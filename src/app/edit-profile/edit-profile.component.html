@@ -1,0 +1,119 @@
+<header >
+
+
+
+    <button class="navbar-toggler navbar-toggler-right" type="button" (click)="navbarCollapsed = !navbarCollapsed"
+        [attr.aria-expanded]="!navbarCollapsed" aria-controls="navbarContent" aria-expanded="false"
+        aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+</header>
+
+   
+<div class="pd-t-20 wd-100p">
+    <h4 class="tx-color-01 mg-b-5">Profile</h4>
+ 
+    <form [formGroup]="editProfileForm" (ngSubmit)="onSubmit()">
+        <!--  -->
+        <div class="form-group">
+           <label for="fullName" style="font-weight: bold;">Name : </label>
+           <input type="text" formControlName="fullName" class="form-control"
+           [ngClass]="{ 'is-invalid': submitted && f.fullName.errors }"
+           value="Chaitanya" >
+            <div *ngIf="submitted && f.fullName.errors" class="invalid-feedback" >
+                <div *ngIf="f.fullName.errors.required">Name is required</div>
+                <div *ngIf="f.fullName.errors.pattern">Name Allow Only Alphabets(min 3 & max 20 Char)</div>
+            </div>           
+        <div>
+            <b><label >Email Referneces</label><br>
+            <input type="checkbox"  
+                [ngClass]="{ 'is-invalid': submitted && f.chkemail.errors }">Measure - </b>Receive Weekly updates on how your properties are doing                
+        </div>
+        <div class="text-right">
+            <button class="btn btn-primary mr-2">Save</button>                 
+        </div>
+        </div>
+        <!-- ================================ -->
+        <div class="form-group">
+            <label for="username" style="font-weight: bold;">Change Email</label>
+            <div class="form-group">
+                <label for="currentpwd" >Current Password : </label>
+                <input type="password" formControlName="currentpwd" class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.currentpwd.errors }"
+                placeholder="Enter Current Password" 
+                pattern="(?=^.{6,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9]).*$"/>
+            <div *ngIf="submitted && f.currentpwd.errors" class="invalid-feedback">
+                <div *ngIf="f.currentpwd.errors.required">Current Password is required</div>
+                <div *ngIf="f.currentpwd.errors.pattern">Enter Valid Current Password (Ex: Aa@2aa) and minimum 6 charcters</div>
+            </div>  
+               </div>      
+            <div class="form-group">
+                <label for="username">New Email</label>
+            <input type="email" formControlName="username" class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.username.errors }"
+                value="Chaitanya@gmail.com" 
+                pattern="^\w+@[a-zA-Z_0-9]+?\.[a-zA-Z]{2,3}$"/>
+            <div *ngIf="submitted && f.username.errors" class="invalid-feedback">
+                <div *ngIf="f.username.errors.required">New Email is required</div>
+                <div *ngIf="f.username.errors.pattern">Please enter a valid New Email</div> 
+            </div><br>
+            
+        <div class="text-right">
+            <button class="btn btn-primary mr-2"  (click)='changemail()'>Save</button>                 
+        </div>
+        </div>
+        </div>
+         <!-- ================================ -->
+         <div class="form-group">
+            <label for="username" style="font-weight: bold;">Change Password</label>
+            <div class="form-group">
+                <label for="currentpwd">Current Password</label>
+                <input type="password" formControlName="currentpwd1" class="form-control"
+                    [ngClass]="{ 'is-invalid': submitted && f.currentpwd1.errors }"
+                    
+                    pattern="(?=^.{6,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9]).*$"/>
+                <div *ngIf="submitted && f.currentpwd1.errors" class="invalid-feedback" >
+                    <div *ngIf="f.currentpwd1.errors.required">Current Password is required</div>
+                    <div *ngIf="f.currentpwd1.errors.pattern">Enter Valid Current Password (Ex: Aa@2aa) and minimum 6 charcters</div>
+                </div>
+            </div>
+            <div class="form-group">
+                    <label for="newpwd">New Password</label>
+                <input type="password" formControlName="newpwd" class="form-control"
+                    [ngClass]="{ 'is-invalid': submitted && f.newpwd.errors }" 
+                    placeholder="Enter New password"
+                    pattern="(?=^.{6,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9]).*$"/>
+                <div *ngIf="submitted && f.newpwd.errors" class="invalid-feedback">
+                 <div *ngIf="f.newpwd.errors.required">New Password is required</div>
+                <div *ngIf="f.newpwd.errors.pattern">Enter Valid New Password (Ex: Aa@2aa) and minimum 6 charcters </div>
+                </div>
+            </div>
+            <div class="form-group">
+                    <label for="confpwd">Confirm Password</label>
+                    <input type="password" formControlName="confpwd" class="form-control"
+                        [ngClass]="{ 'is-invalid': submitted && f.confpwd.errors }" 
+                        placeholder="Enter Confirm password" 
+                        pattern="(?=^.{6,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9]).*$"/>
+                    <div *ngIf="submitted && f.confpwd.errors" class="invalid-feedback">
+                        <div *ngIf="f.confpwd.errors.required">Re-enter is required</div>
+                        <div *ngIf="f.confpwd.errors.pattern">Enter Valid Re-enter Password (Ex: Aa@2aa) and minimum 6 charcters </div>
+                    </div>
+            </div>
+        <div class="text-right">
+            <button class="btn btn-primary mr-2" >Save</button>   
+           
+        </div>
+        <!-- <div *ngIf="show" style="color: red;" class="tx-13"><p>Edit Profile Successfully...!</p></div>               -->
+      
+        </div>  
+       
+    
+   
+   
+</form>
+
+
+
+
+

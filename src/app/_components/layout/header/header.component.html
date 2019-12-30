@@ -1,9 +1,9 @@
 
 <header class="navbar navbar-header navbar-header-fixed">
-    <a href="#" id="mainMenuOpen" class="burger-menu"><i data-feather="menu"></i></a>
-    <div class="navbar-brand">
-      <a routerLink="/" class="df-logo">dash<span>forge</span></a>
-    </div><!-- navbar-brand -->
+    <!-- <a href="#" id="mainMenuOpen" class="burger-menu"><i data-feather="menu"></i></a> -->
+    <!-- <div class="navbar-brand">
+      <a routerLink="/" class="df-logo">adZapier<span>Solutions</span></a>
+    </div> -->
 
 
     <div id="navbarMenu" class="navbar-menu-wrapper">
@@ -36,10 +36,12 @@
             <li class="nav-sub-item"><a href="#" (click)="$event.preventDefault()" class="nav-sub-link"><i-feather name="mail"></i-feather> Mail</a></li>
           </ul>
         </li>
+        
         <li class="nav-item with-sub " ngbDropdown>
           <a  class="nav-link " ngbDropdownToggle id="navbarDropdown03" ><i data-feather="layers"></i> Pages</a>
           <div class="navbar-menu-sub" ngbDropdownMenu aria-labelledby="navbarDropdown03">
             <div class="d-lg-flex" >
+              
               <ul >
                 <li class="nav-label">Authentication</li>
                 <li class="nav-sub-item"><a href="#" (click)="$event.preventDefault()" class="nav-sub-link"><i-feather name="log-in"></i-feather> Sign In</a></li>
@@ -52,6 +54,7 @@
                 <li class="nav-sub-item"><a href="#" (click)="$event.preventDefault()" class="nav-sub-link"><i-feather name="users"></i-feather> Groups</a></li>
                 <li class="nav-sub-item"><a href="#" (click)="$event.preventDefault()" class="nav-sub-link"><i-feather name="calendar"></i-feather> Events</a></li>
               </ul>
+              
               <ul >
                 <li class="nav-label">Error Pages</li>
                 <li class="nav-sub-item"><a href="#" (click)="$event.preventDefault()" class="nav-sub-link"><i-feather name="file"></i-feather> 404 Page Not Found</a></li>
@@ -64,6 +67,7 @@
                 <li class="nav-sub-item"><a href="#" (click)="$event.preventDefault()" class="nav-sub-link"><i-feather name="file"></i-feather> Help Center</a></li>
                 <li class="nav-sub-item"><a href="#" (click)="$event.preventDefault()" class="nav-sub-link"><i-feather name="file"></i-feather> Invoice</a></li>
               </ul>
+          
             </div>
           </div><!-- nav-sub -->
         </li>
@@ -185,7 +189,7 @@
             <h6 class="tx-semibold mg-b-5">Katherine Pechon</h6>
             <p class="mg-b-25 tx-12 tx-color-03">Administrator</p>
 
-            <a href="" class="dropdown-item">
+            <a routerLink="/editProfile"  class="dropdown-item">
               
               <i-feather name="edit-3"></i-feather>
               Edit Profile</a>

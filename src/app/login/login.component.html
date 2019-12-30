@@ -1,37 +1,60 @@
 <div class="media align-items-stretch justify-content-center ht-100p pos-relative">
     <div class="media-body align-items-center d-none d-lg-flex">
       <div class="mx-wd-600">
-        <img src="https://via.placeholder.com/1260x950" class="img-fluid" alt="">
+        <!-- <img src="https://unsplash.com/photos/NdWTSTK0G8k"  alt="dfd"> -->
+        <img src="assets/imgs/helmut-barroso.jpg" class="img-fluid" alt="">
       </div>
-      <div class="pos-absolute b-0 l-0 tx-12 tx-center">
+      <!-- <div class="pos-absolute b-0 l-0 tx-12 tx-center">
         Workspace design vector is created by <a href="https://www.freepik.com/pikisuperstar" target="_blank">pikisuperstar (freepik.com)</a>
-      </div>
+      </div> -->
     </div><!-- media-body -->
     <div class="sign-wrapper mg-lg-l-50 mg-xl-l-60">
       <div class="wd-100p">
         <h3 class="tx-color-01 mg-b-5">Sign In</h3>
         <p class="tx-color-03 tx-16 mg-b-40">Welcome back! Please signin to continue.</p>
         <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+
         <div class="form-group">
-          <label for="username">Email address</label>
-          <input type="email" formControlName="username" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.username.errors }" placeholder="yourname@yourmail.com" />
+          <label for="username">Email Address</label>
+          <input type="email" formControlName="username" class="form-control" 
+          [ngClass]="{ 'is-invalid': submitted && f.username.errors }"
+          pattern="^\w+@[a-zA-Z_0-9]+?\.[a-zA-Z]{2,3}$"
+          placeholder="yourname@yourmail.com" />
+          <!-- pattern="^\w+@[a-zA-Z_0-9]+?\.com$" -->
           <div *ngIf="submitted && f.username.errors" class="invalid-feedback">
               <div *ngIf="f.username.errors.required">Username is required</div>
+              <div *ngIf="f.username.errors.pattern">Please enter a valid email</div> 
           </div>
         </div>
+        
         <div class="form-group">
           <div class="d-flex justify-content-between mg-b-5">
-            <label class="mg-b-0-f">Password</label>
-            <a href="" class="tx-13">Forgot password?</a>
+            <label class="mg-b-0-f">Password</label>  
+            <a routerLink="/forgotpassword" >Forgot password?</a>
           </div>
           <!-- <input type="password" class="form-control" placeholder="Enter your password"> -->
-          <input type="password" formControlName="password" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.password.errors }" placeholder="Enter your password" />
-          <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
+          <input type="password" formControlName="password" class="form-control" 
+           [ngClass]="{ 'is-invalid': submitted && f.password.errors }" placeholder="Enter your password"
+          pattern="(?=^.{6,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9]).*$"/>
+          <div *ngIf="submitted && f.password.errors"  class="invalid-feedback">
               <div *ngIf="f.password.errors.required">Password is required</div>
+              <div *ngIf="f.password.errors.pattern" >Invalid Password</div>
+              <!-- <div *ngIf="f.password.errors.minlength">Password length minimum 6 charcters </div> -->
           </div>
-
+          <br>
+          <div *ngIf="show" style="color:blue;"><p >Sign In Successfully</p>
+          </div>
+          
+         
         </div>
-        <button class="btn btn-brand-02 btn-block">Sign In</button>
+        <div class="text-center">
+          <button class="btn btn-primary mr-2" >Sign In </button>
+       
+          <button class="btn btn-primary mr-2" type="reset" (click)="onReset()">Reset</button><br><br>
+          <!-- <a routerLink="/dashboard/analytics" >Goto Dashboard</a> -->
+      
+      </div>
+        <!-- <button class="btn btn-brand-02 btn-block">Sign In</button> -->
         </form>
         <div class="divider-text">or</div>
         <!-- <button class="btn btn-outline-facebook btn-block">Sign In With Facebook</button>
@@ -39,4 +62,4 @@
         <div class="tx-13 mg-t-20 tx-center">Don't have an account? <a routerLink="/register" >Create an Account</a></div>
       </div>
     </div><!-- sign-wrapper -->
-  </div><!-- media -->
+  </div><!-- media --> 

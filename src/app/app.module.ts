@@ -19,6 +19,9 @@ import { Ng2ChartJsModules } from 'chartjs-ng2-module';
 import { HeaderComponent } from './_components/layout/header/header.component';
 import { FooterComponent } from './_components/layout/footer/footer.component';
 import { NavbarComponent } from './_components/layout/navbar/navbar.component';
+import { ForgotpasswordComponent } from './forgotpassword/forgotpassword.component';
+import { ChangepasswordComponent } from './changepassword/changepassword.component';
+import { EditProfileComponent } from './edit-profile/edit-profile.component';
 
 export const isMock = environment.mock;
 @NgModule({
@@ -31,6 +34,9 @@ export const isMock = environment.mock;
     HeaderComponent,
     FooterComponent,
     NavbarComponent,
+    ForgotpasswordComponent,
+    ChangepasswordComponent,
+    EditProfileComponent
   ],
   imports: [
     BrowserModule,

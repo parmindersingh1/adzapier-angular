@@ -34,7 +34,7 @@ export class LoginComponent implements OnInit {
     loading = false;
     submitted = false;
     returnUrl: string;
-
+    show:Boolean=false;
     constructor(
         private formBuilder: FormBuilder,
         private route: ActivatedRoute,
@@ -50,8 +50,8 @@ export class LoginComponent implements OnInit {
 
     ngOnInit() {
         this.loginForm = this.formBuilder.group({
-            username: ['', Validators.required],
-            password: ['', Validators.required]
+            username: ['', Validators.required,Validators.pattern],
+            password: ['', Validators.required,Validators.pattern,Validators.minLength(6)]
         });
 
         // get return url from route parameters or default to '/'
@@ -61,19 +61,26 @@ export class LoginComponent implements OnInit {
     // convenience getter for easy access to form fields
     get f() { return this.loginForm.controls; }
 
+    onReset(){
+        this.show=false;
+    }
     onSubmit() {
+       // debugger;
         this.submitted = true;
-
+        this.show=false;
+            
         // reset alerts on submit
         this.alertService.clear();
-
+      
         // stop here if form is invalid
         if (this.loginForm.invalid) {
             return;
         }
 
         this.loading = true;
+      
         this.authenticationService.login(this.f.username.value, this.f.password.value)
+        
             .pipe(first())
             .subscribe(
                 data => {
@@ -82,8 +89,24 @@ export class LoginComponent implements OnInit {
                 error => {
                     this.alertService.error(error);
                     this.loading = false;
-                    debugger;
+                    //debugger;
                     this.router.navigate([this.returnUrl]);
                 });
+               // alert('Email ID : '+this.f.username.value +'\nPassWord : '+this.f.password.value);
+               // debugger;
+               
+                if(this.f.password.value.length>=6 ){
+                    this.show=true;
+                    alert('Email ID : '+this.f.username.value +'\nPassWord : '+this.f.password.value);
+                   
+                }
+                else {
+                    this.show=false;
+                }
+                if (!this.loginForm.invalid){
+                    this.returnUrl='/dashboard/analytics';
+                    return this.router.navigate([this.returnUrl]);
+                 }
+                
     }
 }
