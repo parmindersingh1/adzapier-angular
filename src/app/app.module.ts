@@ -19,6 +19,7 @@ import { Ng2ChartJsModules } from 'chartjs-ng2-module';
 import { HeaderComponent } from './_components/layout/header/header.component';
 import { FooterComponent } from './_components/layout/footer/footer.component';
 import { NavbarComponent } from './_components/layout/navbar/navbar.component';
+import { AlertComponent } from './_components';
 
 export const isMock = environment.mock;
 @NgModule({
@@ -31,6 +32,7 @@ export const isMock = environment.mock;
     HeaderComponent,
     FooterComponent,
     NavbarComponent,
+    AlertComponent,
   ],
   imports: [
     BrowserModule,
