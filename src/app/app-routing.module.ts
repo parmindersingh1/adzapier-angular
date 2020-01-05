@@ -7,13 +7,18 @@ import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { AnalyticsComponent } from './pages/dashboards/analytics/analytics.component';
 import { AuthGuard } from './_helpers';
+import { ForgotpasswordComponent } from './forgotpassword/forgotpassword.component';
+import { ChangepasswordComponent } from './changepassword/changepassword.component';
+import { EditProfileComponent } from './edit-profile/edit-profile.component';
 
 const routes: Routes = [
    { path: '', component: HomeComponent, canActivate: [AuthGuard] },
    { path: 'login', component: LoginComponent },
    { path: 'register', component: RegisterComponent },
+   {path:'forgotpassword',component:ForgotpasswordComponent},
    { path: 'dashboard/analytics', component: AnalyticsComponent },
-
+   {path:'changepassword',component:ChangepasswordComponent},
+   {path:'editProfile',component:EditProfileComponent},
   // otherwise redirect to home
    { path: '**', redirectTo: '' }
 ];

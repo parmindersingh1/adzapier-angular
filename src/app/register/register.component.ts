@@ -15,6 +15,7 @@ export class RegisterComponent implements OnInit {
     loading = false;
     submitted = false;
     navbarCollapsed=false;
+    show:Boolean=false;
 
     constructor(
         private formBuilder: FormBuilder,
@@ -31,10 +32,11 @@ export class RegisterComponent implements OnInit {
 
     ngOnInit() {
         this.registerForm = this.formBuilder.group({
-            firstName: ['', Validators.required],
-            lastName: ['', Validators.required],
-            username: ['', Validators.required],
-            password: ['', [Validators.required, Validators.minLength(6)]]
+            firstName: ['', Validators.required,Validators.pattern],
+            lastName: ['', Validators.required,Validators.pattern],
+            username: ['', Validators.required,Validators.pattern],
+            password: ['', Validators.required, ,Validators.pattern,Validators.minLength(6)],
+            confirmpassword: ['', Validators.required, ,Validators.pattern,Validators.minLength(6)]
         });
     }
 
@@ -43,26 +45,40 @@ export class RegisterComponent implements OnInit {
 
     onSubmit() {
         this.submitted = true;
-      debugger;
+      //debugger;
         // reset alerts on submit
         this.alertService.clear();
-
+        this.show=false;
         // stop here if form is invalid
         if (this.registerForm.invalid) {
             return;
         }
 
         this.loading = true;
+
         this.userService.register(this.registerForm.value)
+        
             .pipe(first())
             .subscribe(
                 data => {
+                    debugger;
                     this.alertService.success('Registration successful', true);
-                    this.router.navigate(['/login']);
+                    //this.router.navigate(['/login']);
                 },
                 error => {
                     this.alertService.error(error);
                     this.loading = false;
                 });
+               // debugger;
+              if(this.f.password.value!==this.f.confirmpassword.value){
+                alert('Please enter Password & Confirm password same...!\nPassword : '+this.f.password.value+'\nConfirm Password: '+this.f.confirmpassword.value);             
+              }
+           else{
+                 if(this.f.username.value!=''&&this.f.password.value!=''&&this.f.firstName.value!=''&&this.f.lastName.value!=''&&this.f.confirmpassword.value!=''){
+                  this.show=true;
+              alert('First Name : '+this.f.firstName.value+'\nLast Name : '+this.f.lastName.value+'\nEmail Id : '+this.f.username.value+'\nPassword : '+this.f.password.value+'\nConfirm Password: '+this.f.confirmpassword.value+'\nAccount Created Successfully..!');
+              }
+              //+'\nOrganisation'+this.f.organisation.value
+          }                
     }
 }
