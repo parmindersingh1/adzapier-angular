@@ -15,7 +15,7 @@ export class ForgotpasswordComponent implements OnInit {
   submitted: boolean;
   show: boolean;
   loading: boolean;
-    
+  navbarCollapsed: boolean=false;
 
     constructor(
         private formBuilder: FormBuilder,
