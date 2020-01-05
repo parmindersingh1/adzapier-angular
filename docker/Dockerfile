@@ -13,7 +13,7 @@ EXPOSE 80
 RUN rm -rf /usr/share/nginx/html/*
 COPY dist/adzapier-analytics-ng /usr/share/nginx/html
 # COPY docker/nginx-custom.conf /etc/nginx/conf.d/default.conf
-# COPY docker/nginx.conf /etc/nginx/nginx.conf
+COPY docker/nginx.conf /etc/nginx/nginx.conf
 
 # run nginx
 CMD ["nginx", "-g", "daemon off;"]
