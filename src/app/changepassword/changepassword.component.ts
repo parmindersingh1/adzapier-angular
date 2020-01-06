@@ -15,6 +15,7 @@ export class ChangepasswordComponent implements OnInit {
     loading = false;
     submitted = false;
     show:Boolean=false;
+    navbarCollapsed: boolean=false;
 
     constructor(
         private formBuilder: FormBuilder,
@@ -65,5 +66,9 @@ export class ChangepasswordComponent implements OnInit {
               }
               //+'\nOrganisation'+this.f.organisation.value
           }                
+    }
+
+    onReset(){
+      
     }
 }
