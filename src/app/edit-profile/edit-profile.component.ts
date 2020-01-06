@@ -14,6 +14,7 @@ export class EditProfileComponent implements OnInit {
     loading = false;
     submitted = false;
     show:Boolean=false;
+    navbarCollapsed: boolean=false;
     value1:string;
     value2:string;
     
@@ -56,10 +57,10 @@ export class EditProfileComponent implements OnInit {
     //   }
     // }
    
-    // changemail(){
-    //    debugger;
-    //   this.onSubmit();
-    // }
+    changemail(){
+       debugger;
+      this.onSubmit();
+    }
     changepwd(){
       //this.f.currentpwd.value='Aa@3ersdsd';
       debugger;

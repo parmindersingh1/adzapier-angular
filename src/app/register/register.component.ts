@@ -14,6 +14,7 @@ export class RegisterComponent implements OnInit {
     registerForm: FormGroup;
     loading = false;
     submitted = false;
+    navbarCollapsed=false;
     show:Boolean=false;
 
     constructor(
