@@ -1,0 +1,117 @@
+<header class="navbar navbar-header navbar-header-fixed">
+    <!-- <a href="#" id="mainMenuOpen" class="burger-menu"><i data-feather="menu"></i></a> -->
+    <div class="navbar-brand">
+      <a routerLink="/" class="df-logo">Adzapier<span>Solutions</span></a>
+    </div>
+    </header>
+
+<div style="background-color:whitesmoke" >
+    <form [formGroup]="orgForm" (ngSubmit)="onSubmit()" style="background-color:white">
+    
+    <table width="60%" align="center">
+    <br>
+    <div style="width: 100%; height: 150%; background-color: whitesmoke;border:1px solid #ccc!important;border-radius: 0.50em;">
+        <br>
+   <tr>
+
+       <td  width='90.50%'>
+       &nbsp;&nbsp;
+       <label style="font-weight: bold">Organization</label>
+      </td>
+
+      <td style='text-align:left' width='85%'>
+        <!-- <i-feather name='edit3' class="wd-12 ht-12 stroke-wd-3"></i-feather> -->
+        <button class="btn btn-xs btn-primary" align='right' (click)='editclick()'> 
+           Edit
+        </button>                           
+</td>
+     <br>  
+    </tr>
+     <tr>
+        <td  width='88%' >&nbsp;&nbsp;&nbsp;<label for="fullName" id='lbltxt' *ngIf="show">Adzpier</label>
+            &nbsp;<input type="text"  formControlName="fullName" *ngIf="show1" 
+            [ngClass]="{ 'is-invalid': submitted && f.fullName.errors }"
+            placeholder="Enter your fullName" pattern="^[a-zA-Z ]{3,20}$" />&nbsp;
+            <button class="btn btn-sm btn-primary" formControlName="btncancel" *ngIf="show1"  (click)='cancelclick()'>
+                Cancel</button>
+            <div *ngIf="submitted && f.fullName.errors" class="invalid-feedback" >
+                <div *ngIf="f.fullName.errors.required">Full Name is required</div>
+                <div *ngIf="f.fullName.errors.pattern">Full Name Allow Only Alphabets(min 3 & max 20 Char)</div>
+            </div>
+        </td>
+    </tr>   
+</div>
+    <br>
+    <div style="width: 100%; height: 150%; background-color: whitesmoke;border:1px solid #ccc!important;border-radius: 0.50em;">
+            <br>
+    <tr>
+        
+        <td  width="81%">&nbsp;&nbsp;<label style="font-weight: bold">Properties</label></td>
+        <td>       
+            <!-- <i-feather name='Plus' class="wd-12 ht-12 stroke-wd-3"></i-feather> -->
+            <button class='btn btn-sm btn-primary' align='right'>
+     Add Properties </button></td>
+            <br></tr>
+   <tr>
+      <td><div class="align-middle text-medium">&nbsp;&nbsp;<label>This Organization doesn't have any properties Associated with it</label></div></td>
+    </tr>
+    <br>
+    </div>
+    <br>
+    <div style="width: 100%; height: 150%; background-color: whitesmoke;border:1px solid #ccc!important;border-radius: 0.50em;">
+        <br>
+    <tr><td width="83.50%">&nbsp;&nbsp;<label style="font-weight: bold" >Members</label></td>
+        <td>
+               <!-- <i-feather name='user-plus' class="wd-5 ht-5 stroke-wd-3"></i-feather> -->
+            <button class='btn btn-sm btn-primary' align='right'>
+         Invite Users</button>                              
+              
+            </td>
+        <br></tr>
+   <tr>
+      <td width='77%'><div class="align-middle text-left">&nbsp;&nbsp;<label>Adzapier : Adzapier@gamil.com</label></div>
+    </td>
+    <td><div>&nbsp;&nbsp;<label>Administrator</label></div>
+    </td> 
+    </tr>
+</div>
+<br>
+<div style="width: 100%; height: 150%; background-color: whitesmoke;border:1px solid #ccc!important;border-radius: 0.50em;">
+        <br>
+    <tr><td  width="77%">&nbsp;&nbsp;<label style="font-weight: bold">Pending Invites</label></td>
+    <td align="right">
+        <div class="align-middle text-right">         
+                <button class="btn-light">Resend</button>                              
+      </div>
+    </td>
+</tr>
+    <tr>
+        <td width="88%">
+                <div class="align-middle text-left">&nbsp;&nbsp;<label>Samir : Samir123@gamil.com</label></div>
+                </td>
+               
+        </tr>
+        <br>
+</div>
+<br>
+<div style="width: 100%; height: 150%; background-color: whitesmoke;border:1px solid #ccc!important;border-radius: 0.50em;">
+    <br>
+        <tr><td>&nbsp;&nbsp;<label style="font-weight: bold">Payment Methods</label></td>&nbsp;&nbsp;</tr>
+       <tr>
+          <td><div>&nbsp;&nbsp;<label>This Organization doesn't have any Payment Methods not yet</label></div></td>
+        </tr>
+        <tr>
+        <td>
+                &nbsp;&nbsp;   
+                    <!-- <i-feather name='Plus' class="wd-12 ht-12 stroke-wd-3"></i-feather>       -->
+                        <button class="btn btn-primary btn-sm" > Add Payment Methods</button>                              
+                
+            </td>
+            </tr>
+            <br>
+</div>
+    </table>
+    <br>
+</form>
+</div>
+
