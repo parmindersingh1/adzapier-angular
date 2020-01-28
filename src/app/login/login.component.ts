@@ -1,23 +1,3 @@
-// import { Component, OnInit } from '@angular/core';
-
-// @Component({
-//   selector: 'app-login',
-//   templateUrl: './login.component.html',
-//   styleUrls: ['./login.component.scss']
-// })
-// export class LoginComponent implements OnInit {
-
-//   constructor() { }
-
-//   ngOnInit() {
-//   }
-
-// }
-
-
-
-
-
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -25,16 +5,23 @@ import { first } from 'rxjs/operators';
 
 import { AlertService, AuthenticationService } from './../_services';
 
+
 @Component({ 
   templateUrl: 'login.component.html' ,
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
+
+    private usersdata:any;
     loginForm: FormGroup;
     loading = false;
     submitted = false;
     returnUrl: string;
     show:Boolean=false;
+    
+    //userdetails:any=[];
+
+
     constructor(
         private formBuilder: FormBuilder,
         private route: ActivatedRoute,
@@ -48,10 +35,12 @@ export class LoginComponent implements OnInit {
         }
     }
 
+
+    
     ngOnInit() {
         this.loginForm = this.formBuilder.group({
-            username: ['', Validators.required,Validators.pattern],
-            password: ['', Validators.required,Validators.pattern,Validators.minLength(6)]
+            username: ['', [Validators.required,Validators.pattern]],
+            password: ['', [Validators.required,Validators.pattern,Validators.minLength(6)]]
         });
 
         // get return url from route parameters or default to '/'
@@ -65,9 +54,10 @@ export class LoginComponent implements OnInit {
         this.show=false;
     }
     onSubmit() {
-       // debugger;
+       
         this.submitted = true;
         this.show=false;
+        
             
         // reset alerts on submit
         this.alertService.clear();
@@ -75,38 +65,45 @@ export class LoginComponent implements OnInit {
         // stop here if form is invalid
         if (this.loginForm.invalid) {
             return;
+            
         }
 
         this.loading = true;
+        //console.log(this.loginForm);
       
-        this.authenticationService.login(this.f.username.value, this.f.password.value)
+        this.authenticationService.login(this.f.username.value,this.f.password.value)
         
             .pipe(first())
             .subscribe(
                 data => {
-                    this.router.navigate([this.returnUrl]);
+                    
+                    this.returnUrl='/dashboard/analytics';
+                      return this.router.navigate([this.returnUrl]);
+                    //this.router.navigate([this.returnUrl]);
                 },
                 error => {
                     this.alertService.error(error);
+                    alert('Invalid credentials');
                     this.loading = false;
-                    //debugger;
+                    
                     this.router.navigate([this.returnUrl]);
                 });
                // alert('Email ID : '+this.f.username.value +'\nPassWord : '+this.f.password.value);
-               // debugger;
                
-                if(this.f.password.value.length>=6 ){
-                    this.show=true;
-                    alert('Email ID : '+this.f.username.value +'\nPassWord : '+this.f.password.value);
+               
+                // if(this.f.password.value.length>=6 ){
+                //     this.show=true;
+                //    // alert('Email ID : '+this.f.username.value +'\nPassWord : '+this.f.password.value);
+                //     console.log(this.loginForm);
                    
-                }
-                else {
-                    this.show=false;
-                }
-                if (!this.loginForm.invalid){
-                    this.returnUrl='/dashboard/analytics';
-                    return this.router.navigate([this.returnUrl]);
-                 }
+                // }
+                // else {
+                //     this.show=false;
+                // }
+                // if (!this.loginForm.invalid){
+                //     this.returnUrl='/dashboard/analytics';
+                //     return this.router.navigate([this.returnUrl]);
+                //  }
                 
     }
 }

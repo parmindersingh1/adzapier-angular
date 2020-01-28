@@ -1,18 +1,46 @@
 ﻿import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { environment } from './../../environments/environment';
+import { environment } from './../../environments/environment.staging';
 import { User } from './../_models';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+ 
+
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
-    constructor(private http: HttpClient) { }
+
+    private currentregSubject: BehaviorSubject<User>;
+    public currentregUser: Observable<User>;
+    
+    constructor(private http: HttpClient) {
+        this.currentregSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('currentregUser')));
+        this.currentregUser = this.currentregSubject.asObservable();
+     }
+
+     public get currentUserValue(): User {
+        return this.currentregSubject.value;
+    }
 
     getAll() {
         return this.http.get<User[]>(environment.apiUrl+'/users');
     }
 
-    register(user: User) {
-        return this.http.post(environment.apiUrl+'/users/register', user);
+    // login(user: User){
+    //     return this.http.post(environment.apiUrl+'/users/login', user
+    // }
+
+    register(firstName, lastName, orgname, email, password, confirmpassword ) {
+        return this.http.post<any>(environment.apiUrl+'/users', { firstName, lastName, orgname, email, password, confirmpassword })
+             .pipe(map(user => {
+        //         // store user details and jwt token in local storage to keep user logged in between page refreshes
+                 localStorage.setItem('currentregUser', JSON.stringify(user.response));
+                 this.currentregSubject.next(user);
+                 return user;
+                 //console.log(user);
+             })
+             );
+             alert('Wrong  Credentials');
     }
 
     delete(id: number) {

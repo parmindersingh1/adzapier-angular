@@ -10,8 +10,12 @@ import { AuthGuard } from './_helpers';
 import { ForgotpasswordComponent } from './forgotpassword/forgotpassword.component';
 import { ChangepasswordComponent } from './changepassword/changepassword.component';
 import { EditProfileComponent } from './edit-profile/edit-profile.component';
+import { OrgpageComponent } from './orgpage/orgpage.component';
+import { UseractivityComponent } from './useractivity/useractivity.component';
+
 
 const routes: Routes = [
+
    { path: '', component: HomeComponent, canActivate: [AuthGuard] },
    { path: 'login', component: LoginComponent },
    { path: 'register', component: RegisterComponent },
@@ -19,6 +23,10 @@ const routes: Routes = [
    { path: 'dashboard/analytics', component: AnalyticsComponent },
    {path:'changepassword',component:ChangepasswordComponent},
    {path:'editProfile',component:EditProfileComponent},
+   {path:'portalorg',component:OrgpageComponent},
+   {path:'useractivity',component:UseractivityComponent},
+   
+   
   // otherwise redirect to home
    { path: '**', redirectTo: '' }
 ];

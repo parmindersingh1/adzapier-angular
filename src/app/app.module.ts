@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http'
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
@@ -25,6 +25,9 @@ import { AlertComponent } from './_components';
 import { ForgotpasswordComponent } from './forgotpassword/forgotpassword.component';
 import { ChangepasswordComponent } from './changepassword/changepassword.component';
 import { EditProfileComponent } from './edit-profile/edit-profile.component';
+import { UseractivityComponent } from './useractivity/useractivity.component';
+import { OrgpageComponent } from './orgpage/orgpage.component';
+
 
 
 export const isMock = environment.mock;
@@ -41,7 +44,10 @@ export const isMock = environment.mock;
     AlertComponent,
     ForgotpasswordComponent,
     ChangepasswordComponent,
-    EditProfileComponent
+    EditProfileComponent,
+    UseractivityComponent,
+    OrgpageComponent,
+    
   ],
   imports: [
     BrowserModule,
@@ -54,7 +60,6 @@ export const isMock = environment.mock;
     Ng2ChartJsModules 
   ],
   providers: [
-    
     { provide: HTTP_INTERCEPTORS, 
       useClass: JwtInterceptor, 
       multi: true },
