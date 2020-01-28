@@ -2,11 +2,13 @@
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { environment } from './../../environments/environment';
+import { environment } from './../../environments/environment.staging';
 import { User } from './../_models';
 
 @Injectable({ providedIn: 'root' })
 export class AuthenticationService {
+
+    
     private currentUserSubject: BehaviorSubject<User>;
     public currentUser: Observable<User>;
 
@@ -19,17 +21,19 @@ export class AuthenticationService {
         return this.currentUserSubject.value;
     }
 
-    login(username, password) {
-        //console.log(username+"dfdsfdsf   "+password);
-         return this.http.post<any>(environment.apiUrl+'/users/authenticate', { username, password })
+    login(email, password) {
+        
+        //console.log(email+"dfdsfdsf   "+password);
+         return this.http.post<any>(environment.apiUrl+'/login', { email, password })
              .pipe(map(user => {
         //         // store user details and jwt token in local storage to keep user logged in between page refreshes
-                 localStorage.setItem('currentUser', JSON.stringify(user));
+                 localStorage.setItem('currentUser', JSON.stringify(user.response));
                  this.currentUserSubject.next(user);
                  return user;
                  //console.log(user);
              })
              );
+             alert('Wrong  Credentials');
     }
 
     logout() {
