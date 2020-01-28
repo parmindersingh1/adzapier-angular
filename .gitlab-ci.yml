@@ -28,6 +28,7 @@ test:
     - npm install -g @angular/cli@8.3.1
     - rm -rf node_modules
     - npm install
+    - npm update
   before_script:
     - ls -ltr
 build-stage:
@@ -38,6 +39,7 @@ build-stage:
     expire_in: 1 hr
   script:
     - npm install -g @angular/cli@8.3.1
+    - npm update
     - ./node_modules/@angular/cli/bin/ng build --configuration=staging 
   only:
    - feature-ci-cd
@@ -54,6 +56,7 @@ build-prod:
     expire_in: 1 hr
   script:
     - npm install -g @angular/cli@8.3.1
+    - npm update
     - ./node_modules/@angular/cli/bin/ng build --configuration=production 
   only:
    - master
