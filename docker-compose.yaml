@@ -2,10 +2,7 @@ version: "3.2"
 
 services:
   ui:
-    # image: "adzapier/adzapier-cmp-ui:staging-cicd"
-    # command: ./adzapier-cmp-api
-    # image: "${CI_REGISTRY}/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}:${CI_BUILD_REF_NAME}"
-    image: "adzapier/${CI_PROJECT_TITLE}:${CI_COMMIT_TAG:-$CI_COMMIT_REF_NAME-$CAL_VER}"
+    image: "${CI_PROJECT_TITLE}:${CI_COMMIT_TAG:-$CI_COMMIT_REF_NAME-$CAL_VER}"
     networks:
       apps:
     volumes:
