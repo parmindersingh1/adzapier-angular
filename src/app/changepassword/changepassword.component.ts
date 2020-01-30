@@ -3,13 +3,15 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
-
 import { AlertService, UserService, AuthenticationService } from './../_services';
+
+
 @Component({
   selector: 'app-changepassword',
   templateUrl: './changepassword.component.html',
   styleUrls: ['./changepassword.component.scss']
 })
+
 export class ChangepasswordComponent implements OnInit {
   changepasswordForm: FormGroup;
     loading = false;

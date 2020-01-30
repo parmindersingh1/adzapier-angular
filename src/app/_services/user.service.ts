@@ -43,6 +43,34 @@ export class UserService {
              alert('Wrong  Credentials');
     }
 
+
+    resetpswd(token, password, confirmpassword ) {
+        return this.http.post<any>(environment.apiUrl+'/password/reset', {token, password, confirmpassword })
+             .pipe(map(user => {
+        //         // store user details and jwt token in local storage to keep user logged in between page refreshes
+                 //localStorage.setItem('currentregUser', JSON.stringify(user.response));
+                 //this.currentregSubject.next(user);
+                 //return user;
+                 //console.log(user);
+             })
+             );
+             alert('Wrong  Credentials');
+    }
+
+
+    forgotpswd(email) {
+        return this.http.post<any>(environment.apiUrl+'/password/forgot', {email})
+             .pipe(map(user => {
+        //         // store user details and jwt token in local storage to keep user logged in between page refreshes
+                 //localStorage.setItem('currentregUser', JSON.stringify(user.response));
+                 //this.currentregSubject.next(user);
+                 //return user;
+                 //console.log(user);
+             })
+             );
+             alert('Wrong  Credentials');
+    }
+
     delete(id: number) {
         return this.http.delete(environment.apiUrl+'/users/${id}');
     }

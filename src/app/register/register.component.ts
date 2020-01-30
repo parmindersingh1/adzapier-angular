@@ -58,6 +58,7 @@ export class RegisterComponent implements OnInit {
 
         this.loading = true;
         console.log(this.regForm);
+        
 
         //this.userService.register(this.registerForm.value)
         this.userService.register(this.f.firstName.value, this.f.lastName.value, this.f.organization.value, this.f.email.value, this.f.password.value, this.f.confirmpassword.value)

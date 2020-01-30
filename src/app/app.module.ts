@@ -27,6 +27,7 @@ import { ChangepasswordComponent } from './changepassword/changepassword.compone
 import { EditProfileComponent } from './edit-profile/edit-profile.component';
 import { UseractivityComponent } from './useractivity/useractivity.component';
 import { OrgpageComponent } from './orgpage/orgpage.component';
+import { ResetpasswordComponent } from './resetpassword/resetpassword.component';
 
 
 
@@ -47,6 +48,7 @@ export const isMock = environment.mock;
     EditProfileComponent,
     UseractivityComponent,
     OrgpageComponent,
+    ResetpasswordComponent,
     
   ],
   imports: [
@@ -57,7 +59,8 @@ export const isMock = environment.mock;
     FontAwesomeModule,
     NgbModule,
     IconsModule,
-    Ng2ChartJsModules 
+    Ng2ChartJsModules,
+     
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, 
