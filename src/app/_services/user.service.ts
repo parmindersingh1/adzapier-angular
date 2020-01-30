@@ -43,6 +43,24 @@ export class UserService {
              alert('Wrong  Credentials');
     }
 
+
+    resetpswd(token, password, confirmpassword ) {
+        return this.http.post<any>(environment.apiUrl+'/password/reset', {token, password, confirmpassword })
+             .pipe(map(user => {
+             })
+             );
+             alert('Wrong  Credentials');
+    }
+
+
+    forgotpswd(email) {
+        return this.http.post<any>(environment.apiUrl+'/password/forgot', {email})
+             .pipe(map(user => {
+             })
+             );
+             alert('Wrong  Credentials');
+    }
+
     delete(id: number) {
         return this.http.delete(environment.apiUrl+'/users/${id}');
     }
