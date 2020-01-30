@@ -6,7 +6,6 @@ cache:
     - dist/
 variables:
   IMAGE_TAG: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME
-  #IMAGE_TAG: adzapier/${CI_PROJECT_TITLE}:${CI_COMMIT_TAG:-$CI_COMMIT_REF_NAME-$CI_COMMIT_SHORT_SHA}
 
 stages:
   - test
@@ -29,6 +28,7 @@ test:
     - npm install -g @angular/cli@8.3.1
     - rm -rf node_modules
     - npm install
+    - npm update
   before_script:
     - ls -ltr
 build-stage:
@@ -39,6 +39,7 @@ build-stage:
     expire_in: 1 hr
   script:
     - npm install -g @angular/cli@8.3.1
+    - npm update
     - ./node_modules/@angular/cli/bin/ng build --configuration=staging 
   only:
    - feature-ci-cd
@@ -55,6 +56,7 @@ build-prod:
     expire_in: 1 hr
   script:
     - npm install -g @angular/cli@8.3.1
+    - npm update
     - ./node_modules/@angular/cli/bin/ng build --configuration=production 
   only:
    - master
@@ -66,14 +68,11 @@ build_docker_image:
   script:
     - pwd
     - ls -ltra ./dist/
-    - docker login --username $DOCKER_HUB_USERNAME --password $DOCKER_HUB_PASSWORD
     - cp ./docker/Dockerfile ./
-    - docker build --no-cache -t adzapier/${CI_PROJECT_TITLE}:${CI_COMMIT_TAG:-$CI_COMMIT_REF_NAME-$CAL_VER}  .
-    - docker push adzapier/${CI_PROJECT_TITLE}:${CI_COMMIT_TAG:-$CI_COMMIT_REF_NAME-$CAL_VER}
-    - docker rmi adzapier/${CI_PROJECT_TITLE}:${CI_COMMIT_TAG:-$CI_COMMIT_REF_NAME-$CAL_VER}
-    # - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD ${CI_REGISTRY}
-    # - docker build -t ${CI_REGISTRY_IMAGE}:${CI_COMMIT_REF_NAME} 
-    # - docker push ${CI_REGISTRY_IMAGE}:${CI_COMMIT_REF_NAME} 
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD ${CI_REGISTRY}
+    - docker build --no-cache -t ${CI_REGISTRY_IMAGE}:${CI_COMMIT_TAG:-$CI_COMMIT_REF_NAME-$CAL_VER} .
+    - docker push                ${CI_REGISTRY_IMAGE}:${CI_COMMIT_TAG:-$CI_COMMIT_REF_NAME-$CAL_VER}
+    - docker rmi                 ${CI_REGISTRY_IMAGE}:${CI_COMMIT_TAG:-$CI_COMMIT_REF_NAME-$CAL_VER}
   only:
    - feature-ci-cd
    - staging
@@ -84,14 +83,11 @@ build_docker_image-prod:
   script:
     - pwd
     - ls -ltra ./dist/
-    - docker login --username $DOCKER_HUB_USERNAME --password $DOCKER_HUB_PASSWORD
     - cp ./docker/Dockerfile ./
-    - docker build --no-cache -t adzapier/${CI_PROJECT_TITLE}:${CI_COMMIT_TAG:-$CI_COMMIT_REF_NAME-$CAL_VER}  .
-    - docker push adzapier/${CI_PROJECT_TITLE}:${CI_COMMIT_TAG:-$CI_COMMIT_REF_NAME-$CAL_VER}
-    - docker rmi adzapier/${CI_PROJECT_TITLE}:${CI_COMMIT_TAG:-$CI_COMMIT_REF_NAME-$CAL_VER}
-    # - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD ${CI_REGISTRY}
-    # - docker build -t ${CI_REGISTRY_IMAGE}:${CI_COMMIT_REF_NAME} 
-    # - docker push ${CI_REGISTRY_IMAGE}:${CI_COMMIT_REF_NAME} 
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD ${CI_REGISTRY}
+    - docker build --no-cache -t ${CI_REGISTRY_IMAGE}:${CI_COMMIT_TAG:-$CI_COMMIT_REF_NAME-$CAL_VER} .
+    - docker push                ${CI_REGISTRY_IMAGE}:${CI_COMMIT_TAG:-$CI_COMMIT_REF_NAME-$CAL_VER}
+    - docker rmi                 ${CI_REGISTRY_IMAGE}:${CI_COMMIT_TAG:-$CI_COMMIT_REF_NAME-$CAL_VER}
   only:
    - master
    - /^v[0-9]+(?:.[0-9]+)+$/
@@ -100,19 +96,15 @@ deploy-to-swarm:
   variables:
     DOCKER_HOST: tcp://staging-manager-01-nyc3.adzapsrv.com:2375
     SERVICE_NAME: ui
-    DOCKER_IMG1: "adzapier/${CI_PROJECT_TITLE}:${CI_COMMIT_TAG:-$CI_COMMIT_REF_NAME-$CAL_VER}"
     SERVICE_MIN_REPLICAS: 2
   image: docker:19
   script:
-    # - docker login -u gitlab-ci-token -p "$CI_BUILD_TOKEN" "$CI_REGISTRY"
-    # - docker stack deploy --with-registry-auth --compose-file=docker-stack-compose.yml ${CI_PROJECT_NAMESPACE}-${CI_PROJECT_NAME}-${SERVICE_NAME}
     - docker stack deploy --with-registry-auth --compose-file=docker-stack-out.yaml ${CI_PROJECT_NAMESPACE}-${CI_PROJECT_NAME}
   before_script:
     - export CAL_VER=$(date +"%y%m%d%H")
-    - docker login --username $DOCKER_HUB_USERNAME --password $DOCKER_HUB_PASSWORD
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD ${CI_REGISTRY}
     - apk add gettext
     - envsubst < docker-compose.yaml > docker-stack-out.yaml
-    # - SERVICE_MIN_REPLICAS=`echo "$SERVICE_MIN_REPLICAS * 2" | bc` && docker service scale ${CI_PROJECT_NAMESPACE}-${CI_PROJECT_NAME}=${SERVICE_MIN_REPLICAS}
   environment:
     name: master
     url: http://${CI_BUILD_REF_NAME}.example.com
@@ -123,15 +115,13 @@ deploy-to-swarm:
 deploy-to-swarm-prod:
   stage: deploy
   variables:
-    DOCKER_HOST: tcp://staging-manager-01-nyc3.adzapsrv.com:2375
+    DOCKER_HOST: tcp://production-manager-01-nyc3.adzapsrv.com:2375
     SERVICE_NAME: ui
   image: docker:19
   script:
-    # - docker login -u gitlab-ci-token -p "$CI_BUILD_TOKEN" "$CI_REGISTRY"
-    # - docker stack deploy --with-registry-auth --compose-file=docker-stack-compose.yml ${CI_PROJECT_NAMESPACE}-${CI_PROJECT_NAME}-${SERVICE_NAME}
-    - docker login --username $DOCKER_HUB_USERNAME --password $DOCKER_HUB_PASSWORD
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD ${CI_REGISTRY}
     - envsubst < docker-compose.yaml > docker-compose-out.yaml
-    - docker stack deploy --prune --with-registry-auth --compose-file=docker-stack-out.yaml ${CI_PROJECT_NAMESPACE}-${CI_PROJECT_NAME}
+    - docker stack deploy --prune --with-registry-auth --compose-file=docker-compose-out.yaml ${CI_PROJECT_NAMESPACE}-${CI_PROJECT_NAME}
   before_script:
     - apk add gettext
     - export CAL_VER=$(date +"%y%m%d%H")
