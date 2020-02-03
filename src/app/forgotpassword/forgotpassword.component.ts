@@ -15,6 +15,8 @@ export class ForgotpasswordComponent implements OnInit {
   forgotpasswordForm: FormGroup;
   submitted: boolean;
   show: boolean;
+  show1:Boolean=false;
+  //errorMsg: string;
   loading: boolean;
   navbarCollapsed: boolean=false;
 
@@ -39,6 +41,11 @@ export class ForgotpasswordComponent implements OnInit {
 
     // convenience getter for easy access to form fields
     get f() { return this.forgotpasswordForm.controls; }
+
+    // clearError(){
+    //     this.errorMsg="";
+
+    // }
     
    
     onSubmit() {
@@ -68,5 +75,11 @@ export class ForgotpasswordComponent implements OnInit {
                     this.alertService.error(error);
                     this.loading = false;
                 });
+
+
+                if(this.f.emailid.value){
+                    this.show=true;
+                }
+                
     }
 }

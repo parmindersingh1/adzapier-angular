@@ -17,7 +17,9 @@ export class LoginComponent implements OnInit {
     loading = false;
     submitted = false;
     returnUrl: string;
+    errorMsg: string;
     show:Boolean=false;
+    show1:Boolean=false;
     
     //userdetails:any=[];
 
@@ -39,8 +41,8 @@ export class LoginComponent implements OnInit {
     
     ngOnInit() {
         this.loginForm = this.formBuilder.group({
-            username: ['', [Validators.required,Validators.pattern]],
-            password: ['', [Validators.required,Validators.pattern,Validators.minLength(6)]]
+            email: ['test@test.com', [Validators.required,Validators.pattern]],
+            password: ['Adzap#123', [Validators.required,Validators.pattern,Validators.minLength(6)]]
         });
 
         // get return url from route parameters or default to '/'
@@ -50,13 +52,15 @@ export class LoginComponent implements OnInit {
     // convenience getter for easy access to form fields
     get f() { return this.loginForm.controls; }
 
-    onReset(){
-        this.show=false;
+    clearError() {
+        this.errorMsg = "";
     }
+
     onSubmit() {
        
         this.submitted = true;
         this.show=false;
+        
         
             
         // reset alerts on submit
@@ -71,7 +75,7 @@ export class LoginComponent implements OnInit {
         this.loading = true;
         //console.log(this.loginForm);
       
-        this.authenticationService.login(this.f.username.value,this.f.password.value)
+        this.authenticationService.login(this.f.email.value,this.f.password.value)
         
             .pipe(first())
             .subscribe(
@@ -83,11 +87,33 @@ export class LoginComponent implements OnInit {
                 },
                 error => {
                     this.alertService.error(error);
-                    alert('Invalid credentials');
+                    for (var key in error) {
+
+                        console.log(error[key]);
+                        this.errorMsg = error[key];
+                        break;
+                    }
+                   // console.log(JSON.stringify(error))
+                    //this.errorMsg = error.Incorrect_password;
                     this.loading = false;
                     
                     this.router.navigate([this.returnUrl]);
                 });
+
+
+            //     if(this.f.email.value!==this.f.password.value){
+            //         this.errorMsg = "Invalid credentials"
+            //         this.show1=true;
+                    
+            //     }
+            //     else{
+            //         if(this.f.email.value!=''&&this.f.password.value!=''){
+            //          this.show=true;
+            //          this.errorMsg = ""
+                      
+            //    }
+                 
+            //  }
                // alert('Email ID : '+this.f.username.value +'\nPassWord : '+this.f.password.value);
                
                
