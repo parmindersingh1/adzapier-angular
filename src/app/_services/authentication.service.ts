@@ -26,12 +26,15 @@ export class AuthenticationService {
         //console.log(email+"dfdsfdsf   "+password);
          return this.http.post<any>(environment.apiUrl+'/login', { email, password })
              .pipe(map(user => {
-        //         // store user details and jwt token in local storage to keep user logged in between page refreshes
+                 // store user details and jwt token in local storage to keep user logged in between page refreshes
                  localStorage.setItem('currentUser', JSON.stringify(user.response));
+                 //console.log('token',JSON.stringify(user.response.token));
+                 localStorage.setItem('token', JSON.stringify(user.response.token));
                  this.currentUserSubject.next(user);
                  return user;
                  //console.log(user);
              })
+             
              );
              alert('Wrong  Credentials');
     }

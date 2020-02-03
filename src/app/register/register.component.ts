@@ -16,6 +16,7 @@ export class RegisterComponent implements OnInit {
     submitted = false;
     navbarCollapsed=false;
     show:Boolean=false;
+    errorMsg: string;
 
     constructor(
         private formBuilder: FormBuilder,
@@ -44,6 +45,10 @@ export class RegisterComponent implements OnInit {
     // convenience getter for easy access to form fields
     get f() { return this.regForm.controls; }
 
+    clearError() {
+        this.errorMsg = "";
+    }
+
     onSubmit() {
         this.submitted = true;
         this.show=false;
@@ -67,21 +72,42 @@ export class RegisterComponent implements OnInit {
                     //debugger;
                     this.alertService.success('Registration successful', true);
                     //this.router.navigate(['/login']);
+                    this.errorMsg = "Registration successful....Please LogIn";
                 },
                 error => {
                     this.alertService.error(error);
+                    for (var key in error) {
+                        if (key != "No_record") {
+                            
+                            this.errorMsg = error[key];
+                        }
+                        break;
+                    }
+                    
+                   // console.log(JSON.stringify(error))
+                    //this.errorMsg = error.org_exist;
+                    //this.errorMsg = error.Taken_email;
                     this.loading = false;
+                    //this.show=true;
+
+                    
+                   // this.router.navigate([this.returnUrl]);
                 });
                // debugger;
-              if(this.f.password.value!==this.f.confirmpassword.value){
-                alert('Please enter Password & Confirm password same...!\nPassword : '+this.f.password.value+'\nConfirm Password: '+this.f.confirmpassword.value);             
-              }
-           else{
-                 if(this.f.email.value!=''&&this.f.password.value!=''&&this.f.firstName.value!=''&&this.f.lastName.value!=''&&this.f.confirmpassword.value!=''&&this.f.orgname.value!=''){
-                  this.show=true;
-              alert('First Name : '+this.f.firstName.value+'\nLast Name : '+this.f.lastName.value+'\nOrganization : '+this.f.orgname.value+'\nEmail Id : '+this.f.email.value+'\nPassword : '+this.f.password.value+'\nConfirm Password: '+this.f.confirmpassword.value+'\nAccount Created Successfully..!');
-              }
-              //+'\nOrganisation'+this.f.organisation.value
-          }                
+
+        //       if(this.f.password.value!==this.f.confirmpassword.value){
+        //         alert('Please enter Password & Confirm password same...!\nPassword : '+this.f.password.value+'\nConfirm Password: '+this.f.confirmpassword.value);             
+        //       }
+        //    else{
+        //          if(this.f.email.value!=''&&this.f.password.value!=''&&this.f.firstName.value!=''&&this.f.lastName.value!=''&&this.f.confirmpassword.value!=''&&this.f.organization.value!=''){
+        //           this.show=true;
+        //         //   setTimeout(function(){ 
+        //         //     location.reload();
+        //         // }, 5000); 
+        //       //alert('First Name : '+this.f.firstName.value+'\nLast Name : '+this.f.lastName.value+'\nOrganization : '+this.f.organization.value+'\nEmail Id : '+this.f.email.value+'\nPassword : '+this.f.password.value+'\nConfirm Password: '+this.f.confirmpassword.value+'\nAccount Created Successfully..!');
+               
+        //     }
+              
+        //   }                
     }
 }
