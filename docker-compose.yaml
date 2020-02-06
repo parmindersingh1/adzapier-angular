@@ -38,7 +38,7 @@ services:
         - "traefik.enable=true"
         - "traefik.port=80"
         - "traefik.docker.network=traefik_apps"
-        - "traefik.frontend.rule=Host:staging-cmp.adzpier.com,titan.adzapier.com,adzpier.com"
+        - "traefik.frontend.rule=Host:${HOST}"
 networks:
   apps:
     external:
