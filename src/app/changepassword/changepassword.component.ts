@@ -17,6 +17,7 @@ export class ChangepasswordComponent implements OnInit {
     loading = false;
     submitted = false;
     show:Boolean=false;
+    errorMsg: string;
     navbarCollapsed: boolean=false;
 
     constructor(
@@ -44,6 +45,10 @@ export class ChangepasswordComponent implements OnInit {
 
     // convenience getter for easy access to form fields
     get f() { return this.changepasswordForm.controls; }
+
+    clearError() {
+      this.errorMsg = "";
+  }
 
     onSubmit() {
         this.submitted = true;
