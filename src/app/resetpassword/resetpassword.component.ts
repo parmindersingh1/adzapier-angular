@@ -30,7 +30,7 @@ export class ResetpasswordComponent implements OnInit {
         private alertService: AlertService
   ) { 
     if (this.authenticationService.currentUserValue) {
-      this.router.navigate(['/']);
+      this.router.navigate(['/resetpswd/:id']);
   }
   }
 

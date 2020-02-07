@@ -28,14 +28,14 @@ export class ChangepasswordComponent implements OnInit {
     ) {
         // redirect to home if already logged in
         if (this.authenticationService.currentUserValue) {
-            this.router.navigate(['/']);
+            this.router.navigate(['/changepassword']);
         }
     }
 
     ngOnInit() {
         this.changepasswordForm = this.formBuilder.group({
             fullName: ['', Validators.required,Validators.pattern],
-            username: ['', Validators.required,Validators.pattern],
+            email: ['', Validators.required,Validators.pattern],
             oldpsw: ['', Validators.required, ,Validators.pattern,Validators.minLength(6)],
             newpsw: ['', Validators.required, ,Validators.pattern,Validators.minLength(6)],
             renewpsw:['', Validators.required, ,Validators.pattern,Validators.minLength(6)]
@@ -47,10 +47,11 @@ export class ChangepasswordComponent implements OnInit {
 
     onSubmit() {
         this.submitted = true;
+        this.show=false;
       //debugger;
         // reset alerts on submit
         this.alertService.clear();
-        this.show=false;
+        
         // stop here if form is invalid
         if (this.changepasswordForm.invalid) {
             return;

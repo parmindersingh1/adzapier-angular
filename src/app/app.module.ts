@@ -28,6 +28,9 @@ import { EditProfileComponent } from './edit-profile/edit-profile.component';
 import { UseractivityComponent } from './useractivity/useractivity.component';
 import { OrgpageComponent } from './orgpage/orgpage.component';
 import { ResetpasswordComponent } from './resetpassword/resetpassword.component';
+import { PagenotfoundComponent } from './errorpages/pagenotfound.component';
+import { InternalerrorComponent } from './errorpages/internalerror.component';
+
 
 
 
@@ -49,6 +52,8 @@ export const isMock = environment.mock;
     UseractivityComponent,
     OrgpageComponent,
     ResetpasswordComponent,
+    PagenotfoundComponent,
+    InternalerrorComponent,
     
   ],
   imports: [
