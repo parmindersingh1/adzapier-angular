@@ -30,12 +30,12 @@ export class EditProfileComponent implements OnInit {
       
         // redirect to home if already logged in
         if (this.authenticationService.currentUserValue) {
-            this.router.navigate(['/']);
+            this.router.navigate(['/editprofile']);
         }
     }
 
     ngOnInit() {
-      debugger;
+      //debugger;
       this.editProfileForm = this.formBuilder.group({
         fullName: ['', Validators.required,Validators.pattern],
         username: ['', Validators.required,Validators.pattern],
@@ -58,12 +58,12 @@ export class EditProfileComponent implements OnInit {
     // }
    
     changemail(){
-       debugger;
+       //debugger;
       this.onSubmit();
     }
     changepwd(){
       //this.f.currentpwd.value='Aa@3ersdsd';
-      debugger;
+      //debugger;
       if(this.f.newpwd.value==''){
         alert('Please Enter New Password');
        //document.getElementById('currentpwd1').focus();
@@ -82,7 +82,7 @@ export class EditProfileComponent implements OnInit {
    
     onSubmit() {
         this.submitted = true;
-      debugger;
+      //debugger;
       if(this.f.fullName.value==''){
         alert('Please Enter Full Name');
     //   document.getElementById('currentpwd').focus();
@@ -107,7 +107,7 @@ export class EditProfileComponent implements OnInit {
       
       this.changepwd();
       alert('Edit profile Successfully...!');
-      debugger;
+      //debugger;
        this.show=true;
         // stop here if form is invalid
         // if (this.editProfileForm.invalid) {
@@ -115,7 +115,7 @@ export class EditProfileComponent implements OnInit {
         // }
        
         this.loading = true;
-          debugger;
+          //debugger;
         
        
     }

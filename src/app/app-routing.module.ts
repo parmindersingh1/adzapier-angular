@@ -13,6 +13,8 @@ import { EditProfileComponent } from './edit-profile/edit-profile.component';
 import { OrgpageComponent } from './orgpage/orgpage.component';
 import { UseractivityComponent } from './useractivity/useractivity.component';
 import { ResetpasswordComponent } from './resetpassword/resetpassword.component';
+import { PagenotfoundComponent } from './errorpages/pagenotfound.component';
+import { InternalerrorComponent } from './errorpages/internalerror.component';
 
 
 const routes: Routes = [
@@ -23,10 +25,12 @@ const routes: Routes = [
    {path:'forgotpassword',component:ForgotpasswordComponent},
    { path: 'dashboard/analytics', component: AnalyticsComponent },
    {path:'changepassword',component:ChangepasswordComponent},
-   {path:'editProfile',component:EditProfileComponent},
+   {path:'editprofile',component:EditProfileComponent},
    {path:'portalorg',component:OrgpageComponent},
    {path:'useractivity',component:UseractivityComponent},
    {path:'resetpswd/:id',component:ResetpasswordComponent},
+   {path:'pagenotfound',component:PagenotfoundComponent},
+   {path:'internalerror',component:InternalerrorComponent},
    
    
   // otherwise redirect to home
