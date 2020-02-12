@@ -4,6 +4,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from './../../environments/environment.staging';
 import { User } from './../_models';
+import { Router } from "@angular/router";
 
 @Injectable({ providedIn: 'root' })
 export class AuthenticationService {
@@ -12,8 +13,10 @@ export class AuthenticationService {
     private currentUserSubject: BehaviorSubject<User>;
     public currentUser: Observable<User>;
 
-    constructor(private http: HttpClient) {
-        this.currentUserSubject = new BehaviorSubject<User>(JSON.parse(sessionStorage.getItem('currentUser')));
+    constructor(private http: HttpClient,
+                private router:Router) {
+        
+        this.currentUserSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('currentUser')));
         this.currentUser = this.currentUserSubject.asObservable();
     }
 
@@ -27,7 +30,7 @@ export class AuthenticationService {
          return this.http.post<any>(environment.apiUrl+'/login', { email, password })
              .pipe(map(user => {
                  // store user details and jwt token in local storage to keep user logged in between page refreshes
-                 sessionStorage.setItem('currentUser', JSON.stringify(user.response));
+                 localStorage.setItem('currentUser', JSON.stringify(user.response));
                  //console.log('token',JSON.stringify(user.response.token));
                  //localStorage.setItem('token', JSON.stringify(user.response.token));
                  this.currentUserSubject.next(user);
@@ -40,8 +43,16 @@ export class AuthenticationService {
     }
 
     logout() {
-        // remove user from local storage and set current user to null
-        sessionStorage.removeItem('currentUser');
-        this.currentUserSubject.next(null);
+
+        if ("currentUser" in localStorage) {
+            return true;
+        } else {
+            localStorage.removeItem('currentUser');
+            // remove user from local storage and set current user to null
+            this.currentUserSubject.next(null);
+            return false;
+        }
+        
+        
     }
 }

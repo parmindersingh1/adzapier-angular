@@ -18,7 +18,7 @@
         <li class="nav-item with-sub active" ngbDropdown>
           <a  class="nav-link" ngbDropdownToggle id="navbarDropdown01">Organization</a>
           <ul  aria-labelledby="navbarDropdown01" class="navbar-menu-sub">
-            <li class="nav-sub-item"><a routerLink="/login"  class="nav-sub-link">Property 1</a></li>
+            <li class="nav-sub-item"><a routerLink=""  class="nav-sub-link">Property 1</a></li>
             <li class="nav-sub-item"><a routerLink="/dashboard/analytics" class="nav-sub-link">Property 2</a></li>
             <li class="nav-sub-item"><a href="#" (click)="$event.preventDefault()" class="nav-sub-link">Property 3</a></li>
             <li class="nav-sub-item"><a href="#" (click)="$event.preventDefault()" class="nav-sub-link"><i-feather name="bar-chart-2"></i-feather>Property 4</a></li>
@@ -77,7 +77,7 @@
 
 
 
-    <div class="navbar-right">
+    <div class="navbar-right" *ngIf="accessHeader">
         <a id="navbarSearch" href="" class="search-link">
         
           <i-feather name="search"></i-feather>
@@ -188,7 +188,7 @@
           </a><!-- dropdown-link -->
           <div class="dropdown-menu dropdown-menu-right tx-13">
             <div class="avatar avatar-lg mg-b-15"><img src="assets/imgs/glass.jpg" class="rounded-circle" alt=""></div>
-            <h6 class="tx-semibold mg-b-5">Krish Chaitu</h6>
+            <h6 class="tx-semibold mg-b-5">{{dashname}}</h6>
             <p class="mg-b-25 tx-12 tx-color-03">Administrator</p>
 
             <a routerLink="/editprofile"  class="dropdown-item">
@@ -210,7 +210,7 @@
             <a routerLink="/pagenotfound" class="dropdown-item">
                 <i-feather name="settings"></i-feather>Privacy Settings</a>
 
-            <a routerLink="/login" class="dropdown-item">
+            <a (click)="logout()" class="dropdown-item" style="cursor: pointer;">
                 <i-feather name="log-out"></i-feather>Sign Out</a>
 
           </div><!-- dropdown-menu -->
