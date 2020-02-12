@@ -5,6 +5,8 @@ import { first } from 'rxjs/operators';
 
 import { AlertService, UserService, AuthenticationService } from './../_services';
 
+
+
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
@@ -23,7 +25,8 @@ export class RegisterComponent implements OnInit {
         private router: Router,
         private authenticationService: AuthenticationService,
         private userService: UserService,
-        private alertService: AlertService
+        private alertService: AlertService,
+        
     ) {
         // redirect to home if already logged in
         if (this.userService.currentUserValue) {
@@ -71,8 +74,16 @@ export class RegisterComponent implements OnInit {
                 data => {
                     //debugger;
                     this.alertService.success('Registration successful', true);
-                    //this.router.navigate(['/login']);
-                    this.errorMsg = "Registration successful....Please LogIn";
+                    
+                    
+                    alert("Registration Successful....Please Login");
+                     this.router.navigate(['/login']);
+                //    setTimeout(function(){ 
+                    
+                //      }, 1000);
+                //      alert("Registration successful....Please LogIn");
+                //      this.router.navigate(['/login']);
+                   
                 },
                 error => {
                     this.alertService.error(error);

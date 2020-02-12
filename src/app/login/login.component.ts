@@ -20,6 +20,7 @@ export class LoginComponent implements OnInit {
     errorMsg: string;
     show:Boolean=false;
     show1:Boolean=false;
+    sign_in: string =  "Login";
     
     //userdetails:any=[];
 
@@ -74,9 +75,9 @@ export class LoginComponent implements OnInit {
 
         this.loading = true;
         //console.log(this.loginForm);
-      
+        this.sign_in = "Processing...";
         this.authenticationService.login(this.f.email.value,this.f.password.value)
-        
+            
             .pipe(first())
             .subscribe(
                 data => {
@@ -88,13 +89,10 @@ export class LoginComponent implements OnInit {
                 error => {
                     this.alertService.error(error);
                     for (var key in error) {
-
-                        //console.log(error[key]);
                         this.errorMsg = error[key];
                         break;
                     }
-                   // console.log(JSON.stringify(error))
-                    //this.errorMsg = error.Incorrect_password;
+                    this.sign_in = "Login";
                     this.loading = false;
                     
                     this.router.navigate([this.returnUrl]);
@@ -132,4 +130,6 @@ export class LoginComponent implements OnInit {
                 //  }
                 
     }
+    
+    
 }

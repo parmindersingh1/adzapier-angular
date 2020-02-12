@@ -30,6 +30,8 @@ import { OrgpageComponent } from './orgpage/orgpage.component';
 import { ResetpasswordComponent } from './resetpassword/resetpassword.component';
 import { PagenotfoundComponent } from './errorpages/pagenotfound.component';
 import { InternalerrorComponent } from './errorpages/internalerror.component';
+import { PagenotfoundComponent1 } from './errorpages/404page.component';
+
 
 
 
@@ -54,6 +56,7 @@ export const isMock = environment.mock;
     ResetpasswordComponent,
     PagenotfoundComponent,
     InternalerrorComponent,
+    PagenotfoundComponent1,
     
   ],
   imports: [
