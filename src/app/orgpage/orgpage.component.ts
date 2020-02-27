@@ -28,19 +28,19 @@ export class OrgpageComponent implements OnInit {
   }
   get f() { return this.orgForm.controls; }
   onSubmit(){
-    debugger;
+    //debugger;
     this.submitted = true;
     
   }
   editclick(){
-    debugger;
+    //debugger;
     this.show=false;
     this.show1=true;
     
   }
 
   cancelclick(){
-    debugger;
+    //debugger;
     this.show=true;
     this.show1=false;
   }

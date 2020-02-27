@@ -4,6 +4,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 
 import { AlertService, AuthenticationService } from './../_services';
+import { OrganizationService } from '../_services/organization.service';
+
 
 
 @Component({ 
@@ -30,7 +32,9 @@ export class LoginComponent implements OnInit {
         private route: ActivatedRoute,
         private router: Router,
         private authenticationService: AuthenticationService,
-        private alertService: AlertService
+        private alertService: AlertService,
+        private orgservice:OrganizationService,
+        
     ) {
         // redirect to home if already logged in
         if (this.authenticationService.currentUserValue) {
@@ -42,12 +46,13 @@ export class LoginComponent implements OnInit {
     
     ngOnInit() {
         this.loginForm = this.formBuilder.group({
-            email: ['', [Validators.required,Validators.pattern]],
-            password: ['', [Validators.required,Validators.pattern,Validators.minLength(6)]]
+            email: ['dchaitanya@adzapier.com', [Validators.required,Validators.pattern]],
+            password: ['Adzap@123', [Validators.required,Validators.pattern,Validators.minLength(6)]]
         });
 
         // get return url from route parameters or default to '/'
         this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+        
     }
 
     // convenience getter for easy access to form fields
@@ -56,7 +61,7 @@ export class LoginComponent implements OnInit {
     clearError() {
         this.errorMsg = "";
     }
-
+        
     onSubmit() {
        
         this.submitted = true;
@@ -81,8 +86,11 @@ export class LoginComponent implements OnInit {
             .pipe(first())
             .subscribe(
                 data => {
-                    
-                    this.returnUrl='/dashboard/analytics';
+                    let authtoken = data.response.token;
+                    let userid = data.response.id;
+                let a =  this.organizationlist(authtoken,userid);
+                console.log(a);
+                    this.returnUrl='/home/dashboard/analytics';
                       return this.router.navigate([this.returnUrl]);
                     //this.router.navigate([this.returnUrl]);
                 },
@@ -99,36 +107,18 @@ export class LoginComponent implements OnInit {
                 });
 
 
-            //     if(this.f.email.value!==this.f.password.value){
-            //         this.errorMsg = "Invalid credentials"
-            //         this.show1=true;
-                    
-            //     }
-            //     else{
-            //         if(this.f.email.value!=''&&this.f.password.value!=''){
-            //          this.show=true;
-            //          this.errorMsg = ""
-                      
-            //    }
-                 
-            //  }
-               // alert('Email ID : '+this.f.username.value +'\nPassWord : '+this.f.password.value);
-               
-               
-                // if(this.f.password.value.length>=6 ){
-                //     this.show=true;
-                //    // alert('Email ID : '+this.f.username.value +'\nPassWord : '+this.f.password.value);
-                //     console.log(this.loginForm);
-                   
-                // }
-                // else {
-                //     this.show=false;
-                // }
-                // if (!this.loginForm.invalid){
-                //     this.returnUrl='/dashboard/analytics';
-                //     return this.router.navigate([this.returnUrl]);
-                //  }
+           
                 
+    }
+
+    organizationlist(token,uid){
+        this.orgservice.orglist(token,uid).subscribe((data:any)=> {
+       
+            console.log(data);
+      
+            
+           
+          });
     }
     
     

@@ -11,7 +11,7 @@
     password: string;
     confirmpassword: string;
     token: string;
-    id: number;
+    uid: number;
     roles: string;
 
 

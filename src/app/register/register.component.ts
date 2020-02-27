@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
-
 import { AlertService, UserService, AuthenticationService } from './../_services';
 
 
@@ -13,6 +12,7 @@ import { AlertService, UserService, AuthenticationService } from './../_services
   styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent implements OnInit {
+
     regForm: FormGroup;
     loading = false;
     submitted = false;
@@ -30,7 +30,7 @@ export class RegisterComponent implements OnInit {
     ) {
         // redirect to home if already logged in
         if (this.userService.currentUserValue) {
-            this.router.navigate(['/register']);
+            this.router.navigate(['/signup']);
         }
     }
 
@@ -65,8 +65,7 @@ export class RegisterComponent implements OnInit {
         }
 
         this.loading = true;
-        console.log(this.regForm);
-
+        //console.log(this.regForm);
         //this.userService.register(this.registerForm.value)
         this.userService.register(this.f.firstName.value, this.f.lastName.value, this.f.organization.value, this.f.email.value, this.f.password.value, this.f.confirmpassword.value)
             .pipe(first())
@@ -78,11 +77,6 @@ export class RegisterComponent implements OnInit {
                     
                     alert("Registration Successful....Please Login");
                      this.router.navigate(['/login']);
-                //    setTimeout(function(){ 
-                    
-                //      }, 1000);
-                //      alert("Registration successful....Please LogIn");
-                //      this.router.navigate(['/login']);
                    
                 },
                 error => {
@@ -95,30 +89,12 @@ export class RegisterComponent implements OnInit {
                         break;
                     }
                     
-                   // console.log(JSON.stringify(error))
-                    //this.errorMsg = error.org_exist;
-                    //this.errorMsg = error.Taken_email;
                     this.loading = false;
                     //this.show=true;
 
                     
                    // this.router.navigate([this.returnUrl]);
                 });
-               // debugger;
-
-        //       if(this.f.password.value!==this.f.confirmpassword.value){
-        //         alert('Please enter Password & Confirm password same...!\nPassword : '+this.f.password.value+'\nConfirm Password: '+this.f.confirmpassword.value);             
-        //       }
-        //    else{
-        //          if(this.f.email.value!=''&&this.f.password.value!=''&&this.f.firstName.value!=''&&this.f.lastName.value!=''&&this.f.confirmpassword.value!=''&&this.f.organization.value!=''){
-        //           this.show=true;
-        //         //   setTimeout(function(){ 
-        //         //     location.reload();
-        //         // }, 5000); 
-        //       //alert('First Name : '+this.f.firstName.value+'\nLast Name : '+this.f.lastName.value+'\nOrganization : '+this.f.organization.value+'\nEmail Id : '+this.f.email.value+'\nPassword : '+this.f.password.value+'\nConfirm Password: '+this.f.confirmpassword.value+'\nAccount Created Successfully..!');
                
-        //     }
-              
-        //   }                
     }
 }

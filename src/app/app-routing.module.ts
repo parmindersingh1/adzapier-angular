@@ -23,17 +23,18 @@ const routes: Routes = [
    { path: '', component: HomeComponent, canActivate: [AuthGuard] },
    { path: 'login', component: LoginComponent },
    { path: 'logout', component: LoginComponent },
-   { path: 'register', component: RegisterComponent },
-   {path:'forgotpassword',component:ForgotpasswordComponent},
-   { path: 'dashboard/analytics', component: AnalyticsComponent, canActivate: [AuthGuard] },
-   {path:'changepassword',component:ChangepasswordComponent},
-   {path:'editprofile',component:EditProfileComponent, canActivate: [AuthGuard] },
-   {path:'portalorg',component:OrgpageComponent},
-   {path:'useractivity',component:UseractivityComponent},
-   {path:'resetpswd/:id',component:ResetpasswordComponent},
+   { path: 'signup', component: RegisterComponent },
+   {path:'forgot-password',component:ForgotpasswordComponent},
+   { path: 'home/dashboard/analytics', component: AnalyticsComponent, canActivate: [AuthGuard] },
+   {path:'user/password/change-password',component:ChangepasswordComponent, canActivate: [AuthGuard]},
+   {path:'user/profile/edit',component:EditProfileComponent, canActivate: [AuthGuard] },
+   {path:'portalorg',component:OrgpageComponent, canActivate: [AuthGuard]},
+   {path:'user/activity',component:UseractivityComponent, canActivate: [AuthGuard]},
+   {path:'reset-password/:id',component:ResetpasswordComponent},
    {path:'pagenotfound',component:PagenotfoundComponent},
    {path:'404page',component:PagenotfoundComponent1},
    {path:'internalerror',component:InternalerrorComponent},
+   
 
    
    

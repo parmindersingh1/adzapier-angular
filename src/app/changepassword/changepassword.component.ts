@@ -29,7 +29,7 @@ export class ChangepasswordComponent implements OnInit {
     ) {
         // redirect to home if already logged in
         if (this.authenticationService.currentUserValue) {
-            this.router.navigate(['/changepassword']);
+            this.router.navigate(['/user/password/change-password']);
         }
     }
 

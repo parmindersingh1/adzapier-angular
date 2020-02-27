@@ -1,12 +1,11 @@
 
-<header class="navbar navbar-header navbar-header-fixed bg-gray-100">
+<header class="navbar navbar-header navbar-header-fixed bg-gray-100" >
      <a  href="#" id="mainMenuOpen" class="burger-menu"><i data-feather="menu"></i></a>
      <div class="navbar-brand">
       <a class="df-logo">Adzapier<span>Solutions</span></a>
     </div> 
 
-
-    <div id="navbarMenu" class="navbar-menu-wrapper">
+    <div id="navbarMenu" class="navbar-menu-wrapper" *ngIf="accessHeader">
       <div class="navbar-menu-header">
         <a href="../../index.html" class="df-logo">dash<span>forge</span></a>
         <a id="mainMenuClose" href=""><i data-feather="x"></i></a>
@@ -19,9 +18,6 @@
           <a  class="nav-link" ngbDropdownToggle id="navbarDropdown01">Organization</a>
           <ul  aria-labelledby="navbarDropdown01" class="navbar-menu-sub">
             <li class="nav-sub-item"><a routerLink=""  class="nav-sub-link">Property 1</a></li>
-            <li class="nav-sub-item"><a routerLink="/dashboard/analytics" class="nav-sub-link">Property 2</a></li>
-            <li class="nav-sub-item"><a href="#" (click)="$event.preventDefault()" class="nav-sub-link">Property 3</a></li>
-            <li class="nav-sub-item"><a href="#" (click)="$event.preventDefault()" class="nav-sub-link"><i-feather name="bar-chart-2"></i-feather>Property 4</a></li>
           </ul>
         </li>
 
@@ -78,16 +74,11 @@
 
 
     <div class="navbar-right" *ngIf="accessHeader">
-        <a id="navbarSearch" href="" class="search-link">
+        <a  id="navbarSearch"  class="search-link">
         
           <i-feather name="search"></i-feather>
         </a>
-        <div class="dropdown dropdown-message">
-          <!-- <a href="" class="dropdown-link new-indicator" data-toggle="dropdown">
-            
-            <i-feather name="message-square"></i-feather>
-            <span>5</span>
-          </a> -->
+        <!-- <div class="dropdown dropdown-message">
           <div class="dropdown-menu dropdown-menu-right">
             <div class="dropdown-header">New Messages</div>
             <a href="" class="dropdown-item">
@@ -97,8 +88,8 @@
                   <strong>Socrates Itumay</strong>
                   <p>nam libero tempore cum so...</p>
                   <span>Mar 15 12:32pm</span>
-                </div><!-- media-body -->
-              </div><!-- media -->
+                </div>
+              </div>
             </a>
             <a href="" class="dropdown-item">
               <div class="media">
@@ -107,8 +98,8 @@
                   <strong>Joyce Chua</strong>
                   <p>on the other hand we denounce...</p>
                   <span>Mar 13 04:16am</span>
-                </div><!-- media-body -->
-              </div><!-- media -->
+                </div>
+              </div>
             </a>
             <a href="" class="dropdown-item">
               <div class="media">
@@ -117,8 +108,8 @@
                   <strong>Althea Cabardo</strong>
                   <p>is there anyone who loves...</p>
                   <span>Mar 13 02:56am</span>
-                </div><!-- media-body -->
-              </div><!-- media -->
+                </div>
+              </div>
             </a>
             <a href="" class="dropdown-item">
               <div class="media">
@@ -127,12 +118,12 @@
                   <strong>Adrian Monino</strong>
                   <p>duis aute irure dolor in repre...</p>
                   <span>Mar 12 10:40pm</span>
-                </div><!-- media-body -->
-              </div><!-- media -->
+                </div>
+              </div>
             </a>
             <div class="dropdown-footer"><a href="">View all Messages</a></div>
           </div>
-        </div><!-- dropdown -->
+        </div> -->
         <div class="dropdown dropdown-notification">
           <a href="" class="dropdown-link new-indicator" data-toggle="dropdown">
             <i-feather name="bell"></i-feather>
@@ -191,10 +182,10 @@
             <h6 class="tx-semibold mg-b-5">{{dashname}}</h6>
             <p class="mg-b-25 tx-12 tx-color-03">Administrator</p>
 
-            <a routerLink="/editprofile"  class="dropdown-item">
+            <a routerLink="/user/profile/edit"  class="dropdown-item">
               <i-feather name="edit-3"></i-feather>Edit Profile</a>
               
-            <a routerLink="/editprofile" class="dropdown-item">
+            <a routerLink="/portalorg" class="dropdown-item">
             <i-feather name="user"></i-feather>View Profile</a>
 
             <div class="dropdown-divider"></div>
@@ -204,7 +195,7 @@
             <a routerLink="/pagenotfound" class="dropdown-item">
                 <i-feather name="life-buoy"></i-feather> Forum</a>
 
-            <a routerLink="/changepassword" class="dropdown-item">
+            <a routerLink="/user/password/change-password" class="dropdown-item">
                 <i-feather name="settings"></i-feather>Account Settings</a>
 
             <a routerLink="/pagenotfound" class="dropdown-item">
@@ -216,12 +207,12 @@
           </div><!-- dropdown-menu -->
         </div><!-- dropdown -->
       </div><!-- navbar-right -->
-      <div class="navbar-search">
+      <!-- <div class="navbar-search" *ngIf="accessHeader">
         <div class="navbar-search-header">
           <input type="search" class="form-control" placeholder="Type and hit enter to search...">
           <button class="btn"><i data-feather="search"></i></button>
           <a id="navbarSearchClose" href="" class="link-03 mg-l-5 mg-lg-l-10"><i data-feather="x"></i></a>
-        </div><!-- navbar-search-header -->
+        </div>
         <div class="navbar-search-body">
           <label class="tx-10 tx-medium tx-uppercase tx-spacing-1 tx-color-03 mg-b-10 d-flex align-items-center">Recent Searches</label>
           <ul class="list-unstyled">
@@ -241,7 +232,7 @@
             <li><a href="../../collections/modal.html">form elements</a></li>
             <li><a href="../../components/el-avatar.html">contact app</a></li>
           </ul>
-        </div><!-- navbar-search-body -->
-      </div><!-- navbar-search -->
+        </div>
+      </div> -->
 
 </header><!-- navbar -->

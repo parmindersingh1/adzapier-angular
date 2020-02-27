@@ -30,7 +30,7 @@ export class ResetpasswordComponent implements OnInit {
         private alertService: AlertService
   ) { 
     if (this.authenticationService.currentUserValue) {
-      this.router.navigate(['/resetpswd/:id']);
+      this.router.navigate(['/reset-password/:id']);
   }
   }
 
@@ -64,7 +64,7 @@ export class ResetpasswordComponent implements OnInit {
         this.loading = true;
                // debugger;
                // console.log(this.f.token.value, this.f.newpsw.value, this.f.renewpsw.value);
-               this.userService.resetpswd(this.f.token.value, this.f.newpsw.value, this.f.renewpsw.value)
+               this.userService.resetpassword(this.f.token.value, this.f.newpsw.value, this.f.renewpsw.value)
             .pipe(first())
             .subscribe(
                 data => {
