@@ -3,18 +3,26 @@ import { ChartJSInterface } from 'chartjs-ng2-module/chart-js-interfaces';
 
 // import { df1 } from './sampledata';
 import { faChrome,faEdge,faFirefox,faSafari,faOpera } from '@fortawesome/free-brands-svg-icons';
+import { OrganizationService } from '../../../_services/organization.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './analytics.component.html',
   styleUrls: ['./analytics.component.scss']
 })
-export class AnalyticsComponent {
+export class AnalyticsComponent  {
   faChrome=faChrome;
   faEdge=faEdge;
   faFirefox=faFirefox;
   faSafari=faSafari;
   faOpera=faOpera;
+
+
+  constructor(
+    private orgservice:OrganizationService,
+  ) {}
+    // redirect to home if already logged in
+
 
   public barChartData: ChartJSInterface = {
     type: 'bar',
@@ -381,6 +389,6 @@ export class AnalyticsComponent {
     }
   };
 
-
+  
 
 }

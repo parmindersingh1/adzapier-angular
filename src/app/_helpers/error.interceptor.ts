@@ -15,7 +15,7 @@ export class ErrorInterceptor implements HttpInterceptor {
             if (err.status === 401) {
                 // auto logout if 401 response returned from api
                 if(this.authenticationService.logout()){
-                    this.router.navigate(["/dashboard/analytics"]);
+                    this.router.navigate(["/home/dashboard/analytics"]);
                 } else {
                     this.router.navigate(["/login"]);
                 }

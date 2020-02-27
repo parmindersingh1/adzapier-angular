@@ -12,6 +12,7 @@ export class UserService {
 
     private currentregSubject: BehaviorSubject<User>;
     public currentregUser: Observable<User>;
+
     
     constructor(private http: HttpClient) {
         this.currentregSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('currentregUser')));
@@ -45,7 +46,7 @@ export class UserService {
     }
 
 
-    resetpswd(token, password, confirmpassword ) {
+    resetpassword(token, password, confirmpassword ) {
         return this.http.post<any>(environment.apiUrl+'/password/reset', {token, password, confirmpassword })
              .pipe(map(user => {
              })
@@ -63,6 +64,34 @@ export class UserService {
     }
 
     delete(id: number) {
-        return this.http.delete(environment.apiUrl+'/users/${id}');
+        return this.http.delete(environment.apiUrl+'/users/${id}',{});
     }
+
+
+    update(firstName, lastName, email, password, newpassword, confirmpassword, uid ) {
+        return this.http.put<any>(environment.apiUrl+'/user/'+uid, {firstName, lastName, email, password, newpassword, confirmpassword })
+        .pipe(map(user => {
+
+            let name = firstName + " " + lastName;
+            let email1 = email;
+           
+
+            this.currentregSubject.next(user);
+
+            if ("currentUser" in localStorage) {
+                let userData = JSON.parse(localStorage.getItem('currentUser'));
+                 userData['name'] = name;
+                 userData['email'] = email1;
+                console.log(userData);
+                localStorage.setItem("currentUser", JSON.stringify(userData));
+           
+                 return user;
+            }
+                 
+        })
+        );
+        alert('Wrong  Credentials');
+    }
+
+    
 }

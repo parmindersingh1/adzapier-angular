@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 import { AuthenticationService, UserService, AlertService } from '../_services';
 import { Router } from '@angular/router';
+import { first } from 'rxjs/operators';
 
 @Component({
   selector: 'app-edit-profile',
@@ -10,13 +11,17 @@ import { Router } from '@angular/router';
 })
 export class EditProfileComponent implements OnInit {
 
-  editProfileForm: FormGroup;
+    profileForm: FormGroup;
     loading = false;
     submitted = false;
     show:Boolean=false;
     navbarCollapsed: boolean=false;
-    value1:string;
-    value2:string;
+    returnUrl: string;
+    errorMsg: string;
+    // value1:string;
+    // value2:string;
+    userData:any;
+    uid:string;
     
 
     constructor(
@@ -28,95 +33,86 @@ export class EditProfileComponent implements OnInit {
     ) 
     {
       
-        // redirect to home if already logged in
-        if (this.authenticationService.currentUserValue) {
-            this.router.navigate(['/editprofile']);
+        // redirect to edittprofile if already logged in
+        if (this.userService.currentUserValue) {
+            this.router.navigate(['/user/profile/edit']);
         }
     }
 
     ngOnInit() {
-      //debugger;
-      this.editProfileForm = this.formBuilder.group({
-        fullName: ['', Validators.required,Validators.pattern],
-        username: ['', Validators.required,Validators.pattern],
-        newpwd: ['', Validators.required,Validators.pattern,Validators.minLength(6)],
-        currentpwd: ['', Validators.required, Validators.pattern,Validators.minLength(6)],
-        currentpwd1: ['', Validators.required, Validators.pattern,Validators.minLength(6)],
-        confpwd: ['', Validators.required, Validators.pattern,Validators.minLength(6)]
+      
+      this.profileForm = this.formBuilder.group({
+        firstName: ['', [Validators.required,Validators.pattern]],
+        lastName: ['', [Validators.required,Validators.pattern]],
+        newemail: ['', [Validators.required,Validators.pattern]],
+        currentpassword: ['', [Validators.required, Validators.pattern,Validators.minLength(6)]],
+       newpassword: ['', [Validators.required, Validators.pattern,Validators.minLength(6)]],
+      confirmpassword: ['', [Validators.required, Validators.pattern,Validators.minLength(6)]]
       });
-      //this.f.fullName.setValue('Chaitanya');
+
+      // this.emailForm = this.formBuilder.group({
+       
+      //   email: ['', [Validators.required,Validators.pattern]],
+      //   newemail: ['', [Validators.required,Validators.pattern]],
+
+      // });
+
+      // this.passwordForm = this.formBuilder.group({
+      //   currentpassword: ['', [Validators.required, Validators.pattern,Validators.minLength(6)]],
+      //   newpassword: ['', [Validators.required, Validators.pattern,Validators.minLength(6)]],
+      //   confirmpassword: ['', [Validators.required, Validators.pattern,Validators.minLength(6)]]
+      // });
+      
   }
 
     // convenience getter for easy access to form fields
-    get f() { return this.editProfileForm.controls; }
+    get f() { return this.profileForm.controls; }
    
-   
-    // nameval(){
-    //   if(this.f.fullName.value==""){
-    //     alert('Please Enter Name');
-    //   }
-    // }
-   
-    changemail(){
-       //debugger;
-      this.onSubmit();
-    }
-    changepwd(){
-      //this.f.currentpwd.value='Aa@3ersdsd';
-      //debugger;
-      if(this.f.newpwd.value==''){
-        alert('Please Enter New Password');
-       //document.getElementById('currentpwd1').focus();
-       return false;
-      }
-      if(this.f.confpwd.value==''){
-        alert('Please Enter Confrim Password');
-       //document.getElementById('currentpwd1').focus();
-       return false;
-      }
-      if(this.f.newpwd.value!==this.f.confpwd.value){
-        alert('Please enter New Password & Confirm password same...!\nNew Password : '+this.f.newpwd.value+'\nConfirm Password : '+this.f.confpwd.value);             
-      }
-    //  this.show=true;
-   }
-   
-    onSubmit() {
-        this.submitted = true;
-      //debugger;
-      if(this.f.fullName.value==''){
-        alert('Please Enter Full Name');
-    //   document.getElementById('currentpwd').focus();
-       return false;
-      }
-      if(this.f.currentpwd.value==''){
-        alert('Please Enter Current Password');
-    //   document.getElementById('currentpwd').focus();
-       return false;
-      }
-      if(this.f.username.value==''){
-        alert('Please Enter New Email');
-    //   document.getElementById('currentpwd').focus();
-       return false;
-      }
-    
-      if(this.f.currentpwd1.value==''){
-        alert('Please Enter New Current Password');
-       //document.getElementById('currentpwd1').focus();
-       return true;
-      }
+
+    clearError() {
+      this.errorMsg = "";
       
-      this.changepwd();
-      alert('Edit profile Successfully...!');
-      //debugger;
-       this.show=true;
-        // stop here if form is invalid
-        // if (this.editProfileForm.invalid) {
-        //     return;
-        // }
+      alert("jdajdgsads");
+        console.log(123456);
+  }
+
+    onSubmit() {
        
+      this.submitted = true;
+        this.show=false;
+        //alert()
+            
+        // reset alerts on submit
+        this.alertService.clear();
+      
+        // stop here if form is invalid
+        if (this.profileForm.invalid) {
+            return;
+        }
+
+        //alert()
         this.loading = true;
-          //debugger;
+        console.log(this.profileForm);
+
+        if ("currentUser" in localStorage) {
+              
+          this.userData = JSON.parse(localStorage.getItem('currentUser'));
+          this.uid = this.userData['id'];
+          
+        } 
         
+        this.userService.update(this.f.firstName.value, this.f.lastName.value, this.f.newemail.value,
+                                this.f.currentpassword.value, this.f.newpassword.value, this.f.confirmpassword.value, this.uid)
+            
+            .pipe(first())
+            .subscribe(
+                data => {
+
+                    this.returnUrl='/home/dashboard/analytics';
+                      return this.router.navigate([this.returnUrl]);
+                    //this.router.navigate([this.returnUrl]);
+                });
+                this.loading=false;
        
     }
 }
