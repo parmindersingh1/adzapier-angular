@@ -4,6 +4,6 @@ export const environment = {
   production: true,
   mock: false,
   
-  apiUrl:"//staging-cmp-api.adzpier.com/api/v1",
+  apiUrl:"//staging-cmp-api.adzpier.com/api/v1"
  // apiUrl: '//staging-cmp-api.adzpier.com/api/v1',
 };
