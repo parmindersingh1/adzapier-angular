@@ -1,238 +1,88 @@
+<header class="navbar navbar-header navbar-header-fixed bg-gray-100">
+  <a href="#" id="mainMenuOpen" class="burger-menu"><i data-feather="menu"></i></a>
+  <div class="navbar-brand">
+    <a class="df-logo">Adzapier<span>Solutions</span></a>
+  </div>
 
-<header class="navbar navbar-header navbar-header-fixed bg-gray-100" >
-     <a  href="#" id="mainMenuOpen" class="burger-menu"><i data-feather="menu"></i></a>
-     <div class="navbar-brand">
-      <a class="df-logo">Adzapier<span>Solutions</span></a>
-    </div> 
+  <div id="navbarMenu" class="navbar-menu-wrapper" *ngIf="isUserLoggedIn$ | async as isuserLoggedIn">
+    <!-- *ngIf="headerStatus"-->
+    <div class="navbar-menu-header">
+      <a href="../../index.html" class="df-logo">dash<span>forge</span></a>
+      <a id="mainMenuClose" href=""><i data-feather="x"></i></a>
+    </div><!-- navbar-menu-header -->
 
-    <div id="navbarMenu" class="navbar-menu-wrapper" *ngIf="accessHeader">
-      <div class="navbar-menu-header">
-        <a href="../../index.html" class="df-logo">dash<span>forge</span></a>
-        <a id="mainMenuClose" href=""><i data-feather="x"></i></a>
-      </div><!-- navbar-menu-header -->
-     
-
-      <ul class="nav navbar-menu">
-        <li class="nav-label pd-l-20 pd-lg-l-25 d-lg-none">Main Navigation</li>
-        <li class="nav-item with-sub active" ngbDropdown>
-          <a  class="nav-link" ngbDropdownToggle id="navbarDropdown01">Organization</a>
-          <ul  aria-labelledby="navbarDropdown01" class="navbar-menu-sub">
-            <li class="nav-sub-item"><a routerLink=""  class="nav-sub-link">Property 1</a></li>
-          </ul>
-        </li>
-
-        <!-- <li class="nav-item with-sub " ngbDropdown>
-          <a  class="nav-link " ngbDropdownToggle id="navbarDropdown02"><i data-feather="package"></i> Apps</a>
-          <ul ngbDropdownMenu aria-labelledby="navbarDropdown02" class="navbar-menu-sub">
-            <li class="nav-sub-item"><a href="#" (click)="$event.preventDefault()" class="nav-sub-link"><i-feather name="calendar"></i-feather> Calendar</a></li>
-            <li class="nav-sub-item"><a href="#" (click)="$event.preventDefault()" class="nav-sub-link"><i-feather name="message-square"></i-feather> Chat</a></li>
-            <li class="nav-sub-item"><a href="#" (click)="$event.preventDefault()" class="nav-sub-link"><i-feather name="users"></i-feather> Contacts</a></li>
-            <li class="nav-sub-item"><a href="#" (click)="$event.preventDefault()" class="nav-sub-link"><i-feather name="file-text"></i-feather> File Manager</a></li>
-            <li class="nav-sub-item"><a href="#" (click)="$event.preventDefault()" class="nav-sub-link"><i-feather name="mail"></i-feather> Mail</a></li>
-          </ul>
-        </li> -->
-        
-          <!-- <li class="nav-item with-sub " ngbDropdown>
-          <a  class="nav-link " ngbDropdownToggle id="navbarDropdown03" ><i data-feather="layers"></i> Pages</a>
-          <div class="navbar-menu-sub" ngbDropdownMenu aria-labelledby="navbarDropdown03">
-            <div class="d-lg-flex" >
-              
-              <ul >
-                <li class="nav-label">Authentication</li>
-                <li class="nav-sub-item"><a href="#" (click)="$event.preventDefault()" class="nav-sub-link"><i-feather name="log-in"></i-feather> Sign In</a></li>
-                <li class="nav-sub-item"><a href="#" (click)="$event.preventDefault()" class="nav-sub-link"><i-feather name="user-plus"></i-feather>  Sign Up</a></li>
-                <li class="nav-sub-item"><a href="#" (click)="$event.preventDefault()" class="nav-sub-link"><i-feather name="user-check"></i-feather> Verify Account</a></li>
-                <li class="nav-sub-item"><a href="#" (click)="$event.preventDefault()" class="nav-sub-link"><i-feather name="shield-off"></i-feather> Forgot Password</a></li>
-                <li class="nav-label mg-t-20">User Pages</li>
-                <li class="nav-sub-item"><a href="#" (click)="$event.preventDefault()" class="nav-sub-link"><i-feather name="user"></i-feather> View Profile</a></li>
-                <li class="nav-sub-item"><a href="#" (click)="$event.preventDefault()" class="nav-sub-link"><i-feather name="users"></i-feather> Connections</a></li>
-                <li class="nav-sub-item"><a href="#" (click)="$event.preventDefault()" class="nav-sub-link"><i-feather name="users"></i-feather> Groups</a></li>
-                <li class="nav-sub-item"><a href="#" (click)="$event.preventDefault()" class="nav-sub-link"><i-feather name="calendar"></i-feather> Events</a></li>
-              </ul>
-              
-              <ul >
-                <li class="nav-label">Error Pages</li>
-                <li class="nav-sub-item"><a href="#" (click)="$event.preventDefault()" class="nav-sub-link"><i-feather name="file"></i-feather> 404 Page Not Found</a></li>
-                <li class="nav-sub-item"><a href="#" (click)="$event.preventDefault()" class="nav-sub-link"><i-feather name="file"></i-feather> 500 Internal Server</a></li>
-                <li class="nav-sub-item"><a href="#" (click)="$event.preventDefault()" class="nav-sub-link"><i-feather name="file"></i-feather> 503 Service Unavailable</a></li>
-                <li class="nav-sub-item"><a href="#" (click)="$event.preventDefault()" class="nav-sub-link"><i-feather name="file"></i-feather> 505 Forbidden</a></li>
-                <li class="nav-label mg-t-20">Other Pages</li>
-                <li class="nav-sub-item"><a href="#" (click)="$event.preventDefault()" class="nav-sub-link"><i-feather name="file"></i-feather> Timeline</a></li>
-                <li class="nav-sub-item"><a href="#" (click)="$event.preventDefault()" class="nav-sub-link"><i-feather name="file"></i-feather> Pricing</a></li>
-                <li class="nav-sub-item"><a href="#" (click)="$event.preventDefault()" class="nav-sub-link"><i-feather name="file"></i-feather> Help Center</a></li>
-                <li class="nav-sub-item"><a href="#" (click)="$event.preventDefault()" class="nav-sub-link"><i-feather name="file"></i-feather> Invoice</a></li>
-              </ul>
-          
-            </div>
-          </div>
-        </li>
-        <li class="nav-item"><a href="../../components/" class="nav-link"><i data-feather="box"></i> Components</a></li>
-        <li class="nav-item"><a href="../../collections/" class="nav-link"><i data-feather="archive"></i> Collections</a></li> -->
-      </ul>
-    </div>    <!-- navbar-menu-wrapper -->
-
-
-
-    <div class="navbar-right" *ngIf="accessHeader">
-        <a  id="navbarSearch"  class="search-link">
-        
-          <i-feather name="search"></i-feather>
+    <ul class="nav navbar-menu">
+      <li class="nav-label pd-l-20 pd-lg-l-25 d-lg-none">Main Navigation</li>
+      <li class="nav-item with-sub active" *ngFor="let data of orgList" ngbDropdown>
+        <a class="nav-link" ngbDropdownToggle id="navbarDropdown01">{{data.orgName}}
         </a>
-        <!-- <div class="dropdown dropdown-message">
-          <div class="dropdown-menu dropdown-menu-right">
-            <div class="dropdown-header">New Messages</div>
-            <a href="" class="dropdown-item">
-              <div class="media">
-                <div class="avatar avatar-sm avatar-online"><img src="../https://via.placeholder.com/350" class="rounded-circle" alt=""></div>
-                <div class="media-body mg-l-15">
-                  <strong>Socrates Itumay</strong>
-                  <p>nam libero tempore cum so...</p>
-                  <span>Mar 15 12:32pm</span>
-                </div>
-              </div>
-            </a>
-            <a href="" class="dropdown-item">
-              <div class="media">
-                <div class="avatar avatar-sm avatar-online"><img src="../https://via.placeholder.com/500" class="rounded-circle" alt=""></div>
-                <div class="media-body mg-l-15">
-                  <strong>Joyce Chua</strong>
-                  <p>on the other hand we denounce...</p>
-                  <span>Mar 13 04:16am</span>
-                </div>
-              </div>
-            </a>
-            <a href="" class="dropdown-item">
-              <div class="media">
-                <div class="avatar avatar-sm avatar-online"><img src="../https://via.placeholder.com/600" class="rounded-circle" alt=""></div>
-                <div class="media-body mg-l-15">
-                  <strong>Althea Cabardo</strong>
-                  <p>is there anyone who loves...</p>
-                  <span>Mar 13 02:56am</span>
-                </div>
-              </div>
-            </a>
-            <a href="" class="dropdown-item">
-              <div class="media">
-                <div class="avatar avatar-sm avatar-online"><img src="../https://via.placeholder.com/500" class="rounded-circle" alt=""></div>
-                <div class="media-body mg-l-15">
-                  <strong>Adrian Monino</strong>
-                  <p>duis aute irure dolor in repre...</p>
-                  <span>Mar 12 10:40pm</span>
-                </div>
-              </div>
-            </a>
-            <div class="dropdown-footer"><a href="">View all Messages</a></div>
-          </div>
-        </div> -->
-        <div class="dropdown dropdown-notification">
-          <a href="" class="dropdown-link new-indicator" data-toggle="dropdown">
-            <i-feather name="bell"></i-feather>
-            <!-- <span>2</span> -->
-          </a>
-          <div class="dropdown-menu dropdown-menu-right">
-            <div class="dropdown-header">Notifications</div>
-            <!-- <a href="" class="dropdown-item">
-               <div class="media">
-                <div class="avatar avatar-sm avatar-online"><img src="../https://via.placeholder.com/350" class="rounded-circle" alt=""></div>
-                <div class="media-body mg-l-15">
-                  <p>Congratulate <strong>Socrates Itumay</strong> for work anniversaries</p>
-                  <span>Mar 15 12:32pm</span>
-                </div>
-                
-              </div>
-              
-            </a> -->
-            <!-- <a href="" class="dropdown-item">
-              <div class="media">
-                <div class="avatar avatar-sm avatar-online"><img src="../https://via.placeholder.com/500" class="rounded-circle" alt=""></div>
-                <div class="media-body mg-l-15">
-                  <p><strong>Joyce Chua</strong> just created a new blog post</p>
-                  <span>Mar 13 04:16am</span>
-                </div>
-              </div>
-            </a> -->
-            <!-- <a href="" class="dropdown-item">
-              <div class="media">
-                <div class="avatar avatar-sm avatar-online"><img src="../https://via.placeholder.com/600" class="rounded-circle" alt=""></div>
-                <div class="media-body mg-l-15">
-                  <p><strong>Althea Cabardo</strong> just created a new blog post</p>
-                  <span>Mar 13 02:56am</span>
-                </div>
-              </div>
-            </a> -->
-            <!-- <a href="" class="dropdown-item">
-              <div class="media">
-                <div class="avatar avatar-sm avatar-online"><img src="../https://via.placeholder.com/500" class="rounded-circle" alt=""></div>
-                <div class="media-body mg-l-15">
-                  <p><strong>Adrian Monino</strong> added new comment on your photo</p>
-                  <span>Mar 12 10:40pm</span>
-                </div>
-              </div>
-            </a> -->
-            <div class="dropdown-footer"><a>View all Notifications</a></div>
-          </div><!-- dropdown-menu -->
-        </div>
-        <!-- dropdown -->
-        <div class="dropdown dropdown-profile">
-          <a href="" class="dropdown-link" data-toggle="dropdown" data-display="static">
-            <div class="avatar avatar-sm"><img src="assets/imgs/glass.jpg" class="rounded-circle" alt=""></div>
-          </a><!-- dropdown-link -->
-          <div class="dropdown-menu dropdown-menu-right tx-13">
-            <div class="avatar avatar-lg mg-b-15"><img src="assets/imgs/glass.jpg" class="rounded-circle" alt=""></div>
-            <h6 class="tx-semibold mg-b-5">{{dashname}}</h6>
-            <p class="mg-b-25 tx-12 tx-color-03">Administrator</p>
+        <ul aria-labelledby="navbarDropdown01" class="navbar-menu-sub">
+          <li class="nav-sub-item"><a routerLink="" *ngFor="let prop of data.property" class="nav-sub-link">
+              {{prop.propName}}</a></li>
+        </ul>
+      </li>
+    </ul>
+  </div> <!-- navbar-menu-wrapper -->
 
-            <a routerLink="/user/profile/edit"  class="dropdown-item">
-              <i-feather name="edit-3"></i-feather>Edit Profile</a>
-              
-            <a routerLink="/portalorg" class="dropdown-item">
-            <i-feather name="user"></i-feather>View Profile</a>
+  <div class="navbar-right" *ngIf="isUserLoggedIn$ | async as isuserLoggedIn">
+    <a id="navbarSearch" class="search-link">
 
-            <div class="dropdown-divider"></div>
-            <a routerLink="/pagenotfound" class="dropdown-item">
-                <i-feather name="help-circle"></i-feather>Help Center</a>
+      <i-feather name="search"></i-feather>
+    </a>
 
-            <a routerLink="/pagenotfound" class="dropdown-item">
-                <i-feather name="life-buoy"></i-feather> Forum</a>
+    <div class="dropdown dropdown-notification">
+      <a href="" class="dropdown-link new-indicator" data-toggle="dropdown">
+        <i-feather name="bell"></i-feather>
+        <!-- <span>2</span> -->
+      </a>
+      <div class="dropdown-menu dropdown-menu-right">
+        <div class="dropdown-header">Notifications</div>
+        <div class="dropdown-footer"><a>View all Notifications</a></div>
+      </div><!-- dropdown-menu -->
+    </div>
+    <!-- dropdown -->
+    <div class="dropdown dropdown-profile">
+      <a href="" class="dropdown-link" data-toggle="dropdown" data-display="static">
+        <div class="avatar avatar-sm"><img src="assets/imgs/glass.jpg" class="rounded-circle" alt=""></div>
+      </a><!-- dropdown-link -->
+      <div class="dropdown-menu dropdown-menu-right tx-13">
+        <div class="avatar avatar-lg mg-b-15"><img src="assets/imgs/glass.jpg" class="rounded-circle" alt=""></div>
+        <h6 class="tx-semibold mg-b-5">{{currentLoggedInUser}}</h6><br />
 
-            <a routerLink="/user/password/change-password" class="dropdown-item">
-                <i-feather name="settings"></i-feather>Account Settings</a>
+        <p class="mg-b-25 tx-12 tx-color-03">Administrator</p>
 
-            <a routerLink="/pagenotfound" class="dropdown-item">
-                <i-feather name="settings"></i-feather>Privacy Settings</a>
+        <a routerLink="/user/profile/edit" class="dropdown-item">
+          <i-feather name="edit-3"></i-feather>Edit Profile
+        </a>
 
-            <a (click)="logout()" class="dropdown-item" style="cursor: pointer;">
-                <i-feather name="log-out"></i-feather>Sign Out</a>
+        <a routerLink="/portalorg" class="dropdown-item">
+          <i-feather name="user"></i-feather>View Profile
+        </a>
 
-          </div><!-- dropdown-menu -->
-        </div><!-- dropdown -->
-      </div><!-- navbar-right -->
-      <!-- <div class="navbar-search" *ngIf="accessHeader">
-        <div class="navbar-search-header">
-          <input type="search" class="form-control" placeholder="Type and hit enter to search...">
-          <button class="btn"><i data-feather="search"></i></button>
-          <a id="navbarSearchClose" href="" class="link-03 mg-l-5 mg-lg-l-10"><i data-feather="x"></i></a>
-        </div>
-        <div class="navbar-search-body">
-          <label class="tx-10 tx-medium tx-uppercase tx-spacing-1 tx-color-03 mg-b-10 d-flex align-items-center">Recent Searches</label>
-          <ul class="list-unstyled">
-            <li><a href="dashboard-one.html">modern dashboard</a></li>
-            <li><a href="app-calendar.html">calendar app</a></li>
-            <li><a href="../../collections/modal.html">modal examples</a></li>
-            <li><a href="../../components/el-avatar.html">avatar</a></li>
-          </ul>
+        <div class="dropdown-divider"></div>
+        <a routerLink="/pagenotfound" class="dropdown-item">
+          <i-feather name="help-circle"></i-feather>Help Center
+        </a>
 
-          <hr class="mg-y-30 bd-0">
+        <a routerLink="/pagenotfound" class="dropdown-item">
+          <i-feather name="life-buoy"></i-feather> Forum
+        </a>
 
-          <label class="tx-10 tx-medium tx-uppercase tx-spacing-1 tx-color-03 mg-b-10 d-flex align-items-center">Search Suggestions</label>
+        <a routerLink="/user/password/change-password" class="dropdown-item">
+          <i-feather name="settings"></i-feather>Account Settings
+        </a>
 
-          <ul class="list-unstyled">
-            <li><a href="dashboard-one.html">cryptocurrency</a></li>
-            <li><a href="app-calendar.html">button groups</a></li>
-            <li><a href="../../collections/modal.html">form elements</a></li>
-            <li><a href="../../components/el-avatar.html">contact app</a></li>
-          </ul>
-        </div>
-      </div> -->
+        <a routerLink="/pagenotfound" class="dropdown-item">
+          <i-feather name="settings"></i-feather>Privacy Settings
+        </a>
+        <a routerLink="/portalorg" class="dropdown-item">
+          <i-feather name="settings"></i-feather>Organization
+        </a>
+        <a (click)="logout()" class="dropdown-item" style="cursor: pointer;">
+          <i-feather name="log-out"></i-feather>Sign Out
+        </a>
 
+      </div><!-- dropdown-menu -->
+    </div><!-- dropdown -->
+  </div><!-- navbar-right -->
 </header><!-- navbar -->

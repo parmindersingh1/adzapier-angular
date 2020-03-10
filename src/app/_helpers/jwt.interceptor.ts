@@ -8,28 +8,26 @@ import { User } from '../_models';
 
 @Injectable()
 export class JwtInterceptor implements HttpInterceptor {
-    constructor(private authenticationService: AuthenticationService) {}
+    constructor(private authenticationService: AuthenticationService) { }
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        
-        let currentUser = this.authenticationService.currentUserValue;
-        var t=this.authenticationService.currentUserValue;
 
-    var headers_object = new HttpHeaders();
+        const currentUser = this.authenticationService.currentUserValue;
+        let headers_object = new HttpHeaders();
         headers_object.append('Content-Type', 'application/json');
-        headers_object.append("Authorization", "Bearer" + t);
-        
+        headers_object.append('Authorization', `Bearer` + currentUser);
+
         const httpOptions = {
-          headers: headers_object
+            headers: headers_object
         };
- 
-        if (currentUser && t.token) {
-            
+
+        if (currentUser && currentUser["response"].token) {
+
             request = request.clone({
-            setHeaders: { 
-            Authorization: `Bearer ${t.token}`
+                setHeaders: {
+                    Authorization: `Bearer ${currentUser["response"].token}`
                 }
-            });  
+            });
         }
 
         return next.handle(request);

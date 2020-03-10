@@ -1,8 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, OnChanges } from '@angular/core';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 import { AuthenticationService, UserService, AlertService } from '../_services';
 import { Router } from '@angular/router';
-import { first } from 'rxjs/operators';
 
 @Component({
   selector: 'app-edit-profile',
@@ -11,108 +10,81 @@ import { first } from 'rxjs/operators';
 })
 export class EditProfileComponent implements OnInit {
 
-    profileForm: FormGroup;
-    loading = false;
-    submitted = false;
-    show:Boolean=false;
-    navbarCollapsed: boolean=false;
-    returnUrl: string;
-    errorMsg: string;
-    // value1:string;
-    // value2:string;
-    userData:any;
-    uid:string;
-    
+  profileForm: FormGroup;
+  loading = false;
+  submitted = false;
+  show: boolean = false;
+  navbarCollapsed: boolean = false;
+  returnUrl: string;
+  errorMsg: string;
+  // value1:string;
+  // value2:string;
+  userData: any;
+  uid: string;
+  userProfile: any;
+  isDisabled: boolean;
+  constructor(
+    private formBuilder: FormBuilder,
+    private router: Router,
+    private authenticationService: AuthenticationService,
+    private userService: UserService,
+    private alertService: AlertService
+  ) { }
 
-    constructor(
-        private formBuilder: FormBuilder,
-        private router: Router,
-        private authenticationService: AuthenticationService,
-        private userService: UserService,
-        private alertService: AlertService
-    ) 
-    {
-      
-        // redirect to edittprofile if already logged in
-        if (this.userService.currentUserValue) {
-            this.router.navigate(['/user/profile/edit']);
-        }
-    }
-
-    ngOnInit() {
-      
-      this.profileForm = this.formBuilder.group({
-        firstName: ['', [Validators.required,Validators.pattern]],
-        lastName: ['', [Validators.required,Validators.pattern]],
-        newemail: ['', [Validators.required,Validators.pattern]],
-        currentpassword: ['', [Validators.required, Validators.pattern,Validators.minLength(6)]],
-       newpassword: ['', [Validators.required, Validators.pattern,Validators.minLength(6)]],
-      confirmpassword: ['', [Validators.required, Validators.pattern,Validators.minLength(6)]]
-      });
-
-      // this.emailForm = this.formBuilder.group({
-       
-      //   email: ['', [Validators.required,Validators.pattern]],
-      //   newemail: ['', [Validators.required,Validators.pattern]],
-
-      // });
-
-      // this.passwordForm = this.formBuilder.group({
+  ngOnInit() {
+    this.isDisabled = true;
+    this.profileForm = this.formBuilder.group({
+      firstName: ['', [Validators.required, Validators.pattern]],
+      lastName: ['', [Validators.required, Validators.pattern]],
+      newemail: ['', [Validators.required, Validators.pattern]],
+      currentpassword: [''],
+      newpassword: [''],
+      confirmpassword: ['']
       //   currentpassword: ['', [Validators.required, Validators.pattern,Validators.minLength(6)]],
-      //   newpassword: ['', [Validators.required, Validators.pattern,Validators.minLength(6)]],
-      //   confirmpassword: ['', [Validators.required, Validators.pattern,Validators.minLength(6)]]
-      // });
-      
+      //  newpassword: ['', [Validators.required, Validators.pattern,Validators.minLength(6)]],
+      // confirmpassword: ['', [Validators.required, Validators.pattern,Validators.minLength(6)]]
+    });
+    this.profileForm.disable();
+    this.pathValues();
   }
 
-    // convenience getter for easy access to form fields
-    get f() { return this.profileForm.controls; }
-   
+  // convenience getter for easy access to form fields
+  get f() { return this.profileForm.controls; }
 
-    clearError() {
-      this.errorMsg = "";
-      
-      alert("jdajdgsads");
-        console.log(123456);
-  }
-
-    onSubmit() {
-       
-      this.submitted = true;
-        this.show=false;
-        //alert()
-            
-        // reset alerts on submit
-        this.alertService.clear();
-      
-        // stop here if form is invalid
-        if (this.profileForm.invalid) {
-            return;
+  onSubmit() {
+    this.profileForm.disable();
+    this.userService.update(this.f.firstName.value, this.f.lastName.value)
+      .subscribe((data) => {
+        if (data) {
+          this.userService.getCurrentUser.emit(data);
         }
+      }
+      );
+  }
 
-        //alert()
-        this.loading = true;
-        console.log(this.profileForm);
+  pathValues() {
 
-        if ("currentUser" in localStorage) {
-              
-          this.userData = JSON.parse(localStorage.getItem('currentUser'));
-          this.uid = this.userData['id'];
-          
-        } 
-        
-        this.userService.update(this.f.firstName.value, this.f.lastName.value, this.f.newemail.value,
-                                this.f.currentpassword.value, this.f.newpassword.value, this.f.confirmpassword.value, this.uid)
-            
-            .pipe(first())
-            .subscribe(
-                data => {
+    this.authenticationService.currentUserSubject.subscribe((data) => {
+      if (data) {
+        console.log(data, 'data..edit profile..');
+        this.userService.getLoggedInUserDetails().subscribe((user) => {
+          console.log(user, 'user path values..');
+          this.userProfile = Object.values(user);
+          this.profileForm.patchValue({
+            newemail: this.userProfile[0].email,
+            firstName: this.userProfile[0].firstname,
+            lastName: this.userProfile[0].lastname
+          });
+        });
+      }
+    });
 
-                    this.returnUrl='/home/dashboard/analytics';
-                      return this.router.navigate([this.returnUrl]);
-                    //this.router.navigate([this.returnUrl]);
-                });
-                this.loading=false;
-       
-    }
+  }
+
+  editUserDetails() {
+    this.profileForm.enable();
+  }
+
+
 }
+

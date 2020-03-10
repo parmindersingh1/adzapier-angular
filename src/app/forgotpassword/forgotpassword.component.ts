@@ -28,7 +28,7 @@ export class ForgotpasswordComponent implements OnInit {
         private alertService: AlertService
     ) {
         // redirect to home if already logged in
-        if (this.authenticationService.currentUserValue) {
+        if (this.authenticationService.isUserLoggedIn) {
             this.router.navigate(['/forgot-password']);
         }
     }

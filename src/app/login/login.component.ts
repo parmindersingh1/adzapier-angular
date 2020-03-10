@@ -3,29 +3,27 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 
-import { AlertService, AuthenticationService } from './../_services';
+import { AlertService, AuthenticationService, UserService } from './../_services';
 import { OrganizationService } from '../_services/organization.service';
+import { error } from 'protractor';
 
 
 
-@Component({ 
-  templateUrl: 'login.component.html' ,
-  styleUrls: ['./login.component.scss']
+@Component({
+    templateUrl: 'login.component.html',
+    styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
 
-    private usersdata:any;
+    private usersdata: any;
     loginForm: FormGroup;
     loading = false;
     submitted = false;
     returnUrl: string;
     errorMsg: string;
-    show:Boolean=false;
-    show1:Boolean=false;
-    sign_in: string =  "Login";
-    
-    //userdetails:any=[];
-
+    show: Boolean = false;
+    show1: Boolean = false;
+    sign_in: string = "Login";
 
     constructor(
         private formBuilder: FormBuilder,
@@ -33,26 +31,19 @@ export class LoginComponent implements OnInit {
         private router: Router,
         private authenticationService: AuthenticationService,
         private alertService: AlertService,
-        private orgservice:OrganizationService,
-        
-    ) {
-        // redirect to home if already logged in
-        if (this.authenticationService.currentUserValue) {
-            this.router.navigate(['/']);
-        }
-    }
+        private orgservice: OrganizationService,
+        private userService: UserService
+
+    ) {    }
 
 
-    
+
     ngOnInit() {
         this.loginForm = this.formBuilder.group({
-            email: ['dchaitanya@adzapier.com', [Validators.required,Validators.pattern]],
-            password: ['Adzap@123', [Validators.required,Validators.pattern,Validators.minLength(6)]]
+            email: ['dchaitanya@adzapier.com', [Validators.required, Validators.pattern]],
+            password: ['Adzap@123', [Validators.required, Validators.pattern, Validators.minLength(6)]]
         });
 
-        // get return url from route parameters or default to '/'
-        this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
-        
     }
 
     // convenience getter for easy access to form fields
@@ -61,65 +52,40 @@ export class LoginComponent implements OnInit {
     clearError() {
         this.errorMsg = "";
     }
-        
+
     onSubmit() {
-       
+
         this.submitted = true;
-        this.show=false;
-        
-        
-            
+        this.show = false;
+
+
+
         // reset alerts on submit
         this.alertService.clear();
-      
+
         // stop here if form is invalid
         if (this.loginForm.invalid) {
             return;
-            
+
         }
 
         this.loading = true;
-        //console.log(this.loginForm);
         this.sign_in = "Processing...";
-        this.authenticationService.login(this.f.email.value,this.f.password.value)
-            
-            .pipe(first())
-            .subscribe(
-                data => {
-                    let authtoken = data.response.token;
-                    let userid = data.response.id;
-                let a =  this.organizationlist(authtoken,userid);
-                console.log(a);
-                    this.returnUrl='/home/dashboard/analytics';
-                      return this.router.navigate([this.returnUrl]);
-                    //this.router.navigate([this.returnUrl]);
-                },
-                error => {
-                    this.alertService.error(error);
-                    for (var key in error) {
-                        this.errorMsg = error[key];
-                        break;
-                    }
-                    this.sign_in = "Login";
-                    this.loading = false;
-                    
-                    this.router.navigate([this.returnUrl]);
-                });
+        this.authenticationService.login(this.f.email.value, this.f.password.value)
+            .subscribe((data) => {
+                this.authenticationService.userLoggedIn.next(true);
+                this.authenticationService.currentUserSubject.next(data);
+                localStorage.setItem('currentUser', JSON.stringify(data));
+                this.getLoggedInUserDetails();
+                this.router.navigate(['/home/dashboard/analytics']);
+            }, error => { console.log(error, 'error..') });
 
-
-           
-                
     }
 
-    organizationlist(token,uid){
-        this.orgservice.orglist(token,uid).subscribe((data:any)=> {
-       
-            console.log(data);
-      
-            
-           
-          });
+    getLoggedInUserDetails() {
+        this.userService.getLoggedInUserDetails().subscribe((data) => {
+            this.userService.getCurrentUser.emit(data);
+        });
     }
-    
-    
+
 }
