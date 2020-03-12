@@ -5,9 +5,6 @@ import { first } from 'rxjs/operators';
 
 import { AlertService, AuthenticationService, UserService } from './../_services';
 import { OrganizationService } from '../_services/organization.service';
-import { error } from 'protractor';
-
-
 
 @Component({
     templateUrl: 'login.component.html',
@@ -34,7 +31,11 @@ export class LoginComponent implements OnInit {
         private orgservice: OrganizationService,
         private userService: UserService
 
-    ) {    }
+    ) {
+        if (this.authenticationService.currentUserValue) {
+            this.router.navigate(['/']);
+        }
+      }
 
 
 
@@ -43,7 +44,6 @@ export class LoginComponent implements OnInit {
             email: ['dchaitanya@adzapier.com', [Validators.required, Validators.pattern]],
             password: ['Adzap@123', [Validators.required, Validators.pattern, Validators.minLength(6)]]
         });
-
     }
 
     // convenience getter for easy access to form fields
@@ -70,15 +70,19 @@ export class LoginComponent implements OnInit {
         }
 
         this.loading = true;
-        this.sign_in = "Processing...";
         this.authenticationService.login(this.f.email.value, this.f.password.value)
-            .subscribe((data) => {
-                this.authenticationService.userLoggedIn.next(true);
-                this.authenticationService.currentUserSubject.next(data);
-                localStorage.setItem('currentUser', JSON.stringify(data));
-                this.getLoggedInUserDetails();
-                this.router.navigate(['/home/dashboard/analytics']);
-            }, error => { console.log(error, 'error..') });
+            .pipe(first())
+            .subscribe(
+                data => {
+                    this.authenticationService.userLoggedIn.next(true);
+                    this.authenticationService.currentUserSubject.next(data);
+                    localStorage.setItem('currentUser', JSON.stringify(data));
+                    this.router.navigate(['/home/dashboard/analytics']);
+                },
+                error => {
+                    this.alertService.error(error);
+                    this.loading = false;
+                });
 
     }
 

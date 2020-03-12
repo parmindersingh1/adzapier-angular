@@ -4,8 +4,7 @@
     <a class="df-logo">Adzapier<span>Solutions</span></a>
   </div>
 
-  <div id="navbarMenu" class="navbar-menu-wrapper" *ngIf="isUserLoggedIn$ | async as isuserLoggedIn">
-    <!-- *ngIf="headerStatus"-->
+  <div id="navbarMenu" class="navbar-menu-wrapper" *ngIf="currentUser">
     <div class="navbar-menu-header">
       <a href="../../index.html" class="df-logo">dash<span>forge</span></a>
       <a id="mainMenuClose" href=""><i data-feather="x"></i></a>
@@ -24,8 +23,8 @@
     </ul>
   </div> <!-- navbar-menu-wrapper -->
 
-  <div class="navbar-right" *ngIf="isUserLoggedIn$ | async as isuserLoggedIn">
-    <a id="navbarSearch" class="search-link">
+  <div class="navbar-right" *ngIf="currentUser">
+    <a id="navbarSearch" class="search-link"> 
 
       <i-feather name="search"></i-feather>
     </a>
@@ -56,7 +55,7 @@
         </a>
 
         <a routerLink="/portalorg" class="dropdown-item">
-          <i-feather name="user"></i-feather>View Profile
+          <i-feather name="user"></i-feather>Organization
         </a>
 
         <div class="dropdown-divider"></div>
@@ -74,10 +73,7 @@
 
         <a routerLink="/pagenotfound" class="dropdown-item">
           <i-feather name="settings"></i-feather>Privacy Settings
-        </a>
-        <a routerLink="/portalorg" class="dropdown-item">
-          <i-feather name="settings"></i-feather>Organization
-        </a>
+        </a>        
         <a (click)="logout()" class="dropdown-item" style="cursor: pointer;">
           <i-feather name="log-out"></i-feather>Sign Out
         </a>
