@@ -39,7 +39,7 @@ export class UserService {
                  //localStorage.setItem('currentregUser', JSON.stringify(user.response));
                  this.currentregSubject.next(user);
                  return user;
-                 //console.log(user);
+                
              })
                         
              );
