@@ -56,6 +56,7 @@ export class EditProfileComponent implements OnInit {
     this.userService.update(this.f.firstName.value, this.f.lastName.value)
       .subscribe((data) => {
         if (data) {
+          alert('Details has been updated successfully!');
           this.userService.getCurrentUser.emit(data);
         }
       }
@@ -63,12 +64,9 @@ export class EditProfileComponent implements OnInit {
   }
 
   pathValues() {
-
     this.authenticationService.currentUserSubject.subscribe((data) => {
       if (data) {
-        console.log(data, 'data..edit profile..');
         this.userService.getLoggedInUserDetails().subscribe((user) => {
-          console.log(user, 'user path values..');
           this.userProfile = Object.values(user);
           this.profileForm.patchValue({
             newemail: this.userProfile[0].email,

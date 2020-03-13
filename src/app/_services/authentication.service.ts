@@ -4,6 +4,7 @@ import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { environment } from './../../environments/environment.staging';
 import { User } from './../_models';
 import { Router } from '@angular/router';
+import { map } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class AuthenticationService {
@@ -27,15 +28,19 @@ export class AuthenticationService {
     }
 
     login(email, password) {
-        return this.http.post<any>(environment.apiUrl + '/login', { email, password });
+        return this.http.post<any>(environment.apiUrl + '/login', { email, password })
+        .pipe(map(user => {
+            if(user) {
+            // store user details and jwt token in local storage to keep user logged in between page refreshes
+            localStorage.setItem('currentUser', JSON.stringify(user));
+            this.currentUserSubject.next(user);
+            }
+            return user;
+        }));
     }
- 
-    logout(): boolean {
-        this.userLoggedIn.next(false);
-        this.router.navigate(['/login']);
-        this.currentUserSubject.next(null);
-        localStorage.removeItem('currentUser');
-        return true;
 
+    logout() {
+        localStorage.removeItem('currentUser');
+        this.currentUserSubject.next(null);
     }
 }
