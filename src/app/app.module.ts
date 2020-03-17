@@ -25,6 +25,13 @@ import { AlertComponent } from './_components';
 import { ForgotpasswordComponent } from './forgotpassword/forgotpassword.component';
 import { ChangepasswordComponent } from './changepassword/changepassword.component';
 import { EditProfileComponent } from './edit-profile/edit-profile.component';
+import { UseractivityComponent } from './useractivity/useractivity.component';
+import { OrgpageComponent } from './orgpage/orgpage.component';
+import { ResetpasswordComponent } from './resetpassword/resetpassword.component';
+import { PagenotfoundComponent } from './errorpages/pagenotfound.component';
+import { InternalerrorComponent } from './errorpages/internalerror.component';
+import { PagenotfoundComponent1 } from './errorpages/404page.component';
+import { AuthenticationService } from './_services';
 
 
 export const isMock = environment.mock;
@@ -41,7 +48,14 @@ export const isMock = environment.mock;
     AlertComponent,
     ForgotpasswordComponent,
     ChangepasswordComponent,
-    EditProfileComponent
+    EditProfileComponent,
+    UseractivityComponent,
+    OrgpageComponent,
+    ResetpasswordComponent,
+    PagenotfoundComponent,
+    InternalerrorComponent,
+    PagenotfoundComponent1,
+    
   ],
   imports: [
     BrowserModule,
