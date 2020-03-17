@@ -3,18 +3,21 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
-
 import { AlertService, UserService, AuthenticationService } from './../_services';
+
+
 @Component({
   selector: 'app-changepassword',
   templateUrl: './changepassword.component.html',
   styleUrls: ['./changepassword.component.scss']
 })
+
 export class ChangepasswordComponent implements OnInit {
   changepasswordForm: FormGroup;
     loading = false;
     submitted = false;
     show:Boolean=false;
+    errorMsg: string;
     navbarCollapsed: boolean=false;
 
     constructor(
@@ -26,14 +29,14 @@ export class ChangepasswordComponent implements OnInit {
     ) {
         // redirect to home if already logged in
         if (this.authenticationService.currentUserValue) {
-            this.router.navigate(['/']);
+            this.router.navigate(['/user/password/change-password']);
         }
     }
 
     ngOnInit() {
         this.changepasswordForm = this.formBuilder.group({
             fullName: ['', Validators.required,Validators.pattern],
-            username: ['', Validators.required,Validators.pattern],
+            email: ['', Validators.required,Validators.pattern],
             oldpsw: ['', Validators.required, ,Validators.pattern,Validators.minLength(6)],
             newpsw: ['', Validators.required, ,Validators.pattern,Validators.minLength(6)],
             renewpsw:['', Validators.required, ,Validators.pattern,Validators.minLength(6)]
@@ -43,12 +46,17 @@ export class ChangepasswordComponent implements OnInit {
     // convenience getter for easy access to form fields
     get f() { return this.changepasswordForm.controls; }
 
+    clearError() {
+      this.errorMsg = "";
+  }
+
     onSubmit() {
         this.submitted = true;
+        this.show=false;
       //debugger;
         // reset alerts on submit
         this.alertService.clear();
-        this.show=false;
+        
         // stop here if form is invalid
         if (this.changepasswordForm.invalid) {
             return;

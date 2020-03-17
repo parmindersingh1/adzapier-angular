@@ -30,7 +30,8 @@
             "styles": [
               "src/assets/lib/ionicons/css/ionicons.min.css",
               "src/assets/lib/bootstrap/css/bootstrap.min.css",
-              "src/assets/css/dashforge.css"
+              "src/assets/css/dashforge.css",
+              "src/assets/css/dashforge.demo.css"
             ],
             "scripts": [
               "src/assets/lib/jquery/jquery.min.js",

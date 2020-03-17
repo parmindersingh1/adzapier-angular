@@ -2,7 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { ChartJSInterface } from 'chartjs-ng2-module/chart-js-interfaces';
 
 // import { df1 } from './sampledata';
-import { faChrome,faEdge,faFirefox,faSafari,faOpera } from '@fortawesome/free-brands-svg-icons';
+import { faChrome, faEdge, faFirefox, faSafari, faOpera } from '@fortawesome/free-brands-svg-icons';
+import { OrganizationService } from '../../../_services/organization.service';
+import { UserService, AuthenticationService } from 'src/app/_services';
 
 @Component({
   selector: 'app-root',
@@ -10,11 +12,20 @@ import { faChrome,faEdge,faFirefox,faSafari,faOpera } from '@fortawesome/free-br
   styleUrls: ['./analytics.component.scss']
 })
 export class AnalyticsComponent {
-  faChrome=faChrome;
-  faEdge=faEdge;
-  faFirefox=faFirefox;
-  faSafari=faSafari;
-  faOpera=faOpera;
+  faChrome = faChrome;
+  faEdge = faEdge;
+  faFirefox = faFirefox;
+  faSafari = faSafari;
+  faOpera = faOpera;
+  loginToken;
+
+  constructor(
+    private orgservice: OrganizationService,
+    private userService: UserService,
+    private authService: AuthenticationService
+  ) { }
+  // redirect to home if already logged in
+
 
   public barChartData: ChartJSInterface = {
     type: 'bar',
@@ -155,7 +166,6 @@ export class AnalyticsComponent {
     }
   };
 
-  ;
 
   public flotChart2scatterChartData: ChartJSInterface = {
     type: 'line',
@@ -231,7 +241,7 @@ export class AnalyticsComponent {
         label: 'Mobile',
         borderColor: '#e5e9f2',
         backgroundColor: '#e5e9f2',
-        barThickness:5,
+        barThickness: 5,
         pointRadius: 0,
         fill: false,
         data: [10, 15, 22, 26, 26, 10, 15, 22, 26, 26, 15, 22]
@@ -241,7 +251,7 @@ export class AnalyticsComponent {
         pointRadius: 0,
         borderColor: '#66a4fb',
         backgroundColor: '#66a4fb',
-        barThickness:5,
+        barThickness: 5,
         fill: false,
       }]
     },
@@ -253,10 +263,10 @@ export class AnalyticsComponent {
       },
       scales: {
         xAxes: [{
-          display: false,stacked: true
+          display: false, stacked: true
         }],
         yAxes: [{
-          display: false,stacked: true
+          display: false, stacked: true
         }]
       },
       animation: {
@@ -284,7 +294,7 @@ export class AnalyticsComponent {
         backgroundColor: '#e5e9f2',
         borderWidth: 1.5,
         pointRadius: 0,
-        barThickness:5,
+        barThickness: 5,
         fill: false,
         data: [10, 15, 22, 26, 26, 10, 15, 22, 26, 26, 15, 22]
       }, {
@@ -294,7 +304,7 @@ export class AnalyticsComponent {
         borderColor: '#7ee5e5',
         backgroundColor: '#7ee5e5',
         borderWidth: 1.5,
-        barThickness:5,
+        barThickness: 5,
         fill: false,
       }]
     },
@@ -306,10 +316,10 @@ export class AnalyticsComponent {
       },
       scales: {
         xAxes: [{
-          display: false,stacked: true
+          display: false, stacked: true
         }],
         yAxes: [{
-          display: false,stacked: true
+          display: false, stacked: true
         }]
       },
       animation: {
@@ -327,7 +337,7 @@ export class AnalyticsComponent {
     }
   };
 
-  
+
   public flotChart5ChartData: ChartJSInterface = {
     type: 'bar',
     data: {
@@ -380,7 +390,4 @@ export class AnalyticsComponent {
       }
     }
   };
-
-
-
 }

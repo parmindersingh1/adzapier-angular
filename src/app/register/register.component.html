@@ -1,20 +1,11 @@
-<header class="navbar navbar-expand navbar-dark px-4 flex-column flex-md-row">
 
 
-
-    <button class="navbar-toggler navbar-toggler-right" type="button" (click)="navbarCollapsed = !navbarCollapsed"
-        [attr.aria-expanded]="!navbarCollapsed" aria-controls="navbarContent" aria-expanded="false"
-        aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-
-</header>
 <div class="media align-items-stretch justify-content-center ht-100p">
     <div class="sign-wrapper mg-lg-r-50 mg-xl-r-60">
         <div class="pd-t-20 wd-100p">
             <h4 class="tx-color-01 mg-b-5">Create New Account</h4>
             <p class="tx-color-03 tx-16 mg-b-40">It's free to signup and only takes a minute.</p>
-            <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+            <form [formGroup]="regForm" (ngSubmit)="onSubmit()">
                 <div class="form-group">
                     <label for="firstName">First Name</label>
                     <input type="text" formControlName="firstName" class="form-control"
@@ -35,25 +26,37 @@
                         <div *ngIf="f.lastName.errors.pattern">Last Name Allow Only Alphabets(min 3 & max 20 Char)</div>
                     </div>
                 </div>
+
                 <div class="form-group">
-                    <label for="organisation">Organisation</label>
-                   <select class="form-control" id="org">
+                    <label for="organization">Organization</label>
+                    <input type="text" formControlName="organization" class="form-control"
+                        [ngClass]="{ 'is-invalid': submitted && f.organization.errors }"
+                        placeholder="Enter your organization" (ngModelChange)="clearError()">
+                    <div *ngIf="submitted && f.organization.errors" class="invalid-feedback">
+                        <div *ngIf="f.organization.errors.required">Organization is required</div>
+                    </div>
+
+                </div>
+                    
+                    <!-- <select class="form-control" formControlName="org">
                     <option selected>Select</option>
                     <option value="Adzapier">Adzapier</option>
                     <option value="Adzapier Solutions">Adzapier Solutions</option>
                     <option value="Adzapier Pvt Ltd">Adzapier Pvt Ltd</option>
                        
-                   </select>
-                </div>
+                   </select>  -->
+                
+
+
                 <div class="form-group">
-                    <label for="username">Email address</label>
-                    <input type="text" formControlName="username" class="form-control"
-                        [ngClass]="{ 'is-invalid': submitted && f.username.errors }"
+                    <label for="email">Email Address</label>
+                    <input type="email" formControlName="email" class="form-control"
+                        [ngClass]="{ 'is-invalid': submitted && f.email.errors }"
                         placeholder="Enter your email address" 
-                        pattern="^\w+@[a-zA-Z_0-9]+?\.[a-zA-Z]{2,3}$"/>
-                    <div *ngIf="submitted && f.username.errors" class="invalid-feedback">
-                        <div *ngIf="f.username.errors.required">Email address is required</div>
-                        <div *ngIf="f.username.errors.pattern">Please enter a valid email</div> 
+                        pattern="^\w+@[a-zA-Z_0-9]+?\.[a-zA-Z]{2,3}$" (ngModelChange)="clearError()"/>
+                    <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
+                        <div *ngIf="f.email.errors.required">Email address is required</div>
+                        <div *ngIf="f.email.errors.pattern">Please enter a valid email</div> 
                     </div>
                 </div>
               
@@ -68,6 +71,9 @@
                             <div *ngIf="f.password.errors.pattern">Enter Valid Password (Ex: Aa@2aa) and minimum 6 charcters </div>
                         </div>
                     </div>
+
+
+
                     <div class="form-group">
                         <label for="password">Confirm Password</label>
                         <input type="password" formControlName="confirmpassword" class="form-control"
@@ -81,7 +87,8 @@
                     </div>
           
   
-                <div *ngIf="show" style="color: red;" class="tx-13"><p>Account Created Successfully...!</p></div>
+                <div *ngIf="show" style="color: blue;" class="tx-13"><p>Account Created Successfully...!</p></div>
+                <div  style="color:red;"><p >{{errorMsg}}</p></div>
             
             <div class="form-group tx-12">
                 By clicking <strong>Create an account</strong> below, you agree to our terms of service and privacy

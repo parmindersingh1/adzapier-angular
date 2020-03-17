@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, OnChanges } from '@angular/core';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 import { AuthenticationService, UserService, AlertService } from '../_services';
 import { Router } from '@angular/router';
@@ -10,113 +10,79 @@ import { Router } from '@angular/router';
 })
 export class EditProfileComponent implements OnInit {
 
-  editProfileForm: FormGroup;
-    loading = false;
-    submitted = false;
-    show:Boolean=false;
-    navbarCollapsed: boolean=false;
-    value1:string;
-    value2:string;
-    
+  profileForm: FormGroup;
+  loading = false;
+  submitted = false;
+  show: boolean = false;
+  navbarCollapsed: boolean = false;
+  returnUrl: string;
+  errorMsg: string;
+  // value1:string;
+  // value2:string;
+  userData: any;
+  uid: string;
+  userProfile: any;
+  isDisabled: boolean;
+  constructor(
+    private formBuilder: FormBuilder,
+    private router: Router,
+    private authenticationService: AuthenticationService,
+    private userService: UserService,
+    private alertService: AlertService
+  ) { }
 
-    constructor(
-        private formBuilder: FormBuilder,
-        private router: Router,
-        private authenticationService: AuthenticationService,
-        private userService: UserService,
-        private alertService: AlertService
-    ) 
-    {
-      
-        // redirect to home if already logged in
-        if (this.authenticationService.currentUserValue) {
-            this.router.navigate(['/']);
-        }
-    }
-
-    ngOnInit() {
-      debugger;
-      this.editProfileForm = this.formBuilder.group({
-        fullName: ['', Validators.required,Validators.pattern],
-        username: ['', Validators.required,Validators.pattern],
-        newpwd: ['', Validators.required,Validators.pattern,Validators.minLength(6)],
-        currentpwd: ['', Validators.required, Validators.pattern,Validators.minLength(6)],
-        currentpwd1: ['', Validators.required, Validators.pattern,Validators.minLength(6)],
-        confpwd: ['', Validators.required, Validators.pattern,Validators.minLength(6)]
-      });
-      //this.f.fullName.setValue('Chaitanya');
+  ngOnInit() {
+    this.isDisabled = true;
+    this.profileForm = this.formBuilder.group({
+      firstName: ['', [Validators.required, Validators.pattern]],
+      lastName: ['', [Validators.required, Validators.pattern]],
+      newemail: ['', [Validators.required, Validators.pattern]],
+      currentpassword: [''],
+      newpassword: [''],
+      confirmpassword: ['']
+      //   currentpassword: ['', [Validators.required, Validators.pattern,Validators.minLength(6)]],
+      //  newpassword: ['', [Validators.required, Validators.pattern,Validators.minLength(6)]],
+      // confirmpassword: ['', [Validators.required, Validators.pattern,Validators.minLength(6)]]
+    });
+    this.profileForm.disable();
+    this.pathValues();
   }
 
-    // convenience getter for easy access to form fields
-    get f() { return this.editProfileForm.controls; }
-   
-   
-    // nameval(){
-    //   if(this.f.fullName.value==""){
-    //     alert('Please Enter Name');
-    //   }
-    // }
-   
-    changemail(){
-       debugger;
-      this.onSubmit();
-    }
-    changepwd(){
-      //this.f.currentpwd.value='Aa@3ersdsd';
-      debugger;
-      if(this.f.newpwd.value==''){
-        alert('Please Enter New Password');
-       //document.getElementById('currentpwd1').focus();
-       return false;
+  // convenience getter for easy access to form fields
+  get f() { return this.profileForm.controls; }
+
+  onSubmit() {
+    this.profileForm.disable();
+    this.userService.update(this.f.firstName.value, this.f.lastName.value)
+      .subscribe((data) => {
+        if (data) {
+          alert('Details has been updated successfully!');
+          this.userService.getCurrentUser.emit(data);
+        }
       }
-      if(this.f.confpwd.value==''){
-        alert('Please Enter Confrim Password');
-       //document.getElementById('currentpwd1').focus();
-       return false;
+      );
+  }
+
+  pathValues() {
+    this.authenticationService.currentUserSubject.subscribe((data) => {
+      if (data) {
+        this.userService.getLoggedInUserDetails().subscribe((user) => {
+          this.userProfile = Object.values(user);
+          this.profileForm.patchValue({
+            newemail: this.userProfile[0].email,
+            firstName: this.userProfile[0].firstname,
+            lastName: this.userProfile[0].lastname
+          });
+        });
       }
-      if(this.f.newpwd.value!==this.f.confpwd.value){
-        alert('Please enter New Password & Confirm password same...!\nNew Password : '+this.f.newpwd.value+'\nConfirm Password : '+this.f.confpwd.value);             
-      }
-    //  this.show=true;
-   }
-   
-    onSubmit() {
-        this.submitted = true;
-      debugger;
-      if(this.f.fullName.value==''){
-        alert('Please Enter Full Name');
-    //   document.getElementById('currentpwd').focus();
-       return false;
-      }
-      if(this.f.currentpwd.value==''){
-        alert('Please Enter Current Password');
-    //   document.getElementById('currentpwd').focus();
-       return false;
-      }
-      if(this.f.username.value==''){
-        alert('Please Enter New Email');
-    //   document.getElementById('currentpwd').focus();
-       return false;
-      }
-    
-      if(this.f.currentpwd1.value==''){
-        alert('Please Enter New Current Password');
-       //document.getElementById('currentpwd1').focus();
-       return true;
-      }
-      
-      this.changepwd();
-      alert('Edit profile Successfully...!');
-      debugger;
-       this.show=true;
-        // stop here if form is invalid
-        // if (this.editProfileForm.invalid) {
-        //     return;
-        // }
-       
-        this.loading = true;
-          debugger;
-        
-       
-    }
+    });
+
+  }
+
+  editUserDetails() {
+    this.profileForm.enable();
+  }
+
+
 }
+

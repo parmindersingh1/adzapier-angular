@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http'
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
@@ -27,6 +27,17 @@ import { ChangepasswordComponent } from './changepassword/changepassword.compone
 import { EditProfileComponent } from './edit-profile/edit-profile.component';
 import { UseractivityComponent } from './useractivity/useractivity.component';
 import { OrgpageComponent } from './orgpage/orgpage.component';
+<<<<<<< HEAD
+=======
+import { ResetpasswordComponent } from './resetpassword/resetpassword.component';
+import { PagenotfoundComponent } from './errorpages/pagenotfound.component';
+import { InternalerrorComponent } from './errorpages/internalerror.component';
+import { PagenotfoundComponent1 } from './errorpages/404page.component';
+import { AuthenticationService } from './_services';
+
+
+
+>>>>>>> 58cbb7fa97f0c2811c812952a9dbf0c11958121e
 
 
 export const isMock = environment.mock;
@@ -46,7 +57,15 @@ export const isMock = environment.mock;
     EditProfileComponent,
     UseractivityComponent,
     OrgpageComponent,
+<<<<<<< HEAD
 
+=======
+    ResetpasswordComponent,
+    PagenotfoundComponent,
+    InternalerrorComponent,
+    PagenotfoundComponent1,
+    
+>>>>>>> 58cbb7fa97f0c2811c812952a9dbf0c11958121e
   ],
   imports: [
     BrowserModule,
@@ -56,10 +75,11 @@ export const isMock = environment.mock;
     FontAwesomeModule,
     NgbModule,
     IconsModule,
-    Ng2ChartJsModules 
+    Ng2ChartJsModules,
+     
   ],
   providers: [
-    
+    AuthenticationService,
     { provide: HTTP_INTERCEPTORS, 
       useClass: JwtInterceptor, 
       multi: true },

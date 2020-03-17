@@ -11,9 +11,12 @@ import { AlertService, UserService, AuthenticationService } from './../_services
   styleUrls: ['./forgotpassword.component.scss']
 })
 export class ForgotpasswordComponent implements OnInit {
-  resetpasswordForm: FormGroup;
+
+  forgotpasswordForm: FormGroup;
   submitted: boolean;
   show: boolean;
+  show1:Boolean=false;
+  //errorMsg: string;
   loading: boolean;
   navbarCollapsed: boolean=false;
 
@@ -25,30 +28,58 @@ export class ForgotpasswordComponent implements OnInit {
         private alertService: AlertService
     ) {
         // redirect to home if already logged in
-        if (this.authenticationService.currentUserValue) {
-            this.router.navigate(['/']);
+        if (this.authenticationService.isUserLoggedIn) {
+            this.router.navigate(['/forgot-password']);
         }
     }
 
     ngOnInit() {
-        this.resetpasswordForm = this.formBuilder.group({          
-          emailid: ['', Validators.required,Validators.pattern]
+        this.forgotpasswordForm = this.formBuilder.group({          
+          emailid: ['', [Validators.required,Validators.pattern]]
         });
     }
 
     // convenience getter for easy access to form fields
-    get f() { return this.resetpasswordForm.controls; }
-   
-   
-   
+    get f() { return this.forgotpasswordForm.controls; }
+
+    // clearError(){
+    //     this.errorMsg="";
+
+    // }
+    
    
     onSubmit() {
-        this.submitted = true;
+         this.submitted = true;
+      //debugger;
+        // reset alerts on submit
+        this.alertService.clear();
         this.show=false;
-        debugger;
-            if(this.f.emailid.value!=''){
-     this.show=true;
-        //alert('Link Sent to this Mail ID : '+this.f.emailid.value+ ' Successfully..!');
-            }
+        // stop here if form is invalid
+        if (this.forgotpasswordForm.invalid) {
+            return;
+        }
+
+        this.loading = true;
+               // debugger;
+               // console.log(this.f.token.value, this.f.newpsw.value, this.f.renewpsw.value);
+               this.userService.forgotpswd(this.f.emailid.value)
+            .pipe(first())
+            .subscribe(
+                data => {
+                    //debugger;
+                    //this.alertService.success('Registration successful', true);
+                    //this.router.navigate(['/login']);
+                    //console.log();
+                },
+                error => {
+                    this.alertService.error(error);
+                    this.loading = false;
+                });
+
+
+                if(this.f.emailid.value){
+                    this.show=true;
+                }
+                
     }
 }

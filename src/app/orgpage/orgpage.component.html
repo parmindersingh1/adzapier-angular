@@ -1,9 +1,8 @@
-<header class="navbar navbar-header navbar-header-fixed">
-    <!-- <a href="#" id="mainMenuOpen" class="burger-menu"><i data-feather="menu"></i></a> -->
-    <div class="navbar-brand">
-      <a routerLink="/" class="df-logo">Adzapier<span>Solutions</span></a>
-    </div>
-    </header>
+
+
+
+
+    <!-- <app-header></app-header> -->
 
 <div style="background-color:whitesmoke" >
     <form [formGroup]="orgForm" (ngSubmit)="onSubmit()" style="background-color:white">
@@ -28,11 +27,11 @@
      <br>  
     </tr>
      <tr>
-        <td  width='88%' >&nbsp;&nbsp;&nbsp;<label for="fullName" id='lbltxt' *ngIf="show">Adzpier</label>
+        <td  width='88%' >&nbsp;&nbsp;&nbsp;<label for="fullName" id='lbltxt' *ngIf="show">Adzapier</label>
             &nbsp;<input type="text"  formControlName="fullName" *ngIf="show1" 
             [ngClass]="{ 'is-invalid': submitted && f.fullName.errors }"
-            placeholder="Enter your fullName" pattern="^[a-zA-Z ]{3,20}$" />&nbsp;
-            <button class="btn btn-sm btn-primary" formControlName="btncancel" *ngIf="show1"  (click)='cancelclick()'>
+            placeholder="org list" pattern="^[a-zA-Z ]{3,20}$" />&nbsp;
+            <button class="btn btn-xs btn-primary" formControlName="btncancel" *ngIf="show1"  (click)='cancelclick()'>
                 Cancel</button>
             <div *ngIf="submitted && f.fullName.errors" class="invalid-feedback" >
                 <div *ngIf="f.fullName.errors.required">Full Name is required</div>
@@ -53,7 +52,7 @@
      Add Properties </button></td>
             <br></tr>
    <tr>
-      <td><div class="align-middle text-medium">&nbsp;&nbsp;<label>This Organization doesn't have any properties Associated with it</label></div></td>
+      <td><div class="align-middle text-medium">&nbsp;&nbsp;<label>This organization doesn't have any properties associated with it</label></div></td>
     </tr>
     <br>
     </div>
@@ -69,7 +68,7 @@
             </td>
         <br></tr>
    <tr>
-      <td width='77%'><div class="align-middle text-left">&nbsp;&nbsp;<label>Adzapier : Adzapier@gamil.com</label></div>
+      <td width='77%'><div class="align-middle text-left">&nbsp;&nbsp;<label>Adzapier : Adzapier@gmail.com</label></div>
     </td>
     <td><div>&nbsp;&nbsp;<label>Administrator</label></div>
     </td> 
@@ -87,7 +86,7 @@
 </tr>
     <tr>
         <td width="88%">
-                <div class="align-middle text-left">&nbsp;&nbsp;<label>Samir : Samir123@gamil.com</label></div>
+                <div class="align-middle text-left">&nbsp;&nbsp;<label>Adzapier : Adzapier@gmail.com</label></div>
                 </td>
                
         </tr>

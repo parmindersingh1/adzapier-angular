@@ -1,39 +1,45 @@
 ﻿import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { environment } from './../../environments/environment';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { environment } from './../../environments/environment.staging';
 import { User } from './../_models';
+import { Router } from '@angular/router';
+import { map } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class AuthenticationService {
-    private currentUserSubject: BehaviorSubject<User>;
+
+    public userLoggedIn: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+
+    get isUserLoggedIn() {
+        return this.userLoggedIn.asObservable();
+    }
+    public currentUserSubject: BehaviorSubject<User>;
     public currentUser: Observable<User>;
 
-    constructor(private http: HttpClient) {
+    constructor(private http: HttpClient, private router: Router) {
+
         this.currentUserSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('currentUser')));
         this.currentUser = this.currentUserSubject.asObservable();
     }
 
-    public get currentUserValue(): User {
+    public get currentUserValue() {
         return this.currentUserSubject.value;
     }
 
-    login(username, password) {
-        //console.log(username+"dfdsfdsf   "+password);
-         return this.http.post<any>(environment.apiUrl+'/users/authenticate', { username, password })
-             .pipe(map(user => {
-        //         // store user details and jwt token in local storage to keep user logged in between page refreshes
-                 localStorage.setItem('currentUser', JSON.stringify(user));
-                 this.currentUserSubject.next(user);
-                 return user;
-                 //console.log(user);
-             })
-             );
+    login(email, password) {
+        return this.http.post<any>(environment.apiUrl + '/login', { email, password })
+        .pipe(map(user => {
+            if(user) {
+            // store user details and jwt token in local storage to keep user logged in between page refreshes
+            localStorage.setItem('currentUser', JSON.stringify(user));
+            this.currentUserSubject.next(user);
+            }
+            return user;
+        }));
     }
 
     logout() {
-        // remove user from local storage and set current user to null
         localStorage.removeItem('currentUser');
         this.currentUserSubject.next(null);
     }

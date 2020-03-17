@@ -2,7 +2,10 @@ version: "3.2"
 
 services:
   ui:
+<<<<<<< HEAD
 #    image: "adzapier/${CI_PROJECT_TITLE}:${CI_COMMIT_TAG:-$CI_COMMIT_REF_NAME-$CAL_VER}"
+=======
+>>>>>>> 58cbb7fa97f0c2811c812952a9dbf0c11958121e
     image: ${CI_REGISTRY_IMAGE}:${CI_COMMIT_TAG:-$CI_COMMIT_REF_NAME-$CAL_VER}
     networks:
       apps:
