@@ -32,6 +32,21 @@ test:
   before_script:
     - ls -ltr
 
+build-develop:
+  environment:
+    name: develop
+  stage: build
+  artifacts:
+    paths:
+      - dist/
+    expire_in: 1 hr
+  script:
+    - npm install -g @angular/cli@8.3.1
+    - ./node_modules/@angular/cli/bin/ng build --configuration=develop 
+  only:
+   - develop
+   - /^develop_[0-9]+(?:.[0-9]+)+$/
+   
 build-stage:
   environment:
     name: staging
