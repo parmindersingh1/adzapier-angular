@@ -1,116 +1,114 @@
-
-
-
-
-    <!-- <app-header></app-header> -->
-
-<div style="background-color:whitesmoke" >
-    <form [formGroup]="orgForm" (ngSubmit)="onSubmit()" style="background-color:white">
-    
-    <table width="60%" align="center">
-    <br>
-    <div style="width: 100%; height: 150%; background-color: whitesmoke;border:1px solid #ccc!important;border-radius: 0.50em;">
-        <br>
-   <tr>
-
-       <td  width='90.50%'>
-       &nbsp;&nbsp;
-       <label style="font-weight: bold">Organization</label>
-      </td>
-
-      <td style='text-align:left' width='85%'>
-        <!-- <i-feather name='edit3' class="wd-12 ht-12 stroke-wd-3"></i-feather> -->
-        <button class="btn btn-xs btn-primary" align='right' (click)='editclick()'> 
-           Edit
-        </button>                           
-</td>
-     <br>  
-    </tr>
-     <tr>
-        <td  width='88%' >&nbsp;&nbsp;&nbsp;<label for="fullName" id='lbltxt' *ngIf="show">Adzapier</label>
-            &nbsp;<input type="text"  formControlName="fullName" *ngIf="show1" 
-            [ngClass]="{ 'is-invalid': submitted && f.fullName.errors }"
-            placeholder="org list" pattern="^[a-zA-Z ]{3,20}$" />&nbsp;
-            <button class="btn btn-xs btn-primary" formControlName="btncancel" *ngIf="show1"  (click)='cancelclick()'>
-                Cancel</button>
-            <div *ngIf="submitted && f.fullName.errors" class="invalid-feedback" >
-                <div *ngIf="f.fullName.errors.required">Full Name is required</div>
-                <div *ngIf="f.fullName.errors.pattern">Full Name Allow Only Alphabets(min 3 & max 20 Char)</div>
-            </div>
-        </td>
-    </tr>   
+<div class="heading_border">
+    <h4 class="mg-b-10">Organizations</h4>
 </div>
-    <br>
-    <div style="width: 100%; height: 150%; background-color: whitesmoke;border:1px solid #ccc!important;border-radius: 0.50em;">
-            <br>
-    <tr>
-        
-        <td  width="81%">&nbsp;&nbsp;<label style="font-weight: bold">Properties</label></td>
-        <td>       
-            <!-- <i-feather name='Plus' class="wd-12 ht-12 stroke-wd-3"></i-feather> -->
-            <button class='btn btn-sm btn-primary' align='right'>
-     Add Properties </button></td>
-            <br></tr>
-   <tr>
-      <td><div class="align-middle text-medium">&nbsp;&nbsp;<label>This organization doesn't have any properties associated with it</label></div></td>
-    </tr>
-    <br>
+<div>
+    <div class="organizationlist">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Organization</th>
+                    <th>Edit Organization</th>
+                    <th>Add Properties</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let data of orgList; let i = index">
+                    <td>{{i+1}}</td>
+                    <td><span *ngIf="!isEditable">{{data.orgName}}</span>
+                        <input type="text" *ngIf="isEditable" [(ngModel)]="data.orgName" class="form-control"
+                            id="addOrg" placeholder="Add Organization">
+                    </td>
+                    <td> <button (click)="edit(data)" class="btn btn-outline-primary">
+                            Edit</button>
+                        <button (click)="saveUpdatedChanges(data.orgid,data.orgName)"
+                            class="btn btn-primary">Save</button>
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-outline-primary" data-toggle="modal"
+                            (click)="open(mymodal,data)">Add Property</button>
+                        <button class="btn btn-outline-dark" (click)="getPropertyList(data.orgid)">{{btnText}}</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4" class="paddingzero">
+                       
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+       
     </div>
-    <br>
-    <div style="width: 100%; height: 150%; background-color: whitesmoke;border:1px solid #ccc!important;border-radius: 0.50em;">
-        <br>
-    <tr><td width="83.50%">&nbsp;&nbsp;<label style="font-weight: bold" >Members</label></td>
-        <td>
-               <!-- <i-feather name='user-plus' class="wd-5 ht-5 stroke-wd-3"></i-feather> -->
-            <button class='btn btn-sm btn-primary' align='right'>
-         Invite Users</button>                              
-              
-            </td>
-        <br></tr>
-   <tr>
-      <td width='77%'><div class="align-middle text-left">&nbsp;&nbsp;<label>Adzapier : Adzapier@gmail.com</label></div>
-    </td>
-    <td><div>&nbsp;&nbsp;<label>Administrator</label></div>
-    </td> 
-    </tr>
-</div>
-<br>
-<div style="width: 100%; height: 150%; background-color: whitesmoke;border:1px solid #ccc!important;border-radius: 0.50em;">
-        <br>
-    <tr><td  width="77%">&nbsp;&nbsp;<label style="font-weight: bold">Pending Invites</label></td>
-    <td align="right">
-        <div class="align-middle text-right">         
-                <button class="btn-light">Resend</button>                              
-      </div>
-    </td>
-</tr>
-    <tr>
-        <td width="88%">
-                <div class="align-middle text-left">&nbsp;&nbsp;<label>Adzapier : Adzapier@gmail.com</label></div>
-                </td>
-               
-        </tr>
-        <br>
-</div>
-<br>
-<div style="width: 100%; height: 150%; background-color: whitesmoke;border:1px solid #ccc!important;border-radius: 0.50em;">
-    <br>
-        <tr><td>&nbsp;&nbsp;<label style="font-weight: bold">Payment Methods</label></td>&nbsp;&nbsp;</tr>
-       <tr>
-          <td><div>&nbsp;&nbsp;<label>This Organization doesn't have any Payment Methods not yet</label></div></td>
-        </tr>
-        <tr>
-        <td>
-                &nbsp;&nbsp;   
-                    <!-- <i-feather name='Plus' class="wd-12 ht-12 stroke-wd-3"></i-feather>       -->
-                        <button class="btn btn-primary btn-sm" > Add Payment Methods</button>                              
-                
-            </td>
-            </tr>
-            <br>
-</div>
-    </table>
-    <br>
-</form>
-</div>
+    <div class="propertylist" *ngIf="isOpen">
+        <h5 class="mg-t-10">Property list</h5>
+        <table class="table table-striped" *ngIf="propertyList">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Logo</th>
+                    <th>Property name</th>
+                    <th>Website</th>
+                    <th>Edit Property</th>
+                </tr>
+            </thead>
+            <tbody>
+                <ng-container *ngFor="let list of propertyList; let i = index">
+                    <tr>
+                        <td>
+                            {{i+1}}
+                        </td>
+                        <td>
+                            <img [src]="transform(list.proplogo)" width="150px" />
+                        </td>
+                        <td>
+                            {{list.propname}}
+                        </td>
+                        <td>
+                            {{list.website}}
+                        </td>
+                        <td>
+                            <button class="btn btn-outline-primary"
+                                (click)="editModalPopup(mymodal,list)">Edit</button>
+                        </td>
+                    </tr>
+                </ng-container>
+            </tbody>
+        </table>
 
+    </div>
+</div>
+<ng-template #mymodal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title" *ngIf="!isEditProperty;else editHeading">Add Property</h4>
+        <ng-template #editHeading>
+            <h4 class="modal-title" id="modal-basic-title">Edit Property</h4>
+        </ng-template>
+
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Close Clicked')">
+            <span aria-hidden="true">×</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <!-- <span *ngIf="myContext.pid">PID:{{pid}} {{myContext.pid}}</span> -->
+        <form [formGroup]="organisationPropertyForm" (ngSubmit)="onSubmit(myContext)">
+            <div class="form-group">
+                <label for="inputAddress">Name</label>
+                <input type="text" class="form-control" [(ngModel)]="propname" formControlName="name" id="name">
+            </div>
+            <div class="form-group">
+                <label for="inputAddress2">Website</label>
+                <input type="text" class="form-control" [(ngModel)]="websitename" formControlName="website"
+                    id="website">
+            </div>
+            <div class="form-group">
+                <label for="inputAddress2">Logo</label>
+                <input type="file" class="form-control" (change)="uploadFile($event)" id="logo">
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline-dark">Save</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- (click)="modal.close('Save click')"-->
+</ng-template>

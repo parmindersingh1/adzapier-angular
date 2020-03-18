@@ -20,6 +20,25 @@
               {{prop.propName}}</a></li>
         </ul>
       </li>
+      <li class="nav-item with-sub active" *ngFor="let menu of navigationMenu" ngbDropdown>
+        <a class="nav-link"  ngbDropdownToggle id="navbarDropdown02"> {{menu.showlink}}</a>
+        <ul aria-labelledby="navbarDropdown02" class="navbar-menu-sub"> 
+          <li class="nav-sub-item">
+            <a routerLink="" class="nav-sub-link" *ngFor="let link of menu.subcategory">{{link.showlink}}</a></li>
+        </ul>
+      </li>
+      <!-- <li>
+        <div class="dropdown">
+          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Dropdown Menu
+          </button>
+          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a class="dropdown-item" href="#">Action</a>
+            <a class="dropdown-item" href="#">Another action</a>
+            <a class="dropdown-item" href="#">Something else here</a>
+          </div>
+        </div>
+      </li> -->
     </ul>
   </div> <!-- navbar-menu-wrapper -->
 
@@ -74,7 +93,7 @@
         <a routerLink="/pagenotfound" class="dropdown-item">
           <i-feather name="settings"></i-feather>Privacy Settings
         </a>        
-        <a (click)="logout()" class="dropdown-item" style="cursor: pointer;">
+        <a routerLink="" (click)="logout()" class="dropdown-item">
           <i-feather name="log-out"></i-feather>Sign Out
         </a>
 
