@@ -1,22 +1,20 @@
-import { Component, OnInit, NgModule } from '@angular/core';
-import { FormGroup, Validators, FormsModule, FormBuilder } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { OrganizationService, UserService } from '../_services';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
-import { OrgProperties } from '../_models/orgproperties';
 import { DomSanitizer } from '@angular/platform-browser';
-import { HeaderComponent } from '../_components/layout/header/header.component';
 
 @Component({
   selector: 'app-orgpage',
   templateUrl: './orgpage.component.html',
   styleUrls: ['./orgpage.component.scss']
 })
-@NgModule({
-  imports: [
-    FormsModule
-  ]
+// @NgModule({
+//   imports: [
+//     FormsModule
+//   ]
 
-})
+// })
 
 export class OrgpageComponent implements OnInit {
   organisationPropertyForm: FormGroup;

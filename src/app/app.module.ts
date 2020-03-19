@@ -32,6 +32,7 @@ import { PagenotfoundComponent } from './errorpages/pagenotfound.component';
 import { InternalerrorComponent } from './errorpages/internalerror.component';
 import { PagenotfoundComponent1 } from './errorpages/404page.component';
 import { AuthenticationService } from './_services';
+import { DsarformComponent } from './dsarform/dsarform.component';
 
 
 
@@ -57,7 +58,7 @@ export const isMock = environment.mock;
     PagenotfoundComponent,
     InternalerrorComponent,
     PagenotfoundComponent1,
-    
+    DsarformComponent
   ],
   imports: [
     BrowserModule,

@@ -10,7 +10,7 @@ import { HeaderComponent } from './_components/layout/header/header.component';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  @ViewChild(HeaderComponent) headerComponent: HeaderComponent;
+   
   title = 'adzapier-analytics-ng';
   faCoffee = faCoffee;
   constructor() {
