@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -32,7 +32,7 @@ import { PagenotfoundComponent } from './errorpages/pagenotfound.component';
 import { InternalerrorComponent } from './errorpages/internalerror.component';
 import { PagenotfoundComponent1 } from './errorpages/404page.component';
 import { AuthenticationService } from './_services';
-
+import { DsarformComponent } from './dsarform/dsarform.component';
 
 
 
@@ -58,10 +58,11 @@ export const isMock = environment.mock;
     PagenotfoundComponent,
     InternalerrorComponent,
     PagenotfoundComponent1,
-    
+    DsarformComponent
   ],
   imports: [
     BrowserModule,
+    FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
     AppRoutingModule,
@@ -69,7 +70,6 @@ export const isMock = environment.mock;
     NgbModule,
     IconsModule,
     Ng2ChartJsModules,
-     
   ],
   providers: [
     AuthenticationService,

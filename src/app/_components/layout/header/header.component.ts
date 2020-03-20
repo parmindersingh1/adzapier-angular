@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { OrganizationService, AuthenticationService, UserService } from '../../../_services';
 import { User } from '../../../_models';
@@ -23,6 +23,7 @@ export class HeaderComponent implements OnInit {
   public isHeaderVisible: boolean;
   public headerStatus: boolean;
   orgList: any;
+  navigationMenu: any;
   constructor(
     private router: Router,
     private activatedroute: ActivatedRoute,
@@ -33,6 +34,7 @@ export class HeaderComponent implements OnInit {
     this.authService.currentUser.subscribe(x => this.currentUser = x);
     if (this.currentUser) {
       this.getLoggedInUserDetails();
+      this.loadOrganizationList();
     }
   }
 
@@ -47,7 +49,11 @@ export class HeaderComponent implements OnInit {
       }
     });
     this.loadOrganizationList();
-
+    
+    this.navigationMenu = [{
+      'showlink': 'Application',
+      'subcategory': [{ 'showlink': 'CCPA' },{ 'showlink': 'DSAR' }]
+    }]
   }
 
   logout() {
