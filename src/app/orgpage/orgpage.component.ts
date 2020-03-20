@@ -9,12 +9,7 @@ import { DomSanitizer } from '@angular/platform-browser';
   templateUrl: './orgpage.component.html',
   styleUrls: ['./orgpage.component.scss']
 })
-// @NgModule({
-//   imports: [
-//     FormsModule
-//   ]
 
-// })
 
 export class OrgpageComponent implements OnInit {
   organisationPropertyForm: FormGroup;
@@ -33,7 +28,7 @@ export class OrgpageComponent implements OnInit {
   myContext;
   isEditProperty: boolean;
   constructor(private formBuilder: FormBuilder, private orgservice: OrganizationService, private modalService: NgbModal,
-              private sanitizer: DomSanitizer, private userService: UserService
+    private sanitizer: DomSanitizer, private userService: UserService
   ) { }
 
   ngOnInit() {
@@ -76,7 +71,10 @@ export class OrgpageComponent implements OnInit {
         this.modalService.dismissAll('Data Saved!');
       } else {
         this.orgservice.editProperties(data.oid, data.pid, fd).subscribe((data) => {
-          alert('updated!');
+          if (data) {
+            alert('updated!');
+            this.getPropertyList(data.oid);
+          }
           this.organisationPropertyForm.reset();
           this.modalService.dismissAll();
         }, (error) => {
@@ -134,11 +132,11 @@ export class OrgpageComponent implements OnInit {
     }
   }
 
-  getPropertyList(id) {
+  getPropertyList(id): any {
     this.isOpen = !this.isOpen;
-    this.btnText = "Hide";
     this.orgservice.getPropertyList(id).subscribe((data) => {
-      this.propertyList = data.response;
+      this.orgservice.emitUpdatedOrgList.emit(data.response);
+      return this.propertyList = data.response;
     });
   }
 

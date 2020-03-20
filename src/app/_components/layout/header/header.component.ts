@@ -48,8 +48,10 @@ export class HeaderComponent implements OnInit {
         this.currentLoggedInUser = this.currentUser.response.firstname + ' ' + this.currentUser.response.lastname;
       }
     });
-    this.loadOrganizationList();
-    
+    this.orgservice.emitUpdatedOrgList.subscribe((data) =>{
+      console.log('loadOrganizationList..get called..');
+      this.loadOrganizationList();
+    });
     this.navigationMenu = [{
       'showlink': 'Application',
       'subcategory': [{ 'showlink': 'CCPA' },{ 'showlink': 'DSAR' }]

@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
-import { AuthenticationService, UserService, AlertService } from '../_services';
-import { Router } from '@angular/router';
+import { AuthenticationService, UserService } from '../_services';
 
 @Component({
   selector: 'app-edit-profile',
@@ -25,10 +24,8 @@ export class EditProfileComponent implements OnInit {
   isDisabled: boolean;
   constructor(
     private formBuilder: FormBuilder,
-    private router: Router,
     private authenticationService: AuthenticationService,
-    private userService: UserService,
-    private alertService: AlertService
+    private userService: UserService
   ) { }
 
   ngOnInit() {
