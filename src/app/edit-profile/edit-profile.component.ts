@@ -61,19 +61,14 @@ export class EditProfileComponent implements OnInit {
   }
 
   pathValues() {
-    this.authenticationService.currentUserSubject.subscribe((data) => {
-      if (data) {
-        this.userService.getLoggedInUserDetails().subscribe((user) => {
-          this.userProfile = Object.values(user);
-          this.profileForm.patchValue({
-            newemail: this.userProfile[0].email,
-            firstName: this.userProfile[0].firstname,
-            lastName: this.userProfile[0].lastname
-          });
-        });
-      }
+    this.userService.getLoggedInUserDetails().subscribe((user) => {
+      this.userProfile = Object.values(user);
+      this.profileForm.patchValue({
+        newemail: this.userProfile[0].email,
+        firstName: this.userProfile[0].firstname,
+        lastName: this.userProfile[0].lastname
+      });
     });
-
   }
 
   editUserDetails() {

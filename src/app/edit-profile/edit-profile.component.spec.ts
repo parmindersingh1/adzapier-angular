@@ -1,10 +1,10 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { ReactiveFormsModule, FormsModule, FormBuilder } from '@angular/forms';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { EditProfileComponent } from './edit-profile.component';
 
-describe('EditProfileComponent', () => {
+fdescribe('EditProfileComponent', () => {
   let component: EditProfileComponent;
   let fixture: ComponentFixture<EditProfileComponent>;
 
@@ -26,21 +26,21 @@ describe('EditProfileComponent', () => {
     component.ngOnInit();
   });
 
-  it('should create edit profile component', () => {
+  fit('should create edit profile component', () => {
     const fixturex = TestBed.createComponent(EditProfileComponent);
     const app = fixturex.debugElement.componentInstance;
     expect(app).toBeTruthy();
   });
 
-  it('submit form', () => {
+  fit('submit form', () => {
     expect(component.profileForm.valid).toBeFalsy();
   });
 
-  it('edit form should be initally disable', () => {
+  fit('edit form should be initally disable', () => {
     expect(component.profileForm.disable()).toBeFalsy();
   });
 
-  it('valid email id', () => {
+  fit('valid email id', () => {
     const email = component.profileForm.controls['newemail'];
     expect(email.valid).toBeFalsy();
   });
@@ -58,13 +58,12 @@ describe('EditProfileComponent', () => {
   }));
 
 
-  it('initially firstname lastname should not empty', () => {
-    // component.profileForm.controls['firstName'].setValue("Ajay");
-    // component.profileForm.controls['lastName'].setValue("Kumar");
+  fit('initially firstname lastname should not empty', () => {
     const fname = component.profileForm.controls['firstName'];
     const lname = component.profileForm.controls['lastName'];
     expect(fname).toBeTruthy();
     expect(lname).toBeTruthy();
+    component.editUserDetails();
     component.onSubmit();
   });
 

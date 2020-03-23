@@ -5,69 +5,51 @@
   </div>
 
   <div id="navbarMenu" class="navbar-menu-wrapper" *ngIf="currentUser">
-    <div class="navbar-menu-header">
-      <a href="../../index.html" class="df-logo">dash<span>forge</span></a>
-      <a id="mainMenuClose" href=""><i data-feather="x"></i></a>
-    </div><!-- navbar-menu-header -->
-
     <ul class="nav navbar-menu">
-      <li class="nav-label pd-l-20 pd-lg-l-25 d-lg-none">Main Navigation</li>
       <li class="nav-item with-sub active" *ngFor="let data of orgList" ngbDropdown>
         <a class="nav-link" ngbDropdownToggle id="navbarDropdown01">{{data.orgName}}
         </a>
         <ul aria-labelledby="navbarDropdown01" class="navbar-menu-sub">
-          <li class="nav-sub-item"><a routerLink="" *ngFor="let prop of data.property" class="nav-sub-link">
+          <li class="nav-sub-item">
+            <a routerLink="" *ngFor="let prop of data.property" class="nav-sub-link">
               {{prop.propName}}</a></li>
         </ul>
       </li>
       <li class="nav-item with-sub active" *ngFor="let menu of navigationMenu" ngbDropdown>
-        <a class="nav-link"  ngbDropdownToggle id="navbarDropdown02"> {{menu.showlink}}</a>
-        <ul aria-labelledby="navbarDropdown02" class="navbar-menu-sub"> 
+        <a class="nav-link" ngbDropdownToggle id="navbarDropdown02"> {{menu.showlink}}</a>
+        <ul id="navbarDropdown" aria-labelledby="navbarDropdown02" class="navbar-menu-sub">
           <li class="nav-sub-item">
-            <a routerLink="/dsarform" class="nav-sub-link" *ngFor="let link of menu.subcategory">{{link.showlink}}</a></li>
+            <a routerLink="/dsarform" class="nav-sub-link" *ngFor="let link of menu.subcategory">{{link.showlink}}</a>
+          </li>
         </ul>
       </li>
-      <!-- <li>
-        <div class="dropdown">
-          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Dropdown Menu
-          </button>
-          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <a class="dropdown-item" href="#">Action</a>
-            <a class="dropdown-item" href="#">Another action</a>
-            <a class="dropdown-item" href="#">Something else here</a>
-          </div>
-        </div>
-      </li> -->
     </ul>
+
+
   </div> <!-- navbar-menu-wrapper -->
-
   <div class="navbar-right" *ngIf="currentUser">
-    <a id="navbarSearch" class="search-link"> 
-
+    <a id="navbarSearch" href="" class="search-link">
       <i-feather name="search"></i-feather>
     </a>
 
     <div class="dropdown dropdown-notification">
       <a href="" class="dropdown-link new-indicator" data-toggle="dropdown">
         <i-feather name="bell"></i-feather>
-        <!-- <span>2</span> -->
       </a>
-      <div class="dropdown-menu dropdown-menu-right">
-        <div class="dropdown-header">Notifications</div>
-        <div class="dropdown-footer"><a>View all Notifications</a></div>
-      </div><!-- dropdown-menu -->
     </div>
     <!-- dropdown -->
-    <div class="dropdown dropdown-profile">
-      <a href="" class="dropdown-link" data-toggle="dropdown" data-display="static">
+    <div class="dropdown dropdown-profile show">
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarDropdown"
+        aria-controls="navbarDropdown" aria-expanded="false" aria-label="Toggle navigation">
         <div class="avatar avatar-sm"><img src="assets/imgs/glass.jpg" class="rounded-circle" alt=""></div>
-      </a><!-- dropdown-link -->
-      <div class="dropdown-menu dropdown-menu-right tx-13">
-        <div class="avatar avatar-lg mg-b-15"><img src="assets/imgs/glass.jpg" class="rounded-circle" alt=""></div>
+      </button>
+      <div id="navbarDropdown" class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="navbarDropdown">
+
+        <div class="avatar avatar-lg mg-b-15">
+          <img src="assets/imgs/glass.jpg" class="rounded-circle" alt=""></div>
         <h6 class="tx-semibold mg-b-5">{{currentLoggedInUser}}</h6><br />
 
-        <p class="mg-b-25 tx-12 tx-color-03">Administrator</p>
+        <!-- <p class="mg-b-25 tx-12 tx-color-03">Administrator</p> -->
 
         <a routerLink="/user/profile/edit" class="dropdown-item">
           <i-feather name="edit-3"></i-feather>Edit Profile
@@ -92,12 +74,14 @@
 
         <a routerLink="/pagenotfound" class="dropdown-item">
           <i-feather name="settings"></i-feather>Privacy Settings
-        </a>        
+        </a>
         <a routerLink="" (click)="logout()" class="dropdown-item">
           <i-feather name="log-out"></i-feather>Sign Out
         </a>
 
-      </div><!-- dropdown-menu -->
-    </div><!-- dropdown -->
-  </div><!-- navbar-right -->
+      </div>
+    </div>
+  </div>
+
+  <!-- navbar-right -->
 </header><!-- navbar -->
