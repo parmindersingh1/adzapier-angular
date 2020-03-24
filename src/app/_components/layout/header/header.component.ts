@@ -23,6 +23,7 @@ export class HeaderComponent implements OnInit {
   public isHeaderVisible: boolean;
   public headerStatus: boolean;
   orgList: any;
+  currentOrganization: any;
   navigationMenu: any;
   constructor(
     private router: Router,
@@ -48,13 +49,12 @@ export class HeaderComponent implements OnInit {
         this.currentLoggedInUser = this.currentUser.response.firstname + ' ' + this.currentUser.response.lastname;
       }
     });
-    this.orgservice.emitUpdatedOrgList.subscribe((data) =>{
-      console.log('loadOrganizationList..get called..');
+    this.orgservice.emitUpdatedOrgList.subscribe((data) => {
       this.loadOrganizationList();
     });
     this.navigationMenu = [{
       'showlink': 'Application',
-      'subcategory': [{ 'showlink': 'CCPA' },{ 'showlink': 'DSAR' }]
+      'subcategory': [{ 'showlink': 'CCPA' }, { 'showlink': 'DSAR' }]
     }]
   }
 
@@ -95,6 +95,15 @@ export class HeaderComponent implements OnInit {
     if (this.authService.currentUserValue) {
       this.orgservice.orglist().subscribe((data) => {
         this.orgList = Object.values(data)[0];
+      });
+
+      this.orgservice.emitUpdatedOrganization.subscribe((data) => {
+        for (const key in data) {
+          if (data[key].name !== undefined) {
+            return this.currentOrganization = data[key].name;
+          }
+        }
+
       });
     }
     return false;

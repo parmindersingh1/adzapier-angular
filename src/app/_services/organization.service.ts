@@ -10,7 +10,8 @@ export class OrganizationService {
 
     private currentOrgSubject: BehaviorSubject<Orglist>;
     public currentOrg: Observable<Orglist>;
-    @Output() emitUpdatedOrgList : EventEmitter<Orglist> = new EventEmitter<Orglist>();
+    @Output() emitUpdatedOrgList: EventEmitter<Orglist> = new EventEmitter<Orglist>();
+    @Output() emitUpdatedOrganization: EventEmitter<any> = new EventEmitter<any>();
     constructor(private http: HttpClient) { }
 
     public get currentOrgValue(): Orglist {

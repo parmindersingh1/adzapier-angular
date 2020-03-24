@@ -4,7 +4,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { EditProfileComponent } from './edit-profile.component';
 
-fdescribe('EditProfileComponent', () => {
+describe('EditProfileComponent', () => {
   let component: EditProfileComponent;
   let fixture: ComponentFixture<EditProfileComponent>;
 
@@ -26,26 +26,26 @@ fdescribe('EditProfileComponent', () => {
     component.ngOnInit();
   });
 
-  fit('should create edit profile component', () => {
+  it('should create edit profile component', () => {
     const fixturex = TestBed.createComponent(EditProfileComponent);
     const app = fixturex.debugElement.componentInstance;
     expect(app).toBeTruthy();
   });
 
-  fit('submit form', () => {
+  it('submit form', () => {
     expect(component.profileForm.valid).toBeFalsy();
   });
 
-  fit('edit form should be initally disable', () => {
+  it('edit form should be initally disable', () => {
     expect(component.profileForm.disable()).toBeFalsy();
   });
 
-  fit('valid email id', () => {
+  it('valid email id', () => {
     const email = component.profileForm.controls['newemail'];
     expect(email.valid).toBeFalsy();
   });
 
-  fit('edit button status', async(() => {
+  it('edit button status', async(() => {
     spyOn(component, 'editUserDetails');
 
     let button = fixture.debugElement.nativeElement.querySelector('button');
@@ -58,7 +58,7 @@ fdescribe('EditProfileComponent', () => {
   }));
 
 
-  fit('initially firstname lastname should not empty', () => {
+  it('initially firstname lastname should not empty', () => {
     const fname = component.profileForm.controls['firstName'];
     const lname = component.profileForm.controls['lastName'];
     expect(fname).toBeTruthy();

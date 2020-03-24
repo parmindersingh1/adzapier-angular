@@ -94,13 +94,13 @@ export class OrgpageComponent implements OnInit {
   }
 
   edit(data) {
-    console.log(data, 'data..');
     this.isEditable = !this.isEditable;
   }
 
   saveUpdatedChanges(orgId, data) {
     this.orgservice.updateOrganization(orgId, data).subscribe((data) => {
       if (data) {
+        this.orgservice.emitUpdatedOrganization.emit(data);
         alert('Organization updated successfully!');
         this.isEditable = false;
       }

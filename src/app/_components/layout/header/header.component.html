@@ -7,7 +7,9 @@
   <div id="navbarMenu" class="navbar-menu-wrapper" *ngIf="currentUser">
     <ul class="nav navbar-menu">
       <li class="nav-item with-sub active" *ngFor="let data of orgList" ngbDropdown>
-        <a class="nav-link" ngbDropdownToggle id="navbarDropdown01">{{data.orgName}}
+        <a class="nav-link" ngbDropdownToggle id="navbarDropdown01">
+          <span *ngIf="!currentOrganization">{{data.orgName}}</span>
+          <span>{{currentOrganization}}</span>
         </a>
         <ul aria-labelledby="navbarDropdown01" class="navbar-menu-sub">
           <li class="nav-sub-item">
