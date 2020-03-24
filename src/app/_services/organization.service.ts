@@ -1,11 +1,8 @@
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpInterceptor } from '@angular/common/http';
+import { Injectable, EventEmitter, Output } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 import { environment } from './../../environments/environment.staging';
 import { Orglist } from './../_models';
-import { Router } from '@angular/router';
-import { OrgProperties } from '../_models/orgproperties';
 
 @Injectable({ providedIn: 'root' })
 
@@ -13,8 +10,8 @@ export class OrganizationService {
 
     private currentOrgSubject: BehaviorSubject<Orglist>;
     public currentOrg: Observable<Orglist>;
-
-    constructor(private http: HttpClient, private router: Router) { }
+    @Output() emitUpdatedOrgList : EventEmitter<Orglist> = new EventEmitter<Orglist>();
+    constructor(private http: HttpClient) { }
 
     public get currentOrgValue(): Orglist {
         return this.currentOrgSubject.value;
