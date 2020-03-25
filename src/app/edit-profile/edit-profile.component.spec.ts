@@ -4,7 +4,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { EditProfileComponent } from './edit-profile.component';
 
-describe('EditProfileComponent', () => {
+fdescribe('EditProfileComponent', () => {
   let component: EditProfileComponent;
   let fixture: ComponentFixture<EditProfileComponent>;
 
@@ -32,7 +32,7 @@ describe('EditProfileComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it('submit form', () => {
+  fit('submit form', () => {
     expect(component.profileForm.valid).toBeFalsy();
   });
 
