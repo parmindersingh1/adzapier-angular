@@ -19,9 +19,9 @@
                         <input type="text" *ngIf="isEditable" [(ngModel)]="data.orgName" class="form-control"
                             id="addOrg" placeholder="Add Organization">
                     </td>
-                    <td> <button (click)="edit(data)" class="btn btn-outline-primary">
+                    <td> <button *ngIf="!isEditable" (click)="edit(data)" class="btn btn-outline-primary">
                             Edit</button>
-                        <button (click)="saveUpdatedChanges(data.orgid,data.orgName)"
+                        <button *ngIf="isEditable" (click)="saveUpdatedChanges(data.orgid,data.orgName)"
                             class="btn btn-primary">Save</button>
                     </td>
                     <td>
