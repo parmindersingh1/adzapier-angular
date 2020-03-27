@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { OrganizationService, AuthenticationService, UserService } from '../../../_services';
 import { User } from '../../../_models';
@@ -23,6 +23,8 @@ export class HeaderComponent implements OnInit {
   public isHeaderVisible: boolean;
   public headerStatus: boolean;
   orgList: any;
+  currentOrganization: any;
+  navigationMenu: any;
   constructor(
     private router: Router,
     private activatedroute: ActivatedRoute,
@@ -33,6 +35,7 @@ export class HeaderComponent implements OnInit {
     this.authService.currentUser.subscribe(x => this.currentUser = x);
     if (this.currentUser) {
       this.getLoggedInUserDetails();
+      this.loadOrganizationList();
     }
   }
 
@@ -46,8 +49,13 @@ export class HeaderComponent implements OnInit {
         this.currentLoggedInUser = this.currentUser.response.firstname + ' ' + this.currentUser.response.lastname;
       }
     });
-    this.loadOrganizationList();
-
+    this.orgservice.emitUpdatedOrgList.subscribe((data) => {
+      this.loadOrganizationList();
+    });
+    this.navigationMenu = [{
+      'showlink': 'Application',
+      'subcategory': [{ 'showlink': 'CCPA' }, { 'showlink': 'DSAR' }]
+    }]
   }
 
   logout() {
@@ -87,6 +95,15 @@ export class HeaderComponent implements OnInit {
     if (this.authService.currentUserValue) {
       this.orgservice.orglist().subscribe((data) => {
         this.orgList = Object.values(data)[0];
+      });
+
+      this.orgservice.emitUpdatedOrganization.subscribe((data) => {
+        for (const key in data) {
+          if (data[key].name !== undefined) {
+            return this.currentOrganization = data[key].name;
+          }
+        }
+
       });
     }
     return false;

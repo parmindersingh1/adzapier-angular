@@ -1,8 +1,8 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -11,7 +11,7 @@ import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { IconsModule } from './icons/icons.module';
-import { JwtInterceptor, fakeBackendProvider,ErrorInterceptor } from './_helpers';
+import { JwtInterceptor, fakeBackendProvider, ErrorInterceptor } from './_helpers';
 
 import { environment } from '../environments/environment';
 import { AnalyticsComponent } from './pages/dashboards/analytics/analytics.component';
@@ -32,7 +32,8 @@ import { PagenotfoundComponent } from './errorpages/pagenotfound.component';
 import { InternalerrorComponent } from './errorpages/internalerror.component';
 import { PagenotfoundComponent1 } from './errorpages/404page.component';
 import { AuthenticationService } from './_services';
-
+import { DsarformComponent } from './dsarform/dsarform.component';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 
 
@@ -58,10 +59,11 @@ export const isMock = environment.mock;
     PagenotfoundComponent,
     InternalerrorComponent,
     PagenotfoundComponent1,
-    
+    DsarformComponent
   ],
   imports: [
     BrowserModule,
+    FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
     AppRoutingModule,
@@ -69,16 +71,20 @@ export const isMock = environment.mock;
     NgbModule,
     IconsModule,
     Ng2ChartJsModules,
-     
+    DragDropModule
   ],
   providers: [
     AuthenticationService,
-    { provide: HTTP_INTERCEPTORS, 
-      useClass: JwtInterceptor, 
-      multi: true },
-    { provide: HTTP_INTERCEPTORS, 
-      useClass: ErrorInterceptor, 
-      multi: true },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: JwtInterceptor,
+      multi: true
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: ErrorInterceptor,
+      multi: true
+    },
 
     // provider used to create fake backend
     fakeBackendProvider

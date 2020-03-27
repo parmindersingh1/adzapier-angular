@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild, AfterViewInit } from '@angular/core';
 import { faCoffee } from '@fortawesome/free-solid-svg-icons';
 import { AuthenticationService } from './_services';
 import { User } from './_models';
+import { HeaderComponent } from './_components/layout/header/header.component';
  
 @Component({
   selector: 'app-root',
@@ -9,8 +10,14 @@ import { User } from './_models';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
+   
   title = 'adzapier-analytics-ng';
   faCoffee = faCoffee;
   constructor() {
+  //  this.headerComponent.loadOrganizationList();
   }
+
+  // ngAfterViewInit(){
+  //   this.headerComponent.loadOrganizationList();
+  // }
 }

@@ -16,6 +16,7 @@ import { ResetpasswordComponent } from './resetpassword/resetpassword.component'
 import { PagenotfoundComponent } from './errorpages/pagenotfound.component';
 import { InternalerrorComponent } from './errorpages/internalerror.component';
 import { PagenotfoundComponent1 } from './errorpages/404page.component';
+import { DsarformComponent } from './dsarform/dsarform.component';
 
 
 const routes: Routes = [
@@ -34,7 +35,9 @@ const routes: Routes = [
   { path: 'pagenotfound', component: PagenotfoundComponent },
   { path: '404page', component: PagenotfoundComponent1 },
   { path: 'internalerror', component: InternalerrorComponent },
+  {path : 'dsarform', component: DsarformComponent, canActivate: [AuthGuard]},
   { path: '', redirectTo: 'home/dashboard/analytics', pathMatch: 'full', canActivate: [AuthGuard] },
+  
   // { path: '', redirectTo: 'home/dashboard/analytics', pathMatch:'full' },
 
 

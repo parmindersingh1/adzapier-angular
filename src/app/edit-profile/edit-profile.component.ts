@@ -1,7 +1,6 @@
-import { Component, OnInit, Output, EventEmitter, OnChanges } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
-import { AuthenticationService, UserService, AlertService } from '../_services';
-import { Router } from '@angular/router';
+import { AuthenticationService, UserService } from '../_services';
 
 @Component({
   selector: 'app-edit-profile',
@@ -25,10 +24,8 @@ export class EditProfileComponent implements OnInit {
   isDisabled: boolean;
   constructor(
     private formBuilder: FormBuilder,
-    private router: Router,
     private authenticationService: AuthenticationService,
-    private userService: UserService,
-    private alertService: AlertService
+    private userService: UserService
   ) { }
 
   ngOnInit() {
@@ -64,19 +61,14 @@ export class EditProfileComponent implements OnInit {
   }
 
   pathValues() {
-    this.authenticationService.currentUserSubject.subscribe((data) => {
-      if (data) {
-        this.userService.getLoggedInUserDetails().subscribe((user) => {
-          this.userProfile = Object.values(user);
-          this.profileForm.patchValue({
-            newemail: this.userProfile[0].email,
-            firstName: this.userProfile[0].firstname,
-            lastName: this.userProfile[0].lastname
-          });
-        });
-      }
+    this.userService.getLoggedInUserDetails().subscribe((user) => {
+      this.userProfile = Object.values(user);
+      this.profileForm.patchValue({
+        newemail: this.userProfile[0].email,
+        firstName: this.userProfile[0].firstname,
+        lastName: this.userProfile[0].lastname
+      });
     });
-
   }
 
   editUserDetails() {

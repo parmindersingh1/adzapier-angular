@@ -1,4 +1,16 @@
 .dropdown-toggle::after { 
     border-top:0;
     border-left:0;
-} 
+}
+
+.navbar-toggler {
+    outline: none;
+}
+
+.navbar-header .navbar-right .dropdown:last-child {
+    margin-left: 15px !important;
+}
+
+.navbar-menu .nav-item.active .nav-link {
+    cursor: pointer;
+}

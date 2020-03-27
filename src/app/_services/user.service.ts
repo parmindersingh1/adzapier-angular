@@ -15,6 +15,8 @@ export class UserService {
     userDetails: User;
     userProfileSubject = new Subject<User>();
     @Output() getCurrentUser : EventEmitter<User> = new EventEmitter<User>();
+    private organizationProperty = new Subject<any>();
+    organizationProperty$ = this.organizationProperty.asObservable();
     constructor(private http: HttpClient) {
         this.currentregSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('currentregUser')));
         this.currentregUser = this.currentregSubject.asObservable();
@@ -65,19 +67,23 @@ export class UserService {
     }
 
     delete(id: number) {
-        return this.http.delete(environment.apiUrl+'/users/${id}',{});
+        return this.http.delete(environment.apiUrl + '/users/${id}',{});
     }
 
 
     update(firstName,lastName) {
-        return this.http.put<any>(environment.apiUrl+'/user', {firstName,lastName})
+        return this.http.put<any>(environment.apiUrl + '/user', {firstName,lastName})
     }
 
-    getLoggedInUserDetails():Observable<User> {
-        return this.http.get<User>(environment.apiUrl+'/user');
+    getLoggedInUserDetails(): Observable<User> {
+        return this.http.get<User>(environment.apiUrl + '/user');
     }
 
     getCurrentUserProfile(): Observable<User>{
        return this.userProfileSubject.asObservable();
+    }
+
+    updatePropertyList(data) {
+        this.organizationProperty.next(data);
     }
 }
