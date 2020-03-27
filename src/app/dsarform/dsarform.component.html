@@ -1,3 +1,101 @@
-<div style="height: 600px;">
-<p>dsarform works!</p>
+<div class="example-container">
+    
+    <div class="row">
+        <div cdkDropList #todoList="cdkDropList" [cdkDropListData]="formControlList"
+            [cdkDropListConnectedTo]="[doneList]" class="col-sm-3 example-list" (cdkDropListDropped)="drop($event)">
+            <h3>Drag Form Fields</h3>
+            <div class="drag-list" *ngFor="let item of formControlList" cdkDrag>
+                <span cdkDragHandle>
+                    <svg width="24px" fill="#ccc" viewBox="0 0 24 24">
+                        <path d="M10 9h4V6h3l-5-5-5 5h3v3zm-1 1H6V7l-5 5 5 5v-3h3v-4zm14 2l-5-5v3h-3v4h3v3l5-5zm-9 3h-4v3H7l5 5 5-5h-3v-3z"></path>
+                        <path d="M0 0h24v24H0z" fill="none"></path>
+                      </svg>
+                </span>
+                {{item}}</div>
+        </div>
+
+
+        <div cdkDropList #doneList="cdkDropList" [cdkDropListData]="attendeesList" [cdkDropListConnectedTo]="[todoList]"
+            class="col-sm-9 example-list" (cdkDropListDropped)="drop($event)">
+            <h3>Web Form</h3>
+            <form #regsiterForm="ngForm" (ngSubmit)="register(regsiterForm)">
+                <div class="example-box" *ngFor="let person of attendeesList; let i = index;"
+                    cdkDrag [cdkDragDisabled]="true"> 
+                     
+                    <div *ngIf="person.controlId === 'requesttype'" class="card">
+                        <div class="heading"> {{person.controllabel}}  </div>
+                        <div class="card-body">
+                        <div *ngFor="let opt of requesttype" class="form-check-inline"> 
+                            <label class="form-check-label">
+                            <input class="form-check-input" type="radio" name="requestType"  [value]='opt.reqtype'
+                            [(ngModel)]="requestObject[opt.reqtype]"  />{{opt.reqtype}}
+                            </label>
+                        </div>
+                        </div>
+                    </div>
+                     <div *ngIf="person.controlId === 'usertype'" class="card">
+                        <div class="heading"> {{person.controllabel}} </div>
+                        <div class="card-body">
+                        <div *ngFor="let userOpt of usertype"  class="form-check-inline">
+                            <label class="form-check-label">
+                            <input class="form-check-input" type="radio" name="userType"  [value]='userOpt.usertype'
+                            [(ngModel)]="requestObject[userOpt.usertype]"  /> {{userOpt.usertype}}
+                            </label>
+                        </div>
+                    </div>
+                  </div>
+                    <div *ngIf="person.control === 'input';else selectOption" class="card">
+                        <div class="card-body">
+                        <label> {{person.controllabel}} 
+                            <input class="form-control" type="text" name="{{person.controllabel}}" 
+                            [(ngModel)]="requestObject[person.controllabel]"  />
+                        </label>
+                    </div>
+                    </div>
+                    <div *ngIf="person.controllabel === 'Request Details'" class="card">
+                        <div class="card-body">
+                        <label> {{person.controllabel}}  
+                            <textarea class="form-control" type="text" name="{{person.controllabel}}" 
+                            [(ngModel)]="requestObject[person.controllabel]"></textarea>
+                        </label>
+                        </div>
+                    </div>
+                    <ng-template #selectOption>
+                        <!-- <div ngModelGroup="person.controllabel"> -->
+                        <div *ngIf="person.controllabel == 'State'" class="card">
+                            <div class="card-body">
+                            <label>{{person.controllabel}} 
+                                <select class="form-control"    name="{{person.controllabel}}" 
+                                [(ngModel)]="requestObject[person.controllabel]"
+                                     >
+                                    <option value="" disabled>Choose your state</option>
+                                    <option *ngFor="let state of stateList" [value]="state.id">
+                                        {{ state.name }}
+                                    </option>
+                                </select></label>
+                                </div>
+                        </div>
+                        <div *ngIf="person.controllabel == 'Country'" class="card">
+                            <div class="card-body">
+                            <label> {{person.controllabel}}  
+                                <select class="form-control" name="{{person.controllabel}}" 
+                                [(ngModel)]="requestObject[person.controllabel]">
+                                    <option value="" disabled>Choose your country</option>
+                                    <option *ngFor="let country of countries" [value]="country.id">
+                                        {{ country.name }}
+                                    </option>
+                                </select>
+                            </label>
+                        </div>
+                        </div>
+                       
+                    </ng-template>
+                </div>
+                <div class="col-sm-2"> <button class="btn btn-primary btn-block" type="submit">Signup</button></div>
+            </form>
+            <pre>{{ regsiterForm.value | json  }}
+  </pre>
+        </div>
+    </div>
 </div>
+ 

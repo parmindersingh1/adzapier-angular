@@ -33,6 +33,7 @@ import { InternalerrorComponent } from './errorpages/internalerror.component';
 import { PagenotfoundComponent1 } from './errorpages/404page.component';
 import { AuthenticationService } from './_services';
 import { DsarformComponent } from './dsarform/dsarform.component';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 
 
@@ -70,6 +71,7 @@ export const isMock = environment.mock;
     NgbModule,
     IconsModule,
     Ng2ChartJsModules,
+    DragDropModule
   ],
   providers: [
     AuthenticationService,
