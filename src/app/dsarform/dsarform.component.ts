@@ -11,11 +11,18 @@ export class DsarformComponent implements OnInit {
   public form: FormGroup;
   public contactList: FormArray;
   public requestObject: any = {};
-
-  // returns all form groups under contacts
-  get contactFormGroup() {
-    return this.form.get('contacts') as FormArray;
-  }
+  public selectedFormOption: any;
+  public selectedControlType: any;
+  public selectOptions: any;
+  public selectOptionText: any;
+  public count: number;
+  newAttribute: any = {};
+  lblText: any;
+  inputOrSelectOption: boolean;
+  firstField = true;
+  firstFieldName = 'First Item name';
+  isEditItems: boolean;
+  showFormOption: boolean;
   formControlList = [
     'I am a (an)',
     'Select request type(s)',
@@ -27,14 +34,7 @@ export class DsarformComponent implements OnInit {
     'Request Details'
   ];
 
-  done = [
-    { value: '1 Get up', disabled: false },
-    { value: '2 Brush teeth', disabled: false },
-    { value: '3 Take a shower', disabled: true },
-    { value: '4 Check e-mail', disabled: false },
-    { value: '5 Walk dog', disabled: false }
-  ];
-  attendeesList: RegistrationForm[] = [];
+  webFormControlList: RegistrationForm[] = [];
   allNumbers: number[] = [];
   questionGroups: any;
   dataSubjectAccessRightsForm: any;
@@ -62,29 +62,38 @@ export class DsarformComponent implements OnInit {
       name: 'Canada'
     }
   ];
- 
-  stateList = [
-    {id:'AP',name: 'Andhra Pradesh'},
-    {id:'ARP',name: 'Arunachal Pradesh'},
-    {id:'AS',name: 'Assam'},
-    {id:'BH',name: 'Bihar'}
-     
+
+  controlOption = [
+    {
+      id: 1,
+      control: 'input'
+    },
+    {
+      id: 2,
+      control: 'select'
+    }
   ];
 
-  usertype  = [
-    {id:'1',usertype:'Perspective Employee'},
-    {id:'2',usertype:'Customer'},
-    {id:'3',usertype:'Employee'}
-  ]
+  stateList = [
+    { id: 'AP', name: 'Andhra Pradesh' },
+    { id: 'ARP', name: 'Arunachal Pradesh' },
+    { id: 'AS', name: 'Assam' },
+    { id: 'BH', name: 'Bihar' }
+
+  ];
+
+  usertype = [
+    { id: '1', usertype: 'Perspective Employee' },
+    { id: '2', usertype: 'Customer' },
+    { id: '3', usertype: 'Employee' }
+  ];
 
   requesttype = [
-    {id:'1',reqtype:'Info Request'},
-    {id:'2',reqtype:'Data Deletion'},
-    {id:'3',reqtype:'Do not Sell My Information'}
-  ]
-  
+    { id: '1', reqtype: 'Info Request' },
+    { id: '2', reqtype: 'Data Deletion' },
+    { id: '3', reqtype: 'Do not Sell My Information' }
+  ];
 
-  myForm: FormGroup;
   items = [{
     id: 1,
     qty: 22
@@ -99,76 +108,68 @@ export class DsarformComponent implements OnInit {
   }
 
   ];
-  alteArtists = [
-    'Artist 1 - Odunsi',
-    'Artist 2 - Nonso',
-    'Artist 3 - Wavy the creator',
-    'Artist 4 - Dwin',
-    'Artist 5 - SDC',
-    'Artist 6 - Teni'
-  ];
   constructor(private fb: FormBuilder) {
     for (let insertNumbers = 0; insertNumbers <= 10; insertNumbers++) {
       this.allNumbers.push(insertNumbers);
     }
-
+    this.count = 0;
   }
 
-  // dataSubjectAccessRightsForm = this.fb.array({
-  //   firstname: ['', Validators.required],
-  //   lastname: [''],
-  //   email: [''],
-  //   requiredDetails: []
-  // });
-
-  // dataSubjectAccessRightsForm = this.fb.array([
-  //   this.fb.control('firstname'),
-  //   this.fb.control('lastname'),
-  //   this.fb.control('email'),
-  //   this.fb.control('requiredDetails')
-  // ]);
-
   ngOnInit() {
-    this.attendeesList = [
+    this.selectOptions = [{
+      id: this.count++,
+      name: ' '
+    }];
+    this.webFormControlList = [
       {
         control: 'radio',
         controllabel: 'I am a (an)',
-        controlId: 'usertype'
+        controlId: 'usertype',
+        indexCount: 'userTypeIndex'
       },
       {
         control: 'radio',
         controllabel: 'Select request type(s)',
-        controlId: 'requesttype'
+        controlId: 'requesttype',
+        indexCount: 'requestTypeIndex'
       },
       {
         control: 'input',
         controllabel: 'First Name',
-        controlId: 'fname1'
+        controlId: 'fname1',
+        indexCount: 'FirstNameIndex'
       },
       {
         control: 'input',
         controllabel: 'Last Name',
-        controlId: 'lname1'
+        controlId: 'lname1',
+        indexCount: 'LastNameIndex'
       },
       {
         control: 'input',
         controllabel: 'Email',
-        controlId: 'email'
+        controlId: 'email',
+        indexCount: 'EmailIndex'
       },
       {
         control: 'select',
         controllabel: 'State',
-        controlId: 'state5'
+        controlId: 'state5',
+        indexCount: 'StateIndex',
+        selectOptions: this.stateList
       },
       {
         control: 'select',
         controllabel: 'Country',
-        controlId: 'country6'
+        controlId: 'country',
+        indexCount: 'CountryIndex',
+        selectOptions: this.countries
       },
       {
         control: 'textarea',
         controllabel: 'Request Details',
-        controlId: 'requestdetails7'
+        controlId: 'requestdetails',
+        indexCount: 'RequestDetailsIndex'
       }
     ];
 
@@ -179,29 +180,78 @@ export class DsarformComponent implements OnInit {
   }
 
   register(formData: NgForm) {
-    console.log(formData);
+    console.log(formData.value);
   }
   drop(event: CdkDragDrop<string[]>) {
-    moveItemInArray(this.attendeesList, event.previousIndex, event.currentIndex);
+    moveItemInArray(this.webFormControlList, event.previousIndex, event.currentIndex);
     transferArrayItem(event.previousContainer.data, event.container.data, event.previousIndex, event.currentIndex);
   }
 
-  onFormSubmit(data: NgForm){
-    console.log(data,'onFormSubmit..');
+  onFormSubmit(data: NgForm) {
+    console.log(data, 'onFormSubmit..');
   }
 
+  
+  onEditCloseItems() {
+    this.isEditItems = !this.isEditItems;
+  }
+
+  addFormField() {
+    this.showFormOption = !this.showFormOption;
+    if (this.selectedFormOption === 'select') {
+      this.selectedControlType = !this.selectedControlType;
+    } else {
+      this.selectedControlType = false;
+    }
+  }
+
+  addOptions() {
+    this.selectOptions.push( {
+      id: this.count++,
+      name
+    });
+  }
+
+  deleteSelectOption(index) {
+    this.selectOptions.splice(index, 1);
+  }
+
+  cancelForm() {
+    this.showFormOption = true;
+  }
+
+  addCustomFields(formControls: NgForm) {
+    const controltype = (this.selectedFormOption === 'input') ? 'input' : 'select';
+    this.formControlList.push(formControls.value.lblText);
+    const trimLabel = formControls.value.lblText.split(' ').join('');
+    this.webFormControlList.push( {
+      control: controltype,
+      controllabel: formControls.value.lblText,
+      controlId: 'Custom Input',
+      indexCount: trimLabel + 'Index',
+      selectOptions: this.selectOptions
+    });
+    this.lblText = '';
+  }
+
+  onChangeEvent(event) {
+    console.log(event, 'event...');
+    this.selectedFormOption = event.currentTarget.value;
+    this.showFormOption = !this.showFormOption;
+    this.selectOptions = [];
+  }
 }
 
 export class RegistrationForm {
-      // name : string;
-      // email : string;
-      // phone : string;
-      // city: string;
-      // state: string;
-      // country: string;
-      controlId: string;
-      controllabel: string;
-      control: string;
-
-
+  // name : string;
+  // email : string;
+  // phone : string;
+  // city: string;
+  // state: string;
+  // country: string;
+  controlId: string;
+  controllabel: string;
+  control: string;
+  indexCount: string;
+  selectOptions?: any;
 }
