@@ -16,6 +16,7 @@ export class DsarformComponent implements OnInit {
   public selectOptions: any;
   public selectOptionText: any;
   public count: number;
+  public selectOptionControl: any;
   newAttribute: any = {};
   lblText: any;
   inputOrSelectOption: boolean;
@@ -23,6 +24,7 @@ export class DsarformComponent implements OnInit {
   firstFieldName = 'First Item name';
   isEditItems: boolean;
   showFormOption: boolean;
+
   formControlList = [
     'I am a (an)',
     'Select request type(s)',

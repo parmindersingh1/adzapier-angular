@@ -22,8 +22,8 @@
                     </div>
                     <div class="col-sm-6 custom-controls">
                         <label>Select Field Type
-                            <select class="form-control" (change)="onChangeEvent($event)" name="selectOption"
-                                [(ngModel)]="selectOption">
+                            <select class="form-control" (change)="onChangeEvent($event)" name="selectOptionControl"
+                                [(ngModel)]="selectOptionControl">
                                 <option *ngFor="let status_item of controlOption">
                                     {{status_item.control}}
                                 </option>
