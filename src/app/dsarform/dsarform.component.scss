@@ -31,9 +31,14 @@
   .container .row > form {
     width: 100%;
   }
+
+  .card {
+    padding: 10px;
+    margin: 5px 0;
+  }
  
   .card-body {
-    padding: 10px;
+    padding: 5px 0;
   }
 
   .drag-list {
@@ -41,12 +46,44 @@
     padding: 10px 4px;
     margin: 10px 0;
     border: 1px solid #ccc;
+    cursor: move;
   }
 
   .drag-list:focus {
     background: rgb(126, 15, 15);
   }
+
   .card > div:first-child{
     font-size: 14px;
     font-weight: bold;
+  }
+
+  #selectControl {
+    margin-top: 10px;
+  }
+
+  #selectControl label {
+    font-weight: bold;
+  }
+  .addoption {
+    margin-bottom: 10px;
+  }
+
+  .addoption ul{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .addoption ul li {
+    margin: 0px 0px 8px 0;
+    padding: 0;
+  }
+
+  .custom-controls {
+    
+  }
+
+  .custom-controls label {
+    display: inline;
   }
