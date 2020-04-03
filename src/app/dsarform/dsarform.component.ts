@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { FormBuilder, Validators, FormArray, FormGroup, NgForm } from '@angular/forms';
+import { OrganizationService } from '../../app/_services';
+import { switchMap, map } from 'rxjs/operators';
+import { CcparequestService } from '../_services/ccparequest.service';
 
 @Component({
   selector: 'app-dsarform',
@@ -17,6 +20,8 @@ export class DsarformComponent implements OnInit {
   public selectOptionText: any;
   public count: number;
   public selectOptionControl: any;
+  selectedControlId: any;
+  changeControlType: any;
   newAttribute: any = {};
   lblText: any;
   inputOrSelectOption: boolean;
@@ -24,32 +29,62 @@ export class DsarformComponent implements OnInit {
   firstFieldName = 'First Item name';
   isEditItems: boolean;
   showFormOption: boolean;
-
-  formControlList = [
-    'I am a (an)',
-    'Select request type(s)',
-    'First name',
-    'Last name',
-    'Email',
-    'State',
-    'Country',
-    'Request Details'
-  ];
-
+  selectedRow: any;
+  isEditingList: boolean;
+  isOptionSelected: boolean; // check if change from radio to select dropdown;
+  isRequestTypeSelected: boolean;
+  isSubjectTypeSelected: boolean;
+  editSelectionType: boolean;
+  updatedControl: any;
+  formControlList = [{
+    id: 1,
+    controllabel: 'I am a (an)',
+    controltype: 'radio'
+  },
+  {
+    id: 2,
+    controllabel: 'Select request type(s)',
+    controltype: 'select'
+  },
+  {
+    id: 3,
+    controllabel: 'First Name',
+    controltype: 'textbox'
+  },
+  {
+    id: 4,
+    controllabel: 'Last name',
+    controltype: 'textbox'
+  },
+  {
+    id: 5,
+    controllabel: 'Email',
+    controltype: 'textbox'
+  },
+  {
+    id: 6,
+    controllabel: 'State',
+    controltype: 'select'
+  },
+  {
+    id: 7,
+    controllabel: 'Country',
+    controltype: 'select'
+  },
+  {
+    id: 8,
+    controllabel: 'Request Details',
+    controltype: 'textarea'
+  }];
+  isAddingFormControl: boolean;
   webFormControlList: RegistrationForm[] = [];
   allNumbers: number[] = [];
   questionGroups: any;
   dataSubjectAccessRightsForm: any;
   questionControlArray: any;
   formsArr = [];
-  artists = [
-    '1 Firstname',
-    '2 lastname',
-    '3 emailId',
-    '4 address',
-    '5 phone no',
-    '6 mobile no'
-  ];
+  public requestType: any = [];
+  public subjectType: any = [];
   countries = [
     {
       id: 'us',
@@ -68,11 +103,30 @@ export class DsarformComponent implements OnInit {
   controlOption = [
     {
       id: 1,
-      control: 'input'
+      control: 'textbox'
     },
     {
       id: 2,
       control: 'select'
+    },
+    {
+      id: 3,
+      control: 'radio'
+    },
+    {
+      id: 4,
+      control: 'textarea'
+    }
+  ];
+
+  editableControlOption = [
+    {
+      id: 1,
+      control: 'select'
+    },
+    {
+      id: 2,
+      control: 'radio'
     }
   ];
 
@@ -82,18 +136,6 @@ export class DsarformComponent implements OnInit {
     { id: 'AS', name: 'Assam' },
     { id: 'BH', name: 'Bihar' }
 
-  ];
-
-  usertype = [
-    { id: '1', usertype: 'Perspective Employee' },
-    { id: '2', usertype: 'Customer' },
-    { id: '3', usertype: 'Employee' }
-  ];
-
-  requesttype = [
-    { id: '1', reqtype: 'Info Request' },
-    { id: '2', reqtype: 'Data Deletion' },
-    { id: '3', reqtype: 'Do not Sell My Information' }
   ];
 
   items = [{
@@ -110,45 +152,59 @@ export class DsarformComponent implements OnInit {
   }
 
   ];
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private ccpaRequestService: CcparequestService,
+    private organizationService: OrganizationService
+  ) {
     for (let insertNumbers = 0; insertNumbers <= 10; insertNumbers++) {
       this.allNumbers.push(insertNumbers);
     }
     this.count = 0;
+    this.loadWebControl();
+    this.getCCPAdefaultConfigById();
   }
 
   ngOnInit() {
+    //  this.selectOptionControl = this.controlOption[0].control;
+
     this.selectOptions = [{
       id: this.count++,
       name: ' '
     }];
+
+    this.getCCPAdefaultConfigById();
+
+  }
+
+  loadWebControl() {
     this.webFormControlList = [
       {
         control: 'radio',
         controllabel: 'I am a (an)',
-        controlId: 'usertype',
-        indexCount: 'userTypeIndex'
+        controlId: 'subjecttype',
+        indexCount: 'subjecttypeIndex',
+        selectOptions: this.subjectType
       },
       {
         control: 'radio',
         controllabel: 'Select request type(s)',
         controlId: 'requesttype',
-        indexCount: 'requestTypeIndex'
+        indexCount: 'requestTypeIndex',
+        selectOptions: this.requestType
       },
       {
-        control: 'input',
+        control: 'textbox',
         controllabel: 'First Name',
         controlId: 'fname1',
         indexCount: 'FirstNameIndex'
       },
       {
-        control: 'input',
+        control: 'textbox',
         controllabel: 'Last Name',
         controlId: 'lname1',
         indexCount: 'LastNameIndex'
       },
       {
-        control: 'input',
+        control: 'textbox',
         controllabel: 'Email',
         controlId: 'email',
         indexCount: 'EmailIndex'
@@ -174,11 +230,30 @@ export class DsarformComponent implements OnInit {
         indexCount: 'RequestDetailsIndex'
       }
     ];
-
   }
 
   trackByIndex(index: number, obj: any): any {
     return index;
+  }
+
+  getCCPAdefaultConfigById() {
+    this.organizationService.orglist().pipe(
+      switchMap((data) => {
+        for (const key in data) {
+          if (data[key] !== undefined) {
+            return this.ccpaRequestService.getCCPAdefaultConfigById(data[key][0].orgid);
+          }
+        }
+      })
+
+    ).subscribe((data) => {
+      if (data !== undefined) {
+        const rdata = data['response'].request_type;
+        const sdata = data['response'].subject_type;
+        this.requestType = rdata;
+        this.subjectType = sdata;
+      }
+    });
   }
 
   register(formData: NgForm) {
@@ -193,7 +268,7 @@ export class DsarformComponent implements OnInit {
     console.log(data, 'onFormSubmit..');
   }
 
-  
+
   onEditCloseItems() {
     this.isEditItems = !this.isEditItems;
   }
@@ -201,14 +276,43 @@ export class DsarformComponent implements OnInit {
   addFormField() {
     this.showFormOption = !this.showFormOption;
     if (this.selectedFormOption === 'select') {
-      this.selectedControlType = !this.selectedControlType;
+      this.selectedControlType = true;
     } else {
       this.selectedControlType = false;
     }
   }
 
+  editSelectedRow(data) {
+    this.lblText = data.controllabel;
+    this.isEditingList = true;
+    this.isAddingFormControl = true;
+    this.showFormOption = false;
+    this.selectedControlId = data.controlId;
+
+    (data.control === 'textbox' || data.control === 'textarea') ? this.inputOrSelectOption = true : this.inputOrSelectOption = false;
+    if (data.control === 'select' || data.control === 'radio') {
+      this.editSelectionType = true;
+      this.changeControlType = data.control;
+    } else {
+      this.editSelectionType = false;
+    }
+    this.selectedFormOption = data.control;
+    this.selectOptionControl = data.control;
+    this.addFormField();
+  }
+
+  isSelected(i): boolean {
+    return this.selectedRow === i;
+  }
+
+  saveCurrentItem(i) {
+    console.log(!this.isSelected(i), 'isSelected..');
+    return !this.isSelected(i);
+  }
+
+
   addOptions() {
-    this.selectOptions.push( {
+    this.selectOptions.push({
       id: this.count++,
       name
     });
@@ -223,10 +327,10 @@ export class DsarformComponent implements OnInit {
   }
 
   addCustomFields(formControls: NgForm) {
-    const controltype = (this.selectedFormOption === 'input') ? 'input' : 'select';
+    const controltype = (this.selectedFormOption === 'textbox') ? 'textbox' : 'select';
     this.formControlList.push(formControls.value.lblText);
     const trimLabel = formControls.value.lblText.split(' ').join('');
-    this.webFormControlList.push( {
+    this.webFormControlList.push({
       control: controltype,
       controllabel: formControls.value.lblText,
       controlId: 'Custom Input',
@@ -242,6 +346,34 @@ export class DsarformComponent implements OnInit {
     this.showFormOption = !this.showFormOption;
     this.selectOptions = [];
   }
+
+  updateControlType(event) {
+    this.changeControlType = event.currentTarget.value;
+    if (this.selectedControlId === 'requesttype') {
+      this.updatedControl = this.changeControlType;
+      (this.changeControlType === 'select') ? this.isRequestTypeSelected = true : this.isRequestTypeSelected = false;
+    } else if (this.selectedControlId === 'subjecttype') {
+
+      (this.changeControlType === 'select') ? this.isSubjectTypeSelected = true : this.isSubjectTypeSelected = false;
+    }
+
+
+  }
+
+  addingFormControl() {
+    this.isAddingFormControl = !this.isAddingFormControl;
+  }
+
+
+  cancelAddingFormControl() {
+    this.isAddingFormControl = false;
+    this.isEditingList = false;
+    this.inputOrSelectOption = false;
+    this.showFormOption = true;
+    this.editSelectionType = false;
+  }
+
+
 }
 
 export class RegistrationForm {
@@ -255,5 +387,5 @@ export class RegistrationForm {
   controllabel: string;
   control: string;
   indexCount: string;
-  selectOptions?: any;
+  selectOptions?: Array<any>;
 }
