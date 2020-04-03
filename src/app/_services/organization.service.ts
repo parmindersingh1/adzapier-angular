@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from './../../environments/environment.staging';
 import { Orglist } from './../_models';
+import { Organization } from '../_models/organization';
 
 @Injectable({ providedIn: 'root' })
 
@@ -19,8 +20,8 @@ export class OrganizationService {
     }
 
 
-    orglist(): Observable<any> {
-        return this.http.get<any>(environment.apiUrl + '/organizations?include_property=1');
+    orglist(): Observable<Organization[]> {
+        return this.http.get<Organization[]>(environment.apiUrl + '/organizations?include_property=1');
     }
 
     updateOrganization(orgId, data): Observable<any> {
