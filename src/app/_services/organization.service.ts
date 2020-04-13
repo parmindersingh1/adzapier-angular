@@ -1,5 +1,5 @@
 import { Injectable, EventEmitter, Output } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from './../../environments/environment.staging';
 import { Orglist } from './../_models';
@@ -24,8 +24,12 @@ export class OrganizationService {
         return this.http.get<Organization[]>(environment.apiUrl + '/organizations?include_property=1');
     }
 
+    viewOrganizationDetails(orgId): Observable<Organization[]> {
+        return this.http.get<Organization[]>(environment.apiUrl + '/organizations/' + orgId);
+    }
+
     updateOrganization(orgId, data): Observable<any> {
-        return this.http.put<any>(environment.apiUrl + '/organizations/' + orgId, {orgName: data});
+        return this.http.put<any>(environment.apiUrl + '/organizations/' + orgId, data);
     }
 
     addProperties(orgId, properties): Observable<any> {

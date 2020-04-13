@@ -43,4 +43,8 @@ export class AuthenticationService {
         localStorage.removeItem('currentUser');
         this.currentUserSubject.next(null);
     }
+
+    changePassword(requestObj) {
+        return this.http.post<any>(environment.apiUrl + '/password/change', requestObj);
+    }
 }

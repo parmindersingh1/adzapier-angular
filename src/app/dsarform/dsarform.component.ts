@@ -5,6 +5,7 @@ import { OrganizationService } from '../../app/_services';
 import { switchMap, map } from 'rxjs/operators';
 import { CcparequestService } from '../_services/ccparequest.service';
 
+
 @Component({
   selector: 'app-dsarform',
   templateUrl: './dsarform.component.html',
@@ -176,60 +177,76 @@ export class DsarformComponent implements OnInit {
   }
 
   loadWebControl() {
-    this.webFormControlList = [
-      {
-        control: 'radio',
-        controllabel: 'I am a (an)',
-        controlId: 'subjecttype',
-        indexCount: 'subjecttypeIndex',
-        selectOptions: this.subjectType
-      },
-      {
-        control: 'radio',
-        controllabel: 'Select request type(s)',
-        controlId: 'requesttype',
-        indexCount: 'requestTypeIndex',
-        selectOptions: this.requestType
-      },
-      {
-        control: 'textbox',
-        controllabel: 'First Name',
-        controlId: 'fname1',
-        indexCount: 'FirstNameIndex'
-      },
-      {
-        control: 'textbox',
-        controllabel: 'Last Name',
-        controlId: 'lname1',
-        indexCount: 'LastNameIndex'
-      },
-      {
-        control: 'textbox',
-        controllabel: 'Email',
-        controlId: 'email',
-        indexCount: 'EmailIndex'
-      },
-      {
-        control: 'select',
-        controllabel: 'State',
-        controlId: 'state5',
-        indexCount: 'StateIndex',
-        selectOptions: this.stateList
-      },
-      {
-        control: 'select',
-        controllabel: 'Country',
-        controlId: 'country',
-        indexCount: 'CountryIndex',
-        selectOptions: this.countries
-      },
-      {
-        control: 'textarea',
-        controllabel: 'Request Details',
-        controlId: 'requestdetails',
-        indexCount: 'RequestDetailsIndex'
+    this.organizationService.orglist().pipe(
+      switchMap((data) => {
+        for (const key in data) {
+          if (data[key] !== undefined) {
+            return this.ccpaRequestService.getCCPAdefaultConfigLabels(data[key][0].orgid);
+          }
+        }
+      })
+
+    ).subscribe((data) => {
+      if (data !== undefined) {
+        const key = 'response';
+        this.webFormControlList = data[key];
       }
-    ];
+    });
+
+    // this.webFormControlList = [
+    //   {
+    //     control: 'radio',
+    //     controllabel: 'I am a (an)',
+    //     controlId: 'subjecttype',
+    //     indexCount: 'subjecttypeIndex',
+    //     selectOptions: this.subjectType
+    //   },
+    //   {
+    //     control: 'radio',
+    //     controllabel: 'Select request type(s)',
+    //     controlId: 'requesttype',
+    //     indexCount: 'requestTypeIndex',
+    //     selectOptions: this.requestType
+    //   },
+    //   {
+    //     control: 'textbox',
+    //     controllabel: 'First Name',
+    //     controlId: 'fname1',
+    //     indexCount: 'FirstNameIndex'
+    //   },
+    //   {
+    //     control: 'textbox',
+    //     controllabel: 'Last Name',
+    //     controlId: 'lname1',
+    //     indexCount: 'LastNameIndex'
+    //   },
+    //   {
+    //     control: 'textbox',
+    //     controllabel: 'Email',
+    //     controlId: 'email',
+    //     indexCount: 'EmailIndex'
+    //   },
+    //   {
+    //     control: 'select',
+    //     controllabel: 'State',
+    //     controlId: 'state5',
+    //     indexCount: 'StateIndex',
+    //     selectOptions: this.stateList
+    //   },
+    //   {
+    //     control: 'select',
+    //     controllabel: 'Country',
+    //     controlId: 'country',
+    //     indexCount: 'CountryIndex',
+    //     selectOptions: this.countries
+    //   },
+    //   {
+    //     control: 'textarea',
+    //     controllabel: 'Request Details',
+    //     controlId: 'requestdetails',
+    //     indexCount: 'RequestDetailsIndex'
+    //   }
+    // ];
   }
 
   trackByIndex(index: number, obj: any): any {
@@ -241,7 +258,7 @@ export class DsarformComponent implements OnInit {
       switchMap((data) => {
         for (const key in data) {
           if (data[key] !== undefined) {
-            return this.ccpaRequestService.getCCPAdefaultConfigById(data[key][0].orgid);
+            return this.ccpaRequestService.getCCPAdefaultRequestSubjectType(data[key][0].orgid);
           }
         }
       })
@@ -252,6 +269,7 @@ export class DsarformComponent implements OnInit {
         const sdata = data['response'].subject_type;
         this.requestType = rdata;
         this.subjectType = sdata;
+        this.loadWebControl();
       }
     });
   }

@@ -34,7 +34,9 @@ import { PagenotfoundComponent1 } from './errorpages/404page.component';
 import { AuthenticationService } from './_services';
 import { DsarformComponent } from './dsarform/dsarform.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
-
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { CollapseModule } from 'ngx-bootstrap/collapse';
 
 
 
@@ -71,7 +73,10 @@ export const isMock = environment.mock;
     NgbModule,
     IconsModule,
     Ng2ChartJsModules,
-    DragDropModule
+    DragDropModule,
+    BsDropdownModule.forRoot(),
+    BrowserAnimationsModule,
+    CollapseModule.forRoot()
   ],
   providers: [
     AuthenticationService,
@@ -90,6 +95,6 @@ export const isMock = environment.mock;
     fakeBackendProvider
   ],
   bootstrap: [AppComponent],
-  exports: [AnalyticsComponent]
+  exports: [AnalyticsComponent, BsDropdownModule, CollapseModule]
 })
 export class AppModule { }

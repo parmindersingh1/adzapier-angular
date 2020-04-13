@@ -13,8 +13,10 @@ import { DomSanitizer } from '@angular/platform-browser';
 
 export class OrgpageComponent implements OnInit {
   organisationPropertyForm: FormGroup;
+  editOrganisationForm: FormGroup;
   submitted: boolean;
   orgList: any;
+  orgDetails: any = [];
   closeResult: any;
   isEditable: boolean;
   selectedOrg: any;
@@ -25,10 +27,21 @@ export class OrgpageComponent implements OnInit {
   editPropertyrow: boolean = false;
   propname: any;
   websitename: any;
+  organizationname: any;
+  taxidnumber: any;
+  addressone: any;
+  addresstwo: any;
+  cityname: any;
+  statename: any;
+  zipcodenum: any;
   myContext;
+  showOrgDetails: boolean = false;
+ 
   isEditProperty: boolean;
-  constructor(private formBuilder: FormBuilder, private orgservice: OrganizationService, private modalService: NgbModal,
-    private sanitizer: DomSanitizer, private userService: UserService
+  constructor(private formBuilder: FormBuilder,
+              private orgservice: OrganizationService,
+              private modalService: NgbModal, private sanitizer: DomSanitizer,
+              private userService: UserService
   ) { }
 
   ngOnInit() {
@@ -39,11 +52,19 @@ export class OrgpageComponent implements OnInit {
       website: ['', [Validators.required, Validators.pattern]],
       logo: ['']
     });
-
+    this.editOrganisationForm = this.formBuilder.group({
+      orgname: [''],
+      taxID: [''],
+      address1: [''],
+      address2: [''],
+      city: [''],
+      state: [''],
+      zipcode: ['']
+    });
     this.loadOrganizationList();
   }
-  get f() { return this.organisationPropertyForm.controls; }
-
+   get f() { return this.organisationPropertyForm.controls; }
+   get f1() { return this.editOrganisationForm.controls; }
   uploadFile(event) {
     console.log(event, 'event..');
     if (event.target.files.length > 0) {
@@ -59,9 +80,9 @@ export class OrgpageComponent implements OnInit {
     fd.append('name', this.organisationPropertyForm.get('name').value);
     fd.append('website', this.organisationPropertyForm.get('website').value);
     fd.append('logo', this.organisationPropertyForm.get('logo').value);
+   
     if (this.organisationPropertyForm.valid) {
-
-      if (!data) {
+      if (!this.isEditProperty) {
         this.orgservice.addProperties(this.selectedOrg.orgid, fd).subscribe((result) => {
           this.getPropertyList(this.selectedOrg.orgid);
         }, (error) => {
@@ -70,10 +91,10 @@ export class OrgpageComponent implements OnInit {
         this.organisationPropertyForm.reset();
         this.modalService.dismissAll('Data Saved!');
       } else {
-        this.orgservice.editProperties(data.oid, data.pid, fd).subscribe((data) => {
-          if (data) {
+        this.orgservice.editProperties(this.myContext.oid, this.myContext.pid, fd).subscribe((res) => {
+          if (res) {
             alert('updated!');
-            this.getPropertyList(data.oid);
+            this.getPropertyList(res.oid);
           }
           this.organisationPropertyForm.reset();
           this.modalService.dismissAll();
@@ -89,6 +110,7 @@ export class OrgpageComponent implements OnInit {
 
   loadOrganizationList() {
     this.orgservice.orglist().subscribe((data) => {
+      console.log(JSON.stringify(data),'data..');
       this.orgList = Object.values(data)[0];
     });
   }
@@ -97,17 +119,42 @@ export class OrgpageComponent implements OnInit {
     this.isEditable = !this.isEditable;
   }
 
-  saveUpdatedChanges(orgId, data) {
-    this.orgservice.updateOrganization(orgId, data).subscribe((data) => {
-      if (data) {
-        this.orgservice.emitUpdatedOrganization.emit(data);
-        alert('Organization updated successfully!');
-        this.isEditable = false;
-      }
+  loadOrganizationDetails(org) {
+    this.orgDetails = [];
+    this.showOrgDetails = !this.showOrgDetails;
+    this.orgservice.viewOrganizationDetails(org.orgid).subscribe((data) => {
+      const key = 'response';
+      this.orgDetails.push(data[key]);
     }, (error) => {
-      alert('error while updating');
+      alert(error);
     });
-
+  }
+ 
+  updateOrganisationData(data) {
+    console.log(this.editOrganisationForm.value, 'value..');
+    if (this.editOrganisationForm.valid) {
+      const obj = {
+        orgname: this.editOrganisationForm.get('orgname').value,
+        taxID: this.editOrganisationForm.get('taxID').value,
+        address1: this.editOrganisationForm.get('address1').value,
+        address2: this.editOrganisationForm.get('address2').value,
+        city: this.editOrganisationForm.get('city').value,
+        state:  this.editOrganisationForm.get('state').value,
+        zipcode: this.editOrganisationForm.get('zipcode').value
+      };
+      this.orgservice.updateOrganization(data.oid, obj).subscribe((res) => {
+        if (res) {
+          this.orgservice.emitUpdatedOrganization.emit(res);
+          alert('Organization updated successfully!');
+          this.orgDetails = [];
+          this.showOrgDetails = false;
+          this.loadOrganizationList();
+          this.isEditable = false;
+        }
+      }, (error) => {
+        alert(JSON.stringify(error));
+      });
+    }
   }
 
   open(content, data) {
@@ -161,5 +208,30 @@ export class OrgpageComponent implements OnInit {
     });
   }
 
+  
+
+  editOrganizationModalPopup(content, data) {
+    this.myContext = { oid: data.oid, pid: data.pid};
+    this.organizationname = data.name;
+    this.taxidnumber = data.taxID;
+    this.addressone = data.address1;
+    this.addresstwo = data.address2;
+    this.cityname = data.city;
+    this.statename = data.state;
+    this.zipcodenum = data.zipcode;
+    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
+      alert('edit mp..');
+      this.editOrganisationForm.reset();
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.editOrganisationForm.reset();
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+  
+  onResetEditOrganization() {
+    this.editOrganisationForm.reset();
+    this.modalService.dismissAll('Data Saved!');
+  }
 
 }
