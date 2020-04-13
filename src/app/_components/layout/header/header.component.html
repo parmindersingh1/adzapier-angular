@@ -1,89 +1,111 @@
-<header class="navbar navbar-header navbar-header-fixed bg-gray-100">
-  <a href="#" id="mainMenuOpen" class="burger-menu"><i data-feather="menu"></i></a>
-  <div class="navbar-brand">
-    <a class="df-logo">Adzapier<span>Solutions</span></a>
-  </div>
-
-  <div id="navbarMenu" class="navbar-menu-wrapper" *ngIf="currentUser">
-    <ul class="nav navbar-menu">
-      <li class="nav-item with-sub active" *ngFor="let data of orgList" ngbDropdown>
-        <a class="nav-link" ngbDropdownToggle id="navbarDropdown01">
-          <span *ngIf="!currentOrganization">{{data.orgName}}</span>
-          <span>{{currentOrganization}}</span>
-        </a>
-        <ul aria-labelledby="navbarDropdown01" class="navbar-menu-sub">
-          <li class="nav-sub-item">
-            <a routerLink="" *ngFor="let prop of data.property" class="nav-sub-link">
-              {{prop.propName}}</a></li>
-        </ul>
-      </li>
-      <li class="nav-item with-sub active" *ngFor="let menu of navigationMenu" ngbDropdown>
-        <a class="nav-link" ngbDropdownToggle id="navbarDropdown02"> {{menu.showlink}}</a>
-        <ul id="navbarDropdown" aria-labelledby="navbarDropdown02" class="navbar-menu-sub">
-          <li class="nav-sub-item">
-            <a routerLink="/dsarform" class="nav-sub-link" *ngFor="let link of menu.subcategory">{{link.showlink}}</a>
-          </li>
-        </ul>
+<nav class="navbar navbar-expand-sm">
+  <button class="navbar-toggler navbar-toggler-right" type="button" (click)="isCollapsed = !isCollapsed"
+    aria-expanded="true" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>test
+  </button>
+  <h3><a style="color:#0168fa">Adzapier <span style="color: #000;">Solutions</span></a></h3>
+  <div *ngIf="currentUser" class="navbar-collapse collapse" container="body" [collapse]="isCollapsed"
+    id="navbarNavDropdown">
+    <ul class="navbar-nav" *ngIf="currentUser">
+      <li *ngFor="let menu of leftItems" class="nav-item">
+        <div *ngIf="menu.orgName" class="navbar-collapse collapse" dropdown container="body" [collapse]="isCollapsed">
+          <a class="nav-link dropdown-toggle" dropdownToggle (click)="true">
+            <span *ngIf="!currentOrganization">{{menu.orgName}}</span>
+            <span>{{currentOrganization}}</span>
+          </a>
+          <ul *dropdownMenu class="dropdown-menu">
+            <ng-container *ngFor="let item of menu.property">
+              <li *ngIf="!item.items" role="menuitem">
+                <a class="dropdown-item">
+                  {{item.propName}}
+                </a>
+              </li>
+              <li *ngIf="item.items" role="menuitem" dropdown triggers="mouseover" placement="top right"
+                container="body">
+                <a class="dropdown-item" (click)="false">{{ item.label }}<i
+                    class="fas fa-caret-right dropdown-submenu"></i></a>
+                <ul *dropdownMenu class="dropdown-menu" role="menu">
+                  <ng-container *ngFor="let submenu of item.items">
+                    <li role="menuitem">
+                      {{submenu | json}}
+                      <a class="dropdown-item">
+                        {{ submenu.propName }}
+                      </a>
+                    </li>
+                    <li *ngIf="submenu.divider" class="divider dropdown-divider"></li>
+                  </ng-container>
+                </ul>
+              </li>
+              <li *ngIf="item.divider" class="divider dropdown-divider"></li>
+            </ng-container>
+          </ul>
+        </div>
       </li>
     </ul>
 
+    <ul class="navbar-nav mr-auto" *ngIf="currentUser">
+      <li *ngFor="let menu of navigationMenu" class="nav-item">
+        <div *ngIf="menu.showlink" dropdown container="body">
+          <a class="nav-link dropdown-toggle" dropdownToggle (click)="true">
+            {{ menu.showlink }}</a>
+          <ul *dropdownMenu class="dropdown-menu">
+            <ng-container *ngFor="let item of menu.subcategory;">
+              <li role="menuitem">
+                <a class="dropdown-item" routerLink="{{item.routerLink}}">
+                  {{item.showlink}}
+                </a>
+              </li>
+            </ng-container>
+          </ul>
+        </div>
+      </li>
+    </ul>
 
-  </div> <!-- navbar-menu-wrapper -->
-  <div class="navbar-right" *ngIf="currentUser">
-    <a id="navbarSearch" href="" class="search-link">
-      <i-feather name="search"></i-feather>
-    </a>
-
-    <div class="dropdown dropdown-notification">
-      <a href="" class="dropdown-link new-indicator" data-toggle="dropdown">
-        <i-feather name="bell"></i-feather>
-      </a>
-    </div>
-    <!-- dropdown -->
-    <div class="dropdown dropdown-profile show">
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarDropdown"
-        aria-controls="navbarDropdown" aria-expanded="false" aria-label="Toggle navigation">
-        <div class="avatar avatar-sm"><img src="assets/imgs/glass.jpg" class="rounded-circle" alt=""></div>
-      </button>
-      <div id="navbarDropdown" class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="navbarDropdown">
-
-        <div class="avatar avatar-lg mg-b-15">
-          <img src="assets/imgs/glass.jpg" class="rounded-circle" alt=""></div>
-        <h6 class="tx-semibold mg-b-5">{{currentLoggedInUser}}</h6><br />
-
-        <!-- <p class="mg-b-25 tx-12 tx-color-03">Administrator</p> -->
-
-        <a routerLink="/user/profile/edit" class="dropdown-item">
-          <i-feather name="edit-3"></i-feather>Edit Profile
-        </a>
-
-        <a routerLink="/portalorg" class="dropdown-item">
-          <i-feather name="user"></i-feather>Organization
-        </a>
-
-        <div class="dropdown-divider"></div>
-        <a routerLink="/pagenotfound" class="dropdown-item">
-          <i-feather name="help-circle"></i-feather>Help Center
-        </a>
-
-        <a routerLink="/pagenotfound" class="dropdown-item">
-          <i-feather name="life-buoy"></i-feather> Forum
-        </a>
-
-        <a routerLink="/user/password/change-password" class="dropdown-item">
-          <i-feather name="settings"></i-feather>Account Settings
-        </a>
-
-        <a routerLink="/pagenotfound" class="dropdown-item">
-          <i-feather name="settings"></i-feather>Privacy Settings
-        </a>
-        <a routerLink="" (click)="logout()" class="dropdown-item">
-          <i-feather name="log-out"></i-feather>Sign Out
-        </a>
-
-      </div>
-    </div>
+    <ul class="navbar-nav" *ngIf="currentUser">
+      <li *ngFor="let menu of rightItems" class="nav-item">
+        <div *ngIf="!menu.items" container="body">
+          <a *ngIf="!menu.items" class="nav-link">
+            <i *ngIf="menu.icon" class="{{ menu.icon }}"></i>{{ menu.label }}
+          </a>
+        </div>
+        <div *ngIf="menu.items" dropdown container="body" placement="bottom right">
+          <a class="nav-link dropdown-link" dropdownToggle (click)="false">
+            <div class="avatar avatar-sm"><img src="assets/imgs/glass.jpg" class="rounded-circle" alt=""></div>
+            </a>
+          <ul *dropdownMenu class="dropdown-menu dropdown-menu-right">
+            <ng-container *ngFor="let item of menu.items; first as isFirst">
+              <div *ngIf="isFirst" class="loggedin-user"> 
+                <div class="avatar avatar-lg mg-b-15"><img src="assets/imgs/glass.jpg" class="rounded-circle" alt=""></div>
+                 {{currentLoggedInUser}}</div>
+              <li *ngIf="!item.items" role="menuitem">
+                <a class="dropdown-item" *ngIf="item.label !== 'Signout'" routerLink="{{item.routerLink}}">
+                  <i *ngIf="item.icon" class="{{ item.icon }}"></i>{{item.label}}
+                </a>
+                <a class="dropdown-item" *ngIf="item.label === 'Signout'" (click)="logout()"
+                  routerLink="{{item.routerLink}}">
+                  <i *ngIf="item.icon" class="{{ item.icon }}"></i>{{item.label}}
+                </a>
+              </li>
+              <li *ngIf="item.items" role="menuitem" dropdown triggers="mouseover" placement="top left"
+                container="body">
+                <a class="dropdown-item" (click)="false"><i
+                    class="fas fa-caret-left dropdown-submenu-left"></i>{{ item.label }}</a>
+                <ul *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu">
+                  <ng-container *ngFor="let submenu of item.items">
+                    <li role="menuitem">
+                      <a class="dropdown-item" href="#">
+                        <i *ngIf="submenu.icon" class="{{ submenu.icon }}"></i>{{ submenu.label }}
+                      </a>
+                    </li>
+                    <li *ngIf="submenu.divider" class="divider dropdown-divider"></li>
+                  </ng-container>
+                </ul>
+              </li>
+              <li *ngIf="item.divider" class="divider dropdown-divider"></li>
+            </ng-container>
+          </ul>
+        </div>
+      </li>
+    </ul>
   </div>
-
-  <!-- navbar-right -->
-</header><!-- navbar -->
+</nav>

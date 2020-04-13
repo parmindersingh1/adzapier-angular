@@ -3,15 +3,17 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { OrganizationService, AuthenticationService, UserService } from '../../../_services';
 import { User } from '../../../_models';
 import { Observable } from 'rxjs';
-
+import { BsDropdownConfig } from 'ngx-bootstrap/dropdown';
+import { Organization } from 'src/app/_models/organization';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss']
+  styleUrls: ['./header.component.scss'],
+  providers: [{ provide: BsDropdownConfig, useValue: { isAnimated: true, autoClose: true } }]
 })
 export class HeaderComponent implements OnInit {
-
+  isCollapsed = true;
   accessHeader: boolean;
   public currentLoggedInUser: string;
   uid: string;
@@ -25,6 +27,9 @@ export class HeaderComponent implements OnInit {
   orgList: any;
   currentOrganization: any;
   navigationMenu: any;
+  rightItems: any;
+  leftItems: any;
+  organizationList$: Observable<Organization[]>;
   constructor(
     private router: Router,
     private activatedroute: ActivatedRoute,
@@ -32,20 +37,24 @@ export class HeaderComponent implements OnInit {
     private authService: AuthenticationService,
     private userService: UserService
   ) {
-    this.authService.currentUser.subscribe(x => this.currentUser = x);
-    if (this.currentUser) {
-      this.getLoggedInUserDetails();
-      this.loadOrganizationList();
-    }
+    this.authService.currentUser.subscribe(x => {
+      this.currentUser = x;
+      if (this.currentUser) {
+        this.isCollapsed = false;
+        this.getLoggedInUserDetails();
+        this.loadOrganizationList();
+      }
+    } );
   }
 
 
-
   ngOnInit() {
+    this.isCollapsed = false;
     this.userService.getCurrentUser.subscribe((data) => {
       if (data) {
         console.log(data, 'userService..');
         this.currentUser = data;
+        this.isCollapsed = false;
         this.currentLoggedInUser = this.currentUser.response.firstname + ' ' + this.currentUser.response.lastname;
       }
     });
@@ -54,16 +63,32 @@ export class HeaderComponent implements OnInit {
     });
     this.navigationMenu = [{
       'showlink': 'Application',
-      'subcategory': [{ 'showlink': 'CCPA' }, { 'showlink': 'DSAR' }]
-    }]
+      'subcategory': [{ 'showlink': 'CCPA', 'routerLink': '/dsarform' }, { 'showlink': 'DSAR', 'routerLink': '/dsarform' }]
+    }];
+    this.authService.currentUser.subscribe(x => this.currentUser = x);
+    if (this.currentUser) {
+      this.isCollapsed = false;
+      this.getLoggedInUserDetails();
+      this.loadOrganizationList();
+    }
   }
 
   logout() {
     this.authService.logout();
+    this.isCollapsed = true;
     localStorage.removeItem('currentUser');
     this.router.navigate(['/login']);
     location.reload();
 
+  }
+
+  getDynamicMenu() {
+    const testNames = ['Test1', 'Test2', 'Test3'];
+    const dynamicSubmenu = [];
+    for (const menuName of testNames) {
+      dynamicSubmenu.push({ label: 'Submenu - ' + menuName, routerLink: '/submenus/' + menuName.toLowerCase() });
+    }
+    return dynamicSubmenu;
   }
 
   editProfile() {
@@ -92,9 +117,27 @@ export class HeaderComponent implements OnInit {
   }
 
   loadOrganizationList() {
-    if (this.authService.currentUserValue) {
       this.orgservice.orglist().subscribe((data) => {
         this.orgList = Object.values(data)[0];
+        this.leftItems = this.orgList;
+        this.rightItems = [
+          {
+            label: 'User', icon: 'assets/imgs/glass.jpg',
+            items: [
+              {label: 'Edit Profile', routerLink: '/user/profile/edit', icon: 'fas fa-pen' },
+              {label: 'Organization', routerLink: '/portalorg', icon: 'fas fa-sitemap'},
+              {label: 'Help Center', routerLink: '/pagenotfound', icon: 'far fa-question-circle'},
+              {label: 'Forum', routerLink: '/pagenotfound', icon: 'fas fa-tasks'},
+              {label: 'Account Settings', routerLink: '/user/password/change-password', icon: 'fas fa-tools'},
+              {label: 'Privacy Settings', routerLink: '/pagenotfound', icon: 'fas fa-user-cog'},
+              {label: 'Signout', routerLink: '', icon: 'fas fa-sign-out-alt' }
+            ]
+          }];
+          this.navigationMenu = [{
+            showlink: 'Application',
+            subcategory: [{ showlink: 'CCPA', routerLink: '/dsarform' }, { showlink: 'DSAR', routerLink: '/dsarform'  }]
+          }]
+
       });
 
       this.orgservice.emitUpdatedOrganization.subscribe((data) => {
@@ -105,11 +148,10 @@ export class HeaderComponent implements OnInit {
         }
 
       });
-    }
-    return false;
   }
 
   getLoggedInUserDetails() {
+    this.isCollapsed = false;
     this.userService.getLoggedInUserDetails().subscribe((data) => {
       this.currentLoggedInUser = Object.values(data)[0].firstname + ' ' + Object.values(data)[0].lastname;
     });

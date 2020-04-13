@@ -8,7 +8,7 @@
                 <tr>
                     <th>Id</th>
                     <th>Organization</th>
-                    <th>Edit Organization</th>
+                    <th>View details</th>
                     <th>Add Properties</th>
                 </tr>
             </thead>
@@ -19,25 +19,53 @@
                         <input type="text" *ngIf="isEditable" [(ngModel)]="data.orgName" class="form-control"
                             id="addOrg" placeholder="Add Organization">
                     </td>
-                    <td> <button (click)="edit(data)" class="btn btn-outline-primary">
-                        {{!isEditable?'Edit':'Cancel'}}</button>
-                        <button *ngIf="isEditable" (click)="saveUpdatedChanges(data.orgid,data.orgName)"
-                            class="btn btn-primary">Save</button>
+                    <td>
+                        <!-- <button type="button" class="btn btn-sm btn-primary" data-toggle="modal"
+                            (click)="editOrganizationModalPopup(editOrgModal,data)">Edit</button> -->
+                        <!-- <button (click)="edit(data)" class="btn btn-outline-primary">
+                            {{!isEditable?'Edit':'Cancel'}}</button> -->
+                        <!-- <button *ngIf="isEditable" (click)="saveUpdatedChanges(data.orgid,data.orgName)"
+                            class="btn btn-primary">Save</button> -->
+                            <button type="button" class="btn btn-sm btn-outline-primary" data-toggle="modal"
+                            (click)="loadOrganizationDetails(data)">View details</button>
                     </td>
                     <td>
-                        <button type="button" class="btn btn-outline-primary" data-toggle="modal"
+                      
+                        <button type="button" class="btn btn-sm btn-outline-primary" data-toggle="modal"
                             (click)="open(mymodal,data)">Add Property</button>
-                        <button class="btn btn-outline-dark" (click)="getPropertyList(data.orgid)">{{isOpen?'Hide':'Show'}}</button>
+                        <button class="btn btn-sm btn-outline-dark"
+                            (click)="getPropertyList(data.orgid)">{{isOpen?'Hide':'Show'}}</button>
                     </td>
                 </tr>
                 <tr>
                     <td colspan="4" class="paddingzero">
-                       
                     </td>
                 </tr>
             </tbody>
         </table>
-       
+        <table class="table" *ngIf="showOrgDetails">
+            <thead>
+                <tr>
+                    <th>Organization name</th>
+                    <th>Address</th>
+                    <th>City</th>
+                    <th>State</th>
+                    <th>Zipcode</th>
+                    <th>Edit Organization</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let details of orgDetails">
+                   <td>{{details.name}}</td>
+                   <td>{{details.address1}} {{details.address2}}</td>
+                   <td>{{details.city}}</td>
+                   <td>{{details.state}}</td>
+                   <td>{{details.zipcode}}</td>
+                   <td><button type="button" class="btn btn-sm btn-primary" data-toggle="modal"
+                    (click)="editOrganizationModalPopup(editOrgModal,details)">Edit</button></td>
+                </tr>
+            </tbody>
+        </table>
     </div>
     <div class="propertylist" *ngIf="isOpen">
         <h5 class="mg-t-10">Property list</h5>
@@ -67,8 +95,7 @@
                             {{list.website}}
                         </td>
                         <td>
-                            <button class="btn btn-outline-primary"
-                                (click)="editModalPopup(mymodal,list)">Edit</button>
+                            <button class="btn btn-outline-primary" (click)="editModalPopup(mymodal,list)">Edit</button>
                         </td>
                     </tr>
                 </ng-container>
@@ -77,6 +104,97 @@
 
     </div>
 </div>
+<ng-template #editOrgModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Edit Organization</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Close Clicked')">
+            <span aria-hidden="true">×</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <!-- <span *ngIf="myContext.pid">PID:{{pid}} {{myContext.pid}}</span> -->
+        <!--{
+  "oid": "7fc034da-ce88-4833-8c73-ecc22aac8135",
+  "orgname": "ABC test",
+  "taxID": "1234",
+  "address1": "a1",
+  "address2": "a2",
+  "city": "mum",
+  "state": MH,
+  "zipcode": "400088"
+}-->
+        <form [formGroup]="editOrganisationForm" (ngSubmit)="updateOrganisationData(myContext)">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label for="organizationname">Name</label>
+                        <input type="text" class="form-control" [(ngModel)]="organizationname"
+                            formControlName="orgname" id="orgname">
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="address1">Tax ID</label>
+                        <input type="text" class="form-control" [(ngModel)]="taxidnumber" formControlName="taxID"
+                            id="taxID">
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="address1">Address1</label>
+                        <input type="text" class="form-control" [(ngModel)]="addressone" formControlName="address1"
+                            id="address1">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="address2">Address2</label>
+                        <input type="text" class="form-control" [(ngModel)]="addresstwo" formControlName="address2"
+                            id="address2">
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="city">City</label>
+                        <input type="text" class="form-control" [(ngModel)]="cityname" formControlName="city"
+                            id="city">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="state">State</label>
+                        <input type="text" class="form-control" [(ngModel)]="statename" formControlName="state"
+                            id="state">
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="state">Zip Code</label>
+                        <input type="text" class="form-control" [(ngModel)]="zipcodenum" formControlName="zipcode"
+                            id="zipcode">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                        <button type="button" (click)="onResetEditOrganization()" class="btn btn-outline-dark">Cancel</button>
+                </div>
+                <div class="col-sm-6">
+                        <button type="submit" class="btn btn-outline-dark">Save</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</ng-template>
 <ng-template #mymodal let-modal>
     <div class="modal-header">
         <h4 class="modal-title" id="modal-basic-title" *ngIf="!isEditProperty;else editHeading">Add Property</h4>

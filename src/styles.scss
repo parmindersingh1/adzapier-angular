@@ -1,1 +1,140 @@
 /* You can add global styles to this file, and also import other style files */
+/* Add application styles & imports to this file! */
+// @import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
+// @import "~bootstrap/dist/css/bootstrap.min.css";
+//  @import "~bootstrap/dist/css/bootstrap.css";
+
+.o-hidden {
+    overflow: hidden;
+}
+
+.p-0 {
+    padding: 0;
+}
+
+.border-0 {
+    border: 0px;
+}
+
+.navbar {
+    background: #fff !important;
+    border-radius: 0 !important;
+    height: 60px;
+}
+
+.light-shadow {
+    box-shadow:0 0.1rem 0.5rem rgba(0, 0, 0, 0.15) !important;
+}
+
+.navbar-menu .nav-link {
+    color:#0168fa;
+}
+
+.navbar-expand-sm .navbar-nav .nav-link {
+    // color:#0168fa;
+    color: #001737;
+    font-weight: 500;   
+}
+
+.navbar-expand-sm .navbar-nav .nav-link:hover {
+    color: #0168fa;
+}
+
+.dropdown-item:hover, .dropdown-item:focus {
+    border-radius: 0;
+}
+
+.nav-link, .menuitem {
+    cursor: pointer;
+}
+
+.dropdown-toggle::after {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-top: 0 !important;
+    border-left: 0 !important;
+    border-right: 1.5px solid #8392a5 !important;
+    border-bottom: 1.5px solid #8392a5 !important;
+    display: inline-block;
+    transform: rotate(45deg);
+    margin-left: auto;
+    transition: all 0.2s ease-in-out;
+}
+
+// .dropdown-toggle:last-child::after{
+//     border: 0 !important;
+// }
+
+ul.dropdown-menu.show::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: 25px;
+    border-bottom: 10px solid rgba(192, 204, 218, 0.53);
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+}
+
+ul.dropdown-menu::after {
+    content: '';
+    position: absolute;
+    top: -8.5px;
+    left: 26px;
+    border-bottom: 9px solid #fff;
+    border-left: 9px solid transparent;
+    border-right: 9px solid transparent;
+}
+
+.dropdown-menu {
+    padding: 20px 25px !important;
+    border-radius: 0 !important;
+    margin: 0.68rem 0 0 !important;
+    border: 1px solid rgba(192, 204, 218, 0.53) !important;
+}
+
+.dropdown-item {
+    font-size: 13px !important;
+}
+
+.dropdown-item:hover, .dropdown-item:focus {
+    background-color: #fff !important;
+}
+
+.navbar {
+    padding: 0 !important;
+    border-bottom: 1px solid rgba(72, 94, 144, 0.16) !important;
+}
+
+.dropdown-item:hover {
+    color: #0168fa !important;
+}
+
+.dropdown-menu-right {
+    width: 230px !important;
+    margin: 0.30rem 0 0 !important;    
+}
+
+.dropdown-menu.dropdown-menu-right::before {
+    left: auto !important;
+    right: 15px !important;
+}
+
+.dropdown-menu.dropdown-menu-right::after {
+    content: "";
+    position: absolute;
+    top: -8.5px;
+    right: 16px !important;
+    left: auto !important;
+    border-bottom: 9px solid #fff;
+    border-left: 9px solid transparent;
+    border-right: 9px solid transparent;
+}
+
+a.dropdown-item > i {
+    margin-right: 15px !important;
+}
+
+.navbar-nav {
+    padding: 0 !important;
+}

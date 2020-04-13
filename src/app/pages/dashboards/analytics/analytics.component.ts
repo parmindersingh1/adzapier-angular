@@ -18,12 +18,16 @@ export class AnalyticsComponent {
   faSafari = faSafari;
   faOpera = faOpera;
   loginToken;
-
+  currentUser: any;
+  isCollapsed: any;
   constructor(
     private orgservice: OrganizationService,
     private userService: UserService,
     private authService: AuthenticationService
-  ) { }
+  ) {
+    this.authService.currentUser.subscribe(x => this.currentUser = x);
+    this.isCollapsed = false;
+   }
   // redirect to home if already logged in
 
 
