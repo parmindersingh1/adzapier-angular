@@ -48,7 +48,7 @@ export class EditProfileComponent implements OnInit {
   // convenience getter for easy access to form fields
   get f() { return this.profileForm.controls; }
 
-  onSubmit(profileForm: NgForm) {
+  onSubmit() {
     this.profileForm.disable();
     this.userService.update(this.f.firstName.value, this.f.lastName.value, this.f.newemail.value)
       .subscribe((data) => {
