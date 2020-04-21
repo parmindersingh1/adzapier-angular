@@ -1,0 +1,19 @@
+<p>webforms works!</p>
+<!-- selectedProperty | {{selectedProperty | json}} -->
+<div class="row">
+    <div class="col-sm-6">
+    <button class="btn btn-sm btn-primary" (click)="getCCPAFormList()">GET CCPA Form List</button>
+    </div>
+    <div class="col-sm-6">
+        <button class="btn btn-sm btn-success" routerLink="/dsarform">Create new form</button>
+    </div>
+</div>
+<ul>
+    <li *ngFor="let data of formList">
+        <div *ngFor="let list of data.response">
+           <div style="border-bottom:1px solid #000;" (click)="showForm(list)"> {{list.form_name}} </div>
+           <div *ngIf="list.form_name === ''" style="height: 25px; border-bottom;:1px solid #ccc">form name not found{{list.form_name}}</div>
+        </div>
+        
+    </li>
+</ul>
