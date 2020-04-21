@@ -125,8 +125,13 @@ export class HeaderComponent implements OnInit {
     this.orgservice.orglist().subscribe((data) => {
       this.orgList = Object.values(data)[0];
       this.leftItems = this.orgList;
-      this.orgservice.getSelectedOrgProperty.emit(this.orgList[0].property[0]);
-      this.orgservice.getOrganization.emit(this.orgList[0].orgid);
+    //  this.orgservice.getSelectedOrgProperty.emit(this.orgList[0].property[0]);
+    //  this.orgservice.getOrganization.emit(this.orgList[0].orgid);
+      const obj = {
+        orgId: this.orgList[0].orgid,
+        property: this.orgList[0].property[0]
+      };
+      this.orgservice.changeCurrentSelectedProperty(obj);
       this.rightItems = [
         {
           label: 'User', icon: 'assets/imgs/glass.jpg',
@@ -142,7 +147,7 @@ export class HeaderComponent implements OnInit {
         }];
       this.navigationMenu = [{
         showlink: 'Application',
-        subcategory: [{ showlink: 'CCPA', routerLink: '/dsarform' }, { showlink: 'DSAR', routerLink: '/dsarform' }]
+        subcategory: [{showlink:'Web Forms', routerLink: '/webforms'},{ showlink: 'CCPA', routerLink: '/dsarform' }, { showlink: 'DSAR', routerLink: '/dsarform' }],
       }]
 
     });
@@ -167,8 +172,12 @@ export class HeaderComponent implements OnInit {
   isCurrentPropertySelected(item) {
     this.selectedOrgProperties.length = 0;
     this.activeProp = item.propName;
-
-    this.orgservice.getSelectedOrgProperty.emit(item);
+    const obj = {
+      orgId: this.orgList[0].orgid,
+      property: item
+    };
+    this.orgservice.changeCurrentSelectedProperty(obj);
+   // this.orgservice.getSelectedOrgProperty.emit(obj);
   //  this.firstElement = false;
     this.selectedOrgProperties.push(item);
   }

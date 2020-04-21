@@ -15,7 +15,6 @@ import { CCPAFormConfigurationService } from '../_services/ccpaform-configuratio
   styleUrls: ['./dsarform.component.scss']
 })
 export class DsarformComponent implements OnInit {
-  public form: FormGroup;
   public contactList: FormArray;
   public requestObject: any = {};
   public selectedFormOption: any;
@@ -56,7 +55,7 @@ export class DsarformComponent implements OnInit {
   radioBtnType: boolean;
   subjectTyperadioBtn: boolean;
   subjectTypecheckboxBtnType: boolean;
-  selectedPropID: any;
+  selectedProperty: any;
   currentOrgID: any;
   formName: any;
   countries = [
@@ -145,7 +144,8 @@ export class DsarformComponent implements OnInit {
     this.count = 0;
     //  this.loadWebControl();
     this.getCCPAdefaultConfigById();
-
+    // this.organizationService.getSelectedOrgProperty.subscribe((response) => this.selectedProperty = response);
+    this.organizationService.currentPropertySource.subscribe((response) => this.selectedProperty = response);
   }
 
   ngOnInit() {
@@ -160,8 +160,7 @@ export class DsarformComponent implements OnInit {
     }];
 
     this.getCCPAdefaultConfigById();
-    this.organizationService.getSelectedOrgProperty.subscribe((response) => this.selectedPropID = response.propid);
-    console.log(this.selectedPropID, 'selectedOrgProperty...');
+    this.organizationService.getSelectedOrgProperty.subscribe((response) => this.selectedProperty = response);
     this.organizationService.getOrganization.subscribe((response) => this.currentOrgID = response);
    // this.getCCPAFormList();
   }
@@ -543,19 +542,18 @@ export class DsarformComponent implements OnInit {
     console.log(this.formName, 'formName..');
     this.webFormControlList = this.dsarFormService.getFormControlList();
     const formObject = {
-      form_name: this.formName,
-      form_status: 'Draft',
-      request_form: this.webFormControlList
+      'form_name': this.formName,
+      'form_status': 'Draft',
+      'request_form': this.webFormControlList
     }
-    this.ccpaFormConfigService.createCCPAForm(this.currentOrgID, this.selectedPropID, formObject)
-    .subscribe((data)=>console.log(data),(error)=>console.log(error,'publish error'));
+    if(this.selectedProperty.orgId !== undefined && this.selectedProperty.property.propid !== undefined) {
+      this.ccpaFormConfigService.createCCPAForm(this.selectedProperty.orgId, this.selectedProperty.property.propid, formObject)
+      .subscribe((data)=>console.log(data),(error)=>alert(JSON.stringify(error)));
+    }
+   
     // selectedOrgProperty
   }
 
-  getCCPAFormList() {
-    this.ccpaFormConfigService.getCCPAFormList(this.currentOrgID, this.selectedPropID)
-    .subscribe((data)=>console.log(data,'data..'),(error)=> console.log(error,'get error..'));
-  }
 
 
 }

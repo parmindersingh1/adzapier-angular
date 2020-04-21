@@ -127,8 +127,10 @@
 
         <div cdkDropList #doneList="cdkDropList" [cdkDropListData]="webFormControlList"
             [cdkDropListConnectedTo]="[todoList]" class="col-sm-8 example-list" (cdkDropListDropped)="drop($event)">
-            <h5>Web Form for{{selectedPropID | json}} | {{currentSelectedOrganization | json}}</h5>
+            
+            <h5>Web Form for <span *ngIf="selectedProperty">{{selectedProperty.propName}}</span></h5>
             <div class="card-body">
+                <div class="heading">Form Name </div>
                 <input class="form-control" type="text" name="form_name" [(ngModel)]="formName" />
             </div>
             <form #regsiterForm="ngForm" (ngSubmit)="register(regsiterForm)">
@@ -268,9 +270,8 @@
                 </div>
                 <div class="col-sm-3"> <button class="btn btn-primary btn-block" (click)="publishCCPAFormConfiguration()" type="button">Publish</button></div>
             </form>
-            <button class="btn btn-sm btn-outline-primary" (click)="getCCPAFormList()">getCCPA</button>
-            <pre>{{ regsiterForm.value | json  }}</pre><br />
-            webFormControlList | {{webFormControlList | json}}
+           <!-- <div class="col-sm-3"> <button class="btn btn-sm btn-outline-primary" (click)="getCCPAFormList()">getCCPA</button></div> -->
+           
            
         </div>
     </div>

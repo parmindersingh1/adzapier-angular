@@ -2,26 +2,66 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment.staging';
 import { Observable } from 'rxjs';
+import { WebControls } from '../_models/webcontrols';
+import { CCPAFormFields } from '../_models/ccpaformfields';
 
 @Injectable({
   providedIn: 'root'
 })
-export class CCPAFormConfigurationService {
+export class CCPAFormConfigurationService extends WebControls{
+  webFormControlList: CCPAFormFields;
+  
+  constructor(private httpClient: HttpClient) { 
+    super();
+    this.loadCreatedWebControls();
+  }
 
-  constructor(private httpClient: HttpClient) { }
+  setFormControlList(data: CCPAFormFields[]) {
+    localStorage.setItem('CCPAformControlList', JSON.stringify(data));
+  }
+
+  getFormControlList() {
+    return JSON.parse(localStorage.getItem('CCPAformControlList'));
+  }
+
+  addControl(newItem) {
+    const controls = JSON.parse(localStorage.getItem('CCPAformControlList'));
+    controls.push(newItem);
+    localStorage.setItem('CCPAformControlList', JSON.stringify(controls));
+ }
+
+  deleteControl(item) {
+    const controlList = JSON.parse(localStorage.getItem('CCPAformControlList'));
+    for (let i = 0; i < controlList.length; i++) {
+      if (controlList[i].indexCount === item.indexCount) {
+        controlList.splice(i, 1);
+      }
+    }
+    localStorage.setItem('CCPAformControlList', JSON.stringify(controlList));
+  }
+
+  updateControl(oldItem, oldItemIndex, newItem) {
+    const controlList = JSON.parse(localStorage.getItem('CCPAformControlList'));
+    controlList[oldItemIndex].controllabel = newItem.controllabel;
+    controlList[oldItemIndex].indexCount = newItem.indexCount + 'Index';
+    controlList[oldItemIndex].control = newItem.control;
+    controlList[oldItemIndex].selectOptions = newItem.selectOptions || '';
+    localStorage.setItem('CCPAformControlList', JSON.stringify(controlList));
+  }
+
+
 
   createCCPAForm(orgId, propId, formObject) {
-    return this.httpClient.post<any>(environment.apiUrl + 'ccpa/form/' + orgId + '/' + propId, formObject);
+    return this.httpClient.post<any>(environment.apiUrl + '/ccpa/form/' + orgId + '/' + propId, formObject);
   }
-  // return this.httpClient.get<any>(environment.apiUrl + '/ccpa/default/config/' + orgId );
-  // http://staging-cmp-api.adzpier.com/api/v1/ccpa/form/7fc034da-ce88-4833-8c73-ecc22aac8135/0389b1c6-932f-4f6d-8a37-47978069298f
 
   getCCPAFormList(orgId, propId): Observable<any> {
-    return this.httpClient.get<any>(environment.apiUrl + 'ccpa/form/' + orgId + '/' + propId);
+    return this.httpClient.get<any>(environment.apiUrl + '/ccpa/form/' + orgId + '/' + propId);
   }
 
-  // http://staging-cmp-api.adzpier.com/api/v1/ccpa/form/7fc034da-ce88-4833-8c73-ecc22aac8135/0389b1c6-932f-4f6d-8a37-47978069298f
-
+  getCCPAFormConfigByID(orgId, propId, ccparequestid): Observable<any> {
+    return this.httpClient.get<any>(environment.apiUrl + '/ccpa/form/' + orgId + '/' + propId + '/' + ccparequestid);
+  }
 
 
 }

@@ -42,19 +42,6 @@ export class DsarformService extends WebControls {
     controlList[oldItemIndex].indexCount = newItem.indexCount + 'Index';
     controlList[oldItemIndex].control = newItem.control;
     controlList[oldItemIndex].selectOptions = newItem.selectOptions || '';
-  //  controlList[oldItemIndex]
-    // for (const i in controlList) {
-    //   if (controlList[i].controlId === oldItem.controlId) {
-         
-    //   }
-      // if (i.controlId === oldItem.controlId) {
-      //   i.controllabel = newItem.controllabel;
-      //   i.indexCount = newItem.indexCount + 'Index';
-      //   i.control = newItem.control;
-      //   i.selectOptions = newItem.selectOptions || '';
-      // }
-   // }
-    // Set New Todos
     localStorage.setItem('formControlList', JSON.stringify(controlList));
   }
 
