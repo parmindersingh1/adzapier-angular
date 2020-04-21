@@ -4,6 +4,9 @@ import { FormBuilder, Validators, FormArray, FormGroup, NgForm } from '@angular/
 import { OrganizationService } from '../../app/_services';
 import { switchMap, map } from 'rxjs/operators';
 import { CcparequestService } from '../_services/ccparequest.service';
+import { CCPAFormFields } from '../_models/ccpaformfields';
+import { DsarformService } from '../_services/dsarform.service';
+import { CCPAFormConfigurationService } from '../_services/ccpaform-configuration.service';
 
 
 @Component({
@@ -37,48 +40,10 @@ export class DsarformComponent implements OnInit {
   isSubjectTypeSelected: boolean;
   editSelectionType: boolean;
   updatedControl: any;
-  formControlList = [{
-    id: 1,
-    controllabel: 'I am a (an)',
-    controltype: 'radio'
-  },
-  {
-    id: 2,
-    controllabel: 'Select request type(s)',
-    controltype: 'select'
-  },
-  {
-    id: 3,
-    controllabel: 'First Name',
-    controltype: 'textbox'
-  },
-  {
-    id: 4,
-    controllabel: 'Last name',
-    controltype: 'textbox'
-  },
-  {
-    id: 5,
-    controllabel: 'Email',
-    controltype: 'textbox'
-  },
-  {
-    id: 6,
-    controllabel: 'State',
-    controltype: 'select'
-  },
-  {
-    id: 7,
-    controllabel: 'Country',
-    controltype: 'select'
-  },
-  {
-    id: 8,
-    controllabel: 'Request Details',
-    controltype: 'textarea'
-  }];
+  organizationID: any;
+  formControlList: any;
   isAddingFormControl: boolean;
-  webFormControlList: RegistrationForm[] = [];
+  webFormControlList: any; // CCPAFormFields[] = [];
   allNumbers: number[] = [];
   questionGroups: any;
   dataSubjectAccessRightsForm: any;
@@ -86,6 +51,14 @@ export class DsarformComponent implements OnInit {
   formsArr = [];
   public requestType: any = [];
   public subjectType: any = [];
+  existingControl: any;
+  checkboxBtnType: boolean;
+  radioBtnType: boolean;
+  subjectTyperadioBtn: boolean;
+  subjectTypecheckboxBtnType: boolean;
+  selectedPropID: any;
+  currentOrgID: any;
+  formName: any;
   countries = [
     {
       id: 'us',
@@ -117,6 +90,10 @@ export class DsarformComponent implements OnInit {
     {
       id: 4,
       control: 'textarea'
+    },
+    {
+      id: 5,
+      control: 'checkbox'
     }
   ];
 
@@ -128,6 +105,10 @@ export class DsarformComponent implements OnInit {
     {
       id: 2,
       control: 'radio'
+    },
+    {
+      id: 3,
+      control: 'checkbox'
     }
   ];
 
@@ -154,99 +135,42 @@ export class DsarformComponent implements OnInit {
 
   ];
   constructor(private fb: FormBuilder, private ccpaRequestService: CcparequestService,
-    private organizationService: OrganizationService
+              private organizationService: OrganizationService,
+              private dsarFormService: DsarformService,
+              private ccpaFormConfigService: CCPAFormConfigurationService
   ) {
     for (let insertNumbers = 0; insertNumbers <= 10; insertNumbers++) {
       this.allNumbers.push(insertNumbers);
     }
     this.count = 0;
-    this.loadWebControl();
+    //  this.loadWebControl();
     this.getCCPAdefaultConfigById();
+
   }
 
   ngOnInit() {
+    this.radioBtnType = true;
+    this.subjectTyperadioBtn = true;
+    //  this.loadWebControl();
+    this.webFormControlList = this.dsarFormService.getFormControlList();
     //  this.selectOptionControl = this.controlOption[0].control;
-
     this.selectOptions = [{
       id: this.count++,
       name: ' '
     }];
 
     this.getCCPAdefaultConfigById();
-
+    this.organizationService.getSelectedOrgProperty.subscribe((response) => this.selectedPropID = response.propid);
+    console.log(this.selectedPropID, 'selectedOrgProperty...');
+    this.organizationService.getOrganization.subscribe((response) => this.currentOrgID = response);
+   // this.getCCPAFormList();
   }
 
   loadWebControl() {
-    this.organizationService.orglist().pipe(
-      switchMap((data) => {
-        for (const key in data) {
-          if (data[key] !== undefined) {
-            return this.ccpaRequestService.getCCPAdefaultConfigLabels(data[key][0].orgid);
-          }
-        }
-      })
 
-    ).subscribe((data) => {
-      if (data !== undefined) {
-        const key = 'response';
-        this.webFormControlList = data[key];
-      }
-    });
-
-    // this.webFormControlList = [
-    //   {
-    //     control: 'radio',
-    //     controllabel: 'I am a (an)',
-    //     controlId: 'subjecttype',
-    //     indexCount: 'subjecttypeIndex',
-    //     selectOptions: this.subjectType
-    //   },
-    //   {
-    //     control: 'radio',
-    //     controllabel: 'Select request type(s)',
-    //     controlId: 'requesttype',
-    //     indexCount: 'requestTypeIndex',
-    //     selectOptions: this.requestType
-    //   },
-    //   {
-    //     control: 'textbox',
-    //     controllabel: 'First Name',
-    //     controlId: 'fname1',
-    //     indexCount: 'FirstNameIndex'
-    //   },
-    //   {
-    //     control: 'textbox',
-    //     controllabel: 'Last Name',
-    //     controlId: 'lname1',
-    //     indexCount: 'LastNameIndex'
-    //   },
-    //   {
-    //     control: 'textbox',
-    //     controllabel: 'Email',
-    //     controlId: 'email',
-    //     indexCount: 'EmailIndex'
-    //   },
-    //   {
-    //     control: 'select',
-    //     controllabel: 'State',
-    //     controlId: 'state5',
-    //     indexCount: 'StateIndex',
-    //     selectOptions: this.stateList
-    //   },
-    //   {
-    //     control: 'select',
-    //     controllabel: 'Country',
-    //     controlId: 'country',
-    //     indexCount: 'CountryIndex',
-    //     selectOptions: this.countries
-    //   },
-    //   {
-    //     control: 'textarea',
-    //     controllabel: 'Request Details',
-    //     controlId: 'requestdetails',
-    //     indexCount: 'RequestDetailsIndex'
-    //   }
-    // ];
+    // this.dsarFormService.setFormControlList(this.webFormControlList);
+    // this.webFormControlList = this.dsarFormService.getFormControlList();
+    // this.formControlList = JSON.parse(localStorage.getItem('formControlList'));
   }
 
   trackByIndex(index: number, obj: any): any {
@@ -275,8 +199,11 @@ export class DsarformComponent implements OnInit {
   }
 
   register(formData: NgForm) {
+   // const selectedCountries = this.requestType.filter((country) => country.checked);
+   // console.log(selectedCountries, 'selectedCountries..');
     console.log(formData.value);
   }
+
   drop(event: CdkDragDrop<string[]>) {
     moveItemInArray(this.webFormControlList, event.previousIndex, event.currentIndex);
     transferArrayItem(event.previousContainer.data, event.container.data, event.previousIndex, event.currentIndex);
@@ -290,10 +217,18 @@ export class DsarformComponent implements OnInit {
   onEditCloseItems() {
     this.isEditItems = !this.isEditItems;
   }
-
+  // this.existingControl.control === 'textbox' || this.existingControl.control === 'textarea'
   addFormField() {
     this.showFormOption = !this.showFormOption;
-    if (this.selectedFormOption === 'select') {
+    if (this.isEditingList) {
+      if (this.existingControl.controlId === 'country' || this.existingControl.controlId === 'state' ||
+        this.existingControl.control === 'textbox' || this.existingControl.control === 'textarea' ||
+        this.existingControl.controlId === 'subjecttype' || this.existingControl.controlId === 'requesttype') {
+        this.selectedControlType = false;
+      } else {
+        this.selectedControlType = true;
+      }
+    } else if (this.selectedFormOption === 'select' || this.selectedFormOption === 'radio' || this.selectedFormOption === 'checkbox') {
       this.selectedControlType = true;
     } else {
       this.selectedControlType = false;
@@ -306,17 +241,31 @@ export class DsarformComponent implements OnInit {
     this.isAddingFormControl = true;
     this.showFormOption = false;
     this.selectedControlId = data.controlId;
-
+    this.existingControl = data;
+    // control: controltype,
+    // controllabel: formControls.value.lblText,
+    // controlId: 'Custom Input',
+    // indexCount: trimLabel + 'Index',
+    // selectOptions: this.selectOptions
+    // ||    data.controlId === 'state' || data.controlId === 'country'
     (data.control === 'textbox' || data.control === 'textarea') ? this.inputOrSelectOption = true : this.inputOrSelectOption = false;
-    if (data.control === 'select' || data.control === 'radio') {
+    if (data.control === 'select' && data.controlId !== 'state' && data.controlId !== 'country' || data.control === 'radio'
+      || data.control === 'checkbox') {
       this.editSelectionType = true;
       this.changeControlType = data.control;
+      this.selectOptions = data.selectOptions;
     } else {
       this.editSelectionType = false;
     }
     this.selectedFormOption = data.control;
     this.selectOptionControl = data.control;
+
     this.addFormField();
+  }
+
+  deleteSelectedItem(item) {
+    this.dsarFormService.deleteControl(item);
+    this.webFormControlList = this.dsarFormService.getFormControlList();
   }
 
   isSelected(i): boolean {
@@ -345,43 +294,240 @@ export class DsarformComponent implements OnInit {
   }
 
   addCustomFields(formControls: NgForm) {
-    const controltype = (this.selectedFormOption === 'textbox') ? 'textbox' : 'select';
-    this.formControlList.push(formControls.value.lblText);
+    //  const controltype = (this.selectedFormOption === 'textbox') ? 'textbox' : 'select';
+    // this.formControlList.push(formControls.value.lblText);
     const trimLabel = formControls.value.lblText.split(' ').join('');
-    this.webFormControlList.push({
-      control: controltype,
-      controllabel: formControls.value.lblText,
-      controlId: 'Custom Input',
-      indexCount: trimLabel + 'Index',
-      selectOptions: this.selectOptions
-    });
-    this.lblText = '';
+    // this.ccpaRequestService.createCCPACustomFormField(this.organizationID, formObj)
+    // .subscribe((data) => console.log(data, 'custom form field..'),
+    //   (error) => {
+    //   console.log(error, 'error..');
+    // });
+    if (this.isEditingList) {
+      // alert(this.isEditingList);
+      //  const x = this.dsarFormService.getFormControlList();
+      const req = 'requesttype';
+      const sub = 'subjecttype';
+      if (this.selectedControlId === req || this.selectedControlId === sub) {
+        // let obj = {
+        //   controllabel: formControls.value.lblText,
+        //   indexCount: trimLabel + 'Index',
+        //   control: this.changeControlType
+        // }
+        // this.dsarFormService.addControl(obj)
+        // const webc = this.dsarFormService.getFormControlList();
+        let updatedObj;
+        const oldControlIndex = this.webFormControlList.findIndex((t) =>
+          t.controllabel === this.existingControl.controllabel);
+        // if (oldControlIndex) {
+        updatedObj = {
+          controllabel: formControls.value.lblText,
+          indexCount: trimLabel,
+          control: this.changeControlType,
+          controlId: this.selectedControlId
+          // selectOptions: this.existingControl.selectOptions
+        };
+        this.dsarFormService.updateControl(this.webFormControlList[oldControlIndex], oldControlIndex, updatedObj);
+        // }
+
+        // for (const x of this.webFormControlList) {
+        //   if (x.controlId === this.selectedControlId) {
+        //     updatedObj = {
+        //       controllabel: formControls.value.lblText,
+        //       indexCount: trimLabel,
+        //       control: this.changeControlType,
+        //       controlId: this.selectedControlId
+        //     };
+        //     // x.controllabel = formControls.value.lblText;
+        //     // x.indexCount = trimLabel + 'Index';
+        //     // x.control = this.changeControlType;
+        //   }
+        // }
+        // this.webFormControlList.forEach(t => {
+        //   if (t.controlId === this.selectedControlId) {
+        //     t.controllabel = formControls.value.lblText;
+        //     t.indexCount = trimLabel + 'Index';
+        //   }
+        // });
+        // this.dsarFormService.updateControl(this.webFormControlList[oldControlIndex], oldControlIndex, updatedObj);
+        this.webFormControlList = this.dsarFormService.getFormControlList();
+      } else if (this.existingControl.control === 'textbox' || this.existingControl.control === 'textarea' ||
+        this.existingControl.controlId === 'state' || this.existingControl.controlId === 'country') {
+        let updatedTextobj;
+        const oldControlIndex = this.webFormControlList.findIndex((t) =>
+          t.controllabel === this.existingControl.controllabel);
+        if (oldControlIndex) {
+          updatedTextobj = {
+            controllabel: formControls.value.lblText,
+            indexCount: trimLabel,
+            control: this.existingControl.control,
+            selectOptions: this.existingControl.selectOptions
+          };
+          this.dsarFormService.updateControl(this.webFormControlList[oldControlIndex], oldControlIndex, updatedTextobj);
+        }
+
+        // for (const x of this.webFormControlList) {
+        //   if (x.controlId === this.selectedControlId) {
+        //     updatedTextobj = {
+        //       controllabel: formControls.value.lblText,
+        //       indexCount: trimLabel,
+        //       control: this.existingControl.control
+        //     };
+        //     // x.controllabel = formControls.value.lblText;
+        //     // x.indexCount = trimLabel + 'Index';
+        //     // x.control = this.changeControlType;
+        //   }
+        // }
+        // this.dsarFormService.updateControl(this.existingControl, updatedTextobj);
+        this.webFormControlList = this.dsarFormService.getFormControlList();
+        // const controlList =  this.dsarFormService.getFormControlList();
+        // for (const t of controlList) {
+        //   if (t.controlId === this.selectedControlId) {
+        //     t.control = controltype || this.changeControlType;
+        //     t.controllabel = formControls.value.lblText;
+        //     t.indexCount = trimLabel + 'Index';
+        //   }
+        // }
+        // this.dsarFormService.setFormControlList(controlList);
+        // this.dsarFormService.getFormControlList();
+      } else if (this.existingControl) {
+        let updateCustomObj;
+        const customControlIndex = this.webFormControlList.findIndex((t) =>
+          t.controllabel === this.existingControl.controllabel);
+        //  const customControlIndex = this.webFormControlList.indexOf(this.existingControl.controllabel);
+        if (customControlIndex) {
+          updateCustomObj = {
+            controllabel: formControls.value.lblText,
+            indexCount: trimLabel,
+            control: this.changeControlType,
+            controlId: this.existingControl.controlId,
+            selectOptions: this.existingControl.selectOptions
+          };
+          this.dsarFormService.updateControl(this.webFormControlList[customControlIndex], customControlIndex, updateCustomObj);
+        }
+        // for (const x of this.webFormControlList) {
+        //   if (x.controlId === this.selectedControlId) {
+        //     updateCustomObj = {
+        //       controllabel: formControls.value.lblText,
+        //       indexCount: trimLabel + 'Index',
+        //       control: this.changeControlType,
+        //       controlId: this.existingControl.controlId,
+        //       selectOptions: this.existingControl.selectOptions
+        //     };
+        //   }
+        // }
+        // this.dsarFormService.updateControl(this.existingControl, updateCustomObj);
+        this.webFormControlList = this.dsarFormService.getFormControlList();
+      }
+
+
+      // x.filter((t) => {
+      //     if (t.controlId === this.selectedControlId) {
+      //       t.control = controltype || this.changeControlType;
+      //       t.controllabel = formControls.value.lblText;
+      //       t.indexCount = trimLabel + 'Index';
+      //     }
+      //   });
+
+      // localStorage.setItem('formControlList', JSON.stringify(this.webFormControlList));
+      // this.webFormControlList = this.dsarFormService.getFormControlList();
+      // this.webFormControlList = JSON.parse(localStorage.getItem('formControlList'));
+      //  console.log(x, 'x..');
+    } else {
+      const count = this.webFormControlList.length + 1;
+      const newWebControl = {
+        control: this.selectedFormOption,
+        controllabel: formControls.value.lblText,
+        controlId: 'CustomInput' + count,
+        indexCount: trimLabel + 'Index',
+        selectOptions: this.selectOptions
+      };
+
+      // this.webFormControlList.push({
+      //   control: controltype,
+      //   controllabel: formControls.value.lblText,
+      //   controlId: 'Custom Input',
+      //   indexCount: trimLabel + 'Index',
+      //   selectOptions: this.selectOptions
+      // });
+      this.dsarFormService.addControl(newWebControl);
+      this.webFormControlList = this.dsarFormService.getFormControlList();
+      // this.dsarFormService.setFormControlList(this.webFormControlList);
+      // this.webFormControlList = this.dsarFormService.getFormControlList();
+      // localStorage.setItem('formControlList', JSON.stringify(this.webFormControlList));
+      // this.webFormControlList = JSON.parse(localStorage.getItem('formControlList'));
+      // localStorage.setItem('formControlList', JSON.stringify(this.webFormControlList));
+      // this.webFormControlList = JSON.parse(localStorage.getItem('formControlList'));
+      this.lblText = '';
+    }
+
+
   }
 
   onChangeEvent(event) {
     console.log(event, 'event...');
     this.selectedFormOption = event.currentTarget.value;
     this.showFormOption = !this.showFormOption;
-    this.selectOptions = [];
+    // this.selectOptions = [];
   }
 
   updateControlType(event) {
+
     this.changeControlType = event.currentTarget.value;
     if (this.selectedControlId === 'requesttype') {
       this.updatedControl = this.changeControlType;
-      (this.changeControlType === 'select') ? this.isRequestTypeSelected = true : this.isRequestTypeSelected = false;
-    } else if (this.selectedControlId === 'subjecttype') {
+      if (this.changeControlType === 'select') {
+        this.isRequestTypeSelected = true;
+        this.checkboxBtnType = false;
+        this.radioBtnType = false;
+      } else if (this.changeControlType === 'radio') {
+        this.isRequestTypeSelected = false;
+        this.radioBtnType = true;
+        this.checkboxBtnType = false;
+      } else if (this.changeControlType === 'checkbox') {
+        this.isRequestTypeSelected = false;
+        this.radioBtnType = false;
+        this.checkboxBtnType = true;
+      }
 
-      (this.changeControlType === 'select') ? this.isSubjectTypeSelected = true : this.isSubjectTypeSelected = false;
+    } else if (this.selectedControlId === 'subjecttype') {
+      this.updatedControl = this.changeControlType;
+      if (this.changeControlType === 'select') {
+        this.isSubjectTypeSelected = true;
+        this.subjectTypecheckboxBtnType = false;
+        this.subjectTyperadioBtn = false;
+      } else if (this.changeControlType === 'radio') {
+        this.isSubjectTypeSelected = false;
+        this.subjectTyperadioBtn = true;
+        this.subjectTypecheckboxBtnType = false;
+      } else if (this.changeControlType === 'checkbox') {
+        this.isSubjectTypeSelected = false;
+        this.subjectTyperadioBtn = false;
+        this.subjectTypecheckboxBtnType = true;
+      }
+
     }
+    // else if (this.selectedControlId === 'requesttype' || this.selectedControlId === 'subjecttype') {
+    //   this.updatedControl = this.changeControlType;
+
+    //   if (this.changeControlType === 'checkbox') {
+    //     this.checkboxBtnType = true;
+    //     this.isRequestTypeSelected = false;
+    //   }  
+
+    // }
 
 
   }
 
   addingFormControl() {
     this.isAddingFormControl = !this.isAddingFormControl;
+    this.selectOptions = [];
+    this.lblText = '';
   }
 
+  isCustomControlWithRadioBtn(item): boolean {
+    return item.controlId.startsWith('Custom') ? true : false;
+  }
 
   cancelAddingFormControl() {
     this.isAddingFormControl = false;
@@ -389,21 +535,28 @@ export class DsarformComponent implements OnInit {
     this.inputOrSelectOption = false;
     this.showFormOption = true;
     this.editSelectionType = false;
+    this.webFormControlList = this.dsarFormService.getFormControlList();
+    this.changeControlType = null;
+  }
+
+  publishCCPAFormConfiguration() {
+    console.log(this.formName, 'formName..');
+    this.webFormControlList = this.dsarFormService.getFormControlList();
+    const formObject = {
+      form_name: this.formName,
+      form_status: 'Draft',
+      request_form: this.webFormControlList
+    }
+    this.ccpaFormConfigService.createCCPAForm(this.currentOrgID, this.selectedPropID, formObject)
+    .subscribe((data)=>console.log(data),(error)=>console.log(error,'publish error'));
+    // selectedOrgProperty
+  }
+
+  getCCPAFormList() {
+    this.ccpaFormConfigService.getCCPAFormList(this.currentOrgID, this.selectedPropID)
+    .subscribe((data)=>console.log(data,'data..'),(error)=> console.log(error,'get error..'));
   }
 
 
 }
 
-export class RegistrationForm {
-  // name : string;
-  // email : string;
-  // phone : string;
-  // city: string;
-  // state: string;
-  // country: string;
-  controlId: string;
-  controllabel: string;
-  control: string;
-  indexCount: string;
-  selectOptions?: Array<any>;
-}

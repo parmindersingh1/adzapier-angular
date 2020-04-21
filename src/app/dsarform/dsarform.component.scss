@@ -121,11 +121,24 @@
   }
 
   .editbtn{
-    display: flex;
-    width: 25px;
-    justify-content: space-between;
+      display: flex;
+      width: auto;
+      justify-content: space-between;
+      padding: 3px 5px 5px 5px;
+      line-height: 0px;
+      height: 20px;
+      font-size: 11px;
+      margin: 5px 5px 5px 0px;
   }
 
   .rotateEditicon {
     transform: rotate(130deg);
+  }
+
+  .demo-btn-group .btn {
+    margin: 5px 0;
+  }
+
+  .btn-sm {
+    padding: 3px 5px 5px 5px;
   }

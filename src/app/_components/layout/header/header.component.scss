@@ -69,3 +69,31 @@ i {
     padding: 10px;
     margin: 0 0 10px 0;
 }
+
+.active {
+    background-color: #0148ae;
+    color: #ffffff !important;
+}
+
+.activeFirstIndex {
+    background-color: #333;
+    color: #ffffff !important;   
+}
+
+a.dropdown-item.activeFirstIndex:hover {
+    color: #001737!important;
+}
+
+.avatar-lg {
+    border: 2px solid #808080 !important;
+    border-radius: 50px;
+}
+
+.avatar img {
+    opacity: 0.5;
+}
+
+.avatar-sm {
+    border-radius: 50px;
+    border: 2px solid #808080;
+}

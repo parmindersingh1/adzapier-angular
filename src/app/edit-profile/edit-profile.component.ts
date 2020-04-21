@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Validators, FormBuilder, FormGroup } from '@angular/forms';
+import { Validators, FormBuilder, FormGroup, NgForm } from '@angular/forms';
 import { AuthenticationService, UserService } from '../_services';
 
 @Component({
@@ -48,9 +48,9 @@ export class EditProfileComponent implements OnInit {
   // convenience getter for easy access to form fields
   get f() { return this.profileForm.controls; }
 
-  onSubmit() {
+  onSubmit(profileForm: NgForm) {
     this.profileForm.disable();
-    this.userService.update(this.f.firstName.value, this.f.lastName.value)
+    this.userService.update(this.f.firstName.value, this.f.lastName.value, this.f.newemail.value)
       .subscribe((data) => {
         if (data) {
           alert('Details has been updated successfully!');
@@ -75,6 +75,9 @@ export class EditProfileComponent implements OnInit {
     this.profileForm.enable();
   }
 
+  editUserEmail() {
+    this.profileForm.enable();
+  }
 
 }
 

@@ -1,7 +1,10 @@
-    <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
-
-        <fieldset class="form-fieldset">
-            <legend>Full Name</legend>
+<div class="example-container">
+    <div class="row">
+        
+<form [formGroup]="profileForm" (ngSubmit)="onSubmit(profileForm)">
+    <div class="row">
+        <div class="col-sm-12"><h4>Edit User Profile</h4></div>
+    <div class="col-sm-6">
             <div class="form-group">
               <label class="d-block">First Name</label>
               <input type="text" formControlName="firstName"  class="form-control" placeholder="Enter your firstname"
@@ -11,6 +14,8 @@
                 <div *ngIf="f.firstName.errors.pattern">First Name Allow Only Alphabets(min 3 & max 20 Char)</div>
             </div>
             </div>
+        </div>
+        <div class="col-sm-6">
             <div class="form-group">
               <label class="d-block">Last Name</label>
               <input type="text" formControlName="lastName"  class="form-control" placeholder="Enter your lastname"
@@ -20,19 +25,8 @@
                 <div *ngIf="f.lastName.errors.pattern">Last Name Allow Only Alphabets(min 3 & max 20 Char)</div>
             </div>
             </div>
-
-            <div class="text-right">
-                <button class="btn btn-primary mr-2" type="button" (click)="editUserDetails()">Edit</button>
-                <button class="btn btn-primary mr-2" type="submit" [disabled]="!profileForm.valid">Save</button>
-            </div>
-          </fieldset>
-
-        <br>
-        <!-- ================================ -->
-      
-
-         <fieldset class="form-fieldset">
-            <legend>Change Email</legend>
+        </div>
+    </div>
             <div class="form-group">
                 <label for="email">Email</label>
                 <input type="email" formControlName="newemail" class="form-control"
@@ -43,15 +37,22 @@
                     <div *ngIf="f.newemail.errors.pattern">Please enter a valid email</div> 
                 </div>
               </div>
-
             <div class="text-right">
-                <button class="btn btn-primary mr-2">Edit</button>
-                <button class="btn btn-primary mr-2">Save</button>
+                <button class="btn btn-primary mr-2" type="button" (click)="editUserDetails()">Edit</button>
+                <button class="btn btn-primary mr-2" type="submit" [disabled]="!profileForm.valid">Save</button>
             </div>
-          </fieldset>
 
-          <br>
-   
+        <br>
+        <!-- ================================ -->
+         <!-- <fieldset class="form-fieldset">
+            <legend>Change Email</legend>
+            <div class="text-right">
+                <button class="btn btn-primary mr-2" type="button" (click)="editUserEmail()">Edit</button>
+                <button class="btn btn-primary mr-2" type="submit" [disabled]="!profileForm.valid">Save</button>
+            </div>
+          </fieldset> -->
+
+        <!--    
         <fieldset class="form-fieldset">
             <legend>Change Password</legend>
             <div class="form-group">
@@ -92,16 +93,16 @@
                     <button class="btn btn-primary mr-2" (click)="isDisabled = false">Save</button>
                 </div>
 
-        </fieldset>
+        </fieldset> -->
     
 
 
     </form> 
-
+</div>
+</div>
 
 
         <!-- ================================ -->
-        <br>
     <!-- <form [formGroup]="passwordForm" (ngSubmit)="onSubmit()">    
         <fieldset class="form-fieldset">
             <div class="form-group">

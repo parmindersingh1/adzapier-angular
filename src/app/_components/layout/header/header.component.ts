@@ -5,6 +5,7 @@ import { User } from '../../../_models';
 import { Observable } from 'rxjs';
 import { BsDropdownConfig } from 'ngx-bootstrap/dropdown';
 import { Organization } from 'src/app/_models/organization';
+import { faLeaf } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-header',
@@ -29,7 +30,10 @@ export class HeaderComponent implements OnInit {
   navigationMenu: any;
   rightItems: any;
   leftItems: any;
+  selectedOrgProperties: any = [];
   organizationList$: Observable<Organization[]>;
+  firstElement: boolean;
+  activeProp: any;
   constructor(
     private router: Router,
     private activatedroute: ActivatedRoute,
@@ -44,11 +48,12 @@ export class HeaderComponent implements OnInit {
         this.getLoggedInUserDetails();
         this.loadOrganizationList();
       }
-    } );
+    });
   }
 
 
   ngOnInit() {
+  //  this.firstElement = true;
     this.isCollapsed = false;
     this.userService.getCurrentUser.subscribe((data) => {
       if (data) {
@@ -82,14 +87,14 @@ export class HeaderComponent implements OnInit {
 
   }
 
-  getDynamicMenu() {
-    const testNames = ['Test1', 'Test2', 'Test3'];
-    const dynamicSubmenu = [];
-    for (const menuName of testNames) {
-      dynamicSubmenu.push({ label: 'Submenu - ' + menuName, routerLink: '/submenus/' + menuName.toLowerCase() });
-    }
-    return dynamicSubmenu;
-  }
+  // getDynamicMenu() {
+  //   const testNames = ['Test1', 'Test2', 'Test3'];
+  //   const dynamicSubmenu = [];
+  //   for (const menuName of testNames) {
+  //     dynamicSubmenu.push({ label: 'Submenu - ' + menuName, routerLink: '/submenus/' + menuName.toLowerCase() });
+  //   }
+  //   return dynamicSubmenu;
+  // }
 
   editProfile() {
     return this.router.navigate(['/user/profile/edit']);
@@ -117,37 +122,39 @@ export class HeaderComponent implements OnInit {
   }
 
   loadOrganizationList() {
-      this.orgservice.orglist().subscribe((data) => {
-        this.orgList = Object.values(data)[0];
-        this.leftItems = this.orgList;
-        this.rightItems = [
-          {
-            label: 'User', icon: 'assets/imgs/glass.jpg',
-            items: [
-              {label: 'Edit Profile', routerLink: '/user/profile/edit', icon: 'fas fa-pen' },
-              {label: 'Organization', routerLink: '/portalorg', icon: 'fas fa-sitemap'},
-              {label: 'Help Center', routerLink: '/pagenotfound', icon: 'far fa-question-circle'},
-              {label: 'Forum', routerLink: '/pagenotfound', icon: 'fas fa-tasks'},
-              {label: 'Account Settings', routerLink: '/user/password/change-password', icon: 'fas fa-tools'},
-              {label: 'Privacy Settings', routerLink: '/pagenotfound', icon: 'fas fa-user-cog'},
-              {label: 'Signout', routerLink: '', icon: 'fas fa-sign-out-alt' }
-            ]
-          }];
-          this.navigationMenu = [{
-            showlink: 'Application',
-            subcategory: [{ showlink: 'CCPA', routerLink: '/dsarform' }, { showlink: 'DSAR', routerLink: '/dsarform'  }]
-          }]
+    this.orgservice.orglist().subscribe((data) => {
+      this.orgList = Object.values(data)[0];
+      this.leftItems = this.orgList;
+      this.orgservice.getSelectedOrgProperty.emit(this.orgList[0].property[0]);
+      this.orgservice.getOrganization.emit(this.orgList[0].orgid);
+      this.rightItems = [
+        {
+          label: 'User', icon: 'assets/imgs/glass.jpg',
+          items: [
+            { label: 'Edit Profile', routerLink: '/user/profile/edit', icon: 'fas fa-pen' },
+            { label: 'Organization', routerLink: '/portalorg', icon: 'fas fa-sitemap' },
+            { label: 'Help Center', routerLink: '/pagenotfound', icon: 'far fa-question-circle' },
+            { label: 'Forum', routerLink: '/pagenotfound', icon: 'fas fa-tasks' },
+            { label: 'Account Settings', routerLink: '/user/password/change-password', icon: 'fas fa-tools' },
+            { label: 'Privacy Settings', routerLink: '/pagenotfound', icon: 'fas fa-user-cog' },
+            { label: 'Signout', routerLink: '', icon: 'fas fa-sign-out-alt' }
+          ]
+        }];
+      this.navigationMenu = [{
+        showlink: 'Application',
+        subcategory: [{ showlink: 'CCPA', routerLink: '/dsarform' }, { showlink: 'DSAR', routerLink: '/dsarform' }]
+      }]
 
-      });
+    });
 
-      this.orgservice.emitUpdatedOrganization.subscribe((data) => {
-        for (const key in data) {
-          if (data[key].name !== undefined) {
-            return this.currentOrganization = data[key].name;
-          }
+    this.orgservice.emitUpdatedOrganization.subscribe((data) => {
+      for (const key in data) {
+        if (data[key].name !== undefined) {
+          return this.currentOrganization = data[key].name;
         }
+      }
 
-      });
+    });
   }
 
   getLoggedInUserDetails() {
@@ -157,4 +164,25 @@ export class HeaderComponent implements OnInit {
     });
   }
 
+  isCurrentPropertySelected(item) {
+    this.selectedOrgProperties.length = 0;
+    this.activeProp = item.propName;
+
+    this.orgservice.getSelectedOrgProperty.emit(item);
+  //  this.firstElement = false;
+    this.selectedOrgProperties.push(item);
+  }
+
+  isPropSelected(selectedItem): boolean {
+    return this.selectedOrgProperties.filter((t) => t.propName === selectedItem.propName).length > 0;
+  }
+
+  public trackByMethod(index: number): number {
+   return index;
+  }
+
+  checkisCollapsed(): boolean {
+    this.isCollapsed ? this.firstElement = true : this.firstElement = false;
+    return this.isCollapsed = !this.isCollapsed;
+  }
 }
