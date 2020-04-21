@@ -17,6 +17,8 @@ import { PagenotfoundComponent } from './errorpages/pagenotfound.component';
 import { InternalerrorComponent } from './errorpages/internalerror.component';
 import { PagenotfoundComponent1 } from './errorpages/404page.component';
 import { DsarformComponent } from './dsarform/dsarform.component';
+import { WebformsComponent } from './webforms/webforms.component';
+import { EditwebformComponent } from './editwebform/editwebform.component';
 
 
 const routes: Routes = [
@@ -36,6 +38,8 @@ const routes: Routes = [
   { path: '404page', component: PagenotfoundComponent1 },
   { path: 'internalerror', component: InternalerrorComponent },
   {path : 'dsarform', component: DsarformComponent, canActivate: [AuthGuard]},
+  {path : 'webforms', component: WebformsComponent, canActivate: [AuthGuard]},
+  {path : 'editwebforms', component: EditwebformComponent, canActivate: [AuthGuard]},
   { path: '', redirectTo: 'home/dashboard/analytics', pathMatch: 'full', canActivate: [AuthGuard] },
   
   // { path: '', redirectTo: 'home/dashboard/analytics', pathMatch:'full' },

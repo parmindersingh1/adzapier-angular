@@ -24,20 +24,18 @@ export class ResetpasswordComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
-    private route: ActivatedRoute,
+    private activatedRoute: ActivatedRoute,
     private authenticationService: AuthenticationService,
     private userService: UserService,
     private alertService: AlertService
   ) {
-    if (this.authenticationService.isUserLoggedIn) {
-      this.router.navigate(['/reset-password/:id']);
-    }
+    this.activatedRoute.snapshot.paramMap.get('id');
+    
   }
 
   ngOnInit() {
 
-    this.id = this.route.snapshot.paramMap.get('id');
-    console.log(this.id);
+    this.id = this.activatedRoute.snapshot.paramMap.get('id');
     this.resetpasswordForm = this.formBuilder.group({
       token: [this.id],
       newpsw: ['', Validators.required, , Validators.pattern, Validators.minLength(6)],

@@ -1,22 +1,4 @@
-.display-list-of-numbers {
-    height: 25px;
-    width: 25%;
-    border: 1px solid dodgerblue;
-    display: block;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  .pop{
-    height: 50px;
-    margin-left: 20px;
-    border: 1px solid saddlebrown;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    
-}
-  .cdk-drop-list-dragging .cdk-drag {
+.cdk-drop-list-dragging .cdk-drag {
     transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
   }
   

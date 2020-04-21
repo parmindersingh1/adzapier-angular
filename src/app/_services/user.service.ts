@@ -71,8 +71,8 @@ export class UserService {
     }
 
 
-    update(firstName,lastName) {
-        return this.http.put<any>(environment.apiUrl + '/user', {firstName,lastName})
+    update(firstName,lastName, email) {
+        return this.http.put<any>(environment.apiUrl + '/user', {firstName, lastName, email});
     }
 
     getLoggedInUserDetails(): Observable<User> {

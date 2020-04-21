@@ -1,20 +1,23 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Params } from '@angular/router';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-import { FormBuilder, Validators, FormArray, FormGroup, NgForm } from '@angular/forms';
-import { OrganizationService } from '../../app/_services';
-import { switchMap, map } from 'rxjs/operators';
-import { CcparequestService } from '../_services/ccparequest.service';
-import { CCPAFormFields } from '../_models/ccpaformfields';
-import { DsarformService } from '../_services/dsarform.service';
 import { CCPAFormConfigurationService } from '../_services/ccpaform-configuration.service';
-
+import { error } from 'protractor';
+import { switchMap } from 'rxjs/operators';
+import { OrganizationService } from '../_services';
+import { FormArray, FormBuilder, NgForm } from '@angular/forms';
+import { CcparequestService } from '../_services/ccparequest.service';
 
 @Component({
-  selector: 'app-dsarform',
-  templateUrl: './dsarform.component.html',
-  styleUrls: ['./dsarform.component.scss']
+  selector: 'app-editwebform',
+  templateUrl: './editwebform.component.html',
+  styleUrls: ['./editwebform.component.scss']
 })
-export class DsarformComponent implements OnInit {
+export class EditwebformComponent implements OnInit {
+  propId: any;
+  orgId: any;
+  crid: any;
+  propertyname: any;
   public contactList: FormArray;
   public requestObject: any = {};
   public selectedFormOption: any;
@@ -42,7 +45,6 @@ export class DsarformComponent implements OnInit {
   organizationID: any;
   formControlList: any;
   isAddingFormControl: boolean;
-  webFormControlList: any; // CCPAFormFields[] = [];
   allNumbers: number[] = [];
   questionGroups: any;
   dataSubjectAccessRightsForm: any;
@@ -58,21 +60,69 @@ export class DsarformComponent implements OnInit {
   selectedProperty: any;
   currentOrgID: any;
   formName: any;
-  countries = [
-    {
-      id: 'us',
-      name: 'United States'
-    },
-    {
-      id: 'uk',
-      name: 'United Kingdom'
-    },
-    {
-      id: 'ca',
-      name: 'Canada'
-    }
-  ];
 
+  ccpaFormResponse: any = [];
+  requestFormControls: any = [];
+  constructor(private activatedRoute: ActivatedRoute,
+    private ccpaFormConfigService: CCPAFormConfigurationService,
+    private fb: FormBuilder, private ccpaRequestService: CcparequestService,
+    private organizationService: OrganizationService,
+  ) {
+    this.count = 0;
+    //  this.loadWebControl();
+    this.getCCPAdefaultConfigById();
+    this.organizationService.getSelectedOrgProperty.subscribe((response) => this.selectedProperty = response);
+  }
+
+  ngOnInit() {
+    // const key: Products = JSON.parse(this.dataRoute.snapshot.params['objectProducts']);
+    // const x = this.activatedRoute.snapshot.params['request_form'];
+    this.activatedRoute.paramMap.subscribe((data) => console.log(data, 'data..'));
+    this.activatedRoute.params.subscribe((param: Params) => {
+      console.log(param, 'param..');
+      this.propId = param.pid;
+      this.orgId = param.oid;
+      this.crid = param.crid;
+      this.propertyname = param.propertyname;
+    });
+    this.getCCPAFormConfigByID();
+    this.loadCCPAForm();
+
+    //show edit form
+    this.radioBtnType = true;
+    this.subjectTyperadioBtn = true;
+    //  this.loadWebControl();
+    this.requestFormControls = this.ccpaFormConfigService.getFormControlList();
+    //  this.selectOptionControl = this.controlOption[0].control;
+    this.selectOptions = [{
+      id: this.count++,
+      name: ' '
+    }];
+
+    this.getCCPAdefaultConfigById();
+    this.organizationService.getSelectedOrgProperty.subscribe((response) => this.selectedProperty = response);
+    this.organizationService.getOrganization.subscribe((response) => this.currentOrgID = response);
+    // this.getCCPAFormList();
+  }
+
+  getCCPAFormConfigByID() {
+    this.ccpaFormResponse.length = 0;
+    this.ccpaFormConfigService.getCCPAFormConfigByID(this.orgId, this.propId, this.crid)
+      .subscribe((data) => {
+        console.log(data, 'data..');
+        this.ccpaFormResponse.push(data.response);
+        this.ccpaFormConfigService.setFormControlList(data.response.request_form);
+      }, (error: any) => console.log(error));
+  }
+
+  loadCCPAForm() {
+    this.requestFormControls.length = 0;
+    this.requestFormControls = this.ccpaFormConfigService.getFormControlList();
+  }
+
+  // show ccpa form by crid //
+
+  // tslint:disable-next-line: member-ordering
   controlOption = [
     {
       id: 1,
@@ -96,6 +146,7 @@ export class DsarformComponent implements OnInit {
     }
   ];
 
+  // tslint:disable-next-line: member-ordering
   editableControlOption = [
     {
       id: 1,
@@ -133,44 +184,9 @@ export class DsarformComponent implements OnInit {
   }
 
   ];
-  constructor(private fb: FormBuilder, private ccpaRequestService: CcparequestService,
-              private organizationService: OrganizationService,
-              private dsarFormService: DsarformService,
-              private ccpaFormConfigService: CCPAFormConfigurationService
-  ) {
-    for (let insertNumbers = 0; insertNumbers <= 10; insertNumbers++) {
-      this.allNumbers.push(insertNumbers);
-    }
-    this.count = 0;
-    //  this.loadWebControl();
-    this.getCCPAdefaultConfigById();
-    // this.organizationService.getSelectedOrgProperty.subscribe((response) => this.selectedProperty = response);
-    this.organizationService.currentPropertySource.subscribe((response) => this.selectedProperty = response);
-  }
 
-  ngOnInit() {
-    this.radioBtnType = true;
-    this.subjectTyperadioBtn = true;
-    //  this.loadWebControl();
-    this.webFormControlList = this.dsarFormService.getFormControlList();
-    //  this.selectOptionControl = this.controlOption[0].control;
-    this.selectOptions = [{
-      id: this.count++,
-      name: ' '
-    }];
 
-    this.getCCPAdefaultConfigById();
-    this.organizationService.getSelectedOrgProperty.subscribe((response) => this.selectedProperty = response);
-    this.organizationService.getOrganization.subscribe((response) => this.currentOrgID = response);
-   // this.getCCPAFormList();
-  }
 
-  loadWebControl() {
-
-    // this.dsarFormService.setFormControlList(this.webFormControlList);
-    // this.webFormControlList = this.dsarFormService.getFormControlList();
-    // this.formControlList = JSON.parse(localStorage.getItem('formControlList'));
-  }
 
   trackByIndex(index: number, obj: any): any {
     return index;
@@ -192,19 +208,18 @@ export class DsarformComponent implements OnInit {
         const sdata = data['response'].subject_type;
         this.requestType = rdata;
         this.subjectType = sdata;
-        this.loadWebControl();
       }
     });
   }
 
   register(formData: NgForm) {
-   // const selectedCountries = this.requestType.filter((country) => country.checked);
-   // console.log(selectedCountries, 'selectedCountries..');
+    // const selectedCountries = this.requestType.filter((country) => country.checked);
+    // console.log(selectedCountries, 'selectedCountries..');
     console.log(formData.value);
   }
 
   drop(event: CdkDragDrop<string[]>) {
-    moveItemInArray(this.webFormControlList, event.previousIndex, event.currentIndex);
+    moveItemInArray(this.requestFormControls, event.previousIndex, event.currentIndex);
     transferArrayItem(event.previousContainer.data, event.container.data, event.previousIndex, event.currentIndex);
   }
 
@@ -263,8 +278,8 @@ export class DsarformComponent implements OnInit {
   }
 
   deleteSelectedItem(item) {
-    this.dsarFormService.deleteControl(item);
-    this.webFormControlList = this.dsarFormService.getFormControlList();
+    this.ccpaFormConfigService.deleteControl(item);
+    this.requestFormControls = this.ccpaFormConfigService.getFormControlList();
   }
 
   isSelected(i): boolean {
@@ -315,7 +330,7 @@ export class DsarformComponent implements OnInit {
         // this.dsarFormService.addControl(obj)
         // const webc = this.dsarFormService.getFormControlList();
         let updatedObj;
-        const oldControlIndex = this.webFormControlList.findIndex((t) =>
+        const oldControlIndex = this.requestFormControls.findIndex((t) =>
           t.controllabel === this.existingControl.controllabel);
         // if (oldControlIndex) {
         updatedObj = {
@@ -325,34 +340,15 @@ export class DsarformComponent implements OnInit {
           controlId: this.selectedControlId
           // selectOptions: this.existingControl.selectOptions
         };
-        this.dsarFormService.updateControl(this.webFormControlList[oldControlIndex], oldControlIndex, updatedObj);
+        this.ccpaFormConfigService.updateControl(this.requestFormControls[oldControlIndex], oldControlIndex, updatedObj);
         // }
 
-        // for (const x of this.webFormControlList) {
-        //   if (x.controlId === this.selectedControlId) {
-        //     updatedObj = {
-        //       controllabel: formControls.value.lblText,
-        //       indexCount: trimLabel,
-        //       control: this.changeControlType,
-        //       controlId: this.selectedControlId
-        //     };
-        //     // x.controllabel = formControls.value.lblText;
-        //     // x.indexCount = trimLabel + 'Index';
-        //     // x.control = this.changeControlType;
-        //   }
-        // }
-        // this.webFormControlList.forEach(t => {
-        //   if (t.controlId === this.selectedControlId) {
-        //     t.controllabel = formControls.value.lblText;
-        //     t.indexCount = trimLabel + 'Index';
-        //   }
-        // });
         // this.dsarFormService.updateControl(this.webFormControlList[oldControlIndex], oldControlIndex, updatedObj);
-        this.webFormControlList = this.dsarFormService.getFormControlList();
+        this.requestFormControls = this.ccpaFormConfigService.getFormControlList();
       } else if (this.existingControl.control === 'textbox' || this.existingControl.control === 'textarea' ||
         this.existingControl.controlId === 'state' || this.existingControl.controlId === 'country') {
         let updatedTextobj;
-        const oldControlIndex = this.webFormControlList.findIndex((t) =>
+        const oldControlIndex = this.requestFormControls.findIndex((t) =>
           t.controllabel === this.existingControl.controllabel);
         if (oldControlIndex) {
           updatedTextobj = {
@@ -361,36 +357,12 @@ export class DsarformComponent implements OnInit {
             control: this.existingControl.control,
             selectOptions: this.existingControl.selectOptions
           };
-          this.dsarFormService.updateControl(this.webFormControlList[oldControlIndex], oldControlIndex, updatedTextobj);
+          this.ccpaFormConfigService.updateControl(this.requestFormControls[oldControlIndex], oldControlIndex, updatedTextobj);
         }
-
-        // for (const x of this.webFormControlList) {
-        //   if (x.controlId === this.selectedControlId) {
-        //     updatedTextobj = {
-        //       controllabel: formControls.value.lblText,
-        //       indexCount: trimLabel,
-        //       control: this.existingControl.control
-        //     };
-        //     // x.controllabel = formControls.value.lblText;
-        //     // x.indexCount = trimLabel + 'Index';
-        //     // x.control = this.changeControlType;
-        //   }
-        // }
-        // this.dsarFormService.updateControl(this.existingControl, updatedTextobj);
-        this.webFormControlList = this.dsarFormService.getFormControlList();
-        // const controlList =  this.dsarFormService.getFormControlList();
-        // for (const t of controlList) {
-        //   if (t.controlId === this.selectedControlId) {
-        //     t.control = controltype || this.changeControlType;
-        //     t.controllabel = formControls.value.lblText;
-        //     t.indexCount = trimLabel + 'Index';
-        //   }
-        // }
-        // this.dsarFormService.setFormControlList(controlList);
-        // this.dsarFormService.getFormControlList();
+        this.requestFormControls = this.ccpaFormConfigService.getFormControlList();
       } else if (this.existingControl) {
         let updateCustomObj;
-        const customControlIndex = this.webFormControlList.findIndex((t) =>
+        const customControlIndex = this.requestFormControls.findIndex((t) =>
           t.controllabel === this.existingControl.controllabel);
         //  const customControlIndex = this.webFormControlList.indexOf(this.existingControl.controllabel);
         if (customControlIndex) {
@@ -401,38 +373,14 @@ export class DsarformComponent implements OnInit {
             controlId: this.existingControl.controlId,
             selectOptions: this.existingControl.selectOptions
           };
-          this.dsarFormService.updateControl(this.webFormControlList[customControlIndex], customControlIndex, updateCustomObj);
+          this.ccpaFormConfigService.updateControl(this.requestFormControls[customControlIndex], customControlIndex, updateCustomObj);
         }
-        // for (const x of this.webFormControlList) {
-        //   if (x.controlId === this.selectedControlId) {
-        //     updateCustomObj = {
-        //       controllabel: formControls.value.lblText,
-        //       indexCount: trimLabel + 'Index',
-        //       control: this.changeControlType,
-        //       controlId: this.existingControl.controlId,
-        //       selectOptions: this.existingControl.selectOptions
-        //     };
-        //   }
-        // }
-        // this.dsarFormService.updateControl(this.existingControl, updateCustomObj);
-        this.webFormControlList = this.dsarFormService.getFormControlList();
+
+        this.requestFormControls = this.ccpaFormConfigService.getFormControlList();
       }
 
-
-      // x.filter((t) => {
-      //     if (t.controlId === this.selectedControlId) {
-      //       t.control = controltype || this.changeControlType;
-      //       t.controllabel = formControls.value.lblText;
-      //       t.indexCount = trimLabel + 'Index';
-      //     }
-      //   });
-
-      // localStorage.setItem('formControlList', JSON.stringify(this.webFormControlList));
-      // this.webFormControlList = this.dsarFormService.getFormControlList();
-      // this.webFormControlList = JSON.parse(localStorage.getItem('formControlList'));
-      //  console.log(x, 'x..');
     } else {
-      const count = this.webFormControlList.length + 1;
+      const count = this.requestFormControls.length + 1;
       const newWebControl = {
         control: this.selectedFormOption,
         controllabel: formControls.value.lblText,
@@ -441,21 +389,9 @@ export class DsarformComponent implements OnInit {
         selectOptions: this.selectOptions
       };
 
-      // this.webFormControlList.push({
-      //   control: controltype,
-      //   controllabel: formControls.value.lblText,
-      //   controlId: 'Custom Input',
-      //   indexCount: trimLabel + 'Index',
-      //   selectOptions: this.selectOptions
-      // });
-      this.dsarFormService.addControl(newWebControl);
-      this.webFormControlList = this.dsarFormService.getFormControlList();
-      // this.dsarFormService.setFormControlList(this.webFormControlList);
-      // this.webFormControlList = this.dsarFormService.getFormControlList();
-      // localStorage.setItem('formControlList', JSON.stringify(this.webFormControlList));
-      // this.webFormControlList = JSON.parse(localStorage.getItem('formControlList'));
-      // localStorage.setItem('formControlList', JSON.stringify(this.webFormControlList));
-      // this.webFormControlList = JSON.parse(localStorage.getItem('formControlList'));
+      this.ccpaFormConfigService.addControl(newWebControl);
+      this.requestFormControls = this.ccpaFormConfigService.getFormControlList();
+
       this.lblText = '';
     }
 
@@ -534,27 +470,26 @@ export class DsarformComponent implements OnInit {
     this.inputOrSelectOption = false;
     this.showFormOption = true;
     this.editSelectionType = false;
-    this.webFormControlList = this.dsarFormService.getFormControlList();
+    this.requestFormControls = this.ccpaFormConfigService.getFormControlList();
     this.changeControlType = null;
   }
 
   publishCCPAFormConfiguration() {
     console.log(this.formName, 'formName..');
-    this.webFormControlList = this.dsarFormService.getFormControlList();
+    this.requestFormControls = this.ccpaFormConfigService.getFormControlList();
     const formObject = {
       'form_name': this.formName,
       'form_status': 'Draft',
-      'request_form': this.webFormControlList
+      'request_form': this.requestFormControls
     }
-    if(this.selectedProperty.orgId !== undefined && this.selectedProperty.property.propid !== undefined) {
+    if (this.selectedProperty.orgId !== undefined && this.selectedProperty.property.propid !== undefined) {
       this.ccpaFormConfigService.createCCPAForm(this.selectedProperty.orgId, this.selectedProperty.property.propid, formObject)
-      .subscribe((data)=>console.log(data),(error)=>alert(JSON.stringify(error)));
+        .subscribe((data) => console.log(data), (error) => alert(JSON.stringify(error)));
     }
-   
+
     // selectedOrgProperty
   }
 
 
 
 }
-

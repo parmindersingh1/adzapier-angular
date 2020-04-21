@@ -14,20 +14,19 @@
             <span>{{currentOrganization}}</span>
           </a>
           <ul *dropdownMenu class="dropdown-menu">
-            <ng-container *ngFor="let item of menu.property">
-              <li *ngIf="!item.items" role="menuitem">
-                <a class="dropdown-item">
-                  {{item.propName}}
+            <ng-container *ngFor="let item of menu.property;let first = first; trackBy: trackByMethod">
+              <li *ngIf="!item.items"  [ngClass]="[(first && !activeProp) || (item.propName === activeProp) ? 'activeFirstIndex' : '' ]" role="menuitem" (click)="isCurrentPropertySelected(item)">
+                <a class="dropdown-item" [ngClass]="[isPropSelected(item) ? 'active' : '']"> 
+                {{item.propName}}
                 </a>
               </li>
               <li *ngIf="item.items" role="menuitem" dropdown triggers="mouseover" placement="top right"
                 container="body">
-                <a class="dropdown-item" (click)="false">{{ item.label }}<i
-                    class="fas fa-caret-right dropdown-submenu"></i></a>
+                <a class="dropdown-item" (click)="false">{{ item.label }}
+                  <i class="fas fa-caret-right dropdown-submenu"></i></a>
                 <ul *dropdownMenu class="dropdown-menu" role="menu">
                   <ng-container *ngFor="let submenu of item.items">
                     <li role="menuitem">
-                      {{submenu | json}}
                       <a class="dropdown-item">
                         {{ submenu.propName }}
                       </a>
@@ -70,12 +69,12 @@
         </div>
         <div *ngIf="menu.items" dropdown container="body" placement="bottom right">
           <a class="nav-link dropdown-link" dropdownToggle (click)="false">
-            <div class="avatar avatar-sm"><img src="assets/imgs/glass.jpg" class="rounded-circle" alt=""></div>
+            <div class="avatar avatar-sm"><img src="assets/imgs/user.png" width="24" height="24" class="rounded-circle" alt=""></div>
             </a>
           <ul *dropdownMenu class="dropdown-menu dropdown-menu-right">
             <ng-container *ngFor="let item of menu.items; first as isFirst">
               <div *ngIf="isFirst" class="loggedin-user"> 
-                <div class="avatar avatar-lg mg-b-15"><img src="assets/imgs/glass.jpg" class="rounded-circle" alt=""></div>
+                <div class="avatar avatar-lg mg-b-15"><img src="assets/imgs/user.png" width="32" height="32" class="rounded-circle" alt=""></div>
                  {{currentLoggedInUser}}</div>
               <li *ngIf="!item.items" role="menuitem">
                 <a class="dropdown-item" *ngIf="item.label !== 'Signout'" routerLink="{{item.routerLink}}">

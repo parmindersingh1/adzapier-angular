@@ -37,6 +37,8 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
+import { WebformsComponent } from './webforms/webforms.component';
+import { EditwebformComponent } from './editwebform/editwebform.component';
 
 
 
@@ -61,7 +63,9 @@ export const isMock = environment.mock;
     PagenotfoundComponent,
     InternalerrorComponent,
     PagenotfoundComponent1,
-    DsarformComponent
+    DsarformComponent,
+    WebformsComponent,
+    EditwebformComponent
   ],
   imports: [
     BrowserModule,
