@@ -1,16 +1,17 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment.staging';
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { WebControls } from '../_models/webcontrols';
 import { CCPAFormFields } from '../_models/ccpaformfields';
 
 @Injectable({
   providedIn: 'root'
 })
-export class CCPAFormConfigurationService extends WebControls{
+export class CCPAFormConfigurationService extends WebControls {
   webFormControlList: CCPAFormFields;
-  
+  captureFormDataWhileNavigate = new BehaviorSubject<any>('');
+  currentFormData = this.captureFormDataWhileNavigate.asObservable();
   constructor(private httpClient: HttpClient) { 
     super();
     this.loadCreatedWebControls();
@@ -63,5 +64,7 @@ export class CCPAFormConfigurationService extends WebControls{
     return this.httpClient.get<any>(environment.apiUrl + '/ccpa/form/' + orgId + '/' + propId + '/' + ccparequestid);
   }
 
-
+  captureCurrentSelectedFormData(currentItem) {
+    this.captureFormDataWhileNavigate.next(currentItem);
+  }
 }

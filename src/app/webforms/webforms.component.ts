@@ -11,19 +11,22 @@ import { Router } from '@angular/router';
 export class WebformsComponent implements OnInit {
   selectedProperty: any;
   currentOrgID: any;
+  propertyID: any;
   formList: any = [];
   constructor(private ccpaFormConfigService: CCPAFormConfigurationService,
               private organizationService: OrganizationService,
-              private router: Router) {
-  //  this.organizationService.getSelectedOrgProperty.subscribe((response) => this.selectedProperty = response);
-   // console.log(this.selectedProperty,'constructor..');
-   this.organizationService.currentProperty.subscribe((data)=>this.selectedProperty = data);
-  }
+              private router: Router) { }
 
   ngOnInit() {
-    this.organizationService.currentProperty.subscribe((data)=>this.selectedProperty = data);
-   // this.organizationService.getSelectedOrgProperty.subscribe((response) => this.selectedProperty = response);
-   // console.log(this.selectedProperty,'ngoninit...');
+    this.organizationService.currentProperty.subscribe((data) => {
+      console.log(data, 'data..prp..');
+      this.currentOrgID = data.orgId;
+      this.propertyID = data.property.propid;
+      // this.selectedProperty = data;
+    });
+    this.getCCPAFormList();
+    // this.organizationService.getSelectedOrgProperty.subscribe((response) => this.selectedProperty = response);
+    // console.log(this.selectedProperty,'ngoninit...');
   }
 
 
@@ -33,18 +36,16 @@ export class WebformsComponent implements OnInit {
     // console.log(this.currentOrgID,'currentOrgID..');
     console.log(this.selectedProperty, 'selectedProperty..');
     this.formList.length = 0;
-    this.ccpaFormConfigService.getCCPAFormList(this.selectedProperty.orgId, this.selectedProperty.property.propid)
+    this.ccpaFormConfigService.getCCPAFormList(this.currentOrgID, this.propertyID)
       .subscribe((data) => {
         this.formList.push(data);
-        console.log(this.formList,'fl..');
-      } 
-        , (error) => console.log(error, 'get error..'));
+        console.log(this.formList, 'fl..');
+      }, (error) => console.log(error, 'get error..'));
   }
 
   showForm(data) {
-     this.router.navigate(['/editwebforms', {crid: data.crid, oid:data.OID,pid:data.PID, propertyname: this.selectedProperty.property.propName }]);
-   // this.router.navigateByUrl('/editwebforms', { state: data });
-
-   // console.log(data,'data..');
+    this.ccpaFormConfigService.captureCurrentSelectedFormData(data);
+    this.router.navigate(['/editwebforms', {crid: data.crid}]);
   }
 }
+// { crid: data.crid, oid: data.OID, pid: data.PID, propertyname: data.form_name }

@@ -146,7 +146,7 @@ if (localStorage.getItem('CCPAformControlList') === null || localStorage.getItem
             indexCount: 'RequestDetailsIndex'
         }
     ];
-    localStorage.setItem('formControlList', JSON.stringify(controlsList));
+    localStorage.setItem('CCPAformControlList', JSON.stringify(controlsList));
     return;
 } else {
     console.log('else webcontrolList..');

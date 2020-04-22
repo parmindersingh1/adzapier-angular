@@ -64,9 +64,9 @@ export class EditwebformComponent implements OnInit {
   ccpaFormResponse: any = [];
   requestFormControls: any = [];
   constructor(private activatedRoute: ActivatedRoute,
-    private ccpaFormConfigService: CCPAFormConfigurationService,
-    private fb: FormBuilder, private ccpaRequestService: CcparequestService,
-    private organizationService: OrganizationService,
+              private ccpaFormConfigService: CCPAFormConfigurationService,
+              private fb: FormBuilder, private ccpaRequestService: CcparequestService,
+              private organizationService: OrganizationService
   ) {
     this.count = 0;
     //  this.loadWebControl();
@@ -75,24 +75,24 @@ export class EditwebformComponent implements OnInit {
   }
 
   ngOnInit() {
-    // const key: Products = JSON.parse(this.dataRoute.snapshot.params['objectProducts']);
-    // const x = this.activatedRoute.snapshot.params['request_form'];
-    this.activatedRoute.paramMap.subscribe((data) => console.log(data, 'data..'));
-    this.activatedRoute.params.subscribe((param: Params) => {
-      console.log(param, 'param..');
-      this.propId = param.pid;
-      this.orgId = param.oid;
-      this.crid = param.crid;
-      this.propertyname = param.propertyname;
+    this.ccpaFormConfigService.currentFormData.subscribe((data) => {
+      console.log(data, 'fd..');
+      this.propId = data.PID;
+      this.orgId = data.OID;
+      this.crid = data.crid;
+      this.propertyname = data.form_name;
+      this.requestFormControls = data.request_form;
     });
+    
     this.getCCPAFormConfigByID();
-    this.loadCCPAForm();
+  //  this.loadCCPAForm();
 
     //show edit form
     this.radioBtnType = true;
     this.subjectTyperadioBtn = true;
     //  this.loadWebControl();
-    this.requestFormControls = this.ccpaFormConfigService.getFormControlList();
+    // this.requestFormControls = this.ccpaFormConfigService.getFormControlList();
+   
     //  this.selectOptionControl = this.controlOption[0].control;
     this.selectOptions = [{
       id: this.count++,
@@ -160,33 +160,7 @@ export class EditwebformComponent implements OnInit {
       id: 3,
       control: 'checkbox'
     }
-  ];
-
-  stateList = [
-    { id: 'AP', name: 'Andhra Pradesh' },
-    { id: 'ARP', name: 'Arunachal Pradesh' },
-    { id: 'AS', name: 'Assam' },
-    { id: 'BH', name: 'Bihar' }
-
-  ];
-
-  items = [{
-    id: 1,
-    qty: 22
-  },
-  {
-    id: 2,
-    qty: 21
-  },
-  {
-    id: 3,
-    qty: 18
-  }
-
-  ];
-
-
-
+  ]; 
 
   trackByIndex(index: number, obj: any): any {
     return index;

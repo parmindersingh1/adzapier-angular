@@ -1,0 +1,28 @@
+.webformlist ul{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.webformlist ul li {
+    display: flex;
+    padding: 0;
+}
+
+.webformlist ul li div{
+    width: 250px;
+}
+
+.card {
+    margin: 10px 5px;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.card:hover {
+    border: 1px solid #808080;
+    background: #d0e4ff;
+    box-shadow: 0px 2px 2px #969696;
+
+}
+
