@@ -37,7 +37,6 @@ export class OrgpageComponent implements OnInit {
   zipcodenum: any;
   myContext;
   showOrgDetails: boolean = false;
-  // dataobject = { propertyname: "", website: "", logo_url: "" };
   isEditProperty: boolean;
   constructor(private formBuilder: FormBuilder,
               private orgservice: OrganizationService,
@@ -53,7 +52,7 @@ export class OrgpageComponent implements OnInit {
     this.organisationPropertyForm = this.formBuilder.group({
       propertyname: ['', [Validators.required]],
       website: ['', [Validators.required, Validators.pattern(urlRegex)]],
-      logo_url: ['', [Validators.required]]
+      logourl: ['', [Validators.required]]
     });
     this.editOrganisationForm = this.formBuilder.group({
       organizationname: ['',[Validators.required]],
@@ -95,7 +94,7 @@ export class OrgpageComponent implements OnInit {
         const reqObj = {
           name: this.organisationPropertyForm.value.propertyname,
           website: this.organisationPropertyForm.value.website,
-          logo_url: this.organisationPropertyForm.value.logo_url
+          logo_url: this.organisationPropertyForm.value.logourl
         };
         this.orgservice.addProperties(this.selectedOrg.orgid, reqObj).subscribe((result) => {
           this.getPropertyList(this.selectedOrg.orgid);
@@ -108,7 +107,7 @@ export class OrgpageComponent implements OnInit {
         const reqObj = {
           name: this.organisationPropertyForm.value.propertyname,
           website: this.organisationPropertyForm.value.website,
-          logo_url: this.organisationPropertyForm.value.logo_url
+          logo_url: this.organisationPropertyForm.value.logourl
         };
         this.orgservice.editProperties(this.myContext.oid, this.myContext.pid, reqObj).subscribe((res) => {
           if (res) {

@@ -238,11 +238,11 @@
                 </div>
             </div>
             <div class="form-group">
-                <label for="logo_url">Logo URL</label>
-                <input type="text" class="form-control" name="logo_url" formControlName="logo_url"
-                    [(ngModel)]="logo_url" [ngClass]="{ 'is-invalid': submitted && orgProp.logo_url.errors }" />
-                <div *ngIf="submitted && orgProp.logo_url.errors" class="invalid-feedback">
-                    <div *ngIf="orgProp.logo_url.errors.required">Logo URL is required</div>
+                <label for="logourl">Logo URL</label>
+                <input type="text" class="form-control" name="logourl" formControlName="logourl"
+                    [(ngModel)]="logourl" [ngClass]="{ 'is-invalid': submitted && orgProp.logourl.errors }" />
+                <div *ngIf="submitted && orgProp.logourl.errors" class="invalid-feedback">
+                    <div *ngIf="orgProp.logourl.errors.required">Logo URL is required</div>
                 </div>
             </div>
             <div class="modal-footer">
