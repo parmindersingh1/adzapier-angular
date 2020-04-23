@@ -22,6 +22,15 @@ export class EditProfileComponent implements OnInit {
   uid: string;
   userProfile: any;
   isDisabled: boolean;
+  firstName: any;
+  lastName: any;
+  newemail: any;
+  addressone: any;
+  addresstwo: any;
+  city: any;
+  state: any;
+  zipcode: any;
+  roles: any;
   constructor(
     private formBuilder: FormBuilder,
     private authenticationService: AuthenticationService,
