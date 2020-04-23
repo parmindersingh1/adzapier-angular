@@ -32,52 +32,60 @@ loadWebControls() {
                 controllabel: 'I am a (an)',
                 controlId: 'subjecttype',
                 indexCount: 'subjecttypeIndex',
-                selectOptions: 'subjectType'
+                selectOptions: 'subjectType',
+                preferControlOrder: ''
             },
             {
                 control: 'radio',
                 controllabel: 'Select request type(s)',
                 controlId: 'requesttype',
                 indexCount: 'requestTypeIndex',
-                selectOptions: 'requestType'
+                selectOptions: 'requestType',
+                preferControlOrder: ''
             },
             {
                 control: 'textbox',
                 controllabel: 'First Name',
                 controlId: 'fname1',
-                indexCount: 'FirstNameIndex'
+                indexCount: 'FirstNameIndex',
+                preferControlOrder: ''
             },
             {
                 control: 'textbox',
                 controllabel: 'Last Name',
                 controlId: 'lname1',
-                indexCount: 'LastNameIndex'
+                indexCount: 'LastNameIndex',
+                preferControlOrder: ''
             },
             {
                 control: 'textbox',
                 controllabel: 'Email',
                 controlId: 'email',
-                indexCount: 'EmailIndex'
+                indexCount: 'EmailIndex',
+                preferControlOrder: ''
             },
             {
                 control: 'select',
                 controllabel: 'State',
                 controlId: 'state',
                 indexCount: 'StateIndex',
-                selectOptions: this.stateList
+                selectOptions: this.stateList,
+                preferControlOrder: ''
             },
             {
                 control: 'select',
                 controllabel: 'Country',
                 controlId: 'country',
                 indexCount: 'CountryIndex',
-                selectOptions: this.countries
+                selectOptions: this.countries,
+                preferControlOrder: ''
             },
             {
                 control: 'textarea',
                 controllabel: 'Request Details',
                 controlId: 'requestdetails',
-                indexCount: 'RequestDetailsIndex'
+                indexCount: 'RequestDetailsIndex',
+                preferControlOrder: ''
             }
         ];
         localStorage.setItem('formControlList', JSON.stringify(controlsList));
@@ -98,52 +106,60 @@ if (localStorage.getItem('CCPAformControlList') === null || localStorage.getItem
             controllabel: 'I am a (an)',
             controlId: 'subjecttype',
             indexCount: 'subjecttypeIndex',
-            selectOptions: 'subjectType'
+            selectOptions: 'subjectType',
+            preferControlOrder: 0
         },
         {
             control: 'radio',
             controllabel: 'Select request type(s)',
             controlId: 'requesttype',
             indexCount: 'requestTypeIndex',
-            selectOptions: 'requestType'
+            selectOptions: 'requestType',
+            preferControlOrder: 1
         },
         {
             control: 'textbox',
             controllabel: 'First Name',
             controlId: 'fname1',
-            indexCount: 'FirstNameIndex'
+            indexCount: 'FirstNameIndex',
+            preferControlOrder: 2
         },
         {
             control: 'textbox',
             controllabel: 'Last Name',
             controlId: 'lname1',
-            indexCount: 'LastNameIndex'
+            indexCount: 'LastNameIndex',
+            preferControlOrder: 3
         },
         {
             control: 'textbox',
             controllabel: 'Email',
             controlId: 'email',
-            indexCount: 'EmailIndex'
+            indexCount: 'EmailIndex',
+            preferControlOrder: 4
         },
         {
             control: 'select',
             controllabel: 'State',
             controlId: 'state',
             indexCount: 'StateIndex',
-            selectOptions: this.stateList
+            selectOptions: this.stateList,
+            preferControlOrder: 5
         },
         {
             control: 'select',
             controllabel: 'Country',
             controlId: 'country',
             indexCount: 'CountryIndex',
-            selectOptions: this.countries
+            selectOptions: this.countries,
+            preferControlOrder: 6
         },
         {
             control: 'textarea',
             controllabel: 'Request Details',
             controlId: 'requestdetails',
-            indexCount: 'RequestDetailsIndex'
+            indexCount: 'RequestDetailsIndex',
+            preferControlOrder: 7
         }
     ];
     localStorage.setItem('CCPAformControlList', JSON.stringify(controlsList));

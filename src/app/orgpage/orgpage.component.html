@@ -26,11 +26,11 @@
                             {{!isEditable?'Edit':'Cancel'}}</button> -->
                         <!-- <button *ngIf="isEditable" (click)="saveUpdatedChanges(data.orgid,data.orgName)"
                             class="btn btn-primary">Save</button> -->
-                            <button type="button" class="btn btn-sm btn-outline-primary" data-toggle="modal"
+                        <button type="button" class="btn btn-sm btn-outline-primary" data-toggle="modal"
                             (click)="loadOrganizationDetails(data)">View details</button>
                     </td>
                     <td>
-                      
+
                         <button type="button" class="btn btn-sm btn-outline-primary" data-toggle="modal"
                             (click)="open(mymodal,data)">Add Property</button>
                         <button class="btn btn-sm btn-outline-dark"
@@ -56,13 +56,13 @@
             </thead>
             <tbody>
                 <tr *ngFor="let details of orgDetails">
-                   <td>{{details.name}}</td>
-                   <td>{{details.address1}} {{details.address2}}</td>
-                   <td>{{details.city}}</td>
-                   <td>{{details.state}}</td>
-                   <td>{{details.zipcode}}</td>
-                   <td><button type="button" class="btn btn-sm btn-primary" data-toggle="modal"
-                    (click)="editOrganizationModalPopup(editOrgModal,details)">Edit</button></td>
+                    <td>{{details.name}}</td>
+                    <td>{{details.address1}} {{details.address2}}</td>
+                    <td>{{details.city}}</td>
+                    <td>{{details.state}}</td>
+                    <td>{{details.zipcode}}</td>
+                    <td><button type="button" class="btn btn-sm btn-primary" data-toggle="modal"
+                            (click)="editOrganizationModalPopup(editOrgModal,details)">Edit</button></td>
                 </tr>
             </tbody>
         </table>
@@ -86,7 +86,7 @@
                             {{i+1}}
                         </td>
                         <td>
-                            <img [src]="transform(list.proplogo)" width="150px" />
+                            <img [src]="list.logo_url" width="150px" />
                         </td>
                         <td>
                             {{list.propname}}
@@ -112,24 +112,18 @@
         </button>
     </div>
     <div class="modal-body">
-        <!-- <span *ngIf="myContext.pid">PID:{{pid}} {{myContext.pid}}</span> -->
-        <!--{
-  "oid": "7fc034da-ce88-4833-8c73-ecc22aac8135",
-  "orgname": "ABC test",
-  "taxID": "1234",
-  "address1": "a1",
-  "address2": "a2",
-  "city": "mum",
-  "state": MH,
-  "zipcode": "400088"
-}-->
+
         <form [formGroup]="editOrganisationForm" (ngSubmit)="updateOrganisationData(myContext)">
             <div class="row">
                 <div class="col-sm-12">
                     <div class="form-group">
                         <label for="organizationname">Name</label>
                         <input type="text" class="form-control" [(ngModel)]="organizationname"
-                            formControlName="orgname" id="orgname">
+                            formControlName="organizationname" name="organizationname"
+                            [ngClass]="{ 'is-invalid': submitted && editOrg.organizationname.errors }" />
+                        <div *ngIf="submitted && editOrg.organizationname.errors" class="invalid-feedback">
+                            <div *ngIf="editOrg.organizationname.errors.required">Organization name is required</div>
+                        </div>
                     </div>
                 </div>
 
@@ -137,33 +131,44 @@
             <div class="row">
                 <div class="col-sm-6">
                     <div class="form-group">
-                        <label for="address1">Tax ID</label>
-                        <input type="text" class="form-control" [(ngModel)]="taxidnumber" formControlName="taxID"
-                            id="taxID">
+                        <label for="taxidnumber">Tax ID</label>
+                        <input type="text" class="form-control" [(ngModel)]="taxidnumber" formControlName="taxidnumber"
+                        name="taxidnumber" />
+                          
                     </div>
                 </div>
                 <div class="col-sm-6">
                     <div class="form-group">
-                        <label for="address1">Address1</label>
-                        <input type="text" class="form-control" [(ngModel)]="addressone" formControlName="address1"
-                            id="address1">
+                        <label for="addressone">Address 1</label>
+                        <input type="text" class="form-control" [(ngModel)]="addressone" formControlName="addressone"
+                            name="addressone" [ngClass]="{ 'is-invalid': submitted && editOrg.addressone.errors }"/>
+                            <div *ngIf="submitted && editOrg.addressone.errors" class="invalid-feedback">
+                                <div *ngIf="editOrg.addressone.errors.required">Address 1 is required</div>
+                            </div>
                     </div>
+                   
                 </div>
             </div>
             <div class="row">
 
                 <div class="col-sm-6">
                     <div class="form-group">
-                        <label for="address2">Address2</label>
-                        <input type="text" class="form-control" [(ngModel)]="addresstwo" formControlName="address2"
-                            id="address2">
+                        <label for="addresstwo">Address 2</label>
+                        <input type="text" class="form-control" [(ngModel)]="addresstwo" formControlName="addresstwo"
+                        name="addresstwo" [ngClass]="{ 'is-invalid': submitted && editOrg.addresstwo.errors }"/>
+                            <div *ngIf="submitted && editOrg.addresstwo.errors" class="invalid-feedback">
+                                <div *ngIf="editOrg.addresstwo.errors.required">Address 2 is required</div>
+                            </div>
                     </div>
                 </div>
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label for="city">City</label>
-                        <input type="text" class="form-control" [(ngModel)]="cityname" formControlName="city"
-                            id="city">
+                        <input type="text" class="form-control" [(ngModel)]="cityname" formControlName="cityname" name="cityname"
+                        [ngClass]="{ 'is-invalid': submitted && editOrg.cityname.errors }"/>
+                        <div *ngIf="submitted && editOrg.cityname.errors" class="invalid-feedback">
+                            <div *ngIf="editOrg.cityname.errors.required">City is required</div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -172,24 +177,31 @@
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label for="state">State</label>
-                        <input type="text" class="form-control" [(ngModel)]="statename" formControlName="state"
-                            id="state">
+                        <input type="text" class="form-control" [(ngModel)]="statename" formControlName="statename"
+                        name="statename" [ngClass]="{ 'is-invalid': submitted && editOrg.statename.errors }"/>
+                        <div *ngIf="submitted && editOrg.statename.errors" class="invalid-feedback">
+                                <div *ngIf="editOrg.statename.errors.required">State is required</div>
+                        </div>
                     </div>
                 </div>
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label for="state">Zip Code</label>
-                        <input type="text" class="form-control" [(ngModel)]="zipcodenum" formControlName="zipcode"
-                            id="zipcode">
+                        <input type="text" class="form-control" [(ngModel)]="zipcodenum" formControlName="zipcodenum"
+                        name="zipcodenum" [ngClass]="{ 'is-invalid': submitted && editOrg.zipcodenum.errors }"/>
+                            <div *ngIf="submitted && editOrg.zipcodenum.errors" class="invalid-feedback">
+                                <div *ngIf="editOrg.zipcodenum.errors.required">Zipcode is required</div>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-sm-6">
-                        <button type="button" (click)="onResetEditOrganization()" class="btn btn-outline-dark">Cancel</button>
+                    <button type="button" (click)="onResetEditOrganization()"
+                        class="btn btn-outline-dark">Cancel</button>
                 </div>
                 <div class="col-sm-6">
-                        <button type="submit" class="btn btn-outline-dark">Save</button>
+                    <button  class="btn btn-outline-dark">Save</button>
                 </div>
             </div>
         </form>
@@ -208,25 +220,34 @@
     </div>
     <div class="modal-body">
         <!-- <span *ngIf="myContext.pid">PID:{{pid}} {{myContext.pid}}</span> -->
-        <form [formGroup]="organisationPropertyForm" (ngSubmit)="onSubmit(myContext)">
+        <form [formGroup]="organisationPropertyForm" (ngSubmit)="onSubmit()">
             <div class="form-group">
-                <label for="inputAddress">Name</label>
-                <input type="text" class="form-control" [(ngModel)]="propname" formControlName="name" id="name">
+                <label for="name">Name</label>
+                <input type="text" class="form-control" name="propertyname" formControlName="propertyname"
+                    [(ngModel)]="propertyname" [ngClass]="{ 'is-invalid': submitted && orgProp.propertyname.errors }" />
+                <div *ngIf="submitted && orgProp.propertyname.errors" class="invalid-feedback">
+                    <div *ngIf="orgProp.propertyname.errors.required">Property name is required</div>
+                </div>
             </div>
             <div class="form-group">
-                <label for="inputAddress2">Website</label>
-                <input type="text" class="form-control" [(ngModel)]="websitename" formControlName="website"
-                    id="website">
+                <label for="website">Website</label>
+                <input type="text" class="form-control" name="website" formControlName="website" [(ngModel)]="website"
+                    [ngClass]="{ 'is-invalid': submitted && orgProp.website.errors }" />
+                <div *ngIf="submitted && orgProp.website.errors" class="invalid-feedback">
+                    <div *ngIf="orgProp.website.errors.required">Website address is required</div>
+                </div>
             </div>
             <div class="form-group">
-                <label for="inputAddress2">Logo</label>
-                <input type="file" class="form-control" (change)="uploadFile($event)" id="logo">
+                <label for="logo_url">Logo URL</label>
+                <input type="text" class="form-control" name="logo_url" formControlName="logo_url"
+                    [(ngModel)]="logo_url" [ngClass]="{ 'is-invalid': submitted && orgProp.logo_url.errors }" />
+                <div *ngIf="submitted && orgProp.logo_url.errors" class="invalid-feedback">
+                    <div *ngIf="orgProp.logo_url.errors.required">Logo URL is required</div>
+                </div>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-outline-dark">Save</button>
             </div>
         </form>
     </div>
-
-    <!-- (click)="modal.close('Save click')"-->
 </ng-template>

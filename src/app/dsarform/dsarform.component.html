@@ -1,27 +1,50 @@
-<div class="example-container">
+ 
+<!-- <div class="row">
+    <div class="col-sm-12">
+       
+        <div class="d-sm-flex align-items-center justify-content-between mg-b-20 mg-lg-b-25 mg-xl-b-30">
+            <div class="heading">Form Name </div>
+            <input class="form-control" type="text" name="form_name" [(ngModel)]="formName" />
+        </div>
+      </div>
+</div> -->
+ 
+<div class="container">
     <div class="row">
+        <div class="col-sm-6">
+            <h4 class="mg-b-0 tx-spacing--1">Drag Form Fields</h4>
+          </div>
+          <div class="col-sm-6 text-right">
+            <h5>Web Form for <span *ngIf="selectedProperty">{{selectedProperty.property.propName}}</span></h5>
+            <button class="btn btn-sm btn-outline-primary" (click)="createNewForm()">Create New</button>
+          </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4">
         <div cdkDropList #todoList="cdkDropList" [cdkDropListData]="webFormControlList"
-            [cdkDropListConnectedTo]="[doneList]" class="col-sm-4 example-list" (cdkDropListDropped)="drop($event)">
-            <h3>Drag Form Fields</h3>
+            [cdkDropListConnectedTo]="[doneList]" class="example-list" (cdkDropListDropped)="drop($event)">
+        
             <div *ngIf="!isEditingList">
-                <div class="drag-list" *ngFor="let item of webFormControlList; let i = index;" cdkDrag>
-                    <span cdkDragHandle>
+                <div class="example-box" *ngFor="let item of webFormControlList; let i = index;" cdkDrag>
+                    <!-- <span cdkDragHandle>
                         <svg width="24px" fill="#ccc" viewBox="0 0 24 24">
                             <path
                                 d="M10 9h4V6h3l-5-5-5 5h3v3zm-1 1H6V7l-5 5 5 5v-3h3v-4zm14 2l-5-5v3h-3v4h3v3l5-5zm-9 3h-4v3H7l5 5 5-5h-3v-3z">
                             </path>
                             <path d="M0 0h24v24H0z" fill="none"></path>
                         </svg>
-                    </span>
+                    </span> -->
                     <span class="control-label">
-                        {{item.controllabel}}
+                        {{item.controllabel}} {{item.preferControlOrder}}
                     </span>
+                    <div class="displayflex">
                     <button *ngIf="isCustomControlWithRadioBtn(item)" class="btn btn-sm btn-outline-primary editbtn" (click)="deleteSelectedItem(item)">
                         delete
                     </button>
                     <button class="btn btn-sm btn-outline-primary editbtn" (click)="editSelectedRow(item)">
                         <div><i class="fas fa-pen"></i></div>
                     </button>
+                    </div>
                 </div>
             </div>
             <div class="row">
@@ -35,7 +58,7 @@
 
                 </div>
 
-                <div *ngIf="isAddingFormControl" class="col-sm-12 custom-controls">
+                <div *ngIf="isAddingFormControl" class="col-sm-11 custom-controls">
                     <form #customFields="ngForm" (ngSubmit)="addCustomFields(customFields)">
                         <div class="row">
                             <div class="col-sm-12">
@@ -50,7 +73,7 @@
 
                             <div style="display: flex;" *ngIf="!isEditingList">
                                 <div class="col-sm-8 custom-controls">
-                                    <label>Select Field Type
+                                    <label>Select Field Type  </label>
                                         <select class="form-control" (change)="onChangeEvent($event)"
                                             name="selectOptionControl" [(ngModel)]="selectOptionControl">
                                             <option *ngFor="let status_item of controlOption"
@@ -58,7 +81,7 @@
                                                 {{status_item.control}}
                                             </option>
                                         </select>
-                                    </label>
+                                  
                                 </div>
                                 <div class="col-sm-4">
                                     <br />
@@ -123,23 +146,22 @@
                 </div>
             </div>
         </div>
-
-
+        </div>
+        <div class="col-sm-8">
         <div cdkDropList #doneList="cdkDropList" [cdkDropListData]="webFormControlList"
-            [cdkDropListConnectedTo]="[todoList]" class="col-sm-8 example-list" (cdkDropListDropped)="drop($event)">
-            
-            <h5>Web Form for <span *ngIf="selectedProperty">{{selectedProperty.propName}}</span></h5>
-            <div class="card-body">
-                <div class="heading">Form Name </div>
-                <input class="form-control" type="text" name="form_name" [(ngModel)]="formName" />
+            [cdkDropListConnectedTo]="[todoList]" class="example-list" (cdkDropListDropped)="drop($event)">
+            <div class="example-box">
+                <div class="col-sm-6">
+            <label>Form Name </label>
+            <input class="form-control" type="text" name="form_name" [(ngModel)]="formName" />
             </div>
-            <form #regsiterForm="ngForm" (ngSubmit)="register(regsiterForm)">
+            </div>
+            <form #registerForm="ngForm" (ngSubmit)="register(registerForm)">
                 
                 <div class="example-box" *ngFor="let webcontrol of webFormControlList; let j = index;" cdkDrag
                     [cdkDragDisabled]="true">
-                    <div *ngIf="webcontrol.controlId === 'requesttype'" class="card">
-                        <div class="heading"> {{webcontrol.controllabel}}</div>
-                        <div class="card-body">
+                    <div *ngIf="webcontrol.controlId === 'requesttype'" class="col-sm-6">
+                        <label>{{webcontrol.controllabel}} </label>
                             <div *ngIf="webcontrol.control === 'select' && webcontrol.controlId === 'requesttype'"> <!-- *ngIf="isRequestTypeSelected"-->
                                 <select class="form-control" name="{{webcontrol.controllabel}}"
                                     [(ngModel)]="requestObject[webcontrol.controllabel]">
@@ -147,33 +169,32 @@
                                         {{ opt.country }}
                                     </option>
                                 </select>
-                                <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
+                                <input type="text" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
                             </div>
-                            <div *ngIf="webcontrol.control === 'radio' && webcontrol.controlId === 'requesttype'"> <!-- *ngIf="radioBtnType"-->
-                                <div *ngFor="let opt of requestType" class="form-check-inline">
-                                    <label class="form-check-label">
+                            <div class="form-check" *ngIf="webcontrol.control === 'radio' && webcontrol.controlId === 'requesttype'"> <!-- *ngIf="radioBtnType"-->
+                                <div *ngFor="let opt of requestType">
+                                    <label class="form-check-label">{{opt.country}}</label>
                                         <input class="form-check-input" type="radio" name="{{webcontrol.controllabel}}"
                                             [value]='opt.country'
-                                            [(ngModel)]="requestObject[opt.country]" />{{opt.country}}
-                                        <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
-                                    </label>
+                                            [(ngModel)]="requestObject[opt.country]" />
+                                        <input type="text" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
+                                    
                                 </div>
                             </div>
-                            <div *ngIf="webcontrol.control === 'checkbox' && webcontrol.controlId === 'requesttype'"> <!-- *ngIf="checkboxBtnType"-->
+                            <div  class="form-check" *ngIf="webcontrol.control === 'checkbox' && webcontrol.controlId === 'requesttype'"> <!-- *ngIf="checkboxBtnType"-->
                                 <div *ngFor="let opt of requestType; let i = index;" class="form-check-inline">
-                                    <label class="form-check-label">
                                         <input class="form-check-input" type="checkbox" name="{{webcontrol.controllabel}}"
                                             [value]='opt.country'  
                                             [(ngModel)]="requestObject[opt.country]" />{{opt.country}}
-                                        <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
-                                    </label>
+                                        <input type="text" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
+                                  
                                 </div>
                             </div>
-                        </div>
+                       
                     </div>
-                    <div *ngIf="webcontrol.controlId === 'subjecttype'" class="card">
-                        <div class="heading"> {{webcontrol.controllabel}}</div>
-                        <div class="card-body"> <!--webcontrol.control == 'select' && webcontrol.controlId === 'subjecttype' && isSubjectTypeSelected-->
+                    <div *ngIf="webcontrol.controlId === 'subjecttype'" class="col-sm-6">
+                             <!--webcontrol.control == 'select' && webcontrol.controlId === 'subjecttype' && isSubjectTypeSelected-->
+                            <label>{{webcontrol.controllabel}} </label>
                             <div *ngIf="webcontrol.control == 'select' && webcontrol.controlId === 'subjecttype'"> <!-- *ngIf="isSubjectTypeSelected"-->
                                 <select class="form-control" name="{{webcontrol.controllabel}}"
                                     [(ngModel)]="requestObject[webcontrol.controllabel]">
@@ -183,64 +204,53 @@
                                 </select>
                                 <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
                             </div>
-                            <div *ngIf="webcontrol.control == 'radio' && webcontrol.controlId === 'subjecttype'"> <!--*ngIf="subjectTyperadioBtn"-->
+                            <div class="form-check" *ngIf="webcontrol.control == 'radio' && webcontrol.controlId === 'subjecttype'"> <!--*ngIf="subjectTyperadioBtn"-->
                                 <div *ngFor="let userOpt of subjectType" class="form-check-inline">
-                                    <label class="form-check-label">
                                         <input class="form-check-input" type="radio" name="{{webcontrol.controllabel}}"
                                             [value]='userOpt.name' [(ngModel)]="requestObject[userOpt.name]" />
                                         {{userOpt.name}}
                                         <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
-                                    </label>
+                                   
                                 </div>
                             </div>
                             <div *ngIf="webcontrol.control == 'checkbox' && webcontrol.controlId === 'subjecttype'"> <!--*ngIf="subjectTypecheckboxBtnType"-->
                                 <div *ngFor="let opt of subjectType; let i = index;" class="form-check-inline">
-                                    <label class="form-check-label">
                                         <input class="form-check-input" type="checkbox" name="{{webcontrol.controllabel}}"
                                             [value]='opt.name'  
                                             [(ngModel)]="requestObject[opt.name]" />{{opt.name}}
                                         <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
-                                    </label>
+                                   
                                 </div>
                             </div>
-                        </div>
+                       
                     </div>
-                    <div *ngIf="webcontrol.control === 'textbox';else selectOption" class="card">
-                        <div class="card-body">
-                            <label> {{webcontrol.controllabel}}
+                    <div *ngIf="webcontrol.control === 'textbox';else selectOption" class="col-sm-6">
+                            <label> {{webcontrol.controllabel}} </label>
                                 <input class="form-control" type="text" name="{{webcontrol.controllabel}}"
                                     [(ngModel)]="requestObject[webcontrol.controllabel]" />
                                 <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
-                            </label>
-                        </div>
+                           
                     </div>
-                    <div *ngIf="webcontrol.control === 'textarea'" class="card">
-                        <div class="card-body">
-                            <label> {{webcontrol.controllabel}}
+                    <div *ngIf="webcontrol.control === 'textarea'" class="col-sm-6">
+                            <label> {{webcontrol.controllabel}}   </label>
                                 <textarea class="form-control" type="text" name="{{webcontrol.controllabel}}"
                                     [(ngModel)]="requestObject[webcontrol.controllabel]"></textarea>
                                 <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
-                            </label>
-                        </div>
+                          
                     </div>
-                    <div *ngIf="webcontrol.control === 'radio' && webcontrol.controlId !== 'requesttype' && webcontrol.controlId !== 'subjecttype'"  class="card">
-                        <div class="heading"> {{webcontrol.controllabel}} {{webcontrol.controlId}}</div>
-                        <div class="card-body">
+                    <div class="form-check" *ngIf="webcontrol.control === 'radio' && webcontrol.controlId !== 'requesttype' && webcontrol.controlId !== 'subjecttype'">
+                        <label class="heading"> aa | {{webcontrol.controllabel}} {{webcontrol.controlId}}</label>
                                 <div *ngFor="let userOpt of webcontrol.selectOptions" class="form-check-inline">
-                                    <label class="form-check-label">
                                         <input class="form-check-input" type="radio" name="{{webcontrol.controllabel}}"
                                             [value]='userOpt.name' [(ngModel)]="requestObject[userOpt.name]" />
                                         {{userOpt.name}}
                                         <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
-                                    </label>
+                                  
                                 </div>
-                        </div>
                     </div>
                     <ng-template #selectOption>
-                        <div *ngIf="webcontrol.control == 'select' && webcontrol.controlId !== 'subjecttype' && webcontrol.controlId !== 'requesttype'"
-                            class="card">
-                            <div class="card-body">
-                                <label> {{webcontrol.controllabel}}
+                        <div class="col-sm-6" *ngIf="webcontrol.control == 'select' && webcontrol.controlId !== 'subjecttype' && webcontrol.controlId !== 'requesttype'">
+                                <label> {{webcontrol.controllabel}}   </label>
                                     <select class="form-control" name="{{webcontrol.controllabel}}"
                                         [(ngModel)]="requestObject[webcontrol.controllabel]">
                                         <option *ngFor="let data of webcontrol.selectOptions" [value]="data.id">
@@ -248,31 +258,26 @@
                                         </option>
                                     </select>
                                     <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
-                                </label>
-                            </div>
+                              
                         </div>
                     </ng-template>
-                    <div *ngIf="webcontrol.control == 'checkbox' && webcontrol.controlId !== 'subjecttype' && webcontrol.controlId !== 'requesttype'"
-                            class="card">
-                            <div class="card-body">
-                                <label> {{webcontrol.controllabel}}
+                    <div class="form-check" *ngIf="webcontrol.control == 'checkbox' && webcontrol.controlId !== 'subjecttype' && webcontrol.controlId !== 'requesttype'">
+                                <label class="form-check-label"> {{webcontrol.controllabel}}</label>
                                     <div *ngFor="let opt of webcontrol.selectOptions; let i = index;" class="form-check-inline">
-                                        <label class="form-check-label">
                                             <input class="form-check-input" type="checkbox" name="{{webcontrol.controllabel}}"
                                                 [value]='opt.id'  
                                                 [(ngModel)]="requestObject[opt.name]" />{{opt.name}}
-                                            <!-- <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" /> -->
-                                        </label>
+                                            <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
+                                        
                                     </div>
-                                </label>
-                            </div>
+                                
                         </div>
                 </div>
-                <div class="col-sm-3"> <button class="btn btn-primary btn-block" (click)="publishCCPAFormConfiguration()" type="button">Publish</button></div>
+                <!-- <div class="col-sm-3"> <button class="btn btn-primary btn-block"  type="submit"> </button></div> -->
             </form>
-           <!-- <div class="col-sm-3"> <button class="btn btn-sm btn-outline-primary" (click)="getCCPAFormList()">getCCPA</button></div> -->
+            <div class="example-box col-sm-3 borderzero"> <button class="btn btn-primary btn-block" (click)="publishCCPAFormConfiguration(registerForm)">publish</button></div>
            
-           
+        </div>
         </div>
     </div>
 </div>

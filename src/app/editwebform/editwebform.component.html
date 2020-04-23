@@ -138,7 +138,11 @@
             <form #regsiterForm="ngForm" (ngSubmit)="register(regsiterForm)">
                 
                 <div class="example-box" *ngFor="let webcontrol of requestFormControls; let j = index;" cdkDrag
-                    [cdkDragDisabled]="true">
+                    [cdkDragDisabled]="true"> 
+                    <!-- matchpreferControlOrder | {{matchpreferControlOrder(webcontrol,j)}} -->
+                    <!-- <div *ngIf="matchpreferControlOrder(webcontrol,j)">
+                        {{webcontrol.controllabel}} | {{webcontrol.preferControlOrder}}
+                    </div> -->
                     <div *ngIf="webcontrol.controlId === 'requesttype'" class="card">
                         <div class="heading"> {{webcontrol.controllabel}}</div>
                         <div class="card-body">

@@ -67,12 +67,12 @@ export class UserService {
     }
 
     delete(id: number) {
-        return this.http.delete(environment.apiUrl + '/users/${id}',{});
+        return this.http.delete(environment.apiUrl + '/users/${id}', {});
     }
 
 
-    update(firstName,lastName, email) {
-        return this.http.put<any>(environment.apiUrl + '/user', {firstName, lastName, email});
+    update(profileObj) {
+        return this.http.put<any>(environment.apiUrl + '/user', profileObj);
     }
 
     getLoggedInUserDetails(): Observable<User> {

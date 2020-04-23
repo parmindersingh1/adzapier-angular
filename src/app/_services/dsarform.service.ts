@@ -45,5 +45,8 @@ export class DsarformService extends WebControls {
     localStorage.setItem('formControlList', JSON.stringify(controlList));
   }
 
+  removeControls() {
+    return localStorage.clear();
+  }
 
 }

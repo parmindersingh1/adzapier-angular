@@ -12,6 +12,7 @@
     <div class="col-sm-12 webformlist">
         <ul>
             <li *ngFor="let data of formList">
+                <!-- data.response {{data.response | json}} -->
                 <div class="card" *ngFor="let list of data.response">
                    <div  (click)="showForm(list)"> {{list.form_name}} </div>
                    <div *ngIf="list.form_name === ''">form name not found{{list.form_name}}</div>
