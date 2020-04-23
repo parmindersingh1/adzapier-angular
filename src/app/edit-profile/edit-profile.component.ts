@@ -29,17 +29,18 @@ export class EditProfileComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.isDisabled = true;
+  //  this.isDisabled = true;
+    const zipRegex = '^[0-9]*$';
     this.profileForm = this.formBuilder.group({
-      firstName: ['', [Validators.required, Validators.pattern]],
-      lastName: ['', [Validators.required, Validators.pattern]],
-      newemail: ['', [Validators.required, Validators.pattern]],
-      currentpassword: [''],
-      newpassword: [''],
-      confirmpassword: ['']
-      //   currentpassword: ['', [Validators.required, Validators.pattern,Validators.minLength(6)]],
-      //  newpassword: ['', [Validators.required, Validators.pattern,Validators.minLength(6)]],
-      // confirmpassword: ['', [Validators.required, Validators.pattern,Validators.minLength(6)]]
+      firstName: ['', [Validators.required, Validators.minLength(3)]],
+      lastName: ['', [Validators.required, Validators.minLength(3)]],
+      newemail: ['', [Validators.required, Validators.email]],
+      addressone: ['', [Validators.required]],
+      addresstwo: ['', [Validators.required]],
+      city: ['', [Validators.required]],
+      state: ['', [Validators.required]],
+      zipcode: ['', [Validators.required, Validators.pattern(zipRegex)]],
+      roles: ['', [Validators.required]]
     });
     this.profileForm.disable();
     this.pathValues();
@@ -49,15 +50,31 @@ export class EditProfileComponent implements OnInit {
   get f() { return this.profileForm.controls; }
 
   onSubmit() {
-    this.profileForm.disable();
-    this.userService.update(this.f.firstName.value, this.f.lastName.value, this.f.newemail.value)
-      .subscribe((data) => {
-        if (data) {
-          alert('Details has been updated successfully!');
-          this.userService.getCurrentUser.emit(data);
+    this.submitted = true;
+    if (this.profileForm.invalid) {
+      return false;
+    } else {
+      const editObj = {
+        firstName: this.profileForm.value.firstName,
+        lastName: this.profileForm.value.lastName,
+        email: this.profileForm.value.newemail,
+        address1: this.profileForm.value.addressone,
+        address2: this.profileForm.value.addresstwo,
+        city: this.profileForm.value.city,
+        state: this.profileForm.value.state,
+        zipcode: this.profileForm.value.zipcode,
+        roles: this.profileForm.value.roles
+      }; 
+      this.userService.update(editObj)
+        .subscribe((data) => {
+          if (data) {
+            alert('Details has been updated successfully!');
+            this.userService.getCurrentUser.emit(data);
+          }
         }
-      }
-      );
+        );
+      this.profileForm.disable();
+    }
   }
 
   pathValues() {

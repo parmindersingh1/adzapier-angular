@@ -81,18 +81,19 @@ export class EditwebformComponent implements OnInit {
       this.orgId = data.OID;
       this.crid = data.crid;
       this.propertyname = data.form_name;
-      this.requestFormControls = data.request_form;
+      // this.requestFormControls = data.request_form;
+      this.requestFormControls = this.rearrangeFormSequence(data.request_form);
     });
-    
+
     this.getCCPAFormConfigByID();
-  //  this.loadCCPAForm();
+    //  this.loadCCPAForm();
 
     //show edit form
     this.radioBtnType = true;
     this.subjectTyperadioBtn = true;
     //  this.loadWebControl();
     // this.requestFormControls = this.ccpaFormConfigService.getFormControlList();
-   
+
     //  this.selectOptionControl = this.controlOption[0].control;
     this.selectOptions = [{
       id: this.count++,
@@ -160,7 +161,7 @@ export class EditwebformComponent implements OnInit {
       id: 3,
       control: 'checkbox'
     }
-  ]; 
+  ];
 
   trackByIndex(index: number, obj: any): any {
     return index;
@@ -324,15 +325,15 @@ export class EditwebformComponent implements OnInit {
         let updatedTextobj;
         const oldControlIndex = this.requestFormControls.findIndex((t) =>
           t.controllabel === this.existingControl.controllabel);
-        if (oldControlIndex) {
-          updatedTextobj = {
-            controllabel: formControls.value.lblText,
-            indexCount: trimLabel,
-            control: this.existingControl.control,
-            selectOptions: this.existingControl.selectOptions
-          };
-          this.ccpaFormConfigService.updateControl(this.requestFormControls[oldControlIndex], oldControlIndex, updatedTextobj);
-        }
+        // if (oldControlIndex) {
+        updatedTextobj = {
+          controllabel: formControls.value.lblText,
+          indexCount: trimLabel,
+          control: this.existingControl.control,
+          selectOptions: this.existingControl.selectOptions
+        };
+        this.ccpaFormConfigService.updateControl(this.requestFormControls[oldControlIndex], oldControlIndex, updatedTextobj);
+        //}
         this.requestFormControls = this.ccpaFormConfigService.getFormControlList();
       } else if (this.existingControl) {
         let updateCustomObj;
@@ -448,6 +449,13 @@ export class EditwebformComponent implements OnInit {
     this.changeControlType = null;
   }
 
+  rearrangeFormSequence(dataArray) {
+    dataArray.sort((a, b)=>{
+      return a.preferControlOrder - b.preferControlOrder;
+    });
+    return dataArray;
+  }
+
   publishCCPAFormConfiguration() {
     console.log(this.formName, 'formName..');
     this.requestFormControls = this.ccpaFormConfigService.getFormControlList();
@@ -456,6 +464,7 @@ export class EditwebformComponent implements OnInit {
       'form_status': 'Draft',
       'request_form': this.requestFormControls
     }
+    console.log(this.requestFormControls, 'rfc..');
     if (this.selectedProperty.orgId !== undefined && this.selectedProperty.property.propid !== undefined) {
       this.ccpaFormConfigService.createCCPAForm(this.selectedProperty.orgId, this.selectedProperty.property.propid, formObject)
         .subscribe((data) => console.log(data), (error) => alert(JSON.stringify(error)));

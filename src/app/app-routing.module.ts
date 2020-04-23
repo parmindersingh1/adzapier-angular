@@ -33,7 +33,7 @@ const routes: Routes = [
   { path: 'user/profile/edit', component: EditProfileComponent, canActivate: [AuthGuard] },
   { path: 'portalorg', component: OrgpageComponent, canActivate: [AuthGuard] },
   { path: 'user/activity', component: UseractivityComponent, canActivate: [AuthGuard] },
-  { path: 'reset-password/:id', component: ResetpasswordComponent },
+  { path: 'resetpswd/:id', component: ResetpasswordComponent },
   { path: 'pagenotfound', component: PagenotfoundComponent },
   { path: '404page', component: PagenotfoundComponent1 },
   { path: 'internalerror', component: InternalerrorComponent },

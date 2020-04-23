@@ -127,11 +127,14 @@ export class HeaderComponent implements OnInit {
       this.leftItems = this.orgList;
     //  this.orgservice.getSelectedOrgProperty.emit(this.orgList[0].property[0]);
     //  this.orgservice.getOrganization.emit(this.orgList[0].orgid);
-      const obj = {
-        orgId: this.orgList[0].orgid,
-        property: this.orgList[0].property[0]
-      };
-      this.orgservice.changeCurrentSelectedProperty(obj);
+      if (this.orgList[0].hasOwnProperty('property')) {
+        const obj = {
+          orgId: this.orgList[0].orgid,
+          property: this.orgList[0].property[0]
+        };
+        this.orgservice.changeCurrentSelectedProperty(obj);
+      }
+     
       this.rightItems = [
         {
           label: 'User', icon: 'assets/imgs/glass.jpg',

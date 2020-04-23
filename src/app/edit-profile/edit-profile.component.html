@@ -6,29 +6,41 @@
         <div class="col-sm-12"><h4>Edit User Profile</h4></div>
     <div class="col-sm-6">
             <div class="form-group">
-              <label class="d-block">First Name</label>
-              <input type="text" formControlName="firstName"  class="form-control" placeholder="Enter your firstname"
-              [ngClass]="{ 'is-invalid': submitted && f.firstName.errors }" pattern="^[a-zA-Z ]{3,20}$">
+              <label for="firstName" class="d-block">First Name</label>
+              <input type="text" formControlName="firstName" name="firstName" [(ngModel)]="firstName" class="form-control" placeholder="Enter your firstname"
+              [ngClass]="{ 'is-invalid': submitted && f.firstName.errors }" />
               <div *ngIf="submitted && f.firstName.errors" class="invalid-feedback" >
                 <div *ngIf="f.firstName.errors.required">First Name is required</div>
-                <div *ngIf="f.firstName.errors.pattern">First Name Allow Only Alphabets(min 3 & max 20 Char)</div>
             </div>
             </div>
+
+            <!-- <div class="form-group">
+                <label for="organizationname">Name</label>
+                <input type="text" class="form-control" [(ngModel)]="organizationname"
+                    formControlName="organizationname" name="organizationname"
+                    [ngClass]="{ 'is-invalid': submitted && editOrg.organizationname.errors }" />
+                <div *ngIf="submitted && editOrg.organizationname.errors" class="invalid-feedback">
+                    <div *ngIf="editOrg.organizationname.errors.required">Organization name is required</div>
+                </div>
+            </div> -->
+
+         
         </div>
         <div class="col-sm-6">
             <div class="form-group">
               <label class="d-block">Last Name</label>
               <input type="text" formControlName="lastName"  class="form-control" placeholder="Enter your lastname"
-              [ngClass]="{ 'is-invalid': submitted && f.lastName.errors }" pattern="^[a-zA-Z ]{3,20}$">
+              [ngClass]="{ 'is-invalid': submitted && f.lastName.errors }"/>
               <div *ngIf="submitted && f.lastName.errors" class="invalid-feedback" >
                 <div *ngIf="f.lastName.errors.required">Last Name is required</div>
-                <div *ngIf="f.lastName.errors.pattern">Last Name Allow Only Alphabets(min 3 & max 20 Char)</div>
             </div>
             </div>
         </div>
     </div>
+    <div class="row">
+    <div class="col-sm-12"> 
             <div class="form-group">
-                <label for="email">Email</label>
+                <label for="newemail">Email</label>
                 <input type="email" formControlName="newemail" class="form-control"
                 [ngClass]="{ 'is-invalid': submitted && f.newemail.errors }" 
                 placeholder="Enter your email address" pattern="^\w+@[a-zA-Z_0-9]+?\.[a-zA-Z]{2,3}$">
@@ -37,126 +49,94 @@
                     <div *ngIf="f.newemail.errors.pattern">Please enter a valid email</div> 
                 </div>
               </div>
+    </div>
+   
+</div>
+<div class="row"> 
+    <div class="col-sm-6">
+    <div class="form-group">
+        <label for="addressone">Address 1</label>
+        <input type="text" formControlName="addressone" class="form-control"
+        [ngClass]="{ 'is-invalid': submitted && f.addressone.errors }" 
+        placeholder="Enter your address"/>
+        <div *ngIf="submitted && f.addressone.errors" class="invalid-feedback">
+            <div *ngIf="f.addressone.errors.required">Address 1 is required</div>
+        </div>
+      </div>
+</div>
+    <div class="col-sm-6">
+        <div class="form-group">
+            <label for="addresstwo">Address 2</label>
+            <input type="text" formControlName="addresstwo" class="form-control"
+            [ngClass]="{ 'is-invalid': submitted && f.addresstwo.errors }" 
+            placeholder="Enter your address" />
+            <div *ngIf="submitted && f.addresstwo.errors" class="invalid-feedback">
+                <div *ngIf="f.addresstwo.errors.required">Address 2 is required</div>
+            </div>
+          </div>
+    </div>
+   
+</div>
+<div class="row">
+    <div class="col-sm-6">
+        <div class="form-group">
+            <label for="city">City</label>
+            <input type="text" formControlName="city" class="form-control"
+            [ngClass]="{ 'is-invalid': submitted && f.city.errors }" 
+            placeholder="Enter your city" />
+            <div *ngIf="submitted && f.city.errors" class="invalid-feedback">
+                <div *ngIf="f.city.errors.required">City is required</div>
+            </div>
+          </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="form-group">
+            <label for="state">State</label>
+            <input type="text" formControlName="state" class="form-control"
+            [ngClass]="{ 'is-invalid': submitted && f.state.errors }" 
+            placeholder="Enter your state" />
+            <div *ngIf="submitted && f.state.errors" class="invalid-feedback">
+                <div *ngIf="f.state.errors.required">City is required</div>
+            </div>
+          </div>
+    </div>
+  
+</div>
+<div class="row">
+    <div class="col-sm-6">
+        <div class="form-group">
+            <label for="zipcode">Zipcode</label>
+            <input type="text" formControlName="zipcode" class="form-control"
+            [ngClass]="{ 'is-invalid': submitted && f.zipcode.errors }" 
+            placeholder="Enter your zipcode" />
+            <div *ngIf="submitted && f.zipcode.errors" class="invalid-feedback">
+                <div *ngIf="f.zipcode.errors.required">Zipcode is required</div>
+            </div>
+          </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="form-group">
+            <label for="newemail">Roles</label>
+            <input type="text" formControlName="roles" class="form-control"
+            [ngClass]="{ 'is-invalid': submitted && f.roles.errors }" 
+            placeholder="Enter your role" />
+            <div *ngIf="submitted && f.roles.errors" class="invalid-feedback">
+                <div *ngIf="f.roles.errors.required">Role is required</div>
+            </div>
+          </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-12">
             <div class="text-right">
                 <button class="btn btn-primary mr-2" type="button" (click)="editUserDetails()">Edit</button>
                 <button class="btn btn-primary mr-2" type="submit" [disabled]="!profileForm.valid">Save</button>
             </div>
-
-        <br>
-        <!-- ================================ -->
-         <!-- <fieldset class="form-fieldset">
-            <legend>Change Email</legend>
-            <div class="text-right">
-                <button class="btn btn-primary mr-2" type="button" (click)="editUserEmail()">Edit</button>
-                <button class="btn btn-primary mr-2" type="submit" [disabled]="!profileForm.valid">Save</button>
-            </div>
-          </fieldset> -->
-
-        <!--    
-        <fieldset class="form-fieldset">
-            <legend>Change Password</legend>
-            <div class="form-group">
-                    <label for="currentpassword">Current Password</label>
-                    <input type="password" formControlName="currentpassword" class="form-control"
-                        [ngClass]="{ 'is-invalid': submitted && f.currentpassword.errors }" placeholder="Enter Current password"
-                        pattern="(?=^.{6,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9]).*$" >
-                    <div *ngIf="submitted && f.currentpassword.errors" class="invalid-feedback">
-                        <div *ngIf="f.currentpassword.errors.required">Current Password is required</div>
-                        <div *ngIf="f.currentpassword.errors.pattern">Enter Valid Current Password (Ex: Aa@2aa) and minimum
-                            6 charcters</div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="newpassword">New Password</label>
-                    <input type="password" formControlName="newpassword" class="form-control"
-                        [ngClass]="{ 'is-invalid': submitted && f.newpassword.errors }" placeholder="Enter New password"
-                        pattern="(?=^.{6,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9]).*$" >
-                    <div *ngIf="submitted && f.newpassword.errors" class="invalid-feedback">
-                        <div *ngIf="f.newpassword.errors.required">New Password is required</div>
-                        <div *ngIf="f.newpassword.errors.pattern">Enter Valid New Password (Ex: Aa@2aa) and minimum 6
-                            charcters </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="confirmpassword">Confirm Password</label>
-                    <input type="password" formControlName="confirmpassword" class="form-control"
-                        [ngClass]="{ 'is-invalid': submitted && f.confirmpassword.errors }" placeholder="Enter Confirm password"
-                        pattern="(?=^.{6,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9]).*$" >
-                    <div *ngIf="submitted && f.confirmpassword.errors" class="invalid-feedback">
-                        <div *ngIf="f.confirmpassword.errors.required">Confirm Password is required</div>
-                        <div *ngIf="f.confirmpassword.errors.pattern">Enter Confirm Password Password (Ex: Aa@2aa) and minimum 6
-                            charcters </div>
-                    </div>
-                </div>
-                <div class="text-right">
-                    <button class="btn btn-primary mr-2" (click)="isDisabled = false">Edit</button>
-                    <button class="btn btn-primary mr-2" (click)="isDisabled = false">Save</button>
-                </div>
-
-        </fieldset> -->
-    
-
-
+        </div>
+    </div>
+       
+<!--[disabled]="!profileForm.valid"-->
     </form> 
 </div>
 </div>
-
-
-        <!-- ================================ -->
-    <!-- <form [formGroup]="passwordForm" (ngSubmit)="onSubmit()">    
-        <fieldset class="form-fieldset">
-            <div class="form-group">
-                <label for="password" style="font-weight: bold;">Change Password</label>
-                <div class="form-group">
-                    <label for="currentpwd">Current Password</label>
-                    <input type="password" formControlName="currentpwd" class="form-control"
-                        [ngClass]="{ 'is-invalid': submitted && h.currentpwd.errors }" placeholder="Enter Current password"
-                        pattern="(?=^.{6,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9]).*$" />
-                    <div *ngIf="submitted && h.currentpwd.errors" class="invalid-feedback">
-                        <div *ngIf="h.currentpwd.errors.required">Current Password is required</div>
-                        <div *ngIf="h.currentpwd.errors.pattern">Enter Valid Current Password (Ex: Aa@2aa) and minimum
-                            6 charcters</div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="newpwd">New Password</label>
-                    <input type="password" formControlName="newpwd" class="form-control"
-                        [ngClass]="{ 'is-invalid': submitted && h.newpwd.errors }" placeholder="Enter New password"
-                        pattern="(?=^.{6,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9]).*$" />
-                    <div *ngIf="submitted && h.newpwd.errors" class="invalid-feedback">
-                        <div *ngIf="h.newpwd.errors.required">New Password is required</div>
-                        <div *ngIf="h.newpwd.errors.pattern">Enter Valid New Password (Ex: Aa@2aa) and minimum 6
-                            charcters </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="confpwd">Confirm Password</label>
-                    <input type="password" formControlName="confpwd" class="form-control"
-                        [ngClass]="{ 'is-invalid': submitted && h.confpwd.errors }" placeholder="Enter Confirm password"
-                        pattern="(?=^.{6,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9]).*$" />
-                    <div *ngIf="submitted && h.confpwd.errors" class="invalid-feedback">
-                        <div *ngIf="h.confpwd.errors.required">Confirm Password is required</div>
-                        <div *ngIf="h.confpwd.errors.pattern">Enter Confirm Password Password (Ex: Aa@2aa) and minimum 6
-                            charcters </div>
-                    </div>
-                </div>
-                <div class="text-right">
-                    <button class="btn btn-primary mr-2">Save</button>
-
-                </div>
-
-                
-
-            </div>
-        </fieldset>
-    </form> -->
-         <!-- <div *ngIf="show" style="color: blue;" class="tx-13"><p>Profile updated Successfully...!</p></div> -->
-    
-<!-- </div> -->
-
-
-<!-- <div>
-                    <b><label>Email Referneces</label><br>
-                        <input type="checkbox" [ngClass]="{ 'is-invalid': submitted && f.chkemail.errors }">Measure -
-                    </b>Receive Weekly updates on how your properties are doing
-                </div> -->
+ 

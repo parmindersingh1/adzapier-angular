@@ -133,10 +133,11 @@ export class DsarformComponent implements OnInit {
   }
 
   ];
+
   constructor(private fb: FormBuilder, private ccpaRequestService: CcparequestService,
-              private organizationService: OrganizationService,
-              private dsarFormService: DsarformService,
-              private ccpaFormConfigService: CCPAFormConfigurationService
+    private organizationService: OrganizationService,
+    private dsarFormService: DsarformService,
+    private ccpaFormConfigService: CCPAFormConfigurationService
   ) {
     for (let insertNumbers = 0; insertNumbers <= 10; insertNumbers++) {
       this.allNumbers.push(insertNumbers);
@@ -162,7 +163,7 @@ export class DsarformComponent implements OnInit {
     this.getCCPAdefaultConfigById();
     this.organizationService.getSelectedOrgProperty.subscribe((response) => this.selectedProperty = response);
     this.organizationService.getOrganization.subscribe((response) => this.currentOrgID = response);
-   // this.getCCPAFormList();
+    // this.getCCPAFormList();
   }
 
   loadWebControl() {
@@ -198,15 +199,22 @@ export class DsarformComponent implements OnInit {
   }
 
   register(formData: NgForm) {
-   // const selectedCountries = this.requestType.filter((country) => country.checked);
-   // console.log(selectedCountries, 'selectedCountries..');
-    console.log(formData.value);
+    // const selectedCountries = this.requestType.filter((country) => country.checked);
+    // console.log(selectedCountries, 'selectedCountries..');
+    console.log(formData.value, 'register..');
   }
-
+  //   this.webFormControlList[0].preferControlOrder = registerForm.value.subjectsIndex;
+  // this.webFormControlList[1].preferControlOrder = registerForm.value.subjectsIndex;
   drop(event: CdkDragDrop<string[]>) {
     moveItemInArray(this.webFormControlList, event.previousIndex, event.currentIndex);
     transferArrayItem(event.previousContainer.data, event.container.data, event.previousIndex, event.currentIndex);
+    // this.webFormControlList.forEach((t) => {
+    //  // if (t.preferControlOrder === event.previousIndex) {
+    //     t.preferControlOrder = event.currentIndex;
+    //  // }
+    // });
   }
+
 
   onFormSubmit(data: NgForm) {
     console.log(data, 'onFormSubmit..');
@@ -354,15 +362,15 @@ export class DsarformComponent implements OnInit {
         let updatedTextobj;
         const oldControlIndex = this.webFormControlList.findIndex((t) =>
           t.controllabel === this.existingControl.controllabel);
-        if (oldControlIndex) {
-          updatedTextobj = {
-            controllabel: formControls.value.lblText,
-            indexCount: trimLabel,
-            control: this.existingControl.control,
-            selectOptions: this.existingControl.selectOptions
-          };
-          this.dsarFormService.updateControl(this.webFormControlList[oldControlIndex], oldControlIndex, updatedTextobj);
-        }
+        //  if (oldControlIndex) {
+        updatedTextobj = {
+          controllabel: formControls.value.lblText,
+          indexCount: trimLabel,
+          control: this.existingControl.control,
+          selectOptions: this.existingControl.selectOptions
+        };
+        this.dsarFormService.updateControl(this.webFormControlList[oldControlIndex], oldControlIndex, updatedTextobj);
+        //  }
 
         // for (const x of this.webFormControlList) {
         //   if (x.controlId === this.selectedControlId) {
@@ -538,23 +546,75 @@ export class DsarformComponent implements OnInit {
     this.changeControlType = null;
   }
 
-  publishCCPAFormConfiguration() {
-    console.log(this.formName, 'formName..');
+  publishCCPAFormConfiguration(registerForm) {
+    const formValues: any = [];
+    formValues.push(registerForm.value);
+    console.log(registerForm.value, 'registerForm..');
+    // this.updateWebcontrolIndex(registerForm, this.webFormControlList);
     this.webFormControlList = this.dsarFormService.getFormControlList();
+    const controlArr: any = [];
+    Object.keys(registerForm.value).filter((t) => {
+      if (t.includes('Index')) {
+        controlArr.push(t);
+      }
+    });
+    // for (const i in this.webFormControlList) {
+     
+    //   if (this.webFormControlList[i].indexCount == controlArr[i]) {
+    //     this.webFormControlList[i].preferControlOrder = registerForm.value[controlArr[i]];
+    //   }
+    // }
+    this.webFormControlList.forEach(e1 =>  controlArr.forEach((e2)=> {
+      if(e1.indexCount === e2) {
+        e1.preferControlOrder = registerForm.value[e2];
+      }
+    }));
+   
+
+    console.log(this.webFormControlList, 'updated..webFormControlList..');
+    // this.webFormControlList.forEach((t)=>t.indexCount ==)
+    this.dsarFormService.setFormControlList(this.webFormControlList);
+    console.log(this.webFormControlList, 'webFormControlList..121');
+    //  this.webFormControlList = this.dsarFormService.getFormControlList();
+
     const formObject = {
       'form_name': this.formName,
       'form_status': 'Draft',
       'request_form': this.webFormControlList
-    }
-    if(this.selectedProperty.orgId !== undefined && this.selectedProperty.property.propid !== undefined) {
+    };
+
+  //  return false;
+    if (this.selectedProperty.orgId !== undefined && this.selectedProperty.property.propid !== undefined) {
       this.ccpaFormConfigService.createCCPAForm(this.selectedProperty.orgId, this.selectedProperty.property.propid, formObject)
-      .subscribe((data)=>console.log(data),(error)=>alert(JSON.stringify(error)));
+        .subscribe((data) => console.log(data), (error) => alert(JSON.stringify(error)));
     }
-   
+
     // selectedOrgProperty
   }
 
+  // updateWebcontrolIndex(indexData, arrayData) {
+  //   console.log(indexData, 'indexData..');
+  //  // this.webFormControlList = this.dsarFormService.getFormControlList();
+  //   const controlArr: any = [];
+  //   Object.keys(indexData.value).filter((t) => {
+  //     if (t.includes('Index')) {
+  //       controlArr.push(t);
+  //     }
+  // });
 
+  //   for (const i in arrayData) {
+  //     if (arrayData[i].indexCount === controlArr[i]) {
+  //       arrayData[i].preferControlOrder = indexData.value[controlArr[i]];
+  //     }
+
+  //   }
+  //   this.dsarFormService.setFormControlList(arrayData);
+
+  // }
+  createNewForm() {
+    this.dsarFormService.removeControls();
+    this.webFormControlList = this.dsarFormService.loadWebControls();
+  }
 
 }
 
