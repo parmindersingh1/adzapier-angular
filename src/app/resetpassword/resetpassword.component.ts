@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 import { AlertService, UserService, AuthenticationService } from './../_services';
 import { ActivatedRoute } from '@angular/router';
-
+import { MustMatch } from '../_helpers/must-match.validator';
 
 
 @Component({
@@ -19,6 +19,8 @@ export class ResetpasswordComponent implements OnInit {
   submitted = false;
   show: Boolean = false;
   navbarCollapsed: boolean = false;
+  successmessage: any;
+  errormessage: any;
   public id: string;
 
   constructor(
@@ -40,7 +42,17 @@ export class ResetpasswordComponent implements OnInit {
       token: [this.id],
       newpsw: ['', Validators.required, , Validators.pattern, Validators.minLength(6)],
       renewpsw: ['', Validators.required, , Validators.pattern, Validators.minLength(6)]
+    }, {
+      validator: MustMatch('newpsw', 'renewpsw')
     });
+
+    // this.changepasswordForm = this.formBuilder.group({
+    //   currentPassword: ['', Validators.required],
+    //   newPassword: ['', [Validators.required, Validators.minLength(6)]],
+    //   confirmPassword: ['', Validators.required]
+    // }, {
+    //   validator: MustMatch('newPassword', 'confirmPassword')
+    // });
   }
 
 
@@ -64,29 +76,14 @@ export class ResetpasswordComponent implements OnInit {
     // console.log(this.f.token.value, this.f.newpsw.value, this.f.renewpsw.value);
     this.userService.resetpassword(this.f.token.value, this.f.newpsw.value, this.f.renewpsw.value)
       .pipe(first())
-      .subscribe(
-        data => {
-          //debugger;
-          //this.alertService.success('Registration successful', true);
-          //this.router.navigate(['/login']);
-          console.log();
-        },
-        error => {
-          this.alertService.error(error);
-          this.loading = false;
-        });
-
-
-    if (this.f.newpsw.value !== this.f.renewpsw.value) {
-      alert('Please enter Same Passwords...!\nNew Password : ' + this.f.newpsw.value + '\nRe-enter Password: ' + this.f.renewpsw.value);
-    }
-    else {
-      if (this.f.newpsw.value != '' && this.f.renewpsw.value != '') {
-        this.show = true;
-        //alert('\nNew Password : '+this.f.newpsw.value+'\nRe-enter Password : '+this.f.renewpsw.value+'\nPassword Changed Successfully..!');
-      }
-
-    }
+      .subscribe((data) => {
+        if (data) {
+          this.show = true;
+          this.successmessage = data;
+          this.router.navigate(['/login']);
+        }
+      }, (error) => {
+        this.errormessage = error.Invalid_token;
+      });
   }
-
 }

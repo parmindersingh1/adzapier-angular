@@ -128,7 +128,10 @@ export class OrgpageComponent implements OnInit {
   loadOrganizationList() {
     this.orgservice.orglist().subscribe((data) => {
       this.orgList = Object.values(data)[0];
+      this.getPropertyList(this.orgList[0].orgid);
+      this.loadOrganizationDetails(this.orgList[0]);
     });
+  
   }
  
 
@@ -165,6 +168,7 @@ export class OrgpageComponent implements OnInit {
           this.showOrgDetails = false;
           this.loadOrganizationList();
           this.isEditable = false;
+          this.onResetEditOrganization();
         }
       }, (error) => {
         alert(JSON.stringify(error));

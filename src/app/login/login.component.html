@@ -51,12 +51,20 @@
                
               </div>
               <div class="text-center">
-                <button class="btn btn-brand-02 btn-block" type="submit">{{sign_in}} </button>
+                <button [disabled]="loading" class="btn btn-brand-02 btn-block" type="submit">
+                  <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                  {{sign_in}} </button>
              
                 <!-- <button class="btn btn-primary mr-2" type="reset" (click)="onReset()">Reset</button><br><br> -->
                 <!-- <a routerLink="/dashboard/analytics" >Goto Dashboard</a> -->
             
-            </div>
+             </div>
+
+             <!-- <button [disabled]="loading" class="btn btn-primary">
+              <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+              Login
+          </button> -->
+
               <!-- <button class="btn btn-brand-02 btn-block">Sign In</button> -->
               </form>
           </div>
