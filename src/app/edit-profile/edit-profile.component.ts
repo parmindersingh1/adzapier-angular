@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Validators, FormBuilder, FormGroup, NgForm } from '@angular/forms';
 import { AuthenticationService, UserService } from '../_services';
+import { TextBoxSpaceValidator } from '../_helpers/textboxspace.validator';
 
 @Component({
   selector: 'app-edit-profile',
@@ -12,7 +13,8 @@ export class EditProfileComponent implements OnInit {
   profileForm: FormGroup;
   loading = false;
   submitted = false;
-  show: boolean = false;
+  show: boolean = true;
+  isShowbtnVisible = false;
   navbarCollapsed: boolean = false;
   returnUrl: string;
   errorMsg: string;
@@ -30,7 +32,7 @@ export class EditProfileComponent implements OnInit {
   city: any;
   state: any;
   zipcode: any;
-  roles: any;
+  // roles: any;
   constructor(
     private formBuilder: FormBuilder,
     private authenticationService: AuthenticationService,
@@ -38,20 +40,20 @@ export class EditProfileComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-  //  this.isDisabled = true;
+    //  this.isDisabled = true;
     const zipRegex = '^[0-9]*$';
+    const spaceRegx = '^\S*$';
     this.profileForm = this.formBuilder.group({
-      firstName: ['', [Validators.required, Validators.minLength(3)]],
+      firstName: ['', [Validators.required, Validators.minLength(3)]], // TextBoxSpaceValidator.cannotContainSpace
       lastName: ['', [Validators.required, Validators.minLength(3)]],
-      newemail: ['', [Validators.required, Validators.email]],
+      newemail: [''],
       addressone: ['', [Validators.required]],
-      addresstwo: ['', [Validators.required]],
       city: ['', [Validators.required]],
       state: ['', [Validators.required]],
       zipcode: ['', [Validators.required, Validators.pattern(zipRegex)]],
-      roles: ['', [Validators.required]]
     });
     this.profileForm.disable();
+
     this.pathValues();
   }
 
@@ -68,18 +70,24 @@ export class EditProfileComponent implements OnInit {
         lastName: this.profileForm.value.lastName,
         email: this.profileForm.value.newemail,
         address1: this.profileForm.value.addressone,
-        address2: this.profileForm.value.addresstwo,
+        //  address2: this.profileForm.value.addresstwo,
         city: this.profileForm.value.city,
         state: this.profileForm.value.state,
-        zipcode: this.profileForm.value.zipcode,
-        roles: this.profileForm.value.roles
-      }; 
+        zipcode: this.profileForm.value.zipcode
+        //   roles: this.profileForm.value.roles
+      };
       this.userService.update(editObj)
         .subscribe((data) => {
           if (data) {
+            this.isShowbtnVisible = false;
+            this.show = true;
             alert('Details has been updated successfully!');
             this.userService.getCurrentUser.emit(data);
           }
+        }, (error) => {
+          alert(error);
+          this.isShowbtnVisible = true;
+          this.show = false;
         }
         );
       this.profileForm.disable();
@@ -89,16 +97,31 @@ export class EditProfileComponent implements OnInit {
   pathValues() {
     this.userService.getLoggedInUserDetails().subscribe((user) => {
       this.userProfile = Object.values(user);
+      console.log(this.userProfile, 'userProfile..');
       this.profileForm.patchValue({
         newemail: this.userProfile[0].email,
         firstName: this.userProfile[0].firstname,
-        lastName: this.userProfile[0].lastname
+        lastName: this.userProfile[0].lastname,
+        addressone: this.userProfile[0].address1,
+        city: this.userProfile[0].city,
+        state: this.userProfile[0].state,
+        zipcode: this.userProfile[0].zipcode,
       });
     });
   }
 
   editUserDetails() {
-    this.profileForm.enable();
+    this.show = !this.show;
+    this.isShowbtnVisible = false;
+    if (!this.show) {
+      this.profileForm.enable();
+      this.profileForm.controls['newemail'].disable();
+      this.isShowbtnVisible = true;
+    } else {
+      this.profileForm.disable();
+      this.profileForm.controls['newemail'].disable();
+    }
+
   }
 
   editUserEmail() {

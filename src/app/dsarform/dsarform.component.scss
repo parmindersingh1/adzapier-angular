@@ -172,7 +172,7 @@
   }
   
   .example-box {
-    padding: 20px 10px;
+    padding: 8px 10px;
     border-bottom: solid 1px #ccc;
     color: rgba(0, 0, 0, 0.87);
     display: flex;
@@ -211,4 +211,8 @@
 
   .borderzero{
     border:0;
+  }
+
+  .example-box label {
+    margin-bottom: 0;
   }

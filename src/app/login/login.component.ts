@@ -74,12 +74,14 @@ export class LoginComponent implements OnInit {
             .pipe(first())
             .subscribe(
                 data => {
+                    console.log(data,'login data..');
                     this.authenticationService.userLoggedIn.next(true);
                     this.authenticationService.currentUserSubject.next(data);
                     localStorage.setItem('currentUser', JSON.stringify(data));
                     this.router.navigate(['/home/dashboard/analytics']);
                 },
                 error => {
+                    console.log(error,'login error..');
                     this.alertService.error(error);
                     this.loading = false;
                 });
