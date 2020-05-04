@@ -1,8 +1,10 @@
-<p>webforms works!</p>
 <!-- selectedProperty | {{selectedProperty | json}} -->
 <div class="row">
     <div class="col-sm-6">
-    <!-- <button class="btn btn-sm btn-primary" (click)="getCCPAFormList()">GET CCPA Form List</button> -->
+        <div class="heading_border">
+            <h4 class="mg-b-10">Web Forms for {{currentPropertyName}}</h4>
+        </div>
+        <!-- <button class="btn btn-sm btn-primary" (click)="getCCPAFormList()">GET CCPA Form List</button> -->
     </div>
     <div class="col-sm-6 text-right">
         <button class="btn btn-sm btn-success" routerLink="/dsarform">Create new form</button>
@@ -10,16 +12,25 @@
 </div>
 <div class="row">
     <div class="col-sm-12 webformlist">
-        <ul>
-            <li *ngFor="let data of formList">
+        <div *ngIf="loading">
+            <span class="spinner-border spinner-border-sm mr-1"></span> Loading
+        </div>
+        <!-- <div *ngIf="formList.length == '0'">No web form found</div> -->
+        <hr/>
+        <!-- {{formList | json}} -->
+        <ul> 
+            <li>
+                <div *ngIf="formList.length == '0' && !loading">No web form found</div>
                 <!-- data.response {{data.response | json}} -->
-                <div class="card" *ngFor="let list of data.response">
-                   <div  (click)="showForm(list)"> {{list.form_name}} </div>
-                   <div *ngIf="list.form_name === ''">form name not found{{list.form_name}}</div>
+                <div class="card col-sm-3" *ngFor="let data of formList;let i = index;">
+                    <span class="webform-title"> {{data.form_name?data.form_name:'form name not available'}}</span>
+                    <!-- <span class="cardtext">{{currentPropertyName}}</span> -->
+                    <span class="txt-bold">{{data.form_status}}</span>
+                   <span> <button (click)="showForm(data)" class="btn btn-primary view">View</button></span>
                 </div>
-                
             </li>
+           
         </ul>
-        
+
     </div>
 </div>

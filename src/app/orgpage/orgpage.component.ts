@@ -3,6 +3,7 @@ import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { OrganizationService, UserService } from '../_services';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { DomSanitizer } from '@angular/platform-browser';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-orgpage',
@@ -41,7 +42,8 @@ export class OrgpageComponent implements OnInit {
   constructor(private formBuilder: FormBuilder,
               private orgservice: OrganizationService,
               private modalService: NgbModal, private sanitizer: DomSanitizer,
-              private userService: UserService
+              private userService: UserService,
+              private router: Router
   ) { }
 
   ngOnInit() {
@@ -52,16 +54,16 @@ export class OrgpageComponent implements OnInit {
     this.organisationPropertyForm = this.formBuilder.group({
       propertyname: ['', [Validators.required]],
       website: ['', [Validators.required, Validators.pattern(urlRegex)]],
-      logourl: ['', [Validators.required]]
+      logourl: ['']
     });
     this.editOrganisationForm = this.formBuilder.group({
-      organizationname: ['',[Validators.required]],
+      organizationname: ['', [Validators.required]],
       taxidnumber: [''],
-      addressone: ['',[Validators.required]],
-      addresstwo: ['',[Validators.required]],
-      cityname: ['',[Validators.required]],
-      statename: ['',[Validators.required]],
-      zipcodenum: ['',[Validators.required, Validators.pattern(zipRegex)]]
+      addressone: ['', [Validators.required]],
+      addresstwo: ['', [Validators.required]],
+      cityname: ['', [Validators.required]],
+      statename: ['', [Validators.required]],
+      zipcodenum: ['', [Validators.required, Validators.pattern(zipRegex)]]
     });
     this.loadOrganizationList();
   
@@ -97,7 +99,10 @@ export class OrgpageComponent implements OnInit {
           logo_url: this.organisationPropertyForm.value.logourl
         };
         this.orgservice.addProperties(this.selectedOrg.orgid, reqObj).subscribe((result) => {
-          this.getPropertyList(this.selectedOrg.orgid);
+          if (result) {
+            alert('New property has been added');
+            this.getPropertyList(this.selectedOrg.orgid);
+          }
         }, (error) => {
           console.log(error, 'error..');
         });
@@ -245,7 +250,6 @@ export class OrgpageComponent implements OnInit {
     this.statename = data.state;
     this.zipcodenum = data.zipcode;
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
-      alert('edit mp..');
       this.editOrganisationForm.reset();
       this.closeResult = `Closed with: ${result}`;
     }, (reason) => {
@@ -257,6 +261,10 @@ export class OrgpageComponent implements OnInit {
   onResetEditOrganization() {
     this.editOrganisationForm.reset();
     this.modalService.dismissAll('Data Saved!');
+  }
+
+  clickToManage(propertyID) {
+    this.router.navigate(['propertydashboard/', propertyID]);
   }
  
 }

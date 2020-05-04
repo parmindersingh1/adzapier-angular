@@ -54,6 +54,10 @@ i {
     padding: 0;
 }
 
+.dropdown-menu ul li {
+    display: inline-flex;
+}
+
 .dropdown-item{
     padding: .25rem 0.5rem;
     cursor: pointer;
@@ -71,8 +75,11 @@ i {
 }
 
 .active {
-    background-color: #0148ae;
-    color: #ffffff !important;
+    color: #0148ae !important;
+}
+
+.dropdown-item.active, .dropdown-item:active {
+    background: none !important;
 }
 
 .activeFirstIndex {
@@ -100,4 +107,19 @@ a.dropdown-item.activeFirstIndex:hover {
 
 .fa-sitemap {
     margin-right: 12px !important;
+}
+
+.userInitials {
+    border: 2px solid #666;
+    border-radius: 75px;
+    font-size: 15px;
+    padding: 6px 5px;
+    color: #666;
+    height: 35px;
+    font-weight: bold;
+}
+
+a.nav-link.dropdown-link .userInitials:hover {
+    border: 2px solid #0148ae;
+    color: #0148ae;
 }

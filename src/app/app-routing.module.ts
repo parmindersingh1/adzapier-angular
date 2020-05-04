@@ -19,6 +19,7 @@ import { PagenotfoundComponent1 } from './errorpages/404page.component';
 import { DsarformComponent } from './dsarform/dsarform.component';
 import { WebformsComponent } from './webforms/webforms.component';
 import { EditwebformComponent } from './editwebform/editwebform.component';
+import { PropertydashboardComponent } from './propertydashboard/propertydashboard.component';
 
 
 const routes: Routes = [
@@ -39,20 +40,23 @@ const routes: Routes = [
   { path: 'internalerror', component: InternalerrorComponent },
   {path : 'dsarform', component: DsarformComponent, canActivate: [AuthGuard]},
   {path : 'webforms', component: WebformsComponent, canActivate: [AuthGuard]},
-  {path : 'editwebforms', component: EditwebformComponent, canActivate: [AuthGuard]},
+  {path : 'editwebforms/:crid', component: EditwebformComponent, canActivate: [AuthGuard]},
+  {path : 'propertydashboard/:propid', component: PropertydashboardComponent, canActivate: [AuthGuard]},
+  // {path : 'app1/editwebforms/:crid', component: PublishedwebformComponent, canActivate: [AuthGuard]},
   { path: '', redirectTo: 'home/dashboard/analytics', pathMatch: 'full', canActivate: [AuthGuard] },
   
   // { path: '', redirectTo: 'home/dashboard/analytics', pathMatch:'full' },
-
-
-
-
+ 
   // otherwise redirect to home
   { path: '**', redirectTo: '404page' }
 ];
 
+
+
+
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes)
+  ],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

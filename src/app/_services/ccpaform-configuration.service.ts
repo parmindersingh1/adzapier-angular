@@ -12,9 +12,9 @@ export class CCPAFormConfigurationService extends WebControls {
   webFormControlList: CCPAFormFields;
   captureFormDataWhileNavigate = new BehaviorSubject<any>('');
   currentFormData = this.captureFormDataWhileNavigate.asObservable();
-  constructor(private httpClient: HttpClient) { 
+  constructor(private httpClient: HttpClient) {
     super();
-    this.loadCreatedWebControls();
+   // this.loadCreatedWebControls();
   }
 
   setFormControlList(data: CCPAFormFields[]) {
@@ -50,10 +50,17 @@ export class CCPAFormConfigurationService extends WebControls {
     localStorage.setItem('CCPAformControlList', JSON.stringify(controlList));
   }
 
+  removeControls() {
+    return localStorage.removeItem('CCPAformControlList');
 
+  }
 
   createCCPAForm(orgId, propId, formObject) {
     return this.httpClient.post<any>(environment.apiUrl + '/ccpa/form/' + orgId + '/' + propId, formObject);
+  }
+
+  updateCCPAForm(orgId, propId, ccparequestid, updatedformObject) {
+    return this.httpClient.put<any>(environment.apiUrl + '/ccpa/form/' + orgId + '/' + propId + '/' + ccparequestid, updatedformObject);
   }
 
   getCCPAFormList(orgId, propId): Observable<any> {

@@ -68,7 +68,7 @@ export class HeaderComponent implements OnInit {
     });
     this.navigationMenu = [{
       'showlink': 'Application',
-      'subcategory': [{ 'showlink': 'CCPA', 'routerLink': '/dsarform' }, { 'showlink': 'DSAR', 'routerLink': '/dsarform' }]
+      'subcategory': [{ 'showlink': 'CCPA', 'routerLink': '/' }, { 'showlink': 'DSAR', 'routerLink': '/' }]
     }];
     this.authService.currentUser.subscribe(x => this.currentUser = x);
     if (this.currentUser) {
@@ -185,6 +185,7 @@ export class HeaderComponent implements OnInit {
    // this.orgservice.getSelectedOrgProperty.emit(obj);
   //  this.firstElement = false;
     this.selectedOrgProperties.push(item);
+    this.router.navigate(['/webforms']);
   }
 
   isPropSelected(selectedItem): boolean {
@@ -199,4 +200,12 @@ export class HeaderComponent implements OnInit {
     this.isCollapsed ? this.firstElement = true : this.firstElement = false;
     return this.isCollapsed = !this.isCollapsed;
   }
+
+  nameInitials(str) {
+    const firstChar = str.charAt(0);
+    const spacePos = str.indexOf(' ');
+    const secondChar = str.charAt(spacePos + 1);
+    return firstChar + secondChar;
+  }
+  
 }

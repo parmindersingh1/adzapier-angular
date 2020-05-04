@@ -17,7 +17,11 @@ export class DsarformService extends WebControls {
   }
 
   getFormControlList() {
-    return JSON.parse(localStorage.getItem('formControlList'));
+    if (localStorage.getItem('formControlList') !== null) {
+      return JSON.parse(localStorage.getItem('formControlList'));
+    } else {
+      this.loadWebControls();
+    }
   }
 
   addControl(newItem) {
@@ -46,7 +50,7 @@ export class DsarformService extends WebControls {
   }
 
   removeControls() {
-    return localStorage.clear();
+    return localStorage.removeItem('formControlList');
   }
 
 }

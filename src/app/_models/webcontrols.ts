@@ -96,7 +96,7 @@ loadWebControls() {
 
 }
 
-loadCreatedWebControls() {
+/*loadCreatedWebControls() {
 // localStorage.setItem('CCPAformControlList', JSON.stringify(data));
 if (localStorage.getItem('CCPAformControlList') === null || localStorage.getItem('CCPAformControlList') === undefined) {
 
@@ -168,7 +168,7 @@ if (localStorage.getItem('CCPAformControlList') === null || localStorage.getItem
     console.log('else webcontrolList..');
 }
 
-}
+}*/
 
     // loadStateAndCountry() {
     //     this.countries = [
