@@ -39,7 +39,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { WebformsComponent } from './webforms/webforms.component';
 import { EditwebformComponent } from './editwebform/editwebform.component';
-
+import { PropertydashboardComponent } from './propertydashboard/propertydashboard.component';
 
 
 export const isMock = environment.mock;
@@ -65,7 +65,8 @@ export const isMock = environment.mock;
     PagenotfoundComponent1,
     DsarformComponent,
     WebformsComponent,
-    EditwebformComponent
+    EditwebformComponent,
+    PropertydashboardComponent
   ],
   imports: [
     BrowserModule,

@@ -92,7 +92,7 @@
                             {{i+1}}
                         </td>
                         <td>
-                            <img width="50" height="50" [src]="list.logo_url" width="150px" />
+                            <img width="50" height="50" [src]="list.logo_url?list.logo_url:'assets/imgs/no_image.png'" width="150px" />
                         </td>
                         <td>
                             {{list.propname}}
@@ -104,7 +104,7 @@
                             <button class="btn btn-outline-primary" (click)="editModalPopup(mymodal,list)">Edit</button>
                         </td>
                         <td>
-                            <button class="btn btn-primary">Manage</button>
+                            <button class="btn btn-primary" (click)="clickToManage(list.pid)">Manage</button>
                         </td>
                         <td><button class="btn btn-danger">Delete</button></td>
                     </tr>
@@ -250,10 +250,7 @@
             <div class="form-group">
                 <label for="logourl">Logo URL</label>
                 <input type="text" class="form-control" name="logourl" formControlName="logourl"
-                    [(ngModel)]="logourl" [ngClass]="{ 'is-invalid': submitted && orgProp.logourl.errors }" />
-                <div *ngIf="submitted && orgProp.logourl.errors" class="invalid-feedback">
-                    <div *ngIf="orgProp.logourl.errors.required">Logo URL is required</div>
-                </div>
+                    [(ngModel)]="logourl" />
             </div>
             <div class="modal-footer">
                 <button class="btn btn-outline-dark">Save</button>

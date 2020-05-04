@@ -1,11 +1,4 @@
-.cdk-drop-list-dragging .cdk-drag {
-    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
-  }
-  
-  .cdk-drag-animating {
-    transition: transform 300ms cubic-bezier(0, 0, 0.2, 1);
-  }
-
+ 
   .example-boundary {
     border: 1px solid #000;
   }
@@ -22,26 +15,7 @@
   .card-body {
     padding: 5px 0;
   }
-
-  .drag-list {
-    background: #f1f1f1;
-    padding: 3px 4px;
-    margin: 10px 0;
-    border: 1px solid #ccc;
-    cursor: move;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-  }
-
-  .drag-list span{
-    padding: 5px 3px 0 3px;
-  }
-
-  .drag-list span.control-label{
-    width: 100%;
-    text-align: left;
-  }
+ 
 
   .active {
     background: #f90 !important;
@@ -123,4 +97,22 @@
 
   .btn-sm {
     padding: 3px 5px 5px 5px;
+  }
+
+  .example-box {
+     border-bottom: 1px solid #ccc;
+     padding-bottom: 10px;
+  }
+
+  .example-box label {
+    font-weight: bold;
+    font-size: 14px;
+  }
+
+  .formwrapper{
+    border: 1px solid #ccc;
+  }
+
+  .formwrapper > form {
+    width: 100%;
   }

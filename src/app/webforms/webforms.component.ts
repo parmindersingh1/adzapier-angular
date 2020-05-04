@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CCPAFormConfigurationService } from '../_services/ccpaform-configuration.service';
 import { OrganizationService } from '../_services/organization.service';
-import { Router } from '@angular/router';
+import { Router, NavigationEnd } from '@angular/router';
+import { switchMap, flatMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-webforms',
@@ -12,40 +13,56 @@ export class WebformsComponent implements OnInit {
   selectedProperty: any;
   currentOrgID: any;
   propertyID: any;
+  currentPropertyName: any;
   formList: any = [];
+  loading = false;
+  mySubscription;
   constructor(private ccpaFormConfigService: CCPAFormConfigurationService,
               private organizationService: OrganizationService,
               private router: Router) { }
 
   ngOnInit() {
+    this.loading = true;
     this.organizationService.currentProperty.subscribe((data) => {
-      console.log(data, 'data..prp..');
-      this.currentOrgID = data.orgId;
-      this.propertyID = data.property.propid;
-      // this.selectedProperty = data;
+      this.currentPropertyName = data.property.propName;
+      this.getCCPAFormList();
     });
-    this.getCCPAFormList();
-    // this.organizationService.getSelectedOrgProperty.subscribe((response) => this.selectedProperty = response);
-    // console.log(this.selectedProperty,'ngoninit...');
   }
 
 
   getCCPAFormList() {
-    this.organizationService.getSelectedOrgProperty.subscribe((response) => this.selectedProperty = response);
-    //  this.organizationService.getOrganization.subscribe((response) => this.currentOrgID = response);
-    // console.log(this.currentOrgID,'currentOrgID..');
-    console.log(this.selectedProperty, 'selectedProperty..');
+    this.loading = true;
     this.formList.length = 0;
-    this.ccpaFormConfigService.getCCPAFormList(this.currentOrgID, this.propertyID)
-      .subscribe((data) => {
-        this.formList.push(data);
-        console.log(this.formList, 'fl..');
-      }, (error) => console.log(error, 'get error..'));
+   
+    this.organizationService.currentProperty.pipe(
+      // flatMap((res1) => this.currentPropertyName = res1.property.propName),
+      switchMap((res1) => this.ccpaFormConfigService.getCCPAFormList(res1.orgId, res1.property.propid)),
+    ).subscribe((data) => {
+      if (data.response.length === 0) {
+        this.loading = false;
+        return this.formList.length = 0;
+      } else {
+        this.formList = data.response;
+        this.loading = false;
+        return this.formList;
+      }
+     
+    }, (error) => {
+            console.log(error, 'get error..');
+            this.loading = false;
+       });
+
+
   }
 
   showForm(data) {
     this.ccpaFormConfigService.captureCurrentSelectedFormData(data);
-    this.router.navigate(['/editwebforms', {crid: data.crid}]);
+    this.router.navigate(['/dsarform', {crid: data.crid}]);
   }
+
+  // ngOnDestroy() {
+  //   if (this.mySubscription) {
+  //     this.mySubscription.unsubscribe();
+  //   }
+  // }
 }
-// { crid: data.crid, oid: data.OID, pid: data.PID, propertyname: data.form_name }

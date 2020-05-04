@@ -15,9 +15,10 @@
           </a>
           <ul *dropdownMenu class="dropdown-menu">
             <ng-container *ngFor="let item of menu.property;let first = first; trackBy: trackByMethod">
-              <li *ngIf="!item.items"  [ngClass]="[(first && !activeProp) || (item.propName === activeProp) ? 'activeFirstIndex' : '' ]" role="menuitem" (click)="isCurrentPropertySelected(item)">
-                <a class="dropdown-item" [ngClass]="[isPropSelected(item) ? 'active' : '']"> 
-                {{item.propName}}
+              <li *ngIf="!item.items"  role="menuitem" (click)="isCurrentPropertySelected(item)">
+                <!--[ngClass]="[(first && !activeProp) || (item.propName === activeProp) ? 'activeFirstIndex' : '' ]"-->
+               <a class="dropdown-item" [ngClass]="[isPropSelected(item) ? 'active' : '']"> 
+                <span *ngIf="(first && !activeProp) || (item.propName === activeProp)"><i class="fa fa-check-circle"></i></span>  {{item.propName}}
                 </a>
               </li>
               <li *ngIf="item.items" role="menuitem" dropdown triggers="mouseover" placement="top right"
@@ -69,12 +70,12 @@
         </div>
         <div *ngIf="menu.items" dropdown container="body" placement="bottom right">
           <a class="nav-link dropdown-link" dropdownToggle (click)="false">
-            <div class="avatar avatar-sm"><img src="assets/imgs/user.png" width="24" height="24" class="rounded-circle" alt=""></div>
+            <div class="userInitials">{{nameInitials(currentLoggedInUser)}}</div>
             </a>
           <ul *dropdownMenu class="dropdown-menu dropdown-menu-right">
             <ng-container *ngFor="let item of menu.items; first as isFirst">
               <div *ngIf="isFirst" class="loggedin-user"> 
-                <div class="avatar avatar-lg mg-b-15"><img src="assets/imgs/user.png" width="32" height="32" class="rounded-circle" alt=""></div>
+                <!-- <div class="avatar avatar-lg mg-b-15"><img src="assets/imgs/user.png" width="32" height="32" class="rounded-circle" alt=""></div> -->
                  {{currentLoggedInUser}}</div>
               <li *ngIf="!item.items" role="menuitem">
                 <a class="dropdown-item" *ngIf="item.label !== 'Signout'" routerLink="{{item.routerLink}}">

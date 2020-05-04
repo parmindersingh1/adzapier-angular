@@ -216,3 +216,35 @@
   .example-box label {
     margin-bottom: 0;
   }
+
+  .example-box h3 {
+    font-size: 14px;
+    font-weight: bold;
+  }
+
+  .example-box label {
+    font-weight: bold;
+  }
+
+  .loader-spinner {
+    color: black;
+    font-size: 14px;
+    display: flex;
+    margin-bottom: 10px;
+  }
+
+  .loader-spinner span {
+    font-size: 13px;
+    font-weight: bold;
+    margin-left: 10px;
+  }
+
+  .loader-spinner .spinner-border {
+    width: 1.5rem !important;
+    height: 1.5rem !important;
+  }
+
+  
+.displayblock {
+  display: block;
+}
