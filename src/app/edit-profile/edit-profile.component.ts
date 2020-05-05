@@ -43,13 +43,14 @@ export class EditProfileComponent implements OnInit {
     //  this.isDisabled = true;
     const zipRegex = '^[0-9]*$';
     const spaceRegx = '^\S*$';
+    const strRegx = '^[a-zA-Z \-\']+';
     this.profileForm = this.formBuilder.group({
-      firstName: ['', [Validators.required, Validators.minLength(3)]], // TextBoxSpaceValidator.cannotContainSpace
-      lastName: ['', [Validators.required, Validators.minLength(3)]],
+      firstName: ['', [Validators.required, Validators.minLength(3), Validators.pattern(strRegx)]],
+      lastName: ['', [Validators.required, Validators.minLength(3), Validators.pattern(strRegx)]],
       newemail: [''],
       addressone: ['', [Validators.required]],
-      city: ['', [Validators.required]],
-      state: ['', [Validators.required]],
+      city: ['', [Validators.required, Validators.pattern(strRegx)]],
+      state: ['', [Validators.required, Validators.pattern(strRegx)]],
       zipcode: ['', [Validators.required, Validators.pattern(zipRegex)]],
     });
     this.profileForm.disable();

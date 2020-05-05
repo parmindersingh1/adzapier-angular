@@ -34,6 +34,7 @@
                         placeholder="Enter your organization" (ngModelChange)="clearError()">
                     <div *ngIf="submitted && f.organization.errors" class="invalid-feedback">
                         <div *ngIf="f.organization.errors.required">Organization is required</div>
+                        <div *ngIf="f.organization.errors.pattern">Organization Allow Only Alphabets</div>
                     </div>
 
                 </div>

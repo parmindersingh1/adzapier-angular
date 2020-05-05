@@ -35,10 +35,11 @@ export class RegisterComponent implements OnInit {
     }
 
     ngOnInit() {
+        const strRegx = '^[a-zA-Z \-\']+';
         this.regForm = this.formBuilder.group({
             firstName: ['', [Validators.required, Validators.pattern]],
             lastName: ['', [Validators.required, Validators.pattern]],
-            organization: ['', [Validators.required, Validators.pattern]],
+            organization: ['', [Validators.required, Validators.pattern(strRegx)]],
             email: ['', [Validators.required, Validators.pattern]],
             password: ['', [Validators.required, Validators.pattern, Validators.minLength(6)]],
             confirmpassword: ['', [Validators.required, Validators.pattern, Validators.minLength(6)]]
