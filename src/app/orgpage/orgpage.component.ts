@@ -51,18 +51,19 @@ export class OrgpageComponent implements OnInit {
     this.isEditProperty = false;
     const urlRegex = '(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?';
     const zipRegex = '^[0-9]*$'; //'^[0-9]{6}(?:-[0-9]{4})?$';
+    const strRegx = '^[a-zA-Z \-\']+';
     this.organisationPropertyForm = this.formBuilder.group({
       propertyname: ['', [Validators.required]],
       website: ['', [Validators.required, Validators.pattern(urlRegex)]],
       logourl: ['']
     });
     this.editOrganisationForm = this.formBuilder.group({
-      organizationname: ['', [Validators.required]],
+      organizationname: ['', [Validators.required, Validators.pattern(strRegx)]],
       taxidnumber: [''],
       addressone: ['', [Validators.required]],
       addresstwo: ['', [Validators.required]],
-      cityname: ['', [Validators.required]],
-      statename: ['', [Validators.required]],
+      cityname: ['', [Validators.required, Validators.pattern(strRegx)]],
+      statename: ['', [Validators.required,  Validators.pattern(strRegx)]],
       zipcodenum: ['', [Validators.required, Validators.pattern(zipRegex)]]
     });
     this.loadOrganizationList();
