@@ -33,7 +33,7 @@
                         </div>
                     </ng-template>
                     <ng-template ngbPanelContent>
-                        <div cdkDropList #todoList="cdkDropList" [cdkDropListData]="webFormControlList"
+                        <div cdkDropList [cdkDropListData]="webFormControlList"
                             [cdkDropListConnectedTo]="[doneList]" class="example-list"
                             (cdkDropListDropped)="drop($event)">
                            
@@ -219,7 +219,7 @@
                 </div>
                 <!-- <h3>Form Name: {{propertyname}}</h3> -->
             </div>
-            <div cdkDropList #doneList="cdkDropList" [cdkDropListData]="webFormControlList"
+            <div cdkDropList [cdkDropListData]="webFormControlList"
                 [cdkDropListConnectedTo]="[todoList]" class="example-list" (cdkDropListDropped)="drop($event)">
                 <div *ngFor="let webcontrol of webFormControlList; let k = index">
                     <!-- {{isContainHeaderLogo(webcontrol)}} -->
