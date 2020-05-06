@@ -33,9 +33,8 @@
                         </div>
                     </ng-template>
                     <ng-template ngbPanelContent>
-                        <div cdkDropList [cdkDropListData]="webFormControlList"
-                            [cdkDropListConnectedTo]="[doneList]" class="example-list"
-                            (cdkDropListDropped)="drop($event)">
+                        <div cdkDropList #listOne="cdkDropList" [cdkDropListData]="webFormControlList"
+                            [cdkDropListConnectedTo]="[listTwo]" class="example-list" (cdkDropListDropped)="drop($event)">
                            
                             <div *ngIf="!isAddingFormControl">
                             <div *ngIf="!isEditingList">
@@ -219,14 +218,15 @@
                 </div>
                 <!-- <h3>Form Name: {{propertyname}}</h3> -->
             </div>
-            <div cdkDropList [cdkDropListData]="webFormControlList"
-                [cdkDropListConnectedTo]="[todoList]" class="example-list" (cdkDropListDropped)="drop($event)">
-                <div *ngFor="let webcontrol of webFormControlList; let k = index">
-                    <!-- {{isContainHeaderLogo(webcontrol)}} -->
-                    <div *ngIf="k===0" class="col-sm-12 text-center mt-3"> 
-                        <img class="img-responsive logowidth" [src]="webcontrol.logoURL?webcontrol.logoURL:'assets/imgs/no_image.png'" width="150px" />
-                    </div>
+            <div *ngFor="let webcontrol of webFormControlList; let k = index">
+                <!-- {{isContainHeaderLogo(webcontrol)}} -->
+                <div *ngIf="k===0" class="col-sm-12 text-center mt-3"> 
+                    <img class="img-responsive logowidth" [src]="webcontrol.logoURL?webcontrol.logoURL:'assets/imgs/no_image.png'" width="150px" />
                 </div>
+            </div>
+            <div cdkDropList #listTwo="cdkDropList" [cdkDropListData]="webFormControlList"
+                [cdkDropListConnectedTo]="[listOne]" class="example-list" (cdkDropListDropped)="drop($event)">
+                
                 <form #registerForm="ngForm" (ngSubmit)="register(registerForm)">
 
                     <div class="example-box" *ngFor="let webcontrol of webFormControlList; let j = index;" cdkDrag
