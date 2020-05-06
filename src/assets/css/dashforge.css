@@ -4379,7 +4379,9 @@ input[type="button"].btn-block {
     border-top-left-radius: 0;
     border-top-right-radius: 0; }
   .accordion > .card .card-header {
-    margin-bottom: -1px; }
+    margin-bottom: -1px;
+    padding: 10px 10px;
+  }
 
 .breadcrumb {
   display: flex;

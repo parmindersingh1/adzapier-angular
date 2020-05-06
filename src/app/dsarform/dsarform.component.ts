@@ -68,7 +68,7 @@ export class DsarformComponent implements OnInit, OnDestroy {
   activatedRouteQuery: any;
   loading = false;
   previewPublishedForm: any;
-
+  headerlogoURL: any;
   controlOption = [
     {
       id: 1,
@@ -138,10 +138,11 @@ export class DsarformComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.organizationService.currentPropertySource.subscribe((response) => {
-      console.log(response,'response..org');
-      this.selectedProperty = response.property.propName;
-      this.orgId = response.orgId;
-      this.propId = response.property.propid;
+      if (response !== '') {
+        this.selectedProperty = response.property.propName;
+        this.orgId = response.orgId;
+        this.propId = response.property.propid;
+      }
     });
 
     // this.organizationService.getSelectedOrgProperty.subscribe((response) => {
@@ -345,7 +346,9 @@ export class DsarformComponent implements OnInit, OnDestroy {
         };
         if (this.crid) {
           //   this.ccpaFormConfigService.setFormControlList(this.webFormControlList);
-          this.ccpaFormConfigService.updateControl(this.webFormControlList[oldControlIndex], oldControlIndex, updatedObj);
+          this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
+          const customControlIndex = this.webFormControlList.findIndex((t) => t.controllabel === this.existingControl.controllabel);
+          this.ccpaFormConfigService.updateControl(this.webFormControlList[customControlIndex], customControlIndex, updatedObj);
           this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
         } else {
           this.dsarFormService.updateControl(this.webFormControlList[oldControlIndex], oldControlIndex, updatedObj);
@@ -431,6 +434,26 @@ export class DsarformComponent implements OnInit, OnDestroy {
 
   }
 
+  addHeaderLogo() {
+    const newWebControl = {
+      control: 'img',
+      controllabel: 'Header Logo',
+      logoURL: this.headerlogoURL
+    };
+    if (this.crid) {
+      this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
+      const customControlIndex = this.webFormControlList.findIndex((t) => t.controlId === 'headerlogo');
+      this.ccpaFormConfigService.updateControl(this.webFormControlList[customControlIndex], customControlIndex, newWebControl);
+      this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
+    } else {
+      this.webFormControlList = this.dsarFormService.getFormControlList();
+      const customControlIndex = this.webFormControlList.findIndex((t) => t.controlId === 'headerlogo');
+      this.dsarFormService.updateControl(this.webFormControlList[customControlIndex], customControlIndex, newWebControl);
+      this.webFormControlList = this.dsarFormService.getFormControlList();
+    }
+ 
+  }
+
   onChangeEvent(event) {
     console.log(event, 'event...');
     this.selectedFormOption = event.currentTarget.value;
@@ -494,7 +517,11 @@ export class DsarformComponent implements OnInit, OnDestroy {
   }
 
   isCustomControlWithRadioBtn(item): boolean {
-    return item.controlId.startsWith('Custom') ? true : false;
+      return item.controlId.startsWith('Custom') ? true : false;
+  }
+
+  isContainHeaderLogo(item): boolean {
+    return item.control.startsWith('img') ? true : false;
   }
 
   cancelAddingFormControl() {

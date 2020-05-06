@@ -41,7 +41,6 @@ import { WebformsComponent } from './webforms/webforms.component';
 import { EditwebformComponent } from './editwebform/editwebform.component';
 import { PropertydashboardComponent } from './propertydashboard/propertydashboard.component';
 
-
 export const isMock = environment.mock;
 @NgModule({
   declarations: [

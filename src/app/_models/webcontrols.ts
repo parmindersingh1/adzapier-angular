@@ -28,6 +28,13 @@ loadWebControls() {
 
         const controlsList = [
             {
+                control: 'img',
+                controllabel: 'Header Logo',
+                controlId: 'headerlogo',
+                indexCount: 'headerlogoIndex',
+                logoURL: ''
+            },
+            {
                 control: 'radio',
                 controllabel: 'I am a (an)',
                 controlId: 'subjecttype',
