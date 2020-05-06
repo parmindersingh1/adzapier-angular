@@ -91,8 +91,8 @@
                         <td>
                             {{i+1}}
                         </td>
-                        <td>{{list.logo_url}}
-                            <img width="50" height="50" [src]="list.logo_url?list.logo_url:'assets/imgs/no_image.png'" width="150px" />
+                        <td>
+                            <img class="img-fluid" [src]="list.logo_url?list.logo_url:'assets/imgs/no_image.png'" />
                         </td>
                         <td>
                             {{list.propname}}

@@ -54,3 +54,7 @@ margin-right: 5px;
 .txt-center {
     text-align: center;
 }
+
+.table > tbody > tr > td> img.img-fluid {
+    max-width: 15% !important;
+}
