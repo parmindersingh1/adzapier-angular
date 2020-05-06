@@ -91,7 +91,7 @@
                         <td>
                             {{i+1}}
                         </td>
-                        <td>
+                        <td>{{list.logo_url}}
                             <img width="50" height="50" [src]="list.logo_url?list.logo_url:'assets/imgs/no_image.png'" width="150px" />
                         </td>
                         <td>
@@ -101,12 +101,12 @@
                             {{list.website}}
                         </td>
                         <td>
-                            <button class="btn btn-outline-primary" (click)="editModalPopup(mymodal,list)">Edit</button>
+                            <button class="btn btn-sm btn-outline-primary" (click)="editModalPopup(mymodal,list)">Edit</button>
                         </td>
                         <td>
-                            <button class="btn btn-primary" (click)="clickToManage(list.pid)">Manage</button>
+                            <button class="btn btn-sm btn-primary" (click)="clickToManage(list.pid)">Manage</button>
                         </td>
-                        <td><button class="btn btn-danger">Delete</button></td>
+                        <td><button class="btn btn-sm btn-danger">Delete</button></td>
                     </tr>
                 </ng-container>
             </tbody>
@@ -133,6 +133,7 @@
                             [ngClass]="{ 'is-invalid': submitted && editOrg.organizationname.errors }" />
                         <div *ngIf="submitted && editOrg.organizationname.errors" class="invalid-feedback">
                             <div *ngIf="editOrg.organizationname.errors.required">Organization name is required</div>
+                            <div *ngIf="editOrg.organizationname.errors.pattern">Organization allow only Alphanumeric</div>
                         </div>
                     </div>
                 </div>
@@ -237,6 +238,7 @@
                     [(ngModel)]="propertyname" [ngClass]="{ 'is-invalid': submitted && orgProp.propertyname.errors }" />
                 <div *ngIf="submitted && orgProp.propertyname.errors" class="invalid-feedback">
                     <div *ngIf="orgProp.propertyname.errors.required">Property name is required</div>
+                    <div *ngIf="orgProp.propertyname.errors.pattern">Property allow only Alphanumeric</div>
                 </div>
             </div>
             <div class="form-group">

@@ -10,6 +10,11 @@
         </div>
         <div class="row">
             <div class="col-sm-12">
+                <div *ngFor="let webcontrol of webFormControlList; let k = index">
+                    <div *ngIf="k===0" class="col-sm-12 text-center mt-3"> 
+                        <img class="img-responsive logowidth" [src]="webcontrol.logoURL?webcontrol.logoURL:'assets/imgs/no_image.png'" width="150px" />
+                    </div>
+                </div>
                 <form #registerForm="ngForm" (ngSubmit)="register(registerForm)">
 
                     <div class="example-box" *ngFor="let webcontrol of webFormControlList; let j = index;">

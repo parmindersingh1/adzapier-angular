@@ -46,6 +46,7 @@ export class DsarformService extends WebControls {
     controlList[oldItemIndex].indexCount = newItem.indexCount + 'Index';
     controlList[oldItemIndex].control = newItem.control;
     controlList[oldItemIndex].selectOptions = newItem.selectOptions || '';
+    controlList[oldItemIndex].logoURL = newItem.logoURL || '';
     localStorage.setItem('formControlList', JSON.stringify(controlList));
   }
 

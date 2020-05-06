@@ -38,7 +38,7 @@
   }
  
   .card-body {
-    padding: 5px 0;
+    padding: 5px 0 !important;
   }
 
   .drag-list {
@@ -97,7 +97,7 @@
   }
 
   .custom-controls {
-    margin: 0px auto;
+    margin: 10px auto;
   }
 
   .custom-controls h5{
@@ -247,4 +247,17 @@
   
 .displayblock {
   display: block;
+}
+
+.accordion > .card .card-header {
+  padding: 5px !important;
+}
+
+.form-tl {
+  font-size: 15px;
+}
+
+.logowidth {
+  width: 80px;
+  height: auto;
 }

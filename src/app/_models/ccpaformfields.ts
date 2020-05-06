@@ -10,5 +10,6 @@ export class CCPAFormFields {
     control: string;
     indexCount: string;
     selectOptions?: Array<any>;
+    logoURL: string;
   }
   

@@ -24,8 +24,11 @@ export class WebformsComponent implements OnInit {
   ngOnInit() {
     this.loading = true;
     this.organizationService.currentProperty.subscribe((data) => {
-      this.currentPropertyName = data.property.propName;
-      this.getCCPAFormList();
+      if (data !== '') {
+        this.currentPropertyName = data.property.propName;
+        this.getCCPAFormList();
+      }
+
     });
   }
 
@@ -33,7 +36,7 @@ export class WebformsComponent implements OnInit {
   getCCPAFormList() {
     this.loading = true;
     this.formList.length = 0;
-   
+
     this.organizationService.currentProperty.pipe(
       // flatMap((res1) => this.currentPropertyName = res1.property.propName),
       switchMap((res1) => this.ccpaFormConfigService.getCCPAFormList(res1.orgId, res1.property.propid)),
@@ -46,18 +49,18 @@ export class WebformsComponent implements OnInit {
         this.loading = false;
         return this.formList;
       }
-     
+
     }, (error) => {
-            console.log(error, 'get error..');
-            this.loading = false;
-       });
+      console.log(error, 'get error..');
+      this.loading = false;
+    });
 
 
   }
 
   showForm(data) {
     this.ccpaFormConfigService.captureCurrentSelectedFormData(data);
-    this.router.navigate(['/dsarform', {crid: data.crid}]);
+    this.router.navigate(['/dsarform', { crid: data.crid }]);
   }
 
   // ngOnDestroy() {
