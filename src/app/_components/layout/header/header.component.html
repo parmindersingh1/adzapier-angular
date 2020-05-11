@@ -1,9 +1,19 @@
 <nav class="navbar navbar-expand-sm">
+ 
+ 
   <button class="navbar-toggler navbar-toggler-right" type="button" (click)="isCollapsed = !isCollapsed"
     aria-expanded="true" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>test
+    <span class="navbar-toggler-icon"></span>
   </button>
-  <h3><a style="color:#0168fa">Adzapier <span style="color: #000;">Solutions</span></a></h3>
+  <!-- <h3><a style="color:#0168fa">Adzapier <span style="color: #000;">Solutions</span></a></h3> -->
+ 
+    
+  <div class="navbar-brand col-sm-1">    
+    <a class="df-logo" routerLink="/">
+      Ad<span>Zapier</span>
+    </a>
+  </div>
+ 
   <div *ngIf="currentUser" class="navbar-collapse collapse" container="body" [collapse]="isCollapsed"
     id="navbarNavDropdown">
     <ul class="navbar-nav" *ngIf="currentUser">
@@ -68,9 +78,11 @@
             <i *ngIf="menu.icon" class="{{ menu.icon }}"></i>{{ menu.label }}
           </a>
         </div>
+        <div class="iconwrapper">
+        <div class="searchicon"><i class="fa fa-search" aria-hidden="true"></i></div>
         <div *ngIf="menu.items" dropdown container="body" placement="bottom right">
           <a class="nav-link dropdown-link" dropdownToggle (click)="false">
-            <div class="userInitials">{{nameInitials(currentLoggedInUser)}}</div>
+            <i class="bd bd-primary bg-primary rounded-circle pd-10 tx-white">{{nameInitials(currentLoggedInUser)}}</i>
             </a>
           <ul *dropdownMenu class="dropdown-menu dropdown-menu-right">
             <ng-container *ngFor="let item of menu.items; first as isFirst">
@@ -105,7 +117,17 @@
             </ng-container>
           </ul>
         </div>
+      </div>
       </li>
     </ul>
   </div>
+ 
+  <div class="navbar-right" *ngIf="!currentUser">
+    <a class="btn btn-sm btn-secondary type--uppercase" routerLink="/login">Sign In</a>
+    <a class="btn btn-sm btn-primary type-uppercase mg-l-10" routerLink="/signup">Try for Free</a>
+  </div>
+ 
+ 
+ 
 </nav>
+ 
