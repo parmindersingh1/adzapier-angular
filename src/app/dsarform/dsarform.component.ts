@@ -1,21 +1,24 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ViewEncapsulation } from '@angular/core';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-import { FormBuilder, Validators, FormArray, FormGroup, NgForm } from '@angular/forms';
+import { FormBuilder, Validators, FormArray, FormGroup, NgForm, FormControl } from '@angular/forms';
 import { OrganizationService } from '../../app/_services';
-import { switchMap, map } from 'rxjs/operators';
+import { switchMap, map, throwIfEmpty } from 'rxjs/operators';
 import { CcparequestService } from '../_services/ccparequest.service';
-import { CCPAFormFields } from '../_models/ccpaformfields';
 import { DsarformService } from '../_services/dsarform.service';
 import { CCPAFormConfigurationService } from '../_services/ccpaform-configuration.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
+import { EditorChangeContent, EditorChangeSelection } from 'ngx-quill';
+import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-dsarform',
   templateUrl: './dsarform.component.html',
-  styleUrls: ['./dsarform.component.scss']
+  styleUrls: ['./dsarform.component.scss'],
+  encapsulation: ViewEncapsulation.None,
 })
 export class DsarformComponent implements OnInit, OnDestroy {
+  @ViewChild('editor', { static: true}) editor;
   public contactList: FormArray;
   public requestObject: any = {};
   public selectedFormOption: any;
@@ -43,8 +46,7 @@ export class DsarformComponent implements OnInit, OnDestroy {
   organizationID: any;
   formControlList: any;
   isAddingFormControl: boolean;
-  webFormControlList: any; // CCPAFormFields[] = [];
-  allNumbers: number[] = [];
+  webFormControlList: any;
   questionGroups: any;
   dataSubjectAccessRightsForm: any;
   questionControlArray: any;
@@ -69,6 +71,9 @@ export class DsarformComponent implements OnInit, OnDestroy {
   loading = false;
   previewPublishedForm: any;
   headerlogoURL: any;
+  blured = false;
+  focused = false;
+  trimLabel: any;
   controlOption = [
     {
       id: 1,
@@ -107,16 +112,27 @@ export class DsarformComponent implements OnInit, OnDestroy {
     }
   ];
 
-  
+  quillEditorText: FormGroup;
+  quillConfig = {
+    toolbar: {
+      container: [
+        ['bold', 'italic', 'underline', 'strike'],
+        [{ header: 1 }, { header: 2 }],
+        ['link'],
+        [{ align: [] }],
+        [{ size: ['small', false, 'large', 'huge'] }]
+      ]
+    }
+  };
+  editorData: string;
   constructor(private fb: FormBuilder, private ccpaRequestService: CcparequestService,
               private organizationService: OrganizationService,
               private dsarFormService: DsarformService,
               private ccpaFormConfigService: CCPAFormConfigurationService,
               private router: Router, private location: Location,
-              private activatedRoute: ActivatedRoute) {
-    for (let insertNumbers = 0; insertNumbers <= 10; insertNumbers++) {
-      this.allNumbers.push(insertNumbers);
-    }
+              private activatedRoute: ActivatedRoute,
+              private modalService: NgbModal) {
+   
     this.count = 0;
     this.loading = true;
     //  this.loadWebControl();
@@ -145,16 +161,12 @@ export class DsarformComponent implements OnInit, OnDestroy {
       }
     });
 
-    // this.organizationService.getSelectedOrgProperty.subscribe((response) => {
-    //   console.log(response,'response...SP..1');
-    //   this.selectedProperty = response;
-    // });
+  
     this.loading = true;
     if (this.crid) {
       this.getCCPAdefaultConfigById();
       this.webFormSelectedData = this.ccpaFormConfigService.currentFormData.subscribe((data) => {
         if (data) {
-          // alert(JSON.stringify(data));
           this.propId = data.PID;
           this.orgId = data.OID;
           this.crid = data.crid;
@@ -183,12 +195,16 @@ export class DsarformComponent implements OnInit, OnDestroy {
    
       this.organizationService.getOrganization.subscribe((response) => this.currentOrgID = response);
     }
+
+    this.quillEditorText = this.fb.group({
+      editor: new FormControl(null)
+    });
   }
 
   loadWebControl() {
     if (this.crid) {
       this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
-      console.log(this.webFormControlList, 'loadwebcontrol..');
+      console.log(this.webFormControlList, 'loadwebcontrol..11');
     } else {
       this.webFormControlList = this.dsarFormService.getFormControlList();
       console.log(this.webFormControlList, 'loadwebcontrol..');
@@ -312,10 +328,22 @@ export class DsarformComponent implements OnInit, OnDestroy {
 
 
   addOptions() {
-    this.selectOptions.push({
-      id: this.count++,
-      name
-    });
+    let count = 0;
+    let customObj: Anything = {};
+    const keylabel = this.lblText.split(' ').join('_');
+    const id = count++;
+  //  customObj.key = this.trimLabel + 'id';
+    customObj = {
+      id: this.selectOptions.length + 1,
+      keylabel
+    };
+
+
+    // customObj[key]
+  //  console.log(customObj, 'coo..');
+   // this.selectOptions.push(customObj[key] = this.count++);
+    this.selectOptions.push(customObj);
+    console.log(this.selectOptions, 'selectOptions..');
   }
 
   deleteSelectOption(index) {
@@ -327,7 +355,7 @@ export class DsarformComponent implements OnInit, OnDestroy {
   }
 
   addCustomFields(formControls: NgForm) {
-    const trimLabel = formControls.value.lblText.split(' ').join('');
+    this.trimLabel = formControls.value.lblText.split(' ').join('_').toLowerCase();
     if (this.isEditingList) {
       const req = 'requesttype';
       const sub = 'subjecttype';
@@ -339,7 +367,7 @@ export class DsarformComponent implements OnInit, OnDestroy {
         // if (oldControlIndex) {
         updatedObj = {
           controllabel: formControls.value.lblText,
-          indexCount: trimLabel,
+          indexCount: this.existingControl.indexCount,
           control: this.changeControlType,
           controlId: this.selectedControlId
           // selectOptions: this.existingControl.selectOptions
@@ -363,7 +391,7 @@ export class DsarformComponent implements OnInit, OnDestroy {
         //  if (oldControlIndex) {
         updatedTextobj = {
           controllabel: formControls.value.lblText,
-          indexCount: trimLabel,
+          indexCount: this.existingControl.indexCount,
           control: this.existingControl.control,
           selectOptions: this.existingControl.selectOptions
         };
@@ -384,7 +412,7 @@ export class DsarformComponent implements OnInit, OnDestroy {
         if (customControlIndex !== -1) {
           updateCustomObj = {
             controllabel: formControls.value.lblText,
-            indexCount: trimLabel,
+            indexCount: this.trimLabel,
             control: this.changeControlType,
             controlId: this.existingControl.controlId,
             selectOptions: this.existingControl.selectOptions
@@ -408,7 +436,7 @@ export class DsarformComponent implements OnInit, OnDestroy {
           control: this.selectedFormOption,
           controllabel: formControls.value.lblText,
           controlId: 'CustomInput' + count,
-          indexCount: trimLabel + 'Index',
+          indexCount: this.trimLabel + '_Index',
           selectOptions: this.selectOptions
         };
         this.ccpaFormConfigService.addControl(newWebControl);
@@ -421,7 +449,7 @@ export class DsarformComponent implements OnInit, OnDestroy {
           control: this.selectedFormOption,
           controllabel: formControls.value.lblText,
           controlId: 'CustomInput' + count,
-          indexCount: trimLabel + 'Index',
+          indexCount: this.trimLabel + '_Index',
           selectOptions: this.selectOptions
         };
 
@@ -448,6 +476,29 @@ export class DsarformComponent implements OnInit, OnDestroy {
     } else {
       this.webFormControlList = this.dsarFormService.getFormControlList();
       const customControlIndex = this.webFormControlList.findIndex((t) => t.controlId === 'headerlogo');
+      this.dsarFormService.updateControl(this.webFormControlList[customControlIndex], customControlIndex, newWebControl);
+      this.webFormControlList = this.dsarFormService.getFormControlList();
+    }
+ 
+  }
+
+  onSubmitQuillEditorData() {
+    const newWebControl = {
+      control: 'text',
+      controllabel: 'Welcome Text',
+      controlId: 'welcometext',
+      indexCount: 'welcome_text_Index',
+      welcomeText: this.editorData,
+      preferControlOrder: ''
+    };
+    if (this.crid) {
+      this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
+      const customControlIndex = this.webFormControlList.findIndex((t) => t.controlId === 'welcometext');
+      this.ccpaFormConfigService.updateControl(this.webFormControlList[customControlIndex], customControlIndex, newWebControl);
+      this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
+    } else {
+      this.webFormControlList = this.dsarFormService.getFormControlList();
+      const customControlIndex = this.webFormControlList.findIndex((t) => t.controlId === 'welcometext');
       this.dsarFormService.updateControl(this.webFormControlList[customControlIndex], customControlIndex, newWebControl);
       this.webFormControlList = this.dsarFormService.getFormControlList();
     }
@@ -524,6 +575,10 @@ export class DsarformComponent implements OnInit, OnDestroy {
     return item.control.startsWith('img') ? true : false;
   }
 
+  isContainWelcomeText(item): boolean {
+    return item.controlId === 'welcometext' ? true : false;
+  }
+
   cancelAddingFormControl() {
     this.isAddingFormControl = false;
     this.isEditingList = false;
@@ -586,6 +641,7 @@ export class DsarformComponent implements OnInit, OnDestroy {
         controlArr.push(t);
       }
     });
+
     // for (const i in this.webFormControlList) {
 
     //   if (this.webFormControlList[i].indexCount == controlArr[i]) {
@@ -616,7 +672,23 @@ export class DsarformComponent implements OnInit, OnDestroy {
     this.router.navigate(['/editwebforms', { crid: this.crid }]);
   }
 
+  onSubmitQuillEditorDataX() {
+   // this.editorData =  this.quillEditorText.get('editor').value;
+    console.log(this.editorData, 'editorData..');
+  }
 
+  editQuillEditorDataPopup(content) {
+    this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
+    const editText = this.webFormControlList.filter((t)=>t.indexCount === 'welcome_text_Index');
+    this.editorData = editText[0].welcomeText;
+    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
+      this.quillEditorText.reset();
+     // this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.quillEditorText.reset();
+     // this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
 
   ngOnDestroy() {
     // if (this.webFormSelectedData !== undefined) {
@@ -628,3 +700,6 @@ export class DsarformComponent implements OnInit, OnDestroy {
 
 }
 
+interface Anything {
+  [key: string]: any;
+}

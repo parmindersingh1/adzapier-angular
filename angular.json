@@ -30,11 +30,19 @@
             "styles": [
             
               "src/styles.scss",
-              "src/assets/css/dashforge.css"
-               
+              "src/assets/css/dashforge.css",
+              "./node_modules/quill/dist/quill.snow.css",
+              "./node_modules/quill/dist/quill.core.css",
+              "./node_modules/quill/dist/quill.bubble.css",
+              "./node_modules/quill-emoji/dist/quill-emoji.css",
+              "./node_modules/quill-mention/dist/quill.mention.min.css"
+             
             ],
             "scripts": [
-              
+              "./node_modules/quill/dist/quill.core.js",
+              "./node_modules/quill/dist/quill.min.js",
+              "./node_modules/quill-emoji/dist/quill-emoji.js"
+             
             ]
           },
           "configurations": {
@@ -155,7 +163,7 @@
               "src/favicon.ico",
               "src/assets"
             ],
-            "styles": [
+            "styles": [            
               "src/styles.scss"
             ],
             "scripts": []

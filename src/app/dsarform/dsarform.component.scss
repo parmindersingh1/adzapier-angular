@@ -34,7 +34,7 @@
 
   .card {
     padding: 10px;
-    margin: 5px 0;
+    margin: 0;
   }
  
   .card-body {
@@ -251,6 +251,7 @@
 
 .accordion > .card .card-header {
   padding: 5px !important;
+  border-bottom: 0px !important;
 }
 
 .form-tl {
@@ -260,4 +261,21 @@
 .logowidth {
   width: 80px;
   height: auto;
+}
+
+#cdk-drop-list-0 .example-box:first-child {
+  display: none;
+}
+
+.quilleditor-wrapper {
+  display: block;
+}
+
+.quilleditor .ql-align-right {
+  text-align: right !important;
+}
+
+.quilleditor .ql-align-center {
+  text-align: center !important;
+  margin: 0 !important;
 }

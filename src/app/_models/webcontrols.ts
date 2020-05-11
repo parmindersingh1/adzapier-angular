@@ -31,14 +31,23 @@ loadWebControls() {
                 control: 'img',
                 controllabel: 'Header Logo',
                 controlId: 'headerlogo',
-                indexCount: 'headerlogoIndex',
-                logoURL: ''
+                indexCount: 'header_logo_Index',
+                logoURL: '',
+                preferControlOrder: ''
+            },
+            {
+                control: 'text',
+                controllabel: 'Welcome Text',
+                controlId: 'welcometext',
+                indexCount: 'welcome_text_Index',
+                welcomeText: '',
+                preferControlOrder: ''
             },
             {
                 control: 'radio',
                 controllabel: 'I am a (an)',
                 controlId: 'subjecttype',
-                indexCount: 'subjecttypeIndex',
+                indexCount: 'subject_type_Index',
                 selectOptions: 'subjectType',
                 preferControlOrder: ''
             },
@@ -46,36 +55,43 @@ loadWebControls() {
                 control: 'radio',
                 controllabel: 'Select request type(s)',
                 controlId: 'requesttype',
-                indexCount: 'requestTypeIndex',
+                indexCount: 'request_type_Index',
                 selectOptions: 'requestType',
                 preferControlOrder: ''
             },
             {
                 control: 'textbox',
                 controllabel: 'First Name',
-                controlId: 'fname1',
-                indexCount: 'FirstNameIndex',
+                controlId: 'firstname',
+                indexCount: 'first_name_Index',
                 preferControlOrder: ''
             },
             {
                 control: 'textbox',
                 controllabel: 'Last Name',
-                controlId: 'lname1',
-                indexCount: 'LastNameIndex',
+                controlId: 'lastname',
+                indexCount: 'last_name_Index',
                 preferControlOrder: ''
             },
             {
                 control: 'textbox',
                 controllabel: 'Email',
                 controlId: 'email',
-                indexCount: 'EmailIndex',
+                indexCount: 'email_Index',
+                preferControlOrder: ''
+            },
+            {
+                control: 'textbox',
+                controllabel: 'City',
+                controlId: 'city',
+                indexCount: 'city_Index',
                 preferControlOrder: ''
             },
             {
                 control: 'select',
                 controllabel: 'State',
                 controlId: 'state',
-                indexCount: 'StateIndex',
+                indexCount: 'state_Index',
                 selectOptions: this.stateList,
                 preferControlOrder: ''
             },
@@ -83,7 +99,7 @@ loadWebControls() {
                 control: 'select',
                 controllabel: 'Country',
                 controlId: 'country',
-                indexCount: 'CountryIndex',
+                indexCount: 'country_Index',
                 selectOptions: this.countries,
                 preferControlOrder: ''
             },
@@ -91,7 +107,7 @@ loadWebControls() {
                 control: 'textarea',
                 controllabel: 'Request Details',
                 controlId: 'requestdetails',
-                indexCount: 'RequestDetailsIndex',
+                indexCount: 'request_details_Index',
                 preferControlOrder: ''
             }
         ];
