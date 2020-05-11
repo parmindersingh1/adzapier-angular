@@ -216,14 +216,15 @@
         </div>
         <div class="col-sm-8">
             <!--*ngIf="!propertyname"-->
-            <!-- <div class="card bdr-zero">
+            <label>&nbsp;</label>
+            <div class="card bdr-zero" *ngIf="!formName">
                 <div class="row">
                     <div class="col-sm-6">
                         <label>Form Name </label>
                         <input class="form-control" type="text" name="form_name" [(ngModel)]="formName" />
                     </div> 
                 </div> 
-            </div> -->
+            </div>
             <div *ngFor="let webcontrol of webFormControlList; let k = index">
                         <!-- <div  class="quilleditor" [innerHTML]="editorData"></div> -->
                 <div *ngIf="webcontrol.controlId === 'welcometext'">

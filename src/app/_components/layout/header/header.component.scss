@@ -9,6 +9,7 @@
     filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
     border-radius: 4px;
     width: 100%;
+    height: 60px;
 }
 
 .navbar h3 {
@@ -34,11 +35,11 @@ i.dropdown-submenu {
 
 .nav-item {
     padding: 6px;
-    color: #000;
+    color: rgba(255, 255, 255, 0.7);    
 }
 
 i {
-    margin-right: 5px;
+    margin-right: 0;
 }
 
 .nav-link {
@@ -47,6 +48,11 @@ i {
 
 .navbar-expand-sm .navbar-collapse {
     justify-content: flex-end;
+}
+
+.navbar-expand-sm {
+    justify-content: space-between !important;
+    padding: 0 15px !important;
 }
 
 .dropdown-menu{
@@ -127,4 +133,20 @@ a.nav-link.dropdown-link .userInitials:hover {
 
 .width100 {
     width: 100%;
+}
+
+.navbar-brand .df-logo {
+    color: #fff;
+    font-size: 22px;
+}
+
+.iconwrapper {
+    display: flex;
+    align-items: center;
+}
+
+.iconwrapper .searchicon {
+    margin:0 30px 0 0;
+    color: #fff;
+    font-size: 16px; 
 }
