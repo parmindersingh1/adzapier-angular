@@ -43,9 +43,10 @@ export class DsarformService extends WebControls {
   updateControl(oldItem, oldItemIndex, newItem) {
     const controlList = JSON.parse(localStorage.getItem('formControlList'));
     controlList[oldItemIndex].controllabel = newItem.controllabel;
-    controlList[oldItemIndex].indexCount = newItem.indexCount + 'Index';
+    controlList[oldItemIndex].indexCount = newItem.indexCount;
     controlList[oldItemIndex].control = newItem.control;
     controlList[oldItemIndex].selectOptions = newItem.selectOptions || '';
+    controlList[oldItemIndex].welcomeText = newItem.welcomeText;
     controlList[oldItemIndex].logoURL = newItem.logoURL || '';
     localStorage.setItem('formControlList', JSON.stringify(controlList));
   }

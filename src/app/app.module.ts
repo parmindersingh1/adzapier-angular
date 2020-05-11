@@ -40,7 +40,7 @@ import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { WebformsComponent } from './webforms/webforms.component';
 import { EditwebformComponent } from './editwebform/editwebform.component';
 import { PropertydashboardComponent } from './propertydashboard/propertydashboard.component';
-
+import { QuillModule } from 'ngx-quill';
 export const isMock = environment.mock;
 @NgModule({
   declarations: [
@@ -80,7 +80,8 @@ export const isMock = environment.mock;
     DragDropModule,
     BsDropdownModule.forRoot(),
     BrowserAnimationsModule,
-    CollapseModule.forRoot()
+    CollapseModule.forRoot(),
+    QuillModule.forRoot()
   ],
   providers: [
     AuthenticationService,

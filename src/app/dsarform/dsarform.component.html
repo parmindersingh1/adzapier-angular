@@ -1,13 +1,3 @@
-<!-- <div class="row">
-    <div class="col-sm-12">
-       
-        <div class="d-sm-flex align-items-center justify-content-between mg-b-20 mg-lg-b-25 mg-xl-b-30">
-            <div class="heading">Form Name </div>
-            <input class="form-control" type="text" name="form_name" [(ngModel)]="formName" />
-        </div>
-      </div>
-</div> -->
-
 <div class="container">
     <div class="row">
         <div *ngIf="loading" class="col-sm-12 loader-spinner">
@@ -15,15 +5,26 @@
                 <span class="sr-only">Loading...</span>
             </div> <span style="color: black; font-size: 14px;"> Loading..</span>
         </div>
-        <div class="col-sm-6">
-            <h4 class="mg-b-0 tx-spacing--1">Drag Form Fields</h4>
+        <div class="col-sm-8">
+            <h4 class="mg-b-0 tx-spacing--1">Webform Customization</h4>
         </div>
-        <div class="col-sm-6 text-right">
-            <h5>Web Form for <span *ngIf="selectedProperty">{{selectedProperty}}</span></h5>
+        <div class="col-sm-4 text-right"> 
+                <div class="row">
+                    <div class="col-sm-6">
+                        <a target="_blank" *ngIf="crid" class="btn btn-primary btn-block"
+                            [routerLink]="['/editwebforms',  crid ]">Preview</a>
+                    </div>
+                    <div class="col-sm-6">
+                        <button class="btn btn-primary btn-block"
+                            (click)="publishCCPAFormConfiguration(registerForm)">Save Template</button>
+                    </div>
+                </div> 
+            <!-- <h5>Web Form for <span *ngIf="selectedProperty">{{selectedProperty}}</span></h5> -->
         </div>
     </div>
     <div class="row">
         <div class="col-sm-4">
+            <div><h6>Web form name: <span class="text-right">{{formName}}</span></h6></div>
             <ngb-accordion #acc="ngbAccordion" activeIds="ngb-panel-0">
                 <ngb-panel title="Form Fields">
                     <ng-template ngbPanelHeader>
@@ -40,7 +41,7 @@
                             <div *ngIf="!isEditingList">
                                 <div *ngFor="let item of webFormControlList; let i = index;"
                                 cdkDrag>
-                                    <div class="example-box" *ngIf="!isContainHeaderLogo(item)" >
+                                    <div class="example-box" *ngIf="!isContainHeaderLogo(item) && !isContainWelcomeText(item)" >
                                     <span class="control-label">
                                         {{item.controllabel}} {{item.preferControlOrder}}
                                     </span>
@@ -119,9 +120,11 @@
                                             </div>
                                         </div>
                                         <div *ngIf="showFormOption" id="selectControl">
-                                            <label>Add control label
-                                                <input type="text" class="form-control" name="lblText"
-                                                    [(ngModel)]="lblText" placeholder="Add label text">
+                                            <label>Add control label 
+                                                <span *ngIf="ngModel.errors?.required" style="color:red;font-size:11px">Name of control is mandatory</span>
+                                                <input type="text" class="form-control" name="lblText" #ngModel="ngModel"
+                                                    [(ngModel)]="lblText" placeholder="Add label text" required/>
+                                                   
                                             </label>
                                             <div *ngIf="selectedControlType" class="addoption">
                                                 <label>Add Options</label>
@@ -129,9 +132,14 @@
                                                     <li *ngFor="let item of selectOptions; let i = index;">
                                                         <div class="row">
                                                             <div class="col-sm-6">
-                                                                <input type="text" [(ngModel)]="item.name"
-                                                                    [ngModelOptions]="{standalone: true}"
-                                                                    class="form-control" />
+                                                                <input type="text" [(ngModel)]="item.name" name="{{item.name}}"
+                                                                    [ngModelOptions]="{standalone: true}"  #ngModel="ngModel"
+                                                                    class="form-control" required/>
+                                                                    <div *ngIf="ngModel.errors?.required">
+                                                                        <div>
+                                                                            Add value
+                                                                        </div>
+                                                                    </div>
                                                             </div>
                                                             <div class="col-sm-6">
                                                                 <button type="button" class="btn btn-sm btn-danger"
@@ -147,10 +155,10 @@
                                                 <div class="col-sm-6">
                                                     <div class="demo-btn-group">
                                                         <button type="button" *ngIf="selectedControlType"
-                                                            class="btn btn-xs btn-primary" (click)="addOptions()">Add
+                                                            class="btn btn-xs btn-primary" (click)="addOptions(customFields)">Add
                                                             option</button>
                                                         <button type="submit"
-                                                            class="btn btn-xs btn-success">Save</button>
+                                                            class="btn btn-xs btn-success" [disabled]="( !customFields.form.valid )">Save</button>
                                                     </div>
 
                                                 </div>
@@ -186,44 +194,49 @@
                         </div>
                     </ng-template>
                 </ngb-panel>
+                <ngb-panel title="Form Text">
+                    <ng-template ngbPanelHeader>
+                        <div class="d-flex align-items-center justify-content-between">
+                          <h6 class="form-tl m-0">Form Text</h6>
+                          <button ngbPanelToggle class="btn btn-link p-0"><i class="fas fa-chevron-down"></i></button>
+                        </div>
+                    </ng-template>
+                    <ng-template ngbPanelContent>
+                            <div class="row">
+                           <div class="col-sm-12"> <h6>Welcome Text <span style="float: right;">
+                            <button type="button" class="btn btn-sm btn-default" data-toggle="modal"
+                            (click)="editQuillEditorDataPopup(quillEditorModal)">
+                            <i class="fa fa-edit"></i>
+                        </button>
+                           </span></h6></div>
+                        </div>
+                    </ng-template>
+                </ngb-panel>
             </ngb-accordion>
         </div>
         <div class="col-sm-8">
             <!--*ngIf="!propertyname"-->
-            <div class="card bdr-zero">
+            <!-- <div class="card bdr-zero">
                 <div class="row">
                     <div class="col-sm-6">
                         <label>Form Name </label>
                         <input class="form-control" type="text" name="form_name" [(ngModel)]="formName" />
-                    </div>
-                    <div class="col-sm-6">
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <label> &nbsp; </label>
-
-                                <a target="_blank" *ngIf="crid" class="btn btn-primary btn-block"
-                                    [routerLink]="['/editwebforms',  crid ]">Preview</a>
-                                <!-- <a target="_blank" class="btn btn-primary" (click)="priviewPublishedForm()">Preview M</a> -->
-
-                                <!-- <button  class="btn btn-primary"  (click)="priviewPublishedForm()">priviewPublishedForm</button> -->
-                            </div>
-                            <div class="col-sm-6">
-                                <label> &nbsp; </label>
-                                <button class="btn btn-primary btn-block"
-                                    (click)="publishCCPAFormConfiguration(registerForm)">Save Template</button>
-                            </div>
-                        </div>
-
+                    </div> 
+                </div> 
+            </div> -->
+            <div *ngFor="let webcontrol of webFormControlList; let k = index">
+                        <!-- <div  class="quilleditor" [innerHTML]="editorData"></div> -->
+                <div *ngIf="webcontrol.controlId === 'welcometext'">
+                    <div class="quilleditor-wrapper">  
+                        <div  class="quilleditor" [innerHTML]="webcontrol.welcomeText"></div> 
+                        <!-- <div *ngIf="editorData"  class="quilleditor" [innerHTML]="editorData"></div>  -->
                     </div>
                 </div>
-                <!-- <h3>Form Name: {{propertyname}}</h3> -->
-            </div>
-            <div *ngFor="let webcontrol of webFormControlList; let k = index">
-                <!-- {{isContainHeaderLogo(webcontrol)}} -->
-                <div *ngIf="k===0" class="col-sm-12 text-center mt-3"> 
+                <div *ngIf="webcontrol.controlId === 'headerlogo'" class="col-sm-12 text-center mt-3"> 
                     <img class="img-responsive logowidth" [src]="webcontrol.logoURL?webcontrol.logoURL:'assets/imgs/no_image.png'" width="150px" />
                 </div>
             </div>
+           
             <div cdkDropList [cdkDropListData]="webFormControlList"
                 class="example-list" (cdkDropListDropped)="drop($event)">
                 
@@ -238,8 +251,8 @@
                                 <!-- *ngIf="isRequestTypeSelected"-->
                                 <select class="form-control" name="{{webcontrol.controllabel}}"
                                     [(ngModel)]="requestObject[webcontrol.controllabel]">
-                                    <option *ngFor="let opt of requestType" [value]="opt.country">
-                                        {{ opt.country }}
+                                    <option *ngFor="let opt of requestType" [value]="opt.request_type_id">
+                                        {{ opt.name }}
                                     </option>
                                 </select>
                                 <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
@@ -249,7 +262,7 @@
                                 <!-- *ngIf="radioBtnType"-->
                                 <div *ngFor="let opt of requestType" class="form-check-inline">
                                     <input class="form-check-input" type="radio" name="{{webcontrol.controllabel}}"
-                                        [value]='opt.country' [(ngModel)]="requestObject[opt.country]" />{{opt.country}}
+                                        [value]='opt.request_type_id' [(ngModel)]="requestObject[opt.name]" />{{opt.name}}
                                     <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
 
                                 </div>
@@ -259,7 +272,7 @@
                                 <!-- *ngIf="checkboxBtnType"-->
                                 <div *ngFor="let opt of requestType; let i = index;" class="form-check-inline">
                                     <input class="form-check-input" type="checkbox" name="{{webcontrol.controllabel}}"
-                                        [value]='opt.country' [(ngModel)]="requestObject[opt.country]" />{{opt.country}}
+                                        [value]='opt.request_type_id' [(ngModel)]="requestObject[opt.name]" />{{opt.name}}
                                     <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
 
                                 </div>
@@ -273,7 +286,7 @@
                                 <!-- *ngIf="isSubjectTypeSelected"-->
                                 <select class="form-control" name="{{webcontrol.controllabel}}"
                                     [(ngModel)]="requestObject[webcontrol.controllabel]">
-                                    <option *ngFor="let userOpt of subjectType" [value]="userOpt.name">
+                                    <option *ngFor="let userOpt of subjectType" [value]="userOpt.subject_type_id">
                                         {{ userOpt.name }}
                                     </option>
                                 </select>
@@ -284,7 +297,7 @@
                                 <!--*ngIf="subjectTyperadioBtn"-->
                                 <div *ngFor="let userOpt of subjectType" class="form-check-inline">
                                     <input class="form-check-input" type="radio" name="{{webcontrol.controllabel}}"
-                                        [value]='userOpt.name' [(ngModel)]="requestObject[userOpt.name]" />
+                                        [value]='userOpt.subject_type_id' [(ngModel)]="requestObject[userOpt.name]" />
                                     {{userOpt.name}}
                                     <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
 
@@ -294,7 +307,7 @@
                                 <!--*ngIf="subjectTypecheckboxBtnType"-->
                                 <div *ngFor="let opt of subjectType; let i = index;" class="form-check-inline">
                                     <input class="form-check-input" type="checkbox" name="{{webcontrol.controllabel}}"
-                                        [value]='opt.name' [(ngModel)]="requestObject[opt.name]" />{{opt.name}}
+                                        [value]='opt.subject_type_id' [(ngModel)]="requestObject[opt.name]" />{{opt.name}}
                                     <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
 
                                 </div>
@@ -360,3 +373,22 @@
         </div>
     </div>
 </div>
+
+<!--QuillEditor Modal Popup-->
+<ng-template #quillEditorModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Welcome Text</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Close Clicked')">
+            <span aria-hidden="true">×</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form [formGroup]="quillEditorText" (ngSubmit)="onSubmitQuillEditorData()">
+            <quill-editor formControlName="editor" [modules]="quillConfig" [(ngModel)]="editorData"
+            [styles]="{height: '200px'}"  
+        ></quill-editor> 
+        <button class="btn btn-sm btn-primary" type="submit">save</button>
+        </form> 
+        
+    </div>
+</ng-template>

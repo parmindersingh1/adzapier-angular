@@ -38,6 +38,8 @@ export class EditwebformComponent implements OnInit {
   webFormControlList: any = [];
   selectedProperty: any;
   localStorageCRID: any;
+  checkBoxValues: any = [];
+  selectOptionValues: any = [];
   constructor(private ccpaFormConfigService: CCPAFormConfigurationService,
               private organizationService: OrganizationService,
               private ccpaRequestService: CcparequestService,
@@ -58,7 +60,7 @@ export class EditwebformComponent implements OnInit {
       this.crid = params.get('crid');
     });
     this.getCCPAdefaultConfigById();
-    
+
   }
 
 
@@ -74,8 +76,9 @@ export class EditwebformComponent implements OnInit {
 
     ).subscribe((data) => {
       if (data !== undefined) {
-        const rdata = data['response'].request_type;
-        const sdata = data['response'].subject_type;
+        const key = 'response';
+        const rdata = data[key].request_type;
+        const sdata = data[key].subject_type;
         this.requestType = rdata;
         this.subjectType = sdata;
         this.loadRequestWebForm();
@@ -90,7 +93,6 @@ export class EditwebformComponent implements OnInit {
   loadRequestWebForm() {
 
     this.organizationService.currentProperty.pipe(
-      // flatMap((res1) => this.currentPropertyName = res1.property.propName),
       switchMap((res1) =>
         this.ccpaFormConfigService.getCCPAFormConfigByID(res1.orgId, res1.property.propid, this.crid)
       )
@@ -98,7 +100,6 @@ export class EditwebformComponent implements OnInit {
       if (data.response.length === 0) {
         return this.webFormControlList.length = 0;
       } else {
-      //  console.log(data, 'data..edit..');
         const key = 'request_form';
         const fname = 'form_name';
         this.propertyId = data.response.PID;
@@ -106,12 +107,8 @@ export class EditwebformComponent implements OnInit {
         this.organizationID = data.response.OID;
         this.webFormControlList = data.response[key];
         this.formName = data.response[fname];
-     //   console.log(this.webFormControlList, 'webFormControlList');
         return this.webFormControlList;
       }
-      //  console.log(this.formList.length, 'this.formList length..');
-      // console.log(this.formList, 'this.formList..');
-
     }, (error) => {
       alert(JSON.stringify(error));
       console.log(error, 'get error..');
@@ -119,21 +116,59 @@ export class EditwebformComponent implements OnInit {
   }
 
   register(customerData: NgForm) {
-    console.log(customerData.value, 'CD...form..');
+    // console.log(this.requestObject, 'requestObject..');
+    // console.log(customerData.value, 'CD...form..');
+    // console.log(this.checkBoxValues, 'checkBoxValues..');
     const formData = [];
+    let finalObj;
     formData.push(customerData.value);
-    const obj =  this.updateWebcontrolIndex(formData);
-    this.ccpadataService.createCCPAData(this.organizationID, this.propertyId, this.crid, obj)
-    .subscribe((data)=>{
-      if (data) {
-        alert('Data Submitted!');
+    // console.log(formData, 'formData..');
+    const arryObj = Object.keys(customerData.value);
+    // console.log(arryObj, 'obj..');
+    const keyArray = this.extractKeyWithIndex(formData);
+   
+    if (keyArray.length > 0) {
+      const clientObject = this.removeExtraObjectKeys(formData);
+      finalObj = this.reAssignKeyValue(keyArray, clientObject);
+      console.log(finalObj, 'finalObj..');
+    } else {
+      finalObj = formData[0];
+    }
+
+
+
+    if (this.checkBoxValues.length > 0) {
+      for (const key in finalObj) {
+        if (key === 'subject_type') {
+          const filtered = this.checkBoxValues.filter((t) => t.subject_type_id !== undefined);
+          console.log(filtered, 'filtered..11');
+          const result = filtered.map(a => a.subject_type_id);
+          finalObj[key] = result;
+        } else if (key === 'request_type') {
+          const filtered = this.checkBoxValues.filter((t) => t.request_type_id !== undefined);
+          console.log(filtered, 'filtered..22');
+          const result = filtered.map(a => a.request_type_id);
+          finalObj[key] = result;
+        } else if (finalObj[key] === true) {
+          const filtered = this.checkBoxValues.filter((t) => t.keylabel === key);
+          const result = filtered.map(a => a.name);
+          finalObj[key] = result; 
+        }
       }
-    }, (err) => {
-      alert(JSON.stringify(err));
-    });
+    }
+    console.log(finalObj,'finalObj..');
+    // return false;
+    this.ccpadataService.createCCPAData(this.organizationID, this.propertyId, this.crid, finalObj)
+      .subscribe((data) => {
+        if (data) {
+          alert('Data Submitted!');
+        }
+      }, (err) => {
+        alert(JSON.stringify(err));
+      });
   }
 
-  updateWebcontrolIndex(indexData) {
+  removeExtraObjectKeys(indexData) {
     Object.keys(indexData[0]).forEach((k) => {
       if (k.includes('Index')) {
         delete indexData[0][k];
@@ -142,6 +177,56 @@ export class EditwebformComponent implements OnInit {
 
     return indexData[0];
 
-  } 
+  }
+
+  extractKeyWithIndex(indexData) {
+    const indexArray = [];
+    let t;
+    Object.keys(indexData[0]).forEach((k) => {
+      if (k.includes('_Index')) {
+        indexArray.push(k.replace('_Index', ''));
+      } else if (k.includes('_IndexIndex')) {
+        indexArray.push(k.replace('_IndexIndex', ''));
+      } else if (k.includes('Index')) {
+        indexArray.push(k.replace('Index', ''));
+      }
+    });
+    console.log(indexArray, 'indexArray..');
+    return indexArray;
+
+  }
+
+
+  reAssignKeyValue(array, data) {
+    const keys = Object.keys(data);
+    const newData = {};
+    for (let a = 0; a < array.length; a++) {
+      newData[array[a]] = data[keys[a]];
+
+      data[array[a]] = data[keys[a]];
+      delete data[keys[a]];
+    }
+
+    return newData;
+  }
+
+
+  onCheckboxChange(type) {
+    const index = this.checkBoxValues.indexOf(type);
+    if (index === -1) {
+      this.checkBoxValues.push(type);
+    } else {
+      this.checkBoxValues.splice(index, 1);
+    }
+
+  }
+
+  findIndexToUpdate(type) {
+    return type.id === this;
+  }
+
+  onChangeSelection(e) {
+    this.selectOptionValues.push(e);
+  }
 
 }
