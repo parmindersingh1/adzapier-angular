@@ -52,7 +52,7 @@ export class OrgpageComponent implements OnInit {
     const urlRegex = '(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?';
     const zipRegex = '^[0-9]*$'; //'^[0-9]{6}(?:-[0-9]{4})?$';
     const strRegx = '^[a-zA-Z \-\']+';
-    const alphaNumeric = '^(?![0-9]*$)[a-zA-Z0-9]+$';
+    const alphaNumeric = '^(?![0-9]*$)[a-zA-Z0-9 ]+$';
     this.organisationPropertyForm = this.formBuilder.group({
       propertyname: ['', [Validators.required, Validators.pattern(alphaNumeric)]],
       website: ['', [Validators.required, Validators.pattern(urlRegex)]],

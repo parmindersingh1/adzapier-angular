@@ -36,6 +36,7 @@ export class HeaderComponent implements OnInit {
   firstElement: boolean;
   activeProp: any;
   publicNavigationMenu: any;
+  currentProperty: any;
   constructor(
     private router: Router,
     private activatedroute: ActivatedRoute,
@@ -77,6 +78,7 @@ export class HeaderComponent implements OnInit {
       this.isCollapsed = false;
       this.getLoggedInUserDetails();
       this.loadOrganizationList();
+      this.currentSelectedProperty();
     }
     this.publicNavigationMenu = [
       {   showlink: 'Solutions',
@@ -137,6 +139,7 @@ export class HeaderComponent implements OnInit {
     this.orgservice.orglist().subscribe((data) => {
       this.orgList = Object.values(data)[0];
       this.leftItems = this.orgList;
+      console.log(this.leftItems,'leftItems..');
     //  this.orgservice.getSelectedOrgProperty.emit(this.orgList[0].property[0]);
     //  this.orgservice.getOrganization.emit(this.orgList[0].orgid);
       if (this.orgList[0].hasOwnProperty('property')) {
@@ -233,5 +236,12 @@ export class HeaderComponent implements OnInit {
     const secondChar = str.charAt(spacePos + 1);
     return firstChar + secondChar;
   }
-  
+
+  currentSelectedProperty() {
+    this.orgservice.currentProperty.subscribe((data) => {
+      if (data) {
+        this.currentProperty = data.property.propName;
+      }
+    });
+  }
 }
