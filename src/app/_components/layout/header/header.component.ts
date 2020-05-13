@@ -148,6 +148,7 @@ export class HeaderComponent implements OnInit {
           property: this.orgList[0].property[0]
         };
         this.orgservice.changeCurrentSelectedProperty(obj);
+        this.currentSelectedProperty();
       } else {
         this.router.navigate(['/portalorg']);
       }
