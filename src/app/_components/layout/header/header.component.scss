@@ -51,7 +51,7 @@ i {
 }
 
 .navbar-expand-sm {
-    justify-content: space-between !important;
+    justify-content: flex-start !important;
     padding: 0 15px !important;
 }
 
@@ -65,8 +65,10 @@ i {
 }
 
 .dropdown-item{
-    padding: .25rem 0.5rem;
+    padding: 0.25rem 0;
     cursor: pointer;
+    // justify-content: space-between;
+    // display: flex;
 }
 
 .ml-auto .dropdown-menu {
@@ -75,9 +77,8 @@ i {
   }
 
 .loggedin-user {
-    border-bottom: 1px solid #ccc; 
-    padding: 10px;
-    margin: 0 0 10px 0;
+    padding: 10px 0; 
+    font-weight: bold;
 }
 
 .active {
@@ -146,7 +147,41 @@ a.nav-link.dropdown-link .userInitials:hover {
 }
 
 .iconwrapper .searchicon {
-    margin:0 30px 0 0;
+    margin:0 20px 0 0;
     color: #fff;
     font-size: 16px; 
+}
+
+.line-height {
+    line-height: 3rem;
+}
+
+.activityicon {
+    background: url('src/assets/imgs/activity.svg') no-repeat;
+    height: 24px;
+    width: 24px; 
+}
+
+.feather-16{
+    width: 16px;
+    height: 16px;
+    margin: 0 15px 0 0;
+}
+
+.line-partition {
+    border-bottom: 1px solid #ccc;
+    margin: 20px 0;
+}
+
+.displayflex {
+    display: flex;
+}
+
+.displayflex span {
+    font-size: 12px; 
+    color: #8392a5;
+    text-transform: uppercase;
+    display: block;
+    margin: 10px 0;
+    font-weight: 600;
 }
