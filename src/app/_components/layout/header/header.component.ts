@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { BsDropdownConfig } from 'ngx-bootstrap/dropdown';
 import { Organization } from 'src/app/_models/organization';
 import { faLeaf } from '@fortawesome/free-solid-svg-icons';
+import * as Feather from 'feather-icons';
 
 @Component({
   selector: 'app-header',
@@ -34,6 +35,7 @@ export class HeaderComponent implements OnInit {
   organizationList$: Observable<Organization[]>;
   firstElement: boolean;
   activeProp: any;
+  publicNavigationMenu: any;
   constructor(
     private router: Router,
     private activatedroute: ActivatedRoute,
@@ -66,16 +68,26 @@ export class HeaderComponent implements OnInit {
     this.orgservice.emitUpdatedOrgList.subscribe((data) => {
       this.loadOrganizationList();
     });
-    this.navigationMenu = [{
-      'showlink': 'Application',
-      'subcategory': [{ 'showlink': 'CCPA', 'routerLink': '/' }, { 'showlink': 'DSAR', 'routerLink': '/' }]
-    }];
+    // this.navigationMenu = [{
+    //   'showlink': 'Application',
+    //   'subcategory': [{ 'showlink': 'CCPA', 'routerLink': '/' }, { 'showlink': 'DSAR', 'routerLink': '/' }]
+    // }];
     this.authService.currentUser.subscribe(x => this.currentUser = x);
     if (this.currentUser) {
       this.isCollapsed = false;
       this.getLoggedInUserDetails();
       this.loadOrganizationList();
     }
+    this.publicNavigationMenu = [
+      {   showlink: 'Solutions',
+          subcategory: [{showlink: 'CCPA', routerLink: '/ccpa'}, { showlink: 'GDPR', routerLink: '/gdpr' }]
+      }, {
+        showlink: 'Pricing'
+      }, {
+        showlink: 'Partners'
+      }, {
+        showlink: 'Contact Us'
+      }];
   }
 
   logout() {
@@ -141,20 +153,34 @@ export class HeaderComponent implements OnInit {
         {
           label: 'User', icon: 'assets/imgs/glass.jpg',
           items: [
-            { label: 'Edit Profile', routerLink: '/user/profile/edit', icon: 'fas fa-pen' },
-            { label: 'Organization', routerLink: '/portalorg', icon: 'fas fa-sitemap' },
-            { label: 'Help Center', routerLink: '/pagenotfound', icon: 'far fa-question-circle' },
-            { label: 'Forum', routerLink: '/pagenotfound', icon: 'fas fa-tasks' },
-            { label: 'Account Settings', routerLink: '/user/password/change-password', icon: 'fas fa-tools' },
-            { label: 'Privacy Settings', routerLink: '/pagenotfound', icon: 'fas fa-user-cog' },
-            { label: 'Signout', routerLink: '', icon: 'fas fa-sign-out-alt' }
+            { label: 'User Preferences', routerLink: '/user/profile/edit', icon: 'edit-3' },
+            { label: 'Organizations', routerLink: '/portalorg', icon: 'activity' },
+            { label: 'Billing', routerLink: '/pagenotfound', icon: 'credit-card' },
+            { label: 'Settings', routerLink: '/user/password/change-password', icon: 'settings' },
+            { label: 'Help Center', routerLink: '/pagenotfound', icon: 'help-circle' },
+            { label: 'Signout', routerLink: '', icon: 'log-out' }
           ]
         }];
-      this.navigationMenu = [{
-        showlink: 'Application',
-        subcategory: [{showlink:'Web Forms', routerLink: '/webforms'},{ showlink: 'CCPA', routerLink: '/dsarform' }, { showlink: 'DSAR', routerLink: '/dsarform' }],
-      }]
-
+      this.navigationMenu = [
+      {
+        showlink: 'Dashboard',
+        subcategory: [{ showlink: 'CCPA DSAR', routerLink: '/dsarform', icon: 'bar-chart-2' },
+         { showlink: 'GDPR', routerLink: '/pagenotfound', icon: 'pie-chart' },
+        { showlink: 'Cookie Consent', routerLink: '/pagenotfound', icon: 'fas fa-cookie feather-16' }
+        ]
+      }, {
+        showlink: 'Privacy',
+        subcategory: [
+          { showlink: 'Dashboard', routerLink: '/pagenotfound', icon: 'bar-chart-2' },
+          { showlink: 'Webforms', routerLink: '/webforms', icon: 'pie-chart' },
+          { showlink: 'Requests', routerLink: '/pagenotfound', icon: 'fa fa-ticket-alt feather-16' },
+          { showlink: 'Work flow', routerLink: '/pagenotfound', icon: 'shield-off' },
+          { showlink: 'Cookie Category', routerLink: '/pagenotfound', icon: 'fab fa-microsoft feather-16' },
+          { showlink: 'Cookie Banner', routerLink: '/pagenotfound', icon: 'fas fa-cookie feather-16' },
+          { showlink: 'Consent Tracking', routerLink: '/pagenotfound', icon: 'fas fa-file-contract feather-16' },
+          { showlink: 'Setup', routerLink: '/pagenotfound', icon: 'fas fa-wrench feather-16' }
+        ]
+      }, { showlink: 'Billing', routerLink: '/pagenotfound' }];
     });
 
     this.orgservice.emitUpdatedOrganization.subscribe((data) => {

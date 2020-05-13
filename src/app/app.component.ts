@@ -4,6 +4,7 @@ import { AuthenticationService } from './_services';
 import { User } from './_models';
 import { HeaderComponent } from './_components/layout/header/header.component';
 import { Router, NavigationEnd } from '@angular/router';
+import * as feather from 'feather-icons';
 
 @Component({
   selector: 'app-root',
@@ -29,6 +30,7 @@ export class AppComponent implements OnInit {
         this.hideHeaderFooter = (event.url.indexOf('/editwebforms') === -1);
       }
     });
+    feather.replace();
   }
   // ngAfterViewInit(){
   //   this.headerComponent.loadOrganizationList();

@@ -10,7 +10,6 @@ import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
-import { IconsModule } from './icons/icons.module';
 import { JwtInterceptor, fakeBackendProvider, ErrorInterceptor } from './_helpers';
 
 import { environment } from '../environments/environment';
@@ -41,7 +40,11 @@ import { WebformsComponent } from './webforms/webforms.component';
 import { EditwebformComponent } from './editwebform/editwebform.component';
 import { PropertydashboardComponent } from './propertydashboard/propertydashboard.component';
 import { QuillModule } from 'ngx-quill';
+import { FeatherModule } from 'angular-feather';
+import { allIcons } from 'angular-feather/icons';
+
 export const isMock = environment.mock;
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -75,13 +78,13 @@ export const isMock = environment.mock;
     AppRoutingModule,
     FontAwesomeModule,
     NgbModule,
-    IconsModule,
     Ng2ChartJsModules,
     DragDropModule,
     BsDropdownModule.forRoot(),
     BrowserAnimationsModule,
     CollapseModule.forRoot(),
-    QuillModule.forRoot()
+    QuillModule.forRoot(),
+    FeatherModule.pick(allIcons)
   ],
   providers: [
     AuthenticationService,
