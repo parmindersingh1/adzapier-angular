@@ -45,8 +45,9 @@
       <li *ngFor="let menu of leftItems" class="nav-item">
         <div *ngIf="menu.orgName" class="navbar-collapse collapse" dropdown container="body" [collapse]="isCollapsed">
           <a class="nav-link dropdown-toggle" dropdownToggle (click)="true">
-            <span *ngIf="!currentOrganization">{{menu.orgName}}</span>
-            <span>{{currentOrganization}}</span>
+            <div *ngIf="!currentOrganization">{{menu.orgName}}</div>
+            <div>{{currentOrganization}}</div>
+            <span>{{currentProperty}}</span>
           </a>
           <ul *dropdownMenu class="dropdown-menu">
             <ng-container *ngFor="let item of menu.property;let first = first; trackBy: trackByMethod">
