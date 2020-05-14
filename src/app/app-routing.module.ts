@@ -20,6 +20,18 @@ import { DsarformComponent } from './dsarform/dsarform.component';
 import { WebformsComponent } from './webforms/webforms.component';
 import { EditwebformComponent } from './editwebform/editwebform.component';
 import { PropertydashboardComponent } from './propertydashboard/propertydashboard.component';
+import { PagesettingsComponent } from './pagesettings/pagesettings.component';
+import { PrivacypolicyComponent } from './privacypolicy/privacypolicy.component';
+import { PartnersComponent } from './partners/partners.component';
+import { TermofuseComponent } from './termofuse/termofuse.component';
+import { ContactusComponent } from './contactus/contactus.component';
+import { CCPAComponent } from './ccpa/ccpa.component';
+import { GDPRComponent } from './gdpr/gdpr.component';
+import { PricingComponent } from './pricing/pricing.component';
+import { GethelpComponent } from './gethelp/gethelp.component';
+import { ChangelogComponent } from './changelog/changelog.component';
+import { CompanyComponent } from './company/company.component';
+import { BillingComponent } from './billing/billing.component';
 
 
 const routes: Routes = [
@@ -29,6 +41,15 @@ const routes: Routes = [
   { path: 'logout', component: LoginComponent },
   { path: 'signup', component: RegisterComponent },
   { path: 'forgot-password', component: ForgotpasswordComponent },
+  {path : 'privacypolicy', component: PrivacypolicyComponent},
+  {path : 'pricing', component: PricingComponent},
+  {path : 'partners', component: PartnersComponent},
+  {path : 'termofuse', component: TermofuseComponent},
+  {path : 'contactus', component: ContactusComponent},
+  {path : 'ccpa', component: CCPAComponent},
+  {path : 'gdpr', component: GDPRComponent},
+  {path : 'gethelp', component: GethelpComponent},
+  {path: 'changelog', component: ChangelogComponent},
   { path: 'home/dashboard/analytics', component: AnalyticsComponent, canActivate: [AuthGuard] },
   { path: 'user/password/change-password', component: ChangepasswordComponent, canActivate: [AuthGuard] },
   { path: 'user/profile/edit', component: EditProfileComponent, canActivate: [AuthGuard] },
@@ -40,9 +61,11 @@ const routes: Routes = [
   { path: 'internalerror', component: InternalerrorComponent },
   {path : 'dsarform', component: DsarformComponent, canActivate: [AuthGuard]},
   {path : 'webforms', component: WebformsComponent, canActivate: [AuthGuard]},
+  {path : 'settings', component: PagesettingsComponent, canActivate: [AuthGuard]},
   {path : 'editwebforms/:crid', component: EditwebformComponent, canActivate: [AuthGuard]},
   {path : 'propertydashboard/:propid', component: PropertydashboardComponent, canActivate: [AuthGuard]},
-  // {path : 'app1/editwebforms/:crid', component: PublishedwebformComponent, canActivate: [AuthGuard]},
+  {path : 'company', component: CompanyComponent, canActivate: [AuthGuard]},
+  {path : 'billing', component: BillingComponent, canActivate: [AuthGuard]},
   { path: '', redirectTo: 'home/dashboard/analytics', pathMatch: 'full', canActivate: [AuthGuard] },
   
   // { path: '', redirectTo: 'home/dashboard/analytics', pathMatch:'full' },

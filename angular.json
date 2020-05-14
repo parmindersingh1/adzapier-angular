@@ -28,20 +28,19 @@
               "src/assets"
             ],
             "styles": [
-            
+              "./node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "./node_modules/ngx-bootstrap/datepicker/bs-datepicker.css",
               "src/styles.scss",
               "src/assets/css/dashforge.css",
               "./node_modules/quill/dist/quill.snow.css",
               "./node_modules/quill/dist/quill.core.css",
               "./node_modules/quill/dist/quill.bubble.css",
               "./node_modules/quill-emoji/dist/quill-emoji.css"
-             
             ],
             "scripts": [
               "./node_modules/quill/dist/quill.core.js",
               "./node_modules/quill/dist/quill.min.js",
               "./node_modules/quill-emoji/dist/quill-emoji.js"
-             
             ]
           },
           "configurations": {
@@ -162,7 +161,9 @@
               "src/favicon.ico",
               "src/assets"
             ],
-            "styles": [            
+            "styles": [
+              "./node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "./node_modules/ngx-bootstrap/datepicker/bs-datepicker.css",
               "src/styles.scss"
             ],
             "scripts": []
@@ -194,6 +195,7 @@
           }
         }
       }
-    }},
+    }
+  },
   "defaultProject": "adzapier-analytics-ng"
 }

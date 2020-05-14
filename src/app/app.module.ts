@@ -42,6 +42,21 @@ import { PropertydashboardComponent } from './propertydashboard/propertydashboar
 import { QuillModule } from 'ngx-quill';
 import { FeatherModule } from 'angular-feather';
 import { allIcons } from 'angular-feather/icons';
+import { PagesettingsComponent } from './pagesettings/pagesettings.component';
+import { PricingComponent } from './pricing/pricing.component';
+import { PartnersComponent } from './partners/partners.component';
+import { ContactusComponent } from './contactus/contactus.component';
+import { TermofuseComponent } from './termofuse/termofuse.component';
+import { PrivacypolicyComponent } from './privacypolicy/privacypolicy.component';
+import { CCPAComponent } from './ccpa/ccpa.component';
+import { GDPRComponent } from './gdpr/gdpr.component';
+import { GethelpComponent } from './gethelp/gethelp.component';
+import { ChangelogComponent } from './changelog/changelog.component';
+import { CompanyComponent } from './company/company.component';
+import { BillingComponent } from './billing/billing.component';
+import { NgxPaginationModule } from 'ngx-pagination';
+import { PaginationModule } from 'ngx-bootstrap/pagination';
+
 
 export const isMock = environment.mock;
 
@@ -68,7 +83,19 @@ export const isMock = environment.mock;
     DsarformComponent,
     WebformsComponent,
     EditwebformComponent,
-    PropertydashboardComponent
+    PropertydashboardComponent,
+    PagesettingsComponent,
+    PricingComponent,
+    PartnersComponent,
+    ContactusComponent,
+    TermofuseComponent,
+    PrivacypolicyComponent,
+    CCPAComponent,
+    GDPRComponent,
+    GethelpComponent,
+    ChangelogComponent,
+    CompanyComponent,
+    BillingComponent
   ],
   imports: [
     BrowserModule,
@@ -80,11 +107,14 @@ export const isMock = environment.mock;
     NgbModule,
     Ng2ChartJsModules,
     DragDropModule,
-    BsDropdownModule.forRoot(),
+    NgxPaginationModule,
+    PaginationModule,
     BrowserAnimationsModule,
+    BsDropdownModule.forRoot(),
     CollapseModule.forRoot(),
     QuillModule.forRoot(),
-    FeatherModule.pick(allIcons)
+    FeatherModule.pick(allIcons),
+    PaginationModule.forRoot()
   ],
   providers: [
     AuthenticationService,

@@ -18,7 +18,7 @@
       <li *ngFor="let menu of publicNavigationMenu" class="nav-item">
         <div *ngIf="menu.showlink" dropdown container="body">
           <div *ngIf="!menu.subcategory">
-            <a class="nav-link" (click)="true">
+            <a class="nav-link" (click)="true" routerLink="{{menu.routerLink}}">
               {{ menu.showlink }}</a></div>
           <div *ngIf="menu.subcategory">
             <a class="nav-link dropdown-toggle" *ngIf="menu.subcategory" dropdownToggle (click)="true">

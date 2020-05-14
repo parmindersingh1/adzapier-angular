@@ -84,11 +84,11 @@ export class HeaderComponent implements OnInit {
       {   showlink: 'Solutions',
           subcategory: [{showlink: 'CCPA', routerLink: '/ccpa'}, { showlink: 'GDPR', routerLink: '/gdpr' }]
       }, {
-        showlink: 'Pricing'
+        showlink: 'Pricing', routerLink: '/pricing'
       }, {
-        showlink: 'Partners'
+        showlink: 'Partners', routerLink: '/partners'
       }, {
-        showlink: 'Contact Us'
+        showlink: 'Contact Us', routerLink: '/contactus'
       }];
   }
 
@@ -160,7 +160,7 @@ export class HeaderComponent implements OnInit {
             { label: 'User Preferences', routerLink: '/user/profile/edit', icon: 'edit-3' },
             { label: 'Organizations', routerLink: '/portalorg', icon: 'activity' },
             { label: 'Billing', routerLink: '/pagenotfound', icon: 'credit-card' },
-            { label: 'Settings', routerLink: '/user/password/change-password', icon: 'settings' },
+            { label: 'Settings', routerLink: '/settings', icon: 'settings' },
             { label: 'Help Center', routerLink: '/pagenotfound', icon: 'help-circle' },
             { label: 'Signout', routerLink: '', icon: 'log-out' }
           ]
@@ -232,10 +232,12 @@ export class HeaderComponent implements OnInit {
   }
 
   nameInitials(str) {
-    const firstChar = str.charAt(0);
-    const spacePos = str.indexOf(' ');
-    const secondChar = str.charAt(spacePos + 1);
-    return firstChar + secondChar;
+    if (str !== null) {
+      const firstChar = str.charAt(0);
+      const spacePos = str.indexOf(' ');
+      const secondChar = str.charAt(spacePos + 1);
+      return firstChar + secondChar;
+    }
   }
 
   currentSelectedProperty() {
