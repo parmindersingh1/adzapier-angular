@@ -272,5 +272,5 @@ export class OrgpageComponent implements OnInit {
   clickToManage(propertyID) {
     this.router.navigate(['propertydashboard/', propertyID]);
   }
- 
+
 }

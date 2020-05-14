@@ -67,9 +67,10 @@
             </tbody>
         </table>
     </div>
-    <div class="propertylist"> <!--*ngIf="isOpen"-->
+    <div class="propertylist">
+        <!--*ngIf="isOpen"-->
         <h5 class="mg-t-10">Property list</h5>
-        
+
         <table class="table" *ngIf="propertyList?.length !== '0'">
             <thead>
                 <tr>
@@ -84,7 +85,9 @@
             </thead>
             <tbody>
                 <tr>
-                    <td colspan="7" class="txt-center"><div *ngIf="propertyList?.length == 0"> No property found </div></td>
+                    <td colspan="7" class="txt-center">
+                        <div *ngIf="propertyList?.length == 0"> No property found </div>
+                    </td>
                 </tr>
                 <ng-container *ngFor="let list of propertyList; let i = index">
                     <tr>
@@ -101,7 +104,8 @@
                             {{list.website}}
                         </td>
                         <td>
-                            <button class="btn btn-sm btn-outline-primary" (click)="editModalPopup(mymodal,list)">Edit</button>
+                            <button class="btn btn-sm btn-outline-primary"
+                                (click)="editModalPopup(mymodal,list)">Edit</button>
                         </td>
                         <td>
                             <button class="btn btn-sm btn-primary" (click)="clickToManage(list.pid)">Manage</button>
@@ -133,7 +137,8 @@
                             [ngClass]="{ 'is-invalid': submitted && editOrg.organizationname.errors }" />
                         <div *ngIf="submitted && editOrg.organizationname.errors" class="invalid-feedback">
                             <div *ngIf="editOrg.organizationname.errors.required">Organization name is required</div>
-                            <div *ngIf="editOrg.organizationname.errors.pattern">Organization allow only Alphanumeric</div>
+                            <div *ngIf="editOrg.organizationname.errors.pattern">Organization allow only Alphanumeric
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -144,20 +149,20 @@
                     <div class="form-group">
                         <label for="taxidnumber">Tax ID</label>
                         <input type="text" class="form-control" [(ngModel)]="taxidnumber" formControlName="taxidnumber"
-                        name="taxidnumber" />
-                          
+                            name="taxidnumber" />
+
                     </div>
                 </div>
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label for="addressone">Address 1</label>
                         <input type="text" class="form-control" [(ngModel)]="addressone" formControlName="addressone"
-                            name="addressone" [ngClass]="{ 'is-invalid': submitted && editOrg.addressone.errors }"/>
-                            <div *ngIf="submitted && editOrg.addressone.errors" class="invalid-feedback">
-                                <div *ngIf="editOrg.addressone.errors.required">Address 1 is required</div>
-                            </div>
+                            name="addressone" [ngClass]="{ 'is-invalid': submitted && editOrg.addressone.errors }" />
+                        <div *ngIf="submitted && editOrg.addressone.errors" class="invalid-feedback">
+                            <div *ngIf="editOrg.addressone.errors.required">Address 1 is required</div>
+                        </div>
                     </div>
-                   
+
                 </div>
             </div>
             <div class="row">
@@ -166,17 +171,17 @@
                     <div class="form-group">
                         <label for="addresstwo">Address 2</label>
                         <input type="text" class="form-control" [(ngModel)]="addresstwo" formControlName="addresstwo"
-                        name="addresstwo" [ngClass]="{ 'is-invalid': submitted && editOrg.addresstwo.errors }"/>
-                            <div *ngIf="submitted && editOrg.addresstwo.errors" class="invalid-feedback">
-                                <div *ngIf="editOrg.addresstwo.errors.required">Address 2 is required</div>
-                            </div>
+                            name="addresstwo" [ngClass]="{ 'is-invalid': submitted && editOrg.addresstwo.errors }" />
+                        <div *ngIf="submitted && editOrg.addresstwo.errors" class="invalid-feedback">
+                            <div *ngIf="editOrg.addresstwo.errors.required">Address 2 is required</div>
+                        </div>
                     </div>
                 </div>
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label for="city">City</label>
-                        <input type="text" class="form-control" [(ngModel)]="cityname" formControlName="cityname" name="cityname"
-                        [ngClass]="{ 'is-invalid': submitted && editOrg.cityname.errors }"/>
+                        <input type="text" class="form-control" [(ngModel)]="cityname" formControlName="cityname"
+                            name="cityname" [ngClass]="{ 'is-invalid': submitted && editOrg.cityname.errors }" />
                         <div *ngIf="submitted && editOrg.cityname.errors" class="invalid-feedback">
                             <div *ngIf="editOrg.cityname.errors.required">City is required</div>
                         </div>
@@ -189,9 +194,9 @@
                     <div class="form-group">
                         <label for="state">State</label>
                         <input type="text" class="form-control" [(ngModel)]="statename" formControlName="statename"
-                        name="statename" [ngClass]="{ 'is-invalid': submitted && editOrg.statename.errors }"/>
+                            name="statename" [ngClass]="{ 'is-invalid': submitted && editOrg.statename.errors }" />
                         <div *ngIf="submitted && editOrg.statename.errors" class="invalid-feedback">
-                                <div *ngIf="editOrg.statename.errors.required">State is required</div>
+                            <div *ngIf="editOrg.statename.errors.required">State is required</div>
                         </div>
                     </div>
                 </div>
@@ -199,9 +204,9 @@
                     <div class="form-group">
                         <label for="state">Zip Code</label>
                         <input type="text" class="form-control" [(ngModel)]="zipcodenum" formControlName="zipcodenum"
-                        name="zipcodenum" [ngClass]="{ 'is-invalid': submitted && editOrg.zipcodenum.errors }"/>
-                            <div *ngIf="submitted && editOrg.zipcodenum.errors" class="invalid-feedback">
-                                <div *ngIf="editOrg.zipcodenum.errors.required">Zipcode is required</div>
+                            name="zipcodenum" [ngClass]="{ 'is-invalid': submitted && editOrg.zipcodenum.errors }" />
+                        <div *ngIf="submitted && editOrg.zipcodenum.errors" class="invalid-feedback">
+                            <div *ngIf="editOrg.zipcodenum.errors.required">Zipcode is required</div>
                         </div>
                     </div>
                 </div>
@@ -212,7 +217,7 @@
                         class="btn btn-outline-dark">Cancel</button>
                 </div>
                 <div class="col-sm-6">
-                    <button  class="btn btn-outline-dark">Save</button>
+                    <button class="btn btn-outline-dark">Save</button>
                 </div>
             </div>
         </form>
