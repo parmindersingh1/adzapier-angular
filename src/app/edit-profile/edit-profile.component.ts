@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Validators, FormBuilder, FormGroup, NgForm } from '@angular/forms';
 import { AuthenticationService, UserService } from '../_services';
-import { TextBoxSpaceValidator } from '../_helpers/textboxspace.validator';
-import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MustMatch } from '../_helpers/must-match.validator';
 
 @Component({
@@ -15,6 +14,7 @@ export class EditProfileComponent implements OnInit {
   changepasswordForm: FormGroup;
   loading = false;
   submitted = false;
+  changePwdSubmitted = false;
   show: boolean = true;
   isShowbtnVisible = false;
   navbarCollapsed: boolean = false;
@@ -75,7 +75,7 @@ export class EditProfileComponent implements OnInit {
 
   // convenience getter for easy access to form fields
   get f() { return this.profileForm.controls; }
-
+  get f1() { return this.changepasswordForm.controls; }
   onSubmit() {
     this.submitted = true;
     if (this.profileForm.invalid) {
@@ -99,6 +99,7 @@ export class EditProfileComponent implements OnInit {
            // this.show = true;
             alert('Details has been updated successfully!');
             this.userService.getCurrentUser.emit(data);
+            this.modalService.dismissAll('Data Saved!');
           }
         }, (error) => {
           alert(error);
@@ -147,7 +148,7 @@ export class EditProfileComponent implements OnInit {
   editOrganizationModalPopup(content) {
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
     }, (reason) => {
-      this.profileForm.reset();
+     // this.profileForm.reset();
     });
   }
 
@@ -166,23 +167,21 @@ export class EditProfileComponent implements OnInit {
   }
 
   //change password
-  // convenience getter for easy access to form fields
-  get f1() { return this.changepasswordForm.controls; }
 
   clearError() {
     this.errorMsg = "";
   }
 
   onChangePassword() {
-    this.submitted = true;
+    this.changePwdSubmitted = true;
     this.show = false;
     if (this.changepasswordForm.invalid) {
       return;
     }
     const obj = {
-      current_password: this.f1.currentPassword.value,
-      new_password: this.f1.newPassword.value,
-      confirm_password: this.f1.confirmPassword.value
+      current_password: this.changepasswordForm.value.currentPassword,
+      new_password: this.changepasswordForm.value.newPassword,
+      confirm_password: this.changepasswordForm.value.confirmPassword
     };
     this.authenticationService.changePassword(obj).subscribe((data) => {
       if (data) {
@@ -196,9 +195,14 @@ export class EditProfileComponent implements OnInit {
     });
   }
 
-  onReset() {
-    this.submitted = false;
+  onResetChangePassword() {
+    this.changePwdSubmitted = false;
     this.changepasswordForm.reset();
+  }
+
+  onResetProfile() {
+    this.submitted = false;
+    this.modalService.dismissAll('Data Saved!');
   }
 }
 
