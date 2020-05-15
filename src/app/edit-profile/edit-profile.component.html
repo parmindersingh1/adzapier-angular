@@ -92,10 +92,10 @@
                         <div class="form-group mg-b-5">
                             <label for="currentPassword"> Current Password</label>
                             <input type="password" formControlName="currentPassword" class="form-control"
-                                [ngClass]="{ 'is-invalid': submitted && f1.currentPassword.errors }"
+                                [ngClass]="{ 'is-invalid': changePwdSubmitted && f1.currentPassword.errors }"
                                 placeholder="Enter your password"
                                 pattern="(?=^.{6,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9]).*$" />
-                            <div *ngIf="submitted && f1.currentPassword.errors" class="invalid-feedback">
+                            <div *ngIf="changePwdSubmitted && f1.currentPassword.errors" class="invalid-feedback">
                                 <div *ngIf="f1.currentPassword.errors.required">Password is required</div>
                                 <div *ngIf="f1.currentPassword.errors.pattern">Enter Valid Password (Ex: Aa@2aa) and
                                     minimum 6 charcters </div>
@@ -105,10 +105,10 @@
                         <div class="form-group">
                             <label for="newPassword"> New Password</label>
                             <input type="password" formControlName="newPassword" class="form-control"
-                                [ngClass]="{ 'is-invalid': submitted && f1.newPassword.errors }"
+                                [ngClass]="{ 'is-invalid': changePwdSubmitted && f1.newPassword.errors }"
                                 placeholder="Enter your password"
                                 pattern="(?=^.{6,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9]).*$" />
-                            <div *ngIf="submitted && f1.newPassword.errors" class="invalid-feedback">
+                            <div *ngIf="changePwdSubmitted && f1.newPassword.errors" class="invalid-feedback">
                                 <div *ngIf="f1.newPassword.errors.required">New Password is required</div>
                                 <div *ngIf="f1.newPassword.errors.pattern">Enter Valid Password (Ex: Aa@2aa) and minimum
                                     6 charcters </div>
@@ -118,18 +118,18 @@
                         <div class="form-group">
                             <label for="confirmPassword">Confirm Password</label>
                             <input type="password" formControlName="confirmPassword" class="form-control"
-                                [ngClass]="{ 'is-invalid': submitted && f1.confirmPassword.errors }"
+                                [ngClass]="{ 'is-invalid': changePwdSubmitted && f1.confirmPassword.errors }"
                                 placeholder="Enter your Confirm password"
                                 pattern="(?=^.{6,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9]).*$" />
-                            <div *ngIf="submitted && f1.confirmPassword.errors" class="invalid-feedback">
+                            <div *ngIf="changePwdSubmitted && f1.confirmPassword.errors" class="invalid-feedback">
                                 <div *ngIf="f1.confirmPassword.errors.required">Confirm Password is required</div>
                                 <div *ngIf="f1.confirmPassword.errors.mustMatch">Passwords must match</div>
                             </div>
                         </div>
 
                         <div class="text-left">
-                            <button class="btn btn-primary mr-2" type="submit">Save</button>
-                            <button class="btn btn-primary mr-2" type="reset" (click)="onReset()">Cancel</button>
+                            <button class="btn btn-primary mr-2">Save</button>
+                            <button class="btn btn-primary mr-2" (click)="onResetChangePassword()">Cancel</button>
                         </div>
 
                         <div *ngIf="show" style="color: green; margin-top: 10px;" class="tx-13">
@@ -263,9 +263,9 @@
                         <div class="form-group">
                             <label>&nbsp;</label>
                             <div class="text-right">
-                                <button class="btn btn-primary mr-2" type="submit">Save Changes</button>
-                                <button class="btn btn-primary mr-2" type="button"
-                                    (click)="modal.dismiss('Close Clicked')">Cancel</button>
+                                <button class="btn btn-primary mr-2">Save Changes</button>
+                                <button class="btn btn-primary mr-2"
+                                    (click)="onResetProfile()">Cancel</button>
                             </div>
                         </div>
                     </div>

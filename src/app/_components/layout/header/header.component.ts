@@ -1,12 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { OrganizationService, AuthenticationService, UserService } from '../../../_services';
-import { User } from '../../../_models';
 import { Observable } from 'rxjs';
 import { BsDropdownConfig } from 'ngx-bootstrap/dropdown';
 import { Organization } from 'src/app/_models/organization';
-import { faLeaf } from '@fortawesome/free-solid-svg-icons';
-import * as Feather from 'feather-icons';
 
 @Component({
   selector: 'app-header',
@@ -37,6 +34,8 @@ export class HeaderComponent implements OnInit {
   activeProp: any;
   publicNavigationMenu: any;
   currentProperty: any;
+  navToggleStatus = false;
+  close: boolean;
   constructor(
     private router: Router,
     private activatedroute: ActivatedRoute,
@@ -101,15 +100,6 @@ export class HeaderComponent implements OnInit {
 
   }
 
-  // getDynamicMenu() {
-  //   const testNames = ['Test1', 'Test2', 'Test3'];
-  //   const dynamicSubmenu = [];
-  //   for (const menuName of testNames) {
-  //     dynamicSubmenu.push({ label: 'Submenu - ' + menuName, routerLink: '/submenus/' + menuName.toLowerCase() });
-  //   }
-  //   return dynamicSubmenu;
-  // }
-
   editProfile() {
     return this.router.navigate(['/user/profile/edit']);
   }
@@ -162,7 +152,7 @@ export class HeaderComponent implements OnInit {
             { label: 'Billing', routerLink: '/pagenotfound', icon: 'credit-card' },
             { label: 'Settings', routerLink: '/settings', icon: 'settings' },
             { label: 'Help Center', routerLink: '/pagenotfound', icon: 'help-circle' },
-            { label: 'Signout', routerLink: '', icon: 'log-out' }
+            { label: 'Signout', routerLink: '/login', icon: 'log-out' }
           ]
         }];
       this.navigationMenu = [
@@ -246,5 +236,17 @@ export class HeaderComponent implements OnInit {
         this.currentProperty = data.property.propName;
       }
     });
+  }
+
+  toggleNavbar() {
+    this.navToggleStatus = !this.navToggleStatus;
+  }
+
+  openNav() {
+    this.close = true;
+  }
+
+  closeNav() {
+    this.close = false;
   }
 }

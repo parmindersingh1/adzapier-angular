@@ -4097,9 +4097,9 @@ input[type="button"].btn-block {
     .navbar-expand-lg > .container,
     .navbar-expand-lg > .container-fluid {
       flex-wrap: nowrap; }
-    .navbar-expand-lg .navbar-collapse {
+    /* .navbar-expand-lg .navbar-collapse {
       display: flex !important;
-      flex-basis: auto; }
+      flex-basis: auto; } */
     .navbar-expand-lg .navbar-toggler {
       display: none; } }
 

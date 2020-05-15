@@ -43,15 +43,18 @@ i {
 }
 
 .nav-link {
-    color: #777;
+    color:rgba(255, 255, 255, 0.7);
 }
 
 .navbar-expand-sm .navbar-collapse {
-    justify-content: flex-end;
+    justify-content: flex-start;
+    z-index: 1200;
+    background-color: blueviolet;
 }
 
 .navbar-expand-sm {
-    justify-content: flex-start !important;
+    justify-content: space-between !important;
+    /*justify-content: flex-start !important;*/
     padding: 0 15px !important;
 }
 
@@ -66,11 +69,11 @@ i {
 
 .dropdown-item{
     padding: 0.25rem 0;
-    cursor: pointer;
+    cursor: pointer; 
     // justify-content: space-between;
     // display: flex;
 }
-
+ 
 .ml-auto .dropdown-menu {
     left: auto !important;
     right: 0px;
@@ -162,6 +165,12 @@ a.nav-link.dropdown-link .userInitials:hover {
     margin: 0 15px 0 0;
 }
 
+.feather-24{
+    width: 24px;
+    height: 24px;
+    margin: 0 15px 0 0;
+}
+
 .line-partition {
     border-bottom: 1px solid #ccc;
     margin: 20px 0;
@@ -179,3 +188,201 @@ a.nav-link.dropdown-link .userInitials:hover {
     margin: 10px 0;
     font-weight: 600;
 }
+
+.navbar-menu-wrapper {
+    order: 3;
+    width: 260px;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    background-color: #fff;
+    overflow: hidden;
+    z-index: 1060;
+    transform: translateX(-260px);
+    transition: all 0.4s;
+}
+
+.show {
+    display: block;
+}
+
+/*vertical menu*/
+.sidenav {
+    height: 100%; /* 100% Full-height */
+    width: 0; /* 0 width - change this with JavaScript */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Stay on top */
+    top: 0; /* Stay at the top */
+    left: 0;
+    background-color: #fff; /* Black*/
+    overflow-x: hidden; /* Disable horizontal scroll */
+    padding-top: 10px; /* Place content 60px from the top */
+    transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
+    padding: 20px;
+  }
+  
+  /* The navigation menu links */
+  .sidenav a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 13px;
+    color: #818181;
+    display: block;
+    transition: 0.3s;
+  }
+  
+  /* When you mouse over the navigation links, change their color */
+  .sidenav a:hover {
+    color: #f1f1f1;
+  }
+  
+  /* Position and style the close button (top right corner) */
+  .sidenav .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+  }
+  
+  /* Style page content - use this if you want to push the page content to the right when you open the side navigation */
+  #main {
+    transition: margin-left .5s;
+    padding: 20px;
+  }
+  
+  /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
+  @media screen and (max-height: 450px) {
+    .sidenav {padding-top: 15px;}
+    .sidenav a {font-size: 18px;}
+  }
+
+  .addWidth {
+      width: 250px;
+  }
+
+  .removeWidth {
+      width: 0;
+      padding: 0;
+  }
+
+//   .collapse:not(.show) {
+//       display: none !important;
+//   }
+
+  @media screen and (max-width:767px){
+      .burger-menu {
+          display: block;
+      }
+      .navbar-expand-lg .navbar-toggler {
+        display: block !important;
+    }
+  }
+
+  @media screen and (min-width:768px){
+    .burger-menu {
+        display: none;
+    }
+
+    .navbar-expand-lg .navbar-toggler {
+        display: none !important;
+    }
+}
+ 
+.navbar-left {
+    float: left;
+    /*margin-left: 15px;*/
+  }
+
+  .navbar-header {
+    //   height: auto;
+      display: flex;
+      border-bottom: 0;
+      background: transparent;
+  }
+
+  .df-logo {
+      margin: 0 !important;
+  }
+
+  .navbar-header .navbar-brand {
+    display: flex;
+    align-items: center;
+    padding-left: 15px;
+    margin-right: 0;
+    height: auto;
+    margin: 0 !important;
+    padding: 0 15px 0 15px !important;
+    order: 1;
+}
+
+  @media (min-width: 768px) {
+    .navbar-expand-lg .navbar-collapse {
+        display: flex;
+        flex-basis: auto;
+        flex-grow: 1;
+        justify-content: space-between;
+        padding: 0 15px;
+        // width: 100%;
+    }
+
+    .navbar-collapse .collapse .hidemenu{
+        display: none !important;
+    }
+
+    .navbar-nav {
+        flex-direction: row !important;
+    }
+
+    .showmenu {
+        display: flex !important;
+        height: 60px !important;
+        align-items: center;    
+        // width: 100%;
+      }
+
+      .navbar-header .navbar-brand {
+          width: auto;
+      }
+
+      .addWidth {
+          width: 0;
+      }
+
+      .sidenav {
+          padding: 0;
+      }
+  }
+
+  @media (max-width: 767px) {
+    .showmenu {
+        display: none !important;
+    }
+
+    .navbar .navbar-nav {
+        flex-direction: row !important;
+    }
+  }
+
+  div#collapsibleNavbar ul.navbar-nav {
+    flex-direction: row;
+  }
+
+  .hidemenu {
+      display: none !important;
+  } 
+
+  .bluecolor {
+    color: #0168fa;
+  }
+
+  #divSidenav .df-logo span {
+      font-size: 20px;
+      color: #333;
+      font-weight: bold;
+  }
+
+  #divSidenav > ul > li a.nav-link {
+      color:#818181;
+  }
