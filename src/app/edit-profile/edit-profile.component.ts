@@ -100,6 +100,7 @@ export class EditProfileComponent implements OnInit {
             alert('Details has been updated successfully!');
             this.userService.getCurrentUser.emit(data);
             this.modalService.dismissAll('Data Saved!');
+            this.loadUserDetails();
           }
         }, (error) => {
           alert(error);
