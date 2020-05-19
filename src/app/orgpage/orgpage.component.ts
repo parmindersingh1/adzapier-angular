@@ -39,11 +39,16 @@ export class OrgpageComponent implements OnInit {
   myContext;
   showOrgDetails: boolean = false;
   isEditProperty: boolean;
+  isEditOrganization: boolean;
+  p: number = 1;
+  i: any = [];
+  myconfig = { itemsPerPage: 3 || this.i, currentPage: this.p };
+  
   constructor(private formBuilder: FormBuilder,
-              private orgservice: OrganizationService,
-              private modalService: NgbModal, private sanitizer: DomSanitizer,
-              private userService: UserService,
-              private router: Router
+    private orgservice: OrganizationService,
+    private modalService: NgbModal, private sanitizer: DomSanitizer,
+    private userService: UserService,
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -64,15 +69,15 @@ export class OrgpageComponent implements OnInit {
       addressone: ['', [Validators.required]],
       addresstwo: ['', [Validators.required]],
       cityname: ['', [Validators.required, Validators.pattern(strRegx)]],
-      statename: ['', [Validators.required,  Validators.pattern(strRegx)]],
+      statename: ['', [Validators.required, Validators.pattern(strRegx)]],
       zipcodenum: ['', [Validators.required, Validators.pattern(zipRegex)]]
     });
     this.loadOrganizationList();
-  
+
   }
-   get orgProp() { return this.organisationPropertyForm.controls; }
-   get editOrg() { return this.editOrganisationForm.controls; }
-   
+  get orgProp() { return this.organisationPropertyForm.controls; }
+  get editOrg() { return this.editOrganisationForm.controls; }
+
   uploadFile(event) {
     console.log(event, 'event..');
     if (event.target.files.length > 0) {
@@ -86,7 +91,7 @@ export class OrgpageComponent implements OnInit {
   // get logo_url() { return this.organisationPropertyForm.get('logo_url'); }
   onSubmit() {
     this.submitted = true;
-   
+
     // const fd = new FormData();
     // fd.append('name', this.organisationPropertyForm.get('name').value);
     // fd.append('website', this.organisationPropertyForm.get('website').value);
@@ -128,7 +133,7 @@ export class OrgpageComponent implements OnInit {
         });
       }
     }
- 
+
 
   }
 
@@ -138,9 +143,9 @@ export class OrgpageComponent implements OnInit {
       this.getPropertyList(this.orgList[0].orgid);
       this.loadOrganizationDetails(this.orgList[0]);
     });
-  
+
   }
- 
+
 
   loadOrganizationDetails(org) {
     this.orgDetails = [];
@@ -149,25 +154,26 @@ export class OrgpageComponent implements OnInit {
       const key = 'response';
       this.orgDetails.push(data[key]);
     }, (error) => {
-      alert(error);
+      alert(JSON.stringify(error));
     });
   }
- 
+
   updateOrganisationData(data) {
     this.submitted = true;
     if (this.editOrganisationForm.invalid) {
       return false;
     } else {
-      const obj = {
+      if (this.isEditOrganization) {
+      const updateObj = {
         orgname: this.editOrganisationForm.value.organizationname,
         taxID: this.editOrganisationForm.value.taxidnumber,
         address1: this.editOrganisationForm.value.addressone,
         address2: this.editOrganisationForm.value.addresstwo,
         city: this.editOrganisationForm.value.cityname,
-        state:  this.editOrganisationForm.value.statename,
+        state: this.editOrganisationForm.value.statename,
         zipcode: this.editOrganisationForm.value.zipcodenum
       };
-      this.orgservice.updateOrganization(data.oid, obj).subscribe((res) => {
+      this.orgservice.updateOrganization(data.oid, updateObj).subscribe((res) => {
         if (res) {
           this.orgservice.emitUpdatedOrganization.emit(res);
           alert('Organization updated successfully!');
@@ -180,10 +186,34 @@ export class OrgpageComponent implements OnInit {
       }, (error) => {
         alert(JSON.stringify(error));
       });
+    } else {
+      const addObj = {
+        orgname: this.editOrganisationForm.value.organizationname,
+        taxID: this.editOrganisationForm.value.taxidnumber,
+        address1: this.editOrganisationForm.value.addressone,
+        address2: this.editOrganisationForm.value.addresstwo,
+        city: this.editOrganisationForm.value.cityname,
+        state: this.editOrganisationForm.value.statename,
+        zipcode: this.editOrganisationForm.value.zipcodenum
+      };
+      this.orgservice.addOrganization(addObj).subscribe((res) => {
+        if (res) {
+          this.orgservice.emitUpdatedOrganization.emit(res);
+          alert('Organization Added successfully!');
+          this.onResetEditOrganization();
+          this.orgDetails = [];
+          this.showOrgDetails = false;
+          this.loadOrganizationList();
+          this.isEditable = false;
+        }
+      }, (error) => {
+        alert(JSON.stringify(error));
+      });
+    }
     }
     // console.log(this.editOrganisationForm.value, 'value..');
     // if (this.editOrganisationForm.valid) {
-      
+
     // }
   }
 
@@ -217,7 +247,7 @@ export class OrgpageComponent implements OnInit {
       if (!data.response) {
         alert("Adding property is mandatory. Add Property first.");
       }
-      
+
       return this.propertyList = data.response;
     });
   }
@@ -244,26 +274,46 @@ export class OrgpageComponent implements OnInit {
     });
   }
 
-  
 
-  editOrganizationModalPopup(content, data) {
-    this.myContext = { oid: data.oid, pid: data.pid};
-    this.organizationname = data.name;
-    this.taxidnumber = data.taxID;
-    this.addressone = data.address1;
-    this.addresstwo = data.address2;
-    this.cityname = data.city;
-    this.statename = data.state;
-    this.zipcodenum = data.zipcode;
-    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
-      this.editOrganisationForm.reset();
-      this.closeResult = `Closed with: ${result}`;
-    }, (reason) => {
-      this.editOrganisationForm.reset();
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-    });
+
+  organizationModalPopup(content, data) {
+    if (data !== undefined) {
+      this.isEditOrganization = true;
+      this.myContext = { oid: data.id };
+      this.organizationname = data.orgname;
+      this.taxidnumber = data.taxID;
+      this.addressone = data.address1;
+      this.addresstwo = data.address2;
+      this.cityname = data.city;
+      this.statename = data.state;
+      this.zipcodenum = data.zipcode;
+      this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
+        this.editOrganisationForm.reset();
+        this.closeResult = `Closed with: ${result}`;
+      }, (reason) => {
+        this.editOrganisationForm.reset();
+        this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+      });
+    } else {
+      this.isEditOrganization = false;
+      this.organizationname = '';
+      this.taxidnumber = '';
+      this.addressone = '';
+      this.addresstwo = '';
+      this.cityname = '';
+      this.statename = '';
+      this.zipcodenum = '';
+      this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
+        this.editOrganisationForm.reset();
+        this.closeResult = `Closed with: ${result}`;
+      }, (reason) => {
+        this.editOrganisationForm.reset();
+        this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+      });
+    }
+
   }
-  
+
   onResetEditOrganization() {
     this.editOrganisationForm.reset();
     this.modalService.dismissAll('Data Saved!');
@@ -272,5 +322,14 @@ export class OrgpageComponent implements OnInit {
   clickToManage(propertyID) {
     this.router.navigate(['propertydashboard/', propertyID]);
   }
+
+  pageChangeEvent(event) {
+    this.myconfig.currentPage = event;
+  }
+
+  
+	onChangeEvent(event) {
+		this.myconfig.itemsPerPage = Number(event.target.value);
+	}
 
 }

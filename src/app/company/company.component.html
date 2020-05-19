@@ -1,1 +1,269 @@
-<p>company works!</p>
+<div class="container">
+<div class="mb-3">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb breadcrumb-style1 mg-b-0">
+          <li class="breadcrumb-item"><a routerLink="/settings">Settings</a></li>
+          <li class="breadcrumb-item active" aria-current="page">Company</li>
+        </ol>
+      </nav>
+</div>
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header d-flex align-items-center justify-content-between pd-y-10">
+                <h6 class="mg-b-0 tx-color-03 ">
+                    Company Details  
+                </h6>
+                <div class="d-flex pd-0">
+                    <button (click)="editOrganizationModalPopup(editUserModal)"
+                        class="btn btn-sm btn-white float-right">
+                        <i-feather name="edit-2" class="feather-16"></i-feather>
+                        <span class="d-none d-sm-inline mg-l-0"> Edit</span>
+                    </button>
+                </div>
+            </div> 
+    
+            <div class="card-body">
+                <div class="row row-sm">
+                    <div class="col-sm-3 mg-t-5 mg-sm-t-5">
+                        <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">
+                            Company</label>
+                        <p class="tx-primary mg-b-0">{{orgname}}</p>
+                    </div>
+                    <div class="col-sm-3 mg-t-5 mg-sm-t-5">
+                        <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Address 1</label>
+                        <p class="mg-b-0">{{address1}}</p>
+                    </div>
+
+                    <div class="col-sm-3 mg-t-5 mg-sm-t-5">
+                        <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Address 2</label>
+                        <p class="mg-b-0">{{address2}}</p>
+                    </div>
+
+                    <div class="col-sm-3 mg-t-5 mg-sm-t-5">
+                        <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">TaxID</label>
+                        <p class=" mg-b-0">{{taxid}}</p>
+                    </div> 
+
+                    <div class="col-sm-3 mg-t-5 mg-sm-t-5">
+                        <label
+                            class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">City</label>
+                        <p class="mg-b-0">{{city}}</p>
+                    </div>
+
+                    <div class="col-sm-3 mg-t-5 mg-sm-t-5">
+                        <label
+                            class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">State</label>
+                        <p class="mg-b-0">{{state}}</p>
+                    </div>
+
+                    <div class="col-sm-3 mg-t-20 mg-sm-t-30">
+                        <label
+                            class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Zipcode</label>
+                        <p class="mg-b-0">{{zipcode}}</p>
+                    </div>
+
+
+
+                </div><!-- row -->
+            </div>
+        </div>
+    </div> 
+</div>
+</div>
+<ng-template #editUserModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Edit Company Details</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Close Clicked')">
+            <span aria-hidden="true">×</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form [formGroup]="companyForm" (ngSubmit)="onSubmit()">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="orgname" class="d-block">Company Name</label>
+                        <input type="text" formControlName="orgname" name="orgname" [(ngModel)]="orgname"
+                            class="form-control" placeholder="Enter your company name"
+                            [ngClass]="{ 'is-invalid': submitted && f.orgname.errors }" />
+                        <div *ngIf="submitted && f.orgname.errors" class="invalid-feedback">
+                            <div *ngIf="f.orgname.errors.required">Company Name is required</div>
+                            <div *ngIf="f.orgname.errors.pattern">Company Name Allow Only Alphabets</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="d-block">Tax ID</label>
+                        <input type="text" formControlName="tax_id" class="form-control"
+                            placeholder="Enter your Tax ID"
+                            [ngClass]="{ 'is-invalid': submitted && f.tax_id.errors }" />
+                        <div *ngIf="submitted && f.tax_id.errors" class="invalid-feedback">
+                            <div *ngIf="f.tax_id.errors.required">Tax ID is required</div>
+                            <div *ngIf="f.tax_id.errors.pattern">Tax ID allow only Alphabets(min 3 & max 20
+                                Char)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="addressone">Address</label>
+                        <input type="text" formControlName="address1" class="form-control"
+                            [ngClass]="{ 'is-invalid': submitted && f.address1.errors }"
+                            placeholder="Enter your address" />
+                        <div *ngIf="submitted && f.address1.errors" class="invalid-feedback">
+                            <div *ngIf="f.address1.errors.required">Address 1 is required</div>
+                            <div *ngIf="f.address1.errors.pattern">Address 1 allow only Alphanumeric</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="address2">Address 2</label>
+                        <input type="text" formControlName="address2" class="form-control"
+                            [ngClass]="{ 'is-invalid': submitted && f.address2.errors }"
+                            placeholder="Enter your address" />
+                        <div *ngIf="submitted && f.address2.errors" class="invalid-feedback">
+                            <div *ngIf="f.address2.errors.required">Address 2 is required</div>
+                            <div *ngIf="f.address2.errors.pattern">Address 2 allow only Alphanumeric</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="city">City</label>
+                        <input type="text" formControlName="city" class="form-control"
+                            [ngClass]="{ 'is-invalid': submitted && f.city.errors }"
+                            placeholder="Enter your city" />
+                        <div *ngIf="submitted && f.city.errors" class="invalid-feedback">
+                            <div *ngIf="f.city.errors.required">City is required</div>
+                            <div *ngIf="f.city.errors.pattern">City allow only Alphabets</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="state">State</label>
+                        <input type="text" formControlName="state" class="form-control"
+                            [ngClass]="{ 'is-invalid': submitted && f.state.errors }"
+                            placeholder="Enter your state" />
+                        <div *ngIf="submitted && f.state.errors" class="invalid-feedback">
+                            <div *ngIf="f.state.errors.required">State is required</div>
+                            <div *ngIf="f.state.errors.pattern">State allow only Alphabets</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="zipcode">Zipcode</label>
+                        <input type="text" formControlName="zipcode" class="form-control"
+                            [ngClass]="{ 'is-invalid': submitted && f.zipcode.errors }"
+                            placeholder="Enter your zipcode" />
+                        <div *ngIf="submitted && f.zipcode.errors" class="invalid-feedback">
+                            <div *ngIf="f.zipcode.errors.required">Zipcode is required</div>
+                            <div *ngIf="f.zipcode.errors.pattern">zipcode allow only Numbers</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>&nbsp;</label>
+                        <div class="text-right">
+                            <button class="btn btn-primary mr-2">Save Changes</button>
+                            <button class="btn btn-primary mr-2"
+                                (click)="onResetProfile()">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</ng-template>
+
+<!-- <div class="table-responsive">
+    <div class="card">
+        <div card-header tx-semibold>
+            <div class="mt-3 mb-3" style="display: flex;">
+            <div class="col-sm-3">
+                <input type="text" placeholder="Search Organization" class="form-control" />
+            </div>
+            <div class="col-sm-4">
+            <div class="row">
+            <div class="col-sm-3">
+                <div class="mt-2">
+                    <label class="d-block">View</label>
+                  </div> 
+            </div>
+            <div class="col-sm-3">
+                <select id="PerPage" class="form-control" [(ngModel)]="pageSize"
+                    (change)="onChangeEvent($event)">
+                    <option value="2">2</option>
+                    <option value="4">4</option>
+                    <option value="6">6</option>
+                </select> 
+            </div>
+            <div class="col-sm-6">
+                <div class="mt-2 float-left">
+                    <label class="d-block">records at a time</label>
+                </div>  
+            </div>
+        </div>
+            </div>
+            <div class="col-sm-2 ml-auto">
+                <button type="button" class="btn btn-primary float-right" data-toggle="modal"
+                    (click)="organizationModalPopup(editOrgModal)">Add organization</button>
+            </div>
+        </div>
+        </div>
+        <div class="card-body">
+        <table class="table table-bordered">
+            <thead class="thead-primary">
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Address</th>
+                    <th>City</th>
+                    <th>State</th>
+                    <th>Zipcode</th>
+                    <th>Action</th> 
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let data of orgList | paginate:myconfig;  let i = index">
+                    <td>{{i+1}}</td>
+                    <td><span *ngIf="!isEditable">{{data.orgname}}</span>
+                        <input type="text" *ngIf="isEditable" [(ngModel)]="data.orgname" class="form-control"
+                            id="addOrg" placeholder="Add Organization">
+                    </td>
+                    <td>{{data.address1}} {{data.address2}}</td>
+                    <td>{{data.city}}</td>
+                    <td>{{data.state}}</td>
+                    <td>{{data.zipcode}}</td>
+                    <td>
+                        <button type="button" class="btn btn-sm btn-primary" data-toggle="modal"
+                            (click)="organizationModalPopup(editOrgModal,data)">Edit</button>
+                      
+                    </td>
+                   
+                </tr>
+
+            </tbody>
+        </table>
+        </div>
+        <div class="card-footer">
+            <pagination-controls (pageChange)="pageChangeEvent($event)"></pagination-controls>
+        </div>
+           
+
+    </div>
+</div> -->

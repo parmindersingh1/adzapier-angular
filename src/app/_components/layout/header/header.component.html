@@ -145,7 +145,9 @@
             <ul *dropdownMenu class="dropdown-menu dropdown-menu-right">
               <ng-container *ngFor="let item of menu.items; first as isFirst; let i = index;">
                 <div *ngIf="isFirst" class="loggedin-user">
-                  {{currentLoggedInUser}}</div>
+                  {{currentLoggedInUser}}
+                  <p class="tx-12 tx-color-03">{{userRole}}</p>
+                </div>
                 <li *ngIf="!item.items" role="menuitem">
                   <a class="dropdown-item" *ngIf="item.label !== 'Signout'" routerLink="{{item.routerLink}}">
                     <i-feather *ngIf="item.icon" name="{{item.icon}}" class="feather-16"></i-feather>{{item.label}}
@@ -187,23 +189,29 @@
 </nav>
 
 <div id="divSidenav" class="sidenav" [ngClass]="{'addWidth':close,'removeWidth':!close}">
-  <a class="df-logo" routerLink="/">
-    <span>AdZapier</span>
-  </a>
-  <button class="btn btn-sm closebtn" (click)="closeNav()">
-    <i-feather name="x"></i-feather>
-  </button>
+  <div class="sidebar sidebar-components">
+    <div class="sidebar-header">
+      <i-feather name="menu"></i-feather>
+      <a class="df-logo" routerLink="/">
+        <span>AdZapier</span>
+      </a>
+      <button class="btn btn-sm closebtn" (click)="closeNav()">
+        <i-feather name="x"></i-feather>
+      </button>
+    </div>
+    <div class="sidebar-body">
+      
   <ul class="navbar-nav" *ngIf="!currentUser">
     <li *ngFor="let menu of publicNavigationMenu" class="nav-item">
-      <div *ngIf="menu.showlink" dropdown container="body">
+      <div *ngIf="menu.showlink" (click)="isCollapsed = !isCollapsed" [attr.aria-expanded]="!isCollapsed" aria-controls="collapseExample" container="body">
         <div *ngIf="!menu.subcategory">
           <a class="nav-link" (click)="true" routerLink="{{menu.routerLink}}">
             {{ menu.showlink }}</a></div>
         <div *ngIf="menu.subcategory">
-          <a class="nav-link dropdown-toggle" *ngIf="menu.subcategory" dropdownToggle (click)="true">
+          <a class="nav-link" *ngIf="menu.subcategory" (click)="true">
             {{ menu.showlink }}</a></div>
         <div *ngIf="menu.subcategory">
-          <ul *dropdownMenu class="dropdown-menu">
+          <ul id="collapseExample" [ngbCollapse]="!isCollapsed" >
             <ng-container *ngFor="let item of menu.subcategory;">
               <li role="menuitem">
                 <a class="dropdown-item" routerLink="{{item.routerLink}}">
@@ -225,13 +233,13 @@
   <!--sidemenu property list after login-->
   <ul class="navbar-nav" *ngIf="currentUser">
     <li *ngFor="let menu of leftItems" class="nav-item">
-      <div *ngIf="menu.orgName" class="navbar-collapse collapse" dropdown container="body" [collapse]="isCollapsed">
-        <a class="nav-link dropdown-toggle" dropdownToggle (click)="true">
+      <div *ngIf="menu.orgName" class="navbar-collapse collapse" container="body">
+        <a class="nav-link" (click)="isCollapsed = !isCollapsed" [attr.aria-expanded]="!isCollapsed" aria-controls="collapseExample" container="body">
           <div *ngIf="!currentOrganization">{{menu.orgName}}</div>
           <div>{{currentOrganization}}</div>
           <span>{{currentProperty}}</span>
         </a>
-        <ul *dropdownMenu class="dropdown-menu">
+        <ul id="collapseExample" [ngbCollapse]="!isCollapsed">
           <ng-container *ngFor="let item of menu.property;let first = first; trackBy: trackByMethod">
             <li *ngIf="!item.items" role="menuitem" (click)="isCurrentPropertySelected(item)">
               <a class="dropdown-item" [ngClass]="[isPropSelected(item) ? 'active' : '']">
@@ -289,4 +297,7 @@
     </li>
   </ul>
   <!--end of sidemenu general menu after login-->
+    </div>
+  </div>
+
 </div>

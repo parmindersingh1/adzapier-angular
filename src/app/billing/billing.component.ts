@@ -7,9 +7,23 @@ import { Component, OnInit } from '@angular/core';
 })
 export class BillingComponent implements OnInit {
 
-  constructor() { }
-
-  ngOnInit() {
+  loginText = 'Login';
+  signUpText = 'Sign Up';
+  lessons = ['Lesson 1', 'Lessons 2'];
+  constructor() {
+    console.log('Billing Called Constructor');
   }
 
+  ngOnInit() {
+    console.log('Billing Called ngOnInit method');
+
+  }
+   
+  login() {
+    console.log('Login');
+  }
+
+  signUp() {
+    console.log('Sign Up');
+  }
 }

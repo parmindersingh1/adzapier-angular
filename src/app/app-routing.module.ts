@@ -32,6 +32,7 @@ import { GethelpComponent } from './gethelp/gethelp.component';
 import { ChangelogComponent } from './changelog/changelog.component';
 import { CompanyComponent } from './company/company.component';
 import { BillingComponent } from './billing/billing.component';
+import { VerifyemailComponent } from './verifyemail/verifyemail.component';
 
 
 const routes: Routes = [
@@ -66,6 +67,7 @@ const routes: Routes = [
   {path : 'propertydashboard/:propid', component: PropertydashboardComponent, canActivate: [AuthGuard]},
   {path : 'company', component: CompanyComponent, canActivate: [AuthGuard]},
   {path : 'billing', component: BillingComponent, canActivate: [AuthGuard]},
+  { path: 'verify-email/:id', component: VerifyemailComponent },
   { path: '', redirectTo: 'home/dashboard/analytics', pathMatch: 'full', canActivate: [AuthGuard] },
   
   // { path: '', redirectTo: 'home/dashboard/analytics', pathMatch:'full' },

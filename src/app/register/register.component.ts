@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 import { AlertService, UserService, AuthenticationService } from './../_services';
+import { MustMatch } from '../_helpers/must-match.validator';
 
 
 
@@ -37,13 +38,22 @@ export class RegisterComponent implements OnInit {
     ngOnInit() {
         const strRegx = '^[a-zA-Z \-\']+';
         const alphaNumeric = '^(?![0-9]*$)[a-zA-Z0-9 ]+$';
+        const zipRegex = '^[0-9]*$';
         this.regForm = this.formBuilder.group({
-            firstName: ['', [Validators.required, Validators.pattern]],
-            lastName: ['', [Validators.required, Validators.pattern]],
-            organization: ['', [Validators.required, Validators.pattern(alphaNumeric)]],
+            firstName: ['', [Validators.required, Validators.pattern(strRegx)]],
+            lastName: ['', [Validators.required, Validators.pattern(strRegx)]],
+            companyname: ['', [Validators.required, Validators.pattern(alphaNumeric)]],
+            addressone: ['', [Validators.required, Validators.pattern(alphaNumeric)]],
+            addresstwo: ['', [Validators.required, Validators.pattern(alphaNumeric)]],
+            city: ['', [Validators.required, Validators.pattern(strRegx)]],
+            state: ['', [Validators.required, Validators.pattern(strRegx)]],
+            zipcode: ['', [Validators.required, Validators.pattern(zipRegex)]],
             email: ['', [Validators.required, Validators.pattern]],
+            roles: ['', [Validators.required, Validators.pattern(strRegx)]],
             password: ['', [Validators.required, Validators.pattern, Validators.minLength(6)]],
             confirmpassword: ['', [Validators.required, Validators.pattern, Validators.minLength(6)]]
+        }, {
+            validator: MustMatch('password', 'confirmpassword')
         });
     }
 
@@ -56,18 +66,31 @@ export class RegisterComponent implements OnInit {
 
     onSubmit() {
         this.submitted = true;
-        this.show = false;
-        this.alertService.clear();
+      //  this.show = false;
+       // this.alertService.clear();
 
         // stop here if form is invalid
         if (this.regForm.invalid) {
-            return;
-        }
+            return false;
+        } else {
 
         this.loading = true;
-        this.userService.register(this.f.firstName.value, this.f.lastName.value,
-             this.f.organization.value, this.f.email.value, this.f.password.value,
-             this.f.confirmpassword.value)
+        const requestObj = {
+            firstname: this.f.firstName.value,
+            lastname: this.f.lastName.value,
+            address1: this.f.addressone.value,
+            address2: this.f.addresstwo.value,
+            city: this.f.city.value,
+            state: this.f.state.value,
+            zipcode: this.f.zipcode.value,
+            email: this.f.email.value,
+            password: this.f.password.value,
+            confirmpassword: this.f.confirmpassword.value,
+            companyname: this.f.companyname.value,
+            roles:  this.f.roles.value
+        };
+
+        this.userService.register(requestObj)
             .pipe(first())
             .subscribe(
                 data => {
@@ -88,6 +111,8 @@ export class RegisterComponent implements OnInit {
                     this.loading = false;
 
                 });
+
+            }
 
     }
 }

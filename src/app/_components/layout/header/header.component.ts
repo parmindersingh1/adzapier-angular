@@ -36,6 +36,7 @@ export class HeaderComponent implements OnInit {
   currentProperty: any;
   navToggleStatus = false;
   close: boolean;
+  userRole: string;
   constructor(
     private router: Router,
     private activatedroute: ActivatedRoute,
@@ -55,7 +56,7 @@ export class HeaderComponent implements OnInit {
 
 
   ngOnInit() {
-  //  this.firstElement = true;
+    //  this.firstElement = true;
     this.isCollapsed = false;
     this.userService.getCurrentUser.subscribe((data) => {
       if (data) {
@@ -80,8 +81,9 @@ export class HeaderComponent implements OnInit {
       this.currentSelectedProperty();
     }
     this.publicNavigationMenu = [
-      {   showlink: 'Solutions',
-          subcategory: [{showlink: 'CCPA', routerLink: '/ccpa'}, { showlink: 'GDPR', routerLink: '/gdpr' }]
+      {
+        showlink: 'Solutions',
+        subcategory: [{ showlink: 'CCPA', routerLink: '/ccpa' }, { showlink: 'GDPR', routerLink: '/gdpr' }]
       }, {
         showlink: 'Pricing', routerLink: '/pricing'
       }, {
@@ -127,22 +129,29 @@ export class HeaderComponent implements OnInit {
 
   loadOrganizationList() {
     this.orgservice.orglist().subscribe((data) => {
-      this.orgList = Object.values(data)[0];
-      this.leftItems = this.orgList;
-      console.log(this.leftItems,'leftItems..');
-    //  this.orgservice.getSelectedOrgProperty.emit(this.orgList[0].property[0]);
-    //  this.orgservice.getOrganization.emit(this.orgList[0].orgid);
-      if (this.orgList[0].hasOwnProperty('property')) {
-        const obj = {
-          orgId: this.orgList[0].orgid,
-          property: this.orgList[0].property[0]
-        };
-        this.orgservice.changeCurrentSelectedProperty(obj);
-        this.currentSelectedProperty();
-      } else {
+      if (data === null) {
         this.router.navigate(['/portalorg']);
       }
-     
+      this.orgList = Object.values(data)[0];
+      this.leftItems = this.orgList;
+      console.log(this.leftItems, 'leftItems..');
+      //  else {
+      //   this.orgList = Object.values(data)[0];
+      //   this.leftItems = this.orgList;
+      //   console.log(this.leftItems,'leftItems..');
+      //  }
+
+      // if (this.orgList[0] !== undefined) {
+      //   const obj = {
+      //     orgId: this.orgList[0].orgid,
+      //     property: this.orgList[0].property[0]
+      //   };
+      //   this.orgservice.changeCurrentSelectedProperty(obj);
+      //   this.currentSelectedProperty();
+      // } else {
+
+      // }
+
       this.rightItems = [
         {
           label: 'User', icon: 'assets/imgs/glass.jpg',
@@ -156,25 +165,25 @@ export class HeaderComponent implements OnInit {
           ]
         }];
       this.navigationMenu = [
-      {
-        showlink: 'Dashboard',
-        subcategory: [{ showlink: 'CCPA DSAR', routerLink: '/dsarform', icon: 'bar-chart-2' },
-         { showlink: 'GDPR', routerLink: '/pagenotfound', icon: 'pie-chart' },
-        { showlink: 'Cookie Consent', routerLink: '/pagenotfound', icon: 'fas fa-cookie feather-16' }
-        ]
-      }, {
-        showlink: 'Privacy',
-        subcategory: [
-          { showlink: 'Dashboard', routerLink: '/pagenotfound', icon: 'bar-chart-2' },
-          { showlink: 'Webforms', routerLink: '/webforms', icon: 'pie-chart' },
-          { showlink: 'Requests', routerLink: '/pagenotfound', icon: 'fa fa-ticket-alt feather-16' },
-          { showlink: 'Work flow', routerLink: '/pagenotfound', icon: 'shield-off' },
-          { showlink: 'Cookie Category', routerLink: '/pagenotfound', icon: 'fab fa-microsoft feather-16' },
-          { showlink: 'Cookie Banner', routerLink: '/pagenotfound', icon: 'fas fa-cookie feather-16' },
-          { showlink: 'Consent Tracking', routerLink: '/pagenotfound', icon: 'fas fa-file-contract feather-16' },
-          { showlink: 'Setup', routerLink: '/pagenotfound', icon: 'fas fa-wrench feather-16' }
-        ]
-      }, { showlink: 'Billing', routerLink: '/pagenotfound' }];
+        {
+          showlink: 'Dashboard',
+          subcategory: [{ showlink: 'CCPA DSAR', routerLink: '/dsarform', icon: 'bar-chart-2' },
+          { showlink: 'GDPR', routerLink: '/pagenotfound', icon: 'pie-chart' },
+          { showlink: 'Cookie Consent', routerLink: '/pagenotfound', icon: 'fas fa-cookie feather-16' }
+          ]
+        }, {
+          showlink: 'Privacy',
+          subcategory: [
+            { showlink: 'Dashboard', routerLink: '/pagenotfound', icon: 'bar-chart-2' },
+            { showlink: 'Webforms', routerLink: '/webforms', icon: 'pie-chart' },
+            { showlink: 'Requests', routerLink: '/pagenotfound', icon: 'fa fa-ticket-alt feather-16' },
+            { showlink: 'Work flow', routerLink: '/pagenotfound', icon: 'shield-off' },
+            { showlink: 'Cookie Category', routerLink: '/pagenotfound', icon: 'fab fa-microsoft feather-16' },
+            { showlink: 'Cookie Banner', routerLink: '/pagenotfound', icon: 'fas fa-cookie feather-16' },
+            { showlink: 'Consent Tracking', routerLink: '/pagenotfound', icon: 'fas fa-file-contract feather-16' },
+            { showlink: 'Setup', routerLink: '/pagenotfound', icon: 'fas fa-wrench feather-16' }
+          ]
+        }, { showlink: 'Billing', routerLink: '/pagenotfound' }];
     });
 
     this.orgservice.emitUpdatedOrganization.subscribe((data) => {
@@ -185,12 +194,14 @@ export class HeaderComponent implements OnInit {
       }
 
     });
+
   }
 
   getLoggedInUserDetails() {
     this.isCollapsed = false;
     this.userService.getLoggedInUserDetails().subscribe((data) => {
       this.currentLoggedInUser = Object.values(data)[0].firstname + ' ' + Object.values(data)[0].lastname;
+      this.userRole = Object.values(data)[0].roles;
     });
   }
 
@@ -202,8 +213,8 @@ export class HeaderComponent implements OnInit {
       property: item
     };
     this.orgservice.changeCurrentSelectedProperty(obj);
-   // this.orgservice.getSelectedOrgProperty.emit(obj);
-  //  this.firstElement = false;
+    // this.orgservice.getSelectedOrgProperty.emit(obj);
+    //  this.firstElement = false;
     this.selectedOrgProperties.push(item);
     this.router.navigate(['/webforms']);
   }
@@ -213,7 +224,7 @@ export class HeaderComponent implements OnInit {
   }
 
   public trackByMethod(index: number): number {
-   return index;
+    return index;
   }
 
   checkisCollapsed(): boolean {

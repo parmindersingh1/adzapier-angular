@@ -1,5 +1,5 @@
 import { Injectable, EventEmitter, Output } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from './../../environments/environment.develop';
 import { Orglist } from './../_models';
@@ -22,10 +22,13 @@ export class OrganizationService {
     public get currentOrgValue(): Orglist {
         return this.currentOrgSubject.value;
     }
-
+ 
+    addOrganization(reqObj): Observable<any> {
+        return this.http.post<any>(environment.apiUrl + '/organizations', reqObj);
+    }
 
     orglist(): Observable<Organization[]> {
-        return this.http.get<Organization[]>(environment.apiUrl + '/organizations?include_property=1');
+        return this.http.get<Organization[]>(environment.apiUrl + '/organizations');
     }
 
     viewOrganizationDetails(orgId): Observable<Organization[]> {
@@ -51,4 +54,9 @@ export class OrganizationService {
     changeCurrentSelectedProperty(currentItem) {
         this.currentPropertySource.next(currentItem);
     }
+
+    getCompanyDetails(): Observable<any> {
+        return this.http.get<any>(environment.apiUrl + '/company');
+    }
+
 }
