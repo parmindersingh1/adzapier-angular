@@ -97,6 +97,7 @@ export class CompanyComponent implements OnInit {
           //  this.isShowbtnVisible = false;
            // this.show = true;
             alert('Details has been updated successfully!');
+            this.loadCompanyDetails();
            // this.userService.getCurrentUser.emit(data);
             this.modalService.dismissAll('Data Saved!');
            // this.loadUserDetails();
@@ -110,5 +111,10 @@ export class CompanyComponent implements OnInit {
         );
      // this.profileForm.disable();
     }
+  }
+
+  onResetProfile() {
+    this.companyForm.reset();
+    this.modalService.dismissAll('');
   }
 }
