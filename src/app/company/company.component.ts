@@ -103,6 +103,7 @@ export class CompanyComponent implements OnInit {
           }
         }, (error) => {
           alert(error);
+          this.modalService.dismissAll('Error!');
          // this.isShowbtnVisible = true;
           // this.show = false;
         }
