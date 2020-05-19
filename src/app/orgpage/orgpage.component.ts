@@ -42,6 +42,7 @@ export class OrgpageComponent implements OnInit {
   isEditOrganization: boolean;
   p: number = 1;
   i: any = [];
+  pageSize: any;
   myconfig = { itemsPerPage: 3 || this.i, currentPage: this.p };
   
   constructor(private formBuilder: FormBuilder,
