@@ -28,26 +28,17 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="organization">Organization</label>
-                    <input type="text" formControlName="organization" class="form-control"
-                        [ngClass]="{ 'is-invalid': submitted && f.organization.errors }"
-                        placeholder="Enter your organization" (ngModelChange)="clearError()">
-                    <div *ngIf="submitted && f.organization.errors" class="invalid-feedback">
-                        <div *ngIf="f.organization.errors.required">Organization is required</div>
-                        <div *ngIf="f.organization.errors.pattern">Organization allow only Alphanumeric</div>
+                    <label for="companyname">Companyname</label>
+                    <input type="text" formControlName="companyname" class="form-control"
+                        [ngClass]="{ 'is-invalid': submitted && f.companyname.errors }"
+                        placeholder="Enter your companyname" (ngModelChange)="clearError()">
+                    <div *ngIf="submitted && f.companyname.errors" class="invalid-feedback">
+                        <div *ngIf="f.companyname.errors.required">Companyname is required</div>
+                        <div *ngIf="f.companyname.errors.pattern">Companyname allow only Alphanumeric</div>
                     </div>
 
                 </div>
-                    
-                    <!-- <select class="form-control" formControlName="org">
-                    <option selected>Select</option>
-                    <option value="Adzapier">Adzapier</option>
-                    <option value="Adzapier Solutions">Adzapier Solutions</option>
-                    <option value="Adzapier Pvt Ltd">Adzapier Pvt Ltd</option>
-                       
-                   </select>  -->
                 
-
 
                 <div class="form-group">
                     <label for="email">Email Address</label>
@@ -60,6 +51,73 @@
                         <div *ngIf="f.email.errors.pattern">Please enter a valid email</div> 
                     </div>
                 </div>
+
+
+                <div class="form-group">
+                    <label for="addressone">Address 1</label>
+                    <input type="text" formControlName="addressone" class="form-control"
+                        [ngClass]="{ 'is-invalid': submitted && f.addressone.errors }"
+                        placeholder="Enter your address" />
+                    <div *ngIf="submitted && f.addressone.errors" class="invalid-feedback">
+                        <div *ngIf="f.addressone.errors.required">Address is required</div>
+                        <div *ngIf="f.addressone.errors.pattern">Address allow only Alphanumeric</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="addresstwo">Address 2</label>
+                    <input type="text" formControlName="addresstwo" class="form-control"
+                        [ngClass]="{ 'is-invalid': submitted && f.addresstwo.errors }"
+                        placeholder="Enter your address" />
+                    <div *ngIf="submitted && f.addresstwo.errors" class="invalid-feedback">
+                        <div *ngIf="f.addresstwo.errors.required">Address is required</div>
+                        <div *ngIf="f.addresstwo.errors.pattern">Address allow only Alphanumeric</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="city">City</label>
+                    <input type="text" formControlName="city" class="form-control"
+                        [ngClass]="{ 'is-invalid': submitted && f.city.errors }"
+                        placeholder="Enter your address" />
+                    <div *ngIf="submitted && f.city.errors" class="invalid-feedback">
+                        <div *ngIf="f.city.errors.required">city is required</div>
+                        <div *ngIf="f.city.errors.pattern">City will not accept numbers</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="state">State</label>
+                    <input type="text" formControlName="state" class="form-control"
+                        [ngClass]="{ 'is-invalid': submitted && f.state.errors }"
+                        placeholder="Enter your address" />
+                    <div *ngIf="submitted && f.state.errors" class="invalid-feedback">
+                        <div *ngIf="f.state.errors.required">State is required</div>
+                        <div *ngIf="f.state.errors.pattern">State will not accept numbers</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="zipcode">Zipcode</label>
+                    <input type="text" formControlName="zipcode" class="form-control"
+                        [ngClass]="{ 'is-invalid': submitted && f.zipcode.errors }"
+                        placeholder="Enter your address" />
+                    <div *ngIf="submitted && f.zipcode.errors" class="invalid-feedback">
+                        <div *ngIf="f.zipcode.errors.required">Zipcode is required</div>
+                        <div *ngIf="f.zipcode.errors.pattern">Zipcode will not accept numbers</div>
+                    </div>
+                </div> 
+
+                <div class="form-group">
+                    <label for="roles">Role</label>
+                    <input type="text" formControlName="roles" class="form-control"
+                        [ngClass]="{ 'is-invalid': submitted && f.roles.errors }"
+                        placeholder="Enter your address" />
+                    <div *ngIf="submitted && f.roles.errors" class="invalid-feedback">
+                        <div *ngIf="f.roles.errors.required">Role is required</div>
+                        <div *ngIf="f.roles.errors.pattern">Role will not accept numbers</div>
+                    </div>
+                </div> 
               
                 <div class="form-group">
                         <label for="password">Password</label>
@@ -101,7 +159,7 @@
                     Create Account
             </button> -->
             <div class="text-center">
-                <button class="btn btn-primary mr-2"> Create Account</button>
+                <button class="btn btn-primary mr-2" type="submit"> Create Account</button>
                 <!-- <button class="btn btn-primary mr-2" type="reset" (click)="onReset()">Reset</button> -->
             </div>
         </form>

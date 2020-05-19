@@ -1,27 +1,75 @@
-<div class="heading_border">
-    <h4 class="mg-b-10">Organizations</h4>
+<div class="mb-3">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb breadcrumb-style1 mg-b-0">
+          <li class="breadcrumb-item"><a routerLink="/settings">Settings</a></li>
+          <li class="breadcrumb-item active" aria-current="page">Organizations</li>
+        </ol>
+      </nav>
 </div>
-<div>
-    <div class="organizationlist">
-        <table class="table table-striped">
-            <thead>
+<!-- {{orgList | json}} -->
+
+<div class="table-responsive">
+    <div class="card">
+        <div card-header tx-semibold>
+            <div class="mt-3 mb-3" style="display: flex;">
+            <div class="col-sm-3">
+                <input type="text" placeholder="Search Organization" class="form-control" />
+            </div>
+            <div class="col-sm-4">
+            <div class="row">
+            <div class="col-sm-3">
+                <div class="mt-2">
+                    <label class="d-block">View</label>
+                  </div> 
+            </div>
+            <div class="col-sm-3">
+                <select id="PerPage" class="form-control" [(ngModel)]="pageSize"
+                    (change)="onChangeEvent($event)">
+                    <option value="2">2</option>
+                    <option value="4">4</option>
+                    <option value="6">6</option>
+                </select> 
+            </div>
+            <div class="col-sm-6">
+                <div class="mt-2 float-left">
+                    <label class="d-block">records at a time</label>
+                </div>  
+            </div>
+        </div>
+            </div>
+            <div class="col-sm-2 ml-auto">
+                <button type="button" class="btn btn-primary float-right" data-toggle="modal"
+                    (click)="organizationModalPopup(editOrgModal)">Add organization</button>
+            </div>
+        </div>
+        </div>
+        <div class="card-body">
+        <table class="table table-bordered">
+            <thead class="thead-primary">
                 <tr>
                     <th>Id</th>
-                    <th>Organization</th>
-                    <th>View details</th>
-                    <th>Add Properties</th>
+                    <th>Name</th>
+                    <th>Address</th>
+                    <th>City</th>
+                    <th>State</th>
+                    <th>Zipcode</th>
+                    <th>Action</th> 
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let data of orgList; let i = index">
+                <tr *ngFor="let data of orgList | paginate:myconfig;  let i = index">
                     <td>{{i+1}}</td>
-                    <td><span *ngIf="!isEditable">{{data.orgName}}</span>
-                        <input type="text" *ngIf="isEditable" [(ngModel)]="data.orgName" class="form-control"
+                    <td><span *ngIf="!isEditable">{{data.orgname}}</span>
+                        <input type="text" *ngIf="isEditable" [(ngModel)]="data.orgname" class="form-control"
                             id="addOrg" placeholder="Add Organization">
                     </td>
+                    <td>{{data.address1}} {{data.address2}}</td>
+                    <td>{{data.city}}</td>
+                    <td>{{data.state}}</td>
+                    <td>{{data.zipcode}}</td>
                     <td>
-                        <!-- <button type="button" class="btn btn-sm btn-primary" data-toggle="modal"
-                            (click)="editOrganizationModalPopup(editOrgModal,data)">Edit</button> -->
+                        <button type="button" class="btn btn-sm btn-primary" data-toggle="modal"
+                            (click)="organizationModalPopup(editOrgModal,data)">Edit</button>
                         <!-- <button (click)="edit(data)" class="btn btn-outline-primary">
                             {{!isEditable?'Edit':'Cancel'}}</button> -->
                         <!-- <button *ngIf="isEditable" (click)="saveUpdatedChanges(data.orgid,data.orgName)"
@@ -29,104 +77,116 @@
                         <!-- <button type="button" class="btn btn-sm btn-outline-primary" data-toggle="modal"
                             (click)="loadOrganizationDetails(data)">View details</button> -->
                     </td>
-                    <td>
-
+                    <!-- <td>
+                        Manage
                         <button type="button" class="btn btn-sm btn-outline-primary" data-toggle="modal"
-                            (click)="open(mymodal,data)">Add Property</button>
-                        <!-- <button class="btn btn-sm btn-outline-dark"
-                            (click)="getPropertyList(data.orgid)">{{isOpen?'Hide':'Show'}}</button> -->
-                    </td>
+                            (click)="open(mymodal,data)">Add Property</button> 
+                    </td> -->
                 </tr>
-                <tr>
-                    <td colspan="4" class="paddingzero">
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        <table class="table" *ngIf="showOrgDetails">
-            <thead>
-                <tr>
-                    <th>Organization name</th>
-                    <th>Address</th>
-                    <th>City</th>
-                    <th>State</th>
-                    <th>Zipcode</th>
-                    <th>Edit Organization</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let details of orgDetails">
-                    <td>{{details.name}}</td>
-                    <td>{{details.address1}} {{details.address2}}</td>
-                    <td>{{details.city}}</td>
-                    <td>{{details.state}}</td>
-                    <td>{{details.zipcode}}</td>
-                    <td><button type="button" class="btn btn-sm btn-primary" data-toggle="modal"
-                            (click)="editOrganizationModalPopup(editOrgModal,details)">Edit</button></td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-    <div class="propertylist">
-        <!--*ngIf="isOpen"-->
-        <h5 class="mg-t-10">Property list</h5>
 
-        <table class="table" *ngIf="propertyList?.length !== '0'">
-            <thead>
-                <tr>
-                    <th>Id</th>
-                    <th>Logo</th>
-                    <th>Property name</th>
-                    <th>Website</th>
-                    <th>Edit</th>
-                    <th>Manage</th>
-                    <th>Delete</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td colspan="7" class="txt-center">
-                        <div *ngIf="propertyList?.length == 0"> No property found </div>
-                    </td>
-                </tr>
-                <ng-container *ngFor="let list of propertyList; let i = index">
-                    <tr>
-                        <td>
-                            {{i+1}}
-                        </td>
-                        <td>
-                            <img class="img-fluid" [src]="list.logo_url?list.logo_url:'assets/imgs/no_image.png'" />
-                        </td>
-                        <td>
-                            {{list.propname}}
-                        </td>
-                        <td>
-                            {{list.website}}
-                        </td>
-                        <td>
-                            <button class="btn btn-sm btn-outline-primary"
-                                (click)="editModalPopup(mymodal,list)">Edit</button>
-                        </td>
-                        <td>
-                            <button class="btn btn-sm btn-primary" (click)="clickToManage(list.pid)">Manage</button>
-                        </td>
-                        <td><button class="btn btn-sm btn-danger">Delete</button></td>
-                    </tr>
-                </ng-container>
             </tbody>
         </table>
+        </div>
+        <div class="card-footer">
+            <pagination-controls (pageChange)="pageChangeEvent($event)"></pagination-controls>
+        </div>
+           <!-- <button class="btn btn-sm btn-outline-dark"
+                            (click)="getPropertyList(data.orgid)">{{isOpen?'Hide':'Show'}}</button> -->
+        <!-- <select id="PerPage" class="form-control" [(ngModel)]="pageSize" (change)="onChangeEvent($event)">
+            <option value="10">10</option>
+            <option value="20">20</option>
+            <option value="30">30</option>
+        </select> 
+        -->
 
     </div>
 </div>
+<hr />
+<hr />
+<!-- <table class="table" *ngIf="showOrgDetails">
+    <thead>
+        <tr>
+            <th>Organization name</th>
+            <th>Address</th>
+            <th>City</th>
+            <th>State</th>
+            <th>Zipcode</th>
+            <th>Edit Organization</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let details of orgDetails">
+            <td>{{details.name}}</td>
+            <td>{{details.address1}} {{details.address2}}</td>
+            <td>{{details.city}}</td>
+            <td>{{details.state}}</td>
+            <td>{{details.zipcode}}</td>
+            <td><button type="button" class="btn btn-sm btn-primary" data-toggle="modal"
+                    (click)="organizationModalPopup(editOrgModal,details)">Edit</button></td>
+        </tr>
+    </tbody>
+</table>
+<div class="propertylist">
+    <h5 class="mg-t-10">Property list</h5> 
+    <table class="table" *ngIf="propertyList?.length !== '0'">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Logo</th>
+                <th>Property name</th>
+                <th>Website</th>
+                <th>Edit</th>
+                <th>Manage</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td colspan="7" class="txt-center">
+                    <div *ngIf="propertyList?.length == 0"> No property found </div>
+                </td>
+            </tr>
+            <ng-container *ngFor="let list of propertyList; let i = index">
+                <tr>
+                    <td>
+                        {{i+1}}
+                    </td>
+                    <td>
+                        <img class="img-fluid" [src]="list.logo_url?list.logo_url:'assets/imgs/no_image.png'" />
+                    </td>
+                    <td>
+                        {{list.propname}}
+                    </td>
+                    <td>
+                        {{list.website}}
+                    </td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary"
+                            (click)="editModalPopup(mymodal,list)">Edit</button>
+                    </td>
+                    <td>
+                        <button class="btn btn-sm btn-primary" (click)="clickToManage(list.pid)">Manage</button>
+                    </td>
+                    <td><button class="btn btn-sm btn-danger">Delete</button></td>
+                </tr>
+            </ng-container>
+        </tbody>
+    </table>
+
+</div> -->
+
 <ng-template #editOrgModal let-modal>
     <div class="modal-header">
-        <h4 class="modal-title" id="modal-basic-title">Edit Organization</h4>
+        <h4 class="modal-title" id="modal-basic-title" *ngIf="!isEditOrganization;else editOrgHeading">Add Organization
+        </h4>
+        <ng-template #editOrgHeading>
+            <h4 class="modal-title" id="modal-basic-title">Edit Organization</h4>
+        </ng-template>
         <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Close Clicked')">
             <span aria-hidden="true">×</span>
         </button>
     </div>
     <div class="modal-body">
-
         <form [formGroup]="editOrganisationForm" (ngSubmit)="updateOrganisationData(myContext)">
             <div class="row">
                 <div class="col-sm-12">
@@ -217,7 +277,7 @@
                         class="btn btn-outline-dark">Cancel</button>
                 </div>
                 <div class="col-sm-6">
-                    <button class="btn btn-outline-dark">Save</button>
+                    <button class="btn btn-outline-dark float-right">Save</button>
                 </div>
             </div>
         </form>

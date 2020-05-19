@@ -34,8 +34,8 @@ export class UserService {
     //     return this.http.post(environment.apiUrl+'/users/login', user
     // }
 
-    register(firstName, lastName, orgname, email, password, confirmpassword) {
-        return this.http.post<any>(environment.apiUrl + '/user', { firstName, lastName, orgname, email, password, confirmpassword })
+    register(obj) {
+        return this.http.post<any>(environment.apiUrl + '/user', obj)
             .pipe(map(user => {
                 //         // store user details and jwt token in local storage to keep user logged in between page refreshes
                 //localStorage.setItem('currentregUser', JSON.stringify(user.response));
@@ -81,5 +81,9 @@ export class UserService {
 
     updatePropertyList(data) {
         this.organizationProperty.next(data);
+    }
+
+    verifyEmailAddress(tokenObj): Observable<any> {
+        return this.http.post<any>(environment.apiUrl + '/email/verify', tokenObj);
     }
 }

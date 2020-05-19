@@ -84,6 +84,10 @@ i {
     font-weight: bold;
 }
 
+.loggedin-user p {
+    margin: 0;
+}
+
 .active {
     color: #0148ae !important;
 }
@@ -132,7 +136,15 @@ a.dropdown-item.activeFirstIndex:hover {
 
 a.nav-link.dropdown-link .userInitials:hover {
     border: 2px solid #0148ae;
-    color: #0148ae;
+    color: #4994fe;
+}
+
+a.nav-link.dropdown-toggle:hover {
+    color: #4994fe;
+}
+
+a.nav-link:hover {
+    color: #4994fe;
 }
 
 .width100 {
@@ -207,6 +219,9 @@ a.nav-link.dropdown-link .userInitials:hover {
     display: block;
 }
 
+.sidebar-header {
+    height: 60px;
+}
 /*vertical menu*/
 .sidenav {
     height: 100%; /* 100% Full-height */
@@ -219,31 +234,39 @@ a.nav-link.dropdown-link .userInitials:hover {
     overflow-x: hidden; /* Disable horizontal scroll */
     padding-top: 10px; /* Place content 60px from the top */
     transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
-    padding: 20px;
+    // padding: 20px;
   }
   
   /* The navigation menu links */
   .sidenav a {
     padding: 8px 8px 8px 32px;
     text-decoration: none;
-    font-size: 13px;
-    color: #818181;
+    font-size: 14px;
+    color: #001737;
     display: block;
     transition: 0.3s;
   }
+
+  .sidebar-nav .nav-link.active {
+    position: relative;
+    color: #0168fa;
+  }
+
+  .sidebar-nav .nav a:hover {
+    color: #0168fa;
+    }
   
   /* When you mouse over the navigation links, change their color */
   .sidenav a:hover {
-    color: #f1f1f1;
+    color: #0168fa;
   }
   
   /* Position and style the close button (top right corner) */
   .sidenav .closebtn {
     position: absolute;
-    top: 0;
+    top: 20px;
     right: 25px;
-    font-size: 36px;
-    margin-left: 50px;
+    padding: 0;
   }
   
   /* Style page content - use this if you want to push the page content to the right when you open the side navigation */
@@ -259,13 +282,19 @@ a.nav-link.dropdown-link .userInitials:hover {
   }
 
   .addWidth {
-      width: 250px;
+    //   width: 250px;
   }
 
   .removeWidth {
       width: 0;
       padding: 0;
   }
+
+  .addWidth .sidebar {
+      left:0 !important;
+      background: #fff;
+  }
+      
 
 //   .collapse:not(.show) {
 //       display: none !important;
@@ -385,4 +414,13 @@ a.nav-link.dropdown-link .userInitials:hover {
 
   #divSidenav > ul > li a.nav-link {
       color:#818181;
+  }
+
+  ul#collapseExample {
+    margin: 0;
+    padding: 0 0 0 20px; 
+  }
+
+  .tx-12 {
+      font-weight: normal;
   }

@@ -197,7 +197,7 @@ export class EditProfileComponent implements OnInit {
   }
 
   onResetChangePassword() {
-    this.changePwdSubmitted = false;
+   // this.changePwdSubmitted = false;
     this.changepasswordForm.reset();
   }
 

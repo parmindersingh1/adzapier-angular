@@ -50,6 +50,7 @@
 
 .nav-link, .menuitem {
     cursor: pointer;
+    font-weight: 500;
 }
 
 .dropdown-toggle::after {
@@ -150,3 +151,9 @@ a.dropdown-item > i {
 .bdr-zero {
     border: 0;
 } 
+
+@media (min-width: 576px) {
+    .card-body {
+        padding: 0 15px !important;
+    }
+}
