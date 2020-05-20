@@ -31,7 +31,6 @@ export class CompanyComponent implements OnInit {
   pageSize: any;
   p: number = 1;
   i: any = [];
-  pageSize: any;
   myconfig = { itemsPerPage: 3 || this.i, currentPage: this.p };
   constructor(private companyService: CompanyService, private modalService: NgbModal,
               private formBuilder: FormBuilder, private userService: UserService) { }
