@@ -1,0 +1,327 @@
+<div class="container">
+    <div class="mb-3">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb breadcrumb-style1 mg-b-0">
+              <li class="breadcrumb-item"><a routerLink="/settings">Settings</a></li>
+              <li class="breadcrumb-item active" aria-current="page"><a routerLink="/organizations">Organizations</a></li>
+              <li class="breadcrumb-item active" aria-current="page">Organization Details</li>
+            </ol>
+          </nav>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex align-items-center justify-content-between pd-y-10">
+                    <h6 class="mg-b-0 tx-color-03">
+                        Organization Details  
+                    </h6>
+                    <div class="d-flex pd-0">
+                        <button (click)="editOrganizationModalPopup(editUserModal)"
+                            class="btn btn-sm btn-white float-right">
+                            <i-feather name="edit-2" class="feather-16"></i-feather>
+                            <span class="d-none d-sm-inline mg-l-0"> Edit</span>
+                        </button>
+                    </div>
+                </div> 
+        
+                <div class="card-body">
+                    <div class="row row-sm">
+                        <div class="col-sm-3 mg-t-5 mg-sm-t-5">
+                            <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">
+                                Company</label>
+                            <p class="tx-primary mg-b-0">{{organizationName}}</p>
+                        </div>
+                        <div class="col-sm-3 mg-t-5 mg-sm-t-5">
+                            <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Address 1</label>
+                            <p class="mg-b-0">{{addressOne}}</p>
+                        </div>
+    
+                        <div class="col-sm-3 mg-t-5 mg-sm-t-5">
+                            <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Address 2</label>
+                            <p class="mg-b-0">{{addressTwo}}</p>
+                        </div>
+    
+                        <div class="col-sm-3 mg-t-5 mg-sm-t-5">
+                            <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">TaxID</label>
+                            <p class=" mg-b-0">{{taxID}}</p>
+                        </div> 
+    
+                        <div class="col-sm-3 mg-t-5 mg-sm-t-5">
+                            <label
+                                class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">City</label>
+                            <p class="mg-b-0">{{city}}</p>
+                        </div>
+    
+                        <div class="col-sm-3 mg-t-5 mg-sm-t-5">
+                            <label
+                                class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">State</label>
+                            <p class="mg-b-0">{{state}}</p>
+                        </div>
+    
+                        <div class="col-sm-3 mg-t-5 mg-sm-t-5">
+                            <label
+                                class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Zipcode</label>
+                            <p class="mg-b-0">{{zipcode}}</p>
+                        </div>
+    
+    
+    
+                    </div><!-- row -->
+                </div>
+            </div>
+        </div> 
+    </div>
+ 
+    <div class="divider-text mg-y-10">Properties</div>
+        <div class="table-responsive">
+            <div class="card">
+                <div card-header tx-semibold>
+                    <div class="mt-3 mb-3" style="display: flex;">
+                    <div class="col-sm-3">
+                        <input type="text" placeholder="Search" class="form-control" />
+                    </div>
+                    <div class="col-sm-4">
+                    <div class="row">
+                    <div class="col-sm-3">
+                        <div class="mt-2">
+                            <label class="d-block">View</label>
+                        </div> 
+                    </div>
+                    <div class="col-sm-3">
+                        <select id="PerPage" class="form-control" [(ngModel)]="pageSize" (change)="onChangeEvent($event)">
+                            <option value="2">2</option>
+                            <option value="4">4</option>
+                            <option value="6">6</option>
+                        </select> 
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="mt-2 float-left">
+                            <label class="d-block">records at a time</label>
+                        </div>  
+                    </div>
+                </div>
+                    </div>
+                    <div class="col-sm-2 ml-auto">
+                        <button type="button" class="btn btn-primary btn-xs float-right" data-toggle="modal"
+                            (click)="open(mymodal)"><i class="fas fa-plus"></i> Add Property</button>
+                    </div>
+                </div>
+                </div>
+                <div class="card-body">
+                <table class="table table-bordered">
+                    <thead class="thead-primary">
+                        <tr>
+                            <th>Id</th>
+                            <th>Logo</th>
+                            <th>Name</th>
+                            <th>Domain</th>
+                            <th>Action</th>
+                            <th>Status</th>
+                            <th>Manage</th> 
+                        </tr>
+                    </thead>
+                    <tbody> 
+                            <tr *ngFor="let list of propertyList | paginate:myconfig;  let i = index">
+                                <td>
+                                    {{i+1}} 
+                                </td>
+                                <td>
+                                    <img class="img-fluid" [src]="list.logo_url?list.logo_url:'assets/imgs/no_image.png'" />
+                                </td>
+                                <td>
+                                    {{list.name}}
+                                </td>
+                                <td>
+                                    {{list.website}}
+                                </td>
+                                <td>
+                                    <!-- <i-feather name="edit-3" class="feather-16"></i-feather> -->
+                                    <a class="pd-r-5" (click)="editModalPopup(mymodal,list)">
+                                        <i class="far fa-edit fa-1x"></i>
+                                    </a>
+                                    <a class="pd-r-5">
+                                        <i class="far fa-trash-alt tx-danger fa-sm"></i>
+                                    </a>
+                                    <!-- <i-feather name="trash-2" class="feather-16"></i-feather> -->
+                                </td>
+                                <td>{{list.active?'Active':'Disable'}}</td>
+                                <td>
+                                    <button class="btn btn-xs btn-primary" (click)="clickToManage(list.pid)">Manage</button>
+                                </td>
+                            
+                            </tr>
+                            <tr *ngIf="propertyList?.length == 0">
+                                <td colspan="7" class="txt-center">
+                                    <div> No property found </div>
+                                </td>
+                            </tr>
+                    </tbody>
+                </table>
+                </div>
+                <div class="card-footer text-right">
+                    <pagination-controls (pageChange)="pageChangeEvent($event)"></pagination-controls>
+                </div>
+               
+
+            </div>
+        </div>
+        <div class="divider-text mg-y-10">MEMBERS</div>
+        <div class="table-responsive">
+            <div class="card">
+                <div card-header tx-semibold>
+                    <div class="mt-3 mb-3" style="display: flex;">
+                    <div class="col-sm-3">
+                        <input type="text" placeholder="Search" class="form-control" />
+                    </div>
+                    <div class="col-sm-4">
+                    <div class="row">
+                    <div class="col-sm-3">
+                        <div class="mt-2">
+                            <label class="d-block">View</label>
+                        </div> 
+                    </div>
+                    <div class="col-sm-3">
+                        <select id="PerPage" class="form-control" [(ngModel)]="pageSize" (change)="onChangeEvent($event)">
+                            <option value="2">2</option>
+                            <option value="4">4</option>
+                            <option value="6">6</option>
+                        </select> 
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="mt-2 float-left">
+                            <label class="d-block">records at a time</label>
+                        </div>  
+                    </div>
+                </div>
+                    </div>
+                    <div class="col-sm-2 ml-auto">
+                        <button type="button" class="btn btn-primary btn-xs float-right" data-toggle="modal"
+                            (click)="open(inviteuserModal)"><i class="fas fa-plus"></i> Add User</button>
+                    </div>
+                </div>
+                </div>
+                <div class="card-body">
+                    <table class="table table-bordered">
+                        <thead class="thead-primary">
+                            <tr>
+                                <th>Id</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Last Login</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody> 
+                                <tr *ngFor="let list of organizationTeamMemberList; let i = index">
+                                    <td>
+                                        {{i+1}} 
+                                    </td>
+                                    <td>
+                                        {{list.tm_email}}
+                                    </td> 
+                                    <td>
+                                        {{list.tm_role}}
+                                    </td>
+                                    <td>
+                                        {{list.tm_last_login | date:'medium'}}
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-xs btn-primary">Remove</button>
+                                    </td>
+                                
+                                </tr>
+                                <tr *ngIf="organizationTeamMemberList?.length == 0">
+                                    <td colspan="7" class="txt-center">
+                                        <div> No User found </div>
+                                    </td>
+                                </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer text-right">
+                    <pagination-controls (pageChange)="pageChangeEvent($event)"></pagination-controls>
+                </div>
+             
+            </div>
+        </div>
+    </div>
+
+    <ng-template #mymodal let-modal>
+        <div class="modal-header">
+            <h4 class="modal-title" id="modal-basic-title" *ngIf="!isEditProperty;else editHeading">Add Property</h4>
+            <ng-template #editHeading>
+                <h4 class="modal-title" id="modal-basic-title">Edit Property</h4>
+            </ng-template>
+    
+            <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Close Clicked')">
+                <span aria-hidden="true">×</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <!-- <span *ngIf="myContext.pid">PID:{{pid}} {{myContext.pid}}</span> -->
+            <form [formGroup]="organisationPropertyForm" (ngSubmit)="onSubmit()">
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" class="form-control" name="propertyname" formControlName="propertyname"
+                        [(ngModel)]="propertyname" [ngClass]="{ 'is-invalid': submitted && orgProp.propertyname.errors }" />
+                    <div *ngIf="submitted && orgProp.propertyname.errors" class="invalid-feedback">
+                        <div *ngIf="orgProp.propertyname.errors.required">Property name is required</div>
+                        <div *ngIf="orgProp.propertyname.errors.pattern">Property allow only Alphanumeric</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="website">Website</label>
+                    <input type="text" class="form-control" name="website" formControlName="website" [(ngModel)]="website"
+                        [ngClass]="{ 'is-invalid': submitted && orgProp.website.errors }" />
+                    <div *ngIf="submitted && orgProp.website.errors" class="invalid-feedback">
+                        <div *ngIf="orgProp.website.errors.required">Website address is required</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="logourl">Logo URL</label>
+                    <input type="text" class="form-control" name="logourl" formControlName="logourl"
+                        [(ngModel)]="logourl" />
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-outline-dark">Save</button>
+                </div>
+            </form>
+        </div>
+    </ng-template>
+
+    <ng-template #inviteuserModal let-modal>
+        <div class="modal-header">
+            <h4 class="modal-title" id="modal-basic-title">Invite new users</h4>
+          
+            <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Close Clicked')">
+                <span aria-hidden="true">×</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div>Enter the email addresses of the users you'd like to invite, and choose the role they should have.
+            </div>
+            <form [formGroup]="inviteUserOrgForm" (ngSubmit)="onSubmitInviteUserOrganization()">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <label for="emailid" class="d-block">Email Id</label>
+                            <input type="text" formControlName="emailid" name="emailid" [(ngModel)]="emailid"
+                                class="form-control" placeholder="Enter email id"
+                                [ngClass]="{ 'is-invalid': submitted && f.emailid.errors }" />
+                            <div *ngIf="submitted && f.emailid.errors" class="invalid-feedback">
+                                <div *ngIf="f.emailid.errors.required">Company Name is required</div>
+                                <div *ngIf="f.emailid.errors.pattern">Company Name Allow Only Alphabets</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div *ngFor="let opt of roleList" class="form-check-inline">
+                            <input class="form-check-input" type="radio" name="chkpermissions"
+                                [value]='opt.id' (change)="onCheckChange($event)"/>{{opt.role_name}}
+                        </div>
+                    </div>
+                </div>
+                <button class="btn btn-xs btn-primary" type="submit">Submit</button>
+            </form>
+        </div>
+    </ng-template>

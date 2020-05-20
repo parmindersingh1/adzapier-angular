@@ -16,7 +16,7 @@ export class OrgpageComponent implements OnInit {
   organisationPropertyForm: FormGroup;
   editOrganisationForm: FormGroup;
   submitted: boolean;
-  orgList: any;
+  orgList: any = [];
   orgDetails: any = [];
   closeResult: any;
   isEditable: boolean;
@@ -46,10 +46,10 @@ export class OrgpageComponent implements OnInit {
   myconfig = { itemsPerPage: 3 || this.i, currentPage: this.p };
   
   constructor(private formBuilder: FormBuilder,
-    private orgservice: OrganizationService,
-    private modalService: NgbModal, private sanitizer: DomSanitizer,
-    private userService: UserService,
-    private router: Router
+              private orgservice: OrganizationService,
+              private modalService: NgbModal, private sanitizer: DomSanitizer,
+              private userService: UserService,
+              private router: Router
   ) { }
 
   ngOnInit() {
@@ -90,53 +90,7 @@ export class OrgpageComponent implements OnInit {
   // get name() { return this.organisationPropertyForm.get('name'); }
   // get website() { return this.organisationPropertyForm.get('website'); }
   // get logo_url() { return this.organisationPropertyForm.get('logo_url'); }
-  onSubmit() {
-    this.submitted = true;
-
-    // const fd = new FormData();
-    // fd.append('name', this.organisationPropertyForm.get('name').value);
-    // fd.append('website', this.organisationPropertyForm.get('website').value);
-    // fd.append('logo_url', this.organisationPropertyForm.get('logo_url').value);
-    if (this.organisationPropertyForm.invalid) {
-      return false;
-    } else {
-      if (!this.isEditProperty) {
-        const reqObj = {
-          name: this.organisationPropertyForm.value.propertyname,
-          website: this.organisationPropertyForm.value.website,
-          logo_url: this.organisationPropertyForm.value.logourl
-        };
-        this.orgservice.addProperties(this.selectedOrg.orgid, reqObj).subscribe((result) => {
-          if (result) {
-            alert('New property has been added');
-            this.getPropertyList(this.selectedOrg.orgid);
-          }
-        }, (error) => {
-          console.log(error, 'error..');
-        });
-        this.organisationPropertyForm.reset();
-        this.modalService.dismissAll('Data Saved!');
-      } else {
-        const reqObj = {
-          name: this.organisationPropertyForm.value.propertyname,
-          website: this.organisationPropertyForm.value.website,
-          logo_url: this.organisationPropertyForm.value.logourl
-        };
-        this.orgservice.editProperties(this.myContext.oid, this.myContext.pid, reqObj).subscribe((res) => {
-          if (res) {
-            alert('updated!');
-            this.getPropertyList(res.response.oid);
-          }
-          this.organisationPropertyForm.reset();
-          this.modalService.dismissAll();
-        }, (error) => {
-          console.log(error, 'error..');
-        });
-      }
-    }
-
-
-  }
+ 
 
   loadOrganizationList() {
     this.orgservice.orglist().subscribe((data) => {
@@ -165,7 +119,7 @@ export class OrgpageComponent implements OnInit {
     if (this.editOrganisationForm.invalid) {
       return false;
     } else {
-      if (this.isEditOrganization) {
+      if (!this.isEditOrganization) {
       const updateObj = {
         orgname: this.editOrganisationForm.value.organizationname,
         taxID: this.editOrganisationForm.value.taxidnumber,
@@ -332,6 +286,9 @@ export class OrgpageComponent implements OnInit {
   
 	onChangeEvent(event) {
 		this.myconfig.itemsPerPage = Number(event.target.value);
-	}
-
+  }
+  
+  viewOrganization(orgID) {
+    this.router.navigate(['/organizationdetails', orgID]);
+  }
 }

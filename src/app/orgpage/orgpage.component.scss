@@ -58,3 +58,7 @@ margin-right: 5px;
 .table > tbody > tr > td> img.img-fluid {
     max-width: 15% !important;
 }
+
+.table > tbody > tr > td:nth-child(3) {
+    width: 20% !important;
+}

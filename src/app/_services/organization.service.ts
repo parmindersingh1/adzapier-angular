@@ -59,4 +59,8 @@ export class OrganizationService {
         return this.http.get<any>(environment.apiUrl + '/company');
     }
 
+    getOrganizationByID(orgID): Observable<any> {
+        return this.http.get<any>(environment.apiUrl + '/organizations/' + orgID);
+    }
+
 }

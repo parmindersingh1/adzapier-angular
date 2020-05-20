@@ -14,7 +14,7 @@ export class UserService {
     public currentregUser: Observable<User>;
     userDetails: User;
     userProfileSubject = new Subject<User>();
-    @Output() getCurrentUser: EventEmitter<User> = new EventEmitter<User>();
+    @Output() getCurrentUser: EventEmitter<any> = new EventEmitter<any>();
     private organizationProperty = new Subject<any>();
     organizationProperty$ = this.organizationProperty.asObservable();
     constructor(private http: HttpClient) {
@@ -85,5 +85,9 @@ export class UserService {
 
     verifyEmailAddress(tokenObj): Observable<any> {
         return this.http.post<any>(environment.apiUrl + '/email/verify', tokenObj);
+    }
+
+    getRoleList(): Observable<any> {
+        return this.http.get<any>(environment.apiUrl + '/role');
     }
 }

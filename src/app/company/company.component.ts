@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CompanyService } from '../company.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { Validators, FormBuilder, FormGroup } from '@angular/forms';
+import { Validators, FormBuilder, FormGroup, FormArray, FormControl } from '@angular/forms';
+import { UserService } from '../_services';
 @Component({
   selector: 'app-company',
   templateUrl: './company.component.html',
@@ -19,25 +20,38 @@ export class CompanyComponent implements OnInit {
   orgname: any;
   companyId: any;
   companyForm: FormGroup;
+  inviteUserForm: FormGroup;
   submitted;
-  constructor(private companyService: CompanyService, private modalService: NgbModal,  private formBuilder: FormBuilder,) { }
+  isInviteFormSubmitted;
+  teamMemberList: any;
+  permissions: any;
+  userRoleID: any;
+  roleList: any;
+  constructor(private companyService: CompanyService, private modalService: NgbModal,
+              private formBuilder: FormBuilder, private userService: UserService) { }
 
   ngOnInit() {
+    this.loadRoleList();
     const zipRegex = '^[0-9]*$';
     const spaceRegx = '^\S*$';
     const strRegx = '^[a-zA-Z \-\']+';
     const alphaNumeric = '^(?![0-9]*$)[a-zA-Z0-9 ]+$';
     this.companyForm = this.formBuilder.group({
       orgname: ['', [Validators.required, Validators.pattern(alphaNumeric)]],
-      tax_id: ['', [Validators.required, Validators.minLength(3), Validators.pattern(zipRegex)]],
+      tax_id: [''],
       address1: ['', [Validators.required, Validators.pattern(alphaNumeric)]],
       address2: ['', [Validators.required, Validators.pattern(alphaNumeric)]],
       city: ['', [Validators.required, Validators.pattern(strRegx)]],
       state: ['', [Validators.required, Validators.pattern(strRegx)]],
       zipcode: ['', [Validators.required, Validators.pattern(zipRegex)]],
     });
+    this.inviteUserForm = this.formBuilder.group({
+      emailid: ['', [Validators.required]],
+      permissions: new FormArray([])
+    });
     this.loadCompanyDetails();
     this.pathValues();
+    this.loadCompanyTeamMembers();
   }
   get f() { return this.companyForm.controls; }
   loadCompanyDetails() {
@@ -81,9 +95,8 @@ export class CompanyComponent implements OnInit {
     if (this.companyForm.invalid) {
       return false;
     } else {
-      const editObj = {
-        oid: this.companyId,
-        orgname: this.companyForm.value.orgname,
+      const editObj = { 
+        name: this.companyForm.value.orgname,
         tax_id: this.companyForm.value.tax_id,
         address1: this.companyForm.value.address1,
         address2: this.companyForm.value.address2,
@@ -113,8 +126,66 @@ export class CompanyComponent implements OnInit {
     }
   }
 
+  onSubmitInviteUser() {
+    this.isInviteFormSubmitted = true;
+    if (this.inviteUserForm.invalid) {
+      return false;
+    } else {
+      const requestObj = {
+        email: this.inviteUserForm.value.emailid,
+        role_id: this.inviteUserForm.value.permissions[0],
+        user_level: 'company'
+      };
+      this.companyService.inviteUser(requestObj)
+        .subscribe((data) => {
+          if (data) { 
+            alert('Details has been updated successfully!');
+            this.loadCompanyTeamMembers();
+            this.modalService.dismissAll('Data Saved!');
+          }
+        }, (error) => {
+          alert(error);
+          this.modalService.dismissAll('Error!');
+        }); 
+    }
+  }
+ 
+
+  onCheckChange(event) {
+    const formArray: FormArray = this.inviteUserForm.get('permissions') as FormArray;
+    const index =  formArray.value.indexOf(event.target.value);
+    if (index === -1) {
+      formArray.push(new FormControl(event.target.value));
+    } else {
+      formArray.controls.forEach((ctrl: FormControl) => {
+        if(ctrl.value === event.target.value) {
+          formArray.removeAt(index);
+          return;
+        } 
+      });
+    }
+    console.log(formArray.value,'fcv..');
+  }
+
   onResetProfile() {
     this.companyForm.reset();
     this.modalService.dismissAll('');
+    this.loadCompanyDetails();
+  }
+
+  loadCompanyTeamMembers() {
+    this.companyService.getCompanyTeamMembers().subscribe((data) => {
+      this.teamMemberList = data['response'];
+    });
+  }
+
+  loadRoleList() {
+    this.userService.getRoleList().subscribe((data) => {
+      if (data) {
+        const key = 'response';
+       // const roleid = data[key];
+        this.roleList = data[key];
+      }
+    });
   }
 }

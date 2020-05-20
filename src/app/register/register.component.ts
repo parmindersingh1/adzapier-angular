@@ -43,13 +43,7 @@ export class RegisterComponent implements OnInit {
             firstName: ['', [Validators.required, Validators.pattern(strRegx)]],
             lastName: ['', [Validators.required, Validators.pattern(strRegx)]],
             companyname: ['', [Validators.required, Validators.pattern(alphaNumeric)]],
-            addressone: ['', [Validators.required, Validators.pattern(alphaNumeric)]],
-            addresstwo: ['', [Validators.required, Validators.pattern(alphaNumeric)]],
-            city: ['', [Validators.required, Validators.pattern(strRegx)]],
-            state: ['', [Validators.required, Validators.pattern(strRegx)]],
-            zipcode: ['', [Validators.required, Validators.pattern(zipRegex)]],
             email: ['', [Validators.required, Validators.pattern]],
-            roles: ['', [Validators.required, Validators.pattern(strRegx)]],
             password: ['', [Validators.required, Validators.pattern, Validators.minLength(6)]],
             confirmpassword: ['', [Validators.required, Validators.pattern, Validators.minLength(6)]]
         }, {
@@ -66,53 +60,46 @@ export class RegisterComponent implements OnInit {
 
     onSubmit() {
         this.submitted = true;
-      //  this.show = false;
-       // this.alertService.clear();
+        //  this.show = false;
+        // this.alertService.clear();
 
         // stop here if form is invalid
         if (this.regForm.invalid) {
             return false;
         } else {
 
-        this.loading = true;
-        const requestObj = {
-            firstname: this.f.firstName.value,
-            lastname: this.f.lastName.value,
-            address1: this.f.addressone.value,
-            address2: this.f.addresstwo.value,
-            city: this.f.city.value,
-            state: this.f.state.value,
-            zipcode: this.f.zipcode.value,
-            email: this.f.email.value,
-            password: this.f.password.value,
-            confirmpassword: this.f.confirmpassword.value,
-            companyname: this.f.companyname.value,
-            roles:  this.f.roles.value
-        };
+            this.loading = true;
+            const requestObj = {
+                firstname: this.f.firstName.value,
+                lastname: this.f.lastName.value,
+                email: this.f.email.value,
+                password: this.f.password.value,
+                confirmpassword: this.f.confirmpassword.value,
+                companyname: this.f.companyname.value
+            };
 
-        this.userService.register(requestObj)
-            .pipe(first())
-            .subscribe(
-                data => {
-                    this.alertService.success('Registration successful', true);
-                    alert('Registration Successful....Please Login');
-                    this.router.navigate(['/login']);
-
-                },
-                error => {
-                    this.alertService.error(error);
-                    for (let key in error) {
-                        if (key != 'No_record') {
-                            this.errorMsg = error[key];
+            this.userService.register(requestObj)
+                .pipe(first())
+                .subscribe(
+                    data => {
+                        this.alertService.success('Registration successful', true);
+                        alert('Registration Successful....Please Login');
+                        this.router.navigate(['/login']);
+                    },
+                    error => {
+                        this.alertService.error(error);
+                        for (let key in error) {
+                            if (key != 'No_record') {
+                                this.errorMsg = error[key];
+                            }
+                            break;
                         }
-                        break;
-                    }
 
-                    this.loading = false;
+                        this.loading = false;
 
-                });
+                    });
 
-            }
+        }
 
     }
 }
