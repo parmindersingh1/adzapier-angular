@@ -27,6 +27,12 @@ export class CompanyComponent implements OnInit {
   permissions: any;
   userRoleID: any;
   roleList: any;
+  emailid: any;
+  pageSize: any;
+  p: number = 1;
+  i: any = [];
+  pageSize: any;
+  myconfig = { itemsPerPage: 3 || this.i, currentPage: this.p };
   constructor(private companyService: CompanyService, private modalService: NgbModal,
               private formBuilder: FormBuilder, private userService: UserService) { }
 
@@ -165,6 +171,10 @@ export class CompanyComponent implements OnInit {
       });
     }
     console.log(formArray.value,'fcv..');
+  }
+
+  	onChangeEvent(event) {
+		this.myconfig.itemsPerPage = Number(event.target.value);
   }
 
   onResetProfile() {

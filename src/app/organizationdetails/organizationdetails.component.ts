@@ -37,6 +37,7 @@ export class OrganizationdetailsComponent implements OnInit {
   isInviteFormSubmitted:any;
   organizationTeamMemberList: any
   roleList: any;
+  emailid: any;
   constructor(private activatedRoute: ActivatedRoute,
               private orgService: OrganizationService,
               private modalService: NgbModal,
@@ -68,6 +69,7 @@ export class OrganizationdetailsComponent implements OnInit {
       permissions: new FormArray([])
     });
   }
+  get f() { return this.inviteUserOrgForm.controls; }
   get orgProp() { return this.organisationPropertyForm.controls; }
   loadOrganizationByID(id) {
     this.orgService.getOrganizationByID(id).subscribe((data) => {

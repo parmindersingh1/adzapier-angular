@@ -16,7 +16,7 @@
                         Organization Details  
                     </h6>
                     <div class="d-flex pd-0">
-                        <button (click)="editOrganizationModalPopup(editUserModal)"
+                        <button
                             class="btn btn-sm btn-white float-right">
                             <i-feather name="edit-2" class="feather-16"></i-feather>
                             <span class="d-none d-sm-inline mg-l-0"> Edit</span>
@@ -146,7 +146,7 @@
                                 </td>
                                 <td>{{list.active?'Active':'Disable'}}</td>
                                 <td>
-                                    <button class="btn btn-xs btn-primary" (click)="clickToManage(list.pid)">Manage</button>
+                                    <button class="btn btn-xs btn-primary">Manage</button>
                                 </td>
                             
                             </tr>
