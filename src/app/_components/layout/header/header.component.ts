@@ -63,9 +63,11 @@ export class HeaderComponent implements OnInit {
         console.log(data, 'userService..');
         this.currentUser = data;
         this.isCollapsed = false;
-        this.currentLoggedInUser = this.currentUser.response.firstname + ' ' + this.currentUser.response.lastname;
+        this.currentLoggedInUser = this.currentUser[0].response.firstname + ' ' + this.currentUser[0].response.lastname;
+        this.userRole = data[1].response[0].role_name;
       }
     });
+   // this.getLoggedInUserDetails();
     this.orgservice.emitUpdatedOrgList.subscribe((data) => {
       this.loadOrganizationList();
     });
@@ -77,6 +79,7 @@ export class HeaderComponent implements OnInit {
     if (this.currentUser) {
       this.isCollapsed = false;
       this.getLoggedInUserDetails();
+     // this.loadCurrentUser();
       this.loadOrganizationList();
       this.currentSelectedProperty();
     }
@@ -97,6 +100,7 @@ export class HeaderComponent implements OnInit {
     this.authService.logout();
     this.isCollapsed = true;
     localStorage.removeItem('currentUser');
+   // this.userService.getCurrentUser.unsubscribe();
     this.router.navigate(['/login']);
     location.reload();
 
@@ -130,7 +134,7 @@ export class HeaderComponent implements OnInit {
   loadOrganizationList() {
     this.orgservice.orglist().subscribe((data) => {
       if (data === null) {
-        this.router.navigate(['/portalorg']);
+        this.router.navigate(['/organizations']);
       }
       this.orgList = Object.values(data)[0];
       this.leftItems = this.orgList;
@@ -157,7 +161,7 @@ export class HeaderComponent implements OnInit {
           label: 'User', icon: 'assets/imgs/glass.jpg',
           items: [
             { label: 'User Preferences', routerLink: '/user/profile/edit', icon: 'edit-3' },
-            { label: 'Organizations', routerLink: '/portalorg', icon: 'activity' },
+            { label: 'Organizations', routerLink: '/organizations', icon: 'activity' },
             { label: 'Billing', routerLink: '/pagenotfound', icon: 'credit-card' },
             { label: 'Settings', routerLink: '/settings', icon: 'settings' },
             { label: 'Help Center', routerLink: '/pagenotfound', icon: 'help-circle' },

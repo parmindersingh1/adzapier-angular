@@ -150,7 +150,16 @@ a.dropdown-item > i {
 
 .bdr-zero {
     border: 0;
-} 
+}
+
+.breadcrumb-item a {
+    cursor: pointer;
+}
+
+.feather-16 {
+    width: 16px !important;
+    height: 16px !important;
+}
 
 @media (min-width: 576px) {
     .card-body {

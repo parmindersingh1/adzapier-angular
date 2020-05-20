@@ -33,6 +33,7 @@ import { ChangelogComponent } from './changelog/changelog.component';
 import { CompanyComponent } from './company/company.component';
 import { BillingComponent } from './billing/billing.component';
 import { VerifyemailComponent } from './verifyemail/verifyemail.component';
+import { OrganizationdetailsComponent } from './organizationdetails/organizationdetails.component';
 
 
 const routes: Routes = [
@@ -42,36 +43,37 @@ const routes: Routes = [
   { path: 'logout', component: LoginComponent },
   { path: 'signup', component: RegisterComponent },
   { path: 'forgot-password', component: ForgotpasswordComponent },
-  {path : 'privacypolicy', component: PrivacypolicyComponent},
-  {path : 'pricing', component: PricingComponent},
-  {path : 'partners', component: PartnersComponent},
-  {path : 'termofuse', component: TermofuseComponent},
-  {path : 'contactus', component: ContactusComponent},
-  {path : 'ccpa', component: CCPAComponent},
-  {path : 'gdpr', component: GDPRComponent},
-  {path : 'gethelp', component: GethelpComponent},
-  {path: 'changelog', component: ChangelogComponent},
+  { path: 'privacypolicy', component: PrivacypolicyComponent },
+  { path: 'pricing', component: PricingComponent },
+  { path: 'partners', component: PartnersComponent },
+  { path: 'termofuse', component: TermofuseComponent },
+  { path: 'contactus', component: ContactusComponent },
+  { path: 'ccpa', component: CCPAComponent },
+  { path: 'gdpr', component: GDPRComponent },
+  { path: 'gethelp', component: GethelpComponent },
+  { path: 'changelog', component: ChangelogComponent },
   { path: 'home/dashboard/analytics', component: AnalyticsComponent, canActivate: [AuthGuard] },
   { path: 'user/password/change-password', component: ChangepasswordComponent, canActivate: [AuthGuard] },
   { path: 'user/profile/edit', component: EditProfileComponent, canActivate: [AuthGuard] },
-  { path: 'portalorg', component: OrgpageComponent, canActivate: [AuthGuard] },
+  { path: 'organizations', component: OrgpageComponent, canActivate: [AuthGuard] },
+  { path: 'organizationdetails/:id', component: OrganizationdetailsComponent, canActivate: [AuthGuard] },
   { path: 'user/activity', component: UseractivityComponent, canActivate: [AuthGuard] },
   { path: 'resetpswd/:id', component: ResetpasswordComponent },
   { path: 'pagenotfound', component: PagenotfoundComponent },
   { path: '404page', component: PagenotfoundComponent1 },
   { path: 'internalerror', component: InternalerrorComponent },
-  {path : 'dsarform', component: DsarformComponent, canActivate: [AuthGuard]},
-  {path : 'webforms', component: WebformsComponent, canActivate: [AuthGuard]},
-  {path : 'settings', component: PagesettingsComponent, canActivate: [AuthGuard]},
-  {path : 'editwebforms/:crid', component: EditwebformComponent, canActivate: [AuthGuard]},
-  {path : 'propertydashboard/:propid', component: PropertydashboardComponent, canActivate: [AuthGuard]},
-  {path : 'company', component: CompanyComponent, canActivate: [AuthGuard]},
-  {path : 'billing', component: BillingComponent, canActivate: [AuthGuard]},
+  { path: 'dsarform', component: DsarformComponent, canActivate: [AuthGuard] },
+  { path: 'webforms', component: WebformsComponent, canActivate: [AuthGuard] },
+  { path: 'settings', component: PagesettingsComponent, canActivate: [AuthGuard] },
+  { path: 'editwebforms/:crid', component: EditwebformComponent, canActivate: [AuthGuard] },
+  { path: 'propertydashboard/:propid', component: PropertydashboardComponent, canActivate: [AuthGuard] },
+  { path: 'company', component: CompanyComponent, canActivate: [AuthGuard] },
+  { path: 'billing', component: BillingComponent, canActivate: [AuthGuard] },
   { path: 'verify-email/:id', component: VerifyemailComponent },
   { path: '', redirectTo: 'home/dashboard/analytics', pathMatch: 'full', canActivate: [AuthGuard] },
-  
+
   // { path: '', redirectTo: 'home/dashboard/analytics', pathMatch:'full' },
- 
+
   // otherwise redirect to home
   { path: '**', redirectTo: '404page' }
 ];
