@@ -23,7 +23,7 @@ export class CompanyService {
   }
 
   inviteUser(reqestObj): Observable<any> {
-    return this.httpClient.post<any>(environment.apiUrl + '/invite-user' , reqestObj);
+    return this.httpClient.post<any>(environment.apiUrl + '/invite_user' , reqestObj);
   }
 
   removeTeamMember(id): Observable<any> {
