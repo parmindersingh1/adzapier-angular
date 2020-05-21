@@ -15,7 +15,8 @@ export class OrganizationteamComponent implements OnInit {
   organizationID: any;
   organizationTeamMemberList: any;
   roleList: any;
-  isInviteFormSubmitted;
+  submitted;
+  emailid;
   constructor(private activatedRoute: ActivatedRoute,
               private router: Router,
               private modalService: NgbModal,
@@ -82,7 +83,7 @@ export class OrganizationteamComponent implements OnInit {
   }
 
   onSubmitInviteUserOrganization() {
-    this.isInviteFormSubmitted = true;
+    this.submitted = true;
     if (this.inviteUserOrgForm.invalid) {
       return false;
     } else {
