@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-gdpr',
@@ -7,15 +7,12 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class GDPRComponent implements OnInit {
 
-  @Input() checkBoxList;
   constructor() {
     console.log('GDPRComponent Constructor method');
-    console.log(this.checkBoxList, 'GDPRComponent checkBoxList..cc');
    }
 
   ngOnInit() {
     console.log('GDPRComponent ngOnInit method');
-    console.log(this.checkBoxList, 'GDPRComponent ngoninit..');
   }
 
 }

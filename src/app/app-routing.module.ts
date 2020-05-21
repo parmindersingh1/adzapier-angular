@@ -34,6 +34,7 @@ import { CompanyComponent } from './company/company.component';
 import { BillingComponent } from './billing/billing.component';
 import { VerifyemailComponent } from './verifyemail/verifyemail.component';
 import { OrganizationdetailsComponent } from './organizationdetails/organizationdetails.component';
+import { OrganizationteamComponent } from './organizationteam/organizationteam.component';
 
 
 const routes: Routes = [
@@ -57,6 +58,7 @@ const routes: Routes = [
   { path: 'user/profile/edit', component: EditProfileComponent, canActivate: [AuthGuard] },
   { path: 'organizations', component: OrgpageComponent, canActivate: [AuthGuard] },
   { path: 'organizationdetails/:id', component: OrganizationdetailsComponent, canActivate: [AuthGuard] },
+  { path: 'organizationteam/:id', component: OrganizationteamComponent, canActivate: [AuthGuard] },
   { path: 'user/activity', component: UseractivityComponent, canActivate: [AuthGuard] },
   { path: 'resetpswd/:id', component: ResetpasswordComponent },
   { path: 'pagenotfound', component: PagenotfoundComponent },

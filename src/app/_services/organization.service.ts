@@ -17,6 +17,9 @@ export class OrganizationService {
     @Output() getOrganization: EventEmitter<any> = new EventEmitter<any>();
     public currentPropertySource = new BehaviorSubject<any>('');
     currentProperty = this.currentPropertySource.asObservable();
+
+    public currentManageOrganizationSource = new BehaviorSubject<any>('');
+    currentOrganization = this.currentManageOrganizationSource.asObservable();
     constructor(private http: HttpClient) { }
 
     public get currentOrgValue(): Orglist {
@@ -61,6 +64,10 @@ export class OrganizationService {
 
     getOrganizationByID(orgID): Observable<any> {
         return this.http.get<any>(environment.apiUrl + '/organizations/' + orgID);
+    }
+
+    changeCurrentManagedOrganization(currentItem) {
+        this.currentManageOrganizationSource.next(currentItem);
     }
 
 }

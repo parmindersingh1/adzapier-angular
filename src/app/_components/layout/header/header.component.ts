@@ -48,7 +48,7 @@ export class HeaderComponent implements OnInit {
       this.currentUser = x;
       if (this.currentUser) {
         this.isCollapsed = false;
-        this.getLoggedInUserDetails();
+      //  this.getLoggedInUserDetails();
         this.loadOrganizationList();
       }
     });
@@ -63,8 +63,9 @@ export class HeaderComponent implements OnInit {
         console.log(data, 'userService..');
         this.currentUser = data;
         this.isCollapsed = false;
-        this.currentLoggedInUser = this.currentUser[0].response.firstname + ' ' + this.currentUser[0].response.lastname;
-        this.userRole = data[1].response[0].role_name;
+        this.currentLoggedInUser = this.currentUser.response.firstname + ' ' + this.currentUser.response.lastname;
+        this.userRole = this.currentUser.response.role;
+        console.log(this.userRole,'userRole...');
       }
     });
    // this.getLoggedInUserDetails();
@@ -204,8 +205,9 @@ export class HeaderComponent implements OnInit {
   getLoggedInUserDetails() {
     this.isCollapsed = false;
     this.userService.getLoggedInUserDetails().subscribe((data) => {
-      this.currentLoggedInUser = Object.values(data)[0].firstname + ' ' + Object.values(data)[0].lastname;
-      this.userRole = Object.values(data)[0].roles;
+      this.currentUser = data;
+      this.currentLoggedInUser = this.currentUser.response.firstname + ' ' + this.currentUser.response.lastname;
+      this.userRole = this.currentUser.response.role;
     });
   }
 

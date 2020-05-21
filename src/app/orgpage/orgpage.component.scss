@@ -62,3 +62,22 @@ margin-right: 5px;
 .table > tbody > tr > td:nth-child(3) {
     width: 20% !important;
 }
+
+.table.table.table-bordered > tbody > tr > td > a {
+    color: #0168fa;
+    cursor: pointer;
+}
+
+.table.table.table-bordered > tbody > tr > td > a:hover {
+    color:#0148ae;
+}
+
+.checked {
+    background: green;
+}
+
+.feather-16{
+    width: 16px;
+    height: 16px;
+    margin: 0 15px 0 0;
+}

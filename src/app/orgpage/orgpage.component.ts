@@ -4,6 +4,7 @@ import { OrganizationService, UserService } from '../_services';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
+import { CompanyService } from '../company.service';
 
 @Component({
   selector: 'app-orgpage',
@@ -44,11 +45,12 @@ export class OrgpageComponent implements OnInit {
   i: any = [];
   pageSize: any;
   myconfig = { itemsPerPage: 3 || this.i, currentPage: this.p };
-  
+  selectedOrganization: any = [];
   constructor(private formBuilder: FormBuilder,
               private orgservice: OrganizationService,
               private modalService: NgbModal, private sanitizer: DomSanitizer,
               private userService: UserService,
+              private companyService: CompanyService,
               private router: Router
   ) { }
 
@@ -290,5 +292,26 @@ export class OrgpageComponent implements OnInit {
   
   viewOrganization(orgID) {
     this.router.navigate(['/organizationdetails', orgID]);
+  }
+
+  removeOrganization(id) {
+    this.companyService.removeTeamMember(id).subscribe((data) => {
+      if (data) {
+        alert('Selected oragnization has been disabled!');
+      }
+    }, (err) => {
+      alert(err);
+    });
+  }
+
+  manageSelecteditem(data) {
+    this.selectedOrganization.length = 0;
+    this.selectedOrganization.push(data);
+    this.orgservice.changeCurrentManagedOrganization(data);
+    
+  }
+
+  disableOtherItems(data): boolean {
+    return this.selectedOrganization.filter((t) => t.id === data.id).length > 0;
   }
 }
