@@ -58,6 +58,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { VerifyemailComponent } from './verifyemail/verifyemail.component';
 import { OrganizationdetailsComponent } from './organizationdetails/organizationdetails.component';
+import { OrganizationteamComponent } from './organizationteam/organizationteam.component';
 
 
 export const isMock = environment.mock;
@@ -99,7 +100,8 @@ export const isMock = environment.mock;
     CompanyComponent,
     BillingComponent,
     VerifyemailComponent,
-    OrganizationdetailsComponent
+    OrganizationdetailsComponent,
+    OrganizationteamComponent
   ],
   imports: [
     BrowserModule,

@@ -72,11 +72,13 @@
                             <a class="pd-r-5" data-toggle="modal" (click)="organizationModalPopup(editOrgModal,data)">
                                 <i class="far fa-edit fa-1x"></i> Edit
                             </a>
-                            <a class="pd-r-5">
+                            <a class="pd-r-5" (click)="removeOrganization(data.id)">
                                 <i class="far fa-trash-alt tx-danger fa-sm"></i>Remove
                             </a> 
                         </td>
-                        <td><button>Manage</button></td>
+                        <td><button class="btn btn-sm" (click)="manageSelecteditem(data)">
+                            <span *ngIf="disableOtherItems(data)"><i class="fa fa-check-circle" aria-hidden="true"></i></span>
+                            Manage</button></td>
                        
                     </tr>
 
@@ -125,8 +127,7 @@
                     <div class="form-group">
                         <label for="taxidnumber">Tax ID</label>
                         <input type="text" class="form-control" [(ngModel)]="taxidnumber" formControlName="taxidnumber"
-                            name="taxidnumber" />
-
+                            name="taxidnumber" /> 
                     </div>
                 </div>
                 <div class="col-sm-6">

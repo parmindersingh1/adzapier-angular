@@ -26,5 +26,9 @@ export class CompanyService {
     return this.httpClient.post<any>(environment.apiUrl + '/invite-user' , reqestObj);
   }
 
+  removeTeamMember(id): Observable<any> {
+    return this.httpClient.put<any>(environment.apiUrl + '/team_member/remove/' + id, {});
+  }
+
 }
 

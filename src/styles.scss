@@ -161,8 +161,16 @@ a.dropdown-item > i {
     height: 16px !important;
 }
 
-@media (min-width: 576px) {
-    .card-body {
-        padding: 0 15px !important;
-    }
+// .card-header {
+//     padding: 10px 10px !important;
+// }
+
+.modal-content .close {
+    outline: none;
 }
+
+// @media (min-width: 576px) {
+//     .card-body {
+//         padding: 0 15px !important;
+//     }
+// }
