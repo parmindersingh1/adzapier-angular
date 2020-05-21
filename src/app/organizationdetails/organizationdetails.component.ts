@@ -156,7 +156,7 @@ export class OrganizationdetailsComponent implements OnInit {
     });
   }
 
-  updateOrganisationData(data) {
+  updateOrganisationData() {
     this.submitted = true;
     if (this.editOrganisationForm.invalid) {
       return false;
