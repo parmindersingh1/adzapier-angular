@@ -22,10 +22,17 @@ export class OrganizationdetailsComponent implements OnInit {
   state: string;
   zipcode: number;
   taxID: any;
-  p: number = 1;
-  i: any = [];
-  pageSize: any;
-  myconfig = { itemsPerPage: 3 || this.i, currentPage: this.p };
+
+  p: number = 1; 
+  pageSize: any = 2;
+  totalCount: any;
+  paginationConfig = { itemsPerPage: this.pageSize, currentPage: this.p, totalItems: this.totalCount, id: 'userPagination' };
+
+  p2: number = 1; 
+  propertyPgSize: any = 2;
+  propertyTotalCount: any;
+  propertyPageConfig = {  itemsPerPage: this.propertyPgSize, currentPage: this.p2, totalItems: this.propertyTotalCount, id: 'propertyPagination'};
+
   propertyList: any;
   isOpen: boolean = false;
   submitted;
@@ -40,6 +47,8 @@ export class OrganizationdetailsComponent implements OnInit {
   emailid: any;
   selectedProperty: any = [];
   managedOrganization: any;
+  searchText: any;
+  searchPropertyText: any;
   constructor(private activatedRoute: ActivatedRoute,
               private orgService: OrganizationService,
               private modalService: NgbModal,
@@ -113,7 +122,7 @@ export class OrganizationdetailsComponent implements OnInit {
       if (!data.response) {
         alert("Adding property is mandatory. Add Property first.");
       }
-
+      console.log(this.propertyList,'this.propertyList..');
       return this.propertyList = data.response;
     });
   }
@@ -174,7 +183,7 @@ export class OrganizationdetailsComponent implements OnInit {
       this.orgService.updateOrganization(this.organizationID, updateObj).subscribe((res) => {
         if (res) {
           alert('Organization updated successfully!');
-          
+          this.modalService.dismissAll('Data Saved!');
         }
       }, (error) => {
         alert(JSON.stringify(error));
@@ -238,13 +247,39 @@ export class OrganizationdetailsComponent implements OnInit {
 
   }
 
-
   pageChangeEvent(event) {
-    this.myconfig.currentPage = event;
+    this.paginationConfig.currentPage = event;
+    const pagelimit = '?limit=' + this.paginationConfig.itemsPerPage + '&page=' + this.paginationConfig.currentPage;
+    const key = 'response';
+    this.companyService.getCompanyTeamMembers().subscribe((data) => {
+      this.organizationTeamMemberList = data[key];
+      this.paginationConfig.totalItems = data.count;
+      return this.organizationTeamMemberList;
+    });
   }
 
   onChangeEvent(event) {
-    this.myconfig.itemsPerPage = Number(event.target.value);
+    this.paginationConfig.itemsPerPage = Number(event.target.value);
+  }
+
+  propertyPageChangeEvent(event) {
+    this.propertyPageConfig.currentPage = event;
+    //const pagelimit = '?limit=' + this.paginationConfig.itemsPerPage + '&page=' + this.paginationConfig.currentPage;
+    // const key = 'response';
+    this.orgService.getPropertyList(this.organizationID).subscribe((data) => {
+      this.propertyPageConfig.totalItems = data.count;
+      this.propertyList = data.response;
+      return this.propertyList;
+    });
+    // this.companyService.getCompanyTeamMembers().subscribe((data) => {
+    //   this.organizationTeamMemberList = data[key];
+    //   this.paginationConfig.totalItems = data.count;
+    //   return this.organizationTeamMemberList;
+    // });
+  }
+
+  onPagesizeChangeEvent(event) {
+    this.propertyPageConfig.itemsPerPage = Number(event.target.value);
   }
 
   onCheckChange(event) {
@@ -321,6 +356,16 @@ export class OrganizationdetailsComponent implements OnInit {
 
   disableOtherProperty(data): boolean {
     return this.selectedProperty.filter((t) => t.id === data.id).length > 0;
+  }
+
+  removeOrganization(id) {
+    this.companyService.removeTeamMember(id).subscribe((data) => {
+      if (data) {
+        alert('Selected oragnization has been disabled!');
+      }
+    }, (err) => {
+      alert(err);
+    });
   }
 
 }

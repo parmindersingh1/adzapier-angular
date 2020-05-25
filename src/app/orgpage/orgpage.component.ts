@@ -41,11 +41,13 @@ export class OrgpageComponent implements OnInit {
   showOrgDetails: boolean = false;
   isEditProperty: boolean;
   isEditOrganization: boolean;
-  p: number = 1;
-  i: any = [];
-  pageSize: any;
-  myconfig = { itemsPerPage: 3 || this.i, currentPage: this.p };
+  p: number = 1; 
+  pageSize: any = 2;
+  totalCount: any;
+  paginationConfig = { itemsPerPage: this.pageSize, currentPage: this.p, totalItems: this.totalCount };
   selectedOrganization: any = [];
+  searchText;
+  ascNumberSort: any;
   constructor(private formBuilder: FormBuilder,
               private orgservice: OrganizationService,
               private modalService: NgbModal, private sanitizer: DomSanitizer,
@@ -121,7 +123,7 @@ export class OrgpageComponent implements OnInit {
     if (this.editOrganisationForm.invalid) {
       return false;
     } else {
-      if (!this.isEditOrganization) {
+      if (this.isEditOrganization) {
       const updateObj = {
         orgname: this.editOrganisationForm.value.organizationname,
         taxID: this.editOrganisationForm.value.taxidnumber,
@@ -157,6 +159,7 @@ export class OrgpageComponent implements OnInit {
       this.orgservice.addOrganization(addObj).subscribe((res) => {
         if (res) {
           this.orgservice.emitUpdatedOrganization.emit(res);
+          this.viewOrganization(res.response.id);
           alert('Organization Added successfully!');
           this.onResetEditOrganization();
           this.orgDetails = [];
@@ -235,7 +238,7 @@ export class OrgpageComponent implements OnInit {
 
 
   organizationModalPopup(content, data) {
-    if (data !== undefined) {
+    if (data !== '') {
       this.isEditOrganization = true;
       this.myContext = { oid: data.id };
       this.organizationname = data.orgname;
@@ -282,12 +285,19 @@ export class OrgpageComponent implements OnInit {
   }
 
   pageChangeEvent(event) {
-    this.myconfig.currentPage = event;
+    this.paginationConfig.currentPage = event;
+    const pagelimit = '?limit=' + this.paginationConfig.itemsPerPage + '&page=' + this.paginationConfig.currentPage;
+    this.orgservice.orglist(pagelimit).subscribe((data) => {
+      const key = 'response';
+      this.orgList = data[key];
+      this.paginationConfig.totalItems = data.count;
+      return this.orgList;
+    });
   }
 
   
 	onChangeEvent(event) {
-		this.myconfig.itemsPerPage = Number(event.target.value);
+		this.paginationConfig.itemsPerPage = Number(event.target.value);
   }
   
   viewOrganization(orgID) {
@@ -314,4 +324,14 @@ export class OrgpageComponent implements OnInit {
   disableOtherItems(data): boolean {
     return this.selectedOrganization.filter((t) => t.id === data.id).length > 0;
   }
+
+  sortNumberColumn() {
+    this.ascNumberSort = !this.ascNumberSort;
+    if(this.ascNumberSort) {
+        this.orgList.sort((a, b) => a - b); // For ascending sort
+    } else {
+        this.orgList.sort((a, b) => b - a); // For descending sort
+    }
+}
+
 }

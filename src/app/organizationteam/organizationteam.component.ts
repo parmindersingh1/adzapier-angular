@@ -17,6 +17,10 @@ export class OrganizationteamComponent implements OnInit {
   roleList: any;
   submitted;
   emailid;
+  p: number = 1; 
+  pageSize: any = 2;
+  totalCount: any;
+  paginationConfig = { itemsPerPage: this.pageSize, currentPage: this.p, totalItems: this.totalCount };
   constructor(private activatedRoute: ActivatedRoute,
               private router: Router,
               private modalService: NgbModal,
@@ -63,6 +67,17 @@ export class OrganizationteamComponent implements OnInit {
       // this.closeResult = `Closed with: ${result}`;
     }, (reason) => {
       // this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  pageChangeEvent(event) {
+    this.paginationConfig.currentPage = event;
+    const pagelimit = '?limit=' + this.paginationConfig.itemsPerPage + '&page=' + this.paginationConfig.currentPage;
+    const key = 'response';
+    this.companyService.getCompanyTeamMembers().subscribe((data) => {
+      this.organizationTeamMemberList = data[key];
+      this.paginationConfig.totalItems = data.count;
+      return this.organizationTeamMemberList;
     });
   }
 

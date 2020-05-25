@@ -28,12 +28,16 @@ export class CompanyComponent implements OnInit {
   userRoleID: any;
   roleList: any;
   emailid: any;
-  pageSize: any;
+  pageSize: any = 2;
+  searchText: any;
+  totalCount: any;
+
   p: number = 1;
   i: any = [];
-  myconfig = { itemsPerPage: 3 || this.i, currentPage: this.p };
+  paginationConfig = { itemsPerPage: this.pageSize, currentPage: this.p, totalItems: this.totalCount };
+
   constructor(private companyService: CompanyService, private modalService: NgbModal,
-              private formBuilder: FormBuilder, private userService: UserService) { }
+    private formBuilder: FormBuilder, private userService: UserService) { }
 
   ngOnInit() {
     this.loadRoleList();
@@ -75,7 +79,7 @@ export class CompanyComponent implements OnInit {
   editOrganizationModalPopup(content) {
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
     }, (reason) => {
-     // this.profileForm.reset();
+      // this.profileForm.reset();
     });
   }
 
@@ -100,7 +104,7 @@ export class CompanyComponent implements OnInit {
     if (this.companyForm.invalid) {
       return false;
     } else {
-      const editObj = { 
+      const editObj = {
         name: this.companyForm.value.orgname,
         tax_id: this.companyForm.value.tax_id,
         address1: this.companyForm.value.address1,
@@ -112,22 +116,22 @@ export class CompanyComponent implements OnInit {
       this.companyService.updateCompanyDetails(editObj)
         .subscribe((data) => {
           if (data) {
-          //  this.isShowbtnVisible = false;
-           // this.show = true;
+            //  this.isShowbtnVisible = false;
+            // this.show = true;
             alert('Details has been updated successfully!');
             this.loadCompanyDetails();
-           // this.userService.getCurrentUser.emit(data);
+            // this.userService.getCurrentUser.emit(data);
             this.modalService.dismissAll('Data Saved!');
-           // this.loadUserDetails();
+            // this.loadUserDetails();
           }
         }, (error) => {
           alert(error);
           this.modalService.dismissAll('Error!');
-         // this.isShowbtnVisible = true;
+          // this.isShowbtnVisible = true;
           // this.show = false;
         }
         );
-     // this.profileForm.disable();
+      // this.profileForm.disable();
     }
   }
 
@@ -143,7 +147,7 @@ export class CompanyComponent implements OnInit {
       };
       this.companyService.inviteUser(requestObj)
         .subscribe((data) => {
-          if (data) { 
+          if (data) {
             alert('Details has been updated successfully!');
             this.loadCompanyTeamMembers();
             this.modalService.dismissAll('Data Saved!');
@@ -151,29 +155,45 @@ export class CompanyComponent implements OnInit {
         }, (error) => {
           alert(error);
           this.modalService.dismissAll('Error!');
-        }); 
+        });
     }
   }
- 
+
 
   onCheckChange(event) {
     const formArray: FormArray = this.inviteUserForm.get('permissions') as FormArray;
-    const index =  formArray.value.indexOf(event.target.value);
+    const index = formArray.value.indexOf(event.target.value);
     if (index === -1) {
       formArray.push(new FormControl(event.target.value));
     } else {
       formArray.controls.forEach((ctrl: FormControl) => {
-        if(ctrl.value === event.target.value) {
+        if (ctrl.value === event.target.value) {
           formArray.removeAt(index);
           return;
-        } 
+        }
       });
     }
-    console.log(formArray.value,'fcv..');
+    console.log(formArray.value, 'fcv..');
   }
 
-  	onChangeEvent(event) {
-		this.myconfig.itemsPerPage = Number(event.target.value);
+  onChangeEvent(event) {
+    this.paginationConfig.itemsPerPage = Number(event.target.value);
+  }
+
+  pageChangeEvent(event) {
+    this.paginationConfig.currentPage = event;
+    //  const pagelimit = '?limit=' + this.paginationConfig.itemsPerPage + '&page=' + this.paginationConfig.currentPage;
+    this.companyService.getCompanyTeamMembers().subscribe((data) => {
+      this.teamMemberList = data['response'];
+      this.paginationConfig.totalItems = data.count;
+      return this.teamMemberList;
+    });
+    // this.orgservice.orglist(pagelimit).subscribe((data) => {
+    //   const key = 'response';
+    //   this.orgList = data[key];
+    //   this.paginationConfig.totalItems = data.count;
+    //   return this.orgList;
+    // });
   }
 
   onResetProfile() {
@@ -184,7 +204,9 @@ export class CompanyComponent implements OnInit {
 
   loadCompanyTeamMembers() {
     this.companyService.getCompanyTeamMembers().subscribe((data) => {
-      this.teamMemberList = data['response'];
+      const key = 'response';
+      this.teamMemberList = data[key];
+      this.paginationConfig.totalItems = data.count;
     });
   }
 
@@ -192,7 +214,7 @@ export class CompanyComponent implements OnInit {
     this.userService.getRoleList().subscribe((data) => {
       if (data) {
         const key = 'response';
-       // const roleid = data[key];
+        // const roleid = data[key];
         this.roleList = data[key];
       }
     });

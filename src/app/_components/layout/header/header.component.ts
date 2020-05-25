@@ -4,6 +4,7 @@ import { OrganizationService, AuthenticationService, UserService } from '../../.
 import { Observable } from 'rxjs';
 import { BsDropdownConfig } from 'ngx-bootstrap/dropdown';
 import { Organization } from 'src/app/_models/organization';
+import { mergeMap, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-header',
@@ -37,6 +38,9 @@ export class HeaderComponent implements OnInit {
   navToggleStatus = false;
   close: boolean;
   userRole: string;
+  propertyList: any;
+  listOfProp: any;
+  orgId:any;
   constructor(
     private router: Router,
     private activatedroute: ActivatedRoute,
@@ -95,6 +99,7 @@ export class HeaderComponent implements OnInit {
       }, {
         showlink: 'Contact Us', routerLink: '/contactus'
       }];
+    //this.loadPropertyByOrgID();
   }
 
   logout() {
@@ -137,9 +142,12 @@ export class HeaderComponent implements OnInit {
       if (data === null) {
         this.router.navigate(['/organizations']);
       }
-      this.orgList = Object.values(data)[0];
+      this.orgList = Object.values(data)[1];
       this.leftItems = this.orgList;
+
+      
       console.log(this.leftItems, 'leftItems..');
+    //  this.loadOrganizationProperty();
       //  else {
       //   this.orgList = Object.values(data)[0];
       //   this.leftItems = this.orgList;
@@ -192,15 +200,30 @@ export class HeaderComponent implements OnInit {
     });
 
     this.orgservice.emitUpdatedOrganization.subscribe((data) => {
-      for (const key in data) {
-        if (data[key].name !== undefined) {
-          return this.currentOrganization = data[key].name;
-        }
-      }
+       this.currentOrganization = data.response.orgname;
+       console.log(this.currentOrganization, 'currentOrganization..');
+     //  this.getPropertyList(data.id);
+      // for (const key in data) {
+      //   if (data[key].name !== undefined) {
+      //     return this.currentOrganization = data[key].name;
+      //   }
+      // }
 
     });
 
   }
+
+  // loadOrganizationProperty(): any {
+  //   this.orgList.forEach(element => {
+  //     if(element.id !== '') {
+  //       this.orgservice.getPropertyList(element.id);
+  //     }
+  //   }).subscribe((data) => {
+  //     console.log(data, 'datapropertyList..');
+  //     this.propertyList = data;
+  //   });
+ 
+  // }
 
   getLoggedInUserDetails() {
     this.isCollapsed = false;
@@ -266,4 +289,17 @@ export class HeaderComponent implements OnInit {
   closeNav() {
     this.close = false;
   }
+
+  loadPropertyByOrgID(){
+     this.orgservice.orglist().pipe(
+       switchMap(data => {
+         this.orgId = data.id;
+         return this.orgservice.getPropertyList(this.orgId);
+       })
+     ).subscribe((data)=>{
+      console.log(data,'loadPropertyByOrgID..');
+     });
+     }
+    
+    
 }
