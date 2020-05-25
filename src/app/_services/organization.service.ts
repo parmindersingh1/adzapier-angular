@@ -30,8 +30,11 @@ export class OrganizationService {
         return this.http.post<any>(environment.apiUrl + '/organizations', reqObj);
     }
 
-    orglist(): Observable<Organization[]> {
-        return this.http.get<Organization[]>(environment.apiUrl + '/organizations');
+    orglist(params?): Observable<any> {
+        if (params) {
+            return this.http.get<any>(environment.apiUrl + '/organizations' + params);
+        }
+        return this.http.get<any>(environment.apiUrl + '/organizations');
     }
 
     viewOrganizationDetails(orgId): Observable<Organization[]> {
@@ -69,5 +72,7 @@ export class OrganizationService {
     changeCurrentManagedOrganization(currentItem) {
         this.currentManageOrganizationSource.next(currentItem);
     }
+
+    
 
 }

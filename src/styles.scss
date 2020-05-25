@@ -161,6 +161,14 @@ a.dropdown-item > i {
     height: 16px !important;
 }
 
+.input-group-text {
+    border: 1px solid #dee2e6 !important;
+}
+
+.input-group > .form-control:focus {
+    outline: none !important;
+    box-shadow: none !important;
+}
 // .card-header {
 //     padding: 10px 10px !important;
 // }
@@ -169,6 +177,9 @@ a.dropdown-item > i {
     outline: none;
 }
 
+.container {
+    margin-bottom: 50px;
+}
 // @media (min-width: 576px) {
 //     .card-body {
 //         padding: 0 15px !important;

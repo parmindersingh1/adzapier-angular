@@ -11,45 +11,43 @@
     </div>
 
     <div class="divider-text mg-y-10">MEMBERS</div>
+    
     <div class="table-responsive">
         <div class="card">
             <div card-header tx-semibold>
-                <div class="mt-3 mb-3" style="display: flex;">
-                <div class="col-sm-3">
-                    <input type="text" placeholder="Search" class="form-control" />
+                <div class="mt-3" style="display: flex;">
+                    <div class="col-3 input-group">
+                        <input class="form-control py-2 border-right-0 border" [(ngModel)]="searchText" type="search" value="search" id="example-search-input"/>
+                        <span class="input-group-append">
+                            <div class="input-group-text bg-transparent"><i class="fa fa-search"></i></div>
+                        </span>
+                    </div>
+                    <div class="col-4">
+                    <div class="form-inline">
+                        <div class="col-md-4 form-group pr-0">
+                            <label class="col-sm-5 col-form-label" for="name">View</label>
+                            <select id="PerPage" class="form-control" [(ngModel)]="pageSize"
+                            (change)="onChangeEvent($event)">
+                            <option value="2">2</option>
+                            <option value="4">4</option>
+                            <option value="6">6</option>
+                        </select>                    
+                        </div>
+                        <div col-md-5><label class="d-block">records at a time</label></div>
+                    </div>
+                    </div>
+                    <div class="col-sm-2 ml-auto">
+                        <button type="button" class="btn btn-primary btn-xs float-right" data-toggle="modal"
+                            (click)="open(inviteuserModal)">Add User</button>
+                    </div>
                 </div>
-                <div class="col-sm-4">
-                <div class="row">
-                <div class="col-sm-3">
-                    <div class="mt-2">
-                        <label class="d-block">View</label>
-                    </div> 
-                </div>
-                <div class="col-sm-3">
-                    <select id="PerPage" class="form-control">
-                        <option value="2">2</option>
-                        <option value="4">4</option>
-                        <option value="6">6</option>
-                    </select> 
-                </div>
-                <div class="col-sm-6">
-                    <div class="mt-2 float-left">
-                        <label class="d-block">records at a time</label>
-                    </div>  
-                </div>
-            </div>
-                </div>
-                <div class="col-sm-2 ml-auto">
-                    <button type="button" class="btn btn-primary btn-xs float-right" data-toggle="modal"
-                        (click)="open(inviteuserModal)"><i class="fas fa-plus"></i> Add User</button>
-                </div>
-            </div>
             </div>
             <div class="card-body">
                 <table class="table table-bordered">
                     <thead class="thead-primary">
                         <tr>
                             <th>Id</th>
+                            <th>Name</th>
                             <th>Email</th>
                             <th>Role</th>
                             <th>Last Login</th>
@@ -57,10 +55,11 @@
                         </tr>
                     </thead>
                     <tbody> 
-                            <tr *ngFor="let list of organizationTeamMemberList; let i = index">
+                            <tr *ngFor="let list of organizationTeamMemberList | paginate:paginationConfig | filter: searchText:'tm_name':'tm_email'; let i = index">
                                 <td>
-                                    {{i+1}} 
+                                    {{ (paginationConfig.currentPage - 1) * paginationConfig.itemsPerPage + i + 1 }}
                                 </td>
+                                <td>{{list.tm_name}}</td>
                                 <td>
                                     {{list.tm_email}}
                                 </td> 
@@ -83,9 +82,9 @@
                     </tbody>
                 </table>
             </div>
-            <!-- <div class="card-footer text-right">
+            <div class="card-footer text-right">
                 <pagination-controls (pageChange)="pageChangeEvent($event)"></pagination-controls>
-            </div> -->
+            </div> 
          
         </div>
     </div>
