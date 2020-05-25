@@ -20,6 +20,7 @@ export class OrganizationteamComponent implements OnInit {
   p: number = 1; 
   pageSize: any = 2;
   totalCount: any;
+  searchText: any;
   paginationConfig = { itemsPerPage: this.pageSize, currentPage: this.p, totalItems: this.totalCount };
   constructor(private activatedRoute: ActivatedRoute,
               private router: Router,
@@ -79,6 +80,11 @@ export class OrganizationteamComponent implements OnInit {
       this.paginationConfig.totalItems = data.count;
       return this.organizationTeamMemberList;
     });
+  }
+
+  
+	onChangeEvent(event) {
+		this.paginationConfig.itemsPerPage = Number(event.target.value);
   }
 
   onCheckChange(event) {
