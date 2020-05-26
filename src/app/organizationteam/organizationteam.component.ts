@@ -128,4 +128,14 @@ export class OrganizationteamComponent implements OnInit {
     }
   }
 
+  removeTeamMember(id) {
+   this.companyService.removeTeamMember(id).subscribe((data)=>{
+     if (data) {
+       alert('User has been removed.');
+       this.loadCompanyTeamMembers();
+     }
+   }, (err) => {
+     alert(JSON.stringify(err));
+   });
+  }
 }

@@ -59,22 +59,28 @@ export class EditwebformComponent implements OnInit {
     this.activatedRoute.paramMap.subscribe(params => {
       this.crid = params.get('crid');
     });
+
+    this.organizationService.currentProperty.subscribe((response) => {
+      if (response !== '') {
+        this.selectedProperty = response.property_name;
+        this.organizationID = response.organization_id;
+        this.propertyId = response.property_id;
+      } else {
+        const orgDetails = this.organizationService.getCurrentOrgWithProperty();
+        // this.currentOrganization = orgDetails.organization_name;
+        this.selectedProperty = orgDetails.property_name;
+        this.organizationID = orgDetails.organization_id;
+        this.propertyId = orgDetails.property_id;
+        this.loading = false;
+      }
+    });
     this.getCCPAdefaultConfigById();
 
   }
 
 
   getCCPAdefaultConfigById() {
-    this.organizationService.orglist().pipe(
-      switchMap((data) => {
-        for (const key in data) {
-          if (data[key] !== undefined) {
-            return this.ccpaRequestService.getCCPAdefaultRequestSubjectType(data[key][0].orgid);
-          }
-        }
-      })
-
-    ).subscribe((data) => {
+    this.ccpaRequestService.getCCPAdefaultRequestSubjectType(this.organizationID).subscribe((data) => {
       if (data !== undefined) {
         const key = 'response';
         const rdata = data[key].request_type;
@@ -85,18 +91,15 @@ export class EditwebformComponent implements OnInit {
         this.loading = false;
       }
     }, (error) => {
-      alert(JSON.stringify(error));
+      console.log(JSON.stringify(error));
     });
+ 
   }
 
 
-  loadRequestWebForm() {
-
-    this.organizationService.currentProperty.pipe(
-      switchMap((res1) =>
-        this.ccpaFormConfigService.getCCPAFormConfigByID(res1.orgId, res1.property.propid, this.crid)
-      )
-    ).subscribe((data) => {
+  loadRequestWebForm() { 
+    this.ccpaFormConfigService.getCCPAFormConfigByID(this.organizationID, this.propertyId, this.crid)
+    .subscribe((data) => {
       if (data.response.length === 0) {
         return this.webFormControlList.length = 0;
       } else {

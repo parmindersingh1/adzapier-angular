@@ -80,7 +80,7 @@
                         </div>
                         <div class="col-sm-2 ml-auto">
                             <button type="button" class="btn btn-primary btn-xs float-right" data-toggle="modal"
-                            (click)="open(mymodal)"><i class="fas fa-plus"></i> Add Property</button>
+                            (click)="open(propertyModal)"><i class="fas fa-plus"></i> Add Property</button>
                         </div>
                     </div>
                 </div>
@@ -113,7 +113,7 @@
                                 </td>
                                 <td>
                                     <!-- <i-feather name="edit-3" class="feather-16"></i-feather> -->
-                                    <a class="pd-r-5" (click)="editModalPopup(mymodal,list)">
+                                    <a class="pd-r-5" (click)="editModalPopup(propertyModal,list)">
                                         <i class="far fa-edit fa-1x"></i>
                                     </a>
                                     <a class="pd-r-5">
@@ -188,22 +188,22 @@
                             </tr>
                         </thead>
                         <tbody> 
-                                <tr *ngFor="let list of organizationTeamMemberList | paginate:paginationConfig | filter: searchText:'tm_name':'tm_email'; let i = index">
+                                <tr *ngFor="let list of organizationTeamMemberList | paginate:paginationConfig | filter: searchText:'user_name':'user_email'; let i = index">
                                     <td>
                                         {{ (paginationConfig.currentPage - 1) * paginationConfig.itemsPerPage + i + 1 }}
                                     </td>
-                                    <td>{{list.tm_name}}</td>
+                                    <td>{{list.user_name}}</td>
                                     <td>
-                                        {{list.tm_email}}
+                                        {{list.user_email}}
                                     </td> 
                                     <td>
-                                        {{list.tm_role}}
+                                        {{list.role_name}}
                                     </td>
                                     <td>
-                                        {{list.tm_last_login | date:'medium'}}
+                                        {{list.user_last_login | date:'medium'}}
                                     </td>
                                     <td>
-                                        <button class="btn btn-xs btn-primary">Remove</button>
+                                        <button class="btn btn-sm btn-primary"  (click)="removeTeamMember(list.id)">Remove</button>
                                     </td>
                                 
                                 </tr>
@@ -327,7 +327,7 @@
         </div>
     </ng-template>
 
-    <ng-template #mymodal let-modal>
+    <ng-template #propertyModal let-modal>
         <div class="modal-header">
             <h4 class="modal-title" id="modal-basic-title" *ngIf="!isEditProperty;else editHeading">Add Property</h4>
             <ng-template #editHeading>

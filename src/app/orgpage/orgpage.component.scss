@@ -90,3 +90,20 @@ margin-right: 5px;
     outline: none;
     box-shadow: none;
 }
+
+.searchfield {
+    display: flex;
+}
+
+.searchfield .input-group {
+    align-items: center;
+}
+
+.searchfield > div > span.input-group-append {
+    height: 38px;
+    display: flex;
+}
+
+.searchfield > div > span > div.input-group-text {
+    align-items: center;
+}

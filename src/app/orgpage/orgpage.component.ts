@@ -42,7 +42,7 @@ export class OrgpageComponent implements OnInit {
   isEditProperty: boolean;
   isEditOrganization: boolean;
   p: number = 1; 
-  pageSize: any = 2;
+  pageSize: any = 20;
   totalCount: any;
   paginationConfig = { itemsPerPage: this.pageSize, currentPage: this.p, totalItems: this.totalCount };
   selectedOrganization: any = [];
@@ -96,13 +96,21 @@ export class OrgpageComponent implements OnInit {
   // get logo_url() { return this.organisationPropertyForm.get('logo_url'); }
  
 
-  loadOrganizationList() {
-    this.orgservice.orglist().subscribe((data) => {
+  loadOrganizationList() { 
+   // this.paginationConfig.currentPage = event;
+    const pagelimit = '?limit=' + this.paginationConfig.itemsPerPage + '&page=' + this.paginationConfig.currentPage;
+    this.orgservice.orglist(pagelimit).subscribe((data) => {
       const key = 'response';
       this.orgList = data[key];
-    //  this.getPropertyList(this.orgList[0].orgid);
-    //  this.loadOrganizationDetails(this.orgList[0]);
+      this.paginationConfig.totalItems = data.count;
+      return this.orgList;
     });
+
+    // this.orgservice.orglist().subscribe((data) => {
+    //   const key = 'response';
+    //   this.orgList = data[key];
+    //   this.paginationConfig.totalItems = data.count; 
+    // });
 
   }
 
@@ -159,6 +167,8 @@ export class OrgpageComponent implements OnInit {
       this.orgservice.addOrganization(addObj).subscribe((res) => {
         if (res) {
           this.orgservice.emitUpdatedOrganization.emit(res);
+          this.orgservice.setCurrentOrgWithProperty(res);
+          this.orgservice.changeCurrentSelectedProperty(res);
           this.viewOrganization(res.response.id);
           alert('Organization Added successfully!');
           this.onResetEditOrganization();

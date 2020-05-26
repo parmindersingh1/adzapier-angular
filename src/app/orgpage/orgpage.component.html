@@ -9,26 +9,27 @@
 <div class="table-responsive">
     <div class="card">
         <div card-header tx-semibold>
-            <div class="mt-3" style="display: flex;">
+            <div class="searchfield mt-3">
                 <div class="col-3 input-group">
-                    <input class="form-control py-2 border-right-0 border" [(ngModel)]="searchText" type="search" value="search" id="example-search-input"/>
+                    <input class="form-control py-2 border-right-0 border" [(ngModel)]="searchText" type="search"
+                        value="search" id="example-search-input" />
                     <span class="input-group-append">
                         <div class="input-group-text bg-transparent"><i class="fa fa-search"></i></div>
                     </span>
                 </div>
                 <div class="col-4">
-                <div class="form-inline">
-                    <div class="col-md-4 form-group pr-0">
-                        <label class="col-sm-5 col-form-label" for="name">View</label>
-                        <select id="PerPage" class="form-control" [(ngModel)]="pageSize"
-                        (change)="onChangeEvent($event)">
-                        <option value="2">2</option>
-                        <option value="4">4</option>
-                        <option value="6">6</option>
-                    </select>                    
+                    <div class="form-inline">
+                        <div class="col-md-5 form-group pr-0">
+                            <label class="col-sm-5 col-form-label" for="name">View</label>
+                            <select id="PerPage" class="form-control" [(ngModel)]="pageSize"
+                                (change)="onChangeEvent($event)">
+                                <option value="10">10</option>
+                                <option value="20">20</option>
+                                <option value="30">30</option>
+                            </select>
+                        </div>
+                        <div col-md-5><label class="d-block">records at a time</label></div>
                     </div>
-                    <div col-md-5><label class="d-block">records at a time</label></div>
-                </div>
                 </div>
                 <div class="col-sm-2 ml-auto">
                     <button type="button" class="btn btn-primary btn-xs float-right" data-toggle="modal"
@@ -36,7 +37,7 @@
                 </div>
             </div>
         </div>
-        <div class="card-body"> 
+        <div class="card-body">
             <table class="table table-bordered">
                 <thead class="thead-primary">
                     <tr>
@@ -51,7 +52,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let data of orgList | paginate:paginationConfig | filter: searchText:'orgname':'city':'state';  let i = index">
+                    <tr *ngFor="let data of orgList |  filter: searchText:'orgname':'city':'state' | paginate:paginationConfig; let i = index">
                         <td> {{ (paginationConfig.currentPage - 1) * paginationConfig.itemsPerPage + i + 1 }}
                         </td>
                         <td>{{data.orgname}}</td>
@@ -67,24 +68,27 @@
                             </a>
                             <a class="pd-r-5" (click)="removeOrganization(data.id)">
                                 <i class="far fa-trash-alt tx-danger fa-sm"></i>Remove
-                            </a> 
+                            </a>
                         </td>
                         <td><button class="btn btn-sm" (click)="manageSelecteditem(data)">
-                            <span *ngIf="disableOtherItems(data)"><i class="fa fa-check-circle" aria-hidden="true"></i></span>
-                            Manage</button></td>
-                       
+                                <span *ngIf="disableOtherItems(data)"><i class="fa fa-check-circle"
+                                        aria-hidden="true"></i></span>
+                                Manage</button></td>
                     </tr>
-
+                    <tr>
+                        <td colspan="8" *ngIf="(orgList | filter: searchText:'orgname':'city':'state').length===0">No
+                            records found.</td>
+                    </tr>
                 </tbody>
             </table>
         </div>
         <div class="card-footer text-right">
             <pagination-controls (pageChange)="pageChangeEvent($event)"></pagination-controls>
         </div>
-      
+
     </div>
 </div>
- 
+
 
 <ng-template #editOrgModal let-modal>
     <div class="modal-header">
@@ -120,7 +124,7 @@
                     <div class="form-group">
                         <label for="taxidnumber">Tax ID</label>
                         <input type="text" class="form-control" [(ngModel)]="taxidnumber" formControlName="taxidnumber"
-                            name="taxidnumber" /> 
+                            name="taxidnumber" />
                     </div>
                 </div>
                 <div class="col-sm-6">

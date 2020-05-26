@@ -134,7 +134,7 @@ export class DsarformComponent implements OnInit, OnDestroy {
               private modalService: NgbModal) {
    
     this.count = 0;
-    this.loading = true;
+   // this.loading = true;
     //  this.loadWebControl();
     // this.getCCPAdefaultConfigById();
     this.activatedRoute.paramMap.subscribe(params => {
@@ -153,16 +153,24 @@ export class DsarformComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.organizationService.currentPropertySource.subscribe((response) => {
+    this.organizationService.currentProperty.subscribe((response) => {
       if (response !== '') {
-        this.selectedProperty = response.property.propName;
-        this.orgId = response.orgId;
-        this.propId = response.property.propid;
+        this.selectedProperty = response.property_name;
+        this.orgId = response.organization_id;
+        this.propId = response.property_id;
+      } else {
+        const orgDetails = this.organizationService.getCurrentOrgWithProperty();
+        // this.currentOrganization = orgDetails.organization_name;
+        this.selectedProperty = orgDetails.property_name;
+        this.orgId = orgDetails.organization_id;
+        this.propId = orgDetails.property_id;
+        this.loading = false;
       }
     });
+    
 
   
-    this.loading = true;
+   // this.loading = true;
     if (this.crid) {
       this.getCCPAdefaultConfigById();
       this.webFormSelectedData = this.ccpaFormConfigService.currentFormData.subscribe((data) => {
@@ -217,16 +225,7 @@ export class DsarformComponent implements OnInit, OnDestroy {
   }
 
   getCCPAdefaultConfigById() {
-    this.organizationService.orglist().pipe(
-      switchMap((data) => {
-        for (const key in data) {
-          if (data[key] !== undefined) {
-            return this.ccpaRequestService.getCCPAdefaultRequestSubjectType(data[key][0].orgid);
-          }
-        }
-      })
-
-    ).subscribe((data) => {
+    this.ccpaRequestService.getCCPAdefaultRequestSubjectType(this.orgId).subscribe((data) => {
       if (data !== undefined) {
         const rdata = data['response'].request_type;
         const sdata = data['response'].subject_type;
@@ -236,7 +235,7 @@ export class DsarformComponent implements OnInit, OnDestroy {
         this.loading = false;
       }
     }, (error) => {
-      alert(JSON.stringify(error));
+      console.log(JSON.stringify(error));
     });
   }
 
@@ -610,7 +609,6 @@ export class DsarformComponent implements OnInit, OnDestroy {
       form_status: 'Draft',
       request_form: this.webFormControlList
     };
-    console.log(this.propId, 'propid', this.orgId, 'ORG', this.crid, 'crid');
     // return false;
     if (this.orgId !== undefined && this.propId !== undefined && this.crid !== null) {
       this.ccpaFormConfigService.updateCCPAForm(this.orgId, this.propId, this.crid, formObject)
@@ -619,7 +617,7 @@ export class DsarformComponent implements OnInit, OnDestroy {
             alert('Form Updated!');
             this.dsarFormService.removeControls();
           }
-        }, (error) => alert(JSON.stringify(error)));
+        }, (error) => console.log(JSON.stringify(error)));
     } else {
       this.ccpaFormConfigService.createCCPAForm(this.orgId, this.propId, formObject)
         .subscribe((data) => {
@@ -627,7 +625,7 @@ export class DsarformComponent implements OnInit, OnDestroy {
             alert('New Form Saved!');
             this.dsarFormService.removeControls();
           }
-        }, (error) => alert(JSON.stringify(error)));
+        }, (error) => console.log(JSON.stringify(error)));
     }
 
     // selectedOrgProperty
