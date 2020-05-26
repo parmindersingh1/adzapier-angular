@@ -41,6 +41,7 @@ export class HeaderComponent implements OnInit {
   propertyList: any;
   listOfProp: any;
   orgId:any;
+  orgPropertyMenu: any;
   constructor(
     private router: Router,
     private activatedroute: ActivatedRoute,
@@ -54,6 +55,7 @@ export class HeaderComponent implements OnInit {
         this.isCollapsed = false;
       //  this.getLoggedInUserDetails();
         this.loadOrganizationList();
+        this.loadOrganizationWithProperty();
       }
     });
   }
@@ -70,6 +72,8 @@ export class HeaderComponent implements OnInit {
         this.currentLoggedInUser = this.currentUser.response.firstname + ' ' + this.currentUser.response.lastname;
         this.userRole = this.currentUser.response.role;
         console.log(this.userRole,'userRole...');
+        this.loadOrganizationWithProperty();
+        
       }
     });
    // this.getLoggedInUserDetails();
@@ -85,8 +89,14 @@ export class HeaderComponent implements OnInit {
       this.isCollapsed = false;
       this.getLoggedInUserDetails();
      // this.loadCurrentUser();
-      this.loadOrganizationList();
-      this.currentSelectedProperty();
+     // this.loadOrganizationList();
+     // this.currentSelectedProperty();
+     // this.loadOrganizationWithProperty();
+    //   this.orgservice.emitUpdatedOrganization.subscribe((data) => {
+    //     this.currentOrganization = data.response.orgname;
+    //     console.log(this.currentOrganization, 'currentOrganization..');
+    //  });
+     
     }
     this.publicNavigationMenu = [
       {
@@ -106,6 +116,7 @@ export class HeaderComponent implements OnInit {
     this.authService.logout();
     this.isCollapsed = true;
     localStorage.removeItem('currentUser');
+    this.orgservice.removeControls();
    // this.userService.getCurrentUser.unsubscribe();
     this.router.navigate(['/login']);
     location.reload();
@@ -160,7 +171,7 @@ export class HeaderComponent implements OnInit {
       //     property: this.orgList[0].property[0]
       //   };
       //   this.orgservice.changeCurrentSelectedProperty(obj);
-      //   this.currentSelectedProperty();
+      this.currentSelectedProperty();
       // } else {
 
       // }
@@ -199,17 +210,7 @@ export class HeaderComponent implements OnInit {
         }, { showlink: 'Billing', routerLink: '/pagenotfound' }];
     });
 
-    this.orgservice.emitUpdatedOrganization.subscribe((data) => {
-       this.currentOrganization = data.response.orgname;
-       console.log(this.currentOrganization, 'currentOrganization..');
-     //  this.getPropertyList(data.id);
-      // for (const key in data) {
-      //   if (data[key].name !== undefined) {
-      //     return this.currentOrganization = data[key].name;
-      //   }
-      // }
-
-    });
+    
 
   }
 
@@ -234,22 +235,28 @@ export class HeaderComponent implements OnInit {
     });
   }
 
-  isCurrentPropertySelected(item) {
+  isCurrentPropertySelected(org, prop) {
+    console.log(org,'org..');
+    console.log(prop,'prop..');
     this.selectedOrgProperties.length = 0;
-    this.activeProp = item.propName;
+    this.activeProp = prop.property_name;
     const obj = {
-      orgId: this.orgList[0].orgid,
-      property: item
+      organization_id: org.id,
+      organization_name: org.orgname,
+      property_id: prop.property_id,
+      property_name: prop.property_name
     };
     this.orgservice.changeCurrentSelectedProperty(obj);
     // this.orgservice.getSelectedOrgProperty.emit(obj);
     //  this.firstElement = false;
-    this.selectedOrgProperties.push(item);
-    this.router.navigate(['/webforms']);
+    this.selectedOrgProperties.push(obj);
+    this.orgservice.setCurrentOrgWithProperty(obj);
+    this.currentSelectedProperty();
+    // this.router.navigate(['/webforms']);
   }
 
   isPropSelected(selectedItem): boolean {
-    return this.selectedOrgProperties.filter((t) => t.propName === selectedItem.propName).length > 0;
+    return this.selectedOrgProperties.filter((t) => t.property_id === selectedItem.property_id).length > 0;
   }
 
   public trackByMethod(index: number): number {
@@ -262,7 +269,7 @@ export class HeaderComponent implements OnInit {
   }
 
   nameInitials(str) {
-    if (str !== null) {
+     if (str !== null) {
       const firstChar = str.charAt(0);
       const spacePos = str.indexOf(' ');
       const secondChar = str.charAt(spacePos + 1);
@@ -273,7 +280,18 @@ export class HeaderComponent implements OnInit {
   currentSelectedProperty() {
     this.orgservice.currentProperty.subscribe((data) => {
       if (data) {
-        this.currentProperty = data.property.propName;
+        this.currentProperty = data.property_name;
+        this.currentOrganization = data.organization_name;
+        this.selectedOrgProperties.push(data);
+        this.isPropSelected(data);
+      } else {
+        const orgDetails = this.orgservice.getCurrentOrgWithProperty();
+        if (orgDetails !== undefined) {
+          this.currentOrganization = orgDetails.organization_name || orgDetails.response.orgname;
+          this.currentProperty = orgDetails.property_name;
+          this.selectedOrgProperties.push(orgDetails);
+          this.isPropSelected(orgDetails);
+        }
       }
     });
   }
@@ -290,16 +308,10 @@ export class HeaderComponent implements OnInit {
     this.close = false;
   }
 
-  loadPropertyByOrgID(){
-     this.orgservice.orglist().pipe(
-       switchMap(data => {
-         this.orgId = data.id;
-         return this.orgservice.getPropertyList(this.orgId);
-       })
-     ).subscribe((data)=>{
-      console.log(data,'loadPropertyByOrgID..');
-     });
-     }
-    
-    
+  loadOrganizationWithProperty() {
+    this.orgservice.getOrganizationWithProperty().subscribe((data)=>{
+      this.orgPropertyMenu = data.response;
+      console.log(this.orgPropertyMenu,'pmenu..');
+    } );
+  }
 }

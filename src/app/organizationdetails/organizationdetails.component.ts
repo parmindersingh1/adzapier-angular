@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { OrganizationService, UserService } from '../_services';
 import { FormGroup, FormBuilder, Validators, FormControl, FormArray } from '@angular/forms';
@@ -10,6 +10,8 @@ import { CompanyService } from '../company.service';
   styleUrls: ['./organizationdetails.component.scss']
 })
 export class OrganizationdetailsComponent implements OnInit {
+  @ViewChild('propertyModal', { static: true }) propertyModal: TemplateRef<any>;
+
   organisationPropertyForm: FormGroup;
   editOrganisationForm: FormGroup;
   inviteUserOrgForm: FormGroup;
@@ -60,15 +62,17 @@ export class OrganizationdetailsComponent implements OnInit {
      }
 
   ngOnInit() {
-   
+  
     this.loadRoleList();
     this.loadCompanyTeamMembers();
     this.activatedRoute.paramMap.subscribe(params => {
       this.organizationID = params.get('id');
       console.log(this.organizationID, 'organizationID..');
+      this.loadOrganizationByID(this.organizationID);
+      this.getPropertyList(this.organizationID);
+      this.modalService.open(this.propertyModal);
     });
-    this.loadOrganizationByID(this.organizationID);
-    this.getPropertyList(this.organizationID);
+    
     this.orgService.currentOrganization.subscribe((org) => {
       if (org) {
         console.log(JSON.stringify(org),'orgdetails..');
@@ -122,7 +126,7 @@ export class OrganizationdetailsComponent implements OnInit {
       if (!data.response) {
         alert("Adding property is mandatory. Add Property first.");
       }
-      console.log(this.propertyList,'this.propertyList..');
+     // console.log(this.propertyList,'this.propertyList..');
       return this.propertyList = data.response;
     });
   }
@@ -367,5 +371,16 @@ export class OrganizationdetailsComponent implements OnInit {
       alert(err);
     });
   }
+
+  removeTeamMember(id) {
+    this.companyService.removeTeamMember(id).subscribe((data) => {
+      if (data) {
+        alert('User has been removed.');
+        this.loadCompanyTeamMembers();
+      }
+    }, (err) => {
+      alert(JSON.stringify(err));
+    });
+   }
 
 }

@@ -73,6 +73,21 @@ export class OrganizationService {
         this.currentManageOrganizationSource.next(currentItem);
     }
 
-    
+    getOrganizationWithProperty(): Observable<any> {
+        return this.http.get<any>(environment.apiUrl + '/organizations?required=property');
+    }
 
+    setCurrentOrgWithProperty(currentOrg) {
+        localStorage.setItem('currentOrg', JSON.stringify(currentOrg));
+    }
+
+    getCurrentOrgWithProperty() {
+        if (localStorage.getItem('currentOrg') !== null) {
+            return JSON.parse(localStorage.getItem('currentOrg'));
+          }
+    }
+
+    removeControls() {
+        return localStorage.removeItem('currentOrg');
+    }
 }

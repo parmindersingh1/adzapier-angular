@@ -25,8 +25,15 @@ export class WebformsComponent implements OnInit {
     this.loading = true;
     this.organizationService.currentProperty.subscribe((data) => {
       if (data !== '') {
-        this.currentPropertyName = data.property.propName;
+        this.currentPropertyName = data.property_name;
         this.getCCPAFormList();
+        this.loading = false;
+      } else {
+        const orgDetails = this.organizationService.getCurrentOrgWithProperty();
+        this.getCCPAFormList();
+       // this.currentOrganization = orgDetails.organization_name;
+        this.currentPropertyName = orgDetails.property_name;
+        this.loading = false;
       }
 
     });
@@ -34,28 +41,26 @@ export class WebformsComponent implements OnInit {
 
 
   getCCPAFormList() {
-    this.loading = true;
+   // this.loading = true;
     this.formList.length = 0;
-
-    this.organizationService.currentProperty.pipe(
-      // flatMap((res1) => this.currentPropertyName = res1.property.propName),
-      switchMap((res1) => this.ccpaFormConfigService.getCCPAFormList(res1.orgId, res1.property.propid)),
-    ).subscribe((data) => {
-      if (data.response.length === 0) {
+    const orgDetails = this.organizationService.getCurrentOrgWithProperty();
+  //  console.log(orgDetails,'orgdetails..');
+    if (orgDetails !== undefined) {
+      this.ccpaFormConfigService.getCCPAFormList(orgDetails.organization_id, orgDetails.property_id)
+      .subscribe((data) => {
+        if (data.response.length === 0) {
+          this.loading = false;
+          return this.formList.length = 0;
+        } else {
+          this.formList = data.response;
+          this.loading = false;
+          return this.formList;
+        }
+      }, (error) => {
+        console.log(error, 'get error..');
         this.loading = false;
-        return this.formList.length = 0;
-      } else {
-        this.formList = data.response;
-        this.loading = false;
-        return this.formList;
-      }
-
-    }, (error) => {
-      console.log(error, 'get error..');
-      this.loading = false;
-    });
-
-
+      });
+    }
   }
 
   showForm(data) {
