@@ -1,36 +1,105 @@
-<!-- selectedProperty | {{selectedProperty | json}} -->
-<div class="row">
-    <div class="col-sm-6">
-        <div class="heading_border">
-            <h4 class="mg-b-10">Web Forms for {{currentPropertyName}}</h4>
-        </div>
-        <!-- <button class="btn btn-sm btn-primary" (click)="getCCPAFormList()">GET CCPA Form List</button> -->
+<div class="container">
+    <div class="mb-3">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb breadcrumb-style1 mg-b-0">
+                <li class="breadcrumb-item"><a routerLink="/webforms">DSAR</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Web Forms</li>
+            </ol>
+        </nav>
     </div>
-    <div class="col-sm-6 text-right">
-        <button class="btn btn-sm btn-success" routerLink="/dsarform">Create new form</button>
-    </div>
-</div>
-<div class="row">
-    <div class="col-sm-12 webformlist">
-        <div *ngIf="loading">
-            <span class="spinner-border spinner-border-sm mr-1"></span> Loading
-        </div>
-        <!-- <div *ngIf="formList.length == '0'">No web form found</div> -->
-        <hr/>
-        <!-- {{formList | json}} -->
-        <ul> 
-            <li>
-                <div *ngIf="formList.length == '0' && !loading">No web form found</div>
-                <!-- data.response {{data.response | json}} -->
-                <div class="card col-sm-3" *ngFor="let data of formList;let i = index;">
-                    <span class="webform-title"> {{data.form_name?data.form_name:'form name not available'}}</span>
-                    <!-- <span class="cardtext">{{currentPropertyName}}</span> -->
-                    <span class="txt-bold">{{data.form_status}}</span>
-                   <span> <button (click)="showForm(data)" class="btn btn-primary view">View</button></span>
-                </div>
-            </li>
-           
-        </ul>
 
+    <div class="table-responsive">
+        <div class="card"> 
+            <div class="card-header  d-flex align-items-center justify-content-between pd-y-10">
+                <span class="tx-12 tx-color-03 mg-b-0">
+                    <h6 class="mg-b-0">DSAR Forms</h6>
+                    Data Subject Requests (DSR) Forms
+                </span>
+                <div class="d-flex">
+                    <a routerLink="/dsarform" class="btn btn-sm btn-white">
+                        <i-feather class="feather-16" name="plus"></i-feather>
+                        <span class="d-none d-sm-inline mg-l-5">
+                            Create</span>
+                    </a>
+                </div>
+
+            </div>
+            <div class="card-body">
+                <div *ngIf="formList.length === 0 && !loading">No web form found</div>
+                <div class="card-columns">
+                    <ng-container *ngFor="let data of formList;let i = index;">
+                        <div class="card">
+                            <div class="card-body">
+
+                                <div class="row">
+                                    <div class="col-6">
+                                        <p
+                                            class="tx-10 tx-uppercase tx-medium tx-color-03 tx-spacing-1 tx-nowrap mg-b-5">
+                                            Name</p>
+                                        <div class="d-flex align-items-center">
+                                            <span
+                                                class=" tx-12  tx-normal tx-spacing-1 tx-color-01 ">{{data.form_name?data.form_name:'form name not available'}}</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <p class="tx-10 tx-uppercase tx-medium tx-color-03 tx-spacing-1 mg-b-5">
+                                            ORGANIZATION</p>
+                                        <div class="d-flex align-items-center">
+
+                                            <span
+                                                class=" tx-12  tx-normal tx-spacing-1 tx-color-01 ">{{currentOrganization}}</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-6 mg-t-10">
+                                        <p class="tx-10 tx-uppercase tx-medium tx-color-03 tx-spacing-1 mg-b-5">Property
+                                        </p>
+                                        <div class="d-flex align-items-center">
+
+                                            <span
+                                                class=" tx-12  tx-normal tx-spacing-1 tx-color-01 ">{{currentPropertyName}}</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-6 mg-t-10">
+                                        <p class="tx-10 tx-uppercase tx-medium tx-color-03 tx-spacing-1 mg-b-5">Create
+                                        </p>
+                                        <div class="d-flex align-items-center">
+                                            <span
+                                                class=" tx-10  tx-medium tx-spacing-1 tx-color-01 ">{{data.created_at | date:'medium' }}</span>
+
+                                        </div>
+                                    </div>
+                                    <div class="col-6 mg-t-10">
+                                        <p class="tx-10 tx-uppercase tx-medium tx-color-03 tx-spacing-1 mg-b-5">Status
+                                        </p>
+                                        <div class="d-flex align-items-center">
+                                            <span class="tx-color-05 badge"
+                                                [ngClass]="{'badge-success':data.form_status=='Published','badge-light':data.form_status=='Draft'}">{{data.form_status}}</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-6 mg-t-10">
+                                        <p class="tx-10  tx-medium tx-color-03 tx-spacing-1 mg-b-5">Update
+                                        </p>
+                                        <div class="d-flex align-items-center">
+                                            <span class=" tx-10  tx-medium tx-spacing-1 tx-color-01">Updated at
+                                                {{data.updated_at | date:'medium'}}</span>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <div class="d-flex justify-content-center">
+                                    <button class="btn btn-primary btn-xs button" (click)="showForm(data)">View</button>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+
+        </div>
     </div>
+
 </div>
