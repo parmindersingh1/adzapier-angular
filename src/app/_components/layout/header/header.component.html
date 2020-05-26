@@ -216,42 +216,31 @@
   <!--sidemenu before login-->
 
   <!--sidemenu property list after login-->
-  <ul class="navbar-nav" *ngIf="currentUser">
-    <li *ngFor="let menu of leftItems" class="nav-item">
-      <div *ngIf="menu.orgName" class="navbar-collapse collapse" container="body">
-        <a class="nav-link" (click)="isCollapsed = !isCollapsed" [attr.aria-expanded]="!isCollapsed" aria-controls="collapseExample" container="body">
-          <div *ngIf="!currentOrganization">{{menu.orgName}}</div>
-          <div>{{currentOrganization}}</div>
-          <span>{{currentProperty}}</span>
-        </a>
-        <ul id="collapseExample" [ngbCollapse]="!isCollapsed">
-          <ng-container *ngFor="let item of menu.property;let first = first; trackBy: trackByMethod">
-            <li *ngIf="!item.items" role="menuitem" (click)="isCurrentPropertySelected(item)">
-              <a class="dropdown-item" [ngClass]="[isPropSelected(item) ? 'active' : '']">
-                <span>{{item.propName}}</span> <span class="ml-2"
-                  *ngIf="(first && !activeProp) || (item.propName === activeProp)">
+  <ul  class="navbar-nav" dropdown container="body">
+    <a class="nav-link dropdown-link" dropdownToggle (click)="false">
+     <div>{{currentOrganization}}
+     </div>
+     <span>{{currentProperty?currentProperty:'Select Property'}}</span>
+    </a>
+    <ul *dropdownMenu class="dropdown-menu propMenu">
+        <li role="menuitem" *ngFor="let item of orgPropertyMenu; first as isFirst; let i = index;">
+          <a class="dropdown-item" routerLink="organizationdetails/{{item.id}}">
+            {{item.orgname}}  <span class="align-right"><i-feather class="feather-plus" name="plus"></i-feather></span>
+          </a>
+          <div *ngIf="item.property.length=='0'">No Property</div>  
+          <ul role="menu">
+            <ng-container  *ngFor="let submenu of item.property">
+              <li role="menuitem" (click)="isCurrentPropertySelected(item,submenu)">
+                <a class="dropdown-item" [ngClass]="[isPropSelected(submenu) ? 'active' : '']"> <!-- routerLink="{{item.id}}/{{submenu.property_id}}"-->
+                  {{ submenu.property_name? submenu.property_name: 'No Property' }}
+                  <span class="ml-2" *ngIf="isPropSelected(submenu)">
                   <i class="fa fa-check"></i></span>
-              </a>
-            </li>
-            <li *ngIf="item.items" role="menuitem" dropdown triggers="mouseover" placement="top right" container="body">
-              <a class="dropdown-item" (click)="false">{{ item.label }}
-                <i class="fas fa-caret-right dropdown-submenu"></i></a>
-              <ul *dropdownMenu class="dropdown-menu" role="menu">
-                <ng-container *ngFor="let submenu of item.items">
-                  <li role="menuitem">
-                    <a class="dropdown-item">
-                      {{ submenu.propName }}
-                    </a>
-                  </li>
-                  <li *ngIf="submenu.divider" class="divider dropdown-divider"></li>
-                </ng-container>
-              </ul>
-            </li>
-            <li *ngIf="item.divider" class="divider dropdown-divider"></li>
-          </ng-container>
-        </ul>
-      </div>
-    </li>
+                </a>
+              </li>
+            </ng-container>
+          </ul>         
+        </li>
+    </ul>
   </ul>
   <!--end of sidemenu property list after login-->
   <!--sidemenu general menu after login-->
