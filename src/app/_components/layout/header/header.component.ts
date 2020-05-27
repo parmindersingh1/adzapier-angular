@@ -42,6 +42,7 @@ export class HeaderComponent implements OnInit {
   listOfProp: any;
   orgId:any;
   orgPropertyMenu: any;
+  userID: any;
   constructor(
     private router: Router,
     private activatedroute: ActivatedRoute,
@@ -71,6 +72,7 @@ export class HeaderComponent implements OnInit {
         this.isCollapsed = false;
         this.currentLoggedInUser = this.currentUser.response.firstname + ' ' + this.currentUser.response.lastname;
         this.userRole = this.currentUser.response.role;
+        this.userID = this.currentUser.response.uid;
         console.log(this.userRole,'userRole...');
         this.loadOrganizationWithProperty();
         
@@ -232,6 +234,7 @@ export class HeaderComponent implements OnInit {
       this.currentUser = data;
       this.currentLoggedInUser = this.currentUser.response.firstname + ' ' + this.currentUser.response.lastname;
       this.userRole = this.currentUser.response.role;
+      this.userID = this.currentUser.response.uid;
     });
   }
 
@@ -244,7 +247,8 @@ export class HeaderComponent implements OnInit {
       organization_id: org.id,
       organization_name: org.orgname,
       property_id: prop.property_id,
-      property_name: prop.property_name
+      property_name: prop.property_name,
+      user_id: this.userID
     };
     this.orgservice.changeCurrentSelectedProperty(obj);
     // this.orgservice.getSelectedOrgProperty.emit(obj);
@@ -287,10 +291,12 @@ export class HeaderComponent implements OnInit {
       } else {
         const orgDetails = this.orgservice.getCurrentOrgWithProperty();
         if (orgDetails !== undefined) {
-          this.currentOrganization = orgDetails.organization_name || orgDetails.response.orgname;
-          this.currentProperty = orgDetails.property_name;
-          this.selectedOrgProperties.push(orgDetails);
-          this.isPropSelected(orgDetails);
+          if (orgDetails.user_id === this.userID) {
+            this.currentOrganization = orgDetails.organization_name || orgDetails.response.orgname;
+            this.currentProperty = orgDetails.property_name;
+            this.selectedOrgProperties.push(orgDetails);
+            this.isPropSelected(orgDetails);
+          }
         }
       }
     });

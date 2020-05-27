@@ -74,6 +74,8 @@ export class DsarformComponent implements OnInit, OnDestroy {
   blured = false;
   focused = false;
   trimLabel: any;
+  currentOrganization: any;
+  headerColor: any;
   controlOption = [
     {
       id: 1,
@@ -125,6 +127,7 @@ export class DsarformComponent implements OnInit, OnDestroy {
     }
   };
   editorData: string;
+  active = 1;
   constructor(private fb: FormBuilder, private ccpaRequestService: CcparequestService,
               private organizationService: OrganizationService,
               private dsarFormService: DsarformService,
@@ -160,7 +163,7 @@ export class DsarformComponent implements OnInit, OnDestroy {
         this.propId = response.property_id;
       } else {
         const orgDetails = this.organizationService.getCurrentOrgWithProperty();
-        // this.currentOrganization = orgDetails.organization_name;
+        this.currentOrganization = orgDetails.organization_name;
         this.selectedProperty = orgDetails.property_name;
         this.orgId = orgDetails.organization_id;
         this.propId = orgDetails.property_id;

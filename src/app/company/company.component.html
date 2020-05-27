@@ -125,7 +125,8 @@
                                     {{list.role_name}}
                                 </td>
                                 <td>
-                                    {{list.user_last_login | date:'medium'}}
+                                <span *ngIf="isDateOrString(list.user_last_login)">{{list.user_last_login | date:'medium'}}</span> 
+                                <span *ngIf="!isDateOrString(list.user_last_login)">{{list.user_last_login}}</span>
                                 </td>
                                 <td>
                                     <button class="btn btn-xs btn-primary">Remove</button>
@@ -291,7 +292,8 @@
                     </div>
                 </div>
             </div>
-            <button type="submit">Submit</button>
+            <button class="btn btn-primary btn-xs" type="submit">Submit</button>
+            <button class="btn btn-outline-dark btn-xs float-right" (click)="modal.dismiss('Close Clicked')">Cancel</button>
         </form>
     </div>
 </ng-template>

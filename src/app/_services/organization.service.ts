@@ -49,8 +49,9 @@ export class OrganizationService {
         return this.http.post<any>(environment.apiUrl + '/property/' + orgId,  properties);
     }
 
-    getPropertyList(orgId): Observable<any>{
-        return this.http.get<any>(environment.apiUrl + '/property/' + orgId );
+    getPropertyList(orgId, pageLimit?): Observable<any> {
+        const pgLimit = pageLimit !== undefined ? pageLimit : '';
+        return this.http.get<any>(environment.apiUrl + '/property/' + orgId + pgLimit );
     }
 
     editProperties(orgId, propId, data): Observable<any> {

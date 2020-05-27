@@ -70,7 +70,7 @@ export class OrganizationdetailsComponent implements OnInit {
       console.log(this.organizationID, 'organizationID..');
       this.loadOrganizationByID(this.organizationID);
       this.getPropertyList(this.organizationID);
-      this.modalService.open(this.propertyModal);
+     
     });
     
     this.orgService.currentOrganization.subscribe((org) => {
@@ -123,8 +123,9 @@ export class OrganizationdetailsComponent implements OnInit {
     this.isOpen = !this.isOpen;
     this.orgService.getPropertyList(id).subscribe((data) => {
       this.orgService.emitUpdatedOrgList.emit(data.response);
-      if (!data.response) {
+      if (data.response.length === 0) {
         alert("Adding property is mandatory. Add Property first.");
+        this.modalService.open(this.propertyModal);
       }
      // console.log(this.propertyList,'this.propertyList..');
       return this.propertyList = data.response;
@@ -255,7 +256,7 @@ export class OrganizationdetailsComponent implements OnInit {
     this.paginationConfig.currentPage = event;
     const pagelimit = '?limit=' + this.paginationConfig.itemsPerPage + '&page=' + this.paginationConfig.currentPage;
     const key = 'response';
-    this.companyService.getCompanyTeamMembers().subscribe((data) => {
+    this.companyService.getCompanyTeamMembers(pagelimit).subscribe((data) => {
       this.organizationTeamMemberList = data[key];
       this.paginationConfig.totalItems = data.count;
       return this.organizationTeamMemberList;
@@ -268,9 +269,9 @@ export class OrganizationdetailsComponent implements OnInit {
 
   propertyPageChangeEvent(event) {
     this.propertyPageConfig.currentPage = event;
-    //const pagelimit = '?limit=' + this.paginationConfig.itemsPerPage + '&page=' + this.paginationConfig.currentPage;
+    const pagelimit = '?limit=' + this.paginationConfig.itemsPerPage + '&page=' + this.paginationConfig.currentPage;
     // const key = 'response';
-    this.orgService.getPropertyList(this.organizationID).subscribe((data) => {
+    this.orgService.getPropertyList(this.organizationID, pagelimit).subscribe((data) => {
       this.propertyPageConfig.totalItems = data.count;
       this.propertyList = data.response;
       return this.propertyList;
@@ -339,27 +340,15 @@ export class OrganizationdetailsComponent implements OnInit {
 
   loadCompanyTeamMembers() {
     const key = 'response';
-    this.companyService.getCompanyTeamMembers().subscribe((data) => {
+    const pagelimit = '?limit=' + this.paginationConfig.itemsPerPage + '&page=' + this.paginationConfig.currentPage;
+    this.companyService.getCompanyTeamMembers(pagelimit).subscribe((data) => {
       this.organizationTeamMemberList = data[key];
+      this.paginationConfig.totalItems = data.count;
     });
   }
 
   viewOrganizationTeam() {
     this.router.navigate(['/organizationteam', this.organizationID]);
-  }
-
-  manageSelectedProperty(data) {
-    if (this.managedOrganization !== undefined) {
-      this.selectedProperty.length = 0;
-      this.selectedProperty.push(data);
-    } else {
-      alert('Manage Oranization First!');
-      return false;
-    }
-  }
-
-  disableOtherProperty(data): boolean {
-    return this.selectedProperty.filter((t) => t.id === data.id).length > 0;
   }
 
   removeOrganization(id) {
@@ -382,5 +371,13 @@ export class OrganizationdetailsComponent implements OnInit {
       alert(JSON.stringify(err));
     });
    }
+
+   isDateOrString(status): boolean {
+    const date = Date.parse(status);
+    if (isNaN(date)) {
+      return false;
+    }
+    return true;
+  }
 
 }
