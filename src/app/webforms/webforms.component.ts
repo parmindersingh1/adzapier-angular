@@ -17,6 +17,7 @@ export class WebformsComponent implements OnInit {
   formList: any = [];
   loading = false;
   mySubscription;
+  currentOrganization: any;
   constructor(private ccpaFormConfigService: CCPAFormConfigurationService,
               private organizationService: OrganizationService,
               private router: Router) { }
@@ -31,7 +32,7 @@ export class WebformsComponent implements OnInit {
       } else {
         const orgDetails = this.organizationService.getCurrentOrgWithProperty();
         this.getCCPAFormList();
-       // this.currentOrganization = orgDetails.organization_name;
+        this.currentOrganization = orgDetails.organization_name;
         this.currentPropertyName = orgDetails.property_name;
         this.loading = false;
       }

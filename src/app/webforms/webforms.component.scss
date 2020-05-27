@@ -28,38 +28,38 @@
     position: relative;
 }
 
-.card {
-    margin: 10px 15px;
-    padding: 10px;
-    display: inline-grid;
-    position: relative; 
-    height: 130px;
-    justify-content: space-evenly;
-    text-align: center; 
-}
+// .card {
+//     margin: 10px 15px;
+//     padding: 10px;
+//     display: inline-grid;
+//     position: relative; 
+//     height: 130px;
+//     justify-content: space-evenly;
+//     text-align: center; 
+// }
 
-.card:hover {
-    border: 1px solid #a7ccff;
-    background: #d0e4ff;
-    box-shadow: 0px 2px 2px #969696;
-}
+// .card:hover {
+//     border: 1px solid #a7ccff;
+//     background: #d0e4ff;
+//     box-shadow: 0px 2px 2px #969696;
+// }
 
-.view {
-    display: none;
-}
+// .view {
+//     display: none;
+// }
 
-.card:hover .view {
-    display: block;
-    cursor: pointer;
-    background: #0168fa;
-    width: 100px;
-    color:#fff;
-    border: 1px solid #ccc;
-    border-radius: 20px;
-    padding: 3px;
-    margin: 0px auto;
+// .card:hover .view {
+//     display: block;
+//     cursor: pointer;
+//     background: #0168fa;
+//     width: 100px;
+//     color:#fff;
+//     border: 1px solid #ccc;
+//     border-radius: 20px;
+//     padding: 3px;
+//     margin: 0px auto;
     
-}
+// }
 
 .cardtext {
     border-top: 1px solid #ccc;
@@ -79,6 +79,8 @@
     border-bottom: 1px solid #ccc;
 }
 
-.card span {
-    height: 25px !important;
-}
+// .card span {
+//     height: 25px !important;
+// }
+
+ 
