@@ -18,8 +18,8 @@ export class CompanyService {
     return this.httpClient.put<any>(environment.apiUrl + '/company', reqestObj);
   }
 
-  getCompanyTeamMembers(): Observable<any> {
-    return this.httpClient.get<any>(environment.apiUrl + '/team_member');
+  getCompanyTeamMembers(pagelimit?): Observable<any> {
+    return this.httpClient.get<any>(environment.apiUrl + '/team_member' + pagelimit);
   }
 
   inviteUser(reqestObj): Observable<any> {

@@ -203,7 +203,8 @@ export class CompanyComponent implements OnInit {
   }
 
   loadCompanyTeamMembers() {
-    this.companyService.getCompanyTeamMembers().subscribe((data) => {
+    const pagelimit = '?limit=' + this.paginationConfig.itemsPerPage + '&page=' + this.paginationConfig.currentPage;
+    this.companyService.getCompanyTeamMembers(pagelimit).subscribe((data) => {
       const key = 'response';
       this.teamMemberList = data[key];
       this.paginationConfig.totalItems = data.count;
@@ -218,5 +219,13 @@ export class CompanyComponent implements OnInit {
         this.roleList = data[key];
       }
     });
+  }
+
+  isDateOrString(status): boolean {
+    const date = Date.parse(status);
+    if (isNaN(date)) {
+      return false;
+    }
+    return true;
   }
 }
