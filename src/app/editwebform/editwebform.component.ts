@@ -80,7 +80,7 @@ export class EditwebformComponent implements OnInit {
 
 
   getCCPAdefaultConfigById() {
-    this.ccpaRequestService.getCCPAdefaultRequestSubjectType(this.organizationID).subscribe((data) => {
+    this.ccpaRequestService.getCCPAdefaultRequestSubjectType().subscribe((data) => {
       if (data !== undefined) {
         const key = 'response';
         const rdata = data[key].request_type;

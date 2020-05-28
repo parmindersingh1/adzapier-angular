@@ -32,6 +32,7 @@ loadWebControls() {
                 controllabel: 'Header Logo',
                 controlId: 'headerlogo',
                 indexCount: 'header_logo_Index',
+                headerColor: '',
                 logoURL: '',
                 preferControlOrder: ''
             },
@@ -40,7 +41,8 @@ loadWebControls() {
                 controllabel: 'Welcome Text',
                 controlId: 'welcometext',
                 indexCount: 'welcome_text_Index',
-                welcomeText: '',
+                welcomeText: 'Welcome text',
+                textColor: '',
                 preferControlOrder: ''
             },
             {
@@ -108,6 +110,15 @@ loadWebControls() {
                 controllabel: 'Request Details',
                 controlId: 'requestdetails',
                 indexCount: 'request_details_Index',
+                preferControlOrder: ''
+            },
+            {
+                control: 'text',
+                controllabel: 'Footer Text',
+                controlId: 'footertext',
+                indexCount: 'footer_text_Index',
+                footerText: 'Footer Text',
+                textColor: '',
                 preferControlOrder: ''
             }
         ];
