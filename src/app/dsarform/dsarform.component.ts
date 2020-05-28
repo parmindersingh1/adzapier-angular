@@ -18,7 +18,7 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
   encapsulation: ViewEncapsulation.None,
 })
 export class DsarformComponent implements OnInit, OnDestroy {
-  @ViewChild('editor', { static: true}) editor;
+  @ViewChild('editor', { static: true }) editor;
   public contactList: FormArray;
   public requestObject: any = {};
   public selectedFormOption: any;
@@ -76,6 +76,7 @@ export class DsarformComponent implements OnInit, OnDestroy {
   trimLabel: any;
   currentOrganization: any;
   headerColor: any;
+  footerTextColor: any;
   controlOption = [
     {
       id: 1,
@@ -113,7 +114,7 @@ export class DsarformComponent implements OnInit, OnDestroy {
       control: 'checkbox'
     }
   ];
-
+  isWelcomeEditor: boolean;
   quillEditorText: FormGroup;
   quillConfig = {
     toolbar: {
@@ -127,7 +128,12 @@ export class DsarformComponent implements OnInit, OnDestroy {
     }
   };
   editorData: string;
+  editorDataWelcome: string;
+  editorDataFooter: string;
   active = 1;
+  footerText: any;
+  welcomeText: any;
+  headerLogoPath: any;
   constructor(private fb: FormBuilder, private ccpaRequestService: CcparequestService,
               private organizationService: OrganizationService,
               private dsarFormService: DsarformService,
@@ -135,24 +141,24 @@ export class DsarformComponent implements OnInit, OnDestroy {
               private router: Router, private location: Location,
               private activatedRoute: ActivatedRoute,
               private modalService: NgbModal) {
-   
+
     this.count = 0;
-   // this.loading = true;
+    // this.loading = true;
     //  this.loadWebControl();
     // this.getCCPAdefaultConfigById();
     this.activatedRoute.paramMap.subscribe(params => {
-     // console.log(params, 'params..');
+      // console.log(params, 'params..');
       this.crid = params.get('crid');
-     // console.log(this.crid, 'crid..');
+      // console.log(this.crid, 'crid..');
       // this.selectedwebFormControlList = this.
     });
     this.organizationService.getSelectedOrgProperty.subscribe((response) => {
-      console.log(response,'response...SP..');
+      console.log(response, 'response...SP..');
       this.selectedProperty = response;
     });
     // this.activatedRoute.queryParams.subscribe((params) => this.activatedRouteQuery = params);
     // this.organizationService.getSelectedOrgProperty.subscribe((response) => this.selectedProperty = response);
-   
+
   }
 
   ngOnInit() {
@@ -170,10 +176,10 @@ export class DsarformComponent implements OnInit, OnDestroy {
         this.loading = false;
       }
     });
-    
 
-  
-   // this.loading = true;
+
+
+    // this.loading = true;
     if (this.crid) {
       this.getCCPAdefaultConfigById();
       this.webFormSelectedData = this.ccpaFormConfigService.currentFormData.subscribe((data) => {
@@ -186,9 +192,20 @@ export class DsarformComponent implements OnInit, OnDestroy {
           // this.requestFormControls = data.request_form;
           this.selectedwebFormControlList = this.rearrangeFormSequence(data.request_form);
           this.webFormControlList = this.selectedwebFormControlList;
+          this.webFormControlList.filter((t) => {
+            if (t.controlId === 'footertext') {
+                this.footerText = t.footerText;
+            } else if (t.controlId === 'welcometext') {
+                this.welcomeText = t.welcomeText;
+            } else if (t.controlId === 'headerlogo') {
+              this.headerLogoPath = t.logoURL;
+              this.headerColor = t.headerColor;
+              // this.hea
+          }
+          });
           // this.ccpaFormConfigService.removeControls();
           this.ccpaFormConfigService.setFormControlList(this.webFormControlList);
-         // this.webFormControlList;
+          // this.webFormControlList;
         }
       });
     } else {
@@ -196,6 +213,16 @@ export class DsarformComponent implements OnInit, OnDestroy {
       this.subjectTyperadioBtn = true;
       //  this.loadWebControl();
       this.webFormControlList = this.dsarFormService.getFormControlList();
+      this.webFormControlList.filter((t) => {
+        if (t.controlId === 'footertext') {
+            this.footerText = t.footerText;
+        } else if (t.controlId === 'welcometext') {
+          this.welcomeText = t.welcomeText;
+        } else if (t.controlId === 'headerlogo') {
+          this.headerLogoPath = t.logoURL;
+          this.headerColor = t.headerColor;
+      }
+      });
       //  this.selectOptionControl = this.controlOption[0].control;
       this.selectOptions = [{
         id: this.count++,
@@ -203,13 +230,14 @@ export class DsarformComponent implements OnInit, OnDestroy {
       }];
 
       this.getCCPAdefaultConfigById();
-   
+
       this.organizationService.getOrganization.subscribe((response) => this.currentOrgID = response);
     }
 
     this.quillEditorText = this.fb.group({
       editor: new FormControl(null)
     });
+    this.isWelcomeEditor = false;
   }
 
   loadWebControl() {
@@ -223,12 +251,14 @@ export class DsarformComponent implements OnInit, OnDestroy {
 
   }
 
+  
+
   trackByIndex(index: number, obj: any): any {
     return index;
   }
 
   getCCPAdefaultConfigById() {
-    this.ccpaRequestService.getCCPAdefaultRequestSubjectType(this.orgId).subscribe((data) => {
+    this.ccpaRequestService.getCCPAdefaultRequestSubjectType().subscribe((data) => {
       if (data !== undefined) {
         const rdata = data['response'].request_type;
         const sdata = data['response'].subject_type;
@@ -251,9 +281,9 @@ export class DsarformComponent implements OnInit, OnDestroy {
       moveItemInArray(this.webFormControlList, event.previousIndex, event.currentIndex);
     } else {
       transferArrayItem(event.previousContainer.data,
-                        event.container.data,
-                        event.previousIndex,
-                        event.currentIndex);
+        event.container.data,
+        event.previousIndex,
+        event.currentIndex);
     }
     // moveItemInArray(this.webFormControlList, event.previousIndex, event.currentIndex);
     // transferArrayItem(event.previousContainer.data, event.container.data, event.previousIndex, event.currentIndex);
@@ -293,7 +323,7 @@ export class DsarformComponent implements OnInit, OnDestroy {
     this.showFormOption = false;
     this.selectedControlId = data.controlId;
     this.existingControl = data;
-    
+
     (data.control === 'textbox' || data.control === 'textarea') ? this.inputOrSelectOption = true : this.inputOrSelectOption = false;
     if (data.control === 'select' && data.controlId !== 'state' && data.controlId !== 'country' || data.control === 'radio'
       || data.control === 'checkbox') {
@@ -334,7 +364,7 @@ export class DsarformComponent implements OnInit, OnDestroy {
     let customObj: Anything = {};
     const keylabel = this.lblText.split(' ').join('_');
     const id = count++;
-  //  customObj.key = this.trimLabel + 'id';
+    //  customObj.key = this.trimLabel + 'id';
     customObj = {
       id: this.selectOptions.length + 1,
       keylabel
@@ -342,8 +372,8 @@ export class DsarformComponent implements OnInit, OnDestroy {
 
 
     // customObj[key]
-  //  console.log(customObj, 'coo..');
-   // this.selectOptions.push(customObj[key] = this.count++);
+    //  console.log(customObj, 'coo..');
+    // this.selectOptions.push(customObj[key] = this.count++);
     this.selectOptions.push(customObj);
     console.log(this.selectOptions, 'selectOptions..');
   }
@@ -362,7 +392,7 @@ export class DsarformComponent implements OnInit, OnDestroy {
       const req = 'requesttype';
       const sub = 'subjecttype';
       if (this.selectedControlId === req || this.selectedControlId === sub) {
-       
+
         let updatedObj;
         const oldControlIndex = this.webFormControlList.findIndex((t) =>
           t.controllabel === this.existingControl.controllabel);
@@ -405,7 +435,7 @@ export class DsarformComponent implements OnInit, OnDestroy {
           this.dsarFormService.updateControl(this.webFormControlList[oldControlIndex], oldControlIndex, updatedTextobj);
           this.webFormControlList = this.dsarFormService.getFormControlList();
         }
-        
+
       } else if (this.existingControl) {
         let updateCustomObj;
         const customControlIndex = this.webFormControlList.findIndex((t) =>
@@ -428,7 +458,7 @@ export class DsarformComponent implements OnInit, OnDestroy {
           }
 
         }
-       
+
       }
 
     } else {
@@ -468,7 +498,8 @@ export class DsarformComponent implements OnInit, OnDestroy {
     const newWebControl = {
       control: 'img',
       controllabel: 'Header Logo',
-      logoURL: this.headerlogoURL
+      logoURL: this.headerlogoURL,
+      headerColor: this.headerColor
     };
     if (this.crid) {
       this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
@@ -481,30 +512,55 @@ export class DsarformComponent implements OnInit, OnDestroy {
       this.dsarFormService.updateControl(this.webFormControlList[customControlIndex], customControlIndex, newWebControl);
       this.webFormControlList = this.dsarFormService.getFormControlList();
     }
- 
+
   }
 
   onSubmitQuillEditorData() {
-    const newWebControl = {
-      control: 'text',
-      controllabel: 'Welcome Text',
-      controlId: 'welcometext',
-      indexCount: 'welcome_text_Index',
-      welcomeText: this.editorData,
-      preferControlOrder: ''
-    };
-    if (this.crid) {
-      this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
-      const customControlIndex = this.webFormControlList.findIndex((t) => t.controlId === 'welcometext');
-      this.ccpaFormConfigService.updateControl(this.webFormControlList[customControlIndex], customControlIndex, newWebControl);
-      this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
+    if (this.isWelcomeEditor) {
+      const newWebControl = {
+        control: 'text',
+        controllabel: 'Welcome Text',
+        controlId: 'welcometext',
+        indexCount: 'welcome_text_Index',
+        welcomeText: this.editorDataWelcome,
+        preferControlOrder: ''
+      };
+      if (this.crid) {
+        this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
+        const customControlIndex = this.webFormControlList.findIndex((t) => t.controlId === 'welcometext');
+        this.ccpaFormConfigService.updateControl(this.webFormControlList[customControlIndex], customControlIndex, newWebControl);
+        this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
+      } else {
+        this.webFormControlList = this.dsarFormService.getFormControlList();
+        const customControlIndex = this.webFormControlList.findIndex((t) => t.controlId === 'welcometext');
+        this.dsarFormService.updateControl(this.webFormControlList[customControlIndex], customControlIndex, newWebControl);
+        this.webFormControlList = this.dsarFormService.getFormControlList();
+      }
     } else {
-      this.webFormControlList = this.dsarFormService.getFormControlList();
-      const customControlIndex = this.webFormControlList.findIndex((t) => t.controlId === 'welcometext');
-      this.dsarFormService.updateControl(this.webFormControlList[customControlIndex], customControlIndex, newWebControl);
-      this.webFormControlList = this.dsarFormService.getFormControlList();
+      const footerTextControl = {
+        control: 'text',
+        controllabel: 'Footer Text',
+        controlId: 'footertext',
+        indexCount: 'footer_text_Index',
+        footerText: this.editorDataFooter,
+        textColor: this.footerTextColor,
+        preferControlOrder: ''
+      };
+
+      if (this.crid) {
+        this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
+        const customControlIndex = this.webFormControlList.findIndex((t) => t.controlId === 'footertext');
+        this.ccpaFormConfigService.updateControl(this.webFormControlList[customControlIndex], customControlIndex, footerTextControl);
+        this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
+      } else {
+        this.webFormControlList = this.dsarFormService.getFormControlList();
+        const customControlIndex = this.webFormControlList.findIndex((t) => t.controlId === 'footertext');
+        this.dsarFormService.updateControl(this.webFormControlList[customControlIndex], customControlIndex, footerTextControl);
+        this.webFormControlList = this.dsarFormService.getFormControlList();
+      }
     }
- 
+
+
   }
 
   onChangeEvent(event) {
@@ -570,7 +626,7 @@ export class DsarformComponent implements OnInit, OnDestroy {
   }
 
   isCustomControlWithRadioBtn(item): boolean {
-      return item.controlId.startsWith('Custom') ? true : false;
+    return item.controlId.startsWith('Custom') ? true : false;
   }
 
   isContainHeaderLogo(item): boolean {
@@ -579,6 +635,10 @@ export class DsarformComponent implements OnInit, OnDestroy {
 
   isContainWelcomeText(item): boolean {
     return item.controlId === 'welcometext' ? true : false;
+  }
+
+  isContainFooterText(item): boolean {
+    return item.controlId === 'footertext' ? true : false;
   }
 
   cancelAddingFormControl() {
@@ -630,7 +690,7 @@ export class DsarformComponent implements OnInit, OnDestroy {
           }
         }, (error) => console.log(JSON.stringify(error)));
     }
-
+    this.active = 3;
     // selectedOrgProperty
   }
 
@@ -674,20 +734,41 @@ export class DsarformComponent implements OnInit, OnDestroy {
   }
 
   onSubmitQuillEditorDataX() {
-   // this.editorData =  this.quillEditorText.get('editor').value;
+    // this.editorData =  this.quillEditorText.get('editor').value;
     console.log(this.editorData, 'editorData..');
   }
 
-  editQuillEditorDataPopup(content) {
-    this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
-    const editText = this.webFormControlList.filter((t)=>t.indexCount === 'welcome_text_Index');
-    this.editorData = editText[0].welcomeText;
+  editQuillEditorDataPopup(content, field) {
+    if (field === 'welcomeText') {
+      this.isWelcomeEditor = true;
+      this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
+      if (this.webFormControlList !== null) {
+        const editText = this.webFormControlList.filter((t) => t.indexCount === 'welcome_text_Index');
+        this.editorDataWelcome = editText[0].welcomeText;
+      } else {
+        this.webFormControlList = this.dsarFormService.getFormControlList();
+        const editText = this.webFormControlList.filter((t) => t.indexCount === 'welcome_text_Index');
+        this.editorDataWelcome = editText[0].welcomeText;
+      }
+    } else {
+      this.isWelcomeEditor = false;
+      this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
+      if (this.webFormControlList !== null) {
+        const editText = this.webFormControlList.filter((t) => t.indexCount === 'footer_text_Index');
+        this.editorDataFooter = editText[0].footerText;
+      } else {
+        this.webFormControlList = this.dsarFormService.getFormControlList();
+        const editText = this.webFormControlList.filter((t) => t.indexCount === 'footer_text_Index');
+        this.editorDataFooter = editText[0].footerText;
+      }
+    }
+
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
       this.quillEditorText.reset();
-     // this.closeResult = `Closed with: ${result}`;
+      // this.closeResult = `Closed with: ${result}`;
     }, (reason) => {
       this.quillEditorText.reset();
-     // this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+      // this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
   }
 

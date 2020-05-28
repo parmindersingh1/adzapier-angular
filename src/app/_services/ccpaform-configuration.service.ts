@@ -49,6 +49,7 @@ export class CCPAFormConfigurationService extends WebControls {
     controlList[oldItemIndex].selectOptions = newItem.selectOptions || '';
     controlList[oldItemIndex].welcomeText = newItem.welcomeText;
     controlList[oldItemIndex].logoURL = newItem.logoURL || '';
+    controlList[oldItemIndex].headerColor = newItem.headerColor;
     localStorage.setItem('CCPAformControlList', JSON.stringify(controlList));
   }
 

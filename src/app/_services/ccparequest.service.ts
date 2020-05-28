@@ -9,8 +9,8 @@ export class CcparequestService {
 
   constructor(private httpClient: HttpClient) { }
 
-  getCCPAdefaultRequestSubjectType(orgId): Observable<any> {
-    return this.httpClient.get<any>(environment.apiUrl + '/ccpa/default/types/' + orgId );
+  getCCPAdefaultRequestSubjectType(): Observable<any> {
+    return this.httpClient.get<any>(environment.apiUrl + '/ccpa/default/types/');
   }
 
   getCCPAdefaultConfigLabels(orgId) {
