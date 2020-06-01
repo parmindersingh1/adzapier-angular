@@ -196,6 +196,17 @@ export class OrganizationdetailsComponent implements OnInit {
       }
   }
 
+  disableProperty(orgId, propId) {
+    this.orgService.disableProperty(orgId, propId).subscribe((data) => {
+      if (data) {
+        alert('Property has been disabled.');
+        this.getPropertyList(this.organizationID);
+      }
+    }, (err) => {
+      alert(JSON.stringify(err));
+    });
+  }
+
   pathValues() {
     this.orgService.getOrganizationByID(this.organizationID).subscribe((data) => {
       this.organizationName = data.response.orgname;
@@ -269,7 +280,7 @@ export class OrganizationdetailsComponent implements OnInit {
 
   propertyPageChangeEvent(event) {
     this.propertyPageConfig.currentPage = event;
-    const pagelimit = '?limit=' + this.paginationConfig.itemsPerPage + '&page=' + this.paginationConfig.currentPage;
+    const pagelimit = '?limit=' + this.propertyPageConfig.itemsPerPage + '&page=' + this.propertyPageConfig.currentPage;
     // const key = 'response';
     this.orgService.getPropertyList(this.organizationID, pagelimit).subscribe((data) => {
       this.propertyPageConfig.totalItems = data.count;

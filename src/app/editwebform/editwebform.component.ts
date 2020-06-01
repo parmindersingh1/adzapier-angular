@@ -40,6 +40,10 @@ export class EditwebformComponent implements OnInit {
   localStorageCRID: any;
   checkBoxValues: any = [];
   selectOptionValues: any = [];
+  footerText: any;
+  welcomeText: any;
+  headerlogoURL: any;
+  headerColor: any;
   constructor(private ccpaFormConfigService: CCPAFormConfigurationService,
               private organizationService: OrganizationService,
               private ccpaRequestService: CcparequestService,
@@ -74,8 +78,8 @@ export class EditwebformComponent implements OnInit {
         this.loading = false;
       }
     });
-    this.getCCPAdefaultConfigById();
-
+  //  this.getCCPAdefaultConfigById();
+    this.loadRequestWebForm();
   }
 
 
@@ -100,6 +104,7 @@ export class EditwebformComponent implements OnInit {
   loadRequestWebForm() { 
     this.ccpaFormConfigService.getCCPAFormConfigByID(this.organizationID, this.propertyId, this.crid)
     .subscribe((data) => {
+      console.log(data, 'data..');
       if (data.response.length === 0) {
         return this.webFormControlList.length = 0;
       } else {
@@ -110,6 +115,17 @@ export class EditwebformComponent implements OnInit {
         this.organizationID = data.response.OID;
         this.webFormControlList = data.response[key];
         this.formName = data.response[fname];
+        this.webFormControlList.filter((t) => {
+          if (t.controlId === 'footertext') {
+            this.footerText = t.footerText;
+          } else if (t.controlId === 'welcometext') {
+            this.welcomeText = t.welcomeText;
+          } else if (t.controlId === 'headerlogo') {
+            this.headerlogoURL = t.logoURL;
+            this.headerColor = t.headerColor;
+            // this.hea
+          }
+        });
         return this.webFormControlList;
       }
     }, (error) => {

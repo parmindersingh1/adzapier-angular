@@ -28,10 +28,10 @@
                     <div class="col-sm-3 mg-t-5 mg-sm-t-5">
                         <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">
                             Company</label>
-                        <p class="tx-primary mg-b-0">{{orgname}}</p>
+                        <p class="mg-b-0">{{orgname}}</p>
                     </div>
                     <div class="col-sm-3 mg-t-5 mg-sm-t-5">
-                        <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Address 1</label>
+                        <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Address</label>
                         <p class="mg-b-0">{{address1}} {{address2}} {{zipcode}} {{city}} {{state}}</p>
                     </div>
 
@@ -113,7 +113,7 @@
                         </tr>
                     </thead>
                     <tbody> 
-                            <tr *ngFor="let list of teamMemberList | paginate:paginationConfig | filter: searchText:'tm_name':'tm_email'; let i = index">
+                            <tr *ngFor="let list of teamMemberList | paginate:paginationConfig | filter: searchText:'user_name':'user_email'; let i = index">
                                 <td>
                                     {{ (paginationConfig.currentPage - 1) * paginationConfig.itemsPerPage + i + 1 }}
                                 </td>
@@ -181,7 +181,7 @@
             <div class="row">
                 <div class="col-sm-6">
                     <div class="form-group">
-                        <label for="addressone">Address</label>
+                        <label for="addressone">Address 1</label>
                         <input type="text" formControlName="address1" class="form-control"
                             [ngClass]="{ 'is-invalid': submitted && f.address1.errors }"
                             placeholder="Enter your address" />

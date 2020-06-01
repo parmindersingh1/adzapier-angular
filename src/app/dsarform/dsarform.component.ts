@@ -76,7 +76,10 @@ export class DsarformComponent implements OnInit, OnDestroy {
   trimLabel: any;
   currentOrganization: any;
   headerColor: any;
+  welcomeTextColor: any;
+  welcomeFontSize: any;
   footerTextColor: any;
+  footerFontSize: any;
   controlOption = [
     {
       id: 1,
@@ -135,12 +138,12 @@ export class DsarformComponent implements OnInit, OnDestroy {
   welcomeText: any;
   headerLogoPath: any;
   constructor(private fb: FormBuilder, private ccpaRequestService: CcparequestService,
-              private organizationService: OrganizationService,
-              private dsarFormService: DsarformService,
-              private ccpaFormConfigService: CCPAFormConfigurationService,
-              private router: Router, private location: Location,
-              private activatedRoute: ActivatedRoute,
-              private modalService: NgbModal) {
+    private organizationService: OrganizationService,
+    private dsarFormService: DsarformService,
+    private ccpaFormConfigService: CCPAFormConfigurationService,
+    private router: Router, private location: Location,
+    private activatedRoute: ActivatedRoute,
+    private modalService: NgbModal) {
 
     this.count = 0;
     // this.loading = true;
@@ -165,6 +168,7 @@ export class DsarformComponent implements OnInit, OnDestroy {
     this.organizationService.currentProperty.subscribe((response) => {
       if (response !== '') {
         this.selectedProperty = response.property_name;
+        this.currentOrganization = response.organization_name;
         this.orgId = response.organization_id;
         this.propId = response.property_id;
       } else {
@@ -194,14 +198,14 @@ export class DsarformComponent implements OnInit, OnDestroy {
           this.webFormControlList = this.selectedwebFormControlList;
           this.webFormControlList.filter((t) => {
             if (t.controlId === 'footertext') {
-                this.footerText = t.footerText;
+              this.footerText = t.footerText;
             } else if (t.controlId === 'welcometext') {
-                this.welcomeText = t.welcomeText;
+              this.welcomeText = t.welcomeText;
             } else if (t.controlId === 'headerlogo') {
-              this.headerLogoPath = t.logoURL;
+              this.headerlogoURL = t.logoURL;
               this.headerColor = t.headerColor;
               // this.hea
-          }
+            }
           });
           // this.ccpaFormConfigService.removeControls();
           this.ccpaFormConfigService.setFormControlList(this.webFormControlList);
@@ -215,13 +219,13 @@ export class DsarformComponent implements OnInit, OnDestroy {
       this.webFormControlList = this.dsarFormService.getFormControlList();
       this.webFormControlList.filter((t) => {
         if (t.controlId === 'footertext') {
-            this.footerText = t.footerText;
+          this.footerText = t.footerText;
         } else if (t.controlId === 'welcometext') {
           this.welcomeText = t.welcomeText;
         } else if (t.controlId === 'headerlogo') {
-          this.headerLogoPath = t.logoURL;
+          this.headerlogoURL = t.logoURL;
           this.headerColor = t.headerColor;
-      }
+        }
       });
       //  this.selectOptionControl = this.controlOption[0].control;
       this.selectOptions = [{
@@ -251,7 +255,7 @@ export class DsarformComponent implements OnInit, OnDestroy {
 
   }
 
-  
+
 
   trackByIndex(index: number, obj: any): any {
     return index;
@@ -523,6 +527,8 @@ export class DsarformComponent implements OnInit, OnDestroy {
         controlId: 'welcometext',
         indexCount: 'welcome_text_Index',
         welcomeText: this.editorDataWelcome,
+        welcomeFontSize: this.welcomeFontSize,
+        welcomeTextColor: this.welcomeTextColor,
         preferControlOrder: ''
       };
       if (this.crid) {
@@ -543,7 +549,8 @@ export class DsarformComponent implements OnInit, OnDestroy {
         controlId: 'footertext',
         indexCount: 'footer_text_Index',
         footerText: this.editorDataFooter,
-        textColor: this.footerTextColor,
+        footerTextColor: this.footerTextColor,
+        footerFontSize: this.footerFontSize,
         preferControlOrder: ''
       };
 
@@ -770,6 +777,20 @@ export class DsarformComponent implements OnInit, OnDestroy {
       this.quillEditorText.reset();
       // this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
+  }
+
+  welcomeStyle(): object {
+    return {
+      'color': this.welcomeTextColor,
+      'font-size': this.welcomeFontSize + 'px'
+    };
+  }
+
+  footerStyle(): object {
+    return {
+      'color': this.footerTextColor,
+      'font-size': this.footerFontSize + 'px'
+    };
   }
 
   ngOnDestroy() {

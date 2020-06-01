@@ -42,7 +42,8 @@ loadWebControls() {
                 controlId: 'welcometext',
                 indexCount: 'welcome_text_Index',
                 welcomeText: 'Welcome text',
-                textColor: '',
+                welcomeTextColor: '',
+                welcomeFontSize: '',
                 preferControlOrder: ''
             },
             {
@@ -118,7 +119,8 @@ loadWebControls() {
                 controlId: 'footertext',
                 indexCount: 'footer_text_Index',
                 footerText: 'Footer Text',
-                textColor: '',
+                footerTextColor: '',
+                footerFontSize: '',
                 preferControlOrder: ''
             }
         ];

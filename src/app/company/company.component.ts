@@ -182,9 +182,10 @@ export class CompanyComponent implements OnInit {
 
   pageChangeEvent(event) {
     this.paginationConfig.currentPage = event;
-    //  const pagelimit = '?limit=' + this.paginationConfig.itemsPerPage + '&page=' + this.paginationConfig.currentPage;
-    this.companyService.getCompanyTeamMembers().subscribe((data) => {
-      this.teamMemberList = data['response'];
+    const pagelimit = '?limit=' + this.paginationConfig.itemsPerPage + '&page=' + this.paginationConfig.currentPage;
+    this.companyService.getCompanyTeamMembers(pagelimit).subscribe((data) => {
+      const key = 'response';
+      this.teamMemberList = data[key];
       this.paginationConfig.totalItems = data.count;
       return this.teamMemberList;
     });
