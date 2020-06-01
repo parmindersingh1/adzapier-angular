@@ -44,6 +44,10 @@ export class EditwebformComponent implements OnInit {
   welcomeText: any;
   headerlogoURL: any;
   headerColor: any;
+  welcomeTextColor: any;
+  welcomeFontSize: any;
+  footerTextColor: any;
+  footerFontSize: any;
   constructor(private ccpaFormConfigService: CCPAFormConfigurationService,
               private organizationService: OrganizationService,
               private ccpaRequestService: CcparequestService,
@@ -246,6 +250,20 @@ export class EditwebformComponent implements OnInit {
 
   onChangeSelection(e) {
     this.selectOptionValues.push(e);
+  }
+
+  welcomeStyle(): object {
+    return {
+      'color': this.welcomeTextColor,
+      'font-size': this.welcomeFontSize + 'px'
+    };
+  }
+
+  footerStyle(): object {
+    return {
+      'color': this.footerTextColor,
+      'font-size': this.footerFontSize + 'px'
+    };
   }
 
 }
