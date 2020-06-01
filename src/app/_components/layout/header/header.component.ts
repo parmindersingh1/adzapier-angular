@@ -43,6 +43,7 @@ export class HeaderComponent implements OnInit {
   orgId:any;
   orgPropertyMenu: any;
   userID: any;
+  propList: any;
   constructor(
     private router: Router,
     private activatedroute: ActivatedRoute,
@@ -92,7 +93,7 @@ export class HeaderComponent implements OnInit {
       this.getLoggedInUserDetails();
      // this.loadCurrentUser();
      // this.loadOrganizationList();
-     // this.currentSelectedProperty();
+      this.currentSelectedProperty();
      // this.loadOrganizationWithProperty();
     //   this.orgservice.emitUpdatedOrganization.subscribe((data) => {
     //     this.currentOrganization = data.response.orgname;
@@ -241,21 +242,29 @@ export class HeaderComponent implements OnInit {
   isCurrentPropertySelected(org, prop) {
     console.log(org,'org..');
     console.log(prop,'prop..');
-    this.selectedOrgProperties.length = 0;
-    this.activeProp = prop.property_name;
-    const obj = {
+    this.orgservice.getPropertyList(org.id).subscribe((data) => this.propList = data.response);
+    console.log(this.checkPropertyStatus(prop),'cps..');
+    if (this.checkPropertyStatus(prop)) {
+      alert(prop.property_name + ' property has been disabled.');
+    } else {
+      this.selectedOrgProperties.length = 0;
+      this.activeProp = prop.property_name;
+      const obj = {
       organization_id: org.id,
       organization_name: org.orgname,
       property_id: prop.property_id,
       property_name: prop.property_name,
       user_id: this.userID
     };
-    this.orgservice.changeCurrentSelectedProperty(obj);
-    // this.orgservice.getSelectedOrgProperty.emit(obj);
-    //  this.firstElement = false;
-    this.selectedOrgProperties.push(obj);
-    this.orgservice.setCurrentOrgWithProperty(obj);
-    this.currentSelectedProperty();
+      this.orgservice.changeCurrentSelectedProperty(obj);
+      // this.orgservice.getSelectedOrgProperty.emit(obj);
+      //  this.firstElement = false;
+      this.selectedOrgProperties.push(obj);
+      this.orgservice.setCurrentOrgWithProperty(obj);
+      this.currentSelectedProperty();
+     
+    }
+    
     // this.router.navigate(['/webforms']);
   }
 
@@ -319,5 +328,9 @@ export class HeaderComponent implements OnInit {
       this.orgPropertyMenu = data.response;
       console.log(this.orgPropertyMenu,'pmenu..');
     } );
+  }
+
+  checkPropertyStatus(prop): boolean {
+    return this.propList.filter((t) =>  t.id === prop.property_id && t.active === false).length > 0;
   }
 }

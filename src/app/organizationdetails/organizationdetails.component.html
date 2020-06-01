@@ -92,7 +92,8 @@
                             <th>Logo</th>
                             <th>Name</th>
                             <th>Domain</th>
-                            <th>Action</th> 
+                            <th>Action</th>
+                            <th>Status</th> 
                         </tr>
                     </thead>
                     <tbody> 
@@ -114,11 +115,15 @@
                                     <a class="pd-r-5" (click)="editModalPopup(propertyModal,list)">
                                         <i class="far fa-edit fa-1x"></i>
                                     </a>
-                                    <a class="pd-r-5">
+                                    <a class="pd-r-5" (click)="disableProperty(list.oid,list.id)">
                                         <i class="far fa-trash-alt tx-danger fa-sm"></i>
                                     </a>
                                     <!-- <i-feather name="trash-2" class="feather-16"></i-feather> -->
                                 </td>
+                                <td>
+                                    <span *ngIf="list.active == true" class="badge badge-success">Active</span>
+                                    <span *ngIf="list.active == false" class="badge badge-light">Disabled</span>
+                                    </td>
                             </tr>
                             <tr *ngIf="propertyList?.length == 0">
                                 <td colspan="7" class="txt-center">

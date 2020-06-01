@@ -91,4 +91,9 @@ export class OrganizationService {
     removeControls() {
         return localStorage.removeItem('currentOrg');
     }
+
+    disableProperty(orgID, propID): Observable<any> {
+        return this.http.patch<any>(environment.apiUrl + '/property/' + orgID + '/' + propID, {});
+    }
+
 }
