@@ -1,51 +1,54 @@
 <div class="container">
-<div class="mb-3">
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb breadcrumb-style1 mg-b-0">
-          <li class="breadcrumb-item"><a routerLink="/settings">Settings</a></li>
-          <li class="breadcrumb-item active" aria-current="page">Company</li>
-        </ol>
-      </nav>
-</div>
-<div class="row">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-header d-flex align-items-center justify-content-between pd-y-10">
-                <h6 class="mg-b-0 tx-color-03 ">
-                    Company Details  
-                </h6>
-                <div class="d-flex pd-0">
-                    <button (click)="editOrganizationModalPopup(editCompanyModal)"
-                        class="btn btn-sm btn-white float-right">
-                        <i-feather name="edit-2" class="feather-16"></i-feather>
-                        <span class="d-none d-sm-inline mg-l-0"> Edit</span>
-                    </button>
+    <div class="mb-3">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb breadcrumb-style1 mg-b-0">
+                <li class="breadcrumb-item"><a routerLink="/settings">Settings</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Company</li>
+            </ol>
+        </nav>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex align-items-center justify-content-between pd-y-10">
+                    <h6 class="mg-b-0 tx-color-03 ">
+                        Company Details
+                    </h6>
+                    <div class="d-flex pd-0">
+                        <button (click)="editOrganizationModalPopup(editCompanyModal)"
+                            class="btn btn-sm btn-white float-right">
+                            <i-feather name="edit-2" class="feather-16"></i-feather>
+                            <span class="d-none d-sm-inline mg-l-0"> Edit</span>
+                        </button>
+                    </div>
                 </div>
-            </div> 
-    
-            <div class="card-body">
-                <div class="row row-sm">
-                    <div class="col-sm-3 mg-t-5 mg-sm-t-5">
-                        <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">
-                            Company</label>
-                        <p class="mg-b-0">{{orgname}}</p>
-                    </div>
-                    <div class="col-sm-3 mg-t-5 mg-sm-t-5">
-                        <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Address</label>
-                        <p class="mg-b-0">{{address1}} {{address2}} {{zipcode}} {{city}} {{state}}</p>
-                    </div>
 
-                    <!-- <div class="col-sm-3 mg-t-5 mg-sm-t-5">
+
+                <div class="card-body">
+                    <div class="row row-sm">
+                        <div class="col-sm-3 mg-t-5 mg-sm-t-5">
+                            <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">
+                                Company</label>
+                            <p class="mg-b-0">{{orgname}}</p>
+                        </div>
+                        <div class="col-sm-3 mg-t-5 mg-sm-t-5">
+                            <label
+                                class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Address</label>
+                            <p class="mg-b-0">{{address1}} {{address2}} {{zipcode}} {{city}} {{state}}</p>
+                        </div>
+
+                        <!-- <div class="col-sm-3 mg-t-5 mg-sm-t-5">
                         <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Address 2</label>
                         <p class="mg-b-0">{{address2}}</p>
                     </div> -->
 
-                    <div class="col-sm-3 mg-t-5 mg-sm-t-5">
-                        <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">TaxID</label>
-                        <p class=" mg-b-0">{{taxid}}</p>
-                    </div> 
+                        <div class="col-sm-3 mg-t-5 mg-sm-t-5">
+                            <label
+                                class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">TaxID</label>
+                            <p class=" mg-b-0">{{taxid}}</p>
+                        </div>
 
-                    <!-- <div class="col-sm-3 mg-t-5 mg-sm-t-5">
+                        <!-- <div class="col-sm-3 mg-t-5 mg-sm-t-5">
                         <label
                             class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">City</label>
                         <p class="mg-b-0">{{city}}</p>
@@ -61,46 +64,49 @@
                         <label
                             class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Zipcode</label>
                         <p class="mg-b-0">{{zipcode}}</p>
-                    </div> --> 
+                    </div> -->
 
-                </div><!-- row -->
+                    </div><!-- row -->
+                </div>
             </div>
         </div>
-    </div> 
-</div>
-<div class="divider-text mg-y-10">USERS</div>
-        <div class="table-responsive">
-            <div class="card">
-                <div card-header tx-semibold>
-                    <div class="mt-3" style="display: flex;">
-                        <div class="col-3 input-group">
-                            <input class="form-control py-2 border-right-0 border" [(ngModel)]="searchText" type="search" value="search" id="example-search-input"/>
-                            <span class="input-group-append">
-                                <div class="input-group-text bg-transparent"><i class="fa fa-search"></i></div>
-                            </span>
-                        </div>
-                        <div class="col-4">
+    </div>
+    <div class="divider-text mg-y-10">USERS</div>
+    <div class="table-responsive company-div">
+        <div class="card">
+            <div class="card-header tx-semibold">
+                <div class="searchfield mt-3">
+                    <div class="col-3 input-group">
+                        <input class="form-control py-2 border-right-0 border" [(ngModel)]="searchText" type="search"
+                            value="search" id="example-search-input" />
+                        <span class="input-group-append">
+                            <div class="input-group-text bg-transparent"><i class="fa fa-search"></i></div>
+                        </span>
+                    </div>
+                    <div class="col-4">
                         <div class="form-inline">
-                            <div class="col-md-4 form-group pr-0">
+                            <div class="col-md-5 form-group pr-0">
                                 <label class="col-sm-5 col-form-label" for="name">View</label>
                                 <select id="PerPage" class="form-control" [(ngModel)]="pageSize"
-                                (change)="onChangeEvent($event)">
-                                <option value="2">2</option>
-                                <option value="4">4</option>
-                                <option value="6">6</option>
-                            </select>                    
+                                    (change)="onChangeEvent($event)">
+                                    <option value="5">5</option>
+                                    <option value="10">10</option>
+                                    <option value="15">15</option>
+                                </select>
                             </div>
                             <div col-md-5><label class="d-block">records at a time</label></div>
                         </div>
-                        </div>
-                        <div class="col-sm-2 ml-auto">
-                            <button type="button" class="btn btn-primary btn-xs float-right" data-toggle="modal"
-                            (click)="editOrganizationModalPopup(inviteuserModal)"><i class="fas fa-plus"></i> Add User</button>
-                        </div>
+                    </div>
+                    <div class="col-sm-2 ml-auto">
+                        <button type="button" class="btn btn-primary btn-xs float-right" data-toggle="modal"
+                            (click)="editOrganizationModalPopup(inviteuserModal)"><i class="fas fa-plus"></i> Add
+                            User</button>
                     </div>
                 </div>
- 
-                <div class="card-body">
+            </div>
+
+
+            <div class="card-body">
                 <table class="table table-bordered">
                     <thead class="thead-primary">
                         <tr>
@@ -112,40 +118,42 @@
                             <th>Action</th>
                         </tr>
                     </thead>
-                    <tbody> 
-                            <tr *ngFor="let list of teamMemberList | paginate:paginationConfig | filter: searchText:'user_name':'user_email'; let i = index">
-                                <td>
-                                    {{ (paginationConfig.currentPage - 1) * paginationConfig.itemsPerPage + i + 1 }}
-                                </td>
-                                <td>{{list.user_name}}</td>
-                                <td>
-                                    {{list.user_email}}
-                                </td> 
-                                <td>
-                                    {{list.role_name}}
-                                </td>
-                                <td>
-                                <span *ngIf="isDateOrString(list.user_last_login)">{{list.user_last_login | date:'medium'}}</span> 
+                    <tbody>
+                        <tr
+                            *ngFor="let list of teamMemberList | paginate:paginationConfig | filter: searchText:'user_name':'user_email'; let i = index">
+                            <td>
+                                {{ (paginationConfig.currentPage - 1) * paginationConfig.itemsPerPage + i + 1 }}
+                            </td>
+                            <td>{{list.user_name}}</td>
+                            <td>
+                                {{list.user_email}}
+                            </td>
+                            <td>
+                                {{list.role_name}}
+                            </td>
+                            <td>
+                                <span
+                                    *ngIf="isDateOrString(list.user_last_login)">{{list.user_last_login | date:'medium'}}</span>
                                 <span *ngIf="!isDateOrString(list.user_last_login)">{{list.user_last_login}}</span>
-                                </td>
-                                <td>
-                                    <button class="btn btn-xs btn-primary">Remove</button>
-                                </td>
-                            
-                            </tr>
-                            <tr *ngIf="teamMemberList?.length == 0">
-                                <td colspan="7" class="txt-center">
-                                    <div> No User found </div>
-                                </td>
-                            </tr>
+                            </td>
+                            <td>
+                                <button class="btn btn-xs btn-primary">Remove</button>
+                            </td>
+
+                        </tr>
+                        <tr *ngIf="teamMemberList?.length == 0">
+                            <td colspan="7" class="txt-center">
+                                <div> No User found </div>
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
-                </div>
-                <div class="card-footer text-right">
-                    <pagination-controls (pageChange)="pageChangeEvent($event)"></pagination-controls>
-                </div>                
+            </div>
+            <div class="card-footer text-right">
+                <pagination-controls (pageChange)="pageChangeEvent($event)"></pagination-controls>
             </div>
         </div>
+    </div>
 </div>
 <ng-template #editCompanyModal let-modal>
     <div class="modal-header">
@@ -177,7 +185,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="row">
                 <div class="col-sm-6">
                     <div class="form-group">
@@ -210,8 +218,7 @@
                     <div class="form-group">
                         <label for="city">City</label>
                         <input type="text" formControlName="city" class="form-control"
-                            [ngClass]="{ 'is-invalid': submitted && f.city.errors }"
-                            placeholder="Enter your city" />
+                            [ngClass]="{ 'is-invalid': submitted && f.city.errors }" placeholder="Enter your city" />
                         <div *ngIf="submitted && f.city.errors" class="invalid-feedback">
                             <div *ngIf="f.city.errors.required">City is required</div>
                             <div *ngIf="f.city.errors.pattern">City allow only Alphabets</div>
@@ -222,8 +229,7 @@
                     <div class="form-group">
                         <label for="state">State</label>
                         <input type="text" formControlName="state" class="form-control"
-                            [ngClass]="{ 'is-invalid': submitted && f.state.errors }"
-                            placeholder="Enter your state" />
+                            [ngClass]="{ 'is-invalid': submitted && f.state.errors }" placeholder="Enter your state" />
                         <div *ngIf="submitted && f.state.errors" class="invalid-feedback">
                             <div *ngIf="f.state.errors.required">State is required</div>
                             <div *ngIf="f.state.errors.pattern">State allow only Alphabets</div>
@@ -251,7 +257,7 @@
                         <div class="text-right">
                             <button class="btn btn-primary mr-2">Save Changes</button>
                             <button class="btn btn-primary mr-2"
-                            (click)="modal.dismiss('Close Clicked')">Cancel</button>
+                                (click)="modal.dismiss('Close Clicked')">Cancel</button>
                         </div>
                     </div>
                 </div>
@@ -263,7 +269,7 @@
 <ng-template #inviteuserModal let-modal>
     <div class="modal-header">
         <h4 class="modal-title" id="modal-basic-title">Invite new users</h4>
-      
+
         <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Close Clicked')">
             <span aria-hidden="true">×</span>
         </button>
@@ -278,100 +284,29 @@
                         <label for="emailid" class="d-block">Email Id</label>
                         <input type="text" formControlName="emailid" name="emailid" [(ngModel)]="emailid"
                             class="form-control" placeholder="Enter email id"
-                            [ngClass]="{ 'is-invalid': submitted && f.emailid.errors }" />
-                        <div *ngIf="submitted && f.emailid.errors" class="invalid-feedback">
-                            <div *ngIf="f.emailid.errors.required">Company Name is required</div>
-                            <div *ngIf="f.emailid.errors.pattern">Company Name Allow Only Alphabets</div>
+                            pattern="^\w+@[a-zA-Z_0-9]+?\.[a-zA-Z]{2,3}$"
+                            [ngClass]="{ 'is-invalid': isInviteFormSubmitted && userInvite.emailid.errors }" />
+                        <div *ngIf="isInviteFormSubmitted && userInvite.emailid.errors" class="invalid-feedback">
+                            <div *ngIf="userInvite.emailid.errors.required">User email address is required</div>
+                            <div *ngIf="userInvite.emailid.errors.pattern">Please enter a valid email</div>
                         </div>
                     </div>
                 </div>
                 <div class="col-sm-12">
-                    <div *ngFor="let opt of roleList" class="form-check-inline">
-                        <input class="form-check-input" type="radio" name="chkpermissions"
-                            [value]='opt.id' (change)="onCheckChange($event)"/>{{opt.role_name}}
+                    <label for="permissions" class="d-block">Select roles</label>
+                    <div *ngFor="let order of roleList;" class="form-check-inline">
+                        <input type="radio" id="permissions" name="permissions" formControlName="permissions"
+                            [value]="order.id" /> {{order.role_name}}</div>
+                    <div *ngIf="isInviteFormSubmitted && userInvite.permissions.invalid" class="invalid-radio">
+                        Roles is mandatory
                     </div>
                 </div>
+
+
             </div>
             <button class="btn btn-primary btn-xs" type="submit">Submit</button>
-            <button class="btn btn-outline-dark btn-xs float-right" (click)="modal.dismiss('Close Clicked')">Cancel</button>
+            <button class="btn btn-outline-dark btn-xs float-right"
+                (click)="modal.dismiss('Close Clicked')">Cancel</button>
         </form>
     </div>
 </ng-template>
-
-<!-- <div class="table-responsive">
-    <div class="card">
-        <div card-header tx-semibold>
-            <div class="mt-3 mb-3" style="display: flex;">
-            <div class="col-sm-3">
-                <input type="text" placeholder="Search Organization" class="form-control" />
-            </div>
-            <div class="col-sm-4">
-            <div class="row">
-            <div class="col-sm-3">
-                <div class="mt-2">
-                    <label class="d-block">View</label>
-                  </div> 
-            </div>
-            <div class="col-sm-3">
-                <select id="PerPage" class="form-control" [(ngModel)]="pageSize"
-                    (change)="onChangeEvent($event)">
-                    <option value="2">2</option>
-                    <option value="4">4</option>
-                    <option value="6">6</option>
-                </select> 
-            </div>
-            <div class="col-sm-6">
-                <div class="mt-2 float-left">
-                    <label class="d-block">records at a time</label>
-                </div>  
-            </div>
-        </div>
-            </div>
-            <div class="col-sm-2 ml-auto">
-                <button type="button" class="btn btn-primary float-right" data-toggle="modal"
-                    (click)="organizationModalPopup(editOrgModal)">Add organization</button>
-            </div>
-        </div>
-        </div>
-        <div class="card-body">
-        <table class="table table-bordered">
-            <thead class="thead-primary">
-                <tr>
-                    <th>Id</th>
-                    <th>Name</th>
-                    <th>Address</th>
-                    <th>City</th>
-                    <th>State</th>
-                    <th>Zipcode</th>
-                    <th>Action</th> 
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let data of orgList | paginate:myconfig;  let i = index">
-                    <td>{{i+1}}</td>
-                    <td><span *ngIf="!isEditable">{{data.orgname}}</span>
-                        <input type="text" *ngIf="isEditable" [(ngModel)]="data.orgname" class="form-control"
-                            id="addOrg" placeholder="Add Organization">
-                    </td>
-                    <td>{{data.address1}} {{data.address2}}</td>
-                    <td>{{data.city}}</td>
-                    <td>{{data.state}}</td>
-                    <td>{{data.zipcode}}</td>
-                    <td>
-                        <button type="button" class="btn btn-sm btn-primary" data-toggle="modal"
-                            (click)="organizationModalPopup(editOrgModal,data)">Edit</button>
-                      
-                    </td>
-                   
-                </tr>
-
-            </tbody>
-        </table>
-        </div>
-        <div class="card-footer">
-            <pagination-controls (pageChange)="pageChangeEvent($event)"></pagination-controls>
-        </div>
-           
-
-    </div>
-</div> -->

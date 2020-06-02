@@ -26,12 +26,12 @@ export class OrganizationdetailsComponent implements OnInit {
   taxID: any;
 
   p: number = 1; 
-  pageSize: any = 2;
+  pageSize: any = 5;
   totalCount: any;
   paginationConfig = { itemsPerPage: this.pageSize, currentPage: this.p, totalItems: this.totalCount, id: 'userPagination' };
 
   p2: number = 1; 
-  propertyPgSize: any = 2;
+  propertyPgSize: any = 5;
   propertyTotalCount: any;
   propertyPageConfig = {  itemsPerPage: this.propertyPgSize, currentPage: this.p2, totalItems: this.propertyTotalCount, id: 'propertyPagination'};
 
@@ -64,12 +64,13 @@ export class OrganizationdetailsComponent implements OnInit {
   ngOnInit() {
   
     this.loadRoleList();
-    this.loadCompanyTeamMembers();
+   
     this.activatedRoute.paramMap.subscribe(params => {
       this.organizationID = params.get('id');
       console.log(this.organizationID, 'organizationID..');
       this.loadOrganizationByID(this.organizationID);
       this.getPropertyList(this.organizationID);
+      this.loadCompanyTeamMembers(this.organizationID);
      
     });
     
@@ -90,8 +91,8 @@ export class OrganizationdetailsComponent implements OnInit {
       logourl: ['']
     });
     this.inviteUserOrgForm = this.formBuilder.group({
-      emailid: ['', [Validators.required]],
-      permissions: new FormArray([])
+      emailid: ['', [Validators.required, Validators.pattern]],
+      permissions: ['', [Validators.required]]
     });
     this.editOrganisationForm = this.formBuilder.group({
       organizationName: ['', [Validators.required, Validators.pattern(alphaNumeric)]],
@@ -265,9 +266,9 @@ export class OrganizationdetailsComponent implements OnInit {
 
   pageChangeEvent(event) {
     this.paginationConfig.currentPage = event;
-    const pagelimit = '?limit=' + this.paginationConfig.itemsPerPage + '&page=' + this.paginationConfig.currentPage;
+    const pagelimit = '&limit=' + this.paginationConfig.itemsPerPage + '&page=' + this.paginationConfig.currentPage;
     const key = 'response';
-    this.companyService.getCompanyTeamMembers(pagelimit).subscribe((data) => {
+    this.orgService.getOrgTeamMembers(this.organizationID, pagelimit).subscribe((data) => {
       this.organizationTeamMemberList = data[key];
       this.paginationConfig.totalItems = data.count;
       return this.organizationTeamMemberList;
@@ -280,7 +281,7 @@ export class OrganizationdetailsComponent implements OnInit {
 
   propertyPageChangeEvent(event) {
     this.propertyPageConfig.currentPage = event;
-    const pagelimit = '?limit=' + this.propertyPageConfig.itemsPerPage + '&page=' + this.propertyPageConfig.currentPage;
+    const pagelimit = '&limit=' + this.propertyPageConfig.itemsPerPage + '&page=' + this.propertyPageConfig.currentPage;
     // const key = 'response';
     this.orgService.getPropertyList(this.organizationID, pagelimit).subscribe((data) => {
       this.propertyPageConfig.totalItems = data.count;
@@ -298,22 +299,6 @@ export class OrganizationdetailsComponent implements OnInit {
     this.propertyPageConfig.itemsPerPage = Number(event.target.value);
   }
 
-  onCheckChange(event) {
-    const formArray: FormArray = this.inviteUserOrgForm.get('permissions') as FormArray;
-    const index = formArray.value.indexOf(event.target.value);
-    if (index === -1) {
-      formArray.push(new FormControl(event.target.value));
-    } else {
-      formArray.controls.forEach((ctrl: FormControl) => {
-        if (ctrl.value === event.target.value) {
-          formArray.removeAt(index);
-          return;
-        }
-      });
-    }
-    console.log(formArray.value, 'fcv..');
-  }
-
   onSubmitInviteUserOrganization() {
     this.isInviteFormSubmitted = true;
     if (this.inviteUserOrgForm.invalid) {
@@ -321,7 +306,7 @@ export class OrganizationdetailsComponent implements OnInit {
     } else {
       const requestObj = {
         email: this.inviteUserOrgForm.value.emailid,
-        role_id: this.inviteUserOrgForm.value.permissions[0],
+        role_id: this.inviteUserOrgForm.value.permissions,
         orgid: this.organizationID,
         user_level: 'organization'
       };
@@ -329,7 +314,8 @@ export class OrganizationdetailsComponent implements OnInit {
         .subscribe((data) => {
           if (data) {
             alert('Details has been updated successfully!');
-            this.loadCompanyTeamMembers();
+            this.loadCompanyTeamMembers(this.organizationID);
+            this.inviteUserOrgForm.reset();
             this.modalService.dismissAll('Data Saved!');
           }
         }, (error) => {
@@ -349,10 +335,10 @@ export class OrganizationdetailsComponent implements OnInit {
     });
   }
 
-  loadCompanyTeamMembers() {
+  loadCompanyTeamMembers(orgID) {
     const key = 'response';
-    const pagelimit = '?limit=' + this.paginationConfig.itemsPerPage + '&page=' + this.paginationConfig.currentPage;
-    this.companyService.getCompanyTeamMembers(pagelimit).subscribe((data) => {
+    const pagelimit = '&limit=' + this.paginationConfig.itemsPerPage + '&page=' + this.paginationConfig.currentPage;
+    this.orgService.getOrgTeamMembers(orgID, pagelimit).subscribe((data) => {
       this.organizationTeamMemberList = data[key];
       this.paginationConfig.totalItems = data.count;
     });
@@ -376,7 +362,7 @@ export class OrganizationdetailsComponent implements OnInit {
     this.companyService.removeTeamMember(id).subscribe((data) => {
       if (data) {
         alert('User has been removed.');
-        this.loadCompanyTeamMembers();
+        this.loadCompanyTeamMembers(this.organizationID);
       }
     }, (err) => {
       alert(JSON.stringify(err));

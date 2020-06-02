@@ -11,7 +11,7 @@
 }
 
 .alink {
-    color: #333;
+    color: #0168fa !important;
     cursor: pointer;
 }
 
@@ -21,4 +21,45 @@
 
 .nav-link > div {
     color: rgba(255, 255, 255, 0.7) !important;
+}
+
+.invalid-radio {
+    width: 100%;
+    margin-top: 0.25rem;
+    font-size: 80%;
+    color: #dc3545;
+}
+
+.form-check-inline > input[type='radio'] {
+    margin: 0 5px 0 0;
+}
+
+
+.searchfield {
+    display: flex;
+}
+
+
+
+.table-responsive.property-div > .card > .card-header {
+    padding-top: 0;
+    padding-right: 0;
+    padding-left: 0;
+}
+
+.searchfield .input-group {
+    align-items: center;
+}
+
+.searchfield > div > span.input-group-append {
+    height: 38px;
+    display: flex;
+}
+
+.searchfield > div > span > div.input-group-text {
+    align-items: center;
+}
+
+.searchfield.mt-3 .form-inline {
+    font-weight: normal;
 }
