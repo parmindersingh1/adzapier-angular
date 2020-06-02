@@ -110,7 +110,7 @@
                             class="form-control" placeholder="Enter email id"
                             [ngClass]="{ 'is-invalid': submitted && f.emailid.errors }" />
                         <div *ngIf="submitted && f.emailid.errors" class="invalid-feedback">
-                            <div *ngIf="f.emailid.errors.required">Company Name is required</div>
+                            <div *ngIf="f.emailid.errors.required">Email Address is required</div>
                             <div *ngIf="f.emailid.errors.pattern">Company Name Allow Only Alphabets</div>
                         </div>
                     </div>

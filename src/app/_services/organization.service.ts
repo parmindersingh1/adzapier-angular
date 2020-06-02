@@ -96,4 +96,7 @@ export class OrganizationService {
         return this.http.patch<any>(environment.apiUrl + '/property/' + orgID + '/' + propID, {});
     }
 
+    getOrgTeamMembers(orgID, pagelimit?): Observable<any> {
+        return this.http.get<any>(environment.apiUrl + '/team_member' + '?orgid=' + orgID + pagelimit);
+    }
 }

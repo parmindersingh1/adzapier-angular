@@ -331,6 +331,8 @@ export class HeaderComponent implements OnInit {
   }
 
   checkPropertyStatus(prop): boolean {
-    return this.propList.filter((t) =>  t.id === prop.property_id && t.active === false).length > 0;
+    if (this.propList) {
+      return this.propList.filter((t) =>  t.id === prop.property_id && t.active === false).length > 0;
+    }
   }
 }
