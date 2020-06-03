@@ -49,8 +49,8 @@ export class EditProfileComponent implements OnInit {
     const strRegx = '^[a-zA-Z \-\']+';
     const alphaNumeric = '^(?![0-9]*$)[a-zA-Z0-9 ]+$';
     this.profileForm = this.formBuilder.group({
-      firstName: ['', [Validators.required, Validators.minLength(3), Validators.pattern(strRegx)]],
-      lastName: ['', [Validators.required, Validators.minLength(3), Validators.pattern(strRegx)]],
+      firstName: ['', [Validators.required, Validators.minLength(2), Validators.pattern(strRegx)]],
+      lastName: ['', [Validators.required, Validators.minLength(2), Validators.pattern(strRegx)]],
       newemail: [''],
       companyname: ['Test Company Name'],
       addressone: ['', [Validators.required, Validators.pattern(alphaNumeric)]],
