@@ -26,13 +26,13 @@ export class OrganizationdetailsComponent implements OnInit {
   zipcode: number;
   taxID: any;
 
-  p: number = 1;
-  pageSize: any = 2;
+  p: number = 1; 
+  pageSize: any = 5;
   totalCount: any;
   paginationConfig = { itemsPerPage: this.pageSize, currentPage: this.p, totalItems: this.totalCount, id: 'userPagination' };
 
-  p2: number = 1;
-  propertyPgSize: any = 2;
+  p2: number = 1; 
+  propertyPgSize: any = 5;
   propertyTotalCount: any;
   propertyPageConfig = {  itemsPerPage: this.propertyPgSize, currentPage: this.p2, totalItems: this.propertyTotalCount, id: 'propertyPagination'};
 
@@ -67,13 +67,14 @@ export class OrganizationdetailsComponent implements OnInit {
   ngOnInit() {
 
     this.loadRoleList();
-    this.loadCompanyTeamMembers();
+   
     this.activatedRoute.paramMap.subscribe(params => {
       this.organizationID = params.get('id');
       console.log(this.organizationID, 'organizationID..');
       this.loadOrganizationByID(this.organizationID);
       this.getPropertyList(this.organizationID);
-
+      this.loadCompanyTeamMembers(this.organizationID);
+     
     });
 
     this.orgService.currentOrganization.subscribe((org) => {
@@ -93,8 +94,8 @@ export class OrganizationdetailsComponent implements OnInit {
       logourl: ['']
     });
     this.inviteUserOrgForm = this.formBuilder.group({
-      emailid: ['', [Validators.required]],
-      permissions: new FormArray([])
+      emailid: ['', [Validators.required, Validators.pattern]],
+      permissions: ['', [Validators.required]]
     });
     this.editOrganisationForm = this.formBuilder.group({
       organizationName: ['', [Validators.required, Validators.pattern(alphaNumeric)]],
@@ -286,16 +287,18 @@ export class OrganizationdetailsComponent implements OnInit {
 
   pageChangeEvent(event) {
     this.paginationConfig.currentPage = event;
-    const pagelimit = '?limit=' + this.paginationConfig.itemsPerPage + '&page=' + this.paginationConfig.currentPage;
+    const pagelimit = '&limit=' + this.paginationConfig.itemsPerPage + '&page=' + this.paginationConfig.currentPage;
     const key = 'response';
     this.loading.start();
     this.companyService.getCompanyTeamMembers(pagelimit).subscribe((data) => {
       this.loading.stop();
+    this.orgService.getOrgTeamMembers(this.organizationID, pagelimit).subscribe((data) => {
       this.organizationTeamMemberList = data[key];
       this.paginationConfig.totalItems = data.count;
       return this.organizationTeamMemberList;
     });
-  }
+  });
+}
 
   onChangeEvent(event) {
     this.paginationConfig.itemsPerPage = Number(event.target.value);
@@ -303,7 +306,7 @@ export class OrganizationdetailsComponent implements OnInit {
 
   propertyPageChangeEvent(event) {
     this.propertyPageConfig.currentPage = event;
-    const pagelimit = '?limit=' + this.propertyPageConfig.itemsPerPage + '&page=' + this.propertyPageConfig.currentPage;
+    const pagelimit = '&limit=' + this.propertyPageConfig.itemsPerPage + '&page=' + this.propertyPageConfig.currentPage;
     // const key = 'response';
     this.loading.start();
     this.orgService.getPropertyList(this.organizationID, pagelimit).subscribe((data) => {
@@ -323,22 +326,6 @@ export class OrganizationdetailsComponent implements OnInit {
     this.propertyPageConfig.itemsPerPage = Number(event.target.value);
   }
 
-  onCheckChange(event) {
-    const formArray: FormArray = this.inviteUserOrgForm.get('permissions') as FormArray;
-    const index = formArray.value.indexOf(event.target.value);
-    if (index === -1) {
-      formArray.push(new FormControl(event.target.value));
-    } else {
-      formArray.controls.forEach((ctrl: FormControl) => {
-        if (ctrl.value === event.target.value) {
-          formArray.removeAt(index);
-          return;
-        }
-      });
-    }
-    console.log(formArray.value, 'fcv..');
-  }
-
   onSubmitInviteUserOrganization() {
     this.isInviteFormSubmitted = true;
     if (this.inviteUserOrgForm.invalid) {
@@ -346,7 +333,7 @@ export class OrganizationdetailsComponent implements OnInit {
     } else {
       const requestObj = {
         email: this.inviteUserOrgForm.value.emailid,
-        role_id: this.inviteUserOrgForm.value.permissions[0],
+        role_id: this.inviteUserOrgForm.value.permissions,
         orgid: this.organizationID,
         user_level: 'organization'
       };
@@ -356,7 +343,8 @@ export class OrganizationdetailsComponent implements OnInit {
           this.loading.stop();
           if (data) {
             alert('Details has been updated successfully!');
-            this.loadCompanyTeamMembers();
+            this.loadCompanyTeamMembers(this.organizationID);
+            this.inviteUserOrgForm.reset();
             this.modalService.dismissAll('Data Saved!');
           }
         }, (error) => {
@@ -379,16 +367,19 @@ export class OrganizationdetailsComponent implements OnInit {
     });
   }
 
-  loadCompanyTeamMembers() {
+  loadCompanyTeamMembers(orgID) {
     const key = 'response';
     const pagelimit = '?limit=' + this.paginationConfig.itemsPerPage + '&page=' + this.paginationConfig.currentPage;
     this.loading.start();
     this.companyService.getCompanyTeamMembers(pagelimit).subscribe((data) => {
       this.loading.stop();
+    const pagelimit = '&limit=' + this.paginationConfig.itemsPerPage + '&page=' + this.paginationConfig.currentPage;
+    this.orgService.getOrgTeamMembers(orgID, pagelimit).subscribe((data) => {
       this.organizationTeamMemberList = data[key];
       this.paginationConfig.totalItems = data.count;
     });
-  }
+  });
+}
 
   viewOrganizationTeam() {
     this.router.navigate(['/organizationteam', this.organizationID]);
@@ -411,7 +402,7 @@ export class OrganizationdetailsComponent implements OnInit {
       this.loading.stop()
       if (data) {
         alert('User has been removed.');
-        this.loadCompanyTeamMembers();
+        this.loadCompanyTeamMembers(this.organizationID);
       }
     }, (err) => {
       this.loading.stop();

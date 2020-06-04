@@ -25,11 +25,11 @@ export class CompanyComponent implements OnInit {
   submitted;
   isInviteFormSubmitted;
   teamMemberList: any;
-  permissions: any;
+  permissions: any = [];
   userRoleID: any;
   roleList: any;
   emailid: any;
-  pageSize: any = 2;
+  pageSize: any = 5;
   searchText: any;
   totalCount: any;
 
@@ -59,14 +59,15 @@ export class CompanyComponent implements OnInit {
       zipcode: ['', [Validators.required, Validators.pattern(zipRegex)]],
     });
     this.inviteUserForm = this.formBuilder.group({
-      emailid: ['', [Validators.required]],
-      permissions: new FormArray([])
+      emailid: ['', [Validators.required, Validators.pattern]],
+      permissions: ['', [Validators.required]]
     });
     this.loadCompanyDetails();
     this.pathValues();
     this.loadCompanyTeamMembers();
   }
   get f() { return this.companyForm.controls; }
+  get userInvite() { return this.inviteUserForm.controls; }
   loadCompanyDetails() {
     this.loading.start();
     this.companyService.getCompanyDetails().subscribe((data) => {
@@ -153,7 +154,7 @@ export class CompanyComponent implements OnInit {
     } else {
       const requestObj = {
         email: this.inviteUserForm.value.emailid,
-        role_id: this.inviteUserForm.value.permissions[0],
+        role_id: this.inviteUserForm.value.permissions,
         user_level: 'company'
       };
       this.loading.start();
@@ -162,6 +163,7 @@ export class CompanyComponent implements OnInit {
           this.loading.stop();
           if (data) {
             alert('Details has been updated successfully!');
+            this.inviteUserForm.reset();
             this.loadCompanyTeamMembers();
             this.modalService.dismissAll('Data Saved!');
           }
@@ -174,21 +176,7 @@ export class CompanyComponent implements OnInit {
   }
 
 
-  onCheckChange(event) {
-    const formArray: FormArray = this.inviteUserForm.get('permissions') as FormArray;
-    const index = formArray.value.indexOf(event.target.value);
-    if (index === -1) {
-      formArray.push(new FormControl(event.target.value));
-    } else {
-      formArray.controls.forEach((ctrl: FormControl) => {
-        if (ctrl.value === event.target.value) {
-          formArray.removeAt(index);
-          return;
-        }
-      });
-    }
-    console.log(formArray.value, 'fcv..');
-  }
+  
 
   onChangeEvent(event) {
     this.paginationConfig.itemsPerPage = Number(event.target.value);
