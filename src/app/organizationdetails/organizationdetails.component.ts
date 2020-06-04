@@ -51,6 +51,8 @@ export class OrganizationdetailsComponent implements OnInit {
   managedOrganization: any;
   searchText: any;
   searchPropertyText: any;
+  currentManagedOrgID: any;
+  currrentManagedPropID: any;
   constructor(private activatedRoute: ActivatedRoute,
               private orgService: OrganizationService,
               private modalService: NgbModal,
@@ -58,11 +60,23 @@ export class OrganizationdetailsComponent implements OnInit {
               private companyService: CompanyService,
               private userService: UserService,
               private router: Router) {
-    
+                this.orgService.currentProperty.subscribe((data) => {
+                  this.currentManagedOrgID = data.organization_id;
+                  this.currrentManagedPropID = data.property_id;
+                });
      }
 
   ngOnInit() {
-  
+    this.orgService.currentProperty.subscribe((response) => {
+      if (response !== '') {
+        this.currentManagedOrgID = response.organization_id;
+        this.currrentManagedPropID = response.property_id;
+      } else {
+        const orgDetails = this.orgService.getCurrentOrgWithProperty();
+        this.currentManagedOrgID = orgDetails.organization_id;
+        this.currrentManagedPropID = orgDetails.property_id;
+      }
+    });
     this.loadRoleList();
    
     this.activatedRoute.paramMap.subscribe(params => {
@@ -70,16 +84,11 @@ export class OrganizationdetailsComponent implements OnInit {
       console.log(this.organizationID, 'organizationID..');
       this.loadOrganizationByID(this.organizationID);
       this.getPropertyList(this.organizationID);
-      this.loadCompanyTeamMembers(this.organizationID);
+      this.loadOrgTeamMembers(this.organizationID);
      
     });
     
-    this.orgService.currentOrganization.subscribe((org) => {
-      if (org) {
-        console.log(JSON.stringify(org),'orgdetails..');
-        this.managedOrganization = org;
-      }
-    });
+    
     this.isEditProperty = false;
     const urlRegex = '(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?';
     const zipRegex = '^[0-9]*$'; //'^[0-9]{6}(?:-[0-9]{4})?$';
@@ -189,6 +198,12 @@ export class OrganizationdetailsComponent implements OnInit {
       this.orgService.updateOrganization(this.organizationID, updateObj).subscribe((res) => {
         if (res) {
           alert('Organization updated successfully!');
+          console.log(this.currentManagedOrgID,'currentManagedOrgID..');
+        
+          if (res.response.id === this.currentManagedOrgID) {
+            this.orgService.updateEditedOrganization(res);
+          } 
+          this.orgService.isOrganizationUpdated.next(true);
           this.modalService.dismissAll('Data Saved!');
         }
       }, (error) => {
@@ -237,6 +252,7 @@ export class OrganizationdetailsComponent implements OnInit {
           if (result) {
             alert('New property has been added');
             this.getPropertyList(this.organizationID);
+            this.orgService.isOrganizationUpdated.next(true);
           }
         }, (error) => {
           console.log(error, 'error..');
@@ -253,7 +269,14 @@ export class OrganizationdetailsComponent implements OnInit {
           if (res) {
             alert('Property has been updated!');
             this.getPropertyList(res.response.oid);
+           
+            if (res.response.id === this.currrentManagedPropID) {
+             this.orgService.updateEditedProperty(res);
+             
+              
+            }
           }
+          this.orgService.isOrganizationUpdated.next(true);
           this.organisationPropertyForm.reset();
           this.modalService.dismissAll();
         }, (error) => {
@@ -314,7 +337,7 @@ export class OrganizationdetailsComponent implements OnInit {
         .subscribe((data) => {
           if (data) {
             alert('Details has been updated successfully!');
-            this.loadCompanyTeamMembers(this.organizationID);
+            this.loadOrgTeamMembers(this.organizationID);
             this.inviteUserOrgForm.reset();
             this.modalService.dismissAll('Data Saved!');
           }
@@ -335,7 +358,7 @@ export class OrganizationdetailsComponent implements OnInit {
     });
   }
 
-  loadCompanyTeamMembers(orgID) {
+  loadOrgTeamMembers(orgID) {
     const key = 'response';
     const pagelimit = '&limit=' + this.paginationConfig.itemsPerPage + '&page=' + this.paginationConfig.currentPage;
     this.orgService.getOrgTeamMembers(orgID, pagelimit).subscribe((data) => {
@@ -348,10 +371,15 @@ export class OrganizationdetailsComponent implements OnInit {
     this.router.navigate(['/organizationteam', this.organizationID]);
   }
 
-  removeOrganization(id) {
-    this.companyService.removeTeamMember(id).subscribe((data) => {
+  disableOrganization() {
+    const reqObj = {
+      active: false
+    };
+    this.orgService.disableOrganization(this.organizationID, reqObj).subscribe((data) => {
       if (data) {
         alert('Selected oragnization has been disabled!');
+        this.orgService.isOrganizationUpdated.next(true);
+        this.router.navigate(['/organizations']);
       }
     }, (err) => {
       alert(err);
@@ -362,7 +390,7 @@ export class OrganizationdetailsComponent implements OnInit {
     this.companyService.removeTeamMember(id).subscribe((data) => {
       if (data) {
         alert('User has been removed.');
-        this.loadCompanyTeamMembers(this.organizationID);
+        this.loadOrgTeamMembers(this.organizationID);
       }
     }, (err) => {
       alert(JSON.stringify(err));

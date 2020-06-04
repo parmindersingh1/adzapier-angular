@@ -24,12 +24,12 @@
                             <label class="col-sm-5 col-form-label" for="name">View</label>
                             <select id="PerPage" class="form-control" [(ngModel)]="pageSize"
                                 (change)="onChangeEvent($event)">
+                                <option value="5">5</option>
                                 <option value="10">10</option>
                                 <option value="20">20</option>
-                                <option value="30">30</option>
                             </select>
                         </div>
-                        <div col-md-5><label class="d-block">records at a time</label></div>
+                        <div class="col-md-5"><label class="d-block">records at a time</label></div>
                     </div>
                 </div>
                 <div class="col-sm-2 ml-auto">
@@ -49,12 +49,12 @@
                         <th>State</th>
                         <th>Zipcode</th>
                         <th>Action</th>
-                        <th>Manage</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let data of orgList |  filter: searchText:'orgname':'city':'state' | paginate:paginationConfig; let i = index">
-                        <td> {{ (paginationConfig.currentPage - 1) * paginationConfig.itemsPerPage + i + 1 }}
+                    <ng-container *ngFor="let data of orgList |  filter: searchText:'orgname':'city':'state' | paginate:paginationConfig; let i = index">
+                    <tr [ngClass]="{'row-disabled':data.active == false, 'row-enabled':data.active == true}">
+                        <td>{{ (paginationConfig.currentPage - 1) * paginationConfig.itemsPerPage + i + 1 }}
                         </td>
                         <td>{{data.orgname}}</td>
                         <td>{{data.address1}} {{data.address2}}</td>
@@ -62,20 +62,17 @@
                         <td>{{data.state}}</td>
                         <td>{{data.zipcode}}</td>
                         <td>
-                            <a class="pd-r-5" (click)="viewOrganization(data.id)"><i
-                                    class="fas fa-external-link-alt"></i>View</a>
-                            <a class="pd-r-5" data-toggle="modal" (click)="organizationModalPopup(editOrgModal,data)">
+                            <a class="pd-r-5" *ngIf="data.active == true" (click)="viewOrganization(data.id)"><i
+                                    class="fas fa-external-link-alt"></i> View</a>
+                            <!-- <a class="pd-r-5" *ngIf="data.active == true" data-toggle="modal" (click)="organizationModalPopup(editOrgModal,data)">
                                 <i class="far fa-edit fa-1x"></i> Edit
-                            </a>
-                            <a class="pd-r-5" (click)="removeOrganization(data.id)">
-                                <i class="far fa-trash-alt tx-danger fa-sm"></i>Remove
+                            </a> -->
+                            <a class="badge badge-success pd-r-5" *ngIf="data.active == false" (click)="enableOrganization(data.id)">
+                                <i-feather name="check" class="feather-16"></i-feather> Enable
                             </a>
                         </td>
-                        <td><button class="btn btn-sm" (click)="manageSelecteditem(data)">
-                                <span *ngIf="disableOtherItems(data)"><i class="fa fa-check-circle"
-                                        aria-hidden="true"></i></span>
-                                Manage</button></td>
                     </tr>
+                    </ng-container>
                     <tr>
                         <td colspan="8" *ngIf="(orgList | filter: searchText:'orgname':'city':'state').length===0">No
                             records found.</td>
@@ -93,11 +90,8 @@
 
 <ng-template #editOrgModal let-modal>
     <div class="modal-header">
-        <h4 class="modal-title" id="modal-basic-title" *ngIf="!isEditOrganization;else editOrgHeading">Add Organization
+        <h4 class="modal-title" id="modal-basic-title">Add Organization
         </h4>
-        <ng-template #editOrgHeading>
-            <h4 class="modal-title" id="modal-basic-title">Edit Organization</h4>
-        </ng-template>
         <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Close Clicked')">
             <span aria-hidden="true">×</span>
         </button>

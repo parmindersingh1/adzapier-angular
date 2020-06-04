@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CompanyService } from '../company.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { UserService } from '../_services';
+import { UserService, OrganizationService } from '../_services';
 import { FormArray, FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 
 @Component({
@@ -18,7 +18,7 @@ export class OrganizationteamComponent implements OnInit {
   submitted;
   emailid;
   p: number = 1; 
-  pageSize: any = 2;
+  pageSize: any = 5;
   totalCount: any;
   searchText: any;
   paginationConfig = { itemsPerPage: this.pageSize, currentPage: this.p, totalItems: this.totalCount };
@@ -27,18 +27,19 @@ export class OrganizationteamComponent implements OnInit {
               private modalService: NgbModal,
               private userService: UserService,
               private formBuilder: FormBuilder,
-              private companyService: CompanyService) { }
+              private companyService: CompanyService,
+              private orgService: OrganizationService,) { }
 
   ngOnInit() {
     this.activatedRoute.paramMap.subscribe(params => {
       this.organizationID = params.get('id');
       console.log(this.organizationID,'organizationID..');
+      this.loadOrgTeamMembers(this.organizationID);
     });
     this.loadRoleList();
-    this.loadCompanyTeamMembers();
     this.inviteUserOrgForm = this.formBuilder.group({
       emailid: ['', [Validators.required]],
-      permissions: new FormArray([])
+      permissions: ['', [Validators.required]],
     });
   }
   get f() { return this.inviteUserOrgForm.controls; }
@@ -50,6 +51,15 @@ export class OrganizationteamComponent implements OnInit {
     const key = 'response';
     this.companyService.getCompanyTeamMembers().subscribe((data) => {
       this.organizationTeamMemberList = data[key];
+    });
+  }
+
+  loadOrgTeamMembers(orgID) {
+    const key = 'response';
+    const pagelimit = '&limit=' + this.paginationConfig.itemsPerPage + '&page=' + this.paginationConfig.currentPage;
+    this.orgService.getOrgTeamMembers(orgID, pagelimit).subscribe((data) => {
+      this.organizationTeamMemberList = data[key];
+      this.paginationConfig.totalItems = data.count;
     });
   }
 
@@ -87,21 +97,7 @@ export class OrganizationteamComponent implements OnInit {
 		this.paginationConfig.itemsPerPage = Number(event.target.value);
   }
 
-  onCheckChange(event) {
-    const formArray: FormArray = this.inviteUserOrgForm.get('permissions') as FormArray;
-    const index = formArray.value.indexOf(event.target.value);
-    if (index === -1) {
-      formArray.push(new FormControl(event.target.value));
-    } else {
-      formArray.controls.forEach((ctrl: FormControl) => {
-        if (ctrl.value === event.target.value) {
-          formArray.removeAt(index);
-          return;
-        }
-      });
-    }
-    console.log(formArray.value, 'fcv..');
-  }
+  
 
   onSubmitInviteUserOrganization() {
     this.submitted = true;
@@ -110,7 +106,7 @@ export class OrganizationteamComponent implements OnInit {
     } else {
       const requestObj = {
         email: this.inviteUserOrgForm.value.emailid,
-        role_id: this.inviteUserOrgForm.value.permissions[0],
+        role_id: this.inviteUserOrgForm.value.permissions,
         orgid: this.organizationID,
         user_level: 'organization'
       };
@@ -118,7 +114,7 @@ export class OrganizationteamComponent implements OnInit {
         .subscribe((data) => {
           if (data) {
             alert('Details has been updated successfully!');
-            this.loadCompanyTeamMembers();
+            this.loadOrgTeamMembers(this.organizationID);
             this.modalService.dismissAll('Data Saved!');
           }
         }, (error) => {
@@ -132,7 +128,7 @@ export class OrganizationteamComponent implements OnInit {
    this.companyService.removeTeamMember(id).subscribe((data)=>{
      if (data) {
        alert('User has been removed.');
-       this.loadCompanyTeamMembers();
+       this.loadOrgTeamMembers(this.organizationID);
      }
    }, (err) => {
      alert(JSON.stringify(err));
