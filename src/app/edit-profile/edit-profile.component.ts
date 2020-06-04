@@ -3,6 +3,7 @@ import { Validators, FormBuilder, FormGroup, NgForm } from '@angular/forms';
 import { AuthenticationService, UserService } from '../_services';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MustMatch } from '../_helpers/must-match.validator';
+import {NgxUiLoaderService} from "ngx-ui-loader";
 
 @Component({
   selector: 'app-edit-profile',
@@ -39,6 +40,7 @@ export class EditProfileComponent implements OnInit {
     private formBuilder: FormBuilder,
     private authenticationService: AuthenticationService,
     private userService: UserService,
+    private loadingBar: NgxUiLoaderService,
     private modalService: NgbModal,
   ) { }
 
@@ -92,8 +94,10 @@ export class EditProfileComponent implements OnInit {
         zipcode: this.profileForm.value.zipcode
         //   roles: this.profileForm.value.roles
       };
+      this.loadingBar.start();
       this.userService.update(editObj)
         .subscribe((data) => {
+          this.loadingBar.stop();
           if (data) {
           //  this.isShowbtnVisible = false;
            // this.show = true;
@@ -103,7 +107,8 @@ export class EditProfileComponent implements OnInit {
             this.loadUserDetails();
           }
         }, (error) => {
-          alert(error);
+            this.loadingBar.stop();
+            alert(error);
          // this.isShowbtnVisible = true;
           // this.show = false;
         }
@@ -113,7 +118,9 @@ export class EditProfileComponent implements OnInit {
   }
 
   pathValues() {
+    this.loadingBar.start();
     this.userService.getLoggedInUserDetails().subscribe((user) => {
+      this.loadingBar.stop();
       this.userProfile = Object.values(user);
       console.log(this.userProfile, 'userProfile..');
       this.profileForm.patchValue({
@@ -154,7 +161,9 @@ export class EditProfileComponent implements OnInit {
   }
 
   loadUserDetails() {
+    this.loadingBar.start();
     this.userService.getLoggedInUserDetails().subscribe((user) => {
+      this.loadingBar.stop();
       this.userProfile = Object.values(user);
       this.newemail = this.userProfile[0].email;
       this.firstName = this.userProfile[0].firstname;
@@ -184,13 +193,16 @@ export class EditProfileComponent implements OnInit {
       new_password: this.changepasswordForm.value.newPassword,
       confirm_password: this.changepasswordForm.value.confirmPassword
     };
+    this.loadingBar.start();
     this.authenticationService.changePassword(obj).subscribe((data) => {
+      this.loadingBar.stop();
       if (data) {
         this.show = true;
         this.successMsg = data.response;
       }
       console.log(data, 'data..');
     }, (error) => {
+      this.loadingBar.stop();
       this.show = false;
       this.errorMsg = error.Password_mismatch;
     });

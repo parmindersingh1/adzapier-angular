@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 
 import { AlertService, UserService, AuthenticationService } from './../_services';
+import {NgxUiLoaderService} from "ngx-ui-loader";
 
 @Component({
   selector: 'app-forgotpassword',
@@ -25,6 +26,7 @@ export class ForgotpasswordComponent implements OnInit {
         private router: Router,
         private authenticationService: AuthenticationService,
         private userService: UserService,
+        private loadingBar: NgxUiLoaderService,
         private alertService: AlertService
     ) {
         // redirect to home if already logged in
@@ -34,7 +36,7 @@ export class ForgotpasswordComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.forgotpasswordForm = this.formBuilder.group({          
+        this.forgotpasswordForm = this.formBuilder.group({
           emailid: ['', [Validators.required,Validators.pattern]]
         });
     }
@@ -46,8 +48,8 @@ export class ForgotpasswordComponent implements OnInit {
     //     this.errorMsg="";
 
     // }
-    
-   
+
+
     onSubmit() {
          this.submitted = true;
       //debugger;
@@ -62,17 +64,21 @@ export class ForgotpasswordComponent implements OnInit {
         this.loading = true;
                // debugger;
                // console.log(this.f.token.value, this.f.newpsw.value, this.f.renewpsw.value);
+               this.loadingBar.start();
                this.userService.forgotpswd(this.f.emailid.value)
             .pipe(first())
             .subscribe(
-                data => {
+
+        data => {
+          this.loadingBar.stop();
                     //debugger;
                     //this.alertService.success('Registration successful', true);
                     //this.router.navigate(['/login']);
                     //console.log();
                 },
                 error => {
-                    this.alertService.error(error);
+                  this.loadingBar.stop();
+                  this.alertService.error(error);
                     this.loading = false;
                 });
 
@@ -80,6 +86,6 @@ export class ForgotpasswordComponent implements OnInit {
                 if(this.f.emailid.value){
                     this.show=true;
                 }
-                
+
     }
 }

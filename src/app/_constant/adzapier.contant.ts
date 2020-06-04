@@ -1,0 +1,60 @@
+import {NgxUiLoaderConfig} from 'ngx-ui-loader';
+
+// export const ngxUiLoaderConfig: NgxUiLoaderConfig = {
+//   // 'bgsColor': '#d12006',
+//   'bgsColor': '#d20303',
+//   'bgsOpacity': 0.4,
+//   'bgsPosition': 'bottom-right',
+//   'bgsSize': 90,
+//   'bgsType': 'ball-spin-clockwise',
+//   'blur': 2,
+//   // 'fgsColor': '#d12006',
+//   'fgsColor': '#d20303',
+//   'fgsPosition': 'center-center',
+//   'fgsSize': 0,
+//   'fgsType': 'three-strings',
+//   'gap': 24,
+//   'logoPosition': 'center-center',
+//   'logoSize': 190,
+//   'logoUrl': '',
+//   'masterLoaderId': 'master',
+//   'overlayBorderRadius': '0',
+//   'overlayColor': 'rgba(114,114,114,0.56)',
+//   'pbColor': '#fe6381',
+//   'pbDirection': 'ltr',
+//   'pbThickness': 2,
+//   'hasProgressBar': true,
+//   'text': '',
+//   'textColor': '#FFFFFF',
+//   'textPosition': 'center-center'
+// };
+
+
+
+export const ngxUiLoaderConfig: NgxUiLoaderConfig = {
+  'bgsColor': 'red',
+  'bgsOpacity': 0.5,
+  'bgsPosition': 'bottom-right',
+  'bgsSize': 60,
+  'bgsType': 'ball-spin-clockwise',
+  'blur': 6,
+  'fgsColor': '#03adc3',
+  'fgsPosition': 'center-center',
+  'fgsSize': 80,
+  "fgsType": "rectangle-bounce-pulse-out-rapid",
+  'gap': 24,
+  'logoPosition': 'center-center',
+  'logoSize': 120,
+  'logoUrl': '',
+  'masterLoaderId': 'master',
+  'overlayBorderRadius': '0',
+  'overlayColor': 'rgba(40, 40, 40, 0.8)',
+  // 'pbColor': 'rgb(0, 172, 193)',
+  'pbColor': '#03adc3',
+  'pbDirection': 'ltr',
+  'pbThickness': 3,
+  'hasProgressBar': true,
+  'text': '',
+  'textColor': '#FFFFFF',
+  'textPosition': 'center-center'
+};

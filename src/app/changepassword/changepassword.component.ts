@@ -5,6 +5,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 import { AlertService, UserService, AuthenticationService } from './../_services';
 import { MustMatch } from '../_helpers/must-match.validator';
+import {NgxUiLoaderService} from 'ngx-ui-loader';
 
 @Component({
   selector: 'app-changepassword',
@@ -25,7 +26,8 @@ export class ChangepasswordComponent implements OnInit {
     private router: Router,
     private authenticationService: AuthenticationService,
     private userService: UserService,
-    private alertService: AlertService
+    private alertService: AlertService,
+    private loadingbar: NgxUiLoaderService,
   ) {
     // redirect to home if already logged in
     if (this.authenticationService.currentUserValue) {
@@ -62,12 +64,15 @@ export class ChangepasswordComponent implements OnInit {
       new_password: this.f.newPassword.value,
       confirm_password: this.f.confirmPassword.value
     };
+    this.loadingbar.start();
     this.authenticationService.changePassword(obj).subscribe((data) => {
+      this.loadingbar.stop();
       if (data) {
         this.show = true;
       }
       console.log(data, 'data..');
     }, (error) => {
+      this.loadingbar.stop();
       this.show = false;
       this.errorMsg = error.Password_mismatch;
     });

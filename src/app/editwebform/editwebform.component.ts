@@ -6,6 +6,7 @@ import { OrganizationService } from '../_services';
 import { CcparequestService } from '../_services/ccparequest.service';
 import { FormArray, NgForm } from '@angular/forms';
 import { CcpadataService } from '../_services/ccpadata.service';
+import {NgxUiLoaderService} from "ngx-ui-loader";
 
 @Component({
   selector: 'app-editwebform',
@@ -52,6 +53,7 @@ export class EditwebformComponent implements OnInit {
               private organizationService: OrganizationService,
               private ccpaRequestService: CcparequestService,
               private activatedRoute: ActivatedRoute,
+              private loadingBar: NgxUiLoaderService,
               private ccpadataService: CcpadataService) {
     this.organizationService.getSelectedOrgProperty.subscribe((response) => this.selectedProperty = response);
   }
@@ -67,8 +69,9 @@ export class EditwebformComponent implements OnInit {
     this.activatedRoute.paramMap.subscribe(params => {
       this.crid = params.get('crid');
     });
-
+    this.loadingBar.start();
     this.organizationService.currentProperty.subscribe((response) => {
+      this.loadingBar.stop();
       if (response !== '') {
         this.selectedProperty = response.property_name;
         this.organizationID = response.organization_id;
@@ -88,7 +91,9 @@ export class EditwebformComponent implements OnInit {
 
 
   getCCPAdefaultConfigById() {
+    this.loadingBar.start();
     this.ccpaRequestService.getCCPAdefaultRequestSubjectType().subscribe((data) => {
+      this.loadingBar.stop();
       if (data !== undefined) {
         const key = 'response';
         const rdata = data[key].request_type;
@@ -99,15 +104,18 @@ export class EditwebformComponent implements OnInit {
         this.loading = false;
       }
     }, (error) => {
+      this.loadingBar.stop();
       console.log(JSON.stringify(error));
     });
- 
+
   }
 
 
-  loadRequestWebForm() { 
+  loadRequestWebForm() {
+    this.loadingBar.start();
     this.ccpaFormConfigService.getCCPAFormConfigByID(this.organizationID, this.propertyId, this.crid)
     .subscribe((data) => {
+      this.loadingBar.stop();
       console.log(data, 'data..');
       if (data.response.length === 0) {
         return this.webFormControlList.length = 0;
@@ -133,6 +141,7 @@ export class EditwebformComponent implements OnInit {
         return this.webFormControlList;
       }
     }, (error) => {
+      this.loadingBar.stop();
       alert(JSON.stringify(error));
       console.log(error, 'get error..');
     });
@@ -149,7 +158,7 @@ export class EditwebformComponent implements OnInit {
     const arryObj = Object.keys(customerData.value);
     // console.log(arryObj, 'obj..');
     const keyArray = this.extractKeyWithIndex(formData);
-   
+
     if (keyArray.length > 0) {
       const clientObject = this.removeExtraObjectKeys(formData);
       finalObj = this.reAssignKeyValue(keyArray, clientObject);
@@ -175,18 +184,21 @@ export class EditwebformComponent implements OnInit {
         } else if (finalObj[key] === true) {
           const filtered = this.checkBoxValues.filter((t) => t.keylabel === key);
           const result = filtered.map(a => a.name);
-          finalObj[key] = result; 
+          finalObj[key] = result;
         }
       }
     }
     console.log(finalObj,'finalObj..');
     // return false;
+    this.loadingBar.start();
     this.ccpadataService.createCCPAData(this.organizationID, this.propertyId, this.crid, finalObj)
       .subscribe((data) => {
+        this.loadingBar.stop();
         if (data) {
           alert('Data Submitted!');
         }
       }, (err) => {
+        this.loadingBar.stop();
         alert(JSON.stringify(err));
       });
   }
