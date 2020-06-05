@@ -5,7 +5,7 @@ import { first } from 'rxjs/operators';
 
 import { AlertService, AuthenticationService, UserService } from './../_services';
 import { OrganizationService } from '../_services/organization.service';
-import {NgxUiLoaderService} from "ngx-ui-loader";
+import {NgxUiLoaderService} from 'ngx-ui-loader';
 
 @Component({
     templateUrl: 'login.component.html',

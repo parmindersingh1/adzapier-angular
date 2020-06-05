@@ -143,13 +143,14 @@ export class DsarformComponent implements OnInit, OnDestroy {
   welcomeText: any;
   headerLogoPath: any;
   defaultApprover: any = [];
+  defaultapprovers: any;
   defaultDays: any = 45;
   constructor(private fb: FormBuilder, private ccpaRequestService: CcparequestService,
-    private organizationService: OrganizationService,
-    private dsarFormService: DsarformService,
+              private organizationService: OrganizationService,
+              private dsarFormService: DsarformService,
     private ccpaFormConfigService: CCPAFormConfigurationService,
     private router: Router, private location: Location,
-    private activatedRoute: ActivatedRoute,
+    private activatedRoute: ActivatedRoute,                             
               private loadingbar: NgxUiLoaderService,
               private modalService: NgbModal) {
 

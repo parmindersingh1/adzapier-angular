@@ -542,7 +542,7 @@
                     <form>
                         <div class="form-group mg-b-5">
                             <label for="defaultapprover" class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">Default Approver</label>
-                            <select class="form-control" name="defaultapprover" id="defaultApprover" [(ngModel)]="defaultapprover">
+                            <select class="form-control" name="defaultapprovers" id="defaultApprover" [(ngModel)]="defaultapprovers">
                                 <option *ngFor="let item of defaultApprover" [value]="item.user_name">
                                     {{item.user_name}}
                                 </option>

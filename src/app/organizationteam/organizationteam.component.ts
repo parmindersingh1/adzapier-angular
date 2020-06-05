@@ -4,7 +4,7 @@ import { CompanyService } from '../company.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { UserService, OrganizationService } from '../_services';
 import { FormArray, FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
-import {NgxUiLoaderService} from "ngx-ui-loader";
+import {NgxUiLoaderService} from 'ngx-ui-loader';
 
 @Component({
   selector: 'app-organizationteam',
