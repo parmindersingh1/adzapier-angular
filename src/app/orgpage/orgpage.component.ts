@@ -5,7 +5,7 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { CompanyService } from '../company.service';
-import {NgxUiLoaderService} from "ngx-ui-loader";
+import {NgxUiLoaderService} from 'ngx-ui-loader';
 
 @Component({
   selector: 'app-orgpage',
@@ -41,9 +41,8 @@ export class OrgpageComponent implements OnInit {
   myContext;
   showOrgDetails: boolean = false;
   isEditProperty: boolean;
-  isEditOrganization: boolean;
-  p: number = 1;
-  pageSize: any = 20;
+  p: number = 1; 
+  pageSize: any = 5;
   totalCount: any;
   paginationConfig = { itemsPerPage: this.pageSize, currentPage: this.p, totalItems: this.totalCount };
   selectedOrganization: any = [];
@@ -136,33 +135,6 @@ export class OrgpageComponent implements OnInit {
     if (this.editOrganisationForm.invalid) {
       return false;
     } else {
-      if (this.isEditOrganization) {
-      const updateObj = {
-        orgname: this.editOrganisationForm.value.organizationname,
-        taxID: this.editOrganisationForm.value.taxidnumber,
-        address1: this.editOrganisationForm.value.addressone,
-        address2: this.editOrganisationForm.value.addresstwo,
-        city: this.editOrganisationForm.value.cityname,
-        state: this.editOrganisationForm.value.statename,
-        zipcode: this.editOrganisationForm.value.zipcodenum
-      };
-      this.loading.start();
-      this.orgservice.updateOrganization(data.oid, updateObj).subscribe((res) => {
-        this.loading.stop();
-        if (res) {
-          this.orgservice.emitUpdatedOrganization.emit(res);
-          alert('Organization updated successfully!');
-          this.orgDetails = [];
-          this.showOrgDetails = false;
-          this.loadOrganizationList();
-          this.isEditable = false;
-          this.onResetEditOrganization();
-        }
-      }, (error) => {
-        this.loading.stop();
-        alert(JSON.stringify(error));
-      });
-    } else {
       const addObj = {
         orgname: this.editOrganisationForm.value.organizationname,
         taxID: this.editOrganisationForm.value.taxidnumber,
@@ -178,9 +150,10 @@ export class OrgpageComponent implements OnInit {
         if (res) {
           this.orgservice.emitUpdatedOrganization.emit(res);
           this.orgservice.setCurrentOrgWithProperty(res);
-          this.orgservice.changeCurrentSelectedProperty(res);
+         // this.orgservice.changeCurrentSelectedProperty(res);
           this.viewOrganization(res.response.id);
           alert('Organization Added successfully!');
+          this.orgservice.isOrganizationUpdated.next(true);
           this.onResetEditOrganization();
           this.orgDetails = [];
           this.showOrgDetails = false;
@@ -191,12 +164,9 @@ export class OrgpageComponent implements OnInit {
         this.loading.stop();
         alert(JSON.stringify(error));
       });
+    
     }
-    }
-    // console.log(this.editOrganisationForm.value, 'value..');
-    // if (this.editOrganisationForm.valid) {
-
-    // }
+    
   }
 
   open(content, data) {
@@ -260,7 +230,6 @@ export class OrgpageComponent implements OnInit {
 
   organizationModalPopup(content, data) {
     if (data !== '') {
-      this.isEditOrganization = true;
       this.myContext = { oid: data.id };
       this.organizationname = data.orgname;
       this.taxidnumber = data.taxID;
@@ -277,7 +246,6 @@ export class OrgpageComponent implements OnInit {
         this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
       });
     } else {
-      this.isEditOrganization = false;
       this.organizationname = '';
       this.taxidnumber = '';
       this.addressone = '';
@@ -318,37 +286,28 @@ export class OrgpageComponent implements OnInit {
     });
   }
 
-
-	onChangeEvent(event) {
-		this.paginationConfig.itemsPerPage = Number(event.target.value);
-  }
-
-  viewOrganization(orgID) {
-    this.router.navigate(['/organizationdetails', orgID]);
-  }
-
-  removeOrganization(id) {
-    this.loading.start();
-    this.companyService.removeTeamMember(id).subscribe((data) => {
-      this.loading.stop();
+  enableOrganization(id) {
+    const reqObj = {
+      active: true
+    };
+    this.orgservice.disableOrganization(id, reqObj).subscribe((data) => {
       if (data) {
-        alert('Selected oragnization has been disabled!');
+        alert('Selected oragnization has been enabled!');
+        this.loadOrganizationList();
+        this.orgservice.isOrganizationUpdated.next(true);
       }
     }, (err) => {
       this.loading.stop();
       alert(err);
     });
   }
-
-  manageSelecteditem(data) {
-    this.selectedOrganization.length = 0;
-    this.selectedOrganization.push(data);
-    this.orgservice.changeCurrentManagedOrganization(data);
-
+  
+	onChangeEvent(event) {
+		this.paginationConfig.itemsPerPage = Number(event.target.value);
   }
-
-  disableOtherItems(data): boolean {
-    return this.selectedOrganization.filter((t) => t.id === data.id).length > 0;
+  
+  viewOrganization(orgID) {
+    this.router.navigate(['/organizationdetails', orgID]);
   }
 
   sortNumberColumn() {

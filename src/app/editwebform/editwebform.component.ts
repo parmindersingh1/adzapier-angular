@@ -6,7 +6,7 @@ import { OrganizationService } from '../_services';
 import { CcparequestService } from '../_services/ccparequest.service';
 import { FormArray, NgForm } from '@angular/forms';
 import { CcpadataService } from '../_services/ccpadata.service';
-import {NgxUiLoaderService} from "ngx-ui-loader";
+import {NgxUiLoaderService} from 'ngx-ui-loader';
 
 @Component({
   selector: 'app-editwebform',

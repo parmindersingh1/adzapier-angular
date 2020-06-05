@@ -126,9 +126,9 @@
       justify-content: space-between;
       padding: 3px 5px 5px 5px;
       line-height: 0px;
-      height: 20px;
       font-size: 11px;
-      margin: 5px 5px 5px 0px;
+      align-items: center;
+      margin: 0px 5px 0px 0px;
   }
 
   .rotateEditicon {
@@ -274,6 +274,26 @@
     height: 1.5rem !important;
   }
 
+  .dsar-formwrapper {
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    box-shadow: 1px 1px 2px #d0d0d0;
+  }
+
+  .dsar-formwrapper > ul.nav-tabs > li > a {
+    border-bottom-width: 1px;
+    background-color: #fff;
+    border: 0;
+    border-radius: 0;
+    border-bottom: 2px solid green;;
+  }
+
+  .dsar-formwrapper > ul.nav-tabs > li a.nav-link.active {
+    background-color: #fff;
+    z-index: 5;
+    color: #0168fa;
+    border-bottom: 2px solid #0168fa;
+  }
   
 .displayblock {
   display: block;
@@ -302,6 +322,7 @@
 
 .logocontainer {
   border-radius: 4px 4px 0px 0px;
+  background-color: #3968fa;
 }
 
 #cdk-drop-list-0 .dsarform-box:first-child, #cdk-drop-list-0 .dsarform-box:nth-child(2) {
@@ -343,3 +364,4 @@ input[type='color'] {
   margin: 0;
   height: 24px;
 }
+

@@ -4,7 +4,7 @@ import { OrganizationService, AuthenticationService, UserService } from '../../.
 import { Observable } from 'rxjs';
 import { BsDropdownConfig } from 'ngx-bootstrap/dropdown';
 import { Organization } from 'src/app/_models/organization';
-import { mergeMap, switchMap } from 'rxjs/operators';
+import { mergeMap, switchMap, distinctUntilKeyChanged, distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
   selector: 'app-header',
@@ -12,7 +12,7 @@ import { mergeMap, switchMap } from 'rxjs/operators';
   styleUrls: ['./header.component.scss'],
   providers: [{ provide: BsDropdownConfig, useValue: { isAnimated: true, autoClose: true } }]
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent implements  OnInit {
   isCollapsed = true;
   accessHeader: boolean;
   public currentLoggedInUser: string;
@@ -44,6 +44,7 @@ export class HeaderComponent implements OnInit {
   orgPropertyMenu: any;
   userID: any;
   propList: any;
+  isOrganizationUpdated: boolean;
   constructor(
     private router: Router,
     private activatedroute: ActivatedRoute,
@@ -55,9 +56,17 @@ export class HeaderComponent implements OnInit {
       this.currentUser = x;
       if (this.currentUser) {
         this.isCollapsed = false;
-      //  this.getLoggedInUserDetails();
+        this.getLoggedInUserDetails();
         this.loadOrganizationList();
         this.loadOrganizationWithProperty();
+      }
+    });
+
+    this.orgservice.isOrganizationUpdated.subscribe((t) => {
+      this.isOrganizationUpdated = t;
+      if (this.isOrganizationUpdated) {
+        this.loadOrganizationWithProperty();
+        this.currentSelectedProperty();
       }
     });
   }
@@ -291,24 +300,42 @@ export class HeaderComponent implements OnInit {
   }
 
   currentSelectedProperty() {
-    this.orgservice.currentProperty.subscribe((data) => {
+    // tslint:disable-next-line: max-line-length
+    this.orgservice.currentProperty.pipe(distinctUntilChanged())
+     .subscribe((data) => {
       if (data) {
         this.currentProperty = data.property_name;
-        this.currentOrganization = data.organization_name;
-        this.selectedOrgProperties.push(data);
-        this.isPropSelected(data);
-      } else {
-        const orgDetails = this.orgservice.getCurrentOrgWithProperty();
-        if (orgDetails !== undefined) {
-          if (orgDetails.user_id === this.userID) {
-            this.currentOrganization = orgDetails.organization_name || orgDetails.response.orgname;
-            this.currentProperty = orgDetails.property_name;
-            this.selectedOrgProperties.push(orgDetails);
-            this.isPropSelected(orgDetails);
-          }
+        this.currentOrganization = data.organization_name || data.response.orgname;
+        if (this.currentProperty !== undefined) {
+          this.selectedOrgProperties.push(data);
+          this.isPropSelected(data);
         }
       }
+      
     });
+   
+    this.orgservice.editedProperty.subscribe((prop) => {
+      if (prop) {
+        this.currentProperty = prop.response.name;
+        const orgDetails = this.orgservice.getCurrentOrgWithProperty();
+        orgDetails.property_name = prop.response.name;
+        orgDetails.property_id = prop.response.id;
+        this.orgservice.updateCurrentOrgwithProperty(orgDetails);
+      }
+    });
+
+    this.orgservice.editedOrganization.subscribe((org) => {
+      if (org) {
+        this.currentOrganization = org.response.orgname;
+        const orgDetails = this.orgservice.getCurrentOrgWithProperty();
+        orgDetails.organization_id = org.response.id;
+        orgDetails.organization_name = org.response.orgname;
+        this.orgservice.updateCurrentOrgwithProperty(orgDetails);
+      } else {
+        this.loadOrgPropertyFromLocal();
+      }
+    });
+
   }
 
   toggleNavbar() {
@@ -326,7 +353,6 @@ export class HeaderComponent implements OnInit {
   loadOrganizationWithProperty() {
     this.orgservice.getOrganizationWithProperty().subscribe((data)=>{
       this.orgPropertyMenu = data.response;
-      console.log(this.orgPropertyMenu,'pmenu..');
     } );
   }
 
@@ -335,4 +361,17 @@ export class HeaderComponent implements OnInit {
       return this.propList.filter((t) =>  t.id === prop.property_id && t.active === false).length > 0;
     }
   }
+
+  loadOrgPropertyFromLocal() {
+    const orgDetails = this.orgservice.getCurrentOrgWithProperty();
+    if (orgDetails !== undefined) {
+      if (orgDetails.user_id === this.userID) {
+          this.currentOrganization = orgDetails.organization_name ? orgDetails.organization_name : orgDetails.response.orgname;
+          this.currentProperty = orgDetails.property_name;
+          this.selectedOrgProperties.push(orgDetails);
+          this.isPropSelected(orgDetails);
+      }
+    }
+  }
+
 }

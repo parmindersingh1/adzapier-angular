@@ -180,6 +180,10 @@ a.dropdown-item > i {
 .container, .container-fluid {
     margin-bottom: 50px;
 }
+
+.searchfield.mt-3 .form-inline {
+    font-weight: normal;
+}
 // @media (min-width: 576px) {
 //     .card-body {
 //         padding: 0 15px !important;

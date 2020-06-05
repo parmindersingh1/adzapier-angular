@@ -4,7 +4,6 @@ import { OrganizationService, UserService } from '../_services';
 import { FormGroup, FormBuilder, Validators, FormControl, FormArray } from '@angular/forms';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { CompanyService } from '../company.service';
-import {NgxUiLoaderService} from "ngx-ui-loader";
 @Component({
   selector: 'app-organizationdetails',
   templateUrl: './organizationdetails.component.html',
@@ -52,20 +51,32 @@ export class OrganizationdetailsComponent implements OnInit {
   managedOrganization: any;
   searchText: any;
   searchPropertyText: any;
+  currentManagedOrgID: any;
+  currrentManagedPropID: any;
   constructor(private activatedRoute: ActivatedRoute,
               private orgService: OrganizationService,
               private modalService: NgbModal,
               private formBuilder: FormBuilder,
               private companyService: CompanyService,
               private userService: UserService,
-              private router: Router,
-              private loading: NgxUiLoaderService,
-  ) {
-
+              private router: Router) {
+                this.orgService.currentProperty.subscribe((data) => {
+                  this.currentManagedOrgID = data.organization_id;
+                  this.currrentManagedPropID = data.property_id;
+                });
      }
 
   ngOnInit() {
-
+    this.orgService.currentProperty.subscribe((response) => {
+      if (response !== '') {
+        this.currentManagedOrgID = response.organization_id;
+        this.currrentManagedPropID = response.property_id;
+      } else {
+        const orgDetails = this.orgService.getCurrentOrgWithProperty();
+        this.currentManagedOrgID = orgDetails.organization_id;
+        this.currrentManagedPropID = orgDetails.property_id;
+      }
+    });
     this.loadRoleList();
    
     this.activatedRoute.paramMap.subscribe(params => {
@@ -73,16 +84,11 @@ export class OrganizationdetailsComponent implements OnInit {
       console.log(this.organizationID, 'organizationID..');
       this.loadOrganizationByID(this.organizationID);
       this.getPropertyList(this.organizationID);
-      this.loadCompanyTeamMembers(this.organizationID);
+      this.loadOrgTeamMembers(this.organizationID);
      
     });
-
-    this.orgService.currentOrganization.subscribe((org) => {
-      if (org) {
-        console.log(JSON.stringify(org),'orgdetails..');
-        this.managedOrganization = org;
-      }
-    });
+    
+    
     this.isEditProperty = false;
     const urlRegex = '(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?';
     const zipRegex = '^[0-9]*$'; //'^[0-9]{6}(?:-[0-9]{4})?$';
@@ -111,9 +117,7 @@ export class OrganizationdetailsComponent implements OnInit {
   get orgProp() { return this.organisationPropertyForm.controls; }
   get editOrg() { return this.editOrganisationForm.controls; }
   loadOrganizationByID(id) {
-    this.loading.start();
     this.orgService.getOrganizationByID(id).subscribe((data) => {
-      this.loading.stop();
       this.organizationName = data.response.orgname;
       this.addressOne = data.response.address1;
       this.addressTwo = data.response.address2;
@@ -126,10 +130,8 @@ export class OrganizationdetailsComponent implements OnInit {
   }
 
   getPropertyList(id): any {
-    this.loading.start();
     this.isOpen = !this.isOpen;
     this.orgService.getPropertyList(id).subscribe((data) => {
-      this.loading.stop();
       this.orgService.emitUpdatedOrgList.emit(data.response);
       if (data.response.length === 0) {
         alert("Adding property is mandatory. Add Property first.");
@@ -193,38 +195,36 @@ export class OrganizationdetailsComponent implements OnInit {
         state: this.editOrganisationForm.value.state,
         zipcode: this.editOrganisationForm.value.zipcode
       };
-      this.loading.start();
       this.orgService.updateOrganization(this.organizationID, updateObj).subscribe((res) => {
-        this.loading.stop();
         if (res) {
           alert('Organization updated successfully!');
+          console.log(this.currentManagedOrgID,'currentManagedOrgID..');
+        
+          if (res.response.id === this.currentManagedOrgID) {
+            this.orgService.updateEditedOrganization(res);
+          } 
+          this.orgService.isOrganizationUpdated.next(true);
           this.modalService.dismissAll('Data Saved!');
         }
       }, (error) => {
-        this.loading.stop();
         alert(JSON.stringify(error));
       });
       }
   }
 
   disableProperty(orgId, propId) {
-    this.loading.start();
     this.orgService.disableProperty(orgId, propId).subscribe((data) => {
-      this.loading.stop();
       if (data) {
         alert('Property has been disabled.');
         this.getPropertyList(this.organizationID);
       }
     }, (err) => {
-      this.loading.stop();
       alert(JSON.stringify(err));
     });
   }
 
   pathValues() {
-    this.loading.start();
     this.orgService.getOrganizationByID(this.organizationID).subscribe((data) => {
-      this.loading.stop();
       this.organizationName = data.response.orgname;
       this.addressOne = data.response.address1;
       this.addressTwo = data.response.address2;
@@ -233,12 +233,12 @@ export class OrganizationdetailsComponent implements OnInit {
       this.taxID = data.response.tax_id;
       this.zipcode = data.response.zipcode;
     });
-
+ 
   }
 
   onSubmit() {
     this.submitted = true;
-
+ 
     if (this.organisationPropertyForm.invalid) {
       return false;
     } else {
@@ -248,15 +248,13 @@ export class OrganizationdetailsComponent implements OnInit {
           website: this.organisationPropertyForm.value.website,
           logo_url: this.organisationPropertyForm.value.logourl
         };
-        this.loading.start();
         this.orgService.addProperties(this.organizationID, reqObj).subscribe((result) => {
-          this.loading.stop();
           if (result) {
             alert('New property has been added');
             this.getPropertyList(this.organizationID);
+            this.orgService.isOrganizationUpdated.next(true);
           }
         }, (error) => {
-          this.loading.stop();
           console.log(error, 'error..');
         });
         this.organisationPropertyForm.reset();
@@ -267,17 +265,21 @@ export class OrganizationdetailsComponent implements OnInit {
           website: this.organisationPropertyForm.value.website,
           logo_url: this.organisationPropertyForm.value.logourl
         };
-        this.loading.start();
         this.orgService.editProperties(this.myContext.oid, this.myContext.pid, reqObj).subscribe((res) => {
-          this.loading.stop();
           if (res) {
             alert('Property has been updated!');
             this.getPropertyList(res.response.oid);
+           
+            if (res.response.id === this.currrentManagedPropID) {
+             // this.orgService.changeCurrentSelectedProperty(res);
+              const orgDetails = this.orgService.getCurrentOrgWithProperty();
+              this.orgService.updateEditedProperty(res);
+            }
           }
+         // this.orgService.isOrganizationUpdated.next(true);
           this.organisationPropertyForm.reset();
           this.modalService.dismissAll();
         }, (error) => {
-          this.loading.stop();
           console.log(error, 'error..');
         });
       }
@@ -289,16 +291,12 @@ export class OrganizationdetailsComponent implements OnInit {
     this.paginationConfig.currentPage = event;
     const pagelimit = '&limit=' + this.paginationConfig.itemsPerPage + '&page=' + this.paginationConfig.currentPage;
     const key = 'response';
-    this.loading.start();
-    this.companyService.getCompanyTeamMembers(pagelimit).subscribe((data) => {
-      this.loading.stop();
     this.orgService.getOrgTeamMembers(this.organizationID, pagelimit).subscribe((data) => {
       this.organizationTeamMemberList = data[key];
       this.paginationConfig.totalItems = data.count;
       return this.organizationTeamMemberList;
     });
-  });
-}
+  }
 
   onChangeEvent(event) {
     this.paginationConfig.itemsPerPage = Number(event.target.value);
@@ -308,9 +306,7 @@ export class OrganizationdetailsComponent implements OnInit {
     this.propertyPageConfig.currentPage = event;
     const pagelimit = '&limit=' + this.propertyPageConfig.itemsPerPage + '&page=' + this.propertyPageConfig.currentPage;
     // const key = 'response';
-    this.loading.start();
     this.orgService.getPropertyList(this.organizationID, pagelimit).subscribe((data) => {
-      this.loading.stop();
       this.propertyPageConfig.totalItems = data.count;
       this.propertyList = data.response;
       return this.propertyList;
@@ -337,18 +333,15 @@ export class OrganizationdetailsComponent implements OnInit {
         orgid: this.organizationID,
         user_level: 'organization'
       };
-      this.loading.start();
       this.companyService.inviteUser(requestObj)
         .subscribe((data) => {
-          this.loading.stop();
           if (data) {
             alert('Details has been updated successfully!');
-            this.loadCompanyTeamMembers(this.organizationID);
+            this.loadOrgTeamMembers(this.organizationID);
             this.inviteUserOrgForm.reset();
             this.modalService.dismissAll('Data Saved!');
           }
         }, (error) => {
-          this.loading.stop();
           alert(error);
           this.modalService.dismissAll('Error!');
         });
@@ -356,9 +349,7 @@ export class OrganizationdetailsComponent implements OnInit {
   }
 
   loadRoleList() {
-    this.loading.start();
     this.userService.getRoleList().subscribe((data) => {
-      this.loading.stop();
       if (data) {
         const key = 'response';
         // const roleid = data[key];
@@ -367,45 +358,41 @@ export class OrganizationdetailsComponent implements OnInit {
     });
   }
 
-  loadCompanyTeamMembers(orgID) {
+  loadOrgTeamMembers(orgID) {
     const key = 'response';
-    const pagelimit = '?limit=' + this.paginationConfig.itemsPerPage + '&page=' + this.paginationConfig.currentPage;
-    this.loading.start();
-    this.companyService.getCompanyTeamMembers(pagelimit).subscribe((data) => {
-      this.loading.stop();
     const pagelimit = '&limit=' + this.paginationConfig.itemsPerPage + '&page=' + this.paginationConfig.currentPage;
     this.orgService.getOrgTeamMembers(orgID, pagelimit).subscribe((data) => {
       this.organizationTeamMemberList = data[key];
       this.paginationConfig.totalItems = data.count;
     });
-  });
-}
+  }
 
   viewOrganizationTeam() {
     this.router.navigate(['/organizationteam', this.organizationID]);
   }
 
-  removeOrganization(id) {
-    this.companyService.removeTeamMember(id).subscribe((data) => {
+  disableOrganization() {
+    const reqObj = {
+      active: false
+    };
+    this.orgService.disableOrganization(this.organizationID, reqObj).subscribe((data) => {
       if (data) {
         alert('Selected oragnization has been disabled!');
+        this.orgService.isOrganizationUpdated.next(true);
+        this.router.navigate(['/organizations']);
       }
     }, (err) => {
-      this.loading.stop();
       alert(err);
     });
   }
 
   removeTeamMember(id) {
-    this.loading.start()
     this.companyService.removeTeamMember(id).subscribe((data) => {
-      this.loading.stop()
       if (data) {
         alert('User has been removed.');
-        this.loadCompanyTeamMembers(this.organizationID);
+        this.loadOrgTeamMembers(this.organizationID);
       }
     }, (err) => {
-      this.loading.stop();
       alert(JSON.stringify(err));
     });
    }

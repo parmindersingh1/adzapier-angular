@@ -16,15 +16,27 @@
                     <h6 class="mg-b-0 tx-color-03">
                         Organization Details
                     </h6>
-                    <div class="d-flex pd-0">
-                        <button (click)="editOrganizationModalPopup(editOrgModal)"
-                            class="btn btn-sm btn-white float-right">
-                            <i-feather name="edit-2" class="feather-16"></i-feather>
-                            <span class="d-none d-sm-inline mg-l-0"> Edit</span>
-                        </button>
+                    <!-- <div class="d-flex pd-0">
+                       
                     </div>
-                </div>
-
+                    <div class="d-flex pd-0">
+                       
+                    </div> -->
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                        <button (click)="editOrganizationModalPopup(editOrgModal)"
+                        class="btn btn-sm btn-white float-right">
+                        <i-feather name="edit-2" class="feather-16"></i-feather>
+                        <span class="d-none d-sm-inline mg-l-0"> Edit</span>
+                    </button>
+                        <button (click)="disableOrganization()"
+                        class="btn btn-sm btn-white float-right">
+                        <i class="far fa-trash-alt tx-danger fa-sm"></i>
+                        <span class="d-none d-sm-inline mg-l-0"> Delete</span>
+                    </button>
+                      </div>
+                      
+                </div> 
+        
                 <div class="card-body">
                     <div class="row row-sm">
                         <div class="col-sm-2 mg-t-5 mg-sm-t-5">
@@ -124,10 +136,11 @@
                             <th>Status</th>
                         </tr>
                     </thead>
-                    <tbody>
-                            <tr *ngFor="let list of propertyList | paginate:propertyPageConfig | filter: searchPropertyText:'name';  let i = index">
+                    <tbody> 
+                            <tr *ngFor="let list of propertyList | paginate:propertyPageConfig | filter: searchPropertyText:'name':'website';  let i = index">
+                    
                                 <td>
-                                    {{ (propertyPageConfig.currentPage - 1) * paginationConfig.itemsPerPage + i + 1 }}
+                                    {{ (propertyPageConfig.currentPage - 1) * propertyPageConfig.itemsPerPage + i + 1 }}
                                 </td>
                                 <td>
                                     <img class="img-fluid" [src]="list.logo_url?list.logo_url:'assets/imgs/no_image.png'" />
@@ -149,15 +162,23 @@
                                     <!-- <i-feather name="trash-2" class="feather-16"></i-feather> -->
                                 </td>
                                 <td>
-                                    <span *ngIf="list.active == true" class="badge badge-success">Active</span>
-                                    <span *ngIf="list.active == false" class="badge badge-light">Disabled</span>
+                                    <span [ngClass]="{'badge-success':list.active,'badge-secondary':!list.active}" class="badge">
+                                        <span>{{list.active?'Active':'Disabled'}}</span>
+                                    </span>
+                                    <!-- <span *ngIf="list.active == true" class="badge badge-success">Active</span>
+                                    <span *ngIf="list.active == false" class="badge badge-light">Disabled</span> -->
                                     </td>
-                            </tr> 
-                            <tr *ngIf="propertyList?.length == 0">
+                            </tr>
+                            <!-- <tr *ngIf="propertyList?.length == 0">
                                 <td colspan="7" class="txt-center">
                                     <div> No property found </div>
                                 </td>
+                            </tr> -->
+                            <tr>
+                                <td colspan="7" class="txt-center" *ngIf="(propertyList | filter: searchPropertyText:'name':'website')?.length===0">No
+                                    records found.</td>
                             </tr>
+                            
                     </tbody>
                 </table>
                 </div>
@@ -169,17 +190,18 @@
             </div>
         </div>
         <div class="divider-text mg-y-10">MEMBERS</div>
-        <div class="table-responsive">
+        <div class="table-responsive member-div">
             <div class="card">
-                <div card-header tx-semibold>
-                    <div class="mt-3" style="display: flex;">
+                <div class="card-header tx-semibold">
+                    <div class="searchfield mt-3" style="display: flex;">
                         <div class="col-3 input-group">
-                            <input class="form-control py-2 border-right-0 border" [(ngModel)]="searchText" type="search" value="search" id="example-search-input"/>
+                            <input class="form-control py-2 border-right-0 border" [(ngModel)]="searchText" type="search"
+                            value="search" id="example-search-input" />
                             <span class="input-group-append">
                                 <div class="input-group-text bg-transparent"><i class="fa fa-search"></i></div>
                             </span>
                         </div>
-                        <div class="col-4">
+                        <div class="col-5">
                         <div class="form-inline">
                             <div class="col-md-4 form-group pr-0">
                                 <label class="col-sm-5 col-form-label" for="name">View</label>
@@ -190,7 +212,7 @@
                                 <option value="15">15</option>
                             </select>                    
                             </div>
-                            <div col-md-5><label class="d-block">records at a time</label></div>
+                            <div class="col-md-5"><label class="d-block">records at a time</label></div>
                         </div>
                         </div>
                         <div class="col-sm-2 ml-auto">
@@ -228,19 +250,25 @@
                                         <span *ngIf="!isDateOrString(list.user_last_login)">{{list.user_last_login}}</span>
                                     </td>
                                     <td>
-                                        <button class="btn btn-sm btn-primary"  (click)="removeTeamMember(list.id)">Remove</button>
+                                        <a class="pd-r-5" (click)="removeTeamMember(list.id)">
+                                            <i class="far fa-trash-alt tx-danger fa-sm"></i>
+                                        </a>
                                     </td>
 
                                 </tr>
-                                <tr *ngIf="organizationTeamMemberList?.length == 0">
+                                <!-- <tr *ngIf="organizationTeamMemberList?.length == 0">
                                     <td colspan="7" class="txt-center">
                                         <div> No User found </div>
                                     </td>
+                                </tr> -->
+                                <tr>
+                                    <td colspan="7" class="txt-center" *ngIf="(organizationTeamMemberList | filter: searchText:'role_name':'user_email')?.length===0">No
+                                        records found.</td>
                                 </tr>
                         </tbody>
                     </table>
                 </div>
-                                 <div class="card-footer text-right">
+                <div class="card-footer text-right">
                     <pagination-controls id="userPagination" (pageChange)="pageChangeEvent($event)"></pagination-controls>
                 </div>
 
