@@ -26,6 +26,9 @@ export class VerifyemailComponent implements OnInit {
     this.userService.verifyEmailAddress(requestObj).subscribe((data) => {
       this.loading.stop();
       this.message = data;
+      console.log('message' , this.message);
+    }, error => {
+      this.loading.stop();
     });
   }
 

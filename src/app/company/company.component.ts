@@ -138,7 +138,7 @@ export class CompanyComponent implements OnInit {
         }, (error) => {
             this.loading.stop();
             alert(error);
-          this.modalService.dismissAll('Error!');
+            this.modalService.dismissAll('Error!');
           // this.isShowbtnVisible = true;
           // this.show = false;
         }
@@ -176,10 +176,11 @@ export class CompanyComponent implements OnInit {
   }
 
 
-  
+
 
   onChangeEvent(event) {
     this.paginationConfig.itemsPerPage = Number(event.target.value);
+    this.loadCompanyTeamMembers();
   }
 
   pageChangeEvent(event) {
