@@ -3,7 +3,7 @@ import { CompanyService } from '../company.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Validators, FormBuilder, FormGroup, FormArray, FormControl } from '@angular/forms';
 import { UserService } from '../_services';
-import {NgxUiLoaderService} from "ngx-ui-loader";
+import {NgxUiLoaderService} from 'ngx-ui-loader';
 @Component({
   selector: 'app-company',
   templateUrl: './company.component.html',
