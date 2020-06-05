@@ -12,7 +12,7 @@ import * as feather from 'feather-icons';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-   
+
   title = 'adzapier-analytics-ng';
   faCoffee = faCoffee;
   hideHeaderFooter = true;
@@ -21,7 +21,7 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    
+
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
         console.log(event.url.indexOf('editwebforms') === 0, 'editweb..');

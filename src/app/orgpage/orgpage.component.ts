@@ -5,6 +5,7 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { CompanyService } from '../company.service';
+import {NgxUiLoaderService} from 'ngx-ui-loader';
 
 @Component({
   selector: 'app-orgpage',
@@ -52,7 +53,8 @@ export class OrgpageComponent implements OnInit {
               private modalService: NgbModal, private sanitizer: DomSanitizer,
               private userService: UserService,
               private companyService: CompanyService,
-              private router: Router
+              private router: Router,
+              private loading: NgxUiLoaderService,
   ) { }
 
   ngOnInit() {
@@ -93,12 +95,14 @@ export class OrgpageComponent implements OnInit {
   // get name() { return this.organisationPropertyForm.get('name'); }
   // get website() { return this.organisationPropertyForm.get('website'); }
   // get logo_url() { return this.organisationPropertyForm.get('logo_url'); }
- 
 
-  loadOrganizationList() { 
+
+  loadOrganizationList() {
    // this.paginationConfig.currentPage = event;
     const pagelimit = '?limit=' + this.paginationConfig.itemsPerPage + '&page=' + this.paginationConfig.currentPage;
+    this.loading.start();
     this.orgservice.orglist(pagelimit).subscribe((data) => {
+      this.loading.stop();
       const key = 'response';
       this.orgList = data[key];
       this.paginationConfig.totalItems = data.count;
@@ -108,7 +112,7 @@ export class OrgpageComponent implements OnInit {
     // this.orgservice.orglist().subscribe((data) => {
     //   const key = 'response';
     //   this.orgList = data[key];
-    //   this.paginationConfig.totalItems = data.count; 
+    //   this.paginationConfig.totalItems = data.count;
     // });
 
   }
@@ -121,6 +125,7 @@ export class OrgpageComponent implements OnInit {
       const key = 'response';
       this.orgDetails.push(data[key]);
     }, (error) => {
+      this.loading.stop();
       alert(JSON.stringify(error));
     });
   }
@@ -139,7 +144,9 @@ export class OrgpageComponent implements OnInit {
         state: this.editOrganisationForm.value.statename,
         zipcode: this.editOrganisationForm.value.zipcodenum
       };
+      this.loading.start();
       this.orgservice.addOrganization(addObj).subscribe((res) => {
+        this.loading.stop();
         if (res) {
           this.orgservice.emitUpdatedOrganization.emit(res);
           this.orgservice.setCurrentOrgWithProperty(res);
@@ -154,6 +161,7 @@ export class OrgpageComponent implements OnInit {
           this.isEditable = false;
         }
       }, (error) => {
+        this.loading.stop();
         alert(JSON.stringify(error));
       });
     
@@ -268,7 +276,9 @@ export class OrgpageComponent implements OnInit {
   pageChangeEvent(event) {
     this.paginationConfig.currentPage = event;
     const pagelimit = '?limit=' + this.paginationConfig.itemsPerPage + '&page=' + this.paginationConfig.currentPage;
+    this.loading.start();
     this.orgservice.orglist(pagelimit).subscribe((data) => {
+      this.loading.stop();
       const key = 'response';
       this.orgList = data[key];
       this.paginationConfig.totalItems = data.count;
@@ -287,6 +297,7 @@ export class OrgpageComponent implements OnInit {
         this.orgservice.isOrganizationUpdated.next(true);
       }
     }, (err) => {
+      this.loading.stop();
       alert(err);
     });
   }

@@ -271,12 +271,12 @@ export class OrganizationdetailsComponent implements OnInit {
             this.getPropertyList(res.response.oid);
            
             if (res.response.id === this.currrentManagedPropID) {
-             this.orgService.updateEditedProperty(res);
-             
-              
+             // this.orgService.changeCurrentSelectedProperty(res);
+              const orgDetails = this.orgService.getCurrentOrgWithProperty();
+              this.orgService.updateEditedProperty(res);
             }
           }
-          this.orgService.isOrganizationUpdated.next(true);
+         // this.orgService.isOrganizationUpdated.next(true);
           this.organisationPropertyForm.reset();
           this.modalService.dismissAll();
         }, (error) => {

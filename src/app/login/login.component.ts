@@ -5,6 +5,7 @@ import { first } from 'rxjs/operators';
 
 import { AlertService, AuthenticationService, UserService } from './../_services';
 import { OrganizationService } from '../_services/organization.service';
+import {NgxUiLoaderService} from "ngx-ui-loader";
 
 @Component({
     templateUrl: 'login.component.html',
@@ -29,6 +30,7 @@ export class LoginComponent implements OnInit {
         private authenticationService: AuthenticationService,
         private alertService: AlertService,
         private orgservice: OrganizationService,
+        private loadingBar: NgxUiLoaderService,
         private userService: UserService
 
     ) {
@@ -90,7 +92,9 @@ export class LoginComponent implements OnInit {
     }
 
     getLoggedInUserDetails() {
+        this.loadingBar.start();
         this.userService.getLoggedInUserDetails().subscribe((data) => {
+            this.loadingBar.stop();
             this.userService.getCurrentUser.emit(data);
         });
     }

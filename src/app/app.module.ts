@@ -60,6 +60,8 @@ import { VerifyemailComponent } from './verifyemail/verifyemail.component';
 import { OrganizationdetailsComponent } from './organizationdetails/organizationdetails.component';
 import { OrganizationteamComponent } from './organizationteam/organizationteam.component';
 import { FilterPipe } from './filter.pipe';
+import {NgxUiLoaderModule} from 'ngx-ui-loader';
+import {ngxUiLoaderConfig} from './_constant/adzapier.contant';
 
 
 export const isMock = environment.mock;
@@ -122,7 +124,8 @@ export const isMock = environment.mock;
     CollapseModule.forRoot(),
     QuillModule.forRoot(),
     FeatherModule.pick(allIcons),
-    PaginationModule.forRoot()
+    PaginationModule.forRoot(),
+    NgxUiLoaderModule.forRoot(ngxUiLoaderConfig),
   ],
   providers: [
     AuthenticationService,

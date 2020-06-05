@@ -4,6 +4,7 @@ import { CompanyService } from '../company.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { UserService, OrganizationService } from '../_services';
 import { FormArray, FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
+import {NgxUiLoaderService} from "ngx-ui-loader";
 
 @Component({
   selector: 'app-organizationteam',
@@ -28,7 +29,9 @@ export class OrganizationteamComponent implements OnInit {
               private userService: UserService,
               private formBuilder: FormBuilder,
               private companyService: CompanyService,
-              private orgService: OrganizationService,) { }
+              private orgService: OrganizationService,
+              private loading: NgxUiLoaderService,
+              ) { }
 
   ngOnInit() {
     this.activatedRoute.paramMap.subscribe(params => {
@@ -49,6 +52,7 @@ export class OrganizationteamComponent implements OnInit {
 
   loadCompanyTeamMembers() {
     const key = 'response';
+    this.loading.start();
     this.companyService.getCompanyTeamMembers().subscribe((data) => {
       this.organizationTeamMemberList = data[key];
     });
@@ -64,7 +68,9 @@ export class OrganizationteamComponent implements OnInit {
   }
 
   loadRoleList() {
+    this.loading.start();
     this.userService.getRoleList().subscribe((data) => {
+      this.loading.stop();
       if (data) {
         const key = 'response';
         // const roleid = data[key];
@@ -85,14 +91,16 @@ export class OrganizationteamComponent implements OnInit {
     this.paginationConfig.currentPage = event;
     const pagelimit = '?limit=' + this.paginationConfig.itemsPerPage + '&page=' + this.paginationConfig.currentPage;
     const key = 'response';
+    this.loading.start();
     this.companyService.getCompanyTeamMembers().subscribe((data) => {
+      this.loading.stop();
       this.organizationTeamMemberList = data[key];
       this.paginationConfig.totalItems = data.count;
       return this.organizationTeamMemberList;
     });
   }
 
-  
+
 	onChangeEvent(event) {
 		this.paginationConfig.itemsPerPage = Number(event.target.value);
   }
@@ -110,14 +118,17 @@ export class OrganizationteamComponent implements OnInit {
         orgid: this.organizationID,
         user_level: 'organization'
       };
+      this.loading.start();
       this.companyService.inviteUser(requestObj)
         .subscribe((data) => {
+          this.loading.stop();
           if (data) {
             alert('Details has been updated successfully!');
             this.loadOrgTeamMembers(this.organizationID);
             this.modalService.dismissAll('Data Saved!');
           }
         }, (error) => {
+          this.loading.stop();
           alert(error);
           this.modalService.dismissAll('Error!');
         });
@@ -125,7 +136,9 @@ export class OrganizationteamComponent implements OnInit {
   }
 
   removeTeamMember(id) {
+   this.loading.start();
    this.companyService.removeTeamMember(id).subscribe((data)=>{
+     this.loading.stop();
      if (data) {
        alert('User has been removed.');
        this.loadOrgTeamMembers(this.organizationID);

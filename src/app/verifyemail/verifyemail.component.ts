@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { UserService } from '../_services';
+import {NgxUiLoaderService} from "ngx-ui-loader";
 
 @Component({
   selector: 'app-verifyemail',
@@ -10,7 +11,9 @@ import { UserService } from '../_services';
 export class VerifyemailComponent implements OnInit {
   public id: string;
   message: any;
-  constructor( private activatedRoute: ActivatedRoute, private userService: UserService) {
+  constructor( private activatedRoute: ActivatedRoute,
+               private loading: NgxUiLoaderService,
+               private userService: UserService) {
     this.activatedRoute.snapshot.paramMap.get('id');
   }
 
@@ -19,7 +22,11 @@ export class VerifyemailComponent implements OnInit {
     const requestObj = {
       token: this.id
     };
-    this.userService.verifyEmailAddress(requestObj).subscribe((data) => this.message = data);
+    this.loading.start();
+    this.userService.verifyEmailAddress(requestObj).subscribe((data) => {
+      this.loading.stop();
+      this.message = data;
+    });
   }
 
 }
