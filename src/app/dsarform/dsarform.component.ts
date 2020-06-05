@@ -10,7 +10,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { EditorChangeContent, EditorChangeSelection } from 'ngx-quill';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
-import {NgxUiLoaderService} from "ngx-ui-loader";
+import {NgxUiLoaderService} from 'ngx-ui-loader';
 
 @Component({
   selector: 'app-dsarform',

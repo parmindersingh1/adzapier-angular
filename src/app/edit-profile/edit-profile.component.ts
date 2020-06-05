@@ -3,7 +3,7 @@ import { Validators, FormBuilder, FormGroup, NgForm } from '@angular/forms';
 import { AuthenticationService, UserService } from '../_services';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MustMatch } from '../_helpers/must-match.validator';
-import {NgxUiLoaderService} from "ngx-ui-loader";
+import {NgxUiLoaderService} from 'ngx-ui-loader';
 
 @Component({
   selector: 'app-edit-profile',
