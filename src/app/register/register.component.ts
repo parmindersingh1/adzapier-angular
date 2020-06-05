@@ -13,7 +13,6 @@ import { MustMatch } from '../_helpers/must-match.validator';
     styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent implements OnInit {
-
     regForm: FormGroup;
     loading = false;
     submitted = false;

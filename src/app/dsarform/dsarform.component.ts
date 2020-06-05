@@ -10,6 +10,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { EditorChangeContent, EditorChangeSelection } from 'ngx-quill';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import {NgxUiLoaderService} from "ngx-ui-loader";
 
 @Component({
   selector: 'app-dsarform',
@@ -143,7 +144,8 @@ export class DsarformComponent implements OnInit, OnDestroy {
     private ccpaFormConfigService: CCPAFormConfigurationService,
     private router: Router, private location: Location,
     private activatedRoute: ActivatedRoute,
-    private modalService: NgbModal) {
+              private loadingbar: NgxUiLoaderService,
+              private modalService: NgbModal) {
 
     this.count = 0;
     // this.loading = true;
@@ -155,7 +157,9 @@ export class DsarformComponent implements OnInit, OnDestroy {
       // console.log(this.crid, 'crid..');
       // this.selectedwebFormControlList = this.
     });
+    this.loadingbar.start();
     this.organizationService.getSelectedOrgProperty.subscribe((response) => {
+      this.loadingbar.stop();
       console.log(response, 'response...SP..');
       this.selectedProperty = response;
     });
@@ -165,7 +169,9 @@ export class DsarformComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.loadingbar.start();
     this.organizationService.currentProperty.subscribe((response) => {
+      this.loadingbar.stop();
       if (response !== '') {
         this.selectedProperty = response.property_name;
         this.currentOrganization = response.organization_name;
@@ -186,7 +192,9 @@ export class DsarformComponent implements OnInit, OnDestroy {
     // this.loading = true;
     if (this.crid) {
       this.getCCPAdefaultConfigById();
+      this.loadingbar.start();
       this.webFormSelectedData = this.ccpaFormConfigService.currentFormData.subscribe((data) => {
+        this.loadingbar.stop();
         if (data) {
           this.propId = data.PID;
           this.orgId = data.OID;
@@ -262,7 +270,9 @@ export class DsarformComponent implements OnInit, OnDestroy {
   }
 
   getCCPAdefaultConfigById() {
+    this.loadingbar.start();
     this.ccpaRequestService.getCCPAdefaultRequestSubjectType().subscribe((data) => {
+      this.loadingbar.stop();
       if (data !== undefined) {
         const rdata = data['response'].request_type;
         const sdata = data['response'].subject_type;
@@ -272,6 +282,7 @@ export class DsarformComponent implements OnInit, OnDestroy {
         this.loading = false;
       }
     }, (error) => {
+      this.loadingbar.stop();
       console.log(JSON.stringify(error));
     });
   }
@@ -619,7 +630,7 @@ export class DsarformComponent implements OnInit, OnDestroy {
     //   if (this.changeControlType === 'checkbox') {
     //     this.checkboxBtnType = true;
     //     this.isRequestTypeSelected = false;
-    //   }  
+    //   }
 
     // }
 
@@ -681,21 +692,31 @@ export class DsarformComponent implements OnInit, OnDestroy {
     };
     // return false;
     if (this.orgId !== undefined && this.propId !== undefined && this.crid !== null) {
+      this.loadingbar.start();
       this.ccpaFormConfigService.updateCCPAForm(this.orgId, this.propId, this.crid, formObject)
         .subscribe((data) => {
+          this.loadingbar.stop();
           if (data) {
             alert('Form Updated!');
             this.dsarFormService.removeControls();
           }
-        }, (error) => console.log(JSON.stringify(error)));
+        }, (error) => {
+          this.loadingbar.stop();
+          console.log(JSON.stringify(error));
+        });
     } else {
+      this.loadingbar.start();
       this.ccpaFormConfigService.createCCPAForm(this.orgId, this.propId, formObject)
         .subscribe((data) => {
+          this.loadingbar.stop();
           if (data) {
             alert('New Form Saved!');
             this.dsarFormService.removeControls();
           }
-        }, (error) => console.log(JSON.stringify(error)));
+        }, (error) => {
+          this.loadingbar.stop();
+          console.log(JSON.stringify(error));
+        });
     }
     this.active = 3;
     // selectedOrgProperty

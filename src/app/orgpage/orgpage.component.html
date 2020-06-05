@@ -9,7 +9,7 @@
 </div>
 <div class="table-responsive organization-div">
     <div class="card">
-        <div class="card-header tx-semibold">
+        <div class="card-header">
             <div class="searchfield mt-3">
                 <div class="col-3 input-group">
                     <input class="form-control py-2 border-right-0 border" [(ngModel)]="searchText" type="search"
@@ -21,7 +21,7 @@
                 <div class="col-4">
                     <div class="form-inline">
                         <div class="col-md-5 form-group pr-0">
-                            <label class="col-sm-5 col-form-label" for="name">View</label>
+                            <label class="col-sm-5 col-form-label" for="PerPage">View</label>
                             <select id="PerPage" class="form-control" [(ngModel)]="pageSize"
                                 (change)="onChangeEvent($event)">
                                 <option value="10">10</option>
@@ -108,13 +108,15 @@
                 <div class="col-sm-12">
                     <div class="form-group">
                         <label for="organizationname">Name</label>
-                        <input type="text" class="form-control" [(ngModel)]="organizationname"
+                        <input minlength="2" maxlength="20" type="text" class="form-control" [(ngModel)]="organizationname"
                             formControlName="organizationname" name="organizationname"
                             [ngClass]="{ 'is-invalid': submitted && editOrg.organizationname.errors }" />
                         <div *ngIf="submitted && editOrg.organizationname.errors" class="invalid-feedback">
                             <div *ngIf="editOrg.organizationname.errors.required">Organization name is required</div>
                             <div *ngIf="editOrg.organizationname.errors.pattern">Organization allow only Alphanumeric
                             </div>
+                          <div *ngIf="editOrg.organizationname.errors.minlength">Organization must be at least 2 characters long.</div>
+                          <div *ngIf="editOrg.organizationname.errors.maxlength">Organization should not be greater than 20 characters.</div>
                         </div>
                     </div>
                 </div>
@@ -131,10 +133,12 @@
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label for="addressone">Address 1</label>
-                        <input type="text" class="form-control" [(ngModel)]="addressone" formControlName="addressone"
+                        <input type="text"  minlength="6" maxlength="200" class="form-control" [(ngModel)]="addressone" formControlName="addressone"
                             name="addressone" [ngClass]="{ 'is-invalid': submitted && editOrg.addressone.errors }" />
                         <div *ngIf="submitted && editOrg.addressone.errors" class="invalid-feedback">
                             <div *ngIf="editOrg.addressone.errors.required">Address 1 is required</div>
+                          <div *ngIf="editOrg.addressone.errors.minlength">Address 1 must be at least 6 characters long.</div>
+                          <div *ngIf="editOrg.addressone.errors.maxlength">Address 1 should not be greater than 200 characters.</div>
                         </div>
                     </div>
 
@@ -145,20 +149,24 @@
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label for="addresstwo">Address 2</label>
-                        <input type="text" class="form-control" [(ngModel)]="addresstwo" formControlName="addresstwo"
+                        <input type="text"  minlength="6" maxlength="200" class="form-control" [(ngModel)]="addresstwo" formControlName="addresstwo"
                             name="addresstwo" [ngClass]="{ 'is-invalid': submitted && editOrg.addresstwo.errors }" />
                         <div *ngIf="submitted && editOrg.addresstwo.errors" class="invalid-feedback">
                             <div *ngIf="editOrg.addresstwo.errors.required">Address 2 is required</div>
+                          <div *ngIf="editOrg.addresstwo.errors.minlength">Address 2 must be at least 6 characters long.</div>
+                          <div *ngIf="editOrg.addresstwo.errors.maxlength">Address 2 should not be greater than 200 characters.</div>
                         </div>
                     </div>
                 </div>
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label for="city">City</label>
-                        <input type="text" class="form-control" [(ngModel)]="cityname" formControlName="cityname"
+                        <input  minlength="2" maxlength="20" type="text" class="form-control" [(ngModel)]="cityname" formControlName="cityname"
                             name="cityname" [ngClass]="{ 'is-invalid': submitted && editOrg.cityname.errors }" />
                         <div *ngIf="submitted && editOrg.cityname.errors" class="invalid-feedback">
                             <div *ngIf="editOrg.cityname.errors.required">City is required</div>
+                          <div *ngIf="editOrg.cityname.errors.minlength">City must be at least 2 characters long.</div>
+                          <div *ngIf="editOrg.cityname.errors.maxlength">City should not be greater than 20 characters.</div>
                         </div>
                     </div>
                 </div>
@@ -168,20 +176,22 @@
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label for="state">State</label>
-                        <input type="text" class="form-control" [(ngModel)]="statename" formControlName="statename"
+                        <input type="text" maxlength="15" class="form-control" [(ngModel)]="statename" formControlName="statename"
                             name="statename" [ngClass]="{ 'is-invalid': submitted && editOrg.statename.errors }" />
                         <div *ngIf="submitted && editOrg.statename.errors" class="invalid-feedback">
                             <div *ngIf="editOrg.statename.errors.required">State is required</div>
+                          <div *ngIf="editOrg.statename.errors.maxlength">State should not be greater than 15 characters.</div>
                         </div>
                     </div>
                 </div>
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label for="state">Zip Code</label>
-                        <input type="text" class="form-control" [(ngModel)]="zipcodenum" formControlName="zipcodenum"
+                        <input type="text"  minlength="6" maxlength="6" class="form-control" [(ngModel)]="zipcodenum" formControlName="zipcodenum"
                             name="zipcodenum" [ngClass]="{ 'is-invalid': submitted && editOrg.zipcodenum.errors }" />
                         <div *ngIf="submitted && editOrg.zipcodenum.errors" class="invalid-feedback">
                             <div *ngIf="editOrg.zipcodenum.errors.required">Zipcode is required</div>
+                            <div *ngIf="editOrg.zipcodenum.errors.minlength">Zipcode must be at least 6 characters long.</div>
                         </div>
                     </div>
                 </div>

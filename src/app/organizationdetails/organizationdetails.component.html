@@ -5,7 +5,7 @@
               <li class="breadcrumb-item"><a routerLink="/settings">Settings</a></li>
               <li class="breadcrumb-item active" aria-current="page"><a routerLink="/organizations">Organizations</a></li>
               <li class="breadcrumb-item active" aria-current="page">Organization Details</li>
-              
+
             </ol>
           </nav>
     </div>
@@ -14,7 +14,7 @@
             <div class="card">
                 <div class="card-header d-flex align-items-center justify-content-between pd-y-10">
                     <h6 class="mg-b-0 tx-color-03">
-                        Organization Details  
+                        Organization Details
                     </h6>
                     <div class="d-flex pd-0">
                         <button (click)="editOrganizationModalPopup(editOrgModal)"
@@ -23,37 +23,37 @@
                             <span class="d-none d-sm-inline mg-l-0"> Edit</span>
                         </button>
                     </div>
-                </div> 
-        
+                </div>
+
                 <div class="card-body">
                     <div class="row row-sm">
                         <div class="col-sm-2 mg-t-5 mg-sm-t-5">
                             <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">
                                 Organization</label>
-                            <p class="tx-primary mg-b-0">{{organizationName}}</p>
+                            <p class="mg-b-0">{{organizationName}}</p>
                         </div>
                         <div class="col-sm-2 mg-t-5 mg-sm-t-5">
                             <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Address</label>
                             <p class="mg-b-0">{{addressOne}} {{addressTwo}} {{city}}
-                                {{state}} {{zipcode}} 
+                                {{state}} {{zipcode}}
                             </p>
                         </div>
-    
-                        <div class="col-sm-2 mg-t-5 mg-sm-t-5">
-                            <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">TaxID</label>
-                            <p class="mg-b-0">{{taxID}}</p>
-                        </div>
-                        
+<!--    -->
+<!--                        <div class="col-sm-2 mg-t-5 mg-sm-t-5">-->
+<!--                            <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">TaxID</label>-->
+<!--                            <p class="mg-b-0">{{taxID}}</p>-->
+<!--                        </div>-->
+<!--                        -->
                         <div class="col-sm-2 mg-t-5 mg-sm-t-5">
                             <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Team Member</label>
                             <p class="mg-b-0"><a class="alink" (click)="viewOrganizationTeam()">Team Members</a></p>
-                        </div> 
+                        </div>
                     </div><!-- row -->
                 </div>
             </div>
-        </div> 
+        </div>
     </div>
- 
+
     <div class="divider-text mg-y-10">Properties</div>
         <div class="table-responsive property-div">
             <div class="card">
@@ -121,10 +121,10 @@
                             <th>Name</th>
                             <th>Domain</th>
                             <th>Action</th>
-                            <th>Status</th> 
+                            <th>Status</th>
                         </tr>
                     </thead>
-                    <tbody> 
+                    <tbody>
                             <tr *ngFor="let list of propertyList | paginate:propertyPageConfig | filter: searchPropertyText:'name';  let i = index">
                                 <td>
                                     {{ (propertyPageConfig.currentPage - 1) * paginationConfig.itemsPerPage + i + 1 }}
@@ -140,10 +140,10 @@
                                 </td>
                                 <td>
                                     <!-- <i-feather name="edit-3" class="feather-16"></i-feather> -->
-                                    <a class="pd-r-5" (click)="editModalPopup(propertyModal,list)">
+                                    <a class="pd-r-5 cursor"  (click)="editModalPopup(propertyModal,list)">
                                         <i class="far fa-edit fa-1x"></i>
                                     </a>
-                                    <a class="pd-r-5" (click)="disableProperty(list.oid,list.id)">
+                                    <a class="pd-r-5 cursor" (click)="disableProperty(list.oid,list.id)">
                                         <i class="far fa-trash-alt tx-danger fa-sm"></i>
                                     </a>
                                     <!-- <i-feather name="trash-2" class="feather-16"></i-feather> -->
@@ -152,7 +152,7 @@
                                     <span *ngIf="list.active == true" class="badge badge-success">Active</span>
                                     <span *ngIf="list.active == false" class="badge badge-light">Disabled</span>
                                     </td>
-                            </tr>
+                            </tr> 
                             <tr *ngIf="propertyList?.length == 0">
                                 <td colspan="7" class="txt-center">
                                     <div> No property found </div>
@@ -164,7 +164,7 @@
                 <div class="card-footer text-right">
                     <pagination-controls id="propertyPagination" (pageChange)="propertyPageChangeEvent($event)"></pagination-controls>
                 </div>
-               
+
 
             </div>
         </div>
@@ -211,7 +211,7 @@
                                 <th>Action</th>
                             </tr>
                         </thead>
-                        <tbody> 
+                        <tbody>
                                 <tr *ngFor="let list of organizationTeamMemberList | paginate:paginationConfig | filter: searchText:'user_name':'user_email'; let i = index">
                                     <td>
                                         {{ (paginationConfig.currentPage - 1) * paginationConfig.itemsPerPage + i + 1 }}
@@ -219,18 +219,18 @@
                                     <td>{{list.user_name}}</td>
                                     <td>
                                         {{list.user_email}}
-                                    </td> 
+                                    </td>
                                     <td>
                                         {{list.role_name}}
                                     </td>
                                     <td>
-                                        <span *ngIf="isDateOrString(list.user_last_login)">{{list.user_last_login | date:'medium'}}</span> 
+                                        <span *ngIf="isDateOrString(list.user_last_login)">{{list.user_last_login | date:'medium'}}</span>
                                         <span *ngIf="!isDateOrString(list.user_last_login)">{{list.user_last_login}}</span>
                                     </td>
                                     <td>
                                         <button class="btn btn-sm btn-primary"  (click)="removeTeamMember(list.id)">Remove</button>
                                     </td>
-                                
+
                                 </tr>
                                 <tr *ngIf="organizationTeamMemberList?.length == 0">
                                     <td colspan="7" class="txt-center">
@@ -243,7 +243,7 @@
                                  <div class="card-footer text-right">
                     <pagination-controls id="userPagination" (pageChange)="pageChangeEvent($event)"></pagination-controls>
                 </div>
-             
+
             </div>
         </div>
     </div>
@@ -271,14 +271,14 @@
                             </div>
                         </div>
                     </div>
-    
+
                 </div>
                 <div class="row">
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label for="taxID">Tax ID</label>
                             <input type="text" class="form-control" [(ngModel)]="taxID" formControlName="taxID"
-                                name="taxID" /> 
+                                name="taxID" />
                         </div>
                     </div>
                     <div class="col-sm-6">
@@ -290,11 +290,11 @@
                                 <div *ngIf="editOrg.addressOne.errors.required">Address 1 is required</div>
                             </div>
                         </div>
-    
+
                     </div>
                 </div>
                 <div class="row">
-    
+
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label for="addressTwo">Address 2</label>
@@ -317,7 +317,7 @@
                     </div>
                 </div>
                 <div class="row">
-    
+
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label for="state">State</label>
@@ -358,7 +358,7 @@
             <ng-template #editHeading>
                 <h4 class="modal-title" id="modal-basic-title">Edit Property</h4>
             </ng-template>
-    
+
             <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Close Clicked')">
                 <span aria-hidden="true">×</span>
             </button>
@@ -399,7 +399,7 @@
     <ng-template #inviteuserModal let-modal>
         <div class="modal-header">
             <h4 class="modal-title" id="modal-basic-title">Invite new users</h4>
-          
+
             <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Close Clicked')">
                 <span aria-hidden="true">×</span>
             </button>

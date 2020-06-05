@@ -3,6 +3,7 @@ import { CompanyService } from '../company.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Validators, FormBuilder, FormGroup, FormArray, FormControl } from '@angular/forms';
 import { UserService } from '../_services';
+import {NgxUiLoaderService} from "ngx-ui-loader";
 @Component({
   selector: 'app-company',
   templateUrl: './company.component.html',
@@ -37,7 +38,10 @@ export class CompanyComponent implements OnInit {
   paginationConfig = { itemsPerPage: this.pageSize, currentPage: this.p, totalItems: this.totalCount };
 
   constructor(private companyService: CompanyService, private modalService: NgbModal,
-    private formBuilder: FormBuilder, private userService: UserService) { }
+    private formBuilder: FormBuilder,
+              private userService: UserService,
+              private loading: NgxUiLoaderService,
+  ) { }
 
   ngOnInit() {
     this.loadRoleList();
@@ -65,7 +69,9 @@ export class CompanyComponent implements OnInit {
   get f() { return this.companyForm.controls; }
   get userInvite() { return this.inviteUserForm.controls; }
   loadCompanyDetails() {
+    this.loading.start();
     this.companyService.getCompanyDetails().subscribe((data) => {
+      this.loading.stop();
       this.orgname = data.response.name;
       this.address1 = data.response.address1;
       this.address2 = data.response.address2;
@@ -85,8 +91,10 @@ export class CompanyComponent implements OnInit {
   }
 
   pathValues() {
+    this.loading.start();
     this.companyService.getCompanyDetails().subscribe((user) => {
       this.companyDetails = Object.values(user);
+      this.loading.stop();
       console.log(this.companyDetails, 'userProfile..');
       this.companyForm.patchValue({
         orgname: this.companyDetails[0].name,
@@ -114,8 +122,10 @@ export class CompanyComponent implements OnInit {
         state: this.companyForm.value.state,
         zipcode: this.companyForm.value.zipcode
       };
+      this.loading.start();
       this.companyService.updateCompanyDetails(editObj)
         .subscribe((data) => {
+          this.loading.stop();
           if (data) {
             //  this.isShowbtnVisible = false;
             // this.show = true;
@@ -126,7 +136,8 @@ export class CompanyComponent implements OnInit {
             // this.loadUserDetails();
           }
         }, (error) => {
-          alert(error);
+            this.loading.stop();
+            alert(error);
           this.modalService.dismissAll('Error!');
           // this.isShowbtnVisible = true;
           // this.show = false;
@@ -146,8 +157,10 @@ export class CompanyComponent implements OnInit {
         role_id: this.inviteUserForm.value.permissions,
         user_level: 'company'
       };
+      this.loading.start();
       this.companyService.inviteUser(requestObj)
         .subscribe((data) => {
+          this.loading.stop();
           if (data) {
             alert('Details has been updated successfully!');
             this.inviteUserForm.reset();
@@ -155,6 +168,7 @@ export class CompanyComponent implements OnInit {
             this.modalService.dismissAll('Data Saved!');
           }
         }, (error) => {
+          this.loading.stop();
           alert(error);
           this.modalService.dismissAll('Error!');
         });
@@ -171,7 +185,9 @@ export class CompanyComponent implements OnInit {
   pageChangeEvent(event) {
     this.paginationConfig.currentPage = event;
     const pagelimit = '?limit=' + this.paginationConfig.itemsPerPage + '&page=' + this.paginationConfig.currentPage;
+    this.loading.start();
     this.companyService.getCompanyTeamMembers(pagelimit).subscribe((data) => {
+      this.loading.stop();
       const key = 'response';
       this.teamMemberList = data[key];
       this.paginationConfig.totalItems = data.count;
@@ -193,7 +209,9 @@ export class CompanyComponent implements OnInit {
 
   loadCompanyTeamMembers() {
     const pagelimit = '?limit=' + this.paginationConfig.itemsPerPage + '&page=' + this.paginationConfig.currentPage;
+    this.loading.start();
     this.companyService.getCompanyTeamMembers(pagelimit).subscribe((data) => {
+      this.loading.stop();
       const key = 'response';
       this.teamMemberList = data[key];
       this.paginationConfig.totalItems = data.count;
@@ -201,7 +219,9 @@ export class CompanyComponent implements OnInit {
   }
 
   loadRoleList() {
+    this.loading.start();
     this.userService.getRoleList().subscribe((data) => {
+      this.loading.stop();
       if (data) {
         const key = 'response';
         // const roleid = data[key];
