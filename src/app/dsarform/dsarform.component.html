@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container dsar-form">
     <div class="mb-3">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb breadcrumb-style1 mg-b-0">
@@ -7,9 +7,10 @@
             </ol>
         </nav>
     </div>
+    <div class="dsar-formwrapper">
     <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs">
         <li [ngbNavItem]="1">
-            <a ngbNavLink>1 Basic</a>
+            <a ngbNavLink>Basic</a>
             <ng-template ngbNavContent>
                 <div id="step-1" class="pd-20 tab-pane step-content" style="display: block;">
                     <div class="col-6 align-items-center justify-content-between">
@@ -35,7 +36,7 @@
                     </div>
                 </div> <!-- End Step-1-->
 
-                <div class="btn-toolbar sw-toolbar sw-toolbar-bottom justify-content-end">
+                <div class="btn-toolbar sw-toolbar sw-toolbar-bottom justify-content-end mb-3 mr-3">
                     <div class="btn-group mr-2 sw-btn-group" role="group">
                         <button class="btn btn-secondary sw-btn-next" (click)="nav.select(2)">Next</button>
                     </div>
@@ -44,11 +45,9 @@
         </li>
         <li [ngbNavItem]="2">
             <!--[disabled]="disabled"-->
-            <a ngbNavLink>2 Form</a>
+            <a ngbNavLink>Form</a>
             <ng-template ngbNavContent>
-
-
-
+                <div class="col-12">
                 <div class="row">
                     <div class="col-sm-4">
                         <ngb-accordion #acc="ngbAccordion" activeIds="ngb-panel-0">
@@ -70,7 +69,7 @@
                                                     <div class="example-box"
                                                         *ngIf="!isContainHeaderLogo(item) && !isContainWelcomeText(item) && !isContainFooterText(item)">
                                                         <span class="control-label">
-                                                            {{item.controllabel}} {{item.preferControlOrder}}
+                                                            {{item.controllabel}}
                                                         </span>
                                                         <div class="displayflex">
                                                             <button *ngIf="isCustomControlWithRadioBtn(item)"
@@ -93,8 +92,8 @@
                                                     <div class="p-2" *ngIf="!isAddingFormControl"><button
                                                             class="btn btn-primary smallbtn"
                                                             (click)="addingFormControl()">
-                                                            Add new</button></div> 
-                                                </div> 
+                                                            Add new</button></div>
+                                                </div>
                                             </div>
 
                                             <div *ngIf="isAddingFormControl" class="col-sm-11 custom-controls">
@@ -220,20 +219,20 @@
                                 </ng-template>
                                 <ng-template ngbPanelContent>
                                     <div class="d-flex align-items-center justify-content-between">
-                                        <div class="row"> 
+                                        <div class="row">
                                             <div class="col-12 mb-2">
                                                 <p class="mb-0">Header logo</p>
                                                 <label class="col-form-label mb-0" for="name">Add logo URL </label>
                                                 <div class="form-inline mb-2">
-                                                    <div class="form-group pr-0"> 
+                                                    <div class="form-group pr-0">
                                                         <input type="text" class="form-control" name="headerlogoURL"
-                                                        [(ngModel)]="headerlogoURL" placeholder="Add logo URL"/> 
+                                                            [(ngModel)]="headerlogoURL" placeholder="Add logo URL" />
                                                         <button class="btn btn-primary ml-2"
-                                                        (click)="addHeaderLogo()">save logo</button>               
+                                                            (click)="addHeaderLogo()">save logo</button>
                                                     </div>
                                                 </div>
-                                                </div> 
-                                                
+                                            </div>
+
                                             <div class="col-sm-12 mb-1">
                                                 <div class="formgroup row">
                                                     <div class="col-md-5">
@@ -243,53 +242,54 @@
                                                         <input type="color" [(ngModel)]="headerColor" />
                                                     </div>
                                                     <div class="col-sm-5">
-                                                        <input type="text" class="form-control form-control-sm" [(ngModel)]="headerColor" />
-                                                </div>
+                                                        <input type="text" class="form-control form-control-sm"
+                                                            [(ngModel)]="headerColor" />
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="col-sm-12 mb-1">
                                                 <div class="formgroup row">
-                                                        <div class="col-md-5">
-                                                            <label class="col-form-label-sm">Welcome Text Color</label>
-                                                        </div>
-                                                        <div class="col-sm-2"><input type="color" class="form-control"
+                                                    <div class="col-md-5">
+                                                        <label class="col-form-label-sm">Welcome Text Color</label>
+                                                    </div>
+                                                    <div class="col-sm-2"><input type="color" class="form-control"
                                                             [(ngModel)]="welcomeTextColor" /></div>
-                                                        <div class="col-sm-5">
-                                                                <input type="text" class="form-control form-control-sm"
-                                                            [(ngModel)]="welcomeTextColor" />
-                                                        </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-12 mb-1">
-                                                <div class="formgroup row">
-                                                    <div class="col-md-5">
-                                                    <label class="col-form-label-sm">Welcome Font Size </label>
-                                                    </div>
-                                                    <div class="col-sm-3">
-                                                        <input type="number" min="11" max="20" class="form-control form-control-sm"
-                                                    [(ngModel)]="welcomeFontSize" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-12 mb-1">
-                                                <div class="formgroup row">
-                                                    <div class="col-md-5">
-                                                    <label class="col-form-label-sm">Footer Text Color</label>
-                                                    </div>
-                                                    <div class="col-sm-2">
-                                                        <input type="color"
-                                                            [(ngModel)]="footerTextColor" />
-                                                    </div>
                                                     <div class="col-sm-5">
                                                         <input type="text" class="form-control form-control-sm"
-                                                    [(ngModel)]="footerTextColor" />
+                                                            [(ngModel)]="welcomeTextColor" />
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-sm-12 mb-1">
                                                 <div class="formgroup row">
                                                     <div class="col-md-5">
-                                                    <label  class="col-form-label-sm">Footer Text Size</label>
+                                                        <label class="col-form-label-sm">Welcome Font Size </label>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <input type="number" min="11" max="20"
+                                                            class="form-control form-control-sm"
+                                                            [(ngModel)]="welcomeFontSize" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-12 mb-1">
+                                                <div class="formgroup row">
+                                                    <div class="col-md-5">
+                                                        <label class="col-form-label-sm">Footer Text Color</label>
+                                                    </div>
+                                                    <div class="col-sm-2">
+                                                        <input type="color"  class="form-control" [(ngModel)]="footerTextColor" />
+                                                    </div>
+                                                    <div class="col-sm-5">
+                                                        <input type="text" class="form-control form-control-sm" name="footerTextColor"
+                                                            [(ngModel)]="footerTextColor" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-12 mb-1">
+                                                <div class="formgroup row">
+                                                    <div class="col-md-5">
+                                                        <label class="col-form-label-sm">Footer Text Size</label>
                                                     </div>
                                                     <div class="col-md-3">
                                                         <input type="number" min="11" max="20" class="form-control"
@@ -311,7 +311,7 @@
                                 </ng-template>
                                 <ng-template ngbPanelContent>
                                     <div>
-                                       
+
                                         <div class="pd-2">
                                             <h6>Welcome Text <span style="float: right;">
                                                     <button type="button" class="btn btn-sm btn-default"
@@ -330,24 +330,25 @@
                                                     </button>
                                                 </span></h6>
                                         </div>
-                                       
+
                                     </div>
                                 </ng-template>
                             </ngb-panel>
                         </ngb-accordion>
                     </div>
                     <div class="col-sm-8">
-                
-                            <div class="headerwrapper">
-                                <div class="logocontainer py-2" [style.background-color]="headerColor">
-                                    <img class="img-responsive logowidth"  [src]="headerlogoURL ? headerlogoURL:'assets/imgs/no_image.png'"
-                                        width="150px" />
-                                </div>
-                                <div class="quilleditor-wrapper py-2">
-                                    <div class="quilleditor" [ngStyle]="welcomeStyle()" [innerHTML]="editorDataWelcome?editorDataWelcome:welcomeText"></div>
-                                </div> 
+
+                        <div class="headerwrapper">
+                            <div class="logocontainer py-2" [style.background-color]="headerColor">
+                                <img class="img-responsive logowidth"
+                                    [src]="headerlogoURL ? headerlogoURL:'assets/imgs/no_image.png'" width="150px" />
                             </div>
-                     
+                            <div class="quilleditor-wrapper py-2">
+                                <div class="quilleditor" [ngStyle]="welcomeStyle()"
+                                    [innerHTML]="editorDataWelcome?editorDataWelcome:welcomeText"></div>
+                            </div>
+                        </div>
+
                         <div cdkDropList [cdkDropListData]="webFormControlList" class="example-list"
                             (cdkDropListDropped)="drop($event)">
 
@@ -355,13 +356,13 @@
                                 <div class="dsarform-box" *ngFor="let webcontrol of webFormControlList; let j = index;"
                                     cdkDrag [cdkDragDisabled]="true">
                                     <!-- <ng-container *ngIf="isContainHeaderLogo(webcontrol)"> -->
-                                        <!-- <div *ngIf="webcontrol.controlId === 'welcometext'" style="width: 100%;">
+                                    <!-- <div *ngIf="webcontrol.controlId === 'welcometext'" style="width: 100%;">
                                             {{webcontrol.welcomeText}}
                                             <div class="quilleditor-wrapper">
                                                 <div class="quilleditor" [innerHTML]="webcontrol.welcomeText"></div>
                                             </div>
                                         </div> -->
-                                       
+
                                     <div *ngIf="webcontrol.controlId === 'requesttype'" class="col-sm-6">
                                         <label>{{webcontrol.controllabel}} </label>
                                         <div
@@ -455,6 +456,13 @@
                                         <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
 
                                     </div>
+                                    <div *ngIf="webcontrol.control === 'datepicker'" class="col-sm-6">
+                                        <label> {{webcontrol.controllabel}} </label>
+                                        <input class="form-control" type="date" name="{{webcontrol.controllabel}}"
+                                            [(ngModel)]="requestObject[webcontrol.controllabel]" />
+                                        <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
+
+                                    </div>
                                     <div class="form-check"
                                         *ngIf="webcontrol.control === 'radio' && webcontrol.controlId !== 'requesttype' && webcontrol.controlId !== 'subjecttype'">
                                         <label class="heading">{{webcontrol.controllabel}}</label>
@@ -491,19 +499,20 @@
                                                 [(ngModel)]="requestObject[opt.name]" />{{opt.name}}
                                             <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
 
-                                        </div> 
+                                        </div>
                                     </div>
-                                     
+
                                     <!-- </ng-container> -->
                                 </div>
-                                <div class="col-sm-3 mt-2 mb-2 ml-2"> <button class="btn btn-primary btn-block" [disabled]="true"
-                                        type="submit">
-                                        Submit </button></div> 
+                                <div class="col-sm-3 mt-2 mb-2 ml-2"> <button class="btn btn-primary btn-block"
+                                        [disabled]="true" type="submit">
+                                        Submit </button></div>
                             </form>
                             <div class="quilleditor-wrapper py-2 border-top">
-                                <div class="quilleditor" [ngStyle]="footerStyle()" [innerHTML]="editorDataFooter?editorDataFooter:footerText"></div>
-                            </div> 
-                         
+                                <div class="quilleditor" [ngStyle]="footerStyle()"
+                                    [innerHTML]="editorDataFooter?editorDataFooter:footerText"></div>
+                            </div>
+
                         </div>
                         <!-- <div class="btn-toolbar sw-toolbar sw-toolbar-bottom justify-content-end mb-2">
                             <div class="btn-group sw-btn-group" role="group">
@@ -515,7 +524,8 @@
                         </div> -->
                     </div>
                 </div>
-                <div class="btn-toolbar sw-toolbar sw-toolbar-bottom justify-content-end mb-2">
+                </div>
+                <div class="btn-toolbar sw-toolbar sw-toolbar-bottom justify-content-end mb-3 mr-3">
                     <div class="btn-group sw-btn-group" role="group">
                         <button class="btn btn-secondary sw-btn-prev" (click)="nav.select(1)">Previous</button>
                         <button class="btn btn-secondary sw-btn-next" [disabled]="active === 1"
@@ -525,12 +535,30 @@
             </ng-template>
         </li>
         <li [ngbNavItem]="3">
-            <a ngbNavLink>3 Settings</a>
+            <a ngbNavLink>Settings</a>
+
             <ng-template ngbNavContent>
-                <p>Three <a target="_blank" *ngIf="crid" class="btn btn-secondary sw-btn-prev"
-                    [routerLink]="['/editwebforms',  crid ]">Preview</a></p>
-                
-                <div class="btn-toolbar sw-toolbar sw-toolbar-bottom justify-content-end">
+                <div class="col-5">
+                    <form>
+                        <div class="form-group mg-b-5">
+                            <label for="defaultapprover" class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">Default Approver</label>
+                            <select class="form-control" name="defaultapprovers" id="defaultApprover" [(ngModel)]="defaultapprovers">
+                                <option *ngFor="let item of defaultApprover" [value]="item.user_name">
+                                    {{item.user_name}}
+                                </option>
+                            </select>
+                        </div>
+                        <div class="form-group mg-b-5">
+                            <label for="defaultDays" class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">Default days to respond</label>
+                            <input type="text" class="form-control" [(ngModel)]="defaultDays">
+                        </div>
+                        
+                    </form>
+                </div>
+                <p><a target="_blank" *ngIf="crid" class="btn btn-secondary sw-btn-prev"
+                        [routerLink]="['/editwebforms',  crid ]">Preview</a></p>
+
+                <div class="btn-toolbar sw-toolbar sw-toolbar-bottom justify-content-end mb-3 mr-3">
                     <div class="btn-group mr-2 sw-btn-group" role="group">
                         <button class="btn btn-secondary sw-btn-prev" (click)="nav.select(2)">Previous</button>
                         <button class="btn btn-secondary sw-btn-next" [disabled]="active === 1"
@@ -540,10 +568,10 @@
             </ng-template>
         </li>
         <li [ngbNavItem]="4">
-            <a ngbNavLink>4 Publish</a>
+            <a ngbNavLink>Publish</a>
             <ng-template ngbNavContent>
-                <p>Four</p>
-                <div class="btn-toolbar sw-toolbar sw-toolbar-bottom justify-content-end">
+                <p style="padding-left: 10px;">Four</p>
+                <div class="btn-toolbar sw-toolbar sw-toolbar-bottom justify-content-end mb-3 mr-3">
                     <div class="btn-group mr-2 sw-btn-group" role="group">
                         <button class="btn btn-secondary sw-btn-prev" (click)="nav.select(3)">Previous</button>
                         <button class="btn btn-secondary sw-btn-next" [disabled]="true">Submit</button>
@@ -554,6 +582,7 @@
     </ul>
 
     <div [ngbNavOutlet]="nav" class="mt-2"></div>
+    </div>
 </div>
 
 <!--QuillEditor Modal Popup-->
@@ -572,19 +601,20 @@
         <form [formGroup]="quillEditorText" (ngSubmit)="onSubmitQuillEditorData()">
             <quill-editor formControlName="editor" [modules]="quillConfig" [(ngModel)]="editorDataWelcome"
                 [styles]="{height: '200px'}"></quill-editor>
-            <button class="btn btn-outline-dark float-left mt-2" (click)="modal.dismiss('Close Clicked')">cancel</button>
+            <button class="btn btn-outline-dark float-left mt-2"
+                (click)="modal.dismiss('Close Clicked')">cancel</button>
             <button class="btn btn-primary float-right mt-2" type="submit">save</button>
-        </form> 
+        </form>
     </div>
     <ng-template #footerContent>
-    <div class="modal-body">
-        <form [formGroup]="quillEditorText" (ngSubmit)="onSubmitQuillEditorData()">
-            <quill-editor formControlName="editor" [modules]="quillConfig" [(ngModel)]="editorDataFooter"
-                [styles]="{height: '200px'}"></quill-editor>
-            <button class="btn btn-outline-dark float-left mt-2" (click)="modal.dismiss('Close Clicked')">cancel</button>
-            <button class="btn btn-primary float-right mt-2" type="submit">save</button>
-        </form> 
-    </div>
+        <div class="modal-body">
+            <form [formGroup]="quillEditorText" (ngSubmit)="onSubmitQuillEditorData()">
+                <quill-editor formControlName="editor" [modules]="quillConfig" [(ngModel)]="editorDataFooter"
+                    [styles]="{height: '200px'}"></quill-editor>
+                <button class="btn btn-outline-dark float-left mt-2"
+                    (click)="modal.dismiss('Close Clicked')">cancel</button>
+                <button class="btn btn-primary float-right mt-2" type="submit">save</button>
+            </form>
+        </div>
     </ng-template>
 </ng-template>
-

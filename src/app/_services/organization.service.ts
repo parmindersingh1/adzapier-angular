@@ -20,6 +20,14 @@ export class OrganizationService {
 
     public currentManageOrganizationSource = new BehaviorSubject<any>('');
     currentOrganization = this.currentManageOrganizationSource.asObservable();
+
+    public editedOrganizationSource = new BehaviorSubject<any>('');
+    editedOrganization = this.editedOrganizationSource.asObservable();
+    
+    public editedPropertySource = new BehaviorSubject<any>('');
+    editedProperty = this.editedPropertySource.asObservable();
+
+    public isOrganizationUpdated: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
     constructor(private http: HttpClient) { }
 
     public get currentOrgValue(): Orglist {
@@ -82,6 +90,14 @@ export class OrganizationService {
         localStorage.setItem('currentOrg', JSON.stringify(currentOrg));
     }
 
+    updateCurrentOrgwithProperty(updatedItem) {
+        const selectedOrgProperty = JSON.parse(localStorage.getItem('currentOrg'));
+        selectedOrgProperty.organization_name = updatedItem.organization_name;
+        selectedOrgProperty.property_id = updatedItem.property_id;
+        selectedOrgProperty.property_name = updatedItem.property_name;
+        localStorage.setItem('currentOrg', JSON.stringify(selectedOrgProperty));
+    }
+
     getCurrentOrgWithProperty() {
         if (localStorage.getItem('currentOrg') !== null) {
             return JSON.parse(localStorage.getItem('currentOrg'));
@@ -97,6 +113,23 @@ export class OrganizationService {
     }
 
     getOrgTeamMembers(orgID, pagelimit?): Observable<any> {
-        return this.http.get<any>(environment.apiUrl + '/team_member' + '?orgid=' + orgID + pagelimit);
+        if (pagelimit !== undefined) {
+            return this.http.get<any>(environment.apiUrl + '/team_member' + '?orgid=' + orgID + pagelimit);
+        } else {
+            return this.http.get<any>(environment.apiUrl + '/team_member' + '?orgid=' + orgID);
+        }
+        
+    }
+
+    disableOrganization(orgID, reqObj): Observable<any> {
+        return this.http.patch<any>(environment.apiUrl + '/organizations/' + orgID, reqObj);
+    }
+
+    updateEditedProperty(currentItem) {
+        this.editedPropertySource.next(currentItem);
+    }
+
+    updateEditedOrganization(currentItem) {
+        this.editedOrganizationSource.next(currentItem);
     }
 }

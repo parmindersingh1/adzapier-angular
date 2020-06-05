@@ -71,10 +71,10 @@
     background: green;
 }
 
-.feather-16{
+.feather-16 {
     width: 16px;
     height: 16px;
-    margin: 0 15px 0 0;
+    margin: 0;
 }
 
 .input-group-text {
@@ -101,4 +101,16 @@
 
 .searchfield > div > span > div.input-group-text {
     align-items: center;
+}
+
+.row-enabled {
+    background-color:transparent;
+}
+
+.row-disabled {
+    background-color: #ccc;
+}
+
+tr.row-disabled > td > a {
+    color: #fff !important;
 }

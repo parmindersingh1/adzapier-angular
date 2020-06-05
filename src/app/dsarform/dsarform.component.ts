@@ -101,6 +101,10 @@ export class DsarformComponent implements OnInit, OnDestroy {
     {
       id: 5,
       control: 'checkbox'
+    },
+    {
+      id: 6,
+      control: 'datepicker'
     }
   ];
 
@@ -138,12 +142,15 @@ export class DsarformComponent implements OnInit, OnDestroy {
   footerText: any;
   welcomeText: any;
   headerLogoPath: any;
+  defaultApprover: any = [];
+  defaultapprovers: any;
+  defaultDays: any = 45;
   constructor(private fb: FormBuilder, private ccpaRequestService: CcparequestService,
-    private organizationService: OrganizationService,
-    private dsarFormService: DsarformService,
+              private organizationService: OrganizationService,
+              private dsarFormService: DsarformService,
     private ccpaFormConfigService: CCPAFormConfigurationService,
     private router: Router, private location: Location,
-    private activatedRoute: ActivatedRoute,
+    private activatedRoute: ActivatedRoute,                             
               private loadingbar: NgxUiLoaderService,
               private modalService: NgbModal) {
 
@@ -224,6 +231,7 @@ export class DsarformComponent implements OnInit, OnDestroy {
       this.radioBtnType = true;
       this.subjectTyperadioBtn = true;
       //  this.loadWebControl();
+      this.createNewForm();
       this.webFormControlList = this.dsarFormService.getFormControlList();
       this.webFormControlList.filter((t) => {
         if (t.controlId === 'footertext') {
@@ -235,6 +243,7 @@ export class DsarformComponent implements OnInit, OnDestroy {
           this.headerColor = t.headerColor;
         }
       });
+      this.dsarFormService.setFormControlList(this.webFormControlList);
       //  this.selectOptionControl = this.controlOption[0].control;
       this.selectOptions = [{
         id: this.count++,
@@ -250,6 +259,7 @@ export class DsarformComponent implements OnInit, OnDestroy {
       editor: new FormControl(null)
     });
     this.isWelcomeEditor = false;
+    this.loadDefaultApprover();
   }
 
   loadWebControl() {
@@ -475,7 +485,6 @@ export class DsarformComponent implements OnInit, OnDestroy {
         }
 
       }
-
     } else {
       if (this.crid) {
         const count = this.webFormControlList.length + 1;
@@ -489,6 +498,7 @@ export class DsarformComponent implements OnInit, OnDestroy {
         this.ccpaFormConfigService.addControl(newWebControl);
         this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
         this.lblText = '';
+        this.cancelAddingFormControl();
       } else {
 
         const count = this.webFormControlList.length + 1;
@@ -502,8 +512,8 @@ export class DsarformComponent implements OnInit, OnDestroy {
 
         this.dsarFormService.addControl(newWebControl);
         this.webFormControlList = this.dsarFormService.getFormControlList();
-
         this.lblText = '';
+        this.cancelAddingFormControl();
       }
     }
 
@@ -674,6 +684,7 @@ export class DsarformComponent implements OnInit, OnDestroy {
   }
 
   publishCCPAFormConfiguration(registerForm) {
+    this.setHeaderStyle();
     console.log(this.propId, 'propid', this.orgId, 'ORG', this.crid, 'crid');
     console.log(registerForm.value, 'registerForm..');
     if (this.crid) {
@@ -698,7 +709,7 @@ export class DsarformComponent implements OnInit, OnDestroy {
           this.loadingbar.stop();
           if (data) {
             alert('Form Updated!');
-            this.dsarFormService.removeControls();
+           // this.dsarFormService.removeControls();
           }
         }, (error) => {
           this.loadingbar.stop();
@@ -710,8 +721,9 @@ export class DsarformComponent implements OnInit, OnDestroy {
         .subscribe((data) => {
           this.loadingbar.stop();
           if (data) {
+            this.crid = data.response.crid;
             alert('New Form Saved!');
-            this.dsarFormService.removeControls();
+           // this.dsarFormService.removeControls();
           }
         }, (error) => {
           this.loadingbar.stop();
@@ -784,10 +796,12 @@ export class DsarformComponent implements OnInit, OnDestroy {
       if (this.webFormControlList !== null) {
         const editText = this.webFormControlList.filter((t) => t.indexCount === 'footer_text_Index');
         this.editorDataFooter = editText[0].footerText;
+      //  this.footerTextColor = editText[0].footerTextColor;
       } else {
         this.webFormControlList = this.dsarFormService.getFormControlList();
         const editText = this.webFormControlList.filter((t) => t.indexCount === 'footer_text_Index');
         this.editorDataFooter = editText[0].footerText;
+      //  this.footerTextColor = editText[0].footerTextColor;
       }
     }
 
@@ -812,6 +826,36 @@ export class DsarformComponent implements OnInit, OnDestroy {
       'color': this.footerTextColor,
       'font-size': this.footerFontSize + 'px'
     };
+  }
+
+  setHeaderStyle() {
+    const headerObj = {
+      control: 'img',
+      controllabel: 'Header Logo',
+      controlId: 'headerlogo',
+      indexCount: 'header_logo_Index',
+      headerColor: this.headerColor,
+      logoURL: this.headerlogoURL,
+    };
+    if (this.crid) {
+      this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
+      const customControlIndex = this.webFormControlList.findIndex((t) => t.controlId === 'headerlogo');
+      this.ccpaFormConfigService.updateControl(this.webFormControlList[customControlIndex], customControlIndex, headerObj);
+      this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
+    } else {
+      this.webFormControlList = this.dsarFormService.getFormControlList();
+      const customControlIndex = this.webFormControlList.findIndex((t) => t.controlId === 'headerlogo');
+      this.dsarFormService.updateControl(this.webFormControlList[customControlIndex], customControlIndex, headerObj);
+      this.webFormControlList = this.dsarFormService.getFormControlList();
+    }
+  }
+
+
+  loadDefaultApprover() {
+    this.organizationService.getOrgTeamMembers(this.orgId).subscribe((data) => {
+      const key = 'response';
+      this.defaultApprover = data[key];
+    });
   }
 
   ngOnDestroy() {
