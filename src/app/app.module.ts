@@ -60,7 +60,7 @@ import { VerifyemailComponent } from './verifyemail/verifyemail.component';
 import { OrganizationdetailsComponent } from './organizationdetails/organizationdetails.component';
 import { OrganizationteamComponent } from './organizationteam/organizationteam.component';
 import { FilterPipe } from './filter.pipe';
-import {NgxUiLoaderModule, NgxUiLoaderConfig} from 'ngx-ui-loader';
+import {NgxUiLoaderModule} from 'ngx-ui-loader';
 import {ngxUiLoaderConfig} from './_constant/adzapier.contant';
 
 
