@@ -85,7 +85,7 @@ export class EditwebformComponent implements OnInit {
         this.loading = false;
       }
     });
-  //  this.getCCPAdefaultConfigById();
+    this.getCCPAdefaultConfigById();
     this.loadRequestWebForm();
   }
 
