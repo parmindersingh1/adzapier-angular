@@ -61,14 +61,15 @@ import { OrganizationdetailsComponent } from './organizationdetails/organization
 import { OrganizationteamComponent } from './organizationteam/organizationteam.component';
 import { FilterPipe } from './filter.pipe';
 import {NgxUiLoaderModule, NgxUiLoaderConfig} from 'ngx-ui-loader';
-// import {ngxUiLoaderConfig} from './_constant/adzapier.contant';
+import { DsarRequestsComponent } from './dsar-requests/dsar-requests.component';
+import {ngxUiLoaderConfig} from './_constant/adzapier.contant';
 
-const ngxUiLoaderConfig: NgxUiLoaderConfig = {
-  bgsColor: '#3968fa',
-  fastFadeOut: true,
-  fgsColor: '#3968fa',
-  pbColor: '#3968fa'
-};
+// const ngxUiLoaderConfig: NgxUiLoaderConfig = {
+//   bgsColor: '#3968fa',
+//   fastFadeOut: true,
+//   fgsColor: '#3968fa',
+//   pbColor: '#3968fa'
+// };
 
 export const isMock = environment.mock;
 
@@ -111,7 +112,8 @@ export const isMock = environment.mock;
     VerifyemailComponent,
     OrganizationdetailsComponent,
     OrganizationteamComponent,
-    FilterPipe
+    FilterPipe,
+    DsarRequestsComponent
   ],
   imports: [
     BrowserModule,

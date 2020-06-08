@@ -10,7 +10,10 @@ import {NgxUiLoaderService} from 'ngx-ui-loader';
 })
 export class VerifyemailComponent implements OnInit {
   public id: string;
-  message: any;
+  messageObj = {
+    isError: false,
+    message: ''
+  };
   constructor( private activatedRoute: ActivatedRoute,
                private loading: NgxUiLoaderService,
                private userService: UserService) {
@@ -25,10 +28,12 @@ export class VerifyemailComponent implements OnInit {
     this.loading.start();
     this.userService.verifyEmailAddress(requestObj).subscribe((data) => {
       this.loading.stop();
-      this.message = data;
-      console.log('message' , this.message);
+      this.messageObj.isError = false;
+      this.messageObj.message = 'Your email address is successfully verified ! please login to access your account!';
     }, error => {
       this.loading.stop();
+      this.messageObj.isError = true;
+      this.messageObj.message = 'Something Went Wrong';
     });
   }
 

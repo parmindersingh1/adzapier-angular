@@ -35,6 +35,7 @@ import { BillingComponent } from './billing/billing.component';
 import { VerifyemailComponent } from './verifyemail/verifyemail.component';
 import { OrganizationdetailsComponent } from './organizationdetails/organizationdetails.component';
 import { OrganizationteamComponent } from './organizationteam/organizationteam.component';
+import {DsarRequestsComponent} from "./dsar-requests/dsar-requests.component";
 
 
 const routes: Routes = [
@@ -65,6 +66,7 @@ const routes: Routes = [
   { path: '404page', component: PagenotfoundComponent1 },
   { path: 'internalerror', component: InternalerrorComponent },
   { path: 'dsarform', component: DsarformComponent, canActivate: [AuthGuard] },
+  { path: 'dsar-requests', component: DsarRequestsComponent, canActivate: [AuthGuard]},
   { path: 'webforms', component: WebformsComponent, canActivate: [AuthGuard] },
   { path: 'settings', component: PagesettingsComponent, canActivate: [AuthGuard] },
   { path: 'editwebforms/:crid', component: EditwebformComponent, canActivate: [AuthGuard] },

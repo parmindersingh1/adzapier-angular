@@ -1,0 +1,125 @@
+<div class="container">
+  <div class="mb-3">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb breadcrumb-style1 mg-b-0">
+        <li class="breadcrumb-item"><a routerLink="/settings">DSAR</a></li>
+        <li class="breadcrumb-item active" aria-current="page"> DSAR REQUESTS</li>
+      </ol>
+    </nav>
+  </div>
+  <h3>Data Subject Requests</h3>
+  <div class="table-responsive organization-div">
+    <div class="card">
+      <div class="card-header">
+        <div class="searchfield mt-3">
+
+          <div class="col-2 input-group">
+            <input class="form-control py-2 border-right-0 border" [(ngModel)]="searchText" type="search"
+                  placeholder="Search" id="example-search-input" />
+            <span class="input-group-append">
+                        <div class="input-group-text bg-transparent"><i class="fa fa-search"></i></div>
+                    </span>
+          </div>
+
+          <div class="col-2">
+                <select class="form-control">
+                  <option selected value="">Type Of Request</option>
+                  <option value="1">One</option>
+                  <option value="2">Two</option>
+                  <option value="3">Three</option>
+                </select>
+          </div>
+
+          <div class="col-2">
+            <select class="form-control">
+              <option value="" selected>Status</option>
+              <option value="in-progress">In Progress</option>
+              <option value="Unverified">Unverified</option>
+              <option value="Close">Close</option>
+            </select>
+          </div>
+
+          <div class="col-2">
+            <select class="form-control">
+              <option selected="">Due in</option>
+              <option value="1">Past Due</option>
+              <option value="1">1 day</option>
+              <option value="2">2 days</option>
+              <option value="3">15 Days</option>
+            </select>
+          </div>
+
+
+
+          <div class="col-3">
+            <div class="form-inline">
+              <div class="col-md-8 form-group pr-0">
+                <label class="col-sm-5 col-form-label" for="PerPage">View</label>
+                <select id="PerPage" class="form-control" [(ngModel)]="pageSize"
+                        (change)="onChangeEvent($event)">
+                  <option value="5">5</option>
+                  <option value="10">10</option>
+                  <option value="20">20</option>
+                </select>
+              </div>
+              <div class="col-md-4"><label class="d-block">Rows</label></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <table class="table table-primary table-bordered">
+          <thead class="thead-primary">
+          <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Organization</th>
+            <th>Property</th>
+            <th>RequestType</th>
+            <th>SubjectType</th>
+            <th>DaysLeft</th>
+            <th>Approver</th>
+            <th>Country</th>
+            <th>State</th>
+            <th>WebForm</th>
+            <th>DateCreated</th>
+          </tr>
+          </thead>
+          <tbody>
+<!--          <ng-container *ngFor="let data of requestsList |  filter: searchText:'orgname':'city':'state' | paginate:paginationConfig; let i = index">-->
+<!--            <tr [ngClass]="{'row-disabled':data.active == false, 'row-enabled':data.active == true}">-->
+            <tr *ngFor="let obj of requestsList">
+<!--                <td>{{ (paginationConfig.currentPage - 1) * paginationConfig.itemsPerPage + i + 1 }}-->
+<!--                </td>-->
+              <td><a routerLink="#">{{obj.id}}</a></td>
+                <td>{{obj.name}}</td>
+                <td>{{obj.organization}}</td>
+                <td>{{obj.property}}</td>
+                <td><span class="badge badge-primary">{{obj.requestType}}</span></td>
+                <td>{{obj.subjectType}}</td>
+                <td>
+                  <span *ngIf="obj.daysLeft < 0; else positiveDays" class="text-danger">{{obj.daysLeft}} Days</span>
+                  <ng-template #positiveDays>{{obj.daysLeft}} Days</ng-template>
+                </td>
+                <td>{{obj.approver}}</td>
+                <td>{{obj.country}}</td>
+                <td>{{obj.state}}</td>
+                <td><a routerLink="#">{{obj.webForm}}</a></td>
+                <td>{{obj.dateCreated}}</td>
+              <td>
+
+              </td>
+            </tr>
+<!--          </ng-container>-->
+          <tr>
+            <td colspan="8" *ngIf="(requestsList | filter: searchText:'orgname':'city':'state').length===0">No
+              records found.</td>
+          </tbody>
+        </table>
+      </div>
+      <div class="card-footer text-right">
+        <pagination-controls (pageChange)="pageChangeEvent($event)"></pagination-controls>
+      </div>
+
+  </div>
+</div>
