@@ -6,11 +6,11 @@ import { switchMap, map, throwIfEmpty } from 'rxjs/operators';
 import { CcparequestService } from '../_services/ccparequest.service';
 import { DsarformService } from '../_services/dsarform.service';
 import { CCPAFormConfigurationService } from '../_services/ccpaform-configuration.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, NavigationExtras } from '@angular/router';
 import { Location } from '@angular/common';
 import { EditorChangeContent, EditorChangeSelection } from 'ngx-quill';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
-import {NgxUiLoaderService} from 'ngx-ui-loader';
+import { NgxUiLoaderService } from 'ngx-ui-loader';
 
 @Component({
   selector: 'app-dsarform',
@@ -145,12 +145,13 @@ export class DsarformComponent implements OnInit, OnDestroy {
   defaultApprover: any = [];
   defaultapprovers: any;
   defaultDays: any = 45;
+  public reqURLObj = {};
   constructor(private fb: FormBuilder, private ccpaRequestService: CcparequestService,
               private organizationService: OrganizationService,
               private dsarFormService: DsarformService,
-    private ccpaFormConfigService: CCPAFormConfigurationService,
-    private router: Router, private location: Location,
-    private activatedRoute: ActivatedRoute,                             
+              private ccpaFormConfigService: CCPAFormConfigurationService,
+              private router: Router, private location: Location,
+              private activatedRoute: ActivatedRoute,
               private loadingbar: NgxUiLoaderService,
               private modalService: NgbModal) {
 
@@ -172,7 +173,7 @@ export class DsarformComponent implements OnInit, OnDestroy {
     });
     // this.activatedRoute.queryParams.subscribe((params) => this.activatedRouteQuery = params);
     // this.organizationService.getSelectedOrgProperty.subscribe((response) => this.selectedProperty = response);
-
+    
   }
 
   ngOnInit() {
@@ -251,7 +252,7 @@ export class DsarformComponent implements OnInit, OnDestroy {
       }];
 
       this.getCCPAdefaultConfigById();
-
+      this.reqURLObj = {crid: this.crid, orgid: this.organizationID, propid: this.propId};
       this.organizationService.getOrganization.subscribe((response) => this.currentOrgID = response);
     }
 

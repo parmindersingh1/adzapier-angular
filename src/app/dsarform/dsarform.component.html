@@ -527,8 +527,28 @@
         <li [ngbNavItem]="3">
             <a ngbNavLink>3 Settings</a>
             <ng-template ngbNavContent>
-                <p>Three <a target="_blank" *ngIf="crid" class="btn btn-secondary sw-btn-prev"
-                    [routerLink]="['/editwebforms',  crid ]">Preview</a></p>
+                <div class="col-5">
+                    <form>
+                        <div class="form-group mg-b-5">
+                            <label for="defaultapprover" class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">Default Approver</label>
+                            <select class="form-control" [ngModelOptions]="{standalone: true}" [(ngModel)]="defaultapprovers">
+                                <option *ngFor="let item of defaultApprover" [value]="item.user_name">
+                                    {{item.user_name}}
+                                </option>
+                            </select>
+                        </div>
+                        <div class="form-group mg-b-5">
+                            <label for="defaultDays" class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">Default days to respond</label>
+                            <input type="text" class="form-control" [ngModelOptions]="{standalone: true}"  [(ngModel)]="defaultDays">
+                        </div>
+                        
+                    </form>
+                    <div class="form-group mg-b-5"><a target="_blank" *ngIf="crid" class="btn btn-secondary sw-btn-prev"
+                        href="http://localhost:4500/ccpaform/{{crid}}/{{propId}}/{{orgId}}">Preview</a></div>
+                </div>
+                <!-- <p><a target="_blank" *ngIf="crid" class="btn btn-secondary sw-btn-prev"
+                        [routerLink]="['/editwebforms',  crid ]">Preview</a></p> -->
+                  
 
                 <div class="btn-toolbar sw-toolbar sw-toolbar-bottom justify-content-end">
                     <div class="btn-group mr-2 sw-btn-group" role="group">

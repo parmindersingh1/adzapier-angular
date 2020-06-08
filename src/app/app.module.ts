@@ -60,16 +60,10 @@ import { VerifyemailComponent } from './verifyemail/verifyemail.component';
 import { OrganizationdetailsComponent } from './organizationdetails/organizationdetails.component';
 import { OrganizationteamComponent } from './organizationteam/organizationteam.component';
 import { FilterPipe } from './filter.pipe';
-import {NgxUiLoaderModule, NgxUiLoaderConfig} from 'ngx-ui-loader';
-import { DsarRequestsComponent } from './dsar-requests/dsar-requests.component';
+import {NgxUiLoaderModule} from 'ngx-ui-loader';
 import {ngxUiLoaderConfig} from './_constant/adzapier.contant';
 
-// const ngxUiLoaderConfig: NgxUiLoaderConfig = {
-//   bgsColor: '#3968fa',
-//   fastFadeOut: true,
-//   fgsColor: '#3968fa',
-//   pbColor: '#3968fa'
-// };
+
 
 export const isMock = environment.mock;
 

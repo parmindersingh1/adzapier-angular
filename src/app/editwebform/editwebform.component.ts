@@ -49,6 +49,7 @@ export class EditwebformComponent implements OnInit {
   welcomeFontSize: any;
   footerTextColor: any;
   footerFontSize: any;
+  editorDataWelcome: string;
   constructor(private ccpaFormConfigService: CCPAFormConfigurationService,
               private organizationService: OrganizationService,
               private ccpaRequestService: CcparequestService,
@@ -85,7 +86,7 @@ export class EditwebformComponent implements OnInit {
         this.loading = false;
       }
     });
-  //  this.getCCPAdefaultConfigById();
+    this.getCCPAdefaultConfigById();
     this.loadRequestWebForm();
   }
 
