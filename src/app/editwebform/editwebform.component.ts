@@ -49,6 +49,7 @@ export class EditwebformComponent implements OnInit {
   welcomeFontSize: any;
   footerTextColor: any;
   footerFontSize: any;
+  editorDataWelcome: string;
   constructor(private ccpaFormConfigService: CCPAFormConfigurationService,
               private organizationService: OrganizationService,
               private ccpaRequestService: CcparequestService,
