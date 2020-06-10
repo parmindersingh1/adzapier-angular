@@ -231,6 +231,17 @@ export class CompanyComponent implements OnInit {
     });
   }
 
+  removeTeamMember(id) {
+    this.companyService.removeTeamMember(id).subscribe((data) => {
+      if (data) {
+        alert('User has been removed.');
+        this.loadCompanyTeamMembers();
+      }
+    }, (err) => {
+      alert(JSON.stringify(err));
+    });
+   }
+
   isDateOrString(status): boolean {
     const date = Date.parse(status);
     if (isNaN(date)) {
