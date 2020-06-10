@@ -17,8 +17,11 @@
                         <div class="form-group">
                             <label class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">Web Form
                                 Name</label>
-                            <input class="form-control" placeholder="Enter Name" type="text" name="form_name"
-                                [(ngModel)]="formName" />
+                            <input class="form-control" placeholder="Enter Name" type="text" name="form_name" #formname="ngModel"
+                                [ngClass]="{ 'is-invalid': formname.invalid }" [(ngModel)]="formName" required/>
+                                <div *ngIf="formname.invalid" class="invalid-feedback">
+                                    <div *ngIf="formname.errors.required">Form name is required</div>
+                                </div>                                 
                         </div>
 
                         <div class="form-group">
@@ -69,7 +72,7 @@
                                                     <div class="example-box"
                                                         *ngIf="!isContainHeaderLogo(item) && !isContainWelcomeText(item) && !isContainFooterText(item)">
                                                         <span class="control-label">
-                                                            {{item.controllabel}}
+                                                            {{item.controllabel}}{{item.preferControlOrder}}
                                                         </span>
                                                         <div class="displayflex">
                                                             <button *ngIf="isCustomControlWithRadioBtn(item)"
@@ -364,7 +367,7 @@
                                         </div> -->
 
                                     <div *ngIf="webcontrol.controlId === 'requesttype'" class="col-sm-6">
-                                        <label>{{webcontrol.controllabel}} </label>
+                                        <label>{{webcontrol.controllabel}}{{webcontrol.preferControlOrder}} </label>
                                         <div
                                             *ngIf="webcontrol.control === 'select' && webcontrol.controlId === 'requesttype'">
                                             <!-- *ngIf="isRequestTypeSelected"-->
@@ -528,7 +531,7 @@
                 <div class="btn-toolbar sw-toolbar sw-toolbar-bottom justify-content-end mb-3 mr-3">
                     <div class="btn-group sw-btn-group" role="group">
                         <button class="btn btn-secondary sw-btn-prev" (click)="nav.select(1)">Previous</button>
-                        <button class="btn btn-secondary sw-btn-next" [disabled]="active === 1"
+                        <button class="btn btn-secondary sw-btn-next" [disabled]="active === 1" 
                             (click)="publishCCPAFormConfiguration(registerForm)">Next</button>
                     </div>
                 </div>
@@ -539,33 +542,40 @@
 
             <ng-template ngbNavContent>
                 <div class="col-5">
-                    <form>
-                        <div class="form-group mg-b-5">
-                            <label for="defaultapprover" class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">Default Approver</label>
-                            <select class="form-control" [ngModelOptions]="{standalone: true}" [(ngModel)]="defaultapprovers">
-                                <option *ngFor="let item of defaultApprover" [value]="item.user_name">
-                                    {{item.user_name}}
+                    
+                        <div class="form-group mg-b-5">{{defaultapprover}}
+                            <label for="defaultapprover" class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">
+                                Default Approver</label>
+                                <select class="form-control" name="user" #userselect="ngModel"
+                                [(ngModel)]="defaultapprover"
+                                [ngClass]="{ 'is-invalid':  userselect.invalid && userselect.errors?.required}" required
+                                >
+                                <option *ngFor="let opt of ApproverList" [value]="opt.id">
+                                    {{ opt.user_name }}
                                 </option>
                             </select>
+                            <div *ngIf="userselect.invalid" class="invalid-feedback">
+                                <div *ngIf="userselect.errors?.required">Default approver is required</div>
+                            </div>
+                            
                         </div>
                         <div class="form-group mg-b-5">
-                            <label for="defaultDays" class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">Default days to respond</label>
-                            <input type="text" class="form-control" [ngModelOptions]="{standalone: true}"  [(ngModel)]="defaultDays">
+                            <label for="daysleft" class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">Default days to respond</label>
+                            <input type="text" class="form-control" [ngModelOptions]="{standalone: true}"  [(ngModel)]="daysleft">
                         </div>
                         
-                    </form>
                     <div class="form-group mg-b-5"><a target="_blank" *ngIf="crid" class="btn btn-secondary sw-btn-prev"
-                        href="http://localhost:4500/ccpaform/{{crid}}/{{propId}}/{{orgId}}">Preview</a></div>
+                        href="http://develop-privacyportal.adzpier.com/ccpaform/{{crid}}/{{propId}}/{{orgId}}">Preview</a></div>
                 </div>
-                <!-- <p><a target="_blank" *ngIf="crid" class="btn btn-secondary sw-btn-prev"
-                        [routerLink]="['/editwebforms',  crid ]">Preview</a></p> -->
+                 <div class="form-group mg-b-5"><a target="_blank" *ngIf="crid" class="btn btn-secondary sw-btn-prev"
+                        [routerLink]="['/editwebforms',  crid ]">Local Preview</a></div>
                   
 
                 <div class="btn-toolbar sw-toolbar sw-toolbar-bottom justify-content-end mb-3 mr-3">
                     <div class="btn-group mr-2 sw-btn-group" role="group">
                         <button class="btn btn-secondary sw-btn-prev" (click)="nav.select(2)">Previous</button>
-                        <button class="btn btn-secondary sw-btn-next" [disabled]="active === 1"
-                            (click)="nav.select(4)">Next</button>
+                        <button class="btn btn-secondary sw-btn-next" [disabled]="active === 1" type="submit"
+                          (click)="createDraft()">Next</button> <!--(click)="nav.select(4)"-->
                     </div>
                 </div>
             </ng-template>
