@@ -162,3 +162,15 @@
   text-align: center;
 }
 
+.is-invalid {
+  color: red;
+}
+
+.example-box .form-check-inline {
+  display: inline-table;
+  margin: 0 0px 0 10px;
+}
+
+.example-box .heading {
+  display: flex;
+}

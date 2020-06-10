@@ -50,6 +50,7 @@ export class EditwebformComponent implements OnInit {
   footerTextColor: any;
   footerFontSize: any;
   editorDataWelcome: string;
+  submitted: any;
   constructor(private ccpaFormConfigService: CCPAFormConfigurationService,
               private organizationService: OrganizationService,
               private ccpaRequestService: CcparequestService,
@@ -139,6 +140,8 @@ export class EditwebformComponent implements OnInit {
             // this.hea
           }
         });
+        const selectedwebFormControlList = this.rearrangeFormSequence(data.response[key]);
+        this.webFormControlList = selectedwebFormControlList;
         return this.webFormControlList;
       }
     }, (error) => {
@@ -149,6 +152,7 @@ export class EditwebformComponent implements OnInit {
   }
 
   register(customerData: NgForm) {
+    
     // console.log(this.requestObject, 'requestObject..');
     // console.log(customerData.value, 'CD...form..');
     // console.log(this.checkBoxValues, 'checkBoxValues..');
@@ -189,8 +193,8 @@ export class EditwebformComponent implements OnInit {
         }
       }
     }
-    console.log(finalObj,'finalObj..');
-    // return false;
+    console.log(finalObj,'finalObj editwebform..');
+    return false;
     this.loadingBar.start();
     this.ccpadataService.createCCPAData(this.organizationID, this.propertyId, this.crid, finalObj)
       .subscribe((data) => {
@@ -263,6 +267,13 @@ export class EditwebformComponent implements OnInit {
 
   onChangeSelection(e) {
     this.selectOptionValues.push(e);
+  }
+
+  rearrangeFormSequence(dataArray) {
+    dataArray.sort((a, b) => {
+      return a.preferControlOrder - b.preferControlOrder;
+    });
+    return dataArray;
   }
 
   welcomeStyle(): object {
