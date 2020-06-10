@@ -616,7 +616,7 @@
                 [styles]="{height: '200px'}"></quill-editor>
             <button class="btn btn-outline-dark float-left mt-2"
                 (click)="modal.dismiss('Close Clicked')">cancel</button>
-            <button class="btn btn-primary float-right mt-2" type="submit">save</button>
+            <button class="btn btn-primary float-right mt-2" type="submit" (click)="modal.dismiss('Close Clicked')">save</button>
         </form>
     </div>
     <ng-template #footerContent>
@@ -626,7 +626,7 @@
                     [styles]="{height: '200px'}"></quill-editor>
                 <button class="btn btn-outline-dark float-left mt-2"
                     (click)="modal.dismiss('Close Clicked')">cancel</button>
-                <button class="btn btn-primary float-right mt-2" type="submit">save</button>
+                <button class="btn btn-primary float-right mt-2" type="submit" (click)="modal.dismiss('Close Clicked')">save</button>
             </form>
         </div>
     </ng-template>
