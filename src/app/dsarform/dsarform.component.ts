@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ViewEncapsulation, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { FormBuilder, Validators, FormArray, FormGroup, NgForm, FormControl } from '@angular/forms';
 import { OrganizationService } from '../../app/_services';
@@ -6,17 +6,19 @@ import { switchMap, map, throwIfEmpty } from 'rxjs/operators';
 import { CcparequestService } from '../_services/ccparequest.service';
 import { DsarformService } from '../_services/dsarform.service';
 import { CCPAFormConfigurationService } from '../_services/ccpaform-configuration.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, NavigationExtras } from '@angular/router';
 import { Location } from '@angular/common';
 import { EditorChangeContent, EditorChangeSelection } from 'ngx-quill';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
-import {NgxUiLoaderService} from 'ngx-ui-loader';
+import { NgxUiLoaderService } from 'ngx-ui-loader';
 
 @Component({
   selector: 'app-dsarform',
   templateUrl: './dsarform.component.html',
   styleUrls: ['./dsarform.component.scss'],
   encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.OnPush
+
 })
 export class DsarformComponent implements OnInit, OnDestroy {
   @ViewChild('editor', { static: true }) editor;
@@ -81,6 +83,7 @@ export class DsarformComponent implements OnInit, OnDestroy {
   welcomeFontSize: any;
   footerTextColor: any;
   footerFontSize: any;
+  formObject: any;
   controlOption = [
     {
       id: 1,
@@ -142,17 +145,19 @@ export class DsarformComponent implements OnInit, OnDestroy {
   footerText: any;
   welcomeText: any;
   headerLogoPath: any;
-  defaultApprover: any = [];
-  defaultapprovers: any;
-  defaultDays: any = 45;
+  ApproverList: any = [];
+  defaultapprover: any;
+  daysleft: any = 45;
+  public reqURLObj = {};
   constructor(private fb: FormBuilder, private ccpaRequestService: CcparequestService,
               private organizationService: OrganizationService,
               private dsarFormService: DsarformService,
-    private ccpaFormConfigService: CCPAFormConfigurationService,
-    private router: Router, private location: Location,
-    private activatedRoute: ActivatedRoute,                             
+              private ccpaFormConfigService: CCPAFormConfigurationService,
+              private router: Router, private location: Location,
+              private activatedRoute: ActivatedRoute,
               private loadingbar: NgxUiLoaderService,
-              private modalService: NgbModal) {
+              private modalService: NgbModal,
+              private cd: ChangeDetectorRef) {
 
     this.count = 0;
     // this.loading = true;
@@ -172,7 +177,7 @@ export class DsarformComponent implements OnInit, OnDestroy {
     });
     // this.activatedRoute.queryParams.subscribe((params) => this.activatedRouteQuery = params);
     // this.organizationService.getSelectedOrgProperty.subscribe((response) => this.selectedProperty = response);
-
+    
   }
 
   ngOnInit() {
@@ -251,7 +256,7 @@ export class DsarformComponent implements OnInit, OnDestroy {
       }];
 
       this.getCCPAdefaultConfigById();
-
+      this.reqURLObj = {crid: this.crid, orgid: this.organizationID, propid: this.propId};
       this.organizationService.getOrganization.subscribe((response) => this.currentOrgID = response);
     }
 
@@ -684,6 +689,8 @@ export class DsarformComponent implements OnInit, OnDestroy {
   }
 
   publishCCPAFormConfiguration(registerForm) {
+   
+
     this.setHeaderStyle();
     console.log(this.propId, 'propid', this.orgId, 'ORG', this.crid, 'crid');
     console.log(registerForm.value, 'registerForm..');
@@ -696,15 +703,34 @@ export class DsarformComponent implements OnInit, OnDestroy {
     }
 
 
-    const formObject = {
-      form_name: this.formName,
-      form_status: 'Draft',
-      request_form: this.webFormControlList
-    };
-    // return false;
+   
+    
+    this.active = 3;
+    this.cd.detectChanges();
+    // selectedOrgProperty
+  }
+
+  createDraft() {
+    if (this.defaultapprover === undefined) {
+      return false;
+    } else {
+      this.formObject = {
+        form_name: this.formName,
+        form_status: 'Draft',
+        settings: {
+          approver: this.defaultapprover,
+          days_left: this.daysleft
+        },
+        request_form: this.webFormControlList
+      };
+    }
+    
+    console.log(this.formObject,'fo..');
+    alert(JSON.stringify(this.formObject));
+   // return false;
     if (this.orgId !== undefined && this.propId !== undefined && this.crid !== null) {
       this.loadingbar.start();
-      this.ccpaFormConfigService.updateCCPAForm(this.orgId, this.propId, this.crid, formObject)
+      this.ccpaFormConfigService.updateCCPAForm(this.orgId, this.propId, this.crid, this.formObject)
         .subscribe((data) => {
           this.loadingbar.stop();
           if (data) {
@@ -717,7 +743,7 @@ export class DsarformComponent implements OnInit, OnDestroy {
         });
     } else {
       this.loadingbar.start();
-      this.ccpaFormConfigService.createCCPAForm(this.orgId, this.propId, formObject)
+      this.ccpaFormConfigService.createCCPAForm(this.orgId, this.propId, this.formObject)
         .subscribe((data) => {
           this.loadingbar.stop();
           if (data) {
@@ -730,8 +756,7 @@ export class DsarformComponent implements OnInit, OnDestroy {
           console.log(JSON.stringify(error));
         });
     }
-    this.active = 3;
-    // selectedOrgProperty
+    this.active = 4;
   }
 
   updateWebcontrolIndex(indexData, arrayData) {
@@ -854,7 +879,7 @@ export class DsarformComponent implements OnInit, OnDestroy {
   loadDefaultApprover() {
     this.organizationService.getOrgTeamMembers(this.orgId).subscribe((data) => {
       const key = 'response';
-      this.defaultApprover = data[key];
+      this.ApproverList = data[key];
     });
   }
 

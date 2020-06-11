@@ -137,7 +137,7 @@
                                 <span *ngIf="!isDateOrString(list.user_last_login)">{{list.user_last_login}}</span>
                             </td>
                             <td>
-                                <button class="btn btn-xs btn-primary">Remove</button>
+                                <button class="btn btn-xs btn-primary" (click)="removeTeamMember(list.id)">Remove</button>
                             </td>
 
                         </tr>

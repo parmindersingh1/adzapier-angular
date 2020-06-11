@@ -100,7 +100,7 @@
   }
 
   .example-box {
-     border-bottom: 1px solid #ccc;
+    //  border-bottom: 1px solid #ccc;
      padding-bottom: 10px;
   }
 
@@ -109,6 +109,24 @@
     font-size: 14px;
   }
 
+  
+.logowidth {
+  width: 80px;
+  height: auto;
+}
+
+.headerwrapper {
+  border: 1px solid #ccc;
+  text-align: center;
+  border-radius: 5px 5px 0px 0px;
+  border-bottom: 0px;
+}
+
+.logocontainer {
+  border-radius: 4px 4px 0px 0px;
+  background-color: #3968fa;
+}
+
   .formwrapper{
     border: 1px solid #ccc;
   }
@@ -116,3 +134,43 @@
   .formwrapper > form {
     width: 100%;
   }
+
+  .clientfacingform form {
+    border: 1px solid #ccc;
+    border-radius:5px;
+  }
+
+  .clientfacingform .form-check {
+    padding: 0;
+  }
+  
+.quilleditor-wrapper {
+  display: block;
+  padding: 0px 10px;
+}
+
+.quilleditor-wrapper > .quilleditor .ql-align-right {
+  text-align: right !important;
+}
+
+.quilleditor-wrapper > .quilleditor .ql-align-center {
+  text-align: center !important;
+  margin: 0 !important;
+}
+
+.quilleditor-wrapper > .quilleditor {
+  text-align: center;
+}
+
+.is-invalid {
+  color: red;
+}
+
+.example-box .form-check-inline {
+  display: inline;
+  margin: 0 0px 0 10px;
+}
+
+.example-box .heading {
+  display: flex;
+}

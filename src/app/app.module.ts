@@ -66,6 +66,8 @@ import {ngxUiLoaderConfig} from './_constant/loading.contant';
 import { CheckoutComponent } from './checkout/checkout.component';
 import { CheckoutConfirmationComponent } from './checkout-confirmation/checkout-confirmation.component';
 
+
+
 export const isMock = environment.mock;
 
 @NgModule({
