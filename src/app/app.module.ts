@@ -11,7 +11,6 @@ import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { JwtInterceptor, fakeBackendProvider, ErrorInterceptor } from './_helpers';
-
 import { environment } from '../environments/environment';
 import { AnalyticsComponent } from './pages/dashboards/analytics/analytics.component';
 import { Ng2ChartJsModules } from 'chartjs-ng2-module';
@@ -60,8 +59,11 @@ import { VerifyemailComponent } from './verifyemail/verifyemail.component';
 import { OrganizationdetailsComponent } from './organizationdetails/organizationdetails.component';
 import { OrganizationteamComponent } from './organizationteam/organizationteam.component';
 import { FilterPipe } from './filter.pipe';
-import {NgxUiLoaderModule} from 'ngx-ui-loader';
-import {ngxUiLoaderConfig} from './_constant/adzapier.contant';
+import {NgxUiLoaderModule, NgxUiLoaderConfig} from 'ngx-ui-loader';
+import { DsarRequestsComponent } from './dsar-requests/dsar-requests.component';
+import {ngxUiLoaderConfig} from './_constant/loading.contant';
+import { CheckoutComponent } from './checkout/checkout.component';
+import { CheckoutConfirmationComponent } from './checkout-confirmation/checkout-confirmation.component';
 
 
 
@@ -106,7 +108,10 @@ export const isMock = environment.mock;
     VerifyemailComponent,
     OrganizationdetailsComponent,
     OrganizationteamComponent,
-    FilterPipe
+    FilterPipe,
+    DsarRequestsComponent,
+    CheckoutComponent,
+    CheckoutConfirmationComponent
   ],
   imports: [
     BrowserModule,
