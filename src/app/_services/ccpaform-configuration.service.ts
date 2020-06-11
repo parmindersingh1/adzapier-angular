@@ -43,24 +43,12 @@ export class CCPAFormConfigurationService extends WebControls {
 
   updateControl(oldItem, oldItemIndex, newItem) {
     const controlList = JSON.parse(localStorage.getItem('CCPAformControlList'));
-    controlList[oldItemIndex].controllabel = newItem.controllabel;
-    controlList[oldItemIndex].indexCount = newItem.indexCount;
-    controlList[oldItemIndex].control = newItem.control;
-    controlList[oldItemIndex].selectOptions = newItem.selectOptions || '';
-    controlList[oldItemIndex].welcomeText = newItem.welcomeText;
-    controlList[oldItemIndex].welcomeTextColor = newItem.welcomeTextColor;
-    controlList[oldItemIndex].welcomeFontSize = newItem.welcomeFontSize;
-    controlList[oldItemIndex].footerText = newItem.footerText;
-    controlList[oldItemIndex].footerTextColor = newItem.footerTextColor;
-    controlList[oldItemIndex].footerFontSize = newItem.footerFontSize;
-    controlList[oldItemIndex].logoURL = newItem.logoURL || '';
-    controlList[oldItemIndex].headerColor = newItem.headerColor;
+    controlList[oldItemIndex] = newItem;
     localStorage.setItem('CCPAformControlList', JSON.stringify(controlList));
   }
 
   removeControls() {
     return localStorage.removeItem('CCPAformControlList');
-
   }
 
   createCCPAForm(orgId, propId, formObject) {

@@ -528,6 +528,7 @@ export class DsarformComponent implements OnInit, OnDestroy {
     const newWebControl = {
       control: 'img',
       controllabel: 'Header Logo',
+      controlId: 'headerlogo',
       logoURL: this.headerlogoURL,
       headerColor: this.headerColor
     };
@@ -553,8 +554,8 @@ export class DsarformComponent implements OnInit, OnDestroy {
         controlId: 'welcometext',
         indexCount: 'welcome_text_Index',
         welcomeText: this.editorDataWelcome,
-        welcomeFontSize: this.welcomeFontSize,
-        welcomeTextColor: this.welcomeTextColor,
+        welcomeFontSize: this.welcomeFontSize || '13px',
+        welcomeTextColor: this.welcomeTextColor || '#000',
         preferControlOrder: ''
       };
       if (this.crid) {
@@ -568,6 +569,7 @@ export class DsarformComponent implements OnInit, OnDestroy {
         this.dsarFormService.updateControl(this.webFormControlList[customControlIndex], customControlIndex, newWebControl);
         this.webFormControlList = this.dsarFormService.getFormControlList();
       }
+      this.modalService.dismissAll('Data Saved!');
     } else {
       const footerTextControl = {
         control: 'text',
@@ -575,8 +577,8 @@ export class DsarformComponent implements OnInit, OnDestroy {
         controlId: 'footertext',
         indexCount: 'footer_text_Index',
         footerText: this.editorDataFooter,
-        footerTextColor: this.footerTextColor,
-        footerFontSize: this.footerFontSize,
+        footerTextColor: this.footerTextColor || '#000',
+        footerFontSize: this.footerFontSize || '13px',
         preferControlOrder: ''
       };
 
@@ -591,6 +593,7 @@ export class DsarformComponent implements OnInit, OnDestroy {
         this.dsarFormService.updateControl(this.webFormControlList[customControlIndex], customControlIndex, footerTextControl);
         this.webFormControlList = this.dsarFormService.getFormControlList();
       }
+      this.modalService.dismissAll('Data Saved!');
     }
 
 

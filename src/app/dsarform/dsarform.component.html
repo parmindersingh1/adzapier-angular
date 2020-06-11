@@ -79,7 +79,7 @@
                                                             <button *ngIf="isCustomControlWithRadioBtn(item)"
                                                                 class="btn btn-sm btn-outline-primary editbtn"
                                                                 (click)="deleteSelectedItem(item)">
-                                                                delete
+                                                                <i class="fa fa-trash" aria-hidden="true"></i>
                                                             </button>
                                                             <button class="btn btn-sm btn-outline-primary editbtn"
                                                                 (click)="editSelectedRow(item)">
@@ -604,7 +604,7 @@
                 [styles]="{height: '200px'}"></quill-editor>
             <button class="btn btn-outline-dark float-left mt-2"
                 (click)="modal.dismiss('Close Clicked')">cancel</button>
-            <button class="btn btn-primary float-right mt-2" type="submit" (click)="modal.dismiss('Close Clicked')">save</button>
+            <button class="btn btn-primary float-right mt-2" type="submit">save</button>
         </form>
     </div>
     <ng-template #footerContent>
@@ -614,7 +614,7 @@
                     [styles]="{height: '200px'}"></quill-editor>
                 <button class="btn btn-outline-dark float-left mt-2"
                     (click)="modal.dismiss('Close Clicked')">cancel</button>
-                <button class="btn btn-primary float-right mt-2" type="submit" (click)="modal.dismiss('Close Clicked')">save</button>
+                <button class="btn btn-primary float-right mt-2" type="submit">save</button>
             </form>
         </div>
     </ng-template>

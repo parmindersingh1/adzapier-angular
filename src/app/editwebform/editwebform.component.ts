@@ -52,6 +52,7 @@ export class EditwebformComponent implements OnInit {
   editorDataWelcome: string;
   submitted: any;
   selectedwebFormControlList: any;
+  settings: any;
   constructor(private ccpaFormConfigService: CCPAFormConfigurationService,
               private organizationService: OrganizationService,
               private ccpaRequestService: CcparequestService,
@@ -125,11 +126,13 @@ export class EditwebformComponent implements OnInit {
       } else {
         const key = 'request_form';
         const fname = 'form_name';
+        const approverDaysleft = 'settings';
         this.propertyId = data.response.PID;
         this.crid = data.response.crid;
         this.organizationID = data.response.OID;
         this.webFormControlList = data.response[key];
         this.formName = data.response[fname];
+        this.settings = data.response[approverDaysleft];
         this.webFormControlList.filter((t) => {
           if (t.controlId === 'footertext') {
             this.footerText = t.footerText;
@@ -138,7 +141,6 @@ export class EditwebformComponent implements OnInit {
           } else if (t.controlId === 'headerlogo') {
             this.headerlogoURL = t.logoURL;
             this.headerColor = t.headerColor;
-            // this.hea
           }
         });
         this.selectedwebFormControlList = this.rearrangeFormSequence(data.response[key]);
@@ -153,16 +155,10 @@ export class EditwebformComponent implements OnInit {
   }
 
   register(customerData: NgForm) {
-    
-    // console.log(this.requestObject, 'requestObject..');
-    // console.log(customerData.value, 'CD...form..');
-    // console.log(this.checkBoxValues, 'checkBoxValues..');
     const formData = [];
     let finalObj;
     formData.push(customerData.value);
-    // console.log(formData, 'formData..');
     const arryObj = Object.keys(customerData.value);
-    // console.log(arryObj, 'obj..');
     const keyArray = this.extractKeyWithIndex(formData);
 
     if (keyArray.length > 0) {
@@ -194,8 +190,12 @@ export class EditwebformComponent implements OnInit {
         }
       }
     }
+    
+
+    console.log(this.settings,'settings');
+    Object.assign(finalObj, this.settings);
     console.log(finalObj,'finalObj editwebform..');
-   // return false;
+    
     this.loadingBar.start();
     this.ccpadataService.createCCPAData(this.organizationID, this.propertyId, this.crid, finalObj)
       .subscribe((data) => {

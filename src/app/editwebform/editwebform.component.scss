@@ -156,3 +156,30 @@
 .example-box .heading {
   display: flex;
 }
+
+.quilleditor p {
+  text-align: center;
+  width: 50%;
+  margin: 0 auto;
+  font-weight: 500;
+}
+
+.quilleditor-wrapper .quilleditor p {
+  text-align: center;
+  font-weight: 500;
+}
+
+.quilleditor-wrapper {
+  display: block;
+  padding: 0px 20px;
+}
+
+.quilleditor-wrapper .quilleditor .ql-align-right {
+  text-align: right !important;
+}
+
+.quilleditor-wrapper .quilleditor .ql-align-center {
+  text-align: center !important;
+  margin: 0 !important;
+}
+
