@@ -51,6 +51,7 @@ export class EditwebformComponent implements OnInit {
   footerFontSize: any;
   editorDataWelcome: string;
   submitted: any;
+  selectedwebFormControlList: any;
   constructor(private ccpaFormConfigService: CCPAFormConfigurationService,
               private organizationService: OrganizationService,
               private ccpaRequestService: CcparequestService,
@@ -140,8 +141,8 @@ export class EditwebformComponent implements OnInit {
             // this.hea
           }
         });
-        const selectedwebFormControlList = this.rearrangeFormSequence(data.response[key]);
-        this.webFormControlList = selectedwebFormControlList;
+        this.selectedwebFormControlList = this.rearrangeFormSequence(data.response[key]);
+        this.webFormControlList = this.selectedwebFormControlList;
         return this.webFormControlList;
       }
     }, (error) => {
@@ -194,7 +195,7 @@ export class EditwebformComponent implements OnInit {
       }
     }
     console.log(finalObj,'finalObj editwebform..');
-    return false;
+   // return false;
     this.loadingBar.start();
     this.ccpadataService.createCCPAData(this.organizationID, this.propertyId, this.crid, finalObj)
       .subscribe((data) => {
