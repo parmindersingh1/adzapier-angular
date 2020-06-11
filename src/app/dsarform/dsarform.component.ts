@@ -726,7 +726,6 @@ export class DsarformComponent implements OnInit, OnDestroy {
     }
     
     console.log(this.formObject,'fo..');
-    alert(JSON.stringify(this.formObject));
    // return false;
     if (this.orgId !== undefined && this.propId !== undefined && this.crid !== null) {
       this.loadingbar.start();
