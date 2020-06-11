@@ -11,7 +11,6 @@ import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { JwtInterceptor, fakeBackendProvider, ErrorInterceptor } from './_helpers';
-
 import { environment } from '../environments/environment';
 import { AnalyticsComponent } from './pages/dashboards/analytics/analytics.component';
 import { Ng2ChartJsModules } from 'chartjs-ng2-module';
