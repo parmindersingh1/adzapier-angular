@@ -41,7 +41,7 @@ loadWebControls() {
                 controllabel: 'Welcome Text',
                 controlId: 'welcometext',
                 indexCount: 'welcome_text_Index',
-                welcomeText: 'Welcome text',
+                welcomeText: `<p>Welcome! Please complete this form to submit a request and we will respond as soon as possible. Thank you.</p>`,
                 welcomeTextColor: '',
                 welcomeFontSize: '',
                 preferControlOrder: ''
@@ -118,7 +118,7 @@ loadWebControls() {
                 controllabel: 'Footer Text',
                 controlId: 'footertext',
                 indexCount: 'footer_text_Index',
-                footerText: 'Footer Text',
+                footerText: `<p>Adzapier <br/> 123 Main Street Capital City, ST, USA 10001 +1-800-000-0000 emailprivacy@generitech.com</p>`,
                 footerTextColor: '',
                 footerFontSize: '',
                 preferControlOrder: ''

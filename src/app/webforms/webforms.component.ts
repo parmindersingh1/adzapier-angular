@@ -69,6 +69,14 @@ export class WebformsComponent implements OnInit {
     this.router.navigate(['/dsarform', { crid: data.crid }]);
   }
 
+  navigateToDSARForm() {
+    if (this.currentPropertyName !== undefined) {
+      this.router.navigate(['/dsarform']);
+    } else {
+      alert('Please Select property first!');
+    }
+  }
+
   // ngOnDestroy() {
   //   if (this.mySubscription) {
   //     this.mySubscription.unsubscribe();
