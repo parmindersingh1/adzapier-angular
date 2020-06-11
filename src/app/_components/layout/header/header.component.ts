@@ -85,7 +85,7 @@ export class HeaderComponent implements  OnInit {
         this.userID = this.currentUser.response.uid;
         console.log(this.userRole,'userRole...');
         this.loadOrganizationWithProperty();
-        
+
       }
     });
    // this.getLoggedInUserDetails();
@@ -108,7 +108,7 @@ export class HeaderComponent implements  OnInit {
     //     this.currentOrganization = data.response.orgname;
     //     console.log(this.currentOrganization, 'currentOrganization..');
     //  });
-     
+
     }
     this.publicNavigationMenu = [
       {
@@ -168,7 +168,7 @@ export class HeaderComponent implements  OnInit {
       this.orgList = Object.values(data)[1];
       this.leftItems = this.orgList;
 
-      
+
       console.log(this.leftItems, 'leftItems..');
     //  this.loadOrganizationProperty();
       //  else {
@@ -219,10 +219,10 @@ export class HeaderComponent implements  OnInit {
             { showlink: 'Consent Tracking', routerLink: '/pagenotfound', icon: 'fas fa-file-contract feather-16' },
             { showlink: 'Setup', routerLink: '/pagenotfound', icon: 'fas fa-wrench feather-16' }
           ]
-        }, { showlink: 'Billing', routerLink: '/pagenotfound' }];
+        }, { showlink: 'Billing', routerLink: '/billing' }];
     });
 
-    
+
 
   }
 
@@ -235,7 +235,7 @@ export class HeaderComponent implements  OnInit {
   //     console.log(data, 'datapropertyList..');
   //     this.propertyList = data;
   //   });
- 
+
   // }
 
   getLoggedInUserDetails() {
@@ -271,9 +271,9 @@ export class HeaderComponent implements  OnInit {
       this.selectedOrgProperties.push(obj);
       this.orgservice.setCurrentOrgWithProperty(obj);
       this.currentSelectedProperty();
-     
+
     }
-    
+
     // this.router.navigate(['/webforms']);
   }
 
@@ -311,9 +311,9 @@ export class HeaderComponent implements  OnInit {
           this.isPropSelected(data);
         }
       }
-      
+
     });
-   
+
     this.orgservice.editedProperty.subscribe((prop) => {
       if (prop) {
         this.currentProperty = prop.response.name;

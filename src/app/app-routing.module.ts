@@ -36,6 +36,8 @@ import { VerifyemailComponent } from './verifyemail/verifyemail.component';
 import { OrganizationdetailsComponent } from './organizationdetails/organizationdetails.component';
 import { OrganizationteamComponent } from './organizationteam/organizationteam.component';
 import {DsarRequestsComponent} from "./dsar-requests/dsar-requests.component";
+import {CheckoutComponent} from "./checkout/checkout.component";
+import {CheckoutConfirmationComponent} from "./checkout-confirmation/checkout-confirmation.component";
 
 
 const routes: Routes = [
@@ -74,6 +76,8 @@ const routes: Routes = [
   { path: 'company', component: CompanyComponent, canActivate: [AuthGuard] },
   { path: 'billing', component: BillingComponent, canActivate: [AuthGuard] },
   { path: 'verify-email/:id', component: VerifyemailComponent },
+  { path: 'checkout', component: CheckoutComponent,  canActivate: [AuthGuard] },
+  { path: 'success', component: CheckoutConfirmationComponent,  canActivate: [AuthGuard]  },
   { path: '', redirectTo: 'home/dashboard/analytics', pathMatch: 'full', canActivate: [AuthGuard] },
 
   // { path: '', redirectTo: 'home/dashboard/analytics', pathMatch:'full' },

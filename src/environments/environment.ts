@@ -8,6 +8,7 @@ export const environment = {
   production: false,
   mock: true,
   apiUrl: 'http://my-api-url',
+  stripePublishablekey : 'pk_test_Bea8DtMw2JDaQoZuvyd2yEdE00wtdPEyoM'
 };
 
 
