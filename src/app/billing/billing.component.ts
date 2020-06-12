@@ -12,7 +12,6 @@ import {CompanyService} from "../company.service";
 })
 export class BillingComponent implements OnInit {
   isSuccess = false;
-  loading = false;
   isError = false;
   billingDetails;
   companyDetails;
@@ -36,14 +35,14 @@ export class BillingComponent implements OnInit {
   }
 
   onGetCurrentPlan() {
-    this.loading = true;
+    this.loading.start();
     this.billingService.getCurrentPlan().subscribe(res => {
-      // this.loading = false;
+      this.loading.stop();
       if (res['status'] === 200) {
         this.billingDetails = res['response'];
       }
     }, error => {
-      // this.loading.stop();
+      this.loading.stop();
       console.log(error);
     });
   }
