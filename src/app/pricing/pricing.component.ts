@@ -72,8 +72,8 @@ export class PricingComponent implements OnInit {
     this.onSetValue();
   }
 
-  onSelectBillingCycle(event) {
-    this.billingCycle = event.target.value;
+  onSelectBillingCycle(value) {
+    this.billingCycle = value;
     this.onSetValue();
   }
   onSetValue() {

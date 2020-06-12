@@ -12,4 +12,9 @@ export class BillingService {
     const path = '/billing/subscribe';
     return this.http.post(environment.apiUrl + path, data);
   }
+
+  getCurrentPlan() {
+    const path = '/billing/current_plan';
+    return this.http.get(environment.apiUrl + path);
+  }
 }

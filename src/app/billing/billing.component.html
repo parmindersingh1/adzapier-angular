@@ -3,13 +3,21 @@
     <div>
       <nav aria-label="breadcrumb">
         <ol class="breadcrumb breadcrumb-style1 mg-b-10">
-          <li class="breadcrumb-item"><a href="#">Admin</a></li>
+          <li class="breadcrumb-item"><a routerLink="/">Dashboard</a></li>
           <li class="breadcrumb-item active" aria-current="page">billing</li>
         </ol>
       </nav>
       <h4 class="mg-b-0 tx-spacing--1">Billing</h4>
     </div>
-    <button id="toggleplan" class="btn btn-primary">Paid/Free</button>
+<!--    <button id="toggleplan" class="btn btn-primary">Paid/Free</button>-->
+  </div>
+
+  <div *ngIf="isSuccess" class="mb-0 mt-3 alert alert-success">
+    <strong> Payment Received!</strong> Thanks for the payment - Your plan has been upgraded
+  </div>
+
+  <div *ngIf="isError" class="mb-0 mt-3 alert alert-danger">
+    <strong>Error!</strong> Something went Wrong...
   </div>
 
   <div class="paid" style="position: relative;">
@@ -19,12 +27,12 @@
           <div class="card-body">
             <h5 class="card-title">Bill Estimate</h5>
 
-            <span class="card-text">USD 20.00
+            <span class="card-text">{{billingDetails.billing_history.currency}} {{billingDetails.billing_history.amount}}
                                 <span class="card-text">(tax inclusive) </span>
                             </span>
             <br>
-            <span> Plan Subscribed: Plus </span>
-            <p>Next Charge: May 28,2020</p>
+            <span> Plan Subscribed: {{billingDetails.billing_details.plan_name}} </span>
+<!--            <p>Next Charge: May 28,2020</p>-->
 
           </div>
           <div class="card-footer">
@@ -33,22 +41,27 @@
           </div>
         </div>
       </div>
+
+
+
+
+
       <div class="col-sm-6 col-lg-6 mg-t-40 mg-sm-t-0 mg-md-t-40">
         <div class="card" style="min-height:200px">
           <div class="card-body">
             <h5 class="card-title">Billing details</h5>
-            <h6 class="card-subtitle mb-2 text-muted">Billing period</h6>
-            <p class="card-text">Monthly</p>
+<!--            <h6 class="card-subtitle mb-2 text-muted">Billing period</h6>-->
+<!--            <p class="card-text">Monthly</p>-->
             <div class="row">
               <div class="col-sm-3">
-                <i class="fab fa-cc-amex" aria-hidden="true" style="font-size: 70px;"></i>
+                <i class="fab fa-cc-{{billingDetails.billing_details.brand}}" aria-hidden="true" style="font-size: 70px;"></i>
               </div>
               <div class="col-sm-9">
-                <span p-0="">**** ****** **1008</span>
+                <span p-0="">{{billingDetails.billing_details.card_number}}</span>
                 <br>
-                <span>Dharmesh patel</span>
+                <span>{{billingDetails.billing_details.name}}</span>
                 <br>
-                <p>Expires 11/2024</p>
+                <p>Expires <span [innerHTML]="billingDetails.billing_details.expiry"></span></p>
               </div>
             </div>
           </div>
@@ -62,10 +75,10 @@
           <div class="card-body">
             <h5 class="card-title">Bill history</h5>
 
-            <span class="card-text">USD 20.00
+                                                  <span class="card-text">{{billingDetails.billing_history.currency}} {{billingDetails.billing_history.amount}}
                                 <span class="card-text">(tax inclusive) </span>
                             </span>
-            <p>Next Charge: May 28,2020</p>
+<!--            <p>Next Charge: May 28,2020</p>-->
           </div>
         </div>
       </div>
@@ -74,12 +87,12 @@
         <div class="card" style="min-height:200px">
           <div class="card-body">
             <h5 class="card-title">Company Name</h5>
-            <h6 class="card-subtitle mb-2 text-muted">AdZapier</h6>
+            <h6 class="card-subtitle mb-2 text-muted">{{companyDetails.name}}</h6>
 
-            <h6 class="tx-15 mg-b-10">Company Name</h6>
-            <p class="mg-b-0">4033 Patterson Road, Staten Island, NY 10301</p>
-            <p class="mg-b-0">Tel No: 324 445-4544</p>
-            <p class="mg-b-0">Email: youremail@companyname.com</p>
+            <h6 class="tx-15 mg-b-10">Contact Info</h6>
+            <p class="mg-b-0">{{billingDetails.company_details.address}}</p>
+<!--            <p class="mg-b-0">Tel No: 324 445-4544</p>-->
+            <p class="mg-b-0">Email: {{billingDetails.company_details.email}}</p>
 
           </div>
         </div>
@@ -87,27 +100,6 @@
 
     </div>
   </div>
-
-  <div class="free mg-t-0" style="visibility: hidden;position: relative;">
-    <div class="row row-xs ">
-      <div class="col-sm-12 col-lg-12 mg-t-40 mg-sm-t-0 mg-md-t-40">
-        <div class="card" style="min-height:200px">
-          <div class="card-body">
-            <p>
-              Your current plan is <strong>FOREVER FREE </strong>. Upgrade to a paid plan to unlock all features.
-              <a target="_blank" href="/pricing/">
-                See pricing and features</a>.
-            </p>
-
-            <a class="btn btn-success" href="page-pricing.html"> Upgrade Now!</a>
-          </div>
-        </div>
-      </div>
-
-
-    </div>
-  </div>
-
-
 
 </div>
+

@@ -5,8 +5,8 @@
     <div>
       <nav aria-label="breadcrumb">
         <ol class="breadcrumb breadcrumb-style1 mg-b-10">
-          <li class="breadcrumb-item"><a href="#">Admin</a></li>
-          <li class="breadcrumb-item" aria-current="page"><a href="page-billing.html">Billing</a></li>
+          <li class="breadcrumb-item"><a routerLink="/billing">Billing</a></li>
+          <li class="breadcrumb-item" aria-current="page"><a routerLink="/pricing">Pricing</a></li>
           <li class="breadcrumb-item active" aria-current="page">Checkout</li>
         </ol>
       </nav>
@@ -41,7 +41,7 @@
           <br>
           <br>
           <a class="card-link" routerLink="/pricing"> Cancel</a>
-          <a style="margin-left: 20px;" class="btn btn-success" (click)="onCheckout()" > Checkout</a>
+          <a class="btn btn-success" (click)="onCheckout()" > Checkout</a>
           <br>
           <br>
           <p>Your card will be immediately charged {{planDetails.price}} and then billed {{planDetails.price}} each {{planDetails.cycle}}.</p>

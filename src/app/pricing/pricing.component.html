@@ -3,20 +3,19 @@
     <div class="row justify-content-center">
       <div class="col-10 cmol-sm-6 col-md-4 col-lg-2 d-flex flex-column bg-ui-01 mg-t-100 mg-10 pd-t-30 rounded-10">
 
-        <div class="form-group">
-
-
-
-          <label for="billing-cycle">Select Billing Cycle:</label>
-          <select (change)="onSelectBillingCycle($event)" class="form-control" id="billing-cycle">
-            <option value="MONTHLY" selected>MONTHLY</option>
-            <option value="YEARLY">YEARLY</option>
-          </select>
+        <label>Select Billing Cycle:</label>
+        <div class="btn-group" dropdown>
+          <button id="button-basic" dropdownToggle type="button" class="btn btn-default dropdown-toggle"
+                  aria-controls="dropdown-basic">
+            {{billingCycle | titlecase}}<span class="ml-3 caret"></span>
+          </button>
+          <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu"
+              role="menu" aria-labelledby="button-basic">
+            <li role="menuitem" (click)="onSelectBillingCycle('MONTHLY')" >Monthly Plans</li>
+            <li role="menuitem" (click)="onSelectBillingCycle('YEARLY')">Yearly Plans</li>
+          </ul>
         </div>
-
-
-
-        <p class="tx-size-20 tx-normal mg-b-30 ">Customize your solution here </p>
+        <p class="tx-size-20 tx-normal mg-b-30 solution">Customize your solution here </p>
         <div class="custom-control custom-switch mg-5">
           <input type="checkbox" class="custom-control-input" checked (change)="$event.target.checked = true" id="customSwitch1">
           <label class="custom-control-label" for="customSwitch1">CCPA</label>
