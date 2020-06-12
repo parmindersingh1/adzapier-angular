@@ -1,8 +1,6 @@
-import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {BillingService} from "../_services/billing.service";
-import {NgxUiLoaderService} from "ngx-ui-loader";
-import {ChangeDetection} from "@angular/cli/lib/config/schema";
 import {CompanyService} from "../company.service";
 
 @Component({
@@ -12,12 +10,12 @@ import {CompanyService} from "../company.service";
 })
 export class BillingComponent implements OnInit {
   isSuccess = false;
+  loading = false;
   isError = false;
   billingDetails;
   companyDetails;
   constructor(private activatedRoute: ActivatedRoute,
               private billingService: BillingService,
-              private loading: NgxUiLoaderService,
               private companyService: CompanyService
   ) {
 
@@ -35,14 +33,14 @@ export class BillingComponent implements OnInit {
   }
 
   onGetCurrentPlan() {
-    this.loading.start();
+    this.loading = true;
     this.billingService.getCurrentPlan().subscribe(res => {
-      this.loading.stop();
+      this.loading = false;
       if (res['status'] === 200) {
         this.billingDetails = res['response'];
       }
     }, error => {
-      this.loading.stop();
+      this.loading = false;
       console.log(error);
     });
   }
