@@ -47,7 +47,7 @@
                                 [(ngModel)]="requestObject[webcontrol.controllabel]"
                                 [ngClass]="{ 'is-invalid': registerForm.submitted && requestype.invalid }" required
                                 >
-                                <option *ngFor="let opt of requestType" [value]="opt.request_type_id">
+                                <option *ngFor="let opt of webcontrol.selectOptions" [value]="opt.request_type_id">
                                     {{ opt.name }}
                                 </option>
                             </select>
@@ -59,7 +59,7 @@
                         <div class="form-check"
                             *ngIf="webcontrol.control === 'radio' && webcontrol.controlId === 'requesttype'">
                             <!-- *ngIf="radioBtnType"-->
-                            <ng-container *ngFor="let opt of requestType; let last = last">
+                            <ng-container *ngFor="let opt of webcontrol.selectOptions; let last = last">
                                 <div class="form-check-inline">
                                 <input class="form-check-input" type="radio"
                                     name="{{webcontrol.controllabel}}" [value]='opt.request_type_id' #requestype="ngModel"
@@ -78,7 +78,7 @@
                         <div class="form-check"
                             *ngIf="webcontrol.control === 'checkbox' && webcontrol.controlId === 'requesttype'">
                             <!-- *ngIf="checkboxBtnType"-->
-                            <div *ngFor="let opt of requestType; let i = index;"
+                            <div *ngFor="let opt of webcontrol.selectOptions; let i = index;"
                                 class="form-check-inline">
                                 <input class="form-check-input" type="checkbox"  #requestype="ngModel"
                                     name="{{webcontrol.controllabel}}" [value]='opt.request_type_id' (change)="onCheckboxChange(opt)"
@@ -100,7 +100,7 @@
                             <!-- *ngIf="isSubjectTypeSelected"-->
                             <select class="form-control" name="{{webcontrol.controllabel}}" #subjecttype="ngModel"
                                 [(ngModel)]="requestObject[webcontrol.controllabel]" [ngClass]="{ 'is-invalid': registerForm.submitted && subjecttype.invalid }" required>
-                                <option *ngFor="let userOpt of subjectType"
+                                <option *ngFor="let userOpt of webcontrol.selectOptions"
                                     [value]="userOpt.subject_type_id">
                                     {{ userOpt.name }}
                                 </option>
@@ -115,7 +115,7 @@
                         <div class="form-check"
                             *ngIf="webcontrol.control == 'radio' && webcontrol.controlId === 'subjecttype'">
                             <!--*ngIf="subjectTyperadioBtn"-->
-                            <div *ngFor="let userOpt of subjectType; let last = last" class="form-check-inline">
+                            <div *ngFor="let userOpt of webcontrol.selectOptions; let last = last" class="form-check-inline">
                                 <input class="form-check-input" type="radio" #subjecttype="ngModel"
                                     name="{{webcontrol.controllabel}}" [value]='userOpt.subject_type_id'  (change)="onCheckboxChange(userOpt)"
                                     [(ngModel)]="requestObject[userOpt.name]" [ngClass]="{ 'is-invalid': registerForm.submitted && subjecttype.invalid }" required />
@@ -130,7 +130,7 @@
                         <div
                             *ngIf="webcontrol.control == 'checkbox' && webcontrol.controlId === 'subjecttype'">
                             <!--*ngIf="subjectTypecheckboxBtnType"-->
-                            <div *ngFor="let opt of subjectType; let i = index; let last = last"
+                            <div *ngFor="let opt of webcontrol.selectOptions; let i = index; let last = last"
                                 class="form-check-inline">
                                 <input class="form-check-input" type="checkbox"  #subjecttype="ngModel" (change)="onCheckboxChange(opt)"
                                     name="{{webcontrol.controllabel}}" [value]='opt.subject_type_id'

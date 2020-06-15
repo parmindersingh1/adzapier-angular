@@ -1,6 +1,13 @@
+import { Injectable } from '@angular/core';
+import { CcparequestService } from '../_services/ccparequest.service';
+@Injectable()
 export class WebControls {
     // stateList: any;
     // countries: any;
+    constructor(public subjectType?: any[],
+                public cCPARequestService?: CcparequestService,
+                public requestType?: any[]) { }
+
     countries = [
     {
         id: 'us',
@@ -41,7 +48,8 @@ loadWebControls() {
                 controllabel: 'Welcome Text',
                 controlId: 'welcometext',
                 indexCount: 'welcome_text_Index',
-                welcomeText: `<p>Welcome! Please complete this form to submit a request and we will respond as soon as possible. Thank you.</p>`,
+                welcomeText: `<p>Welcome! Please complete this form to submit a request ` +
+                             `and we will respond as soon as possible. Thank you.</p>`,
                 welcomeTextColor: '',
                 welcomeFontSize: '',
                 preferControlOrder: ''
@@ -51,7 +59,7 @@ loadWebControls() {
                 controllabel: 'I am a (an)',
                 controlId: 'subjecttype',
                 indexCount: 'subject_type_Index',
-                selectOptions: 'subjectType',
+                selectOptions: this.subjectType,
                 preferControlOrder: ''
             },
             {
@@ -59,7 +67,7 @@ loadWebControls() {
                 controllabel: 'Select request type(s)',
                 controlId: 'requesttype',
                 indexCount: 'request_type_Index',
-                selectOptions: 'requestType',
+                selectOptions: this.requestType,
                 preferControlOrder: ''
             },
             {
@@ -230,24 +238,4 @@ if (localStorage.getItem('CCPAformControlList') === null || localStorage.getItem
     //       ];
     // }
     // kept for request type, subject type for later use
-    // getCCPAdefaultConfigById() {
-    //     this.organizationService.orglist().pipe(
-    //       switchMap((data) => {
-    //         for (const key in data) {
-    //           if (data[key] !== undefined) {
-    //             return this.ccpaRequestService.getCCPAdefaultRequestSubjectType(data[key][0].orgid);
-    //           }
-    //         }
-    //       })
-    //     ).subscribe((data) => {
-    //       if (data !== undefined) {
-    //         const key = 'response';
-    //         const rdata = data[key].request_type;
-    //         const sdata = data[key].subject_type;
-    //         this.requestType = rdata;
-    //         this.subjectType = sdata;
-    //         this.loadWebControls();
-    //       }
-    //     });
-    //   }
 }
