@@ -300,6 +300,7 @@ export class OrganizationdetailsComponent implements OnInit {
 
   onChangeEvent(event) {
     this.paginationConfig.itemsPerPage = Number(event.target.value);
+    this.loadOrgTeamMembers(this.organizationID);
   }
 
   propertyPageChangeEvent(event) {

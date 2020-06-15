@@ -84,6 +84,11 @@ export class DsarformComponent implements OnInit, OnDestroy {
   footerTextColor: any;
   footerFontSize: any;
   formObject: any;
+  sideMenuRequestTypeOptions: any = [];
+  sideMenuSubjectTypeOptions: any = [];
+  isRequestType: boolean;
+  isSubjectType: boolean;
+
   controlOption = [
     {
       id: 1,
@@ -150,14 +155,14 @@ export class DsarformComponent implements OnInit, OnDestroy {
   daysleft: any = 45;
   public reqURLObj = {};
   constructor(private fb: FormBuilder, private ccpaRequestService: CcparequestService,
-              private organizationService: OrganizationService,
-              private dsarFormService: DsarformService,
-              private ccpaFormConfigService: CCPAFormConfigurationService,
-              private router: Router, private location: Location,
-              private activatedRoute: ActivatedRoute,
-              private loadingbar: NgxUiLoaderService,
-              private modalService: NgbModal,
-              private cd: ChangeDetectorRef) {
+    private organizationService: OrganizationService,
+    private dsarFormService: DsarformService,
+    private ccpaFormConfigService: CCPAFormConfigurationService,
+    private router: Router, private location: Location,
+    private activatedRoute: ActivatedRoute,
+    private loadingbar: NgxUiLoaderService,
+    private modalService: NgbModal,
+    private cd: ChangeDetectorRef) {
 
     this.count = 0;
     // this.loading = true;
@@ -177,11 +182,13 @@ export class DsarformComponent implements OnInit, OnDestroy {
     });
     // this.activatedRoute.queryParams.subscribe((params) => this.activatedRouteQuery = params);
     // this.organizationService.getSelectedOrgProperty.subscribe((response) => this.selectedProperty = response);
-    
+
   }
 
   ngOnInit() {
     this.loadingbar.start();
+    this.webFormControlList = this.dsarFormService.getFormControlList();
+    this.getCCPAdefaultConfigById();
     this.organizationService.currentProperty.subscribe((response) => {
       this.loadingbar.stop();
       if (response !== '') {
@@ -203,7 +210,7 @@ export class DsarformComponent implements OnInit, OnDestroy {
 
     // this.loading = true;
     if (this.crid) {
-      this.getCCPAdefaultConfigById();
+      // this.getCCPAdefaultConfigById();
       this.loadingbar.start();
       this.webFormSelectedData = this.ccpaFormConfigService.currentFormData.subscribe((data) => {
         this.loadingbar.stop();
@@ -224,7 +231,6 @@ export class DsarformComponent implements OnInit, OnDestroy {
             } else if (t.controlId === 'headerlogo') {
               this.headerlogoURL = t.logoURL;
               this.headerColor = t.headerColor;
-              // this.hea
             }
           });
           // this.ccpaFormConfigService.removeControls();
@@ -255,8 +261,8 @@ export class DsarformComponent implements OnInit, OnDestroy {
         name: ' '
       }];
 
-      this.getCCPAdefaultConfigById();
-      this.reqURLObj = {crid: this.crid, orgid: this.organizationID, propid: this.propId};
+      // this.getCCPAdefaultConfigById();
+      this.reqURLObj = { crid: this.crid, orgid: this.organizationID, propid: this.propId };
       this.organizationService.getOrganization.subscribe((response) => this.currentOrgID = response);
     }
 
@@ -265,23 +271,7 @@ export class DsarformComponent implements OnInit, OnDestroy {
     });
     this.isWelcomeEditor = false;
     this.loadDefaultApprover();
-  }
-
-  loadWebControl() {
-    if (this.crid) {
-      this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
-      console.log(this.webFormControlList, 'loadwebcontrol..11');
-    } else {
-      this.webFormControlList = this.dsarFormService.getFormControlList();
-      console.log(this.webFormControlList, 'loadwebcontrol..');
-    }
-
-  }
-
-
-
-  trackByIndex(index: number, obj: any): any {
-    return index;
+    this.getCCPAdefaultConfigById();
   }
 
   getCCPAdefaultConfigById() {
@@ -302,6 +292,63 @@ export class DsarformComponent implements OnInit, OnDestroy {
     });
   }
 
+  loadWebControl() {
+    if (this.crid) {
+      this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
+      console.log(this.webFormControlList, 'loadwebcontrol..11');
+
+      this.ccpaFormConfigService.setFormControlList(this.webFormControlList);
+    } else {
+      this.webFormControlList = this.dsarFormService.getFormControlList();
+      console.log(this.webFormControlList, 'loadwebcontrol..');
+      this.webFormControlList.filter((t) => {
+        if (t.controlId === 'requesttype') {
+          //  this.sideMenuRequestTypeOptions = this.requestType;
+          t.selectOptions = this.requestType;
+        } else if (t.controlId === 'subjecttype') {
+          // this.sideMenuSubjectTypeOptions = this.subjectType;
+          t.selectOptions = this.subjectType;
+        }
+      });
+      this.dsarFormService.setFormControlList(this.webFormControlList);
+    }
+
+  }
+
+  loadSubjectRequestTypeForSideNav(selectedType) {
+
+    this.webFormControlList.filter((t) => {
+      if (t.controlId === selectedType) {
+        if (selectedType === 'subjecttype') {
+          t.selectOptions = this.subjectType;
+          this.sideMenuSubjectTypeOptions = this.subjectType;
+          // t.selectOptions = this.sideMenuSubjectTypeOptions;
+        } else {
+          t.selectOptions = this.requestType;
+          this.sideMenuRequestTypeOptions = this.requestType;
+          // t.selectOptions = this.sideMenuRequestTypeOptions;
+        }
+
+      }
+    });
+    // this.selectOptions = this.sideMenuSubjectTypeOptions;
+    if (this.sideMenuRequestTypeOptions.length !== 0 && this.isRequestType) {
+      console.log(this.sideMenuRequestTypeOptions);
+      return this.sideMenuRequestTypeOptions;
+    } else {
+      console.log(this.sideMenuSubjectTypeOptions);
+      return this.sideMenuSubjectTypeOptions;
+    }
+
+
+  }
+
+  trackByIndex(index: number, obj: any): any {
+    return index;
+  }
+
+
+
   register(formData: NgForm) {
     console.log(formData.value, 'register..');
   }
@@ -320,6 +367,7 @@ export class DsarformComponent implements OnInit, OnDestroy {
   }
 
 
+
   onFormSubmit(data: NgForm) {
     console.log(data, 'onFormSubmit..');
   }
@@ -333,9 +381,18 @@ export class DsarformComponent implements OnInit, OnDestroy {
     this.showFormOption = !this.showFormOption;
     if (this.isEditingList) {
       if (this.existingControl.controlId === 'country' || this.existingControl.controlId === 'state' ||
-        this.existingControl.control === 'textbox' || this.existingControl.control === 'textarea' ||
-        this.existingControl.controlId === 'subjecttype' || this.existingControl.controlId === 'requesttype') {
+        this.existingControl.control === 'textbox' || this.existingControl.control === 'textarea') {
         this.selectedControlType = false;
+        this.isSubjectType = false;
+        this.isRequestType = false;
+      } else if (this.existingControl.controlId === 'subjecttype') {
+        this.isSubjectType = true;
+        this.isRequestType = false;
+        this.loadSubjectRequestTypeForSideNav('subjecttype');
+      } else if (this.existingControl.controlId === 'requesttype') {
+        this.isRequestType = true;
+        this.isSubjectType = false;
+        this.loadSubjectRequestTypeForSideNav('requesttype');
       } else {
         this.selectedControlType = true;
       }
@@ -343,6 +400,8 @@ export class DsarformComponent implements OnInit, OnDestroy {
       this.selectedControlType = true;
     } else {
       this.selectedControlType = false;
+      this.isSubjectType = false;
+      this.isRequestType = false;
     }
   }
 
@@ -408,6 +467,51 @@ export class DsarformComponent implements OnInit, OnDestroy {
     console.log(this.selectOptions, 'selectOptions..');
   }
 
+  addCustomReqestSubjectType() {
+    // isSubjectType,isRequestType
+    let subjectObj: Anything = {};
+    let requestObj: Anything = {};
+    const keylabel = this.lblText.split(' ').join('_');
+    if (this.isSubjectType) {
+      subjectObj = {
+        subject_type_id: this.generateUUID(),
+        active: true,
+        created_at: new Date().toJSON(),
+        updated_at: new Date().toJSON(),
+      };
+
+      this.sideMenuSubjectTypeOptions.push(subjectObj);
+      //   console.log(this.selectOptions, 'selectOptions types..');
+    } else {
+      requestObj = {
+        request_type_id: this.generateUUID(),
+        active: true,
+        created_at: new Date().toJSON(),
+        updated_at: new Date().toJSON(),
+      };
+
+      this.sideMenuRequestTypeOptions.push(requestObj);
+      //  console.log(this.selectOptions, 'selectOptions types..');
+    }
+
+  }
+  // {
+  //   "subject_type_id": "e85fb633-0f5d-4aa5-b09c-9e499f5e0fb2",
+  //   "name": "Student",
+  //   "active": true,
+  //   "created_at": "2020-05-28T15:09:44.406193Z",
+  //   "updated_at": "2020-05-28T15:09:44.406193Z"
+  // }
+  generateUUID() {
+    let dt = new Date().getTime();
+    const uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+      let r = (dt + Math.random() * 16) % 16 | 0;
+      dt = Math.floor(dt / 16);
+      return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+    });
+    return uuid;
+  }
+
   deleteSelectOption(index) {
     this.selectOptions.splice(index, 1);
   }
@@ -427,12 +531,23 @@ export class DsarformComponent implements OnInit, OnDestroy {
         const oldControlIndex = this.webFormControlList.findIndex((t) =>
           t.controllabel === this.existingControl.controllabel);
         // if (oldControlIndex) {
+        // const subReqObj = {
+        //     control: this.selectedFormOption,
+        //     controllabel: formControls.value.lblText,
+        //     controlId: this.selectedControlId,
+        //     selectOptions: this.existingControl.selectOptions
+        //   };
+        // console.log(subReqObj, 'subReqObj..');
+        // this.dsarFormService.addControl(newWebControl);
+        // this.webFormControlList = this.dsarFormService.getFormControlList();
+        // this.lblText = '';
+        // this.cancelAddingFormControl();
         updatedObj = {
           controllabel: formControls.value.lblText,
           indexCount: this.existingControl.indexCount,
           control: this.changeControlType,
-          controlId: this.selectedControlId
-          // selectOptions: this.existingControl.selectOptions
+          controlId: this.selectedControlId,
+          selectOptions: this.existingControl.selectOptions
         };
         if (this.crid) {
           //   this.ccpaFormConfigService.setFormControlList(this.webFormControlList);
@@ -683,6 +798,8 @@ export class DsarformComponent implements OnInit, OnDestroy {
     this.inputOrSelectOption = false;
     this.showFormOption = true;
     this.editSelectionType = false;
+    this.isSubjectType = false;
+    this.isRequestType = false;
     // if (this.crid) {
     //   this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
     // } else {
@@ -692,7 +809,7 @@ export class DsarformComponent implements OnInit, OnDestroy {
   }
 
   publishCCPAFormConfiguration(registerForm) {
-   
+
 
     this.setHeaderStyle();
     console.log(this.propId, 'propid', this.orgId, 'ORG', this.crid, 'crid');
@@ -706,8 +823,8 @@ export class DsarformComponent implements OnInit, OnDestroy {
     }
 
 
-   
-    
+
+
     this.active = 3;
     this.cd.detectChanges();
     // selectedOrgProperty
@@ -727,9 +844,9 @@ export class DsarformComponent implements OnInit, OnDestroy {
         request_form: this.webFormControlList
       };
     }
-    
-    console.log(this.formObject,'fo..');
-   // return false;
+
+    console.log(this.formObject, 'fo..');
+    // return false;
     if (this.orgId !== undefined && this.propId !== undefined && this.crid !== null) {
       this.loadingbar.start();
       this.ccpaFormConfigService.updateCCPAForm(this.orgId, this.propId, this.crid, this.formObject)
@@ -737,7 +854,7 @@ export class DsarformComponent implements OnInit, OnDestroy {
           this.loadingbar.stop();
           if (data) {
             alert('Form Updated!');
-           // this.dsarFormService.removeControls();
+            // this.dsarFormService.removeControls();
           }
         }, (error) => {
           this.loadingbar.stop();
@@ -751,7 +868,7 @@ export class DsarformComponent implements OnInit, OnDestroy {
           if (data) {
             this.crid = data.response.crid;
             alert('New Form Saved!');
-           // this.dsarFormService.removeControls();
+            // this.dsarFormService.removeControls();
           }
         }, (error) => {
           this.loadingbar.stop();
@@ -823,12 +940,12 @@ export class DsarformComponent implements OnInit, OnDestroy {
       if (this.webFormControlList !== null) {
         const editText = this.webFormControlList.filter((t) => t.indexCount === 'footer_text_Index');
         this.editorDataFooter = editText[0].footerText;
-      //  this.footerTextColor = editText[0].footerTextColor;
+        //  this.footerTextColor = editText[0].footerTextColor;
       } else {
         this.webFormControlList = this.dsarFormService.getFormControlList();
         const editText = this.webFormControlList.filter((t) => t.indexCount === 'footer_text_Index');
         this.editorDataFooter = editText[0].footerText;
-      //  this.footerTextColor = editText[0].footerTextColor;
+        //  this.footerTextColor = editText[0].footerTextColor;
       }
     }
 
