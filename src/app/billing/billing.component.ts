@@ -2,6 +2,7 @@ import { Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {BillingService} from "../_services/billing.service";
 import {CompanyService} from "../company.service";
+import {NgxUiLoaderService} from "ngx-ui-loader";
 
 @Component({
   selector: 'app-billing',
@@ -10,13 +11,13 @@ import {CompanyService} from "../company.service";
 })
 export class BillingComponent implements OnInit {
   isSuccess = false;
-  loading = false;
   isError = false;
   billingDetails;
   companyDetails;
   constructor(private activatedRoute: ActivatedRoute,
               private billingService: BillingService,
-              private companyService: CompanyService
+              private companyService: CompanyService,
+              private loading: NgxUiLoaderService
   ) {
 
   }
@@ -33,14 +34,14 @@ export class BillingComponent implements OnInit {
   }
 
   onGetCurrentPlan() {
-    this.loading = true;
+    this.loading.start();
     this.billingService.getCurrentPlan().subscribe(res => {
-      this.loading = false;
+      this.loading.stop();
       if (res['status'] === 200) {
         this.billingDetails = res['response'];
       }
     }, error => {
-      this.loading = false;
+      this.loading.stop();
       console.log(error);
     });
   }

@@ -212,7 +212,7 @@ export class HeaderComponent implements  OnInit {
           subcategory: [
             { showlink: 'Dashboard', routerLink: '/pagenotfound', icon: 'bar-chart-2' },
             { showlink: 'Webforms', routerLink: '/webforms', icon: 'pie-chart' },
-            { showlink: 'Requests', routerLink: '/pagenotfound', icon: 'fa fa-ticket-alt feather-16' },
+            { showlink: 'Requests', routerLink: '/dsar-requests', icon: 'fa fa-ticket-alt feather-16' },
             { showlink: 'Work flow', routerLink: '/pagenotfound', icon: 'shield-off' },
             { showlink: 'Cookie Category', routerLink: '/pagenotfound', icon: 'fab fa-microsoft feather-16' },
             { showlink: 'Cookie Banner', routerLink: '/pagenotfound', icon: 'fas fa-cookie feather-16' },

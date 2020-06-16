@@ -45,7 +45,7 @@ export class DsarformService extends WebControls {
     controlList[oldItemIndex] = newItem;
     localStorage.setItem('formControlList', JSON.stringify(controlList));
   }
-  
+
   removeControls() {
     return localStorage.removeItem('formControlList');
   }

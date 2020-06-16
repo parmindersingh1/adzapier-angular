@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {OrganizationService, UserService} from "../_services";
-import {ModalDismissReasons, NgbModal} from "@ng-bootstrap/ng-bootstrap";
-import {DomSanitizer} from "@angular/platform-browser";
-import {CompanyService} from "../company.service";
-import {Router} from "@angular/router";
-import {NgxUiLoaderService} from "ngx-ui-loader";
+import {OrganizationService, UserService} from '../_services';
+import {CompanyService} from '../company.service';
+import {Router} from '@angular/router';
+import {NgxUiLoaderService} from 'ngx-ui-loader';
+import {DsarRequestService} from '../_services/dsar-request.service';
+import {Subject} from 'rxjs';
+import {debounceTime, distinctUntilChanged} from 'rxjs/operators';
 
 @Component({
   selector: 'app-dsar-requests',
@@ -14,67 +14,8 @@ import {NgxUiLoaderService} from "ngx-ui-loader";
 })
 export class DsarRequestsComponent implements OnInit {
   submitted: boolean;
-  requestsList: any = [{
-    id: '1akB7JSBSN',
-    name: 'Dharmesh',
-    organization: 'kingfesh',
-    property: 'mykingfesh.com',
-    requestType: 'New',
-    subjectType: 'Customer',
-    daysLeft: 45,
-    approver: 'Dharmesh',
-    country: 'USA',
-    state: 'CA',
-    webForm: 'MyWebFrom1',
-    dateCreated: '2014-04-29'
-  },
-    {
-      id: '1akB7JSBSN',
-      name: 'John Doe',
-      organization: 'kingfesh',
-      property: 'mykingfesh.com',
-      requestType: 'Verify Request',
-      subjectType: 'Customer',
-      daysLeft: 45,
-      approver: 'Dharmesh Patel',
-      country: 'USA',
-      state: 'CA',
-      webForm: 'MyWebFrom1',
-      dateCreated: '2014-04-29'
-    },
-    {
-      id: '1akB7JSBSN',
-      name: 'Will Smith',
-      organization: 'kingfesh',
-      property: 'mykingfesh.com',
-      requestType: 'In Progress',
-      subjectType: 'Customer',
-      daysLeft: 45,
-      approver: 'Dharmesh Patel',
-      country: 'USA',
-      state: 'CA',
-      webForm: 'MyWebFrom1',
-      dateCreated: '2014-04-29'
-    },
-    {
-      id: '1akB7JSBSN',
-      name: 'Aditya Mishra',
-      organization: 'kingfesh',
-      property: 'mykingfesh.com',
-      requestType: 'In Progress',
-      subjectType: 'Customer',
-      daysLeft: -6,
-      approver: 'Dharmesh Patel',
-      country: 'USA',
-      state: 'CA',
-      webForm: 'MyWebFrom1',
-      dateCreated: '2014-04-29'
-    },
-  ];
-  orgDetails: any = [];
-  propertyList: any;
-  isOpen: boolean = false;
   propertyname: any;
+  requestsList = [];
   website: any;
   logourl: any;
   organizationname: any;
@@ -84,81 +25,70 @@ export class DsarRequestsComponent implements OnInit {
   cityname: any;
   statename: any;
   zipcodenum: any;
-  myContext;
-  showOrgDetails: boolean = false;
-  isEditProperty: boolean;
   p = 1;
   pageSize: any = 5;
   totalCount: any;
   paginationConfig = { itemsPerPage: this.pageSize, currentPage: this.p, totalItems: this.totalCount };
-  searchText;
-  ascNumberSort: any;
+  currentManagedOrgID: any;
+  allFilterData: any = {
+    filter_status: [],
+    filter_Request_type: [],
+    filter_Subject_type: [],
+    filter_due_in: []
+  };
+  currrentManagedPropID: any;
+  public inputValue = '';
+  public debouncedInputValue = this.inputValue;
+  private searchDecouncer$: Subject<string> = new Subject();
+  subjectType = '';
+  requestType = '';
+  status = '';
+  dueIn = '';
+
   constructor(
               private orgservice: OrganizationService,
               private userService: UserService,
               private companyService: CompanyService,
               private router: Router,
               private loading: NgxUiLoaderService,
+              private dsarRequestService: DsarRequestService
   ) { }
 
   ngOnInit() {
-    this.paginationConfig.itemsPerPage = this.requestsList.length;
-    this.loadOrganizationList();
+    this.paginationConfig.itemsPerPage = 5;
+    this.onGetPropsAndOrgId();
+    this.onGetDsarRequestList();
+    this.onGetRequestListFilter();
+    this.setupSearchDebouncer();
   }
 
-  loadOrganizationList() {
-    // this.paginationConfig.currentPage = event;
-    const pagelimit = '?limit=' + this.paginationConfig.itemsPerPage + '&page=' + this.paginationConfig.currentPage;
-    // this.loading.start();
-    // this.orgservice.orglist(pagelimit).subscribe((data) => {
-    //   this.loading.stop();
-    //   const key = 'response';
-    //   this.requestsList = data[key];
-    //   this.paginationConfig.totalItems = data.count;
-    //   return this.requestsList;
-    // });
-
-    // this.orgservice.orglist().subscribe((data) => {
-    //   const key = 'response';
-    //   this.requestsList = data[key];
-    //   this.paginationConfig.totalItems = data.count;
-    // });
-
-  }
-
-
-  loadOrganizationDetails(org) {
-    this.orgDetails = [];
-    this.showOrgDetails = !this.showOrgDetails;
-    this.orgservice.viewOrganizationDetails(org.orgid).subscribe((data) => {
-      const key = 'response';
-      this.orgDetails.push(data[key]);
-    }, (error) => {
-      this.loading.stop();
-      alert(JSON.stringify(error));
-    });
-  }
-
-  private getDismissReason(reason: any): string {
-    if (reason === ModalDismissReasons.ESC) {
-      return 'by pressing ESC';
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return 'by clicking on a backdrop';
-    } else {
-      return `with: ${reason}`;
-    }
-  }
-
-  getPropertyList(id): any {
-    this.isOpen = !this.isOpen;
-    this.orgservice.getPropertyList(id).subscribe((data) => {
-      this.orgservice.emitUpdatedOrgList.emit(data.response);
-      if (!data.response) {
-        alert("Adding property is mandatory. Add Property first.");
+  onGetPropsAndOrgId() {
+    this.orgservice.currentProperty.subscribe((response) => {
+      if (response !== '') {
+        this.currentManagedOrgID = response.organization_id;
+        this.currrentManagedPropID = response.property_id;
+      } else {
+        const orgDetails = this.orgservice.getCurrentOrgWithProperty();
+        this.currentManagedOrgID = orgDetails.organization_id;
+        this.currrentManagedPropID = orgDetails.property_id;
       }
-
-      return this.propertyList = data.response;
     });
+  }
+
+  onGetDsarRequestList() {
+    this.loading.start();
+    const pagelimit = '?limit=' + this.paginationConfig.itemsPerPage + '&page=' + this.paginationConfig.currentPage;
+    this.dsarRequestService.getDsarRequestList(this.currentManagedOrgID, this.currrentManagedPropID, pagelimit)
+      .subscribe((data) => {
+        this.loading.stop();
+      if (data['response']) {
+        this.requestsList = data['response'];
+        this.paginationConfig.totalItems = data.count;
+      }
+    }, error => {
+        this.loading.stop();
+        console.log(error);
+      });
   }
 
 
@@ -166,26 +96,86 @@ export class DsarRequestsComponent implements OnInit {
     this.paginationConfig.currentPage = event;
     const pagelimit = '?limit=' + this.paginationConfig.itemsPerPage + '&page=' + this.paginationConfig.currentPage;
     this.loading.start();
-    this.orgservice.orglist(pagelimit).subscribe((data) => {
+      this.dsarRequestService.getDsarRequestList(this.currentManagedOrgID, this.currrentManagedPropID, pagelimit)
+        .subscribe((data) => {
       this.loading.stop();
       const key = 'response';
       this.requestsList = data[key];
       this.paginationConfig.totalItems = data.count;
       return this.requestsList;
-    });
+    }, error => {
+          this.loading.stop();
+          console.log(error);
+        });
+  }
+
+  onGetRequestListFilter() {
+    this.loading.start();
+    this.dsarRequestService.getDsarRequestFilter(this.currentManagedOrgID, this.currrentManagedPropID)
+      .subscribe(res => {
+        this.loading.stop();
+        if (res) {
+            this.allFilterData = res;
+          }
+      }, error => {
+        this.loading.stop();
+        console.log(error);
+      });
   }
 
   onChangeEvent(event) {
     this.paginationConfig.itemsPerPage = Number(event.target.value);
+    this.searchFilter();
   }
 
-  sortNumberColumn() {
-    this.ascNumberSort = !this.ascNumberSort;
-    if(this.ascNumberSort) {
-      this.requestsList.sort((a, b) => a - b); // For ascending sort
-    } else {
-      this.requestsList.sort((a, b) => b - a); // For descending sort
-    }
+  public onSearchInputChange(term: string): void {
+    this.searchDecouncer$.next(term);
+  }
+
+  private setupSearchDebouncer(): void {
+    this.searchDecouncer$.pipe(
+      debounceTime(1000),
+      distinctUntilChanged(),
+    ).subscribe((term: string) => {
+      this.debouncedInputValue = term;
+      this.searchFilter();
+    });
+  }
+
+  private searchFilter(): void {
+    const params = '?limit=' + this.paginationConfig.itemsPerPage + '&page=' + this.paginationConfig.currentPage
+    + '&name=' + this.inputValue + '&subject_type=' + this.subjectType + '&request_type=' + this.requestType
+    + '&status=' + this.status + '&due_in=' + this.dueIn;
+    this.loading.start();
+    this.dsarRequestService.getDsarRequestFilterList(this.currentManagedOrgID, this.currrentManagedPropID, params)
+      .subscribe(res => {
+        this.loading.stop();
+        if (res['response']) {
+          this.requestsList = res['response'];
+        }
+      }, error => {
+        this.loading.stop();
+        console.log(error);
+      });
+  }
+
+  onChangeRequestType(event) {
+    this.requestType = event.target.value;
+    this.searchFilter();
+  }
+
+  onChangeStatus(event) {
+    this.status = event.target.value;
+    this.searchFilter();
+  }
+
+  onChangeDueIn(event) {
+    this.dueIn = event.target.value;
+    this.searchFilter();
+  }
+  onChangeSubjectType(event) {
+    this.subjectType = event.target.value;
+    this.searchFilter();
   }
 
 }
