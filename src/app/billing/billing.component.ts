@@ -1,9 +1,8 @@
-import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {BillingService} from "../_services/billing.service";
-import {NgxUiLoaderService} from "ngx-ui-loader";
-import {ChangeDetection} from "@angular/cli/lib/config/schema";
 import {CompanyService} from "../company.service";
+import {NgxUiLoaderService} from "ngx-ui-loader";
 
 @Component({
   selector: 'app-billing',
@@ -17,8 +16,8 @@ export class BillingComponent implements OnInit {
   companyDetails;
   constructor(private activatedRoute: ActivatedRoute,
               private billingService: BillingService,
-              private loading: NgxUiLoaderService,
-              private companyService: CompanyService
+              private companyService: CompanyService,
+              private loading: NgxUiLoaderService
   ) {
 
   }

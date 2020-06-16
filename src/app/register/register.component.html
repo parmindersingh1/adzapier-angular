@@ -70,6 +70,7 @@
                         <div *ngIf="submitted && f.confirmpassword.errors" class="invalid-feedback">
                             <div *ngIf="f.confirmpassword.errors.required">Confirm Password is required</div>
                             <div *ngIf="f.confirmpassword.errors.pattern">Enter Valid Confirm Password (Ex: Aa@2aa) and minimum 6 charcters </div>
+                            <div *ngIf="f.confirmpassword.errors.mustMatch">The password and confirmation password do not match</div>
                         </div>
                     </div>
 
