@@ -136,8 +136,12 @@ export class EditwebformComponent implements OnInit {
         this.webFormControlList.filter((t) => {
           if (t.controlId === 'footertext') {
             this.footerText = t.footerText;
+            this.footerTextColor = t.footerTextColor;
+            this.footerFontSize = t.footerFontSize;
           } else if (t.controlId === 'welcometext') {
             this.welcomeText = t.welcomeText;
+            this.welcomeTextColor = t.welcomeTextColor;
+            this.welcomeFontSize = t.welcomeFontSize;
           } else if (t.controlId === 'headerlogo') {
             this.headerlogoURL = t.logoURL;
             this.headerColor = t.headerColor;

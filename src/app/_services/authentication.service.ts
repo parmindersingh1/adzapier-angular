@@ -38,7 +38,7 @@ export class AuthenticationService {
                 return user;
             }),
              catchError(err => {
-                console.error(err.message, 'err');
+                console.error(err, 'err');
                 return throwError("Error thrown from catchError");
             }));
     }
