@@ -177,12 +177,35 @@ a.dropdown-item > i {
     outline: none;
 }
 
+.container {
+    z-index: 0;
+}
+
 .container, .container-fluid {
     margin-bottom: 50px;
 }
 
 .searchfield.mt-3 .form-inline {
     font-weight: normal;
+}
+
+.container > .nav-tabs .nav-link {
+    background-color: transparent;
+    border-color: transparent;
+    border-bottom: 2px solid #5cb85c;
+}
+
+.container > .nav-tabs .nav-link:hover, .nav-tabs .nav-link:focus {
+    background-color: transparent;
+    border:0;
+    border-bottom: 2px solid #5cb85c;
+}
+.container > .nav-tabs .nav-link.active {
+    background-color: #fff;
+    z-index: 5;
+    color: #0168fa;
+    border: 0px;
+    border-bottom: 2px solid blue;
 }
 // @media (min-width: 576px) {
 //     .card-body {
