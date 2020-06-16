@@ -64,6 +64,7 @@ import { DsarRequestsComponent } from './dsar-requests/dsar-requests.component';
 import {ngxUiLoaderConfig} from './_constant/loading.contant';
 import { CheckoutComponent } from './checkout/checkout.component';
 import { CheckoutConfirmationComponent } from './checkout-confirmation/checkout-confirmation.component';
+import {TimeAgoPipe} from 'time-ago-pipe';
 
 
 
@@ -111,7 +112,8 @@ export const isMock = environment.mock;
     FilterPipe,
     DsarRequestsComponent,
     CheckoutComponent,
-    CheckoutConfirmationComponent
+    CheckoutConfirmationComponent,
+    TimeAgoPipe
   ],
   imports: [
     BrowserModule,
