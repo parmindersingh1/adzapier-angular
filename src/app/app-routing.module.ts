@@ -38,6 +38,7 @@ import { OrganizationteamComponent } from './organizationteam/organizationteam.c
 import {DsarRequestsComponent} from "./dsar-requests/dsar-requests.component";
 import {CheckoutComponent} from "./checkout/checkout.component";
 import {CheckoutConfirmationComponent} from "./checkout-confirmation/checkout-confirmation.component";
+import {UpdateBillingComponent} from "./update-billing/update-billing.component";
 
 
 const routes: Routes = [
@@ -75,6 +76,7 @@ const routes: Routes = [
   { path: 'propertydashboard/:propid', component: PropertydashboardComponent, canActivate: [AuthGuard] },
   { path: 'company', component: CompanyComponent, canActivate: [AuthGuard] },
   { path: 'billing', component: BillingComponent, canActivate: [AuthGuard] },
+  { path: 'billing/update', component: UpdateBillingComponent, canActivate: [AuthGuard] },
   { path: 'verify-email/:id', component: VerifyemailComponent },
   { path: 'checkout', component: CheckoutComponent,  canActivate: [AuthGuard] },
   { path: 'success', component: CheckoutConfirmationComponent,  canActivate: [AuthGuard]  },

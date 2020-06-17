@@ -65,6 +65,8 @@ import {ngxUiLoaderConfig} from './_constant/loading.contant';
 import { CheckoutComponent } from './checkout/checkout.component';
 import { CheckoutConfirmationComponent } from './checkout-confirmation/checkout-confirmation.component';
 import {TimeAgoPipe} from 'time-ago-pipe';
+import { UpdateBillingComponent } from './update-billing/update-billing.component';
+import {MatButtonModule} from "@angular/material/button";
 
 
 
@@ -113,7 +115,8 @@ export const isMock = environment.mock;
     DsarRequestsComponent,
     CheckoutComponent,
     CheckoutConfirmationComponent,
-    TimeAgoPipe
+    TimeAgoPipe,
+    UpdateBillingComponent
   ],
   imports: [
     BrowserModule,
@@ -134,6 +137,7 @@ export const isMock = environment.mock;
     FeatherModule.pick(allIcons),
     PaginationModule.forRoot(),
     NgxUiLoaderModule.forRoot(ngxUiLoaderConfig),
+    MatButtonModule,
   ],
   providers: [
     AuthenticationService,

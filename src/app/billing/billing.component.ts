@@ -12,8 +12,12 @@ import {NgxUiLoaderService} from "ngx-ui-loader";
 export class BillingComponent implements OnInit {
   isSuccess = false;
   isError = false;
-  billingDetails;
-  companyDetails;
+  billingDetails: any = {
+    billing_details: {},
+    billing_history: {},
+    company_details: {}
+  };
+  companyDetails: any = { name: ''};
   constructor(private activatedRoute: ActivatedRoute,
               private billingService: BillingService,
               private companyService: CompanyService,
