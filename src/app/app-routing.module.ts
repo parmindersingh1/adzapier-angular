@@ -39,6 +39,7 @@ import {DsarRequestsComponent} from "./dsar-requests/dsar-requests.component";
 import {CheckoutComponent} from "./checkout/checkout.component";
 import {CheckoutConfirmationComponent} from "./checkout-confirmation/checkout-confirmation.component";
 import {UpdateBillingComponent} from "./update-billing/update-billing.component";
+import {CcpaDsarComponent} from "./dashboard/ccpa-dsar/ccpa-dsar.component";
 
 
 const routes: Routes = [
@@ -79,6 +80,7 @@ const routes: Routes = [
   { path: 'billing/update', component: UpdateBillingComponent, canActivate: [AuthGuard] },
   { path: 'verify-email/:id', component: VerifyemailComponent },
   { path: 'checkout', component: CheckoutComponent,  canActivate: [AuthGuard] },
+  { path: 'home/dashboard/ccpa-dsar', component: CcpaDsarComponent,  canActivate: [AuthGuard] },
   { path: 'success', component: CheckoutConfirmationComponent,  canActivate: [AuthGuard]  },
   { path: '', redirectTo: 'home/dashboard/analytics', pathMatch: 'full', canActivate: [AuthGuard] },
 

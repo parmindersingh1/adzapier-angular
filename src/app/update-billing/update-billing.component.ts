@@ -4,6 +4,8 @@ import {CompanyService} from "../company.service";
 import {NgxUiLoaderService} from "ngx-ui-loader";
 import {environment} from "../../environments/environment.develop";
 import {ActivatedRoute} from "@angular/router";
+import {NotificationsService} from "angular2-notifications";
+import {notificationConfig} from "../_constant/notification.constant";
 
 
 @Component({
@@ -12,6 +14,7 @@ import {ActivatedRoute} from "@angular/router";
   styleUrls: ['./update-billing.component.scss']
 })
 export class UpdateBillingComponent implements OnInit {
+  sessionId = '';
   billingDetails: any = {
     billing_details: {},
     billing_history: {},
@@ -28,63 +31,79 @@ export class UpdateBillingComponent implements OnInit {
   constructor(
     private billingService: BillingService,
     private companyService: CompanyService,
+    private notification: NotificationsService,
     private loading: NgxUiLoaderService,
     private activatedRoute: ActivatedRoute
   ) { }
 
-  
+
 
   ngOnInit() {
     this.onGetStatus();
     this.onGetCurrentPlan();
     this.onGetCompanyDetails();
+    this.onGetSessionId();
   }
   onGetStatus() {
     this.activatedRoute.queryParams.subscribe(res => {
-      if (res.success == 'true') {
+      if (res['success'] === 'true') {
         this.queryParams = res;
         this.queryParams.success = true;
       }
-      if (res.success == 'false') {
+      if (res['success'] === 'false') {
           this.queryParams.success = false;
           this.queryParams.error = true;
         }
     });
   }
 
+  onGetSessionId() {
+    this.loading.start('1');
+    this.billingService.createSessionId().subscribe(res => {
+      this.loading.stop('1');
+      if (res['status'] === 200) {
+        this.sessionId = res['response'];
+      }
+    }, error => {
+      this.loading.stop('1');
+      this.notification.error('Session Id', 'Something went wrong...', notificationConfig);
+    });
+  }
   onGetCurrentPlan() {
-    this.loading.start();
+    this.loading.start('2');
     this.billingService.getCurrentPlan().subscribe(res => {
-      this.loading.stop();
+      this.loading.stop('2');
       if (res['status'] === 200) {
         this.billingDetails = res['response'];
         console.log(this.billingDetails);
       }
     }, error => {
-      this.loading.stop();
-      console.log(error);
+      this.loading.stop('2');
+      this.notification.error('Current Plan', 'Something went wrong...', notificationConfig);
     });
   }
   onGetCompanyDetails() {
+    this.loading.start('3');
     this.companyService.getCompanyDetails().subscribe(res => {
+      this.loading.stop('3');
       if (res['status'] === 200) {
         this.companyDetails = res['response'];
       }
     }, error => {
-      console.log(error);
+      this.loading.stop('3');
+      this.notification.error('Company Details', 'Something went wrong...', notificationConfig);
     });
   }
 
   onUpdateCheckout() {
-    this.stripe.redirectToCheckout({
-      // Make the id field from the Checkout Session creation API response
-      // available to this file, so you can provide it as parameter here
-      // instead of the {{CHECKOUT_SESSION_ID}} placeholder.
-      sessionId: 'cs_test_o7OVL9oxKVPPPS34BBEOnQvzogLwWYp4aWc30GmfcUEesfrBf6MZpGRZ'
-    }).then((result) => {
-      // If `redirectToCheckout` fails due to a browser or network
-      // error, display the localized error message to your customer
-      // using `result.error.message`.
-    });
+    if (this.sessionId) {
+      this.stripe.redirectToCheckout({
+        sessionId: this.sessionId
+      }).then((result) => {
+
+      }).catch(error => {
+        this.notification.error('Checkout', error, notificationConfig);
+      });
+    }
   }
 }

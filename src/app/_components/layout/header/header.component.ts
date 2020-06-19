@@ -203,7 +203,7 @@ export class HeaderComponent implements  OnInit {
       this.navigationMenu = [
         {
           showlink: 'Dashboard',
-          subcategory: [{ showlink: 'CCPA DSAR', routerLink: '/dsarform', icon: 'bar-chart-2' },
+          subcategory: [{ showlink: 'CCPA DSAR', routerLink: '/home/dashboard/ccpa-dsar', icon: 'bar-chart-2' },
           { showlink: 'GDPR', routerLink: '/pagenotfound', icon: 'pie-chart' },
           { showlink: 'Cookie Consent', routerLink: '/pagenotfound', icon: 'fas fa-cookie feather-16' }
           ]

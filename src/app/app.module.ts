@@ -67,6 +67,9 @@ import { CheckoutConfirmationComponent } from './checkout-confirmation/checkout-
 import {TimeAgoPipe} from 'time-ago-pipe';
 import { UpdateBillingComponent } from './update-billing/update-billing.component';
 import {MatButtonModule} from "@angular/material/button";
+import {CcpaDsarComponent} from "./dashboard/ccpa-dsar/ccpa-dsar.component";
+import { ChartsModule } from 'ng2-charts';
+import { SimpleNotificationsModule } from 'angular2-notifications';
 
 
 
@@ -116,12 +119,15 @@ export const isMock = environment.mock;
     CheckoutComponent,
     CheckoutConfirmationComponent,
     TimeAgoPipe,
-    UpdateBillingComponent
+    UpdateBillingComponent,
+    CcpaDsarComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
+    ChartsModule,
     ReactiveFormsModule,
+    SimpleNotificationsModule.forRoot(),
     HttpClientModule,
     AppRoutingModule,
     FontAwesomeModule,
