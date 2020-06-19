@@ -205,7 +205,6 @@
   }
 
   .dsarform-box {
-    padding: 8px 10px;
     color: rgba(0, 0, 0, 0.87);
     display: flex;
     flex-direction: row;
@@ -303,6 +302,15 @@
     border-bottom: 2px solid #0168fa;
   }
   
+  ul.nav-tabs.nav {
+    position: relative;
+  }
+  
+  ul.nav-tabs.nav > li:last-child {
+    position: absolute !important;
+    right: 10px !important;
+}
+
 .displayblock {
   display: block;
 }

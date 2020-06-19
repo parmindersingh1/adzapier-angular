@@ -291,7 +291,7 @@ export class HeaderComponent implements  OnInit {
   }
 
   nameInitials(str) {
-     if (str !== null) {
+    if (str !== undefined) {
       const firstChar = str.charAt(0);
       const spacePos = str.indexOf(' ');
       const secondChar = str.charAt(spacePos + 1);
@@ -372,6 +372,8 @@ export class HeaderComponent implements  OnInit {
           this.isPropSelected(orgDetails);
       }
     }
+    console.log(this.currentProperty,'currentProperty.last..');
+    return this.currentProperty;
   }
 
 }

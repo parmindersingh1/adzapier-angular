@@ -187,8 +187,9 @@ export class DsarformComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.loadingbar.start();
-    this.webFormControlList = this.dsarFormService.getFormControlList();
+  //  this.webFormControlList = this.dsarFormService.getFormControlList();
     this.getCCPAdefaultConfigById();
+   // this.loadWebControl();
     this.organizationService.currentProperty.subscribe((response) => {
       this.loadingbar.stop();
       if (response !== '') {
@@ -209,7 +210,7 @@ export class DsarformComponent implements OnInit, OnDestroy {
 
 
     // this.loading = true;
-    if (this.crid) {
+    if (this.crid !== null) {
       // this.getCCPAdefaultConfigById();
       this.loadingbar.start();
       this.webFormSelectedData = this.ccpaFormConfigService.currentFormData.subscribe((data) => {
@@ -223,11 +224,16 @@ export class DsarformComponent implements OnInit, OnDestroy {
           // this.requestFormControls = data.request_form;
           this.selectedwebFormControlList = this.rearrangeFormSequence(data.request_form);
           this.webFormControlList = this.selectedwebFormControlList;
+          console.log(this.webFormControlList,'crid..webFormControlList..');
           this.webFormControlList.filter((t) => {
             if (t.controlId === 'footertext') {
               this.footerText = t.footerText;
+              this.footerTextColor = t.footerTextColor;
+              this.footerFontSize = t.footerFontSize;
             } else if (t.controlId === 'welcometext') {
               this.welcomeText = t.welcomeText;
+              this.welcomeTextColor = t.welcomeTextColor;
+              this.welcomeFontSize = t.welcomeFontSize;
             } else if (t.controlId === 'headerlogo') {
               this.headerlogoURL = t.logoURL;
               this.headerColor = t.headerColor;
@@ -241,20 +247,25 @@ export class DsarformComponent implements OnInit, OnDestroy {
     } else {
       this.radioBtnType = true;
       this.subjectTyperadioBtn = true;
-      //  this.loadWebControl();
+      // this.loadWebControl();
       this.createNewForm();
       this.webFormControlList = this.dsarFormService.getFormControlList();
       this.webFormControlList.filter((t) => {
         if (t.controlId === 'footertext') {
           this.footerText = t.footerText;
+          this.footerTextColor = t.footerTextColor;
+          this.footerFontSize = t.footerFontSize;
         } else if (t.controlId === 'welcometext') {
           this.welcomeText = t.welcomeText;
+          this.welcomeTextColor = t.welcomeTextColor;
+          this.welcomeFontSize = t.welcomeFontSize;
         } else if (t.controlId === 'headerlogo') {
           this.headerlogoURL = t.logoURL;
           this.headerColor = t.headerColor;
         }
       });
       this.dsarFormService.setFormControlList(this.webFormControlList);
+      this.webFormControlList = this.dsarFormService.getFormControlList();
       //  this.selectOptionControl = this.controlOption[0].control;
       this.selectOptions = [{
         id: this.count++,
@@ -290,6 +301,7 @@ export class DsarformComponent implements OnInit, OnDestroy {
       this.loadingbar.stop();
       console.log(JSON.stringify(error));
     });
+    this.loadWebControl();
   }
 
   loadWebControl() {
@@ -515,6 +527,32 @@ export class DsarformComponent implements OnInit, OnDestroy {
   deleteSelectOption(index) {
     this.selectOptions.splice(index, 1);
   }
+
+  deleteSubjectOption(index) {
+    this.sideMenuSubjectTypeOptions.splice(index, 1);
+    if(this.crid){
+      this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
+      this.webFormControlList.filter((t) => {
+        if (t.controlId === 'subjecttype') {
+          t.selectOptions = this.sideMenuSubjectTypeOptions;
+        }
+      });
+      this.ccpaFormConfigService.setFormControlList(this.webFormControlList);
+    } else {
+      this.webFormControlList = this.dsarFormService.getFormControlList();
+      this.webFormControlList.filter((t) => {
+        if (t.controlId === 'subjecttype') {
+          t.selectOptions = this.sideMenuSubjectTypeOptions;
+        }
+      });
+      this.dsarFormService.setFormControlList(this.webFormControlList);
+    }
+  }
+
+  deleteRequestOption(index) {
+    this.sideMenuRequestTypeOptions.splice(index, 1);
+  }
+  
 
   cancelForm() {
     this.showFormOption = true;
@@ -809,16 +847,32 @@ export class DsarformComponent implements OnInit, OnDestroy {
   }
 
   publishCCPAFormConfiguration(registerForm) {
-
-
     this.setHeaderStyle();
     console.log(this.propId, 'propid', this.orgId, 'ORG', this.crid, 'crid');
     console.log(registerForm.value, 'registerForm..');
     if (this.crid) {
       this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
+      this.webFormControlList.filter((t) => {
+        if (t.controlId === 'footertext') {
+          t.footerTextColor = this.footerTextColor;
+          t.footerFontSize = this.footerFontSize;
+        } else if (t.controlId === 'welcometext') {
+          t.welcomeTextColor = this.welcomeTextColor;
+          t.welcomeFontSize = this.welcomeFontSize;
+        }
+      });
       this.updateWebcontrolIndex(registerForm.value, this.webFormControlList);
     } else {
       this.webFormControlList = this.dsarFormService.getFormControlList();
+      this.webFormControlList.filter((t) => {
+        if (t.controlId === 'footertext') {
+          t.footerTextColor = this.footerTextColor;
+          t.footerFontSize = this.footerFontSize;
+        } else if (t.controlId === 'welcometext') {
+          t.welcomeTextColor = this.welcomeTextColor;
+          t.welcomeFontSize = this.welcomeFontSize;
+        }
+      });
       this.updateWebcontrolIndex(registerForm.value, this.webFormControlList);
     }
 
@@ -925,27 +979,30 @@ export class DsarformComponent implements OnInit, OnDestroy {
   editQuillEditorDataPopup(content, field) {
     if (field === 'welcomeText') {
       this.isWelcomeEditor = true;
-      this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
-      if (this.webFormControlList !== null) {
+      if (this.crid) {
+        this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
+        if (this.webFormControlList !== null) {
         const editText = this.webFormControlList.filter((t) => t.indexCount === 'welcome_text_Index');
         this.editorDataWelcome = editText[0].welcomeText;
+        }
       } else {
         this.webFormControlList = this.dsarFormService.getFormControlList();
         const editText = this.webFormControlList.filter((t) => t.indexCount === 'welcome_text_Index');
         this.editorDataWelcome = editText[0].welcomeText;
       }
+     
     } else {
       this.isWelcomeEditor = false;
-      this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
-      if (this.webFormControlList !== null) {
+      if (this.crid) {
+        this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
+        if (this.webFormControlList !== null) {
         const editText = this.webFormControlList.filter((t) => t.indexCount === 'footer_text_Index');
         this.editorDataFooter = editText[0].footerText;
-        //  this.footerTextColor = editText[0].footerTextColor;
+        }
       } else {
         this.webFormControlList = this.dsarFormService.getFormControlList();
         const editText = this.webFormControlList.filter((t) => t.indexCount === 'footer_text_Index');
         this.editorDataFooter = editText[0].footerText;
-        //  this.footerTextColor = editText[0].footerTextColor;
       }
     }
 
@@ -959,17 +1016,34 @@ export class DsarformComponent implements OnInit, OnDestroy {
   }
 
   welcomeStyle(): object {
-    return {
-      'color': this.welcomeTextColor,
-      'font-size': this.welcomeFontSize + 'px'
-    };
+     // this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
+      // if (this.crid) {
+        // this.webFormControlList.filter((t) => {
+        //   if (t.controlId === 'welcometext') {
+        //     console.log(t,'t..');
+        //     this.welcomeTextColor = t.welcomeTextColor;
+        //     this.welcomeFontSize = t.welcomeFontSize;
+        //   }
+        // });
+        return {
+          'color': this.welcomeTextColor,
+          'font-size': this.welcomeFontSize + 'px'
+        };
+      
+      
   }
 
   footerStyle(): object {
-    return {
-      'color': this.footerTextColor,
-      'font-size': this.footerFontSize + 'px'
-    };
+      // this.webFormControlList.filter((t) => {
+      //   if (t.controlId === 'footertext') {
+      //      this.footerTextColor = t.footerTextColor;
+      //      this.footerFontSize = t.footerFontSize;
+      //   }
+      // });
+      return {
+        'color': this.footerTextColor,
+        'font-size': this.footerFontSize + 'px'
+      };
   }
 
   setHeaderStyle() {
