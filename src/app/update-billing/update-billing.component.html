@@ -1,0 +1,139 @@
+<div class="container pd-x-0 pd-lg-x-10 pd-xl-x-0">
+  <div class="d-sm-flex align-items-center justify-content-between ">
+    <div>
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb breadcrumb-style1 mg-b-10">
+          <li class="breadcrumb-item"><a routerLink="/">Dashboard</a></li>
+          <li class="breadcrumb-item active" aria-current="page">billing</li>
+        </ol>
+      </nav>
+      <h4 class="mg-b-0 tx-spacing--1">Billing Details</h4>
+    </div>
+  </div>
+<!--  billing_details:-->
+<!--  brand: "visa"-->
+<!--  card_number: "**** ****** **1111"-->
+<!--  email: "adityamishra99@outlook.com"-->
+<!--  expiry: "%!d(string=11)/2021"-->
+<!--  name: "aditya mishra"-->
+<!--  period: "<nil>"-->
+<!--  plan_name: "CCPA Monthly Gold"-->
+<!--  __proto__: Object-->
+<!--  billing_history:-->
+<!--  amount: "1500"-->
+<!--  currency: "USD"-->
+<!--  __proto__: Object-->
+<!--  company_details:-->
+<!--  address: "Elephanta society,Shubhash Lane Malad East, Mumbai, Maharastra, 400062"-->
+<!--  email: "adityamishra99@outlook.com"-->
+
+
+    <div class="row">
+      <div class="col-md-8">
+        <div *ngIf="queryParams.success" class="mt-3 alert alert-info">
+          <strong> Updated! </strong>Your payment Information has been updated
+        </div>
+
+        <div *ngIf="queryParams.error" class="mt-3 alert alert-danger">
+          <strong> Error! </strong> Something went wrong ...
+        </div>
+
+        <div class="col-md-10 mb-4 mg-t-40 mg-sm-t-0 mg-md-t-40">
+          <h6>Update an existing payment card</h6>
+          <div class="card">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-sm-2">
+                  <i class="fab fa-cc-{{billingDetails.billing_details.brand}}" aria-hidden="true" style="font-size: 70px;"></i>
+                </div>
+                <div class="col-md-6">
+                  <span p-0="">{{billingDetails.billing_details.card_number}}</span>
+                  <br>
+                  <span>{{billingDetails.billing_details.name}}</span>
+                  <br>
+                  <p>Expires {{billingDetails.billing_details.expiry}}</p>
+                </div>
+
+                <div class="col-md-4">
+                  <button (click)="onUpdateCheckout()" class="btn btn-secondary mt-3" type="button">
+                    <i class='fas fa-pen mr-2'></i> <span> Update Card</span>
+                  </button>
+                </div>
+
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="contant-details mt-3 mt-3 ml-1">
+          <h4 class="mb-4">Contact Details</h4>
+
+<!--          <div class="alert alert-info">-->
+<!--            <strong><i class="fa fa-info-circle" aria-hidden="true"></i>-->
+<!--              </strong> Indicates a successful or positive action.-->
+<!--          </div>-->
+<!--          curl https://api.stripe.com/v1/checkout/sessions \-->
+<!--          -u sk_test_eeCK72g3vGhF8K7r68i5soff00qT19y10I: \-->
+<!--          -d "payment_method_types[]"=card \-->
+<!--          -d mode=setup \-->
+<!--          -d customer=cus_HS438S79OwPbsc \-->
+<!--          -d "setup_intent_data[metadata][subscription_id]"=si_HS43DDciW3JFoJ \-->
+<!--          -d success_url="http://localhost:4200/billing/update?success=true&session_id={CHECKOUT_SESSION_ID}" \-->
+<!--          -d cancel_url="http://localhost:4200/billing/update?success=false"-->
+
+<!--          curl https://api.stripe.com/v1/checkout/sessions/cs_test_rjV6881thhqCcFjiaD29WeHjRpd7snWr0ZEF9I1HAykw3MVDUN12iZ4M \-->
+<!--          -u sk_test_eeCK72g3vGhF8K7r68i5soff00qT19y10I:-->
+
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Company Name</h5>
+              <h6 class="card-subtitle mb-2 text-muted">{{companyDetails.name}}</h6>
+
+              <h6 class="tx-15 mg-b-10">Contact Info</h6>
+              <p class="mg-b-0">{{billingDetails.company_details.address}}</p>
+              <!--            <p class="mg-b-0">Tel No: 324 445-4544</p>-->
+              <p class="mg-b-0">Email: {{billingDetails.company_details.email}}</p>
+
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+
+
+
+
+
+
+
+      <div class="col-md-4">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">Bill Estimate </h4>
+            <h6 class="card-subtitle mb-2 text-muted">{{companyDetails.name}}</h6>
+
+            <div class="plan-details mt-4">
+              <h6 class="mb-4 mt-3">{{billingDetails.billing_details.plan_name}} <span class="float-right">$ {{billingDetails.billing_history.amount}}</span></h6>
+            </div>
+
+
+            <div class=" mt-4">
+              <h6 class="mb-4 mt-3 text-muted">Tax <span class="float-right">0.00</span></h6>
+              <h6 class="mb-4 mt-3 text-muted">Total <span class="float-right total-price">$ {{billingDetails.billing_history.amount}}</span></h6>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+
+    </div>
+
+
+
+</div>
+<simple-notifications></simple-notifications>
