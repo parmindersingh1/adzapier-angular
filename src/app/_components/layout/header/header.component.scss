@@ -1,12 +1,492 @@
-.dropdown-toggle::after { 
-    border-top:0;
-    border-left:0;
+.navbar {
+    padding: 5px;
+    border-color: #e7e7e7;
+    background-image: -webkit-linear-gradient(top, #ffffff 0%, #f8f8f8 100%);
+    background-image: -o-linear-gradient(top, #ffffff 0%, #f8f8f8 100%);
+    background-image: linear-gradient(to bottom, #ffffff 0%, #f8f8f8 100%);
+    background-repeat: repeat-x;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff', endColorstr='#fff8f8f8', GradientType=0);
+    filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
+    border-radius: 4px;
+    width: 100%;
+    height: 60px;
 }
 
-.navbar-toggler {
-    outline: none;
+.navbar h3 {
+    margin: 10px 20px 10px 10px;
 }
 
-.navbar-header .navbar-right .dropdown:last-child {
-    margin-left: 15px !important;
+.navbar-nav {
+    padding-left: 25px;
+    padding-right: 25px;
 }
+
+i.dropdown-submenu {
+    float: right;
+    margin-top: 5px;
+    margin-right: -5px;
+}
+
+.dropdown-submenu-left {
+    //margin-top: 5px;
+    margin-left: -5px;
+    margin-right: 10px;
+}
+
+.nav-item {
+    padding: 6px;
+    color: rgba(255, 255, 255, 0.7);    
+}
+
+i {
+    margin-right: 0;
+}
+
+.nav-link {
+    color:rgba(255, 255, 255, 0.7);
+}
+
+.navbar-expand-sm .navbar-collapse {
+    justify-content: flex-start;
+    z-index: 1200;
+    background-color: blueviolet;
+}
+
+.navbar-expand-sm {
+    justify-content: space-between !important;
+    /*justify-content: flex-start !important;*/
+    padding: 0 15px !important;
+}
+
+.dropdown-menu{
+    font-size: 0.9rem;
+    padding: 0;
+}
+
+.dropdown-menu ul li {
+    list-style-type: none;
+}
+
+.dropdown-item{
+    padding: 0.25rem 0;
+    cursor: pointer; 
+    // justify-content: space-between;
+    // display: flex;
+}
+
+.propMenu > li {
+    // display: inline-flex !important;
+} 
+
+ul.dropdown-menu.propMenu.show {
+    display: block;
+    column-count: 4;
+    // width: 60rem;
+}
+
+ul.dropdown-menu.propMenu.show > li {
+    margin-right: 0px;
+    flex-direction: column;
+    display: inline-flex;
+    width: 200px;
+    margin-left: 0;
+}
+
+ul.dropdown-menu.propMenu.show > li > a {
+    font-weight: bold;
+    margin-bottom: 5px;
+    border-radius: 0;
+    border-bottom: 1px solid #ccc;
+    font-size: 12px !important;
+}
+
+ul.dropdown-menu.propMenu.show > li > ul {
+    padding-left: 0;
+}
+.ml-auto .dropdown-menu {
+    left: auto !important;
+    right: 0px;
+  }
+
+.loggedin-user {
+    padding: 10px 0; 
+    font-weight: bold;
+}
+
+.loggedin-user p {
+    margin: 0;
+}
+
+.active {
+    background-color: #0148ae;
+    color: #0148ae !important;
+}
+
+.dropdown-item.active, .dropdown-item:active {
+    background: none !important;
+}
+
+.activeFirstIndex {
+    background-color: #333;
+    color: #ffffff !important;   
+}
+
+a.dropdown-item.activeFirstIndex:hover {
+    color: #001737!important;
+}
+
+.avatar-lg {
+    border: 2px solid #808080 !important;
+    border-radius: 50px;
+}
+
+.avatar img {
+    opacity: 0.5;
+}
+
+.avatar-sm {
+    border-radius: 50px;
+    border: 2px solid #808080;
+}
+
+.fa-sitemap {
+    margin-right: 12px !important;
+}
+
+.userInitials {
+    border: 2px solid #666;
+    border-radius: 75px;
+    font-size: 15px;
+    padding: 6px 5px;
+    color: #666;
+    height: 35px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+a.nav-link.dropdown-link .userInitials:hover {
+    border: 2px solid #0148ae;
+    color: #4994fe;
+}
+
+a.nav-link.dropdown-toggle:hover {
+    color: #4994fe;
+}
+
+a.nav-link:hover {
+    color: #4994fe;
+}
+
+.width100 {
+    width: 100%;
+}
+
+.navbar-brand .df-logo {
+    color: #fff;
+    font-size: 22px;
+}
+
+.iconwrapper {
+    display: flex;
+    align-items: center;
+}
+
+.iconwrapper .searchicon {
+    margin:0 20px 0 0;
+    color: #fff;
+    font-size: 16px; 
+}
+
+.line-height {
+    line-height: 3rem;
+}
+
+.feather-16{
+    width: 16px;
+    height: 16px;
+    margin: 0 15px 0 0;
+}
+
+.feather-24{
+    width: 24px;
+    height: 24px;
+    margin: 0 15px 0 0;
+}
+
+.line-partition {
+    border-bottom: 1px solid #ccc;
+    margin: 20px 0;
+}
+
+.displayflex {
+    display: flex;
+}
+
+.displayflex span {
+    font-size: 12px; 
+    color: #8392a5;
+    text-transform: uppercase;
+    display: block;
+    margin: 10px 0;
+    font-weight: 600;
+}
+
+.navbar-menu-wrapper {
+    order: 3;
+    width: 260px;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    background-color: #fff;
+    overflow: hidden;
+    z-index: 1060;
+    transform: translateX(-260px);
+    transition: all 0.4s;
+}
+
+.show {
+    display: block;
+}
+
+.sidebar-header {
+    height: 60px;
+}
+/*vertical menu*/
+.sidenav {
+    height: 100%; /* 100% Full-height */
+    width: 0; /* 0 width - change this with JavaScript */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Stay on top */
+    top: 0; /* Stay at the top */
+    left: 0;
+    background-color: #fff; /* Black*/
+    overflow-x: hidden; /* Disable horizontal scroll */
+    padding-top: 10px; /* Place content 60px from the top */
+    transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
+    // padding: 20px;
+  }
+  
+  /* The navigation menu links */
+  .sidenav a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 14px;
+    color: #001737;
+    display: block;
+    transition: 0.3s;
+  }
+
+  .sidebar-nav .nav-link.active {
+    position: relative;
+    color: #0168fa;
+  }
+
+  .sidebar-nav .nav a:hover {
+    color: #0168fa;
+    }
+  
+  /* When you mouse over the navigation links, change their color */
+  .sidenav a:hover {
+    color: #0168fa;
+  }
+  
+  /* Position and style the close button (top right corner) */
+  .sidenav .closebtn {
+    position: absolute;
+    top: 20px;
+    right: 25px;
+    padding: 0;
+  }
+
+  .sidenav .sidebar > .sidebar-body > ul > a > div {
+    color: #000;
+   }
+
+   .sidenav .sidebar > .sidebar-body > ul > a > span {
+    color: #000;
+   }
+  
+  /* Style page content - use this if you want to push the page content to the right when you open the side navigation */
+  #main {
+    transition: margin-left .5s;
+    padding: 20px;
+  }
+  
+  /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
+  @media screen and (max-height: 450px) {
+    .sidenav {padding-top: 15px;}
+    .sidenav a {font-size: 18px;}
+  }
+
+  .addWidth {
+    //   width: 250px;
+  }
+
+  .removeWidth {
+      width: 0;
+      padding: 0;
+  }
+
+  .addWidth .sidebar {
+      left:0 !important;
+      background: #fff;
+  }
+      
+
+//   .collapse:not(.show) {
+//       display: none !important;
+//   }
+
+  @media screen and (max-width:767px){
+      .burger-menu {
+          display: block;
+      }
+      .navbar-expand-lg .navbar-toggler {
+        display: block !important;
+    }
+  }
+
+  @media screen and (min-width:768px){
+    .burger-menu {
+        display: none;
+    }
+
+    .navbar-expand-lg .navbar-toggler {
+        display: none !important;
+    }
+}
+ 
+.navbar-left {
+    float: left;
+    /*margin-left: 15px;*/
+  }
+
+  .navbar-header {
+    //   height: auto;
+      display: flex;
+      border-bottom: 0;
+      background: transparent;
+  }
+
+  .df-logo {
+      margin: 0 !important;
+  }
+
+  .navbar-header .navbar-brand {
+    display: flex;
+    align-items: center;
+    padding-left: 15px;
+    margin-right: 0;
+    height: auto;
+    margin: 0 !important;
+    padding: 0 15px 0 15px !important;
+    order: 1;
+}
+
+  @media (min-width: 768px) {
+    .navbar-expand-lg .navbar-collapse {
+        display: flex;
+        flex-basis: auto;
+        flex-grow: 1;
+        justify-content: space-between;
+        padding: 0 15px;
+        // width: 100%;
+    }
+
+    .navbar-collapse .collapse .hidemenu{
+        display: none !important;
+    }
+
+    .navbar-nav {
+        flex-direction: row !important;
+    }
+
+    .showmenu {
+        display: flex !important;
+        height: 60px !important;
+        align-items: center;    
+        // width: 100%;
+      }
+
+      .navbar-header .navbar-brand {
+          width: auto;
+      }
+
+      .addWidth {
+          width: 0;
+      }
+
+      .sidenav {
+          padding: 0;
+      }
+  }
+
+  @media (max-width: 767px) {
+    .showmenu {
+        display: none !important;
+    }
+
+    .navbar .navbar-nav {
+        flex-direction: row !important;
+    }
+  }
+
+  div#collapsibleNavbar ul.navbar-nav {
+    flex-direction: row;
+  }
+
+  .hidemenu {
+      display: none !important;
+  } 
+
+  .bluecolor {
+    color: #0168fa;
+  }
+
+  #divSidenav .df-logo span {
+      font-size: 20px;
+      color: #333;
+      font-weight: bold;
+  }
+
+  #divSidenav > ul > li a.nav-link {
+      color:#818181;
+  }
+
+  ul#collapseExample {
+    margin: 0;
+    padding: 0 0 0 20px; 
+  }
+
+  .tx-12 {
+      font-weight: normal;
+  }
+
+  ul.navbar-nav > a.nav-link.dropdown-link {
+    color:rgba(255, 255, 255, 0.7);
+  }
+
+  ul.navbar-nav > a.nav-link.dropdown-link:hover {
+    color: #4994fe !important;
+  }
+
+  ul.navbar-nav > a.nav-link.dropdown-link::after{
+  content: "";
+    width: 6px;
+    height: 6px;
+    border-top: 0 !important;
+    border-left: 0 !important;
+    border-right: 1.5px solid #8392a5 !important;
+    border-bottom: 1.5px solid #8392a5 !important;
+    display: inline-flex;
+    margin: -5px 0 0 10px !important;
+    transform: rotate(45deg);
+    transition: all 0.2s ease-in-out;
+  }
+
+  .feather-plus {
+      height:16px;
+      width: 16px;
+      float: right;
+  }

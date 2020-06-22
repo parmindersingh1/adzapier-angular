@@ -1,0 +1,479 @@
+.display-list-of-numbers {
+    height: 25px;
+    width: 25%;
+    border: 1px solid dodgerblue;
+    display: block;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .pop{
+    height: 50px;
+    margin-left: 20px;
+    border: 1px solid saddlebrown;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+}
+
+.cdk-drag {
+  margin: 10px;
+}
+  .cdk-drop-list-dragging .cdk-drag {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+    // border: 1px solid #ccc;
+    // padding: 20px;
+    margin: 10px;
+  }
+  
+  .cdk-drag-animating {
+    transition: transform 300ms cubic-bezier(0, 0, 0.2, 1);
+  }
+
+  .example-boundary {
+    border: 1px solid #000;
+  }
+
+  .container .row > form {
+    width: 100%;
+  }
+
+  .card {
+    padding: 10px;
+    margin: 0;
+  }
+ 
+  .card-body {
+    padding: 5px 2px !important;
+  }
+
+  .drag-list {
+    background: #f1f1f1;
+    padding: 3px 4px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    cursor: move;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .drag-list span{
+    padding: 5px 3px 0 3px;
+  }
+
+  .drag-list span.control-label{
+    width: 100%;
+    text-align: left;
+  }
+
+  // .active {
+  //   background: #f90 !important;
+  // }
+
+  .drag-list:focus {
+    background: rgb(126, 15, 15);
+  }
+
+  .card > div:first-child{
+    font-size: 14px;
+    font-weight: bold;
+  }
+
+  #selectControl {
+    margin-top: 10px;
+  }
+
+  #selectControl label {
+    font-weight: bold;
+  }
+  .addoption {
+    margin-bottom: 10px;
+  }
+
+  .addoption ul{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .addoption ul li {
+    margin: 0px 0px 8px 0;
+    padding: 0;
+  }
+
+  .custom-controls {
+    margin: 10px auto;
+  }
+
+  .custom-controls h5{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .custom-controls h5 button {
+    padding: 5px 7px 0 7px;
+    font-size: 12px;
+    line-height: 15px;
+  }
+
+  .custom-controls label {
+    display: inline;
+  }
+
+  .smallbtn{
+    padding: 7px 10px;
+  }
+
+  .editbtn{
+      display: flex;
+      width: auto;
+      justify-content: space-between;
+      padding: 3px 5px 5px 5px;
+      line-height: 0px;
+      font-size: 11px;
+      align-items: center;
+      margin: 0px 5px 0px 0px;
+  }
+
+  .rotateEditicon {
+    transform: rotate(130deg);
+  }
+
+  .demo-btn-group .btn {
+    margin: 5px 0;
+  }
+
+  .btn-sm {
+    padding: 3px 5px 5px 5px;
+  }
+
+  .form-check-label {
+    display: inherit;
+  }
+
+  .displayflex {
+    display: flex;
+  }
+
+  /*test*/
+
+  .example-container {
+    // width: 400px;
+    max-width: 100%;
+    margin: 0 25px 25px 0;
+    display: inline-block;
+    vertical-align: top;
+  }
+
+  .formfield-list {
+    max-width: 100%;
+   /* border: solid 1px #ccc;*/
+    min-height: 60px;
+    display: block;
+    background: white;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .example-list {
+    max-width: 100%;
+    border: solid 1px #ccc;
+    border-top:0;
+    min-height: 60px;
+    display: block;
+    background: white;
+    border-radius: 0px 0px 4px 4px;
+    overflow: hidden;
+    margin-bottom: 10px;
+  }
+  
+  .example-box {
+    padding: 8px 10px;
+    border: solid 1px #ccc;
+    color: rgba(0, 0, 0, 0.87);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    box-sizing: border-box;
+    cursor: move;
+    background: white;
+    font-size: 14px;
+  }
+
+  .dsarform-box {
+    color: rgba(0, 0, 0, 0.87);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    box-sizing: border-box;
+    cursor: move;
+    background: white;
+    font-size: 14px;
+  }
+
+  .dsarform-box div > label {
+    font-weight: bold;
+    margin: 0;
+  }
+  
+  .cdk-drag-preview {
+    box-sizing: border-box;
+    border-radius: 4px;
+    background-color: lightblue;
+    box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+                0 8px 10px 1px rgba(0, 0, 0, 0.14),
+                0 3px 14px 2px rgba(0, 0, 0, 0.12);
+  }
+  
+  .cdk-drag .cdk-drag-placeholder {
+    opacity: 0;
+  }
+  
+  .cdk-drag-animating {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+  }
+  
+  .example-box:last-child {
+    /*border: none;*/
+  }
+  
+  .example-list.cdk-drop-list-dragging .example-box:not(.cdk-drag-placeholder) {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+  }
+
+  .borderzero{
+    border:0;
+  }
+
+  .example-box label {
+    margin-bottom: 0;
+  }
+
+  .example-box h3 {
+    font-size: 14px;
+    font-weight: bold;
+  }
+
+  .example-box label {
+    font-weight: bold;
+  }
+
+  .loader-spinner {
+    color: black;
+    font-size: 14px;
+    display: flex;
+    margin-bottom: 10px;
+  }
+
+  .loader-spinner span {
+    font-size: 13px;
+    font-weight: bold;
+    margin-left: 10px;
+  }
+
+  .loader-spinner .spinner-border {
+    width: 1.5rem !important;
+    height: 1.5rem !important;
+  }
+
+  .dsar-formwrapper {
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    box-shadow: 1px 1px 2px #d0d0d0;
+  }
+
+  .dsar-formwrapper > ul.nav-tabs > li > a {
+    border-bottom-width: 1px;
+    background-color: #fff;
+    border: 0;
+    border-radius: 0;
+    border-bottom: 2px solid green;;
+  }
+
+  .dsar-formwrapper > ul.nav-tabs > li a.nav-link.active {
+    background-color: #fff;
+    z-index: 5;
+    color: #0168fa;
+    border-bottom: 2px solid #0168fa;
+  }
+  
+  .shadowdiv {
+    border: 1px solid rgba(72, 94, 144, 0.16);
+    border-radius: 4px;
+    box-shadow: 0rem 0.1rem 0.2rem #ccc;
+  }
+
+  .shadowdiv > .nav-tabs .nav-link.active {
+    background-color: #fff;
+    z-index: 5;
+    color: #0168fa;
+    border: 0px;
+    border-bottom: 2px solid blue;
+}
+
+.shadowdiv > .nav-tabs .nav-link {
+  background-color: transparent;
+  border-color: transparent;
+  border-bottom: 2px solid #5cb85c;
+}
+
+  .shadowdiv ul.nav-tabs.nav {
+    position: relative;
+    background: #fff;
+    // border: 1px solid rgba(72, 94, 144, 0.16);
+    border-bottom: 0;
+    border-radius: 4px 4px 0px 0px;
+  }
+  
+  .shadowdiv ul.nav-tabs.nav > li:last-child {
+    position: absolute !important;
+    right: 0px !important;
+  }
+
+  .shadowdiv ul.nav-tabs.nav > li:last-child > a.btn-sm {
+    padding: 5px 10px !important;
+    margin: 5px 5px 0 0 !important;
+  }
+
+  .shadowdiv .tab-content {
+    padding: 5px;
+  }
+
+.displayblock {
+  display: block;
+}
+
+.accordion > .card .card-header {
+  padding: 5px !important;
+  border-bottom: 0px !important;
+}
+
+.form-tl {
+  font-size: 15px;
+}
+
+.logowidth {
+  width: 80px;
+  height: auto;
+}
+
+.headerwrapper {
+  border: 1px solid #ccc;
+  text-align: center;
+  border-radius: 5px 5px 0px 0px;
+  border-bottom: 0px;
+}
+
+.logocontainer {
+  border-radius: 4px 4px 0px 0px;
+  background-color: #3968fa;
+}
+
+#cdk-drop-list-0 .dsarform-box:first-child, #cdk-drop-list-0 .dsarform-box:nth-child(2) {
+  display: none;
+}
+
+.quilleditor-wrapper {
+  display: block;
+  padding: 0px 20px;
+}
+
+.quilleditor-wrapper > .quilleditor .ql-align-right {
+  text-align: right !important;
+}
+
+.quilleditor-wrapper > .quilleditor .ql-align-center {
+  text-align: center !important;
+}
+
+.quilleditor p {
+  text-align: center;
+  width: 50%;
+  margin: 0 auto;
+  font-weight: 500;
+}
+
+.border-top {
+  border-top:1px solid #ccc;
+}
+
+input[type="color"]::-webkit-color-swatch-wrapper {
+	padding: 0;
+}
+input[type="color"]::-webkit-color-swatch {
+	border: none;
+}
+
+input[type='color'] {
+  -webkit-appearance: none;
+  border: none;
+  width: 24px;
+  padding: 0;
+  outline: none;
+  border-radius: 5px;
+  margin: 0;
+  height: 24px;
+}
+
+.form-field-section {
+
+}
+
+.form-field-section .card {
+  padding: 0;
+}
+
+.form-field-section .card .card-header {
+  border-bottom: 1px solid #ccc !important;
+  padding: 15px !important;
+}
+
+.icon-label-wrapper span {
+  margin: 0 10px 0 10px;
+}
+
+.controls-with-options {
+  display: flex;
+  flex-direction: column;
+}
+
+.list-wrapper{
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+}
+
+.controls-with-options > .list-wrapper ul {
+  margin: 0;
+  padding: 0 20px 0 0;  
+}
+
+.list-wrapper ul {
+  
+}
+
+.controls-with-options ul li {
+  list-style-type: none;
+}
+
+.controls-with-options .btn-link {
+  border-radius: 20px;
+  border: 1px solid #ccc;
+  width: 25px;
+  height: 25px;
+}
+
+.shadow {
+  box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.card-body .align-items-center {
+  font-weight: bold;
+  margin: 5px;
+}
+

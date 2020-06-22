@@ -2,7 +2,8 @@ version: "3.2"
 
 services:
   ui:
-    image: ${CI_REGISTRY_IMAGE}:${CI_COMMIT_TAG:-$CI_COMMIT_REF_NAME-$CAL_VER}
+#    image: ${CI_REGISTRY_IMAGE}:${CI_COMMIT_TAG:-$CI_COMMIT_REF_NAME-$CAL_VER}
+    image: ${CI_REGISTRY_IMAGE}:${CI_COMMIT_TAG:-$CI_COMMIT_REF_NAME-$TAG}
     networks:
       apps:
     volumes:
@@ -34,7 +35,7 @@ services:
           cpus: '0.5'
           memory: 64M
       labels:
-        - "traefik.backend=cmp-ui"
+        - "traefik.backend=${backend}"
         - "traefik.enable=true"
         - "traefik.port=80"
         - "traefik.docker.network=traefik_apps"

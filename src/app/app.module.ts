@@ -2,19 +2,14 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
-import { LoginComponent } from './login/login.component';
-import { RegisterComponent } from './register/register.component';
-import { IconsModule } from './icons/icons.module';
-import { JwtInterceptor, fakeBackendProvider, ErrorInterceptor } from './_helpers';
 
+import { JwtInterceptor, fakeBackendProvider, ErrorInterceptor } from './_helpers';
 import { environment } from '../environments/environment';
-import { AnalyticsComponent } from './pages/dashboards/analytics/analytics.component';
 import { Ng2ChartJsModules } from 'chartjs-ng2-module';
 import { HeaderComponent } from './_components/layout/header/header.component';
 import { FooterComponent } from './_components/layout/footer/footer.component';
@@ -23,42 +18,61 @@ import { NavbarComponent } from './_components/layout/navbar/navbar.component';
 import { AlertComponent } from './_components';
 
 import { ForgotpasswordComponent } from './forgotpassword/forgotpassword.component';
-import { ChangepasswordComponent } from './changepassword/changepassword.component';
-import { EditProfileComponent } from './edit-profile/edit-profile.component';
+
 import { UseractivityComponent } from './useractivity/useractivity.component';
-import { OrgpageComponent } from './orgpage/orgpage.component';
 import { ResetpasswordComponent } from './resetpassword/resetpassword.component';
 import { PagenotfoundComponent } from './errorpages/pagenotfound.component';
 import { InternalerrorComponent } from './errorpages/internalerror.component';
 import { PagenotfoundComponent1 } from './errorpages/404page.component';
 import { AuthenticationService } from './_services';
-import { DsarformComponent } from './dsarform/dsarform.component';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { CollapseModule } from 'ngx-bootstrap/collapse';
 
+import { PropertydashboardComponent } from './propertydashboard/propertydashboard.component';
+import { FeatherModule } from 'angular-feather';
+import { allIcons } from 'angular-feather/icons';
+import { PricingComponent } from './pricing/pricing.component';
+import { PartnersComponent } from './partners/partners.component';
+import { TermofuseComponent } from './termofuse/termofuse.component';
+import { PrivacypolicyComponent } from './privacypolicy/privacypolicy.component';
+import { CCPAComponent } from './ccpa/ccpa.component';
+import { VerifyemailComponent } from './verifyemail/verifyemail.component';
 
+import { NgxUiLoaderModule, NgxUiLoaderConfig } from 'ngx-ui-loader';
+import { ngxUiLoaderConfig } from './_constant/loading.contant';
+import { CheckoutComponent } from './checkout/checkout.component';
+import { CheckoutConfirmationComponent } from './checkout-confirmation/checkout-confirmation.component';
+
+import { SharedbootstrapModule } from './sharedbootstrap/sharedbootstrap.module';
 
 
 export const isMock = environment.mock;
+
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
-    LoginComponent,
-    RegisterComponent,
-    AnalyticsComponent,
     HeaderComponent,
     FooterComponent,
     NavbarComponent,
     AlertComponent,
     ForgotpasswordComponent,
-    ChangepasswordComponent,
-    EditProfileComponent,
     UseractivityComponent,
-    OrgpageComponent,
     ResetpasswordComponent,
     PagenotfoundComponent,
     InternalerrorComponent,
     PagenotfoundComponent1,
-    DsarformComponent
+    PropertydashboardComponent,
+    PricingComponent,
+    PartnersComponent,
+    TermofuseComponent,
+    PrivacypolicyComponent,
+    CCPAComponent,
+    VerifyemailComponent,
+    CheckoutComponent,
+    CheckoutConfirmationComponent,
   ],
   imports: [
     BrowserModule,
@@ -67,9 +81,16 @@ export const isMock = environment.mock;
     HttpClientModule,
     AppRoutingModule,
     FontAwesomeModule,
-    NgbModule,
-    IconsModule,
     Ng2ChartJsModules,
+    DragDropModule,
+
+    BrowserAnimationsModule,
+
+    BsDropdownModule.forRoot(),
+    CollapseModule.forRoot(),
+    FeatherModule.pick(allIcons),
+    NgxUiLoaderModule.forRoot(ngxUiLoaderConfig),
+    SharedbootstrapModule
   ],
   providers: [
     AuthenticationService,
@@ -88,6 +109,8 @@ export const isMock = environment.mock;
     fakeBackendProvider
   ],
   bootstrap: [AppComponent],
-  exports: [AnalyticsComponent]
+  exports: [
+    // AnalyticsModule,
+    BsDropdownModule, CollapseModule]
 })
 export class AppModule { }

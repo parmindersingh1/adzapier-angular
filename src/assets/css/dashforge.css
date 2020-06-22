@@ -6,6 +6,11 @@
 *
 
 /* ############### FONTS IMPORT ############### */
+@import '~quill/dist/quill.bubble.css';
+@import '~quill/dist/quill.snow.css';
+@import '~quill-emoji/dist/quill-emoji.css';
+@import '~quill/dist/quill.core.css';
+
 @import url("https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900");
 @import url("https://fonts.googleapis.com/css?family=Roboto+Mono");
 @import url("https://fonts.googleapis.com/css?family=Lato:300,400,700,900");
@@ -4092,9 +4097,9 @@ input[type="button"].btn-block {
     .navbar-expand-lg > .container,
     .navbar-expand-lg > .container-fluid {
       flex-wrap: nowrap; }
-    .navbar-expand-lg .navbar-collapse {
+    /* .navbar-expand-lg .navbar-collapse {
       display: flex !important;
-      flex-basis: auto; }
+      flex-basis: auto; } */
     .navbar-expand-lg .navbar-toggler {
       display: none; } }
 
@@ -4379,7 +4384,9 @@ input[type="button"].btn-block {
     border-top-left-radius: 0;
     border-top-right-radius: 0; }
   .accordion > .card .card-header {
-    margin-bottom: -1px; }
+    margin-bottom: -1px;
+    padding: 10px 10px;
+  }
 
 .breadcrumb {
   display: flex;
@@ -12115,7 +12122,7 @@ textarea.parsley-success:focus {
       stroke-linecap: square;
       stroke-linejoin: miter; }
   .ql-snow.ql-toolbar .ql-picker-label {
-    display: flex;
+    display: inherit;
     align-items: center;
     border-radius: 0.25rem; }
     .ql-snow.ql-toolbar .ql-picker-label.ql-active {

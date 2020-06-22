@@ -1,0 +1,185 @@
+ 
+  .example-boundary {
+    border: 1px solid #000;
+  }
+
+  .container .row > form {
+    width: 100%;
+  }
+
+  .card {
+    padding: 10px;
+    margin: 5px 0;
+  }
+ 
+  .card-body {
+    padding: 5px 0;
+  }
+ 
+
+  .active {
+    background: #f90 !important;
+  }
+
+  .drag-list:focus {
+    background: rgb(126, 15, 15);
+  }
+
+  .card > div:first-child{
+    font-size: 14px;
+    font-weight: bold;
+  }
+
+  #selectControl {
+    margin-top: 10px;
+  }
+
+  #selectControl label {
+    font-weight: bold;
+  }
+  .addoption {
+    margin-bottom: 10px;
+  }
+
+  .addoption ul{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .addoption ul li {
+    margin: 0px 0px 8px 0;
+    padding: 0;
+  }
+
+  .custom-controls {
+    
+  }
+
+  .custom-controls h5{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .custom-controls h5 button {
+    padding: 5px 7px 0 7px;
+    font-size: 12px;
+    line-height: 15px;
+  }
+
+  .custom-controls label {
+    display: inline;
+  }
+
+  .smallbtn{
+    padding: 7px 10px;
+  }
+
+  .editbtn{
+      display: flex;
+      width: auto;
+      justify-content: space-between;
+      padding: 3px 5px 5px 5px;
+      line-height: 0px;
+      height: 20px;
+      font-size: 11px;
+      margin: 5px 5px 5px 0px;
+  }
+
+  .rotateEditicon {
+    transform: rotate(130deg);
+  }
+
+  .demo-btn-group .btn {
+    margin: 5px 0;
+  }
+
+  .btn-sm {
+    padding: 3px 5px 5px 5px;
+  }
+
+  .example-box {
+    //  border-bottom: 1px solid #ccc;
+     padding-bottom: 10px;
+  }
+
+  .example-box label {
+    font-weight: bold;
+    font-size: 14px;
+  }
+
+  
+.logowidth {
+  width: 80px;
+  height: auto;
+}
+
+.headerwrapper {
+  border: 1px solid #ccc;
+  text-align: center;
+  border-radius: 5px 5px 0px 0px;
+  border-bottom: 0px;
+}
+
+.logocontainer {
+  border-radius: 4px 4px 0px 0px;
+  background-color: #3968fa;
+}
+
+  .formwrapper{
+    border: 1px solid #ccc;
+  }
+
+  .formwrapper > form {
+    width: 100%;
+  }
+
+  .clientfacingform form {
+    border: 1px solid #ccc;
+    border-radius:5px;
+  }
+
+  .clientfacingform .form-check {
+    padding: 0;
+  }
+ 
+.is-invalid {
+  color: red;
+}
+
+.example-box .form-check-inline {
+  display: inline;
+  margin: 0 0px 0 10px;
+}
+
+.example-box .heading {
+  display: flex;
+}
+
+.quilleditor p {
+  text-align: center;
+  width: 50%;
+  margin: 0 auto;
+  font-weight: 500;
+}
+
+.quilleditor-wrapper .quilleditor p {
+  text-align: center;
+  font-weight: 500;
+}
+
+.quilleditor-wrapper {
+  display: block;
+  padding: 0px 20px;
+}
+
+.quilleditor-wrapper .quilleditor .ql-align-right {
+  text-align: right !important;
+}
+
+.quilleditor-wrapper .quilleditor .ql-align-center {
+  text-align: center !important;
+  margin: 0 !important;
+}
+

@@ -1,0 +1,25 @@
+.btn-default{
+  background: #fff;
+  border: 1px solid lightgray;
+  margin-bottom: 10px;
+}
+ul {
+  margin: 0px !important;
+  padding: 0px !important;
+}
+li {
+  padding: 6px;
+  cursor: pointer;
+  text-transform: capitalize;
+  padding-top: 12px;
+  padding-bottom: 10px;
+  text-align: center;
+}
+li:hover {
+  background: #007bff;
+  color: #fff;
+}
+.solution {
+  margin-bottom: 8px;
+  margin-top: 25px;
+}

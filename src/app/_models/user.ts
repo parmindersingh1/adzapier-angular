@@ -1,4 +1,6 @@
-﻿export class User {
+﻿import {UserRole} from '../_models/UserRole';
+
+export class User {
     firstname: string;
     lastname: string;
     address1: string;
@@ -12,7 +14,7 @@
     confirmpassword: string;
     token: string;
     uid: number;
-    roles: string;
+    userole: UserRole[];
 
 
     //firstName: string;
