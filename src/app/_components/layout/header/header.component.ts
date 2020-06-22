@@ -354,6 +354,7 @@ export class HeaderComponent implements OnInit {
     // this.orgPropertyMenu = this.orgservice.getOrganizationWithProperty();
     this.orgservice.getOrganizationWithProperty().subscribe((data) => {
       this.orgPropertyMenu = data.response;
+      if (data.response.length > 0) {
       this.rearrangeFormSequence(this.orgPropertyMenu);
       this.selectedOrgProperties.length = 0;
       this.activeProp = this.orgPropertyMenu[0].property[0].property_name;
@@ -370,6 +371,9 @@ export class HeaderComponent implements OnInit {
       this.selectedOrgProperties.push(obj);
       this.orgservice.setCurrentOrgWithProperty(obj);
       this.currentSelectedProperty();
+    } else {
+      this.router.navigate(['settings/organizations']);
+    }
       // if (this.currentProperty === undefined) {
       //   this.selectedOrgProperties.length = 0;
       //   this.selectedOrgProperties.push(data.response[0].property[0]);

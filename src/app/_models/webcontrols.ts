@@ -7,7 +7,6 @@ export class WebControls {
     // stateList: any;
     // countries: any;
     constructor(public subjectType?: any[],
-                public cCPARequestService?: CcparequestService,
                 public requestType?: any[]) { }
 
     countries = [
