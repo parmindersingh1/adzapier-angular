@@ -6,8 +6,7 @@ import { CcparequestService } from '../_services/ccparequest.service';
 export class WebControls {
     // stateList: any;
     // countries: any;
-    constructor(public subjectType?: any[],
-                public requestType?: any[]) { }
+    constructor() { }
 
     countries = [
     {
@@ -60,7 +59,7 @@ loadWebControls() {
                 controllabel: 'I am a (an)',
                 controlId: 'subjecttype',
                 indexCount: 'subject_type_Index',
-                selectOptions: this.subjectType,
+                selectOptions: '',
                 preferControlOrder: ''
             },
             {
@@ -68,7 +67,7 @@ loadWebControls() {
                 controllabel: 'Select request type(s)',
                 controlId: 'requesttype',
                 indexCount: 'request_type_Index',
-                selectOptions: this.requestType,
+                selectOptions: '',
                 preferControlOrder: ''
             },
             {

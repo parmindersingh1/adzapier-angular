@@ -12,6 +12,8 @@ export class CCPAFormConfigurationService extends WebControls {
   webFormControlList: CCPAFormFields;
   captureFormDataWhileNavigate = new BehaviorSubject<any>('');
   currentFormData = this.captureFormDataWhileNavigate.asObservable();
+  subjectType: any;
+  requestType: any;
   constructor(private httpClient: HttpClient) {
     super();
    // this.loadCreatedWebControls();
