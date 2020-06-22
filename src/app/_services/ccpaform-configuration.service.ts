@@ -4,6 +4,7 @@ import { environment } from 'src/environments/environment.staging';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { WebControls } from '../_models/webcontrols';
 import { CCPAFormFields } from '../_models/ccpaformfields';
+import { CcparequestService } from './ccparequest.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,7 @@ export class CCPAFormConfigurationService extends WebControls {
   webFormControlList: CCPAFormFields;
   captureFormDataWhileNavigate = new BehaviorSubject<any>('');
   currentFormData = this.captureFormDataWhileNavigate.asObservable();
-  constructor(private httpClient: HttpClient) {
+  constructor(private httpClient: HttpClient, private CCPARequestService: CcparequestService) {
     super();
    // this.loadCreatedWebControls();
   }
