@@ -40,6 +40,7 @@ export class DsarRequestdetailsComponent implements OnInit {
   nextTab: any;
   quillEditorText: FormGroup;
   private fb: FormBuilder;
+  editorDataFooter: any;
   quillConfig = {
     toolbar: {
       container: [

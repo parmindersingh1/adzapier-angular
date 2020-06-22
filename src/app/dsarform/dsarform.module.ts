@@ -20,13 +20,9 @@ import { SharedbootstrapModule } from '../sharedbootstrap/sharedbootstrap.module
     DsarformRoutingModule,
    // QuillModule,
     SharedbootstrapModule
-  ],
+  ]
  // providers:[NgbModule, NgbModal],
-  exports: [
-    // NgbModule, NgbModal,
-    SharedbootstrapModule,
-     DsarformComponent],
-    bootstrap: [DsarformComponent]
+ 
 })
 export class DsarformModule {
   
