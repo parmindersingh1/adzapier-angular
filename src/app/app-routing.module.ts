@@ -25,40 +25,40 @@ import { CheckoutConfirmationComponent } from './checkout-confirmation/checkout-
 
 const routes: Routes = [
 
-  { path: 'login', loadChildren: () => import(`./login/login.module`).then(m => m.LoginModule) },
-  { path: 'signup', loadChildren: () => import(`./register/register.module`).then(m => m.RegisterModule) },
+  { path: 'login', loadChildren: () => import('./login/login.module').then(m => m.LoginModule) },
+  { path: 'signup', loadChildren: () => import('./register/register.module').then(m => m.RegisterModule) },
   { path: 'forgot-password', component: ForgotpasswordComponent },
   { path: 'privacypolicy', component: PrivacypolicyComponent },
   { path: 'partners', component: PartnersComponent },
   { path: 'termofuse', component: TermofuseComponent },
-  { path: 'contactus', loadChildren: () => import(`./contactus/contactus.module`).then(m => m.ContactusModule) },
+  { path: 'contactus', loadChildren: () => import('./contactus/contactus.module').then(m => m.ContactusModule) },
   { path: 'ccpa', component: CCPAComponent },
-  { path: 'gdpr', loadChildren: () => import(`./gdpr/gdpr.module`).then(m => m.GdprModule) },
-  { path: 'changelog', loadChildren: () => import(`./changelog/changelog.module`).then(m => m.ChangelogModule) },
-  { path: 'gethelp', loadChildren: () => import(`./gethelp/gethelp.module`).then(m => m.GethelpModule) },
+  { path: 'gdpr', loadChildren: () => import('./gdpr/gdpr.module').then(m => m.GdprModule) },
+  { path: 'changelog', loadChildren: () => import('./changelog/changelog.module').then(m => m.ChangelogModule) },
+  { path: 'gethelp', loadChildren: () => import('./gethelp/gethelp.module').then(m => m.GethelpModule) },
   {
-    path: 'home/dashboard/analytics', loadChildren: () => import(`./dashboard/analytics.module`)
+    path: 'home/dashboard/analytics', loadChildren: () => import('./dashboard/analytics.module')
       .then(m => m.AnalyticsModule)
   },
-  { path: 'userprofile', loadChildren: () => import(`./edit-profile/edit-profile.module`).then(m => m.EditProfileModule) },
+  { path: 'userprofile', loadChildren: () => import('./edit-profile/edit-profile.module').then(m => m.EditProfileModule) },
   { path: 'pricing', component: PricingComponent, canActivate: [AuthGuard] },
   { path: 'user/activity', component: UseractivityComponent, canActivate: [AuthGuard] },
   { path: 'resetpswd/:id', component: ResetpasswordComponent },
   { path: 'pagenotfound', component: PagenotfoundComponent },
   { path: '404page', component: PagenotfoundComponent1 },
   { path: 'internalerror', component: InternalerrorComponent },
-  { path: 'privacy/dsar/dsarform', loadChildren: () => import(`./dsarform/dsarform.module`).then(m => m.DsarformModule) },
+  { path: 'privacy/dsar/dsarform', loadChildren: () => import('./dsarform/dsarform.module').then(m => m.DsarformModule) },
   {
-    path: 'privacy/dsar/dsar-requests', loadChildren: () => import(`./privacy/dsar/dsar-requests/dsar-requests.module`)
+    path: 'privacy/dsar/dsar-requests', loadChildren: () => import('./privacy/dsar/dsar-requests/dsar-requests.module')
       .then(m => m.DsarRequestsModule)
   },
   {
     path: 'privacy/dsar/dsar-requests-details/:id',
-    loadChildren: () => import(`./privacy/dsar/dsar-requestdetails/dsar-requestdetails.module`).then(m => m.DsarRequestdetailsModule)
+    loadChildren: () => import('./privacy/dsar/dsar-requestdetails/dsar-requestdetails.module').then(m => m.DsarRequestdetailsModule)
   },
-  { path: 'privacy/dsar/webforms', loadChildren: () => import(`./privacy/dsar/webforms/webforms.module`).then(m => m.WebformsModule) },
+  { path: 'privacy/dsar/webforms', loadChildren: () => import('./privacy/dsar/webforms/webforms.module').then(m => m.WebformsModule) },
   { path: 'settings', loadChildren: () => import('./pagesettings/pagesettings.module').then(m => m.PagesettingsModule) },
-  { path: 'editwebforms/:crid', loadChildren: () => import(`./editwebform/editwebform.module`).then(m => m.EditwebformModule) },
+  { path: 'editwebforms/:crid', loadChildren: () => import('./editwebform/editwebform.module').then(m => m.EditwebformModule) },
   { path: 'propertydashboard/:propid', component: PropertydashboardComponent, canActivate: [AuthGuard] },
   { path: 'verify-email/:id', component: VerifyemailComponent },
   { path: 'checkout', component: CheckoutComponent, canActivate: [AuthGuard] },
