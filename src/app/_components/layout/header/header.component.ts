@@ -12,7 +12,7 @@ import { mergeMap, switchMap, distinctUntilKeyChanged, distinctUntilChanged } fr
   styleUrls: ['./header.component.scss'],
   providers: [{ provide: BsDropdownConfig, useValue: { isAnimated: true, autoClose: true } }]
 })
-export class HeaderComponent implements  OnInit {
+export class HeaderComponent implements OnInit {
   isCollapsed = true;
   accessHeader: boolean;
   public currentLoggedInUser: string;
@@ -40,7 +40,7 @@ export class HeaderComponent implements  OnInit {
   userRole: string;
   propertyList: any;
   listOfProp: any;
-  orgId:any;
+  orgId: any;
   orgPropertyMenu: any;
   userID: any;
   propList: any;
@@ -83,12 +83,12 @@ export class HeaderComponent implements  OnInit {
         this.currentLoggedInUser = this.currentUser.response.firstname + ' ' + this.currentUser.response.lastname;
         this.userRole = this.currentUser.response.role;
         this.userID = this.currentUser.response.uid;
-        console.log(this.userRole,'userRole...');
+        console.log(this.userRole, 'userRole...');
         this.loadOrganizationWithProperty();
 
       }
     });
-   // this.getLoggedInUserDetails();
+    // this.getLoggedInUserDetails();
     this.orgservice.emitUpdatedOrgList.subscribe((data) => {
       this.loadOrganizationList();
     });
@@ -100,14 +100,14 @@ export class HeaderComponent implements  OnInit {
     if (this.currentUser) {
       this.isCollapsed = false;
       this.getLoggedInUserDetails();
-     // this.loadCurrentUser();
-     // this.loadOrganizationList();
+      // this.loadCurrentUser();
+      // this.loadOrganizationList();
       this.currentSelectedProperty();
-     // this.loadOrganizationWithProperty();
-    //   this.orgservice.emitUpdatedOrganization.subscribe((data) => {
-    //     this.currentOrganization = data.response.orgname;
-    //     console.log(this.currentOrganization, 'currentOrganization..');
-    //  });
+      // this.loadOrganizationWithProperty();
+      //   this.orgservice.emitUpdatedOrganization.subscribe((data) => {
+      //     this.currentOrganization = data.response.orgname;
+      //     console.log(this.currentOrganization, 'currentOrganization..');
+      //  });
 
     }
     this.publicNavigationMenu = [
@@ -129,14 +129,14 @@ export class HeaderComponent implements  OnInit {
     this.isCollapsed = true;
     localStorage.removeItem('currentUser');
     // this.orgservice.removeControls();
-   // this.userService.getCurrentUser.unsubscribe();
+    // this.userService.getCurrentUser.unsubscribe();
     this.router.navigate(['/login']);
     location.reload();
 
   }
 
   editProfile() {
-    return this.router.navigate(['/user/profile/edit']);
+    return this.router.navigate(['userprofile']);
   }
 
   isHeaderVisibleTop(): boolean {
@@ -163,14 +163,14 @@ export class HeaderComponent implements  OnInit {
   loadOrganizationList() {
     this.orgservice.orglist().subscribe((data) => {
       if (data === null) {
-        this.router.navigate(['/organizations']);
+        this.router.navigate(['settings/organizations']);
       }
       this.orgList = Object.values(data)[1];
       this.leftItems = this.orgList;
 
 
       console.log(this.leftItems, 'leftItems..');
-    //  this.loadOrganizationProperty();
+      //  this.loadOrganizationProperty();
       //  else {
       //   this.orgList = Object.values(data)[0];
       //   this.leftItems = this.orgList;
@@ -192,9 +192,9 @@ export class HeaderComponent implements  OnInit {
         {
           label: 'User', icon: 'assets/imgs/glass.jpg',
           items: [
-            { label: 'User Preferences', routerLink: '/user/profile/edit', icon: 'edit-3' },
-            { label: 'Organizations', routerLink: '/organizations', icon: 'activity' },
-            { label: 'Billing', routerLink: '/pagenotfound', icon: 'credit-card' },
+            { label: 'User Preferences', routerLink: '/userprofile', icon: 'edit-3' },
+            { label: 'Organizations', routerLink: 'settings/organizations', icon: 'activity' },
+            { label: 'Billing', routerLink: 'settings/billing', icon: 'credit-card' },
             { label: 'Settings', routerLink: '/settings', icon: 'settings' },
             { label: 'Help Center', routerLink: '/pagenotfound', icon: 'help-circle' },
             { label: 'Signout', routerLink: '/login', icon: 'log-out' }
@@ -211,15 +211,15 @@ export class HeaderComponent implements  OnInit {
           showlink: 'Privacy',
           subcategory: [
             { showlink: 'Dashboard', routerLink: '/pagenotfound', icon: 'bar-chart-2' },
-            { showlink: 'Webforms', routerLink: '/webforms', icon: 'pie-chart' },
-            { showlink: 'Requests', routerLink: '/dsar-requests', icon: 'fa fa-ticket-alt feather-16' },
+            { showlink: 'Webforms', routerLink: '/privacy/dsar/webforms', icon: 'pie-chart' },
+            { showlink: 'Requests', routerLink: 'privacy/dsar/dsar-requests', icon: 'fa fa-ticket-alt feather-16' },
             { showlink: 'Work flow', routerLink: '/pagenotfound', icon: 'shield-off' },
             { showlink: 'Cookie Category', routerLink: '/pagenotfound', icon: 'fab fa-microsoft feather-16' },
             { showlink: 'Cookie Banner', routerLink: '/pagenotfound', icon: 'fas fa-cookie feather-16' },
             { showlink: 'Consent Tracking', routerLink: '/pagenotfound', icon: 'fas fa-file-contract feather-16' },
             { showlink: 'Setup', routerLink: '/pagenotfound', icon: 'fas fa-wrench feather-16' }
           ]
-        }, { showlink: 'Billing', routerLink: '/billing' }];
+        }, { showlink: 'Billing', routerLink: 'settings/billing' }];
     });
 
 
@@ -249,22 +249,22 @@ export class HeaderComponent implements  OnInit {
   }
 
   isCurrentPropertySelected(org, prop) {
-    console.log(org,'org..');
-    console.log(prop,'prop..');
+    console.log(org, 'org..');
+    console.log(prop, 'prop..');
     this.orgservice.getPropertyList(org.id).subscribe((data) => this.propList = data.response);
-    console.log(this.checkPropertyStatus(prop),'cps..');
+    console.log(this.checkPropertyStatus(prop), 'cps..');
     if (this.checkPropertyStatus(prop)) {
       alert(prop.property_name + ' property has been disabled.');
     } else {
       this.selectedOrgProperties.length = 0;
       this.activeProp = prop.property_name;
       const obj = {
-      organization_id: org.id,
-      organization_name: org.orgname,
-      property_id: prop.property_id,
-      property_name: prop.property_name,
-      user_id: this.userID
-    };
+        organization_id: org.id,
+        organization_name: org.orgname,
+        property_id: prop.property_id,
+        property_name: prop.property_name,
+        user_id: this.userID
+      };
       this.orgservice.changeCurrentSelectedProperty(obj);
       // this.orgservice.getSelectedOrgProperty.emit(obj);
       //  this.firstElement = false;
@@ -302,17 +302,17 @@ export class HeaderComponent implements  OnInit {
   currentSelectedProperty() {
     // tslint:disable-next-line: max-line-length
     this.orgservice.currentProperty.pipe(distinctUntilChanged())
-     .subscribe((data) => {
-      if (data) {
-        this.currentProperty = data.property_name;
-        this.currentOrganization = data.organization_name || data.response.orgname;
-        if (this.currentProperty !== undefined) {
-          this.selectedOrgProperties.push(data);
-          this.isPropSelected(data);
+      .subscribe((data) => {
+        if (data) {
+          this.currentProperty = data.property_name;
+          this.currentOrganization = data.organization_name || data.response.orgname;
+          if (this.currentProperty !== undefined) {
+            this.selectedOrgProperties.push(data);
+            this.isPropSelected(data);
+          }
         }
-      }
 
-    });
+      });
 
     this.orgservice.editedProperty.subscribe((prop) => {
       if (prop) {
@@ -351,14 +351,38 @@ export class HeaderComponent implements  OnInit {
   }
 
   loadOrganizationWithProperty() {
-    this.orgservice.getOrganizationWithProperty().subscribe((data)=>{
+    // this.orgPropertyMenu = this.orgservice.getOrganizationWithProperty();
+    this.orgservice.getOrganizationWithProperty().subscribe((data) => {
       this.orgPropertyMenu = data.response;
-    } );
+      this.rearrangeFormSequence(this.orgPropertyMenu);
+      this.selectedOrgProperties.length = 0;
+      this.activeProp = this.orgPropertyMenu[0].property[0].property_name;
+      const obj = {
+        organization_id: this.orgPropertyMenu[0].id,
+        organization_name: this.orgPropertyMenu[0].orgname,
+        property_id: this.orgPropertyMenu[0].property[0].property_id,
+        property_name: this.orgPropertyMenu[0].property[0].property_name,
+        user_id: this.userID
+      };
+      this.orgservice.changeCurrentSelectedProperty(obj);
+      // this.orgservice.getSelectedOrgProperty.emit(obj);
+      //  this.firstElement = false;
+      this.selectedOrgProperties.push(obj);
+      this.orgservice.setCurrentOrgWithProperty(obj);
+      this.currentSelectedProperty();
+      // if (this.currentProperty === undefined) {
+      //   this.selectedOrgProperties.length = 0;
+      //   this.selectedOrgProperties.push(data.response[0].property[0]);
+      //   this.isPropSelected(data.response[0].property[0]);
+      //   this.orgservice.changeCurrentSelectedProperty(data.response[0].property[0]);
+      //   this.orgservice.setCurrentOrgWithProperty(data.response[0]);
+      // }
+    });
   }
 
   checkPropertyStatus(prop): boolean {
     if (this.propList) {
-      return this.propList.filter((t) =>  t.id === prop.property_id && t.active === false).length > 0;
+      return this.propList.filter((t) => t.id === prop.property_id && t.active === false).length > 0;
     }
   }
 
@@ -366,14 +390,28 @@ export class HeaderComponent implements  OnInit {
     const orgDetails = this.orgservice.getCurrentOrgWithProperty();
     if (orgDetails !== undefined) {
       if (orgDetails.user_id === this.userID) {
-          this.currentOrganization = orgDetails.organization_name ? orgDetails.organization_name : orgDetails.response.orgname;
-          this.currentProperty = orgDetails.property_name;
-          this.selectedOrgProperties.push(orgDetails);
-          this.isPropSelected(orgDetails);
+        this.currentOrganization = orgDetails.organization_name ? orgDetails.organization_name : orgDetails.response.orgname;
+        this.currentProperty = orgDetails.property_name;
+        this.selectedOrgProperties.push(orgDetails);
+        this.isPropSelected(orgDetails);
       }
+      console.log(this.currentProperty, 'currentProperty.last..');
+      return this.currentProperty;
     }
-    console.log(this.currentProperty,'currentProperty.last..');
-    return this.currentProperty;
+
+  }
+
+  rearrangeFormSequence(dataArray) {
+    dataArray.sort((a, b) => {
+      if (a.orgname > b.orgname) {
+        return 1;
+      }
+      if (b.orgname > a.orgname) {
+        return -1;
+      }
+      return 0;
+    });
+    return dataArray;
   }
 
 }

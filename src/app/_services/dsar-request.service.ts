@@ -22,4 +22,9 @@ export class DsarRequestService {
     const path = '/ccpa/data/';
     return this.http.get(environment.apiUrl + path + orgId + '/' + propsID + pagelimit);
   }
+
+  getDSARRequestDetails(orgID, propID, dataReqID): Observable<any> {
+    return this.http.get<any>(environment.apiUrl + '/ccpa/data/' + orgID + '/' + propID + '/' + dataReqID);
+  }
+// http://develop-cmp-api.adzpier.com/api/v1/ccpa/data/q/q/q
 }

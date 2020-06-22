@@ -2,11 +2,13 @@
     <div class="mb-3">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb breadcrumb-style1 mg-b-0">
-                <li class="breadcrumb-item"><a routerLink="/webforms">DSAR</a></li>
+                <li class="breadcrumb-item">Privacy</li>
+                <li class="breadcrumb-item">DSAR</li>
                 <li class="breadcrumb-item active" aria-current="page">Web forms</li>
             </ol>
         </nav>
     </div>
+    <div class="shadowdiv">
     <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs">
         <li [ngbNavItem]="1">
             <a ngbNavLink>1 Basic</a>
@@ -39,7 +41,7 @@
                 </div> <!-- End Step-1-->
 
                 <div class="btn-toolbar sw-toolbar sw-toolbar-bottom justify-content-end">
-                    <div class="btn-group mr-2 sw-btn-group" role="group">
+                    <div class="btn-group mr-2 mb-2 sw-btn-group" role="group">
                         <button class="btn btn-secondary sw-btn-next" (click)="nav.select(2)">Next</button>
                     </div>
                 </div>
@@ -421,7 +423,7 @@
                         <div class="headerwrapper">
                             <div class="logocontainer py-2" [style.background-color]="headerColor">
                                 <img class="img-responsive logowidth"
-                                    [src]="headerlogoURL ? headerlogoURL:'assets/imgs/no_image.png'" width="150px" />
+                                    [src]="headerlogoURL ? headerlogoURL:' '" width="150px" />
                             </div>
                             <div class="quilleditor-wrapper py-2">
                                 <div class="quilleditor" [ngStyle]="welcomeStyle()"
@@ -595,7 +597,7 @@
                     </div>
                 </div>
                 <div class="btn-toolbar sw-toolbar sw-toolbar-bottom justify-content-end mb-2">
-                    <div class="btn-group sw-btn-group" role="group">
+                    <div class="btn-group sw-btn-group mb-2 mr-2" role="group">
                         <button class="btn btn-secondary sw-btn-prev" (click)="nav.select(1)">Previous</button>
                         <button class="btn btn-secondary sw-btn-next" [disabled]="active === 1"
                             (click)="publishCCPAFormConfiguration(registerForm)">Next</button>
@@ -643,7 +645,7 @@
 
 
                 <div class="btn-toolbar sw-toolbar sw-toolbar-bottom justify-content-end">
-                    <div class="btn-group mr-2 sw-btn-group" role="group">
+                    <div class="btn-group mr-2 mb-2 sw-btn-group" role="group">
                         <button class="btn btn-secondary sw-btn-prev" (click)="nav.select(2)">Previous</button>
                         <button class="btn btn-secondary sw-btn-next" [disabled]="active === 1" type="submit"
                             (click)="createDraft()">Next</button>
@@ -657,7 +659,7 @@
             <ng-template ngbNavContent>
                 <p>Four</p>
                 <div class="btn-toolbar sw-toolbar sw-toolbar-bottom justify-content-end">
-                    <div class="btn-group mr-2 sw-btn-group" role="group">
+                    <div class="btn-group mr-2 mb-2 sw-btn-group" role="group">
                         <button class="btn btn-secondary sw-btn-prev" (click)="nav.select(3)">Previous</button>
                         <button class="btn btn-secondary sw-btn-next" [disabled]="true">Submit</button>
                     </div>
@@ -665,12 +667,12 @@
             </ng-template>
         </li>
         <li>
-            <a target="_blank" *ngIf="crid" class="btn btn-primary"
+            <a target="_blank" *ngIf="crid" class="btn btn-sm btn-primary"
                 href="http://develop-privacyportal.adzpier.com/ccpa/form/{{orgId}}/{{propId}}/{{crid}}">Preview</a>
         </li>
     </ul>
-    
-    <div [ngbNavOutlet]="nav" class="mt-2"></div>
+    <div [ngbNavOutlet]="nav"></div>
+    </div>
 </div>
 
 <!--QuillEditor Modal Popup-->
