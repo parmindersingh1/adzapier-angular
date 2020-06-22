@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { CcparequestService } from '../_services/ccparequest.service';
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+  })
 export class WebControls {
     // stateList: any;
     // countries: any;
