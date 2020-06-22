@@ -1,6 +1,6 @@
 ﻿import { Injectable, EventEmitter, Output } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { environment } from './../../environments/environment.develop';
+import { environment } from './../../environments/environment.staging';
 import { User } from './../_models';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
