@@ -14,16 +14,12 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 // import { BillingComponent } from '../billing/billing.component';
 import { PagesettingsRoutingModule } from './pagesettings-routing.module';
 import { SharedbootstrapModule } from '../sharedbootstrap/sharedbootstrap.module';
-import { CompanyComponent } from './company/company.component';
-import { BillingComponent } from './billing/billing.component';
-import { OrganizationteamComponent } from './organizationteam/organizationteam.component';
-import { OrganizationdetailsComponent } from './organizationdetails/organizationdetails.component';
 @NgModule({
   declarations: [PagesettingsComponent,
-    OrgpageComponent,
-   CompanyComponent, BillingComponent,
-   OrganizationteamComponent,
-   OrganizationdetailsComponent
+    // OrgpageComponent,
+  //  CompanyComponent, BillingComponent,
+   // OrganizationteamComponent,
+  //  OrganizationdetailsComponent,
   ],
   imports: [
     CommonModule,
