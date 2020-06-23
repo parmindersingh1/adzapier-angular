@@ -180,10 +180,11 @@ export class DsarRequestsComponent implements OnInit {
   }
 
   viewDSARRequestDetails(id) {
-    // privacy/dsar/dsar-requests-details/{{obj.id}}
     this.router.navigate(['privacy/dsar/dsar-requests-details', id]);
-    //privacy/dsar/dsar-requests-details
-    // settings/organizations/organizationdetails/5c08cacd-257d-4934-ae73-d9d9fe9cf08d
   }
 
+  navigateToWebForm(id) {
+   // this.router.navigate(['privacy/dsar/dsarform', id]);
+    this.router.navigate(['/privacy/dsar/dsarform', { crid: id}]);
+  }
 }

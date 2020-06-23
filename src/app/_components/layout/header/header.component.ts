@@ -243,6 +243,8 @@ export class HeaderComponent implements OnInit {
     this.userService.getLoggedInUserDetails().subscribe((data) => {
       this.currentUser = data;
       this.currentLoggedInUser = this.currentUser.response.firstname + ' ' + this.currentUser.response.lastname;
+      this.currentLoggedInUser = this.currentLoggedInUser.toLowerCase().split(' ')
+      .map((s) => s.charAt(0).toUpperCase() + s.substring(1)).join(' ');
       this.userRole = this.currentUser.response.role;
       this.userID = this.currentUser.response.uid;
     });

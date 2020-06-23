@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { CcparequestService } from '../_services/ccparequest.service';
+import { HttpClient } from '@angular/common/http';
+
 @Injectable({
     providedIn: 'root'
   })
@@ -8,26 +10,26 @@ export class WebControls {
     // countries: any;
     constructor() { }
 
-    countries = [
-    {
-        id: 'us',
-        name: 'United States'
-    },
-    {
-        id: 'uk',
-        name: 'United Kingdom'
-    },
-    {
-        id: 'ca',
-        name: 'Canada'
-    }
-    ];
-    stateList = [
-    { id: 'AP', name: 'Andhra Pradesh' },
-    { id: 'ARP', name: 'Arunachal Pradesh' },
-    { id: 'AS', name: 'Assam' },
-    { id: 'BH', name: 'Bihar' }
-    ];
+    // countries = [
+    // {
+    //     id: 'us',
+    //     name: 'United States'
+    // },
+    // {
+    //     id: 'uk',
+    //     name: 'United Kingdom'
+    // },
+    // {
+    //     id: 'ca',
+    //     name: 'Canada'
+    // }
+    // ];
+    // stateList = [
+    // { id: 'AP', name: 'Andhra Pradesh' },
+    // { id: 'ARP', name: 'Arunachal Pradesh' },
+    // { id: 'AS', name: 'Assam' },
+    // { id: 'BH', name: 'Bihar' }
+    // ];
 
 loadWebControls() {
     // this.loadStateAndCountry();
@@ -92,10 +94,11 @@ loadWebControls() {
                 preferControlOrder: ''
             },
             {
-                control: 'textbox',
-                controllabel: 'City',
-                controlId: 'city',
-                indexCount: 'city_Index',
+                control: 'select',
+                controllabel: 'Country',
+                controlId: 'country',
+                indexCount: 'country_Index',
+                selectOptions: '',
                 preferControlOrder: ''
             },
             {
@@ -103,15 +106,14 @@ loadWebControls() {
                 controllabel: 'State',
                 controlId: 'state',
                 indexCount: 'state_Index',
-                selectOptions: this.stateList,
+                selectOptions: '',
                 preferControlOrder: ''
             },
             {
-                control: 'select',
-                controllabel: 'Country',
-                controlId: 'country',
-                indexCount: 'country_Index',
-                selectOptions: this.countries,
+                control: 'textbox',
+                controllabel: 'City',
+                controlId: 'city',
+                indexCount: 'city_Index',
                 preferControlOrder: ''
             },
             {
