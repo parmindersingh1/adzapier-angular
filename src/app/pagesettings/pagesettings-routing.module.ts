@@ -14,15 +14,15 @@ import { OrganizationteamComponent } from './organizationteam/organizationteam.c
 const routes: Routes = [
   { path: '', component: PagesettingsComponent, canActivate: [AuthGuard]},
   {
-    path: 'billing',
+    path: 'settings/billing',
     loadChildren: () => import(`./billing/billing.module`).then(m => m.BillingModule)
   },
   {
-    path: 'company',
+    path: 'settings/company',
     loadChildren: () => import(`./company/company.module`).then(m => m.CompanyModule)
   },
   {
-    path: 'organizations',
+    path: 'settings/organizations',
     children: [
       { path: '', loadChildren: () => import(`./organization/organization.module`).then(m => m.OrganizationModule) },
       {
