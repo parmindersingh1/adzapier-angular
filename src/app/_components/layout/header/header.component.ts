@@ -193,8 +193,8 @@ export class HeaderComponent implements OnInit {
           label: 'User', icon: 'assets/imgs/glass.jpg',
           items: [
             { label: 'User Preferences', routerLink: '/userprofile', icon: 'edit-3' },
-            { label: 'Organizations', routerLink: 'settings/organizations', icon: 'activity' },
-            { label: 'Billing', routerLink: 'settings/billing', icon: 'credit-card' },
+            { label: 'Organizations', routerLink: '/settings/organizations', icon: 'activity' },
+            { label: 'Billing', routerLink: '/settings/billing', icon: 'credit-card' },
             { label: 'Settings', routerLink: '/settings', icon: 'settings' },
             { label: 'Help Center', routerLink: '/pagenotfound', icon: 'help-circle' },
             { label: 'Signout', routerLink: '/login', icon: 'log-out' }
@@ -219,7 +219,7 @@ export class HeaderComponent implements OnInit {
             { showlink: 'Consent Tracking', routerLink: '/pagenotfound', icon: 'fas fa-file-contract feather-16' },
             { showlink: 'Setup', routerLink: '/pagenotfound', icon: 'fas fa-wrench feather-16' }
           ]
-        }, { showlink: 'Billing', routerLink: 'settings/billing' }];
+        }, { showlink: 'Billing', routerLink: '/settings/billing' }];
     });
 
 
