@@ -307,7 +307,7 @@
                                                 <label class="col-form-label mb-0" for="name">Add logo URL </label>
                                                 <div class="form-inline mb-2">
                                                     <div class="form-group pr-0">
-                                                        <input type="text" class="form-control" name="headerlogoURL"
+                                                        <input type="text" class="form-control form-control-sm" name="headerlogoURL"
                                                             [(ngModel)]="headerlogoURL" placeholder="Add logo URL" />
                                                         <button class="btn btn-primary ml-2"
                                                             (click)="addHeaderLogo()">save logo</button>
@@ -347,8 +347,8 @@
                                                     <div class="col-md-5">
                                                         <label class="col-form-label-sm">Welcome Font Size </label>
                                                     </div>
-                                                    <div class="col-sm-3">
-                                                        <input type="number" min="11" max="20"
+                                                    <div class="col-sm-3 offset-md-4">
+                                                        <input type="number" min="13" max="20"
                                                             class="form-control form-control-sm"
                                                             [(ngModel)]="welcomeFontSize" />
                                                     </div>
@@ -373,8 +373,8 @@
                                                     <div class="col-md-5">
                                                         <label class="col-form-label-sm">Footer Text Size</label>
                                                     </div>
-                                                    <div class="col-md-3">
-                                                        <input type="number" min="11" max="20" class="form-control"
+                                                    <div class="col-md-3 offset-md-4">
+                                                        <input type="number" min="13" max="20" class="form-control form-control-sm"
                                                             [(ngModel)]="footerFontSize" />
                                                     </div>
                                                 </div>
@@ -392,9 +392,9 @@
                                     </div>
                                 </ng-template>
                                 <ng-template ngbPanelContent>
-                                    <div>
+                                    <div class="editorwrapper">
 
-                                        <div class="pd-2">
+                                        <div class="pd-5">
                                             <h6>Welcome Text <span style="float: right;">
                                                     <button type="button" class="btn btn-sm btn-default"
                                                         data-toggle="modal"
@@ -403,7 +403,7 @@
                                                     </button>
                                                 </span></h6>
                                         </div>
-                                        <div class="pd-2">
+                                        <div class="pd-5">
                                             <h6>Footer Text <span style="float: right;">
                                                     <button type="button" class="btn btn-sm btn-default"
                                                         data-toggle="modal"
@@ -556,7 +556,7 @@
                                     </div>
                                     <ng-template #selectOption>
                                         <div class="col-sm-6"
-                                            *ngIf="webcontrol.control == 'select' && webcontrol.controlId !== 'subjecttype' && webcontrol.controlId !== 'requesttype'">
+                                            *ngIf="webcontrol.control == 'select' && webcontrol.controlId !== 'state' && webcontrol.controlId !== 'country' && webcontrol.controlId !== 'subjecttype' && webcontrol.controlId !== 'requesttype'">
                                             <label> {{webcontrol.controllabel}} </label>
                                             <select class="form-control" name="{{webcontrol.controllabel}}"
                                                 [(ngModel)]="requestObject[webcontrol.controllabel]">
@@ -567,6 +567,30 @@
                                             <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
 
                                         </div>
+                                        <div class="col-sm-6"
+                                            *ngIf="webcontrol.control == 'select' && webcontrol.controlId == 'country'">
+                                            <label> {{webcontrol.controllabel}} </label>
+                                            <select class="form-control" name="{{webcontrol.controllabel}}"
+                                                [(ngModel)]="requestObject[webcontrol.controllabel]" (change)="onSelectCountry($event.target.value)">
+                                                <option *ngFor="let data of contactList" [value]="data.id">
+                                                    {{ data.name }}
+                                                </option>
+                                            </select>
+                                            <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
+                                        </div>
+
+                                        <div class="col-sm-6"
+                                            *ngIf="webcontrol.control == 'select' && webcontrol.controlId == 'state'">
+                                            <label> {{webcontrol.controllabel}} </label>
+                                            <select class="form-control" name="{{webcontrol.controllabel}}"
+                                                [(ngModel)]="requestObject[webcontrol.controllabel]">
+                                                <option *ngFor="let data of filteredStateList" [value]="data.name">
+                                                    {{ data.name }}
+                                                </option>
+                                            </select>
+                                            <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
+                                        </div>
+                                        
                                     </ng-template>
                                     <div class="form-check"
                                         *ngIf="webcontrol.control == 'checkbox' && webcontrol.controlId !== 'subjecttype' && webcontrol.controlId !== 'requesttype'">

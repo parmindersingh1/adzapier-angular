@@ -59,6 +59,28 @@
   cursor: pointer;
 }
 
+.table.table.table-bordered > tbody > tr > td > a:first-child {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: pointer;
+  display: inline-block;
+  width: 100px !important;
+  overflow: hidden !important;
+}
+
+.table-primary, .table-primary > tbody > tr > td {
+  padding: 3px !important;
+  font-size: 13px;
+}
+
+.organization-div > .card > .card-body {
+  padding: 3px;
+}
+
+.organization-div > .card > .card-header {
+  padding: 5px;
+}
+
 .table.table.table-bordered > tbody > tr > td > a:hover {
   color:#0148ae;
 }

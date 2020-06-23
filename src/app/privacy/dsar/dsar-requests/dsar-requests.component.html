@@ -8,10 +8,10 @@
     </nav>
   </div>
   <h3>Data Subject Requests</h3>
-  <div class="table-responsive organization-div">
+  <div class="organization-div">
     <div class="card">
       <div class="card-header">
-        <div class="searchfield row mt-3 pl-2 pr-2">
+        <div class="searchfield row mt-1 pl-2 pr-2">
           <div class="col-sm-2 col-md-2 input-group">
             <input class="form-control py-2 border-right-0 border" [(ngModel)]="inputValue"
                    (ngModelChange)="onSearchInputChange($event)" type="search"
@@ -55,11 +55,6 @@
               </ng-container>
             </select>
           </div>
-
-
-
-
-
           <div class="col-sm-2 col-md-2">
             <div class="form-inline">
               <div class="col-md-12 form-group pr-0">
@@ -97,7 +92,7 @@
           <tbody>
             <tr *ngFor="let obj of requestsList | paginate:paginationConfig">
 
-              <td><a (click)="viewDSARRequestDetails(obj.id)">{{obj.id}}</a></td>
+              <td><a (click)="viewDSARRequestDetails(obj.id)" title="{{obj.id}}">{{obj.id}}</a></td>
                 <td>{{obj.name}}</td>
                 <td>{{obj.org_name}}</td>
                 <td>{{obj.property_name}}</td>
@@ -111,11 +106,9 @@
                 <td>{{obj.approver}}</td>
                 <td>{{obj.country}}</td>
                 <td>{{obj.state}}</td>
-                <td><a routerLink="#">{{obj?.web_form_id}}</a></td>
-                <td>{{obj.created_at}} <!--| timeAgo--></td>
-              <td>
-
-              </td>
+                <td><a (click)="navigateToWebForm(obj.web_form_id)">{{obj.web_form_name}}</a></td>
+                <td>{{obj.created_at | timeAgo}} <!--| timeAgo--></td>
+               
             </tr>
 <!--          </ng-container>-->
           <tr>
