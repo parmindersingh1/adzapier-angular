@@ -1,8 +1,11 @@
 import { Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
+import { notificationConfig } from 'src/app/_constant/notification.constant';
+import {NotificationsService} from 'angular2-notifications';
 import { BillingService } from 'src/app/_services/billing.service';
 import { CompanyService } from 'src/app/company.service';
+
 
 @Component({
   selector: 'app-billing',
@@ -12,11 +15,16 @@ import { CompanyService } from 'src/app/company.service';
 export class BillingComponent implements OnInit {
   isSuccess = false;
   isError = false;
-  billingDetails;
-  companyDetails;
+  billingDetails: any = {
+    billing_details: {},
+    billing_history: {},
+    company_details: {}
+  };
+  companyDetails: any = { name: ''};
   constructor(private activatedRoute: ActivatedRoute,
               private billingService: BillingService,
               private companyService: CompanyService,
+              private notification: NotificationsService,
               private loading: NgxUiLoaderService
   ) {
 
@@ -42,7 +50,7 @@ export class BillingComponent implements OnInit {
       }
     }, error => {
       this.loading.stop();
-      console.log(error);
+      this.notification.error('Current Plan', 'Something went wrong...', notificationConfig);
     });
   }
 
@@ -52,7 +60,7 @@ export class BillingComponent implements OnInit {
        this.companyDetails = res['response'];
      }
     }, error => {
-      console.log(error);
+      this.notification.error('Company Details', 'Something went wrong...', notificationConfig);
     });
   }
 

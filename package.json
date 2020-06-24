@@ -29,6 +29,7 @@
     "@ng-bootstrap/ng-bootstrap": "^5.3.0",
     "@nrwl/workspace": "^8.11.0",
     "angular-feather": "^6.0.9",
+    "angular2-notifications": "^9.0.0",
     "bootstrap": "^4.4.1",
     "chartjs-ng2-module": "0.0.13",
     "feather-icons": "^4.28.0",

@@ -46,6 +46,7 @@ import { CheckoutComponent } from './checkout/checkout.component';
 import { CheckoutConfirmationComponent } from './checkout-confirmation/checkout-confirmation.component';
 
 import { SharedbootstrapModule } from './sharedbootstrap/sharedbootstrap.module';
+import { SimpleNotificationsModule } from 'angular2-notifications';
 
 
 export const isMock = environment.mock;
@@ -90,6 +91,7 @@ export const isMock = environment.mock;
     CollapseModule.forRoot(),
     FeatherModule.pick(allIcons),
     NgxUiLoaderModule.forRoot(ngxUiLoaderConfig),
+    SimpleNotificationsModule.forRoot(),
     SharedbootstrapModule
   ],
   providers: [

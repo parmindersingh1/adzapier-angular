@@ -20,3 +20,11 @@
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
+
+.fa-edit {
+  float: right;
+  color: #000;
+  position: relative;
+  top: -25px;
+  cursor: pointer;
+}
