@@ -45,7 +45,7 @@ import { ngxUiLoaderConfig } from './_constant/loading.contant';
 import { CheckoutComponent } from './checkout/checkout.component';
 import { CheckoutConfirmationComponent } from './checkout-confirmation/checkout-confirmation.component';
 import { UpdateBillingComponent } from './update-billing/update-billing.component';
-// import { MatButtonModule } from '@angular/material/button';
+import { MatButtonModule } from '@angular/material/button';
 import { CcpaDsarComponent } from './dashboard/ccpa-dsar/ccpa-dsar.component';
 import { ChartsModule } from 'ng2-charts';
 import { SimpleNotificationsModule } from 'angular2-notifications';
@@ -101,7 +101,7 @@ export const isMock = environment.mock;
     NgxUiLoaderModule.forRoot(ngxUiLoaderConfig),
     SimpleNotificationsModule.forRoot(),
     
-   // MatButtonModule,
+    MatButtonModule
   ],
   providers: [
     AuthenticationService,
