@@ -58,11 +58,12 @@
       <a class="nav-link dropdown-link" dropdownToggle (click)="false">
        <div>{{currentOrganization}}
        </div>
-       <span>{{currentProperty?currentProperty:'Select Property'}}</span>
+       <span>{{currentProperty ? currentProperty : 'Select Property'}}</span>
       </a>
+     <!--(orgPropertyMenu | async).response-->
       <ul *dropdownMenu class="dropdown-menu propMenu">
           <li role="menuitem" *ngFor="let item of orgPropertyMenu; first as isFirst; let i = index;">
-            <a class="dropdown-item" routerLink="organizationdetails/{{item.id}}">
+            <a class="dropdown-item" routerLink="settings/organizations/organizationdetails/{{item.id}}">
               {{item.orgname}}  <span class="align-right"><i-feather class="feather-plus" name="plus"></i-feather></span>
             </a>
             <div *ngIf="item.property.length=='0'">No Property</div>  
@@ -79,6 +80,7 @@
             </ul>         
           </li>
       </ul>
+    <!-- </ng-container> -->
     </ul>
       <!--end of organization / property menu after login--> 
     <ul class="navbar-nav mr-auto" *ngIf="currentUser">
@@ -124,8 +126,7 @@
           </div>
           <div *ngIf="menu.items" dropdown container="body" placement="bottom right">
             <a class="nav-link dropdown-link" dropdownToggle (click)="false">
-              <i
-                class="bd bd-primary bg-primary rounded-circle pd-10 tx-white">{{nameInitials(currentLoggedInUser)}}</i>
+              <i class="bd bd-primary bg-primary rounded-circle pd-10 tx-white">{{nameInitials(currentLoggedInUser)}}</i>
             </a>
             <ul *dropdownMenu class="dropdown-menu dropdown-menu-right">
               <ng-container *ngFor="let item of menu.items; first as isFirst; let i = index;">

@@ -1,0 +1,143 @@
+<div class="container">
+    <div class="mb-3">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb breadcrumb-style1 mg-b-0">
+              <li class="breadcrumb-item"><a routerLink="/settings">Settings</a></li>
+              <li class="breadcrumb-item active" aria-current="page"><a routerLink="/organizations">Organizations</a></li>
+              <li class="breadcrumb-item active" aria-current="page"><a (click)="backToOrganizationDetail()">Organizations Details</a></li>
+              <li class="breadcrumb-item active" aria-current="page">Organization Team Members</li>
+            </ol>
+          </nav>
+    </div>
+
+    <div class="divider-text mg-y-10">MEMBERS</div>
+
+    <div class="table-responsive team-members-div">
+        <div class="card">
+            <div class="card-header tx-semibold">
+                <div class="searchfield mt-3" style="display: flex;">
+                    <div class="col-3 input-group">
+                        <input class="form-control py-2 border-right-0 border" [(ngModel)]="searchText" type="search" value="search" id="example-search-input"/>
+                        <span class="input-group-append">
+                            <div class="input-group-text bg-transparent"><i class="fa fa-search"></i></div>
+                        </span>
+                    </div>
+                    <div class="col-5">
+                    <div class="form-inline">
+                        <div class="col-md-4 form-group pr-0">
+                            <label class="col-sm-5 col-form-label" for="name">View</label>
+                            <select id="PerPage" class="form-control" [(ngModel)]="pageSize"
+                            (change)="onChangeEvent($event)">
+                            <option value="5">5</option>
+                            <option value="10">10</option>
+                            <option value="15">15</option>
+                        </select>
+                        </div>
+                        <div class="col-md-5"><label class="d-block">records at a time</label></div>
+                    </div>
+                    </div>
+                    <div class="col-sm-2 ml-auto">
+                        <button type="button" class="btn btn-primary btn-xs float-right" data-toggle="modal"
+                            (click)="open(inviteuserModal)">Add User</button>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <table class="table table-bordered">
+                    <thead class="thead-primary">
+                        <tr>
+                            <th>Id</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>Last Login</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                            <tr *ngFor="let list of organizationTeamMemberList | paginate:paginationConfig | filter: searchText:'user_name':'user_email'; let i = index">
+                                <td>
+                                    {{ (paginationConfig.currentPage - 1) * paginationConfig.itemsPerPage + i + 1 }}
+                                </td>
+                                <td>{{list.user_name}}</td>
+                                <td>
+                                    {{list.user_email}}
+                                </td>
+                                <td>
+                                    {{list.role_name}}
+                                </td>
+                                <td>
+                                  <span class="text-center tx-success" *ngIf="list.user_last_login === 'Invitation Pending' || list.user_last_login === 'Invitation sent'; else LoginDate">
+                                    {{list.user_last_login }}
+                                  </span>
+                                  <ng-template #LoginDate>
+                                    {{list.user_last_login | timeAgo}}
+                                    </ng-template>
+                                </td>
+                                <td>
+                                    <button class="btn btn-xs btn-primary" (click)="removeTeamMember(list.id)">Remove</button>
+                                </td>
+
+                            </tr>
+                            <tr>
+                                <td colspan="8" *ngIf="(organizationTeamMemberList | filter: searchText:'user_name':'user_email').length===0">No
+                                    records found.</td>
+                            </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="card-footer text-right">
+                <pagination-controls (pageChange)="pageChangeEvent($event)"></pagination-controls>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<ng-template #inviteuserModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Invite new users</h4>
+
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Close Clicked')">
+            <span aria-hidden="true">×</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div>Enter the email addresses of the users you'd like to invite, and choose the role they should have.
+        </div>
+        <form [formGroup]="inviteUserOrgForm" (ngSubmit)="onSubmitInviteUserOrganization()">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label for="emailid" class="d-block">Email Id</label>
+                        <input type="text" formControlName="emailid" name="emailid" [(ngModel)]="emailid"
+                            class="form-control" placeholder="Enter email id"
+                            pattern="^\w+@[a-zA-Z_0-9]+?\.[a-zA-Z]{2,3}$"
+                            [ngClass]="{ 'is-invalid': submitted && f.emailid.errors }" />
+                        <div *ngIf="submitted && f.emailid.errors" class="invalid-feedback">
+                            <div *ngIf="f.emailid.errors.required">Email Address is required</div>
+                            <div *ngIf="f.emailid.errors.pattern">Please enter valid email address</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <label for="permissions" class="d-block">Select roles</label>
+                    <div *ngFor="let order of roleList;" class="form-check-inline">
+                        <input type="radio" id="permissions" name="permissions" formControlName="permissions"
+                            [value]="order.id" /> {{order.role_name}}</div>
+                    <div *ngIf="submitted && f.permissions.invalid" class="invalid-radio">
+                        Roles is mandatory
+                    </div>
+                </div>
+                <!-- <div class="col-sm-12">
+                    <div *ngFor="let opt of roleList" class="form-check-inline">
+                        <input class="form-check-input" type="radio" name="chkpermissions"
+                            [value]='opt.id'/>{{opt.role_name}}
+                    </div>
+                </div> -->
+            </div>
+            <button class="btn btn-xs btn-primary" type="submit">Submit</button>
+            <button class="btn btn-xs btn-primary float-right" (click)="modal.dismiss('Close Clicked')">Cancel</button>
+        </form>
+    </div>
+</ng-template>

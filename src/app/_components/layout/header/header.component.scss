@@ -490,3 +490,7 @@ a.nav-link:hover {
       width: 16px;
       float: right;
   }
+
+  a.nav-link.dropdown-link > i {
+    text-transform: uppercase;
+  }

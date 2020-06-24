@@ -1,0 +1,241 @@
+<div class="container">
+    <div class="mb-3">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb breadcrumb-style1 mg-b-0">
+                <li class="breadcrumb-item"> Privacy</li>
+                <li class="breadcrumb-item"> DSAR</li>
+                <li class="breadcrumb-item"><a (click)="backToDSARRequest()">DSAR Request</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{{requestID}}</li>
+            </ol>
+        </nav>
+    </div>
+    <div class="row row-sm ">
+        <div class="col-lg-6 col-xl-12 mg-t-10">
+            <div class="card">
+                <div class="card-header  d-flex align-items-center justify-content-between pd-y-10">
+                    <span class="tx-12 tx-color-03 mg-b-0">
+                        <h6 class="mg-b-0">Request Details</h6>
+                        Current Status of DSAR Request
+                    </span>
+                    <div class="d-flex">
+                        <a href="#modalEditContact" data-toggle="modal"
+                            class="btn btn-sm btn-white d-flex align-items-center mg-r-5"><svg
+                                xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="feather feather-edit-2">
+                                <polygon points="16 3 21 8 8 21 3 21 3 16 16 3"></polygon>
+                            </svg><span class="d-none d-sm-inline mg-l-5">
+                                Edit</span></a>
+
+                        <button data-toggle="modal" class="btn btn-sm btn-white d-flex align-items-center mg-r-5">
+                            <span class="d-none d-sm-inline mg-l-5">
+                                Extend Due Date</span></button>
+                    </div>
+
+                </div>
+                <div class="card-body pd-10">
+
+                    <div class="row row-sm pd-t-5">
+                        <div class="col-sm">
+                            <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Request
+                                ID</label>
+                            <p class="mg-b-0">{{respCDID}}</p>
+                        </div>
+                        <div class="col-sm">
+                            <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Request
+                                Types
+                            </label>
+                            <p class="mg-b-0">--</p>
+                        </div>
+                        <div class="col-sm">
+                            <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Due
+                                in
+                            </label>
+                            <p class="mg-b-0">{{respDaysLeft}}</p>
+                        </div>
+
+                        <div class="col-sm">
+                            <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Date
+                                Opened
+                            </label>
+                            <p class="mg-b-0">--</p>
+                        </div>
+
+                        <div class="col-sm">
+                            <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Request
+                                Accepting Agent</label>
+                            <p class="mg-b-0">Jeniffer Logan</p>
+                        </div>
+
+
+                        <div class="col-sm ">
+                            <label
+                                class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Workflow</label>
+                            <p class="mg-b-0">CCPA Workflow</p>
+                        </div>
+                    </div>
+                    <div class="row row-sm pd-t-10 bd-t">
+                        <div class="col-sm">
+                            <label
+                                class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Status</label>
+
+                            <p class="tx-11 tx-spacing-1 tx-semibold mg-b-0 tx-success">InProggress</p>
+                        </div>
+                        <div class="col-sm">
+                            <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Subject
+                                Type
+                            </label>
+                            <p class="mg-b-0">--</p>
+                        </div>
+                        <div class="col-sm">
+                            <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Risk
+                                Factor
+                            </label>
+                            <p class="tx-11 tx-spacing-1 tx-semibold mg-b-0 tx-danger">Likely High Risk</p>
+                        </div>
+
+                        <div class="col-sm">
+                            <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Deadline
+                            </label>
+                            <p class="mg-b-0">--</p>
+                        </div>
+
+                        <div class="col-sm">
+                            <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Approver
+                            </label>
+                            <p class="mg-b-0">--</p>
+                        </div>
+
+
+                        <div class="col-sm ">
+                            <label
+                                class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Form</label>
+                            <p class="mg-b-0">--</p>
+                        </div>
+                    </div>
+                    <div class="row row-sm pd-t-10 bd-t">
+                        <div class="col-sm">
+                            <label
+                                class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Property</label>
+
+                            <p class="tx-13 tx-spacing-1  mg-b-0 ">{{currentPropertyName}}</p>
+                        </div>
+                        <div class="col-sm">
+                            <label
+                                class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Name</label>
+
+                            <p class="tx-13 tx-spacing-1  mg-b-0 ">{{respFirstName}}</p>
+                        </div>
+                        <div class="col-sm">
+                            <label
+                                class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Email</label>
+
+                            <p class="tx-13 tx-spacing-1  mg-b-0 ">{{respEmailID}}</p>
+                        </div>
+                        <div class="col-sm">
+                            <label
+                                class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Country</label>
+
+                            <p class="tx-13 tx-spacing-1  mg-b-0 ">United States</p>
+                        </div>
+
+                        <div class="col-sm">
+                            <label
+                                class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Address</label>
+
+                            <!-- <p class="tx-13 tx-spacing-1  mg-b-0 ">pateld982@gmail.com</p> -->
+                            <p class="tx-13 tx-spacing-1  mg-b-0">819 Waldeck Street Farmers Branch, TX 75244,
+                                United
+                                States
+                            </p>
+
+                        </div>
+                        <div class="col-sm col-1"></div>
+
+                    </div>
+
+                    <div class="shadowdiv">
+                        <div class="divider-text mg-y-5">Advance Status</div>
+                        <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs" [(activeId)]="active"
+                            (navChange)="onNavChange($event)">
+                            <li [ngbNavItem]="1">
+                                <a ngbNavLink [ngClass]="{'previousTabcolor':previousTabOne,'':!previousTabOne}"> <span
+                                        class="step-number">1</span>Verify Request</a>
+                                <ng-template ngbNavContent>
+                                    <div id="step-1" class="pd-5 tab-pane verify-request-content" style="display: block;">
+                                        <!--step1 tabs-->
+                                        <ul ngbNav #nav="ngbNav" class="nav-tabs">
+                                            <li ngbNavItem>
+                                              <a ngbNavLink>Activity</a>
+                                              <ng-template ngbNavContent>First content</ng-template>
+                                            </li>
+                                            <li ngbNavItem>
+                                              <a ngbNavLink>Email</a>
+                                              <ng-template ngbNavContent>
+                                                <quill-editor formControlName="editor" [modules]="quillConfig" [(ngModel)]="editorDataFooter"
+                                                [styles]="{height: '200px'}"></quill-editor>
+                                              </ng-template>
+                                            </li>
+                                            <li ngbNavItem>
+                                                <a ngbNavLink>Tasks</a>
+                                                <ng-template ngbNavContent>Tasks content</ng-template>
+                                              </li>
+                                              <li ngbNavItem>
+                                                <a ngbNavLink>Systems</a>
+                                                <ng-template ngbNavContent>System content</ng-template>
+                                              </li>
+                                          </ul>
+                                          <div [ngbNavOutlet]="nav"></div>
+                                          
+                                        <!--end of step1 tabs-->
+
+                                    </div> <!-- End Step-1-->
+                                </ng-template>
+                            </li>
+                            <li [ngbNavItem]="2">
+                                <!--[disabled]="disabled"-->
+                                <a ngbNavLink [ngClass]="{'previousTabcolor':previousTabTwo,'':!previousTabTwo}"><span
+                                        class="step-number">2</span> Request Fulfill</a>
+                                <ng-template ngbNavContent>
+                                    22
+                                </ng-template>
+                            </li>
+                            <li [ngbNavItem]="3">
+                                <a ngbNavLink
+                                    [ngClass]="{'previousTabcolor':previousTabThree,'':!previousTabThree}"><span
+                                        class="step-number">3</span> Settings</a>
+                                <ng-template ngbNavContent>
+
+                                    <!-- <div class="form-group mg-b-5"><a target="_blank" *ngIf="crid" class="btn btn-secondary sw-btn-prev"
+                        [routerLink]="['/editwebforms',  crid ]">Local Preview</a></div> -->
+                                    33
+
+
+                                </ng-template>
+                            </li>
+                            <li [ngbNavItem]="4">
+                                <a ngbNavLink
+                                    [ngClass]="{'previousTabcolor':previousTabFour,'':!previousTabThree}"><span
+                                        class="step-number">4</span> Consumer Notification</a>
+                                <ng-template ngbNavContent>
+                                    <p>Four</p>
+
+                                </ng-template>
+                            </li>
+                            <li [ngbNavItem]="5">
+                                <a ngbNavLink><span class="step-number">5</span> Complete</a>
+                                <ng-template ngbNavContent>
+                                    <p>Five</p>
+                                </ng-template>
+                            </li>
+
+                        </ul>
+                        <div [ngbNavOutlet]="nav"></div>
+                    </div>
+                    
+                </div><!-- card-body -->
+            </div><!-- card -->
+        </div>
+
+    </div>
+</div>

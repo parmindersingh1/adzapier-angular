@@ -1,0 +1,112 @@
+.step-number {
+    margin-right: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Inter UI", Roboto, sans-serif;
+    color: #8392a5;
+    border: 2px solid #8392a5;
+    background-color: #fff;
+    border-radius: 100%;
+}
+
+.shadowdiv > ul > li.nav-item > a.nav-link {
+    padding: 10px 0px;
+    margin: 0 0px;
+    // border: 0;
+    // width: 200px;
+    background-color: transparent;
+}
+
+.shadowdiv > ul > li.nav-item > a.nav-link > span {
+    // margin: 0 20px;
+}
+
+.nav-tabs .nav-link {
+    border: 0;
+}
+
+.nav-tabs > li {
+    display: inline-flex;
+}
+
+.nav-tabs .nav-item + .nav-item {
+    margin: 0;
+    // padding: 0 25px !important;
+}
+
+.nav-tabs .nav-link.active {
+    border:0;
+}
+
+li.nav-item {
+    margin: 0;
+}
+// .shadowdiv > ul > li + li:before {
+//     background-image: url(../../../../assets/imgs/next.png) no-repeat;
+//     display: inline-block;
+//     vertical-align: middle;
+//     margin: 0 30px;
+//  }
+
+.nav-link.active > span.step-number {
+    background-color: #0168fa;
+    border: 2px solid #0168fa;
+    color:#fff;
+}
+
+.shadowdiv > ul > li.nav-item::after{
+     display: inline-block;
+     content: '\2192';
+     font-size: 33px;
+     margin: 5px 20px;
+     line-height: 33px;
+     color: #ccc;
+    // background: url(../../../../assets/imgs/right.png) no-repeat 0px 55%  !important;   
+ }
+
+ .shadowdiv > ul > li.nav-item:last-child:after{
+    content: '';
+ }
+
+ .previousTabcolor {
+     color: green;
+     background-color: green;
+ }
+
+ .previousTabcolor > span.step-number {
+     background-color: green;
+     border: 2px solid green;
+     color: #fff;
+ }
+
+ .verify-request-content > ul.nav-tabs > li.nav-item > a.nav-link.active {
+     border-bottom: 1px solid #0168fa;
+ }
+
+ .verify-request-content > ul.nav-tabs > li.nav-item > a.nav-link {
+    // border-bottom: 2px solid rgba(72, 94, 144, 0.16);
+    background-color: transparent;
+ }
+
+ .verify-request-content > ul.nav-tabs {
+    // border-bottom: 2px solid rgba(72, 94, 144, 0.16);
+ }
+ 
+// .nav-item + .nav-item::before {
+//     display: block;
+// }
+
+// .nav-item {
+//         content: '\f287';
+//         font-family: 'Ionicons';
+//         font-size: 16px;
+//         font-weight: 400;
+//         color: #c0ccda;
+//         position: absolute;
+//         top: 50%;
+//         left: -26px;
+//         line-height: 0;
+//         display: none;
+// }
