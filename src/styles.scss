@@ -33,11 +33,13 @@
 .navbar-menu .nav-link {
     color:#0168fa;
 }
-
+.simple-notification-wrapper.right {
+  top: 75px;
+}
 .navbar-expand-sm .navbar-nav .nav-link {
     // color:#0168fa;
     color: rgba(255, 255, 255, 0.7);
-    font-weight: 500;   
+    font-weight: 500;
 }
 
 .navbar-expand-sm .navbar-nav .nav-link:hover {
@@ -67,7 +69,7 @@
     transition: all 0.2s ease-in-out;
 }
 
-a.nav-link.dropdown-toggle:hover:after { 
+a.nav-link.dropdown-toggle:hover:after {
     border-right: 1.5px solid #0168fa !important;
     border-bottom: 1.5px solid #0168fa !important;
 }
@@ -121,7 +123,7 @@ ul.dropdown-menu::after {
 
 .dropdown-menu-right {
     width: 230px !important;
-    margin: 0.7rem 0 0 !important;    
+    margin: 0.7rem 0 0 !important;
 }
 
 .dropdown-menu.dropdown-menu-right::before {

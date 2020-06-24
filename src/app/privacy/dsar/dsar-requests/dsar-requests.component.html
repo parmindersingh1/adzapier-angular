@@ -96,7 +96,13 @@
                 <td>{{obj.name}}</td>
                 <td>{{obj.org_name}}</td>
                 <td>{{obj.property_name}}</td>
-               <td><span class="badge badge-primary">{{obj.status}}</span></td>
+               <td>
+                 <span *ngIf="obj.status === 'New'" class="badge badge-primary">{{obj.status}}</span>
+                 <span *ngIf="obj.status === 'Verify Request'" class="badge badge-info">{{obj.status}}</span>
+                 <span *ngIf="obj.status === 'InProgress'" class="badge badge-warning">{{obj.status}}</span>
+                 <span *ngIf="obj.status === 'Complete'" class="badge badge-light">{{obj.status}}</span>
+                 <span *ngIf="obj.status === 'UnVerifed'" class="badge badge-danger">{{obj.status}}</span>
+               </td>
                <td><span>{{obj.request_type}}</span></td>
                 <td>{{obj.subject_type}}</td>
                 <td>
