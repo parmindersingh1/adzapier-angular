@@ -65,9 +65,9 @@ export class DsarRequestdetailsComponent implements OnInit {
     });
     this.getSelectedOrgIDPropertyID();
     this.loadDataRequestDetails();
-    // this.quillEditorText = this.fb.group({
-    //   editor: new FormControl(null)
-    // });
+    this.quillEditorText = new FormGroup({
+      editor: new FormControl(null)
+    });
   }
   
   getSelectedOrgIDPropertyID() {

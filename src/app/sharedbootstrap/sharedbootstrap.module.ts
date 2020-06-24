@@ -15,9 +15,8 @@ import { TimeAgoPipe } from 'time-ago-pipe';
     CommonModule,
     NgbModule,
     DragDropModule,
-    QuillModule,
+    QuillModule.forRoot(),
     NgxPaginationModule,
-    
     FeatherModule.pick(allIcons),
     PaginationModule.forRoot()
   ],
