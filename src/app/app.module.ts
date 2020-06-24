@@ -102,7 +102,7 @@ export const isMock = environment.mock;
     FeatherModule.pick(allIcons),
     NgxUiLoaderModule.forRoot(ngxUiLoaderConfig),
     SimpleNotificationsModule.forRoot(),
-    SharedbootstrapModule
+    SharedbootstrapModule,
     MatButtonModule,
   ],
   providers: [

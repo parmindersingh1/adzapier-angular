@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import {Router} from "@angular/router";
-import {NgxUiLoaderService} from "ngx-ui-loader";
-import {DataService} from "../_services/data.service";
-import {BillingService} from "../_services/billing.service";
-import { environment } from '../../environments/environment.staging';
+import {Router} from '@angular/router';
+import {NgxUiLoaderService} from 'ngx-ui-loader';
+import {DataService} from '../_services/data.service';
+import {BillingService} from '../_services/billing.service';
+import { environment } from '../../environments/environment.develop';
 @Component({
   selector: 'app-checkout',
   templateUrl: './checkout.component.html',

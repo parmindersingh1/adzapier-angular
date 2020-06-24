@@ -1,10 +1,11 @@
 import { Component, OnInit} from '@angular/core';
-import {ActivatedRoute} from "@angular/router";
-import {BillingService} from "../_services/billing.service";
-import {CompanyService} from "../company.service";
-import {NgxUiLoaderService} from "ngx-ui-loader";
-import {notificationConfig} from "../_constant/notification.constant";
-import {NotificationsService} from "angular2-notifications";
+import {ActivatedRoute} from '@angular/router';
+import { BillingService } from 'src/app/_services/billing.service';
+import { NotificationsService } from 'angular2-notifications';
+import { CompanyService } from 'src/app/company.service';
+import { NgxUiLoaderService } from 'ngx-ui-loader';
+import { notificationConfig } from 'src/app/_constant/notification.constant';
+
 
 @Component({
   selector: 'app-billing',
