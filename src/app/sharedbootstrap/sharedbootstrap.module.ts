@@ -8,20 +8,19 @@ import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { FilterPipe } from '../filter.pipe';
 import { FeatherModule } from 'angular-feather';
 import { allIcons } from 'angular-feather/icons';
-
+import { TimeAgoPipe } from 'time-ago-pipe';
 @NgModule({
-  declarations: [FilterPipe],
+  declarations: [FilterPipe, TimeAgoPipe],
   imports: [
     CommonModule,
     NgbModule,
     DragDropModule,
-    QuillModule,
+    QuillModule.forRoot(),
     NgxPaginationModule,
-    
     FeatherModule.pick(allIcons),
     PaginationModule.forRoot()
   ],
-  exports: [NgbModule, DragDropModule, QuillModule, NgxPaginationModule, FilterPipe]
+  exports: [NgbModule, DragDropModule, QuillModule, NgxPaginationModule, FilterPipe, TimeAgoPipe]
 
 })
 export class SharedbootstrapModule { }

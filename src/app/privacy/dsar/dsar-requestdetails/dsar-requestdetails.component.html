@@ -172,8 +172,10 @@
                                             <li ngbNavItem>
                                               <a ngbNavLink>Email</a>
                                               <ng-template ngbNavContent>
+                                                  <div [formGroup]="quillEditorText">
                                                 <quill-editor formControlName="editor" [modules]="quillConfig" [(ngModel)]="editorDataFooter"
                                                 [styles]="{height: '200px'}"></quill-editor>
+                                                  </div>
                                               </ng-template>
                                             </li>
                                             <li ngbNavItem>

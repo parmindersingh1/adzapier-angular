@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DsarRequestsRoutingModule } from './dsar-requests-routing.module';
 import { DsarRequestsComponent } from './dsar-requests.component';
-// import { TimeAgoPipe } from 'time-ago-pipe';
 import { SharedbootstrapModule } from 'src/app/sharedbootstrap/sharedbootstrap.module';
 
 
