@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from "@angular/common/http";
-import { environment } from './../../environments/environment.staging';
-import {Observable} from "rxjs";
+import { HttpClient } from '@angular/common/http';
+import { environment } from './../../environments/environment';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -26,5 +26,4 @@ export class DsarRequestService {
   getDSARRequestDetails(orgID, propID, dataReqID): Observable<any> {
     return this.http.get<any>(environment.apiUrl + '/ccpa/data/' + orgID + '/' + propID + '/' + dataReqID);
   }
-// http://develop-cmp-api.adzpier.com/api/v1/ccpa/data/q/q/q
 }

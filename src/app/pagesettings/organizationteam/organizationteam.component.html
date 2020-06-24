@@ -67,11 +67,11 @@
                                     {{list.role_name}}
                                 </td>
                                 <td>
-                                  <span class="text-center tx-success" *ngIf="list.user_last_login === 'Invitation Pending'; else LoginDate">
+                                  <span class="text-center tx-success" *ngIf="list.user_last_login === 'Invitation Pending' || list.user_last_login === 'Invitation sent'; else LoginDate">
                                     {{list.user_last_login }}
                                   </span>
                                   <ng-template #LoginDate>
-                                    {{list.user_last_login | timeAgo}}
+                                    {{list.user_last_login}}
                                     </ng-template>
                                 </td>
                                 <td>

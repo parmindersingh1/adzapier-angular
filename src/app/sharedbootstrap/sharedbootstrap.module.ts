@@ -9,16 +9,14 @@ import { FilterPipe } from '../filter.pipe';
 import { FeatherModule } from 'angular-feather';
 import { allIcons } from 'angular-feather/icons';
 import { TimeAgoPipe } from 'time-ago-pipe';
-
 @NgModule({
   declarations: [FilterPipe, TimeAgoPipe],
   imports: [
     CommonModule,
     NgbModule,
     DragDropModule,
-    QuillModule,
+    QuillModule.forRoot(),
     NgxPaginationModule,
-    
     FeatherModule.pick(allIcons),
     PaginationModule.forRoot()
   ],
