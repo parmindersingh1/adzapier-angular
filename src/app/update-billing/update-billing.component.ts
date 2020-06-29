@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import {BillingService} from "../_services/billing.service";
-import {CompanyService} from "../company.service";
-import {NgxUiLoaderService} from "ngx-ui-loader";
-import {environment} from "../../environments/environment.develop";
-import {ActivatedRoute} from "@angular/router";
-import {NotificationsService} from "angular2-notifications";
-import {notificationConfig} from "../_constant/notification.constant";
+import {BillingService} from '../_services/billing.service';
+import { CompanyService } from '../company.service';
+import {NgxUiLoaderService} from 'ngx-ui-loader';
+import {environment} from '../../environments/environment';
+import {ActivatedRoute} from '@angular/router';
+import {NotificationsService} from 'angular2-notifications';
+import {notificationConfig} from '../_constant/notification.constant';
+
 
 
 @Component({

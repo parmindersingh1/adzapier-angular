@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from "@angular/common/http";
-import { environment } from './../../environments/environment.develop';
-import {Observable} from "rxjs";
+import { HttpClient } from '@angular/common/http';
+import { environment } from './../../environments/environment';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -21,5 +21,9 @@ export class DsarRequestService {
   getDsarRequestFilterList(orgId, propsID, pagelimit) {
     const path = '/ccpa/data/';
     return this.http.get(environment.apiUrl + path + orgId + '/' + propsID + pagelimit);
+  }
+
+  getDSARRequestDetails(orgID, propID, dataReqID): Observable<any> {
+    return this.http.get<any>(environment.apiUrl + '/ccpa/data/' + orgID + '/' + propID + '/' + dataReqID);
   }
 }

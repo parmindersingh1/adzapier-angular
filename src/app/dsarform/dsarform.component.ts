@@ -22,7 +22,6 @@ import { NgxUiLoaderService } from 'ngx-ui-loader';
 })
 export class DsarformComponent implements OnInit, OnDestroy {
   @ViewChild('editor', { static: true }) editor;
-  public contactList: FormArray;
   public requestObject: any = {};
   public selectedFormOption: any;
   public selectedControlType: any;
@@ -88,6 +87,10 @@ export class DsarformComponent implements OnInit, OnDestroy {
   sideMenuSubjectTypeOptions: any = [];
   isRequestType: boolean;
   isSubjectType: boolean;
+  countryStateList: any;
+  stateList: any;
+  contactList: any;
+  filteredStateList: any;
 
   controlOption = [
     {
@@ -283,6 +286,8 @@ export class DsarformComponent implements OnInit, OnDestroy {
     this.isWelcomeEditor = false;
     this.loadDefaultApprover();
     this.getCCPAdefaultConfigById();
+    this.loadCountryList();
+    this.loadStateList();
   }
 
   getCCPAdefaultConfigById() {
@@ -590,7 +595,7 @@ export class DsarformComponent implements OnInit, OnDestroy {
         if (this.crid) {
           //   this.ccpaFormConfigService.setFormControlList(this.webFormControlList);
           this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
-          const customControlIndex = this.webFormControlList.findIndex((t) => t.controllabel === this.existingControl.controllabel);
+          const customControlIndex = this.webFormControlList.findIndex((t) => t.indexCount === this.existingControl.indexCount);
           this.ccpaFormConfigService.updateControl(this.webFormControlList[customControlIndex], customControlIndex, updatedObj);
           this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
         } else {
@@ -1074,6 +1079,18 @@ export class DsarformComponent implements OnInit, OnDestroy {
       const key = 'response';
       this.ApproverList = data[key];
     });
+  }
+
+  loadCountryList() {
+    this.ccpaFormConfigService.getCountryList().subscribe((data) => this.contactList = data);
+  }
+
+  loadStateList() {
+    this.ccpaFormConfigService.getStateList().subscribe((data) => this.stateList = data);
+  }
+
+  onSelectCountry(countryid) {
+    this.filteredStateList = this.stateList.filter((item) => item.country_id === countryid);
   }
 
   ngOnDestroy() {

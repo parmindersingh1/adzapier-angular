@@ -302,14 +302,47 @@
     border-bottom: 2px solid #0168fa;
   }
   
-  ul.nav-tabs.nav {
+  .shadowdiv {
+    border: 1px solid rgba(72, 94, 144, 0.16);
+    border-radius: 4px;
+    box-shadow: 0rem 0.1rem 0.2rem #ccc;
+  }
+
+  .shadowdiv > .nav-tabs .nav-link.active {
+    background-color: #fff;
+    z-index: 5;
+    color: #0168fa;
+    border: 0px;
+    border-bottom: 2px solid blue;
+}
+
+.shadowdiv > .nav-tabs .nav-link {
+  background-color: transparent;
+  border-color: transparent;
+  border-bottom: 2px solid #5cb85c;
+}
+
+  .shadowdiv ul.nav-tabs.nav {
     position: relative;
+    background: #fff;
+    // border: 1px solid rgba(72, 94, 144, 0.16);
+    border-bottom: 0;
+    border-radius: 4px 4px 0px 0px;
   }
   
-  ul.nav-tabs.nav > li:last-child {
+  .shadowdiv ul.nav-tabs.nav > li:last-child {
     position: absolute !important;
-    right: 10px !important;
-}
+    right: 0px !important;
+  }
+
+  .shadowdiv ul.nav-tabs.nav > li:last-child > a.btn-sm {
+    padding: 5px 10px !important;
+    margin: 5px 5px 0 0 !important;
+  }
+
+  .shadowdiv .tab-content {
+    padding: 5px;
+  }
 
 .displayblock {
   display: block;
@@ -420,6 +453,10 @@ input[type='color'] {
   padding: 0 20px 0 0;  
 }
 
+.list-wrapper ul {
+  
+}
+
 .controls-with-options ul li {
   list-style-type: none;
 }
@@ -429,5 +466,18 @@ input[type='color'] {
   border: 1px solid #ccc;
   width: 25px;
   height: 25px;
+}
+
+.shadow {
+  box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.card-body .align-items-center {
+  font-weight: bold;
+  margin: 5px;
+}
+
+.editorwrapper > div > h6 {
+  font-weight: bold;
 }
 
