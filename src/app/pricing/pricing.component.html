@@ -16,6 +16,14 @@
               {{billingCycle | titlecase}}<span class="ml-3 caret"></span>
             </button>
           </ng-container>
+
+          <ng-container *ngIf="currentPlan.duration == null">
+          <button id="button-basic" dropdownToggle type="button" class="btn btn-default dropdown-toggle"
+                  aria-controls="dropdown-basic">
+            {{billingCycle | titlecase}}<span class="ml-3 caret"></span> </button>
+          </ng-container>
+
+
           <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu"
               role="menu" aria-labelledby="button-basic">
             <li role="menuitem" (click)="onSelectBillingCycle('MONTHLY')" >Monthly Plans</li>

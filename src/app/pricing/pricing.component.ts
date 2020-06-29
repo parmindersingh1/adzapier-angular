@@ -100,7 +100,7 @@ export class PricingComponent implements OnInit {
     this.loading.start();
     this.billingService.getCurrentPlanInfo().subscribe(res => {
       this.loading.stop();
-      if (res['status'] === 200) {
+      if (!res['error']) {
         this.currentPlan = res['response'];
         this.billingCycle = res['response']['duration'] === 'month' ? 'MONTHLY' : 'YEARLY';
         this.onSetValue();
