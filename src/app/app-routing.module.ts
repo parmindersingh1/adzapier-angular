@@ -40,6 +40,7 @@ import {CheckoutComponent} from "./checkout/checkout.component";
 import {CheckoutConfirmationComponent} from "./checkout-confirmation/checkout-confirmation.component";
 import {UpdateBillingComponent} from "./update-billing/update-billing.component";
 import {CcpaDsarComponent} from "./dashboard/ccpa-dsar/ccpa-dsar.component";
+import {WelcomeComponent} from "./welcome/welcome.component";
 
 
 const routes: Routes = [
@@ -61,7 +62,7 @@ const routes: Routes = [
   { path: 'user/password/change-password', component: ChangepasswordComponent, canActivate: [AuthGuard] },
   { path: 'user/profile/edit', component: EditProfileComponent, canActivate: [AuthGuard] },
   { path: 'organizations', component: OrgpageComponent, canActivate: [AuthGuard] },
-  { path: 'pricing', component: PricingComponent,  canActivate: [AuthGuard] },
+  { path: 'pricing', component: PricingComponent },
   { path: 'organizationdetails/:id', component: OrganizationdetailsComponent, canActivate: [AuthGuard] },
   { path: 'organizationteam/:id', component: OrganizationteamComponent, canActivate: [AuthGuard] },
   { path: 'user/activity', component: UseractivityComponent, canActivate: [AuthGuard] },
@@ -83,6 +84,7 @@ const routes: Routes = [
   { path: 'home/dashboard/ccpa-dsar', component: CcpaDsarComponent,  canActivate: [AuthGuard] },
   { path: 'success', component: CheckoutConfirmationComponent,  canActivate: [AuthGuard]  },
   { path: '', redirectTo: 'home/dashboard/analytics', pathMatch: 'full', canActivate: [AuthGuard] },
+  { path: 'welcome', component: WelcomeComponent, canActivate: [AuthGuard]},
 
   // { path: '', redirectTo: 'home/dashboard/analytics', pathMatch:'full' },
 

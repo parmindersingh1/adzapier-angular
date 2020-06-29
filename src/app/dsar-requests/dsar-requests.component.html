@@ -22,7 +22,7 @@
           </div>
           <div class="col-sm-2 col-md-2">
                 <select (change)="onChangeRequestType($event)"  class="form-control">
-                  <option selected disabled value="">Type Of Request</option>
+                  <option selected value="">Type Of Request</option>
                   <ng-container *ngFor="let obj of allFilterData.filter_Request_type">
                      <option [value]="obj.key">{{obj.value}}</option>
                   </ng-container>
@@ -31,7 +31,7 @@
 
           <div class="col-sm-2 col-md-2">
             <select (change)="onChangeSubjectType($event)" class="form-control">
-              <option selected disabled value="">Subject Type</option>
+              <option selected value="">Subject Type</option>
               <ng-container *ngFor="let obj of allFilterData.filter_Subject_type">
                 <option [value]="obj.key">{{obj.value}}</option>
               </ng-container>
@@ -40,7 +40,7 @@
 
           <div class="col-sm-2 col-md-2">
             <select (change)="onChangeStatus($event)" class="form-control">
-              <option selected disabled value="">Status</option>
+              <option selected value="">Status</option>
               <ng-container *ngFor="let obj of allFilterData.filter_status">
                 <option [value]="obj.key">{{obj.value}}</option>
               </ng-container>
@@ -49,7 +49,7 @@
 
           <div class="col-sm-2 col-md-2">
             <select (change)="onChangeDueIn($event)" class="form-control">
-              <option selected disabled value="">Due in</option>
+              <option selected value="">Due in</option>
               <ng-container *ngFor="let obj of allFilterData.filter_due_in">
                 <option [value]="obj.key">{{obj.value}}</option>
               </ng-container>

@@ -5,10 +5,17 @@
 
         <label>Select Billing Cycle:</label>
         <div class="btn-group" dropdown>
+          <ng-container *ngIf="!currentPlan || currentPlan.duration == 'month'">
           <button id="button-basic" dropdownToggle type="button" class="btn btn-default dropdown-toggle"
                   aria-controls="dropdown-basic">
             {{billingCycle | titlecase}}<span class="ml-3 caret"></span>
           </button>
+          </ng-container>
+          <ng-container *ngIf="currentPlan && currentPlan.duration == 'year'">
+            <button type="button" class="btn btn-default dropdown-toggle">
+              {{billingCycle | titlecase}}<span class="ml-3 caret"></span>
+            </button>
+          </ng-container>
           <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu"
               role="menu" aria-labelledby="button-basic">
             <li role="menuitem" (click)="onSelectBillingCycle('MONTHLY')" >Monthly Plans</li>
@@ -29,10 +36,20 @@
         <div class="col-10 col-sm-6 col-md-4 col-lg-2 d-flex flex-column bd  mg-r-10 pd-30 ">
           <h3 class="mg-b-25">{{plan.name}}</h3>
           <p class="tx-color-03 mg-b-25">{{plan.summary}}</p>
-          <h1 class="tx-rubik tx-normal mg-b-30 mg-t-auto">{{plan.price}}</h1>
+          <h1 *ngIf="plan.price !==  'Contact Us'" class="tx-rubik tx-normal mg-b-30 mg-t-auto">${{plan.price}}.00</h1>
+          <h1 *ngIf="plan.price === 'Contact Us'" class="tx-rubik tx-normal mg-b-30 mg-t-auto">Contact Us</h1>
           <p class="tx-size-10 mg-b-30 ">{{plan.type}}</p>
-          <button *ngIf="plan.plan" (click)="onSelectPlan(plan)" class="btn btn-primary btn-block">{{plan.button}}</button>
-          <button *ngIf="!plan.plan"  class="btn btn-primary btn-block">{{plan.button}}</button>
+
+
+          <button *ngIf="plan.plan && !currentPlan.amount; else upGradePlan" (click)="onSelectPlan(plan)" class="btn btn-primary btn-block">{{plan.button}}</button>
+          <button *ngIf="!plan.plan" (click)="onSelectPlan(plan)" class="btn btn-primary btn-block">{{plan.button}}</button>
+          <ng-template #upGradePlan>
+          <button *ngIf="plan.plan && currentPlan.amount > plan.price" [disabled]="currentPlan.amount > plan.price"  (click)="onUpgradePlan(plan)" class="btn btn-primary btn-block">{{plan.button}}</button>
+          <button *ngIf="plan.plan && currentPlan.amount == plan.price" [disabled]="currentPlan.amount == plan.price"  (click)="onUpgradePlan(plan)" class="btn btn-primary btn-block">Current Plan</button>
+          <button *ngIf="plan.plan && currentPlan.amount < plan.price" (click)="onUpgradePlan(plan)" class="btn btn-primary btn-block">{{plan.button}}</button>
+          </ng-template>
+
+
         </div>
       </ng-container>
     </div>
@@ -43,9 +60,9 @@
         <tbody>
         <tr>
           <th scope="row"></th>
-          <td><div class="rounded-10 pd-y-10 pd-x-20 bg-ui-01">Basic</div></td>
-          <td><div class="rounded-10 pd-y-10 pd-x-20 bg-ui-01">Plus</div></td>
-          <td><div class="rounded-10 pd-y-10 pd-x-20 bg-ui-01">Business</div></td>
+          <td><div class="rounded-10 pd-y-10 pd-x-20 bg-ui-01">Silver</div></td>
+          <td><div class="rounded-10 pd-y-10 pd-x-20 bg-ui-01">Gold</div></td>
+          <td><div class="rounded-10 pd-y-10 pd-x-20 bg-ui-01">Platinum</div></td>
           <td><div class="rounded-10 pd-y-10 pd-x-20 bg-ui-01">Enterprise</div></td>
         </tr>
 
@@ -74,3 +91,4 @@
       </table>
     </div>
   </div><!-- container -->
+  <simple-notifications></simple-notifications>

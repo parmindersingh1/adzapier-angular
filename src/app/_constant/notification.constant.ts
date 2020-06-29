@@ -1,5 +1,5 @@
 export const notificationConfig = {
-  timeOut: 3000,
+  timeOut: 5000,
   showProgressBar: true,
   pauseOnHover: true,
   clickToClose: true

@@ -4,6 +4,8 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Validators, FormBuilder, FormGroup, FormArray, FormControl } from '@angular/forms';
 import { UserService } from '../_services';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
+import {notificationConfig} from "../_constant/notification.constant";
+import {NotificationsService} from "angular2-notifications";
 @Component({
   selector: 'app-company',
   templateUrl: './company.component.html',
@@ -40,6 +42,7 @@ export class CompanyComponent implements OnInit {
   constructor(private companyService: CompanyService, private modalService: NgbModal,
     private formBuilder: FormBuilder,
               private userService: UserService,
+              private notification: NotificationsService,
               private loading: NgxUiLoaderService,
   ) { }
 
@@ -248,5 +251,26 @@ export class CompanyComponent implements OnInit {
       return false;
     }
     return true;
+  }
+  onResendInvitation(email) {
+    const requestObj = {
+      email,
+      user_level: 'company'
+    };
+    this.loading.start();
+    this.companyService.inviteUser(requestObj)
+      .subscribe((data) => {
+        this.loading.stop();
+        if (data) {
+          this.notification.info('Invitation Send', 'We have sent a email on your Email Id', notificationConfig);
+          this.inviteUserForm.reset();
+          this.loadCompanyTeamMembers();
+          this.modalService.dismissAll('Data Saved!');
+        }
+      }, (error) => {
+        this.loading.stop();
+        this.notification.error('Invitation Send', 'Something went wrong...', notificationConfig);
+        this.modalService.dismissAll('Error!');
+      });
   }
 }

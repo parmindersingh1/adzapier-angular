@@ -70,6 +70,7 @@ import {MatButtonModule} from "@angular/material/button";
 import {CcpaDsarComponent} from "./dashboard/ccpa-dsar/ccpa-dsar.component";
 import { ChartsModule } from 'ng2-charts';
 import { SimpleNotificationsModule } from 'angular2-notifications';
+import { WelcomeComponent } from './welcome/welcome.component';
 
 
 
@@ -120,7 +121,8 @@ export const isMock = environment.mock;
     CheckoutConfirmationComponent,
     TimeAgoPipe,
     UpdateBillingComponent,
-    CcpaDsarComponent
+    CcpaDsarComponent,
+    WelcomeComponent
   ],
   imports: [
     BrowserModule,

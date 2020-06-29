@@ -35,12 +35,19 @@
               "./node_modules/quill/dist/quill.snow.css",
               "./node_modules/quill/dist/quill.core.css",
               "./node_modules/quill/dist/quill.bubble.css",
-              "./node_modules/quill-emoji/dist/quill-emoji.css"
+              "./node_modules/quill-emoji/dist/quill-emoji.css",
+              "./src/assets/css/map/jqvmap.min.css",
+              "./src/assets/css/daterangepicker.css"
             ],
             "scripts": [
               "./node_modules/quill/dist/quill.core.js",
               "./node_modules/quill/dist/quill.min.js",
-              "./node_modules/quill-emoji/dist/quill-emoji.js"
+              "./node_modules/jquery/dist/jquery.min.js",
+              "./node_modules/quill-emoji/dist/quill-emoji.js",
+              "./src/assets/js/moment.min.js",
+              "./src/assets/js/map/jquery.vmap.min.js",
+              "./src/assets/js/map/jquery.vmap.usa.js",
+              "./src/assets/js/datepicker/daterangepicker.min.js"
             ]
           },
           "configurations": {

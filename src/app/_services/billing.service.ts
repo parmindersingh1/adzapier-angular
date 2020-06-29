@@ -21,4 +21,13 @@ export class BillingService {
     const path = '/billing/update/card/session';
     return this.http.get(environment.apiUrl + path);
   }
+  getCurrentPlanInfo() {
+    const path = '/billing/current/plan';
+    return this.http.get(environment.apiUrl + path);
+  }
+  upGradePlan(data) {
+  const path = '/billing/upgrade/plan';
+  return this.http.post(environment.apiUrl + path, data);
+}
+
 }
