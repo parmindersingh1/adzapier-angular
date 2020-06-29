@@ -5,6 +5,9 @@ import { subscriptionPlan } from '../_constant/pricing.contant';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
 import {DataService} from "../_services/data.service";
 import {UserService} from "../_services";
+import {NotificationsService} from "angular2-notifications";
+import {not} from "rxjs/internal-compatibility";
+import {notificationConfig} from "../_constant/notification.constant";
 
 @Component({
   selector: 'app-pricing',
@@ -16,15 +19,21 @@ export class PricingComponent implements OnInit {
   billingCycle = 'MONTHLY';
   subscriptionPlanType = 'CCPA';
   userEmail: any;
+  currentPlan = {
+    amount: null,
+    duration: null
+  };
   constructor(private router: Router,
               private loading: NgxUiLoaderService,
               private dataService: DataService,
+              private notification: NotificationsService,
               private userService: UserService,
               private billingService: BillingService) { }
 
   ngOnInit() {
     this.onGetUserEmail();
     this.onSetValue();
+    this.onGetCurrentPlan();
   }
   onGetUserEmail() {
     this.loading.start();
@@ -86,5 +95,33 @@ export class PricingComponent implements OnInit {
     } else if (this.billingCycle === 'YEARLY' && this.subscriptionPlanType === 'GDPR') {
       this.subscriptionPlan = subscriptionPlan.GDPR.YEARLY;
     }
+  }
+  onGetCurrentPlan() {
+    this.loading.start();
+    this.billingService.getCurrentPlanInfo().subscribe(res => {
+      this.loading.stop();
+      if (!res['error']) {
+        this.currentPlan = res['response'];
+        this.billingCycle = res['response']['duration'] === 'month' ? 'MONTHLY' : 'YEARLY';
+        this.onSetValue();
+      }
+    }, error => {
+      this.loading.stop();
+      this.notification.error('Current Plan', 'Something went wrong...', notificationConfig);
+    });
+  }
+
+  onUpgradePlan(plan) {
+    this.loading.start();
+    this.billingService.upGradePlan({ plan: plan.plan }).subscribe(res => {
+      this.loading.stop();
+      if (res['status'] === 200) {
+        this.notification.info('Plan Upgraded', 'Your Plan has been Upgraded', notificationConfig);
+        this.onGetCurrentPlan();
+      }
+    }, error => {
+      this.loading.stop();
+      this.notification.error('Company Details', 'Something went wrong...', notificationConfig);
+    });
   }
 }

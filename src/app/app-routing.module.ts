@@ -37,7 +37,7 @@ const routes: Routes = [
   { path: 'changelog', loadChildren: () => import('./changelog/changelog.module').then(m => m.ChangelogModule) },
   { path: 'gethelp', loadChildren: () => import('./gethelp/gethelp.module').then(m => m.GethelpModule) },
   {
-    path: 'home/dashboard/analytics', loadChildren: () => import('./dashboard/analytics.module')
+    path: 'home/dashboard', loadChildren: () => import('./dashboard/analytics.module')
       .then(m => m.AnalyticsModule)
   },
   { path: 'userprofile', loadChildren: () => import('./edit-profile/edit-profile.module').then(m => m.EditProfileModule) },
@@ -63,7 +63,7 @@ const routes: Routes = [
   { path: 'verify-email/:id', component: VerifyemailComponent },
   { path: 'checkout', component: CheckoutComponent, canActivate: [AuthGuard] },
   { path: 'success', component: CheckoutConfirmationComponent, canActivate: [AuthGuard] },
-  { path: '', redirectTo: 'home/dashboard/analytics', pathMatch: 'full', canActivate: [AuthGuard] },
+  { path: '', redirectTo: 'home/dashboard', pathMatch: 'full', canActivate: [AuthGuard] },
   // { path: '', redirectTo: 'home/dashboard/analytics', pathMatch:'full' },
   // otherwise redirect to home
   { path: '**', redirectTo: '404page' }

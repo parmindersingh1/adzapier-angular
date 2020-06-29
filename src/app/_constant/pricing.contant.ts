@@ -3,7 +3,7 @@ export const subscriptionPlan = {
     MONTHLY : [{
     name: 'Silver',
     summary: 'Secure and automated website support. Monthly scanning and automatic language detection.',
-    price: '$10.00',
+    price: '10',
       cycle: 'Month',
     type: 'Per website/month',
     button: '7 day free trial',
@@ -11,7 +11,7 @@ export const subscriptionPlan = {
   }, {
     name: 'Gold',
     summary: 'As Basic and with advanced privacy policy generator.',
-    price: '$15.00',
+    price: '15',
       cycle: 'Month',
     type: 'Per website/month',
     button: 'Choose Plan',
@@ -20,7 +20,7 @@ export const subscriptionPlan = {
     {
       name: 'Platinum',
       summary: 'As Plus with geo-targeting, consent management and user controls.',
-      price: '$25.00',
+      price: '25',
       cycle: 'Month',
       type: 'Per website/month',
       button: 'Choose Plan',
@@ -39,7 +39,7 @@ export const subscriptionPlan = {
    YEARLY: [{
      name: 'Silver',
      summary: 'Secure and automated website support. Monthly scanning and automatic language detection.',
-     price: '$100.00',
+     price: '100',
      cycle: 'year',
      type: 'Per website/year',
      button: '7 day free trial',
@@ -47,7 +47,7 @@ export const subscriptionPlan = {
    }, {
      name: 'Gold',
      summary: 'As Basic and with advanced privacy policy generator.',
-     price: '$150.00',
+     price: '150',
      cycle: 'year',
      type: 'Per website/year',
      button: 'Choose Plan',
@@ -56,7 +56,7 @@ export const subscriptionPlan = {
      {
        name: 'Platinum',
        summary: 'As Plus with geo-targeting, consent management and user controls.',
-       price: '$250.00',
+       price: '250',
        cycle: 'year',
        type: 'Per website/year',
        button: 'Choose Plan',
@@ -78,7 +78,7 @@ export const subscriptionPlan = {
     MONTHLY: [{
       name: 'Silver',
       summary: 'Secure and automated website support. Monthly scanning and automatic language detection.',
-      price: '$14.00',
+      price: '14',
       cycle: 'Month',
       type: 'Per website/month',
       button: '7 day free trial',
@@ -86,7 +86,7 @@ export const subscriptionPlan = {
   }, {
     name: 'Gold',
     summary: 'As Basic and with advanced privacy policy generator.',
-    price: '$21.00',
+    price: '21',
       cycle: 'Month',
     type: 'Per website/month',
     button: 'Choose Plan',
@@ -95,7 +95,7 @@ export const subscriptionPlan = {
     {
       name: 'Platinum',
       summary: 'As Plus with geo-targeting, consent management and user controls.',
-      price: '$35.00',
+      price: '35',
       cycle: 'Month',
       type: 'Per website/month',
       button: 'Choose Plan',
@@ -114,7 +114,7 @@ export const subscriptionPlan = {
     YEARLY: [{
       name: 'Silver',
       summary: 'Secure and automated website support. Monthly scanning and automatic language detection.',
-      price: '$140.00',
+      price: '140',
       cycle: 'year',
       type: 'Per website/year',
       button: '7 day free trial',
@@ -122,7 +122,7 @@ export const subscriptionPlan = {
   }, {
   name: 'Gold',
     summary: 'As Basic and with advanced privacy policy generator.',
-    price: '$210.00',
+    price: '210',
     cycle: 'year',
     type: 'Per website/year',
     button: 'Choose Plan',
@@ -131,7 +131,7 @@ export const subscriptionPlan = {
 {
   name: 'Platinum',
   summary: 'As Plus with geo-targeting, consent management and user controls.',
-  price: '$350.00',
+  price: '350',
   cycle: 'year',
   type: 'Per website/year',
   button: 'Choose Plan',
