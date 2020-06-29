@@ -1,5 +1,5 @@
 import { Component, OnInit} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import { BillingService } from 'src/app/_services/billing.service';
 import { NotificationsService } from 'angular2-notifications';
 import { CompanyService } from 'src/app/company.service';
@@ -22,6 +22,7 @@ export class BillingComponent implements OnInit {
   };
   companyDetails: any = { name: ''};
   constructor(private activatedRoute: ActivatedRoute,
+              private router: Router,
               private billingService: BillingService,
               private companyService: CompanyService,
               private notification: NotificationsService,
@@ -46,12 +47,21 @@ export class BillingComponent implements OnInit {
     this.billingService.getCurrentPlan().subscribe(res => {
       this.loading.stop();
       if (res['status'] === 200) {
-        this.billingDetails = res['response'];
+        console.log(typeof(res['response']));
+        if (typeof(res['response']) === 'string') {
+          this.notification.info('No Current Plan', 'You have not Subscribed with any plan...', notificationConfig);
+          this.router.navigateByUrl('/pricing');
+        } else {
+          this.billingDetails = res['response'];
+        }
       }
     }, error => {
       this.loading.stop();
       this.notification.error('Current Plan', 'Something went wrong...', notificationConfig);
     });
+    setTimeout( () => {
+      this.loading.stop();
+    }, 4000);
   }
 
   onGetCompanyDetails() {
