@@ -115,7 +115,7 @@ export class HeaderComponent implements OnInit {
         showlink: 'Solutions',
         subcategory: [{ showlink: 'CCPA', routerLink: '/ccpa' }, { showlink: 'GDPR', routerLink: '/gdpr' }]
       }, {
-        showlink: 'Pricing', routerLink: '/pricing'
+        showlink: 'Pricing', routerLink: '/plans'
       }, {
         showlink: 'Partners', routerLink: '/partners'
       }, {
