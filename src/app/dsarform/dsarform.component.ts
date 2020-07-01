@@ -468,7 +468,7 @@ export class DsarformComponent implements OnInit, OnDestroy {
   addOptions() {
     let count = 0;
     let customObj: Anything = {};
-    const keylabel = this.lblText.split(' ').join('_');
+    const keylabel = this.lblText.split(' ').join('_').toLowerCase();
     const id = count++;
     //  customObj.key = this.trimLabel + 'id';
     customObj = {

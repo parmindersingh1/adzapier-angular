@@ -27,13 +27,13 @@ services:
       update_config:
         parallelism: 1
         delay: 10s
-      resources:
-        limits:
-          cpus: '1'
-          memory: 256M
-        reservations:
-          cpus: '0.5'
-          memory: 64M
+      # resources:
+      #   limits:
+      #     cpus: '1'
+      #     memory: 256M
+      #   reservations:
+      #     cpus: '0.5'
+      #     memory: 64M
       labels:
         - "traefik.backend=${backend}"
         - "traefik.enable=true"

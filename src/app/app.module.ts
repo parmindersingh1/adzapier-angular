@@ -50,7 +50,8 @@ import { SimpleNotificationsModule } from 'angular2-notifications';
 import { WelcomeComponent } from './welcome/welcome.component';
 
 import { SharedbootstrapModule } from './sharedbootstrap/sharedbootstrap.module';
-
+import { CcpaDsarComponent } from './dashboard/ccpa-dsar/ccpa-dsar.component';
+import { ChartsModule } from 'ng2-charts';
 
 export const isMock = environment.mock;
 
@@ -77,6 +78,7 @@ export const isMock = environment.mock;
     VerifyemailComponent,
     CheckoutComponent,
     CheckoutConfirmationComponent,
+  //  CcpaDsarComponent,
     WelcomeComponent
   ],
   imports: [
@@ -96,9 +98,8 @@ export const isMock = environment.mock;
     CollapseModule.forRoot(),
     FeatherModule.pick(allIcons),
     NgxUiLoaderModule.forRoot(ngxUiLoaderConfig),
-    SimpleNotificationsModule.forRoot(),
-
-    MatButtonModule
+    MatButtonModule,
+    ChartsModule
   ],
   providers: [
     AuthenticationService,
@@ -119,6 +120,6 @@ export const isMock = environment.mock;
   bootstrap: [AppComponent],
   exports: [
     // AnalyticsModule,
-    BsDropdownModule, CollapseModule]
+    BsDropdownModule, CollapseModule, SimpleNotificationsModule]
 })
 export class AppModule { }
