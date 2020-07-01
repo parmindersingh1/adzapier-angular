@@ -46,8 +46,12 @@
               "./node_modules/quill-emoji/dist/quill-emoji.js",
               "./src/assets/js/moment.min.js",
               "./src/assets/js/map/jquery.vmap.min.js",
+              "./src/assets/js/map/jquery.vmap.world.js",
               "./src/assets/js/map/jquery.vmap.usa.js",
-              "./src/assets/js/datepicker/daterangepicker.min.js"
+              "./src/assets/js/datepicker/daterangepicker.min.js",
+              "./src/assets/js/flot/jquery.flot.js",
+              "./src/assets/js/flot/jquery.flot.resize.js",
+              "./src/assets/js/flot/jquery.flot.stack.js"
             ]
           },
           "configurations": {

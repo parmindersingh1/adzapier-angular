@@ -14,8 +14,8 @@ import {DashboardService} from "../../_services/dashboard.service";
 import {NotificationsService} from "angular2-notifications";
 import {notificationConfig} from "../../_constant/notification.constant";
 import * as moment from 'moment';
+import {df1, df2, df3, df4, df5, df6} from "../sampledata";
 declare var jQuery: any;
-
 
 
 @Component({
@@ -49,9 +49,17 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
   public doughnutChartData: MultiDataSet = [
     [100],
   ];
+
   public doughnutChartType: ChartType = 'doughnut';
-
-
+  doughnutColors = [
+    {
+      backgroundColor: [
+        '#f77db9',
+        '#7dbcff',
+        '#7de5e5',
+      ]
+    }
+  ];
 
   // Pie
   public pieChartOptions: ChartOptions = {
@@ -62,6 +70,16 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
   public pieChartType: ChartType = 'pie';
   public pieChartLegend = true;
   public pieChartPlugins = [];
+  pieColors = [
+    {
+      backgroundColor: [
+        '#f77db9',
+        '#7dbcff',
+        '#7de5e5',
+      ]
+    }
+  ];
+
   currentManagedOrgID: any;
   currrentManagedPropID: any;
     dashboardCount = {
@@ -72,7 +90,7 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
     };
     Requests = [];
     stateList: [];
-
+    public requestChartError = true;
 
   constructor(
     private orgservice: OrganizationService,
@@ -84,13 +102,187 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
     monkeyPatchChartJsLegend();
   }
   ngOnInit() {
+    // this.onSetUpMainMap();
     this.onGetPropsAndOrgId();
   }
   ngAfterViewInit() {
     this.onInsilizaedMap();
     this.onSetUpDate();
+    this.onCountMap();
   }
 
+  onSetUpMainMap(data, labelData) {
+    console.log(data[0]);
+    jQuery.plot('#requestflotChart', [{
+    //   data: df1,
+    //   color: '#69b2f8'
+    // }, {
+    //   data: df2,
+    //   color: '#d1e6fa'
+    // }, {
+    //   data: df3,
+    //   color: '#d1e6fa',
+    //   lines: {
+    //     fill: false,
+    //     lineWidth: 1.5
+    //   }
+
+      data: data[0],
+      color: '#69b2f8'
+    }, {
+      data: data[1],
+      color: '#d1e6fa'
+    }, {
+      data: data[2],
+      color: '#d1e6fa',
+      lines: {
+        fill: false,
+        lineWidth: 1.5
+      }
+    }], {
+      series: {
+        stack: 0,
+        shadowSize: 0,
+        lines: {
+          show: true,
+          lineWidth: 0,
+          fill: 1
+        }
+      },
+      grid: {
+        borderWidth: 0,
+        aboveData: true
+      },
+
+      yaxis: {
+        show: true,
+        color: 'rgba(72, 94, 144, .1)',
+        min: 0,
+        max: 300,
+        font: {
+          size: 10,
+          color: '#8392a5'
+        }
+      },
+      xaxis: {
+        show: true,
+        ticks: labelData,
+        // ticks: [[ 0, 'jan'], [1, 'feb'], [2, 'march'], [3, 'april'], [4 , 'may'],
+        // [5, 'june'], [6, 'july'], [7, 'Aug'], [8, 'Sep'], [9, 'Oct'], [10, 'nov'], [11, 'dec']
+        // ],
+
+        // ticks: [[0, ''], [8, 'Jan'], [20, 'Feb'], [32, 'Mar'], [44, 'Apr'], [56, 'May'],
+        //   [68, 'Jun'], [80, 'Jul'], [92, 'Aug'], [104, 'Sep'], [116, 'Oct'], [128, 'Nov'], [140, 'Dec']],
+        // color: 'rgba(255,255,255,.2)'
+
+        // ticks: [[0, ''], [2, 'Jan'], [3, 'Feb'], [4, 'Mar'], [5, 'Apr'], [6, 'May'],
+        //   [7, 'Jun'], [8, 'Jul'], [9, 'Aug'], [10, 'Sep'], [11, 'Oct'], [12, 'Nov'], [13, 'Dec']],
+        color: 'rgba(255,255,255,.2)'
+      }
+    });
+  }
+
+  onCountMap() {
+    jQuery.plot('#flotChart3', [{
+      data: df4,
+      color: '#9db2c6'
+    }], {
+      series: {
+        shadowSize: 0,
+        lines: {
+          show: true,
+          lineWidth: 2,
+          fill: true,
+          fillColor: { colors: [{ opacity: 0 }, { opacity: .5 }] }
+        }
+      },
+      grid: {
+        borderWidth: 0,
+        labelMargin: 0
+      },
+      yaxis: {
+        show: false,
+        min: 0,
+        max: 60
+      },
+      xaxis: { show: false }
+    });
+
+    jQuery.plot('#flotChart4', [{
+      data: df5,
+      color: '#9db2c6'
+    }], {
+      series: {
+        shadowSize: 0,
+        lines: {
+          show: true,
+          lineWidth: 2,
+          fill: true,
+          fillColor: { colors: [{ opacity: 0 }, { opacity: .5 }] }
+        }
+      },
+      grid: {
+        borderWidth: 0,
+        labelMargin: 0
+      },
+      yaxis: {
+        show: false,
+        min: 0,
+        max: 80
+      },
+      xaxis: { show: false }
+    });
+
+    jQuery.plot('#flotChart5', [{
+      data: df6,
+      color: '#9db2c6'
+    }], {
+      series: {
+        shadowSize: 0,
+        lines: {
+          show: true,
+          lineWidth: 2,
+          fill: true,
+          fillColor: { colors: [{ opacity: 0 }, { opacity: .5 }] }
+        }
+      },
+      grid: {
+        borderWidth: 0,
+        labelMargin: 0
+      },
+      yaxis: {
+        show: false,
+        min: 0,
+        max: 80
+      },
+      xaxis: { show: false }
+    });
+
+    jQuery.plot('#flotChart6', [{
+      data: df4,
+      color: '#9db2c6'
+    }], {
+      series: {
+        shadowSize: 0,
+        lines: {
+          show: true,
+          lineWidth: 2,
+          fill: true,
+          fillColor: { colors: [{ opacity: 0 }, { opacity: .5 }] }
+        }
+      },
+      grid: {
+        borderWidth: 0,
+        labelMargin: 0
+      },
+      yaxis: {
+        show: false,
+        min: 0,
+        max: 60
+      },
+      xaxis: { show: false }
+    });
+  }
   onInsilizaedMap() {
     jQuery('#vmap').vectorMap({
       map: 'usa_en',
@@ -175,15 +367,35 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
   }
 
   onSetChartData(chart) {
-    // lineChartData
     if (chart['requestsChart']['data']) {
-      let lineChartData = [];
-      lineChartData = chart['requestsChart']['data'].map((item) => {
-        return {data: item.value, label: item.label};
-      });
-      this.lineChartData = lineChartData;
-      this.lineChartLabels = chart['requestsChart']['belowLabel'];
+        this.requestChartError = false;
+      const newArray = [...chart['requestsChart']['data']];
+      // const newArray = [
+      //   {label: "Recevied", value: [4,23,23,67,12,43, 12, 24, 43,6, 7,34]},
+      //   {label: "Recevied", value: [32,67,88,45,12,54, 34, 90, 43,2, 87,66]},
+      //   {label: "Recevied", value: [12,23,54,56,54,23, 2, 67, 2,12, 34,32]},
+      //   {label: "Recevied", value: [98,78,67,67,98,42, 21, 43, 34,76, 11,4]},
+      // ];
+      const data = [];
+      for (const chart of newArray) {
+        const numVal = [];
+        const value = chart.value;
+        for (let i = 0; value.length > i; i++) {
+          numVal.push([i, value[i]]);
+        }
+        data.push(numVal);
+      }
+      const newLabel = [...chart['requestsChart']['belowLabel']];
+      const labelData = [];
+      for (let i = 0; newLabel.length > i; i++) {
+        labelData.push([i, newLabel[i]]);
+      }
+      console.log('labelData', labelData);
+      console.log('main DAta', data);
+      this.onSetUpMainMap(data, labelData);
     }
+
+
     // doughnutChartData
     if (chart['RequestType']['data']) {
       const requestTypeLabel = [];
@@ -192,9 +404,17 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
         requestTypeLabel.push(data.label);
         requestTypeValue.push(data.value);
       }
+      console.log(
+        'requestTypeLabel', requestTypeLabel,
+        'requestTypeValue', requestTypeValue
+      );
       this.doughnutChartLabels = requestTypeLabel;
       this.doughnutChartData = requestTypeValue;
+
     }
+    // this.doughnutChartLabels = ['aditya', 'amit', 'milan'];
+    // this.doughnutChartData = [34, 43, 21];
+
     // pieChartData
     if (chart['subjectType']['data']) {
       const subjectTypeLabel = [];
