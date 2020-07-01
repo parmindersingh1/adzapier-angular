@@ -84,17 +84,39 @@
       <div class="card">
         <div class="card-header pd-y-15 d-md-flex align-items-center justify-content-between">
           <h6 class="mg-b-0">Requests</h6>
+          <ul class="list-inline d-flex mg-t-20 mg-sm-t-10 mg-md-t-0 mg-b-0">
+            <li class="list-inline-item d-flex align-items-center">
+              <span class="d-block wd-10 ht-10 bg-df-1 rounded mg-r-5"></span>
+              <span class="tx-sans tx-uppercase tx-10 tx-medium tx-color-03">Received</span>
+            </li>
+            <li class="list-inline-item d-flex align-items-center mg-l-5">
+              <span class="d-block wd-10 ht-10 bg-df-2 rounded mg-r-5"></span>
+              <span class="tx-sans tx-uppercase tx-10 tx-medium tx-color-03">Completed</span>
+            </li>
+            <li class="list-inline-item d-flex align-items-center mg-l-5">
+              <span class="d-block wd-10 ht-10 bg-df-3 rounded mg-r-5"></span>
+              <span class="tx-sans tx-uppercase tx-10 tx-medium tx-color-03">Plan</span>
+            </li>
+          </ul>
         </div><!-- card-header -->
 
-        <canvas baseChart
-                [datasets]="lineChartData"
-                [labels]="lineChartLabels"
-                [options]="lineChartOptions"
-                [colors]="lineChartColors"
-                [legend]="lineChartLegend"
-                [chartType]="lineChartType"
-                [plugins]="lineChartPlugins">
-        </canvas>
+<!--        <canvas baseChart-->
+<!--                [datasets]="lineChartData"-->
+<!--                [labels]="lineChartLabels"-->
+<!--                [options]="lineChartOptions"-->
+<!--                [colors]="lineChartColors"-->
+<!--                [legend]="lineChartLegend"-->
+<!--                [chartType]="lineChartType"-->
+<!--                [plugins]="lineChartPlugins">-->
+<!--        </canvas>-->
+
+        <div  *ngIf="!requestChartError; else noChart"  class="chart-one">
+          <div id="requestflotChart" class="flot-chart" style="height:312px"></div>
+        </div>
+        <ng-template #noChart>
+          <p style="height:250px" class="text-center mt-5">No Record Found</p>
+        </ng-template>
+
 
       </div><!-- card -->
     </div>
@@ -106,6 +128,7 @@
         <div class="card-body pd-lg-25">
           <canvas baseChart height="200"
                   [data]="doughnutChartData"
+                  [colors]="doughnutColors"
                   [labels]="doughnutChartLabels"
                   [chartType]="doughnutChartType">
           </canvas>
@@ -160,6 +183,7 @@
                   [data]="pieChartData"
                   [labels]="pieChartLabels"
                   [chartType]="pieChartType"
+                  [colors]="pieColors"
                   [options]="pieChartOptions"
                   [plugins]="pieChartPlugins"
                   [legend]="pieChartLegend">
