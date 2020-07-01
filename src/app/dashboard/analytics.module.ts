@@ -9,7 +9,6 @@ import { ChartsModule } from 'ng2-charts';
 import {SharedbootstrapModule} from "../sharedbootstrap/sharedbootstrap.module";
 // import {TimeAgoPipe} from "time-ago-pipe";
 
-
 @NgModule({
   declarations: [AnalyticsComponent, CcpaDsarComponent],
   imports: [
