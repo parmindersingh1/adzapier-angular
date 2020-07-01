@@ -19,7 +19,11 @@ const routes: Routes = [
   },
   {
     path: 'billing',
-    loadChildren: () => import('./billing/billing.module').then(m => m.BillingModule)
+    children: [
+      {path: '', loadChildren: () => import('./billing/billing.module').then(m => m.BillingModule) },
+      {path: 'update',
+      loadChildren: () => import('./update-billing/update-billing.module').then(m => m.UpdateBillingModule)}
+    ]
   },
   {
     path: 'organizations',

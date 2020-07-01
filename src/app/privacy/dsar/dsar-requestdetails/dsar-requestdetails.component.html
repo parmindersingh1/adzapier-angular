@@ -34,7 +34,7 @@
 
                 </div>
                 <div class="card-body pd-10">
-
+{{requestDetails | json}}
                     <div class="row row-sm pd-t-5">
                         <div class="col-sm">
                             <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Request
@@ -51,14 +51,14 @@
                             <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Due
                                 in
                             </label>
-                            <p class="mg-b-0">{{respDaysLeft}}</p>
+                            <p class="mg-b-0"> {{getDueIn(respCreatedAt,respDaysLeft)}}</p>
                         </div>
 
                         <div class="col-sm">
                             <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Date
                                 Opened
                             </label>
-                            <p class="mg-b-0">--</p>
+                            <p class="mg-b-0">{{respCreatedAt}}</p>
                         </div>
 
                         <div class="col-sm">
@@ -97,7 +97,7 @@
                         <div class="col-sm">
                             <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Deadline
                             </label>
-                            <p class="mg-b-0">--</p>
+                            <p class="mg-b-0">{{getDeadLine(respCreatedAt,respDaysLeft) | date:'medium'}}</p>
                         </div>
 
                         <div class="col-sm">
