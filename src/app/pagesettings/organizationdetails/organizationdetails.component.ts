@@ -3,9 +3,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 // import { OrganizationService, UserService } from '../_services';
 import { FormGroup, FormBuilder, Validators, FormControl, FormArray } from '@angular/forms';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import {NotificationsService} from "angular2-notifications";
 import { OrganizationService } from 'src/app/_services/organization.service';
 import { CompanyService } from 'src/app/company.service';
 import { UserService } from 'src/app/_services/user.service';
+import { notificationConfig } from 'src/app/_constant/notification.constant';
 // import { CompanyService } from '../company.service';
 @Component({
   selector: 'app-organizationdetails',
@@ -28,12 +30,12 @@ export class OrganizationdetailsComponent implements OnInit {
   zipcode: number;
   taxID: any;
 
-  p: number = 1; 
+  p: number = 1;
   pageSize: any = 5;
   totalCount: any;
   paginationConfig = { itemsPerPage: this.pageSize, currentPage: this.p, totalItems: this.totalCount, id: 'userPagination' };
 
-  p2: number = 1; 
+  p2: number = 1;
   propertyPgSize: any = 5;
   propertyTotalCount: any;
   propertyPageConfig = {  itemsPerPage: this.propertyPgSize, currentPage: this.p2, totalItems: this.propertyTotalCount, id: 'propertyPagination'};
@@ -58,6 +60,7 @@ export class OrganizationdetailsComponent implements OnInit {
   currrentManagedPropID: any;
   constructor(private activatedRoute: ActivatedRoute,
               private orgService: OrganizationService,
+              private notification: NotificationsService,
               private modalService: NgbModal,
               private formBuilder: FormBuilder,
               private companyService: CompanyService,
@@ -81,17 +84,17 @@ export class OrganizationdetailsComponent implements OnInit {
       }
     });
     this.loadRoleList();
-   
+
     this.activatedRoute.paramMap.subscribe(params => {
       this.organizationID = params.get('id');
       console.log(this.organizationID, 'organizationID..');
       this.loadOrganizationByID(this.organizationID);
       this.getPropertyList(this.organizationID);
       this.loadOrgTeamMembers(this.organizationID);
-     
+
     });
-    
-    
+
+
     this.isEditProperty = false;
     const urlRegex = '(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?';
     const zipRegex = '^[0-9]*$'; //'^[0-9]{6}(?:-[0-9]{4})?$';
@@ -202,10 +205,10 @@ export class OrganizationdetailsComponent implements OnInit {
         if (res) {
           alert('Organization updated successfully!');
           console.log(this.currentManagedOrgID,'currentManagedOrgID..');
-        
+
           if (res.response.id === this.currentManagedOrgID) {
             this.orgService.updateEditedOrganization(res);
-          } 
+          }
           this.orgService.isOrganizationUpdated.next(true);
           this.modalService.dismissAll('Data Saved!');
         }
@@ -236,12 +239,12 @@ export class OrganizationdetailsComponent implements OnInit {
       this.taxID = data.response.tax_id;
       this.zipcode = data.response.zipcode;
     });
- 
+
   }
 
   onSubmit() {
     this.submitted = true;
- 
+
     if (this.organisationPropertyForm.invalid) {
       return false;
     } else {
@@ -272,7 +275,7 @@ export class OrganizationdetailsComponent implements OnInit {
           if (res) {
             alert('Property has been updated!');
             this.getPropertyList(res.response.oid);
-           
+
             if (res.response.id === this.currrentManagedPropID) {
              // this.orgService.changeCurrentSelectedProperty(res);
               const orgDetails = this.orgService.getCurrentOrgWithProperty();
@@ -408,5 +411,23 @@ export class OrganizationdetailsComponent implements OnInit {
     }
     return true;
   }
-
+  onResendInvitation(email) {
+    const requestObj = {
+      email,
+      orgid: this.organizationID,
+      user_level: 'organization'
+    };
+    this.companyService.inviteUser(requestObj)
+      .subscribe((data) => {
+        if (data) {
+          this.notification.info('Invitation Send', 'We have sent a email on your Email Id', notificationConfig);
+          this.loadOrgTeamMembers(this.organizationID);
+          this.inviteUserOrgForm.reset();
+          this.modalService.dismissAll('Data Saved!');
+        }
+      }, (error) => {
+        this.notification.error('Invitation Send', error, notificationConfig);
+        this.modalService.dismissAll('Error!');
+      });
+  }
 }

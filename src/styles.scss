@@ -19,7 +19,9 @@
 .border-0 {
     border: 0px;
 }
-
+.simple-notification-wrapper.bottom {
+  bottom: 0px !important;
+}
 .navbar {
     background: #042893 !important;
     border-radius: 0 !important;
@@ -33,8 +35,8 @@
 .navbar-menu .nav-link {
     color:#0168fa;
 }
-.simple-notification-wrapper.right {
-  top: 75px;
+.simple-notification-wrapper.bottom {
+  bottom: 50px !important;
 }
 .navbar-expand-sm .navbar-nav .nav-link {
     // color:#0168fa;

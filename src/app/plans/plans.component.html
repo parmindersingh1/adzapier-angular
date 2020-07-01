@@ -1,0 +1,84 @@
+
+<div class="container ht-100p tx-center">
+  <div class="row justify-content-center">
+    <div class="col-10 cmol-sm-6 col-md-4 col-lg-2 d-flex flex-column bg-ui-01 mg-t-100 mg-10 pd-t-30 rounded-10">
+
+      <label>Select Billing Cycle:</label>
+      <div class="btn-group" dropdown>
+
+          <button id="button-basic" dropdownToggle type="button" class="btn btn-default dropdown-toggle"
+                  aria-controls="dropdown-basic">
+            {{billingCycle | titlecase}}<span class="ml-3 caret"></span> </button>
+
+
+        <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu"
+            role="menu" aria-labelledby="button-basic">
+          <li role="menuitem" (click)="onSelectBillingCycle('MONTHLY')" >Monthly Plans</li>
+          <li role="menuitem" (click)="onSelectBillingCycle('YEARLY')">Yearly Plans</li>
+        </ul>
+      </div>
+      <p class="tx-size-20 tx-normal mg-b-30 solution">Customize your solution here </p>
+      <div class="custom-control custom-switch mg-5">
+        <input type="checkbox" class="custom-control-input" checked (change)="$event.target.checked = true" id="customSwitch1">
+        <label class="custom-control-label" for="customSwitch1">CCPA</label>
+      </div>
+      <div class=" custom-control custom-switch mg-5">
+        <input type="checkbox" class="custom-control-input" (change)="onSelectPlanType($event)" id="customSwitch2">
+        <label class="custom-control-label" for="customSwitch2">GDPR</label>
+      </div>
+    </div>
+    <ng-container *ngFor="let plan of subscriptionPlan">
+      <div class="col-10 col-sm-6 col-md-4 col-lg-2 d-flex flex-column bd  mg-r-10 pd-30 ">
+        <h3 class="mg-b-25">{{plan.name}}</h3>
+        <p class="tx-color-03 mg-b-25">{{plan.summary}}</p>
+        <h1 *ngIf="plan.price !==  'Contact Us'" class="tx-rubik tx-normal mg-b-30 mg-t-auto">${{plan.price}}.00</h1>
+        <h1 *ngIf="plan.price === 'Contact Us'" class="tx-rubik tx-normal mg-b-30 mg-t-auto">Contact Us</h1>
+        <p class="tx-size-10 mg-b-30 ">{{plan.type}}</p>
+
+
+        <button *ngIf="plan.plan"
+                (click)="onSelectPlan(plan)" class="btn btn-primary btn-block">{{plan.button}}</button>
+        <button *ngIf="!plan.plan" (click)="onSelectPlan(plan)" class="btn btn-primary btn-block">{{plan.button}}</button>
+
+      </div>
+    </ng-container>
+  </div>
+
+  <div class="row table-responsive mg-t-30 ">
+    <h4 class="mg-b-10 align-baseline">Feature comparision</h4>
+    <table class="table ">
+      <tbody>
+      <tr>
+        <th scope="row"></th>
+        <td><div class="rounded-10 pd-y-10 pd-x-20 bg-ui-01">Silver</div></td>
+        <td><div class="rounded-10 pd-y-10 pd-x-20 bg-ui-01">Gold</div></td>
+        <td><div class="rounded-10 pd-y-10 pd-x-20 bg-ui-01">Platinum</div></td>
+        <td><div class="rounded-10 pd-y-10 pd-x-20 bg-ui-01">Enterprise</div></td>
+      </tr>
+
+      <tr>
+        <th scope="row">Cookie banner</th>
+        <td><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-square tx-primary"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg></td>
+        <td><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-square tx-primary"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg></td>
+        <td><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-square tx-primary"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg></td>
+        <td><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-square tx-primary"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg></td>
+      </tr>
+      <tr>
+        <th scope="row">2</th>
+        <td><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-square tx-primary"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg></td>
+        <td><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-square tx-primary"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg></td>
+        <td><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-square tx-primary"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg></td>
+        <td><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-square tx-primary"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg></td>
+      </tr>
+      <tr>
+        <th scope="row">3</th>
+        <td></td>
+        <td><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-square tx-primary"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg></td>
+        <td><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-square tx-primary"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg></td>
+        <td><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-square tx-primary"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg></td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+

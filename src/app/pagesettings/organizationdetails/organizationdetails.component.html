@@ -17,10 +17,10 @@
                         Organization Details
                     </h6>
                     <!-- <div class="d-flex pd-0">
-                       
+
                     </div>
                     <div class="d-flex pd-0">
-                       
+
                     </div> -->
                     <div class="btn-group" role="group" aria-label="Basic example">
                         <button (click)="editOrganizationModalPopup(editOrgModal)"
@@ -34,9 +34,9 @@
                         <span class="d-none d-sm-inline mg-l-0"> Delete</span>
                     </button>
                       </div>
-                      
-                </div> 
-        
+
+                </div>
+
                 <div class="card-body">
                     <div class="row row-sm">
                         <div class="col-sm-2 mg-t-5 mg-sm-t-5">
@@ -85,7 +85,7 @@
                                     <option value="5">5</option>
                                     <option value="10">10</option>
                                     <option value="15">15</option>
-                                </select>                
+                                </select>
                             </div>
                             <div col-md-5><label class="d-block">records at a time</label></div>
                         </div>
@@ -96,7 +96,7 @@
                         </div>
                     </div>
                 </div>
-                <!-- <div card-header tx-semibold> 
+                <!-- <div card-header tx-semibold>
                     <div class="searchfield mt-3" style="display: flex;">
                         <div class="col-3 input-group">
                             <input class="form-control py-2 border-right-0 border" [(ngModel)]="searchPropertyText" type="search" value="search" id="example-search-input"/>
@@ -113,7 +113,7 @@
                                 <option value="5">5</option>
                                 <option value="10">10</option>
                                 <option value="15">15</option>
-                            </select>                    
+                            </select>
                             </div>
                             <div col-md-5><label class="d-block">records at a time</label></div>
                         </div>
@@ -136,9 +136,9 @@
                             <th>Status</th>
                         </tr>
                     </thead>
-                    <tbody> 
+                    <tbody>
                             <tr *ngFor="let list of propertyList | paginate:propertyPageConfig | filter: searchPropertyText:'name':'website';  let i = index">
-                    
+
                                 <td>
                                     {{ (propertyPageConfig.currentPage - 1) * propertyPageConfig.itemsPerPage + i + 1 }}
                                 </td>
@@ -178,7 +178,7 @@
                                 <td colspan="7" class="txt-center" *ngIf="(propertyList | filter: searchPropertyText:'name':'website')?.length===0">No
                                     records found.</td>
                             </tr>
-                            
+
                     </tbody>
                 </table>
                 </div>
@@ -210,7 +210,7 @@
                                 <option value="5">5</option>
                                 <option value="10">10</option>
                                 <option value="15">15</option>
-                            </select>                    
+                            </select>
                             </div>
                             <div class="col-md-5"><label class="d-block">records at a time</label></div>
                         </div>
@@ -230,7 +230,8 @@
                                 <th>Email</th>
                                 <th>Roles</th>
                                 <th>Last Login</th>
-                                <th>Action</th>
+                              <th>Resend</th>
+                              <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -249,6 +250,10 @@
                                         <span *ngIf="isDateOrString(list.user_last_login)">{{list.user_last_login | date:'medium'}}</span>
                                         <span *ngIf="!isDateOrString(list.user_last_login)">{{list.user_last_login}}</span>
                                     </td>
+                                  <td class="text-center">
+                                    <button type="button" *ngIf="list.user_last_login === 'Invitation sent' || list.user_last_login === 'Invitation Pending'"
+                                            (click)="onResendInvitation(list.user_email)"  class="btn btn-sm btn-secondary"><i class="fas fa-envelope	"></i> Resend Invitation</button>
+                                  </td>
                                     <td>
                                         <a class="pd-r-5" (click)="removeTeamMember(list.id)">
                                             <i class="far fa-trash-alt tx-danger fa-sm"></i>
@@ -462,7 +467,7 @@
                             </div>
                         </div> -->
                     </div>
-                    
+
                     <!-- <div class="col-sm-12">
                         <div *ngFor="let opt of roleList" class="form-check-inline">
                             <input class="form-check-input" type="radio" name="chkpermissions"

@@ -45,12 +45,13 @@ import { ngxUiLoaderConfig } from './_constant/loading.contant';
 import { CheckoutComponent } from './checkout/checkout.component';
 import { CheckoutConfirmationComponent } from './checkout-confirmation/checkout-confirmation.component';
 import { MatButtonModule } from '@angular/material/button';
-import { CcpaDsarComponent } from './dashboard/ccpa-dsar/ccpa-dsar.component';
-import { ChartsModule } from 'ng2-charts';
+
 import { SimpleNotificationsModule } from 'angular2-notifications';
+import { WelcomeComponent } from './welcome/welcome.component';
 
 import { SharedbootstrapModule } from './sharedbootstrap/sharedbootstrap.module';
-
+import { CcpaDsarComponent } from './dashboard/ccpa-dsar/ccpa-dsar.component';
+import { ChartsModule } from 'ng2-charts';
 
 export const isMock = environment.mock;
 
@@ -77,12 +78,12 @@ export const isMock = environment.mock;
     VerifyemailComponent,
     CheckoutComponent,
     CheckoutConfirmationComponent,
-    CcpaDsarComponent
+  //  CcpaDsarComponent,
+    WelcomeComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
-    ChartsModule,
     ReactiveFormsModule,
     SimpleNotificationsModule.forRoot(),
     HttpClientModule,
@@ -97,8 +98,8 @@ export const isMock = environment.mock;
     CollapseModule.forRoot(),
     FeatherModule.pick(allIcons),
     NgxUiLoaderModule.forRoot(ngxUiLoaderConfig),
-    
-    MatButtonModule
+    MatButtonModule,
+    ChartsModule
   ],
   providers: [
     AuthenticationService,

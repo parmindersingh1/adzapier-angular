@@ -8,7 +8,7 @@
         data-target="#collapsibleNavbar">
         <i-feather name="menu" class="feather-16"></i-feather>
       </button>
-      <a class="df-logo" routerLink="/">
+      <a class="df-logo" routerLink="/home/dashboard">
         Ad<span>Zapier</span>
       </a>
     </div>
@@ -66,7 +66,7 @@
             <a class="dropdown-item" routerLink="settings/organizations/organizationdetails/{{item.id}}">
               {{item.orgname}}  <span class="align-right"><i-feather class="feather-plus" name="plus"></i-feather></span>
             </a>
-            <div *ngIf="item.property.length=='0'">No Property</div>  
+            <div *ngIf="item.property.length=='0'">No Property</div>
             <ul role="menu">
               <ng-container  *ngFor="let submenu of item.property">
                 <li role="menuitem" (click)="isCurrentPropertySelected(item,submenu)">
@@ -77,12 +77,12 @@
                   </a>
                 </li>
               </ng-container>
-            </ul>         
+            </ul>
           </li>
       </ul>
     <!-- </ng-container> -->
     </ul>
-      <!--end of organization / property menu after login--> 
+      <!--end of organization / property menu after login-->
     <ul class="navbar-nav mr-auto" *ngIf="currentUser">
       <li *ngFor="let menu of navigationMenu" class="nav-item">
         <div *ngIf="menu.showlink" dropdown container="body">
@@ -117,7 +117,7 @@
       <li *ngFor="let menu of rightItems" class="nav-item">
         <div *ngIf="!menu.items" container="body">trtyr
           <a *ngIf="!menu.items" class="nav-link" routerLink="{{menu.routerLink}}">
-            <i *ngIf="menu.icon" class="{{ menu.icon }}"></i>{{ menu.label }} 
+            <i *ngIf="menu.icon" class="{{ menu.icon }}"></i>{{ menu.label }}
           </a>
         </div>
         <div class="iconwrapper">
@@ -186,7 +186,7 @@
       </button>
     </div>
     <div class="sidebar-body">
-      
+
   <ul class="navbar-nav" *ngIf="!currentUser">
     <li *ngFor="let menu of publicNavigationMenu" class="nav-item">
       <div *ngIf="menu.showlink" (click)="isCollapsed = !isCollapsed" [attr.aria-expanded]="!isCollapsed" aria-controls="collapseExample" container="body">
@@ -228,7 +228,7 @@
           <a class="dropdown-item" routerLink="organizationdetails/{{item.id}}">
             {{item.orgname}}  <span class="align-right"><i-feather class="feather-plus" name="plus"></i-feather></span>
           </a>
-          <div *ngIf="item.property.length=='0'">No Property</div>  
+          <div *ngIf="item.property.length=='0'">No Property</div>
           <ul role="menu">
             <ng-container  *ngFor="let submenu of item.property">
               <li role="menuitem" (click)="isCurrentPropertySelected(item,submenu)">
@@ -239,7 +239,7 @@
                 </a>
               </li>
             </ng-container>
-          </ul>         
+          </ul>
         </li>
     </ul>
   </ul>
