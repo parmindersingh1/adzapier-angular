@@ -273,7 +273,7 @@ export class HeaderComponent implements OnInit {
       this.selectedOrgProperties.push(obj);
       this.orgservice.setCurrentOrgWithProperty(obj);
       this.currentSelectedProperty();
-
+      this.router.navigate(['/privacy/dsar/webforms']);
     }
 
     // this.router.navigate(['/webforms']);

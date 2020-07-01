@@ -44,7 +44,6 @@ import { NgxUiLoaderModule, NgxUiLoaderConfig } from 'ngx-ui-loader';
 import { ngxUiLoaderConfig } from './_constant/loading.contant';
 import { CheckoutComponent } from './checkout/checkout.component';
 import { CheckoutConfirmationComponent } from './checkout-confirmation/checkout-confirmation.component';
-import { UpdateBillingComponent } from './update-billing/update-billing.component';
 import { MatButtonModule } from '@angular/material/button';
 import { CcpaDsarComponent } from './dashboard/ccpa-dsar/ccpa-dsar.component';
 import { ChartsModule } from 'ng2-charts';
@@ -78,7 +77,6 @@ export const isMock = environment.mock;
     VerifyemailComponent,
     CheckoutComponent,
     CheckoutConfirmationComponent,
-    UpdateBillingComponent,
     CcpaDsarComponent
   ],
   imports: [
@@ -99,7 +97,6 @@ export const isMock = environment.mock;
     CollapseModule.forRoot(),
     FeatherModule.pick(allIcons),
     NgxUiLoaderModule.forRoot(ngxUiLoaderConfig),
-    SimpleNotificationsModule.forRoot(),
     
     MatButtonModule
   ],
@@ -122,6 +119,6 @@ export const isMock = environment.mock;
   bootstrap: [AppComponent],
   exports: [
     // AnalyticsModule,
-    BsDropdownModule, CollapseModule]
+    BsDropdownModule, CollapseModule, SimpleNotificationsModule]
 })
 export class AppModule { }
