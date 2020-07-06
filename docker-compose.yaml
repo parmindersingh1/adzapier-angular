@@ -1,7 +1,7 @@
 version: "3.2"
 
 services:
-  ui-T1:
+  develop-ui-T1:
     image: ${CI_REGISTRY_IMAGE}:${CI_COMMIT_TAG:-$CI_COMMIT_REF_NAME-$TAG}
     networks:
       apps1:
