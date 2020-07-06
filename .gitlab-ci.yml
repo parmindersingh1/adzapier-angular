@@ -144,14 +144,14 @@ deploy-to-swarm-develop:
   image: docker:19
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD ${CI_REGISTRY}
-    - docker service scale ${CI_PROJECT_NAMESPACE}-${CI_PROJECT_NAME}-${CI_BUILD_REF_NAME}_${SERVICE_NAME}=$SCALABLE_REPLICAS || true
+    - docker service scale ${CI_PROJECT_NAMESPACE}-${CI_PROJECT_NAME}_${SERVICE_NAME}=$SCALABLE_REPLICAS || true
     - echo "Deploying Stack"
     - docker stack deploy --with-registry-auth --compose-file=docker-stack-out.yaml ${CI_PROJECT_NAMESPACE}-${CI_PROJECT_NAME}
-    - docker service scale ${CI_PROJECT_NAMESPACE}-${CI_PROJECT_NAME}-${CI_BUILD_REF_NAME}_${SERVICE_NAME}=$RUNNING_REPLICAS
+    - docker service scale ${CI_PROJECT_NAMESPACE}-${CI_PROJECT_NAME}_${SERVICE_NAME}=$RUNNING_REPLICAS
   before_script:
     - export CAL_VER=$(date +"%y%m%d%H")
     - apk add gettext
-    - RUNNING_REPLICAS=$(docker service ps ${CI_PROJECT_NAMESPACE}-${CI_PROJECT_NAME}-${CI_BUILD_REF_NAME}_${SERVICE_NAME} | grep -i running | wc -l) || true
+    - RUNNING_REPLICAS=$(docker service ps ${CI_PROJECT_NAMESPACE}-${CI_PROJECT_NAME}_${SERVICE_NAME} | grep -i running | wc -l) || true
     - echo $RUNNING_REPLICAS
     - |
       if [[ $RUNNING_REPLICAS == 0 ]]; then
@@ -180,14 +180,14 @@ deploy-to-swarm-staging:
   image: docker:19
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD ${CI_REGISTRY}
-    - docker service scale ${CI_PROJECT_NAMESPACE}-${CI_PROJECT_NAME}-${CI_BUILD_REF_NAME}_${SERVICE_NAME}=$SCALABLE_REPLICAS || true
+    - docker service scale ${CI_PROJECT_NAMESPACE}-${CI_PROJECT_NAME}_${SERVICE_NAME}=$SCALABLE_REPLICAS || true
     - echo "Deploying Stack"
     - docker stack deploy --with-registry-auth --compose-file=docker-stack-out.yaml ${CI_PROJECT_NAMESPACE}-${CI_PROJECT_NAME}
-    - docker service scale ${CI_PROJECT_NAMESPACE}-${CI_PROJECT_NAME}-${CI_BUILD_REF_NAME}_${SERVICE_NAME}=$RUNNING_REPLICAS
+    - docker service scale ${CI_PROJECT_NAMESPACE}-${CI_PROJECT_NAME}_${SERVICE_NAME}=$RUNNING_REPLICAS
   before_script:
     - export CAL_VER=$(date +"%y%m%d%H")
     - apk add gettext
-    - RUNNING_REPLICAS=$(docker service ps ${CI_PROJECT_NAMESPACE}-${CI_PROJECT_NAME}-${CI_BUILD_REF_NAME}_${SERVICE_NAME} | grep -i running | wc -l) || true
+    - RUNNING_REPLICAS=$(docker service ps ${CI_PROJECT_NAMESPACE}-${CI_PROJECT_NAME}_${SERVICE_NAME} | grep -i running | wc -l) || true
     - echo $RUNNING_REPLICAS
     - |
       if [[ $RUNNING_REPLICAS == 0 ]]; then
