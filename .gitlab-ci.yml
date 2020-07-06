@@ -1,4 +1,4 @@
-image: node:13
+image: node:14
 cache:
   untracked: false
   key: "$CI_BUILD_REF_NAME"
