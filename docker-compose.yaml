@@ -1,11 +1,10 @@
 version: "3.2"
 
 services:
-  ui:
-#    image: ${CI_REGISTRY_IMAGE}:${CI_COMMIT_TAG:-$CI_COMMIT_REF_NAME-$CAL_VER}
+  ui-T1:
     image: ${CI_REGISTRY_IMAGE}:${CI_COMMIT_TAG:-$CI_COMMIT_REF_NAME-$TAG}
     networks:
-      apps:
+      apps1:
     volumes:
       - /etc/localtime:/etc/localtime:ro
     logging:
@@ -15,7 +14,7 @@ services:
         max-file: "10"
     deploy:
       mode: replicated
-      replicas: ${SERVICE_MIN_REPLICAS:-1}
+      replicas: ${SERVICE_MIN_REPLICAS}
       restart_policy:
         condition: on-failure
         delay: 10s
@@ -39,8 +38,40 @@ services:
         - "traefik.enable=true"
         - "traefik.port=80"
         - "traefik.docker.network=traefik_apps"
-        - "traefik.frontend.rule=Host:${HOST}"
+        - "traefik.frontend.rule=Host:${HOST1}"
+
+  ${SERVICE_NAME}:
+    image: ${CI_REGISTRY_IMAGE}:${CI_COMMIT_TAG:-$CI_COMMIT_REF_NAME-$TAG}
+    networks:
+      - apps
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
+    deploy:
+      replicas: ${SCALABLE_REPLICAS}
+      update_config:
+        parallelism: 1
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+      placement:
+        constraints:
+          - node.role==worker
+      labels:
+        - "traefik.enable=true"
+        - "traefik.tags=public"
+        - "traefik.http.routers.${SERVICE_NAME}.rule=Host(${HOST})"
+        - "traefik.http.services.${SERVICE_NAME}.loadbalancer.server.port=${TARGET_PORT}"
+        - "traefik.http.routers.${SERVICE_NAME}.entrypoints=web"
+        - "traefik.http.routers.${SERVICE_NAME}.service=${SERVICE_NAME}"
+        - "traefik.docker.network=traefik2_apps"
+
 networks:
-  apps:
+  apps1:
     external:
       name: traefik_apps
+  apps:
+    external:
+      name: traefik2_apps
