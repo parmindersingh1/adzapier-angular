@@ -34,7 +34,7 @@
 
                 </div>
                 <div class="card-body pd-10">
-<!-- {{requestDetails | json}} -->
+                <!-- {{requestDetails | json}} -->
                     <div class="row row-sm pd-t-5">
                         <div class="col-sm">
                             <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Request
@@ -58,7 +58,7 @@
                             <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Date
                                 Opened
                             </label>
-                            <p class="mg-b-0">{{respCreatedAt}}</p>
+                            <p class="mg-b-0">{{respCreatedAt | date:'medium'}}</p>
                         </div>
 
                         <div class="col-sm">
@@ -103,7 +103,7 @@
                         <div class="col-sm">
                             <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Approver
                             </label>
-                            <p class="mg-b-0">--</p>
+                            <p class="mg-b-0">{{approverName}}</p>
                         </div>
 
 
@@ -136,20 +136,28 @@
                             <label
                                 class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Country</label>
 
-                            <p class="tx-13 tx-spacing-1  mg-b-0 ">United States</p>
+                            <p class="tx-13 tx-spacing-1  mg-b-0 ">{{respCountry}}</p>
                         </div>
-
                         <div class="col-sm">
                             <label
-                                class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Address</label>
+                                class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">State</label>
 
-                            <!-- <p class="tx-13 tx-spacing-1  mg-b-0 ">pateld982@gmail.com</p> -->
+                            <p class="tx-13 tx-spacing-1  mg-b-0 ">{{respState}}</p>
+                        </div>
+                        <div class="col-sm">
+                            <label
+                                class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">City</label>
+
+                            <p class="tx-13 tx-spacing-1  mg-b-0 ">{{respCity}}</p>
+                        </div>
+                        <!-- <div class="col-sm">
+                            <label
+                                class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Address</label>
                             <p class="tx-13 tx-spacing-1  mg-b-0">819 Waldeck Street Farmers Branch, TX 75244,
-                                United
-                                States
+                                United  States
                             </p>
 
-                        </div>
+                        </div> -->
                         <div class="col-sm col-1"></div>
 
                     </div>

@@ -24,22 +24,25 @@ export class WebformsComponent implements OnInit {
 
   ngOnInit() {
     this.loading = true;
+    this.loadCurrentProperty();
+  }
+
+  loadCurrentProperty() {
     this.organizationService.currentProperty.subscribe((data) => {
       if (data !== '') {
+        this.currentOrganization = data.organization_name;
         this.currentPropertyName = data.property_name;
         this.getCCPAFormList();
         this.loading = false;
       } else {
         const orgDetails = this.organizationService.getCurrentOrgWithProperty();
-        this.getCCPAFormList();
         this.currentOrganization = orgDetails.organization_name;
         this.currentPropertyName = orgDetails.property_name;
+        this.getCCPAFormList();
         this.loading = false;
       }
-
     });
   }
-
 
   getCCPAFormList() {
    // this.loading = true;
