@@ -414,7 +414,15 @@ export class DsarformComponent implements OnInit, OnDestroy {
         this.selectedControlType = true;
       }
     } else if (this.selectedFormOption === 'select' || this.selectedFormOption === 'radio' || this.selectedFormOption === 'checkbox') {
-      this.selectedControlType = true;
+      this.selectedControlType = !this.selectedControlType; // true;
+      if (this.selectedControlType) {
+        this.selectOptions = [];
+        this.addOptions();
+      }
+       else {
+        this.selectOptions = [];
+      }
+     // this.addOptions();
     } else {
       this.selectedControlType = false;
       this.isSubjectType = false;
@@ -466,6 +474,7 @@ export class DsarformComponent implements OnInit, OnDestroy {
 
 
   addOptions() {
+   // this.selectOptions = [];
     let count = 0;
     let customObj: Anything = {};
     const keylabel = this.lblText.split(' ').join('_').toLowerCase();
@@ -482,6 +491,7 @@ export class DsarformComponent implements OnInit, OnDestroy {
     // this.selectOptions.push(customObj[key] = this.count++);
     this.selectOptions.push(customObj);
     console.log(this.selectOptions, 'selectOptions..');
+    // this.cancelAddingFormControl();
   }
 
   addCustomReqestSubjectType() {
@@ -510,7 +520,7 @@ export class DsarformComponent implements OnInit, OnDestroy {
       this.sideMenuRequestTypeOptions.push(requestObj);
       //  console.log(this.selectOptions, 'selectOptions types..');
     }
-
+    
   }
   // {
   //   "subject_type_id": "e85fb633-0f5d-4aa5-b09c-9e499f5e0fb2",
@@ -602,7 +612,7 @@ export class DsarformComponent implements OnInit, OnDestroy {
           this.dsarFormService.updateControl(this.webFormControlList[oldControlIndex], oldControlIndex, updatedObj);
           this.webFormControlList = this.dsarFormService.getFormControlList();
         }
-
+        
       } else if (this.existingControl.control === 'textbox' || this.existingControl.control === 'textarea' ||
         this.existingControl.controlId === 'state' || this.existingControl.controlId === 'country') {
         let updatedTextobj;
@@ -677,6 +687,7 @@ export class DsarformComponent implements OnInit, OnDestroy {
         this.webFormControlList = this.dsarFormService.getFormControlList();
         this.lblText = '';
         this.cancelAddingFormControl();
+      //  this.selectedControlType = false;
       }
     }
 
@@ -760,7 +771,18 @@ export class DsarformComponent implements OnInit, OnDestroy {
   onChangeEvent(event) {
     console.log(event, 'event...');
     this.selectedFormOption = event.currentTarget.value;
-    this.showFormOption = !this.showFormOption;
+    if (this.selectedFormOption === 'checkbox' || this.selectedFormOption === 'radio' || this.selectedFormOption === 'select'){
+      this.showFormOption = true;
+      this.selectedControlType = true;
+      if(this.selectOptions.length === 0){
+        this.addOptions();
+      }
+      
+    } else{
+      this.showFormOption = false;
+    }
+    // this.showFormOption = !this.showFormOption;
+    
     // this.selectOptions = [];
   }
 
@@ -839,10 +861,11 @@ export class DsarformComponent implements OnInit, OnDestroy {
     this.isAddingFormControl = false;
     this.isEditingList = false;
     this.inputOrSelectOption = false;
-    this.showFormOption = true;
+    this.showFormOption = false; // true
     this.editSelectionType = false;
     this.isSubjectType = false;
     this.isRequestType = false;
+    this.selectedControlType = false;
     // if (this.crid) {
     //   this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
     // } else {

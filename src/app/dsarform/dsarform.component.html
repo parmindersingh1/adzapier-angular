@@ -9,272 +9,313 @@
         </nav>
     </div>
     <div class="shadowdiv">
-    <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs">
-        <li [ngbNavItem]="1">
-            <a ngbNavLink>1 Basic</a>
-            <ng-template ngbNavContent>
-                <div id="step-1" class="pd-20 tab-pane step-content" style="display: block;">
-                    <div class="col-6 align-items-center justify-content-between">
-                        <div class="form-group">
-                            <label class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">Web Form
-                                Name</label>
-                            <input class="form-control" placeholder="Enter Name" type="text" name="form_name" #formname="ngModel"
-                                [ngClass]="{ 'is-invalid': formname.invalid }" [(ngModel)]="formName" required/>
+        <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs">
+            <li [ngbNavItem]="1">
+                <a ngbNavLink>1 Basic</a>
+                <ng-template ngbNavContent>
+                    <div id="step-1" class="pd-20 tab-pane step-content" style="display: block;">
+                        <div class="col-6 align-items-center justify-content-between">
+                            <div class="form-group">
+                                <label class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">Web Form
+                                    Name</label>
+                                <input class="form-control" placeholder="Enter Name" type="text" name="form_name"
+                                    #formname="ngModel" [ngClass]="{ 'is-invalid': formname.invalid }"
+                                    [(ngModel)]="formName" required />
                                 <div *ngIf="formname.invalid" class="invalid-feedback">
                                     <div *ngIf="formname.errors.required">Form name is required</div>
-                                </div>                                
-                        </div>
+                                </div>
+                            </div>
 
-                        <div class="form-group">
-                            <label
-                                class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">Organization</label>
-                            <input type="text" class="form-control" placeholder="Enter name on card" disabled=""
-                                [(ngModel)]="currentOrganization">
-                        </div>
+                            <div class="form-group">
+                                <label
+                                    class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">Organization</label>
+                                <input type="text" class="form-control" placeholder="Enter name on card" disabled=""
+                                    [(ngModel)]="currentOrganization">
+                            </div>
 
-                        <div class="form-group">
-                            <label class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">Property</label>
-                            <input type="text" class="form-control" placeholder="Enter name on card" disabled=""
-                                [(ngModel)]="selectedProperty">
+                            <div class="form-group">
+                                <label
+                                    class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">Property</label>
+                                <input type="text" class="form-control" placeholder="Enter name on card" disabled=""
+                                    [(ngModel)]="selectedProperty">
+                            </div>
+                        </div>
+                    </div> <!-- End Step-1-->
+
+                    <div class="btn-toolbar sw-toolbar sw-toolbar-bottom justify-content-end">
+                        <div class="btn-group mr-2 mb-2 sw-btn-group" role="group">
+                            <button class="btn btn-secondary sw-btn-next" (click)="nav.select(2)">Next</button>
                         </div>
                     </div>
-                </div> <!-- End Step-1-->
-
-                <div class="btn-toolbar sw-toolbar sw-toolbar-bottom justify-content-end">
-                    <div class="btn-group mr-2 mb-2 sw-btn-group" role="group">
-                        <button class="btn btn-secondary sw-btn-next" (click)="nav.select(2)">Next</button>
-                    </div>
-                </div>
-            </ng-template>
-        </li>
-        <li [ngbNavItem]="2">
-            <!--[disabled]="disabled"-->
-            <a ngbNavLink>2 Form</a>
-            <ng-template ngbNavContent>
+                </ng-template>
+            </li>
+            <li [ngbNavItem]="2">
+                <!--[disabled]="disabled"-->
+                <a ngbNavLink>2 Form</a>
+                <ng-template ngbNavContent>
 
 
 
-                <div class="row">
-                    <div class="col-sm-4 form-field-section">
-                        <ngb-accordion #acc="ngbAccordion" activeIds="ngb-panel-0">
-                            <ngb-panel title="Form Fields">
-                                <ng-template ngbPanelHeader>
-                                    <div class="d-flex align-items-center justify-content-between">
-                                        <h6 class="form-tl m-0">Form Fields</h6>
-                                        <button ngbPanelToggle class="btn btn-link p-0"><i
-                                                class="fas fa-chevron-down"></i></button>
-                                    </div>
-                                </ng-template>
-                                <ng-template ngbPanelContent>
-                                    <div cdkDropList [cdkDropListData]="webFormControlList" class="formfield-list"
-                                        (cdkDropListDropped)="drop($event)">
-
-                                        <div *ngIf="!isAddingFormControl">
-                                            <div *ngIf="!isEditingList">
-                                                <div *ngFor="let item of webFormControlList; let i = index;" cdkDrag>
-                                                    <div class="example-box"
-                                                        *ngIf="!isContainHeaderLogo(item) && !isContainWelcomeText(item) && !isContainFooterText(item)">
-                                                        <div class="icon-label-wrapper">
-                                                            <i class="fa fa-bars" aria-hidden="true"></i>
-                                                            <span class="control-label">
-                                                                {{item.controllabel}}
-                                                            </span>
-                                                        </div>
-                                                        <div class="displayflex">
-                                                            <button *ngIf="isCustomControlWithRadioBtn(item)"
-                                                                class="btn btn-sm btn-outline-primary editbtn"
-                                                                (click)="deleteSelectedItem(item)">
-                                                                <i class="fa fa-trash" aria-hidden="true"></i>
-                                                            </button>
-                                                            <button class="btn btn-sm btn-outline-primary editbtn"
-                                                                (click)="editSelectedRow(item)">
-                                                                <div><i class="fas fa-pen"></i></div>
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
+                    <div class="row">
+                        <div class="col-sm-4 form-field-section">
+                            <ngb-accordion #acc="ngbAccordion" activeIds="ngb-panel-0">
+                                <ngb-panel title="Form Fields">
+                                    <ng-template ngbPanelHeader>
+                                        <div class="d-flex align-items-center justify-content-between">
+                                            <h6 class="form-tl m-0">Form Fields</h6>
+                                            <button ngbPanelToggle class="btn btn-link p-0"><i
+                                                    class="fas fa-chevron-down"></i></button>
                                         </div>
-                                        <div class="row">
-                                            <div class="col-sm-12">
-                                                <div class="d-flex justify-content-between">
-                                                    <div class="p-2" *ngIf="!isAddingFormControl"><button
-                                                            class="btn btn-primary smallbtn"
-                                                            (click)="addingFormControl()">
-                                                            Add new</button></div>
-                                                </div>
-                                            </div>
+                                    </ng-template>
+                                    <ng-template ngbPanelContent>
+                                        <div cdkDropList [cdkDropListData]="webFormControlList" class="formfield-list"
+                                            (cdkDropListDropped)="drop($event)">
 
-                                            <div *ngIf="isAddingFormControl" class="col-sm-11 custom-controls">
-                                                <form #customFields="ngForm" (ngSubmit)="addCustomFields(customFields)">
-                                                    <div class="row">
-                                                        <div class="col-sm-12">
-                                                            <h5>Create Custom Fields<div>
-                                                                    <button type="button"
-                                                                        (click)="cancelAddingFormControl()"
-                                                                        class="btn btn-danger">
-                                                                        <span>&#10006;</span>
-                                                                    </button>
-                                                                </div>
-                                                            </h5>
-                                                        </div>
-
-                                                        <div style="display: flex;" *ngIf="!isEditingList">
-                                                            <div class="col-sm-8 custom-controls">
-                                                                <label>Select Field Type </label>
-                                                                <select class="form-control"
-                                                                    (change)="onChangeEvent($event)"
-                                                                    name="selectOptionControl"
-                                                                    [(ngModel)]="selectOptionControl">
-                                                                    <option *ngFor="let status_item of controlOption"
-                                                                        [value]="status_item.control">
-                                                                        {{status_item.control}}
-                                                                    </option>
-                                                                </select>
-
+                                            <div *ngIf="!isAddingFormControl">
+                                                <div *ngIf="!isEditingList">
+                                                    <div *ngFor="let item of webFormControlList; let i = index;"
+                                                        cdkDrag>
+                                                        <div class="example-box"
+                                                            *ngIf="!isContainHeaderLogo(item) && !isContainWelcomeText(item) && !isContainFooterText(item)">
+                                                            <div class="icon-label-wrapper">
+                                                                <i class="fa fa-bars" aria-hidden="true"></i>
+                                                                <span class="control-label">
+                                                                    {{item.controllabel}}
+                                                                </span>
                                                             </div>
-                                                            <div class="col-sm-4">
-                                                                <br />
-                                                                <button type="button" (click)="addFormField()"
-                                                                    class="btn btn-primary">{{showFormOption?'Cancel':'Add'}}</button>
-                                                            </div>
-                                                        </div>
-
-                                                        <div *ngIf="isEditingList && editSelectionType">
-                                                            <div class="col-sm-12 custom-controls">
-                                                                <label>Display Type
-                                                                    <select class="form-control"
-                                                                        (change)="updateControlType($event)"
-                                                                        name="changeControlType"
-                                                                        [(ngModel)]="changeControlType">
-                                                                        <option
-                                                                            *ngFor="let status_item of editableControlOption"
-                                                                            [value]="status_item.control">
-                                                                            {{status_item.control}}
-                                                                        </option>
-                                                                    </select>
-                                                                </label>
+                                                            <div class="displayflex">
+                                                                <button *ngIf="isCustomControlWithRadioBtn(item)"
+                                                                    class="btn btn-sm btn-outline-primary editbtn"
+                                                                    (click)="deleteSelectedItem(item)">
+                                                                    <i class="fa fa-trash" aria-hidden="true"></i>
+                                                                </button>
+                                                                <button class="btn btn-sm btn-outline-primary editbtn"
+                                                                    (click)="editSelectedRow(item)">
+                                                                    <div><i class="fas fa-pen"></i></div>
+                                                                </button>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div *ngIf="showFormOption" id="selectControl"
-                                                        class="controls-with-options">
-                                                        <label>Add control
-                                                            <span *ngIf="ngModel.errors?.required"
-                                                                style="color:red;font-size:11px">Name of control is
-                                                                mandatory</span>
-                                                            <input type="text" class="form-control" name="lblText"
-                                                                #ngModel="ngModel" [(ngModel)]="lblText"
-                                                                placeholder="Add label text" required />
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                    <div class="d-flex justify-content-between">
+                                                        <div class="p-2" *ngIf="!isAddingFormControl"><button
+                                                                class="btn btn-primary smallbtn"
+                                                                (click)="addingFormControl()">
+                                                                Add new</button></div>
+                                                    </div>
+                                                </div>
 
-                                                        </label>
-                                                        <!--*ngIf="isSubjectType"-->
-                                                        <div class="list-wrapper" *ngIf="isSubjectType == true && isRequestType == false">
-                                                            <ul>
-                                                                <!-- {{sideMenuSubjectTypeOptions | json}} -->
-                                                                <!-- isSubjectType | {{isSubjectType}}
-                                                                sideMenuSubjectTypeOptions | {{sideMenuSubjectTypeOptions.length}} -->
-                                                                <li
-                                                                    *ngFor="let item of sideMenuSubjectTypeOptions; let i = index;">
-                                                                    <div class="row">
-                                                                        <div class="form-inline">
-                                                                            <div class="col-md-12 form-group pr-0">
-                                                                                <input type="text"
-                                                                                    [(ngModel)]="item.name"
-                                                                                    name="{{item.name}}"
-                                                                                    [ngModelOptions]="{standalone: true}"
-                                                                                    #ngModel="ngModel"
-                                                                                    class="form-control mb-1"
-                                                                                    required />
+                                                <div *ngIf="isAddingFormControl" class="col-sm-11 custom-controls">
+                                                    <form #customFields="ngForm"
+                                                        (ngSubmit)="customFields.form.valid && addCustomFields(customFields)">
+                                                        <div class="row">
+                                                            <div class="col-sm-12">
+                                                                <h5>Create Custom Fields<div>
+                                                                        <button type="button"
+                                                                            (click)="cancelAddingFormControl()"
+                                                                            class="btn btn-danger">
+                                                                            <span>&#10006;</span>
+                                                                        </button>
+                                                                    </div>
+                                                                </h5>
+                                                            </div>
+
+                                                            <div style="display: flex;" *ngIf="!isEditingList">
+                                                                <div class="form-inline custom-controls">
+                                                                    <div class="col-md-12">
+                                                                        <label>Select Field Type </label>
+                                                                    </div>
+                                                                    <div class="col-md-12 form-group pr-0">
+                                                                        <select class="form-control"
+                                                                            (change)="onChangeEvent($event)"
+                                                                            name="selectOptionControl"
+                                                                            [(ngModel)]="selectOptionControl">
+                                                                            <option
+                                                                                *ngFor="let status_item of controlOption"
+                                                                                [value]="status_item.control">
+                                                                                {{status_item.control}}
+                                                                            </option>
+                                                                        </select>
+                                                                        <button type="button" (click)="addFormField()"
+                                                                            class="btn btn-primary ml-2">{{showFormOption?'Cancel':'Add'}}</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div *ngIf="isEditingList && editSelectionType">
+                                                                <div class="col-sm-12 custom-controls">
+                                                                    <label>Display Type
+                                                                        <select class="form-control"
+                                                                            (change)="updateControlType($event)"
+                                                                            name="changeControlType"
+                                                                            [(ngModel)]="changeControlType">
+                                                                            <option
+                                                                                *ngFor="let status_item of editableControlOption"
+                                                                                [value]="status_item.control">
+                                                                                {{status_item.control}}
+                                                                            </option>
+                                                                        </select>
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div *ngIf="showFormOption" id="selectControl"
+                                                            class="controls-with-options">
+                                                            <label>Add control
+                                                                <span *ngIf="ngModel.errors?.required"
+                                                                    style="color:red;font-size:11px">Name of control is
+                                                                    mandatory</span>
+                                                                <input type="text" class="form-control" name="lblText"
+                                                                    #ngModel="ngModel" [(ngModel)]="lblText"
+                                                                    placeholder="Add label text" required />
+
+                                                            </label>
+                                                            <!--*ngIf="isSubjectType"-->
+
+                                                            <div class="list-wrapper"
+                                                                *ngIf="isSubjectType == true && isRequestType == false">
+                                                                <ul>
+
+                                                                    <li
+                                                                        *ngFor="let item of sideMenuSubjectTypeOptions; let i = index;let last = last">
+                                                                        <div class="row">
+                                                                            <div class="form-inline">
+                                                                                <div
+                                                                                    class="control-wrapper form-group pl-3">
+                                                                                    <input type="text"
+                                                                                        [(ngModel)]="item.name"
+                                                                                        name="{{item.name}}"
+                                                                                        [ngModelOptions]="{standalone: true}"
+                                                                                        #ngModel="ngModel"
+                                                                                        [ngClass]="{ 'is-invalid': customFields.submitted && ngModel.invalid }"
+                                                                                        class="form-control mb-1"
+                                                                                        required />
+                                                                                    <div
+                                                                                        *ngIf="customFields.submitted && ngModel.invalid">
+                                                                                        <span
+                                                                                            *ngIf="ngModel.errors?.required"
+                                                                                            class="red">
+                                                                                            Add value
+                                                                                        </span>
+                                                                                    </div>
+                                                                                </div>
                                                                                 <button type="button"
                                                                                     class="btn btn-sm btn-danger ml-2"
                                                                                     (click)="deleteSubjectOption(i)"><span
-                                                                                        style="font-size: 13px;">&#10005;</span></button>
-
+                                                                                        style="font-size: 13px;"><i
+                                                                                            class="fa fa-minus"
+                                                                                            aria-hidden="true"></i></span></button>
+                                                                                <span *ngIf="last">
+                                                                                    <button
+                                                                                        *ngIf="isSubjectType === true && isRequestType === false"
+                                                                                        class="btn btn-xs btn-primary"
+                                                                                        (click)="addCustomReqestSubjectType()">
+                                                                                        <span>
+                                                                                            <i class="fa fa-plus"
+                                                                                                aria-hidden="true"></i></span>
+                                                                                    </button></span>
                                                                             </div>
-
                                                                         </div>
-                                                                    </div>
-                                                                </li>
-                                                            </ul>
-                                                            <button
-                                                                *ngIf="isSubjectType === true && isRequestType === false"
-                                                                class="btn btn-sm btn-link mb-2"
-                                                                (click)="addCustomReqestSubjectType()">
-                                                                <i class="fa fa-plus" aria-hidden="true"></i>
-                                                            </button>
-                                                        </div>
-                                                        <div class="list-wrapper"
-                                                            *ngIf="isSubjectType == false && isRequestType == true">
-                                                            <ul>
-                                                                <!-- sideMenuRequestTypeOptions | {{sideMenuRequestTypeOptions.length}} -->
-                                                                <li
-                                                                    *ngFor="let item of sideMenuRequestTypeOptions; let i = index;">
-                                                                    <div class="row">
-                                                                        <div class="form-inline">
-                                                                            <div class="col-md-12 form-group pr-0">
-                                                                                <input type="text"
-                                                                                    [(ngModel)]="item.name"
-                                                                                    name="{{item.name}}"
-                                                                                    [ngModelOptions]="{standalone: true}"
-                                                                                    #ngModel="ngModel"
-                                                                                    class="form-control mb-1"
-                                                                                    required />
+                                                                    </li>
+                                                                </ul>
+
+                                                            </div>
+                                                            <div class="list-wrapper"
+                                                                *ngIf="isSubjectType == false && isRequestType == true">
+                                                                <ul>
+                                                                    <li
+                                                                        *ngFor="let item of sideMenuRequestTypeOptions; let i = index; let last = last;">
+                                                                        <div class="row">
+                                                                            <div class="form-inline">
+                                                                                <div
+                                                                                    class="control-wrapper form-group pl-3">
+                                                                                    <input type="text"
+                                                                                        [(ngModel)]="item.name"
+                                                                                        name="{{item.name}}"
+                                                                                        [ngModelOptions]="{standalone: true}"
+                                                                                        #ngModel="ngModel"
+                                                                                        class="form-control mb-1"
+                                                                                        [ngClass]="{ 'is-invalid': customFields.submitted && ngModel.invalid }"
+                                                                                        required />
+                                                                                    <div
+                                                                                        *ngIf="customFields.submitted && ngModel.invalid">
+                                                                                        <span
+                                                                                            *ngIf="ngModel.errors?.required"
+                                                                                            class="red">
+                                                                                            Add value
+                                                                                        </span>
+                                                                                    </div>
+
+                                                                                </div>
                                                                                 <button type="button"
                                                                                     class="btn btn-sm btn-danger ml-2"
                                                                                     (click)="deleteRequestOption(i)"><span
-                                                                                        style="font-size: 13px;">&#10005;</span></button>
-                                                                                <!-- <div *ngIf="ngModel.errors?.required">
-                                                                                <div>
-                                                                                    Add value
-                                                                                </div>
-                                                                            </div> -->
-                                                                            </div>
-
-                                                                        </div>
-                                                                    </div>
-                                                                </li>
-                                                            </ul>
-                                                            <button
-                                                                *ngIf="isSubjectType === false && isRequestType === true"
-                                                                class="btn btn-sm btn-link mb-2"
-                                                                (click)="addCustomReqestSubjectType()">
-                                                                <i class="fa fa-plus" aria-hidden="true"></i>
-                                                            </button>
-                                                        </div>
-                                                        <div *ngIf="selectedControlType" class="addoption">
-                                                            <ul>
-                                                                <li *ngFor="let item of selectOptions; let i = index;">
-                                                                    <div class="row">
-                                                                        <div class="col-sm-6">
-                                                                            <input type="text" [(ngModel)]="item.name"
-                                                                                name="{{item.name}}"
-                                                                                [ngModelOptions]="{standalone: true}"
-                                                                                #ngModel="ngModel" class="form-control"
-                                                                                required />
-                                                                            <div *ngIf="ngModel.errors?.required">
-                                                                                <div>
-                                                                                    Add value
-                                                                                </div>
+                                                                                        style="font-size: 13px;">
+                                                                                        <i class="fa fa-minus"
+                                                                                            aria-hidden="true"></i>
+                                                                                    </span></button>
+                                                                                <span *ngIf="last">
+                                                                                    <button
+                                                                                        *ngIf="isSubjectType === false && isRequestType === true"
+                                                                                        class="btn btn-xs btn-primary"
+                                                                                        (click)="addCustomReqestSubjectType()">
+                                                                                        <span>
+                                                                                            <i class="fa fa-plus"
+                                                                                                aria-hidden="true"></i>
+                                                                                        </span>
+                                                                                    </button></span>
                                                                             </div>
                                                                         </div>
-                                                                        <div class="col-sm-6">
-                                                                            <button type="button"
-                                                                                class="btn btn-sm btn-danger"
-                                                                                (click)="deleteSelectOption(i)"><span
-                                                                                    style="font-size: 13px;">&#10005;</span></button>
-                                                                        </div>
-                                                                    </div>
-                                                                </li>
-                                                            </ul>
+                                                                    </li>
+                                                                </ul>
 
-                                                        </div>
-                                                        <div class="row">
-                                                            <div class="col-sm-6">
-                                                                <div class="demo-btn-group">
-                                                                    <button type="button" *ngIf="selectedControlType"
-                                                                        class="btn btn-xs btn-primary"
-                                                                        (click)="addOptions()">Add option</button>
+                                                            </div>
+                                                            <div *ngIf="selectedControlType" class="addoption">
+
+                                                                <ul>
+                                                                    <li
+                                                                        *ngFor="let item of selectOptions; let i = index; let last = last;">
+                                                                        <div class="row form-inline">
+                                                                            <div class="col-md-12 form-group pr-0">
+                                                                                <div class="dispalyflex-column">
+                                                                                    <input type="text"
+                                                                                        [(ngModel)]="item.name"
+                                                                                        name="{{item.name}}"
+                                                                                        [ngModelOptions]="{standalone: true}"
+                                                                                        #ngModel="ngModel"
+                                                                                        class="form-control" required />
+                                                                                    <span
+                                                                                        *ngIf="ngModel.errors?.required"
+                                                                                        class="red">
+                                                                                        Add value
+                                                                                    </span>
+                                                                                </div>
+
+                                                                                <button type="button"
+                                                                                    class="btn btn-sm btn-danger ml-2"
+                                                                                    (click)="deleteSelectOption(i)"><span
+                                                                                        style="font-size: 13px;"><i
+                                                                                            class="fa fa-minus"
+                                                                                            aria-hidden="true"></i></span>
+                                                                                </button>
+                                                                                <button type="button" *ngIf="last"
+                                                                                    class="btn btn-xs btn-primary add-icon"
+                                                                                    (click)="addOptions()">
+                                                                                    <i class="fa fa-plus"
+                                                                                        aria-hidden="true"></i>
+                                                                                </button>
+                                                                            </div>
+                                                                        </div>
+
+                                                                    </li>
+                                                                </ul>
+
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col-sm-6">
                                                                     <button type="submit" class="btn btn-xs btn-success"
                                                                         [disabled]="( !customFields.form.valid )">Save</button>
                                                                 </div>
@@ -282,420 +323,434 @@
                                                             </div>
 
                                                         </div>
-
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </ng-template>
-                            </ngb-panel>
-                            <ngb-panel title="Form Styling">
-                                <ng-template ngbPanelHeader>
-                                    <div class="d-flex align-items-center justify-content-between">
-                                        <h6 class="form-tl m-0">Form Styling</h6>
-                                        <button ngbPanelToggle class="btn btn-link p-0"><i
-                                                class="fas fa-chevron-down"></i></button>
-                                    </div>
-                                </ng-template>
-                                <ng-template ngbPanelContent>
-                                    <div class="d-flex align-items-center justify-content-between">
-                                        <div class="row">
-                                            <div class="col-12 mb-2">
-                                                <p class="mb-0">Header logo</p>
-                                                <label class="col-form-label mb-0" for="name">Add logo URL </label>
-                                                <div class="form-inline mb-2">
-                                                    <div class="form-group pr-0">
-                                                        <input type="text" class="form-control form-control-sm" name="headerlogoURL"
-                                                            [(ngModel)]="headerlogoURL" placeholder="Add logo URL" />
-                                                        <button class="btn btn-primary ml-2"
-                                                            (click)="addHeaderLogo()">save logo</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-sm-12 mb-1">
-                                                <div class="formgroup row">
-                                                    <div class="col-md-5">
-                                                        <label class="col-form-label-sm">Header Color</label>
-                                                    </div>
-                                                    <div class="col-md-2">
-                                                        <input type="color" [(ngModel)]="headerColor" />
-                                                    </div>
-                                                    <div class="col-sm-5">
-                                                        <input type="text" class="form-control form-control-sm"
-                                                            [(ngModel)]="headerColor" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-12 mb-1">
-                                                <div class="formgroup row">
-                                                    <div class="col-md-5">
-                                                        <label class="col-form-label-sm">Welcome Text Color</label>
-                                                    </div>
-                                                    <div class="col-sm-2"><input type="color" class="form-control"
-                                                            [(ngModel)]="welcomeTextColor" /></div>
-                                                    <div class="col-sm-5">
-                                                        <input type="text" class="form-control form-control-sm"
-                                                            [(ngModel)]="welcomeTextColor" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-12 mb-1">
-                                                <div class="formgroup row">
-                                                    <div class="col-md-5">
-                                                        <label class="col-form-label-sm">Welcome Font Size </label>
-                                                    </div>
-                                                    <div class="col-sm-3 offset-md-4">
-                                                        <input type="number" min="13" max="20"
-                                                            class="form-control form-control-sm"
-                                                            [(ngModel)]="welcomeFontSize" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-12 mb-1">
-                                                <div class="formgroup row">
-                                                    <div class="col-md-5">
-                                                        <label class="col-form-label-sm">Footer Text Color</label>
-                                                    </div>
-                                                    <div class="col-sm-2">
-                                                        <input type="color" [(ngModel)]="footerTextColor" />
-                                                    </div>
-                                                    <div class="col-sm-5">
-                                                        <input type="text" class="form-control form-control-sm"
-                                                            [(ngModel)]="footerTextColor" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-12 mb-1">
-                                                <div class="formgroup row">
-                                                    <div class="col-md-5">
-                                                        <label class="col-form-label-sm">Footer Text Size</label>
-                                                    </div>
-                                                    <div class="col-md-3 offset-md-4">
-                                                        <input type="number" min="13" max="20" class="form-control form-control-sm"
-                                                            [(ngModel)]="footerFontSize" />
-                                                    </div>
+                                                    </form>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </ng-template>
-                            </ngb-panel>
-                            <ngb-panel title="Form Text">
-                                <ng-template ngbPanelHeader>
-                                    <div class="d-flex align-items-center justify-content-between">
-                                        <h6 class="form-tl m-0">Form Text</h6>
-                                        <button ngbPanelToggle class="btn btn-link p-0"><i
-                                                class="fas fa-chevron-down"></i></button>
-                                    </div>
-                                </ng-template>
-                                <ng-template ngbPanelContent>
-                                    <div class="editorwrapper">
 
-                                        <div class="pd-5">
-                                            <h6>Welcome Text <span style="float: right;">
-                                                    <button type="button" class="btn btn-sm btn-default"
-                                                        data-toggle="modal"
-                                                        (click)="editQuillEditorDataPopup(quillEditorModal,'welcomeText')">
-                                                        <i class="fa fa-edit"></i>
-                                                    </button>
-                                                </span></h6>
+                                    </ng-template>
+                                </ngb-panel>
+                                <ngb-panel title="Form Styling">
+                                    <ng-template ngbPanelHeader>
+                                        <div class="d-flex align-items-center justify-content-between">
+                                            <h6 class="form-tl m-0">Form Styling</h6>
+                                            <button ngbPanelToggle class="btn btn-link p-0"><i
+                                                    class="fas fa-chevron-down"></i></button>
                                         </div>
-                                        <div class="pd-5">
-                                            <h6>Footer Text <span style="float: right;">
-                                                    <button type="button" class="btn btn-sm btn-default"
-                                                        data-toggle="modal"
-                                                        (click)="editQuillEditorDataPopup(quillEditorModal,'footerText')">
-                                                        <i class="fa fa-edit"></i>
-                                                    </button>
-                                                </span></h6>
-                                        </div>
+                                    </ng-template>
+                                    <ng-template ngbPanelContent>
+                                        <div class="d-flex align-items-center justify-content-between">
+                                            <div class="row">
+                                                <div class="col-12 mb-2">
+                                                    <p class="mb-0">Header logo</p>
+                                                    <label class="col-form-label mb-0" for="name">Add logo URL </label>
+                                                    <div class="form-inline mb-2">
+                                                        <div class="form-group pr-0">
+                                                            <input type="text" class="form-control form-control-sm"
+                                                                name="headerlogoURL" [(ngModel)]="headerlogoURL"
+                                                                placeholder="Add logo URL" />
+                                                            <button class="btn btn-primary ml-2"
+                                                                (click)="addHeaderLogo()">save logo</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
 
-                                    </div>
-                                </ng-template>
-                            </ngb-panel>
-                        </ngb-accordion>
-                    </div>
-                    <div class="col-sm-8">
-                        <!-- webFormControlList  {{webFormControlList | json}} -->
-                        <div class="headerwrapper">
-                            <div class="logocontainer py-2" [style.background-color]="headerColor">
-                                <img class="img-responsive logowidth"
-                                    [src]="headerlogoURL ? headerlogoURL:' '" width="150px" />
-                            </div>
-                            <div class="quilleditor-wrapper py-2">
-                                <div class="quilleditor" [ngStyle]="welcomeStyle()"
-                                    [innerHTML]="editorDataWelcome?editorDataWelcome:welcomeText"></div>
-                            </div>
+                                                <div class="col-sm-12 mb-1">
+                                                    <div class="formgroup row">
+                                                        <div class="col-md-5">
+                                                            <label class="col-form-label-sm">Header Color</label>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <input type="color" [(ngModel)]="headerColor" />
+                                                        </div>
+                                                        <div class="col-sm-5">
+                                                            <input type="text" class="form-control form-control-sm"
+                                                                [(ngModel)]="headerColor" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-12 mb-1">
+                                                    <div class="formgroup row">
+                                                        <div class="col-md-5">
+                                                            <label class="col-form-label-sm">Welcome Text Color</label>
+                                                        </div>
+                                                        <div class="col-sm-2"><input type="color" class="form-control"
+                                                                [(ngModel)]="welcomeTextColor" /></div>
+                                                        <div class="col-sm-5">
+                                                            <input type="text" class="form-control form-control-sm"
+                                                                [(ngModel)]="welcomeTextColor" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-12 mb-1">
+                                                    <div class="formgroup row">
+                                                        <div class="col-md-5">
+                                                            <label class="col-form-label-sm">Welcome Font Size </label>
+                                                        </div>
+                                                        <div class="col-sm-3 offset-md-4">
+                                                            <input type="number" min="13" max="20"
+                                                                class="form-control form-control-sm"
+                                                                [(ngModel)]="welcomeFontSize" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-12 mb-1">
+                                                    <div class="formgroup row">
+                                                        <div class="col-md-5">
+                                                            <label class="col-form-label-sm">Footer Text Color</label>
+                                                        </div>
+                                                        <div class="col-sm-2">
+                                                            <input type="color" [(ngModel)]="footerTextColor" />
+                                                        </div>
+                                                        <div class="col-sm-5">
+                                                            <input type="text" class="form-control form-control-sm"
+                                                                [(ngModel)]="footerTextColor" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-12 mb-1">
+                                                    <div class="formgroup row">
+                                                        <div class="col-md-5">
+                                                            <label class="col-form-label-sm">Footer Text Size</label>
+                                                        </div>
+                                                        <div class="col-md-3 offset-md-4">
+                                                            <input type="number" min="13" max="20"
+                                                                class="form-control form-control-sm"
+                                                                [(ngModel)]="footerFontSize" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </ng-template>
+                                </ngb-panel>
+                                <ngb-panel title="Form Text">
+                                    <ng-template ngbPanelHeader>
+                                        <div class="d-flex align-items-center justify-content-between">
+                                            <h6 class="form-tl m-0">Form Text</h6>
+                                            <button ngbPanelToggle class="btn btn-link p-0"><i
+                                                    class="fas fa-chevron-down"></i></button>
+                                        </div>
+                                    </ng-template>
+                                    <ng-template ngbPanelContent>
+                                        <div class="editorwrapper">
+
+                                            <div class="pd-5">
+                                                <h6>Welcome Text <span style="float: right;">
+                                                        <button type="button" class="btn btn-sm btn-default"
+                                                            data-toggle="modal"
+                                                            (click)="editQuillEditorDataPopup(quillEditorModal,'welcomeText')">
+                                                            <i class="fa fa-edit"></i>
+                                                        </button>
+                                                    </span></h6>
+                                            </div>
+                                            <div class="pd-5">
+                                                <h6>Footer Text <span style="float: right;">
+                                                        <button type="button" class="btn btn-sm btn-default"
+                                                            data-toggle="modal"
+                                                            (click)="editQuillEditorDataPopup(quillEditorModal,'footerText')">
+                                                            <i class="fa fa-edit"></i>
+                                                        </button>
+                                                    </span></h6>
+                                            </div>
+
+                                        </div>
+                                    </ng-template>
+                                </ngb-panel>
+                            </ngb-accordion>
                         </div>
+                        <div class="col-sm-8">
+                            <!-- webFormControlList  {{webFormControlList | json}} -->
+                            <div class="headerwrapper">
+                                <div class="logocontainer py-2" [style.background-color]="headerColor">
+                                    <img class="img-responsive logowidth" [src]="headerlogoURL ? headerlogoURL:' '"
+                                        width="150px" />
+                                </div>
+                                <div class="quilleditor-wrapper py-2">
+                                    <div class="quilleditor" [ngStyle]="welcomeStyle()"
+                                        [innerHTML]="editorDataWelcome?editorDataWelcome:welcomeText"></div>
+                                </div>
+                            </div>
 
-                        <div cdkDropList [cdkDropListData]="webFormControlList" class="example-list"
-                            (cdkDropListDropped)="drop($event)">
+                            <div cdkDropList [cdkDropListData]="webFormControlList" class="example-list"
+                                (cdkDropListDropped)="drop($event)">
 
-                            <form #registerForm="ngForm" (ngSubmit)="register(registerForm)">
-                                <div class="dsarform-box" *ngFor="let webcontrol of webFormControlList; let j = index;"
-                                    cdkDrag [cdkDragDisabled]="true">
-                                   
-                                    <div *ngIf="webcontrol.controlId === 'requesttype'" class="col-sm-6">
-                                        <label>{{webcontrol.controllabel}} </label>
-                                        <div
-                                            *ngIf="webcontrol.control === 'select' && webcontrol.controlId === 'requesttype'">
-                                            <select class="form-control" name="{{webcontrol.controllabel}}"
-                                                [(ngModel)]="requestObject[webcontrol.controllabel]">
-                                                <option *ngFor="let opt of webcontrol.selectOptions"
-                                                    [value]="opt.request_type_id">
-                                                    {{ opt.name }}
-                                                </option>
-                                            </select>
-                                            <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
-                                        </div>
-                                        <div class="form-check"
-                                            *ngIf="webcontrol.control === 'radio' && webcontrol.controlId === 'requesttype'">
-                                            <!-- *ngIf="radioBtnType"-->
-                                            <div *ngFor="let opt of webcontrol.selectOptions" class="form-check-inline">
-                                                <input class="form-check-input" type="radio" name="requesttype"
-                                                    [value]='opt.request_type_id'
-                                                    [(ngModel)]="requestObject[opt.name]" />{{opt.name}}
+                                <form #registerForm="ngForm" (ngSubmit)="register(registerForm)">
+                                    <div class="dsarform-box"
+                                        *ngFor="let webcontrol of webFormControlList; let j = index;" cdkDrag
+                                        [cdkDragDisabled]="true">
+
+                                        <div *ngIf="webcontrol.controlId === 'requesttype'" class="col-sm-6">
+                                            <label>{{webcontrol.controllabel}} </label>
+                                            <div
+                                                *ngIf="webcontrol.control === 'select' && webcontrol.controlId === 'requesttype'">
+                                                <select class="form-control" name="{{webcontrol.controllabel}}"
+                                                    [(ngModel)]="requestObject[webcontrol.controllabel]">
+                                                    <option *ngFor="let opt of webcontrol.selectOptions"
+                                                        [value]="opt.request_type_id">
+                                                        {{ opt.name }}
+                                                    </option>
+                                                </select>
                                                 <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
+                                            </div>
+                                            <div class="form-check"
+                                                *ngIf="webcontrol.control === 'radio' && webcontrol.controlId === 'requesttype'">
+                                                <!-- *ngIf="radioBtnType"-->
+                                                <div *ngFor="let opt of webcontrol.selectOptions"
+                                                    class="form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="requesttype"
+                                                        [value]='opt.request_type_id'
+                                                        [(ngModel)]="requestObject[opt.name]" />{{opt.name}}
+                                                    <input type="hidden" name="{{webcontrol.indexCount}}"
+                                                        [ngModel]="j+1" />
 
+                                                </div>
+                                            </div>
+                                            <div class="form-check"
+                                                *ngIf="webcontrol.control === 'checkbox' && webcontrol.controlId === 'requesttype'">
+                                                <!-- *ngIf="checkboxBtnType"-->
+                                                <div *ngFor="let opt of webcontrol.selectOptions; let i = index;"
+                                                    class="form-check-inline">
+                                                    <input class="form-check-input" type="checkbox"
+                                                        name="{{webcontrol.controllabel}}" [value]='opt.request_type_id'
+                                                        [(ngModel)]="requestObject[opt.name]" />{{opt.name}}
+                                                    <input type="hidden" name="{{webcontrol.indexCount}}"
+                                                        [ngModel]="j+1" />
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div *ngIf="webcontrol.controlId === 'subjecttype'" class="col-sm-6">
+                                            <!--webcontrol.control == 'select' && webcontrol.controlId === 'subjecttype' && isSubjectTypeSelected-->
+                                            <label>{{webcontrol.controllabel}} </label>
+                                            <div
+                                                *ngIf="webcontrol.control == 'select' && webcontrol.controlId === 'subjecttype'">
+                                                <!-- *ngIf="isSubjectTypeSelected"-->
+                                                <select class="form-control" name="{{webcontrol.controllabel}}"
+                                                    [(ngModel)]="requestObject[webcontrol.controllabel]">
+                                                    <option *ngFor="let userOpt of webcontrol.selectOptions"
+                                                        [value]="userOpt.subject_type_id">
+                                                        {{ userOpt.name }}
+                                                    </option>
+                                                </select>
+                                                <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
+                                            </div>
+                                            <div class="form-check"
+                                                *ngIf="webcontrol.control == 'radio' && webcontrol.controlId === 'subjecttype'">
+                                                <!--*ngIf="subjectTyperadioBtn"-->
+                                                <div *ngFor="let userOpt of webcontrol.selectOptions"
+                                                    class="form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="subjecttype"
+                                                        [value]='userOpt.subject_type_id'
+                                                        [(ngModel)]="requestObject[userOpt.name]" />
+                                                    {{userOpt.name}}
+                                                    <input type="hidden" name="{{webcontrol.indexCount}}"
+                                                        [ngModel]="j+1" />
+                                                </div>
+                                            </div>
+                                            <div
+                                                *ngIf="webcontrol.control == 'checkbox' && webcontrol.controlId === 'subjecttype'">
+                                                <!--*ngIf="subjectTypecheckboxBtnType"-->
+                                                <div *ngFor="let opt of webcontrol.selectOptions; let i = index;"
+                                                    class="form-check-inline">
+                                                    <input class="form-check-input" type="checkbox"
+                                                        name="{{webcontrol.controllabel}}" [value]='opt.subject_type_id'
+                                                        [(ngModel)]="requestObject[opt.name]" />{{opt.name}}
+                                                    <input type="hidden" name="{{webcontrol.indexCount}}"
+                                                        [ngModel]="j+1" />
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div *ngIf="webcontrol.control === 'textbox';else selectOption"
+                                            class="col-sm-6">
+                                            <label> {{webcontrol.controllabel}} </label>
+                                            <input class="form-control" type="text" name="{{webcontrol.controllabel}}"
+                                                [(ngModel)]="requestObject[webcontrol.controllabel]" />
+                                            <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
+
+                                        </div>
+                                        <div *ngIf="webcontrol.control === 'textarea'" class="col-sm-6">
+                                            <label> {{webcontrol.controllabel}} </label>
+                                            <textarea class="form-control" type="text"
+                                                name="{{webcontrol.controllabel}}"
+                                                [(ngModel)]="requestObject[webcontrol.controllabel]"></textarea>
+                                            <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
+
+                                        </div>
+                                        <div *ngIf="webcontrol.control === 'datepicker'" class="col-sm-6">
+                                            <label> {{webcontrol.controllabel}} </label>
+                                            <input class="form-control" type="date" name="{{webcontrol.controllabel}}"
+                                                #datePicker="ngModel"
+                                                [(ngModel)]="requestObject[webcontrol.controllabel]" />
+                                            <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
+                                            <div *ngIf="registerForm.submitted && datePicker.invalid"
+                                                class="invalid-feedback">
+                                                <div *ngIf="datePicker.errors.required">{{webcontrol.controllabel}} is
+                                                    required</div>
                                             </div>
                                         </div>
                                         <div class="form-check"
-                                            *ngIf="webcontrol.control === 'checkbox' && webcontrol.controlId === 'requesttype'">
-                                            <!-- *ngIf="checkboxBtnType"-->
-                                            <div *ngFor="let opt of webcontrol.selectOptions; let i = index;"
-                                                class="form-check-inline">
-                                                <input class="form-check-input" type="checkbox"
-                                                    name="{{webcontrol.controllabel}}" [value]='opt.request_type_id'
-                                                    [(ngModel)]="requestObject[opt.name]" />{{opt.name}}
-                                                <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
-
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                    <div *ngIf="webcontrol.controlId === 'subjecttype'" class="col-sm-6">
-                                        <!--webcontrol.control == 'select' && webcontrol.controlId === 'subjecttype' && isSubjectTypeSelected-->
-                                        <label>{{webcontrol.controllabel}} </label>
-                                        <div *ngIf="webcontrol.control == 'select' && webcontrol.controlId === 'subjecttype'">
-                                            <!-- *ngIf="isSubjectTypeSelected"-->
-                                            <select class="form-control" name="{{webcontrol.controllabel}}"
-                                                [(ngModel)]="requestObject[webcontrol.controllabel]">
-                                                <option *ngFor="let userOpt of webcontrol.selectOptions"
-                                                    [value]="userOpt.subject_type_id">
-                                                    {{ userOpt.name }}
-                                                </option>
-                                            </select>
-                                            <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
-                                        </div>
-                                        <div class="form-check"
-                                            *ngIf="webcontrol.control == 'radio' && webcontrol.controlId === 'subjecttype'">
-                                            <!--*ngIf="subjectTyperadioBtn"-->
+                                            *ngIf="webcontrol.control === 'radio' && webcontrol.controlId !== 'requesttype' && webcontrol.controlId !== 'subjecttype'">
+                                            <label class="heading">{{webcontrol.controllabel}}</label>
                                             <div *ngFor="let userOpt of webcontrol.selectOptions"
                                                 class="form-check-inline">
-                                                <input class="form-check-input" type="radio" name="subjecttype"
-                                                    [value]='userOpt.subject_type_id'
+                                                <input class="form-check-input" type="radio"
+                                                    name="{{webcontrol.controllabel}}" [value]='userOpt.name'
                                                     [(ngModel)]="requestObject[userOpt.name]" />
                                                 {{userOpt.name}}
                                                 <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
+
                                             </div>
                                         </div>
-                                        <div
-                                            *ngIf="webcontrol.control == 'checkbox' && webcontrol.controlId === 'subjecttype'">
-                                            <!--*ngIf="subjectTypecheckboxBtnType"-->
+                                        <ng-template #selectOption>
+                                            <div class="col-sm-6"
+                                                *ngIf="webcontrol.control == 'select' && webcontrol.controlId !== 'state' && webcontrol.controlId !== 'country' && webcontrol.controlId !== 'subjecttype' && webcontrol.controlId !== 'requesttype'">
+                                                <label> {{webcontrol.controllabel}} </label>
+                                                <select class="form-control" name="{{webcontrol.controllabel}}"
+                                                    [(ngModel)]="requestObject[webcontrol.controllabel]">
+                                                    <option *ngFor="let data of webcontrol.selectOptions"
+                                                        [value]="data.id">
+                                                        {{ data.name }}
+                                                    </option>
+                                                </select>
+                                                <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
+
+                                            </div>
+                                            <div class="col-sm-6"
+                                                *ngIf="webcontrol.control == 'select' && webcontrol.controlId == 'country'">
+                                                <label> {{webcontrol.controllabel}} </label>
+                                                <select class="form-control" name="{{webcontrol.controllabel}}"
+                                                    [(ngModel)]="requestObject[webcontrol.controllabel]"
+                                                    (change)="onSelectCountry($event.target.value)">
+                                                    <option *ngFor="let data of contactList" [value]="data.id">
+                                                        {{ data.name }}
+                                                    </option>
+                                                </select>
+                                                <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
+                                            </div>
+
+                                            <div class="col-sm-6"
+                                                *ngIf="webcontrol.control == 'select' && webcontrol.controlId == 'state'">
+                                                <label> {{webcontrol.controllabel}} </label>
+                                                <select class="form-control" name="{{webcontrol.controllabel}}"
+                                                    [(ngModel)]="requestObject[webcontrol.controllabel]">
+                                                    <option *ngFor="let data of filteredStateList" [value]="data.name">
+                                                        {{ data.name }}
+                                                    </option>
+                                                </select>
+                                                <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
+                                            </div>
+
+                                        </ng-template>
+                                        <div class="form-check"
+                                            *ngIf="webcontrol.control == 'checkbox' && webcontrol.controlId !== 'subjecttype' && webcontrol.controlId !== 'requesttype'">
+                                            <label class="form-check-label"> {{webcontrol.controllabel}}</label>
                                             <div *ngFor="let opt of webcontrol.selectOptions; let i = index;"
                                                 class="form-check-inline">
                                                 <input class="form-check-input" type="checkbox"
-                                                    name="{{webcontrol.controllabel}}" [value]='opt.subject_type_id'
+                                                    name="{{webcontrol.controllabel}}" [value]='opt.id'
                                                     [(ngModel)]="requestObject[opt.name]" />{{opt.name}}
                                                 <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
 
                                             </div>
                                         </div>
 
+                                        <!-- </ng-container> -->
                                     </div>
-                                    <div *ngIf="webcontrol.control === 'textbox';else selectOption" class="col-sm-6">
-                                        <label> {{webcontrol.controllabel}} </label>
-                                        <input class="form-control" type="text" name="{{webcontrol.controllabel}}"
-                                            [(ngModel)]="requestObject[webcontrol.controllabel]" />
-                                        <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
-
-                                    </div>
-                                    <div *ngIf="webcontrol.control === 'textarea'" class="col-sm-6">
-                                        <label> {{webcontrol.controllabel}} </label>
-                                        <textarea class="form-control" type="text" name="{{webcontrol.controllabel}}"
-                                            [(ngModel)]="requestObject[webcontrol.controllabel]"></textarea>
-                                        <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
-
-                                    </div>
-                                    <div *ngIf="webcontrol.control === 'datepicker'" class="col-sm-6">
-                                        <label> {{webcontrol.controllabel}} </label>
-                                        <input class="form-control" type="date" name="{{webcontrol.controllabel}}"
-                                            #datePicker="ngModel"
-                                            [(ngModel)]="requestObject[webcontrol.controllabel]" />
-                                        <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
-                                        <div *ngIf="registerForm.submitted && datePicker.invalid"
-                                            class="invalid-feedback">
-                                            <div *ngIf="datePicker.errors.required">{{webcontrol.controllabel}} is
-                                                required</div>
-                                        </div>
-                                    </div>
-                                    <div class="form-check"
-                                        *ngIf="webcontrol.control === 'radio' && webcontrol.controlId !== 'requesttype' && webcontrol.controlId !== 'subjecttype'">
-                                        <label class="heading">{{webcontrol.controllabel}}</label>
-                                        <div *ngFor="let userOpt of webcontrol.selectOptions" class="form-check-inline">
-                                            <input class="form-check-input" type="radio"
-                                                name="{{webcontrol.controllabel}}" [value]='userOpt.name'
-                                                [(ngModel)]="requestObject[userOpt.name]" />
-                                            {{userOpt.name}}
-                                            <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
-
-                                        </div>
-                                    </div>
-                                    <ng-template #selectOption>
-                                        <div class="col-sm-6"
-                                            *ngIf="webcontrol.control == 'select' && webcontrol.controlId !== 'state' && webcontrol.controlId !== 'country' && webcontrol.controlId !== 'subjecttype' && webcontrol.controlId !== 'requesttype'">
-                                            <label> {{webcontrol.controllabel}} </label>
-                                            <select class="form-control" name="{{webcontrol.controllabel}}"
-                                                [(ngModel)]="requestObject[webcontrol.controllabel]">
-                                                <option *ngFor="let data of webcontrol.selectOptions" [value]="data.id">
-                                                    {{ data.name }}
-                                                </option>
-                                            </select>
-                                            <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
-
-                                        </div>
-                                        <div class="col-sm-6"
-                                            *ngIf="webcontrol.control == 'select' && webcontrol.controlId == 'country'">
-                                            <label> {{webcontrol.controllabel}} </label>
-                                            <select class="form-control" name="{{webcontrol.controllabel}}"
-                                                [(ngModel)]="requestObject[webcontrol.controllabel]" (change)="onSelectCountry($event.target.value)">
-                                                <option *ngFor="let data of contactList" [value]="data.id">
-                                                    {{ data.name }}
-                                                </option>
-                                            </select>
-                                            <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
-                                        </div>
-
-                                        <div class="col-sm-6"
-                                            *ngIf="webcontrol.control == 'select' && webcontrol.controlId == 'state'">
-                                            <label> {{webcontrol.controllabel}} </label>
-                                            <select class="form-control" name="{{webcontrol.controllabel}}"
-                                                [(ngModel)]="requestObject[webcontrol.controllabel]">
-                                                <option *ngFor="let data of filteredStateList" [value]="data.name">
-                                                    {{ data.name }}
-                                                </option>
-                                            </select>
-                                            <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
-                                        </div>
-                                        
-                                    </ng-template>
-                                    <div class="form-check"
-                                        *ngIf="webcontrol.control == 'checkbox' && webcontrol.controlId !== 'subjecttype' && webcontrol.controlId !== 'requesttype'">
-                                        <label class="form-check-label"> {{webcontrol.controllabel}}</label>
-                                        <div *ngFor="let opt of webcontrol.selectOptions; let i = index;"
-                                            class="form-check-inline">
-                                            <input class="form-check-input" type="checkbox"
-                                                name="{{webcontrol.controllabel}}" [value]='opt.id'
-                                                [(ngModel)]="requestObject[opt.name]" />{{opt.name}}
-                                            <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
-
-                                        </div>
-                                    </div>
-
-                                    <!-- </ng-container> -->
+                                    <div class="col-sm-3 mt-2 mb-2 ml-2"> <button class="btn btn-primary btn-block"
+                                            [disabled]="true" type="submit">
+                                            Submit </button></div>
+                                </form>
+                                <div class="quilleditor-wrapper py-2 border-top">
+                                    <div class="quilleditor" [ngStyle]="footerStyle()"
+                                        [innerHTML]="editorDataFooter?editorDataFooter:footerText"></div>
                                 </div>
-                                <div class="col-sm-3 mt-2 mb-2 ml-2"> <button class="btn btn-primary btn-block"
-                                        [disabled]="true" type="submit">
-                                        Submit </button></div>
-                            </form>
-                            <div class="quilleditor-wrapper py-2 border-top">
-                                <div class="quilleditor" [ngStyle]="footerStyle()"
-                                    [innerHTML]="editorDataFooter?editorDataFooter:footerText"></div>
+
                             </div>
 
                         </div>
-                      
                     </div>
-                </div>
-                <div class="btn-toolbar sw-toolbar sw-toolbar-bottom justify-content-end mb-2">
-                    <div class="btn-group sw-btn-group mb-2 mr-2" role="group">
-                        <button class="btn btn-secondary sw-btn-prev" (click)="nav.select(1)">Previous</button>
-                        <button class="btn btn-secondary sw-btn-next" [disabled]="active === 1"
-                            (click)="publishCCPAFormConfiguration(registerForm)">Next</button>
+                    <div class="btn-toolbar sw-toolbar sw-toolbar-bottom justify-content-end mb-2">
+                        <div class="btn-group sw-btn-group mb-2 mr-2" role="group">
+                            <button class="btn btn-secondary sw-btn-prev" (click)="nav.select(1)">Previous</button>
+                            <button class="btn btn-secondary sw-btn-next" [disabled]="active === 1"
+                                (click)="publishCCPAFormConfiguration(registerForm)">Next</button>
+                        </div>
                     </div>
-                </div>
-            </ng-template>
-        </li>
-        <li [ngbNavItem]="3">
-            <a ngbNavLink>3 Settings</a>
-            <ng-template ngbNavContent>
-                <div class="col-5">
+                </ng-template>
+            </li>
+            <li [ngbNavItem]="3">
+                <a ngbNavLink>3 Settings</a>
+                <ng-template ngbNavContent>
+                    <div class="col-5">
 
-                    <div class="form-group mg-b-5">
-                        <label for="defaultapprover"
-                            class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">
-                            Default Approver</label>
-                        <select class="form-control" name="user" #userselect="ngModel" [(ngModel)]="defaultapprover"
-                            [ngClass]="{ 'is-invalid':  userselect.invalid && userselect.errors?.required}" required>
-                            <ng-container *ngFor="let opt of ApproverList">
-                                <option *ngIf="opt.user_name !== ' '" [value]="opt.approver_id">
-                                    {{ opt.user_name }}
-                                </option>
-                            </ng-container>
+                        <div class="form-group mg-b-5">
+                            <label for="defaultapprover"
+                                class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">
+                                Default Approver</label>
+                            <select class="form-control" name="user" #userselect="ngModel" [(ngModel)]="defaultapprover"
+                                [ngClass]="{ 'is-invalid':  userselect.invalid && userselect.errors?.required}"
+                                required>
+                                <ng-container *ngFor="let opt of ApproverList">
+                                    <option *ngIf="opt.user_name !== ' '" [value]="opt.approver_id">
+                                        {{ opt.user_name }}
+                                    </option>
+                                </ng-container>
 
-                        </select>
-                        <div *ngIf="userselect.invalid" class="invalid-feedback">
-                            <div *ngIf="userselect.errors?.required">Default approver is required</div>
+                            </select>
+                            <div *ngIf="userselect.invalid" class="invalid-feedback">
+                                <div *ngIf="userselect.errors?.required">Default approver is required</div>
+                            </div>
+
+                        </div>
+                        <div class="form-group mg-b-5">
+                            <label for="daysleft"
+                                class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">Default days to
+                                respond</label>
+                            <input type="text" class="form-control" [ngModelOptions]="{standalone: true}"
+                                [(ngModel)]="daysleft">
                         </div>
 
+                        <div class="form-group mg-b-5"><a target="_blank" *ngIf="crid"
+                                class="btn btn-secondary sw-btn-prev"
+                                href="http://develop-privacyportal.adzpier.com/ccpa/form/{{orgId}}/{{propId}}/{{crid}}">Preview</a>
+                        </div>
                     </div>
-                    <div class="form-group mg-b-5">
-                        <label for="daysleft"
-                            class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">Default days to
-                            respond</label>
-                        <input type="text" class="form-control" [ngModelOptions]="{standalone: true}"
-                            [(ngModel)]="daysleft">
-                    </div>
-
-                    <div class="form-group mg-b-5"><a target="_blank" *ngIf="crid" class="btn btn-secondary sw-btn-prev"
-                            href="http://develop-privacyportal.adzpier.com/ccpa/form/{{orgId}}/{{propId}}/{{crid}}">Preview</a>
-                    </div>
-                </div>
-                <!-- <div class="form-group mg-b-5"><a target="_blank" *ngIf="crid" class="btn btn-secondary sw-btn-prev"
+                    <!-- <div class="form-group mg-b-5"><a target="_blank" *ngIf="crid" class="btn btn-secondary sw-btn-prev"
                         [routerLink]="['/editwebforms',  crid ]">Local Preview</a></div> -->
 
 
-                <div class="btn-toolbar sw-toolbar sw-toolbar-bottom justify-content-end">
-                    <div class="btn-group mr-2 mb-2 sw-btn-group" role="group">
-                        <button class="btn btn-secondary sw-btn-prev" (click)="nav.select(2)">Previous</button>
-                        <button class="btn btn-secondary sw-btn-next" [disabled]="active === 1" type="submit"
-                            (click)="createDraft()">Next</button>
-                        <!--(click)="nav.select(4)"-->
+                    <div class="btn-toolbar sw-toolbar sw-toolbar-bottom justify-content-end">
+                        <div class="btn-group mr-2 mb-2 sw-btn-group" role="group">
+                            <button class="btn btn-secondary sw-btn-prev" (click)="nav.select(2)">Previous</button>
+                            <button class="btn btn-secondary sw-btn-next" [disabled]="active === 1" type="submit"
+                                (click)="createDraft()">Next</button>
+                            <!--(click)="nav.select(4)"-->
+                        </div>
                     </div>
-                </div>
-            </ng-template>
-        </li>
-        <li [ngbNavItem]="4">
-            <a ngbNavLink>4 Publish</a>
-            <ng-template ngbNavContent>
-                <p>Four</p>
-                <div class="btn-toolbar sw-toolbar sw-toolbar-bottom justify-content-end">
-                    <div class="btn-group mr-2 mb-2 sw-btn-group" role="group">
-                        <button class="btn btn-secondary sw-btn-prev" (click)="nav.select(3)">Previous</button>
-                        <button class="btn btn-secondary sw-btn-next" [disabled]="true">Submit</button>
+                </ng-template>
+            </li>
+            <li [ngbNavItem]="4">
+                <a ngbNavLink>4 Publish</a>
+                <ng-template ngbNavContent>
+                    <p>Four</p>
+                    <div class="btn-toolbar sw-toolbar sw-toolbar-bottom justify-content-end">
+                        <div class="btn-group mr-2 mb-2 sw-btn-group" role="group">
+                            <button class="btn btn-secondary sw-btn-prev" (click)="nav.select(3)">Previous</button>
+                            <button class="btn btn-secondary sw-btn-next" [disabled]="true">Submit</button>
+                        </div>
                     </div>
-                </div>
-            </ng-template>
-        </li>
-        <li>
-            <a target="_blank" *ngIf="crid" class="btn btn-sm btn-primary"
-                href="http://develop-privacyportal.adzpier.com/ccpa/form/{{orgId}}/{{propId}}/{{crid}}">Preview</a>
-        </li>
-    </ul>
-    <div [ngbNavOutlet]="nav"></div>
+                </ng-template>
+            </li>
+            <li>
+                <a target="_blank" *ngIf="crid" class="btn btn-sm btn-primary"
+                    href="http://develop-privacyportal.adzpier.com/ccpa/form/{{orgId}}/{{propId}}/{{crid}}">Preview</a>
+            </li>
+        </ul>
+        <div [ngbNavOutlet]="nav"></div>
     </div>
 </div>
 
@@ -715,8 +770,7 @@
         <form [formGroup]="quillEditorText" (ngSubmit)="onSubmitQuillEditorData()">
             <quill-editor formControlName="editor" [modules]="quillConfig" [(ngModel)]="editorDataWelcome"
                 [styles]="{height: '200px'}"></quill-editor>
-            <button class="btn btn-outline-dark float-left mt-2"
-                (click)="modal.dismiss('Close Clicked')">close</button>
+            <button class="btn btn-outline-dark float-left mt-2" (click)="modal.dismiss('Close Clicked')">close</button>
             <button class="btn btn-primary float-right mt-2" type="submit">save</button>
         </form>
     </div>

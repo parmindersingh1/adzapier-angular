@@ -18,7 +18,8 @@ export class DsarRequestdetailsComponent implements OnInit {
   requestDetails: any = [];
   active;
   disabled = true;
-
+  ApproverList: any = [];
+  approverName: any;
   respCDID: any;
   respCRID: any;
   respOID: any;
@@ -53,9 +54,9 @@ export class DsarRequestdetailsComponent implements OnInit {
     }
   };
   constructor(private activatedRoute: ActivatedRoute,
-    private router: Router,
-    private orgService: OrganizationService,
-    private dsarRequestService: DsarRequestService
+              private router: Router,
+              private orgService: OrganizationService,
+              private dsarRequestService: DsarRequestService
   ) { }
 
   ngOnInit() {
@@ -65,6 +66,7 @@ export class DsarRequestdetailsComponent implements OnInit {
     });
     this.getSelectedOrgIDPropertyID();
     this.loadDataRequestDetails();
+    this.getApprover();
     this.quillEditorText = new FormGroup({
       editor: new FormControl(null)
     });
@@ -105,6 +107,16 @@ export class DsarRequestdetailsComponent implements OnInit {
         this.respEmailID = data.response.request_data.email;
         this.respCDID = data.response.cdid;
       });
+  }
+
+  getApprover() {
+    this.orgService.getOrgTeamMembers(this.currentManagedOrgID).subscribe((data) => {
+      const key = 'response';
+      this.ApproverList = data[key];
+      const filterResponse = this.ApproverList.filter((t)=> t.approver_id === this.respApprover);
+      this.approverName = filterResponse[0].user_name;
+      return this.approverName;
+    });
   }
 
   onNavChange(changeEvent: NgbNavChangeEvent) {
