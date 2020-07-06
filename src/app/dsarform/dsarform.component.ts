@@ -501,7 +501,7 @@ export class DsarformComponent implements OnInit, OnDestroy {
     const keylabel = this.lblText.split(' ').join('_');
     if (this.isSubjectType) {
       subjectObj = {
-        subject_type_id:1, //  this.generateUUID()
+        subject_type_id: this.generateUUID(),
         active: true,
         created_at: new Date().toJSON(),
         updated_at: new Date().toJSON(),
@@ -511,7 +511,7 @@ export class DsarformComponent implements OnInit, OnDestroy {
       //   console.log(this.selectOptions, 'selectOptions types..');
     } else {
       requestObj = {
-        request_type_id: 1, // this.generateUUID()
+        request_type_id: this.generateUUID(),
         active: true,
         created_at: new Date().toJSON(),
         updated_at: new Date().toJSON(),
