@@ -44,6 +44,8 @@ services:
     image: ${CI_REGISTRY_IMAGE}:${CI_COMMIT_TAG:-$CI_COMMIT_REF_NAME-$TAG}
     networks:
       - apps
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
     logging:
       driver: "json-file"
       options:
