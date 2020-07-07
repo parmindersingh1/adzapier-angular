@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import {BillingService} from '../_services/billing.service';
-import { CompanyService } from '../company.service';
+import { BillingService } from 'src/app/_services/billing.service';
+import { CompanyService } from 'src/app/company.service';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
-import {environment} from '../../environments/environment';
+import { environment } from 'src/environments/environment.develop';
 import {ActivatedRoute} from '@angular/router';
 import {NotificationsService} from 'angular2-notifications';
-import {notificationConfig} from '../_constant/notification.constant';
+import { notificationConfig } from 'src/app/_constant/notification.constant';
 
 
 

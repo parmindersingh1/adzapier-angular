@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { OrganizationService } from 'src/app/_services';
 import { DsarRequestService } from 'src/app/_services/dsar-request.service';
-import {NgbNavChangeEvent} from '@ng-bootstrap/ng-bootstrap';
+import { NgbNavChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 
 @Component({
@@ -18,7 +18,8 @@ export class DsarRequestdetailsComponent implements OnInit {
   requestDetails: any = [];
   active;
   disabled = true;
-
+  ApproverList: any = [];
+  approverName: any;
   respCDID: any;
   respCRID: any;
   respOID: any;
@@ -56,7 +57,7 @@ export class DsarRequestdetailsComponent implements OnInit {
               private router: Router,
               private orgService: OrganizationService,
               private dsarRequestService: DsarRequestService
-     ) { }
+  ) { }
 
   ngOnInit() {
     this.activatedRoute.paramMap.subscribe(params => {
@@ -65,11 +66,12 @@ export class DsarRequestdetailsComponent implements OnInit {
     });
     this.getSelectedOrgIDPropertyID();
     this.loadDataRequestDetails();
+    this.getApprover();
     this.quillEditorText = new FormGroup({
       editor: new FormControl(null)
     });
   }
-  
+
   getSelectedOrgIDPropertyID() {
     this.orgService.currentProperty.subscribe((response) => {
       if (response !== '') {
@@ -84,26 +86,36 @@ export class DsarRequestdetailsComponent implements OnInit {
       }
     });
   }
-  
+
   backToDSARRequest() {
     this.router.navigate(['privacy/dsar/dsar-requests']);
   }
 
   loadDataRequestDetails() {
     this.dsarRequestService.getDSARRequestDetails(this.currentManagedOrgID, this.currrentManagedPropID, this.requestID)
-    .subscribe((data) => {
-      this.requestDetails.push(data.response);
-      this.respApprover = data.response.approver;
-      this.respState = data.response.state;
-      this.respCity = data.response.city;
-      this.respCountry = data.response.country;
-      this.respCreatedAt = data.response.created_at;
-      this.respUpdatedAt = data.response.updated_at;
-      this.respDaysLeft = data.response.days_left;
-      this.respFirstName = data.response.first_name;
-      this.respLastName = data.response.last_name;
-      this.respEmailID = data.response.request_data.email;
-      this.respCDID = data.response.cdid;
+      .subscribe((data) => {
+        this.requestDetails.push(data.response);
+        this.respApprover = data.response.approver;
+        this.respState = data.response.state;
+        this.respCity = data.response.city;
+        this.respCountry = data.response.country;
+        this.respCreatedAt = data.response.created_at;
+        this.respUpdatedAt = data.response.updated_at;
+        this.respDaysLeft = data.response.days_left;
+        this.respFirstName = data.response.first_name;
+        this.respLastName = data.response.last_name;
+        this.respEmailID = data.response.request_data.email;
+        this.respCDID = data.response.cdid;
+      });
+  }
+
+  getApprover() {
+    this.orgService.getOrgTeamMembers(this.currentManagedOrgID).subscribe((data) => {
+      const key = 'response';
+      this.ApproverList = data[key];
+      const filterResponse = this.ApproverList.filter((t)=> t.approver_id === this.respApprover);
+      this.approverName = filterResponse[0].user_name;
+      return this.approverName;
     });
   }
 
@@ -130,27 +142,41 @@ export class DsarRequestdetailsComponent implements OnInit {
     //     this.previousTab = false;
     // }
   }
-  
 
-  tabSelection(tab){
+
+  tabSelection(tab) {
     switch (tab) {
       case 1:
-          this.previousTabOne = true;
-          break;
+        this.previousTabOne = true;
+        break;
       case 2:
-          this.previousTabTwo = true;
-          break;
+        this.previousTabTwo = true;
+        break;
       case 3:
-          this.previousTabThree = true;
-          break;
+        this.previousTabThree = true;
+        break;
       case 4:
-          this.previousTabFour = true;
-          break;
+        this.previousTabFour = true;
+        break;
       case 5:
         this.previousTabFive = true;
         break;
+    }
+
   }
-  
+
+  getDeadLine(createdDate, daysLeft) {
+    const dt = new Date(createdDate);
+    dt.setDate(dt.getDate() + this.getDueIn(createdDate, daysLeft));
+    return dt;
+  }
+
+  getDueIn(createdDate, daysLeft) {
+    const creationDate: any = new Date(createdDate);
+    const todaysDate: any = new Date(Date.now());
+    const diffTime = Math.abs(todaysDate - creationDate);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return daysLeft - diffDays;
   }
 
 }

@@ -91,7 +91,7 @@
           </thead>
           <tbody>
             <tr *ngFor="let obj of requestsList | paginate:paginationConfig">
-
+              
               <td><a (click)="viewDSARRequestDetails(obj.id)" title="{{obj.id}}">{{obj.id}}</a></td>
                 <td>{{obj.name}}</td>
                 <td>{{obj.org_name}}</td>

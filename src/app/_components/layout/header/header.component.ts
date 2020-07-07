@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { BsDropdownConfig } from 'ngx-bootstrap/dropdown';
 import { Organization } from 'src/app/_models/organization';
 import { mergeMap, switchMap, distinctUntilKeyChanged, distinctUntilChanged } from 'rxjs/operators';
+import { NgxUiLoaderService } from 'ngx-ui-loader';
 
 @Component({
   selector: 'app-header',
@@ -50,7 +51,8 @@ export class HeaderComponent implements OnInit {
     private activatedroute: ActivatedRoute,
     private orgservice: OrganizationService,
     private authService: AuthenticationService,
-    private userService: UserService
+    private userService: UserService,
+    private loading: NgxUiLoaderService,
   ) {
     this.authService.currentUser.subscribe(x => {
       this.currentUser = x;
@@ -213,7 +215,7 @@ export class HeaderComponent implements OnInit {
             { showlink: 'Dashboard', routerLink: '/pagenotfound', icon: 'bar-chart-2' },
             { showlink: 'Webforms', routerLink: '/privacy/dsar/webforms', icon: 'pie-chart' },
             { showlink: 'Requests', routerLink: '/privacy/dsar/dsar-requests', icon: 'fa fa-ticket-alt feather-16' },
-            { showlink: 'Work flow', routerLink: '/pagenotfound', icon: 'shield-off' },
+            { showlink: 'Work flow', routerLink: '/privacy/dsar/workflows', icon: 'shield-off' },
             { showlink: 'Cookie Category', routerLink: '/pagenotfound', icon: 'fab fa-microsoft feather-16' },
             { showlink: 'Cookie Banner', routerLink: '/pagenotfound', icon: 'fas fa-cookie feather-16' },
             { showlink: 'Consent Tracking', routerLink: '/pagenotfound', icon: 'fas fa-file-contract feather-16' },
@@ -273,7 +275,7 @@ export class HeaderComponent implements OnInit {
       this.selectedOrgProperties.push(obj);
       this.orgservice.setCurrentOrgWithProperty(obj);
       this.currentSelectedProperty();
-
+      this.router.navigate(['/privacy/dsar/webforms']);
     }
 
     // this.router.navigate(['/webforms']);
@@ -353,8 +355,9 @@ export class HeaderComponent implements OnInit {
   }
 
   loadOrganizationWithProperty() {
-    // this.orgPropertyMenu = this.orgservice.getOrganizationWithProperty();
+    this.loading.start();
     this.orgservice.getOrganizationWithProperty().subscribe((data) => {
+      this.loading.stop();
       this.orgPropertyMenu = data.response;
       if (data.response.length > 0) {
       this.rearrangeFormSequence(this.orgPropertyMenu);
