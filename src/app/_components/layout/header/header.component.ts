@@ -360,25 +360,30 @@ export class HeaderComponent implements OnInit {
       this.loading.stop();
       this.orgPropertyMenu = data.response;
       if (data.response.length > 0) {
-      this.rearrangeFormSequence(this.orgPropertyMenu);
-      this.selectedOrgProperties.length = 0;
-      this.activeProp = this.orgPropertyMenu[0].property[0].property_name;
-      const obj = {
-        organization_id: this.orgPropertyMenu[0].id,
-        organization_name: this.orgPropertyMenu[0].orgname,
-        property_id: this.orgPropertyMenu[0].property[0].property_id,
-        property_name: this.orgPropertyMenu[0].property[0].property_name,
-        user_id: this.userID
-      };
-      this.orgservice.changeCurrentSelectedProperty(obj);
-      // this.orgservice.getSelectedOrgProperty.emit(obj);
-      //  this.firstElement = false;
-      this.selectedOrgProperties.push(obj);
-      this.orgservice.setCurrentOrgWithProperty(obj);
-      this.currentSelectedProperty();
-    } else {
-      this.router.navigate(['settings/organizations']);
-    }
+        this.rearrangeFormSequence(this.orgPropertyMenu);
+        this.selectedOrgProperties.length = 0;
+        if (!this.isOrgPropertyExists()) {
+          this.activeProp = this.orgPropertyMenu[0].property[0].property_name;
+          const obj = {
+            organization_id: this.orgPropertyMenu[0].id,
+            organization_name: this.orgPropertyMenu[0].orgname,
+            property_id: this.orgPropertyMenu[0].property[0].property_id,
+            property_name: this.orgPropertyMenu[0].property[0].property_name,
+            user_id: this.userID
+          };
+          this.orgservice.changeCurrentSelectedProperty(obj);
+          // this.orgservice.getSelectedOrgProperty.emit(obj);
+          //  this.firstElement = false;
+          this.selectedOrgProperties.push(obj);
+          this.orgservice.setCurrentOrgWithProperty(obj);
+
+        } else {
+          this.currentSelectedProperty();
+        }
+
+      } else {
+        this.router.navigate(['settings/organizations']);
+      }
       // if (this.currentProperty === undefined) {
       //   this.selectedOrgProperties.length = 0;
       //   this.selectedOrgProperties.push(data.response[0].property[0]);
@@ -398,7 +403,7 @@ export class HeaderComponent implements OnInit {
   loadOrgPropertyFromLocal() {
     const orgDetails = this.orgservice.getCurrentOrgWithProperty();
     if (orgDetails !== undefined) {
-      if (orgDetails.user_id === this.userID) {
+      if (orgDetails.user_id) { //=== this.userID
         this.currentOrganization = orgDetails.organization_name ? orgDetails.organization_name : orgDetails.response.orgname;
         this.currentProperty = orgDetails.property_name;
         this.selectedOrgProperties.push(orgDetails);
@@ -421,6 +426,15 @@ export class HeaderComponent implements OnInit {
       return 0;
     });
     return dataArray;
+  }
+  //check whether organizaion property was earlier selected
+  isOrgPropertyExists(): boolean {
+    const orgDetails = this.orgservice.getCurrentOrgWithProperty();
+    if (orgDetails) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
 }

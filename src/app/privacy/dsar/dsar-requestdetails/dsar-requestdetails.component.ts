@@ -38,7 +38,12 @@ export class DsarRequestdetailsComponent implements OnInit {
   previousTabThree: any;
   previousTabFour: any;
   previousTabFive: any;
+  requestType: any;
+  subjectType: any;
+  workflowName: any;
   nextTab: any;
+  formName: any;
+  customFields: any;
   quillEditorText: FormGroup;
   private fb: FormBuilder;
   editorDataFooter: any;
@@ -66,7 +71,7 @@ export class DsarRequestdetailsComponent implements OnInit {
     });
     this.getSelectedOrgIDPropertyID();
     this.loadDataRequestDetails();
-    this.getApprover();
+  //  this.getApprover();
     this.quillEditorText = new FormGroup({
       editor: new FormControl(null)
     });
@@ -95,18 +100,25 @@ export class DsarRequestdetailsComponent implements OnInit {
     this.dsarRequestService.getDSARRequestDetails(this.currentManagedOrgID, this.currrentManagedPropID, this.requestID)
       .subscribe((data) => {
         this.requestDetails.push(data.response);
-        this.respApprover = data.response.approver;
-        this.respState = data.response.state;
-        this.respCity = data.response.city;
-        this.respCountry = data.response.country;
+        this.customFields = data.response.custom_data;
+        this.respApprover = data.response.approver_firstname + ' ' + data.response.approver_lastname;
+        this.respState = data.response.custom_data.state;
+        this.respCity = data.response.custom_data.city;
+        this.respCountry = data.response.custom_data.country;
         this.respCreatedAt = data.response.created_at;
         this.respUpdatedAt = data.response.updated_at;
         this.respDaysLeft = data.response.days_left;
-        this.respFirstName = data.response.first_name;
-        this.respLastName = data.response.last_name;
-        this.respEmailID = data.response.request_data.email;
-        this.respCDID = data.response.cdid;
+        this.respFirstName = data.response.custom_data.first_name;
+        this.respLastName = data.response.custom_data.last_name;
+        this.respEmailID = data.response.custom_data.email;
+        this.respCDID = data.response.id;
+        this.formName = data.response.form_name;
+        this.requestType = data.response.request_type;
+        this.subjectType = data.response.subject_type;
+        this.workflowName = data.response.workflow_name;
+        this.getCustomFields(this.customFields);
       });
+      
   }
 
   getApprover() {
@@ -179,4 +191,31 @@ export class DsarRequestdetailsComponent implements OnInit {
     return daysLeft - diffDays;
   }
 
+  getCustomFields(data:any){
+    // this.trimLabel = formControls.value.lblText.split(' ').join('_').toLowerCase();
+   // this.customFields
+   let updatedObj = [];
+   if(data !== undefined){
+    for (let k in data){
+
+        let value = data[k];
+        let key   = k.replace('_', ' ');
+        let updatedKey = this.capitalizeFirstLetter(key);
+        updatedObj[updatedKey] = value;
+    }
+
+   }
+   return updatedObj;
+  }
+
+
+
+  capitalizeFirstLetter(key:any) {
+    return key.charAt(0).toUpperCase() + key.slice(1);
+  }
+
 }
+
+    
+
+
