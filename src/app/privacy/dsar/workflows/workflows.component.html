@@ -28,6 +28,7 @@
             </div>
 
             <div class="card-body">
+                <!-- {{workflowList | json}} -->
                 <table class="table table-primary table-bordered">
                     <thead class="thead-primary">
                     <tr>
@@ -41,11 +42,11 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td></td>
-                            <!-- <td *ngFor="let item of workflowList">
-
-                            </td> -->
+                            <td *ngFor="let item of workflowList">
+                                {{item | json}}
+                            </td>
                         </tr>
+                        
                     </tbody>
                     </table>
             </div>
