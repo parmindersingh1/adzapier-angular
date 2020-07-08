@@ -98,7 +98,7 @@
                         <div class="col-sm">
                             <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Deadline
                             </label>
-                            <p class="mg-b-0">{{getDeadLine(respCreatedAt,respDaysLeft) | date:'medium'}}</p>
+                            <p class="mg-b-0" *ngIf="respCreatedAt && respDaysLeft">{{getDeadLine(respCreatedAt,respDaysLeft) | date:'medium'}}</p>
                         </div>
 
                         <div class="col-sm">
