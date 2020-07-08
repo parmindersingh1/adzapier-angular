@@ -2,11 +2,11 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AnalyticsComponent } from './analytics.component';
 import { AuthGuard } from 'src/app/_helpers';
-import {CcpaDsarComponent} from "./ccpa-dsar/ccpa-dsar.component";
+
 
 const routes: Routes = [
   {path: 'analytics', component: AnalyticsComponent,  canActivate: [AuthGuard]},
-  {path: 'ccpa-dsar', component: CcpaDsarComponent,  canActivate: [AuthGuard]}
+  {path: 'ccpa-dsar', loadChildren: () => import('./ccpa-dsar/ccpa-dsar.module').then(m => m.CcpaDsarModule) }
   ];
 
 @NgModule({
