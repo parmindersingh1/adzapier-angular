@@ -362,7 +362,7 @@ export class HeaderComponent implements OnInit {
       if (data.response.length > 0) {
         this.rearrangeFormSequence(this.orgPropertyMenu);
         this.selectedOrgProperties.length = 0;
-        if (!this.isOrgPropertyExists()) {
+        if (!this.isOrgPropertyExists(this.orgPropertyMenu)) {
           this.activeProp = this.orgPropertyMenu[0].property[0].property_name;
           const obj = {
             organization_id: this.orgPropertyMenu[0].id,
@@ -428,13 +428,10 @@ export class HeaderComponent implements OnInit {
     return dataArray;
   }
   //check whether organizaion property was earlier selected
-  isOrgPropertyExists(): boolean {
+  isOrgPropertyExists(data): boolean {
     const orgDetails = this.orgservice.getCurrentOrgWithProperty();
-    if (orgDetails) {
-      return true;
-    } else {
-      return false;
-    }
+    let result = data.filter((t)=>t.orgname == orgDetails.organization_name).length > 0;
+    return result;
   }
 
 }
