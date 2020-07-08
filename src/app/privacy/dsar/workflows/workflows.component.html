@@ -1,10 +1,54 @@
-<div class="container">
+<div class="container mb-0">
     <div class="mb-3">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb breadcrumb-style1 mg-b-0">
                 <li class="breadcrumb-item"><a routerLink="/webforms">DSAR</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Web Forms</li>
+                <li class="breadcrumb-item active" aria-current="page">Workflow</li>
             </ol>
         </nav>
+    </div>
+</div>
+
+<div>
+    <div class="col-lg-6 col-xl-12">
+        <div class="card">
+            <div class="card-header  d-flex align-items-center justify-content-between pd-y-10">
+                <span class="tx-12 tx-color-03 mg-b-0">
+                    <h6 class="mg-b-0">Request Details</h6>
+                    Current Status of DSAR Request
+                </span>
+                <div class="d-flex">
+                    
+                    <button class="btn btn-sm btn-white d-flex align-items-center mg-r-5" (click)="createWorkflow()">
+                        <span class="d-none d-sm-inline mg-l-5">
+                            <i class="fa fa-plus" aria-hidden="true"></i>
+                            Create</span></button>
+                </div>
+
+            </div>
+
+            <div class="card-body">
+                <table class="table table-primary table-bordered">
+                    <thead class="thead-primary">
+                    <tr>
+                        <th>Workflow Name</th>
+                        <th>Status</th>
+                        <th>Created By</th>
+                        <th>Last Updated by</th>
+                        <th>Last Update Date</th>
+                        <th>Created Date</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td></td>
+                            <!-- <td *ngFor="let item of workflowList">
+
+                            </td> -->
+                        </tr>
+                    </tbody>
+                    </table>
+            </div>
+        </div>
     </div>
 </div>

@@ -61,6 +61,8 @@ const routes: Routes = [
     path: 'privacy/dsar/workflows', loadChildren: () => import('./privacy/dsar/workflows/workflows.module')
     .then(m => m.WorkflowsModule)
   },
+  { path: 'privacy/dsar/createworkflow', loadChildren: () => import('./privacy/dsar/createworkflow/createworkflow.module')
+  .then(m => m.CreateworkflowModule) },
   { path: 'settings', loadChildren: () => import('./pagesettings/pagesettings.module').then(m => m.PagesettingsModule) },
   { path: 'editwebforms/:crid', loadChildren: () => import('./editwebform/editwebform.module').then(m => m.EditwebformModule) },
   { path: 'propertydashboard/:propid', component: PropertydashboardComponent, canActivate: [AuthGuard] },
