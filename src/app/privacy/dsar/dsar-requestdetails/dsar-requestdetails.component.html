@@ -34,7 +34,8 @@
 
                 </div>
                 <div class="card-body pd-10">
-<!-- {{requestDetails | json}} -->
+                <!-- {{requestDetails | json}} -->
+                
                     <div class="row row-sm pd-t-5">
                         <div class="col-sm">
                             <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Request
@@ -45,7 +46,7 @@
                             <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Request
                                 Types
                             </label>
-                            <p class="mg-b-0">--</p>
+                            <p class="mg-b-0">{{requestType}}</p>
                         </div>
                         <div class="col-sm">
                             <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Due
@@ -58,7 +59,7 @@
                             <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Date
                                 Opened
                             </label>
-                            <p class="mg-b-0">{{respCreatedAt}}</p>
+                            <p class="mg-b-0" *ngIf="respCreatedAt">{{respCreatedAt | date:'medium'}}</p>
                         </div>
 
                         <div class="col-sm">
@@ -71,7 +72,7 @@
                         <div class="col-sm ">
                             <label
                                 class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Workflow</label>
-                            <p class="mg-b-0">CCPA Workflow</p>
+                            <p class="mg-b-0">{{workflowName}}</p>
                         </div>
                     </div>
                     <div class="row row-sm pd-t-10 bd-t">
@@ -85,7 +86,7 @@
                             <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Subject
                                 Type
                             </label>
-                            <p class="mg-b-0">--</p>
+                            <p class="mg-b-0">{{subjectType}}</p>
                         </div>
                         <div class="col-sm">
                             <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Risk
@@ -97,23 +98,23 @@
                         <div class="col-sm">
                             <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Deadline
                             </label>
-                            <p class="mg-b-0">{{getDeadLine(respCreatedAt,respDaysLeft) | date:'medium'}}</p>
+                            <p class="mg-b-0" *ngIf="respCreatedAt && respDaysLeft">{{getDeadLine(respCreatedAt,respDaysLeft) | date:'medium'}}</p>
                         </div>
 
                         <div class="col-sm">
                             <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Approver
                             </label>
-                            <p class="mg-b-0">--</p>
+                            <p class="mg-b-0">{{respApprover}}</p>
                         </div>
 
 
                         <div class="col-sm ">
                             <label
                                 class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Form</label>
-                            <p class="mg-b-0">--</p>
+                            <p class="mg-b-0">{{formName}}</p>
                         </div>
                     </div>
-                    <div class="row row-sm pd-t-10 bd-t">
+                    <!-- <div class="row row-sm pd-t-10 bd-t">
                         <div class="col-sm">
                             <label
                                 class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Property</label>
@@ -136,24 +137,45 @@
                             <label
                                 class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Country</label>
 
-                            <p class="tx-13 tx-spacing-1  mg-b-0 ">United States</p>
+                            <p class="tx-13 tx-spacing-1  mg-b-0 ">{{respCountry}}</p>
                         </div>
+                        <div class="col-sm">
+                            <label
+                                class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">State</label>
 
+                            <p class="tx-13 tx-spacing-1  mg-b-0 ">{{respState}}</p>
+                        </div>
+                        <div class="col-sm">
+                            <label
+                                class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">City</label>
+
+                            <p class="tx-13 tx-spacing-1  mg-b-0 ">{{respCity}}</p>
+                        </div> 
                         <div class="col-sm">
                             <label
                                 class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Address</label>
-
-                            <!-- <p class="tx-13 tx-spacing-1  mg-b-0 ">pateld982@gmail.com</p> -->
                             <p class="tx-13 tx-spacing-1  mg-b-0">819 Waldeck Street Farmers Branch, TX 75244,
-                                United
-                                States
+                                United  States
                             </p>
 
                         </div>
                         <div class="col-sm col-1"></div>
 
-                    </div>
+                    </div> -->
+                    <div class="divwrapper">
+                        <div class="customdata">
+                            <label
+                                class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Property</label>
 
+                            <p class="tx-13 tx-spacing-1  mg-b-0 ">{{currentPropertyName}}</p>
+                        </div>
+                    <div *ngFor="let data of getCustomFields(customFields) | keyvalue">
+                        <div class="customdata">
+                        <label class="tx-sans">{{data.key}} </label>
+                        <p class="mg-b-0">{{data.value}}</p>
+                        </div>
+                      </div>
+                    </div>
                     <div class="shadowdiv">
                         <div class="divider-text mg-y-5">Advance Status</div>
                         <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs" [(activeId)]="active"

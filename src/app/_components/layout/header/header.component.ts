@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { BsDropdownConfig } from 'ngx-bootstrap/dropdown';
 import { Organization } from 'src/app/_models/organization';
 import { mergeMap, switchMap, distinctUntilKeyChanged, distinctUntilChanged } from 'rxjs/operators';
+import { NgxUiLoaderService } from 'ngx-ui-loader';
 
 @Component({
   selector: 'app-header',
@@ -50,7 +51,8 @@ export class HeaderComponent implements OnInit {
     private activatedroute: ActivatedRoute,
     private orgservice: OrganizationService,
     private authService: AuthenticationService,
-    private userService: UserService
+    private userService: UserService,
+    private loading: NgxUiLoaderService,
   ) {
     this.authService.currentUser.subscribe(x => {
       this.currentUser = x;
@@ -213,7 +215,7 @@ export class HeaderComponent implements OnInit {
             { showlink: 'Dashboard', routerLink: '/pagenotfound', icon: 'bar-chart-2' },
             { showlink: 'Webforms', routerLink: '/privacy/dsar/webforms', icon: 'pie-chart' },
             { showlink: 'Requests', routerLink: '/privacy/dsar/dsar-requests', icon: 'fa fa-ticket-alt feather-16' },
-            { showlink: 'Work flow', routerLink: '/pagenotfound', icon: 'shield-off' },
+            { showlink: 'Work flow', routerLink: '/privacy/dsar/workflows', icon: 'shield-off' },
             { showlink: 'Cookie Category', routerLink: '/pagenotfound', icon: 'fab fa-microsoft feather-16' },
             { showlink: 'Cookie Banner', routerLink: '/pagenotfound', icon: 'fas fa-cookie feather-16' },
             { showlink: 'Consent Tracking', routerLink: '/pagenotfound', icon: 'fas fa-file-contract feather-16' },
@@ -353,29 +355,35 @@ export class HeaderComponent implements OnInit {
   }
 
   loadOrganizationWithProperty() {
-    // this.orgPropertyMenu = this.orgservice.getOrganizationWithProperty();
+    this.loading.start();
     this.orgservice.getOrganizationWithProperty().subscribe((data) => {
+      this.loading.stop();
       this.orgPropertyMenu = data.response;
       if (data.response.length > 0) {
-      this.rearrangeFormSequence(this.orgPropertyMenu);
-      this.selectedOrgProperties.length = 0;
-      this.activeProp = this.orgPropertyMenu[0].property[0].property_name;
-      const obj = {
-        organization_id: this.orgPropertyMenu[0].id,
-        organization_name: this.orgPropertyMenu[0].orgname,
-        property_id: this.orgPropertyMenu[0].property[0].property_id,
-        property_name: this.orgPropertyMenu[0].property[0].property_name,
-        user_id: this.userID
-      };
-      this.orgservice.changeCurrentSelectedProperty(obj);
-      // this.orgservice.getSelectedOrgProperty.emit(obj);
-      //  this.firstElement = false;
-      this.selectedOrgProperties.push(obj);
-      this.orgservice.setCurrentOrgWithProperty(obj);
-      this.currentSelectedProperty();
-    } else {
-      this.router.navigate(['settings/organizations']);
-    }
+        this.rearrangeFormSequence(this.orgPropertyMenu);
+        this.selectedOrgProperties.length = 0;
+        if (!this.isOrgPropertyExists()) {
+          this.activeProp = this.orgPropertyMenu[0].property[0].property_name;
+          const obj = {
+            organization_id: this.orgPropertyMenu[0].id,
+            organization_name: this.orgPropertyMenu[0].orgname,
+            property_id: this.orgPropertyMenu[0].property[0].property_id,
+            property_name: this.orgPropertyMenu[0].property[0].property_name,
+            user_id: this.userID
+          };
+          this.orgservice.changeCurrentSelectedProperty(obj);
+          // this.orgservice.getSelectedOrgProperty.emit(obj);
+          //  this.firstElement = false;
+          this.selectedOrgProperties.push(obj);
+          this.orgservice.setCurrentOrgWithProperty(obj);
+
+        } else {
+          this.currentSelectedProperty();
+        }
+
+      } else {
+        this.router.navigate(['settings/organizations']);
+      }
       // if (this.currentProperty === undefined) {
       //   this.selectedOrgProperties.length = 0;
       //   this.selectedOrgProperties.push(data.response[0].property[0]);
@@ -395,7 +403,7 @@ export class HeaderComponent implements OnInit {
   loadOrgPropertyFromLocal() {
     const orgDetails = this.orgservice.getCurrentOrgWithProperty();
     if (orgDetails !== undefined) {
-      if (orgDetails.user_id === this.userID) {
+      if (orgDetails.user_id) { //=== this.userID
         this.currentOrganization = orgDetails.organization_name ? orgDetails.organization_name : orgDetails.response.orgname;
         this.currentProperty = orgDetails.property_name;
         this.selectedOrgProperties.push(orgDetails);
@@ -418,6 +426,15 @@ export class HeaderComponent implements OnInit {
       return 0;
     });
     return dataArray;
+  }
+  //check whether organizaion property was earlier selected
+  isOrgPropertyExists(): boolean {
+    const orgDetails = this.orgservice.getCurrentOrgWithProperty();
+    if (orgDetails) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
 }

@@ -79,7 +79,7 @@ export class ResetpasswordComponent implements OnInit {
       .subscribe((data) => {
         if (data) {
           this.show = true;
-          this.successmessage = data;
+          this.successmessage = 'Password has been reset successfully!';
           this.router.navigate(['/login']);
         }
       }, (error) => {
