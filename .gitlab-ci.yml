@@ -155,7 +155,7 @@ deploy-to-swarm-develop:
     - echo $RUNNING_REPLICAS
     - |
       if [[ $RUNNING_REPLICAS == 0 ]]; then
-        RUNNING_REPLICAS=`expr $RUNNING_REPLICAS + 1`
+        RUNNING_REPLICAS=`expr $RUNNING_REPLICAS + $SERVICE_MIN_REPLICAS`
       fi
     - echo $RUNNING_REPLICAS
     - SCALABLE=`expr $RUNNING_REPLICAS \* $SERVICE_MIN_REPLICAS`
@@ -191,7 +191,7 @@ deploy-to-swarm-staging:
     - echo $RUNNING_REPLICAS
     - |
       if [[ $RUNNING_REPLICAS == 0 ]]; then
-        RUNNING_REPLICAS=`expr $RUNNING_REPLICAS + 1`
+        RUNNING_REPLICAS=`expr $RUNNING_REPLICAS + $SERVICE_MIN_REPLICAS`
       fi
     - echo $RUNNING_REPLICAS
     - SCALABLE=`expr $RUNNING_REPLICAS \* $SERVICE_MIN_REPLICAS`
