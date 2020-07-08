@@ -161,7 +161,7 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
           show: true,
           color: 'rgba(72, 94, 144, .1)',
           min: 0,
-          max: requestsChartCount,
+          max: requestsChartCount * 2,
           font: {
             size: 10,
             color: '#8392a5'
