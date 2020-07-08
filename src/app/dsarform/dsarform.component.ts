@@ -11,6 +11,7 @@ import { Location } from '@angular/common';
 import { EditorChangeContent, EditorChangeSelection } from 'ngx-quill';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
+import { WorkflowService } from '../_services/workflow.service';
 
 @Component({
   selector: 'app-dsarform',
@@ -91,7 +92,7 @@ export class DsarformComponent implements OnInit, OnDestroy {
   stateList: any;
   contactList: any;
   filteredStateList: any;
-
+  workFlowList: any;
   controlOption = [
     {
       id: 1,
@@ -155,12 +156,14 @@ export class DsarformComponent implements OnInit, OnDestroy {
   headerLogoPath: any;
   ApproverList: any = [];
   defaultapprover: any;
+  workflow: any;
   daysleft: any = 45;
   public reqURLObj = {};
   constructor(private fb: FormBuilder, private ccpaRequestService: CcparequestService,
     private organizationService: OrganizationService,
     private dsarFormService: DsarformService,
     private ccpaFormConfigService: CCPAFormConfigurationService,
+    private workFlowService: WorkflowService,
     private router: Router, private location: Location,
     private activatedRoute: ActivatedRoute,
     private loadingbar: NgxUiLoaderService,
@@ -288,6 +291,7 @@ export class DsarformComponent implements OnInit, OnDestroy {
     this.getCCPAdefaultConfigById();
     this.loadCountryList();
     this.loadStateList();
+    this.loadWorkFlowList();
   }
 
   getCCPAdefaultConfigById() {
@@ -582,7 +586,7 @@ export class DsarformComponent implements OnInit, OnDestroy {
 
         let updatedObj;
         const oldControlIndex = this.webFormControlList.findIndex((t) =>
-          t.controllabel === this.existingControl.controllabel);
+          t.controlId === this.existingControl.controlId);
         // if (oldControlIndex) {
         // const subReqObj = {
         //     control: this.selectedFormOption,
@@ -621,6 +625,7 @@ export class DsarformComponent implements OnInit, OnDestroy {
         //  if (oldControlIndex) {
         updatedTextobj = {
           controllabel: formControls.value.lblText,
+          controlId: this.existingControl.controlId,
           indexCount: this.existingControl.indexCount,
           control: this.existingControl.control,
           selectOptions: this.existingControl.selectOptions
@@ -921,6 +926,7 @@ export class DsarformComponent implements OnInit, OnDestroy {
         form_status: 'Draft',
         settings: {
           approver: this.defaultapprover,
+          workflow: this.workflow,
           days_left: this.daysleft
         },
         request_form: this.webFormControlList
@@ -1101,6 +1107,13 @@ export class DsarformComponent implements OnInit, OnDestroy {
     this.organizationService.getOrgTeamMembers(this.orgId).subscribe((data) => {
       const key = 'response';
       this.ApproverList = data[key];
+    });
+  }
+
+  loadWorkFlowList(){
+    this.workFlowService.getWorkflow().subscribe((data)=> {
+      const key = 'response';
+      this.workFlowList = data[key];
     });
   }
 

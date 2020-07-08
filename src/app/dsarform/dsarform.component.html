@@ -704,7 +704,24 @@
                             <div *ngIf="userselect.invalid" class="invalid-feedback">
                                 <div *ngIf="userselect.errors?.required">Default approver is required</div>
                             </div>
+                        </div>
+                        <div class="form-group mg-b-5">
+                            <label for="workflow"
+                                class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">
+                               Select Work flow</label>
+                            <select class="form-control" name="workflow" #workflowselect="ngModel" [(ngModel)]="workflow"
+                                [ngClass]="{ 'is-invalid':  workflowselect.invalid && workflowselect.errors?.required}"
+                                required>
+                                <ng-container *ngFor="let opt of workFlowList">
+                                    <option *ngIf="opt.workflow_name !== ' '" [value]="opt.id">
+                                        {{ opt.workflow_name }}
+                                    </option>
+                                </ng-container>
 
+                            </select>
+                            <div *ngIf="workflowselect.invalid" class="invalid-feedback">
+                                <div *ngIf="workflowselect.errors?.required">Workflow is required</div>
+                            </div>
                         </div>
                         <div class="form-group mg-b-5">
                             <label for="daysleft"

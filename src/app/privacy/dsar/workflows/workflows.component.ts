@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router, NavigationExtras } from '@angular/router';
 
 @Component({
   selector: 'app-workflows',
@@ -7,9 +8,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class WorkflowsComponent implements OnInit {
 
-  constructor() { }
+  constructor(private router: Router) { }
 
   ngOnInit() {
+  }
+
+  createWorkflow(){
+    this.router.navigate(['/privacy/dsar/createworkflow']);
   }
 
 }
