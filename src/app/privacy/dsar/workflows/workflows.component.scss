@@ -1,0 +1,32 @@
+
+table.table.table-bordered > thead > tr > th:first-child {
+    width: 100px;
+}
+
+table.table.table-bordered > tbody > tr > td:first-child {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    cursor: pointer;
+    display: inline-block;
+    width: 100px !important;
+    overflow: hidden !important;
+    border-right: 0;
+    border-left: 0;
+    border-bottom: 0;
+  }
+
+//   table.table.table-bordered > thead > tr > th {
+//       padding: 3px;
+//   }
+  
+  table.table.table-bordered > thead > tr > th:nth-child(2) {
+      width: 150px;
+  }
+
+  .table-bordered {
+      border: 0;
+  }
+
+  .workflowdiv > .card > .card-body {
+    padding: 0 !important;
+  }
