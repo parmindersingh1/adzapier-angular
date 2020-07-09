@@ -758,8 +758,8 @@
                     </div>
                 </ng-template>
             </li>
-            <li  *ngIf="crid">
-                <a target="_blank" class="btn btn-sm btn-primary" (click)="previewCCPAForm()">Preview</a>
+            <li>
+                <span *ngIf="crid" class="previewbtn"><a target="_blank" class="btn btn-sm btn-primary" (click)="previewCCPAForm()">Preview</a></span>
             </li>
         </ul>
         <div [ngbNavOutlet]="nav"></div>

@@ -621,7 +621,7 @@ export class DsarformComponent implements OnInit, OnDestroy {
         this.existingControl.controlId === 'state' || this.existingControl.controlId === 'country') {
         let updatedTextobj;
         const oldControlIndex = this.webFormControlList.findIndex((t) =>
-          t.controllabel === this.existingControl.controllabel);
+          t.indexCount === this.existingControl.indexCount);
         //  if (oldControlIndex) {
         updatedTextobj = {
           controllabel: formControls.value.lblText,

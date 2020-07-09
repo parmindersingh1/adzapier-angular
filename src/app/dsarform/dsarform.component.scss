@@ -539,3 +539,13 @@ input[type='color'] {
   color: red;
   font-size: 12px;
 }
+
+.previewbtn {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+}
+
+span.previewbtn a {
+  color: #fff !important;
+}
