@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { WorkflowService } from 'src/app/_services/workflow.service';
 
 @Component({
   selector: 'app-createworkflow',
@@ -6,20 +7,32 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./createworkflow.component.scss']
 })
 export class CreateworkflowComponent implements OnInit {
-  tabList: any = [];
+  workflowList: any;
   viewMode: any;
-  constructor() { }
+  workflowName: any;
+  workflowselect: any;
+  constructor(private workflowService: WorkflowService) { }
 
   ngOnInit() {
-    this.tabList = [{id:1, type:'tab1'},{id:2, type:'tab2'},{id:3, type:'tab3'},{id:4, type:'tab4'}]
     this.viewMode = 'tab1';
+    this.loadWorkflowList();
   }
 
   nextTab(){
     console.log(this.viewMode,'viewMode..');
     if(this.viewMode == 'tab1'){
       this.viewMode = 'tab2';
-    }
+    } else if(this.viewMode == 'tab2'){
+      this.viewMode = 'tab3'
+    } 
+  }
+
+  loadWorkflowList(){
+    this.workflowService.getWorkflow().subscribe((data)=>{
+      const key = 'response';
+      this.workflowList = data.response; 
+    });
+    
   }
 
 

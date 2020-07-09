@@ -12,7 +12,7 @@
 
 
 <div>
-    <div class="col-lg-6 col-xl-12">
+    <div class="col-lg-6 col-xl-12 workflowcontainer">
         <div class="card">
             <div class="card-header  d-flex align-items-center justify-content-between pd-y-10">
                 <span class="tx-12 tx-color-03 mg-b-0">
@@ -42,22 +42,48 @@
                         <div class="step" [class.current]= "viewMode == 'tab1'" (click)="viewMode = 'tab1'"> <span> Step 1</span> </div>
                         <div class="step" [class.current]= "viewMode == 'tab2'" (click)="viewMode = 'tab2'"> <span>Step 2 some words</span> </div>
                         <div class="step" [class.current]= "viewMode == 'tab3'" (click)="viewMode = 'tab3'"> <span> Step 3</span> </div>
-                        <div class="step" [class.current]= "viewMode == 'tab4'" (click)="viewMode = 'tab4'"> <span>Step 4</span> </div>
                     </div>
                     <div id="tab-content">
                         <!-- [ngClass]="[isPropSelected(submenu) ? 'active' : '']" -->
                         
             <div [ngSwitch]="viewMode">
-             <div *ngSwitchCase="'tab1'">tab 1 This is a map view</div>
+             <div *ngSwitchCase="'tab1'">
+                <div class="form-group">
+                    <label class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">Workflow Name</label>
+                    <input class="form-control" placeholder="Enter Name" type="text" name="workflow_name"
+                        #workflow="ngModel" [ngClass]="{ 'is-invalid': workflow.invalid }"
+                        [(ngModel)]="workflowName" required />
+                    <div *ngIf="workflow.invalid" class="invalid-feedback">
+                        <div *ngIf="workflow.errors.required">Workflow name is required</div>
+                    </div>
+                </div>
+                <div class="form-group mg-b-5">
+                    <label for="defaultapprover"
+                        class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">
+                        Default Approver</label>
+                    <select class="form-control" name="user" #workflowselect="ngModel" [(ngModel)]="workflowselection"
+                        [ngClass]="{ 'is-invalid':  workflowselect.invalid && workflowselect.errors?.required}"
+                        required>
+                        <ng-container *ngFor="let opt of workflowList">
+                            <option *ngIf="opt.workflow_name !== ' '" [value]="opt.id">
+                                {{ opt.workflow_name }}
+                            </option>
+                        </ng-container>
+
+                    </select>
+                    <div *ngIf="workflowselect.invalid" class="invalid-feedback">
+                        <div *ngIf="workflowselect.errors?.required">Default approver is required</div>
+                    </div>
+                </div>
+
+             </div>
               <div *ngSwitchCase="'tab2'">
                  tab 2
               </div>
               <div *ngSwitchCase="'tab3'">
                 tab 3
              </div>
-             <div *ngSwitchCase="'tab4'">
-                tab 4
-             </div>
+             
               </div>
                         <!-- <div *ngFor="let item of tabList">
                             <div id="tab1" [ngClass]="{tab1?'tab1':''}">tab 1 </div>
