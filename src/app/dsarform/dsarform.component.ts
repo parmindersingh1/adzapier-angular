@@ -193,9 +193,9 @@ export class DsarformComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.loadingbar.start();
-  //  this.webFormControlList = this.dsarFormService.getFormControlList();
+    //  this.webFormControlList = this.dsarFormService.getFormControlList();
     this.getCCPAdefaultConfigById();
-   // this.loadWebControl();
+    // this.loadWebControl();
     this.organizationService.currentProperty.subscribe((response) => {
       this.loadingbar.stop();
       if (response !== '') {
@@ -230,7 +230,7 @@ export class DsarformComponent implements OnInit, OnDestroy {
           // this.requestFormControls = data.request_form;
           this.selectedwebFormControlList = this.rearrangeFormSequence(data.request_form);
           this.webFormControlList = this.selectedwebFormControlList;
-          console.log(this.webFormControlList,'crid..webFormControlList..');
+          console.log(this.webFormControlList, 'crid..webFormControlList..');
           this.webFormControlList.filter((t) => {
             if (t.controlId === 'footertext') {
               this.footerText = t.footerText;
@@ -423,10 +423,10 @@ export class DsarformComponent implements OnInit, OnDestroy {
         this.selectOptions = [];
         this.addOptions();
       }
-       else {
+      else {
         this.selectOptions = [];
       }
-     // this.addOptions();
+      // this.addOptions();
     } else {
       this.selectedControlType = false;
       this.isSubjectType = false;
@@ -478,7 +478,7 @@ export class DsarformComponent implements OnInit, OnDestroy {
 
 
   addOptions() {
-   // this.selectOptions = [];
+    // this.selectOptions = [];
     let count = 0;
     let customObj: Anything = {};
     const keylabel = this.lblText.split(' ').join('_').toLowerCase();
@@ -524,7 +524,7 @@ export class DsarformComponent implements OnInit, OnDestroy {
       this.sideMenuRequestTypeOptions.push(requestObj);
       //  console.log(this.selectOptions, 'selectOptions types..');
     }
-    
+
   }
   // {
   //   "subject_type_id": "e85fb633-0f5d-4aa5-b09c-9e499f5e0fb2",
@@ -549,7 +549,7 @@ export class DsarformComponent implements OnInit, OnDestroy {
 
   deleteSubjectOption(index) {
     this.sideMenuSubjectTypeOptions.splice(index, 1);
-    if(this.crid){
+    if (this.crid) {
       this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
       this.webFormControlList.filter((t) => {
         if (t.controlId === 'subjecttype') {
@@ -571,7 +571,7 @@ export class DsarformComponent implements OnInit, OnDestroy {
   deleteRequestOption(index) {
     this.sideMenuRequestTypeOptions.splice(index, 1);
   }
-  
+
 
   cancelForm() {
     this.showFormOption = true;
@@ -616,7 +616,7 @@ export class DsarformComponent implements OnInit, OnDestroy {
           this.dsarFormService.updateControl(this.webFormControlList[oldControlIndex], oldControlIndex, updatedObj);
           this.webFormControlList = this.dsarFormService.getFormControlList();
         }
-        
+
       } else if (this.existingControl.control === 'textbox' || this.existingControl.control === 'textarea' ||
         this.existingControl.controlId === 'state' || this.existingControl.controlId === 'country') {
         let updatedTextobj;
@@ -692,7 +692,7 @@ export class DsarformComponent implements OnInit, OnDestroy {
         this.webFormControlList = this.dsarFormService.getFormControlList();
         this.lblText = '';
         this.cancelAddingFormControl();
-      //  this.selectedControlType = false;
+        //  this.selectedControlType = false;
       }
     }
 
@@ -776,18 +776,18 @@ export class DsarformComponent implements OnInit, OnDestroy {
   onChangeEvent(event) {
     console.log(event, 'event...');
     this.selectedFormOption = event.currentTarget.value;
-    if (this.selectedFormOption === 'checkbox' || this.selectedFormOption === 'radio' || this.selectedFormOption === 'select'){
+    if (this.selectedFormOption === 'checkbox' || this.selectedFormOption === 'radio' || this.selectedFormOption === 'select') {
       this.showFormOption = true;
       this.selectedControlType = true;
-      if(this.selectOptions.length === 0){
+      if (this.selectOptions.length === 0) {
         this.addOptions();
       }
-      
-    } else{
+
+    } else {
       this.showFormOption = false;
     }
     // this.showFormOption = !this.showFormOption;
-    
+
     // this.selectOptions = [];
   }
 
@@ -1016,22 +1016,22 @@ export class DsarformComponent implements OnInit, OnDestroy {
       if (this.crid) {
         this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
         if (this.webFormControlList !== null) {
-        const editText = this.webFormControlList.filter((t) => t.indexCount === 'welcome_text_Index');
-        this.editorDataWelcome = editText[0].welcomeText;
+          const editText = this.webFormControlList.filter((t) => t.indexCount === 'welcome_text_Index');
+          this.editorDataWelcome = editText[0].welcomeText;
         }
       } else {
         this.webFormControlList = this.dsarFormService.getFormControlList();
         const editText = this.webFormControlList.filter((t) => t.indexCount === 'welcome_text_Index');
         this.editorDataWelcome = editText[0].welcomeText;
       }
-     
+
     } else {
       this.isWelcomeEditor = false;
       if (this.crid) {
         this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
         if (this.webFormControlList !== null) {
-        const editText = this.webFormControlList.filter((t) => t.indexCount === 'footer_text_Index');
-        this.editorDataFooter = editText[0].footerText;
+          const editText = this.webFormControlList.filter((t) => t.indexCount === 'footer_text_Index');
+          this.editorDataFooter = editText[0].footerText;
         }
       } else {
         this.webFormControlList = this.dsarFormService.getFormControlList();
@@ -1050,34 +1050,21 @@ export class DsarformComponent implements OnInit, OnDestroy {
   }
 
   welcomeStyle(): object {
-     // this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
-      // if (this.crid) {
-        // this.webFormControlList.filter((t) => {
-        //   if (t.controlId === 'welcometext') {
-        //     console.log(t,'t..');
-        //     this.welcomeTextColor = t.welcomeTextColor;
-        //     this.welcomeFontSize = t.welcomeFontSize;
-        //   }
-        // });
-        return {
-          'color': this.welcomeTextColor,
-          'font-size': this.welcomeFontSize + 'px'
-        };
-      
-      
+   
+    return {
+      'color': this.welcomeTextColor,
+      'font-size': this.welcomeFontSize + 'px'
+    };
+
+
   }
 
   footerStyle(): object {
-      // this.webFormControlList.filter((t) => {
-      //   if (t.controlId === 'footertext') {
-      //      this.footerTextColor = t.footerTextColor;
-      //      this.footerFontSize = t.footerFontSize;
-      //   }
-      // });
-      return {
-        'color': this.footerTextColor,
-        'font-size': this.footerFontSize + 'px'
-      };
+    
+    return {
+      'color': this.footerTextColor,
+      'font-size': this.footerFontSize + 'px'
+    };
   }
 
   setHeaderStyle() {
@@ -1110,8 +1097,8 @@ export class DsarformComponent implements OnInit, OnDestroy {
     });
   }
 
-  loadWorkFlowList(){
-    this.workFlowService.getWorkflow().subscribe((data)=> {
+  loadWorkFlowList() {
+    this.workFlowService.getWorkflow().subscribe((data) => {
       const key = 'response';
       this.workFlowList = data[key];
     });
@@ -1127,6 +1114,14 @@ export class DsarformComponent implements OnInit, OnDestroy {
 
   onSelectCountry(countryid) {
     this.filteredStateList = this.stateList.filter((item) => item.country_id === countryid);
+  }
+
+  previewCCPAForm() {
+    if (window.location.hostname === "develop-cmp.adzpier.com") {
+      window.open('http://develop-privacyportal.adzpier.com/ccpa/form/' + this.orgId + '/' + this.propId + '/' + this.crid);
+    } else if (window.location.hostname === "staging-cmp.adzpier.com") {
+      window.open('http://staging-privacyportal.adzpier.com/ccpa/form/' + this.orgId + '/' + this.propId + '/' + this.crid);
+    }
   }
 
   ngOnDestroy() {

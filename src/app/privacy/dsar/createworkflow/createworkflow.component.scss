@@ -96,7 +96,7 @@ a:hover {
 	color: #666;
 	cursor: default;
 	margin: 0 3px;
-	padding: 10px 10px 10px 30px;
+	padding: 8px 10px 7px 30px;
 	min-width: 180px;
 	float: left;
 	position: relative;
@@ -175,4 +175,8 @@ a:hover {
 
 .deactive-tab {
     display: none;
+}
+
+.workflowcontainer .card .card-body {
+	padding: 0;
 }
