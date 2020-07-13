@@ -71,10 +71,6 @@
 	vertical-align: middle;
 }
 
-.nav {
-	margin-top: 40px;
-}
-
 .pull-right {
 	float: right;
 }
@@ -179,4 +175,39 @@ a:hover {
 
 .workflowcontainer .card .card-body {
 	padding: 0;
+}
+
+.small-btn {
+	border-radius: 10px;
+    height: 18px;
+	padding: 0px 3px;
+	margin: 0px 5px;
+}
+
+.stages {
+display: inline-flex;
+flex-direction: column;
+}
+
+.stages ul {
+	margin: 0;
+	padding: 0;
+}
+
+.displayflex {
+	display: flex;
+	flex-direction: row;
+}
+
+.stages ul li {
+	display: inline-flex;
+	flex-direction: row;
+}
+
+.wrapper #tab-content {
+	padding: 10px 0 0 0;
+}
+
+.red {
+	color: red;
 }

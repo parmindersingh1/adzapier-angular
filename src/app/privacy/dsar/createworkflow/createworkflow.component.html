@@ -39,83 +39,94 @@
             <div class="card-body">
                 <div class="wrapper">
                     <div class="arrow-steps clearfix">
-                        <div class="step" [class.current]= "viewMode == 'tab1'" (click)="viewMode = 'tab1'"> <span> Step 1</span> </div>
-                        <div class="step" [class.current]= "viewMode == 'tab2'" (click)="viewMode = 'tab2'"> <span>Step 2 some words</span> </div>
-                        <div class="step" [class.current]= "viewMode == 'tab3'" (click)="viewMode = 'tab3'"> <span> Step 3</span> </div>
+                        <div class="step" [class.current]="viewMode == 'tab1'" (click)="onClickWorflowTab('tab1')">
+                            <span> Basic</span> </div>
+                        <div class="step" [class.current]="viewMode == 'tab2'" (click)="onClickWorflowTab('tab2')">
+                            <span> Workflow </span> </div>
+                        <div class="step" [class.current]="viewMode == 'tab3'" (click)="onClickWorflowTab('tab3')">
+                            <span> Publish </span> </div>
                     </div>
                     <div id="tab-content">
-                        <!-- [ngClass]="[isPropSelected(submenu) ? 'active' : '']" -->
-                        
-            <div [ngSwitch]="viewMode">
-             <div *ngSwitchCase="'tab1'">
-                <div class="form-group">
-                    <label class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">Workflow Name</label>
-                    <input class="form-control" placeholder="Enter Name" type="text" name="workflow_name"
-                        #workflow="ngModel" [ngClass]="{ 'is-invalid': workflow.invalid }"
-                        [(ngModel)]="workflowName" required />
-                    <div *ngIf="workflow.invalid" class="invalid-feedback">
-                        <div *ngIf="workflow.errors.required">Workflow name is required</div>
-                    </div>
-                </div>
-                <div class="form-group mg-b-5">
-                    <label for="defaultapprover"
-                        class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">
-                        Default Approver</label>
-                    <select class="form-control" name="user" #workflowselect="ngModel" [(ngModel)]="workflowselection"
-                        [ngClass]="{ 'is-invalid':  workflowselect.invalid && workflowselect.errors?.required}"
-                        required>
-                        <ng-container *ngFor="let opt of workflowList">
-                            <option *ngIf="opt.workflow_name !== ' '" [value]="opt.id">
-                                {{ opt.workflow_name }}
-                            </option>
-                        </ng-container>
+                        <div [ngSwitch]="viewMode">
+                            <div *ngSwitchCase="'tab1'">
+                                <div class="form-group">
+                                    <div class="col-sm-6">
+                                        <label
+                                            class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">Workflow
+                                            Name</label>
+                                        <input class="form-control" placeholder="Enter Name" type="text"
+                                            name="workflow_name" #workflow="ngModel"
+                                            [ngClass]="{ 'is-invalid': workflow.invalid }" [(ngModel)]="workflowName"
+                                            required />
+                                        <div *ngIf="workflow.invalid" class="invalid-feedback">
+                                            <div *ngIf="workflow.errors.required">Workflow name is required</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group mg-b-5">
+                                    <div class="col-sm-6">
+                                        <label for="workflowselect"
+                                            class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">
+                                            Select Workflow</label>
+                                        <select class="form-control" name="user" #workflowselect="ngModel"
+                                            (change)="onWorkflowChange($event)" [(ngModel)]="workflowselection"
+                                            [ngClass]="{ 'is-invalid':  workflowselect.invalid && workflowselect.errors?.required}"
+                                            required>
+                                            <ng-container *ngFor="let opt of workflowList">
+                                                <option *ngIf="opt.workflow_name !== ' '" [value]="opt.id">
+                                                    {{ opt.workflow_name }}
+                                                </option>
+                                            </ng-container>
 
-                    </select>
-                    <div *ngIf="workflowselect.invalid" class="invalid-feedback">
-                        <div *ngIf="workflowselect.errors?.required">Default approver is required</div>
-                    </div>
-                </div>
+                                        </select>
+                                        <div *ngIf="workflowselect.invalid" class="invalid-feedback">
+                                            <div *ngIf="workflowselect.errors?.required">Workflow is required</div>
+                                        </div>
+                                    </div>
+                                </div>
 
-             </div>
-              <div *ngSwitchCase="'tab2'">
-                 tab 2
-              </div>
-              <div *ngSwitchCase="'tab3'">
-                tab 3
-             </div>
-             
-              </div>
-                        <!-- <div *ngFor="let item of tabList">
-                            <div id="tab1" [ngClass]="{tab1?'tab1':''}">tab 1 </div>
+                            </div>
+                            <div *ngSwitchCase="'tab2'">
+                                <ng-container *ngIf="workflowStages.length !== 0">
+                                    <app-customtabs [inputData]="workflowStages" [currentTab]="order"
+                                        (currentStageEvent)="clickOnWorkflowStages($event)">
+                                    </app-customtabs>
+                                </ng-container>
+                                <div class="col-sm-6" *ngIf="workflowStages.length !== 0">
+                                    <form [formGroup]="quillEditorGuidanceText">
+                                        <label class="tx-10 tx-uppercase tx-medium"> <span class="red">*</span>
+                                            Stage</label>
+                                        <input type="text" [(ngModel)]="stage_title" name="stage_title"
+                                            (input)="update(stage_title)" [ngModelOptions]="{standalone: true}"
+                                            #ngModel="ngModel" class="form-control mb-1"
+                                            [ngClass]="{ 'is-invalid': ngModel.invalid }" required />
+                                        <div *ngIf="ngModel.invalid" class="invalid-feedback">
+                                            <div *ngIf="ngModel.errors.required">Stage is required</div>
+                                        </div>
+                                        <label class="tx-10 tx-uppercase tx-medium"> <span class="red">*</span>
+                                            Guidance Text</label>
+                                        <quill-editor formControlName="guidancetext" [modules]="quillConfig"
+                                            [(ngModel)]="editorGuidanceText" [styles]="{height: '200px'}">
+                                        </quill-editor>
+
+                                    </form>
+
+                                </div>
+
+                            </div>
+                            <div *ngSwitchCase="'tab3'">
+                                tab 3
+                            </div>
                         </div>
-                       
-                        <div id="tab2">tab 2 </div>
-                        <div id="tab3">tab 3 </div>
-                        <div id="tab4">tab 4 </div> -->
                     </div>
                     <div class="nav clearfix">
-                        <button class="prev">Previous</button>
-                        <button class="next pull-right" (click)="nextTab()">Next</button>
+                        <div class="col-sm-6 mt-2 mb-2">
+                            <button class="btn btn-sm btn-primary prev" (click)="previousTab()"
+                                *ngIf="viewMode!=='tab1'">Previous</button>
+                            <button class="btn btn-sm btn-primary next pull-right" (click)="nextTab()">Next</button>
+                        </div>
                     </div>
                 </div>
-                <!-- <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs">
-                    <li [ngbNavItem]="1">
-                        <a ngbNavLink>1 Basic</a>
-                        <ng-template ngbNavContent>
-                        </ng-template>
-                    </li>
-                    <li [ngbNavItem]="2">
-                        <a ngbNavLink>2 Workflow</a>
-                        <ng-template ngbNavContent>
-                        </ng-template>
-                    </li>
-                    <li [ngbNavItem]="3">
-                        <a ngbNavLink>3 Publish</a>
-                        <ng-template ngbNavContent>
-                        </ng-template>
-                    </li>
-
-                </ul> -->
             </div>
         </div>
     </div>

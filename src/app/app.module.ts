@@ -78,7 +78,6 @@ export const isMock = environment.mock;
     VerifyemailComponent,
     CheckoutComponent,
     CheckoutConfirmationComponent,
-  //  CcpaDsarComponent,
     WelcomeComponent
   ],
   imports: [
