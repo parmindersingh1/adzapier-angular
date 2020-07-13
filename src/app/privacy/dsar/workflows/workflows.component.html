@@ -20,15 +20,16 @@
                 <div class="d-flex">
 
                     <button class="btn btn-sm btn-white d-flex align-items-center mg-r-5" (click)="createWorkflow()">
+                        <i class="fa fa-plus" aria-hidden="true"></i>
                         <span class="d-none d-sm-inline mg-l-5">
-                            <i class="fa fa-plus" aria-hidden="true"></i>
-                            Create</span></button>
+                            Create</span>
+                    </button>
                 </div>
 
             </div>
 
             <div class="card-body">
-                
+
                 <!-- {{workflowList | json}} -->
 
                 <table class="table table-bordered">
@@ -52,16 +53,12 @@
                             <td>
                                 {{item.workflow_status}}
                             </td>
-                            <td>{{item.created_by}}</td>
+                            <td>{{item.createdby_firstname}} {{item.createdby_lastname}}</td>
                             <td>
-                                 {{item.updated_by}}
-                            </td>
+                                {{item.updatedby_firstname}} {{item.updatedby_lastname}}</td>
                             <td>
-                                {{item.updated_at | date:'medium'}}
-                            </td>
-                            <td>
-                                {{item.created_at | date:'medium'}}
-                            </td>
+                                {{item.updated_at | date:'medium'}}</td>
+                            <td>{{item.created_at | date:'medium'}}</td>
                         </tr>
 
                     </tbody>

@@ -1,0 +1,106 @@
+.customtab {
+    flex-grow: 1;
+    height: 38px;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    white-space: nowrap;
+    width: 1000px;
+}
+
+.customtab ul {
+    margin: 0;
+    padding: 0;
+}
+
+.customtab ul li {
+    display: inline;
+    margin: 0 3px;
+}
+
+.customtab ul li:last-child {
+    margin-left: 0px !important;
+}
+
+.displayflex {
+    display: inline-flex;
+}
+
+.divflex {
+    display: flex;
+    margin: 20px 0;
+}
+
+.arrowbtn {
+    height: 30px;
+    background: none;
+    font-size: 24px;
+    border: 0;
+    outline: none;
+    margin: 2px 0 0 0;
+}
+
+.small-btn {
+    border-radius: 30px;
+    height: 26px;
+    padding: 0px 3px;
+    margin: 4px 0 0 20px;
+    width: 27px;
+}
+
+.tabTitleWrapper {
+    font-size: 14px;
+    text-align: center;
+    color: #666;
+    display: flex;
+    cursor: default;
+    margin: 0 3px;
+    padding: 0;
+    min-width: 180px;
+    float: left;
+    height: 36px;
+    position: relative;
+    background-color: #d9e3f7;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    transition: background-color 0.2s ease;
+}
+.tabTitleWrapper::after {
+    border-left: 17px solid #23468c;
+}
+
+.tabTitleWrapper::after,.tabTitleWrapper::before {
+    content: " ";
+    position: absolute;
+    top: 0;
+    right: -17px;
+    width: 0;
+    height: 0;
+    border-top: 19px solid transparent;
+    border-bottom: 17px solid transparent;
+    border-left: 17px solid #d9e3f7;
+    z-index: 2;
+    transition: border-color 0.2s ease;
+
+}
+
+.deleteicon {
+    margin: 0;
+    padding: 9px 10px 7px 10px;
+}
+
+.stageTitle {
+    padding: 7px 8px;
+    text-align: left;
+    width: 100%;
+}
+
+.selectedTab {
+    background-color: #3c65b7;
+    color: #fff;
+}
+
+.selectedTab::after {
+    border-left: 17px solid #3c65b7;
+}
