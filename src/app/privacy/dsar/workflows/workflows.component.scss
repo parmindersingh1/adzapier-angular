@@ -6,7 +6,6 @@ table.table.table-bordered > thead > tr > th:first-child {
 table.table.table-bordered > tbody > tr > td:first-child {
     text-overflow: ellipsis;
     white-space: nowrap;
-    cursor: pointer;
     display: inline-block;
     width: 100px !important;
     overflow: hidden !important;
