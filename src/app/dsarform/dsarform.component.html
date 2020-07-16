@@ -706,9 +706,8 @@
                             </div>
                         </div>
                         <div class="form-group mg-b-5">
-                            <label for="workflow"
-                                class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">
-                               Select Work flow</label>
+                            <label for="workflow" class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">
+                                Select Work flow</label>
                             <select class="form-control" name="workflow" #workflowselect="ngModel" [(ngModel)]="workflow"
                                 [ngClass]="{ 'is-invalid':  workflowselect.invalid && workflowselect.errors?.required}"
                                 required>
@@ -731,10 +730,7 @@
                                 [(ngModel)]="daysleft">
                         </div>
 
-                        <div class="form-group mg-b-5"><a target="_blank" *ngIf="crid"
-                                class="btn btn-secondary sw-btn-prev"
-                                href="http://develop-privacyportal.adzpier.com/ccpa/form/{{orgId}}/{{propId}}/{{crid}}">Preview</a>
-                        </div>
+                     
                     </div>
                     <!-- <div class="form-group mg-b-5"><a target="_blank" *ngIf="crid" class="btn btn-secondary sw-btn-prev"
                         [routerLink]="['/editwebforms',  crid ]">Local Preview</a></div> -->
@@ -763,8 +759,7 @@
                 </ng-template>
             </li>
             <li>
-                <a target="_blank" *ngIf="crid" class="btn btn-sm btn-primary"
-                    href="http://develop-privacyportal.adzpier.com/ccpa/form/{{orgId}}/{{propId}}/{{crid}}">Preview</a>
+                <span *ngIf="crid" class="previewbtn"><a target="_blank" class="btn btn-sm btn-primary" (click)="previewCCPAForm()">Preview</a></span>
             </li>
         </ul>
         <div [ngbNavOutlet]="nav"></div>

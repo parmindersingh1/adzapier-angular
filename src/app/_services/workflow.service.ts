@@ -14,4 +14,13 @@ export class WorkflowService {
   getWorkflow(): Observable<any> {
     return this.httpClient.get<any>(environment.apiUrl + '/workflow');
   }
+
+  // to get all stages
+  getWorkflowById(id): Observable<any> {
+    return this.httpClient.get<any>(environment.apiUrl + '/workflow?workflow_id='+id);
+  }
+
+  createWorkflow(reqObj): Observable<any> {
+    return this.httpClient.post<any>(environment.apiUrl + '/workflow',reqObj);
+  }
 }

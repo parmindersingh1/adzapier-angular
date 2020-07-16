@@ -430,8 +430,10 @@ export class HeaderComponent implements OnInit {
   //check whether organizaion property was earlier selected
   isOrgPropertyExists(data): boolean {
     const orgDetails = this.orgservice.getCurrentOrgWithProperty();
-    let result = data.filter((t)=>t.orgname == orgDetails.organization_name).length > 0;
-    return result;
+    if(orgDetails !== undefined){
+      let result = data.filter((t)=>t.orgname == orgDetails.organization_name).length > 0;
+      return result;
+    }
   }
 
 }

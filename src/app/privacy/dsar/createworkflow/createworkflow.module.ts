@@ -5,9 +5,9 @@ import { CreateworkflowRoutingModule } from './createworkflow-routing.module';
 import { CreateworkflowComponent } from './createworkflow.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedbootstrapModule } from 'src/app/sharedbootstrap/sharedbootstrap.module';
-
+import {CustomtabsComponent} from 'src/app/_components/customtabs/customtabs.component';
 @NgModule({
-  declarations: [CreateworkflowComponent],
+  declarations: [CreateworkflowComponent,CustomtabsComponent],
   imports: [
     CommonModule,
     FormsModule,
