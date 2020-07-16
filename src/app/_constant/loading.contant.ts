@@ -41,7 +41,7 @@ export const ngxUiLoaderConfig: NgxUiLoaderConfig = {
   'fgsColor': '#007bff',
   'fgsPosition': 'center-center',
   'fgsSize': 80,
-  "fgsType": "rectangle-bounce-pulse-out-rapid",
+  "fgsType": "circle",
   'gap': 24,
   'logoPosition': 'center-center',
   'logoSize': 120,

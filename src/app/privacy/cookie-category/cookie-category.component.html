@@ -18,6 +18,7 @@
                                   aria-hidden="true"></span>
             Rescan...
           </button>
+          <button class="btn btn-white btn-xs cat-btn" (click)="openCategoryModal(category)">Add Category</button>
           <a class="btn btn-secondary m" type="button" href="cookie-consent-banner.html">
             <!-- <span class="spinner-border spinner-border-sm txt-info" role="status"
                 aria-hidden="true"></span> -->
@@ -27,282 +28,65 @@
       </div>
     </div>
 
-    <div class="row row-xs">
-      <div class="col-12 mg-t-10">
-        <div class="card mg-b-10">
-          <div class="card-header pd-t-20 d-sm-flex align-items-start justify-content-between bd-b-0 ">
-            <div>
-              <p class="tx-13 tx-color-03 mg-b-0">Cookie scan detail from last rececent scan</p>
-            </div>
-            <div class="mg-t-20 mg-sm-t-0">
-              <button class="btn btn-white btn-xs active m-r-15 " (click)="openModal(template)">Add Cookie</button>
+<app-crud-table *ngIf="isDurationType" [dataManager]="dataManager"></app-crud-table>
+  </div>
+</div>
 
-              <!--              <button class="btn btn-white btn-xs active m-r-15 " (click)="lgModal.show()">Large modal</button>-->
-
-              <button class="btn btn-white btn-xs" (click)="openCategoryModal(category)">Add
-                Category</button>
-            </div>
-          </div>
-<!--          <ng-template #template>-->
-<!--            <div class="modal-header">-->
-<!--              <h4 class="modal-title pull-left">Modal</h4>-->
-<!--              <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">-->
-<!--                <span aria-hidden="true">&times;</span>-->
-<!--              </button>-->
-<!--            </div>-->
-<!--            <div class="modal-body">-->
-<!--              This is a modal.-->
-<!--            </div>-->
-<!--          </ng-template>-->
-          <div class="table-responsive">
-            <table class="table table-dashboard mg-b-0">
-              <thead>
-              <tr>
-                <th></th>
-                <th>Purpose</th>
-                <th>Type</th>
-                <th class="text-right">Name</th>
-                <th class="text-right">Domain</th>
-                <th class="text-right">Lifespan</th>
-                <th class="text-right">Path</th>
-                <th class="text-right">Secure</th>
-                <th class="text-right">Http only</th>
-                <th class="text-left">Description</th>
-              </tr>
-              </thead>
-              <tbody>
-              <tr>
-                <td class="tx-medium text-left">
-                  <div class="btn-group text-left" role="group">
-                    <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle btn-xs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    </button>
-                    <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                      <a class="dropdown-item" href="#modalCookieEdit" data-toggle="modal">Edit</a>
-                      <a class="dropdown-item" href="#">Delete</a>
-                    </div>
-                  </div>
-                </td>
-                <td class="tx-color-03 tx-normal tx-success">Necessary</td>
-                <td class="tx-color-03 tx-normal">FIRST PARTY</td>
-                <td class="tx-medium text-right"> wordpress_test_cookie</td>
-                <td class="tx-medium text-right"> adzapier.com</td>
-                <td class="tx-medium text-right"> Session</td>
-                <td class="tx-medium text-right"> /</td>
-                <td class="tx-medium text-right"> </td>
-                <td class="tx-medium text-right"> </td>
-                <td class="tx-medium text-left"> </td>
-
-              </tr>
-
-              </tbody>
-            </table>
-          </div><!-- table-responsive -->
-        </div><!-- card -->
-      </div>
-
-
-
-    </div><!-- row -->
-  </div><!-- container -->
-</div><!-- content -->
 
 <ng-template #category>
   <form [formGroup]="categoryForm" (ngSubmit)="onCategoryFromSubmit()">
-  <div class="modal-header ">
-        Create Category
+    <div class="modal-header ">
+      Create Category
+    </div>
+    <div class="modal-body ">
+      <div class="form-group mg-b-5">
+        <label class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-0 tx-color-03">Category
+          name</label>
+        <input type="text" formControlName="categoryName" class="form-control" placeholder="Category Name"
+               [ngClass]="{ 'is-invalid': categoryFromSubmitted && c.categoryName.errors }"
+        >
+        <div *ngIf="categoryFromSubmitted && c.categoryName.errors" class="invalid-feedback">
+          <div *ngIf="c.categoryName.errors.required">Category Name is required</div>
+          <div *ngIf="c.categoryName.errors.pattern">Category Name Allow Only Alphabets</div>
+        </div>
       </div>
-      <div class="modal-body ">
-        <div class="form-group mg-b-5">
-          <label class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-0 tx-color-03">Category
-            name</label>
-          <input type="text" formControlName="categoryName" class="form-control" placeholder="Category Name"
-                 [ngClass]="{ 'is-invalid': categoryFromSubmitted && c.categoryName.errors }"
-          >
-          <div *ngIf="categoryFromSubmitted && c.categoryName.errors" class="invalid-feedback">
-            <div *ngIf="c.categoryName.errors.required">Category Name is required</div>
-            <div *ngIf="c.categoryName.errors.pattern">Category Name Allow Only Alphabets</div>
-          </div>
-        </div>
 
-        <div class="form-group mg-b-5">
-          <label class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-0 tx-color-03">Category ID</label>
-          <input type="text" class="form-control" placeholder="Category Id"
-                 [ngClass]="{ 'is-invalid': categoryFromSubmitted && c.categoryId.errors }"
-          >
-          <div *ngIf="categoryFromSubmitted && c.categoryId.errors" class="invalid-feedback"
-          >
-            <div *ngIf="c.categoryId.errors.required">Category Id is required</div>
-          </div>
-        </div>
-
-<!--        <div class="form-group mg-b-5">-->
-<!--          <label class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-0 tx-color-03">Workflow-->
-<!--            name</label>-->
-<!--          <input type="text" class="form-control" placeholder="Tax Id">-->
+<!--      <div class="form-group mg-b-5">-->
+<!--        <label class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-0 tx-color-03">Category ID</label>-->
+<!--        <input type="text" class="form-control" placeholder="Category Id"-->
+<!--               [ngClass]="{ 'is-invalid': categoryFromSubmitted && c.categoryId.errors }"-->
+<!--        >-->
+<!--        <div *ngIf="categoryFromSubmitted && c.categoryId.errors" class="invalid-feedback"-->
+<!--        >-->
+<!--          <div *ngIf="c.categoryId.errors.required">Category Id is required</div>-->
 <!--        </div>-->
+<!--      </div>-->
 
-        <div class="form-group mg-b-5">
-          <label for="exampleFormControlTextarea1" class="tx-small"><i class="fa fa-asterisk tx-danger "
-                                                                       aria-hidden="true"></i> Description</label>
-          <textarea class="form-control" id="exampleFormControlTextarea1"
-                    [ngClass]="{ 'is-invalid': categoryFromSubmitted && c.description.errors }"
-                    rows="3"></textarea>
-          <div *ngIf="categoryFromSubmitted && c.description.errors" class="invalid-feedback"
-          >
-            <div *ngIf="c.description.errors.required">Description is required</div>
-          </div>
+      <!--        <div class="form-group mg-b-5">-->
+      <!--          <label class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-0 tx-color-03">Workflow-->
+      <!--            name</label>-->
+      <!--          <input type="text" class="form-control" placeholder="Tax Id">-->
+      <!--        </div>-->
+
+      <div class="form-group mg-b-5">
+        <label for="exampleFormControlTextarea1" class="tx-small"><i class="fa fa-asterisk tx-danger "
+                                                                     aria-hidden="true"></i> Description</label>
+        <textarea class="form-control" formControlName="description" id="exampleFormControlTextarea1"
+                  [ngClass]="{ 'is-invalid': categoryFromSubmitted && c.description.errors }"
+                  rows="3"></textarea>
+        <div *ngIf="categoryFromSubmitted && c.description.errors" class="invalid-feedback"
+        >
+          <div *ngIf="c.description.errors.required">Description is required</div>
         </div>
-
-
-      </div><!-- modal-body -->
-      <div class="modal-footer pd-x-20 pd-y-15">
-        <button type="button" (click)="categoryModalRef.hide()" class="btn btn-white" data-dismiss="modal">Cancel</button>
-        <button type="submit" class="btn btn-primary">Save</button>
       </div>
+
+
+    </div><!-- modal-body -->
+    <div class="modal-footer pd-x-20 pd-y-15">
+      <button type="button" (click)="categoryModalRef.hide()" class="btn btn-white" data-dismiss="modal">Cancel</button>
+      <button type="submit" class="btn btn-primary">Save</button>
+    </div>
   </form>
 </ng-template>
+<app-notify></app-notify>
 
-
-<ng-template #template class="modal-lg">
-  <form [formGroup]="cookieForm" (ngSubmit)="onCookieFromSubmit()">
-
-  <div class="modal-header ">
-        Add Cookie
-      </div>
-      <div class="modal-body ">
-        <div class="form-row">
-          <div class="form-group col-md-6">
-            <label class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-0 tx-color-03"><i class="tx-8 fa fa-asterisk tx-danger " aria-hidden="true"></i>Cookie
-              Name</label>
-            <input type="text" formControlName="cookieName" class="form-control"
-                   [ngClass]="{ 'is-invalid': cookieFromSubmitted && f.cookieName.errors }"
-                   placeholder="Cookie Name">
-
-            <div *ngIf="cookieFromSubmitted && f.cookieName.errors" class="invalid-feedback">
-              <div *ngIf="f.cookieName.errors.required">Cookie Name is required</div>
-              <div *ngIf="f.cookieName.errors.pattern">Cookie Name Allow Only Alphabets</div>
-            </div>
-          </div>
-
-          <div class="form-group col-md-6">
-            <label class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-0 tx-color-03"><i class="tx-8 fa fa-asterisk tx-danger " aria-hidden="true"></i> Host</label>
-            <input type="text" formControlName="host" class="form-control" placeholder="Host"
-                   [ngClass]="{ 'is-invalid': cookieFromSubmitted && f.host.errors }"
-            >
-            <div *ngIf="cookieFromSubmitted && f.host.errors" class="invalid-feedback">
-              <div *ngIf="f.host.errors.required">Host is required</div>
-              <div *ngIf="f.host.errors.pattern">Host Allow Only Alphabets</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-group col-md-6">
-            <label class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-0 tx-color-03"><i class="tx-8 fa fa-asterisk tx-danger " aria-hidden="true"></i> Category</label>
-            <select formControlName="category" id="my-select" class="form-control" name=""
-                    [ngClass]="{ 'is-invalid': cookieFromSubmitted && f.host.errors }"
-            >
-              <option>Necessary</option>
-              <option>Performance</option>
-              <option>Functional</option>
-              <option>Targeting</option>
-              <option>Unknown</option>
-              <option>Custom</option>
-            </select>
-            <div *ngIf="cookieFromSubmitted && f.category.errors" class="invalid-feedback">
-              <div *ngIf="f.category.errors.required">Category is required</div>
-            </div>
-          </div>
-
-          <div class="form-group col-md-6">
-            <label class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-0 tx-color-03"><i class="tx-8 fa fa-asterisk tx-danger " aria-hidden="true"></i> Party</label>
-            <div class="col-sm-10">
-              <div class="form-check form-check-inline">
-                <input formControlName="party" name="party" class="form-check-input" type="radio"
-                       id="inlineRadio1" value="option1">
-                <label class="form-check-label" for="inlineRadio1">First Party</label>
-              </div>
-              <div class="form-check form-check-inline">
-                <input formControlName="party" name="party" class="form-check-input" type="radio"
-                       id="inlineRadio2" value="option2">
-                <label class="form-check-label" for="inlineRadio2">Third Party</label>
-              </div>
-              <div *ngIf="cookieFromSubmitted && f.party.errors" class="invalid-feedback">
-                <div *ngIf="f.party.errors.required">Party is required</div>
-              </div>
-            </div>
-          </div>
-
-        </div>
-
-
-        <div class="form-group mg-b-5">
-          <label for="exampleFormControlTextarea1"><i class="tx-8 fa fa-asterisk tx-danger " aria-hidden="true"></i> Description</label>
-          <textarea formControlName="description" class="form-control"
-                    [ngClass]="{ 'is-invalid': cookieFromSubmitted && f.description.errors }"
-                    rows="3"></textarea>
-          <div *ngIf="cookieFromSubmitted && f.description.errors" class="invalid-feedback">
-            <div *ngIf="f.description.errors.required">Description is required</div>
-            <div *ngIf="f.description.errors.pattern">Description Allow Only Alphabets</div>
-          </div>
-        </div>
-
-        <div class="form-group mg-b-5">
-          <label for="exampleFormControlTextarea1" ><i class="tx-8 fa fa-asterisk tx-danger "
-                                                       aria-hidden="true"></i> Value</label>
-          <textarea formControlName="value" class="form-control"
-                    [ngClass]="{ 'is-invalid': cookieFromSubmitted && f.value.errors }"
-                    rows="3"></textarea>
-          <div *ngIf="cookieFromSubmitted && f.value.errors" class="invalid-feedback">
-            <div *ngIf="f.value.errors.required">Value is required</div>
-            <div *ngIf="f.value.errors.pattern">Value Allow Only Alphabets</div>
-          </div>
-        </div>
-
-
-        <div class="form-group">
-          <label class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-0 tx-color-03">Expires</label>
-          <div class="col-sm-10">
-            <div class="form-check form-check-inline">
-              <input formControlName="expired" name="expired" class="form-check-input" type="radio"  id="inlineRadio1"
-                     value="option1">
-              <label class="form-check-label" for="inlineRadio1">Seesion</label>
-            </div>
-            <div class="form-check form-check-inline">
-              <input formControlName="expired" name="expired" class="form-check-input" type="radio" id="inlineRadio2"
-                     value="option2">
-              <label class="form-check-label" for="inlineRadio2">Presistent</label>
-            </div>
-            <div *ngIf="cookieFromSubmitted && f.expired.errors" class="invalid-feedback">
-              <div *ngIf="f.expired.errors.required">Expires is required</div>
-            </div>
-          </div>
-
-          <div class="form-row">
-            <div class="form-group col-md-2">
-              <label
-                class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-0 tx-color-03">Duration</label>
-              <input formControlName="duration1" type="number" class="form-control" placeholder="1">
-
-            </div>
-            <div class="form-group col-md-3 d-flex align-items-end">
-              <select formControlName="duration2" class="custom-select">
-                <option>Days</option>
-                <option>Weeks</option>
-                <option>Months</option>
-                <option>Years</option>
-              </select>
-            </div>
-            <div *ngIf="cookieFromSubmitted && f.duration1.errors" class="invalid-feedback">
-              <div *ngIf="f.duration1.errors.required">Duration is required</div>
-            </div>
-          </div>
-
-        </div>
-      </div><!-- modal-body -->
-      <div class="modal-footer pd-x-20 pd-y-15">
-        <button type="button" (click)="cookieModalRef.hide()" class="btn btn-white" data-dismiss="modal">Cancel</button>
-        <button type="submit" class="btn btn-primary">Save</button>
-      </div>
-  </form>
-</ng-template>

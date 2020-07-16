@@ -6,6 +6,7 @@ import {AuthGuard} from "../../_helpers";
 import { ModalModule } from 'ngx-bootstrap/modal';
 import {MatDialog, MatDialogModule} from '@angular/material/dialog';
 import {ReactiveFormsModule} from "@angular/forms";
+import {CrudTableModule, NotifyModule} from "ng-mazdik-lib";
 
 
 const route: Routes = [
@@ -18,7 +19,9 @@ const route: Routes = [
     ModalModule.forRoot(),
     RouterModule.forChild(route),
     MatDialogModule,
-    ReactiveFormsModule
-  ]
+    NotifyModule,
+    ReactiveFormsModule,
+    CrudTableModule
+  ],
 })
 export class CookieCategoryModule { }
