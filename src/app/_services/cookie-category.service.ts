@@ -39,14 +39,23 @@ export class CookieCategoryService implements DataSource {
   }
 
   getItems(requestMeta: RequestMetadata): Promise<PagedResult> {
-    console.log('requestMeta', requestMeta);
+    let name = '';
+    let category = '';
+    console.log('requestMeta.filters.hasOwnProperty', requestMeta.filters.hasOwnProperty('name'));
+    if (requestMeta.filters.hasOwnProperty('name')) {
+      console.log('requestMeta.filters.name.value', requestMeta.filters.name.value);
+      name = '&name=' + requestMeta.filters.name.value;
+    }
+    if (requestMeta.filters.hasOwnProperty('category')) {
+      category = '&categoryId=' + requestMeta.filters.category.value;
+    }
     this.dataFilter.filters = requestMeta.filters;
     this.dataFilter.globalFilterValue = requestMeta.globalFilterValue;
     this.dataSort.sortMeta = requestMeta.sortMeta;
     const perPage = requestMeta.pageMeta.perPage;
     const currentPage = requestMeta.pageMeta.currentPage;
     const path = '/cookie/' + this.currentManagedOrgID + '/' + this.currrentManagedPropID;
-    const params = '?limit=' + perPage + '&page' + currentPage;
+    const params = '?limit=' + perPage + '&page' + currentPage + name + category;
     return this.http.get<PagedResult>(environment.apiUrl + path + params)
       .toPromise()
       .then( (res) => {
@@ -57,7 +66,7 @@ export class CookieCategoryService implements DataSource {
           const sortedData = this.dataSort.sortRows(filteredData);
           console.log('sortedData', sortedData);
           const pageData = arrayPaginate(sortedData, currentPage, perPage);
-          const totalCount = sortedData.length;
+          const totalCount = res['count'];
           const pageCount = pageData.length;
           const result = {
             items: pageData,
@@ -76,7 +85,6 @@ export class CookieCategoryService implements DataSource {
   }
 
   getItem(row: any): Promise<any> {
-    console.log('getItem', row);
     const filters = {};
     for (const key of this.primaryKeys) {
       filters[key] = {value: row[key]};
@@ -94,8 +102,6 @@ export class CookieCategoryService implements DataSource {
   }
 
   async post(item: any): Promise<any>  {
-    console.log('post', item);
-
     const catData = {
       category: item.category,
       description: item.description,
@@ -120,7 +126,6 @@ export class CookieCategoryService implements DataSource {
   }
 
   put(item: any): Promise<any> {
-    console.log('put', item);
     const catData = {
       category: item.category,
       description: item.description,

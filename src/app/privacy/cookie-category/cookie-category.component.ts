@@ -41,10 +41,10 @@ settings: CdtSettings = new CdtSettings({
   crud: true,
   // bodyHeight: 380,
   exportAction: true,
-  globalFilter: true,
+  globalFilter: false,
   columnToggleAction: true,
   clearAllFiltersAction: true,
-  rowClass: this.getCellClass
+  rowClass: this.getCellClass,
   // virtualScroll: true,
 });
 
@@ -73,7 +73,7 @@ messages: DtMessages = new DtMessagesEn({
   columns.forEach((x, i) => (i > 0) ? x.editable = true : x.editable = false);
   columns[1].cellClass = this.getCellClass;
   columns[3].options = this.categoryList;
-  columns[9].options = this.durationType;
+  columns[8].options = this.durationType;
   this.dataManager = new DataManager(columns, this.settings, this.service, this.messages);
   this.dataManager.pager.perPage = 10;
   this.cd.detectChanges();
