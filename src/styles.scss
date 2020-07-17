@@ -216,3 +216,19 @@ a.dropdown-item > i {
 //         padding: 0 15px !important;
 //     }
 // }
+
+.datatable-header-cell {
+  background-color: #0367fa !important;
+}
+.dt-button {
+  background-color: #0367fa !important;
+}
+.ui-modal-header {
+  background-color: #0367fa !important;
+}
+.dt-form-group:first-child {
+  display: none !important;
+}
+.dt-spinner {
+  box-shadow: 0 -1.25rem 0 1.5rem #0367fa inset !important;
+}

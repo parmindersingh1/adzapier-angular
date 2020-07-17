@@ -22,16 +22,16 @@
       <li *ngFor="let menu of publicNavigationMenu" class="nav-item">
         <div *ngIf="menu.showlink" dropdown container="body">
           <div *ngIf="!menu.subcategory">
-            <a class="nav-link" (click)="true" routerLink="{{menu.routerLink}}">
+            <a class="nav-link" (click)="true" routerLinkActive="active" routerLink="{{menu.routerLink}}">
               {{ menu.showlink }}</a></div>
           <div *ngIf="menu.subcategory">
-            <a class="nav-link dropdown-toggle" *ngIf="menu.subcategory" dropdownToggle (click)="true">
+            <a class="nav-link dropdown-toggle" routerLinkActive="active" *ngIf="menu.subcategory" dropdownToggle (click)="true">
               {{ menu.showlink }}</a></div>
           <div *ngIf="menu.subcategory">
             <ul *dropdownMenu class="dropdown-menu">
               <ng-container *ngFor="let item of menu.subcategory;">
                 <li role="menuitem">
-                  <a class="dropdown-item" routerLink="{{item.routerLink}}">
+                  <a class="dropdown-item" routerLinkActive="active" routerLink="{{item.routerLink}}">
                     {{item.showlink}}
                   </a>
                 </li>
@@ -43,10 +43,10 @@
     </ul>
     <ul class="navbar-nav navbar-right" *ngIf="!currentUser">
       <li class="nav-item">
-        <a class="btn btn-sm btn-secondary type--uppercase" routerLink="/login">Sign In</a>
+        <a class="btn btn-sm btn-secondary type--uppercase" routerLinkActive="active" routerLink="/login">Sign In</a>
       </li>
       <li class="nav-item">
-        <a class="btn btn-sm btn-primary type-uppercase mg-l-10" routerLink="/signup">Try for Free</a>
+        <a class="btn btn-sm btn-primary type-uppercase mg-l-10" routerLinkActive="active" routerLink="/signup">Try for Free</a>
       </li>
     </ul>
   </div>
@@ -55,7 +55,7 @@
   <div class="collapse navbar-collapse mr-auto" [collapse]="!isCollapsed"
     [ngClass]="{'hidemenu':!currentUser, 'showmenu':currentUser}">
     <ul  class="navbar-nav" dropdown container="body">
-      <a class="nav-link dropdown-link" dropdownToggle (click)="false">
+      <a class="nav-link dropdown-link" routerLinkActive="active" dropdownToggle (click)="false">
        <div>{{currentOrganization}}
        </div>
        <span>{{currentProperty ? currentProperty : 'Select Property'}}</span>
@@ -63,14 +63,14 @@
      <!--(orgPropertyMenu | async).response-->
       <ul *dropdownMenu class="dropdown-menu propMenu">
           <li role="menuitem" *ngFor="let item of orgPropertyMenu; first as isFirst; let i = index;">
-            <a class="dropdown-item" routerLink="settings/organizations/organizationdetails/{{item.id}}">
+            <a class="dropdown-item" routerLinkActive="active" routerLink="settings/organizations/organizationdetails/{{item.id}}">
               {{item.orgname}}  <span class="align-right"><i-feather class="feather-plus" name="plus"></i-feather></span>
             </a>
             <div *ngIf="item.property.length=='0'">No Property</div>
             <ul role="menu">
               <ng-container  *ngFor="let submenu of item.property">
                 <li role="menuitem" (click)="isCurrentPropertySelected(item,submenu)">
-                  <a class="dropdown-item" [ngClass]="[isPropSelected(submenu) ? 'active' : '']"> <!-- routerLink="{{item.id}}/{{submenu.property_id}}"-->
+                  <a class="dropdown-item" routerLinkActive="active" [ngClass]="[isPropSelected(submenu) ? 'active' : '']"> <!-- routerLink="{{item.id}}/{{submenu.property_id}}"-->
                     {{ submenu.property_name? submenu.property_name: 'No Property' }}
                     <span class="ml-2" *ngIf="isPropSelected(submenu)">
                     <i class="fa fa-check"></i></span>
@@ -87,16 +87,16 @@
       <li *ngFor="let menu of navigationMenu" class="nav-item">
         <div *ngIf="menu.showlink" dropdown container="body">
           <div *ngIf="!menu.subcategory">
-            <a class="nav-link" (click)="true" routerLink="{{menu.routerLink}}">
+            <a class="nav-link" routerLinkActive="active" (click)="true" routerLink="{{menu.routerLink}}">
               {{ menu.showlink }}</a></div>
           <div *ngIf="menu.subcategory">
-            <a class="nav-link dropdown-toggle" *ngIf="menu.subcategory" dropdownToggle (click)="true">
+            <a class="nav-link dropdown-toggle" routerLinkActive="active" *ngIf="menu.subcategory" dropdownToggle (click)="true">
               {{ menu.showlink }}</a></div>
           <ul *dropdownMenu class="dropdown-menu">
             <ng-container *ngFor="let item of menu.subcategory;let q = index;">
               <li *ngIf="menu.showlink == 'Privacy' && q===0" class="displayflex"><span>DSAR</span></li>
               <li role="menuitem">
-                <a class="dropdown-item" routerLink="{{item.routerLink}}">
+                <a class="dropdown-item" routerLinkActive="active" routerLink="{{item.routerLink}}">
                   <span *ngIf="item.icon.indexOf('fa')===-1">
                     <i-feather name="{{item.icon}}" class="feather-16"></i-feather>{{item.showlink}}
                   </span>
@@ -116,7 +116,7 @@
     <ul class="navbar-nav">
       <li *ngFor="let menu of rightItems" class="nav-item">
         <div *ngIf="!menu.items" container="body">trtyr
-          <a *ngIf="!menu.items" class="nav-link" routerLink="{{menu.routerLink}}">
+          <a *ngIf="!menu.items" routerLinkActive="active" class="nav-link" routerLink="{{menu.routerLink}}">
             <i *ngIf="menu.icon" class="{{ menu.icon }}"></i>{{ menu.label }}
           </a>
         </div>
@@ -125,7 +125,7 @@
             <i-feather name="search"></i-feather>
           </div>
           <div *ngIf="menu.items" dropdown container="body" placement="bottom right">
-            <a class="nav-link dropdown-link" dropdownToggle (click)="false">
+            <a class="nav-link dropdown-link" routerLinkActive="active" dropdownToggle (click)="false">
               <i class="bd bd-primary bg-primary rounded-circle pd-10 tx-white">{{nameInitials(currentLoggedInUser)}}</i>
             </a>
             <ul *dropdownMenu class="dropdown-menu dropdown-menu-right">
@@ -135,10 +135,10 @@
                   <p class="tx-12 tx-color-03">{{userRole}}</p>
                 </div>
                 <li *ngIf="!item.items" role="menuitem">
-                  <a class="dropdown-item" *ngIf="item.label !== 'Signout'" routerLink="{{item.routerLink}}">
+                  <a class="dropdown-item" routerLinkActive="active" *ngIf="item.label !== 'Signout'" routerLink="{{item.routerLink}}">
                     <i-feather *ngIf="item.icon" name="{{item.icon}}" class="feather-16"></i-feather>{{item.label}}
                   </a>
-                  <a class="dropdown-item" *ngIf="item.label === 'Signout'" (click)="logout()"
+                  <a class="dropdown-item" routerLinkActive="active" *ngIf="item.label === 'Signout'" (click)="logout()"
                     routerLink="{{item.routerLink}}">
                     <i-feather *ngIf="item.icon" name="{{item.icon}}" class="feather-16"></i-feather>{{item.label}}
                   </a>
@@ -148,12 +148,12 @@
                 </li>
                 <li *ngIf="item.items" role="menuitem" dropdown triggers="mouseover" placement="top left"
                   container="body">
-                  <a class="dropdown-item" (click)="false"><i
+                  <a class="dropdown-item" routerLinkActive="active" (click)="false"><i
                       class="fas fa-caret-left dropdown-submenu-left"></i>{{ item.label }}</a>
                   <ul *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu">
                     <ng-container *ngFor="let submenu of item.items">
                       <li role="menuitem">
-                        <a class="dropdown-item" href="#">
+                        <a class="dropdown-item" routerLinkActive="active" href="#">
                           <i-feather *ngIf="submenu.icon" name="{{submenu.icon}}" class="feather-16"></i-feather>
                           {{ submenu.label }}
 
@@ -191,16 +191,16 @@
     <li *ngFor="let menu of publicNavigationMenu" class="nav-item">
       <div *ngIf="menu.showlink" (click)="isCollapsed = !isCollapsed" [attr.aria-expanded]="!isCollapsed" aria-controls="collapseExample" container="body">
         <div *ngIf="!menu.subcategory">
-          <a class="nav-link" (click)="true" routerLink="{{menu.routerLink}}">
+          <a class="nav-link" routerLinkActive="active" (click)="true" routerLink="{{menu.routerLink}}">
             {{ menu.showlink }}</a></div>
         <div *ngIf="menu.subcategory">
-          <a class="nav-link" *ngIf="menu.subcategory" (click)="true">
+          <a class="nav-link" routerLinkActive="active" *ngIf="menu.subcategory" (click)="true">
             {{ menu.showlink }}</a></div>
         <div *ngIf="menu.subcategory">
           <ul id="collapseExample" [ngbCollapse]="!isCollapsed" >
             <ng-container *ngFor="let item of menu.subcategory;">
               <li role="menuitem">
-                <a class="dropdown-item" routerLink="{{item.routerLink}}">
+                <a class="dropdown-item" routerLinkActive="active" routerLink="{{item.routerLink}}">
                   {{item.showlink}}
                 </a>
               </li>
@@ -210,7 +210,7 @@
       </div>
     </li>
     <li class="nav-item" *ngIf="!currentUser">
-      <a  class="nav-link" routerLink="/login">Sign In</a> </li>
+      <a  class="nav-link" routerLinkActive="active" routerLink="/login">Sign In</a> </li>
     <li *ngIf="!currentUser" class="nav-item"> <a  class="nav-link" routerLink="/signup">Try for Free</a>
     </li>
   </ul>
@@ -218,21 +218,21 @@
 
   <!--sidemenu property list after login-->
   <ul  class="navbar-nav" dropdown container="body">
-    <a class="nav-link dropdown-link" dropdownToggle (click)="false">
+    <a class="nav-link dropdown-link" routerLinkActive="active" dropdownToggle (click)="false">
      <div>{{currentOrganization}}
      </div>
      <span>{{currentProperty?currentProperty:'Select Property'}}</span>
     </a>
     <ul *dropdownMenu class="dropdown-menu propMenu">
         <li role="menuitem" *ngFor="let item of orgPropertyMenu; first as isFirst; let i = index;">
-          <a class="dropdown-item" routerLink="organizationdetails/{{item.id}}">
+          <a class="dropdown-item" routerLinkActive="active" routerLink="organizationdetails/{{item.id}}">
             {{item.orgname}}  <span class="align-right"><i-feather class="feather-plus" name="plus"></i-feather></span>
           </a>
           <div *ngIf="item.property.length=='0'">No Property</div>
           <ul role="menu">
             <ng-container  *ngFor="let submenu of item.property">
               <li role="menuitem" (click)="isCurrentPropertySelected(item,submenu)">
-                <a class="dropdown-item" [ngClass]="[isPropSelected(submenu) ? 'active' : '']"> <!-- routerLink="{{item.id}}/{{submenu.property_id}}"-->
+                <a class="dropdown-item" routerLinkActive="active" [ngClass]="[isPropSelected(submenu) ? 'active' : '']"> <!-- routerLink="{{item.id}}/{{submenu.property_id}}"-->
                   {{ submenu.property_name? submenu.property_name: 'No Property' }}
                   <span class="ml-2" *ngIf="isPropSelected(submenu)">
                   <i class="fa fa-check"></i></span>
@@ -249,16 +249,16 @@
     <li *ngFor="let menu of navigationMenu" class="nav-item">
       <div *ngIf="menu.showlink" dropdown container="body">
         <div *ngIf="!menu.subcategory">
-          <a class="nav-link" (click)="true" routerLink="{{menu.routerLink}}">
+          <a class="nav-link" routerLinkActive="active" (click)="true" routerLink="{{menu.routerLink}}">
             {{ menu.showlink }}</a></div>
         <div *ngIf="menu.subcategory">
-          <a class="nav-link dropdown-toggle" *ngIf="menu.subcategory" dropdownToggle (click)="true">
+          <a class="nav-link dropdown-toggle"  routerLinkActive="active"*ngIf="menu.subcategory" dropdownToggle (click)="true">
             {{ menu.showlink }}</a></div>
         <ul *dropdownMenu class="dropdown-menu">
           <ng-container *ngFor="let item of menu.subcategory;let q = index;">
             <li *ngIf="menu.showlink == 'Privacy' && q===0" class="displayflex"><span>DSAR</span></li>
             <li role="menuitem">
-              <a class="dropdown-item" routerLink="{{item.routerLink}}">
+              <a class="dropdown-item" routerLinkActive="active" routerLink="{{item.routerLink}}">
                 <span *ngIf="item.icon.indexOf('fa')===-1">
                   <i-feather name="{{item.icon}}" class="feather-16"></i-feather>{{item.showlink}}
                 </span>
