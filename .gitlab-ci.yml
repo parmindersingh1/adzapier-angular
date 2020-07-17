@@ -147,7 +147,7 @@ deploy-to-swarm-develop:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD ${CI_REGISTRY}
     - docker service scale ${CI_PROJECT_NAMESPACE}-${CI_PROJECT_NAME}_${SERVICE_NAME}=$SCALABLE_REPLICAS || true
     - echo "Deploying Stack"
-    - docker stack deploy --prune --with-registry-auth --compose-file=docker-stack-out.yaml ${CI_PROJECT_NAMESPACE}-${CI_PROJECT_NAME}
+    - docker stack deploy --with-registry-auth --compose-file=docker-stack-out.yaml ${CI_PROJECT_NAMESPACE}-${CI_PROJECT_NAME}
     - docker service scale ${CI_PROJECT_NAMESPACE}-${CI_PROJECT_NAME}_${SERVICE_NAME}=$RUNNING_REPLICAS
   before_script:
     - export CAL_VER=$(date +"%y%m%d%H")
@@ -184,7 +184,7 @@ deploy-to-swarm-staging:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD ${CI_REGISTRY}
     - docker service scale ${CI_PROJECT_NAMESPACE}-${CI_PROJECT_NAME}_${SERVICE_NAME}=$SCALABLE_REPLICAS || true
     - echo "Deploying Stack"
-    - docker stack deploy --prune --with-registry-auth --compose-file=docker-stack-out.yaml ${CI_PROJECT_NAMESPACE}-${CI_PROJECT_NAME}
+    - docker stack deploy --with-registry-auth --compose-file=docker-stack-out.yaml ${CI_PROJECT_NAMESPACE}-${CI_PROJECT_NAME}
     - docker service scale ${CI_PROJECT_NAMESPACE}-${CI_PROJECT_NAME}_${SERVICE_NAME}=$RUNNING_REPLICAS
   before_script:
     - export CAL_VER=$(date +"%y%m%d%H")
