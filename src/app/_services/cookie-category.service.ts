@@ -41,9 +41,7 @@ export class CookieCategoryService implements DataSource {
   getItems(requestMeta: RequestMetadata): Promise<PagedResult> {
     let name = '';
     let category = '';
-    console.log('requestMeta.filters.hasOwnProperty', requestMeta.filters.hasOwnProperty('name'));
     if (requestMeta.filters.hasOwnProperty('name')) {
-      console.log('requestMeta.filters.name.value', requestMeta.filters.name.value);
       name = '&name=' + requestMeta.filters.name.value;
     }
     if (requestMeta.filters.hasOwnProperty('category')) {
@@ -55,7 +53,7 @@ export class CookieCategoryService implements DataSource {
     const perPage = requestMeta.pageMeta.perPage;
     const currentPage = requestMeta.pageMeta.currentPage;
     const path = '/cookie/' + this.currentManagedOrgID + '/' + this.currrentManagedPropID;
-    const params = '?limit=' + perPage + '&page' + currentPage + name + category;
+    const params = '?limit=' + perPage + '&page=' + currentPage + name + category;
     return this.http.get<PagedResult>(environment.apiUrl + path + params)
       .toPromise()
       .then( (res) => {
@@ -64,12 +62,11 @@ export class CookieCategoryService implements DataSource {
           // @ts-ignore
           const filteredData = this.dataFilter.filterRows(rows);
           const sortedData = this.dataSort.sortRows(filteredData);
-          console.log('sortedData', sortedData);
           const pageData = arrayPaginate(sortedData, currentPage, perPage);
           const totalCount = res['count'];
           const pageCount = pageData.length;
           const result = {
-            items: pageData,
+            items: res['response'],
             _meta: {
               totalCount,
               pageCount,
@@ -77,7 +74,6 @@ export class CookieCategoryService implements DataSource {
               perPage
             }
           } as unknown as PagedResult;
-          console.log('result', result);
           return result;
         }
       })
@@ -93,7 +89,6 @@ export class CookieCategoryService implements DataSource {
       pageMeta: {currentPage: 1},
       filters,
     } as RequestMetadata;
-    console.log('requestMeta Get', requestMeta);
     return this.getItems(requestMeta)
       .then(data => {
           return data.items[0];
@@ -163,7 +158,6 @@ export class CookieCategoryService implements DataSource {
   }
 
   getOptions(url: string, parentId: any): Promise<any> {
-    console.log('getOptions', parentId);
     return this.http.get(url)
       .toPromise()
       .then((response: any) => {
@@ -178,7 +172,6 @@ export class CookieCategoryService implements DataSource {
   }
 
   private handleError(error: any) {
-    console.log('error', error);
     let errorMessage = '';
     if (error.error instanceof ErrorEvent) {
       // client-side error
