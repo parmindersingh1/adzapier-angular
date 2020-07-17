@@ -136,8 +136,9 @@ deploy-to-swarm-develop:
   variables:
     DOCKER_HOST: tcp://staging-manager-01-nyc3.adzapsrv.com:2375
     backend: cmp_develop-ui
-    HOST1: develop-cmp.adzpier.com
-    HOST: "`develop-cmp.adzpier.com`"
+#    HOST1: develop-cmp.adzpier.com
+#    HOST: "`develop-cmp.adzpier.com`"
+    DOMAINS: "Host(`develop-cmp.adzpier.com`) || Host(`develop-cmp.adzpier-staging.com`)"
     SERVICE_NAME: ${CI_BUILD_REF_NAME}-ui
     TARGET_PORT: 80
     SERVICE_MIN_REPLICAS: 2
@@ -146,7 +147,7 @@ deploy-to-swarm-develop:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD ${CI_REGISTRY}
     - docker service scale ${CI_PROJECT_NAMESPACE}-${CI_PROJECT_NAME}_${SERVICE_NAME}=$SCALABLE_REPLICAS || true
     - echo "Deploying Stack"
-    - docker stack deploy --with-registry-auth --compose-file=docker-stack-out.yaml ${CI_PROJECT_NAMESPACE}-${CI_PROJECT_NAME}
+    - docker stack deploy --prune --with-registry-auth --compose-file=docker-stack-out.yaml ${CI_PROJECT_NAMESPACE}-${CI_PROJECT_NAME}
     - docker service scale ${CI_PROJECT_NAMESPACE}-${CI_PROJECT_NAME}_${SERVICE_NAME}=$RUNNING_REPLICAS
   before_script:
     - export CAL_VER=$(date +"%y%m%d%H")
@@ -173,8 +174,9 @@ deploy-to-swarm-staging:
     DOCKER_HOST: tcp://staging-manager-01-nyc3.adzapsrv.com:2375
     SERVICE_NAME: ${CI_BUILD_REF_NAME}-ui
     backend: cmp-ui
-    HOST1: staging-cmp.adzpier.com
-    HOST: "`staging-cmp.adzpier.com`"
+#    HOST1: staging-cmp.adzpier.com
+#    HOST: "`staging-cmp.adzpier.com`"
+    DOMAINS: "Host(`staging-cmp.adzpier.com`) || Host(`cmp.adzpier-staging.com`)"
     SERVICE_MIN_REPLICAS: 2
     TARGET_PORT: 80
   image: docker:19
@@ -182,7 +184,7 @@ deploy-to-swarm-staging:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD ${CI_REGISTRY}
     - docker service scale ${CI_PROJECT_NAMESPACE}-${CI_PROJECT_NAME}_${SERVICE_NAME}=$SCALABLE_REPLICAS || true
     - echo "Deploying Stack"
-    - docker stack deploy --with-registry-auth --compose-file=docker-stack-out.yaml ${CI_PROJECT_NAMESPACE}-${CI_PROJECT_NAME}
+    - docker stack deploy --prune --with-registry-auth --compose-file=docker-stack-out.yaml ${CI_PROJECT_NAMESPACE}-${CI_PROJECT_NAME}
     - docker service scale ${CI_PROJECT_NAMESPACE}-${CI_PROJECT_NAME}_${SERVICE_NAME}=$RUNNING_REPLICAS
   before_script:
     - export CAL_VER=$(date +"%y%m%d%H")
@@ -210,17 +212,33 @@ deploy-to-swarm-prod:
   stage: deploy
   variables:
     DOCKER_HOST: tcp://production-manager-01-nyc3.adzapsrv.com:2375
-#    SERVICE_NAME: ui
+    SERVICE_MIN_REPLICAS: 2
+    TARGET_PORT: 80
+    SERVICE_NAME: ${CI_BUILD_REF_NAME}-ui
     backend: cmp-ui
-    HOST: cmp.adzpier.com
+    HOST: "`cmp.adzpier.com`"
   image: docker:19
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD ${CI_REGISTRY}
-    - envsubst < docker-compose.yaml > docker-compose-out.yaml
+    - docker service scale ${CI_PROJECT_NAMESPACE}-${CI_PROJECT_NAME}_${SERVICE_NAME}=$SCALABLE_REPLICAS || true
+    - echo "Deploying Stack"
     - docker stack deploy --prune --with-registry-auth --compose-file=docker-compose-out.yaml ${CI_PROJECT_NAMESPACE}-${CI_PROJECT_NAME}
+    - docker service scale ${CI_PROJECT_NAMESPACE}-${CI_PROJECT_NAME}_${SERVICE_NAME}=$RUNNING_REPLICAS
   before_script:
     - apk add gettext
     - export CAL_VER=$(date +"%y%m%d%H")
+    - RUNNING_REPLICAS=$(docker service ps ${CI_PROJECT_NAMESPACE}-${CI_PROJECT_NAME}_${SERVICE_NAME} | grep -i running | wc -l) || true
+    - echo $RUNNING_REPLICAS
+    - |
+      if [[ $RUNNING_REPLICAS == 0 ]]; then
+        RUNNING_REPLICAS=`expr $RUNNING_REPLICAS + $SERVICE_MIN_REPLICAS`
+      fi
+    - echo $RUNNING_REPLICAS
+    - SCALABLE=`expr $RUNNING_REPLICAS \* $SERVICE_MIN_REPLICAS`
+    - export SCALABLE_REPLICAS=$(echo $SCALABLE)
+    - echo $SCALABLE_REPLICAS
+    - envsubst < docker-compose.yaml > docker-compose-out.yaml
+    - cat docker-compose-out.yaml
   environment:
     name: master
     url: http://${CI_BUILD_REF_NAME}.adzpier.com
