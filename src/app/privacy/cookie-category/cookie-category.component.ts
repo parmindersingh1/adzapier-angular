@@ -107,7 +107,6 @@ messages: DtMessages = new DtMessagesEn({
     this.loading.start();
     const that = this;
     await this.service.getCategoriesList().then((res: CategoryResponse) => {
-    console.log('res', res);
     that.loading.stop();
     for (const data of res.response.durationtype) {
       durationType.push({id: data['key'], name: data['value']});
