@@ -142,7 +142,7 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
       }
     }];
 
-      const options = {
+    const options = {
         series: {
           stack: 0,
           shadowSize: 0,

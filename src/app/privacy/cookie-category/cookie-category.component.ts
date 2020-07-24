@@ -29,6 +29,7 @@ class CategoryResponseData {
 
 export class CookieCategoryComponent implements OnInit {
   categoryModalRef: BsModalRef;
+  isScanning = false;
   isDurationType = false;
   cookieForm: FormGroup;
   categoryForm: FormGroup;
@@ -147,5 +148,16 @@ messages: DtMessages = new DtMessagesEn({
       this.notification.error('Error', 'Something went wrong', notificationConfig);
     });
   }
-
+  onRescanCookie() {
+     this.isScanning = true;
+     this.service.cookieScanning().subscribe(res => {
+       this.isScanning = false;
+       if (res['status'] === 201) {
+         this.notification.info('Scanning', res['response'], notificationConfig);
+       }
+     }, error => {
+       this.isScanning = false;
+       this.notification.error('Error', error, notificationConfig);
+     });
+  }
 }
