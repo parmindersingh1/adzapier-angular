@@ -252,7 +252,7 @@
                                     </td>
                                   <td class="text-center">
                                     <button type="button" *ngIf="list.user_last_login === 'Invitation sent' || list.user_last_login === 'Invitation Pending'"
-                                            (click)="onResendInvitation(list.user_email)"  class="btn btn-sm btn-secondary"><i class="fas fa-envelope	"></i> Resend Invitation</button>
+                                            (click)="onResendInvitation(list.user_email)"  class="btn btn-sm btn-primary"><i class="fas fa-envelope	"></i> Resend Invitation</button>
                                   </td>
                                     <td>
                                         <a class="pd-r-5" (click)="removeTeamMember(list.id)">

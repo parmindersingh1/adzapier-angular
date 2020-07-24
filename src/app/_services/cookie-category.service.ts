@@ -196,4 +196,12 @@ export class CookieCategoryService implements DataSource {
         })
         .catch(this.handleError.bind(this));
   }
+
+  cookieScanning() {
+    const paramsData = {
+      orgid: this.currentManagedOrgID,
+      propid: this.currrentManagedPropID
+    };
+    return this.http.get(environment.apiUrl + '/scanner/' + this.currentManagedOrgID + '/' + this.currrentManagedPropID);
+  }
 }
