@@ -5,6 +5,8 @@ import { FormArray, FormGroup, FormControl, FormBuilder, Validators } from '@ang
 import {NgxUiLoaderService} from 'ngx-ui-loader';
 import { UserService, OrganizationService } from 'src/app/_services';
 import { CompanyService } from 'src/app/company.service';
+import {notificationConfig} from "../../_constant/notification.constant";
+import {NotificationsService} from "angular2-notifications";
 
 @Component({
   selector: 'app-organizationteam',
@@ -18,7 +20,7 @@ export class OrganizationteamComponent implements OnInit {
   roleList: any;
   submitted;
   emailid;
-  p: number = 1; 
+  p: number = 1;
   pageSize: any = 5;
   totalCount: any;
   searchText: any;
@@ -28,6 +30,7 @@ export class OrganizationteamComponent implements OnInit {
               private modalService: NgbModal,
               private userService: UserService,
               private formBuilder: FormBuilder,
+              private notification: NotificationsService,
               private companyService: CompanyService,
               private orgService: OrganizationService,
               private loading: NgxUiLoaderService,
@@ -53,7 +56,7 @@ export class OrganizationteamComponent implements OnInit {
   loadOrgTeamMembers(orgID) {
     const key = 'response';
     const pagelimit = '&limit=' + this.paginationConfig.itemsPerPage + '&page=' + this.paginationConfig.currentPage;
-    this.loading.start();
+    console.log('page Limit', pagelimit);
     this.orgService.getOrgTeamMembers(orgID, pagelimit).subscribe((data) => {
       this.loading.stop();
       this.organizationTeamMemberList = data[key];
@@ -98,7 +101,7 @@ export class OrganizationteamComponent implements OnInit {
 		this.paginationConfig.itemsPerPage = Number(event.target.value);
   }
 
-  
+
 
   onSubmitInviteUserOrganization() {
     this.submitted = true;
@@ -126,6 +129,25 @@ export class OrganizationteamComponent implements OnInit {
           this.modalService.dismissAll('Error!');
         });
     }
+  }
+  onResendInvitation(email) {
+    const requestObj = {
+      email,
+      orgid: this.organizationID,
+      user_level: 'organization'
+    };
+    this.companyService.inviteUser(requestObj)
+      .subscribe((data) => {
+        if (data) {
+          this.notification.info('Invitation Send', 'We have sent a email on your Email Id', notificationConfig);
+          this.loadOrgTeamMembers(this.organizationID);
+          this.inviteUserOrgForm.reset();
+          this.modalService.dismissAll('Data Saved!');
+        }
+      }, (error) => {
+        this.notification.error('Invitation Error', error, notificationConfig);
+        this.modalService.dismissAll('Error!');
+      });
   }
 
   removeTeamMember(id) {

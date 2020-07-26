@@ -1,0 +1,18 @@
+.table-responsive {
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch; }
+.table-responsive > .table-bordered {
+  border: 0; }
+
+@media (min-width: 576px) {
+  .modal-dialog {
+    max-width: 700px !important;
+  }
+}
+.cat-btn{
+  background-color: #0367fa !important;
+  color: #fff !important;
+  margin-right: 5px;
+}

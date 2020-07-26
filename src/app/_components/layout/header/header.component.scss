@@ -36,8 +36,12 @@ i.dropdown-submenu {
 .nav-item {
   padding: 6px;
   color: rgba(255, 255, 255, 0.7);
+  background: transparent;
 }
-
+.active {
+  color: #4994fe !important;
+  background-color: transparent !important;
+}
 i {
   margin-right: 0;
 }
@@ -57,7 +61,9 @@ i {
   /*justify-content: flex-start !important;*/
   padding: 0 15px !important;
 }
-
+.dropdown-menu-right{
+  right: -62px !important;
+}
 .dropdown-menu{
   font-size: 0.9rem;
   padding: 0;
@@ -117,10 +123,10 @@ ul.dropdown-menu.propMenu.show > li > ul {
   margin: 0;
 }
 
-.active {
-  background-color: #0148ae;
-  color: #0148ae !important;
-}
+//.active {
+//  background-color: #0148ae;
+//  color: #0148ae !important;
+//}
 
 .dropdown-item.active, .dropdown-item:active {
   background: none !important;
