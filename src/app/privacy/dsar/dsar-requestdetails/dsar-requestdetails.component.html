@@ -18,24 +18,50 @@
                         Current Status of DSAR Request
                     </span>
                     <div class="d-flex">
-                        <a href="#modalEditContact" data-toggle="modal"
-                            class="btn btn-sm btn-white d-flex align-items-center mg-r-5"><svg
-                                xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round" class="feather feather-edit-2">
+
+                        <button (click)="editRequestDetailModalPopup(editRequestDetails,'')" data-toggle="modal"
+                            class="btn btn-xs btn-white mr-2"><svg xmlns="http://www.w3.org/2000/svg" width="24"
+                                height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-2">
                                 <polygon points="16 3 21 8 8 21 3 21 3 16 16 3"></polygon>
                             </svg><span class="d-none d-sm-inline mg-l-5">
-                                Edit</span></a>
+                                Edit</span></button>
 
-                        <button data-toggle="modal" class="btn btn-sm btn-white d-flex align-items-center mg-r-5">
-                            <span class="d-none d-sm-inline mg-l-5">
-                                Extend Due Date</span></button>
+
+
+                        <div class="dropdown extenddays" [ngClass]="{'show':isListVisible,'':!isListVisible}">
+                            <button class="btn btn-xs btn-primary" role="button" #btnDaysLeft (click)="toggleBtn()">
+                                Extend Days
+                            </button>
+
+                            <div class="dropdown-menu" #toggleDayleftdiv
+                                [ngClass]="{'show':isListVisible,'':!isListVisible}">
+                                <ul>
+                                    <li *ngFor="let item of customdayslist;let last = last">
+                                        <div class="dropdown-item" (click)="onClickEndDays(item)"> {{item}}</div>
+                                        <div *ngIf="last" class="aligncenter">
+                                            <form #endDaysform='ngForm' autocomplete="false"
+                                                (ngSubmit)="onSubmitEndDays(endDaysform)" class="d-flex">
+
+                                                <input type="number" min="1" #customDaysInput
+                                                    class="form-control form-control-sm" max="45"
+                                                    [(ngModel)]="customdays" name="customdays"
+                                                    placeholder="custom value" />
+
+                                                <button class="btn btn-xs btn-primary ml-2">select</button>
+                                            </form>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+
+
                     </div>
 
                 </div>
                 <div class="card-body pd-10">
-                <!-- {{requestDetails | json}} -->
-                
                     <div class="row row-sm pd-t-5">
                         <div class="col-sm">
                             <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Request
@@ -59,13 +85,13 @@
                             <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Date
                                 Opened
                             </label>
-                            <p class="mg-b-0" *ngIf="respCreatedAt">{{respCreatedAt | date:'medium'}}</p>
+                            <p class="mg-b-0" *ngIf="respCreatedAt">{{respCreatedAt | date:'longDate'}}</p>
                         </div>
 
                         <div class="col-sm">
                             <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Request
                                 Accepting Agent</label>
-                            <p class="mg-b-0">Jeniffer Logan</p>
+                            <p class="mg-b-0">{{reqAcceptingagent}}</p>
                         </div>
 
 
@@ -92,13 +118,14 @@
                             <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Risk
                                 Factor
                             </label>
-                            <p class="tx-11 tx-spacing-1 tx-semibold mg-b-0 tx-danger">Likely High Risk</p>
+                            <p class="tx-11 tx-spacing-1 tx-semibold mg-b-0 tx-danger">{{riskFactorText}}</p>
                         </div>
 
                         <div class="col-sm">
                             <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Deadline
                             </label>
-                            <p class="mg-b-0" *ngIf="respCreatedAt && respDaysLeft">{{getDeadLine(respCreatedAt,respDaysLeft) | date:'medium'}}</p>
+                            <p class="mg-b-0" *ngIf="respCreatedAt && respDaysLeft">
+                                {{getDeadLine(respCreatedAt,respDaysLeft) | date:'longDate'}}</p>
                         </div>
 
                         <div class="col-sm">
@@ -114,152 +141,327 @@
                             <p class="mg-b-0">{{formName}}</p>
                         </div>
                     </div>
-                    <!-- <div class="row row-sm pd-t-10 bd-t">
-                        <div class="col-sm">
-                            <label
-                                class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Property</label>
 
-                            <p class="tx-13 tx-spacing-1  mg-b-0 ">{{currentPropertyName}}</p>
-                        </div>
-                        <div class="col-sm">
-                            <label
-                                class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Name</label>
-
-                            <p class="tx-13 tx-spacing-1  mg-b-0 ">{{respFirstName}}</p>
-                        </div>
-                        <div class="col-sm">
-                            <label
-                                class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Email</label>
-
-                            <p class="tx-13 tx-spacing-1  mg-b-0 ">{{respEmailID}}</p>
-                        </div>
-                        <div class="col-sm">
-                            <label
-                                class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Country</label>
-
-                            <p class="tx-13 tx-spacing-1  mg-b-0 ">{{respCountry}}</p>
-                        </div>
-                        <div class="col-sm">
-                            <label
-                                class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">State</label>
-
-                            <p class="tx-13 tx-spacing-1  mg-b-0 ">{{respState}}</p>
-                        </div>
-                        <div class="col-sm">
-                            <label
-                                class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">City</label>
-
-                            <p class="tx-13 tx-spacing-1  mg-b-0 ">{{respCity}}</p>
-                        </div> 
-                        <div class="col-sm">
-                            <label
-                                class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Address</label>
-                            <p class="tx-13 tx-spacing-1  mg-b-0">819 Waldeck Street Farmers Branch, TX 75244,
-                                United  States
-                            </p>
-
-                        </div>
-                        <div class="col-sm col-1"></div>
-
-                    </div> -->
                     <div class="divwrapper">
                         <div class="customdata">
                             <label
                                 class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Property</label>
 
-                            <p class="tx-13 tx-spacing-1  mg-b-0 ">{{currentPropertyName}}</p>
+                            <p class="tx-13 tx-spacing-1  mg-b-0 " *ngIf="currentPropertyName">{{currentPropertyName}}
+                            </p>
                         </div>
-                    <div *ngFor="let data of getCustomFields(customFields) | keyvalue">
-                        <div class="customdata">
-                        <label class="tx-sans">{{data.key}} </label>
-                        <p class="mg-b-0">{{data.value}}</p>
+                        <div *ngFor="let data of getCustomFields(customFields) | keyvalue">
+                            <div class="customdata">
+                                <label class="tx-sans">{{data.key}} </label>
+                                <p class="mg-b-0">{{data.value}}</p>
+                            </div>
                         </div>
-                      </div>
                     </div>
-                    <div class="shadowdiv">
+                    <div class="stagediv">
                         <div class="divider-text mg-y-5">Advance Status</div>
-                        <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs" [(activeId)]="active"
-                            (navChange)="onNavChange($event)">
-                            <li [ngbNavItem]="1">
-                                <a ngbNavLink [ngClass]="{'previousTabcolor':previousTabOne,'':!previousTabOne}"> <span
-                                        class="step-number">1</span>Verify Request</a>
-                                <ng-template ngbNavContent>
-                                    <div id="step-1" class="pd-5 tab-pane verify-request-content" style="display: block;">
-                                        <!--step1 tabs-->
-                                        <ul ngbNav #nav="ngbNav" class="nav-tabs">
-                                            <li ngbNavItem>
-                                              <a ngbNavLink>Activity</a>
-                                              <ng-template ngbNavContent>First content</ng-template>
-                                            </li>
-                                            <li ngbNavItem>
-                                              <a ngbNavLink>Email</a>
-                                              <ng-template ngbNavContent>
-                                                  <div [formGroup]="quillEditorText">
-                                                <quill-editor formControlName="editor" [modules]="quillConfig" [(ngModel)]="editorDataFooter"
-                                                [styles]="{height: '200px'}"></quill-editor>
-                                                  </div>
-                                              </ng-template>
-                                            </li>
-                                            <li ngbNavItem>
-                                                <a ngbNavLink>Tasks</a>
-                                                <ng-template ngbNavContent>Tasks content</ng-template>
-                                              </li>
-                                              <li ngbNavItem>
-                                                <a ngbNavLink>Systems</a>
-                                                <ng-template ngbNavContent>System content</ng-template>
-                                              </li>
-                                          </ul>
-                                          <div [ngbNavOutlet]="nav"></div>
-                                          
-                                        <!--end of step1 tabs-->
 
-                                    </div> <!-- End Step-1-->
-                                </ng-template>
+                        <ul class="nav-tabs">
+                            <li *ngFor="let stage of workflowStages">
+
+                                <div (click)="stageSelection(stage)" [ngClass]="{'completedStage':  isStageCompleted(stage)
+                                ,'':stage.order < nextStage || stage.order == nextStage
+                                }">
+
+                                    <a> <span class="step-number"
+                                            [ngClass]="{' ':currentStage==stage.order && !isPreviousStageExist(stage),'':nextStage > currentStage}">{{stage.order}}</span>
+                                        <span
+                                            [ngClass]="{' ':currentStage==stage.order && !isPreviousStageExist(stage),'':nextStage > currentStage}">
+                                            {{stage.stage_title}}</span>
+                                    </a>
+                                </div>
+
                             </li>
-                            <li [ngbNavItem]="2">
-                                <!--[disabled]="disabled"-->
-                                <a ngbNavLink [ngClass]="{'previousTabcolor':previousTabTwo,'':!previousTabTwo}"><span
-                                        class="step-number">2</span> Request Fulfill</a>
-                                <ng-template ngbNavContent>
-                                    22
-                                </ng-template>
-                            </li>
-                            <li [ngbNavItem]="3">
-                                <a ngbNavLink
-                                    [ngClass]="{'previousTabcolor':previousTabThree,'':!previousTabThree}"><span
-                                        class="step-number">3</span> Settings</a>
-                                <ng-template ngbNavContent>
-
-                                    <!-- <div class="form-group mg-b-5"><a target="_blank" *ngIf="crid" class="btn btn-secondary sw-btn-prev"
-                        [routerLink]="['/editwebforms',  crid ]">Local Preview</a></div> -->
-                                    33
-
-
-                                </ng-template>
-                            </li>
-                            <li [ngbNavItem]="4">
-                                <a ngbNavLink
-                                    [ngClass]="{'previousTabcolor':previousTabFour,'':!previousTabThree}"><span
-                                        class="step-number">4</span> Consumer Notification</a>
-                                <ng-template ngbNavContent>
-                                    <p>Four</p>
-
-                                </ng-template>
-                            </li>
-                            <li [ngbNavItem]="5">
-                                <a ngbNavLink><span class="step-number">5</span> Complete</a>
-                                <ng-template ngbNavContent>
-                                    <p>Five</p>
-                                </ng-template>
-                            </li>
-
                         </ul>
-                        <div [ngbNavOutlet]="nav"></div>
+
+
+
                     </div>
-                    
+
                 </div><!-- card-body -->
             </div><!-- card -->
+            <div class="card mt-2 activitytab">
+                <ul ngbNav #nav="ngbNav" class="nav-tabs" (navChange)="onNavChange($event)">
+                    <li [ngbNavItem]="1">
+                        <a ngbNavLink>Activity</a>
+                        <ng-template ngbNavContent>
+                            <form [formGroup]="quillEditorText" autocomplete="false"
+                                (ngSubmit)="onSubmitActivityPost()">
+                                <quill-editor formControlName="editor" [modules]="quillConfig"
+                                    [(ngModel)]="editorActivityPost">
+                                </quill-editor>
+                                <button type="submit" class="btn btn-sm btn-primary float-right mb-2 mt-2">Post</button>
+                            </form>
+
+                        </ng-template>
+
+
+                    </li>
+                    <li [ngbNavItem]="2">
+                        <a ngbNavLink>Email</a>
+                        <ng-template ngbNavContent>
+                            <form [formGroup]="quillEditorEmailText" autocomplete="false"
+                                (ngSubmit)="onSubmitEmailPost()">
+                                <div class="d-flex">
+                                    <div class="d-flex align-items-center mb-2 ml-auto">
+                                        <label class="mr-2"> Select template </label>
+                                        <div class="flex-row m1">
+                                            <select (change)="onChangeRequestType($event)"
+                                                formControlName="dropdownEmailTemplate" class="form-control">
+                                                <option selected disabled value="">select email template</option>
+                                                <ng-container *ngFor="let obj of emailTemplates">
+                                                    <option [value]="obj.template">{{obj.name}}</option>
+                                                </ng-container>
+                                            </select>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <quill-editor formControlName="editorEmailMessage" [modules]="quillConfig">
+                                </quill-editor>
+                                <button type="submit" class="btn btn-sm btn-primary float-right mb-2 mt-2">Post
+                                    2</button>
+                            </form>
+                        </ng-template>
+
+
+                    </li>
+                    <li [ngbNavItem]="3">
+                        <a ngbNavLink>Tasks</a>
+                        <ng-template ngbNavContent>Tasks content</ng-template>
+                    </li>
+                    <!-- <li ngbNavItem>
+                        <a ngbNavLink>Systems</a>
+                        <ng-template ngbNavContent>System content</ng-template>
+                    </li> -->
+                </ul>
+                <div [ngbNavOutlet]="nav" class="m-2"></div>
+                <div class="activity" *ngIf="isActivityLogOpen">
+                    <ul>
+                        <li *ngFor="let data of activityLog">
+                            <div *ngIf="data.activity_type == 'post'" class="activity-log">
+                                <div class="chat-group-divider">
+                                    <span *ngIf="data.created_at">{{data.created_at | date:'longDate'}}</span>
+                                </div>
+                                <div class="chat-stage-wrapper">
+                                    <div class="media pl-0 col-9">
+                                        <div class="avatar avatar-sm avatar-online">
+                                            <span
+                                                class="avatar-initial rounded-circle">{{nameInitials(data.user_firstname,data.user_lastname)}}</span>
+                                        </div>
+                                        <div class="media-body">
+                                            <p class="feedback">
+
+                                                <strong> {{data.user_firstname}} {{data.user_lastname}}</strong>
+                                                posted feedback
+                                                <!-- at <span *ngIf="data.created_at">{{data.created_at | date:'medium'}}</span> -->
+                                            </p>
+
+                                            <div class="userfeedback" [innerHTML]="data.activity_feedback">
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="activitystage">{{data.current_status}}</div>
+
+                                </div>
+                            </div>
+                            <div *ngIf="data.activity_type == 'status_change'" class="activity-log">
+                                <div class="chat-group-divider">
+                                    <span *ngIf="data.created_at">{{data.created_at | date:'longDate'}}</span>
+                                </div>
+                                <div class="chat-stage-wrapper">
+                                    <div class="media">
+                                        <div class="avatar avatar-sm avatar-online">
+                                            <span
+                                                class="avatar-initial rounded-circle">{{nameInitials(data.user_firstname,data.user_lastname)}}</span>
+                                        </div>
+                                        <div class="media-body">
+                                            <strong>{{data.user_firstname}} {{data.user_lastname}}
+                                            </strong>chagne status from
+                                            <strong>{{data.previous_status}}</strong> to
+                                            <strong>{{data.current_status}}</strong>
+                                        </div>
+                                    </div>
+                                    <div class="activitystage">{{data.current_status}}</div>
+                                </div>
+                                <!-- <p class="margin-0">
+                                 {{nameInitials(data.user_firstname,data.user_lastname)}}
+                                <strong>{{data.user_firstname}} {{data.user_lastname}} </strong>chagne status from  
+                                    <strong>{{data.previous_status}}</strong> to <strong>{{data.current_status}}</strong> on 
+                                    {{data.created_at | date:'medium'}}
+                                </p>
+                                <div class="activitystage">{{data.current_status}}</div> -->
+
+                            </div>
+                        </li>
+                    </ul>
+
+                </div>
+                <!--email log-->
+                <div class="activity" *ngIf="isEmailLogOpen">
+                    <ul>
+                        <li *ngFor="let data of emailLog">
+                            <div class="activity-log">
+                                <div class="chat-group-divider">
+                                    <span *ngIf="data.created_at">{{data.created_at | date:'longDate'}}</span>
+                                </div>
+                                <div class="chat-stage-wrapper">
+                                    <div class="media pl-0 col-9">
+                                        <div class="avatar avatar-sm avatar-online">
+                                            <span
+                                                class="avatar-initial rounded-circle">{{nameInitials(data.user_firstname,data.user_lastname)}}</span>
+                                        </div>
+                                        <div class="media-body">
+                                            <p class="feedback">
+
+                                                <strong> {{data.user_firstname}} {{data.user_lastname}}</strong>
+                                                posted feedback
+                                                <!-- at <span *ngIf="data.created_at">{{data.created_at | date:'medium'}}</span> -->
+                                            </p>
+
+                                            <div class="userfeedback" [innerHTML]="data.email_body">
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="activitystage">{{data.current_status}}</div>
+
+                                </div>
+                            </div>
+
+                        </li>
+                    </ul>
+
+                </div>
+
+            </div>
         </div>
 
     </div>
+</div>
+<ng-template #editRequestDetails let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Update Request Details</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Close Clicked')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <!-- {{requestDetailsbyId | json}} -->
+    <form [formGroup]="editRequestDetailForm" autocomplete="false" (ngSubmit)="updateRequestDetails()">
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label for="requestacceptingagent"
+                            class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">Request accepting
+                            agent</label>
+                        <input type="text" class="form-control" formControlName="requestacceptingagent"
+                            [ngClass]="{ 'is-invalid': isRequestDetailFormsubmit && editRequest.requestacceptingagent.errors }" />
+                        <div *ngIf="isRequestDetailFormsubmit && editRequest.requestacceptingagent.errors"
+                            class="invalid-feedback">
+                            <div *ngIf="editRequest.requestacceptingagent.errors.required">Request accepting agent is
+                                required</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-sm-12 mb-3">
+
+                    <label for="riskfactor" class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">
+                        Select Risk factor</label>
+                    <select class="form-control" formControlName="riskfactor"
+                        [ngClass]="{ 'is-invalid': isRequestDetailFormsubmit && editRequest.riskfactor.errors }">
+                        <ng-container *ngFor="let opt of riskFactorList">
+                            <option [value]="opt.value">
+                                {{ opt.value }}
+                            </option>
+                        </ng-container>
+                    </select>
+                    <div *ngIf="isRequestDetailFormsubmit && editRequest.riskfactor.errors" class="invalid-feedback">
+                        <div *ngIf="editRequest.riskfactor.errors.required">risk factor is required</div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <label for="workflowselect" class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">
+                        Select Approver</label>
+                    <select class="form-control" formControlName="approver"
+                        [ngClass]="{ 'is-invalid':  isRequestDetailFormsubmit && editRequest.approver.errors}">
+                        <ng-container *ngFor="let opt of ApproverList">
+                            <option  [value]="opt.approver_id"
+                                [selected]="opt.approver_id === selectedApprover">
+                                {{ opt.user_name }} 
+                            </option>
+                        </ng-container>
+
+                    </select>
+                    <div *ngIf="isRequestDetailFormsubmit && editRequest.approver.errors">
+                        <div *ngIf="editRequest.approver.errors.required">Approver is required</div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <label for="workflowselect" class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">
+                        Country</label>
+                    <input formControlName="country" autocomplete="false" [typeahead]="countryList"
+                        typeaheadOptionField="name" [typeaheadScrollable]="true" [typeaheadOptionsInScrollableView]="5"
+                        placeholder="type and search country"
+                        [ngClass]="{ 'is-invalid': isRequestDetailFormsubmit && editRequest.country.errors }"
+                        (typeaheadOnSelect)="onSelectCountry($event)" class="form-control">
+                    <div *ngIf="isRequestDetailFormsubmit && editRequest.requestacceptingagent.errors"
+                        class="invalid-feedback">
+                        <div *ngIf="editRequest.requestacceptingagent.errors.required">Country is required</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <label for="workflowselect" class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">
+                        Select State</label>
+                    <input formControlName="state" autocomplete="false" [typeahead]="filteredStateList"
+                        typeaheadOptionField="name"
+                        [ngClass]="{ 'is-invalid': isRequestDetailFormsubmit && editRequest.state.errors }"
+                        placeholder="type and search state" [typeaheadScrollable]="true"
+                        [typeaheadOptionsInScrollableView]="5" class="form-control">
+                    <div *ngIf="isRequestDetailFormsubmit && editRequest.state.errors" class="invalid-feedback">
+                        <div *ngIf="editRequest.state.errors.required">State is required</div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <label for="workflowselect" class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">
+                        City</label>
+                    <input type="text" autocomplete="false" class="form-control" formControlName="city"
+                        [ngClass]="{ 'is-invalid': isRequestDetailFormsubmit && editRequest.city.errors }" />
+                    <div *ngIf="isRequestDetailFormsubmit && editRequest.city.errors" class="invalid-feedback">
+                        <div *ngIf="editRequest.city.errors.required">City is required</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary tx-13" (click)="onCancelClick()">Cancel</button>
+            <button class="btn btn-primary tx-13" type="submit">Save</button>
+        </div>
+
+    </form>
+</ng-template>
+<div class="col-sm-5 mr-0 float-right flotingdiv">
+    <alert *ngIf="isOpen" [type]="alertType" dismissOnTimeout="5000" [dismissible]="dismissible"
+        (onClosed)="onClosed(alert)">{{  alertMsg}}</alert>
 </div>

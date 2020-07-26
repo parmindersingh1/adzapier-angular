@@ -1,22 +1,27 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, AfterViewChecked, ViewChild } from '@angular/core';
 import { WorkflowService } from 'src/app/_services/workflow.service';
-import { FormGroup, FormControl, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { NgxUiLoaderService } from 'ngx-ui-loader';
 
 @Component({
   selector: 'app-createworkflow',
   templateUrl: './createworkflow.component.html',
-  styleUrls: ['./createworkflow.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  styleUrls: ['./createworkflow.component.scss']
+  // changeDetection: ChangeDetectionStrategy.OnPush
 
 })
 export class CreateworkflowComponent implements OnInit {
+  dismissible = true;
+  isOpen = false;
   workflowList: any;
   viewMode: any;
   workflowName: any;
   workflowselection: any;
   workflowStagesFromId: any;
+  selectedWorkflowId: any;
+  workflowStatus: any;
   workflowStages: any = [];
-  tabList: any = [];
   stage_title: any;
   order: any;
   currentStage: any;
@@ -24,6 +29,11 @@ export class CreateworkflowComponent implements OnInit {
   quillEditorGuidanceText: FormGroup;
   selectedTab: any;
   isTabSelected: boolean;
+  isWorkflowEditing: boolean;
+  submitted = true;
+  isControlDisabled: boolean;
+  alertMsg: any;
+  alertType: any;
   quillConfig = {
     toolbar: {
       container: [
@@ -35,53 +45,40 @@ export class CreateworkflowComponent implements OnInit {
       ]
     }
   };
-  constructor(private fb: FormBuilder, private workflowService: WorkflowService) {
-    this.loadWorkflowList();
+  constructor(private fb: FormBuilder,
+    private activatedRoute: ActivatedRoute,
+    private workflowService: WorkflowService,
+    private loadingBar: NgxUiLoaderService,
+    private cd: ChangeDetectorRef) {
   }
 
   ngOnInit() {
-    this.viewMode = 'tab1';
+    this.isWorkflowEditing = false;
+    this.loadWorkflowList();
     this.quillEditorGuidanceText = this.fb.group({
-      guidancetext: new FormControl(null)
+      guidancetext: ['', [Validators.required]],
+      stage_title: ['', [Validators.required]]
     });
+
+    this.activatedRoute.paramMap.subscribe(params => {
+      this.selectedWorkflowId = params.get('id');
+    });
+
+     this.workflowService.selectedWorkflow.subscribe((data)=>{
+       console.log(data,'data..workflowService');
+        this.workflowName = data.workflow_name; 
+     },(error)=>{
+      this.isOpen = true;
+      this.alertMsg = error;
+      this.alertType = 'danger';
+     });
+
     
+    this.loadWorkflowById();
+   
   }
-
-  nextTab() {
-    //this.loadWorkflowById();
-    console.log(this.viewMode, 'viewMode..');
-    if (this.viewMode == 'tab1') {
-   //   this.loadWorkflowById();
-      if(this.workflowName && this.workflowselection){
-        if(this.workflowStages.length !== 0){
-          this.viewMode = 'tab2';
-        }
-        
-      }
-           
-    } else if (this.viewMode == 'tab2') {
-      
-      if(this.stage_title){
-        this.viewMode = 'tab3';
-        const requestObj = {
-          workflow_name:this.workflowName,
-          workflow_stages: this.workflowStages
-        }
-        console.log('requestObj',requestObj);
-        this.workflowService.createWorkflow(requestObj).subscribe((data)=>{
-          if(data){
-            alert('workflow created!');
-          }
-        },(error)=>{
-          alert(JSON.stringify(error));
-        })
-      }else {
-        return false;
-      }
-     
-    }
-  }
-
+  get cwf() { return this.quillEditorGuidanceText.controls; }
+   
   previousTab(){
     if (this.viewMode == 'tab3') {
       this.viewMode = 'tab2';
@@ -92,48 +89,34 @@ export class CreateworkflowComponent implements OnInit {
 
   loadWorkflowList() {
     this.workflowService.getWorkflow().subscribe((data) => {
-      const key = 'response';
       this.workflowList = data.response;
     });
-
-  }
-
-  loadWorkflowById(id) {
-    this.workflowService.getWorkflowById(id).subscribe((data) => {
-      if (data) {
-        let respData = data.response[0].workflow_stages;
-        this.workflowStages = this.rearrangeArrayResponse(respData);
-      }
-    }, (error) => {
-      alert(JSON.stringify(error));
-    })
   }
 
   onWorkflowChange($event){
     console.log($event,'$event.');
     this.loadWorkflowById($event.target.value);
   }
-
-  
-  selectCurrentStage(item) {
-    console.log(item, 'item..');
-    this.currentStage = item.order;
-  }
-
+ 
   clickOnWorkflowStages($event) {
     this.selectedTab = $event;
-    this.isTabSelected = true;
-    console.log($event, '$event..');
-    this.stage_title = $event.stage_title; // + ' ' + $event.order;
-    this.editorGuidanceText = $event.guidance_text;
-    
-   
+    this.isTabSelected = true; 
+    this.quillEditorGuidanceText.controls['guidancetext'].setValue($event.guidance_text);
+    this.quillEditorGuidanceText.controls['stage_title'].setValue($event.stage_title);
   }
 
-  update(title) {
-    let index = this.workflowStages.findIndex((t) => t.order === this.selectedTab.order);
-    this.workflowStages[index].stage_title = title;
+  update(e) {
+    if(this.selectedTab !== undefined){
+      let index = this.workflowStages.findIndex((t) => t.order === this.selectedTab.order);
+      this.workflowStages[index].stage_title = e.currentTarget.value;
+      this.quillEditorGuidanceText.controls['stage_title'].setValue(e.currentTarget.value);
+    }else{
+      this.workflowStages[0].stage_title = e.currentTarget.value;
+      this.quillEditorGuidanceText.controls['stage_title'].setValue(e.currentTarget.value); 
+    }
+    
   }
+ 
 
   rearrangeArrayResponse(dataArray) {
     dataArray.sort((a, b) => {
@@ -162,4 +145,112 @@ export class CreateworkflowComponent implements OnInit {
     }
   }
 
+  activateWorkflowById(id){
+    const reqObj = {
+      workflow_status:'Active'
+    }
+    this.workflowService.updateWorkflow(id,reqObj).subscribe((data)=>{
+      if(data){
+        this.alertMsg = data.response;
+        this.isOpen = true;
+        this.alertType = 'success';
+        this.loadWorkflowList();
+      }
+    },(error)=>{
+      console.log(JSON.stringify(error));
+      this.isOpen = true;
+      this.alertMsg = error;
+      this.alertType = 'danger';
+    })
+  }
+
+  saveWorkflow() {
+    this.submitted = true;
+    if (this.quillEditorGuidanceText.invalid) {
+      return;
+    }else{
+      const requestObj = {
+        workflow_name:this.workflowName,
+        workflow_stages: this.workflowStages
+      }
+      this.workflowService.updateWorkflow(this.selectedWorkflowId,requestObj).subscribe((data)=>{
+        if(data){
+          this.alertMsg = data.response;
+          this.isOpen = true;
+          this.alertType = 'success';
+          console.log(JSON.stringify(data.response));
+        }
+      },(error)=>{
+        this.alertMsg = error;
+        this.isOpen = true;
+        this.alertType = 'danger';
+        console.log(JSON.stringify(error));
+      })
+    }
+   
+  }
+
+  activateWorkflow(status){
+    let flowStatus = status == 'active'? 'draft' : 'active';
+    if(flowStatus === 'draft'){
+      this.quillEditorGuidanceText.controls['guidancetext'].enable();
+      this.quillEditorGuidanceText.controls['stage_title'].enable();
+      this.isControlDisabled = false;
+    }
+    const reqObj = {
+      workflow_status: flowStatus
+    }
+    this.workflowService.updateWorkflow(this.selectedWorkflowId,reqObj).subscribe((data)=>{
+      if(data){
+        this.alertMsg = data.response;
+        this.isOpen = true;
+        this.alertType = 'success';
+        this.loadWorkflowById(this.selectedWorkflowId);
+      }
+    },(error)=>{
+      this.isOpen = true;
+      this.alertMsg = error;
+      this.alertType = 'danger';
+      console.log(JSON.stringify(error));
+    })
+  }
+
+
+  loadWorkflowById(id?) {
+    let resp : any;
+    //this.loadingBar.start();
+    this.workflowService.getWorkflowById(this.selectedWorkflowId).subscribe((data) => {
+    resp = this.rearrangeArrayResponse(data.response[0].workflow_stages);
+    this.workflowStages = resp;
+    let stage_title = this.workflowStages[0].stage_title;
+    let guidance_text = this.workflowStages[0].guidance_text;
+    this.workflowStatus = data.response[0].workflow_status;
+    if (this.workflowStatus === 'active') {
+      this.quillEditorGuidanceText.controls['guidancetext'].disable();
+      this.quillEditorGuidanceText.controls['stage_title'].disable();
+      this.isControlDisabled = true;
+    }
+    this.workflowName = data.response[0].workflow_name;
+    this.quillEditorGuidanceText.controls['guidancetext'].setValue(guidance_text);
+    this.quillEditorGuidanceText.controls['stage_title'].setValue(stage_title);
+  //  this.loadingBar.stop();
+    this.workflowStages;
+    },(error)=>{
+      this.alertMsg = error;
+      this.isOpen = true;
+      this.alertType = 'danger';
+    });
+  }
+
+  
+  onClosed(dismissedAlert: any): void {
+    this.alertMsg !== dismissedAlert;
+    this.isOpen = false;
+  }
+
+  // ngAfterViewChecked(){
+  //   console.log('test..ngAfterViewChecked');
+  //   this.cd.detectChanges();
+  // }
+  
 }

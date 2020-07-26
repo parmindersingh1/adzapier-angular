@@ -70,3 +70,30 @@
 .searchfield.mt-3 .form-inline {
     font-weight: normal;
 }
+
+.alert-info {
+    color: #0c5460;
+    background-color: #d1ecf1;
+    border-color: #bee5eb;
+}
+
+.alert-success {
+	background-color: #10b759;
+    border-color: #10b759;
+    color: #fff;
+}
+
+.alert-danger {
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+}
+
+.flotingdiv{
+	position: fixed;
+	bottom: 0;
+	top: 84%;
+	right:0;
+	overflow-x: hidden;
+	overflow-y: auto
+}

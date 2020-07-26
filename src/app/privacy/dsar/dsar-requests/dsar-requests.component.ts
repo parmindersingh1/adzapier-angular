@@ -45,7 +45,9 @@ export class DsarRequestsComponent implements OnInit {
   requestType = '';
   status = '';
   dueIn = '';
-
+  alertMsg: any;
+  isOpen = true;
+  alertType: any;
   constructor(
     private orgservice: OrganizationService,
     private userService: UserService,
@@ -88,7 +90,9 @@ export class DsarRequestsComponent implements OnInit {
         }
       }, error => {
         this.loading.stop();
-        console.log(error);
+        this.alertMsg = error;
+        this.isOpen = true;
+        this.alertType = 'danger';
       });
   }
 
@@ -106,7 +110,9 @@ export class DsarRequestsComponent implements OnInit {
         return this.requestsList;
       }, error => {
         this.loading.stop();
-        console.log(error);
+        this.alertMsg = error;
+        this.isOpen = true;
+        this.alertType = 'danger';
       });
   }
 
@@ -120,7 +126,9 @@ export class DsarRequestsComponent implements OnInit {
         }
       }, error => {
         this.loading.stop();
-        console.log(error);
+        this.alertMsg = error;
+        this.isOpen = true;
+        this.alertType = 'danger';
       });
   }
 
@@ -156,7 +164,9 @@ export class DsarRequestsComponent implements OnInit {
         }
       }, error => {
         this.loading.stop();
-        console.log(error);
+        this.alertMsg = error;
+        this.isOpen = true;
+        this.alertType = 'danger';
       });
   }
 
@@ -186,5 +196,10 @@ export class DsarRequestsComponent implements OnInit {
   navigateToWebForm(id) {
    // this.router.navigate(['privacy/dsar/dsarform', id]);
     this.router.navigate(['/privacy/dsar/dsarform', { crid: id}]);
+  }
+
+  onClosed(dismissedAlert: any): void {
+    this.alertMsg !== dismissedAlert;
+    this.isOpen = false;
   }
 }

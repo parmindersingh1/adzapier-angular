@@ -129,15 +129,12 @@
                         Roles is mandatory
                     </div>
                 </div>
-                <!-- <div class="col-sm-12">
-                    <div *ngFor="let opt of roleList" class="form-check-inline">
-                        <input class="form-check-input" type="radio" name="chkpermissions"
-                            [value]='opt.id'/>{{opt.role_name}}
-                    </div>
-                </div> -->
+                 
             </div>
+            <div class="float-right">
+            <button class="btn btn-xs btn-secondary mr-3" (click)="onCancelClick()">Cancel</button>
             <button class="btn btn-xs btn-primary" type="submit">Submit</button>
-            <button class="btn btn-xs btn-primary float-right" (click)="modal.dismiss('Close Clicked')">Cancel</button>
+            </div>
         </form>
     </div>
 </ng-template>

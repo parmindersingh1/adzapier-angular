@@ -8,6 +8,7 @@ export class FilterPipe implements PipeTransform {
     if (search === undefined) {
       return data;
     } else {
+      let result:any = [];
       let filteredData = data.filter(obj => obj[propertyName].toLowerCase().includes(search.toLowerCase()));
       if (propertyName2) {
         filteredData = filteredData.concat(data.filter(obj => obj[propertyName2].toLowerCase().includes(search.toLowerCase())));
@@ -15,8 +16,14 @@ export class FilterPipe implements PipeTransform {
           filteredData = filteredData.concat(data.filter(obj => obj[propertyName3].toLowerCase().includes(search.toLowerCase())));
         }
       }
-      return filteredData;
+      filteredData.forEach(function(item) {
+        if(result.indexOf(item) < 0) {
+            result.push(item);
+        }
+      });
+
+       return result;
     }
   }
- 
+
 }

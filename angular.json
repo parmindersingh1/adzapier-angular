@@ -42,7 +42,7 @@
             "scripts": [
               "./node_modules/jquery/dist/jquery.min.js",
               "./node_modules/quill/dist/quill.core.js",
-              "./node_modules/quill/dist/quill.min.js",              
+              "./node_modules/quill/dist/quill.min.js",
               "./node_modules/quill-emoji/dist/quill-emoji.js",
               "./src/assets/js/moment.min.js",
               "./src/assets/js/map/jquery.vmap.min.js",

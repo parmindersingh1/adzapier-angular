@@ -2,132 +2,71 @@
     <div class="mb-3">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb breadcrumb-style1 mg-b-0">
-                <li class="breadcrumb-item"><a routerLink="/webforms">DSAR</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Web Forms</li>
+                <li class="breadcrumb-item"> Privacy</li>
+                <li class="breadcrumb-item"> DSAR </li>
+                <li class="breadcrumb-item"> <a routerLink="/privacy/dsar/workflows">Workflow</a> </li>
+                <li class="breadcrumb-item active" aria-current="page">
+                    {{workflowName? workflowName : 'Create Workflow'}}</li>
             </ol>
         </nav>
     </div>
 </div>
-
-
-
 <div>
     <div class="col-lg-6 col-xl-12 workflowcontainer">
         <div class="card">
             <div class="card-header  d-flex align-items-center justify-content-between pd-y-10">
                 <span class="tx-12 tx-color-03 mg-b-0">
-                    <h6 class="mg-b-0">Create Workflow</h6>
+                    <h6 class="mg-b-0 txt-caps">{{workflowName? workflowName : 'Create workflow'}}<span
+                            [class.workflowname]="workflowName !== ''">{{workflowStatus?workflowStatus:''}}</span></h6>
                 </span>
                 <div class="d-flex">
-
-                    <button class="btn btn-sm btn-white d-flex align-items-center mg-r-5">
-                        <span class="d-none d-sm-inline mg-l-5">
+                    <button class="btn btn-xs btn-primary d-flex align-items-center mg-r-5"
+                        (click)="activateWorkflow(workflowStatus)">
+                        <span class="d-none d-sm-inline">
                             <i class="fa fa-plus" aria-hidden="true"></i>
-                            Active</span></button>
-                    <button class="btn btn-sm btn-white d-flex align-items-center mg-r-5">
-                        <span class="d-none d-sm-inline mg-l-5">
-                            <i class="fa fa-plus" aria-hidden="true"></i>
-                            Draft</span></button>
-                    <button class="btn btn-sm btn-white d-flex align-items-center mg-r-5">
-                        <span class="d-none d-sm-inline mg-l-5">
+                            {{workflowStatus == 'active' ? 'Edit' : 'Activate'}}</span></button>
+                    <button class="btn btn-xs btn-white d-flex align-items-center mg-r-5" type="submit"
+                        (click)="saveWorkflow()">
+                        <span class="d-none d-sm-inline">
                             <i class="fa fa-plus" aria-hidden="true"></i>
                             Save</span></button>
                 </div>
-
             </div>
 
             <div class="card-body">
                 <div class="wrapper">
-                    <div class="arrow-steps clearfix">
-                        <div class="step" [class.current]="viewMode == 'tab1'" (click)="onClickWorflowTab('tab1')">
-                            <span> Basic</span> </div>
-                        <div class="step" [class.current]="viewMode == 'tab2'" (click)="onClickWorflowTab('tab2')">
-                            <span> Workflow </span> </div>
-                        <div class="step" [class.current]="viewMode == 'tab3'" (click)="onClickWorflowTab('tab3')">
-                            <span> Publish </span> </div>
-                    </div>
-                    <div id="tab-content">
-                        <div [ngSwitch]="viewMode">
-                            <div *ngSwitchCase="'tab1'">
-                                <div class="form-group">
-                                    <div class="col-sm-6">
-                                        <label
-                                            class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">Workflow
-                                            Name</label>
-                                        <input class="form-control" placeholder="Enter Name" type="text"
-                                            name="workflow_name" #workflow="ngModel"
-                                            [ngClass]="{ 'is-invalid': workflow.invalid }" [(ngModel)]="workflowName"
-                                            required />
-                                        <div *ngIf="workflow.invalid" class="invalid-feedback">
-                                            <div *ngIf="workflow.errors.required">Workflow name is required</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group mg-b-5">
-                                    <div class="col-sm-6">
-                                        <label for="workflowselect"
-                                            class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">
-                                            Select Workflow</label>
-                                        <select class="form-control" name="user" #workflowselect="ngModel"
-                                            (change)="onWorkflowChange($event)" [(ngModel)]="workflowselection"
-                                            [ngClass]="{ 'is-invalid':  workflowselect.invalid && workflowselect.errors?.required}"
-                                            required>
-                                            <ng-container *ngFor="let opt of workflowList">
-                                                <option *ngIf="opt.workflow_name !== ' '" [value]="opt.id">
-                                                    {{ opt.workflow_name }}
-                                                </option>
-                                            </ng-container>
-
-                                        </select>
-                                        <div *ngIf="workflowselect.invalid" class="invalid-feedback">
-                                            <div *ngIf="workflowselect.errors?.required">Workflow is required</div>
-                                        </div>
-                                    </div>
-                                </div>
-
+                    <div *ngIf="workflowStages.length === 0" class="m-2">No data found</div>
+                    <ng-container *ngIf="workflowStages?.length > 0">
+                        <app-customtabs [flowStatus]="workflowStatus" [inputData]="workflowStages" [currentTab]="order"
+                            (currentStageEvent)="clickOnWorkflowStages($event)">
+                        </app-customtabs>
+                    </ng-container>
+                    <div class="col-sm-6 mb-3" *ngIf="workflowStages?.length !== 0">
+                        <form [formGroup]="quillEditorGuidanceText">
+                            <label class="tx-10 tx-uppercase tx-medium"> <span class="red">*</span>
+                                Stage</label>
+                            <input type="text" formControlName="stage_title" (keyup)="update($event)"
+                                class="form-control mb-1" [class.disabled]="isControlDisabled"
+                                [ngClass]="{ 'is-invalid': submitted && cwf.stage_title.errors }" required />
+                            <div *ngIf="submitted && cwf.stage_title.errors" class="invalid-feedback">
+                                <div *ngIf="cwf.stage_title.errors.required">Stage is required</div>
                             </div>
-                            <div *ngSwitchCase="'tab2'">
-                                <ng-container *ngIf="workflowStages.length !== 0">
-                                    <app-customtabs [inputData]="workflowStages" [currentTab]="order"
-                                        (currentStageEvent)="clickOnWorkflowStages($event)">
-                                    </app-customtabs>
-                                </ng-container>
-                                <div class="col-sm-6" *ngIf="workflowStages.length !== 0">
-                                    <form [formGroup]="quillEditorGuidanceText">
-                                        <label class="tx-10 tx-uppercase tx-medium"> <span class="red">*</span>
-                                            Stage</label>
-                                        <input type="text" [(ngModel)]="stage_title" name="stage_title"
-                                            (input)="update(stage_title)" [ngModelOptions]="{standalone: true}"
-                                            #ngModel="ngModel" class="form-control mb-1"
-                                            [ngClass]="{ 'is-invalid': ngModel.invalid }" required />
-                                        <div *ngIf="ngModel.invalid" class="invalid-feedback">
-                                            <div *ngIf="ngModel.errors.required">Stage is required</div>
-                                        </div>
-                                        <label class="tx-10 tx-uppercase tx-medium"> <span class="red">*</span>
-                                            Guidance Text</label>
-                                        <quill-editor formControlName="guidancetext" [modules]="quillConfig"
-                                            [(ngModel)]="editorGuidanceText" [styles]="{height: '200px'}">
-                                        </quill-editor>
-
-                                    </form>
-
-                                </div>
-
+                            <label class="tx-10 tx-uppercase tx-medium"> <span class="red">*</span>
+                                Guidance Text</label>
+                            <quill-editor formControlName="guidancetext" [modules]="quillConfig"
+                                [class.disabled]="isControlDisabled" [styles]="{height: '200px'}"
+                                [ngClass]="{ 'is-invalid': submitted && cwf.guidancetext.errors }" required>
+                            </quill-editor>
+                            <div *ngIf="submitted && cwf.guidancetext.errors" class="invalid-feedback">
+                                <div *ngIf="cwf.guidancetext.errors.required">Guidance text is required</div>
                             </div>
-                            <div *ngSwitchCase="'tab3'">
-                                tab 3
-                            </div>
-                        </div>
-                    </div>
-                    <div class="nav clearfix">
-                        <div class="col-sm-6 mt-2 mb-2">
-                            <button class="btn btn-sm btn-primary prev" (click)="previousTab()"
-                                *ngIf="viewMode!=='tab1'">Previous</button>
-                            <button class="btn btn-sm btn-primary next pull-right" (click)="nextTab()">Next</button>
-                        </div>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
+<div class="col-sm-5 mr-0 float-right flotingdiv">
+<alert *ngIf="isOpen" [type]="alertType" dismissOnTimeout="5000" [dismissible]="dismissible" (onClosed)="onClosed(alert)">{{  alertMsg}}</alert>
 </div>

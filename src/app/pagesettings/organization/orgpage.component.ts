@@ -25,7 +25,6 @@ export class OrgpageComponent implements OnInit {
   selectedOrg: any;
   selectedImage: File;
   propertyList: any;
-  isOpen: boolean = false;
   btnText: string = 'Show';
   editPropertyrow: boolean = false;
   propertyname: any;
@@ -48,6 +47,13 @@ export class OrgpageComponent implements OnInit {
   selectedOrganization: any = [];
   searchText;
   ascNumberSort: any;
+  
+  isControlDisabled: boolean;
+  alertMsg: any;
+  alertType: any;
+  dismissible = true;
+  isOpen = false;
+
   constructor(private formBuilder: FormBuilder,
               private orgservice: OrganizationService,
               private modalService: NgbModal, private sanitizer: DomSanitizer,
@@ -92,11 +98,6 @@ export class OrgpageComponent implements OnInit {
     }
   }
 
-  // get name() { return this.organisationPropertyForm.get('name'); }
-  // get website() { return this.organisationPropertyForm.get('website'); }
-  // get logo_url() { return this.organisationPropertyForm.get('logo_url'); }
-
-
   loadOrganizationList() {
    // this.paginationConfig.currentPage = event;
     const pagelimit = '?limit=' + this.paginationConfig.itemsPerPage + '&page=' + this.paginationConfig.currentPage;
@@ -107,6 +108,10 @@ export class OrgpageComponent implements OnInit {
       this.orgList = data[key];
       this.paginationConfig.totalItems = data.count;
       return this.orgList;
+    },(error)=>{
+      this.alertMsg = error;
+      this.isOpen = true;
+      this.alertType = 'danger';
     });
 
     // this.orgservice.orglist().subscribe((data) => {
@@ -126,7 +131,9 @@ export class OrgpageComponent implements OnInit {
       this.orgDetails.push(data[key]);
     }, (error) => {
       this.loading.stop();
-      alert(JSON.stringify(error));
+      this.alertMsg = error;
+      this.isOpen = true;
+      this.alertType = 'danger';
     });
   }
 
@@ -152,7 +159,10 @@ export class OrgpageComponent implements OnInit {
           this.orgservice.setCurrentOrgWithProperty(res);
          // this.orgservice.changeCurrentSelectedProperty(res);
           this.viewOrganization(res.response.id);
-          alert('Organization Added successfully!');
+        //  alert('Organization Added successfully!');
+          this.alertMsg = 'Organization Added successfully!';
+          this.isOpen = true;
+          this.alertType = 'success';
           this.orgservice.isOrganizationUpdated.next(true);
           this.onResetEditOrganization();
           this.orgDetails = [];
@@ -162,7 +172,9 @@ export class OrgpageComponent implements OnInit {
         }
       }, (error) => {
         this.loading.stop();
-        alert(JSON.stringify(error));
+        this.alertMsg = error;
+        this.isOpen = true;
+        this.alertType = 'danger';
       });
     
     }
@@ -193,14 +205,20 @@ export class OrgpageComponent implements OnInit {
   }
 
   getPropertyList(id): any {
-    this.isOpen = !this.isOpen;
+   // this.isOpen = !this.isOpen;
     this.orgservice.getPropertyList(id).subscribe((data) => {
       this.orgservice.emitUpdatedOrgList.emit(data.response);
       if (!data.response) {
-        alert("Adding property is mandatory. Add Property first.");
+        this.alertMsg = 'Adding property is mandatory. Add Property first!';
+        this.isOpen = true;
+        this.alertType = 'info';
       }
 
       return this.propertyList = data.response;
+    },(error)=>{
+      this.alertMsg = error;
+      this.isOpen = true;
+      this.alertType = 'danger';
     });
   }
 
@@ -217,7 +235,6 @@ export class OrgpageComponent implements OnInit {
     this.myContext = { oid: data.oid, pid: data.pid };
 
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
-      alert('edit mp..');
       this.organisationPropertyForm.reset();
       this.closeResult = `Closed with: ${result}`;
     }, (reason) => {
@@ -292,13 +309,18 @@ export class OrgpageComponent implements OnInit {
     };
     this.orgservice.disableOrganization(id, reqObj).subscribe((data) => {
       if (data) {
-        alert('Selected oragnization has been enabled!');
-        this.loadOrganizationList();
         this.orgservice.isOrganizationUpdated.next(true);
+        this.alertMsg = 'Selected oragnization has been enabled!'; //data.response;
+        this.isOpen = true;
+        this.alertType = 'success';
+        this.loadOrganizationList();
+        
       }
     }, (err) => {
       this.loading.stop();
-      alert(err);
+      this.alertMsg = err;
+      this.isOpen = true;
+      this.alertType = 'danger';
     });
   }
   
@@ -308,7 +330,6 @@ export class OrgpageComponent implements OnInit {
   
   viewOrganization(orgID) {
     this.router.navigate(['settings/organizations/organizationdetails', orgID]);
-    // settings/organizations/organizationdetails/5c08cacd-257d-4934-ae73-d9d9fe9cf08d
   }
 
   sortNumberColumn() {
@@ -319,5 +340,11 @@ export class OrgpageComponent implements OnInit {
         this.orgList.sort((a, b) => b - a); // For descending sort
     }
 }
+
+onClosed(dismissedAlert: any): void {
+  this.alertMsg !== dismissedAlert;
+  this.isOpen = false;
+}
+
 
 }

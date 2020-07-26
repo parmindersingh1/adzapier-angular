@@ -1,9 +1,9 @@
-import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
+import { Component, OnInit, ViewChild, TemplateRef, ChangeDetectorRef, AfterContentChecked } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 // import { OrganizationService, UserService } from '../_services';
 import { FormGroup, FormBuilder, Validators, FormControl, FormArray } from '@angular/forms';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
-import {NotificationsService} from "angular2-notifications";
+import { NotificationsService } from "angular2-notifications";
 import { OrganizationService } from 'src/app/_services/organization.service';
 import { CompanyService } from 'src/app/company.service';
 import { UserService } from 'src/app/_services/user.service';
@@ -38,10 +38,9 @@ export class OrganizationdetailsComponent implements OnInit {
   p2: number = 1;
   propertyPgSize: any = 5;
   propertyTotalCount: any;
-  propertyPageConfig = {  itemsPerPage: this.propertyPgSize, currentPage: this.p2, totalItems: this.propertyTotalCount, id: 'propertyPagination'};
+  propertyPageConfig = { itemsPerPage: this.propertyPgSize, currentPage: this.p2, totalItems: this.propertyTotalCount, id: 'propertyPagination' };
 
   propertyList: any;
-  isOpen: boolean = false;
   submitted;
   isEditProperty: boolean;
   propertyname: any;
@@ -58,19 +57,25 @@ export class OrganizationdetailsComponent implements OnInit {
   searchPropertyText: any;
   currentManagedOrgID: any;
   currrentManagedPropID: any;
+  isControlDisabled: boolean;
+  alertMsg: any;
+  alertType: any;
+  dismissible = true;
+  isOpen = false;
   constructor(private activatedRoute: ActivatedRoute,
-              private orgService: OrganizationService,
-              private notification: NotificationsService,
-              private modalService: NgbModal,
-              private formBuilder: FormBuilder,
-              private companyService: CompanyService,
-              private userService: UserService,
-              private router: Router) {
-                this.orgService.currentProperty.subscribe((data) => {
-                  this.currentManagedOrgID = data.organization_id;
-                  this.currrentManagedPropID = data.property_id;
-                });
-     }
+    private orgService: OrganizationService,
+    private notification: NotificationsService,
+    private modalService: NgbModal,
+    private formBuilder: FormBuilder,
+    private companyService: CompanyService,
+    private userService: UserService,
+    private router: Router,
+    private cdref: ChangeDetectorRef) {
+    this.orgService.currentProperty.subscribe((data) => {
+      this.currentManagedOrgID = data.organization_id;
+      this.currrentManagedPropID = data.property_id;
+    });
+  }
 
   ngOnInit() {
     this.orgService.currentProperty.subscribe((response) => {
@@ -132,18 +137,20 @@ export class OrganizationdetailsComponent implements OnInit {
       this.taxID = data.response.tax_id;
       this.zipcode = data.response.zipcode;
     });
-    this.pathValues();
+   // this.pathValues();
   }
 
   getPropertyList(id): any {
-    this.isOpen = !this.isOpen;
+    // this.isOpen = !this.isOpen;
     this.orgService.getPropertyList(id).subscribe((data) => {
       this.orgService.emitUpdatedOrgList.emit(data.response);
       if (data.response.length === 0) {
-        alert("Adding property is mandatory. Add Property first.");
+        this.alertMsg = 'Adding property is mandatory. Add Property first.';
+        this.isOpen = true;
+        this.alertType = 'info';
         this.modalService.open(this.propertyModal);
       }
-     // console.log(this.propertyList,'this.propertyList..');
+      // console.log(this.propertyList,'this.propertyList..');
       return this.propertyList = data.response;
     });
   }
@@ -168,9 +175,10 @@ export class OrganizationdetailsComponent implements OnInit {
     this.website = data.website;
     this.logourl = data.logo_url;
     this.myContext = { oid: data.oid, pid: data.id };
-
+    this.organisationPropertyForm.controls['propertyname'].setValue(data.name);
+    this.organisationPropertyForm.controls['website'].setValue(data.website);
+    this.organisationPropertyForm.controls['logourl'].setValue(data.logo_url);
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
-      alert('edit mp..');
       this.organisationPropertyForm.reset();
       // this.closeResult = `Closed with: ${result}`;
     }, (reason) => {
@@ -180,7 +188,14 @@ export class OrganizationdetailsComponent implements OnInit {
   }
 
   editOrganizationModalPopup(content) {
-    this.pathValues();
+    this.editOrganisationForm.controls['organizationName'].setValue( this.organizationName );
+    this.editOrganisationForm.controls['addressOne'].setValue(this.addressOne);
+    this.editOrganisationForm.controls['addressTwo'].setValue(this.addressTwo);
+    this.editOrganisationForm.controls['city'].setValue(this.city);
+    this.editOrganisationForm.controls['state'].setValue(this.state);
+    this.editOrganisationForm.controls['taxID'].setValue(this.taxID);
+    this.editOrganisationForm.controls['zipcode'].setValue(this.zipcode);
+
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
     }, (reason) => {
     });
@@ -191,7 +206,7 @@ export class OrganizationdetailsComponent implements OnInit {
     if (this.editOrganisationForm.invalid) {
       return false;
     } else {
-    //  if (!this.isEditOrganization) {
+      //  if (!this.isEditOrganization) {
       const updateObj = {
         orgname: this.editOrganisationForm.value.organizationName,
         taxID: this.editOrganisationForm.value.taxID,
@@ -203,9 +218,11 @@ export class OrganizationdetailsComponent implements OnInit {
       };
       this.orgService.updateOrganization(this.organizationID, updateObj).subscribe((res) => {
         if (res) {
-          alert('Organization updated successfully!');
-          console.log(this.currentManagedOrgID,'currentManagedOrgID..');
-
+          this.alertMsg = res.response;
+          this.isOpen = true;
+          this.alertType = 'success';
+          console.log(this.currentManagedOrgID, 'currentManagedOrgID..');
+          this.loadOrganizationByID(this.organizationID);
           if (res.response.id === this.currentManagedOrgID) {
             this.orgService.updateEditedOrganization(res);
           }
@@ -213,19 +230,25 @@ export class OrganizationdetailsComponent implements OnInit {
           this.modalService.dismissAll('Data Saved!');
         }
       }, (error) => {
-        alert(JSON.stringify(error));
+        this.alertMsg = error;
+        this.isOpen = true;
+        this.alertType = 'danger';
       });
-      }
+    }
   }
 
   disableProperty(orgId, propId) {
     this.orgService.disableProperty(orgId, propId).subscribe((data) => {
       if (data) {
-        alert('Property has been disabled.');
+        this.alertMsg = data.response;
+        this.isOpen = true;
+        this.alertType = 'success';
         this.getPropertyList(this.organizationID);
       }
     }, (err) => {
-      alert(JSON.stringify(err));
+      this.alertMsg = err;
+      this.isOpen = true;
+      this.alertType = 'danger';
     });
   }
 
@@ -256,12 +279,16 @@ export class OrganizationdetailsComponent implements OnInit {
         };
         this.orgService.addProperties(this.organizationID, reqObj).subscribe((result) => {
           if (result) {
-            alert('New property has been added');
+            this.alertMsg = 'New property has been added!';
+            this.isOpen = true;
+            this.alertType = 'success';
             this.getPropertyList(this.organizationID);
             this.orgService.isOrganizationUpdated.next(true);
           }
         }, (error) => {
-          console.log(error, 'error..');
+          this.alertMsg = error;
+          this.isOpen = true;
+          this.alertType = 'danger';
         });
         this.organisationPropertyForm.reset();
         this.modalService.dismissAll('Data Saved!');
@@ -273,20 +300,24 @@ export class OrganizationdetailsComponent implements OnInit {
         };
         this.orgService.editProperties(this.myContext.oid, this.myContext.pid, reqObj).subscribe((res) => {
           if (res) {
-            alert('Property has been updated!');
+            this.alertMsg = 'Property has been updated!';
+            this.isOpen = true;
+            this.alertType = 'success';
             this.getPropertyList(res.response.oid);
 
             if (res.response.id === this.currrentManagedPropID) {
-             // this.orgService.changeCurrentSelectedProperty(res);
+              // this.orgService.changeCurrentSelectedProperty(res);
               const orgDetails = this.orgService.getCurrentOrgWithProperty();
               this.orgService.updateEditedProperty(res);
             }
           }
-         // this.orgService.isOrganizationUpdated.next(true);
+          // this.orgService.isOrganizationUpdated.next(true);
           this.organisationPropertyForm.reset();
           this.modalService.dismissAll();
         }, (error) => {
-          console.log(error, 'error..');
+          this.alertMsg = error;
+          this.isOpen = true;
+          this.alertType = 'danger';
         });
       }
     }
@@ -343,13 +374,17 @@ export class OrganizationdetailsComponent implements OnInit {
       this.companyService.inviteUser(requestObj)
         .subscribe((data) => {
           if (data) {
-            alert('Details has been updated successfully!');
+            this.alertMsg = data.response;
+            this.isOpen = true;
+            this.alertType = 'success';
             this.loadOrgTeamMembers(this.organizationID);
             this.inviteUserOrgForm.reset();
             this.modalService.dismissAll('Data Saved!');
           }
         }, (error) => {
-          alert(error);
+          this.alertMsg = error;
+          this.isOpen = true;
+          this.alertType = 'danger';
           this.modalService.dismissAll('Error!');
         });
     }
@@ -384,27 +419,35 @@ export class OrganizationdetailsComponent implements OnInit {
     };
     this.orgService.disableOrganization(this.organizationID, reqObj).subscribe((data) => {
       if (data) {
-        alert('Selected oragnization has been disabled!');
+        this.alertMsg = data.response;
+        this.isOpen = true;
+        this.alertType = 'success';
         this.orgService.isOrganizationUpdated.next(true);
-        this.router.navigate(['/organizations']);
+        this.router.navigate(['settings/organizations']);
       }
     }, (err) => {
-      alert(err);
+      this.alertMsg = err;
+      this.isOpen = true;
+      this.alertType = 'danger';
     });
   }
 
   removeTeamMember(id) {
     this.companyService.removeTeamMember(id).subscribe((data) => {
       if (data) {
-        alert('User has been removed.');
+        this.alertMsg = data.response;
+        this.isOpen = true;
+        this.alertType = 'success';
         this.loadOrgTeamMembers(this.organizationID);
       }
     }, (err) => {
-      alert(JSON.stringify(err));
+      this.alertMsg = err;
+      this.isOpen = true;
+      this.alertType = 'danger';
     });
-   }
+  }
 
-   isDateOrString(status): boolean {
+  isDateOrString(status): boolean {
     const date = Date.parse(status);
     if (isNaN(date)) {
       return false;
@@ -420,14 +463,34 @@ export class OrganizationdetailsComponent implements OnInit {
     this.companyService.inviteUser(requestObj)
       .subscribe((data) => {
         if (data) {
-          this.notification.info('Invitation Send', 'We have sent a email on your Email Id', notificationConfig);
+          this.alertMsg = 'We have sent a email on your Email Id';
+          this.isOpen = true;
+          this.alertType = 'info';
           this.loadOrgTeamMembers(this.organizationID);
           this.inviteUserOrgForm.reset();
           this.modalService.dismissAll('Data Saved!');
         }
       }, (error) => {
-        this.notification.error('Invitation Send', error, notificationConfig);
+        this.alertMsg = error;
+        this.isOpen = true;
+        this.alertType = 'danger';
         this.modalService.dismissAll('Error!');
       });
   }
+
+  onCancelClick() {
+    this.isInviteFormSubmitted = false;
+    this.inviteUserOrgForm.reset();
+    this.modalService.dismissAll('Canceled');
+  }
+
+  onClosed(dismissedAlert: any): void {
+    this.alertMsg !== dismissedAlert;
+    this.isOpen = false;
+  }
+
+  // ngAfterContentChecked() {
+  //   this.cdref.detectChanges();
+  // }
+
 }
