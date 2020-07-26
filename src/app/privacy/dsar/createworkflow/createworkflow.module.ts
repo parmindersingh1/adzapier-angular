@@ -12,8 +12,8 @@ import {CustomtabsComponent} from 'src/app/_components/customtabs/customtabs.com
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    CreateworkflowRoutingModule,
-    SharedbootstrapModule
+    SharedbootstrapModule,
+    CreateworkflowRoutingModule
   ]
 })
 export class CreateworkflowModule { }

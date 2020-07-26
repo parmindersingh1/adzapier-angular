@@ -217,6 +217,18 @@ a.dropdown-item > i {
 //     }
 // }
 
+
+.alert-success {
+	background-color: #7B1FA2;
+    border-color: #4A148C;
+    color: #fff;
+}
+
+.alert-danger {
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+}
 .datatable-header-cell {
   background-color: #0367fa !important;
 }

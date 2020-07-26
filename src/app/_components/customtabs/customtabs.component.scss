@@ -42,9 +42,9 @@
 .small-btn {
     border-radius: 30px;
     height: 26px;
-    padding: 0px 3px;
+    padding: 4px 0px;
     margin: 4px 0 0 20px;
-    width: 27px;
+    width: 26px;
 }
 
 .tabTitleWrapper {
@@ -88,6 +88,7 @@
 .deleteicon {
     margin: 0;
     padding: 9px 10px 7px 10px;
+    cursor: pointer;
 }
 
 .stageTitle {
@@ -103,4 +104,12 @@
 
 .selectedTab::after {
     border-left: 17px solid #3c65b7;
+}
+
+.disabled {
+    cursor: not-allowed;
+}
+
+.btn-primary.disabled, .btn-primary:disabled {
+    cursor: default;
 }

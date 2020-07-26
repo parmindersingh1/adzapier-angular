@@ -1,13 +1,15 @@
-import { Component, OnInit, Input, Output, EventEmitter, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ElementRef, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'app-customtabs',
   templateUrl: './customtabs.component.html',
   styleUrls: ['./customtabs.component.scss']
+  // changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CustomtabsComponent implements OnInit {
   @Input() inputData: any = [];
   @Input() currentTab: any;
+  @Input() flowStatus: any;
   @Output() currentStageEvent: EventEmitter<any> = new EventEmitter<any>();
   @ViewChild('panel', { static: true }) public panel: ElementRef<any>;
   newitemAdded: any = [];
@@ -17,6 +19,7 @@ export class CustomtabsComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    this.currentTab =  this.inputData[0].order;
   }
 
   addCustomStages(index, itemorder) {
@@ -28,7 +31,7 @@ export class CustomtabsComponent implements OnInit {
 
     const customStageObj = {
       guidance_text: 'Add your guidance text ',
-      id:'', // this.generateUUID(),
+      id: '', // this.generateUUID(),
       order: itemorder + 1,
       stage_title: this.stage_title || 'New stage'
     };
@@ -89,7 +92,7 @@ export class CustomtabsComponent implements OnInit {
   }
 
   currentSelectedStage(id): boolean{
-   return this.newitemAdded.filter((t) => t.order == id).length > 0;
+   return this.newitemAdded.filter((t) => t.id == id).length > 0;
   }
 
 }

@@ -759,7 +759,7 @@
                 </ng-template>
             </li>
             <li>
-                <span *ngIf="crid" class="previewbtn"><a target="_blank" class="btn btn-sm btn-primary" (click)="previewCCPAForm()">Preview</a></span>
+                <span *ngIf="crid" class="previewbtn"><a target="_blank" class="btn btn-xs btn-primary" (click)="previewCCPAForm()">Preview</a></span>
             </li>
         </ul>
         <div [ngbNavOutlet]="nav"></div>
@@ -798,3 +798,7 @@
         </div>
     </ng-template>
 </ng-template>
+<div class="col-sm-5 mr-0 float-right flotingdiv">
+    <alert *ngIf="isOpen" [type]="alertType" dismissOnTimeout="5000" [dismissible]="dismissible"
+        (onClosed)="onClosed(alert)">{{  alertMsg}}</alert>
+</div>
