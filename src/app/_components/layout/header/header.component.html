@@ -18,7 +18,7 @@
   <div class="collapse navbar-collapse" id="collapsibleNavbar" [collapse]="!isCollapsed"
     [ngClass]="{'hidemenu':currentUser, 'showmenu':!currentUser}">
     <!--[ngClass]="{'hidemenu':currentUser, 'showmenu':!currentUser}"-->
-    <ul class="navbar-nav mr-auto" *ngIf="!currentUser">
+    <ul class="navbar-nav nav-mr" *ngIf="!currentUser">
       <li *ngFor="let menu of publicNavigationMenu" class="nav-item">
         <div *ngIf="menu.showlink" dropdown container="body">
           <div *ngIf="!menu.subcategory">
@@ -54,7 +54,7 @@
   <!--menu after login-->
   <div class="collapse navbar-collapse mr-auto" [collapse]="!isCollapsed"
     [ngClass]="{'hidemenu':!currentUser, 'showmenu':currentUser}">
-    <ul  class="navbar-nav" dropdown container="body">
+    <ul  class="navbar-nav nav-mr" dropdown container="body">
       <a class="nav-link dropdown-link" routerLinkActive="active" dropdownToggle (click)="false">
        <div>{{currentOrganization}}
        </div>
