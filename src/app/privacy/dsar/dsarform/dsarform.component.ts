@@ -1135,10 +1135,10 @@ export class DsarformComponent implements OnInit, OnDestroy {
   }
 
   previewCCPAForm() {
-    if (window.location.hostname === "develop-cmp.adzpier-staging.com") {
-      window.open('http://develop-privacyportal.adzpier-staging.com/ccpa/form/' + this.orgId + '/' + this.propId + '/' + this.crid);
+    if (window.location.hostname === 'develop-cmp.adzpier-staging.com') {
+      window.open('https://develop-privacyportal.adzpier-staging.com/ccpa/form/' + this.orgId + '/' + this.propId + '/' + this.crid);
     } else if (window.location.hostname === "cmp.adzpier-staging.com") {
-      window.open('http://privacyportal.adzpier-staging.com/ccpa/form/' + this.orgId + '/' + this.propId + '/' + this.crid);
+      window.open('https://privacyportal.adzpier-staging.com/ccpa/form/' + this.orgId + '/' + this.propId + '/' + this.crid);
     }
   }
 
