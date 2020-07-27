@@ -1,17 +1,16 @@
 
-table.table.table-bordered > thead > tr > th:first-child {
-    width: 100px;
-}
+// table.table.table-bordered > thead > tr > th:first-child {
+//     width: 100px;
+// }
 
 table.table.table-bordered > tbody > tr > td:first-child {
-    text-overflow: ellipsis;
+    // text-overflow: ellipsis;
     white-space: nowrap;
-    display: inline-block;
-    width: 100px !important;
-    overflow: hidden !important;
+    // display: inline-block;
+    // width: 100px !important;
+    // overflow: hidden !important;
     border-right: 0;
     border-left: 0;
-    border-bottom: 0;
   }
 
 //   table.table.table-bordered > thead > tr > th {
@@ -29,3 +28,26 @@ table.table.table-bordered > tbody > tr > td:first-child {
   .workflowdiv > .card > .card-body {
     padding: 0 !important;
   }
+
+  .workflowdiv > .card > .card-header {
+    margin: 0;
+    padding: 0 0 10px 0;
+  }
+
+  table.table.table-bordered > tbody > tr:last-child {
+    border-bottom: 1px solid #e1e5ed;
+  }
+
+  .workflowlink {
+    cursor: pointer;
+  }
+
+  .workflowlink a {
+    cursor: pointer;
+    text-decoration: underline;
+    color: #3968fa;
+    text-transform: capitalize;
+    font-weight: 500;
+  }
+
+  

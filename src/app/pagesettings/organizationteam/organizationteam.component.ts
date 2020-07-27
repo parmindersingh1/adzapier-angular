@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-// import { CompanyService } from '../company.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-// import { UserService, OrganizationService } from '../_services';
 import { FormArray, FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
 import { UserService, OrganizationService } from 'src/app/_services';
@@ -55,19 +53,12 @@ export class OrganizationteamComponent implements OnInit {
     this.router.navigate(['settings/organizations/organizationdetails', this.organizationID]);
   }
 
-  loadCompanyTeamMembers() {
-    const key = 'response';
-    this.loading.start();
-    this.companyService.getCompanyTeamMembers().subscribe((data) => {
-      this.organizationTeamMemberList = data[key];
-    });
-  }
-
   loadOrgTeamMembers(orgID) {
     const key = 'response';
     const pagelimit = '&limit=' + this.paginationConfig.itemsPerPage + '&page=' + this.paginationConfig.currentPage;
     console.log('page Limit', pagelimit);
     this.orgService.getOrgTeamMembers(orgID, pagelimit).subscribe((data) => {
+      this.loading.stop();
       this.organizationTeamMemberList = data[key];
       this.paginationConfig.totalItems = data.count;
     });
@@ -98,11 +89,10 @@ export class OrganizationteamComponent implements OnInit {
     const pagelimit = '?limit=' + this.paginationConfig.itemsPerPage + '&page=' + this.paginationConfig.currentPage;
     const key = 'response';
     this.loading.start();
-    this.companyService.getCompanyTeamMembers(pagelimit).subscribe((data) => {
+    this.orgService.getOrgTeamMembers(this.organizationID, pagelimit).subscribe((data) => {
       this.loading.stop();
       this.organizationTeamMemberList = data[key];
       this.paginationConfig.totalItems = data.count;
-      return this.organizationTeamMemberList;
     });
   }
 
@@ -172,4 +162,11 @@ export class OrganizationteamComponent implements OnInit {
      alert(JSON.stringify(err));
    });
   }
+
+  onCancelClick(){
+    this.submitted = false;
+    this.inviteUserOrgForm.reset();
+    this.modalService.dismissAll('Canceled');   
+  }
+
 }

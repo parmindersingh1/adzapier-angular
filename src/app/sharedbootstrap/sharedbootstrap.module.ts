@@ -9,6 +9,9 @@ import { FilterPipe } from '../filter.pipe';
 import { FeatherModule } from 'angular-feather';
 import { allIcons } from 'angular-feather/icons';
 import { TimeAgoPipe } from 'time-ago-pipe';
+import { AlertModule } from 'ngx-bootstrap/alert';
+import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
+
 @NgModule({
   declarations: [FilterPipe, TimeAgoPipe],
   imports: [
@@ -18,9 +21,12 @@ import { TimeAgoPipe } from 'time-ago-pipe';
     QuillModule.forRoot(),
     NgxPaginationModule,
     FeatherModule.pick(allIcons),
-    PaginationModule.forRoot()
+    PaginationModule.forRoot(),
+    AlertModule.forRoot(),
+    TypeaheadModule.forRoot()
+
   ],
-  exports: [NgbModule, DragDropModule, QuillModule, NgxPaginationModule, FilterPipe, TimeAgoPipe]
+  exports: [NgbModule, DragDropModule, QuillModule, NgxPaginationModule, AlertModule, TypeaheadModule, FilterPipe, TimeAgoPipe]
 
 })
 export class SharedbootstrapModule { }

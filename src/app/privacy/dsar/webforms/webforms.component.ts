@@ -69,7 +69,7 @@ export class WebformsComponent implements OnInit {
 
   showForm(data) {
     this.ccpaFormConfigService.captureCurrentSelectedFormData(data);
-    this.router.navigate(['/privacy/dsar/dsarform', { crid: data.crid }]);
+    this.router.navigate(['/privacy/dsar/dsarform',data.crid]);
   }
 
   navigateToDSARForm() {

@@ -61,12 +61,11 @@
 
 .container {
 	font-family: 'Lato', sans-serif;
-	width: 1000px;
 	margin: 0 auto;
 }
 
 .wrapper {
-	display: table-cell;
+	display: inline;
 	/*height: 400px;*/
 	vertical-align: middle;
 }
@@ -210,4 +209,44 @@ flex-direction: column;
 
 .red {
 	color: red;
+}
+
+.workflowname {
+	border: 1px solid #ccc;
+    border-radius: 30px;
+    font-size: 11px;
+    color: #596882;
+    text-transform: uppercase;
+    background: aliceblue;
+    margin: 3px 10px;
+    padding: 5px 10px 3px 10px;
+}
+
+.txt-caps {
+	text-transform: capitalize;
+}
+
+.disabled {
+    cursor: not-allowed;
+}
+
+.alert-success {
+	background-color: #10b759;
+    border-color: #10b759;
+    color: #fff;
+}
+
+.alert-danger {
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+}
+
+.flotingdiv{
+	position: fixed;
+	bottom: 0;
+	top: 84%;
+	right:0;
+	overflow-x: hidden;
+	overflow-y: auto
 }

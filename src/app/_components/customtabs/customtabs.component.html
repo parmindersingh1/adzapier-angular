@@ -1,19 +1,18 @@
 <div class="divflex">
-<button (click)="onPreviousSearchPosition()" class="arrowbtn"><i class="fa fa-angle-left"></i></button>
+<button  (click)="onPreviousSearchPosition()" class="arrowbtn"><i class="fa fa-angle-left"></i></button>
 <div class="customtab col-sm-8" #panel>
     <ul>
         <li *ngFor="let item of inputData; let i = index;let first = first; let last = last; let odd = odd;">
-            <div class="displayflex"> 
-                <div class="tabTitleWrapper" [class.selectedTab]="currentTab == item.order">
-                    <div *ngIf="currentSelectedStage(item.order)" class="deleteicon" (click)="deleteSelectedStage(i)">
+            <div class="displayflex">
+                <div class="tabTitleWrapper"  [class.selectedTab]="currentTab == item.order">
+                    <div *ngIf="currentSelectedStage(item.id)" class="deleteicon" (click)="deleteSelectedStage(i)">
                         <i class="fa fa-trash" aria-hidden="true"></i>
                     </div> 
                     <div class="stageTitle" (click)="selectCurrentStage(item)">
                        {{item.stage_title}}
                     </div>                                      
                 </div>
-                <!-- I | {{i}} length | {{workflowStages.length}} -->
-                <button class="btn btn-xs btn-primary small-btn" *ngIf="i !==  item.order && i < inputData.length - 1"
+                <button [disabled]="flowStatus === 'active'"  class="btn btn-xs btn-primary small-btn" *ngIf="i !==  item.order && i < inputData.length - 1"
                     (click)="addCustomStages(i,item.order)">
                     <span>
                         <i class="fa fa-plus" aria-hidden="true"></i>

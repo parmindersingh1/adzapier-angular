@@ -5,6 +5,6 @@ export const environment = {
   mock: false,
  
   stripePublishablekey : 'pk_test_Bea8DtMw2JDaQoZuvyd2yEdE00wtdPEyoM',
-  apiUrl:"//develop-cmp-api.adzpier.com/api/v1"
+  apiUrl: 'https://develop-cmp-api.adzpier-staging.com/api/v1'
  
 };

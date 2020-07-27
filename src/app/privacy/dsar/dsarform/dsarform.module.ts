@@ -6,8 +6,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { DsarformRoutingModule } from './dsarform-routing.module';
 import { NgbModule, NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { SharedbootstrapModule } from '../sharedbootstrap/sharedbootstrap.module';
 import { QuillModule } from 'ngx-quill';
+import { SharedbootstrapModule } from 'src/app/sharedbootstrap/sharedbootstrap.module';
 
 
 @NgModule({

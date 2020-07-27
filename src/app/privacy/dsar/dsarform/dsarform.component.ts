@@ -1,17 +1,15 @@
 import { Component, OnInit, OnDestroy, ViewChild, ViewEncapsulation, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-import { FormBuilder, Validators, FormArray, FormGroup, NgForm, FormControl } from '@angular/forms';
-import { OrganizationService } from '../../app/_services';
-import { switchMap, map, throwIfEmpty } from 'rxjs/operators';
-import { CcparequestService } from '../_services/ccparequest.service';
-import { DsarformService } from '../_services/dsarform.service';
-import { CCPAFormConfigurationService } from '../_services/ccpaform-configuration.service';
-import { ActivatedRoute, Router, NavigationExtras } from '@angular/router';
+import { FormBuilder, FormGroup, NgForm, FormControl } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
-import { EditorChangeContent, EditorChangeSelection } from 'ngx-quill';
-import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
-import { WorkflowService } from '../_services/workflow.service';
+import { OrganizationService } from 'src/app/_services';
+import { CcparequestService } from 'src/app/_services/ccparequest.service';
+import { DsarformService } from 'src/app/_services/dsarform.service';
+import { CCPAFormConfigurationService } from 'src/app/_services/ccpaform-configuration.service';
+import { WorkflowService } from 'src/app/_services/workflow.service';
 
 @Component({
   selector: 'app-dsarform',
@@ -159,16 +157,22 @@ export class DsarformComponent implements OnInit, OnDestroy {
   workflow: any;
   daysleft: any = 45;
   public reqURLObj = {};
+  isControlDisabled: boolean;
+  alertMsg: any;
+  alertType: any;
+  dismissible = true;
+  isOpen = false;
   constructor(private fb: FormBuilder, private ccpaRequestService: CcparequestService,
-    private organizationService: OrganizationService,
-    private dsarFormService: DsarformService,
-    private ccpaFormConfigService: CCPAFormConfigurationService,
-    private workFlowService: WorkflowService,
-    private router: Router, private location: Location,
-    private activatedRoute: ActivatedRoute,
-    private loadingbar: NgxUiLoaderService,
-    private modalService: NgbModal,
-    private cd: ChangeDetectorRef) {
+              private organizationService: OrganizationService,
+              private dsarFormService: DsarformService,
+              private ccpaFormConfigService: CCPAFormConfigurationService,
+              private workFlowService: WorkflowService,
+              private router: Router,
+              private location: Location,
+              private activatedRoute: ActivatedRoute,
+              private loadingbar: NgxUiLoaderService,
+              private modalService: NgbModal,
+              private cd: ChangeDetectorRef) {
 
     this.count = 0;
     // this.loading = true;
@@ -176,7 +180,7 @@ export class DsarformComponent implements OnInit, OnDestroy {
     // this.getCCPAdefaultConfigById();
     this.activatedRoute.paramMap.subscribe(params => {
       // console.log(params, 'params..');
-      this.crid = params.get('crid');
+      this.crid = params.get('id');
       // console.log(this.crid, 'crid..');
       // this.selectedwebFormControlList = this.
     });
@@ -308,7 +312,9 @@ export class DsarformComponent implements OnInit, OnDestroy {
       }
     }, (error) => {
       this.loadingbar.stop();
-      console.log(JSON.stringify(error));
+      this.alertMsg = error;
+      this.isOpen = true;
+      this.alertType = 'danger';
     });
     this.loadWebControl();
   }
@@ -927,7 +933,7 @@ export class DsarformComponent implements OnInit, OnDestroy {
         settings: {
           approver: this.defaultapprover,
           workflow: this.workflow,
-          days_left: this.daysleft
+          days_left: Number(this.daysleft)
         },
         request_form: this.webFormControlList
       };
@@ -941,12 +947,16 @@ export class DsarformComponent implements OnInit, OnDestroy {
         .subscribe((data) => {
           this.loadingbar.stop();
           if (data) {
-            alert('Form Updated!');
+            this.alertMsg = data.response;
+            this.isOpen = true;
+            this.alertType = 'success';
             // this.dsarFormService.removeControls();
           }
         }, (error) => {
           this.loadingbar.stop();
-          console.log(JSON.stringify(error));
+          this.alertMsg = error;
+          this.isOpen = true;
+          this.alertType = 'danger';
         });
     } else {
       this.loadingbar.start();
@@ -955,12 +965,16 @@ export class DsarformComponent implements OnInit, OnDestroy {
           this.loadingbar.stop();
           if (data) {
             this.crid = data.response.crid;
-            alert('New Form Saved!');
+            this.alertMsg = data.response;
+            this.isOpen = true;
+            this.alertType = 'success';
             // this.dsarFormService.removeControls();
           }
         }, (error) => {
           this.loadingbar.stop();
-          console.log(JSON.stringify(error));
+          this.alertMsg = error;
+          this.isOpen = true;
+          this.alertType = 'danger';
         });
     }
     this.active = 4;
@@ -1101,6 +1115,10 @@ export class DsarformComponent implements OnInit, OnDestroy {
     this.workFlowService.getWorkflow().subscribe((data) => {
       const key = 'response';
       this.workFlowList = data[key];
+    },(error)=>{
+      this.alertMsg = error;
+      this.isOpen = true;
+      this.alertType = 'danger';
     });
   }
 
@@ -1117,11 +1135,16 @@ export class DsarformComponent implements OnInit, OnDestroy {
   }
 
   previewCCPAForm() {
-    if (window.location.hostname === "develop-cmp.adzpier.com") {
-      window.open('http://develop-privacyportal.adzpier.com/ccpa/form/' + this.orgId + '/' + this.propId + '/' + this.crid);
-    } else if (window.location.hostname === "staging-cmp.adzpier.com") {
-      window.open('http://staging-privacyportal.adzpier.com/ccpa/form/' + this.orgId + '/' + this.propId + '/' + this.crid);
+    if (window.location.hostname === 'develop-cmp.adzpier-staging.com') {
+      window.open('https://develop-privacyportal.adzpier-staging.com/ccpa/form/' + this.orgId + '/' + this.propId + '/' + this.crid);
+    } else if (window.location.hostname === "cmp.adzpier-staging.com") {
+      window.open('https://privacyportal.adzpier-staging.com/ccpa/form/' + this.orgId + '/' + this.propId + '/' + this.crid);
     }
+  }
+
+  onClosed(dismissedAlert: any): void {
+    this.alertMsg !== dismissedAlert;
+    this.isOpen = false;
   }
 
   ngOnDestroy() {

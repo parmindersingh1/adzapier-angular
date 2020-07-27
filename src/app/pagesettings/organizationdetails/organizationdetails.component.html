@@ -235,7 +235,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                                <tr *ngFor="let list of organizationTeamMemberList | paginate:paginationConfig | filter: searchText:'user_name':'user_email'; let i = index">
+                                <tr *ngFor="let list of organizationTeamMemberList | paginate:paginationConfig | filter: searchText:'user_name':'user_email':'role_name'; let i = index">
                                     <td>
                                         {{ (paginationConfig.currentPage - 1) * paginationConfig.itemsPerPage + i + 1 }}
                                     </td>
@@ -294,7 +294,7 @@
                     <div class="col-sm-12">
                         <div class="form-group">
                             <label for="organizationName">Name</label>
-                            <input type="text" class="form-control" [(ngModel)]="organizationName"
+                            <input type="text" class="form-control"  
                                 formControlName="organizationName" name="organizationName"
                                 [ngClass]="{ 'is-invalid': submitted && editOrg.organizationName.errors }" />
                             <div *ngIf="submitted && editOrg.organizationName.errors" class="invalid-feedback">
@@ -310,14 +310,14 @@
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label for="taxID">Tax ID</label>
-                            <input type="text" class="form-control" [(ngModel)]="taxID" formControlName="taxID"
+                            <input type="text" class="form-control" formControlName="taxID"
                                 name="taxID" />
                         </div>
                     </div>
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label for="addressOne">Address 1</label>
-                            <input type="text" class="form-control" [(ngModel)]="addressOne" formControlName="addressOne"
+                            <input type="text" class="form-control"  formControlName="addressOne"
                                 name="addressOne" [ngClass]="{ 'is-invalid': submitted && editOrg.addressOne.errors }" />
                             <div *ngIf="submitted && editOrg.addressOne.errors" class="invalid-feedback">
                                 <div *ngIf="editOrg.addressOne.errors.required">Address 1 is required</div>
@@ -331,7 +331,7 @@
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label for="addressTwo">Address 2</label>
-                            <input type="text" class="form-control" [(ngModel)]="addressTwo" formControlName="addressTwo"
+                            <input type="text" class="form-control"  formControlName="addressTwo"
                                 name="addressTwo" [ngClass]="{ 'is-invalid': submitted && editOrg.addressTwo.errors }" />
                             <div *ngIf="submitted && editOrg.addressTwo.errors" class="invalid-feedback">
                                 <div *ngIf="editOrg.addressTwo.errors.required">Address 2 is required</div>
@@ -341,7 +341,7 @@
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label for="city">City</label>
-                            <input type="text" class="form-control" [(ngModel)]="city" formControlName="city"
+                            <input type="text" class="form-control"  formControlName="city"
                                 name="city" [ngClass]="{ 'is-invalid': submitted && editOrg.city.errors }" />
                             <div *ngIf="submitted && editOrg.city.errors" class="invalid-feedback">
                                 <div *ngIf="editOrg.city.errors.required">City is required</div>
@@ -354,7 +354,7 @@
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label for="state">State</label>
-                            <input type="text" class="form-control" [(ngModel)]="state" formControlName="state"
+                            <input type="text" class="form-control"  formControlName="state"
                                 name="state" [ngClass]="{ 'is-invalid': submitted && editOrg.state.errors }" />
                             <div *ngIf="submitted && editOrg.state.errors" class="invalid-feedback">
                                 <div *ngIf="editOrg.state.errors.required">State is required</div>
@@ -364,7 +364,7 @@
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label for="state">Zip Code</label>
-                            <input type="text" class="form-control" [(ngModel)]="zipcode" formControlName="zipcode"
+                            <input type="text" class="form-control"  formControlName="zipcode"
                                 name="zipcode" [ngClass]="{ 'is-invalid': submitted && editOrg.zipcode.errors }" />
                             <div *ngIf="submitted && editOrg.zipcode.errors" class="invalid-feedback">
                                 <div *ngIf="editOrg.zipcode.errors.required">Zipcode is required</div>
@@ -402,7 +402,7 @@
                 <div class="form-group">
                     <label for="name">Name</label>
                     <input type="text" class="form-control" name="propertyname" formControlName="propertyname"
-                        [(ngModel)]="propertyname" [ngClass]="{ 'is-invalid': submitted && orgProp.propertyname.errors }" />
+                        [ngClass]="{ 'is-invalid': submitted && orgProp.propertyname.errors }" />
                     <div *ngIf="submitted && orgProp.propertyname.errors" class="invalid-feedback">
                         <div *ngIf="orgProp.propertyname.errors.required">Property name is required</div>
                         <div *ngIf="orgProp.propertyname.errors.pattern">Property allow only Alphanumeric</div>
@@ -410,7 +410,7 @@
                 </div>
                 <div class="form-group">
                     <label for="website">Website</label>
-                    <input type="text" class="form-control" name="website" formControlName="website" [(ngModel)]="website"
+                    <input type="text" class="form-control" name="website" formControlName="website" 
                         [ngClass]="{ 'is-invalid': submitted && orgProp.website.errors }" />
                     <div *ngIf="submitted && orgProp.website.errors" class="invalid-feedback">
                         <div *ngIf="orgProp.website.errors.required">Website address is required</div>
@@ -419,7 +419,7 @@
                 <div class="form-group">
                     <label for="logourl">Logo URL</label>
                     <input type="text" class="form-control" name="logourl" formControlName="logourl"
-                        [(ngModel)]="logourl" />
+                         />
                 </div>
                 <div class="modal-footer p-0 py-2">
                     <button class="btn btn-outline-dark" (click)="modal.dismiss('Close Clicked')">Cancel</button>
@@ -433,7 +433,7 @@
         <div class="modal-header">
             <h4 class="modal-title" id="modal-basic-title">Invite new users</h4>
 
-            <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Close Clicked')">
+            <button type="button" class="close" aria-label="Close" (click)="onCancelClick()">
                 <span aria-hidden="true">×</span>
             </button>
         </div>
@@ -445,7 +445,7 @@
                     <div class="col-sm-12">
                         <div class="form-group">
                             <label for="emailid" class="d-block">Email Id</label>
-                            <input type="email" formControlName="emailid" name="emailid" [(ngModel)]="emailid"
+                            <input type="email" formControlName="emailid" name="emailid"
                                 class="form-control" placeholder="Enter email id"
                                 pattern="^\w+@[a-zA-Z_0-9]+?\.[a-zA-Z]{2,3}$"
                                 [ngClass]="{ 'is-invalid': isInviteFormSubmitted && f.emailid.errors }" />
@@ -484,7 +484,13 @@
                         </div>
                     </div>
                 </div>
+                <div class="float-right">
+                <button class="btn btn-xs btn-secondary mr-3" type="reset" (click)="onCancelClick()">Cancel</button>
                 <button class="btn btn-xs btn-primary" type="submit">Submit</button>
+                </div>
             </form>
         </div>
     </ng-template>
+    <div class="col-sm-5 mr-0 float-right flotingdiv">
+        <alert *ngIf="isOpen" [type]="alertType" dismissOnTimeout="10000" [dismissible]="dismissible" (onClosed)="onClosed(alert)">{{  alertMsg}}</alert>
+    </div>

@@ -33,7 +33,7 @@ export class VerifyemailComponent implements OnInit {
     }, error => {
       this.loading.stop();
       this.messageObj.isError = true;
-      this.messageObj.message = 'Something Went Wrong';
+      this.messageObj.message = 'This link has been expired!';
     });
   }
 
