@@ -2,10 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Validators, FormBuilder, FormGroup, FormArray, FormControl } from '@angular/forms';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
-import {NotificationsService} from "angular2-notifications";
 import { UserService } from 'src/app/_services';
 import { CompanyService } from 'src/app/company.service';
-import { notificationConfig } from 'src/app/_constant/notification.constant';
 
 @Component({
   selector: 'app-company',
@@ -39,11 +37,14 @@ export class CompanyComponent implements OnInit {
   p: number = 1;
   i: any = [];
   paginationConfig = { itemsPerPage: this.pageSize, currentPage: this.p, totalItems: this.totalCount };
-
+  isControlDisabled: boolean;
+  alertMsg: any;
+  alertType: any;
+  dismissible = true;
+  isOpen = false;
   constructor(private companyService: CompanyService, private modalService: NgbModal,
               private formBuilder: FormBuilder,
               private userService: UserService,
-              private notification: NotificationsService,
               private loading: NgxUiLoaderService,
   ) { }
 
@@ -92,6 +93,8 @@ export class CompanyComponent implements OnInit {
     }, (reason) => {
       // this.profileForm.reset();
     });
+    this.inviteUserForm.reset();
+    this.isInviteFormSubmitted = false;
   }
 
   pathValues() {
@@ -133,15 +136,20 @@ export class CompanyComponent implements OnInit {
           if (data) {
             //  this.isShowbtnVisible = false;
             // this.show = true;
-            alert('Details has been updated successfully!');
+         // alert('Details has been updated successfully!');
+            this.alertMsg = 'Details has been updated successfully!';
+            this.isOpen = true;
+            this.alertType = 'success';
             this.loadCompanyDetails();
             // this.userService.getCurrentUser.emit(data);
             this.modalService.dismissAll('Data Saved!');
             // this.loadUserDetails();
           }
-        }, (error) => {
+        }, (err) => {
             this.loading.stop();
-            alert(error);
+            this.alertMsg = err;
+            this.isOpen = true;
+            this.alertType = 'danger';
             this.modalService.dismissAll('Error!');
           // this.isShowbtnVisible = true;
           // this.show = false;
@@ -166,17 +174,28 @@ export class CompanyComponent implements OnInit {
         .subscribe((data) => {
           this.loading.stop();
           if (data) {
-            alert('Details has been updated successfully!');
+            this.alertMsg = 'Details has been updated successfully!';
+            this.isOpen = true;
+            this.alertType = 'success';
             this.inviteUserForm.reset();
+            this.isInviteFormSubmitted = false;
             this.loadCompanyTeamMembers();
             this.modalService.dismissAll('Data Saved!');
           }
-        }, (error) => {
+        }, (err) => {
           this.loading.stop();
-          alert(error);
+          this.alertMsg = err;
+          this.isOpen = true;
+          this.alertType = 'danger';
           this.modalService.dismissAll('Error!');
         });
     }
+  }
+
+  onResetInviteUser() {
+    this.isInviteFormSubmitted = false;
+    this.inviteUserForm.reset();
+    this.modalService.dismissAll('Data Saved!');
   }
 
 
@@ -197,6 +216,10 @@ export class CompanyComponent implements OnInit {
       this.teamMemberList = data[key];
       this.paginationConfig.totalItems = data.count;
       return this.teamMemberList;
+    }, (err) => {
+      this.alertMsg = err;
+      this.isOpen = true;
+      this.alertType = 'danger';
     });
     // this.orgservice.orglist(pagelimit).subscribe((data) => {
     //   const key = 'response';
@@ -232,17 +255,25 @@ export class CompanyComponent implements OnInit {
         // const roleid = data[key];
         this.roleList = data[key];
       }
+    }, (err) => {
+      this.alertMsg = err;
+      this.isOpen = true;
+      this.alertType = 'danger';
     });
   }
 
   removeTeamMember(id) {
     this.companyService.removeTeamMember(id).subscribe((data) => {
       if (data) {
-        alert('User has been removed.');
+        this.alertMsg = 'User has been removed!';
+        this.isOpen = true;
+        this.alertType = 'success';
         this.loadCompanyTeamMembers();
       }
     }, (err) => {
-      alert(JSON.stringify(err));
+        this.alertMsg = err;
+        this.isOpen = true;
+        this.alertType = 'danger';
     });
    }
 
@@ -263,15 +294,27 @@ export class CompanyComponent implements OnInit {
       .subscribe((data) => {
         this.loading.stop();
         if (data) {
-          this.notification.info('Invitation Send', 'We have sent a email on your Email Id', notificationConfig);
+        //  this.notification.info('Invitation Send', 'We have sent a email on your Email Id', notificationConfig);
+          this.alertMsg = 'We have sent a email on your Email Id';
+          this.isOpen = true;
+          this.alertType = 'success';
+
           this.inviteUserForm.reset();
           this.loadCompanyTeamMembers();
           this.modalService.dismissAll('Data Saved!');
         }
-      }, (error) => {
+      }, (err) => {
         this.loading.stop();
-        this.notification.error('Invitation Send', 'Something went wrong...', notificationConfig);
+        this.alertMsg = err;
+        this.isOpen = true;
+        this.alertType = 'danger';
+     //   this.notification.error('Invitation Send', 'Something went wrong...', notificationConfig);
         this.modalService.dismissAll('Error!');
       });
+  }
+
+  onClosed(dismissedAlert: any): void {
+    this.alertMsg !== dismissedAlert;
+    this.isOpen = false;
   }
 }

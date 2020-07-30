@@ -218,7 +218,7 @@ export class OrganizationdetailsComponent implements OnInit {
       };
       this.orgService.updateOrganization(this.organizationID, updateObj).subscribe((res) => {
         if (res) {
-          this.alertMsg = res.response;
+          this.alertMsg = 'Organization has been updated!';
           this.isOpen = true;
           this.alertType = 'success';
           console.log(this.currentManagedOrgID, 'currentManagedOrgID..');
@@ -284,6 +284,8 @@ export class OrganizationdetailsComponent implements OnInit {
             this.alertType = 'success';
             this.getPropertyList(this.organizationID);
             this.orgService.isOrganizationUpdated.next(true);
+            this.organisationPropertyForm.reset();
+            this.submitted = false;
           }
         }, (error) => {
           this.alertMsg = error;
@@ -314,6 +316,7 @@ export class OrganizationdetailsComponent implements OnInit {
           // this.orgService.isOrganizationUpdated.next(true);
           this.organisationPropertyForm.reset();
           this.modalService.dismissAll();
+          this.submitted = false;
         }, (error) => {
           this.alertMsg = error;
           this.isOpen = true;
@@ -489,6 +492,11 @@ export class OrganizationdetailsComponent implements OnInit {
     this.isOpen = false;
   }
 
+  onCancelClickProperty() {
+    this.submitted = false;
+    this.organisationPropertyForm.reset();
+    this.modalService.dismissAll('Canceled');
+  }
   // ngAfterContentChecked() {
   //   this.cdref.detectChanges();
   // }

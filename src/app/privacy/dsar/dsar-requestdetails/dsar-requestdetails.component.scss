@@ -409,6 +409,12 @@ ul.nav-tabs > li:last-child > div > a::after {
 .dropdown-menu > ul > li > .dropdown-item:hover {
     background: #ccc !important;
 }
+
+ul.ngx-pagination {
+   margin: 10px;
+   float: right;
+}
+
 // .nav-item + .nav-item::before {
 //     display: block;
 // }

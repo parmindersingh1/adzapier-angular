@@ -23,7 +23,7 @@
                     <button class="btn btn-xs btn-primary d-flex align-items-center mg-r-5"
                         (click)="activateWorkflow(workflowStatus)">
                         <span class="d-none d-sm-inline">
-                            <i class="fa fa-plus" aria-hidden="true"></i>
+                            <i *ngIf="workflowStatus == 'active'" class="fa fa-pen mr-1" aria-hidden="true"></i>
                             {{workflowStatus == 'active' ? 'Edit' : 'Activate'}}</span></button>
                     <button class="btn btn-xs btn-white d-flex align-items-center mg-r-5" type="submit"
                         (click)="saveWorkflow()">

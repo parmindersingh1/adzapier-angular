@@ -16,8 +16,9 @@
                     </h6>
                     <div class="d-flex pd-0">
                         <button (click)="editOrganizationModalPopup(editCompanyModal)"
-                            class="btn btn-sm btn-white float-right">
+                            class="btn btn-xs btn-white float-right">
                             <!-- <i-feather name="edit-2" class="feather-16"></i-feather> -->
+                            <i class="fa fa-pen mr-1" aria-hidden="true"></i>
                             <span class="d-none d-sm-inline mg-l-0"> Edit</span>
                         </button>
                     </div>
@@ -137,12 +138,15 @@
                                     *ngIf="isDateOrString(list.user_last_login)">{{list.user_last_login | date:'medium'}}</span>
                                 <span *ngIf="!isDateOrString(list.user_last_login)">{{list.user_last_login}}</span>
                             </td>
-                          <td class="text-center">
-                            <button type="button" *ngIf="list.user_last_login === 'Invitation sent' || list.user_last_login === 'Invitation Pending'"
-                                  (click)="onResendInvitation(list.user_email)"  class="btn btn-sm btn-primary"><i class="fas fa-envelope	"></i> Resend Invitation</button>
-                          </td>
+                            <td class="text-center">
+                                <button type="button"
+                                    *ngIf="list.user_last_login === 'Invitation sent' || list.user_last_login === 'Invitation Pending'"
+                                    (click)="onResendInvitation(list.user_email)" class="btn btn-sm btn-primary"><i
+                                        class="fas fa-envelope	"></i> Resend Invitation</button>
+                            </td>
                             <td>
-                                <button class="btn btn-xs btn-primary" (click)="removeTeamMember(list.id)">Remove</button>
+                                <button class="btn btn-xs btn-primary"
+                                    (click)="removeTeamMember(list.id)">Remove</button>
                             </td>
 
                         </tr>
@@ -260,9 +264,9 @@
                     <div class="form-group">
                         <label>&nbsp;</label>
                         <div class="text-right">
-                            <button class="btn btn-primary mr-2">Save Changes</button>
-                            <button class="btn btn-primary mr-2"
+                            <button class="btn btn-secondary mr-2"
                                 (click)="modal.dismiss('Close Clicked')">Cancel</button>
+                            <button class="btn btn-primary mr-2">Save Changes</button>
                         </div>
                     </div>
                 </div>
@@ -287,7 +291,7 @@
                 <div class="col-sm-12">
                     <div class="form-group">
                         <label for="emailid" class="d-block">Email Id</label>
-                        <input type="text" formControlName="emailid" name="emailid" [(ngModel)]="emailid"
+                        <input type="text" formControlName="emailid" name="emailid" 
                             class="form-control" placeholder="Enter email id"
                             pattern="^\w+@[a-zA-Z_0-9]+?\.[a-zA-Z]{2,3}$"
                             [ngClass]="{ 'is-invalid': isInviteFormSubmitted && userInvite.emailid.errors }" />
@@ -309,9 +313,16 @@
 
 
             </div>
+            <div class="float-right">
+            <button class="btn btn-outline-dark btn-xs mr-2"
+            (click)="onResetInviteUser()">Cancel</button>
             <button class="btn btn-primary btn-xs" type="submit">Submit</button>
-            <button class="btn btn-outline-dark btn-xs float-right"
-                (click)="modal.dismiss('Close Clicked')">Cancel</button>
+            </div>
         </form>
     </div>
 </ng-template>
+
+<div class="col-sm-5 mr-0 float-right flotingdiv">
+    <alert *ngIf="isOpen" [type]="alertType" dismissOnTimeout="5000" [dismissible]="dismissible"
+        (onClosed)="onClosed(alert)">{{  alertMsg}}</alert>
+</div>
