@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener, ViewChild, ElementRef, Renderer2 } from '@angular/core';
+import { Component, OnInit, HostListener, ViewChild, ElementRef, Renderer2, TemplateRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { OrganizationService } from 'src/app/_services';
 import { DsarRequestService } from 'src/app/_services/dsar-request.service';
@@ -8,6 +8,7 @@ import { WorkflowService } from 'src/app/_services/workflow.service';
 import { CcpadataService } from 'src/app/_services/ccpadata.service';
 import { CCPAFormConfigurationService } from 'src/app/_services/ccpaform-configuration.service';
 import { TypeaheadMatch } from 'ngx-bootstrap/typeahead/typeahead-match.class';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap';
 
 @Component({
   selector: 'app-dsar-requestdetails',
@@ -18,6 +19,7 @@ export class DsarRequestdetailsComponent implements OnInit {
   @ViewChild('toggleDayleftdiv',{static:true}) toggleDayleftdiv: ElementRef;
   @ViewChild('btnDaysLeft',{static:true}) btnDaysLeft: ElementRef; 
   @ViewChild('customDaysInput',{static:false}) customDaysInput: ElementRef;
+  @ViewChild('confirmTemplate',{static:false}) confirmModal : TemplateRef<any>;
   requestID: any;
   currentManagedOrgID: any;
   currrentManagedPropID: any;
@@ -92,6 +94,10 @@ export class DsarRequestdetailsComponent implements OnInit {
   country: any;
   reqAcceptingagent: any;
   riskFactorText: any;
+  p: number = 1;
+  pageSize: any = 5;
+  totalCount: any;
+  paginationConfig = { itemsPerPage: this.pageSize, currentPage: this.p, totalItems: this.totalCount, id: 'userPagination' };
   quillConfig = {
     toolbar: {
       container: [
@@ -103,6 +109,11 @@ export class DsarRequestdetailsComponent implements OnInit {
       ]
     }
   };
+  isConfirmed:boolean;
+  stageDiff: number;
+  revertedStage: any;
+  status: number = 0;
+  modalRef: BsModalRef;
   constructor(private activatedRoute: ActivatedRoute,
     private router: Router,
     private orgService: OrganizationService,
@@ -112,7 +123,8 @@ export class DsarRequestdetailsComponent implements OnInit {
     private ccpaFormConfigService: CCPAFormConfigurationService,
     private modalService: NgbModal,
     private formBuilder: FormBuilder,
-    private renderer2: Renderer2
+    private renderer2: Renderer2,
+    private bsmodalService: BsModalService
   ) {
     this.renderer2.listen('window', 'click',(e:Event)=>{
       if(e.target !== this.toggleDayleftdiv.nativeElement && e.target !== this.btnDaysLeft.nativeElement && e.target !== this.customDaysInput.nativeElement){
@@ -349,42 +361,12 @@ export class DsarRequestdetailsComponent implements OnInit {
       }
       this.nextStage = this.selectedStages[this.selectedStages.length - 1].order;
       this.currentStageId = item.id;
-      this.previousStageId = this.selectedStages.filter((t) => t.order == item.order - 1)[0].id;
-      const diff = this.nextStage - item.order;
-      let result;
-      diff >= 1 ? result = confirm('do you want to revert steps?') : false;
-      if (result) {
-
-        if (diff !== 0) {
-          if (this.isPreviousStageSelected(item)) {
-            // this.inputData.splice(start, deleteCount, customStageObj);
-            if (diff === 1) {
-              this.selectedStages.splice(this.selectedStages.length - 1, 1);
-              //  this.previousStage = this.selectedStages[this.nextStage - 1].order;
-              //  this.previousStageId = this.selectedStages[this.nextStage-1].id;
-            } else {
-              for (let i = diff; i > 0; i--) {
-                this.selectedStages.splice(this.selectedStages.length - i, 1);
-              }
-
-            }
-
-          }
-
-        } else {
-          return false;
-        }
-
-      } else {
-        
-        const reqObj = {
-          current_status: this.currentStageId,
-          previous_status: this.previousStageId,
-          activity_feedback: this.editorActivityPost
-        }
-        this.stageAPI(this.requestID, reqObj);
+      if(item.order !== 1){
+        this.previousStageId = this.selectedStages.filter((t) => t.order == item.order - 1)[0].id;
       }
-
+      const diff = this.nextStage - item.order;
+   //  incase of revert steps
+      (diff >= 1) ? this.openModal(this.confirmModal, diff, item) : false;
     } else {
         this.alertMsg = 'Can not skip stages!';
         this.isOpen = true;
@@ -394,6 +376,54 @@ export class DsarRequestdetailsComponent implements OnInit {
 
  
   }
+ 
+  openModal(template: TemplateRef<any>,diff,item) {
+    this.modalRef = this.bsmodalService.show(template, {class: 'modal-sm'});
+    this.stageDiff = diff;
+    this.revertedStage = item;
+  }
+ 
+  confirm() {
+   this.modalRef.hide();
+   this.isConfirmed = true;
+   if (this.isConfirmed) {
+   // alert(result);
+    if (this.stageDiff !== 0) {
+      if (this.isPreviousStageSelected(this.revertedStage)) {
+        // this.inputData.splice(start, deleteCount, customStageObj);
+        if (this.stageDiff === 1) {
+          this.selectedStages.splice(this.selectedStages.length - 1, 1);
+          //  this.previousStage = this.selectedStages[this.nextStage - 1].order;
+          //  this.previousStageId = this.selectedStages[this.nextStage-1].id;
+        } else {
+          for (let i = this.stageDiff; i > 0; i--) {
+            this.selectedStages.splice(this.selectedStages.length - i, 1);
+          }
+
+        }
+
+      }
+
+    } else {
+      return false;
+    }
+
+  } else {
+    
+    const reqObj = {
+      current_status: this.currentStageId,
+      previous_status: this.previousStageId,
+      activity_feedback: this.editorActivityPost
+    }
+    this.stageAPI(this.requestID, reqObj);
+  }
+  }
+ 
+  decline(): void {
+    this.isConfirmed = false;
+    this.modalRef.hide();
+  }
+
 
   isStageCompleted(item): boolean {
     if (item !== undefined) {
@@ -424,7 +454,7 @@ export class DsarRequestdetailsComponent implements OnInit {
 
   onSubmitActivityPost() {
     const reqObj = {
-      current_status: this.currentStageId,
+      current_status: this.currentStageId ||  this.workflowStages[0].id,
       previous_status: this.previousStageId,
       activity_feedback: this.editorActivityPost
     }
@@ -473,7 +503,9 @@ export class DsarRequestdetailsComponent implements OnInit {
   }
 
   loadActivityLog(requestID) {
-    this.ccpaDataService.getCCPADataActivityLog(requestID).subscribe((data) => {
+    this.paginationConfig.currentPage = 1;
+    const pagelimit = '?limit=' + this.paginationConfig.itemsPerPage + '&page=' + this.paginationConfig.currentPage;
+    this.ccpaDataService.getCCPADataActivityLog(requestID,pagelimit).subscribe((data) => {
       this.activityLog = data.response;
     })
   }
@@ -530,6 +562,7 @@ export class DsarRequestdetailsComponent implements OnInit {
 
   }
 
+  
   // onRiskfactorChange($event){
   //   this.editRequest.controls['risk_factor'].value = $event.currentTarget.value;
   // }
@@ -648,6 +681,25 @@ export class DsarRequestdetailsComponent implements OnInit {
     this.editRequestDetailForm.controls['state'].setValue(this.respState);
     this.editRequestDetailForm.controls['city'].setValue(this.respCity);
     this.editRequestDetailForm.controls['requestacceptingagent'].setValue(this.reqAcceptingagent);
+  }
+
+  pageChangeEvent(event) {
+    this.paginationConfig.currentPage = event;
+    const pagelimit = '?limit=' + this.paginationConfig.itemsPerPage + '&page=' + this.paginationConfig.currentPage;
+    this.ccpaDataService.getCCPADataActivityLog(this.requestID,pagelimit).subscribe((data) => {
+      this.activityLog = data.response;
+      if(data.response.length !== 0){
+        this.activityLog = data.response;
+      }else {
+        this.alertMsg = 'No record found';
+        this.isOpen = true;
+        this.alertType = 'info';
+      }
+    },(err)=>{
+      this.alertMsg = err;
+      this.isOpen = true;
+      this.alertType = 'danger';
+    })
   }
 }
 

@@ -212,7 +212,7 @@ export class HeaderComponent implements OnInit {
         }, {
           showlink: 'Privacy',
           subcategory: [
-            { showlink: 'Dashboard', routerLink: '/pagenotfound', icon: 'bar-chart-2' },
+            { showlink: 'Dashboard', routerLink: '/home/dashboard/ccpa-dsar', icon: 'bar-chart-2' },
             { showlink: 'Webforms', routerLink: '/privacy/dsar/webforms', icon: 'pie-chart' },
             { showlink: 'Requests', routerLink: '/privacy/dsar/dsar-requests', icon: 'fa fa-ticket-alt feather-16' },
             { showlink: 'Work flow', routerLink: '/privacy/dsar/workflows', icon: 'shield-off' },

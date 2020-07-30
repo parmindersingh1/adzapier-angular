@@ -6,6 +6,7 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { OrganizationService, UserService } from 'src/app/_services';
 import { CompanyService } from 'src/app/company.service';
 import { DsarRequestService } from 'src/app/_services/dsar-request.service';
+import { CCPAFormConfigurationService } from 'src/app/_services/ccpaform-configuration.service';
 
 @Component({
   selector: 'app-dsar-requests',
@@ -54,7 +55,8 @@ export class DsarRequestsComponent implements OnInit {
     private companyService: CompanyService,
     private router: Router,
     private loading: NgxUiLoaderService,
-    private dsarRequestService: DsarRequestService
+    private dsarRequestService: DsarRequestService,
+    private ccpaFormConfigService: CCPAFormConfigurationService
   ) { }
 
   ngOnInit() {
@@ -193,9 +195,9 @@ export class DsarRequestsComponent implements OnInit {
     this.router.navigate(['privacy/dsar/dsar-requests-details', id]);
   }
 
-  navigateToWebForm(id) {
-   // this.router.navigate(['privacy/dsar/dsarform', id]);
-    this.router.navigate(['/privacy/dsar/dsarform', { crid: id}]);
+  navigateToWebForm(obj) {
+    this.ccpaFormConfigService.captureCurrentSelectedFormData(obj);
+    this.router.navigate(['/privacy/dsar/dsarform', obj.web_form_id]);
   }
 
   onClosed(dismissedAlert: any): void {

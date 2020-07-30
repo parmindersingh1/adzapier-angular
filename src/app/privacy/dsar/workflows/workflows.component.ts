@@ -54,7 +54,6 @@ export class WorkflowsComponent implements OnInit {
     this.workflowService.getWorkflow().subscribe((data) => {
       const key = 'response';
       this.workflowList = data.response;
-      this.activeWorkflowList = data.response;
     });
   }
 

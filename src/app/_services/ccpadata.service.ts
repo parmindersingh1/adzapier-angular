@@ -17,10 +17,14 @@ export class CcpadataService {
     return this.httpClient.post<any>(environment.apiUrl + '/ccpa/activity/' + ccpaDataId, reqObj);
   }
 
-  getCCPADataActivityLog(ccpaDataId): Observable<any>{
-    return this.httpClient.get<any>(environment.apiUrl + '/ccpa/activity/' + ccpaDataId);
+  getCCPADataActivityLog(ccpaDataId,pageLimit?): Observable<any>{
+    if(pageLimit !== undefined){
+      return this.httpClient.get<any>(environment.apiUrl + '/ccpa/activity/' + ccpaDataId + pageLimit);
+    } else {
+      return this.httpClient.get<any>(environment.apiUrl + '/ccpa/activity/' + ccpaDataId);
+    }
   }
-
+  
   addCCPADataEmailActivity(ccpaDataId, reqObj) {
     return this.httpClient.post<any>(environment.apiUrl + '/ccpa/email/' + ccpaDataId, reqObj); 
   }

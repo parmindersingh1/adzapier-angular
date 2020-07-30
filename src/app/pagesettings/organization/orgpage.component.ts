@@ -172,7 +172,7 @@ export class OrgpageComponent implements OnInit {
         }
       }, (error) => {
         this.loading.stop();
-        this.alertMsg = error;
+        this.alertMsg = JSON.stringify(error);
         this.isOpen = true;
         this.alertType = 'danger';
       });
