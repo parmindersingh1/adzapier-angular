@@ -20,7 +20,11 @@ export class WorkflowService {
     } else{
       return this.httpClient.get<any>(environment.apiUrl + '/workflow' + pgLimit);
     }
-    
+
+  }
+
+  getWorkflowByStatus(status): Observable<any> {
+    return this.httpClient.get<any>(environment.apiUrl + '/workflow?workflow_status='+status);
   }
 
   // to get all stages

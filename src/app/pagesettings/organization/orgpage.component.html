@@ -29,7 +29,7 @@
                                 <option value="20">20</option>
                             </select>
                         </div>
-                        <div class="col-md-5"><label class="d-block">records at a time</label></div>
+                        <div><label class="d-block">records at a time</label></div>
                     </div>
                 </div>
                 <div class="col-sm-2 ml-auto">
@@ -203,6 +203,6 @@
         </form>
     </div>
 </ng-template>
-<div class="col-sm-5 mr-0 float-right flotingdiv">
-    <alert *ngIf="isOpen" [type]="alertType" dismissOnTimeout="5000" [dismissible]="dismissible" (onClosed)="onClosed(alert)">{{  alertMsg}}</alert>
+<div class="col-sm-5 mr-0 float-right flotingdiv"> <!--dismissOnTimeout="5000"-->
+    <alert *ngIf="isOpen" [type]="alertType"  [dismissible]="dismissible" (onClosed)="onClosed(alert)">{{  alertMsg}}</alert>
 </div>

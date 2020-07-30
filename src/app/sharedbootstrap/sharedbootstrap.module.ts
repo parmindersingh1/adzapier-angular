@@ -9,8 +9,10 @@ import { FilterPipe } from '../filter.pipe';
 import { FeatherModule } from 'angular-feather';
 import { allIcons } from 'angular-feather/icons';
 import { TimeAgoPipe } from 'time-ago-pipe';
-import { AlertModule } from 'ngx-bootstrap/alert';
+// import { AlertModule } from 'ngx-bootstrap/alert';
 import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
+import { ModalModule, AlertModule } from 'ngx-bootstrap';
+
 
 @NgModule({
   declarations: [FilterPipe, TimeAgoPipe],
@@ -23,6 +25,7 @@ import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
     FeatherModule.pick(allIcons),
     PaginationModule.forRoot(),
     AlertModule.forRoot(),
+    ModalModule.forRoot(),
     TypeaheadModule.forRoot()
 
   ],

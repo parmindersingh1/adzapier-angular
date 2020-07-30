@@ -229,8 +229,8 @@ export class DsarformComponent implements OnInit, OnDestroy {
           this.propId = data.PID;
           this.orgId = data.OID;
           this.crid = data.crid;
-          this.propertyname = data.form_name;
-          this.formName = data.form_name;
+          // this.propertyname = data.form_name;
+          this.formName = data.form_name || data.web_form_name;
           // this.requestFormControls = data.request_form;
           this.selectedwebFormControlList = this.rearrangeFormSequence(data.request_form);
           this.webFormControlList = this.selectedwebFormControlList;
@@ -1115,7 +1115,7 @@ export class DsarformComponent implements OnInit, OnDestroy {
     this.workFlowService.getWorkflow().subscribe((data) => {
       const key = 'response';
       this.workFlowList = data[key];
-    },(error)=>{
+    }, (error) => {
       this.alertMsg = error;
       this.isOpen = true;
       this.alertType = 'danger';
@@ -1135,9 +1135,12 @@ export class DsarformComponent implements OnInit, OnDestroy {
   }
 
   previewCCPAForm() {
+    if (window.location.hostname === 'localhost') {
+      window.open('http://localhost:4500/ccpa/form/' + this.orgId + '/' + this.propId + '/' + this.crid);
+    }
     if (window.location.hostname === 'develop-cmp.adzpier-staging.com') {
       window.open('https://develop-privacyportal.adzpier-staging.com/ccpa/form/' + this.orgId + '/' + this.propId + '/' + this.crid);
-    } else if (window.location.hostname === "cmp.adzpier-staging.com") {
+    } else if (window.location.hostname === 'cmp.adzpier-staging.com') {
       window.open('https://privacyportal.adzpier-staging.com/ccpa/form/' + this.orgId + '/' + this.propId + '/' + this.crid);
     }
   }

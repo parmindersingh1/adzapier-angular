@@ -94,12 +94,12 @@
                     </div>
                     <div *ngIf="webcontrol.controlId === 'subjecttype'" class="col-sm-6 example-box">
                         <!--webcontrol.control == 'select' && webcontrol.controlId === 'subjecttype' && isSubjectTypeSelected-->
-                        <label>{{webcontrol.controllabel}} </label>
+                        <label>{{webcontrol.controllabel}}</label>
                         <div
                             *ngIf="webcontrol.control == 'select' && webcontrol.controlId === 'subjecttype'">
                             <!-- *ngIf="isSubjectTypeSelected"-->
-                            <select class="form-control" name="{{webcontrol.controllabel}}" #subjecttype="ngModel"
-                                [(ngModel)]="requestObject[webcontrol.controllabel]" [ngClass]="{ 'is-invalid': registerForm.submitted && subjecttype.invalid }" required>
+                            <select class="form-control" name="{{webcontrol.controlId}}" #subjecttype="ngModel"
+                                [(ngModel)]="requestObject[webcontrol.controlId]" [ngClass]="{ 'is-invalid': registerForm.submitted && subjecttype.invalid }" required>
                                 <option *ngFor="let userOpt of webcontrol.selectOptions"
                                     [value]="userOpt.subject_type_id">
                                     {{ userOpt.name }}

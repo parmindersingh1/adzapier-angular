@@ -24,14 +24,14 @@
                     </div> -->
                     <div class="btn-group" role="group" aria-label="Basic example">
                         <button (click)="editOrganizationModalPopup(editOrgModal)"
-                        class="btn btn-sm btn-white float-right">
+                        class="btn btn-xs btn-primary float-right">
                         <!-- <i-feather name="edit-2" class="feather-16"></i-feather> -->
-                        <span class="d-none d-sm-inline mg-l-0"> Edit</span>
+                        <span class="d-none d-sm-inline mg-l-0">  <i class="fa fa-pen mr-1" aria-hidden="true"></i> Edit</span>
                     </button>
                         <button (click)="disableOrganization()"
-                        class="btn btn-sm btn-white float-right">
-                        <i class="far fa-trash-alt tx-danger fa-sm"></i>
-                        <span class="d-none d-sm-inline mg-l-0"> Delete</span>
+                        class="btn btn-xs btn-white float-right">
+                        <i class="far fa-trash-alt fa-sm"></i>
+                        <span class="d-none d-sm-inline mg-l-0 ml-1"> Delete</span>
                     </button>
                       </div>
 
@@ -392,8 +392,8 @@
                 <h4 class="modal-title" id="modal-basic-title">Edit Property</h4>
             </ng-template>
 
-            <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Close Clicked')">
-                <span aria-hidden="true">×</span>
+            <button type="button" class="close" aria-label="Close" (click)="onCancelClickProperty()">
+                <span aria-hidden="true">&times;</span>
             </button>
         </div>
         <div class="modal-body">
@@ -422,7 +422,7 @@
                          />
                 </div>
                 <div class="modal-footer p-0 py-2">
-                    <button class="btn btn-outline-dark" (click)="modal.dismiss('Close Clicked')">Cancel</button>
+                    <button class="btn btn-outline-dark" (click)="onCancelClickProperty()">Cancel</button>
                     <button class="btn btn-outline-dark">Save</button>
                 </div>
             </form>
