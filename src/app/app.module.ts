@@ -78,7 +78,7 @@ export const isMock = environment.mock;
     VerifyemailComponent,
     CheckoutComponent,
     CheckoutConfirmationComponent,
-    WelcomeComponent,
+    WelcomeComponent
   ],
   imports: [
     BrowserModule,
