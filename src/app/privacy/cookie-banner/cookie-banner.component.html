@@ -1,27 +1,1048 @@
-<!--<div class="container">-->
-<!--  <div class="row">-->
-<!--    <div class="col-md-12">-->
-<!--      <div class="card">-->
-<!--        <div class="card-header">Configure your theme-->
-<!--        </div>-->
-<!--        <div class="card-body">-->
-<!--          <mat-form-field appearance="fill">-->
-<!--            <mat-label>Toppings</mat-label>-->
-<!--            <mat-select [formControl]="toppings" multiple>-->
-<!--              <mat-option>fsdg</mat-option>-->
-<!--&lt;!&ndash;              <mat-option *ngFor="let topping of toppingList" [value]="topping">{{topping}}</mat-option>&ndash;&gt;-->
-<!--            </mat-select>-->
-<!--          </mat-form-field>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </div>-->
-<!--  </div>-->
-<!--</div>-->
-<mat-form-field appearance="fill">
-  <mat-label>Favorite food</mat-label>
-  <mat-select>
-    <mat-option *ngFor="let food of foods" [value]="food.value">
-      {{food.viewValue}}
-    </mat-option>
-  </mat-select>
-</mat-form-field>
+<div class="container">
+  <form [formGroup]="cookieBannerForm" (ngSubmit)="onSubmit()">
+    <div class="row">
+      <div class="col-md-12">
+        <h2 class="mat-h2">
+          Configure your Banner CCPA & GDPR
+        </h2>
+        <div class="card">
+          <div class="card-header">Configure your theme
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-4">
+                <mat-form-field class="dropdown-width" appearance="fill">
+                  <mat-label>CCPA Target</mat-label>
+                  <mat-select formControlName="ccpaTarget" [errorStateMatcher]="matcher">
+                    <mat-option *ngFor="let ccpaCountry of ccpaBannerConstant.ccpaTargetCountry"
+                                [value]="ccpaCountry.value">{{ccpaCountry.title}}</mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="f.ccpaTarget.hasError('required')">
+                    CCPA Target is <strong>required</strong>
+                  </mat-error>
+                </mat-form-field>
+
+                <mat-form-field class="dropdown-width" appearance="fill">
+                  <mat-label>GDPR Target</mat-label>
+                  <mat-select formControlName="gdprTarget" [errorStateMatcher]="matcher" multiple>
+                    <mat-option
+                      *ngFor="let gdprCountry of ccpaBannerConstant.gdprTargetCountry"
+                      [value]="gdprCountry.value">{{gdprCountry.title}}</mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="f.gdprTarget.hasError('required')">
+                    GDPR Target is <strong>required</strong>
+                  </mat-error>
+                </mat-form-field>
+
+              </div>
+              <div class="col-md-8 switch-btn">
+                <mat-slide-toggle formControlName="cookieBlocking" color="primary" class="cookie-allow">COKIE BLOCKING
+                </mat-slide-toggle>
+                <br>
+                <mat-slide-toggle formControlName="enableIab" color="primary" class="cookie-allow">ENABLE IAB
+                </mat-slide-toggle>
+                <br>
+                <mat-slide-toggle formControlName="email" color="primary" class="cookie-allow">EMAIL</mat-slide-toggle>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--      End Configure your theme -->
+
+        <div class="card">
+          <div class="card-header">Banner Customize UI - GDPR
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-12">
+                <mat-form-field class="lang-select" appearance="fill">
+                  <mat-label>Language</mat-label>
+                  <mat-select formControlName="gdprBannerlanguage" [errorStateMatcher]="matcher">
+                    <mat-option  *ngFor="let gdprLang of ccpaBannerConstant.GDPR.BANNER.Bannerlanguage"
+                    [value]="gdprLang.value"
+                    >
+                      {{gdprLang.title}}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="f.gdprBannerlanguage.hasError('required')">
+                    GDPR Language is <strong>required</strong>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-md-12 mt-2">
+                <h6>Position</h6>
+                <mat-radio-group formControlName="gdprBannerPosition" aria-label="Select an option">
+                  <mat-radio-button *ngFor="let gdprPosition of ccpaBannerConstant.GDPR.BANNER.BannerPosition"
+                                    class="mr-2" [value]="gdprPosition.value">{{gdprPosition.title}}</mat-radio-button>
+                </mat-radio-group>
+              </div>
+
+              <div class="col-md-12 mt-2">
+                <mat-form-field class="example-full-width w-60">
+                  <mat-label>Title</mat-label>
+                  <input formControlName="gdprBannerTitle" [errorStateMatcher]="matcher"
+                         matInput >
+                  <mat-error *ngIf="f.gdprBannerTitle.hasError('required')">
+                    Title is <strong>required</strong>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+
+              <div class="col-md-12 mt-2">
+                <mat-form-field class="example-full-width w-60">
+                  <mat-label>Description</mat-label>
+                  <textarea formControlName="gdprBannerDescription" [errorStateMatcher]="matcher" matInput></textarea>
+                  <mat-error *ngIf="f.gdprBannerDescription.hasError('required')">
+                    Description is <strong>required</strong>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+
+              <div class="col-md-12 mt-4">
+                <h6>Banner Styles</h6>
+                <div class="row mt-2">
+                  <div class="col-md-3">
+                    <div class="row">
+                      <div class="col-md-4">textColor</div>
+                      <div class="col-md-3"><input
+                        #bannerTextColor
+                        formControlName="gdprBannerGlobalStyleTextColor"
+                        type="color"></div>
+                      <div class="col-md-5">
+                        <input matInput
+                               [value]="bannerTextColor.value">
+                        <!--                        <mat-error *ngIf="f.gdprBannerGlobalStyleTextColor.hasError('required')">-->
+                        <!--                          TextColor is <strong>required</strong>-->
+                        <!--                        </mat-error>-->
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-md-4">
+                    <div class="row">
+                      <div class="col-md-5">BackGroundColor</div>
+                      <div class="col-md-3"><input #bannerBackGroundColor
+                                                   formControlName="gdprBannerGlobalStyleBackgroundColor"
+                                                   type="color"></div>
+                      <div class="col-md-4">
+                        <input matInput
+                               [value]="bannerBackGroundColor.value">
+                      </div>
+                    </div>
+
+                  </div>
+
+                </div>
+              </div>
+
+
+              <div class="col-md-12 mt-5">
+                <h6>PreferenceButton Styles</h6>
+                <div class="row mt-2">
+
+                  <div class="col-md-3 mt-2">
+                    <mat-form-field class="example-full-width">
+                      <mat-label>Preference text</mat-label>
+                      <input matInput
+                             formControlName="gdprBannerPreferenceButtonTextContent" [errorStateMatcher]="matcher">
+                      <mat-error *ngIf="f.gdprBannerPreferenceButtonTextContent.hasError('required')">
+                        Preference is <strong>required</strong>
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+
+                  <div class="col-md-3">
+                    <div class="row">
+                      <div class="col-md-4">textColor</div>
+                      <div class="col-md-3"><input
+                        #bannerCustomizeButtonTextColor
+                        formControlName="gdprBannerPreferenceButtonTextColor"
+                        type="color"></div>
+                      <div class="col-md-5">
+                        <input matInput readonly
+                               [value]="bannerCustomizeButtonTextColor.value">
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-md-4">
+                    <div class="row">
+                      <div class="col-md-5">BackGround Color</div>
+                      <div class="col-md-3"><input
+                        formControlName="gdprBannerPreferenceButtonBackgroundColor"
+                        #bannerCustomizeButtonBackGroundColor type="color"></div>
+                      <div class="col-md-4">
+                        <input matInput readonly
+                               [value]="bannerCustomizeButtonBackGroundColor.value">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+
+              <div class="col-md-12 mt-4">
+                <h6>Allow All Button Styles</h6>
+                <div class="row mt-2">
+
+
+                  <div class="col-md-3 mt-2">
+                    <mat-form-field class="example-full-width">
+                      <mat-label>Allow All text</mat-label>
+                      <input matInput
+                             formControlName="gdprBannerAllowAllButtonTextContent" [errorStateMatcher]="matcher"
+                             >
+                      <mat-error *ngIf="f.gdprBannerAllowAllButtonTextContent.hasError('required')">
+                        AllowAll Text is <strong>required</strong>
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+
+
+                  <div class="col-md-3">
+                    <div class="row">
+                      <div class="col-md-4">textColor</div>
+                      <div class="col-md-3"><input
+                        formControlName="gdprBannerAllowAllButtonTextColor"
+                        #bannerAllowButtonTextColor type="color"></div>
+                      <div class="col-md-5">
+                        <input matInput
+                               readonly
+                               [value]="bannerAllowButtonTextColor.value">
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-md-4">
+                    <div class="row">
+                      <div class="col-md-5">BackGround Color</div>
+                      <div class="col-md-3"><input
+                        formControlName="gdprBannerAllowAllButtonBackgroundColor"
+                        #bannerAllowButtonBackGroundColor type="color"></div>
+                      <div class="col-md-4">
+                        <input matInput readonly [value]="bannerAllowButtonBackGroundColor.value">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+
+              <div class="col-md-12 mt-4">
+                <h6>DisableButton Styles</h6>
+                <div class="row mt-2">
+
+                  <div class="col-md-3 mt-2">
+                    <mat-form-field class="example-full-width">
+                      <mat-label>Disable Button text</mat-label>
+                      <input matInput
+                             formControlName="gdprBannerDisableAllButtonTextContent" [errorStateMatcher]="matcher"
+                              >
+                      <mat-error *ngIf="f.gdprBannerDisableAllButtonTextContent.hasError('required')">
+                        DisableText is <strong>required</strong>
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+
+
+                  <div class="col-md-3">
+                    <div class="row">
+                      <div class="col-md-4">textColor</div>
+                      <div class="col-md-3"><input
+                        formControlName="gdprBannerDisableAllButtonTextColor"
+                        #bannerDisableButtonTextColor type="color"></div>
+                      <div class="col-md-5">
+                        <input matInput [value]="bannerDisableButtonTextColor.value">
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-md-4">
+                    <div class="row">
+                      <div class="col-md-5">BackGround Color</div>
+                      <div class="col-md-3"><input
+                        formControlName="gdprBannerDisableAllButtonBackgroundColor"
+                        #bannerDisableButtonBackGroundColor type="color"></div>
+                      <div class="col-md-4">
+                        <input matInput [value]="bannerDisableButtonBackGroundColor.value">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+
+            </div>
+
+          </div>
+        </div>
+
+
+        <div class="card">
+          <div class="card-header">PopUp Customize UI - GDPR
+          </div>
+          <div class="card-body">
+            <div class="row">
+
+
+              <div class="col-md-12">
+                <mat-form-field class=" w-60 example-full-width">
+                  <mat-label>Purpose Body Summary</mat-label>
+                  <textarea matInput
+                            formControlName="gdprPopUpPurposeBodyDescription" [errorStateMatcher]="matcher"
+                  ></textarea>
+                  <mat-error *ngIf="f.gdprPopUpPurposeBodyDescription.hasError('required')">
+                    Purpose Body is <strong>required</strong>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+
+
+              <div class="col-md-12">
+                <mat-form-field class=" w-60 example-full-width">
+                  <mat-label>Vendors Body Summary</mat-label>
+                  <textarea matInput
+                            formControlName="gdprPopUpVendorBodyDescription" [errorStateMatcher]="matcher"
+                  ></textarea>
+                  <mat-error *ngIf="f.gdprPopUpVendorBodyDescription.hasError('required')">
+                    Vendors Body is <strong>required</strong>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+
+
+              <div class="col-md-12 mt-4">
+                <h6>PopUp Styles</h6>
+                <div class="row mt-2">
+
+                  <div class="col-md-3">
+                    <div class="row">
+                      <div class="col-md-4">textColor</div>
+                      <div class="col-md-3"><input
+                        formControlName="gdprPopUpGlobalTextColor"
+                        #popUpTextColor type="color"></div>
+                      <div class="col-md-5">
+                        <input matInput [value]="popUpTextColor.value">
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+
+              <div class="col-md-12 mt-4">
+                <h6>PurposeButton Styles</h6>
+                <div class="row mt-2">
+
+                  <div class="col-md-3">
+                    <div class="row">
+                      <div class="col-md-4">textColor</div>
+                      <div class="col-md-3"><input
+                        formControlName="gdprPopUpPurposeButtonTextColor"
+                        #popUpPurposeButtonTextColor type="color"></div>
+                      <div class="col-md-5">
+                        <input matInput [value]="popUpPurposeButtonTextColor.value">
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-md-4">
+                    <div class="row">
+                      <div class="col-md-5">BackGround Color</div>
+                      <div class="col-md-3"><input
+                        formControlName="gdprPopUpPurposeButtonBackgroundColor"
+                        #popUpPurposeButtonBackGroundColor type="color"></div>
+                      <div class="col-md-4">
+                        <input matInput [value]="popUpPurposeButtonBackGroundColor.value">
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-md-4">
+                    <div class="row">
+                      <div class="col-md-5">BorderButton Color</div>
+                      <div class="col-md-3"><input
+                        formControlName="gdprPopUpPurposeButtonBorderColor"
+                        #bannerBorderButtonColor type="color"></div>
+                      <div class="col-md-4">
+                        <input matInput [value]="bannerBorderButtonColor.value">
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+
+              <div class="col-md-12 mt-5">
+                <h6>DisableAllButton Styles</h6>
+                <div class="row mt-2">
+
+                  <div class="col-md-3 mt-2">
+                    <mat-form-field class="example-full-width">
+                      <mat-label>Disable Button text</mat-label>
+                      <input matInput
+                             formControlName="gdprPopUpDisableAllButtonTextContent" [errorStateMatcher]="matcher"
+                             placeholder="Ex. Pizza" >
+                      <mat-error *ngIf="f.gdprPopUpDisableAllButtonTextContent.hasError('required')">
+                        DisableTexxt is <strong>required</strong>
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+
+                  <div class="col-md-3">
+                    <div class="row">
+                      <div class="col-md-4">textColor</div>
+                      <div class="col-md-3"><input
+                        formControlName="gdprPopUpDisableAllButtonTextColor"
+                        #popUpDisableAllButtonTextColor type="color"></div>
+                      <div class="col-md-5">
+                        <input matInput
+                               [value]="popUpDisableAllButtonTextColor.value">
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-md-4">
+                    <div class="row">
+                      <div class="col-md-5">BackGround Color</div>
+                      <div class="col-md-3"><input
+                        formControlName="gdprPopUpDisableAllButtonBackgroundColor"
+                        #popUpDisableAllButtonBackGroundColor type="color"></div>
+                      <div class="col-md-4">
+                        <input matInput [value]="popUpDisableAllButtonBackGroundColor.value">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+
+              <div class="col-md-12 mt-4">
+                <h6>SaveMyChoice Button Styles</h6>
+                <div class="row mt-2">
+
+                  <div class="col-md-3 mt-2">
+                    <mat-form-field class="example-full-width">
+                      <mat-label>SaveMyChoice Button text</mat-label>
+                      <input matInput
+                             formControlName="gdprPopUpSaveMyChoiceButtonContentText" [errorStateMatcher]="matcher"
+                             >
+                      <mat-error *ngIf="f.gdprPopUpSaveMyChoiceButtonContentText.hasError('required')">
+                        SaveMyChoice Text is <strong>required</strong>
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+
+                  <div class="col-md-3">
+                    <div class="row">
+                      <div class="col-md-4">textColor</div>
+                      <div class="col-md-3"><input
+                        formControlName="gdprPopUpSaveMyChoiceButtonTextColor"
+                        #popUpSaveMyChoiseButtonTextColor type="color"></div>
+                      <div class="col-md-5">
+                        <input matInput [value]="popUpSaveMyChoiseButtonTextColor.value">
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-md-4">
+                    <div class="row">
+                      <div class="col-md-5">BackGround Color</div>
+                      <div class="col-md-3"><input
+                        formControlName="gdprPopUpSaveMyChoiceButtonBackgroundColor"
+                        #popUpSaveMyChoiseButtonBackGroundColor type="color"></div>
+                      <div class="col-md-4">
+                        <input matInput [value]="popUpSaveMyChoiseButtonBackGroundColor.value">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-12 mt-4">
+                <h6>Allow All Button Styles</h6>
+                <div class="row mt-2">
+
+
+                  <div class="col-md-3 mt-2">
+                    <mat-form-field class="example-full-width">
+                      <mat-label>Allow All text</mat-label>
+                      <input matInput
+                             formControlName="gdprPopUpAllowAllButtonTextContent" [errorStateMatcher]="matcher"
+                             placeholder="Ex. Pizza" >
+                      <mat-error *ngIf="f.gdprPopUpAllowAllButtonTextContent.hasError('required')">
+                        AllowAllText is <strong>required</strong>
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+
+
+                  <div class="col-md-3">
+                    <div class="row">
+                      <div class="col-md-4">textColor</div>
+                      <div class="col-md-3"><input
+                        formControlName="gdprPopUpAllowAllButtonTextColor"
+                        #popUPAllowButtonTextColor type="color"></div>
+                      <div class="col-md-5">
+                        <input matInput [value]="popUPAllowButtonTextColor.value">
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-md-4">
+                    <div class="row">
+                      <div class="col-md-5">BackGround Color</div>
+                      <div class="col-md-3"><input
+                        formControlName="gdprPopUpAllowAllButtonBackgroundColor"
+                        #popUPAllowButtonBackGroundColor type="color"></div>
+                      <div class="col-md-4">
+                        <input matInput [value]="popUPAllowButtonBackGroundColor.value">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="card">
+        <div class="card-header">Banner Customize UI - CCPA
+        </div>
+        <div class="card-body">
+          <div class="row">
+<!--            <div class="col-md-12">-->
+<!--              <mat-form-field class="lang-select" appearance="fill">-->
+<!--                <mat-label>Language</mat-label>-->
+<!--                <mat-select-->
+<!--                  formControlName="ccpaBannerlanguage" [errorStateMatcher]="matcher"-->
+<!--                >-->
+<!--                  <mat-option *ngFor="let ccpaLang of ccpaBannerConstant.CCPA.BANNER.Bannerlanguage"-->
+<!--                              [value]="ccpaLang.value">-->
+<!--                    {{ccpaLang.title}}-->
+<!--                  </mat-option>-->
+<!--                </mat-select>-->
+<!--                <mat-error *ngIf="f.ccpaBannerlanguage.hasError('required')">-->
+<!--                  Language is <strong>required</strong>-->
+<!--                </mat-error>-->
+<!--              </mat-form-field>-->
+<!--            </div>-->
+            <div class="col-md-12 mt-2">
+              <h6>Position</h6>
+              <mat-radio-group  formControlName="ccpaBannerPosition"
+                                aria-label="Select an option">
+                <mat-radio-button *ngFor="let ccpaPosition of ccpaBannerConstant.CCPA.BANNER.BannerPosition"
+                                  class="mr-2" [value]="ccpaPosition.value">{{ccpaPosition.title}}</mat-radio-button>
+              </mat-radio-group>
+              <mat-error *ngIf="f.ccpaBannerPosition.hasError('required')">
+                Banner Position is <strong>required</strong>
+              </mat-error>
+            </div>
+
+            <div class="col-md-12 mt-2">
+              <mat-form-field class="example-full-width w-60">
+                <mat-label>Title</mat-label>
+                <input formControlName="ccpaBannerTitle"
+                       [errorStateMatcher]="matcher" matInput >
+                <mat-error *ngIf="f.ccpaBannerTitle.hasError('required')">
+                  Title is <strong>required</strong>
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="col-md-12 mt-2">
+              <mat-form-field class="example-full-width w-60">
+                <mat-label>Description</mat-label>
+                <textarea formControlName="ccpaBannerDescription"
+                          [errorStateMatcher]="matcher"
+                          matInput></textarea>
+                <mat-error *ngIf="f.ccpaBannerDescription.hasError('required')">
+                  Description is <strong>required</strong>
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="col-md-12 mt-4">
+              <h6>Banner Styles</h6>
+              <div class="row mt-2">
+
+                <div class="col-md-3">
+                  <div class="row">
+                    <div class="col-md-4">textColor</div>
+                    <div class="col-md-3"><input formControlName="ccpaBannerGlobalStyleTextColor" #ccpabannerTextColor type="color"></div>
+                    <div class="col-md-5">
+                      <input matInput [value]="ccpabannerTextColor.value">
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-4">
+                  <div class="row">
+                    <div class="col-md-5">BackGroundColor</div>
+                    <div class="col-md-3"><input formControlName="ccpaBannerGlobalStyleBackgroundColor" #ccpabannerBackGroundColor type="color"></div>
+                    <div class="col-md-4">
+                      <input matInput [value]="ccpabannerBackGroundColor.value">
+                    </div>
+                  </div>
+
+                </div>
+
+              </div>
+            </div>
+
+
+            <div class="col-md-12 mt-5">
+              <h6>PreferenceButton Styles</h6>
+              <div class="row mt-2">
+
+                <div class="col-md-3 mt-2">
+                  <mat-form-field class="example-full-width">
+                    <mat-label>Preference text</mat-label>
+                    <input
+                      formControlName="ccpaBannerPreferenceButtonTextContent"
+                      [errorStateMatcher]="matcher"
+                      matInput placeholder="Ex. Pizza" >
+                    <mat-error *ngIf="f.ccpaBannerPreferenceButtonTextContent.hasError('required')">
+                      Preference is <strong>required</strong>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
+                <div class="col-md-3">
+                  <div class="row">
+                    <div class="col-md-4">textColor</div>
+                    <div class="col-md-3"><input
+                      formControlName="ccpaBannerPreferenceButtonTextColor" #ccpabannerCustomizeButtonTextColor type="color"></div>
+                    <div class="col-md-5">
+                      <input matInput [value]="ccpabannerCustomizeButtonTextColor.value">
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-4">
+                  <div class="row">
+                    <div class="col-md-5">BackGround Color</div>
+                    <div class="col-md-3"><input
+                      formControlName="ccpaBannerPreferenceButtonBackgroundColor"
+                      #ccpabannerCustomizeButtonBackGroundColor type="color"></div>
+                    <div class="col-md-4">
+                      <input matInput [value]="ccpabannerCustomizeButtonBackGroundColor.value">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+            <div class="col-md-12 mt-4">
+              <h6>Allow All Button Styles</h6>
+              <div class="row mt-2">
+
+
+                <div class="col-md-3 mt-2">
+                  <mat-form-field class="example-full-width">
+                    <mat-label>Allow All text</mat-label>
+                    <input matInput
+                           formControlName="ccpaBannerAllowAllButtonTextContent"
+                           [errorStateMatcher]="matcher"
+                           placeholder="Ex. Pizza" >
+                    <mat-error *ngIf="f.ccpaBannerAllowAllButtonTextContent.hasError('required')">
+                      AllowAll Text is <strong>required</strong>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
+
+                <div class="col-md-3">
+                  <div class="row">
+                    <div class="col-md-4">textColor</div>
+                    <div class="col-md-3"><input
+                      formControlName="ccpaBannerAllowAllButtonTextColor"
+                      #ccpabannerAllowButtonTextColor type="color"></div>
+                    <div class="col-md-5">
+                      <input matInput [value]="ccpabannerAllowButtonTextColor.value">
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-4">
+                  <div class="row">
+                    <div class="col-md-5">BackGround Color</div>
+                    <div class="col-md-3"><input
+                      formControlName="ccpaBannerAllowAllButtonBackgroundColor"
+                      #ccpabannerAllowButtonBackGroundColor type="color"></div>
+                    <div class="col-md-4">
+                      <input matInput [value]="ccpabannerAllowButtonBackGroundColor.value">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+            <div class="col-md-12 mt-4">
+              <h6>DisableButton Styles</h6>
+              <div class="row mt-2">
+
+                <div class="col-md-3 mt-2">
+                  <mat-form-field class="example-full-width">
+                    <mat-label>Disable Button text</mat-label>
+                    <input matInput
+                           formControlName="ccpaBannerDisableAllButtonTextContent"
+                           [errorStateMatcher]="matcher"
+                           placeholder="Ex. Pizza" >
+                    <mat-error *ngIf="f.ccpaBannerDisableAllButtonTextContent.hasError('required')">
+                      DisableAll Text is <strong>required</strong>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
+
+                <div class="col-md-3">
+                  <div class="row">
+                    <div class="col-md-4">textColor</div>
+                    <div class="col-md-3"><input
+                      formControlName="ccpaBannerDisableAllButtonTextColor"
+                      #ccpabannerDisableButtonTextColor type="color"></div>
+                    <div class="col-md-5">
+                      <input matInput [value]="ccpabannerDisableButtonTextColor.value">
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-4">
+                  <div class="row">
+                    <div class="col-md-5">BackGround Color</div>
+                    <div class="col-md-3"><input
+                      formControlName="ccpaBannerDisableAllButtonBackgroundColor"
+                      #ccpabannerDisableButtonBackGroundColor type="color"></div>
+                    <div class="col-md-4">
+                      <input matInput [value]="ccpabannerDisableButtonBackGroundColor.value">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="card">
+        <div class="card-header">PopUp Customize UI - CCPA
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-12 mt-4">
+              <h6>PopUp Styles</h6>
+              <div class="row mt-2">
+
+                <div class="col-md-3">
+                  <div class="row">
+                    <div class="col-md-4">textColor</div>
+                    <div class="col-md-3"><input
+                      formControlName="ccpaPopUpGlobalTextColor"
+                                #ccpapopUpTextColor type="color"></div>
+                    <div class="col-md-5">
+                      <input matInput [value]="ccpapopUpTextColor.value">
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+
+<!--            <div class="col-md-12 mt-4">-->
+<!--              <h6>PurposeButton Styles</h6>-->
+<!--              <div class="row mt-2">-->
+
+<!--                <div class="col-md-3">-->
+<!--                  <div class="row">-->
+<!--                    <div class="col-md-4">textColor</div>-->
+<!--                    <div class="col-md-3"><input-->
+<!--                      formControlName="ccpaPopUpPurposeButtonTextColor"-->
+<!--                      #ccpapopUpPurposeButtonTextColor type="color"></div>-->
+<!--                    <div class="col-md-5">-->
+<!--                      <input matInput [value]="ccpapopUpPurposeButtonTextColor.value">-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                </div>-->
+
+<!--                <div class="col-md-4">-->
+<!--                  <div class="row">-->
+<!--                    <div class="col-md-5">BackGround Color</div>-->
+<!--                    <div class="col-md-3"><input-->
+<!--                      formControlName="ccpaPopUpPurposeButtonBackgroundColor"-->
+<!--                      #ccpapopUpPurposeButtonBackGroundColor type="color"></div>-->
+<!--                    <div class="col-md-4">-->
+<!--                      <input matInput [value]="ccpapopUpPurposeButtonBackGroundColor.value">-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                </div>-->
+
+<!--                <div class="col-md-4">-->
+<!--                  <div class="row">-->
+<!--                    <div class="col-md-5">BorderButton Color</div>-->
+<!--                    <div class="col-md-3"><input-->
+<!--                      formControlName="ccpaPopUpPurposeButtonBorderColor"-->
+<!--                      #ccpabannerBorderButtonColor type="color"></div>-->
+<!--                    <div class="col-md-4">-->
+<!--                      <input matInput [value]="ccpabannerBorderButtonColor.value">-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                </div>-->
+
+<!--              </div>-->
+<!--            </div>-->
+
+
+            <div class="col-md-12 mt-5">
+              <h6>DisableAllButton Styles</h6>
+              <div class="row mt-2">
+
+                <div class="col-md-3 mt-2">
+                  <mat-form-field class="example-full-width">
+                    <mat-label>Disable Button text</mat-label>
+                    <input matInput
+                           formControlName="ccpaPopUpDisableAllButtonTextContent"
+                           [errorStateMatcher]="matcher"
+                            >
+                    <mat-error *ngIf="f.ccpaPopUpDisableAllButtonTextContent.hasError('required')">
+                      DisableButton Texxt is <strong>required</strong>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
+                <div class="col-md-3">
+                  <div class="row">
+                    <div class="col-md-4">textColor</div>
+                    <div class="col-md-3"><input
+                      formControlName="ccpaPopUpDisableAllButtonTextColor"
+                      #ccpapopUpDisableAllButtonTextColor type="color"></div>
+                    <div class="col-md-5">
+                      <input matInput [value]="ccpapopUpDisableAllButtonTextColor.value">
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-4">
+                  <div class="row">
+                    <div class="col-md-5">BackGround Color</div>
+                    <div class="col-md-3"><input
+                      formControlName="ccpaPopUpDisableAllButtonBackgroundColor"
+                      #ccpapopUpDisableAllButtonBackGroundColor type="color"></div>
+                    <div class="col-md-4">
+                      <input matInput [value]="ccpapopUpDisableAllButtonBackGroundColor.value">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+            <div class="col-md-12 mt-4">
+              <h6>Allow All Button Styles</h6>
+              <div class="row mt-2">
+
+
+                <div class="col-md-3 mt-2">
+                  <mat-form-field class="example-full-width">
+                    <mat-label>Allow All text</mat-label>
+                    <input matInput
+                           formControlName="ccpaPopUpAllowAllButtonTextContent"
+                           [errorStateMatcher]="matcher"
+                           placeholder="Ex. Pizza" >
+                    <mat-error *ngIf="f.ccpaPopUpAllowAllButtonTextContent.hasError('required')">
+                      AllowAllText is <strong>required</strong>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
+
+                <div class="col-md-3">
+                  <div class="row">
+                    <div class="col-md-4">textColor</div>
+                    <div class="col-md-3"><input
+                      formControlName="ccpaPopUpAllowAllButtonTextColor"
+                      #ccpapopUPAllowButtonTextColor type="color"></div>
+                    <div class="col-md-5">
+                      <input matInput [value]="ccpapopUPAllowButtonTextColor.value">
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-4">
+                  <div class="row">
+                    <div class="col-md-5">BackGround Color</div>
+                    <div class="col-md-3"><input
+                      formControlName="ccpaPopUpAllowAllButtonBackGroundColor"
+                      #ccpapopUPAllowButtonBackGroundColor type="color"></div>
+                    <div class="col-md-4">
+                      <input matInput [value]="ccpapopUPAllowButtonBackGroundColor.value">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+            <div class="col-md-12 mt-5 mb-3">
+              <h6 class="mb-4"> PopUp Body Content</h6>
+              <mat-accordion>
+                <mat-expansion-panel (opened)="panelOpenState = true"
+                                     (closed)="panelOpenState = false">
+                  <mat-expansion-panel-header>
+                    <mat-panel-title>
+                      Information
+                    </mat-panel-title>
+                  </mat-expansion-panel-header>
+
+                  <mat-form-field class="w-60 mb-2 example-full-width">
+                    <mat-label>Title</mat-label>
+                    <input matInput
+                           formControlName="ccpaPopUpInformationTitle"
+                           [errorStateMatcher]="matcher" placeholder="" >
+                    <mat-error *ngIf="f.ccpaPopUpInformationTitle.hasError('required')">
+                      Information Title is <strong>required</strong>
+                    </mat-error>
+                  </mat-form-field>
+                  <br>
+
+                  <mat-form-field class="w-60 example-full-width">
+                    <mat-label>Description</mat-label>
+                    <textarea matInput
+                              formControlName="ccpaPopUpInformationDescription"
+                              [errorStateMatcher]="matcher" placeholder=""></textarea>
+                    <mat-error *ngIf="f.ccpaPopUpInformationDescription.hasError('required')">
+                      Information Description is <strong>required</strong>
+                    </mat-error>
+                  </mat-form-field>
+
+                </mat-expansion-panel>
+              </mat-accordion>
+            </div>
+
+            <div class="col-md-12 mb-3">
+              <mat-accordion>
+                <mat-expansion-panel (opened)="panelOpenState = true"
+                                     (closed)="panelOpenState = false">
+                  <mat-expansion-panel-header>
+                    <mat-panel-title>
+                      Necessary
+                    </mat-panel-title>
+                  </mat-expansion-panel-header>
+                  <mat-form-field class="w-60 mb-2 example-full-width">
+                    <mat-label>Title</mat-label>
+                    <input matInput
+                           formControlName="ccpaPopUpNecessaryTitle"
+                           [errorStateMatcher]="matcher"
+                           placeholder="" >
+                    <mat-error *ngIf="f.ccpaPopUpNecessaryTitle.hasError('required')">
+                      Necessary Title is <strong>required</strong>
+                    </mat-error>
+                  </mat-form-field>
+                  <br>
+
+                  <mat-form-field class="w-60 example-full-width">
+                    <mat-label>Description</mat-label>
+                    <textarea matInput
+                              formControlName="ccpaPopUpNecessaryDescription"
+                              [errorStateMatcher]="matcher" placeholder=""></textarea>
+                    <mat-error *ngIf="f.ccpaPopUpNecessaryDescription.hasError('required')">
+                      Necessary Description is <strong>required</strong>
+                    </mat-error>
+                  </mat-form-field>
+                </mat-expansion-panel>
+              </mat-accordion>
+            </div>
+            <div class="col-md-12 mb-3">
+              <mat-accordion>
+                <mat-expansion-panel (opened)="panelOpenState = true"
+                                     (closed)="panelOpenState = false">
+                  <mat-expansion-panel-header>
+                    <mat-panel-title>
+                      Analytics
+                    </mat-panel-title>
+                  </mat-expansion-panel-header>
+                  <mat-form-field class="w-60 mb-2 example-full-width">
+                    <mat-label>Title</mat-label>
+                    <input matInput formControlName="ccpaPopUpAnalyticsTitle"
+                           [errorStateMatcher]="matcher"  placeholder="" >
+                    <mat-error *ngIf="f.ccpaPopUpAnalyticsTitle.hasError('required')">
+                      Analytics Title is <strong>required</strong>
+                    </mat-error>
+                  </mat-form-field>
+                  <br>
+
+                  <mat-form-field class="w-60 example-full-width">
+                    <mat-label>Description</mat-label>
+                    <textarea matInput
+                              formControlName="ccpaPopUpAnalyticsDescription"
+                              [errorStateMatcher]="matcher" placeholder=""></textarea>
+                    <mat-error *ngIf="f.ccpaPopUpAnalyticsDescription.hasError('required')">
+                      Analytics Description is <strong>required</strong>
+                    </mat-error>
+                  </mat-form-field>
+                </mat-expansion-panel>
+              </mat-accordion>
+            </div>
+
+            <div class="col-md-12 mb-3">
+              <mat-accordion>
+                <mat-expansion-panel (opened)="panelOpenState = true"
+                                     (closed)="panelOpenState = false">
+                  <mat-expansion-panel-header>
+                    <mat-panel-title>
+                      Advertising
+                    </mat-panel-title>
+                  </mat-expansion-panel-header>
+                  <mat-form-field class="w-60 mb-2 example-full-width">
+                    <mat-label>Title</mat-label>
+                    <input matInput
+                           formControlName="ccpaPopUpAdvertisingTitle"
+                           [errorStateMatcher]="matcher" placeholder="" >
+                    <mat-error *ngIf="f.ccpaPopUpAdvertisingTitle.hasError('required')">
+                      Advertising Title is <strong>required</strong>
+                    </mat-error>
+                  </mat-form-field>
+                  <br>
+
+                  <mat-form-field class="w-60 example-full-width">
+                    <mat-label>Description</mat-label>
+                    <textarea matInput
+                              formControlName="ccpaPopUpAdvertisingDescription"
+                              [errorStateMatcher]="matcher" placeholder=""></textarea>
+                    <mat-error *ngIf="f.ccpaPopUpAdvertisingDescription.hasError('required')">
+                      Advertising Description is <strong>required</strong>
+                    </mat-error>
+                  </mat-form-field>
+                </mat-expansion-panel>
+              </mat-accordion>
+            </div>
+
+
+          </div>
+        </div>
+      </div>
+
+
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-body text-center">
+            <button class="btn btn-default btn-xs mr-4" type="button">Back</button>
+            <button
+              class="btn btn-primary btn-xs" type="submit">Submit
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
