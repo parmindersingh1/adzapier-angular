@@ -10,6 +10,7 @@ import { CcparequestService } from 'src/app/_services/ccparequest.service';
 import { DsarformService } from 'src/app/_services/dsarform.service';
 import { CCPAFormConfigurationService } from 'src/app/_services/ccpaform-configuration.service';
 import { WorkflowService } from 'src/app/_services/workflow.service';
+import { flatMap, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-dsarform',
@@ -91,6 +92,8 @@ export class DsarformComponent implements OnInit, OnDestroy {
   contactList: any;
   filteredStateList: any;
   workFlowList: any;
+  currentManagedPropID: any;
+  currentManagedOrgID: any;
   controlOption = [
     {
       id: 1,
@@ -153,6 +156,8 @@ export class DsarformComponent implements OnInit, OnDestroy {
   welcomeText: any;
   headerLogoPath: any;
   ApproverList: any = [];
+  selectedApproverID: any;
+  selectedWorkflowID: any;
   defaultapprover: any;
   workflow: any;
   daysleft: any = 45;
@@ -163,16 +168,16 @@ export class DsarformComponent implements OnInit, OnDestroy {
   dismissible = true;
   isOpen = false;
   constructor(private fb: FormBuilder, private ccpaRequestService: CcparequestService,
-              private organizationService: OrganizationService,
-              private dsarFormService: DsarformService,
-              private ccpaFormConfigService: CCPAFormConfigurationService,
-              private workFlowService: WorkflowService,
-              private router: Router,
-              private location: Location,
-              private activatedRoute: ActivatedRoute,
-              private loadingbar: NgxUiLoaderService,
-              private modalService: NgbModal,
-              private cd: ChangeDetectorRef) {
+    private organizationService: OrganizationService,
+    private dsarFormService: DsarformService,
+    private ccpaFormConfigService: CCPAFormConfigurationService,
+    private workFlowService: WorkflowService,
+    private router: Router,
+    private location: Location,
+    private activatedRoute: ActivatedRoute,
+    private loadingbar: NgxUiLoaderService,
+    private modalService: NgbModal,
+    private cd: ChangeDetectorRef) {
 
     this.count = 0;
     // this.loading = true;
@@ -221,19 +226,39 @@ export class DsarformComponent implements OnInit, OnDestroy {
 
     // this.loading = true;
     if (this.crid !== null) {
+      // this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
       // this.getCCPAdefaultConfigById();
+      const uuidRegx = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/;
       this.loadingbar.start();
       this.webFormSelectedData = this.ccpaFormConfigService.currentFormData.subscribe((data) => {
         this.loadingbar.stop();
         if (data) {
-          this.propId = data.PID;
-          this.orgId = data.OID;
+          (this.propId !== '') ? this.propId = this.propId : this.propId = data.PID;
+          (this.orgId !== '') ? this.orgId = this.orgId : this.orgId = data.OID;
+          // this.orgId = data.OID;
           this.crid = data.crid;
           // this.propertyname = data.form_name;
           this.formName = data.form_name || data.web_form_name;
+          //  this.selectedApproverID = data.approver;
+          // this.selectedWorkflowID = data.workflow;
+          const isUUID = uuidRegx.test(data.approver);
+          if (isUUID) {
+            this.selectedApproverID = data.approver;
+            this.selectedWorkflowID = data.workflow;
+          } else {
+            this.selectedApproverID = data.approver_id;
+            this.selectedWorkflowID = data.workflow_id;
+            //  this.getWorkflowWithApproverID();
+          }
           // this.requestFormControls = data.request_form;
-          this.selectedwebFormControlList = this.rearrangeFormSequence(data.request_form);
-          this.webFormControlList = this.selectedwebFormControlList;
+          if (data.request_form) {
+            this.selectedwebFormControlList = this.rearrangeFormSequence(data.request_form);
+            this.webFormControlList = this.selectedwebFormControlList;
+          } else {
+            this.selectedwebFormControlList = this.rearrangeFormSequence(this.ccpaFormConfigService.getFormControlList());
+            this.webFormControlList = this.selectedwebFormControlList;
+          }
+
           console.log(this.webFormControlList, 'crid..webFormControlList..');
           this.webFormControlList.filter((t) => {
             if (t.controlId === 'footertext') {
@@ -252,6 +277,14 @@ export class DsarformComponent implements OnInit, OnDestroy {
           // this.ccpaFormConfigService.removeControls();
           this.ccpaFormConfigService.setFormControlList(this.webFormControlList);
           // this.webFormControlList;
+
+          //  console.log(this.defaultapprover, 'defaultapprover..');
+        } else {
+          // const retrivedData = this.ccpaFormConfigService.getCurrentSelectedFormData();
+          // this.selectedApproverID = retrivedData.approver;
+          // this.selectedWorkflowID = retrivedData.workflow;
+          // this.formName = retrivedData.form_name;
+          this.getWorkflowWithApproverID();
         }
       });
     } else {
@@ -501,6 +534,7 @@ export class DsarformComponent implements OnInit, OnDestroy {
     // this.selectOptions.push(customObj[key] = this.count++);
     this.selectOptions.push(customObj);
     console.log(this.selectOptions, 'selectOptions..');
+
     // this.cancelAddingFormControl();
   }
 
@@ -650,6 +684,8 @@ export class DsarformComponent implements OnInit, OnDestroy {
         const customControlIndex = this.webFormControlList.findIndex((t) =>
           t.controllabel === this.existingControl.controllabel);
         //  const customControlIndex = this.webFormControlList.indexOf(this.existingControl.controllabel);
+        const emptyIndex = this.selectOptions.findIndex((t) => t.keylabel === '');
+        this.selectOptions[emptyIndex].keylabel = this.trimLabel;
         if (customControlIndex !== -1) {
           updateCustomObj = {
             controllabel: formControls.value.lblText,
@@ -672,6 +708,8 @@ export class DsarformComponent implements OnInit, OnDestroy {
     } else {
       if (this.crid) {
         const count = this.webFormControlList.length + 1;
+        const emptyIndex = this.selectOptions.findIndex((t) => t.keylabel === '');
+        this.selectOptions[emptyIndex].keylabel = this.trimLabel;
         const newWebControl = {
           control: this.selectedFormOption,
           controllabel: formControls.value.lblText,
@@ -684,7 +722,8 @@ export class DsarformComponent implements OnInit, OnDestroy {
         this.lblText = '';
         this.cancelAddingFormControl();
       } else {
-
+        const emptyIndex = this.selectOptions.findIndex((t) => t.keylabel === '');
+        this.selectOptions[emptyIndex].keylabel = this.trimLabel;
         const count = this.webFormControlList.length + 1;
         const newWebControl = {
           control: this.selectedFormOption,
@@ -920,6 +959,7 @@ export class DsarformComponent implements OnInit, OnDestroy {
 
     this.active = 3;
     this.cd.detectChanges();
+
     // selectedOrgProperty
   }
 
@@ -946,10 +986,12 @@ export class DsarformComponent implements OnInit, OnDestroy {
       this.ccpaFormConfigService.updateCCPAForm(this.orgId, this.propId, this.crid, this.formObject)
         .subscribe((data) => {
           this.loadingbar.stop();
+          this.active = 4;
           if (data) {
-            this.alertMsg = data.response;
-            this.isOpen = true;
-            this.alertType = 'success';
+            // this.alertMsg = data.response;
+            // this.isOpen = true;
+            // this.alertType = 'success';
+            // this.active = 4;
             // this.dsarFormService.removeControls();
           }
         }, (error) => {
@@ -958,16 +1000,22 @@ export class DsarformComponent implements OnInit, OnDestroy {
           this.isOpen = true;
           this.alertType = 'danger';
         });
+      this.alertMsg = 'Web form has been updated successfully!';
+      this.isOpen = true;
+      this.alertType = 'success';
+      this.active = 4;
     } else {
       this.loadingbar.start();
       this.ccpaFormConfigService.createCCPAForm(this.orgId, this.propId, this.formObject)
         .subscribe((data) => {
           this.loadingbar.stop();
+          this.active = 4;
           if (data) {
             this.crid = data.response.crid;
-            this.alertMsg = data.response;
-            this.isOpen = true;
-            this.alertType = 'success';
+            // this.alertMsg = data.response;
+            // this.isOpen = true;
+            // this.alertType = 'success';
+
             // this.dsarFormService.removeControls();
           }
         }, (error) => {
@@ -976,8 +1024,13 @@ export class DsarformComponent implements OnInit, OnDestroy {
           this.isOpen = true;
           this.alertType = 'danger';
         });
+      this.alertMsg = 'Web form has been added successfully!';
+      this.isOpen = true;
+      this.alertType = 'success';
+      this.active = 4;
     }
-    this.active = 4;
+
+
   }
 
   updateWebcontrolIndex(indexData, arrayData) {
@@ -1064,7 +1117,7 @@ export class DsarformComponent implements OnInit, OnDestroy {
   }
 
   welcomeStyle(): object {
-   
+
     return {
       'color': this.welcomeTextColor,
       'font-size': this.welcomeFontSize + 'px'
@@ -1074,7 +1127,7 @@ export class DsarformComponent implements OnInit, OnDestroy {
   }
 
   footerStyle(): object {
-    
+
     return {
       'color': this.footerTextColor,
       'font-size': this.footerFontSize + 'px'
@@ -1105,16 +1158,22 @@ export class DsarformComponent implements OnInit, OnDestroy {
 
 
   loadDefaultApprover() {
-    this.organizationService.getOrgTeamMembers(this.orgId).subscribe((data) => {
-      const key = 'response';
-      this.ApproverList = data[key];
-    });
+    if (this.orgId) {
+      this.organizationService.getOrgTeamMembers(this.orgId).subscribe((data) => {
+        const key = 'response';
+        this.ApproverList = data[key];
+        const filterValue = this.ApproverList.filter((t) => t.approver_id === this.selectedApproverID);
+        this.defaultapprover = filterValue[0].approver_id;
+      });
+    }
   }
 
   loadWorkFlowList() {
     this.workFlowService.getWorkflow().subscribe((data) => {
       const key = 'response';
       this.workFlowList = data[key];
+      const filterValue = this.workFlowList.filter((t) => t.id === this.selectedWorkflowID);
+      this.workflow = filterValue[0].id;
     }, (error) => {
       this.alertMsg = error;
       this.isOpen = true;
@@ -1135,19 +1194,32 @@ export class DsarformComponent implements OnInit, OnDestroy {
   }
 
   previewCCPAForm() {
-    if (window.location.hostname === 'localhost') {
-      window.open('http://localhost:4500/ccpa/form/' + this.orgId + '/' + this.propId + '/' + this.crid);
-    }
-    if (window.location.hostname === 'develop-cmp.adzpier-staging.com') {
-      window.open('https://develop-privacyportal.adzpier-staging.com/ccpa/form/' + this.orgId + '/' + this.propId + '/' + this.crid);
-    } else if (window.location.hostname === 'cmp.adzpier-staging.com') {
-      window.open('https://privacyportal.adzpier-staging.com/ccpa/form/' + this.orgId + '/' + this.propId + '/' + this.crid);
+    if (this.orgId && this.propId) {
+      if (window.location.hostname === 'localhost') {
+        window.open('http://localhost:4500/ccpa/form/' + this.orgId + '/' + this.propId + '/' + this.crid);
+      }
+      if (window.location.hostname === 'develop-cmp.adzpier-staging.com') {
+        window.open('https://develop-privacyportal.adzpier-staging.com/ccpa/form/' + this.orgId + '/' + this.propId + '/' + this.crid);
+      } else if (window.location.hostname === 'cmp.adzpier-staging.com') {
+        window.open('https://privacyportal.adzpier-staging.com/ccpa/form/' + this.orgId + '/' + this.propId + '/' + this.crid);
+      }
+    } else {
+      this.alertMsg = 'Organization or Property not found!';
+      this.isOpen = true;
+      this.alertType = 'danger';
     }
   }
 
   onClosed(dismissedAlert: any): void {
-    this.alertMsg !== dismissedAlert;
+    this.alertMsg = !dismissedAlert;
     this.isOpen = false;
+  }
+
+  getWorkflowWithApproverID() {
+    const retrivedData = this.ccpaFormConfigService.getCurrentSelectedFormData();
+    this.selectedApproverID = retrivedData.approver;
+    this.selectedWorkflowID = retrivedData.workflow;
+    this.formName = retrivedData.form_name;
   }
 
   ngOnDestroy() {

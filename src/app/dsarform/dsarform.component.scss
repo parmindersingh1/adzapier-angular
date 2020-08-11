@@ -237,7 +237,6 @@
   .dsarform-box div > label {
     font-weight: bold;
     margin: 0;
-    display: flex;
   }
   
   .cdk-drag-preview {
@@ -553,7 +552,7 @@ span.previewbtn a {
 
 
 .alert-success {
- 	  background-color: #5cb85c;
+	  background-color: #5cb85c;
     border-color: #4cae4c;
     color: #fff;
     padding: 12px 32px 12px 12px !important;
@@ -568,15 +567,8 @@ span.previewbtn a {
 .flotingdiv{
 	position: fixed;
 	bottom: 40px;
+  // top: 84%;
 	right:10px;
 	overflow-x: hidden;
 	overflow-y: auto
-}
-
-.form-check {
-  padding-left: 0 !important;
-}
-
-.txt-capitalize {
-  text-transform: capitalize;
 }
