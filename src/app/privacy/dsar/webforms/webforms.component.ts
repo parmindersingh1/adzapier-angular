@@ -1,8 +1,27 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
-import { switchMap, flatMap } from 'rxjs/operators';
+import { switchMap, flatMap, map } from 'rxjs/operators';
 import { CCPAFormConfigurationService } from 'src/app/_services/ccpaform-configuration.service';
 import { OrganizationService } from 'src/app/_services';
+import { Observable } from 'rxjs';
+import { CCPAFormFields } from 'src/app/_models/ccpaformfields';
+
+
+ interface WebFormModel {
+  crid: any;
+  form_name: string;
+  form_status: string;
+  OID: any;
+  PID: any;
+  active: boolean
+  settings: any;
+  workflow: any;
+  approver: any;
+  days_left: number;
+  created_at: string;
+  updated_at: string;
+  request_form: CCPAFormFields;
+}
 
 @Component({
   selector: 'app-webforms',
@@ -14,7 +33,7 @@ export class WebformsComponent implements OnInit {
   currentOrgID: any;
   propertyID: any;
   currentPropertyName: any;
-  formList: any = [];
+  formList: Observable<WebFormModel[]>;
   loading = false;
   mySubscription;
   currentOrganization: any;
@@ -46,24 +65,25 @@ export class WebformsComponent implements OnInit {
 
   getCCPAFormList() {
    // this.loading = true;
-    this.formList.length = 0;
+  // this.formList.length = 0;
     const orgDetails = this.organizationService.getCurrentOrgWithProperty();
   //  console.log(orgDetails,'orgdetails..');
     if (orgDetails !== undefined) {
-      this.ccpaFormConfigService.getCCPAFormList(orgDetails.organization_id, orgDetails.property_id)
-      .subscribe((data) => {
-        if (data.response.length === 0) {
-          this.loading = false;
-          return this.formList.length = 0;
-        } else {
-          this.formList = data.response;
-          this.loading = false;
-          return this.formList;
-        }
-      }, (error) => {
-        console.log(error, 'get error..');
-        this.loading = false;
-      });
+    this.formList = this.ccpaFormConfigService.getCCPAFormList(orgDetails.organization_id, orgDetails.property_id).pipe(map((t)=>t.response));
+    console.log(this.formList,'formList..');
+      // .subscribe((data) => {
+      //   if (data.response.length === 0) {
+      //     this.loading = false;
+      //     return this.formList.length = 0;
+      //   } else {
+      //     this.formList = data.response;
+      //     this.loading = false;
+      //     return this.formList;
+      //   }
+      // }, (error) => {
+      //   console.log(error, 'get error..');
+      //   this.loading = false;
+      // });
     }
   }
 
