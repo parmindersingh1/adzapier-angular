@@ -1,12 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { FormArray, FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
-import {NgxUiLoaderService} from 'ngx-ui-loader';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { UserService, OrganizationService } from 'src/app/_services';
 import { CompanyService } from 'src/app/company.service';
-import {notificationConfig} from "../../_constant/notification.constant";
-import {NotificationsService} from "angular2-notifications";
 
 @Component({
   selector: 'app-organizationteam',
@@ -25,21 +23,24 @@ export class OrganizationteamComponent implements OnInit {
   totalCount: any;
   searchText: any;
   paginationConfig = { itemsPerPage: this.pageSize, currentPage: this.p, totalItems: this.totalCount };
+  alertMsg: any;
+  alertType: any;
+  dismissible = true;
+  isOpen = false;
   constructor(private activatedRoute: ActivatedRoute,
-              private router: Router,
-              private modalService: NgbModal,
-              private userService: UserService,
-              private formBuilder: FormBuilder,
-              private notification: NotificationsService,
-              private companyService: CompanyService,
-              private orgService: OrganizationService,
-              private loading: NgxUiLoaderService,
-              ) { }
+    private router: Router,
+    private modalService: NgbModal,
+    private userService: UserService,
+    private formBuilder: FormBuilder,
+    private companyService: CompanyService,
+    private orgService: OrganizationService,
+    private loading: NgxUiLoaderService,
+  ) { }
 
   ngOnInit() {
     this.activatedRoute.paramMap.subscribe(params => {
       this.organizationID = params.get('id');
-      console.log(this.organizationID,'organizationID..');
+      console.log(this.organizationID, 'organizationID..');
       this.loadOrgTeamMembers(this.organizationID);
     });
     this.loadRoleList();
@@ -93,12 +94,17 @@ export class OrganizationteamComponent implements OnInit {
       this.loading.stop();
       this.organizationTeamMemberList = data[key];
       this.paginationConfig.totalItems = data.count;
+    },(error)=>{
+      this.alertMsg = error;
+      this.isOpen = true;
+      this.alertType = 'danger';
+      this.modalService.dismissAll('Error!');
     });
   }
 
 
-	onChangeEvent(event) {
-		this.paginationConfig.itemsPerPage = Number(event.target.value);
+  onChangeEvent(event) {
+    this.paginationConfig.itemsPerPage = Number(event.target.value);
   }
 
 
@@ -119,13 +125,17 @@ export class OrganizationteamComponent implements OnInit {
         .subscribe((data) => {
           this.loading.stop();
           if (data) {
-            alert('Details has been updated successfully!');
+            this.alertMsg = data.response;
+            this.isOpen = true;
+            this.alertType = 'success';
             this.loadOrgTeamMembers(this.organizationID);
             this.modalService.dismissAll('Data Saved!');
           }
         }, (error) => {
           this.loading.stop();
-          alert(error);
+          this.alertMsg = error.Taken_email || error;
+          this.isOpen = true;
+          this.alertType = 'danger';
           this.modalService.dismissAll('Error!');
         });
     }
@@ -139,34 +149,42 @@ export class OrganizationteamComponent implements OnInit {
     this.companyService.inviteUser(requestObj)
       .subscribe((data) => {
         if (data) {
-          this.notification.info('Invitation Send', 'We have sent a email on your Email Id', notificationConfig);
+          this.alertMsg = data.response;
+          this.isOpen = true;
+          this.alertType = 'success';
           this.loadOrgTeamMembers(this.organizationID);
           this.inviteUserOrgForm.reset();
           this.modalService.dismissAll('Data Saved!');
         }
       }, (error) => {
-        this.notification.error('Invitation Error', error, notificationConfig);
+        this.alertMsg = JSON.stringify(error);
+        this.isOpen = true;
+        this.alertType = 'danger';
         this.modalService.dismissAll('Error!');
       });
   }
 
   removeTeamMember(id) {
-   this.loading.start();
-   this.companyService.removeTeamMember(id).subscribe((data)=>{
-     this.loading.stop();
-     if (data) {
-       alert('User has been removed.');
-       this.loadOrgTeamMembers(this.organizationID);
-     }
-   }, (err) => {
-     alert(JSON.stringify(err));
-   });
+    this.loading.start();
+    this.companyService.removeTeamMember(id).subscribe((data) => {
+      this.loading.stop();
+      if (data) {
+        this.alertMsg = data.response;
+        this.isOpen = true;
+        this.alertType = 'success';
+        this.loadOrgTeamMembers(this.organizationID);
+      }
+    }, (err) => {
+      this.alertMsg = err;
+      this.isOpen = true;
+      this.alertType = 'dangere';
+    });
   }
 
-  onCancelClick(){
+  onCancelClick() {
     this.submitted = false;
     this.inviteUserOrgForm.reset();
-    this.modalService.dismissAll('Canceled');   
+    this.modalService.dismissAll('Canceled');
   }
 
 }

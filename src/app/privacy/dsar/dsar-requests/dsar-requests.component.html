@@ -91,7 +91,6 @@
           </thead>
           <tbody>
             <tr *ngFor="let obj of requestsList | paginate:paginationConfig">
-              
               <td><a (click)="viewDSARRequestDetails(obj.id)" title="{{obj.id}}">{{obj.id}}</a></td>
                 <td>{{obj.name}}</td>
                 <td>{{obj.org_name}}</td>
@@ -109,7 +108,7 @@
                   <span *ngIf="obj.days_left < 0; else positiveDays" class="text-danger">{{obj.days_left}} Days</span>
                   <ng-template #positiveDays>{{obj.days_left}} Days</ng-template>
                 </td>
-                <td>{{obj.approver}}</td>
+                <td>{{obj.approver_firstname + ' ' + obj.approver_lastname}}</td>
                 <td>{{obj.country}}</td>
                 <td>{{obj.state}}</td>
                 <td><a (click)="navigateToWebForm(obj)">{{obj.web_form_name}}</a></td>
@@ -130,5 +129,5 @@
   </div>
 </div>
 <div class="col-sm-5 mt-3 mr-0 float-right">
-  <alert *ngIf="isOpen" [type]="alertType"  dismissOnTimeout="5000" [dismissible]="dismissible" (onClosed)="onClosed(alert)">{{  alertMsg}}</alert>
+  <alert *ngIf="isOpen" [type]="alertType" [dismissible]="dismissible" (onClosed)="(alert)">{{  alertMsg}}</alert>
   </div>

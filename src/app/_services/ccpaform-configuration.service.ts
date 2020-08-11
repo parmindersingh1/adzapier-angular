@@ -4,12 +4,15 @@ import { environment } from 'src/environments/environment';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { WebControls } from '../_models/webcontrols';
 import { CCPAFormFields } from '../_models/ccpaformfields';
+import { shareReplay } from 'rxjs/operators';
+import { map } from 'jquery';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CCPAFormConfigurationService extends WebControls {
   webFormControlList: CCPAFormFields;
+  ccpaFormList$: Observable<any>;
   captureFormDataWhileNavigate = new BehaviorSubject<any>('');
   currentFormData = this.captureFormDataWhileNavigate.asObservable();
   subjectType: any;
@@ -62,7 +65,11 @@ export class CCPAFormConfigurationService extends WebControls {
   }
 
   getCCPAFormList(orgId, propId): Observable<any> {
-    return this.httpClient.get<any>(environment.apiUrl + '/ccpa/form/' + orgId + '/' + propId);
+    if (!this.ccpaFormList$) {
+       this.ccpaFormList$ = this.httpClient.get<any>(environment.apiUrl + '/ccpa/form/' + orgId + '/' + propId)
+       .pipe(shareReplay(1));
+    }
+    return this.ccpaFormList$;
   }
 
   getCCPAFormConfigByID(orgId, propId, ccparequestid): Observable<any> {
@@ -70,6 +77,7 @@ export class CCPAFormConfigurationService extends WebControls {
   }
 
   captureCurrentSelectedFormData(currentItem) {
+    sessionStorage.setItem('currentwebform',JSON.stringify(currentItem));
     this.captureFormDataWhileNavigate.next(currentItem);
   }
 
@@ -79,5 +87,9 @@ export class CCPAFormConfigurationService extends WebControls {
 
   getCountryList(): Observable<any> {
     return this.httpClient.get<any>('assets/json/countries.json');
+  }
+
+  getCurrentSelectedFormData() {
+    return JSON.parse(sessionStorage.getItem('currentwebform'));
   }
 }

@@ -11,7 +11,7 @@ import { allIcons } from 'angular-feather/icons';
 import { TimeAgoPipe } from 'time-ago-pipe';
 // import { AlertModule } from 'ngx-bootstrap/alert';
 import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
-import { ModalModule, AlertModule } from 'ngx-bootstrap';
+import { ModalModule, AlertModule, BsDatepickerModule } from 'ngx-bootstrap';
 
 
 @NgModule({
@@ -26,10 +26,11 @@ import { ModalModule, AlertModule } from 'ngx-bootstrap';
     PaginationModule.forRoot(),
     AlertModule.forRoot(),
     ModalModule.forRoot(),
-    TypeaheadModule.forRoot()
+    TypeaheadModule.forRoot(),
+    BsDatepickerModule.forRoot()
 
   ],
-  exports: [NgbModule, DragDropModule, QuillModule, NgxPaginationModule, AlertModule, TypeaheadModule, FilterPipe, TimeAgoPipe]
+  exports: [NgbModule, DragDropModule, QuillModule, NgxPaginationModule, BsDatepickerModule, AlertModule, TypeaheadModule, FilterPipe, TimeAgoPipe]
 
 })
 export class SharedbootstrapModule { }
