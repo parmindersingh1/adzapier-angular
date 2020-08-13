@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild, ViewEncapsulation, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ViewEncapsulation, ChangeDetectionStrategy, ChangeDetectorRef, SecurityContext } from '@angular/core';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { FormBuilder, FormGroup, NgForm, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -11,6 +11,7 @@ import { DsarformService } from 'src/app/_services/dsarform.service';
 import { CCPAFormConfigurationService } from 'src/app/_services/ccpaform-configuration.service';
 import { WorkflowService } from 'src/app/_services/workflow.service';
 import { flatMap, switchMap } from 'rxjs/operators';
+import { DomSanitizer, SafeResourceUrl, SafeHtml } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-dsarform',
@@ -94,6 +95,8 @@ export class DsarformComponent implements OnInit, OnDestroy {
   workFlowList: any;
   currentManagedPropID: any;
   currentManagedOrgID: any;
+  uploadFilename: any;
+  capthchaID: SafeHtml;
   controlOption = [
     {
       id: 1,
@@ -167,17 +170,21 @@ export class DsarformComponent implements OnInit, OnDestroy {
   alertType: any;
   dismissible = true;
   isOpen = false;
+  showFilesizeerror: boolean = false;
+  showFileExtnerror: boolean = false;
+  isFileUploadRequired: boolean = false;
   constructor(private fb: FormBuilder, private ccpaRequestService: CcparequestService,
-    private organizationService: OrganizationService,
-    private dsarFormService: DsarformService,
-    private ccpaFormConfigService: CCPAFormConfigurationService,
-    private workFlowService: WorkflowService,
-    private router: Router,
-    private location: Location,
-    private activatedRoute: ActivatedRoute,
-    private loadingbar: NgxUiLoaderService,
-    private modalService: NgbModal,
-    private cd: ChangeDetectorRef) {
+              private organizationService: OrganizationService,
+              private dsarFormService: DsarformService,
+              private ccpaFormConfigService: CCPAFormConfigurationService,
+              private workFlowService: WorkflowService,
+              private router: Router,
+              private location: Location,
+              private activatedRoute: ActivatedRoute,
+              private loadingbar: NgxUiLoaderService,
+              private modalService: NgbModal,
+              private cd: ChangeDetectorRef,
+              private sanitizer: DomSanitizer) {
 
     this.count = 0;
     // this.loading = true;
@@ -1221,6 +1228,59 @@ export class DsarformComponent implements OnInit, OnDestroy {
     this.selectedWorkflowID = retrivedData.workflow;
     this.formName = retrivedData.form_name;
   }
+
+  uploadFile(event) {
+    console.log(event, 'event..');
+    const fileExtArray = ['pdf', 'txt', 'jpeg', 'jpg', 'png', 'doc', 'docx', 'csv', 'xls'];
+    // if (event.target.files.length > 0) {
+    if (event.target.files[0].size > (2 * 1024 * 1024)) {
+      this.showFilesizeerror = true;
+      return false;
+    } else {
+      const fileExtn = event.target.files[0].name.split('.').pop();
+      if (fileExtArray.some((t) => t == fileExtn)) {
+        this.showFilesizeerror = false;
+        this.showFileExtnerror = false;
+        const file = event.target.files[0];
+        this.uploadFilename = file.name;
+        // this.subTaskResponseForm.get('uploaddocument').setValue(file);
+      } else {
+        this.showFileExtnerror = true;
+      }
+
+    }
+
+    // }
+  }
+
+  allowFileupload(event){
+    this.isFileUploadRequired = event.target.checked;
+    const oldControlIndex = this.webFormControlList.findIndex((t) =>  t.controlId === 'fileupload');
+    this.webFormControlList = this.dsarFormService.getFormControlList();
+    const obj = this.webFormControlList[oldControlIndex];
+    obj.requiredfield = event.target.checked;
+    this.dsarFormService.updateControl(this.webFormControlList[oldControlIndex], oldControlIndex, obj);
+
+  }
+
+ 
+
+  setSrcQuery(e, q) {
+    let src  = e.src;
+    let p = src.indexOf('?');
+    if (p >= 0) {
+      src = src.substr(0, p);
+    }
+    e.src = src + '?' + q;
+  }
+
+  reload() {
+    this.setSrcQuery(document.getElementById('image'), 'reload=' + (new Date()).getTime());
+    this.setSrcQuery(document.getElementById('audio'), (new Date()).getTime());
+    return false;
+  }
+  
+  
 
   ngOnDestroy() {
     // if (this.webFormSelectedData !== undefined) {

@@ -246,7 +246,7 @@ export class HeaderComponent implements OnInit {
       this.currentUser = data;
       this.currentLoggedInUser = this.currentUser.response.firstname + ' ' + this.currentUser.response.lastname;
       this.currentLoggedInUser = this.currentLoggedInUser.toLowerCase().split(' ')
-      .map((s) => s.charAt(0).toUpperCase() + s.substring(1)).join(' ');
+        .map((s) => s.charAt(0).toUpperCase() + s.substring(1)).join(' ');
       this.userRole = this.currentUser.response.role;
       this.userID = this.currentUser.response.uid;
     });
@@ -255,28 +255,28 @@ export class HeaderComponent implements OnInit {
   isCurrentPropertySelected(org, prop) {
     console.log(org, 'org..');
     console.log(prop, 'prop..');
-    this.orgservice.getPropertyList(org.id).subscribe((data) => this.propList = data.response);
-    console.log(this.checkPropertyStatus(prop), 'cps..');
-    if (this.checkPropertyStatus(prop)) {
-      alert(prop.property_name + ' property has been disabled.');
-    } else {
-      this.selectedOrgProperties.length = 0;
-      this.activeProp = prop.property_name;
-      const obj = {
-        organization_id: org.id,
-        organization_name: org.orgname,
-        property_id: prop.property_id,
-        property_name: prop.property_name,
-        user_id: this.userID
-      };
-      this.orgservice.changeCurrentSelectedProperty(obj);
-      // this.orgservice.getSelectedOrgProperty.emit(obj);
-      //  this.firstElement = false;
-      this.selectedOrgProperties.push(obj);
-      this.orgservice.setCurrentOrgWithProperty(obj);
-      this.currentSelectedProperty();
-      this.router.navigate(['/privacy/dsar/webforms']);
-    }
+    //   this.orgservice.getPropertyList(org.id).subscribe((data) => this.propList = data.response);
+    //  console.log(this.checkPropertyStatus(prop), 'cps..');
+    // if (this.checkPropertyStatus(prop)) {
+    //   alert(prop.property_name + ' property has been disabled.');
+    // } else {
+    this.selectedOrgProperties.length = 0;
+    this.activeProp = prop.property_name;
+    const obj = {
+      organization_id: org.id,
+      organization_name: org.orgname,
+      property_id: prop.property_id,
+      property_name: prop.property_name,
+      user_id: this.userID
+    };
+    this.orgservice.changeCurrentSelectedProperty(obj);
+    // this.orgservice.getSelectedOrgProperty.emit(obj);
+    //  this.firstElement = false;
+    this.selectedOrgProperties.push(obj);
+    this.orgservice.setCurrentOrgWithProperty(obj);
+    this.currentSelectedProperty();
+    this.router.navigate(['/privacy/dsar/webforms']);
+    //  }
 
     // this.router.navigate(['/webforms']);
   }
@@ -430,8 +430,8 @@ export class HeaderComponent implements OnInit {
   //check whether organizaion property was earlier selected
   isOrgPropertyExists(data): boolean {
     const orgDetails = this.orgservice.getCurrentOrgWithProperty();
-    if(orgDetails !== undefined){
-      let result = data.filter((t)=>t.orgname == orgDetails.organization_name).length > 0;
+    if (orgDetails !== undefined) {
+      const result = data.filter((t) => t.orgname == orgDetails.organization_name).length > 0;
       return result;
     }
   }
