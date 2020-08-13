@@ -50,10 +50,9 @@ export class CompanyComponent implements OnInit {
 
   ngOnInit() {
     this.loadRoleList();
-    const zipRegex = '^[0-9]*$';
-    const spaceRegx = '^\S*$';
-    const strRegx = '^[a-zA-Z \-\']+';
-    const alphaNumeric = '^(?![0-9]*$)[a-zA-Z0-9 ]+$';
+    const numRegex =  '^[0-9]*$';
+    const strRegx = '^[a-zA-Z\-\']+';
+    const alphaNumeric = '.*\\S.*[a-zA-z0-9 ]';
     this.companyForm = this.formBuilder.group({
       orgname: ['', [Validators.required, Validators.pattern(alphaNumeric)]],
       tax_id: [''],
@@ -61,7 +60,7 @@ export class CompanyComponent implements OnInit {
       address2: ['', [Validators.required, Validators.pattern(alphaNumeric)]],
       city: ['', [Validators.required, Validators.pattern(strRegx)]],
       state: ['', [Validators.required, Validators.pattern(strRegx)]],
-      zipcode: ['', [Validators.required, Validators.pattern(zipRegex)]],
+      zipcode: ['', [Validators.required, Validators.pattern(numRegex)]],
     });
     this.inviteUserForm = this.formBuilder.group({
       emailid: ['', [Validators.required, Validators.pattern]],
@@ -121,13 +120,13 @@ export class CompanyComponent implements OnInit {
       return false;
     } else {
       const editObj = {
-        name: this.companyForm.value.orgname,
-        tax_id: this.companyForm.value.tax_id,
-        address1: this.companyForm.value.address1,
-        address2: this.companyForm.value.address2,
-        city: this.companyForm.value.city,
-        state: this.companyForm.value.state,
-        zipcode: this.companyForm.value.zipcode
+        name: this.companyForm.value.orgname.trim(),
+        tax_id: this.companyForm.value.tax_id.trim(),
+        address1: this.companyForm.value.address1.trim(),
+        address2: this.companyForm.value.address2.trim(),
+        city: this.companyForm.value.city.trim(),
+        state: this.companyForm.value.state.trim(),
+        zipcode: this.companyForm.value.zipcode.trim()
       };
       this.loading.start();
       this.companyService.updateCompanyDetails(editObj)

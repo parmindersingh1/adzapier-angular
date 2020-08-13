@@ -437,7 +437,7 @@ export class DsarRequestdetailsComponent implements OnInit {
           }
           const reqObj = {
             current_status: this.currentStageId,
-            previous_status: this.previousStageId,
+            previous_status: this.previousStageId ? this.previousStageId : this.previousStageId = ''
           }
           console.log(reqObj, 'stage selection..');
           this.stageAPI(this.requestID, reqObj);
@@ -615,7 +615,7 @@ export class DsarRequestdetailsComponent implements OnInit {
   }
 
   stageAPI(requestID, requestObj) {
-    //  return false;
+    // return false;
     this.ccpaDataService.addCCPADataActivity(requestID, requestObj).subscribe((data) => {
       if (data) {
         this.loadDataRequestDetails();

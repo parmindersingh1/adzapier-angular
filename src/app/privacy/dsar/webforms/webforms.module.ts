@@ -4,6 +4,7 @@ import { FeatherModule } from 'angular-feather';
 import { allIcons } from 'angular-feather/icons';
 import { WebformsRoutingModule } from './webforms-routing.module';
 import { WebformsComponent } from './webforms.component';
+import { SharedbootstrapModule } from 'src/app/sharedbootstrap/sharedbootstrap.module';
 
 
 @NgModule({
@@ -11,7 +12,8 @@ import { WebformsComponent } from './webforms.component';
   imports: [
     CommonModule,
     FeatherModule.pick(allIcons),
-    WebformsRoutingModule
+    WebformsRoutingModule,
+    SharedbootstrapModule
   ]
 })
 export class WebformsModule { }

@@ -114,7 +114,7 @@
                             <th>Id</th>
                             <th>Name</th>
                             <th>Email</th>
-                            <th>Role</th>
+                            <th>Roles</th>
                             <th>Last Login</th>
                             <td>Resend</td>
                             <th>Action</th>
@@ -182,7 +182,7 @@
                             [ngClass]="{ 'is-invalid': submitted && f.orgname.errors }" />
                         <div *ngIf="submitted && f.orgname.errors" class="invalid-feedback">
                             <div *ngIf="f.orgname.errors.required">Company Name is required</div>
-                            <div *ngIf="f.orgname.errors.pattern">Company Name Allow Only Alphabets</div>
+                            <div *ngIf="f.orgname.errors.pattern">Company Name allow only alphanumeric</div>
                         </div>
                     </div>
                 </div>
@@ -204,7 +204,7 @@
                             placeholder="Enter your address" />
                         <div *ngIf="submitted && f.address1.errors" class="invalid-feedback">
                             <div *ngIf="f.address1.errors.required">Address 1 is required</div>
-                            <div *ngIf="f.address1.errors.pattern">Address 1 allow only Alphanumeric</div>
+                            <div *ngIf="f.address1.errors.pattern">Address 1 allow only alphanumeric</div>
                         </div>
                     </div>
                 </div>
@@ -216,7 +216,7 @@
                             placeholder="Enter your address" />
                         <div *ngIf="submitted && f.address2.errors" class="invalid-feedback">
                             <div *ngIf="f.address2.errors.required">Address 2 is required</div>
-                            <div *ngIf="f.address2.errors.pattern">Address 2 allow only Alphanumeric</div>
+                            <div *ngIf="f.address2.errors.pattern">Address 2 allow only alphanumeric</div>
                         </div>
                     </div>
                 </div>
@@ -230,7 +230,7 @@
                             [ngClass]="{ 'is-invalid': submitted && f.city.errors }" placeholder="Enter your city" />
                         <div *ngIf="submitted && f.city.errors" class="invalid-feedback">
                             <div *ngIf="f.city.errors.required">City is required</div>
-                            <div *ngIf="f.city.errors.pattern">City allow only Alphabets</div>
+                            <div *ngIf="f.city.errors.pattern">City allow only alphabets</div>
                         </div>
                     </div>
                 </div>
