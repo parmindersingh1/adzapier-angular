@@ -5,9 +5,10 @@ import { CCPAFormConfigurationService } from 'src/app/_services/ccpaform-configu
 import { OrganizationService } from 'src/app/_services';
 import { Observable } from 'rxjs';
 import { CCPAFormFields } from 'src/app/_models/ccpaformfields';
+import { NgxUiLoaderService } from 'ngx-ui-loader';
 
 
- interface WebFormModel {
+interface WebFormModel {
   crid: any;
   form_name: string;
   form_status: string;
@@ -33,16 +34,27 @@ export class WebformsComponent implements OnInit {
   currentOrgID: any;
   propertyID: any;
   currentPropertyName: any;
-  formList: Observable<WebFormModel[]>;
-  loading = false;
+  formList: any = []; // Observable<WebFormModel[]>;
+  // loading = false;
   mySubscription;
   currentOrganization: any;
+  alertMsg: any;
+  alertType: any;
+  dismissible = true;
+  isOpen = false;
   constructor(private ccpaFormConfigService: CCPAFormConfigurationService,
-              private organizationService: OrganizationService,
-              private router: Router) { }
+    private organizationService: OrganizationService,
+    private loading: NgxUiLoaderService,
+    private router: Router) {
+    this.router.events.subscribe((e) => {
+      if (e instanceof NavigationEnd) {
+        this.loadCurrentProperty();
+      }
+    });
+  }
 
   ngOnInit() {
-    this.loading = true;
+    // this.loading = true;
     this.loadCurrentProperty();
   }
 
@@ -51,45 +63,48 @@ export class WebformsComponent implements OnInit {
       if (data !== '') {
         this.currentOrganization = data.organization_name;
         this.currentPropertyName = data.property_name;
-        this.getCCPAFormList();
-        this.loading = false;
+        this.getCCPAFormList(data);
       } else {
         const orgDetails = this.organizationService.getCurrentOrgWithProperty();
         this.currentOrganization = orgDetails.organization_name;
         this.currentPropertyName = orgDetails.property_name;
-        this.getCCPAFormList();
-        this.loading = false;
+        this.getCCPAFormList(orgDetails);
       }
     });
+
   }
 
-  getCCPAFormList() {
-   // this.loading = true;
-  // this.formList.length = 0;
-    const orgDetails = this.organizationService.getCurrentOrgWithProperty();
-  //  console.log(orgDetails,'orgdetails..');
+  getCCPAFormList(orgDetails) {
+
+    this.loading.start();
+    //  const orgDetails = this.organizationService.getCurrentOrgWithProperty();
+    // console.log(orgDetails.organization_id,'orgid..',orgDetails.property_id,'prid..');
     if (orgDetails !== undefined) {
-    this.formList = this.ccpaFormConfigService.getCCPAFormList(orgDetails.organization_id, orgDetails.property_id).pipe(map((t)=>t.response));
-    console.log(this.formList,'formList..');
-      // .subscribe((data) => {
-      //   if (data.response.length === 0) {
-      //     this.loading = false;
-      //     return this.formList.length = 0;
-      //   } else {
-      //     this.formList = data.response;
-      //     this.loading = false;
-      //     return this.formList;
-      //   }
-      // }, (error) => {
-      //   console.log(error, 'get error..');
-      //   this.loading = false;
-      // });
+      this.ccpaFormConfigService.getCCPAFormList(orgDetails.organization_id, orgDetails.property_id)
+        .subscribe((data) => {
+          this.loading.stop();
+          if (data.response.length !== 0) {
+          
+            this.formList = data.response;
+            // this.loading = false;
+            return this.formList;
+          } else {
+            return this.formList.length = 0;
+            //  this.loading = false;
+
+          }
+        }, (error) => {
+          this.alertMsg = error;
+          this.isOpen = true;
+          this.alertType = 'danger';
+          // this.loading = false;
+        });
     }
   }
 
   showForm(data) {
     this.ccpaFormConfigService.captureCurrentSelectedFormData(data);
-    this.router.navigate(['/privacy/dsar/dsarform',data.crid]);
+    this.router.navigate(['/privacy/dsar/dsarform', data.crid]);
   }
 
   navigateToDSARForm() {
@@ -98,6 +113,11 @@ export class WebformsComponent implements OnInit {
     } else {
       alert('Please Select property first!');
     }
+  }
+
+  onClosed(dismissedAlert: any): void {
+    this.alertMsg = !dismissedAlert;
+    this.isOpen = false;
   }
 
   // ngOnDestroy() {

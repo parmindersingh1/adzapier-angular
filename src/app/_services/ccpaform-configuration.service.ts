@@ -65,11 +65,10 @@ export class CCPAFormConfigurationService extends WebControls {
   }
 
   getCCPAFormList(orgId, propId): Observable<any> {
-    if (!this.ccpaFormList$) {
-       this.ccpaFormList$ = this.httpClient.get<any>(environment.apiUrl + '/ccpa/form/' + orgId + '/' + propId)
-       .pipe(shareReplay(1));
-    }
-    return this.ccpaFormList$;
+      // this.ccpaFormList$ = 
+     return this.httpClient.get<any>(environment.apiUrl + '/ccpa/form/' + orgId + '/' + propId);
+      // .pipe(shareReplay(1));
+      // return this.ccpaFormList$;
   }
 
   getCCPAFormConfigByID(orgId, propId, ccparequestid): Observable<any> {
@@ -92,4 +91,9 @@ export class CCPAFormConfigurationService extends WebControls {
   getCurrentSelectedFormData() {
     return JSON.parse(sessionStorage.getItem('currentwebform'));
   }
+
+  getCaptcha(): Observable<any> {
+    return this.httpClient.get<any>(environment.apiUrl + '/captch');
+  }
+
 }

@@ -124,6 +124,14 @@ loadWebControls() {
                 preferControlOrder: ''
             },
             {
+                control: 'file',
+                controllabel: 'Upload attachement',
+                controlId: 'fileupload',
+                indexCount: 'file_upload_Index',
+                preferControlOrder: '',
+                requiredfield: ''
+            },
+            {
                 control: 'text',
                 controllabel: 'Footer Text',
                 controlId: 'footertext',

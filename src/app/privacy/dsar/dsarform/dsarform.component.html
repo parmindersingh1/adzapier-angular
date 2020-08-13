@@ -661,8 +661,34 @@
 
                                             </div>
                                         </div>
-
-                                        <!-- </ng-container> -->
+                                        <div *ngIf="isFileUploadRequired">
+                                        <div class="col-sm-6"
+                                            *ngIf="webcontrol.control == 'file' && webcontrol.controlId == 'fileupload'">
+                                            <label class="form-check-label"> {{webcontrol.controllabel}}</label>
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text" id="inputGroupFileAddon01">Upload Attachment(s)</span>
+                                                    </div>
+                                                    <div class="custom-file">
+                                                        <input type="file" class="custom-file-input" (change)="uploadFile($event)"
+                                                            id="uploaddocument">
+                                                        <label class="custom-file-label"
+                                                            for="inputGroupFile01">{{uploadFilename?uploadFilename:'Choose file'}}</label>
+                                                            <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
+                                                            
+                                                    </div>
+                            
+                                                </div>
+                                                <div *ngIf="showFilesizeerror" class="color-red tx-12 mt-2">
+                                                    File size should not exceed 2MB
+                                                </div>
+                                                <div *ngIf="showFileExtnerror" class="color-red tx-12 mt-2">
+                                                    Only pdf, jpg, txt, doc, docx file area allowed.
+                                                </div> 
+                                           
+                                        </div>
+                                    </div>
+                                      
                                     </div>
                                     <div class="col-sm-3 mt-2 mb-2 ml-2"> <button class="btn btn-primary btn-block"
                                             [disabled]="true" type="submit">
@@ -733,7 +759,12 @@
                             <input type="text" class="form-control" [ngModelOptions]="{standalone: true}"
                                 [(ngModel)]="daysleft">
                         </div>
-
+                        <div class="form-group mg-b-5">
+                            <label for="daysleft"
+                            class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">Enable File upload
+                            <input type="checkbox" (click)="allowFileupload($event)"/>
+                        </label>
+                        </div>
                      
                     </div>
                     <!-- <div class="form-group mg-b-5"><a target="_blank" *ngIf="crid" class="btn btn-secondary sw-btn-prev"
