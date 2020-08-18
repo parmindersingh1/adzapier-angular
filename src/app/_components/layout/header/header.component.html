@@ -121,9 +121,6 @@
           </a>
         </div>
         <div class="iconwrapper">
-          <div class="searchicon">
-            <i-feather name="search"></i-feather>
-          </div>
           <div *ngIf="menu.items" dropdown container="body" placement="bottom right">
             <a class="nav-link dropdown-link" routerLinkActive="active" dropdownToggle (click)="false">
               <i class="bd bd-primary bg-primary rounded-circle pd-10 tx-white">{{nameInitials(currentLoggedInUser)}}</i>

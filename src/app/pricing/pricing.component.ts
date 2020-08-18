@@ -1,13 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
-import {BillingService} from "../_services/billing.service";
-import { subscriptionPlan } from '../_constant/pricing.contant';
+import {BillingService} from '../_services/billing.service';
+import {subscriptionPlan} from '../_constant/pricing.contant';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
-import {DataService} from "../_services/data.service";
-import {UserService} from "../_services";
-import {NotificationsService} from "angular2-notifications";
-import {not} from "rxjs/internal-compatibility";
-import {notificationConfig} from "../_constant/notification.constant";
+import {DataService} from '../_services/data.service';
+import {UserService} from '../_services';
+import {NotificationsService} from 'angular2-notifications';
+import {not} from 'rxjs/internal-compatibility';
+import {notificationConfig} from '../_constant/notification.constant';
 
 @Component({
   selector: 'app-pricing',
@@ -21,23 +21,27 @@ export class PricingComponent implements OnInit {
   userEmail: any;
   currentPlan = {
     amount: null,
-    duration: null
+    duration: null,
+    services: null
   };
+
   constructor(private router: Router,
               private loading: NgxUiLoaderService,
               private dataService: DataService,
               private notification: NotificationsService,
               private userService: UserService,
-              private billingService: BillingService) { }
+              private billingService: BillingService) {
+  }
 
   ngOnInit() {
     this.onGetUserEmail();
     this.onSetValue();
     this.onGetCurrentPlan();
   }
+
   onGetUserEmail() {
     this.loading.start();
-    this.userService.getLoggedInUserDetails().subscribe( res => {
+    this.userService.getLoggedInUserDetails().subscribe(res => {
       this.loading.stop();
       const result = res;
       if (result['status'] === 200) {
@@ -48,14 +52,27 @@ export class PricingComponent implements OnInit {
       console.log(error);
     });
   }
+
   onSelectPlan(plan) {
     if (this.userEmail) {
-      const data = {
-        plan: plan.plan,
-        email: this.userEmail
-      };
+
+      let payloads = {};
+      if (this.subscriptionPlanType === 'GDPR') {
+        payloads = {
+          service: [this.currentPlan.services.GDPR.key, this.currentPlan.services.CCPA.key],
+          plan: plan.plan,
+          email: this.userEmail
+        };
+      } else {
+        payloads = {
+          service: [this.currentPlan.services.CCPA.key],
+          plan: plan.plan,
+          email: this.userEmail
+        };
+      }
+      console.log(this.billingCycle, this.subscriptionPlanType);
       this.loading.start();
-      this.billingService.getSessionId(data).subscribe(res => {
+      this.billingService.getSessionId(payloads).subscribe(res => {
         this.loading.stop();
         const result = res;
         if (result['status'] === 200) {
@@ -72,6 +89,7 @@ export class PricingComponent implements OnInit {
       location.reload();
     }
   }
+
   onSelectPlanType(event) {
     if (event.target.checked) {
       this.subscriptionPlanType = 'GDPR';
@@ -85,10 +103,11 @@ export class PricingComponent implements OnInit {
     this.billingCycle = value;
     this.onSetValue();
   }
+
   onSetValue() {
     if (this.billingCycle === 'MONTHLY' && this.subscriptionPlanType === 'CCPA') {
       this.subscriptionPlan = subscriptionPlan.CCPA.MONTHLY;
-    } else if  (this.billingCycle === 'YEARLY' && this.subscriptionPlanType === 'CCPA') {
+    } else if (this.billingCycle === 'YEARLY' && this.subscriptionPlanType === 'CCPA') {
       this.subscriptionPlan = subscriptionPlan.CCPA.YEARLY;
     } else if (this.billingCycle === 'MONTHLY' && this.subscriptionPlanType === 'GDPR') {
       this.subscriptionPlan = subscriptionPlan.GDPR.MONTHLY;
@@ -96,6 +115,7 @@ export class PricingComponent implements OnInit {
       this.subscriptionPlan = subscriptionPlan.GDPR.YEARLY;
     }
   }
+
   onGetCurrentPlan() {
     this.loading.start();
     this.billingService.getCurrentPlanInfo().subscribe(res => {
@@ -113,7 +133,20 @@ export class PricingComponent implements OnInit {
 
   onUpgradePlan(plan) {
     this.loading.start();
-    this.billingService.upGradePlan({ plan: plan.plan }).subscribe(res => {
+    console.log('currentPlan', this.currentPlan);
+    let payloads = {};
+    if (this.subscriptionPlanType === 'GDPR') {
+      payloads = {
+        service: [this.currentPlan.services.GDPR.key, this.currentPlan.services.CCPA.key],
+        plan: plan.plan
+      };
+    } else {
+      payloads = {
+        service: [this.currentPlan.services.CCPA.key],
+        plan: plan.plan
+      };
+    }
+    this.billingService.upGradePlan(payloads).subscribe(res => {
       this.loading.stop();
       if (res['status'] === 200) {
         this.notification.info('Plan Upgraded', 'Your Plan has been Upgraded', notificationConfig);
