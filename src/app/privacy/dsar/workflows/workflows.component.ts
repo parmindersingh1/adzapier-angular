@@ -53,7 +53,7 @@ export class WorkflowsComponent implements OnInit {
   loadWorkflowList() {
     this.workflowService.getWorkflow().subscribe((data) => {
       const key = 'response';
-      this.workflowList = data.response;
+      this.workflowList = data['response'];
     });
   }
 

@@ -54,9 +54,6 @@
                 <!--[disabled]="disabled"-->
                 <a ngbNavLink>2 Form</a>
                 <ng-template ngbNavContent>
-
-
-
                     <div class="row">
                         <div class="col-sm-4 form-field-section">
                             <ngb-accordion #acc="ngbAccordion" activeIds="ngb-panel-0">
@@ -466,6 +463,7 @@
                                 <div class="logocontainer py-2" [style.background-color]="headerColor">
                                     <img class="img-responsive logowidth" [src]="headerlogoURL ? headerlogoURL:' '"
                                         width="150px" />
+                                    <h3 *ngIf="!headerlogoURL" class="txt-capitalize">{{formName}}</h3>
                                 </div>
                                 <div class="quilleditor-wrapper py-2">
                                     <div class="quilleditor" [ngStyle]="welcomeStyle()"
@@ -481,7 +479,7 @@
                                         *ngFor="let webcontrol of webFormControlList; let j = index;" cdkDrag
                                         [cdkDragDisabled]="true">
 
-                                        <div *ngIf="webcontrol.controlId === 'requesttype'" class="col-sm-6">
+                                        <div *ngIf="webcontrol.controlId === 'requesttype'" class="col-sm-12">
                                             <label>{{webcontrol.controllabel}} </label>
                                             <div
                                                 *ngIf="webcontrol.control === 'select' && webcontrol.controlId === 'requesttype'">
@@ -522,7 +520,7 @@
                                             </div>
 
                                         </div>
-                                        <div *ngIf="webcontrol.controlId === 'subjecttype'" class="col-sm-6">
+                                        <div *ngIf="webcontrol.controlId === 'subjecttype'" class="col-sm-12">
                                             <!--webcontrol.control == 'select' && webcontrol.controlId === 'subjecttype' && isSubjectTypeSelected-->
                                             <label>{{webcontrol.controllabel}} </label>
                                             <div
@@ -566,14 +564,14 @@
 
                                         </div>
                                         <div *ngIf="webcontrol.control === 'textbox';else selectOption"
-                                            class="col-sm-6">
+                                            class="col-sm-12">
                                             <label> {{webcontrol.controllabel}} </label>
                                             <input class="form-control" type="text" name="{{webcontrol.controllabel}}"
                                                 [(ngModel)]="requestObject[webcontrol.controllabel]" />
                                             <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
 
                                         </div>
-                                        <div *ngIf="webcontrol.control === 'textarea'" class="col-sm-6">
+                                        <div *ngIf="webcontrol.control === 'textarea'" class="col-sm-12">
                                             <label> {{webcontrol.controllabel}} </label>
                                             <textarea class="form-control" type="text"
                                                 name="{{webcontrol.controllabel}}"
@@ -581,7 +579,7 @@
                                             <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
 
                                         </div>
-                                        <div *ngIf="webcontrol.control === 'datepicker'" class="col-sm-6">
+                                        <div *ngIf="webcontrol.control === 'datepicker'" class="col-sm-12">
                                             <label> {{webcontrol.controllabel}} </label>
                                             <input class="form-control" type="date" name="{{webcontrol.controllabel}}"
                                                 #datePicker="ngModel"
@@ -593,7 +591,8 @@
                                                     required</div>
                                             </div>
                                         </div>
-                                        <div class="form-check"
+
+                                        <div class="col-sm-12"
                                             *ngIf="webcontrol.control === 'radio' && webcontrol.controlId !== 'requesttype' && webcontrol.controlId !== 'subjecttype'">
                                             <label class="heading">{{webcontrol.controllabel}}</label>
                                             <div *ngFor="let userOpt of webcontrol.selectOptions"
@@ -606,8 +605,9 @@
 
                                             </div>
                                         </div>
+
                                         <ng-template #selectOption>
-                                            <div class="col-sm-6"
+                                            <div class="col-sm-12"
                                                 *ngIf="webcontrol.control == 'select' && webcontrol.controlId !== 'state' && webcontrol.controlId !== 'country' && webcontrol.controlId !== 'subjecttype' && webcontrol.controlId !== 'requesttype'">
                                                 <label> {{webcontrol.controllabel}} </label>
                                                 <select class="form-control" name="{{webcontrol.controllabel}}"
@@ -620,7 +620,7 @@
                                                 <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
 
                                             </div>
-                                            <div class="col-sm-6"
+                                            <div class="col-sm-12"
                                                 *ngIf="webcontrol.control == 'select' && webcontrol.controlId == 'country'">
                                                 <label> {{webcontrol.controllabel}} </label>
                                                 <select class="form-control" name="{{webcontrol.controllabel}}"
@@ -633,7 +633,7 @@
                                                 <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
                                             </div>
 
-                                            <div class="col-sm-6"
+                                            <div class="col-sm-12"
                                                 *ngIf="webcontrol.control == 'select' && webcontrol.controlId == 'state'">
                                                 <label> {{webcontrol.controllabel}} </label>
                                                 <select class="form-control" name="{{webcontrol.controllabel}}"
@@ -646,7 +646,7 @@
                                             </div>
 
                                         </ng-template>
-                                        <div class="form-check"
+                                        <div class="col-sm-12"
                                             *ngIf="webcontrol.control == 'checkbox' && webcontrol.controlId !== 'subjecttype' && webcontrol.controlId !== 'requesttype'">
                                             <label class="form-check-label"> {{webcontrol.controllabel}}</label>
                                             <div *ngFor="let opt of webcontrol.selectOptions; let i = index;"
@@ -658,12 +658,68 @@
 
                                             </div>
                                         </div>
+                                        <div *ngIf="isFileUploadRequired">
+                                            <div class="row">
+                                            <div class="col-sm-12"
+                                                *ngIf="webcontrol.control == 'file' && webcontrol.controlId == 'fileupload'">
+                                                <label class="form-check-label"> {{webcontrol.controllabel}}</label>
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text" id="inputGroupFileAddon01">Upload
+                                                            Attachment(s)</span>
+                                                    </div>
+                                                    <div class="custom-file">
+                                                        <input type="file" class="custom-file-input"
+                                                            (change)="uploadFile($event)" id="uploaddocument">
+                                                        <label class="custom-file-label"
+                                                            for="inputGroupFile01">{{uploadFilename?uploadFilename:'Choose file'}}</label>
+                                                        <input type="hidden" name="{{webcontrol.indexCount}}"
+                                                            [ngModel]="j+1" />
 
-                                        <!-- </ng-container> -->
+                                                    </div>
+
+                                                </div>
+                                                <div *ngIf="showFilesizeerror" class="color-red tx-12 mt-2">
+                                                    File size should not exceed 2MB
+                                                </div>
+                                                <div *ngIf="showFileExtnerror" class="color-red tx-12 mt-2">
+                                                    Only pdf, jpg, txt, doc, docx file area allowed.
+                                                </div>
+
+                                            </div>
+                                            </div>
+                                        </div>
+                                       
+                                        <!-- <img *ngIf="j == webFormControlList.length - 1" [src]='capthchaID' />
+                                     {{capthchaID}} -->
+                                     <div class="col-sm-12 mt-2" *ngIf="j == webFormControlList.length - 1">
+                                        <label><span class="color-red">*</span> Captcha</label>
+                                        <div class="form-group flex-align-item mb-0">
+                                            <button title="Refresh captcha" type="button" class="btn btn-xs btn-primary mb-2 mr-1" (click)="loadCaptcha()">
+                                                <img src="../../assets/imgs/refresh.svg" width="20" height="20"/>
+                                            </button>
+                                        <div class="align-form">
+                                            <span  [ngClass]="{'displaynone':!isImageLoading,'':isImageLoading}"  class="spinner-border spinner-border-sm mr-1"></span>
+                                        <img [src]="imageToShow" alt="captcha image"
+                                            *ngIf="!isImageLoading; else noImageFound">
+                                            <!-- <audio controls>
+                                                <source src="imageToShow.wav" type="audio/wav">
+                                            </audio> -->
+                                        <ng-template #noImageFound>
+                                          <span>No Image Found</span>
+                                        </ng-template>
+                                        </div>
+                                        </div>
+                                        <div  class="row col-sm-12" *ngIf="j == webFormControlList.length - 1">
+                                            <input class="form-control" placeholder="Enter above captcha code" autocomplete="new-{{j}}" name="captchacode" [(ngModel)]="captchacode" />
+                                        </div>
                                     </div>
+                                   
+                                    </div>
+                                     
                                     <div class="col-sm-3 mt-2 mb-2 ml-2"> <button class="btn btn-primary btn-block"
                                             [disabled]="true" type="submit">
-                                            Submit </button></div>
+                                            Submit</button></div>
                                 </form>
                                 <div class="quilleditor-wrapper py-2 border-top">
                                     <div class="quilleditor" [ngStyle]="footerStyle()"
@@ -696,7 +752,8 @@
                                 [ngClass]="{ 'is-invalid':  userselect.invalid && userselect.errors?.required}"
                                 required>
                                 <ng-container *ngFor="let opt of ApproverList">
-                                    <option *ngIf="opt.user_name !== ' '" [value]="opt.approver_id">
+                                    <option *ngIf="opt.user_name !== ' '" [value]="opt.approver_id"
+                                        [selected]="opt.approver_id === defaultapprover">
                                         {{ opt.user_name }}
                                     </option>
                                 </ng-container>
@@ -709,11 +766,13 @@
                         <div class="form-group mg-b-5">
                             <label for="workflow" class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">
                                 Select Work flow</label>
-                            <select class="form-control" name="workflow" #workflowselect="ngModel" [(ngModel)]="workflow"
+                            <select class="form-control" name="workflow" #workflowselect="ngModel"
+                                [(ngModel)]="workflow"
                                 [ngClass]="{ 'is-invalid':  workflowselect.invalid && workflowselect.errors?.required}"
                                 required>
                                 <ng-container *ngFor="let opt of workFlowList">
-                                    <option *ngIf="opt.workflow_status == 'active'" [value]="opt.id">
+                                    <option *ngIf="opt.workflow_status == 'active'" [value]="opt.id"
+                                        [selected]="opt.approver_id === workflow">
                                         {{ opt.workflow_name }}
                                     </option>
                                 </ng-container>
@@ -730,8 +789,13 @@
                             <input type="text" class="form-control" [ngModelOptions]="{standalone: true}"
                                 [(ngModel)]="daysleft">
                         </div>
+                        <div class="form-group mg-b-5">
+                            <label for="daysleft"
+                                class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">Enable File upload
+                                <input type="checkbox" (click)="allowFileupload($event)" />
+                            </label>
+                        </div>
 
-                     
                     </div>
                     <!-- <div class="form-group mg-b-5"><a target="_blank" *ngIf="crid" class="btn btn-secondary sw-btn-prev"
                         [routerLink]="['/editwebforms',  crid ]">Local Preview</a></div> -->
@@ -760,10 +824,14 @@
                 </ng-template>
             </li>
             <li>
-                <span *ngIf="crid" class="previewbtn"><a target="_blank" class="btn btn-xs btn-primary" (click)="previewCCPAForm()">Preview</a></span>
+                <span *ngIf="crid" class="previewbtn"><a target="_blank" class="btn btn-xs btn-primary"
+                        (click)="previewCCPAForm()">Preview</a></span>
             </li>
         </ul>
-        <div [ngbNavOutlet]="nav"></div>
+        <div [ngbNavOutlet]="nav">
+
+        </div>
+
     </div>
 </div>
 
@@ -799,7 +867,7 @@
         </div>
     </ng-template>
 </ng-template>
-<div class="col-sm-5 mr-0 float-right flotingdiv">
-    <alert *ngIf="isOpen" [type]="alertType" dismissOnTimeout="5000" [dismissible]="dismissible"
-        (onClosed)="onClosed(alert)">{{  alertMsg}}</alert>
+<div class="float-right flotingdiv"> <!--dismissOnTimeout="5000"-->
+    <alert *ngIf="isOpen" [type]="alertType"  [dismissible]="dismissible" dismissOnTimeout="10000"
+        (onClosed)="onClosed(alertMsg)">{{alertMsg}}</alert>
 </div>

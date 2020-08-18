@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
@@ -14,13 +14,15 @@ import { MustMatch } from '../_helpers/must-match.validator';
 })
 export class RegisterComponent implements OnInit {
 
-  regForm: FormGroup;
+    regForm: FormGroup;
     loading = false;
     submitted = false;
     navbarCollapsed = false;
-    show: Boolean = false;
+    show: boolean = false;
     errorMsg: string;
-
+    alertMsg: any;
+    isOpen: boolean;
+    alertType: any;
     constructor(
         private formBuilder: FormBuilder,
         private router: Router,
@@ -53,8 +55,9 @@ export class RegisterComponent implements OnInit {
 
     // convenience getter for easy access to form fields
     get f() {
-      console.log(this.regForm.controls);
-      return this.regForm.controls; }
+       // console.log(this.regForm.controls);
+        return this.regForm.controls;
+    }
 
     clearError() {
         this.errorMsg = "";
@@ -84,20 +87,22 @@ export class RegisterComponent implements OnInit {
                 .pipe(first())
                 .subscribe(
                     data => {
-                        this.alertService.success('Registration successful', true);
-                        alert('Registration Successful....Please Login');
+                        this.alertMsg = data.response;
+                        this.isOpen = true;
+                        this.alertType = 'success';
                         this.router.navigate(['/login']);
                     },
                     error => {
-                        this.alertService.error(error);
-                        for (let key in error) {
-                            if (key != 'No_record') {
-                                this.errorMsg = error[key];
-                            }
-                            break;
-                        }
-
-                        this.loading = false;
+                       this.alertMsg = error.email_error;
+                       this.isOpen = true;
+                       this.alertType = 'danger';
+                       this.loading = false;
+                        // for (let key in error) {
+                        //     if (key != 'No_record') {
+                        //         this.errorMsg = error[key];
+                        //     }
+                        //     break;
+                        // }
 
                     });
 

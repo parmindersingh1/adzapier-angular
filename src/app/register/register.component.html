@@ -99,4 +99,7 @@
             <img src="assets/imgs/signup.jpg" class="img-fluid" alt="">
     </div><!-- media-body -->
 </div><!-- media -->
-
+<div class="float-right flotingdiv"> <!--dismissOnTimeout="5000"-->
+    <alert *ngIf="isOpen" [type]="alertType"  [dismissible]="dismissible"
+        (onClosed)="onClosed(alertMsg)">{{alertMsg}}</alert>
+</div>

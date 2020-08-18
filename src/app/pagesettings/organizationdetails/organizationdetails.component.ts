@@ -381,14 +381,13 @@ export class OrganizationdetailsComponent implements OnInit {
             this.isOpen = true;
             this.alertType = 'success';
             this.loadOrgTeamMembers(this.organizationID);
-            this.inviteUserOrgForm.reset();
-            this.modalService.dismissAll('Data Saved!');
+            this.onCancelClick();
           }
         }, (error) => {
           this.alertMsg = error;
           this.isOpen = true;
           this.alertType = 'danger';
-          this.modalService.dismissAll('Error!');
+          this.onCancelClick();
         });
     }
   }

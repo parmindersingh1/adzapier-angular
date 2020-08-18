@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Observable, BehaviorSubject } from 'rxjs';
+import { shareReplay } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -9,44 +10,55 @@ import { Observable, BehaviorSubject } from 'rxjs';
 export class WorkflowService {
   public workflowSource = new BehaviorSubject<any>('');
   selectedWorkflow = this.workflowSource.asObservable();
+  private workflowlist$: Observable<any>;
 
   constructor(private httpClient: HttpClient) { }
 
-  
+  //for workflow table
   getWorkflow(pageLimit?): Observable<any> {
     const pgLimit = pageLimit !== undefined ? pageLimit : '';
-    if(pageLimit === ''){
-      return this.httpClient.get<any>(environment.apiUrl + '/workflow');
-    } else{
-      return this.httpClient.get<any>(environment.apiUrl + '/workflow' + pgLimit);
+    if (pageLimit === '') {
+      if (!this.workflowlist$) {
+        this.workflowlist$ = this.httpClient.get<any>(environment.apiUrl + '/workflow').pipe(shareReplay(1));
+      }
+      return this.workflowlist$;
+    } else {
+      if (!this.workflowlist$) {
+        this.workflowlist$ = this.httpClient.get<any>(environment.apiUrl + '/workflow' + pgLimit).pipe(shareReplay(1));
+      }
+      return this.workflowlist$;
     }
 
   }
 
   getWorkflowByStatus(status): Observable<any> {
-    return this.httpClient.get<any>(environment.apiUrl + '/workflow?workflow_status='+status);
+    if(!this.workflowlist$){
+      this.workflowlist$ = this.httpClient.get<any>(environment.apiUrl + '/workflow?workflow_status=' + status).pipe(shareReplay(1));
+    }
+    return this.workflowlist$;
   }
 
   // to get all stages
   getWorkflowById(id?, pageLimit?): Observable<any> {
     const pgLimit = pageLimit !== undefined ? pageLimit : '';
-    if(pgLimit === ''){
-      return this.httpClient.get<any>(environment.apiUrl + '/workflow?workflow_id='+id);//.pipe(delay(2000));
-     } else {
-      return this.httpClient.get<any>(environment.apiUrl + '/workflow?workflow_id='+id + pgLimit);//.pipe(delay(2000));
-     }
+    if (pgLimit === '') {
+      return this.httpClient.get<any>(environment.apiUrl + '/workflow?workflow_id=' + id);//.pipe(shareReplay(1));//.pipe(delay(2000));
+    } else {
+      return this.httpClient.get<any>(environment.apiUrl + '/workflow?workflow_id=' + id + pgLimit);//.pipe(shareReplay(1));//.pipe(delay(2000));
+    }
 
   }
 
   createWorkflow(reqObj): Observable<any> {
-    return this.httpClient.post<any>(environment.apiUrl + '/workflow',reqObj);
+    return this.httpClient.post<any>(environment.apiUrl + '/workflow', reqObj);
   }
 
-  updateWorkflow(id,reqObj): Observable<any> {
-    return this.httpClient.put<any>(environment.apiUrl + '/workflow?workflow_id='+id,reqObj);
+  updateWorkflow(id, reqObj): Observable<any> {
+    return this.httpClient.put<any>(environment.apiUrl + '/workflow?workflow_id=' + id, reqObj);
   }
 
   changeCurrentSelectedWorkflow(currentItem) {
     this.workflowSource.next(currentItem);
-  }  
+  }
 }
+

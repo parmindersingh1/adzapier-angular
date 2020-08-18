@@ -152,5 +152,5 @@
     </form>
 </ng-template>
 <div class="col-sm-5 mt-3 mr-0 float-right">
-    <alert *ngIf="isOpen" [type]="alertType"  dismissOnTimeout="5000" [dismissible]="dismissible" (onClosed)="onClosed(alert)">{{  alertMsg}}</alert>
+    <alert *ngIf="isOpen" [type]="alertType"  dismissOnTimeout="5000" [dismissible]="dismissible" (onClosed)="onClosed(alertMsg)">{{  alertMsg}}</alert>
 </div>

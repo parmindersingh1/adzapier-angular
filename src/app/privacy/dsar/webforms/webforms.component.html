@@ -26,7 +26,7 @@
 
             </div>
             <div class="card-body">
-                <div *ngIf="formList.length === 0 && !loading">No web form found</div>
+                <div *ngIf="formList.length === 0">No web form found</div>
                 <div class="card-columns">
                     <ng-container *ngFor="let data of formList;let i = index;">
                         <div class="card">
@@ -103,4 +103,8 @@
         </div>
     </div>
 
+</div>
+<div class="float-right flotingdiv"> <!--dismissOnTimeout="5000"-->
+    <alert *ngIf="isOpen" [type]="alertType"  [dismissible]="dismissible"
+        (onClosed)="onClosed(alertMsg)">{{alertMsg}}</alert>
 </div>

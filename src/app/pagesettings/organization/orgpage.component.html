@@ -204,5 +204,5 @@
     </div>
 </ng-template>
 <div class="col-sm-5 mr-0 float-right flotingdiv"> <!--dismissOnTimeout="5000"-->
-    <alert *ngIf="isOpen" [type]="alertType"  [dismissible]="dismissible" (onClosed)="onClosed(alert)">{{  alertMsg}}</alert>
+    <alert *ngIf="isOpen" [type]="alertType"  [dismissible]="dismissible" (onClosed)="onClosed(alertMsg)">{{  alertMsg}}</alert>
 </div>

@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild, ViewEncapsulation, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ViewEncapsulation, ChangeDetectionStrategy, ChangeDetectorRef, SecurityContext } from '@angular/core';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { FormBuilder, FormGroup, NgForm, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -10,6 +10,10 @@ import { CcparequestService } from 'src/app/_services/ccparequest.service';
 import { DsarformService } from 'src/app/_services/dsarform.service';
 import { CCPAFormConfigurationService } from 'src/app/_services/ccpaform-configuration.service';
 import { WorkflowService } from 'src/app/_services/workflow.service';
+import { flatMap, switchMap, map } from 'rxjs/operators';
+import { DomSanitizer, SafeResourceUrl, SafeHtml } from '@angular/platform-browser';
+import { Observable } from 'rxjs';
+import { HttpResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-dsarform',
@@ -91,6 +95,11 @@ export class DsarformComponent implements OnInit, OnDestroy {
   contactList: any;
   filteredStateList: any;
   workFlowList: any;
+  currentManagedPropID: any;
+  currentManagedOrgID: any;
+  uploadFilename: any;
+  capthchaID: Observable<any>; // SafeHtml;
+  captchaImage: SafeHtml;
   controlOption = [
     {
       id: 1,
@@ -153,6 +162,8 @@ export class DsarformComponent implements OnInit, OnDestroy {
   welcomeText: any;
   headerLogoPath: any;
   ApproverList: any = [];
+  selectedApproverID: any;
+  selectedWorkflowID: any;
   defaultapprover: any;
   workflow: any;
   daysleft: any = 45;
@@ -162,6 +173,15 @@ export class DsarformComponent implements OnInit, OnDestroy {
   alertType: any;
   dismissible = true;
   isOpen = false;
+  showFilesizeerror: boolean = false;
+  showFileExtnerror: boolean = false;
+  isFileUploadRequired: boolean = false;
+  imgUrl: string; // = 'https://develop-cmp-api.adzpier-staging.com/api/v1/captcha/image';
+
+  imageToShow: any;
+  isImageLoading: boolean;
+  captchacode: any;
+  captchaid: any;
   constructor(private fb: FormBuilder, private ccpaRequestService: CcparequestService,
               private organizationService: OrganizationService,
               private dsarFormService: DsarformService,
@@ -172,7 +192,8 @@ export class DsarformComponent implements OnInit, OnDestroy {
               private activatedRoute: ActivatedRoute,
               private loadingbar: NgxUiLoaderService,
               private modalService: NgbModal,
-              private cd: ChangeDetectorRef) {
+              private cd: ChangeDetectorRef,
+              private sanitizer: DomSanitizer) {
 
     this.count = 0;
     // this.loading = true;
@@ -221,19 +242,39 @@ export class DsarformComponent implements OnInit, OnDestroy {
 
     // this.loading = true;
     if (this.crid !== null) {
+      // this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
       // this.getCCPAdefaultConfigById();
+      const uuidRegx = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/;
       this.loadingbar.start();
       this.webFormSelectedData = this.ccpaFormConfigService.currentFormData.subscribe((data) => {
         this.loadingbar.stop();
         if (data) {
-          this.propId = data.PID;
-          this.orgId = data.OID;
+          (this.propId !== '') ? this.propId = this.propId : this.propId = data.PID;
+          (this.orgId !== '') ? this.orgId = this.orgId : this.orgId = data.OID;
+          // this.orgId = data.OID;
           this.crid = data.crid;
           // this.propertyname = data.form_name;
           this.formName = data.form_name || data.web_form_name;
+          //  this.selectedApproverID = data.approver;
+          // this.selectedWorkflowID = data.workflow;
+          const isUUID = uuidRegx.test(data.approver);
+          if (isUUID) {
+            this.selectedApproverID = data.approver;
+            this.selectedWorkflowID = data.workflow;
+          } else {
+            this.selectedApproverID = data.approver_id;
+            this.selectedWorkflowID = data.workflow_id;
+            //  this.getWorkflowWithApproverID();
+          }
           // this.requestFormControls = data.request_form;
-          this.selectedwebFormControlList = this.rearrangeFormSequence(data.request_form);
-          this.webFormControlList = this.selectedwebFormControlList;
+          if (data.request_form) {
+            this.selectedwebFormControlList = this.rearrangeFormSequence(data.request_form);
+            this.webFormControlList = this.selectedwebFormControlList;
+          } else {
+            this.selectedwebFormControlList = this.rearrangeFormSequence(this.ccpaFormConfigService.getFormControlList());
+            this.webFormControlList = this.selectedwebFormControlList;
+          }
+
           console.log(this.webFormControlList, 'crid..webFormControlList..');
           this.webFormControlList.filter((t) => {
             if (t.controlId === 'footertext') {
@@ -252,6 +293,14 @@ export class DsarformComponent implements OnInit, OnDestroy {
           // this.ccpaFormConfigService.removeControls();
           this.ccpaFormConfigService.setFormControlList(this.webFormControlList);
           // this.webFormControlList;
+
+          //  console.log(this.defaultapprover, 'defaultapprover..');
+        } else {
+          // const retrivedData = this.ccpaFormConfigService.getCurrentSelectedFormData();
+          // this.selectedApproverID = retrivedData.approver;
+          // this.selectedWorkflowID = retrivedData.workflow;
+          // this.formName = retrivedData.form_name;
+          this.getWorkflowWithApproverID();
         }
       });
     } else {
@@ -296,6 +345,7 @@ export class DsarformComponent implements OnInit, OnDestroy {
     this.loadCountryList();
     this.loadStateList();
     this.loadWorkFlowList();
+    this.loadCaptcha();
   }
 
   getCCPAdefaultConfigById() {
@@ -501,6 +551,7 @@ export class DsarformComponent implements OnInit, OnDestroy {
     // this.selectOptions.push(customObj[key] = this.count++);
     this.selectOptions.push(customObj);
     console.log(this.selectOptions, 'selectOptions..');
+
     // this.cancelAddingFormControl();
   }
 
@@ -646,10 +697,18 @@ export class DsarformComponent implements OnInit, OnDestroy {
         }
 
       } else if (this.existingControl) {
+        this.webFormControlList = this.dsarFormService.getFormControlList();
         let updateCustomObj;
         const customControlIndex = this.webFormControlList.findIndex((t) =>
-          t.controllabel === this.existingControl.controllabel);
+          t.indexCount === this.existingControl.indexCount);
         //  const customControlIndex = this.webFormControlList.indexOf(this.existingControl.controllabel);
+        // const emptyIndex = this.selectOptions.findIndex((t) => t.keylabel === '');
+        // this.selectOptions[emptyIndex].keylabel = this.trimLabel;
+        const emptyIndex = this.selectOptions.findIndex((t) => t.keylabel !== '');
+       // if (emptyIndex === -1) {
+        this.selectOptions[emptyIndex].keylabel = this.trimLabel;
+       // }
+
         if (customControlIndex !== -1) {
           updateCustomObj = {
             controllabel: formControls.value.lblText,
@@ -672,6 +731,8 @@ export class DsarformComponent implements OnInit, OnDestroy {
     } else {
       if (this.crid) {
         const count = this.webFormControlList.length + 1;
+        const emptyIndex = this.selectOptions.findIndex((t) => t.keylabel === '');
+        this.selectOptions[emptyIndex].keylabel = this.trimLabel;
         const newWebControl = {
           control: this.selectedFormOption,
           controllabel: formControls.value.lblText,
@@ -684,6 +745,10 @@ export class DsarformComponent implements OnInit, OnDestroy {
         this.lblText = '';
         this.cancelAddingFormControl();
       } else {
+        const emptyIndex = this.selectOptions.findIndex((t) => t.keylabel === '');
+        if (emptyIndex !== -1) {
+          this.selectOptions[emptyIndex].keylabel = this.trimLabel;
+        }
 
         const count = this.webFormControlList.length + 1;
         const newWebControl = {
@@ -920,6 +985,7 @@ export class DsarformComponent implements OnInit, OnDestroy {
 
     this.active = 3;
     this.cd.detectChanges();
+
     // selectedOrgProperty
   }
 
@@ -946,10 +1012,12 @@ export class DsarformComponent implements OnInit, OnDestroy {
       this.ccpaFormConfigService.updateCCPAForm(this.orgId, this.propId, this.crid, this.formObject)
         .subscribe((data) => {
           this.loadingbar.stop();
+          this.active = 4;
           if (data) {
-            this.alertMsg = data.response;
-            this.isOpen = true;
-            this.alertType = 'success';
+            // this.alertMsg = data.response;
+            // this.isOpen = true;
+            // this.alertType = 'success';
+            // this.active = 4;
             // this.dsarFormService.removeControls();
           }
         }, (error) => {
@@ -958,16 +1026,22 @@ export class DsarformComponent implements OnInit, OnDestroy {
           this.isOpen = true;
           this.alertType = 'danger';
         });
+      this.alertMsg = 'Web form has been updated successfully!';
+      this.isOpen = true;
+      this.alertType = 'success';
+      this.active = 4;
     } else {
       this.loadingbar.start();
       this.ccpaFormConfigService.createCCPAForm(this.orgId, this.propId, this.formObject)
         .subscribe((data) => {
           this.loadingbar.stop();
+          this.active = 4;
           if (data) {
             this.crid = data.response.crid;
-            this.alertMsg = data.response;
-            this.isOpen = true;
-            this.alertType = 'success';
+            // this.alertMsg = data.response;
+            // this.isOpen = true;
+            // this.alertType = 'success';
+
             // this.dsarFormService.removeControls();
           }
         }, (error) => {
@@ -976,8 +1050,13 @@ export class DsarformComponent implements OnInit, OnDestroy {
           this.isOpen = true;
           this.alertType = 'danger';
         });
+      this.alertMsg = 'Web form has been added successfully!';
+      this.isOpen = true;
+      this.alertType = 'success';
+      this.active = 4;
     }
-    this.active = 4;
+
+
   }
 
   updateWebcontrolIndex(indexData, arrayData) {
@@ -1064,7 +1143,7 @@ export class DsarformComponent implements OnInit, OnDestroy {
   }
 
   welcomeStyle(): object {
-   
+
     return {
       'color': this.welcomeTextColor,
       'font-size': this.welcomeFontSize + 'px'
@@ -1074,7 +1153,7 @@ export class DsarformComponent implements OnInit, OnDestroy {
   }
 
   footerStyle(): object {
-    
+
     return {
       'color': this.footerTextColor,
       'font-size': this.footerFontSize + 'px'
@@ -1105,16 +1184,26 @@ export class DsarformComponent implements OnInit, OnDestroy {
 
 
   loadDefaultApprover() {
-    this.organizationService.getOrgTeamMembers(this.orgId).subscribe((data) => {
-      const key = 'response';
-      this.ApproverList = data[key];
-    });
+    if (this.orgId) {
+      this.organizationService.getOrgTeamMembers(this.orgId).subscribe((data) => {
+        const key = 'response';
+        this.ApproverList = data[key];
+        const filterValue = this.ApproverList.filter((t) => t.approver_id === this.selectedApproverID);
+        if (filterValue.length > 0) {
+          this.defaultapprover = filterValue[0].approver_id;
+        }
+      });
+    }
   }
 
   loadWorkFlowList() {
     this.workFlowService.getWorkflow().subscribe((data) => {
       const key = 'response';
       this.workFlowList = data[key];
+      const filterValue = this.workFlowList.filter((t) => t.id === this.selectedWorkflowID);
+      if (filterValue.length > 0) {
+        this.workflow = filterValue[0].id;
+      }
     }, (error) => {
       this.alertMsg = error;
       this.isOpen = true;
@@ -1135,19 +1224,118 @@ export class DsarformComponent implements OnInit, OnDestroy {
   }
 
   previewCCPAForm() {
-    if (window.location.hostname === 'localhost') {
-      window.open('http://localhost:4500/ccpa/form/' + this.orgId + '/' + this.propId + '/' + this.crid);
-    }
-    if (window.location.hostname === 'develop-cmp.adzpier-staging.com') {
-      window.open('https://develop-privacyportal.adzpier-staging.com/ccpa/form/' + this.orgId + '/' + this.propId + '/' + this.crid);
-    } else if (window.location.hostname === 'cmp.adzpier-staging.com') {
-      window.open('https://privacyportal.adzpier-staging.com/ccpa/form/' + this.orgId + '/' + this.propId + '/' + this.crid);
+    if (this.orgId && this.propId) {
+      if (window.location.hostname === 'localhost') {
+        window.open('http://localhost:4500/ccpa/form/' + this.orgId + '/' + this.propId + '/' + this.crid);
+      }
+      if (window.location.hostname === 'develop-cmp.adzpier-staging.com') {
+        window.open('https://develop-privacyportal.adzpier-staging.com/ccpa/form/' + this.orgId + '/' + this.propId + '/' + this.crid);
+      } else if (window.location.hostname === 'cmp.adzpier-staging.com') {
+        window.open('https://privacyportal.adzpier-staging.com/ccpa/form/' + this.orgId + '/' + this.propId + '/' + this.crid);
+      }
+    } else {
+      this.alertMsg = 'Organization or Property not found!';
+      this.isOpen = true;
+      this.alertType = 'danger';
     }
   }
 
   onClosed(dismissedAlert: any): void {
-    this.alertMsg !== dismissedAlert;
+    this.alertMsg = !dismissedAlert;
     this.isOpen = false;
+  }
+
+  getWorkflowWithApproverID() {
+    const retrivedData = this.ccpaFormConfigService.getCurrentSelectedFormData();
+    this.selectedApproverID = retrivedData.approver;
+    this.selectedWorkflowID = retrivedData.workflow;
+    this.formName = retrivedData.form_name;
+  }
+
+  uploadFile(event) {
+    console.log(event, 'event..');
+    const fileExtArray = ['pdf', 'txt', 'jpeg', 'jpg', 'png', 'doc', 'docx', 'csv', 'xls'];
+    // if (event.target.files.length > 0) {
+    if (event.target.files[0].size > (2 * 1024 * 1024)) {
+      this.showFilesizeerror = true;
+      return false;
+    } else {
+      const fileExtn = event.target.files[0].name.split('.').pop();
+      if (fileExtArray.some((t) => t == fileExtn)) {
+        this.showFilesizeerror = false;
+        this.showFileExtnerror = false;
+        const file = event.target.files[0];
+        this.uploadFilename = file.name;
+        // this.subTaskResponseForm.get('uploaddocument').setValue(file);
+      } else {
+        this.showFileExtnerror = true;
+      }
+
+    }
+
+    // }
+  }
+
+  allowFileupload(event) {
+    this.isFileUploadRequired = event.target.checked;
+    const oldControlIndex = this.webFormControlList.findIndex((t) => t.controlId === 'fileupload');
+    this.webFormControlList = this.dsarFormService.getFormControlList();
+    const obj = this.webFormControlList[oldControlIndex];
+    obj.requiredfield = event.target.checked;
+    this.dsarFormService.updateControl(this.webFormControlList[oldControlIndex], oldControlIndex, obj);
+
+  }
+
+  loadCaptcha() {
+    if (window.location.hostname === 'localhost') {
+      this.imgUrl = 'https://develop-cmp-api.adzpier-staging.com/api/v1/captcha/image';
+    }
+    if (window.location.hostname === 'develop-cmp.adzpier-staging.com') {
+      this.imgUrl = 'https://develop-cmp-api.adzpier-staging.com/api/v1/captcha/image';
+    } else if (window.location.hostname === 'cmp.adzpier-staging.com') {
+      this.imgUrl = 'https://privacyportal.adzpier-staging.com/api/v1/captcha/image';
+    }
+
+    this.ccpaFormConfigService.getCaptcha().subscribe((data) => {
+      this.captchaid = data.captchaid;
+      this.getImageFromService(this.imgUrl + '/' + this.captchaid + '.png');
+    });
+
+  }
+
+
+  createImageFromBlob(image: Blob) {
+    let reader = new FileReader();
+    reader.addEventListener('load', () => {
+      this.imageToShow = reader.result;
+    }, false);
+
+    if (image) {
+      reader.readAsDataURL(image);
+    }
+  }
+
+  getImageFromService(url) {
+    this.isImageLoading = true;
+    this.ccpaFormConfigService.getImage(url).subscribe(data => {
+      this.createImageFromBlob(data);
+      this.isImageLoading = false;
+    }, error => {
+      this.isImageLoading = false;
+      console.log(error);
+    });
+  }
+
+  postCaptcha() {
+    const obj = {
+      captcha_id: this.captchaid,
+      captcha_solution: this.captchacode
+    };
+    this.ccpaFormConfigService.verifyCaptcha(obj).subscribe((data) => console.log(data));
+  }
+
+  transform(imgData) {
+    this.captchaImage = this.sanitizer.bypassSecurityTrustResourceUrl(imgData);
   }
 
   ngOnDestroy() {
