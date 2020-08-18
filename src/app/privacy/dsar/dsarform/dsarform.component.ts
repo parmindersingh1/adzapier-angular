@@ -12,7 +12,6 @@ import { CCPAFormConfigurationService } from 'src/app/_services/ccpaform-configu
 import { WorkflowService } from 'src/app/_services/workflow.service';
 import { flatMap, switchMap, map } from 'rxjs/operators';
 import { DomSanitizer, SafeResourceUrl, SafeHtml } from '@angular/platform-browser';
-import { CaptchaComponent } from 'angular-captcha';
 import { Observable } from 'rxjs';
 import { HttpResponse } from '@angular/common/http';
 
@@ -25,7 +24,6 @@ import { HttpResponse } from '@angular/common/http';
 
 })
 export class DsarformComponent implements OnInit, OnDestroy {
-  @ViewChild(CaptchaComponent, { static: true }) captchaComponent: CaptchaComponent;
   @ViewChild('editor', { static: true }) editor;
   public requestObject: any = {};
   public selectedFormOption: any;
