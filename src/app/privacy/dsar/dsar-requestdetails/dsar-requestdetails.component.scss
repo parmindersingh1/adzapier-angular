@@ -171,7 +171,7 @@ li.nav-item {
     display: inline-block;
     float: left;
     margin: 0 0 10px 0;
-    width: 15%;
+    width: 17%;
  }
 
  .divwrapper {
@@ -259,7 +259,7 @@ ul.nav-tabs > li:last-child > div > a::after {
  .activity ul li {
     list-style-type: none;
     display: inline-flex;
-    flex-direction: row;
+    flex-direction: column;
     margin: 0;
     width: 100%;
     align-items: center;
@@ -283,7 +283,7 @@ ul.nav-tabs > li:last-child > div > a::after {
     width: 100%;
     align-items: baseline;
     justify-items: baseline;
-    padding: 0 10px;
+    padding: 10px 10px;
     background: #f8f9fc;
  }
 
@@ -351,7 +351,7 @@ ul.nav-tabs > li:last-child > div > a::after {
     position: relative;
     display: flex;
     align-items: center;
-    margin: 20px 0;
+    margin: 10px 0;
     color: #8392a5;
     font-size: 10px;
     font-family: -apple-system, BlinkMacSystemFont, "Inter UI", Roboto, sans-serif;
@@ -426,6 +426,10 @@ ul.ngx-pagination {
     margin-top: 0 !important;
     width: 16px;
     height: 16px;
+}
+
+.form-check {
+    padding-left: 15px !important;
 }
 
 // .nav-item + .nav-item::before {

@@ -10,8 +10,10 @@ import { CcparequestService } from 'src/app/_services/ccparequest.service';
 import { DsarformService } from 'src/app/_services/dsarform.service';
 import { CCPAFormConfigurationService } from 'src/app/_services/ccpaform-configuration.service';
 import { WorkflowService } from 'src/app/_services/workflow.service';
-import { flatMap, switchMap } from 'rxjs/operators';
+import { flatMap, switchMap, map } from 'rxjs/operators';
 import { DomSanitizer, SafeResourceUrl, SafeHtml } from '@angular/platform-browser';
+import { Observable } from 'rxjs';
+import { HttpResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-dsarform',
@@ -96,7 +98,8 @@ export class DsarformComponent implements OnInit, OnDestroy {
   currentManagedPropID: any;
   currentManagedOrgID: any;
   uploadFilename: any;
-  capthchaID: SafeHtml;
+  capthchaID: Observable<any>; // SafeHtml;
+  captchaImage: SafeHtml;
   controlOption = [
     {
       id: 1,
@@ -173,6 +176,12 @@ export class DsarformComponent implements OnInit, OnDestroy {
   showFilesizeerror: boolean = false;
   showFileExtnerror: boolean = false;
   isFileUploadRequired: boolean = false;
+  imgUrl: string; // = 'https://develop-cmp-api.adzpier-staging.com/api/v1/captcha/image';
+
+  imageToShow: any;
+  isImageLoading: boolean;
+  captchacode: any;
+  captchaid: any;
   constructor(private fb: FormBuilder, private ccpaRequestService: CcparequestService,
               private organizationService: OrganizationService,
               private dsarFormService: DsarformService,
@@ -336,6 +345,7 @@ export class DsarformComponent implements OnInit, OnDestroy {
     this.loadCountryList();
     this.loadStateList();
     this.loadWorkFlowList();
+    this.loadCaptcha();
   }
 
   getCCPAdefaultConfigById() {
@@ -687,12 +697,18 @@ export class DsarformComponent implements OnInit, OnDestroy {
         }
 
       } else if (this.existingControl) {
+        this.webFormControlList = this.dsarFormService.getFormControlList();
         let updateCustomObj;
         const customControlIndex = this.webFormControlList.findIndex((t) =>
-          t.controllabel === this.existingControl.controllabel);
+          t.indexCount === this.existingControl.indexCount);
         //  const customControlIndex = this.webFormControlList.indexOf(this.existingControl.controllabel);
-        const emptyIndex = this.selectOptions.findIndex((t) => t.keylabel === '');
+        // const emptyIndex = this.selectOptions.findIndex((t) => t.keylabel === '');
+        // this.selectOptions[emptyIndex].keylabel = this.trimLabel;
+        const emptyIndex = this.selectOptions.findIndex((t) => t.keylabel !== '');
+       // if (emptyIndex === -1) {
         this.selectOptions[emptyIndex].keylabel = this.trimLabel;
+       // }
+
         if (customControlIndex !== -1) {
           updateCustomObj = {
             controllabel: formControls.value.lblText,
@@ -730,7 +746,10 @@ export class DsarformComponent implements OnInit, OnDestroy {
         this.cancelAddingFormControl();
       } else {
         const emptyIndex = this.selectOptions.findIndex((t) => t.keylabel === '');
-        this.selectOptions[emptyIndex].keylabel = this.trimLabel;
+        if (emptyIndex !== -1) {
+          this.selectOptions[emptyIndex].keylabel = this.trimLabel;
+        }
+
         const count = this.webFormControlList.length + 1;
         const newWebControl = {
           control: this.selectedFormOption,
@@ -1170,7 +1189,9 @@ export class DsarformComponent implements OnInit, OnDestroy {
         const key = 'response';
         this.ApproverList = data[key];
         const filterValue = this.ApproverList.filter((t) => t.approver_id === this.selectedApproverID);
-        this.defaultapprover = filterValue[0].approver_id;
+        if (filterValue.length > 0) {
+          this.defaultapprover = filterValue[0].approver_id;
+        }
       });
     }
   }
@@ -1180,7 +1201,9 @@ export class DsarformComponent implements OnInit, OnDestroy {
       const key = 'response';
       this.workFlowList = data[key];
       const filterValue = this.workFlowList.filter((t) => t.id === this.selectedWorkflowID);
-      this.workflow = filterValue[0].id;
+      if (filterValue.length > 0) {
+        this.workflow = filterValue[0].id;
+      }
     }, (error) => {
       this.alertMsg = error;
       this.isOpen = true;
@@ -1253,9 +1276,9 @@ export class DsarformComponent implements OnInit, OnDestroy {
     // }
   }
 
-  allowFileupload(event){
+  allowFileupload(event) {
     this.isFileUploadRequired = event.target.checked;
-    const oldControlIndex = this.webFormControlList.findIndex((t) =>  t.controlId === 'fileupload');
+    const oldControlIndex = this.webFormControlList.findIndex((t) => t.controlId === 'fileupload');
     this.webFormControlList = this.dsarFormService.getFormControlList();
     const obj = this.webFormControlList[oldControlIndex];
     obj.requiredfield = event.target.checked;
@@ -1263,24 +1286,57 @@ export class DsarformComponent implements OnInit, OnDestroy {
 
   }
 
- 
-
-  setSrcQuery(e, q) {
-    let src  = e.src;
-    let p = src.indexOf('?');
-    if (p >= 0) {
-      src = src.substr(0, p);
+  loadCaptcha() {
+    if (window.location.hostname === 'localhost') {
+      this.imgUrl = 'https://develop-cmp-api.adzpier-staging.com/api/v1/captcha/image';
     }
-    e.src = src + '?' + q;
+    if (window.location.hostname === 'develop-cmp.adzpier-staging.com') {
+      this.imgUrl = 'https://develop-cmp-api.adzpier-staging.com/api/v1/captcha/image';
+    } else if (window.location.hostname === 'cmp.adzpier-staging.com') {
+      this.imgUrl = 'https://privacyportal.adzpier-staging.com/api/v1/captcha/image';
+    }
+
+    this.ccpaFormConfigService.getCaptcha().subscribe((data) => {
+      this.captchaid = data.captchaid;
+      this.getImageFromService(this.imgUrl + '/' + this.captchaid + '.png');
+    });
+
   }
 
-  reload() {
-    this.setSrcQuery(document.getElementById('image'), 'reload=' + (new Date()).getTime());
-    this.setSrcQuery(document.getElementById('audio'), (new Date()).getTime());
-    return false;
+
+  createImageFromBlob(image: Blob) {
+    let reader = new FileReader();
+    reader.addEventListener('load', () => {
+      this.imageToShow = reader.result;
+    }, false);
+
+    if (image) {
+      reader.readAsDataURL(image);
+    }
   }
-  
-  
+
+  getImageFromService(url) {
+    this.isImageLoading = true;
+    this.ccpaFormConfigService.getImage(url).subscribe(data => {
+      this.createImageFromBlob(data);
+      this.isImageLoading = false;
+    }, error => {
+      this.isImageLoading = false;
+      console.log(error);
+    });
+  }
+
+  postCaptcha() {
+    const obj = {
+      captcha_id: this.captchaid,
+      captcha_solution: this.captchacode
+    };
+    this.ccpaFormConfigService.verifyCaptcha(obj).subscribe((data) => console.log(data));
+  }
+
+  transform(imgData) {
+    this.captchaImage = this.sanitizer.bypassSecurityTrustResourceUrl(imgData);
+  }
 
   ngOnDestroy() {
     // if (this.webFormSelectedData !== undefined) {

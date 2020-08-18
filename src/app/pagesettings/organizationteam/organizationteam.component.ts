@@ -129,14 +129,14 @@ export class OrganizationteamComponent implements OnInit {
             this.isOpen = true;
             this.alertType = 'success';
             this.loadOrgTeamMembers(this.organizationID);
-            this.modalService.dismissAll('Data Saved!');
+            this.onCancelClick();
           }
         }, (error) => {
           this.loading.stop();
           this.alertMsg = error.Taken_email || error;
           this.isOpen = true;
           this.alertType = 'danger';
-          this.modalService.dismissAll('Error!');
+          this.onCancelClick();
         });
     }
   }

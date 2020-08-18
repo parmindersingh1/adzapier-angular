@@ -14,7 +14,7 @@ interface WebFormModel {
   form_status: string;
   OID: any;
   PID: any;
-  active: boolean
+  active: boolean;
   settings: any;
   workflow: any;
   approver: any;
