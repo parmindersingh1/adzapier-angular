@@ -8,6 +8,7 @@ import { DsarformRoutingModule } from './dsarform-routing.module';
 import { NgbModule, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { QuillModule } from 'ngx-quill';
 import { SharedbootstrapModule } from 'src/app/sharedbootstrap/sharedbootstrap.module';
+import { BotDetectCaptchaModule } from 'angular-captcha';
 
 
 @NgModule({
@@ -20,7 +21,8 @@ import { SharedbootstrapModule } from 'src/app/sharedbootstrap/sharedbootstrap.m
    // NgbModule, NgbModal,
     DsarformRoutingModule,
     QuillModule.forRoot(),
-    SharedbootstrapModule
+    SharedbootstrapModule,
+    BotDetectCaptchaModule
   ]
  // providers:[NgbModule, NgbModal],
  

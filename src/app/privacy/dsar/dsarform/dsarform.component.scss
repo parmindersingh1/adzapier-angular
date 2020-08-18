@@ -225,19 +225,21 @@
   .dsarform-box {
     color: rgba(0, 0, 0, 0.87);
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     align-items: center;
     justify-content: space-between;
     box-sizing: border-box;
     cursor: move;
     background: white;
     font-size: 14px;
+    width: 50%;
   }
 
   .dsarform-box div > label {
     font-weight: bold;
     margin: 0;
     display: flex;
+    text-transform: capitalize;
   }
   
   .cdk-drag-preview {
@@ -579,4 +581,19 @@ span.previewbtn a {
 
 .txt-capitalize {
   text-transform: capitalize;
+}
+
+.flex-align-item {
+  display: flex;
+  align-items: center;
+}
+
+.align-form {
+  display:flex;
+  flex-direction:row;
+  align-items:center;
+}
+
+.displaynone {
+  display: none;
 }

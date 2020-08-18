@@ -224,7 +224,7 @@
                                 </div>
                                 <quill-editor formControlName="editorEmailMessage" [modules]="quillConfig">
                                 </quill-editor>
-                                <button type="submit" class="btn btn-sm btn-primary float-right mb-2 mt-2">Post
+                                <button type="submit" class="btn btn-xs btn-primary float-right mb-2 mt-2">Post
                                 </button>
                             </form>
                         </ng-template>
@@ -247,7 +247,8 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr *ngFor="let task of subTaskList$ | async">
+                                    <tr *ngFor="let task of subTaskListResponse"> <!-- subTaskList$ | async-->
+                                        <!-- <td>{{task | json}}</td> -->
                                         <td>
                                             <div class="tasklink"><span *ngIf="task.required"
                                                     class="color-red">*</span><a
@@ -274,9 +275,12 @@
                                             </a>
                                         </td>
                                     </tr>
-                                    <tr *ngIf="(subTaskList$ | async)?.length === 0">
+                                    <tr *ngIf="subTaskListResponse.length === 0">
                                         <td colspan="7">No record found.</td>
                                     </tr>
+                                    <!-- <tr *ngIf="(subTaskList$ | async)?.length === 0">
+                                        <td colspan="7">No record found.</td>
+                                    </tr> -->
                                 </tbody>
                             </table>
                         </ng-template>
@@ -294,7 +298,10 @@
                 <div [ngbNavOutlet]="nav" class="m-2"></div>
                 <div class="activity" *ngIf="isActivityLogOpen">
                     <ul>
-                        <li *ngFor="let data of activityLog | paginate:paginationConfig;">
+                        <li *ngFor="let data of activityLog | paginate:paginationConfig; let i = index">
+                            <!-- <div class="chat-group-divider" *ngIf="i==0">
+                                <span *ngIf="data.created_at">{{data.created_at | date:'longDate'}}</span>
+                            </div> -->
                             <div *ngIf="data.activity_type == 'post'" class="activity-log">
                                 <div class="chat-group-divider">
                                     <span *ngIf="data.created_at">{{data.created_at | date:'longDate'}}</span>
@@ -591,8 +598,8 @@
             </div>
 
             <div class="row">
-                <div class="col-sm-12 mb-3">
-                    <div>
+                <div class="col-sm-12 ml-2 mb-3">
+                    <div class="form-check">
                         <label for="issubtaskrequired"
                             class="form-check-label tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">
                             <input type="checkbox" class="form-check-input" formControlName="issubtaskrequired" />
@@ -625,12 +632,8 @@
                     <label for="subtaskdescription"
                         class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">
                         Reminder </label>
-                    <input type="text" formControlName="reminder"
-                        [ngClass]="{ 'is-invalid': isAddSubTaskSubmit && addsubTask.reminder.errors }"
+                    <input type="text" formControlName="reminder"                      
                         class="form-control" bsDatepicker [maxDate]="maxDate" [minDate]="minDate" [bsValue]="bsValue" />
-                    <div *ngIf="isAddSubTaskSubmit && addsubTask.reminder?.errors" class="invalid-feedback">
-                        <div *ngIf="addsubTask.reminder?.errors.required">Reminder date is required</div>
-                    </div>
                 </div>
             </div>
 
@@ -696,11 +699,11 @@
 
 
             <div class="row">
-                <div class="col-sm-12 mb-3">
+                <div class="col-sm-12 ml-2 mb-3">
                     <div class="form-check">
                         <label for="markcompleted"
-                            class="form-check-label tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03 ml-2">
-                            <input type="checkbox" class="form-check-input" formControlName="markcompleted" />
+                            class="form-check-label tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">
+                            <input type="checkbox" class="form-check-input" formControlName="markcompleted" id="markcompleted" />
                             Mark as complete
                         </label>
                     </div>

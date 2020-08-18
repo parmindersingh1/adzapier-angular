@@ -3,7 +3,7 @@ import { Validators, FormBuilder, FormGroup, NgForm } from '@angular/forms';
 import { AuthenticationService, UserService } from '../_services';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MustMatch } from '../_helpers/must-match.validator';
-import {NgxUiLoaderService} from 'ngx-ui-loader';
+import { NgxUiLoaderService } from 'ngx-ui-loader';
 
 @Component({
   selector: 'app-edit-profile',
@@ -35,6 +35,9 @@ export class EditProfileComponent implements OnInit {
   state: any;
   zipcode: any;
   companyname: any;
+  alertMsg: any;
+  isOpen = false;
+  alertType: any;
   // roles: any;
   constructor(
     private formBuilder: FormBuilder,
@@ -60,7 +63,7 @@ export class EditProfileComponent implements OnInit {
       state: ['', [Validators.required, Validators.pattern(strRegx)]],
       zipcode: ['', [Validators.required, Validators.pattern(zipRegex)]],
     });
-  //  this.profileForm.disable();
+    //  this.profileForm.disable();
     this.profileForm.controls['newemail'].disable();
     this.profileForm.controls['companyname'].disable();
     this.pathValues();
@@ -99,21 +102,23 @@ export class EditProfileComponent implements OnInit {
         .subscribe((data) => {
           this.loadingBar.stop();
           if (data) {
-          //  this.isShowbtnVisible = false;
-           // this.show = true;
-            alert('Details has been updated successfully!');
+            this.alertMsg = 'Details has been updated successfully!';
+            this.isOpen = true;
+            this.alertType = 'success';
             this.userService.getCurrentUser.emit(data);
             this.modalService.dismissAll('Data Saved!');
             this.loadUserDetails();
           }
         }, (error) => {
-            this.loadingBar.stop();
-            alert(error);
-         // this.isShowbtnVisible = true;
+          this.loadingBar.stop();
+          this.alertMsg = error;
+          this.isOpen = true;
+          this.alertType = 'danger';
+          // this.isShowbtnVisible = true;
           // this.show = false;
         }
         );
-     // this.profileForm.disable();
+      // this.profileForm.disable();
     }
   }
 
@@ -137,11 +142,11 @@ export class EditProfileComponent implements OnInit {
 
   editUserDetails() {
     this.show = !this.show;
-  //  this.isShowbtnVisible = false;
+    //  this.isShowbtnVisible = false;
     if (!this.show) {
       this.profileForm.enable();
       this.profileForm.controls['newemail'].disable();
-     // this.isShowbtnVisible = true;
+      // this.isShowbtnVisible = true;
     } else {
       this.profileForm.disable();
       this.profileForm.controls['newemail'].disable();
@@ -156,7 +161,7 @@ export class EditProfileComponent implements OnInit {
   editOrganizationModalPopup(content) {
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
     }, (reason) => {
-     // this.profileForm.reset();
+      // this.profileForm.reset();
     });
   }
 
@@ -168,7 +173,7 @@ export class EditProfileComponent implements OnInit {
       this.newemail = this.userProfile[0].email;
       this.firstName = this.userProfile[0].firstname;
       this.lastName = this.userProfile[0].lastname;
-      this.addressone =  this.userProfile[0].address1;
+      this.addressone = this.userProfile[0].address1;
       this.city = this.userProfile[0].city;
       this.state = this.userProfile[0].state;
       this.zipcode = this.userProfile[0].zipcode;
@@ -199,23 +204,33 @@ export class EditProfileComponent implements OnInit {
       if (data) {
         this.show = true;
         this.successMsg = data.response;
+        this.alertMsg = data.response;
+        this.isOpen = true;
+        this.alertType = 'success';
       }
       console.log(data, 'data..');
     }, (error) => {
       this.loadingBar.stop();
       this.show = false;
-      this.errorMsg = error.Password_mismatch;
+      this.alertMsg = error.Password_mismatch;
+      this.isOpen = true;
+      this.alertType = 'danger';
     });
   }
 
   onResetChangePassword() {
-   // this.changePwdSubmitted = false;
+    // this.changePwdSubmitted = false;
     this.changepasswordForm.reset();
   }
 
   onResetProfile() {
     this.submitted = false;
     this.modalService.dismissAll('Data Saved!');
+  }
+
+  onClosed(dismissedAlert: any): void {
+    this.alertMsg = !dismissedAlert;
+    this.isOpen = false;
   }
 }
 
