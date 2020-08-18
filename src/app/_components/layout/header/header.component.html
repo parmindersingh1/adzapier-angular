@@ -115,7 +115,7 @@
   <div class="navbar-right" *ngIf="currentUser">
     <ul class="navbar-nav">
       <li *ngFor="let menu of rightItems" class="nav-item">
-        <div *ngIf="!menu.items" container="body">trtyr
+        <div *ngIf="!menu.items" container="body">
           <a *ngIf="!menu.items" routerLinkActive="active" class="nav-link" routerLink="{{menu.routerLink}}">
             <i *ngIf="menu.icon" class="{{ menu.icon }}"></i>{{ menu.label }}
           </a>
@@ -135,10 +135,10 @@
                   <p class="tx-12 tx-color-03">{{userRole}}</p>
                 </div>
                 <li *ngIf="!item.items" role="menuitem">
-                  <a class="dropdown-item" routerLinkActive="active" *ngIf="item.label !== 'Signout'" routerLink="{{item.routerLink}}">
+                  <a class="dropdown-item" *ngIf="item.label !== 'Signout'" routerLink="{{item.routerLink}}">
                     <i-feather *ngIf="item.icon" name="{{item.icon}}" class="feather-16"></i-feather>{{item.label}}
                   </a>
-                  <a class="dropdown-item" routerLinkActive="active" *ngIf="item.label === 'Signout'" (click)="logout()"
+                  <a class="dropdown-item" *ngIf="item.label === 'Signout'" (click)="logout()"
                     routerLink="{{item.routerLink}}">
                     <i-feather *ngIf="item.icon" name="{{item.icon}}" class="feather-16"></i-feather>{{item.label}}
                   </a>

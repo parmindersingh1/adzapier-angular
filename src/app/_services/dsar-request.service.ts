@@ -58,14 +58,13 @@ export class DsarRequestService {
   getSubTask(requestID, stageID, subtaskID?): Observable<any> {
 
     if (subtaskID) {
-      if (!this.subTasklist$) {
-        this.subTasklist$ = this.http.get<any>(environment.apiUrl + '/ccpa/subtask/' + requestID + '/' + stageID + '/' + subtaskID).pipe(shareReplay(1));
-      }
-      return this.subTasklist$;
-    }
-    else {
-      this.subTasklist$ = this.http.get<any>(environment.apiUrl + '/ccpa/subtask/' + requestID + '/' + stageID).pipe(shareReplay(1));
-      return this.subTasklist$;
+     // if (!this.subTasklist$) {
+       return this.http.get<any>(environment.apiUrl + '/ccpa/subtask/' + requestID + '/' + stageID + '/' + subtaskID).pipe(shareReplay(1));
+     // }
+     // return this.subTasklist$;
+    } else {
+     return this.http.get<any>(environment.apiUrl + '/ccpa/subtask/' + requestID + '/' + stageID).pipe(shareReplay(1));
+     // return this.subTasklist$;
     }
 
   }

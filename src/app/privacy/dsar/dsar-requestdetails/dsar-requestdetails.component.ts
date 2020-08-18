@@ -113,6 +113,7 @@ export class DsarRequestdetailsComponent implements OnInit {
   isEditSubTask: boolean = false;
   isResponseToSubTask: boolean = false;
   selectedTaskID: any;
+  isDisable: boolean = true;
   paginationConfig = { itemsPerPage: this.pageSize, currentPage: this.p, totalItems: this.totalCount, id: 'userPagination' };
   quillConfig = {
     toolbar: {
@@ -133,7 +134,7 @@ export class DsarRequestdetailsComponent implements OnInit {
   subTaskList$: Observable<any[]>;
   subTaskListResponse: any = [];
   isTaskTabOpen: boolean = false;
-  isAddSubTaskSubmit: boolean;
+  isAddSubTaskSubmit: boolean = false;
   today: Date;
   displayAssignee: any;
   displayTaskDescription: any;
@@ -167,7 +168,7 @@ export class DsarRequestdetailsComponent implements OnInit {
     });
 
     this.quillEditorText = new FormGroup({
-      editor: new FormControl('',Validators.required)
+      editor: new FormControl('', Validators.required)
     });
     this.quillEditorEmailText = new FormGroup({
       dropdownEmailTemplate: new FormControl(null),
@@ -213,7 +214,7 @@ export class DsarRequestdetailsComponent implements OnInit {
     this.loadStateList();
     this.loadDSARRequestDetailsByID();
     this.preFillData();
-
+    // this.onChanges();
   }
   get addActivity() { return this.quillEditorText.controls; }
   get editRequest() { return this.editRequestDetailForm.controls; }
@@ -411,8 +412,9 @@ export class DsarRequestdetailsComponent implements OnInit {
   }
 
   stageSelection(item) {
+    // this.getSubTaskList();
     this.currentStage = item.order;
-    if (!this.isSubTaskExist()) {
+    if (this.isSubTaskExist(item)) {
       if (this.selectedStages.length == 0) {
         this.nextStage = 0;
       } else {
@@ -435,13 +437,24 @@ export class DsarRequestdetailsComponent implements OnInit {
           if (item.order !== 1) {
             this.previousStageId = this.selectedStages.filter((t) => t.order == item.order - 1)[0].id;
           }
-          const reqObj = {
-            current_status: this.currentStageId,
-            previous_status: this.previousStageId ? this.previousStageId : this.previousStageId = ''
+          let reqObj;
+          if (this.previousStageId) {
+            reqObj = {
+              current_status: this.currentStageId,
+              previous_status: this.previousStageId
+            };
+          } else {
+            reqObj = {
+              current_status: this.currentStageId
+            };
           }
+          // const reqObj = {
+          //   current_status: this.currentStageId,
+          //   previous_status: this.previousStageId ? this.previousStageId : this.previousStageId = ''
+          // }
           console.log(reqObj, 'stage selection..');
           this.stageAPI(this.requestID, reqObj);
-          this.getSubTaskList();
+          // this.getSubTaskList();
         } else {
           this.alertMsg = 'Can not skip stages!';
           this.isOpen = true;
@@ -451,8 +464,8 @@ export class DsarRequestdetailsComponent implements OnInit {
 
 
       } else if (this.isPreviousStageSelected(item)) {
-        let diff = this.nextStage - item.order;
-        this.openModal(this.confirmModal, diff, item)
+        const diff = this.nextStage - item.order;
+        this.openModal(this.confirmModal, diff, item);
       }
     } else {
       this.alertMsg = 'Without completing subtask can not switch to other stage';
@@ -515,7 +528,7 @@ export class DsarRequestdetailsComponent implements OnInit {
       const reqObj = {
         current_status: this.currentStageId,
         previous_status: this.previousStageId,
-        activity_feedback:  this.quillEditorText.get('editor').value //this.editorActivityPost
+        activity_feedback: this.quillEditorText.get('editor').value //this.editorActivityPost
       }
       this.stageAPI(this.requestID, reqObj);
     }
@@ -538,7 +551,7 @@ export class DsarRequestdetailsComponent implements OnInit {
   }
 
   isCurrentPreviousStageEqual(item): boolean {
-    return this.nextStage == item.order;
+    return this.nextStage === item.order;
   }
 
   isPreviousStageExist(item): boolean {
@@ -552,16 +565,29 @@ export class DsarRequestdetailsComponent implements OnInit {
     return this.selectedStages.findIndex((t) => t.order == item.order) === -1;
   }
 
-  isSubTaskExist(): boolean {
+  isSubTaskExist(stage): boolean {
 
-    if (this.subTaskListResponse.length !== 0) {
+
+    if (this.subTaskListResponse[0] !== undefined && this.subTaskListResponse.length !== 0) {
       const lastStage = this.selectedStages[this.selectedStages.length - 1];
-      const issubTaskExist = this.subTaskListResponse.some((t) => t.workflow_stage === lastStage.id);
-      const isSubTaskCompleted = this.subTaskListResponse.some((t) => t.mark_completed === false);
-      const isSubTaskRequired = this.subTaskListResponse.some((t) => t.required === true);
-      if (issubTaskExist && isSubTaskCompleted && isSubTaskRequired) {
-        return true;
+      //  const matchStage = this.selectedStages.some((t) => t.id === stage.id);
+      const isSubTaskCompleted = this.subTaskListResponse.some((t) => t.workflow_stage === lastStage.id &&
+        t.mark_completed === false && t.required === true);
+      // const isSubTaskCompleted = this.subTaskListResponse.some((t) => t.mark_completed === true && t.required === true
+      //   && t.workflow_stage === stage.id);
+      // const isSubTaskRequired = this.subTaskListResponse.some((t) => t.required === true);
+      //  if (matchStage) {
+      if (isSubTaskCompleted) {
+        return false;
+      } else {
+        return true; // if selected stage subtask is already completed
       }
+      //  } 
+      // else {
+      //   return true;
+      // }
+    } else if (this.subTaskListResponse.length === 0) {
+      return true;
     }
   }
 
@@ -575,19 +601,25 @@ export class DsarRequestdetailsComponent implements OnInit {
   onSubmitActivityPost() {
     //this.selectedStages[this.selectedStages.length - 1].id
     this.isActivitysubmitted = true;
-    if(this.quillEditorText.invalid){
+    if (this.quillEditorText.invalid) {
       return false;
-    } else{
-      console.log(this.selectedStages[this.selectedStages.length - 1].id);
+    } else {
+      //  console.log(this.selectedStages[this.selectedStages.length - 1].id);
       const reqObj = {
         current_status: this.currentStageId !== undefined ? this.currentStageId : this.workflowStages[this.workflowStages.length - 1].id,
-        previous_status: this.previousStageId !== undefined ? this.previousStageId : '',
+        previous_status: this.previousStageId,
         activity_feedback: this.quillEditorText.get('editor').value //this.editorActivityPost
-      }
+      };
+      Object.keys(reqObj).forEach(key => {
+        if (reqObj[key] === undefined) {
+          delete reqObj[key];
+        }
+      });
       console.log(reqObj, 'state req..onSubmitActivityPost');
+      //  return false;
       this.stageAPI(this.requestID, reqObj);
     }
-   
+
   }
 
   onSubmitEmailPost() {
@@ -682,7 +714,8 @@ export class DsarRequestdetailsComponent implements OnInit {
       this.subTaskForm.controls['subtaskdescription'].setValue(data.description);
       this.subTaskForm.controls['issubtaskrequired'].setValue(data.required);
       this.subTaskForm.controls['deadline'].setValue(new Date(data.deadline));
-      this.subTaskForm.controls['reminder'].setValue(new Date(data.reminder));
+      data.reminder !== null ? this.subTaskForm.controls['reminder'].setValue(new Date(data.reminder)) :
+      this.subTaskForm.controls['reminder'].setValue('');
       this.subTaskForm.controls['assignee'].setValue(this.selectedAssignee);
 
       this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
@@ -865,7 +898,7 @@ export class DsarRequestdetailsComponent implements OnInit {
       this.alertMsg = err;
       this.isOpen = true;
       this.alertType = 'danger';
-    })
+    });
   }
 
   onSubmitAddSubTask() {
@@ -879,11 +912,12 @@ export class DsarRequestdetailsComponent implements OnInit {
         description: this.subTaskForm.controls['subtaskdescription'].value,
         required: this.subTaskForm.controls['issubtaskrequired'].value || false,
         deadline: new Date(this.subTaskForm.controls['deadline'].value).toJSON(),
-        reminder: new Date(this.subTaskForm.controls['reminder'].value).toJSON()
-      }
+        reminder: (this.subTaskForm.controls['reminder'].value !== null) ?
+                  new Date(this.subTaskForm.controls['reminder'].value).toJSON() : null
+      };
 
       console.log(obj, 'obj..', this.currentStageId, 'currentStageId..');
-      const currentStageID = this.currentStageId ? this.currentStageId : this.currentWorkflowStageID
+      const currentStageID = this.currentStageId ? this.currentStageId : this.currentWorkflowStageID;
       if (!this.isEditSubTask) {
         this.dsarRequestService.addSubTask(this.requestID, currentStageID, obj)
           .subscribe((data) => {
@@ -891,13 +925,13 @@ export class DsarRequestdetailsComponent implements OnInit {
             this.isOpen = true;
             this.alertType = 'success';
             this.getSubTaskList();
-            this.subTaskForm.reset();
-            this.modalService.dismissAll('Canceled');
+            this.onResetSubTask();
           }, (error) => {
             this.alertMsg = error;
             this.isOpen = true;
             this.alertType = 'danger';
-          })
+            this.onResetSubTask();
+           });
       } else { // update sub task
         this.dsarRequestService.updateSubTask(this.selectedTaskID, obj)
           .subscribe((data) => {
@@ -955,16 +989,7 @@ export class DsarRequestdetailsComponent implements OnInit {
       fd.append('task_response', this.subTaskResponseForm.get('taskresponse').value);
       fd.append('mark_completed', this.subTaskResponseForm.get('markcompleted').value);
       fd.append('upload', this.subTaskResponseForm.get('uploaddocument').value);
-      const obj = {
-        task_response: this.subTaskResponseForm.controls['taskresponse'].value,
-        mark_completed: this.subTaskResponseForm.controls['markcompleted'].value,
-        upload: this.subTaskResponseForm.controls['uploaddocument'].value
-        // required: this.subTaskForm.controls['issubtaskrequired'].value || false,
-        // deadline: new Date(this.subTaskForm.controls['deadline'].value).toJSON(),
-        // reminder: new Date(this.subTaskForm.controls['reminder'].value).toJSON()
-      }
 
-      console.log(obj, 'obj..');
     //  return false;
       this.dsarRequestService.addSubTaskResponse(this.selectedTaskID, fd)
         .subscribe((data) => {
@@ -972,14 +997,13 @@ export class DsarRequestdetailsComponent implements OnInit {
           this.isOpen = true;
           this.alertType = 'success';
           this.getSubTaskList();
-          this.subTaskResponseForm.reset();
-          this.modalService.dismissAll('Canceled');
+          this.onCancelSubTaskResponse();
         }, (error) => {
-          this.alertMsg = error;
+          this.alertMsg = JSON.stringify(error);
           this.isOpen = true;
           this.alertType = 'danger';
-          this.subTaskResponseForm.reset();
-        })
+          this.onCancelSubTaskResponse();
+        });
     }
   }
 
@@ -1000,18 +1024,10 @@ export class DsarRequestdetailsComponent implements OnInit {
     const currentStageID = this.currentStageId ? this.currentStageId : this.currentWorkflowStageID;
     if (currentStageID) {
       let resp;
-      this.subTaskList$ = this.dsarRequestService.getSubTask(this.requestID, currentStageID).pipe(map((t) => t.response));
-      this.subTaskList$.subscribe((data) => this.subTaskListResponse = data);
-      console.log(this.subTaskListResponse, '..subTaskListResponse');
-      //  this.dsarRequestService.getSubTask(this.requestID, currentStageID)
-      //  .subscribe((data) => {
-      //       this.subTaskListResponse = data.response;
-      //       console.log(this.subTaskListResponse, 'subTaskListResponse..');
-      //     }, (error) => {
-      //       this.alertMsg = error;
-      //       this.isOpen = true;
-      //       this.alertType = 'danger';
-      //     })
+      this.dsarRequestService.getSubTask(this.requestID, currentStageID).subscribe((data) => {
+        return this.subTaskListResponse = data.response;
+      });
+      
     } else {
       this.alertMsg = 'Stage not selected!';
       this.isOpen = true;
@@ -1038,10 +1054,21 @@ export class DsarRequestdetailsComponent implements OnInit {
     return this.displayAssignee = approverName[0].user_name;
   }
 
-  onCancelSubTaskResponse(){
+  onCancelSubTaskResponse() {
     this.isResponseSubmitted = false;
+    this.uploadFilename = '';
     this.subTaskResponseForm.reset();
     this.modalService.dismissAll('Canceled');
+  }
+
+  onChanges() {
+    this.subTaskResponseForm.get('taskresponse').valueChanges.subscribe((data) => {
+      if (data !== '') {
+        this.subTaskResponseForm.get('markcompleted').enable();
+      } else {
+        this.subTaskResponseForm.get('markcompleted').disable();
+      }
+    });
   }
 
 }

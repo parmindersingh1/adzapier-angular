@@ -6,6 +6,7 @@ import { OrganizationService } from 'src/app/_services';
 import { Observable } from 'rxjs';
 import { CCPAFormFields } from 'src/app/_models/ccpaformfields';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
+import { CaptchaComponent } from 'angular-captcha'; 
 
 
 interface WebFormModel {
@@ -14,7 +15,7 @@ interface WebFormModel {
   form_status: string;
   OID: any;
   PID: any;
-  active: boolean
+  active: boolean;
   settings: any;
   workflow: any;
   approver: any;
