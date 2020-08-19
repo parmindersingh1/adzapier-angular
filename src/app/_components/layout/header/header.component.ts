@@ -207,7 +207,7 @@ export class HeaderComponent implements OnInit {
           showlink: 'Dashboard',
           subcategory: [{ showlink: 'CCPA DSAR', routerLink: '/home/dashboard/ccpa-dsar', icon: 'bar-chart-2' },
           { showlink: 'GDPR', routerLink: '/pagenotfound', icon: 'pie-chart' },
-          { showlink: 'Cookie Consent', routerLink: '/pagenotfound', icon: 'fas fa-cookie feather-16' }
+          { showlink: 'Cookie Consent', routerLink: '/home/dashboard/cookie-consent', icon: 'fas fa-cookie feather-16' }
           ]
         }, {
           showlink: 'Privacy',
@@ -217,7 +217,7 @@ export class HeaderComponent implements OnInit {
             { showlink: 'Requests', routerLink: '/privacy/dsar/dsar-requests', icon: 'fa fa-ticket-alt feather-16' },
             { showlink: 'Work flow', routerLink: '/privacy/dsar/workflows', icon: 'shield-off' },
             { showlink: 'Cookie Category', routerLink: '/privacy/cookie-category', icon: 'fab fa-microsoft feather-16' },
-            { showlink: 'Cookie Banner', routerLink: '/pagenotfound', icon: 'fas fa-cookie feather-16' },
+            { showlink: 'Cookie Banner', routerLink: '/privacy/cookie-banner', icon: 'fas fa-cookie feather-16' },
             { showlink: 'Consent Tracking', routerLink: '/pagenotfound', icon: 'fas fa-file-contract feather-16' },
             { showlink: 'Setup', routerLink: '/pagenotfound', icon: 'fas fa-wrench feather-16' }
           ]
