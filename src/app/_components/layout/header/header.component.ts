@@ -438,9 +438,9 @@ export class HeaderComponent implements OnInit {
     if (orgDetails !== undefined) {
       const result = data.filter((t) => t.id === orgDetails.organization_id).length > 0;
       const isSameUserLoggedin = orgDetails.user_id === this.userID;
-      if(result && isSameUserLoggedin){
+      if (result && isSameUserLoggedin) {
         return true;
-      }else{
+      } else {
         return false;
       }
     }
