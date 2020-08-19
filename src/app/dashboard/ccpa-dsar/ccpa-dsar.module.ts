@@ -6,6 +6,7 @@ import {AuthGuard} from "../../_helpers";
 import {CcpaDsarComponent} from "./ccpa-dsar.component";
 import {SharedbootstrapModule} from "../../sharedbootstrap/sharedbootstrap.module";
 import {ChartsModule} from "ng2-charts";
+import {BsDropdownModule} from 'ngx-bootstrap';
 
 const routes: Routes = [
   {path: '', component: CcpaDsarComponent,  canActivate: [AuthGuard]}
@@ -13,11 +14,12 @@ const routes: Routes = [
 
 @NgModule({
   declarations: [CcpaDsarComponent],
-  imports: [
-    CommonModule,
-    SharedbootstrapModule,
-    ChartsModule,
-  RouterModule.forChild(routes),
-]
+    imports: [
+        CommonModule,
+        SharedbootstrapModule,
+        ChartsModule,
+        RouterModule.forChild(routes),
+        BsDropdownModule,
+    ]
 })
 export class CcpaDsarModule { }

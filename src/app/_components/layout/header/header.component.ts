@@ -207,7 +207,7 @@ export class HeaderComponent implements OnInit {
           showlink: 'Dashboard',
           subcategory: [{ showlink: 'CCPA DSAR', routerLink: '/home/dashboard/ccpa-dsar', icon: 'bar-chart-2' },
           { showlink: 'GDPR', routerLink: '/pagenotfound', icon: 'pie-chart' },
-          { showlink: 'Cookie Consent', routerLink: '/pagenotfound', icon: 'fas fa-cookie feather-16' }
+          { showlink: 'Cookie Consent', routerLink: '/home/dashboard/cookie-consent', icon: 'fas fa-cookie feather-16' }
           ]
         }, {
           showlink: 'Privacy',
@@ -217,7 +217,7 @@ export class HeaderComponent implements OnInit {
             { showlink: 'Requests', routerLink: '/privacy/dsar/dsar-requests', icon: 'fa fa-ticket-alt feather-16' },
             { showlink: 'Work flow', routerLink: '/privacy/dsar/workflows', icon: 'shield-off' },
             { showlink: 'Cookie Category', routerLink: '/privacy/cookie-category', icon: 'fab fa-microsoft feather-16' },
-            { showlink: 'Cookie Banner', routerLink: '/pagenotfound', icon: 'fas fa-cookie feather-16' },
+            { showlink: 'Cookie Banner', routerLink: '/privacy/cookie-banner', icon: 'fas fa-cookie feather-16' },
             { showlink: 'Consent Tracking', routerLink: '/pagenotfound', icon: 'fas fa-file-contract feather-16' },
             { showlink: 'Setup', routerLink: '/pagenotfound', icon: 'fas fa-wrench feather-16' }
           ]
@@ -363,20 +363,25 @@ export class HeaderComponent implements OnInit {
         this.rearrangeFormSequence(this.orgPropertyMenu);
         this.selectedOrgProperties.length = 0;
         if (!this.isOrgPropertyExists(this.orgPropertyMenu)) {
-          this.activeProp = this.orgPropertyMenu[0].property[0].property_name;
-          const obj = {
-            organization_id: this.orgPropertyMenu[0].id,
-            organization_name: this.orgPropertyMenu[0].orgname,
-            property_id: this.orgPropertyMenu[0].property[0].property_id,
-            property_name: this.orgPropertyMenu[0].property[0].property_name,
-            user_id: this.userID
-          };
-          this.orgservice.changeCurrentSelectedProperty(obj);
-          // this.orgservice.getSelectedOrgProperty.emit(obj);
-          //  this.firstElement = false;
-          this.selectedOrgProperties.push(obj);
-          this.orgservice.setCurrentOrgWithProperty(obj);
-
+          if (typeof this.orgPropertyMenu[0].property[0] === 'undefined') {
+            // this.router.navigate(['settings/organizations']);
+            this.router.navigate(['settings/organizations/organizationdetails/' + this.orgPropertyMenu[0].id]);
+            return false;
+          } else {
+            this.activeProp = this.orgPropertyMenu[0].property[0].property_name;
+            const obj = {
+              organization_id: this.orgPropertyMenu[0].id,
+              organization_name: this.orgPropertyMenu[0].orgname,
+              property_id: this.orgPropertyMenu[0].property[0].property_id,
+              property_name: this.orgPropertyMenu[0].property[0].property_name,
+              user_id: this.userID
+            };
+            this.orgservice.changeCurrentSelectedProperty(obj);
+            // this.orgservice.getSelectedOrgProperty.emit(obj);
+            //  this.firstElement = false;
+            this.selectedOrgProperties.push(obj);
+            this.orgservice.setCurrentOrgWithProperty(obj);
+          }
         } else {
           this.currentSelectedProperty();
         }
@@ -403,7 +408,7 @@ export class HeaderComponent implements OnInit {
   loadOrgPropertyFromLocal() {
     const orgDetails = this.orgservice.getCurrentOrgWithProperty();
     if (orgDetails !== undefined) {
-      if (orgDetails.user_id) { //=== this.userID
+      if (orgDetails.user_id === this.userID) { //=== this.userID
         this.currentOrganization = orgDetails.organization_name ? orgDetails.organization_name : orgDetails.response.orgname;
         this.currentProperty = orgDetails.property_name;
         this.selectedOrgProperties.push(orgDetails);
@@ -431,8 +436,13 @@ export class HeaderComponent implements OnInit {
   isOrgPropertyExists(data): boolean {
     const orgDetails = this.orgservice.getCurrentOrgWithProperty();
     if (orgDetails !== undefined) {
-      const result = data.filter((t) => t.orgname == orgDetails.organization_name).length > 0;
-      return result;
+      const result = data.filter((t) => t.id === orgDetails.organization_id).length > 0;
+      const isSameUserLoggedin = orgDetails.user_id === this.userID;
+      if (result && isSameUserLoggedin) {
+        return true;
+      } else {
+        return false;
+      }
     }
   }
 
