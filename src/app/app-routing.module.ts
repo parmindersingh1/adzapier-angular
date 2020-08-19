@@ -67,6 +67,10 @@ const routes: Routes = [
     path: 'privacy/cookie-category', loadChildren: () => import('./privacy/cookie-category/cookie-category.module')
       .then(m => m.CookieCategoryModule)
   },
+  {
+    path: 'privacy/cookie-banner', loadChildren: () => import('./privacy/cookie-banner/cookie-banner.module')
+      .then(m => m.CookieBannerModule)
+  },
   { path: 'privacy/dsar/createworkflow', loadChildren: () => import('./privacy/dsar/createworkflow/createworkflow.module')
   .then(m => m.CreateworkflowModule) },
   { path: 'privacy/dsar/createworkflow/:id', loadChildren: () => import('./privacy/dsar/createworkflow/createworkflow.module')

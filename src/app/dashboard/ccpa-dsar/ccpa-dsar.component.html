@@ -17,19 +17,20 @@
         <button class="btn btn-sm pd-x-15 btn-primary btn-uppercase mg-l-5"><i data-feather="file" class="wd-10 mg-r-5"></i> Generate Report</button> -->
 
 
-
       <span id="reportrange"
-        style="background: #fff; cursor: pointer; padding: 9px 10px; border: 1px solid #ccc; width: 100%"
-        class="rounded-5">
+            style="background: #fff; cursor: pointer; padding: 9px 10px; border: 1px solid #ccc; width: 100%"
+            class="rounded-5">
         <i class="fa fa-calendar"></i>&nbsp;
         <span></span> <i class="fa fa-caret-down"></i>
 
       </span>
       <button (click)="onPrint()" class="btn btn-sm pd-x-15 btn-white btn-uppercase mg-l-5" id="printReport"><i
-          class="fas fa-print" style='font-size:14px'></i> Print</button>
+        class="fas fa-print" style='font-size:14px'></i> Print
+      </button>
 
       <button (click)="onGetPropsAndOrgId(); onGetCcpaAndDsar(); onGetRequestByState()"
-        class="btn btn-sm pd-x-15 btn-white btn-uppercase mg-l-5"><i class="fas fa-sync"></i> Refresh</button>
+              class="btn btn-sm pd-x-15 btn-white btn-uppercase mg-l-5"><i class="fas fa-sync"></i> Refresh
+      </button>
 
 
     </div>
@@ -44,9 +45,11 @@
           <!-- <p class="tx-11 tx-color-03 mg-b-0"><span class="tx-medium tx-success">100 <i class="icon ion-md-arrow-up"></i></span> than last week</p> -->
         </div>
         <div class="chart-three">
-          <div id="flotChart3" class="flot-chart ht-30" style="padding: 0px; position: relative;"><canvas
+          <div id="flotChart3" class="flot-chart ht-30" style="padding: 0px; position: relative;">
+            <canvas
               class="flot-base" width="501" height="60"
-              style="direction: ltr; position: absolute; left: 0px; top: 0px; width: 250.5px; height: 30px;"></canvas><canvas
+              style="direction: ltr; position: absolute; left: 0px; top: 0px; width: 250.5px; height: 30px;"></canvas>
+            <canvas
               class="flot-overlay" width="501" height="60"
               style="direction: ltr; position: absolute; left: 0px; top: 0px; width: 250.5px; height: 30px;"></canvas>
           </div>
@@ -61,9 +64,11 @@
           <!-- <p class="tx-11 tx-color-03 mg-b-0"><span class="tx-medium tx-danger">10 <i class="icon ion-md-arrow-down"></i></span> than last week</p> -->
         </div>
         <div class="chart-three">
-          <div id="flotChart4" class="flot-chart ht-30" style="padding: 0px; position: relative;"><canvas
+          <div id="flotChart4" class="flot-chart ht-30" style="padding: 0px; position: relative;">
+            <canvas
               class="flot-base" width="501" height="60"
-              style="direction: ltr; position: absolute; left: 0px; top: 0px; width: 250.5px; height: 30px;"></canvas><canvas
+              style="direction: ltr; position: absolute; left: 0px; top: 0px; width: 250.5px; height: 30px;"></canvas>
+            <canvas
               class="flot-overlay" width="501" height="60"
               style="direction: ltr; position: absolute; left: 0px; top: 0px; width: 250.5px; height: 30px;"></canvas>
           </div>
@@ -78,9 +83,11 @@
           <!-- <p class="tx-11 tx-color-03 mg-b-0"><span class="tx-medium tx-danger">0.3% <i class="icon ion-md-arrow-down"></i></span> than last week</p> -->
         </div>
         <div class="chart-three">
-          <div id="flotChart5" class="flot-chart ht-30" style="padding: 0px; position: relative;"><canvas
+          <div id="flotChart5" class="flot-chart ht-30" style="padding: 0px; position: relative;">
+            <canvas
               class="flot-base" width="501" height="60"
-              style="direction: ltr; position: absolute; left: 0px; top: 0px; width: 250.5px; height: 30px;"></canvas><canvas
+              style="direction: ltr; position: absolute; left: 0px; top: 0px; width: 250.5px; height: 30px;"></canvas>
+            <canvas
               class="flot-overlay" width="501" height="60"
               style="direction: ltr; position: absolute; left: 0px; top: 0px; width: 250.5px; height: 30px;"></canvas>
           </div>
@@ -95,9 +102,11 @@
           <!-- <p class="tx-11 tx-color-03 mg-b-0"><span class="tx-medium tx-success">2.1% <i class="icon ion-md-arrow-up"></i></span> than last week</p> -->
         </div>
         <div class="chart-three">
-          <div id="flotChart6" class="flot-chart ht-30" style="padding: 0px; position: relative;"><canvas
+          <div id="flotChart6" class="flot-chart ht-30" style="padding: 0px; position: relative;">
+            <canvas
               class="flot-base" width="501" height="60"
-              style="direction: ltr; position: absolute; left: 0px; top: 0px; width: 250.5px; height: 30px;"></canvas><canvas
+              style="direction: ltr; position: absolute; left: 0px; top: 0px; width: 250.5px; height: 30px;"></canvas>
+            <canvas
               class="flot-overlay" width="501" height="60"
               style="direction: ltr; position: absolute; left: 0px; top: 0px; width: 250.5px; height: 30px;"></canvas>
           </div>
@@ -124,17 +133,17 @@
           </ul>
         </div><!-- card-header -->
 
-<!--        <canvas baseChart-->
-<!--                [datasets]="lineChartData"-->
-<!--                [labels]="lineChartLabels"-->
-<!--                [options]="lineChartOptions"-->
-<!--                [colors]="lineChartColors"-->
-<!--                [legend]="lineChartLegend"-->
-<!--                [chartType]="lineChartType"-->
-<!--                [plugins]="lineChartPlugins">-->
-<!--        </canvas>-->
+        <!--        <canvas baseChart-->
+        <!--                [datasets]="lineChartData"-->
+        <!--                [labels]="lineChartLabels"-->
+        <!--                [options]="lineChartOptions"-->
+        <!--                [colors]="lineChartColors"-->
+        <!--                [legend]="lineChartLegend"-->
+        <!--                [chartType]="lineChartType"-->
+        <!--                [plugins]="lineChartPlugins">-->
+        <!--        </canvas>-->
 
-        <div  *ngIf="!requestChartError; else noChart"  class="chart-one">
+        <div *ngIf="!requestChartError; else noChart" class="chart-one">
           <div id="requestflotChart" class="flot-chart" style="height:312px"></div>
         </div>
         <ng-template #noChart>
@@ -164,29 +173,38 @@
         <div class="card-header d-flex align-items-center justify-content-between">
           <h6 class="mg-b-0">Request By State</h6>
           <div class="tx-13 d-flex align-items-center">
-
-            <span class="mg-r-5">Country:</span> <a href="" class="d-flex align-items-center link-03 lh-0">USA <i
-                class="icon ion-ios-arrow-down mg-l-5"></i></a>
+            <div class="btn-group" dropdown>
+              <button id="button-basic" dropdownToggle type="button" class="btn btn-default
+                btn-sm dropdown-toggle"
+                      aria-controls="dropdown-basic"> Country <span class="caret"></span>
+              </button>
+              <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu"
+                  role="menu" aria-labelledby="button-basic">
+                <li role="menuitem" (click)="onSelectCountry('usa')"><a class="dropdown-item" href="javascript:;">USA</a></li>
+                <li role="menuitem" (click)="onSelectCountry('world')"><a class="dropdown-item" href="javascript:;">World</a></li>
+              </ul>
+            </div>
           </div>
         </div><!-- card-header -->
         <!--        <ng-container *ngIf="stateList.length > 0; else noStateList">-->
         <div class="card-body pd-0">
           <div class="pd-y-25 pd-x-20">
-            <div id="vmap" class="ht-200"></div>
+            <div id="vmap" *ngIf="currentState === 'usa'" class="ht-200"></div>
+            <div id="worldMap" *ngIf="currentState !== 'usa'" class="ht-200"></div>
           </div>
           <div class="table-responsive">
             <table class="table table-borderless table-dashboard table-dashboard-one">
               <thead>
-                <tr>
-                  <th class="wd-25">States</th>
-                  <th class="wd-25 ">Count</th>
-                </tr>
+              <tr>
+                <th class="wd-25">States</th>
+                <th class="wd-25 ">Count</th>
+              </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let state of stateList">
-                  <td class="tx-medium">{{state.state}}</td>
-                  <td class="">{{state.count}}</td>
-                </tr>
+              <tr *ngFor="let state of stateList">
+                <td class="tx-medium">{{state.state}}</td>
+                <td class="">{{state.count}}</td>
+              </tr>
               </tbody>
             </table>
           </div><!-- table-responsive -->
@@ -250,7 +268,7 @@
               <div class="mg-l-auto text-right">
                 <p class="tx-medium mg-b-0">Status</p>
                 <small *ngIf="request.status === 'InProgress'; else success"
-                  class="tx-12 tx-orange mg-b-0">Inprogress</small>
+                       class="tx-12 tx-orange mg-b-0">Inprogress</small>
                 <ng-template #success>
                   <small class="tx-12 tx-success mg-b-0">{{request.status}}</small>
                 </ng-template>
@@ -259,7 +277,7 @@
           </ul>
           <div class="card-footer text-center tx-13">
             <a routerLink="/privacy/dsar/dsar-requests" class="link-03">View All Transactions <i
-                class="icon ion-md-arrow-down mg-l-5"></i></a>
+              class="icon ion-md-arrow-down mg-l-5"></i></a>
           </div><!-- card-footer -->
         </ng-container>
         <ng-template #noRequests>
