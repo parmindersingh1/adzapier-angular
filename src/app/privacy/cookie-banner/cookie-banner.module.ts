@@ -9,13 +9,15 @@ import {MatRadioModule} from '@angular/material/radio';
 import {MatInputModule} from '@angular/material/input';
 import {MatButtonModule} from '@angular/material/button';
 import {MatExpansionModule} from '@angular/material/expansion';
-
+import { SetupComponent } from './setup/setup.component';
 
 const path: Routes = [{
-  path: '', component: CookieBannerComponent
-}];
+  path: '', component: CookieBannerComponent,
+},
+  { path: 'setup', component: SetupComponent}
+];
 @NgModule({
-  declarations: [CookieBannerComponent],
+  declarations: [CookieBannerComponent, SetupComponent],
   imports: [
     CommonModule,
     RouterModule.forChild(path),
