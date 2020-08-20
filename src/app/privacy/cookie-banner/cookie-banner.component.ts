@@ -59,7 +59,7 @@ export class CookieBannerComponent implements OnInit {
     this.cookieBannerService.onGetCookieBannerData(path)
       .subscribe(res => {
         this.loading.stop('2');
-        if (res['status'] === 200) {
+        if (res['status'] === 200 && res.hasOwnProperty('response')) {
           this.bannerCookieData = res['response'];
           this.onSetValueConfig();
           this.onSetValueGdpr();
