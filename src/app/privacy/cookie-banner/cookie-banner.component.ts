@@ -27,7 +27,8 @@ export class CookieBannerComponent implements OnInit {
   panelOpenState = false;
   matcher = new MyErrorStateMatcher();
   currentPlan;
-  isFieldDisabled = null;
+  isFieldDisabled = true;
+  logoText = 'Adzapier';
   bannerCookieData = {};
   public ccpaBannerConstant = ccpaBannerConstant;
   public defaultData = defaultData;
@@ -333,6 +334,8 @@ export class CookieBannerComponent implements OnInit {
   onUpdateForm() {
     const userPrefrencesData = {
       ccpa_target: this.cookieBannerForm.value.ccpaTarget,
+      logo_text: this.logoText,
+      gdpr_global: this.cookieBannerForm.value.gdprTarget.includes('EU'),
       gdpr_target: this.cookieBannerForm.value.gdprTarget,
       cookie_blocking: this.cookieBannerForm.value.cookieBlocking,
       enable_iab: this.cookieBannerForm.value.enableIab,
@@ -499,5 +502,13 @@ export class CookieBannerComponent implements OnInit {
   }
   backClicked() {
     this._location.back();
+  }
+  onSelectLogo (e) {
+    // console.log(e);
+    if (e.checked) {
+      this.logoText = 'Adzapier';
+    } else {
+      this.logoText = '';
+    }
   }
 }
