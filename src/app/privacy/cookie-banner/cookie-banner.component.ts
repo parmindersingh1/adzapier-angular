@@ -30,6 +30,7 @@ export class CookieBannerComponent implements OnInit {
   isFieldDisabled = true;
   logoText = 'Adzapier';
   bannerCookieData = {};
+  isGdprGlobal = false;
   public ccpaBannerConstant = ccpaBannerConstant;
   public defaultData = defaultData;
   private currentManagedOrgID: any;
@@ -510,5 +511,13 @@ export class CookieBannerComponent implements OnInit {
     } else {
       this.logoText = '';
     }
+  }
+
+  onCheckCountry(event) {
+     this.isGdprGlobal =  event.includes('EU');
+     if (this.isGdprGlobal) {
+       this.cookieBannerForm.get('ccpaTarget').clearValidators();
+       this.cookieBannerForm.get('ccpaTarget').updateValueAndValidity();
+     }
   }
 }

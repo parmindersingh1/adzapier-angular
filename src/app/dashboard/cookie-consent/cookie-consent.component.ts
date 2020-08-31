@@ -21,6 +21,10 @@ class CookieCount {
 })
 export class CookieConsentComponent implements OnInit {
   currentManagedOrgID: any;
+  alertMsg: any;
+  alertType: any;
+  dismissible = true;
+  isOpen = false;
   currrentManagedPropID: any;
   dashboardCount: CookieCount = new CookieCount();
   percentDashboardCount: CookieCount = new CookieCount();
@@ -32,6 +36,10 @@ export class CookieConsentComponent implements OnInit {
 
   ngOnInit() {
     this.onMapInIt();
+    this.alertMsg =
+      "adssa";
+    this.isOpen = true;
+    this.alertType = 'danger';
     this.onGetPropsAndOrgId();
     this.onGetDashboardData();
   }
@@ -96,8 +104,18 @@ export class CookieConsentComponent implements OnInit {
       enableZoom: false,
       borderWidth: 1,
       borderColor: '#fff',
-      hoverOpacity: .85
+      hoverOpacity: .85,
+      onLabelShow: function (event, label, code) {
+        if(code === 'us') {
+          label.text();
+        }
+      }
     });
   }
+  onClosed(dismissedAlert: any): void {
+    this.alertMsg !== dismissedAlert;
+    this.isOpen = false;
+  }
+
 
 }
