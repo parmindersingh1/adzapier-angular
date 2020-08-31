@@ -17,4 +17,8 @@ export class DashboardService {
     const path = '/ccpa/chart/state/';
     return this.http.get(environment.apiUrl + path + orgId + '/' + propsID, { params : queryParam});
   }
+  getDashboardData(propId) {
+    const path = '/consentdashboard/';
+    return this.http.get(environment.apiUrl + path + propId);
+  }
 }
