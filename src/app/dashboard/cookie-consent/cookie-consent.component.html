@@ -3,8 +3,8 @@
     <div>
       <nav aria-label="breadcrumb">
         <ol class="breadcrumb breadcrumb-style1 mg-b-10">
-          <li class="breadcrumb-item"><a href="#">Privacy</a></li>
-          <li class="breadcrumb-item"><a href="#">Cookie</a></li>
+          <li class="breadcrumb-item"><a href="javascript:;">Privacy</a></li>
+          <li class="breadcrumb-item"><a href="javascript:;">Cookie</a></li>
           <li class="breadcrumb-item active">Consent Analytics</li>
         </ol>
       </nav>
@@ -36,51 +36,51 @@
                                 bd-purple = Other -->
 
         <div class="col-4 col-sm-2 col-md-2 ">
-          <h4 class="tx-normal tx-rubik mg-b-10">156</h4>
+          <h4 class="tx-normal tx-rubik mg-b-10">{{dashboardCount.totalConsent}}</h4>
 
           <h6 class="tx-uppercase tx-spacing-1 tx-semibold tx-10 tx-color-02 mg-b-2">Total Consents</h6>
 
         </div><!-- col -->
         <div class="col-6 col-sm-4 col-md-3 col-lg bd-l">
-          <h4 class="tx-normal tx-rubik mg-b-10">86</h4>
+          <h4 class="tx-normal tx-rubik mg-b-10">{{dashboardCount.acceptAll}}</h4>
           <div class="progress ht-2 mg-b-10">
-            <div class="progress-bar wd-85p bg-success" role="progressbar" aria-valuenow="85" aria-valuemin="0"
-                 aria-valuemax="100"></div>
+            <div class="progress-bar wd-{{percentDashboardCount.acceptAll}}p bg-success" role="progressbar" attr.aria-valuenow="{{dashboardCount.acceptAll}}" attr.aria-valuemin="0"
+                 attr.aria-valuemax="100"></div>
           </div>
           <h6 class="tx-uppercase tx-spacing-1 tx-semibold tx-10 tx-color-02 mg-b-2">Accept All</h6>
 
         </div><!-- col -->
         <div class="col-6 col-sm-4 col-md-3 col-lg mg-t-20 mg-sm-t-0 bd-l">
-          <h4 class="tx-normal tx-rubik mg-b-10">27</h4>
+          <h4 class="tx-normal tx-rubik mg-b-10">{{dashboardCount.saveSetting}}</h4>
           <div class="progress ht-2 mg-b-10">
-            <div class="progress-bar wd-25p bg-primary" role="progressbar" aria-valuenow="25" aria-valuemin="0"
+            <div class="progress-bar wd-{{percentDashboardCount.saveSetting}}p bg-primary" role="progressbar" attr.aria-valuenow="{{dashboardCount.saveSetting}}" aria-valuemin="0"
                  aria-valuemax="100"></div>
           </div>
           <h6 class="tx-uppercase tx-spacing-1 tx-semibold tx-10 tx-color-02 mg-b-2">Save Settings</h6>
 
         </div><!-- col -->
         <div class="col-6 col-sm-4 col-md-3 col-lg mg-t-20 mg-md-t-0 bd-l">
-          <h4 class="tx-normal tx-rubik mg-b-10">45</h4>
+          <h4 class="tx-normal tx-rubik mg-b-10">{{dashboardCount.rejectAll}}</h4>
           <div class="progress ht-2 mg-b-10">
-            <div class="progress-bar wd-45p bg-warning" role="progressbar" aria-valuenow="45" aria-valuemin="0"
+            <div class="progress-bar wd-{{percentDashboardCount.rejectAll}}p bg-warning" role="progressbar" attr.aria-valuenow="{{dashboardCount.rejectAll}}" aria-valuemin="0"
                  aria-valuemax="100"></div>
           </div>
           <h6 class="tx-uppercase tx-spacing-1 tx-semibold tx-10 tx-color-02 mg-b-2">Reject ALL</h6>
 
         </div><!-- col -->
         <div class="col-6 col-sm-4 col-md-3 col-lg mg-t-20 mg-lg-t-0 bd-l">
-          <h4 class="tx-normal tx-rubik mg-b-10">30</h4>
+          <h4 class="tx-normal tx-rubik mg-b-10">{{dashboardCount.close}}</h4>
           <div class="progress ht-2 mg-b-10">
-            <div class="progress-bar wd-30p bg-danger" role="progressbar" aria-valuenow="30" aria-valuemin="0"
+            <div class="progress-bar wd-{{percentDashboardCount.close}}p bg-danger" role="progressbar" attr.aria-valuenow="{{dashboardCount.close}}" aria-valuemin="0"
                  aria-valuemax="100"></div>
           </div>
           <h6 class="tx-uppercase tx-spacing-1 tx-semibold tx-10 tx-color-02 mg-b-2">Close</h6>
 
         </div><!-- col -->
         <div class="col-6 col-sm-4 col-md-3 col-lg mg-t-20 mg-lg-t-0 bd-l">
-          <h4 class="tx-normal tx-rubik mg-b-10">20</h4>
+          <h4 class="tx-normal tx-rubik mg-b-10">{{dashboardCount.doNotSale}}</h4>
           <div class="progress ht-2 mg-b-10">
-            <div class="progress-bar wd-30p bg-teal" role="progressbar" aria-valuenow="20" aria-valuemin="0"
+            <div class="progress-bar wd-{{percentDashboardCount.doNotSale}}p bg-teal" role="progressbar" attr.aria-valuenow="{{dashboardCount.doNotSale}}" aria-valuemin="0"
                  aria-valuemax="100"></div>
           </div>
           <h6 class="tx-uppercase tx-spacing-1 tx-semibold tx-10 tx-color-02 mg-b-2">Do not Sell</h6>
@@ -494,3 +494,7 @@
 
 
 </div><!-- container -->
+<div class="col-sm-5 mr-0 float-right flotingdiv">
+  <alert *ngIf="isOpen" [type]="alertType" dismissOnTimeout="5000" [dismissible]="dismissible"
+         (onClosed)="onClosed(alertMsg)">{{  alertMsg}}</alert>
+</div>
