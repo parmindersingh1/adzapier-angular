@@ -52,6 +52,8 @@ import { WelcomeComponent } from './welcome/welcome.component';
 import { SharedbootstrapModule } from './sharedbootstrap/sharedbootstrap.module';
 import { CcpaDsarComponent } from './dashboard/ccpa-dsar/ccpa-dsar.component';
 import { ChartsModule } from 'ng2-charts';
+import { TableModule } from 'primeng/table';
+import { MultiSelectModule } from 'primeng/multiselect';
 
 export const isMock = environment.mock;
 
@@ -99,6 +101,8 @@ export const isMock = environment.mock;
     NgxUiLoaderModule.forRoot(ngxUiLoaderConfig),
     MatButtonModule,
     ChartsModule,
+    TableModule,
+    MultiSelectModule
   ],
   providers: [
     AuthenticationService,
