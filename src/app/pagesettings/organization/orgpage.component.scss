@@ -136,9 +136,10 @@ tr.row-disabled > td > a {
 
 .flotingdiv{
 	position: fixed;
-	bottom: 0;
+	bottom: 60px;
 	top: 84%;
-	right:0;
+	right:10px;
 	overflow-x: hidden;
-	overflow-y: auto
+    overflow-y: auto;
+    pointer-events: none;
 }

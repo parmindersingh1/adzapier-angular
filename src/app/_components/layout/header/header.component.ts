@@ -397,6 +397,12 @@ export class HeaderComponent implements OnInit {
       //   this.orgservice.setCurrentOrgWithProperty(data.response[0]);
       // }
     });
+ //   this.getColumnCountSize();
+  }
+
+  getColumnCountSize() {
+    console.log(this.orgPropertyMenu.length, 'this.orgPropertyMenu.length..');
+    return this.orgPropertyMenu.length < 3 ? 2 : 4;
   }
 
   checkPropertyStatus(prop): boolean {

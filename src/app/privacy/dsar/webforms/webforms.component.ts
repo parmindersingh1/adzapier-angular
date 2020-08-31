@@ -2,8 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { switchMap, flatMap, map } from 'rxjs/operators';
 import { CCPAFormConfigurationService } from 'src/app/_services/ccpaform-configuration.service';
-import { OrganizationService } from 'src/app/_services';
-import { Observable } from 'rxjs';
+import { OrganizationService, UserService } from 'src/app/_services';
 import { CCPAFormFields } from 'src/app/_models/ccpaformfields';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 
@@ -42,13 +41,18 @@ export class WebformsComponent implements OnInit {
   alertType: any;
   dismissible = true;
   isOpen = false;
+  currentUser: any;
+  currentuserID: any;
+  orgDetails: any;
   constructor(private ccpaFormConfigService: CCPAFormConfigurationService,
-    private organizationService: OrganizationService,
-    private loading: NgxUiLoaderService,
-    private router: Router) {
+              private organizationService: OrganizationService,
+              private loading: NgxUiLoaderService,
+              private userService: UserService,
+              private router: Router) {
     this.router.events.subscribe((e) => {
       if (e instanceof NavigationEnd) {
         this.loadCurrentProperty();
+        this.currentLoggedInUser();
       }
     });
   }
@@ -56,29 +60,27 @@ export class WebformsComponent implements OnInit {
   ngOnInit() {
     // this.loading = true;
     this.loadCurrentProperty();
+    this.currentLoggedInUser();
   }
 
   loadCurrentProperty() {
     this.organizationService.currentProperty.subscribe((data) => {
       if (data !== '') {
-        this.currentOrganization = data.organization_name;
-        this.currentPropertyName = data.property_name;
-        this.getCCPAFormList(data);
-      } else {
+        this.orgDetails = data;
+       } else {
         const orgDetails = this.organizationService.getCurrentOrgWithProperty();
-        this.currentOrganization = orgDetails.organization_name;
-        this.currentPropertyName = orgDetails.property_name;
-        this.getCCPAFormList(orgDetails);
-      }
+        this.orgDetails = orgDetails;
+        }
     });
+
+    this.currentOrganization = this.orgDetails.organization_name;
+    this.currentPropertyName = this.orgDetails.property_name;
+    this.getCCPAFormList(this.orgDetails);
 
   }
 
   getCCPAFormList(orgDetails) {
-
     this.loading.start();
-    //  const orgDetails = this.organizationService.getCurrentOrgWithProperty();
-    // console.log(orgDetails.organization_id,'orgid..',orgDetails.property_id,'prid..');
     if (orgDetails !== undefined) {
       this.ccpaFormConfigService.getCCPAFormList(orgDetails.organization_id, orgDetails.property_id)
         .subscribe((data) => {
@@ -108,7 +110,7 @@ export class WebformsComponent implements OnInit {
   }
 
   navigateToDSARForm() {
-    if (this.currentPropertyName !== undefined) {
+   if (this.currentPropertyName !== undefined) {
       this.router.navigate(['/privacy/dsar/dsarform']);
     } else {
       alert('Please Select property first!');
@@ -118,6 +120,13 @@ export class WebformsComponent implements OnInit {
   onClosed(dismissedAlert: any): void {
     this.alertMsg = !dismissedAlert;
     this.isOpen = false;
+  }
+
+  currentLoggedInUser(){
+    this.userService.getLoggedInUserDetails().subscribe((resp) => {
+          this.currentUser = resp;
+          this.currentuserID = this.currentUser.response.uid;
+        });
   }
 
   // ngOnDestroy() {

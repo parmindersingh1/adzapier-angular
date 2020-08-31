@@ -11,9 +11,9 @@ export class DsarRequestService {
   subTasklist$: Observable<any[]>;
   constructor(private http: HttpClient) { }
 
-  getDsarRequestList(orgId, propsID, pagelimit): Observable<any> {
+  getDsarRequestList(orgId, propsID, pagelimit, orderBy): Observable<any> {
     const path = '/ccpa/data/';
-    return this.http.get(environment.apiUrl + path + orgId + '/' + propsID + pagelimit);
+    return this.http.get(environment.apiUrl + path + orgId + '/' + propsID + pagelimit + orderBy);
   }
 
   getDsarRequestFilter(orgId, propsID) {
