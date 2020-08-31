@@ -10,8 +10,37 @@ export const defaultData = {
   ccpaBannerPosition: 'bottom',
 };
 export const ccpaBannerConstant = {
-  ccpaTargetCountry: [{title: 'Califonia', value: 'CA'}, {title: 'USA', value: 'USA'}],
-  gdprTargetCountry: [{ title: 'Europe', value: 'EU'}, {title: 'Los Angeles', value: 'LA'}],
+  ccpaTargetCountry: [{title: 'California', value: 'ca'}, {title: 'USA', value: 'US'}],
+  gdprTargetCountry: [
+    { title: 'GDPR Global', value: 'EU'},
+    { title: 'Belgium', value: 'BE'},
+    { title: 'Bulgaria', value: 'BG'},
+    {title: 'Czechia', value: 'CZ'},
+    {title: 'Denmark', value: 'DK'},
+    {title: 'Germany', value: 'DE'},
+    {title: 'Estonia', value: 'EE'},
+    {title: 'Ireland', value: 'IE'},
+    {title: 'Greece', value: 'EL'},
+    {title: 'Spain', value: 'ES'},
+    {title: 'France', value: 'FR'},
+    {title: 'Croatia', value: 'HR'},
+    {title: 'Italy', value: 'IT'},
+    {title: 'Cyprus', value: 'CY'},
+    {title: 'Latvia', value: 'LV'},
+    {title: 'Lithuania', value: 'LT'},
+    {title: 'Luxembourg', value: 'LU'},
+    {title: 'Hungary', value: 'HU'},
+    {title: 'Malta', value: 'MT'},
+    {title: 'Netherlands', value: 'NL'},
+    {title: 'Austria', value: 'AT'},
+    {title: 'Poland', value: 'PL'},
+    {title: 'Portugal', value: 'PT'},
+    {title: 'Romania', value: 'RO'},
+    {title: 'Slovenia', value: 'SI'},
+    {title: 'Slovakia', value: 'SK'},
+    {title: 'Finland', value: 'FI'},
+    {title: 'Sweden', value: 'SE'}
+    ],
   GDPR: {
     BANNER: {
       Bannerlanguage: [

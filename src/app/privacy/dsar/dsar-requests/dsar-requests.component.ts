@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, Input, ChangeDetectorRef, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { Subject } from 'rxjs';
@@ -7,13 +7,19 @@ import { OrganizationService, UserService } from 'src/app/_services';
 import { CompanyService } from 'src/app/company.service';
 import { DsarRequestService } from 'src/app/_services/dsar-request.service';
 import { CCPAFormConfigurationService } from 'src/app/_services/ccpaform-configuration.service';
+import { LazyLoadEvent } from 'primeng/api';
+
 
 @Component({
   selector: 'app-dsar-requests',
   templateUrl: './dsar-requests.component.html',
-  styleUrls: ['./dsar-requests.component.scss']
+  styleUrls: ['./dsar-requests.component.scss'],
+
 })
-export class DsarRequestsComponent implements OnInit {
+export class DsarRequestsComponent implements OnInit, AfterViewInit {
+  firstone = 0;
+  cols: any[];
+  selectedCols: any[];
   @ViewChild('editor', { static: true }) editor;
   submitted: boolean;
   propertyname: any;
@@ -27,10 +33,7 @@ export class DsarRequestsComponent implements OnInit {
   cityname: any;
   statename: any;
   zipcodenum: any;
-  p = 1;
-  pageSize: any = 5;
-  totalCount: any;
-  paginationConfig = { itemsPerPage: this.pageSize, currentPage: this.p, totalItems: this.totalCount };
+  
   currentManagedOrgID: any;
   allFilterData: any = {
     filter_status: [],
@@ -38,6 +41,7 @@ export class DsarRequestsComponent implements OnInit {
     filter_Subject_type: [],
     filter_due_in: []
   };
+  eventRows: number;
   currrentManagedPropID: any;
   public inputValue = '';
   public debouncedInputValue = this.inputValue;
@@ -49,6 +53,11 @@ export class DsarRequestsComponent implements OnInit {
   alertMsg: any;
   isOpen = true;
   alertType: any;
+  first = 0;
+  rows = 0;
+  totalRecords: number;
+  isloading: boolean;
+
   constructor(
     private orgservice: OrganizationService,
     private userService: UserService,
@@ -56,16 +65,18 @@ export class DsarRequestsComponent implements OnInit {
     private router: Router,
     private loading: NgxUiLoaderService,
     private dsarRequestService: DsarRequestService,
-    private ccpaFormConfigService: CCPAFormConfigurationService
-  ) { }
+    private ccpaFormConfigService: CCPAFormConfigurationService,
+    private cdRef: ChangeDetectorRef
+  ) {}
 
   ngOnInit() {
-    this.paginationConfig.itemsPerPage = 5;
     this.onGetPropsAndOrgId();
-    this.onGetDsarRequestList();
     this.onGetRequestListFilter();
     this.setupSearchDebouncer();
+    this.isloading = true;
   }
+
+
 
   onGetPropsAndOrgId() {
     this.orgservice.currentProperty.subscribe((response) => {
@@ -80,42 +91,54 @@ export class DsarRequestsComponent implements OnInit {
     });
   }
 
-  onGetDsarRequestList() {
-    this.loading.start();
-    const pagelimit = '?limit=' + this.paginationConfig.itemsPerPage + '&page=' + this.paginationConfig.currentPage;
-    this.dsarRequestService.getDsarRequestList(this.currentManagedOrgID, this.currrentManagedPropID, pagelimit)
-      .subscribe((data) => {
-        this.loading.stop();
-        if (data['response']) {
-          this.requestsList = data['response'];
-          this.paginationConfig.totalItems = data.count;
-        }
-      }, error => {
-        this.loading.stop();
-        this.alertMsg = error;
-        this.isOpen = true;
-        this.alertType = 'danger';
-      });
+
+  @Input() get selectedColumns(): any[] {
+    return this.selectedCols;
   }
 
+  set selectedColumns(val: any[]) {
+    // restore original order
+    this.selectedCols = this.cols.filter(col => val.includes(col));
+  }
 
-  pageChangeEvent(event) {
-    this.paginationConfig.currentPage = event;
-    const pagelimit = '?limit=' + this.paginationConfig.itemsPerPage + '&page=' + this.paginationConfig.currentPage;
-    this.loading.start();
-    this.dsarRequestService.getDsarRequestList(this.currentManagedOrgID, this.currrentManagedPropID, pagelimit)
-      .subscribe((data) => {
-        this.loading.stop();
-        const key = 'response';
-        this.requestsList = data[key];
-        this.paginationConfig.totalItems = data.count;
-        return this.requestsList;
-      }, error => {
-        this.loading.stop();
-        this.alertMsg = error;
-        this.isOpen = true;
-        this.alertType = 'danger';
-      });
+  loadCarsLazy(event: LazyLoadEvent) {
+    this.isloading = true;
+    this.eventRows = event.rows;
+    if (this.requestsList) {
+
+      if (event.first === 0) {
+        this.firstone = 1;
+      } else {
+        this.firstone = (event.first / event.rows) + 1;
+      }
+      const pagelimit = '?limit=' + this.eventRows + '&page=' + this.firstone;
+      const sortOrder = event.sortOrder === -1 ? 'DESC' : 'ASC';
+      const orderBy = '&orderby=' + event.sortField + ' ' + sortOrder;
+
+      this.dsarRequestService.getDsarRequestList(this.currentManagedOrgID, this.currrentManagedPropID, pagelimit, orderBy)
+        .subscribe((data) => {
+          this.isloading = false;
+          const key = 'response';
+          this.requestsList = data[key];
+          this.rows = data[key].length;
+          this.totalRecords = data.count;
+        }, error => {
+          this.loading.stop();
+          this.alertMsg = error;
+          this.isOpen = true;
+          this.alertType = 'danger';
+        });
+    }
+
+    this.cols = [
+      { field: 'country', header: 'Country' },
+      { field: 'org_name', header: 'Organization' },
+      { field: 'property_name', header: 'Property' },
+      { field: 'state', header: 'State' },
+      { field: 'approver_firstname', header: 'Approver' }
+    ];
+
+    this.selectedCols = this.cols;
   }
 
   onGetRequestListFilter() {
@@ -134,13 +157,14 @@ export class DsarRequestsComponent implements OnInit {
       });
   }
 
-  onChangeEvent(event) {
-    this.paginationConfig.itemsPerPage = Number(event.target.value);
-    this.searchFilter();
+
+  public onSearchInputChange(): void {
+    this.searchDecouncer$.next(this.inputValue);
   }
 
-  public onSearchInputChange(term: string): void {
-    this.searchDecouncer$.next(term);
+  public clearSearchfield() {
+    this.inputValue = '';
+    this.searchDecouncer$.next(this.inputValue);
   }
 
   private setupSearchDebouncer(): void {
@@ -154,18 +178,19 @@ export class DsarRequestsComponent implements OnInit {
   }
 
   private searchFilter(): void {
-    const params = '?limit=' + this.paginationConfig.itemsPerPage + '&page=' + this.paginationConfig.currentPage
+    const params = '?limit=' + this.eventRows + '&page=' + this.firstone
       + '&name=' + this.inputValue + '&subject_type=' + this.subjectType + '&request_type=' + this.requestType
       + '&status=' + this.status + '&due_in=' + this.dueIn;
-    this.loading.start();
+    this.isloading = true;
     this.dsarRequestService.getDsarRequestFilterList(this.currentManagedOrgID, this.currrentManagedPropID, params)
       .subscribe(res => {
-        this.loading.stop();
-        if (res['response']) {
-          this.requestsList = res['response'];
+        this.isloading = false;
+        const key = 'response';
+        if (res[key]) {
+          this.requestsList = res[key];
         }
       }, error => {
-        this.loading.stop();
+        this.isloading = false;
         this.alertMsg = error;
         this.isOpen = true;
         this.alertType = 'danger';
@@ -201,7 +226,22 @@ export class DsarRequestsComponent implements OnInit {
   }
 
   onClosed(dismissedAlert: any): void {
-    this.alertMsg !== dismissedAlert;
+    this.alertMsg = !dismissedAlert;
     this.isOpen = false;
   }
+
+  ngAfterViewInit() {
+    this.cols = [
+      { field: 'country', header: 'Country' },
+      { field: 'name', header: 'Name' },
+      { field: 'org_name', header: 'Organization' },
+      { field: 'property_name', header: 'Property' },
+      { field: 'state', header: 'State' },
+      { field: 'approver_firstname', header: 'Approver' }
+    ];
+
+    this.selectedCols = this.cols;
+    this.cdRef.detectChanges();
+  }
+
 }

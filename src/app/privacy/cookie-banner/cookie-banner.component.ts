@@ -8,6 +8,7 @@ import {notificationConfig} from '../../_constant/notification.constant';
 import {NotificationsService} from 'angular2-notifications';
 import {OrganizationService} from '../../_services';
 import {Location} from '@angular/common';
+import {Router} from '@angular/router';
 
 /** Error when invalid control is dirty, touched, or submitted. */
 export class MyErrorStateMatcher implements ErrorStateMatcher {
@@ -26,8 +27,10 @@ export class CookieBannerComponent implements OnInit {
   panelOpenState = false;
   matcher = new MyErrorStateMatcher();
   currentPlan;
-  isFieldDisabled = null;
+  isFieldDisabled = true;
+  logoText = 'Adzapier';
   bannerCookieData = {};
+  isGdprGlobal = false;
   public ccpaBannerConstant = ccpaBannerConstant;
   public defaultData = defaultData;
   private currentManagedOrgID: any;
@@ -39,7 +42,8 @@ export class CookieBannerComponent implements OnInit {
               private cookieBannerService: CookieBannerService,
               private loading: NgxUiLoaderService,
               private  orgservice: OrganizationService,
-              private _location: Location
+              private _location: Location,
+              private router: Router
   ) {
   }
 
@@ -59,7 +63,7 @@ export class CookieBannerComponent implements OnInit {
     this.cookieBannerService.onGetCookieBannerData(path)
       .subscribe(res => {
         this.loading.stop('2');
-        if (res['status'] === 200) {
+        if (res['status'] === 200 && res.hasOwnProperty('response')) {
           this.bannerCookieData = res['response'];
           this.onSetValueConfig();
           this.onSetValueGdpr();
@@ -166,18 +170,18 @@ export class CookieBannerComponent implements OnInit {
       ccpaPopUpAllowAllButtonTextContent: [''],
       ccpaPopUpAllowAllButtonTextColor: [''],
       ccpaPopUpAllowAllButtonBackGroundColor: [''],
-      ccpaPopUpInformationHeading: [''],
-      informationBtnText: [''],
-      ccpaPopUpInformationDescription: [''],
-      ccpaPopUpNecessaryHeading: [''],
-      necessaryBtnText: [''],
-      ccpaPopUpNecessaryDescription: [''],
-      ccpaPopUpAnalyticsHeading: [''],
-      analyticsBtnText: [''],
-      ccpaPopUpAnalyticsDescription: [''],
-      ccpaPopUpAdvertisingHeading: [''],
-      advertisingBtnText: [''],
-      ccpaPopUpAdvertisingDescription: [''],
+      ccpaPopUpInformationHeading: [ccpaBannerConstant.CCPA.POPUP.PopUpInformationHead],
+      informationBtnText: [ccpaBannerConstant.CCPA.POPUP.PopUpInformationBtnText],
+      ccpaPopUpInformationDescription: [ccpaBannerConstant.CCPA.POPUP.PopUpInformationDescription],
+      ccpaPopUpNecessaryHeading: [ccpaBannerConstant.CCPA.POPUP.PopUpNecessaryHead],
+      necessaryBtnText: [ccpaBannerConstant.CCPA.POPUP.necessaryBtnText],
+      ccpaPopUpNecessaryDescription: [ccpaBannerConstant.CCPA.POPUP.PopUpNecessaryDescription],
+      ccpaPopUpAnalyticsHeading: [ccpaBannerConstant.CCPA.POPUP.PopUpAnalyticsHead],
+      analyticsBtnText: [ccpaBannerConstant.CCPA.POPUP.advertisingBtnText],
+      ccpaPopUpAnalyticsDescription: [ccpaBannerConstant.CCPA.POPUP.PopUpAnalyticsDescription],
+      ccpaPopUpAdvertisingHeading: [ccpaBannerConstant.CCPA.POPUP.PopUpAdvertisingHead],
+      advertisingBtnText: [ccpaBannerConstant.CCPA.POPUP.advertisingBtnText],
+      ccpaPopUpAdvertisingDescription: [ccpaBannerConstant.CCPA.POPUP.PopUpAdvertisingDescription],
     });
   }
 
@@ -320,6 +324,7 @@ export class CookieBannerComponent implements OnInit {
       .subscribe(res => {
         this.loading.stop();
         this.notification.info('Success', res['response'], notificationConfig);
+        this.router.navigateByUrl('privacy/cookie-banner/setup');
       }, error => {
         this.notification.error('Error', error, notificationConfig);
         this.loading.stop();
@@ -330,6 +335,8 @@ export class CookieBannerComponent implements OnInit {
   onUpdateForm() {
     const userPrefrencesData = {
       ccpa_target: this.cookieBannerForm.value.ccpaTarget,
+      logo_text: this.logoText,
+      gdpr_global: this.cookieBannerForm.value.gdprTarget.includes('EU'),
       gdpr_target: this.cookieBannerForm.value.gdprTarget,
       cookie_blocking: this.cookieBannerForm.value.cookieBlocking,
       enable_iab: this.cookieBannerForm.value.enableIab,
@@ -357,6 +364,7 @@ export class CookieBannerComponent implements OnInit {
       .subscribe(res => {
         this.loading.stop();
         this.notification.info('Success', res['response'], notificationConfig);
+        this.router.navigateByUrl('privacy/cookie-banner/setup');
       }, error => {
         this.notification.error('Error', error, notificationConfig);
         this.loading.stop();
@@ -495,5 +503,21 @@ export class CookieBannerComponent implements OnInit {
   }
   backClicked() {
     this._location.back();
+  }
+  onSelectLogo (e) {
+    // console.log(e);
+    if (e.checked) {
+      this.logoText = 'Adzapier';
+    } else {
+      this.logoText = '';
+    }
+  }
+
+  onCheckCountry(event) {
+     this.isGdprGlobal =  event.includes('EU');
+     if (this.isGdprGlobal) {
+       this.cookieBannerForm.get('ccpaTarget').clearValidators();
+       this.cookieBannerForm.get('ccpaTarget').updateValueAndValidity();
+     }
   }
 }

@@ -18,7 +18,10 @@ import {df1, df2, df3, df4, df5, df6} from '../sampledata';
 import {ChangeDetection} from '@angular/cli/lib/config/schema';
 
 declare var jQuery: any;
-
+interface Country {
+  count: number;
+  state: string;
+}
 
 @Component({
   selector: 'app-ccpa-dsar',
@@ -91,9 +94,10 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
     REQUEST_RECEIVED: 0
   };
   Requests = [];
-  stateList: [];
+  stateList: Country[] = [];
   public requestChartError = true;
   currentState = 'usa';
+  private stateCountryColor = {};
 
   constructor(
     private orgservice: OrganizationService,
@@ -218,7 +222,7 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
       yaxis: {
         show: false,
         min: 0,
-        max: dashBoardChartCount.REQUEST_RECEIVED
+        max: dashBoardChartCount.REQUEST_RECEIVED * 2
       },
       xaxis: {show: false}
     });
@@ -243,7 +247,7 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
       yaxis: {
         show: false,
         min: 0,
-        max: dashBoardChartCount.REQUEST_IN_PROGRESS
+        max: dashBoardChartCount.REQUEST_IN_PROGRESS * 2
       },
       xaxis: {show: false}
     });
@@ -268,7 +272,7 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
       yaxis: {
         show: false,
         min: 0,
-        max: dashBoardChartCount.REQUEST_COMPLETED
+        max: dashBoardChartCount.REQUEST_COMPLETED * 2
       },
       xaxis: {show: false}
     });
@@ -293,7 +297,7 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
       yaxis: {
         show: false,
         min: 0,
-        max: dashBoardChartCount.AVG_TIME_TO_COMPLETE
+        max: dashBoardChartCount.AVG_TIME_TO_COMPLETE * 2
       },
       xaxis: {show: false}
     });
@@ -310,33 +314,34 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
   }
 
   onInsilizaedMap() {
+    const that = this;
     if (this.currentState === 'usa') {
-      console.log('in usa');
+      console.log('stateCountryColor', that.stateCountryColor)
+      jQuery('#vmap').empty();
       jQuery('#vmap').vectorMap({
         map: 'usa_en',
         showTooltip: true,
         backgroundColor: '#fff',
         color: '#d1e6fa',
-        colors: {
-          fl: '#69b2f8',
-          ca: '#69b2f8',
-          tx: '#69b2f8',
-          wy: '#69b2f8',
-          ny: '#69b2f8'
-        },
+        colors: that.stateCountryColor,
         selectedColor: '#00cccc',
         enableZoom: false,
         borderWidth: 1,
         borderColor: '#fff',
         hoverOpacity: .85,
+        onLabelShow:  (event, label, code) => {
+          for (const  countryData of that.stateList) {
+            if (code === countryData.state.toLowerCase()) {
+              label.append(' : ' + countryData.count);
+            } else {
+              label.append(' : 0');
+            }
+          }
+          that.cd.detectChanges()
+        }
       });
     } else {
-      const sample_data = {
-        'af': '16.63',
-        'in': '11.58',
-        'ca': '158.97',
-        'us': '255.97'
-      };
+      jQuery('#worldMap').empty();
       jQuery('#worldMap').vectorMap({
         map: 'world_en',
         backgroundColor: '#fff',
@@ -345,19 +350,17 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
         selectedColor: '#00cccc',
         enableZoom: true,
         showTooltip: true,
-        values: sample_data,
         scaleColors: ['#d1e6fa', '#00cccc'],
         normalizeFunction: 'polynomial',
-
-        onLabelShow: function (event, label, code) {
-          let x = sample_data[code];
-          console.log(event);
-          console.log(label)
-          console.log(code)
-          if (x) {
-            label[0].innerHTML = label[0].innerHTML + code + ':' + x;
+        onLabelShow:  (event, label, code) => {
+          for (const  countryData of that.stateList) {
+            if (code === countryData.state.toLowerCase()) {
+              label.append(' : ' + countryData.count);
+            } else {
+              label.append(' : 0');
+            }
           }
-
+          that.cd.detectChanges()
         }
       });
     }
@@ -547,7 +550,11 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
       .subscribe(res => {
         this.loading.stop();
         const result = res.response;
+        for (const  countryData of result) {
+          this.stateCountryColor[`${countryData.state.toLowerCase()}`] = '#69b2f8';
+        }
         this.stateList = result;
+        this.onInsilizaedMap();
       }, error => {
         this.loading.stop();
         this.notification.error('Dashboard', 'Something went wrong...' + error, notificationConfig);
