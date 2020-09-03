@@ -10,7 +10,6 @@ import { HomeComponent } from './home/home.component';
 
 import { JwtInterceptor, fakeBackendProvider, ErrorInterceptor } from './_helpers';
 import { environment } from '../environments/environment';
-import { Ng2ChartJsModules } from 'chartjs-ng2-module';
 import { HeaderComponent } from './_components/layout/header/header.component';
 import { FooterComponent } from './_components/layout/footer/footer.component';
 import { NavbarComponent } from './_components/layout/navbar/navbar.component';
@@ -50,8 +49,6 @@ import { SimpleNotificationsModule } from 'angular2-notifications';
 import { WelcomeComponent } from './welcome/welcome.component';
 
 import { SharedbootstrapModule } from './sharedbootstrap/sharedbootstrap.module';
-import { CcpaDsarComponent } from './dashboard/ccpa-dsar/ccpa-dsar.component';
-import { ChartsModule } from 'ng2-charts';
 import { TableModule } from 'primeng/table';
 import { MultiSelectModule } from 'primeng/multiselect';
 
@@ -90,7 +87,6 @@ export const isMock = environment.mock;
     HttpClientModule,
     AppRoutingModule,
     FontAwesomeModule,
-    Ng2ChartJsModules,
     DragDropModule,
     BrowserAnimationsModule,
     SharedbootstrapModule,
@@ -99,7 +95,7 @@ export const isMock = environment.mock;
     FeatherModule.pick(allIcons),
     NgxUiLoaderModule.forRoot(ngxUiLoaderConfig),
     MatButtonModule,
-    TableModule, 
+    TableModule,
     MultiSelectModule
   ],
   providers: [
