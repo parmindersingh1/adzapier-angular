@@ -51,8 +51,8 @@ export class EditProfileComponent implements OnInit {
     //  this.isDisabled = true;
     const zipRegex = '^[0-9]*$';
     const spaceRegx = '^\S*$';
-    const strRegx = '^[a-zA-Z \-\']+';
-    const alphaNumeric = '^(?![0-9]*$)[a-zA-Z0-9 ]+$';
+    const strRegx = '.*\\S.*[a-zA-Z \-\']';
+    const alphaNumeric = '.*\\S.*[a-zA-z0-9 ]';
     this.profileForm = this.formBuilder.group({
       firstName: ['', [Validators.required, Validators.minLength(2), Validators.pattern(strRegx)]],
       lastName: ['', [Validators.required, Validators.minLength(2), Validators.pattern(strRegx)]],
@@ -208,7 +208,6 @@ export class EditProfileComponent implements OnInit {
         this.isOpen = true;
         this.alertType = 'success';
       }
-      console.log(data, 'data..');
     }, (error) => {
       this.loadingBar.stop();
       this.show = false;

@@ -8,6 +8,11 @@
 @import '~quill/dist/quill.snow.css';
 @import '~quill-emoji/dist/quill-emoji.css';
 
+/*for prime ng table */
+@import '../node_modules/primeng/resources/themes/saga-blue/theme.css';
+@import '../node_modules/primeng/resources/primeng.min.css';
+@import '../node_modules/primeicons/primeicons.css';
+
 .o-hidden {
     overflow: hidden;
 }
@@ -250,3 +255,23 @@ a.dropdown-item > i {
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+
+/* Prime Ng Table */
+.p-datatable .p-datatable-tbody > tr > td:first-child {
+    color: #00f !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+    cursor: pointer !important;
+    // display: inline-block;
+    width: 60px !important;
+    overflow: hidden !important;
+  }
+  
+  .p-component {
+      font-size: 14px !important;
+  }
+
+  .p-datatable.p-datatable-sm .p-datatable-tbody > tr > td {
+      font-size: 13px !important;
+  }

@@ -39,7 +39,7 @@
             </div>
         </div>
         <div class="card-body">
-            <table class="table table-bordered">
+            <table class="table table-bordered mb-0">
                 <thead class="thead-primary">
                     <tr>
                         <th>Id</th>
@@ -182,7 +182,7 @@
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label for="state">Zip Code</label>
-                        <input type="text"  minlength="6" maxlength="6" class="form-control" [(ngModel)]="zipcodenum" formControlName="zipcodenum"
+                        <input type="text" class="form-control" [(ngModel)]="zipcodenum" formControlName="zipcodenum"
                             name="zipcodenum" [ngClass]="{ 'is-invalid': submitted && editOrg.zipcodenum.errors }" />
                         <div *ngIf="submitted && editOrg.zipcodenum.errors" class="invalid-feedback">
                             <div *ngIf="editOrg.zipcodenum.errors.required">Zipcode is required</div>

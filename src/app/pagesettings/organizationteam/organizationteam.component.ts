@@ -28,13 +28,13 @@ export class OrganizationteamComponent implements OnInit {
   dismissible = true;
   isOpen = false;
   constructor(private activatedRoute: ActivatedRoute,
-    private router: Router,
-    private modalService: NgbModal,
-    private userService: UserService,
-    private formBuilder: FormBuilder,
-    private companyService: CompanyService,
-    private orgService: OrganizationService,
-    private loading: NgxUiLoaderService,
+              private router: Router,
+              private modalService: NgbModal,
+              private userService: UserService,
+              private formBuilder: FormBuilder,
+              private companyService: CompanyService,
+              private orgService: OrganizationService,
+              private loading: NgxUiLoaderService
   ) { }
 
   ngOnInit() {
@@ -125,7 +125,7 @@ export class OrganizationteamComponent implements OnInit {
         .subscribe((data) => {
           this.loading.stop();
           if (data) {
-            this.alertMsg = data.response;
+            this.alertMsg = 'We have sent a email on your Email Id';
             this.isOpen = true;
             this.alertType = 'success';
             this.loadOrgTeamMembers(this.organizationID);
@@ -149,7 +149,7 @@ export class OrganizationteamComponent implements OnInit {
     this.companyService.inviteUser(requestObj)
       .subscribe((data) => {
         if (data) {
-          this.alertMsg = data.response;
+          this.alertMsg = 'We have sent a email on your Email Id';
           this.isOpen = true;
           this.alertType = 'success';
           this.loadOrgTeamMembers(this.organizationID);

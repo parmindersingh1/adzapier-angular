@@ -3,11 +3,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 // import { OrganizationService, UserService } from '../_services';
 import { FormGroup, FormBuilder, Validators, FormControl, FormArray } from '@angular/forms';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
-import { NotificationsService } from "angular2-notifications";
 import { OrganizationService } from 'src/app/_services/organization.service';
 import { CompanyService } from 'src/app/company.service';
 import { UserService } from 'src/app/_services/user.service';
-import { notificationConfig } from 'src/app/_constant/notification.constant';
 // import { CompanyService } from '../company.service';
 @Component({
   selector: 'app-organizationdetails',
@@ -63,14 +61,13 @@ export class OrganizationdetailsComponent implements OnInit {
   dismissible = true;
   isOpen = false;
   constructor(private activatedRoute: ActivatedRoute,
-    private orgService: OrganizationService,
-    private notification: NotificationsService,
-    private modalService: NgbModal,
-    private formBuilder: FormBuilder,
-    private companyService: CompanyService,
-    private userService: UserService,
-    private router: Router,
-    private cdref: ChangeDetectorRef) {
+              private orgService: OrganizationService,
+              private modalService: NgbModal,
+              private formBuilder: FormBuilder,
+              private companyService: CompanyService,
+              private userService: UserService,
+              private router: Router,
+              private cdref: ChangeDetectorRef) {
     this.orgService.currentProperty.subscribe((data) => {
       this.currentManagedOrgID = data.organization_id;
       this.currrentManagedPropID = data.property_id;
@@ -103,8 +100,9 @@ export class OrganizationdetailsComponent implements OnInit {
     this.isEditProperty = false;
     const urlRegex = '(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?';
     const zipRegex = '^[0-9]*$'; //'^[0-9]{6}(?:-[0-9]{4})?$';
-    const strRegx = '^[a-zA-Z \-\']+';
-    const alphaNumeric = '^(?![0-9]*$)[a-zA-Z0-9 ]+$';
+    const strRegx = '.*\\S.*[a-zA-Z \-\']';
+    // const alphaNumeric = '^(?![0-9]*$)[a-zA-Z0-9 ]+$';
+    const alphaNumeric = '.*\\S.*[a-zA-z0-9 ]';
     this.organisationPropertyForm = this.formBuilder.group({
       propertyname: ['', [Validators.required, Validators.pattern(alphaNumeric)]],
       website: ['', [Validators.required, Validators.pattern(urlRegex)]],
