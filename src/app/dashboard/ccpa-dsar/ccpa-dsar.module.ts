@@ -15,7 +15,6 @@ const routes: Routes = [
   declarations: [CcpaDsarComponent],
     imports: [
         CommonModule,
-        SharedbootstrapModule,
         RouterModule.forChild(routes),
         Ng2ChartJsModules,
         ChartsModule
