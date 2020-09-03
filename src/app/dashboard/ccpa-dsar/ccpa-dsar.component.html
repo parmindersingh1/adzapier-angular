@@ -174,15 +174,11 @@
           <h6 class="mg-b-0">Request By State</h6>
           <div class="tx-13 d-flex align-items-center">
             <div class="btn-group" dropdown>
-              <button id="button-basic" dropdownToggle type="button" class="btn btn-default
-                btn-sm dropdown-toggle"
-                      aria-controls="dropdown-basic"> Country <span class="caret"></span>
-              </button>
-              <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu"
-                  role="menu" aria-labelledby="button-basic">
-                <li role="menuitem" (click)="onSelectCountry('usa')"><a class="dropdown-item" href="javascript:;">USA</a></li>
-                <li role="menuitem" (click)="onSelectCountry('world')"><a class="dropdown-item" href="javascript:;">World</a></li>
-              </ul>
+
+              <select (change)="onSelectCountry($event)" class="form-control" id="sel1">
+                <option value="usa">USA</option>
+                <option value="world">World</option>
+              </select>
             </div>
           </div>
         </div><!-- card-header -->
