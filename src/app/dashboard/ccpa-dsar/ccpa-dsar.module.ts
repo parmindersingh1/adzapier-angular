@@ -1,11 +1,10 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {RouterModule, Routes} from "@angular/router";
-import {AnalyticsComponent} from "../analytics.component";
-import {AuthGuard} from "../../_helpers";
-import {CcpaDsarComponent} from "./ccpa-dsar.component";
-import {SharedbootstrapModule} from "../../sharedbootstrap/sharedbootstrap.module";
-import {ChartsModule} from "ng2-charts";
+import {RouterModule, Routes} from '@angular/router';
+import {AuthGuard} from '../../_helpers';
+import {CcpaDsarComponent} from './ccpa-dsar.component';
+import {SharedbootstrapModule} from '../../sharedbootstrap/sharedbootstrap.module';
+import {ChartsModule} from 'ng2-charts';
 import {BsDropdownModule} from 'ngx-bootstrap';
 
 const routes: Routes = [
@@ -17,9 +16,9 @@ const routes: Routes = [
     imports: [
         CommonModule,
         SharedbootstrapModule,
-        ChartsModule,
         RouterModule.forChild(routes),
         BsDropdownModule,
+      ChartsModule
     ]
 })
 export class CcpaDsarModule { }

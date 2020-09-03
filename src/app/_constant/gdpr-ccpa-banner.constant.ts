@@ -4,6 +4,8 @@ export const defaultData = {
   defaultCookieBlocking: true,
   defaultEnableIab: true,
   defaultEmail: false,
+  showOpenCcpaBtn: true,
+  showOpenGdprBtn: true,
   gdprDefaultLang: 'en',
   gdprDefaultBannerPosition: 'bottom',
   // ccpaDefaultBannerlanguage: 'en'

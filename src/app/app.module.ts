@@ -92,7 +92,6 @@ export const isMock = environment.mock;
     FontAwesomeModule,
     Ng2ChartJsModules,
     DragDropModule,
-
     BrowserAnimationsModule,
     SharedbootstrapModule,
     BsDropdownModule.forRoot(),
@@ -100,8 +99,7 @@ export const isMock = environment.mock;
     FeatherModule.pick(allIcons),
     NgxUiLoaderModule.forRoot(ngxUiLoaderConfig),
     MatButtonModule,
-    ChartsModule,
-    TableModule,
+    TableModule, 
     MultiSelectModule
   ],
   providers: [
