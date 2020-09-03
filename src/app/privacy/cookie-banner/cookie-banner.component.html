@@ -40,6 +40,16 @@
                   <mat-checkbox [disabled]="isFieldDisabled" (change)="onSelectLogo($event)"  [checked]="logoText" class="example-margin">Show Adzapier Logo?</mat-checkbox>
                 </section>
 
+                <section class="example-section">
+                  <mat-checkbox [disabled]="isFieldDisabled"   formControlName="showOpenGdprBtn"
+                                class="example-margin">Show Open Gdpr PopUp Button?</mat-checkbox>
+                </section>
+
+                <section class="example-section">
+                  <mat-checkbox [disabled]="isFieldDisabled || isGdprGlobal" formControlName="showOpenCcpaBtn"
+                               class="example-margin">Show Open Ccpa PopUp Button?</mat-checkbox>
+                </section>
+
               </div>
               <div class="col-md-8 switch-btn">
                 <mat-slide-toggle formControlName="cookieBlocking" color="primary" class="cookie-allow">COKIE BLOCKING

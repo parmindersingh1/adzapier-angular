@@ -27,7 +27,7 @@ export class CookieBannerComponent implements OnInit {
   panelOpenState = false;
   matcher = new MyErrorStateMatcher();
   currentPlan;
-  isFieldDisabled = true;
+  isFieldDisabled = null;
   logoText = 'Adzapier';
   bannerCookieData = {};
   isGdprGlobal = false;
@@ -83,7 +83,9 @@ export class CookieBannerComponent implements OnInit {
       gdprTarget: configData['gdpr_target'],
       cookieBlocking: configData['cookie_blocking'],
       enableIab: configData['enable_iab'],
-      email: configData['email']
+      email: configData['email'],
+      showOpenCcpaBtn: configData['showOpenCcpaBtn'],
+      showOpenGdprBtn: configData['showOpenGdprBtn']
     });
   }
 
@@ -113,6 +115,8 @@ export class CookieBannerComponent implements OnInit {
       cookieBlocking: [this.defaultData.defaultCookieBlocking],
       enableIab: [this.defaultData.defaultEnableIab],
       email: [this.defaultData.defaultEmail],
+      showOpenCcpaBtn: [this.defaultData.showOpenCcpaBtn],
+      showOpenGdprBtn: [this.defaultData.showOpenGdprBtn],
       // GDPR BANNER
       gdprBannerlanguage: [''],
       gdprBannerPosition: [defaultData.gdprDefaultBannerPosition],
@@ -301,6 +305,10 @@ export class CookieBannerComponent implements OnInit {
       cookie_blocking: this.cookieBannerForm.value.cookieBlocking,
       enable_iab: this.cookieBannerForm.value.enableIab,
       email: this.cookieBannerForm.value.email,
+      logo_text: this.logoText,
+      gdpr_global: this.cookieBannerForm.value.gdprTarget.includes('EU'),
+      showOpenCcpaBtn: this.cookieBannerForm.value.showOpenCcpaBtn,
+      showOpenGdprBtn: this.cookieBannerForm.value.showOpenGdprBtn
     };
     let formData = {};
     const CCPA_DATA = this.onGetCcpaFormData();
@@ -341,6 +349,8 @@ export class CookieBannerComponent implements OnInit {
       cookie_blocking: this.cookieBannerForm.value.cookieBlocking,
       enable_iab: this.cookieBannerForm.value.enableIab,
       email: this.cookieBannerForm.value.email,
+      showOpenCcpaBtn: this.cookieBannerForm.value.showOpenCcpaBtn,
+      showOpenGdprBtn: this.cookieBannerForm.value.showOpenGdprBtn
     };
     let formData = {};
     const CCPA_DATA = this.onGetCcpaFormData();
