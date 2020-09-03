@@ -12,6 +12,7 @@ import { TimeAgoPipe } from 'time-ago-pipe';
 // import { AlertModule } from 'ngx-bootstrap/alert';
 import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
 import { ModalModule, AlertModule, BsDatepickerModule } from 'ngx-bootstrap';
+import {ChartsModule} from 'ng2-charts';
 
 
 @NgModule({
@@ -27,10 +28,10 @@ import { ModalModule, AlertModule, BsDatepickerModule } from 'ngx-bootstrap';
     AlertModule.forRoot(),
     ModalModule.forRoot(),
     TypeaheadModule.forRoot(),
-    BsDatepickerModule.forRoot()
-
+    BsDatepickerModule.forRoot(),
+    ChartsModule,
   ],
-  exports: [NgbModule, DragDropModule, QuillModule, NgxPaginationModule, BsDatepickerModule, AlertModule, TypeaheadModule, FilterPipe, TimeAgoPipe]
+  exports: [NgbModule, ChartsModule,  DragDropModule, QuillModule, NgxPaginationModule, BsDatepickerModule, AlertModule, TypeaheadModule, FilterPipe, TimeAgoPipe]
 
 })
 export class SharedbootstrapModule { }
