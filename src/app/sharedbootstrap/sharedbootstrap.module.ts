@@ -29,9 +29,8 @@ import {ChartsModule} from 'ng2-charts';
     ModalModule.forRoot(),
     TypeaheadModule.forRoot(),
     BsDatepickerModule.forRoot(),
-    ChartsModule,
   ],
-  exports: [NgbModule, ChartsModule,  DragDropModule, QuillModule, NgxPaginationModule, BsDatepickerModule, AlertModule, TypeaheadModule, FilterPipe, TimeAgoPipe]
+  exports: [NgbModule,  DragDropModule, QuillModule, NgxPaginationModule, BsDatepickerModule, AlertModule, TypeaheadModule, FilterPipe, TimeAgoPipe]
 
 })
 export class SharedbootstrapModule { }
