@@ -17,6 +17,7 @@ const routes: Routes = [
         CommonModule,
         RouterModule.forChild(routes),
         Ng2ChartJsModules,
+      SharedbootstrapModule,
         ChartsModule
     ]
 })
