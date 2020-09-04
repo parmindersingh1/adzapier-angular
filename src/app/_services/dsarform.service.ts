@@ -42,8 +42,21 @@ export class DsarformService extends WebControls {
 
   updateControl(oldItem, oldItemIndex, newItem) {
     const controlList = JSON.parse(localStorage.getItem('formControlList'));
-    controlList[oldItemIndex] = newItem;
+    const actualIndex = controlList.findIndex((t) => t.controlId === newItem.controlId);
+    if (actualIndex === oldItemIndex) {
+      controlList[oldItemIndex] = newItem;
+    } else {
+      controlList[actualIndex] = newItem;
+      this.swapElements(controlList, actualIndex, oldItemIndex);
+    }
+
     localStorage.setItem('formControlList', JSON.stringify(controlList));
+  }
+
+  swapElements(elementArray, oldIndex, newIndex) {
+    const temp = elementArray[oldIndex];
+    elementArray[oldIndex] = elementArray[newIndex];
+    elementArray[newIndex] = temp;
   }
 
   removeControls() {

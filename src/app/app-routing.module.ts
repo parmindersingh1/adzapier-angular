@@ -32,7 +32,7 @@ const routes: Routes = [
   { path: 'partners', component: PartnersComponent },
   { path: 'termofuse', component: TermofuseComponent },
   { path: 'contactus', loadChildren: () => import('./contactus/contactus.module').then(m => m.ContactusModule) },
-  { path: 'ccpa', component: CCPAComponent },
+  { path: 'dsar', component: CCPAComponent },
   { path: 'gdpr', loadChildren: () => import('./gdpr/gdpr.module').then(m => m.GdprModule) },
   { path: 'changelog', loadChildren: () => import('./changelog/changelog.module').then(m => m.ChangelogModule) },
   { path: 'gethelp', loadChildren: () => import('./gethelp/gethelp.module').then(m => m.GethelpModule) },
