@@ -303,7 +303,8 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
     });
   }
 
-  onSelectCountry(country) {
+  onSelectCountry(e) {
+    const country = e.target.value;
     this.currentState = country;
     console.log(
       'this.currrefdfs', this.currentState
