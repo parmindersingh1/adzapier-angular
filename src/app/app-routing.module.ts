@@ -40,7 +40,6 @@ const routes: Routes = [
     path: 'home/dashboard', loadChildren: () => import('./dashboard/analytics.module')
       .then(m => m.AnalyticsModule)
   },
-  {path: 'home/dashboard/ccpa-dsar', loadChildren: () => import('./dashboard/ccpa-dsar/ccpa-dsar.module').then(m => m.CcpaDsarModule)},
   {path: 'home/dashboard/ccpa-dashboard', loadChildren: () =>
       import('./dashboard/ccpa-dashboard/ccpa-dashboard.module').then(m => m.CcpaDashboardModule)},
   { path: 'userprofile', loadChildren: () => import('./edit-profile/edit-profile.module').then(m => m.EditProfileModule) },

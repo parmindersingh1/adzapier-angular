@@ -4,6 +4,7 @@ import {RouterModule, Routes} from '@angular/router';
 import {AuthGuard} from '../../_helpers';
 import {CcpaDsarComponent} from './ccpa-dsar.component';
 import {ChartsModule} from 'ng2-charts';
+import {SharedbootstrapModule} from '../../sharedbootstrap/sharedbootstrap.module';
 
 
 
@@ -16,6 +17,7 @@ const routes: Routes = [
   imports: [
     CommonModule,
     RouterModule.forChild(routes),
+    SharedbootstrapModule,
     ChartsModule,
   ]
 })

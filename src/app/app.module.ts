@@ -51,6 +51,10 @@ import { WelcomeComponent } from './welcome/welcome.component';
 import { SharedbootstrapModule } from './sharedbootstrap/sharedbootstrap.module';
 import { TableModule } from 'primeng/table';
 import { MultiSelectModule } from 'primeng/multiselect';
+import { ChartsModule } from 'ng2-charts';
+import { Ng2ChartJsModules } from 'chartjs-ng2-module';
+
+
 
 export const isMock = environment.mock;
 
@@ -96,7 +100,9 @@ export const isMock = environment.mock;
     NgxUiLoaderModule.forRoot(ngxUiLoaderConfig),
     MatButtonModule,
     TableModule,
-    MultiSelectModule
+    MultiSelectModule,
+    ChartsModule,
+    Ng2ChartJsModules
   ],
   providers: [
     AuthenticationService,

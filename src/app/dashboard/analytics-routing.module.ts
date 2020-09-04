@@ -6,6 +6,7 @@ import {AuthGuard} from 'src/app/_helpers';
 
 const routes: Routes = [
   {path: 'analytics', component: AnalyticsComponent, canActivate: [AuthGuard]},
+  {path: 'ccpa-dsar', loadChildren: () => import('./ccpa-dsar/ccpa-dsar.module').then(m => m.CcpaDsarModule) },
   {
     path: 'cookie-consent',
     loadChildren: () => import('./cookie-consent/cookie-consent.module').then(m => m.CookieConsentModule),
