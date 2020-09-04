@@ -233,13 +233,13 @@
     background: white;
     font-size: 14px;
     width: 50%;
+    margin: 10px auto 0 auto !important;
   }
 
   .dsarform-box div > label {
     font-weight: bold;
     margin: 0;
     display: flex;
-    text-transform: capitalize;
   }
   
   .cdk-drag-preview {
@@ -597,4 +597,20 @@ span.previewbtn a {
 
 .displaynone {
   display: none;
+}
+
+.center-div {
+  margin: 10px auto;
+}
+
+.form-check-input {
+  margin: 0;
+}
+
+.pad-right-20 {
+  padding: 0 0 0 20px;
+}
+
+.color-red {
+  color: red;
 }

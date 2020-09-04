@@ -32,7 +32,7 @@ const routes: Routes = [
   { path: 'partners', component: PartnersComponent },
   { path: 'termofuse', component: TermofuseComponent },
   { path: 'contactus', loadChildren: () => import('./contactus/contactus.module').then(m => m.ContactusModule) },
-  { path: 'ccpa', component: CCPAComponent },
+  { path: 'dsar', component: CCPAComponent },
   { path: 'gdpr', loadChildren: () => import('./gdpr/gdpr.module').then(m => m.GdprModule) },
   { path: 'changelog', loadChildren: () => import('./changelog/changelog.module').then(m => m.ChangelogModule) },
   { path: 'gethelp', loadChildren: () => import('./gethelp/gethelp.module').then(m => m.GethelpModule) },
@@ -40,6 +40,8 @@ const routes: Routes = [
     path: 'home/dashboard', loadChildren: () => import('./dashboard/analytics.module')
       .then(m => m.AnalyticsModule)
   },
+  {path: 'home/dashboard/ccpa-dashboard', loadChildren: () =>
+      import('./dashboard/ccpa-dashboard/ccpa-dashboard.module').then(m => m.CcpaDashboardModule)},
   { path: 'userprofile', loadChildren: () => import('./edit-profile/edit-profile.module').then(m => m.EditProfileModule) },
   { path: 'pricing', component: PricingComponent, canActivate: [AuthGuard] },
   { path: 'user/activity', component: UseractivityComponent, canActivate: [AuthGuard] },
@@ -65,11 +67,11 @@ const routes: Routes = [
   },
   {
     path: 'privacy/cookie-category', loadChildren: () => import('./privacy/cookie-category/cookie-category.module')
-      .then(m => m.CookieCategoryModule)
+      .then(m => m.CookieCategoryModule), canActivate: [AuthGuard]
   },
   {
     path: 'privacy/cookie-banner', loadChildren: () => import('./privacy/cookie-banner/cookie-banner.module')
-      .then(m => m.CookieBannerModule)
+      .then(m => m.CookieBannerModule), canActivate: [AuthGuard]
   },
   { path: 'privacy/dsar/createworkflow', loadChildren: () => import('./privacy/dsar/createworkflow/createworkflow.module')
   .then(m => m.CreateworkflowModule) },

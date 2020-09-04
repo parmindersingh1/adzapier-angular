@@ -48,8 +48,21 @@ export class CCPAFormConfigurationService extends WebControls {
 
   updateControl(oldItem, oldItemIndex, newItem) {
     const controlList = JSON.parse(localStorage.getItem('CCPAformControlList'));
+    const actualIndex = controlList.findIndex((t) => t.controlId === newItem.controlId);
     controlList[oldItemIndex] = newItem;
+    if (actualIndex === oldItemIndex) {
+      controlList[oldItemIndex] = newItem;
+    } else {
+      controlList[actualIndex] = newItem;
+      this.swapElements(controlList, actualIndex, oldItemIndex);
+    }
     localStorage.setItem('CCPAformControlList', JSON.stringify(controlList));
+  }
+
+  swapElements(elementArray, oldIndex, newIndex) {
+    const temp = elementArray[oldIndex];
+    elementArray[oldIndex] = elementArray[newIndex];
+    elementArray[newIndex] = temp;
   }
 
   removeControls() {
@@ -93,7 +106,7 @@ export class CCPAFormConfigurationService extends WebControls {
   }
 
   getCaptcha(): Observable<any> {
-    return this.httpClient.get<any>(environment.apiUrl + '/captcha/id');
+    return this.httpClient.get<any>(environment.apiUrl + '/captcha');
   }
 
   getImage(imageUrl: string): Observable<Blob> {
@@ -101,6 +114,9 @@ export class CCPAFormConfigurationService extends WebControls {
   }
  
   verifyCaptcha(obj) {
-    return this.httpClient.post<any>(environment.apiUrl + '/captcha/verify', obj);
+    return this.httpClient.post<any>(environment.apiUrl + '/captcha/verify/' + obj.captcha_id + '/' + obj.captcha_solution, {});
   }
+
+  // https://develop-cmp-api.adzpier-staging.com/api/v1/captcha/verify/e3296361-d26b-4562-8006-3556c480db28/227472
+
 }
