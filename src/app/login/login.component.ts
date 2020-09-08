@@ -77,7 +77,7 @@ export class LoginComponent implements OnInit {
             .subscribe(
                 data => {
                     console.log(data,'login data..');
-                    this.getLoggedInUserDetails();
+                   // this.getLoggedInUserDetails();
                     this.authenticationService.userLoggedIn.next(true);
                     this.authenticationService.currentUserSubject.next(data);
                     localStorage.setItem('currentUser', JSON.stringify(data));

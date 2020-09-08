@@ -4,7 +4,6 @@ import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from './_helpers';
 import { ForgotpasswordComponent } from './forgotpassword/forgotpassword.component';
 
-import { UseractivityComponent } from './useractivity/useractivity.component';
 import { ResetpasswordComponent } from './resetpassword/resetpassword.component';
 import { PagenotfoundComponent } from './errorpages/pagenotfound.component';
 import { InternalerrorComponent } from './errorpages/internalerror.component';
@@ -15,7 +14,6 @@ import { PrivacypolicyComponent } from './privacypolicy/privacypolicy.component'
 import { PartnersComponent } from './partners/partners.component';
 import { TermofuseComponent } from './termofuse/termofuse.component';
 import { CCPAComponent } from './ccpa/ccpa.component';
-import { PricingComponent } from './pricing/pricing.component';
 
 import { VerifyemailComponent } from './verifyemail/verifyemail.component';
 
@@ -43,8 +41,8 @@ const routes: Routes = [
   {path: 'home/dashboard/ccpa-dashboard', loadChildren: () =>
       import('./dashboard/ccpa-dashboard/ccpa-dashboard.module').then(m => m.CcpaDashboardModule)},
   { path: 'userprofile', loadChildren: () => import('./edit-profile/edit-profile.module').then(m => m.EditProfileModule) },
-  { path: 'pricing', component: PricingComponent, canActivate: [AuthGuard] },
-  { path: 'user/activity', component: UseractivityComponent, canActivate: [AuthGuard] },
+  {path: 'pricing', loadChildren: () =>
+      import('./pricing/pricing.module').then(m => m.PricingModule)},
   { path: 'resetpswd/:id', component: ResetpasswordComponent },
   { path: 'pagenotfound', component: PagenotfoundComponent },
   { path: '404page', component: PagenotfoundComponent1 },

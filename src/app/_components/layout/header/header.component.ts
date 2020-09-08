@@ -79,7 +79,6 @@ export class HeaderComponent implements OnInit {
     this.isCollapsed = false;
     this.userService.getCurrentUser.subscribe((data) => {
       if (data) {
-        console.log(data, 'userService..');
         this.currentUser = data;
         this.isCollapsed = false;
         this.currentLoggedInUser = this.currentUser.response.firstname + ' ' + this.currentUser.response.lastname;
@@ -90,22 +89,9 @@ export class HeaderComponent implements OnInit {
 
       }
     });
-    // this.getLoggedInUserDetails();
     this.orgservice.emitUpdatedOrgList.subscribe((data) => {
       this.loadOrganizationList();
     });
-    // this.navigationMenu = [{
-    //   'showlink': 'Application',
-    //   'subcategory': [{ 'showlink': 'CCPA', 'routerLink': '/' }, { 'showlink': 'DSAR', 'routerLink': '/' }]
-    // }];
-    this.authService.currentUser.subscribe(x => this.currentUser = x);
-    if (this.currentUser) {
-      this.isCollapsed = false;
-      this.getLoggedInUserDetails();
-      // this.loadCurrentUser();
-      // this.loadOrganizationList();
-      this.currentSelectedProperty();
-    }
     this.publicNavigationMenu = [
       {
         showlink: 'Solutions',
@@ -138,7 +124,6 @@ export class HeaderComponent implements OnInit {
   isHeaderVisibleTop(): boolean {
     this.userService.currentregSubject.subscribe((data) => {
       if (data) {
-        console.log(data, 'data..');
         this.headerStatus = true;
       } else {
         this.headerStatus = false;
@@ -151,7 +136,6 @@ export class HeaderComponent implements OnInit {
         this.headerStatus = false;
       }
     });
-    console.log(this.headerStatus, 'header comp headerStatus.sss1.');
     return this.headerStatus;
 
   }
@@ -344,7 +328,6 @@ export class HeaderComponent implements OnInit {
   }
 
   getColumnCountSize() {
-    console.log(this.orgPropertyMenu.length, 'this.orgPropertyMenu.length..');
     return this.orgPropertyMenu.length < 3 ? 2 : 4;
   }
 
@@ -363,7 +346,6 @@ export class HeaderComponent implements OnInit {
         this.selectedOrgProperties.push(orgDetails);
         this.isPropSelected(orgDetails);
       }
-      console.log(this.currentProperty, 'currentProperty.last..');
       return this.currentProperty;
     }
 
@@ -381,7 +363,7 @@ export class HeaderComponent implements OnInit {
     });
     return dataArray;
   }
-  //check whether organizaion property was earlier selected
+  // check whether organizaion property was earlier selected
   isOrgPropertyExists(data): boolean {
     const orgDetails = this.orgservice.getCurrentOrgWithProperty();
     if (orgDetails !== undefined) {

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { BillingRoutingModule } from './billing-routing.module';
 import { BillingComponent } from './billing.component';
+import { SharedbootstrapModule } from 'src/app/sharedbootstrap/sharedbootstrap.module';
 // import { UpdateBillingComponent } from '../update-billing/update-billing.component';
 // import {UpdateBillingComponent} from "../../update-billing/update-billing.component";
 
@@ -11,7 +12,8 @@ import { BillingComponent } from './billing.component';
   declarations: [BillingComponent],
   imports: [
     CommonModule,
-    BillingRoutingModule
+    BillingRoutingModule,
+    SharedbootstrapModule
   ]
 })
 export class BillingModule { }
