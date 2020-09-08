@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from './../../environments/environment';
 import { User } from './../_models';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, shareReplay } from 'rxjs/operators';
 
 
 
@@ -27,7 +27,8 @@ export class UserService {
     }
 
     getAll() {
-        return this.http.get<User[]>(environment.apiUrl + '/user');
+        const key = 'response';
+        return this.http.get<User[]>(environment.apiUrl + '/user').pipe(map(res => res[key]), shareReplay());
     }
 
     // login(user: User){
@@ -72,7 +73,8 @@ export class UserService {
     }
 
     getLoggedInUserDetails(): Observable<User> {
-        return this.http.get<User>(environment.apiUrl + '/user');
+        const key = 'response';
+        return this.http.get<User>(environment.apiUrl + '/user').pipe(shareReplay()); // map(res => res[key]),
     }
 
     getCurrentUserProfile(): Observable<User> {

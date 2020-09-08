@@ -1,14 +1,14 @@
-import {ChangeDetectorRef, Component, OnInit, TemplateRef, ViewChild} from '@angular/core';
-import {CdtSettings, DataManager, SelectItem, DtMessages, DtMessagesEn} from 'ng-mazdik-lib';
-import {CookieCategoryService} from '../../_services/cookie-category.service';
-import {getColumnsPlayers} from './columns';
-import {BsModalRef, BsModalService} from 'ngx-bootstrap';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {MatDialog} from '@angular/material/dialog';
-import {NgxUiLoaderService} from 'ngx-ui-loader';
-import {NotificationsService} from 'angular2-notifications';
-import {notificationConfig} from '../../_constant/notification.constant';
-import {OrganizationService} from '../../_services';
+import { ChangeDetectorRef, Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { CdtSettings, DataManager, SelectItem, DtMessages, DtMessagesEn } from 'ng-mazdik-lib';
+import { CookieCategoryService } from '../../_services/cookie-category.service';
+import { getColumnsPlayers } from './columns';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
+import { NgxUiLoaderService } from 'ngx-ui-loader';
+import { NotificationsService } from 'angular2-notifications';
+import { notificationConfig } from '../../_constant/notification.constant';
+import { OrganizationService } from '../../_services';
 interface CategoryResponse {
   response: CategoryResponseData;
   status: number;
@@ -37,49 +37,52 @@ export class CookieCategoryComponent implements OnInit {
   categoryList;
   durationType;
   dataManager: DataManager;
+  dismissible = true;
+  alertMsg: any;
+  isOpen = false;
+  alertType: any;
+  settings: CdtSettings = new CdtSettings({
+    crud: true,
+    // bodyHeight: 380,
+    exportAction: true,
+    globalFilter: false,
+    columnToggleAction: true,
+    clearAllFiltersAction: true,
+    rowClass: this.getCellClass,
+    // virtualScroll: true,
+  });
 
-settings: CdtSettings = new CdtSettings({
-  crud: true,
-  // bodyHeight: 380,
-  exportAction: true,
-  globalFilter: false,
-  columnToggleAction: true,
-  clearAllFiltersAction: true,
-  rowClass: this.getCellClass,
-  // virtualScroll: true,
-});
+  messages: DtMessages = new DtMessagesEn({
+    titleDetailView: 'Cookie details',
+    create: 'Create Cookie',
+    titleCreate: 'Add Cookie'
+  });
 
-messages: DtMessages = new DtMessagesEn({
-  titleDetailView: 'Cookie details',
-  create: 'Create Cookie',
-  titleCreate: 'Add Cookie'
-});
-
-   constructor(private service: CookieCategoryService,
-               private cd: ChangeDetectorRef,
-               private modalService: BsModalService,
-               private formBuilder: FormBuilder,
-               private loading: NgxUiLoaderService,
-               private notification: NotificationsService,
-               private orgservice: OrganizationService,
-               public dialog: MatDialog
-) {
-   this.onInItCategoryForm();
-}
-  ngOnInit() {
-     this.onGetCategoryAndDurationList();
+  constructor(private service: CookieCategoryService,
+              private cd: ChangeDetectorRef,
+              private modalService: BsModalService,
+              private formBuilder: FormBuilder,
+              private loading: NgxUiLoaderService,
+              private notification: NotificationsService,
+              private orgservice: OrganizationService,
+              public dialog: MatDialog
+  ) {
+    this.onInItCategoryForm();
   }
- onInitTable() {
-  const columns = getColumnsPlayers();
-  columns.forEach((x, i) => (i > 0) ? x.editable = true : x.editable = false);
-  columns[1].cellClass = this.getCellClass;
-  columns[3].options = this.categoryList;
-  columns[8].options = this.durationType;
-  this.dataManager = new DataManager(columns, this.settings, this.service, this.messages);
-  this.dataManager.pager.perPage = 10;
-  this.cd.detectChanges();
-}
-  getCellClass({row, column, value}): any {
+  ngOnInit() {
+    this.onGetCategoryAndDurationList();
+  }
+  onInitTable() {
+    const columns = getColumnsPlayers();
+    columns.forEach((x, i) => (i > 0) ? x.editable = true : x.editable = false);
+    columns[1].cellClass = this.getCellClass;
+    columns[3].options = this.categoryList;
+    columns[8].options = this.durationType;
+    this.dataManager = new DataManager(columns, this.settings, this.service, this.messages);
+    this.dataManager.pager.perPage = 10;
+    this.cd.detectChanges();
+  }
+  getCellClass({ row, column, value }): any {
     return {
       'cell-big-value': true
       // 'cell-middle-value': parseInt(value, 10) > 1000000 && parseInt(value, 10) < 1000000000,
@@ -99,31 +102,34 @@ messages: DtMessages = new DtMessagesEn({
     this.categoryModalRef = this.modalService.show(template);
   }
 
-  get c() {return this.categoryForm.controls; }
+  get c() { return this.categoryForm.controls; }
 
-   // @ts-ignore
+  // @ts-ignore
   async onGetCategoryAndDurationList() {
     const durationType = [];
     const categoryList = [];
     this.loading.start();
     const that = this;
     await this.service.getCategoriesList().then((res: CategoryResponse) => {
-    that.loading.stop();
-    for (const data of res.response.durationtype) {
-      durationType.push({id: data['key'], name: data['value']});
-    }
-    for (const cat of res.response.categoryList) {
-      categoryList.push({id: cat['id'], name: cat['name']});
-    }
-    that.categoryList = categoryList;
-    that.durationType = durationType;
-    that.dataManager = null;
-    that.isDurationType = true;
-    that.onInitTable();
-  }).catch( error => {
       that.loading.stop();
-      this.notification.error('Error', 'Something went wrong', notificationConfig);
-  });
+      for (const data of res.response.durationtype) {
+        durationType.push({ id: data['key'], name: data['value'] });
+      }
+      for (const cat of res.response.categoryList) {
+        categoryList.push({ id: cat['id'], name: cat['name'] });
+      }
+      that.categoryList = categoryList;
+      that.durationType = durationType;
+      that.dataManager = null;
+      that.isDurationType = true;
+      that.onInitTable();
+    }).catch(error => {
+      that.loading.stop();
+     // this.notification.error('Error', 'Something went wrong', notificationConfig);
+      this.isOpen = true;
+      this.alertMsg = error;
+      this.alertType = 'danger';
+    });
   }
 
   onCategoryFromSubmit() {
@@ -136,28 +142,44 @@ messages: DtMessages = new DtMessagesEn({
       description: this.categoryForm.value.description
     };
     this.loading.start();
-    this.service.createCategory(categoryData).subscribe( res => {
+    this.service.createCategory(categoryData).subscribe(res => {
       this.loading.stop();
       this.categoryModalRef.hide();
       if (res['status'] === 201) {
-        this.notification.info('Category Created', 'The category created successfully', notificationConfig);
+        // this.notification.info('Category Created', 'The category created successfully', notificationConfig);
+        this.isOpen = true;
+        this.alertMsg = 'The category created successfully';
+        this.alertType = 'success';
       }
     }, error => {
       this.loading.stop();
       this.categoryModalRef.hide();
-      this.notification.error('Error', 'Something went wrong', notificationConfig);
+      // this.notification.error('Error', 'Something went wrong', notificationConfig);
+      this.isOpen = true;
+      this.alertMsg = error;
+      this.alertType = 'danger';
     });
   }
   onRescanCookie() {
-     this.isScanning = true;
-     this.service.cookieScanning().subscribe(res => {
-       this.isScanning = false;
-       if (res['status'] === 201) {
-         this.notification.info('Scanning', res['response'], notificationConfig);
-       }
-     }, error => {
-       this.isScanning = false;
-       this.notification.error('Error', error, notificationConfig);
-     });
+    this.isScanning = true;
+    this.service.cookieScanning().subscribe(res => {
+      this.isScanning = false;
+      if (res['status'] === 201) {
+        // this.notification.info('Scanning', res['response'], notificationConfig);
+        this.isOpen = true;
+        this.alertMsg = res['response'];
+        this.alertType = 'info';
+      }
+    }, error => {
+      this.isScanning = false;
+      // this.notification.error('Error', error, notificationConfig);
+      this.isOpen = true;
+      this.alertMsg = error;
+      this.alertType = 'danger';
+    });
+  }
+  onClosed(dismissedAlert: any): void {
+    this.alertMsg = !dismissedAlert;
+    this.isOpen = false;
   }
 }

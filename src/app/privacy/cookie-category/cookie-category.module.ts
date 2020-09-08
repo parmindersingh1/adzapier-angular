@@ -7,7 +7,7 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import {MatDialog, MatDialogModule} from '@angular/material/dialog';
 import {ReactiveFormsModule} from "@angular/forms";
 import {CrudTableModule, NotifyModule} from "ng-mazdik-lib";
-
+import { SharedbootstrapModule } from 'src/app/sharedbootstrap/sharedbootstrap.module';
 
 const route: Routes = [
   {path: '', component: CookieCategoryComponent, canActivate: [AuthGuard]}
@@ -21,7 +21,8 @@ const route: Routes = [
     MatDialogModule,
     NotifyModule,
     ReactiveFormsModule,
-    CrudTableModule
+    CrudTableModule,
+    SharedbootstrapModule
   ],
 })
 export class CookieCategoryModule { }
