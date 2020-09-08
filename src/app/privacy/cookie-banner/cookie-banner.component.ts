@@ -31,6 +31,10 @@ export class CookieBannerComponent implements OnInit {
   logoText = 'Adzapier';
   bannerCookieData = {};
   isGdprGlobal = false;
+  dismissible = true;
+  alertMsg: any;
+  isOpen = false;
+  alertType: any;
   public ccpaBannerConstant = ccpaBannerConstant;
   public defaultData = defaultData;
   private currentManagedOrgID: any;
@@ -71,7 +75,10 @@ export class CookieBannerComponent implements OnInit {
         }
       }, error => {
         this.loading.stop('2');
-        this.notification.error('Error', error, notificationConfig);
+      //  this.notification.error('Error', error, notificationConfig);
+        this.isOpen = true;
+        this.alertMsg = error;
+        this.alertType = 'danger';
       });
 
   }
@@ -103,7 +110,10 @@ export class CookieBannerComponent implements OnInit {
           this.cookieBannerForm.get('gdprTarget').updateValueAndValidity();
         }
       }, error => {
-        this.notification.error('Error', error, notificationConfig);
+      //  this.notification.error('Error', error, notificationConfig);
+        this.isOpen = true;
+        this.alertMsg = error;
+        this.alertType = 'danger';
         this.loading.stop('1');
       });
   }
@@ -331,10 +341,18 @@ export class CookieBannerComponent implements OnInit {
     this.cookieBannerService.onSubmitCookieBannerData(formData, path)
       .subscribe(res => {
         this.loading.stop();
-        this.notification.info('Success', res['response'], notificationConfig);
+       // this.notification.info('Success', res['response'], notificationConfig);
+        this.isOpen = true;
+        this.alertMsg = res['response'];
+        this.alertType = 'success';
+        setTimeout(() => {
         this.router.navigateByUrl('privacy/cookie-banner/setup');
+        }, 1000);
       }, error => {
-        this.notification.error('Error', error, notificationConfig);
+       // this.notification.error('Error', error, notificationConfig);
+        this.isOpen = true;
+        this.alertMsg = error;
+        this.alertType = 'danger';
         this.loading.stop();
       });
   }
@@ -373,10 +391,16 @@ export class CookieBannerComponent implements OnInit {
     this.cookieBannerService.onUpdateCookieBannerData(formData, path)
       .subscribe(res => {
         this.loading.stop();
-        this.notification.info('Success', res['response'], notificationConfig);
-        this.router.navigateByUrl('privacy/cookie-banner/setup');
+        this.isOpen = true;
+        this.alertMsg = res['response'];
+        this.alertType = 'success';
+        setTimeout(() => {
+          this.router.navigateByUrl('privacy/cookie-banner/setup');
+        }, 1000);
       }, error => {
-        this.notification.error('Error', error, notificationConfig);
+        this.isOpen = true;
+        this.alertMsg = error;
+        this.alertType = 'danger';
         this.loading.stop();
       });
   }
@@ -529,5 +553,10 @@ export class CookieBannerComponent implements OnInit {
        this.cookieBannerForm.get('ccpaTarget').clearValidators();
        this.cookieBannerForm.get('ccpaTarget').updateValueAndValidity();
      }
+  }
+
+  onClosed(dismissedAlert: any): void {
+    this.alertMsg = !dismissedAlert;
+    this.isOpen = false;
   }
 }

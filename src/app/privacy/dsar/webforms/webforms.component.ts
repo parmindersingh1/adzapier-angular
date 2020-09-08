@@ -1,6 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
-import { switchMap, flatMap, map } from 'rxjs/operators';
 import { CCPAFormConfigurationService } from 'src/app/_services/ccpaform-configuration.service';
 import { OrganizationService, UserService } from 'src/app/_services';
 import { CCPAFormFields } from 'src/app/_models/ccpaformfields';
@@ -85,9 +84,8 @@ export class WebformsComponent implements OnInit {
       this.ccpaFormConfigService.getCCPAFormList(orgDetails.organization_id, orgDetails.property_id)
         .subscribe((data) => {
           this.loading.stop();
-          if (data.response.length !== 0) {
-          
-            this.formList = data.response;
+          if (data.length !== 0) {
+            this.formList = data;
             // this.loading = false;
             return this.formList;
           } else {

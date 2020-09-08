@@ -12,13 +12,11 @@ import { JwtInterceptor, fakeBackendProvider, ErrorInterceptor } from './_helper
 import { environment } from '../environments/environment';
 import { HeaderComponent } from './_components/layout/header/header.component';
 import { FooterComponent } from './_components/layout/footer/footer.component';
-import { NavbarComponent } from './_components/layout/navbar/navbar.component';
 
-import { AlertComponent } from './_components';
+// import { AlertComponent } from './_components';
 
 import { ForgotpasswordComponent } from './forgotpassword/forgotpassword.component';
 
-import { UseractivityComponent } from './useractivity/useractivity.component';
 import { ResetpasswordComponent } from './resetpassword/resetpassword.component';
 import { PagenotfoundComponent } from './errorpages/pagenotfound.component';
 import { InternalerrorComponent } from './errorpages/internalerror.component';
@@ -32,7 +30,7 @@ import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { PropertydashboardComponent } from './propertydashboard/propertydashboard.component';
 import { FeatherModule } from 'angular-feather';
 import { allIcons } from 'angular-feather/icons';
-import { PricingComponent } from './pricing/pricing.component';
+// import { PricingComponent } from './pricing/pricing.component';
 import { PartnersComponent } from './partners/partners.component';
 import { TermofuseComponent } from './termofuse/termofuse.component';
 import { PrivacypolicyComponent } from './privacypolicy/privacypolicy.component';
@@ -64,16 +62,14 @@ export const isMock = environment.mock;
     HomeComponent,
     HeaderComponent,
     FooterComponent,
-    NavbarComponent,
-    AlertComponent,
+    // AlertComponent,
     ForgotpasswordComponent,
-    UseractivityComponent,
     ResetpasswordComponent,
     PagenotfoundComponent,
     InternalerrorComponent,
     PagenotfoundComponent1,
     PropertydashboardComponent,
-    PricingComponent,
+   // PricingComponent,
     PartnersComponent,
     TermofuseComponent,
     PrivacypolicyComponent,

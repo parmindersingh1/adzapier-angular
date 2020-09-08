@@ -4,8 +4,7 @@ import { environment } from 'src/environments/environment';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { WebControls } from '../_models/webcontrols';
 import { CCPAFormFields } from '../_models/ccpaformfields';
-import { shareReplay, switchMap } from 'rxjs/operators';
-import { map } from 'jquery';
+import { shareReplay, map, switchMap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -79,7 +78,10 @@ export class CCPAFormConfigurationService extends WebControls {
 
   getCCPAFormList(orgId, propId): Observable<any> {
     // this.ccpaFormList$ = 
-    return this.httpClient.get<any>(environment.apiUrl + '/ccpa/form/' + orgId + '/' + propId);
+    const key = 'response';
+    return this.httpClient.get<any>(environment.apiUrl + '/ccpa/form/' + orgId + '/' + propId).pipe(
+      map(res => res[key])
+      );
     // .pipe(shareReplay(1));
     // return this.ccpaFormList$;
   }
@@ -116,7 +118,5 @@ export class CCPAFormConfigurationService extends WebControls {
   verifyCaptcha(obj) {
     return this.httpClient.post<any>(environment.apiUrl + '/captcha/verify/' + obj.captcha_id + '/' + obj.captcha_solution, {});
   }
-
-  // https://develop-cmp-api.adzpier-staging.com/api/v1/captcha/verify/e3296361-d26b-4562-8006-3556c480db28/227472
 
 }

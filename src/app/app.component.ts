@@ -24,9 +24,6 @@ export class AppComponent implements OnInit {
 
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
-        console.log(event.url.indexOf('editwebforms') === 0, 'editweb..');
-        console.log(event.url.indexOf('editwebforms'), 'editwebindex..');
-        console.log(event.url, 'editweburl..');
         this.hideHeaderFooter = (event.url.indexOf('/editwebforms') === -1);
       }
     });

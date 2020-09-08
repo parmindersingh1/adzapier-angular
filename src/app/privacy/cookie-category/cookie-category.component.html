@@ -11,27 +11,263 @@
         </nav>
         <h4 class="mg-b-0 tx-spacing--1">Cookie Category</h4>
       </div>
-      <div class="d-none d-md-block">
-        <div class="d-flex flex-column flex-sm-row mg-t-20 mg-md-t-0">
-                    <button *ngIf="!isScanning" (click)="onRescanCookie()" class="btn btn-primary mg-r-3" type="button">
-                      Rescan
-                    </button>
-          <button *ngIf="isScanning" class="btn btn-primary mg-r-3" type="button" disabled>
-                            <span class="spinner-border spinner-border-sm txt-info" role="status"
-                                  aria-hidden="true"></span>
-            Rescanning...
-          </button>
-          <button class="btn btn-white btn-xs cat-btn" (click)="openCategoryModal(category)">Add Category</button>
-          <a class="btn btn-secondary m" type="button" routerLink="/privacy/cookie-banner">
-            <!-- <span class="spinner-border spinner-border-sm txt-info" role="status"
-                aria-hidden="true"></span> -->
-            Configure Banner
-          </a>
-        </div>
-      </div>
     </div>
 
-<app-crud-table *ngIf="isDurationType" [dataManager]="dataManager"></app-crud-table>
+<!--<app-crud-table *ngIf="isDurationType" [dataManager]="dataManager"></app-crud-table>-->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <p-toast></p-toast>
+
+    <div class="card">
+      <p-toolbar styleClass="p-mb-4">
+        <ng-template pTemplate="left">
+          <button type="button" class="btn-primary btn btn-sm mr-3" (click)="openNew()">New </button>
+          <span class="p-input-icon-left">
+                    <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search..." />
+                                  <i class="pi pi-search"></i>
+                </span>
+          <p-multiSelect class="ml-3" [options]="cols" [(ngModel)]="selectedColumns" optionLabel="header"
+                         selectedItemsLabel="{0} columns selected" [style]="{minWidth: '200px'}" placeholder="Choose Columns">
+          </p-multiSelect>
+        </ng-template>
+
+        <ng-template pTemplate="right">
+          <div class="d-flex flex-column flex-sm-row mg-t-20 mg-md-t-0">
+            <button *ngIf="!isScanning" (click)="onRescanCookie()" class="btn-primary btn btn-sm mg-r-3" type="button">
+              Rescan
+            </button>
+            <button *ngIf="isScanning" class="btn-primary btn btn-smmg-r-3" type="button" disabled>
+                            <span class="spinner-border spinner-border-sm txt-info" role="status"
+                                  aria-hidden="true"></span>
+              Rescanning...
+            </button>
+            <button class="btn btn-white btn-sm cat-btn" (click)="openCategoryModal(category)">Add Category</button>
+            <a class="btn btn-secondary btn-sm" type="button" routerLink="/privacy/cookie-banner">
+              Configure Banner
+            </a>
+          </div>
+        </ng-template>
+      </p-toolbar>
+
+      <p-table #dt [value]="cookieCategoryList" styleClass="p-datatable-sm"
+               [loading]="tLoading"
+               [totalRecords]="totalCookieCount"
+               [lazy]="true"
+               [rowsPerPageOptions]="[10,20,30]"
+               [columns]="selectedColumns"
+               [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+               [(selection)]="selectedProducts" [rowHover]="true" dataKey="id"
+               (sortFunction)="customSort($event)"
+               (onLazyLoad)="onGetCatList($event)"
+               currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries">
+        <ng-template pTemplate="header" let-columns>
+          <tr>
+            <td>#</td>
+            <th pSortableColumn="name">Name <p-sortIcon field="name"></p-sortIcon></th>
+            <th>Host</th>
+            <th pSortableColumn="category">Category <p-sortIcon field="category"></p-sortIcon></th>
+            <th  *ngFor="let col of columns">
+              {{col.header}}
+            </th>
+                        <th>Domain</th>
+                        <th>Http Type</th>
+            <th>Edit</th>
+            <th>Delete</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-cookieList  let-columns="columns" styleClass="p-datatable-responsive-demo">
+          <tr>
+            <td>{{cookieList.id}}</td>
+            <td>{{cookieList.name}}</td>
+            <td>{{cookieList.path}}</td>
+            <td></td>
+            <td *ngFor="let col of columns">
+              {{cookieList[col.field]}}
+            </td>
+            <td>
+              <i *ngIf="cookieList.secure" class="fa fa-check-circle" aria-hidden="true"></i>
+            </td>
+            <td>
+              <i *ngIf="cookieList.http_only" class="fa fa-check-circle" aria-hidden="true"></i>
+            </td>
+            <td>
+              <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-button-sm" (click)="editProduct(cookieList)"></button>
+            </td>
+            <td>
+              <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger p-button-sm" (click)="deleteProduct(cookieList)"></button>
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="summary">
+          <div class="p-d-flex p-ai-center p-jc-between">
+            In total there are {{totalCookieCount}} Cookies.
+          </div>
+        </ng-template>
+      </p-table>
+    </div>
+
+    <p-dialog [(visible)]="productDialog" [style]="{width: '700px'}" header="Add Cookie" [modal]="true" styleClass="p-fluid">
+      <ng-template pTemplate="content">
+        <form [formGroup]="addCookieForm" (ngSubmit)="onSubmit()">
+        <div class="form-row">
+
+          <div class="form-group col-md-6">
+            <label class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-0 tx-color-03"><i class="tx-8 fa fa-asterisk tx-danger " aria-hidden="true"></i>Cookie
+              Name</label>
+            <input type="text" formControlName="name" class="form-control" placeholder="Cookie Name">
+            <div *ngIf="submitted && f.name.errors"
+            >
+              <div class="text-danger mt-2" *ngIf="f.name.errors.required">This Field is required</div>
+            </div>
+          </div>
+
+          <div class="form-group col-md-6">
+            <label class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-0 tx-color-03"><i class="tx-8 fa fa-asterisk tx-danger " aria-hidden="true"></i> Host</label>
+            <input type="text" formControlName="path" class="form-control" placeholder="Host">
+            <div *ngIf="submitted && f.path.errors"
+            >
+              <div class="text-danger mt-2" *ngIf="f.path.errors.required">This Field is required</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-0 tx-color-03"><i class="tx-8 fa fa-asterisk tx-danger " aria-hidden="true"></i> Category</label>
+            <select formControlName="category" id="my-select" class="form-control" >
+              <option *ngFor="let obj of categoryList" [value]="obj.id">{{obj.name}}</option>
+            </select>
+            <div *ngIf="submitted && f.category.errors"
+            >
+              <div class="text-danger mt-2" *ngIf="f.category.errors.required">This Field is required</div>
+            </div>
+          </div>
+
+          <div class="form-group col-md-6">
+            <label class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-0 tx-color-03"><i class="tx-8 fa fa-asterisk tx-danger " aria-hidden="true"></i> Party</label>
+            <div class="col-sm-10">
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" formControlName="party" name="party" id="inlineRadio1" value="first_party">
+                <label class="form-check-label" for="inlineRadio1">First Party</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" formControlName="party" name="party" id="inlineRadio2" value="third_party">
+                <label class="form-check-label" for="inlineRadio2">Third Party</label>
+              </div>
+            </div>
+            <div *ngIf="submitted && f.party.errors"
+            >
+              <div class="text-danger mt-2" *ngIf="f.party.errors.required">This Field is required</div>
+            </div>
+          </div>
+
+        </div>
+
+
+        <div class="form-group mg-b-5">
+          <label for="exampleFormControlTextarea1"><i class="tx-8 fa fa-asterisk tx-danger " aria-hidden="true"></i> Description</label>
+          <textarea formControlName="description" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+          <div *ngIf="submitted && f.description.errors"
+          >
+            <div class="text-danger mt-2" *ngIf="f.description.errors.required">This Field is required</div>
+          </div>
+        </div>
+
+        <div class="form-group mg-b-5">
+          <label for="exampleFormControlTextarea1"><i class="tx-8 fa fa-asterisk tx-danger " aria-hidden="true"></i> Value</label>
+          <textarea formControlName="value" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+          <div *ngIf="submitted && f.value.errors"
+          >
+            <div class="text-danger mt-2" *ngIf="f.value.errors.required">This Field is required</div>
+          </div>
+        </div>
+
+
+        <div class="form-group">
+          <label class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-0 tx-color-03">Expires</label>
+          <div class="col-sm-10">
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" formControlName="expiry"  name="expiry" value="seesion">
+              <label class="form-check-label" for="inlineRadio1">Seesion</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" formControlName="expiry" name="expiry" value="presistent">
+              <label class="form-check-label" for="inlineRadio2">Presistent</label>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group col-md-2">
+              <label class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-0 tx-color-03">Duration</label>
+              <input formControlName="duration" type="number" class="form-control" placeholder="1">
+
+            </div>
+            <div class="form-group col-md-3 d-flex align-items-end">
+              <select formControlName="duration_type" class="custom-select">
+                <option *ngFor="let dur of durationType" [value]="dur.key">{{dur.value}}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+          <div class="text-center">
+            <button  label="Cancel" icon="pi pi-times" class="btn btn-white mr-4">Cancel</button>
+            <button  label="Save" icon="pi pi-check" class="btn btn-primary">Save</button>
+          </div>
+        </form>
+      </ng-template>
+    </p-dialog>
+
+    <p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   </div>
 </div>
 
@@ -73,5 +309,8 @@
     </div>
   </form>
 </ng-template>
-<app-notify></app-notify>
+<!-- <app-notify></app-notify> -->
+<div class="col-sm-5 mt-3 mr-0 float-right">
+  <alert *ngIf="isOpen" [type]="alertType"  dismissOnTimeout="5000" [dismissible]="dismissible" (onClosed)="onClosed(alertMsg)">{{  alertMsg}}</alert>
+</div>
 

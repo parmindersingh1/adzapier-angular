@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import {notificationConfig} from '../../../_constant/notification.constant';
-import {NotificationsService} from 'angular2-notifications';
-import {CookieBannerService} from '../../../_services/cookie-banner.service';
-import {NgxUiLoaderService} from 'ngx-ui-loader';
-import {OrganizationService} from '../../../_services';
-import {Location} from '@angular/common';
+import { notificationConfig } from '../../../_constant/notification.constant';
+import { NotificationsService } from 'angular2-notifications';
+import { CookieBannerService } from '../../../_services/cookie-banner.service';
+import { NgxUiLoaderService } from 'ngx-ui-loader';
+import { OrganizationService } from '../../../_services';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-setup',
@@ -15,11 +15,15 @@ export class SetupComponent implements OnInit {
   private currentManagedOrgID: any;
   private currrentManagedPropID: any;
   scriptUrl: any;
+  dismissible = true;
+  alertMsg: any;
+  isOpen = false;
+  alertType: any;
   constructor(
     private notification: NotificationsService,
     private cookieBannerService: CookieBannerService,
     private loading: NgxUiLoaderService,
-    private  orgservice: OrganizationService,
+    private orgservice: OrganizationService,
   ) { }
 
   ngOnInit() {
@@ -46,14 +50,17 @@ export class SetupComponent implements OnInit {
       .subscribe(res => {
         this.loading.stop('2');
         this.scriptUrl = `<script src="${res['response']['js_location']}"></script>`;
-          // res['response']['js_location'];
+        // res['response']['js_location'];
         console.log('this.scriptUrl', this.scriptUrl);
         if (res['status'] === 200 && res.hasOwnProperty('response')) {
-           console.log('inseide');
+          console.log('inseide');
         }
       }, error => {
         this.loading.stop('2');
         this.notification.error('Error', error, notificationConfig);
+        this.isOpen = true;
+        this.alertMsg = error;
+        this.alertType = 'danger';
       });
   }
   onCopyScript() {

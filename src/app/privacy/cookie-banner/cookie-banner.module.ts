@@ -11,7 +11,7 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatExpansionModule} from '@angular/material/expansion';
 import { SetupComponent } from './setup/setup.component';
 import {MatCheckboxModule} from '@angular/material/checkbox';
-
+import { SharedbootstrapModule } from 'src/app/sharedbootstrap/sharedbootstrap.module';
 const path: Routes = [{
   path: '', component: CookieBannerComponent,
 },
@@ -30,7 +30,8 @@ const path: Routes = [{
         MatButtonModule,
         MatButtonModule,
         MatExpansionModule,
-        MatCheckboxModule
+        MatCheckboxModule,
+        SharedbootstrapModule
     ]
 })
 export class CookieBannerModule { }
