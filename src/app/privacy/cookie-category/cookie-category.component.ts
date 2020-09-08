@@ -1,8 +1,5 @@
-<<<<<<< HEAD
-import { ChangeDetectorRef, Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { CdtSettings, DataManager, SelectItem, DtMessages, DtMessagesEn } from 'ng-mazdik-lib';
+import { ChangeDetectorRef, Component, Input, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { CookieCategoryService } from '../../_services/cookie-category.service';
-import { getColumnsPlayers } from './columns';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
@@ -10,20 +7,9 @@ import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { NotificationsService } from 'angular2-notifications';
 import { notificationConfig } from '../../_constant/notification.constant';
 import { OrganizationService } from '../../_services';
-=======
-import {ChangeDetectorRef, Component, Input, OnInit, TemplateRef, ViewChild} from '@angular/core';
-import {CookieCategoryService} from '../../_services/cookie-category.service';
-import {BsModalRef, BsModalService} from 'ngx-bootstrap';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {MatDialog} from '@angular/material/dialog';
-import {NgxUiLoaderService} from 'ngx-ui-loader';
-import {NotificationsService} from 'angular2-notifications';
-import {notificationConfig} from '../../_constant/notification.constant';
-import {OrganizationService} from '../../_services';
-import {ConfirmationService, LazyLoadEvent, SortEvent} from 'primeng/api';
+import { ConfirmationService, LazyLoadEvent, SortEvent } from 'primeng/api';
 import { MessageService } from 'primeng/api';
 
->>>>>>> c297ba745c4d00ea440a5d371af311472e21d00f
 interface CategoryResponse {
   response: CategoryResponseData;
   status: number;
@@ -53,60 +39,6 @@ export class CookieCategoryComponent implements OnInit {
   categoryFromSubmitted: boolean;
   categoryList;
   durationType;
-<<<<<<< HEAD
-  dataManager: DataManager;
-  dismissible = true;
-  alertMsg: any;
-  isOpen = false;
-  alertType: any;
-  settings: CdtSettings = new CdtSettings({
-    crud: true,
-    // bodyHeight: 380,
-    exportAction: true,
-    globalFilter: false,
-    columnToggleAction: true,
-    clearAllFiltersAction: true,
-    rowClass: this.getCellClass,
-    // virtualScroll: true,
-  });
-
-  messages: DtMessages = new DtMessagesEn({
-    titleDetailView: 'Cookie details',
-    create: 'Create Cookie',
-    titleCreate: 'Add Cookie'
-  });
-
-  constructor(private service: CookieCategoryService,
-              private cd: ChangeDetectorRef,
-              private modalService: BsModalService,
-              private formBuilder: FormBuilder,
-              private loading: NgxUiLoaderService,
-              private notification: NotificationsService,
-              private orgservice: OrganizationService,
-              public dialog: MatDialog
-  ) {
-    this.onInItCategoryForm();
-  }
-  ngOnInit() {
-    this.onGetCategoryAndDurationList();
-  }
-  onInitTable() {
-    const columns = getColumnsPlayers();
-    columns.forEach((x, i) => (i > 0) ? x.editable = true : x.editable = false);
-    columns[1].cellClass = this.getCellClass;
-    columns[3].options = this.categoryList;
-    columns[8].options = this.durationType;
-    this.dataManager = new DataManager(columns, this.settings, this.service, this.messages);
-    this.dataManager.pager.perPage = 10;
-    this.cd.detectChanges();
-  }
-  getCellClass({ row, column, value }): any {
-    return {
-      'cell-big-value': true
-      // 'cell-middle-value': parseInt(value, 10) > 1000000 && parseInt(value, 10) < 1000000000,
-      // 'cell-zero-value': parseInt(value, 10) === 0,
-      // 'cell-right': true,
-=======
 
   productDialog: boolean;
 
@@ -125,27 +57,31 @@ export class CookieCategoryComponent implements OnInit {
   private pagelimit: string;
   private orderBy: string;
   private data: { limit: any; page: any; sortBy: any, sortColumn: any, search: any };
-   constructor(private service: CookieCategoryService,
-               private cd: ChangeDetectorRef,
-               private modalService: BsModalService,
-               private loading: NgxUiLoaderService,
-               private notification: NotificationsService,
-               private orgservice: OrganizationService,
-               public dialog: MatDialog,
-               private formBuilder: FormBuilder,
-               private messageService: MessageService, private confirmationService: ConfirmationService
-) {
-   this.onInItCategoryForm();
-}
+  dismissible = true;
+  alertMsg: any;
+  isOpen = false;
+  alertType: any;
+  constructor(private service: CookieCategoryService,
+    private cd: ChangeDetectorRef,
+    private modalService: BsModalService,
+    private loading: NgxUiLoaderService,
+    private notification: NotificationsService,
+    private orgservice: OrganizationService,
+    public dialog: MatDialog,
+    private formBuilder: FormBuilder,
+    private messageService: MessageService, private confirmationService: ConfirmationService
+  ) {
+    this.onInItCategoryForm();
+  }
   ngOnInit() {
-     this.onSelectedColummFormServer();
-     this.onGetCategoryAndDurationList();
-     // this.onGetCatList();
-     this.onInItCookieForm();
+    this.onSelectedColummFormServer();
+    this.onGetCategoryAndDurationList();
+    // this.onGetCatList();
+    this.onInItCookieForm();
   }
   onSelectedColummFormServer() {
-    this.cols =  this.onGetColumms();
-    const  selectedCols = JSON.parse(localStorage.getItem('cookieCat'));
+    this.cols = this.onGetColumms();
+    const selectedCols = JSON.parse(localStorage.getItem('cookieCat'));
     if (!selectedCols) {
       localStorage.setItem('cookieCat', JSON.stringify(this.cols));
     } else {
@@ -154,8 +90,8 @@ export class CookieCategoryComponent implements OnInit {
     // this.selectedCols = this.cols;
   }
 
-  onGetColumms () {
-   return [
+  onGetColumms() {
+    return [
       { field: 'party', header: 'Party' },
       { field: 'desc', header: 'Description' },
       { field: 'value', header: 'Value' },
@@ -163,21 +99,21 @@ export class CookieCategoryComponent implements OnInit {
       { field: 'duration', header: 'Duration' },
     ];
   }
-onInItCookieForm() {
-  this.addCookieForm = this.formBuilder.group({
-    name: ['', Validators.required],
-    path: ['', Validators.required],
-    category: ['', Validators.required],
-    party: ['', Validators.required],
-    description: ['', Validators.required],
-    value: ['', Validators.required],
-    expiry: [''],
-    duration: [''],
-    duration_type: [''],
-    property: [null],
-    http_only: [null],
-  });
-}
+  onInItCookieForm() {
+    this.addCookieForm = this.formBuilder.group({
+      name: ['', Validators.required],
+      path: ['', Validators.required],
+      category: ['', Validators.required],
+      party: ['', Validators.required],
+      description: ['', Validators.required],
+      value: ['', Validators.required],
+      expiry: [''],
+      duration: [''],
+      duration_type: [''],
+      property: [null],
+      http_only: [null],
+    });
+  }
 
   onGetCatList(event) {
 
@@ -189,28 +125,29 @@ onInItCookieForm() {
     }
     this.pagelimit = '?limit=' + this.eventRows + '&page=' + this.firstone;
     this.data = {
-        limit: this.eventRows,
-        page: this.firstone,
-        sortBy:  event.sortOrder === -1 ? 'DESC' : 'ASC',
-        sortColumn: event.sortField !== undefined ? event.sortField : '',
-        search: event.globalFilter === null ? '' : event.globalFilter
-      };
+      limit: this.eventRows,
+      page: this.firstone,
+      sortBy: event.sortOrder === -1 ? 'DESC' : 'ASC',
+      sortColumn: event.sortField !== undefined ? event.sortField : '',
+      search: event.globalFilter === null ? '' : event.globalFilter
+    };
     this.onGetDataFromServer();
   }
 
-  onGetDataFromServer(){
-     this.tLoading = true;
-  this.service.getCookieData(this.data).subscribe(res => {
-    this.tLoading = false;
-  this.cookieCategoryList = res['response'];
-  this.totalCookieCount = res['count'];
-}, error => {
-    this.tLoading = false;
-  });
-}
+  onGetDataFromServer() {
+    this.tLoading = true;
+    this.service.getCookieData(this.data).subscribe(res => {
+      this.tLoading = false;
+      this.cookieCategoryList = res['response'];
+      this.totalCookieCount = res['count'];
+    }, error => {
+      this.tLoading = false;
+    });
+  }
 
   get f() {
-     return this.addCookieForm.controls; }
+    return this.addCookieForm.controls;
+  }
 
   @Input() get selectedColumns(): any[] {
     localStorage.setItem('cookieCat', JSON.stringify(this.selectedCols));
@@ -234,7 +171,6 @@ onInItCookieForm() {
       party: this.addCookieForm.value.party,
       path: this.addCookieForm.value.path,
       value: this.addCookieForm.value.value
->>>>>>> c297ba745c4d00ea440a5d371af311472e21d00f
     };
     this.submitted = true;
     // stop here if form is invalid
@@ -256,7 +192,7 @@ onInItCookieForm() {
 
 
   openNew() {
-     this.isUpdate = false;
+    this.isUpdate = false;
     this.cookieCategory = {};
     this.submitted = false;
     this.productDialog = true;
@@ -276,10 +212,10 @@ onInItCookieForm() {
   // }
 
   editProduct(product) {
-      this.catId = product.id;
-     this.isUpdate = true;
+    this.catId = product.id;
+    this.isUpdate = true;
     this.addCookieForm.patchValue(product);
-    this.cookieCategory = {...product};
+    this.cookieCategory = { ...product };
     this.productDialog = true;
   }
 
@@ -294,10 +230,10 @@ onInItCookieForm() {
           .subscribe(res => {
             this.tLoading = false;
             this.onGetDataFromServer();
-            this.messageService.add({severity:'success', summary: 'Successful', detail: 'Cookie Deleted', life: 3000});
+            this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Cookie Deleted', life: 3000 });
           }, error => {
             this.tLoading = false;
-            this.messageService.add({severity:'error', summary: 'Error', detail: error, life: 3000});
+            this.messageService.add({ severity: 'error', summary: 'Error', detail: error, life: 3000 });
           });
       }
     });
@@ -307,7 +243,7 @@ onInItCookieForm() {
     this.productDialog = false;
     this.submitted = false;
   }
-  onUpdate (catForm) {
+  onUpdate(catForm) {
     this.tLoading = true;
     this.service.put(catForm, this.catId)
       .subscribe(res => {
@@ -355,7 +291,7 @@ onInItCookieForm() {
   createId(): string {
     let id = '';
     var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    for ( var i = 0; i < 5; i++ ) {
+    for (var i = 0; i < 5; i++) {
       id += chars.charAt(Math.floor(Math.random() * chars.length));
     }
     return id;
@@ -386,24 +322,24 @@ onInItCookieForm() {
 
 
 
-//  onInitTable() {
-//   const columns = getColumnsPlayers();
-//   columns.forEach((x, i) => (i > 0) ? x.editable = true : x.editable = false);
-//   columns[1].cellClass = this.getCellClass;
-//   columns[3].options = this.categoryList;
-//   columns[8].options = this.durationType;
-//   this.dataManager = new DataManager(columns, this.settings, this.service, this.messages);
-//   this.dataManager.pager.perPage = 10;
-//   this.cd.detectChanges();
-// }
-//   getCellClass({row, column, value}): any {
-//     return {
-//       'cell-big-value': true
-//       // 'cell-middle-value': parseInt(value, 10) > 1000000 && parseInt(value, 10) < 1000000000,
-//       // 'cell-zero-value': parseInt(value, 10) === 0,
-//       // 'cell-right': true,
-//     };
-//   }
+  //  onInitTable() {
+  //   const columns = getColumnsPlayers();
+  //   columns.forEach((x, i) => (i > 0) ? x.editable = true : x.editable = false);
+  //   columns[1].cellClass = this.getCellClass;
+  //   columns[3].options = this.categoryList;
+  //   columns[8].options = this.durationType;
+  //   this.dataManager = new DataManager(columns, this.settings, this.service, this.messages);
+  //   this.dataManager.pager.perPage = 10;
+  //   this.cd.detectChanges();
+  // }
+  //   getCellClass({row, column, value}): any {
+  //     return {
+  //       'cell-big-value': true
+  //       // 'cell-middle-value': parseInt(value, 10) > 1000000 && parseInt(value, 10) < 1000000000,
+  //       // 'cell-zero-value': parseInt(value, 10) === 0,
+  //       // 'cell-right': true,
+  //     };
+  //   }
   onInItCategoryForm() {
     const alphaNumeric = '^(?![0-9]*$)[a-zA-Z0-9 ]+$';
     this.categoryForm = this.formBuilder.group({
@@ -425,31 +361,15 @@ onInItCookieForm() {
     this.loading.start();
     const that = this;
     await this.service.getCategoriesList().then((res: CategoryResponse) => {
-<<<<<<< HEAD
-=======
-    that.loading.stop();
+      that.loading.stop();
       if (res.status === 200) {
         that.categoryList = res.response.categoryList;
         that.durationType = res.response.durationtype;
       }
-    // that.onInitTable();
-  }).catch( error => {
->>>>>>> c297ba745c4d00ea440a5d371af311472e21d00f
-      that.loading.stop();
-      for (const data of res.response.durationtype) {
-        durationType.push({ id: data['key'], name: data['value'] });
-      }
-      for (const cat of res.response.categoryList) {
-        categoryList.push({ id: cat['id'], name: cat['name'] });
-      }
-      that.categoryList = categoryList;
-      that.durationType = durationType;
-      that.dataManager = null;
-      that.isDurationType = true;
-      that.onInitTable();
+      // that.onInitTable();
     }).catch(error => {
       that.loading.stop();
-     // this.notification.error('Error', 'Something went wrong', notificationConfig);
+      // this.notification.error('Error', 'Something went wrong', notificationConfig);
       this.isOpen = true;
       this.alertMsg = error;
       this.alertType = 'danger';
@@ -492,19 +412,15 @@ onInItCookieForm() {
         // this.notification.info('Scanning', res['response'], notificationConfig);
         this.isOpen = true;
         this.alertMsg = res['response'];
-        this.alertType = 'info';
+        this.alertType = 'success';
       }
     }, error => {
       this.isScanning = false;
-      // this.notification.error('Error', error, notificationConfig);
+     // this.notification.error('Error', error, notificationConfig);
       this.isOpen = true;
       this.alertMsg = error;
       this.alertType = 'danger';
     });
-  }
-  onClosed(dismissedAlert: any): void {
-    this.alertMsg = !dismissedAlert;
-    this.isOpen = false;
   }
 
 

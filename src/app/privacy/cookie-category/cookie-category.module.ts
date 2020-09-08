@@ -7,9 +7,7 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import {MatDialog, MatDialogModule} from '@angular/material/dialog';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {CrudTableModule, NotifyModule} from "ng-mazdik-lib";
-<<<<<<< HEAD
 import { SharedbootstrapModule } from 'src/app/sharedbootstrap/sharedbootstrap.module';
-=======
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DialogModule } from 'primeng/dialog';
 import { FileUploadModule } from 'primeng/fileupload';
@@ -23,7 +21,6 @@ import {ConfirmationService, MessageService} from 'primeng/api';
 import {InputTextModule} from 'primeng/inputtext';
 import {RippleModule} from 'primeng/ripple';
 import {MultiSelectModule} from 'primeng/multiselect';
->>>>>>> c297ba745c4d00ea440a5d371af311472e21d00f
 
 const route: Routes = [
   {path: '', component: CookieCategoryComponent, canActivate: [AuthGuard]}
@@ -38,9 +35,7 @@ const route: Routes = [
     NotifyModule,
     ReactiveFormsModule,
     CrudTableModule,
-<<<<<<< HEAD
-    SharedbootstrapModule
-=======
+    SharedbootstrapModule,
     ConfirmDialogModule,
     FormsModule,
     InputNumberModule,
@@ -54,7 +49,6 @@ const route: Routes = [
     InputTextModule,
     RippleModule,
     MultiSelectModule
->>>>>>> c297ba745c4d00ea440a5d371af311472e21d00f
   ],
   providers: [MessageService, ConfirmationService]
 })
