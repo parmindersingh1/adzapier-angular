@@ -105,17 +105,11 @@ export class HeaderComponent implements OnInit {
       // this.loadCurrentUser();
       // this.loadOrganizationList();
       this.currentSelectedProperty();
-      // this.loadOrganizationWithProperty();
-      //   this.orgservice.emitUpdatedOrganization.subscribe((data) => {
-      //     this.currentOrganization = data.response.orgname;
-      //     console.log(this.currentOrganization, 'currentOrganization..');
-      //  });
-
     }
     this.publicNavigationMenu = [
       {
         showlink: 'Solutions',
-        subcategory: [{ showlink: 'CCPA', routerLink: '/ccpa' }, { showlink: 'GDPR', routerLink: '/gdpr' }]
+        subcategory: [{ showlink: 'DSAR', routerLink: '/dsar' }, { showlink: 'GDPR', routerLink: '/gdpr' }]
       }, {
         showlink: 'Pricing', routerLink: '/plans'
       }, {
@@ -169,27 +163,7 @@ export class HeaderComponent implements OnInit {
       }
       this.orgList = Object.values(data)[1];
       this.leftItems = this.orgList;
-
-
-      console.log(this.leftItems, 'leftItems..');
-      //  this.loadOrganizationProperty();
-      //  else {
-      //   this.orgList = Object.values(data)[0];
-      //   this.leftItems = this.orgList;
-      //   console.log(this.leftItems,'leftItems..');
-      //  }
-
-      // if (this.orgList[0] !== undefined) {
-      //   const obj = {
-      //     orgId: this.orgList[0].orgid,
-      //     property: this.orgList[0].property[0]
-      //   };
-      //   this.orgservice.changeCurrentSelectedProperty(obj);
       this.currentSelectedProperty();
-      // } else {
-
-      // }
-
       this.rightItems = [
         {
           label: 'User', icon: 'assets/imgs/glass.jpg',
@@ -205,7 +179,7 @@ export class HeaderComponent implements OnInit {
       this.navigationMenu = [
         {
           showlink: 'Dashboard',
-          subcategory: [{ showlink: 'CCPA DSAR', routerLink: '/home/dashboard/ccpa-dsar', icon: 'bar-chart-2' },
+          subcategory: [{ showlink: 'DSAR', routerLink: '/home/dashboard/ccpa-dsar', icon: 'bar-chart-2' },
           { showlink: 'GDPR', routerLink: '/pagenotfound', icon: 'pie-chart' },
           { showlink: 'Cookie Consent', routerLink: '/home/dashboard/cookie-consent', icon: 'fas fa-cookie feather-16' }
           ]
@@ -227,18 +201,7 @@ export class HeaderComponent implements OnInit {
 
 
   }
-
-  // loadOrganizationProperty(): any {
-  //   this.orgList.forEach(element => {
-  //     if(element.id !== '') {
-  //       this.orgservice.getPropertyList(element.id);
-  //     }
-  //   }).subscribe((data) => {
-  //     console.log(data, 'datapropertyList..');
-  //     this.propertyList = data;
-  //   });
-
-  // }
+ 
 
   getLoggedInUserDetails() {
     this.isCollapsed = false;
@@ -253,13 +216,6 @@ export class HeaderComponent implements OnInit {
   }
 
   isCurrentPropertySelected(org, prop) {
-    console.log(org, 'org..');
-    console.log(prop, 'prop..');
-    //   this.orgservice.getPropertyList(org.id).subscribe((data) => this.propList = data.response);
-    //  console.log(this.checkPropertyStatus(prop), 'cps..');
-    // if (this.checkPropertyStatus(prop)) {
-    //   alert(prop.property_name + ' property has been disabled.');
-    // } else {
     this.selectedOrgProperties.length = 0;
     this.activeProp = prop.property_name;
     const obj = {
@@ -270,15 +226,10 @@ export class HeaderComponent implements OnInit {
       user_id: this.userID
     };
     this.orgservice.changeCurrentSelectedProperty(obj);
-    // this.orgservice.getSelectedOrgProperty.emit(obj);
-    //  this.firstElement = false;
     this.selectedOrgProperties.push(obj);
     this.orgservice.setCurrentOrgWithProperty(obj);
     this.currentSelectedProperty();
-    this.router.navigate(['/privacy/dsar/webforms']);
-    //  }
-
-    // this.router.navigate(['/webforms']);
+  //  this.router.navigate(['/privacy/dsar/webforms']);
   }
 
   isPropSelected(selectedItem): boolean {
@@ -389,15 +340,7 @@ export class HeaderComponent implements OnInit {
       } else {
         this.router.navigate(['settings/organizations']);
       }
-      // if (this.currentProperty === undefined) {
-      //   this.selectedOrgProperties.length = 0;
-      //   this.selectedOrgProperties.push(data.response[0].property[0]);
-      //   this.isPropSelected(data.response[0].property[0]);
-      //   this.orgservice.changeCurrentSelectedProperty(data.response[0].property[0]);
-      //   this.orgservice.setCurrentOrgWithProperty(data.response[0]);
-      // }
     });
- //   this.getColumnCountSize();
   }
 
   getColumnCountSize() {
