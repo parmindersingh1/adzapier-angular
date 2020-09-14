@@ -7,6 +7,7 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import {MatDialog, MatDialogModule} from '@angular/material/dialog';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {CrudTableModule, NotifyModule} from "ng-mazdik-lib";
+import { SharedbootstrapModule } from 'src/app/sharedbootstrap/sharedbootstrap.module';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DialogModule } from 'primeng/dialog';
 import { FileUploadModule } from 'primeng/fileupload';
@@ -34,6 +35,7 @@ const route: Routes = [
     NotifyModule,
     ReactiveFormsModule,
     CrudTableModule,
+    SharedbootstrapModule,
     ConfirmDialogModule,
     FormsModule,
     InputNumberModule,

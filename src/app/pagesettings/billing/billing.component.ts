@@ -1,5 +1,5 @@
-import { Component, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { BillingService } from 'src/app/_services/billing.service';
 import { NotificationsService } from 'angular2-notifications';
 import { CompanyService } from 'src/app/company.service';
@@ -20,7 +20,11 @@ export class BillingComponent implements OnInit {
     billing_history: {},
     company_details: {}
   };
-  companyDetails: any = { name: ''};
+  companyDetails: any = { name: '' };
+  dismissible = true;
+  alertMsg: any;
+  isOpen = false;
+  alertType: any;
   constructor(private activatedRoute: ActivatedRoute,
               private router: Router,
               private billingService: BillingService,
@@ -33,8 +37,8 @@ export class BillingComponent implements OnInit {
   ngOnInit() {
     this.activatedRoute.queryParams.subscribe(params => {
       if (params.success === 'true') {
-          this.isSuccess = true;
-     } else if (params.success === 'false') {
+        this.isSuccess = true;
+      } else if (params.success === 'false') {
         this.isError = true;
       }
     });
@@ -47,9 +51,12 @@ export class BillingComponent implements OnInit {
     this.billingService.getCurrentPlan().subscribe(res => {
       this.loading.stop();
       if (res['status'] === 200) {
-        console.log(typeof(res['response']));
-        if (typeof(res['response']) === 'string') {
-          this.notification.info('No Current Plan', 'You have not Subscribed with any plan...', notificationConfig);
+        console.log(typeof (res['response']));
+        if (typeof (res['response']) === 'string') {
+          //  this.notification.info('No Current Plan', 'You have not Subscribed with any plan...', notificationConfig);
+          this.isOpen = true;
+          this.alertMsg = 'You have not Subscribed with any plan...';
+          this.alertType = 'info';
           this.router.navigateByUrl('/pricing');
         } else {
           this.billingDetails = res['response'];
@@ -57,9 +64,12 @@ export class BillingComponent implements OnInit {
       }
     }, error => {
       this.loading.stop();
-      this.notification.error('Current Plan', 'Something went wrong...', notificationConfig);
+      this.isOpen = true;
+      this.alertMsg = error;
+      this.alertType = 'danger';
+      // this.notification.error('Current Plan', 'Something went wrong...', notificationConfig);
     });
-    setTimeout( () => {
+    setTimeout(() => {
       this.loading.stop();
     }, 4000);
   }
@@ -67,11 +77,19 @@ export class BillingComponent implements OnInit {
   onGetCompanyDetails() {
     this.companyService.getCompanyDetails().subscribe(res => {
       if (res['status'] === 200) {
-       this.companyDetails = res['response'];
-     }
+        this.companyDetails = res['response'];
+      }
     }, error => {
-      this.notification.error('Company Details', 'Something went wrong...', notificationConfig);
+      this.isOpen = true;
+      this.alertMsg = error;
+      this.alertType = 'danger';
+     // this.notification.error('Company Details', 'Something went wrong...', notificationConfig);
     });
+  }
+
+  onClosed(dismissedAlert: any): void {
+    this.alertMsg = !dismissedAlert;
+    this.isOpen = false;
   }
 
 }

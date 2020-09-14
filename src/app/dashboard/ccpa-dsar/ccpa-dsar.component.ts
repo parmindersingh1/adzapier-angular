@@ -33,6 +33,10 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
   requestType = [];
   subjectType = [];
   endDate;
+  dismissible = true;
+  alertMsg: any;
+  isOpen = false;
+  alertType: any;
   // public lineChartData: ChartDataSets[] = [
   //   { data: [100], label: 'No Record'  },
   // ];
@@ -413,11 +417,16 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
           this.subjectType = result['subjectType']['data'];
           this.onSetChartData(result);
         } else {
-          this.notification.info('Dashboard', 'Data not Found...', notificationConfig);
+          this.isOpen = true;
+          this.alertMsg = 'Data not Found...';
+          this.alertType = 'info';
+         // this.notification.info('Dashboard', 'Data not Found...', notificationConfig);
         }
       }, error => {
         this.loading.stop('p1');
-        this.notification.error('Dashboard', 'Something went wrong...' + error, notificationConfig);
+        this.isOpen = true;
+        this.alertMsg = error;
+        this.alertType = 'danger';
       });
   }
 
@@ -550,7 +559,10 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
         this.onInsilizaedMap();
       }, error => {
         this.loading.stop();
-        this.notification.error('Dashboard', 'Something went wrong...' + error, notificationConfig);
+        this.isOpen = true;
+        this.alertMsg = error;
+        this.alertType = 'danger';
+       // this.notification.error('Dashboard', 'Something went wrong...' + error, notificationConfig);
       });
   }
 
@@ -563,5 +575,10 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
       return this.dashboardCount.AVG_TIME_TO_COMPLETE;
     }
     return 0;
+  }
+
+  onClosed(dismissedAlert: any): void {
+    this.alertMsg = !dismissedAlert;
+    this.isOpen = false;
   }
 }

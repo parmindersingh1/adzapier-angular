@@ -40,13 +40,12 @@ export class CookieConsentComponent implements OnInit {
   constructor(private dashboardService: DashboardService,
               private orgservice: OrganizationService,
               private notification: NotificationsService,
-  private loading: NgxUiLoaderService,
+              private loading: NgxUiLoaderService
   ) { }
 
   ngOnInit() {
     this.onMapInIt();
-    this.alertMsg =
-      "adssa";
+    this.alertMsg = "adssa";
     this.isOpen = true;
     this.alertType = 'danger';
     this.onGetPropsAndOrgId();
@@ -92,7 +91,10 @@ export class CookieConsentComponent implements OnInit {
         }
       }, error => {
         this.loading.stop('1');
-        this.notification.error('Cookie Consent Dashboard',  error, notificationConfig);
+       // this.notification.error('Cookie Consent Dashboard',  error, notificationConfig);
+        this.isOpen = true;
+        this.alertMsg = error;
+        this.alertType = 'danger';
       });
   }
 
@@ -170,7 +172,7 @@ export class CookieConsentComponent implements OnInit {
     });
   }
   onClosed(dismissedAlert: any): void {
-    this.alertMsg !== dismissedAlert;
+    this.alertMsg = !dismissedAlert;
     this.isOpen = false;
   }
 

@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { BillingService } from 'src/app/_services/billing.service';
 import { CompanyService } from 'src/app/company.service';
-import {NgxUiLoaderService} from 'ngx-ui-loader';
+import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { environment } from 'src/environments/environment';
-import {ActivatedRoute} from '@angular/router';
-import {NotificationsService} from 'angular2-notifications';
+import { ActivatedRoute } from '@angular/router';
+import { NotificationsService } from 'angular2-notifications';
 import { notificationConfig } from 'src/app/_constant/notification.constant';
 
 
@@ -27,8 +27,11 @@ export class UpdateBillingComponent implements OnInit {
     sessionId: '',
     error: false,
   };
-  companyDetails: any = { name: ''};
-
+  companyDetails: any = { name: '' };
+  alertMsg: any;
+  alertType: any;
+  dismissible = true;
+  isOpen = false;
   constructor(
     private billingService: BillingService,
     private companyService: CompanyService,
@@ -52,9 +55,9 @@ export class UpdateBillingComponent implements OnInit {
         this.queryParams.success = true;
       }
       if (res['success'] === 'false') {
-          this.queryParams.success = false;
-          this.queryParams.error = true;
-        }
+        this.queryParams.success = false;
+        this.queryParams.error = true;
+      }
     });
   }
 
@@ -67,7 +70,10 @@ export class UpdateBillingComponent implements OnInit {
       }
     }, error => {
       this.loading.stop('1');
-      this.notification.error('Session Id', 'Something went wrong...', notificationConfig);
+      this.alertMsg = error;
+      this.isOpen = true;
+      this.alertType = 'danger';
+     // this.notification.error('Session Id', 'Something went wrong...', notificationConfig);
     });
   }
   onGetCurrentPlan() {
@@ -80,7 +86,10 @@ export class UpdateBillingComponent implements OnInit {
       }
     }, error => {
       this.loading.stop('2');
-      this.notification.error('Current Plan', 'Something went wrong...', notificationConfig);
+      this.alertMsg = error;
+      this.isOpen = true;
+      this.alertType = 'danger';
+     // this.notification.error('Current Plan', 'Something went wrong...', notificationConfig);
     });
   }
   onGetCompanyDetails() {
@@ -92,7 +101,10 @@ export class UpdateBillingComponent implements OnInit {
       }
     }, error => {
       this.loading.stop('3');
-      this.notification.error('Company Details', 'Something went wrong...', notificationConfig);
+      this.alertMsg = error;
+      this.isOpen = true;
+      this.alertType = 'danger';
+     // this.notification.error('Company Details', 'Something went wrong...', notificationConfig);
     });
   }
 
@@ -103,7 +115,10 @@ export class UpdateBillingComponent implements OnInit {
       }).then((result) => {
 
       }).catch(error => {
-        this.notification.error('Checkout', error, notificationConfig);
+        this.alertMsg = error;
+        this.isOpen = true;
+        this.alertType = 'danger';
+       // this.notification.error('Checkout', error, notificationConfig);
       });
     }
   }

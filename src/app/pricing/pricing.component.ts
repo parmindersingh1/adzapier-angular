@@ -1,13 +1,13 @@
-import {Component, OnInit} from '@angular/core';
-import {Router} from '@angular/router';
-import {BillingService} from '../_services/billing.service';
-import {subscriptionPlan} from '../_constant/pricing.contant';
-import {NgxUiLoaderService} from 'ngx-ui-loader';
-import {DataService} from '../_services/data.service';
-import {UserService} from '../_services';
-import {NotificationsService} from 'angular2-notifications';
-import {not} from 'rxjs/internal-compatibility';
-import {notificationConfig} from '../_constant/notification.constant';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { BillingService } from '../_services/billing.service';
+import { subscriptionPlan } from '../_constant/pricing.contant';
+import { NgxUiLoaderService } from 'ngx-ui-loader';
+import { DataService } from '../_services/data.service';
+import { UserService } from '../_services';
+import { NotificationsService } from 'angular2-notifications';
+import { not } from 'rxjs/internal-compatibility';
+import { notificationConfig } from '../_constant/notification.constant';
 
 @Component({
   selector: 'app-pricing',
@@ -24,7 +24,10 @@ export class PricingComponent implements OnInit {
     duration: null,
     services: null
   };
-
+  dismissible = true;
+  alertMsg: any;
+  isOpen = false;
+  alertType: any;
   constructor(private router: Router,
               private loading: NgxUiLoaderService,
               private dataService: DataService,
@@ -127,7 +130,10 @@ export class PricingComponent implements OnInit {
       }
     }, error => {
       this.loading.stop();
-      this.notification.error('Current Plan', 'Something went wrong...', notificationConfig);
+      this.isOpen = true;
+      this.alertMsg = error;
+      this.alertType = 'danger';
+      // this.notification.error('Current Plan', 'Something went wrong...', notificationConfig);
     });
   }
 
@@ -149,12 +155,18 @@ export class PricingComponent implements OnInit {
     this.billingService.upGradePlan(payloads).subscribe(res => {
       this.loading.stop();
       if (res['status'] === 200) {
-        this.notification.info('Plan Upgraded', 'Your Plan has been Upgraded', notificationConfig);
+        this.isOpen = true;
+        this.alertMsg = 'Your Plan has been Upgraded';
+        this.alertType = 'info';
+        //  this.notification.info('Plan Upgraded', 'Your Plan has been Upgraded', notificationConfig);
         this.onGetCurrentPlan();
       }
     }, error => {
       this.loading.stop();
-      this.notification.error('Company Details', 'Something went wrong...', notificationConfig);
+      this.isOpen = true;
+      this.alertMsg = error;
+      this.alertType = 'danger';
+    //  this.notification.error('Company Details', 'Something went wrong...', notificationConfig);
     });
   }
 }
