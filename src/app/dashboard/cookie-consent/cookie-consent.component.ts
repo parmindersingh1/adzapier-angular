@@ -14,6 +14,13 @@ class CookieCount {
   close = 0;
   doNotSale = 0;
 }
+class Opt {
+  allow_advertising: 0;
+  allow_analytics: 0;
+  allow_essantial: 0;
+  allow_socialmedia: 0;
+  total_consents: 0;
+}
 @Component({
   selector: 'app-cookie-consent',
   templateUrl: './cookie-consent.component.html',
@@ -27,6 +34,8 @@ export class CookieConsentComponent implements OnInit {
   isOpen = false;
   currrentManagedPropID: any;
   dashboardCount: CookieCount = new CookieCount();
+  optIn = new Opt();
+  optOut = new Opt();
   percentDashboardCount: CookieCount = new CookieCount();
   constructor(private dashboardService: DashboardService,
               private orgservice: OrganizationService,
@@ -41,6 +50,9 @@ export class CookieConsentComponent implements OnInit {
     this.alertType = 'danger';
     this.onGetPropsAndOrgId();
     this.onGetDashboardData();
+    this.onGetOptInActivity();
+    this.onGetOptOutActivity();
+    this.onConsentDetails();
   }
 
   onGetPropsAndOrgId() {
@@ -57,7 +69,7 @@ export class CookieConsentComponent implements OnInit {
   }
   onGetDashboardData() {
     this.loading.start('1');
-    this.dashboardService.getDashboardData('dbb7e602-c70d-4692-ae6d-d92d3016501d')
+    this.dashboardService.getDashboardData(this.currrentManagedPropID)
       .subscribe(res => {
         this.loading.stop('1');
         if (res['status'] === 200) {
@@ -86,8 +98,53 @@ export class CookieConsentComponent implements OnInit {
       });
   }
 
+  onGetOptInActivity() {
+    this.loading.start('f1');
+    this.dashboardService.getOtpInActivity(this.currrentManagedPropID)
+      .subscribe(res => {
+        this.loading.stop('f1');
+        if (res) {
+          this.optIn = res['response'];
+        }
+      }, error => {
+        this.loading.stop('f1');
+      })
+  }
+
+  onGetOptOutActivity() {
+    this.loading.start('f2');
+    this.dashboardService.getOtpOutActivity(this.currrentManagedPropID)
+      .subscribe(res => {
+        this.loading.stop('f2');
+        if (res) {
+          this.optOut = res['response'];
+        }
+      }, error => {
+        this.loading.stop('f2');
+      })
+  }
+
+  onConsentDetails() {
+    this.loading.start('f3');
+    this.dashboardService.getConsentDetails(this.currrentManagedPropID)
+      .subscribe(res => {
+        this.loading.stop('f3');
+
+      }, error => {
+        this.loading.stop('f3');
+      })
+  }
+
   onCalculateValue(val1) {
-    return val1 * 100 / this.dashboardCount.totalConsent;
+    return Math.ceil(val1 * 100 / this.dashboardCount.totalConsent);
+  }
+  onCalculateOptValue(val, totalConsent) {
+    const cal = Math.ceil(val * 100 / totalConsent);
+    if (isNaN(cal)) {
+      return 0;
+    } else {
+      return cal;
+    }
   }
   onMapInIt() {
     jQuery('#vmapUSA').vectorMap({
