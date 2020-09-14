@@ -1,0 +1,61 @@
+<div class="mb-4">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb breadcrumb-style1 mg-b-10">
+      <li class="breadcrumb-item"><a href="#">Cookie</a></li>
+      <li class="breadcrumb-item"><a href="#">Consent</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Tracking</li>
+    </ol>
+  </nav>
+  <h4 class="mg-b-0 tx-spacing--1">Cookie Consent Tracking</h4>
+</div>
+<p-table
+  styleClass="p-datatable-sm"
+  [value]="cookieConsents"
+  [lazy]="true"
+  [loading]="tLoading"
+  [totalRecords]="totalCookieCount"
+  [rowsPerPageOptions]="[10,20,30]"
+  [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+  (onLazyLoad)="onGetCookieConsentData($event)"
+>
+  <ng-template pTemplate="header">
+    <tr>
+      <th>Id</th>
+      <th>Consent</th>
+      <th>Type</th>
+      <th>Status</th>
+      <th>Date</th>
+      <th>Device Id</th>
+      <th>Ip Address</th>
+      <th>Os</th>
+      <th>Country</th>
+      <th>City</th>
+      <th>State</th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-consent   styleClass="p-datatable-responsive-demo">
+    <tr>
+      <td>{{consent.id}}</td>
+      <td  data-toggle="tooltip" title="{{consent.consent}}"> {{ consent.consent.length > 10 ? consent.consent.slice(0, 10) + '...' : consent.consent}} </td>
+      <td>{{consent.consent_type }}</td>
+      <td>
+        <span *ngIf="consent.status === 'do_not_sell'" class="product-badge status-outofstock">{{consent.status}}</span>
+        <span *ngIf="consent.status === 'reject_all'" class="product-badge status-outofstock">{{consent.status}}</span>
+        <span *ngIf="consent.status === 'accept_all'" class="product-badge status-instock">{{consent.status}}</span>
+        <span *ngIf="consent.status === 'save_setting'" class="product-badge status-lowstock">{{consent.status}}</span>
+      </td>
+      <td > {{consent.consent_date | date}} </td>
+      <td data-toggle="tooltip" title="{{consent.device_id}}">{{consent.device_id.slice(0, 10)}} ...</td>
+      <td>{{consent.ip_address}}</td>
+      <td>{{consent.os}}</td>
+      <td> {{consent.country}}</td>
+      <td> {{consent.city}}</td>
+      <td> {{consent.state}}</td>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="summary">
+    <div class="p-d-flex p-ai-center p-jc-between">
+      In total there are {{totalCookieCount ? totalCookieCount : 0 }} Consent.
+    </div>
+  </ng-template>
+</p-table>
