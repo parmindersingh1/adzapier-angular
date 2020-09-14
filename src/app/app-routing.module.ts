@@ -70,6 +70,10 @@ const routes: Routes = [
       .then(m => m.CookieCategoryModule), canActivate: [AuthGuard]
   },
   {
+    path: 'privacy/cookie-consent', loadChildren: () => import('./privacy/cookie-consent/cookie-consent.module')
+      .then(m => m.CookieConsentModule), canActivate: [AuthGuard]
+  },
+  {
     path: 'privacy/cookie-banner', loadChildren: () => import('./privacy/cookie-banner/cookie-banner.module')
       .then(m => m.CookieBannerModule), canActivate: [AuthGuard]
   },

@@ -192,7 +192,7 @@ export class HeaderComponent implements OnInit {
             { showlink: 'Work flow', routerLink: '/privacy/dsar/workflows', icon: 'shield-off' },
             { showlink: 'Cookie Category', routerLink: '/privacy/cookie-category', icon: 'fab fa-microsoft feather-16' },
             { showlink: 'Cookie Banner', routerLink: '/privacy/cookie-banner', icon: 'fas fa-cookie feather-16' },
-            { showlink: 'Consent Tracking', routerLink: '/pagenotfound', icon: 'fas fa-file-contract feather-16' },
+            { showlink: 'Consent Tracking', routerLink: '/privacy/cookie-consent', icon: 'fas fa-file-contract feather-16' },
             { showlink: 'Setup', routerLink: '/pagenotfound', icon: 'fas fa-wrench feather-16' }
           ]
         }, { showlink: 'Billing', routerLink: 'settings/billing' }];
@@ -201,7 +201,7 @@ export class HeaderComponent implements OnInit {
 
 
   }
- 
+
 
   getLoggedInUserDetails() {
     this.isCollapsed = false;

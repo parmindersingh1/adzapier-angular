@@ -21,4 +21,15 @@ export class DashboardService {
     const path = '/consentdashboard/';
     return this.http.get(environment.apiUrl + path + propId);
   }
+
+  getOtpInActivity(propId) {
+    return this.http.get(environment.apiUrl  + '/optinactivitydashboard/' + propId);
+  }
+
+  getOtpOutActivity(propId) {
+    return this.http.get(environment.apiUrl  + '/optoutactivitydashboard/' + propId);
+  }
+  getConsentDetails(propId) {
+    return this.http.get(environment.apiUrl  + '/consentdetailsdashboard/' + propId);
+  }
 }

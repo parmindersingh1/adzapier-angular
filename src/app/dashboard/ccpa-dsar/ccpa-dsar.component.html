@@ -23,11 +23,11 @@
         <span></span> <i class="fa fa-caret-down"></i>
 
       </span>
-      <button (click)="onPrint()" class="btn btn-sm pd-x-15 btn-white btn-uppercase mg-l-5" id="printReport"><i
+      <button style="width: 110px" (click)="onPrint()" class="btn btn-sm pd-x-15 btn-white btn-uppercase mg-l-5" id="printReport"><i
         class="fas fa-print" style='font-size:14px'></i> Print
       </button>
 
-      <button (click)="onGetPropsAndOrgId(); onGetCcpaAndDsar(); onGetRequestByState()"
+      <button style="width: 110px" (click)="onGetPropsAndOrgId(); onGetCcpaAndDsar(); onGetRequestByState()"
               class="btn btn-sm pd-x-15 btn-white btn-uppercase mg-l-5"><i class="fas fa-sync"></i> Refresh
       </button>
 
@@ -113,7 +113,7 @@
       </div>
     </div><!-- col -->
     <div class="col-lg-8 col-xl-7 mg-t-10">
-      <div class="card">
+      <div class="card chart-height">
         <div class="card-header pd-y-15 d-md-flex align-items-center justify-content-between">
           <h6 class="mg-b-0">Requests</h6>
           <ul class="list-inline d-flex mg-t-20 mg-sm-t-10 mg-md-t-0 mg-b-0">
@@ -146,26 +146,54 @@
           <div id="requestflotChart" class="flot-chart" style="height:312px"></div>
         </div>
         <ng-template #noChart>
-          <p style="height:250px" class="text-center mt-5">No Record Found</p>
+          <div class="text-center mt-5">
+            <img src="assets/imgs/dash.png" style="width: 100px">
+            <h6> No Record</h6>
+          </div>
         </ng-template>
 
 
       </div><!-- card -->
     </div>
     <div class="col-md-6 col-lg-6 col-xl-5 mg-t-10">
-      <div class="card">
+      <div  class="card chart-height">
         <div class="card-header">
           <h6 class="mg-b-0">Request Type</h6>
         </div><!-- card-header -->
-        <div class="card-body pd-lg-25">
-          <canvas baseChart height="200"
+        <div *ngIf="requestType.length > 0" class="card-body pd-lg-25">
+          <canvas baseChart height="140"
                   [data]="doughnutChartData"
                   [colors]="doughnutColors"
                   [labels]="doughnutChartLabels"
                   [chartType]="doughnutChartType">
           </canvas>
         </div><!-- card-body -->
+
+        <div *ngIf="requestType.length > 0" class="card-footer pd-20">
+          <div class="row">
+
+            <div *ngFor="let obj of requestType" class="col-4">
+              <p class="tx-10 tx-uppercase tx-medium tx-color-03 tx-spacing-1 tx-nowrap mg-b-5">{{obj.label}}
+              </p>
+              <div class="d-flex align-items-center">
+                <div *ngIf="obj.label === 'Data Deletion'" style="background: #f0b06c" class="wd-10 ht-10 rounded-circle mg-r-5"></div>
+                <div *ngIf="obj.label === 'Data Portability'" style="background: #c693f9" class="wd-10 ht-10 rounded-circle mg-r-5"></div>
+                <div *ngIf="obj.label === 'Data Processing'" style="background: #6fe0e0" class="wd-10 ht-10 rounded-circle bg-pink mg-r-5"></div>
+                <div *ngIf="obj.label === 'Info Request'" style="background: #69b2f8" class="wd-10 ht-10 rounded-circle bg-pink mg-r-5"></div>
+                <div *ngIf="obj.label === 'Update Data'" style="background: #eb7db8" class="wd-10 ht-10 rounded-circle bg-pink mg-r-5"></div>
+                <h5 class="tx-normal tx-rubik mg-b-0">{{obj.value}} </h5>
+              </div>
+            </div>
+          </div><!-- row -->
+        </div>
+        <div *ngIf="requestType.length === 0" class="text-center mt-5">
+          <img src="assets/imgs/dash.png" style="width: 100px">
+          <h6> No Record</h6>
+        </div>
+
+
       </div><!-- card -->
+
     </div>
     <div class="div-height col-md-6 col-xl-4 mg-t-10 order-md-1 order-xl-0">
       <div class="card card-height">
@@ -217,8 +245,8 @@
           <h6 class="mg-b-0">Requests By Subject Type</h6>
 
         </div><!-- card-header -->
-        <div class="card-body pd-b-0">
-          <canvas baseChart height="300"
+        <div  *ngIf="subjectType.length > 0" class="card-body pd-b-0">
+          <canvas baseChart height="200"
                   [data]="pieChartData"
                   [labels]="pieChartLabels"
                   [chartType]="pieChartType"
@@ -228,6 +256,30 @@
                   [legend]="pieChartLegend">
           </canvas>
         </div><!-- card-body -->
+
+
+        <div *ngIf="subjectType.length > 0" class="card-footer pd-20">
+          <div class="row">
+
+            <div *ngFor="let obj of subjectType" class="col-4">
+              <p class="tx-10 tx-uppercase tx-medium tx-color-03 tx-spacing-1 tx-nowrap mg-b-5">{{obj.label}}
+              </p>
+              <div class="d-flex align-items-center">
+                <div *ngIf="obj.label === 'Contractor'" style="background: #f0b06c" class="wd-10 ht-10 rounded-circle mg-r-5"></div>
+                <div *ngIf="obj.label === 'Customer'" style="background: #c693f9" class="wd-10 ht-10 rounded-circle mg-r-5"></div>
+                <div *ngIf="obj.label === 'Employee'" style="background: #6fe0e0" class="wd-10 ht-10 rounded-circle bg-pink mg-r-5"></div>
+                <div *ngIf="obj.label === 'Student'" style="background: #69b2f8" class="wd-10 ht-10 rounded-circle bg-pink mg-r-5"></div>
+                <div *ngIf="obj.label === 'Update Data'" style="background: #69b2f8" class="wd-10 ht-10 rounded-circle bg-pink mg-r-5"></div>
+                <h5 class="tx-normal tx-rubik mg-b-0">{{obj.value}} </h5>
+              </div>
+            </div>
+          </div><!-- row -->
+        </div>
+        <div *ngIf="subjectType.length === 0" class="text-center mt-5">
+          <img src="assets/imgs/dash.png" style="width: 100px">
+          <h6> No Record</h6>
+        </div>
+
       </div>
     </div>
 
