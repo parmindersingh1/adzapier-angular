@@ -30,6 +30,8 @@ interface Country {
 })
 export class CcpaDsarComponent implements OnInit, AfterViewInit {
   startDate;
+  requestType = [];
+  subjectType = [];
   endDate;
   dismissible = true;
   alertMsg: any;
@@ -63,9 +65,8 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
   doughnutColors = [
     {
       backgroundColor: [
-        '#f77db9',
-        '#7dbcff',
-        '#7de5e5',
+        '#f0b06c',  '#c693f9', '#6fe0e0', '#69b2f8',  '#f77eb9',
+ // '#f77eb9', '#fdb16d', '#c693f9',   '#65e0e0', '#69b2f8',   '#6fd39b'
       ]
     }
   ];
@@ -82,9 +83,7 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
   pieColors = [
     {
       backgroundColor: [
-        '#f77db9',
-        '#7dbcff',
-        '#7de5e5',
+        '#f0b06c',  '#c693f9', '#6fe0e0', '#69b2f8',  '#f77eb9',
       ]
     }
   ];
@@ -125,21 +124,8 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
   }
 
   onSetUpMainMap(data, labelData, requestsChartCount) {
-    console.log('mainData', data);
+    console.log('requestsChartCount', requestsChartCount)
     const newData = [{
-      //   data: df1,
-      //   color: '#69b2f8'
-      // }, {
-      //   data: df2,
-      //   color: '#d1e6fa'
-      // }, {
-      //   data: df3,
-      //   color: '#d1e6fa',
-      //   lines: {
-      //     fill: false,
-      //     lineWidth: 1.5
-      //   }
-
       data: data[0],
       color: '#69b2f8'
     }, {
@@ -312,7 +298,7 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
     this.currentState = country;
     console.log(
       'this.currrefdfs', this.currentState
-    )
+    );
     setTimeout(() => {
       this.onInsilizaedMap();
     }, 1000);
@@ -321,7 +307,7 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
   onInsilizaedMap() {
     const that = this;
     if (this.currentState === 'usa') {
-      console.log('stateCountryColor', that.stateCountryColor)
+      console.log('stateCountryColor', that.stateCountryColor);
       jQuery('#vmap').empty();
       jQuery('#vmap').vectorMap({
         map: 'usa_en',
@@ -342,7 +328,7 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
               label.append(' : 0');
             }
           }
-          that.cd.detectChanges()
+          that.cd.detectChanges();
         }
       });
     } else {
@@ -365,7 +351,7 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
               label.append(' : 0');
             }
           }
-          that.cd.detectChanges()
+          that.cd.detectChanges();
         }
       });
     }
@@ -415,18 +401,20 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
   }
 
   onGetCcpaAndDsar() {
-    this.loading.start();
+    this.loading.start('p1');
     const queryParam = {
       from_date: this.startDate,
       to_date: this.endDate
     };
     this.dashboardService.getCcpaAndDsar(this.currentManagedOrgID, this.currrentManagedPropID, queryParam)
       .subscribe(res => {
-        this.loading.stop();
+        this.loading.stop('p1');
         const result = res.response;
         if (Object.keys(result).length > 0) {
           this.dashboardCount = result.dashboardCount;
-          this.Requests = result.Requests;
+          this.Requests = result.hasOwnProperty('Requests') ? result.Requests : [];
+          this.requestType = result['RequestType']['data'];
+          this.subjectType = result['subjectType']['data'];
           this.onSetChartData(result);
         } else {
           this.isOpen = true;
@@ -435,8 +423,7 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
          // this.notification.info('Dashboard', 'Data not Found...', notificationConfig);
         }
       }, error => {
-        this.loading.stop();
-      //  this.notification.error('Dashboard', 'Something went wrong...' + error, notificationConfig);
+        this.loading.stop('p1');
         this.isOpen = true;
         this.alertMsg = error;
         this.alertType = 'danger';
@@ -461,12 +448,15 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
         const value = chart.value;
         for (let i = 0; value.length > i; i++) {
           numVal.push([i, value[i]]);
-          if (requestsChartCount < value[i]) {
-            requestsChartCount = value[i];
+          const num = Number(value[i]);
+          console.log('num', num)
+          if (num > requestsChartCount) {
+            requestsChartCount = num;
           }
         }
         data.push(numVal);
       }
+      console.log('data', data)
       const newLabel = [...chart.requestsChart.belowLabel];
       const labelData = [];
       for (let i = 0; newLabel.length > i; i++) {
@@ -546,6 +536,7 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
         subjectTypeValue.push(data2.value);
       }
       this.pieChartLabels = subjectTypeLabel;
+      console.log('pieChartLabels', this.pieChartLabels)
       this.pieChartData = subjectTypeValue;
     }
   }
