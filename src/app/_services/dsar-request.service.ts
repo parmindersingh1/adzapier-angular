@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from './../../environments/environment';
 import { Observable } from 'rxjs';
-import { shareReplay } from 'rxjs/operators';
+import { shareReplay, map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -11,9 +11,9 @@ export class DsarRequestService {
   subTasklist$: Observable<any[]>;
   constructor(private http: HttpClient) { }
 
-  getDsarRequestList(orgId, propsID, pagelimit, orderBy): Observable<any> {
+  getDsarRequestList(orgId, propsID, pagelimit, orderBy?): Observable<any> {
     const path = '/ccpa/data/';
-    return this.http.get(environment.apiUrl + path + orgId + '/' + propsID + pagelimit + orderBy);
+    return this.http.get(environment.apiUrl + path + orgId + '/' + propsID + pagelimit);
   }
 
   getDsarRequestFilter(orgId, propsID) {
@@ -67,6 +67,11 @@ export class DsarRequestService {
      // return this.subTasklist$;
     }
 
+  }
+
+  viewUserUploadedFile(requestID) {
+    const key = 'response';
+    return this.http.get<any>(environment.apiUrl + '/dsar/user/file/' + requestID).pipe(map((res) => res[key]), shareReplay(1));
   }
 
 }

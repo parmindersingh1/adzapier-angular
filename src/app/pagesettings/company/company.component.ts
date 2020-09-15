@@ -21,6 +21,8 @@ export class CompanyComponent implements OnInit {
   zipcode: number;
   orgname: any;
   companyId: any;
+  phone: any;
+  email: any;
   companyForm: FormGroup;
   inviteUserForm: FormGroup;
   submitted;
@@ -61,6 +63,8 @@ export class CompanyComponent implements OnInit {
       city: ['', [Validators.required, Validators.pattern(strRegx)]],
       state: ['', [Validators.required, Validators.pattern(strRegx)]],
       zipcode: ['', [Validators.required, Validators.pattern(numRegex)]],
+      email: ['', [Validators.required]],
+      phone: ['', [Validators.required]]
     });
     this.inviteUserForm = this.formBuilder.group({
       emailid: ['', [Validators.required, Validators.pattern]],
@@ -75,6 +79,7 @@ export class CompanyComponent implements OnInit {
   loadCompanyDetails() {
     this.loading.start();
     this.companyService.getCompanyDetails().subscribe((data) => {
+      console.log(data,'CC data..');
       this.loading.stop();
       this.orgname = data.response.name;
       this.address1 = data.response.address1;
@@ -84,6 +89,8 @@ export class CompanyComponent implements OnInit {
       this.taxid = data.response.tax_id;
       this.zipcode = data.response.zipcode;
       this.companyId = data.response.id;
+      this.email = data.response.email;
+      this.phone = data.response.phone;
     });
   }
 
@@ -109,7 +116,9 @@ export class CompanyComponent implements OnInit {
         city: this.companyDetails[0].city,
         state: this.companyDetails[0].state,
         zipcode: this.companyDetails[0].zipcode,
-        tax_id: this.companyDetails[0].tax_id
+        tax_id: this.companyDetails[0].tax_id,
+        email: this.companyDetails[0].email,
+        phone: this.companyDetails[0].phone
       });
     });
   }
@@ -126,7 +135,9 @@ export class CompanyComponent implements OnInit {
         address2: this.companyForm.value.address2.trim(),
         city: this.companyForm.value.city.trim(),
         state: this.companyForm.value.state.trim(),
-        zipcode: this.companyForm.value.zipcode.trim()
+        zipcode: this.companyForm.value.zipcode.trim(),
+        email: this.companyForm.value.email.trim(),
+        phone: this.companyForm.value.phone.trim()
       };
       this.loading.start();
       this.companyService.updateCompanyDetails(editObj)
@@ -313,7 +324,7 @@ export class CompanyComponent implements OnInit {
   }
 
   onClosed(dismissedAlert: any): void {
-    this.alertMsg !== dismissedAlert;
+    this.alertMsg = !dismissedAlert;
     this.isOpen = false;
   }
 }
