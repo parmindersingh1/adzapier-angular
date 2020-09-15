@@ -9,7 +9,7 @@
       </nav>
       <h4 class="mg-b-0 tx-spacing--1">Billing</h4>
     </div>
-<!--    <button id="toggleplan" class="btn btn-primary">Paid/Free</button>-->
+    <!--    <button id="toggleplan" class="btn btn-primary">Paid/Free</button>-->
   </div>
 
   <div *ngIf="isSuccess" class="mb-0 mt-3 alert alert-success">
@@ -27,12 +27,13 @@
           <div class="card-body">
             <h5 class="card-title">Bill Estimate</h5>
 
-            <span class="card-text">{{billingDetails.billing_history.currency}} {{billingDetails.billing_history.amount}}
-                                <span class="card-text">(tax inclusive) </span>
-                            </span>
+            <span class="card-text">{{billingDetails.billing_history.currency}}
+              {{billingDetails.billing_history.amount}}
+              <span class="card-text">(tax inclusive) </span>
+            </span>
             <br>
             <span> Plan Subscribed: {{billingDetails.billing_details.plan_name}} </span>
-<!--            <p>Next Charge: May 28,2020</p>-->
+            <!--            <p>Next Charge: May 28,2020</p>-->
 
           </div>
           <div class="card-footer">
@@ -50,15 +51,16 @@
         <div class="card" style="min-height:200px">
           <div class="card-body">
             <h5 class="card-title">Billing details</h5>
-<!--            <h6 class="card-subtitle mb-2 text-muted">Billing period</h6>-->
-<!--            <p class="card-text">Monthly</p>-->
-           <a routerLink="/settings/billing/update">
-             <i class='fas fa-edit' data-toggle="Edit Billing" title="Edit Billing" style='font-size:24px'></i>
-           </a>
+            <!--            <h6 class="card-subtitle mb-2 text-muted">Billing period</h6>-->
+            <!--            <p class="card-text">Monthly</p>-->
+            <a routerLink="/settings/billing/update">
+              <i class='fas fa-edit' data-toggle="Edit Billing" title="Edit Billing" style='font-size:24px'></i>
+            </a>
 
             <div class="row">
               <div class="col-sm-3">
-                <i class="fab fa-cc-{{billingDetails.billing_details.brand}}" aria-hidden="true" style="font-size: 70px;"></i>
+                <i class="fab fa-cc-{{billingDetails.billing_details.brand}}" aria-hidden="true"
+                  style="font-size: 70px;"></i>
               </div>
               <div class="col-sm-9">
                 <span p-0="">{{billingDetails.billing_details.card_number}}</span>
@@ -79,25 +81,53 @@
           <div class="card-body">
             <h5 class="card-title">Bill history</h5>
 
-                                                  <span class="card-text">{{billingDetails.billing_history.currency}} {{billingDetails.billing_history.amount}}
-                                <span class="card-text">(tax inclusive) </span>
-                            </span>
-<!--            <p>Next Charge: May 28,2020</p>-->
+            <span class="card-text">{{billingDetails.billing_history.currency}}
+              {{billingDetails.billing_history.amount}}
+              <span class="card-text">(tax inclusive) </span>
+            </span>
+            <!--            <p>Next Charge: May 28,2020</p>-->
           </div>
         </div>
       </div>
 
       <div class="col-sm-6 col-lg-6 mg-t-40 mg-sm-t-0 mg-md-t-40">
-        <div class="card" style="min-height:200px">
+        <div class="card">
           <div class="card-body">
-            <h5 class="card-title">Company Name</h5>
-            <h6 class="card-subtitle mb-2 text-muted">{{companyDetails.name}}</h6>
-
-            <h6 class="tx-15 mg-b-10">Contact Info</h6>
-            <p class="mg-b-0">{{billingDetails.company_details.address}}</p>
-<!--            <p class="mg-b-0">Tel No: 324 445-4544</p>-->
-            <p class="mg-b-0">Email: {{billingDetails.company_details.email}}</p>
-
+            <h5 class="card-title">Company Details</h5>
+            <div class="addresswrapper">
+              <ul>
+                <li *ngFor="let data of companyDetails">
+                  <p class="mg-b-0">
+                    <span class="fontbold">Name</span>
+                    <span> {{data.name}}</span>
+                  </p>
+                  <p class="mg-b-0">
+                    <span class="fontbold">Address</span>
+                    <span> {{data.address1}} {{data.address2}}</span>
+                  </p>
+                  <p class="mg-b-0">
+                    <span class="fontbold">City</span>
+                    <span class="displayflex">{{data.city}}</span>
+                  </p>
+                  <p class="mg-b-0">
+                    <span class="fontbold">State</span>
+                    <span class="displayflex"> {{data.state}}</span>
+                  </p>
+                  <p class="mg-b-0">
+                    <span class="fontbold">Zipcode</span>
+                    <span class="displayflex"> {{data.zipcode}}</span>
+                  </p>
+                  <p class="mg-b-0">
+                    <span class="fontbold">Email</span>
+                    <span class="displayflex"> {{data.email}}</span>
+                  </p>
+                  <p class="mg-b-0">
+                    <span class="fontbold">Phone</span>
+                    <span class="displayflex"> {{data.phone}}</span>
+                  </p>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
@@ -107,5 +137,6 @@
 
 </div>
 <div class="col-sm-5 mt-3 mr-0 float-right">
-  <alert *ngIf="isOpen" [type]="alertType" [dismissible]="dismissible" (onClosed)="onClosed(alertMsg)">{{  alertMsg}}</alert>
+  <alert *ngIf="isOpen" [type]="alertType" [dismissible]="dismissible" (onClosed)="onClosed(alertMsg)">{{  alertMsg}}
+  </alert>
 </div>

@@ -193,6 +193,26 @@
             </div>
             <div class="row">
                 <div class="col-sm-6">
+                    <div class="form-group"><label for="email">Email</label>
+                        <input type="text" class="form-control"  formControlName="email"
+                        name="email" [ngClass]="{ 'is-invalid': submitted && editOrg.email.errors }" />
+                        <div *ngIf="submitted && editOrg.email.errors" class="invalid-feedback">
+                            <div *ngIf="editOrg.email.errors.required">Email is required</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group"><label for="phone">Phone</label>
+                        <input type="text" class="form-control"  formControlName="phone"
+                        name="phone" [ngClass]="{ 'is-invalid': submitted && editOrg.phone.errors }" />
+                        <div *ngIf="submitted && editOrg.phone.errors" class="invalid-feedback">
+                            <div *ngIf="editOrg.phone.errors.required">Phone is required</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
                     <button type="button" (click)="onResetEditOrganization()"
                         class="btn btn-outline-dark">Cancel</button>
                 </div>

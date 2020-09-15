@@ -60,6 +60,8 @@ export class OrganizationdetailsComponent implements OnInit {
   alertType: any;
   dismissible = true;
   isOpen = false;
+  email: any;
+  phone: any;
   constructor(private activatedRoute: ActivatedRoute,
               private orgService: OrganizationService,
               private modalService: NgbModal,
@@ -119,7 +121,9 @@ export class OrganizationdetailsComponent implements OnInit {
       addressTwo: ['', [Validators.required]],
       city: ['', [Validators.required, Validators.pattern(strRegx)]],
       state: ['', [Validators.required, Validators.pattern(strRegx)]],
-      zipcode: ['', [Validators.required, Validators.pattern(zipRegex)]]
+      zipcode: ['', [Validators.required, Validators.pattern(zipRegex)]],
+      email: ['', [Validators.required]],
+      phone: ['', [Validators.required]]
     });
   }
   get f() { return this.inviteUserOrgForm.controls; }
@@ -127,6 +131,7 @@ export class OrganizationdetailsComponent implements OnInit {
   get editOrg() { return this.editOrganisationForm.controls; }
   loadOrganizationByID(id) {
     this.orgService.getOrganizationByID(id).subscribe((data) => {
+      console.log(data, 'data..');
       this.organizationName = data.response.orgname;
       this.addressOne = data.response.address1;
       this.addressTwo = data.response.address2;
@@ -134,6 +139,8 @@ export class OrganizationdetailsComponent implements OnInit {
       this.state = data.response.state;
       this.taxID = data.response.tax_id;
       this.zipcode = data.response.zipcode;
+      this.email = data.response.email;
+      this.phone = data.response.phone;
     });
    // this.pathValues();
   }
@@ -193,7 +200,8 @@ export class OrganizationdetailsComponent implements OnInit {
     this.editOrganisationForm.controls['state'].setValue(this.state);
     this.editOrganisationForm.controls['taxID'].setValue(this.taxID);
     this.editOrganisationForm.controls['zipcode'].setValue(this.zipcode);
-
+    this.editOrganisationForm.controls['email'].setValue(this.email);
+    this.editOrganisationForm.controls['phone'].setValue(this.phone);
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
     }, (reason) => {
     });
@@ -212,7 +220,9 @@ export class OrganizationdetailsComponent implements OnInit {
         address2: this.editOrganisationForm.value.addressTwo,
         city: this.editOrganisationForm.value.city,
         state: this.editOrganisationForm.value.state,
-        zipcode: this.editOrganisationForm.value.zipcode
+        zipcode: this.editOrganisationForm.value.zipcode,
+        email: this.editOrganisationForm.value.email,
+        phone: this.editOrganisationForm.value.phone
       };
       this.orgService.updateOrganization(this.organizationID, updateObj).subscribe((res) => {
         if (res) {
@@ -485,7 +495,7 @@ export class OrganizationdetailsComponent implements OnInit {
   }
 
   onClosed(dismissedAlert: any): void {
-    this.alertMsg !== dismissedAlert;
+    this.alertMsg = !dismissedAlert;
     this.isOpen = false;
   }
 

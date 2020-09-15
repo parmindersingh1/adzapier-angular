@@ -220,6 +220,10 @@ export class HeaderComponent implements OnInit {
     return this.selectedOrgProperties.filter((t) => t.property_id === selectedItem.property_id).length > 0;
   }
 
+  isOrgSelected(selectedItem): boolean {
+    return this.selectedOrgProperties.filter((t) => t.organization_id === selectedItem.id).length > 0;
+  }
+
   public trackByMethod(index: number): number {
     return index;
   }

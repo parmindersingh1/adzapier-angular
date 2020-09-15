@@ -5,7 +5,8 @@ import { DsarRequestdetailsRoutingModule } from './dsar-requestdetails-routing.m
 import { DsarRequestdetailsComponent } from './dsar-requestdetails.component';
 import { SharedbootstrapModule } from 'src/app/sharedbootstrap/sharedbootstrap.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
+import { FeatherModule } from 'angular-feather';
+import { allIcons } from 'angular-feather/icons';
 
 @NgModule({
   declarations: [DsarRequestdetailsComponent],
@@ -13,7 +14,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     CommonModule,
     SharedbootstrapModule,
     FormsModule, ReactiveFormsModule,
-    DsarRequestdetailsRoutingModule
+    DsarRequestdetailsRoutingModule,
+    FeatherModule.pick(allIcons),
   ]
 })
 export class DsarRequestdetailsModule { }

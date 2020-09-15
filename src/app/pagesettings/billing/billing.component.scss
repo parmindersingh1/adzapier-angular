@@ -28,3 +28,37 @@
   top: -25px;
   cursor: pointer;
 }
+
+.fontbold {
+  font-weight: bold;
+  width: 15%;
+  display: inline-flex;
+}
+
+.addresswrapper ul {
+  margin: 0;
+  padding: 0;
+}
+
+.addresswrapper ul li {
+  list-style-type: none;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.addresswrapper ul li p {
+  margin: 0;
+  display: flex;
+}
+
+.addresswrapper ul li p:first-child {
+  margin: 0 10px 0 0;
+  width: 100%;
+  display: flex;
+}
+
+.displayflex {
+  /*display: flex;*/
+  width: 100%;
+}

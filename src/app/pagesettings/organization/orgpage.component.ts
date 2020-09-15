@@ -53,7 +53,8 @@ export class OrgpageComponent implements OnInit {
   alertType: any;
   dismissible = true;
   isOpen = false;
-
+  email: any;
+  phone: any;
   constructor(private formBuilder: FormBuilder,
               private orgservice: OrganizationService,
               private modalService: NgbModal, private sanitizer: DomSanitizer,
@@ -82,7 +83,9 @@ export class OrgpageComponent implements OnInit {
       addresstwo: ['', [Validators.required]],
       cityname: ['', [Validators.required, Validators.pattern(strRegx)]],
       statename: ['', [Validators.required, Validators.pattern(strRegx)]],
-      zipcodenum: ['', [Validators.required, Validators.pattern(zipRegex)]]
+      zipcodenum: ['', [Validators.required, Validators.pattern(zipRegex)]],
+      email: ['', [Validators.required]],
+      phone: ['', [Validators.required]],
     });
     this.loadOrganizationList();
 
@@ -149,7 +152,9 @@ export class OrgpageComponent implements OnInit {
         address2: this.editOrganisationForm.value.addresstwo,
         city: this.editOrganisationForm.value.cityname,
         state: this.editOrganisationForm.value.statename,
-        zipcode: this.editOrganisationForm.value.zipcodenum
+        zipcode: this.editOrganisationForm.value.zipcodenum,
+        email: this.editOrganisationForm.value.email,
+        phone: this.editOrganisationForm.value.phone
       };
       this.loading.start();
       this.orgservice.addOrganization(addObj).subscribe((res) => {
@@ -255,6 +260,8 @@ export class OrgpageComponent implements OnInit {
       this.cityname = data.city;
       this.statename = data.state;
       this.zipcodenum = data.zipcode;
+      this.email = data.email;
+      this.phone = data.phone;
       this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
         this.editOrganisationForm.reset();
         this.closeResult = `Closed with: ${result}`;
@@ -270,6 +277,8 @@ export class OrgpageComponent implements OnInit {
       this.cityname = '';
       this.statename = '';
       this.zipcodenum = '';
+      this.email = '';
+      this.phone = '';
       this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
         this.editOrganisationForm.reset();
         this.closeResult = `Closed with: ${result}`;
@@ -342,7 +351,7 @@ export class OrgpageComponent implements OnInit {
 }
 
 onClosed(dismissedAlert: any): void {
-  this.alertMsg !== dismissedAlert;
+  this.alertMsg = !dismissedAlert;
   this.isOpen = false;
 }
 
