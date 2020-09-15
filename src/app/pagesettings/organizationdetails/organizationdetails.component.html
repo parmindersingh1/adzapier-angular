@@ -50,6 +50,14 @@
                                 {{state}} {{zipcode}}
                             </p>
                         </div>
+                        <div class="col-sm-2 mg-t-5 mg-sm-t-5">
+                            <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Email</label> 
+                            <p class="mg-b-0">{{email}}</p>
+                        </div>
+                        <div class="col-sm-2 mg-t-5 mg-sm-t-5">
+                            <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Phone</label> 
+                            <p class="mg-b-0">{{phone}}</p>
+                        </div>
 <!--    -->
 <!--                        <div class="col-sm-2 mg-t-5 mg-sm-t-5">-->
 <!--                            <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">TaxID</label>-->
@@ -374,6 +382,26 @@
                                 name="zipcode" [ngClass]="{ 'is-invalid': submitted && editOrg.zipcode.errors }" />
                             <div *ngIf="submitted && editOrg.zipcode.errors" class="invalid-feedback">
                                 <div *ngIf="editOrg.zipcode.errors.required">Zipcode is required</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group"><label for="email">Email</label>
+                            <input type="text" class="form-control"  formControlName="email"
+                            name="email" [ngClass]="{ 'is-invalid': submitted && editOrg.email.errors }" />
+                            <div *ngIf="submitted && editOrg.email.errors" class="invalid-feedback">
+                                <div *ngIf="editOrg.email.errors.required">Email is required</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group"><label for="phone">Phone</label>
+                            <input type="text" class="form-control"  formControlName="phone"
+                            name="phone" [ngClass]="{ 'is-invalid': submitted && editOrg.phone.errors }" />
+                            <div *ngIf="submitted && editOrg.phone.errors" class="invalid-feedback">
+                                <div *ngIf="editOrg.phone.errors.required">Phone is required</div>
                             </div>
                         </div>
                     </div>

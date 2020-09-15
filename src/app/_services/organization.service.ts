@@ -4,6 +4,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from './../../environments/environment';
 import { Orglist } from './../_models';
 import { Organization } from '../_models/organization';
+import { map, shareReplay } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 
@@ -113,10 +114,13 @@ export class OrganizationService {
     }
 
     getOrgTeamMembers(orgID, pagelimit?): Observable<any> {
+        const key = 'response';
         if (pagelimit !== undefined) {
-            return this.http.get<any>(environment.apiUrl + '/team_member' + '?orgid=' + orgID + pagelimit);
+            return this.http.get<any>(environment.apiUrl + '/team_member' + '?orgid=' + orgID + pagelimit)
+            .pipe(map(res => res[key]), shareReplay());
         } else {
-            return this.http.get<any>(environment.apiUrl + '/team_member' + '?orgid=' + orgID);
+            return this.http.get<any>(environment.apiUrl + '/team_member' + '?orgid=' + orgID)
+            .pipe(map(res => res[key]), shareReplay());
         }
         
     }

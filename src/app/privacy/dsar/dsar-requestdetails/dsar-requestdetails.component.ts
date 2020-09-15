@@ -10,8 +10,7 @@ import { CCPAFormConfigurationService } from 'src/app/_services/ccpaform-configu
 import { TypeaheadMatch } from 'ngx-bootstrap/typeahead/typeahead-match.class';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-
+import { NgxUiLoaderService } from 'ngx-ui-loader';
 @Component({
   selector: 'app-dsar-requestdetails',
   templateUrl: './dsar-requestdetails.component.html',
@@ -22,6 +21,8 @@ export class DsarRequestdetailsComponent implements OnInit {
   @ViewChild('btnDaysLeft', { static: true }) btnDaysLeft: ElementRef;
   @ViewChild('customDaysInput', { static: false }) customDaysInput: ElementRef;
   @ViewChild('confirmTemplate', { static: false }) confirmModal: TemplateRef<any>;
+  @ViewChild('filePreview', { static: true }) filePreview: ElementRef;
+
   requestID: any;
   currentManagedOrgID: any;
   currrentManagedPropID: any;
@@ -142,6 +143,8 @@ export class DsarRequestdetailsComponent implements OnInit {
   displayTaskDeadline: string;
   showFilesizeerror: boolean = false;
   showFileExtnerror: boolean = false;
+  base64FileCode: any;
+  filePreviewURL: any;
   constructor(private activatedRoute: ActivatedRoute,
     private router: Router,
     private orgService: OrganizationService,
@@ -152,7 +155,8 @@ export class DsarRequestdetailsComponent implements OnInit {
     private modalService: NgbModal,
     private formBuilder: FormBuilder,
     private renderer2: Renderer2,
-    private bsmodalService: BsModalService
+    private bsmodalService: BsModalService,
+    private loading: NgxUiLoaderService
   ) {
     this.renderer2.listen('window', 'click', (e: Event) => {
       if (e.target !== this.toggleDayleftdiv.nativeElement && e.target !== this.btnDaysLeft.nativeElement && e.target !== this.customDaysInput.nativeElement) {
@@ -292,7 +296,7 @@ export class DsarRequestdetailsComponent implements OnInit {
     let approverList;
     this.orgService.getOrgTeamMembers(this.currentManagedOrgID).subscribe((data) => {
       const key = 'response';
-      approverList = data[key];
+      approverList = data;
       let filterdList = approverList.filter((t) => t.user_name !== ' ');
       this.ApproverList = filterdList;
     }, (error) => {
@@ -715,7 +719,7 @@ export class DsarRequestdetailsComponent implements OnInit {
       this.subTaskForm.controls['issubtaskrequired'].setValue(data.required);
       this.subTaskForm.controls['deadline'].setValue(new Date(data.deadline));
       data.reminder !== null ? this.subTaskForm.controls['reminder'].setValue(new Date(data.reminder)) :
-      this.subTaskForm.controls['reminder'].setValue('');
+        this.subTaskForm.controls['reminder'].setValue('');
       this.subTaskForm.controls['assignee'].setValue(this.selectedAssignee);
 
       this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
@@ -737,7 +741,7 @@ export class DsarRequestdetailsComponent implements OnInit {
 
   }
 
-  openResponseModalPopup(content, data) {
+  openResponseModalPopup(content, data?) {
 
     this.isResponseToSubTask = false;
     // this.isEditSubTask = true;
@@ -762,6 +766,12 @@ export class DsarRequestdetailsComponent implements OnInit {
     });
   }
 
+  openFilePreviewModalPopup(content) {
+    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
+
+    }, (reason) => {
+    }); 
+  }
 
   // onRiskfactorChange($event){
   //   this.editRequest.controls['risk_factor'].value = $event.currentTarget.value;
@@ -913,7 +923,7 @@ export class DsarRequestdetailsComponent implements OnInit {
         required: this.subTaskForm.controls['issubtaskrequired'].value || false,
         deadline: new Date(this.subTaskForm.controls['deadline'].value).toJSON(),
         reminder: (this.subTaskForm.controls['reminder'].value !== null) ?
-                  new Date(this.subTaskForm.controls['reminder'].value).toJSON() : null
+          new Date(this.subTaskForm.controls['reminder'].value).toJSON() : null
       };
 
       console.log(obj, 'obj..', this.currentStageId, 'currentStageId..');
@@ -931,7 +941,7 @@ export class DsarRequestdetailsComponent implements OnInit {
             this.isOpen = true;
             this.alertType = 'danger';
             this.onResetSubTask();
-           });
+          });
       } else { // update sub task
         this.dsarRequestService.updateSubTask(this.selectedTaskID, obj)
           .subscribe((data) => {
@@ -990,7 +1000,7 @@ export class DsarRequestdetailsComponent implements OnInit {
       fd.append('mark_completed', this.subTaskResponseForm.get('markcompleted').value);
       fd.append('upload', this.subTaskResponseForm.get('uploaddocument').value);
 
-    //  return false;
+      //  return false;
       this.dsarRequestService.addSubTaskResponse(this.selectedTaskID, fd)
         .subscribe((data) => {
           this.alertMsg = data.response;
@@ -1027,7 +1037,7 @@ export class DsarRequestdetailsComponent implements OnInit {
       this.dsarRequestService.getSubTask(this.requestID, currentStageID).subscribe((data) => {
         return this.subTaskListResponse = data.response;
       });
-      
+
     } else {
       this.alertMsg = 'Stage not selected!';
       this.isOpen = true;
@@ -1061,6 +1071,10 @@ export class DsarRequestdetailsComponent implements OnInit {
     this.modalService.dismissAll('Canceled');
   }
 
+  onCancelFilePreview() {
+    this.modalService.dismissAll('Canceled');
+  }
+
   onChanges() {
     this.subTaskResponseForm.get('taskresponse').valueChanges.subscribe((data) => {
       if (data !== '') {
@@ -1069,6 +1083,56 @@ export class DsarRequestdetailsComponent implements OnInit {
         this.subTaskResponseForm.get('markcompleted').disable();
       }
     });
+  }
+
+  viewFile() {
+    this.loading.start();
+    let ext;
+    let documentType;
+    this.dsarRequestService.viewUserUploadedFile(this.requestID).subscribe((data) => {
+      this.loading.stop();
+      if (data) {
+        this.base64FileCode = data.upload;
+        ext = data.upload_ext;
+        documentType = this.changeFileType(ext);
+        const blob = new Blob([this._base64ToArrayBuffer(this.base64FileCode)], {
+          type: documentType // type: 'application/pdf',
+        });
+        const url = URL.createObjectURL(blob);
+        return window.open(url, 'iframeFilepreview');
+      }
+    }, (error) => {
+      this.loading.stop();
+      console.log(error, 'error..');
+    });
+
+  }
+
+  changeFileType(ext) {
+    let fileType;
+    switch (ext) {
+      case 'txt':
+        return fileType = 'text/plain';
+      case 'pdf':
+        return fileType = 'application/pdf';
+      case 'doc':
+        return fileType = 'application/msword';
+      case 'docx':
+        return fileType = 'application/msword';
+      case 'csv':
+        return fileType = 'text/csv';
+    }
+  }
+
+
+  _base64ToArrayBuffer(testbase64) {
+    const binary_string = window.atob(testbase64);
+    const len = binary_string.length;
+    const bytes = new Uint8Array(len);
+    for (let i = 0; i < len; i++) {
+      bytes[i] = binary_string.charCodeAt(i);
+    }
+    return bytes.buffer;
   }
 
 }

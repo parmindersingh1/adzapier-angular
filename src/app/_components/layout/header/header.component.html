@@ -55,7 +55,7 @@
   <div class="collapse navbar-collapse mr-auto" [collapse]="!isCollapsed"
     [ngClass]="{'hidemenu':!currentUser, 'showmenu':currentUser}">
     <ul  class="navbar-nav nav-mr" dropdown container="body">
-      <a class="nav-link dropdown-link" routerLinkActive="active" dropdownToggle (click)="false">
+      <a class="nav-link dropdown-link"  dropdownToggle (click)="false">
        <div>{{currentOrganization}}
        </div>
        <span>{{currentProperty ? currentProperty : 'Select Property'}}</span>
@@ -63,8 +63,9 @@
      <!--(orgPropertyMenu | async).response-->
       <ul *dropdownMenu class="dropdown-menu propMenu">
           <li role="menuitem" *ngFor="let item of orgPropertyMenu; first as isFirst; let i = index;">
-            <a class="dropdown-item" routerLinkActive="active" routerLink="settings/organizations/organizationdetails/{{item.id}}">
-              {{item.orgname}}  <span class="align-right"><i-feather class="feather-plus" name="plus"></i-feather></span>
+            <a class="dropdown-item"  routerLink="settings/organizations/organizationdetails/{{item.id}}">
+             <span [ngClass]="[isOrgSelected(item) ? 'active' : '']">{{item.orgname}}</span>
+             <span class="align-right"><i-feather class="feather-plus" name="plus"></i-feather></span>
             </a>
             <div *ngIf="item.property.length=='0'">No Property</div>
             <ul role="menu">

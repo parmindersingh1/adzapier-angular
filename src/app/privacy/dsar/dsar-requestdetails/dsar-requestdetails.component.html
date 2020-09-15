@@ -147,10 +147,16 @@
                             <p class="tx-13 tx-spacing-1  mg-b-0 " *ngIf="currentPropertyName">{{currentPropertyName}}
                             </p>
                         </div>
-                        <div *ngFor="let data of getCustomFields(customFields) | keyvalue">
+                        <div *ngFor="let data of getCustomFields(customFields) | keyvalue; let i = index">
                             <div class="customdata">
                                 <label class="tx-sans">{{data.key}} </label>
                                 <p class="mg-b-0">{{data.value}}</p>
+                            </div>
+                            <div *ngIf="i==getCustomFields(customFields).length" class="col-sm-2 customdata downloadFile">
+                                <label class="tx-sans"> Attachments </label>
+                                <p><i-feather class="feather-file" name="file"></i-feather>
+                                    <a (click)="viewFile()" style="cursor: pointer;">View File</a>
+                                </p>                               
                             </div>
                         </div>
                     </div>
@@ -170,8 +176,9 @@
                                             [ngClass]="{' ':currentStage==stage.order && !isPreviousStageExist(stage),'':nextStage > currentStage}">
                                             {{stage.stage_title}}</span>
                                     </a>
+                                  
                                 </div>
-
+                                <div class="m-2">{{stage.guidance_text}}</div>
                             </li>
                         </ul>
 
@@ -251,8 +258,8 @@
                                         <!-- <td>{{task | json}}</td> -->
                                         <td>
                                             <div class="tasklink"><span *ngIf="task.required"
-                                                    class="color-red">*</span><a
-                                                    (click)="openResponseModalPopup(subTaskResponseModal,task)">{{task.name}}</a>
+                                                    class="color-red">*</span>
+                                        <a (click)="openResponseModalPopup(subTaskResponseModal,task)">{{task.name}}</a>
                                             </div>
                                         </td>
                                         <td><span [innerHTML]="getStagename(task.workflow_stage)">
@@ -748,3 +755,13 @@
     <alert *ngIf="isOpen" [type]="alertType" [dismissible]="dismissible" (onClosed)="onClosed(alertMsg)">{{alertMsg}}
     </alert>
 </div>
+
+<ng-template #previewFile>
+    
+    <div class="modal-body">
+        <button type="button" class="close" aria-label="Close" (click)="onCancelFilePreview()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <iframe #filePreview name="iframeFilepreview" style="height:200px;width:300px"></iframe>
+    </div>
+  </ng-template>

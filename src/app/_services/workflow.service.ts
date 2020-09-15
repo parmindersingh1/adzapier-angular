@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Observable, BehaviorSubject } from 'rxjs';
-import { shareReplay } from 'rxjs/operators';
+import { shareReplay, map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -16,15 +16,17 @@ export class WorkflowService {
 
   //for workflow table
   getWorkflow(pageLimit?): Observable<any> {
+    const key = 'response';
     const pgLimit = pageLimit !== undefined ? pageLimit : '';
     if (pageLimit === '') {
       if (!this.workflowlist$) {
-        this.workflowlist$ = this.httpClient.get<any>(environment.apiUrl + '/workflow').pipe(shareReplay(1));
+        this.workflowlist$ = this.httpClient.get<any>(environment.apiUrl + '/workflow').pipe(map(res => res[key]), shareReplay(1));
       }
       return this.workflowlist$;
     } else {
       if (!this.workflowlist$) {
-        this.workflowlist$ = this.httpClient.get<any>(environment.apiUrl + '/workflow' + pgLimit).pipe(shareReplay(1));
+        this.workflowlist$ = this.httpClient.get<any>(environment.apiUrl + '/workflow' + pgLimit)
+        .pipe(map(res => res[key]), shareReplay(1));
       }
       return this.workflowlist$;
     }
