@@ -28,7 +28,6 @@ export class CookieBannerComponent implements OnInit {
   matcher = new MyErrorStateMatcher();
   currentPlan;
   isFieldDisabled = null;
-  logoText = 'Adzapier';
   bannerCookieData: any;
   isGdprGlobal = false;
   dismissible = true;
