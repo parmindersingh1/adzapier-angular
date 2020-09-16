@@ -300,7 +300,7 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
       'this.currrefdfs', this.currentState
     );
     setTimeout(() => {
-      this.onInsilizaedMap();
+      this.onGetRequestByState();
     }, 1000);
   }
 
@@ -546,7 +546,7 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
     const queryParam = {
       from_date: this.startDate,
       to_date: this.endDate,
-      country: 'USA'
+      country: this.currentState
     };
     this.dashboardService.getRequestByState(this.currentManagedOrgID, this.currrentManagedPropID, queryParam)
       .subscribe(res => {
