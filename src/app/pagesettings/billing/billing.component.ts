@@ -20,7 +20,7 @@ export class BillingComponent implements OnInit {
     billing_history: {},
     company_details: {}
   };
-  companyDetails: any = { name: '' };
+  companyDetails: any = [];
   dismissible = true;
   alertMsg: any;
   isOpen = false;
@@ -77,7 +77,7 @@ export class BillingComponent implements OnInit {
   onGetCompanyDetails() {
     this.companyService.getCompanyDetails().subscribe(res => {
       if (res['status'] === 200) {
-        this.companyDetails = res['response'];
+        this.companyDetails.push(res['response']);
       }
     }, error => {
       this.isOpen = true;

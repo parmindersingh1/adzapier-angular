@@ -538,6 +538,10 @@ input[type='color'] {
   flex-direction: column;
 }
 
+.dispalyflex-column .form-control.is-invalid {
+  padding-right: 0 !important;
+}
+
 .red {
   color: red;
   font-size: 12px;
@@ -613,4 +617,15 @@ span.previewbtn a {
 
 .color-red {
   color: red;
+}
+
+.collapse-btn {
+  width: 100%;
+  text-align: left;
+  display: flex;
+  justify-content: space-between;
+}
+
+::ng-deep .form-control .is-invalid {
+  padding-right: 0 !important;
 }

@@ -60,9 +60,9 @@
                                 <ngb-panel title="Form Fields">
                                     <ng-template ngbPanelHeader>
                                         <div class="d-flex align-items-center justify-content-between">
-                                            <h6 class="form-tl m-0">Form Fields</h6>
-                                            <button ngbPanelToggle class="btn btn-link p-0"><i
-                                                    class="fas fa-chevron-down"></i></button>
+                                            <button ngbPanelToggle  class="btn btn-link p-0 collapse-btn">
+                                                <h6 class="form-tl m-0">Form Fields</h6>
+                                            <i class="fas fa-chevron-down"></i></button>
                                         </div>
                                     </ng-template>
                                     <ng-template ngbPanelContent>
@@ -194,7 +194,7 @@
                                                                                     <div
                                                                                         *ngIf="customFields.submitted && ngModel.invalid">
                                                                                         <span
-                                                                                            *ngIf="ngModel.errors?.required"
+                                                                                            *ngIf="ngModel.errors.required"
                                                                                             class="red">
                                                                                             Add value
                                                                                         </span>
@@ -279,19 +279,24 @@
                                                                         <div class="row form-inline">
                                                                             <div class="col-md-12 form-group pr-0">
                                                                                 <div class="dispalyflex-column">
-                                                                                    <input type="text"
+                                                                                        <input type="text"
                                                                                         [(ngModel)]="item.name"
                                                                                         name="{{item.name}}"
                                                                                         [ngModelOptions]="{standalone: true}"
-                                                                                        #ngModel="ngModel"
-                                                                                        class="form-control" required />
-                                                                                    <span
-                                                                                        *ngIf="ngModel.errors?.required && item.name == ''"
-                                                                                        class="red">
-                                                                                        Add value
-                                                                                    </span>
-                                                                                </div>
+                                                                                        #customControl="ngModel"
+                                                                                        [ngClass]="{ 'is-invalid': customFields.submitted && customControl.invalid }"
+                                                                                        class="form-control mb-1"
+                                                                                        required />
+                                                                                        <div
+                                                                                        *ngIf="customFields.submitted && customControl.invalid">
+                                                                                        <span
+                                                                                            *ngIf="customControl.errors?.required"
+                                                                                            class="red">
+                                                                                            Add value
+                                                                                        </span>
+                                                                                    </div>
 
+                                                                                </div>
                                                                                 <button type="button"
                                                                                     class="btn btn-sm btn-danger ml-2"
                                                                                     (click)="deleteSelectOption(i)"><span
@@ -331,9 +336,9 @@
                                 <ngb-panel title="Form Styling">
                                     <ng-template ngbPanelHeader>
                                         <div class="d-flex align-items-center justify-content-between">
-                                            <h6 class="form-tl m-0">Form Styling</h6>
-                                            <button ngbPanelToggle class="btn btn-link p-0"><i
-                                                    class="fas fa-chevron-down"></i></button>
+                                            <button ngbPanelToggle class="btn btn-link p-0 collapse-btn">
+                                                <h6 class="form-tl m-0">Form Styling</h6>
+                                            <i class="fas fa-chevron-down"></i></button>
                                         </div>
                                     </ng-template>
                                     <ng-template ngbPanelContent>
@@ -425,9 +430,9 @@
                                 <ngb-panel title="Form Text">
                                     <ng-template ngbPanelHeader>
                                         <div class="d-flex align-items-center justify-content-between">
-                                            <h6 class="form-tl m-0">Form Text</h6>
-                                            <button ngbPanelToggle class="btn btn-link p-0"><i
-                                                    class="fas fa-chevron-down"></i></button>
+                                            <button ngbPanelToggle class="btn btn-link p-0 collapse-btn">
+                                                <h6 class="form-tl m-0">Form Text</h6>
+                                                <i class="fas fa-chevron-down"></i></button>
                                         </div>
                                     </ng-template>
                                     <ng-template ngbPanelContent>

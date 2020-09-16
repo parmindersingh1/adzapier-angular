@@ -29,7 +29,8 @@
 }
 
 .nav-tabs > li {
-    display: inline-flex;
+    display: flex;
+    flex-direction: column;
 }
 
 .nav-tabs .nav-item + .nav-item {
@@ -110,7 +111,6 @@ li.nav-item {
     display: inline-flex;
     padding: 0 10px;
     margin: 10px 0;
-    line-height: 30px;
  }
 
  .completedStage a span.step-number {
@@ -210,8 +210,9 @@ ul.nav-tabs > li > div > a {
     display: inline-flex;
     padding: 0 10px;
     margin: 10px 0;
-    line-height: 30px;
     cursor: pointer;
+    flex-direction: row;
+    align-items: center;
 }
 
 ul.nav-tabs > li > div > a::after{
@@ -334,6 +335,7 @@ ul.nav-tabs > li:last-child > div > a::after {
 
  .stagediv ul.nav-tabs {
      border: 0;
+     display: flex;
  }
 
 .flotingdiv{
@@ -541,3 +543,13 @@ ul.ngx-pagination {
     width: 100%;
   }
   
+  .downloadFile {
+      position: absolute;
+      right: 0px;
+  }
+
+  .feather-file {
+    height: 20px;
+    width: 20px;
+    margin-right: 10px;
+  }
