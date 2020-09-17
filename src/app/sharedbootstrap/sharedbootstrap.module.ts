@@ -6,7 +6,6 @@ import { QuillModule } from 'ngx-quill';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { FilterPipe } from '../filter.pipe';
-import { FilterUniquePipe } from '../filterunique.pipe';
 import { FeatherModule } from 'angular-feather';
 import { allIcons } from 'angular-feather/icons';
 import { TimeAgoPipe } from 'time-ago-pipe';
@@ -17,7 +16,7 @@ import {ChartsModule} from 'ng2-charts';
 
 
 @NgModule({
-  declarations: [FilterPipe, TimeAgoPipe, FilterUniquePipe],
+  declarations: [FilterPipe, TimeAgoPipe],
   imports: [
     CommonModule,
     NgbModule,
@@ -32,7 +31,7 @@ import {ChartsModule} from 'ng2-charts';
     BsDatepickerModule.forRoot(),
   ],
   exports: [NgbModule,  DragDropModule, QuillModule, NgxPaginationModule, BsDatepickerModule,
-  AlertModule, TypeaheadModule, FilterPipe, TimeAgoPipe, FilterUniquePipe]
+  AlertModule, TypeaheadModule, FilterPipe, TimeAgoPipe]
 
 })
 export class SharedbootstrapModule { }
