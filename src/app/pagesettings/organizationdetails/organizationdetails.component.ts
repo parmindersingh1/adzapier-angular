@@ -142,7 +142,7 @@ export class OrganizationdetailsComponent implements OnInit {
       this.email = data.response.email;
       this.phone = data.response.phone;
     });
-   // this.pathValues();
+    // this.pathValues();
   }
 
   getPropertyList(id): any {
@@ -193,7 +193,7 @@ export class OrganizationdetailsComponent implements OnInit {
   }
 
   editOrganizationModalPopup(content) {
-    this.editOrganisationForm.controls['organizationName'].setValue( this.organizationName );
+    this.editOrganisationForm.controls['organizationName'].setValue(this.organizationName);
     this.editOrganisationForm.controls['addressOne'].setValue(this.addressOne);
     this.editOrganisationForm.controls['addressTwo'].setValue(this.addressTwo);
     this.editOrganisationForm.controls['city'].setValue(this.city);
@@ -338,9 +338,8 @@ export class OrganizationdetailsComponent implements OnInit {
   pageChangeEvent(event) {
     this.paginationConfig.currentPage = event;
     const pagelimit = '&limit=' + this.paginationConfig.itemsPerPage + '&page=' + this.paginationConfig.currentPage;
-    const key = 'response';
     this.orgService.getOrgTeamMembers(this.organizationID, pagelimit).subscribe((data) => {
-      this.organizationTeamMemberList = data[key];
+      this.organizationTeamMemberList = data;
       this.paginationConfig.totalItems = data.count;
       return this.organizationTeamMemberList;
     });
@@ -414,7 +413,7 @@ export class OrganizationdetailsComponent implements OnInit {
     const key = 'response';
     const pagelimit = '&limit=' + this.paginationConfig.itemsPerPage + '&page=' + this.paginationConfig.currentPage;
     this.orgService.getOrgTeamMembers(orgID, pagelimit).subscribe((data) => {
-      this.organizationTeamMemberList = data[key];
+      this.organizationTeamMemberList = data;
       this.paginationConfig.totalItems = data.count;
     });
   }
