@@ -4,14 +4,12 @@ export const defaultData = {
   defaultCookieBlocking: true,
   defaultEnableIab: true,
   defaultEmail: false,
-  showOpenCcpaBtn: true,
-  showOpenGdprBtn: true,
+  showOpenBtn: true,
+  logo: true,
   gdprDefaultLang: 'en',
-  gdprDefaultBannerPosition: 'bottom',
-  // ccpaDefaultBannerlanguage: 'en'
-  ccpaBannerPosition: 'bottom',
+  DefaultBannerPosition: 'bottom',
 };
-export const ccpaBannerConstant = {
+export const BannerConstant = {
   ccpaTargetCountry: [{title: 'California', value: 'ca'}, {title: 'USA', value: 'US'}],
   gdprTargetCountry: [
     { title: 'GDPR Global', value: 'EU'},
@@ -43,16 +41,31 @@ export const ccpaBannerConstant = {
     {title: 'Finland', value: 'FI'},
     {title: 'Sweden', value: 'SE'}
     ],
+
+  // SocialMediaText: 'Social Media',
+  // PopUpSocialMediaHead: 'General Information\n',
+  // PopUpSocialMediaDescription: 'In order to comply with data protection laws, we ask you to review the key points below of our Privacy Policy. To continue using our website, you need to select your preferences and click "Save". Privacy Statement',
+  // NecessaryText: 'Essentiial',
+  // PopUpNecessaryHead: 'Required Cookies\n',
+  // PopUpNecessaryDescription: 'Required cookies are necessary for basic website functionality. Some examples include: session cookies needed to transmit the website, authentication cookies, and security cookies',
+  // AnalyticsText: 'Analytics',
+  // PopUpAnalyticsHead: 'Functional Cookies\n',
+  // PopUpAnalyticsDescription: 'Functional cookies enhance functions, performance, and services on the website. Some examples include: cookies used to analyze site traffic, cookies used for market research, and cookies used to display advertising that is not directed to a particular individual.\n' +
+  //   '\n',
+  // AdvertisingText: 'Advertising',
+  // PopUpAdvertisingHead: 'Advertising Cookies\n',
+  // PopUpAdvertisingDescription: 'Advertising cookies track activity across websites in order to understand a viewer’s interests, and direct them specific marketing. Some examples include: cookies used for remarketing, or interest-based advertising.\n' +
+  //   '\n',
   GDPR: {
     BANNER: {
       Bannerlanguage: [
         {
           title: 'English',
-          value: 'EN'
+          value: 'en'
         },
         {
-          title: 'Spanish',
-          value: 'EU'
+          title: 'German',
+          value: 'de'
         }
       ],
       BannerPosition: [
@@ -97,16 +110,6 @@ export const ccpaBannerConstant = {
   },
   CCPA: {
     BANNER: {
-      // Bannerlanguage: [
-      //   {
-      //     title: 'English',
-      //     value: 'EN'
-      //   },
-      //   {
-      //     title: 'Spanish',
-      //     value: 'EU'
-      //   }
-      // ],
       BannerPosition: [
         {title: 'Top', value: 'top'},
         {title: 'Bottom', value: 'bottom'}
@@ -127,32 +130,34 @@ export const ccpaBannerConstant = {
       // BannerDisableAllButtonBackgroundColor: '#ffffff',
     },
     POPUP: {
-      // PopUpGlobalTextColor: '#000000',
-      // PopUpGlobalBackgroundColor: '#ffffff',
-      // PopUpPurposeButtonTextColor: '#000000',
-      // PopUpPurposeButtonBackgroundColor: '#ffffff',
-      // PopUpPurposeButtonBorderColor: '#000000',
       PopUpDisableAllButtonTextContent: 'Disable All',
       // PopUpDisableAllButtonTextColor: '#ffffff',
       // PopUpDisableAllButtonBackgroundColor: '#444444',
       PopUpAllowAllButtonTextContent: 'Allow All',
       // PopUpAllowAllButtonTextColor: '#666666',
       // PopUpAllowAllButtonBackgroundColor: '#ffffff',
-      PopUpInformationBtnText: 'Information',
-      PopUpInformationHead: 'General Information\n',
-      PopUpInformationDescription: 'In order to comply with data protection laws, we ask you to review the key points below of our Privacy Policy. To continue using our website, you need to select your preferences and click "Save". Privacy Statement',
-      necessaryBtnText: 'Necessary',
+      // PopUpInformationBtnText: 'Information',
+      SocialMediaText: 'Social Media',
+      PopUpSocialMediaHead: 'General Information\n',
+      PopUpSocialMediaDescription: 'In order to comply with data protection laws, we ask you to review the key points below of our Privacy Policy. To continue using our website, you need to select your preferences and click "Save". Privacy Statement',
+      NecessaryText: 'Essentiial',
       PopUpNecessaryHead: 'Required Cookies\n',
-      PopUpNecessaryDescription: 'Required cookies are necessary for basic website functionality. Some examples include: session cookies needed to transmit the website, authentication cookies, and security cookies.\n' +
-        '\n',
-      analyticsBtnText: 'Analytics',
+      PopUpNecessaryDescription: 'Required cookies are necessary for basic website functionality. Some examples include: session cookies needed to transmit the website, authentication cookies, and security cookies',
+      AnalyticsText: 'Analytics',
       PopUpAnalyticsHead: 'Functional Cookies\n',
       PopUpAnalyticsDescription: 'Functional cookies enhance functions, performance, and services on the website. Some examples include: cookies used to analyze site traffic, cookies used for market research, and cookies used to display advertising that is not directed to a particular individual.\n' +
         '\n',
+      AdvertisingText: 'Advertising',
       PopUpAdvertisingHead: 'Advertising Cookies\n',
-      advertisingBtnText: 'Advertising',
       PopUpAdvertisingDescription: 'Advertising cookies track activity across websites in order to understand a viewer’s interests, and direct them specific marketing. Some examples include: cookies used for remarketing, or interest-based advertising.\n' +
         '\n',
     }
   }
 };
+
+export const IabPurposeIds = {
+  advertising: [3, 4],
+  socialMedia: [1, 2],
+  analytics: [5, 6],
+  essentiial: [7, 8]
+}

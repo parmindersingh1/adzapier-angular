@@ -260,18 +260,18 @@
                 <div class="col-sm-6">
                     <div class="form-group"><label for="email">Email</label>
                         <input type="text" class="form-control"  formControlName="email"
-                        name="email" [ngClass]="{ 'is-invalid': submitted && editOrg.email.errors }" />
-                        <div *ngIf="submitted && editOrg.email.errors" class="invalid-feedback">
-                            <div *ngIf="editOrg.email.errors.required">Email is required</div>
+                        name="email" [ngClass]="{ 'is-invalid': submitted && f.email.errors }" />
+                        <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
+                            <div *ngIf="f.email.errors.required">Email is required</div>
                         </div>
                     </div>
                 </div>
                 <div class="col-sm-6">
                     <div class="form-group"><label for="phone">Phone</label>
                         <input type="text" class="form-control"  formControlName="phone"
-                        name="phone" [ngClass]="{ 'is-invalid': submitted && editOrg.phone.errors }" />
-                        <div *ngIf="submitted && editOrg.phone.errors" class="invalid-feedback">
-                            <div *ngIf="editOrg.phone.errors.required">Phone is required</div>
+                        name="phone" [ngClass]="{ 'is-invalid': submitted && f.phone.errors }" />
+                        <div *ngIf="submitted && f.phone.errors" class="invalid-feedback">
+                            <div *ngIf="f.phone.errors.required">Phone is required</div>
                         </div>
                     </div>
                 </div>
@@ -285,7 +285,7 @@
                             placeholder="Enter your zipcode" />
                         <div *ngIf="submitted && f.zipcode.errors" class="invalid-feedback">
                             <div *ngIf="f.zipcode.errors.required">Zipcode is required</div>
-                            <div *ngIf="f.zipcode.errors.pattern">zipcode allow only Numbers</div>
+                            <div *ngIf="f.zipcode.errors.pattern">Zipcode must be at least 5 characters long.</div>
                         </div>
                     </div>
                 </div>

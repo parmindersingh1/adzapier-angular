@@ -262,14 +262,12 @@
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label for="zipcode">Zipcode</label>
-                            <input type="text"  minlength="4" maxlength="6"  formControlName="zipcode" class="form-control"
+                            <input type="text" formControlName="zipcode" class="form-control"
                                 [ngClass]="{ 'is-invalid': submitted && f.zipcode.errors }"
                                 placeholder="Enter your zipcode" />
                             <div *ngIf="submitted && f.zipcode.errors" class="invalid-feedback">
                                 <div *ngIf="f.zipcode.errors.required">Zipcode is required</div>
-                                <div *ngIf="f.zipcode.errors.pattern">zipcode allow only Numbers</div>
-                              <div *ngIf="f.zipcode.errors.minlength">Zipcode must be at least 4 characters long.</div>
-                              <div *ngIf="f.zipcode.errors.maxlength">Zipcode should not be greater than  characters.</div>
+                                <div *ngIf="f.zipcode.errors.pattern">Zipcode must be at least 5 characters long.</div>
                             </div>
                         </div>
                     </div>

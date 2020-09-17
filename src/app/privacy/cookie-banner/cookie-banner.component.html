@@ -3,10 +3,16 @@
     <div class="row">
       <div class="w-100">
         <h2 class="mat-h2">
-          Configure your Banner CCPA & GDPR
+          Configure your Banner
         </h2>
         <div class="card">
-          <div class="card-header">Configure your theme
+          <div class="card-header">
+            <h6 style="float: left">Configure your theme </h6>
+              <button style="float: right"
+                      class="pull-right btn btn-sm pd-x-15 btn-white btn-uppercase mg-l-5" id="printReport"><i class="fa fa-arrow-right" aria-hidden="true"></i>
+                Publish</button>
+            <button style="float: right" class="pull-right btn btn-sm pd-x-15 btn-white btn-uppercase mg-l-5" id="printReport"><i class="fas fa-save"></i> Save</button>
+
           </div>
           <div class="card-body">
             <div class="row">
@@ -14,7 +20,7 @@
                 <mat-form-field class="dropdown-width" appearance="fill">
                   <mat-label>CCPA Target</mat-label>
                   <mat-select formControlName="ccpaTarget" [disabled]="isGdprGlobal"  [errorStateMatcher]="matcher">
-                    <mat-option *ngFor="let ccpaCountry of ccpaBannerConstant.ccpaTargetCountry"
+                    <mat-option *ngFor="let ccpaCountry of bannerConstant.ccpaTargetCountry"
                                 [value]="ccpaCountry.value">{{ccpaCountry.title}}</mat-option>
                   </mat-select>
                   <mat-error *ngIf="f.ccpaTarget.hasError('required')">
@@ -27,7 +33,7 @@
                   <mat-select [disabled]="currentPlan !== 'GDPR'" (ngModelChange)="onCheckCountry($event)" formControlName="gdprTarget"
                               [errorStateMatcher]="matcher" multiple>
                     <mat-option
-                      *ngFor="let gdprCountry of ccpaBannerConstant.gdprTargetCountry"
+                      *ngFor="let gdprCountry of bannerConstant.gdprTargetCountry"
                       [value]="gdprCountry.value">{{gdprCountry.title}}</mat-option>
                   </mat-select>
                   <mat-error *ngIf="f.gdprTarget.hasError('required')">
@@ -37,22 +43,19 @@
 
 
                 <section class="example-section">
-                  <mat-checkbox [disabled]="isFieldDisabled" (change)="onSelectLogo($event)"  [checked]="logoText" class="example-margin">Show Adzapier Logo?</mat-checkbox>
+                  <mat-checkbox [disabled]="isFieldDisabled"
+                                formControlName="logo"
+                                class="example-margin">Show Adzapier Logo?</mat-checkbox>
                 </section>
 
                 <section class="example-section">
-                  <mat-checkbox [disabled]="isFieldDisabled"   formControlName="showOpenGdprBtn"
-                                class="example-margin">Show Open Gdpr PopUp Button?</mat-checkbox>
-                </section>
-
-                <section class="example-section">
-                  <mat-checkbox [disabled]="isFieldDisabled || isGdprGlobal" formControlName="showOpenCcpaBtn"
-                               class="example-margin">Show Open Ccpa PopUp Button?</mat-checkbox>
+                  <mat-checkbox [disabled]="isFieldDisabled"   formControlName="showOpenBtn"
+                                class="example-margin">Show Open PopUp Button?</mat-checkbox>
                 </section>
 
               </div>
               <div class="col-md-8 switch-btn">
-                <mat-slide-toggle formControlName="cookieBlocking" color="primary" class="cookie-allow">COKIE BLOCKING
+                <mat-slide-toggle formControlName="cookieBlocking" color="primary" class="cookie-allow">COOKIE BLOCKING
                 </mat-slide-toggle>
                 <br>
                 <mat-slide-toggle [disabled]="isGdprGlobal" [checked]="isGdprGlobal" formControlName="enableIab" color="primary" class="cookie-allow">ENABLE IAB
@@ -65,43 +68,43 @@
         </div>
         <!--      End Configure your theme -->
 
-        <div class="card" *ngIf="currentPlan === 'GDPR'">
-          <div class="card-header">Banner Customize UI - GDPR
+        <div class="card">
+          <div class="card-header">Banner Customize UI
           </div>
           <div class="card-body">
             <div class="row">
               <div class="col-md-12">
                 <mat-form-field class="lang-select" appearance="fill">
                   <mat-label>Language</mat-label>
-                  <mat-select  [disabled]="isFieldDisabled" formControlName="gdprBannerlanguage" [errorStateMatcher]="matcher">
-                    <mat-option *ngFor="let gdprLang of ccpaBannerConstant.GDPR.BANNER.Bannerlanguage"
+                  <mat-select  [disabled]="isFieldDisabled" formControlName="Bannerlanguage" [errorStateMatcher]="matcher">
+                    <mat-option *ngFor="let gdprLang of bannerConstant.GDPR.BANNER.Bannerlanguage"
                                 [value]="gdprLang.value"
                     >
                       {{gdprLang.title}}
                     </mat-option>
                   </mat-select>
-                  <mat-error *ngIf="f.gdprBannerlanguage.hasError('required')">
-                    GDPR Language is <strong>required</strong>
+                  <mat-error *ngIf="f.Bannerlanguage.hasError('required')">
+                    Language is <strong>required</strong>
                   </mat-error>
                 </mat-form-field>
               </div>
               <div class="col-md-12 mt-2">
                 <h6>Position</h6>
-                <mat-radio-group formControlName="gdprBannerPosition" aria-label="Select an option">
-                  <mat-radio-button *ngFor="let gdprPosition of ccpaBannerConstant.GDPR.BANNER.BannerPosition"
+                <mat-radio-group formControlName="BannerPosition" aria-label="Select an option">
+                  <mat-radio-button *ngFor="let gdprPosition of bannerConstant.GDPR.BANNER.BannerPosition"
                                     class="mr-2"  [disabled]="isFieldDisabled" [value]="gdprPosition.value">{{gdprPosition.title}}</mat-radio-button>
                 </mat-radio-group>
               </div>
 
               <div class="col-md-12 mt-2">
-                <input type="text" [attr.disabled]="isFieldDisabled" formControlName="gdprBannerTitle"
-                       class="form-control w-50" [placeholder]="ccpaBannerConstant.GDPR.BANNER.BannerTitle">
+                <input type="text" [attr.disabled]="isFieldDisabled" formControlName="BannerTitle"
+                       class="form-control w-50" [placeholder]="bannerConstant.GDPR.BANNER.BannerTitle">
               </div>
 
               <div class="col-md-12 mt-2">
                 <textarea [attr.disabled]="isFieldDisabled" class="form-control w-50" rows="3"
-                          formControlName="gdprBannerDescription"
-                          [placeholder]="ccpaBannerConstant.GDPR.BANNER.BannerDescription"></textarea>
+                          formControlName="BannerDescription"
+                          [placeholder]="bannerConstant.GDPR.BANNER.BannerDescription"></textarea>
               </div>
 
               <div class="col-md-12 mt-4">
@@ -112,7 +115,7 @@
                       <div class="col-md-4">textColor</div>
                       <div class="col-md-3"><input
                         #bannerTextColor [attr.disabled]="isFieldDisabled"
-                        formControlName="gdprBannerGlobalStyleTextColor"
+                        formControlName="BannerGlobalStyleTextColor"
                         type="color" [attr.disabled]="isFieldDisabled"></div>
                       <div class="col-md-5">
                         <input matInput disabled
@@ -125,14 +128,13 @@
                     <div class="row">
                       <div class="col-md-5">BackGroundColor</div>
                       <div class="col-md-3"><input #bannerBackGroundColor [attr.disabled]="isFieldDisabled"
-                                                   formControlName="gdprBannerGlobalStyleBackgroundColor"
+                                                   formControlName="BannerGlobalStyleBackgroundColor"
                                                    type="color" [attr.disabled]="isFieldDisabled"></div>
                       <div class="col-md-4">
                         <input matInput disabled
                                [value]="bannerBackGroundColor.value">
                       </div>
                     </div>
-
                   </div>
 
                 </div>
@@ -145,8 +147,8 @@
 
                   <div class="col-md-3 mt-2">
                     <input type="text" [attr.disabled]="isFieldDisabled" class="form-control"
-                           formControlName="gdprBannerPreferenceButtonTextContent"
-                           [placeholder]="ccpaBannerConstant.GDPR.BANNER.BannerPreferenceButtonTextContent">
+                           formControlName="BannerPreferenceButtonTextContent"
+                           [placeholder]="bannerConstant.GDPR.BANNER.BannerPreferenceButtonTextContent">
 
                   </div>
 
@@ -155,7 +157,7 @@
                       <div class="col-md-4">textColor</div>
                       <div class="col-md-3"><input
                         #bannerCustomizeButtonTextColor
-                        formControlName="gdprBannerPreferenceButtonTextColor"
+                        formControlName="BannerPreferenceButtonTextColor"
                         type="color" [attr.disabled]="isFieldDisabled"></div>
                       <div class="col-md-5">
                         <input matInput disabled readonly
@@ -168,7 +170,7 @@
                     <div class="row">
                       <div class="col-md-5">BackGround Color</div>
                       <div class="col-md-3"><input
-                        formControlName="gdprBannerPreferenceButtonBackgroundColor"
+                        formControlName="BannerPreferenceButtonBackgroundColor"
                         #bannerCustomizeButtonBackGroundColor type="color" [attr.disabled]="isFieldDisabled"></div>
                       <div class="col-md-4">
                         <input matInput disabled readonly
@@ -187,8 +189,8 @@
 
                   <div class="col-md-3 mt-2">
                     <input type="text" [attr.disabled]="isFieldDisabled" class="form-control"
-                           formControlName="gdprBannerAllowAllButtonTextContent"
-                           [placeholder]="ccpaBannerConstant.GDPR.BANNER.BannerAllowAllButtonTextContent">
+                           formControlName="BannerAllowAllButtonTextContent"
+                           [placeholder]="bannerConstant.GDPR.BANNER.BannerAllowAllButtonTextContent">
 
                   </div>
 
@@ -197,7 +199,7 @@
                     <div class="row">
                       <div class="col-md-4">textColor</div>
                       <div class="col-md-3"><input
-                        formControlName="gdprBannerAllowAllButtonTextColor"
+                        formControlName="BannerAllowAllButtonTextColor"
                         #bannerAllowButtonTextColor type="color" [attr.disabled]="isFieldDisabled"></div>
                       <div class="col-md-5">
                         <input matInput disabled
@@ -211,7 +213,7 @@
                     <div class="row">
                       <div class="col-md-5">BackGround Color</div>
                       <div class="col-md-3"><input
-                        formControlName="gdprBannerAllowAllButtonBackgroundColor"
+                        formControlName="BannerAllowAllButtonBackgroundColor"
                         #bannerAllowButtonBackGroundColor type="color" [attr.disabled]="isFieldDisabled"></div>
                       <div class="col-md-4">
                         <input matInput disabled readonly [value]="bannerAllowButtonBackGroundColor.value">
@@ -228,8 +230,8 @@
 
                   <div class="col-md-3 mt-2">
                     <input type="text" [attr.disabled]="isFieldDisabled" class="form-control"
-                           formControlName="gdprBannerDisableAllButtonTextContent"
-                           [placeholder]="ccpaBannerConstant.GDPR.BANNER.BannerDisableAllButtonTextContent">
+                           formControlName="BannerDisableAllButtonTextContent"
+                           [placeholder]="bannerConstant.GDPR.BANNER.BannerDisableAllButtonTextContent">
                   </div>
 
 
@@ -237,7 +239,7 @@
                     <div class="row">
                       <div class="col-md-4">textColor</div>
                       <div class="col-md-3"><input
-                        formControlName="gdprBannerDisableAllButtonTextColor"
+                        formControlName="BannerDisableAllButtonTextColor"
                         #bannerDisableButtonTextColor type="color" [attr.disabled]="isFieldDisabled"></div>
                       <div class="col-md-5">
                         <input matInput disabled [value]="bannerDisableButtonTextColor.value">
@@ -249,7 +251,7 @@
                     <div class="row">
                       <div class="col-md-5">BackGround Color</div>
                       <div class="col-md-3"><input
-                        formControlName="gdprBannerDisableAllButtonBackgroundColor"
+                        formControlName="BannerDisableAllButtonBackgroundColor"
                         #bannerDisableButtonBackGroundColor type="color" [attr.disabled]="isFieldDisabled"></div>
                       <div class="col-md-4">
                         <input matInput disabled [value]="bannerDisableButtonBackGroundColor.value">
@@ -266,8 +268,8 @@
         </div>
 
 
-        <div class="card" *ngIf="currentPlan === 'GDPR'">
-          <div class="card-header">PopUp Customize UI - GDPR
+        <div class="card">
+          <div class="card-header">PopUp Customize UI
           </div>
           <div class="card-body">
             <div class="row">
@@ -276,16 +278,16 @@
               <div class="col-md-12">
                 <h6>Purpose Body Description</h6>
                 <textarea [attr.disabled]="isFieldDisabled" class="form-control w-50" rows="3"
-                          formControlName="gdprPopUpPurposeBodyDescription"
-                          [placeholder]="ccpaBannerConstant.GDPR.POPUP.PopUpPurposeBodyDescription"></textarea>
+                          formControlName="PopUpPurposeBodyDescription"
+                          [placeholder]="bannerConstant.GDPR.POPUP.PopUpPurposeBodyDescription"></textarea>
               </div>
 
 
               <div class="col-md-12 mt-3">
                 <h6>Vendor Body Description</h6>
                 <textarea [attr.disabled]="isFieldDisabled" class="form-control w-50" rows="3"
-                          formControlName="gdprPopUpVendorBodyDescription"
-                          [placeholder]="ccpaBannerConstant.GDPR.POPUP.PopUpVendorBodyDescription"></textarea>
+                          formControlName="PopUpVendorBodyDescription"
+                          [placeholder]="bannerConstant.GDPR.POPUP.PopUpVendorBodyDescription"></textarea>
               </div>
 
 
@@ -293,17 +295,34 @@
                 <h6>PopUp Styles</h6>
                 <div class="row mt-2">
 
-                  <div class="col-md-3">
+<!--                  <div class="col-md-3">-->
+<!--                    <div class="row">-->
+<!--                      <div class="col-md-4">textColor</div>-->
+<!--                      <div class="col-md-3"><input-->
+<!--                        formControlName="PopUpGlobalTextColor"-->
+<!--                        #popUpTextColor type="color" [attr.disabled]="isFieldDisabled"></div>-->
+<!--                      <div class="col-md-5">-->
+<!--                        <input matInput disabled [value]="popUpTextColor.value">-->
+<!--                      </div>-->
+<!--                    </div>-->
+<!--                  </div>-->
+
+
+
+                  <div class="col-md-5">
                     <div class="row">
-                      <div class="col-md-4">textColor</div>
+                      <div class="col-md-4">Switch Button Color</div>
                       <div class="col-md-3"><input
-                        formControlName="gdprPopUpGlobalTextColor"
-                        #popUpTextColor type="color" [attr.disabled]="isFieldDisabled"></div>
+                        formControlName="PopUpSwitchButton"
+                        #PopUpSwitchButton type="color" [attr.disabled]="isFieldDisabled"></div>
                       <div class="col-md-5">
-                        <input matInput disabled [value]="popUpTextColor.value">
+                        <input matInput disabled [value]="PopUpSwitchButton.value">
                       </div>
                     </div>
                   </div>
+
+
+
 
                 </div>
               </div>
@@ -317,7 +336,7 @@
                     <div class="row">
                       <div class="col-md-4">textColor</div>
                       <div class="col-md-3"><input
-                        formControlName="gdprPopUpPurposeButtonTextColor"
+                        formControlName="PopUpPurposeButtonTextColor"
                         #popUpPurposeButtonTextColor type="color" [attr.disabled]="isFieldDisabled"></div>
                       <div class="col-md-5">
                         <input matInput disabled [value]="popUpPurposeButtonTextColor.value">
@@ -329,7 +348,7 @@
                     <div class="row">
                       <div class="col-md-5">BackGround Color</div>
                       <div class="col-md-3"><input
-                        formControlName="gdprPopUpPurposeButtonBackgroundColor"
+                        formControlName="PopUpPurposeButtonBackgroundColor"
                         #popUpPurposeButtonBackGroundColor type="color" [attr.disabled]="isFieldDisabled"></div>
                       <div class="col-md-4">
                         <input matInput disabled [value]="popUpPurposeButtonBackGroundColor.value">
@@ -351,15 +370,15 @@
 
                   <div class="col-md-3 mt-2">
                     <input type="text" [attr.disabled]="isFieldDisabled" class="form-control"
-                           formControlName="gdprPopUpDisableAllButtonTextContent"
-                           [placeholder]="ccpaBannerConstant.GDPR.POPUP.PopUpDisableAllButtonTextContent">
+                           formControlName="PopUpDisableAllButtonTextContent"
+                           [placeholder]="bannerConstant.GDPR.POPUP.PopUpDisableAllButtonTextContent">
                   </div>
 
                   <div class="col-md-3">
                     <div class="row">
                       <div class="col-md-4">textColor</div>
                       <div class="col-md-3"><input
-                        formControlName="gdprPopUpDisableAllButtonTextColor"
+                        formControlName="PopUpDisableAllButtonTextColor"
                         #popUpDisableAllButtonTextColor type="color" [attr.disabled]="isFieldDisabled"></div>
                       <div class="col-md-5">
                         <input matInput disabled
@@ -372,7 +391,7 @@
                     <div class="row">
                       <div class="col-md-5">BackGround Color</div>
                       <div class="col-md-3"><input
-                        formControlName="gdprPopUpDisableAllButtonBackgroundColor"
+                        formControlName="PopUpDisableAllButtonBackgroundColor"
                         #popUpDisableAllButtonBackGroundColor type="color" [attr.disabled]="isFieldDisabled"></div>
                       <div class="col-md-4">
                         <input matInput disabled [value]="popUpDisableAllButtonBackGroundColor.value">
@@ -389,8 +408,8 @@
 
                   <div class="col-md-3 mt-2">
                     <input type="text" [attr.disabled]="isFieldDisabled" class="form-control"
-                           formControlName="gdprPopUpSaveMyChoiceButtonContentText"
-                           [placeholder]="ccpaBannerConstant.GDPR.POPUP.PopUpSaveMyChoiceButtonContentText">
+                           formControlName="PopUpSaveMyChoiceButtonContentText"
+                           [placeholder]="bannerConstant.GDPR.POPUP.PopUpSaveMyChoiceButtonContentText">
 
                   </div>
 
@@ -398,7 +417,7 @@
                     <div class="row">
                       <div class="col-md-4">textColor</div>
                       <div class="col-md-3"><input
-                        formControlName="gdprPopUpSaveMyChoiceButtonTextColor"
+                        formControlName="PopUpSaveMyChoiceButtonTextColor"
                         #popUpSaveMyChoiseButtonTextColor type="color" [attr.disabled]="isFieldDisabled"></div>
                       <div class="col-md-5">
                         <input matInput disabled [value]="popUpSaveMyChoiseButtonTextColor.value">
@@ -410,7 +429,7 @@
                     <div class="row">
                       <div class="col-md-5">BackGround Color</div>
                       <div class="col-md-3"><input
-                        formControlName="gdprPopUpSaveMyChoiceButtonBackgroundColor"
+                        formControlName="PopUpSaveMyChoiceButtonBackgroundColor"
                         #popUpSaveMyChoiseButtonBackGroundColor type="color" [attr.disabled]="isFieldDisabled"></div>
                       <div class="col-md-4">
                         <input matInput disabled [value]="popUpSaveMyChoiseButtonBackGroundColor.value">
@@ -428,8 +447,8 @@
                   <div class="col-md-3 mt-2">
 
                     <input type="text" [attr.disabled]="isFieldDisabled" class="form-control"
-                           formControlName="gdprPopUpAllowAllButtonTextContent"
-                           [placeholder]="ccpaBannerConstant.GDPR.POPUP.PopUpAllowAllButtonTextContent">
+                           formControlName="PopUpAllowAllButtonTextContent"
+                           [placeholder]="bannerConstant.GDPR.POPUP.PopUpAllowAllButtonTextContent">
                   </div>
 
 
@@ -437,7 +456,7 @@
                     <div class="row">
                       <div class="col-md-4">textColor</div>
                       <div class="col-md-3"><input
-                        formControlName="gdprPopUpAllowAllButtonTextColor"
+                        formControlName="PopUpAllowAllButtonTextColor"
                         #popUPAllowButtonTextColor type="color" [attr.disabled]="isFieldDisabled"></div>
                       <div class="col-md-5">
                         <input matInput disabled [value]="popUPAllowButtonTextColor.value">
@@ -449,7 +468,7 @@
                     <div class="row">
                       <div class="col-md-5">BackGround Color</div>
                       <div class="col-md-3"><input
-                        formControlName="gdprPopUpAllowAllButtonBackgroundColor"
+                        formControlName="PopUpAllowAllButtonBackgroundColor"
                         #popUPAllowButtonBackGroundColor type="color" [attr.disabled]="isFieldDisabled"></div>
                       <div class="col-md-4">
                         <input matInput disabled [value]="popUPAllowButtonBackGroundColor.value">
@@ -459,6 +478,103 @@
                 </div>
               </div>
 
+              <div class="col-md-12 mt-5 mb-3">
+                <h6 class="mb-4"> PopUp Body Content</h6>
+                <mat-accordion>
+                  <mat-expansion-panel (opened)="panelOpenState = true"
+                                       (closed)="panelOpenState = false">
+                    <mat-expansion-panel-header>
+                      <mat-panel-title>
+                          <h6> {{bannerConstant.CCPA.POPUP.AdvertisingText}}</h6>
+                      </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <h6>Title</h6>
+                    <input type="text" [attr.disabled]="isFieldDisabled" class="form-control w-50"
+                           formControlName="PopUpSocialMediaHeading"
+                           [placeholder]="bannerConstant.CCPA.POPUP.PopUpAdvertisingHead">
+                    <br>
+                    <h6>Description</h6>
+                    <textarea [attr.disabled]="isFieldDisabled" class="form-control w-50" rows="3"
+                              formControlName="PopUpSocialMediaDescription"
+                              [placeholder]="bannerConstant.CCPA.POPUP.PopUpAdvertisingDescription"></textarea>
+
+
+                  </mat-expansion-panel>
+                </mat-accordion>
+              </div>
+
+              <div class="col-md-12 mb-3">
+                <mat-accordion>
+                  <mat-expansion-panel (opened)="panelOpenState = true"
+                                       (closed)="panelOpenState = false">
+                    <mat-expansion-panel-header>
+                      <mat-panel-title>
+                        <h6> {{bannerConstant.CCPA.POPUP.SocialMediaText}}</h6>
+
+                      </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <h6>Title</h6>
+                    <input type="text" [attr.disabled]="isFieldDisabled" class="form-control w-50"
+                           formControlName="PopUpNecessaryHeading"
+                           [placeholder]="bannerConstant.CCPA.POPUP.PopUpSocialMediaHead">
+                    <br>
+                    <h6>Description</h6>
+                    <textarea [attr.disabled]="isFieldDisabled" class="form-control w-50" rows="3"
+                              formControlName="PopUpNecessaryDescription"
+                              [placeholder]="bannerConstant.CCPA.POPUP.PopUpSocialMediaDescription"></textarea>
+
+                  </mat-expansion-panel>
+                </mat-accordion>
+              </div>
+              <div class="col-md-12 mb-3">
+                <mat-accordion>
+                  <mat-expansion-panel (opened)="panelOpenState = true"
+                                       (closed)="panelOpenState = false">
+                    <mat-expansion-panel-header>
+                      <mat-panel-title>
+                        <h6> {{bannerConstant.CCPA.POPUP.AnalyticsText}}</h6>
+
+                      </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <h6>Title</h6>
+                    <input type="text" [attr.disabled]="isFieldDisabled" class="form-control w-50"
+                           formControlName="PopUpAnalyticsHeading"
+                           [placeholder]="bannerConstant.CCPA.POPUP.PopUpAnalyticsHead">
+                    <br>
+                    <h6>Description</h6>
+                    <textarea [attr.disabled]="isFieldDisabled" class="form-control w-50" rows="3"
+                              formControlName="PopUpAnalyticsDescription"
+                              [placeholder]="bannerConstant.CCPA.POPUP.PopUpAnalyticsDescription"></textarea>
+
+                  </mat-expansion-panel>
+                </mat-accordion>
+              </div>
+
+              <div class="col-md-12 mb-3">
+                <mat-accordion>
+                  <mat-expansion-panel (opened)="panelOpenState = true"
+                                       (closed)="panelOpenState = false">
+                    <mat-expansion-panel-header>
+                      <mat-panel-title>
+                        <h6> {{bannerConstant.CCPA.POPUP.NecessaryText}}</h6>
+
+                      </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <h6>Title</h6>
+                    <input type="text" [attr.disabled]="isFieldDisabled" class="form-control w-50"
+                           formControlName="PopUpAdvertisingHeading"
+                           [placeholder]="bannerConstant.CCPA.POPUP.PopUpNecessaryHead">
+                    <br>
+
+                    <h6>Description</h6>
+                    <textarea [attr.disabled]="isFieldDisabled" class="form-control w-50" rows="3"
+                              formControlName="PopUpAdvertisingDescription"
+                              [placeholder]="bannerConstant.CCPA.POPUP.PopUpNecessaryDescription"></textarea>
+
+                  </mat-expansion-panel>
+                </mat-accordion>
+              </div>
+
 
             </div>
           </div>
@@ -466,392 +582,290 @@
       </div>
 
 
-      <div class="card">
-        <div class="card-header">Banner Customize UI - CCPA
-        </div>
-        <div class="card-body">
-          <div class="row">
-            <div class="col-md-12 mt-2">
-              <h6>Position</h6>
-              <mat-radio-group
-                formControlName="ccpaBannerPosition"
-                aria-label="Select an option">
-                <mat-radio-button *ngFor="let ccpaPosition of ccpaBannerConstant.CCPA.BANNER.BannerPosition"
-                                  class="mr-2"  [disabled]="isFieldDisabled" [value]="ccpaPosition.value">{{ccpaPosition.title}}</mat-radio-button>
-              </mat-radio-group>
-              <mat-error *ngIf="f.ccpaBannerPosition.hasError('required')">
-                Banner Position is <strong>required</strong>
-              </mat-error>
-            </div>
+<!--      <div class="card">-->
+<!--        <div class="card-header">Banner Customize UI - CCPA-->
+<!--        </div>-->
+<!--        <div class="card-body">-->
+<!--          <div class="row">-->
+<!--            <div class="col-md-12 mt-2">-->
+<!--              <h6>Position</h6>-->
+<!--              <mat-radio-group-->
+<!--                formControlName="ccpaBannerPosition"-->
+<!--                aria-label="Select an option">-->
+<!--                <mat-radio-button *ngFor="let ccpaPosition of bannerConstant.CCPA.BANNER.BannerPosition"-->
+<!--                                  class="mr-2"  [disabled]="isFieldDisabled" [value]="ccpaPosition.value">{{ccpaPosition.title}}</mat-radio-button>-->
+<!--              </mat-radio-group>-->
+<!--              <mat-error *ngIf="f.ccpaBannerPosition.hasError('required')">-->
+<!--                Banner Position is <strong>required</strong>-->
+<!--              </mat-error>-->
+<!--            </div>-->
 
-            <div class="col-md-12 mt-2">
-              <input type="text" [attr.disabled]="isFieldDisabled" class="form-control"
-                     formControlName="ccpaBannerTitle" [placeholder]="ccpaBannerConstant.CCPA.BANNER.BannerTitle">
+<!--            <div class="col-md-12 mt-2">-->
+<!--              <input type="text" [attr.disabled]="isFieldDisabled" class="form-control"-->
+<!--                     formControlName="ccpaBannerTitle" [placeholder]="bannerConstant.CCPA.BANNER.BannerTitle">-->
 
-            </div>
+<!--            </div>-->
 
-            <div class="col-md-12 mt-2">
-              <textarea [attr.disabled]="isFieldDisabled" class="form-control w-50" rows="3"
-                        formControlName="ccpaBannerDescription"
-                        [placeholder]="ccpaBannerConstant.CCPA.BANNER.BannerDescription"></textarea>
-            </div>
+<!--            <div class="col-md-12 mt-2">-->
+<!--              <textarea [attr.disabled]="isFieldDisabled" class="form-control w-50" rows="3"-->
+<!--                        formControlName="ccpaBannerDescription"-->
+<!--                        [placeholder]="bannerConstant.CCPA.BANNER.BannerDescription"></textarea>-->
+<!--            </div>-->
 
-            <div class="col-md-12 mt-4">
-              <h6>Banner Styles</h6>
-              <div class="row mt-2">
+<!--            <div class="col-md-12 mt-4">-->
+<!--              <h6>Banner Styles</h6>-->
+<!--              <div class="row mt-2">-->
 
-                <div class="col-md-3">
-                  <div class="row">
-                    <div class="col-md-4">textColor</div>
-                    <div class="col-md-3"><input formControlName="ccpaBannerGlobalStyleTextColor" #ccpabannerTextColor
-                                                 type="color" [attr.disabled]="isFieldDisabled"></div>
-                    <div class="col-md-5">
-                      <input matInput disabled [value]="ccpabannerTextColor.value">
-                    </div>
-                  </div>
-                </div>
+<!--                <div class="col-md-3">-->
+<!--                  <div class="row">-->
+<!--                    <div class="col-md-4">textColor</div>-->
+<!--                    <div class="col-md-3"><input formControlName="ccpaBannerGlobalStyleTextColor" #ccpabannerTextColor-->
+<!--                                                 type="color" [attr.disabled]="isFieldDisabled"></div>-->
+<!--                    <div class="col-md-5">-->
+<!--                      <input matInput disabled [value]="ccpabannerTextColor.value">-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                </div>-->
 
-                <div class="col-md-4">
-                  <div class="row">
-                    <div class="col-md-5">BackGroundColor</div>
-                    <div class="col-md-3"><input formControlName="ccpaBannerGlobalStyleBackgroundColor"
-                                                 #ccpabannerBackGroundColor type="color"
-                                                 [attr.disabled]="isFieldDisabled"></div>
-                    <div class="col-md-4">
-                      <input matInput disabled [value]="ccpabannerBackGroundColor.value">
-                    </div>
-                  </div>
+<!--                <div class="col-md-4">-->
+<!--                  <div class="row">-->
+<!--                    <div class="col-md-5">BackGroundColor</div>-->
+<!--                    <div class="col-md-3"><input formControlName="ccpaBannerGlobalStyleBackgroundColor"-->
+<!--                                                 #ccpabannerBackGroundColor type="color"-->
+<!--                                                 [attr.disabled]="isFieldDisabled"></div>-->
+<!--                    <div class="col-md-4">-->
+<!--                      <input matInput disabled [value]="ccpabannerBackGroundColor.value">-->
+<!--                    </div>-->
+<!--                  </div>-->
 
-                </div>
+<!--                </div>-->
 
-              </div>
-            </div>
-
-
-            <div class="col-md-12 mt-5">
-              <h6>PreferenceButton Styles</h6>
-              <div class="row mt-2">
-
-                <div class="col-md-3 mt-2">
-                  <input type="text" [attr.disabled]="isFieldDisabled" class="form-control"
-                         formControlName="ccpaBannerPreferenceButtonTextContent" [placeholder]="ccpaBannerConstant.CCPA.BANNER.BannerPreferenceButtonTextContent">
-                </div>
-
-                <div class="col-md-3">
-                  <div class="row">
-                    <div class="col-md-4">textColor</div>
-                    <div class="col-md-3"><input
-                      formControlName="ccpaBannerPreferenceButtonTextColor" #ccpabannerCustomizeButtonTextColor
-                      type="color" [attr.disabled]="isFieldDisabled"></div>
-                    <div class="col-md-5">
-                      <input matInput disabled [value]="ccpabannerCustomizeButtonTextColor.value">
-                    </div>
-                  </div>
-                </div>
-
-                <div class="col-md-4">
-                  <div class="row">
-                    <div class="col-md-5">BackGround Color</div>
-                    <div class="col-md-3"><input
-                      formControlName="ccpaBannerPreferenceButtonBackgroundColor"
-                      #ccpabannerCustomizeButtonBackGroundColor type="color" [attr.disabled]="isFieldDisabled"></div>
-                    <div class="col-md-4">
-                      <input matInput disabled [value]="ccpabannerCustomizeButtonBackGroundColor.value">
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+<!--              </div>-->
+<!--            </div>-->
 
 
-            <div class="col-md-12 mt-4">
-              <h6>Allow All Button Styles</h6>
-              <div class="row mt-2">
+<!--            <div class="col-md-12 mt-5">-->
+<!--              <h6>PreferenceButton Styles</h6>-->
+<!--              <div class="row mt-2">-->
+
+<!--                <div class="col-md-3 mt-2">-->
+<!--                  <input type="text" [attr.disabled]="isFieldDisabled" class="form-control"-->
+<!--                         formControlName="ccpaBannerPreferenceButtonTextContent" [placeholder]="bannerConstant.CCPA.BANNER.BannerPreferenceButtonTextContent">-->
+<!--                </div>-->
+
+<!--                <div class="col-md-3">-->
+<!--                  <div class="row">-->
+<!--                    <div class="col-md-4">textColor</div>-->
+<!--                    <div class="col-md-3"><input-->
+<!--                      formControlName="ccpaBannerPreferenceButtonTextColor" #ccpabannerCustomizeButtonTextColor-->
+<!--                      type="color" [attr.disabled]="isFieldDisabled"></div>-->
+<!--                    <div class="col-md-5">-->
+<!--                      <input matInput disabled [value]="ccpabannerCustomizeButtonTextColor.value">-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                </div>-->
+
+<!--                <div class="col-md-4">-->
+<!--                  <div class="row">-->
+<!--                    <div class="col-md-5">BackGround Color</div>-->
+<!--                    <div class="col-md-3"><input-->
+<!--                      formControlName="ccpaBannerPreferenceButtonBackgroundColor"-->
+<!--                      #ccpabannerCustomizeButtonBackGroundColor type="color" [attr.disabled]="isFieldDisabled"></div>-->
+<!--                    <div class="col-md-4">-->
+<!--                      <input matInput disabled [value]="ccpabannerCustomizeButtonBackGroundColor.value">-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </div>-->
 
 
-                <div class="col-md-3 mt-2">
-                  <input type="text" [attr.disabled]="isFieldDisabled" class="form-control"
-                         formControlName="ccpaBannerAllowAllButtonTextContent"
-                         [placeholder]="ccpaBannerConstant.CCPA.BANNER.BannerAllowAllButtonTextContent">
-                </div>
+<!--            <div class="col-md-12 mt-4">-->
+<!--              <h6>Allow All Button Styles</h6>-->
+<!--              <div class="row mt-2">-->
 
 
-                <div class="col-md-3">
-                  <div class="row">
-                    <div class="col-md-4">textColor</div>
-                    <div class="col-md-3"><input
-                      formControlName="ccpaBannerAllowAllButtonTextColor"
-                      #ccpabannerAllowButtonTextColor type="color" [attr.disabled]="isFieldDisabled"></div>
-                    <div class="col-md-5">
-                      <input matInput disabled [value]="ccpabannerAllowButtonTextColor.value">
-                    </div>
-                  </div>
-                </div>
-
-                <div class="col-md-4">
-                  <div class="row">
-                    <div class="col-md-5">BackGround Color</div>
-                    <div class="col-md-3"><input
-                      formControlName="ccpaBannerAllowAllButtonBackgroundColor"
-                      #ccpabannerAllowButtonBackGroundColor type="color" [attr.disabled]="isFieldDisabled"></div>
-                    <div class="col-md-4">
-                      <input matInput disabled [value]="ccpabannerAllowButtonBackGroundColor.value">
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+<!--                <div class="col-md-3 mt-2">-->
+<!--                  <input type="text" [attr.disabled]="isFieldDisabled" class="form-control"-->
+<!--                         formControlName="ccpaBannerAllowAllButtonTextContent"-->
+<!--                         [placeholder]="bannerConstant.CCPA.BANNER.BannerAllowAllButtonTextContent">-->
+<!--                </div>-->
 
 
-            <div class="col-md-12 mt-4">
-              <h6>DisableButton Styles</h6>
-              <div class="row mt-2">
+<!--                <div class="col-md-3">-->
+<!--                  <div class="row">-->
+<!--                    <div class="col-md-4">textColor</div>-->
+<!--                    <div class="col-md-3"><input-->
+<!--                      formControlName="ccpaBannerAllowAllButtonTextColor"-->
+<!--                      #ccpabannerAllowButtonTextColor type="color" [attr.disabled]="isFieldDisabled"></div>-->
+<!--                    <div class="col-md-5">-->
+<!--                      <input matInput disabled [value]="ccpabannerAllowButtonTextColor.value">-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                </div>-->
 
-                <div class="col-md-3 mt-2">
-                  <input type="text" [attr.disabled]="isFieldDisabled" class="form-control"
-                         formControlName="ccpaBannerDisableAllButtonTextContent"
-                         [placeholder]="ccpaBannerConstant.CCPA.BANNER.BannerDisableAllButtonTextContent">
-                </div>
-
-
-                <div class="col-md-3">
-                  <div class="row">
-                    <div class="col-md-4">textColor</div>
-                    <div class="col-md-3"><input
-                      formControlName="ccpaBannerDisableAllButtonTextColor"
-                      #ccpabannerDisableButtonTextColor type="color" [attr.disabled]="isFieldDisabled"></div>
-                    <div class="col-md-5">
-                      <input matInput disabled [value]="ccpabannerDisableButtonTextColor.value">
-                    </div>
-                  </div>
-                </div>
-
-                <div class="col-md-4">
-                  <div class="row">
-                    <div class="col-md-5">BackGround Color</div>
-                    <div class="col-md-3"><input
-                      formControlName="ccpaBannerDisableAllButtonBackgroundColor"
-                      #ccpabannerDisableButtonBackGroundColor type="color" [attr.disabled]="isFieldDisabled"></div>
-                    <div class="col-md-4">
-                      <input matInput disabled [value]="ccpabannerDisableButtonBackGroundColor.value">
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+<!--                <div class="col-md-4">-->
+<!--                  <div class="row">-->
+<!--                    <div class="col-md-5">BackGround Color</div>-->
+<!--                    <div class="col-md-3"><input-->
+<!--                      formControlName="ccpaBannerAllowAllButtonBackgroundColor"-->
+<!--                      #ccpabannerAllowButtonBackGroundColor type="color" [attr.disabled]="isFieldDisabled"></div>-->
+<!--                    <div class="col-md-4">-->
+<!--                      <input matInput disabled [value]="ccpabannerAllowButtonBackGroundColor.value">-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </div>-->
 
 
-      <div class="card">
-        <div class="card-header">PopUp Customize UI - CCPA
-        </div>
-        <div class="card-body">
-          <div class="row">
-            <div class="col-md-12 mt-4">
-              <h6>PopUp Styles</h6>
-              <div class="row mt-2">
+<!--            <div class="col-md-12 mt-4">-->
+<!--              <h6>DisableButton Styles</h6>-->
+<!--              <div class="row mt-2">-->
 
-                <div class="col-md-3">
-                  <div class="row">
-                    <div class="col-md-4">textColor</div>
-                    <div class="col-md-3"><input
-                      formControlName="ccpaPopUpGlobalTextColor"
-                      #ccpapopUpTextColor type="color" [attr.disabled]="isFieldDisabled"></div>
-                    <div class="col-md-5">
-                      <input matInput disabled [value]="ccpapopUpTextColor.value">
-                    </div>
-                  </div>
-                </div>
-
-              </div>
-            </div>
+<!--                <div class="col-md-3 mt-2">-->
+<!--                  <input type="text" [attr.disabled]="isFieldDisabled" class="form-control"-->
+<!--                         formControlName="ccpaBannerDisableAllButtonTextContent"-->
+<!--                         [placeholder]="bannerConstant.CCPA.BANNER.BannerDisableAllButtonTextContent">-->
+<!--                </div>-->
 
 
-            <div class="col-md-12 mt-5">
-              <h6>DisableAllButton Styles</h6>
-              <div class="row mt-2">
+<!--                <div class="col-md-3">-->
+<!--                  <div class="row">-->
+<!--                    <div class="col-md-4">textColor</div>-->
+<!--                    <div class="col-md-3"><input-->
+<!--                      formControlName="ccpaBannerDisableAllButtonTextColor"-->
+<!--                      #ccpabannerDisableButtonTextColor type="color" [attr.disabled]="isFieldDisabled"></div>-->
+<!--                    <div class="col-md-5">-->
+<!--                      <input matInput disabled [value]="ccpabannerDisableButtonTextColor.value">-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                </div>-->
 
-                <div class="col-md-3 mt-2">
-                  <input type="text" [attr.disabled]="isFieldDisabled" class="form-control"
-                         formControlName="ccpaPopUpDisableAllButtonTextContent"
-                         [placeholder]="ccpaBannerConstant.CCPA.POPUP.PopUpDisableAllButtonTextContent">
-                </div>
-
-                <div class="col-md-3">
-                  <div class="row">
-                    <div class="col-md-4">textColor</div>
-                    <div class="col-md-3"><input
-                      formControlName="ccpaPopUpDisableAllButtonTextColor"
-                      #ccpapopUpDisableAllButtonTextColor type="color" [attr.disabled]="isFieldDisabled"></div>
-                    <div class="col-md-5">
-                      <input matInput disabled [value]="ccpapopUpDisableAllButtonTextColor.value">
-                    </div>
-                  </div>
-                </div>
-
-                <div class="col-md-4">
-                  <div class="row">
-                    <div class="col-md-5">BackGround Color</div>
-                    <div class="col-md-3"><input
-                      formControlName="ccpaPopUpDisableAllButtonBackgroundColor"
-                      #ccpapopUpDisableAllButtonBackGroundColor type="color" [attr.disabled]="isFieldDisabled"></div>
-                    <div class="col-md-4">
-                      <input matInput disabled [value]="ccpapopUpDisableAllButtonBackGroundColor.value">
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+<!--                <div class="col-md-4">-->
+<!--                  <div class="row">-->
+<!--                    <div class="col-md-5">BackGround Color</div>-->
+<!--                    <div class="col-md-3"><input-->
+<!--                      formControlName="ccpaBannerDisableAllButtonBackgroundColor"-->
+<!--                      #ccpabannerDisableButtonBackGroundColor type="color" [attr.disabled]="isFieldDisabled"></div>-->
+<!--                    <div class="col-md-4">-->
+<!--                      <input matInput disabled [value]="ccpabannerDisableButtonBackGroundColor.value">-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
 
 
-            <div class="col-md-12 mt-4">
-              <h6>Allow All Button Styles</h6>
-              <div class="row mt-2">
+<!--      <div class="card">-->
+<!--        <div class="card-header">PopUp Customize UI - CCPA-->
+<!--        </div>-->
+<!--        <div class="card-body">-->
+<!--          <div class="row">-->
+<!--            <div class="col-md-12 mt-4">-->
+<!--              <h6>PopUp Styles</h6>-->
+<!--              <div class="row mt-2">-->
+
+<!--                <div class="col-md-3">-->
+<!--                  <div class="row">-->
+<!--                    <div class="col-md-4">textColor</div>-->
+<!--                    <div class="col-md-3"><input-->
+<!--                      formControlName="ccpaPopUpGlobalTextColor"-->
+<!--                      #ccpapopUpTextColor type="color" [attr.disabled]="isFieldDisabled"></div>-->
+<!--                    <div class="col-md-5">-->
+<!--                      <input matInput disabled [value]="ccpapopUpTextColor.value">-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                </div>-->
+
+<!--              </div>-->
+<!--            </div>-->
 
 
-                <div class="col-md-3 mt-2">
-                  <input type="text" [attr.disabled]="isFieldDisabled" class="form-control"
-                         formControlName="ccpaPopUpAllowAllButtonTextContent"
-                         [placeholder]="ccpaBannerConstant.CCPA.POPUP.PopUpAllowAllButtonTextContent">
-                </div>
+<!--            <div class="col-md-12 mt-5">-->
+<!--              <h6>DisableAllButton Styles</h6>-->
+<!--              <div class="row mt-2">-->
+
+<!--                <div class="col-md-3 mt-2">-->
+<!--                  <input type="text" [attr.disabled]="isFieldDisabled" class="form-control"-->
+<!--                         formControlName="ccpaPopUpDisableAllButtonTextContent"-->
+<!--                         [placeholder]="bannerConstant.CCPA.POPUP.PopUpDisableAllButtonTextContent">-->
+<!--                </div>-->
+
+<!--                <div class="col-md-3">-->
+<!--                  <div class="row">-->
+<!--                    <div class="col-md-4">textColor</div>-->
+<!--                    <div class="col-md-3"><input-->
+<!--                      formControlName="ccpaPopUpDisableAllButtonTextColor"-->
+<!--                      #ccpapopUpDisableAllButtonTextColor type="color" [attr.disabled]="isFieldDisabled"></div>-->
+<!--                    <div class="col-md-5">-->
+<!--                      <input matInput disabled [value]="ccpapopUpDisableAllButtonTextColor.value">-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                </div>-->
+
+<!--                <div class="col-md-4">-->
+<!--                  <div class="row">-->
+<!--                    <div class="col-md-5">BackGround Color</div>-->
+<!--                    <div class="col-md-3"><input-->
+<!--                      formControlName="ccpaPopUpDisableAllButtonBackgroundColor"-->
+<!--                      #ccpapopUpDisableAllButtonBackGroundColor type="color" [attr.disabled]="isFieldDisabled"></div>-->
+<!--                    <div class="col-md-4">-->
+<!--                      <input matInput disabled [value]="ccpapopUpDisableAllButtonBackGroundColor.value">-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </div>-->
 
 
-                <div class="col-md-3">
-                  <div class="row">
-                    <div class="col-md-4">textColor</div>
-                    <div class="col-md-3"><input
-                      formControlName="ccpaPopUpAllowAllButtonTextColor"
-                      #ccpapopUPAllowButtonTextColor type="color" [attr.disabled]="isFieldDisabled"></div>
-                    <div class="col-md-5">
-                      <input matInput disabled [value]="ccpapopUPAllowButtonTextColor.value">
-                    </div>
-                  </div>
-                </div>
-
-                <div class="col-md-4">
-                  <div class="row">
-                    <div class="col-md-5">BackGround Color</div>
-                    <div class="col-md-3"><input
-                      formControlName="ccpaPopUpAllowAllButtonBackGroundColor"
-                      #ccpapopUPAllowButtonBackGroundColor type="color" [attr.disabled]="isFieldDisabled"></div>
-                    <div class="col-md-4">
-                      <input matInput disabled [value]="ccpapopUPAllowButtonBackGroundColor.value">
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+<!--            <div class="col-md-12 mt-4">-->
+<!--              <h6>Allow All Button Styles</h6>-->
+<!--              <div class="row mt-2">-->
 
 
-            <div class="col-md-12 mt-5 mb-3">
-              <h6 class="mb-4"> PopUp Body Content</h6>
-              <mat-accordion>
-                <mat-expansion-panel (opened)="panelOpenState = true"
-                                     (closed)="panelOpenState = false">
-                  <mat-expansion-panel-header>
-                    <mat-panel-title>
-                      <input type="text" [attr.disabled]="isFieldDisabled" class="form-control w-25"
-                             formControlName="informationBtnText"
-                             [placeholder]="ccpaBannerConstant.CCPA.POPUP.PopUpInformationBtnText">
-                    </mat-panel-title>
-                  </mat-expansion-panel-header>
-                  <h6>Title</h6>
-                  <input type="text" [attr.disabled]="isFieldDisabled" class="form-control w-50"
-                         formControlName="ccpaPopUpInformationHeading"
-                         [placeholder]="ccpaBannerConstant.CCPA.POPUP.PopUpInformationHead">
-                  <br>
-                  <h6>Description</h6>
-                  <textarea [attr.disabled]="isFieldDisabled" class="form-control w-50" rows="3"
-                            formControlName="ccpaPopUpInformationDescription"
-                            [placeholder]="ccpaBannerConstant.CCPA.POPUP.PopUpInformationDescription"></textarea>
+<!--                <div class="col-md-3 mt-2">-->
+<!--                  <input type="text" [attr.disabled]="isFieldDisabled" class="form-control"-->
+<!--                         formControlName="ccpaPopUpAllowAllButtonTextContent"-->
+<!--                         [placeholder]="bannerConstant.CCPA.POPUP.PopUpAllowAllButtonTextContent">-->
+<!--                </div>-->
 
 
-                </mat-expansion-panel>
-              </mat-accordion>
-            </div>
+<!--                <div class="col-md-3">-->
+<!--                  <div class="row">-->
+<!--                    <div class="col-md-4">textColor</div>-->
+<!--                    <div class="col-md-3"><input-->
+<!--                      formControlName="ccpaPopUpAllowAllButtonTextColor"-->
+<!--                      #ccpapopUPAllowButtonTextColor type="color" [attr.disabled]="isFieldDisabled"></div>-->
+<!--                    <div class="col-md-5">-->
+<!--                      <input matInput disabled [value]="ccpapopUPAllowButtonTextColor.value">-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                </div>-->
 
-            <div class="col-md-12 mb-3">
-              <mat-accordion>
-                <mat-expansion-panel (opened)="panelOpenState = true"
-                                     (closed)="panelOpenState = false">
-                  <mat-expansion-panel-header>
-                    <mat-panel-title>
-                      <input type="text" [attr.disabled]="isFieldDisabled" class="form-control w-25"
-                             formControlName="necessaryBtnText"
-                             [placeholder]="ccpaBannerConstant.CCPA.POPUP.necessaryBtnText">
-                    </mat-panel-title>
-                  </mat-expansion-panel-header>
-                  <h6>Title</h6>
-                  <input type="text" [attr.disabled]="isFieldDisabled" class="form-control w-50"
-                         formControlName="ccpaPopUpNecessaryHeading"
-                         [placeholder]="ccpaBannerConstant.CCPA.POPUP.PopUpNecessaryHead">
-                  <br>
-                  <h6>Description</h6>
-                  <textarea [attr.disabled]="isFieldDisabled" class="form-control w-50" rows="3"
-                            formControlName="ccpaPopUpNecessaryDescription"
-                            [placeholder]="ccpaBannerConstant.CCPA.POPUP.PopUpNecessaryDescription"></textarea>
-
-                </mat-expansion-panel>
-              </mat-accordion>
-            </div>
-            <div class="col-md-12 mb-3">
-              <mat-accordion>
-                <mat-expansion-panel (opened)="panelOpenState = true"
-                                     (closed)="panelOpenState = false">
-                  <mat-expansion-panel-header>
-                    <mat-panel-title>
-                      <input type="text" [attr.disabled]="isFieldDisabled" class="form-control w-25"
-                             formControlName="analyticsBtnText"
-                             [placeholder]="ccpaBannerConstant.CCPA.POPUP.analyticsBtnText">
-                    </mat-panel-title>
-                  </mat-expansion-panel-header>
-                  <h6>Title</h6>
-                  <input type="text" [attr.disabled]="isFieldDisabled" class="form-control w-50"
-                         formControlName="ccpaPopUpAnalyticsHeading"
-                         [placeholder]="ccpaBannerConstant.CCPA.POPUP.PopUpAnalyticsHead">
-                  <br>
-                  <h6>Description</h6>
-                  <textarea [attr.disabled]="isFieldDisabled" class="form-control w-50" rows="3"
-                            formControlName="ccpaPopUpAnalyticsDescription"
-                            [placeholder]="ccpaBannerConstant.CCPA.POPUP.PopUpAnalyticsDescription"></textarea>
-
-                </mat-expansion-panel>
-              </mat-accordion>
-            </div>
-
-            <div class="col-md-12 mb-3">
-              <mat-accordion>
-                <mat-expansion-panel (opened)="panelOpenState = true"
-                                     (closed)="panelOpenState = false">
-                  <mat-expansion-panel-header>
-                    <mat-panel-title>
-
-                      <input type="text" [attr.disabled]="isFieldDisabled" class="form-control w-25"
-                             formControlName="advertisingBtnText"
-                             [placeholder]="ccpaBannerConstant.CCPA.POPUP.advertisingBtnText">
-                    </mat-panel-title>
-                  </mat-expansion-panel-header>
-                  <h6>Title</h6>
-                  <input type="text" [attr.disabled]="isFieldDisabled" class="form-control w-50"
-                         formControlName="ccpaPopUpAdvertisingHeading"
-                         [placeholder]="ccpaBannerConstant.CCPA.POPUP.PopUpAdvertisingHead">
-                  <br>
-
-                  <h6>Description</h6>
-                  <textarea [attr.disabled]="isFieldDisabled" class="form-control w-50" rows="3"
-                            formControlName="ccpaPopUpAdvertisingDescription"
-                            [placeholder]="ccpaBannerConstant.CCPA.POPUP.PopUpAdvertisingDescription"></textarea>
-
-                </mat-expansion-panel>
-              </mat-accordion>
-            </div>
+<!--                <div class="col-md-4">-->
+<!--                  <div class="row">-->
+<!--                    <div class="col-md-5">BackGround Color</div>-->
+<!--                    <div class="col-md-3"><input-->
+<!--                      formControlName="ccpaPopUpAllowAllButtonBackGroundColor"-->
+<!--                      #ccpapopUPAllowButtonBackGroundColor type="color" [attr.disabled]="isFieldDisabled"></div>-->
+<!--                    <div class="col-md-4">-->
+<!--                      <input matInput disabled [value]="ccpapopUPAllowButtonBackGroundColor.value">-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </div>-->
 
 
-          </div>
-        </div>
-      </div>
+
+
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
 
 
       <div class="col-md-12">

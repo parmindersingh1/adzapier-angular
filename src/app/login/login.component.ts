@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
-
 import { AlertService, AuthenticationService, UserService } from './../_services';
 import { OrganizationService } from '../_services/organization.service';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
@@ -22,7 +21,10 @@ export class LoginComponent implements OnInit {
     show: Boolean = false;
     show1: Boolean = false;
     sign_in: string = "Login";
-
+    dismissible = true;
+    alertMsg: any;
+    isOpen = false;
+    alertType: any;
     constructor(
         private formBuilder: FormBuilder,
         private route: ActivatedRoute,
@@ -76,7 +78,6 @@ export class LoginComponent implements OnInit {
             .pipe(first())
             .subscribe(
                 data => {
-                    console.log(data,'login data..');
                    // this.getLoggedInUserDetails();
                     this.authenticationService.userLoggedIn.next(true);
                     this.authenticationService.currentUserSubject.next(data);
@@ -85,7 +86,9 @@ export class LoginComponent implements OnInit {
                 },
                 error => {
                     console.log(error,'login error..');
-                    this.alertService.error(error);
+                    this.isOpen = true;
+                    this.alertMsg = error;
+                    this.alertType = 'danger';
                     this.loading = false;
                 });
 
@@ -98,5 +101,10 @@ export class LoginComponent implements OnInit {
             this.userService.getCurrentUser.emit(data);
         });
     }
+
+    onClosed(dismissedAlert: any): void {
+        this.alertMsg = !dismissedAlert;
+        this.isOpen = false;
+      }
 
 }

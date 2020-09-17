@@ -313,6 +313,7 @@ ul.nav-tabs > li:last-child > div > a::after {
     width: 100%;
     align-items: end;
     justify-content: space-between;
+    padding: 5px 10px;
 }
 
  .margin-0 {
@@ -552,4 +553,8 @@ ul.ngx-pagination {
     height: 20px;
     width: 20px;
     margin-right: 10px;
+  }
+
+  .lightgray {
+    color: #8392a5;
   }
