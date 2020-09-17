@@ -52,6 +52,7 @@ export class CompanyComponent implements OnInit {
 
   ngOnInit() {
     this.loadRoleList();
+    const numZip = '^[0-9]{5,20}$'; // '^[0-9]{5}(?:-[0-9]{4})?$';
     const numRegex =  '^[0-9]*$';
     const strRegx = '^[a-zA-Z\-\']+';
     const alphaNumeric = '.*\\S.*[a-zA-z0-9 ]';
@@ -62,7 +63,7 @@ export class CompanyComponent implements OnInit {
       address2: ['', [Validators.required, Validators.pattern(alphaNumeric)]],
       city: ['', [Validators.required, Validators.pattern(strRegx)]],
       state: ['', [Validators.required, Validators.pattern(strRegx)]],
-      zipcode: ['', [Validators.required, Validators.pattern(numRegex)]],
+      zipcode: ['', [Validators.required, Validators.pattern(numZip)]],
       email: ['', [Validators.required]],
       phone: ['', [Validators.required]]
     });

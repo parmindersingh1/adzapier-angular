@@ -60,9 +60,10 @@
                                 <ngb-panel title="Form Fields">
                                     <ng-template ngbPanelHeader>
                                         <div class="d-flex align-items-center justify-content-between">
-                                            <button ngbPanelToggle  class="btn btn-link p-0 collapse-btn">
+                                            <button ngbPanelToggle class="btn btn-link p-0 collapse-btn">
                                                 <h6 class="form-tl m-0">Form Fields</h6>
-                                            <i class="fas fa-chevron-down"></i></button>
+                                                <i class="fas fa-chevron-down"></i>
+                                            </button>
                                         </div>
                                     </ng-template>
                                     <ng-template ngbPanelContent>
@@ -130,15 +131,23 @@
                                                                         <select class="form-control"
                                                                             (change)="onChangeEvent($event)"
                                                                             name="selectOptionControl"
-                                                                            [(ngModel)]="selectOptionControl">
-                                                                            <option
-                                                                                *ngFor="let status_item of controlOption"
-                                                                                [value]="status_item.control">
-                                                                                {{status_item.control}}
+                                                                            #ngModel="ngModel"
+                                                                            [(ngModel)]="selectOptionControl" required>
+                                                                            <option selected disabled value="">select field
                                                                             </option>
+                                                                            <ng-container
+                                                                                *ngFor="let status_item of controlOption">
+                                                                                <option [value]="status_item.control">
+                                                                                    {{status_item.control}}
+                                                                                </option>
+                                                                            </ng-container>
                                                                         </select>
                                                                         <button type="button" (click)="addFormField()"
                                                                             class="btn btn-primary ml-2">{{showFormOption?'Cancel':'Add'}}</button>
+                                                                        <span *ngIf="ngModel.errors?.required"
+                                                                            style="color:red;font-size:11px">Select
+                                                                            field type control is
+                                                                            mandatory</span>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -279,7 +288,7 @@
                                                                         <div class="row form-inline">
                                                                             <div class="col-md-12 form-group pr-0">
                                                                                 <div class="dispalyflex-column">
-                                                                                        <input type="text"
+                                                                                    <input type="text"
                                                                                         [(ngModel)]="item.name"
                                                                                         name="{{item.name}}"
                                                                                         [ngModelOptions]="{standalone: true}"
@@ -287,7 +296,7 @@
                                                                                         [ngClass]="{ 'is-invalid': customFields.submitted && customControl.invalid }"
                                                                                         class="form-control mb-1"
                                                                                         required />
-                                                                                        <div
+                                                                                    <div
                                                                                         *ngIf="customFields.submitted && customControl.invalid">
                                                                                         <span
                                                                                             *ngIf="customControl.errors?.required"
@@ -338,7 +347,8 @@
                                         <div class="d-flex align-items-center justify-content-between">
                                             <button ngbPanelToggle class="btn btn-link p-0 collapse-btn">
                                                 <h6 class="form-tl m-0">Form Styling</h6>
-                                            <i class="fas fa-chevron-down"></i></button>
+                                                <i class="fas fa-chevron-down"></i>
+                                            </button>
                                         </div>
                                     </ng-template>
                                     <ng-template ngbPanelContent>
@@ -432,7 +442,8 @@
                                         <div class="d-flex align-items-center justify-content-between">
                                             <button ngbPanelToggle class="btn btn-link p-0 collapse-btn">
                                                 <h6 class="form-tl m-0">Form Text</h6>
-                                                <i class="fas fa-chevron-down"></i></button>
+                                                <i class="fas fa-chevron-down"></i>
+                                            </button>
                                         </div>
                                     </ng-template>
                                     <ng-template ngbPanelContent>
@@ -663,57 +674,62 @@
 
                                             </div>
                                         </div>
-                                            <div class="col-sm-12" [ngClass]="{'displaynone':!webcontrol.requiredfield,'':webcontrol.requiredfield ||isFileUploadRequired}"
-                                                *ngIf="webcontrol.requiredfield && webcontrol.controlId == 'fileupload'">
-                                                <label class="form-check-label"> {{webcontrol.controllabel}}</label>
-                                                <div class="input-group">
-                                                    <div class="custom-file">
-                                                        <input type="file" class="custom-file-input"
-                                                            (change)="uploadFile($event)" id="uploaddocument">
-                                                        <label class="custom-file-label"
-                                                            for="inputGroupFile01">{{uploadFilename?uploadFilename:'Choose file'}}</label>
-                                                        <input type="hidden" name="{{webcontrol.indexCount}}"
-                                                            [ngModel]="j+1" />
+                                        <div class="col-sm-12"
+                                            [ngClass]="{'displaynone':!webcontrol.requiredfield,'':webcontrol.requiredfield ||isFileUploadRequired}"
+                                            *ngIf="webcontrol.requiredfield && webcontrol.controlId == 'fileupload'">
+                                            <label class="form-check-label"> {{webcontrol.controllabel}}</label>
+                                            <div class="input-group">
+                                                <div class="custom-file">
+                                                    <input type="file" class="custom-file-input"
+                                                        (change)="uploadFile($event)" id="uploaddocument">
+                                                    <label class="custom-file-label"
+                                                        for="inputGroupFile01">{{uploadFilename?uploadFilename:'Choose file'}}</label>
+                                                    <input type="hidden" name="{{webcontrol.indexCount}}"
+                                                        [ngModel]="j+1" />
 
-                                                    </div>
-
-                                                </div>
-                                                <div *ngIf="showFilesizeerror" class="color-red tx-12 mt-2">
-                                                    File size should not exceed 2MB
-                                                </div>
-                                                <div *ngIf="showFileExtnerror" class="color-red tx-12 mt-2">
-                                                    Only pdf, jpg, txt, doc, docx file area allowed.
                                                 </div>
 
                                             </div>
-                                       
+                                            <div *ngIf="showFilesizeerror" class="color-red tx-12 mt-2">
+                                                File size should not exceed 2MB
+                                            </div>
+                                            <div *ngIf="showFileExtnerror" class="color-red tx-12 mt-2">
+                                                Only pdf, jpg, txt, doc, docx file area allowed.
+                                            </div>
+
+                                        </div>
+
                                         <!-- <img *ngIf="j == webFormControlList.length - 1" [src]='capthchaID' />
                                      {{capthchaID}} -->
-                                     <div class="col-sm-12" *ngIf="j == webFormControlList.length - 1">
-                                        <label><span class="color-red">*</span> Captcha</label>
-                                        <div class="form-group flex-align-item mb-0">
-                                            <button title="Refresh captcha" type="button" class="btn btn-xs btn-primary mb-2 mr-1" (click)="loadCaptcha()">
-                                                <img src="../../assets/imgs/refresh.svg" width="20" height="20"/>
-                                            </button>
-                                        <div class="align-form">
-                                            <span  [ngClass]="{'displaynone':!isImageLoading,'':isImageLoading}"  class="spinner-border spinner-border-sm mr-1"></span>
-                                        <img [src]="imageToShow" alt="captcha image"
-                                            *ngIf="!isImageLoading; else noImageFound">
-                                            <!-- <audio controls>
+                                        <div class="col-sm-12" *ngIf="j == webFormControlList.length - 1">
+                                            <label><span class="color-red">*</span> Captcha</label>
+                                            <div class="form-group flex-align-item mb-0">
+                                                <button title="Refresh captcha" type="button"
+                                                    class="btn btn-xs btn-primary mb-2 mr-1" (click)="loadCaptcha()">
+                                                    <img src="../../assets/imgs/refresh.svg" width="20" height="20" />
+                                                </button>
+                                                <div class="align-form">
+                                                    <span [ngClass]="{'displaynone':!isImageLoading,'':isImageLoading}"
+                                                        class="spinner-border spinner-border-sm mr-1"></span>
+                                                    <img [src]="imageToShow" alt="captcha image"
+                                                        *ngIf="!isImageLoading; else noImageFound">
+                                                    <!-- <audio controls>
                                                 <source src="imageToShow.wav" type="audio/wav">
                                             </audio> -->
-                                        <ng-template #noImageFound>
-                                          <span>No Image Found</span>
-                                        </ng-template>
+                                                    <ng-template #noImageFound>
+                                                        <span>No Image Found</span>
+                                                    </ng-template>
+                                                </div>
+                                            </div>
+                                            <div class="row col-sm-12" *ngIf="j == webFormControlList.length - 1">
+                                                <input class="form-control" placeholder="Enter above captcha code"
+                                                    autocomplete="new-{{j}}" name="captchacode"
+                                                    [(ngModel)]="captchacode" />
+                                            </div>
                                         </div>
-                                        </div>
-                                        <div  class="row col-sm-12" *ngIf="j == webFormControlList.length - 1">
-                                            <input class="form-control" placeholder="Enter above captcha code" autocomplete="new-{{j}}" name="captchacode" [(ngModel)]="captchacode" />
-                                        </div>
+
                                     </div>
-                                   
-                                    </div>
-                                     
+
                                     <div class="col-sm-3 center-div"> <button class="btn btn-primary btn-block"
                                             [disabled]="true" type="submit">
                                             Submit</button></div>
@@ -787,11 +803,12 @@
                                 [(ngModel)]="daysleft">
                         </div>
                         <div class="form-group mg-b-5">
-                            <label for="fileupload" class="form-check-label tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03"
+                            <label for="fileupload"
+                                class="form-check-label tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03"
                                 class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">
-                                <input type="checkbox" [checked]="isFileUploadRequired"
-                                class="form-check-input"  (click)="allowFileupload($event)" />
-                               <span class="pad-right-20"> Enable File upload</span>
+                                <input type="checkbox" [checked]="isFileUploadRequired" class="form-check-input"
+                                    (click)="allowFileupload($event)" />
+                                <span class="pad-right-20"> Enable File upload</span>
                             </label>
                         </div>
 
@@ -866,7 +883,8 @@
         </div>
     </ng-template>
 </ng-template>
-<div class="float-right flotingdiv"> <!--dismissOnTimeout="5000"-->
-    <alert *ngIf="isOpen" [type]="alertType"  [dismissible]="dismissible" dismissOnTimeout="10000"
+<div class="float-right flotingdiv">
+    <!--dismissOnTimeout="5000"-->
+    <alert *ngIf="isOpen" [type]="alertType" [dismissible]="dismissible" dismissOnTimeout="10000"
         (onClosed)="onClosed(alertMsg)">{{alertMsg}}</alert>
 </div>
