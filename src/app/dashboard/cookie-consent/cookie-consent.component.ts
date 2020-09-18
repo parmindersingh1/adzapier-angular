@@ -45,9 +45,6 @@ export class CookieConsentComponent implements OnInit {
 
   ngOnInit() {
     this.onMapInIt();
-    this.alertMsg = "adssa";
-    this.isOpen = true;
-    this.alertType = 'danger';
     this.onGetPropsAndOrgId();
     this.onGetDashboardData();
     this.onGetOptInActivity();
@@ -72,22 +69,24 @@ export class CookieConsentComponent implements OnInit {
     this.dashboardService.getDashboardData(this.currrentManagedPropID)
       .subscribe(res => {
         this.loading.stop('1');
-        if (res['status'] === 200) {
+        if (res) {
+          if (res['status'] === 200) {
             const result = res['response'];
             // count
-            this.dashboardCount.totalConsent =  result.hasOwnProperty('total_consents') ? result['total_consents'] :  0;
-            this.dashboardCount.acceptAll =  result.hasOwnProperty('accept_all') ? result['accept_all'] :  0;
-            this.dashboardCount.close =  result.hasOwnProperty('close') ? result['close'] :  0;
-            this.dashboardCount.rejectAll =  result.hasOwnProperty('reject_all') ? result['reject_all'] :  0;
-            this.dashboardCount.saveSetting =  result.hasOwnProperty('save_setting') ? result['save_setting'] :  0;
+            this.dashboardCount.totalConsent = result.hasOwnProperty('total_consents') ? result['total_consents'] : 0;
+            this.dashboardCount.acceptAll = result.hasOwnProperty('accept_all') ? result['accept_all'] : 0;
+            this.dashboardCount.close = result.hasOwnProperty('close') ? result['close'] : 0;
+            this.dashboardCount.rejectAll = result.hasOwnProperty('reject_all') ? result['reject_all'] : 0;
+            this.dashboardCount.saveSetting = result.hasOwnProperty('save_setting') ? result['save_setting'] : 0;
             this.dashboardCount.doNotSale = result.hasOwnProperty('do_not_sell') ? result['do_not_sell'] : 0;
 
             // Calculate Count
-          this.percentDashboardCount.acceptAll =  result.hasOwnProperty('accept_all') ? this.onCalculateValue(result['accept_all']) :  0;
-          this.percentDashboardCount.close =  result.hasOwnProperty('close') ? this.onCalculateValue(result['close']) :  0;
-          this.percentDashboardCount.rejectAll =  result.hasOwnProperty('reject_all') ? this.onCalculateValue(result['reject_all']) :  0;
-          this.percentDashboardCount.saveSetting =  result.hasOwnProperty('save_setting') ? this.onCalculateValue(result['save_setting']) :  0;
-          this.percentDashboardCount.doNotSale = result.hasOwnProperty('do_not_sell') ? this.onCalculateValue(result['do_not_sell']) : 0;
+            this.percentDashboardCount.acceptAll = result.hasOwnProperty('accept_all') ? this.onCalculateValue(result['accept_all']) : 0;
+            this.percentDashboardCount.close = result.hasOwnProperty('close') ? this.onCalculateValue(result['close']) : 0;
+            this.percentDashboardCount.rejectAll = result.hasOwnProperty('reject_all') ? this.onCalculateValue(result['reject_all']) : 0;
+            this.percentDashboardCount.saveSetting = result.hasOwnProperty('save_setting') ? this.onCalculateValue(result['save_setting']) : 0;
+            this.percentDashboardCount.doNotSale = result.hasOwnProperty('do_not_sell') ? this.onCalculateValue(result['do_not_sell']) : 0;
+          }
         }
       }, error => {
         this.loading.stop('1');

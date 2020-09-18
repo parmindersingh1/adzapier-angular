@@ -28,7 +28,7 @@ export class CookieBannerComponent implements OnInit {
   matcher = new MyErrorStateMatcher();
   currentPlan;
   isFieldDisabled = null;
-  bannerCookieData: any;
+  bannerCookieData = null;
   isGdprGlobal = false;
   dismissible = true;
   alertMsg: any;
@@ -248,7 +248,7 @@ export class CookieBannerComponent implements OnInit {
     if (this.cookieBannerForm.invalid) {
       return;
     }
-    if (Object.keys(this.bannerCookieData).length > 0) {
+    if (this.bannerCookieData) {
       this.onUpdateForm();
     } else {
       this.onSubmitForm();

@@ -4,7 +4,6 @@ import { BillingService } from 'src/app/_services/billing.service';
 import { NotificationsService } from 'angular2-notifications';
 import { CompanyService } from 'src/app/company.service';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
-import { notificationConfig } from 'src/app/_constant/notification.constant';
 
 
 @Component({
@@ -48,18 +47,19 @@ export class BillingComponent implements OnInit {
 
   onGetCurrentPlan() {
     this.loading.start();
-    this.billingService.getCurrentPlan().subscribe(res => {
+    this.billingService.getCurrentPlan().subscribe((res: any) => {
       this.loading.stop();
-      if (res['status'] === 200) {
-        console.log(typeof (res['response']));
-        if (typeof (res['response']) === 'string') {
+      if (res.status === 200) {
+        if (typeof (res.response) === 'string') {
           //  this.notification.info('No Current Plan', 'You have not Subscribed with any plan...', notificationConfig);
           this.isOpen = true;
           this.alertMsg = 'You have not Subscribed with any plan...';
           this.alertType = 'info';
           this.router.navigateByUrl('/pricing');
         } else {
-          this.billingDetails = res['response'];
+          if (Object.keys(res.response).length > 0) {
+            this.billingDetails = res.response;
+          }
         }
       }
     }, error => {
