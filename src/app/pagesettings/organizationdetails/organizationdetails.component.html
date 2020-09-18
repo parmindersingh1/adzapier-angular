@@ -382,6 +382,7 @@
                                 name="zipcode" [ngClass]="{ 'is-invalid': submitted && editOrg.zipcode.errors }" />
                             <div *ngIf="submitted && editOrg.zipcode.errors" class="invalid-feedback">
                                 <div *ngIf="editOrg.zipcode.errors.required">Zipcode is required</div>
+                                <div *ngIf="editOrg.zipcode.errors.pattern">Zipcode can not be less than 5 digit</div>
                             </div>
                         </div>
                     </div>

@@ -94,7 +94,6 @@ export class OrgpageComponent implements OnInit {
   get editOrg() { return this.editOrganisationForm.controls; }
 
   uploadFile(event) {
-    console.log(event, 'event..');
     if (event.target.files.length > 0) {
       const file = event.target.files[0];
       this.organisationPropertyForm.get('logo').setValue(file);

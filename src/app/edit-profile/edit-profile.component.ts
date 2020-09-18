@@ -49,7 +49,7 @@ export class EditProfileComponent implements OnInit {
 
   ngOnInit() {
     //  this.isDisabled = true;
-    const zipRegex = '^[0-9]*$';
+    const zipRegex = '^[0-9]{5,20}$';
     const spaceRegx = '^\S*$';
     const strRegx = '.*\\S.*[a-zA-Z \-\']';
     const alphaNumeric = '.*\\S.*[a-zA-z0-9 ]';

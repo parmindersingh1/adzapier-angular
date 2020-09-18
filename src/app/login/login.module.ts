@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { LoginComponent } from './login.component';
 import { LoginRoutingModule } from './login-routing.module';
+import { SharedbootstrapModule } from 'src/app/sharedbootstrap/sharedbootstrap.module';
 
 
 
@@ -12,7 +13,8 @@ import { LoginRoutingModule } from './login-routing.module';
     CommonModule,
     ReactiveFormsModule,
     FormsModule,
-    LoginRoutingModule
+    LoginRoutingModule,
+    SharedbootstrapModule
   ]
 })
 export class LoginModule { }

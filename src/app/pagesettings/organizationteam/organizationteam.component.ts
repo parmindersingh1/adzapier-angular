@@ -60,7 +60,7 @@ export class OrganizationteamComponent implements OnInit {
     console.log('page Limit', pagelimit);
     this.orgService.getOrgTeamMembers(orgID, pagelimit).subscribe((data) => {
       this.loading.stop();
-      this.organizationTeamMemberList = data[key];
+      this.organizationTeamMemberList = data;
       this.paginationConfig.totalItems = data.count;
     });
   }
@@ -92,7 +92,7 @@ export class OrganizationteamComponent implements OnInit {
     this.loading.start();
     this.orgService.getOrgTeamMembers(this.organizationID, pagelimit).subscribe((data) => {
       this.loading.stop();
-      this.organizationTeamMemberList = data[key];
+      this.organizationTeamMemberList = data;
       this.paginationConfig.totalItems = data.count;
     },(error)=>{
       this.alertMsg = error;

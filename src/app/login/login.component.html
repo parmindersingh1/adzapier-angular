@@ -79,6 +79,10 @@
   
   </div>
 </div>
+<div class="col-sm-5 mt-3 mr-0 float-right">
+  <alert *ngIf="isOpen" [type]="alertType" [dismissible]="dismissible" (onClosed)="onClosed(alertMsg)">{{  alertMsg}}
+  </alert>
+</div>
 <!-- 
 <div class="media align-items-stretch justify-content-center ht-100p pos-relative">
     <div class="media-body align-items-center d-none d-lg-flex">
