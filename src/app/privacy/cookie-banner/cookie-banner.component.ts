@@ -4,7 +4,6 @@ import {ErrorStateMatcher} from '@angular/material/core';
 import {BannerConstant, defaultData, IabPurposeIds} from '../../_constant/gdpr-ccpa-banner.constant';
 import {CookieBannerService} from '../../_services/cookie-banner.service';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
-import {notificationConfig} from '../../_constant/notification.constant';
 import {NotificationsService} from 'angular2-notifications';
 import {OrganizationService} from '../../_services';
 import {Location} from '@angular/common';
@@ -28,7 +27,7 @@ export class CookieBannerComponent implements OnInit {
   matcher = new MyErrorStateMatcher();
   currentPlan;
   isFieldDisabled = null;
-  bannerCookieData: any;
+  bannerCookieData = null;
   isGdprGlobal = false;
   dismissible = true;
   alertMsg: any;
@@ -248,7 +247,7 @@ export class CookieBannerComponent implements OnInit {
     if (this.cookieBannerForm.invalid) {
       return;
     }
-    if (Object.keys(this.bannerCookieData).length > 0) {
+    if (this.bannerCookieData) {
       this.onUpdateForm();
     } else {
       this.onSubmitForm();
@@ -263,7 +262,7 @@ export class CookieBannerComponent implements OnInit {
       enable_iab: this.cookieBannerForm.value.enableIab,
       email: this.cookieBannerForm.value.email,
       logo_text: this.cookieBannerForm.value.logo,
-      gdpr_global: this.cookieBannerForm.value.gdprTarget.includes('EU'),
+      gdpr_global: this.cookieBannerForm.value.gdprTarget.includes('eu'),
       showOpenBtn: this.cookieBannerForm.value.showOpenBtn,
       CONFIG: this.onGetFormData()
     };
@@ -294,7 +293,7 @@ export class CookieBannerComponent implements OnInit {
     const userPrefrencesData = {
       ccpa_target: this.cookieBannerForm.value.ccpaTarget,
       logo_text: this.cookieBannerForm.value.logo,
-      gdpr_global: this.cookieBannerForm.value.gdprTarget.includes('EU'),
+      gdpr_global: this.cookieBannerForm.value.gdprTarget.includes('eu'),
       gdpr_target: this.cookieBannerForm.value.gdprTarget,
       cookie_blocking: this.cookieBannerForm.value.cookieBlocking,
       enable_iab: this.cookieBannerForm.value.enableIab,
@@ -419,7 +418,7 @@ export class CookieBannerComponent implements OnInit {
   }
 
   onCheckCountry(event) {
-     this.isGdprGlobal =  event.includes('EU');
+     this.isGdprGlobal =  event.includes('eu');
      if (this.isGdprGlobal) {
        this.cookieBannerForm.get('ccpaTarget').clearValidators();
        this.cookieBannerForm.get('ccpaTarget').updateValueAndValidity();
