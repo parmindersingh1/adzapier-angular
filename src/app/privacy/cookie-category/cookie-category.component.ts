@@ -151,7 +151,6 @@ export class CookieCategoryComponent implements OnInit {
 
   @Input() get selectedColumns(): any[] {
     localStorage.setItem('cookieCat', JSON.stringify(this.selectedCols));
-    console.log('saas', this.selectedCols)
     return this.selectedCols;
   }
 
@@ -248,6 +247,7 @@ export class CookieCategoryComponent implements OnInit {
     this.service.put(catForm, this.catId)
       .subscribe(res => {
         this.tLoading = false;
+        this.addCookieForm.reset();
         this.cookieCategory = {};
         this.onGetDataFromServer();
         this.productDialog = false;
@@ -263,6 +263,7 @@ export class CookieCategoryComponent implements OnInit {
     this.tLoading = true;
     this.service.post(catForm)
       .subscribe(res => {
+        this.addCookieForm.reset();
         this.tLoading = false;
         this.onGetDataFromServer();
         this.cookieCategory = {};
