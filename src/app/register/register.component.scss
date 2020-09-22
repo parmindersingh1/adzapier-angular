@@ -54,12 +54,16 @@
  background-color: #f8d7da;
  border-color: #f5c6cb;
 }
+ 
+.flotingdiv {
+	position: fixed;
+	bottom: 0;
+	top: 84%;
+	right:0;
+	overflow-x: hidden;
+  overflow-y: auto;
+}
 
-.flotingdiv{
-position: fixed;
-bottom: 40px;
-right:10px;
-overflow-x: hidden;
-overflow-y: auto;
-z-index: 0;
+::ng-deep .alert {
+  padding: 12px 35px 12px 12px;
 }

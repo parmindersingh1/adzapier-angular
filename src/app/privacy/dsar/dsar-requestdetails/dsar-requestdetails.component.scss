@@ -9,6 +9,7 @@
     border: 2px solid #8392a5;
     background-color: #fff;
     border-radius: 100%;
+    cursor: pointer;
 }
 
 .shadowdiv > ul > li.nav-item > a.nav-link {
@@ -346,6 +347,7 @@ ul.nav-tabs > li:last-child > div > a::after {
 	right:0;
 	overflow-x: hidden;
     overflow-y: auto;
+    z-index: 1;
 }
 
 .chat-group-divider {
@@ -557,4 +559,78 @@ ul.ngx-pagination {
 
   .lightgray {
     color: #8392a5;
+  }
+
+  .custom-file-input {
+    color: transparent;
+    opacity: 0;
+    margin: 8px 0px;
+    cursor: pointer;
+  }
+  .custom-file-input::-webkit-file-upload-button {
+    visibility: hidden;
+  }
+  .custom-file-input::before {
+    content: 'Select some files';
+    color: #fff;
+    display: inline-block;
+    background: #0168fa;
+    border: 1px solid #0062cc;
+    border-radius: 3px;
+    padding: 5px 8px;
+    outline: none;
+    white-space: nowrap;
+    -webkit-user-select: none;
+    cursor: pointer;    
+    font-size: 10pt;
+  }
+  .custom-file-input:hover::before {
+    border-color: #014ebb;
+    background-color: #0153c7;
+  }
+  .custom-file-input:active {
+    outline: 0;
+  }
+  .custom-file-input:active::before {
+    background: #0168fa;
+  }
+  .email-attachment-wrapper {
+    display: flex;
+    float: right;
+    align-items: flex-end;
+    width: 400px;
+  }
+  .email-attachment-wrapper .input-group {
+      margin: 0 10px;
+  }
+
+  .email-attachment-wrapper .input-group .custom-file .custom-file-label {
+    height: 30px !important;
+    border-radius: 0.35rem;
+    border: 1px solid #3968fa !important;
+  }
+
+  .email-attachment-wrapper .input-group .custom-file .custom-file-label::after {
+    background-color: #3968fa;
+    height: 28px !important;
+    font-size: 12px;
+    font-weight: normal;
+    color: #fff;
+  }
+
+  .email-attachment-wrapper label {
+    font-weight: bold;
+  }
+
+  ::ng-deep .theme-green .bs-datepicker-head {
+    background-color: #0168fa !important;
+  }
+
+  ::ng-deep .theme-green .bs-datepicker-body table td.week span {
+    color: #0168fa !important;
+  }
+  
+  .email-lbl {
+    width: 110px;
+    margin: 10px 0 10px 0px;
   }

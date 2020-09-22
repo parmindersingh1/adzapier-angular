@@ -146,17 +146,17 @@ export class DsarRequestdetailsComponent implements OnInit {
   base64FileCode: any;
   filePreviewURL: any;
   constructor(private activatedRoute: ActivatedRoute,
-    private router: Router,
-    private orgService: OrganizationService,
-    private dsarRequestService: DsarRequestService,
-    private workflowService: WorkflowService,
-    private ccpaDataService: CcpadataService,
-    private ccpaFormConfigService: CCPAFormConfigurationService,
-    private modalService: NgbModal,
-    private formBuilder: FormBuilder,
-    private renderer2: Renderer2,
-    private bsmodalService: BsModalService,
-    private loading: NgxUiLoaderService
+              private router: Router,
+              private orgService: OrganizationService,
+              private dsarRequestService: DsarRequestService,
+              private workflowService: WorkflowService,
+              private ccpaDataService: CcpadataService,
+              private ccpaFormConfigService: CCPAFormConfigurationService,
+              private modalService: NgbModal,
+              private formBuilder: FormBuilder,
+              private renderer2: Renderer2,
+              private bsmodalService: BsModalService,
+              private loading: NgxUiLoaderService
   ) {
     this.renderer2.listen('window', 'click', (e: Event) => {
       if (e.target !== this.toggleDayleftdiv.nativeElement && e.target !== this.btnDaysLeft.nativeElement && e.target !== this.customDaysInput.nativeElement) {
@@ -174,9 +174,10 @@ export class DsarRequestdetailsComponent implements OnInit {
     this.quillEditorText = new FormGroup({
       editor: new FormControl('', Validators.required)
     });
-    this.quillEditorEmailText = new FormGroup({
-      dropdownEmailTemplate: new FormControl(null),
-      editorEmailMessage: new FormControl(null),
+    this.quillEditorEmailText = this.formBuilder.group({
+      dropdownEmailTemplate: ['', [Validators.required]],
+      editorEmailMessage: ['', [Validators.required]],
+      emailAttachment: ['']
     });
     this.loadActivityLog(this.requestID);
     this.loadEmailLog(this.requestID);
@@ -216,7 +217,7 @@ export class DsarRequestdetailsComponent implements OnInit {
 
     this.loadCountryList();
     this.loadStateList();
-    this.loadDSARRequestDetailsByID();
+    this.loadDSARRequestDetailsByID(this.currentManagedOrgID, this.currrentManagedPropID, this.requestID);
     this.preFillData();
     // this.onChanges();
   }
@@ -399,8 +400,8 @@ export class DsarRequestdetailsComponent implements OnInit {
   getWorkflowStages(id) {
     ///workflowId
     this.workflowService.getWorkflowById(id).subscribe((data) => {
-      if (data.response.length > 0) {
-        let respData = data.response[0].workflow_stages;
+      if (data.length > 0) {
+        const respData = data[0].workflow_stages;
         this.workflowStages = this.rearrangeArrayResponse(respData);
         // this.selectedStages.push(this.workflowStages[0]);
         this.selectStageOnPageLoad(this.currentWorkflowStageID);
@@ -456,7 +457,7 @@ export class DsarRequestdetailsComponent implements OnInit {
           //   current_status: this.currentStageId,
           //   previous_status: this.previousStageId ? this.previousStageId : this.previousStageId = ''
           // }
-          console.log(reqObj, 'stage selection..');
+        //  console.log(reqObj, 'stage selection..');
           this.stageAPI(this.requestID, reqObj);
           // this.getSubTaskList();
         } else {
@@ -496,14 +497,16 @@ export class DsarRequestdetailsComponent implements OnInit {
         if (this.isPreviousStageSelected(this.revertedStage)) {
           // this.inputData.splice(start, deleteCount, customStageObj);
           if (this.stageDiff === 1) {
-            this.previousStageId = this.selectedStages[this.selectedStages.length - 1].id
+            const stageLength = (this.selectedStages.length - this.stageDiff);
+
             this.selectedStages.splice(this.selectedStages.length - 1, 1);
+            this.previousStageId = this.selectedStages[this.selectedStages.length - 1].id;
             //  this.previousStage = this.selectedStages[this.nextStage - 1].order;
             //  this.previousStageId = this.selectedStages[this.nextStage-1].id;
             const reqObj = {
-              current_status: this.currentStageId,
-              previous_status: this.previousStageId,
-            }
+              current_status: this.previousStageId,
+              previous_status: this.currentStageId
+            };
             console.log(reqObj, 'conf..');
             this.stageAPI(this.requestID, reqObj);
             this.getSubTaskList();
@@ -610,7 +613,7 @@ export class DsarRequestdetailsComponent implements OnInit {
     } else {
       //  console.log(this.selectedStages[this.selectedStages.length - 1].id);
       const reqObj = {
-        current_status: this.currentStageId !== undefined ? this.currentStageId : this.workflowStages[this.workflowStages.length - 1].id,
+        current_status: this.currentStageId !== undefined ? this.currentStageId : this.selectedStages[this.selectedStages.length - 1].id,
         previous_status: this.previousStageId,
         activity_feedback: this.quillEditorText.get('editor').value //this.editorActivityPost
       };
@@ -630,10 +633,17 @@ export class DsarRequestdetailsComponent implements OnInit {
     console.log(this.workflowStages[0], 'ns..');
     const requestObj = {
       current_status: this.currentStageId || this.workflowStages[0].id,
-      email_body: this.quillEditorEmailText.get('editorEmailMessage').value
-    }
+      email_body: this.quillEditorEmailText.get('editorEmailMessage').value,
+      upload: this.quillEditorEmailText.get('emailAttachment').value
+    };
     console.log(requestObj, 'state req..onSubmitActivityPost');
-    this.ccpaDataService.addCCPADataEmailActivity(this.requestID, requestObj).subscribe((data) => {
+
+    const fd = new FormData();
+    fd.append('current_status', this.currentStageId || this.workflowStages[0].id);
+    fd.append('email_body', this.quillEditorEmailText.get('editorEmailMessage').value);
+    fd.append('upload', this.quillEditorEmailText.get('emailAttachment').value);
+
+    this.ccpaDataService.addCCPADataEmailActivity(this.requestID, fd).subscribe((data) => {
       if (data) {
         // alert(data.response);
         this.alertMsg = data.response;
@@ -645,7 +655,7 @@ export class DsarRequestdetailsComponent implements OnInit {
       this.alertMsg = error;
       this.isOpen = true;
       this.alertType = 'danger';
-    })
+    });
 
     //this.stageAPI(this.requestID, reqObj);
   }
@@ -802,22 +812,31 @@ export class DsarRequestdetailsComponent implements OnInit {
           this.alertMsg = error;
           this.isOpen = true;
           this.alertType = 'danger';
-        })
+        });
     }
 
 
   }
 
-  loadDSARRequestDetailsByID() {
+  loadDSARRequestDetailsByID(currentManagedOrgID, currrentManagedPropID, requestID) {
     let approver;
-    let currentriskFactor;
-    this.dsarRequestService.getDSARRequestDetailsByID(this.currentManagedOrgID, this.currrentManagedPropID, this.requestID)
+    this.dsarRequestService.getDSARRequestDetailsByID(currentManagedOrgID, currrentManagedPropID, requestID)
       .subscribe((data) => {
-        this.requestDetailsbyId = data.response;
-        this.riskFactorList = data.response.risk_factor;
-        approver = data.response.approver;
-        this.selectedApprover = approver[0].approver_id;
-        this.editRequestDetailForm.controls['approver'].setValue(this.selectedApprover);
+        if (data) {
+          this.requestDetailsbyId = data.response;
+          this.riskFactorList = data.response.risk_factor;
+          approver = data.response.approver;
+          this.selectedApprover = approver[0].approver_id;
+          this.editRequestDetailForm.controls['approver'].setValue(this.selectedApprover);
+        } else {
+          this.alertMsg = data.response;
+          this.isOpen = true;
+          this.alertType = 'info';
+        }
+      }, (error) => {
+        this.alertMsg = error;
+        this.isOpen = true;
+        this.alertType = 'danger';
       });
 
   }
@@ -914,6 +933,7 @@ export class DsarRequestdetailsComponent implements OnInit {
   onSubmitAddSubTask() {
     this.isAddSubTaskSubmit = true;
     if (this.subTaskForm.invalid) {
+      //  this.isAddSubTaskSubmit = false;
       return false;
     } else {
       const obj = {
@@ -966,7 +986,7 @@ export class DsarRequestdetailsComponent implements OnInit {
     this.modalService.dismissAll('Canceled');
   }
 
-  uploadFile(event) {
+  uploadFile(event, tag) {
     console.log(event, 'event..');
     const fileExtArray = ['pdf', 'txt', 'jpeg', 'jpg', 'png', 'doc', 'docx', 'csv', 'xls'];
     // if (event.target.files.length > 0) {
@@ -979,8 +999,14 @@ export class DsarRequestdetailsComponent implements OnInit {
         this.showFilesizeerror = false;
         this.showFileExtnerror = false;
         const file = event.target.files[0];
-        this.uploadFilename = file.name;
-        this.subTaskResponseForm.get('uploaddocument').setValue(file);
+        if (tag !== 'email') {
+          this.uploadFilename = file.name;
+          this.subTaskResponseForm.get('uploaddocument').setValue(file);
+        } else {
+          this.uploadFilename = file.name;
+          this.quillEditorEmailText.get('emailAttachment').setValue(file);
+        }
+
       } else {
         this.showFileExtnerror = true;
       }
@@ -1034,9 +1060,14 @@ export class DsarRequestdetailsComponent implements OnInit {
     const currentStageID = this.currentStageId ? this.currentStageId : this.currentWorkflowStageID;
     if (currentStageID) {
       let resp;
-      this.dsarRequestService.getSubTask(this.requestID, currentStageID).subscribe((data) => {
-        return this.subTaskListResponse = data.response;
-      });
+      this.dsarRequestService.getSubTaskByWorkflowID(this.requestID, currentStageID)
+        .subscribe((data) => {
+          return this.subTaskListResponse = data;
+        }, (error) => {
+          this.alertMsg = error;
+          this.isOpen = true;
+          this.alertType = 'danger';
+        });
 
     } else {
       this.alertMsg = 'Stage not selected!';
