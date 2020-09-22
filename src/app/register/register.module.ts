@@ -1,10 +1,9 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { SharedbootstrapModule } from 'src/app/sharedbootstrap/sharedbootstrap.module';
 import { RegisterRoutingModule } from './register-routing.module';
 import { RegisterComponent } from './register.component';
-import {NgxPasswordToggleModule} from "ngx-password-toggle";
-import { SharedbootstrapModule } from 'src/app/sharedbootstrap/sharedbootstrap.module';
 
 @NgModule({
   declarations: [RegisterComponent],
@@ -13,7 +12,6 @@ import { SharedbootstrapModule } from 'src/app/sharedbootstrap/sharedbootstrap.m
         ReactiveFormsModule,
         FormsModule,
         RegisterRoutingModule,
-        NgxPasswordToggleModule,
         SharedbootstrapModule
     ]
 })

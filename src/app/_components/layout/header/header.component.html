@@ -88,7 +88,7 @@
       <li *ngFor="let menu of navigationMenu" class="nav-item">
         <div *ngIf="menu.showlink" dropdown container="body">
           <div *ngIf="!menu.subcategory">
-            <a class="nav-link" routerLinkActive="active" (click)="true" routerLink="{{menu.routerLink}}">
+            <a class="nav-link" routerLinkActive="active" (click)="goto(menu.routerLink)">
               {{ menu.showlink }}</a></div>
           <div *ngIf="menu.subcategory">
             <a class="nav-link dropdown-toggle" routerLinkActive="active" *ngIf="menu.subcategory" dropdownToggle (click)="true">
@@ -97,7 +97,7 @@
             <ng-container *ngFor="let item of menu.subcategory;let q = index;">
               <li *ngIf="menu.showlink == 'Privacy' && q===0" class="displayflex"><span>DSAR</span></li>
               <li role="menuitem">
-                <a class="dropdown-item" routerLinkActive="active" routerLink="{{item.routerLink}}">
+                <a class="dropdown-item" routerLinkActive="active" (click)="goto(item.routerLink)">
                   <span *ngIf="item.icon.indexOf('fa')===-1">
                     <i-feather name="{{item.icon}}" class="feather-16"></i-feather>{{item.showlink}}
                   </span>
@@ -117,7 +117,7 @@
     <ul class="navbar-nav">
       <li *ngFor="let menu of rightItems" class="nav-item">
         <div *ngIf="!menu.items" container="body">
-          <a *ngIf="!menu.items" routerLinkActive="active" class="nav-link" routerLink="{{menu.routerLink}}">
+          <a *ngIf="!menu.items" routerLinkActive="active" class="nav-link" (click)="goto(menu.routerLink)">
             <i *ngIf="menu.icon" class="{{ menu.icon }}"></i>{{ menu.label }}
           </a>
         </div>
@@ -133,7 +133,7 @@
                   <p class="tx-12 tx-color-03">{{userRole}}</p>
                 </div>
                 <li *ngIf="!item.items" role="menuitem">
-                  <a class="dropdown-item" *ngIf="item.label !== 'Signout'" routerLink="{{item.routerLink}}">
+                  <a class="dropdown-item" *ngIf="item.label !== 'Signout'" (click)="goto(item.routerLink)">
                     <i-feather *ngIf="item.icon" name="{{item.icon}}" class="feather-16"></i-feather>{{item.label}}
                   </a>
                   <a class="dropdown-item" *ngIf="item.label === 'Signout'" (click)="logout()"
