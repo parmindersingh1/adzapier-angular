@@ -30,9 +30,9 @@ export class WorkflowsComponent implements OnInit {
   listTotalCount: any;
   paginationConfig = { itemsPerPage: this.pgSize, currentPage: this.page, totalItems: this.listTotalCount, id: 'propertyPagination' };
   constructor(private router: Router, private workflowService: WorkflowService,
-    private modalService: NgbModal,
-    private formBuilder: FormBuilder,
-    private loadingBar: NgxUiLoaderService,
+              private modalService: NgbModal,
+              private formBuilder: FormBuilder,
+              private loadingBar: NgxUiLoaderService
   ) { }
 
   ngOnInit() {
@@ -52,8 +52,7 @@ export class WorkflowsComponent implements OnInit {
   // to retrive all and show only active workflow in dropdown  
   loadWorkflowList() {
     this.workflowService.getWorkflow().subscribe((data) => {
-      const key = 'response';
-      this.workflowList = data['response'];
+      this.workflowList = data;
     });
   }
 
@@ -61,7 +60,7 @@ export class WorkflowsComponent implements OnInit {
     // this.loadingBar.start();
     this.workflowService.getWorkflowById(id)
       .subscribe((data: any) => {
-        let stages = data.response[0].workflow_stages;
+        const stages = data[0].workflow_stages;
         this.workflowStages = this.rearrangeArrayResponse(stages);
         let x = this.workflowStages.length;
         // this.loadingBar.stop();
@@ -70,7 +69,7 @@ export class WorkflowsComponent implements OnInit {
         this.isOpen = true;
         this.alertMsg = error;
         this.alertType = 'danger';
-      })
+      });
   }
 
 
@@ -145,8 +144,8 @@ export class WorkflowsComponent implements OnInit {
     this.paginationConfig.itemsPerPage = Number(event.target.value);
     const pagelimit = '?limit=' + this.paginationConfig.itemsPerPage + '&page=' + this.paginationConfig.currentPage;
     this.workflowService.getWorkflow(pagelimit).subscribe((data) => {
-      this.paginationConfig.totalItems = data.count;
-      this.workflowList = data.response;
+      this.paginationConfig.totalItems = data.length;
+      this.workflowList = data;
       //return this.workflowList;
     });
   }
@@ -156,8 +155,8 @@ export class WorkflowsComponent implements OnInit {
     this.paginationConfig.currentPage = event;
     const pagelimit = '?limit=' + this.paginationConfig.itemsPerPage + '&page=' + this.paginationConfig.currentPage;
     this.workflowService.getWorkflow(pagelimit).subscribe((data) => {
-      this.paginationConfig.totalItems = data.count;
-      this.workflowList = data.response;
+      this.paginationConfig.totalItems = data.length;
+      this.workflowList = data;
      // return this.workflowList;
     });
   }
@@ -174,7 +173,7 @@ export class WorkflowsComponent implements OnInit {
   }  
 
   onClosed(dismissedAlert: any): void {
-    this.alertMsg !== dismissedAlert;
+    this.alertMsg = !dismissedAlert;
     this.isOpen = false;
   }
 

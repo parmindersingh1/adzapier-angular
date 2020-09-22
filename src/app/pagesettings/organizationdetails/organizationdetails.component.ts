@@ -101,7 +101,7 @@ export class OrganizationdetailsComponent implements OnInit {
 
     this.isEditProperty = false;
     const urlRegex = '(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?';
-    const zipRegex = '^[0-9]*$'; //'^[0-9]{6}(?:-[0-9]{4})?$';
+    const zipRegex = '^[0-9]{5,20}$'; //'^[0-9]{6}(?:-[0-9]{4})?$';
     const strRegx = '.*\\S.*[a-zA-Z \-\']';
     // const alphaNumeric = '^(?![0-9]*$)[a-zA-Z0-9 ]+$';
     const alphaNumeric = '.*\\S.*[a-zA-z0-9 ]';

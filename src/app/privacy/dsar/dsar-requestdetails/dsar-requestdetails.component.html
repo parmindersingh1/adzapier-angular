@@ -156,7 +156,7 @@
                                 <label class="tx-sans"> Attachments </label>
                                 <p><i-feather class="feather-file" name="file"></i-feather>
                                     <a (click)="viewFile()" style="cursor: pointer;">View File</a>
-                                </p>                               
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -179,6 +179,7 @@
                                   
                                 </div>
                                 <div class="m-2">{{stage.guidance_text}}</div>
+                                <!-- <div class="m-2">{{stage.id}}</div> -->
                             </li>
                         </ul>
 
@@ -195,13 +196,13 @@
                         <ng-template ngbNavContent>
                             <form [formGroup]="quillEditorText" (ngSubmit)="onSubmitActivityPost()">
                                 <quill-editor formControlName="editor" [modules]="quillConfig"
-                                [ngClass]="{ 'is-invalid': isActivitysubmitted && addActivity.editor?.errors }"
-                                   > <!-- [(ngModel)]="editorActivityPost"-->
+                                    [ngClass]="{ 'is-invalid': isActivitysubmitted && addActivity.editor?.errors }">
+                                    <!-- [(ngModel)]="editorActivityPost"-->
                                 </quill-editor>
                                 <div *ngIf="isActivitysubmitted && addActivity.editor?.errors"
-                                class="invalid-feedback float-left col-5">
-                                <div *ngIf="addActivity.editor?.errors.required">Activity can not be empty, add your post.</div>
-                            </div>
+                                    class="invalid-feedback float-left col-5">
+                                    <div *ngIf="addActivity.editor?.errors.required">Activity can not be empty, add your post.</div>
+                                </div>
                                 <button type="submit" class="btn btn-xs btn-primary float-right mb-2 mt-2">Post</button>
                             </form>
 
@@ -231,8 +232,19 @@
                                 </div>
                                 <quill-editor formControlName="editorEmailMessage" [modules]="quillConfig">
                                 </quill-editor>
+                                <div class="email-attachment-wrapper">
+                                    <label class="email-lbl">Attach file</label>
+                                <div class="input-group">
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" (change)="uploadFile($event,'email')"
+                                            id="emailAttachment">
+                                        <label class="custom-file-label"
+                                            for="inputGroupFile01">{{uploadFilename?uploadFilename:'Choose file'}}</label>
+                                    </div>            
+                                </div>
                                 <button type="submit" class="btn btn-xs btn-primary float-right mb-2 mt-2">Post
                                 </button>
+                                </div>                               
                             </form>
                         </ng-template>
                     </li>
@@ -254,12 +266,13 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr *ngFor="let task of subTaskListResponse"> <!-- subTaskList$ | async-->
+                                    <tr *ngFor="let task of subTaskListResponse">
+                                        <!-- subTaskList$ | async-->
                                         <!-- <td>{{task | json}}</td> -->
                                         <td>
-                                            <div class="tasklink"><span *ngIf="task.required"
-                                                    class="color-red">*</span>
-                                        <a (click)="openResponseModalPopup(subTaskResponseModal,task)">{{task.name}}</a>
+                                            <div class="tasklink"><span *ngIf="task.required" class="color-red">*</span>
+                                                <a
+                                                    (click)="openResponseModalPopup(subTaskResponseModal,task)">{{task.name}}</a>
                                             </div>
                                         </td>
                                         <td><span [innerHTML]="getStagename(task.workflow_stage)">
@@ -305,90 +318,76 @@
                 <div [ngbNavOutlet]="nav" class="m-2"></div>
                 <div class="activity" *ngIf="isActivityLogOpen">
                     <ul>
-                        <li *ngFor="let data of activityLog | paginate:paginationConfig; let i = index;">
-                            <!-- <div class="chat-group-divider" *ngIf="i==0">
-                                <span *ngIf="data.created_at">{{data.created_at | date:'longDate'}}</span>
-                            </div> -->
-                            <!-- <div *ngIf="data.activity_type == 'post'" class="activity-log"> -->
+                        <li *ngFor="let data of activityLog; let i = index;">
+
+                            <div class="activity-log">
+
                                 <div class="chat-group-divider">
-                                    <span *ngIf=" !i || ( data.created_at | date: 'longDate') !== (activityLog[i-1].created_at | date: 'longDate' ) ">
-                                        {{data.created_at | date:'longDate'}}
+                                    <span
+                                        *ngIf=" !i || ( data.created_at | date: 'shortDate') !== (activityLog[i-1].created_at | date: 'shortDate' ) ">
+                                        {{data.created_at | date:'mediumDate'}}
                                     </span>
-                                </div>                               
-                                <!-- !i || ( purRecord.timestamp | date: 'shortDate') !== (purchaseRecords[i-1].timestamp | date: 'shortDate' )  -->
+                                </div>
+
                                 <div class="chat-stage-wrapper">
                                     <div class="media pl-0 col-9">
-                                        <div class="avatar avatar-sm avatar-online">
-                                            <span class="avatar-initial rounded-circle">{{nameInitials(data.user_firstname,data.user_lastname)}}</span>
-                                        </div>
-                                        <div class="media-body">
-                                            <p class="feedback">
-                                                <strong> {{data.user_firstname}} {{data.user_lastname}}</strong>
-                                                posted feedback at <small class="lightgray">{{data.created_at | date:'mediumTime'}}</small>
-                                                <!-- at <span *ngIf="data.created_at">{{data.created_at | date:'medium'}}</span> -->
-                                            </p>
-                                            <div class="userfeedback" [innerHTML]="data.activity_feedback">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="activitystage">{{data.current_status}}</div>
-                                </div>
-                            <!-- </div> -->
-                            <!-- <div *ngIf="data.activity_type == 'status_change'" class="activity-log"> -->
-                                
-                                
-                                <div class="chat-stage-wrapper">
-                                    <div class="media">
                                         <div class="avatar avatar-sm avatar-online">
                                             <span
                                                 class="avatar-initial rounded-circle">{{nameInitials(data.user_firstname,data.user_lastname)}}</span>
                                         </div>
                                         <div class="media-body">
-                                            <strong>{{data.user_firstname}} {{data.user_lastname}}
-                                            </strong>chagne status from
-                                            <strong>{{data.previous_status}}</strong> to
-                                            <strong>{{data.current_status}}</strong>
-                                            at <small class="lightgray">{{data.created_at | date: 'mediumTime'}}</small>
+                                            <p class="feedback">
+                                                <strong> {{data.user_firstname}} {{data.user_lastname}}</strong>
+                                                posted feedback at <small class="lightgray">
+                                                    {{data.created_at | date:'mediumTime'}}</small>
+                                            </p>
+                                            <div class="userfeedback" [innerHTML]="data.activity_feedback">
+                                            </div>
+                                            <p class="feedback">
+                                                <strong>{{data.user_firstname}} {{data.user_lastname}}
+                                                </strong>chagne status from
+                                                <strong>{{data.previous_status}}</strong> to
+                                                <strong>{{data.current_status}}</strong>
+                                                at <small
+                                                    class="lightgray">{{data.created_at | date: 'mediumTime'}}</small>
+                                            </p>
                                         </div>
+
                                     </div>
+
                                     <div class="activitystage">{{data.current_status}}</div>
                                 </div>
-                                <!-- <p class="margin-0">
-                                 {{nameInitials(data.user_firstname,data.user_lastname)}}
-                                <strong>{{data.user_firstname}} {{data.user_lastname}} </strong>chagne status from  
-                                    <strong>{{data.previous_status}}</strong> to <strong>{{data.current_status}}</strong> on 
-                                    {{data.created_at | date:'medium'}}
-                                </p>
-                                <div class="activitystage">{{data.current_status}}</div> -->
 
-                            <!-- </div> -->
+                            </div>
+                            
                         </li>
                     </ul>
-                    <div class="mt-3 float-right">
-                        <pagination-controls id="userPagination" (pageChange)="pageChangeEvent($event)">
-                        </pagination-controls>
-                    </div>
+                    
                 </div>
                 <!--email log-->
                 <div class="activity" *ngIf="isEmailLogOpen">
                     <ul>
-                        <li *ngFor="let data of emailLog | paginate:paginationConfig; let i = index;  first as isFirst">
+                        <li *ngFor="let data of emailLog; let k = index;  first as isFirst">
                             <div class="activity-log">
-                                <div class="chat-group-divider"> <!-- *ngIf="isFirst || data.created_at != emailLog[i+1].created_at"-->
+                                <div class="chat-group-divider">
+                                    <!-- *ngIf="isFirst || data.created_at != emailLog[i+1].created_at"-->
                                     <!-- <span>{{data.created_at | date:'longDate'}}</span> -->
-                                    <span *ngIf=" !i || ( data.created_at | date: 'longDate') !== (activityLog[i-1].created_at | date: 'longDate' ) ">
+                                    <span
+                                        *ngIf=" !k || ( data.created_at | date: 'longDate') !== (emailLog[k-1].created_at | date: 'longDate' ) ">
                                         {{data.created_at | date:'longDate'}}
                                     </span>
                                 </div>
                                 <div class="chat-stage-wrapper">
                                     <div class="media pl-0 col-9">
                                         <div class="avatar avatar-sm avatar-online">
-                                            <span class="avatar-initial rounded-circle">{{nameInitials(data.user_firstname,data.user_lastname)}}</span>
+                                            <span
+                                                class="avatar-initial rounded-circle">{{nameInitials(data.user_firstname,data.user_lastname)}}</span>
                                         </div>
                                         <div class="media-body">
                                             <p class="feedback">
                                                 <strong> {{data.user_firstname}} {{data.user_lastname}}</strong>
-                                                posted feedback at <small class="lightgray">{{data.created_at | date: 'mediumTime'}}</small>
+                                                posted feedback at <small
+                                                    class="lightgray">{{data.created_at | date: 'mediumTime'}}</small>
                                                 <!-- at <span *ngIf="data.created_at">{{data.created_at | date:'medium'}}</span> -->
                                             </p>
 
@@ -498,7 +497,7 @@
                 <div class="col-sm-12">
                     <label for="workflowselect" class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">
                         Select State</label>
-                    <input formControlName="state" autocomplete="false" [typeahead]="filteredStateList"
+                    <input formControlName="state" autocomplete="new" [typeahead]="filteredStateList"
                         typeaheadOptionField="name"
                         [ngClass]="{ 'is-invalid': isRequestDetailFormsubmit && editRequest.state.errors }"
                         placeholder="type and search state" [typeaheadScrollable]="true"
@@ -579,7 +578,8 @@
                         <label for="subtaskname"
                             class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">Sub Task Name</label>
                         <input type="text" class="form-control" formControlName="subtaskname"
-                            [ngClass]="{ 'is-invalid': isAddSubTaskSubmit && addsubTask.subtaskname?.errors }" />
+                            [ngClass]="{ 'is-invalid': isAddSubTaskSubmit && addsubTask.subtaskname?.errors }"
+                            required />
                         <div *ngIf="isAddSubTaskSubmit && addsubTask.subtaskname?.errors" class="invalid-feedback">
                             <div *ngIf="addsubTask.subtaskname?.errors.required">Sub Task Name is
                                 required</div>
@@ -594,7 +594,8 @@
                         class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">
                         Sub task description</label>
                     <textarea class="form-control" formControlName="subtaskdescription"
-                        [ngClass]="{ 'is-invalid': isAddSubTaskSubmit && addsubTask.subtaskdescription?.errors }">
+                        [ngClass]="{ 'is-invalid': isAddSubTaskSubmit && addsubTask.subtaskdescription?.errors }"
+                        required>
                         </textarea>
                     <div *ngIf="isAddSubTaskSubmit && addsubTask.subtaskdescription?.errors" class="invalid-feedback">
                         <div *ngIf="addsubTask.subtaskdescription?.errors.required">Subtask description is required
@@ -608,7 +609,8 @@
                     <div class="form-check">
                         <label for="issubtaskrequired"
                             class="form-check-label tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">
-                            <input type="checkbox" class="form-check-input" formControlName="issubtaskrequired" />
+                            <input type="checkbox" class="form-check-input" formControlName="issubtaskrequired"
+                                required />
                             <span>Is Required</span>
                         </label>
                     </div>
@@ -625,7 +627,7 @@
                     <input type="text" formControlName="deadline"
                         [ngClass]="{ 'is-invalid': isAddSubTaskSubmit && addsubTask.deadline.errors }"
                         class="form-control" #dp="bsDatepicker" bsDatepicker (bsValueChange)="onValueChange($event)"
-                        [bsValue]="bsValue" />
+                        [bsValue]="bsValue" required />
                     <div *ngIf="isAddSubTaskSubmit && addsubTask.deadline.errors" class="invalid-feedback">
                         <div *ngIf="addsubTask.deadline?.errors.required">Deadline date is required</div>
                     </div>
@@ -638,8 +640,8 @@
                     <label for="subtaskdescription"
                         class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">
                         Reminder </label>
-                    <input type="text" formControlName="reminder"                      
-                        class="form-control" bsDatepicker [maxDate]="maxDate" [minDate]="minDate" [bsValue]="bsValue" />
+                    <input type="text" formControlName="reminder" class="form-control" bsDatepicker [maxDate]="maxDate"
+                        [minDate]="minDate" [bsValue]="bsValue" required />
                 </div>
             </div>
 
@@ -709,7 +711,8 @@
                     <div class="form-check">
                         <label for="markcompleted"
                             class="form-check-label tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">
-                            <input type="checkbox" class="form-check-input" formControlName="markcompleted" id="markcompleted" />
+                            <input type="checkbox" class="form-check-input" formControlName="markcompleted"
+                                id="markcompleted" />
                             <span>Mark as complete</span>
                         </label>
                     </div>

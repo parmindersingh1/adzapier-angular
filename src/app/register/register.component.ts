@@ -23,6 +23,7 @@ export class RegisterComponent implements OnInit {
     alertMsg: any;
     isOpen: boolean;
     alertType: any;
+    dismissible = true;
     constructor(
         private formBuilder: FormBuilder,
         private router: Router,
@@ -31,11 +32,7 @@ export class RegisterComponent implements OnInit {
         private alertService: AlertService,
 
     ) {
-        // redirect to home if already logged in
-        if (this.userService) {
-            this.router.navigate(['/signup']);
         }
-    }
 
     ngOnInit() {
         const strRegx = '^[a-zA-Z \-\']+';
@@ -93,20 +90,19 @@ export class RegisterComponent implements OnInit {
                         this.router.navigate(['/login']);
                     },
                     error => {
-                       this.alertMsg = error.email_error;
-                       this.isOpen = true;
-                       this.alertType = 'danger';
-                       this.loading = false;
-                        // for (let key in error) {
-                        //     if (key != 'No_record') {
-                        //         this.errorMsg = error[key];
-                        //     }
-                        //     break;
-                        // }
+                        this.alertMsg = error;
+                        this.isOpen = true;
+                        this.alertType = 'info';
+                        this.loading = false;
 
                     });
 
         }
 
+    }
+
+    onClosed(dismissedAlert: any): void {
+        this.alertMsg = !dismissedAlert;
+        this.isOpen = false;
     }
 }
