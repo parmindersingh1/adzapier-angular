@@ -423,9 +423,16 @@
 
         <div
           class="card-header pd-t-20 d-sm-flex align-items-start justify-content-between bd-b-0 pd-b-0">
-          <div>
+          <div class="row w-100 mb-2">
+            <div class="col-md-11">
             <h6 class="mg-b-5">Consent Details</h6>
             <p class="tx-13 tx-color-03 mg-b-0">Your cookie consent detail</p>
+            </div>
+            <div class="col-md-1">
+            <select (change)="onSelectCountry($event)" class="form-control" id="sel1">
+              <option *ngFor="let country of countryList" [value]="country.country">{{country.country}}</option>
+            </select>
+            </div>
           </div>
           <!-- <div class="d-flex mg-t-20 mg-sm-t-0">
             <div class="btn-group flex-fill">
@@ -443,52 +450,50 @@
               <th>Action</th>
               <th class="text-right"> Necessary Cookies</th>
               <th class="text-right"> Analytics</th>
-              <th class="text-right">Lifespan</th>
               <th class="text-right">Advertising</th>
               <th class="text-right"> Social Media</th>
             </tr>
             </thead>
             <tbody>
 
-            <tr>
-              <td class="tx-normal ">USA</td>
-              <td class="tx-normal ">Accept ALL</td>
-              <td class="tx-normal text-right">100</td>
-              <td class="tx-medium text-right"> 200</td>
-              <td class="tx-medium text-right"> 300</td>
-              <td class="tx-medium text-right"> 500</td>
-              <td class="tx-medium text-right"> 600</td>
+            <tr *ngFor="let obj of consentDetails">
+              <td class="tx-normal ">{{obj.country}}</td>
+              <td class="tx-normal ">{{obj.action}}</td>
+              <td class="tx-normal text-right">{{obj.allow_essantial ? obj.allow_essantial : 0}}</td>
+              <td class="tx-medium text-right"> {{obj.allow_analytics ? obj.allow_analytics : 0}}</td>
+              <td class="tx-medium text-right"> {{obj.allow_advertising ? obj.allow_advertising : 0}}</td>
+              <td class="tx-medium text-right"> {{obj.allow_socialmedia ? obj.allow_socialmedia: 0}}</td>
             </tr>
-            <tr>
-              <td class="tx-normal ">USA</td>
-              <td class="tx-normal">Save Settings</td>
-              <td class="tx-normal text-right ">100</td>
-              <td class="tx-medium text-right"> 200</td>
-              <td class="tx-medium text-right"> 300</td>
-              <td class="tx-medium text-right"> 500</td>
-              <td class="tx-medium text-right"> 600</td>
+<!--            <tr>-->
+<!--              <td class="tx-normal ">USA</td>-->
+<!--              <td class="tx-normal">Save Settings</td>-->
+<!--              <td class="tx-normal text-right ">100</td>-->
+<!--              <td class="tx-medium text-right"> 200</td>-->
+<!--              <td class="tx-medium text-right"> 300</td>-->
+<!--              <td class="tx-medium text-right"> 500</td>-->
+<!--              <td class="tx-medium text-right"> 600</td>-->
 
-            </tr>
-            <tr>
-              <td class="tx-normal ">USA</td>
-              <td class="tx-normal">REJECT ALL</td>
-              <td class="tx-normal text-right">100</td>
-              <td class="tx-medium text-right"> 200</td>
-              <td class="tx-medium text-right"> 300</td>
-              <td class="tx-medium text-right"> 500</td>
-              <td class="tx-medium text-right"> 600</td>
+<!--            </tr>-->
+<!--            <tr>-->
+<!--              <td class="tx-normal ">USA</td>-->
+<!--              <td class="tx-normal">REJECT ALL</td>-->
+<!--              <td class="tx-normal text-right">100</td>-->
+<!--              <td class="tx-medium text-right"> 200</td>-->
+<!--              <td class="tx-medium text-right"> 300</td>-->
+<!--              <td class="tx-medium text-right"> 500</td>-->
+<!--              <td class="tx-medium text-right"> 600</td>-->
 
-            </tr>
-            <tr>
-              <td class="tx-normal ">USA</td>
-              <td class="tx-normal">DO NOT SELL</td>
-              <td class="tx-normal text-right">100</td>
-              <td class="tx-medium text-right"> 200</td>
-              <td class="tx-medium text-right"> 300</td>
-              <td class="tx-medium text-right"> 500</td>
-              <td class="tx-medium text-right"> 600</td>
+<!--            </tr>-->
+<!--            <tr>-->
+<!--              <td class="tx-normal ">USA</td>-->
+<!--              <td class="tx-normal">DO NOT SELL</td>-->
+<!--              <td class="tx-normal text-right">100</td>-->
+<!--              <td class="tx-medium text-right"> 200</td>-->
+<!--              <td class="tx-medium text-right"> 300</td>-->
+<!--              <td class="tx-medium text-right"> 500</td>-->
+<!--              <td class="tx-medium text-right"> 600</td>-->
 
-            </tr>
+<!--            </tr>-->
 
 
             </tbody>
