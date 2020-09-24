@@ -138,6 +138,9 @@ export class CookieBannerComponent implements OnInit {
       BannerAllowAllButtonTextContent: [''],
       BannerAllowAllButtonTextColor: [''],
       BannerAllowAllButtonBackgroundColor: [''],
+      BannerAllowRequiredTextContent: [''],
+      BannerAllowRequiredButtonTextColor: [''],
+      BannerAllowRequiredButtonBackgroundColor: [''],
       BannerDisableAllButtonTextContent: [''],
       BannerDisableAllButtonTextColor: [''],
       BannerDisableAllButtonBackgroundColor: [''],
@@ -188,6 +191,9 @@ export class CookieBannerComponent implements OnInit {
       BannerAllowAllButtonTextContent: this.bannerCookieData.CONFIG.Banner.AllowAllButtonStylesAndContent.textContent,
       BannerAllowAllButtonTextColor: this.bannerCookieData.CONFIG.Banner.AllowAllButtonStylesAndContent.textColor,
       BannerAllowAllButtonBackgroundColor: this.bannerCookieData.CONFIG.Banner.AllowAllButtonStylesAndContent.background,
+      BannerAllowRequiredTextContent: this.bannerCookieData.CONFIG.Banner.AllowReqButtonStylesAndContent.BannerAllowRequiredTextContent,
+      BannerAllowRequiredButtonTextColor: this.bannerCookieData.CONFIG.Banner.AllowReqButtonStylesAndContent.BannerAllowRequiredButtonTextColor,
+      BannerAllowRequiredButtonBackgroundColor: this.bannerCookieData.CONFIG.Banner.AllowReqButtonStylesAndContent.BannerAllowRequiredButtonBackgroundColor,
       BannerDisableAllButtonTextContent: this.bannerCookieData.CONFIG.Banner.DisableAllButtonStylesAndContent.textContent,
       BannerDisableAllButtonTextColor: this.bannerCookieData.CONFIG.Banner.DisableAllButtonStylesAndContent.textColor,
       BannerDisableAllButtonBackgroundColor: this.bannerCookieData.CONFIG.Banner.DisableAllButtonStylesAndContent.background,
@@ -342,6 +348,11 @@ export class CookieBannerComponent implements OnInit {
           textContent: this.cookieBannerForm.value.BannerAllowAllButtonTextContent,
           textColor: this.cookieBannerForm.value.BannerAllowAllButtonTextColor,
           background: this.cookieBannerForm.value.BannerAllowAllButtonBackgroundColor
+        },
+        AllowReqButtonStylesAndContent: {
+          textContent: this.cookieBannerForm.value.BannerAllowRequiredTextContent,
+          textColor: this.cookieBannerForm.value.BannerAllowRequiredButtonTextColor,
+          background: this.cookieBannerForm.value.BannerAllowRequiredButtonBackgroundColor
         },
         DisableAllButtonStylesAndContent: {
           textContent: this.cookieBannerForm.value.BannerDisableAllButtonTextContent,
