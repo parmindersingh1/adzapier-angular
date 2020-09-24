@@ -71,6 +71,9 @@ export class HeaderComponent implements OnInit {
         this.currentSelectedProperty();
       }
     });
+    this.router.routeReuseStrategy.shouldReuseRoute = () => {
+      return false;
+    };
   }
 
 
@@ -213,7 +216,7 @@ export class HeaderComponent implements OnInit {
     this.selectedOrgProperties.push(obj);
     this.orgservice.setCurrentOrgWithProperty(obj);
     this.currentSelectedProperty();
-  //  this.router.navigate(['/privacy/dsar/webforms']);
+    this.router.navigate([this.router.url]);
   }
 
   isPropSelected(selectedItem): boolean {
@@ -381,4 +384,7 @@ export class HeaderComponent implements OnInit {
     }
   }
 
+  goto(link) {
+   this.router.navigate([link]);
+  }
 }

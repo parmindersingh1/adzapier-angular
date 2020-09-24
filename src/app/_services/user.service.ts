@@ -2,8 +2,8 @@
 import { HttpClient } from '@angular/common/http';
 import { environment } from './../../environments/environment';
 import { User } from './../_models';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
-import { map, shareReplay } from 'rxjs/operators';
+import { BehaviorSubject, Observable, Subject, throwError } from 'rxjs';
+import { map, shareReplay, retry, catchError } from 'rxjs/operators';
 
 
 
@@ -43,10 +43,10 @@ export class UserService {
                 this.currentregSubject.next(user);
                 return user;
 
-            })
-
+            }),
+                retry(1),
+                catchError(this.handleError)
             );
-        alert('Wrong  Credentials');
     }
 
 
@@ -60,7 +60,6 @@ export class UserService {
             .pipe(map(user => {
             })
             );
-        alert('Wrong  Credentials');
     }
 
     delete(id: number) {
@@ -92,4 +91,18 @@ export class UserService {
     getRoleList(): Observable<any> {
         return this.http.get<any>(environment.apiUrl + '/role');
     }
+
+    handleError(error) {
+        let errorMessage = '';
+        if (error.email_error instanceof ErrorEvent) {
+            // client-side error
+            errorMessage = `Error: ${error.email_error}`;
+        } else {
+            // server-side error
+            errorMessage = `${error.email_error}`;
+        }
+        console.log(errorMessage);
+        return throwError(errorMessage);
+    }
+
 }

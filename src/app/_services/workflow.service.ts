@@ -19,16 +19,16 @@ export class WorkflowService {
     const key = 'response';
     const pgLimit = pageLimit !== undefined ? pageLimit : '';
     if (pageLimit === '') {
-      if (!this.workflowlist$) {
-        this.workflowlist$ = this.httpClient.get<any>(environment.apiUrl + '/workflow').pipe(map(res => res[key]), shareReplay(1));
-      }
-      return this.workflowlist$;
+    //  if (!this.workflowlist$) {
+        return this.httpClient.get<any>(environment.apiUrl + '/workflow').pipe(map(res => res[key]), shareReplay(1));
+     // }
+     // return this.workflowlist$;
     } else {
-      if (!this.workflowlist$) {
-        this.workflowlist$ = this.httpClient.get<any>(environment.apiUrl + '/workflow' + pgLimit)
+     // if (!this.workflowlist$) {
+       return this.httpClient.get<any>(environment.apiUrl + '/workflow' + pgLimit)
         .pipe(map(res => res[key]), shareReplay(1));
-      }
-      return this.workflowlist$;
+    //  }
+    //  return this.workflowlist$;
     }
 
   }
@@ -42,11 +42,14 @@ export class WorkflowService {
 
   // to get all stages
   getWorkflowById(id?, pageLimit?): Observable<any> {
+    const key = 'response';
     const pgLimit = pageLimit !== undefined ? pageLimit : '';
     if (pgLimit === '') {
-      return this.httpClient.get<any>(environment.apiUrl + '/workflow?workflow_id=' + id);//.pipe(shareReplay(1));//.pipe(delay(2000));
+      return this.httpClient.get<any>(environment.apiUrl + '/workflow?workflow_id=' + id)
+      .pipe(map(res => res[key]), shareReplay(1));
     } else {
-      return this.httpClient.get<any>(environment.apiUrl + '/workflow?workflow_id=' + id + pgLimit);//.pipe(shareReplay(1));//.pipe(delay(2000));
+      return this.httpClient.get<any>(environment.apiUrl + '/workflow?workflow_id=' + id + pgLimit)
+      .pipe(map(res => res[key]), shareReplay(1));
     }
 
   }

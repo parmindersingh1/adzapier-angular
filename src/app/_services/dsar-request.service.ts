@@ -27,7 +27,7 @@ export class DsarRequestService {
   }
 
   getDSARRequestDetails(orgID, propID, dataReqID): Observable<any> {
-    return this.http.get<any>(environment.apiUrl + '/ccpa/data/' + orgID + '/' + propID + '/' + dataReqID).pipe(shareReplay(1))
+    return this.http.get<any>(environment.apiUrl + '/ccpa/data/' + orgID + '/' + propID + '/' + dataReqID);
   }
 
   getEmailTemplate(): Observable<any> {
@@ -72,6 +72,12 @@ export class DsarRequestService {
   viewUserUploadedFile(requestID) {
     const key = 'response';
     return this.http.get<any>(environment.apiUrl + '/dsar/user/file/' + requestID).pipe(map((res) => res[key]), shareReplay(1));
+  }
+
+  getSubTaskByWorkflowID(requestID, workflowID) {
+    const key = 'response';
+    return this.http.get<any>(environment.apiUrl + '/ccpa/subtask/' + requestID + '?workflow_stage=' + workflowID)
+    .pipe(map((res) => res[key]), shareReplay(1));
   }
 
 }
