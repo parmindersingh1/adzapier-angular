@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BillingService } from 'src/app/_services/billing.service';
 import { NotificationsService } from 'angular2-notifications';
 import { CompanyService } from 'src/app/company.service';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
+import {BsModalRef, BsModalService} from 'ngx-bootstrap';
 
 
 @Component({
@@ -14,6 +15,9 @@ import { NgxUiLoaderService } from 'ngx-ui-loader';
 export class BillingComponent implements OnInit {
   isSuccess = false;
   isError = false;
+  @ViewChild('showAlertMsg', { static: false}) showAlertMsg;
+  modalRef: BsModalRef;
+
   billingDetails: any = {
     billing_details: {},
     billing_history: {},
@@ -29,7 +33,8 @@ export class BillingComponent implements OnInit {
               private billingService: BillingService,
               private companyService: CompanyService,
               private notification: NotificationsService,
-              private loading: NgxUiLoaderService
+              private loading: NgxUiLoaderService,
+              private modalService: BsModalService
   ) {
 
   }
@@ -45,17 +50,23 @@ export class BillingComponent implements OnInit {
     this.onGetCompanyDetails();
   }
 
+  openModal(template: TemplateRef<any>) {
+    this.modalRef = this.modalService.show(template, {class: 'modal-sm', animated: false,    keyboard: false,     ignoreBackdropClick: true
+    });
+  }
+
   onGetCurrentPlan() {
     this.loading.start();
     this.billingService.getCurrentPlan().subscribe((res: any) => {
       this.loading.stop();
       if (res.status === 200) {
         if (typeof (res.response) === 'string') {
-          //  this.notification.info('No Current Plan', 'You have not Subscribed with any plan...', notificationConfig);
+          this.openModal(this.showAlertMsg);
           this.isOpen = true;
           this.alertMsg = 'You have not Subscribed with any plan...';
           this.alertType = 'info';
-          this.router.navigateByUrl('/pricing');
+        } else if (Object.keys(res.response).length === 0) {
+          this.openModal(this.showAlertMsg);
         } else {
           if (Object.keys(res.response).length > 0) {
             this.billingDetails = res.response;
@@ -72,6 +83,11 @@ export class BillingComponent implements OnInit {
     setTimeout(() => {
       this.loading.stop();
     }, 4000);
+  }
+
+  navigateToPricing() {
+    this.modalRef.hide();
+    this.router.navigateByUrl('pricing');
   }
 
   onGetCompanyDetails() {

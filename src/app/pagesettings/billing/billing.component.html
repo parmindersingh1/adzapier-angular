@@ -123,6 +123,16 @@
   </div>
 
 </div>
+
+<ng-template #showAlertMsg>
+  <div class="modal-body text-center">
+    <p>You don't have any current plan, <br /> Please Choose Your First Plan</p>
+    <button type="button" class="btn btn-primary btn-sm" (click)="navigateToPricing()" >View plans</button>
+  </div>
+</ng-template>
+
+
+
 <div class="col-sm-5 mt-3 mr-0 float-right">
   <alert *ngIf="isOpen" [type]="alertType" [dismissible]="dismissible" (onClosed)="onClosed(alertMsg)">{{  alertMsg}}
   </alert>
