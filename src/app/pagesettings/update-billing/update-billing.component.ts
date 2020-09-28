@@ -17,9 +17,9 @@ import { notificationConfig } from 'src/app/_constant/notification.constant';
 export class UpdateBillingComponent implements OnInit {
   sessionId = '';
   billingDetails: any = {
-    billing_details: {},
-    billing_history: {},
-    company_details: {}
+    billing_details: null,
+    billing_history: null,
+    company_details: null
   };
   stripe = (window as any).Stripe(environment.stripePublishablekey);
   queryParams: any = {

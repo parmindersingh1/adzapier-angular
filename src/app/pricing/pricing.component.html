@@ -49,7 +49,7 @@
           <p class="tx-size-10 mg-b-30 ">{{plan.type}}</p>
 
           <button *ngIf="plan.plan && !currentPlan.amount; else upGradePlan" (click)="onSelectPlan(plan)" class="btn btn-primary btn-block">{{plan.button}}</button>
-          <button *ngIf="!plan.plan" (click)="onSelectPlan(plan)" class="btn btn-primary btn-block">{{plan.button}}</button>
+          <button *ngIf="!plan.plan" [disabled]="!plan.plan" (click)="onSelectPlan(plan)" class="btn btn-primary btn-block">{{plan.button}}</button>
           <ng-template #upGradePlan>
           <button *ngIf="plan.plan && currentPlan.amount > plan.price" [disabled]="currentPlan.amount > plan.price"  (click)="onUpgradePlan(plan)" class="btn btn-primary btn-block">{{plan.button}}</button>
           <button *ngIf="plan.plan && currentPlan.amount == plan.price" [disabled]="currentPlan.amount == plan.price"  (click)="onUpgradePlan(plan)" class="btn btn-primary btn-block">Current Plan</button>
@@ -99,7 +99,7 @@
       </table>
     </div>
   </div><!-- container -->
-   
+
   <div class="col-sm-5 mt-3 mr-0 float-right">
     <alert *ngIf="isOpen" [type]="alertType"  dismissOnTimeout="5000" [dismissible]="dismissible" (onClosed)="onClosed(alertMsg)">{{  alertMsg}}</alert>
   </div>
