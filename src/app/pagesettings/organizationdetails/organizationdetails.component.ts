@@ -105,6 +105,7 @@ export class OrganizationdetailsComponent implements OnInit {
     const strRegx = '.*\\S.*[a-zA-Z \-\']';
     // const alphaNumeric = '^(?![0-9]*$)[a-zA-Z0-9 ]+$';
     const alphaNumeric = '.*\\S.*[a-zA-z0-9 ]';
+    const phoneNumRegx = '^[0-9]*$'; // '^-?(0|[1-9]\d*)?$';
     this.organisationPropertyForm = this.formBuilder.group({
       propertyname: ['', [Validators.required, Validators.pattern(alphaNumeric)]],
       website: ['', [Validators.required, Validators.pattern(urlRegex)]],
@@ -123,7 +124,7 @@ export class OrganizationdetailsComponent implements OnInit {
       state: ['', [Validators.required, Validators.pattern(strRegx)]],
       zipcode: ['', [Validators.required, Validators.pattern(zipRegex)]],
       email: ['', [Validators.required]],
-      phone: ['', [Validators.required]]
+      phone: ['', [Validators.required, Validators.pattern(phoneNumRegx)]]
     });
   }
   get f() { return this.inviteUserOrgForm.controls; }

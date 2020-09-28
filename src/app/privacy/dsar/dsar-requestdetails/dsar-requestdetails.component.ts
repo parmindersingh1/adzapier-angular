@@ -145,6 +145,8 @@ export class DsarRequestdetailsComponent implements OnInit {
   showFileExtnerror: boolean = false;
   base64FileCode: any;
   filePreviewURL: any;
+  isEmailVerified = false;
+  isAttachmentExist: boolean;
   constructor(private activatedRoute: ActivatedRoute,
               private router: Router,
               private orgService: OrganizationService,
@@ -275,8 +277,10 @@ export class DsarRequestdetailsComponent implements OnInit {
         this.workflowId = data.response.workflow_id;
         this.reqAcceptingagent = data.response.req_accepting_agent;
         this.riskFactorText = data.response.risk_factor;
-        this.currentWorkflowStage = data.response.workflow_stage;
-        this.currentWorkflowStageID = data.response.workflow_stage_id;
+        this.currentWorkflowStage = data.response.workflow_stage || '';
+        this.currentWorkflowStageID = data.response.workflow_stage_id || '';
+        this.isEmailVerified = data.response.email_verified;
+        this.isAttachmentExist = this.isFileExist(data.response.upload_exist);
         this.getCustomFields(this.customFields);
         this.getWorkflowStages(this.workflowId);
         //        this.selectStageOnPageLoad(this.currentWorkflowStageID);
@@ -457,7 +461,7 @@ export class DsarRequestdetailsComponent implements OnInit {
           //   current_status: this.currentStageId,
           //   previous_status: this.previousStageId ? this.previousStageId : this.previousStageId = ''
           // }
-        //  console.log(reqObj, 'stage selection..');
+          //  console.log(reqObj, 'stage selection..');
           this.stageAPI(this.requestID, reqObj);
           // this.getSubTaskList();
         } else {
@@ -632,14 +636,14 @@ export class DsarRequestdetailsComponent implements OnInit {
   onSubmitEmailPost() {
     console.log(this.workflowStages[0], 'ns..');
     const requestObj = {
-      current_status: this.currentStageId || this.workflowStages[0].id,
+      current_status: this.currentWorkflowStageID || this.workflowStages[0].id, // this.currentStageId || this.workflowStages[0].id,
       email_body: this.quillEditorEmailText.get('editorEmailMessage').value,
       upload: this.quillEditorEmailText.get('emailAttachment').value
     };
     console.log(requestObj, 'state req..onSubmitActivityPost');
 
     const fd = new FormData();
-    fd.append('current_status', this.currentStageId || this.workflowStages[0].id);
+    fd.append('current_status', this.currentWorkflowStageID || this.workflowStages[0].id);
     fd.append('email_body', this.quillEditorEmailText.get('editorEmailMessage').value);
     fd.append('upload', this.quillEditorEmailText.get('emailAttachment').value);
 
@@ -682,7 +686,7 @@ export class DsarRequestdetailsComponent implements OnInit {
     const pagelimit = '?limit=' + this.paginationConfig.itemsPerPage + '&page=' + this.paginationConfig.currentPage;
     this.ccpaDataService.getCCPADataActivityLog(requestID, pagelimit).subscribe((data) => {
       this.activityLog = data.response;
-    })
+    });
   }
 
   loadEmailLog(requestID) {
@@ -780,7 +784,7 @@ export class DsarRequestdetailsComponent implements OnInit {
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
 
     }, (reason) => {
-    }); 
+    });
   }
 
   // onRiskfactorChange($event){
@@ -1157,13 +1161,37 @@ export class DsarRequestdetailsComponent implements OnInit {
 
 
   _base64ToArrayBuffer(testbase64) {
-    const binary_string = window.atob(testbase64);
-    const len = binary_string.length;
+    const binarystring = window.atob(testbase64);
+    const len = binarystring.length;
     const bytes = new Uint8Array(len);
     for (let i = 0; i < len; i++) {
-      bytes[i] = binary_string.charCodeAt(i);
+      bytes[i] = binarystring.charCodeAt(i);
     }
     return bytes.buffer;
+  }
+
+  isCustomFieldEmail(key, isEmailVerified): boolean {
+    return key === 'Email' && !isEmailVerified;
+  }
+
+  isEmailIDVerified(key, isEmailVerified): boolean {
+    return key === 'Email' && isEmailVerified;
+  }
+
+  isFileExist(uploadexist): boolean {
+    return uploadexist !== '';
+  }
+
+  verifyUserEmailID() {
+    this.dsarRequestService.verifyClientEmailID(this.requestID).subscribe((data) => {
+      this.alertMsg = data.response;
+      this.isOpen = true;
+      this.alertType = 'success';
+    }, (err) => {
+      this.alertMsg = 'error';
+      this.isOpen = true;
+      this.alertType = 'danger';
+    });
   }
 
 }

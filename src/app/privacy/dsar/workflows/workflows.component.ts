@@ -51,8 +51,10 @@ export class WorkflowsComponent implements OnInit {
 
   // to retrive all and show only active workflow in dropdown  
   loadWorkflowList() {
-    this.workflowService.getWorkflow().subscribe((data) => {
-      this.workflowList = data;
+    const pagelimit = '?limit=' + this.paginationConfig.itemsPerPage + '&page=' + this.paginationConfig.currentPage;
+    this.workflowService.getWorkflow(pagelimit).subscribe((data) => {
+      this.workflowList = data.response;
+      this.paginationConfig.totalItems = data.count;
     });
   }
 
@@ -144,20 +146,20 @@ export class WorkflowsComponent implements OnInit {
     this.paginationConfig.itemsPerPage = Number(event.target.value);
     const pagelimit = '?limit=' + this.paginationConfig.itemsPerPage + '&page=' + this.paginationConfig.currentPage;
     this.workflowService.getWorkflow(pagelimit).subscribe((data) => {
-      this.paginationConfig.totalItems = data.length;
-      this.workflowList = data;
+      this.paginationConfig.totalItems = data.count;
+      this.workflowList = data.response;
       //return this.workflowList;
     });
   }
 
   propertyPageChangeEvent(event) {
-  //  this.loadWorkflowListByEvent(event);
+    //  this.loadWorkflowListByEvent(event);
     this.paginationConfig.currentPage = event;
     const pagelimit = '?limit=' + this.paginationConfig.itemsPerPage + '&page=' + this.paginationConfig.currentPage;
     this.workflowService.getWorkflow(pagelimit).subscribe((data) => {
-      this.paginationConfig.totalItems = data.length;
-      this.workflowList = data;
-     // return this.workflowList;
+      this.paginationConfig.totalItems = data.count;
+      this.workflowList = data.response;
+      // return this.workflowList;
     });
   }
 
@@ -169,8 +171,8 @@ export class WorkflowsComponent implements OnInit {
   onCancelClick(){
     this.submitted = false;
     this.createWorkFlowForm.reset();
-    this.modalService.dismissAll('Canceled');   
-  }  
+    this.modalService.dismissAll('Canceled');
+  }
 
   onClosed(dismissedAlert: any): void {
     this.alertMsg = !dismissedAlert;

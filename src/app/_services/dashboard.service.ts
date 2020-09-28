@@ -29,7 +29,10 @@ export class DashboardService {
   getOtpOutActivity(propId) {
     return this.http.get(environment.apiUrl  + '/optoutactivitydashboard/' + propId);
   }
-  getConsentDetails(propId) {
-    return this.http.get(environment.apiUrl  + '/consentdetailsdashboard/' + propId);
+  getConsentDetails(propId, params) {
+    return this.http.get(environment.apiUrl  + '/consentdetailsdashboard/' + propId, {params: params});
+  }
+  getCookieConsentCountry(propId: any, params: any) {
+    return this.http.get(environment.apiUrl  + '/consentcountrylist/' + propId, {params: params});
   }
 }

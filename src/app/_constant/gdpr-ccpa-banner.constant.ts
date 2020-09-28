@@ -81,6 +81,7 @@ export const BannerConstant = {
       // BannerPreferenceButtonTextColor: '#ffffff',
       // BannerPreferenceButtonBackgroundColor: '#fdfddf',
       BannerAllowAllButtonTextContent: 'Accept All',
+      BannerAllowRequiredButtonTextContent: 'Allow Required',
       // BannerAllowAllButtonTextColor: '#000000',
       // BannerAllowAllButtonBackgroundColor: '#1990ff',
       BannerDisableAllButtonTextContent: 'Do not sell My Data',

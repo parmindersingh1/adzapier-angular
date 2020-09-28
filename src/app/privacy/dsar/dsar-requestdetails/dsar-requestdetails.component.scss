@@ -285,7 +285,7 @@ ul.nav-tabs > li:last-child > div > a::after {
     width: 100%;
     align-items: baseline;
     justify-items: baseline;
-    padding: 10px 10px;
+    padding: 10px 10px 0 10px;
     background: #f8f9fc;
  }
 
@@ -301,9 +301,9 @@ ul.nav-tabs > li:last-child > div > a::after {
     font-size: 13px;
  }
 
- .userfeedback > p {
-    margin: 0 !important;
- }
+ ::ng-deep .userfeedback  p {
+    margin: 0;
+ } 
 
  .userfeedback > p.ql-align-justify {
     margin: 0 !important;
@@ -633,4 +633,29 @@ ul.ngx-pagination {
   .email-lbl {
     width: 110px;
     margin: 10px 0 10px 0px;
+  }
+
+  .show {
+      display:inline-flex;
+  }
+
+  .hide {
+      display: none;
+  }
+
+  .badge-danger {
+      cursor: pointer;
+  }
+
+  .feather-tick {
+    height:16px;
+    width: 16px;
+  }
+
+  .customdata > label > .badge-success {
+      display:inline-flex;
+      text-transform: capitalize;
+      align-items: center;
+      padding: 0px 5px 0px 3px;
+      border: 1px solid #58b85b;
   }

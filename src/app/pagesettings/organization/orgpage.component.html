@@ -186,7 +186,8 @@
                             name="zipcodenum" [ngClass]="{ 'is-invalid': submitted && editOrg.zipcodenum.errors }" />
                         <div *ngIf="submitted && editOrg.zipcodenum.errors" class="invalid-feedback">
                             <div *ngIf="editOrg.zipcodenum.errors.required">Zipcode is required</div>
-                            <div *ngIf="editOrg.zipcodenum.errors.minlength">Zipcode must be at least 6 characters long.</div>
+                            <div *ngIf="editOrg.zipcodenum.errors">Zipcode is number</div>
+                            <div *ngIf="editOrg.zipcodenum.errors.pattern">Zipcode must be at least 5 characters long.</div>
                         </div>
                     </div>
                 </div>
@@ -207,6 +208,7 @@
                         name="phone" [ngClass]="{ 'is-invalid': submitted && editOrg.phone.errors }" />
                         <div *ngIf="submitted && editOrg.phone.errors" class="invalid-feedback">
                             <div *ngIf="editOrg.phone.errors.required">Phone is required</div>
+                            <div *ngIf="editOrg.phone.errors.pattern">Enter valid phone number</div>
                         </div>
                     </div>
                 </div>

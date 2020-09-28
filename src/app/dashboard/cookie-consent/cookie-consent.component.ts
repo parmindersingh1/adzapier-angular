@@ -32,11 +32,14 @@ export class CookieConsentComponent implements OnInit {
   alertType: any;
   dismissible = true;
   isOpen = false;
+  countryList = [];
   currrentManagedPropID: any;
   dashboardCount: CookieCount = new CookieCount();
   optIn = new Opt();
   optOut = new Opt();
+  consentDetails = [];
   percentDashboardCount: CookieCount = new CookieCount();
+   currentCountry: any;
   constructor(private dashboardService: DashboardService,
               private orgservice: OrganizationService,
               private notification: NotificationsService,
@@ -49,6 +52,7 @@ export class CookieConsentComponent implements OnInit {
     this.onGetDashboardData();
     this.onGetOptInActivity();
     this.onGetOptOutActivity();
+    this.onGetCountryList();
     this.onConsentDetails();
   }
 
@@ -123,12 +127,34 @@ export class CookieConsentComponent implements OnInit {
       })
   }
 
+  onSelectCountry(event) {
+    this.currentCountry = event.target.value;
+    this.onConsentDetails();
+  }
+  onGetCountryList() {
+  this.loading.start('f6');
+  const params = null;
+  this.dashboardService.getCookieConsentCountry(this.currrentManagedPropID, params)
+    .subscribe((res: any) => {
+      this.loading.stop('f6');
+      if (res) {
+        this.countryList = res.response;
+      }
+    }, error => {
+      this.loading.stop('f6');
+    });
+  }
   onConsentDetails() {
     this.loading.start('f3');
-    this.dashboardService.getConsentDetails(this.currrentManagedPropID)
-      .subscribe(res => {
+    const params = {
+      country:  this.currentCountry
+    };
+    this.dashboardService.getConsentDetails(this.currrentManagedPropID, params)
+      .subscribe((res: any) => {
         this.loading.stop('f3');
-
+        if (res) {
+          this.consentDetails = res.response;
+        }
       }, error => {
         this.loading.stop('f3');
       })
