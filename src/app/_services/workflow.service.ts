@@ -20,13 +20,13 @@ export class WorkflowService {
     const pgLimit = pageLimit !== undefined ? pageLimit : '';
     if (pageLimit === '') {
     //  if (!this.workflowlist$) {
-        return this.httpClient.get<any>(environment.apiUrl + '/workflow').pipe(map(res => res[key]), shareReplay(1));
+        return this.httpClient.get<any>(environment.apiUrl + '/workflow').pipe(shareReplay(1)); // map(res => res[key])
      // }
      // return this.workflowlist$;
     } else {
      // if (!this.workflowlist$) {
        return this.httpClient.get<any>(environment.apiUrl + '/workflow' + pgLimit)
-        .pipe(map(res => res[key]), shareReplay(1));
+        .pipe(shareReplay(1)); // map(res => res[key]),
     //  }
     //  return this.workflowlist$;
     }

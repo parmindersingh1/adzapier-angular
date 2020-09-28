@@ -216,7 +216,12 @@ export class HeaderComponent implements OnInit {
     this.selectedOrgProperties.push(obj);
     this.orgservice.setCurrentOrgWithProperty(obj);
     this.currentSelectedProperty();
-    this.router.navigate([this.router.url]);
+    if (this.router.url.indexOf('privacy/dsar/dsar-requests-details') !== -1) {
+      this.router.navigate(['/privacy/dsar/dsar-requests']);
+    } else {
+      this.router.navigate([this.router.url]);
+    }
+
   }
 
   isPropSelected(selectedItem): boolean {
@@ -384,7 +389,11 @@ export class HeaderComponent implements OnInit {
     }
   }
 
-  goto(link) {
-   this.router.navigate([link]);
+  goto(link: any, id?: any) {
+    if (id !== undefined) {
+      this.router.navigate([link, id]);
+    } else {
+      this.router.navigate([link]);
+    }
   }
 }
