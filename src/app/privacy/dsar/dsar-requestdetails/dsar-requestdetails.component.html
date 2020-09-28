@@ -149,12 +149,27 @@
                         </div>
                         <div *ngFor="let data of getCustomFields(customFields) | keyvalue; let i = index">
                             <div class="customdata">
-                                <label class="tx-sans">{{data.key}} </label>
+                                <label class="tx-sans">{{data.key}} 
+                                    <span class="badge" (click)="verifyUserEmailID()"
+                                    [ngClass]="{'badge-danger':isCustomFieldEmail(data.key,isEmailVerified),'hide':!isCustomFieldEmail(data.key,isEmailVerified)}">
+                                    Click to Verify</span> 
+                                    <span class="badge" [ngClass]="{'badge-success':isEmailIDVerified(data.key,isEmailVerified),'hide':!isEmailIDVerified(data.key,isEmailVerified)}">
+                                         <i-feather class="feather-tick" name="check"></i-feather> Verified
+                                    </span>
+                                </label>
                                 <p class="mg-b-0">{{data.value}}</p>
                             </div>
-                            <div *ngIf="i==getCustomFields(customFields).length" class="col-sm-2 customdata downloadFile">
-                                <label class="tx-sans"> Attachments </label>
-                                <p><i-feather class="feather-file" name="file"></i-feather>
+                            <ng-template #elseEmailverified>
+                                <div class="customdata">
+                                    <label class="tx-sans">{{data.key}}</label>
+                                    <p class="mg-b-0">{{data.value}} </p>
+                                </div>
+                            </ng-template>
+                            <div *ngIf="i==getCustomFields(customFields).length"
+                                class="col-sm-2 customdata downloadFile">
+                                <label class="tx-sans"> Attachments isAttachmentExist |{{isAttachmentExist}}</label>
+                                <p [ngClass]="{'show':!isAttachmentExist,'hide':isAttachmentExist}">
+                                    <i-feather class="feather-file" name="file"></i-feather>
                                     <a (click)="viewFile()" style="cursor: pointer;">View File</a>
                                 </p>
                             </div>
@@ -201,7 +216,8 @@
                                 </quill-editor>
                                 <div *ngIf="isActivitysubmitted && addActivity.editor?.errors"
                                     class="invalid-feedback float-left col-5">
-                                    <div *ngIf="addActivity.editor?.errors.required">Activity can not be empty, add your post.</div>
+                                    <div *ngIf="addActivity.editor?.errors.required">Activity can not be empty, add your
+                                        post.</div>
                                 </div>
                                 <button type="submit" class="btn btn-xs btn-primary float-right mb-2 mt-2">Post</button>
                             </form>
@@ -234,17 +250,17 @@
                                 </quill-editor>
                                 <div class="email-attachment-wrapper">
                                     <label class="email-lbl">Attach file</label>
-                                <div class="input-group">
-                                    <div class="custom-file">
-                                        <input type="file" class="custom-file-input" (change)="uploadFile($event,'email')"
-                                            id="emailAttachment">
-                                        <label class="custom-file-label"
-                                            for="inputGroupFile01">{{uploadFilename?uploadFilename:'Choose file'}}</label>
-                                    </div>            
+                                    <div class="input-group">
+                                        <div class="custom-file">
+                                            <input type="file" class="custom-file-input"
+                                                (change)="uploadFile($event,'email')" id="emailAttachment">
+                                            <label class="custom-file-label"
+                                                for="inputGroupFile01">{{uploadFilename?uploadFilename:'Choose file'}}</label>
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="btn btn-xs btn-primary float-right mb-2 mt-2">Post
+                                    </button>
                                 </div>
-                                <button type="submit" class="btn btn-xs btn-primary float-right mb-2 mt-2">Post
-                                </button>
-                                </div>                               
                             </form>
                         </ng-template>
                     </li>
@@ -319,7 +335,6 @@
                 <div class="activity" *ngIf="isActivityLogOpen">
                     <ul>
                         <li *ngFor="let data of activityLog; let i = index;">
-
                             <div class="activity-log">
 
                                 <div class="chat-group-divider">
@@ -336,14 +351,14 @@
                                                 class="avatar-initial rounded-circle">{{nameInitials(data.user_firstname,data.user_lastname)}}</span>
                                         </div>
                                         <div class="media-body">
-                                            <p class="feedback">
+                                            <p class="feedback" *ngIf="data.activity_feedback">
                                                 <strong> {{data.user_firstname}} {{data.user_lastname}}</strong>
                                                 posted feedback at <small class="lightgray">
                                                     {{data.created_at | date:'mediumTime'}}</small>
                                             </p>
                                             <div class="userfeedback" [innerHTML]="data.activity_feedback">
                                             </div>
-                                            <p class="feedback">
+                                            <p class="feedback" *ngIf="data.previous_status && data.activity_feedback === ''">
                                                 <strong>{{data.user_firstname}} {{data.user_lastname}}
                                                 </strong>chagne status from
                                                 <strong>{{data.previous_status}}</strong> to
@@ -359,10 +374,10 @@
                                 </div>
 
                             </div>
-                            
+
                         </li>
                     </ul>
-                    
+
                 </div>
                 <!--email log-->
                 <div class="activity" *ngIf="isEmailLogOpen">
@@ -609,8 +624,7 @@
                     <div class="form-check">
                         <label for="issubtaskrequired"
                             class="form-check-label tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">
-                            <input type="checkbox" class="form-check-input" formControlName="issubtaskrequired"
-                                required />
+                            <input type="checkbox" class="form-check-input" formControlName="issubtaskrequired" />
                             <span>Is Required</span>
                         </label>
                     </div>
@@ -738,7 +752,7 @@
                     <div *ngIf="showFileExtnerror" class="color-red tx-12 mt-2">
                         Only pdf, jpg, txt, doc, docx file area allowed.
                     </div>
-                    
+
 
                 </div>
             </div>
@@ -754,16 +768,15 @@
 
 <div *ngIf="isOpen" class="col-sm-5 mr-0 float-right flotingdiv">
     <!-- dismissOnTimeout="5000"-->
-    <alert *ngIf="isOpen" [type]="alertType" [dismissible]="dismissible" (onClosed)="onClosed(alertMsg)">{{alertMsg}}
+    <alert *ngIf="isOpen" [type]="alertType" dismissOnTimeout="10000" [dismissible]="dismissible" (onClosed)="onClosed(alertMsg)">{{alertMsg}}
     </alert>
 </div>
 
 <ng-template #previewFile>
-    
     <div class="modal-body">
         <button type="button" class="close" aria-label="Close" (click)="onCancelFilePreview()">
             <span aria-hidden="true">&times;</span>
         </button>
         <iframe #filePreview name="iframeFilepreview" style="height:200px;width:300px"></iframe>
     </div>
-  </ng-template>
+</ng-template>

@@ -811,7 +811,15 @@
                                 <span class="pad-right-20"> Enable File upload</span>
                             </label>
                         </div>
-
+                        <div class="form-group mg-b-5">
+                            <label for="fileupload"
+                                class="form-check-label tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03"
+                                class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">
+                                <input type="checkbox" [checked]="isEmailVerificationRequired" class="form-check-input"
+                                    (click)="allowEmailVerification($event)" />
+                                <span class="pad-right-20"> Enable Email Verificatioin</span>
+                            </label>
+                        </div>
                     </div>
                     <!-- <div class="form-group mg-b-5"><a target="_blank" *ngIf="crid" class="btn btn-secondary sw-btn-prev"
                         [routerLink]="['/editwebforms',  crid ]">Local Preview</a></div> -->

@@ -4,7 +4,7 @@ import { OrganizationService, UserService } from 'src/app/_services';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
-import {NgxUiLoaderService} from 'ngx-ui-loader';
+import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { CompanyService } from 'src/app/company.service';
 
 @Component({
@@ -40,14 +40,14 @@ export class OrgpageComponent implements OnInit {
   myContext;
   showOrgDetails: boolean = false;
   isEditProperty: boolean;
-  p: number = 1; 
+  p: number = 1;
   pageSize: any = 5;
   totalCount: any;
   paginationConfig = { itemsPerPage: this.pageSize, currentPage: this.p, totalItems: this.totalCount };
   selectedOrganization: any = [];
   searchText;
   ascNumberSort: any;
-  
+
   isControlDisabled: boolean;
   alertMsg: any;
   alertType: any;
@@ -61,16 +61,17 @@ export class OrgpageComponent implements OnInit {
               private userService: UserService,
               private companyService: CompanyService,
               private router: Router,
-              private loading: NgxUiLoaderService,
+              private loading: NgxUiLoaderService
   ) { }
 
   ngOnInit() {
     this.isEditable = false;
     this.isEditProperty = false;
     const urlRegex = '(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?';
-    const zipRegex = '^[0-9]*$'; //'^[0-9]{6}(?:-[0-9]{4})?$';
+    const zipRegex = '^[0-9]{5,20}$'; // '^[0-9]*$'; //'^[0-9]{6}(?:-[0-9]{4})?$';
     const strRegx = '^[a-zA-Z \-\']+';
     const alphaNumeric = '^(?![0-9]*$)[a-zA-Z0-9 ]+$';
+    const phoneNumRegx = '^[0-9]*$'; // '^-?(0|[1-9]\d*)?$';
     this.organisationPropertyForm = this.formBuilder.group({
       propertyname: ['', [Validators.required, Validators.pattern(alphaNumeric)]],
       website: ['', [Validators.required, Validators.pattern(urlRegex)]],
@@ -85,7 +86,7 @@ export class OrgpageComponent implements OnInit {
       statename: ['', [Validators.required, Validators.pattern(strRegx)]],
       zipcodenum: ['', [Validators.required, Validators.pattern(zipRegex)]],
       email: ['', [Validators.required]],
-      phone: ['', [Validators.required]],
+      phone: ['', [Validators.required, Validators.pattern(phoneNumRegx)]]
     });
     this.loadOrganizationList();
 
@@ -101,7 +102,7 @@ export class OrgpageComponent implements OnInit {
   }
 
   loadOrganizationList() {
-   // this.paginationConfig.currentPage = event;
+    // this.paginationConfig.currentPage = event;
     const pagelimit = '?limit=' + this.paginationConfig.itemsPerPage + '&page=' + this.paginationConfig.currentPage;
     this.loading.start();
     this.orgservice.orglist(pagelimit).subscribe((data) => {
@@ -110,7 +111,7 @@ export class OrgpageComponent implements OnInit {
       this.orgList = data[key];
       this.paginationConfig.totalItems = data.count;
       return this.orgList;
-    },(error)=>{
+    }, (error) => {
       this.alertMsg = error;
       this.isOpen = true;
       this.alertType = 'danger';
@@ -145,7 +146,7 @@ export class OrgpageComponent implements OnInit {
       return false;
     } else {
       const addObj = {
-        orgname: this.editOrganisationForm.value.organizationname,
+        orgname: this.capitalizeFirstLetter(this.editOrganisationForm.value.organizationname),
         taxID: this.editOrganisationForm.value.taxidnumber,
         address1: this.editOrganisationForm.value.addressone,
         address2: this.editOrganisationForm.value.addresstwo,
@@ -161,9 +162,9 @@ export class OrgpageComponent implements OnInit {
         if (res) {
           this.orgservice.emitUpdatedOrganization.emit(res);
           this.orgservice.setCurrentOrgWithProperty(res);
-         // this.orgservice.changeCurrentSelectedProperty(res);
+          // this.orgservice.changeCurrentSelectedProperty(res);
           this.viewOrganization(res.response.id);
-        //  alert('Organization Added successfully!');
+          //  alert('Organization Added successfully!');
           this.alertMsg = 'Organization Added successfully!';
           this.isOpen = true;
           this.alertType = 'success';
@@ -180,9 +181,9 @@ export class OrgpageComponent implements OnInit {
         this.isOpen = true;
         this.alertType = 'danger';
       });
-    
+
     }
-    
+
   }
 
   open(content, data) {
@@ -209,7 +210,7 @@ export class OrgpageComponent implements OnInit {
   }
 
   getPropertyList(id): any {
-   // this.isOpen = !this.isOpen;
+    // this.isOpen = !this.isOpen;
     this.orgservice.getPropertyList(id).subscribe((data) => {
       this.orgservice.emitUpdatedOrgList.emit(data.response);
       if (!data.response) {
@@ -219,7 +220,7 @@ export class OrgpageComponent implements OnInit {
       }
 
       return this.propertyList = data.response;
-    },(error)=>{
+    }, (error) => {
       this.alertMsg = error;
       this.isOpen = true;
       this.alertType = 'danger';
@@ -322,7 +323,7 @@ export class OrgpageComponent implements OnInit {
         this.isOpen = true;
         this.alertType = 'success';
         this.loadOrganizationList();
-        
+
       }
     }, (err) => {
       this.loading.stop();
@@ -331,28 +332,32 @@ export class OrgpageComponent implements OnInit {
       this.alertType = 'danger';
     });
   }
-  
-	onChangeEvent(event) {
-		this.paginationConfig.itemsPerPage = Number(event.target.value);
+
+  onChangeEvent(event) {
+    this.paginationConfig.itemsPerPage = Number(event.target.value);
   }
-  
+
   viewOrganization(orgID) {
     this.router.navigate(['settings/organizations/organizationdetails', orgID]);
   }
 
   sortNumberColumn() {
     this.ascNumberSort = !this.ascNumberSort;
-    if(this.ascNumberSort) {
-        this.orgList.sort((a, b) => a - b); // For ascending sort
+    if (this.ascNumberSort) {
+      this.orgList.sort((a, b) => a - b); // For ascending sort
     } else {
-        this.orgList.sort((a, b) => b - a); // For descending sort
+      this.orgList.sort((a, b) => b - a); // For descending sort
     }
-}
+  }
 
-onClosed(dismissedAlert: any): void {
-  this.alertMsg = !dismissedAlert;
-  this.isOpen = false;
-}
+  capitalizeFirstLetter(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  }
+
+  onClosed(dismissedAlert: any): void {
+    this.alertMsg = !dismissedAlert;
+    this.isOpen = false;
+  }
 
 
 }
