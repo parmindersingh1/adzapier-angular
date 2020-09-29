@@ -403,6 +403,7 @@
                             name="phone" [ngClass]="{ 'is-invalid': submitted && editOrg.phone.errors }" />
                             <div *ngIf="submitted && editOrg.phone.errors" class="invalid-feedback">
                                 <div *ngIf="editOrg.phone.errors.required">Phone is required</div>
+                                <div *ngIf="editOrg.phone.errors.pattern">Enter valid phone number</div>
                             </div>
                         </div>
                     </div>

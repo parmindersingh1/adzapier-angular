@@ -80,4 +80,7 @@ export class DsarRequestService {
     .pipe(map((res) => res[key]), shareReplay(1));
   }
 
+  verifyClientEmailID(requestID) {
+    return this.http.post<any>(environment.apiUrl + '/dsar/email/verify/' + requestID, {});
+  }
 }

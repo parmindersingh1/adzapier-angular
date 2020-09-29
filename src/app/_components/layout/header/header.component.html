@@ -63,7 +63,7 @@
      <!--(orgPropertyMenu | async).response-->
       <ul *dropdownMenu class="dropdown-menu propMenu">
           <li role="menuitem" *ngFor="let item of orgPropertyMenu; first as isFirst; let i = index;">
-            <a class="dropdown-item"  routerLink="settings/organizations/organizationdetails/{{item.id}}">
+            <a class="dropdown-item"  (click)="goto('settings/organizations/organizationdetails',item.id)">
              <span [ngClass]="[isOrgSelected(item) ? 'active' : '']">{{item.orgname}}</span>
              <span class="align-right"><i-feather class="feather-plus" name="plus"></i-feather></span>
             </a>

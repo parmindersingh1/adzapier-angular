@@ -174,6 +174,7 @@ export class DsarformComponent implements OnInit, OnDestroy, AfterViewInit {
   showFilesizeerror: boolean = false;
   showFileExtnerror: boolean = false;
   isFileUploadRequired: boolean = false;
+  isEmailVerificationRequired: boolean = false;
   imgUrl: string;
 
   imageToShow: any;
@@ -278,7 +279,6 @@ export class DsarformComponent implements OnInit, OnDestroy, AfterViewInit {
             this.webFormControlList = this.selectedwebFormControlList;
           }
 
-          console.log(this.webFormControlList, 'crid..webFormControlList..');
           this.webFormControlList.filter((t) => {
             if (t.controlId === 'footertext') {
               this.footerText = t.footerText;
@@ -297,9 +297,7 @@ export class DsarformComponent implements OnInit, OnDestroy, AfterViewInit {
           });
           // this.ccpaFormConfigService.removeControls();
           this.ccpaFormConfigService.setFormControlList(this.webFormControlList);
-          // this.webFormControlList;
 
-          //  console.log(this.defaultapprover, 'defaultapprover..');
         } else {
           // const retrivedData = this.ccpaFormConfigService.getCurrentSelectedFormData();
           // this.selectedApproverID = retrivedData.approver;
@@ -968,7 +966,8 @@ export class DsarformComponent implements OnInit, OnDestroy, AfterViewInit {
         settings: {
           approver: this.defaultapprover,
           workflow: this.workflow,
-          days_left: Number(this.daysleft)
+          days_left: Number(this.daysleft),
+          email_verified: this.isEmailVerificationRequired
         },
         request_form: this.webFormControlList
       };
@@ -1165,7 +1164,7 @@ export class DsarformComponent implements OnInit, OnDestroy, AfterViewInit {
 
   loadWorkFlowList() {
     this.workFlowService.getWorkflow().subscribe((data) => {
-      this.workFlowList = data;
+      this.workFlowList = data.response;
       const filterValue = this.workFlowList.filter((t) => t.id === this.selectedWorkflowID);
       if (filterValue.length > 0) {
         this.workflow = filterValue[0].id;
@@ -1262,6 +1261,10 @@ export class DsarformComponent implements OnInit, OnDestroy, AfterViewInit {
       this.webFormControlList = this.dsarFormService.getFormControlList();
       this.rearrangeFormSequence(this.webFormControlList);
     }
+  }
+
+  allowEmailVerification(event) {
+    this.isEmailVerificationRequired = event.target.checked;
   }
 
   loadCaptcha() {
