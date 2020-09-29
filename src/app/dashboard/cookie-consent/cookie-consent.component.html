@@ -12,10 +12,10 @@
     </div>
     <div class="d-none d-md-block">
       <div class="d-flex flex-column flex-sm-row mg-t-20 mg-md-t-0">
-        <button class="btn btn-sm btn-white btn-uppercase pd-x-15"><i data-feather="download" class="mg-r-5"></i> Export
-          CSV
-        </button>
-        <button class="btn btn-sm btn-white btn-uppercase pd-x-15 mg-t-5 mg-sm-t-0  mg-sm-l-5"><i data-feather="eye"
+<!--        <button class="btn btn-sm btn-white btn-uppercase pd-x-15"><i data-feather="download" class="mg-r-5"></i> Export-->
+<!--          CSV-->
+<!--        </button>-->
+        <button (click)="onRefreshAll()" class="btn btn-sm btn-white btn-uppercase pd-x-15 mg-t-5 mg-sm-t-0  mg-sm-l-5"><i data-feather="eye"
                                                                                                   class="mg-r-5"></i>
           Refresh
         </button>
@@ -27,13 +27,6 @@
   <div class="card mg-b-10">
     <div class="card-body">
       <div class="row row-sm">
-        <!--
-                                bd-success =Accept All
-                                bd-primary = Save Settings
-                                bd-warning = Reject ALL
-                                bd-pink = Close
-                                bd-teal = CCPA
-                                bd-purple = Other -->
 
         <div class="col-4 col-sm-2 col-md-2 ">
           <h4 class="tx-normal tx-rubik mg-b-10">{{dashboardCount.totalConsent}}</h4>
@@ -92,103 +85,6 @@
     </div>
   </div>
 
-
-  <div class="row pd-b-10">
-    <!-- <div class="col col-lg-12 col-xl-12 mg-t-1">
-        <div class="card card-body">
-        <div class="d-flex align-items-center justify-content-between ">
-            <div class="media">
-
-              <div class="media-body">
-                <h6 class="tx-sans tx-uppercase tx-10 tx-spacing-1 tx-color-03 tx-semibold tx-nowrap mg-b-5 mg-md-b-8">Visitors</h6>
-                <h4 class="tx-20 tx-sm-18 tx-md-24 tx-normal tx-rubik mg-b-0">1,000,104</h4>
-              </div>
-            </div>
-            <div class="media mg-t-20 mg-sm-t-0 mg-sm-l-15 mg-md-l-40">
-
-              <div class="media-body">
-                <h6 class="tx-sans tx-uppercase tx-10 tx-spacing-1 tx-color-03 tx-semibold mg-b-5 mg-md-b-8">Accept ALL</h6>
-                <h4 class="tx-20 tx-sm-18 tx-md-24 tx-normal tx-rubik mg-b-0">234,769</h4>
-              </div>
-            </div>
-            <div class="media mg-t-20 mg-sm-t-0 mg-sm-l-15 mg-md-l-40">
-
-              <div class="media-body">
-                <h6 class="tx-sans tx-uppercase tx-10 tx-spacing-1 tx-color-03 tx-semibold mg-b-5 mg-md-b-8">Save Settigns</h6>
-                <h4 class="tx-20 tx-sm-18 tx-md-24 tx-normal tx-rubik mg-b-0">1,608,469</small></h4>
-              </div>
-            </div>
-
-            <div class="media mg-t-20 mg-sm-t-0 mg-sm-l-15 mg-md-l-40">
-
-                <div class="media-body">
-                  <h6 class="tx-sans tx-uppercase tx-10 tx-spacing-1 tx-color-03 tx-semibold mg-b-5 mg-md-b-8">Close</h6>
-                  <h4 class="tx-20 tx-sm-18 tx-md-24 tx-normal tx-rubik mg-b-0">1,608,469</small></h4>
-                </div>
-              </div>
-
-          </div>
-        </div>
-    </div> -->
-
-    <!-- <div class="col-sm-2 col-lg-2">
-        <div class="card card-body">
-            <h6 class="tx-uppercase tx-11 tx-spacing-1 tx-color-02 tx-semibold mg-b-8">Unique Visitors
-            </h6>
-            <div class="d-flex d-lg-block d-xl-flex align-items-end">
-                <h3 class="tx-normal tx-rubik mg-b-0 mg-r-5 lh-1">20,000</h3>
-
-            </div>
-        </div>
-    </div>
-
-    <div class="col-sm-2 col-lg-2">
-        <div class="card card-body">
-            <h6 class="tx-uppercase tx-11 tx-spacing-1 tx-color-02 tx-semibold mg-b-8">Accept ALL
-            </h6>
-            <div class="d-flex d-lg-block d-xl-flex align-items-end">
-                <h3 class="tx-medium tx-success mg-b-0 mg-r-5 lh-1">5,000</h3>
-
-            </div>
-        </div>
-    </div>
-
-    <div class="col-sm-2 col-lg-2">
-        <div class="card card-body">
-            <h6 class="tx-uppercase tx-11 tx-spacing-1 tx-color-02 tx-semibold mg-b-8">Save Settings
-            </h6>
-            <div class="d-flex d-lg-block d-xl-flex align-items-end">
-                <h3 class="tx-normal tx-rubik mg-b-0 mg-r-5 lh-1">5,000</h3>
-
-            </div>
-        </div>
-    </div>
-
-    <div class="col-sm-2 col-lg-2">
-        <div class="card card-body">
-            <h6 class="tx-uppercase tx-11 tx-spacing-1 tx-color-02 tx-semibold mg-b-8">Accept ALL
-            </h6>
-            <div class="d-flex d-lg-block d-xl-flex align-items-end">
-                <h3 class="tx-normal tx-rubik mg-b-0 mg-r-5 lh-1">5,000</h3>
-
-            </div>
-        </div>
-    </div>
-    <div class="col-sm-2 col-lg-2">
-        <div class="card card-body">
-            <h6 class="tx-uppercase tx-11 tx-spacing-1 tx-color-02 tx-semibold mg-b-8">Close
-            </h6>
-            <div class="d-flex d-lg-block d-xl-flex align-items-end">
-                <h3 class="tx-normal tx-rubik mg-b-0 mg-r-5 lh-1">5,000</h3>
-
-            </div>
-        </div>
-    </div> -->
-
-
-  </div>
-
-
   <div class="row row-xs">
 
 
@@ -196,26 +92,19 @@
       <div class="card ">
         <div class="card-header d-flex align-items-center justify-content-between">
           <h6 class="mg-b-0">Request By State</h6>
-          <!-- <div class="tx-13 d-flex align-items-center">
-        <span class="mg-r-5">Country:</span> <a href="" class="d-flex align-items-center link-03 lh-0">USA <i
-            class="icon ion-ios-arrow-down mg-l-5"></i></a>
-      </div> -->
           <div class="dropdown">
-            <a class=" dropdown-toggle" href="#" role="button" id="mapdropdownMenuLink"
-               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Country: <span id="mapSelection">USA</span>
-            </a>
-            <div class="dropdown-menu" aria-labelledby="mapdropdownMenuLink">
-              <a class="dropdown-item" data-name="USA">USA</a>
-              <a class="dropdown-item" data-name="World">World</a>
-            </div>
+            <select (change)="onSelectCountryMap($event)" class="form-control" id="sel1">
+              <option value="usa">USA</option>
+              <option value="world">World</option>
+            </select>
           </div>
 
 
         </div><!-- card-header -->
         <div class="card-body ">
           <div class="pd-y-25 pd-x-20">
-            <div id="vmapUSA" class="ht-200"></div>
+            <div id="vmap" *ngIf="currentCountryMap === 'usa'" class="ht-200"></div>
+            <div id="worldMap" *ngIf="currentCountryMap !== 'usa'" class="ht-200"></div>
           </div>
           <!-- <div class="table-responsive">
               <table class="table table-borderless table-dashboard table-dashboard-one">

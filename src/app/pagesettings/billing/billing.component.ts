@@ -17,7 +17,7 @@ export class BillingComponent implements OnInit {
   isError = false;
   @ViewChild('showAlertMsg', { static: false}) showAlertMsg;
   modalRef: BsModalRef;
-
+  confirmModal: BsModalRef;
   billingDetails: any = {
     billing_details: {},
     billing_history: {},
@@ -108,4 +108,34 @@ export class BillingComponent implements OnInit {
     this.isOpen = false;
   }
 
+  onCancelPlan() {
+    this.loading.start();
+    this.billingService.cancelPlan()
+      .subscribe( (res: any) => {
+        this.loading.stop();
+        if (res) {
+          this.isOpen = true;
+          this.alertMsg = res.response;
+          this.alertType = 'info';
+        }
+      }, error => {
+        this.loading.stop();
+        this.isOpen = true;
+        this.alertMsg = error;
+        this.alertType = 'danger';
+      });
+  }
+
+  openConfimModal(template: TemplateRef<any>) {
+    this.confirmModal = this.modalService.show(template, {class: 'modal-sm',  animated: false,    keyboard: false,     ignoreBackdropClick: true});
+  }
+
+  confirm(): void {
+    this.onCancelPlan();
+    this.confirmModal.hide();
+  }
+
+  decline(): void {
+    this.confirmModal.hide();
+  }
 }

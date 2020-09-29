@@ -35,4 +35,9 @@ export class DashboardService {
   getCookieConsentCountry(propId: any, params: any) {
     return this.http.get(environment.apiUrl  + '/consentcountrylist/' + propId, {params: params});
   }
+
+  getMapDataForConsentDashboard(propId, params) {
+    const path = '/consentmaplist/';
+    return this.http.get(environment.apiUrl  + path + propId, {params: params});
+  }
 }
