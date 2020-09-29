@@ -5,7 +5,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { NotificationsService } from 'angular2-notifications';
-import { notificationConfig } from '../../_constant/notification.constant';
 import { OrganizationService } from '../../_services';
 import { ConfirmationService, LazyLoadEvent, SortEvent } from 'primeng/api';
 import { MessageService } from 'primeng/api';
@@ -13,6 +12,10 @@ import { MessageService } from 'primeng/api';
 interface CategoryResponse {
   response: CategoryResponseData;
   status: number;
+}
+interface  ColInterface {
+  field: string;
+  header: string;
 }
 class SelectItemData {
   id: any;
@@ -33,8 +36,8 @@ export class CookieCategoryComponent implements OnInit {
   isScanning = false;
   isDurationType = false;
   catId = '';
-  selectedCols: any[];
-  cols: any[];
+  selectedCols: ColInterface[];
+  cols: ColInterface[];
   categoryForm: FormGroup;
   categoryFromSubmitted: boolean;
   categoryList;
@@ -81,19 +84,21 @@ export class CookieCategoryComponent implements OnInit {
   }
   onSelectedColummFormServer() {
     this.cols = this.onGetColumms();
-    const selectedCols = JSON.parse(localStorage.getItem('cookieCat'));
-    if (!selectedCols) {
-      localStorage.setItem('cookieCat', JSON.stringify(this.cols));
-    } else {
-      this.selectedCols = selectedCols;
+    const tableCols = localStorage.getItem('cookieCat');
+    if (tableCols) {
+      const selectedCols = JSON.parse(localStorage.getItem('cookieCat'));
+      if (!selectedCols) {
+        localStorage.setItem('cookieCat', JSON.stringify(this.cols));
+      } else {
+        this.selectedCols = selectedCols;
+      }
+      // this.selectedCols = this.cols;
     }
-    // this.selectedCols = this.cols;
   }
-
   onGetColumms() {
     return [
       { field: 'party', header: 'Party' },
-      { field: 'desc', header: 'Description' },
+      { field: 'description', header: 'Description' },
       { field: 'value', header: 'Value' },
       { field: 'expiry', header: 'Expires' },
       { field: 'duration', header: 'Duration' },
@@ -424,5 +429,7 @@ export class CookieCategoryComponent implements OnInit {
     });
   }
 
-
+onHideModal() {
+  this.categoryModalRef.hide();
+}
 }

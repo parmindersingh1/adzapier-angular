@@ -30,4 +30,8 @@ export class BillingService {
   return this.http.post(environment.apiUrl + path, data);
 }
 
+  cancelPlan() {
+    const path = '/billing/cancel/subscription';
+    return this.http.get(environment.apiUrl + path);
+  }
 }

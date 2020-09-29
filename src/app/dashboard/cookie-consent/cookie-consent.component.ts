@@ -1,9 +1,13 @@
-import {Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {DashboardService} from '../../_services/dashboard.service';
 import { OrganizationService} from '../../_services';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
 import {NotificationsService} from 'angular2-notifications';
 import {notificationConfig} from '../../_constant/notification.constant';
+interface Country {
+  total_consents: number;
+  state: string;
+}
 
 declare var jQuery: any;
 class CookieCount {
@@ -40,9 +44,13 @@ export class CookieConsentComponent implements OnInit {
   consentDetails = [];
   percentDashboardCount: CookieCount = new CookieCount();
    currentCountry: any;
+   currentCountryMap = 'usa';
+   stateCountryColor = {};
+  stateList: Country[] = [];
   constructor(private dashboardService: DashboardService,
               private orgservice: OrganizationService,
               private notification: NotificationsService,
+              private cd: ChangeDetectorRef,
               private loading: NgxUiLoaderService
   ) { }
 
@@ -54,6 +62,7 @@ export class CookieConsentComponent implements OnInit {
     this.onGetOptOutActivity();
     this.onGetCountryList();
     this.onConsentDetails();
+    this.onGetMapData();
   }
 
   onGetPropsAndOrgId() {
@@ -117,15 +126,16 @@ export class CookieConsentComponent implements OnInit {
   onGetOptOutActivity() {
     this.loading.start('f2');
     this.dashboardService.getOtpOutActivity(this.currrentManagedPropID)
-      .subscribe(res => {
+      .subscribe((res: any) => {
         this.loading.stop('f2');
         if (res) {
-          this.optOut = res['response'];
+          this.optOut = res.response;
         }
       }, error => {
         this.loading.stop('f2');
-      })
+      });
   }
+
 
   onSelectCountry(event) {
     this.currentCountry = event.target.value;
@@ -139,6 +149,10 @@ export class CookieConsentComponent implements OnInit {
       this.loading.stop('f6');
       if (res) {
         this.countryList = res.response;
+        if (res.response.length > 0) {
+          this.currentCountry = res.response[0].country;
+          this.onConsentDetails();
+        }
       }
     }, error => {
       this.loading.stop('f6');
@@ -171,35 +185,100 @@ export class CookieConsentComponent implements OnInit {
       return cal;
     }
   }
-  onMapInIt() {
-    jQuery('#vmapUSA').vectorMap({
-      map: 'world_en',
-      showTooltip: true,
-      backgroundColor: '#fff',
-      color: '#d1e6fa',
-      colors: {
-        fl: '#69b2f8',
-        ca: '#69b2f8',
-        tx: '#69b2f8',
-        wy: '#69b2f8',
-        ny: '#69b2f8'
-      },
-      selectedColor: '#00cccc',
-      enableZoom: false,
-      borderWidth: 1,
-      borderColor: '#fff',
-      hoverOpacity: .85,
-      onLabelShow: function (event, label, code) {
-        if(code === 'us') {
-          label.text();
+
+  onSelectCountryMap(e) {
+    const country = e.target.value;
+    this.currentCountryMap = country;
+    setTimeout(() => {
+      this.onGetMapData();
+    }, 1000);
+  }
+
+  onGetMapData() {
+    this.loading.start('f7');
+    const params = {
+      // country: 'IN'
+      country: this.currentCountryMap
+    };
+    this.dashboardService.getMapDataForConsentDashboard(this.currrentManagedPropID, params)
+      .subscribe( (res: any) => {
+        this.loading.stop('f7');
+        console.log('res', res);
+        const result = res.response;
+        for (const  countryData of result) {
+          this.stateCountryColor[`${countryData.state.toLowerCase()}`] = '#69b2f8';
         }
-      }
-    });
+        this.stateList = result;
+        this.onMapInIt();
+      }, error => {
+        this.loading.stop('f7');
+      })
+  }
+  onMapInIt() {
+    const that = this;
+    if (this.currentCountryMap === 'usa') {
+      console.log('stateCountryColor', that.stateCountryColor);
+      jQuery('#vmap').empty();
+      jQuery('#vmap').vectorMap({
+        map: 'usa_en',
+        showTooltip: true,
+        backgroundColor: '#fff',
+        color: '#d1e6fa',
+        colors: that.stateCountryColor,
+        selectedColor: '#00cccc',
+        enableZoom: false,
+        borderWidth: 1,
+        borderColor: '#fff',
+        hoverOpacity: .85,
+        onLabelShow:  (event, label, code) => {
+          for (const  countryData of that.stateList) {
+            if (code === countryData.state.toLowerCase()) {
+              label.append(' : ' + countryData.total_consents);
+            } else {
+              label.append(' : 0');
+            }
+          }
+          that.cd.detectChanges();
+        }
+      });
+    } else {
+      jQuery('#worldMap').empty();
+      jQuery('#worldMap').vectorMap({
+        map: 'world_en',
+        backgroundColor: '#fff',
+        color: '#d1e6fa',
+        hoverOpacity: 0.7,
+        selectedColor: '#00cccc',
+        enableZoom: true,
+        showTooltip: true,
+        scaleColors: ['#d1e6fa', '#00cccc'],
+        normalizeFunction: 'polynomial',
+        onLabelShow:  (event, label, code) => {
+          for (const  countryData of that.stateList) {
+            if (code === countryData.state.toLowerCase()) {
+              label.append(' : ' + countryData.total_consents);
+            } else {
+              label.append(' : 0');
+            }
+          }
+          that.cd.detectChanges();
+        }
+      });
+    }
+    this.cd.detectChanges();
   }
   onClosed(dismissedAlert: any): void {
     this.alertMsg = !dismissedAlert;
     this.isOpen = false;
   }
 
+  onRefreshAll() {
+    this.onGetDashboardData();
+    this.onGetOptInActivity();
+    this.onGetOptOutActivity();
+    this.onGetCountryList();
+    this.onConsentDetails();
+    this.onGetMapData();
+  }
 
 }

@@ -98,13 +98,29 @@
 
               <div class="col-md-12 mt-2">
                 <input type="text" [attr.disabled]="isFieldDisabled" formControlName="BannerTitle"
-                       class="form-control w-50" [placeholder]="bannerConstant.GDPR.BANNER.BannerTitle">
+                       class="form-control w-50"  [placeholder]="bannerConstant.GDPR.BANNER.BannerTitle">
+                <div *ngIf="submitted && f.BannerTitle.errors">
+                  <div class="text-danger mt-2" *ngIf="f.BannerTitle.errors.minlength">
+                    Minimum 2 characters required
+                  </div>
+                  <div class="text-danger mt-2" *ngIf="f.BannerTitle.errors.maxlength">
+                    Maximum 50 characters required
+                  </div>
+                </div>
               </div>
 
               <div class="col-md-12 mt-2">
                 <textarea [attr.disabled]="isFieldDisabled" class="form-control w-50" rows="3"
                           formControlName="BannerDescription"
                           [placeholder]="bannerConstant.GDPR.BANNER.BannerDescription"></textarea>
+                <div *ngIf="submitted && f.BannerDescription.errors">
+                  <div class="text-danger mt-2" *ngIf="f.BannerDescription.errors.minlength">
+                    Minimum 20 characters required
+                  </div>
+                  <div class="text-danger mt-2" *ngIf="f.BannerDescription.errors.maxlength">
+                    Maximum 300 characters required
+                  </div>
+                </div>
               </div>
 
               <div class="col-md-12 mt-4">
@@ -149,7 +165,14 @@
                     <input type="text" [attr.disabled]="isFieldDisabled" class="form-control"
                            formControlName="BannerPreferenceButtonTextContent"
                            [placeholder]="bannerConstant.GDPR.BANNER.BannerPreferenceButtonTextContent">
-
+                    <div *ngIf="submitted && f.BannerPreferenceButtonTextContent.errors">
+                      <div class="text-danger mt-2" *ngIf="f.BannerPreferenceButtonTextContent.errors.minlength">
+                        Minimum 2 characters required
+                      </div>
+                      <div class="text-danger mt-2" *ngIf="f.BannerPreferenceButtonTextContent.errors.maxlength">
+                        Maximum 25 characters required
+                      </div>
+                    </div>
                   </div>
 
                   <div class="col-md-3">
@@ -195,7 +218,14 @@
                     <input type="text" [attr.disabled]="isFieldDisabled" class="form-control"
                            formControlName="BannerAllowRequiredTextContent"
                            [placeholder]="bannerConstant.GDPR.BANNER.BannerAllowRequiredButtonTextContent">
-
+                    <div *ngIf="submitted && f.BannerAllowRequiredTextContent.errors">
+                      <div class="text-danger mt-2" *ngIf="f.BannerAllowRequiredTextContent.errors.minlength">
+                        Minimum 2 characters required
+                      </div>
+                      <div class="text-danger mt-2" *ngIf="f.BannerAllowRequiredTextContent.errors.maxlength">
+                        Maximum 25 characters required
+                      </div>
+                    </div>
                   </div>
                   <div class="col-md-3">
                     <div class="row">
@@ -239,6 +269,14 @@
                     <input type="text" [attr.disabled]="isFieldDisabled" class="form-control"
                            formControlName="BannerAllowAllButtonTextContent"
                            [placeholder]="bannerConstant.GDPR.BANNER.BannerAllowAllButtonTextContent">
+                    <div *ngIf="submitted && f.BannerAllowAllButtonTextContent.errors">
+                      <div class="text-danger mt-2" *ngIf="f.BannerAllowAllButtonTextContent.errors.minlength">
+                        Minimum 2 characters required
+                      </div>
+                      <div class="text-danger mt-2" *ngIf="f.BannerAllowAllButtonTextContent.errors.maxlength">
+                        Maximum 25 characters required
+                      </div>
+                    </div>
 
                   </div>
 
@@ -280,6 +318,14 @@
                     <input type="text" [attr.disabled]="isFieldDisabled" class="form-control"
                            formControlName="BannerDisableAllButtonTextContent"
                            [placeholder]="bannerConstant.GDPR.BANNER.BannerDisableAllButtonTextContent">
+                    <div *ngIf="submitted && f.BannerDisableAllButtonTextContent.errors">
+                      <div class="text-danger mt-2" *ngIf="f.BannerDisableAllButtonTextContent.errors.minlength">
+                        Minimum 2 characters required
+                      </div>
+                      <div class="text-danger mt-2" *ngIf="f.BannerDisableAllButtonTextContent.errors.maxlength">
+                        Maximum 25 characters required
+                      </div>
+                    </div>
                   </div>
 
 
@@ -328,6 +374,14 @@
                 <textarea [attr.disabled]="isFieldDisabled" class="form-control w-50" rows="3"
                           formControlName="PopUpPurposeBodyDescription"
                           [placeholder]="bannerConstant.GDPR.POPUP.PopUpPurposeBodyDescription"></textarea>
+                <div *ngIf="submitted && f.PopUpPurposeBodyDescription.errors">
+                  <div class="text-danger mt-2" *ngIf="f.PopUpPurposeBodyDescription.errors.minlength">
+                    Minimum 20 characters required
+                  </div>
+                  <div class="text-danger mt-2" *ngIf="f.PopUpPurposeBodyDescription.errors.maxlength">
+                    Maximum 300 characters required
+                  </div>
+                </div>
               </div>
 
 
@@ -336,6 +390,14 @@
                 <textarea [attr.disabled]="isFieldDisabled" class="form-control w-50" rows="3"
                           formControlName="PopUpVendorBodyDescription"
                           [placeholder]="bannerConstant.GDPR.POPUP.PopUpVendorBodyDescription"></textarea>
+                <div *ngIf="submitted && f.PopUpVendorBodyDescription.errors">
+                  <div class="text-danger mt-2" *ngIf="f.PopUpVendorBodyDescription.errors.minlength">
+                    Minimum 20 characters required
+                  </div>
+                  <div class="text-danger mt-2" *ngIf="f.PopUpVendorBodyDescription.errors.maxlength">
+                    Maximum 300 characters required
+                  </div>
+                </div>
               </div>
 
 
@@ -420,6 +482,14 @@
                     <input type="text" [attr.disabled]="isFieldDisabled" class="form-control"
                            formControlName="PopUpDisableAllButtonTextContent"
                            [placeholder]="bannerConstant.GDPR.POPUP.PopUpDisableAllButtonTextContent">
+                    <div *ngIf="submitted && f.PopUpDisableAllButtonTextContent.errors">
+                      <div class="text-danger mt-2" *ngIf="f.PopUpDisableAllButtonTextContent.errors.minlength">
+                        Minimum 2 characters required
+                      </div>
+                      <div class="text-danger mt-2" *ngIf="f.PopUpDisableAllButtonTextContent.errors.maxlength">
+                        Maximum 25 characters required
+                      </div>
+                    </div>
                   </div>
 
                   <div class="col-md-3">
@@ -458,6 +528,14 @@
                     <input type="text" [attr.disabled]="isFieldDisabled" class="form-control"
                            formControlName="PopUpSaveMyChoiceButtonContentText"
                            [placeholder]="bannerConstant.GDPR.POPUP.PopUpSaveMyChoiceButtonContentText">
+                    <div *ngIf="submitted && f.PopUpSaveMyChoiceButtonContentText.errors">
+                      <div class="text-danger mt-2" *ngIf="f.PopUpSaveMyChoiceButtonContentText.errors.minlength">
+                        Minimum 2 characters required
+                      </div>
+                      <div class="text-danger mt-2" *ngIf="f.PopUpSaveMyChoiceButtonContentText.errors.maxlength">
+                        Maximum 25 characters required
+                      </div>
+                    </div>
 
                   </div>
 
@@ -490,13 +568,18 @@
               <div class="col-md-12 mt-4">
                 <h6>Allow All Button Styles</h6>
                 <div class="row mt-2">
-
-
                   <div class="col-md-3 mt-2">
-
                     <input type="text" [attr.disabled]="isFieldDisabled" class="form-control"
                            formControlName="PopUpAllowAllButtonTextContent"
                            [placeholder]="bannerConstant.GDPR.POPUP.PopUpAllowAllButtonTextContent">
+                    <div *ngIf="submitted && f.PopUpAllowAllButtonTextContent.errors">
+                      <div class="text-danger mt-2" *ngIf="f.PopUpAllowAllButtonTextContent.errors.minlength">
+                        Minimum 2 characters required
+                      </div>
+                      <div class="text-danger mt-2" *ngIf="f.PopUpAllowAllButtonTextContent.errors.maxlength">
+                        Maximum 25 characters required
+                      </div>
+                    </div>
                   </div>
 
 
@@ -540,12 +623,27 @@
                     <input type="text" [attr.disabled]="isFieldDisabled" class="form-control w-50"
                            formControlName="PopUpSocialMediaHeading"
                            [placeholder]="bannerConstant.CCPA.POPUP.PopUpAdvertisingHead">
+                    <div *ngIf="submitted && f.PopUpSocialMediaHeading.errors">
+                      <div class="text-danger mt-2" *ngIf="f.PopUpSocialMediaHeading.errors.minlength">
+                        Minimum 2 characters required
+                      </div>
+                      <div class="text-danger mt-2" *ngIf="f.PopUpSocialMediaHeading.errors.maxlength">
+                        Maximum 50 characters required
+                      </div>
+                    </div>
                     <br>
                     <h6>Description</h6>
                     <textarea [attr.disabled]="isFieldDisabled" class="form-control w-50" rows="3"
                               formControlName="PopUpSocialMediaDescription"
                               [placeholder]="bannerConstant.CCPA.POPUP.PopUpAdvertisingDescription"></textarea>
-
+                    <div *ngIf="submitted && f.PopUpSocialMediaDescription.errors">
+                      <div class="text-danger mt-2" *ngIf="f.PopUpSocialMediaDescription.errors.minlength">
+                        Minimum 20 characters required
+                      </div>
+                      <div class="text-danger mt-2" *ngIf="f.PopUpSocialMediaDescription.errors.maxlength">
+                        Maximum 300 characters required
+                      </div>
+                    </div>
 
                   </mat-expansion-panel>
                 </mat-accordion>
@@ -565,12 +663,27 @@
                     <input type="text" [attr.disabled]="isFieldDisabled" class="form-control w-50"
                            formControlName="PopUpNecessaryHeading"
                            [placeholder]="bannerConstant.CCPA.POPUP.PopUpSocialMediaHead">
+                    <div *ngIf="submitted && f.PopUpNecessaryHeading.errors">
+                      <div class="text-danger mt-2" *ngIf="f.PopUpNecessaryHeading.errors.minlength">
+                        Minimum 2 characters required
+                      </div>
+                      <div class="text-danger mt-2" *ngIf="f.PopUpNecessaryHeading.errors.maxlength">
+                        Maximum 50 characters required
+                      </div>
+                    </div>
                     <br>
                     <h6>Description</h6>
                     <textarea [attr.disabled]="isFieldDisabled" class="form-control w-50" rows="3"
                               formControlName="PopUpNecessaryDescription"
                               [placeholder]="bannerConstant.CCPA.POPUP.PopUpSocialMediaDescription"></textarea>
-
+                    <div *ngIf="submitted && f.PopUpNecessaryDescription.errors">
+                      <div class="text-danger mt-2" *ngIf="f.PopUpNecessaryDescription.errors.minlength">
+                        Minimum 20 characters required
+                      </div>
+                      <div class="text-danger mt-2" *ngIf="f.PopUpNecessaryDescription.errors.maxlength">
+                        Maximum 300 characters required
+                      </div>
+                    </div>
                   </mat-expansion-panel>
                 </mat-accordion>
               </div>
@@ -588,12 +701,27 @@
                     <input type="text" [attr.disabled]="isFieldDisabled" class="form-control w-50"
                            formControlName="PopUpAnalyticsHeading"
                            [placeholder]="bannerConstant.CCPA.POPUP.PopUpAnalyticsHead">
+                    <div *ngIf="submitted && f.PopUpAnalyticsHeading.errors">
+                      <div class="text-danger mt-2" *ngIf="f.PopUpAnalyticsHeading.errors.minlength">
+                        Minimum 2 characters required
+                      </div>
+                      <div class="text-danger mt-2" *ngIf="f.PopUpAnalyticsHeading.errors.maxlength">
+                        Maximum 50 characters required
+                      </div>
+                    </div>
                     <br>
                     <h6>Description</h6>
                     <textarea [attr.disabled]="isFieldDisabled" class="form-control w-50" rows="3"
                               formControlName="PopUpAnalyticsDescription"
                               [placeholder]="bannerConstant.CCPA.POPUP.PopUpAnalyticsDescription"></textarea>
-
+                    <div *ngIf="submitted && f.PopUpAnalyticsDescription.errors">
+                      <div class="text-danger mt-2" *ngIf="f.PopUpAnalyticsDescription.errors.minlength">
+                        Minimum 20 characters required
+                      </div>
+                      <div class="text-danger mt-2" *ngIf="f.PopUpAnalyticsDescription.errors.maxlength">
+                        Maximum 300 characters required
+                      </div>
+                    </div>
                   </mat-expansion-panel>
                 </mat-accordion>
               </div>
@@ -612,13 +740,28 @@
                     <input type="text" [attr.disabled]="isFieldDisabled" class="form-control w-50"
                            formControlName="PopUpAdvertisingHeading"
                            [placeholder]="bannerConstant.CCPA.POPUP.PopUpNecessaryHead">
+                    <div *ngIf="submitted && f.PopUpAdvertisingHeading.errors">
+                      <div class="text-danger mt-2" *ngIf="f.PopUpAdvertisingHeading.errors.minlength">
+                        Minimum 2 characters required
+                      </div>
+                      <div class="text-danger mt-2" *ngIf="f.PopUpAdvertisingHeading.errors.maxlength">
+                        Maximum 50 characters required
+                      </div>
+                    </div>
                     <br>
 
                     <h6>Description</h6>
                     <textarea [attr.disabled]="isFieldDisabled" class="form-control w-50" rows="3"
                               formControlName="PopUpAdvertisingDescription"
                               [placeholder]="bannerConstant.CCPA.POPUP.PopUpNecessaryDescription"></textarea>
-
+                    <div *ngIf="submitted && f.PopUpAdvertisingDescription.errors">
+                      <div class="text-danger mt-2" *ngIf="f.PopUpAdvertisingDescription.errors.minlength">
+                        Minimum 20 characters required
+                      </div>
+                      <div class="text-danger mt-2" *ngIf="f.PopUpAdvertisingDescription.errors.maxlength">
+                        Maximum 300 characters required
+                      </div>
+                    </div>
                   </mat-expansion-panel>
                 </mat-accordion>
               </div>

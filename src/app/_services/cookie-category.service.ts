@@ -104,7 +104,7 @@ export class CookieCategoryService  {
 
   delete(item: any) {
     const path = '/cookie/' + this.currentManagedOrgID + '/' + this.currrentManagedPropID + '/' + item.id;
-    return this.http.delete(environment.apiUrl + path)
+    return this.http.patch(environment.apiUrl + path, {id: item.id});
   }
   //
   // getOptions(url: string, parentId: any): Promise<any> {
