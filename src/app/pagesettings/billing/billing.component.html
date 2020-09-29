@@ -32,8 +32,8 @@
               <span class="card-text">(tax inclusive) </span>
             </span>
             <br>
-            <span> Plan Subscribed: {{billingDetails.billing_details.plan_name}} </span>
-            <!--            <p>Next Charge: May 28,2020</p>-->
+            <span> Plan Subscribed: {{billingDetails.billing_details.plan_name}} </span> <br />
+                        <a href="javascript:;" (click)="openConfimModal(cancelPlan)">Cancel Subscription</a>
 
           </div>
           <div class="card-footer">
@@ -123,6 +123,14 @@
   </div>
 
 </div>
+
+<ng-template #cancelPlan>
+  <div class="modal-body text-center">
+    <p>Do you want to cancel your current subscription?</p>
+    <button type="button" class="btn btn-default" (click)="confirm()" >Yes</button>
+    <button type="button" class="btn btn-primary" (click)="decline()" >No</button>
+  </div>
+</ng-template>
 
 <ng-template #showAlertMsg>
   <div class="modal-body text-center">

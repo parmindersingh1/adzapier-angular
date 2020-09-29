@@ -101,7 +101,7 @@
             <td>{{cookieList.id}}</td>
             <td>{{cookieList.name}}</td>
             <td>{{cookieList.path}}</td>
-            <td></td>
+            <td>{{cookieList.category}}</td>
             <td *ngFor="let col of columns">
               {{cookieList[col.field]}}
             </td>
@@ -230,8 +230,10 @@
             </div>
           </div>
         </div>
+          <input type="hidden" formControlName="property" />
+          <input type="hidden" formControlName="http_only" />
           <div class="text-center">
-            <button type="button"  label="Cancel" icon="pi pi-times" class="btn btn-white mr-4">Cancel</button>
+            <button type="button"  (click)="hideDialog()"  label="Cancel" icon="pi pi-times" class="btn btn-white mr-4">Cancel</button>
             <button type="submit"  label="Save" icon="pi pi-check" class="btn btn-primary">Save</button>
           </div>
         </form>
