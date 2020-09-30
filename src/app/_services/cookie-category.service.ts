@@ -104,7 +104,7 @@ export class CookieCategoryService  {
 
   delete(item: any) {
     const path = '/cookie/' + this.currentManagedOrgID + '/' + this.currrentManagedPropID + '/' + item.id;
-    return this.http.patch(environment.apiUrl + path, {id: item.id});
+    return this.http.patch(environment.apiUrl + path, {active: false});
   }
   //
   // getOptions(url: string, parentId: any): Promise<any> {
@@ -151,6 +151,6 @@ export class CookieCategoryService  {
       orgid: this.currentManagedOrgID,
       propid: this.currrentManagedPropID
     };
-    return this.http.get(environment.apiUrl + '/scanner/' + this.currentManagedOrgID + '/' + this.currrentManagedPropID);
+    return this.http.get(environment.apiUrl + '/scanner/request/' + this.currentManagedOrgID + '/' + this.currrentManagedPropID);
   }
 }

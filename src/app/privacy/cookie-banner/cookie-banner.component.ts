@@ -31,12 +31,26 @@ export class CookieBannerComponent implements OnInit {
   isGdprGlobal = false;
   dismissible = true;
   alertMsg: any;
+  isEdit = false;
   isOpen = false;
   alertType: any;
   public bannerConstant = BannerConstant;
   public defaultData = defaultData;
   private currentManagedOrgID: any;
   private currrentManagedPropID: any;
+  quillConfig = {
+    toolbar: {
+      container: [
+        ['bold', 'italic', 'underline', 'strike'],
+        [{ header: 1 }, { header: 2 }],
+        ['link'],
+        [{ color: [] }],          // dropdown with defaults from theme
+        [{ font: [] }],
+        [{ align: [] }],
+        [{ size: ['small', false, 'large', 'huge'] }]
+      ]
+    }
+  };
 
   constructor(private formBuilder: FormBuilder,
               private notification: NotificationsService,
@@ -47,7 +61,7 @@ export class CookieBannerComponent implements OnInit {
               private _location: Location,
               private router: Router
   ) {
-    console.log('bannerConstant', this.bannerConstant)
+    console.log('bannerConstant', this.bannerConstant);
   }
 
   cookieBannerForm: FormGroup;
@@ -64,12 +78,13 @@ export class CookieBannerComponent implements OnInit {
     const path = '/consent/banner/' + this.currentManagedOrgID + '/' + this.currrentManagedPropID;
     this.loading.start('2');
     this.cookieBannerService.onGetCookieBannerData(path)
-      .subscribe(res => {
+      .subscribe((res: any) => {
         this.loading.stop('2');
-        if (res['status'] === 200 && res.hasOwnProperty('response')) {
-          this.bannerCookieData = res['response'];
+        if (res.status === 200 && res.hasOwnProperty('response')) {
+          this.bannerCookieData = res.response;
           this.onSetValueConfig();
           this.onSetValue();
+          this.isEdit = true;
         }
       }, error => {
         this.loading.stop('2');
@@ -129,7 +144,7 @@ export class CookieBannerComponent implements OnInit {
       Bannerlanguage: [''],
       BannerPosition: [this.defaultData.DefaultBannerPosition],
       BannerTitle: ['', [Validators.minLength(2), Validators.maxLength(50)]],
-      BannerDescription: ['',  [Validators.minLength(20), Validators.maxLength(300)]],
+      BannerDescription: ['',  [Validators.minLength(20)]],
       BannerGlobalStyleTextColor: [''],
       BannerGlobalStyleBackgroundColor: [''],
       BannerPreferenceButtonTextContent: ['', [Validators.minLength(2), Validators.maxLength(25)]],
@@ -178,56 +193,57 @@ export class CookieBannerComponent implements OnInit {
   }
 
   onSetValue() {
+    console.log(': this.bannerCookieData.config.',  this.bannerCookieData.config);
     this.cookieBannerForm.patchValue({
-      Bannerlanguage: this.bannerCookieData.CONFIG.Language,
-      BannerPosition: this.bannerCookieData.CONFIG.BannerPosition,
-      BannerTitle: this.bannerCookieData.CONFIG.Banner.Content.title,
-      BannerDescription: this.bannerCookieData.CONFIG.Banner.Content.description,
-      BannerGlobalStyleTextColor: this.bannerCookieData.CONFIG.Banner.GlobalStyles.textColor,
-      BannerGlobalStyleBackgroundColor: this.bannerCookieData.CONFIG.Banner.GlobalStyles.background,
-      BannerPreferenceButtonTextContent: this.bannerCookieData.CONFIG.Banner.PreferenceButtonStylesAndContent.textContent,
-      BannerPreferenceButtonTextColor: this.bannerCookieData.CONFIG.Banner.PreferenceButtonStylesAndContent.textColor,
-      BannerPreferenceButtonBackgroundColor: this.bannerCookieData.CONFIG.Banner.PreferenceButtonStylesAndContent.background,
-      BannerAllowAllButtonTextContent: this.bannerCookieData.CONFIG.Banner.AllowAllButtonStylesAndContent.textContent,
-      BannerAllowAllButtonTextColor: this.bannerCookieData.CONFIG.Banner.AllowAllButtonStylesAndContent.textColor,
-      BannerAllowAllButtonBackgroundColor: this.bannerCookieData.CONFIG.Banner.AllowAllButtonStylesAndContent.background,
-      BannerAllowRequiredTextContent: this.bannerCookieData.CONFIG.Banner.AllowReqButtonStylesAndContent.BannerAllowRequiredTextContent,
-      BannerAllowRequiredButtonTextColor: this.bannerCookieData.CONFIG.Banner.AllowReqButtonStylesAndContent.BannerAllowRequiredButtonTextColor,
-      BannerAllowRequiredButtonBackgroundColor: this.bannerCookieData.CONFIG.Banner.AllowReqButtonStylesAndContent.BannerAllowRequiredButtonBackgroundColor,
-      BannerDisableAllButtonTextContent: this.bannerCookieData.CONFIG.Banner.DisableAllButtonStylesAndContent.textContent,
-      BannerDisableAllButtonTextColor: this.bannerCookieData.CONFIG.Banner.DisableAllButtonStylesAndContent.textColor,
-      BannerDisableAllButtonBackgroundColor: this.bannerCookieData.CONFIG.Banner.DisableAllButtonStylesAndContent.background,
+      Bannerlanguage: this.bannerCookieData.config.Language,
+      BannerPosition: this.bannerCookieData.config.BannerPosition,
+      BannerTitle: this.bannerCookieData.config.Banner.Content.title,
+      BannerDescription: this.bannerCookieData.config.Banner.Content.description,
+      BannerGlobalStyleTextColor: this.bannerCookieData.config.Banner.GlobalStyles.textColor,
+      BannerGlobalStyleBackgroundColor: this.bannerCookieData.config.Banner.GlobalStyles.background,
+      BannerPreferenceButtonTextContent: this.bannerCookieData.config.Banner.PreferenceButtonStylesAndContent.textContent,
+      BannerPreferenceButtonTextColor: this.bannerCookieData.config.Banner.PreferenceButtonStylesAndContent.textColor,
+      BannerPreferenceButtonBackgroundColor: this.bannerCookieData.config.Banner.PreferenceButtonStylesAndContent.background,
+      BannerAllowAllButtonTextContent: this.bannerCookieData.config.Banner.AllowAllButtonStylesAndContent.textContent,
+      BannerAllowAllButtonTextColor: this.bannerCookieData.config.Banner.AllowAllButtonStylesAndContent.textColor,
+      BannerAllowAllButtonBackgroundColor: this.bannerCookieData.config.Banner.AllowAllButtonStylesAndContent.background,
+      BannerAllowRequiredTextContent: this.bannerCookieData.config.Banner.AllowReqButtonStylesAndContent.textContent,
+      BannerAllowRequiredButtonTextColor: this.bannerCookieData.config.Banner.AllowReqButtonStylesAndContent.textColor,
+      BannerAllowRequiredButtonBackgroundColor: this.bannerCookieData.config.Banner.AllowReqButtonStylesAndContent.background,
+      BannerDisableAllButtonTextContent: this.bannerCookieData.config.Banner.DisableAllButtonStylesAndContent.textContent,
+      BannerDisableAllButtonTextColor: this.bannerCookieData.config.Banner.DisableAllButtonStylesAndContent.textColor,
+      BannerDisableAllButtonBackgroundColor: this.bannerCookieData.config.Banner.DisableAllButtonStylesAndContent.background,
       //  POPUP
-      PopUpPurposeBodyDescription: this.bannerCookieData.CONFIG.POPUP.Content.PurposeBodyDescription,
-      PopUpVendorBodyDescription: this.bannerCookieData.CONFIG.POPUP.Content.VendorBodyDescription,
-      PopUpGlobalTextColor: this.bannerCookieData.CONFIG.POPUP.GlobalStyles.textColor,
-      PopUpSwitchButton:  this.bannerCookieData.CONFIG.POPUP.SwitchButton.backgroundColor,
-      PopUpGlobalBackgroundColor: this.bannerCookieData.CONFIG.POPUP.GlobalStyles.backgroundColor,
-      PopUpPurposeButtonTextColor: this.bannerCookieData.CONFIG.POPUP.PurposeButton.textColor,
-      PopUpPurposeButtonBackgroundColor: this.bannerCookieData.CONFIG.POPUP.PurposeButton.backgroundColor,
+      PopUpPurposeBodyDescription: this.bannerCookieData.config.POPUP.Content.PurposeBodyDescription,
+      PopUpVendorBodyDescription: this.bannerCookieData.config.POPUP.Content.VendorBodyDescription,
+      PopUpGlobalTextColor: this.bannerCookieData.config.POPUP.GlobalStyles.textColor,
+      PopUpSwitchButton:  this.bannerCookieData.config.POPUP.SwitchButton.backgroundColor,
+      PopUpGlobalBackgroundColor: this.bannerCookieData.config.POPUP.GlobalStyles.backgroundColor,
+      PopUpPurposeButtonTextColor: this.bannerCookieData.config.POPUP.PurposeButton.textColor,
+      PopUpPurposeButtonBackgroundColor: this.bannerCookieData.config.POPUP.PurposeButton.backgroundColor,
       // PopUpPurposeButtonBorderColor: this.bannerCookieData.CONFIG,
-      PopUpDisableAllButtonTextContent: this.bannerCookieData.CONFIG.POPUP.DisableAllButton.textContent,
-      PopUpDisableAllButtonTextColor: this.bannerCookieData.CONFIG.POPUP.DisableAllButton.textColor,
-      PopUpDisableAllButtonBackgroundColor: this.bannerCookieData.CONFIG.POPUP.DisableAllButton.backgroundColor,
-      PopUpSaveMyChoiceButtonContentText: this.bannerCookieData.CONFIG.POPUP.SaveMyChoiseButton.textContent,
-      PopUpSaveMyChoiceButtonTextColor: this.bannerCookieData.CONFIG.POPUP.SaveMyChoiseButton.textColor,
-      PopUpSaveMyChoiceButtonBackgroundColor: this.bannerCookieData.CONFIG.POPUP.SaveMyChoiseButton.backgroundColor,
-      PopUpAllowAllButtonTextContent: this.bannerCookieData.CONFIG.POPUP.AllowAllButton.textContent,
-      PopUpAllowAllButtonTextColor: this.bannerCookieData.CONFIG.POPUP.AllowAllButton.textColor,
-      PopUpAllowAllButtonBackgroundColor: this.bannerCookieData.CONFIG.POPUP.AllowAllButton.backgroundColor,
+      PopUpDisableAllButtonTextContent: this.bannerCookieData.config.POPUP.DisableAllButton.textContent,
+      PopUpDisableAllButtonTextColor: this.bannerCookieData.config.POPUP.DisableAllButton.textColor,
+      PopUpDisableAllButtonBackgroundColor: this.bannerCookieData.config.POPUP.DisableAllButton.backgroundColor,
+      PopUpSaveMyChoiceButtonContentText: this.bannerCookieData.config.POPUP.SaveMyChoiseButton.textContent,
+      PopUpSaveMyChoiceButtonTextColor: this.bannerCookieData.config.POPUP.SaveMyChoiseButton.textColor,
+      PopUpSaveMyChoiceButtonBackgroundColor: this.bannerCookieData.config.POPUP.SaveMyChoiseButton.backgroundColor,
+      PopUpAllowAllButtonTextContent: this.bannerCookieData.config.POPUP.AllowAllButton.textContent,
+      PopUpAllowAllButtonTextColor: this.bannerCookieData.config.POPUP.AllowAllButton.textColor,
+      PopUpAllowAllButtonBackgroundColor: this.bannerCookieData.config.POPUP.AllowAllButton.backgroundColor,
 
-      PopUpInformationHeading: this.bannerCookieData.CONFIG.POPUP.PurposeBody[0].heading,
-      informationBtnText: this.bannerCookieData.CONFIG.POPUP.PurposeBody[0].title,
-      PopUpInformationDescription: this.bannerCookieData.CONFIG.POPUP.PurposeBody[0].description,
-      PopUpNecessaryHeading: this.bannerCookieData.CONFIG.POPUP.PurposeBody[1].heading,
-      necessaryBtnText: this.bannerCookieData.CONFIG.POPUP.PurposeBody[1].title,
-      PopUpNecessaryDescription: this.bannerCookieData.CONFIG.POPUP.PurposeBody[1].description,
-      PopUpAnalyticsHeading: this.bannerCookieData.CONFIG.POPUP.PurposeBody[2].heading,
-      analyticsBtnText: this.bannerCookieData.CONFIG.POPUP.PurposeBody[2].title,
-      PopUpAnalyticsDescription: this.bannerCookieData.CONFIG.POPUP.PurposeBody[2].description,
-      PopUpAdvertisingHeading: this.bannerCookieData.CONFIG.POPUP.PurposeBody[3].heading,
-      advertisingBtnText: this.bannerCookieData.CONFIG.POPUP.PurposeBody[3].title,
-      PopUpAdvertisingDescription: this.bannerCookieData.CONFIG.POPUP.PurposeBody[3].description,
+      PopUpInformationHeading: this.bannerCookieData.config.POPUP.PurposeBody[0].heading,
+      informationBtnText: this.bannerCookieData.config.POPUP.PurposeBody[0].title,
+      PopUpInformationDescription: this.bannerCookieData.config.POPUP.PurposeBody[0].description,
+      PopUpNecessaryHeading: this.bannerCookieData.config.POPUP.PurposeBody[1].heading,
+      necessaryBtnText: this.bannerCookieData.config.POPUP.PurposeBody[1].title,
+      PopUpNecessaryDescription: this.bannerCookieData.config.POPUP.PurposeBody[1].description,
+      PopUpAnalyticsHeading: this.bannerCookieData.config.POPUP.PurposeBody[2].heading,
+      analyticsBtnText: this.bannerCookieData.config.POPUP.PurposeBody[2].title,
+      PopUpAnalyticsDescription: this.bannerCookieData.config.POPUP.PurposeBody[2].description,
+      PopUpAdvertisingHeading: this.bannerCookieData.config.POPUP.PurposeBody[3].heading,
+      advertisingBtnText: this.bannerCookieData.config.POPUP.PurposeBody[3].title,
+      PopUpAdvertisingDescription: this.bannerCookieData.config.POPUP.PurposeBody[3].description,
     });
   }
 
@@ -429,11 +445,13 @@ export class CookieBannerComponent implements OnInit {
   }
 
   onCheckCountry(event) {
-     this.isGdprGlobal =  event.includes('eu');
-     if (this.isGdprGlobal) {
-       this.cookieBannerForm.get('ccpaTarget').clearValidators();
-       this.cookieBannerForm.get('ccpaTarget').updateValueAndValidity();
-     }
+    if ( event ) {
+      this.isGdprGlobal = event.includes('eu');
+      if (this.isGdprGlobal) {
+        this.cookieBannerForm.get('ccpaTarget').clearValidators();
+        this.cookieBannerForm.get('ccpaTarget').updateValueAndValidity();
+      }
+    }
   }
 
   onClosed(dismissedAlert: any): void {
