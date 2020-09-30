@@ -38,6 +38,19 @@ export class CookieBannerComponent implements OnInit {
   public defaultData = defaultData;
   private currentManagedOrgID: any;
   private currrentManagedPropID: any;
+  quillConfig = {
+    toolbar: {
+      container: [
+        ['bold', 'italic', 'underline', 'strike'],
+        [{ header: 1 }, { header: 2 }],
+        ['link'],
+        [{ color: [] }],          // dropdown with defaults from theme
+        [{ font: [] }],
+        [{ align: [] }],
+        [{ size: ['small', false, 'large', 'huge'] }]
+      ]
+    }
+  };
 
   constructor(private formBuilder: FormBuilder,
               private notification: NotificationsService,
@@ -48,7 +61,7 @@ export class CookieBannerComponent implements OnInit {
               private _location: Location,
               private router: Router
   ) {
-    console.log('bannerConstant', this.bannerConstant)
+    console.log('bannerConstant', this.bannerConstant);
   }
 
   cookieBannerForm: FormGroup;
@@ -131,7 +144,7 @@ export class CookieBannerComponent implements OnInit {
       Bannerlanguage: [''],
       BannerPosition: [this.defaultData.DefaultBannerPosition],
       BannerTitle: ['', [Validators.minLength(2), Validators.maxLength(50)]],
-      BannerDescription: ['',  [Validators.minLength(20), Validators.maxLength(300)]],
+      BannerDescription: ['',  [Validators.minLength(20)]],
       BannerGlobalStyleTextColor: [''],
       BannerGlobalStyleBackgroundColor: [''],
       BannerPreferenceButtonTextContent: ['', [Validators.minLength(2), Validators.maxLength(25)]],
@@ -180,7 +193,7 @@ export class CookieBannerComponent implements OnInit {
   }
 
   onSetValue() {
-    console.log(': this.bannerCookieData.config.',  this.bannerCookieData.config)
+    console.log(': this.bannerCookieData.config.',  this.bannerCookieData.config);
     this.cookieBannerForm.patchValue({
       Bannerlanguage: this.bannerCookieData.config.Language,
       BannerPosition: this.bannerCookieData.config.BannerPosition,
@@ -432,7 +445,7 @@ export class CookieBannerComponent implements OnInit {
   }
 
   onCheckCountry(event) {
-    if( event ) {
+    if ( event ) {
       this.isGdprGlobal = event.includes('eu');
       if (this.isGdprGlobal) {
         this.cookieBannerForm.get('ccpaTarget').clearValidators();

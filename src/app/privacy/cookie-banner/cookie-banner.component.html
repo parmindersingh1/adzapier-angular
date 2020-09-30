@@ -110,9 +110,14 @@
               </div>
 
               <div class="col-md-12 mt-2">
-                <textarea [attr.disabled]="isFieldDisabled" class="form-control w-50" rows="3"
-                          formControlName="BannerDescription"
-                          [placeholder]="bannerConstant.GDPR.BANNER.BannerDescription"></textarea>
+<!--                <textarea [attr.disabled]="isFieldDisabled" class="form-control w-50" rows="3"-->
+<!--                          formControlName="BannerDescription"-->
+<!--                          [placeholder]="bannerConstant.GDPR.BANNER.BannerDescription"></textarea>-->
+
+                <div class="w-50">
+                <quill-editor maxlength="300" formControlName="BannerDescription" [modules]="quillConfig"
+                          [styles]="{height: '150px'}" required>
+                </quill-editor>
                 <div *ngIf="submitted && f.BannerDescription.errors">
                   <div class="text-danger mt-2" *ngIf="f.BannerDescription.errors.minlength">
                     Minimum 20 characters required
@@ -120,6 +125,7 @@
                   <div class="text-danger mt-2" *ngIf="f.BannerDescription.errors.maxlength">
                     Maximum 300 characters required
                   </div>
+                </div>
                 </div>
               </div>
 
