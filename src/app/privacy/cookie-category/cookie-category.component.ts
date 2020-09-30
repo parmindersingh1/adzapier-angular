@@ -77,8 +77,8 @@ export class CookieCategoryComponent implements OnInit {
     this.onInItCategoryForm();
   }
   ngOnInit() {
-    this.onSelectedColummFormServer();
     this.onGetCategoryAndDurationList();
+    this.onSelectedColummFormServer();
     // this.onGetCatList();
     this.onInItCookieForm();
   }
@@ -87,7 +87,7 @@ export class CookieCategoryComponent implements OnInit {
     const tableCols = localStorage.getItem('cookieCat');
     if (tableCols) {
       const selectedCols = JSON.parse(localStorage.getItem('cookieCat'));
-      if (!selectedCols) {
+      if (!selectedCols && this.cols) {
         localStorage.setItem('cookieCat', JSON.stringify(this.cols));
       } else {
         this.selectedCols = selectedCols;
@@ -155,7 +155,9 @@ export class CookieCategoryComponent implements OnInit {
   }
 
   @Input() get selectedColumns(): any[] {
-    localStorage.setItem('cookieCat', JSON.stringify(this.selectedCols));
+    if (this.selectedCols) {
+      localStorage.setItem('cookieCat', JSON.stringify(this.selectedCols));
+    }
     return this.selectedCols;
   }
 
