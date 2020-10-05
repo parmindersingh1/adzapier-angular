@@ -77,10 +77,9 @@ export class CookieCategoryComponent implements OnInit {
     this.onInItCategoryForm();
   }
   ngOnInit() {
-    this.onGetCategoryAndDurationList();
     this.onSelectedColummFormServer();
-    // this.onGetCatList();
     this.onInItCookieForm();
+    this.onGetCategoryAndDurationList();
   }
   onSelectedColummFormServer() {
     this.cols = this.onGetColumms();
@@ -121,7 +120,6 @@ export class CookieCategoryComponent implements OnInit {
   }
 
   onGetCatList(event) {
-
     this.eventRows = event.rows;
     if (event.first === 0) {
       this.firstone = 1;
@@ -327,27 +325,6 @@ export class CookieCategoryComponent implements OnInit {
     });
   }
 
-
-
-
-  //  onInitTable() {
-  //   const columns = getColumnsPlayers();
-  //   columns.forEach((x, i) => (i > 0) ? x.editable = true : x.editable = false);
-  //   columns[1].cellClass = this.getCellClass;
-  //   columns[3].options = this.categoryList;
-  //   columns[8].options = this.durationType;
-  //   this.dataManager = new DataManager(columns, this.settings, this.service, this.messages);
-  //   this.dataManager.pager.perPage = 10;
-  //   this.cd.detectChanges();
-  // }
-  //   getCellClass({row, column, value}): any {
-  //     return {
-  //       'cell-big-value': true
-  //       // 'cell-middle-value': parseInt(value, 10) > 1000000 && parseInt(value, 10) < 1000000000,
-  //       // 'cell-zero-value': parseInt(value, 10) === 0,
-  //       // 'cell-right': true,
-  //     };
-  //   }
   onInItCategoryForm() {
     const alphaNumeric = '^(?![0-9]*$)[a-zA-Z0-9 ]+$';
     this.categoryForm = this.formBuilder.group({
@@ -361,23 +338,16 @@ export class CookieCategoryComponent implements OnInit {
   }
 
   get c() { return this.categoryForm.controls; }
-
-  // @ts-ignore
-  async onGetCategoryAndDurationList() {
-    const durationType = [];
-    const categoryList = [];
+   onGetCategoryAndDurationList() {
     this.loading.start();
-    const that = this;
-    await this.service.getCategoriesList().then((res: CategoryResponse) => {
-      that.loading.stop();
+    this.service.getCategoriesList().subscribe((res: any) => {
+      this.loading.stop();
       if (res.status === 200) {
-        that.categoryList = res.response.categoryList;
-        that.durationType = res.response.durationtype;
+        this.categoryList = res.response.categoryList;
+        this.durationType = res.response.durationtype;
       }
-      // that.onInitTable();
-    }).catch(error => {
-      that.loading.stop();
-      // this.notification.error('Error', 'Something went wrong', notificationConfig);
+    }, error => {
+      this.loading.stop();
       this.isOpen = true;
       this.alertMsg = error;
       this.alertType = 'danger';
