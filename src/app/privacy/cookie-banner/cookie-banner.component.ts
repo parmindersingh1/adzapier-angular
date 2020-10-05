@@ -9,6 +9,7 @@ import {OrganizationService} from '../../_services';
 import {Location} from '@angular/common';
 import {Router} from '@angular/router';
 
+
 /** Error when invalid control is dirty, touched, or submitted. */
 export class MyErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
@@ -75,9 +76,8 @@ export class CookieBannerComponent implements OnInit {
   }
 
   onGetCookieBannerData() {
-    const path = '/consent/banner/' + this.currentManagedOrgID + '/' + this.currrentManagedPropID;
     this.loading.start('2');
-    this.cookieBannerService.onGetCookieBannerData(path)
+    this.cookieBannerService.onGetCookieBannerData( this.currentManagedOrgID ,  this.currrentManagedPropID)
       .subscribe((res: any) => {
         this.loading.stop('2');
         if (res.status === 200 && res.hasOwnProperty('response')) {
@@ -88,7 +88,6 @@ export class CookieBannerComponent implements OnInit {
         }
       }, error => {
         this.loading.stop('2');
-      //  this.notification.error('Error', error, notificationConfig);
         this.isOpen = true;
         this.alertMsg = error;
         this.alertType = 'danger';
@@ -123,7 +122,7 @@ export class CookieBannerComponent implements OnInit {
           this.cookieBannerForm.get('gdprTarget').updateValueAndValidity();
         }
       }, error => {
-      //  this.notification.error('Error', error, notificationConfig);
+        console.log('eror', error)
         this.isOpen = true;
         this.alertMsg = error;
         this.alertType = 'danger';
@@ -267,6 +266,7 @@ export class CookieBannerComponent implements OnInit {
   onSubmit() {
     this.submitted = true;
     if (this.cookieBannerForm.invalid) {
+      console.log('BannerDescription',  this.cookieBannerForm.controls)
       return;
     }
     if (this.bannerCookieData) {
@@ -288,10 +288,8 @@ export class CookieBannerComponent implements OnInit {
       showOpenBtn: this.cookieBannerForm.value.showOpenBtn,
       CONFIG: this.onGetFormData()
     };
-    const path = '/consent/banner/' + this.currentManagedOrgID + '/' + this.currrentManagedPropID;
     this.loading.start();
-    console.log('formData', userPrefrencesData);
-    this.cookieBannerService.onSubmitCookieBannerData(userPrefrencesData, path)
+    this.cookieBannerService.onSubmitCookieBannerData(userPrefrencesData, this.currentManagedOrgID, this.currrentManagedPropID )
       .subscribe((res: any) => {
         this.loading.stop();
        // this.notification.info('Success', res['response'], notificationConfig);
@@ -302,7 +300,6 @@ export class CookieBannerComponent implements OnInit {
         this.router.navigateByUrl('privacy/cookie-banner/setup');
         }, 1000);
       }, error => {
-       // this.notification.error('Error', error, notificationConfig);
         this.isOpen = true;
         this.alertMsg = error;
         this.alertType = 'danger';
@@ -323,10 +320,8 @@ export class CookieBannerComponent implements OnInit {
       showOpenBtn: this.cookieBannerForm.value.showOpenBtn,
       CONFIG: this.onGetFormData()
     };
-    const path = '/consent/banner/' + this.currentManagedOrgID + '/' + this.currrentManagedPropID;
     this.loading.start();
-    console.log('formData', JSON.stringify(userPrefrencesData));
-    this.cookieBannerService.onUpdateCookieBannerData(userPrefrencesData, path)
+    this.cookieBannerService.onUpdateCookieBannerData(userPrefrencesData, this.currentManagedOrgID , this.currrentManagedPropID)
       .subscribe((res: any) => {
         this.loading.stop();
         this.isOpen = true;
