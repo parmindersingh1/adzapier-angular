@@ -116,7 +116,7 @@
 
                 <div class="w-50">
                 <quill-editor maxlength="300" formControlName="BannerDescription" [modules]="quillConfig"
-                          [styles]="{height: '150px'}" required>
+                          [styles]="{height: '150px'}">
                 </quill-editor>
                 <div *ngIf="submitted && f.BannerDescription.errors">
                   <div class="text-danger mt-2" *ngIf="f.BannerDescription.errors.minlength">

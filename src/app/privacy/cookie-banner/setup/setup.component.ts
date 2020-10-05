@@ -44,16 +44,12 @@ export class SetupComponent implements OnInit {
   }
 
   onGetCookieBannerData() {
-    const path = '/consent/banner/' + this.currentManagedOrgID + '/' + this.currrentManagedPropID;
     this.loading.start('2');
-    this.cookieBannerService.onGetCookieBannerData(path)
+    this.cookieBannerService.onGetCookieBannerData(this.currentManagedOrgID , this.currrentManagedPropID)
       .subscribe(res => {
         this.loading.stop('2');
-        this.scriptUrl = `<script src="${res['response']['js_location']}"></script>`;
-        // res['response']['js_location'];
-        console.log('this.scriptUrl', this.scriptUrl);
+        this.scriptUrl = `<script src="https://${res['response']['js_location']}"></script>`;
         if (res['status'] === 200 && res.hasOwnProperty('response')) {
-          console.log('inseide');
         }
       }, error => {
         this.loading.stop('2');
