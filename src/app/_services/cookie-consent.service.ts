@@ -16,17 +16,17 @@ export class CookieConsentService {
               private loki: LokiService
               ) { }
 
-  getConsent(propsId, pagelimit) {
+  getConsent(propsId, pagelimit, componentName) {
     const path = apiConstant.COOKIE_CONSENT.replace(':propId', propsId);
     return this.http.get(environment.apiUrl + path + pagelimit).pipe(map(res => res),
       catchError(error => {
-        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.cookieConsent, path);
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.cookieConsent, componentName, path);
         return throwError(error);
       }),
     );
   }
 
-  onSendLogs(errorType, msg, functionality, path) {
-    this.loki.onSendErrorLogs(errorType, msg, functionality, path).subscribe();
+  onSendLogs(errorType, msg, functionality, componentName, path) {
+    this.loki.onSendErrorLogs(errorType, msg, functionality, componentName, path).subscribe();
   }
 }

@@ -62,7 +62,6 @@ export class CookieBannerComponent implements OnInit {
               private _location: Location,
               private router: Router
   ) {
-    console.log('bannerConstant', this.bannerConstant);
   }
 
   cookieBannerForm: FormGroup;
@@ -77,7 +76,7 @@ export class CookieBannerComponent implements OnInit {
 
   onGetCookieBannerData() {
     this.loading.start('2');
-    this.cookieBannerService.onGetCookieBannerData( this.currentManagedOrgID ,  this.currrentManagedPropID)
+    this.cookieBannerService.onGetCookieBannerData( this.currentManagedOrgID ,  this.currrentManagedPropID, this.constructor.name)
       .subscribe((res: any) => {
         this.loading.stop('2');
         if (res.status === 200 && res.hasOwnProperty('response')) {
@@ -103,6 +102,7 @@ export class CookieBannerComponent implements OnInit {
       cookieBlocking: configData.cookie_blocking,
       enableIab: configData.enable_iab,
       email: configData.email,
+      allowGoogleVendors: configData.allowGoogleVendors,
       showOpenCcpaBtn: configData.showOpenCcpaBtn,
       showOpenGdprBtn: configData.showOpenGdprBtn
     });
@@ -110,7 +110,7 @@ export class CookieBannerComponent implements OnInit {
 
   onGetCurrentPlan() {
     this.loading.start('1');
-    this.cookieBannerService.onGetPlanType()
+    this.cookieBannerService.onGetPlanType(this.constructor.name)
       .subscribe((res: any) => {
         this.loading.stop('1');
         const planType = res.response;
@@ -131,12 +131,14 @@ export class CookieBannerComponent implements OnInit {
   }
 
   onFormInIt() {
+    console.log('this.defaultData', this.defaultData)
     this.cookieBannerForm = this.formBuilder.group({
       ccpaTarget: ['', Validators.required],
       gdprTarget: ['', Validators.required],
       cookieBlocking: [this.defaultData.defaultCookieBlocking],
       enableIab: [this.defaultData.defaultEnableIab],
       email: [this.defaultData.defaultEmail],
+      allowGoogleVendors: [this.defaultData.allowGoogleVendors],
       showOpenBtn: [this.defaultData.showOpenBtn],
       logo: [this.defaultData.logo],
       //  BANNER
@@ -277,19 +279,21 @@ export class CookieBannerComponent implements OnInit {
   }
 
   onSubmitForm() {
+    console.log('this.cookieBannerForm.value.gdprTarget', this.cookieBannerForm.value.gdprTarget)
     const userPrefrencesData = {
       ccpa_target: this.cookieBannerForm.value.ccpaTarget,
       gdpr_target: this.cookieBannerForm.value.gdprTarget,
       cookie_blocking: this.cookieBannerForm.value.cookieBlocking,
       enable_iab: this.cookieBannerForm.value.enableIab,
       email: this.cookieBannerForm.value.email,
+      allowGoogleVendors: this.cookieBannerForm.value.allowGoogleVendors,
       logo_text: this.cookieBannerForm.value.logo,
-      gdpr_global: this.cookieBannerForm.value.gdprTarget.includes('eu'),
+      gdpr_global: this.cookieBannerForm.value.gdprTarget ? this.cookieBannerForm.value.gdprTarget.includes('eu') : false,
       showOpenBtn: this.cookieBannerForm.value.showOpenBtn,
       CONFIG: this.onGetFormData()
     };
     this.loading.start();
-    this.cookieBannerService.onSubmitCookieBannerData(userPrefrencesData, this.currentManagedOrgID, this.currrentManagedPropID )
+    this.cookieBannerService.onSubmitCookieBannerData(userPrefrencesData, this.currentManagedOrgID, this.currrentManagedPropID, this.constructor.name )
       .subscribe((res: any) => {
         this.loading.stop();
        // this.notification.info('Success', res['response'], notificationConfig);
@@ -309,19 +313,21 @@ export class CookieBannerComponent implements OnInit {
 
 
   onUpdateForm() {
+    console.log('this.cookieBannerForm.value.allowGoogleVendors', this.cookieBannerForm.value.allowGoogleVendors)
     const userPrefrencesData = {
       ccpa_target: this.cookieBannerForm.value.ccpaTarget,
       logo_text: this.cookieBannerForm.value.logo,
-      gdpr_global: this.cookieBannerForm.value.gdprTarget.includes('eu'),
+      gdpr_global: this.cookieBannerForm.value.gdprTarget ? this.cookieBannerForm.value.gdprTarget.includes('eu') : false,
       gdpr_target: this.cookieBannerForm.value.gdprTarget,
       cookie_blocking: this.cookieBannerForm.value.cookieBlocking,
       enable_iab: this.cookieBannerForm.value.enableIab,
       email: this.cookieBannerForm.value.email,
+      allowGoogleVendors: this.cookieBannerForm.value.allowGoogleVendors,
       showOpenBtn: this.cookieBannerForm.value.showOpenBtn,
       CONFIG: this.onGetFormData()
     };
     this.loading.start();
-    this.cookieBannerService.onUpdateCookieBannerData(userPrefrencesData, this.currentManagedOrgID , this.currrentManagedPropID)
+    this.cookieBannerService.onUpdateCookieBannerData(userPrefrencesData, this.currentManagedOrgID , this.currrentManagedPropID, this.constructor.name)
       .subscribe((res: any) => {
         this.loading.stop();
         this.isOpen = true;

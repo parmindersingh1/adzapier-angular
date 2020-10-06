@@ -45,11 +45,13 @@
                 <section class="example-section">
                   <mat-checkbox [disabled]="isFieldDisabled"
                                 formControlName="logo"
+                                color="primary"
                                 class="example-margin">Show Adzapier Logo?</mat-checkbox>
                 </section>
 
                 <section class="example-section">
                   <mat-checkbox [disabled]="isFieldDisabled"   formControlName="showOpenBtn"
+                                color="primary"
                                 class="example-margin">Show Open PopUp Button?</mat-checkbox>
                 </section>
 
@@ -62,6 +64,8 @@
                 </mat-slide-toggle>
                 <br>
                 <mat-slide-toggle formControlName="email" color="primary" class="cookie-allow">EMAIL</mat-slide-toggle>
+                <br>
+                <mat-slide-toggle formControlName="allowGoogleVendors" color="primary" class="cookie-allow">Allow Google Vendors</mat-slide-toggle>
               </div>
             </div>
           </div>
@@ -92,7 +96,7 @@
                 <h6>Position</h6>
                 <mat-radio-group formControlName="BannerPosition" aria-label="Select an option">
                   <mat-radio-button *ngFor="let gdprPosition of bannerConstant.GDPR.BANNER.BannerPosition"
-                                    class="mr-2"  [disabled]="isFieldDisabled" [value]="gdprPosition.value">{{gdprPosition.title}}</mat-radio-button>
+                                    class="mr-2"  [disabled]="isFieldDisabled"  color="primary" [value]="gdprPosition.value">{{gdprPosition.title}}</mat-radio-button>
                 </mat-radio-group>
               </div>
 
@@ -110,10 +114,6 @@
               </div>
 
               <div class="col-md-12 mt-2">
-<!--                <textarea [attr.disabled]="isFieldDisabled" class="form-control w-50" rows="3"-->
-<!--                          formControlName="BannerDescription"-->
-<!--                          [placeholder]="bannerConstant.GDPR.BANNER.BannerDescription"></textarea>-->
-
                 <div class="w-50">
                 <quill-editor maxlength="300" formControlName="BannerDescription" [modules]="quillConfig"
                           [styles]="{height: '150px'}">

@@ -139,7 +139,7 @@ export class CookieCategoryComponent implements OnInit {
 
   onGetDataFromServer() {
     this.tLoading = true;
-    this.service.getCookieData(this.data).subscribe(res => {
+    this.service.getCookieData(this.data, this.constructor.name).subscribe(res => {
       this.tLoading = false;
       this.cookieCategoryList = res['response'];
       this.totalCookieCount = res['count'];
@@ -230,7 +230,7 @@ export class CookieCategoryComponent implements OnInit {
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
         this.tLoading = true;
-        this.service.delete(cookieCat)
+        this.service.delete(cookieCat, this.constructor.name)
           .subscribe(res => {
             this.tLoading = false;
             this.onGetDataFromServer();
@@ -249,7 +249,7 @@ export class CookieCategoryComponent implements OnInit {
   }
   onUpdate(catForm) {
     this.tLoading = true;
-    this.service.put(catForm, this.catId)
+    this.service.put(catForm, this.catId, this.constructor.name)
       .subscribe(res => {
         this.tLoading = false;
         this.addCookieForm.reset();
@@ -266,7 +266,7 @@ export class CookieCategoryComponent implements OnInit {
   }
   saveProduct(catForm) {
     this.tLoading = true;
-    this.service.post(catForm)
+    this.service.post(catForm, this.constructor.name)
       .subscribe(res => {
         this.addCookieForm.reset();
         this.tLoading = false;
@@ -340,7 +340,7 @@ export class CookieCategoryComponent implements OnInit {
   get c() { return this.categoryForm.controls; }
    onGetCategoryAndDurationList() {
     this.loading.start();
-    this.service.getCategoriesList().subscribe((res: any) => {
+    this.service.getCategoriesList(this.constructor.name).subscribe((res: any) => {
       this.loading.stop();
       if (res.status === 200) {
         this.categoryList = res.response.categoryList;
@@ -364,7 +364,7 @@ export class CookieCategoryComponent implements OnInit {
       description: this.categoryForm.value.description
     };
     this.loading.start();
-    this.service.createCategory(categoryData).subscribe(res => {
+    this.service.createCategory(categoryData, this.constructor.name).subscribe(res => {
       this.loading.stop();
       this.categoryModalRef.hide();
       if (res['status'] === 201) {
@@ -384,7 +384,7 @@ export class CookieCategoryComponent implements OnInit {
   }
   onRescanCookie() {
     this.isScanning = true;
-    this.service.cookieScanning().subscribe(res => {
+    this.service.cookieScanning(this.constructor.name).subscribe(res => {
       this.isScanning = false;
       if (res['status'] === 201) {
         // this.notification.info('Scanning', res['response'], notificationConfig);

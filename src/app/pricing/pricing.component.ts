@@ -75,7 +75,7 @@ export class PricingComponent implements OnInit {
       }
       console.log(this.billingCycle, this.subscriptionPlanType);
       this.loading.start();
-      this.billingService.getSessionId(payloads).subscribe(res => {
+      this.billingService.getSessionId(payloads, this.constructor.name).subscribe(res => {
         this.loading.stop();
         const result = res;
         if (result['status'] === 200) {
@@ -121,7 +121,7 @@ export class PricingComponent implements OnInit {
 
   onGetCurrentPlan() {
     this.loading.start();
-    this.billingService.getCurrentPlanInfo().subscribe((res: any) => {
+    this.billingService.getCurrentPlanInfo(this.constructor.name).subscribe((res: any) => {
       this.loading.stop();
       if (!res['error']) {
         this.currentPlan = res['response'];
@@ -154,7 +154,7 @@ export class PricingComponent implements OnInit {
         plan: plan.plan
       };
     }
-    this.billingService.upGradePlan(payloads).subscribe(res => {
+    this.billingService.upGradePlan(payloads, this.constructor.name).subscribe(res => {
       this.loading.stop();
       if (res['status'] === 200) {
         this.isOpen = true;

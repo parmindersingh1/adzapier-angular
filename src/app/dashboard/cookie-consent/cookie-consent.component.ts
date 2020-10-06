@@ -79,7 +79,7 @@ export class CookieConsentComponent implements OnInit {
   }
   onGetDashboardData() {
     this.loading.start('1');
-    this.dashboardService.getDashboardData(this.currrentManagedPropID)
+    this.dashboardService.getDashboardData(this.currrentManagedPropID, this.constructor.name)
       .subscribe(res => {
         this.loading.stop('1');
         if (res) {
@@ -112,7 +112,7 @@ export class CookieConsentComponent implements OnInit {
 
   onGetOptInActivity() {
     this.loading.start('f1');
-    this.dashboardService.getOtpInActivity(this.currrentManagedPropID)
+    this.dashboardService.getOtpInActivity(this.currrentManagedPropID, this.constructor.name)
       .subscribe(res => {
         this.loading.stop('f1');
         if (res) {
@@ -125,7 +125,7 @@ export class CookieConsentComponent implements OnInit {
 
   onGetOptOutActivity() {
     this.loading.start('f2');
-    this.dashboardService.getOtpOutActivity(this.currrentManagedPropID)
+    this.dashboardService.getOtpOutActivity(this.currrentManagedPropID, this.constructor.name)
       .subscribe((res: any) => {
         this.loading.stop('f2');
         if (res) {
@@ -144,7 +144,7 @@ export class CookieConsentComponent implements OnInit {
   onGetCountryList() {
   this.loading.start('f6');
   const params = null;
-  this.dashboardService.getCookieConsentCountry(this.currrentManagedPropID, params)
+  this.dashboardService.getCookieConsentCountry(this.currrentManagedPropID, params, this.constructor.name)
     .subscribe((res: any) => {
       this.loading.stop('f6');
       if (res) {
@@ -163,7 +163,7 @@ export class CookieConsentComponent implements OnInit {
     const params = {
       country:  this.currentCountry
     };
-    this.dashboardService.getConsentDetails(this.currrentManagedPropID, params)
+    this.dashboardService.getConsentDetails(this.currrentManagedPropID, params, this.constructor.name)
       .subscribe((res: any) => {
         this.loading.stop('f3');
         if (res) {
@@ -200,7 +200,7 @@ export class CookieConsentComponent implements OnInit {
       // country: 'IN'
       country: this.currentCountryMap
     };
-    this.dashboardService.getMapDataForConsentDashboard(this.currrentManagedPropID, params)
+    this.dashboardService.getMapDataForConsentDashboard(this.currrentManagedPropID, params, this.constructor.name)
       .subscribe( (res: any) => {
         this.loading.stop('f7');
         console.log('res', res);

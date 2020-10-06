@@ -45,7 +45,7 @@ export class SetupComponent implements OnInit {
 
   onGetCookieBannerData() {
     this.loading.start('2');
-    this.cookieBannerService.onGetCookieBannerData(this.currentManagedOrgID , this.currrentManagedPropID)
+    this.cookieBannerService.onGetCookieBannerData(this.currentManagedOrgID , this.currrentManagedPropID, this.constructor.name)
       .subscribe(res => {
         this.loading.stop('2');
         this.scriptUrl = `<script src="https://${res['response']['js_location']}"></script>`;

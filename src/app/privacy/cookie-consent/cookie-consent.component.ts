@@ -48,7 +48,7 @@ export class CookieConsentTableComponent implements OnInit {
       this.firstone = (event.first / event.rows) + 1;
     }
     this.pagelimit = '?limit=' + this.eventRows + '&page=' + this.firstone;
-    this.cookieConsentService.getConsent(this.currrentManagedPropID, this.pagelimit)
+    this.cookieConsentService.getConsent(this.currrentManagedPropID, this.pagelimit, this.constructor.name)
         .subscribe(res => {
           this.tLoading = false;
           if (res['status'] === 200) {
