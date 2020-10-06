@@ -63,7 +63,7 @@ export class UpdateBillingComponent implements OnInit {
 
   onGetSessionId() {
     this.loading.start('1');
-    this.billingService.createSessionId().subscribe(res => {
+    this.billingService.createSessionId(this.constructor.name).subscribe(res => {
       this.loading.stop('1');
       if (res['status'] === 200) {
         this.sessionId = res['response'];
@@ -78,7 +78,7 @@ export class UpdateBillingComponent implements OnInit {
   }
   onGetCurrentPlan() {
     this.loading.start('2');
-    this.billingService.getCurrentPlan().subscribe(res => {
+    this.billingService.getCurrentPlan(this.constructor.name).subscribe(res => {
       this.loading.stop('2');
       if (res['status'] === 200) {
         this.billingDetails = res['response'];

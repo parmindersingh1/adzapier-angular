@@ -406,7 +406,7 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
       from_date: this.startDate,
       to_date: this.endDate
     };
-    this.dashboardService.getCcpaAndDsar(this.currentManagedOrgID, this.currrentManagedPropID, queryParam)
+    this.dashboardService.getCcpaAndDsar(this.currentManagedOrgID, this.currrentManagedPropID, queryParam, this.constructor.name)
       .subscribe(res => {
         this.loading.stop('p1');
         const result = res.response;
@@ -548,7 +548,7 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
       to_date: this.endDate,
       country: this.currentState
     };
-    this.dashboardService.getRequestByState(this.currentManagedOrgID, this.currrentManagedPropID, queryParam)
+    this.dashboardService.getRequestByState(this.currentManagedOrgID, this.currrentManagedPropID, queryParam, this.constructor.name)
       .subscribe(res => {
         this.loading.stop();
         const result = res.response;

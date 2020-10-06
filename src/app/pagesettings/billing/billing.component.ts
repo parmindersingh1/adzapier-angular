@@ -57,7 +57,7 @@ export class BillingComponent implements OnInit {
 
   onGetCurrentPlan() {
     this.loading.start();
-    this.billingService.getCurrentPlan().subscribe((res: any) => {
+    this.billingService.getCurrentPlan(this.constructor.name).subscribe((res: any) => {
       this.loading.stop();
       if (res.status === 200) {
         if (typeof (res.response) === 'string') {
@@ -110,7 +110,7 @@ export class BillingComponent implements OnInit {
 
   onCancelPlan() {
     this.loading.start();
-    this.billingService.cancelPlan()
+    this.billingService.cancelPlan(this.constructor.name)
       .subscribe( (res: any) => {
         this.loading.stop();
         if (res) {
