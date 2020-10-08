@@ -13,10 +13,11 @@ import { TimeAgoPipe } from 'time-ago-pipe';
 import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
 import { ModalModule, AlertModule, BsDatepickerModule } from 'ngx-bootstrap';
 import {ChartsModule} from 'ng2-charts';
+import { SafePipe } from 'src/app/_helpers/safe.pipe';
 
 
 @NgModule({
-  declarations: [FilterPipe, TimeAgoPipe],
+  declarations: [FilterPipe, TimeAgoPipe, SafePipe],
   imports: [
     CommonModule,
     NgbModule,
@@ -31,7 +32,7 @@ import {ChartsModule} from 'ng2-charts';
     BsDatepickerModule.forRoot(),
   ],
   exports: [NgbModule,  DragDropModule, QuillModule, NgxPaginationModule, BsDatepickerModule,
-  AlertModule, TypeaheadModule, FilterPipe, TimeAgoPipe]
+  AlertModule, TypeaheadModule, FilterPipe, TimeAgoPipe, SafePipe]
 
 })
 export class SharedbootstrapModule { }

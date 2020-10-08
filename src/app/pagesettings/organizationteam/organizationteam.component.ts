@@ -60,7 +60,7 @@ export class OrganizationteamComponent implements OnInit {
     console.log('page Limit', pagelimit);
     this.orgService.getOrgTeamMembers(orgID, pagelimit).subscribe((data) => {
       this.loading.stop();
-      this.organizationTeamMemberList = data;
+      this.organizationTeamMemberList = data.response;
       this.paginationConfig.totalItems = data.count;
     });
   }
@@ -87,12 +87,12 @@ export class OrganizationteamComponent implements OnInit {
 
   pageChangeEvent(event) {
     this.paginationConfig.currentPage = event;
-    const pagelimit = '?limit=' + this.paginationConfig.itemsPerPage + '&page=' + this.paginationConfig.currentPage;
+    const pagelimit = '&limit=' + this.paginationConfig.itemsPerPage + '&page=' + this.paginationConfig.currentPage;
     const key = 'response';
     this.loading.start();
     this.orgService.getOrgTeamMembers(this.organizationID, pagelimit).subscribe((data) => {
       this.loading.stop();
-      this.organizationTeamMemberList = data;
+      this.organizationTeamMemberList = data.response;
       this.paginationConfig.totalItems = data.count;
     },(error)=>{
       this.alertMsg = error;

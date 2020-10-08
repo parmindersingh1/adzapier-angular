@@ -176,7 +176,7 @@ export class DsarformComponent implements OnInit, OnDestroy, AfterViewInit {
   isFileUploadRequired: boolean = false;
   isEmailVerificationRequired: boolean = false;
   imgUrl: string;
-
+  isDraftWebForm = false;
   imageToShow: any;
   isImageLoading: boolean;
   captchacode: any;
@@ -259,6 +259,9 @@ export class DsarformComponent implements OnInit, OnDestroy, AfterViewInit {
           //  this.crid = data.crid;
           // this.propertyname = data.form_name;
           this.formName = data.form_name || data.web_form_name;
+          if (data.form_status === 'Draft') {
+            this.isDraftWebForm = true;
+          }
           //  this.selectedApproverID = data.approver;
           // this.selectedWorkflowID = data.workflow;
           const isUUID = uuidRegx.test(data.approver);
@@ -1153,7 +1156,7 @@ export class DsarformComponent implements OnInit, OnDestroy, AfterViewInit {
   loadDefaultApprover() {
     if (this.orgId) {
       this.organizationService.getOrgTeamMembers(this.orgId).subscribe((data) => {
-        this.ApproverList = data;
+        this.ApproverList = data.response;
         const filterValue = this.ApproverList.filter((t) => t.approver_id === this.selectedApproverID);
         if (filterValue.length > 0) {
           this.defaultapprover = filterValue[0].approver_id;
@@ -1215,6 +1218,9 @@ export class DsarformComponent implements OnInit, OnDestroy, AfterViewInit {
     this.selectedApproverID = retrivedData.approver;
     this.selectedWorkflowID = retrivedData.workflow;
     this.formName = retrivedData.form_name;
+    if (retrivedData.form_status === 'Draft') {
+      this.isDraftWebForm = true;
+    }
   }
 
   uploadFile(event) {
