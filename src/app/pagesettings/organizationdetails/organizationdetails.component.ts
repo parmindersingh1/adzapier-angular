@@ -133,7 +133,6 @@ export class OrganizationdetailsComponent implements OnInit {
   get editOrg() { return this.editOrganisationForm.controls; }
   loadOrganizationByID(id) {
     this.orgService.getOrganizationByID(id).subscribe((data) => {
-      console.log(data, 'data..');
       this.organizationName = data.response.orgname;
       this.addressOne = data.response.address1;
       this.addressTwo = data.response.address2;
@@ -166,7 +165,7 @@ export class OrganizationdetailsComponent implements OnInit {
     this.propertyname = '';
     this.website = '';
     this.logourl = '';
-    // this.selectedOrg = data;
+    this.inviteUserOrgForm.get('emailid')[this.isUpdateUserinvitation ? 'disable' : 'enable']();
     this.isEditProperty = false;
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
       // this.closeResult = `Closed with: ${result}`;
@@ -513,16 +512,17 @@ editUserInvitation(content, data) {
   this.inviteUserOrgForm.controls['permissions'].setValue(data.role_id);
    
   this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
-    this.organisationPropertyForm.reset();
+    this.inviteUserOrgForm.reset();
     // this.closeResult = `Closed with: ${result}`;
   }, (reason) => {
-    this.organisationPropertyForm.reset();
+    this.inviteUserOrgForm.reset();
     // this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
   });
 }
 
 onCancelClick() {
   this.isInviteFormSubmitted = false;
+  this.isUpdateUserinvitation = false;
   this.inviteUserOrgForm.reset();
   this.modalService.dismissAll('Canceled');
 }
