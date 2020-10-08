@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {RouterModule, Routes} from "@angular/router";
-import {CookieCategoryComponent} from "./cookie-category.component";
-import {AuthGuard} from "../../_helpers";
+import {RouterModule, Routes} from '@angular/router';
+import {CookieCategoryComponent} from './cookie-category.component';
+import {AuthGuard} from '../../../_helpers';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import {MatDialog, MatDialogModule} from '@angular/material/dialog';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';

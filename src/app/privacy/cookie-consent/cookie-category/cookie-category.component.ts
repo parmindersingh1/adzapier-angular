@@ -1,13 +1,14 @@
 import { ChangeDetectorRef, Component, Input, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { CookieCategoryService } from '../../_services/cookie-category.service';
+import { CookieCategoryService } from '../../../_services/cookie-category.service';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { NotificationsService } from 'angular2-notifications';
-import { OrganizationService } from '../../_services';
+import { OrganizationService } from '../../../_services';
 import { ConfirmationService, LazyLoadEvent, SortEvent } from 'primeng/api';
 import { MessageService } from 'primeng/api';
+import {moduleName} from '../../../_constant/module-name.constant';
 
 interface CategoryResponse {
   response: CategoryResponseData;
@@ -59,7 +60,7 @@ export class CookieCategoryComponent implements OnInit {
   private eventRows: string;
   private pagelimit: string;
   private orderBy: string;
-  private data: { limit: any; page: any; sortBy: any, sortColumn: any, search: any };
+  private data: { limit: any; page: any; sortBy: any, sortColumn: any, name: any };
   dismissible = true;
   alertMsg: any;
   isOpen = false;
@@ -132,14 +133,14 @@ export class CookieCategoryComponent implements OnInit {
       page: this.firstone,
       sortBy: event.sortOrder === -1 ? 'DESC' : 'ASC',
       sortColumn: event.sortField !== undefined ? event.sortField : '',
-      search: event.globalFilter === null ? '' : event.globalFilter
+      name: event.globalFilter === null ? '' : event.globalFilter
     };
     this.onGetDataFromServer();
   }
 
   onGetDataFromServer() {
     this.tLoading = true;
-    this.service.getCookieData(this.data, this.constructor.name).subscribe(res => {
+    this.service.getCookieData(this.data, this.constructor.name, moduleName).subscribe(res => {
       this.tLoading = false;
       this.cookieCategoryList = res['response'];
       this.totalCookieCount = res['count'];
@@ -202,19 +203,6 @@ export class CookieCategoryComponent implements OnInit {
     this.productDialog = true;
   }
 
-  // deleteSelectedProducts() {
-  //   this.confirmationService.confirm({
-  //     message: 'Are you sure you want to delete the selected products?',
-  //     header: 'Confirm',
-  //     icon: 'pi pi-exclamation-triangle',
-  //     accept: () => {
-  //       this.cookieCategoryList = this.cookieCategoryList.filter(val => !this.selectedProducts.includes(val));
-  //       this.selectedProducts = null;
-  //       this.messageService.add({severity:'success', summary: 'Successful', detail: 'Products Deleted', life: 3000});
-  //     }
-  //   });
-  // }
-
   editProduct(product) {
     this.catId = product.id;
     this.isUpdate = true;
@@ -230,7 +218,7 @@ export class CookieCategoryComponent implements OnInit {
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
         this.tLoading = true;
-        this.service.delete(cookieCat, this.constructor.name)
+        this.service.delete(cookieCat, this.constructor.name, moduleName)
           .subscribe(res => {
             this.tLoading = false;
             this.onGetDataFromServer();
@@ -249,7 +237,7 @@ export class CookieCategoryComponent implements OnInit {
   }
   onUpdate(catForm) {
     this.tLoading = true;
-    this.service.put(catForm, this.catId, this.constructor.name)
+    this.service.put(catForm, this.catId, this.constructor.name, moduleName.cookieCategoryModule)
       .subscribe(res => {
         this.tLoading = false;
         this.addCookieForm.reset();
@@ -266,7 +254,7 @@ export class CookieCategoryComponent implements OnInit {
   }
   saveProduct(catForm) {
     this.tLoading = true;
-    this.service.post(catForm, this.constructor.name)
+    this.service.post(catForm, this.constructor.name, moduleName.cookieCategoryModule)
       .subscribe(res => {
         this.addCookieForm.reset();
         this.tLoading = false;
@@ -340,7 +328,7 @@ export class CookieCategoryComponent implements OnInit {
   get c() { return this.categoryForm.controls; }
    onGetCategoryAndDurationList() {
     this.loading.start();
-    this.service.getCategoriesList(this.constructor.name).subscribe((res: any) => {
+    this.service.getCategoriesList(this.constructor.name, moduleName.cookieCategoryModule).subscribe((res: any) => {
       this.loading.stop();
       if (res.status === 200) {
         this.categoryList = res.response.categoryList;
@@ -364,7 +352,7 @@ export class CookieCategoryComponent implements OnInit {
       description: this.categoryForm.value.description
     };
     this.loading.start();
-    this.service.createCategory(categoryData, this.constructor.name).subscribe(res => {
+    this.service.createCategory(categoryData, this.constructor.name, moduleName).subscribe(res => {
       this.loading.stop();
       this.categoryModalRef.hide();
       if (res['status'] === 201) {
@@ -384,7 +372,7 @@ export class CookieCategoryComponent implements OnInit {
   }
   onRescanCookie() {
     this.isScanning = true;
-    this.service.cookieScanning(this.constructor.name).subscribe(res => {
+    this.service.cookieScanning(this.constructor.name, moduleName.cookieCategoryModule).subscribe(res => {
       this.isScanning = false;
       if (res['status'] === 201) {
         // this.notification.info('Scanning', res['response'], notificationConfig);

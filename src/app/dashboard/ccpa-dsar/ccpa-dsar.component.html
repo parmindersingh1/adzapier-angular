@@ -116,34 +116,20 @@
       <div class="card chart-height">
         <div class="card-header pd-y-15 d-md-flex align-items-center justify-content-between">
           <h6 class="mg-b-0">Requests</h6>
-          <ul class="list-inline d-flex mg-t-20 mg-sm-t-10 mg-md-t-0 mg-b-0">
-            <li class="list-inline-item d-flex align-items-center">
-              <span class="d-block wd-10 ht-10 bg-df-1 rounded mg-r-5"></span>
-              <span class="tx-sans tx-uppercase tx-10 tx-medium tx-color-03">Received</span>
-            </li>
-            <li class="list-inline-item d-flex align-items-center mg-l-5">
-              <span class="d-block wd-10 ht-10 bg-df-2 rounded mg-r-5"></span>
-              <span class="tx-sans tx-uppercase tx-10 tx-medium tx-color-03">Completed</span>
-            </li>
-            <li class="list-inline-item d-flex align-items-center mg-l-5">
-              <span class="d-block wd-10 ht-10 bg-df-3 rounded mg-r-5"></span>
-              <span class="tx-sans tx-uppercase tx-10 tx-medium tx-color-03">Plan</span>
-            </li>
-          </ul>
-        </div><!-- card-header -->
+        </div>
+<!--        <h6 class="mg-b-0"> Requests</h6>-->
 
-        <!--        <canvas baseChart-->
-        <!--                [datasets]="lineChartData"-->
-        <!--                [labels]="lineChartLabels"-->
-        <!--                [options]="lineChartOptions"-->
-        <!--                [colors]="lineChartColors"-->
-        <!--                [legend]="lineChartLegend"-->
-        <!--                [chartType]="lineChartType"-->
-        <!--                [plugins]="lineChartPlugins">-->
-        <!--        </canvas>-->
-
-        <div *ngIf="!requestChartError; else noChart" class="chart-one">
-          <div id="requestflotChart" class="flot-chart" style="height:312px"></div>
+        <div *ngIf="!requestChartError; else noChart" class="chart-one mt-1">
+<!--          <div id="requestflotChart" class="flot-chart" style="height:312px"></div>-->
+          <canvas baseChart
+                  [datasets]="lineChartData"
+                  [labels]="lineChartLabels"
+                  [options]="lineChartOptions"
+                  [colors]="lineChartColors"
+                  [legend]="lineChartLegend"
+                  [chartType]="lineChartType"
+                  [plugins]="lineChartPlugins">
+          </canvas>
         </div>
         <ng-template #noChart>
           <div class="text-center mt-5">
@@ -176,11 +162,7 @@
               <p class="tx-10 tx-uppercase tx-medium tx-color-03 tx-spacing-1 tx-nowrap mg-b-5">{{obj.label}}
               </p>
               <div class="d-flex align-items-center">
-                <div *ngIf="obj.label === 'Data Deletion'" style="background: #f0b06c" class="wd-10 ht-10 rounded-circle mg-r-5"></div>
-                <div *ngIf="obj.label === 'Data Portability'" style="background: #c693f9" class="wd-10 ht-10 rounded-circle mg-r-5"></div>
-                <div *ngIf="obj.label === 'Data Processing'" style="background: #6fe0e0" class="wd-10 ht-10 rounded-circle bg-pink mg-r-5"></div>
-                <div *ngIf="obj.label === 'Info Request'" style="background: #69b2f8" class="wd-10 ht-10 rounded-circle bg-pink mg-r-5"></div>
-                <div *ngIf="obj.label === 'Update Data'" style="background: #eb7db8" class="wd-10 ht-10 rounded-circle bg-pink mg-r-5"></div>
+                <div  [ngStyle]="{ background: obj.color }" class="wd-10 ht-10 rounded-circle mg-r-5"></div>
                 <h5 class="tx-normal tx-rubik mg-b-0">{{obj.value}} </h5>
               </div>
             </div>
@@ -224,7 +206,7 @@
               </tr>
               </thead>
               <tbody>
-              <tr *ngFor="let state of stateList">
+              <tr *ngFor="let state of stateList | slice:0:6">
                 <td class="tx-medium">{{state.state}}</td>
                 <td class="">{{state.count}}</td>
               </tr>
@@ -265,11 +247,7 @@
               <p class="tx-10 tx-uppercase tx-medium tx-color-03 tx-spacing-1 tx-nowrap mg-b-5">{{obj.label}}
               </p>
               <div class="d-flex align-items-center">
-                <div *ngIf="obj.label === 'Contractor'" style="background: #f0b06c" class="wd-10 ht-10 rounded-circle mg-r-5"></div>
-                <div *ngIf="obj.label === 'Customer'" style="background: #c693f9" class="wd-10 ht-10 rounded-circle mg-r-5"></div>
-                <div *ngIf="obj.label === 'Employee'" style="background: #6fe0e0" class="wd-10 ht-10 rounded-circle bg-pink mg-r-5"></div>
-                <div *ngIf="obj.label === 'Student'" style="background: #69b2f8" class="wd-10 ht-10 rounded-circle bg-pink mg-r-5"></div>
-                <div *ngIf="obj.label === 'Update Data'" style="background: #69b2f8" class="wd-10 ht-10 rounded-circle bg-pink mg-r-5"></div>
+                <div [ngStyle]="{ background: obj.color }" class="wd-10 ht-10 rounded-circle mg-r-5"></div>
                 <h5 class="tx-normal tx-rubik mg-b-0">{{obj.value}} </h5>
               </div>
             </div>
@@ -295,7 +273,7 @@
         </div>
         <ng-container *ngIf="Requests.length > 0; else noRequests">
           <ul class="list-group list-group-flush tx-13">
-            <li *ngFor="let request of Requests | slice:0:7" class="list-group-item d-flex pd-sm-x-20">
+            <li *ngFor="let request of Requests | slice:0:6" class="list-group-item d-flex pd-sm-x-20">
               <div class="avatar d-none d-sm-block">
                 <span *ngIf="request.status ==='New'" class="avatar-initial rounded-circle bg-primary">
                   <i class="fas fa-plus"></i>
@@ -303,19 +281,19 @@
                 <span *ngIf="request.status ==='InProgress'" class="avatar-initial rounded-circle bg-orange op-5">
                   <i class="fas fa-sync"></i>
                 </span>
-                <span *ngIf="request.status ==='Complete'" class="avatar-initial rounded-circle bg-teal">
+                <span *ngIf="request.status ==='Completed'" class="avatar-initial rounded-circle bg-teal">
                   <i class="fas fa-check"></i>
                 </span>
               </div>
 
               <div class="pd-sm-l-10">
                 <p style="text-transform: capitalize" class="tx-medium mg-b-0">{{request.name}}</p>
-<!--                <small class="tx-12 tx-color-03 mg-b-0">{{request.time | timeAgo}}</small>-->
+                <small class="tx-12 tx-color-03 mg-b-0">{{request.time | timeAgo}}</small>
               </div>
               <div class="mg-l-auto text-right">
                 <p class="tx-medium mg-b-0">Status</p>
-                <small *ngIf="request.status === 'InProgress'; else success"
-                       class="tx-12 tx-orange mg-b-0">Inprogress</small>
+                <small *ngIf="request.status === 'In Progress'; else success"
+                       class="tx-12 tx-orange mg-b-0">In Progress</small>
                 <ng-template #success>
                   <small class="tx-12 tx-success mg-b-0">{{request.status}}</small>
                 </ng-template>

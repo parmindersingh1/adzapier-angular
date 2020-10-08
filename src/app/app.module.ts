@@ -39,7 +39,6 @@ import { VerifyemailComponent } from './verifyemail/verifyemail.component';
 
 import { NgxUiLoaderModule, NgxUiLoaderConfig } from 'ngx-ui-loader';
 import { ngxUiLoaderConfig } from './_constant/loading.contant';
-import { CheckoutComponent } from './checkout/checkout.component';
 import { CheckoutConfirmationComponent } from './checkout-confirmation/checkout-confirmation.component';
 import { MatButtonModule } from '@angular/material/button';
 
@@ -75,7 +74,6 @@ export const isMock = environment.mock;
     PrivacypolicyComponent,
     CCPAComponent,
     VerifyemailComponent,
-    CheckoutComponent,
     CheckoutConfirmationComponent,
     WelcomeComponent
   ],

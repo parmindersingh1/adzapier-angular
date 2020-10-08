@@ -1,13 +1,14 @@
 import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, Validators, FormGroup, FormGroupDirective, NgForm} from '@angular/forms';
 import {ErrorStateMatcher} from '@angular/material/core';
-import {BannerConstant, defaultData, IabPurposeIds} from '../../_constant/gdpr-ccpa-banner.constant';
-import {CookieBannerService} from '../../_services/cookie-banner.service';
+import {BannerConstant, defaultData, IabPurposeIds} from '../../../_constant/gdpr-ccpa-banner.constant';
+import {CookieBannerService} from '../../../_services/cookie-banner.service';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
 import {NotificationsService} from 'angular2-notifications';
-import {OrganizationService} from '../../_services';
+import {OrganizationService} from '../../../_services';
 import {Location} from '@angular/common';
 import {Router} from '@angular/router';
+import {moduleName} from '../../../_constant/module-name.constant';
 
 
 /** Error when invalid control is dirty, touched, or submitted. */
@@ -76,7 +77,7 @@ export class CookieBannerComponent implements OnInit {
 
   onGetCookieBannerData() {
     this.loading.start('2');
-    this.cookieBannerService.onGetCookieBannerData( this.currentManagedOrgID ,  this.currrentManagedPropID, this.constructor.name)
+    this.cookieBannerService.onGetCookieBannerData( this.currentManagedOrgID ,  this.currrentManagedPropID, this.constructor.name, moduleName.cookieBannerModule)
       .subscribe((res: any) => {
         this.loading.stop('2');
         if (res.status === 200 && res.hasOwnProperty('response')) {
@@ -110,7 +111,7 @@ export class CookieBannerComponent implements OnInit {
 
   onGetCurrentPlan() {
     this.loading.start('1');
-    this.cookieBannerService.onGetPlanType(this.constructor.name)
+    this.cookieBannerService.onGetPlanType(this.constructor.name, moduleName.cookieBannerModule)
       .subscribe((res: any) => {
         this.loading.stop('1');
         const planType = res.response;
@@ -293,7 +294,7 @@ export class CookieBannerComponent implements OnInit {
       CONFIG: this.onGetFormData()
     };
     this.loading.start();
-    this.cookieBannerService.onSubmitCookieBannerData(userPrefrencesData, this.currentManagedOrgID, this.currrentManagedPropID, this.constructor.name )
+    this.cookieBannerService.onSubmitCookieBannerData(userPrefrencesData, this.currentManagedOrgID, this.currrentManagedPropID, this.constructor.name , moduleName.cookieBannerModule)
       .subscribe((res: any) => {
         this.loading.stop();
        // this.notification.info('Success', res['response'], notificationConfig);
@@ -327,7 +328,7 @@ export class CookieBannerComponent implements OnInit {
       CONFIG: this.onGetFormData()
     };
     this.loading.start();
-    this.cookieBannerService.onUpdateCookieBannerData(userPrefrencesData, this.currentManagedOrgID , this.currrentManagedPropID, this.constructor.name)
+    this.cookieBannerService.onUpdateCookieBannerData(userPrefrencesData, this.currentManagedOrgID , this.currrentManagedPropID, this.constructor.name, moduleName.cookieBannerModule)
       .subscribe((res: any) => {
         this.loading.stop();
         this.isOpen = true;
