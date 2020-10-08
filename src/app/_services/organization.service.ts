@@ -114,15 +114,15 @@ export class OrganizationService {
     }
 
     getOrgTeamMembers(orgID, pagelimit?): Observable<any> {
-        const key = 'response';
+      //  const key = 'response';
         if (pagelimit !== undefined) {
             return this.http.get<any>(environment.apiUrl + '/team_member' + '?orgid=' + orgID + pagelimit)
-            .pipe(map(res => res[key]), shareReplay());
+            .pipe(shareReplay());
         } else {
             return this.http.get<any>(environment.apiUrl + '/team_member' + '?orgid=' + orgID)
-            .pipe(map(res => res[key]), shareReplay());
+            .pipe(shareReplay());
         }
-        
+
     }
 
     disableOrganization(orgID, reqObj): Observable<any> {

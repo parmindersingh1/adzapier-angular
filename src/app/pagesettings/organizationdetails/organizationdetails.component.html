@@ -26,7 +26,7 @@
                         <button (click)="editOrganizationModalPopup(editOrgModal)"
                         class="btn btn-xs btn-primary float-right">
                         <!-- <i-feather name="edit-2" class="feather-16"></i-feather> -->
-                        <span class="d-none d-sm-inline mg-l-0">  <i class="fa fa-pen mr-1" aria-hidden="true"></i> Edit</span>
+                        <span class="d-none d-sm-inline cursorpointer mg-l-0">  <i class="fa fa-pen mr-1" aria-hidden="true"></i> Edit</span>
                     </button>
                         <button (click)="disableOrganization()"
                         class="btn btn-xs btn-white float-right">
@@ -244,8 +244,9 @@
                         </thead>
                         <tbody>
                                 <tr *ngFor="let list of organizationTeamMemberList | paginate:paginationConfig | filter: searchText:'user_name':'user_email':'role_name'; let i = index">
+                                   
                                     <td>
-                                        {{ (paginationConfig.currentPage - 1) * paginationConfig.itemsPerPage + i + 1 }}
+                                       {{ (paginationConfig.currentPage - 1) * paginationConfig.itemsPerPage + i + 1 }}
                                     </td>
                                     <td>{{list.user_name}}</td>
                                     <td>
@@ -259,21 +260,21 @@
                                         <span *ngIf="!isDateOrString(list.user_last_login)">{{list.user_last_login}}</span>
                                     </td>
                                   <td class="text-center">
-                                    <button type="button" *ngIf="list.user_last_login === 'Invitation sent' || list.user_last_login === 'Invitation Pending'"
-                                            (click)="onResendInvitation(list.user_email)"  class="btn btn-sm btn-primary"><i class="fas fa-envelope	"></i> Resend Invitation</button>
+                                      <!-- *ngIf="list.user_last_login === 'Invitation sent' || list.user_last_login === 'Invitation Pending'"-->
+                                    <button type="button"
+                                            (click)="onResendInvitation(list.approver_id)"  class="btn btn-xs btn-primary"><i class="fas fa-envelope	"></i> Resend Invitation</button>
                                   </td>
                                     <td>
+                                        <a class="pd-r-5" (click)="editUserInvitation(inviteuserModal,list)">
+                                            <span class="d-none d-sm-inline cursorpointer mg-l-0">  <i class="fa fa-pen mr-1 colorblue" aria-hidden="true"></i></span>
+                                        </a>
                                         <a class="pd-r-5" (click)="removeTeamMember(list.id)">
                                             <i class="far fa-trash-alt tx-danger fa-sm"></i>
                                         </a>
                                     </td>
 
                                 </tr>
-                                <!-- <tr *ngIf="organizationTeamMemberList?.length == 0">
-                                    <td colspan="7" class="txt-center">
-                                        <div> No User found </div>
-                                    </td>
-                                </tr> -->
+                               
                                 <tr>
                                     <td colspan="7" class="txt-center" *ngIf="(organizationTeamMemberList | filter: searchText:'role_name':'user_email')?.length===0">No
                                         records found.</td>
@@ -467,8 +468,10 @@
 
     <ng-template #inviteuserModal let-modal>
         <div class="modal-header">
-            <h4 class="modal-title" id="modal-basic-title">Invite new users</h4>
-
+            <h4 class="modal-title" id="modal-basic-title" *ngIf="!isUpdateUserinvitation;else editInviteUserHeading">Invite New User</h4>
+            <ng-template #editInviteUserHeading>
+                <h4 class="modal-title" id="modal-basic-title">Update user</h4>
+            </ng-template>
             <button type="button" class="close" aria-label="Close" (click)="onCancelClick()">
                 <span aria-hidden="true">×</span>
             </button>
@@ -528,5 +531,5 @@
         </div>
     </ng-template>
     <div class="col-sm-5 mr-0 float-right flotingdiv">
-        <alert *ngIf="isOpen" [type]="alertType" [dismissible]="dismissible" (onClosed)="onClosed(alert)">{{  alertMsg}}</alert>
+        <alert *ngIf="isOpen" [type]="alertType" dismissOnTimeout="5000" [dismissible]="dismissible" (onClosed)="onClosed(alert)">{{  alertMsg}}</alert>
     </div>

@@ -23,8 +23,6 @@ import { SharedbootstrapModule } from 'src/app/sharedbootstrap/sharedbootstrap.m
     SharedbootstrapModule
   ]
  // providers:[NgbModule, NgbModal],
- 
+
 })
-export class DsarformModule {
-  
- }
+export class DsarformModule { }

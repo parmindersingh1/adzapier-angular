@@ -167,7 +167,7 @@
                             </ng-template>
                             <div *ngIf="i==getCustomFields(customFields).length"
                                 class="col-sm-2 customdata downloadFile">
-                                <label class="tx-sans"> Attachments isAttachmentExist |{{isAttachmentExist}}</label>
+                                <label class="tx-sans"> Attachments</label>
                                 <p [ngClass]="{'show':!isAttachmentExist,'hide':isAttachmentExist}">
                                     <i-feather class="feather-file" name="file"></i-feather>
                                     <a (click)="viewFile()" style="cursor: pointer;">View File</a>
@@ -291,14 +291,14 @@
                                                     (click)="openResponseModalPopup(subTaskResponseModal,task)">{{task.name}}</a>
                                             </div>
                                         </td>
-                                        <td><span [innerHTML]="getStagename(task.workflow_stage)">
+                                        <td><span [innerHTML]="getStagename(task.workflow_stage) | safe : 'html'">
 
                                             </span></td>
                                         <td><span class="badge"
                                                 [ngClass]="{'badge-success':task.mark_completed,'badge-warning':!task.mark_completed}">
                                                 {{task.mark_completed ? 'Completed': 'Assigned' }}</span></td>
                                         <td>
-                                            <span [innerHTML]="displayApproverName(task.assignee)"></span>
+                                            <span [innerHTML]="displayApproverName(task.assignee) | safe : 'html'"></span>
                                         </td>
                                         <td>
                                             {{task.deadline | date : 'dd-MM-yyyy'}}
@@ -356,7 +356,7 @@
                                                 posted feedback at <small class="lightgray">
                                                     {{data.created_at | date:'mediumTime'}}</small>
                                             </p>
-                                            <div class="userfeedback" [innerHTML]="data.activity_feedback">
+                                            <div class="userfeedback" [innerHTML]="data.activity_feedback | safe : 'html'">
                                             </div>
                                             <p class="feedback" *ngIf="data.previous_status && data.activity_feedback === ''">
                                                 <strong>{{data.user_firstname}} {{data.user_lastname}}
@@ -406,7 +406,7 @@
                                                 <!-- at <span *ngIf="data.created_at">{{data.created_at | date:'medium'}}</span> -->
                                             </p>
 
-                                            <div class="userfeedback" [innerHTML]="data.email_body">
+                                            <div class="userfeedback" [innerHTML]="data.email_body | safe : 'html'">
                                             </div>
                                         </div>
 
@@ -620,7 +620,7 @@
             </div>
 
             <div class="row">
-                <div class="col-sm-12 ml-2 mb-3">
+                <div class="col-sm-12 ml-1 mb-3">
                     <div class="form-check">
                         <label for="issubtaskrequired"
                             class="form-check-label tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">

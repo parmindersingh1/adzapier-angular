@@ -1,0 +1,65 @@
+h6 > i {
+    margin: 0 10px 0 0;
+    font-size: 16px;
+}
+
+.height50 {
+    height: 50px !important;
+}
+
+// .card-header p {
+//     margin-left: 29px;
+// }
+
+// .card-header > a::after{
+//     display: inline-block;
+//     content: '\2192';
+//     font-size: 33px;
+//     margin: 0px 10px;
+//     line-height: 33px;
+//     font-weight: normal;
+//     color: #ccc;
+//    // background: url(../../../../assets/imgs/right.png) no-repeat 0px 55%  !important;   
+// }
+
+.link {
+    margin: 0;
+    position: absolute;
+    bottom: 25px;
+}
+
+.link > a {
+    color: #0168fa;
+    font-weight: 500;
+    // display: inline-flex;
+    padding: 0;
+    margin: 10px 0;
+    cursor: pointer;
+    flex-direction: row;
+    align-items: center;
+}
+
+.link > a::after{
+    display: inline-block;
+    content: '\2192';
+    font-size: 15px;
+    margin: 0px 10px;
+    line-height: 17px;
+    font-weight: normal;
+    color: #0168fa;
+   // background: url(../../../../assets/imgs/right.png) no-repeat 0px 55%  !important;   
+}
+
+.card-header {
+    height: 130px;
+    position: relative;
+}
+
+.card-header > i {
+    font-size: 30px;
+    margin-right: 10px;
+}
+
+* {
+    box-sizing: border-box;
+  }

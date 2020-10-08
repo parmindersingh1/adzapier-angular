@@ -97,11 +97,11 @@ export class UserService {
         if (error.email_error instanceof ErrorEvent) {
             // client-side error
             errorMessage = `Error: ${error.email_error}`;
+
         } else {
             // server-side error
             errorMessage = `${error.email_error}`;
         }
-        console.log(errorMessage);
         return throwError(errorMessage);
     }
 
