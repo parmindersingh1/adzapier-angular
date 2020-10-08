@@ -9,13 +9,14 @@ import { OrganizationdetailsComponent } from './organizationdetails/organization
 import { OrganizationteamComponent } from './organizationteam/organizationteam.component';
 
 
-
-
 const routes: Routes = [
   { path: '', component: PagesettingsComponent, canActivate: [AuthGuard]},
   {
     path: 'company',
-    loadChildren: () => import('./company/company.module').then(m => m.CompanyModule)
+    children: [
+      {path: '', loadChildren: () => import('./company/company.module').then(m => m.CompanyModule) },
+      {path: 'companyteam', loadChildren: () => import('./companyteam/companyteam.module').then(m => m.CompanyTeamModule) }
+    ]
   },
   {
     path: 'billing',

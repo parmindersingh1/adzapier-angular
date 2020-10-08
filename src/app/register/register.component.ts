@@ -35,8 +35,8 @@ export class RegisterComponent implements OnInit {
         }
 
     ngOnInit() {
-        const strRegx = '^[a-zA-Z \-\']+';
-        const alphaNumeric = '^(?![0-9]*$)[a-zA-Z0-9 ]+$';
+        const strRegx = '.*\\S.*[a-zA-Z \-\']';
+        const alphaNumeric = '.*\\S.*[a-zA-z0-9 ]'; // '^(?![0-9]*$)[a-zA-Z0-9 ]+$';
         const zipRegex = '^[0-9]*$';
         this.regForm = this.formBuilder.group({
             firstName: ['', [Validators.required, Validators.pattern(strRegx)]],
@@ -105,4 +105,5 @@ export class RegisterComponent implements OnInit {
         this.alertMsg = !dismissedAlert;
         this.isOpen = false;
     }
+
 }

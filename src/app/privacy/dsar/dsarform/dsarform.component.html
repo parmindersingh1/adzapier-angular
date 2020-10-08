@@ -45,7 +45,7 @@
 
                     <div class="btn-toolbar sw-toolbar sw-toolbar-bottom justify-content-end">
                         <div class="btn-group mr-2 mb-2 sw-btn-group" role="group">
-                            <button class="btn btn-secondary sw-btn-next" (click)="nav.select(2)">Next</button>
+                            <button class="btn btn-primary sw-btn-next" (click)="nav.select(2)">Next</button>
                         </div>
                     </div>
                 </ng-template>
@@ -101,7 +101,7 @@
                                                 <div class="col-sm-12">
                                                     <div class="d-flex justify-content-between">
                                                         <div class="p-2" *ngIf="!isAddingFormControl"><button
-                                                                class="btn btn-primary smallbtn"
+                                                                class="btn btn-xs btn-primary"
                                                                 (click)="addingFormControl()">
                                                                 Add new</button></div>
                                                     </div>
@@ -362,8 +362,8 @@
                                                             <input type="text" class="form-control form-control-sm"
                                                                 name="headerlogoURL" [(ngModel)]="headerlogoURL"
                                                                 placeholder="Add logo URL" />
-                                                            <button class="btn btn-primary ml-2"
-                                                                (click)="addHeaderLogo()">save logo</button>
+                                                            <button class="btn btn-xs btn-primary ml-2"
+                                                                (click)="addHeaderLogo()">Save logo</button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -483,7 +483,7 @@
                                 </div>
                                 <div class="quilleditor-wrapper py-2">
                                     <div class="quilleditor" [ngStyle]="welcomeStyle()"
-                                        [innerHTML]="editorDataWelcome?editorDataWelcome:welcomeText"></div>
+                                        [innerHTML]="editorDataWelcome?(editorDataWelcome | safe: 'html'):welcomeText"></div>
                                 </div>
                             </div>
 
@@ -736,7 +736,7 @@
                                 </form>
                                 <div class="quilleditor-wrapper py-2 border-top">
                                     <div class="quilleditor" [ngStyle]="footerStyle()"
-                                        [innerHTML]="editorDataFooter?editorDataFooter:footerText"></div>
+                                        [innerHTML]="editorDataFooter?(editorDataFooter | safe: 'html'):footerText"></div>
                                 </div>
 
                             </div>
@@ -744,9 +744,9 @@
                         </div>
                     </div>
                     <div class="btn-toolbar sw-toolbar sw-toolbar-bottom justify-content-end mb-2">
-                        <div class="btn-group sw-btn-group mb-2 mr-2" role="group">
-                            <button class="btn btn-secondary sw-btn-prev" (click)="nav.select(1)">Previous</button>
-                            <button class="btn btn-secondary sw-btn-next" [disabled]="active === 1"
+                        <div>
+                            <button class="btn btn-primary sw-btn-prev mr-2" (click)="nav.select(1)">Previous</button>
+                            <button class="btn btn-primary sw-btn-next" [disabled]="active === 1"
                                 (click)="publishCCPAFormConfiguration(registerForm)">Next</button>
                         </div>
                     </div>
@@ -826,9 +826,9 @@
 
 
                     <div class="btn-toolbar sw-toolbar sw-toolbar-bottom justify-content-end">
-                        <div class="btn-group mr-2 mb-2 sw-btn-group" role="group">
-                            <button class="btn btn-secondary sw-btn-prev" (click)="nav.select(2)">Previous</button>
-                            <button class="btn btn-secondary sw-btn-next" [disabled]="active === 1" type="submit"
+                        <div>
+                            <button class="btn btn-primary sw-btn-prev mr-2" (click)="nav.select(2)">Previous</button>
+                            <button class="btn btn-primary sw-btn-next" [disabled]="active === 1" type="submit"
                                 (click)="createDraft()">Next</button>
                             <!--(click)="nav.select(4)"-->
                         </div>
@@ -840,14 +840,15 @@
                 <ng-template ngbNavContent>
                     <p>Four</p>
                     <div class="btn-toolbar sw-toolbar sw-toolbar-bottom justify-content-end">
-                        <div class="btn-group mr-2 mb-2 sw-btn-group" role="group">
-                            <button class="btn btn-secondary sw-btn-prev" (click)="nav.select(3)">Previous</button>
-                            <button class="btn btn-secondary sw-btn-next" [disabled]="true">Submit</button>
+                        <div>
+                            <button class="btn btn-primary sw-btn-prev mr-2" (click)="nav.select(3)">Previous</button>
+                            <button class="btn btn-primary sw-btn-next" [disabled]="true">Submit</button>
                         </div>
                     </div>
                 </ng-template>
             </li>
             <li>
+                <span *ngIf="isDraftWebForm" class="draftspan">Draft</span>
                 <span *ngIf="crid" class="previewbtn"><a target="_blank" class="btn btn-xs btn-primary"
                         (click)="previewCCPAForm()">Preview</a></span>
             </li>
