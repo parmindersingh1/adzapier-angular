@@ -10,10 +10,8 @@ import {NgxUiLoaderService} from 'ngx-ui-loader';
 })
 export class VerifyemailComponent implements OnInit {
   public id: string;
-  messageObj = {
-    isError: false,
-    message: ''
-  };
+  isUserVarified = false;
+  message: string;
   constructor( private activatedRoute: ActivatedRoute,
                private loading: NgxUiLoaderService,
                private userService: UserService) {
@@ -28,12 +26,12 @@ export class VerifyemailComponent implements OnInit {
     this.loading.start();
     this.userService.verifyEmailAddress(requestObj).subscribe((data) => {
       this.loading.stop();
-      this.messageObj.isError = false;
-      this.messageObj.message = 'Your email address is successfully verified ! please login to access your account!';
+      this.isUserVarified = true;
+      this.message = 'Your email address is successfully verified ! please login to access your account!';
     }, error => {
       this.loading.stop();
-      this.messageObj.isError = true;
-      this.messageObj.message = 'This link has been expired!';
+      this.isUserVarified = false;
+      this.message = 'This link has been expired!';
     });
   }
 
