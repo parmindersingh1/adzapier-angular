@@ -89,6 +89,7 @@ export class DsarRequestdetailsComponent implements OnInit {
   subTaskResponseForm: FormGroup;
   submitted: boolean;
   isActivitysubmitted: boolean;
+  isEmailPostsubmitted: boolean;
   isRequestDetailFormsubmit: boolean;
   isResponseSubmitted: boolean;
   requestDetailsbyId: any;
@@ -176,7 +177,7 @@ export class DsarRequestdetailsComponent implements OnInit {
       editor: new FormControl('', Validators.required)
     });
     this.quillEditorEmailText = this.formBuilder.group({
-      dropdownEmailTemplate: ['', [Validators.required]],
+      dropdownEmailTemplate: [''],
       editorEmailMessage: ['', [Validators.required]],
       emailAttachment: ['']
     });
@@ -206,7 +207,7 @@ export class DsarRequestdetailsComponent implements OnInit {
 
     this.subTaskResponseForm = this.formBuilder.group({
       taskresponse: ['', [Validators.required]],
-      markcompleted: [''],
+      markcompleted: ['', [Validators.requiredTrue]],
       uploaddocument: ['']
     });
 
@@ -223,6 +224,7 @@ export class DsarRequestdetailsComponent implements OnInit {
     // this.onChanges();
   }
   get addActivity() { return this.quillEditorText.controls; }
+  get addEmailPost() { return this.quillEditorEmailText.controls; }
   get editRequest() { return this.editRequestDetailForm.controls; }
   get addsubTask() { return this.subTaskForm.controls; }
   get subTaskResponse() { return this.subTaskResponseForm.controls; }
@@ -609,48 +611,60 @@ export class DsarRequestdetailsComponent implements OnInit {
       return false;
     } else {
       //  console.log(this.selectedStages[this.selectedStages.length - 1].id);
-      const reqObj = {
-        current_status: this.currentStageId !== undefined ? this.currentStageId : this.selectedStages[this.selectedStages.length - 1].id,
-        previous_status: this.previousStageId,
-        activity_feedback: this.quillEditorText.get('editor').value //this.editorActivityPost
-      };
-      Object.keys(reqObj).forEach(key => {
-        if (reqObj[key] === undefined) {
-          delete reqObj[key];
-        }
-      });
-      //  return false;
-      this.stageAPI(this.requestID, reqObj);
+      if (this.selectedStages.length === 0) {
+        this.alertMsg = 'Stage not selected!';
+        this.isOpen = true;
+        this.alertType = 'info';
+        return false;
+      } else {
+        const reqObj = {
+          current_status: this.currentStageId !== undefined ? this.currentStageId : this.selectedStages[this.selectedStages.length - 1].id,
+          previous_status: this.previousStageId,
+          activity_feedback: this.quillEditorText.get('editor').value // this.editorActivityPost
+        };
+        Object.keys(reqObj).forEach(key => {
+          if (reqObj[key] === undefined) {
+            delete reqObj[key];
+          }
+        });
+        this.stageAPI(this.requestID, reqObj);
+      }
     }
 
   }
 
   onSubmitEmailPost() {
-    const requestObj = {
-      current_status: this.currentWorkflowStageID || this.workflowStages[0].id, // this.currentStageId || this.workflowStages[0].id,
-      email_body: this.quillEditorEmailText.get('editorEmailMessage').value,
-      upload: this.quillEditorEmailText.get('emailAttachment').value
-    };
+    this.isEmailPostsubmitted = true;
+    if (this.quillEditorEmailText.invalid) {
+      return false;
+    } else {
+      const requestObj = {
+        current_status: this.currentWorkflowStageID || this.workflowStages[0].id, // this.currentStageId || this.workflowStages[0].id,
+        email_body: this.quillEditorEmailText.get('editorEmailMessage').value,
+        upload: this.quillEditorEmailText.get('emailAttachment').value
+      };
 
-    const fd = new FormData();
-    fd.append('current_status', this.currentWorkflowStageID || this.workflowStages[0].id);
-    fd.append('email_body', this.quillEditorEmailText.get('editorEmailMessage').value);
-    fd.append('upload', this.quillEditorEmailText.get('emailAttachment').value);
+      const fd = new FormData();
+      fd.append('current_status', this.currentWorkflowStageID || this.workflowStages[0].id);
+      fd.append('email_body', this.quillEditorEmailText.get('editorEmailMessage').value);
+      fd.append('upload', this.quillEditorEmailText.get('emailAttachment').value);
 
-    this.ccpaDataService.addCCPADataEmailActivity(this.requestID, fd).subscribe((data) => {
-      if (data) {
-        // alert(data.response);
-        this.alertMsg = data.response;
+      this.ccpaDataService.addCCPADataEmailActivity(this.requestID, fd).subscribe((data) => {
+        if (data) {
+          // alert(data.response);
+          this.alertMsg = data.response;
+          this.isOpen = true;
+          this.alertType = 'success';
+          this.loadEmailLog(this.requestID);
+          this.quillEditorEmailText.get('editorEmailMessage').reset();
+          this.isEmailPostsubmitted = false;
+        }
+      }, (error) => {
+        this.alertMsg = error;
         this.isOpen = true;
-        this.alertType = 'success';
-        this.loadEmailLog(this.requestID);
-      }
-    }, (error) => {
-      this.alertMsg = error;
-      this.isOpen = true;
-      this.alertType = 'danger';
-    });
-
+        this.alertType = 'danger';
+      });
+    }
     //this.stageAPI(this.requestID, reqObj);
   }
 
@@ -663,6 +677,8 @@ export class DsarRequestdetailsComponent implements OnInit {
         this.isOpen = true;
         this.alertType = 'success';
         this.loadActivityLog(requestID);
+        this.quillEditorText.get('editor').setValue('');
+        this.isActivitysubmitted = false;
       }
     }, (error) => {
       this.alertMsg = error;
