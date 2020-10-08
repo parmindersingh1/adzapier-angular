@@ -7,8 +7,7 @@ import { AuthGuard } from 'src/app/_helpers';
 
 const routes: Routes = [
   {path: '', component: BillingComponent,  canActivate: [AuthGuard]},
- // {path: 'update', component: UpdateBillingComponent,  canActivate: [AuthGuard]}
-
+ {path: 'pricing', loadChildren: () => import('./pricing/pricing.module').then(m => m.PricingModule), canActivate: [AuthGuard]}
   ];
 @NgModule({
   imports: [RouterModule.forChild(routes)],

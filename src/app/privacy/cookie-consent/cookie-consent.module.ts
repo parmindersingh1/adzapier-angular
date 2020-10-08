@@ -1,26 +1,22 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {CookieConsentTableComponent} from './cookie-consent.component';
-import {ButtonModule} from 'primeng/button';
-import { RatingModule} from 'primeng/rating';
-import { TableModule} from 'primeng/table';
-import {FormsModule} from '@angular/forms';
 import {RouterModule, Routes} from '@angular/router';
+import {AuthGuard} from '../../_helpers';
 
 const route: Routes = [
-  {path: '', component: CookieConsentTableComponent}
-];
+  {
+    path: 'cookie-tracking', loadChildren: () => import('./cookie-tracking/cookie-tracking.module').then(m => m.CookieTrackingModule), canActivate: [AuthGuard]
+  },  {
+    path: 'cookie-banner', loadChildren: () => import('./cookie-banner/cookie-banner.module').then(m => m.CookieBannerModule), canActivate: [AuthGuard]
+  },  {
+    path: 'cookie-category', loadChildren: () => import('./cookie-category/cookie-category.module').then(m => m.CookieCategoryModule), canActivate: [AuthGuard]
+  },
+]
 
 @NgModule({
-  declarations: [
-    CookieConsentTableComponent
-  ],
+  declarations: [],
   imports: [
     CommonModule,
-    RatingModule,
-    FormsModule,
-    ButtonModule,
-    TableModule,
     RouterModule.forChild(route)
   ]
 })

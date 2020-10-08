@@ -12,17 +12,37 @@ import {OrganizationService} from '../../_services';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
 import {DashboardService} from '../../_services/dashboard.service';
 import {NotificationsService} from 'angular2-notifications';
-import {notificationConfig} from '../../_constant/notification.constant';
 import * as moment from 'moment';
-import {df1, df2, df3, df4, df5, df6} from '../sampledata';
-import {ChangeDetection} from '@angular/cli/lib/config/schema';
+import {df3} from '../sampledata';
+import {moduleName} from '../../_constant/module-name.constant';
 
 declare var jQuery: any;
 interface Country {
   count: number;
   state: string;
 }
+const colorValues =  [
+  {
+    borderColor: '#0168fa',
+    backgroundColor: 'rgba(104, 154, 223, 0.68)',
+    borderWidth: 1
+  },
+  {
+    borderColor: '#c29200',
+    backgroundColor: 'rgba(255, 193, 7, 0.68)',
+    borderWidth: 1
+  },
+  {
+    borderColor: '#c40e20',
+    backgroundColor: 'rgba(220, 53, 69, 0.68)',
+    borderWidth: 1
+  },
+];
 
+const colorCodes = [ '#f77eb9', '#fdb16d', '#c693f9',   '#65e0e0', '#69b2f8',   '#6fd39b'];
+const nullStatics = [
+  [0, 0], [1, 0], [2, 0], [3, 0], [4, 0], [5, 0], [6, 0], [7, 0], [8, 0], [9, 0]
+];
 @Component({
   selector: 'app-ccpa-dsar',
   templateUrl: './ccpa-dsar.component.html',
@@ -55,6 +75,37 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
   // public lineChartPlugins = [];
 
 
+
+  public lineChartData  = [
+    {},
+  ];
+  public lineChartLabels: Label[] = [];
+  public lineChartOptions = {
+    responsive: true,
+    scales: {
+      yAxes: [{
+        ticks: {
+          // suggestedMax: 10,
+          // stepSize: 1
+          callback: (value) => {
+            if (Math.floor(value) === value) {
+              return value;
+            }
+          }
+        }
+      }]
+    }
+  };
+  public lineChartColors = [
+    {
+      borderColor: '#99ffff',
+      backgroundColor: '#c3f6f6',
+      borderWidth: 1
+    }
+  ];
+  public lineChartLegend = true;
+  public lineChartType = 'line';
+  public lineChartPlugins = [];
   // Doughnut
   public doughnutChartLabels: Label[] = ['No Record'];
   public doughnutChartData: MultiDataSet = [
@@ -65,8 +116,7 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
   doughnutColors = [
     {
       backgroundColor: [
-        '#f0b06c',  '#c693f9', '#6fe0e0', '#69b2f8',  '#f77eb9',
- // '#f77eb9', '#fdb16d', '#c693f9',   '#65e0e0', '#69b2f8',   '#6fd39b'
+ '#f77eb9', '#fdb16d', '#c693f9',   '#65e0e0', '#69b2f8',   '#6fd39b'
       ]
     }
   ];
@@ -74,6 +124,7 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
   // Pie
   public pieChartOptions: ChartOptions = {
     responsive: true,
+
   };
   public pieChartLabels: Label[] = ['No Record'];
   public pieChartData: SingleDataSet = [100];
@@ -83,7 +134,7 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
   pieColors = [
     {
       backgroundColor: [
-        '#f0b06c',  '#c693f9', '#6fe0e0', '#69b2f8',  '#f77eb9',
+        '#f77eb9', '#fdb16d', '#c693f9',   '#65e0e0', '#69b2f8',   '#6fd39b'
       ]
     }
   ];
@@ -100,7 +151,9 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
   stateList: Country[] = [];
   public requestChartError = true;
   currentState = 'usa';
-  private stateCountryColor = {};
+  private countryColor = {};
+  private stateColor = {};
+  private countryList = [];
 
   constructor(
     private orgservice: OrganizationService,
@@ -119,79 +172,78 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.onInsilizaedMap();
     this.onSetUpDate();
   }
 
-  onSetUpMainMap(data, labelData, requestsChartCount) {
-    console.log('requestsChartCount', requestsChartCount)
-    const newData = [{
-      data: data[0],
-      color: '#69b2f8'
-    }, {
-      data: data[1],
-      color: '#d1e6fa'
-    }, {
-      data: data[2],
-      color: '#d1e6fa',
-      lines: {
-        fill: false,
-        lineWidth: 1.5
-      }
-    }];
-
-    const options = {
-      series: {
-        stack: 0,
-        shadowSize: 0,
-        lines: {
-          show: true,
-          lineWidth: 0,
-          fill: 1
-        }
-      },
-      grid: {
-        borderWidth: 0,
-        aboveData: true
-      },
-
-      yaxis: {
-        show: true,
-        color: 'rgba(72, 94, 144, .1)',
-        min: 0,
-        max: requestsChartCount * 2,
-        font: {
-          size: 10,
-          color: '#8392a5'
-        }
-      },
-      xaxis: {
-        show: true,
-        ticks: labelData,
-        // ticks: [[ 0, 'jan'], [1, 'feb'], [2, 'march'], [3, 'april'], [4 , 'may'],
-        // [5, 'june'], [6, 'july'], [7, 'Aug'], [8, 'Sep'], [9, 'Oct'], [10, 'nov'], [11, 'dec']
-        // ],
-
-        // ticks: [[0, ''], [8, 'Jan'], [20, 'Feb'], [32, 'Mar'], [44, 'Apr'], [56, 'May'],
-        //   [68, 'Jun'], [80, 'Jul'], [92, 'Aug'], [104, 'Sep'], [116, 'Oct'], [128, 'Nov'], [140, 'Dec']],
-        // color: 'rgba(255,255,255,.2)'
-
-        // ticks: [[0, ''], [2, 'Jan'], [3, 'Feb'], [4, 'Mar'], [5, 'Apr'], [6, 'May'],
-        //   [7, 'Jun'], [8, 'Jul'], [9, 'Aug'], [10, 'Sep'], [11, 'Oct'], [12, 'Nov'], [13, 'Dec']],
-        color: 'rgba(255,255,255,.2)'
-      }
-    };
-    const plot = jQuery.plot('#requestflotChart', newData, options);
-
-    plot.setData(newData);
-    plot.setupGrid();
-    plot.draw();
-    this.cd.detectChanges();
-    return plot;
-  }
+  // onSetUpMainMap(data, labelData, requestsChartCount) {
+  //   console.log('requestsChartCount', requestsChartCount)
+  //   const newData = [{
+  //     data: data[0],
+  //     color: '#69b2f8'
+  //   }, {
+  //     data: data[1],
+  //     color: '#d1e6fa'
+  //   }, {
+  //     data: data[2],
+  //     color: '#d1e6fa',
+  //     lines: {
+  //       fill: false,
+  //       lineWidth: 1.5
+  //     }
+  //   }];
+  //
+  //   const options = {
+  //     series: {
+  //       stack: 0,
+  //       shadowSize: 0,
+  //       lines: {
+  //         show: true,
+  //         lineWidth: 0,
+  //         fill: 1
+  //       }
+  //     },
+  //     grid: {
+  //       borderWidth: 0,
+  //       aboveData: true
+  //     },
+  //
+  //     yaxis: {
+  //       show: true,
+  //       color: 'rgba(72, 94, 144, .1)',
+  //       min: 0,
+  //       max: requestsChartCount * 2,
+  //       font: {
+  //         size: 10,
+  //         color: '#8392a5'
+  //       }
+  //     },
+  //     xaxis: {
+  //       show: true,
+  //       ticks: labelData,
+  //       // ticks: [[ 0, 'jan'], [1, 'feb'], [2, 'march'], [3, 'april'], [4 , 'may'],
+  //       // [5, 'june'], [6, 'july'], [7, 'Aug'], [8, 'Sep'], [9, 'Oct'], [10, 'nov'], [11, 'dec']
+  //       // ],
+  //
+  //       // ticks: [[0, ''], [8, 'Jan'], [20, 'Feb'], [32, 'Mar'], [44, 'Apr'], [56, 'May'],
+  //       //   [68, 'Jun'], [80, 'Jul'], [92, 'Aug'], [104, 'Sep'], [116, 'Oct'], [128, 'Nov'], [140, 'Dec']],
+  //       // color: 'rgba(255,255,255,.2)'
+  //
+  //       // ticks: [[0, ''], [2, 'Jan'], [3, 'Feb'], [4, 'Mar'], [5, 'Apr'], [6, 'May'],
+  //       //   [7, 'Jun'], [8, 'Jul'], [9, 'Aug'], [10, 'Sep'], [11, 'Oct'], [12, 'Nov'], [13, 'Dec']],
+  //       color: 'rgba(255,255,255,.2)'
+  //     }
+  //   };
+  //   const plot = jQuery.plot('#requestflotChart', newData, options);
+  //
+  //   plot.setData(newData);
+  //   plot.setupGrid();
+  //   plot.draw();
+  //   this.cd.detectChanges();
+  //   return plot;
+  // }
 
   onCountMap(requestComplete, requestReceived, requestInProgress, timeToComplete, dashBoardChartCount) {
-    console.log('dashBoardChartCount', dashBoardChartCount);
+    console.log('requestReceived', requestReceived);
     jQuery.plot('#flotChart3', [{
       data: requestReceived,
       color: '#9db2c6'
@@ -267,8 +319,10 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
       xaxis: {show: false}
     });
 
+    console.log('timeToComplete' , timeToComplete)
     jQuery.plot('#flotChart6', [{
-      data: timeToComplete,
+      // data: timeToComplete,
+      data: timeToComplete.length > 0 ? timeToComplete : nullStatics,
       color: '#9db2c6'
     }], {
       series: {
@@ -304,24 +358,22 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
     }, 1000);
   }
 
-  onInsilizaedMap() {
+  onSetUsaMap() {
     const that = this;
-    if (this.currentState === 'usa') {
-      console.log('stateCountryColor', that.stateCountryColor);
-      jQuery('#vmap').empty();
-      jQuery('#vmap').vectorMap({
+    jQuery('#vmap').empty();
+    jQuery('#vmap').vectorMap({
         map: 'usa_en',
         showTooltip: true,
         backgroundColor: '#fff',
         color: '#d1e6fa',
-        colors: that.stateCountryColor,
+        colors: that.stateColor,
         selectedColor: '#00cccc',
         enableZoom: false,
         borderWidth: 1,
         borderColor: '#fff',
         hoverOpacity: .85,
-        onLabelShow:  (event, label, code) => {
-          for (const  countryData of that.stateList) {
+        onLabelShow: (event, label, code) => {
+          for (const countryData of that.stateList) {
             if (code === countryData.state.toLowerCase()) {
               label.append(' : ' + countryData.count);
             } else {
@@ -331,31 +383,33 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
           that.cd.detectChanges();
         }
       });
-    } else {
-      jQuery('#worldMap').empty();
-      jQuery('#worldMap').vectorMap({
-        map: 'world_en',
-        backgroundColor: '#fff',
-        color: '#d1e6fa',
-        hoverOpacity: 0.7,
-        selectedColor: '#00cccc',
-        enableZoom: true,
-        showTooltip: true,
-        scaleColors: ['#d1e6fa', '#00cccc'],
-        normalizeFunction: 'polynomial',
-        onLabelShow:  (event, label, code) => {
-          for (const  countryData of that.stateList) {
-            if (code === countryData.state.toLowerCase()) {
-              label.append(' : ' + countryData.count);
-            } else {
-              label.append(' : 0');
-            }
+  }
+
+  onSetWorldMap () {
+    const that = this;
+    jQuery('#worldMap').empty();
+    jQuery('#worldMap').vectorMap({
+      map: 'world_en',
+      backgroundColor: '#fff',
+      color: '#d1e6fa',
+      colors: that.countryColor,
+      hoverOpacity: 0.7,
+      selectedColor: '#00cccc',
+      enableZoom: true,
+      showTooltip: true,
+      scaleColors: ['#d1e6fa', '#00cccc'],
+      normalizeFunction: 'polynomial',
+      onLabelShow:  (event, label, code) => {
+        for (const  countryData of that.countryList) {
+          if (code === countryData.state.toLowerCase()) {
+            label.append(' : ' + countryData.count);
+          } else {
+            label.append(' : 0');
           }
-          that.cd.detectChanges();
         }
-      });
-    }
-    this.cd.detectChanges();
+        that.cd.detectChanges();
+      }
+    });
   }
 
   onSetUpDate() {
@@ -406,7 +460,7 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
       from_date: this.startDate,
       to_date: this.endDate
     };
-    this.dashboardService.getCcpaAndDsar(this.currentManagedOrgID, this.currrentManagedPropID, queryParam, this.constructor.name)
+    this.dashboardService.getCcpaAndDsar(this.currentManagedOrgID, this.currrentManagedPropID, queryParam, this.constructor.name, moduleName.ccpaDsarModule)
       .subscribe(res => {
         this.loading.stop('p1');
         const result = res.response;
@@ -414,7 +468,13 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
           this.dashboardCount = result.dashboardCount;
           this.Requests = result.hasOwnProperty('Requests') ? result.Requests : [];
           this.requestType = result['RequestType']['data'];
+          this.requestType.forEach( (element, index) => {
+            return element.color = colorCodes[index];
+          });
           this.subjectType = result['subjectType']['data'];
+          this.subjectType.forEach( (element, index) => {
+            return element.color = colorCodes[index];
+          });
           this.onSetChartData(result);
         } else {
           this.isOpen = true;
@@ -431,41 +491,27 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
   }
 
   onSetChartData(chart) {
-    let requestsChartCount = 0;
     if (chart.requestsChart.data) {
       this.requestChartError = false;
-      const newArray = [...chart.requestsChart.data];
-      // const demo = [
-      //   {label: "Recevied", value: [4,23,23,67,12,43, 12, 24, 43,6, 7,34]},
-      //   {label: "Recevied", value: [32,67,88,45,12,54, 34, 90, 43,2, 87,66]},
-      //   {label: "Recevied", value: [12,23,54,56,54,23, 2, 67, 2,12, 34,32]},
-      //   {label: "Recevied", value: [98,78,67,67,98,42, 21, 43, 34,76, 11,4]},
-      // ];
-      // console.log('old', demo);
+      const reqChartData = [...chart.requestsChart.data];
+      const reqChartLabel = [...chart.requestsChart.belowLabel];
       const data = [];
-      for (const chart of newArray) {
-        const numVal = [];
-        const value = chart.value;
-        for (let i = 0; value.length > i; i++) {
-          numVal.push([i, value[i]]);
-          const num = Number(value[i]);
-          console.log('num', num)
-          if (num > requestsChartCount) {
-            requestsChartCount = num;
-          }
+      const colorChart = [];
+      for (const chart of reqChartData) {
+        data.push({data:  chart.value.map(x => +x), label: chart.label});
+        if (chart.label === 'Recevied') {
+          colorChart.push(colorValues[0])
         }
-        data.push(numVal);
+        if (chart.label === 'InProgress') {
+          colorChart.push(colorValues[1])
+        }
+        if (chart.label === 'Complete') {
+          colorChart.push(colorValues[2])
+        }
       }
-      console.log('data', data)
-      const newLabel = [...chart.requestsChart.belowLabel];
-      const labelData = [];
-      for (let i = 0; newLabel.length > i; i++) {
-        labelData.push([i, newLabel[i]]);
-      }
-      setTimeout(() => {
-        this.onSetUpMainMap(data, labelData, requestsChartCount).draw();
-      }, 1000);
-
+      this.lineChartLabels = reqChartLabel;
+      this.lineChartData = data;
+      this.lineChartColors = colorChart;
     }
 
     // dashboardCount
@@ -548,15 +594,24 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
       to_date: this.endDate,
       country: this.currentState
     };
-    this.dashboardService.getRequestByState(this.currentManagedOrgID, this.currrentManagedPropID, queryParam, this.constructor.name)
+    this.dashboardService.getRequestByState(this.currentManagedOrgID, this.currrentManagedPropID, queryParam, this.constructor.name, moduleName.ccpaDsarModule)
       .subscribe(res => {
         this.loading.stop();
         const result = res.response;
-        for (const  countryData of result) {
-          this.stateCountryColor[`${countryData.state.toLowerCase()}`] = '#69b2f8';
+        if (this.currentState === 'usa') {
+          for (const  countryData of result) {
+            this.stateColor[`${countryData.state.toLowerCase()}`] = '#69b2f8';
+          }
+          this.stateList = result;
+          this.onSetUsaMap();
+        } else {
+          for (const  countryData of result) {
+            this.countryColor[`${countryData.country.toLowerCase()}`] = '#69b2f8';
+          }
+          this.countryList = result;
+          this.onSetWorldMap();
         }
-        this.stateList = result;
-        this.onInsilizaedMap();
+
       }, error => {
         this.loading.stop();
         this.isOpen = true;

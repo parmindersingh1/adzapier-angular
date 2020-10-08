@@ -22,7 +22,7 @@ const routes: Routes = [
     children: [
       {path: '', loadChildren: () => import('./billing/billing.module').then(m => m.BillingModule) },
       {path: 'update',
-      loadChildren: () => import('./update-billing/update-billing.module').then(m => m.UpdateBillingModule)}
+      loadChildren: () => import('./billing/update-billing/update-billing.module').then(m => m.UpdateBillingModule)}
     ]
   },
   {
