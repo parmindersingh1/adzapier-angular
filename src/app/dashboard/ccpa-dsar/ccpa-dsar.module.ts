@@ -6,8 +6,6 @@ import {CcpaDsarComponent} from './ccpa-dsar.component';
 import {ChartsModule, ThemeService} from 'ng2-charts';
 import {SharedbootstrapModule} from '../../sharedbootstrap/sharedbootstrap.module';
 
-
-
 const routes: Routes = [
   {path: '', component: CcpaDsarComponent,  canActivate: [AuthGuard]}
 ];

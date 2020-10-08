@@ -14,50 +14,50 @@ export class CookieBannerService {
 
   constructor(private http: HttpClient, private loki: LokiService) { }
 
-  onSubmitCookieBannerData(payload, orgId, propId, componentName): Observable<any> {
+  onSubmitCookieBannerData(payload, orgId, propId, componentName, moduleName): Observable<any> {
     let path = apiConstant.CONSENT_BANNER.replace(':orgId', orgId);
     path = path.replace(':propId', propId);
     return this.http.post(environment.apiUrl + path, payload).pipe(map(res => res),
       catchError(error => {
-        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.cookieBanner, componentName, path);
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.cookieBanner, componentName, moduleName, path);
         return throwError(error);
       }),
     );
   }
-  onUpdateCookieBannerData(payload, orgId, propId, componentName): Observable<any> {
+  onUpdateCookieBannerData(payload, orgId, propId, componentName, moduleName): Observable<any> {
     let path = apiConstant.CONSENT_BANNER.replace(':orgId', orgId);
     path = path.replace(':propId', propId);
     return this.http.put(environment.apiUrl + path, payload).pipe(map(res => res),
       catchError(error => {
-        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.cookieBanner, componentName, path);
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.cookieBanner, componentName,  moduleName, path);
         return throwError(error);
       }),
     );
   }
-  onGetPlanType(componentName): Observable<any> {
+  onGetPlanType(componentName, moduleName): Observable<any> {
     console.log('compone', componentName)
     const path = apiConstant.COMPANY_SERVICE;
     return this.http.get(environment.apiUrl + path)
       .pipe(map(res => res),
         catchError(error => {
-          this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.cookieBanner, componentName, path);
+          this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.cookieBanner, componentName, moduleName, path);
           return throwError(error);
         }),
       );
   }
 
-  onGetCookieBannerData( orgId, propId, componentName ): Observable<any> {
+  onGetCookieBannerData( orgId, propId, componentName, moduleName ): Observable<any> {
     let path = apiConstant.CONSENT_BANNER.replace(':orgId', orgId);
     path = path.replace(':propId', propId);
     return this.http.get(environment.apiUrl + path).pipe(map(res => res),
       catchError(error => {
-        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.cookieBanner, componentName, path);
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.cookieBanner, componentName, moduleName, path);
         return throwError(error);
       }),
     );
   }
 
-  onSendLogs(errorType, msg, functionality, componentName, path) {
-    this.loki.onSendErrorLogs(errorType, msg, functionality, componentName, path).subscribe();
+  onSendLogs(errorType, msg, functionality, componentName, moduleName, path) {
+    this.loki.onSendErrorLogs(errorType, msg, functionality, componentName, moduleName, path).subscribe();
   }
 }

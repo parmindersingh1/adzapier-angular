@@ -17,7 +17,7 @@ import { CCPAComponent } from './ccpa/ccpa.component';
 
 import { VerifyemailComponent } from './verifyemail/verifyemail.component';
 
-import { CheckoutComponent } from './checkout/checkout.component';
+import { CheckoutComponent } from './pagesettings/billing/pricing/checkout/checkout.component';
 import { CheckoutConfirmationComponent } from './checkout-confirmation/checkout-confirmation.component';
 
 
@@ -38,11 +38,9 @@ const routes: Routes = [
     path: 'home/dashboard', loadChildren: () => import('./dashboard/analytics.module')
       .then(m => m.AnalyticsModule)
   },
-  {path: 'home/dashboard/ccpa-dashboard', loadChildren: () =>
-      import('./dashboard/ccpa-dashboard/ccpa-dashboard.module').then(m => m.CcpaDashboardModule)},
   { path: 'userprofile', loadChildren: () => import('./edit-profile/edit-profile.module').then(m => m.EditProfileModule) },
-  {path: 'pricing', loadChildren: () =>
-      import('./pricing/pricing.module').then(m => m.PricingModule)},
+  // {path: 'pricing', loadChildren: () =>
+  //     import('./pagesettings/billing/pricing/pricing.module').then(m => m.PricingModule)},
   { path: 'resetpswd/:id', component: ResetpasswordComponent },
   { path: 'pagenotfound', component: PagenotfoundComponent },
   { path: '404page', component: PagenotfoundComponent1 },
@@ -64,16 +62,8 @@ const routes: Routes = [
     .then(m => m.WorkflowsModule)
   },
   {
-    path: 'privacy/cookie-category', loadChildren: () => import('./privacy/cookie-category/cookie-category.module')
-      .then(m => m.CookieCategoryModule), canActivate: [AuthGuard]
-  },
-  {
-    path: 'privacy/cookie-consent', loadChildren: () => import('./privacy/cookie-consent/cookie-consent.module')
+    path: 'cookie-consent', loadChildren: () => import('./privacy/cookie-consent/cookie-consent.module')
       .then(m => m.CookieConsentModule), canActivate: [AuthGuard]
-  },
-  {
-    path: 'privacy/cookie-banner', loadChildren: () => import('./privacy/cookie-banner/cookie-banner.module')
-      .then(m => m.CookieBannerModule), canActivate: [AuthGuard]
   },
   { path: 'privacy/dsar/createworkflow', loadChildren: () => import('./privacy/dsar/createworkflow/createworkflow.module')
   .then(m => m.CreateworkflowModule) },
@@ -83,7 +73,7 @@ const routes: Routes = [
   { path: 'editwebforms/:crid', loadChildren: () => import('./editwebform/editwebform.module').then(m => m.EditwebformModule) },
   { path: 'propertydashboard/:propid', component: PropertydashboardComponent, canActivate: [AuthGuard] },
   { path: 'verify-email/:id', component: VerifyemailComponent },
-  { path: 'checkout', component: CheckoutComponent, canActivate: [AuthGuard] },
+  // { path: 'checkout', component: CheckoutComponent, canActivate: [AuthGuard] },
   { path: 'success', component: CheckoutConfirmationComponent, canActivate: [AuthGuard] },
   { path: '', redirectTo: 'home/dashboard/analytics', pathMatch: 'full', canActivate: [AuthGuard] },
   { path: 'plans', loadChildren: () => import('./plans/plan.module').then(m => m.PlanModule) },
