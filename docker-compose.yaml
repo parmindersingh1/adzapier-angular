@@ -37,12 +37,9 @@ services:
         - "traefik.http.routers.${SERVICE_NAME}.service=${SERVICE_NAME}"
         - "traefik.http.routers.${SERVICE_NAME}.rule=${DOMAINS}"
         - "traefik.http.routers.${SERVICE_NAME}.entrypoints=web"
-        - "traefik.http.routers.${SERVICE_NAME}.middlewares=https_redirect"
-        - "traefik.http.routers.${SERVICE_NAME}secured.rule=${DOMAINS}"
-        - "traefik.http.routers.${SERVICE_NAME}secured.entrypoints=websecure"
-        - "traefik.http.routers.${SERVICE_NAME}secured.tls=true"
-        - "traefik.http.middlewares.https_redirect.redirectscheme.scheme=https"
-        - "traefik.http.middlewares.https_redirect.redirectscheme.permanent=true"
+        - "traefik.http.routers.${SERVICE_NAME}.middlewares=redirect-to-https"
+        - "traefik.http.middlewares.redirect-to-https.headers.sslredirect=true"
+        - "traefik.http.middlewares.redirect-to-https.headers.sslProxyHeaders.X-Forwarded-Proto=https"
         - "traefik.docker.network=traefik2_apps"
 
 networks:
