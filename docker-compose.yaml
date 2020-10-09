@@ -33,10 +33,16 @@ services:
       labels:
         - "traefik.enable=true"
         - "traefik.tags=public"
-        - "traefik.http.routers.${SERVICE_NAME}.rule=${DOMAINS}"
         - "traefik.http.services.${SERVICE_NAME}.loadbalancer.server.port=${TARGET_PORT}"
-        - "traefik.http.routers.${SERVICE_NAME}.entrypoints=web"
         - "traefik.http.routers.${SERVICE_NAME}.service=${SERVICE_NAME}"
+        - "traefik.http.routers.${SERVICE_NAME}.rule=${DOMAINS}"
+        - "traefik.http.routers.${SERVICE_NAME}.entrypoints=web"
+        - "traefik.http.routers.${SERVICE_NAME}.middlewares=https_redirect"
+        - "traefik.http.routers.${SERVICE_NAME}secured.rule=${DOMAINS}"
+        - "traefik.http.routers.${SERVICE_NAME}secured.entrypoints=websecure"
+        - "traefik.http.routers.${SERVICE_NAME}secured.tls=true"
+        - "traefik.http.middlewares.https_redirect.redirectscheme.scheme=https"
+        - "traefik.http.middlewares.https_redirect.redirectscheme.permanent=true"
         - "traefik.docker.network=traefik2_apps"
 
 networks:
