@@ -9,20 +9,21 @@ import { OrganizationdetailsComponent } from './organizationdetails/organization
 import { OrganizationteamComponent } from './organizationteam/organizationteam.component';
 
 
-
-
 const routes: Routes = [
   { path: '', component: PagesettingsComponent, canActivate: [AuthGuard]},
   {
     path: 'company',
-    loadChildren: () => import('./company/company.module').then(m => m.CompanyModule)
+    children: [
+      {path: '', loadChildren: () => import('./company/company.module').then(m => m.CompanyModule) },
+      {path: 'companyteam', loadChildren: () => import('./companyteam/companyteam.module').then(m => m.CompanyTeamModule) }
+    ]
   },
   {
     path: 'billing',
     children: [
       {path: '', loadChildren: () => import('./billing/billing.module').then(m => m.BillingModule) },
       {path: 'update',
-      loadChildren: () => import('./update-billing/update-billing.module').then(m => m.UpdateBillingModule)}
+      loadChildren: () => import('./billing/update-billing/update-billing.module').then(m => m.UpdateBillingModule)}
     ]
   },
   {

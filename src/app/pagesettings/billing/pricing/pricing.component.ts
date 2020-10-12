@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { BillingService } from '../_services/billing.service';
-import { subscriptionPlan } from '../_constant/pricing.contant';
+import { BillingService } from '../../../_services/billing.service';
+import { subscriptionPlan } from '../../../_constant/pricing.contant';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
-import { DataService } from '../_services/data.service';
-import { UserService } from '../_services';
+import { DataService } from '../../../_services/data.service';
+import { UserService } from '../../../_services';
 import { NotificationsService } from 'angular2-notifications';
 import { not } from 'rxjs/internal-compatibility';
-import { notificationConfig } from '../_constant/notification.constant';
+import { notificationConfig } from '../../../_constant/notification.constant';
+import {moduleName} from '../../../_constant/module-name.constant';
 
 @Component({
   selector: 'app-pricing',
@@ -75,14 +76,14 @@ export class PricingComponent implements OnInit {
       }
       console.log(this.billingCycle, this.subscriptionPlanType);
       this.loading.start();
-      this.billingService.getSessionId(payloads).subscribe(res => {
+      this.billingService.getSessionId(payloads, this.constructor.name, moduleName.pricingModule).subscribe(res => {
         this.loading.stop();
         const result = res;
         if (result['status'] === 200) {
           plan.sessionId = res['response'];
           plan.planType = this.subscriptionPlanType;
           this.dataService.setBillingPlan(plan);
-          this.router.navigateByUrl('/checkout');
+          this.router.navigateByUrl('/settings/billing/pricing/checkout');
         }
       }, error => {
         this.loading.stop();
@@ -121,7 +122,7 @@ export class PricingComponent implements OnInit {
 
   onGetCurrentPlan() {
     this.loading.start();
-    this.billingService.getCurrentPlanInfo().subscribe((res: any) => {
+    this.billingService.getCurrentPlanInfo(this.constructor.name, moduleName.pricingModule).subscribe((res: any) => {
       this.loading.stop();
       if (!res['error']) {
         this.currentPlan = res['response'];
@@ -154,7 +155,7 @@ export class PricingComponent implements OnInit {
         plan: plan.plan
       };
     }
-    this.billingService.upGradePlan(payloads).subscribe(res => {
+    this.billingService.upGradePlan(payloads, this.constructor.name, moduleName.pricingModule).subscribe(res => {
       this.loading.stop();
       if (res['status'] === 200) {
         this.isOpen = true;
@@ -170,5 +171,10 @@ export class PricingComponent implements OnInit {
       this.alertType = 'danger';
     //  this.notification.error('Company Details', 'Something went wrong...', notificationConfig);
     });
+  }
+
+  onClosed(dismissedAlert: any): void {
+    this.alertMsg = !dismissedAlert;
+    this.isOpen = false;
   }
 }

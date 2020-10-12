@@ -15,64 +15,64 @@ export class BillingService {
   constructor(private http: HttpClient,
               private loki: LokiService
               ) { }
-  getSessionId(data) {
+  getSessionId(data, componentName, moduleName) {
     const path = apiConstant.BILLING_CREATE_SESSION_ID;
     return this.http.post(environment.apiUrl + path, data).pipe(map(res => res),
       catchError(error => {
-        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.billing, path);
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.billing, componentName, moduleName, path);
         return throwError(error);
       }),
     );
   }
 
-  getCurrentPlan() {
+  getCurrentPlan(componentName, moduleName) {
     const path = apiConstant.BILLING_CURRENT_SUBSCRIPTION;
     return this.http.get(environment.apiUrl + path).pipe(map(res => res),
       catchError(error => {
-        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.billing, path);
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.billing, componentName, moduleName, path);
         return throwError(error);
       }),
     );
   }
-  createSessionId() {
+  createSessionId(componentName, moduleName) {
     const path = apiConstant.BILLING_UPDATE_SESSION_ID;
     return this.http.get(environment.apiUrl + path).pipe(map(res => res),
       catchError(error => {
-        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.updateBilling, path);
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.updateBilling, componentName, moduleName, path);
         return throwError(error);
       }),
     );
   }
-  getCurrentPlanInfo() {
+  getCurrentPlanInfo(componentName, moduleName) {
     const path = apiConstant.BILLING_CURRENT_PLAN_INFO;
     return this.http.get(environment.apiUrl + path).pipe(map(res => res),
       catchError(error => {
-        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.billing, path);
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.billing, componentName, moduleName, path);
         return throwError(error);
       }),
     );
   }
-  upGradePlan(data) {
+  upGradePlan(data, componentName, moduleName) {
   const path = apiConstant.BILLING_UPGRADE_PLAN;
   return this.http.post(environment.apiUrl + path, data).pipe(map(res => res),
     catchError(error => {
-      this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.updateBilling, path);
+      this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.updateBilling, componentName, moduleName, path);
       return throwError(error);
     }),
   );
 }
 
-  cancelPlan() {
+  cancelPlan(componentName, moduleName) {
     const path = apiConstant.BILLING_CANCEL_PLAN;
     return this.http.get(environment.apiUrl + path).pipe(map(res => res),
       catchError(error => {
-        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.billing, path);
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.billing, componentName, moduleName, path);
         return throwError(error);
       }),
     );
   }
 
-  onSendLogs(errorType, msg, functionality, path) {
-    this.loki.onSendErrorLogs(errorType, msg, functionality, path).subscribe();
+  onSendLogs(errorType, msg, functionality, componentName, moduleName, path) {
+    this.loki.onSendErrorLogs(errorType, msg, functionality, componentName, moduleName, path).subscribe();
   }
 }

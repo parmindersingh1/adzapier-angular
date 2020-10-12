@@ -35,85 +35,85 @@ export class CookieCategoryService  {
     });
   }
 
-  getCookieData(requestMeta): Observable<any>  {
+  getCookieData(requestMeta, componentName, moduleName): Observable<any>  {
     let path = apiConstant.COOKIE.replace(':orgId', this.currentManagedOrgID);
     path = path.replace(':propId', this.currrentManagedPropID);
     return this.http.get(environment.apiUrl + path, { params: requestMeta}).pipe(map(res => res),
       catchError(error => {
-        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.cookie, path);
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.cookie, componentName, moduleName, path);
         return throwError(error);
       }),
     );
   }
 
-   post(item: any): Observable<any>   {
+   post(item: any, componentName, moduleName): Observable<any>   {
      let path = apiConstant.COOKIE.replace(':orgId', this.currentManagedOrgID);
      path = path.replace(':propId', this.currrentManagedPropID);
      return this.http.post(environment.apiUrl + path, item).pipe(map(res => res),
       catchError(error => {
-        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.cookie, path);
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.cookie, componentName, moduleName, path);
         return throwError(error);
       }),
     );
   }
   //
-  put(catData: any, id: any): Observable<any>  {
+  put(catData: any, id: any, componentName, moduleName): Observable<any>  {
     let path = apiConstant.COOKIE_WITH_ID.replace(':orgId', this.currentManagedOrgID);
     path = path.replace(':propId', this.currrentManagedPropID);
     path = path.replace(':id', id);
     return this.http.put(environment.apiUrl + path, catData).pipe(map(res => res),
       catchError(error => {
-        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.cookie, path);
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.cookie, componentName, moduleName, path);
         return throwError(error);
       }),
     );
   }
 
-  delete(item: any): Observable<any>  {
+  delete(item: any, componentName, moduleName): Observable<any>  {
     let path = apiConstant.COOKIE_WITH_ID.replace(':orgId', this.currentManagedOrgID);
     path = path.replace(':propId', this.currrentManagedPropID);
     path = path.replace(':id', item.id);
     return this.http.patch(environment.apiUrl + path, {active: false}).pipe(map(res => res),
       catchError(error => {
-        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.cookie, path);
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.cookie, componentName, moduleName, path);
         return throwError(error);
       }),
     );
   }
 
-  createCategory(categoryData: { name: any; description: any }): Observable<any>  {
+  createCategory(categoryData: { name: any; description: any }, componentName, moduleName): Observable<any>  {
     const path = apiConstant.COOKIE_CATEGORY;
     return this.http.post(environment.apiUrl + path, categoryData).pipe(map(res => res),
       catchError(error => {
-        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.cookieCategory, path);
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.cookieCategory, componentName, moduleName, path);
         return throwError(error);
       }),
     );
   }
   //
-  getCategoriesList(): Observable<any> {
+  getCategoriesList(componentName, moduleName): Observable<any> {
     const path = apiConstant.COOKIE_CATEGORY;
     return this.http.get(environment.apiUrl + path).pipe(map(res => res),
         catchError(error => {
-          this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.cookieCategory, path);
+          this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.cookieCategory, componentName, moduleName, path);
           return throwError(error);
         }),
       );
   }
 
-  cookieScanning() {
+  cookieScanning(componentName, moduleName) {
     let path = apiConstant.COOKIE_SCANNER.replace(':orgId', this.currentManagedOrgID);
     path = path.replace(':propId', this.currrentManagedPropID);
     return this.http.get(environment.apiUrl + path).pipe(map(res => res),
       catchError(error => {
-        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.cookieCategory, path);
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.cookieCategory, componentName, moduleName, path);
         return throwError(error);
       }),
     );
   }
 
 
-  onSendLogs(errorType, msg, functionality, path) {
-    this.loki.onSendErrorLogs(errorType, msg, functionality, path).subscribe();
+  onSendLogs(errorType, msg, functionality, componentName, moduleName, path) {
+    this.loki.onSendErrorLogs(errorType, msg, functionality, componentName, moduleName, path).subscribe();
   }
 }

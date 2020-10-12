@@ -436,6 +436,16 @@ ul.ngx-pagination {
     padding-left: 15px !important;
 }
 
+.form-check-label span {
+    margin-left: 5px;
+    text-transform: uppercase;
+}
+
+.form-check .is-invalid {
+    color: #f00;
+    font-size: 11px;
+    padding-left: 5px !important;
+}
 // .nav-item + .nav-item::before {
 //     display: block;
 // }
@@ -648,7 +658,8 @@ ul.ngx-pagination {
   }
 
   .feather-tick {
-    height:16px;
+    height: 16px;
+    margin-right: 5px;
     width: 16px;
   }
 

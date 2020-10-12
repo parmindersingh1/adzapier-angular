@@ -5,6 +5,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { UserService, OrganizationService } from 'src/app/_services';
 import { CompanyService } from 'src/app/company.service';
+import { TablePaginationConfig } from 'src/app/_models/tablepaginationconfig';
 
 @Component({
   selector: 'app-organizationteam',
@@ -22,11 +23,13 @@ export class OrganizationteamComponent implements OnInit {
   pageSize: any = 5;
   totalCount: any;
   searchText: any;
-  paginationConfig = { itemsPerPage: this.pageSize, currentPage: this.p, totalItems: this.totalCount };
+  paginationConfig: TablePaginationConfig;
   alertMsg: any;
   alertType: any;
   dismissible = true;
   isOpen = false;
+  isUpdateUserinvitation = false;
+  approverID: any;
   constructor(private activatedRoute: ActivatedRoute,
               private router: Router,
               private modalService: NgbModal,
@@ -35,7 +38,7 @@ export class OrganizationteamComponent implements OnInit {
               private companyService: CompanyService,
               private orgService: OrganizationService,
               private loading: NgxUiLoaderService
-  ) { }
+  ) { this.paginationConfig = { itemsPerPage: this.pageSize, currentPage: this.p, totalItems: this.totalCount }; }
 
   ngOnInit() {
     this.activatedRoute.paramMap.subscribe(params => {
@@ -60,7 +63,7 @@ export class OrganizationteamComponent implements OnInit {
     console.log('page Limit', pagelimit);
     this.orgService.getOrgTeamMembers(orgID, pagelimit).subscribe((data) => {
       this.loading.stop();
-      this.organizationTeamMemberList = data;
+      this.organizationTeamMemberList = data.response;
       this.paginationConfig.totalItems = data.count;
     });
   }
@@ -78,6 +81,7 @@ export class OrganizationteamComponent implements OnInit {
   }
 
   open(content) {
+    this.inviteUserOrgForm.get('emailid')[this.isUpdateUserinvitation ? 'disable' : 'enable']();
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
       // this.closeResult = `Closed with: ${result}`;
     }, (reason) => {
@@ -87,14 +91,14 @@ export class OrganizationteamComponent implements OnInit {
 
   pageChangeEvent(event) {
     this.paginationConfig.currentPage = event;
-    const pagelimit = '?limit=' + this.paginationConfig.itemsPerPage + '&page=' + this.paginationConfig.currentPage;
+    const pagelimit = '&limit=' + this.paginationConfig.itemsPerPage + '&page=' + this.paginationConfig.currentPage;
     const key = 'response';
     this.loading.start();
     this.orgService.getOrgTeamMembers(this.organizationID, pagelimit).subscribe((data) => {
       this.loading.stop();
-      this.organizationTeamMemberList = data;
+      this.organizationTeamMemberList = data.response;
       this.paginationConfig.totalItems = data.count;
-    },(error)=>{
+    }, (error) => {
       this.alertMsg = error;
       this.isOpen = true;
       this.alertType = 'danger';
@@ -108,56 +112,73 @@ export class OrganizationteamComponent implements OnInit {
   }
 
 
-
   onSubmitInviteUserOrganization() {
     this.submitted = true;
     if (this.inviteUserOrgForm.invalid) {
       return false;
     } else {
-      const requestObj = {
-        email: this.inviteUserOrgForm.value.emailid,
-        role_id: this.inviteUserOrgForm.value.permissions,
-        orgid: this.organizationID,
-        user_level: 'organization'
-      };
-      this.loading.start();
-      this.companyService.inviteUser(requestObj)
-        .subscribe((data) => {
-          this.loading.stop();
-          if (data) {
-            this.alertMsg = 'We have sent a email on your Email Id';
+      if (!this.isUpdateUserinvitation) {
+        const requestObj = {
+          email: this.inviteUserOrgForm.value.emailid,
+          role_id: this.inviteUserOrgForm.value.permissions,
+          orgid: this.organizationID,
+          user_level: 'organization'
+        };
+        this.companyService.inviteUser(requestObj)
+          .subscribe((data) => {
+            if (data) {
+              this.alertMsg = data.response;
+              this.isOpen = true;
+              this.alertType = 'success';
+              this.loadOrgTeamMembers(this.organizationID);
+              this.onCancelClick();
+            }
+          }, (error) => {
+            this.alertMsg = JSON.stringify(error);
             this.isOpen = true;
-            this.alertType = 'success';
-            this.loadOrgTeamMembers(this.organizationID);
+            this.alertType = 'danger';
             this.onCancelClick();
-          }
-        }, (error) => {
-          this.loading.stop();
-          this.alertMsg = error.Taken_email || error;
-          this.isOpen = true;
-          this.alertType = 'danger';
-          this.onCancelClick();
-        });
+          });
+      } else {
+        const requestObj = {
+          // email: this.inviteUserOrgForm.get('emailid').value,
+          user_id: this.approverID,
+          role_id: this.inviteUserOrgForm.value.permissions,
+          orgid: this.organizationID
+          //  user_level: 'organization'
+        };
+        this.companyService.updateUserRole(requestObj)
+          .subscribe((data) => {
+            if (data) {
+              this.alertMsg = data.response;
+              this.isOpen = true;
+              this.alertType = 'success';
+              this.loadOrgTeamMembers(this.organizationID);
+              this.onCancelClick();
+            }
+          }, (error) => {
+            this.alertMsg = JSON.stringify(error);
+            this.isOpen = true;
+            this.alertType = 'danger';
+            this.onCancelClick();
+          });
+      }
     }
   }
-  onResendInvitation(email) {
-    const requestObj = {
-      email,
-      orgid: this.organizationID,
-      user_level: 'organization'
-    };
-    this.companyService.inviteUser(requestObj)
+
+  onResendInvitation(userid) {
+    this.companyService.resendInvitation(userid)
       .subscribe((data) => {
         if (data) {
           this.alertMsg = 'We have sent a email on your Email Id';
           this.isOpen = true;
-          this.alertType = 'success';
+          this.alertType = 'info';
           this.loadOrgTeamMembers(this.organizationID);
           this.inviteUserOrgForm.reset();
           this.modalService.dismissAll('Data Saved!');
         }
       }, (error) => {
-        this.alertMsg = JSON.stringify(error);
+        this.alertMsg = error;
         this.isOpen = true;
         this.alertType = 'danger';
         this.modalService.dismissAll('Error!');
@@ -181,10 +202,35 @@ export class OrganizationteamComponent implements OnInit {
     });
   }
 
+  editUserInvitation(content, data) {
+    console.log(data, 'editUserInvitation..');
+    this.isUpdateUserinvitation = true;
+    this.approverID = data.approver_id;
+    this.inviteUserOrgForm.controls['emailid'].setValue(data.user_email);
+    this.inviteUserOrgForm.get('emailid')[this.isUpdateUserinvitation ? 'disable' : 'enable']();
+    this.inviteUserOrgForm.controls['permissions'].setValue(data.role_id);
+
+    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
+      this.inviteUserOrgForm.reset();
+      // this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.inviteUserOrgForm.reset();
+      // this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
   onCancelClick() {
     this.submitted = false;
+    this.isUpdateUserinvitation = false;
     this.inviteUserOrgForm.reset();
     this.modalService.dismissAll('Canceled');
   }
+
+
+  onClosed(dismissedAlert: any): void {
+    this.alertMsg = !dismissedAlert;
+    this.isOpen = false;
+  }
+
 
 }

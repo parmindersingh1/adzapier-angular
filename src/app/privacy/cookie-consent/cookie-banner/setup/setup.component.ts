@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { notificationConfig } from '../../../_constant/notification.constant';
+import { notificationConfig } from '../../../../_constant/notification.constant';
 import { NotificationsService } from 'angular2-notifications';
-import { CookieBannerService } from '../../../_services/cookie-banner.service';
+import { CookieBannerService } from '../../../../_services/cookie-banner.service';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
-import { OrganizationService } from '../../../_services';
+import { OrganizationService } from '../../../../_services';
 import { Location } from '@angular/common';
+import {moduleName} from '../../../../_constant/module-name.constant';
 
 @Component({
   selector: 'app-setup',
@@ -45,7 +46,7 @@ export class SetupComponent implements OnInit {
 
   onGetCookieBannerData() {
     this.loading.start('2');
-    this.cookieBannerService.onGetCookieBannerData(this.currentManagedOrgID , this.currrentManagedPropID)
+    this.cookieBannerService.onGetCookieBannerData(this.currentManagedOrgID , this.currrentManagedPropID, this.constructor.name, moduleName.setUpModule)
       .subscribe(res => {
         this.loading.stop('2');
         this.scriptUrl = `<script src="https://${res['response']['js_location']}"></script>`;

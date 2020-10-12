@@ -4,6 +4,7 @@ export const defaultData = {
   defaultCookieBlocking: true,
   defaultEnableIab: true,
   defaultEmail: false,
+  allowGoogleVendors: true,
   showOpenBtn: true,
   logo: true,
   gdprDefaultLang: 'en',
@@ -41,21 +42,6 @@ export const BannerConstant = {
     {title: 'Finland', value: 'fi'},
     {title: 'Sweden', value: 'se'}
     ],
-
-  // SocialMediaText: 'Social Media',
-  // PopUpSocialMediaHead: 'General Information\n',
-  // PopUpSocialMediaDescription: 'In order to comply with data protection laws, we ask you to review the key points below of our Privacy Policy. To continue using our website, you need to select your preferences and click "Save". Privacy Statement',
-  // NecessaryText: 'Essentiial',
-  // PopUpNecessaryHead: 'Required Cookies\n',
-  // PopUpNecessaryDescription: 'Required cookies are necessary for basic website functionality. Some examples include: session cookies needed to transmit the website, authentication cookies, and security cookies',
-  // AnalyticsText: 'Analytics',
-  // PopUpAnalyticsHead: 'Functional Cookies\n',
-  // PopUpAnalyticsDescription: 'Functional cookies enhance functions, performance, and services on the website. Some examples include: cookies used to analyze site traffic, cookies used for market research, and cookies used to display advertising that is not directed to a particular individual.\n' +
-  //   '\n',
-  // AdvertisingText: 'Advertising',
-  // PopUpAdvertisingHead: 'Advertising Cookies\n',
-  // PopUpAdvertisingDescription: 'Advertising cookies track activity across websites in order to understand a viewer’s interests, and direct them specific marketing. Some examples include: cookies used for remarketing, or interest-based advertising.\n' +
-  //   '\n',
   GDPR: {
     BANNER: {
       Bannerlanguage: [

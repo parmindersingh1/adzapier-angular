@@ -177,9 +177,9 @@ export class HeaderComponent implements OnInit {
             { showlink: 'Webforms', routerLink: '/privacy/dsar/webforms', icon: 'pie-chart' },
             { showlink: 'Requests', routerLink: '/privacy/dsar/dsar-requests', icon: 'fa fa-ticket-alt feather-16' },
             { showlink: 'Work flow', routerLink: '/privacy/dsar/workflows', icon: 'shield-off' },
-            { showlink: 'Cookie Category', routerLink: '/privacy/cookie-category', icon: 'fab fa-microsoft feather-16' },
-            { showlink: 'Cookie Banner', routerLink: '/privacy/cookie-banner', icon: 'fas fa-cookie feather-16' },
-            { showlink: 'Consent Tracking', routerLink: '/privacy/cookie-consent', icon: 'fas fa-file-contract feather-16' },
+            { showlink: 'Cookie Category', routerLink: '/cookie-consent/cookie-category', icon: 'fab fa-microsoft feather-16' },
+            { showlink: 'Cookie Banner', routerLink: '/cookie-consent/cookie-banner', icon: 'fas fa-cookie feather-16' },
+            { showlink: 'Consent Tracking', routerLink: '/cookie-consent/cookie-tracking', icon: 'fas fa-file-contract feather-16' },
             { showlink: 'Setup', routerLink: '/pagenotfound', icon: 'fas fa-wrench feather-16' }
           ]
         }, { showlink: 'Billing', routerLink: 'settings/billing' }];

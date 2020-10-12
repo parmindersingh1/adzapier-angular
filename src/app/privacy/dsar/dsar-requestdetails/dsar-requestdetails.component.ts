@@ -2,7 +2,7 @@ import { Component, OnInit, HostListener, ViewChild, ElementRef, Renderer2, Temp
 import { ActivatedRoute, Router } from '@angular/router';
 import { OrganizationService } from 'src/app/_services';
 import { DsarRequestService } from 'src/app/_services/dsar-request.service';
-import { NgbNavChangeEvent, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbNavChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 import { FormGroup, FormBuilder, FormControl, Validators, NgForm } from '@angular/forms';
 import { WorkflowService } from 'src/app/_services/workflow.service';
 import { CcpadataService } from 'src/app/_services/ccpadata.service';
@@ -11,6 +11,7 @@ import { TypeaheadMatch } from 'ngx-bootstrap/typeahead/typeahead-match.class';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap';
 import { Observable } from 'rxjs';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
+import { TablePaginationConfig } from 'src/app/_models/tablepaginationconfig';
 @Component({
   selector: 'app-dsar-requestdetails',
   templateUrl: './dsar-requestdetails.component.html',
@@ -89,6 +90,7 @@ export class DsarRequestdetailsComponent implements OnInit {
   subTaskResponseForm: FormGroup;
   submitted: boolean;
   isActivitysubmitted: boolean;
+  isEmailPostsubmitted: boolean;
   isRequestDetailFormsubmit: boolean;
   isResponseSubmitted: boolean;
   requestDetailsbyId: any;
@@ -115,7 +117,7 @@ export class DsarRequestdetailsComponent implements OnInit {
   isResponseToSubTask: boolean = false;
   selectedTaskID: any;
   isDisable: boolean = true;
-  paginationConfig = { itemsPerPage: this.pageSize, currentPage: this.p, totalItems: this.totalCount, id: 'userPagination' };
+  paginationConfig: TablePaginationConfig;
   quillConfig = {
     toolbar: {
       container: [
@@ -161,23 +163,24 @@ export class DsarRequestdetailsComponent implements OnInit {
               private loading: NgxUiLoaderService
   ) {
     this.renderer2.listen('window', 'click', (e: Event) => {
-      if (e.target !== this.toggleDayleftdiv.nativeElement && e.target !== this.btnDaysLeft.nativeElement && e.target !== this.customDaysInput.nativeElement) {
+      if (e.target !== this.toggleDayleftdiv.nativeElement &&
+        e.target !== this.btnDaysLeft.nativeElement && e.target !== this.customDaysInput.nativeElement) {
         this.isListVisible = false;
       }
     });
+    this.paginationConfig = { itemsPerPage: this.pageSize, currentPage: this.p, totalItems: this.totalCount, id: 'userPagination' };
   }
 
   ngOnInit() {
     this.activatedRoute.paramMap.subscribe(params => {
       this.requestID = params.get('id');
-      console.log(JSON.stringify(params), 'params..');
     });
 
     this.quillEditorText = new FormGroup({
       editor: new FormControl('', Validators.required)
     });
     this.quillEditorEmailText = this.formBuilder.group({
-      dropdownEmailTemplate: ['', [Validators.required]],
+      dropdownEmailTemplate: [''],
       editorEmailMessage: ['', [Validators.required]],
       emailAttachment: ['']
     });
@@ -207,7 +210,7 @@ export class DsarRequestdetailsComponent implements OnInit {
 
     this.subTaskResponseForm = this.formBuilder.group({
       taskresponse: ['', [Validators.required]],
-      markcompleted: [''],
+      markcompleted: ['', [Validators.requiredTrue]],
       uploaddocument: ['']
     });
 
@@ -224,6 +227,7 @@ export class DsarRequestdetailsComponent implements OnInit {
     // this.onChanges();
   }
   get addActivity() { return this.quillEditorText.controls; }
+  get addEmailPost() { return this.quillEditorEmailText.controls; }
   get editRequest() { return this.editRequestDetailForm.controls; }
   get addsubTask() { return this.subTaskForm.controls; }
   get subTaskResponse() { return this.subTaskResponseForm.controls; }
@@ -300,8 +304,7 @@ export class DsarRequestdetailsComponent implements OnInit {
   getApprover() {
     let approverList;
     this.orgService.getOrgTeamMembers(this.currentManagedOrgID).subscribe((data) => {
-      const key = 'response';
-      approverList = data;
+      approverList = data.response;
       let filterdList = approverList.filter((t) => t.user_name !== ' ');
       this.ApproverList = filterdList;
     }, (error) => {
@@ -312,7 +315,6 @@ export class DsarRequestdetailsComponent implements OnInit {
   }
 
   onNavChange(changeEvent: NgbNavChangeEvent) {
-    console.log(changeEvent, 'changeEvent..');
     if (changeEvent.activeId === 1 && changeEvent.nextId === 2) {
       this.isActivityLogOpen = false;
       this.isEmailLogOpen = true;
@@ -384,7 +386,6 @@ export class DsarRequestdetailsComponent implements OnInit {
     let updatedObj = [];
     if (data !== undefined) {
       for (let k in data) {
-
         let value = data[k];
         let key = k.replace('_', ' ');
         let updatedKey = this.capitalizeFirstLetter(key);
@@ -429,14 +430,13 @@ export class DsarRequestdetailsComponent implements OnInit {
       } else {
         this.nextStage = this.selectedStages[this.selectedStages.length - 1].order
       }
-      console.log(this.isPreviousStageExist(item), 'this.isPreviousStageExist(item)..');
       if (!this.isPreviousStageExist(item)) {
         //  this.previousStage = this.selectedStages[this.selectedStages.length - 1].order;
         //  if(item.order > this.previousStage + 1)
         // (this.isStageCompleted(item)) ? true : false;
         const increaseByOne = item.order - this.nextStage;
-        if (increaseByOne == 1) {
-          let idx = this.selectedStages.findIndex((t) => t.order === item.order);
+        if (increaseByOne === 1) {
+          const idx = this.selectedStages.findIndex((t) => t.order === item.order);
           if (idx === -1) {
             this.selectedStages.push(item);
           }
@@ -511,7 +511,6 @@ export class DsarRequestdetailsComponent implements OnInit {
               current_status: this.previousStageId,
               previous_status: this.currentStageId
             };
-            console.log(reqObj, 'conf..');
             this.stageAPI(this.requestID, reqObj);
             this.getSubTaskList();
           } else {
@@ -522,8 +521,7 @@ export class DsarRequestdetailsComponent implements OnInit {
             const reqObj = {
               current_status: this.revertedStage.id,
               previous_status: this.previousStageId,
-            }
-            console.log(reqObj, 'else conf..');
+            };
             this.stageAPI(this.requestID, reqObj);
             this.getSubTaskList();
           }
@@ -616,51 +614,60 @@ export class DsarRequestdetailsComponent implements OnInit {
       return false;
     } else {
       //  console.log(this.selectedStages[this.selectedStages.length - 1].id);
-      const reqObj = {
-        current_status: this.currentStageId !== undefined ? this.currentStageId : this.selectedStages[this.selectedStages.length - 1].id,
-        previous_status: this.previousStageId,
-        activity_feedback: this.quillEditorText.get('editor').value //this.editorActivityPost
-      };
-      Object.keys(reqObj).forEach(key => {
-        if (reqObj[key] === undefined) {
-          delete reqObj[key];
-        }
-      });
-      console.log(reqObj, 'state req..onSubmitActivityPost');
-      //  return false;
-      this.stageAPI(this.requestID, reqObj);
+      if (this.selectedStages.length === 0) {
+        this.alertMsg = 'Stage not selected!';
+        this.isOpen = true;
+        this.alertType = 'info';
+        return false;
+      } else {
+        const reqObj = {
+          current_status: this.currentStageId !== undefined ? this.currentStageId : this.selectedStages[this.selectedStages.length - 1].id,
+          previous_status: this.previousStageId,
+          activity_feedback: this.quillEditorText.get('editor').value // this.editorActivityPost
+        };
+        Object.keys(reqObj).forEach(key => {
+          if (reqObj[key] === undefined) {
+            delete reqObj[key];
+          }
+        });
+        this.stageAPI(this.requestID, reqObj);
+      }
     }
 
   }
 
   onSubmitEmailPost() {
-    console.log(this.workflowStages[0], 'ns..');
-    const requestObj = {
-      current_status: this.currentWorkflowStageID || this.workflowStages[0].id, // this.currentStageId || this.workflowStages[0].id,
-      email_body: this.quillEditorEmailText.get('editorEmailMessage').value,
-      upload: this.quillEditorEmailText.get('emailAttachment').value
-    };
-    console.log(requestObj, 'state req..onSubmitActivityPost');
+    this.isEmailPostsubmitted = true;
+    if (this.quillEditorEmailText.invalid) {
+      return false;
+    } else {
+      const requestObj = {
+        current_status: this.currentWorkflowStageID || this.workflowStages[0].id, // this.currentStageId || this.workflowStages[0].id,
+        email_body: this.quillEditorEmailText.get('editorEmailMessage').value,
+        upload: this.quillEditorEmailText.get('emailAttachment').value
+      };
 
-    const fd = new FormData();
-    fd.append('current_status', this.currentWorkflowStageID || this.workflowStages[0].id);
-    fd.append('email_body', this.quillEditorEmailText.get('editorEmailMessage').value);
-    fd.append('upload', this.quillEditorEmailText.get('emailAttachment').value);
+      const fd = new FormData();
+      fd.append('current_status', this.currentWorkflowStageID || this.workflowStages[0].id);
+      fd.append('email_body', this.quillEditorEmailText.get('editorEmailMessage').value);
+      fd.append('upload', this.quillEditorEmailText.get('emailAttachment').value);
 
-    this.ccpaDataService.addCCPADataEmailActivity(this.requestID, fd).subscribe((data) => {
-      if (data) {
-        // alert(data.response);
-        this.alertMsg = data.response;
+      this.ccpaDataService.addCCPADataEmailActivity(this.requestID, fd).subscribe((data) => {
+        if (data) {
+          // alert(data.response);
+          this.alertMsg = data.response;
+          this.isOpen = true;
+          this.alertType = 'success';
+          this.loadEmailLog(this.requestID);
+          this.quillEditorEmailText.get('editorEmailMessage').reset();
+          this.isEmailPostsubmitted = false;
+        }
+      }, (error) => {
+        this.alertMsg = error;
         this.isOpen = true;
-        this.alertType = 'success';
-        this.loadEmailLog(this.requestID);
-      }
-    }, (error) => {
-      this.alertMsg = error;
-      this.isOpen = true;
-      this.alertType = 'danger';
-    });
-
+        this.alertType = 'danger';
+      });
+    }
     //this.stageAPI(this.requestID, reqObj);
   }
 
@@ -673,6 +680,8 @@ export class DsarRequestdetailsComponent implements OnInit {
         this.isOpen = true;
         this.alertType = 'success';
         this.loadActivityLog(requestID);
+        this.quillEditorText.get('editor').setValue('');
+        this.isActivitysubmitted = false;
       }
     }, (error) => {
       this.alertMsg = error;
@@ -803,8 +812,7 @@ export class DsarRequestdetailsComponent implements OnInit {
         country: this.editRequestDetailForm.controls['country'].value,
         state: this.editRequestDetailForm.controls['state'].value,
         city: this.editRequestDetailForm.controls['city'].value
-      }
-      console.log(obj, 'obj..');
+      };
       this.dsarRequestService.updateDSARRequestDetailsByID(this.currentManagedOrgID, this.currrentManagedPropID, this.requestID, obj)
         .subscribe((data) => {
           this.alertMsg = data.response;
@@ -850,12 +858,11 @@ export class DsarRequestdetailsComponent implements OnInit {
   }
 
   onClickEndDays(item) {
-    console.log(item, 'days selected');
     this.isListVisible = false;
     const obj = {
       extend_days: Number(this.respDaysLeft),
       days_left: Number(item)
-    }
+    };
     this.dsarRequestService.updateDSARRequestDetailsByID(this.currentManagedOrgID, this.currrentManagedPropID, this.requestID, obj)
       .subscribe((data) => {
         this.alertMsg = data.response;
@@ -870,12 +877,17 @@ export class DsarRequestdetailsComponent implements OnInit {
   }
 
   onSubmitEndDays(form: NgForm) {
-    console.log(this.customdays, 'customdays..');
+    if ((this.customdays <= 0)) {
+      this.alertMsg = 'Negative numbers are not allowed!';
+      this.isOpen = true;
+      this.alertType = 'danger';
+      return false;
+    }
     this.isListVisible = false;
     const obj = {
       extend_days: Number(this.respDaysLeft),
       days_left: Number(this.customdays)
-    }
+    };
     this.dsarRequestService.updateDSARRequestDetailsByID(this.currentManagedOrgID, this.currrentManagedPropID, this.requestID, obj)
       .subscribe((data) => {
         this.alertMsg = data.response;
@@ -887,7 +899,7 @@ export class DsarRequestdetailsComponent implements OnInit {
         this.alertMsg = error;
         this.isOpen = true;
         this.alertType = 'danger';
-      })
+      });
   }
 
   loadCountryList() {
@@ -950,7 +962,6 @@ export class DsarRequestdetailsComponent implements OnInit {
           new Date(this.subTaskForm.controls['reminder'].value).toJSON() : null
       };
 
-      console.log(obj, 'obj..', this.currentStageId, 'currentStageId..');
       const currentStageID = this.currentStageId ? this.currentStageId : this.currentWorkflowStageID;
       if (!this.isEditSubTask) {
         this.dsarRequestService.addSubTask(this.requestID, currentStageID, obj)
@@ -991,7 +1002,6 @@ export class DsarRequestdetailsComponent implements OnInit {
   }
 
   uploadFile(event, tag) {
-    console.log(event, 'event..');
     const fileExtArray = ['pdf', 'txt', 'jpeg', 'jpg', 'png', 'doc', 'docx', 'csv', 'xls'];
     // if (event.target.files.length > 0) {
     if (event.target.files[0].size > (2 * 1024 * 1024)) {
@@ -1050,10 +1060,9 @@ export class DsarRequestdetailsComponent implements OnInit {
 
   selectStageOnPageLoad(id) {
     if (id) {
-      let workfloworder = this.workflowStages.filter((t) => t.id === id);
+      const workfloworder = this.workflowStages.filter((t) => t.id === id);
       // console.log(workfloworder[0].order,'workfloworder..');
       const x = this.workflowStages.slice(0, workfloworder[0].order);
-      console.log(x, 'x..order..');
       this.selectedStages = x;
     }
   }
@@ -1089,7 +1098,6 @@ export class DsarRequestdetailsComponent implements OnInit {
   onValueChange(value: Date): void {
     this.minDate = new Date();
     this.maxDate = new Date(value);
-    console.log(this.minDate.getDate());
     this.minDate.setDate(this.minDate.getDate());
     this.maxDate.setDate(this.maxDate.getDate());
   }
@@ -1138,7 +1146,6 @@ export class DsarRequestdetailsComponent implements OnInit {
       }
     }, (error) => {
       this.loading.stop();
-      console.log(error, 'error..');
     });
 
   }

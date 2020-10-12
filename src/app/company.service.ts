@@ -23,11 +23,19 @@ export class CompanyService {
   }
 
   inviteUser(reqestObj): Observable<any> {
-    return this.httpClient.post<any>(environment.apiUrl + '/invite_user' , reqestObj);
+    return this.httpClient.post<any>(environment.apiUrl + '/invite/user' , reqestObj);
+  }
+
+  updateUserRole(reqestObj): Observable<any> {
+    return this.httpClient.put<any>(environment.apiUrl + '/invite/user' , reqestObj);
   }
 
   removeTeamMember(id): Observable<any> {
     return this.httpClient.put<any>(environment.apiUrl + '/team_member/remove/' + id, {});
+  }
+
+  resendInvitation(userId): Observable<any> {
+    return this.httpClient.get<any>(environment.apiUrl + '/invite/user/resend/' + userId, {});
   }
 
 }

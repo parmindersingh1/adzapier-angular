@@ -5,6 +5,7 @@ import { NotificationsService } from 'angular2-notifications';
 import { CompanyService } from 'src/app/company.service';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap';
+import {moduleName} from '../../_constant/module-name.constant';
 
 
 @Component({
@@ -57,7 +58,7 @@ export class BillingComponent implements OnInit {
 
   onGetCurrentPlan() {
     this.loading.start();
-    this.billingService.getCurrentPlan().subscribe((res: any) => {
+    this.billingService.getCurrentPlan(this.constructor.name, moduleName.billingModule).subscribe((res: any) => {
       this.loading.stop();
       if (res.status === 200) {
         if (typeof (res.response) === 'string') {
@@ -87,7 +88,7 @@ export class BillingComponent implements OnInit {
 
   navigateToPricing() {
     this.modalRef.hide();
-    this.router.navigateByUrl('pricing');
+    this.router.navigateByUrl('/settings/billing/pricing');
   }
 
   onGetCompanyDetails() {
@@ -110,7 +111,7 @@ export class BillingComponent implements OnInit {
 
   onCancelPlan() {
     this.loading.start();
-    this.billingService.cancelPlan()
+    this.billingService.cancelPlan(this.constructor.name, moduleName.billingModule)
       .subscribe( (res: any) => {
         this.loading.stop();
         if (res) {

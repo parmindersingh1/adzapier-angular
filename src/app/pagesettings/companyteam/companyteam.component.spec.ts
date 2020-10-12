@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CcpaDashboardComponent } from './ccpa-dashboard.component';
+import { CompanyteamComponent } from './companyteam.component';
 
-describe('CcpaDashboardComponent', () => {
-  let component: CcpaDashboardComponent;
-  let fixture: ComponentFixture<CcpaDashboardComponent>;
+describe('CompanyteamComponent', () => {
+  let component: CompanyteamComponent;
+  let fixture: ComponentFixture<CompanyteamComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CcpaDashboardComponent ]
+      declarations: [ CompanyteamComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(CcpaDashboardComponent);
+    fixture = TestBed.createComponent(CompanyteamComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

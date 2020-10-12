@@ -6,6 +6,7 @@ import { environment } from 'src/environments/environment';
 import { ActivatedRoute } from '@angular/router';
 import { NotificationsService } from 'angular2-notifications';
 import { notificationConfig } from 'src/app/_constant/notification.constant';
+import {moduleName} from '../../../_constant/module-name.constant';
 
 
 
@@ -49,7 +50,7 @@ export class UpdateBillingComponent implements OnInit {
     this.onGetSessionId();
   }
   onGetStatus() {
-    this.activatedRoute.queryParams.subscribe(res => {
+    this.activatedRoute.queryParams.subscribe((res: any) => {
       if (res['success'] === 'true') {
         this.queryParams = res;
         this.queryParams.success = true;
@@ -63,7 +64,7 @@ export class UpdateBillingComponent implements OnInit {
 
   onGetSessionId() {
     this.loading.start('1');
-    this.billingService.createSessionId().subscribe(res => {
+    this.billingService.createSessionId(this.constructor.name, moduleName.updateBillingModule).subscribe((res: any) => {
       this.loading.stop('1');
       if (res['status'] === 200) {
         this.sessionId = res['response'];
@@ -78,7 +79,7 @@ export class UpdateBillingComponent implements OnInit {
   }
   onGetCurrentPlan() {
     this.loading.start('2');
-    this.billingService.getCurrentPlan().subscribe(res => {
+    this.billingService.getCurrentPlan(this.constructor.name, moduleName.updateBillingModule).subscribe((res: any) => {
       this.loading.stop('2');
       if (res['status'] === 200) {
         this.billingDetails = res['response'];
@@ -94,7 +95,7 @@ export class UpdateBillingComponent implements OnInit {
   }
   onGetCompanyDetails() {
     this.loading.start('3');
-    this.companyService.getCompanyDetails().subscribe(res => {
+    this.companyService.getCompanyDetails().subscribe((res: any) => {
       this.loading.stop('3');
       if (res['status'] === 200) {
         this.companyDetails = res['response'];

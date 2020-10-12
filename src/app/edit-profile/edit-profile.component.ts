@@ -39,6 +39,7 @@ export class EditProfileComponent implements OnInit {
   isOpen = false;
   alertType: any;
   // roles: any;
+  dismissible = true;
   constructor(
     private formBuilder: FormBuilder,
     private authenticationService: AuthenticationService,
@@ -207,6 +208,8 @@ export class EditProfileComponent implements OnInit {
         this.alertMsg = data.response;
         this.isOpen = true;
         this.alertType = 'success';
+        this.changePwdSubmitted = false;
+        this.changepasswordForm.reset();
       }
     }, (error) => {
       this.loadingBar.stop();
@@ -214,6 +217,8 @@ export class EditProfileComponent implements OnInit {
       this.alertMsg = error.Password_mismatch;
       this.isOpen = true;
       this.alertType = 'danger';
+      this.changePwdSubmitted = false;
+      this.changepasswordForm.reset();
     });
   }
 
