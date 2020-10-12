@@ -4,6 +4,7 @@ import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { UserService } from 'src/app/_services';
 import { CompanyService } from 'src/app/company.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { TablePaginationConfig } from 'src/app/_models/tablepaginationconfig';
 
 @Component({
   selector: 'app-companyteam',
@@ -20,7 +21,7 @@ export class CompanyteamComponent implements OnInit {
 
   p: number = 1;
   i: any = [];
-  paginationConfig = { itemsPerPage: this.pageSize, currentPage: this.p, totalItems: this.totalCount };
+  paginationConfig: TablePaginationConfig; // =
   isControlDisabled: boolean;
   alertMsg: any;
   alertType: any;
@@ -37,7 +38,9 @@ export class CompanyteamComponent implements OnInit {
   constructor(private companyService: CompanyService, private modalService: NgbModal,
               private formBuilder: FormBuilder,
               private userService: UserService,
-              private loading: NgxUiLoaderService) { }
+              private loading: NgxUiLoaderService) { 
+                this.paginationConfig = { itemsPerPage: this.pageSize, currentPage: this.p, totalItems: this.totalCount };
+              }
 
   ngOnInit() {
     this.loadRoleList();
@@ -195,4 +198,23 @@ export class CompanyteamComponent implements OnInit {
     this.alertMsg = !dismissedAlert;
     this.isOpen = false;
   }
+
+  
+  onChangeEvent(event) {
+    this.paginationConfig.itemsPerPage = Number(event.target.value);
+    this.loadCompanyTeamMembers();
+  }
+
+  pageChangeEvent(event) {
+    this.paginationConfig.currentPage = event;
+    const pagelimit = '?limit=' + this.paginationConfig.itemsPerPage + '&page=' + this.paginationConfig.currentPage;
+    this.loading.start();
+    this.companyService.getCompanyTeamMembers(pagelimit).subscribe((data) => {
+      this.loading.stop();
+      const key = 'response';
+      this.teamMemberList = data[key];
+      this.paginationConfig.totalItems = data.count;
+    });
+  }
+
 }

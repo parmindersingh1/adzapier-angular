@@ -6,6 +6,7 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { OrganizationService } from 'src/app/_services/organization.service';
 import { CompanyService } from 'src/app/company.service';
 import { UserService } from 'src/app/_services/user.service';
+import { TablePaginationConfig } from 'src/app/_models/tablepaginationconfig';
 // import { CompanyService } from '../company.service';
 @Component({
   selector: 'app-organizationdetails',
@@ -31,12 +32,13 @@ export class OrganizationdetailsComponent implements OnInit {
   p: number = 1;
   pageSize: any = 5;
   totalCount: any;
-  paginationConfig = { itemsPerPage: this.pageSize, currentPage: this.p, totalItems: this.totalCount, id: 'userPagination' };
+  paginationConfig: TablePaginationConfig;
 
   p2: number = 1;
   propertyPgSize: any = 5;
   propertyTotalCount: any;
-  propertyPageConfig = { itemsPerPage: this.propertyPgSize, currentPage: this.p2, totalItems: this.propertyTotalCount, id: 'propertyPagination' };
+  propertyPageConfig: TablePaginationConfig;
+  // = { itemsPerPage: this.propertyPgSize, currentPage: this.p2, totalItems: this.propertyTotalCount, id: 'propertyPagination' };
 
   propertyList: any;
   submitted;
@@ -75,6 +77,9 @@ export class OrganizationdetailsComponent implements OnInit {
       this.currentManagedOrgID = data.organization_id;
       this.currrentManagedPropID = data.property_id;
     });
+    this.paginationConfig = { itemsPerPage: this.pageSize, currentPage: this.p, totalItems: this.totalCount, id: 'userPagination' };
+    this.propertyPageConfig = { itemsPerPage: this.propertyPgSize, currentPage: this.p2,
+      totalItems: this.propertyTotalCount, id: 'propertyPagination' };
   }
 
   ngOnInit() {
@@ -124,7 +129,7 @@ export class OrganizationdetailsComponent implements OnInit {
       city: ['', [Validators.required, Validators.pattern(strRegx)]],
       state: ['', [Validators.required, Validators.pattern(strRegx)]],
       zipcode: ['', [Validators.required, Validators.pattern(zipRegex)]],
-      email: ['', [Validators.required]],
+      email: ['', [Validators.required, Validators.pattern]],
       phone: ['', [Validators.required, Validators.pattern(phoneNumRegx)]]
     });
   }

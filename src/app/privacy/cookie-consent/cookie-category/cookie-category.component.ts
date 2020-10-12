@@ -392,4 +392,11 @@ export class CookieCategoryComponent implements OnInit {
 onHideModal() {
   this.categoryModalRef.hide();
 }
+
+
+onClosed(dismissedAlert: any): void {
+  this.alertMsg = !dismissedAlert;
+  this.isOpen = false;
+}
+
 }

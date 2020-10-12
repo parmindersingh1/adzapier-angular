@@ -4,7 +4,7 @@ import { WorkflowService } from 'src/app/_services/workflow.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
-
+import { TablePaginationConfig } from 'src/app/_models/tablepaginationconfig';
 @Component({
   selector: 'app-workflows',
   templateUrl: './workflows.component.html',
@@ -28,12 +28,14 @@ export class WorkflowsComponent implements OnInit {
   page: number = 1;
   pgSize: any = 5;
   listTotalCount: any;
-  paginationConfig = { itemsPerPage: this.pgSize, currentPage: this.page, totalItems: this.listTotalCount, id: 'propertyPagination' };
+  paginationConfig: TablePaginationConfig;
   constructor(private router: Router, private workflowService: WorkflowService,
               private modalService: NgbModal,
               private formBuilder: FormBuilder,
               private loadingBar: NgxUiLoaderService
-  ) { }
+  ) {
+   this.paginationConfig = { itemsPerPage: this.pgSize, currentPage: this.page, totalItems: this.listTotalCount, id: 'propertyPagination' };
+  }
 
   ngOnInit() {
     this.loadWorkflowList();
@@ -131,7 +133,7 @@ export class WorkflowsComponent implements OnInit {
         this.alertType = 'danger';
         this.createWorkFlowForm.reset();
         this.modalService.dismissAll('error!');
-      })
+      });
     }
   }
 
@@ -148,7 +150,6 @@ export class WorkflowsComponent implements OnInit {
     this.workflowService.getWorkflow(pagelimit).subscribe((data) => {
       this.paginationConfig.totalItems = data.count;
       this.workflowList = data.response;
-      //return this.workflowList;
     });
   }
 

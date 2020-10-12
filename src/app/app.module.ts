@@ -15,7 +15,7 @@ import { FooterComponent } from './_components/layout/footer/footer.component';
 
 // import { AlertComponent } from './_components';
 
-import { ForgotpasswordComponent } from './forgotpassword/forgotpassword.component';
+// import { ForgotpasswordComponent } from './forgotpassword/forgotpassword.component';
 
 import { ResetpasswordComponent } from './resetpassword/resetpassword.component';
 import { PagenotfoundComponent } from './errorpages/pagenotfound.component';
@@ -35,7 +35,7 @@ import { PartnersComponent } from './partners/partners.component';
 import { TermofuseComponent } from './termofuse/termofuse.component';
 import { PrivacypolicyComponent } from './privacypolicy/privacypolicy.component';
 import { CCPAComponent } from './ccpa/ccpa.component';
-import { VerifyemailComponent } from './verifyemail/verifyemail.component';
+// import { VerifyemailComponent } from './verifyemail/verifyemail.component';
 
 import { NgxUiLoaderModule, NgxUiLoaderConfig } from 'ngx-ui-loader';
 import { ngxUiLoaderConfig } from './_constant/loading.contant';
@@ -62,7 +62,7 @@ export const isMock = environment.mock;
     HeaderComponent,
     FooterComponent,
     // AlertComponent,
-    ForgotpasswordComponent,
+    // ForgotpasswordComponent,
     ResetpasswordComponent,
     PagenotfoundComponent,
     InternalerrorComponent,
@@ -73,7 +73,7 @@ export const isMock = environment.mock;
     TermofuseComponent,
     PrivacypolicyComponent,
     CCPAComponent,
-    VerifyemailComponent,
+   // VerifyemailComponent,
     CheckoutConfirmationComponent,
     WelcomeComponent
   ],

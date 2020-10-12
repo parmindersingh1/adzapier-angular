@@ -172,4 +172,9 @@ export class PricingComponent implements OnInit {
     //  this.notification.error('Company Details', 'Something went wrong...', notificationConfig);
     });
   }
+
+  onClosed(dismissedAlert: any): void {
+    this.alertMsg = !dismissedAlert;
+    this.isOpen = false;
+  }
 }
