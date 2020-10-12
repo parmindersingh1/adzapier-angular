@@ -53,6 +53,7 @@ export class EditwebformComponent implements OnInit {
   submitted: any;
   selectedwebFormControlList: any;
   settings: any;
+  dismissible = true;
   constructor(private ccpaFormConfigService: CCPAFormConfigurationService,
               private organizationService: OrganizationService,
               private ccpaRequestService: CcparequestService,

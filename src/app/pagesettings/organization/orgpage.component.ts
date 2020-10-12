@@ -6,7 +6,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { CompanyService } from 'src/app/company.service';
-
+import { TablePaginationConfig } from 'src/app/_models/tablepaginationconfig';
 @Component({
   selector: 'app-orgpage',
   templateUrl: './orgpage.component.html',
@@ -43,7 +43,7 @@ export class OrgpageComponent implements OnInit {
   p: number = 1;
   pageSize: any = 5;
   totalCount: any;
-  paginationConfig = { itemsPerPage: this.pageSize, currentPage: this.p, totalItems: this.totalCount };
+  paginationConfig: TablePaginationConfig;
   selectedOrganization: any = [];
   searchText;
   ascNumberSort: any;
@@ -62,7 +62,9 @@ export class OrgpageComponent implements OnInit {
               private companyService: CompanyService,
               private router: Router,
               private loading: NgxUiLoaderService
-  ) { }
+  ) {
+    this.paginationConfig = { itemsPerPage: this.pageSize, currentPage: this.p, totalItems: this.totalCount };
+   }
 
   ngOnInit() {
     this.isEditable = false;
@@ -85,7 +87,7 @@ export class OrgpageComponent implements OnInit {
       cityname: ['', [Validators.required, Validators.pattern(strRegx)]],
       statename: ['', [Validators.required, Validators.pattern(strRegx)]],
       zipcodenum: ['', [Validators.required, Validators.pattern(zipRegex)]],
-      email: ['', [Validators.required]],
+      email: ['', [Validators.required, Validators.pattern]],
       phone: ['', [Validators.required, Validators.pattern(phoneNumRegx)]]
     });
     this.loadOrganizationList();
@@ -335,6 +337,7 @@ export class OrgpageComponent implements OnInit {
 
   onChangeEvent(event) {
     this.paginationConfig.itemsPerPage = Number(event.target.value);
+    this.loadOrganizationList();
   }
 
   viewOrganization(orgID) {

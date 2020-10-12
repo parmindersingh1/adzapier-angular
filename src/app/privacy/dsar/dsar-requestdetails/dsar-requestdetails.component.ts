@@ -2,7 +2,7 @@ import { Component, OnInit, HostListener, ViewChild, ElementRef, Renderer2, Temp
 import { ActivatedRoute, Router } from '@angular/router';
 import { OrganizationService } from 'src/app/_services';
 import { DsarRequestService } from 'src/app/_services/dsar-request.service';
-import { NgbNavChangeEvent, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbNavChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 import { FormGroup, FormBuilder, FormControl, Validators, NgForm } from '@angular/forms';
 import { WorkflowService } from 'src/app/_services/workflow.service';
 import { CcpadataService } from 'src/app/_services/ccpadata.service';
@@ -11,6 +11,7 @@ import { TypeaheadMatch } from 'ngx-bootstrap/typeahead/typeahead-match.class';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap';
 import { Observable } from 'rxjs';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
+import { TablePaginationConfig } from 'src/app/_models/tablepaginationconfig';
 @Component({
   selector: 'app-dsar-requestdetails',
   templateUrl: './dsar-requestdetails.component.html',
@@ -116,7 +117,7 @@ export class DsarRequestdetailsComponent implements OnInit {
   isResponseToSubTask: boolean = false;
   selectedTaskID: any;
   isDisable: boolean = true;
-  paginationConfig = { itemsPerPage: this.pageSize, currentPage: this.p, totalItems: this.totalCount, id: 'userPagination' };
+  paginationConfig: TablePaginationConfig;
   quillConfig = {
     toolbar: {
       container: [
@@ -162,10 +163,12 @@ export class DsarRequestdetailsComponent implements OnInit {
               private loading: NgxUiLoaderService
   ) {
     this.renderer2.listen('window', 'click', (e: Event) => {
-      if (e.target !== this.toggleDayleftdiv.nativeElement && e.target !== this.btnDaysLeft.nativeElement && e.target !== this.customDaysInput.nativeElement) {
+      if (e.target !== this.toggleDayleftdiv.nativeElement &&
+        e.target !== this.btnDaysLeft.nativeElement && e.target !== this.customDaysInput.nativeElement) {
         this.isListVisible = false;
       }
     });
+    this.paginationConfig = { itemsPerPage: this.pageSize, currentPage: this.p, totalItems: this.totalCount, id: 'userPagination' };
   }
 
   ngOnInit() {

@@ -789,7 +789,7 @@
 </ng-template>
 
 
-<div *ngIf="isOpen" class="col-sm-5 mr-0 float-right flotingdiv">
+<div *ngIf="isOpen" class="col-sm-5 mr-0 float-right flotingdiv" [ngClass]="{'hide':!isOpen}">
     <!-- dismissOnTimeout="5000"-->
     <alert *ngIf="isOpen" [type]="alertType" dismissOnTimeout="10000" [dismissible]="dismissible"
         (onClosed)="onClosed(alertMsg)">{{alertMsg}}

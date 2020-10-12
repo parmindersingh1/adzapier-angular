@@ -33,7 +33,7 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit {
   cityname: any;
   statename: any;
   zipcodenum: any;
-  
+  dismissible = true;
   currentManagedOrgID: any;
   allFilterData: any = {
     filter_status: [],
