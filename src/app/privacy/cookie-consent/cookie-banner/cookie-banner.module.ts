@@ -9,9 +9,9 @@ import {MatRadioModule} from '@angular/material/radio';
 import {MatInputModule} from '@angular/material/input';
 import {MatButtonModule} from '@angular/material/button';
 import {MatExpansionModule} from '@angular/material/expansion';
-import { SetupComponent } from './setup/setup.component';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import { SharedbootstrapModule } from 'src/app/sharedbootstrap/sharedbootstrap.module';
+import {SetupComponent} from './setup/setup.component';
 const path: Routes = [{
   path: '', component: CookieBannerComponent,
 },
