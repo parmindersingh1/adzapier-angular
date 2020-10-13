@@ -197,7 +197,7 @@
             <div id="vmap" *ngIf="currentState === 'usa'" class="ht-200"></div>
             <div id="worldMap" *ngIf="currentState !== 'usa'" class="ht-200"></div>
           </div>
-          <div class="table-responsive">
+          <div *ngIf="currentState === 'usa'" class="table-responsive">
             <table class="table table-borderless table-dashboard table-dashboard-one">
               <thead>
               <tr>
@@ -212,7 +212,29 @@
               </tr>
               </tbody>
             </table>
-          </div><!-- table-responsive -->
+          </div>
+
+
+
+          <div *ngIf="currentState !== 'usa'" class="table-responsive">
+            <table class="table table-borderless table-dashboard table-dashboard-one">
+              <thead>
+              <tr>
+                <th class="wd-25">Country</th>
+                <th class="wd-25 ">Count</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr *ngFor="let countryData of countryList | slice:0:6">
+                <td class="tx-medium">{{countryData.country}}</td>
+                <td class="">{{countryData.count}}</td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+
+
+
         </div><!-- card-body -->
         <!--        </ng-container>-->
         <!--        <ng-template #noStateList>-->

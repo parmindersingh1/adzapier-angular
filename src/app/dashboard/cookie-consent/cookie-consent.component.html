@@ -94,7 +94,7 @@
           <h6 class="mg-b-0">Request By State</h6>
           <div class="dropdown">
             <select (change)="onSelectCountryMap($event)" class="form-control" id="sel1">
-              <option value="usa">USA</option>
+              <option value="us">USA</option>
               <option value="world">World</option>
             </select>
           </div>
@@ -103,8 +103,8 @@
         </div><!-- card-header -->
         <div class="card-body ">
           <div class="pd-y-25 pd-x-20">
-            <div id="vmap" *ngIf="currentCountryMap === 'usa'" class="ht-200"></div>
-            <div id="worldMap" *ngIf="currentCountryMap !== 'usa'" class="ht-200"></div>
+            <div id="vmap" *ngIf="currentCountryMap === 'us'" class="ht-200"></div>
+            <div id="worldMap" *ngIf="currentCountryMap !== 'us'" class="ht-200"></div>
           </div>
           <!-- <div class="table-responsive">
               <table class="table table-borderless table-dashboard table-dashboard-one">
