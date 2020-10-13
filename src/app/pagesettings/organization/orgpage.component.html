@@ -197,9 +197,11 @@
                 <div class="col-sm-6">
                     <div class="form-group"><label for="email">Email</label>
                         <input type="text" class="form-control"  formControlName="email"
+                        pattern="^\w+@[a-zA-Z_0-9]+?\.[a-zA-Z]{2,3}$"
                         name="email" [ngClass]="{ 'is-invalid': submitted && editOrg.email.errors }" />
                         <div *ngIf="submitted && editOrg.email.errors" class="invalid-feedback">
                             <div *ngIf="editOrg.email.errors.required">Email is required</div>
+                            <div *ngIf="editOrg.emailid.errors.pattern">Please enter valid email address</div>
                         </div>
                     </div>
                 </div>
@@ -226,6 +228,6 @@
         </form>
     </div>
 </ng-template>
-<div class="col-sm-5 mr-0 float-right flotingdiv"> <!--dismissOnTimeout="5000"-->
-    <alert *ngIf="isOpen" [type]="alertType"  [dismissible]="dismissible" (onClosed)="onClosed(alertMsg)">{{  alertMsg}}</alert>
+<div class="col-sm-5 mr-0 float-right flotingdiv" [ngClass]="{'hide':!isOpen}"> <!--dismissOnTimeout="5000"-->
+    <alert *ngIf="isOpen" [type]="alertType"  dismissOnTimeout="5000" [dismissible]="dismissible" (onClosed)="onClosed(alertMsg)">{{  alertMsg}}</alert>
 </div>

@@ -39,6 +39,7 @@ export class EditProfileComponent implements OnInit {
   isOpen = false;
   alertType: any;
   // roles: any;
+  dismissible = true;
   constructor(
     private formBuilder: FormBuilder,
     private authenticationService: AuthenticationService,

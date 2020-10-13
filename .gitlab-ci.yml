@@ -214,7 +214,7 @@ deploy-to-swarm-prod:
     PUBLISH_PORT: 8190
     SERVICE_NAME: ${CI_BUILD_REF_NAME}-ui
     backend: cmp-ui
-    HOST: "`cmp.adzpier.com`"
+    DOMAINS: "Host(`portal.adzapier.com`)"
   image: docker:19
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD ${CI_REGISTRY}

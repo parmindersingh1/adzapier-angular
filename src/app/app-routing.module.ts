@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { AuthGuard } from './_helpers';
-import { ForgotpasswordComponent } from './forgotpassword/forgotpassword.component';
+// import { ForgotpasswordComponent } from './forgotpassword/forgotpassword.component';
 
 import { ResetpasswordComponent } from './resetpassword/resetpassword.component';
 import { PagenotfoundComponent } from './errorpages/pagenotfound.component';
@@ -15,7 +15,7 @@ import { PartnersComponent } from './partners/partners.component';
 import { TermofuseComponent } from './termofuse/termofuse.component';
 import { CCPAComponent } from './ccpa/ccpa.component';
 
-import { VerifyemailComponent } from './verifyemail/verifyemail.component';
+// import { VerifyemailComponent } from './verifyemail/verifyemail.component';
 
 import { CheckoutComponent } from './pagesettings/billing/pricing/checkout/checkout.component';
 import { CheckoutConfirmationComponent } from './checkout-confirmation/checkout-confirmation.component';
@@ -25,7 +25,7 @@ const routes: Routes = [
 
   { path: 'login', loadChildren: () => import('./login/login.module').then(m => m.LoginModule) },
   { path: 'signup', loadChildren: () => import('./register/register.module').then(m => m.RegisterModule) },
-  { path: 'forgot-password', component: ForgotpasswordComponent },
+  { path: 'forgot-password', loadChildren: () => import('./forgotpassword/forgotpassword.module').then(m => m.ForgotpasswordModule) },
   { path: 'privacypolicy', component: PrivacypolicyComponent },
   { path: 'partners', component: PartnersComponent },
   { path: 'termofuse', component: TermofuseComponent },
@@ -72,7 +72,7 @@ const routes: Routes = [
   { path: 'settings', loadChildren: () => import('./pagesettings/pagesettings.module').then(m => m.PagesettingsModule) },
   { path: 'editwebforms/:crid', loadChildren: () => import('./editwebform/editwebform.module').then(m => m.EditwebformModule) },
   { path: 'propertydashboard/:propid', component: PropertydashboardComponent, canActivate: [AuthGuard] },
-  { path: 'verify-email/:id', component: VerifyemailComponent },
+  { path: 'verify-email/:id', loadChildren: () => import('./verifyemail/verifyemail.module').then(m => m.VerifyemailModule) },
   // { path: 'checkout', component: CheckoutComponent, canActivate: [AuthGuard] },
   { path: 'success', component: CheckoutConfirmationComponent, canActivate: [AuthGuard] },
   { path: '', redirectTo: 'home/dashboard/analytics', pathMatch: 'full', canActivate: [AuthGuard] },

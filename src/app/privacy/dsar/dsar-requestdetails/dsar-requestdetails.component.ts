@@ -2,7 +2,7 @@ import { Component, OnInit, HostListener, ViewChild, ElementRef, Renderer2, Temp
 import { ActivatedRoute, Router } from '@angular/router';
 import { OrganizationService } from 'src/app/_services';
 import { DsarRequestService } from 'src/app/_services/dsar-request.service';
-import { NgbNavChangeEvent, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbNavChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 import { FormGroup, FormBuilder, FormControl, Validators, NgForm } from '@angular/forms';
 import { WorkflowService } from 'src/app/_services/workflow.service';
 import { CcpadataService } from 'src/app/_services/ccpadata.service';
@@ -11,6 +11,7 @@ import { TypeaheadMatch } from 'ngx-bootstrap/typeahead/typeahead-match.class';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap';
 import { Observable } from 'rxjs';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
+import { TablePaginationConfig } from 'src/app/_models/tablepaginationconfig';
 @Component({
   selector: 'app-dsar-requestdetails',
   templateUrl: './dsar-requestdetails.component.html',
@@ -89,6 +90,7 @@ export class DsarRequestdetailsComponent implements OnInit {
   subTaskResponseForm: FormGroup;
   submitted: boolean;
   isActivitysubmitted: boolean;
+  isEmailPostsubmitted: boolean;
   isRequestDetailFormsubmit: boolean;
   isResponseSubmitted: boolean;
   requestDetailsbyId: any;
@@ -115,7 +117,7 @@ export class DsarRequestdetailsComponent implements OnInit {
   isResponseToSubTask: boolean = false;
   selectedTaskID: any;
   isDisable: boolean = true;
-  paginationConfig = { itemsPerPage: this.pageSize, currentPage: this.p, totalItems: this.totalCount, id: 'userPagination' };
+  paginationConfig: TablePaginationConfig;
   quillConfig = {
     toolbar: {
       container: [
@@ -161,10 +163,12 @@ export class DsarRequestdetailsComponent implements OnInit {
               private loading: NgxUiLoaderService
   ) {
     this.renderer2.listen('window', 'click', (e: Event) => {
-      if (e.target !== this.toggleDayleftdiv.nativeElement && e.target !== this.btnDaysLeft.nativeElement && e.target !== this.customDaysInput.nativeElement) {
+      if (e.target !== this.toggleDayleftdiv.nativeElement &&
+        e.target !== this.btnDaysLeft.nativeElement && e.target !== this.customDaysInput.nativeElement) {
         this.isListVisible = false;
       }
     });
+    this.paginationConfig = { itemsPerPage: this.pageSize, currentPage: this.p, totalItems: this.totalCount, id: 'userPagination' };
   }
 
   ngOnInit() {
@@ -176,7 +180,7 @@ export class DsarRequestdetailsComponent implements OnInit {
       editor: new FormControl('', Validators.required)
     });
     this.quillEditorEmailText = this.formBuilder.group({
-      dropdownEmailTemplate: ['', [Validators.required]],
+      dropdownEmailTemplate: [''],
       editorEmailMessage: ['', [Validators.required]],
       emailAttachment: ['']
     });
@@ -206,7 +210,7 @@ export class DsarRequestdetailsComponent implements OnInit {
 
     this.subTaskResponseForm = this.formBuilder.group({
       taskresponse: ['', [Validators.required]],
-      markcompleted: [''],
+      markcompleted: ['', [Validators.requiredTrue]],
       uploaddocument: ['']
     });
 
@@ -223,6 +227,7 @@ export class DsarRequestdetailsComponent implements OnInit {
     // this.onChanges();
   }
   get addActivity() { return this.quillEditorText.controls; }
+  get addEmailPost() { return this.quillEditorEmailText.controls; }
   get editRequest() { return this.editRequestDetailForm.controls; }
   get addsubTask() { return this.subTaskForm.controls; }
   get subTaskResponse() { return this.subTaskResponseForm.controls; }
@@ -609,48 +614,60 @@ export class DsarRequestdetailsComponent implements OnInit {
       return false;
     } else {
       //  console.log(this.selectedStages[this.selectedStages.length - 1].id);
-      const reqObj = {
-        current_status: this.currentStageId !== undefined ? this.currentStageId : this.selectedStages[this.selectedStages.length - 1].id,
-        previous_status: this.previousStageId,
-        activity_feedback: this.quillEditorText.get('editor').value //this.editorActivityPost
-      };
-      Object.keys(reqObj).forEach(key => {
-        if (reqObj[key] === undefined) {
-          delete reqObj[key];
-        }
-      });
-      //  return false;
-      this.stageAPI(this.requestID, reqObj);
+      if (this.selectedStages.length === 0) {
+        this.alertMsg = 'Stage not selected!';
+        this.isOpen = true;
+        this.alertType = 'info';
+        return false;
+      } else {
+        const reqObj = {
+          current_status: this.currentStageId !== undefined ? this.currentStageId : this.selectedStages[this.selectedStages.length - 1].id,
+          previous_status: this.previousStageId,
+          activity_feedback: this.quillEditorText.get('editor').value // this.editorActivityPost
+        };
+        Object.keys(reqObj).forEach(key => {
+          if (reqObj[key] === undefined) {
+            delete reqObj[key];
+          }
+        });
+        this.stageAPI(this.requestID, reqObj);
+      }
     }
 
   }
 
   onSubmitEmailPost() {
-    const requestObj = {
-      current_status: this.currentWorkflowStageID || this.workflowStages[0].id, // this.currentStageId || this.workflowStages[0].id,
-      email_body: this.quillEditorEmailText.get('editorEmailMessage').value,
-      upload: this.quillEditorEmailText.get('emailAttachment').value
-    };
+    this.isEmailPostsubmitted = true;
+    if (this.quillEditorEmailText.invalid) {
+      return false;
+    } else {
+      const requestObj = {
+        current_status: this.currentWorkflowStageID || this.workflowStages[0].id, // this.currentStageId || this.workflowStages[0].id,
+        email_body: this.quillEditorEmailText.get('editorEmailMessage').value,
+        upload: this.quillEditorEmailText.get('emailAttachment').value
+      };
 
-    const fd = new FormData();
-    fd.append('current_status', this.currentWorkflowStageID || this.workflowStages[0].id);
-    fd.append('email_body', this.quillEditorEmailText.get('editorEmailMessage').value);
-    fd.append('upload', this.quillEditorEmailText.get('emailAttachment').value);
+      const fd = new FormData();
+      fd.append('current_status', this.currentWorkflowStageID || this.workflowStages[0].id);
+      fd.append('email_body', this.quillEditorEmailText.get('editorEmailMessage').value);
+      fd.append('upload', this.quillEditorEmailText.get('emailAttachment').value);
 
-    this.ccpaDataService.addCCPADataEmailActivity(this.requestID, fd).subscribe((data) => {
-      if (data) {
-        // alert(data.response);
-        this.alertMsg = data.response;
+      this.ccpaDataService.addCCPADataEmailActivity(this.requestID, fd).subscribe((data) => {
+        if (data) {
+          // alert(data.response);
+          this.alertMsg = data.response;
+          this.isOpen = true;
+          this.alertType = 'success';
+          this.loadEmailLog(this.requestID);
+          this.quillEditorEmailText.get('editorEmailMessage').reset();
+          this.isEmailPostsubmitted = false;
+        }
+      }, (error) => {
+        this.alertMsg = error;
         this.isOpen = true;
-        this.alertType = 'success';
-        this.loadEmailLog(this.requestID);
-      }
-    }, (error) => {
-      this.alertMsg = error;
-      this.isOpen = true;
-      this.alertType = 'danger';
-    });
-
+        this.alertType = 'danger';
+      });
+    }
     //this.stageAPI(this.requestID, reqObj);
   }
 
@@ -663,6 +680,8 @@ export class DsarRequestdetailsComponent implements OnInit {
         this.isOpen = true;
         this.alertType = 'success';
         this.loadActivityLog(requestID);
+        this.quillEditorText.get('editor').setValue('');
+        this.isActivitysubmitted = false;
       }
     }, (error) => {
       this.alertMsg = error;

@@ -80,8 +80,9 @@
                                     class="fas fa-envelope	"></i> Resend Invitation</button>
                         </td>
                         <td>
-                            <button class="btn btn-xs btn-primary"
-                                (click)="removeTeamMember(list.id)">Remove</button>
+                            <a (click)="removeTeamMember(list.id)" title="Remove member">
+                                <span class="d-none d-sm-inline cursorpointer mg-l-0"> <i class="far fa-trash-alt tx-danger fa-sm"></i></span>
+                            </a>
                         </td>
 
                     </tr>
@@ -147,7 +148,7 @@
     </div>
 </ng-template>
 
-<div class="col-sm-5 mr-0 float-right flotingdiv">
+<div class="col-sm-5 mr-0 float-right flotingdiv" [ngClass]="{'hide':!isOpen}">
     <alert *ngIf="isOpen" [type]="alertType" dismissOnTimeout="5000" [dismissible]="dismissible"
         (onClosed)="onCloseAlert(alertMsg)">{{  alertMsg}}</alert>
 </div>

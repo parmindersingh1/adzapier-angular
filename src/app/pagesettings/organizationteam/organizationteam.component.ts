@@ -5,6 +5,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { UserService, OrganizationService } from 'src/app/_services';
 import { CompanyService } from 'src/app/company.service';
+import { TablePaginationConfig } from 'src/app/_models/tablepaginationconfig';
 
 @Component({
   selector: 'app-organizationteam',
@@ -22,7 +23,7 @@ export class OrganizationteamComponent implements OnInit {
   pageSize: any = 5;
   totalCount: any;
   searchText: any;
-  paginationConfig = { itemsPerPage: this.pageSize, currentPage: this.p, totalItems: this.totalCount };
+  paginationConfig: TablePaginationConfig;
   alertMsg: any;
   alertType: any;
   dismissible = true;
@@ -37,7 +38,7 @@ export class OrganizationteamComponent implements OnInit {
               private companyService: CompanyService,
               private orgService: OrganizationService,
               private loading: NgxUiLoaderService
-  ) { }
+  ) { this.paginationConfig = { itemsPerPage: this.pageSize, currentPage: this.p, totalItems: this.totalCount }; }
 
   ngOnInit() {
     this.activatedRoute.paramMap.subscribe(params => {
@@ -224,5 +225,12 @@ export class OrganizationteamComponent implements OnInit {
     this.inviteUserOrgForm.reset();
     this.modalService.dismissAll('Canceled');
   }
+
+
+  onClosed(dismissedAlert: any): void {
+    this.alertMsg = !dismissedAlert;
+    this.isOpen = false;
+  }
+
 
 }

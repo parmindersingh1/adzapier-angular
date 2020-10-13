@@ -4,6 +4,7 @@ import { Validators, FormBuilder, FormGroup, FormArray, FormControl } from '@ang
 import {NgxUiLoaderService} from 'ngx-ui-loader';
 import { UserService } from 'src/app/_services';
 import { CompanyService } from 'src/app/company.service';
+import { TablePaginationConfig } from 'src/app/_models/tablepaginationconfig';
 
 @Component({
   selector: 'app-company',
@@ -38,7 +39,7 @@ export class CompanyComponent implements OnInit {
 
   p: number = 1;
   i: any = [];
-  paginationConfig = { itemsPerPage: this.pageSize, currentPage: this.p, totalItems: this.totalCount };
+  paginationConfig: TablePaginationConfig;
   isControlDisabled: boolean;
   alertMsg: any;
   alertType: any;
@@ -48,7 +49,9 @@ export class CompanyComponent implements OnInit {
               private formBuilder: FormBuilder,
               private userService: UserService,
               private loading: NgxUiLoaderService,
-  ) { }
+  ) {
+    this.paginationConfig = { itemsPerPage: this.pageSize, currentPage: this.p, totalItems: this.totalCount };
+   }
 
   ngOnInit() {
     this.loadRoleList();

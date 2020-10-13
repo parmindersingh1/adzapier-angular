@@ -260,9 +260,8 @@
                                         <span *ngIf="!isDateOrString(list.user_last_login)">{{list.user_last_login}}</span>
                                     </td>
                                   <td class="text-center">
-                                      <!-- *ngIf="list.user_last_login === 'Invitation sent' || list.user_last_login === 'Invitation Pending'"-->
-                                    <button type="button"
-                                            (click)="onResendInvitation(list.approver_id)"  class="btn btn-xs btn-primary"><i class="fas fa-envelope	"></i> Resend Invitation</button>
+                                    <button  *ngIf="list.user_last_login === 'Invitation sent'" type="button"
+                                            (click)="onResendInvitation(list.approver_id)"  class="btn btn-xs btn-primary"><i class="fas fa-envelope"></i> Resend Invitation</button>
                                   </td>
                                     <td>
                                         <a class="pd-r-5" (click)="editUserInvitation(inviteuserModal,list)">
@@ -392,11 +391,12 @@
                     <div class="col-sm-6">
                         <div class="form-group"><label for="email">Email</label>
                             <input type="text" class="form-control"  formControlName="email"
-                            name="email" [ngClass]="{ 'is-invalid': submitted && editOrg.email.errors }" />
+                            pattern="^\w+@[a-zA-Z_0-9]+?\.[a-zA-Z]{2,3}$"  name="email" [ngClass]="{ 'is-invalid': submitted && editOrg.email.errors }" />
                             <div *ngIf="submitted && editOrg.email.errors" class="invalid-feedback">
                                 <div *ngIf="editOrg.email.errors.required">Email is required</div>
+                                <div *ngIf="editOrg.email.errors.pattern">Please enter valid email</div>
                             </div>
-                        </div>
+                        </div>                     
                     </div>
                     <div class="col-sm-6">
                         <div class="form-group"><label for="phone">Phone</label>
@@ -530,6 +530,6 @@
             </form>
         </div>
     </ng-template>
-    <div class="col-sm-5 mr-0 float-right flotingdiv">
+    <div class="col-sm-5 mr-0 float-right flotingdiv" [ngClass]="{'hide':!isOpen}">
         <alert *ngIf="isOpen" [type]="alertType" dismissOnTimeout="5000" [dismissible]="dismissible" (onClosed)="onClosed(alert)">{{  alertMsg}}</alert>
     </div>
