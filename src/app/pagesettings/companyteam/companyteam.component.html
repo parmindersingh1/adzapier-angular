@@ -76,7 +76,7 @@
                         <td class="text-center">
                             <button type="button"
                                 *ngIf="list.user_last_login === 'Invitation sent' || list.user_last_login === 'Invitation Pending'"
-                                (click)="onResendInvitation(list.user_email)" class="btn btn-xs btn-primary"><i
+                                (click)="onResendInvitation(list.approver_id)" class="btn btn-xs btn-primary"><i
                                     class="fas fa-envelope	"></i> Resend Invitation</button>
                         </td>
                         <td>

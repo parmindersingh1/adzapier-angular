@@ -7,6 +7,7 @@ import { OrganizationService } from 'src/app/_services/organization.service';
 import { CompanyService } from 'src/app/company.service';
 import { UserService } from 'src/app/_services/user.service';
 import { TablePaginationConfig } from 'src/app/_models/tablepaginationconfig';
+import { moduleName } from 'src/app/_constant/module-name.constant';
 // import { CompanyService } from '../company.service';
 @Component({
   selector: 'app-organizationdetails',
@@ -125,7 +126,7 @@ export class OrganizationdetailsComponent implements OnInit {
       organizationName: ['', [Validators.required, Validators.pattern(alphaNumeric)]],
       taxID: [''],
       addressOne: ['', [Validators.required]],
-      addressTwo: ['', [Validators.required]],
+      addressTwo: [''],
       city: ['', [Validators.required, Validators.pattern(strRegx)]],
       state: ['', [Validators.required, Validators.pattern(strRegx)]],
       zipcode: ['', [Validators.required, Validators.pattern(zipRegex)]],
@@ -383,7 +384,7 @@ export class OrganizationdetailsComponent implements OnInit {
           orgid: this.organizationID,
           user_level: 'organization'
         };
-        this.companyService.inviteUser(requestObj)
+        this.companyService.inviteUser( this.constructor.name, moduleName.organizationDetailsModule, requestObj)
           .subscribe((data) => {
             if (data) {
               this.alertMsg = data.response;
@@ -406,7 +407,7 @@ export class OrganizationdetailsComponent implements OnInit {
           orgid: this.organizationID
         //  user_level: 'organization'
         };
-        this.companyService.updateUserRole(requestObj)
+        this.companyService.updateUserRole( this.constructor.name, moduleName.organizationDetailsModule, requestObj)
           .subscribe((data) => {
             if (data) {
               this.alertMsg = data.response;
@@ -426,7 +427,7 @@ export class OrganizationdetailsComponent implements OnInit {
   }
 
 loadRoleList() {
-  this.userService.getRoleList().subscribe((data) => {
+  this.userService.getRoleList( this.constructor.name, moduleName.organizationDetailsModule ).subscribe((data) => {
     if (data) {
       const key = 'response';
       // const roleid = data[key];
@@ -468,7 +469,7 @@ disableOrganization() {
 }
 
 removeTeamMember(id) {
-  this.companyService.removeTeamMember(id).subscribe((data) => {
+  this.companyService.removeTeamMember( this.constructor.name, moduleName.organizationDetailsModule, id).subscribe((data) => {
     if (data) {
       this.alertMsg = data.response;
       this.isOpen = true;
@@ -490,7 +491,7 @@ isDateOrString(status): boolean {
   return true;
 }
 onResendInvitation(userid) {
-  this.companyService.resendInvitation(userid)
+  this.companyService.resendInvitation(this.constructor.name, moduleName.organizationDetailsModule, userid)
     .subscribe((data) => {
       if (data) {
         this.alertMsg = 'We have sent a email on your Email Id';

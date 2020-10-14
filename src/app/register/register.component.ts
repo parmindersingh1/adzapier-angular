@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 import { AlertService, UserService, AuthenticationService } from './../_services';
 import { MustMatch } from '../_helpers/must-match.validator';
+import { moduleName } from '../_constant/module-name.constant';
 
 
 
@@ -80,7 +81,7 @@ export class RegisterComponent implements OnInit {
                 companyname: this.f.companyname.value
             };
 
-            this.userService.register(requestObj)
+            this.userService.register(this.constructor.name, moduleName.registerModule, requestObj)
                 .pipe(first())
                 .subscribe(
                     data => {

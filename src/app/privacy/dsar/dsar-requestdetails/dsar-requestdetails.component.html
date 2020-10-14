@@ -170,7 +170,7 @@
                             <div *ngIf="i==getCustomFields(customFields).length"
                                 class="col-sm-2 customdata downloadFile">
                                 <label class="tx-sans"> Attachments</label>
-                                <p [ngClass]="{'show':!isAttachmentExist,'hide':isAttachmentExist}">
+                                <p [ngClass]="{'show':isAttachmentExist,'hide':!isAttachmentExist}">
                                     <i-feather class="feather-file" name="file"></i-feather>
                                     <a (click)="viewFile()" style="cursor: pointer;">View File</a>
                                 </p>

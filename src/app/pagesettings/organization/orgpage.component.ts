@@ -83,7 +83,7 @@ export class OrgpageComponent implements OnInit {
       organizationname: ['', [Validators.required, Validators.pattern(alphaNumeric)]],
       taxidnumber: [''],
       addressone: ['', [Validators.required]],
-      addresstwo: ['', [Validators.required]],
+      addresstwo: [''],
       cityname: ['', [Validators.required, Validators.pattern(strRegx)]],
       statename: ['', [Validators.required, Validators.pattern(strRegx)]],
       zipcodenum: ['', [Validators.required, Validators.pattern(zipRegex)]],

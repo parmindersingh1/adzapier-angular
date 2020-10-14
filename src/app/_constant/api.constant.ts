@@ -25,5 +25,10 @@ export const apiConstant = {
   BILLING_CURRENT_PLAN_INFO: '/billing/current/plan',
   BILLING_CREATE_SESSION_ID: '/billing/checkout/session',
   BILLING_UPDATE_SESSION_ID: '/billing/update/card/session',
-  BILLING_CURRENT_SUBSCRIPTION: '/billing/current/subscription'
-}
+  BILLING_CURRENT_SUBSCRIPTION: '/billing/current/subscription',
+  // Workflow
+  WORKFLOW: '/workflow',
+  WORKFLOW_STATUS: '/workflow?workflow_status=',
+  WORKFLOW_ID: '/workflow?workflow_id='
+
+};

@@ -17,7 +17,6 @@ import { FooterComponent } from './_components/layout/footer/footer.component';
 
 // import { ForgotpasswordComponent } from './forgotpassword/forgotpassword.component';
 
-import { ResetpasswordComponent } from './resetpassword/resetpassword.component';
 import { PagenotfoundComponent } from './errorpages/pagenotfound.component';
 import { InternalerrorComponent } from './errorpages/internalerror.component';
 import { PagenotfoundComponent1 } from './errorpages/404page.component';
@@ -63,7 +62,6 @@ export const isMock = environment.mock;
     FooterComponent,
     // AlertComponent,
     // ForgotpasswordComponent,
-    ResetpasswordComponent,
     PagenotfoundComponent,
     InternalerrorComponent,
     PagenotfoundComponent1,

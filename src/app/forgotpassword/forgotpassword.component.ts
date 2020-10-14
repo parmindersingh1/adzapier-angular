@@ -5,6 +5,7 @@ import { first } from 'rxjs/operators';
 
 import { AlertService, UserService, AuthenticationService } from './../_services';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
+import { moduleName } from '../_constant/module-name.constant';
 
 @Component({
   selector: 'app-forgotpassword',
@@ -68,7 +69,7 @@ export class ForgotpasswordComponent implements OnInit {
     // debugger;
     // console.log(this.f.token.value, this.f.newpsw.value, this.f.renewpsw.value);
     this.loadingBar.start();
-    this.userService.forgotpswd(this.f.emailid.value)
+    this.userService.forgotpswd(this.constructor.name, moduleName.forgotPasswordModule, this.f.emailid.value)
       .pipe(first())
       .subscribe(data => {
         this.loadingBar.stop();

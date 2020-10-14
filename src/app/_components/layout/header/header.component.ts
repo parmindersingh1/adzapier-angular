@@ -6,6 +6,7 @@ import { BsDropdownConfig } from 'ngx-bootstrap/dropdown';
 import { Organization } from 'src/app/_models/organization';
 import { mergeMap, switchMap, distinctUntilKeyChanged, distinctUntilChanged } from 'rxjs/operators';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
+import { moduleName } from 'src/app/_constant/module-name.constant';
 
 @Component({
   selector: 'app-header',
@@ -192,7 +193,7 @@ export class HeaderComponent implements OnInit {
 
   getLoggedInUserDetails() {
     this.isCollapsed = false;
-    this.userService.getLoggedInUserDetails().subscribe((data) => {
+    this.userService.getLoggedInUserDetails(this.constructor.name, moduleName.headerModule).subscribe((data) => {
       this.currentUser = data;
       this.currentLoggedInUser = this.currentUser.response.firstname + ' ' + this.currentUser.response.lastname;
       this.currentLoggedInUser = this.currentLoggedInUser.toLowerCase().split(' ')
