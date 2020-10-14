@@ -12,37 +12,12 @@
         <h4 class="mg-b-0 tx-spacing--1">Cookie Category</h4>
       </div>
     </div>
-
-<!--<app-crud-table *ngIf="isDurationType" [dataManager]="dataManager"></app-crud-table>-->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     <p-toast></p-toast>
 
     <div class="card">
       <p-toolbar styleClass="p-mb-4">
         <ng-template pTemplate="left">
-          <button type="button" class="btn-primary btn btn-sm mr-3" (click)="openNew()">New </button>
+<!--          <button type="button" class="btn-primary btn btn-sm mr-3" (click)="openNew()">New </button>-->
           <span class="p-input-icon-left">
                     <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search..." />
                                   <i class="pi pi-search"></i>
@@ -54,6 +29,7 @@
 
         <ng-template pTemplate="right">
           <div class="d-flex flex-column flex-sm-row mg-t-20 mg-md-t-0">
+            <button type="button" class="btn-primary btn btn-sm mr-3" (click)="openNew()">Add Cookie </button>
             <button *ngIf="!isScanning" (click)="onRescanCookie()" class="btn-primary btn btn-sm mg-r-3" type="button">
               Rescan
             </button>
@@ -62,8 +38,8 @@
                                   aria-hidden="true"></span>
               Rescanning...
             </button>
-            <button class="btn btn-white btn-sm cat-btn" (click)="openCategoryModal(category)">Add Category</button>
-            <a class="btn btn-secondary btn-sm" type="button" routerLink="/privacy/cookie-banner">
+            <!--            <button class="btn btn-white btn-sm cat-btn" (click)="openCategoryModal(category)">Add Category</button>-->
+            <a class="btn btn-secondary btn-sm" type="button" routerLink="/cookie-consent/cookie-banner">
               Configure Banner
             </a>
           </div>

@@ -6,7 +6,7 @@ import {NotificationsService} from 'angular2-notifications';
 import {notificationConfig} from '../../_constant/notification.constant';
 import {moduleName} from '../../_constant/module-name.constant';
 interface Country {
-  total_consents: number;
+  count: number;
   state: string;
 }
 
@@ -45,9 +45,10 @@ export class CookieConsentComponent implements OnInit {
   consentDetails = [];
   percentDashboardCount: CookieCount = new CookieCount();
    currentCountry: any;
-   currentCountryMap = 'usa';
+   currentCountryMap = 'us';
    stateCountryColor = {};
   stateList: Country[] = [];
+  private countryColor: any;
   constructor(private dashboardService: DashboardService,
               private orgservice: OrganizationService,
               private notification: NotificationsService,
@@ -56,7 +57,6 @@ export class CookieConsentComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.onMapInIt();
     this.onGetPropsAndOrgId();
     this.onGetDashboardData();
     this.onGetOptInActivity();
@@ -204,23 +204,31 @@ export class CookieConsentComponent implements OnInit {
     this.dashboardService.getMapDataForConsentDashboard(this.currrentManagedPropID, params, this.constructor.name, moduleName.cookieConsentModule)
       .subscribe( (res: any) => {
         this.loading.stop('f7');
-        console.log('res', res);
         const result = res.response;
-        for (const  countryData of result) {
-          this.stateCountryColor[`${countryData.state.toLowerCase()}`] = '#69b2f8';
+
+        if (this.currentCountryMap === 'us') {
+          for (const  countryData of result) {
+            this.stateCountryColor[`${countryData.state.toLowerCase()}`] = '#69b2f8';
+          }
+          this.stateList = result;
+          this.onInItStateMap();
+        } else {
+          this.countryColor = [];
+          for (const  countryData of result) {
+            this.countryColor[`${countryData.country.toLowerCase()}`] = '#69b2f8';
+          }
+          this.countryList = result;
+          this.onInItWorldMap();
         }
-        this.stateList = result;
-        this.onMapInIt();
+
       }, error => {
         this.loading.stop('f7');
       })
   }
-  onMapInIt() {
+  onInItStateMap() {
     const that = this;
-    if (this.currentCountryMap === 'usa') {
-      console.log('stateCountryColor', that.stateCountryColor);
-      jQuery('#vmap').empty();
-      jQuery('#vmap').vectorMap({
+    jQuery('#vmap').empty();
+    jQuery('#vmap').vectorMap({
         map: 'usa_en',
         showTooltip: true,
         backgroundColor: '#fff',
@@ -232,41 +240,42 @@ export class CookieConsentComponent implements OnInit {
         borderColor: '#fff',
         hoverOpacity: .85,
         onLabelShow:  (event, label, code) => {
-          for (const  countryData of that.stateList) {
-            if (code === countryData.state.toLowerCase()) {
-              label.append(' : ' + countryData.total_consents);
+          for (const  stateData of that.stateList) {
+            if (code === stateData.state.toLowerCase()) {
+              label.append(' : ' + stateData.count);
             } else {
-              label.append(' : 0');
+              // label.append(' : 0');
             }
           }
           that.cd.detectChanges();
         }
       });
-    } else {
-      jQuery('#worldMap').empty();
-      jQuery('#worldMap').vectorMap({
-        map: 'world_en',
-        backgroundColor: '#fff',
-        color: '#d1e6fa',
-        hoverOpacity: 0.7,
-        selectedColor: '#00cccc',
-        enableZoom: true,
-        showTooltip: true,
-        scaleColors: ['#d1e6fa', '#00cccc'],
-        normalizeFunction: 'polynomial',
-        onLabelShow:  (event, label, code) => {
-          for (const  countryData of that.stateList) {
-            if (code === countryData.state.toLowerCase()) {
-              label.append(' : ' + countryData.total_consents);
-            } else {
-              label.append(' : 0');
-            }
+  }
+  onInItWorldMap() {
+    const that = this
+    jQuery('#worldMap').empty();
+    jQuery('#worldMap').vectorMap({
+      map: 'world_en',
+      backgroundColor: '#fff',
+      color: '#d1e6fa',
+      colors: that.countryColor,
+      hoverOpacity: 0.7,
+      selectedColor: '#00cccc',
+      enableZoom: true,
+      showTooltip: true,
+      scaleColors: ['#d1e6fa', '#00cccc'],
+      normalizeFunction: 'polynomial',
+      onLabelShow:  (event, label, code) => {
+        for (const  countryData of that.countryList) {
+          if (code === countryData.country.toLowerCase()) {
+            label.append(' : ' + countryData.count);
+          } else {
+            // label.append(' : 0');
           }
-          that.cd.detectChanges();
         }
-      });
-    }
-    this.cd.detectChanges();
+        that.cd.detectChanges();
+      }
+    });
   }
   onClosed(dismissedAlert: any): void {
     this.alertMsg = !dismissedAlert;

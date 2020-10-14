@@ -362,31 +362,31 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
     const that = this;
     jQuery('#vmap').empty();
     jQuery('#vmap').vectorMap({
-        map: 'usa_en',
-        showTooltip: true,
-        backgroundColor: '#fff',
-        color: '#d1e6fa',
-        colors: that.stateColor,
-        selectedColor: '#00cccc',
-        enableZoom: false,
-        borderWidth: 1,
-        borderColor: '#fff',
-        hoverOpacity: .85,
-        onLabelShow: (event, label, code) => {
-          for (const countryData of that.stateList) {
-            if (code === countryData.state.toLowerCase()) {
-              label.append(' : ' + countryData.count);
-            } else {
-              label.append(' : 0');
-            }
+      map: 'usa_en',
+      showTooltip: true,
+      backgroundColor: '#fff',
+      color: '#d1e6fa',
+      colors: that.stateColor,
+      selectedColor: '#00cccc',
+      enableZoom: false,
+      borderWidth: 1,
+      borderColor: '#fff',
+      hoverOpacity: .85,
+      onLabelShow:  (event, label, code) => {
+        for (const  stateData of that.stateList) {
+          if (code === stateData.state.toLowerCase()) {
+            label.append(' : ' + stateData.count);
+          } else {
+            // label.append(' : 0');
           }
-          that.cd.detectChanges();
         }
-      });
+        that.cd.detectChanges();
+      }
+    });
   }
 
   onSetWorldMap () {
-    const that = this;
+    const that = this
     jQuery('#worldMap').empty();
     jQuery('#worldMap').vectorMap({
       map: 'world_en',
@@ -401,10 +401,13 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
       normalizeFunction: 'polynomial',
       onLabelShow:  (event, label, code) => {
         for (const  countryData of that.countryList) {
-          if (code === countryData.state.toLowerCase()) {
+          if(code === 'us' && countryData.country === 'USA') {
+            label.append(' : ' + countryData.count);
+          }
+          if (code === countryData.country.toLowerCase()) {
             label.append(' : ' + countryData.count);
           } else {
-            label.append(' : 0');
+            // label.append(' : 0');
           }
         }
         that.cd.detectChanges();

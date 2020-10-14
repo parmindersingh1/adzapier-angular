@@ -302,7 +302,7 @@ export class CookieBannerComponent implements OnInit {
         this.alertMsg = res.response;
         this.alertType = 'success';
         setTimeout(() => {
-        this.router.navigateByUrl('privacy/cookie-banner/setup');
+        this.router.navigateByUrl('/cookie-consent/cookie-banner/setup');
         }, 1000);
       }, error => {
         this.isOpen = true;
@@ -335,7 +335,7 @@ export class CookieBannerComponent implements OnInit {
         this.alertMsg = res.response;
         this.alertType = 'success';
         setTimeout(() => {
-          this.router.navigateByUrl('privacy/cookie-banner/setup');
+          this.router.navigateByUrl('/cookie-consent/cookie-banner/setup');
         }, 1000);
       }, error => {
         this.isOpen = true;

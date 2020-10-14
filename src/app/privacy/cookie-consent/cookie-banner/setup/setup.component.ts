@@ -30,6 +30,7 @@ export class SetupComponent implements OnInit {
   ngOnInit() {
     this.onGetPropsAndOrgId();
     this.onGetCookieBannerData();
+    console.log('in')
   }
   onGetPropsAndOrgId() {
     this.orgservice.currentProperty.subscribe((response) => {
