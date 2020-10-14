@@ -4,6 +4,7 @@ import { AuthenticationService, UserService } from '../_services';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MustMatch } from '../_helpers/must-match.validator';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
+import { moduleName } from '../_constant/module-name.constant';
 
 @Component({
   selector: 'app-edit-profile',
@@ -99,7 +100,7 @@ export class EditProfileComponent implements OnInit {
         //   roles: this.profileForm.value.roles
       };
       this.loadingBar.start();
-      this.userService.update(editObj)
+      this.userService.update(this.constructor.name, moduleName.editProfileModule, editObj)
         .subscribe((data) => {
           this.loadingBar.stop();
           if (data) {
@@ -125,7 +126,7 @@ export class EditProfileComponent implements OnInit {
 
   pathValues() {
     this.loadingBar.start();
-    this.userService.getLoggedInUserDetails().subscribe((user) => {
+    this.userService.getLoggedInUserDetails(this.constructor.name, moduleName.editProfileModule).subscribe((user) => {
       this.loadingBar.stop();
       this.userProfile = Object.values(user);
       console.log(this.userProfile, 'userProfile..');
@@ -168,7 +169,7 @@ export class EditProfileComponent implements OnInit {
 
   loadUserDetails() {
     this.loadingBar.start();
-    this.userService.getLoggedInUserDetails().subscribe((user) => {
+    this.userService.getLoggedInUserDetails(this.constructor.name, moduleName.editProfileModule).subscribe((user) => {
       this.loadingBar.stop();
       this.userProfile = Object.values(user);
       this.newemail = this.userProfile[0].email;
@@ -200,7 +201,7 @@ export class EditProfileComponent implements OnInit {
       confirm_password: this.changepasswordForm.value.confirmPassword
     };
     this.loadingBar.start();
-    this.authenticationService.changePassword(obj).subscribe((data) => {
+    this.authenticationService.changePassword(this.constructor.name, moduleName.editProfileModule, obj).subscribe((data) => {
       this.loadingBar.stop();
       if (data) {
         this.show = true;

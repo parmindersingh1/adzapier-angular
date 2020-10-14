@@ -8,6 +8,7 @@ import { CompanyService } from 'src/app/company.service';
 import { DsarRequestService } from 'src/app/_services/dsar-request.service';
 import { CCPAFormConfigurationService } from 'src/app/_services/ccpaform-configuration.service';
 import { LazyLoadEvent } from 'primeng/api';
+import { moduleName } from 'src/app/_constant/module-name.constant';
 
 
 @Component({
@@ -101,7 +102,7 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit {
     this.selectedCols = this.cols.filter(col => val.includes(col));
   }
 
-  loadCarsLazy(event: LazyLoadEvent) {
+  loadrequestsListLazy(event: LazyLoadEvent) {
     this.isloading = true;
     this.eventRows = event.rows;
     if (this.requestsList) {
@@ -115,7 +116,8 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit {
       const sortOrder = event.sortOrder === -1 ? 'DESC' : 'ASC';
       const orderBy = '&orderby=' + event.sortField + ' ' + sortOrder;
 
-      this.dsarRequestService.getDsarRequestList(this.currentManagedOrgID, this.currrentManagedPropID, pagelimit, orderBy)
+      this.dsarRequestService.getDsarRequestList(this.constructor.name, moduleName.dsarRequestModule, this.currentManagedOrgID,
+        this.currrentManagedPropID, pagelimit, orderBy)
         .subscribe((data) => {
           this.isloading = false;
           const key = 'response';
@@ -143,7 +145,8 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit {
 
   onGetRequestListFilter() {
     this.loading.start();
-    this.dsarRequestService.getDsarRequestFilter(this.currentManagedOrgID, this.currrentManagedPropID)
+    this.dsarRequestService.getDsarRequestFilter(this.currentManagedOrgID, this.currrentManagedPropID,
+      this.constructor.name, moduleName.dsarRequestModule)
       .subscribe(res => {
         this.loading.stop();
         if (res) {
@@ -182,7 +185,8 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit {
       + '&name=' + this.inputValue + '&subject_type=' + this.subjectType + '&request_type=' + this.requestType
       + '&status=' + this.status + '&due_in=' + this.dueIn;
     this.isloading = true;
-    this.dsarRequestService.getDsarRequestFilterList(this.currentManagedOrgID, this.currrentManagedPropID, params)
+    this.dsarRequestService.getDsarRequestFilterList(this.currentManagedOrgID, this.currrentManagedPropID, params,
+       this.constructor.name, moduleName.dsarRequestModule)
       .subscribe(res => {
         this.isloading = false;
         const key = 'response';

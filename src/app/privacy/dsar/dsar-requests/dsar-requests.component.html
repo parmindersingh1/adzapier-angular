@@ -10,7 +10,7 @@
   </div>
 
   <p-table #ptable [value]="requestsList" [columns]="selectedColumns" [paginator]="true" [lazy]="true"
-    [loading]="isloading" (onLazyLoad)="loadCarsLazy($event)" [rows]="5" [showCurrentPageReport]="true"
+    [loading]="isloading" (onLazyLoad)="loadrequestsListLazy($event)" [rows]="5" [showCurrentPageReport]="true"
     [totalRecords]="totalRecords" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
     [rowsPerPageOptions]="[5,10,15]" styleClass="p-datatable-sm">
     <ng-template pTemplate="caption">
@@ -149,6 +149,6 @@
     </ng-template>
   </p-table>
 
-  <div class="col-sm-5 mt-3 mr-0 float-right">
-    <alert *ngIf="isOpen" [type]="alertType" [dismissible]="dismissible" (onClosed)="(alert)">{{  alertMsg}}</alert>
-  </div>
+  <div class="col-sm-5 mt-3 mr-0 float-right" [ngClass]="{'hide':!isOpen}">
+    <alert *ngIf="isOpen" [type]="alertType"  dismissOnTimeout="5000" [dismissible]="dismissible" (onClosed)="onClosed(alertMsg)">{{alertMsg}}</alert>
+</div>

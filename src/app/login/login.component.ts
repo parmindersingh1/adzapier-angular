@@ -5,6 +5,7 @@ import { first } from 'rxjs/operators';
 import { AlertService, AuthenticationService, UserService } from './../_services';
 import { OrganizationService } from '../_services/organization.service';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
+import { moduleName } from '../_constant/module-name.constant';
 
 @Component({
     templateUrl: 'login.component.html',
@@ -74,7 +75,7 @@ export class LoginComponent implements OnInit {
         }
 
         this.loading = true;
-        this.authenticationService.login(this.f.email.value, this.f.password.value)
+        this.authenticationService.login(this.constructor.name, moduleName.loginModule, this.f.email.value, this.f.password.value)
             .pipe(first())
             .subscribe(
                 data => {
@@ -96,7 +97,7 @@ export class LoginComponent implements OnInit {
 
     getLoggedInUserDetails() {
         this.loadingBar.start();
-        this.userService.getLoggedInUserDetails().subscribe((data) => {
+        this.userService.getLoggedInUserDetails(this.constructor.name, moduleName.loginModule).subscribe((data) => {
             this.loadingBar.stop();
             this.userService.getCurrentUser.emit(data);
         });

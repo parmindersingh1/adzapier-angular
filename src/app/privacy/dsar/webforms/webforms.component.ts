@@ -4,7 +4,7 @@ import { CCPAFormConfigurationService } from 'src/app/_services/ccpaform-configu
 import { OrganizationService, UserService } from 'src/app/_services';
 import { CCPAFormFields } from 'src/app/_models/ccpaformfields';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
-
+import {moduleName} from '../../../_constant/module-name.constant';
 
 interface WebFormModel {
   crid: any;
@@ -81,7 +81,8 @@ export class WebformsComponent implements OnInit {
   getCCPAFormList(orgDetails) {
     this.loading.start();
     if (orgDetails !== undefined) {
-      this.ccpaFormConfigService.getCCPAFormList(orgDetails.organization_id, orgDetails.property_id)
+      this.ccpaFormConfigService.getCCPAFormList(orgDetails.organization_id, orgDetails.property_id,
+        this.constructor.name, moduleName.dsarWebFormModule)
         .subscribe((data) => {
           this.loading.stop();
           if (data.length !== 0) {
@@ -121,7 +122,7 @@ export class WebformsComponent implements OnInit {
   }
 
   currentLoggedInUser(){
-    this.userService.getLoggedInUserDetails().subscribe((resp) => {
+    this.userService.getLoggedInUserDetails(this.constructor.name, moduleName.webFormModule ).subscribe((resp) => {
           this.currentUser = resp;
           this.currentuserID = this.currentUser.response.uid;
         });

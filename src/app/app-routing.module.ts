@@ -41,7 +41,7 @@ const routes: Routes = [
   { path: 'userprofile', loadChildren: () => import('./edit-profile/edit-profile.module').then(m => m.EditProfileModule) },
   // {path: 'pricing', loadChildren: () =>
   //     import('./pagesettings/billing/pricing/pricing.module').then(m => m.PricingModule)},
-  { path: 'resetpswd/:id', component: ResetpasswordComponent },
+  { path: 'resetpswd/:id', loadChildren: () => import('./resetpassword/resetpassword.module').then(m => m.ResetpasswordModule) },
   { path: 'pagenotfound', component: PagenotfoundComponent },
   { path: '404page', component: PagenotfoundComponent1 },
   { path: 'internalerror', component: InternalerrorComponent },
