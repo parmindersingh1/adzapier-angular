@@ -670,3 +670,7 @@ ul.ngx-pagination {
       padding: 0px 5px 0px 3px;
       border: 1px solid #58b85b;
   }
+
+  .show > a:hover {
+    color: #00f !important;
+  }

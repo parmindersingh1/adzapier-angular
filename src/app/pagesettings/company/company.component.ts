@@ -5,6 +5,7 @@ import {NgxUiLoaderService} from 'ngx-ui-loader';
 import { UserService } from 'src/app/_services';
 import { CompanyService } from 'src/app/company.service';
 import { TablePaginationConfig } from 'src/app/_models/tablepaginationconfig';
+import { moduleName } from 'src/app/_constant/module-name.constant';
 
 @Component({
   selector: 'app-company',
@@ -63,7 +64,7 @@ export class CompanyComponent implements OnInit {
       orgname: ['', [Validators.required, Validators.pattern(alphaNumeric)]],
       tax_id: [''],
       address1: ['', [Validators.required, Validators.pattern(alphaNumeric)]],
-      address2: ['', [Validators.required, Validators.pattern(alphaNumeric)]],
+      address2: [''],
       city: ['', [Validators.required, Validators.pattern(strRegx)]],
       state: ['', [Validators.required, Validators.pattern(strRegx)]],
       zipcode: ['', [Validators.required, Validators.pattern(numZip)]],
@@ -82,7 +83,7 @@ export class CompanyComponent implements OnInit {
   get userInvite() { return this.inviteUserForm.controls; }
   loadCompanyDetails() {
     this.loading.start();
-    this.companyService.getCompanyDetails().subscribe((data) => {
+    this.companyService.getCompanyDetails(this.constructor.name, moduleName.companyModule).subscribe((data) => {
       console.log(data,'CC data..');
       this.loading.stop();
       this.orgname = data.response.name;
@@ -109,7 +110,7 @@ export class CompanyComponent implements OnInit {
 
   pathValues() {
     this.loading.start();
-    this.companyService.getCompanyDetails().subscribe((user) => {
+    this.companyService.getCompanyDetails(this.constructor.name, moduleName.companyModule).subscribe((user) => {
       this.companyDetails = Object.values(user);
       this.loading.stop();
       console.log(this.companyDetails, 'userProfile..');
@@ -144,7 +145,7 @@ export class CompanyComponent implements OnInit {
         phone: this.companyForm.value.phone.trim()
       };
       this.loading.start();
-      this.companyService.updateCompanyDetails(editObj)
+      this.companyService.updateCompanyDetails(this.constructor.name, moduleName.companyModule, editObj)
         .subscribe((data) => {
           this.loading.stop();
           if (data) {
@@ -184,7 +185,7 @@ export class CompanyComponent implements OnInit {
         user_level: 'company'
       };
       this.loading.start();
-      this.companyService.inviteUser(requestObj)
+      this.companyService.inviteUser(this.constructor.name, moduleName.companyModule, requestObj)
         .subscribe((data) => {
           this.loading.stop();
           if (data) {
@@ -224,7 +225,7 @@ export class CompanyComponent implements OnInit {
     this.paginationConfig.currentPage = event;
     const pagelimit = '?limit=' + this.paginationConfig.itemsPerPage + '&page=' + this.paginationConfig.currentPage;
     this.loading.start();
-    this.companyService.getCompanyTeamMembers(pagelimit).subscribe((data) => {
+    this.companyService.getCompanyTeamMembers(this.constructor.name, moduleName.companyModule, pagelimit).subscribe((data) => {
       this.loading.stop();
       const key = 'response';
       this.teamMemberList = data[key];
@@ -252,7 +253,7 @@ export class CompanyComponent implements OnInit {
   loadCompanyTeamMembers() {
     const pagelimit = '?limit=' + this.paginationConfig.itemsPerPage + '&page=' + this.paginationConfig.currentPage;
     this.loading.start();
-    this.companyService.getCompanyTeamMembers(pagelimit).subscribe((data) => {
+    this.companyService.getCompanyTeamMembers(this.constructor.name, moduleName.companyModule, pagelimit).subscribe((data) => {
       this.loading.stop();
       const key = 'response';
       this.teamMemberList = data[key];
@@ -262,7 +263,7 @@ export class CompanyComponent implements OnInit {
 
   loadRoleList() {
     this.loading.start();
-    this.userService.getRoleList().subscribe((data) => {
+    this.userService.getRoleList(this.constructor.name, moduleName.companyModule).subscribe((data) => {
       this.loading.stop();
       if (data) {
         const key = 'response';
@@ -277,7 +278,7 @@ export class CompanyComponent implements OnInit {
   }
 
   removeTeamMember(id) {
-    this.companyService.removeTeamMember(id).subscribe((data) => {
+    this.companyService.removeTeamMember(this.constructor.name, moduleName.companyModule, id).subscribe((data) => {
       if (data) {
         this.alertMsg = 'User has been removed!';
         this.isOpen = true;
@@ -298,33 +299,29 @@ export class CompanyComponent implements OnInit {
     }
     return true;
   }
-  onResendInvitation(email) {
-    const requestObj = {
-      email,
-      user_level: 'company'
-    };
-    this.loading.start();
-    this.companyService.inviteUser(requestObj)
-      .subscribe((data) => {
-        this.loading.stop();
-        if (data) {
-        //  this.notification.info('Invitation Send', 'We have sent a email on your Email Id', notificationConfig);
-          this.alertMsg = 'We have sent a email on your Email Id';
-          this.isOpen = true;
-          this.alertType = 'success';
 
-          this.inviteUserForm.reset();
-          this.loadCompanyTeamMembers();
-          this.modalService.dismissAll('Data Saved!');
-        }
-      }, (err) => {
-        this.loading.stop();
-        this.alertMsg = err;
+  onResendInvitation(id) {
+    this.companyService.resendInvitation(this.constructor.name, moduleName.companyModule, id)
+    .subscribe((data) => {
+      this.loading.stop();
+      if (data) {
+      //  this.notification.info('Invitation Send', 'We have sent a email on your Email Id', notificationConfig);
+        this.alertMsg = 'We have sent a email on your Email Id';
         this.isOpen = true;
-        this.alertType = 'danger';
-     //   this.notification.error('Invitation Send', 'Something went wrong...', notificationConfig);
-        this.modalService.dismissAll('Error!');
-      });
+        this.alertType = 'success';
+
+        this.inviteUserForm.reset();
+        this.loadCompanyTeamMembers();
+        this.modalService.dismissAll('Data Saved!');
+      }
+    }, (err) => {
+      this.loading.stop();
+      this.alertMsg = err;
+      this.isOpen = true;
+      this.alertType = 'danger';
+   //   this.notification.error('Invitation Send', 'Something went wrong...', notificationConfig);
+      this.modalService.dismissAll('Error!');
+    });
   }
 
   onClosed(dismissedAlert: any): void {

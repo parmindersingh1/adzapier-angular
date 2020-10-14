@@ -4,8 +4,11 @@ import { environment } from 'src/environments/environment';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { WebControls } from '../_models/webcontrols';
 import { CCPAFormFields } from '../_models/ccpaformfields';
-import { shareReplay, map, switchMap } from 'rxjs/operators';
-
+import { shareReplay, map, switchMap, catchError } from 'rxjs/operators';
+import {LokiService} from './loki.service';
+import {LokiFunctionality, LokiStatusType} from '../_constant/loki.constant';
+import {throwError} from 'rxjs';
+import {apiConstant} from '../_constant/api.constant';
 @Injectable({
   providedIn: 'root'
 })
@@ -16,7 +19,7 @@ export class CCPAFormConfigurationService extends WebControls {
   currentFormData = this.captureFormDataWhileNavigate.asObservable();
   subjectType: any;
   requestType: any;
-  constructor(private httpClient: HttpClient) {
+  constructor(private httpClient: HttpClient, private lokiService: LokiService) {
     super();
     // this.loadCreatedWebControls();
   }
@@ -68,26 +71,48 @@ export class CCPAFormConfigurationService extends WebControls {
     return localStorage.removeItem('CCPAformControlList');
   }
 
-  createCCPAForm(orgId, propId, formObject) {
-    return this.httpClient.post<any>(environment.apiUrl + '/ccpa/form/' + orgId + '/' + propId, formObject);
+  createCCPAForm(orgId, propId, formObject, componentName, moduleName) {
+    const path = '/ccpa/form/' + orgId + '/' + propId;
+    return this.httpClient.post<any>(environment.apiUrl + path, formObject)
+    .pipe(shareReplay(1), catchError(error => {
+      this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.webForm, componentName, moduleName, path);
+      return throwError(error);
+    }));
   }
 
-  updateCCPAForm(orgId, propId, ccparequestid, updatedformObject) {
-    return this.httpClient.put<any>(environment.apiUrl + '/ccpa/form/' + orgId + '/' + propId + '/' + ccparequestid, updatedformObject);
+  updateCCPAForm(orgId, propId, ccparequestid, updatedformObject, componentName, moduleName) {
+    const path = '/ccpa/form/' + orgId + '/' + propId + '/' + ccparequestid;
+    return this.httpClient.put<any>(environment.apiUrl + path, updatedformObject)
+    .pipe(shareReplay(1), catchError(error => {
+      this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.updateCCPAForm, componentName, moduleName, path);
+      return throwError(error);
+    }));
   }
 
-  getCCPAFormList(orgId, propId): Observable<any> {
-    // this.ccpaFormList$ = 
+  getCCPAFormList(orgId, propId, componentName, moduleName): Observable<any> {
+    // this.ccpaFormList$ =
     const key = 'response';
-    return this.httpClient.get<any>(environment.apiUrl + '/ccpa/form/' + orgId + '/' + propId).pipe(
-      map(res => res[key])
+    const path = '/ccpa/form/' + orgId + '/' + propId;
+    return this.httpClient.get<any>(environment.apiUrl + path).pipe(
+      map(res => res[key]),
+      catchError(error => {
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.getCCPAFormList, componentName, moduleName, path);
+        return throwError(error);
+      })
       );
     // .pipe(shareReplay(1));
     // return this.ccpaFormList$;
   }
 
-  getCCPAFormConfigByID(orgId, propId, ccparequestid): Observable<any> {
-    return this.httpClient.get<any>(environment.apiUrl + '/ccpa/form/' + orgId + '/' + propId + '/' + ccparequestid);
+  getCCPAFormConfigByID(orgId, propId, ccparequestid, componentName, moduleName): Observable<any> {
+    const path = '/ccpa/form/' + orgId + '/' + propId + '/' + ccparequestid;
+    return this.httpClient.get<any>(environment.apiUrl + path ).pipe(
+      shareReplay(1),
+      catchError(error => {
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.getCCPAFormConfigByID, componentName, moduleName, path);
+        return throwError(error);
+      })
+    );
   }
 
   captureCurrentSelectedFormData(currentItem) {
@@ -107,16 +132,40 @@ export class CCPAFormConfigurationService extends WebControls {
     return JSON.parse(sessionStorage.getItem('currentwebform'));
   }
 
-  getCaptcha(): Observable<any> {
-    return this.httpClient.get<any>(environment.apiUrl + '/captcha');
+  getCaptcha(componentName, moduleName): Observable<any> {
+    const path = '/captcha';
+    return this.httpClient.get<any>(environment.apiUrl + path)
+    .pipe(
+      catchError(error => {
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.getWebFormCaptcha, componentName, moduleName, path);
+        return throwError(error);
+      })
+    );
   }
 
-  getImage(imageUrl: string): Observable<Blob> {
-    return this.httpClient.get(imageUrl, { responseType: 'blob' });
+  getImage(imageUrl: string, componentName, moduleName): Observable<Blob> {
+    return this.httpClient.get(imageUrl, { responseType: 'blob' })
+    .pipe(
+      catchError(error => {
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.getImage, componentName, moduleName, imageUrl);
+        return throwError(error);
+      })
+    );
   }
  
-  verifyCaptcha(obj) {
-    return this.httpClient.post<any>(environment.apiUrl + '/captcha/verify/' + obj.captcha_id + '/' + obj.captcha_solution, {});
+  verifyCaptcha(obj, componentName, moduleName) {
+    const path = '/captcha/verify/' + obj.captcha_id + '/' + obj.captcha_solution;
+    return this.httpClient.post<any>(environment.apiUrl + path, {})
+    .pipe(
+      catchError(error => {
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.verifyCaptcha, componentName, moduleName, path);
+        return throwError(error);
+      })
+    );
+  }
+
+  onSendLogs(errorType, msg, functionality, componentName, moduleName, path) {
+    this.lokiService.onSendErrorLogs(errorType, msg, functionality, componentName, moduleName, path).subscribe();
   }
 
 }

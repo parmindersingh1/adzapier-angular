@@ -12,6 +12,7 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap';
 import { Observable } from 'rxjs';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { TablePaginationConfig } from 'src/app/_models/tablepaginationconfig';
+import {moduleName} from '../../../_constant/module-name.constant';
 @Component({
   selector: 'app-dsar-requestdetails',
   templateUrl: './dsar-requestdetails.component.html',
@@ -258,7 +259,8 @@ export class DsarRequestdetailsComponent implements OnInit {
   loadDataRequestDetails() {
 
     //alert(this.ApproverList['151b7dce-5028-4ad9-bb32-0be1dc423499'].user_name);
-    this.dsarRequestService.getDSARRequestDetails(this.currentManagedOrgID, this.currrentManagedPropID, this.requestID)
+    this.dsarRequestService.getDSARRequestDetails(this.currentManagedOrgID, this.currrentManagedPropID, this.requestID,
+       this.constructor.name, moduleName.dsarRequestModule)
       .subscribe((data) => {
         //   console.log(data.response,'resp...');
         this.requestDetails.push(data.response);
@@ -404,7 +406,7 @@ export class DsarRequestdetailsComponent implements OnInit {
 
   getWorkflowStages(id) {
     ///workflowId
-    this.workflowService.getWorkflowById(id).subscribe((data) => {
+    this.workflowService.getWorkflowById(this.constructor.name, moduleName.workFlowModule, id).subscribe((data) => {
       if (data.length > 0) {
         const respData = data[0].workflow_stages;
         this.workflowStages = this.rearrangeArrayResponse(respData);
@@ -813,7 +815,8 @@ export class DsarRequestdetailsComponent implements OnInit {
         state: this.editRequestDetailForm.controls['state'].value,
         city: this.editRequestDetailForm.controls['city'].value
       };
-      this.dsarRequestService.updateDSARRequestDetailsByID(this.currentManagedOrgID, this.currrentManagedPropID, this.requestID, obj)
+      this.dsarRequestService.updateDSARRequestDetailsByID(this.currentManagedOrgID, this.currrentManagedPropID, this.requestID, obj,
+        this.constructor.name, moduleName.dsarRequestModule)
         .subscribe((data) => {
           this.alertMsg = data.response;
           this.isOpen = true;
@@ -832,7 +835,8 @@ export class DsarRequestdetailsComponent implements OnInit {
 
   loadDSARRequestDetailsByID(currentManagedOrgID, currrentManagedPropID, requestID) {
     let approver;
-    this.dsarRequestService.getDSARRequestDetailsByID(currentManagedOrgID, currrentManagedPropID, requestID)
+    this.dsarRequestService.getDSARRequestDetailsByID(currentManagedOrgID, currrentManagedPropID, requestID,
+       this.constructor.name, moduleName.dsarRequestModule)
       .subscribe((data) => {
         if (data) {
           this.requestDetailsbyId = data.response;
@@ -863,7 +867,8 @@ export class DsarRequestdetailsComponent implements OnInit {
       extend_days: Number(this.respDaysLeft),
       days_left: Number(item)
     };
-    this.dsarRequestService.updateDSARRequestDetailsByID(this.currentManagedOrgID, this.currrentManagedPropID, this.requestID, obj)
+    this.dsarRequestService.updateDSARRequestDetailsByID(this.currentManagedOrgID, this.currrentManagedPropID, this.requestID, obj,
+       this.constructor.name, moduleName.dsarRequestModule)
       .subscribe((data) => {
         this.alertMsg = data.response;
         this.isOpen = true;
@@ -888,7 +893,8 @@ export class DsarRequestdetailsComponent implements OnInit {
       extend_days: Number(this.respDaysLeft),
       days_left: Number(this.customdays)
     };
-    this.dsarRequestService.updateDSARRequestDetailsByID(this.currentManagedOrgID, this.currrentManagedPropID, this.requestID, obj)
+    this.dsarRequestService.updateDSARRequestDetailsByID(this.currentManagedOrgID, this.currrentManagedPropID,
+      this.requestID, obj, this.constructor.name, moduleName.dsarRequestModule)
       .subscribe((data) => {
         this.alertMsg = data.response;
         this.isOpen = true;
@@ -964,7 +970,7 @@ export class DsarRequestdetailsComponent implements OnInit {
 
       const currentStageID = this.currentStageId ? this.currentStageId : this.currentWorkflowStageID;
       if (!this.isEditSubTask) {
-        this.dsarRequestService.addSubTask(this.requestID, currentStageID, obj)
+        this.dsarRequestService.addSubTask(this.requestID, currentStageID, obj, this.constructor.name, moduleName.dsarRequestModule)
           .subscribe((data) => {
             this.alertMsg = data.response;
             this.isOpen = true;
@@ -978,7 +984,7 @@ export class DsarRequestdetailsComponent implements OnInit {
             this.onResetSubTask();
           });
       } else { // update sub task
-        this.dsarRequestService.updateSubTask(this.selectedTaskID, obj)
+        this.dsarRequestService.updateSubTask(this.selectedTaskID, obj, this.constructor.name, moduleName.dsarRequestModule)
           .subscribe((data) => {
             this.alertMsg = data.response;
             this.isOpen = true;
@@ -1041,7 +1047,7 @@ export class DsarRequestdetailsComponent implements OnInit {
       fd.append('upload', this.subTaskResponseForm.get('uploaddocument').value);
 
       //  return false;
-      this.dsarRequestService.addSubTaskResponse(this.selectedTaskID, fd)
+      this.dsarRequestService.addSubTaskResponse(this.selectedTaskID, fd, this.constructor.name, moduleName.dsarRequestModule)
         .subscribe((data) => {
           this.alertMsg = data.response;
           this.isOpen = true;
@@ -1073,7 +1079,7 @@ export class DsarRequestdetailsComponent implements OnInit {
     const currentStageID = this.currentStageId ? this.currentStageId : this.currentWorkflowStageID;
     if (currentStageID) {
       let resp;
-      this.dsarRequestService.getSubTaskByWorkflowID(this.requestID, currentStageID)
+      this.dsarRequestService.getSubTaskByWorkflowID(this.requestID, currentStageID, this.constructor.name, moduleName.dsarRequestModule)
         .subscribe((data) => {
           return this.subTaskListResponse = data;
         }, (error) => {
@@ -1132,7 +1138,7 @@ export class DsarRequestdetailsComponent implements OnInit {
     this.loading.start();
     let ext;
     let documentType;
-    this.dsarRequestService.viewUserUploadedFile(this.requestID).subscribe((data) => {
+    this.dsarRequestService.viewUserUploadedFile(this.requestID, this.constructor.name, moduleName.dsarRequestModule).subscribe((data) => {
       this.loading.stop();
       if (data) {
         this.base64FileCode = data.upload;
@@ -1163,6 +1169,12 @@ export class DsarRequestdetailsComponent implements OnInit {
         return fileType = 'application/msword';
       case 'csv':
         return fileType = 'text/csv';
+      case 'png':
+        return fileType = 'image/png';
+      case 'jpg':
+        return fileType = 'image/jpg';
+      case 'jpeg':
+        return fileType = 'image/jpeg';
     }
   }
 
@@ -1190,7 +1202,7 @@ export class DsarRequestdetailsComponent implements OnInit {
   }
 
   verifyUserEmailID() {
-    this.dsarRequestService.verifyClientEmailID(this.requestID).subscribe((data) => {
+    this.dsarRequestService.verifyClientEmailID(this.requestID, this.constructor.name, moduleName.dsarRequestModule).subscribe((data) => {
       this.alertMsg = data.response;
       this.isOpen = true;
       this.alertType = 'success';

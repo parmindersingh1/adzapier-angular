@@ -5,6 +5,7 @@ import { first } from 'rxjs/operators';
 import { AlertService, UserService, AuthenticationService } from './../_services';
 import { ActivatedRoute } from '@angular/router';
 import { MustMatch } from '../_helpers/must-match.validator';
+import { moduleName } from '../_constant/module-name.constant';
 
 
 @Component({
@@ -74,7 +75,8 @@ export class ResetpasswordComponent implements OnInit {
     this.loading = true;
     // debugger;
     // console.log(this.f.token.value, this.f.newpsw.value, this.f.renewpsw.value);
-    this.userService.resetpassword(this.f.token.value, this.f.newpsw.value, this.f.renewpsw.value)
+    this.userService.resetpassword(this.constructor.name, moduleName.resetPasswordModule,
+       this.f.token.value, this.f.newpsw.value, this.f.renewpsw.value)
       .pipe(first())
       .subscribe((data) => {
         if (data) {

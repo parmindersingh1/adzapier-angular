@@ -3,7 +3,8 @@ import { WorkflowService } from 'src/app/_services/workflow.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
-
+// import {moduleName} from '../../_constant/module-name.constant';
+import { moduleName} from '../../../_constant/module-name.constant';
 @Component({
   selector: 'app-createworkflow',
   templateUrl: './createworkflow.component.html',
@@ -88,7 +89,7 @@ export class CreateworkflowComponent implements OnInit {
   }
 
   loadWorkflowList() {
-    this.workflowService.getWorkflow().subscribe((data) => {
+    this.workflowService.getWorkflow(this.constructor.name, moduleName.workFlowModule).subscribe((data) => {
       this.workflowList = data.response;
     });
   }
@@ -149,7 +150,7 @@ export class CreateworkflowComponent implements OnInit {
     const reqObj = {
       workflow_status: 'Active'
     }
-    this.workflowService.updateWorkflow(id, reqObj).subscribe((data) => {
+    this.workflowService.updateWorkflow(id, reqObj, this.constructor.name, moduleName.workFlowModule).subscribe((data) => {
       if (data) {
         this.alertMsg = data.response;
         this.isOpen = true;
@@ -173,7 +174,8 @@ export class CreateworkflowComponent implements OnInit {
         workflow_name: this.workflowName,
         workflow_stages: this.workflowStages
       }
-      this.workflowService.updateWorkflow(this.selectedWorkflowId, requestObj).subscribe((data) => {
+      this.workflowService.updateWorkflow(this.selectedWorkflowId, requestObj, this.constructor.name, moduleName.workFlowModule)
+      .subscribe((data) => {
         if (data) {
           this.alertMsg = data.response;
           this.isOpen = true;
@@ -199,8 +201,9 @@ export class CreateworkflowComponent implements OnInit {
     }
     const reqObj = {
       workflow_status: flowStatus
-    }
-    this.workflowService.updateWorkflow(this.selectedWorkflowId, reqObj).subscribe((data) => {
+    };
+    this.workflowService.updateWorkflow(this.selectedWorkflowId, reqObj, this.constructor.name, moduleName.workFlowModule)
+    .subscribe((data) => {
       if (data) {
         this.alertMsg = data.response;
         this.isOpen = true;
@@ -219,7 +222,8 @@ export class CreateworkflowComponent implements OnInit {
   loadWorkflowById(id?) {
     let resp: any;
     //this.loadingBar.start();
-    this.workflowService.getWorkflowById(this.selectedWorkflowId).subscribe((data) => {
+    this.workflowService.getWorkflowById(this.constructor.name, moduleName.workFlowModule, this.constructor.name,  this.selectedWorkflowId)
+    .subscribe((data) => {
       if (data.length > 0) {
         resp = this.rearrangeArrayResponse(data[0].workflow_stages);
         this.workflowStages = resp;

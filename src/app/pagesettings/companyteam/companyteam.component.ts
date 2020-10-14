@@ -5,6 +5,7 @@ import { UserService } from 'src/app/_services';
 import { CompanyService } from 'src/app/company.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TablePaginationConfig } from 'src/app/_models/tablepaginationconfig';
+import { moduleName } from 'src/app/_constant/module-name.constant';
 
 @Component({
   selector: 'app-companyteam',
@@ -71,7 +72,7 @@ export class CompanyteamComponent implements OnInit {
   loadCompanyTeamMembers() {
     const pagelimit = '?limit=' + this.paginationConfig.itemsPerPage + '&page=' + this.paginationConfig.currentPage;
     this.loading.start();
-    this.companyService.getCompanyTeamMembers(pagelimit).subscribe((data) => {
+    this.companyService.getCompanyTeamMembers(this.constructor.name, moduleName.companyTeamModule, pagelimit).subscribe((data) => {
       this.loading.stop();
       const key = 'response';
       this.teamMemberList = data[key];
@@ -82,7 +83,7 @@ export class CompanyteamComponent implements OnInit {
 
   loadRoleList() {
     this.loading.start();
-    this.userService.getRoleList().subscribe((data) => {
+    this.userService.getRoleList(this.constructor.name, moduleName.companyTeamModule).subscribe((data) => {
       this.loading.stop();
       if (data) {
         const key = 'response';
@@ -97,7 +98,7 @@ export class CompanyteamComponent implements OnInit {
   }
 
   removeTeamMember(id) {
-    this.companyService.removeTeamMember(id).subscribe((data) => {
+    this.companyService.removeTeamMember(this.constructor.name, moduleName.companyTeamModule, id).subscribe((data) => {
       if (data) {
         this.alertMsg = 'User has been removed!';
         this.isOpen = true;
@@ -122,7 +123,7 @@ export class CompanyteamComponent implements OnInit {
         user_level: 'company'
       };
       this.loading.start();
-      this.companyService.inviteUser(requestObj)
+      this.companyService.inviteUser(this.constructor.name, moduleName.companyTeamModule, requestObj)
         .subscribe((data) => {
           this.loading.stop();
           if (data) {
@@ -142,13 +143,36 @@ export class CompanyteamComponent implements OnInit {
     }
   }
 
-  onResendInvitation(email) {
+  onResendInvitation(id) {
+    this.companyService.resendInvitation(this.constructor.name, moduleName.companyModule, id)
+    .subscribe((data) => {
+      this.loading.stop();
+      if (data) {
+      //  this.notification.info('Invitation Send', 'We have sent a email on your Email Id', notificationConfig);
+        this.alertMsg = 'We have sent a email on your Email Id';
+        this.isOpen = true;
+        this.alertType = 'success';
+
+        this.inviteUserForm.reset();
+        this.loadCompanyTeamMembers();
+        this.modalService.dismissAll('Data Saved!');
+      }
+    }, (err) => {
+      this.loading.stop();
+      this.alertMsg = err;
+      this.isOpen = true;
+      this.alertType = 'danger';
+   //   this.notification.error('Invitation Send', 'Something went wrong...', notificationConfig);
+      this.modalService.dismissAll('Error!');
+    });
+  }
+  onResendInvitationXX(email) {
     const requestObj = {
       email,
       user_level: 'company'
     };
     this.loading.start();
-    this.companyService.inviteUser(requestObj)
+    this.companyService.inviteUser(this.constructor.name, moduleName.companyTeamModule, requestObj)
       .subscribe((data) => {
         this.loading.stop();
         if (data) {
@@ -209,7 +233,7 @@ export class CompanyteamComponent implements OnInit {
     this.paginationConfig.currentPage = event;
     const pagelimit = '?limit=' + this.paginationConfig.itemsPerPage + '&page=' + this.paginationConfig.currentPage;
     this.loading.start();
-    this.companyService.getCompanyTeamMembers(pagelimit).subscribe((data) => {
+    this.companyService.getCompanyTeamMembers(this.constructor.name, moduleName.companyTeamModule, pagelimit).subscribe((data) => {
       this.loading.stop();
       const key = 'response';
       this.teamMemberList = data[key];

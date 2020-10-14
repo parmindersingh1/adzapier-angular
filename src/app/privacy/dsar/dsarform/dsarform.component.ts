@@ -14,8 +14,7 @@ import { DsarformService } from 'src/app/_services/dsarform.service';
 import { CCPAFormConfigurationService } from 'src/app/_services/ccpaform-configuration.service';
 import { WorkflowService } from 'src/app/_services/workflow.service';
 import { Observable } from 'rxjs';
-import { HttpResponse } from '@angular/common/http';
-
+import {moduleName} from '../../../_constant/module-name.constant';
 @Component({
   selector: 'app-dsarform',
   templateUrl: './dsarform.component.html',
@@ -978,7 +977,8 @@ export class DsarformComponent implements OnInit, OnDestroy, AfterViewInit {
 
     if (this.orgId !== undefined && this.propId !== undefined && this.crid !== null) {
       this.loadingbar.start();
-      this.ccpaFormConfigService.updateCCPAForm(this.orgId, this.propId, this.crid, this.formObject)
+      this.ccpaFormConfigService.updateCCPAForm(this.orgId, this.propId, this.crid, this.formObject,
+        this.constructor.name, moduleName.dsarWebFormModule)
         .subscribe((data) => {
           this.loadingbar.stop();
           this.active = 4;
@@ -994,7 +994,8 @@ export class DsarformComponent implements OnInit, OnDestroy, AfterViewInit {
       this.active = 4;
     } else {
       this.loadingbar.start();
-      this.ccpaFormConfigService.createCCPAForm(this.orgId, this.propId, this.formObject)
+      this.ccpaFormConfigService.createCCPAForm(this.orgId, this.propId, this.formObject,
+        this.constructor.name, moduleName.dsarWebFormModule)
         .subscribe((data) => {
           this.loadingbar.stop();
           this.active = 4;
@@ -1166,7 +1167,7 @@ export class DsarformComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   loadWorkFlowList() {
-    this.workFlowService.getWorkflow().subscribe((data) => {
+    this.workFlowService.getWorkflow(this.constructor.name, moduleName.workFlowModule).subscribe((data) => {
       this.workFlowList = data.response;
       const filterValue = this.workFlowList.filter((t) => t.id === this.selectedWorkflowID);
       if (filterValue.length > 0) {
@@ -1283,7 +1284,7 @@ export class DsarformComponent implements OnInit, OnDestroy, AfterViewInit {
       this.imgUrl = 'https://privacyportal.adzpier-staging.com/api/v1/captcha/image';
     }
 
-    this.ccpaFormConfigService.getCaptcha().subscribe((data) => {
+    this.ccpaFormConfigService.getCaptcha(this.constructor.name, moduleName.dsarWebFormModule).subscribe((data) => {
       this.captchaid = data.id;
       this.imageToShow = 'data:image/png;base64' + ',' + data.captcha;
     });
