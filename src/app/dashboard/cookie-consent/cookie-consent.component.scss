@@ -45,7 +45,10 @@ td {
 .rounded-circle {
   border-radius: 50% !important;
 }
-
+.activity-card {
+  min-height: 254px;
+  margin-top: 32px;
+}
 .bd-primary {
   border-color: #0168fa !important;
 }

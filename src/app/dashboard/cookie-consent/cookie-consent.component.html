@@ -12,11 +12,12 @@
     </div>
     <div class="d-none d-md-block">
       <div class="d-flex flex-column flex-sm-row mg-t-20 mg-md-t-0">
-<!--        <button class="btn btn-sm btn-white btn-uppercase pd-x-15"><i data-feather="download" class="mg-r-5"></i> Export-->
-<!--          CSV-->
-<!--        </button>-->
-        <button (click)="onRefreshAll()" class="btn btn-sm btn-white btn-uppercase pd-x-15 mg-t-5 mg-sm-t-0  mg-sm-l-5"><i data-feather="eye"
-                                                                                                  class="mg-r-5"></i>
+        <!--        <button class="btn btn-sm btn-white btn-uppercase pd-x-15"><i data-feather="download" class="mg-r-5"></i> Export-->
+        <!--          CSV-->
+        <!--        </button>-->
+        <button (click)="onRefreshAll()" class="btn btn-sm btn-white btn-uppercase pd-x-15 mg-t-5 mg-sm-t-0  mg-sm-l-5">
+          <i data-feather="eye"
+             class="mg-r-5"></i>
           Refresh
         </button>
 
@@ -24,7 +25,7 @@
     </div>
   </div>
 
-  <div class="card mg-b-10">
+  <div *ngIf="!loadingSkeleton.one" class="card mg-b-10">
     <div class="card-body">
       <div class="row row-sm">
 
@@ -37,17 +38,21 @@
         <div class="col-6 col-sm-4 col-md-3 col-lg bd-l">
           <h4 class="tx-normal tx-rubik mg-b-10">{{dashboardCount.acceptAll}}</h4>
           <div class="progress ht-2 mg-b-10">
-            <div class="progress-bar bg-success"  [ngStyle]="{'width': percentDashboardCount.acceptAll+'%'}"  role="progressbar" attr.aria-valuenow="{{dashboardCount.acceptAll}}" attr.aria-valuemin="0"
+            <div class="progress-bar bg-success" [ngStyle]="{'width': percentDashboardCount.acceptAll+'%'}"
+                 role="progressbar" attr.aria-valuenow="{{dashboardCount.acceptAll}}" attr.aria-valuemin="0"
                  attr.aria-valuemax="100"></div>
           </div>
 
-          <h6 class="tx-uppercase tx-spacing-1 tx-semibold tx-10 tx-color-02 mg-b-2"> {{percentDashboardCount.acceptAll}} Accept All</h6>
+          <h6
+            class="tx-uppercase tx-spacing-1 tx-semibold tx-10 tx-color-02 mg-b-2"> {{percentDashboardCount.acceptAll}}
+            Accept All</h6>
 
         </div><!-- col -->
         <div class="col-6 col-sm-4 col-md-3 col-lg mg-t-20 mg-sm-t-0 bd-l">
           <h4 class="tx-normal tx-rubik mg-b-10">{{dashboardCount.saveSetting}}</h4>
           <div class="progress ht-2 mg-b-10">
-            <div class="progress-bar  bg-primary" [ngStyle]="{'width': percentDashboardCount.saveSetting+'%'}"  role="progressbar" attr.aria-valuenow="{{dashboardCount.saveSetting}}" aria-valuemin="0"
+            <div class="progress-bar  bg-primary" [ngStyle]="{'width': percentDashboardCount.saveSetting+'%'}"
+                 role="progressbar" attr.aria-valuenow="{{dashboardCount.saveSetting}}" aria-valuemin="0"
                  aria-valuemax="100"></div>
           </div>
           <h6 class="tx-uppercase tx-spacing-1 tx-semibold tx-10 tx-color-02 mg-b-2">Save Settings</h6>
@@ -56,7 +61,8 @@
         <div class="col-6 col-sm-4 col-md-3 col-lg mg-t-20 mg-md-t-0 bd-l">
           <h4 class="tx-normal tx-rubik mg-b-10">{{dashboardCount.rejectAll}}</h4>
           <div class="progress ht-2 mg-b-10">
-            <div class="progress-bar  bg-warning" [ngStyle]="{'width': percentDashboardCount.rejectAll+'%'}"   role="progressbar" attr.aria-valuenow="{{dashboardCount.rejectAll}}" aria-valuemin="0"
+            <div class="progress-bar  bg-warning" [ngStyle]="{'width': percentDashboardCount.rejectAll+'%'}"
+                 role="progressbar" attr.aria-valuenow="{{dashboardCount.rejectAll}}" aria-valuemin="0"
                  aria-valuemax="100"></div>
           </div>
           <h6 class="tx-uppercase tx-spacing-1 tx-semibold tx-10 tx-color-02 mg-b-2">Reject ALL</h6>
@@ -65,7 +71,8 @@
         <div class="col-6 col-sm-4 col-md-3 col-lg mg-t-20 mg-lg-t-0 bd-l">
           <h4 class="tx-normal tx-rubik mg-b-10">{{dashboardCount.close}}</h4>
           <div class="progress ht-2 mg-b-10">
-            <div class="progress-bar  bg-danger" [ngStyle]="{'width': percentDashboardCount.close+'%'}"   role="progressbar" attr.aria-valuenow="{{dashboardCount.close}}" aria-valuemin="0"
+            <div class="progress-bar  bg-danger" [ngStyle]="{'width': percentDashboardCount.close+'%'}"
+                 role="progressbar" attr.aria-valuenow="{{dashboardCount.close}}" aria-valuemin="0"
                  aria-valuemax="100"></div>
           </div>
           <h6 class="tx-uppercase tx-spacing-1 tx-semibold tx-10 tx-color-02 mg-b-2">Close</h6>
@@ -74,7 +81,8 @@
         <div class="col-6 col-sm-4 col-md-3 col-lg mg-t-20 mg-lg-t-0 bd-l">
           <h4 class="tx-normal tx-rubik mg-b-10">{{dashboardCount.doNotSale}}</h4>
           <div class="progress ht-2 mg-b-10">
-            <div class="progress-bar bg-teal" [ngStyle]="{'width': percentDashboardCount.doNotSale+'%'}" role="progressbar" attr.aria-valuenow="{{dashboardCount.doNotSale}}" aria-valuemin="0"
+            <div class="progress-bar bg-teal" [ngStyle]="{'width': percentDashboardCount.doNotSale+'%'}"
+                 role="progressbar" attr.aria-valuenow="{{dashboardCount.doNotSale}}" aria-valuemin="0"
                  aria-valuemax="100"></div>
           </div>
           <h6 class="tx-uppercase tx-spacing-1 tx-semibold tx-10 tx-color-02 mg-b-2">Do not Sell</h6>
@@ -84,6 +92,9 @@
       </div><!-- row -->
     </div>
   </div>
+
+  <ngx-skeleton-loader *ngIf="loadingSkeleton.one" count="3"></ngx-skeleton-loader>
+
 
   <div class="row row-xs">
 
@@ -101,41 +112,14 @@
 
 
         </div><!-- card-header -->
-        <div class="card-body ">
+        <div class="card-body " style="max-height: 270px;">
           <div class="pd-y-25 pd-x-20">
-            <div id="vmap" *ngIf="currentCountryMap === 'us'" class="ht-200"></div>
+            <div id="vmap"  *ngIf="currentCountryMap === 'us'" class="ht-200"></div>
             <div id="worldMap" *ngIf="currentCountryMap !== 'us'" class="ht-200"></div>
+            <div style="position: relative; top: -210px;">
+              <ngx-skeleton-loader *ngIf="loadingSkeleton.five" count="6"></ngx-skeleton-loader>
+            </div>
           </div>
-          <!-- <div class="table-responsive">
-              <table class="table table-borderless table-dashboard table-dashboard-one">
-                  <thead>
-                      <tr>
-                          <th class="wd-25">States</th>
-                          <th class="wd-25 ">Count</th>
-                      </tr>
-                  </thead>
-                  <tbody>
-                      <tr>
-                          <td class="tx-medium">California</td>
-                          <td class="">12,201</td>
-                      </tr>
-                      <tr>
-                          <td class="tx-medium">Texas</td>
-                          <td class="">11,950</td>
-                      </tr>
-                      <tr>
-                          <td class="tx-medium">Wyoming</td>
-                          <td class="">11,198</td>
-                      </tr>
-                      <tr>
-                          <td class="tx-medium">Florida</td>
-                          <td class="">9,885</td>
-                      </tr>
-
-                  </tbody>
-              </table>
-          </div> -->
-          <!-- table-responsive -->
         </div><!-- card-body -->
       </div><!-- card -->
     </div><!-- col -->
@@ -144,16 +128,13 @@
         <div class="card-header pd-t-20 ">
           <h6 class="mg-b-0">Opt In Activites</h6>
         </div><!-- card-header -->
-        <div class="card-body pd-y-10">
-          <!-- <div class="d-flex align-items-baseline tx-rubik">
-            <h1 class="tx-40 lh-1 tx-normal tx-spacing--2 mg-b-5 mg-r-5">9.8</h1>
-            <p class="tx-11 tx-color-03 mg-b-0"><span class="tx-medium tx-success">1.6% <i class="icon ion-md-arrow-up"></i></span></p>
-          </div> -->
+        <div class="card-body activity-card  pd-y-10">
+          <div  *ngIf="!loadingSkeleton.two">
           <h6 class="tx-uppercase tx-spacing-1 tx-semibold tx-10 tx-color-02 mg-b-15">Performance Score</h6>
-
           <div class="progress bg-transparent op-7 ht-10 mg-b-15">
             <div class="progress-bar bg-primary"
-                 [ngStyle]="{'width': onCalculateOptValue(optIn.allow_essantial, optIn.total_consents)+'%'}"  role="progressbar" aria-valuenow="30" aria-valuemin="0"
+                 [ngStyle]="{'width': onCalculateOptValue(optIn.allow_essantial, optIn.total_consents)+'%'}"
+                 role="progressbar" aria-valuenow="30" aria-valuemin="0"
                  aria-valuemax="100"></div>
             <div class="progress-bar bg-success bd-l bd-white"
                  [ngStyle]="{'width': onCalculateOptValue(optIn.allow_analytics, optIn.total_consents)+'%'}"
@@ -168,8 +149,6 @@
                  role="progressbar" aria-valuenow="5" aria-valuemin="0"
                  aria-valuemax="100"></div>
           </div>
-
-
           <table class="table-dashboard-two">
             <tbody>
             <tr>
@@ -204,35 +183,24 @@
               <td class="text-right">{{optIn.allow_socialmedia}}</td>
               <td class="text-right">{{onCalculateOptValue(optIn.allow_socialmedia, optIn.total_consents)}}%</td>
             </tr>
-            <!-- <tr>
-              <td><div class="wd-12 ht-12 rounded-circle bd bd-3 bd-teal"></div></td>
-              <td class="tx-medium">Poor</td>
-              <td class="text-right">512</td>
-              <td class="text-right">10%</td>
-            </tr>
-            <tr>
-              <td><div class="wd-12 ht-12 rounded-circle bd bd-3 bd-purple"></div></td>
-              <td class="tx-medium">Very Poor</td>
-              <td class="text-right">81</td>
-              <td class="text-right">4%</td>
-            </tr> -->
             </tbody>
           </table>
+          </div>
+          <ngx-skeleton-loader *ngIf="loadingSkeleton.two" count="5"></ngx-skeleton-loader>
         </div><!-- card-body -->
+
       </div><!-- card -->
+
+
     </div>
     <div class="col-md-4 mg-t-10 mg-md-t-0">
       <div class="card">
         <div class="card-header pd-t-20 ">
           <h6 class="mg-b-0">Optout Activites</h6>
         </div><!-- card-header -->
-        <div class="card-body pd-y-10">
-          <!-- <div class="d-flex align-items-baseline tx-rubik">
-            <h1 class="tx-40 lh-1 tx-normal tx-spacing--2 mg-b-5 mg-r-5">9.8</h1>
-            <p class="tx-11 tx-color-03 mg-b-0"><span class="tx-medium tx-success">1.6% <i class="icon ion-md-arrow-up"></i></span></p>
-          </div> -->
+        <div class="card-body activity-card  pd-y-10">
+          <div *ngIf="!loadingSkeleton.three">
           <h6 class="tx-uppercase tx-spacing-1 tx-semibold tx-10 tx-color-02 mg-b-15">Performance Score</h6>
-
           <div class="progress bg-transparent op-7 ht-10 mg-b-15">
             <div class="progress-bar bg-gray-900"
                  [ngStyle]="{'width': onCalculateOptValue(optOut.allow_essantial, optOut.total_consents)+'%'}"
@@ -286,21 +254,10 @@
               <td class="text-right">{{optOut.allow_socialmedia}}</td>
               <td class="text-right">{{onCalculateOptValue(optOut.allow_socialmedia, optOut.total_consents)}}%</td>
             </tr>
-
-            <!-- <tr>
-              <td><div class="wd-12 ht-12 rounded-circle bd bd-3 bd-teal"></div></td>
-              <td class="tx-medium">Poor</td>
-              <td class="text-right">512</td>
-              <td class="text-right">10%</td>
-            </tr>
-            <tr>
-              <td><div class="wd-12 ht-12 rounded-circle bd bd-3 bd-purple"></div></td>
-              <td class="tx-medium">Very Poor</td>
-              <td class="text-right">81</td>
-              <td class="text-right">4%</td>
-            </tr> -->
             </tbody>
           </table>
+        </div>
+          <ngx-skeleton-loader *ngIf="loadingSkeleton.three" count="5"></ngx-skeleton-loader>
         </div><!-- card-body -->
       </div><!-- card -->
     </div>
@@ -314,79 +271,47 @@
           class="card-header pd-t-20 d-sm-flex align-items-start justify-content-between bd-b-0 pd-b-0">
           <div class="row w-100 mb-2">
             <div class="col-md-11">
-            <h6 class="mg-b-5">Consent Details</h6>
-            <p class="tx-13 tx-color-03 mg-b-0">Your cookie consent detail</p>
+              <h6 class="mg-b-5">Consent Details</h6>
+              <p class="tx-13 tx-color-03 mg-b-0">Your cookie consent detail</p>
             </div>
             <div class="col-md-1">
-            <select (change)="onSelectCountry($event)" class="form-control" id="sel1">
-              <option *ngFor="let country of countryList" [value]="country.country">{{country.country}}</option>
-            </select>
+              <select (change)="onSelectCountry($event)" class="form-control" id="sel1">
+                <option *ngFor="let country of countryList" [value]="country.country">{{country.country}}</option>
+              </select>
             </div>
           </div>
-          <!-- <div class="d-flex mg-t-20 mg-sm-t-0">
-            <div class="btn-group flex-fill">
-              <button class="btn btn-white btn-xs active">Range</button>
-              <button class="btn btn-white btn-xs">Period</button>
-            </div>
-          </div> -->
         </div>
 
         <div class="table-responsive">
-          <table class="table table-dashboard mg-b-0">
-            <thead>
-            <tr>
-              <th>Country</th>
-              <th>Action</th>
-              <th class="text-right"> Necessary Cookies</th>
-              <th class="text-right"> Analytics</th>
-              <th class="text-right">Advertising</th>
-              <th class="text-right"> Social Media</th>
-            </tr>
-            </thead>
-            <tbody>
+          <ng-container *ngIf="!loadingSkeleton.four">
+            <table class="table table-dashboard mg-b-0">
+              <thead>
+              <tr>
+                <th>Country</th>
+                <th>Action</th>
+                <th class="text-right"> Necessary Cookies</th>
+                <th class="text-right"> Analytics</th>
+                <th class="text-right">Advertising</th>
+                <th class="text-right"> Social Media</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr *ngFor="let obj of consentDetails">
+                <td class="tx-normal ">{{obj.country}}</td>
+                <td class="tx-normal ">{{obj.action}}</td>
+                <td class="tx-normal text-right">{{obj.allow_essantial ? obj.allow_essantial : 0}}</td>
+                <td class="tx-medium text-right"> {{obj.allow_analytics ? obj.allow_analytics : 0}}</td>
+                <td class="tx-medium text-right"> {{obj.allow_advertising ? obj.allow_advertising : 0}}</td>
+                <td class="tx-medium text-right"> {{obj.allow_socialmedia ? obj.allow_socialmedia : 0}}</td>
+              </tr>
+              </tbody>
 
-            <tr *ngFor="let obj of consentDetails">
-              <td class="tx-normal ">{{obj.country}}</td>
-              <td class="tx-normal ">{{obj.action}}</td>
-              <td class="tx-normal text-right">{{obj.allow_essantial ? obj.allow_essantial : 0}}</td>
-              <td class="tx-medium text-right"> {{obj.allow_analytics ? obj.allow_analytics : 0}}</td>
-              <td class="tx-medium text-right"> {{obj.allow_advertising ? obj.allow_advertising : 0}}</td>
-              <td class="tx-medium text-right"> {{obj.allow_socialmedia ? obj.allow_socialmedia: 0}}</td>
-            </tr>
-<!--            <tr>-->
-<!--              <td class="tx-normal ">USA</td>-->
-<!--              <td class="tx-normal">Save Settings</td>-->
-<!--              <td class="tx-normal text-right ">100</td>-->
-<!--              <td class="tx-medium text-right"> 200</td>-->
-<!--              <td class="tx-medium text-right"> 300</td>-->
-<!--              <td class="tx-medium text-right"> 500</td>-->
-<!--              <td class="tx-medium text-right"> 600</td>-->
+            </table>
+          </ng-container>
+          <div class="mt-2">
+            <ngx-skeleton-loader *ngIf="loadingSkeleton.four" count="5"></ngx-skeleton-loader>
+          </div>
 
-<!--            </tr>-->
-<!--            <tr>-->
-<!--              <td class="tx-normal ">USA</td>-->
-<!--              <td class="tx-normal">REJECT ALL</td>-->
-<!--              <td class="tx-normal text-right">100</td>-->
-<!--              <td class="tx-medium text-right"> 200</td>-->
-<!--              <td class="tx-medium text-right"> 300</td>-->
-<!--              <td class="tx-medium text-right"> 500</td>-->
-<!--              <td class="tx-medium text-right"> 600</td>-->
-
-<!--            </tr>-->
-<!--            <tr>-->
-<!--              <td class="tx-normal ">USA</td>-->
-<!--              <td class="tx-normal">DO NOT SELL</td>-->
-<!--              <td class="tx-normal text-right">100</td>-->
-<!--              <td class="tx-medium text-right"> 200</td>-->
-<!--              <td class="tx-medium text-right"> 300</td>-->
-<!--              <td class="tx-medium text-right"> 500</td>-->
-<!--              <td class="tx-medium text-right"> 600</td>-->
-
-<!--            </tr>-->
-
-
-            </tbody>
-          </table>
         </div><!-- table-responsive -->
       </div><!-- card -->
     </div>

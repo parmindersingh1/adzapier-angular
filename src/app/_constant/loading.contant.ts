@@ -20,7 +20,7 @@ export const ngxUiLoaderConfig: NgxUiLoaderConfig = {
   'logoUrl': '',
   'masterLoaderId': 'master',
   'overlayBorderRadius': '0',
-  'overlayColor': 'rgba(114,114,114,0.3)',
+  'overlayColor': 'rgba(114,114,114,0.1)',
   'pbColor': '#4da0fa',
   'pbDirection': 'ltr',
   'pbThickness': 2,

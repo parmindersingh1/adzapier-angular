@@ -35,6 +35,13 @@ export class CookieConsentComponent implements OnInit {
   currentManagedOrgID: any;
   alertMsg: any;
   alertType: any;
+  loadingSkeleton = {
+    one: false,
+    two: false,
+    three: false,
+    four: false,
+    five: false
+  };
   dismissible = true;
   isOpen = false;
   countryList = [];
@@ -80,9 +87,11 @@ export class CookieConsentComponent implements OnInit {
   }
   onGetDashboardData() {
     this.loading.start('1');
+    this.loadingSkeleton.one = true;
     this.dashboardService.getDashboardData(this.currrentManagedPropID, this.constructor.name, moduleName.cookieConsentModule)
       .subscribe(res => {
         this.loading.stop('1');
+        this.loadingSkeleton.one = false;
         if (res) {
           if (res['status'] === 200) {
             const result = res['response'];
@@ -104,7 +113,8 @@ export class CookieConsentComponent implements OnInit {
         }
       }, error => {
         this.loading.stop('1');
-       // this.notification.error('Cookie Consent Dashboard',  error, notificationConfig);
+        this.loadingSkeleton.one = false;
+        // this.notification.error('Cookie Consent Dashboard',  error, notificationConfig);
         this.isOpen = true;
         this.alertMsg = error;
         this.alertType = 'danger';
@@ -113,26 +123,32 @@ export class CookieConsentComponent implements OnInit {
 
   onGetOptInActivity() {
     this.loading.start('f1');
+    this.loadingSkeleton.two = true;
     this.dashboardService.getOtpInActivity(this.currrentManagedPropID, this.constructor.name, moduleName.cookieConsentModule)
       .subscribe(res => {
+        this.loadingSkeleton.two = false;
         this.loading.stop('f1');
         if (res) {
           this.optIn = res['response'];
         }
       }, error => {
+        this.loadingSkeleton.two = false;
         this.loading.stop('f1');
       })
   }
 
   onGetOptOutActivity() {
+    this.loadingSkeleton.three = true;
     this.loading.start('f2');
     this.dashboardService.getOtpOutActivity(this.currrentManagedPropID, this.constructor.name, moduleName.cookieConsentModule)
       .subscribe((res: any) => {
+        this.loadingSkeleton.three = false;
         this.loading.stop('f2');
         if (res) {
           this.optOut = res.response;
         }
       }, error => {
+        this.loadingSkeleton.three = false;
         this.loading.stop('f2');
       });
   }
@@ -161,16 +177,19 @@ export class CookieConsentComponent implements OnInit {
   }
   onConsentDetails() {
     this.loading.start('f3');
+    this.loadingSkeleton.four = true;
     const params = {
       country:  this.currentCountry
     };
     this.dashboardService.getConsentDetails(this.currrentManagedPropID, params, this.constructor.name, moduleName.cookieConsentModule)
       .subscribe((res: any) => {
         this.loading.stop('f3');
+        this.loadingSkeleton.four = false;
         if (res) {
           this.consentDetails = res.response;
         }
       }, error => {
+        this.loadingSkeleton.four = false;
         this.loading.stop('f3');
       })
   }
@@ -196,13 +215,15 @@ export class CookieConsentComponent implements OnInit {
   }
 
   onGetMapData() {
-    this.loading.start('f7');
+    // this.loading.start('f7');
     const params = {
       // country: 'IN'
       country: this.currentCountryMap
     };
+    this.loadingSkeleton.five = true;
     this.dashboardService.getMapDataForConsentDashboard(this.currrentManagedPropID, params, this.constructor.name, moduleName.cookieConsentModule)
       .subscribe( (res: any) => {
+        this.loadingSkeleton.five = false;
         this.loading.stop('f7');
         const result = res.response;
 
@@ -222,6 +243,7 @@ export class CookieConsentComponent implements OnInit {
         }
 
       }, error => {
+        this.loadingSkeleton.five = false;
         this.loading.stop('f7');
       })
   }
