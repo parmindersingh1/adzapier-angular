@@ -78,7 +78,7 @@ export class WorkflowService {
 
   }
 
-  createWorkflow(reqObj, componentName, moduleName): Observable<any> {
+  createWorkflow(componentName, moduleName, reqObj): Observable<any> {
     const path = apiConstant.WORKFLOW;
     return this.httpClient.post<any>(environment.apiUrl + path, reqObj).pipe(map(shareReplay(1),
     catchError(error => {
@@ -87,7 +87,7 @@ export class WorkflowService {
     })));
   }
 
-  updateWorkflow(id, reqObj, componentName, moduleName): Observable<any> {
+  updateWorkflow(componentName, moduleName, id, reqObj): Observable<any> {
     const path = apiConstant.WORKFLOW_ID;
     return this.httpClient.put<any>(environment.apiUrl + path + id, reqObj).pipe(map(shareReplay(1),
     catchError(error => {

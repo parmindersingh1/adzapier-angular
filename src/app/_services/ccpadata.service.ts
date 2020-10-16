@@ -1,36 +1,69 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
+import { LokiService } from './loki.service';
+import { LokiFunctionality, LokiStatusType } from '../_constant/loki.constant';
+import { catchError } from 'rxjs/operators';
+
 @Injectable({
   providedIn: 'root'
 })
 export class CcpadataService {
 
-  constructor(private httpClient: HttpClient) { }
+  constructor(private httpClient: HttpClient, private lokiService: LokiService) { }
 
   createCCPAData(orgID, propID, crID, dataObj) {
     return this.httpClient.post<any>(environment.apiUrl + '/ccpa/data/' + orgID + '/' + propID + '/' + crID, dataObj);
   }
 
-  addCCPADataActivity(ccpaDataId, reqObj) {
-    return this.httpClient.post<any>(environment.apiUrl + '/ccpa/activity/' + ccpaDataId, reqObj);
+  addCCPADataActivity(componentName, moduleName, ccpaDataId, reqObj) {
+    const path = '/ccpa/activity/' + ccpaDataId;
+    return this.httpClient.post<any>(environment.apiUrl + path, reqObj)
+    .pipe(catchError(error => {
+      this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.getWorkflow, componentName, moduleName, path);
+      return throwError(error);
+    }));
   }
 
-  getCCPADataActivityLog(ccpaDataId,pageLimit?): Observable<any>{
-    if(pageLimit !== undefined){
-      return this.httpClient.get<any>(environment.apiUrl + '/ccpa/activity/' + ccpaDataId + pageLimit);
+  getCCPADataActivityLog(componentName, moduleName, ccpaDataId, pageLimit?): Observable<any> {
+    if (pageLimit !== undefined) {
+      const path = '/ccpa/activity/' + ccpaDataId + pageLimit;
+      return this.httpClient.get<any>(environment.apiUrl + path)
+      .pipe(catchError(error => {
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.getWorkflow, componentName, moduleName, path);
+        return throwError(error);
+      }));
     } else {
-      return this.httpClient.get<any>(environment.apiUrl + '/ccpa/activity/' + ccpaDataId);
+      const path = '/ccpa/activity/' + ccpaDataId;
+      return this.httpClient.get<any>(environment.apiUrl + path)
+      .pipe(catchError(error => {
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.getWorkflow, componentName, moduleName, path);
+        return throwError(error);
+      }));
     }
   }
-  
-  addCCPADataEmailActivity(ccpaDataId, reqObj) {
-    return this.httpClient.post<any>(environment.apiUrl + '/ccpa/email/' + ccpaDataId, reqObj); 
+
+  addCCPADataEmailActivity(componentName, moduleName, ccpaDataId, reqObj) {
+    const path = '/ccpa/email/' + ccpaDataId;
+    return this.httpClient.post<any>(environment.apiUrl + path, reqObj)
+      .pipe(catchError(error => {
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.getWorkflow, componentName, moduleName, path);
+        return throwError(error);
+      }));
   }
 
-  getCCPADataEmailLog(ccpaDataId): Observable<any> {
-    return this.httpClient.get<any>(environment.apiUrl + '/ccpa/email/' + ccpaDataId);
+  getCCPADataEmailLog(componentName, moduleName, ccpaDataId): Observable<any> {
+    const path = '/ccpa/email/' + ccpaDataId;
+    return this.httpClient.get<any>(environment.apiUrl + path).pipe(
+      catchError(error => {
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.getWorkflow, componentName, moduleName, path);
+        return throwError(error);
+      })
+    );
   }
 
+  onSendLogs(errorType, msg, functionality, componentName, moduleName, path) {
+    this.lokiService.onSendErrorLogs(errorType, msg, functionality, componentName, moduleName, path).subscribe();
+  }
 }

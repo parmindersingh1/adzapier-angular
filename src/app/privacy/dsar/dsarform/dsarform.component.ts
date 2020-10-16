@@ -100,42 +100,51 @@ export class DsarformComponent implements OnInit, OnDestroy, AfterViewInit {
   controlOption = [
     {
       id: 1,
-      control: 'textbox'
+      control: 'textbox',
+      display: 'Textbox'
     },
     {
       id: 2,
-      control: 'select'
+      control: 'select',
+      display: 'Select'
     },
     {
       id: 3,
-      control: 'radio'
+      control: 'radio',
+      display: 'Radio'
     },
     {
       id: 4,
-      control: 'textarea'
+      control: 'textarea',
+      display: 'Textarea'
     },
     {
       id: 5,
-      control: 'checkbox'
+      control: 'checkbox',
+      display: 'Checkbox'
     },
     {
       id: 6,
-      control: 'datepicker'
+      control: 'datepicker',
+      display: 'Datepicker'
     }
   ];
 
   editableControlOption = [
     {
       id: 1,
-      control: 'select'
+      control: 'select',
+      display: 'Select'
     },
     {
       id: 2,
-      control: 'radio'
+      control: 'radio',
+      display: 'Radio'
     },
     {
       id: 3,
-      control: 'checkbox'
+      control: 'checkbox',
+      display: 'Checkbox'
     }
   ];
   isWelcomeEditor: boolean;
@@ -174,6 +183,7 @@ export class DsarformComponent implements OnInit, OnDestroy, AfterViewInit {
   showFileExtnerror: boolean = false;
   isFileUploadRequired: boolean = false;
   isEmailVerificationRequired: boolean = false;
+  isCaptchaVerificationRequired: boolean = false;
   imgUrl: string;
   isDraftWebForm = false;
   imageToShow: any;
@@ -295,6 +305,8 @@ export class DsarformComponent implements OnInit, OnDestroy, AfterViewInit {
               this.headerColor = t.headerColor;
             } else if (t.controlId === 'fileupload') {
               this.isFileUploadRequired = t.requiredfield;
+            } else if (t.controlId === 'captchacontrol') {
+              this.isCaptchaVerificationRequired = t.requiredfield;
             }
           });
           // this.ccpaFormConfigService.removeControls();
@@ -328,6 +340,8 @@ export class DsarformComponent implements OnInit, OnDestroy, AfterViewInit {
           this.headerColor = t.headerColor;
         } else if (t.controlId === 'fileupload') {
           this.isFileUploadRequired = t.requiredfield;
+        } else if (t.controlId === 'captchacontrol') {
+          this.isCaptchaVerificationRequired = t.requiredfield;
         }
       });
       this.dsarFormService.setFormControlList(this.webFormControlList);
@@ -907,6 +921,10 @@ export class DsarformComponent implements OnInit, OnDestroy, AfterViewInit {
     return item.controlId === 'fileupload' ? true : false;
   }
 
+  isContainCaptchaControl(item): boolean {
+    return item.controlId === 'captchacontrol' ? true : false;
+  }
+
   cancelAddingFormControl() {
     this.isAddingFormControl = false;
     this.isEditingList = false;
@@ -969,7 +987,8 @@ export class DsarformComponent implements OnInit, OnDestroy, AfterViewInit {
           approver: this.defaultapprover,
           workflow: this.workflow,
           days_left: Number(this.daysleft),
-          email_verified: this.isEmailVerificationRequired
+          email_verified: this.isEmailVerificationRequired,
+          captcha: this.isCaptchaVerificationRequired
         },
         request_form: this.webFormControlList
       };
@@ -1272,6 +1291,29 @@ export class DsarformComponent implements OnInit, OnDestroy, AfterViewInit {
 
   allowEmailVerification(event) {
     this.isEmailVerificationRequired = event.target.checked;
+  }
+
+  allowCaptchaVerification(event) {
+    this.isCaptchaVerificationRequired = event.target.checked;
+    if (this.crid) {
+      this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
+      const customControlIndex = this.webFormControlList.findIndex((t) => t.controlId === 'captchacontrol');
+      const updateobj = this.webFormControlList[customControlIndex];
+      updateobj.requiredfield = event.target.checked;
+      updateobj.preferControlOrder = this.webFormControlList.length - 1;
+      this.ccpaFormConfigService.updateControl(this.webFormControlList[customControlIndex], customControlIndex, updateobj);
+      this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
+      this.rearrangeFormSequence(this.webFormControlList);
+    } else {
+      this.webFormControlList = this.dsarFormService.getFormControlList();
+      const oldControlIndex = this.webFormControlList.findIndex((t) => t.controlId === 'captchacontrol');
+      const obj = this.webFormControlList[oldControlIndex];
+      obj.requiredfield = event.target.checked;
+      obj.preferControlOrder = this.webFormControlList.length - 1;
+      this.dsarFormService.updateControl(this.webFormControlList[oldControlIndex], oldControlIndex, obj);
+      this.webFormControlList = this.dsarFormService.getFormControlList();
+      this.rearrangeFormSequence(this.webFormControlList);
+    }
   }
 
   loadCaptcha() {

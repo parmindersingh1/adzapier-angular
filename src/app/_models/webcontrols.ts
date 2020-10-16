@@ -132,6 +132,14 @@ loadWebControls() {
                 requiredfield: ''
             },
             {
+                control: 'captcha',
+                controllabel: 'Captcha',
+                controlId: 'captchacontrol',
+                indexCount: 'captcha_control_Index',
+                preferControlOrder: '',
+                requiredfield: ''
+            },
+            {
                 control: 'text',
                 controllabel: 'Footer Text',
                 controlId: 'footertext',

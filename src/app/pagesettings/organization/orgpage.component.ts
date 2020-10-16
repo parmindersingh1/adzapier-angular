@@ -142,7 +142,7 @@ export class OrgpageComponent implements OnInit {
     });
   }
 
-  updateOrganisationData(data) {
+  updateOrganisationData() {
     this.submitted = true;
     if (this.editOrganisationForm.invalid) {
       return false;
@@ -179,6 +179,8 @@ export class OrgpageComponent implements OnInit {
         }
       }, (error) => {
         this.loading.stop();
+        this.onResetEditOrganization();
+        this.submitted = false;
         this.alertMsg = JSON.stringify(error);
         this.isOpen = true;
         this.alertType = 'danger';

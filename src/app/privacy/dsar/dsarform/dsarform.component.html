@@ -75,7 +75,7 @@
                                                     <div *ngFor="let item of webFormControlList; let i = index;"
                                                         cdkDrag>
                                                         <div class="example-box"
-                                                            *ngIf="!isContainHeaderLogo(item) && !isContainWelcomeText(item) && !isContainFileUpload(item) && !isContainFooterText(item)">
+                                                            *ngIf="!isContainHeaderLogo(item) && !isContainWelcomeText(item) && !isContainFileUpload(item) && !isContainCaptchaControl(item) && !isContainFooterText(item)">
                                                             <div class="icon-label-wrapper">
                                                                 <i class="fa fa-bars" aria-hidden="true"></i>
                                                                 <span class="control-label">
@@ -133,12 +133,13 @@
                                                                             name="selectOptionControl"
                                                                             #ngModel="ngModel"
                                                                             [(ngModel)]="selectOptionControl" required>
-                                                                            <option selected disabled value="">select field
+                                                                            <option selected disabled value="">select
+                                                                                field
                                                                             </option>
                                                                             <ng-container
                                                                                 *ngFor="let status_item of controlOption">
                                                                                 <option [value]="status_item.control">
-                                                                                    {{status_item.control}}
+                                                                                    {{status_item.display}}
                                                                                 </option>
                                                                             </ng-container>
                                                                         </select>
@@ -483,7 +484,8 @@
                                 </div>
                                 <div class="quilleditor-wrapper py-2">
                                     <div class="quilleditor" [ngStyle]="welcomeStyle()"
-                                        [innerHTML]="editorDataWelcome?(editorDataWelcome | safe: 'html'):welcomeText"></div>
+                                        [innerHTML]="editorDataWelcome?(editorDataWelcome | safe: 'html'):welcomeText">
+                                    </div>
                                 </div>
                             </div>
 
@@ -702,29 +704,38 @@
                                         <!-- <img *ngIf="j == webFormControlList.length - 1" [src]='capthchaID' />
                                      {{capthchaID}} -->
                                         <div class="col-sm-12" *ngIf="j == webFormControlList.length - 1">
-                                            <label><span class="color-red">*</span> Captcha</label>
-                                            <div class="form-group flex-align-item mb-0">
-                                                <button title="Refresh captcha" type="button"
-                                                    class="btn btn-xs btn-primary mb-2 mr-1" (click)="loadCaptcha()">
-                                                    <img src="../../assets/imgs/refresh.svg" width="20" height="20" />
-                                                </button>
-                                                <div class="align-form">
-                                                    <span [ngClass]="{'displaynone':!isImageLoading,'':isImageLoading}"
-                                                        class="spinner-border spinner-border-sm mr-1"></span>
-                                                    <img [src]="imageToShow" alt="captcha image"
-                                                        *ngIf="!isImageLoading; else noImageFound">
-                                                    <!-- <audio controls>
+                                            <div class="col-sm-12 margin-padding-zero"
+                                                [ngClass]="{'displaynone':!webcontrol.requiredfield,'':webcontrol.requiredfield ||isCaptchaVerificationRequired}"
+                                                *ngIf="webcontrol.requiredfield && webcontrol.controlId == 'captchacontrol'">
+
+
+                                                <label><span class="color-red">*</span> Captcha</label>
+                                                <div class="form-group flex-align-item mb-0">
+                                                    <button title="Refresh captcha" type="button"
+                                                        class="btn btn-xs btn-primary mb-2 mr-1"
+                                                        (click)="loadCaptcha()">
+                                                        <img src="../../assets/imgs/refresh.svg" width="20"
+                                                            height="20" />
+                                                    </button>
+                                                    <div class="align-form">
+                                                        <span
+                                                            [ngClass]="{'displaynone':!isImageLoading,'':isImageLoading}"
+                                                            class="spinner-border spinner-border-sm mr-1"></span>
+                                                        <img [src]="imageToShow" alt="captcha image"
+                                                            *ngIf="!isImageLoading; else noImageFound">
+                                                        <!-- <audio controls>
                                                 <source src="imageToShow.wav" type="audio/wav">
                                             </audio> -->
-                                                    <ng-template #noImageFound>
-                                                        <span>No Image Found</span>
-                                                    </ng-template>
+                                                        <ng-template #noImageFound>
+                                                            <span>No Image Found</span>
+                                                        </ng-template>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="row col-sm-12" *ngIf="j == webFormControlList.length - 1">
-                                                <input class="form-control" placeholder="Enter above captcha code"
-                                                    autocomplete="new-{{j}}" name="captchacode"
-                                                    [(ngModel)]="captchacode" />
+                                                <div class="col-sm-12 margin-padding-zero" *ngIf="j == webFormControlList.length - 1">
+                                                    <input class="form-control" placeholder="Enter above captcha code"
+                                                        autocomplete="new-{{j}}" name="captchacode"
+                                                        [(ngModel)]="captchacode" />
+                                                </div>
                                             </div>
                                         </div>
 
@@ -736,7 +747,8 @@
                                 </form>
                                 <div class="quilleditor-wrapper py-2 border-top">
                                     <div class="quilleditor" [ngStyle]="footerStyle()"
-                                        [innerHTML]="editorDataFooter?(editorDataFooter | safe: 'html'):footerText"></div>
+                                        [innerHTML]="editorDataFooter?(editorDataFooter | safe: 'html'):footerText">
+                                    </div>
                                 </div>
 
                             </div>
@@ -808,7 +820,7 @@
                                 class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">
                                 <input type="checkbox" [checked]="isFileUploadRequired" class="form-check-input"
                                     (click)="allowFileupload($event)" />
-                                <span class="pad-right-20"> Enable File upload</span>
+                                <span class="pad-right-20"> File upload</span>
                             </label>
                         </div>
                         <div class="form-group mg-b-5">
@@ -817,7 +829,16 @@
                                 class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">
                                 <input type="checkbox" [checked]="isEmailVerificationRequired" class="form-check-input"
                                     (click)="allowEmailVerification($event)" />
-                                <span class="pad-right-20"> Enable Email Verificatioin</span>
+                                <span class="pad-right-20"> Email Verificatioin</span>
+                            </label>
+                        </div>
+                        <div class="form-group mg-b-5">
+                            <label for="fileupload"
+                                class="form-check-label tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03"
+                                class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">
+                                <input type="checkbox" [checked]="isCaptchaVerificationRequired"
+                                    class="form-check-input" (click)="allowCaptchaVerification($event)" />
+                                <span class="pad-right-20"> Captcha Verificatioin</span>
                             </label>
                         </div>
                     </div>
