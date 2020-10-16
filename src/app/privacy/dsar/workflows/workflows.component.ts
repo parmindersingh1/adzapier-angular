@@ -118,7 +118,7 @@ export class WorkflowsComponent implements OnInit {
       };
       this.workflowService.changeCurrentSelectedWorkflow(requestObj);
       // return false;
-      this.workflowService.createWorkflow(requestObj, this.constructor.name, moduleName.workFlowModule).subscribe((data) => {
+      this.workflowService.createWorkflow(this.constructor.name, moduleName.workFlowModule, requestObj).subscribe((data) => {
         if (data) {
           this.alertMsg = data.response;
           this.isOpen = true;

@@ -11,7 +11,7 @@ export const environment = {
   stripePublishablekey : 'pk_test_Bea8DtMw2JDaQoZuvyd2yEdE00wtdPEyoM',
   lokiUrl: 'https://logs.adzpier-staging.com/loki/api/v1/push',
   lokiConfig: {
-        app: 'cmp-local',
+        app: 'cmp-adminportal-local',
         env: 'local',
   },
 };
