@@ -6,6 +6,7 @@ import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { UserService, OrganizationService } from 'src/app/_services';
 import { CompanyService } from 'src/app/company.service';
 import { TablePaginationConfig } from 'src/app/_models/tablepaginationconfig';
+import { moduleName } from 'src/app/_constant/module-name.constant';
 
 @Component({
   selector: 'app-organizationteam',
@@ -70,7 +71,7 @@ export class OrganizationteamComponent implements OnInit {
 
   loadRoleList() {
     this.loading.start();
-    this.userService.getRoleList().subscribe((data) => {
+    this.userService.getRoleList(this.constructor.name, moduleName.organizationTeamModule).subscribe((data) => {
       this.loading.stop();
       if (data) {
         const key = 'response';
@@ -124,7 +125,7 @@ export class OrganizationteamComponent implements OnInit {
           orgid: this.organizationID,
           user_level: 'organization'
         };
-        this.companyService.inviteUser(requestObj)
+        this.companyService.inviteUser( this.constructor.name, moduleName.organizationTeamModule, requestObj)
           .subscribe((data) => {
             if (data) {
               this.alertMsg = data.response;
@@ -147,7 +148,7 @@ export class OrganizationteamComponent implements OnInit {
           orgid: this.organizationID
           //  user_level: 'organization'
         };
-        this.companyService.updateUserRole(requestObj)
+        this.companyService.updateUserRole( this.constructor.name, moduleName.organizationTeamModule, requestObj)
           .subscribe((data) => {
             if (data) {
               this.alertMsg = data.response;
@@ -167,7 +168,7 @@ export class OrganizationteamComponent implements OnInit {
   }
 
   onResendInvitation(userid) {
-    this.companyService.resendInvitation(userid)
+    this.companyService.resendInvitation(this.constructor.name, moduleName.organizationTeamModule, userid)
       .subscribe((data) => {
         if (data) {
           this.alertMsg = 'We have sent a email on your Email Id';
@@ -187,7 +188,7 @@ export class OrganizationteamComponent implements OnInit {
 
   removeTeamMember(id) {
     this.loading.start();
-    this.companyService.removeTeamMember(id).subscribe((data) => {
+    this.companyService.removeTeamMember(this.constructor.name, moduleName.organizationTeamModule, id).subscribe((data) => {
       this.loading.stop();
       if (data) {
         this.alertMsg = data.response;

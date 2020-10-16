@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { UserService } from '../_services';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
+import { moduleName } from '../_constant/module-name.constant';
 
 @Component({
   selector: 'app-verifyemail',
@@ -24,7 +25,7 @@ export class VerifyemailComponent implements OnInit {
       token: this.id
     };
     this.loading.start();
-    this.userService.verifyEmailAddress(requestObj).subscribe((data) => {
+    this.userService.verifyEmailAddress(this.constructor.name, moduleName.verifyEmailModule, requestObj).subscribe((data) => {
       this.loading.stop();
       this.isUserVarified = true;
       this.message = 'Your email address is successfully verified ! please login to access your account!';

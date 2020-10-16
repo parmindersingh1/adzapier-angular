@@ -4,8 +4,8 @@ import { environment } from './../../environments/environment';
 import { User } from './../_models';
 import { BehaviorSubject, Observable, Subject, throwError } from 'rxjs';
 import { map, shareReplay, retry, catchError } from 'rxjs/operators';
-
-
+import {LokiService} from './loki.service';
+import {LokiFunctionality, LokiStatusType} from '../_constant/loki.constant';
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
@@ -17,7 +17,7 @@ export class UserService {
     @Output() getCurrentUser: EventEmitter<any> = new EventEmitter<any>();
     private organizationProperty = new Subject<any>();
     organizationProperty$ = this.organizationProperty.asObservable();
-    constructor(private http: HttpClient) {
+    constructor(private http: HttpClient, private lokiService: LokiService) {
         this.currentregSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('currentregUser')));
         this.currentregUser = this.currentregSubject.asObservable();
     }
@@ -26,40 +26,56 @@ export class UserService {
         return this.currentregSubject.value;
     }
 
-    getAll() {
+    getAll(componentName, moduleName) {
         const key = 'response';
-        return this.http.get<User[]>(environment.apiUrl + '/user').pipe(map(res => res[key]), shareReplay());
+        const path = '/user';
+        return this.http.get<User[]>(environment.apiUrl + path).pipe(map(res => res[key]), shareReplay(),
+        catchError(error => {
+            this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.getAll, componentName, moduleName, path);
+            return throwError(error);
+          }));
     }
 
     // login(user: User){
     //     return this.http.post(environment.apiUrl+'/users/login', user
     // }
 
-    register(obj) {
-        return this.http.post<any>(environment.apiUrl + '/user', obj)
+    register(componentName, moduleName, obj) {
+        const path = '/user';
+        return this.http.post<any>(environment.apiUrl + `${path}`, obj)
             .pipe(map(user => {
-                //         // store user details and jwt token in local storage to keep user logged in between page refreshes
-                //localStorage.setItem('currentregUser', JSON.stringify(user.response));
+                // store user details and jwt token in local storage to keep user logged in between page refreshes
                 this.currentregSubject.next(user);
                 return user;
 
             }),
                 retry(1),
-                catchError(this.handleError)
+                catchError(error => {
+                    this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.registerUser, componentName, moduleName, path);
+                    return throwError(error);
+                  })
             );
     }
 
 
-    resetpassword(token, password, confirmpassword): Observable<any> {
-        return this.http.post<any>(environment.apiUrl + '/password/reset', { token, password, confirmpassword });
+    resetpassword(componentName, moduleName, token, password, confirmpassword): Observable<any> {
+        const path = '/password/reset';
+        return this.http.post<any>(environment.apiUrl + path, { token, password, confirmpassword })
+        .pipe(catchError(error => {
+            this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.resetPassword, componentName, moduleName, path);
+            return throwError(error);
+          }));
     }
 
 
-    forgotpswd(email) {
-        return this.http.post<any>(environment.apiUrl + '/password/forgot', { email })
-            .pipe(map(user => {
-            })
-            );
+    forgotpswd(componentName, moduleName, email) {
+        const path = '/password/forgot';
+        return this.http.post<any>(environment.apiUrl + path, { email })
+            .pipe(catchError(error => {
+                this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.forgotPassword, componentName, moduleName, path);
+                return throwError(error);
+              }));
+
     }
 
     delete(id: number) {
@@ -67,13 +83,23 @@ export class UserService {
     }
 
 
-    update(profileObj) {
-        return this.http.put<any>(environment.apiUrl + '/user', profileObj);
+    update(componentName, moduleName, profileObj) {
+        const path = '/user';
+        return this.http.put<any>(environment.apiUrl + path, profileObj)
+        .pipe(catchError(error => {
+            this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.updateUserProfile, componentName, moduleName, path);
+            return throwError(error);
+          }));
     }
 
-    getLoggedInUserDetails(): Observable<User> {
-        const key = 'response';
-        return this.http.get<User>(environment.apiUrl + '/user').pipe(shareReplay()); // map(res => res[key]),
+    getLoggedInUserDetails(componentName, moduleName): Observable<User> {
+        const path = '/user';
+        return this.http.get<User>(environment.apiUrl + path).pipe(shareReplay(1),
+        catchError(error => {
+            this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.getLoggedInUserDetails, componentName, moduleName, path);
+            return throwError(error);
+          })
+        );
     }
 
     getCurrentUserProfile(): Observable<User> {
@@ -84,12 +110,24 @@ export class UserService {
         this.organizationProperty.next(data);
     }
 
-    verifyEmailAddress(tokenObj): Observable<any> {
-        return this.http.post<any>(environment.apiUrl + '/email/verify', tokenObj);
+    verifyEmailAddress(componentName, moduleName, tokenObj): Observable<any> {
+        const path =  '/email/verify';
+        return this.http.post<any>(environment.apiUrl + path, tokenObj).pipe(
+            catchError(error => {
+                this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.verifyUserEmailID, componentName, moduleName, path);
+                return throwError(error);
+              })
+        );
     }
 
-    getRoleList(): Observable<any> {
-        return this.http.get<any>(environment.apiUrl + '/role');
+    getRoleList(componentName, moduleName): Observable<any> {
+        const path = '/role';
+        return this.http.get<any>(environment.apiUrl + path).pipe(
+            catchError(error => {
+                this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.userRole, componentName, moduleName, path);
+                return throwError(error);
+              })
+        );
     }
 
     handleError(error) {
@@ -104,5 +142,9 @@ export class UserService {
         }
         return throwError(errorMessage);
     }
+
+    onSendLogs(errorType, msg, functionality, componentName, moduleName, path) {
+        this.lokiService.onSendErrorLogs(errorType, msg, functionality, componentName, moduleName, path).subscribe();
+      }
 
 }

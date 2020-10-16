@@ -6,6 +6,7 @@ import { BsDropdownConfig } from 'ngx-bootstrap/dropdown';
 import { Organization } from 'src/app/_models/organization';
 import { mergeMap, switchMap, distinctUntilKeyChanged, distinctUntilChanged } from 'rxjs/operators';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
+import { moduleName } from 'src/app/_constant/module-name.constant';
 
 @Component({
   selector: 'app-header',
@@ -176,7 +177,8 @@ export class HeaderComponent implements OnInit {
             { showlink: 'Dashboard', routerLink: '/home/dashboard/ccpa-dsar', icon: 'bar-chart-2' },
             { showlink: 'Webforms', routerLink: '/privacy/dsar/webforms', icon: 'pie-chart' },
             { showlink: 'Requests', routerLink: '/privacy/dsar/dsar-requests', icon: 'fa fa-ticket-alt feather-16' },
-            { showlink: 'Work flow', routerLink: '/privacy/dsar/workflows', icon: 'shield-off' },
+            { showlink: 'Workflow', routerLink: '/privacy/dsar/workflows', icon: 'shield-off' },
+
             { showlink: 'Dashboard', routerLink: '/home/dashboard/cookie-consent', icon: 'fas fa-cookie feather-16' },
             { showlink: 'Cookie Category', routerLink: '/cookie-consent/cookie-category', icon: 'fab fa-microsoft feather-16' },
             { showlink: 'Cookie Banner', routerLink: '/cookie-consent/cookie-banner', icon: 'fas fa-cookie feather-16' },
@@ -184,6 +186,8 @@ export class HeaderComponent implements OnInit {
             { showlink: 'Setup', routerLink: '/cookie-consent/cookie-banner/setup', icon: 'fas fa-wrench feather-16' }
           ]
         }, { showlink: 'Billing', routerLink: 'settings/billing' }];
+    }, (error) => {
+      console.log(error);
     });
 
 
@@ -193,7 +197,7 @@ export class HeaderComponent implements OnInit {
 
   getLoggedInUserDetails() {
     this.isCollapsed = false;
-    this.userService.getLoggedInUserDetails().subscribe((data) => {
+    this.userService.getLoggedInUserDetails(this.constructor.name, moduleName.headerModule).subscribe((data) => {
       this.currentUser = data;
       this.currentLoggedInUser = this.currentUser.response.firstname + ' ' + this.currentUser.response.lastname;
       this.currentLoggedInUser = this.currentLoggedInUser.toLowerCase().split(' ')
@@ -337,6 +341,8 @@ export class HeaderComponent implements OnInit {
       } else {
         this.router.navigate(['settings/organizations']);
       }
+    }, (error) => {
+      this.loading.stop();
     });
   }
 

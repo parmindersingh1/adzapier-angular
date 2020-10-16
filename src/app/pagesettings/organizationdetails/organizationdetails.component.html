@@ -339,11 +339,7 @@
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label for="addressTwo">Address 2</label>
-                            <input type="text" class="form-control"  formControlName="addressTwo"
-                                name="addressTwo" [ngClass]="{ 'is-invalid': submitted && editOrg.addressTwo.errors }" />
-                            <div *ngIf="submitted && editOrg.addressTwo.errors" class="invalid-feedback">
-                                <div *ngIf="editOrg.addressTwo.errors.required">Address 2 is required</div>
-                            </div>
+                            <input type="text" class="form-control" formControlName="addressTwo" name="addressTwo" />
                         </div>
                     </div>
                     <div class="col-sm-6">

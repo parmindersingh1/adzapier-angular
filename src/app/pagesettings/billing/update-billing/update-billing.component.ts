@@ -95,7 +95,7 @@ export class UpdateBillingComponent implements OnInit {
   }
   onGetCompanyDetails() {
     this.loading.start('3');
-    this.companyService.getCompanyDetails().subscribe((res: any) => {
+    this.companyService.getCompanyDetails(this.constructor.name, moduleName.updateBillingModule).subscribe((res: any) => {
       this.loading.stop('3');
       if (res['status'] === 200) {
         this.companyDetails = res['response'];

@@ -12,6 +12,7 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap';
 import { Observable } from 'rxjs';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { TablePaginationConfig } from 'src/app/_models/tablepaginationconfig';
+import { moduleName } from '../../../_constant/module-name.constant';
 @Component({
   selector: 'app-dsar-requestdetails',
   templateUrl: './dsar-requestdetails.component.html',
@@ -23,7 +24,7 @@ export class DsarRequestdetailsComponent implements OnInit {
   @ViewChild('customDaysInput', { static: false }) customDaysInput: ElementRef;
   @ViewChild('confirmTemplate', { static: false }) confirmModal: TemplateRef<any>;
   @ViewChild('filePreview', { static: true }) filePreview: ElementRef;
-
+  @ViewChild('panel', { static: true }) public panel: ElementRef<any>;
   requestID: any;
   currentManagedOrgID: any;
   currrentManagedPropID: any;
@@ -258,7 +259,8 @@ export class DsarRequestdetailsComponent implements OnInit {
   loadDataRequestDetails() {
 
     //alert(this.ApproverList['151b7dce-5028-4ad9-bb32-0be1dc423499'].user_name);
-    this.dsarRequestService.getDSARRequestDetails(this.currentManagedOrgID, this.currrentManagedPropID, this.requestID)
+    this.dsarRequestService.getDSARRequestDetails(this.currentManagedOrgID, this.currrentManagedPropID, this.requestID,
+      this.constructor.name, moduleName.dsarRequestModule)
       .subscribe((data) => {
         //   console.log(data.response,'resp...');
         this.requestDetails.push(data.response);
@@ -404,7 +406,7 @@ export class DsarRequestdetailsComponent implements OnInit {
 
   getWorkflowStages(id) {
     ///workflowId
-    this.workflowService.getWorkflowById(id).subscribe((data) => {
+    this.workflowService.getWorkflowById(this.constructor.name, moduleName.workFlowModule, id).subscribe((data) => {
       if (data.length > 0) {
         const respData = data[0].workflow_stages;
         this.workflowStages = this.rearrangeArrayResponse(respData);
@@ -652,7 +654,8 @@ export class DsarRequestdetailsComponent implements OnInit {
       fd.append('email_body', this.quillEditorEmailText.get('editorEmailMessage').value);
       fd.append('upload', this.quillEditorEmailText.get('emailAttachment').value);
 
-      this.ccpaDataService.addCCPADataEmailActivity(this.requestID, fd).subscribe((data) => {
+      this.ccpaDataService.addCCPADataEmailActivity(this.constructor.name, moduleName.dsarRequestModule,
+         this.requestID, fd).subscribe((data) => {
         if (data) {
           // alert(data.response);
           this.alertMsg = data.response;
@@ -673,7 +676,8 @@ export class DsarRequestdetailsComponent implements OnInit {
 
   stageAPI(requestID, requestObj) {
     // return false;
-    this.ccpaDataService.addCCPADataActivity(requestID, requestObj).subscribe((data) => {
+    this.ccpaDataService.addCCPADataActivity( this.constructor.name, moduleName.dsarRequestModule,
+       requestID, requestObj).subscribe((data) => {
       if (data) {
         this.loadDataRequestDetails();
         this.alertMsg = data.response;
@@ -693,13 +697,14 @@ export class DsarRequestdetailsComponent implements OnInit {
   loadActivityLog(requestID) {
     this.paginationConfig.currentPage = 1;
     const pagelimit = '?limit=' + this.paginationConfig.itemsPerPage + '&page=' + this.paginationConfig.currentPage;
-    this.ccpaDataService.getCCPADataActivityLog(requestID, pagelimit).subscribe((data) => {
+    this.ccpaDataService.getCCPADataActivityLog(this.constructor.name, moduleName.dsarRequestModule,
+       requestID, pagelimit).subscribe((data) => {
       this.activityLog = data.response;
     });
   }
 
   loadEmailLog(requestID) {
-    this.ccpaDataService.getCCPADataEmailLog(requestID).subscribe((data) => {
+    this.ccpaDataService.getCCPADataEmailLog(this.constructor.name, moduleName.dsarRequestModule, requestID).subscribe((data) => {
       this.emailLog = data.response;
     })
   }
@@ -813,7 +818,8 @@ export class DsarRequestdetailsComponent implements OnInit {
         state: this.editRequestDetailForm.controls['state'].value,
         city: this.editRequestDetailForm.controls['city'].value
       };
-      this.dsarRequestService.updateDSARRequestDetailsByID(this.currentManagedOrgID, this.currrentManagedPropID, this.requestID, obj)
+      this.dsarRequestService.updateDSARRequestDetailsByID(this.currentManagedOrgID, this.currrentManagedPropID, this.requestID, obj,
+        this.constructor.name, moduleName.dsarRequestModule)
         .subscribe((data) => {
           this.alertMsg = data.response;
           this.isOpen = true;
@@ -832,7 +838,8 @@ export class DsarRequestdetailsComponent implements OnInit {
 
   loadDSARRequestDetailsByID(currentManagedOrgID, currrentManagedPropID, requestID) {
     let approver;
-    this.dsarRequestService.getDSARRequestDetailsByID(currentManagedOrgID, currrentManagedPropID, requestID)
+    this.dsarRequestService.getDSARRequestDetailsByID(currentManagedOrgID, currrentManagedPropID, requestID,
+      this.constructor.name, moduleName.dsarRequestModule)
       .subscribe((data) => {
         if (data) {
           this.requestDetailsbyId = data.response;
@@ -863,7 +870,8 @@ export class DsarRequestdetailsComponent implements OnInit {
       extend_days: Number(this.respDaysLeft),
       days_left: Number(item)
     };
-    this.dsarRequestService.updateDSARRequestDetailsByID(this.currentManagedOrgID, this.currrentManagedPropID, this.requestID, obj)
+    this.dsarRequestService.updateDSARRequestDetailsByID(this.currentManagedOrgID, this.currrentManagedPropID, this.requestID, obj,
+      this.constructor.name, moduleName.dsarRequestModule)
       .subscribe((data) => {
         this.alertMsg = data.response;
         this.isOpen = true;
@@ -888,7 +896,8 @@ export class DsarRequestdetailsComponent implements OnInit {
       extend_days: Number(this.respDaysLeft),
       days_left: Number(this.customdays)
     };
-    this.dsarRequestService.updateDSARRequestDetailsByID(this.currentManagedOrgID, this.currrentManagedPropID, this.requestID, obj)
+    this.dsarRequestService.updateDSARRequestDetailsByID(this.currentManagedOrgID, this.currrentManagedPropID,
+      this.requestID, obj, this.constructor.name, moduleName.dsarRequestModule)
       .subscribe((data) => {
         this.alertMsg = data.response;
         this.isOpen = true;
@@ -930,7 +939,8 @@ export class DsarRequestdetailsComponent implements OnInit {
   pageChangeEvent(event) {
     this.paginationConfig.currentPage = event;
     const pagelimit = '?limit=' + this.paginationConfig.itemsPerPage + '&page=' + this.paginationConfig.currentPage;
-    this.ccpaDataService.getCCPADataActivityLog(this.requestID, pagelimit).subscribe((data) => {
+    this.ccpaDataService.getCCPADataActivityLog(this.constructor.name, moduleName.dsarRequestModule,
+       this.requestID, pagelimit).subscribe((data) => {
       this.activityLog = data.response;
       if (data.response.length !== 0) {
         this.activityLog = data.response;
@@ -964,7 +974,7 @@ export class DsarRequestdetailsComponent implements OnInit {
 
       const currentStageID = this.currentStageId ? this.currentStageId : this.currentWorkflowStageID;
       if (!this.isEditSubTask) {
-        this.dsarRequestService.addSubTask(this.requestID, currentStageID, obj)
+        this.dsarRequestService.addSubTask(this.requestID, currentStageID, obj, this.constructor.name, moduleName.dsarRequestModule)
           .subscribe((data) => {
             this.alertMsg = data.response;
             this.isOpen = true;
@@ -978,7 +988,7 @@ export class DsarRequestdetailsComponent implements OnInit {
             this.onResetSubTask();
           });
       } else { // update sub task
-        this.dsarRequestService.updateSubTask(this.selectedTaskID, obj)
+        this.dsarRequestService.updateSubTask(this.selectedTaskID, obj, this.constructor.name, moduleName.dsarRequestModule)
           .subscribe((data) => {
             this.alertMsg = data.response;
             this.isOpen = true;
@@ -1041,7 +1051,7 @@ export class DsarRequestdetailsComponent implements OnInit {
       fd.append('upload', this.subTaskResponseForm.get('uploaddocument').value);
 
       //  return false;
-      this.dsarRequestService.addSubTaskResponse(this.selectedTaskID, fd)
+      this.dsarRequestService.addSubTaskResponse(this.selectedTaskID, fd, this.constructor.name, moduleName.dsarRequestModule)
         .subscribe((data) => {
           this.alertMsg = data.response;
           this.isOpen = true;
@@ -1070,10 +1080,19 @@ export class DsarRequestdetailsComponent implements OnInit {
 
 
   getSubTaskList() {
-    const currentStageID = this.currentStageId ? this.currentStageId : this.currentWorkflowStageID;
+    console.log(this.selectedStages, 'selectedStages..');
+    let currentStageID;
+    if (this.selectedStages.length > 1) {
+      currentStageID =  this.getWorkflowStageID(this.selectedStages);
+      console.log(currentStageID.toString(), 'currentStageID..1toString');
+    } else {
+      currentStageID = this.currentStageId ? this.currentStageId : this.currentWorkflowStageID;
+      console.log(currentStageID, 'currentStageID..2');
+    }
+  //  return false;
     if (currentStageID) {
       let resp;
-      this.dsarRequestService.getSubTaskByWorkflowID(this.requestID, currentStageID)
+      this.dsarRequestService.getSubTaskByWorkflowID(this.requestID, currentStageID, this.constructor.name, moduleName.dsarRequestModule)
         .subscribe((data) => {
           return this.subTaskListResponse = data;
         }, (error) => {
@@ -1087,6 +1106,19 @@ export class DsarRequestdetailsComponent implements OnInit {
       this.isOpen = true;
       this.alertType = 'info';
     }
+  }
+
+  getWorkflowStageID(array) {
+    const workflowID = [];
+    array.forEach(element => {
+      workflowID.push(element.id);
+    });
+    // for (const key of array) {
+    //   if (key === 'id') {
+    //     workflowID.push(array[key]);
+    //   }
+    // }
+    return workflowID;
   }
 
   getStagename(stageid): string {
@@ -1132,7 +1164,7 @@ export class DsarRequestdetailsComponent implements OnInit {
     this.loading.start();
     let ext;
     let documentType;
-    this.dsarRequestService.viewUserUploadedFile(this.requestID).subscribe((data) => {
+    this.dsarRequestService.viewUserUploadedFile(this.requestID, this.constructor.name, moduleName.dsarRequestModule).subscribe((data) => {
       this.loading.stop();
       if (data) {
         this.base64FileCode = data.upload;
@@ -1163,6 +1195,12 @@ export class DsarRequestdetailsComponent implements OnInit {
         return fileType = 'application/msword';
       case 'csv':
         return fileType = 'text/csv';
+      case 'png':
+        return fileType = 'image/png';
+      case 'jpg':
+        return fileType = 'image/jpg';
+      case 'jpeg':
+        return fileType = 'image/jpeg';
     }
   }
 
@@ -1190,7 +1228,7 @@ export class DsarRequestdetailsComponent implements OnInit {
   }
 
   verifyUserEmailID() {
-    this.dsarRequestService.verifyClientEmailID(this.requestID).subscribe((data) => {
+    this.dsarRequestService.verifyClientEmailID(this.requestID, this.constructor.name, moduleName.dsarRequestModule).subscribe((data) => {
       this.alertMsg = data.response;
       this.isOpen = true;
       this.alertType = 'success';
@@ -1199,6 +1237,14 @@ export class DsarRequestdetailsComponent implements OnInit {
       this.isOpen = true;
       this.alertType = 'danger';
     });
+  }
+
+  public onPreviousSearchPosition(): void {
+    this.panel.nativeElement.scrollLeft -= 150;
+  }
+
+  public onNextSearchPosition(): void {
+    this.panel.nativeElement.scrollLeft += 150;
   }
 
 }

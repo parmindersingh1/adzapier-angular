@@ -92,7 +92,7 @@ export class BillingComponent implements OnInit {
   }
 
   onGetCompanyDetails() {
-    this.companyService.getCompanyDetails().subscribe(res => {
+    this.companyService.getCompanyDetails(this.constructor.name, moduleName.billingModule).subscribe(res => {
       if (res['status'] === 200) {
         this.companyDetails.push(res['response']);
       }

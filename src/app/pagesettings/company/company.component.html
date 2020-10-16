@@ -150,7 +150,7 @@
                             <td class="text-center">
                                 <button type="button"
                                     *ngIf="list.user_last_login === 'Invitation sent' || list.user_last_login === 'Invitation Pending'"
-                                    (click)="onResendInvitation(list.user_email)" class="btn btn-sm btn-primary"><i
+                                    (click)="onResendInvitation(list.approver_id)" class="btn btn-sm btn-primary"><i
                                         class="fas fa-envelope	"></i> Resend Invitation</button>
                             </td>
                             <td>
@@ -186,12 +186,14 @@
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label for="orgname" class="d-block">Company Name</label>
-                        <input type="text" formControlName="orgname" name="orgname" [(ngModel)]="orgname"
+                        <input type="text" formControlName="orgname" name="orgname" [(ngModel)]="orgname" minlength="2" maxlength="20"
                             class="form-control" placeholder="Enter your company name"
                             [ngClass]="{ 'is-invalid': submitted && f.orgname.errors }" />
                         <div *ngIf="submitted && f.orgname.errors" class="invalid-feedback">
                             <div *ngIf="f.orgname.errors.required">Company Name is required</div>
                             <div *ngIf="f.orgname.errors.pattern">Company Name allow only alphanumeric</div>
+                            <div *ngIf="f.orgname.errors.minlength">Company must be at least 2 characters long.</div>
+                            <div *ngIf="f.orgname.errors.maxlength">Company should not be greater than 20 characters.</div>
                         </div>
                     </div>
                 </div>
@@ -208,25 +210,23 @@
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label for="addressone">Address 1</label>
-                        <input type="text" formControlName="address1" class="form-control"
+                        <input type="text" formControlName="address1" class="form-control"  minlength="6" maxlength="200"
                             [ngClass]="{ 'is-invalid': submitted && f.address1.errors }"
                             placeholder="Enter your address" />
                         <div *ngIf="submitted && f.address1.errors" class="invalid-feedback">
                             <div *ngIf="f.address1.errors.required">Address 1 is required</div>
                             <div *ngIf="f.address1.errors.pattern">Address 1 allow only alphanumeric</div>
+                            <div *ngIf="f.address1.errors.minlength">Address 1 must be at least 6 characters long.</div>
+                          <div *ngIf="f.address1.errors.maxlength">Address 1 should not be greater than 200 characters.</div>
                         </div>
                     </div>
                 </div>
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label for="address2">Address 2</label>
-                        <input type="text" formControlName="address2" class="form-control"
-                            [ngClass]="{ 'is-invalid': submitted && f.address2.errors }"
+                        <input type="text" formControlName="address2" class="form-control"                           
                             placeholder="Enter your address" />
-                        <div *ngIf="submitted && f.address2.errors" class="invalid-feedback">
-                            <div *ngIf="f.address2.errors.required">Address 2 is required</div>
-                            <div *ngIf="f.address2.errors.pattern">Address 2 allow only alphanumeric</div>
-                        </div>
+                         
                     </div>
                 </div>
 
@@ -235,7 +235,7 @@
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label for="city">City</label>
-                        <input type="text" formControlName="city" class="form-control"
+                        <input type="text" formControlName="city" class="form-control" minlength="2" maxlength="20"
                             [ngClass]="{ 'is-invalid': submitted && f.city.errors }" placeholder="Enter your city" />
                         <div *ngIf="submitted && f.city.errors" class="invalid-feedback">
                             <div *ngIf="f.city.errors.required">City is required</div>
@@ -246,7 +246,7 @@
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label for="state">State</label>
-                        <input type="text" formControlName="state" class="form-control"
+                        <input type="text" formControlName="state" class="form-control" maxlength="15"
                             [ngClass]="{ 'is-invalid': submitted && f.state.errors }" placeholder="Enter your state" />
                         <div *ngIf="submitted && f.state.errors" class="invalid-feedback">
                             <div *ngIf="f.state.errors.required">State is required</div>
@@ -260,9 +260,11 @@
                 <div class="col-sm-6">
                     <div class="form-group"><label for="email">Email</label>
                         <input type="text" class="form-control"  formControlName="email"
+                        pattern="^\w+@[a-zA-Z_0-9]+?\.[a-zA-Z]{2,3}$"
                         name="email" [ngClass]="{ 'is-invalid': submitted && f.email.errors }" />
                         <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
                             <div *ngIf="f.email.errors.required">Email is required</div>
+                            <div *ngIf="f.email.errors.pattern">Please enter valid email address</div>
                         </div>
                     </div>
                 </div>

@@ -45,7 +45,7 @@ export class PricingComponent implements OnInit {
 
   onGetUserEmail() {
     this.loading.start();
-    this.userService.getLoggedInUserDetails().subscribe(res => {
+    this.userService.getLoggedInUserDetails(this.constructor.name, moduleName.pricingModule).subscribe(res => {
       this.loading.stop();
       const result = res;
       if (result['status'] === 200) {

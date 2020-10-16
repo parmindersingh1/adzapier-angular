@@ -670,3 +670,63 @@ ul.ngx-pagination {
       padding: 0px 5px 0px 3px;
       border: 1px solid #58b85b;
   }
+
+  .show > a:hover {
+    color: #00f !important;
+  }
+
+  .divflex {
+    display: flex;
+    margin: 20px 0;
+    position: relative;
+}
+
+.customtab {
+    flex-grow: 1;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    white-space: nowrap;
+    width: 100%;
+    margin: 0 0 0 45px;
+    min-width: 1000px;
+}
+
+.customtab ul {
+    margin: 0;
+    padding: 0;
+}
+
+.customtab ul li {
+    display: inline;
+    margin: 0 3px;
+}
+
+.customtab ul li:last-child {
+    margin-left: 0px !important;
+}
+
+.arrowbtn {
+    height: 30px;
+    background: none;
+    font-size: 24px;
+    border: 0;
+    outline: none;
+    margin: 2px 0 0 0;
+    position: absolute;
+}
+
+.small-btn {
+    border-radius: 30px;
+    height: 26px;
+    padding: 4px 0px;
+    margin: 4px 0 0 20px;
+    width: 26px;
+}
+
+.leftarrow {
+    left:10px
+}
+
+.rightarrow {
+    right: 0;
+}

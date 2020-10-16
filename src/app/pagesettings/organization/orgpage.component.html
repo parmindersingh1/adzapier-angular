@@ -99,7 +99,7 @@
         </button>
     </div>
     <div class="modal-body">
-        <form [formGroup]="editOrganisationForm" (ngSubmit)="updateOrganisationData(myContext)">
+        <form [formGroup]="editOrganisationForm" (ngSubmit)="updateOrganisationData()">
             <div class="row">
                 <div class="col-sm-12">
                     <div class="form-group">
@@ -145,13 +145,7 @@
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label for="addresstwo">Address 2</label>
-                        <input type="text"  minlength="6" maxlength="200" class="form-control" [(ngModel)]="addresstwo" formControlName="addresstwo"
-                            name="addresstwo" [ngClass]="{ 'is-invalid': submitted && editOrg.addresstwo.errors }" />
-                        <div *ngIf="submitted && editOrg.addresstwo.errors" class="invalid-feedback">
-                            <div *ngIf="editOrg.addresstwo.errors.required">Address 2 is required</div>
-                          <div *ngIf="editOrg.addresstwo.errors.minlength">Address 2 must be at least 6 characters long.</div>
-                          <div *ngIf="editOrg.addresstwo.errors.maxlength">Address 2 should not be greater than 200 characters.</div>
-                        </div>
+                        <input type="text" class="form-control" [(ngModel)]="addresstwo" formControlName="addresstwo" name="addresstwo" />                         
                     </div>
                 </div>
                 <div class="col-sm-6">

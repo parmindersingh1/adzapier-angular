@@ -5,6 +5,8 @@ import { environment } from './../../environments/environment';
 import { User } from './../_models';
 import { Router } from '@angular/router';
 import { map, catchError } from 'rxjs/operators';
+import {LokiService} from './loki.service';
+import {LokiFunctionality, LokiStatusType} from '../_constant/loki.constant';
 
 @Injectable({ providedIn: 'root' })
 export class AuthenticationService {
@@ -17,7 +19,7 @@ export class AuthenticationService {
     public currentUserSubject: BehaviorSubject<User>;
     public currentUser: Observable<User>;
 
-    constructor(private http: HttpClient, private router: Router) {
+    constructor(private http: HttpClient, private router: Router, private lokiService: LokiService) {
 
         this.currentUserSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('currentUser')));
         this.currentUser = this.currentUserSubject.asObservable();
@@ -27,8 +29,9 @@ export class AuthenticationService {
         return this.currentUserSubject.value;
     }
 
-    login(email, password) {
-        return this.http.post<any>(environment.apiUrl + '/login', { email, password })
+    login(componentName, moduleName, email, password) {
+        const path = '/login';
+        return this.http.post<any>(environment.apiUrl + path, { email, password })
             .pipe(map(user => {
                 if (user) {
                     // store user details and jwt token in local storage to keep user logged in between page refreshes
@@ -37,10 +40,11 @@ export class AuthenticationService {
                 }
                 return user;
             }),
-             catchError(err => {
-                console.error(err, 'err');
-                return throwError("Error thrown from catchError");
-            }));
+            catchError(error => {
+                this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.loginUser, componentName, moduleName, path);
+                return throwError(error);
+              })
+             );
     }
 
     logout() {
@@ -48,7 +52,17 @@ export class AuthenticationService {
         this.currentUserSubject.next(null);
     }
 
-    changePassword(requestObj) {
-        return this.http.post<any>(environment.apiUrl + '/password/change', requestObj);
+    changePassword(componentName, moduleName, requestObj) {
+        const path = '/password/change';
+        return this.http.post<any>(environment.apiUrl + path, requestObj).pipe(
+            catchError(error => {
+                this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.changePassword, componentName, moduleName, path);
+                return throwError(error);
+              })
+        );
     }
+
+    onSendLogs(errorType, msg, functionality, componentName, moduleName, path) {
+        this.lokiService.onSendErrorLogs(errorType, msg, functionality, componentName, moduleName, path).subscribe();
+      }
 }
