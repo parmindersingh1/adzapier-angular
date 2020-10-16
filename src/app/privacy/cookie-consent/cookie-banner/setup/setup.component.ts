@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, ElementRef, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import { notificationConfig } from '../../../../_constant/notification.constant';
 import { NotificationsService } from 'angular2-notifications';
 import { CookieBannerService } from '../../../../_services/cookie-banner.service';
@@ -6,6 +6,8 @@ import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { OrganizationService } from '../../../../_services';
 import { Location } from '@angular/common';
 import {moduleName} from '../../../../_constant/module-name.constant';
+import {BsModalRef, BsModalService} from 'ngx-bootstrap';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-setup',
@@ -14,7 +16,12 @@ import {moduleName} from '../../../../_constant/module-name.constant';
 })
 export class SetupComponent implements OnInit {
   private currentManagedOrgID: any;
+  modalRef: BsModalRef;
   private currrentManagedPropID: any;
+  @ViewChild('template', { static: true}) template: ElementRef;
+  closeScript = `"></script>`;
+  addScript = `<script src="`;
+  loadingSkeleton = false;
   scriptUrl: any;
   dismissible = true;
   alertMsg: any;
@@ -24,14 +31,16 @@ export class SetupComponent implements OnInit {
     private notification: NotificationsService,
     private cookieBannerService: CookieBannerService,
     private loading: NgxUiLoaderService,
-    private orgservice: OrganizationService,
+    private modalService: BsModalService,
+  private router: Router,
+  private orgservice: OrganizationService,
   ) { }
 
   ngOnInit() {
     this.onGetPropsAndOrgId();
     this.onGetCookieBannerData();
-    console.log('in')
   }
+
   onGetPropsAndOrgId() {
     this.orgservice.currentProperty.subscribe((response) => {
       if (response !== '') {
@@ -47,14 +56,19 @@ export class SetupComponent implements OnInit {
 
   onGetCookieBannerData() {
     this.loading.start('2');
+    this.loadingSkeleton = true;
     this.cookieBannerService.onGetCookieBannerData(this.currentManagedOrgID , this.currrentManagedPropID, this.constructor.name, moduleName.setUpModule)
       .subscribe(res => {
+        this.loadingSkeleton = false;
         this.loading.stop('2');
-        this.scriptUrl = `<script src="https://${res['response']['js_location']}"></script>`;
         if (res['status'] === 200 && res.hasOwnProperty('response')) {
+          this.scriptUrl = res['response']['js_location'];this.scriptUrl = res['response']['js_location'];
+        } else {
+          this.openModal(this.template)
         }
       }, error => {
         this.loading.stop('2');
+        this.loadingSkeleton = false;
         this.notification.error('Error', error, notificationConfig);
         this.isOpen = true;
         this.alertMsg = error;
@@ -65,5 +79,21 @@ export class SetupComponent implements OnInit {
     this.scriptUrl.select();
     document.execCommand('copy');
     this.scriptUrl.setSelectionRange(0, 0);
+  }
+  copyToClipboard() {
+    const copyText = this.addScript + this.scriptUrl + this.closeScript;
+    // copyText.select();
+    // copyText.setSelectionRange(0, 99999);
+    // document.execCommand("copy");
+  }
+
+  openModal(template: any) {
+    this.modalRef = this.modalService.show(template, { animated: false,    keyboard: false,     ignoreBackdropClick: true
+    });
+  }
+
+  navigate() {
+    this.modalRef.hide();
+    this.router.navigateByUrl('/cookie-consent/cookie-banner');
   }
 }

@@ -14,6 +14,7 @@ import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
 import { ModalModule, AlertModule, BsDatepickerModule } from 'ngx-bootstrap';
 import {ChartsModule} from 'ng2-charts';
 import { SafePipe } from 'src/app/_helpers/safe.pipe';
+import {NgxSkeletonLoaderModule} from 'ngx-skeleton-loader';
 
 
 @NgModule({
@@ -21,6 +22,7 @@ import { SafePipe } from 'src/app/_helpers/safe.pipe';
   imports: [
     CommonModule,
     NgbModule,
+    NgxSkeletonLoaderModule,
     DragDropModule,
     QuillModule.forRoot(),
     NgxPaginationModule,
@@ -31,7 +33,7 @@ import { SafePipe } from 'src/app/_helpers/safe.pipe';
     TypeaheadModule.forRoot(),
     BsDatepickerModule.forRoot(),
   ],
-  exports: [NgbModule,  DragDropModule, QuillModule, NgxPaginationModule, BsDatepickerModule,
+  exports: [NgbModule, NgxSkeletonLoaderModule, DragDropModule, QuillModule, NgxPaginationModule, BsDatepickerModule,
   AlertModule, TypeaheadModule, FilterPipe, TimeAgoPipe, SafePipe]
 
 })

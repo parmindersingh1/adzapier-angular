@@ -46,13 +46,13 @@
                   <mat-checkbox [disabled]="isFieldDisabled"
                                 formControlName="logo"
                                 color="primary"
-                                class="example-margin">Show Adzapier Logo?</mat-checkbox>
+                                class="example-margin">Show Logo</mat-checkbox>
                 </section>
 
                 <section class="example-section">
                   <mat-checkbox [disabled]="isFieldDisabled"   formControlName="showOpenBtn"
                                 color="primary"
-                                class="example-margin">Show Open PopUp Button?</mat-checkbox>
+                                class="example-margin">Show Badge</mat-checkbox>
                 </section>
 
               </div>
@@ -63,8 +63,8 @@
                 <mat-slide-toggle [disabled]="isGdprGlobal" [checked]="isGdprGlobal" formControlName="enableIab" color="primary" class="cookie-allow">ENABLE IAB
                 </mat-slide-toggle>
                 <br>
-                <mat-slide-toggle formControlName="email" color="primary" class="cookie-allow">EMAIL</mat-slide-toggle>
-                <br>
+<!--                <mat-slide-toggle formControlName="email" color="primary" class="cookie-allow">EMAIL</mat-slide-toggle>-->
+<!--                <br>-->
                 <mat-slide-toggle formControlName="allowGoogleVendors" color="primary" class="cookie-allow">Allow Google Vendors</mat-slide-toggle>
               </div>
             </div>
@@ -101,6 +101,7 @@
               </div>
 
               <div class="col-md-12 mt-2">
+                <h6>Title</h6>
                 <input type="text" [attr.disabled]="isFieldDisabled" formControlName="BannerTitle"
                        class="form-control w-50"  [placeholder]="bannerConstant.GDPR.BANNER.BannerTitle">
                 <div *ngIf="submitted && f.BannerTitle.errors">
@@ -115,7 +116,8 @@
 
               <div class="col-md-12 mt-2">
                 <div class="w-50">
-                <quill-editor maxlength="300" formControlName="BannerDescription" [modules]="quillConfig"
+                  <h6>Description</h6>
+                  <quill-editor maxlength="300" [placeholder]="bannerConstant.GDPR.BANNER.BannerDescription" formControlName="BannerDescription" [modules]="quillConfig"
                           [styles]="{height: '150px'}">
                 </quill-editor>
                 <div *ngIf="submitted && f.BannerDescription.errors">
