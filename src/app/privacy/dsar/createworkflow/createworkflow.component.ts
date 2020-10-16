@@ -150,7 +150,7 @@ export class CreateworkflowComponent implements OnInit {
     const reqObj = {
       workflow_status: 'Active'
     }
-    this.workflowService.updateWorkflow(id, reqObj, this.constructor.name, moduleName.workFlowModule).subscribe((data) => {
+    this.workflowService.updateWorkflow(this.constructor.name, moduleName.workFlowModule, id, reqObj).subscribe((data) => {
       if (data) {
         this.alertMsg = data.response;
         this.isOpen = true;
@@ -174,7 +174,7 @@ export class CreateworkflowComponent implements OnInit {
         workflow_name: this.workflowName,
         workflow_stages: this.workflowStages
       }
-      this.workflowService.updateWorkflow(this.selectedWorkflowId, requestObj, this.constructor.name, moduleName.workFlowModule)
+      this.workflowService.updateWorkflow(this.constructor.name, moduleName.workFlowModule, this.selectedWorkflowId, requestObj)
       .subscribe((data) => {
         if (data) {
           this.alertMsg = data.response;
@@ -202,7 +202,7 @@ export class CreateworkflowComponent implements OnInit {
     const reqObj = {
       workflow_status: flowStatus
     };
-    this.workflowService.updateWorkflow(this.selectedWorkflowId, reqObj, this.constructor.name, moduleName.workFlowModule)
+    this.workflowService.updateWorkflow(this.constructor.name, moduleName.workFlowModule, this.selectedWorkflowId, reqObj)
     .subscribe((data) => {
       if (data) {
         this.alertMsg = data.response;
@@ -222,7 +222,7 @@ export class CreateworkflowComponent implements OnInit {
   loadWorkflowById(id?) {
     let resp: any;
     //this.loadingBar.start();
-    this.workflowService.getWorkflowById(this.constructor.name, moduleName.workFlowModule, this.constructor.name,  this.selectedWorkflowId)
+    this.workflowService.getWorkflowById(this.constructor.name, moduleName.workFlowModule, this.selectedWorkflowId)
     .subscribe((data) => {
       if (data.length > 0) {
         resp = this.rearrangeArrayResponse(data[0].workflow_stages);

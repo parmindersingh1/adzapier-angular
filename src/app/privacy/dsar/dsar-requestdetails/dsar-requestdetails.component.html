@@ -179,10 +179,11 @@
                     </div>
                     <div class="stagediv">
                         <div class="divider-text mg-y-5">Advance Status</div>
-
+                        <div class="divflex">
+                            <button (click)="onPreviousSearchPosition()" class="arrowbtn leftarrow"><i class="fa fa-angle-left"></i></button>
+                            <div class="customtab col-sm-8" #panel>
                         <ul class="nav-tabs">
                             <li *ngFor="let stage of workflowStages">
-
                                 <div (click)="stageSelection(stage)" [ngClass]="{'completedStage':  isStageCompleted(stage)
                                 ,'':stage.order < nextStage || stage.order == nextStage
                                 }">
@@ -196,9 +197,12 @@
                                   
                                 </div>
                                 <div class="m-2">{{stage.guidance_text}}</div>
-                                <!-- <div class="m-2">{{stage.id}}</div> -->
+                                <div class="m-2">{{stage.id}}</div>
                             </li>
                         </ul>
+                        </div>
+                        <button (click)="onNextSearchPosition()" class="arrowbtn rightarrow"><i class="fa fa-angle-right"></i></button>
+                        </div>
 
 
 

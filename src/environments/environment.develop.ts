@@ -7,7 +7,7 @@ export const environment = {
   apiUrl: 'https://develop-cmp-api.adzpier-staging.com/api/v1',
   lokiUrl: 'https://logs.adzpier-staging.com/loki/api/v1/push',
   lokiConfig: {
-    app: 'cmp-develop',
+    app: 'cmp-adminportal-develop',
     env: 'develop',
   },
 };

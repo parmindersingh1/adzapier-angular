@@ -46,7 +46,7 @@ export class CompanyService {
     }));
   }
 
-  updateUserRole(reqestObj, componentName, moduleName): Observable<any> {
+  updateUserRole(componentName, moduleName, reqestObj): Observable<any> {
     const path = '/invite/user';
     return this.httpClient.put<any>(environment.apiUrl + path , reqestObj).pipe(catchError(error => {
       this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.updateUserRole, componentName, moduleName, path);
