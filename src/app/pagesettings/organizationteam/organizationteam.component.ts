@@ -55,7 +55,7 @@ export class OrganizationteamComponent implements OnInit {
   }
   get f() { return this.inviteUserOrgForm.controls; }
   backToOrganizationDetail() {
-    this.router.navigate(['settings/organizations/organizationdetails', this.organizationID]);
+    this.router.navigate(['settings/organizations/details', this.organizationID]);
   }
 
   loadOrgTeamMembers(orgID) {

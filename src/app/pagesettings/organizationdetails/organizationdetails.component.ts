@@ -98,7 +98,6 @@ export class OrganizationdetailsComponent implements OnInit {
 
     this.activatedRoute.paramMap.subscribe(params => {
       this.organizationID = params.get('id');
-      console.log(this.organizationID, 'organizationID..');
       this.loadOrganizationByID(this.organizationID);
       this.getPropertyList(this.organizationID);
       this.loadOrgTeamMembers(this.organizationID);
