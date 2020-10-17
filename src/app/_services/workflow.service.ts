@@ -80,20 +80,20 @@ export class WorkflowService {
 
   createWorkflow(componentName, moduleName, reqObj): Observable<any> {
     const path = apiConstant.WORKFLOW;
-    return this.httpClient.post<any>(environment.apiUrl + path, reqObj).pipe(map(shareReplay(1),
+    return this.httpClient.post<any>(environment.apiUrl + path, reqObj).pipe(
     catchError(error => {
       this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.createWorkflow, componentName, moduleName, path);
       return throwError(error);
-    })));
+    }));
   }
 
   updateWorkflow(componentName, moduleName, id, reqObj): Observable<any> {
     const path = apiConstant.WORKFLOW_ID;
-    return this.httpClient.put<any>(environment.apiUrl + path + id, reqObj).pipe(map(shareReplay(1),
+    return this.httpClient.put<any>(environment.apiUrl + path + id, reqObj).pipe(
     catchError(error => {
       this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.updateWorkflow, componentName, moduleName, path);
       return throwError(error);
-    })));
+    }));
   }
 
   changeCurrentSelectedWorkflow(currentItem) {

@@ -14,7 +14,7 @@ import { DsarformService } from 'src/app/_services/dsarform.service';
 import { CCPAFormConfigurationService } from 'src/app/_services/ccpaform-configuration.service';
 import { WorkflowService } from 'src/app/_services/workflow.service';
 import { Observable } from 'rxjs';
-import {moduleName} from '../../../_constant/module-name.constant';
+import { moduleName } from '../../../_constant/module-name.constant';
 @Component({
   selector: 'app-dsarform',
   templateUrl: './dsarform.component.html',
@@ -306,7 +306,7 @@ export class DsarformComponent implements OnInit, OnDestroy, AfterViewInit {
             } else if (t.controlId === 'fileupload') {
               this.isFileUploadRequired = t.requiredfield;
             } else if (t.controlId === 'captchacontrol') {
-              this.isCaptchaVerificationRequired = t.requiredfield;
+              this.isCaptchaVerificationRequired = (t.requiredfield === '') ? false : true;
             }
           });
           // this.ccpaFormConfigService.removeControls();
@@ -341,7 +341,7 @@ export class DsarformComponent implements OnInit, OnDestroy, AfterViewInit {
         } else if (t.controlId === 'fileupload') {
           this.isFileUploadRequired = t.requiredfield;
         } else if (t.controlId === 'captchacontrol') {
-          this.isCaptchaVerificationRequired = t.requiredfield;
+          this.isCaptchaVerificationRequired = (t.requiredfield === '') ? false : true;
         }
       });
       this.dsarFormService.setFormControlList(this.webFormControlList);
@@ -939,8 +939,7 @@ export class DsarformComponent implements OnInit, OnDestroy, AfterViewInit {
 
   publishCCPAFormConfiguration(registerForm) {
     this.setHeaderStyle();
-    console.log(this.propId, 'propid', this.orgId, 'ORG', this.crid, 'crid');
-    console.log(registerForm.value, 'registerForm..');
+    // console.log(registerForm.value, 'registerForm..');
     if (this.crid) {
       this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
       this.webFormControlList.filter((t) => {
@@ -1056,7 +1055,7 @@ export class DsarformComponent implements OnInit, OnDestroy, AfterViewInit {
         e1.preferControlOrder = indexData[e2];
       }
     }));
-    console.log(arrayData, 'arrayData..');
+    // console.log(arrayData, 'arrayData..');
     return arrayData;
   }
   createNewForm() {
@@ -1238,6 +1237,26 @@ export class DsarformComponent implements OnInit, OnDestroy, AfterViewInit {
     this.selectedApproverID = retrivedData.approver;
     this.selectedWorkflowID = retrivedData.workflow;
     this.formName = retrivedData.form_name;
+    this.isEmailVerificationRequired = retrivedData.email_verified;
+    retrivedData.request_form.filter((t) => {
+      if (t.controlId === 'fileupload') {
+        this.isFileUploadRequired = t.requiredfield;
+      } else if (t.controlId === 'captchacontrol') {
+        this.isCaptchaVerificationRequired = t.requiredfield;
+      } else if (t.controlId === 'footertext') {
+        this.footerText = t.footerText;
+        this.footerTextColor = t.footerTextColor;
+        this.footerFontSize = t.footerFontSize;
+      } else if (t.controlId === 'welcometext') {
+        this.welcomeText = t.welcomeText;
+        this.welcomeTextColor = t.welcomeTextColor;
+        this.welcomeFontSize = t.welcomeFontSize;
+      } else if (t.controlId === 'headerlogo') {
+        this.headerlogoURL = t.logoURL;
+        this.headerColor = t.headerColor;
+      }
+    });
+
     if (retrivedData.form_status === 'Draft') {
       this.isDraftWebForm = true;
     }

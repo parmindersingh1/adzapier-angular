@@ -343,7 +343,7 @@ export class OrgpageComponent implements OnInit {
   }
 
   viewOrganization(orgID) {
-    this.router.navigate(['settings/organizations/organizationdetails', orgID]);
+    this.router.navigate(['settings/organizations/details', orgID]);
   }
 
   sortNumberColumn() {

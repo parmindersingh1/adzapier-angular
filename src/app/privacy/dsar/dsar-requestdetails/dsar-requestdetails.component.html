@@ -153,7 +153,7 @@
                                 <label class="tx-sans">{{data.key}}
                                     <span class="badge" (click)="verifyUserEmailID()"
                                         [ngClass]="{'badge-danger':isCustomFieldEmail(data.key,isEmailVerified),'hide':!isCustomFieldEmail(data.key,isEmailVerified)}">
-                                        Click to Verify</span>
+                                        Resend Verification</span>
                                     <span class="badge"
                                         [ngClass]="{'badge-success':isEmailIDVerified(data.key,isEmailVerified),'hide':!isEmailIDVerified(data.key,isEmailVerified)}">
                                         <i-feather class="feather-tick" name="check"></i-feather> Verified

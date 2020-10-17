@@ -41,7 +41,7 @@ loadWebControls() {
                 controllabel: 'Header Logo',
                 controlId: 'headerlogo',
                 indexCount: 'header_logo_Index',
-                headerColor: '',
+                headerColor: '#3968fa',
                 logoURL: '',
                 preferControlOrder: ''
             },
@@ -52,8 +52,8 @@ loadWebControls() {
                 indexCount: 'welcome_text_Index',
                 welcomeText: `<p>Welcome! Please complete this form to submit a request ` +
                              `and we will respond as soon as possible. Thank you.</p>`,
-                welcomeTextColor: '',
-                welcomeFontSize: '',
+                welcomeTextColor: '#333333',
+                welcomeFontSize: '13',
                 preferControlOrder: ''
             },
             {
@@ -145,8 +145,8 @@ loadWebControls() {
                 controlId: 'footertext',
                 indexCount: 'footer_text_Index',
                 footerText: `<p>Adzapier <br/> 123 Main Street Capital City, ST, USA 10001 +1-800-000-0000 emailprivacy@generitech.com</p>`,
-                footerTextColor: '',
-                footerFontSize: '',
+                footerTextColor: '#333333',
+                footerFontSize: '13',
                 preferControlOrder: ''
             }
         ];
