@@ -897,8 +897,9 @@
         <form [formGroup]="quillEditorText" (ngSubmit)="onSubmitQuillEditorData()">
             <quill-editor formControlName="editor" [modules]="quillConfig" [(ngModel)]="editorDataWelcome"
                 [styles]="{height: '200px'}"></quill-editor>
-            <button class="btn btn-outline-dark float-left mt-2" (click)="modal.dismiss('Close Clicked')">close</button>
-            <button class="btn btn-primary float-right mt-2" type="submit">save</button>
+            
+            <button class="btn btn-primary float-right mt-2" type="submit">Save</button>
+            <button class="btn btn-outline-dark float-right mt-2 mr-2" (click)="modal.dismiss('Close Clicked')">Close</button>
         </form>
     </div>
     <ng-template #footerContent>
@@ -906,9 +907,9 @@
             <form [formGroup]="quillEditorText" (ngSubmit)="onSubmitQuillEditorData()">
                 <quill-editor formControlName="editor" [modules]="quillConfig" [(ngModel)]="editorDataFooter"
                     [styles]="{height: '200px'}"></quill-editor>
-                <button class="btn btn-outline-dark float-left mt-2"
-                    (click)="modal.dismiss('Close Clicked')">close</button>
-                <button class="btn btn-primary float-right mt-2" type="submit">save</button>
+                <button class="btn btn-primary float-right mt-2" type="submit">Save</button>
+                <button class="btn btn-outline-dark float-right mt-2 mr-2"
+                    (click)="modal.dismiss('Close Clicked')">Close</button>
             </form>
         </div>
     </ng-template>

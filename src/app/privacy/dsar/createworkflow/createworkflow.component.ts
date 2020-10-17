@@ -66,7 +66,6 @@ export class CreateworkflowComponent implements OnInit {
     });
 
     this.workflowService.selectedWorkflow.subscribe((data) => {
-      console.log(data, 'data..workflowService');
       this.workflowName = data.workflow_name;
     }, (error) => {
       this.isOpen = true;

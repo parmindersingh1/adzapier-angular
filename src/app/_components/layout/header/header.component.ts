@@ -315,7 +315,7 @@ export class HeaderComponent implements OnInit {
         if (!this.isOrgPropertyExists(this.orgPropertyMenu)) {
           if (typeof this.orgPropertyMenu[0].property[0] === 'undefined') {
             // this.router.navigate(['settings/organizations']);
-            this.router.navigate(['settings/organizations/organizationdetails/' + this.orgPropertyMenu[0].id]);
+            this.router.navigate(['settings/organizations/details/' + this.orgPropertyMenu[0].id]);
             return false;
           } else {
             this.activeProp = this.orgPropertyMenu[0].property[0].property_name;

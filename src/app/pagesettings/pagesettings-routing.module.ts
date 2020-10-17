@@ -31,7 +31,7 @@ const routes: Routes = [
     children: [
       { path: '', loadChildren: () => import('./organization/organization.module').then(m => m.OrganizationModule) },
       {
-        path: 'organizationdetails/:id',
+        path: 'details/:id',
         loadChildren: () => import('./organizationdetails/organizationdetails.module').then(m => m.OrganizationdetailsModule)
       },
       {
