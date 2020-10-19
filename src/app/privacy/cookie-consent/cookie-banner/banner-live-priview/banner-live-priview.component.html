@@ -1,0 +1,63 @@
+<div class="cc-banner-preview " style="max-width: 60rem; height: 30rem; font-size: 9px;">
+
+  <div
+    [ngStyle]="{background: formData.bannerBackGroundColor, color: formData.bannerTextColor,
+    top : formData.position === 'bottom' ? '377px' : '0px'
+    }"
+    class="banner-shadow" id="onetrust-banner-sdk"
+    style="
+       top: 377px;
+           position: relative;
+   z-index: 0; width: 100%;">
+    <div class="row pd-10">
+      <div class="col-7">
+        <div id="onetrust-policy">
+          <h6 style="font-size: 11px" class="cc-font-size-16 cc-floating-title" id="onetrust-policy-title"
+              [ngStyle]="{color: formData.bannerTextColor}">
+            {{formData.bannerTitle}}
+          </h6>
+          <div class="text-small float-rounded-corner-main line-height-nineteen font-size-thirteen onetrust-policy-text"
+               id="onetrust-policy-text">
+            <span [ngStyle]="{color: formData.bannerTextColor}" [innerHTML]="formData.bannerDescription"></span>
+       </div>
+
+        </div>
+      </div>
+      <div class="col-5 pd-y-10">
+        <div class="floating-flat-margin-cls ng-star-inserted" id="onetrust-button-group">
+          <button
+            class="font-size-thirteen mr-2 onetrust-pc-btn-handler cc-float-rounded-icon-btn cookie-setting-link ng-star-inserted"
+            [ngStyle]="{background: formData.bannerPreferenceButtonBackGroundColor, borderColor:formData.bannerPreferenceButtonBackGroundColor,
+             color: formData.bannerPreferenceButtonTextColor}"
+          >
+           {{formData.bannerPreferenceButtonTextContent}}
+          </button>
+          <button
+            class="onetrust-accept-btn-handler-btn mr-2 onetrust-accept-btn-handler cc-float-rounded-icon-btn ng-star-inserted"
+            [ngStyle]="{background: formData.bannerDisableButtonBackGroundColor,
+            borderColor: formData.bannerDisableButtonBackGroundColor,
+            color: formData.bannerDisableButtonTextColor}"
+          >
+            {{formData.bannerDisableButtonTextContent}}
+          </button>
+
+          <button
+            class="onetrust-accept-btn-handler-btn onetrust-accept-btn-handler cc-float-rounded-icon-btn ng-star-inserted"
+            [ngStyle]="{background: formData.bannerAcceptButtonBackgroundColor,
+            borderColor: formData.bannerAcceptButtonBackgroundColor,
+            color: formData.bannerAcceptButtonTextColor}"
+            >
+            {{formData.bannerAcceptButtonTextContent}}
+          </button>
+
+        </div>
+      </div>
+
+
+    </div>
+
+
+  </div>
+
+
+</div>
