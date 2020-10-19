@@ -267,7 +267,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     width: 60px !important;
     overflow: hidden !important;
   }
-  
+
   .p-component {
       font-size: 14px !important;
   }
@@ -275,3 +275,10 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   .p-datatable.p-datatable-sm .p-datatable-tbody > tr > td {
       font-size: 13px !important;
   }
+
+.p-tabview .p-tabview-nav {
+  //background: #ffffff;
+  //border: 1px solid #dee2e6;
+  //border-width: 0 0 2px 0;
+  padding-left: 31% !important;
+}
