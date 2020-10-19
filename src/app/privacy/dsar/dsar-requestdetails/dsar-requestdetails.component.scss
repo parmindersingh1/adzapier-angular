@@ -655,6 +655,8 @@ ul.ngx-pagination {
 
   .badge-danger {
       cursor: pointer;
+      text-transform: capitalize;
+      font-size: 11px;
   }
 
   .feather-tick {

@@ -623,7 +623,7 @@ export class DsarRequestdetailsComponent implements OnInit {
         return false;
       } else {
         const reqObj = {
-          current_status: this.currentStageId !== undefined ? this.currentStageId : this.selectedStages[this.selectedStages.length - 1].id,
+          current_status: this.selectedStages[this.selectedStages.length - 1].id,
           previous_status: this.previousStageId,
           activity_feedback: this.quillEditorText.get('editor').value // this.editorActivityPost
         };
@@ -1080,14 +1080,11 @@ export class DsarRequestdetailsComponent implements OnInit {
 
 
   getSubTaskList() {
-    console.log(this.selectedStages, 'selectedStages..');
     let currentStageID;
     if (this.selectedStages.length > 1) {
       currentStageID =  this.getWorkflowStageID(this.selectedStages);
-      console.log(currentStageID.toString(), 'currentStageID..1toString');
     } else {
       currentStageID = this.currentStageId ? this.currentStageId : this.currentWorkflowStageID;
-      console.log(currentStageID, 'currentStageID..2');
     }
   //  return false;
     if (currentStageID) {
