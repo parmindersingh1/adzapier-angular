@@ -1081,7 +1081,7 @@ export class DsarRequestdetailsComponent implements OnInit {
 
   getSubTaskList() {
     let currentStageID;
-    if (this.selectedStages.length > 1) {
+    if (this.selectedStages.length >= 1) {
       currentStageID =  this.getWorkflowStageID(this.selectedStages);
     } else {
       currentStageID = this.currentStageId ? this.currentStageId : this.currentWorkflowStageID;

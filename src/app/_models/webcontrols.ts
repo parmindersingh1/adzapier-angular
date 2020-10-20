@@ -62,7 +62,8 @@ loadWebControls() {
                 controlId: 'subjecttype',
                 indexCount: 'subject_type_Index',
                 selectOptions: '',
-                preferControlOrder: ''
+                preferControlOrder: '',
+                requiredfield: ''
             },
             {
                 control: 'radio',
@@ -70,28 +71,32 @@ loadWebControls() {
                 controlId: 'requesttype',
                 indexCount: 'request_type_Index',
                 selectOptions: '',
-                preferControlOrder: ''
+                preferControlOrder: '',
+                requiredfield: ''
             },
             {
                 control: 'textbox',
                 controllabel: 'First Name',
                 controlId: 'firstname',
                 indexCount: 'first_name_Index',
-                preferControlOrder: ''
+                preferControlOrder: '',
+                requiredfield: ''
             },
             {
                 control: 'textbox',
                 controllabel: 'Last Name',
                 controlId: 'lastname',
                 indexCount: 'last_name_Index',
-                preferControlOrder: ''
+                preferControlOrder: '',
+                requiredfield: ''
             },
             {
                 control: 'textbox',
                 controllabel: 'Email',
                 controlId: 'email',
                 indexCount: 'email_Index',
-                preferControlOrder: ''
+                preferControlOrder: '',
+                requiredfield: ''
             },
             {
                 control: 'select',
@@ -99,7 +104,8 @@ loadWebControls() {
                 controlId: 'country',
                 indexCount: 'country_Index',
                 selectOptions: '',
-                preferControlOrder: ''
+                preferControlOrder: '',
+                requiredfield: ''
             },
             {
                 control: 'select',
@@ -107,21 +113,24 @@ loadWebControls() {
                 controlId: 'state',
                 indexCount: 'state_Index',
                 selectOptions: '',
-                preferControlOrder: ''
+                preferControlOrder: '',
+                requiredfield: ''
             },
             {
                 control: 'textbox',
                 controllabel: 'City',
                 controlId: 'city',
                 indexCount: 'city_Index',
-                preferControlOrder: ''
+                preferControlOrder: '',
+                requiredfield: ''
             },
             {
                 control: 'textarea',
                 controllabel: 'Request Details',
                 controlId: 'requestdetails',
                 indexCount: 'request_details_Index',
-                preferControlOrder: ''
+                preferControlOrder: '',
+                requiredfield: ''
             },
             {
                 control: 'file',
@@ -129,7 +138,8 @@ loadWebControls() {
                 controlId: 'fileupload',
                 indexCount: 'file_upload_Index',
                 preferControlOrder: '',
-                requiredfield: ''
+                requiredfield: '',
+                ismandatory: ''
             },
             {
                 control: 'captcha',
