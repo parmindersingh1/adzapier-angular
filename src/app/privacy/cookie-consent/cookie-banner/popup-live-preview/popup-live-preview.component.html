@@ -1,0 +1,144 @@
+<div class="cc-banner-preview " style="max-width: 60rem; height: 30rem; font-size: 9px;">
+  <div class="banner-shadow" id="onetrust-preference-sdk"
+    style="background-color: rgb(255, 255, 255); color: rgb(105, 105, 105); z-index: 0; max-width: 46rem;">
+
+    <div class="card ">
+
+      <div class="card-body p-0">
+        <p-tabView headerAlignment="center">
+          <p-tabPanel header="Purpose">
+            <p class="desc">{{formData.popUpPurposeDescription}}</p>
+            <div class="row">
+              <div class="col-md-4">
+                <button type="button"
+                  (click)="onSelectPurpose(formData.AdvertisingText)"
+                  [ngStyle]="{color: formData.popUpPurposeButtonTextColor, background: formData.popUpPurposeButtonBackGroundColor}"
+                  class="btn btn-default purpose-btn w-100 mb-2">{{formData.AdvertisingText}}</button>
+                <button type="button"
+                (click)="onSelectPurpose(formData.SocialMediaText)"
+                  [ngStyle]="{color: formData.popUpPurposeButtonTextColor, background: formData.popUpPurposeButtonBackGroundColor}"
+                  class="btn btn-default purpose-btn w-100 mb-2">{{formData.SocialMediaText}}</button>
+                <button type="button"
+                (click)="onSelectPurpose(formData.AnalyticsText)"
+                  [ngStyle]="{color: formData.popUpPurposeButtonTextColor, background: formData.popUpPurposeButtonBackGroundColor}"
+                  class="btn btn-default purpose-btn w-100 mb-2">{{formData.AnalyticsText}}</button>
+                <button type="button"
+                (click)="onSelectPurpose(formData.NecessaryText)"
+                  [ngStyle]="{color: formData.popUpPurposeButtonTextColor, background: formData.popUpPurposeButtonBackGroundColor}"
+                  class="btn btn-default purpose-btn w-100 mb-2">{{formData.NecessaryText}}</button>
+              </div>
+              <div class="col-md-8">
+
+                <ng-container *ngIf="currentPurpose === formData.AdvertisingText">
+                <div class="row">
+                  <div class="col-md-9">
+                    <h6> {{formData.PopUpAdvertisingHead}} </h6>
+                  </div>
+                  <div class="col-md-3">
+                    <label class="switch">
+                      <input type="checkbox" #switchBtn checked>
+                      <span [ngStyle]="{background: switchBtn.checked ? formData.popUpSwitchButtonColor: ''}"
+                        class="slider round"></span>
+                    </label>
+                  </div>
+                </div>
+                <p class="desc">{{formData.PopUpAdvertisingDescription}}</p>
+                </ng-container>
+
+                <ng-container *ngIf="currentPurpose === formData.SocialMediaText">
+                  <div class="row">
+                    <div class="col-md-9">
+                      <h6> {{formData.PopUpSocialMediaHead}} </h6>
+                    </div>
+                    <div class="col-md-3">
+                      <label class="switch">
+                        <input type="checkbox" #switchBtn checked>
+                        <span [ngStyle]="{background: switchBtn.checked ? formData.popUpSwitchButtonColor: ''}"
+                          class="slider round"></span>
+                      </label>
+                    </div>
+                  </div>
+                  <p class="desc">{{formData.PopUpSocialMediaDescription}}</p>
+                  </ng-container>
+
+
+
+                  <ng-container *ngIf="currentPurpose === formData.AnalyticsText">
+                    <div class="row">
+                      <div class="col-md-9">
+                        <h6> {{formData.PopUpAnalyticsHead}} </h6>
+                      </div>
+                      <div class="col-md-3">
+                        <label class="switch">
+                          <input type="checkbox" #switchBtn checked>
+                          <span [ngStyle]="{background: switchBtn.checked ? formData.popUpSwitchButtonColor: ''}"
+                            class="slider round"></span>
+                        </label>
+                      </div>
+                    </div>
+                    <p class="desc">{{formData.PopUpAnalyticsDescription}}</p>
+                    </ng-container>
+
+
+
+                    <ng-container *ngIf="currentPurpose === formData.NecessaryText">
+                      <div class="row">
+                        <div class="col-md-9">
+                          <h6> {{formData.PopUpNecessaryHead}} </h6>
+                        </div>
+                        <div class="col-md-3">
+                          <label class="switch">
+                            <input type="checkbox" #switchBtn checked>
+                            <span [ngStyle]="{background: switchBtn.checked ? formData.popUpSwitchButtonColor: ''}"
+                              class="slider round"></span>
+                          </label>
+                        </div>
+                      </div>
+                      <p class="desc">{{formData.PopUpNecessaryDescription}}</p>
+                      </ng-container>
+
+
+
+              </div>
+            </div>
+          </p-tabPanel>
+          <p-tabPanel header="Vendors">
+            <p class="desc">{{formData.popUpVendorsDescription}}</p>
+            <ngx-skeleton-loader count="5" animation="false"></ngx-skeleton-loader>
+          </p-tabPanel>
+        </p-tabView>
+      </div>
+      <div class="card-footer">
+          <div class="row">
+            <div class="col-md-4">
+              <button type="button"
+              style="font-size: 11px"
+               [ngStyle]="{
+                background: formData.popUpDisableAllButtonBackgroundColor,
+                color: formData.popUpDisableAllButtonTextColor
+              }" class="w-100 btn btn-default">{{formData.popUpDisableAllButtonTextContent}}</button>
+            </div>
+            <div class="col-md-4">
+              <button type="button"  style="font-size: 11px"
+              [ngStyle]="{
+                background: formData.popUpSaveMyChoiceButtonBackgroundColor,
+                color: formData.popUpSaveMyChoiceButtonTextColor
+              }" class="w-100 btn btn-default">{{formData.popUpSaveMyChoiceButtonTextContent}}</button>
+            </div>
+            <div class="col-md-4">
+              <button type="button"
+              style="font-size: 11px"
+              [ngStyle]="{
+                background: formData.popUpAllowAllButtonBackgroundColor,
+                color: formData.popUpAllowAllButtonTextColor
+              }" class="w-100 btn btn-default">{{formData.popUpAllowAllButtonTextContent}}</button>
+
+            </div>
+          </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+<style>
+</style>

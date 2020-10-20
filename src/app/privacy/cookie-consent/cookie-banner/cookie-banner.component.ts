@@ -1,7 +1,13 @@
 import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, Validators, FormGroup, FormGroupDirective, NgForm} from '@angular/forms';
 import {ErrorStateMatcher} from '@angular/material/core';
-import {BannerConstant, defaultData, IabPurposeIds} from '../../../_constant/gdpr-ccpa-banner.constant';
+import {
+  BannerConstant,
+  defaultData,
+  FormDefaultData,
+  IabPurposeIds,
+  defaultBannerContent
+} from '../../../_constant/gdpr-ccpa-banner.constant';
 import {CookieBannerService} from '../../../_services/cookie-banner.service';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
 import {NotificationsService} from 'angular2-notifications';
@@ -26,8 +32,13 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
 })
 export class CookieBannerComponent implements OnInit {
   panelOpenState = false;
+  skeletonLoading = false;
   matcher = new MyErrorStateMatcher();
   currentPlan;
+  gdprTarget = [];
+  currentState = 'banner';
+  data = defaultBannerContent;
+  formContent: any = defaultBannerContent;
   isFieldDisabled = null;
   bannerCookieData = null;
   isGdprGlobal = false;
@@ -63,13 +74,19 @@ export class CookieBannerComponent implements OnInit {
               private _location: Location,
               private router: Router
   ) {
+
   }
 
   cookieBannerForm: FormGroup;
-  submitted = false;
+  submitted = true;
+  cities1: any[];
 
   ngOnInit() {
+    // window.scroll(0, 500)
+    console.log('formContent', this.data)
     this.onFormInIt();
+    this.onSetDefaultValue();
+    this.gdprTarget = this.bannerConstant.gdprTargetCountry;
     this.onGetPropsAndOrgId();
     this.onGetCurrentPlan();
     this.onGetCookieBannerData();
@@ -111,8 +128,10 @@ export class CookieBannerComponent implements OnInit {
 
   onGetCurrentPlan() {
     this.loading.start('1');
+    this.skeletonLoading = true;
     this.cookieBannerService.onGetPlanType(this.constructor.name, moduleName.cookieBannerModule)
       .subscribe((res: any) => {
+        this.skeletonLoading = false;
         this.loading.stop('1');
         const planType = res.response;
         if (planType.GDPR) {
@@ -123,7 +142,7 @@ export class CookieBannerComponent implements OnInit {
           this.cookieBannerForm.get('gdprTarget').updateValueAndValidity();
         }
       }, error => {
-        console.log('eror', error)
+        this.skeletonLoading = false;
         this.isOpen = true;
         this.alertMsg = error;
         this.alertType = 'danger';
@@ -140,10 +159,10 @@ export class CookieBannerComponent implements OnInit {
       enableIab: [this.defaultData.defaultEnableIab],
       email: [this.defaultData.defaultEmail],
       allowGoogleVendors: [this.defaultData.allowGoogleVendors],
-      showOpenBtn: [this.defaultData.showOpenBtn],
+      showBadge: [this.defaultData.showBadge],
       logo: [this.defaultData.logo],
       //  BANNER
-      Bannerlanguage: [''],
+      Bannerlanguage: [this.defaultData.gdprDefaultLang],
       BannerPosition: [this.defaultData.DefaultBannerPosition],
       BannerTitle: ['', [Validators.minLength(2), Validators.maxLength(50)]],
       BannerDescription: ['',  [Validators.minLength(20)]],
@@ -194,8 +213,66 @@ export class CookieBannerComponent implements OnInit {
     });
   }
 
+  onSetDefaultValue() {
+    // this.formContent['bannerTitle'] = this.data.bannerTitle;
+    this.formContent = this.data;
+    console.log('this.data.bannerTitle', this.data)
+    this.cookieBannerForm.patchValue({
+      BannerTitle: this.data.bannerTitle,
+      BannerDescription: this.data.bannerDescription,
+      BannerGlobalStyleTextColor: this.data.bannerTextColor,
+      BannerGlobalStyleBackgroundColor: this.data.bannerBackGroundColor,
+      BannerPreferenceButtonTextContent: this.data.bannerPreferenceButtonTextContent,
+      BannerPreferenceButtonTextColor: this.data.bannerPreferenceButtonTextColor,
+      BannerPreferenceButtonBackgroundColor: this.data.bannerPreferenceButtonBackGroundColor,
+      BannerAllowAllButtonTextContent: this.data.bannerAcceptButtonTextContent,
+      BannerAllowAllButtonTextColor: this.data.bannerAcceptButtonTextColor,
+      BannerAllowAllButtonBackgroundColor: this.data.bannerAcceptButtonBackgroundColor,
+      // BannerAllowRequiredTextContent: this.bannerCookieData.config.Banner.AllowReqButtonStylesAndContent.textContent,
+      // BannerAllowRequiredButtonTextColor: this.bannerCookieData.config.Banner.AllowReqButtonStylesAndContent.textColor,
+      // BannerAllowRequiredButtonBackgroundColor: this.bannerCookieData.config.Banner.AllowReqButtonStylesAndContent.background,
+      BannerDisableAllButtonTextContent: this.data.bannerDisableButtonTextContent,
+      BannerDisableAllButtonTextColor: this.data.bannerDisableButtonTextColor,
+      BannerDisableAllButtonBackgroundColor: this.data.bannerDisableButtonBackGroundColor,
+      //  POPUP
+      PopUpPurposeBodyDescription: this.data.popUpPurposeDescription,
+      PopUpVendorBodyDescription: this.data.popUpVendorsDescription,
+      // PopUpGlobalTextColor: this.bannerCookieData.config.POPUP.GlobalStyles.textColor,
+      PopUpSwitchButton:  this.data.popUpSwitchButtonColor,
+      // PopUpGlobalBackgroundColor: this.bannerCookieData.config.POPUP.GlobalStyles.backgroundColor,
+      PopUpPurposeButtonTextColor: this.data.popUpPurposeButtonTextColor,
+      PopUpPurposeButtonBackgroundColor: this.data.popUpPurposeButtonBackGroundColor,
+      // // PopUpPurposeButtonBorderColor: this.bannerCookieData.CONFIG,
+      PopUpDisableAllButtonTextContent: this.data.popUpDisableAllButtonTextContent,
+      PopUpDisableAllButtonTextColor: this.data.popUpDisableAllButtonTextColor,
+      PopUpDisableAllButtonBackgroundColor: this.data.popUpDisableAllButtonBackgroundColor,
+      PopUpSaveMyChoiceButtonContentText: this.data.popUpSaveMyChoiceButtonTextContent,
+      PopUpSaveMyChoiceButtonTextColor: this.data.popUpSaveMyChoiceButtonTextColor,
+      PopUpSaveMyChoiceButtonBackgroundColor: this.data.popUpSaveMyChoiceButtonBackgroundColor,
+      PopUpAllowAllButtonTextContent: this.data.popUpAllowAllButtonTextContent,
+      PopUpAllowAllButtonTextColor: this.data.popUpAllowAllButtonTextColor,
+      PopUpAllowAllButtonBackgroundColor: this.data.popUpAllowAllButtonBackgroundColor,
+      //
+      PopUpAdvertisingHeading: this.data.PopUpAdvertisingHead,
+      advertisingBtnText: this.data.AdvertisingText,
+      PopUpAdvertisingDescription: this.data.PopUpAdvertisingDescription,
+
+      PopUpSocialMediaHeading: this.data.PopUpSocialMediaHead,
+      socialMediaBtnText: this.data.SocialMediaText,
+      PopUpSocialMediaDescription: this.data.PopUpSocialMediaDescription,
+
+      PopUpAnalyticsHeading: this.data.PopUpAnalyticsHead,
+      analyticsBtnText: this.data.AnalyticsText,
+      PopUpAnalyticsDescription: this.data.PopUpAnalyticsDescription,
+
+      PopUpNecessaryHeading: this.data.PopUpNecessaryHead,
+      necessaryBtnText: this.data.NecessaryText,
+      PopUpNecessaryDescription: this.data.PopUpNecessaryDescription,
+    });
+  }
+
+
   onSetValue() {
-    console.log(': this.bannerCookieData.config.',  this.bannerCookieData.config);
     this.cookieBannerForm.patchValue({
       Bannerlanguage: this.bannerCookieData.config.Language,
       BannerPosition: this.bannerCookieData.config.BannerPosition,
@@ -234,21 +311,41 @@ export class CookieBannerComponent implements OnInit {
       PopUpAllowAllButtonTextColor: this.bannerCookieData.config.POPUP.AllowAllButton.textColor,
       PopUpAllowAllButtonBackgroundColor: this.bannerCookieData.config.POPUP.AllowAllButton.backgroundColor,
 
-      PopUpInformationHeading: this.bannerCookieData.config.POPUP.PurposeBody[0].heading,
-      informationBtnText: this.bannerCookieData.config.POPUP.PurposeBody[0].title,
-      PopUpInformationDescription: this.bannerCookieData.config.POPUP.PurposeBody[0].description,
-      PopUpNecessaryHeading: this.bannerCookieData.config.POPUP.PurposeBody[1].heading,
-      necessaryBtnText: this.bannerCookieData.config.POPUP.PurposeBody[1].title,
-      PopUpNecessaryDescription: this.bannerCookieData.config.POPUP.PurposeBody[1].description,
+      // PopUpInformationHeading: this.bannerCookieData.config.POPUP.PurposeBody[0].heading,
+      // informationBtnText: this.bannerCookieData.config.POPUP.PurposeBody[0].title,
+      // PopUpInformationDescription: this.bannerCookieData.config.POPUP.PurposeBody[0].description,
+
+      // PopUpNecessaryHeading: this.bannerCookieData.config.POPUP.PurposeBody[1].heading,
+      // necessaryBtnText: this.bannerCookieData.config.POPUP.PurposeBody[1].title,
+      // PopUpNecessaryDescription: this.bannerCookieData.config.POPUP.PurposeBody[1].description,
+
+
+      // PopUpAdvertisingHeading: this.bannerCookieData.config.POPUP.PurposeBody[3].heading,
+      // advertisingBtnText: this.bannerCookieData.config.POPUP.PurposeBody[3].title,
+      // PopUpAdvertisingDescription: this.bannerCookieData.config.POPUP.PurposeBody[3].description,
+
+
+      PopUpAdvertisingHeading: this.bannerCookieData.config.POPUP.PurposeBody[0].heading,
+      advertisingBtnText: this.bannerCookieData.config.POPUP.PurposeBody[0].title,
+      PopUpAdvertisingDescription: this.bannerCookieData.config.POPUP.PurposeBody[0].description,
+
+      PopUpSocialMediaHeading:  this.bannerCookieData.config.POPUP.PurposeBody[1].heading,
+      socialMediaBtnText:  this.bannerCookieData.config.POPUP.PurposeBody[1].title,
+      PopUpSocialMediaDescription:  this.bannerCookieData.config.POPUP.PurposeBody[1].description,
+
       PopUpAnalyticsHeading: this.bannerCookieData.config.POPUP.PurposeBody[2].heading,
       analyticsBtnText: this.bannerCookieData.config.POPUP.PurposeBody[2].title,
       PopUpAnalyticsDescription: this.bannerCookieData.config.POPUP.PurposeBody[2].description,
-      PopUpAdvertisingHeading: this.bannerCookieData.config.POPUP.PurposeBody[3].heading,
-      advertisingBtnText: this.bannerCookieData.config.POPUP.PurposeBody[3].title,
-      PopUpAdvertisingDescription: this.bannerCookieData.config.POPUP.PurposeBody[3].description,
+
+
+      PopUpNecessaryHeading: this.bannerCookieData.config.POPUP.PurposeBody[3].heading,
+      necessaryBtnText: this.bannerCookieData.config.POPUP.PurposeBody[3].title,
+      PopUpNecessaryDescription: this.bannerCookieData.config.POPUP.PurposeBody[3].description,
     });
   }
-
+  onChoiceBanner(type: string) {
+    this.currentState = type;
+  }
   onGetPropsAndOrgId() {
     this.orgservice.currentProperty.subscribe((response) => {
       if (response !== '') {
@@ -267,6 +364,7 @@ export class CookieBannerComponent implements OnInit {
   }
 
   onSubmit() {
+    console.log('abc', this.cookieBannerForm.value.gdprTarget)
     this.submitted = true;
     if (this.cookieBannerForm.invalid) {
       console.log('BannerDescription',  this.cookieBannerForm.controls)
@@ -290,7 +388,7 @@ export class CookieBannerComponent implements OnInit {
       allowGoogleVendors: this.cookieBannerForm.value.allowGoogleVendors,
       logo_text: this.cookieBannerForm.value.logo,
       gdpr_global: this.cookieBannerForm.value.gdprTarget ? this.cookieBannerForm.value.gdprTarget.includes('eu') : false,
-      showOpenBtn: this.cookieBannerForm.value.showOpenBtn,
+      showOpenBtn: this.cookieBannerForm.value.showBadge,
       CONFIG: this.onGetFormData()
     };
     this.loading.start();
@@ -324,7 +422,7 @@ export class CookieBannerComponent implements OnInit {
       enable_iab: this.cookieBannerForm.value.enableIab,
       email: this.cookieBannerForm.value.email,
       allowGoogleVendors: this.cookieBannerForm.value.allowGoogleVendors,
-      showOpenBtn: this.cookieBannerForm.value.showOpenBtn,
+      showOpenBtn: this.cookieBannerForm.value.showBadge,
       CONFIG: this.onGetFormData()
     };
     this.loading.start();
@@ -413,28 +511,28 @@ export class CookieBannerComponent implements OnInit {
           {
             id : 1,
             purposeId : IabPurposeIds.advertising,
-            title: this.bannerConstant.CCPA.POPUP.AdvertisingText,
+            title: this.formContent.AdvertisingText,
             heading: this.cookieBannerForm.value.PopUpAdvertisingHeading,
             description: this.cookieBannerForm.value.PopUpAdvertisingDescription
           },
           {
             id : 2,
             purposeId : IabPurposeIds.socialMedia,
-            title: this.bannerConstant.CCPA.POPUP.SocialMediaText,
+            title: this.formContent.SocialMediaText,
             heading: this.cookieBannerForm.value.PopUpSocialMediaHeading,
             description: this.cookieBannerForm.value.PopUpSocialMediaDescription
           },
           {
             id : 3,
             purposeId : IabPurposeIds.analytics,
-            title: this.bannerConstant.CCPA.POPUP.AnalyticsText,
+            title: this.formContent.AnalyticsText,
             heading: this.cookieBannerForm.value.PopUpAnalyticsHeading,
             description: this.cookieBannerForm.value.PopUpAnalyticsDescription
           },
           {
             id : 4,
             purposeId : IabPurposeIds.essentiial,
-            title: this.bannerConstant.CCPA.POPUP.NecessaryText,
+            title: this.formContent.NecessaryText,
             heading: this.cookieBannerForm.value.PopUpNecessaryHeading,
             description: this.cookieBannerForm.value.PopUpNecessaryDescription
           }
