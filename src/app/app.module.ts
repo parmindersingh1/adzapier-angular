@@ -49,6 +49,7 @@ import { TableModule } from 'primeng/table';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { ChartsModule } from 'ng2-charts';
 import { Ng2ChartJsModules } from 'chartjs-ng2-module';
+import {AccordionModule, TabsModule} from 'ngx-bootstrap';
 
 
 
@@ -94,7 +95,9 @@ export const isMock = environment.mock;
     TableModule,
     MultiSelectModule,
     ChartsModule,
-    Ng2ChartJsModules
+    Ng2ChartJsModules,
+    TabsModule.forRoot(),
+    AccordionModule.forRoot()
   ],
   providers: [
     AuthenticationService,

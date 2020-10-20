@@ -170,6 +170,15 @@
                                                                 </div>
                                                             </div>
                                                         </div>
+                                                         
+                                                        <div class="form-check required-check">
+                                                            <input class="form-check-input"  name="changeControlType"
+                                                            [checked]="isRequiredField" (change)="onCheckboxChange($event)" type="checkbox" id="gridCheck1">
+                                                            <label class="form-check-label" for="gridCheck1">
+                                                              Required
+                                                            </label>
+                                                          </div>
+                                                    
                                                         <div *ngIf="showFormOption" id="selectControl"
                                                             class="controls-with-options">
                                                             <label>Add control
@@ -498,7 +507,7 @@
                                         [cdkDragDisabled]="true">
 
                                         <div *ngIf="webcontrol.controlId === 'requesttype'" class="col-sm-12">
-                                            <label>{{webcontrol.controllabel}} </label>
+                                            <label><span *ngIf="webcontrol.requiredfield" class="color-red">*</span> {{webcontrol.controllabel}}</label>
                                             <div
                                                 *ngIf="webcontrol.control === 'select' && webcontrol.controlId === 'requesttype'">
                                                 <select class="form-control" name="{{webcontrol.controllabel}}"
@@ -540,7 +549,7 @@
                                         </div>
                                         <div *ngIf="webcontrol.controlId === 'subjecttype'" class="col-sm-12">
                                             <!--webcontrol.control == 'select' && webcontrol.controlId === 'subjecttype' && isSubjectTypeSelected-->
-                                            <label>{{webcontrol.controllabel}} </label>
+                                            <label><span *ngIf="webcontrol.requiredfield" class="color-red">*</span>{{webcontrol.controllabel}}</label>
                                             <div
                                                 *ngIf="webcontrol.control == 'select' && webcontrol.controlId === 'subjecttype'">
                                                 <!-- *ngIf="isSubjectTypeSelected"-->
@@ -583,14 +592,14 @@
                                         </div>
                                         <div *ngIf="webcontrol.control === 'textbox';else selectOption"
                                             class="col-sm-12">
-                                            <label> {{webcontrol.controllabel}} </label>
+                                            <label> <span *ngIf="webcontrol.requiredfield" class="color-red">*</span> {{webcontrol.controllabel}} </label>
                                             <input class="form-control" type="text" name="{{webcontrol.controllabel}}"
                                                 [(ngModel)]="requestObject[webcontrol.controllabel]" />
                                             <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
 
                                         </div>
                                         <div *ngIf="webcontrol.control === 'textarea'" class="col-sm-12">
-                                            <label> {{webcontrol.controllabel}} </label>
+                                            <label><span *ngIf="webcontrol.requiredfield" class="color-red">*</span> {{webcontrol.controllabel}} </label>
                                             <textarea class="form-control" type="text"
                                                 name="{{webcontrol.controllabel}}"
                                                 [(ngModel)]="requestObject[webcontrol.controllabel]"></textarea>
@@ -598,7 +607,7 @@
 
                                         </div>
                                         <div *ngIf="webcontrol.control === 'datepicker'" class="col-sm-12">
-                                            <label> {{webcontrol.controllabel}} </label>
+                                            <label><span *ngIf="webcontrol.requiredfield" class="color-red">*</span> {{webcontrol.controllabel}} </label>
                                             <input class="form-control" type="date" name="{{webcontrol.controllabel}}"
                                                 #datePicker="ngModel"
                                                 [(ngModel)]="requestObject[webcontrol.controllabel]" />
@@ -612,7 +621,8 @@
 
                                         <div class="col-sm-12"
                                             *ngIf="webcontrol.control === 'radio' && webcontrol.controlId !== 'requesttype' && webcontrol.controlId !== 'subjecttype'">
-                                            <label class="heading">{{webcontrol.controllabel}}</label>
+                                            <label class="heading"><span *ngIf="webcontrol.requiredfield" class="color-red">*</span>{{webcontrol.controllabel}}
+                                                </label>
                                             <div *ngFor="let userOpt of webcontrol.selectOptions"
                                                 class="form-check-inline">
                                                 <input class="form-check-input" type="radio"
@@ -627,7 +637,7 @@
                                         <ng-template #selectOption>
                                             <div class="col-sm-12"
                                                 *ngIf="webcontrol.control == 'select' && webcontrol.controlId !== 'state' && webcontrol.controlId !== 'country' && webcontrol.controlId !== 'subjecttype' && webcontrol.controlId !== 'requesttype'">
-                                                <label> {{webcontrol.controllabel}} </label>
+                                                <label><span *ngIf="webcontrol.requiredfield" class="color-red">*</span> {{webcontrol.controllabel}}</label>
                                                 <select class="form-control" name="{{webcontrol.controllabel}}"
                                                     [(ngModel)]="requestObject[webcontrol.controllabel]">
                                                     <option *ngFor="let data of webcontrol.selectOptions"
@@ -640,7 +650,7 @@
                                             </div>
                                             <div class="col-sm-12"
                                                 *ngIf="webcontrol.control == 'select' && webcontrol.controlId == 'country'">
-                                                <label> {{webcontrol.controllabel}} </label>
+                                                <label><span *ngIf="webcontrol.requiredfield" class="color-red">*</span> {{webcontrol.controllabel}} </label>
                                                 <select class="form-control" name="{{webcontrol.controllabel}}"
                                                     [(ngModel)]="requestObject[webcontrol.controllabel]"
                                                     (change)="onSelectCountry($event.target.value)">
@@ -653,7 +663,7 @@
 
                                             <div class="col-sm-12"
                                                 *ngIf="webcontrol.control == 'select' && webcontrol.controlId == 'state'">
-                                                <label> {{webcontrol.controllabel}} </label>
+                                                <label><span *ngIf="webcontrol.requiredfield" class="color-red">*</span> {{webcontrol.controllabel}} </label>
                                                 <select class="form-control" name="{{webcontrol.controllabel}}"
                                                     [(ngModel)]="requestObject[webcontrol.controllabel]">
                                                     <option *ngFor="let data of filteredStateList" [value]="data.name">
@@ -666,7 +676,7 @@
                                         </ng-template>
                                         <div class="col-sm-12"
                                             *ngIf="webcontrol.control == 'checkbox' && webcontrol.controlId !== 'subjecttype' && webcontrol.controlId !== 'requesttype'">
-                                            <label class="form-check-label"> {{webcontrol.controllabel}}</label>
+                                            <label class="form-check-label"><span *ngIf="webcontrol.requiredfield" class="color-red">*</span> {{webcontrol.controllabel}}</label>
                                             <div *ngFor="let opt of webcontrol.selectOptions; let i = index;"
                                                 class="form-check-inline">
                                                 <input class="form-check-input" type="checkbox"
@@ -679,7 +689,7 @@
                                         <div class="col-sm-12"
                                             [ngClass]="{'displaynone':!webcontrol.requiredfield,'':webcontrol.requiredfield ||isFileUploadRequired}"
                                             *ngIf="webcontrol.requiredfield && webcontrol.controlId == 'fileupload'">
-                                            <label class="form-check-label"> {{webcontrol.controllabel}}</label>
+                                            <label class="form-check-label"><span *ngIf="webcontrol.ismandatory" class="color-red">*</span> {{webcontrol.controllabel}}</label>
                                             <div class="input-group">
                                                 <div class="custom-file">
                                                     <input type="file" class="custom-file-input"
@@ -707,9 +717,7 @@
                                             <div class="col-sm-12 margin-padding-zero"
                                                 [ngClass]="{'displaynone':!webcontrol.requiredfield,'':webcontrol.requiredfield ||isCaptchaVerificationRequired}"
                                                 *ngIf="webcontrol.requiredfield && webcontrol.controlId == 'captchacontrol'">
-
-
-                                                <label><span class="color-red">*</span> Captcha</label>
+                                                <label>Captcha</label>
                                                 <div class="form-group flex-align-item mb-0">
                                                     <button title="Refresh captcha" type="button"
                                                         class="btn btn-xs btn-primary mb-2 mr-1"
@@ -822,6 +830,13 @@
                                     (click)="allowFileupload($event)" />
                                 <span class="pad-right-20"> File upload</span>
                             </label>
+                            <div class="form-check required-check">
+                                <input class="form-check-input"  name="changeControlType"
+                                [checked]="isFileuploadRequiredField" (change)="onCheckboxChangeUpload($event)" type="checkbox" id="gridCheck1">
+                                <label class="form-check-label" for="gridCheck1">
+                                    Required
+                                </label>
+                              </div>
                         </div>
                         <div class="form-group mg-b-5">
                             <label for="fileupload"
