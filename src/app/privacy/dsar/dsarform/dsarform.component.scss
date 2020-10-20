@@ -370,7 +370,7 @@
 }
 
 .accordion > .card .card-header {
-  padding: 5px !important;
+  padding: 0px !important;
   border-bottom: 0px !important;
 }
 
@@ -451,7 +451,7 @@ input[type='color'] {
 
 .form-field-section .card .card-header {
   border-bottom: 1px solid #ccc !important;
-  padding: 15px !important;
+  padding: 0px !important;
 }
 
 .icon-label-wrapper span {
@@ -623,6 +623,7 @@ span.previewbtn a {
   text-align: left;
   display: flex;
   justify-content: space-between;
+  padding: 12px !important;
 }
 
 ::ng-deep .form-control .is-invalid {
@@ -656,4 +657,12 @@ span.previewbtn a {
 .margin-padding-zero {
   margin: 0 !important;
   padding: 0 !important;
+}
+ 
+.required-check input[type='checkbox'] {
+  margin: 2px 4px;
+}
+
+.required-check label {
+  margin-left: 20px;
 }

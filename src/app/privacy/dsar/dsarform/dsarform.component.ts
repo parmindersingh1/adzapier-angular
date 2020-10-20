@@ -190,6 +190,9 @@ export class DsarformComponent implements OnInit, OnDestroy, AfterViewInit {
   isImageLoading: boolean;
   captchacode: any;
   captchaid: any;
+  isRequiredField = false;
+  isFileuploadRequiredField = false;
+  selectedControlObj;
   constructor(private fb: FormBuilder, private ccpaRequestService: CcparequestService,
               private organizationService: OrganizationService,
               private dsarFormService: DsarformService,
@@ -305,6 +308,7 @@ export class DsarformComponent implements OnInit, OnDestroy, AfterViewInit {
               this.headerColor = t.headerColor;
             } else if (t.controlId === 'fileupload') {
               this.isFileUploadRequired = t.requiredfield;
+              this.isFileuploadRequiredField = t.ismandatory;
             } else if (t.controlId === 'captchacontrol') {
               this.isCaptchaVerificationRequired = (t.requiredfield === '') ? false : true;
             }
@@ -340,6 +344,7 @@ export class DsarformComponent implements OnInit, OnDestroy, AfterViewInit {
           this.headerColor = t.headerColor;
         } else if (t.controlId === 'fileupload') {
           this.isFileUploadRequired = t.requiredfield;
+          this.isFileuploadRequiredField = (t.ismandatory === '') ? false : true;
         } else if (t.controlId === 'captchacontrol') {
           this.isCaptchaVerificationRequired = (t.requiredfield === '') ? false : true;
         }
@@ -499,13 +504,14 @@ export class DsarformComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   editSelectedRow(data) {
+    this.selectedControlObj = data;
     this.lblText = data.controllabel;
     this.isEditingList = true;
     this.isAddingFormControl = true;
     this.showFormOption = false;
     this.selectedControlId = data.controlId;
     this.existingControl = data;
-
+    this.isRequiredField = data.requiredfield === '' ? false : data.requiredfield;
     (data.control === 'textbox' || data.control === 'textarea') ? this.inputOrSelectOption = true : this.inputOrSelectOption = false;
     if (data.control === 'select' && data.controlId !== 'state' && data.controlId !== 'country' || data.control === 'radio'
       || data.control === 'checkbox') {
@@ -639,7 +645,8 @@ export class DsarformComponent implements OnInit, OnDestroy, AfterViewInit {
           indexCount: this.existingControl.indexCount,
           control: this.changeControlType,
           controlId: this.selectedControlId,
-          selectOptions: this.existingControl.selectOptions
+          selectOptions: this.existingControl.selectOptions,
+          requiredfield: this.isRequiredField
         };
         this.addUpdateFormControls(oldControlIndex, updatedObj);
       } else if (this.existingControl.control === 'textbox' || this.existingControl.control === 'textarea' ||
@@ -653,7 +660,8 @@ export class DsarformComponent implements OnInit, OnDestroy, AfterViewInit {
           controlId: this.existingControl.controlId,
           indexCount: this.existingControl.indexCount,
           control: this.existingControl.control,
-          selectOptions: this.existingControl.selectOptions
+          selectOptions: this.existingControl.selectOptions,
+          requiredfield: this.isRequiredField
         };
         this.addUpdateFormControls(oldControlIndex, updatedTextobj);
       } else if (this.existingControl) {
@@ -677,7 +685,8 @@ export class DsarformComponent implements OnInit, OnDestroy, AfterViewInit {
             indexCount: this.trimLabel,
             control: this.changeControlType,
             controlId: this.existingControl.controlId,
-            selectOptions: this.existingControl.selectOptions
+            selectOptions: this.existingControl.selectOptions,
+            requiredfield: this.isRequiredField
           };
           const optionLength = this.selectOptions.length;
           if (optionLength > 0) {
@@ -716,7 +725,8 @@ export class DsarformComponent implements OnInit, OnDestroy, AfterViewInit {
           controllabel: formControls.value.lblText,
           controlId: 'CustomInput' + count,
           indexCount: this.trimLabel + '_Index',
-          selectOptions: this.selectOptions
+          selectOptions: this.selectOptions,
+          requiredfield: this.isRequiredField
         };
         const optionLength = this.selectOptions.length;
         if (optionLength > 0) {
@@ -743,7 +753,8 @@ export class DsarformComponent implements OnInit, OnDestroy, AfterViewInit {
           controllabel: formControls.value.lblText,
           controlId: 'CustomInput' + count,
           indexCount: this.trimLabel + '_Index',
-          selectOptions: this.selectOptions
+          selectOptions: this.selectOptions,
+          requiredfield: this.isRequiredField
         };
 
         const optionLength = this.selectOptions.length;
@@ -935,6 +946,7 @@ export class DsarformComponent implements OnInit, OnDestroy, AfterViewInit {
     this.isRequestType = false;
     this.selectedControlType = false;
     this.changeControlType = null;
+    this.isRequiredField = false;
   }
 
   publishCCPAFormConfiguration(registerForm) {
@@ -1241,6 +1253,7 @@ export class DsarformComponent implements OnInit, OnDestroy, AfterViewInit {
     retrivedData.request_form.filter((t) => {
       if (t.controlId === 'fileupload') {
         this.isFileUploadRequired = t.requiredfield;
+        this.isFileuploadRequiredField = (t.ismandatory === '') ? false : true;
       } else if (t.controlId === 'captchacontrol') {
         this.isCaptchaVerificationRequired = t.requiredfield;
       } else if (t.controlId === 'footertext') {
@@ -1288,10 +1301,12 @@ export class DsarformComponent implements OnInit, OnDestroy, AfterViewInit {
   allowFileupload(event) {
     this.isFileUploadRequired = event.target.checked;
     if (this.crid) {
-      this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
+      this.webFormControlList = this.ccpaFormConfigService.getFormControlList();  
       const customControlIndex = this.webFormControlList.findIndex((t) => t.controlId === 'fileupload');
       const updateobj = this.webFormControlList[customControlIndex];
       updateobj.requiredfield = event.target.checked;
+      const isMandatoryField = this.isFileuploadRequiredField ? true : false;
+      updateobj.ismandatory = isMandatoryField;
       updateobj.preferControlOrder = this.webFormControlList.length - 1;
       this.ccpaFormConfigService.updateControl(this.webFormControlList[customControlIndex], customControlIndex, updateobj);
       this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
@@ -1301,6 +1316,8 @@ export class DsarformComponent implements OnInit, OnDestroy, AfterViewInit {
       const oldControlIndex = this.webFormControlList.findIndex((t) => t.controlId === 'fileupload');
       const obj = this.webFormControlList[oldControlIndex];
       obj.requiredfield = event.target.checked;
+      const isMandatoryField = this.isFileuploadRequiredField ? true : false;
+      obj.ismandatory = isMandatoryField;
       obj.preferControlOrder = this.webFormControlList.length - 1;
       this.dsarFormService.updateControl(this.webFormControlList[oldControlIndex], oldControlIndex, obj);
       this.webFormControlList = this.dsarFormService.getFormControlList();
@@ -1352,6 +1369,28 @@ export class DsarformComponent implements OnInit, OnDestroy, AfterViewInit {
 
   }
 
+  onCheckboxChange($event) {
+    // console.log(this.selectedControlObj,'selectedControlObj..');
+    this.selectedControlObj.requiredfield = $event.target.checked;
+    this.isRequiredField = $event.target.checked;
+  //  this.isFileUploadRequired = 
+
+    if (this.crid) {
+      const customControlIndex = this.ccpaFormConfigService.getFormControlList()
+        .findIndex((t) => t.indexCount === this.selectedControlObj.indexCount);
+      this.ccpaFormConfigService.updateControl(this.webFormControlList[customControlIndex], customControlIndex, this.selectedControlObj);
+      this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
+    } else {
+      const customControlIndex = this.dsarFormService.getFormControlList()
+       .findIndex((t) => t.indexCount === this.selectedControlObj.indexCount);
+      this.dsarFormService.updateControl(this.webFormControlList[customControlIndex], customControlIndex, this.selectedControlObj);
+      this.webFormControlList = this.dsarFormService.getFormControlList();
+    }
+  }
+
+  onCheckboxChangeUpload($event){
+    this.isFileuploadRequiredField = $event.target.checked;
+  }
 
   ngOnDestroy() {
     // if (this.webFormSelectedData !== undefined) {
