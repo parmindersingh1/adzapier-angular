@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {FormDefaultData} from '../../../../_constant/gdpr-ccpa-banner.constant';
+import {FormDefaultData} from '../../../../_constant/consent-banner.constant';
 
 @Component({
   selector: 'app-banner-live-priview',
