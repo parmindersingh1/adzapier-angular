@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, FormControl, Validators, FormGroup, FormGroupDirective, NgForm} from '@angular/forms';
 import {ErrorStateMatcher} from '@angular/material/core';
 import {
@@ -7,7 +7,7 @@ import {
   FormDefaultData,
   IabPurposeIds,
   defaultBannerContent
-} from '../../../_constant/gdpr-ccpa-banner.constant';
+} from '../../../_constant/consent-banner.constant';
 import {CookieBannerService} from '../../../_services/cookie-banner.service';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
 import {NotificationsService} from 'angular2-notifications';
@@ -32,6 +32,7 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
 })
 export class CookieBannerComponent implements OnInit {
   panelOpenState = false;
+  // @ViewChild('gdprGlobal', {static: false}) gdprGlobal
   skeletonLoading = false;
   matcher = new MyErrorStateMatcher();
   currentPlan;
@@ -117,12 +118,13 @@ export class CookieBannerComponent implements OnInit {
     this.cookieBannerForm.patchValue({
       ccpaTarget: configData.ccpa_target,
       gdprTarget: configData.gdpr_target,
+      gdpr_global: configData.gdpr_global,
       cookieBlocking: configData.cookie_blocking,
       enableIab: configData.enable_iab,
       email: configData.email,
       allowGoogleVendors: configData.allowGoogleVendors,
-      showOpenCcpaBtn: configData.showOpenCcpaBtn,
-      showOpenGdprBtn: configData.showOpenGdprBtn
+      showBadge: configData.showOpenBtn,
+      logo: configData.logo_text
     });
   }
 
@@ -159,6 +161,7 @@ export class CookieBannerComponent implements OnInit {
       enableIab: [this.defaultData.defaultEnableIab],
       email: [this.defaultData.defaultEmail],
       allowGoogleVendors: [this.defaultData.allowGoogleVendors],
+      gdpr_global: [this.defaultData.gdprGlobal],
       showBadge: [this.defaultData.showBadge],
       logo: [this.defaultData.logo],
       //  BANNER
@@ -198,18 +201,18 @@ export class CookieBannerComponent implements OnInit {
       PopUpAllowAllButtonTextContent: ['', [Validators.minLength(2), Validators.maxLength(25)]],
       PopUpAllowAllButtonTextColor: [''],
       PopUpAllowAllButtonBackgroundColor: [''],
-      PopUpSocialMediaHeading: [BannerConstant.CCPA.POPUP.PopUpSocialMediaHead, [Validators.minLength(2), Validators.maxLength(50)]],
+      PopUpSocialMediaHeading: ['', [Validators.minLength(2), Validators.maxLength(50)]],
       // informationBtnText: [BannerConstant.CCPA.POPUP.PopUpInformationBtnText],
-      PopUpSocialMediaDescription: [BannerConstant.CCPA.POPUP.PopUpSocialMediaDescription, [Validators.minLength(20), Validators.maxLength(300)]],
-      PopUpNecessaryHeading: [BannerConstant.CCPA.POPUP.PopUpNecessaryHead, [Validators.minLength(2), Validators.maxLength(50)]],
+      PopUpSocialMediaDescription: ['', [Validators.minLength(20), Validators.maxLength(300)]],
+      PopUpNecessaryHeading: ['', [Validators.minLength(2), Validators.maxLength(50)]],
       // necessaryBtnText: [BannerConstant.CCPA.POPUP.necessaryBtnText],
-      PopUpNecessaryDescription: [BannerConstant.CCPA.POPUP.PopUpNecessaryDescription, [Validators.minLength(20), Validators.maxLength(300)]],
-      PopUpAnalyticsHeading: [BannerConstant.CCPA.POPUP.PopUpAnalyticsHead, [Validators.minLength(2), Validators.maxLength(50)]],
+      PopUpNecessaryDescription: ['', [Validators.minLength(20), Validators.maxLength(300)]],
+      PopUpAnalyticsHeading: ['', [Validators.minLength(2), Validators.maxLength(50)]],
       // analyticsBtnText: [BannerConstant.CCPA.POPUP.advertisingBtnText],
-      PopUpAnalyticsDescription: [BannerConstant.CCPA.POPUP.PopUpAnalyticsDescription, [Validators.minLength(20), Validators.maxLength(300)]],
-      PopUpAdvertisingHeading: [BannerConstant.CCPA.POPUP.PopUpAdvertisingHead, [Validators.minLength(2), Validators.maxLength(50)]],
+      PopUpAnalyticsDescription: ['', [Validators.minLength(20), Validators.maxLength(300)]],
+      PopUpAdvertisingHeading: ['', [Validators.minLength(2), Validators.maxLength(50)]],
       // advertisingBtnText: [BannerConstant.CCPA.POPUP.advertisingBtnText],
-      PopUpAdvertisingDescription: [BannerConstant.CCPA.POPUP.PopUpAdvertisingDescription, [Validators.minLength(20), Validators.maxLength(300)]],
+      PopUpAdvertisingDescription: ['', [Validators.minLength(20), Validators.maxLength(300)]],
     });
   }
 
@@ -387,8 +390,8 @@ export class CookieBannerComponent implements OnInit {
       email: this.cookieBannerForm.value.email,
       allowGoogleVendors: this.cookieBannerForm.value.allowGoogleVendors,
       logo_text: this.cookieBannerForm.value.logo,
-      gdpr_global: this.cookieBannerForm.value.gdprTarget ? this.cookieBannerForm.value.gdprTarget.includes('eu') : false,
-      showOpenBtn: this.cookieBannerForm.value.showBadge,
+      gdpr_global: this.cookieBannerForm.value.gdpr_global,
+      show_open_btn: this.cookieBannerForm.value.showBadge,
       CONFIG: this.onGetFormData()
     };
     this.loading.start();
@@ -416,13 +419,13 @@ export class CookieBannerComponent implements OnInit {
     const userPrefrencesData = {
       ccpa_target: this.cookieBannerForm.value.ccpaTarget,
       logo_text: this.cookieBannerForm.value.logo,
-      gdpr_global: this.cookieBannerForm.value.gdprTarget ? this.cookieBannerForm.value.gdprTarget.includes('eu') : false,
+      gdpr_global: this.cookieBannerForm.value.gdpr_global,
       gdpr_target: this.cookieBannerForm.value.gdprTarget,
       cookie_blocking: this.cookieBannerForm.value.cookieBlocking,
       enable_iab: this.cookieBannerForm.value.enableIab,
       email: this.cookieBannerForm.value.email,
       allowGoogleVendors: this.cookieBannerForm.value.allowGoogleVendors,
-      showOpenBtn: this.cookieBannerForm.value.showBadge,
+      show_open_btn: this.cookieBannerForm.value.showBadge,
       CONFIG: this.onGetFormData()
     };
     this.loading.start();
@@ -544,18 +547,31 @@ export class CookieBannerComponent implements OnInit {
     this._location.back();
   }
 
-  onCheckCountry(event) {
-    if ( event ) {
-      this.isGdprGlobal = event.includes('eu');
-      if (this.isGdprGlobal) {
-        this.cookieBannerForm.get('ccpaTarget').clearValidators();
-        this.cookieBannerForm.get('ccpaTarget').updateValueAndValidity();
-      }
-    }
-  }
+  // onCheckCountry(event) {
+  //   if ( event ) {
+  //     this.isGdprGlobal = event.includes('eu');
+  //     if (this.isGdprGlobal) {
+  //       this.cookieBannerForm.get('ccpaTarget').clearValidators();
+  //       this.cookieBannerForm.get('ccpaTarget').updateValueAndValidity();
+  //     }
+  //   }
+  // }
 
   onClosed(dismissedAlert: any): void {
     this.alertMsg = !dismissedAlert;
     this.isOpen = false;
+  }
+
+  onSetGdprGlobal(event: any) {
+    // console.log(event)
+    if (event) {
+      this.cookieBannerForm.get('gdprTarget').clearValidators();
+
+    } else {
+      // this.cookieBannerForm.setValidators('gdprTarget', [])
+      this.cookieBannerForm.controls["gdprTarget"].setValidators(Validators.required);
+      // this.cookieBannerForm.setValidators([Validators.required);
+    }
+    this.cookieBannerForm.get('gdprTarget').updateValueAndValidity();
   }
 }

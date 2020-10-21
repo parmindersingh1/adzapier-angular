@@ -59,7 +59,7 @@
                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries">
         <ng-template pTemplate="header" let-columns>
           <tr>
-            <td>#</td>
+            <td class="id-box"><span class="ml-4">Id</span></td>
             <th pSortableColumn="name">Name <p-sortIcon field="name"></p-sortIcon></th>
             <th>Host</th>
             <th pSortableColumn="category">Category <p-sortIcon field="category"></p-sortIcon></th>
@@ -130,9 +130,10 @@
 
         <div class="form-row">
           <div class="form-group col-md-6">
-            <label class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-0 tx-color-03"><i class="tx-8 fa fa-asterisk tx-danger " aria-hidden="true"></i> Category</label>
+            <label class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-0 tx-color-03">
+              <i class="tx-8 fa fa-asterisk tx-danger " aria-hidden="true"></i> Category</label>
             <select formControlName="category" id="my-select" class="form-control" >
-              <option *ngFor="let obj of categoryList" [value]="obj.id">{{obj.name}}</option>
+              <option *ngFor="let obj of cookieCategories" [value]="obj.value">{{obj.label}}</option>
             </select>
             <div *ngIf="submitted && f.category.errors"
             >

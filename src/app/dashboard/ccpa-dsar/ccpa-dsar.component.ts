@@ -111,7 +111,11 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
   public doughnutChartData: MultiDataSet = [
     [100],
   ];
+  public doughnutChartOptions: ChartOptions = {
+    responsive: true,
+    legend: {position: 'bottom'}
 
+  };
   public doughnutChartType: ChartType = 'doughnut';
   doughnutColors = [
     {
@@ -124,6 +128,7 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
   // Pie
   public pieChartOptions: ChartOptions = {
     responsive: true,
+    legend: {position: 'bottom'}
 
   };
   public pieChartLabels: Label[] = ['No Record'];

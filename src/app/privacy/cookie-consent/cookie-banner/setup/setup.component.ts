@@ -17,6 +17,7 @@ import {Router} from '@angular/router';
 export class SetupComponent implements OnInit {
   private currentManagedOrgID: any;
   modalRef: BsModalRef;
+  isCopied = false;
   private currrentManagedPropID: any;
   @ViewChild('template', { static: true}) template: ElementRef;
   closeScript = `"></script>`;
@@ -81,10 +82,12 @@ export class SetupComponent implements OnInit {
     this.scriptUrl.setSelectionRange(0, 0);
   }
   copyToClipboard() {
-    const copyText = this.addScript + this.scriptUrl + this.closeScript;
-    // copyText.select();
-    // copyText.setSelectionRange(0, 99999);
-    // document.execCommand("copy");
+    this.isCopied = true;
+    const copyText: any = this.addScript + this.scriptUrl + this.closeScript;
+    console.log(copyText)
+    copyText.select();
+    copyText.setSelectionRange(0, 99999);
+    document.execCommand("copy");
   }
 
   openModal(template: any) {
