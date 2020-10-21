@@ -1,4 +1,4 @@
-<div class="cc-banner-preview " style="max-width: 60rem; height: 30rem; font-size: 9px;">
+<div class="cc-banner-preview " style=" height: 30rem; font-size: 9px;">
 
   <div
     [ngStyle]="{background: formData.bannerBackGroundColor, color: formData.bannerTextColor,
@@ -26,6 +26,7 @@
       <div class="col-5 pd-y-10">
         <div class="floating-flat-margin-cls ng-star-inserted" id="onetrust-button-group">
           <button
+            type="button"
             class="font-size-thirteen mr-2 onetrust-pc-btn-handler cc-float-rounded-icon-btn cookie-setting-link ng-star-inserted"
             [ngStyle]="{background: formData.bannerPreferenceButtonBackGroundColor, borderColor:formData.bannerPreferenceButtonBackGroundColor,
              color: formData.bannerPreferenceButtonTextColor}"
@@ -33,6 +34,7 @@
            {{formData.bannerPreferenceButtonTextContent}}
           </button>
           <button
+            type="button"
             class="onetrust-accept-btn-handler-btn mr-2 onetrust-accept-btn-handler cc-float-rounded-icon-btn ng-star-inserted"
             [ngStyle]="{background: formData.bannerDisableButtonBackGroundColor,
             borderColor: formData.bannerDisableButtonBackGroundColor,
@@ -42,6 +44,7 @@
           </button>
 
           <button
+            type="button"
             class="onetrust-accept-btn-handler-btn onetrust-accept-btn-handler cc-float-rounded-icon-btn ng-star-inserted"
             [ngStyle]="{background: formData.bannerAcceptButtonBackgroundColor,
             borderColor: formData.bannerAcceptButtonBackgroundColor,

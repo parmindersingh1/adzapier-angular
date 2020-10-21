@@ -6,6 +6,14 @@
 .table-responsive > .table-bordered {
   border: 0; }
 
+.id-box {
+  background: #f8f9fa;
+  border-bottom: 1px solid #e6e4e4;
+  font-size: 12px;
+}
+.p-datatable {
+  margin-top: 0px !important;
+}
 @media (min-width: 576px) {
   .modal-dialog {
     max-width: 700px !important;

@@ -9,6 +9,7 @@ import { OrganizationService } from '../../../_services';
 import { ConfirmationService, LazyLoadEvent, SortEvent } from 'primeng/api';
 import { MessageService } from 'primeng/api';
 import {moduleName} from '../../../_constant/module-name.constant';
+import {cookieName} from '../../../_constant/cookies-name.constant';
 
 interface CategoryResponse {
   response: CategoryResponseData;
@@ -36,6 +37,7 @@ export class CookieCategoryComponent implements OnInit {
   categoryModalRef: BsModalRef;
   isScanning = false;
   isDurationType = false;
+  cookieCategories = cookieName;
   catId = '';
   selectedCols: ColInterface[];
   cols: ColInterface[];
