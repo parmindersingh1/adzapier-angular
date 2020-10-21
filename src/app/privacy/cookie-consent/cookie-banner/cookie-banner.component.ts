@@ -124,7 +124,7 @@ export class CookieBannerComponent implements OnInit {
       email: configData.email,
       allowGoogleVendors: configData.allowGoogleVendors,
       showBadge: configData.showOpenBtn,
-      logo: configData.logo_text
+      logo: configData.logo
     });
   }
 
@@ -389,9 +389,9 @@ export class CookieBannerComponent implements OnInit {
       enable_iab: this.cookieBannerForm.value.enableIab,
       email: this.cookieBannerForm.value.email,
       allowGoogleVendors: this.cookieBannerForm.value.allowGoogleVendors,
-      logo_text: this.cookieBannerForm.value.logo,
+      logo: this.cookieBannerForm.value.logo,
       gdpr_global: this.cookieBannerForm.value.gdpr_global,
-      show_open_btn: this.cookieBannerForm.value.showBadge,
+      show_badge: this.cookieBannerForm.value.showBadge,
       CONFIG: this.onGetFormData()
     };
     this.loading.start();
@@ -418,14 +418,14 @@ export class CookieBannerComponent implements OnInit {
     console.log('this.cookieBannerForm.value.allowGoogleVendors', this.cookieBannerForm.value.allowGoogleVendors)
     const userPrefrencesData = {
       ccpa_target: this.cookieBannerForm.value.ccpaTarget,
-      logo_text: this.cookieBannerForm.value.logo,
+      logo: this.cookieBannerForm.value.logo,
       gdpr_global: this.cookieBannerForm.value.gdpr_global,
       gdpr_target: this.cookieBannerForm.value.gdprTarget,
       cookie_blocking: this.cookieBannerForm.value.cookieBlocking,
       enable_iab: this.cookieBannerForm.value.enableIab,
       email: this.cookieBannerForm.value.email,
       allowGoogleVendors: this.cookieBannerForm.value.allowGoogleVendors,
-      show_open_btn: this.cookieBannerForm.value.showBadge,
+      show_badge: this.cookieBannerForm.value.showBadge,
       CONFIG: this.onGetFormData()
     };
     this.loading.start();
