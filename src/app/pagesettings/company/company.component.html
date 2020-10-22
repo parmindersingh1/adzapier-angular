@@ -149,14 +149,21 @@
                                 <span *ngIf="!isDateOrString(list.user_last_login)">{{list.user_last_login}}</span>
                             </td>
                             <td class="text-center">
+                              
                                 <button type="button"
                                     *ngIf="list.user_last_login === 'Invitation sent' || list.user_last_login === 'Invitation Pending'"
-                                    (click)="onResendInvitation(list.approver_id)" class="btn btn-sm btn-primary"><i
+                                    (click)="onResendInvitation(list.approver_id)" class="btn btn-xs btn-primary"><i
                                         class="fas fa-envelope	"></i> Resend Invitation</button>
                             </td>
                             <td>
-                                <button class="btn btn-xs btn-primary"
-                                    (click)="removeTeamMember(list.id)">Remove</button>
+                                <a class="pd-r-5" (click)="editUserInvitation(inviteuserModal,list)">
+                                    <span class="d-none d-sm-inline cursorpointer mg-l-0">  <i class="fa fa-pen mr-1 colorblue" aria-hidden="true"></i></span>
+                                </a>
+
+                                <a class="pd-r-5" (click)="removeTeamMember(list.approver_id)">
+                                    <i class="far fa-trash-alt tx-danger fa-sm"></i>
+                                </a>
+ 
                             </td>
 
                         </tr>
@@ -309,9 +316,11 @@
 
 <ng-template #inviteuserModal let-modal>
     <div class="modal-header">
-        <h4 class="modal-title" id="modal-basic-title">Invite new users</h4>
-
-        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Close Clicked')">
+        <h4 class="modal-title" id="modal-basic-title" *ngIf="!isUpdateUserinvitation;else editInviteUserHeading">Invite New User</h4>
+        <ng-template #editInviteUserHeading>
+            <h4 class="modal-title" id="modal-basic-title">Update user</h4>
+        </ng-template>
+        <button type="button" class="close" aria-label="Close" (click)="onCancelClick()">
             <span aria-hidden="true">×</span>
         </button>
     </div>

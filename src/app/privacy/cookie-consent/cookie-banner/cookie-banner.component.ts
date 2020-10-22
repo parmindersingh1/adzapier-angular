@@ -84,7 +84,6 @@ export class CookieBannerComponent implements OnInit {
 
   ngOnInit() {
     // window.scroll(0, 500)
-    console.log('formContent', this.data)
     this.onFormInIt();
     this.onSetDefaultValue();
     this.gdprTarget = this.bannerConstant.gdprTargetCountry;
@@ -114,7 +113,13 @@ export class CookieBannerComponent implements OnInit {
   }
 
   onSetValueConfig() {
+
     const configData: any = this.bannerCookieData;
+    // console.log('configData', configData);
+    if (configData.gdpr_global) {
+      this.cookieBannerForm.get('gdprTarget').clearValidators();
+    }
+    this.cookieBannerForm.get('gdprTarget').updateValueAndValidity();
     this.cookieBannerForm.patchValue({
       ccpaTarget: configData.ccpa_target,
       gdprTarget: configData.gdpr_target,
@@ -122,7 +127,7 @@ export class CookieBannerComponent implements OnInit {
       cookieBlocking: configData.cookie_blocking,
       enableIab: configData.enable_iab,
       email: configData.email,
-      allowGoogleVendors: configData.allowGoogleVendors,
+      google_vendors: configData.google_vendors,
       showBadge: configData.showOpenBtn,
       logo: configData.logo
     });
@@ -153,14 +158,13 @@ export class CookieBannerComponent implements OnInit {
   }
 
   onFormInIt() {
-    console.log('this.defaultData', this.defaultData)
     this.cookieBannerForm = this.formBuilder.group({
       ccpaTarget: ['', Validators.required],
       gdprTarget: ['', Validators.required],
       cookieBlocking: [this.defaultData.defaultCookieBlocking],
       enableIab: [this.defaultData.defaultEnableIab],
       email: [this.defaultData.defaultEmail],
-      allowGoogleVendors: [this.defaultData.allowGoogleVendors],
+      google_vendors: [this.defaultData.google_vendors],
       gdpr_global: [this.defaultData.gdprGlobal],
       showBadge: [this.defaultData.showBadge],
       logo: [this.defaultData.logo],
@@ -219,7 +223,6 @@ export class CookieBannerComponent implements OnInit {
   onSetDefaultValue() {
     // this.formContent['bannerTitle'] = this.data.bannerTitle;
     this.formContent = this.data;
-    console.log('this.data.bannerTitle', this.data)
     this.cookieBannerForm.patchValue({
       BannerTitle: this.data.bannerTitle,
       BannerDescription: this.data.bannerDescription,
@@ -388,7 +391,7 @@ export class CookieBannerComponent implements OnInit {
       cookie_blocking: this.cookieBannerForm.value.cookieBlocking,
       enable_iab: this.cookieBannerForm.value.enableIab,
       email: this.cookieBannerForm.value.email,
-      allowGoogleVendors: this.cookieBannerForm.value.allowGoogleVendors,
+      google_vendors: this.cookieBannerForm.value.google_vendors,
       logo: this.cookieBannerForm.value.logo,
       gdpr_global: this.cookieBannerForm.value.gdpr_global,
       show_badge: this.cookieBannerForm.value.showBadge,
@@ -415,7 +418,7 @@ export class CookieBannerComponent implements OnInit {
 
 
   onUpdateForm() {
-    console.log('this.cookieBannerForm.value.allowGoogleVendors', this.cookieBannerForm.value.allowGoogleVendors)
+    console.log('this.cookieBannerForm.value.google_vendors', this.cookieBannerForm.value.google_vendors)
     const userPrefrencesData = {
       ccpa_target: this.cookieBannerForm.value.ccpaTarget,
       logo: this.cookieBannerForm.value.logo,
@@ -424,7 +427,7 @@ export class CookieBannerComponent implements OnInit {
       cookie_blocking: this.cookieBannerForm.value.cookieBlocking,
       enable_iab: this.cookieBannerForm.value.enableIab,
       email: this.cookieBannerForm.value.email,
-      allowGoogleVendors: this.cookieBannerForm.value.allowGoogleVendors,
+      google_vendors: this.cookieBannerForm.value.google_vendors,
       show_badge: this.cookieBannerForm.value.showBadge,
       CONFIG: this.onGetFormData()
     };

@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 import { AlertService, AuthenticationService, UserService } from './../_services';
 import { OrganizationService } from '../_services/organization.service';
-import {NgxUiLoaderService} from 'ngx-ui-loader';
+import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { moduleName } from '../_constant/module-name.constant';
 
 @Component({
@@ -40,7 +40,7 @@ export class LoginComponent implements OnInit {
         if (this.authenticationService.currentUserValue) {
             this.router.navigate(['/']);
         }
-      }
+    }
 
 
 
@@ -79,14 +79,14 @@ export class LoginComponent implements OnInit {
             .pipe(first())
             .subscribe(
                 data => {
-                   // this.getLoggedInUserDetails();
+                    // this.getLoggedInUserDetails();
                     this.authenticationService.userLoggedIn.next(true);
                     this.authenticationService.currentUserSubject.next(data);
                     localStorage.setItem('currentUser', JSON.stringify(data));
                     this.router.navigate(['/home/dashboard/analytics']);
                 },
                 error => {
-                    console.log(error,'login error..');
+                    console.log(error, 'login error..');
                     this.isOpen = true;
                     this.alertMsg = error;
                     this.alertType = 'danger';
@@ -106,6 +106,6 @@ export class LoginComponent implements OnInit {
     onClosed(dismissedAlert: any): void {
         this.alertMsg = !dismissedAlert;
         this.isOpen = false;
-      }
+    }
 
 }

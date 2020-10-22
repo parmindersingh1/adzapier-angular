@@ -40,6 +40,7 @@ export class WorkflowsComponent implements OnInit {
 
   ngOnInit() {
     this.loadWorkflowList();
+    this.loadActiveWorkflowList();
     const alphaNumeric = '^(?![0-9]*$)[a-zA-Z0-9 ]+$';
     this.createWorkFlowForm = this.formBuilder.group({
       workflowName: ['', [Validators.required, Validators.pattern(alphaNumeric)]],
@@ -60,6 +61,15 @@ export class WorkflowsComponent implements OnInit {
       this.paginationConfig.totalItems = data.count;
     });
   }
+
+  loadActiveWorkflowList() {
+    const pagelimit = '?limit=' + 0;
+    this.workflowService.getActiveWorkflowList(this.constructor.name, moduleName.workFlowModule).subscribe((data) => {
+      this.activeWorkflowList = data.response;
+      this.paginationConfig.totalItems = data.count;
+    });
+  }
+
 
   public loadWorkflowById(id) {
     // this.loadingBar.start();

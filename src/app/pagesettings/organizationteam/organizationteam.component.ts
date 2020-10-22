@@ -188,7 +188,8 @@ export class OrganizationteamComponent implements OnInit {
 
   removeTeamMember(id) {
     this.loading.start();
-    this.companyService.removeTeamMember(this.constructor.name, moduleName.organizationTeamModule, id).subscribe((data) => {
+    this.companyService.removeTeamMember(this.constructor.name, moduleName.organizationTeamModule, id,
+      this.organizationID).subscribe((data) => {
       this.loading.stop();
       if (data) {
         this.alertMsg = data.response;
@@ -201,7 +202,7 @@ export class OrganizationteamComponent implements OnInit {
       this.isOpen = true;
       this.alertType = 'dangere';
     });
-  }
+  }  
 
   editUserInvitation(content, data) {
     console.log(data, 'editUserInvitation..');
