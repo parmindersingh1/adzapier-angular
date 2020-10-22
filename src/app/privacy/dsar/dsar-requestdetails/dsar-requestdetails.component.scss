@@ -632,6 +632,10 @@ ul.ngx-pagination {
     font-weight: bold;
   }
 
+  ::ng-deep .input-group > .custom-file {
+      overflow: hidden;
+  }
+
   ::ng-deep .theme-green .bs-datepicker-head {
     background-color: #0168fa !important;
   }
