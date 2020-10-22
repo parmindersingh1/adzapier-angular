@@ -10,7 +10,14 @@
   border-radius: 4px;
   width: 100%;
   height: 60px;
+  position: fixed;
+  z-index: 1000;
 }
+
+.navbar .nav > li {
+  z-index: 1001;
+}
+
 
 .navbar h3 {
   margin: 10px 20px 10px 10px;
@@ -190,8 +197,12 @@ a.nav-link:hover {
 }
 
 .navbar-brand .df-logo {
-  color: #fff;
-  font-size: 22px;
+  color: #031a61 !important;
+  font-size: 24px;
+}
+
+.navbar-expand-lg .navbar-nav .nav-link {
+  color: #596882;
 }
 
 .iconwrapper {
@@ -472,7 +483,8 @@ ul#collapseExample {
 }
 
 ul.navbar-nav > a.nav-link.dropdown-link {
-  color:rgba(255, 255, 255, 0.7);
+  // color:rgba(255, 255, 255, 0.7);
+  color: #596882
 }
 
 ul.navbar-nav > a.nav-link.dropdown-link:hover {
@@ -497,4 +509,12 @@ ul.navbar-nav > a.nav-link.dropdown-link::after{
   height:16px;
   width: 16px;
   float: right;
+}
+
+a.nav-link.dropdown-toggle:hover {
+  color: #4994fe !important;
+}
+
+a.nav-link:hover {
+  color: #4994fe !important;
 }

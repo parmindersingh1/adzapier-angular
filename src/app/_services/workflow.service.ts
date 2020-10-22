@@ -40,6 +40,7 @@ export class WorkflowService {
     }
 
   }
+// https://develop-cmp-api.adzpier-staging.com/api/v1/workflow?workflow_status=active
 
   getWorkflowByStatus(status, componentName, moduleName): Observable<any> {
     const path = apiConstant.WORKFLOW_STATUS;
@@ -98,6 +99,18 @@ export class WorkflowService {
 
   changeCurrentSelectedWorkflow(currentItem) {
     this.workflowSource.next(currentItem);
+  }
+
+  getActiveWorkflowList(componentName, moduleName): Observable<any> {
+    const path = '/workflow?workflow_status=active';
+
+    return this.httpClient.get<any>(environment.apiUrl + path).pipe(
+      catchError(error => {
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.createWorkflow, componentName, moduleName, path);
+        return throwError(error);
+      }));
+    // https://develop-cmp-api.adzpier-staging.com/api/v1/workflow?workflow_status=active
+
   }
 
   onSendLogs(errorType, msg, functionality, componentName, moduleName, path) {
