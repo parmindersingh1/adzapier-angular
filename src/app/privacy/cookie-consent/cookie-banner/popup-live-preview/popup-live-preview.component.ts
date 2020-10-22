@@ -1,6 +1,6 @@
 import {Component, ElementRef, Input, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap';
-import {FormDefaultData} from '../../../../_constant/gdpr-ccpa-banner.constant';
+import {FormDefaultData} from '../../../../_constant/consent-banner.constant';
 
 @Component({
   selector: 'app-popup-live-preview',

@@ -3,9 +3,9 @@
     <div>
       <nav aria-label="breadcrumb">
         <ol class="breadcrumb breadcrumb-style1 mg-b-10">
-          <li class="breadcrumb-item"><a href="#">Privacy</a></li>
-          <li class="breadcrumb-item"><a href="#">Cookie Consent</a></li>
-          <li class="breadcrumb-item">Cookie Banner</li>
+          <li class="breadcrumb-item">Privacy</li>
+          <li class="breadcrumb-item">Cookie Consent</li>
+          <li class="breadcrumb-item"><a routerLink="/cookie-consent/cookie-banner">Banner Configuration</a></li>
           <li class="breadcrumb-item active">Setup</li>
         </ol>
       </nav>
@@ -18,7 +18,7 @@
   <div class="card mt-3">
     <div  class="card-header"><h6 style="float: left"><b>Production CDN </b></h6>
     <button (click)="copyToClipboard()" style="float: right" type="button" class=" pull-right btn-sm btn btn-primary"><i class="mr-1 fa fa-clipboard" aria-hidden="true"></i>
-       Copy Script</button>
+       {{ isCopied ? 'Copied' : 'Copy Script'}}</button>
     </div>
     <div *ngIf="!loadingSkeleton" style="background: #282a36" class="card-body">
       <p  class="text-danger codeText">

@@ -5,21 +5,21 @@
   <form [formGroup]="cookieBannerForm" (ngSubmit)="onSubmit()">
     <div class="d-sm-flex align-items-center justify-content-between">
       <div>
-        <nav aria-label="breadcrumb">
+        <nav aria-label="breadcrumb" style="margin-left: -14px">
           <ol class="breadcrumb breadcrumb-style1 mg-b-10">
-            <li class="breadcrumb-item"><a href="#">Cookie</a></li>
-            <li class="breadcrumb-item "><a href="#">Consent</a></li>
-            <li class="breadcrumb-item active">Banner</li>
+            <li class="breadcrumb-item"><a href="#">Privacy</a></li>
+            <li class="breadcrumb-item "><a href="#">Cookie Consent</a></li>
+            <li class="breadcrumb-item active">Banner Configuration</li>
 
           </ol>
         </nav>
         <!-- <h4 class="mg-b-0 tx-spacing--1">Welcome to Dashboard</h4> -->
       </div>
+
+
       <div class="d-none d-md-block">
-        <button  type="submit" class="btn btn-sm pd-x-15 btn-white btn-uppercase"><i data-feather="save"
-                                                                      class="wd-10 mg-r-5"></i> Save</button>
-        <button   type="submit" class="btn btn-sm pd-x-15 btn-primary btn-uppercase mg-l-5"
-                data-toggle="modal"><i data-feather="sliders" class="wd-10 mg-r-5"></i> Publish</button>
+        <button type="submit" class="btn btn-sm pd-x-15 btn-white btn-uppercase"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-save wd-10 mg-r-5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg> Save</button>
+        <button type="submit" class="btn btn-sm pd-x-15 btn-primary btn-uppercase mg-l-5" href="#modalAddCategory" data-toggle="modal"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-sliders wd-10 mg-r-5"><line x1="4" y1="21" x2="4" y2="14"></line><line x1="4" y1="10" x2="4" y2="3"></line><line x1="12" y1="21" x2="12" y2="12"></line><line x1="12" y1="8" x2="12" y2="3"></line><line x1="20" y1="21" x2="20" y2="16"></line><line x1="20" y1="12" x2="20" y2="3"></line><line x1="1" y1="14" x2="7" y2="14"></line><line x1="9" y1="8" x2="15" y2="8"></line><line x1="17" y1="16" x2="23" y2="16"></line></svg> Publish</button>
       </div>
     </div> <!-- breadcrumb -->
 
@@ -38,10 +38,17 @@
                     class="tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase col-sm-5  col-form-label">CCPA
                     Target:</label>
                   <div class="col-sm-7">
-                    <select formControlName="ccpaTarget" [disabled]="isGdprGlobal" class="form-control" id="sel1">
+                    <select  formControlName="ccpaTarget" [disabled]="isGdprGlobal" class="form-control" id="sel1">
                       <option *ngFor="let ccpaCountry of bannerConstant.ccpaTargetCountry" [value]="ccpaCountry.value">
                         {{ccpaCountry.title}}</option>
                     </select>
+
+                    <div *ngIf="submitted && f.ccpaTarget.errors">
+                      <div class="text-danger mt-2" *ngIf="f.ccpaTarget.errors.required">
+                        Choose CCPA Target
+                      </div>
+                    </div>
+
                   </div>
                 </div>
 
@@ -50,7 +57,13 @@
                   <label for="sel1"
                          class="tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase col-sm-5  col-form-label">GDPR Target:</label>
                   <div class="col-sm-7">
-                    <p-multiSelect  formControlName="gdprTarget" [style]="{'width':'100%'}" [options]="gdprTarget" ></p-multiSelect>
+                    <p-multiSelect [disabled]="gdprGlobal.checked ? true : false" [ngClass]="{ 'is-invalid': submitted && f.gdprTarget.errors }"
+                                   formControlName="gdprTarget" [style]="{'width':'100%'}" [options]="gdprTarget" ></p-multiSelect>
+                    <div *ngIf="submitted && f.gdprTarget.errors">
+                      <div class="text-danger mt-2" *ngIf="f.gdprTarget.errors.required">
+                        Choose GDPR Target
+                      </div>
+                    </div>
                   </div>
                 </div>
 
@@ -115,6 +128,32 @@
                         </label>
                       </div>
                     </div>
+
+                    <div class="form-group row pd-0 mg-b-0">
+                      <label class="col-sm-8 tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label">
+                        GDPR GLOBAL</label>
+                      <div class="col-sm-4">
+                        <label class="switch">
+                          <input type="checkbox" (ngModelChange)="onSetGdprGlobal($event)" #gdprGlobal formControlName="gdpr_global">
+                          <span class="slider round"></span>
+                        </label>
+                      </div>
+                    </div>
+
+
+                    <div class="form-group row pd-0 mg-b-0">
+                      <label class="col-sm-8 tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label">
+                        Configure banner</label>
+                      <div class="col-sm-4">
+                        <label class="switch">
+                          <input type="checkbox" #showConfig>
+                          <span class="slider round"></span>
+                        </label>
+                      </div>
+                    </div>
+
+
+
                   </div>
                 </div>
               </div>
@@ -146,12 +185,12 @@
 <!--          <p-tabPanel  header="Banner">-->
         <ng-container *ngIf="currentState === 'banner'">
           <div class="row">
-            <div class="col-md-5">
+            <div *ngIf="showConfig.checked" class="col-md-5">
               <div class="card">
                 <div class="card-header">Banner Styling and Content
                 </div>
-                <div class="card-body banner-body">
-                  <div class="row">
+                <div class="card-body p-0 banner-body">
+                  <div class="row banner-row">
                     <p-accordion>
                       <p-accordionTab header="General Configuration" [selected]="true">
                         <div class="col-md-12">
@@ -160,7 +199,7 @@
                               class="tx-12 tx-medium tx-middle tx-spacing-1 tx-color-03 tx-uppercase">Language </label>
                             <select [disabled]="isFieldDisabled" formControlName="Bannerlanguage"
                               class="form-control w-75" id="lang">
-                              <option *ngFor="let gdprLang of bannerConstant.GDPR.BANNER.Bannerlanguage"
+                              <option *ngFor="let gdprLang of bannerConstant.Bannerlanguage"
                                 [value]="gdprLang.value">{{gdprLang.title}}</option>
 
                             </select>
@@ -173,7 +212,7 @@
                         </div>
                         <div class="col-md-12 mb-4">
                           <h6 class="tx-12 tx-medium tx-middle tx-spacing-1 tx-color-03 tx-uppercase">Position</h6>
-                          <div *ngFor="let gdprPosition of bannerConstant.GDPR.BANNER.BannerPosition"
+                          <div *ngFor="let gdprPosition of bannerConstant.BannerPosition"
                             class="form-check-inline">
                             <label class="form-check-label">
                               <input formControlName="BannerPosition" [(ngModel)]="formContent.position"
@@ -189,7 +228,7 @@
                           <h5 class="tx-12 tx-medium tx-spacing-1 tx-color-03 tx-uppercase ">Title</h5>
                           <input type="text" [attr.disabled]="isFieldDisabled" formControlName="BannerTitle"
                             [(ngModel)]="formContent.bannerTitle" class="form-control w-100"
-                            [placeholder]="bannerConstant.GDPR.BANNER.BannerTitle">
+                            [placeholder]="formContent.bannerTitle">
                           <div *ngIf="submitted && f.BannerTitle.errors">
                             <div class="text-danger mt-2" *ngIf="f.BannerTitle.errors.minlength">
                               Minimum 2 characters required
@@ -203,7 +242,7 @@
                           <div class="w-100">
                             <h6 class="tx-12 tx-medium tx-spacing-1 tx-color-03 tx-uppercase">Description</h6>
                             <quill-editor [(ngModel)]="formContent.bannerDescription" maxlength="300"
-                              [placeholder]="bannerConstant.GDPR.BANNER.BannerDescription"
+                              [placeholder]="formContent.bannerDescription"
                               formControlName="BannerDescription" [modules]="quillConfig" [styles]="{height: '150px'}">
                             </quill-editor>
                             <div *ngIf="submitted && f.BannerDescription.errors">
@@ -252,7 +291,7 @@
                             <input type="text" [attr.disabled]="isFieldDisabled" class="form-control input-sm"
                               [(ngModel)]="formContent.bannerPreferenceButtonTextContent"
                               id="BannerPreferenceButtonTextContent" formControlName="BannerPreferenceButtonTextContent"
-                              [placeholder]="bannerConstant.GDPR.BANNER.BannerPreferenceButtonTextContent">
+                              [placeholder]="formContent.bannerPreferenceButtonTextContent">
                             <div *ngIf="submitted && f.BannerPreferenceButtonTextContent.errors">
                               <div class="text-danger mt-2"
                                 *ngIf="f.BannerPreferenceButtonTextContent.errors.minlength">
@@ -303,7 +342,7 @@
                             <input type="text" [attr.disabled]="isFieldDisabled" class="form-control input-sm"
                               formControlName="BannerAllowRequiredTextContent"
                               [(ngModel)]="formContent.bannerAllowReqButtonTextContent"
-                              [placeholder]="bannerConstant.GDPR.BANNER.BannerAllowRequiredButtonTextContent">
+                              [placeholder]="formContent.bannerAllowReqButtonTextContent">
                             <div *ngIf="submitted && f.BannerAllowRequiredTextContent.errors">
                               <div class="text-danger mt-2" *ngIf="f.BannerAllowRequiredTextContent.errors.minlength">
                                 Minimum 2 characters required
@@ -352,7 +391,7 @@
                             <input type="text" [attr.disabled]="isFieldDisabled" class="form-control input-sm"
                               formControlName="BannerAllowAllButtonTextContent"
                               [(ngModel)]="formContent.bannerAcceptButtonTextContent"
-                              [placeholder]="bannerConstant.GDPR.BANNER.BannerAllowAllButtonTextContent">
+                              [placeholder]="formContent.bannerAcceptButtonTextContent">
                             <div *ngIf="submitted && f.BannerAllowAllButtonTextContent.errors">
                               <div class="text-danger mt-2" *ngIf="f.BannerAllowAllButtonTextContent.errors.minlength">
                                 Minimum 2 characters required
@@ -399,7 +438,7 @@
                             <input type="text" [attr.disabled]="isFieldDisabled" class="form-control input-sm"
                               [(ngModel)]="formContent.bannerDisableButtonTextContent"
                               formControlName="BannerDisableAllButtonTextContent"
-                              [placeholder]="bannerConstant.GDPR.BANNER.BannerDisableAllButtonTextContent">
+                              [placeholder]="formContent.bannerDisableButtonTextContent">
                             <div *ngIf="submitted && f.BannerDisableAllButtonTextContent.errors">
                               <div class="text-danger mt-2"
                                 *ngIf="f.BannerDisableAllButtonTextContent.errors.minlength">
@@ -446,7 +485,7 @@
               </div>
             </div>
 
-            <div class="col-md-7">
+            <div [ngClass]="{'col-md-12' : !showConfig.checked , 'col-md-7' : showConfig.checked }" >
               <app-banner-live-priview *ngIf="!skeletonLoading" [formData]="formContent"></app-banner-live-priview>
               <ngx-skeleton-loader *ngIf="skeletonLoading" count="14"></ngx-skeleton-loader>
             </div>
@@ -461,11 +500,11 @@
 <!--         <p-tabPanel header="Preferences">-->
         <ng-container  >
           <div class="row" [ngStyle]="{display: currentState === 'popup' ? '' : 'none'}">
-            <div class="col-md-5">
+            <div *ngIf="showConfig.checked" class="col-md-5">
               <div class="card">
                 <div class="card-header">Preference Styling and Content
                 </div>
-                <div class="card-body popup-body">
+                <div class="card-body p-0 popup-body">
                   <p-accordion>
                     <p-accordionTab header="Purpose & Vendors (For GDPR Only)">
                       <div class="col-md-12 mt-2">
@@ -474,7 +513,7 @@
                           <textarea [attr.disabled]="isFieldDisabled" class="form-control w-100" rows="3"
                             formControlName="PopUpPurposeBodyDescription"
                             [(ngModel)]="formContent.popUpPurposeDescription"
-                            [placeholder]="bannerConstant.GDPR.POPUP.PopUpPurposeBodyDescription"></textarea>
+                            [placeholder]="formContent.popUpPurposeDescription"></textarea>
                           <div *ngIf="submitted && f.PopUpPurposeBodyDescription.errors">
                             <div class="text-danger mt-2" *ngIf="f.PopUpPurposeBodyDescription.errors.minlength">
                               Minimum 20 characters required
@@ -496,7 +535,7 @@
                           <textarea [attr.disabled]="isFieldDisabled" class="form-control w-100" rows="3"
                             formControlName="PopUpVendorBodyDescription"
                             [(ngModel)]="formContent.popUpVendorsDescription"
-                            [placeholder]="bannerConstant.GDPR.POPUP.PopUpVendorBodyDescription"></textarea>
+                            [placeholder]="formContent.popUpVendorsDescription"></textarea>
                           <div *ngIf="submitted && f.PopUpVendorBodyDescription.errors">
                             <div class="text-danger mt-2" *ngIf="f.PopUpVendorBodyDescription.errors.minlength">
                               Minimum 20 characters required
@@ -560,7 +599,7 @@
                           <input type="text" [attr.disabled]="isFieldDisabled" class="form-control"
                             class="form-control input-sm" [(ngModel)]="formContent.popUpDisableAllButtonTextContent"
                             formControlName="PopUpDisableAllButtonTextContent"
-                            [placeholder]="bannerConstant.GDPR.POPUP.PopUpDisableAllButtonTextContent">
+                            [placeholder]="formContent.popUpDisableAllButtonTextContent">
                           <div *ngIf="submitted && f.PopUpDisableAllButtonTextContent.errors">
                             <div class="text-danger mt-2" *ngIf="f.PopUpDisableAllButtonTextContent.errors.minlength">
                               Minimum 2 characters required
@@ -609,7 +648,7 @@
                           <input type="text" [attr.disabled]="isFieldDisabled" class="form-control input-sm"
                             formControlName="PopUpSaveMyChoiceButtonContentText"
                             [(ngModel)]="formContent.popUpSaveMyChoiceButtonTextContent"
-                            [placeholder]="bannerConstant.GDPR.POPUP.PopUpSaveMyChoiceButtonContentText">
+                            [placeholder]="formContent.popUpSaveMyChoiceButtonTextContent">
                           <div *ngIf="submitted && f.PopUpSaveMyChoiceButtonContentText.errors">
                             <div class="text-danger mt-2" *ngIf="f.PopUpSaveMyChoiceButtonContentText.errors.minlength">
                               Minimum 2 characters required
@@ -828,7 +867,7 @@
             </div>
 
 
-            <div class="col-md-7">
+            <div [ngClass]="{'col-md-12' : !showConfig.checked , 'col-md-7' : showConfig.checked }">
               <app-popup-live-preview [formData]="formContent">></app-popup-live-preview>
             </div>
           </div>
@@ -837,15 +876,15 @@
         </ng-container>
       </div>
 
-      <div class="col-md-12 mt-5">
-        <div class="text-center">
-          <button (click)="backClicked()" class="btn btn-default btn-md mr-4" type="button">Back</button>
-          <button *ngIf="!isEdit" class="btn btn-primary btn-md" type="submit">Save and Next
-          </button>
-          <button *ngIf="isEdit"  class="btn btn-primary btn-md" type="submit">Update and Next
-          </button>
-        </div>
-      </div>
+<!--      <div class="col-md-12 mt-5">-->
+<!--        <div class="text-center">-->
+<!--          <button (click)="backClicked()" class="btn btn-default btn-md mr-4" type="button">Back</button>-->
+<!--          <button *ngIf="!isEdit" class="btn btn-primary btn-md" type="submit">Save and Next-->
+<!--          </button>-->
+<!--          <button *ngIf="isEdit"  class="btn btn-primary btn-md" type="submit">Update and Next-->
+<!--          </button>-->
+<!--        </div>-->
+<!--      </div>-->
     </div>
   </form>
 </div>

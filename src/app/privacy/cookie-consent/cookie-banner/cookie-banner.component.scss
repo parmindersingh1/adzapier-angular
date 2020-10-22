@@ -45,8 +45,13 @@ input[type=color] {
 
 
 .banner-body {
-  max-height: 440px;
+  height: 409px;
   overflow: overlay;
+}
+.banner-row {
+  width: 100%;
+  margin-right: 0px;
+  margin-left: 0px;
 }
 .popup-body {
   max-height: 440px;
@@ -112,7 +117,7 @@ input[type=color] {
   transition: .4s;
 }
 
-// .form-check-label::before, 
+// .form-check-label::before,
 // .form-check-label::after {
 //     top: .8rem;
 //     width: 1.25rem;
