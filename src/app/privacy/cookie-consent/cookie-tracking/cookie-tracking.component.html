@@ -46,7 +46,9 @@
       </td>
       <td > {{consent.consent_date | date}} </td>
       <td data-toggle="tooltip" title="{{consent.device_id}}">{{consent.device_id.slice(0, 10)}} ...</td>
-      <td>{{consent.ip_address}}</td>
+      <td data-toggle="tooltip" title="{{consent.ip_address}}">
+        {{ consent.ip_address.length > 12 ? consent.ip_address.slice(0, 12) + '...' : consent.ip_address}}
+      </td>
       <td>{{consent.os}}</td>
       <td> {{consent.country}}</td>
       <td> {{consent.city}}</td>

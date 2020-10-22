@@ -123,7 +123,7 @@
                         Google Vendors</label>
                       <div class="col-sm-4">
                         <label class="switch">
-                          <input type="checkbox" formControlName="allowGoogleVendors">
+                          <input type="checkbox" formControlName="google_vendors">
                           <span class="slider round"></span>
                         </label>
                       </div>
@@ -485,7 +485,7 @@
               </div>
             </div>
 
-            <div [ngClass]="{'col-md-12' : !showConfig.checked , 'col-md-7' : showConfig.checked }" >
+            <div class="white-back" [ngClass]="{'col-md-12' : !showConfig.checked , 'col-md-7' : showConfig.checked }" >
               <app-banner-live-priview *ngIf="!skeletonLoading" [formData]="formContent"></app-banner-live-priview>
               <ngx-skeleton-loader *ngIf="skeletonLoading" count="14"></ngx-skeleton-loader>
             </div>
@@ -867,7 +867,7 @@
             </div>
 
 
-            <div [ngClass]="{'col-md-12' : !showConfig.checked , 'col-md-7' : showConfig.checked }">
+            <div class="white-back" [ngClass]="{'col-md-12' : !showConfig.checked , 'col-md-7' : showConfig.checked }">
               <app-popup-live-preview [formData]="formContent">></app-popup-live-preview>
             </div>
           </div>
