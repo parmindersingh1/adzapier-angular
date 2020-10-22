@@ -28,7 +28,7 @@
   bottom: 0px !important;
 }
 .navbar {
-    background: #042893 !important;
+    background: #fff !important; /*042893*/
     border-radius: 0 !important;
     height: 60px;
 }
@@ -192,6 +192,7 @@ a.dropdown-item > i {
 
 .container, .container-fluid {
     margin-bottom: 50px;
+    background-color: #f5f6fa;
 }
 
 .searchfield.mt-3 .form-inline {

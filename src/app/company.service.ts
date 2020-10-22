@@ -38,9 +38,9 @@ export class CompanyService {
     }));
   }
 
-  inviteUser( componentName, moduleName, reqestObj): Observable<any> {
+  inviteUser(componentName, moduleName, reqestObj): Observable<any> {
     const path = '/invite/user';
-    return this.httpClient.post<any>(environment.apiUrl + path , reqestObj).pipe(catchError(error => {
+    return this.httpClient.post<any>(environment.apiUrl + path, reqestObj).pipe(catchError(error => {
       this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.inviteUser, componentName, moduleName, path);
       return throwError(error);
     }));
@@ -48,28 +48,33 @@ export class CompanyService {
 
   updateUserRole(componentName, moduleName, reqestObj): Observable<any> {
     const path = '/invite/user';
-    return this.httpClient.put<any>(environment.apiUrl + path , reqestObj).pipe(catchError(error => {
+    return this.httpClient.put<any>(environment.apiUrl + path, reqestObj).pipe(catchError(error => {
       this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.updateUserRole, componentName, moduleName, path);
       return throwError(error);
     }));
   }
 
-  removeTeamMember(componentName, moduleName, id): Observable<any> {
-    const path = '/team_member/remove/';
-    return this.httpClient.put<any>(environment.apiUrl + path + id, {})
-    .pipe(catchError(error => {
-      this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.removeTeamMember, componentName, moduleName, path);
-      return throwError(error);
-    }));
+  removeTeamMember(componentName, moduleName, id, orgid?): Observable<any> {
+    let path;
+    if (orgid) {
+      path = '/invite/user/' + id + '?orgid=' + orgid;
+    } else {
+      path = '/invite/user/' + id;
+    }
+    return this.httpClient.delete<any>(environment.apiUrl + path)
+      .pipe(catchError(error => {
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.removeTeamMember, componentName, moduleName, path);
+        return throwError(error);
+      }));
   }
 
   resendInvitation(componentName, moduleName, userId): Observable<any> {
     const path = '/invite/user/resend/';
     return this.httpClient.get<any>(environment.apiUrl + path + userId, {})
-    .pipe(catchError(error => {
-      this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.resendInvitation, componentName, moduleName, path);
-      return throwError(error);
-    }));
+      .pipe(catchError(error => {
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.resendInvitation, componentName, moduleName, path);
+        return throwError(error);
+      }));
   }
 
   onSendLogs(errorType, msg, functionality, componentName, moduleName, path) {

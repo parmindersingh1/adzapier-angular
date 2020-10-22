@@ -28,14 +28,14 @@ export class CompanyteamComponent implements OnInit {
   alertType: any;
   dismissible = true;
   isOpen = false;
-
+  isUpdateUserinvitation = false;
   submitted;
   isInviteFormSubmitted;
   permissions: any = [];
   userRoleID: any;
   roleList: any;
   emailid: any;
-
+  approverID: any;
   constructor(private companyService: CompanyService, private modalService: NgbModal,
               private formBuilder: FormBuilder,
               private userService: UserService,
@@ -112,7 +112,7 @@ export class CompanyteamComponent implements OnInit {
     });
   }
 
-  onSubmitInviteUser() {
+  onSubmitInviteUserXX() {
     this.isInviteFormSubmitted = true;
     if (this.inviteUserForm.invalid) {
       return false;
@@ -142,6 +142,67 @@ export class CompanyteamComponent implements OnInit {
         });
     }
   }
+
+  
+  onSubmitInviteUser() {
+    this.isInviteFormSubmitted = true;
+    if (this.inviteUserForm.invalid) {
+      return false;
+    } else {
+      if (!this.isUpdateUserinvitation) {
+        const requestObj = {
+          email: this.inviteUserForm.value.emailid,
+          role_id: this.inviteUserForm.value.permissions,
+          user_level: 'company'
+        };
+        this.companyService.inviteUser( this.constructor.name, moduleName.organizationDetailsModule, requestObj)
+          .subscribe((data) => {
+            if (data) {
+              this.alertMsg = data.response;
+              this.isOpen = true;
+              this.alertType = 'success';
+              this.loadCompanyTeamMembers();
+              this.modalService.dismissAll('Data Saved!');
+            }
+          }, (error) => {
+            this.alertMsg = JSON.stringify(error);
+            this.isOpen = true;
+            this.alertType = 'danger';
+            this.modalService.dismissAll('Data Saved!');
+          });
+      } else {
+        const requestObj = {
+         // email: this.inviteUserOrgForm.get('emailid').value,
+          user_id: this.approverID,
+          role_id: this.inviteUserForm.value.permissions,
+        //  user_level: 'organization'
+        };
+        this.companyService.updateUserRole( this.constructor.name, moduleName.organizationDetailsModule, requestObj)
+          .subscribe((data) => {
+            if (data) {
+              this.alertMsg = data.response;
+              this.isOpen = true;
+              this.alertType = 'success';
+              this.loadCompanyTeamMembers();
+              this.onCancelClick();
+            }
+          }, (error) => {
+            this.alertMsg = JSON.stringify(error);
+            this.isOpen = true;
+            this.alertType = 'danger';
+            this.onCancelClick();
+          });
+      }
+    }
+  }
+
+  onCancelClick() {
+    this.isInviteFormSubmitted = false;
+    this.isUpdateUserinvitation = false;
+    this.inviteUserForm.reset();
+    this.modalService.dismissAll('Canceled');
+  }
+
 
   onResendInvitation(id) {
     this.companyService.resendInvitation(this.constructor.name, moduleName.companyModule, id)
@@ -223,6 +284,22 @@ export class CompanyteamComponent implements OnInit {
     this.isOpen = false;
   }
 
+  editUserInvitation(content, data) {
+    console.log(data, 'editUserInvitation..');
+    this.isUpdateUserinvitation = true;
+    this.approverID = data.approver_id;
+    this.inviteUserForm.controls['emailid'].setValue(data.user_email);
+    this.inviteUserForm.get('emailid')[this.isUpdateUserinvitation ? 'disable' : 'enable']();
+    this.inviteUserForm.controls['permissions'].setValue(data.role_id);
+     
+    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
+      this.inviteUserForm.reset();
+      // this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.inviteUserForm.reset();
+      // this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
   
   onChangeEvent(event) {
     this.paginationConfig.itemsPerPage = Number(event.target.value);

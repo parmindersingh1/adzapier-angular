@@ -363,6 +363,7 @@
 
   .shadowdiv .tab-content {
     padding: 5px;
+    background: #fff;
   }
 
 .displayblock {
@@ -665,4 +666,41 @@ span.previewbtn a {
 
 .required-check label {
   margin-left: 20px;
+}
+
+.publishbg {
+  background-color: #fbfbff;
+  margin: 10px 20px 30px 20px;
+  border: 1px solid #dfdfe8;
+}
+
+.publish {
+  margin: 0;
+  width: 100%;
+  white-space: pre-wrap;
+  max-height: 18rem;
+  overflow-y: auto;
+  padding: 0 10px 0 20px;
+}
+
+.bluecolor {
+  color: #4f9fcf;
+}
+
+.greencolor {
+  color: green;
+}
+
+.redcolor {
+  color: red;
+}
+
+.script-title {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.fontsize22 {
+  font-size: 22px;
 }

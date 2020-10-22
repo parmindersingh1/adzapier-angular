@@ -1,6 +1,6 @@
 import {
   Component, OnInit, OnDestroy, ViewChild, ViewEncapsulation,
-  ChangeDetectionStrategy, ChangeDetectorRef, AfterViewInit
+  ChangeDetectionStrategy, ChangeDetectorRef, AfterViewInit, ElementRef, HostListener
 } from '@angular/core';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { FormBuilder, FormGroup, NgForm, FormControl } from '@angular/forms';
@@ -15,6 +15,7 @@ import { CCPAFormConfigurationService } from 'src/app/_services/ccpaform-configu
 import { WorkflowService } from 'src/app/_services/workflow.service';
 import { Observable } from 'rxjs';
 import { moduleName } from '../../../_constant/module-name.constant';
+import { WebControlProperties } from 'src/app/_models/webcontrolproperties';
 @Component({
   selector: 'app-dsarform',
   templateUrl: './dsarform.component.html',
@@ -23,8 +24,10 @@ import { moduleName } from '../../../_constant/module-name.constant';
   changeDetection: ChangeDetectionStrategy.OnPush
 
 })
-export class DsarformComponent implements OnInit, OnDestroy, AfterViewInit {
+export class DsarformComponent implements OnInit, OnDestroy {
   @ViewChild('editor', { static: true }) editor;
+  @ViewChild('sampleCode', { static: false }) public sampleCode: ElementRef<any>;
+
   public requestObject: any = {};
   public selectedFormOption: any;
   public selectedControlType: any;
@@ -192,18 +195,19 @@ export class DsarformComponent implements OnInit, OnDestroy, AfterViewInit {
   captchaid: any;
   isRequiredField = false;
   isFileuploadRequiredField = false;
-  selectedControlObj;
+  selectedControlObj: WebControlProperties;
+  scriptcode: string;
   constructor(private fb: FormBuilder, private ccpaRequestService: CcparequestService,
-              private organizationService: OrganizationService,
-              private dsarFormService: DsarformService,
-              private ccpaFormConfigService: CCPAFormConfigurationService,
-              private workFlowService: WorkflowService,
-              private router: Router,
-              private location: Location,
-              private activatedRoute: ActivatedRoute,
-              private loadingbar: NgxUiLoaderService,
-              private modalService: NgbModal,
-              private cd: ChangeDetectorRef
+    private organizationService: OrganizationService,
+    private dsarFormService: DsarformService,
+    private ccpaFormConfigService: CCPAFormConfigurationService,
+    private workFlowService: WorkflowService,
+    private router: Router,
+    private location: Location,
+    private activatedRoute: ActivatedRoute,
+    private loadingbar: NgxUiLoaderService,
+    private modalService: NgbModal,
+    private cd: ChangeDetectorRef
   ) {
 
     this.count = 0;
@@ -254,6 +258,7 @@ export class DsarformComponent implements OnInit, OnDestroy, AfterViewInit {
     this.loadStateList();
     this.loadWorkFlowList();
     this.loadCaptcha();
+    this.getWebFormScriptLink();
   }
 
   CreateUpdateDSARForm(formcrid) {
@@ -773,6 +778,7 @@ export class DsarformComponent implements OnInit, OnDestroy, AfterViewInit {
         this.webFormControlList = this.dsarFormService.getFormControlList();
         this.lblText = '';
         this.cancelAddingFormControl();
+        this.updateCaptchaPosition();
         //  this.selectedControlType = false;
       }
     }
@@ -934,6 +940,16 @@ export class DsarformComponent implements OnInit, OnDestroy, AfterViewInit {
 
   isContainCaptchaControl(item): boolean {
     return item.controlId === 'captchacontrol' ? true : false;
+  }
+
+  isCaptchaControlRequired(): boolean {
+    if (this.crid) {
+      this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
+      return this.webFormControlList.findIndex((t) => t.controlId === 'captchacontrol');
+    } else {
+      this.webFormControlList = this.dsarFormService.getFormControlList();
+      return this.webFormControlList.some((t) => t.controlId === 'captchacontrol');
+    }
   }
 
   cancelAddingFormControl() {
@@ -1239,6 +1255,19 @@ export class DsarformComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
+  getWebFormScriptLink() {
+    if (this.orgId && this.propId) {
+      if (window.location.hostname === 'localhost') {
+        this.scriptcode = 'http://localhost:4500/ccpa/form/' + this.orgId + '/' + this.propId + '/' + this.crid;
+      }
+      if (window.location.hostname === 'develop-cmp.adzpier-staging.com') {
+        this.scriptcode = 'https://develop-privacyportal.adzpier-staging.com/ccpa/form/' + this.orgId + '/' + this.propId + '/' + this.crid;
+      } else if (window.location.hostname === 'cmp.adzpier-staging.com') {
+        this.scriptcode = 'https://privacyportal.adzpier-staging.com/ccpa/form/' + this.orgId + '/' + this.propId + '/' + this.crid;
+      }
+    }
+  }
+
   onClosed(dismissedAlert: any): void {
     this.alertMsg = !dismissedAlert;
     this.isOpen = false;
@@ -1301,7 +1330,7 @@ export class DsarformComponent implements OnInit, OnDestroy, AfterViewInit {
   allowFileupload(event) {
     this.isFileUploadRequired = event.target.checked;
     if (this.crid) {
-      this.webFormControlList = this.ccpaFormConfigService.getFormControlList();  
+      this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
       const customControlIndex = this.webFormControlList.findIndex((t) => t.controlId === 'fileupload');
       const updateobj = this.webFormControlList[customControlIndex];
       updateobj.requiredfield = event.target.checked;
@@ -1370,26 +1399,44 @@ export class DsarformComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   onCheckboxChange($event) {
-    // console.log(this.selectedControlObj,'selectedControlObj..');
-    this.selectedControlObj.requiredfield = $event.target.checked;
     this.isRequiredField = $event.target.checked;
-  //  this.isFileUploadRequired = 
-
-    if (this.crid) {
-      const customControlIndex = this.ccpaFormConfigService.getFormControlList()
-        .findIndex((t) => t.indexCount === this.selectedControlObj.indexCount);
-      this.ccpaFormConfigService.updateControl(this.webFormControlList[customControlIndex], customControlIndex, this.selectedControlObj);
-      this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
-    } else {
-      const customControlIndex = this.dsarFormService.getFormControlList()
-       .findIndex((t) => t.indexCount === this.selectedControlObj.indexCount);
-      this.dsarFormService.updateControl(this.webFormControlList[customControlIndex], customControlIndex, this.selectedControlObj);
-      this.webFormControlList = this.dsarFormService.getFormControlList();
+    // console.log(this.selectedControlObj,'selectedControlObj..');
+    if (this.selectedControlObj !== undefined) {
+      this.selectedControlObj.requiredfield = $event.target.checked;
+      if (this.crid) {
+        const customControlIndex = this.ccpaFormConfigService.getFormControlList()
+          .findIndex((t) => t.indexCount === this.selectedControlObj.indexCount);
+        this.ccpaFormConfigService.updateControl(this.webFormControlList[customControlIndex], customControlIndex, this.selectedControlObj);
+        this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
+      } else {
+        const customControlIndex = this.dsarFormService.getFormControlList()
+          .findIndex((t) => t.indexCount === this.selectedControlObj.indexCount);
+        this.dsarFormService.updateControl(this.webFormControlList[customControlIndex], customControlIndex, this.selectedControlObj);
+        this.webFormControlList = this.dsarFormService.getFormControlList();
+      }
     }
   }
 
-  onCheckboxChangeUpload($event){
+  onCheckboxChangeUpload($event) {
     this.isFileuploadRequiredField = $event.target.checked;
+    if (this.crid) {
+      const customControlIndex = this.webFormControlList.findIndex((t) => t.controlId === 'fileupload');
+      const updateobj = this.webFormControlList[customControlIndex];
+      updateobj.ismandatory = this.isFileuploadRequiredField ? true : false;
+      updateobj.preferControlOrder = this.webFormControlList.length - 1;
+      this.ccpaFormConfigService.updateControl(this.webFormControlList[customControlIndex], customControlIndex, updateobj);
+      this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
+      this.rearrangeFormSequence(this.webFormControlList);
+    } else {
+      this.webFormControlList = this.dsarFormService.getFormControlList();
+      const oldControlIndex = this.webFormControlList.findIndex((t) => t.controlId === 'fileupload');
+      const obj = this.webFormControlList[oldControlIndex];
+      obj.ismandatory = this.isFileuploadRequiredField ? true : false;
+      obj.preferControlOrder = this.webFormControlList.length - 1;
+      this.dsarFormService.updateControl(this.webFormControlList[oldControlIndex], oldControlIndex, obj);
+      this.webFormControlList = this.dsarFormService.getFormControlList();
+      this.rearrangeFormSequence(this.webFormControlList);
+    }
   }
 
   ngOnDestroy() {
@@ -1400,12 +1447,62 @@ export class DsarformComponent implements OnInit, OnDestroy, AfterViewInit {
     this.selectedwebFormControlList = [];
   }
 
-  ngAfterViewInit() {
-    this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
-    this.cd.detectChanges();
+  copyToClipBoard() {
+
+    let textarea = null;
+    textarea = document.createElement('textarea');
+    textarea.style.height = '0px';
+    textarea.style.left = '-100px';
+    textarea.style.opacity = '0';
+    textarea.style.position = 'fixed';
+    textarea.style.top = '-100px';
+    textarea.style.width = '0px';
+    document.body.appendChild(textarea);
+    // Set and select the value (creating an active Selection range).
+    textarea.value = this.sampleCode.nativeElement.innerText.trim();
+    textarea.select();
+    document.execCommand('copy');
+    if (textarea && textarea.parentNode) {
+      textarea.parentNode.removeChild(textarea);
+    }
   }
+
+  updateCaptchaPosition() {
+    if (this.crid) {
+      this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
+      const customControlIndex = this.webFormControlList.findIndex((t) => t.controlId === 'captchacontrol');
+      const updateobj = this.webFormControlList[customControlIndex];
+      const elementToReplace = this.webFormControlList.splice(customControlIndex, 1);
+      this.webFormControlList = this.webFormControlList.concat(elementToReplace);
+      this.dsarFormService.setFormControlList(this.webFormControlList);
+      // updateobj.preferControlOrder = this.webFormControlList.length - 1;
+      // this.ccpaFormConfigService.updateControl(this.webFormControlList[customControlIndex], customControlIndex, updateobj);
+      this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
+      this.rearrangeFormSequence(this.webFormControlList);
+
+    } else {
+      this.webFormControlList = this.dsarFormService.getFormControlList();
+      const customControlIndex = this.webFormControlList.findIndex((t) => t.controlId === 'captchacontrol');
+      const updateobj = this.webFormControlList[customControlIndex];
+      const elementToReplace = this.webFormControlList.splice(customControlIndex, 1);
+      this.webFormControlList = this.webFormControlList.concat(elementToReplace);
+      this.dsarFormService.setFormControlList(this.webFormControlList);
+      // updateobj.preferControlOrder = this.webFormControlList.length + 1;
+      // this.dsarFormService.updateControl(this.webFormControlList[customControlIndex], customControlIndex, updateobj);
+      this.webFormControlList = this.dsarFormService.getFormControlList();
+      this.rearrangeFormSequence(this.webFormControlList);
+    }
+  }
+  // ngAfterViewInit() {
+  //   const copyText = this.sampleCode.nativeElement.innerText.trim();
+  //   console.log(copyText, 'ct..');
+  //   this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
+  //   this.cd.detectChanges();
+  // }
 }
 
 interface CustomControls {
   [key: string]: any;
 }
+
+

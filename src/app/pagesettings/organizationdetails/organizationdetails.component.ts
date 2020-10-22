@@ -468,7 +468,8 @@ disableOrganization() {
 }
 
 removeTeamMember(id) {
-  this.companyService.removeTeamMember( this.constructor.name, moduleName.organizationDetailsModule, id).subscribe((data) => {
+  this.companyService.removeTeamMember( this.constructor.name, moduleName.organizationDetailsModule, id,
+    this.organizationID).subscribe((data) => {
     if (data) {
       this.alertMsg = data.response;
       this.isOpen = true;
