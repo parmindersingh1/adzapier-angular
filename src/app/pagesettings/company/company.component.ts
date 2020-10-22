@@ -101,12 +101,14 @@ export class CompanyComponent implements OnInit {
   }
 
   editOrganizationModalPopup(content) {
+    this.isInviteFormSubmitted = false;
+    this.isUpdateUserinvitation = false;
+    this.inviteUserForm.reset();
+    this.inviteUserForm.get('emailid')[this.isUpdateUserinvitation ? 'disable' : 'enable']();
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
     }, (reason) => {
       // this.profileForm.reset();
     });
-    this.inviteUserForm.reset();
-    this.isInviteFormSubmitted = false;
   }
 
   pathValues() {
@@ -150,16 +152,11 @@ export class CompanyComponent implements OnInit {
         .subscribe((data) => {
           this.loading.stop();
           if (data) {
-            //  this.isShowbtnVisible = false;
-            // this.show = true;
-         // alert('Details has been updated successfully!');
             this.alertMsg = 'Details has been updated successfully!';
             this.isOpen = true;
             this.alertType = 'success';
             this.loadCompanyDetails();
-            // this.userService.getCurrentUser.emit(data);
             this.modalService.dismissAll('Data Saved!');
-            // this.loadUserDetails();
           }
         }, (err) => {
             this.loading.stop();
@@ -167,11 +164,8 @@ export class CompanyComponent implements OnInit {
             this.isOpen = true;
             this.alertType = 'danger';
             this.modalService.dismissAll('Error!');
-          // this.isShowbtnVisible = true;
-          // this.show = false;
         }
         );
-      // this.profileForm.disable();
     }
   }
 
@@ -193,20 +187,20 @@ export class CompanyComponent implements OnInit {
               this.isOpen = true;
               this.alertType = 'success';
               this.loadCompanyTeamMembers();
-              this.modalService.dismissAll('Data Saved!');
+              this.onCancelClick();
+              this.isUpdateUserinvitation = false;
             }
           }, (error) => {
             this.alertMsg = JSON.stringify(error);
             this.isOpen = true;
             this.alertType = 'danger';
-            this.modalService.dismissAll('Data Saved!');
+            this.onCancelClick();
+            this.isUpdateUserinvitation = false;
           });
       } else {
         const requestObj = {
-         // email: this.inviteUserOrgForm.get('emailid').value,
           user_id: this.approverID,
           role_id: this.inviteUserForm.value.permissions,
-        //  user_level: 'organization'
         };
         this.companyService.updateUserRole( this.constructor.name, moduleName.organizationDetailsModule, requestObj)
           .subscribe((data) => {
@@ -216,12 +210,14 @@ export class CompanyComponent implements OnInit {
               this.alertType = 'success';
               this.loadCompanyTeamMembers();
               this.onCancelClick();
+              this.isUpdateUserinvitation = false;
             }
           }, (error) => {
             this.alertMsg = JSON.stringify(error);
             this.isOpen = true;
             this.alertType = 'danger';
             this.onCancelClick();
+            this.isUpdateUserinvitation = false;
           });
       }
     }
@@ -327,11 +323,13 @@ export class CompanyComponent implements OnInit {
         this.isOpen = true;
         this.alertType = 'success';
         this.loadCompanyTeamMembers();
+        this.onCancelClick();
       }
     }, (err) => {
         this.alertMsg = err;
         this.isOpen = true;
         this.alertType = 'danger';
+        this.onCancelClick();
     });
    }
 
@@ -353,9 +351,8 @@ export class CompanyComponent implements OnInit {
         this.isOpen = true;
         this.alertType = 'success';
 
-        this.inviteUserForm.reset();
         this.loadCompanyTeamMembers();
-        this.modalService.dismissAll('Data Saved!');
+        this.onCancelClick();
       }
     }, (err) => {
       this.loading.stop();
@@ -363,7 +360,7 @@ export class CompanyComponent implements OnInit {
       this.isOpen = true;
       this.alertType = 'danger';
    //   this.notification.error('Invitation Send', 'Something went wrong...', notificationConfig);
-      this.modalService.dismissAll('Error!');
+      this.onCancelClick();
     });
   }
 
