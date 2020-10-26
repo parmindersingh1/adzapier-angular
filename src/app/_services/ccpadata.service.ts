@@ -63,6 +63,16 @@ export class CcpadataService {
     );
   }
 
+  deleteDSARRequestByID(componentName, moduleName, orgID, propID, ccpaDataId){
+    const path = '/ccpa/data/' + orgID + '/' + propID + '/' + ccpaDataId;
+    return this.httpClient.delete<any>(environment.apiUrl + path).pipe(
+      catchError(error => {
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.getWorkflow, componentName, moduleName, path);
+        return throwError(error);
+      })
+    );
+  }
+
   onSendLogs(errorType, msg, functionality, componentName, moduleName, path) {
     this.lokiService.onSendErrorLogs(errorType, msg, functionality, componentName, moduleName, path).subscribe();
   }

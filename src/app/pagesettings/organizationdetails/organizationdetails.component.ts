@@ -66,6 +66,7 @@ export class OrganizationdetailsComponent implements OnInit {
   email: any;
   phone: any;
   isUpdateUserinvitation = false;
+  recordID: any;
   constructor(private activatedRoute: ActivatedRoute,
               private orgService: OrganizationService,
               private modalService: NgbModal,
@@ -400,11 +401,9 @@ export class OrganizationdetailsComponent implements OnInit {
           });
       } else {
         const requestObj = {
-         // email: this.inviteUserOrgForm.get('emailid').value,
+          id: this.recordID,
           user_id: this.approverID,
-          role_id: this.inviteUserOrgForm.value.permissions,
-          orgid: this.organizationID
-        //  user_level: 'organization'
+          role_id: this.inviteUserOrgForm.value.permissions
         };
         this.companyService.updateUserRole( this.constructor.name, moduleName.organizationDetailsModule, requestObj)
           .subscribe((data) => {
@@ -467,8 +466,8 @@ disableOrganization() {
   });
 }
 
-removeTeamMember(id) {
-  this.companyService.removeTeamMember( this.constructor.name, moduleName.organizationDetailsModule, id,
+removeTeamMember(obj) {
+  this.companyService.removeTeamMember( this.constructor.name, moduleName.organizationDetailsModule, obj,
     this.organizationID).subscribe((data) => {
     if (data) {
       this.alertMsg = data.response;
@@ -512,7 +511,8 @@ onResendInvitation(userid) {
 editUserInvitation(content, data) {
   console.log(data, 'editUserInvitation..');
   this.isUpdateUserinvitation = true;
-  this.approverID = data.approver_id;
+  this.recordID = data.id;
+  this.approverID = data.approver_id;  
   this.inviteUserOrgForm.controls['emailid'].setValue(data.user_email);
   this.inviteUserOrgForm.get('emailid')[this.isUpdateUserinvitation ? 'disable' : 'enable']();
   this.inviteUserOrgForm.controls['permissions'].setValue(data.role_id);

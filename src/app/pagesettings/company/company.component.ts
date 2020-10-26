@@ -47,6 +47,7 @@ export class CompanyComponent implements OnInit {
   dismissible = true;
   isOpen = false;
   approverID: any;
+  recordID: any;
   constructor(private companyService: CompanyService, private modalService: NgbModal,
               private formBuilder: FormBuilder,
               private userService: UserService,
@@ -97,16 +98,24 @@ export class CompanyComponent implements OnInit {
       this.companyId = data.response.id;
       this.email = data.response.email;
       this.phone = data.response.phone;
-    });
+    }, (err) => {
+      this.loading.stop();
+      this.alertMsg = err;
+      this.isOpen = true;
+      this.alertType = 'danger';
+      this.modalService.dismissAll('Error!');
+  });
   }
 
   editOrganizationModalPopup(content) {
+    this.isInviteFormSubmitted = false;
+    this.isUpdateUserinvitation = false;
+    this.inviteUserForm.reset();
+    this.inviteUserForm.get('emailid')[this.isUpdateUserinvitation ? 'disable' : 'enable']();
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
     }, (reason) => {
       // this.profileForm.reset();
     });
-    this.inviteUserForm.reset();
-    this.isInviteFormSubmitted = false;
   }
 
   pathValues() {
@@ -126,7 +135,13 @@ export class CompanyComponent implements OnInit {
         email: this.companyDetails[0].email,
         phone: this.companyDetails[0].phone
       });
-    });
+    }, (err) => {
+      this.loading.stop();
+      this.alertMsg = err;
+      this.isOpen = true;
+      this.alertType = 'danger';
+      this.modalService.dismissAll('Error!');
+  });
   }
 
   onSubmit() {
@@ -150,16 +165,11 @@ export class CompanyComponent implements OnInit {
         .subscribe((data) => {
           this.loading.stop();
           if (data) {
-            //  this.isShowbtnVisible = false;
-            // this.show = true;
-         // alert('Details has been updated successfully!');
             this.alertMsg = 'Details has been updated successfully!';
             this.isOpen = true;
             this.alertType = 'success';
             this.loadCompanyDetails();
-            // this.userService.getCurrentUser.emit(data);
             this.modalService.dismissAll('Data Saved!');
-            // this.loadUserDetails();
           }
         }, (err) => {
             this.loading.stop();
@@ -167,11 +177,8 @@ export class CompanyComponent implements OnInit {
             this.isOpen = true;
             this.alertType = 'danger';
             this.modalService.dismissAll('Error!');
-          // this.isShowbtnVisible = true;
-          // this.show = false;
         }
         );
-      // this.profileForm.disable();
     }
   }
 
@@ -193,20 +200,21 @@ export class CompanyComponent implements OnInit {
               this.isOpen = true;
               this.alertType = 'success';
               this.loadCompanyTeamMembers();
-              this.modalService.dismissAll('Data Saved!');
+              this.onCancelClick();
+              this.isUpdateUserinvitation = false;
             }
           }, (error) => {
             this.alertMsg = JSON.stringify(error);
             this.isOpen = true;
             this.alertType = 'danger';
-            this.modalService.dismissAll('Data Saved!');
+            this.onCancelClick();
+            this.isUpdateUserinvitation = false;
           });
       } else {
         const requestObj = {
-         // email: this.inviteUserOrgForm.get('emailid').value,
+          id: this.recordID,
           user_id: this.approverID,
           role_id: this.inviteUserForm.value.permissions,
-        //  user_level: 'organization'
         };
         this.companyService.updateUserRole( this.constructor.name, moduleName.organizationDetailsModule, requestObj)
           .subscribe((data) => {
@@ -216,12 +224,14 @@ export class CompanyComponent implements OnInit {
               this.alertType = 'success';
               this.loadCompanyTeamMembers();
               this.onCancelClick();
+              this.isUpdateUserinvitation = false;
             }
           }, (error) => {
             this.alertMsg = JSON.stringify(error);
             this.isOpen = true;
             this.alertType = 'danger';
             this.onCancelClick();
+            this.isUpdateUserinvitation = false;
           });
       }
     }
@@ -245,6 +255,7 @@ export class CompanyComponent implements OnInit {
     console.log(data, 'editUserInvitation..');
     this.isUpdateUserinvitation = true;
     this.approverID = data.approver_id;
+    this.recordID = data.id;
     this.inviteUserForm.controls['emailid'].setValue(data.user_email);
     this.inviteUserForm.get('emailid')[this.isUpdateUserinvitation ? 'disable' : 'enable']();
     this.inviteUserForm.controls['permissions'].setValue(data.role_id);
@@ -320,18 +331,20 @@ export class CompanyComponent implements OnInit {
     });
   }
 
-  removeTeamMember(id) {
-    this.companyService.removeTeamMember(this.constructor.name, moduleName.companyModule, id).subscribe((data) => {
+  removeTeamMember(obj) {
+    this.companyService.removeTeamMember(this.constructor.name, moduleName.companyModule, obj).subscribe((data) => {
       if (data) {
         this.alertMsg = 'User has been removed!';
         this.isOpen = true;
         this.alertType = 'success';
         this.loadCompanyTeamMembers();
+        this.onCancelClick();
       }
     }, (err) => {
         this.alertMsg = err;
         this.isOpen = true;
         this.alertType = 'danger';
+        this.onCancelClick();
     });
    }
 
@@ -353,9 +366,8 @@ export class CompanyComponent implements OnInit {
         this.isOpen = true;
         this.alertType = 'success';
 
-        this.inviteUserForm.reset();
         this.loadCompanyTeamMembers();
-        this.modalService.dismissAll('Data Saved!');
+        this.onCancelClick();
       }
     }, (err) => {
       this.loading.stop();
@@ -363,7 +375,7 @@ export class CompanyComponent implements OnInit {
       this.isOpen = true;
       this.alertType = 'danger';
    //   this.notification.error('Invitation Send', 'Something went wrong...', notificationConfig);
-      this.modalService.dismissAll('Error!');
+      this.onCancelClick();
     });
   }
 

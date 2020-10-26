@@ -14,7 +14,7 @@
             <li [ngbNavItem]="1">
                 <a ngbNavLink>1 Basic</a>
                 <ng-template ngbNavContent>
-                    <div id="step-1" class="pd-20 tab-pane step-content" style="display: block;">
+                    <div id="step-1" class="p-10 mt-2 tab-pane step-content" style="display: block;">
                         <div class="col-6 align-items-center justify-content-between">
                             <div class="form-group">
                                 <label class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">Web Form
@@ -839,17 +839,17 @@
                         <div class="form-group mg-b-5">
                             <label for="fileupload"
                                 class="form-check-label tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03"
-                                class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">
+                               >
                                 <input type="checkbox" [checked]="isFileUploadRequired" class="form-check-input"
                                     (click)="allowFileupload($event)" />
                                 <span class="pad-right-20"> File upload</span>
                             </label>
                             <div class="form-check required-check">
+                                <label class="form-check-label tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03" for="gridCheck1">
                                 <input class="form-check-input" name="changeControlType"
                                     [checked]="isFileuploadRequiredField" (change)="onCheckboxChangeUpload($event)"
-                                    type="checkbox" id="gridCheck1">
-                                <label class="form-check-label" for="gridCheck1">
-                                    Required
+                                    type="checkbox" id="gridCheck1">                                
+                                    <span class="pad-right-20 ml-1"> Required </span>
                                 </label>
                             </div>
                         </div>
@@ -889,33 +889,62 @@
             <li [ngbNavItem]="4">
                 <a ngbNavLink>4 Publish</a>
                 <ng-template ngbNavContent>
-                    
-                    <p class="p-0 ml-4 mr-4 mt-2 mb-0 script-title">
-                       
-                        <span class="font-weight-bold"> <span class="fontsize22 mr-1"><i class="far fa-file-code"></i></span>Add script</span> <button class="btn btn-xs btn-primary float-right" (click)="copyToClipBoard()">Copy</button> </p>
-                    <div class="publishbg" #sampleCode>
-                        <pre class="mb-0">
-                            <code><span class="tag">&lt;style&gt;</span>
-                                    <span style="color: blueviolet;">{{'.form-wrapper {'}}</span>
-                                        <span class="pln">max</span><span class="pun">-</span><span class="pln">width</span><span class="pun">:</span> <span class="lit">100%</span><span class="pun">;</span><span class="pln">
-                                        height</span><span class="pun">:</span> <span class="lit">800px</span><span class="pun">;</span><span class="pln">
-                                        border</span><span class="pun">:</span> <span class="lit">1px</span><span class="pln"> solid </span><span class="com">#c0c2c7;</span><span class="pln">
-                                        margin</span><span class="pun">:</span> <span class="kwd">auto</span><span class="pun">;</span><span class="pln">
-                                        text-align</span><span class="pun">:</span> <span class="lit">center</span><span class="pun">;</span>
-                                    <span style="color: blueviolet;">{{ '}' }}</span>
+                    <div class="publishwrapper">
+                    <ul ngbNav #nav="ngbNav" class="nav-tabs">
+                        <li ngbNavItem>
+                          <a ngbNavLink>Embed Code</a>
+                          <ng-template ngbNavContent>
+                            <div class="code-link-wrapper">
+                            <p class="script-title">                       
+                                <span class="font-weight-bold"> <span class="fontsize22 mr-1"><i class="far fa-file-code"></i></span>Add script</span> <button class="btn btn-xs btn-primary float-right" (click)="copyToClipBoard('embedcode')">Copy</button> </p>
+                            <div class="publishbg" #azEmbedCode>
+                    <pre class="mb-0">
+<code>  <span class="tag">&lt;style&gt;</span>
+        <span style="color: blueviolet;">{{'.az-form-wrapper {'}}</span>
+            <span class="pln">max</span><span class="pun">-</span><span class="pln">width</span><span class="pun">:</span> <span class="lit">100%</span><span class="pun">;</span><span class="pln">
+            height</span><span class="pun">:</span> <span class="lit">800px</span><span class="pun">;</span><span class="pln">
+            border</span><span class="pun">:</span> <span class="lit">1px</span><span class="pln"> solid </span><span class="com">#c0c2c7;</span><span class="pln">
+            margin</span><span class="pun">:</span> <span class="kwd">auto</span><span class="pun">;</span><span class="pln">
+            text-align</span><span class="pun">:</span> <span class="lit">center</span><span class="pun">;</span>
+        <span style="color: blueviolet;">{{ '}' }}</span>
 
-                                    <span style="color: blueviolet;">{{'.form-wrapper iframe {'}}</span>
-                                        <span class="pln">min</span><span class="pun">-</span><span class="pln">width</span><span class="pun">:</span> <span class="lit">450px</span><span class="pun">;</span><span class="pln">
-                                        height</span><span class="pun">:</span> <span class="lit">800px</span><span class="pun">;</span><span class="pln">
-                                        border</span><span class="pun">:</span> <span class="lit">1px</span><span class="pln"> solid </span><span class="com">#c0c2c7;</span><span class="pln">
-                                        margin</span><span class="pun">:</span> <span class="kwd">0 auto</span><span class="pun">;</span>
-                                        <span style="color: blueviolet;">{{ '}' }}</span>
-                                <span class="tag">&lt;/style&gt;</span>
-                            </code>
-                        </pre>
-                        <pre class="publish"><code data-lang="javascript"><span class="bluecolor">&lt;iframe</span> <span class="greencolor">src=</span><span class="redcolor">&quot;{{scriptcode}}&quot;</span><span class="bluecolor">&gt;&lt;/iframe&gt;</span></code>
-                    </pre>
+        <span style="color: blueviolet;">{{'.az-form-wrapper iframe {'}}</span>
+            <span class="pln">min</span><span class="pun">-</span><span class="pln">width</span><span class="pun">:</span> <span class="lit">450px</span><span class="pun">;</span><span class="pln">
+            height</span><span class="pun">:</span> <span class="lit">800px</span><span class="pun">;</span><span class="pln">
+            border</span><span class="pun">:</span> <span class="lit">1px</span><span class="pln"> solid </span><span class="com">#c0c2c7;</span><span class="pln">
+            margin</span><span class="pun">:</span> <span class="kwd">0 auto</span><span class="pun">;</span>
+             <span style="color: blueviolet;">{{ '}' }}</span>
+  <span class="tag">&lt;/style&gt;</span>
+</code></pre>
+<pre class="publish">
+<code><span class="bluecolor">&lt;div class=&quot;az-form-wrapper&quot;&gt;</span>
+    <span class="bluecolor">&lt;iframe</span> <span class="greencolor">src=</span><span class="redcolor">&quot;{{scriptcode}}&quot;</span><span class="bluecolor">&gt;</span>
+    <span class="bluecolor">&lt;/iframe&gt;</span>
+<span class="bluecolor">&lt;/div&gt;</span>
+</code>
+</pre>
+                            </div>
+                            </div>
+                          </ng-template>
+                        </li>
+                        <li ngbNavItem>
+                          <a ngbNavLink>Share Link</a>
+                          <ng-template ngbNavContent>
+                            <div class="code-link-wrapper">
+                            <p class="script-title">                       
+                                <span class="font-weight-bold"> <span class="fontsize22 mr-1"><i class="far fa-file-code"></i></span>
+                                Web Form Link</span> <button class="btn btn-xs btn-primary float-right" (click)="copyToClipBoard('sharelink')">Copy</button> </p>
+                                <div class="sharelinkbg" #shareLinkCode>
+                        <pre class="publish"><code><span class="redcolor">&quot;{{scriptcode}}&quot;</span></code></pre>
+                                </div>
+                                </div>
+                          </ng-template>
+                        </li>
+                      </ul>
                     </div>
+                      <div class="publish-content" [ngbNavOutlet]="nav"></div>
+                      
+                  
 
                     <div class="btn-toolbar sw-toolbar sw-toolbar-bottom justify-content-end">
                         <div>

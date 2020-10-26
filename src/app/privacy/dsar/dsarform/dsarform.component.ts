@@ -26,8 +26,8 @@ import { WebControlProperties } from 'src/app/_models/webcontrolproperties';
 })
 export class DsarformComponent implements OnInit, OnDestroy {
   @ViewChild('editor', { static: true }) editor;
-  @ViewChild('sampleCode', { static: false }) public sampleCode: ElementRef<any>;
-
+  @ViewChild('azEmbedCode', { static: false }) public azEmbedCode: ElementRef<any>;
+  @ViewChild('shareLinkCode', { static: false }) public shareLinkCode: ElementRef<any>;
   public requestObject: any = {};
   public selectedFormOption: any;
   public selectedControlType: any;
@@ -746,7 +746,7 @@ export class DsarformComponent implements OnInit, OnDestroy {
         }
         this.ccpaFormConfigService.addControl(newWebControl);
         this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
-
+        this.updateCaptchaPosition();
       } else {
         this.selectOptions.forEach(element => {
           element.keylabel = this.trimLabel;
@@ -1043,10 +1043,10 @@ export class DsarformComponent implements OnInit, OnDestroy {
       this.ccpaFormConfigService.createCCPAForm(this.orgId, this.propId, this.formObject,
         this.constructor.name, moduleName.dsarWebFormModule)
         .subscribe((data) => {
-          this.loadingbar.stop();
-          this.active = 4;
           if (data) {
-            this.crid = data.response.crid;
+            this.crid = data.id;
+            this.getWebFormScriptLink();
+            this.loadingbar.stop();
           }
         }, (error) => {
           this.loadingbar.stop();
@@ -1447,8 +1447,7 @@ export class DsarformComponent implements OnInit, OnDestroy {
     this.selectedwebFormControlList = [];
   }
 
-  copyToClipBoard() {
-
+  copyToClipBoard(contentType) {
     let textarea = null;
     textarea = document.createElement('textarea');
     textarea.style.height = '0px';
@@ -1459,9 +1458,16 @@ export class DsarformComponent implements OnInit, OnDestroy {
     textarea.style.width = '0px';
     document.body.appendChild(textarea);
     // Set and select the value (creating an active Selection range).
-    textarea.value = this.sampleCode.nativeElement.innerText.trim();
-    textarea.select();
-    document.execCommand('copy');
+    if (contentType === 'embedcode') {
+      textarea.value = this.azEmbedCode.nativeElement.innerText.trim();
+      textarea.select();
+      document.execCommand('copy');
+    } else {
+      textarea.value = this.shareLinkCode.nativeElement.innerText.trim();
+      textarea.select();
+      document.execCommand('copy');
+    }
+
     if (textarea && textarea.parentNode) {
       textarea.parentNode.removeChild(textarea);
     }
@@ -1474,7 +1480,7 @@ export class DsarformComponent implements OnInit, OnDestroy {
       const updateobj = this.webFormControlList[customControlIndex];
       const elementToReplace = this.webFormControlList.splice(customControlIndex, 1);
       this.webFormControlList = this.webFormControlList.concat(elementToReplace);
-      this.dsarFormService.setFormControlList(this.webFormControlList);
+      this.ccpaFormConfigService.setFormControlList(this.webFormControlList);
       // updateobj.preferControlOrder = this.webFormControlList.length - 1;
       // this.ccpaFormConfigService.updateControl(this.webFormControlList[customControlIndex], customControlIndex, updateobj);
       this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
@@ -1494,7 +1500,7 @@ export class DsarformComponent implements OnInit, OnDestroy {
     }
   }
   // ngAfterViewInit() {
-  //   const copyText = this.sampleCode.nativeElement.innerText.trim();
+  //   const copyText = this.azEmbedCode.nativeElement.innerText.trim();
   //   console.log(copyText, 'ct..');
   //   this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
   //   this.cd.detectChanges();

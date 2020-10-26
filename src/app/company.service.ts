@@ -54,12 +54,12 @@ export class CompanyService {
     }));
   }
 
-  removeTeamMember(componentName, moduleName, id, orgid?): Observable<any> {
+  removeTeamMember(componentName, moduleName, obj, orgid?): Observable<any> {
     let path;
     if (orgid) {
-      path = '/invite/user/' + id + '?orgid=' + orgid;
+      path = '/invite/user/' + obj.id + '/' + obj.approver_id + '?orgid=' + orgid;
     } else {
-      path = '/invite/user/' + id;
+      path = '/invite/user/' + obj.id + '/' + obj.approver_id;
     }
     return this.httpClient.delete<any>(environment.apiUrl + path)
       .pipe(catchError(error => {

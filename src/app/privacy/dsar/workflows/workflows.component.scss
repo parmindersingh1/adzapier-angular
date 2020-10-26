@@ -50,4 +50,108 @@ table.table.table-bordered > tbody > tr > td:first-child {
     font-weight: 500;
   }
 
+  .searchfield {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .input-group-append {
+    cursor: pointer;
+  }
   
+::ng-deep .p-datatable.p-datatable-sm .p-datatable-tbody > tr > td > a {
+  cursor: pointer;
+}
+
+::ng-deep .p-inputtext {
+  padding: 0.3rem;
+  font-size: 0.8rem;
+}
+
+::ng-deep .p-paginator .p-paginator-pages .p-paginator-page {
+  min-width: 1.5rem;
+  height: 1.5rem;
+}
+
+::ng-deep .p-paginator .p-dropdown {
+  height: 2rem;
+}
+
+// ::ng-deep .p-multiselect-panel .p-multiselect-header {
+//   padding: 0.3rem 1rem;
+// }
+
+// ::ng-deep .p-multiselect-panel .p-multiselect-items {
+//   padding: 0;
+// }
+
+// ::ng-deep .p-multiselect-panel .p-multiselect-items .p-multiselect-item.p-highlight {
+//   background-color: #fff;
+//   color: #333;
+// }
+
+// ::ng-deep .p-highlight .p-checkbox .p-checkbox-box {
+//   border-color: #2196F3;
+// }
+
+// ::ng-deep .p-multiselect-panel .p-multiselect-items .p-multiselect-item:focus {
+//   box-shadow: none;
+// }
+
+::ng-deep .p-datatable .p-paginator-bottom {
+  border-top: 1px solid #ccc;
+  border-radius: 0px 0px 10px 10px;
+  border-bottom: 0;
+}
+
+::ng-deep .p-datatable.p-datatable-sm .p-datatable-header {
+  background: #fff;
+  border-radius: 5px 5px 0 0;
+  border: 0;
+}
+
+::ng-deep .p-datatable {
+  position: relative;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+::ng-deep .p-datatable-thead {
+  border-top: 1px solid #dde2ea;
+}
+
+// ::ng-deep .p-datatable.p-datatable-sm .p-datatable-thead > tr > th {
+//   width: 100%;
+//   background: #3968fa;
+//   color: #fff;
+//   font-weight: normal;
+// }
+
+// ::ng-deep .p-datatable.p-datatable-sm .p-datatable-thead > tr > th:hover {
+//   background: #4975ff;
+//   color: #fff;
+// }
+
+// ::ng-deep .p-datatable .p-sortable-column .p-sortable-column-icon {
+//   color: #fff;
+//   margin-left: 0.5rem;
+// }
+
+::ng-deep .p-datatable.p-datatable-sm .p-datatable-tbody > tr > td > a:hover {
+  text-decoration: underline;
+}
+
+
+::ng-deep .workflow-primeng-wrapper .p-datatable .p-datatable-thead > tr > th:first-child {
+  width: auto;
+}
+
+
+// ::ng-deep .p-datatable .p-sortable-column:not(.p-highlight):hover .p-sortable-column-icon {
+//   color:#fff;
+// }
+
+// ::ng-deep .p-datatable .p-sortable-column.p-highlight .p-sortable-column-icon {
+//   color: #fff;
+// }

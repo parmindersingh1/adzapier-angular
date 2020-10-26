@@ -19531,21 +19531,25 @@
         {
             "id": "3919",
             "name": "Alabama",
+            "sortname": "AL",
             "country_id": "231"
         },
         {
             "id": "3920",
             "name": "Alaska",
+            "sortname": "AK",
             "country_id": "231"
         },
         {
             "id": "3921",
             "name": "Arizona",
+            "sortname": "AZ",
             "country_id": "231"
         },
         {
             "id": "3922",
             "name": "Arkansas",
+            "sortname":"AR",
             "country_id": "231"
         },
         {
@@ -19556,6 +19560,7 @@
         {
             "id": "3924",
             "name": "California",
+            "sortname":"CA",
             "country_id": "231"
         },
         {
@@ -19566,71 +19571,85 @@
         {
             "id": "3926",
             "name": "Colorado",
+            "sortname":"CO",
             "country_id": "231"
         },
         {
             "id": "3927",
             "name": "Connecticut",
+            "sortname":"CT",
             "country_id": "231"
         },
         {
             "id": "3928",
             "name": "Delaware",
+            "sortname":"DE",
             "country_id": "231"
         },
         {
             "id": "3929",
             "name": "District of Columbia",
+            "sortname":"DC",
             "country_id": "231"
         },
         {
             "id": "3930",
             "name": "Florida",
+            "sortname":"FL",
             "country_id": "231"
         },
         {
             "id": "3931",
             "name": "Georgia",
+            "sortname":"GA",
             "country_id": "231"
         },
         {
             "id": "3932",
             "name": "Hawaii",
+            "sortname":"HI",
             "country_id": "231"
         },
         {
             "id": "3933",
             "name": "Idaho",
+            "sortname":"ID",
             "country_id": "231"
         },
         {
             "id": "3934",
             "name": "Illinois",
+            "sortname":"IL",
             "country_id": "231"
         },
         {
             "id": "3935",
             "name": "Indiana",
+            "sortname":"IN",
             "country_id": "231"
         },
         {
             "id": "3936",
             "name": "Iowa",
+            "sortname":"IA",
             "country_id": "231"
         },
         {
             "id": "3937",
             "name": "Kansas",
+            "sortname":"KS",
             "country_id": "231"
         },
         {
             "id": "3938",
             "name": "Kentucky",
+            "sortname":"KY",
             "country_id": "231"
         },
         {
             "id": "3939",
             "name": "Louisiana",
+            "sortname":"LA",
             "country_id": "231"
         },
         {
@@ -19641,136 +19660,163 @@
         {
             "id": "3941",
             "name": "Maine",
+            "sortname":"ME",
             "country_id": "231"
         },
         {
             "id": "3942",
             "name": "Maryland",
+            "sortname":"MD",
             "country_id": "231"
         },
         {
             "id": "3943",
             "name": "Massachusetts",
+            "sortname":"MA",
             "country_id": "231"
         },
         {
             "id": "3944",
             "name": "Medfield",
+            "sortname":"MA",
             "country_id": "231"
         },
         {
             "id": "3945",
             "name": "Michigan",
+            "sortname":"MI",
             "country_id": "231"
         },
         {
             "id": "3946",
             "name": "Minnesota",
+            "sortname":"MN",
             "country_id": "231"
         },
         {
             "id": "3947",
             "name": "Mississippi",
+            "sortname":"MS",
             "country_id": "231"
         },
         {
             "id": "3948",
             "name": "Missouri",
+            "sortname":"MO",
             "country_id": "231"
         },
         {
             "id": "3949",
             "name": "Montana",
+            "sortname":"MT",
             "country_id": "231"
         },
         {
             "id": "3950",
             "name": "Nebraska",
+            "sortname":"NE",
             "country_id": "231"
         },
         {
             "id": "3951",
             "name": "Nevada",
+            "sortname":"NV",
             "country_id": "231"
         },
         {
             "id": "3952",
             "name": "New Hampshire",
+            "sortname":"NH",
             "country_id": "231"
         },
         {
             "id": "3953",
             "name": "New Jersey",
+            "sortname":"NJ",
             "country_id": "231"
         },
         {
             "id": "3954",
-            "name": "New Jersy",
+            "name": "Puerto Rico",
+            "sortname":"PR",
             "country_id": "231"
         },
         {
             "id": "3955",
             "name": "New Mexico",
+            "sortname":"NM",
             "country_id": "231"
         },
         {
             "id": "3956",
             "name": "New York",
+            "sortname":"NY",
             "country_id": "231"
         },
         {
             "id": "3957",
             "name": "North Carolina",
+            "sortname":"NC",
             "country_id": "231"
         },
         {
             "id": "3958",
             "name": "North Dakota",
+            "sortname":"ND",
             "country_id": "231"
         },
         {
             "id": "3959",
             "name": "Ohio",
+            "sortname":"OH",
             "country_id": "231"
         },
         {
             "id": "3960",
             "name": "Oklahoma",
+            "sortname":"OK",
             "country_id": "231"
         },
         {
             "id": "3961",
             "name": "Ontario",
+            "sortname":"ON",
             "country_id": "231"
         },
         {
             "id": "3962",
             "name": "Oregon",
+            "sortname":"OR",
             "country_id": "231"
         },
         {
             "id": "3963",
             "name": "Pennsylvania",
+            "sortname":"PA",
             "country_id": "231"
         },
         {
             "id": "3964",
             "name": "Ramey",
+            "sortname":"MN",
             "country_id": "231"
         },
         {
             "id": "3965",
             "name": "Rhode Island",
+            "sortname":"RI",
             "country_id": "231"
         },
         {
             "id": "3966",
             "name": "South Carolina",
+            "sortname":"SC",
             "country_id": "231"
         },
         {
             "id": "3967",
             "name": "South Dakota",
+            "sortname":"SD",
             "country_id": "231"
         },
         {
@@ -19781,51 +19827,61 @@
         {
             "id": "3969",
             "name": "Tennessee",
+            "sortname":"TN",
             "country_id": "231"
         },
         {
             "id": "3970",
             "name": "Texas",
+            "sortname":"TX",
             "country_id": "231"
         },
         {
             "id": "3971",
             "name": "Trimble",
+            "sortname":"VA",
             "country_id": "231"
         },
         {
             "id": "3972",
             "name": "Utah",
+            "sortname":"UT",
             "country_id": "231"
         },
         {
             "id": "3973",
             "name": "Vermont",
+            "sortname":"VT",
             "country_id": "231"
         },
         {
             "id": "3974",
             "name": "Virginia",
+            "sortname":"VA",
             "country_id": "231"
         },
         {
             "id": "3975",
             "name": "Washington",
+            "sortname":"WA",
             "country_id": "231"
         },
         {
             "id": "3976",
             "name": "West Virginia",
+            "sortname":"WV",
             "country_id": "231"
         },
         {
             "id": "3977",
             "name": "Wisconsin",
+            "sortname":"WI",
             "country_id": "231"
         },
         {
             "id": "3978",
             "name": "Wyoming",
+            "sortname":"WY",
             "country_id": "231"
         },
         {
