@@ -34,6 +34,7 @@ export class CookieBannerComponent implements OnInit {
   panelOpenState = false;
   // @ViewChild('gdprGlobal', {static: false}) gdprGlobal
   skeletonLoading = false;
+  type = 'draft';
   matcher = new MyErrorStateMatcher();
   currentPlan;
   gdprTarget = [];
@@ -168,6 +169,13 @@ export class CookieBannerComponent implements OnInit {
       gdpr_global: [this.defaultData.gdprGlobal],
       showBadge: [this.defaultData.showBadge],
       logo: [this.defaultData.logo],
+      // DISPLAY FREQUENCY
+      bannerPartialConsent: [1],
+      bannerPartialConsentType: [this.defaultData.BannerDisplayFrequency.partialConsent],
+      bannerRejectAllConsent: [1],
+      bannerRejectAllConsentType: [this.defaultData.BannerDisplayFrequency.rejectAll],
+      bannerShowConsent: [1],
+      bannerShowConsentType: [this.defaultData.BannerDisplayFrequency.noConsent],
       //  BANNER
       Bannerlanguage: [this.defaultData.gdprDefaultLang],
       BannerPosition: [this.defaultData.DefaultBannerPosition],
@@ -280,6 +288,14 @@ export class CookieBannerComponent implements OnInit {
 
   onSetValue() {
     this.cookieBannerForm.patchValue({
+      // DISPLAY FREQUENCY
+      bannerPartialConsent: this.bannerCookieData.config.DisplayFrequency.bannerPartialConsent,
+      bannerPartialConsentType: this.bannerCookieData.config.DisplayFrequency.bannerPartialConsentType,
+      bannerRejectAllConsent: this.bannerCookieData.config.DisplayFrequency.bannerRejectAllConsent,
+      bannerRejectAllConsentType: this.bannerCookieData.config.DisplayFrequency.bannerRejectAllConsentType,
+      bannerShowConsent: this.bannerCookieData.config.DisplayFrequency.bannerShowConsent,
+      bannerShowConsentType: this.bannerCookieData.config.DisplayFrequency.bannerShowConsentType,
+      //
       Bannerlanguage: this.bannerCookieData.config.Language,
       BannerPosition: this.bannerCookieData.config.BannerPosition,
       BannerTitle: this.bannerCookieData.config.Banner.Content.title,
@@ -387,6 +403,7 @@ export class CookieBannerComponent implements OnInit {
     console.log('this.cookieBannerForm.value.gdprTarget', this.cookieBannerForm.value.gdprTarget)
     const userPrefrencesData = {
       ccpa_target: this.cookieBannerForm.value.ccpaTarget,
+      type: this.type,
       gdpr_target: this.cookieBannerForm.value.gdprTarget,
       cookie_blocking: this.cookieBannerForm.value.cookieBlocking,
       enable_iab: this.cookieBannerForm.value.enableIab,
@@ -406,7 +423,9 @@ export class CookieBannerComponent implements OnInit {
         this.alertMsg = res.response;
         this.alertType = 'success';
         setTimeout(() => {
-        this.router.navigateByUrl('/cookie-consent/cookie-banner/setup');
+          if (this.type === 'publish') {
+            this.router.navigateByUrl('/cookie-consent/cookie-banner/setup');
+          }
         }, 1000);
       }, error => {
         this.isOpen = true;
@@ -421,6 +440,7 @@ export class CookieBannerComponent implements OnInit {
     console.log('this.cookieBannerForm.value.google_vendors', this.cookieBannerForm.value.google_vendors)
     const userPrefrencesData = {
       ccpa_target: this.cookieBannerForm.value.ccpaTarget,
+      type: this.type,
       logo: this.cookieBannerForm.value.logo,
       gdpr_global: this.cookieBannerForm.value.gdpr_global,
       gdpr_target: this.cookieBannerForm.value.gdprTarget,
@@ -439,8 +459,10 @@ export class CookieBannerComponent implements OnInit {
         this.alertMsg = res.response;
         this.alertType = 'success';
         setTimeout(() => {
-          this.router.navigateByUrl('/cookie-consent/cookie-banner/setup');
-        }, 1000);
+          if (this.type === 'publish') {
+            this.router.navigateByUrl('/cookie-consent/cookie-banner/setup');
+          }
+          }, 1000);
       }, error => {
         this.isOpen = true;
         this.alertMsg = error;
@@ -452,6 +474,14 @@ export class CookieBannerComponent implements OnInit {
     return {
       Language: this.cookieBannerForm.value.Bannerlanguage,
       BannerPosition: this.cookieBannerForm.value.BannerPosition,
+      DisplayFrequency: {
+        bannerPartialConsent: this.cookieBannerForm.value.bannerPartialConsent,
+        bannerPartialConsentType: this.cookieBannerForm.value.bannerPartialConsentType,
+        bannerRejectAllConsent: this.cookieBannerForm.value.bannerRejectAllConsent,
+        bannerRejectAllConsentType: this.cookieBannerForm.value.bannerRejectAllConsentType,
+        bannerShowConsent: this.cookieBannerForm.value.bannerShowConsent,
+        bannerShowConsentType: this.cookieBannerForm.value.bannerShowConsentType,
+      },
       Banner: {
         Content: {
           title: this.cookieBannerForm.value.BannerTitle,
