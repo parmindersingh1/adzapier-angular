@@ -50,6 +50,15 @@ table.table.table-bordered > tbody > tr > td:first-child {
     font-weight: 500;
   }
 
+  .searchfield {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .input-group-append {
+    cursor: pointer;
+  }
   
 ::ng-deep .p-datatable.p-datatable-sm .p-datatable-tbody > tr > td > a {
   cursor: pointer;

@@ -16,8 +16,8 @@
     [totalRecords]="totalRecords" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
     [rowsPerPageOptions]="[5,10,15]" styleClass="p-datatable-sm">
     <ng-template pTemplate="caption">
-        <div class="searchfield row mt-1 pl-2 pr-2">
-            <div class="col-sm-2 col-md-2 input-group">
+        <div class="searchfield mt-1 pl-1">
+            <div class="row col-sm-2 col-md-2 input-group">
                 <input class="form-control border-right-0 border" [(ngModel)]="inputValue" type="text"
                     (keyup.enter)="onSearchInputChange()" placeholder="Search" id="example-search-input" />
                 <span class="input-group-append">
@@ -35,13 +35,13 @@
         <button type="button" class="btn btn-white" data-toggle="modal"
         (click)="createWorkflowModalPopup(createworkflowModal,'')"><i class="fas fa-plus"></i> Create</button>
      </div> -->
-                <button (click)="createWorkflowModalPopup(createworkflowModal,'')" data-toggle="modal" type="button"
-                    class="btn btn-white ml-auto pr-2 mr-2">
+               <div class="float-right mr-1"> <button (click)="createWorkflowModalPopup(createworkflowModal,'')" data-toggle="modal" type="button"
+                    class="btn btn-white">
                     <i-feather class="feather-16" name="plus"></i-feather>
                     <span class="d-none d-sm-inline mg-l-5">
                         Create</span>
                 </button>
-
+                </div>
         </div>
 
     </ng-template>
