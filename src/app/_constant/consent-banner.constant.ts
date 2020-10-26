@@ -10,6 +10,11 @@ export const defaultData = {
   logo: true,
   gdprDefaultLang: 'en',
   DefaultBannerPosition: 'bottom',
+  BannerDisplayFrequency: {
+    partialConsent: 'hours',
+    rejectAll: 'days',
+    noConsent: 'pageViews',
+  }
 };
 
 export const defaultBannerContent = {
@@ -195,6 +200,11 @@ export const BannerConstant = {
     {title: 'Top', value: 'top'},
     {title: 'Bottom', value: 'bottom'}
   ],
+  BannerDisplayFrequency: [
+    {label: 'Hour', value: 'hours'},
+    {label: 'Day', value: 'days'},
+    {label: 'Page View', value: 'pageViews'},
+  ]
 };
 
 export const IabPurposeIds = {
