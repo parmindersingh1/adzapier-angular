@@ -185,6 +185,7 @@ tr.row-disabled > td > a {
   display: flex;
   width: 100%;
   border-radius: 5px 5px 0 0;
+  border-top:1px solid #dde2ea;
 }
 
 ::ng-deep .p-datatable {

@@ -47,6 +47,7 @@ export class CompanyComponent implements OnInit {
   dismissible = true;
   isOpen = false;
   approverID: any;
+  recordID: any;
   constructor(private companyService: CompanyService, private modalService: NgbModal,
               private formBuilder: FormBuilder,
               private userService: UserService,
@@ -97,7 +98,13 @@ export class CompanyComponent implements OnInit {
       this.companyId = data.response.id;
       this.email = data.response.email;
       this.phone = data.response.phone;
-    });
+    }, (err) => {
+      this.loading.stop();
+      this.alertMsg = err;
+      this.isOpen = true;
+      this.alertType = 'danger';
+      this.modalService.dismissAll('Error!');
+  });
   }
 
   editOrganizationModalPopup(content) {
@@ -128,7 +135,13 @@ export class CompanyComponent implements OnInit {
         email: this.companyDetails[0].email,
         phone: this.companyDetails[0].phone
       });
-    });
+    }, (err) => {
+      this.loading.stop();
+      this.alertMsg = err;
+      this.isOpen = true;
+      this.alertType = 'danger';
+      this.modalService.dismissAll('Error!');
+  });
   }
 
   onSubmit() {
@@ -199,6 +212,7 @@ export class CompanyComponent implements OnInit {
           });
       } else {
         const requestObj = {
+          id: this.recordID,
           user_id: this.approverID,
           role_id: this.inviteUserForm.value.permissions,
         };
@@ -241,6 +255,7 @@ export class CompanyComponent implements OnInit {
     console.log(data, 'editUserInvitation..');
     this.isUpdateUserinvitation = true;
     this.approverID = data.approver_id;
+    this.recordID = data.id;
     this.inviteUserForm.controls['emailid'].setValue(data.user_email);
     this.inviteUserForm.get('emailid')[this.isUpdateUserinvitation ? 'disable' : 'enable']();
     this.inviteUserForm.controls['permissions'].setValue(data.role_id);
@@ -316,8 +331,8 @@ export class CompanyComponent implements OnInit {
     });
   }
 
-  removeTeamMember(id) {
-    this.companyService.removeTeamMember(this.constructor.name, moduleName.companyModule, id).subscribe((data) => {
+  removeTeamMember(obj) {
+    this.companyService.removeTeamMember(this.constructor.name, moduleName.companyModule, obj).subscribe((data) => {
       if (data) {
         this.alertMsg = 'User has been removed!';
         this.isOpen = true;
