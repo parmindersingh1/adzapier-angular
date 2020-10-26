@@ -10,7 +10,7 @@
     </div>
 </div>
 
-
+<div class="workflow-primeng-wrapper">
 <p-table #ptable [value]="workflowList" [columns]="selectedColumns" [paginator]="true" [lazy]="true"
     [loading]="isloading" (onLazyLoad)="loadrequestsListLazy($event)" [rows]="5" [showCurrentPageReport]="true"
     [totalRecords]="totalRecords" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
@@ -107,7 +107,7 @@
   selectedItemsLabel="{0} columns selected" [style]="{minWidth: '200px'}" placeholder="Choose Columns">
 </p-multiSelect> -->
 </p-table>
-
+</div>
 
 
 <ng-template #createworkflowModal let-modal>

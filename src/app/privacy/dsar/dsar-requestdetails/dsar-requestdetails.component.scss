@@ -32,6 +32,7 @@
 .nav-tabs > li {
     display: flex;
     flex-direction: column;
+    width: 50%;
 }
 
 .nav-tabs .nav-item + .nav-item {
@@ -43,6 +44,10 @@
     border:0;
     border-bottom: 2px solid;
     box-sizing: content-box;
+}
+
+.activitytab .nav-tabs > li {
+    width: auto;
 }
 
 li.nav-item {
@@ -735,4 +740,8 @@ ul.ngx-pagination {
 
 .rightarrow {
     right: 0;
+}
+
+.word-wrap {
+    white-space: normal;
 }
