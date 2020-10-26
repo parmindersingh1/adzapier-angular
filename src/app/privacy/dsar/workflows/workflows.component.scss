@@ -142,6 +142,12 @@ table.table.table-bordered > tbody > tr > td:first-child {
   text-decoration: underline;
 }
 
+
+::ng-deep .workflow-primeng-wrapper .p-datatable .p-datatable-thead > tr > th:first-child {
+  width: auto;
+}
+
+
 // ::ng-deep .p-datatable .p-sortable-column:not(.p-highlight):hover .p-sortable-column-icon {
 //   color:#fff;
 // }

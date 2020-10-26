@@ -1043,10 +1043,10 @@ export class DsarformComponent implements OnInit, OnDestroy {
       this.ccpaFormConfigService.createCCPAForm(this.orgId, this.propId, this.formObject,
         this.constructor.name, moduleName.dsarWebFormModule)
         .subscribe((data) => {
-          this.loadingbar.stop();
-          this.active = 4;
           if (data) {
-            this.crid = data.response.crid;
+            this.crid = data.id;
+            this.getWebFormScriptLink();
+            this.loadingbar.stop();
           }
         }, (error) => {
           this.loadingbar.stop();
