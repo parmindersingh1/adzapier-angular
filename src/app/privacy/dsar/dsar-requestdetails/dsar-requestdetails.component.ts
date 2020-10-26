@@ -387,7 +387,8 @@ export class DsarRequestdetailsComponent implements OnInit {
 
     let updatedObj = [];
     if (data !== undefined) {
-      for (let k in data) {
+      // tslint:disable-next-line: forin
+      for (const k in data) {
         let value = data[k];
         let key = k.replace('_', ' ');
         let updatedKey = this.capitalizeFirstLetter(key);
@@ -655,52 +656,52 @@ export class DsarRequestdetailsComponent implements OnInit {
       fd.append('upload', this.quillEditorEmailText.get('emailAttachment').value);
 
       this.ccpaDataService.addCCPADataEmailActivity(this.constructor.name, moduleName.dsarRequestModule,
-         this.requestID, fd).subscribe((data) => {
-        if (data) {
-          // alert(data.response);
-          this.alertMsg = data.response;
+        this.requestID, fd).subscribe((data) => {
+          if (data) {
+            // alert(data.response);
+            this.alertMsg = data.response;
+            this.isOpen = true;
+            this.alertType = 'success';
+            this.loadEmailLog(this.requestID);
+            this.quillEditorEmailText.get('editorEmailMessage').reset();
+            this.isEmailPostsubmitted = false;
+          }
+        }, (error) => {
+          this.alertMsg = error;
           this.isOpen = true;
-          this.alertType = 'success';
-          this.loadEmailLog(this.requestID);
-          this.quillEditorEmailText.get('editorEmailMessage').reset();
-          this.isEmailPostsubmitted = false;
-        }
-      }, (error) => {
-        this.alertMsg = error;
-        this.isOpen = true;
-        this.alertType = 'danger';
-      });
+          this.alertType = 'danger';
+        });
     }
     //this.stageAPI(this.requestID, reqObj);
   }
 
   stageAPI(requestID, requestObj) {
     // return false;
-    this.ccpaDataService.addCCPADataActivity( this.constructor.name, moduleName.dsarRequestModule,
-       requestID, requestObj).subscribe((data) => {
-      if (data) {
-        this.loadDataRequestDetails();
-        this.alertMsg = data.response;
+    this.ccpaDataService.addCCPADataActivity(this.constructor.name, moduleName.dsarRequestModule,
+      requestID, requestObj).subscribe((data) => {
+        if (data) {
+          this.loadDataRequestDetails();
+          this.alertMsg = data.response;
+          this.isOpen = true;
+          this.alertType = 'success';
+          this.loadActivityLog(requestID);
+          this.quillEditorText.get('editor').setValue('');
+          this.isActivitysubmitted = false;
+        }
+      }, (error) => {
+        this.alertMsg = error;
         this.isOpen = true;
-        this.alertType = 'success';
-        this.loadActivityLog(requestID);
-        this.quillEditorText.get('editor').setValue('');
-        this.isActivitysubmitted = false;
-      }
-    }, (error) => {
-      this.alertMsg = error;
-      this.isOpen = true;
-      this.alertType = 'danger';
-    })
+        this.alertType = 'danger';
+      })
   }
 
   loadActivityLog(requestID) {
     this.paginationConfig.currentPage = 1;
     const pagelimit = '?limit=' + this.paginationConfig.itemsPerPage + '&page=' + this.paginationConfig.currentPage;
     this.ccpaDataService.getCCPADataActivityLog(this.constructor.name, moduleName.dsarRequestModule,
-       requestID, pagelimit).subscribe((data) => {
-      this.activityLog = data.response;
-    });
+      requestID, pagelimit).subscribe((data) => {
+        this.activityLog = data.response;
+      });
   }
 
   loadEmailLog(requestID) {
@@ -940,20 +941,20 @@ export class DsarRequestdetailsComponent implements OnInit {
     this.paginationConfig.currentPage = event;
     const pagelimit = '?limit=' + this.paginationConfig.itemsPerPage + '&page=' + this.paginationConfig.currentPage;
     this.ccpaDataService.getCCPADataActivityLog(this.constructor.name, moduleName.dsarRequestModule,
-       this.requestID, pagelimit).subscribe((data) => {
-      this.activityLog = data.response;
-      if (data.response.length !== 0) {
+      this.requestID, pagelimit).subscribe((data) => {
         this.activityLog = data.response;
-      } else {
-        this.alertMsg = 'No record found';
+        if (data.response.length !== 0) {
+          this.activityLog = data.response;
+        } else {
+          this.alertMsg = 'No record found';
+          this.isOpen = true;
+          this.alertType = 'info';
+        }
+      }, (err) => {
+        this.alertMsg = err;
         this.isOpen = true;
-        this.alertType = 'info';
-      }
-    }, (err) => {
-      this.alertMsg = err;
-      this.isOpen = true;
-      this.alertType = 'danger';
-    });
+        this.alertType = 'danger';
+      });
   }
 
   onSubmitAddSubTask() {
@@ -1082,11 +1083,11 @@ export class DsarRequestdetailsComponent implements OnInit {
   getSubTaskList() {
     let currentStageID;
     if (this.selectedStages.length >= 1) {
-      currentStageID =  this.getWorkflowStageID(this.selectedStages);
+      currentStageID = this.getWorkflowStageID(this.selectedStages);
     } else {
       currentStageID = this.currentStageId ? this.currentStageId : this.currentWorkflowStageID;
     }
-  //  return false;
+    //  return false;
     if (currentStageID) {
       let resp;
       this.dsarRequestService.getSubTaskByWorkflowID(this.requestID, currentStageID, this.constructor.name, moduleName.dsarRequestModule)
@@ -1242,6 +1243,19 @@ export class DsarRequestdetailsComponent implements OnInit {
 
   public onNextSearchPosition(): void {
     this.panel.nativeElement.scrollLeft += 150;
+  }
+
+  deleteDSARRequest() {
+    this.ccpaDataService.deleteDSARRequestByID(this.constructor.name, moduleName.dsarRequestModule, this.currentManagedOrgID,
+      this.currrentManagedPropID, this.requestID).subscribe((data) => {
+        this.alertMsg = data.response;
+        this.isOpen = true;
+        this.alertType = 'success';
+      }, (err) => {
+        this.alertMsg = 'error';
+        this.isOpen = true;
+        this.alertType = 'danger';
+      });
   }
 
 }

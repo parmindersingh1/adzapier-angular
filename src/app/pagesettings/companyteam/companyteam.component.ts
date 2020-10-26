@@ -36,6 +36,7 @@ export class CompanyteamComponent implements OnInit {
   roleList: any;
   emailid: any;
   approverID: any;
+  recordID: any;
   constructor(private companyService: CompanyService, private modalService: NgbModal,
               private formBuilder: FormBuilder,
               private userService: UserService,
@@ -97,8 +98,8 @@ export class CompanyteamComponent implements OnInit {
     });
   }
 
-  removeTeamMember(id) {
-    this.companyService.removeTeamMember(this.constructor.name, moduleName.companyTeamModule, id).subscribe((data) => {
+  removeTeamMember(obj) {
+    this.companyService.removeTeamMember(this.constructor.name, moduleName.companyTeamModule, obj).subscribe((data) => {
       if (data) {
         this.alertMsg = 'User has been removed!';
         this.isOpen = true;
@@ -173,6 +174,7 @@ export class CompanyteamComponent implements OnInit {
       } else {
         const requestObj = {
          // email: this.inviteUserOrgForm.get('emailid').value,
+          id: this.recordID,
           user_id: this.approverID,
           role_id: this.inviteUserForm.value.permissions,
         //  user_level: 'organization'
@@ -263,12 +265,14 @@ export class CompanyteamComponent implements OnInit {
   }
 
   editOrganizationModalPopup(content) {
+    this.isInviteFormSubmitted = false;
+    this.isUpdateUserinvitation = false;
+    this.inviteUserForm.reset();
+    this.inviteUserForm.get('emailid')[this.isUpdateUserinvitation ? 'disable' : 'enable']();
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
     }, (reason) => {
       // this.profileForm.reset();
     });
-    this.inviteUserForm.reset();
-    this.isInviteFormSubmitted = false;
   }
 
   isDateOrString(status): boolean {
@@ -288,6 +292,7 @@ export class CompanyteamComponent implements OnInit {
     console.log(data, 'editUserInvitation..');
     this.isUpdateUserinvitation = true;
     this.approverID = data.approver_id;
+    this.recordID = data.id;
     this.inviteUserForm.controls['emailid'].setValue(data.user_email);
     this.inviteUserForm.get('emailid')[this.isUpdateUserinvitation ? 'disable' : 'enable']();
     this.inviteUserForm.controls['permissions'].setValue(data.role_id);

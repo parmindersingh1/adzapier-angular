@@ -14,12 +14,22 @@ export class DsarRequestService {
   constructor(private http: HttpClient, private lokiService: LokiService) { }
 
   getDsarRequestList(componentName, moduleName, orgId, propsID, pagelimit, orderBy?): Observable<any> {
-    const path = '/ccpa/data/' + orgId + '/' + propsID + pagelimit;
-    return this.http.get(environment.apiUrl + path)
-      .pipe(shareReplay(1), catchError(error => {
-        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.getDsarRequestList, componentName, moduleName, path);
-        return throwError(error);
-      }));
+    let path = '/ccpa/data/' + orgId + '/' + propsID + pagelimit;
+    if (orderBy === undefined) {
+      return this.http.get<any>(environment.apiUrl + path)
+        .pipe(shareReplay(1), catchError(error => {
+          this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.getDsarRequestList, componentName, moduleName, path);
+          return throwError(error);
+        }));
+    } else {
+      path = '/ccpa/data/' + orgId + '/' + propsID + pagelimit + orderBy;
+      return this.http.get<any>(environment.apiUrl + path)
+        .pipe(shareReplay(1), catchError(error => {
+          this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.getDsarRequestList, componentName, moduleName, path);
+          return throwError(error);
+        }));
+    }
+
   }
 
   getDsarRequestFilter(orgId, propsID, componentName, moduleName) {
@@ -125,12 +135,11 @@ export class DsarRequestService {
     const key = 'response';
     const path = '/dsar/user/file/' + requestID;
     return this.http.get<any>(environment.apiUrl + path)
-    .pipe(map((res) => res[key]), shareReplay(1), catchError(error => {
-      this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.viewUserUploadedFile, componentName, moduleName, path);
-      return throwError(error);
-    }));
+      .pipe(map((res) => res[key]), shareReplay(1), catchError(error => {
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.viewUserUploadedFile, componentName, moduleName, path);
+        return throwError(error);
+      }));
   }
-// https://develop-cmp-api.adzpier-staging.com/api/v1/workflow?workflow_id=CreateworkflowComponent3e82ccac-8070-40e4-8c41-81531c39b16b
   getSubTaskByWorkflowID(requestID, workflowID, componentName, moduleName) {
     const key = 'response';
     const path = '/ccpa/subtask/' + requestID + '?workflow_stage=' + workflowID;
@@ -144,10 +153,10 @@ export class DsarRequestService {
   verifyClientEmailID(requestID, componentName, moduleName) {
     const path = '/dsar/email/verify/' + requestID;
     return this.http.post<any>(environment.apiUrl + path, {})
-    .pipe(catchError(error => {
-      this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.verifyClientEmailID, componentName, moduleName, path);
-      return throwError(error);
-    }));
+      .pipe(catchError(error => {
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.verifyClientEmailID, componentName, moduleName, path);
+        return throwError(error);
+      }));
   }
 
   onSendLogs(errorType, msg, functionality, componentName, moduleName, path) {
