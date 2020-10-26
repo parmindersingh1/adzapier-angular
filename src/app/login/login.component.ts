@@ -86,7 +86,6 @@ export class LoginComponent implements OnInit {
                     this.router.navigate(['/home/dashboard/analytics']);
                 },
                 error => {
-                    console.log(error, 'login error..');
                     this.isOpen = true;
                     this.alertMsg = error;
                     this.alertType = 'danger';

@@ -17,7 +17,6 @@ export class WorkflowService {
 
   constructor(private httpClient: HttpClient, private lokiService: LokiService) { }
 
-  //for workflow table
   getWorkflow(componentName, moduleName, pageLimit?): Observable<any> {
     const key = 'response';
     const pgLimit = pageLimit !== undefined ? pageLimit : '';
@@ -40,7 +39,6 @@ export class WorkflowService {
     }
 
   }
-// https://develop-cmp-api.adzpier-staging.com/api/v1/workflow?workflow_status=active
 
   getWorkflowByStatus(status, componentName, moduleName): Observable<any> {
     const path = apiConstant.WORKFLOW_STATUS;
@@ -109,7 +107,6 @@ export class WorkflowService {
         this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.createWorkflow, componentName, moduleName, path);
         return throwError(error);
       }));
-    // https://develop-cmp-api.adzpier-staging.com/api/v1/workflow?workflow_status=active
 
   }
 

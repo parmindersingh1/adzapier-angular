@@ -31,6 +31,7 @@ export class OrganizationteamComponent implements OnInit {
   isOpen = false;
   isUpdateUserinvitation = false;
   approverID: any;
+  recordID: any;
   constructor(private activatedRoute: ActivatedRoute,
               private router: Router,
               private modalService: NgbModal,
@@ -142,11 +143,9 @@ export class OrganizationteamComponent implements OnInit {
           });
       } else {
         const requestObj = {
-          // email: this.inviteUserOrgForm.get('emailid').value,
+          id: this.recordID,
           user_id: this.approverID,
-          role_id: this.inviteUserOrgForm.value.permissions,
-          orgid: this.organizationID
-          //  user_level: 'organization'
+          role_id: this.inviteUserOrgForm.value.permissions
         };
         this.companyService.updateUserRole( this.constructor.name, moduleName.organizationTeamModule, requestObj)
           .subscribe((data) => {
@@ -186,9 +185,9 @@ export class OrganizationteamComponent implements OnInit {
       });
   }
 
-  removeTeamMember(id) {
+  removeTeamMember(obj) {
     this.loading.start();
-    this.companyService.removeTeamMember(this.constructor.name, moduleName.organizationTeamModule, id,
+    this.companyService.removeTeamMember(this.constructor.name, moduleName.organizationTeamModule, obj,
       this.organizationID).subscribe((data) => {
       this.loading.stop();
       if (data) {
@@ -208,6 +207,7 @@ export class OrganizationteamComponent implements OnInit {
     console.log(data, 'editUserInvitation..');
     this.isUpdateUserinvitation = true;
     this.approverID = data.approver_id;
+    this.recordID = data.id;
     this.inviteUserOrgForm.controls['emailid'].setValue(data.user_email);
     this.inviteUserOrgForm.get('emailid')[this.isUpdateUserinvitation ? 'disable' : 'enable']();
     this.inviteUserOrgForm.controls['permissions'].setValue(data.role_id);
