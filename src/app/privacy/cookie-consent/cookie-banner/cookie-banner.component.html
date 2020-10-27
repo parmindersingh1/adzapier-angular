@@ -18,8 +18,8 @@
 
 
       <div class="d-none d-md-block">
-        <button type="submit" class="btn btn-sm pd-x-15 btn-white btn-uppercase"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-save wd-10 mg-r-5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg> Save</button>
-        <button type="submit" class="btn btn-sm pd-x-15 btn-primary btn-uppercase mg-l-5" href="#modalAddCategory" data-toggle="modal"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-sliders wd-10 mg-r-5"><line x1="4" y1="21" x2="4" y2="14"></line><line x1="4" y1="10" x2="4" y2="3"></line><line x1="12" y1="21" x2="12" y2="12"></line><line x1="12" y1="8" x2="12" y2="3"></line><line x1="20" y1="21" x2="20" y2="16"></line><line x1="20" y1="12" x2="20" y2="3"></line><line x1="1" y1="14" x2="7" y2="14"></line><line x1="9" y1="8" x2="15" y2="8"></line><line x1="17" y1="16" x2="23" y2="16"></line></svg> Publish</button>
+        <button (click)="type = 'draft'" type="submit" class="btn btn-sm pd-x-15 btn-white btn-uppercase"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-save wd-10 mg-r-5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg> Save</button>
+        <button (click)="type = 'publish'" type="submit" class="btn btn-sm pd-x-15 btn-primary btn-uppercase mg-l-5" href="#modalAddCategory" data-toggle="modal"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-sliders wd-10 mg-r-5"><line x1="4" y1="21" x2="4" y2="14"></line><line x1="4" y1="10" x2="4" y2="3"></line><line x1="12" y1="21" x2="12" y2="12"></line><line x1="12" y1="8" x2="12" y2="3"></line><line x1="20" y1="21" x2="20" y2="16"></line><line x1="20" y1="12" x2="20" y2="3"></line><line x1="1" y1="14" x2="7" y2="14"></line><line x1="9" y1="8" x2="15" y2="8"></line><line x1="17" y1="16" x2="23" y2="16"></line></svg> Publish</button>
       </div>
     </div> <!-- breadcrumb -->
 
@@ -32,12 +32,15 @@
         <div class="card">
           <div class="card-body">
             <div class="row">
-              <div class="col-md-4">
-                <div class="form-group row">
+              <div class="col-md-6">
+                <div class="divider-text mt-0">Banner Configuration</div>
+              <div class="row">
+              <div class="col-md-6">
+                <div class="form-group mb-1 row">
                   <label for="sel1"
-                    class="tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase col-sm-5  col-form-label">CCPA
+                    class="tx-13 tx-medium tx-spacing-1 pb-0 tx-color-03 tx-uppercase col-sm-12  col-form-label">CCPA
                     Target:</label>
-                  <div class="col-sm-7">
+                  <div class="col-sm-12">
                     <select  formControlName="ccpaTarget" [disabled]="isGdprGlobal" class="form-control" id="sel1">
                       <option *ngFor="let ccpaCountry of bannerConstant.ccpaTargetCountry" [value]="ccpaCountry.value">
                         {{ccpaCountry.title}}</option>
@@ -53,10 +56,10 @@
                 </div>
 
 
-                <div class="form-group row">
+                <div class="form-group mb-1 row">
                   <label for="sel1"
-                         class="tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase col-sm-5  col-form-label">GDPR Target:</label>
-                  <div class="col-sm-7">
+                         class="tx-13 tx-medium pb-0 tx-spacing-1 tx-color-03 tx-uppercase col-sm-12  col-form-label">GDPR Target:</label>
+                  <div class="col-sm-12">
                     <p-multiSelect [disabled]="gdprGlobal.checked ? true : false" [ngClass]="{ 'is-invalid': submitted && f.gdprTarget.errors }"
                                    formControlName="gdprTarget" [style]="{'width':'100%'}" [options]="gdprTarget" ></p-multiSelect>
                     <div *ngIf="submitted && f.gdprTarget.errors">
@@ -68,12 +71,12 @@
                 </div>
 
                 <div class="row">
-                 <div class="col-md-1 pt-2">
-                 <p-checkbox binary="true"
+                 <div class="col-md-2 ">
+                 <p-checkbox class="pt-1" binary="true"
                              formControlName="logo"></p-checkbox>
                  </div>
-                 <div class="col-md-11">
-                  <label class="tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase col-sm-5  col-form-label">
+                 <div class="col-md-10">
+                  <label class="tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase col-sm-12 col-form-label">
                     Show Logo
                   </label>
                  </div>
@@ -81,81 +84,133 @@
 
 
                 <div class="row">
-                  <div class="col-md-1 pt-2">
-                    <p-checkbox binary="true"  formControlName="showBadge"></p-checkbox>
+                  <div class="col-md-2">
+                    <p-checkbox binary="true" class="pt-1" formControlName="showBadge"></p-checkbox>
                   </div>
-                  <div class="col-md-11">
-                    <label class="tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase col-sm-5  col-form-label">
+                  <div class="col-md-10">
+                    <label class="tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase col-sm-12  col-form-label">
                       Show Badge
                     </label>
                   </div>
                 </div>
-
-
               </div>
-              <div class="col-md-8 switch-btn">
 
-                <div class="row">
-                  <div class="col-md-4">
-                    <div class="form-group row pd-0 mg-b-0">
-                      <label class="col-sm-8 tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label">
-                        COOKIE BLOCKING</label>
-                      <div class="col-sm-4">
-                        <label class="switch">
-                          <input type="checkbox" formControlName="cookieBlocking">
-                          <span class="slider round"></span>
-                        </label>
+
+                <div class="col-md-6 mt-3 border-right">
+                  <div class="form-group row pd-0 mg-b-0">
+                    <label class="col-sm-8 tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label">
+                      COOKIE BLOCKING</label>
+                    <div class="col-sm-4">
+                      <label class="switch">
+                        <input type="checkbox" formControlName="cookieBlocking">
+                        <span class="slider round"></span>
+                      </label>
+                    </div>
+                  </div>
+                  <div class="form-group row pd-0 mg-b-0">
+                    <label class="col-sm-8 tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label">
+                      ENABLE IAB</label>
+                    <div class="col-sm-4">
+                      <label class="switch">
+                        <input type="checkbox" [disabled]="isGdprGlobal" [checked]="isGdprGlobal"
+                               formControlName="enableIab">
+                        <span class="slider round"></span>
+                      </label>
+                    </div>
+                  </div>
+                  <div class="form-group row pd-0 mg-b-0">
+                    <label class="col-sm-8 tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label">
+                      Google Vendors</label>
+                    <div class="col-sm-4">
+                      <label class="switch">
+                        <input type="checkbox" formControlName="google_vendors">
+                        <span class="slider round"></span>
+                      </label>
+                    </div>
+                  </div>
+
+                  <div class="form-group row pd-0 mg-b-0">
+                    <label class="col-sm-8 tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label">
+                      GDPR GLOBAL</label>
+                    <div class="col-sm-4">
+                      <label class="switch">
+                        <input type="checkbox" (ngModelChange)="onSetGdprGlobal($event)" #gdprGlobal formControlName="gdpr_global">
+                        <span class="slider round"></span>
+                      </label>
+                    </div>
+                  </div>
+
+
+                  <div class="form-group row pd-0 mg-b-0">
+                    <label class="col-sm-8 tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label">
+                      Configure banner</label>
+                    <div class="col-sm-4">
+                      <label class="switch">
+                        <input type="checkbox" #showConfig>
+                        <span class="slider round"></span>
+                      </label>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+              </div>
+              <div class="col-md-6 switch-btn">
+                  <div class="col-md-12">
+                    <div class="divider-text mt-0">Display Frequency</div>
+                    <div class="row mb-2">
+                      <div class="col-md-12">
+                        <h6 class=" tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label">Show the Consent Manager UI to users the partial consent status every:</h6>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="input-group mb-1">
+                          <input oninput="validity.valid||(value='');" min="1" type="number"
+                                 formControlName="bannerPartialConsent" class="form-control" value="1" name="email">
+                          <div class="input-group-append">
+                            <select class="form-control"  formControlName="bannerPartialConsentType">
+                              <option *ngFor="let type of bannerConstant.BannerDisplayFrequency" [value]="type.value">{{type.label}}</option>
+                            </select>
+                          </div>
+                        </div>
+                    </div>
+                    </div>
+
+                    <div class="row mb-2">
+                      <div class="col-md-12">
+                        <h6 class=" tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label">Show the Consent Manager UI to users who rejected all purposes every:</h6>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="input-group mb-1">
+                          <input oninput="validity.valid||(value='');" min="1" type="number"
+                                 formControlName="bannerRejectAllConsent"  class="form-control" value="1" name="email">
+                          <div class="input-group-append">
+                            <select  formControlName="bannerRejectAllConsentType" class="form-control">
+                              <option *ngFor="let type of bannerConstant.BannerDisplayFrequency" [value]="type.value">{{type.label}}</option>
+                            </select>
+                          </div>
+                        </div>
                       </div>
                     </div>
-                    <div class="form-group row pd-0 mg-b-0">
-                      <label class="col-sm-8 tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label">
-                        ENABLE IAB</label>
-                      <div class="col-sm-4">
-                        <label class="switch">
-                          <input type="checkbox" [disabled]="isGdprGlobal" [checked]="isGdprGlobal"
-                            formControlName="enableIab">
-                          <span class="slider round"></span>
-                        </label>
+                    <div class="row">
+                      <div class="col-md-12">
+                        <h6 class=" tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label">Show the Consent Manager UI to users who made no consent choice every:</h6>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="input-group mb-1">
+                          <input  formControlName="bannerShowConsent" oninput="validity.valid||(value='');" min="1" type="number"class="form-control" value="1" name="email">
+                          <div class="input-group-append">
+                            <select  formControlName="bannerShowConsentType" class="form-control">
+                              <option *ngFor="let type of bannerConstant.BannerDisplayFrequency" [value]="type.value">{{type.label}}</option>
+                            </select>
+                          </div>
+                        </div>
                       </div>
                     </div>
-                    <div class="form-group row pd-0 mg-b-0">
-                      <label class="col-sm-8 tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label">
-                        Google Vendors</label>
-                      <div class="col-sm-4">
-                        <label class="switch">
-                          <input type="checkbox" formControlName="google_vendors">
-                          <span class="slider round"></span>
-                        </label>
-                      </div>
-                    </div>
-
-                    <div class="form-group row pd-0 mg-b-0">
-                      <label class="col-sm-8 tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label">
-                        GDPR GLOBAL</label>
-                      <div class="col-sm-4">
-                        <label class="switch">
-                          <input type="checkbox" (ngModelChange)="onSetGdprGlobal($event)" #gdprGlobal formControlName="gdpr_global">
-                          <span class="slider round"></span>
-                        </label>
-                      </div>
-                    </div>
-
-
-                    <div class="form-group row pd-0 mg-b-0">
-                      <label class="col-sm-8 tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label">
-                        Configure banner</label>
-                      <div class="col-sm-4">
-                        <label class="switch">
-                          <input type="checkbox" #showConfig>
-                          <span class="slider round"></span>
-                        </label>
-                      </div>
-                    </div>
-
-
 
                   </div>
-                </div>
+
+
+
               </div>
             </div>
           </div>

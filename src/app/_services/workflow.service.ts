@@ -99,8 +99,8 @@ export class WorkflowService {
     this.workflowSource.next(currentItem);
   }
 
-  getActiveWorkflowList(componentName, moduleName): Observable<any> {
-    const path = '/workflow?workflow_status=active';
+  getActiveWorkflowList(componentName, moduleName, pagelimit): Observable<any> {
+    const path = '/workflow?workflow_status=active' + pagelimit;
 
     return this.httpClient.get<any>(environment.apiUrl + path).pipe(
       catchError(error => {

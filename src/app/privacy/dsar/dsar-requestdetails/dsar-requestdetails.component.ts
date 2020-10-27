@@ -8,11 +8,12 @@ import { WorkflowService } from 'src/app/_services/workflow.service';
 import { CcpadataService } from 'src/app/_services/ccpadata.service';
 import { CCPAFormConfigurationService } from 'src/app/_services/ccpaform-configuration.service';
 import { TypeaheadMatch } from 'ngx-bootstrap/typeahead/typeahead-match.class';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap';
+import { BsDatepickerConfig, BsDaterangepickerDirective, BsModalRef, BsModalService } from 'ngx-bootstrap';
 import { Observable } from 'rxjs';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { TablePaginationConfig } from 'src/app/_models/tablepaginationconfig';
 import { moduleName } from '../../../_constant/module-name.constant';
+import { formatDate } from '@angular/common';
 @Component({
   selector: 'app-dsar-requestdetails',
   templateUrl: './dsar-requestdetails.component.html',
@@ -25,6 +26,9 @@ export class DsarRequestdetailsComponent implements OnInit {
   @ViewChild('confirmTemplate', { static: false }) confirmModal: TemplateRef<any>;
   @ViewChild('filePreview', { static: true }) filePreview: ElementRef;
   @ViewChild('panel', { static: true }) public panel: ElementRef<any>;
+  @ViewChild('dp', { static: false }) datepicker: BsDaterangepickerDirective;
+  bsConfig: Partial<BsDatepickerConfig>;
+
   requestID: any;
   currentManagedOrgID: any;
   currrentManagedPropID: any;
@@ -150,6 +154,9 @@ export class DsarRequestdetailsComponent implements OnInit {
   filePreviewURL: any;
   isEmailVerified = false;
   isAttachmentExist: boolean;
+  activitytype: any;
+  bsValue: Date;
+  subtaskDeadlineDate: Date;
   constructor(private activatedRoute: ActivatedRoute,
               private router: Router,
               private orgService: OrganizationService,
@@ -170,6 +177,7 @@ export class DsarRequestdetailsComponent implements OnInit {
       }
     });
     this.paginationConfig = { itemsPerPage: this.pageSize, currentPage: this.p, totalItems: this.totalCount, id: 'userPagination' };
+    this.activitytype = 0; // 0 = private (internal), 1 = public
   }
 
   ngOnInit() {
@@ -205,8 +213,8 @@ export class DsarRequestdetailsComponent implements OnInit {
       subtaskname: ['', [Validators.required]],
       subtaskdescription: ['', [Validators.required]],
       issubtaskrequired: [''],
-      deadline: ['', [Validators.required]],
-      reminder: ['']
+      deadline: [new Date(), [Validators.required]],
+      reminder: [null]
     });
 
     this.subTaskResponseForm = this.formBuilder.group({
@@ -372,7 +380,8 @@ export class DsarRequestdetailsComponent implements OnInit {
   getDeadLine(createdDate, daysLeft) {
     const dt = new Date(createdDate);
     dt.setDate(dt.getDate() + this.getDueIn(createdDate, daysLeft));
-    return dt;
+    this.subtaskDeadlineDate = dt;
+    return this.subtaskDeadlineDate;
   }
 
   getDueIn(createdDate, daysLeft) {
@@ -677,7 +686,7 @@ export class DsarRequestdetailsComponent implements OnInit {
 
   stageAPI(requestID, requestObj) {
     // return false;
-    this.ccpaDataService.addCCPADataActivity(this.constructor.name, moduleName.dsarRequestModule,
+    this.ccpaDataService.addCCPADataActivity(this.constructor.name, moduleName.dsarRequestModule, this.activitytype,
       requestID, requestObj).subscribe((data) => {
         if (data) {
           this.loadDataRequestDetails();
@@ -692,13 +701,13 @@ export class DsarRequestdetailsComponent implements OnInit {
         this.alertMsg = error;
         this.isOpen = true;
         this.alertType = 'danger';
-      })
+      });
   }
 
   loadActivityLog(requestID) {
     this.paginationConfig.currentPage = 1;
     const pagelimit = '?limit=' + this.paginationConfig.itemsPerPage + '&page=' + this.paginationConfig.currentPage;
-    this.ccpaDataService.getCCPADataActivityLog(this.constructor.name, moduleName.dsarRequestModule,
+    this.ccpaDataService.getCCPADataActivityLog(this.constructor.name, moduleName.dsarRequestModule, this.activitytype,
       requestID, pagelimit).subscribe((data) => {
         this.activityLog = data.response;
       });
@@ -760,6 +769,8 @@ export class DsarRequestdetailsComponent implements OnInit {
       this.isEditSubTask = false;
       this.selectedAssignee = '';
       this.onResetSubTask();
+      this.isAddSubTaskSubmit = false;
+      this.subTaskForm.reset();
       this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
         // this.subTaskForm.controls['assignee'].setValue(data.assignee);
 
@@ -940,7 +951,7 @@ export class DsarRequestdetailsComponent implements OnInit {
   pageChangeEvent(event) {
     this.paginationConfig.currentPage = event;
     const pagelimit = '?limit=' + this.paginationConfig.itemsPerPage + '&page=' + this.paginationConfig.currentPage;
-    this.ccpaDataService.getCCPADataActivityLog(this.constructor.name, moduleName.dsarRequestModule,
+    this.ccpaDataService.getCCPADataActivityLog(this.constructor.name, moduleName.dsarRequestModule, this.activitytype,
       this.requestID, pagelimit).subscribe((data) => {
         this.activityLog = data.response;
         if (data.response.length !== 0) {
@@ -960,19 +971,18 @@ export class DsarRequestdetailsComponent implements OnInit {
   onSubmitAddSubTask() {
     this.isAddSubTaskSubmit = true;
     if (this.subTaskForm.invalid) {
-      //  this.isAddSubTaskSubmit = false;
       return false;
     } else {
       const obj = {
         assignee: this.subTaskForm.controls['assignee'].value,
         name: this.subTaskForm.controls['subtaskname'].value,
         description: this.subTaskForm.controls['subtaskdescription'].value,
-        required: this.subTaskForm.controls['issubtaskrequired'].value || false,
+        required: this.subTaskForm.controls['issubtaskrequired'].value == null ? false : true,
         deadline: new Date(this.subTaskForm.controls['deadline'].value).toJSON(),
         reminder: (this.subTaskForm.controls['reminder'].value !== null) ?
           new Date(this.subTaskForm.controls['reminder'].value).toJSON() : null
       };
-
+      
       const currentStageID = this.currentStageId ? this.currentStageId : this.currentWorkflowStageID;
       if (!this.isEditSubTask) {
         this.dsarRequestService.addSubTask(this.requestID, currentStageID, obj, this.constructor.name, moduleName.dsarRequestModule)
@@ -980,13 +990,13 @@ export class DsarRequestdetailsComponent implements OnInit {
             this.alertMsg = data.response;
             this.isOpen = true;
             this.alertType = 'success';
-            this.getSubTaskList();
             this.onResetSubTask();
+            this.getSubTaskList();
           }, (error) => {
+            this.onResetSubTask();
             this.alertMsg = error;
             this.isOpen = true;
             this.alertType = 'danger';
-            this.onResetSubTask();
           });
       } else { // update sub task
         this.dsarRequestService.updateSubTask(this.selectedTaskID, obj, this.constructor.name, moduleName.dsarRequestModule)
@@ -1001,7 +1011,7 @@ export class DsarRequestdetailsComponent implements OnInit {
             this.isOpen = true;
             this.alertType = 'danger';
             this.onResetSubTask();
-          })
+          });
       }
     }
   }
@@ -1011,6 +1021,14 @@ export class DsarRequestdetailsComponent implements OnInit {
     this.subTaskForm.reset();
     this.modalService.dismissAll('Canceled');
   }
+
+  isInvalidDate(event) {
+    const test = event.target.value;
+    if (test === 'Invalid date') {
+      event.target.value = formatDate(new Date(), 'MM/dd/yyyy', 'en'); // Change it here
+    }
+  }
+
 
   uploadFile(event, tag) {
     const fileExtArray = ['pdf', 'txt', 'jpeg', 'jpg', 'png', 'doc', 'docx', 'csv', 'xls'];
@@ -1126,10 +1144,10 @@ export class DsarRequestdetailsComponent implements OnInit {
 
 
   onValueChange(value: Date): void {
-    this.minDate = new Date();
-    this.maxDate = new Date(value);
-    this.minDate.setDate(this.minDate.getDate());
-    this.maxDate.setDate(this.maxDate.getDate());
+      this.minDate = new Date();
+      this.maxDate = new Date(value);
+      this.minDate.setDate(this.minDate.getDate());
+      this.maxDate.setDate(this.maxDate.getDate());
   }
 
   displayApproverName(id): string {
@@ -1256,6 +1274,10 @@ export class DsarRequestdetailsComponent implements OnInit {
         this.isOpen = true;
         this.alertType = 'danger';
       });
+  }
+
+  onCheckboxChange($event) {
+    console.log($event);
   }
 
 }

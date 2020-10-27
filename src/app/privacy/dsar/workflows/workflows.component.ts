@@ -134,8 +134,8 @@ export class WorkflowsComponent implements OnInit, AfterViewInit  {
  
 
 loadActiveWorkflowList() {
-  const pagelimit = '?limit=' + 0;
-  this.workflowService.getActiveWorkflowList(this.constructor.name, moduleName.workFlowModule).subscribe((data) => {
+  const pagelimit = '&limit=' + 0;
+  this.workflowService.getActiveWorkflowList(this.constructor.name, moduleName.workFlowModule, pagelimit).subscribe((data) => {
     this.activeWorkflowList = data.response;
     this.paginationConfig.totalItems = data.count;
   });

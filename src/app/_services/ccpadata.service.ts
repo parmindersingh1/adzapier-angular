@@ -17,30 +17,32 @@ export class CcpadataService {
     return this.httpClient.post<any>(environment.apiUrl + '/ccpa/data/' + orgID + '/' + propID + '/' + crID, dataObj);
   }
 
-  addCCPADataActivity(componentName, moduleName, ccpaDataId, reqObj) {
-    const path = '/ccpa/activity/' + ccpaDataId;
+  addCCPADataActivity(componentName, moduleName, activitytype, ccpaDataId, reqObj) {
+    const activityType = activitytype === 0 ? 'internal' : 'public';
+    const path = '/ccpa/activity/' + activityType + '/' + ccpaDataId;
     return this.httpClient.post<any>(environment.apiUrl + path, reqObj)
-    .pipe(catchError(error => {
-      this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.getWorkflow, componentName, moduleName, path);
-      return throwError(error);
-    }));
+      .pipe(catchError(error => {
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.getWorkflow, componentName, moduleName, path);
+        return throwError(error);
+      }));
   }
 
-  getCCPADataActivityLog(componentName, moduleName, ccpaDataId, pageLimit?): Observable<any> {
+  getCCPADataActivityLog(componentName, moduleName, activitytype, ccpaDataId, pageLimit?): Observable<any> {
+    const activityType = 'internal';
     if (pageLimit !== undefined) {
-      const path = '/ccpa/activity/' + ccpaDataId + pageLimit;
+      const path = '/ccpa/activity/' + activityType + '/' + ccpaDataId + pageLimit;
       return this.httpClient.get<any>(environment.apiUrl + path)
-      .pipe(catchError(error => {
-        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.getWorkflow, componentName, moduleName, path);
-        return throwError(error);
-      }));
+        .pipe(catchError(error => {
+          this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.getCCPADataActivityLog, componentName, moduleName, path);
+          return throwError(error);
+        }));
     } else {
-      const path = '/ccpa/activity/' + ccpaDataId;
+      const path = '/ccpa/activity/' + activityType + '/' + ccpaDataId;
       return this.httpClient.get<any>(environment.apiUrl + path)
-      .pipe(catchError(error => {
-        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.getWorkflow, componentName, moduleName, path);
-        return throwError(error);
-      }));
+        .pipe(catchError(error => {
+          this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.getCCPADataActivityLog, componentName, moduleName, path);
+          return throwError(error);
+        }));
     }
   }
 
@@ -63,7 +65,7 @@ export class CcpadataService {
     );
   }
 
-  deleteDSARRequestByID(componentName, moduleName, orgID, propID, ccpaDataId){
+  deleteDSARRequestByID(componentName, moduleName, orgID, propID, ccpaDataId) {
     const path = '/ccpa/data/' + orgID + '/' + propID + '/' + ccpaDataId;
     return this.httpClient.delete<any>(environment.apiUrl + path).pipe(
       catchError(error => {
