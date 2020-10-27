@@ -111,6 +111,8 @@ export class OrganizationteamComponent implements OnInit {
 
   onChangeEvent(event) {
     this.paginationConfig.itemsPerPage = Number(event.target.value);
+    this.paginationConfig.currentPage = 1;
+    this.loadOrgTeamMembers(this.organizationID);
   }
 
 

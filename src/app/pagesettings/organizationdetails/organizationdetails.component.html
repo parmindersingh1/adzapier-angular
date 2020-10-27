@@ -151,7 +151,7 @@
                                     {{ (propertyPageConfig.currentPage - 1) * propertyPageConfig.itemsPerPage + i + 1 }}
                                 </td>
                                 <td>
-                                    <img class="img-fluid" [src]="list.logo_url?list.logo_url:'assets/imgs/no_image.png'" />
+                                    <img class="img-fluid" [src]="loadLogoURL(list.logo_url)" />
                                 </td>
                                 <td>
                                     {{list.name}}
