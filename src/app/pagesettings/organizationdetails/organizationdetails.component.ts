@@ -80,8 +80,10 @@ export class OrganizationdetailsComponent implements OnInit {
       this.currrentManagedPropID = data.property_id;
     });
     this.paginationConfig = { itemsPerPage: this.pageSize, currentPage: this.p, totalItems: this.totalCount, id: 'userPagination' };
-    this.propertyPageConfig = { itemsPerPage: this.propertyPgSize, currentPage: this.p2,
-      totalItems: this.propertyTotalCount, id: 'propertyPagination' };
+    this.propertyPageConfig = {
+      itemsPerPage: this.propertyPgSize, currentPage: this.p2,
+      totalItems: this.propertyTotalCount, id: 'propertyPagination'
+    };
   }
 
   ngOnInit() {
@@ -354,6 +356,7 @@ export class OrganizationdetailsComponent implements OnInit {
 
   onChangeEvent(event) {
     this.paginationConfig.itemsPerPage = Number(event.target.value);
+    this.paginationConfig.currentPage = 1;
     this.loadOrgTeamMembers(this.organizationID);
   }
 
@@ -370,6 +373,7 @@ export class OrganizationdetailsComponent implements OnInit {
 
   onPagesizeChangeEvent(event) {
     this.propertyPageConfig.itemsPerPage = Number(event.target.value);
+    this.propertyPageConfig.currentPage = 1;
   }
 
   onSubmitInviteUserOrganization() {
@@ -384,7 +388,7 @@ export class OrganizationdetailsComponent implements OnInit {
           orgid: this.organizationID,
           user_level: 'organization'
         };
-        this.companyService.inviteUser( this.constructor.name, moduleName.organizationDetailsModule, requestObj)
+        this.companyService.inviteUser(this.constructor.name, moduleName.organizationDetailsModule, requestObj)
           .subscribe((data) => {
             if (data) {
               this.alertMsg = data.response;
@@ -405,7 +409,7 @@ export class OrganizationdetailsComponent implements OnInit {
           user_id: this.approverID,
           role_id: this.inviteUserOrgForm.value.permissions
         };
-        this.companyService.updateUserRole( this.constructor.name, moduleName.organizationDetailsModule, requestObj)
+        this.companyService.updateUserRole(this.constructor.name, moduleName.organizationDetailsModule, requestObj)
           .subscribe((data) => {
             if (data) {
               this.alertMsg = data.response;
@@ -424,125 +428,138 @@ export class OrganizationdetailsComponent implements OnInit {
     }
   }
 
-loadRoleList() {
-  this.userService.getRoleList( this.constructor.name, moduleName.organizationDetailsModule ).subscribe((data) => {
-    if (data) {
-      const key = 'response';
-      // const roleid = data[key];
-      this.roleList = data[key];
-    }
-  });
-}
-
-loadOrgTeamMembers(orgID) {
-  const key = 'response';
-  const pagelimit = '&limit=' + this.paginationConfig.itemsPerPage + '&page=' + this.paginationConfig.currentPage;
-  this.orgService.getOrgTeamMembers(orgID, pagelimit).subscribe((data) => {
-    this.organizationTeamMemberList = data.response;
-    this.paginationConfig.totalItems = data.count;
-  });
-}
-
-viewOrganizationTeam() {
-  this.router.navigate(['settings/organizations/organizationteam', this.organizationID]);
-}
-
-disableOrganization() {
-  const reqObj = {
-    active: false
-  };
-  this.orgService.disableOrganization(this.organizationID, reqObj).subscribe((data) => {
-    if (data) {
-      this.alertMsg = data.response;
-      this.isOpen = true;
-      this.alertType = 'success';
-      this.orgService.isOrganizationUpdated.next(true);
-      this.router.navigate(['settings/organizations']);
-    }
-  }, (err) => {
-    this.alertMsg = err;
-    this.isOpen = true;
-    this.alertType = 'danger';
-  });
-}
-
-removeTeamMember(obj) {
-  this.companyService.removeTeamMember( this.constructor.name, moduleName.organizationDetailsModule, obj,
-    this.organizationID).subscribe((data) => {
-    if (data) {
-      this.alertMsg = data.response;
-      this.isOpen = true;
-      this.alertType = 'success';
-      this.loadOrgTeamMembers(this.organizationID);
-    }
-  }, (err) => {
-    this.alertMsg = err;
-    this.isOpen = true;
-    this.alertType = 'danger';
-  });
-}
-
-isDateOrString(status): boolean {
-  const date = Date.parse(status);
-  if (isNaN(date)) {
-    return false;
-  }
-  return true;
-}
-onResendInvitation(userid) {
-  this.companyService.resendInvitation(this.constructor.name, moduleName.organizationDetailsModule, userid)
-    .subscribe((data) => {
+  loadRoleList() {
+    this.userService.getRoleList(this.constructor.name, moduleName.organizationDetailsModule).subscribe((data) => {
       if (data) {
-        this.alertMsg = 'We have sent a email on your Email Id';
-        this.isOpen = true;
-        this.alertType = 'info';
-        this.loadOrgTeamMembers(this.organizationID);
-        this.inviteUserOrgForm.reset();
-        this.modalService.dismissAll('Data Saved!');
+        const key = 'response';
+        // const roleid = data[key];
+        this.roleList = data[key];
       }
-    }, (error) => {
-      this.alertMsg = error;
+    });
+  }
+
+  loadOrgTeamMembers(orgID) {
+    const key = 'response';
+    const pagelimit = '&limit=' + this.paginationConfig.itemsPerPage + '&page=' + this.paginationConfig.currentPage;
+    this.orgService.getOrgTeamMembers(orgID, pagelimit).subscribe((data) => {
+      this.organizationTeamMemberList = data.response;
+      this.paginationConfig.totalItems = data.count;
+    });
+  }
+
+  viewOrganizationTeam() {
+    this.router.navigate(['settings/organizations/organizationteam', this.organizationID]);
+  }
+
+  disableOrganization() {
+    const reqObj = {
+      active: false
+    };
+    this.orgService.disableOrganization(this.organizationID, reqObj).subscribe((data) => {
+      if (data) {
+        this.alertMsg = data.response;
+        this.isOpen = true;
+        this.alertType = 'success';
+        this.orgService.isOrganizationUpdated.next(true);
+        this.router.navigate(['settings/organizations']);
+      }
+    }, (err) => {
+      this.alertMsg = err;
       this.isOpen = true;
       this.alertType = 'danger';
-      this.modalService.dismissAll('Error!');
     });
-}
+  }
 
-editUserInvitation(content, data) {
-  console.log(data, 'editUserInvitation..');
-  this.isUpdateUserinvitation = true;
-  this.recordID = data.id;
-  this.approverID = data.approver_id;  
-  this.inviteUserOrgForm.controls['emailid'].setValue(data.user_email);
-  this.inviteUserOrgForm.get('emailid')[this.isUpdateUserinvitation ? 'disable' : 'enable']();
-  this.inviteUserOrgForm.controls['permissions'].setValue(data.role_id);
-   
-  this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
+  removeTeamMember(obj) {
+    this.companyService.removeTeamMember(this.constructor.name, moduleName.organizationDetailsModule, obj,
+      this.organizationID).subscribe((data) => {
+        if (data) {
+          this.alertMsg = data.response;
+          this.isOpen = true;
+          this.alertType = 'success';
+          this.loadOrgTeamMembers(this.organizationID);
+        }
+      }, (err) => {
+        this.alertMsg = err;
+        this.isOpen = true;
+        this.alertType = 'danger';
+      });
+  }
+
+  isDateOrString(status): boolean {
+    const date = Date.parse(status);
+    if (isNaN(date)) {
+      return false;
+    }
+    return true;
+  }
+  onResendInvitation(userid) {
+    this.companyService.resendInvitation(this.constructor.name, moduleName.organizationDetailsModule, userid)
+      .subscribe((data) => {
+        if (data) {
+          this.alertMsg = 'We have sent a email on your Email Id';
+          this.isOpen = true;
+          this.alertType = 'info';
+          this.loadOrgTeamMembers(this.organizationID);
+          this.inviteUserOrgForm.reset();
+          this.modalService.dismissAll('Data Saved!');
+        }
+      }, (error) => {
+        this.alertMsg = error;
+        this.isOpen = true;
+        this.alertType = 'danger';
+        this.modalService.dismissAll('Error!');
+      });
+  }
+
+  editUserInvitation(content, data) {
+    console.log(data, 'editUserInvitation..');
+    this.isUpdateUserinvitation = true;
+    this.recordID = data.id;
+    this.approverID = data.approver_id;
+    this.inviteUserOrgForm.controls['emailid'].setValue(data.user_email);
+    this.inviteUserOrgForm.get('emailid')[this.isUpdateUserinvitation ? 'disable' : 'enable']();
+    this.inviteUserOrgForm.controls['permissions'].setValue(data.role_id);
+
+    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
+      this.inviteUserOrgForm.reset();
+      // this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.inviteUserOrgForm.reset();
+      // this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  onCancelClick() {
+    this.isInviteFormSubmitted = false;
+    this.isUpdateUserinvitation = false;
     this.inviteUserOrgForm.reset();
-    // this.closeResult = `Closed with: ${result}`;
-  }, (reason) => {
-    this.inviteUserOrgForm.reset();
-    // this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-  });
-}
+    this.modalService.dismissAll('Canceled');
+  }
 
-onCancelClick() {
-  this.isInviteFormSubmitted = false;
-  this.isUpdateUserinvitation = false;
-  this.inviteUserOrgForm.reset();
-  this.modalService.dismissAll('Canceled');
-}
+  onClosed(dismissedAlert: any): void {
+    this.alertMsg = !dismissedAlert;
+    this.isOpen = false;
+  }
 
-onClosed(dismissedAlert: any): void {
-  this.alertMsg = !dismissedAlert;
-  this.isOpen = false;
-}
+  onCancelClickProperty() {
+    this.submitted = false;
+    this.organisationPropertyForm.reset();
+    this.modalService.dismissAll('Canceled');
+  }
 
-onCancelClickProperty() {
-  this.submitted = false;
-  this.organisationPropertyForm.reset();
-  this.modalService.dismissAll('Canceled');
-}
+  loadLogoURL(logourl): string {
+    if (logourl !== null) {
+      if (logourl.indexOf('http') !== -1) {
+        return logourl;
+      } else {
+        return logourl = 'assets/imgs/no_image.png';
+      }
+    } else {
+      return logourl = 'assets/imgs/no_image.png';
+    }
+
+  }
   // ngAfterContentChecked() {
   //   this.cdref.detectChanges();
   // }

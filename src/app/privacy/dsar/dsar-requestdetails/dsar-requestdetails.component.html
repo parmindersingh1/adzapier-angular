@@ -214,6 +214,15 @@
                     <li [ngbNavItem]="1">
                         <a ngbNavLink>Activity</a>
                         <ng-template ngbNavContent>
+                            <div class="form-check-inline"> 
+                                <input class="form-check-input" type="radio" name="privatetype"
+                                    id="privatetype" [value]="0" [(ngModel)]="activitytype">
+                                <label for="privatetype">Private</label>
+                                <input class="form-check-input" type="radio" name="publictype"
+                                    id="publictype" [value]="1" [(ngModel)]="activitytype" >
+                                <label for="publictype">Public</label>
+                            </div>
+                            
                             <form [formGroup]="quillEditorText" (ngSubmit)="onSubmitActivityPost()">
                                 <quill-editor formControlName="editor" [modules]="quillConfig"
                                     [ngClass]="{ 'is-invalid': isActivitysubmitted && addActivity.editor?.errors }">
@@ -662,9 +671,11 @@
                     <label for="subtaskdescription"
                         class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">
                         Deadline</label>
-                    <input type="text" formControlName="deadline"
+                    <input formControlName="deadline"
                         [ngClass]="{ 'is-invalid': isAddSubTaskSubmit && addsubTask.deadline.errors }"
-                        class="form-control" #dp="bsDatepicker" bsDatepicker (bsValueChange)="onValueChange($event)"
+                        class="form-control" bsDatepicker (bsValueChange)="onValueChange($event)"
+                        [maxDate]="subtaskDeadlineDate"
+                        [bsConfig]="{ dateInputFormat: 'MM-DD-YYYY',  returnFocusToInput: true }"
                         [bsValue]="bsValue" required />
                     <div *ngIf="isAddSubTaskSubmit && addsubTask.deadline.errors" class="invalid-feedback">
                         <div *ngIf="addsubTask.deadline?.errors.required">Deadline date is required</div>
@@ -678,8 +689,8 @@
                     <label for="subtaskdescription"
                         class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">
                         Reminder </label>
-                    <input type="text" formControlName="reminder" class="form-control" bsDatepicker [maxDate]="maxDate"
-                        [minDate]="minDate" [bsValue]="bsValue" required />
+                    <input formControlName="reminder" class="form-control"  bsDatepicker [maxDate]="maxDate"
+                    [bsConfig]="{ dateInputFormat: 'DD-MM-YYYY',  returnFocusToInput: true }" [minDate]="minDate" [bsValue]="bsValue" />
                 </div>
             </div>
 

@@ -52,7 +52,7 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit {
   status = '';
   dueIn = '';
   alertMsg: any;
-  isOpen = true;
+  isOpen = false;
   alertType: any;
   first = 0;
   rows = 0;
