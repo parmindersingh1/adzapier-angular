@@ -77,7 +77,7 @@
                  </div>
                  <div class="col-md-10">
                   <label class="tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase col-sm-12 col-form-label">
-                    Show Logo
+                    Show Watermark
                   </label>
                  </div>
                 </div>
@@ -158,7 +158,7 @@
               <div class="col-md-6 switch-btn">
                   <div class="col-md-12">
                     <div class="divider-text mt-0">Display Frequency</div>
-                    <div class="row mb-2">
+                    <div class="row">
                       <div class="col-md-12">
                         <h6 class=" tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label">Show the Consent Manager UI to users the partial consent status every:</h6>
                       </div>
@@ -175,7 +175,7 @@
                     </div>
                     </div>
 
-                    <div class="row mb-2">
+                    <div class="row">
                       <div class="col-md-12">
                         <h6 class=" tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label">Show the Consent Manager UI to users who rejected all purposes every:</h6>
                       </div>
@@ -241,7 +241,7 @@
         <ng-container *ngIf="currentState === 'banner'">
           <div class="row">
             <div *ngIf="showConfig.checked" class="col-md-5">
-              <div class="card">
+              <div class="card mb-0">
                 <div class="card-header">Banner Styling and Content
                 </div>
                 <div class="card-body p-0 banner-body">
@@ -556,7 +556,7 @@
         <ng-container  >
           <div class="row" [ngStyle]="{display: currentState === 'popup' ? '' : 'none'}">
             <div *ngIf="showConfig.checked" class="col-md-5">
-              <div class="card">
+              <div class="card mb-0">
                 <div class="card-header">Preference Styling and Content
                 </div>
                 <div class="card-body p-0 popup-body">
@@ -943,7 +943,11 @@
     </div>
   </form>
 </div>
-<div class="col-sm-5 mt-3 mr-0 float-right">
-  <alert *ngIf="isOpen" [type]="alertType" [dismissible]="dismissible" (onClosed)="onClosed(alertMsg)">{{  alertMsg}}
-  </alert>
+<!--<div class="col-sm-5 mt-3 mr-0 float-right">-->
+<!--  <alert *ngIf="isOpen" [type]="alertType" [dismissible]="dismissible" (onClosed)="onClosed(alertMsg)">{{  alertMsg}}-->
+<!--  </alert>-->
+<!--</div>-->
+
+<div class="col-sm-5 mr-0 float-right flotingdiv" [ngClass]="{'hide':!isOpen}">
+  <alert *ngIf="isOpen" [type]="alertType" dismissOnTimeout="5000" [dismissible]="dismissible" (onClosed)="onClosed(alertMsg)">{{  alertMsg}}</alert>
 </div>

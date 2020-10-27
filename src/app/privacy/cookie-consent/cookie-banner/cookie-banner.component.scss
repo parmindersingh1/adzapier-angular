@@ -53,7 +53,7 @@ input[type=color] {
 
 
 .banner-body {
-  height: 409px;
+  height: 445px;
   overflow: overlay;
 }
 
@@ -157,4 +157,44 @@ input:checked + .slider:before {
 }
 input:checked + .slider {
   background-color: #2196F3;
+}
+
+
+.alert-info {
+  color: #0c5460;
+  background-color: #d1ecf1;
+  border-color: #bee5eb;
+}
+
+.alert-success {
+  background-color: #10b759;
+  border-color: #10b759;
+  color: #fff;
+}
+
+.alert-danger {
+  color: #721c24;
+  background-color: #f8d7da;
+  border-color: #f5c6cb;
+}
+
+.flotingdiv{
+  position: fixed;
+  bottom: 0;
+  top: 84%;
+  right:0;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.cursorpointer {
+  cursor: pointer;
+}
+
+.colorblue {
+  color: #00f;
+}
+
+.hide {
+  display: none;
 }

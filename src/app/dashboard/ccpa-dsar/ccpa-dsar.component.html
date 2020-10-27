@@ -194,7 +194,7 @@
             <div id="vmap" *ngIf="currentState === 'usa'" class="ht-200"></div>
             <div id="worldMap" *ngIf="currentState !== 'usa'" class="ht-200"></div>
           </div>
-          <div *ngIf="currentState === 'usa'" class="table-responsive">
+          <div *ngIf="currentState === 'usa'" class="table-responsive state-count-list">
             <table class="table table-borderless table-dashboard table-dashboard-one">
               <thead>
               <tr>
@@ -204,7 +204,7 @@
               </thead>
               <tbody>
               <tr *ngFor="let state of stateList | slice:0:6">
-                <td class="tx-medium">{{state.state}}</td>
+                <td class="tx-medium">{{state.statename}}</td>
                 <td class="">{{state.count}}</td>
               </tr>
               </tbody>
@@ -213,7 +213,7 @@
 
 
 
-          <div *ngIf="currentState !== 'usa'" class="table-responsive">
+          <div *ngIf="currentState !== 'usa'" class="table-responsive state-count-list">
             <table class="table table-borderless table-dashboard table-dashboard-one">
               <thead>
               <tr>
@@ -223,7 +223,7 @@
               </thead>
               <tbody>
               <tr *ngFor="let countryData of countryList | slice:0:6">
-                <td class="tx-medium">{{countryData.country}}</td>
+                <td class="tx-medium">{{countryData.countryname}}</td>
                 <td class="">{{countryData.count}}</td>
               </tr>
               </tbody>

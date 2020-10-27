@@ -33,8 +33,8 @@ export class SetupComponent implements OnInit {
     private cookieBannerService: CookieBannerService,
     private loading: NgxUiLoaderService,
     private modalService: BsModalService,
-  private router: Router,
-  private orgservice: OrganizationService,
+    private router: Router,
+    private orgservice: OrganizationService,
   ) { }
 
   ngOnInit() {
@@ -62,10 +62,10 @@ export class SetupComponent implements OnInit {
       .subscribe(res => {
         this.loadingSkeleton = false;
         this.loading.stop('2');
-        if (res['status'] === 200 && res.hasOwnProperty('response')) {
-          this.scriptUrl = res['response']['js_location'];this.scriptUrl = res['response']['js_location'];
+        if (res.status === 200 && res.hasOwnProperty('response')) {
+          this.scriptUrl = res.response.js_location; this.scriptUrl = res.response.js_location;
         } else {
-          this.openModal(this.template)
+          this.openModal(this.template);
         }
       }, error => {
         this.loading.stop('2');
@@ -84,10 +84,18 @@ export class SetupComponent implements OnInit {
   copyToClipboard() {
     this.isCopied = true;
     const copyText: any = this.addScript + this.scriptUrl + this.closeScript;
-    console.log(copyText)
-    copyText.select();
-    copyText.setSelectionRange(0, 99999);
-    document.execCommand("copy");
+    let textarea = null;
+    textarea = document.createElement('textarea');
+    textarea.style.height = '0px';
+    textarea.style.left = '-100px';
+    textarea.style.opacity = '0';
+    textarea.style.position = 'fixed';
+    textarea.style.top = '-100px';
+    textarea.style.width = '0px';
+    document.body.appendChild(textarea);
+    textarea.value = copyText.trim();
+    textarea.select();
+    document.execCommand('copy');
   }
 
   openModal(template: any) {

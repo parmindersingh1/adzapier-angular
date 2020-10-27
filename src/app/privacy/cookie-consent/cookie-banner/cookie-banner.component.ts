@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
 import {FormBuilder, FormControl, Validators, FormGroup, FormGroupDirective, NgForm} from '@angular/forms';
 import {ErrorStateMatcher} from '@angular/material/core';
 import {
@@ -28,7 +28,8 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
 @Component({
   selector: 'app-cookie-banner',
   templateUrl: './cookie-banner.component.html',
-  styleUrls: ['./cookie-banner.component.scss']
+  styleUrls: ['./cookie-banner.component.scss'],
+  encapsulation: ViewEncapsulation.Emulated
 })
 export class CookieBannerComponent implements OnInit {
   panelOpenState = false;
@@ -386,10 +387,10 @@ export class CookieBannerComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log('abc', this.cookieBannerForm.value.gdprTarget)
+    console.log('abc', this.cookieBannerForm.value.gdprTarget);
     this.submitted = true;
     if (this.cookieBannerForm.invalid) {
-      console.log('BannerDescription',  this.cookieBannerForm.controls)
+      console.log('BannerDescription',  this.cookieBannerForm.controls);
       return;
     }
     if (this.bannerCookieData) {
@@ -400,7 +401,7 @@ export class CookieBannerComponent implements OnInit {
   }
 
   onSubmitForm() {
-    console.log('this.cookieBannerForm.value.gdprTarget', this.cookieBannerForm.value.gdprTarget)
+    console.log('this.cookieBannerForm.value.gdprTarget', this.cookieBannerForm.value.gdprTarget);
     const userPrefrencesData = {
       ccpa_target: this.cookieBannerForm.value.ccpaTarget,
       type: this.type,
@@ -437,7 +438,7 @@ export class CookieBannerComponent implements OnInit {
 
 
   onUpdateForm() {
-    console.log('this.cookieBannerForm.value.google_vendors', this.cookieBannerForm.value.google_vendors)
+    console.log('this.cookieBannerForm.value.google_vendors', this.cookieBannerForm.value.google_vendors);
     const userPrefrencesData = {
       ccpa_target: this.cookieBannerForm.value.ccpaTarget,
       type: this.type,
@@ -602,7 +603,7 @@ export class CookieBannerComponent implements OnInit {
 
     } else {
       // this.cookieBannerForm.setValidators('gdprTarget', [])
-      this.cookieBannerForm.controls["gdprTarget"].setValidators(Validators.required);
+      this.cookieBannerForm.controls.gdprTarget.setValidators(Validators.required);
       // this.cookieBannerForm.setValidators([Validators.required);
     }
     this.cookieBannerForm.get('gdprTarget').updateValueAndValidity();

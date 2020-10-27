@@ -20,33 +20,35 @@ import {ConfirmationService, MessageService} from 'primeng/api';
 import {InputTextModule} from 'primeng/inputtext';
 import {RippleModule} from 'primeng/ripple';
 import {MultiSelectModule} from 'primeng/multiselect';
+import {ChartsModule} from 'ng2-charts';
 
 const route: Routes = [
   {path: '', component: CookieCategoryComponent, canActivate: [AuthGuard]}
 ];
 @NgModule({
   declarations: [CookieCategoryComponent],
-  imports: [
-    CommonModule,
-    ModalModule.forRoot(),
-    RouterModule.forChild(route),
-    MatDialogModule,
-    ReactiveFormsModule,
-    SharedbootstrapModule,
-    ConfirmDialogModule,
-    FormsModule,
-    InputNumberModule,
-    RadioButtonModule,
-    DialogModule,
-    RatingModule,
-    TableModule,
-    ToolbarModule,
-    ToastModule,
-    FileUploadModule,
-    InputTextModule,
-    RippleModule,
-    MultiSelectModule
-  ],
+    imports: [
+        CommonModule,
+        ModalModule.forRoot(),
+        RouterModule.forChild(route),
+        MatDialogModule,
+        ReactiveFormsModule,
+        SharedbootstrapModule,
+        ConfirmDialogModule,
+        FormsModule,
+        InputNumberModule,
+        RadioButtonModule,
+        DialogModule,
+        RatingModule,
+        TableModule,
+        ToolbarModule,
+        ToastModule,
+        FileUploadModule,
+        InputTextModule,
+        RippleModule,
+        MultiSelectModule,
+        ChartsModule
+    ],
   providers: [MessageService, ConfirmationService]
 })
 export class CookieCategoryModule { }

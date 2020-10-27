@@ -10,6 +10,7 @@ import { ConfirmationService, LazyLoadEvent, SortEvent } from 'primeng/api';
 import { MessageService } from 'primeng/api';
 import {moduleName} from '../../../_constant/module-name.constant';
 import {cookieName} from '../../../_constant/cookies-name.constant';
+import {ChartOptions} from 'chart.js';
 
 interface CategoryResponse {
   response: CategoryResponseData;
@@ -34,6 +35,19 @@ class CategoryResponseData {
 })
 
 export class CookieCategoryComponent implements OnInit {
+
+
+  public chartType: string = 'doughnut';
+  public chartLabels: Array<string> = ['Jan', 'Feb', 'Mar'];
+  public chartData: Array<number> = [1, 1, 1];
+  public doughnutChartOptions: ChartOptions = {
+    responsive: true,
+    legend: { display: false
+    }
+
+  };
+
+
   categoryModalRef: BsModalRef;
   isScanning = false;
   isDurationType = false;
@@ -45,7 +59,6 @@ export class CookieCategoryComponent implements OnInit {
   categoryFromSubmitted: boolean;
   categoryList;
   durationType;
-
   productDialog: boolean;
 
   cookieCategoryList = [];
