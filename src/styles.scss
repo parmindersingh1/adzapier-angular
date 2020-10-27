@@ -13,6 +13,9 @@
 @import '../node_modules/primeng/resources/primeng.min.css';
 @import '../node_modules/primeicons/primeicons.css';
 
+body{
+  background-color: #f5f6fa !important;
+}
 .o-hidden {
     overflow: hidden;
 }
@@ -192,7 +195,7 @@ a.dropdown-item > i {
 
 .container, .container-fluid {
     margin-bottom: 50px;
-    background-color: #f5f6fa;
+    //background-color: #f5f6fa;
 }
 
 .searchfield.mt-3 .form-inline {
