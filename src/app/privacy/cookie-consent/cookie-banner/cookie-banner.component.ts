@@ -67,6 +67,7 @@ export class CookieBannerComponent implements OnInit {
       ]
     }
   };
+  private isPublish: boolean;
 
   constructor(private formBuilder: FormBuilder,
               private notification: NotificationsService,
@@ -390,7 +391,6 @@ export class CookieBannerComponent implements OnInit {
     console.log('abc', this.cookieBannerForm.value.gdprTarget);
     this.submitted = true;
     if (this.cookieBannerForm.invalid) {
-      console.log('BannerDescription',  this.cookieBannerForm.controls);
       return;
     }
     if (this.bannerCookieData) {
@@ -401,7 +401,6 @@ export class CookieBannerComponent implements OnInit {
   }
 
   onSubmitForm() {
-    console.log('this.cookieBannerForm.value.gdprTarget', this.cookieBannerForm.value.gdprTarget);
     const userPrefrencesData = {
       ccpa_target: this.cookieBannerForm.value.ccpaTarget,
       type: this.type,
@@ -415,10 +414,12 @@ export class CookieBannerComponent implements OnInit {
       show_badge: this.cookieBannerForm.value.showBadge,
       CONFIG: this.onGetFormData()
     };
+    this.isPublish = true;
     this.loading.start();
     this.cookieBannerService.onSubmitCookieBannerData(userPrefrencesData, this.currentManagedOrgID, this.currrentManagedPropID, this.constructor.name , moduleName.cookieBannerModule)
       .subscribe((res: any) => {
         this.loading.stop();
+        this.isPublish = false;
        // this.notification.info('Success', res['response'], notificationConfig);
         this.isOpen = true;
         this.alertMsg = res.response;
@@ -429,6 +430,7 @@ export class CookieBannerComponent implements OnInit {
           }
         }, 1000);
       }, error => {
+        this.isPublish = false;
         this.isOpen = true;
         this.alertMsg = error;
         this.alertType = 'danger';
@@ -438,7 +440,6 @@ export class CookieBannerComponent implements OnInit {
 
 
   onUpdateForm() {
-    console.log('this.cookieBannerForm.value.google_vendors', this.cookieBannerForm.value.google_vendors);
     const userPrefrencesData = {
       ccpa_target: this.cookieBannerForm.value.ccpaTarget,
       type: this.type,
@@ -453,9 +454,11 @@ export class CookieBannerComponent implements OnInit {
       CONFIG: this.onGetFormData()
     };
     this.loading.start();
+    this.isPublish = true;
     this.cookieBannerService.onUpdateCookieBannerData(userPrefrencesData, this.currentManagedOrgID , this.currrentManagedPropID, this.constructor.name, moduleName.cookieBannerModule)
       .subscribe((res: any) => {
         this.loading.stop();
+        this.isPublish = false;
         this.isOpen = true;
         this.alertMsg = res.response;
         this.alertType = 'success';
@@ -469,6 +472,7 @@ export class CookieBannerComponent implements OnInit {
         this.alertMsg = error;
         this.alertType = 'danger';
         this.loading.stop();
+        this.isPublish = false;
       });
   }
   onGetFormData() {

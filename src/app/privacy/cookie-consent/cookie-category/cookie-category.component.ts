@@ -54,6 +54,7 @@ export class CookieCategoryComponent implements OnInit {
   cookieCategories = cookieName;
   catId = '';
   selectedCols: ColInterface[];
+  isPublish = false;
   cols: ColInterface[];
   categoryForm: FormGroup;
   categoryFromSubmitted: boolean;
