@@ -19,7 +19,8 @@ import {moduleName} from '../../_constant/module-name.constant';
 declare var jQuery: any;
 interface Country {
   count: number;
-  state: string;
+  statecode: string;
+  statename: string;
 }
 const colorValues =  [
   {
@@ -52,29 +53,13 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
   startDate;
   requestType = [];
   subjectType = [];
+  skeletonLoading = false;
+  skeletonLoadingState = false;
   endDate;
   dismissible = true;
   alertMsg: any;
   isOpen = false;
   alertType: any;
-  // public lineChartData: ChartDataSets[] = [
-  //   { data: [100], label: 'No Record'  },
-  // ];
-  // public lineChartLabels: Label[] = ['jan', 'feb', 'march'];
-  // public lineChartOptions: (ChartOptions & { responsive: any }) = {
-  //   responsive: true,
-  // };
-  // public lineChartColors: Color[] = [
-  //   {
-  //     borderColor: 'black',
-  //     backgroundColor: 'rgba(255,0,0,0.3)',
-  //   },
-  // ];
-  // public lineChartLegend = true;
-  // public lineChartType = 'line';
-  // public lineChartPlugins = [];
-
-
 
   public lineChartData  = [
     {},
@@ -180,75 +165,7 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
     this.onSetUpDate();
   }
 
-  // onSetUpMainMap(data, labelData, requestsChartCount) {
-  //   console.log('requestsChartCount', requestsChartCount)
-  //   const newData = [{
-  //     data: data[0],
-  //     color: '#69b2f8'
-  //   }, {
-  //     data: data[1],
-  //     color: '#d1e6fa'
-  //   }, {
-  //     data: data[2],
-  //     color: '#d1e6fa',
-  //     lines: {
-  //       fill: false,
-  //       lineWidth: 1.5
-  //     }
-  //   }];
-  //
-  //   const options = {
-  //     series: {
-  //       stack: 0,
-  //       shadowSize: 0,
-  //       lines: {
-  //         show: true,
-  //         lineWidth: 0,
-  //         fill: 1
-  //       }
-  //     },
-  //     grid: {
-  //       borderWidth: 0,
-  //       aboveData: true
-  //     },
-  //
-  //     yaxis: {
-  //       show: true,
-  //       color: 'rgba(72, 94, 144, .1)',
-  //       min: 0,
-  //       max: requestsChartCount * 2,
-  //       font: {
-  //         size: 10,
-  //         color: '#8392a5'
-  //       }
-  //     },
-  //     xaxis: {
-  //       show: true,
-  //       ticks: labelData,
-  //       // ticks: [[ 0, 'jan'], [1, 'feb'], [2, 'march'], [3, 'april'], [4 , 'may'],
-  //       // [5, 'june'], [6, 'july'], [7, 'Aug'], [8, 'Sep'], [9, 'Oct'], [10, 'nov'], [11, 'dec']
-  //       // ],
-  //
-  //       // ticks: [[0, ''], [8, 'Jan'], [20, 'Feb'], [32, 'Mar'], [44, 'Apr'], [56, 'May'],
-  //       //   [68, 'Jun'], [80, 'Jul'], [92, 'Aug'], [104, 'Sep'], [116, 'Oct'], [128, 'Nov'], [140, 'Dec']],
-  //       // color: 'rgba(255,255,255,.2)'
-  //
-  //       // ticks: [[0, ''], [2, 'Jan'], [3, 'Feb'], [4, 'Mar'], [5, 'Apr'], [6, 'May'],
-  //       //   [7, 'Jun'], [8, 'Jul'], [9, 'Aug'], [10, 'Sep'], [11, 'Oct'], [12, 'Nov'], [13, 'Dec']],
-  //       color: 'rgba(255,255,255,.2)'
-  //     }
-  //   };
-  //   const plot = jQuery.plot('#requestflotChart', newData, options);
-  //
-  //   plot.setData(newData);
-  //   plot.setupGrid();
-  //   plot.draw();
-  //   this.cd.detectChanges();
-  //   return plot;
-  // }
-
   onCountMap(requestComplete, requestReceived, requestInProgress, timeToComplete, dashBoardChartCount) {
-    console.log('requestReceived', requestReceived);
     jQuery.plot('#flotChart3', [{
       data: requestReceived,
       color: '#9db2c6'
@@ -324,7 +241,6 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
       xaxis: {show: false}
     });
 
-    console.log('timeToComplete' , timeToComplete)
     jQuery.plot('#flotChart6', [{
       // data: timeToComplete,
       data: timeToComplete.length > 0 ? timeToComplete : nullStatics,
@@ -355,9 +271,6 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
   onSelectCountry(e) {
     const country = e.target.value;
     this.currentState = country;
-    console.log(
-      'this.currrefdfs', this.currentState
-    );
     setTimeout(() => {
       this.onGetRequestByState();
     }, 1000);
@@ -379,7 +292,7 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
       hoverOpacity: .85,
       onLabelShow:  (event, label, code) => {
         for (const  stateData of that.stateList) {
-          if (code === stateData.state.toLowerCase()) {
+          if (code === stateData.statecode.toLowerCase()) {
             label.append(' : ' + stateData.count);
           } else {
             // label.append(' : 0');
@@ -406,13 +319,8 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
       normalizeFunction: 'polynomial',
       onLabelShow:  (event, label, code) => {
         for (const  countryData of that.countryList) {
-          if(code === 'us' && countryData.country === 'USA') {
+          if (code === countryData.countrycode.toLowerCase()) {
             label.append(' : ' + countryData.count);
-          }
-          if (code === countryData.country.toLowerCase()) {
-            label.append(' : ' + countryData.count);
-          } else {
-            // label.append(' : 0');
           }
         }
         that.cd.detectChanges();
@@ -437,13 +345,16 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
     jQuery('#reportrange').daterangepicker({
       startDate: start,
       endDate: end,
+      maxDate: new Date(),
       ranges: {
         Today: [moment(), moment()],
         Yesterday: [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
         'Last 7 Days': [moment().subtract(6, 'days'), moment()],
         'Last 30 Days': [moment().subtract(29, 'days'), moment()],
         'This Month': [moment().startOf('month'), moment().endOf('month')],
-        'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+        'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+        'This Year': [moment().startOf('year'), moment().endOf('year')],
+        'Last Year': [moment().subtract(1, 'year').startOf('year'), moment().subtract(1, 'year').endOf('year')],
       }
     }, cb);
     cb(start, end);
@@ -464,6 +375,7 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
 
   onGetCcpaAndDsar() {
     this.loading.start('p1');
+    this.skeletonLoading = true;
     const queryParam = {
       from_date: this.startDate,
       to_date: this.endDate
@@ -471,6 +383,7 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
     this.dashboardService.getCcpaAndDsar(this.currentManagedOrgID, this.currrentManagedPropID, queryParam, this.constructor.name, moduleName.ccpaDsarModule)
       .subscribe(res => {
         this.loading.stop('p1');
+        this.skeletonLoading = false;
         const result = res.response;
         if (Object.keys(result).length > 0) {
           this.dashboardCount = result.dashboardCount;
@@ -491,6 +404,7 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
          // this.notification.info('Dashboard', 'Data not Found...', notificationConfig);
         }
       }, error => {
+        this.skeletonLoading = false;
         this.loading.stop('p1');
         this.isOpen = true;
         this.alertMsg = error;
@@ -590,13 +504,13 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
         subjectTypeValue.push(data2.value);
       }
       this.pieChartLabels = subjectTypeLabel;
-      console.log('pieChartLabels', this.pieChartLabels)
       this.pieChartData = subjectTypeValue;
     }
   }
 
   onGetRequestByState() {
     this.loading.start();
+    this.skeletonLoadingState = true;
     const queryParam = {
       from_date: this.startDate,
       to_date: this.endDate,
@@ -605,22 +519,24 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
     this.dashboardService.getRequestByState(this.currentManagedOrgID, this.currrentManagedPropID, queryParam, this.constructor.name, moduleName.ccpaDsarModule)
       .subscribe(res => {
         this.loading.stop();
+        this.skeletonLoadingState = false;
         const result = res.response;
         if (this.currentState === 'usa') {
           for (const  countryData of result) {
-            this.stateColor[`${countryData.state.toLowerCase()}`] = '#69b2f8';
+            this.stateColor[`${countryData.statecode.toLowerCase()}`] = '#69b2f8';
           }
           this.stateList = result;
           this.onSetUsaMap();
         } else {
           for (const  countryData of result) {
-            this.countryColor[`${countryData.country.toLowerCase()}`] = '#69b2f8';
+            this.countryColor[`${countryData.countrycode.toLowerCase()}`] = '#69b2f8';
           }
           this.countryList = result;
           this.onSetWorldMap();
         }
 
       }, error => {
+        this.skeletonLoadingState = false;
         this.loading.stop();
         this.isOpen = true;
         this.alertMsg = error;
