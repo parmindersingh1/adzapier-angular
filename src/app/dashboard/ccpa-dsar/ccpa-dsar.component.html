@@ -108,15 +108,22 @@
       </div>
     </div><!-- col -->
 
+<!-- 
+    <div *ngIf="skeletonLoading" class="col-md-12 pt-3 card">
+      <div class="card-body">
+        <ngx-skeleton-loader count="3"></ngx-skeleton-loader>
+      </div>
+    </div> -->
+
+
     <div class="col-lg-8 col-xl-7 mg-t-10">
       <div class="card chart-height">
         <div class="card-header pd-y-15 d-md-flex align-items-center justify-content-between">
           <h6 class="mg-b-0">Requests</h6>
         </div>
 <!--        <h6 class="mg-b-0"> Requests</h6>-->
-
+      <ng-container *ngIf="!skeletonLoading">
         <div *ngIf="!requestChartError; else noChart" class="chart-one mt-1">
-<!--          <div id="requestflotChart" class="flot-chart" style="height:312px"></div>-->
           <canvas baseChart
                   [datasets]="lineChartData"
                   [labels]="lineChartLabels"
@@ -133,8 +140,10 @@
             <h6> No Record</h6>
           </div>
         </ng-template>
-
-
+      </ng-container>
+          <ng-container *ngIf="skeletonLoading">
+        <ngx-skeleton-loader class="p-4 pb-0" count="7"></ngx-skeleton-loader>
+        </ng-container>
       </div><!-- card -->
     </div>
     <div class="col-md-6 col-lg-6 col-xl-5 mg-t-10">
@@ -142,6 +151,7 @@
         <div class="card-header">
           <h6 class="mg-b-0">Request Type</h6>
         </div><!-- card-header -->
+        <ng-container *ngIf="!skeletonLoading">
         <div *ngIf="requestType.length > 0" class="card-body pd-lg-25">
           <canvas baseChart height="140"
                   [data]="doughnutChartData"
@@ -169,7 +179,10 @@
           <img src="assets/imgs/dash.png" style="width: 100px">
           <h6> No Record</h6>
         </div>
-
+        </ng-container>
+        <ng-container *ngIf="skeletonLoading">
+          <ngx-skeleton-loader class="p-4 pb-0" count="7"></ngx-skeleton-loader>
+        </ng-container>
 
       </div><!-- card -->
 
@@ -194,6 +207,9 @@
             <div id="vmap" *ngIf="currentState === 'usa'" class="ht-200"></div>
             <div id="worldMap" *ngIf="currentState !== 'usa'" class="ht-200"></div>
           </div>
+         
+          
+        
           <div *ngIf="currentState === 'usa'" class="table-responsive state-count-list">
             <table class="table table-borderless table-dashboard table-dashboard-one">
               <thead>
@@ -231,7 +247,6 @@
           </div>
 
 
-
         </div><!-- card-body -->
         <!--        </ng-container>-->
         <!--        <ng-template #noStateList>-->
@@ -246,6 +261,7 @@
           <h6 class="mg-b-0">Requests By Subject Type</h6>
 
         </div><!-- card-header -->
+        <ng-container *ngIf="!skeletonLoading">
         <div  *ngIf="subjectType.length > 0" class="card-body pd-b-0">
           <canvas baseChart height="200"
                   [data]="pieChartData"
@@ -276,7 +292,10 @@
           <img src="assets/imgs/dash.png" style="width: 100px">
           <h6> No Record</h6>
         </div>
-
+        </ng-container>
+        <ng-container *ngIf="skeletonLoading">
+          <ngx-skeleton-loader class="p-4 pb-0" count="10"></ngx-skeleton-loader>
+        </ng-container>
       </div>
     </div>
 
@@ -290,6 +309,7 @@
             <a href="" class="link-03 lh-0 mg-l-10"><i class="icon ion-md-more"></i></a>
           </div>
         </div>
+        <ng-container *ngIf="!skeletonLoading">
         <ng-container *ngIf="Requests.length > 0; else noRequests">
           <ul class="list-group list-group-flush tx-13">
             <li *ngFor="let request of Requests | slice:0:6" class="list-group-item d-flex pd-sm-x-20">
@@ -327,6 +347,10 @@
         <ng-template #noRequests>
           <p class="text-center mt-5">No Record Found</p>
         </ng-template>
+        </ng-container>
+        <ng-container *ngIf="skeletonLoading">
+          <ngx-skeleton-loader class="p-4 pb-0" count="10"></ngx-skeleton-loader>
+        </ng-container>
       </div><!-- card -->
     </div>
   </div><!-- row -->

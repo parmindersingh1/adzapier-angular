@@ -53,7 +53,7 @@
         </h2>
         <div class="card">
           <div class="card-body">
-            <div class="row">
+            <div [ngStyle]="{display: skeletonLoading ? 'none': ''}" class="row">
               <div class="col-md-6">
                 <div class="divider-text mt-0">Banner Configuration</div>
               <div class="row">
@@ -235,6 +235,7 @@
 
               </div>
             </div>
+            <ngx-skeleton-loader *ngIf="skeletonLoading" count="6" class="pt-4"></ngx-skeleton-loader>
           </div>
         </div>
         <!--      End Configure your theme -->

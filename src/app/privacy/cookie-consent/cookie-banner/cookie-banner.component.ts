@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
+import {ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
 import {FormBuilder, FormControl, Validators, FormGroup, FormGroupDirective, NgForm} from '@angular/forms';
 import {ErrorStateMatcher} from '@angular/material/core';
 import {
@@ -33,7 +33,7 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
 })
 export class CookieBannerComponent implements OnInit {
   panelOpenState = false;
-  // @ViewChild('gdprGlobal', {static: false}) gdprGlobal
+  // @ViewChild('showConfig', {static: false}) showConfig : ElementRef;
   skeletonLoading = false;
   type = 'draft';
   matcher = new MyErrorStateMatcher();
@@ -601,7 +601,6 @@ export class CookieBannerComponent implements OnInit {
   }
 
   onSetGdprGlobal(event: any) {
-    // console.log(event)
     if (event) {
       this.cookieBannerForm.get('gdprTarget').clearValidators();
 

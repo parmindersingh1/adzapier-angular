@@ -53,6 +53,8 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
   startDate;
   requestType = [];
   subjectType = [];
+  skeletonLoading = false;
+  skeletonLoadingState = false;
   endDate;
   dismissible = true;
   alertMsg: any;
@@ -373,6 +375,7 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
 
   onGetCcpaAndDsar() {
     this.loading.start('p1');
+    this.skeletonLoading = true;
     const queryParam = {
       from_date: this.startDate,
       to_date: this.endDate
@@ -380,6 +383,7 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
     this.dashboardService.getCcpaAndDsar(this.currentManagedOrgID, this.currrentManagedPropID, queryParam, this.constructor.name, moduleName.ccpaDsarModule)
       .subscribe(res => {
         this.loading.stop('p1');
+        this.skeletonLoading = false;
         const result = res.response;
         if (Object.keys(result).length > 0) {
           this.dashboardCount = result.dashboardCount;
@@ -400,6 +404,7 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
          // this.notification.info('Dashboard', 'Data not Found...', notificationConfig);
         }
       }, error => {
+        this.skeletonLoading = false;
         this.loading.stop('p1');
         this.isOpen = true;
         this.alertMsg = error;
@@ -505,6 +510,7 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
 
   onGetRequestByState() {
     this.loading.start();
+    this.skeletonLoadingState = true;
     const queryParam = {
       from_date: this.startDate,
       to_date: this.endDate,
@@ -513,6 +519,7 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
     this.dashboardService.getRequestByState(this.currentManagedOrgID, this.currrentManagedPropID, queryParam, this.constructor.name, moduleName.ccpaDsarModule)
       .subscribe(res => {
         this.loading.stop();
+        this.skeletonLoadingState = false;
         const result = res.response;
         if (this.currentState === 'usa') {
           for (const  countryData of result) {
@@ -529,6 +536,7 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
         }
 
       }, error => {
+        this.skeletonLoadingState = false;
         this.loading.stop();
         this.isOpen = true;
         this.alertMsg = error;
