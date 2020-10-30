@@ -77,3 +77,15 @@
 .hide {
     display: none;
 }
+
+.pagination-wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: normal;
+    align-items: center;
+}
+
+.height28 {
+    height: 28px;
+}

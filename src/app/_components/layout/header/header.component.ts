@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { OrganizationService, AuthenticationService, UserService } from '../../../_services';
 import { Observable } from 'rxjs';
 import { BsDropdownConfig } from 'ngx-bootstrap/dropdown';
@@ -7,6 +7,7 @@ import { Organization } from 'src/app/_models/organization';
 import { mergeMap, switchMap, distinctUntilKeyChanged, distinctUntilChanged } from 'rxjs/operators';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { moduleName } from 'src/app/_constant/module-name.constant';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap';
 
 @Component({
   selector: 'app-header',
@@ -15,6 +16,8 @@ import { moduleName } from 'src/app/_constant/module-name.constant';
   providers: [{ provide: BsDropdownConfig, useValue: { isAnimated: true, autoClose: true } }]
 })
 export class HeaderComponent implements OnInit {
+  @ViewChild('confirmTemplate', { static: false }) confirmModal: TemplateRef<any>;
+  modalRef: BsModalRef;
   isCollapsed = true;
   accessHeader: boolean;
   public currentLoggedInUser: string;
@@ -47,6 +50,8 @@ export class HeaderComponent implements OnInit {
   userID: any;
   propList: any;
   isOrganizationUpdated: boolean;
+  isPropertySelected: boolean;
+
   constructor(
     private router: Router,
     private activatedroute: ActivatedRoute,
@@ -54,6 +59,7 @@ export class HeaderComponent implements OnInit {
     private authService: AuthenticationService,
     private userService: UserService,
     private loading: NgxUiLoaderService,
+    private bsmodalService: BsModalService
   ) {
     this.authService.currentUser.subscribe(x => {
       this.currentUser = x;
@@ -75,6 +81,7 @@ export class HeaderComponent implements OnInit {
     this.router.routeReuseStrategy.shouldReuseRoute = () => {
       return false;
     };
+
   }
 
 
@@ -88,7 +95,6 @@ export class HeaderComponent implements OnInit {
         this.currentLoggedInUser = this.currentUser.response.firstname + ' ' + this.currentUser.response.lastname;
         this.userRole = this.currentUser.response.role;
         this.userID = this.currentUser.response.uid;
-        console.log(this.userRole, 'userRole...');
         this.loadOrganizationWithProperty();
 
       }
@@ -230,7 +236,8 @@ export class HeaderComponent implements OnInit {
   }
 
   isPropSelected(selectedItem): boolean {
-    return this.selectedOrgProperties.filter((t) => t.property_id === selectedItem.property_id).length > 0;
+    const propertySelected = this.selectedOrgProperties.filter((t) => t.property_id === selectedItem.property_id).length > 0;
+    return this.isPropertySelected = propertySelected;
   }
 
   isOrgSelected(selectedItem): boolean {
@@ -400,7 +407,27 @@ export class HeaderComponent implements OnInit {
     if (id !== undefined) {
       this.router.navigate([link, id]);
     } else {
-      this.router.navigate([link]);
+      if (link.indexOf('cookie') !== -1) {
+        if (this.isPropertySelected) {
+          this.router.navigate([link]);
+        } else {
+          this.openModal(this.confirmModal);
+          return false;
+        }
+      } else {
+        this.router.navigate([link]);
+      }
     }
   }
+ //  || link.indexOf('privacy') !== -1 || link.indexOf('webform') !== -1 || link.indexOf('ccpa') !== -1
+  confirm() {
+    this.modalRef.hide();
+    this.router.navigate(['settings/organizations/details/' + this.orgPropertyMenu[0].id]);
+    // return false;
+  }
+
+  openModal(template: TemplateRef<any>) {
+    this.modalRef = this.bsmodalService.show(template, { class: 'modal-sm' });
+  }
+
 }

@@ -4,13 +4,16 @@
       <nav aria-label="breadcrumb">
         <ol class="breadcrumb breadcrumb-style1 mg-b-10">
           <li class="breadcrumb-item">Privacy</li>
-          <li class="breadcrumb-item">Cookie Consent</li>
+          <li class="breadcrumb-item"><a routerLink="/home/dashboard/cookie-consent">Cookie Consent</a></li>
           <li class="breadcrumb-item"><a routerLink="/cookie-consent/cookie-banner">Banner Configuration</a></li>
           <li class="breadcrumb-item active">Setup</li>
         </ol>
       </nav>
     </div>
   </div>
+  <alert type="warning"  [dismissible]="dismissible" (onClosed)="onClosed(alert)">
+    <strong>Hold On!</strong> If You Recenlty updated the Configuration, It would take around 1 Hours to Reflect the changes
+  </alert>
   <h5 class="mt-2 head">Implementing Banner Scripts</h5>
   <p class="alert alert-info">
     <b>Note! </b> The script must be placed before any other script in your site in order to ensure the banner is loaded before any other scripts have the chance to load or set cookies. This allows for the script tag to communicate the site visitor's consent preferences to downstream vendors and for those vendors to show content and set cookies as allowed by the site visitor.

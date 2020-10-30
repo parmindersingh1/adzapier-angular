@@ -48,6 +48,8 @@ i.dropdown-submenu {
 .active {
   color: #0168fa !important;
   background-color: transparent !important;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 i {
   margin-right: 0;
@@ -113,6 +115,13 @@ ul.dropdown-menu.propMenu.show > li > a {
   border-radius: 0;
   border-bottom: 1px solid #ccc;
   font-size: 12px !important;
+  display: flex;
+  text-overflow: ellipsis;
+}
+
+ul.dropdown-menu.propMenu.show > li > a > span{
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 ul.dropdown-menu.propMenu.show > li > ul {
@@ -517,4 +526,18 @@ a.nav-link.dropdown-toggle:hover {
 
 a.nav-link:hover {
   color: #4994fe !important;
+}
+
+.flotingdiv{
+	position: fixed;
+	bottom: 0;
+	top: 84%;
+	right:0;
+	overflow-x: hidden;
+    overflow-y: auto;
+    z-index: 1;
+}
+
+.width25 {
+  width: 25px;
 }

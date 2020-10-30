@@ -8,6 +8,8 @@ import { CompanyService } from 'src/app/company.service';
 import { UserService } from 'src/app/_services/user.service';
 import { TablePaginationConfig } from 'src/app/_models/tablepaginationconfig';
 import { moduleName } from 'src/app/_constant/module-name.constant';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap';
+
 // import { CompanyService } from '../company.service';
 @Component({
   selector: 'app-organizationdetails',
@@ -16,10 +18,12 @@ import { moduleName } from 'src/app/_constant/module-name.constant';
 })
 export class OrganizationdetailsComponent implements OnInit {
   @ViewChild('propertyModal', { static: true }) propertyModal: TemplateRef<any>;
-
+  @ViewChild('confirmTemplate', { static: false }) confirmModal: TemplateRef<any>;
+  modalRef: BsModalRef;
   organisationPropertyForm: FormGroup;
   editOrganisationForm: FormGroup;
   inviteUserOrgForm: FormGroup;
+  confirmationForm: FormGroup;
   organizationID: any;
   organizationDetails: any;
   organizationName: any;
@@ -67,6 +71,14 @@ export class OrganizationdetailsComponent implements OnInit {
   phone: any;
   isUpdateUserinvitation = false;
   recordID: any;
+  controlname: string;
+  selectedOrgID: any;
+  selectedPropID: any;
+  userInput: any;
+  isconfirmationsubmitted: boolean;
+  confirmProperty: any;
+  confirmTeammember: any;
+  selectedTeamMember: any;
   constructor(private activatedRoute: ActivatedRoute,
               private orgService: OrganizationService,
               private modalService: NgbModal,
@@ -74,6 +86,7 @@ export class OrganizationdetailsComponent implements OnInit {
               private companyService: CompanyService,
               private userService: UserService,
               private router: Router,
+              private bsmodalService: BsModalService,
               private cdref: ChangeDetectorRef) {
     this.orgService.currentProperty.subscribe((data) => {
       this.currentManagedOrgID = data.organization_id;
@@ -135,10 +148,14 @@ export class OrganizationdetailsComponent implements OnInit {
       email: ['', [Validators.required, Validators.pattern]],
       phone: ['', [Validators.required, Validators.pattern(phoneNumRegx)]]
     });
+    this.confirmationForm = this.formBuilder.group({
+      userInput: ['', [Validators.required]]
+    });
   }
   get f() { return this.inviteUserOrgForm.controls; }
   get orgProp() { return this.organisationPropertyForm.controls; }
   get editOrg() { return this.editOrganisationForm.controls; }
+  get confirmDelete() { return this.confirmationForm.controls; }
   loadOrganizationByID(id) {
     this.orgService.getOrganizationByID(id).subscribe((data) => {
       this.organizationName = data.response.orgname;
@@ -254,13 +271,24 @@ export class OrganizationdetailsComponent implements OnInit {
     }
   }
 
-  disableProperty(orgId, propId) {
-    this.orgService.disableProperty(orgId, propId).subscribe((data) => {
+  disableProperty(obj, control: string) {
+    this.controlname = control;
+    this.selectedPropID = obj.id;
+    this.selectedOrgID = obj.oid;
+    this.confirmProperty = obj.name;
+    this.openModal(this.confirmModal);
+  }
+
+  confirmPropertyDelete() {
+    this.modalRef.hide();
+    this.orgService.disableProperty(this.selectedOrgID, this.selectedPropID).subscribe((data) => {
       if (data) {
+        this.userInput = '';
         this.alertMsg = data.response;
         this.isOpen = true;
         this.alertType = 'success';
         this.getPropertyList(this.organizationID);
+        this.onCancelClick();
       }
     }, (err) => {
       this.alertMsg = err;
@@ -451,39 +479,34 @@ export class OrganizationdetailsComponent implements OnInit {
     this.router.navigate(['settings/organizations/organizationteam', this.organizationID]);
   }
 
-  disableOrganization() {
-    const reqObj = {
-      active: false
-    };
-    this.orgService.disableOrganization(this.organizationID, reqObj).subscribe((data) => {
-      if (data) {
-        this.alertMsg = data.response;
-        this.isOpen = true;
-        this.alertType = 'success';
-        this.orgService.isOrganizationUpdated.next(true);
-        this.router.navigate(['settings/organizations']);
-      }
-    }, (err) => {
-      this.alertMsg = err;
-      this.isOpen = true;
-      this.alertType = 'danger';
-    });
+  disableOrganization(control: string) {
+    this.controlname = control;
+    this.openModal(this.confirmModal);
   }
 
-  removeTeamMember(obj) {
-    this.companyService.removeTeamMember(this.constructor.name, moduleName.organizationDetailsModule, obj,
+  confirmDeleteTeamMember() {
+    this.modalRef.hide();
+    this.companyService.removeTeamMember(this.constructor.name, moduleName.organizationDetailsModule, this.confirmTeammember,
       this.organizationID).subscribe((data) => {
         if (data) {
           this.alertMsg = data.response;
           this.isOpen = true;
           this.alertType = 'success';
           this.loadOrgTeamMembers(this.organizationID);
+          this.onCancelClick();
         }
       }, (err) => {
         this.alertMsg = err;
         this.isOpen = true;
         this.alertType = 'danger';
       });
+  }
+
+  removeTeamMember(obj, control: string) {
+    this.confirmTeammember = obj;
+    this.controlname = control;
+    this.selectedTeamMember = obj.user_email;
+    this.openModal(this.confirmModal);
   }
 
   isDateOrString(status): boolean {
@@ -533,8 +556,10 @@ export class OrganizationdetailsComponent implements OnInit {
   onCancelClick() {
     this.isInviteFormSubmitted = false;
     this.isUpdateUserinvitation = false;
+    this.isconfirmationsubmitted = false;
     this.inviteUserOrgForm.reset();
     this.modalService.dismissAll('Canceled');
+    this.confirmationForm.reset();
   }
 
   onClosed(dismissedAlert: any): void {
@@ -559,6 +584,76 @@ export class OrganizationdetailsComponent implements OnInit {
       return logourl = 'assets/imgs/no_image.png';
     }
 
+  }
+
+  // confirm before delete record
+  confirmOrganizationDelete() {
+    // if (userinput === 'Delete' || userinput === 'DELETE') {
+    this.modalRef.hide();
+    const reqObj = {
+      active: false
+    };
+    this.orgService.disableOrganization(this.organizationID, reqObj).subscribe((data) => {
+      if (data) {
+        this.userInput = '';
+        this.alertMsg = data.error;
+        this.isOpen = true;
+        this.alertType = 'success';
+        this.orgService.isOrganizationUpdated.next(true);
+        this.router.navigate(['settings/organizations']);
+      }
+    }, (err) => {
+      this.alertMsg = err;
+      this.isOpen = true;
+      this.alertType = 'danger';
+    });
+    // } else {
+    //   alert('aaa');
+    // }
+  }
+
+  onSubmitConfirmation(selectedaction) {
+    this.isconfirmationsubmitted = true;
+    if (this.confirmationForm.invalid) {
+      return false;
+    } else {
+      const userInput = this.confirmationForm.value.userInput;
+      if (userInput === 'Delete') {
+        if (selectedaction === 'organization') {
+          this.confirmOrganizationDelete();
+          this.router.navigate(['settings/organizations']);
+        } else if (selectedaction === 'property') {
+          this.confirmPropertyDelete();
+        } else if (selectedaction === 'team member') {
+          this.confirmDeleteTeamMember();
+        }
+      } else {
+        // this.confirmationForm.reset();
+        // this.isconfirmationsubmitted = false;
+        return false;
+      }
+    }
+  }
+
+  cancelModal() {
+    this.modalRef.hide();
+    this.confirmationForm.reset();
+    this.isconfirmationsubmitted = false;
+    return false;
+  }
+
+  openModal(template: TemplateRef<any>) {
+    this.modalRef = this.bsmodalService.show(template, { class: '' });
+  }
+
+  showControlContent(): string {
+    if (this.controlname === 'team member') {
+      return this.selectedTeamMember;
+    } else if (this.controlname === 'organization') {
+      return this.organizationName;
+    } else if (this.controlname === 'property') {
+      return this.confirmProperty;
+    }
   }
   // ngAfterContentChecked() {
   //   this.cdref.detectChanges();

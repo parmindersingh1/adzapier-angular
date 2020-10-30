@@ -74,8 +74,8 @@
                                         <p class="tx-10 tx-uppercase tx-medium tx-color-03 tx-spacing-1 mg-b-5">Status
                                         </p>
                                         <div class="d-flex align-items-center">
-                                            <span class="tx-color-05 badge"
-                                                [ngClass]="{'badge-success':data.form_status=='Published','badge-light':data.form_status=='Draft'}">{{data.form_status}}</span>
+                                            <span class="tx-color-05 badge text-capitalize"
+                                                [ngClass]="{'badge-success':data.form_status=='Published','badge-light':data.form_status=='draft' || data.form_status=='Draft'}">{{data.form_status}}</span>
                                         </div>
                                     </div>
                                     <div class="col-6 mg-t-10">
