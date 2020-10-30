@@ -63,9 +63,9 @@
      <!--(orgPropertyMenu | async).response-->
       <ul *dropdownMenu class="dropdown-menu propMenu">
           <li role="menuitem" *ngFor="let item of orgPropertyMenu; first as isFirst; let i = index;">
-            <a class="dropdown-item"  (click)="goto('settings/organizations/details',item.id)">
+            <a class="dropdown-item" title="{{item.orgname}}"  (click)="goto('settings/organizations/details',item.id)">
              <span [ngClass]="[isOrgSelected(item) ? 'active' : '']">{{item.orgname}}</span>
-             <span class="align-right"><i-feather class="feather-plus" name="plus"></i-feather></span>
+             <span class="align-right width25"><i-feather class="feather-plus" name="plus"></i-feather></span>
             </a>
             <div *ngIf="item.property.length=='0'">No Property</div>
             <ul role="menu">
@@ -224,7 +224,7 @@
     <ul *dropdownMenu class="dropdown-menu propMenu">
         <li role="menuitem" *ngFor="let item of orgPropertyMenu; first as isFirst; let i = index;">
           <a class="dropdown-item" routerLinkActive="active" routerLink="organizationdetails/{{item.id}}">
-            {{item.orgname}}  <span class="align-right"><i-feather class="feather-plus" name="plus"></i-feather></span>
+            {{item.orgname}}  <span class="align-right width25"><i-feather class="feather-plus" name="plus"></i-feather></span>
           </a>
           <div *ngIf="item.property.length=='0'">No Property</div>
           <ul role="menu">
@@ -274,3 +274,10 @@
   </div>
 
 </div>
+<ng-template #confirmTemplate>
+  <div class="modal-body text-center">
+      <p>Property is not created! create property</p>
+      <button type="button" class="btn btn-xs btn-primary mr-2" (click)="confirm()">OK</button>
+  </div>
+</ng-template>
+ 

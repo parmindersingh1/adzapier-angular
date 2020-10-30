@@ -33,7 +33,7 @@
                             <button class="btn btn-xs btn-primary mr-2" role="button" #btnDaysLeft (click)="toggleBtn()">
                                 Extend Days
                             </button>
-                            <button class="btn btn-xs btn-primary" (click)="deleteDSARRequest()">Delete</button>
+                            <button class="btn btn-xs btn-primary" (click)="removeDSARRequest('DSAR Request detail')">Delete</button>
                             <div class="dropdown-menu" #toggleDayleftdiv
                                 [ngClass]="{'show':isListVisible,'':!isListVisible}">
                                 <ul>
@@ -151,7 +151,7 @@
                         <div *ngFor="let data of getCustomFields(customFields) | keyvalue; let i = index">
                             <div class="customdata">
                                 <label class="tx-sans">{{data.key}}
-                                    <span class="badge" (click)="verifyUserEmailID()"
+                                    <span *ngIf="isemailverificationRequired" class="badge" (click)="verifyUserEmailID()"
                                         [ngClass]="{'badge-danger':isCustomFieldEmail(data.key,isEmailVerified),'hide':!isCustomFieldEmail(data.key,isEmailVerified)}">
                                         Resend Verification</span>
                                     <span class="badge"
@@ -809,6 +809,36 @@
         (onClosed)="onClosed(alertMsg)">{{alertMsg}}
     </alert>
 </div>
+
+<ng-template #confirmDeleteTemplate let-modal>
+    <div class="modal-header">
+        <h5 class="modal-title">Are you absolutely sure?</h5>
+        <button type="button" class="close" (click)="cancelModal()" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body text-center">
+        <p> This will delete selected 
+            <span class="font-weight-bold"> {{showControlContent()}}</span>
+             <!-- <span class="font-weight-bold">{{controlname === 'team member' ? selectedTeamMember : organizationName}}</span>
+             <span class="font-weight-bold"> {{controlname === 'organization' ? organizationName : confirmProperty}}</span> -->
+             {{controlname}}</p>
+        <p>Please type <strong>'Delete'</strong> to confirm</p>
+
+        <form [formGroup]="confirmationForm" (ngSubmit)="onSubmitConfirmation(controlname)">
+            <input type="text" class="form-control" formControlName="userInput" name="userInput" required
+                [ngClass]="{ 'is-invalid': isconfirmationsubmitted && confirmDelete.userInput.value !== 'Delete' }" />
+            <div *ngIf="isconfirmationsubmitted && confirmDelete.userInput.value !== 'Delete'" class="invalid-feedback text-left">
+                Enter appropriate text
+            </div>
+            <div class="mt-2 d-flex">
+                    <button class="btn btn-xs btn-primary btn-block" *ngIf="controlname == 'DSAR Request detail'">I understand the
+                        consequences, delete this
+                        {{controlname}}</button>
+            </div>
+        </form>
+    </div>
+</ng-template>
 
 <ng-template #previewFile>
     <div class="modal-body">

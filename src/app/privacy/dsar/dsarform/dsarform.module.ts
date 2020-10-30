@@ -20,6 +20,7 @@ import { SharedbootstrapModule } from 'src/app/sharedbootstrap/sharedbootstrap.m
    // NgbModule, NgbModal,
     DsarformRoutingModule,
     QuillModule.forRoot(),
+    NgbModule,
     SharedbootstrapModule
   ]
  // providers:[NgbModule, NgbModal],

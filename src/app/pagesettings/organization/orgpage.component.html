@@ -18,20 +18,7 @@
                         <div class="input-group-text bg-transparent"><i class="fa fa-search"></i></div>
                     </span>
                 </div>
-                <div class="col-4">
-                    <div class="form-inline">
-                        <div class="col-md-5 form-group pr-0">
-                            <label class="col-sm-5 col-form-label" for="PerPage">View</label>
-                            <select id="PerPage" class="form-control" [(ngModel)]="pageSize"
-                                (change)="onChangeEvent($event)">
-                                <option value="5">5</option>
-                                <option value="10">10</option>
-                                <option value="20">20</option>
-                            </select>
-                        </div>
-                        <div><label class="d-block">records at a time</label></div>
-                    </div>
-                </div>
+                 
                 <div class="ml-auto mr-3">
                     <button type="button" class="btn btn-white" data-toggle="modal"
                         (click)="organizationModalPopup(editOrgModal,'')">   <i-feather class="feather-16" name="plus"></i-feather> 
@@ -40,7 +27,7 @@
             </div>
         </div>
         <div class="card-body">
-            <table class="table table-bordered mb-0">
+            <table class="table table-bordered mb-2">
                 <thead class="thead-primary">
                     <tr>
                         <th>Id</th>
@@ -81,11 +68,28 @@
                     </tr>
                 </tbody>
             </table>
+            <div class="pagination-wrapper">
+                <div class="col-4 pl-0">
+                    <div class="form-inline">
+                        <div class="form-group pr-0">
+                            <label class="col-sm-5 col-form-label" for="name">View</label>
+                            <select id="PerPage" class="form-control" [(ngModel)]="pageSize"
+                                (change)="onChangeEvent($event)">
+                                <option value="5">5</option>
+                                <option value="10">10</option>
+                                <option value="15">15</option>
+                            </select>
+                        </div>
+                        <div class="row col-md-5"><label class="d-block">records at a time</label></div>
+                    </div>
+                </div>
+                <div class="height28">
+                <pagination-controls (pageChange)="pageChangeEvent($event)"></pagination-controls>
+                </div>
+                </div>
+    
         </div>
-        <div class="card-footer text-right">
-            <pagination-controls (pageChange)="pageChangeEvent($event)"></pagination-controls>
-        </div>
-
+         
     </div>
 </div>
 </div>
@@ -104,7 +108,7 @@
                 <div class="col-sm-12">
                     <div class="form-group">
                         <label for="organizationname">Name</label>
-                        <input minlength="2" maxlength="20" type="text" class="form-control" [(ngModel)]="organizationname"
+                        <input minlength="2" maxlength="55" type="text" class="form-control" [(ngModel)]="organizationname"
                             formControlName="organizationname" name="organizationname"
                             [ngClass]="{ 'is-invalid': submitted && editOrg.organizationname.errors }" />
                         <div *ngIf="submitted && editOrg.organizationname.errors" class="invalid-feedback">

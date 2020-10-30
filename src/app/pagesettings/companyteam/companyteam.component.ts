@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Validators, FormBuilder, FormGroup, FormArray, FormControl } from '@angular/forms';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { UserService } from 'src/app/_services';
@@ -6,6 +6,7 @@ import { CompanyService } from 'src/app/company.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TablePaginationConfig } from 'src/app/_models/tablepaginationconfig';
 import { moduleName } from 'src/app/_constant/module-name.constant';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap';
 
 @Component({
   selector: 'app-companyteam',
@@ -13,9 +14,12 @@ import { moduleName } from 'src/app/_constant/module-name.constant';
   styleUrls: ['./companyteam.component.scss']
 })
 export class CompanyteamComponent implements OnInit {
+  @ViewChild('confirmTemplate', { static: false }) confirmModal: TemplateRef<any>;
+  modalRef: BsModalRef;
   teamMemberList: any;
   companyForm: FormGroup;
   inviteUserForm: FormGroup;
+  confirmationForm: FormGroup;
   pageSize: any = 5;
   searchText: any;
   totalCount: any;
@@ -37,10 +41,16 @@ export class CompanyteamComponent implements OnInit {
   emailid: any;
   approverID: any;
   recordID: any;
+  isconfirmationsubmitted: boolean;
+  confirmTeammember: any;
+  selectedTeamMember: any;
+  controlname: string;
   constructor(private companyService: CompanyService, private modalService: NgbModal,
               private formBuilder: FormBuilder,
               private userService: UserService,
-              private loading: NgxUiLoaderService) { 
+              private loading: NgxUiLoaderService,
+              private bsmodalService: BsModalService
+              ) { 
                 this.paginationConfig = { itemsPerPage: this.pageSize, currentPage: this.p, totalItems: this.totalCount };
               }
 
@@ -65,9 +75,12 @@ export class CompanyteamComponent implements OnInit {
       emailid: ['', [Validators.required, Validators.pattern]],
       permissions: ['', [Validators.required]]
     });
+    this.confirmationForm = this.formBuilder.group({
+      userInput: ['', [Validators.required]]
+    });
     this.loadCompanyTeamMembers();
   }
-
+  get confirmDelete() { return this.confirmationForm.controls; }
   get userInvite() { return this.inviteUserForm.controls; }
 
   loadCompanyTeamMembers() {
@@ -98,8 +111,17 @@ export class CompanyteamComponent implements OnInit {
     });
   }
 
-  removeTeamMember(obj) {
-    this.companyService.removeTeamMember(this.constructor.name, moduleName.companyTeamModule, obj).subscribe((data) => {
+  removeTeamMember(obj, control: string) {
+    this.confirmTeammember = obj;
+    this.controlname = control;
+    this.selectedTeamMember = obj.user_email;
+    this.openModal(this.confirmModal);
+  }
+
+
+  confirmDeleteTeamMember() {
+    this.modalRef.hide();
+    this.companyService.removeTeamMember(this.constructor.name, moduleName.companyTeamModule, this.confirmTeammember).subscribe((data) => {
       if (data) {
         this.alertMsg = 'User has been removed!';
         this.isOpen = true;
@@ -113,38 +135,25 @@ export class CompanyteamComponent implements OnInit {
     });
   }
 
-  onSubmitInviteUserXX() {
-    this.isInviteFormSubmitted = true;
-    if (this.inviteUserForm.invalid) {
+  onSubmitConfirmation(selectedaction) {
+    this.isconfirmationsubmitted = true;
+    if (this.confirmationForm.invalid) {
       return false;
     } else {
-      const requestObj = {
-        email: this.inviteUserForm.value.emailid,
-        role_id: this.inviteUserForm.value.permissions,
-        user_level: 'company'
-      };
-      this.loading.start();
-      this.companyService.inviteUser(this.constructor.name, moduleName.companyTeamModule, requestObj)
-        .subscribe((data) => {
-          this.loading.stop();
-          if (data) {
-            this.alertMsg = 'Details has been updated successfully!';
-            this.isOpen = true;
-            this.alertType = 'success';
-            this.loadCompanyTeamMembers();
-            this.onResetInviteUser();
-          }
-        }, (err) => {
-          this.loading.stop();
-          this.alertMsg = err;
-          this.isOpen = true;
-          this.alertType = 'danger';
-          this.modalService.dismissAll('Error!');
-        });
+      const userInput = this.confirmationForm.value.userInput;
+      if (userInput === 'Delete') {
+         if (selectedaction === 'team member') {
+          this.confirmDeleteTeamMember();
+        }
+      } else {
+        // this.confirmationForm.reset();
+        // this.isconfirmationsubmitted = false;
+        return false;
+      }
     }
   }
-
   
+
   onSubmitInviteUser() {
     this.isInviteFormSubmitted = true;
     if (this.inviteUserForm.invalid) {
@@ -229,34 +238,7 @@ export class CompanyteamComponent implements OnInit {
       this.modalService.dismissAll('Error!');
     });
   }
-  onResendInvitationXX(email) {
-    const requestObj = {
-      email,
-      user_level: 'company'
-    };
-    this.loading.start();
-    this.companyService.inviteUser(this.constructor.name, moduleName.companyTeamModule, requestObj)
-      .subscribe((data) => {
-        this.loading.stop();
-        if (data) {
-        //  this.notification.info('Invitation Send', 'We have sent a email on your Email Id', notificationConfig);
-          this.alertMsg = 'We have sent a email on your Email Id';
-          this.isOpen = true;
-          this.alertType = 'success';
 
-          this.inviteUserForm.reset();
-          this.loadCompanyTeamMembers();
-          this.modalService.dismissAll('Data Saved!');
-        }
-      }, (err) => {
-        this.loading.stop();
-        this.alertMsg = JSON.stringify(err);
-        this.isOpen = true;
-        this.alertType = 'danger';
-     //   this.notification.error('Invitation Send', 'Something went wrong...', notificationConfig);
-        this.modalService.dismissAll('Error!');
-      });
-  }
 
   onResetInviteUser() {
     this.isInviteFormSubmitted = false;
@@ -322,6 +304,23 @@ export class CompanyteamComponent implements OnInit {
       this.teamMemberList = data[key];
       this.paginationConfig.totalItems = data.count;
     });
+  }
+
+  cancelModal() {
+    this.modalRef.hide();
+    this.confirmationForm.reset();
+    this.isconfirmationsubmitted = false;
+    return false;
+  }
+
+  openModal(template: TemplateRef<any>) {
+    this.modalRef = this.bsmodalService.show(template, { class: '' });
+  }
+
+  showControlContent(): string {
+    if (this.controlname === 'team member') {
+      return this.selectedTeamMember;
+    }
   }
 
 }

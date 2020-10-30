@@ -113,3 +113,27 @@
 table.table.table-bordered > tbody > tr > td:nth-child(2) > img.img-fluid {
     max-width: 15%;
 }
+
+.borderzero {
+    border: 0;
+}
+
+.card-body .table > .tbody > tr > td > a {
+    cursor: pointer;
+}
+
+::ng-deep .modal-dialog .modal-sm {
+    width: 380px !important;
+}
+
+.pagination-wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: normal;
+    align-items: center;
+}
+
+.height28 {
+    height: 28px;
+}

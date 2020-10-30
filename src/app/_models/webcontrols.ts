@@ -63,7 +63,7 @@ loadWebControls() {
                 indexCount: 'subject_type_Index',
                 selectOptions: '',
                 preferControlOrder: '',
-                requiredfield: ''
+                requiredfield: true
             },
             {
                 control: 'radio',
@@ -72,7 +72,7 @@ loadWebControls() {
                 indexCount: 'request_type_Index',
                 selectOptions: '',
                 preferControlOrder: '',
-                requiredfield: ''
+                requiredfield: true
             },
             {
                 control: 'textbox',
@@ -80,7 +80,7 @@ loadWebControls() {
                 controlId: 'firstname',
                 indexCount: 'first_name_Index',
                 preferControlOrder: '',
-                requiredfield: ''
+                requiredfield: true
             },
             {
                 control: 'textbox',
@@ -88,7 +88,7 @@ loadWebControls() {
                 controlId: 'lastname',
                 indexCount: 'last_name_Index',
                 preferControlOrder: '',
-                requiredfield: ''
+                requiredfield: true
             },
             {
                 control: 'textbox',
@@ -96,7 +96,7 @@ loadWebControls() {
                 controlId: 'email',
                 indexCount: 'email_Index',
                 preferControlOrder: '',
-                requiredfield: ''
+                requiredfield: true
             },
             {
                 control: 'select',
@@ -105,7 +105,7 @@ loadWebControls() {
                 indexCount: 'country_Index',
                 selectOptions: '',
                 preferControlOrder: '',
-                requiredfield: ''
+                requiredfield: true
             },
             {
                 control: 'select',
@@ -114,7 +114,7 @@ loadWebControls() {
                 indexCount: 'state_Index',
                 selectOptions: '',
                 preferControlOrder: '',
-                requiredfield: ''
+                requiredfield: true
             },
             {
                 control: 'textbox',
@@ -122,7 +122,7 @@ loadWebControls() {
                 controlId: 'city',
                 indexCount: 'city_Index',
                 preferControlOrder: '',
-                requiredfield: ''
+                requiredfield: true
             },
             {
                 control: 'textarea',
@@ -130,7 +130,7 @@ loadWebControls() {
                 controlId: 'requestdetails',
                 indexCount: 'request_details_Index',
                 preferControlOrder: '',
-                requiredfield: ''
+                requiredfield: true
             },
             {
                 control: 'file',
