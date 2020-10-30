@@ -15,6 +15,8 @@ import {OrganizationService} from '../../../_services';
 import {Location} from '@angular/common';
 import {Router} from '@angular/router';
 import {moduleName} from '../../../_constant/module-name.constant';
+import { CookieCategoryService } from 'src/app/_services/cookie-category.service';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap';
 
 
 /** Error when invalid control is dirty, touched, or submitted. */
@@ -33,8 +35,10 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
 })
 export class CookieBannerComponent implements OnInit {
   panelOpenState = false;
+  @ViewChild('template', { static: true}) template: ElementRef;
+  modalRef: BsModalRef;
   // @ViewChild('showConfig', {static: false}) showConfig : ElementRef;
-  skeletonLoading = false;
+  skeletonLoading = true;
   type = 'draft';
   matcher = new MyErrorStateMatcher();
   currentPlan;
@@ -72,7 +76,9 @@ export class CookieBannerComponent implements OnInit {
   constructor(private formBuilder: FormBuilder,
               private notification: NotificationsService,
               private cd: ChangeDetectorRef,
+              private modalService: BsModalService,
               private cookieBannerService: CookieBannerService,
+              private cookieCategoryService: CookieCategoryService,
               private loading: NgxUiLoaderService,
               private  orgservice: OrganizationService,
               private _location: Location,
@@ -87,6 +93,7 @@ export class CookieBannerComponent implements OnInit {
 
   ngOnInit() {
     // window.scroll(0, 500)
+    this.onGetCookies();
     this.onFormInIt();
     this.onSetDefaultValue();
     this.gdprTarget = this.bannerConstant.gdprTargetCountry;
@@ -116,26 +123,44 @@ export class CookieBannerComponent implements OnInit {
   }
 
   onSetValueConfig() {
-
     const configData: any = this.bannerCookieData;
     // console.log('configData', configData);
-    if (configData.gdpr_global) {
+    if ( configData.gdpr_global === 'true' || configData.gdpr_global === true) {
       this.cookieBannerForm.get('gdprTarget').clearValidators();
     }
     this.cookieBannerForm.get('gdprTarget').updateValueAndValidity();
+    console.log('configData', configData);
+    
     this.cookieBannerForm.patchValue({
       ccpaTarget: configData.ccpa_target,
       gdprTarget: configData.gdpr_target,
-      gdpr_global: configData.gdpr_global,
+      gdpr_global: configData.gdpr_global === 'true' || configData.gdpr_global === true ? true : false,
       cookieBlocking: configData.cookie_blocking,
       enableIab: configData.enable_iab,
       email: configData.email,
       google_vendors: configData.google_vendors,
-      showBadge: configData.showOpenBtn,
+      showBadge: configData.show_badge,
       logo: configData.logo
     });
   }
 
+  onGetCookies() {
+    this.loading.start();
+    this.cookieCategoryService.getCookieData({}, this.constructor.name, moduleName).subscribe((res: any) => {
+      this.loading.stop();
+      if (res.response.length === 0){
+      this.modalRef = this.modalService.show(this.template, { animated: false,    keyboard: false,     ignoreBackdropClick: true
+      });
+    }
+    }, error => {
+      this.loading.stop();
+    });
+  }
+
+  navigate() {
+    this.modalRef.hide();
+    this.router.navigateByUrl('/cookie-consent/cookie-category');
+  }
   onGetCurrentPlan() {
     this.loading.start('1');
     this.skeletonLoading = true;

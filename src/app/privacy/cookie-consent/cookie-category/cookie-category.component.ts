@@ -390,12 +390,10 @@ export class CookieCategoryComponent implements OnInit {
     this.isScanning = true;
     this.service.cookieScanning(this.constructor.name, moduleName.cookieCategoryModule).subscribe(res => {
       this.isScanning = false;
-      if (res['status'] === 201) {
-        // this.notification.info('Scanning', res['response'], notificationConfig);
+  
         this.isOpen = true;
         this.alertMsg = res['response'];
-        this.alertType = 'success';
-      }
+        this.alertType = 'success'
     }, error => {
       this.isScanning = false;
      // this.notification.error('Error', error, notificationConfig);

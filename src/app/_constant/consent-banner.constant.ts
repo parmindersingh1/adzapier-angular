@@ -5,7 +5,7 @@ export const defaultData = {
   defaultEnableIab: true,
   defaultEmail: false,
   google_vendors: true,
-  gdprGlobal: true,
+  gdprGlobal: false,
   showBadge: true,
   logo: true,
   gdprDefaultLang: 'en',

@@ -83,7 +83,7 @@ export class SetupComponent implements OnInit {
   }
   copyToClipboard() {
     this.isCopied = true;
-    const copyText: any = this.addScript + this.scriptUrl + this.closeScript;
+    const copyText: any = this.addScript + '//' + this.scriptUrl + this.closeScript;
     let textarea = null;
     textarea = document.createElement('textarea');
     textarea.style.height = '0px';
