@@ -4,8 +4,8 @@
       <div>
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb breadcrumb-style1 mg-b-10">
-            <li class="breadcrumb-item"><a href="#">Privacy</a></li>
-            <li class="breadcrumb-item"><a href="#">Cookie Consent</a></li>
+            <li class="breadcrumb-item">Privacy</li>
+            <li class="breadcrumb-item"><a routerLink="/home/dashboard/cookie-consent">Cookie Consent</a></li>
             <li class="breadcrumb-item active">Cookie Category</li>
           </ol>
         </nav>
@@ -149,13 +149,13 @@
         <ng-template pTemplate="right">
           <div class="d-flex flex-column flex-sm-row mg-t-20 mg-md-t-0">
             <button type="button" class="btn-primary btn btn-sm mr-3" (click)="openNew()">Add Cookie </button>
-            <button *ngIf="!isScanning" (click)="onRescanCookie()" class="btn-primary btn btn-sm mg-r-3" type="button">
-              Rescan
+            <button *ngIf="!isScanning" (click)="onRescanCookie()" class="btn-primary btn btn-sm mr-3 mg-r-3" type="button">
+              Scan
             </button>
-            <button *ngIf="isScanning" class="btn-primary btn btn-smmg-r-3" type="button" disabled>
+            <button *ngIf="isScanning" class="btn-primary btn mr-3 btn-smmg-r-3" type="button" disabled>
                             <span class="spinner-border spinner-border-sm txt-info" role="status"
                                   aria-hidden="true"></span>
-              Rescanning...
+              Scanning...
             </button>
             <!--            <button class="btn btn-white btn-sm cat-btn" (click)="openCategoryModal(category)">Add Category</button>-->
             <a class="btn btn-secondary btn-sm" type="button" routerLink="/cookie-consent/cookie-banner">

@@ -24,7 +24,7 @@
             "tsConfig": "tsconfig.json",
             "aot": false,
             "assets": [
-              "src/favicon.ico",
+              "src/assets/az-icon.png",
               "src/assets"
             ],
             "styles": [

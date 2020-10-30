@@ -7,8 +7,8 @@
       <div>
         <nav aria-label="breadcrumb" style="margin-left: -14px">
           <ol class="breadcrumb breadcrumb-style1 mg-b-10">
-            <li class="breadcrumb-item"><a href="#">Privacy</a></li>
-            <li class="breadcrumb-item "><a href="#">Cookie Consent</a></li>
+            <li class="breadcrumb-item">Privacy</li>
+            <li class="breadcrumb-item"><a routerLink="/home/dashboard/cookie-consent">Cookie Consent</a></li>
             <li class="breadcrumb-item active">Banner Configuration</li>
 
           </ol>
@@ -974,3 +974,11 @@
 <div class="col-sm-5 mr-0 float-right flotingdiv" [ngClass]="{'hide':!isOpen}">
   <alert *ngIf="isOpen" [type]="alertType" dismissOnTimeout="5000" [dismissible]="dismissible" (onClosed)="onClosed(alertMsg)">{{  alertMsg}}</alert>
 </div>
+<ng-template #template>
+  <div class="modal-body text-center">
+    <p>You don't have any cookies<br />
+      you need to create cookie manually or scan the property
+    </p>
+        <button type="button" class="btn btn-primary" (click)="navigate()" >Go Now </button>
+  </div>
+</ng-template>
