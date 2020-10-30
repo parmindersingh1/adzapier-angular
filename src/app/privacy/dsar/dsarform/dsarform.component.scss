@@ -640,7 +640,7 @@ span.previewbtn a {
 
 .draftspan {
   position: absolute;
-  right: 100px;
+  right: 610px;
   border: 1px solid #ccc;
   border-radius: 20px;
   padding: 6px 12px 3px;
@@ -771,4 +771,18 @@ span.previewbtn a {
 
 .shadowdiv > .nav-tabs .nav-link {
   height: 50px;
+}
+
+.publishbtn {
+  position: absolute;
+  right: 100px;
+  top: 10px;
+}
+
+.hide {
+  display: none;
+}
+
+.show {
+   
 }

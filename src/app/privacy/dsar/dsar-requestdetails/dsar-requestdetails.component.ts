@@ -28,7 +28,9 @@ export class DsarRequestdetailsComponent implements OnInit {
   @ViewChild('panel', { static: true }) public panel: ElementRef<any>;
   @ViewChild('dp', { static: false }) datepicker: BsDaterangepickerDirective;
   bsConfig: Partial<BsDatepickerConfig>;
-
+  @ViewChild('confirmDeleteTemplate', { static: false }) confirmDeleteModal: TemplateRef<any>;
+  confirmationForm: FormGroup;
+  modalRef: BsModalRef;
   requestID: any;
   currentManagedOrgID: any;
   currrentManagedPropID: any;
@@ -138,7 +140,6 @@ export class DsarRequestdetailsComponent implements OnInit {
   stageDiff: number;
   revertedStage: any;
   status: number = 0;
-  modalRef: BsModalRef;
   subTaskList$: Observable<any[]>;
   subTaskListResponse: any = [];
   isTaskTabOpen: boolean = false;
@@ -157,6 +158,9 @@ export class DsarRequestdetailsComponent implements OnInit {
   activitytype: any;
   bsValue: Date;
   subtaskDeadlineDate: Date;
+  isconfirmationsubmitted: boolean;
+  controlname: string;
+  isemailverificationRequired: boolean;
   constructor(private activatedRoute: ActivatedRoute,
               private router: Router,
               private orgService: OrganizationService,
@@ -223,6 +227,10 @@ export class DsarRequestdetailsComponent implements OnInit {
       uploaddocument: ['']
     });
 
+    this.confirmationForm = this.formBuilder.group({
+      userInput: ['', [Validators.required]]
+    });
+
     this.getSelectedOrgIDPropertyID();
 
 
@@ -240,7 +248,7 @@ export class DsarRequestdetailsComponent implements OnInit {
   get editRequest() { return this.editRequestDetailForm.controls; }
   get addsubTask() { return this.subTaskForm.controls; }
   get subTaskResponse() { return this.subTaskResponseForm.controls; }
-
+  get confirmDelete() { return this.confirmationForm.controls; }
   getSelectedOrgIDPropertyID() {
     this.orgService.currentProperty.subscribe((response) => {
       if (response !== '') {
@@ -270,7 +278,7 @@ export class DsarRequestdetailsComponent implements OnInit {
     this.dsarRequestService.getDSARRequestDetails(this.currentManagedOrgID, this.currrentManagedPropID, this.requestID,
       this.constructor.name, moduleName.dsarRequestModule)
       .subscribe((data) => {
-        //   console.log(data.response,'resp...');
+        console.log(data.response,'resp...');
         this.requestDetails.push(data.response);
         this.customFields = data.response.custom_data;
         this.respApprover = data.response.approver_firstname + ' ' + data.response.approver_lastname;
@@ -294,6 +302,7 @@ export class DsarRequestdetailsComponent implements OnInit {
         this.currentWorkflowStage = data.response.workflow_stage || '';
         this.currentWorkflowStageID = data.response.workflow_stage_id || '';
         this.isEmailVerified = data.response.email_verified;
+        this.isemailverificationRequired = data.response.required_email_verification;
         this.isAttachmentExist = this.isFileExist(data.response.upload_exist);
         this.getCustomFields(this.customFields);
         this.getWorkflowStages(this.workflowId);
@@ -498,10 +507,14 @@ export class DsarRequestdetailsComponent implements OnInit {
 
   }
 
-  openModal(template: TemplateRef<any>, diff, item) {
+  openModal(template: TemplateRef<any>, diff?, item?) {
     this.modalRef = this.bsmodalService.show(template, { class: 'modal-sm' });
     this.stageDiff = diff;
     this.revertedStage = item;
+  }
+
+  deleteModal(template: TemplateRef<any>) {
+    this.modalRef = this.bsmodalService.show(template, { class: '' });
   }
 
   confirm() {
@@ -526,7 +539,7 @@ export class DsarRequestdetailsComponent implements OnInit {
             this.stageAPI(this.requestID, reqObj);
             this.getSubTaskList();
           } else {
-            this.previousStageId = this.selectedStages[this.selectedStages.length - 1].id
+            this.previousStageId = this.selectedStages[this.selectedStages.length - 1].id;
             for (let i = this.stageDiff; i > 0; i--) {
               this.selectedStages.splice(this.selectedStages.length - i, 1);
             }
@@ -716,7 +729,7 @@ export class DsarRequestdetailsComponent implements OnInit {
   loadEmailLog(requestID) {
     this.ccpaDataService.getCCPADataEmailLog(this.constructor.name, moduleName.dsarRequestModule, requestID).subscribe((data) => {
       this.emailLog = data.response;
-    })
+    });
   }
 
   loadEmailTemplate() {
@@ -1263,6 +1276,11 @@ export class DsarRequestdetailsComponent implements OnInit {
     this.panel.nativeElement.scrollLeft += 150;
   }
 
+  removeDSARRequest(control: string) {
+    this.controlname = control;
+    this.deleteModal(this.confirmDeleteModal);
+  }
+
   deleteDSARRequest() {
     this.ccpaDataService.deleteDSARRequestByID(this.constructor.name, moduleName.dsarRequestModule, this.currentManagedOrgID,
       this.currrentManagedPropID, this.requestID).subscribe((data) => {
@@ -1278,6 +1296,43 @@ export class DsarRequestdetailsComponent implements OnInit {
 
   onCheckboxChange($event) {
     console.log($event);
+  }
+
+  cancelModal() {
+    this.modalRef.hide();
+    this.confirmationForm.reset();
+    this.isconfirmationsubmitted = false;
+    return false;
+  }
+
+
+  showControlContent(): string {
+    if (this.controlname === 'DSAR Request detail') {
+      return  this.requestID;
+    }
+  }
+
+  confirmDeleteDSARRequest() {
+    this.modalRef.hide();
+    this.deleteDSARRequest();
+  }
+
+  onSubmitConfirmation(selectedaction) {
+    this.isconfirmationsubmitted = true;
+    if (this.confirmationForm.invalid) {
+      return false;
+    } else {
+      const userInput = this.confirmationForm.value.userInput;
+      if (userInput === 'Delete') {
+         if (selectedaction === 'DSAR Request detail') {
+          this.confirmDeleteDSARRequest();
+        }
+      } else {
+        // this.confirmationForm.reset();
+        // this.isconfirmationsubmitted = false;
+        return false;
+      }
+    }
   }
 
 }

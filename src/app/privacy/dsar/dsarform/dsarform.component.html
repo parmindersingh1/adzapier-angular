@@ -10,7 +10,7 @@
         </nav>
     </div>
     <div class="shadowdiv">
-        <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs">
+        <ul ngbNav #nav="ngbNav" [(activeId)]="active"  class="nav-tabs">
             <li [ngbNavItem]="1">
                 <a ngbNavLink>1 Basic</a>
                 <ng-template ngbNavContent>
@@ -779,7 +779,7 @@
                     </div>
                     <div class="btn-toolbar sw-toolbar sw-toolbar-bottom justify-content-end mb-2">
                         <div>
-                            <button class="btn btn-primary sw-btn-prev mr-2" (click)="nav.select(1)">Previous</button>
+                            <button class="btn btn-primary sw-btn-prev mr-2" (click)="onPrevious(1)">Previous</button>
                             <button class="btn btn-primary sw-btn-next" [disabled]="active === 1"
                                 (click)="publishCCPAFormConfiguration(registerForm)">Next</button>
                         </div>
@@ -878,8 +878,8 @@
 
                     <div class="btn-toolbar sw-toolbar sw-toolbar-bottom justify-content-end">
                         <div>
-                            <button class="btn btn-primary sw-btn-prev mr-2" (click)="nav.select(2)">Previous</button>
-                            <button class="btn btn-primary sw-btn-next" [disabled]="active === 1" type="submit"
+                            <button class="btn btn-primary sw-btn-prev mr-2" (click)="onPrevious(2)">Previous</button>
+                            <button class="btn btn-primary sw-btn-next" [disabled]="active === 1" 
                                 (click)="createDraft()">Next</button>
                             <!--(click)="nav.select(4)"-->
                         </div>
@@ -887,14 +887,16 @@
                 </ng-template>
             </li>
             <li [ngbNavItem]="4">
-                <a ngbNavLink>4 Publish</a>
+                <a ngbNavLink>4 Integrate</a>
                 <ng-template ngbNavContent>
                     <div class="publishwrapper">
-                    <ul ngbNav #nav="ngbNav" class="nav-tabs">
-                        <li ngbNavItem>
-                          <a ngbNavLink>Embed Code</a>
+                    <ul ngbNav #nav="ngbNav" class="nav-tabs" [ngClass]="{'hide':!isWebFormPublished,'show':isWebFormPublished}">
+                        <li ngbNavItem >
+                          <a ngbNavLink >Embed Code</a>
                           <ng-template ngbNavContent>
-                            <div class="code-link-wrapper">
+                            <span *ngIf="!isWebFormPublished">Integrate options will be available once the webform is published.
+                            </span>
+                            <div class="code-link-wrapper" [ngClass]="{'hide':!isWebFormPublished,'show':isWebFormPublished}">
                             <p class="script-title">                       
                                 <span class="font-weight-bold"> <span class="fontsize22 mr-1"><i class="far fa-file-code"></i></span>Add script</span> <button class="btn btn-xs btn-primary float-right" (click)="copyToClipBoard('embedcode')">Copy</button> </p>
                             <div class="publishbg" #azEmbedCode>
@@ -930,7 +932,7 @@
                         <li ngbNavItem>
                           <a ngbNavLink>Share Link</a>
                           <ng-template ngbNavContent>
-                            <div class="code-link-wrapper">
+                            <div class="code-link-wrapper" [ngClass]="{'hide':!isWebFormPublished,'show':isWebFormPublished}">
                             <p class="script-title">                       
                                 <span class="font-weight-bold"> <span class="fontsize22 mr-1"><i class="far fa-file-code"></i></span>
                                 Web Form Link</span> <button class="btn btn-xs btn-primary float-right" (click)="copyToClipBoard('sharelink')">Copy</button> </p>
@@ -941,6 +943,7 @@
                           </ng-template>
                         </li>
                       </ul>
+                      
                     </div>
                       <div class="publish-content" [ngbNavOutlet]="nav"></div>
                       
@@ -948,22 +951,27 @@
 
                     <div class="btn-toolbar sw-toolbar sw-toolbar-bottom justify-content-end">
                         <div>
-                            <button class="btn btn-primary sw-btn-prev mr-2" (click)="nav.select(3)">Previous</button>
+                            <button class="btn btn-primary sw-btn-prev mr-2" (click)="onPrevious(3)">Previous</button>
+                            
                             <button class="btn btn-primary sw-btn-next" [disabled]="true">Submit</button>
                         </div>
                     </div>
                 </ng-template>
             </li>
-            <li>
-                <span *ngIf="isDraftWebForm" class="draftspan">Draft</span>
+            <li><!--[ngClass]="{'hide':isWebFormPublished,'show':!isWebFormPublished}"-->
+                <!-- <span>{{showFormStatus()}}</span> isDraftWebForm | {{isDraftWebForm}}  -->
+                <button type="button" *ngIf="crid" type="button" class="btn btn-xs btn-primary publishbtn" (click)="finalPublishDSARForm()">Publish</button>
+                <span class="draftspan">{{showFormStatus()}}</span>
                 <span *ngIf="crid" class="previewbtn"><a target="_blank" class="btn btn-xs btn-primary"
                         (click)="previewCCPAForm()">Preview</a></span>
+            
             </li>
         </ul>
+       
         <div [ngbNavOutlet]="nav">
 
         </div>
-
+        
     </div>
 </div>
 
@@ -1001,8 +1009,7 @@
         </div>
     </ng-template>
 </ng-template>
-<div class="float-right flotingdiv" [ngClass]="{'hide':!isOpen}">
-    <!--dismissOnTimeout="5000"-->
-    <alert *ngIf="isOpen" [type]="alertType" [dismissible]="dismissible" dismissOnTimeout="10000"
-        (onClosed)="onClosed(alertMsg)">{{alertMsg}}</alert>
+<div class="col-sm-5 mr-0 float-right flotingdiv">
+    <alert *ngIf="isOpen" [type]="alertType" dismissOnTimeout="5000" [dismissible]="dismissible"
+        (onClosed)="onClosed(alert)">{{alertMsg}}</alert>
 </div>

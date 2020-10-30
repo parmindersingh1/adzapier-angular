@@ -94,20 +94,7 @@
                             <div class="input-group-text bg-transparent"><i class="fa fa-search"></i></div>
                         </span>
                     </div>
-                    <div class="col-4">
-                        <div class="form-inline">
-                            <div class="col-md-5 form-group pr-0">
-                                <label class="col-sm-5 col-form-label" for="name">View</label>
-                                <select id="PerPage" class="form-control" [(ngModel)]="pageSize"
-                                    (change)="onChangeEvent($event)">
-                                    <option value="5">5</option>
-                                    <option value="10">10</option>
-                                    <option value="15">15</option>
-                                </select>
-                            </div>
-                            <div col-md-5><label class="d-block">records at a time</label></div>
-                        </div>
-                    </div>
+                    
                     <div class="col-sm-2 ml-auto">
                         <button type="button" class="btn btn-primary btn-xs float-right" data-toggle="modal"
                             (click)="editOrganizationModalPopup(inviteuserModal)"><i class="fas fa-plus"></i> Add
@@ -115,10 +102,8 @@
                     </div>
                 </div>
             </div>
-
-
             <div class="card-body">
-                <table class="table table-bordered">
+                <table class="table table-bordered mb-2">
                     <thead class="thead-primary">
                         <tr>
                             <th>Id</th>
@@ -160,7 +145,7 @@
                                     <span class="d-none d-sm-inline cursorpointer mg-l-0">  <i class="fa fa-pen mr-1 colorblue" aria-hidden="true"></i></span>
                                 </a>
 
-                                <a class="pd-r-5" (click)="removeTeamMember(list)">
+                                <a class="pd-r-5" (click)="removeTeamMember(list,'team member')">
                                     <i class="far fa-trash-alt tx-danger fa-sm"></i>
                                 </a>
  
@@ -174,10 +159,28 @@
                         </tr>
                     </tbody>
                 </table>
+                
+ <div class="pagination-wrapper">
+    <div class="col-4 pl-0">
+        <div class="form-inline">
+            <div class="form-group pr-0">
+                <label class="col-sm-5 col-form-label" for="name">View</label>
+                <select id="PerPage" class="form-control" [(ngModel)]="pageSize"
+                    (change)="onChangeEvent($event)">
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="15">15</option>
+                </select>
             </div>
-            <div class="card-footer text-right">
-                <pagination-controls (pageChange)="pageChangeEvent($event)"></pagination-controls>
+            <div class="row col-md-5"><label class="d-block">records at a time</label></div>
+        </div>
+    </div>
+    <div class="height28">
+    <pagination-controls (pageChange)="pageChangeEvent($event)"></pagination-controls>
+    </div>
+    </div>
             </div>
+            
         </div>
     </div>
 </div>
@@ -363,6 +366,35 @@
     </div>
 </ng-template>
 
+<ng-template #confirmTemplate let-modal>
+    <div class="modal-header">
+        <h5 class="modal-title">Are you absolutely sure?</h5>
+        <button type="button" class="close" (click)="cancelModal()" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body text-center">
+        <p> This will delete selected 
+            <span class="font-weight-bold"> {{showControlContent()}}</span>
+             <!-- <span class="font-weight-bold">{{controlname === 'team member' ? selectedTeamMember : organizationName}}</span>
+             <span class="font-weight-bold"> {{controlname === 'organization' ? organizationName : confirmProperty}}</span> -->
+             {{controlname}}</p>
+        <p>Please type <strong>'Delete'</strong> to confirm</p>
+
+        <form [formGroup]="confirmationForm" (ngSubmit)="onSubmitConfirmation(controlname)">
+            <input type="text" class="form-control" formControlName="userInput" name="userInput" required
+                [ngClass]="{ 'is-invalid': isconfirmationsubmitted && confirmDelete.userInput.value !== 'Delete' }" />
+            <div *ngIf="isconfirmationsubmitted && confirmDelete.userInput.value !== 'Delete'" class="invalid-feedback text-left">
+                Enter appropriate text
+            </div>
+            <div class="mt-2 d-flex">
+                    <button class="btn btn-xs btn-primary btn-block" *ngIf="controlname == 'team member'">I understand the
+                        consequences, delete this
+                        {{controlname}}</button>
+            </div>
+        </form>
+    </div>
+</ng-template>
 <div class="col-sm-5 mr-0 float-right flotingdiv" [ngClass]="{'hide':!isOpen}">
     <alert *ngIf="isOpen" [type]="alertType" dismissOnTimeout="5000" [dismissible]="dismissible"
         (onClosed)="onClosed(alertMsg)">{{  alertMsg}}</alert>
