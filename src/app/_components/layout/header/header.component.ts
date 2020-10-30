@@ -95,7 +95,6 @@ export class HeaderComponent implements OnInit {
         this.currentLoggedInUser = this.currentUser.response.firstname + ' ' + this.currentUser.response.lastname;
         this.userRole = this.currentUser.response.role;
         this.userID = this.currentUser.response.uid;
-        console.log(this.userRole, 'userRole...');
         this.loadOrganizationWithProperty();
 
       }
