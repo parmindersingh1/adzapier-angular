@@ -106,8 +106,10 @@ export class OrganizationdetailsComponent implements OnInit {
         this.currrentManagedPropID = response.property_id;
       } else {
         const orgDetails = this.orgService.getCurrentOrgWithProperty();
-        this.currentManagedOrgID = orgDetails.organization_id;
-        this.currrentManagedPropID = orgDetails.property_id;
+        if (orgDetails !== undefined) {
+          this.currentManagedOrgID = orgDetails.organization_id;
+          this.currrentManagedPropID = orgDetails.property_id;
+        }
       }
     });
     this.loadRoleList();
