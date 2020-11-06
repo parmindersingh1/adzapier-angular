@@ -13,7 +13,7 @@
     <div class="row">
         <div class="col-12">
             <div class="card">
-                <div class="card-header d-flex align-items-center justify-content-between pd-y-10">
+                <div class="card-header d-flex align-items-center justify-content-between pd-15">
                     <h6 class="mg-b-0 tx-color-03">
                         Organization Details
                     </h6>
@@ -83,8 +83,8 @@
     <div class="table-responsive property-div">
         <div class="card">
             <div class="card-header tx-semibold">
-                <div class="searchfield mt-3" style="display: flex;">
-                    <div class="col-3 input-group">
+                <div class="card-header d-flex align-items-center justify-content-between pd-15">
+                    <div class="row col-3 input-group">
                         <input class="form-control py-2 border-right-0 border" [(ngModel)]="searchPropertyText"
                             type="search" value="search" id="example-search-input" />
                         <span class="input-group-append">
@@ -92,7 +92,7 @@
                         </span>
                     </div>
                     
-                    <div class="col-sm-2 ml-auto">
+                    <div class="ml-auto">
                         <button type="button" class="btn btn-primary btn-xs float-right" data-toggle="modal"
                             (click)="open(propertyModal)"><i class="fas fa-plus"></i> Add Property</button>
                     </div>

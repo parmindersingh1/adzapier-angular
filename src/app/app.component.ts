@@ -1,4 +1,4 @@
-import { Component, ViewChild, AfterViewInit, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { faCoffee } from '@fortawesome/free-solid-svg-icons';
 import { AuthenticationService } from './_services';
 import { User } from './_models';
@@ -9,7 +9,9 @@ import * as feather from 'feather-icons';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
+  // encapsulation: ViewEncapsulation.None
+
 })
 export class AppComponent implements OnInit {
 

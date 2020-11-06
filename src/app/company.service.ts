@@ -40,7 +40,7 @@ export class CompanyService {
 
   inviteUser(componentName, moduleName, reqestObj): Observable<any> {
     const path = '/invite/user';
-    return this.httpClient.post<any>(environment.apiUrl + path, reqestObj).pipe(catchError(error => {
+    return this.httpClient.post<any>(environment.apiUrl + path, reqestObj).pipe(shareReplay(1),catchError(error => {
       this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.inviteUser, componentName, moduleName, path);
       return throwError(error);
     }));

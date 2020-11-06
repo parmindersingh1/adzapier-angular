@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener, ViewChild, ElementRef, Renderer2, TemplateRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Renderer2, TemplateRef, ViewChildren, QueryList } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { OrganizationService } from 'src/app/_services';
 import { DsarRequestService } from 'src/app/_services/dsar-request.service';
@@ -8,7 +8,7 @@ import { WorkflowService } from 'src/app/_services/workflow.service';
 import { CcpadataService } from 'src/app/_services/ccpadata.service';
 import { CCPAFormConfigurationService } from 'src/app/_services/ccpaform-configuration.service';
 import { TypeaheadMatch } from 'ngx-bootstrap/typeahead/typeahead-match.class';
-import { BsDatepickerConfig, BsDaterangepickerDirective, BsModalRef, BsModalService } from 'ngx-bootstrap';
+import { BsDatepickerConfig, BsDatepickerDirective, BsDaterangepickerDirective, BsModalRef, BsModalService } from 'ngx-bootstrap';
 import { Observable } from 'rxjs';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { TablePaginationConfig } from 'src/app/_models/tablepaginationconfig';
@@ -29,6 +29,9 @@ export class DsarRequestdetailsComponent implements OnInit {
   @ViewChild('dp', { static: false }) datepicker: BsDaterangepickerDirective;
   bsConfig: Partial<BsDatepickerConfig>;
   @ViewChild('confirmDeleteTemplate', { static: false }) confirmDeleteModal: TemplateRef<any>;
+  @ViewChildren('stageContent') workflowStageContent: QueryList<ElementRef>;
+  @ViewChild('dateControlTemplate', { static: true }) public dateControlTemplate: BsDatepickerDirective;
+
   confirmationForm: FormGroup;
   modalRef: BsModalRef;
   requestID: any;
@@ -161,6 +164,8 @@ export class DsarRequestdetailsComponent implements OnInit {
   isconfirmationsubmitted: boolean;
   controlname: string;
   isemailverificationRequired: boolean;
+  selectedStageContent: string;
+  bsErrordate: any;
   constructor(private activatedRoute: ActivatedRoute,
               private router: Router,
               private orgService: OrganizationService,
@@ -274,11 +279,9 @@ export class DsarRequestdetailsComponent implements OnInit {
 
   loadDataRequestDetails() {
 
-    //alert(this.ApproverList['151b7dce-5028-4ad9-bb32-0be1dc423499'].user_name);
     this.dsarRequestService.getDSARRequestDetails(this.currentManagedOrgID, this.currrentManagedPropID, this.requestID,
       this.constructor.name, moduleName.dsarRequestModule)
       .subscribe((data) => {
-        console.log(data.response,'resp...');
         this.requestDetails.push(data.response);
         this.customFields = data.response.custom_data;
         this.respApprover = data.response.approver_firstname + ' ' + data.response.approver_lastname;
@@ -439,17 +442,28 @@ export class DsarRequestdetailsComponent implements OnInit {
       }
     }, (error) => {
       alert(JSON.stringify(error));
-    })
+    });
   }
-
   stageSelection(item) {
+    let isEmailGetVerified: boolean;
+    if (this.isemailverificationRequired) {
+      if (this.isEmailIDVerified('Email', this.isEmailVerified)) {
+        isEmailGetVerified = true;
+      } else {
+        this.alertMsg = 'Can not select stages without email verification!';
+        this.isOpen = true;
+        this.alertType = 'danger';
+        return false;
+      }
+    }
+    this.selectedStageContent = item.guidance_text;
     // this.getSubTaskList();
     this.currentStage = item.order;
     if (this.isSubTaskExist(item)) {
-      if (this.selectedStages.length == 0) {
+      if (this.selectedStages.length === 0) {
         this.nextStage = 0;
       } else {
-        this.nextStage = this.selectedStages[this.selectedStages.length - 1].order
+        this.nextStage = this.selectedStages[this.selectedStages.length - 1].order;
       }
       if (!this.isPreviousStageExist(item)) {
         //  this.previousStage = this.selectedStages[this.selectedStages.length - 1].order;
@@ -666,14 +680,20 @@ export class DsarRequestdetailsComponent implements OnInit {
     if (this.quillEditorEmailText.invalid) {
       return false;
     } else {
+      if (this.selectedStages.length === 0) {
+        this.alertMsg = 'Stage is not selected! email';
+        this.isOpen = true;
+        this.alertType = 'info';
+        return false;
+      } else {
       const requestObj = {
-        current_status: this.currentWorkflowStageID || this.workflowStages[0].id, // this.currentStageId || this.workflowStages[0].id,
+        current_status: this.currentWorkflowStageID || this.selectedStages[this.selectedStages.length - 1].id,
         email_body: this.quillEditorEmailText.get('editorEmailMessage').value,
         upload: this.quillEditorEmailText.get('emailAttachment').value
       };
 
       const fd = new FormData();
-      fd.append('current_status', this.currentWorkflowStageID || this.workflowStages[0].id);
+      fd.append('current_status', this.currentWorkflowStageID || this.selectedStages[this.selectedStages.length - 1].id);
       fd.append('email_body', this.quillEditorEmailText.get('editorEmailMessage').value);
       fd.append('upload', this.quillEditorEmailText.get('emailAttachment').value);
 
@@ -693,6 +713,7 @@ export class DsarRequestdetailsComponent implements OnInit {
           this.isOpen = true;
           this.alertType = 'danger';
         });
+      }
     }
     //this.stageAPI(this.requestID, reqObj);
   }
@@ -735,7 +756,7 @@ export class DsarRequestdetailsComponent implements OnInit {
   loadEmailTemplate() {
     this.dsarRequestService.getEmailTemplate().subscribe((data) => {
       this.emailTemplates = data.response;
-    })
+    });
   }
 
   onChangeRequestType(event) {
@@ -754,7 +775,7 @@ export class DsarRequestdetailsComponent implements OnInit {
   }
 
   onClosed(dismissedAlert: any): void {
-    this.alertMsg !== dismissedAlert;
+    this.alertMsg = !dismissedAlert;
     this.isOpen = false;
   }
 
@@ -906,7 +927,7 @@ export class DsarRequestdetailsComponent implements OnInit {
         this.alertMsg = error;
         this.isOpen = true;
         this.alertType = 'danger';
-      })
+      });
   }
 
   onSubmitEndDays(form: NgForm) {
@@ -982,50 +1003,55 @@ export class DsarRequestdetailsComponent implements OnInit {
   }
 
   onSubmitAddSubTask() {
-    this.isAddSubTaskSubmit = true;
-    if (this.subTaskForm.invalid) {
-      return false;
-    } else {
-      const obj = {
-        assignee: this.subTaskForm.controls['assignee'].value,
-        name: this.subTaskForm.controls['subtaskname'].value,
-        description: this.subTaskForm.controls['subtaskdescription'].value,
-        required: this.subTaskForm.controls['issubtaskrequired'].value == null ? false : true,
-        deadline: new Date(this.subTaskForm.controls['deadline'].value).toJSON(),
-        reminder: (this.subTaskForm.controls['reminder'].value !== null) ?
-          new Date(this.subTaskForm.controls['reminder'].value).toJSON() : null
-      };
-      
-      const currentStageID = this.currentStageId ? this.currentStageId : this.currentWorkflowStageID;
-      if (!this.isEditSubTask) {
-        this.dsarRequestService.addSubTask(this.requestID, currentStageID, obj, this.constructor.name, moduleName.dsarRequestModule)
-          .subscribe((data) => {
-            this.alertMsg = data.response;
-            this.isOpen = true;
-            this.alertType = 'success';
-            this.onResetSubTask();
-            this.getSubTaskList();
-          }, (error) => {
-            this.onResetSubTask();
-            this.alertMsg = error;
-            this.isOpen = true;
-            this.alertType = 'danger';
-          });
-      } else { // update sub task
-        this.dsarRequestService.updateSubTask(this.selectedTaskID, obj, this.constructor.name, moduleName.dsarRequestModule)
-          .subscribe((data) => {
-            this.alertMsg = data.response;
-            this.isOpen = true;
-            this.alertType = 'success';
-            this.getSubTaskList();
-            this.onResetSubTask();
-          }, (error) => {
-            this.alertMsg = error;
-            this.isOpen = true;
-            this.alertType = 'danger';
-            this.onResetSubTask();
-          });
+    const currentStageID = this.currentStageId ? this.currentStageId : this.currentWorkflowStageID;
+    if (currentStageID) {
+      this.isAddSubTaskSubmit = true;
+      if (this.subTaskForm.invalid) {
+        return false;
+      } else {
+        const obj = {
+          assignee: this.subTaskForm.controls['assignee'].value,
+          name: this.subTaskForm.controls['subtaskname'].value,
+          description: this.subTaskForm.controls['subtaskdescription'].value,
+          required: this.subTaskForm.controls['issubtaskrequired'].value, // == null ? false : true,
+          deadline: new Date(this.subTaskForm.controls['deadline'].value).toJSON(),
+          reminder: (this.subTaskForm.controls['reminder'].value !== null) ?
+            new Date(this.subTaskForm.controls['reminder'].value).toJSON() : null
+        };
+        if (!this.isEditSubTask) {
+          this.dsarRequestService.addSubTask(this.requestID, currentStageID, obj, this.constructor.name, moduleName.dsarRequestModule)
+            .subscribe((data) => {
+              this.alertMsg = data.response;
+              this.isOpen = true;
+              this.alertType = 'success';
+              this.onResetSubTask();
+              this.getSubTaskList();
+            }, (error) => {
+              this.onResetSubTask();
+              this.alertMsg = error;
+              this.isOpen = true;
+              this.alertType = 'danger';
+            });
+        } else { // update sub task
+          this.dsarRequestService.updateSubTask(this.selectedTaskID, obj, this.constructor.name, moduleName.dsarRequestModule)
+            .subscribe((data) => {
+              this.alertMsg = data.response;
+              this.isOpen = true;
+              this.alertType = 'success';
+              this.getSubTaskList();
+              this.onResetSubTask();
+            }, (error) => {
+              this.alertMsg = error;
+              this.isOpen = true;
+              this.alertType = 'danger';
+              this.onResetSubTask();
+            });
+        }
       }
+    } else {
+      this.alertMsg = 'Can not add subtask without stage selection!';
+      this.isOpen = true;
+      this.alertType = 'danger';
     }
   }
 
@@ -1333,6 +1359,25 @@ export class DsarRequestdetailsComponent implements OnInit {
         return false;
       }
     }
+  }
+
+  stageContentStyle(): object {
+    if (this.selectedStageContent !== undefined) {
+      if (this.selectedStageContent.length <= 150) {
+        return { 'min-height': '110px' };
+      } else if (this.selectedStageContent.length <= 300) {
+        return { 'min-height': '130px' };
+      } else if (this.selectedStageContent.length <= 450) {
+        return { 'min-height': '170px' };
+      } else if (this.selectedStageContent.length <= 650) {
+        return { 'min-height': '170px' };
+      } else if (this.selectedStageContent.length <= 1050) {
+        return { 'min-height': '240px' };
+      }
+    } else {
+      return { 'min-height': '110px' };
+    }
+
   }
 
 }

@@ -12,7 +12,7 @@
     <div class="row row-sm ">
         <div class="col-lg-6 col-xl-12 mg-t-10">
             <div class="card">
-                <div class="card-header  d-flex align-items-center justify-content-between pd-y-10">
+                <div class="card-header  d-flex align-items-center justify-content-between pd-13">
                     <span class="tx-12 tx-color-03 mg-b-0">
                         <h6 class="mg-b-0">Request Details</h6>
                         Current Status of DSAR Request
@@ -179,26 +179,29 @@
                     </div>
                     <div class="stagediv">
                         <div class="divider-text mg-y-5">Advance Status</div>
-                        <div class="divflex">
+                        <div class="divflex" [ngStyle]="stageContentStyle()">
                             <button (click)="onPreviousSearchPosition()" class="arrowbtn leftarrow"><i class="fa fa-angle-left"></i></button>
                             <div class="customtab col-sm-8" #panel>
                         <ul class="nav-tabs">
                             <li *ngFor="let stage of workflowStages">
-                                <div (click)="stageSelection(stage)" [ngClass]="{'completedStage':  isStageCompleted(stage)
-                                ,'':stage.order < nextStage || stage.order == nextStage
-                                }">
+                                <div #stageContent (click)="stageSelection(stage)" [ngClass]="{'completedStage':  isStageCompleted(stage),'':stage.order < nextStage || stage.order == nextStage}">
 
                                     <a> <span class="step-number"
                                             [ngClass]="{' ':currentStage==stage.order && !isPreviousStageExist(stage),'':nextStage > currentStage}">{{stage.order}}</span>
                                         <span
                                             [ngClass]="{' ':currentStage==stage.order && !isPreviousStageExist(stage),'':nextStage > currentStage}">
-                                            {{stage.stage_title}}</span>
+                                            {{stage.stage_title}} 
+                                        </span>
                                     </a>
                                   
                                 </div>
-                                <div class="m-2 word-wrap">{{stage.guidance_text}}</div>
+                                <h4 [ngClass]="{'selected-title':stage.id === currentWorkflowStageID,'hide':stage.id !== currentWorkflowStageID}">{{stage.stage_title}}</h4>
+                                <div class="m-2 word-wrap" [ngClass]="{'selected-stage-content':stage.id === currentWorkflowStageID,'hide':stage.id !== currentWorkflowStageID}">
+                                    {{stage.guidance_text}}
+                                </div>
                             </li>
                         </ul>
+                        <!-- <div>{{selectedStageContent}}</div> -->
                         </div>
                         <button (click)="onNextSearchPosition()" class="arrowbtn rightarrow"><i class="fa fa-angle-right"></i></button>
                         </div>
@@ -673,7 +676,7 @@
                         Deadline</label>
                     <input formControlName="deadline"
                         [ngClass]="{ 'is-invalid': isAddSubTaskSubmit && addsubTask.deadline.errors }"
-                        class="form-control" bsDatepicker (bsValueChange)="onValueChange($event)"
+                        class="form-control" bsDatepicker #dateControlTemplate (bsValueChange)="onValueChange($event)"
                         [maxDate]="subtaskDeadlineDate"
                         [bsConfig]="{ dateInputFormat: 'MM-DD-YYYY',  returnFocusToInput: true }"
                         [bsValue]="bsValue" required />
@@ -683,14 +686,13 @@
                 </div>
             </div>
             <div class="row">
-                <!-- [maxDate]="maxDate"
-                               [minDate]="minDate"-->
+
                 <div class="col-sm-12 mb-3">
                     <label for="subtaskdescription"
                         class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">
                         Reminder </label>
                     <input formControlName="reminder" class="form-control"  bsDatepicker [maxDate]="maxDate"
-                    [bsConfig]="{ dateInputFormat: 'DD-MM-YYYY',  returnFocusToInput: true }" [minDate]="minDate" [bsValue]="bsValue" />
+                    [bsConfig]="{ dateInputFormat: 'MM-DD-YYYY',  returnFocusToInput: true }" [minDate]="minDate" [bsValue]="bsValue" />
                 </div>
             </div>
 
