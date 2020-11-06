@@ -8,7 +8,8 @@ import { DsarformRoutingModule } from './dsarform-routing.module';
 import { NgbModule, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { QuillModule } from 'ngx-quill';
 import { SharedbootstrapModule } from 'src/app/sharedbootstrap/sharedbootstrap.module';
-
+import { FeatherModule } from 'angular-feather';
+import { allIcons } from 'angular-feather/icons';
 
 @NgModule({
   declarations: [DsarformComponent],
@@ -21,7 +22,8 @@ import { SharedbootstrapModule } from 'src/app/sharedbootstrap/sharedbootstrap.m
     DsarformRoutingModule,
     QuillModule.forRoot(),
     NgbModule,
-    SharedbootstrapModule
+    SharedbootstrapModule,
+    FeatherModule.pick(allIcons)
   ]
  // providers:[NgbModule, NgbModal],
 
