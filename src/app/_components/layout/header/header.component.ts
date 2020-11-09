@@ -95,7 +95,6 @@ export class HeaderComponent implements OnInit {
         this.currentLoggedInUser = this.currentUser.response.firstname + ' ' + this.currentUser.response.lastname;
         this.userRole = this.currentUser.response.role;
         this.userID = this.currentUser.response.uid;
-        console.log(this.userRole, 'userRole...');
         this.loadOrganizationWithProperty();
 
       }
@@ -225,7 +224,11 @@ export class HeaderComponent implements OnInit {
       user_id: this.userID
     };
     this.orgservice.changeCurrentSelectedProperty(obj);
-    this.selectedOrgProperties.push(obj);
+    // this.selectedOrgProperties.push(obj);
+    const orgIndex = this.selectedOrgProperties.findIndex((t) => t.organization_id === obj.organization_id);
+    if (orgIndex === -1) {
+      this.selectedOrgProperties.push(obj);
+    }
     this.orgservice.setCurrentOrgWithProperty(obj);
     this.currentSelectedProperty();
     if (this.router.url.indexOf('privacy/dsar/dsar-requests-details') !== -1) {
@@ -237,8 +240,9 @@ export class HeaderComponent implements OnInit {
   }
 
   isPropSelected(selectedItem): boolean {
-    const propertySelected = this.selectedOrgProperties.filter((t) => t.property_id === selectedItem.property_id).length > 0;
-    return this.isPropertySelected = propertySelected;
+    this.isPropertySelected = this.selectedOrgProperties.filter((t) => t.property_id === selectedItem.property_id).length > 0
+      ? true : false;
+    return this.isPropertySelected;
   }
 
   isOrgSelected(selectedItem): boolean {
@@ -271,7 +275,10 @@ export class HeaderComponent implements OnInit {
           this.currentProperty = data.property_name;
           this.currentOrganization = data.organization_name || data.response.orgname;
           if (this.currentProperty !== undefined) {
-            this.selectedOrgProperties.push(data);
+            const orgIndex = this.selectedOrgProperties.findIndex((t) => t.organization_id === data.organization_id);
+            if (orgIndex === -1) {
+              this.selectedOrgProperties.push(data);
+            }
             this.isPropSelected(data);
           }
         }
@@ -285,6 +292,7 @@ export class HeaderComponent implements OnInit {
         orgDetails.property_name = prop.response.name;
         orgDetails.property_id = prop.response.id;
         this.orgservice.updateCurrentOrgwithProperty(orgDetails);
+        this.isPropSelected(orgDetails);
       }
     });
 
@@ -339,7 +347,10 @@ export class HeaderComponent implements OnInit {
             this.orgservice.changeCurrentSelectedProperty(obj);
             // this.orgservice.getSelectedOrgProperty.emit(obj);
             //  this.firstElement = false;
-            this.selectedOrgProperties.push(obj);
+            const orgIndex = this.selectedOrgProperties.findIndex((t) => t.organization_id === obj.organization_id);
+            if (orgIndex === -1) {
+              this.selectedOrgProperties.push(obj);
+            }
             this.orgservice.setCurrentOrgWithProperty(obj);
           }
         } else {
@@ -370,7 +381,10 @@ export class HeaderComponent implements OnInit {
       if (orgDetails.user_id === this.userID) { //=== this.userID
         this.currentOrganization = orgDetails.organization_name ? orgDetails.organization_name : orgDetails.response.orgname;
         this.currentProperty = orgDetails.property_name;
-        this.selectedOrgProperties.push(orgDetails);
+        const orgIndex = this.selectedOrgProperties.findIndex((t) => t.organization_id === orgDetails.organization_id);
+        if (orgIndex === -1) {
+          this.selectedOrgProperties.push(orgDetails);
+        }
         this.isPropSelected(orgDetails);
       }
       return this.currentProperty;
@@ -408,8 +422,8 @@ export class HeaderComponent implements OnInit {
     if (id !== undefined) {
       this.router.navigate([link, id]);
     } else {
-      if (link.indexOf('cookie') !== -1) {
-        if (this.isPropertySelected) {
+      if (this.checkLinkAccess(link)) {
+        if (this.selectedOrgProperties.length > 0) {
           this.router.navigate([link]);
         } else {
           this.openModal(this.confirmModal);
@@ -420,7 +434,15 @@ export class HeaderComponent implements OnInit {
       }
     }
   }
- //  || link.indexOf('privacy') !== -1 || link.indexOf('webform') !== -1 || link.indexOf('ccpa') !== -1
+
+  checkLinkAccess(link): boolean {
+    if (link.indexOf('workflow') !== -1) {
+      return false;
+    } else if (link.indexOf('cookie') !== -1 || link.indexOf('privacy') !== -1 || link.indexOf('webform') !== -1 ||
+    link.indexOf('ccpa') !== -1) {
+        return true;
+    }
+  }
   confirm() {
     this.modalRef.hide();
     this.router.navigate(['settings/organizations/details/' + this.orgPropertyMenu[0].id]);

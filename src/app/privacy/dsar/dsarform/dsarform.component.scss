@@ -39,14 +39,19 @@
     width: 100%;
   }
 
-  .card {
-    padding: 10px;
-    margin: 0;
-  }
+  // .card {
+  //   padding: 10px;
+  //   margin: 0;
+  // }
  
-  .card-body {
-    padding: 5px 2px !important;
+  .collapse .card-body {
+    padding: 5px 2px;
   }
+
+  // .card-body {
+  //   padding: 5px 2px !important;
+  //   background-color: blueviolet;
+  // }
 
   .drag-list {
     background: #f1f1f1;
@@ -391,6 +396,7 @@
 .logocontainer {
   border-radius: 4px 4px 0px 0px;
   background-color: #3968fa;
+  color:#fff;
 }
 
 #cdk-drop-list-0 .dsarform-box:first-child, #cdk-drop-list-0 .dsarform-box:nth-child(2) {
@@ -786,3 +792,127 @@ span.previewbtn a {
 .show {
    
 }
+
+/*Logo upload*/
+
+.image-wrap {
+  padding: 10px;
+  border: solid 1px #e0e0e0;
+  display: inline-block;
+}
+
+.img-space {
+  border: solid 1px #737373;
+  border-radius: 8px;
+  background-image: linear-gradient(45deg, #8a8a8a 25%, transparent 25%), linear-gradient(-45deg, #8a8a8a 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #8a8a8a 75%), linear-gradient(-45deg, transparent 75%, #8a8a8a 75%);
+  background-size: 20px 20px;
+  background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+  height: auto;
+  width: 100%;
+  padding: 10px;
+}
+
+.img-space img {
+  display: block;
+  margin: auto;
+  cursor: pointer;
+}
+
+.fileInputProfileWrap {
+  width: 100%;
+  height: auto;
+}
+
+.fileInputProfile {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  z-index: 99;
+  opacity: 0;
+}
+.fileInputProfile[disabled] + .img-space{
+  pointer-events: none;
+  cursor: not-allowed!important;
+}
+
+ .input-group .custom-file .custom-file-input {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  top: 0;
+  height: auto !important;
+  left: 110px;
+  margin: 0;
+  opacity: 0;
+}
+
+.input-group input[type="file"] {
+  opacity: 0;
+  position: absolute;
+}
+.input-group .custom-file-upload {
+  margin: 0 auto;
+}
+
+.filedetails {
+  border: 1px solid #ccc;
+  margin: 5px 0;
+  border-radius: 10px;
+  padding: 10px;
+  color: #666;
+  flex-direction: column;
+  text-transform: uppercase;
+  font-size: 10px;
+  font-weight: 500;
+  position: relative;
+}
+
+.margin-left26 {
+  margin-left: 26px
+}
+
+.logodelete {
+  background: transparent;
+  position: absolute;
+  right: 10px;
+  color: #666;
+  border: 0;
+  outline: 0;
+  top: 16px;
+}
+
+.logodelete:focus {
+  outline: 0;
+  border: 0
+}
+
+.upload-wrapper {
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.upload-wrapper p {
+  text-align: center;
+  font-size: 12px;
+  text-transform: capitalize;
+}
+
+.feathericon {
+  width:18px;
+  height: 18px;
+}
+
+.uploaded-logo-width {
+    width: 150px;
+    height: auto;
+}
+
+.color-controlwrapper input[type=color] {
+  width: 36px;
+  height: 30px;
+}
+
+.color-controlwrapper .form-control-sm {
+  height: 30px !important;
+} 
