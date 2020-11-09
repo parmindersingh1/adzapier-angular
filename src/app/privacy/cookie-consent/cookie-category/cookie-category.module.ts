@@ -20,7 +20,7 @@ import {ConfirmationService, MessageService} from 'primeng/api';
 import {InputTextModule} from 'primeng/inputtext';
 import {RippleModule} from 'primeng/ripple';
 import {MultiSelectModule} from 'primeng/multiselect';
-import {ChartsModule} from 'ng2-charts';
+import {ChartsModule, ThemeService} from 'ng2-charts';
 
 const route: Routes = [
   {path: '', component: CookieCategoryComponent, canActivate: [AuthGuard]}
@@ -49,6 +49,6 @@ const route: Routes = [
         MultiSelectModule,
         ChartsModule
     ],
-  providers: [MessageService, ConfirmationService]
+  providers: [MessageService, ConfirmationService, ThemeService]
 })
 export class CookieCategoryModule { }
