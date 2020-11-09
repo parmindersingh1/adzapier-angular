@@ -674,7 +674,7 @@
                     <label for="subtaskdescription"
                         class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">
                         Deadline</label>
-                    <input formControlName="deadline"
+                    <input formControlName="deadline" type="text"
                         [ngClass]="{ 'is-invalid': isAddSubTaskSubmit && addsubTask.deadline.errors }"
                         class="form-control" bsDatepicker #dateControlTemplate (bsValueChange)="onValueChange($event)"
                         [maxDate]="subtaskDeadlineDate"
@@ -691,8 +691,8 @@
                     <label for="subtaskdescription"
                         class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">
                         Reminder </label>
-                    <input formControlName="reminder" class="form-control"  bsDatepicker [maxDate]="maxDate"
-                    [bsConfig]="{ dateInputFormat: 'MM-DD-YYYY',  returnFocusToInput: true }" [minDate]="minDate" [bsValue]="bsValue" />
+                   <input formControlName="reminder" class="form-control"  bsDatepicker [maxDate]="maxDate" type="text"
+                [bsConfig]="{ dateInputFormat: 'MM-DD-YYYY',  returnFocusToInput: true }" [minDate]="minDate" [bsValue]="bsValue" />
                 </div>
             </div>
 
