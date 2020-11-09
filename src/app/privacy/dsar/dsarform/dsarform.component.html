@@ -812,7 +812,7 @@
                 <div>
                     <button class="btn btn-primary sw-btn-prev mr-2" (click)="onPrevious(1)">Previous</button>
                     <button class="btn btn-primary sw-btn-next mr-2" [disabled]="active === 1"
-                        (click)="publishCCPAFormConfiguration(registerForm)">Next</button>
+                        (click)="saveAsDraftCCPAFormConfiguration(registerForm)">Next</button>
                 </div>
             </div>
         </ng-template>
@@ -1049,5 +1049,5 @@
 </ng-template>
 <div class="col-sm-5 mr-0 float-right flotingdiv">
     <alert *ngIf="isOpen" [type]="alertType" dismissOnTimeout="5000" [dismissible]="dismissible"
-        (onClosed)="onClosed(alert)">{{alertMsg}}</alert>
+        (onClosed)="onClosed(alertType)">{{alertMsg}}</alert>
 </div>

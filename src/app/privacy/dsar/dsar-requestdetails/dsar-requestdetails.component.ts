@@ -1069,7 +1069,7 @@ export class DsarRequestdetailsComponent implements OnInit {
   }
 
 
-  uploadFile(event, tag) {
+  uploadFile(event, tag?) {
     const fileExtArray = ['pdf', 'txt', 'jpeg', 'jpg', 'png', 'doc', 'docx', 'csv', 'xls'];
     // if (event.target.files.length > 0) {
     if (event.target.files[0].size > (2 * 1024 * 1024)) {
