@@ -11,6 +11,9 @@ import { MessageService } from 'primeng/api';
 import {moduleName} from '../../../_constant/module-name.constant';
 import {cookieName} from '../../../_constant/cookies-name.constant';
 import {ChartOptions} from 'chart.js';
+import {key} from 'ionicons/icons';
+import {ChangeDetection} from '@angular/cli/lib/config/schema';
+const colorCodes = [ '#f77eb9', '#fdb16d', '#c693f9',   '#65e0e0', '#69b2f8',   '#6fd39b'];
 
 interface CategoryResponse {
   response: CategoryResponseData;
@@ -35,18 +38,30 @@ class CategoryResponseData {
 })
 
 export class CookieCategoryComponent implements OnInit {
-
+  skeletonLoading = {
+    one: false,
+    two: false
+  };
 
   public chartType: string = 'doughnut';
-  public chartLabels: Array<string> = ['Jan', 'Feb', 'Mar'];
-  public chartData: Array<number> = [1, 1, 1];
+  public chartLabels: Array<string> = [];
+  public chartData: Array<number> = [];
   public doughnutChartOptions: ChartOptions = {
     responsive: true,
     legend: { display: false
     }
-
   };
-
+  pieColors = [
+    {
+      backgroundColor: [
+        '#f77eb9', '#fdb16d', '#c693f9',   '#65e0e0', '#69b2f8',   '#6fd39b'
+      ]
+    }
+  ];
+  public chartTypeLabels: Array<string> = [];
+  public chartTypeData: Array<number> = [];
+  categoryChart = [];
+  typeChart = [];
 
   categoryModalRef: BsModalRef;
   isScanning = false;
@@ -97,6 +112,7 @@ export class CookieCategoryComponent implements OnInit {
     this.onSelectedColummFormServer();
     this.onInItCookieForm();
     this.onGetCategoryAndDurationList();
+    this.onGetChartData();
   }
   onSelectedColummFormServer() {
     this.cols = this.onGetColumms();
@@ -226,6 +242,69 @@ export class CookieCategoryComponent implements OnInit {
     this.cookieCategory = { ...product };
     this.productDialog = true;
   }
+  onGetChartData() {
+    this.skeletonLoading.one = true;
+    this.service.getCategoryChatData(this.constructor.name, moduleName.cookieCategoryModule).subscribe( (res: any) => {
+      this.skeletonLoading.one = false;
+      if (res.status === 200) {
+        this.categoryChart = res.response;
+        this.categoryChart.forEach( (element, index) => {
+          return element.color = colorCodes[index];
+        });
+        this.onSetUpPieChartData(res.response);
+      }
+    }, error => {
+      this.skeletonLoading.one = false;
+    });
+    this.skeletonLoading.two = true;
+    this.service.getPartyChartData(this.constructor.name, moduleName.cookieCategoryModule).subscribe( (res: any) => {
+      this.skeletonLoading.two = false;
+      if (res.status === 200) {
+        this.typeChart = res.response;
+        this.typeChart.forEach( (element, index) => {
+          return element.color = colorCodes[index];
+        });
+        this.onSetUpTypeChartData(res.response);
+      }
+    }, error => {
+      this.skeletonLoading.two = false;
+    });
+  }
+
+  onSetUpPieChartData(chartData) {
+    console.log('chartData', chartData)
+    if(chartData.length > 0) {
+      const val = [];
+      const key = [];
+      for (const data of chartData) {
+        val.push(data.count);
+        key.push(data.category);
+      }
+    this.chartLabels = key;
+    this.chartData = val;
+    this.cd.detectChanges();
+      console.log('chart', this.chartLabels)
+      console.log('chart', this.chartData)
+    }
+  }
+
+  onSetUpTypeChartData(chartData) {
+    console.log('chartData', chartData)
+    if(chartData.length > 0) {
+      const val = [];
+      const key = [];
+      for (const data of chartData) {
+        val.push(data.count);
+        key.push(data.type);
+      }
+      this.chartTypeLabels = key;
+      this.chartTypeData = val;
+      console.log()
+      this.cd.detectChanges();
+      console.log('chart', this.chartLabels)
+      console.log('chart', this.chartData)
+    }
+  }
 
   deleteProduct(cookieCat) {
     this.confirmationService.confirm({
@@ -256,6 +335,9 @@ export class CookieCategoryComponent implements OnInit {
     this.service.put(catForm, this.catId, this.constructor.name, moduleName.cookieCategoryModule)
       .subscribe(res => {
         this.tLoading = false;
+        this.isOpen = true;
+        this.alertMsg = 'Cookie updated Successfully';
+        this.alertType = 'success';
         this.addCookieForm.reset();
         this.cookieCategory = {};
         this.onGetDataFromServer();
@@ -264,6 +346,9 @@ export class CookieCategoryComponent implements OnInit {
       }, error => {
         this.tLoading = false;
         this.productDialog = false;
+        this.isOpen = true;
+        this.alertMsg = error;
+        this.alertType = 'error';
         this.cookieCategory = {};
       });
 
@@ -272,6 +357,9 @@ export class CookieCategoryComponent implements OnInit {
     this.tLoading = true;
     this.service.post(catForm, this.constructor.name, moduleName.cookieCategoryModule)
       .subscribe(res => {
+        this.isOpen = true;
+        this.alertMsg = 'Cookie Created Successfully';
+        this.alertType = 'success';
         this.addCookieForm.reset();
         this.tLoading = false;
         this.onGetDataFromServer();
@@ -279,6 +367,9 @@ export class CookieCategoryComponent implements OnInit {
         this.productDialog = false;
         // this.onGetCatList();
       }, error => {
+        this.isOpen = true;
+        this.alertMsg = error;
+        this.alertType = 'error';
         this.tLoading = false;
         this.productDialog = false;
         this.cookieCategory = {};
@@ -390,7 +481,7 @@ export class CookieCategoryComponent implements OnInit {
     this.isScanning = true;
     this.service.cookieScanning(this.constructor.name, moduleName.cookieCategoryModule).subscribe(res => {
       this.isScanning = false;
-  
+
         this.isOpen = true;
         this.alertMsg = res['response'];
         this.alertType = 'success'

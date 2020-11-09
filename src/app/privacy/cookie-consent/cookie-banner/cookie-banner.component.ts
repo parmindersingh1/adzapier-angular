@@ -130,7 +130,7 @@ export class CookieBannerComponent implements OnInit {
     }
     this.cookieBannerForm.get('gdprTarget').updateValueAndValidity();
     console.log('configData', configData);
-    
+
     this.cookieBannerForm.patchValue({
       ccpaTarget: configData.ccpa_target,
       gdprTarget: configData.gdpr_target,
@@ -206,6 +206,7 @@ export class CookieBannerComponent implements OnInit {
       //  BANNER
       Bannerlanguage: [this.defaultData.gdprDefaultLang],
       BannerPosition: [this.defaultData.DefaultBannerPosition],
+      BadgePosition: [this.defaultData.DefaultBadgePosition],
       BannerTitle: ['', [Validators.minLength(2), Validators.maxLength(50)]],
       BannerDescription: ['',  [Validators.minLength(20)]],
       BannerGlobalStyleTextColor: [''],
@@ -314,6 +315,7 @@ export class CookieBannerComponent implements OnInit {
 
 
   onSetValue() {
+    console.log('this.bannerCookieData.config.BadgePosition', this.bannerCookieData.config.BadgePosition)
     this.cookieBannerForm.patchValue({
       // DISPLAY FREQUENCY
       bannerPartialConsent: this.bannerCookieData.config.DisplayFrequency.bannerPartialConsent,
@@ -324,7 +326,9 @@ export class CookieBannerComponent implements OnInit {
       bannerShowConsentType: this.bannerCookieData.config.DisplayFrequency.bannerShowConsentType,
       //
       Bannerlanguage: this.bannerCookieData.config.Language,
+      BadgePosition: this.bannerCookieData.config.BadgePosition,
       BannerPosition: this.bannerCookieData.config.BannerPosition,
+      //
       BannerTitle: this.bannerCookieData.config.Banner.Content.title,
       BannerDescription: this.bannerCookieData.config.Banner.Content.description,
       BannerGlobalStyleTextColor: this.bannerCookieData.config.Banner.GlobalStyles.textColor,
@@ -480,6 +484,7 @@ export class CookieBannerComponent implements OnInit {
     };
     this.loading.start();
     this.isPublish = true;
+    console.log('datassdfsadf', JSON.stringify(userPrefrencesData))
     this.cookieBannerService.onUpdateCookieBannerData(userPrefrencesData, this.currentManagedOrgID , this.currrentManagedPropID, this.constructor.name, moduleName.cookieBannerModule)
       .subscribe((res: any) => {
         this.loading.stop();
@@ -504,6 +509,7 @@ export class CookieBannerComponent implements OnInit {
     return {
       Language: this.cookieBannerForm.value.Bannerlanguage,
       BannerPosition: this.cookieBannerForm.value.BannerPosition,
+      BadgePosition: this.cookieBannerForm.value.BadgePosition,
       DisplayFrequency: {
         bannerPartialConsent: this.cookieBannerForm.value.bannerPartialConsent,
         bannerPartialConsentType: this.cookieBannerForm.value.bannerPartialConsentType,

@@ -299,6 +299,20 @@
                             </label>
                           </div>
                         </div>
+
+
+                        <div class="col-md-12 mb-4">
+                          <h6 class="tx-12 tx-medium tx-middle tx-spacing-1 tx-color-03 tx-uppercase">Badge Position</h6>
+                          <div *ngFor="let badgePosition of bannerConstant.BadgePosition"
+                               class="form-check-inline">
+                            <label class="form-check-label">
+                              <input formControlName="BadgePosition"
+                                     [disabled]="isFieldDisabled" [value]="badgePosition.value" type="radio"
+                                     class="form-check-input" name="BadgePosition">{{badgePosition.title}}
+                            </label>
+                          </div>
+                        </div>
+
                       </p-accordionTab>
 
                       <p-accordionTab header="Content">

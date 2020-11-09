@@ -29,6 +29,8 @@ export const apiConstant = {
   // Workflow
   WORKFLOW: '/workflow',
   WORKFLOW_STATUS: '/workflow?workflow_status=',
-  WORKFLOW_ID: '/workflow?workflow_id='
-
+  WORKFLOW_ID: '/workflow?workflow_id=',
+  // COOKIE_CATEGORY_CHART
+  COOKIE_CATEGORY_CHART: '/cookiepurpose/:propId',
+  COOKIE_CATEGORY_TYPE_CHART: '/cookietype/:propId'
 };
