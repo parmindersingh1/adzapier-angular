@@ -22,13 +22,18 @@ h6 > i {
 //    // background: url(../../../../assets/imgs/right.png) no-repeat 0px 55%  !important;   
 // }
 
-.link {
-    margin: 0;
-    position: absolute;
-    bottom: 25px;
+// .link {
+//     margin: 0;
+//     position: absolute;
+//     bottom: 25px;
+// }
+
+.card-header .link {
+    margin: 10px 0 0 0;
+    line-height: 15px !important;
 }
 
-.link > a {
+.card-header .link > a {
     color: #0168fa;
     font-weight: 500;
     // display: inline-flex;
@@ -39,7 +44,7 @@ h6 > i {
     align-items: center;
 }
 
-.link > a::after{
+.card-header .link > a::after{
     display: inline-block;
     content: '\2192';
     font-size: 15px;

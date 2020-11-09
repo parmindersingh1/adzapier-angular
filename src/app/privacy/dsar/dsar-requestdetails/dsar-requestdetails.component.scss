@@ -32,7 +32,7 @@
 .nav-tabs > li {
     display: flex;
     flex-direction: column;
-    width: 50%;
+    // width: 50%;
 }
 
 .nav-tabs .nav-item + .nav-item {
@@ -666,6 +666,7 @@ ul.ngx-pagination {
       cursor: pointer;
       text-transform: capitalize;
       font-size: 11px;
+      z-index: 100;
   }
 
   .feather-tick {
@@ -688,15 +689,15 @@ ul.ngx-pagination {
 
   .divflex {
     display: flex;
-    margin: 20px 0;
+    margin: 20px 0 10px 0;
     position: relative;
+    overflow: hidden;
+    min-height: 230px;
+
 }
 
 .customtab {
     flex-grow: 1;
-    overflow-x: hidden;
-    overflow-y: hidden;
-    white-space: nowrap;
     width: 100%;
     margin: 0 0 0 45px;
     min-width: 1000px;
@@ -710,6 +711,7 @@ ul.ngx-pagination {
 .customtab ul li {
     display: inline;
     margin: 0 3px;
+    flex:auto;
 }
 
 .customtab ul li:last-child {
@@ -806,3 +808,25 @@ ul.ngx-pagination {
   .form-check-inline label {
     margin-right: 10px;
  }
+
+ .selected-stage-content {
+     display: block;
+     position: absolute;
+     width: 100%;
+     left: 22px;
+     top: 80px;     
+ }
+
+ .selected-title {
+    font-size: 15px;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    text-transform: CAPITALIZE;
+    left: 30px;
+    top: 60px;
+ }
+
+ .t2 {
+    background: violet;     
+}
