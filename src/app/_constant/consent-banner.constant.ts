@@ -10,6 +10,7 @@ export const defaultData = {
   logo: true,
   gdprDefaultLang: 'en',
   DefaultBannerPosition: 'bottom',
+  DefaultBadgePosition: 'right',
   BannerDisplayFrequency: {
     partialConsent: 'hours',
     rejectAll: 'days',
@@ -199,6 +200,10 @@ export const BannerConstant = {
   BannerPosition: [
     {title: 'Top', value: 'top'},
     {title: 'Bottom', value: 'bottom'}
+  ],
+  BadgePosition: [
+    {title: 'Left', value: 'left'},
+    {title: 'Right', value: 'right'}
   ],
   BannerDisplayFrequency: [
     {label: 'Hour', value: 'hours'},
