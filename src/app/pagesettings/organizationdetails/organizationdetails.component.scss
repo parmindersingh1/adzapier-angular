@@ -1,6 +1,6 @@
-.table > tbody > tr > td> img.img-fluid {
-    max-width: 15% !important;
-}
+// .table > tbody > tr > td> img.img-fluid {
+//     max-width: 15% !important;
+// }
 
 .table > tbody > tr:hover {
     background-color:#e9ecf1;
@@ -110,7 +110,7 @@
     display: none;
 }
 
-table.table.table-bordered > tbody > tr > td:nth-child(2) > img.img-fluid {
+table.table-bordered > tbody > tr > td:nth-child(2) > img.img-fluid {
     max-width: 15%;
 }
 

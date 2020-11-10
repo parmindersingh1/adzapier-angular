@@ -59,7 +59,7 @@ export class EditProfileComponent implements OnInit {
       firstName: ['', [Validators.required, Validators.minLength(2), Validators.pattern(strRegx)]],
       lastName: ['', [Validators.required, Validators.minLength(2), Validators.pattern(strRegx)]],
       newemail: [''],
-      companyname: ['Test Company Name'],
+      companyname: [''],
       addressone: ['', [Validators.required, Validators.pattern(alphaNumeric)]],
       city: ['', [Validators.required, Validators.pattern(strRegx)]],
       state: ['', [Validators.required, Validators.pattern(strRegx)]],
@@ -179,7 +179,7 @@ export class EditProfileComponent implements OnInit {
       this.city = this.userProfile[0].city;
       this.state = this.userProfile[0].state;
       this.zipcode = this.userProfile[0].zipcode;
-      this.companyname = 'TEST Company Name';
+      this.companyname = '';
     });
   }
 
