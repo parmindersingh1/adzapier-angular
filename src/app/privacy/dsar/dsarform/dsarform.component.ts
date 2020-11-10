@@ -216,6 +216,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
   logoHeight: number;
   logoWidth: number;
   isCodeCopied = false;
+  isdraftsubmitted = false;
   constructor(private fb: FormBuilder, private ccpaRequestService: CcparequestService,
               private organizationService: OrganizationService,
               private dsarFormService: DsarformService,
@@ -240,12 +241,12 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
   }
 
   ngOnInit() {
-   // this.loadingbar.start();
+    // this.loadingbar.start();
     //  this.webFormControlList = this.dsarFormService.getFormControlList();
     this.getCCPAdefaultConfigById();
     // this.loadWebControl();
     this.organizationService.currentProperty.subscribe((response) => {
-    //  this.loadingbar.stop();
+      //  this.loadingbar.stop();
       if (response !== '') {
         this.selectedProperty = response.property_name;
         this.currentOrganization = response.organization_name;
@@ -307,9 +308,9 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
       // this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
       // this.getCCPAdefaultConfigById();
       const uuidRegx = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/;
-    //  this.loadingbar.start();
+      //  this.loadingbar.start();
       this.webFormSelectedData = this.ccpaFormConfigService.currentFormData.subscribe((data) => {
-     //   this.loadingbar.stop();
+        //   this.loadingbar.stop();
         if (data) {
           (this.propId !== '') ? this.propId = this.propId : this.propId = data.PID;
           (this.orgId !== '') ? this.orgId = this.orgId : this.orgId = data.OID;
@@ -369,9 +370,10 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
           // this.selectedWorkflowID = retrivedData.workflow;
           // this.formName = retrivedData.form_name;
           this.getWorkflowWithApproverID();
+          this.daysleft = data.days_left || 45;
         }
       });
-     // this.getDSARFormByCRID(this.crid);
+      // this.getDSARFormByCRID(this.crid);
     } else {
       this.radioBtnType = true;
       this.subjectTyperadioBtn = true;
@@ -404,7 +406,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
         id: this.count++,
         name: ' '
       }];
-
+      this.daysleft = 45;
       // this.getCCPAdefaultConfigById();
       this.reqURLObj = { crid: formcrid, orgid: this.organizationID, propid: this.propId };
       this.organizationService.getOrganization.subscribe((response) => this.currentOrgID = response);
@@ -422,7 +424,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
         this.loading = false;
       }
     }, (error) => {
-     // this.loadingbar.stop();
+      // this.loadingbar.stop();
       this.alertMsg = error;
       this.isOpen = true;
       this.alertType = 'danger';
@@ -1007,11 +1009,12 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
 
   saveAsDraftCCPAFormConfiguration(registerForm) {
     // if (this.headerlogoBase64 !== '') {
+    this.isdraftsubmitted = false;
     this.setHeaderStyle();
     // }
     // console.log(registerForm.value, 'registerForm..');
     if (this.crid) {
-     // this.getDSARFormByCRID(this.crid);
+      // this.getDSARFormByCRID(this.crid);
       this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
       this.webFormControlList.filter((t) => {
         if (t.controlId === 'footertext') {
@@ -1039,13 +1042,13 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
     this.isWebFormPublished = false;
     this.isDraftWebForm = true;
     this.active = 3;
-   // this.cd.detectChanges();
+    // this.cd.detectChanges();
 
     // selectedOrgProperty
   }
 
   createDraft() {
-
+    this.isdraftsubmitted = true;
     if (this.defaultapprover === undefined) {
       return false;
     } else {
@@ -1692,7 +1695,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
   }
 
   getDSARFormByCRID(responsID) {
-  //  this.loadingbar.start();
+    //  this.loadingbar.start();
     if (this.orgId && this.propId) {
       this.ccpaFormConfigService.getCCPAFormConfigByID(this.orgId, this.propId, responsID,
         this.constructor.name, moduleName.dsarWebFormModule).subscribe((data) => {
@@ -1707,7 +1710,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
             this.isDraftWebForm = true;
           }
           this.showFormStatus();
-         // this.loadingbar.stop();
+          // this.loadingbar.stop();
         }, (error) => {
           this.alertMsg = error;
           this.isOpen = true;
