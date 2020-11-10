@@ -18,6 +18,11 @@
 
 
       <div class="d-none d-md-block">
+        <button (click)="onResetConfig()" type="button" class="btn btn-sm pd-x-15 btn-primary mr-2 btn-uppercase">
+          Reset Configuration
+        </button>
+
+
         <button (click)="type = 'draft'" type="submit" class="btn btn-sm pd-x-15 btn-white btn-uppercase">
           <ng-container *ngIf="!isPublish || type === 'publish'">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-save wd-10 mg-r-5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
@@ -219,9 +224,9 @@
                       </div>
                       <div class="col-md-6">
                         <div class="input-group mb-1">
-                          <input  formControlName="bannerShowConsent" oninput="validity.valid||(value='');" min="1" type="number"class="form-control" value="1" name="email">
+                          <input  formControlName="bannerClosedConsent" oninput="validity.valid||(value='');" min="1" type="number"class="form-control" value="1" name="email">
                           <div class="input-group-append">
-                            <select  formControlName="bannerShowConsentType" class="form-control">
+                            <select  formControlName="bannerClosedConsentType" class="form-control">
                               <option *ngFor="let type of bannerConstant.BannerDisplayFrequency" [value]="type.value">{{type.label}}</option>
                             </select>
                           </div>
@@ -994,5 +999,15 @@
       you need to create cookie manually or scan the property
     </p>
         <button type="button" class="btn btn-primary" (click)="navigate()" >Go Now </button>
+  </div>
+</ng-template>
+
+
+<ng-template #template1>
+  <div class="modal-body text-center">
+    <p>This will reset all the configuration<br />
+    </p>
+    <button type="button" class="btn btn-primary mr-3" (click)="modalRef.hide()" >No </button>
+    <button type="button" class="btn btn-white" (click)="modalRef.hide(); onSetDefaultValue()" >Yes </button>
   </div>
 </ng-template>
