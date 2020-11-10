@@ -130,7 +130,7 @@
                 <table class="table table-bordered">
                     <thead class="thead-primary">
                         <tr>
-                            <th>Id</th>
+                            <th>ID</th>
                             <th>Logo</th>
                             <th>Name</th>
                             <th>Domain</th>
@@ -233,7 +233,7 @@
                 <table class="table table-bordered mb-2">
                     <thead class="thead-primary">
                         <tr>
-                            <th>Id</th>
+                            <th>ID</th>
                             <th>Name</th>
                             <th>Email</th>
                             <th>Roles</th>
@@ -257,9 +257,14 @@
                                 {{list.role_name}}
                             </td>
                             <td>
-                                <span
-                                    *ngIf="isDateOrString(list.user_last_login)">{{list.user_last_login | date:'medium'}}</span>
-                                <span *ngIf="!isDateOrString(list.user_last_login)">{{list.user_last_login}}</span>
+                                <span class="text-center tx-success"
+                                *ngIf="list.user_last_login === 'Invitation Pending' || list.user_last_login === 'Invitation sent'; else LoginDate">
+                                {{list.user_last_login }}
+                            </span>
+                            <ng-template #LoginDate>
+                                {{list.user_last_login | timeAgo}}
+                            </ng-template>
+
                             </td>
                             <td class="text-center">
                                 <button *ngIf="list.user_last_login === 'Invitation sent'" type="button"
