@@ -1,4 +1,5 @@
-import { Component, OnInit, ViewChild, ElementRef, Renderer2, TemplateRef, ViewChildren, QueryList } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Renderer2, TemplateRef, ViewChildren, QueryList,
+  ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { OrganizationService } from 'src/app/_services';
 import { DsarRequestService } from 'src/app/_services/dsar-request.service';
@@ -177,7 +178,8 @@ export class DsarRequestdetailsComponent implements OnInit {
               private formBuilder: FormBuilder,
               private renderer2: Renderer2,
               private bsmodalService: BsModalService,
-              private loading: NgxUiLoaderService
+              private loading: NgxUiLoaderService,
+              private cd: ChangeDetectorRef
   ) {
     this.renderer2.listen('window', 'click', (e: Event) => {
       if (e.target !== this.toggleDayleftdiv.nativeElement &&
@@ -1057,6 +1059,7 @@ export class DsarRequestdetailsComponent implements OnInit {
 
   onResetSubTask() {
     this.isAddSubTaskSubmit = false;
+    this.bsValue = null;
     this.subTaskForm.reset();
     this.modalService.dismissAll('Canceled');
   }

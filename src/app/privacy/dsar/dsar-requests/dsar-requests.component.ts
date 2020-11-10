@@ -1,4 +1,5 @@
-import { Component, OnInit, ViewChild, Input, ChangeDetectorRef, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, Input, ChangeDetectionStrategy, ChangeDetectorRef, ElementRef, AfterContentChecked,
+  AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { Subject } from 'rxjs';
@@ -15,9 +16,10 @@ import { moduleName } from 'src/app/_constant/module-name.constant';
   selector: 'app-dsar-requests',
   templateUrl: './dsar-requests.component.html',
   styleUrls: ['./dsar-requests.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Default
 
 })
-export class DsarRequestsComponent implements OnInit, AfterViewInit {
+export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterContentChecked {
   firstone = 0;
   cols: any[];
   selectedCols: any[];
@@ -237,7 +239,7 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     this.cols = [
       { field: 'country', header: 'Country' },
-      { field: 'name', header: 'Name' },
+      // { field: 'name', header: 'Name' },
       { field: 'org_name', header: 'Organization' },
       { field: 'property_name', header: 'Property' },
       { field: 'state', header: 'State' },
@@ -245,6 +247,10 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit {
     ];
 
     this.selectedCols = this.cols;
+    this.cdRef.detectChanges();
+  }
+
+  ngAfterContentChecked(): void {
     this.cdRef.detectChanges();
   }
 
