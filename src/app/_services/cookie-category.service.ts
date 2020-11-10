@@ -116,4 +116,24 @@ export class CookieCategoryService  {
   onSendLogs(errorType, msg, functionality, componentName, moduleName, path) {
     this.loki.onSendErrorLogs(errorType, msg, functionality, componentName, moduleName, path).subscribe();
   }
+
+  getCategoryChatData(componentName, moduleName) {
+    const path = apiConstant.COOKIE_CATEGORY_CHART.replace(':propId', this.currrentManagedPropID);
+    return this.http.get(environment.apiUrl + path).pipe( map ( res => res),
+      catchError(err => {
+        this.onSendLogs(LokiStatusType.ERROR, err, LokiFunctionality.cookieCategory, componentName, moduleName, path);
+        return throwError(err);
+      })
+      );
+  }
+
+  getPartyChartData(componentName, moduleName) {
+    const path = apiConstant.COOKIE_CATEGORY_TYPE_CHART.replace(':propId', this.currrentManagedPropID);
+    return this.http.get(environment.apiUrl + path).pipe( map ( res => res),
+      catchError(err => {
+        this.onSendLogs(LokiStatusType.ERROR, err, LokiFunctionality.cookieCategory, componentName, moduleName, path);
+        return throwError(err);
+      })
+    );
+  }
 }
