@@ -110,8 +110,14 @@
     display: none;
 }
 
-table.table-bordered > tbody > tr > td:nth-child(2) > img.img-fluid {
-    max-width: 15%;
+table > tbody > tr > td:nth-child(2) > div > img.img-fluid {
+    max-width: 40%;
+    max-height: 100%;
+    display: block;
+}
+
+.img-wrapper {
+    float: left;
 }
 
 .borderzero {
