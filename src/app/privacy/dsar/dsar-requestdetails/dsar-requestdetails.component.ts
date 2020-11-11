@@ -9,7 +9,8 @@ import { WorkflowService } from 'src/app/_services/workflow.service';
 import { CcpadataService } from 'src/app/_services/ccpadata.service';
 import { CCPAFormConfigurationService } from 'src/app/_services/ccpaform-configuration.service';
 import { TypeaheadMatch } from 'ngx-bootstrap/typeahead/typeahead-match.class';
-import { BsDatepickerConfig, BsDatepickerDirective, BsDaterangepickerDirective, BsModalRef, BsModalService } from 'ngx-bootstrap';
+import {  BsModalRef, BsModalService } from 'ngx-bootstrap';
+import { BsDatepickerConfig, BsDatepickerDirective, BsDaterangepickerDirective, DatePickerComponent } from 'ngx-bootstrap/datepicker';
 import { Observable } from 'rxjs';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { TablePaginationConfig } from 'src/app/_models/tablepaginationconfig';
@@ -31,7 +32,7 @@ export class DsarRequestdetailsComponent implements OnInit {
   bsConfig: Partial<BsDatepickerConfig>;
   @ViewChild('confirmDeleteTemplate', { static: false }) confirmDeleteModal: TemplateRef<any>;
   @ViewChildren('stageContent') workflowStageContent: QueryList<ElementRef>;
-  @ViewChild('dateControlTemplate', { static: true }) public dateControlTemplate: BsDatepickerDirective;
+  @ViewChild('dateControlTemplate', { static: true }) public dateControlTemplate: DatePickerComponent;
 
   confirmationForm: FormGroup;
   modalRef: BsModalRef;
@@ -122,6 +123,7 @@ export class DsarRequestdetailsComponent implements OnInit {
   totalCount: any;
   minDate: Date;
   maxDate: Date;
+  reminderMaxDate: Date;
   uploadFilename: any;
   selectedAssignee: any;
   isEditSubTask: boolean = false;
@@ -1316,6 +1318,7 @@ export class DsarRequestdetailsComponent implements OnInit {
         this.alertMsg = data.response;
         this.isOpen = true;
         this.alertType = 'success';
+        this.router.navigate(['privacy/dsar/dsar-requests']);
       }, (err) => {
         this.alertMsg = 'error';
         this.isOpen = true;

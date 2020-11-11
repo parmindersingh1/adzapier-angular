@@ -4,33 +4,20 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
-import { NotificationsService } from 'angular2-notifications';
 import { OrganizationService } from '../../../_services';
 import { ConfirmationService, LazyLoadEvent, SortEvent } from 'primeng/api';
 import { MessageService } from 'primeng/api';
 import {moduleName} from '../../../_constant/module-name.constant';
 import {cookieName} from '../../../_constant/cookies-name.constant';
 import {ChartOptions} from 'chart.js';
-import {key} from 'ionicons/icons';
-import {ChangeDetection} from '@angular/cli/lib/config/schema';
 const colorCodes = [ '#f77eb9', '#fdb16d', '#c693f9',   '#65e0e0', '#69b2f8',   '#6fd39b'];
 
-interface CategoryResponse {
-  response: CategoryResponseData;
-  status: number;
-}
+
 interface  ColInterface {
   field: string;
   header: string;
 }
-class SelectItemData {
-  id: any;
-  name: any;
-}
-class CategoryResponseData {
-  categoryList = [];
-  durationtype: [];
-}
+
 @Component({
   selector: 'app-cookie-category',
   templateUrl: './cookie-category.component.html',
@@ -69,7 +56,6 @@ export class CookieCategoryComponent implements OnInit {
   cookieCategories = cookieName;
   catId = '';
   selectedCols: ColInterface[];
-  isPublish = false;
   cols: ColInterface[];
   categoryForm: FormGroup;
   categoryFromSubmitted: boolean;
@@ -100,7 +86,6 @@ export class CookieCategoryComponent implements OnInit {
     private cd: ChangeDetectorRef,
     private modalService: BsModalService,
     private loading: NgxUiLoaderService,
-    private notification: NotificationsService,
     private orgservice: OrganizationService,
     public dialog: MatDialog,
     private formBuilder: FormBuilder,
@@ -463,7 +448,6 @@ export class CookieCategoryComponent implements OnInit {
       this.loading.stop();
       this.categoryModalRef.hide();
       if (res['status'] === 201) {
-        // this.notification.info('Category Created', 'The category created successfully', notificationConfig);
         this.isOpen = true;
         this.alertMsg = 'The category created successfully';
         this.alertType = 'success';
@@ -471,7 +455,6 @@ export class CookieCategoryComponent implements OnInit {
     }, error => {
       this.loading.stop();
       this.categoryModalRef.hide();
-      // this.notification.error('Error', 'Something went wrong', notificationConfig);
       this.isOpen = true;
       this.alertMsg = error;
       this.alertType = 'danger';
@@ -487,7 +470,6 @@ export class CookieCategoryComponent implements OnInit {
         this.alertType = 'success'
     }, error => {
       this.isScanning = false;
-     // this.notification.error('Error', error, notificationConfig);
       this.isOpen = true;
       this.alertMsg = error;
       this.alertType = 'danger';

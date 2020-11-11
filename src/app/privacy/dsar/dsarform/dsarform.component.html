@@ -1000,8 +1000,9 @@
         <button type="button" *ngIf="crid" type="button" class="btn btn-xs btn-primary publishbtn"
             (click)="finalPublishDSARForm()">Publish</button>
         <span class="draftspan">{{showFormStatus()}}</span>
+        <!-- <button *ngIf="isResetlinkEnable" class="btn btn-link reset-link">Reset</button> -->
         <span *ngIf="crid" class="previewbtn"><a target="_blank" class="btn btn-xs btn-primary"
-                (click)="previewCCPAForm()">Preview</a></span>
+            (click)="previewCCPAForm()">Preview</a></span>
 
     </li>
     </ul>

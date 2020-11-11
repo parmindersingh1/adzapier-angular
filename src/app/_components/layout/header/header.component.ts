@@ -4,10 +4,11 @@ import { OrganizationService, AuthenticationService, UserService } from '../../.
 import { Observable } from 'rxjs';
 import { BsDropdownConfig } from 'ngx-bootstrap/dropdown';
 import { Organization } from 'src/app/_models/organization';
-import { mergeMap, switchMap, distinctUntilKeyChanged, distinctUntilChanged } from 'rxjs/operators';
+import { distinctUntilChanged } from 'rxjs/operators';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { moduleName } from 'src/app/_constant/module-name.constant';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-header',
@@ -51,7 +52,11 @@ export class HeaderComponent implements OnInit {
   propList: any;
   isOrganizationUpdated: boolean;
   isPropertySelected: boolean;
-
+  isPrivacyActivelinkMatched = false;
+  isBillingActivelinkMatched = false;
+  isOtherActivelinkMatched = false;
+  isSublinkActive = false;
+  selectedSubmenu: any = [];
   constructor(
     private router: Router,
     private activatedroute: ActivatedRoute,
@@ -59,7 +64,8 @@ export class HeaderComponent implements OnInit {
     private authService: AuthenticationService,
     private userService: UserService,
     private loading: NgxUiLoaderService,
-    private bsmodalService: BsModalService
+    private bsmodalService: BsModalService,
+    private location: Location
   ) {
     this.authService.currentUser.subscribe(x => {
       this.currentUser = x;
@@ -82,8 +88,19 @@ export class HeaderComponent implements OnInit {
       return false;
     };
 
-  }
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        this.isPrivacyActivelinkMatched = event.url.indexOf('privacy') >= 0 || event.url.indexOf('home') >= 0
+          || event.url.indexOf('cookie') >= 0;
+      } else if (event instanceof NavigationEnd) {
+        if (event.url.indexOf('settings/billing') !== -1 || event.url.indexOf('pricing') !== -1) {
+          this.isBillingActivelinkMatched = true;
+          this.isPrivacyActivelinkMatched = false;
+        }
+      }
+    });
 
+  }
 
   ngOnInit() {
     //  this.firstElement = true;
@@ -420,17 +437,19 @@ export class HeaderComponent implements OnInit {
 
   goto(link: any, id?: any) {
     if (id !== undefined) {
-      this.router.navigate([link, id]);
+      this.router.navigate([link.routerLink, id]);
     } else {
-      if (this.checkLinkAccess(link)) {
+      if (this.checkLinkAccess(link.routerLink)) {
         if (this.selectedOrgProperties.length > 0) {
-          this.router.navigate([link]);
+          this.router.navigate([link.routerLink]);
+          this.activateActiveClass(link);
         } else {
           this.openModal(this.confirmModal);
           return false;
         }
       } else {
-        this.router.navigate([link]);
+        this.router.navigate([link.routerLink]);
+        this.activateActiveClass(link);
       }
     }
   }
@@ -443,6 +462,30 @@ export class HeaderComponent implements OnInit {
         return true;
     }
   }
+
+  activateActiveClass(menu: any) {
+    this.selectedSubmenu.length = 0;
+    this.selectedSubmenu.push(menu);
+    if (menu.routerLink.indexOf('settings/billing') !== -1 || menu.routerLink.indexOf('pricing') !== -1) {
+      this.isBillingActivelinkMatched = true;
+      if (menu.icon !== undefined) {
+        this.activateSublink(menu);
+      }
+      return this.isPrivacyActivelinkMatched = false;
+    } else if (menu.routerLink.indexOf('/settings') >= 0) {
+      this.isBillingActivelinkMatched = false;
+      if (menu.icon !== undefined) {
+        this.activateSublink(menu);
+       }
+      }
+  }
+
+  activateSublink(selectedItem): boolean {
+    this.isBillingActivelinkMatched = false;
+    return this.isSublinkActive = this.selectedSubmenu.some((t) =>
+      t.showlink === selectedItem.showlink && t.icon === selectedItem.icon);
+  }
+
   confirm() {
     this.modalRef.hide();
     this.router.navigate(['settings/organizations/details/' + this.orgPropertyMenu[0].id]);

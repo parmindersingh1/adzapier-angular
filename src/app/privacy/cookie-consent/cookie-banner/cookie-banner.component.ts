@@ -10,7 +10,6 @@ import {
 } from '../../../_constant/consent-banner.constant';
 import {CookieBannerService} from '../../../_services/cookie-banner.service';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
-import {NotificationsService} from 'angular2-notifications';
 import {OrganizationService} from '../../../_services';
 import {Location} from '@angular/common';
 import {Router} from '@angular/router';
@@ -72,10 +71,9 @@ export class CookieBannerComponent implements OnInit {
       ]
     }
   };
-  private isPublish: boolean;
+  public isPublish: boolean;
 
   constructor(private formBuilder: FormBuilder,
-              private notification: NotificationsService,
               private cd: ChangeDetectorRef,
               private modalService: BsModalService,
               private cookieBannerService: CookieBannerService,
@@ -507,7 +505,6 @@ export class CookieBannerComponent implements OnInit {
       .subscribe((res: any) => {
         this.loading.stop();
         this.isPublish = false;
-       // this.notification.info('Success', res['response'], notificationConfig);
         this.isOpen = true;
         this.alertMsg = res.response;
         this.alertType = 'success';

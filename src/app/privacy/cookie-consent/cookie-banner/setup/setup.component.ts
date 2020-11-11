@@ -1,6 +1,4 @@
 import {Component, ElementRef, OnInit, TemplateRef, ViewChild} from '@angular/core';
-import { notificationConfig } from '../../../../_constant/notification.constant';
-import { NotificationsService } from 'angular2-notifications';
 import { CookieBannerService } from '../../../../_services/cookie-banner.service';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { OrganizationService } from '../../../../_services';
@@ -29,7 +27,6 @@ export class SetupComponent implements OnInit {
   isOpen = false;
   alertType: any;
   constructor(
-    private notification: NotificationsService,
     private cookieBannerService: CookieBannerService,
     private loading: NgxUiLoaderService,
     private modalService: BsModalService,
@@ -70,7 +67,6 @@ export class SetupComponent implements OnInit {
       }, error => {
         this.loading.stop('2');
         this.loadingSkeleton = false;
-        this.notification.error('Error', error, notificationConfig);
         this.isOpen = true;
         this.alertMsg = error;
         this.alertType = 'danger';
@@ -106,5 +102,9 @@ export class SetupComponent implements OnInit {
   navigate() {
     this.modalRef.hide();
     this.router.navigateByUrl('/cookie-consent/cookie-banner');
+  }
+
+  onClosed(alertMsg: any) {
+
   }
 }
