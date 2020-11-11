@@ -1,64 +1,30 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { HomeComponent } from './home/home.component';
-
 import { JwtInterceptor, fakeBackendProvider, ErrorInterceptor } from './_helpers';
-import { environment } from '../environments/environment';
 import { HeaderComponent } from './_components/layout/header/header.component';
 import { FooterComponent } from './_components/layout/footer/footer.component';
-
-// import { AlertComponent } from './_components';
-
-// import { ForgotpasswordComponent } from './forgotpassword/forgotpassword.component';
-
 import { PagenotfoundComponent } from './errorpages/pagenotfound.component';
 import { InternalerrorComponent } from './errorpages/internalerror.component';
 import { PagenotfoundComponent1 } from './errorpages/404page.component';
 import { AuthenticationService } from './_services';
-import { DragDropModule } from '@angular/cdk/drag-drop';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
-
-import { PropertydashboardComponent } from './propertydashboard/propertydashboard.component';
 import { FeatherModule } from 'angular-feather';
 import { allIcons } from 'angular-feather/icons';
-// import { PricingComponent } from './pricing/pricing.component';
-import { PartnersComponent } from './partners/partners.component';
-import { TermofuseComponent } from './termofuse/termofuse.component';
-import { PrivacypolicyComponent } from './privacypolicy/privacypolicy.component';
-import { CCPAComponent } from './ccpa/ccpa.component';
-// import { VerifyemailComponent } from './verifyemail/verifyemail.component';
-
-import { NgxUiLoaderModule, NgxUiLoaderConfig } from 'ngx-ui-loader';
+import {NgxUiLoaderModule, NgxUiLoaderService} from 'ngx-ui-loader';
 import { ngxUiLoaderConfig } from './_constant/loading.contant';
-import { CheckoutConfirmationComponent } from './checkout-confirmation/checkout-confirmation.component';
-import { MatButtonModule } from '@angular/material/button';
-
-import { SimpleNotificationsModule } from 'angular2-notifications';
 import { WelcomeComponent } from './welcome/welcome.component';
-
-import { SharedbootstrapModule } from './sharedbootstrap/sharedbootstrap.module';
-import { TableModule } from 'primeng/table';
-import { MultiSelectModule } from 'primeng/multiselect';
-import { ChartsModule } from 'ng2-charts';
-import { Ng2ChartJsModules } from 'chartjs-ng2-module';
-import {AccordionModule, TabsModule} from 'ngx-bootstrap';
-
-
-
-export const isMock = environment.mock;
+import { ModalModule } from 'ngx-bootstrap';
+import {NgbCollapseModule} from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
     AppComponent,
-    HomeComponent,
+    // HomeComponent,
     HeaderComponent,
     FooterComponent,
     // AlertComponent,
@@ -66,40 +32,42 @@ export const isMock = environment.mock;
     PagenotfoundComponent,
     InternalerrorComponent,
     PagenotfoundComponent1,
-    PropertydashboardComponent,
+    // PropertydashboardComponent,
    // PricingComponent,
-    PartnersComponent,
-    TermofuseComponent,
-    PrivacypolicyComponent,
-    CCPAComponent,
+   //  PartnersComponent,
+   //  TermofuseComponent,
+   //  PrivacypolicyComponent,
+   //  CCPAComponent,
    // VerifyemailComponent,
-    CheckoutConfirmationComponent,
+   //  CheckoutConfirmationComponent,
     WelcomeComponent
   ],
   imports: [
     BrowserModule,
-    FormsModule,
-    ReactiveFormsModule,
-    SimpleNotificationsModule.forRoot(),
+    // FormsModule,
+    // ReactiveFormsModule,
     HttpClientModule,
     AppRoutingModule,
-    FontAwesomeModule,
-    DragDropModule,
+    // FontAwesomeModule,
+    // DragDropModule,
     BrowserAnimationsModule,
-    SharedbootstrapModule,
+    // SharedbootstrapModule,
     BsDropdownModule.forRoot(),
     CollapseModule.forRoot(),
     FeatherModule.pick(allIcons),
     NgxUiLoaderModule.forRoot(ngxUiLoaderConfig),
-    MatButtonModule,
-    TableModule,
-    MultiSelectModule,
-    ChartsModule,
-    Ng2ChartJsModules,
-    TabsModule.forRoot(),
-    AccordionModule.forRoot()
+    // MatButtonModule,
+    // TableModule,
+    // MultiSelectModule,
+    // ChartsModule,
+    // Ng2ChartJsModules,
+    ModalModule.forRoot(),
+    // TabsModule.forRoot(),
+    // AccordionModule.forRoot(),
+    NgbCollapseModule
   ],
   providers: [
+    NgxUiLoaderService,
     AuthenticationService,
     {
       provide: HTTP_INTERCEPTORS,
@@ -113,11 +81,12 @@ export const isMock = environment.mock;
     },
 
     // provider used to create fake backend
-    fakeBackendProvider
+    fakeBackendProvider,
+
   ],
   bootstrap: [AppComponent],
   exports: [
     // AnalyticsModule,
-    BsDropdownModule, CollapseModule, SimpleNotificationsModule]
+    BsDropdownModule, CollapseModule]
 })
 export class AppModule { }

@@ -55,7 +55,7 @@ export class LoginComponent implements OnInit {
     get f() { return this.loginForm.controls; }
 
     clearError() {
-        this.errorMsg = "";
+        this.errorMsg = '';
     }
 
     onSubmit() {
