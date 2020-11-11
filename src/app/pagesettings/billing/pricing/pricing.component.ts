@@ -1,21 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnDestroy, OnInit, Renderer2} from '@angular/core';
 import { Router } from '@angular/router';
 import { BillingService } from '../../../_services/billing.service';
 import { subscriptionPlan } from '../../../_constant/pricing.contant';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { DataService } from '../../../_services/data.service';
 import { UserService } from '../../../_services';
-import { NotificationsService } from 'angular2-notifications';
-import { not } from 'rxjs/internal-compatibility';
-import { notificationConfig } from '../../../_constant/notification.constant';
 import {moduleName} from '../../../_constant/module-name.constant';
+declare var jQuery: any;
 
 @Component({
   selector: 'app-pricing',
   templateUrl: './pricing.component.html',
   styleUrls: ['./pricing.component.scss']
 })
-export class PricingComponent implements OnInit {
+export class PricingComponent implements OnInit, OnDestroy {
   subscriptionPlan;
   billingCycle = 'MONTHLY';
   subscriptionPlanType = 'CCPA';
@@ -32,7 +30,6 @@ export class PricingComponent implements OnInit {
   constructor(private router: Router,
               private loading: NgxUiLoaderService,
               private dataService: DataService,
-              private notification: NotificationsService,
               private userService: UserService,
               private billingService: BillingService) {
   }
@@ -41,15 +38,21 @@ export class PricingComponent implements OnInit {
     this.onGetUserEmail();
     this.onSetValue();
     this.onGetCurrentPlan();
+    const div = document.querySelector('#main');
+    div.classList.remove('container');
   }
-
+  ngOnDestroy() {
+    const div = document.querySelector('#main');
+    // div.classList.remove('container');
+    div.classList.add('container')
+  }
   onGetUserEmail() {
     this.loading.start();
     this.userService.getLoggedInUserDetails(this.constructor.name, moduleName.pricingModule).subscribe(res => {
       this.loading.stop();
-      const result = res;
-      if (result['status'] === 200) {
-        this.userEmail = result['response']['email'];
+      const result: any = res;
+      if (result.status === 200) {
+        this.userEmail = result.response.email;
       }
     }, error => {
       this.loading.stop();
@@ -78,9 +81,9 @@ export class PricingComponent implements OnInit {
       this.loading.start();
       this.billingService.getSessionId(payloads, this.constructor.name, moduleName.pricingModule).subscribe(res => {
         this.loading.stop();
-        const result = res;
-        if (result['status'] === 200) {
-          plan.sessionId = res['response'];
+        const result: any = res;
+        if (result.status === 200) {
+          plan.sessionId = result.response;
           plan.planType = this.subscriptionPlanType;
           this.dataService.setBillingPlan(plan);
           this.router.navigateByUrl('/settings/billing/pricing/checkout');
@@ -136,7 +139,6 @@ export class PricingComponent implements OnInit {
       this.isOpen = true;
       this.alertMsg = error;
       this.alertType = 'danger';
-      // this.notification.error('Current Plan', 'Something went wrong...', notificationConfig);
     });
   }
 
@@ -161,7 +163,6 @@ export class PricingComponent implements OnInit {
         this.isOpen = true;
         this.alertMsg = 'Your Plan has been Upgraded';
         this.alertType = 'info';
-        //  this.notification.info('Plan Upgraded', 'Your Plan has been Upgraded', notificationConfig);
         this.onGetCurrentPlan();
       }
     }, error => {
@@ -169,7 +170,6 @@ export class PricingComponent implements OnInit {
       this.isOpen = true;
       this.alertMsg = error;
       this.alertType = 'danger';
-    //  this.notification.error('Company Details', 'Something went wrong...', notificationConfig);
     });
   }
 
@@ -177,4 +177,5 @@ export class PricingComponent implements OnInit {
     this.alertMsg = !dismissedAlert;
     this.isOpen = false;
   }
+
 }
