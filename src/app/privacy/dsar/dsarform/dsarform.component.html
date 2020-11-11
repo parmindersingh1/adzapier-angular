@@ -1002,7 +1002,7 @@
         <span class="draftspan">{{showFormStatus()}}</span>
         <!-- <button *ngIf="isResetlinkEnable" class="btn btn-link reset-link">Reset</button> -->
         <span *ngIf="crid" class="previewbtn"><a target="_blank" class="btn btn-xs btn-primary"
-            [disabled]="!isResetlinkEnable" (click)="previewCCPAForm()">Preview</a></span>
+            (click)="previewCCPAForm()">Preview</a></span>
 
     </li>
     </ul>
