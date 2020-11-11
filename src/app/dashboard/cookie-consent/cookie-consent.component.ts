@@ -2,8 +2,6 @@ import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {DashboardService} from '../../_services/dashboard.service';
 import { OrganizationService} from '../../_services';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
-import {NotificationsService} from 'angular2-notifications';
-import {notificationConfig} from '../../_constant/notification.constant';
 import {moduleName} from '../../_constant/module-name.constant';
 interface Country {
   count: number;
@@ -58,7 +56,6 @@ export class CookieConsentComponent implements OnInit {
   private countryColor: any;
   constructor(private dashboardService: DashboardService,
               private orgservice: OrganizationService,
-              private notification: NotificationsService,
               private cd: ChangeDetectorRef,
               private loading: NgxUiLoaderService
   ) { }
@@ -114,7 +111,6 @@ export class CookieConsentComponent implements OnInit {
       }, error => {
         this.loading.stop('1');
         this.loadingSkeleton.one = false;
-        // this.notification.error('Cookie Consent Dashboard',  error, notificationConfig);
         this.isOpen = true;
         this.alertMsg = error;
         this.alertType = 'danger';

@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { ChartJSInterface } from 'chartjs-ng2-module/chart-js-interfaces';
 
 // import { df1 } from './sampledata';
 import { faChrome, faEdge, faFirefox, faSafari, faOpera } from '@fortawesome/free-brands-svg-icons';
@@ -30,7 +29,7 @@ export class AnalyticsComponent {
   // redirect to home if already logged in
 
 
-  public barChartData: ChartJSInterface = {
+  public barChartData = {
     type: 'bar',
     data: {
       labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
@@ -72,7 +71,7 @@ export class AnalyticsComponent {
 
 
 
-  public chartDonut: ChartJSInterface = {
+  public chartDonut = {
     type: 'doughnut',
     data: {
       labels: ['Organic Search', 'Email', 'Referral', 'Social Media'],
@@ -93,7 +92,7 @@ export class AnalyticsComponent {
       }
     }
   };
-  public pieChartData: ChartJSInterface = {
+  public pieChartData = {
     type: 'pie',
     data: {
       labels: ['Download Sales', 'In-Store Sales', 'Mail-Order Sales'],
@@ -107,7 +106,7 @@ export class AnalyticsComponent {
 
 
 
-  public flotChart1scatterChartData: ChartJSInterface = {
+  public flotChart1scatterChartData = {
     type: 'line',
     data: {
       labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
@@ -170,7 +169,7 @@ export class AnalyticsComponent {
   };
 
 
-  public flotChart2scatterChartData: ChartJSInterface = {
+  public flotChart2scatterChartData = {
     type: 'line',
     data: {
       labels: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
@@ -236,7 +235,7 @@ export class AnalyticsComponent {
     }
   };
 
-  public flotChart3ChartData: ChartJSInterface = {
+  public flotChart3ChartData = {
     type: 'bar',
     data: {
       labels: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
@@ -287,7 +286,7 @@ export class AnalyticsComponent {
     }
   };
 
-  public flotChart4ChartData: ChartJSInterface = {
+  public flotChart4ChartData = {
     type: 'bar',
     data: {
       labels: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
@@ -341,7 +340,7 @@ export class AnalyticsComponent {
   };
 
 
-  public flotChart5ChartData: ChartJSInterface = {
+  public flotChart5ChartData = {
     type: 'bar',
     data: {
       labels: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],

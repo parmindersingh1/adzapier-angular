@@ -4,8 +4,6 @@ import { CompanyService } from 'src/app/company.service';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { environment } from 'src/environments/environment';
 import { ActivatedRoute } from '@angular/router';
-import { NotificationsService } from 'angular2-notifications';
-import { notificationConfig } from 'src/app/_constant/notification.constant';
 import {moduleName} from '../../../_constant/module-name.constant';
 
 
@@ -36,7 +34,6 @@ export class UpdateBillingComponent implements OnInit {
   constructor(
     private billingService: BillingService,
     private companyService: CompanyService,
-    private notification: NotificationsService,
     private loading: NgxUiLoaderService,
     private activatedRoute: ActivatedRoute
   ) { }
@@ -74,7 +71,6 @@ export class UpdateBillingComponent implements OnInit {
       this.alertMsg = error;
       this.isOpen = true;
       this.alertType = 'danger';
-     // this.notification.error('Session Id', 'Something went wrong...', notificationConfig);
     });
   }
   onGetCurrentPlan() {
@@ -90,7 +86,6 @@ export class UpdateBillingComponent implements OnInit {
       this.alertMsg = error;
       this.isOpen = true;
       this.alertType = 'danger';
-     // this.notification.error('Current Plan', 'Something went wrong...', notificationConfig);
     });
   }
   onGetCompanyDetails() {
@@ -105,7 +100,6 @@ export class UpdateBillingComponent implements OnInit {
       this.alertMsg = error;
       this.isOpen = true;
       this.alertType = 'danger';
-     // this.notification.error('Company Details', 'Something went wrong...', notificationConfig);
     });
   }
 
@@ -119,8 +113,11 @@ export class UpdateBillingComponent implements OnInit {
         this.alertMsg = error;
         this.isOpen = true;
         this.alertType = 'danger';
-       // this.notification.error('Checkout', error, notificationConfig);
       });
     }
+  }
+
+  onClosed(alertMsg: any) {
+
   }
 }

@@ -1,47 +1,72 @@
+<div style="margin-left: 80px" class="d-sm-flex align-items-center justify-content-between ">
+  <div>
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb breadcrumb-style1 mg-b-10">
+        <li class="breadcrumb-item"><a routerLink="/">Dashboard</a></li>
+        <li class="breadcrumb-item active" aria-current="page">billing</li>
+      </ol>
+    </nav>
+    <h4 class="mg-b-0 mb-4 ml-2 tx-spacing--1">Pricing</h4>
+  </div>
+  <!--    <button id="toggleplan" class="btn btn-primary">Paid/Free</button>-->
+</div>
+<div class="row">
+  <div class="col-md-7"></div>
+  <div class="col-md-5">
+    <span class="mr-2"> Yearly Type </span>
+    <label class="switch">
+      <input (change)="onSelectBillingCycle('YEARLY')" type="checkbox">
+      <span class="slider round"></span>
+    </label>
+  </div>
+</div>
 
-  <div class="container ht-100p tx-center">
+
+  <div class=" ht-100p tx-center">
     <div class="row justify-content-center">
-      <div class="col-10 cmol-sm-6 col-md-4 col-lg-2 d-flex flex-column bg-ui-01 mg-t-100 mg-10 pd-t-30 rounded-10">
 
-        <label>Select Billing Cycle:</label>
-        <div class="btn-group" dropdown>
-          <ng-container *ngIf="!currentPlan || currentPlan.duration == 'month'">
-          <button id="button-basic" dropdownToggle type="button" class="btn btn-default dropdown-toggle"
-                  aria-controls="dropdown-basic">
-            {{billingCycle | titlecase}}<span class="ml-3 caret"></span>
-          </button>
-          </ng-container>
-          <ng-container *ngIf="currentPlan && currentPlan.duration == 'year'">
-            <button type="button" class="btn btn-default dropdown-toggle">
-              {{billingCycle | titlecase}}<span class="ml-3 caret"></span>
-            </button>
-          </ng-container>
+<!--      <div class="col-10 cmol-sm-6 col-md-4 col-lg-2 d-flex flex-column bg-ui-01 mg-t-100 mg-10 pd-t-30 rounded-10">-->
 
-          <ng-container *ngIf="currentPlan.duration == null">
-          <button id="button-basic" dropdownToggle type="button" class="btn btn-default dropdown-toggle"
-                  aria-controls="dropdown-basic">
-            {{billingCycle | titlecase}}<span class="ml-3 caret"></span> </button>
-          </ng-container>
+<!--        <label>Select Billing Cycle:</label>-->
+<!--        <div class="btn-group" dropdown>-->
+<!--          <ng-container *ngIf="!currentPlan || currentPlan.duration == 'month'">-->
+<!--          <button dropdownToggle type="button" class="btn btn-default dropdown-toggle"-->
+<!--                  aria-controls="dropdown-basic">-->
+<!--            {{billingCycle | titlecase}}<span class="ml-3 caret"></span>-->
+<!--          </button>-->
+<!--          </ng-container>-->
+<!--          <ng-container *ngIf="currentPlan && currentPlan.duration == 'year'">-->
+<!--            <button type="button" class="btn btn-default dropdown-toggle">-->
+<!--              {{billingCycle | titlecase}}<span class="ml-3 caret"></span>-->
+<!--            </button>-->
+<!--          </ng-container>-->
+
+<!--          <ng-container *ngIf="currentPlan.duration == null">-->
+<!--          <button id="button-basic" dropdownToggle type="button" class="btn btn-default dropdown-toggle"-->
+<!--                  aria-controls="dropdown-basic">-->
+<!--            {{billingCycle | titlecase}}<span class="ml-3 caret"></span> </button>-->
+<!--          </ng-container>-->
 
 
-          <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu"
-              role="menu" aria-labelledby="button-basic">
-            <li role="menuitem" (click)="onSelectBillingCycle('MONTHLY')" >Monthly Plans</li>
-            <li role="menuitem" (click)="onSelectBillingCycle('YEARLY')">Yearly Plans</li>
-          </ul>
-        </div>
-        <p class="tx-size-20 tx-normal mg-b-30 solution">Customize your solution here </p>
-        <div class="custom-control custom-switch mg-5">
-          <input type="checkbox" class="custom-control-input" checked (change)="$event.target.checked = true" id="customSwitch1">
-          <label class="custom-control-label" for="customSwitch1">CCPA</label>
-        </div>
-        <div class=" custom-control custom-switch mg-5">
-          <input type="checkbox" class="custom-control-input" (change)="onSelectPlanType($event)" id="customSwitch2">
-          <label class="custom-control-label" for="customSwitch2">GDPR</label>
-        </div>
-      </div>
+<!--          <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu"-->
+<!--              role="menu" aria-labelledby="button-basic">-->
+<!--            <li role="menuitem" (click)="onSelectBillingCycle('MONTHLY')" >Monthly Plans</li>-->
+<!--            <li role="menuitem" (click)="onSelectBillingCycle('YEARLY')">Yearly Plans</li>-->
+<!--          </ul>-->
+<!--        </div>-->
+<!--        <p class="tx-size-20 tx-normal mg-b-30 solution">Customize your solution here </p>-->
+<!--        <div class="custom-control custom-switch mg-5">-->
+<!--          <input type="checkbox" class="custom-control-input" checked (change)="$event.target.checked = true" id="customSwitch1">-->
+<!--          <label class="custom-control-label" for="customSwitch1">CCPA</label>-->
+<!--        </div>-->
+<!--        <div class=" custom-control custom-switch mg-5">-->
+<!--          <input type="checkbox" class="custom-control-input" (change)="onSelectPlanType($event)" id="customSwitch2">-->
+<!--          <label class="custom-control-label" for="customSwitch2">GDPR</label>-->
+<!--        </div>-->
+<!--      </div>-->
+      <div class="col-md-8 p-0 row">
       <ng-container *ngFor="let plan of subscriptionPlan">
-        <div class="col-10 col-sm-6 col-md-4 col-lg-2 d-flex flex-column bd  mg-r-10 pd-30 ">
+        <div class="col-10 col-sm-6 col-md-3 d-flex flex-column bd pd-20  " style="      background: #fff;  min-height: 474px;">
           <h3 class="mg-b-25">{{plan.name}}</h3>
           <p class="tx-color-03 mg-b-25">{{plan.summary}}</p>
           <h1 *ngIf="plan.price !==  'Contact Us'" class="tx-rubik tx-normal mg-b-30 mg-t-auto">${{plan.price}}.00</h1>
@@ -57,48 +82,159 @@
           </ng-template>
 
           <!-- <button  (click)="onUpgradePlan(plan)" class="btn btn-primary btn-block">{{plan.button}}</button> -->
-
         </div>
       </ng-container>
-    </div>
+      <div class="mt-3 container row">
+        <div class="card  col-md-12">
+          <div class="card-body">
+            <div class="row mt-4" style="border-bottom: 1px dotted lightgray">
+              <div class="text-left col-md-9">
+                <h5>Cookie Consent Quick Start</h5>
+                <p>Get up and running with minimal effort!</p>
+              </div>
+              <div class="col-md-1">
+                <button type="button" style="border-radius: 21px;" class="btn mt-3 btn-primary btn-lg"><i class="fa fa-plus" aria-hidden="true"></i>
+                </button>
+              </div>
+              <div class="col-md-2">
+                <h4 class="mt-4"><b>$150.00</b></h4>
+              </div>
+            </div>    <div class="row mt-4" style="border-bottom: 1px dotted lightgray">
+              <div class="text-left col-md-9">
+                <h5>Cookie Consent Quick Start</h5>
+                <p>Get up and running with minimal effort!</p>
+              </div>
+              <div class="col-md-1">
+                <button type="button" style="border-radius: 21px;" class="btn mt-3 btn-primary btn-lg"><i class="fa fa-plus" aria-hidden="true"></i>
+                </button>
+              </div>
+              <div class="col-md-2">
+                <h4 class="mt-4"><b>$150.00</b></h4>
+              </div>
+            </div>    <div class="row mt-4" style="border-bottom: 1px dotted lightgray">
+              <div class="text-left col-md-9">
+                <h5>Cookie Consent Quick Start</h5>
+                <p>Get up and running with minimal effort!</p>
+              </div>
+              <div class="col-md-1">
+                <button type="button" style="border-radius: 21px;" class="btn mt-3 btn-primary btn-lg"><i class="fa fa-plus" aria-hidden="true"></i>
+                </button>
+              </div>
+              <div class="col-md-2">
+                <h4 class="mt-4"><b>$150.00</b></h4>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
-    <div class="row table-responsive mg-t-30 ">
-      <h4 class="mg-b-10 align-baseline">Feature comparision</h4>
-      <table class="table ">
-        <tbody>
-        <tr>
-          <th scope="row"></th>
-          <td><div class="rounded-10 pd-y-10 pd-x-20 bg-ui-01">Silver</div></td>
-          <td><div class="rounded-10 pd-y-10 pd-x-20 bg-ui-01">Gold</div></td>
-          <td><div class="rounded-10 pd-y-10 pd-x-20 bg-ui-01">Platinum</div></td>
-          <td><div class="rounded-10 pd-y-10 pd-x-20 bg-ui-01">Enterprise</div></td>
-        </tr>
+        <div class="container row table-responsive mg-t-30 ">
+          <h4 class="mg-b-10 align-baseline">Feature comparison</h4>
+          <table class="table ">
+            <tbody>
+            <tr>
+              <th scope="row"></th>
+              <td><div class="rounded-10 pd-y-10 pd-x-20 bg-ui-01">Silver</div></td>
+              <td><div class="rounded-10 pd-y-10 pd-x-20 bg-ui-01">Gold</div></td>
+              <td><div class="rounded-10 pd-y-10 pd-x-20 bg-ui-01">Platinum</div></td>
+              <td><div class="rounded-10 pd-y-10 pd-x-20 bg-ui-01">Enterprise</div></td>
+            </tr>
 
-        <tr>
-          <th scope="row">Cookie banner</th>
-          <td><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-square tx-primary"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg></td>
-          <td><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-square tx-primary"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg></td>
-          <td><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-square tx-primary"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg></td>
-          <td><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-square tx-primary"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg></td>
-        </tr>
-        <tr>
-          <th scope="row">2</th>
-          <td><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-square tx-primary"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg></td>
-          <td><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-square tx-primary"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg></td>
-          <td><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-square tx-primary"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg></td>
-          <td><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-square tx-primary"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg></td>
-        </tr>
-        <tr>
-          <th scope="row">3</th>
-          <td></td>
-          <td><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-square tx-primary"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg></td>
-          <td><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-square tx-primary"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg></td>
-          <td><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-square tx-primary"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg></td>
-        </tr>
-        </tbody>
-      </table>
+            <tr>
+              <th scope="row">Cookie banner</th>
+              <td><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-square tx-primary"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg></td>
+              <td><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-square tx-primary"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg></td>
+              <td><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-square tx-primary"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg></td>
+              <td><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-square tx-primary"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg></td>
+            </tr>
+            <tr>
+              <th scope="row">2</th>
+              <td><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-square tx-primary"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg></td>
+              <td><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-square tx-primary"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg></td>
+              <td><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-square tx-primary"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg></td>
+              <td><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-square tx-primary"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg></td>
+            </tr>
+            <tr>
+              <th scope="row">3</th>
+              <td></td>
+              <td><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-square tx-primary"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg></td>
+              <td><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-square tx-primary"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg></td>
+              <td><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-square tx-primary"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg></td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+
+
+      </div>
+
+      <div class="col-md-3">
+        <div class="card cart-box ">
+          <div class="card-body">
+            <h3 class="mb-4 text-center">Your Cart</h3>
+
+            <div class="row" style="border-bottom: 1px solid lightgray;">
+              <div style="text-align: left" class="col-md-6">
+                <h5>Cookie Consent</h5>
+                <h6>Types Year</h6>
+              </div>
+              <div class="col-md-6">
+                <h5>$699.00</h5>
+              </div>
+            </div>
+            <div class="row mt-3" style="border-bottom: 1px solid lightgray;">
+              <div style="text-align: left" class="col-md-6">
+                <h5>Cookie Consent</h5>
+                <h6>Types Year</h6>
+              </div>
+              <div class="col-md-6">
+                <h5>$699.00</h5>
+              </div>
+            </div>
+
+            <div class="row mt-3">
+              <div class="col-md-5">
+               <h5 class="pt-2 text-left"> Promo Code</h5>
+              </div>
+              <div class="col-md-7 text-left">
+                <input type="text" class="form-control w-100"  placeholder="Promo Code">
+
+              </div>
+            </div>
+
+              <div class="row mt-3 pt-3" style="border-top: 1px solid lightgray">
+                <div class="col-md-8">
+                  <h5 class="text-left">Subtotal</h5>
+                  <h6 class="text-left">DISCOUNT</h6>
+                </div>
+                <div class="col-md-4">
+                  <h5>$122.00</h5>
+                  <h5>- $12.00</h5>
+                </div>
+
+              </div>
+
+
+            <div class="row mt-3 pt-3" style="border-top: 1px dotted lightgray">
+              <div class="col-md-8">
+                <h5 class="text-left">Total</h5>
+              </div>
+              <div class="col-md-4">
+                <h5>$102.00</h5>
+              </div>
+              <div class="col-md-12">
+                <button type="button" class="pl-5 pr-5 btn-lg btn btn-primary">Checkout</button>
+              </div>
+            </div>
+
+
+          </div>
+        </div>
+      </div>
+
     </div>
   </div><!-- container -->
+
 
   <div class="col-sm-5 mt-3 mr-0 float-right">
     <alert *ngIf="isOpen" [type]="alertType"  dismissOnTimeout="5000" [dismissible]="dismissible" (onClosed)="onClosed(alertMsg)">{{  alertMsg}}</alert>

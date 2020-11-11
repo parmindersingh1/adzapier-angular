@@ -1,11 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {Router} from "@angular/router";
-import {NgxUiLoaderService} from "ngx-ui-loader";
-import {DataService} from "../_services/data.service";
-import {NotificationsService} from "angular2-notifications";
-import {UserService} from "../_services";
-import {BillingService} from "../_services/billing.service";
-import {notificationConfig} from "../_constant/notification.constant";
+import {Router} from '@angular/router';
 import { subscriptionPlan } from '../_constant/pricing.contant';
 
 @Component({
