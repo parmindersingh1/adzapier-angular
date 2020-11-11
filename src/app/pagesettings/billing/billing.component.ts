@@ -1,7 +1,6 @@
 import {Component, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BillingService } from 'src/app/_services/billing.service';
-import { NotificationsService } from 'angular2-notifications';
 import { CompanyService } from 'src/app/company.service';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap';
@@ -33,7 +32,6 @@ export class BillingComponent implements OnInit {
               private router: Router,
               private billingService: BillingService,
               private companyService: CompanyService,
-              private notification: NotificationsService,
               private loading: NgxUiLoaderService,
               private modalService: BsModalService
   ) {
@@ -79,7 +77,6 @@ export class BillingComponent implements OnInit {
       this.isOpen = true;
       this.alertMsg = error;
       this.alertType = 'danger';
-      // this.notification.error('Current Plan', 'Something went wrong...', notificationConfig);
     });
     setTimeout(() => {
       this.loading.stop();
@@ -100,7 +97,6 @@ export class BillingComponent implements OnInit {
       this.isOpen = true;
       this.alertMsg = error;
       this.alertType = 'danger';
-     // this.notification.error('Company Details', 'Something went wrong...', notificationConfig);
     });
   }
 
