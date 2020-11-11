@@ -217,6 +217,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
   logoWidth: number;
   isCodeCopied = false;
   isdraftsubmitted = false;
+  isResetlinkEnable = false;
   constructor(private fb: FormBuilder, private ccpaRequestService: CcparequestService,
               private organizationService: OrganizationService,
               private dsarFormService: DsarformService,
@@ -1607,8 +1608,10 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
 
   showFormStatus(): string {
     if (this.isWebFormPublished && !this.isDraftWebForm) {
+      this.isResetlinkEnable = true;
       return 'Active';
     }
+    this.isResetlinkEnable = false;
     return 'Draft';
   }
 
