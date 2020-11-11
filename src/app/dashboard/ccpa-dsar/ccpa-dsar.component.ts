@@ -11,9 +11,7 @@ import {
 import {OrganizationService} from '../../_services';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
 import {DashboardService} from '../../_services/dashboard.service';
-import {NotificationsService} from 'angular2-notifications';
 import * as moment from 'moment';
-import {df3} from '../sampledata';
 import {moduleName} from '../../_constant/module-name.constant';
 
 declare var jQuery: any;
@@ -143,15 +141,15 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
   currentState = 'usa';
   private countryColor = {};
   private stateColor = {};
-  private countryList = [];
+  public countryList = [];
 
   constructor(
     private orgservice: OrganizationService,
     private loading: NgxUiLoaderService,
     private cd: ChangeDetectorRef,
     private dashboardService: DashboardService,
-    private notification: NotificationsService
   ) {
+
     monkeyPatchChartJsTooltip();
     monkeyPatchChartJsLegend();
   }
@@ -401,7 +399,6 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
           this.isOpen = true;
           this.alertMsg = 'Data not Found...';
           this.alertType = 'info';
-         // this.notification.info('Dashboard', 'Data not Found...', notificationConfig);
         }
       }, error => {
         this.skeletonLoading = false;
@@ -541,7 +538,6 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
         this.isOpen = true;
         this.alertMsg = error;
         this.alertType = 'danger';
-       // this.notification.error('Dashboard', 'Something went wrong...' + error, notificationConfig);
       });
   }
 
