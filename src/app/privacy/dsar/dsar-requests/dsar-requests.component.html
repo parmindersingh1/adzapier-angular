@@ -134,7 +134,7 @@
     </ng-template>
     <ng-template pTemplate="emptymessage" let-columns>
       <tr>
-        <td [attr.colspan]="columns.length">
+        <td [attr.colspan]="columns.length === 5 ? 13 : 8">
           No records found
         </td>
       </tr>

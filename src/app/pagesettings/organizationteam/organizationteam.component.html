@@ -37,7 +37,7 @@
                             <th>ID</th>
                             <th>Name</th>
                             <th>Email</th>
-                            <th>Role</th>
+                            <th>Roles</th>
                             <th>Last Login</th>
                             <th>Resend</th>
                             <th>Action</th>
@@ -57,7 +57,7 @@
                                 {{list.role_name}}
                             </td>
                             <td>
-                                <span class="text-center tx-success"
+                                <span class="text-center"
                                     *ngIf="list.user_last_login === 'Invitation Pending' || list.user_last_login === 'Invitation sent'; else LoginDate">
                                     {{list.user_last_login }}
                                 </span>
