@@ -10,7 +10,7 @@
         </nav>
     </div>
     <div class="shadowdiv">
-        <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs" (navChange)="onNavChange($event)" >
+        <ul ngbNav #nav="ngbNav" (navChange)="onNavChange($event)" [(activeId)]="active" class="nav-tabs">
             <li [ngbNavItem]="1">
                 <a ngbNavLink>1 Basic</a>
                 <ng-template ngbNavContent>
@@ -20,7 +20,7 @@
 
                                 <div class="form-group mb-2">
                                     <label for="formname" class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">Name</label>
-                                    <input type="text" class="form-control" formControlName="formname" name="formname"
+                                    <input type="text" class="form-control" formControlName="formname" name="formname" [attr.disabled]="!isEditingPublishedForm ? '' : null"
                                         [ngClass]="{ 'is-invalid': basicFormSubmitted && stepFormOne.formname.errors }" />
                                     <div *ngIf="basicFormSubmitted && stepFormOne.formname.errors" class="invalid-feedback">
                                         <div *ngIf="stepFormOne.formname.errors.required">Form name is required
@@ -80,12 +80,12 @@
                                                         </span>
                                                     </div>
                                                     <div class="displayflex">
-                                                        <button *ngIf="isCustomControlWithRadioBtn(item)"
+                                                        <button *ngIf="isCustomControlWithRadioBtn(item)" [attr.disabled]="!isEditingPublishedForm ? '' : null"
                                                             class="btn btn-sm btn-outline-primary editbtn"
                                                             (click)="deleteSelectedItem(item)">
                                                             <i class="fa fa-trash" aria-hidden="true"></i>
                                                         </button>
-                                                        <button class="btn btn-sm btn-outline-primary editbtn"
+                                                        <button class="btn btn-sm btn-outline-primary editbtn" [attr.disabled]="!isEditingPublishedForm ? '' : null"
                                                             (click)="editSelectedRow(item)">
                                                             <div><i class="fas fa-pen"></i></div>
                                                         </button>
@@ -98,7 +98,7 @@
                                         <div class="col-sm-12">
                                             <div class="d-flex justify-content-between">
                                                 <div class="p-2" *ngIf="!isAddingFormControl"><button
-                                                        class="btn btn-xs btn-primary" (click)="addingFormControl()">
+                                                        class="btn btn-xs btn-primary" (click)="addingFormControl()" [attr.disabled]="!isEditingPublishedForm ? '' : null">
                                                         Add new</button></div>
                                             </div>
                                         </div>
@@ -111,7 +111,7 @@
                                                         <h5>Create Custom Fields<div>
                                                                 <button type="button"
                                                                     (click)="cancelAddingFormControl()"
-                                                                    class="btn btn-danger">
+                                                                    class="btn btn-danger" [attr.disabled]="!isEditingPublishedForm ? '' : null">
                                                                     <span>&#10006;</span>
                                                                 </button>
                                                             </div>
@@ -361,10 +361,10 @@
                                                     <div class="upload-wrapper" [ngClass]="{'hide':headerlogoBase64,'show':!headerlogoBase64}">
                                                         <p>File Format PNG, JPG or JPEG, Max Size 1MB</p>
                                                 <div class="input-group">
-                                                    <label for="file-upload" class="custom-file-upload btn btn-primary">
+                                                    <label for="file-upload" class="custom-file-upload btn btn-primary" [ngClass]="{'disabled':!isEditingPublishedForm}">
                                                         Upload
                                                     </label>
-                                                    <input type="file" class="custom-file-input"
+                                                    <input type="file" class="custom-file-input" [attr.disabled]="!isEditingPublishedForm ? '' : null"
                                                     formControlName="headerlogo"
                                                     (change)="fileChangeEvent($event)" id="headerlogo">
                                                     
@@ -389,49 +389,7 @@
                                                     </button>
                                                 </div>
                                             </div>
-                                            <!-- <div>
-                                            <label class="col-form-label mb-0" for="name">Add logo URL </label>
-                                            <label class="form-check-label">  Add logo URL </label>
-                                        <div class="input-group form-group">
-                                            <div class="custom-file">
-                                                <input type="file" class="form-control"
-                                                accept=".png,.jpg,jpeg"
-                                                formControlName="headerlogo"
-                                                (change)="fileChangeEvent($event)" id="headerlogo">
-                                                <label class="custom-file-label" for="addlogo">Browse</label>
-                                                    <div class="img-space">
-                                                        <ng-container *ngIf="headerlogoBase64; else elseTemplate">
-                                                            <img [src]="headerlogoBase64" />
-                                                        </ng-container>
-                                                        <ng-template #elseTemplate>                                    
-                                                            <img src="assets/imgs/no_image.png" class="img-responsive">
-                                                        </ng-template>                                
-                                                    </div>
-                                            </div>
-                                        </div>
                                         
-                                            </div> -->
-                                            <!-- <div class="form-group mb-2">
-                                                <div class="form-group pr-0">
-                                                   
-                                                        <input type="file" class="form-control"
-                                                        accept=".png,.jpg,jpeg"
-                                                        formControlName="headerlogo"
-                                                        (change)="fileChangeEvent($event)" id="headerlogo"><br/>
-                                                        <div class="img-space">
-
-                                                            <ng-container *ngIf="headerlogoBase64; else elseTemplate">
-                                                                <img [src]="headerlogoBase64" />
-                                                            </ng-container>
-                                                            <ng-template #elseTemplate>                                    
-                                                                <img src="assets/imgs/no_image.png" class="img-responsive">
-                                                            </ng-template>
-                                    
-                                                        </div>
- 
-                                                    <button class="btn btn-xs btn-primary ml-2">Save logo</button>
-                                                </div>
-                                            </div> -->
                                             </form>
                                         </div>
 
@@ -441,8 +399,8 @@
                                                     <label class="col-form-label-sm tx-10 tx-uppercase tx-medium tx-spacing-1">Header Color</label>
                                                 </div>
                                                 <div class="col-md-7 d-flex color-controlwrapper">
-                                                    <input type="color" [(ngModel)]="headerColor" />
-                                                    <input type="text" class="form-control form-control-sm ml-1"
+                                                    <input type="color" [(ngModel)]="headerColor" [attr.disabled]="!isEditingPublishedForm ? '' : null" />
+                                                    <input type="text" class="form-control form-control-sm ml-1" [attr.disabled]="!isEditingPublishedForm ? '' : null"
                                                     [(ngModel)]="headerColor" />
                                                 </div>
                                                 
@@ -453,9 +411,9 @@
                                                 <div class="col-md-5">
                                                     <label class="col-form-label-sm tx-10 tx-uppercase tx-medium tx-spacing-1">Welcome Text Color</label>
                                                 </div>
-                                                <div class="col-md-7 d-flex color-controlwrapper"><input type="color" class="form-control"
+                                                <div class="col-md-7 d-flex color-controlwrapper"><input type="color" class="form-control" [attr.disabled]="!isEditingPublishedForm ? '' : null"
                                                         [(ngModel)]="welcomeTextColor" />
-                                                        <input type="text" class="form-control form-control-sm ml-1"
+                                                        <input type="text" class="form-control form-control-sm ml-1" [attr.disabled]="!isEditingPublishedForm ? '' : null"
                                                         [(ngModel)]="welcomeTextColor" />
                                                     </div>
                                             </div>
@@ -466,7 +424,7 @@
                                                     <label class="col-form-label-sm tx-10 tx-uppercase tx-medium tx-spacing-1">Welcome Font Size </label>
                                                 </div>
                                                 <div class="col-sm-3 offset-md-4">
-                                                    <input type="number" min="13" max="20"
+                                                    <input type="number" min="13" max="20" [attr.disabled]="!isEditingPublishedForm ? '' : null"
                                                         class="form-control form-control-sm h-75"
                                                         [(ngModel)]="welcomeFontSize" />
                                                 </div>
@@ -478,8 +436,8 @@
                                                     <label class="col-form-label-sm tx-10 tx-uppercase tx-medium tx-spacing-1">Footer Text Color</label>
                                                 </div>
                                                 <div class="col-md-7 d-flex color-controlwrapper">
-                                                    <input type="color" [(ngModel)]="footerTextColor" />
-                                                    <input type="text" class="form-control form-control-sm ml-1"
+                                                    <input type="color" [(ngModel)]="footerTextColor" [attr.disabled]="!isEditingPublishedForm ? '' : null" />
+                                                    <input type="text" class="form-control form-control-sm ml-1" [attr.disabled]="!isEditingPublishedForm ? '' : null"
                                                         [(ngModel)]="footerTextColor" />
                                                 </div>
                                             </div>
@@ -491,7 +449,7 @@
                                                 </div>
                                                 <div class="col-md-3 offset-md-4">
                                                     <input type="number" min="13" max="20"
-                                                        class="form-control form-control-sm h-75"
+                                                        class="form-control form-control-sm h-75" [attr.disabled]="!isEditingPublishedForm ? '' : null"
                                                         [(ngModel)]="footerFontSize" />
                                                 </div>
                                             </div>
@@ -514,7 +472,7 @@
 
                                     <div class="pd-5">
                                         <h6>Welcome Text <span style="float: right;">
-                                                <button type="button" class="btn btn-sm btn-default" data-toggle="modal"
+                                                <button type="button" class="btn btn-sm btn-default" data-toggle="modal" [attr.disabled]="!isEditingPublishedForm ? '' : null"
                                                     (click)="editQuillEditorDataPopup(quillEditorModal,'welcomeText')">
                                                     <i class="fa fa-edit"></i>
                                                 </button>
@@ -522,7 +480,7 @@
                                     </div>
                                     <div class="pd-5">
                                         <h6>Footer Text <span style="float: right;">
-                                                <button type="button" class="btn btn-sm btn-default" data-toggle="modal"
+                                                <button type="button" class="btn btn-sm btn-default" data-toggle="modal" [attr.disabled]="!isEditingPublishedForm ? '' : null"
                                                     (click)="editQuillEditorDataPopup(quillEditorModal,'footerText')">
                                                     <i class="fa fa-edit"></i>
                                                 </button>
@@ -826,7 +784,7 @@
                     <label for="defaultapprover" class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">
                         Default Approver</label>
                     <select class="form-control" name="user" #userselect="ngModel" name="defaultapprover" [(ngModel)]="defaultapprover"
-                        [ngClass]="{ 'is-invalid':  isdraftsubmitted && userselect.invalid && userselect.errors?.required}" required>
+                        [ngClass]="{ 'is-invalid':  isdraftsubmitted && userselect.invalid && userselect.errors?.required}" [attr.disabled]="!isEditingPublishedForm ? '' : null" required>
                         <ng-container *ngFor="let opt of ApproverList">
                             <option *ngIf="opt.user_name !== ' '" [value]="opt.approver_id"
                                 [selected]="opt.approver_id === defaultapprover">
@@ -842,7 +800,7 @@
                 <div class="form-group mg-b-5">
                     <label for="workflow" class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">
                         Select Work flow</label>
-                    <select class="form-control" name="workflow" #workflowselect="ngModel" [(ngModel)]="workflow"
+                    <select class="form-control" name="workflow" #workflowselect="ngModel" [(ngModel)]="workflow" [attr.disabled]="!isEditingPublishedForm ? '' : null"
                         [ngClass]="{ 'is-invalid': isdraftsubmitted && workflowselect.invalid && workflowselect.errors?.required}"
                         required>
                         <ng-container *ngFor="let opt of workFlowList">
@@ -861,13 +819,13 @@
                     <label for="daysleft" class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">Default
                         days to
                         respond</label>
-                    <input type="text" class="form-control" [ngModelOptions]="{standalone: true}"
+                    <input type="text" class="form-control" [ngModelOptions]="{standalone: true}" [attr.disabled]="!isEditingPublishedForm ? '' : null"
                         [(ngModel)]="daysleft">
                 </div>
                 <div class="form-group mg-b-5">
                     <label for="fileupload"
                         class="form-check-label tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">
-                        <input type="checkbox" [checked]="isFileUploadRequired" class="form-check-input"
+                        <input type="checkbox" [checked]="isFileUploadRequired" class="form-check-input" [attr.disabled]="!isEditingPublishedForm ? '' : null"
                             (click)="allowFileupload($event)" />
                         <span class="pad-right-20"> File upload</span>
                     </label>
@@ -876,7 +834,7 @@
                             for="gridCheck1">
                             <input class="form-check-input" name="changeControlType"
                                 [checked]="isFileuploadRequiredField" (change)="onCheckboxChangeUpload($event)"
-                                type="checkbox" id="gridCheck1">
+                                type="checkbox" id="gridCheck1" [attr.disabled]="!isEditingPublishedForm ? '' : null">
                             <span class="pad-right-20 ml-1"> Required </span>
                         </label>
                     </div>
@@ -886,7 +844,7 @@
                         class="form-check-label tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03"
                         class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">
                         <input type="checkbox" [checked]="isEmailVerificationRequired" class="form-check-input"
-                            (click)="allowEmailVerification($event)" />
+                            (click)="allowEmailVerification($event)" [attr.disabled]="!isEditingPublishedForm ? '' : null"/>
                         <span class="pad-right-20"> Email Verificatioin</span>
                     </label>
                 </div>
@@ -895,21 +853,17 @@
                         class="form-check-label tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03"
                         class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">
                         <input type="checkbox" [checked]="isCaptchaVerificationRequired" class="form-check-input"
-                            (click)="allowCaptchaVerification($event)" />
+                            (click)="allowCaptchaVerification($event)" [attr.disabled]="!isEditingPublishedForm ? '' : null"/>
                         <span class="pad-right-20"> Captcha Verificatioin</span>
                     </label>
                 </div>
             </div>
-            <!-- <div class="form-group mg-b-5"><a target="_blank" *ngIf="crid" class="btn btn-secondary sw-btn-prev"
-                        [routerLink]="['/editwebforms',  crid ]">Local Preview</a></div> -->
-
 
             <div class="btn-toolbar sw-toolbar sw-toolbar-bottom justify-content-end mb-2">
                 <div>
                     <button class="btn btn-primary sw-btn-prev mr-2" (click)="onPrevious(2)">Previous</button>
                     <button class="btn btn-primary sw-btn-next mr-2" [disabled]="active === 1"
                         (click)="createDraft()">Next</button>
-                    <!--(click)="nav.select(4)"-->
                 </div>
             </div>
         </ng-template>
@@ -997,11 +951,13 @@
         </ng-template>
     </li>
     <li>
-        <button type="button" *ngIf="crid" type="button" class="btn btn-xs btn-primary publishbtn"
-            (click)="finalPublishDSARForm()">Publish</button>
+        <button type="button" *ngIf="crid" type="button" class="btn btn-xs btn-primary publishbtn" [attr.disabled]="isEditingPublishedForm ? '' : null"
+           (click)="togglePublish()"> {{isResetlinkEnable? 'Edit':'Publish'}}</button>
+
         <span class="draftspan">{{showFormStatus()}}</span>
+        <button *ngIf="isResetlinkEnable" class="btn btn-xs btn-primary reset-link" (click)="resetWebform()">Reset</button>
         <span *ngIf="crid" class="previewbtn"><a target="_blank" class="btn btn-xs btn-primary"
-                (click)="previewCCPAForm()">Preview</a></span>
+            (click)="previewCCPAForm()">Preview</a></span>
 
     </li>
     </ul>
@@ -1046,6 +1002,13 @@
             </form>
         </div>
     </ng-template>
+</ng-template>
+<ng-template #confirmEdit>
+    <div class="modal-body text-center">
+        <p>Do you want to edit published form? You may loose previous data!</p>
+        <button type="button" class="btn btn-xs btn-primary mr-2" (click)="confirmForEditing()">Yes</button>
+        <button type="button" class="btn btn-xs btn-secondary" (click)="decline()">No</button>
+    </div>
 </ng-template>
 <div class="col-sm-5 mr-0 float-right flotingdiv">
     <alert *ngIf="isOpen" [type]="alertType" dismissOnTimeout="5000" [dismissible]="dismissible"

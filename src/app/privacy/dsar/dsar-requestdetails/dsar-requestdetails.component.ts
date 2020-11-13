@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef, Renderer2, TemplateRef, ViewChildren, QueryList,
-  ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+  ChangeDetectionStrategy, ChangeDetectorRef, AfterViewInit, AfterViewChecked, AfterContentChecked } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { OrganizationService } from 'src/app/_services';
 import { DsarRequestService } from 'src/app/_services/dsar-request.service';
@@ -9,7 +9,8 @@ import { WorkflowService } from 'src/app/_services/workflow.service';
 import { CcpadataService } from 'src/app/_services/ccpadata.service';
 import { CCPAFormConfigurationService } from 'src/app/_services/ccpaform-configuration.service';
 import { TypeaheadMatch } from 'ngx-bootstrap/typeahead/typeahead-match.class';
-import { BsDatepickerConfig, BsDatepickerDirective, BsDaterangepickerDirective, BsModalRef, BsModalService } from 'ngx-bootstrap';
+import {  BsModalRef, BsModalService } from 'ngx-bootstrap';
+import { BsDatepickerDirective, BsDaterangepickerDirective, DatePickerComponent } from 'ngx-bootstrap/datepicker';
 import { Observable } from 'rxjs';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { TablePaginationConfig } from 'src/app/_models/tablepaginationconfig';
@@ -20,7 +21,7 @@ import { formatDate } from '@angular/common';
   templateUrl: './dsar-requestdetails.component.html',
   styleUrls: ['./dsar-requestdetails.component.scss']
 })
-export class DsarRequestdetailsComponent implements OnInit {
+export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, AfterViewChecked {
   @ViewChild('toggleDayleftdiv', { static: true }) toggleDayleftdiv: ElementRef;
   @ViewChild('btnDaysLeft', { static: true }) btnDaysLeft: ElementRef;
   @ViewChild('customDaysInput', { static: false }) customDaysInput: ElementRef;
@@ -28,10 +29,14 @@ export class DsarRequestdetailsComponent implements OnInit {
   @ViewChild('filePreview', { static: true }) filePreview: ElementRef;
   @ViewChild('panel', { static: true }) public panel: ElementRef<any>;
   @ViewChild('dp', { static: false }) datepicker: BsDaterangepickerDirective;
-  bsConfig: Partial<BsDatepickerConfig>;
+ // bsConfig: Partial<BsDatepickerConfig>;
   @ViewChild('confirmDeleteTemplate', { static: false }) confirmDeleteModal: TemplateRef<any>;
   @ViewChildren('stageContent') workflowStageContent: QueryList<ElementRef>;
-  @ViewChild('dateControlTemplate', { static: true }) public dateControlTemplate: BsDatepickerDirective;
+  // @ViewChild('dateControlTemplate', { static: true }) public dateControlTemplate: DatePickerComponent;
+  // @ViewChild('dp', { static: false }) public dateControlTemplate: QueryList<ElementRef>;
+//  @ViewChild('dp', { static: true }) dp: BsDatepickerDirective;
+  @ViewChild('dp', {static: true}) dp: ElementRef;
+
 
   confirmationForm: FormGroup;
   modalRef: BsModalRef;
@@ -122,6 +127,7 @@ export class DsarRequestdetailsComponent implements OnInit {
   totalCount: any;
   minDate: Date;
   maxDate: Date;
+  reminderMaxDate: Date;
   uploadFilename: any;
   selectedAssignee: any;
   isEditSubTask: boolean = false;
@@ -192,6 +198,7 @@ export class DsarRequestdetailsComponent implements OnInit {
   }
 
   ngOnInit() {
+    console.log(this.dp,'dp..');
     this.activatedRoute.paramMap.subscribe(params => {
       this.requestID = params.get('id');
     });
@@ -1059,7 +1066,11 @@ export class DsarRequestdetailsComponent implements OnInit {
 
   onResetSubTask() {
     this.isAddSubTaskSubmit = false;
-    this.bsValue = null;
+   // this.bsValue = null;
+    // this.dateControlTemplate.bsValueChange.subscribe((data) => {
+    //   console.log(data,'data.');
+    //   this.bsValue = null;
+    // });
     this.subTaskForm.reset();
     this.modalService.dismissAll('Canceled');
   }
@@ -1316,6 +1327,7 @@ export class DsarRequestdetailsComponent implements OnInit {
         this.alertMsg = data.response;
         this.isOpen = true;
         this.alertType = 'success';
+        this.router.navigate(['privacy/dsar/dsar-requests']);
       }, (err) => {
         this.alertMsg = 'error';
         this.isOpen = true;
@@ -1383,6 +1395,20 @@ export class DsarRequestdetailsComponent implements OnInit {
 
   }
 
+  ngAfterViewInit(){
+    console.log('viewinit');
+    console.log(this.dp);
+  }
+
+  ngAfterViewChecked() {
+    console.log('viewchecked');
+    console.log(this.dp);
+    console.log(this.bsValue,'bsvalue');
+  }
+
+  // ngAfterContentChecked(){
+  //  this.dateControlTemplate.nativeElement.bsValue = null;
+  // }
 }
 
 
