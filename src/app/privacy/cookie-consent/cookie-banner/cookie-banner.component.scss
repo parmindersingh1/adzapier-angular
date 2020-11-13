@@ -7,8 +7,17 @@
 .card {
   margin-bottom: 30px;
 }
+::ng-deep .p-multiselect {
+  width: 100%;
+  padding: 2px;
+  position: static;
+  padding-left: 5px;
+}
 ::ng-deep  .p-accordion .p-accordion-header .p-accordion-header-link {
   background: #ffffff !important;
+}
+.checkbox ::ng-deep {
+
 }
 .white-back{
   background: #fff;
