@@ -30,7 +30,6 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
   selector: 'app-cookie-banner',
   templateUrl: './cookie-banner.component.html',
   styleUrls: ['./cookie-banner.component.scss'],
-  encapsulation: ViewEncapsulation.Emulated
 })
 export class CookieBannerComponent implements OnInit {
   panelOpenState = false;
@@ -88,7 +87,6 @@ export class CookieBannerComponent implements OnInit {
 
   cookieBannerForm: FormGroup;
   submitted = true;
-  cities1: any[];
 
   ngOnInit() {
     // window.scroll(0, 500)
@@ -637,32 +635,33 @@ export class CookieBannerComponent implements OnInit {
         PurposeBody: [
           {
             id : 1,
+            purposeId : IabPurposeIds.essentiial,
+            title: this.formContent.NecessaryText,
+            heading: this.cookieBannerForm.value.PopUpNecessaryHeading,
+            description: this.cookieBannerForm.value.PopUpNecessaryDescription
+          },
+          {
+            id : 2,
             purposeId : IabPurposeIds.advertising,
             title: this.formContent.AdvertisingText,
             heading: this.cookieBannerForm.value.PopUpAdvertisingHeading,
             description: this.cookieBannerForm.value.PopUpAdvertisingDescription
           },
           {
-            id : 2,
+            id : 3,
             purposeId : IabPurposeIds.socialMedia,
             title: this.formContent.SocialMediaText,
             heading: this.cookieBannerForm.value.PopUpSocialMediaHeading,
             description: this.cookieBannerForm.value.PopUpSocialMediaDescription
           },
           {
-            id : 3,
+            id : 4,
             purposeId : IabPurposeIds.analytics,
             title: this.formContent.AnalyticsText,
             heading: this.cookieBannerForm.value.PopUpAnalyticsHeading,
             description: this.cookieBannerForm.value.PopUpAnalyticsDescription
           },
-          {
-            id : 4,
-            purposeId : IabPurposeIds.essentiial,
-            title: this.formContent.NecessaryText,
-            heading: this.cookieBannerForm.value.PopUpNecessaryHeading,
-            description: this.cookieBannerForm.value.PopUpNecessaryDescription
-          }
+
         ],
       },
     };

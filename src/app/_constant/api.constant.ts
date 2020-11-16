@@ -22,6 +22,7 @@ export const apiConstant = {
   // Billing
   BILLING_CANCEL_PLAN: '/billing/cancel/subscription',
   BILLING_UPGRADE_PLAN: '/billing/upgrade/plan',
+  BILLING_CURRENT_PLAN_DETAILS: '/billing/plan',
   BILLING_CURRENT_PLAN_INFO: '/billing/current/plan',
   BILLING_CREATE_SESSION_ID: '/billing/checkout/session',
   BILLING_UPDATE_SESSION_ID: '/billing/update/card/session',

@@ -213,8 +213,8 @@ export const BannerConstant = {
 };
 
 export const IabPurposeIds = {
+  essentiial: [],
   advertising: [3, 4],
   socialMedia: [1, 2],
   analytics: [5, 6],
-  essentiial: [7, 8]
 }

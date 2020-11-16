@@ -11,6 +11,10 @@
             <div class="row">
               <div class="col-md-4">
                 <button type="button"
+                        (click)="onSelectPurpose(formData.NecessaryText)"
+                        [ngStyle]="{color: formData.popUpPurposeButtonTextColor, background: formData.popUpPurposeButtonBackGroundColor}"
+                        class="btn btn-default purpose-btn w-100 mb-2">{{formData.NecessaryText}}</button>
+                <button type="button"
                   (click)="onSelectPurpose(formData.AdvertisingText)"
                   [ngStyle]="{color: formData.popUpPurposeButtonTextColor, background: formData.popUpPurposeButtonBackGroundColor}"
                   class="btn btn-default purpose-btn w-100 mb-2">{{formData.AdvertisingText}}</button>
@@ -22,13 +26,24 @@
                 (click)="onSelectPurpose(formData.AnalyticsText)"
                   [ngStyle]="{color: formData.popUpPurposeButtonTextColor, background: formData.popUpPurposeButtonBackGroundColor}"
                   class="btn btn-default purpose-btn w-100 mb-2">{{formData.AnalyticsText}}</button>
-                <button type="button"
-                (click)="onSelectPurpose(formData.NecessaryText)"
-                  [ngStyle]="{color: formData.popUpPurposeButtonTextColor, background: formData.popUpPurposeButtonBackGroundColor}"
-                  class="btn btn-default purpose-btn w-100 mb-2">{{formData.NecessaryText}}</button>
+
               </div>
               <div class="col-md-8">
-
+                <ng-container *ngIf="currentPurpose === formData.NecessaryText">
+                  <div class="row">
+                    <div class="col-md-9">
+                      <h6> {{formData.PopUpNecessaryHead}} </h6>
+                    </div>
+                    <div class="col-md-3">
+                      <label class="switch">
+                        <input type="checkbox" #switchBtn checked>
+                        <span [ngStyle]="{background: switchBtn.checked ? formData.popUpSwitchButtonColor: ''}"
+                              class="slider round"></span>
+                      </label>
+                    </div>
+                  </div>
+                  <p class="desc">{{formData.PopUpNecessaryDescription}}</p>
+                </ng-container>
                 <ng-container *ngIf="currentPurpose === formData.AdvertisingText">
                 <div class="row">
                   <div class="col-md-9">
@@ -81,21 +96,7 @@
 
 
 
-                    <ng-container *ngIf="currentPurpose === formData.NecessaryText">
-                      <div class="row">
-                        <div class="col-md-9">
-                          <h6> {{formData.PopUpNecessaryHead}} </h6>
-                        </div>
-                        <div class="col-md-3">
-                          <label class="switch">
-                            <input type="checkbox" #switchBtn checked>
-                            <span [ngStyle]="{background: switchBtn.checked ? formData.popUpSwitchButtonColor: ''}"
-                              class="slider round"></span>
-                          </label>
-                        </div>
-                      </div>
-                      <p class="desc">{{formData.PopUpNecessaryDescription}}</p>
-                      </ng-container>
+
 
 
 

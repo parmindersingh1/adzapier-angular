@@ -177,8 +177,8 @@ tr.row-disabled > td > a {
 }
 
 ::ng-deep .p-multiselect {
-  position: absolute !important;
-  width: 200px !important;
+  position: absolute;
+  width: 200px;
 }
 
 ::ng-deep .p-datatable.p-datatable-sm .p-datatable-header {
@@ -247,7 +247,7 @@ tr.row-disabled > td > a {
   color: #fff !important;
 }
 // ::ng-deep .p-multiselect-filter-container > .pi {
-//   font-size: 0.6rem; 
+//   font-size: 0.6rem;
 // }
 
 .linkcolor {
