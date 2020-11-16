@@ -108,7 +108,7 @@
       </div>
     </div><!-- col -->
 
-<!-- 
+<!--
     <div *ngIf="skeletonLoading" class="col-md-12 pt-3 card">
       <div class="card-body">
         <ngx-skeleton-loader count="3"></ngx-skeleton-loader>
@@ -207,10 +207,10 @@
             <div id="vmap" *ngIf="currentState === 'usa'" class="ht-200"></div>
             <div id="worldMap" *ngIf="currentState !== 'usa'" class="ht-200"></div>
           </div>
-         
-          
-        
-          <div *ngIf="currentState === 'usa'" class="table-responsive state-count-list">
+
+
+
+          <div *ngIf="currentState === 'usa' && stateList.length > 0" class="table-responsive state-count-list">
             <table class="table table-borderless table-dashboard table-dashboard-one">
               <thead>
               <tr>
@@ -219,7 +219,7 @@
               </tr>
               </thead>
               <tbody>
-              <tr *ngFor="let state of stateList | slice:0:6">
+              <tr *ngFor="let state of stateList">
                 <td class="tx-medium">{{state.statename}}</td>
                 <td class="">{{state.count}}</td>
               </tr>
@@ -229,7 +229,7 @@
 
 
 
-          <div *ngIf="currentState !== 'usa'" class="table-responsive state-count-list">
+          <div *ngIf="currentState !== 'usa' && countryList.length > 0" class="table-responsive state-count-list">
             <table class="table table-borderless table-dashboard table-dashboard-one">
               <thead>
               <tr>
@@ -238,7 +238,7 @@
               </tr>
               </thead>
               <tbody>
-              <tr *ngFor="let countryData of countryList | slice:0:6">
+              <tr *ngFor="let countryData of countryList">
                 <td class="tx-medium">{{countryData.countryname}}</td>
                 <td class="">{{countryData.count}}</td>
               </tr>

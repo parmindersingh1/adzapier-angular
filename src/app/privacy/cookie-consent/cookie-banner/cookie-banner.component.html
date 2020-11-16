@@ -53,9 +53,9 @@
 
     <div class="row">
       <div class="w-100">
-        <h2 class="mat-h2">
+        <h4 class="mat-h2">
           Configure your Banner
-        </h2>
+        </h4>
         <div class="card">
           <div class="card-body">
             <div [ngStyle]="{display: skeletonLoading ? 'none': ''}" class="row">
@@ -87,7 +87,7 @@
                   <label for="sel1"
                          class="tx-13 tx-medium pb-0 tx-spacing-1 tx-color-03 tx-uppercase col-sm-12  col-form-label">GDPR Target:</label>
                   <div class="col-sm-12">
-                    <p-multiSelect [disabled]="gdprGlobal.checked ? true : false" [ngClass]="{ 'is-invalid': submitted && f.gdprTarget.errors }"
+                    <p-multiSelect class="gdprSelect" [disabled]="gdprGlobal.checked ? true : false" [ngClass]="{ 'is-invalid': submitted && f.gdprTarget.errors }"
                                    formControlName="gdprTarget" [style]="{'width':'100%'}" [options]="gdprTarget" ></p-multiSelect>
                     <div *ngIf="submitted && f.gdprTarget.errors">
                       <div class="text-danger mt-2" *ngIf="f.gdprTarget.errors.required">
@@ -112,7 +112,7 @@
 
                 <div class="row">
                   <div class="col-md-2">
-                    <p-checkbox binary="true" class="pt-1" formControlName="showBadge"></p-checkbox>
+                    <p-checkbox binary="true" class="pt-1 checkbox" formControlName="showBadge"></p-checkbox>
                   </div>
                   <div class="col-md-10">
                     <label class="tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase col-sm-12  col-form-label">
@@ -839,6 +839,38 @@
                     <div class="col-md-12 mt-3 mb-2">
                       <h6 class="mb-4"> Purpose Content</h6>
                     </div>
+
+
+                    <p-accordionTab [header]="formContent.NecessaryText">
+                      <h6>Title</h6>
+                      <input type="text" [attr.disabled]="isFieldDisabled" class="form-control input-sm w-100"
+                             formControlName="PopUpNecessaryHeading" [(ngModel)]="formContent.PopUpNecessaryHead"
+                             [placeholder]="formContent.PopUpNecessaryHead">
+                      <div *ngIf="submitted && f.PopUpAdvertisingHeading.errors">
+                        <div class="text-danger mt-2" *ngIf="f.PopUpAdvertisingHeading.errors.minlength">
+                          Minimum 2 characters required
+                        </div>
+                        <div class="text-danger mt-2" *ngIf="f.PopUpAdvertisingHeading.errors.maxlength">
+                          Maximum 50 characters required
+                        </div>
+                      </div>
+                      <br>
+
+                      <h6>Description</h6>
+                      <textarea [attr.disabled]="isFieldDisabled" class="form-control input-sm w-100" rows="3"
+                                formControlName="PopUpNecessaryDescription" [(ngModel)]="formContent.PopUpNecessaryDescription"
+                                [placeholder]="formContent.PopUpNecessaryDescription"></textarea>
+                      <div *ngIf="submitted && f.PopUpNecessaryDescription.errors">
+                        <div class="text-danger mt-2" *ngIf="f.PopUpNecessaryDescription.errors.minlength">
+                          Minimum 20 characters required
+                        </div>
+                        <div class="text-danger mt-2" *ngIf="f.PopUpNecessaryDescription.errors.maxlength">
+                          Maximum 300 characters required
+                        </div>
+                      </div>
+                    </p-accordionTab>
+
+
                     <p-accordionTab [header]="formContent.AdvertisingText">
                       <h6>Title</h6>
                       <input type="text" [attr.disabled]="isFieldDisabled" class="form-control input-sm w-100"
@@ -930,34 +962,7 @@
 
 
 
-                    <p-accordionTab [header]="formContent.NecessaryText">
-                      <h6>Title</h6>
-                      <input type="text" [attr.disabled]="isFieldDisabled" class="form-control input-sm w-100"
-                        formControlName="PopUpNecessaryHeading" [(ngModel)]="formContent.PopUpNecessaryHead"
-                        [placeholder]="formContent.PopUpNecessaryHead">
-                      <div *ngIf="submitted && f.PopUpAdvertisingHeading.errors">
-                        <div class="text-danger mt-2" *ngIf="f.PopUpAdvertisingHeading.errors.minlength">
-                          Minimum 2 characters required
-                        </div>
-                        <div class="text-danger mt-2" *ngIf="f.PopUpAdvertisingHeading.errors.maxlength">
-                          Maximum 50 characters required
-                        </div>
-                      </div>
-                      <br>
 
-                      <h6>Description</h6>
-                      <textarea [attr.disabled]="isFieldDisabled" class="form-control input-sm w-100" rows="3"
-                        formControlName="PopUpNecessaryDescription" [(ngModel)]="formContent.PopUpNecessaryDescription"
-                        [placeholder]="formContent.PopUpNecessaryDescription"></textarea>
-                      <div *ngIf="submitted && f.PopUpNecessaryDescription.errors">
-                        <div class="text-danger mt-2" *ngIf="f.PopUpNecessaryDescription.errors.minlength">
-                          Minimum 20 characters required
-                        </div>
-                        <div class="text-danger mt-2" *ngIf="f.PopUpNecessaryDescription.errors.maxlength">
-                          Maximum 300 characters required
-                        </div>
-                      </div>
-                    </p-accordionTab>
                   </p-accordion>
                 </div>
               </div>
