@@ -5,6 +5,7 @@ import { LoginRoutingModule } from './login-routing.module';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 // import {AlertModule} from 'ngx-bootstrap';
 import { SharedbootstrapModule } from '../sharedbootstrap/sharedbootstrap.module';
+// import {AlertConfig, AlertModule} from 'ngx-bootstrap';
 
 
 
@@ -18,6 +19,7 @@ import { SharedbootstrapModule } from '../sharedbootstrap/sharedbootstrap.module
    // AlertModule,
     SharedbootstrapModule,
     // NgxPasswordToggleModule
-  ]
+  ],
+  providers: []
 })
 export class LoginModule { }

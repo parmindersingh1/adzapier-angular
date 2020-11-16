@@ -29,7 +29,7 @@ export class CookieCategoryComponent implements OnInit {
     one: false,
     two: false
   };
-
+  purposeTotalCount = 0;
   public chartType: string = 'doughnut';
   public chartLabels: Array<string> = [];
   public chartData: Array<number> = [];
@@ -214,6 +214,7 @@ export class CookieCategoryComponent implements OnInit {
 
 
   openNew() {
+    this.addCookieForm.reset();
     this.isUpdate = false;
     this.cookieCategory = {};
     this.submitted = false;
@@ -234,6 +235,7 @@ export class CookieCategoryComponent implements OnInit {
       if (res.status === 200) {
         this.categoryChart = res.response;
         this.categoryChart.forEach( (element, index) => {
+          this.purposeTotalCount += element.count;
           return element.color = colorCodes[index];
         });
         this.onSetUpPieChartData(res.response);
@@ -268,26 +270,25 @@ export class CookieCategoryComponent implements OnInit {
     this.chartLabels = key;
     this.chartData = val;
     this.cd.detectChanges();
-      console.log('chart', this.chartLabels)
-      console.log('chart', this.chartData)
     }
   }
 
   onSetUpTypeChartData(chartData) {
-    console.log('chartData', chartData)
-    if(chartData.length > 0) {
+    if (chartData.length > 0) {
       const val = [];
       const key = [];
       for (const data of chartData) {
         val.push(data.count);
-        key.push(data.type);
+        console.log('data.type', data.type);
+        if (!data.type) {
+          key.push('Unknown');
+        } else {
+          key.push(data.type);
+        }
       }
       this.chartTypeLabels = key;
       this.chartTypeData = val;
-      console.log()
       this.cd.detectChanges();
-      console.log('chart', this.chartLabels)
-      console.log('chart', this.chartData)
     }
   }
 
