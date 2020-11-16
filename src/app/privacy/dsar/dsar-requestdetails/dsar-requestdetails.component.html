@@ -597,7 +597,7 @@
         </button>
     </div>
     <!-- {{requestDetailsbyId | json}} -->
-    <form [formGroup]="subTaskForm" (ngSubmit)="onSubmitAddSubTask()">
+   <form #subTaskForm="ngForm" (ngSubmit)="onSubmitAddSubTask(subTaskForm)">
         <div class="modal-body">
             <div class="row">
                 <div class="col-sm-12">
@@ -605,8 +605,9 @@
                         <label for="defaultapprover"
                             class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">
                             Assignee</label>
-                        <select class="form-control" name="user" formControlName="assignee"
-                            [ngClass]="{ 'is-invalid': isAddSubTaskSubmit && addsubTask.assignee?.errors }" required>
+                        <select class="form-control" name="assignee" [(ngModel)]="subTaskFields.assignee" #assignee="ngModel"
+                        [ngClass]="{ 'is-invalid': assignee.invalid && subTaskForm.submitted }"
+                              required>
                             <ng-container *ngFor="let opt of ApproverList">
                                 <option *ngIf="opt.user_name !== ' '" [value]="opt.approver_id"
                                     [selected]="opt.approver_id === selectedAssignee">
@@ -615,11 +616,10 @@
                             </ng-container>
 
                         </select>
-
-                        <div *ngIf="isAddSubTaskSubmit && addsubTask.assignee.errors" class="invalid-feedback">
-                            <div *ngIf="addsubTask.assignee.errors.required">Sub Task Name is
-                                required</div>
+                        <div *ngIf="assignee.invalid && subTaskForm.submitted" class="invalid-feedback">
+                            <div *ngIf="assignee?.errors.required">Assignee is required</div>
                         </div>
+                         
                     </div>
                 </div>
             </div>
@@ -628,12 +628,11 @@
                     <div class="form-group">
                         <label for="subtaskname"
                             class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">Sub Task Name</label>
-                        <input type="text" class="form-control" formControlName="subtaskname"
-                            [ngClass]="{ 'is-invalid': isAddSubTaskSubmit && addsubTask.subtaskname?.errors }"
+                        <input type="text" class="form-control" name="name" [(ngModel)]="subTaskFields.name"  #name="ngModel"
+                        [ngClass]="{ 'is-invalid': name.invalid && subTaskForm.submitted }"
                             required />
-                        <div *ngIf="isAddSubTaskSubmit && addsubTask.subtaskname?.errors" class="invalid-feedback">
-                            <div *ngIf="addsubTask.subtaskname?.errors.required">Sub Task Name is
-                                required</div>
+                        <div *ngIf="name.invalid && subTaskForm.submitted" class="invalid-feedback">
+                            <div *ngIf="name?.errors.required">Sub Task Name is  required</div>
                         </div>
                     </div>
                 </div>
@@ -644,12 +643,13 @@
                     <label for="subtaskdescription"
                         class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">
                         Sub task description</label>
-                    <textarea class="form-control" formControlName="subtaskdescription"
-                        [ngClass]="{ 'is-invalid': isAddSubTaskSubmit && addsubTask.subtaskdescription?.errors }"
+                    <textarea class="form-control" name="description" [(ngModel)]="subTaskFields.description"
+                    #description="ngModel" 
+                        [ngClass]="{ 'is-invalid': description.invalid && subTaskForm.submitted }"
                         required>
                         </textarea>
-                    <div *ngIf="isAddSubTaskSubmit && addsubTask.subtaskdescription?.errors" class="invalid-feedback">
-                        <div *ngIf="addsubTask.subtaskdescription?.errors.required">Subtask description is required
+                    <div *ngIf="description.invalid && subTaskForm.submitted" class="invalid-feedback">
+                        <div *ngIf="description?.errors.required">Subtask description is required
                         </div>
                     </div>
                 </div>
@@ -660,13 +660,10 @@
                     <div class="form-check">
                         <label for="issubtaskrequired"
                             class="form-check-label tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">
-                            <input type="checkbox" class="form-check-input" formControlName="issubtaskrequired" />
+                            <input type="checkbox" class="form-check-input" [(ngModel)]="subTaskFields.required" name="required" />
                             <span>Is Required</span>
                         </label>
                     </div>
-                    <!-- <div *ngIf="isAddSubTaskSubmit && addsubTask.issubtaskrequired.errors" class="invalid-feedback">
-                        <div *ngIf="addsubTask.issubtaskrequired.errors.required">Checkbox is required</div>
-                    </div> -->
                 </div>
             </div>
             <div class="row">
@@ -674,14 +671,15 @@
                     <label for="subtaskdescription"
                         class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">
                         Deadline</label>
-                    <input formControlName="deadline" type="text"
-                        [ngClass]="{ 'is-invalid': isAddSubTaskSubmit && addsubTask.deadline.errors }"
-                        class="form-control" bsDatepicker #dateControlTemplate (bsValueChange)="onValueChange($event)"
+                    <input name="deadline" type="text" [(ngModel)]="subTaskFields.deadline" #deadline="ngModel"
+                        [ngClass]="{ 'is-invalid': deadline.invalid && subTaskForm.submitted }" autocomplete="off"
+                        class="form-control" #dp="bsDatepicker" bsDatepicker (bsValueChange)="onValueChange($event)"
                         [maxDate]="subtaskDeadlineDate"
-                        [bsConfig]="{ dateInputFormat: 'MM-DD-YYYY',  returnFocusToInput: true }"
-                        [bsValue]="bsValue" required />
-                    <div *ngIf="isAddSubTaskSubmit && addsubTask.deadline.errors" class="invalid-feedback">
-                        <div *ngIf="addsubTask.deadline?.errors.required">Deadline date is required</div>
+                        [bsConfig]="{ dateInputFormat: 'MM-DD-YYYY',  adaptivePosition: true, returnFocusToInput: true, selectFromOtherMonth: true }"
+                        [(bsValue)]="subTaskFields.deadline" required />
+                    
+                    <div *ngIf="deadline.valid && subTaskForm.submitted " class="invalid-feedback">
+                        <div *ngIf="subTaskForm.deadline?.errors.required">Deadline date is required</div>
                     </div>
                 </div>
             </div>
@@ -691,8 +689,10 @@
                     <label for="subtaskdescription"
                         class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">
                         Reminder </label>
-                   <input formControlName="reminder" class="form-control"  bsDatepicker [maxDate]="maxDate" type="text"
-                [bsConfig]="{ dateInputFormat: 'MM-DD-YYYY',  returnFocusToInput: true }" [minDate]="minDate" [bsValue]="bsValue" />
+                   <input name="reminder" [(ngModel)]="subTaskFields.reminder"   #reminder="ngModel" class="form-control" autocomplete="off"
+                   #dp="bsDatepicker" bsDatepicker (bsValueChange)="onValueChange($event)" [maxDate]="maxDate" type="text"
+                [bsConfig]="{ dateInputFormat: 'MM-DD-YYYY', adaptivePosition: true, selectFromOtherMonth: true, returnFocusToInput: true }"
+                 [minDate]="minDate" [bsValue]="bsValue" />
                 </div>
             </div>
 
@@ -701,7 +701,6 @@
             <button type="button" class="btn btn-white tx-13" (click)="onResetSubTask()">Cancel</button>
             <button class="btn btn-primary tx-13" type="submit">Save</button>
         </div>
-
     </form>
 </ng-template>
 

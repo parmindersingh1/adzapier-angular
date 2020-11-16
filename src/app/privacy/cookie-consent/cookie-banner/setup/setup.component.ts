@@ -4,7 +4,7 @@ import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { OrganizationService } from '../../../../_services';
 import { Location } from '@angular/common';
 import {moduleName} from '../../../../_constant/module-name.constant';
-import {BsModalRef, BsModalService} from 'ngx-bootstrap';
+import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
 import {Router} from '@angular/router';
 
 @Component({
