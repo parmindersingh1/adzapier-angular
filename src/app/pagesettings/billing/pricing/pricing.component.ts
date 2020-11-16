@@ -7,8 +7,9 @@ import { DataService } from '../../../_services/data.service';
 import { UserService } from '../../../_services';
 import {moduleName} from '../../../_constant/module-name.constant';
 import any = jasmine.any;
+import {environment} from '../../../../environments/environment';
 declare var jQuery: any;
-class PlanDetails{
+class PlanDetails {
   addons: any[];
   monthly: any[];
   yearly: any[];
@@ -23,6 +24,7 @@ export class PricingComponent implements OnInit, OnDestroy {
   planDetails: PlanDetails =  new PlanDetails();
   subscriptionList = [];
   billingCycle = 'monthly';
+  stripe = (window as any).Stripe(environment.stripePublishablekey);
   cartItem = [];
   // subscriptionPlanType = 'CCPA';
   subTotal = 0;
@@ -68,7 +70,7 @@ export class PricingComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     const div = document.querySelector('#main');
     // div.classList.remove('container');
-    div.classList.add('container')
+    div.classList.add('container');
   }
   onGetUserEmail() {
     this.loading.start();
@@ -84,13 +86,17 @@ export class PricingComponent implements OnInit, OnDestroy {
     });
   }
 
-  onSelectPlan(plan) {
+  onSelectPlan() {
+    const plans = [];
+    for (const pricing of this.cartItem) {
+      plans.push({plan_id : pricing.id, units: pricing.unit});
+    }
+    console.log('plan', plans);
     if (this.userEmail) {
-
       let payloads = {};
-        payloads = {
-          service: [this.currentPlan.services.CCPA.key],
-          plan: plan.plan,
+      payloads = {
+          service: ['20689404-f553-4b22-9636-2873b4a7ad4e'],
+          plan_details: plans,
           email: this.userEmail
         };
       // console.log(this.billingCycle, this.subscriptionPlanType);
@@ -99,10 +105,7 @@ export class PricingComponent implements OnInit, OnDestroy {
         this.loading.stop();
         const result: any = res;
         if (result.status === 200) {
-          plan.sessionId = result.response;
-          // plan.planType = this.subscriptionPlanType;
-          this.dataService.setBillingPlan(plan);
-          this.router.navigateByUrl('/settings/billing/pricing/checkout');
+          this.onCheckOut(result.response);
         }
       }, error => {
         this.loading.stop();
@@ -122,22 +125,21 @@ export class PricingComponent implements OnInit, OnDestroy {
   }
 
   onSelectBillingCycle(e) {
-    console.log('val', e.checked)
-    if(e.checked) {
+    if (e.checked) {
       this.billingCycle = 'yearly';
-      this.subscriptionList = this.planDetails[`${this.billingCycle}`]
+      this.subscriptionList = this.planDetails[`${this.billingCycle}`];
     } else {
       this.billingCycle = 'monthly';
-      this.subscriptionList = this.planDetails[`${this.billingCycle}`]
+      this.subscriptionList = this.planDetails[`${this.billingCycle}`];
     }
   }
   onGetCurrentPlan() {
     this.loading.start();
     this.billingService.getCurrentPlanInfo(this.constructor.name, moduleName.pricingModule).subscribe((res: any) => {
       this.loading.stop();
-      if (!res['error']) {
-        this.currentPlan = res['response'];
-        this.billingCycle = res['response']['duration'] === 'month' ? 'MONTHLY' : 'YEARLY';
+      if (!res.error) {
+        this.currentPlan = res.response;
+        this.billingCycle = res.response.duration === 'month' ? 'MONTHLY' : 'YEARLY';
         // this.onSetValue();
       } else {
         this.currentPlan.services = res.error.services;
@@ -153,7 +155,7 @@ export class PricingComponent implements OnInit, OnDestroy {
   onUpgradePlan(plan) {
     this.loading.start();
     console.log('currentPlan', this.currentPlan);
-    let payloads = {};
+    const payloads = {};
     // if (this.subscriptionPlanType === 'GDPR') {
     //   payloads = {
     //     service: [this.currentPlan.services.GDPR.key, this.currentPlan.services.CCPA.key],
@@ -165,9 +167,9 @@ export class PricingComponent implements OnInit, OnDestroy {
     //     plan: plan.plan
     //   };
     // }
-    this.billingService.upGradePlan(payloads, this.constructor.name, moduleName.pricingModule).subscribe(res => {
+    this.billingService.upGradePlan(payloads, this.constructor.name, moduleName.pricingModule).subscribe((res: any) => {
       this.loading.stop();
-      if (res['status'] === 200) {
+      if (res.status === 200) {
         this.isOpen = true;
         this.alertMsg = 'Your Plan has been Upgraded';
         this.alertType = 'info';
@@ -186,20 +188,59 @@ export class PricingComponent implements OnInit, OnDestroy {
     this.isOpen = false;
   }
 
-  onAddToCart(plan: any) {
-    const isItem = this.cartItem.includes((plan));
-    if (isItem) {
-      this.cartItem = this.cartItem.filter( obj => {
-        return obj.id !== plan.id;
-      });
-    } else {
-      this.cartItem.push(plan);
-    }
+  onAddToCart(planDetails: any, planUnit: any) {
+    // const isItem = this.cartItem.includes((plan));
+    // if (isItem) {
+    //   this.cartItem = this.cartItem.filter( obj => {
+    //     return obj.id !== plan.id;
+    //   });
+    // } else {
+    const plan = {...planDetails};
+    plan.priceTotal = plan.price * planUnit.value;
+    plan.unit = planUnit.value;
+    this.cartItem.push(plan);
+    // }
     this.subTotal = 0;
     if (this.cartItem.length > 0) {
       for (const item of this.cartItem) {
-        this.subTotal += Number(item.price);
+        this.subTotal += Number(item.priceTotal);
       }
     }
+  }
+
+  onUpdateCart(cartProperty, i) {
+    // const foundIndex = this.cartItem.findIndex(x => x.id == cart.id);
+    this.cartItem[i].unit = cartProperty.value;
+    this.cartItem[i].priceTotal = this.cartItem[i].price * cartProperty.value;
+    this.subTotal = 0;
+    if (this.cartItem.length > 0) {
+      for (const item of this.cartItem) {
+        this.subTotal += Number(item.priceTotal);
+      }
+    }
+  }
+  onRemoveCartItem(i, item) {
+      this.cartItem.splice(1, i);
+
+      this.subTotal = 0;
+      if (this.cartItem.length > 0) {
+      for (const itemVal of this.cartItem) {
+        this.subTotal += Number(itemVal.priceTotal);
+      }
+    }
+  }
+
+  onApplyCoupon() {
+
+  }
+
+  private onCheckOut(response: any) {
+    this.stripe.redirectToCheckout({
+      sessionId: response
+    }).then( (result) => {
+      console.log(result);
+    }).catch( error => {
+      console.log(error);
+    });
   }
 }
