@@ -678,8 +678,8 @@
                         [bsConfig]="{ dateInputFormat: 'MM-DD-YYYY',  adaptivePosition: true, returnFocusToInput: true, selectFromOtherMonth: true }"
                         [(bsValue)]="subTaskFields.deadline" required />
                     
-                    <div *ngIf="deadline.valid && subTaskForm.submitted " class="invalid-feedback">
-                        <div *ngIf="subTaskForm.deadline?.errors.required">Deadline date is required</div>
+                    <div *ngIf="deadline.invalid && subTaskForm.submitted " class="invalid-feedback">
+                        <div *ngIf="deadline?.errors.required">Deadline date is required</div>
                     </div>
                 </div>
             </div>
