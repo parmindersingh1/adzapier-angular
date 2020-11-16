@@ -18,7 +18,7 @@ import { allIcons } from 'angular-feather/icons';
 import {NgxUiLoaderModule, NgxUiLoaderService} from 'ngx-ui-loader';
 import { ngxUiLoaderConfig } from './_constant/loading.contant';
 import { WelcomeComponent } from './welcome/welcome.component';
-import { ModalModule } from 'ngx-bootstrap';
+import { ModalModule } from 'ngx-bootstrap/modal';
 import {NgbCollapseModule} from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({

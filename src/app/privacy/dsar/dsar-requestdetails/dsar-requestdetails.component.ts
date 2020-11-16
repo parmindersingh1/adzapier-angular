@@ -1,5 +1,6 @@
-import { Component, OnInit, ViewChild, ElementRef, Renderer2, TemplateRef, ViewChildren, QueryList,
-  ChangeDetectionStrategy, ChangeDetectorRef, AfterViewInit, AfterViewChecked, AfterContentChecked } from '@angular/core';
+import {
+  Component, OnInit, ViewChild, ElementRef, Renderer2, TemplateRef, ViewChildren, QueryList, ChangeDetectionStrategy, ChangeDetectorRef
+} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { OrganizationService } from 'src/app/_services';
 import { DsarRequestService } from 'src/app/_services/dsar-request.service';
@@ -9,8 +10,7 @@ import { WorkflowService } from 'src/app/_services/workflow.service';
 import { CcpadataService } from 'src/app/_services/ccpadata.service';
 import { CCPAFormConfigurationService } from 'src/app/_services/ccpaform-configuration.service';
 import { TypeaheadMatch } from 'ngx-bootstrap/typeahead/typeahead-match.class';
-import {  BsModalRef, BsModalService } from 'ngx-bootstrap';
-import { BsDatepickerDirective, BsDaterangepickerDirective, DatePickerComponent } from 'ngx-bootstrap/datepicker';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Observable } from 'rxjs';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { TablePaginationConfig } from 'src/app/_models/tablepaginationconfig';
@@ -20,23 +20,20 @@ import { formatDate } from '@angular/common';
   selector: 'app-dsar-requestdetails',
   templateUrl: './dsar-requestdetails.component.html',
   styleUrls: ['./dsar-requestdetails.component.scss']
+
 })
-export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, AfterViewChecked {
+export class DsarRequestdetailsComponent implements OnInit {
   @ViewChild('toggleDayleftdiv', { static: true }) toggleDayleftdiv: ElementRef;
   @ViewChild('btnDaysLeft', { static: true }) btnDaysLeft: ElementRef;
   @ViewChild('customDaysInput', { static: false }) customDaysInput: ElementRef;
   @ViewChild('confirmTemplate', { static: false }) confirmModal: TemplateRef<any>;
   @ViewChild('filePreview', { static: true }) filePreview: ElementRef;
   @ViewChild('panel', { static: true }) public panel: ElementRef<any>;
-  @ViewChild('dp', { static: false }) datepicker: BsDaterangepickerDirective;
- // bsConfig: Partial<BsDatepickerConfig>;
+  
   @ViewChild('confirmDeleteTemplate', { static: false }) confirmDeleteModal: TemplateRef<any>;
   @ViewChildren('stageContent') workflowStageContent: QueryList<ElementRef>;
-  // @ViewChild('dateControlTemplate', { static: true }) public dateControlTemplate: DatePickerComponent;
-  // @ViewChild('dp', { static: false }) public dateControlTemplate: QueryList<ElementRef>;
-//  @ViewChild('dp', { static: true }) dp: BsDatepickerDirective;
-  @ViewChild('dp', {static: true}) dp: ElementRef;
-
+  
+  @ViewChild('subTaskForm', null) subTaskTempForm: NgForm;
 
   confirmationForm: FormGroup;
   modalRef: BsModalRef;
@@ -166,13 +163,15 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
   isEmailVerified = false;
   isAttachmentExist: boolean;
   activitytype: any;
-  bsValue: Date;
+  bsValue: Date = null;
   subtaskDeadlineDate: Date;
   isconfirmationsubmitted: boolean;
   controlname: string;
   isemailverificationRequired: boolean;
   selectedStageContent: string;
   bsErrordate: any;
+  
+  subTaskFields: IsubtaskType;
   constructor(private activatedRoute: ActivatedRoute,
               private router: Router,
               private orgService: OrganizationService,
@@ -198,7 +197,15 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
   }
 
   ngOnInit() {
-    console.log(this.dp,'dp..');
+    this.subTaskFields = {
+      assignee: '',
+      name: '',
+      description: '',
+      required: false,
+      deadline: new Date(null),
+      reminder: new Date(null)
+    };
+    this.bsValue = new Date();
     this.activatedRoute.paramMap.subscribe(params => {
       this.requestID = params.get('id');
     });
@@ -231,7 +238,7 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
       subtaskname: ['', [Validators.required]],
       subtaskdescription: ['', [Validators.required]],
       issubtaskrequired: [''],
-      deadline: [new Date(), [Validators.required]],
+      deadline: [null, [Validators.required]],
       reminder: [null]
     });
 
@@ -656,7 +663,6 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
   }
 
   onSubmitActivityPost() {
-    //this.selectedStages[this.selectedStages.length - 1].id
     this.isActivitysubmitted = true;
     if (this.quillEditorText.invalid) {
       return false;
@@ -695,33 +701,33 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
         this.alertType = 'info';
         return false;
       } else {
-      const requestObj = {
-        current_status: this.currentWorkflowStageID || this.selectedStages[this.selectedStages.length - 1].id,
-        email_body: this.quillEditorEmailText.get('editorEmailMessage').value,
-        upload: this.quillEditorEmailText.get('emailAttachment').value
-      };
+        const requestObj = {
+          current_status: this.currentWorkflowStageID || this.selectedStages[this.selectedStages.length - 1].id,
+          email_body: this.quillEditorEmailText.get('editorEmailMessage').value,
+          upload: this.quillEditorEmailText.get('emailAttachment').value
+        };
 
-      const fd = new FormData();
-      fd.append('current_status', this.currentWorkflowStageID || this.selectedStages[this.selectedStages.length - 1].id);
-      fd.append('email_body', this.quillEditorEmailText.get('editorEmailMessage').value);
-      fd.append('upload', this.quillEditorEmailText.get('emailAttachment').value);
+        const fd = new FormData();
+        fd.append('current_status', this.currentWorkflowStageID || this.selectedStages[this.selectedStages.length - 1].id);
+        fd.append('email_body', this.quillEditorEmailText.get('editorEmailMessage').value);
+        fd.append('upload', this.quillEditorEmailText.get('emailAttachment').value);
 
-      this.ccpaDataService.addCCPADataEmailActivity(this.constructor.name, moduleName.dsarRequestModule,
-        this.requestID, fd).subscribe((data) => {
-          if (data) {
-            // alert(data.response);
-            this.alertMsg = data.response;
+        this.ccpaDataService.addCCPADataEmailActivity(this.constructor.name, moduleName.dsarRequestModule,
+          this.requestID, fd).subscribe((data) => {
+            if (data) {
+              // alert(data.response);
+              this.alertMsg = data.response;
+              this.isOpen = true;
+              this.alertType = 'success';
+              this.loadEmailLog(this.requestID);
+              this.quillEditorEmailText.get('editorEmailMessage').reset();
+              this.isEmailPostsubmitted = false;
+            }
+          }, (error) => {
+            this.alertMsg = error;
             this.isOpen = true;
-            this.alertType = 'success';
-            this.loadEmailLog(this.requestID);
-            this.quillEditorEmailText.get('editorEmailMessage').reset();
-            this.isEmailPostsubmitted = false;
-          }
-        }, (error) => {
-          this.alertMsg = error;
-          this.isOpen = true;
-          this.alertType = 'danger';
-        });
+            this.alertType = 'danger';
+          });
       }
     }
     //this.stageAPI(this.requestID, reqObj);
@@ -795,20 +801,35 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
       this.isEditSubTask = true;
       this.selectedTaskID = data.id;
       this.selectedAssignee = data.assignee;
-      this.subTaskForm.controls['subtaskname'].setValue(data.name);
-      this.subTaskForm.controls['subtaskdescription'].setValue(data.description);
-      this.subTaskForm.controls['issubtaskrequired'].setValue(data.required);
-      this.subTaskForm.controls['deadline'].setValue(new Date(data.deadline));
-      data.reminder !== null ? this.subTaskForm.controls['reminder'].setValue(new Date(data.reminder)) :
-        this.subTaskForm.controls['reminder'].setValue('');
-      this.subTaskForm.controls['assignee'].setValue(this.selectedAssignee);
+      this.subTaskFields.assignee = data.assignee;
+      this.subTaskFields.name = data.name;
+      this.subTaskFields.description = data.description;
+      this.subTaskFields.required = data.required;
+      this.subTaskFields.deadline = new Date(data.deadline);
+      this.subTaskFields.reminder = new Date(data.reminder);
 
+      const obj = {
+        assignee: data.assignee,
+        name: data.name,
+        description: data.description,
+        required: data.required === '' ? false : true,
+        deadline: data.deadline,
+        reminder: data.reminder
+      };
+     // this.subTaskFields = obj;
+     // this.subTaskTempForm.setValue(obj);
       this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
 
       }, (reason) => {
         this.subTaskForm.reset();
       });
     } else {
+      this.subTaskFields.deadline = null;
+      this.subTaskFields.reminder = null;
+      this.subTaskFields.assignee = null;
+      this.subTaskFields.description = null;
+      this.subTaskFields.name = null;
+      this.subTaskFields.required = null;
       this.isEditSubTask = false;
       this.selectedAssignee = '';
       this.onResetSubTask();
@@ -833,15 +854,6 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
     this.displayTaskDescription = data.description;
     this.displayTaskname = data.name; //data.deadline
     this.displayTaskDeadline = data.deadline;
-    // displayTaskname
-    // this.selectedAssignee = data.assignee;
-    // this.subTaskForm.controls['subtaskname'].setValue(data.name);
-    // this.subTaskForm.controls['subtaskdescription'].setValue(data.description);
-    // this.subTaskForm.controls['issubtaskrequired'].setValue(data.required);
-    // this.subTaskForm.controls['deadline'].setValue(new Date(data.deadline));
-    // this.subTaskForm.controls['reminder'].setValue(new Date(data.reminder));
-    // this.subTaskForm.controls['assignee'].setValue(this.selectedAssignee);
-
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
 
     }, (reason) => {
@@ -1011,14 +1023,77 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
       });
   }
 
-  onSubmitAddSubTask() {
+  onSubmitAddSubTask(subtaskForm: NgForm) {
+    this.isAddSubTaskSubmit = true;
+    if (subtaskForm.invalid) {
+      return false;
+    }
+    console.log(subtaskForm.value, 'sv..');
+    const currentStageID = this.currentStageId ? this.currentStageId : this.currentWorkflowStageID;
+    if (currentStageID) {
+      const obj = {
+        assignee: subtaskForm.value.assignee,
+        name: subtaskForm.value.name,
+        description: subtaskForm.value.description,
+        required: subtaskForm.value.required || false,
+        deadline: subtaskForm.value.deadline,
+        reminder: subtaskForm.value.reminder
+      };
+      if (!this.isEditSubTask) {
+        this.dsarRequestService.addSubTask(this.requestID, currentStageID, obj,
+          this.constructor.name, moduleName.dsarRequestModule)
+          .subscribe((data) => {
+            this.alertMsg = data.response;
+            this.isOpen = true;
+            this.alertType = 'success';
+            subtaskForm.resetForm();
+            // subtaskForm.reset();
+            this.getSubTaskList();
+            this.modalService.dismissAll('Canceled');
+          
+            // this.subTaskTempForm.resetForm();
+            // this.subTaskForm.reset(subtaskForm.value);
+            // this.onResetSubTask();
+  
+          }, (error) => {
+            this.onResetSubTask();
+            this.alertMsg = error;
+            this.isOpen = true;
+            this.alertType = 'danger';
+          });
+      } else {
+        this.dsarRequestService.updateSubTask(this.selectedTaskID, obj, this.constructor.name, moduleName.dsarRequestModule)
+        .subscribe((data) => {
+          this.alertMsg = data.response;
+          this.isOpen = true;
+          this.alertType = 'success';
+          this.getSubTaskList();
+          subtaskForm.resetForm();
+          this.onResetSubTask();
+        }, (error) => {
+          this.alertMsg = error;
+          this.isOpen = true;
+          this.alertType = 'danger';
+          this.onResetSubTask();
+        });
+      }
+      
+    }
+  }
+
+  resetSubtaskForm(subtaskForm: NgForm) {
+    subtaskForm.resetForm();
+  }
+
+  onSubmitAddSubTaskREACT() {
+    let obj;
     const currentStageID = this.currentStageId ? this.currentStageId : this.currentWorkflowStageID;
     if (currentStageID) {
       this.isAddSubTaskSubmit = true;
       if (this.subTaskForm.invalid) {
         return false;
       } else {
-        const obj = {
+        obj = {
           assignee: this.subTaskForm.controls['assignee'].value,
           name: this.subTaskForm.controls['subtaskname'].value,
           description: this.subTaskForm.controls['subtaskdescription'].value,
@@ -1033,6 +1108,7 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
               this.alertMsg = data.response;
               this.isOpen = true;
               this.alertType = 'success';
+              this.subTaskForm.reset(obj);
               this.onResetSubTask();
               this.getSubTaskList();
             }, (error) => {
@@ -1048,6 +1124,7 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
               this.isOpen = true;
               this.alertType = 'success';
               this.getSubTaskList();
+              this.subTaskForm.reset(obj);
               this.onResetSubTask();
             }, (error) => {
               this.alertMsg = error;
@@ -1066,11 +1143,6 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
 
   onResetSubTask() {
     this.isAddSubTaskSubmit = false;
-   // this.bsValue = null;
-    // this.dateControlTemplate.bsValueChange.subscribe((data) => {
-    //   console.log(data,'data.');
-    //   this.bsValue = null;
-    // });
     this.subTaskForm.reset();
     this.modalService.dismissAll('Canceled');
   }
@@ -1197,10 +1269,10 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
 
 
   onValueChange(value: Date): void {
-      this.minDate = new Date();
-      this.maxDate = new Date(value);
-      this.minDate.setDate(this.minDate.getDate());
-      this.maxDate.setDate(this.maxDate.getDate());
+    this.minDate = new Date();
+    this.maxDate = new Date(value);
+    this.minDate.setDate(this.minDate.getDate());
+    this.maxDate.setDate(this.maxDate.getDate());
   }
 
   displayApproverName(id): string {
@@ -1349,7 +1421,7 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
 
   showControlContent(): string {
     if (this.controlname === 'DSAR Request detail') {
-      return  this.requestID;
+      return this.requestID;
     }
   }
 
@@ -1365,7 +1437,7 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
     } else {
       const userInput = this.confirmationForm.value.userInput;
       if (userInput === 'Delete') {
-         if (selectedaction === 'DSAR Request detail') {
+        if (selectedaction === 'DSAR Request detail') {
           this.confirmDeleteDSARRequest();
         }
       } else {
@@ -1395,20 +1467,6 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
 
   }
 
-  ngAfterViewInit(){
-    console.log('viewinit');
-    console.log(this.dp);
-  }
-
-  ngAfterViewChecked() {
-    console.log('viewchecked');
-    console.log(this.dp);
-    console.log(this.bsValue,'bsvalue');
-  }
-
-  // ngAfterContentChecked(){
-  //  this.dateControlTemplate.nativeElement.bsValue = null;
-  // }
 }
 
 
@@ -1435,4 +1493,13 @@ interface SubTaskList {
   workflow: string;
   workflow_stage: string;
 
+}
+
+interface IsubtaskType {
+  assignee: any;
+  name: string;
+  description: string;
+  required: boolean;
+  deadline: Date;
+  reminder: Date;
 }

@@ -2,19 +2,19 @@ import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { OrganizationService, AuthenticationService, UserService } from '../../../_services';
 import { Observable } from 'rxjs';
-import { BsDropdownConfig } from 'ngx-bootstrap/dropdown';
+import { BsDropdownConfig, BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { Organization } from 'src/app/_models/organization';
 import { distinctUntilChanged } from 'rxjs/operators';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { moduleName } from 'src/app/_constant/module-name.constant';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss'],
-  providers: [{ provide: BsDropdownConfig, useValue: { isAnimated: true, autoClose: true } }]
+  styleUrls: ['./header.component.scss']
+ // providers: [{ provide: BsDropdownConfig, useValue: { isAnimated: true, autoClose: true } }]
 })
 export class HeaderComponent implements OnInit {
   @ViewChild('confirmTemplate', { static: false }) confirmModal: TemplateRef<any>;
@@ -57,6 +57,7 @@ export class HeaderComponent implements OnInit {
   isOtherActivelinkMatched = false;
   isSublinkActive = false;
   selectedSubmenu: any = [];
+  notificationList: any = [];
   constructor(
     private router: Router,
     private activatedroute: ActivatedRoute,
@@ -93,7 +94,8 @@ export class HeaderComponent implements OnInit {
         this.isPrivacyActivelinkMatched = event.url.indexOf('privacy') >= 0 || event.url.indexOf('home') >= 0
           || event.url.indexOf('cookie') >= 0;
       } else if (event instanceof NavigationEnd) {
-        if (event.url.indexOf('settings/billing') !== -1 || event.url.indexOf('pricing') !== -1) {
+        if (event.url.indexOf('settings/billing') !== -1 || event.url.indexOf('pricing') !== -1 ||
+          event.url.indexOf('analytics') >= 0 ) {
           this.isBillingActivelinkMatched = true;
           this.isPrivacyActivelinkMatched = false;
         }
@@ -130,7 +132,7 @@ export class HeaderComponent implements OnInit {
       }, {
         showlink: 'Contact Us', routerLink: '/contactus'
       }];
-    //this.loadPropertyByOrgID();
+    this.loadNotification();
   }
 
   logout() {
@@ -439,16 +441,16 @@ export class HeaderComponent implements OnInit {
     if (id !== undefined) {
       this.router.navigate([link.routerLink, id]);
     } else {
-      if (this.checkLinkAccess(link.routerLink)) {
+      if (this.checkLinkAccess(link.routerLink || link)) {
         if (this.selectedOrgProperties.length > 0) {
-          this.router.navigate([link.routerLink]);
+          this.router.navigate([link.routerLink || link]);
           this.activateActiveClass(link);
         } else {
           this.openModal(this.confirmModal);
           return false;
         }
       } else {
-        this.router.navigate([link.routerLink]);
+        this.router.navigate([link.routerLink || link]);
         this.activateActiveClass(link);
       }
     }
@@ -466,13 +468,14 @@ export class HeaderComponent implements OnInit {
   activateActiveClass(menu: any) {
     this.selectedSubmenu.length = 0;
     this.selectedSubmenu.push(menu);
-    if (menu.routerLink.indexOf('settings/billing') !== -1 || menu.routerLink.indexOf('pricing') !== -1) {
+    const navLink = menu.routerLink || menu;
+    if (navLink.indexOf('settings/billing') !== -1 || navLink.indexOf('pricing') !== -1) {
       this.isBillingActivelinkMatched = true;
       if (menu.icon !== undefined) {
         this.activateSublink(menu);
       }
       return this.isPrivacyActivelinkMatched = false;
-    } else if (menu.routerLink.indexOf('/settings') >= 0) {
+    } else if (navLink.indexOf('/settings') >= 0) {
       this.isBillingActivelinkMatched = false;
       if (menu.icon !== undefined) {
         this.activateSublink(menu);
@@ -494,6 +497,12 @@ export class HeaderComponent implements OnInit {
 
   openModal(template: TemplateRef<any>) {
     this.modalRef = this.bsmodalService.show(template, { class: 'modal-sm' });
+  }
+
+  loadNotification() {
+    this.userService.getNotification(this.constructor.name, moduleName.headerModule).subscribe((data) => {
+      this.notificationList = data.response;
+    });
   }
 
 }

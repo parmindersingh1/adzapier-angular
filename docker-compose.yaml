@@ -1,9 +1,8 @@
 version: "3.2"
 
 services:
- 
   ${SERVICE_NAME}:
-    image: ${CI_REGISTRY_IMAGE}:${CI_COMMIT_TAG:-$CI_COMMIT_REF_NAME-$TAG}
+    image: ${CI_REGISTRY_IMAGE}:${TAGS}
     networks:
       - apps
       - monitor
