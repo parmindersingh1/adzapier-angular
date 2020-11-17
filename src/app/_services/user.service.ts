@@ -154,7 +154,7 @@ export class UserService {
     }
 
     updateNotification(componentName, moduleName, requestobj): Observable<any> {
-        const path = 'notification';
+        const path = '/notification';
         return this.http.put<any>(environment.apiUrl + path, requestobj).pipe(
             catchError(error => {
                 this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.getNotification, componentName, moduleName, path);
