@@ -312,3 +312,11 @@ ul.notification-menu-right::after {
     border-left: 9px solid transparent;
     border-right: 9px solid transparent;
 }
+
+.breadcrumb-style1 .breadcrumb-item {
+    font-weight: 500;
+}
+
+.breadcrumb-style1 .breadcrumb-item.active {
+    font-weight: 500;
+}
