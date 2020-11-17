@@ -143,6 +143,27 @@ export class UserService {
         return throwError(errorMessage);
     }
 
+    getNotification(componentName, moduleName): Observable<any> {
+        const path = '/notification';
+        return this.http.get<any>(environment.apiUrl + path).pipe(
+            catchError(error => {
+                this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.getNotification, componentName, moduleName, path);
+                return throwError(error);
+              })
+        );
+    }
+
+    updateNotification(componentName, moduleName, requestobj): Observable<any> {
+        const path = '/notification';
+        return this.http.put<any>(environment.apiUrl + path, requestobj).pipe(
+            catchError(error => {
+                this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.getNotification, componentName, moduleName, path);
+                return throwError(error);
+              })
+        );
+
+    }
+
     onSendLogs(errorType, msg, functionality, componentName, moduleName, path) {
         this.lokiService.onSendErrorLogs(errorType, msg, functionality, componentName, moduleName, path).subscribe();
       }

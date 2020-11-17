@@ -60,5 +60,7 @@ export enum LokiFunctionality {
   getDsarRequestList = 'getDsarRequestList',
   getDsarRequestFilter = 'getDsarRequestFilter',
   getCCPADataActivityLog = 'getCCPADataActivityLog',
-  addCCPADataActivity = 'addCCPADataActivity'
+  addCCPADataActivity = 'addCCPADataActivity',
+  getNotification = 'getNotification',
+  updateNotification = 'updateNotification'
 }

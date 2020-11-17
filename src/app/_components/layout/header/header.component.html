@@ -8,7 +8,7 @@
         data-target="#collapsibleNavbar">
         <i-feather name="menu" class="feather-16"></i-feather>
       </button>
-      <a class="df-logo" routerLink="/login">
+      <a class="df-logo" (click)="goto('/login')"> <!--routerLink="/login"-->
         Ad<span>Zapier</span>
       </a>
     </div>
@@ -112,6 +112,22 @@
     </ul>
   </div>
   <!--end of general menu after login-->
+  <!--notification after login-->
+  <div class="navbar-right" *ngIf="currentUser" dropdown>
+    <a  class="nav-link dropdown-link" dropdownToggle (click)="false">
+      <i-feather name="bell" class="feather-20"></i-feather>
+    </a>
+    <ul class="dropdown-menu notification-menu-right" *dropdownMenu>
+    <li>  <div class="dropdown-header">Notifications</div></li>
+      <li class="nav-item">
+        <div *ngFor="let data of notificationList;" class="notification-wrapper">
+          <span class="tx-color-02"> {{data.notification}}</span> <!--{{data | json}} -->
+          <span class="clear-notification" [ngClass]="{'clear-notification':data.active}" (click)="clearNotification(data.id)">&times;</span>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <!--end of notification after login-->
   <!--usermenu after login-->
   <div class="navbar-right" *ngIf="currentUser">
     <ul class="navbar-nav">
@@ -169,6 +185,8 @@
       </li>
     </ul>
   </div>
+
+  
   <!--usermenuends after login-->
 </nav>
 

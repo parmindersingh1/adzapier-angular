@@ -5,7 +5,7 @@ import {RouterModule, Routes} from '@angular/router';
 import {ReactiveFormsModule} from '@angular/forms';
 import { SharedbootstrapModule } from 'src/app/sharedbootstrap/sharedbootstrap.module';
 import {SetupComponent} from './setup/setup.component';
-import {TabsModule} from 'ngx-bootstrap';
+import {TabsModule} from 'ngx-bootstrap/tabs';
 import {TabViewModule} from 'primeng/tabview';
 import { BannerLivePriviewComponent } from './banner-live-priview/banner-live-priview.component';
 import {AccordionModule} from 'primeng/accordion';

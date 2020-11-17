@@ -20,7 +20,7 @@
 
                                 <div class="form-group mb-2">
                                     <label for="formname" class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">Name</label>
-                                    <input type="text" class="form-control" formControlName="formname" name="formname" [attr.disabled]="!isEditingPublishedForm ? '' : null"
+                                    <input type="text" class="form-control" formControlName="formname" name="formname" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
                                         [ngClass]="{ 'is-invalid': basicFormSubmitted && stepFormOne.formname.errors }" />
                                     <div *ngIf="basicFormSubmitted && stepFormOne.formname.errors" class="invalid-feedback">
                                         <div *ngIf="stepFormOne.formname.errors.required">Form name is required
@@ -80,12 +80,12 @@
                                                         </span>
                                                     </div>
                                                     <div class="displayflex">
-                                                        <button *ngIf="isCustomControlWithRadioBtn(item)" [attr.disabled]="!isEditingPublishedForm ? '' : null"
+                                                        <button *ngIf="isCustomControlWithRadioBtn(item)" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
                                                             class="btn btn-sm btn-outline-primary editbtn"
                                                             (click)="deleteSelectedItem(item)">
                                                             <i class="fa fa-trash" aria-hidden="true"></i>
                                                         </button>
-                                                        <button class="btn btn-sm btn-outline-primary editbtn" [attr.disabled]="!isEditingPublishedForm ? '' : null"
+                                                        <button class="btn btn-sm btn-outline-primary editbtn" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
                                                             (click)="editSelectedRow(item)">
                                                             <div><i class="fas fa-pen"></i></div>
                                                         </button>
@@ -98,7 +98,7 @@
                                         <div class="col-sm-12">
                                             <div class="d-flex justify-content-between">
                                                 <div class="p-2" *ngIf="!isAddingFormControl"><button
-                                                        class="btn btn-xs btn-primary" (click)="addingFormControl()" [attr.disabled]="!isEditingPublishedForm ? '' : null">
+                                                        class="btn btn-xs btn-primary" (click)="addingFormControl()" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null">
                                                         Add new</button></div>
                                             </div>
                                         </div>
@@ -111,7 +111,7 @@
                                                         <h5>Create Custom Fields<div>
                                                                 <button type="button"
                                                                     (click)="cancelAddingFormControl()"
-                                                                    class="btn btn-danger" [attr.disabled]="!isEditingPublishedForm ? '' : null">
+                                                                    class="btn btn-danger" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null">
                                                                     <span>&#10006;</span>
                                                                 </button>
                                                             </div>
@@ -361,10 +361,10 @@
                                                     <div class="upload-wrapper" [ngClass]="{'hide':headerlogoBase64,'show':!headerlogoBase64}">
                                                         <p>File Format PNG, JPG or JPEG, Max Size 1MB</p>
                                                 <div class="input-group">
-                                                    <label for="file-upload" class="custom-file-upload btn btn-primary" [ngClass]="{'disabled':!isEditingPublishedForm}">
+                                                    <label for="file-upload" class="custom-file-upload btn btn-primary" [ngClass]="{'disabled':isWebFormPublished && !isEditingPublishedForm}">
                                                         Upload
                                                     </label>
-                                                    <input type="file" class="custom-file-input" [attr.disabled]="!isEditingPublishedForm ? '' : null"
+                                                    <input type="file" class="custom-file-input" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
                                                     formControlName="headerlogo"
                                                     (change)="fileChangeEvent($event)" id="headerlogo">
                                                     
@@ -399,8 +399,8 @@
                                                     <label class="col-form-label-sm tx-10 tx-uppercase tx-medium tx-spacing-1">Header Color</label>
                                                 </div>
                                                 <div class="col-md-7 d-flex color-controlwrapper">
-                                                    <input type="color" [(ngModel)]="headerColor" [attr.disabled]="!isEditingPublishedForm ? '' : null" />
-                                                    <input type="text" class="form-control form-control-sm ml-1" [attr.disabled]="!isEditingPublishedForm ? '' : null"
+                                                    <input type="color" [(ngModel)]="headerColor" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null" />
+                                                    <input type="text" class="form-control form-control-sm ml-1" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm? '' : null"
                                                     [(ngModel)]="headerColor" />
                                                 </div>
                                                 
@@ -411,9 +411,9 @@
                                                 <div class="col-md-5">
                                                     <label class="col-form-label-sm tx-10 tx-uppercase tx-medium tx-spacing-1">Welcome Text Color</label>
                                                 </div>
-                                                <div class="col-md-7 d-flex color-controlwrapper"><input type="color" class="form-control" [attr.disabled]="!isEditingPublishedForm ? '' : null"
+                                                <div class="col-md-7 d-flex color-controlwrapper"><input type="color" class="form-control" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
                                                         [(ngModel)]="welcomeTextColor" />
-                                                        <input type="text" class="form-control form-control-sm ml-1" [attr.disabled]="!isEditingPublishedForm ? '' : null"
+                                                        <input type="text" class="form-control form-control-sm ml-1" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
                                                         [(ngModel)]="welcomeTextColor" />
                                                     </div>
                                             </div>
@@ -424,7 +424,7 @@
                                                     <label class="col-form-label-sm tx-10 tx-uppercase tx-medium tx-spacing-1">Welcome Font Size </label>
                                                 </div>
                                                 <div class="col-sm-3 offset-md-4">
-                                                    <input type="number" min="13" max="20" [attr.disabled]="!isEditingPublishedForm ? '' : null"
+                                                    <input type="number" min="13" max="20" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
                                                         class="form-control form-control-sm h-75"
                                                         [(ngModel)]="welcomeFontSize" />
                                                 </div>
@@ -436,8 +436,8 @@
                                                     <label class="col-form-label-sm tx-10 tx-uppercase tx-medium tx-spacing-1">Footer Text Color</label>
                                                 </div>
                                                 <div class="col-md-7 d-flex color-controlwrapper">
-                                                    <input type="color" [(ngModel)]="footerTextColor" [attr.disabled]="!isEditingPublishedForm ? '' : null" />
-                                                    <input type="text" class="form-control form-control-sm ml-1" [attr.disabled]="!isEditingPublishedForm ? '' : null"
+                                                    <input type="color" [(ngModel)]="footerTextColor" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null" />
+                                                    <input type="text" class="form-control form-control-sm ml-1" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm? '' : null"
                                                         [(ngModel)]="footerTextColor" />
                                                 </div>
                                             </div>
@@ -449,7 +449,7 @@
                                                 </div>
                                                 <div class="col-md-3 offset-md-4">
                                                     <input type="number" min="13" max="20"
-                                                        class="form-control form-control-sm h-75" [attr.disabled]="!isEditingPublishedForm ? '' : null"
+                                                        class="form-control form-control-sm h-75" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
                                                         [(ngModel)]="footerFontSize" />
                                                 </div>
                                             </div>
@@ -472,7 +472,7 @@
 
                                     <div class="pd-5">
                                         <h6>Welcome Text <span style="float: right;">
-                                                <button type="button" class="btn btn-sm btn-default" data-toggle="modal" [attr.disabled]="!isEditingPublishedForm ? '' : null"
+                                                <button type="button" class="btn btn-sm btn-default" data-toggle="modal" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm? '' : null"
                                                     (click)="editQuillEditorDataPopup(quillEditorModal,'welcomeText')">
                                                     <i class="fa fa-edit"></i>
                                                 </button>
@@ -480,7 +480,7 @@
                                     </div>
                                     <div class="pd-5">
                                         <h6>Footer Text <span style="float: right;">
-                                                <button type="button" class="btn btn-sm btn-default" data-toggle="modal" [attr.disabled]="!isEditingPublishedForm ? '' : null"
+                                                <button type="button" class="btn btn-sm btn-default" data-toggle="modal" [attr.disabled]="isWebFormPublished  && !isEditingPublishedForm? '' : null"
                                                     (click)="editQuillEditorDataPopup(quillEditorModal,'footerText')">
                                                     <i class="fa fa-edit"></i>
                                                 </button>
@@ -784,7 +784,7 @@
                     <label for="defaultapprover" class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">
                         Default Approver</label>
                     <select class="form-control" name="user" #userselect="ngModel" name="defaultapprover" [(ngModel)]="defaultapprover"
-                        [ngClass]="{ 'is-invalid':  isdraftsubmitted && userselect.invalid && userselect.errors?.required}" [attr.disabled]="!isEditingPublishedForm ? '' : null" required>
+                        [ngClass]="{ 'is-invalid':  isdraftsubmitted && userselect.invalid && userselect.errors?.required}" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null" required>
                         <ng-container *ngFor="let opt of ApproverList">
                             <option *ngIf="opt.user_name !== ' '" [value]="opt.approver_id"
                                 [selected]="opt.approver_id === defaultapprover">
@@ -800,7 +800,7 @@
                 <div class="form-group mg-b-5">
                     <label for="workflow" class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">
                         Select Work flow</label>
-                    <select class="form-control" name="workflow" #workflowselect="ngModel" [(ngModel)]="workflow" [attr.disabled]="!isEditingPublishedForm ? '' : null"
+                    <select class="form-control" name="workflow" #workflowselect="ngModel" [(ngModel)]="workflow" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
                         [ngClass]="{ 'is-invalid': isdraftsubmitted && workflowselect.invalid && workflowselect.errors?.required}"
                         required>
                         <ng-container *ngFor="let opt of workFlowList">
@@ -819,13 +819,13 @@
                     <label for="daysleft" class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">Default
                         days to
                         respond</label>
-                    <input type="text" class="form-control" [ngModelOptions]="{standalone: true}" [attr.disabled]="!isEditingPublishedForm ? '' : null"
+                    <input type="text" class="form-control" [ngModelOptions]="{standalone: true}" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
                         [(ngModel)]="daysleft">
                 </div>
                 <div class="form-group mg-b-5">
                     <label for="fileupload"
                         class="form-check-label tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">
-                        <input type="checkbox" [checked]="isFileUploadRequired" class="form-check-input" [attr.disabled]="!isEditingPublishedForm ? '' : null"
+                        <input type="checkbox" [checked]="isFileUploadRequired" class="form-check-input" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
                             (click)="allowFileupload($event)" />
                         <span class="pad-right-20"> File upload</span>
                     </label>
@@ -834,7 +834,7 @@
                             for="gridCheck1">
                             <input class="form-check-input" name="changeControlType"
                                 [checked]="isFileuploadRequiredField" (change)="onCheckboxChangeUpload($event)"
-                                type="checkbox" id="gridCheck1" [attr.disabled]="!isEditingPublishedForm ? '' : null">
+                                type="checkbox" id="gridCheck1" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm? '' : null">
                             <span class="pad-right-20 ml-1"> Required </span>
                         </label>
                     </div>
@@ -844,7 +844,7 @@
                         class="form-check-label tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03"
                         class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">
                         <input type="checkbox" [checked]="isEmailVerificationRequired" class="form-check-input"
-                            (click)="allowEmailVerification($event)" [attr.disabled]="!isEditingPublishedForm ? '' : null"/>
+                            (click)="allowEmailVerification($event)" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm? '' : null"/>
                         <span class="pad-right-20"> Email Verificatioin</span>
                     </label>
                 </div>
@@ -853,7 +853,7 @@
                         class="form-check-label tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03"
                         class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">
                         <input type="checkbox" [checked]="isCaptchaVerificationRequired" class="form-check-input"
-                            (click)="allowCaptchaVerification($event)" [attr.disabled]="!isEditingPublishedForm ? '' : null"/>
+                            (click)="allowCaptchaVerification($event)" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"/>
                         <span class="pad-right-20"> Captcha Verificatioin</span>
                     </label>
                 </div>
@@ -950,15 +950,14 @@
             </div>
         </ng-template>
     </li>
-    <li>
-        <button type="button" *ngIf="crid" type="button" class="btn btn-xs btn-primary publishbtn" [attr.disabled]="isEditingPublishedForm ? '' : null"
-           (click)="togglePublish()"> {{isResetlinkEnable? 'Edit':'Publish'}}</button>
+    <li> 
+        <button type="button" *ngIf="crid" type="button" class="btn btn-xs btn-primary publishbtn" style="z-index: 1200;" [attr.disabled]="!isWebFormPublished && isEditingPublishedForm? '' : null"
+           (click)="togglePublish()"> {{isWebFormPublished && !isEditingPublishedForm? 'Edit':'Publish'}}</button>
 
         <span class="draftspan">{{showFormStatus()}}</span>
-        <button *ngIf="isResetlinkEnable" class="btn btn-xs btn-primary reset-link" (click)="resetWebform()">Reset</button>
+        <button *ngIf="isDraftWebForm && isEditingPublishedForm" class="btn btn-xs btn-primary reset-link" (click)="resetWebform()">Reset</button>
         <span *ngIf="crid" class="previewbtn"><a target="_blank" class="btn btn-xs btn-primary"
             (click)="previewCCPAForm()">Preview</a></span>
-
     </li>
     </ul>
 

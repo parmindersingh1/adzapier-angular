@@ -15,7 +15,7 @@ import {Location} from '@angular/common';
 import {Router} from '@angular/router';
 import {moduleName} from '../../../_constant/module-name.constant';
 import { CookieCategoryService } from 'src/app/_services/cookie-category.service';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 
 
 /** Error when invalid control is dirty, touched, or submitted. */
