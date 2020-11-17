@@ -19,6 +19,9 @@ export const defaultData = {
 };
 
 export const defaultBannerContent = {
+  privacy: 'Privacy',
+  privacyLink: 'http://google.com',
+  privacyTextColor: '#162893',
   position: 'bottom',
   bannerTitle: 'We use cookies Data',
   bannerDescription: 'We may place these for analysis of our visitor data, to improve our website, show personalised content and to give you a great website experience. For more information about the cookies we use open the settings.',
@@ -32,6 +35,10 @@ export const defaultBannerContent = {
   bannerDisableButtonTextContent: 'Disable Button',
   bannerDisableButtonTextColor: '#ffffff',
   bannerDisableButtonBackGroundColor: '#162893',
+  //
+  bannerDoNotSellMyDataTextContent: 'Do Not Sell My Data',
+  bannerDoNotSellMyDataTextColor: '#ffffff',
+  bannerDoNotSellMyDataBackGroundColor: '#162893',
   //
   bannerAcceptButtonTextContent: 'Accept All',
   bannerAcceptButtonTextColor: '#ffffff',
@@ -55,6 +62,9 @@ export const defaultBannerContent = {
   popUpDisableAllButtonBackgroundColor: '#000000',
 
   //
+  popUpDoNotSellTextContent: 'Do Not Sell My Data',
+  popUpDoNotSellTextColor: '#ffffff',
+  popUpDoNotSellBackgroundColor: '#162893',
 
   popUpSaveMyChoiceButtonTextContent: 'Save My Choice',
   popUpSaveMyChoiceButtonTextColor: '#ffffff',
@@ -88,6 +98,9 @@ export const defaultBannerContent = {
 }
 
 export class FormDefaultData {
+  privacy: 'Privacy';
+  privacyLink: 'http://google.com';
+  privacyTextColor: '#162893';
   position: 'bottom';
   bannerTitle: 'We use cookies Data';
   bannerDescription: 'We may place these for analysis of our visitor data, to improve our website, show personalised content and to give you a great website experience. For more information about the cookies we use open the settings.';
