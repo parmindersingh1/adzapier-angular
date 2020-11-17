@@ -14,7 +14,7 @@ import { Location } from '@angular/common';
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
- // providers: [{ provide: BsDropdownConfig, useValue: { isAnimated: true, autoClose: true } }]
+  // providers: [{ provide: BsDropdownConfig, useValue: { isAnimated: true, autoClose: true } }]
 })
 export class HeaderComponent implements OnInit {
   @ViewChild('confirmTemplate', { static: false }) confirmModal: TemplateRef<any>;
@@ -95,7 +95,7 @@ export class HeaderComponent implements OnInit {
           || event.url.indexOf('cookie') >= 0;
       } else if (event instanceof NavigationEnd) {
         if (event.url.indexOf('settings/billing') !== -1 || event.url.indexOf('pricing') !== -1 ||
-          event.url.indexOf('analytics') >= 0 ) {
+          event.url.indexOf('analytics') >= 0) {
           this.isBillingActivelinkMatched = true;
           this.isPrivacyActivelinkMatched = false;
         }
@@ -479,8 +479,8 @@ export class HeaderComponent implements OnInit {
       this.isBillingActivelinkMatched = false;
       if (menu.icon !== undefined) {
         this.activateSublink(menu);
-       }
       }
+    }
   }
 
   activateSublink(selectedItem): boolean {
@@ -502,6 +502,16 @@ export class HeaderComponent implements OnInit {
   loadNotification() {
     this.userService.getNotification(this.constructor.name, moduleName.headerModule).subscribe((data) => {
       this.notificationList = data.response;
+    });
+  }
+
+  clearNotification(requestid) {
+    const obj = {
+      id: [requestid]
+    };
+    this.userService.updateNotification(this.constructor.name, moduleName.headerModule, obj).subscribe((data) => {
+      console.log(data.response);
+      this.loadNotification();
     });
   }
 

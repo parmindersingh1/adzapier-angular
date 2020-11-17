@@ -577,3 +577,21 @@ a.nav-link:hover {
 .width25 {
   width: 25px;
 }
+
+.clear-notification {
+  padding: 0px 3px 0px 3px;
+  height: 17px;
+  color: #1b2e4b;
+}
+
+.clear-notification:hover {
+  background: #eaeaea;
+  cursor: pointer;
+}
+
+.notification-wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 0px 10px;
+}

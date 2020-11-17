@@ -120,8 +120,9 @@
     <ul class="dropdown-menu notification-menu-right" *dropdownMenu>
     <li>  <div class="dropdown-header">Notifications</div></li>
       <li class="nav-item">
-        <div *ngFor="let data of notificationList;" class="pl-2 ml-1">
-          <span style="color: black;"> {{data.notification}}</span>
+        <div *ngFor="let data of notificationList;" class="notification-wrapper">
+          <span class="tx-color-02"> {{data.notification}}</span> <!--{{data | json}} -->
+          <span class="clear-notification" [ngClass]="{'clear-notification':data.active}" (click)="clearNotification(data.id)">&times;</span>
         </div>
       </li>
     </ul>
