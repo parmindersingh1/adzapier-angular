@@ -674,7 +674,7 @@
                     <input name="deadline" type="text" [(ngModel)]="subTaskFields.deadline" #deadline="ngModel"
                         [ngClass]="{ 'is-invalid': deadline.invalid && subTaskForm.submitted }" autocomplete="off"
                         class="form-control" #dp="bsDatepicker" bsDatepicker (bsValueChange)="onValueChange($event)"
-                        [maxDate]="subtaskDeadlineDate"
+                        [maxDate]="subtaskDeadlineDate" [minDate]="minDate"
                         [bsConfig]="{ dateInputFormat: 'MM-DD-YYYY',  adaptivePosition: true, returnFocusToInput: true, selectFromOtherMonth: true }"
                         [(bsValue)]="subTaskFields.deadline" required />
                     
