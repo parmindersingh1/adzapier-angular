@@ -179,7 +179,7 @@ export class EditProfileComponent implements OnInit {
       this.city = this.userProfile[0].city;
       this.state = this.userProfile[0].state;
       this.zipcode = this.userProfile[0].zipcode;
-      this.companyname = '';
+      this.companyname = this.userProfile[0].companyname;
     });
   }
 

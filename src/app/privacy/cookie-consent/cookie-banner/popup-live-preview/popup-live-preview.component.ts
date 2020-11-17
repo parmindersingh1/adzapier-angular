@@ -1,5 +1,5 @@
 import {Component, ElementRef, Input, OnInit, TemplateRef, ViewChild} from '@angular/core';
-import {BsModalRef, BsModalService} from 'ngx-bootstrap';
+import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
 import {FormDefaultData} from '../../../../_constant/consent-banner.constant';
 
 @Component({

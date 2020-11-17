@@ -6,7 +6,7 @@ import { CompanyService } from 'src/app/company.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TablePaginationConfig } from 'src/app/_models/tablepaginationconfig';
 import { moduleName } from 'src/app/_constant/module-name.constant';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 
 @Component({
   selector: 'app-companyteam',

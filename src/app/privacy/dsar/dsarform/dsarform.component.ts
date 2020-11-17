@@ -16,7 +16,7 @@ import { Observable } from 'rxjs';
 import { moduleName } from '../../../_constant/module-name.constant';
 import { WebControlProperties } from 'src/app/_models/webcontrolproperties';
 import { DomSanitizer } from '@angular/platform-browser';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 @Component({
   selector: 'app-dsarform',
   templateUrl: './dsarform.component.html',
@@ -246,9 +246,6 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
   }
 
   ngOnInit() {
-    this.isEditingPublishedForm = !this.isEditingPublishedForm;
-    // this.loadingbar.start();
-    //  this.webFormControlList = this.dsarFormService.getFormControlList();
     this.getCCPAdefaultConfigById();
     // this.loadWebControl();
     this.organizationService.currentProperty.subscribe((response) => {
@@ -443,6 +440,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
     if (this.crid) {
       this.getDSARFormByCRID(this.crid);
     } else {
+      this.isEditingPublishedForm = false;
       this.webFormControlList = this.dsarFormService.getFormControlList();
       this.webFormControlList.filter((t) => {
         if (t.controlId === 'requesttype') {
@@ -1015,7 +1013,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
   }
 
   saveAsDraftCCPAFormConfiguration(registerForm) {
-    if (!this.isEditingPublishedForm) {
+    if (this.isWebFormPublished) {
       this.navDirective.select(4);
     } else {
       this.isdraftsubmitted = false;
@@ -1048,11 +1046,11 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
       this.isWebFormPublished = false;
       this.isDraftWebForm = true;
       this.active = 3;
-    }
+   }
   }
 
   createDraft() {
-    if (!this.isEditingPublishedForm) {
+    if (this.isWebFormPublished) {
       alert('test..');
       this.navDirective.select(4);
     } else {
@@ -1121,31 +1119,31 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
       }
     }
   }
-
+// this.basicForm.value.formname === '' || this.basicForm.value.formname === undefined || !this.basicFormSubmitted
   onNavChange(changeEvent: NgbNavChangeEvent) {
-   if (changeEvent.nextId === 2) {
-        if (this.basicForm.value.formname === '' || this.basicForm.value.formname === undefined || !this.basicFormSubmitted) {
-          changeEvent.preventDefault();
-          this.alertMsg = 'Please complete step 1 Basic and press next';
-          this.isOpen = true;
-          this.alertType = 'danger';
-        }
-     
-      } else if (changeEvent.nextId === 3) {
-          if (!this.isdraftsubmitted) {
-          changeEvent.preventDefault();
-          this.alertMsg = 'Please complete step 2 Form and press next';
-          this.isOpen = true;
-          this.alertType = 'danger';
-          }
-      } else if (changeEvent.nextId === 4) {
-        if (this.defaultapprover !== null && this.workflow !== null) {
-          changeEvent.preventDefault();
-          this.alertMsg = 'Please complete step 3 Settings and press next';
-          this.isOpen = true;
-          this.alertType = 'danger';
-          }
+    if (changeEvent.nextId === 2) {
+      if (this.isEditingPublishedForm) {
+        changeEvent.preventDefault();
+        this.alertMsg = 'Please complete step 1 Basic and press next';
+        this.isOpen = true;
+        this.alertType = 'danger';
       }
+
+    } else if (changeEvent.nextId === 3) {
+      if (this.isEditingPublishedForm) {
+        changeEvent.preventDefault();
+        this.alertMsg = 'Please complete step 2 Form and press next';
+        this.isOpen = true;
+        this.alertType = 'danger';
+      }
+    } else if (changeEvent.nextId === 4) {
+      if (this.isEditingPublishedForm) {
+        changeEvent.preventDefault();
+        this.alertMsg = 'Please complete step 3 Settings and press next';
+        this.isOpen = true;
+        this.alertType = 'danger';
+      }
+    }
 
   }
 
@@ -1635,9 +1633,11 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
     if (this.isWebFormPublished && !this.isDraftWebForm) {
       this.isResetlinkEnable = true;
       return 'Active';
+    } else {
+      this.isResetlinkEnable = false;
+      return 'Draft';
     }
-    this.isResetlinkEnable = false;
-    return 'Draft';
+
   }
 
   transform(imgData) {
@@ -1758,6 +1758,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
           } else {
             this.isWebFormPublished = false;
             this.isDraftWebForm = true;
+            this.isEditingPublishedForm = true;
           }
           this.showFormStatus();
           // this.loadingbar.stop();
@@ -1772,10 +1773,12 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
 
   editFormAfterPublish() {
     this.isEditingPublishedForm = !this.isEditingPublishedForm;
+    this.isWebFormPublished = true;
+    this.isDraftWebForm = true;
   }
 
   togglePublish() {
-    if (this.isResetlinkEnable) {
+    if (this.isWebFormPublished) {
       this.openModal(this.confirmModal);
     } else {
       return this.finalPublishDSARForm();

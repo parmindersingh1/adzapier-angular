@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { BillingService } from 'src/app/_services/billing.service';
 import { CompanyService } from 'src/app/company.service';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
-import {BsModalRef, BsModalService} from 'ngx-bootstrap';
+import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
 import {moduleName} from '../../_constant/module-name.constant';
 
 
