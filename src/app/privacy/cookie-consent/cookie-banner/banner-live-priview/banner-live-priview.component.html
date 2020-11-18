@@ -14,11 +14,11 @@
         <div id="onetrust-policy">
           <h6 style="font-size: 11px" class="cc-font-size-16 cc-floating-title" id="onetrust-policy-title"
               [ngStyle]="{color: formData.bannerTextColor}">
-            {{formData.bannerTitle}}
+            {{formData.bannerTitle ? formData.bannerTitle : defaultContent.bannerTitle}}
           </h6>
           <div class="text-small float-rounded-corner-main line-height-nineteen font-size-thirteen onetrust-policy-text"
                id="onetrust-policy-text">
-            <span [ngStyle]="{color: formData.bannerTextColor}" [innerHTML]="formData.bannerDescription"></span>
+            <span [ngStyle]="{color: formData.bannerTextColor}" [innerHTML]="formData.bannerDescription ? formData.bannerDescription : defaultContent.bannerDescription"></span>
        </div>
 
         </div>
@@ -31,7 +31,7 @@
             [ngStyle]="{background: formData.bannerPreferenceButtonBackGroundColor, borderColor:formData.bannerPreferenceButtonBackGroundColor,
              color: formData.bannerPreferenceButtonTextColor}"
           >
-           {{formData.bannerPreferenceButtonTextContent}}
+           {{formData.bannerPreferenceButtonTextContent ? formData.bannerPreferenceButtonTextContent : defaultContent.bannerPreferenceButtonTextContent}}
           </button>
           <button
             type="button"
@@ -40,7 +40,7 @@
             borderColor: formData.bannerDisableButtonBackGroundColor,
             color: formData.bannerDisableButtonTextColor}"
           >
-            {{formData.bannerDisableButtonTextContent}}
+            {{formData.bannerDisableButtonTextContent ? formData.bannerDisableButtonTextContent : defaultContent.bannerDisableButtonTextContent}}
           </button>
 
           <button
@@ -50,7 +50,7 @@
             borderColor: formData.bannerAcceptButtonBackgroundColor,
             color: formData.bannerAcceptButtonTextColor}"
             >
-            {{formData.bannerAcceptButtonTextContent}}
+            {{formData.bannerAcceptButtonTextContent ? formData.bannerAcceptButtonTextContent : defaultContent.bannerAcceptButtonTextContent}}
           </button>
 
         </div>

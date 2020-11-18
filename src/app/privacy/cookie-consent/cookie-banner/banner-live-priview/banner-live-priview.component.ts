@@ -1,5 +1,5 @@
 import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
-import {FormDefaultData} from '../../../../_constant/consent-banner.constant';
+import {defaultBannerContent, FormDefaultData} from '../../../../_constant/consent-banner.constant';
 
 @Component({
   selector: 'app-banner-live-priview',
@@ -7,8 +7,9 @@ import {FormDefaultData} from '../../../../_constant/consent-banner.constant';
   styleUrls: ['./banner-live-priview.component.scss']
 })
 export class BannerLivePriviewComponent implements OnInit, OnChanges {
-  public defaultContent = new FormDefaultData();
+  public defaultContent = defaultBannerContent;
 @Input('formData') formData: FormDefaultData = new FormDefaultData();
+@Input('isDisabled') isDisabled = false;
   constructor() { }
 
   ngOnInit() {

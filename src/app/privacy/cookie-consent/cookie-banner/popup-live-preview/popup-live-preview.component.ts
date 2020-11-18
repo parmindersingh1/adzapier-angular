@@ -1,6 +1,5 @@
-import {Component, ElementRef, Input, OnInit, TemplateRef, ViewChild} from '@angular/core';
-import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
-import {FormDefaultData} from '../../../../_constant/consent-banner.constant';
+import {Component,  Input,  OnInit} from '@angular/core';
+import {defaultBannerContent, FormDefaultData} from '../../../../_constant/consent-banner.constant';
 
 @Component({
   selector: 'app-popup-live-preview',
@@ -8,11 +7,12 @@ import {FormDefaultData} from '../../../../_constant/consent-banner.constant';
   styleUrls: ['./popup-live-preview.component.scss']
 })
 export class PopupLivePreviewComponent implements OnInit {
-  public defaultContent = new FormDefaultData();
+  public defaultContent = defaultBannerContent;
   currentPurpose = '';
   @Input('formData') formData: FormDefaultData = new FormDefaultData();
+
   ngOnInit() {
-    this.currentPurpose = this.formData.AdvertisingText;
+    this.currentPurpose = this.defaultContent.NecessaryText ;
   }
 
   onSelectPurpose(val: string) {

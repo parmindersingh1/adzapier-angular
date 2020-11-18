@@ -14,7 +14,7 @@
     </div>
     <p-toast></p-toast>
     <div class="row">
-      <div class="col-md-12">
+      <div class="col-md-12 btn-list">
       <div style="float: right" class="d-flex flex-column flex-sm-row mg-t-20 mg-md-t-0">
         <button type="button" class="btn-primary btn btn-sm mr-3" (click)="openNew()">Add Cookie </button>
         <button *ngIf="!isScanning" (click)="onRescanCookie()" class="btn-primary btn btn-sm mr-3 mg-r-3" type="button">
@@ -61,7 +61,7 @@
             </canvas>
           </div>
           <div class="col-6 tx-12 mg-t-10">
-            <div *ngFor="let chart of categoryChart" class="d-flex align-items-center">
+            <div *ngFor="let chart of categoryChart" class=" cookie-name-list d-flex align-items-center">
               <div  [ngStyle]="{background: chart.color}" class="wd-10 ht-10  rounded-circle pos-relative t--1"></div>
               <span class="tx-medium mg-l-10" *ngIf="chart.category === 'advertising'">Advertising Cookies</span>
               <span class="tx-medium mg-l-10" *ngIf="chart.category === 'social_media'">Social Media Cookies</span>
@@ -98,7 +98,7 @@
             </canvas>
           </div>
           <div class="col-6 tx-12 mg-t-10">
-            <div *ngFor="let chart of typeChart" class="d-flex align-items-center">
+            <div *ngFor="let chart of typeChart" class="cookie-name-list d-flex align-items-center">
               <div [ngStyle]="{background: chart.color}" class="wd-10 ht-10 rounded-circle pos-relative t--1"></div>
               <span *ngIf="chart.type" class="tx-medium mg-l-10">{{chart.type}}</span>
               <span *ngIf="!chart.type" class="tx-medium mg-l-10">Unknown</span>
