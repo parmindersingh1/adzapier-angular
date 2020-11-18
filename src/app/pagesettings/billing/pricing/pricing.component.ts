@@ -22,6 +22,7 @@ class PlanDetails {
 export class PricingComponent implements OnInit, OnDestroy {
   subscriptionPlan;
   planDetails: PlanDetails =  new PlanDetails();
+  skeletonLoader = false;
   subscriptionList = [];
   billingCycle = 'monthly';
   stripe = (window as any).Stripe(environment.stripePublishablekey);
@@ -56,12 +57,15 @@ export class PricingComponent implements OnInit, OnDestroy {
   }
   onGetPlanDetails() {
     this.loading.start();
+    this.skeletonLoader = true;
     this.billingService.getCurrentPlanInfo(this.constructor.name, moduleName.pricingModule).subscribe((res: any) => {
       this.loading.stop();
+      this.skeletonLoader = false;
       this.planDetails = res.response;
       this.subscriptionList = res.response.monthly;
     }, error => {
       this.loading.stop();
+      this.skeletonLoader = false;
       this.isOpen = true;
       this.alertMsg = error;
       this.alertType = 'danger';
@@ -220,7 +224,7 @@ export class PricingComponent implements OnInit, OnDestroy {
     }
   }
   onRemoveCartItem(i, item) {
-      this.cartItem.splice(1, i);
+      this.cartItem.splice(i, 1);
 
       this.subTotal = 0;
       if (this.cartItem.length > 0) {
