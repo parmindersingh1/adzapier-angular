@@ -75,4 +75,15 @@ export class BillingService {
   onSendLogs(errorType, msg, functionality, componentName, moduleName, path) {
     this.loki.onSendErrorLogs(errorType, msg, functionality, componentName, moduleName, path).subscribe();
   }
+
+  coupon(coupon, componentName, moduleName) {
+    let path = apiConstant.BILLING_COUPON;
+    path = path.replace(':coupon_code', coupon);
+    return this.http.get(environment.apiUrl + path).pipe(map(res => res),
+      catchError(error => {
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.billing, componentName, moduleName, path);
+        return throwError(error);
+      }),
+    );
+  }
 }
