@@ -605,6 +605,7 @@ export class CookieBannerComponent implements OnInit {
       });
   }
   onGetFormData() {
+    console.log('configaa', this.cookieBannerForm.value)
     return {
       Language: this.cookieBannerForm.value.Bannerlanguage,
       BannerPosition: this.cookieBannerForm.value.BannerPosition,
@@ -691,7 +692,7 @@ export class CookieBannerComponent implements OnInit {
         SaveMyChoiseButton: {
           textContent: this.isFieldDisabled ? null : this.cookieBannerForm.value.PopUpSaveMyChoiceButtonContentText,
           backgroundColor: this.cookieBannerForm.value.PopUpSaveMyChoiceButtonBackgroundColor,
-          textColor: this.cookieBannerForm.value.PopUpSaveMyChoiceButtonContentText
+          textColor: this.cookieBannerForm.value.PopUpSaveMyChoiceButtonTextColor
         },
         PurposeBody: this.isFieldDisabled ? [] :  [
           {
