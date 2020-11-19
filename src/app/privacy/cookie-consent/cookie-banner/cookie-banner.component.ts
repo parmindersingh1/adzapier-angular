@@ -605,7 +605,6 @@ export class CookieBannerComponent implements OnInit {
       });
   }
   onGetFormData() {
-    console.log('configaa', this.cookieBannerForm.value)
     return {
       Language: this.cookieBannerForm.value.Bannerlanguage,
       BannerPosition: this.cookieBannerForm.value.BannerPosition,
