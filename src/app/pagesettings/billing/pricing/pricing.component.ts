@@ -235,7 +235,9 @@ export class PricingComponent implements OnInit, OnDestroy {
   }
 
   onApplyCoupon() {
-
+    this.billingService.coupon('Ex3j1SHG', this.constructor.name, moduleName.pricingModule).subscribe(res => {
+      console.log(res);
+    });
   }
 
   private onCheckOut(response: any) {
