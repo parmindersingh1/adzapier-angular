@@ -234,6 +234,7 @@ export class CookieCategoryComponent implements OnInit {
       this.skeletonLoading.one = false;
       if (res.status === 200) {
         this.categoryChart = res.response;
+        this.purposeTotalCount = 0;
         this.categoryChart.forEach( (element, index) => {
           this.purposeTotalCount += element.count;
           return element.color = colorCodes[index];
@@ -259,7 +260,6 @@ export class CookieCategoryComponent implements OnInit {
   }
 
   onSetUpPieChartData(chartData) {
-    console.log('chartData', chartData)
     if(chartData.length > 0) {
       const val = [];
       const key = [];
