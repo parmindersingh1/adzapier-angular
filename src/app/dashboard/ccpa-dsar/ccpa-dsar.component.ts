@@ -518,20 +518,22 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
         this.loading.stop();
         this.skeletonLoadingState = false;
         const result = res.response;
+        console.log('result', result)
         if (this.currentState === 'usa') {
+          this.stateColor = {};
           for (const  countryData of result) {
             this.stateColor[`${countryData.statecode.toLowerCase()}`] = '#69b2f8';
           }
           this.stateList = result;
           this.onSetUsaMap();
         } else {
+          this.countryColor = {};
           for (const  countryData of result) {
             this.countryColor[`${countryData.countrycode.toLowerCase()}`] = '#69b2f8';
           }
           this.countryList = result;
           this.onSetWorldMap();
         }
-
       }, error => {
         this.skeletonLoadingState = false;
         this.loading.stop();

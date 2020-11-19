@@ -183,11 +183,12 @@ input[type="checkbox"] {
   display: block;
   width: 375px;
   height: 105px;
-  background-color: #000;
-  border-radius: 350px;
+  background-color: #fff;
   cursor: pointer;
   transform: scale(0.4);
   margin: auto;
+  border: .0625rem solid grey;
+  border-radius: 100rem;
 }
 
 #knob {
@@ -208,7 +209,7 @@ input[type="checkbox"] {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  color: #fff;
+  color: gray;
   font-size: 35px;
   font-weight: bold;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
