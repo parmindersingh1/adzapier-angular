@@ -1013,8 +1013,8 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
   }
 
   saveAsDraftCCPAFormConfiguration(registerForm) {
-    if (this.isWebFormPublished) {
-      this.navDirective.select(4);
+    if (this.isWebFormPublished && !this.isEditingPublishedForm) {
+      this.navDirective.select(3);
     } else {
       this.isdraftsubmitted = false;
       this.setHeaderStyle();
@@ -1051,7 +1051,6 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
 
   createDraft() {
     if (this.isWebFormPublished) {
-      alert('test..');
       this.navDirective.select(4);
     } else {
       this.isdraftsubmitted = true;
@@ -1158,6 +1157,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
           this.alertMsg = resp.response;
           this.isOpen = true;
           this.alertType = 'success';
+          this.getDSARFormByCRID(this.crid);
           this.navDirective.select(4);
           this.getWebFormScriptLink();
           this.loadingbar.stop();
@@ -1741,13 +1741,21 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
               this.footerText = t.footerText;
               this.footerTextColor = t.footerTextColor;
               this.footerFontSize = t.footerFontSize;
+              this.editorDataFooter = this.footerText;
             } else if (t.controlId === 'welcometext') {
               this.welcomeText = t.welcomeText;
               this.welcomeTextColor = t.welcomeTextColor;
               this.welcomeFontSize = t.welcomeFontSize;
+              this.editorDataWelcome = this.welcomeText;
             } else if (t.controlId === 'headerlogo') {
               this.headerlogoBase64 = t.logoURL;
               this.headerColor = t.headerColor;
+            } else if (t.controlId === 'subjecttype') {
+              this.sideMenuSubjectTypeOptions = t.selectOptions;
+              this.lblText = t.controllabel;
+            } else if (t.controlId === 'requesttype') {
+              this.sideMenuRequestTypeOptions = t.selectOptions;
+              this.lblText = t.controllabel;
             }
           });
           this.ccpaFormConfigService.setFormControlList(this.webFormControlList);
@@ -1791,6 +1799,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
 
   confirmForEditing() {
     this.editFormAfterPublish();
+    this.navDirective.select(1);
     this.modalRef.hide();
   }
 
@@ -1803,6 +1812,14 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
     this.getDSARFormByCRID(this.crid);
   }
 
+  disableEditPublishBtn(): boolean {
+    if (!this.isWebFormPublished && this.isEditingPublishedForm) {
+      return false;
+    } else if (this.isWebFormPublished && this.isEditingPublishedForm) {
+      return true;
+    }
+  }
+  
   ngAfterContentChecked(): void {
     this.cd.detectChanges();
   }

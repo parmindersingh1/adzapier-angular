@@ -1,5 +1,7 @@
-import { Component, OnInit, ViewChild, Input, ChangeDetectionStrategy, ChangeDetectorRef, ElementRef, AfterContentChecked,
-  AfterViewInit } from '@angular/core';
+import {
+  Component, OnInit, ViewChild, Input, ChangeDetectionStrategy, ChangeDetectorRef, ElementRef, AfterContentChecked,
+  AfterViewInit
+} from '@angular/core';
 import { Router } from '@angular/router';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { Subject } from 'rxjs';
@@ -10,7 +12,8 @@ import { DsarRequestService } from 'src/app/_services/dsar-request.service';
 import { CCPAFormConfigurationService } from 'src/app/_services/ccpaform-configuration.service';
 import { LazyLoadEvent } from 'primeng/api';
 import { moduleName } from 'src/app/_constant/module-name.constant';
-
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-dsar-requests',
@@ -60,7 +63,11 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
   rows = 0;
   totalRecords: number;
   isloading: boolean;
-
+  activeWebFormList: any = [];
+  createDSARWebFormRequest: FormGroup;
+  selectedOrgID: any;
+  selectedPropID: any;
+  selectedCRID: any;
   constructor(
     private orgservice: OrganizationService,
     private userService: UserService,
@@ -69,17 +76,23 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
     private loading: NgxUiLoaderService,
     private dsarRequestService: DsarRequestService,
     private ccpaFormConfigService: CCPAFormConfigurationService,
-    private cdRef: ChangeDetectorRef
-  ) {}
+    private cdRef: ChangeDetectorRef,
+    private modalService: NgbModal,
+    private formBuilder: FormBuilder
+  ) { }
 
   ngOnInit() {
     this.onGetPropsAndOrgId();
     this.onGetRequestListFilter();
     this.setupSearchDebouncer();
     this.isloading = true;
+    this.getCCPAFormList();
+    this.createDSARWebFormRequest = this.formBuilder.group({
+      webformselection: ['', [Validators.required]]
+    });
   }
 
-
+  get dsar() { return this.createDSARWebFormRequest.controls; }
 
   onGetPropsAndOrgId() {
     this.orgservice.currentProperty.subscribe((response) => {
@@ -188,7 +201,7 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
       + '&status=' + this.status + '&due_in=' + this.dueIn;
     this.isloading = true;
     this.dsarRequestService.getDsarRequestFilterList(this.currentManagedOrgID, this.currrentManagedPropID, params,
-       this.constructor.name, moduleName.dsarRequestModule)
+      this.constructor.name, moduleName.dsarRequestModule)
       .subscribe(res => {
         this.isloading = false;
         const key = 'response';
@@ -236,6 +249,45 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
     this.isOpen = false;
   }
 
+  getCCPAFormList() {
+    this.loading.start();
+    this.ccpaFormConfigService.getCCPAFormList(this.currentManagedOrgID, this.currrentManagedPropID,
+      this.constructor.name, moduleName.dsarWebFormModule)
+      .subscribe((data) => {
+        this.loading.stop();
+        if (data.length !== 0) {
+          this.activeWebFormList = data;
+          // this.loading = false;
+          return this.activeWebFormList;
+        } else {
+          return this.activeWebFormList.length = 0;
+          //  this.loading = false;
+
+        }
+      }, (error) => {
+        this.alertMsg = error;
+        this.isOpen = true;
+        this.alertType = 'danger';
+        // this.loading = false;
+      });
+  }
+
+  onWebformChange($event) {
+    const obj = JSON.parse($event.target.value);
+    this.selectedOrgID = obj.OID;
+    this.selectedPropID = obj.PID;
+    this.selectedCRID = obj.crid;
+  }
+
+  onCancelClick() {
+    this.submitted = false;
+    this.createDSARWebFormRequest.reset();
+    this.selectedOrgID = null;
+    this.selectedPropID = null;
+    this.selectedCRID = null;
+    this.modalService.dismissAll('Canceled');
+  }
+
   ngAfterViewInit() {
     this.cols = [
       { field: 'country', header: 'Country' },
@@ -254,4 +306,50 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
     this.cdRef.detectChanges();
   }
 
+  createWebFormRequestModal(content, data) {
+    if (data !== '') {
+
+      this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
+
+      }, (reason) => {
+
+      });
+    } else {
+
+      this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
+
+      }, (reason) => {
+
+      });
+    }
+
+  }
+
+  previewCCPAForm() {
+    this.submitted = true;
+    if (this.createDSARWebFormRequest.invalid) {
+      return false;
+    } else {
+      if (this.selectedOrgID && this.selectedPropID) {
+        if (window.location.hostname === 'localhost') {
+          window.open('http://localhost:4500/dsar/form/' + this.selectedOrgID + '/'
+            + this.selectedPropID + '/' + this.selectedCRID);
+          this.onCancelClick();
+        }
+        if (window.location.hostname === 'develop-cmp.adzpier-staging.com') {
+          window.open('https://develop-privacyportal.adzpier-staging.com/dsar/form/' + this.selectedOrgID + '/'
+            + this.selectedPropID + '/' + this.selectedCRID);
+          this.onCancelClick();
+        } else if (window.location.hostname === 'cmp.adzpier-staging.com') {
+          window.open('https://privacyportal.adzpier-staging.com/dsar/form/' + this.selectedOrgID + '/'
+            + this.selectedPropID + '/' + this.selectedCRID);
+          this.onCancelClick();
+        }
+      } else {
+        this.alertMsg = 'Organization or Property not found!';
+        this.isOpen = true;
+        this.alertType = 'danger';
+      }
+    }
+  }
 }
