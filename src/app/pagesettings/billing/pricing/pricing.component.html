@@ -1,15 +1,7 @@
-<div  class="d-sm-flex align-items-center justify-content-between ">
-  <div>
-    <nav aria-label="breadcrumb">
-      <ol class="breadcrumb breadcrumb-style1 mg-b-10">
-        <li class="breadcrumb-item"><a routerLink="/">Dashboard</a></li>
-        <li class="breadcrumb-item active" aria-current="page">billing</li>
-      </ol>
-    </nav>
-    <h4 class="mg-b-0 mb-4 ml-2 tx-spacing--1">Pricing</h4>
-  </div>
+<!--<div  class="d-sm-flex align-items-center justify-content-between ">-->
+
   <!--    <button id="toggleplan" class="btn btn-primary">Paid/Free</button>-->
-</div>
+<!--</div>-->
 <!--<div class="row">-->
 <!--  <div class="col-md-7"></div>-->
 <!--  <div class="col-md-5">-->
@@ -74,6 +66,12 @@
 <!--          </label>-->
 <!--        </div>-->
 
+
+            <div class="text-center text-head col-md-12">
+              <h1>Pricing & Plans</h1>
+              <p class="text-success">A PLAN FOR EVERY BUSINESS</p>
+            </div>
+
         <div class="col-md-12 cycle-type">
           <input (change)="onSelectBillingCycle(subType)"  #subType type="checkbox" id="lol-checkbox">
 
@@ -86,7 +84,7 @@
         </div>
 
         <div *ngIf="!skeletonLoader" class="row justify-content-center mt-5">
-          <div *ngFor="let plan of subscriptionList" class="col-3 d-flex bg-white-col bt-card flex-column bd pt-0  pd-30 ">
+          <div *ngFor="let plan of subscriptionList" class="col d-flex bg-white-col bt-card flex-column bd pt-0 mr-2  pd-20 ">
             <h4 class="popular-text" [ngStyle]="{background: plan.name === 'Gold' ? '#3968fa' : null}"><ng-container *ngIf="plan.name === 'Gold'">MOST POPULAR</ng-container></h4>
             <h3 class="mt-4 plan-type">{{plan.name}}</h3>
             <p class="tx-color-03 mg-b-50">{{plan.description}}</p>
@@ -265,19 +263,22 @@
                <h5 class="pt-2 font-weight-bold text-left"> Promo Code</h5>
               </div>
               <div class="col-md-7 text-right">
-                <input type="text" class="form-control mb-1 w-100"  placeholder="Promo Code">
-                <a href="javascript:;" class="mr-1 text-primary" (click)="onApplyCoupon()">Apply</a>
+                <input type="text" class="form-control mb-1 w-100" [(ngModel)]="promoCode" [disabled]="percentOff" [value]="percentOff ? null : promoCode" placeholder="Promo Code">
+                <a href="javascript:;" *ngIf="promoCode && !percentOff" class="mr-1 text-primary" (click)="onApplyCoupon()">Apply</a>
+<!--                <a href="javascript:;"  class="mr-1 text-primary" (click)="onRemoveCoupon()">Remove</a>-->
+                <p *ngIf="percentOff" class="alert-success promoCode-text alert">{{promoCode}}
+                  <i class="fa fa-times cursorpointer close-btn" (click)="onRemoveCoupon()" aria-hidden="true"></i></p>
               </div>
             </div>
 
               <div class="row mt-1 pt-3" style="border-top: 1px solid lightgray">
-                <div class="col-md-8">
+                <div class="col-md-6">
                   <h5 class=" font-weight-bold text-left">Subtotal</h5>
                   <h6 class="font-weight-bold text-left">Discount</h6>
                 </div>
-                <div class="col-md-4">
-                  <h5> ${{subTotal}}.00</h5>
-                  <h5>- $0.00</h5>
+                <div class="col-md-6 text-left">
+                  <h5> ${{  subTotal + '.00' }}</h5>
+                  <h5> ${{percentOff ? subTotal * percentOff / 100 : '0.00'}} ({{percentOff}}%)</h5>
                 </div>
 
               </div>
@@ -288,7 +289,7 @@
                 <h5 class="text-left font-weight-bold">Total</h5>
               </div>
               <div class="col-md-4">
-                <h5>${{subTotal - discountPrice}}.00</h5>
+                <h5>${{ percentOff ? subTotal - subTotal * percentOff / 100 : subTotal + '.00' }}</h5>
               </div>
               <div class="col-md-12">
                 <button type="button" (click)="onSelectPlan()" class="pl-5 font-weight-bold pr-5 btn-lg btn btn-primary">Checkout</button>
@@ -304,6 +305,6 @@
   </div><!-- container -->
 
 
-  <div class="col-sm-5 mt-3 mr-0 float-right">
-    <alert *ngIf="isOpen" [type]="alertType"  dismissOnTimeout="5000" [dismissible]="dismissible" (onClosed)="onClosed(alertMsg)">{{  alertMsg}}</alert>
-  </div>
+<div class="col-sm-5 mr-0 float-right flotingdiv" [ngClass]="{'hide':!isOpen}">
+  <alert *ngIf="isOpen" [type]="alertType" dismissOnTimeout="5000" [dismissible]="dismissible" (onClosed)="onClosed(alertMsg)">{{  alertMsg}}</alert>
+</div>
