@@ -2,7 +2,6 @@ import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { OrganizationService, AuthenticationService, UserService } from '../../../_services';
 import { Observable } from 'rxjs';
-import { BsDropdownConfig, BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { Organization } from 'src/app/_models/organization';
 import { distinctUntilChanged } from 'rxjs/operators';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
@@ -14,7 +13,6 @@ import { Location } from '@angular/common';
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
-  // providers: [{ provide: BsDropdownConfig, useValue: { isAnimated: true, autoClose: true } }]
 })
 export class HeaderComponent implements OnInit {
   @ViewChild('confirmTemplate', { static: false }) confirmModal: TemplateRef<any>;
@@ -439,7 +437,7 @@ export class HeaderComponent implements OnInit {
 
   goto(link: any, id?: any) {
     if (id !== undefined) {
-      this.router.navigate([link.routerLink, id]);
+      this.router.navigate([link.routerLink || link, id]);
     } else {
       if (this.checkLinkAccess(link.routerLink || link)) {
         if (this.selectedOrgProperties.length > 0) {
@@ -505,14 +503,26 @@ export class HeaderComponent implements OnInit {
     });
   }
 
-  clearNotification(requestid) {
-    const obj = {
-      id: [requestid]
-    };
+  clearNotification(requestid, purpose: string, status: boolean) {
+    let obj;
+    if (purpose === 'read') {
+      obj = {
+        id: [requestid],
+        read: status, // false,
+      };
+    } else {
+      obj = {
+        id: [requestid],
+        active: status // false
+      };
+    }
     this.userService.updateNotification(this.constructor.name, moduleName.headerModule, obj).subscribe((data) => {
       console.log(data.response);
       this.loadNotification();
     });
   }
 
+  isProperyDisabled(item): boolean {
+    return item.property_active === null || false;
+  }
 }

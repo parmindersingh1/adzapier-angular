@@ -143,6 +143,7 @@ ul.dropdown-menu.propMenu.show > li > a {
   border-bottom: 1px solid #ccc;
   font-size: 12px !important;
   display: flex;
+  justify-content: space-between;
   text-overflow: ellipsis;
 }
 
@@ -581,17 +582,99 @@ a.nav-link:hover {
 .clear-notification {
   padding: 0px 3px 0px 3px;
   height: 17px;
-  color: #1b2e4b;
+  color: transparent;
+  background-color: transparent;
+  border: 0;
+  font-size: 20px;
 }
 
 .clear-notification:hover {
-  background: #eaeaea;
   cursor: pointer;
+}
+
+.clear-notification .readicon:focus {
+  outline: none;
+}
+
+.clear-notification:focus {
+  outline: none;
+}
+
+.cross-icon {
+  margin: 2px 4px 0 0;
+  font-size: 12px;
+  height: 14px;
+}
+
+.cross-icon:hover {
+  color:#9c9c9cad;
+  background-color: #dedede;
+}
+
+.unreadicon {
+  border-radius: 30px;
+  border: 3px solid #fffc;
+  height: 16px;
+  width: 16px;
+  background: #3968fa;
+}
+
+.readicon {
+  border-radius: 30px;
+  border: 3px solid #fffc;
+  height: 16px;
+  width: 16px;
+  background: #ccc;
+}
+
+.notification-height {
+  overflow-y: auto;
+  max-height: 250px;
+  padding: 6px 6px 0px 6px;
+  height: 100%;
+  min-height: 100px;
 }
 
 .notification-wrapper {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  padding: 0px 10px;
+  padding: 4px 5px 1px 5px;
+}
+
+.notification-wrapper:hover {
+  background: #f3f3f3;
+  color:#222;
+  border-radius: 5px;
+}
+
+.notification-wrapper:hover .cross-icon {
+  color:#000;
+}
+
+
+::ng-deep .tooltip {
+  top: 6px !important;
+}
+
+::ng-deep .tooltip .arrow {
+  display: none;
+}
+
+::ng-deep .tooltip-inner {
+  font-size: 11px;
+  padding: 0px 5px;
+}
+
+::ng-deep .tooltip-arrow .arrow {
+  display: none;
+}
+
+.tooltip-inner {
+  padding: 0px 5px !important;
+}
+
+.disableproperty {
+  color: #b3b3b3 !important;
+  cursor: auto;
 }

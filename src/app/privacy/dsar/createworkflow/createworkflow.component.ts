@@ -3,8 +3,7 @@ import { WorkflowService } from 'src/app/_services/workflow.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
-// import {moduleName} from '../../_constant/module-name.constant';
-import { moduleName} from '../../../_constant/module-name.constant';
+import { moduleName } from '../../../_constant/module-name.constant';
 @Component({
   selector: 'app-createworkflow',
   templateUrl: './createworkflow.component.html',
@@ -32,7 +31,7 @@ export class CreateworkflowComponent implements OnInit {
   isTabSelected: boolean;
   isWorkflowEditing: boolean;
   submitted = true;
-  isControlDisabled: boolean;
+  isControlDisabled = false;
   alertMsg: any;
   alertType: any;
   quillConfig = {
@@ -46,6 +45,8 @@ export class CreateworkflowComponent implements OnInit {
       ]
     }
   };
+  workflowType: string;
+  isworkflowSaved = false;
   constructor(private fb: FormBuilder,
               private activatedRoute: ActivatedRoute,
               private workflowService: WorkflowService,
@@ -88,8 +89,10 @@ export class CreateworkflowComponent implements OnInit {
   }
 
   loadWorkflowList() {
+    this.loadingBar.start();
     this.workflowService.getWorkflow(this.constructor.name, moduleName.workFlowModule).subscribe((data) => {
       this.workflowList = data.response;
+      this.loadingBar.stop();
     });
   }
 
@@ -148,7 +151,7 @@ export class CreateworkflowComponent implements OnInit {
   activateWorkflowById(id) {
     const reqObj = {
       workflow_status: 'Active'
-    }
+    };
     this.workflowService.updateWorkflow(this.constructor.name, moduleName.workFlowModule, id, reqObj).subscribe((data) => {
       if (data) {
         this.alertMsg = data.response;
@@ -161,38 +164,57 @@ export class CreateworkflowComponent implements OnInit {
       this.isOpen = true;
       this.alertMsg = error;
       this.alertType = 'danger';
-    })
+    });
   }
 
-  saveWorkflow() {
+  saveWorkflow(status) {
     this.submitted = true;
+    const flowStatus = status === 'active' ? 'draft' : 'active';
     if (this.quillEditorGuidanceText.invalid) {
       return;
     } else {
       const requestObj = {
         workflow_name: this.workflowName,
-        workflow_stages: this.workflowStages
-      }
+        workflow_stages: this.workflowStages,
+        workflow_status: flowStatus
+      };
+      this.loadingBar.start();
       this.workflowService.updateWorkflow(this.constructor.name, moduleName.workFlowModule, this.selectedWorkflowId, requestObj)
-      .subscribe((data) => {
-        if (data) {
-          this.alertMsg = data.response;
+        .subscribe((data) => {
+          if (data) {
+            this.isworkflowSaved = true;
+            this.isControlDisabled = true;
+            this.quillEditorGuidanceText.controls['guidancetext'].disable();
+            this.alertMsg = data.response;
+            this.isOpen = true;
+            this.alertType = 'success';
+            this.loadWorkflowById(this.selectedWorkflowId);
+            this.loadingBar.stop();
+          }
+        }, (error) => {
+          this.alertMsg = error;
           this.isOpen = true;
-          this.alertType = 'success';
-          console.log(JSON.stringify(data.response));
-        }
-      }, (error) => {
-        this.alertMsg = error;
-        this.isOpen = true;
-        this.alertType = 'danger';
-        console.log(JSON.stringify(error));
-      })
+          this.alertType = 'danger';
+          this.loadingBar.stop();
+        });
     }
 
   }
 
+  editWorkflow($event, status) {
+    console.log($event.target.value, 'ev..');
+    if ($event.target.innerText === 'Activate' && !this.isControlDisabled) { //  
+      this.activateWorkflow(status);
+    } else {
+      this.isControlDisabled = false;
+      this.quillEditorGuidanceText.controls['guidancetext'].enable();
+      this.quillEditorGuidanceText.controls['stage_title'].enable();
+    }
+  }
+
   activateWorkflow(status) {
-    let flowStatus = status == 'active' ? 'draft' : 'active';
+    const flowStatus = status === 'active' ? 'draft' : 'active';
+
     if (flowStatus === 'draft') {
       this.quillEditorGuidanceText.controls['guidancetext'].enable();
       this.quillEditorGuidanceText.controls['stage_title'].enable();
@@ -202,53 +224,71 @@ export class CreateworkflowComponent implements OnInit {
       workflow_status: flowStatus
     };
     this.workflowService.updateWorkflow(this.constructor.name, moduleName.workFlowModule, this.selectedWorkflowId, reqObj)
-    .subscribe((data) => {
-      if (data) {
-        this.alertMsg = data.response;
+      .subscribe((data) => {
+        if (data) {
+          this.alertMsg = data.response;
+          this.isOpen = true;
+          this.alertType = 'success';
+          this.loadWorkflowById(this.selectedWorkflowId);
+        }
+      }, (error) => {
         this.isOpen = true;
-        this.alertType = 'success';
-        this.loadWorkflowById(this.selectedWorkflowId);
-      }
-    }, (error) => {
-      this.isOpen = true;
-      this.alertMsg = error;
-      this.alertType = 'danger';
-      console.log(JSON.stringify(error));
-    })
+        this.alertMsg = error;
+        this.alertType = 'danger';
+        console.log(JSON.stringify(error));
+      });
   }
 
+  checkFormStatus(): boolean {
+    if (this.isControlDisabled && this.workflowStatus === 'active') {
+      this.quillEditorGuidanceText.controls['guidancetext'].enable();
+      this.quillEditorGuidanceText.controls['stage_title'].enable();
+      return this.isControlDisabled = false;
+    }
+  }
+
+  checkButtonStatus(): boolean {
+    if (this.workflowType === 'custom' || this.workflowStatus === 'active' && this.isControlDisabled) {
+      return false;
+    } else if (this.workflowType === 'default' || this.workflowStatus === 'active' && this.isControlDisabled) {
+      return true;
+    } else if (this.workflowType === 'custom' || this.workflowStatus === 'draft' && !this.isControlDisabled) {
+      return true;
+    }
+  }
 
   loadWorkflowById(id?) {
+    this.loadingBar.start();
     let resp: any;
-    //this.loadingBar.start();
     this.workflowService.getWorkflowById(this.constructor.name, moduleName.workFlowModule, this.selectedWorkflowId)
-    .subscribe((data) => {
-      if (data.length > 0) {
-        resp = this.rearrangeArrayResponse(data[0].workflow_stages);
-        this.workflowStages = resp;
-        let stage_title = this.workflowStages[0].stage_title;
-        let guidance_text = this.workflowStages[0].guidance_text;
-        this.workflowStatus = data[0].workflow_status;
-        if (this.workflowStatus === 'active') {
-          this.quillEditorGuidanceText.controls['guidancetext'].disable();
-          this.quillEditorGuidanceText.controls['stage_title'].disable();
-          this.isControlDisabled = true;
+      .subscribe((data) => {
+        if (data.length > 0) {
+          resp = this.rearrangeArrayResponse(data[0].workflow_stages);
+          this.workflowStages = resp;
+          let stage_title = this.workflowStages[0].stage_title;
+          let guidance_text = this.workflowStages[0].guidance_text;
+          this.workflowStatus = data[0].workflow_status;
+          this.workflowType = data[0].workflow_type;
+          if (this.workflowStatus === 'active') {
+            this.quillEditorGuidanceText.controls['guidancetext'].disable();
+            this.quillEditorGuidanceText.controls['stage_title'].disable();
+            this.isControlDisabled = true;
+          }
+          this.workflowName = data[0].workflow_name;
+          this.quillEditorGuidanceText.controls['guidancetext'].setValue(guidance_text);
+          this.quillEditorGuidanceText.controls['stage_title'].setValue(stage_title);
+          this.loadingBar.stop();
+          //  this.workflowStages;
+        } else {
+          this.alertMsg = 'No data found!';
+          this.isOpen = true;
+          this.alertType = 'info';
         }
-        this.workflowName = data[0].workflow_name;
-        this.quillEditorGuidanceText.controls['guidancetext'].setValue(guidance_text);
-        this.quillEditorGuidanceText.controls['stage_title'].setValue(stage_title);
-        //  this.loadingBar.stop();
-       //  this.workflowStages;
-      } else {
-        this.alertMsg = 'No data found!';
+      }, (error) => {
+        this.alertMsg = error;
         this.isOpen = true;
-        this.alertType = 'info';
-      }
-    }, (error) => {
-      this.alertMsg = error;
-      this.isOpen = true;
-      this.alertType = 'danger';
-    });
+        this.alertType = 'danger';
+      });
   }
 
   onClosed(dismissedAlert: any): void {
@@ -256,9 +296,4 @@ export class CreateworkflowComponent implements OnInit {
     this.isOpen = false;
   }
 
-  // ngAfterViewChecked(){
-  //   console.log('test..ngAfterViewChecked');
-  //   this.cd.detectChanges();
-  // }
-  
 }

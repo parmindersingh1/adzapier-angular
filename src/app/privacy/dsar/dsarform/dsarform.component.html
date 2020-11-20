@@ -124,7 +124,7 @@
                                                                 <label>Select Field Type </label>
                                                             </div>
                                                             <div class="col-md-12 form-group pr-0">
-                                                                <select class="form-control"
+                                                                <select class="form-control" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
                                                                     (change)="onChangeEvent($event)"
                                                                     name="selectOptionControl" #ngModel="ngModel"
                                                                     [(ngModel)]="selectOptionControl" required>
@@ -138,7 +138,7 @@
                                                                         </option>
                                                                     </ng-container>
                                                                 </select>
-                                                                <button type="button" (click)="addFormField()"
+                                                                <button type="button" (click)="addFormField()" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
                                                                     class="btn btn-primary ml-2">{{showFormOption?'Cancel':'Add'}}</button>
                                                                 <span *ngIf="ngModel.errors?.required"
                                                                     style="color:red;font-size:11px">Select
@@ -153,7 +153,7 @@
                                                             <label>Display Type
                                                                 <select class="form-control"
                                                                     (change)="updateControlType($event)"
-                                                                    name="changeControlType"
+                                                                    name="changeControlType" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
                                                                     [(ngModel)]="changeControlType">
                                                                     <option
                                                                         *ngFor="let status_item of editableControlOption"
@@ -167,7 +167,7 @@
                                                 </div>
 
                                                 <div class="form-check required-check">
-                                                    <input class="form-check-input" name="changeControlType"
+                                                    <input class="form-check-input" name="changeControlType" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
                                                         [checked]="isRequiredField" (change)="onCheckboxChange($event)"
                                                         type="checkbox" id="gridCheck1">
                                                     <label class="form-check-label" for="gridCheck1">
@@ -182,7 +182,7 @@
                                                             style="color:red;font-size:11px">Name of control is
                                                             mandatory</span>
                                                         <input type="text" class="form-control" name="lblText"
-                                                            #ngModel="ngModel" [(ngModel)]="lblText"
+                                                            #ngModel="ngModel" [(ngModel)]="lblText" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
                                                             placeholder="Add label text" required />
 
                                                     </label>
@@ -198,7 +198,7 @@
                                                                     <div class="form-inline">
                                                                         <div class="control-wrapper form-group pl-3">
                                                                             <input type="text" [(ngModel)]="item.name"
-                                                                                name="{{item.name}}"
+                                                                                name="{{item.name}}" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
                                                                                 [ngModelOptions]="{standalone: true}"
                                                                                 #ngModel="ngModel"
                                                                                 [ngClass]="{ 'is-invalid': customFields.submitted && ngModel.invalid }"
@@ -211,14 +211,14 @@
                                                                                 </span>
                                                                             </div>
                                                                         </div>
-                                                                        <button type="button"
+                                                                        <button type="button" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
                                                                             class="btn btn-sm btn-danger ml-2"
                                                                             (click)="deleteSubjectOption(i)"><span
                                                                                 style="font-size: 13px;"><i
                                                                                     class="fa fa-minus"
                                                                                     aria-hidden="true"></i></span></button>
                                                                         <span *ngIf="last">
-                                                                            <button
+                                                                            <button [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
                                                                                 *ngIf="isSubjectType === true && isRequestType === false"
                                                                                 class="btn btn-xs btn-primary"
                                                                                 (click)="addCustomReqestSubjectType()">
@@ -241,7 +241,7 @@
                                                                     <div class="form-inline">
                                                                         <div class="control-wrapper form-group pl-3">
                                                                             <input type="text" [(ngModel)]="item.name"
-                                                                                name="{{item.name}}"
+                                                                                name="{{item.name}}" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
                                                                                 [ngModelOptions]="{standalone: true}"
                                                                                 #ngModel="ngModel"
                                                                                 class="form-control mb-1"
@@ -256,7 +256,7 @@
                                                                             </div>
 
                                                                         </div>
-                                                                        <button type="button"
+                                                                        <button type="button" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
                                                                             class="btn btn-sm btn-danger ml-2"
                                                                             (click)="deleteRequestOption(i)"><span
                                                                                 style="font-size: 13px;">
@@ -264,7 +264,7 @@
                                                                                     aria-hidden="true"></i>
                                                                             </span></button>
                                                                         <span *ngIf="last">
-                                                                            <button
+                                                                            <button [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
                                                                                 *ngIf="isSubjectType === false && isRequestType === true"
                                                                                 class="btn btn-xs btn-primary"
                                                                                 (click)="addCustomReqestSubjectType()">
@@ -288,7 +288,7 @@
                                                                     <div class="col-md-12 form-group pr-0">
                                                                         <div class="dispalyflex-column">
                                                                             <input type="text" [(ngModel)]="item.name"
-                                                                                name="{{item.name}}"
+                                                                                name="{{item.name}}" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
                                                                                 [ngModelOptions]="{standalone: true}"
                                                                                 #customControl="ngModel"
                                                                                 [ngClass]="{ 'is-invalid': customFields.submitted && customControl.invalid }"
@@ -303,14 +303,14 @@
                                                                             </div>
 
                                                                         </div>
-                                                                        <button type="button"
+                                                                        <button type="button" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
                                                                             class="btn btn-sm btn-danger ml-2"
                                                                             (click)="deleteSelectOption(i)"><span
                                                                                 style="font-size: 13px;"><i
                                                                                     class="fa fa-minus"
                                                                                     aria-hidden="true"></i></span>
                                                                         </button>
-                                                                        <button type="button" *ngIf="last"
+                                                                        <button type="button" *ngIf="last" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
                                                                             class="btn btn-xs btn-primary add-icon"
                                                                             (click)="addOptions()">
                                                                             <i class="fa fa-plus"
@@ -325,7 +325,7 @@
                                                     </div>
                                                     <div class="row">
                                                         <div class="col-sm-6">
-                                                            <button type="submit" class="btn btn-xs btn-success"
+                                                            <button type="submit" class="btn btn-xs btn-success" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
                                                                 [disabled]="( !customFields.form.valid )">Save</button>
                                                         </div>
 
@@ -951,11 +951,9 @@
         </ng-template>
     </li>
     <li> 
-        <button type="button" *ngIf="crid" type="button" class="btn btn-xs btn-primary publishbtn" style="z-index: 1200;" [attr.disabled]="!isWebFormPublished && isEditingPublishedForm? '' : null"
-           (click)="togglePublish()"> {{isWebFormPublished && !isEditingPublishedForm? 'Edit':'Publish'}}</button>
-
-        <span class="draftspan">{{showFormStatus()}}</span>
-        <button *ngIf="isDraftWebForm && isEditingPublishedForm" class="btn btn-xs btn-primary reset-link" (click)="resetWebform()">Reset</button>
+        <button type="button" *ngIf="crid" type="button" class="btn btn-xs btn-primary publishbtn" [attr.disabled]="disableEditPublishBtn() ? true : null"
+           (click)="togglePublish()"> {{isWebFormPublished && !isEditingPublishedForm? 'Edit':'Publish'}}</button><span class="draftspan">{{showFormStatus()}}</span>
+        <button *ngIf="isDraftWebForm && isEditingPublishedForm && isWebFormPublished" class="btn btn-xs btn-primary reset-link" (click)="resetWebform()">Reset</button>
         <span *ngIf="crid" class="previewbtn"><a target="_blank" class="btn btn-xs btn-primary"
             (click)="previewCCPAForm()">Preview</a></span>
     </li>

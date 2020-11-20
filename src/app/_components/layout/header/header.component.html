@@ -70,11 +70,12 @@
             <div *ngIf="item.property.length=='0'">No Property</div>
             <ul role="menu">
               <ng-container  *ngFor="let submenu of item.property">
-                <li role="menuitem" (click)="isCurrentPropertySelected(item,submenu)">
-                  <a class="dropdown-item" routerLinkActive="active" [ngClass]="[isPropSelected(submenu) ? 'active' : '']"> <!-- routerLink="{{item.id}}/{{submenu.property_id}}"-->
-                    {{ submenu.property_name? submenu.property_name: 'No Property' }}
+                <li role="menuitem">
+                  <a class="dropdown-item" routerLinkActive="active" [class.disableproperty]="isProperyDisabled(submenu)" [ngClass]="[isPropSelected(submenu) ? 'active' : '']"> <!-- routerLink="{{item.id}}/{{submenu.property_id}}"-->
+                   <span (click)="isProperyDisabled(submenu) ? false : isCurrentPropertySelected(item,submenu)"> {{ submenu.property_name? submenu.property_name: 'No Property' }}
                     <span class="ml-2" *ngIf="isPropSelected(submenu)">
                     <i class="fa fa-check"></i></span>
+                  </span>                       
                   </a>
                 </li>
               </ng-container>
@@ -113,16 +114,23 @@
   </div>
   <!--end of general menu after login-->
   <!--notification after login-->
-  <div class="navbar-right" *ngIf="currentUser" dropdown>
+  <div class="navbar-right" *ngIf="currentUser" dropdown [insideClick]="true">
     <a  class="nav-link dropdown-link" dropdownToggle (click)="false">
       <i-feather name="bell" class="feather-20"></i-feather>
     </a>
     <ul class="dropdown-menu notification-menu-right" *dropdownMenu>
     <li>  <div class="dropdown-header">Notifications</div></li>
-      <li class="nav-item">
+      <li class="nav-item notification-height">
         <div *ngFor="let data of notificationList;" class="notification-wrapper">
-          <span class="tx-color-02"> {{data.notification}}</span> <!--{{data | json}} -->
-          <span class="clear-notification" [ngClass]="{'clear-notification':data.active}" (click)="clearNotification(data.id)">&times;</span>
+          <span class="tx-color-02">
+          {{data.notification}}</span>
+             <div class="d-flex">
+          <button class="clear-notification cross-icon" tooltip="Clear notification"
+          placement="bottom" [adaptivePosition]="false"
+          [ngClass]="{'clear-notification':data.active}" (click)="clearNotification(data.id,'clear',false)">&#10005;</button> <!-- (click)="clearNotification(data.id,data.active,true)" to remove message-->
+          <button class="clear-notification" tooltip="Mark as read" placement="bottom" [adaptivePosition]="false"
+           [ngClass]="{'unreadicon':data.read,'readicon':!data.read}" (click)="clearNotification(data.id,'read',false)">&#9679;</button>
+          </div> <!--tooltip="{{data.read ? 'Mark as read':'Mark as unread'}}"-->
         </div>
       </li>
     </ul>
