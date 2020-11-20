@@ -314,7 +314,7 @@ ul.notification-menu-right::after {
 }
 
 .breadcrumb-style1 .breadcrumb-item, .breadcrumb-style2 .breadcrumb-item, .breadcrumb-style3 .breadcrumb-item {
-    font-weight: 500;
+    font-weight: 500 !important;
 }
 
 .breadcrumb-style1 .breadcrumb-item.active {
