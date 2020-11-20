@@ -153,6 +153,7 @@ export class OrganizationdetailsComponent implements OnInit {
     this.confirmationForm = this.formBuilder.group({
       userInput: ['', [Validators.required]]
     });
+    this.loadUserList();
   }
   get f() { return this.inviteUserOrgForm.controls; }
   get orgProp() { return this.organisationPropertyForm.controls; }
@@ -474,6 +475,12 @@ export class OrganizationdetailsComponent implements OnInit {
     this.orgService.getOrgTeamMembers(orgID, pagelimit).subscribe((data) => {
       this.organizationTeamMemberList = data.response;
       this.paginationConfig.totalItems = data.count;
+    });
+  }
+
+  loadUserList() {
+    this.companyService.getUserList(this.constructor.name, moduleName.organizationDetailsModule).subscribe((data) => {
+      console.log(data,'data..');
     });
   }
 

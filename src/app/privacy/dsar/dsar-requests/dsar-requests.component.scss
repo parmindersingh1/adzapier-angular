@@ -311,3 +311,8 @@ tr.row-disabled > td > a {
 .hide {
   display: none;
 }
+
+.align-navbtn {
+  display: flex;
+  justify-content: space-between;
+}
