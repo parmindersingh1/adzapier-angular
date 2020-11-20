@@ -234,6 +234,7 @@ export class CookieCategoryComponent implements OnInit {
       this.skeletonLoading.one = false;
       if (res.status === 200) {
         this.categoryChart = res.response;
+        this.purposeTotalCount = 0;
         this.categoryChart.forEach( (element, index) => {
           this.purposeTotalCount += element.count;
           return element.color = colorCodes[index];
@@ -259,7 +260,6 @@ export class CookieCategoryComponent implements OnInit {
   }
 
   onSetUpPieChartData(chartData) {
-    console.log('chartData', chartData)
     if(chartData.length > 0) {
       const val = [];
       const key = [];
@@ -302,6 +302,7 @@ export class CookieCategoryComponent implements OnInit {
         this.service.delete(cookieCat, this.constructor.name, moduleName)
           .subscribe(res => {
             this.tLoading = false;
+            this.onGetChartData();
             this.onGetDataFromServer();
             this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Cookie Deleted', life: 3000 });
           }, error => {
@@ -326,6 +327,7 @@ export class CookieCategoryComponent implements OnInit {
         this.alertType = 'success';
         this.addCookieForm.reset();
         this.cookieCategory = {};
+        this.onGetChartData();
         this.onGetDataFromServer();
         this.productDialog = false;
         // this.onGetCatList();
@@ -348,6 +350,7 @@ export class CookieCategoryComponent implements OnInit {
         this.alertType = 'success';
         this.addCookieForm.reset();
         this.tLoading = false;
+        this.onGetChartData();
         this.onGetDataFromServer();
         this.cookieCategory = {};
         this.productDialog = false;

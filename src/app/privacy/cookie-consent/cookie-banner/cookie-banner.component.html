@@ -102,7 +102,7 @@
                  <p-checkbox class="pt-1" binary="true"
                              formControlName="logo"></p-checkbox>
                  </div>
-                 <div class="col-md-10">
+                 <div class="col-md-9">
                   <label class="tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase col-sm-12 col-form-label">
                     Show Watermark
                   </label>
@@ -114,7 +114,7 @@
                   <div class="col-md-2">
                     <p-checkbox binary="true" class="pt-1 checkbox" formControlName="showBadge"></p-checkbox>
                   </div>
-                  <div class="col-md-10">
+                  <div class="col-md-9">
                     <label class="tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase col-sm-12  col-form-label">
                       Show Badge
                     </label>
@@ -173,7 +173,7 @@
                       Configure banner</label>
                     <div class="col-sm-4">
                       <label class="switch">
-                        <input type="checkbox" #showConfig>
+                        <input checked type="checkbox" #showConfig>
                         <span class="slider round"></span>
                       </label>
                     </div>
@@ -336,9 +336,9 @@
                           </div>
                         </div>
                         <div class="col-md-12 mt-2">
-                          <div class="w-100">
+                          <div [ngStyle]="{display: isFieldDisabled ? 'none' : ''}" class="w-100">
                             <h6 class="tx-12 tx-medium tx-spacing-1 tx-color-03 tx-uppercase">Description</h6>
-                            <quill-editor [(ngModel)]="formContent.bannerDescription" maxlength="300"
+                            <quill-editor  [(ngModel)]="formContent.bannerDescription" maxlength="300"
                               [placeholder]="formContent.bannerDescription"
                               formControlName="BannerDescription" [modules]="quillConfig" [styles]="{height: '150px'}">
                             </quill-editor>
@@ -351,7 +351,60 @@
                               </div>
                             </div>
                           </div>
-                        </div>
+
+
+                          <div [ngStyle]="{display: !isFieldDisabled ? 'none' : ''}" class="w-100">
+
+                            <div class="w-100 mt-2">
+                              <h5 class="tx-12 tx-medium tx-spacing-1 tx-color-03 tx-uppercase ">Privacy Text</h5>
+                              <input type="text" formControlName="privacyText"
+                                     [(ngModel)]="formContent.privacy" class="form-control w-100"
+                                     [placeholder]="formContent.privacy">
+                              <div *ngIf="submitted && f.privacyText.errors">
+                                <div class="text-danger mt-2" *ngIf="f.privacyText.errors.minlength">
+                                  Minimum 2 characters required
+                                </div>
+                                <div class="text-danger mt-2" *ngIf="f.privacyText.errors.maxlength">
+                                  Maximum 30 characters required
+                                </div>
+                              </div>
+                            </div>
+
+                            <div class=" w-100 mt-2">
+                              <h5 class="tx-12 tx-medium tx-spacing-1 tx-color-03 tx-uppercase ">Privacy Link</h5>
+                              <input type="text"  formControlName="privacyLink"
+                                     [(ngModel)]="formContent.privacyLink" class="form-control w-100"
+                                     [placeholder]="formContent.privacyLink">
+                              <div *ngIf="submitted && f.privacyLink.errors">
+                                <div class="text-danger mt-2" *ngIf="f.privacyLink.errors.minlength">
+                                  Minimum 2 characters required
+                                </div>
+                                <div class="text-danger mt-2" *ngIf="f.privacyLink.errors.maxlength">
+                                  Maximum 30 characters required
+                                </div>
+                              </div>
+                            </div>
+
+
+                            <div class="w-100 p-0">
+                              <ul style="list-style: none; display: flex" class="ml-2 pl-0 mt-2">
+                                <li class="tx-12 w-50 tx-medium tx-middle tx-spacing-1 tx-color-03 tx-uppercase">Text Color
+                                </li>
+                                <li class="text-left tx-middle"><input #privacyTextColor
+                                                                       [(ngModel)]="formContent.privacyTextColor" formControlName="privacyTextColor"
+                                                                       type="color" ></li>
+                                <li class="ml-4"><input class="form-control input-sm" [value]="privacyTextColor.value">
+                                </li>
+                              </ul>
+                            </div>
+
+
+                          </div>
+
+
+
+
+                          </div>
                       </p-accordionTab>
                       <p-accordionTab class="mt-2" header="Global Styles">
                         <div class="col-md-12 p-0">
@@ -360,7 +413,7 @@
                             </li>
                             <li class="text-left tx-middle"><input #bannerTextColor
                                 [(ngModel)]="formContent.bannerTextColor" formControlName="BannerGlobalStyleTextColor"
-                                type="color" [disabled]="isFieldDisabled"></li>
+                                type="color"></li>
                             <li class="ml-4"><input class="form-control input-sm" [value]="bannerTextColor.value">
                             </li>
                           </ul>
@@ -374,7 +427,7 @@
                             <li class="tx-middle ml-4"><input #bannerBackGroundColor
                                 [(ngModel)]="formContent.bannerBackGroundColor"
                                 formControlName="BannerGlobalStyleBackgroundColor" type="color"
-                                [disabled]="isFieldDisabled"></li>
+                                ></li>
                             <li class="ml-4"><input class="form-control input-sm" [value]="bannerBackGroundColor.value">
                             </li>
                           </ul>
@@ -410,7 +463,7 @@
                             <li class="text-left tx-middle"><input #bannerCustomizeButtonTextColor
                                 [(ngModel)]="formContent.bannerPreferenceButtonTextColor"
                                 formControlName="BannerPreferenceButtonTextColor" type="color"
-                                [attr.disabled]="isFieldDisabled"></li>
+                                ></li>
                             <li class="ml-3"><input class="form-control input-sm"
                                 [value]="bannerCustomizeButtonTextColor.value"></li>
                           </ul>
@@ -423,7 +476,7 @@
                             </li>
                             <li class="ml-3"><input formControlName="BannerPreferenceButtonBackgroundColor"
                                 [(ngModel)]="formContent.bannerPreferenceButtonBackGroundColor"
-                                #bannerCustomizeButtonBackGroundColor type="color" [attr.disabled]="isFieldDisabled">
+                                #bannerCustomizeButtonBackGroundColor type="color">
                             </li>
                             <li class="ml-3"><input class="form-control input-sm"
                                 [value]="bannerCustomizeButtonBackGroundColor.value"></li>
@@ -457,7 +510,7 @@
                             <li class="text-left tx-middle"><input
                                 [(ngModel)]="formContent.bannerAllowReqButtonTextColor"
                                 formControlName="BannerAllowRequiredButtonTextColor" #bannerAllowReqButtonTextColor
-                                type="color" [attr.disabled]="isFieldDisabled"></li>
+                                type="color"></li>
                             <li class="ml-3"><input class="form-control input-sm"
                                 [value]="bannerAllowReqButtonTextColor.value"></li>
                           </ul>
@@ -471,7 +524,7 @@
                             <li class="ml-3 tx-middle"><input
                                 [(ngModel)]="formContent.bannerAllowReqButtonBackgroundColor"
                                 formControlName="BannerAllowRequiredButtonBackgroundColor"
-                                #bannerAllowReqButtonBackGroundColor type="color" [attr.disabled]="isFieldDisabled">
+                                #bannerAllowReqButtonBackGroundColor type="color">
                             </li>
                             <li class="ml-3"><input class="form-control input-sm"
                                 [value]="bannerAllowReqButtonBackGroundColor.value"></li>
@@ -506,7 +559,7 @@
                             </li>
                             <li class="text-left tx-middle"><input formControlName="BannerAllowAllButtonTextColor"
                                 [(ngModel)]="formContent.bannerAcceptButtonTextColor" #bannerAllowButtonTextColor
-                                type="color" [attr.disabled]="isFieldDisabled"></li>
+                                type="color"></li>
                             <li class="ml-3"><input class="form-control input-sm"
                                 [value]="bannerAllowButtonTextColor.value"></li>
                           </ul>
@@ -519,7 +572,7 @@
                             </li>
                             <li class="ml-3"><input formControlName="BannerAllowAllButtonBackgroundColor"
                                 [(ngModel)]="formContent.bannerAcceptButtonBackgroundColor"
-                                #bannerAllowButtonBackGroundColor type="color" [attr.disabled]="isFieldDisabled"></li>
+                                #bannerAllowButtonBackGroundColor type="color"></li>
                             <li class="ml-3"><input class="form-control input-sm"
                                 [value]="bannerAllowButtonBackGroundColor.value"></li>
                           </ul>
@@ -556,7 +609,7 @@
                             <li class="text-left tx-middle"><input
                                 [(ngModel)]="formContent.bannerDisableButtonTextColor"
                                 formControlName="BannerDisableAllButtonTextColor" #bannerDisableButtonTextColor
-                                type="color" [attr.disabled]="isFieldDisabled"></li>
+                                type="color" ></li>
                             <li class="ml-3"><input class="form-control input-sm"
                                 [value]="bannerDisableButtonTextColor.value"></li>
                           </ul>
@@ -569,12 +622,65 @@
                             </li>
                             <li class="ml-3"><input [(ngModel)]="formContent.bannerDisableButtonBackGroundColor"
                                 formControlName="BannerDisableAllButtonBackgroundColor"
-                                #bannerDisableButtonBackGroundColor type="color" [attr.disabled]="isFieldDisabled"></li>
+                                #bannerDisableButtonBackGroundColor type="color"></li>
                             <li class="ml-3"><input class="form-control input-sm"
                                 [value]="bannerDisableButtonBackGroundColor.value"></li>
                           </ul>
                         </div>
                       </p-accordionTab>
+
+
+                      <p-accordionTab header="Do Not Sell My Data (For CCPA Only)">
+
+                        <div class="col-md-12 ml-0 mb-4  p-0 row mt-2">
+                          <h5 class="col-sm-4 pl-2 tx-middle tx-12 tx-medium tx-spacing-1 tx-color-03 tx-uppercase">
+                            Text Content </h5>
+                          <div class="col-sm-8 ml-0">
+                            <input type="text" [attr.disabled]="isFieldDisabled" class="form-control input-sm"
+                                   [(ngModel)]="formContent.bannerDoNotSellMyDataTextContent"
+                                   formControlName="bannerDoNotSellMyDataTextContent"
+                                   [placeholder]="formContent.bannerDoNotSellMyDataTextContent">
+                            <div *ngIf="submitted && f.bannerDoNotSellMyDataTextContent.errors">
+                              <div class="text-danger mt-2"
+                                   *ngIf="f.bannerDoNotSellMyDataTextContent.errors.minlength">
+                                Minimum 2 characters required
+                              </div>
+                              <div class="text-danger mt-2"
+                                   *ngIf="f.bannerDoNotSellMyDataTextContent.errors.maxlength">
+                                Maximum 25 characters required
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="col-md-12 mt-2 p-0">
+                          <ul style="list-style: none; display: flex" class="ml-2 pl-0 mt-2">
+                            <li class="tx-12 tx-medium tx-middle tx-spacing-1 tx-color-03 tx-uppercase">Text Color
+                            </li>
+                            <li class="text-left tx-middle"><input
+                              [(ngModel)]="formContent.bannerDoNotSellMyDataTextColor"
+                              formControlName="bannerDoNotSellMyDataTextColor" #bannerDoNotSellMyDataTextColor
+                              type="color" ></li>
+                            <li class="ml-3"><input class="form-control input-sm"
+                                                    [value]="bannerDoNotSellMyDataTextColor.value"></li>
+                          </ul>
+                        </div>
+
+                        <div class="col-md-12 p-0 mt-2">
+                          <ul style="list-style: none; display: flex" class="ml-2 pl-0 mt-2">
+                            <li class="tx-12 tx-medium tx-middle tx-spacing-1 tx-color-03 tx-uppercase">BackGround
+                              Color
+                            </li>
+                            <li class="ml-3"><input [(ngModel)]="formContent.bannerDoNotSellMyDataBackGroundColor"
+                                                    formControlName="bannerDoNotSellMyDataBackGroundColor"
+                                                    #bannerDoNotSellMyDataBackGroundColor type="color"></li>
+                            <li class="ml-3"><input class="form-control input-sm"
+                                                    [value]="bannerDoNotSellMyDataBackGroundColor.value"></li>
+                          </ul>
+                        </div>
+                      </p-accordionTab>
+
+
                     </p-accordion>
                   </div>
 
@@ -583,7 +689,7 @@
             </div>
 
             <div class="white-back" [ngClass]="{'col-md-12' : !showConfig.checked , 'col-md-7' : showConfig.checked }" >
-              <app-banner-live-priview *ngIf="!skeletonLoading" [formData]="formContent"></app-banner-live-priview>
+              <app-banner-live-priview *ngIf="!skeletonLoading" [isDisabled]="isFieldDisabled" [formData]="formContent"></app-banner-live-priview>
               <ngx-skeleton-loader *ngIf="skeletonLoading" count="14"></ngx-skeleton-loader>
             </div>
 
@@ -654,7 +760,7 @@
                           </li>
                           <li class="text-left tx-middle"><input formControlName="PopUpSwitchButton"
                               [(ngModel)]="formContent.popUpSwitchButtonColor" #PopUpSwitchButton type="color"
-                              [attr.disabled]="isFieldDisabled">
+                              >
                           <li class="ml-3"><input class="form-control input-sm" [value]="PopUpSwitchButton.value"></li>
                         </ul>
                       </div>
@@ -667,7 +773,7 @@
                           </li>
                           <li class="text-left tx-middle"><input [(ngModel)]="formContent.popUpPurposeButtonTextColor"
                               formControlName="PopUpPurposeButtonTextColor" #popUpPurposeButtonTextColor type="color"
-                              [attr.disabled]="isFieldDisabled"></li>
+                             ></li>
                           <li class="ml-3"><input class="form-control input-sm"
                               [value]="popUpPurposeButtonTextColor.value"></li>
                         </ul>
@@ -677,9 +783,9 @@
                           <li class="tx-12 tx-medium tx-middle tx-spacing-1 tx-color-03 tx-uppercase">BackGround
                             Color
                           </li>
-                          <li class="ml-3"><input [(ngModel)]="formContent.popUpPurposeButtonBackGroundColor"
+                          <li class="ml-3"><input type="color" [(ngModel)]="formContent.popUpPurposeButtonBackGroundColor"
                               formControlName="PopUpPurposeButtonBackgroundColor" #popUpPurposeButtonBackGroundColor
-                              type="color" [attr.disabled]="isFieldDisabled"></li>
+                              ></li>
                           <li class="ml-3"><input class="form-control input-sm"
                               [value]="popUpPurposeButtonBackGroundColor.value"></li>
                         </ul>
@@ -714,7 +820,7 @@
                           </li>
                           <li class="text-left tx-middle"><input formControlName="PopUpDisableAllButtonTextColor"
                               [(ngModel)]="formContent.popUpDisableAllButtonTextColor" #popUpDisableAllButtonTextColor
-                              type="color" [attr.disabled]="isFieldDisabled"></li>
+                              type="color" ></li>
                           <li class="ml-3"><input class="form-control input-sm"
                               [value]="popUpDisableAllButtonTextColor.value"></li>
                         </ul>
@@ -727,9 +833,56 @@
                           </li>
                           <li class="ml-3"><input [(ngModel)]="formContent.popUpDisableAllButtonBackgroundColor"
                               formControlName="PopUpDisableAllButtonBackgroundColor"
-                              #popUpDisableAllButtonBackGroundColor type="color" [attr.disabled]="isFieldDisabled"></li>
+                              #popUpDisableAllButtonBackGroundColor type="color"></li>
                           <li class="ml-3"><input class="form-control input-sm"
                               [value]="popUpDisableAllButtonBackGroundColor.value"></li>
+                        </ul>
+                      </div>
+                    </p-accordionTab>
+
+
+                    <p-accordionTab header="Do Not Sell My Data (For CCPA Only)">
+                      <div class="col-md-12 ml-0 mb-4  p-0 row mt-2">
+                        <h5 class="col-sm-4 pl-2 tx-middle tx-12 tx-medium tx-spacing-1 tx-color-03 tx-uppercase">
+                          Text Content </h5>
+                        <div class="col-sm-8 ml-0">
+                          <input type="text"  class="form-control"
+                                 class="form-control input-sm" [(ngModel)]="formContent.popUpDoNotSellTextContent"
+                                 formControlName="popUpDoNotSellTextContent"
+                                 [placeholder]="formContent.popUpDoNotSellTextContent">
+                          <div *ngIf="submitted && f.popUpDoNotSellTextContent.errors">
+                            <div class="text-danger mt-2" *ngIf="f.popUpDoNotSellTextContent.errors.minlength">
+                              Minimum 2 characters required
+                            </div>
+                            <div class="text-danger mt-2" *ngIf="f.popUpDoNotSellTextContent.errors.maxlength">
+                              Maximum 25 characters required
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="col-md-12 mt-2 p-0">
+                        <ul style="list-style: none; display: flex" class="ml-2 pl-0 mt-2">
+                          <li class="tx-12 tx-medium tx-middle tx-spacing-1 tx-color-03 tx-uppercase">Text Color
+                          </li>
+                          <li class="text-left tx-middle"><input formControlName="popUpDoNotSellTextColor"
+                                                                 [(ngModel)]="formContent.popUpDoNotSellTextColor" #popUpDoNotSellTextColor
+                                                                 type="color"></li>
+                          <li class="ml-3"><input class="form-control input-sm"
+                                                  [value]="popUpDoNotSellTextColor.value"></li>
+                        </ul>
+                      </div>
+
+                      <div class="col-md-12 p-0 mt-2">
+                        <ul style="list-style: none; display: flex" class="ml-2 pl-0 mt-2">
+                          <li class="tx-12 tx-medium tx-middle tx-spacing-1 tx-color-03 tx-uppercase">BackGround
+                            Color
+                          </li>
+                          <li class="ml-3"><input [(ngModel)]="formContent.popUpDoNotSellBackgroundColor"
+                                                  formControlName="popUpDoNotSellBackgroundColor"
+                                                  #popUpDoNotSellBackgroundColor type="color"></li>
+                          <li class="ml-3"><input class="form-control input-sm"
+                                                  [value]="popUpDoNotSellBackgroundColor.value"></li>
                         </ul>
                       </div>
                     </p-accordionTab>
@@ -764,7 +917,7 @@
                           <li class="text-left tx-middle"><input
                               [(ngModel)]="formContent.popUpSaveMyChoiceButtonTextColor"
                               formControlName="PopUpSaveMyChoiceButtonTextColor" #popUpSaveMyChoiseButtonTextColor
-                              type="color" [attr.disabled]="isFieldDisabled"></li>
+                              type="color"></li>
                           <li class="ml-3"><input class="form-control input-sm"
                               [value]="popUpSaveMyChoiseButtonTextColor.value"></li>
                         </ul>
@@ -777,7 +930,7 @@
                           </li>
                           <li class="ml-3"><input formControlName="PopUpSaveMyChoiceButtonBackgroundColor"
                               [(ngModel)]="formContent.popUpSaveMyChoiceButtonBackgroundColor"
-                              #popUpSaveMyChoiseButtonBackGroundColor type="color" [attr.disabled]="isFieldDisabled">
+                              #popUpSaveMyChoiseButtonBackGroundColor type="color">
                           </li>
                           <li class="ml-3"><input class="form-control input-sm"
                               [value]="popUpSaveMyChoiseButtonBackGroundColor.value"></li>
@@ -815,7 +968,7 @@
                           </li>
                           <li class="text-left tx-middle"><input [(ngModel)]="formContent.popUpAllowAllButtonTextColor"
                               formControlName="PopUpAllowAllButtonTextColor" #popUPAllowButtonTextColor type="color"
-                              [attr.disabled]="isFieldDisabled"></li>
+                              ></li>
                           <li class="ml-3"><input class="form-control input-sm"
                               [value]="popUPAllowButtonTextColor.value"></li>
                         </ul>
@@ -828,7 +981,7 @@
                           </li>
                           <li class="ml-3"><input [(ngModel)]="formContent.popUpAllowAllButtonBackgroundColor"
                               formControlName="PopUpAllowAllButtonBackgroundColor" #popUPAllowButtonBackGroundColor
-                              type="color" [attr.disabled]="isFieldDisabled"></li>
+                              type="color"></li>
                           <li class="ml-3"><input class="form-control input-sm"
                               [value]="popUPAllowButtonBackGroundColor.value"></li>
                         </ul>
