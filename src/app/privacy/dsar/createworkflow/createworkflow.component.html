@@ -20,13 +20,18 @@
                             [class.workflowname]="workflowName !== ''">{{workflowStatus?workflowStatus:''}}</span></h6>
                 </span>
                 <div class="d-flex">
-                    <button class="btn btn-xs btn-primary d-flex align-items-center mg-r-5"
-                        (click)="activateWorkflow(workflowStatus)">
+                    <button class="btn btn-xs btn-primary d-flex align-items-center mg-r-5" 
+                    [ngClass]="{'hideEditSave-btn':workflowType == 'default', '': workflowType !== 'default'}"
+                    [attr.disabled]="checkButtonStatus() ? true: null"
+                        (click)="editWorkflow($event,workflowStatus)">
                         <span class="d-none d-sm-inline">
                             <i *ngIf="workflowStatus == 'active'" class="fa fa-pen mr-1" aria-hidden="true"></i>
                             {{workflowStatus == 'active' ? 'Edit' : 'Activate'}}</span></button>
-                    <button class="btn btn-xs btn-white d-flex align-items-center mg-r-5" type="submit"
-                        (click)="saveWorkflow()">
+
+                    <button class="btn btn-xs btn-white d-flex align-items-center mg-r-5" type="button"
+                    [ngClass]="{'hideEditSave-btn':workflowType == 'default', '': workflowType !== 'default'}"
+                    [attr.disabled]="checkButtonStatus() &&  workflowStatus !== 'draft' || isControlDisabled && workflowStatus !== 'draft' ? true : null"
+                        (click)="saveWorkflow(workflowStatus)">
                         <span class="d-none d-sm-inline">
                             <i class="fa fa-plus" aria-hidden="true"></i>
                             Save</span></button>
@@ -35,7 +40,6 @@
 
             <div class="card-body">
                 <div class="wrapper">
-                    <div *ngIf="workflowStages.length === 0" class="m-2">No data found</div>
                     <ng-container *ngIf="workflowStages?.length > 0">
                         <app-customtabs [flowStatus]="workflowStatus" [inputData]="workflowStages" [currentTab]="order"
                             (currentStageEvent)="clickOnWorkflowStages($event)">
@@ -46,7 +50,9 @@
                             <label class="tx-10 tx-uppercase tx-medium"> <span class="red">*</span>
                                 Stage</label>
                             <input type="text" formControlName="stage_title" (keyup)="update($event)"
-                                class="form-control mb-1" [class.disabled]="isControlDisabled"
+                                class="form-control mb-1" 
+                                [attr.disabled]="isControlDisabled?true:null"
+                                [class.disabled]="isControlDisabled"
                                 [ngClass]="{ 'is-invalid': submitted && cwf.stage_title.errors }" required />
                             <div *ngIf="submitted && cwf.stage_title.errors" class="invalid-feedback">
                                 <div *ngIf="cwf.stage_title.errors.required">Stage is required</div>
@@ -54,7 +60,8 @@
                             <label class="tx-10 tx-uppercase tx-medium"> <span class="red">*</span>
                                 Guidance Text</label>
                             <quill-editor formControlName="guidancetext" [modules]="quillConfig"
-                                [class.disabled]="isControlDisabled" [styles]="{height: '200px'}"
+                                [class.disabled]="isControlDisabled"
+                                 [styles]="{height: '200px'}"
                                 [ngClass]="{ 'is-invalid': submitted && cwf.guidancetext.errors }" required>
                             </quill-editor>
                             <div *ngIf="submitted && cwf.guidancetext.errors" class="invalid-feedback">
@@ -62,6 +69,7 @@
                             </div>
                         </form>
                     </div>
+                    <div *ngIf="!workflowStages?.length" class="m-2">No data found test</div>
                 </div>
             </div>
         </div>

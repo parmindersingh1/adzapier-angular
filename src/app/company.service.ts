@@ -40,7 +40,7 @@ export class CompanyService {
 
   inviteUser(componentName, moduleName, reqestObj): Observable<any> {
     const path = '/invite/user';
-    return this.httpClient.post<any>(environment.apiUrl + path, reqestObj).pipe(shareReplay(1),catchError(error => {
+    return this.httpClient.post<any>(environment.apiUrl + path, reqestObj).pipe(shareReplay(1), catchError(error => {
       this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.inviteUser, componentName, moduleName, path);
       return throwError(error);
     }));
@@ -73,6 +73,15 @@ export class CompanyService {
     return this.httpClient.get<any>(environment.apiUrl + path + userId, {})
       .pipe(catchError(error => {
         this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.resendInvitation, componentName, moduleName, path);
+        return throwError(error);
+      }));
+  }
+
+  getUserList(componentName, moduleName): Observable<any> {
+    const path = '/invite/user/list';
+    return this.httpClient.get<any>(environment.apiUrl + path)
+      .pipe(catchError(error => {
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.getUserList, componentName, moduleName, path);
         return throwError(error);
       }));
   }

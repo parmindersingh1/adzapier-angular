@@ -20,6 +20,7 @@ import { ngxUiLoaderConfig } from './_constant/loading.contant';
 import { WelcomeComponent } from './welcome/welcome.component';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import {NgbCollapseModule} from '@ng-bootstrap/ng-bootstrap';
+import { TooltipModule } from 'ngx-bootstrap/tooltip';
 
 @NgModule({
   declarations: [
@@ -56,6 +57,7 @@ import {NgbCollapseModule} from '@ng-bootstrap/ng-bootstrap';
     CollapseModule.forRoot(),
     FeatherModule.pick(allIcons),
     NgxUiLoaderModule.forRoot(ngxUiLoaderConfig),
+    TooltipModule.forRoot(),
     // MatButtonModule,
     // TableModule,
     // MultiSelectModule,
@@ -87,6 +89,7 @@ import {NgbCollapseModule} from '@ng-bootstrap/ng-bootstrap';
   bootstrap: [AppComponent],
   exports: [
     // AnalyticsModule,
+    TooltipModule,
     BsDropdownModule, CollapseModule]
 })
 export class AppModule { }

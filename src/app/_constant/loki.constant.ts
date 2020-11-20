@@ -62,5 +62,6 @@ export enum LokiFunctionality {
   getCCPADataActivityLog = 'getCCPADataActivityLog',
   addCCPADataActivity = 'addCCPADataActivity',
   getNotification = 'getNotification',
-  updateNotification = 'updateNotification'
+  updateNotification = 'updateNotification',
+  getUserList = 'getUserList'
 }
