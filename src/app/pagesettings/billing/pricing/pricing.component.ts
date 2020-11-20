@@ -40,6 +40,8 @@ export class PricingComponent implements OnInit, OnDestroy {
   alertMsg: any;
   isOpen = false;
   alertType: any;
+  percentOff = 0;
+  promoCode: any;
   constructor(private router: Router,
               private loading: NgxUiLoaderService,
               private dataService: DataService,
@@ -95,15 +97,13 @@ export class PricingComponent implements OnInit, OnDestroy {
     for (const pricing of this.cartItem) {
       plans.push({plan_id : pricing.id, units: pricing.unit});
     }
-    console.log('plan', plans);
     if (this.userEmail) {
       let payloads = {};
       payloads = {
-          service: ['20689404-f553-4b22-9636-2873b4a7ad4e'],
-          plan_details: plans,
+        coupon_code: this.promoCode ? this.promoCode : '',
+        plan_details: plans,
           email: this.userEmail
         };
-      // console.log(this.billingCycle, this.subscriptionPlanType);
       this.loading.start();
       this.billingService.getSessionId(payloads, this.constructor.name, moduleName.pricingModule).subscribe(res => {
         this.loading.stop();
@@ -235,8 +235,19 @@ export class PricingComponent implements OnInit, OnDestroy {
   }
 
   onApplyCoupon() {
-    this.billingService.coupon('Ex3j1SHG', this.constructor.name, moduleName.pricingModule).subscribe(res => {
-      console.log(res);
+    this.loading.start();
+    this.billingService.coupon(this.promoCode, this.constructor.name, moduleName.pricingModule).subscribe((res: any) => {
+    this.loading.stop();
+      this.percentOff = 0;
+      if (res.response.valid) {
+        this.percentOff = res.response.percent_off;
+      } else {
+        this.isOpen = true;
+        this.alertMsg = 'Promo Code is not Valid';
+        this.alertType = 'danger';
+      }
+    }, error => {
+      this.loading.stop();
     });
   }
 
@@ -248,5 +259,10 @@ export class PricingComponent implements OnInit, OnDestroy {
     }).catch( error => {
       console.log(error);
     });
+  }
+
+  onRemoveCoupon() {
+    this.percentOff = 0;
+    this.promoCode = null;
   }
 }
