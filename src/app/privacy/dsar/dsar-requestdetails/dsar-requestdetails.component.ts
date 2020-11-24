@@ -1,4 +1,5 @@
-import { Component, OnInit, ViewChild, ElementRef, Renderer2, TemplateRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Renderer2, TemplateRef, AfterContentInit, AfterContentChecked,
+AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { OrganizationService } from 'src/app/_services';
 import { DsarRequestService } from 'src/app/_services/dsar-request.service';
@@ -19,14 +20,14 @@ import { formatDate } from '@angular/common';
   templateUrl: './dsar-requestdetails.component.html',
   styleUrls: ['./dsar-requestdetails.component.scss']
 })
-export class DsarRequestdetailsComponent implements OnInit {
+export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, AfterContentChecked {
   @ViewChild('toggleDayleftdiv', { static: true }) toggleDayleftdiv: ElementRef;
   @ViewChild('btnDaysLeft', { static: true }) btnDaysLeft: ElementRef;
   @ViewChild('customDaysInput', { static: false }) customDaysInput: ElementRef;
   @ViewChild('confirmTemplate', { static: false }) confirmModal: TemplateRef<any>;
   @ViewChild('filePreview', { static: true }) filePreview: ElementRef;
   @ViewChild('panel', { static: true }) public panel: ElementRef<any>;
-  
+  @ViewChild('workflowStageScroller', {static: false}) public workflowStageScroller: ElementRef<any>;
   @ViewChild('confirmDeleteTemplate', { static: false }) confirmDeleteModal: TemplateRef<any>;
   
   // @ViewChild('subTaskForm', null) subTaskTempForm: NgForm;
@@ -166,8 +167,14 @@ export class DsarRequestdetailsComponent implements OnInit {
   isemailverificationRequired: boolean;
   selectedStageContent: string;
   bsErrordate: any;
-  
+  skeletonLoading = true;
   subTaskFields: IsubtaskType;
+  translateX: number = 0;
+  leftbtnVisibility = false;
+  rightbtnVisibility = true;
+  scrollLimit: number;
+  showStageTitle: string;
+  showStageGuidanceText: string;
   constructor(private activatedRoute: ActivatedRoute,
               private router: Router,
               private orgService: OrganizationService,
@@ -179,7 +186,8 @@ export class DsarRequestdetailsComponent implements OnInit {
               private formBuilder: FormBuilder,
               private renderer2: Renderer2,
               private bsmodalService: BsModalService,
-              private loading: NgxUiLoaderService
+              private loading: NgxUiLoaderService,
+              private cdRef: ChangeDetectorRef
   ) {
     this.renderer2.listen('window', 'click', (e: Event) => {
       if (e.target !== this.toggleDayleftdiv.nativeElement &&
@@ -434,6 +442,7 @@ export class DsarRequestdetailsComponent implements OnInit {
       if (data.length > 0) {
         const respData = data[0].workflow_stages;
         this.workflowStages = this.rearrangeArrayResponse(respData);
+        this.skeletonLoading = false;
         // this.selectedStages.push(this.workflowStages[0]);
         this.selectStageOnPageLoad(this.currentWorkflowStageID);
         this.getSubTaskList();
@@ -443,6 +452,7 @@ export class DsarRequestdetailsComponent implements OnInit {
         this.alertType = 'info';
       }
     }, (error) => {
+      this.skeletonLoading = false;
       alert(JSON.stringify(error));
     });
   }
@@ -458,8 +468,6 @@ export class DsarRequestdetailsComponent implements OnInit {
         return false;
       }
     }
-    this.selectedStageContent = item.guidance_text;
-    // this.getSubTaskList();
     this.currentStage = item.order;
     if (this.isSubTaskExist(item)) {
       if (this.selectedStages.length === 0) {
@@ -1300,11 +1308,11 @@ export class DsarRequestdetailsComponent implements OnInit {
   }
 
   public onPreviousSearchPosition(): void {
-    this.panel.nativeElement.scrollLeft -= 150;
+    this.translateX += 150;
   }
 
   public onNextSearchPosition(): void {
-    this.panel.nativeElement.scrollLeft += 150;
+    this.translateX -= 150;
   }
 
   removeDSARRequest(control: string) {
@@ -1368,17 +1376,17 @@ export class DsarRequestdetailsComponent implements OnInit {
   }
 
   stageContentStyle(): object {
-    if (this.selectedStageContent !== undefined) {
-      if (this.selectedStageContent.length <= 150) {
-        return { 'min-height': '110px' };
-      } else if (this.selectedStageContent.length <= 300) {
-        return { 'min-height': '130px' };
-      } else if (this.selectedStageContent.length <= 450) {
-        return { 'min-height': '170px' };
-      } else if (this.selectedStageContent.length <= 650) {
-        return { 'min-height': '170px' };
-      } else if (this.selectedStageContent.length <= 1050) {
-        return { 'min-height': '240px' };
+    if (this.showStageGuidanceText !== undefined) {
+      if (this.showStageGuidanceText.length <= 150) {
+        return { 'min-height': '80px' };
+      } else if (this.showStageGuidanceText.length <= 300) {
+        return { 'min-height': '90px' };
+      } else if (this.showStageGuidanceText.length <= 450) {
+        return { 'min-height': '100px' };
+      } else if (this.showStageGuidanceText.length <= 650) {
+        return { 'min-height': '120px' };
+      } else if (this.showStageGuidanceText.length <= 1050) {
+        return { 'min-height': '340px' };
       }
     } else {
       return { 'min-height': '110px' };
@@ -1386,8 +1394,41 @@ export class DsarRequestdetailsComponent implements OnInit {
 
   }
 
-}
+  leftClickStatus(): boolean {
+    if (this.translateX >= 0) {
+      return true;
+    }
+  }
 
+  rightClickStatus(): boolean {
+    if (this.translateX <= this.scrollLimit) {
+      return true;
+    }
+  }
+
+  showStageTitleAndContent(selectedStage) {
+    if (selectedStage.id === this.currentWorkflowStageID) {
+      this.showStageTitle = selectedStage.stage_title;
+      this.showStageGuidanceText = selectedStage.guidance_text;
+    }
+  }
+
+  ngAfterContentChecked() {
+    setTimeout(() => {
+      const parentElementSize = this.workflowStageScroller.nativeElement.parentElement.offsetWidth;
+      const itemSize = this.workflowStageScroller.nativeElement.querySelector('li').offsetWidth;
+      const itemLength = this.workflowStageScroller.nativeElement.childElementCount;
+      const menuSize = itemSize * itemLength;
+      const visibleSize = menuSize - parentElementSize;
+      this.scrollLimit = -visibleSize;
+    }, 3000);
+  }
+
+  ngAfterViewInit(): void {
+    this.cdRef.detectChanges();
+  }
+
+}
 
 interface SubTaskList {
 

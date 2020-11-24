@@ -82,6 +82,7 @@ li.nav-item {
 
  ul.nav-tabs > li > div > a > span {
      text-transform: capitalize;
+     margin: -7px 0 20px 0;
  }
 
  .previousTabcolor {
@@ -214,10 +215,10 @@ ul.nav-tabs > li > div > a {
     color: #596882;
     font-weight: 500;
     display: inline-flex;
-    padding: 0 10px;
+    padding: 0;
     margin: 10px 0;
     cursor: pointer;
-    flex-direction: row;
+    flex-direction: column;
     align-items: center;
 }
 
@@ -229,6 +230,10 @@ ul.nav-tabs > li > div > a::after{
     line-height: 33px;
     font-weight: normal;
     color: #ccc;
+    position: relative;
+    left: 100px;
+    right: auto;
+    top: -85px;
    // background: url(../../../../assets/imgs/right.png) no-repeat 0px 55%  !important;   
 }
 
@@ -331,8 +336,8 @@ ul.nav-tabs > li:last-child > div > a::after {
      width: 100% !important;
  }
 
- .stagediv{
-
+ .stagediv {
+    position: relative;
  }
  
  .stagediv ul {
@@ -689,23 +694,27 @@ ul.ngx-pagination {
 
   .divflex {
     display: flex;
-    margin: 20px 0 10px 0;
+    margin: 20px 35px 10px 35px;
     position: relative;
     overflow: hidden;
-    min-height: 230px;
-
+    min-height: 70px;
 }
+
 
 .customtab {
     flex-grow: 1;
     width: 100%;
     margin: 0 0 0 45px;
     min-width: 1000px;
+    margin: 0 auto;
 }
 
 .customtab ul {
     margin: 0;
     padding: 0;
+    transition: all .3s ease-in-out;
+    display: inline-flex;
+    align-items: stretch;
 }
 
 .customtab ul li {
@@ -726,6 +735,7 @@ ul.ngx-pagination {
     outline: none;
     margin: 2px 0 0 0;
     position: absolute;
+    width: 30px;
 }
 
 .small-btn {
@@ -736,12 +746,33 @@ ul.ngx-pagination {
     width: 26px;
 }
 
+.tabTitleWrapper {
+    font-size: 14px;
+    text-align: center;
+    color: #666;
+    display: flex;
+    cursor: default;
+    margin: 0 3px;
+    padding: 0;
+    min-width: 220px;
+    float: left;
+    height: 36px;
+    position: relative;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    transition: background-color 0.2s ease;
+}
+
 .leftarrow {
-    left:10px
+    left: 0;
+    top: 40px
 }
 
 .rightarrow {
     right: 0;
+    top: 40px;
 }
 
 .word-wrap {
@@ -812,9 +843,9 @@ ul.ngx-pagination {
  .selected-stage-content {
      display: block;
      position: absolute;
-     width: 100%;
-     left: 22px;
-     top: 80px;     
+     width: 93%;
+     left: 40px;
+     top: 30px;     
  }
 
  .selected-title {
@@ -823,10 +854,19 @@ ul.ngx-pagination {
     padding: 0;
     position: absolute;
     text-transform: CAPITALIZE;
-    left: 30px;
-    top: 60px;
+    left: 40px;
+    top: 0;
+ }
+
+ .title-guidancetext-wrapper {
+     position: relative;
+     min-height: 80px;
  }
 
  .t2 {
     background: violet;     
+}
+
+.hidebtns {
+    visibility: hidden;
 }

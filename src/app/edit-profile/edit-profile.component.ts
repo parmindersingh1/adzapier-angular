@@ -138,6 +138,7 @@ export class EditProfileComponent implements OnInit {
         city: this.userProfile[0].city,
         state: this.userProfile[0].state,
         zipcode: this.userProfile[0].zipcode,
+        companyname: this.userProfile[0].companyname
       });
     });
   }

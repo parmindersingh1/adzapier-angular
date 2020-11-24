@@ -950,10 +950,10 @@
             </div>
         </ng-template>
     </li>
-    <li> 
-        <button type="button" *ngIf="crid" type="button" class="btn btn-xs btn-primary publishbtn" [attr.disabled]="disableEditPublishBtn() ? true : null"
-           (click)="togglePublish()"> {{isWebFormPublished && !isEditingPublishedForm? 'Edit':'Publish'}}</button><span class="draftspan">{{showFormStatus()}}</span>
-        <button *ngIf="isDraftWebForm && isEditingPublishedForm && isWebFormPublished" class="btn btn-xs btn-primary reset-link" (click)="resetWebform()">Reset</button>
+    <li> <!-- *ngIf="!isDraftWebForm && isWebFormPublished && isEditingPublishedForm" disableEditPublishBtn()-->
+        <button type="button" *ngIf="crid" type="button" class="btn btn-xs btn-primary publishbtn" [attr.disabled]="isResetlinkEnable ? true : null"
+           (click)="togglePublish()"> {{isWebFormPublished && !isEditingPublishedForm && !isResetlinkEnable ? 'Edit':'Publish'}}</button><span class="draftspan">{{showFormStatus()}}</span>
+        <button [ngClass]="{'hide':!isResetlinkEnable,'':isResetlinkEnable}" class="btn btn-xs btn-primary reset-link" (click)="resetWebform()">Reset</button>
         <span *ngIf="crid" class="previewbtn"><a target="_blank" class="btn btn-xs btn-primary"
             (click)="previewCCPAForm()">Preview</a></span>
     </li>
