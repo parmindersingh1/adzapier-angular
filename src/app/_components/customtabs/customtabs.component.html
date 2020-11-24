@@ -1,7 +1,7 @@
 <div class="divflex">
-<button  (click)="onPreviousSearchPosition()" class="arrowbtn"><i class="fa fa-angle-left"></i></button>
-<div class="customtab col-sm-8" #panel>
-    <ul>
+<button  (click)="onPreviousSearchPosition()" class="arrowbtn" [ngClass]="{'hidebtns':leftClickStatus()}"><i class="fa fa-angle-left"></i></button>
+<div class="customtab" #panel> 
+    <ul [ngStyle]="{'transform': 'translateX(' + translateX + 'px)'}" #inputDataIdentifier>
         <li *ngFor="let item of inputData; let i = index;let first = first; let last = last; let odd = odd;">
             <div class="displayflex">
                 <div class="tabTitleWrapper"  [class.selectedTab]="currentTab == item.order">
@@ -22,5 +22,5 @@
         </li>
     </ul>
 </div>
-<button (click)="onNextSearchPosition()" class="arrowbtn"><i class="fa fa-angle-right"></i></button>
+<button (click)="onNextSearchPosition()" class="arrowbtn" [ngClass]="{'hidebtns':rightClickStatus()}"><i class="fa fa-angle-right"></i></button>
 </div>

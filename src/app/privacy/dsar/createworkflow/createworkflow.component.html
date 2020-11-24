@@ -19,10 +19,10 @@
                     <h6 class="mg-b-0 txt-caps">{{workflowName? workflowName : 'Create workflow'}}<span
                             [class.workflowname]="workflowName !== ''">{{workflowStatus?workflowStatus:''}}</span></h6>
                 </span>
-                <div class="d-flex">
+                <div class="d-flex" *ngIf="!skeletonLoading && quillEditorForm.valid">
                     <button class="btn btn-xs btn-primary d-flex align-items-center mg-r-5" 
                     [ngClass]="{'hideEditSave-btn':workflowType == 'default', '': workflowType !== 'default'}"
-                    [attr.disabled]="checkButtonStatus() ? true: null"
+                    [attr.disabled]="(workflowStatus === 'draft' && !isworkflowSaved) || (workflowStatus == 'draft' && isControlDisabled) ? true:null"
                         (click)="editWorkflow($event,workflowStatus)">
                         <span class="d-none d-sm-inline">
                             <i *ngIf="workflowStatus == 'active'" class="fa fa-pen mr-1" aria-hidden="true"></i>
@@ -31,7 +31,7 @@
                     <button class="btn btn-xs btn-white d-flex align-items-center mg-r-5" type="button"
                     [ngClass]="{'hideEditSave-btn':workflowType == 'default', '': workflowType !== 'default'}"
                     [attr.disabled]="checkButtonStatus() &&  workflowStatus !== 'draft' || isControlDisabled && workflowStatus !== 'draft' ? true : null"
-                        (click)="saveWorkflow(workflowStatus)">
+                        (click)="saveWorkflow(quillEditorForm, workflowStatus)">
                         <span class="d-none d-sm-inline">
                             <i class="fa fa-plus" aria-hidden="true"></i>
                             Save</span></button>
@@ -41,35 +41,46 @@
             <div class="card-body">
                 <div class="wrapper">
                     <ng-container *ngIf="workflowStages?.length > 0">
-                        <app-customtabs [flowStatus]="workflowStatus" [inputData]="workflowStages" [currentTab]="order"
+                        <div class="loader-margin"> 
+                            <ngx-skeleton-loader  *ngIf="skeletonLoading && workflowStages?.length !== 0"   count="1"></ngx-skeleton-loader>
+                            <span *ngIf="!skeletonLoading && workflowStages?.length === 0" class="nodatafound">No data found</span>
+                        </div>
+                        <app-customtabs *ngIf="!skeletonLoading"  [flowStatus]="workflowStatus" [inputData]="workflowStages" [currentTab]="order"
                             (currentStageEvent)="clickOnWorkflowStages($event)">
                         </app-customtabs>
                     </ng-container>
-                    <div class="col-sm-6 mb-3" *ngIf="workflowStages?.length !== 0">
-                        <form [formGroup]="quillEditorGuidanceText">
+                   
+                    <div class="col-sm-6 mb-3">
+                        <form #quillEditorForm="ngForm">
+                            <div  [class.hide]="!skeletonLoading && !quillEditorForm.valid">
                             <label class="tx-10 tx-uppercase tx-medium"> <span class="red">*</span>
                                 Stage</label>
-                            <input type="text" formControlName="stage_title" (keyup)="update($event)"
+                            <input type="text" [(ngModel)]="stageTitle"  #stage_title="ngModel" name="stageTitle" (keyup)="update($event)"
                                 class="form-control mb-1" 
                                 [attr.disabled]="isControlDisabled?true:null"
                                 [class.disabled]="isControlDisabled"
-                                [ngClass]="{ 'is-invalid': submitted && cwf.stage_title.errors }" required />
-                            <div *ngIf="submitted && cwf.stage_title.errors" class="invalid-feedback">
-                                <div *ngIf="cwf.stage_title.errors.required">Stage is required</div>
+                                [ngClass]="{ 'is-invalid': stage_title?.invalid && (stage_title?.dirty || stage_title?.touched) && submitted && !skeletonLoading }" required />
+                            <div *ngIf="stage_title?.invalid && !skeletonLoading" class="invalid-feedback">
+                                <div *ngIf="stage_title?.invalid && submitted">Stage is required</div>
                             </div>
                             <label class="tx-10 tx-uppercase tx-medium"> <span class="red">*</span>
                                 Guidance Text</label>
-                            <quill-editor formControlName="guidancetext" [modules]="quillConfig"
-                                [class.disabled]="isControlDisabled"
-                                 [styles]="{height: '200px'}"
-                                [ngClass]="{ 'is-invalid': submitted && cwf.guidancetext.errors }" required>
+                            <div [ngClass]="{ 'quilleditor-invalid':  guidanceText.invalid && submitted && !skeletonLoading}">
+                                <quill-editor [(ngModel)]="guidancetext" name="guidancetext" [modules]="quillConfig" 
+                            #guidanceText = "ngModel"
+                                [class.disabled]="isControlDisabled" (onContentChanged)="updateGuidanceText($event)"
+                                [ngClass]="{ 'is-invalid': guidanceText?.invalid && (guidanceText?.dirty || guidanceText?.touched) && submitted }"
+                                 [styles]="{height: '200px'}"   
+                                 [required]="true">
                             </quill-editor>
-                            <div *ngIf="submitted && cwf.guidancetext.errors" class="invalid-feedback">
-                                <div *ngIf="cwf.guidancetext.errors.required">Guidance text is required</div>
+                            <div *ngIf="guidanceText?.invalid && submitted && !skeletonLoading" class="invalid-feedback position-absolute">
+                                <div *ngIf="guidanceText?.invalid">Guidance text is required</div>
                             </div>
+                            </div>
+                        </div>
                         </form>
                     </div>
-                    <div *ngIf="!workflowStages?.length" class="m-2">No data found test</div>
+                
                 </div>
             </div>
         </div>

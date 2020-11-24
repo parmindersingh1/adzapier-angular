@@ -23,12 +23,19 @@ services:
       replicas: ${SCALABLE_REPLICAS}
       update_config:
         parallelism: 1
-        delay: 10s
+        delay: 20s
       restart_policy:
         condition: on-failure
       placement:
         constraints:
           - node.role==worker
+      resources:
+        limits:
+          cpus: ${LIMIT_CPU}
+          memory: ${LIMIT_MEMORY}
+        reservations:
+          cpus: ${RESERVE_CPU}
+          memory: ${RESERVE_MEMORY}
       labels:
         - "traefik.enable=true"
         - "traefik.tags=public"
