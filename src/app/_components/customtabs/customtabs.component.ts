@@ -1,25 +1,36 @@
-import { Component, OnInit, Input, Output, EventEmitter, ElementRef, ViewChild, ChangeDetectionStrategy } from '@angular/core';
+import {
+  Component, OnInit, Input, Output, EventEmitter, ElementRef, ViewChild, ChangeDetectionStrategy,
+  ChangeDetectorRef, AfterContentChecked
+} from '@angular/core';
 
 @Component({
   selector: 'app-customtabs',
   templateUrl: './customtabs.component.html',
-  styleUrls: ['./customtabs.component.scss']
-  // changeDetection: ChangeDetectionStrategy.OnPush
+  styleUrls: ['./customtabs.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CustomtabsComponent implements OnInit {
+export class CustomtabsComponent implements OnInit, AfterContentChecked {
   @Input() inputData: any = [];
   @Input() currentTab: any;
   @Input() flowStatus: any;
   @Output() currentStageEvent: EventEmitter<any> = new EventEmitter<any>();
   @ViewChild('panel', { static: true }) public panel: ElementRef<any>;
+  @ViewChild('inputDataIdentifier', { static: true }) public inputDataIdentifier: ElementRef<any>;
   newitemAdded: any = [];
   currentStage: any;
-  stage_title: any;
-  largest_id: any;
-  constructor() { }
+  stageTitle: any;
+  translateX: number = 0;
+  leftbtnVisibility = false;
+  rightbtnVisibility = true;
+  scrollLimit: number;
+  constructor(private cdRef: ChangeDetectorRef) { }
 
   ngOnInit() {
-    this.currentTab =  this.inputData[0].order;
+    if (this.currentTab) {
+      return this.currentTab;
+    } else {
+      this.currentTab = this.inputData[0].order;
+    }
   }
 
   addCustomStages(index, itemorder) {
@@ -33,7 +44,7 @@ export class CustomtabsComponent implements OnInit {
       guidance_text: 'Add your guidance text ',
       id: '', // this.generateUUID(),
       order: itemorder + 1,
-      stage_title: this.stage_title || 'New stage'
+      stage_title: this.stageTitle || 'New stage'
     };
 
 
@@ -43,9 +54,9 @@ export class CustomtabsComponent implements OnInit {
     this.inputData.splice(start, deleteCount, customStageObj);
     this.currentStageEvent.emit(customStageObj);
     this.updateOrders(this.inputData);
-    this.currentTab  = this.inputData[customStageObj.order - 1].order;
-    if(this.newitemAdded.length >= 12){
-      alert('You have reach limit of 12 stages!');
+    this.currentTab = this.inputData[customStageObj.order - 1].order;
+    if (this.newitemAdded.length >= 12) {
+      console.log('You have reach limit of 12 stages!');
       return false;
     }
   }
@@ -62,11 +73,11 @@ export class CustomtabsComponent implements OnInit {
   }
 
   public onPreviousSearchPosition(): void {
-    this.panel.nativeElement.scrollLeft -= 150;
+    this.translateX += 150;
   }
 
   public onNextSearchPosition(): void {
-    this.panel.nativeElement.scrollLeft += 150;
+    this.translateX -= 150;
   }
 
   generateUUID() {
@@ -91,8 +102,30 @@ export class CustomtabsComponent implements OnInit {
     }
   }
 
-  currentSelectedStage(id): boolean{
-   return this.newitemAdded.filter((t) => t.id == id).length > 0;
+  currentSelectedStage(id): boolean {
+    return this.newitemAdded.filter((t) => t.id === id).length > 0;
+  }
+
+  leftClickStatus(): boolean {
+    if (this.translateX >= 0) {
+      return true;
+    }
+  }
+
+  rightClickStatus(): boolean {
+    if (this.translateX <= this.scrollLimit) {
+      return true;
+    }
+  }
+
+  ngAfterContentChecked(): void {
+    this.cdRef.detectChanges();
+    const parentElementSize = this.inputDataIdentifier.nativeElement.parentElement.offsetWidth;
+    const itemSize = this.inputDataIdentifier.nativeElement.querySelector('li').offsetWidth;
+    const itemLength = this.inputDataIdentifier.nativeElement.childElementCount;
+    const menuSize = itemSize * itemLength;
+    const visibleSize = menuSize - parentElementSize;
+    this.scrollLimit = -visibleSize;
   }
 
 }

@@ -5,11 +5,15 @@
     overflow-y: hidden;
     white-space: nowrap;
     width: 1000px;
+    margin: 0 auto;
 }
 
 .customtab ul {
     margin: 0;
     padding: 0;
+    transition: all .3s ease-in-out;
+    display: inline-flex;
+    align-items: stretch;
 }
 
 .customtab ul li {
@@ -27,11 +31,12 @@
 
 .divflex {
     display: flex;
-    margin: 20px 0;
+    margin: 20px 10px;
 }
 
 .arrowbtn {
-    height: 30px;
+    height: 35px;
+    width: 35px;
     background: none;
     font-size: 24px;
     border: 0;
@@ -112,4 +117,8 @@
 
 .btn-primary.disabled, .btn-primary:disabled {
     cursor: default;
+}
+
+.hidebtns {
+    visibility: hidden;
 }

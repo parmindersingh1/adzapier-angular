@@ -60,21 +60,25 @@ table.table.table-bordered > tbody > tr > td:first-child {
     cursor: pointer;
   }
   
-::ng-deep .p-datatable.p-datatable-sm .p-datatable-tbody > tr > td > a {
+.workflows-table ::ng-deep .p-datatable.p-datatable-sm .p-datatable-tbody > tr > td > a {
   cursor: pointer;
 }
 
-::ng-deep .p-inputtext {
+.workflows-table ::ng-deep .p-datatable.p-datatable-sm .p-datatable-thead > tr > th {
+  padding: 0.8rem 0.3rem;
+}
+
+.workflows-table ::ng-deep .p-inputtext {
   padding: 0.3rem;
   font-size: 0.8rem;
 }
 
-::ng-deep .p-paginator .p-paginator-pages .p-paginator-page {
+.workflows-table ::ng-deep .p-paginator .p-paginator-pages .p-paginator-page {
   min-width: 1.5rem;
   height: 1.5rem;
 }
 
-::ng-deep .p-paginator .p-dropdown {
+.workflows-table ::ng-deep .p-paginator .p-dropdown {
   height: 2rem;
 }
 
@@ -99,25 +103,25 @@ table.table.table-bordered > tbody > tr > td:first-child {
 //   box-shadow: none;
 // }
 
-::ng-deep .p-datatable .p-paginator-bottom {
+.workflows-table ::ng-deep .p-datatable .p-paginator-bottom {
   border-top: 1px solid #ccc;
   border-radius: 0px 0px 10px 10px;
   border-bottom: 0;
 }
 
-::ng-deep .p-datatable.p-datatable-sm .p-datatable-header {
+.workflows-table ::ng-deep .p-datatable.p-datatable-sm .p-datatable-header {
   background: #fff;
   border-radius: 5px 5px 0 0;
   border: 0;
 }
 
-::ng-deep .p-datatable {
+.workflows-table ::ng-deep .p-datatable {
   position: relative;
   border: 1px solid #ccc;
   border-radius: 5px;
 }
 
-::ng-deep .p-datatable-thead {
+.workflows-table ::ng-deep .p-datatable-thead {
   border-top: 1px solid #dde2ea;
 }
 
@@ -138,12 +142,12 @@ table.table.table-bordered > tbody > tr > td:first-child {
 //   margin-left: 0.5rem;
 // }
 
-::ng-deep .p-datatable.p-datatable-sm .p-datatable-tbody > tr > td > a:hover {
+.workflows-table ::ng-deep .p-datatable.p-datatable-sm .p-datatable-tbody > tr > td > a:hover {
   text-decoration: underline;
 }
 
 
-::ng-deep .workflow-primeng-wrapper .p-datatable .p-datatable-thead > tr > th:first-child {
+.workflows-table ::ng-deep .workflow-primeng-wrapper .p-datatable .p-datatable-thead > tr > th:first-child {
   width: auto;
 }
 

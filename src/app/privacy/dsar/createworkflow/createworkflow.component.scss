@@ -259,3 +259,21 @@ flex-direction: column;
 .hideEditSave-btn {
 	display: none !important;
 }
+
+.loader-margin {
+	margin:4px auto 0 auto;
+	width: auto;
+	padding: 4px 4px 0 4px;
+	height: auto;	
+}
+
+.quilleditor-invalid {
+    border: 1px solid #f00;
+    border-radius: 5px;
+}
+
+.nodatafound{
+	top: 8px;
+    position: relative;
+    margin: 0 20px;
+}

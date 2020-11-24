@@ -179,12 +179,12 @@
                     </div>
                     <div class="stagediv">
                         <div class="divider-text mg-y-5">Advance Status</div>
-                        <div class="divflex" [ngStyle]="stageContentStyle()">
-                            <button (click)="onPreviousSearchPosition()" class="arrowbtn leftarrow"><i class="fa fa-angle-left"></i></button>
-                            <div class="customtab col-sm-8" #panel>
-                        <ul class="nav-tabs">
+                        <button (click)="onPreviousSearchPosition()"  class="arrowbtn leftarrow" [ngClass]="{'hidebtns':leftClickStatus()}"><i class="fa fa-angle-left"></i></button>
+                        <div class="divflex">
+                            <div class="customtab" #panel>
+                        <ul class="nav-tabs" [ngStyle]="{'transform': 'translateX(' + translateX + 'px)'}" #workflowStageScroller>
                             <li *ngFor="let stage of workflowStages">
-                                <div #stageContent (click)="stageSelection(stage)" [ngClass]="{'completedStage':  isStageCompleted(stage),'':stage.order < nextStage || stage.order == nextStage}">
+                                <div #stageContent class="tabTitleWrapper" (click)="stageSelection(stage)" [ngClass]="{'completedStage':  isStageCompleted(stage),'':stage.order < nextStage || stage.order == nextStage}">
 
                                     <a> <span class="step-number"
                                             [ngClass]="{' ':currentStage==stage.order && !isPreviousStageExist(stage),'':nextStage > currentStage}">{{stage.order}}</span>
@@ -195,21 +195,20 @@
                                     </a>
                                   
                                 </div>
-                                <h4 [ngClass]="{'selected-title':stage.id === currentWorkflowStageID,'hide':stage.id !== currentWorkflowStageID}">{{stage.stage_title}}</h4>
-                                <div class="m-2 word-wrap" [ngClass]="{'selected-stage-content':stage.id === currentWorkflowStageID,'hide':stage.id !== currentWorkflowStageID}">
-                                    {{stage.guidance_text}}
-                                </div>
+                                <ng-container>{{showStageTitleAndContent(stage)}}</ng-container>
                             </li>
                         </ul>
                         <!-- <div>{{selectedStageContent}}</div> -->
                         </div>
-                        <button (click)="onNextSearchPosition()" class="arrowbtn rightarrow"><i class="fa fa-angle-right"></i></button>
                         </div>
-
-
-
+                        <button (click)="onNextSearchPosition()" class="arrowbtn rightarrow" [ngClass]="{'hidebtns':rightClickStatus()}"><i class="fa fa-angle-right"></i></button>
                     </div>
-
+                    <div class="title-guidancetext-wrapper" [ngStyle]="stageContentStyle()">
+                    <h4 class="selected-title" [innerHTML]="showStageTitle"></h4>
+                    <div class="word-wrap selected-stage-content">
+                       <span [innerHTML]="showStageGuidanceText"></span> 
+                    </div>
+                    </div>
                 </div><!-- card-body -->
             </div><!-- card -->
             <div class="card mt-2 activitytab">

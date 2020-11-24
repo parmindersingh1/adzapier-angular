@@ -222,17 +222,17 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
   isEditingPublishedForm = false;
   modalRef: BsModalRef;
   constructor(private fb: FormBuilder, private ccpaRequestService: CcparequestService,
-              private organizationService: OrganizationService,
-              private dsarFormService: DsarformService,
-              private ccpaFormConfigService: CCPAFormConfigurationService,
-              private workFlowService: WorkflowService,
-              private router: Router,
-              private activatedRoute: ActivatedRoute,
-              private loadingbar: NgxUiLoaderService,
-              private modalService: NgbModal,
-              private cd: ChangeDetectorRef,
-              private sanitizer: DomSanitizer,
-              private bsmodalService: BsModalService
+    private organizationService: OrganizationService,
+    private dsarFormService: DsarformService,
+    private ccpaFormConfigService: CCPAFormConfigurationService,
+    private workFlowService: WorkflowService,
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
+    private loadingbar: NgxUiLoaderService,
+    private modalService: NgbModal,
+    private cd: ChangeDetectorRef,
+    private sanitizer: DomSanitizer,
+    private bsmodalService: BsModalService
   ) {
 
     this.count = 0;
@@ -1016,6 +1016,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
     if (this.isWebFormPublished && !this.isEditingPublishedForm) {
       this.navDirective.select(3);
     } else {
+    //  this.isResetlinkEnable = !this.isResetlinkEnable;
       this.isdraftsubmitted = false;
       this.setHeaderStyle();
       if (this.crid) {
@@ -1046,13 +1047,14 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
       this.isWebFormPublished = false;
       this.isDraftWebForm = true;
       this.active = 3;
-   }
+    }
   }
 
   createDraft() {
     if (this.isWebFormPublished) {
       this.navDirective.select(4);
     } else {
+      this.isResetlinkEnable = false;
       this.isdraftsubmitted = true;
       if (this.defaultapprover === undefined) {
         return false;
@@ -1118,7 +1120,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
       }
     }
   }
-// this.basicForm.value.formname === '' || this.basicForm.value.formname === undefined || !this.basicFormSubmitted
+  // this.basicForm.value.formname === '' || this.basicForm.value.formname === undefined || !this.basicFormSubmitted
   onNavChange(changeEvent: NgbNavChangeEvent) {
     if (changeEvent.nextId === 2) {
       if (this.isEditingPublishedForm) {
@@ -1631,10 +1633,10 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
 
   showFormStatus(): string {
     if (this.isWebFormPublished && !this.isDraftWebForm) {
-      this.isResetlinkEnable = true;
+      // this.isResetlinkEnable = true;
       return 'Active';
     } else {
-      this.isResetlinkEnable = false;
+      //  this.isResetlinkEnable = false;
       return 'Draft';
     }
 
@@ -1727,8 +1729,16 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
     if (this.orgId && this.propId) {
       this.ccpaFormConfigService.getCCPAFormConfigByID(this.orgId, this.propId, responsID,
         this.constructor.name, moduleName.dsarWebFormModule).subscribe((data) => {
-          this.formName = data.response.form_name;
-          this.basicForm.controls['formname'].setValue(data.response.form_name);
+          // tslint:disable-next-line: max-line-length
+          if (this.isResetlinkEnable) {
+            if (this.basicForm.controls['formname'].value !== '') {
+              this.basicForm.controls['formname'].setValue(this.basicForm.controls['formname'].value);
+            }
+          } else {
+            this.formName = data.response.form_name;
+            this.basicForm.controls['formname'].setValue(data.response.form_name);
+          }
+
           const key = 'request_form';
           this.webFormControlList = data.response[key];
           data.response[key].filter((t) => {
@@ -1760,9 +1770,11 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
           });
           this.ccpaFormConfigService.setFormControlList(this.webFormControlList);
           if (data.response['form_status'] === 'publish') {
-            this.isWebFormPublished = true;
-            this.isDraftWebForm = false;
-            this.isEditingPublishedForm = false;
+            if (!this.isResetlinkEnable) {
+              this.isWebFormPublished = true;
+              this.isDraftWebForm = false;
+              this.isEditingPublishedForm = false;
+            }
           } else {
             this.isWebFormPublished = false;
             this.isDraftWebForm = true;
@@ -1783,6 +1795,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
     this.isEditingPublishedForm = !this.isEditingPublishedForm;
     this.isWebFormPublished = true;
     this.isDraftWebForm = true;
+    this.isEditingPublishedForm ? this.isResetlinkEnable = true : this.isResetlinkEnable = false;
   }
 
   togglePublish() {
@@ -1809,17 +1822,20 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
 
   resetWebform() {
     this.isEditingPublishedForm = !this.isEditingPublishedForm;
+    this.isResetlinkEnable = !this.isResetlinkEnable;
     this.getDSARFormByCRID(this.crid);
   }
 
   disableEditPublishBtn(): boolean {
-    if (!this.isWebFormPublished && this.isEditingPublishedForm) {
+    if (!this.isWebFormPublished && this.isEditingPublishedForm && !this.isResetlinkEnable) {
+    //  this.isResetlinkEnable = false;
       return false;
-    } else if (this.isWebFormPublished && this.isEditingPublishedForm) {
+    } else if (this.isWebFormPublished && this.isEditingPublishedForm && this.isResetlinkEnable) {
+    //  this.isResetlinkEnable = true;
       return true;
     }
   }
-  
+
   ngAfterContentChecked(): void {
     this.cd.detectChanges();
   }

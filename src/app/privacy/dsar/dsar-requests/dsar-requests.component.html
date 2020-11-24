@@ -15,7 +15,7 @@
 
   </div>
 
-  <p-table #ptable [value]="requestsList" [columns]="selectedColumns" [paginator]="true" [lazy]="true"
+  <p-table class="dsar-request-table" #ptable [value]="requestsList" [columns]="selectedColumns" [paginator]="true" [lazy]="true"
     [loading]="isloading" (onLazyLoad)="loadrequestsListLazy($event)" [rows]="5" [showCurrentPageReport]="true"
     [totalRecords]="totalRecords" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
     [rowsPerPageOptions]="[5,10,15]" styleClass="p-datatable-sm">
