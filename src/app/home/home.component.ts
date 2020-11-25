@@ -17,22 +17,26 @@ export class HomeComponent implements OnInit {
         private authenticationService: AuthenticationService,
         private userService: UserService
     ) {
-        this.currentUser = this.authenticationService.currentUserValue;
+       // this.currentUser = this.authenticationService.currentUserValue;
     }
 
     ngOnInit() {
-        this.loadAllUsers();
+      //  console.log(this.currentUser,'currentuser home..');
+       // if(!this.currentUser){
+          //  this.loadAllUsers();
+       // }
     }
 
-    deleteUser(id: number) {
-        this.userService.delete(id)
-            .pipe(first())
-            .subscribe(() => this.loadAllUsers());
-    }
+    // deleteUser(id: number) {
+    //     this.userService.delete(id)
+    //         .pipe(first())
+    //         .subscribe(() => this.loadAllUsers());
+    // }
 
-    private loadAllUsers() {
-        this.userService.getAll()
-            .pipe(first())
-            .subscribe(users => this.users = users);
-    }
+    // private loadAllUsers() {
+    //     console.log('home...');
+    //     this.userService.getAll()
+    //         .pipe(first())
+    //         .subscribe(users => this.users = users);
+    // }
 }

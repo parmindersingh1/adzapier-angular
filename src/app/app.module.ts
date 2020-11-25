@@ -1,60 +1,95 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http'
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { HomeComponent } from './home/home.component';
-import { LoginComponent } from './login/login.component';
-import { RegisterComponent } from './register/register.component';
-import { IconsModule } from './icons/icons.module';
-import { JwtInterceptor, fakeBackendProvider,ErrorInterceptor } from './_helpers';
-
-import { environment } from '../environments/environment';
-import { AnalyticsComponent } from './pages/dashboards/analytics/analytics.component';
-import { Ng2ChartJsModules } from 'chartjs-ng2-module';
+import { JwtInterceptor, fakeBackendProvider, ErrorInterceptor } from './_helpers';
 import { HeaderComponent } from './_components/layout/header/header.component';
 import { FooterComponent } from './_components/layout/footer/footer.component';
-import { NavbarComponent } from './_components/layout/navbar/navbar.component';
+import { PagenotfoundComponent } from './errorpages/pagenotfound.component';
+import { InternalerrorComponent } from './errorpages/internalerror.component';
+import { PagenotfoundComponent1 } from './errorpages/404page.component';
+import { AuthenticationService } from './_services';
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { CollapseModule } from 'ngx-bootstrap/collapse';
+import { FeatherModule } from 'angular-feather';
+import { allIcons } from 'angular-feather/icons';
+import {NgxUiLoaderModule, NgxUiLoaderService} from 'ngx-ui-loader';
+import { ngxUiLoaderConfig } from './_constant/loading.contant';
+import { WelcomeComponent } from './welcome/welcome.component';
+import { ModalModule } from 'ngx-bootstrap/modal';
+import {NgbCollapseModule} from '@ng-bootstrap/ng-bootstrap';
+import { TooltipModule } from 'ngx-bootstrap/tooltip';
 
-export const isMock = environment.mock;
 @NgModule({
   declarations: [
     AppComponent,
-    HomeComponent,
-    LoginComponent,
-    RegisterComponent,
-    AnalyticsComponent,
+    // HomeComponent,
     HeaderComponent,
     FooterComponent,
-    NavbarComponent,
+    // AlertComponent,
+    // ForgotpasswordComponent,
+    PagenotfoundComponent,
+    InternalerrorComponent,
+    PagenotfoundComponent1,
+    // PropertydashboardComponent,
+   // PricingComponent,
+   //  PartnersComponent,
+   //  TermofuseComponent,
+   //  PrivacypolicyComponent,
+   //  CCPAComponent,
+   // VerifyemailComponent,
+   //  CheckoutConfirmationComponent,
+    WelcomeComponent
   ],
   imports: [
     BrowserModule,
-    ReactiveFormsModule,
+    // FormsModule,
+    // ReactiveFormsModule,
     HttpClientModule,
     AppRoutingModule,
-    FontAwesomeModule,
-    NgbModule,
-    IconsModule,
-    Ng2ChartJsModules 
+    // FontAwesomeModule,
+    // DragDropModule,
+    BrowserAnimationsModule,
+    // SharedbootstrapModule,
+    BsDropdownModule.forRoot(),
+    CollapseModule.forRoot(),
+    FeatherModule.pick(allIcons),
+    NgxUiLoaderModule.forRoot(ngxUiLoaderConfig),
+    TooltipModule.forRoot(),
+    // MatButtonModule,
+    // TableModule,
+    // MultiSelectModule,
+    // ChartsModule,
+    // Ng2ChartJsModules,
+    ModalModule.forRoot(),
+    // TabsModule.forRoot(),
+    // AccordionModule.forRoot(),
+    NgbCollapseModule
   ],
   providers: [
-    
-    { provide: HTTP_INTERCEPTORS, 
-      useClass: JwtInterceptor, 
-      multi: true },
-    { provide: HTTP_INTERCEPTORS, 
-      useClass: ErrorInterceptor, 
-      multi: true },
+    NgxUiLoaderService,
+    AuthenticationService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: JwtInterceptor,
+      multi: true
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: ErrorInterceptor,
+      multi: true
+    },
 
     // provider used to create fake backend
-    fakeBackendProvider
+    fakeBackendProvider,
+
   ],
   bootstrap: [AppComponent],
-  exports: [AnalyticsComponent]
+  exports: [
+    // AnalyticsModule,
+    TooltipModule,
+    BsDropdownModule, CollapseModule]
 })
 export class AppModule { }

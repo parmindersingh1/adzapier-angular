@@ -22,23 +22,28 @@
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.json",
-            "aot": false,
+            "aot": true,
             "assets": [
-              "src/favicon.ico",
+              "src/assets/az-icon.png",
               "src/assets"
             ],
             "styles": [
-              "src/assets/lib/ionicons/css/ionicons.min.css",
-              "src/assets/lib/bootstrap/css/bootstrap.min.css",
-              "src/assets/css/dashforge.css"
+              "./node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "./node_modules/ngx-bootstrap/datepicker/bs-datepicker.css",
+              "src/styles.scss",
+              "src/assets/css/dashforge.css",
+              "./node_modules/quill-emoji/dist/quill-emoji.css",
+              "./src/assets/css/map/jqvmap.min.css",
+              "./src/assets/css/daterangepicker.css"
             ],
             "scripts": [
-              "src/assets/lib/jquery/jquery.min.js",
-              "src/assets/lib/bootstrap/js/bootstrap.min.js",
-              "src/assets/lib/bootstrap/js/bootstrap.bundle.min.js",
-              "src/assets/lib/feather-icons/feather.min.js",
-              "src/assets/js/dashforge.js",
-              "src/assets/js/dashforge.settings.js"
+              "./node_modules/jquery/dist/jquery.min.js",
+              "./src/assets/js/moment.min.js",
+              "./src/assets/js/map/jquery.vmap.min.js",
+              "./src/assets/js/map/jquery.vmap.world.js",
+              "./src/assets/js/map/jquery.vmap.usa.js",
+              "./src/assets/js/datepicker/daterangepicker.min.js",
+              "./src/assets/js/flot/jquery.flot.js"
             ]
           },
           "configurations": {
@@ -51,17 +56,75 @@
               ],
               "optimization": true,
               "outputHashing": "all",
-              "sourceMap": false,
+              "sourceMap": true,
               "extractCss": true,
-              "namedChunks": false,
+              "namedChunks": true,
               "aot": true,
               "extractLicenses": true,
-              "vendorChunk": false,
+              "vendorChunk": true,
               "buildOptimizer": true,
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "2mb",
+                  "maximumWarning": "4mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb",
+                  "maximumError": "10kb"
+                }
+              ]
+            },
+            "staging": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.staging.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": true,
+              "extractCss": true,
+              "namedChunks": true,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": true,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "4mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb",
+                  "maximumError": "10kb"
+                }
+              ]
+            },
+            "develop": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.develop.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": true,
+              "extractCss": true,
+              "namedChunks": true,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": true,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "4mb",
                   "maximumError": "5mb"
                 },
                 {
@@ -95,13 +158,16 @@
           "options": {
             "main": "src/test.ts",
             "polyfills": "src/polyfills.ts",
-            "tsConfig": "tsconfig.spec.json",
-            "karmaConfig": "karma.conf.js",
+            "tsConfig": "src/tsconfig.spec.json",
+            "karmaConfig": "src/karma.conf.js",
             "assets": [
               "src/favicon.ico",
               "src/assets"
             ],
             "styles": [
+              "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
+              "./node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "./node_modules/ngx-bootstrap/datepicker/bs-datepicker.css",
               "src/styles.scss"
             ],
             "scripts": []
@@ -133,6 +199,7 @@
           }
         }
       }
-    }},
+    }
+  },
   "defaultProject": "adzapier-analytics-ng"
 }

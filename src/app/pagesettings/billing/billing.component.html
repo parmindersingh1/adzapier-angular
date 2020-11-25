@@ -1,0 +1,147 @@
+<div class="container pd-x-0 pd-lg-x-10 pd-xl-x-0">
+  <div class="d-sm-flex align-items-center justify-content-between ">
+    <div>
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb breadcrumb-style1 mg-b-10">
+          <li class="breadcrumb-item"><a routerLink="/">Dashboard</a></li>
+          <li class="breadcrumb-item active" aria-current="page">billing</li>
+        </ol>
+      </nav>
+      <h4 class="mg-b-0 tx-spacing--1">Billing</h4>
+    </div>
+        <a routerLink="/settings/billing/manage" id="toggleplan" class="btn btn-primary"><i class="fa fa-cog pr-1" aria-hidden="true"></i> Manage Subscription</a>
+  </div>
+
+  <div *ngIf="isSuccess" class="mb-0 mt-3 alert alert-success">
+    <strong> Payment Received!</strong> Thanks for the payment - Your plan has been upgraded
+  </div>
+
+  <div *ngIf="isError" class="mb-0 mt-3 alert alert-danger">
+    <strong>Error!</strong> Something went Wrong...
+  </div>
+
+  <div class="paid" style="position: relative;">
+    <div class="row row-xs">
+      <div class="col-sm-6 col-lg-6 mg-t-40 mg-sm-t-0 mg-md-t-40">
+        <div class="card" style="min-height:200px">
+          <div class="card-body">
+            <h5 class="card-title">Bill Estimate</h5>
+
+            <span class="card-text">{{billingDetails.billing_history.currency}}
+              {{billingDetails.billing_history.amount}}
+              <span class="card-text">(tax inclusive) </span>
+            </span>
+            <br>
+            <span> Plan Subscribed: {{billingDetails.billing_details.plan_name}} </span> <br />
+                        <a href="javascript:;" (click)="openConfimModal(cancelPlan)">Cancel Subscription</a>
+
+          </div>
+          <div class="card-footer">
+            <!-- <button class="btn btn-block btn-primary">Upgrade Plan</button> -->
+            <a class="btn btn-block btn-primary btn-success" routerLink="/settings/billing/pricing"> Upgrade Now!</a>
+          </div>
+        </div>
+      </div>
+
+
+
+
+
+      <div class="col-sm-6 col-lg-6 mg-t-40 mg-sm-t-0 mg-md-t-40">
+        <div class="card" style="min-height:200px">
+          <div class="card-body">
+            <h5 class="card-title">Billing details</h5>
+            <!--            <h6 class="card-subtitle mb-2 text-muted">Billing period</h6>-->
+            <!--            <p class="card-text">Monthly</p>-->
+            <a routerLink="/settings/billing/update">
+              <i class='fas fa-edit' data-toggle="Edit Billing" title="Edit Billing" style='font-size:24px'></i>
+            </a>
+
+            <div class="row">
+              <div class="col-sm-3">
+                <i class="fab fa-cc-{{billingDetails.billing_details.brand}}" aria-hidden="true"
+                  style="font-size: 70px;"></i>
+              </div>
+              <div class="col-sm-9">
+                <span p-0="">{{billingDetails.billing_details.card_number}}</span>
+                <br>
+                <span>{{billingDetails.billing_details.name}}</span>
+                <br>
+                <p>Expires <span [innerHTML]="billingDetails.billing_details.expiry"></span></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row row-xs ">
+      <div class="col-sm-6 col-lg-6 mg-t-40 mg-sm-t-0 mg-md-t-40">
+        <div class="card min-height" style="min-height:200px">
+          <div class="card-body">
+            <h5 class="card-title">Bill history</h5>
+
+            <span class="card-text">{{billingDetails.billing_history.currency}}
+              {{billingDetails.billing_history.amount}}
+              <span class="card-text">(tax inclusive) </span>
+            </span>
+            <!--            <p>Next Charge: May 28,2020</p>-->
+          </div>
+        </div>
+      </div>
+
+      <div class="col-sm-6 col-lg-6 mg-t-40 mg-sm-t-0 mg-md-t-40">
+        <div class="card min-height">
+          <div class="card-body">
+            <h6 class="card-title">Company Details</h6>
+            <div class="addresswrapper">
+              <ul>
+                <li *ngFor="let data of companyDetails">
+                  <p class="mg-b-0">
+                    <span> {{data.name}}</span>
+                  </p>
+                  <p class="mg-b-0">
+                    <span> {{data.address1}} {{data.address2}}</span>
+                  </p>
+                  <p class="mg-b-0">
+                    <span>{{data.city}} </span>
+                    <span > {{data.state}} </span>
+                    <span> {{data.zipcode}} </span>
+                  </p>
+                  <p class="mg-b-0">
+                    <span> {{data.email}} </span>
+                    <span> {{data.phone}} </span>
+                  </p>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<ng-template #cancelPlan>
+  <div class="modal-body text-center">
+    <p>Do you want to cancel your current subscription?</p>
+    <button type="button" class="btn btn-default" (click)="confirm()" >Yes</button>
+    <button type="button" class="btn btn-primary" (click)="decline()" >No</button>
+  </div>
+</ng-template>
+
+<ng-template #showAlertMsg>
+  <div class="modal-body text-center">
+    <p>You don't have any current plan, <br /> Please Choose Your First Plan</p>
+    <button type="button" class="btn btn-primary btn-sm" (click)="navigateToPricing()" >View plans</button>
+  </div>
+</ng-template>
+
+
+
+<div class="col-sm-5 mt-3 mr-0 float-right">
+  <alert *ngIf="isOpen" [type]="alertType" [dismissible]="dismissible" (onClosed)="onClosed(alertMsg)">{{  alertMsg}}
+  </alert>
+</div>

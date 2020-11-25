@@ -1,1 +1,322 @@
 /* You can add global styles to this file, and also import other style files */
+/* Add application styles & imports to this file! */
+// @import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
+// @import "~bootstrap/dist/css/bootstrap.min.css";
+//  @import "~bootstrap/dist/css/bootstrap.css";
+//@import '~quill/dist/quill.core.css';
+//@import '~quill/dist/quill.bubble.css';
+//@import '~quill/dist/quill.snow.css';
+//@import '~quill-emoji/dist/quill-emoji.css';
+
+/*for prime ng table */
+// @import '../src/assets/css/dashforge.css';
+@import '../node_modules/primeng/resources/themes/saga-blue/theme.css';
+@import '../node_modules/primeng/resources/primeng.min.css';
+@import '../node_modules/primeicons/primeicons.css';
+
+
+body{
+  background-color: #f5f6fa !important;
+}
+.o-hidden {
+    overflow: hidden;
+}
+
+.p-0 {
+    padding: 0;
+}
+
+.border-0 {
+    border: 0px;
+}
+.simple-notification-wrapper.bottom {
+  bottom: 0px !important;
+}
+.navbar {
+    background: #fff !important; /*042893*/
+    border-radius: 0 !important;
+    height: 60px;
+}
+
+.light-shadow {
+    box-shadow:0 0.1rem 0.5rem rgba(0, 0, 0, 0.15) !important;
+}
+
+.navbar-menu .nav-link {
+    color:#0168fa;
+}
+.simple-notification-wrapper.bottom {
+  bottom: 50px !important;
+}
+.navbar-expand-sm .navbar-nav .nav-link {
+    // color:#0168fa;
+    color: rgba(255, 255, 255, 0.7);
+    font-weight: 500;
+}
+
+.navbar-expand-sm .navbar-nav .nav-link:hover {
+    color: #0168fa;
+}
+
+.dropdown-item:hover, .dropdown-item:focus {
+    border-radius: 0;
+}
+
+.nav-link, .menuitem {
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.dropdown-toggle::after {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-top: 0 !important;
+    border-left: 0 !important;
+    border-right: 1.5px solid #8392a5 !important;
+    border-bottom: 1.5px solid #8392a5 !important;
+    display: inline-block;
+    transform: rotate(45deg);
+    margin-left: auto;
+    transition: all 0.2s ease-in-out;
+}
+
+a.nav-link.dropdown-toggle:hover:after {
+    border-right: 1.5px solid #0168fa !important;
+    border-bottom: 1.5px solid #0168fa !important;
+}
+// .dropdown-toggle:last-child::after{
+//     border: 0 !important;
+// }
+
+ul.dropdown-menu.show::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: 25px;
+    border-bottom: 10px solid rgba(192, 204, 218, 0.53);
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+}
+
+ul.dropdown-menu::after {
+    content: '';
+    position: absolute;
+    top: -8.5px;
+    left: 26px;
+    border-bottom: 9px solid #fff;
+    border-left: 9px solid transparent;
+    border-right: 9px solid transparent;
+}
+
+.dropdown-menu {
+    padding: 10px 25px 20px 25px !important;
+    border-radius: 0 !important;
+    margin: 0.68rem 0 0 !important;
+    border: 1px solid rgba(192, 204, 218, 0.53) !important;
+    left: -39px !important;
+    right: auto !important;
+}
+
+.dropdown-item {
+    font-size: 13px !important;
+}
+
+.dropdown-item:hover, .dropdown-item:focus {
+    background-color: #fff !important;
+}
+
+.navbar {
+    padding: 0 !important;
+    border-bottom: 1px solid rgba(72, 94, 144, 0.16) !important;
+}
+
+.dropdown-item:hover {
+    color: #0168fa !important;
+}
+
+.dropdown-menu-right {
+    width: 230px !important;
+    margin: 0.7rem 0 0 !important;
+}
+
+.dropdown-menu.dropdown-menu-right::before {
+    left: auto !important;
+    right: 15px !important;
+}
+
+.dropdown-menu.dropdown-menu-right::after {
+    content: "";
+    position: absolute;
+    top: -8.5px;
+    right: 16px !important;
+    left: auto !important;
+    border-bottom: 9px solid #fff;
+    border-left: 9px solid transparent;
+    border-right: 9px solid transparent;
+}
+
+a.dropdown-item > i {
+    margin-right: 15px !important;
+}
+
+.navbar-nav {
+    padding: 0 !important;
+}
+
+.bdr-zero {
+    border: 0;
+}
+
+.breadcrumb-item a {
+    cursor: pointer;
+}
+
+.feather-16 {
+    width: 16px !important;
+    height: 16px !important;
+}
+
+.input-group-text {
+    border: 1px solid #dee2e6 !important;
+}
+
+.input-group > .form-control:focus {
+    outline: none !important;
+    box-shadow: none !important;
+}
+// .card-header {
+//     padding: 10px 10px !important;
+// }
+
+.modal-content .close {
+    outline: none;
+}
+
+.container {
+    z-index: 0;
+}
+
+.container, .container-fluid {
+    margin-bottom: 50px;
+    //background-color: #f5f6fa;
+}
+
+.searchfield.mt-3 .form-inline {
+    font-weight: normal;
+}
+
+.container > .nav-tabs .nav-link {
+    background-color: transparent;
+    border-color: transparent;
+    border-bottom: 2px solid #5cb85c;
+}
+
+.container > .nav-tabs .nav-link:hover, .nav-tabs .nav-link:focus {
+    background-color: transparent;
+    border:0;
+    border-bottom: 2px solid #5cb85c;
+}
+.container > .nav-tabs .nav-link.active {
+    background-color: #fff;
+    z-index: 5;
+    color: #0168fa;
+    border: 0px;
+    border-bottom: 2px solid blue;
+}
+// @media (min-width: 576px) {
+//     .card-body {
+//         padding: 0 15px !important;
+//     }
+// }
+
+
+// .alert-success {
+// 	background-color: #7B1FA2;
+//     border-color: #4A148C;
+//     color: #fff;
+// }
+
+.alert-danger {
+    color: #721c24;
+    background-color: #dc3545;
+    border-color: #f5c6cb;
+}
+.datatable-header-cell {
+  background-color: #0367fa !important;
+}
+.dt-button {
+  background-color: #0367fa !important;
+}
+.ui-modal-header {
+  background-color: #0367fa !important;
+}
+.dt-form-group:first-child {
+  display: none !important;
+}
+.dt-spinner {
+  box-shadow: 0 -1.25rem 0 1.5rem #0367fa inset !important;
+}
+.nav-item {
+  background: transparent !important;
+}
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+
+/* Prime Ng Table */
+.p-datatable .p-datatable-tbody > tr > td:first-child {
+    color: #00f !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+    cursor: pointer !important;
+    // display: inline-block;
+    width: 60px !important;
+    overflow: hidden !important;
+  }
+
+  .p-component {
+      font-size: 14px !important;
+  }
+
+  .p-datatable.p-datatable-sm .p-datatable-tbody > tr > td {
+      font-size: 13px !important;
+  }
+
+.p-tabview .p-tabview-nav {
+  //background: #ffffff;
+  //border: 1px solid #dee2e6;
+  //border-width: 0 0 2px 0;
+  padding-left: 31% !important;
+}
+
+ul.notification-menu-right.show::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    right: 25px !important;
+    left: auto !important;
+    border-bottom: 10px solid rgba(192, 204, 218, 0.53);
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+}
+
+ul.notification-menu-right::after {
+    content: '';
+    position: absolute;
+    top: -8.5px;
+    right: 26px !important;
+    left: auto !important;
+    border-bottom: 9px solid #fff;
+    border-left: 9px solid transparent;
+    border-right: 9px solid transparent;
+}
+
+.breadcrumb-style1 .breadcrumb-item, .breadcrumb-style2 .breadcrumb-item, .breadcrumb-style3 .breadcrumb-item {
+    font-weight: 500 !important;
+}
+
+.breadcrumb-style1 .breadcrumb-item.active {
+    font-weight: 500;
+}

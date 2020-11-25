@@ -1,0 +1,72 @@
+.table-dashboard-two {
+  width: 100%;
+  font-size: 13px;
+}
+tr {
+  display: table-row;
+  vertical-align: inherit;
+  border-color: inherit;
+}
+table {
+  display: table;
+  box-sizing: border-box;
+  border-collapse: collapse;
+  border-spacing: 2px;
+  border-color: grey;
+}
+.table-dashboard-two td:first-child {
+  padding-left: 0;
+}
+.table-dashboard-two td {
+  vertical-align: top;
+  line-height: 1;
+  padding: 8px 0;
+}
+td {
+  display: table-cell;
+  vertical-align: inherit;
+}
+.table-dashboard-two td:first-child div {
+  opacity: .7;
+}
+
+.ht-12 {
+  height: 12px;
+}
+.wd-12 {
+  width: 12px;
+}
+.bd-3 {
+  border-width: 3px;
+}
+.bd {
+  border: 3px solid rgba(72, 94, 144, 0.16);
+}
+.rounded-circle {
+  border-radius: 50% !important;
+}
+.form-control {
+  height: 29px;
+  padding-right: 1px;
+  padding-left: 5px;
+}
+.req-header{
+  padding-top: 12px;
+  padding-bottom: 12px;
+}
+.activity-card {
+  min-height: 254px;
+  margin-top: 32px;
+}
+.bd-primary {
+  border-color: #0168fa !important;
+}
+.bd-success {
+  border-color: #10b759 !important;
+}
+.bd-warning {
+  border-color: #ffc107 !important;
+}
+.bd-pink {
+  border-color: #f10075 !important;
+}

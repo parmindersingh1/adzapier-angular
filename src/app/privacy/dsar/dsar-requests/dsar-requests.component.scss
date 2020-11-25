@@ -1,0 +1,318 @@
+.pd-t-20 {
+  padding: 2%!important;
+}
+
+.heading_border{
+  border-bottom: 1px solid #485e9029;
+}
+
+.propertylist {
+  border: 1px solid #ccc;
+}
+
+.propertylist h5 {
+  padding: 0px 10px;
+}
+
+.propertylist ul{
+  margin: 0;
+  padding: 0;
+}
+
+.propertylist ul li{
+  list-style-type: none;
+}
+
+.table-responsive.organization-div > .card > .card-header {
+  padding-top: 0;
+  padding-right: 0;
+  padding-left: 0;
+}
+
+.paddingzero{
+  padding: 0;
+  margin: 0;
+}
+
+.modal-header .close {
+  outline: none;
+}
+
+.is-invalid {
+  color: red;
+}
+
+.txt-center {
+  text-align: center;
+}
+
+.table > tbody > tr > td> img.img-fluid {
+  max-width: 15% !important;
+}
+
+.table > tbody > tr > td:nth-child(3) {
+  width: 20% !important;
+}
+
+.table.table.table-bordered > tbody > tr > td > a {
+  color: #0168fa;
+  cursor: pointer;
+}
+
+.table.table.table-bordered > tbody > tr > td > a:first-child {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: pointer;
+  display: inline-block;
+  width: 100px !important;
+  overflow: hidden !important;
+}
+
+.table-primary, .table-primary > tbody > tr > td {
+  padding: 3px !important;
+  font-size: 13px;
+}
+
+.organization-div > .card > .card-body {
+  padding: 3px;
+}
+
+.organization-div > .card > .card-header {
+  padding: 5px;
+}
+
+.table.table.table-bordered > tbody > tr > td > a:hover {
+  color:#0148ae;
+}
+
+.table > tbody > tr:hover {
+  background-color:#e9ecf1;
+}
+
+.checked {
+  background: green;
+}
+
+.feather-16 {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+}
+
+.input-group-text {
+  border: 1px solid #dee2e6;
+}
+
+.input-group > .form-control:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.searchfield {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+
+.searchfield .input-group {
+  align-items: center;
+}
+
+.searchfield > div > span.input-group-append {
+  height: 33px;
+  display: flex;
+}
+
+.searchfield > div > span > div.input-group-text {
+  align-items: center;
+  cursor: pointer !important;
+  border: 1px solid #c0ccda;
+}
+
+.searchfield div.input-group > input.form-control:first-child {
+  border: 1px solid #c0ccda !important;
+  border-right: 0 !important;
+}
+
+.searchfield > div > span > div.input-group-text {
+  border: 1px solid #c0ccda !important;
+  background: #fff !important;
+}
+
+.row-enabled {
+  background-color:transparent;
+}
+
+.row-disabled {
+  background-color: #ccc;
+}
+
+tr.row-disabled > td > a {
+  color: #fff !important;
+}
+
+.table-primary tbody tr {
+  background-color: #f1f7ff;
+}
+.table-primary tbody tr:hover {
+  background-color: #d2e5ff;
+}
+.table-primary tbody tr td a {
+  color: #0168fa;
+  text-decoration: none;
+  background-color: transparent;
+  font-weight: 400;
+}
+
+.badge {
+  font-size: 10px;
+  font-weight: 500;
+  font-family: -apple-system, BlinkMacSystemFont, "Inter UI", Roboto, sans-serif;
+  padding: 3px 5px 4px;
+  border-radius: 3px;
+}
+.badge-primary {
+  color: #fff;
+  background-color: #0168fa;
+}
+
+.dsar-request-table ::ng-deep .p-multiselect {
+  position: absolute;
+  width: 200px;
+}
+
+.dsar-request-table ::ng-deep .p-datatable.p-datatable-sm .p-datatable-header {
+  display: flex;
+  width: 100%;
+  border-radius: 5px 5px 0 0;
+  border-top:1px solid #dde2ea;
+}
+
+.dsar-request-table ::ng-deep .p-datatable {
+  position: relative;
+  border: 1px solid #ccc;
+  border-top: 0;
+  margin: 20px 0;
+  border-radius: 5px;
+}
+
+.dsar-request-table ::ng-deep .p-datatable .p-datatable-header {
+  border-bottom: 1px solid #ccc;
+  border-top: 1px solid #ccc;
+}
+
+.dsar-request-table ::ng-deep .p-datatable .p-datatable-thead > tr > th {
+  font-size: 11px;
+}
+
+.dsar-request-table ::ng-deep .p-datatable .p-datatable-thead > tr > th:first-child {
+  width: 60px;
+}
+
+.dsar-request-table ::ng-deep .p-datatable.p-datatable-sm .p-datatable-tbody > tr > td > a:hover {
+  text-decoration: underline;
+}
+
+.dsar-request-table ::ng-deep .p-datatable .p-paginator-bottom {
+  justify-content: flex-end;
+}
+
+// ::ng-deep .pi {
+//   font-size: 0.6rem;
+// }
+
+.dsar-request-table ::ng-deep .p-datatable .p-sortable-column .p-sortable-column-icon {
+  margin-left: 0;
+  font-size: 0.6rem;
+}
+
+.dsar-request-table ::ng-deep .p-datatable.p-datatable-sm .p-datatable-thead > tr > th {
+  padding: 0.8rem 0.3rem;
+}
+
+.dsar-request-table ::ng-deep .p-datatable.p-datatable-sm .p-datatable-thead > tr > th:first-child {
+  padding: 0.8rem 0.5rem;
+}
+
+.dsar-request-table ::ng-deep .p-multiselect .p-multiselect-label {
+  padding: 0.3rem;
+}
+
+.searchfield .form-control {
+  height: auto;
+  padding: 0.3rem;
+}
+
+.badge-primary {
+  color: #fff !important;
+}
+// ::ng-deep .p-multiselect-filter-container > .pi {
+//   font-size: 0.6rem;
+// }
+
+.linkcolor {
+  cursor: pointer !important;
+  color:#00f !important;
+}
+
+.input-group-append .bg-transparent {
+  cursor: pointer;
+}
+
+.color-red {
+  color: red;
+}
+
+.dsar-request-table ::ng-deep .p-datatable.p-datatable-sm .p-datatable-tbody > tr > td > a {
+  cursor: pointer;
+}
+
+.dsar-request-table ::ng-deep .p-inputtext {
+  padding: 0.3rem;
+  font-size: 0.8rem;
+}
+
+.dsar-request-table ::ng-deep .p-paginator .p-paginator-pages .p-paginator-page {
+  min-width: 1.5rem;
+  height: 1.5rem;
+}
+
+.dsar-request-table ::ng-deep .p-paginator .p-dropdown {
+  height: 2rem;
+}
+
+.dsar-request-table ::ng-deep .p-multiselect-panel .p-multiselect-header {
+  padding: 0.3rem 1rem;
+}
+
+.dsar-request-table ::ng-deep .p-multiselect-panel .p-multiselect-items {
+  padding: 0;
+}
+
+.dsar-request-table ::ng-deep .p-multiselect-panel .p-multiselect-items .p-multiselect-item.p-highlight {
+  background-color: #fff;
+  color: #333;
+}
+
+.dsar-request-table ::ng-deep .p-highlight .p-checkbox .p-checkbox-box {
+  border-color: #2196F3;
+}
+
+.dsar-request-table ::ng-deep .p-multiselect-panel .p-multiselect-items .p-multiselect-item:focus {
+  box-shadow: none;
+}
+
+.dsar-request-table ::ng-deep .p-datatable .p-paginator-bottom {
+  border-top: 1px solid #ccc;
+  border-radius: 0px 0px 10px 10px;
+  border-bottom: 0;
+}
+
+.hide {
+  display: none;
+}
+
+.align-navbtn {
+  display: flex;
+  justify-content: space-between;
+}

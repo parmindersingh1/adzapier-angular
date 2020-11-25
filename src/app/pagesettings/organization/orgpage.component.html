@@ -1,0 +1,231 @@
+<div class="container">
+<div class="mb-3">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb breadcrumb-style1 mg-b-0">
+            <li class="breadcrumb-item"><a routerLink="/settings">Settings</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Organizations</li>
+        </ol>
+    </nav>
+</div>
+<div class="table-responsive organization-div">
+    <div class="card">
+        <div class="card-header">
+            <div class="searchfield mt-3">
+                <div class="col-3 input-group">
+                    <input class="form-control py-2 border-right-0 border" [(ngModel)]="searchText" type="search"
+                        value="search" id="example-search-input" />
+                    <span class="input-group-append">
+                        <div class="input-group-text bg-transparent"><i class="fa fa-search"></i></div>
+                    </span>
+                </div>
+                 
+                <div class="ml-auto mr-3">
+                    <button type="button" class="btn btn-white" data-toggle="modal"
+                        (click)="organizationModalPopup(editOrgModal,'')">   <i-feather class="feather-16" name="plus"></i-feather> 
+                        Add organization</button>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <table class="table table-bordered mb-2">
+                <thead class="thead-primary">
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Address</th>
+                        <th>City</th>
+                        <th>State</th>
+                        <th>Zipcode</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <ng-container *ngFor="let data of orgList |  filter: searchText:'orgname':'city':'state' | paginate:paginationConfig; let i = index">
+                    <tr [ngClass]="{'row-disabled':data.active == false, 'row-enabled':data.active == true}">
+                        <td>{{ (paginationConfig.currentPage - 1) * paginationConfig.itemsPerPage + i + 1 }}
+                        </td>
+                        <td>{{data.orgname}}</td>
+                        <td>{{data.address1}} {{data.address2}}</td>
+                        <td>{{data.city}}</td>
+                        <td>{{data.state}}</td>
+                        <td>{{data.zipcode}}</td>
+                        <td>
+                            <a class="pd-r-5" *ngIf="data.active == true" (click)="viewOrganization(data.id)"><i
+                                    class="fas fa-external-link-alt"></i> View</a>
+                            <!-- <a class="pd-r-5" *ngIf="data.active == true" data-toggle="modal" (click)="organizationModalPopup(editOrgModal,data)">
+                                <i class="far fa-edit fa-1x"></i> Edit
+                            </a> -->
+                            <a class="badge badge-success pd-r-5" *ngIf="data.active == false" (click)="enableOrganization(data.id)">
+                                <!-- <i-feather name="check" class="feather-16"></i-feather> -->
+                                 Enable
+                            </a>
+                        </td>
+                    </tr>
+                    </ng-container>
+                    <tr>
+                        <td colspan="8" *ngIf="(orgList | filter: searchText:'orgname':'city':'state').length===0">No
+                            records found.</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="pagination-wrapper">
+                <div class="col-4 pl-0">
+                    <div class="form-inline">
+                        <div class="form-group pr-0">
+                            <label class="col-sm-5 col-form-label" for="name">View</label>
+                            <select id="PerPage" class="form-control" [(ngModel)]="pageSize"
+                                (change)="onChangeEvent($event)">
+                                <option value="5">5</option>
+                                <option value="10">10</option>
+                                <option value="15">15</option>
+                            </select>
+                        </div>
+                        <div class="row col-md-5"><label class="d-block">records at a time</label></div>
+                    </div>
+                </div>
+                <div class="height28">
+                <pagination-controls (pageChange)="pageChangeEvent($event)"></pagination-controls>
+                </div>
+                </div>
+    
+        </div>
+         
+    </div>
+</div>
+</div>
+
+<ng-template #editOrgModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Add Organization
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Close Clicked')">
+            <span aria-hidden="true">×</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form [formGroup]="editOrganisationForm" (ngSubmit)="updateOrganisationData()">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label for="organizationname">Name</label>
+                        <input minlength="2" maxlength="55" type="text" class="form-control" [(ngModel)]="organizationname"
+                            formControlName="organizationname" name="organizationname"
+                            [ngClass]="{ 'is-invalid': submitted && editOrg.organizationname.errors }" />
+                        <div *ngIf="submitted && editOrg.organizationname.errors" class="invalid-feedback">
+                            <div *ngIf="editOrg.organizationname.errors.required">Organization name is required</div>
+                            <div *ngIf="editOrg.organizationname.errors.pattern">Organization allow only Alphanumeric
+                            </div>
+                          <div *ngIf="editOrg.organizationname.errors.minlength">Organization must be at least 2 characters long.</div>
+                          <div *ngIf="editOrg.organizationname.errors.maxlength">Organization should not be greater than 20 characters.</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="taxidnumber">Tax ID</label>
+                        <input type="text" class="form-control" [(ngModel)]="taxidnumber" formControlName="taxidnumber"
+                            name="taxidnumber" />
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="addressone">Address 1</label>
+                        <input type="text"  minlength="6" maxlength="200" class="form-control" [(ngModel)]="addressone" formControlName="addressone"
+                            name="addressone" [ngClass]="{ 'is-invalid': submitted && editOrg.addressone.errors }" />
+                        <div *ngIf="submitted && editOrg.addressone.errors" class="invalid-feedback">
+                            <div *ngIf="editOrg.addressone.errors.required">Address 1 is required</div>
+                          <div *ngIf="editOrg.addressone.errors.minlength">Address 1 must be at least 6 characters long.</div>
+                          <div *ngIf="editOrg.addressone.errors.maxlength">Address 1 should not be greater than 200 characters.</div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="row">
+
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="addresstwo">Address 2</label>
+                        <input type="text" class="form-control" [(ngModel)]="addresstwo" formControlName="addresstwo" name="addresstwo" />                         
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="city">City</label>
+                        <input  minlength="2" maxlength="20" type="text" class="form-control" [(ngModel)]="cityname" formControlName="cityname"
+                            name="cityname" [ngClass]="{ 'is-invalid': submitted && editOrg.cityname.errors }" />
+                        <div *ngIf="submitted && editOrg.cityname.errors" class="invalid-feedback">
+                            <div *ngIf="editOrg.cityname.errors.required">City is required</div>
+                          <div *ngIf="editOrg.cityname.errors.minlength">City must be at least 2 characters long.</div>
+                          <div *ngIf="editOrg.cityname.errors.maxlength">City should not be greater than 20 characters.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="state">State</label>
+                        <input type="text" maxlength="15" class="form-control" [(ngModel)]="statename" formControlName="statename"
+                            name="statename" [ngClass]="{ 'is-invalid': submitted && editOrg.statename.errors }" />
+                        <div *ngIf="submitted && editOrg.statename.errors" class="invalid-feedback">
+                            <div *ngIf="editOrg.statename.errors.required">State is required</div>
+                          <div *ngIf="editOrg.statename.errors.maxlength">State should not be greater than 15 characters.</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="state">Zip Code</label>
+                        <input type="text" class="form-control" [(ngModel)]="zipcodenum" formControlName="zipcodenum"
+                            name="zipcodenum" [ngClass]="{ 'is-invalid': submitted && editOrg.zipcodenum.errors }" />
+                        <div *ngIf="submitted && editOrg.zipcodenum.errors" class="invalid-feedback">
+                            <div *ngIf="editOrg.zipcodenum.errors.required">Zipcode is required</div>
+                            <div *ngIf="editOrg.zipcodenum.errors">Zipcode is number</div>
+                            <div *ngIf="editOrg.zipcodenum.errors.pattern">Zipcode must be at least 5 characters long.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group"><label for="email">Email</label>
+                        <input type="text" class="form-control"  formControlName="email"
+                        pattern="^\w+@[a-zA-Z_0-9]+?\.[a-zA-Z]{2,3}$"
+                        name="email" [ngClass]="{ 'is-invalid': submitted && editOrg.email.errors }" />
+                        <div *ngIf="submitted && editOrg.email.errors" class="invalid-feedback">
+                            <div *ngIf="editOrg.email.errors.required">Email is required</div>
+                            <div *ngIf="editOrg.emailid.errors.pattern">Please enter valid email address</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group"><label for="phone">Phone</label>
+                        <input type="text" class="form-control"  formControlName="phone"
+                        name="phone" [ngClass]="{ 'is-invalid': submitted && editOrg.phone.errors }" />
+                        <div *ngIf="submitted && editOrg.phone.errors" class="invalid-feedback">
+                            <div *ngIf="editOrg.phone.errors.required">Phone is required</div>
+                            <div *ngIf="editOrg.phone.errors.pattern">Enter valid phone number</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <button type="button" (click)="onResetEditOrganization()"
+                        class="btn btn-outline-dark">Cancel</button>
+                </div>
+                <div class="col-sm-6">
+                    <button class="btn btn-outline-dark float-right">Save</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</ng-template>
+<div class="col-sm-5 mr-0 float-right flotingdiv" [ngClass]="{'hide':!isOpen}"> <!--dismissOnTimeout="5000"-->
+    <alert *ngIf="isOpen" [type]="alertType"  dismissOnTimeout="5000" [dismissible]="dismissible" (onClosed)="onClosed(alertMsg)">{{  alertMsg}}</alert>
+</div>

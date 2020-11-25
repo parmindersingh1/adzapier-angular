@@ -1,239 +1,309 @@
+<nav class="navbar navbar-expand-lg">
+  <!-- Brand -->
+  <!-- Toggler/collapsibe Button -->
 
-<header class="navbar navbar-header navbar-header-fixed">
-    <a href="#" id="mainMenuOpen" class="burger-menu"><i data-feather="menu"></i></a>
+  <div class="navbar-header">
     <div class="navbar-brand">
-      <a routerLink="/" class="df-logo">dash<span>forge</span></a>
-    </div><!-- navbar-brand -->
-
-
-    <div id="navbarMenu" class="navbar-menu-wrapper">
-      <div class="navbar-menu-header">
-        <a href="../../index.html" class="df-logo">dash<span>forge</span></a>
-        <a id="mainMenuClose" href=""><i data-feather="x"></i></a>
-      </div><!-- navbar-menu-header -->
-     
-
-      <ul class="nav navbar-menu">
-        <li class="nav-label pd-l-20 pd-lg-l-25 d-lg-none">Main Navigation</li>
-        <li class="nav-item with-sub  active" >
-          <a  class="nav-link "  id="navbarDropdown01" >
-            Dashboard
-          </a>
-          <ul  aria-labelledby="navbarDropdown01" class="navbar-menu-sub">
-            <li class="nav-sub-item"><a routerLink="/login"  class="nav-sub-link"><i-feather name="bar-chart-2"></i-feather>Sales Monitoring</a></li>
-            <li class="nav-sub-item"><a routerLink="/dashboard/analytics" class="nav-sub-link"><i-feather name="bar-chart-2"></i-feather>Website Analytics</a></li>
-            <li class="nav-sub-item"><a href="#" (click)="$event.preventDefault()" class="nav-sub-link"><i-feather name="bar-chart-2"></i-feather>Cryptocurrency</a></li>
-            <li class="nav-sub-item"><a href="#" (click)="$event.preventDefault()" class="nav-sub-link"><i-feather name="bar-chart-2"></i-feather>Helpdesk Management</a></li>
-          </ul>
-        </li>
-        <li class="nav-item with-sub " ngbDropdown>
-          <a  class="nav-link " ngbDropdownToggle id="navbarDropdown02"><i data-feather="package"></i> Apps</a>
-          <ul ngbDropdownMenu aria-labelledby="navbarDropdown02" class="navbar-menu-sub">
-            <li class="nav-sub-item"><a href="#" (click)="$event.preventDefault()" class="nav-sub-link"><i-feather name="calendar"></i-feather> Calendar</a></li>
-            <li class="nav-sub-item"><a href="#" (click)="$event.preventDefault()" class="nav-sub-link"><i-feather name="message-square"></i-feather> Chat</a></li>
-            <li class="nav-sub-item"><a href="#" (click)="$event.preventDefault()" class="nav-sub-link"><i-feather name="users"></i-feather> Contacts</a></li>
-            <li class="nav-sub-item"><a href="#" (click)="$event.preventDefault()" class="nav-sub-link"><i-feather name="file-text"></i-feather> File Manager</a></li>
-            <li class="nav-sub-item"><a href="#" (click)="$event.preventDefault()" class="nav-sub-link"><i-feather name="mail"></i-feather> Mail</a></li>
-          </ul>
-        </li>
-        <li class="nav-item with-sub " ngbDropdown>
-          <a  class="nav-link " ngbDropdownToggle id="navbarDropdown03" ><i data-feather="layers"></i> Pages</a>
-          <div class="navbar-menu-sub" ngbDropdownMenu aria-labelledby="navbarDropdown03">
-            <div class="d-lg-flex" >
-              <ul >
-                <li class="nav-label">Authentication</li>
-                <li class="nav-sub-item"><a href="#" (click)="$event.preventDefault()" class="nav-sub-link"><i-feather name="log-in"></i-feather> Sign In</a></li>
-                <li class="nav-sub-item"><a href="#" (click)="$event.preventDefault()" class="nav-sub-link"><i-feather name="user-plus"></i-feather>  Sign Up</a></li>
-                <li class="nav-sub-item"><a href="#" (click)="$event.preventDefault()" class="nav-sub-link"><i-feather name="user-check"></i-feather> Verify Account</a></li>
-                <li class="nav-sub-item"><a href="#" (click)="$event.preventDefault()" class="nav-sub-link"><i-feather name="shield-off"></i-feather> Forgot Password</a></li>
-                <li class="nav-label mg-t-20">User Pages</li>
-                <li class="nav-sub-item"><a href="#" (click)="$event.preventDefault()" class="nav-sub-link"><i-feather name="user"></i-feather> View Profile</a></li>
-                <li class="nav-sub-item"><a href="#" (click)="$event.preventDefault()" class="nav-sub-link"><i-feather name="users"></i-feather> Connections</a></li>
-                <li class="nav-sub-item"><a href="#" (click)="$event.preventDefault()" class="nav-sub-link"><i-feather name="users"></i-feather> Groups</a></li>
-                <li class="nav-sub-item"><a href="#" (click)="$event.preventDefault()" class="nav-sub-link"><i-feather name="calendar"></i-feather> Events</a></li>
-              </ul>
-              <ul >
-                <li class="nav-label">Error Pages</li>
-                <li class="nav-sub-item"><a href="#" (click)="$event.preventDefault()" class="nav-sub-link"><i-feather name="file"></i-feather> 404 Page Not Found</a></li>
-                <li class="nav-sub-item"><a href="#" (click)="$event.preventDefault()" class="nav-sub-link"><i-feather name="file"></i-feather> 500 Internal Server</a></li>
-                <li class="nav-sub-item"><a href="#" (click)="$event.preventDefault()" class="nav-sub-link"><i-feather name="file"></i-feather> 503 Service Unavailable</a></li>
-                <li class="nav-sub-item"><a href="#" (click)="$event.preventDefault()" class="nav-sub-link"><i-feather name="file"></i-feather> 505 Forbidden</a></li>
-                <li class="nav-label mg-t-20">Other Pages</li>
-                <li class="nav-sub-item"><a href="#" (click)="$event.preventDefault()" class="nav-sub-link"><i-feather name="file"></i-feather> Timeline</a></li>
-                <li class="nav-sub-item"><a href="#" (click)="$event.preventDefault()" class="nav-sub-link"><i-feather name="file"></i-feather> Pricing</a></li>
-                <li class="nav-sub-item"><a href="#" (click)="$event.preventDefault()" class="nav-sub-link"><i-feather name="file"></i-feather> Help Center</a></li>
-                <li class="nav-sub-item"><a href="#" (click)="$event.preventDefault()" class="nav-sub-link"><i-feather name="file"></i-feather> Invoice</a></li>
-              </ul>
-            </div>
-          </div><!-- nav-sub -->
-        </li>
-        <li class="nav-item"><a href="../../components/" class="nav-link"><i data-feather="box"></i> Components</a></li>
-        <li class="nav-item"><a href="../../collections/" class="nav-link"><i data-feather="archive"></i> Collections</a></li>
+      <button class="navbar-toggler navbar-left" type="button" (click)="openNav()" data-toggle="collapse"
+        data-target="#collapsibleNavbar">
+        <i-feather name="menu" class="feather-16"></i-feather>
+      </button>
+      <a class="df-logo" (click)="goto('/login')"> <!--routerLink="/login"-->
+        Ad<span>Zapier</span>
+      </a>
+    </div>
+  </div>
+  <!--logo with menu icon-->
+  <!-- Navbar links -->
+  <div class="collapse navbar-collapse" id="collapsibleNavbar" [collapse]="!isCollapsed"
+    [ngClass]="{'hidemenu':currentUser, 'showmenu':!currentUser}">
+    <!--[ngClass]="{'hidemenu':currentUser, 'showmenu':!currentUser}"-->
+    <ul class="navbar-nav nav-mr" *ngIf="!currentUser">
+      <li *ngFor="let menu of publicNavigationMenu" class="nav-item">
+        <div *ngIf="menu.showlink" dropdown container="body">
+          <div *ngIf="!menu.subcategory">
+            <a class="nav-link" (click)="true" routerLinkActive="active" routerLink="{{menu.routerLink}}">
+              {{ menu.showlink }}</a></div>
+          <div *ngIf="menu.subcategory">
+            <a class="nav-link dropdown-toggle" routerLinkActive="active" *ngIf="menu.subcategory" dropdownToggle (click)="true">
+              {{ menu.showlink }}</a></div>
+          <div *ngIf="menu.subcategory">
+            <ul *dropdownMenu class="dropdown-menu">
+              <ng-container *ngFor="let item of menu.subcategory;">
+                <li role="menuitem">
+                  <a class="dropdown-item" routerLinkActive="active" routerLink="{{item.routerLink}}">
+                    {{item.showlink}}
+                  </a>
+                </li>
+              </ng-container>
+            </ul>
+          </div>
+        </div>
+      </li>
+    </ul>
+    <ul class="navbar-nav navbar-right" *ngIf="!currentUser">
+      <li class="nav-item">
+        <a class="btn btn-sm btn-primary" routerLink="/login">Sign In</a>
+      </li>
+      <li class="nav-item">
+        <a class="btn btn-sm btn-primary mg-l-10" routerLink="/signup">Try for Free</a>
+      </li>
+    </ul>
+  </div>
+  <!--end of menu before login-->
+  <!--menu after login-->
+  <div class="collapse navbar-collapse mr-auto" [collapse]="!isCollapsed"
+    [ngClass]="{'hidemenu':!currentUser, 'showmenu':currentUser}">
+    <ul  class="navbar-nav nav-mr" dropdown container="body">
+      <a class="nav-link dropdown-link"  dropdownToggle (click)="false">
+       <div>{{currentOrganization}}
+       </div>
+       <span>{{currentProperty ? currentProperty : 'Select Property'}}</span>
+      </a>
+     <!--(orgPropertyMenu | async).response-->
+      <ul *dropdownMenu class="dropdown-menu propMenu">
+          <li role="menuitem" *ngFor="let item of orgPropertyMenu; first as isFirst; let i = index;">
+            <a class="dropdown-item" title="{{item.orgname}}"  (click)="goto('settings/organizations/details',item.id)">
+             <span [ngClass]="[isOrgSelected(item) ? 'active' : '']">{{item.orgname}}</span>
+             <span class="align-right width25"><i-feather class="feather-plus" name="plus"></i-feather></span>
+            </a>
+            <div *ngIf="item.property.length=='0'">No Property</div>
+            <ul role="menu">
+              <ng-container  *ngFor="let submenu of item.property">
+                <li role="menuitem">
+                  <a class="dropdown-item" routerLinkActive="active" [class.disableproperty]="isProperyDisabled(submenu)" [ngClass]="[isPropSelected(submenu) ? 'active' : '']"> <!-- routerLink="{{item.id}}/{{submenu.property_id}}"-->
+                   <span (click)="isProperyDisabled(submenu) ? false : isCurrentPropertySelected(item,submenu)"> {{ submenu.property_name? submenu.property_name: 'No Property' }}
+                    <span class="ml-2" *ngIf="isPropSelected(submenu)">
+                    <i class="fa fa-check"></i></span>
+                  </span>                       
+                  </a>
+                </li>
+              </ng-container>
+            </ul>
+          </li>
       </ul>
-    </div><!-- navbar-menu-wrapper -->
-
-
-
-    <div class="navbar-right">
-        <a id="navbarSearch" href="" class="search-link">
-        
-          <i-feather name="search"></i-feather>
-        </a>
-        <div class="dropdown dropdown-message">
-          <a href="" class="dropdown-link new-indicator" data-toggle="dropdown">
-            
-            <i-feather name="message-square"></i-feather>
-            <span>5</span>
-          </a>
-          <div class="dropdown-menu dropdown-menu-right">
-            <div class="dropdown-header">New Messages</div>
-            <a href="" class="dropdown-item">
-              <div class="media">
-                <div class="avatar avatar-sm avatar-online"><img src="../https://via.placeholder.com/350" class="rounded-circle" alt=""></div>
-                <div class="media-body mg-l-15">
-                  <strong>Socrates Itumay</strong>
-                  <p>nam libero tempore cum so...</p>
-                  <span>Mar 15 12:32pm</span>
-                </div><!-- media-body -->
-              </div><!-- media -->
-            </a>
-            <a href="" class="dropdown-item">
-              <div class="media">
-                <div class="avatar avatar-sm avatar-online"><img src="../https://via.placeholder.com/500" class="rounded-circle" alt=""></div>
-                <div class="media-body mg-l-15">
-                  <strong>Joyce Chua</strong>
-                  <p>on the other hand we denounce...</p>
-                  <span>Mar 13 04:16am</span>
-                </div><!-- media-body -->
-              </div><!-- media -->
-            </a>
-            <a href="" class="dropdown-item">
-              <div class="media">
-                <div class="avatar avatar-sm avatar-online"><img src="../https://via.placeholder.com/600" class="rounded-circle" alt=""></div>
-                <div class="media-body mg-l-15">
-                  <strong>Althea Cabardo</strong>
-                  <p>is there anyone who loves...</p>
-                  <span>Mar 13 02:56am</span>
-                </div><!-- media-body -->
-              </div><!-- media -->
-            </a>
-            <a href="" class="dropdown-item">
-              <div class="media">
-                <div class="avatar avatar-sm avatar-online"><img src="../https://via.placeholder.com/500" class="rounded-circle" alt=""></div>
-                <div class="media-body mg-l-15">
-                  <strong>Adrian Monino</strong>
-                  <p>duis aute irure dolor in repre...</p>
-                  <span>Mar 12 10:40pm</span>
-                </div><!-- media-body -->
-              </div><!-- media -->
-            </a>
-            <div class="dropdown-footer"><a href="">View all Messages</a></div>
-          </div><!-- dropdown-menu -->
-        </div><!-- dropdown -->
-        <div class="dropdown dropdown-notification">
-          <a href="" class="dropdown-link new-indicator" data-toggle="dropdown">
-            <i-feather name="bell"></i-feather>
-            <span>2</span>
-          </a>
-          <div class="dropdown-menu dropdown-menu-right">
-            <div class="dropdown-header">Notifications</div>
-            <a href="" class="dropdown-item">
-              <div class="media">
-                <div class="avatar avatar-sm avatar-online"><img src="../https://via.placeholder.com/350" class="rounded-circle" alt=""></div>
-                <div class="media-body mg-l-15">
-                  <p>Congratulate <strong>Socrates Itumay</strong> for work anniversaries</p>
-                  <span>Mar 15 12:32pm</span>
-                </div><!-- media-body -->
-              </div><!-- media -->
-            </a>
-            <a href="" class="dropdown-item">
-              <div class="media">
-                <div class="avatar avatar-sm avatar-online"><img src="../https://via.placeholder.com/500" class="rounded-circle" alt=""></div>
-                <div class="media-body mg-l-15">
-                  <p><strong>Joyce Chua</strong> just created a new blog post</p>
-                  <span>Mar 13 04:16am</span>
-                </div><!-- media-body -->
-              </div><!-- media -->
-            </a>
-            <a href="" class="dropdown-item">
-              <div class="media">
-                <div class="avatar avatar-sm avatar-online"><img src="../https://via.placeholder.com/600" class="rounded-circle" alt=""></div>
-                <div class="media-body mg-l-15">
-                  <p><strong>Althea Cabardo</strong> just created a new blog post</p>
-                  <span>Mar 13 02:56am</span>
-                </div><!-- media-body -->
-              </div><!-- media -->
-            </a>
-            <a href="" class="dropdown-item">
-              <div class="media">
-                <div class="avatar avatar-sm avatar-online"><img src="../https://via.placeholder.com/500" class="rounded-circle" alt=""></div>
-                <div class="media-body mg-l-15">
-                  <p><strong>Adrian Monino</strong> added new comment on your photo</p>
-                  <span>Mar 12 10:40pm</span>
-                </div><!-- media-body -->
-              </div><!-- media -->
-            </a>
-            <div class="dropdown-footer"><a href="">View all Notifications</a></div>
-          </div><!-- dropdown-menu -->
-        </div><!-- dropdown -->
-        <div class="dropdown dropdown-profile">
-          <a href="" class="dropdown-link" data-toggle="dropdown" data-display="static">
-            <div class="avatar avatar-sm"><img src="https://via.placeholder.com/500" class="rounded-circle" alt=""></div>
-          </a><!-- dropdown-link -->
-          <div class="dropdown-menu dropdown-menu-right tx-13">
-            <div class="avatar avatar-lg mg-b-15"><img src="https://via.placeholder.com/500" class="rounded-circle" alt=""></div>
-            <h6 class="tx-semibold mg-b-5">Katherine Pechon</h6>
-            <p class="mg-b-25 tx-12 tx-color-03">Administrator</p>
-
-            <a href="" class="dropdown-item">
-              
-              <i-feather name="edit-3"></i-feather>
-              Edit Profile</a>
-            <a href="page-profile-view.html" class="dropdown-item">
-              
-              <i-feather name="user"></i-feather>
-              View Profile</a>
-            <div class="dropdown-divider"></div>
-            <a href="page-help-center.html" class="dropdown-item">
-                <i-feather name="help-circle"></i-feather>
-              Help Center</a>
-            <a href="" class="dropdown-item">
-                <i-feather name="life-buoy"></i-feather> Forum</a>
-            <a href="" class="dropdown-item">
-                <i-feather name="settings"></i-feather>Account Settings</a>
-            <a href="" class="dropdown-item">
-                <i-feather name="settings"></i-feather>Privacy Settings</a>
-            <a href="page-signin.html" class="dropdown-item">
-                <i-feather name="log-out"></i-feather>Sign Out</a>
-          </div><!-- dropdown-menu -->
-        </div><!-- dropdown -->
-      </div><!-- navbar-right -->
-      <div class="navbar-search">
-        <div class="navbar-search-header">
-          <input type="search" class="form-control" placeholder="Type and hit enter to search...">
-          <button class="btn"><i data-feather="search"></i></button>
-          <a id="navbarSearchClose" href="" class="link-03 mg-l-5 mg-lg-l-10"><i data-feather="x"></i></a>
-        </div><!-- navbar-search-header -->
-        <div class="navbar-search-body">
-          <label class="tx-10 tx-medium tx-uppercase tx-spacing-1 tx-color-03 mg-b-10 d-flex align-items-center">Recent Searches</label>
-          <ul class="list-unstyled">
-            <li><a href="dashboard-one.html">modern dashboard</a></li>
-            <li><a href="app-calendar.html">calendar app</a></li>
-            <li><a href="../../collections/modal.html">modal examples</a></li>
-            <li><a href="../../components/el-avatar.html">avatar</a></li>
+    <!-- </ng-container> -->
+    </ul>
+      <!--end of organization / property menu after login-->
+    <ul class="navbar-nav mr-auto" *ngIf="currentUser">
+      <li *ngFor="let menu of navigationMenu" class="nav-item">
+        <div *ngIf="menu.showlink" dropdown container="body">
+          <div *ngIf="!menu.subcategory">
+            <a class="nav-link" [class.active]="menu.showlink === 'Billing' && isBillingActivelinkMatched" (click)="goto(menu)">
+              {{ menu.showlink }}</a></div>
+          <div *ngIf="menu.subcategory">
+            <a class="nav-link dropdown-toggle"  [class.active]="menu.showlink === 'Privacy' && isPrivacyActivelinkMatched" *ngIf="menu.subcategory" dropdownToggle (click)="true">
+              {{ menu.showlink }}</a></div>
+          <ul *dropdownMenu class="dropdown-menu">
+            <ng-container *ngFor="let item of menu.subcategory;let q = index;">
+              <li *ngIf="menu.showlink == 'Privacy' && q===0" class="displayflex"><span>DSAR</span></li>
+              <li role="menuitem">
+                <a class="dropdown-item" [class.active]="activateSublink(item)" (click)="goto(item)">
+                  <span *ngIf="item.icon.indexOf('fa')===-1">
+                    <i-feather name="{{item.icon}}" class="feather-16"></i-feather>{{item.showlink}}
+                  </span>
+                  <span *ngIf="item.icon.indexOf('fa')===0"><i class="{{item.icon}}"></i>{{item.showlink}}</span>
+                </a>
+              </li>
+              <li *ngIf="q===3" class="displayflex"><span>Cookie Consent</span></li>
+            </ng-container>
           </ul>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <!--end of general menu after login-->
+  <!--notification after login-->
+  <div class="navbar-right" *ngIf="currentUser" dropdown [insideClick]="true">
+    <a  class="nav-link dropdown-link" dropdownToggle (click)="false">
+      <i-feather name="bell" class="feather-20"></i-feather>
+    </a>
+    <ul class="dropdown-menu notification-menu-right" *dropdownMenu>
+    <li>  <div class="dropdown-header">Notifications</div></li>
+      <li class="nav-item notification-height">
+        <div *ngFor="let data of notificationList;" class="notification-wrapper">
+          <span class="tx-color-02">
+          {{data.notification}}</span>
+             <div class="d-flex">
+          <button class="clear-notification cross-icon" tooltip="Clear notification"
+          placement="bottom" [adaptivePosition]="false"
+          [ngClass]="{'clear-notification':data.active}" (click)="clearNotification(data.id,'clear',false)">&#10005;</button> <!-- (click)="clearNotification(data.id,data.active,true)" to remove message-->
+          <button class="clear-notification" tooltip="Mark as read" placement="bottom" [adaptivePosition]="false"
+           [ngClass]="{'unreadicon':data.read,'readicon':!data.read}" (click)="clearNotification(data.id,'read',false)">&#9679;</button>
+          </div> <!--tooltip="{{data.read ? 'Mark as read':'Mark as unread'}}"-->
+        </div>
+      </li>
+    </ul>
+  </div>
+  <!--end of notification after login-->
+  <!--usermenu after login-->
+  <div class="navbar-right" *ngIf="currentUser">
+    <ul class="navbar-nav">
+      <li *ngFor="let menu of rightItems" class="nav-item">
+        <div *ngIf="!menu.items" container="body">
+          <a *ngIf="!menu.items" routerLinkActive="active" class="nav-link" (click)="goto(menu)">
+            <i *ngIf="menu.icon" class="{{ menu.icon }}"></i>{{ menu.label }}
+          </a>
+        </div>
+        <div class="iconwrapper">
+          <div *ngIf="menu.items" dropdown container="body" placement="bottom right">
+            <a class="nav-link dropdown-link" routerLinkActive="active" dropdownToggle (click)="false">
+              <i class="bd bd-primary bg-primary rounded-circle pd-10 tx-white">{{nameInitials(currentLoggedInUser)}}</i>
+            </a>
+            <ul *dropdownMenu class="dropdown-menu dropdown-menu-right">
+              <ng-container *ngFor="let item of menu.items; first as isFirst; let i = index;">
+                <div *ngIf="isFirst" class="loggedin-user">
+                  {{currentLoggedInUser}}
+                  <p class="tx-12 tx-color-03">{{userRole}}</p>
+                </div>
+                <li *ngIf="!item.items" role="menuitem">
+                  <a class="dropdown-item" *ngIf="item.label !== 'Signout'" [class.active]="activateSublink(item)" (click)="goto(item)">
+                    <i-feather *ngIf="item.icon" name="{{item.icon}}" class="feather-16"></i-feather>{{item.label}}
+                  </a>
+                  <a class="dropdown-item" *ngIf="item.label === 'Signout'" (click)="logout()"
+                    routerLink="{{item.routerLink}}">
+                    <i-feather *ngIf="item.icon" name="{{item.icon}}" class="feather-16"></i-feather>{{item.label}}
+                  </a>
+                </li>
+                <li *ngIf="i == 1">
+                  <div class="line-partition"></div>
+                </li>
+                <li *ngIf="item.items" role="menuitem" dropdown triggers="mouseover" placement="top left"
+                  container="body">
+                  <a class="dropdown-item" routerLinkActive="active" (click)="false"><i
+                      class="fas fa-caret-left dropdown-submenu-left"></i>{{ item.label }}</a>
+                  <ul *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu">
+                    <ng-container *ngFor="let submenu of item.items">
+                      <li role="menuitem">
+                        <a class="dropdown-item" routerLinkActive="active" href="#">
+                          <i-feather *ngIf="submenu.icon" name="{{submenu.icon}}" class="feather-16"></i-feather>
+                          {{ submenu.label }}
 
-          <hr class="mg-y-30 bd-0">
+                        </a>
+                      </li>
+                      <li *ngIf="submenu.divider" class="divider dropdown-divider"></li>
+                    </ng-container>
+                  </ul>
+                </li>
+                <li *ngIf="item.divider" class="divider dropdown-divider"></li>
+              </ng-container>
+            </ul>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
 
-          <label class="tx-10 tx-medium tx-uppercase tx-spacing-1 tx-color-03 mg-b-10 d-flex align-items-center">Search Suggestions</label>
+  
+  <!--usermenuends after login-->
+</nav>
 
-          <ul class="list-unstyled">
-            <li><a href="dashboard-one.html">cryptocurrency</a></li>
-            <li><a href="app-calendar.html">button groups</a></li>
-            <li><a href="../../collections/modal.html">form elements</a></li>
-            <li><a href="../../components/el-avatar.html">contact app</a></li>
+<div id="divSidenav" class="sidenav" [ngClass]="{'addWidth':close,'removeWidth':!close}">
+  <div class="sidebar sidebar-components">
+    <div class="sidebar-header">
+      <i-feather name="menu"></i-feather>
+      <a class="df-logo" routerLink="/">
+        <span>AdZapier</span>
+      </a>
+      <button class="btn btn-sm closebtn" (click)="closeNav()">
+        <i-feather name="x"></i-feather>
+      </button>
+    </div>
+    <div class="sidebar-body">
+
+  <ul class="navbar-nav" *ngIf="!currentUser">
+    <li *ngFor="let menu of publicNavigationMenu" class="nav-item">
+      <div *ngIf="menu.showlink" (click)="isCollapsed = !isCollapsed" [attr.aria-expanded]="!isCollapsed" aria-controls="collapseExample" container="body">
+        <div *ngIf="!menu.subcategory">
+          <a class="nav-link" routerLinkActive="active" (click)="true" routerLink="{{menu.routerLink}}">
+            {{ menu.showlink }}</a></div>
+        <div *ngIf="menu.subcategory">
+          <a class="nav-link" routerLinkActive="active" *ngIf="menu.subcategory" (click)="true">
+            {{ menu.showlink }}</a></div>
+        <div *ngIf="menu.subcategory">
+          <ul id="collapseExample" [ngbCollapse]="!isCollapsed" >
+            <ng-container *ngFor="let item of menu.subcategory;">
+              <li role="menuitem">
+                <a class="dropdown-item" routerLinkActive="active" routerLink="{{item.routerLink}}">
+                  {{item.showlink}}
+                </a>
+              </li>
+            </ng-container>
           </ul>
-        </div><!-- navbar-search-body -->
-      </div><!-- navbar-search -->
+        </div>
+      </div>
+    </li>
+    <li class="nav-item" *ngIf="!currentUser">
+      <a  class="nav-link" routerLinkActive="active" routerLink="/login">Sign In</a> </li>
+    <li *ngIf="!currentUser" class="nav-item"> <a  class="nav-link" routerLink="/signup">Try for Free</a>
+    </li>
+  </ul>
+  <!--sidemenu before login-->
 
-</header><!-- navbar -->
+  <!--sidemenu property list after login-->
+  <ul  class="navbar-nav" dropdown container="body">
+    <a class="nav-link dropdown-link" routerLinkActive="active" dropdownToggle (click)="false">
+     <div>{{currentOrganization}}
+     </div>
+     <span>{{currentProperty?currentProperty:'Select Property'}}</span>
+    </a>
+    <ul *dropdownMenu class="dropdown-menu propMenu">
+        <li role="menuitem" *ngFor="let item of orgPropertyMenu; first as isFirst; let i = index;">
+          <a class="dropdown-item" routerLinkActive="active" routerLink="organizationdetails/{{item.id}}">
+            {{item.orgname}}  <span class="align-right width25"><i-feather class="feather-plus" name="plus"></i-feather></span>
+          </a>
+          <div *ngIf="item.property.length=='0'">No Property</div>
+          <ul role="menu">
+            <ng-container  *ngFor="let submenu of item.property">
+              <li role="menuitem" (click)="isCurrentPropertySelected(item,submenu)">
+                <a class="dropdown-item" routerLinkActive="active" [ngClass]="[isPropSelected(submenu) ? 'active' : '']"> <!-- routerLink="{{item.id}}/{{submenu.property_id}}"-->
+                  {{ submenu.property_name? submenu.property_name: 'No Property' }}
+                  <span class="ml-2" *ngIf="isPropSelected(submenu)">
+                  <i class="fa fa-check"></i></span>
+                </a>
+              </li>
+            </ng-container>
+          </ul>
+        </li>
+    </ul>
+  </ul>
+  <!--end of sidemenu property list after login-->
+  <!--sidemenu general menu after login-->
+  <ul class="navbar-nav mr-auto" *ngIf="currentUser">
+    <li *ngFor="let menu of navigationMenu" class="nav-item">
+      <div *ngIf="menu.showlink" dropdown container="body">
+        <div *ngIf="!menu.subcategory">
+          <a class="nav-link" routerLinkActive="active" (click)="true" routerLink="{{menu.routerLink}}">
+            {{ menu.showlink }}</a></div>
+        <div *ngIf="menu.subcategory">
+          <a class="nav-link dropdown-toggle"  routerLinkActive="active"*ngIf="menu.subcategory" dropdownToggle (click)="true">
+            {{ menu.showlink }}</a></div>
+        <ul *dropdownMenu class="dropdown-menu">
+          <ng-container *ngFor="let item of menu.subcategory;let q = index;">
+            <li *ngIf="menu.showlink == 'Privacy' && q===0" class="displayflex"><span>DSAR</span></li>
+            <li role="menuitem">
+              <a class="dropdown-item" routerLinkActive="active" routerLink="{{item.routerLink}}">
+                <span *ngIf="item.icon.indexOf('fa')===-1">
+                  <i-feather name="{{item.icon}}" class="feather-16"></i-feather>{{item.showlink}}
+                </span>
+                <span *ngIf="item.icon.indexOf('fa')===0"><i class="{{item.icon}}"></i>{{item.showlink}}</span>
+              </a>
+            </li>
+            <li *ngIf="q===3" class="displayflex"><span>Cookie Consent</span></li>
+          </ng-container>
+        </ul>
+      </div>
+    </li>
+  </ul>
+  <!--end of sidemenu general menu after login-->
+    </div>
+  </div>
+
+</div>
+<ng-template #confirmTemplate>
+  <div class="modal-body text-center">
+      <p>Property is not created! create property</p>
+      <button type="button" class="btn btn-xs btn-primary mr-2" (click)="confirm()">OK</button>
+  </div>
+</ng-template>
+ 

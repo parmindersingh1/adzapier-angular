@@ -1,0 +1,172 @@
+<div class="container mb-0">
+    <div class="mb-3">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb breadcrumb-style1 mg-b-0">
+                <li class="breadcrumb-item"> Privacy</li>
+                <li class="breadcrumb-item">Data Subject Access Request</li>
+                <li class="breadcrumb-item active" aria-current="page">Workflow</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="workflow-primeng-wrapper">
+<p-table class="workflows-table" #ptable [value]="workflowList" [columns]="selectedColumns" [paginator]="true" [lazy]="true"
+    [loading]="isloading" (onLazyLoad)="loadrequestsListLazy($event)" [rows]="5" [showCurrentPageReport]="true"
+    [totalRecords]="totalRecords" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+    [rowsPerPageOptions]="[5,10,15]" styleClass="p-datatable-sm">
+    <ng-template pTemplate="caption">
+        <div class="searchfield mt-1 pl-1">
+            <div class="row col-sm-2 col-md-2 input-group">
+                <input class="form-control border-right-0 border" [(ngModel)]="inputValue" type="text"
+                    (keyup.enter)="onSearchInputChange()" placeholder="Search" id="example-search-input" />
+                <span class="input-group-append">
+                    <div *ngIf="inputValue !== ''" (click)="clearSearchfield()" class="input-group-text bg-transparent"
+                        style="background-color: #fff !important;">
+                        <i class="fa fa-times color-red" aria-hidden="true"></i>
+                    </div>
+                    <div class="input-group-text bg-transparent" (click)="onSearchInputChange()">
+                        <i class="fa fa-search"></i>
+                    </div>
+
+                </span>
+            </div>
+            <!-- <div class="ml-auto pr-1 mr-2">
+        <button type="button" class="btn btn-white" data-toggle="modal"
+        (click)="createWorkflowModalPopup(createworkflowModal,'')"><i class="fas fa-plus"></i> Create</button>
+     </div> -->
+               <div class="float-right mr-1"> <button (click)="createWorkflowModalPopup(createworkflowModal,'')" data-toggle="modal" type="button"
+                    class="btn btn-white">
+                    <i-feather class="feather-16" name="plus"></i-feather>
+                    <span class="d-none d-sm-inline mg-l-5">
+                        Create</span>
+                </button>
+                </div>
+        </div>
+
+    </ng-template>
+
+    <ng-template pTemplate="header" let-columns>
+
+        <tr>
+
+            <th pSortableColumn="workflow_name">Workflow Name <p-sortIcon field="workflow_name"></p-sortIcon>
+            </th>
+            <th pSortableColumn="workflow_status">Status<p-sortIcon field="workflow_status"></p-sortIcon>
+            </th>
+            <th pSortableColumn="createdby_firstname">Created by<p-sortIcon field="createdby_firstname"></p-sortIcon>
+            </th>
+            <th pSortableColumn="updatedby_firstname">Last updated by<p-sortIcon field="updatedby_firstname">
+                </p-sortIcon>
+            </th>
+            <th pSortableColumn="created_at">Created at <p-sortIcon field="created_at"></p-sortIcon>
+            </th>
+            <th pSortableColumn="updated_at">Updated at <p-sortIcon field="updated_at"></p-sortIcon>
+            </th>
+
+        </tr>
+
+    </ng-template>
+    <ng-template pTemplate="body" let-rowData let-columns="columns" styleClass="p-datatable-responsive-demo">
+        <tr>
+            <td>
+                <a (click)="navigateToWorkflow(rowData)" title="{{rowData.id}}">
+                    {{rowData.workflow_name}}
+                </a>
+            </td>
+            <td> <span class="badge"
+                    [ngClass]="{'badge-primary':rowData.workflow_status === 'active','badge-light':rowData.workflow_status === 'draft'}">
+                    {{rowData.workflow_status}}</span>
+
+            </td>
+            <td>{{rowData.createdby_firstname}} {{rowData.createdby_lastname}}</td>
+            <td>{{rowData.updatedby_firstname}} {{rowData.updatedby_lastname}}</td>
+            <td>{{rowData.created_at | timeAgo}}</td>
+            <td>{{rowData.updated_at | timeAgo}}</td>
+
+        </tr>
+
+    </ng-template>
+    <ng-template pTemplate="emptymessage" let-columns>
+        <tr>
+            <td [attr.colspan]="columns.length">
+                No records found
+            </td>
+        </tr>
+    </ng-template>
+
+    <!-- <ng-template pTemplate="footer" let-columns="columns">
+    <tr>
+      <td *ngFor="let col of columns">
+        {{col.header}}
+      </td>
+    </tr>
+  </ng-template> -->
+
+    <!-- <p-multiSelect [options]="cols" [(ngModel)]="selectedColumns" optionLabel="header"
+  selectedItemsLabel="{0} columns selected" [style]="{minWidth: '200px'}" placeholder="Choose Columns">
+</p-multiSelect> -->
+</p-table>
+</div>
+
+
+<ng-template #createworkflowModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Create Workflow
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="onCancelClick()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <form [formGroup]="createWorkFlowForm" (ngSubmit)="createWorkFlow()">
+        <div class="modal-body">
+
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label for="workflowName"
+                            class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">Name</label>
+                        <input type="text" class="form-control" formControlName="workflowName"
+                            [ngClass]="{ 'is-invalid': submitted && addWorkflow.workflowName.errors }" />
+                        <div *ngIf="submitted && addWorkflow.workflowName.errors" class="invalid-feedback">
+                            <div *ngIf="addWorkflow.workflowName.errors.required">Workflow name is required</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-sm-12 mb-3">
+                    <label for="workflowselect" class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">
+                        Select Workflow</label>
+                    <select class="form-control" formControlName="workflowselection" (change)="onWorkflowChange($event)"
+                        [ngClass]="{ 'is-invalid': submitted && addWorkflow.workflowselection.errors }">
+                        <ng-container *ngFor="let opt of activeWorkflowList">
+                            <option *ngIf="opt.workflow_status=='active'" [value]="opt.id">
+                                {{ opt.workflow_name }}
+                            </option>
+                        </ng-container>
+
+                    </select>
+                    <div *ngIf="submitted && addWorkflow.workflowselection.errors" class="invalid-feedback">
+                        <div *ngIf="addWorkflow.workflowselection.errors.required">Select workflow is required</div>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary tx-13" (click)="onCancelClick()">Cancel</button>
+            <button class="btn btn-primary tx-13">Save</button>
+        </div>
+
+    </form>
+</ng-template>
+<div class="col-sm-5 mt-3 mr-0 float-right">
+    <alert *ngIf="isOpen" [type]="alertType" dismissOnTimeout="5000" [dismissible]="dismissible"
+        (onClosed)="onClosed(alertMsg)">{{alertMsg}}</alert>
+</div>

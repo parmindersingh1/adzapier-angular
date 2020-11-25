@@ -1,0 +1,55 @@
+<div class="container pd-x-0 pd-lg-x-10 pd-xl-x-0">
+
+
+  <div class="d-sm-flex align-items-center justify-content-between ">
+    <div>
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb breadcrumb-style1 mg-b-10">
+          <li class="breadcrumb-item"><a routerLink="/billing">Billing</a></li>
+          <li class="breadcrumb-item" aria-current="page"><a routerLink="/pricing">Pricing</a></li>
+          <li class="breadcrumb-item active" aria-current="page">Checkout</li>
+        </ol>
+      </nav>
+      <h4 class="mg-b-0 tx-spacing--1">Billing</h4>
+    </div>
+
+  </div>
+
+  <div class="row row-xs">
+    <div class="col-sm-6 col-lg-6 mg-t-40 mg-sm-t-0 mg-md-t-40">
+      <div class="card" style="min-height:200px">
+        <div class="card-body">
+          <h5 class="card-title"> Order Review </h5>
+          <h5 class="card-text"> Plan Name:
+            {{planDetails.planType === 'GDPR' ? 'CCPA + GDPR' : planDetails.planType }}
+            - {{planDetails.name}}</h5>
+          <br>
+<!--          <div class="mg-b-10">-->
+<!--            <span class="card-text pd-r-50"> Billing cycle:</span>-->
+<!--            <input type="checkbox" class="custom-control-input" id="customCheck1">-->
+<!--            <label class="custom-control-label" for="customCheck1">Custom checkbox</label>-->
+<!--          </div>-->
+          <p>
+            <span class=" tx-indigo">
+            USD {{planDetails.price}}
+            </span>
+            <span class=" card-text">(tax inclusive) </span>
+          </p>
+
+          <br>
+          <span class="card-text text-muted">{{planDetails.type}} </span>
+          <br>
+          <br>
+          <a class="card-link" routerLink="/settings/billing/pricing"> Cancel</a>
+          <a class="btn btn-success" (click)="onCheckout()" > Checkout</a>
+          <br>
+          <br>
+          <p>Your card will be immediately charged {{planDetails.price}} and then billed {{planDetails.price}} each {{planDetails.cycle}}.</p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+
+</div>

@@ -1,0 +1,91 @@
+.pd-t-20 {
+    padding: 2%!important;
+}
+
+.table > tbody > tr:hover {
+    background-color:#e9ecf1;
+}
+
+.invalid-radio {
+    width: 100%;
+    margin-top: 0.25rem;
+    font-size: 80%;
+    color: #dc3545;
+}
+
+.form-check-inline > input[type='radio'] {
+    margin: 0 5px 0 0;
+}
+
+
+.searchfield {
+    display: flex;
+}
+
+.table-responsive.company-div > .card > .card-header {
+    padding-top: 0;
+    padding-right: 0;
+    padding-left: 0;
+}
+
+.searchfield .input-group {
+    align-items: center;
+}
+
+.searchfield > div > span.input-group-append {
+    height: 38px;
+    display: flex;
+}
+
+.searchfield > div > span > div.input-group-text {
+    align-items: center;
+}
+
+.searchfield.mt-3 .form-inline {
+    font-weight: normal;
+}
+
+
+.alert-info {
+    color: #0c5460;
+    background-color: #d1ecf1;
+    border-color: #bee5eb;
+}
+
+.alert-success {
+	background-color: #7B1FA2;
+    border-color: #4A148C;
+    color: #fff;
+}
+
+.alert-danger {
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+}
+
+.flotingdiv{
+    position: fixed;
+	bottom: 0;
+	top: 84%;
+	right:0;
+	overflow-x: hidden;
+    overflow-y: auto;
+    z-index: 0;    
+}
+
+.hide {
+    display: none;
+}
+
+.pagination-wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: normal;
+    align-items: center;
+}
+
+.height28 {
+    height: 28px;
+}

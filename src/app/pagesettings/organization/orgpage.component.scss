@@ -1,0 +1,161 @@
+.pd-t-20 {
+    padding: 2%!important;
+}
+
+.heading_border{
+    border-bottom: 1px solid #485e9029;
+}
+
+.propertylist {
+    border: 1px solid #ccc;
+}
+
+.propertylist h5 {
+    padding: 0px 10px;
+}
+
+.propertylist ul{
+    margin: 0;
+    padding: 0;
+}
+
+.propertylist ul li{
+    list-style-type: none;
+}
+
+.table-responsive.organization-div > .card > .card-header {
+    padding-top: 0;
+    padding-right: 0;
+    padding-left: 0;
+}
+
+.paddingzero{
+    padding: 0;
+    margin: 0;
+}
+
+.modal-header .close {
+    outline: none;
+}
+
+.is-invalid {
+    color: red;
+}
+
+.txt-center {
+    text-align: center;
+}
+
+.table > tbody > tr > td> img.img-fluid {
+    max-width: 15% !important;
+}
+
+.table > tbody > tr > td:nth-child(3) {
+    width: 20% !important;
+}
+
+.table.table.table-bordered > tbody > tr > td > a {
+    color: #0168fa;
+    cursor: pointer;
+}
+
+.table.table.table-bordered > tbody > tr > td > a:hover {
+    color:#0148ae;
+}
+
+.table > tbody > tr:hover {
+    background-color:#e9ecf1;
+}
+
+.checked {
+    background: green;
+}
+
+.feather-16 {
+    width: 16px;
+    height: 16px;
+    margin: 0;
+}
+
+.input-group-text {
+    border: 1px solid #dee2e6;
+}
+
+.input-group > .form-control:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+.searchfield {
+    display: flex;
+}
+
+.searchfield .input-group {
+    align-items: center;
+}
+
+.searchfield > div > span.input-group-append {
+    height: 38px;
+    display: flex;
+}
+
+.searchfield > div > span > div.input-group-text {
+    align-items: center;
+}
+
+.row-enabled {
+    background-color:transparent;
+}
+
+.row-disabled {
+    background-color: #ccc;
+}
+
+tr.row-disabled > td > a {
+    color: #fff !important;
+}
+
+
+.alert-info {
+    color: #0c5460;
+    background-color: #d1ecf1;
+    border-color: #bee5eb;
+}
+
+.alert-success {
+	background-color: #7B1FA2;
+    border-color: #4A148C;
+    color: #fff;
+}
+
+.alert-danger {
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+}
+
+.flotingdiv{
+	position: fixed;
+	bottom: 60px;
+	top: 84%;
+	right:10px;
+	overflow-x: hidden;
+    overflow-y: auto;
+    pointer-events: none;
+}
+
+.hide {
+    display: none;
+}
+
+.pagination-wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: normal;
+    align-items: center;
+}
+
+.height28 {
+    height: 28px;
+}

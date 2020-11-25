@@ -1,0 +1,91 @@
+<div class="container mb-0">
+    <div class="mb-3">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb breadcrumb-style1 mg-b-0">
+                <li class="breadcrumb-item"> Privacy</li>
+                <li class="breadcrumb-item"> Data Subject Access Request </li>
+                <li class="breadcrumb-item"> <a routerLink="/privacy/dsar/workflows">Workflow</a> </li>
+                <li class="breadcrumb-item active" aria-current="page">
+                    {{workflowName? workflowName : 'Create Workflow'}}</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+<div>
+    <div class="col-lg-6 col-xl-12 workflowcontainer">
+        <div class="card">
+            <div class="card-header  d-flex align-items-center justify-content-between pd-y-10">
+                <span class="tx-12 tx-color-03 mg-b-0">
+                    <h6 class="mg-b-0 txt-caps">{{workflowName? workflowName : 'Create workflow'}}<span
+                            [class.workflowname]="workflowName !== ''">{{workflowStatus?workflowStatus:''}}</span></h6>
+                </span>
+                <div class="d-flex" *ngIf="!skeletonLoading && quillEditorForm.valid">
+                    <button class="btn btn-xs btn-primary d-flex align-items-center mg-r-5" 
+                    [ngClass]="{'hideEditSave-btn':workflowType == 'default', '': workflowType !== 'default'}"
+                    [attr.disabled]="(workflowStatus === 'draft' && !isworkflowSaved) || (workflowStatus == 'draft' && isControlDisabled) ? true:null"
+                        (click)="editWorkflow($event,workflowStatus)">
+                        <span class="d-none d-sm-inline">
+                            <i *ngIf="workflowStatus == 'active'" class="fa fa-pen mr-1" aria-hidden="true"></i>
+                            {{workflowStatus == 'active' ? 'Edit' : 'Activate'}}</span></button>
+
+                    <button class="btn btn-xs btn-white d-flex align-items-center mg-r-5" type="button"
+                    [ngClass]="{'hideEditSave-btn':workflowType == 'default', '': workflowType !== 'default'}"
+                    [attr.disabled]="checkButtonStatus() &&  workflowStatus !== 'draft' || isControlDisabled && workflowStatus !== 'draft' ? true : null"
+                        (click)="saveWorkflow(quillEditorForm, workflowStatus)">
+                        <span class="d-none d-sm-inline">
+                            <i class="fa fa-plus" aria-hidden="true"></i>
+                            Save</span></button>
+                </div>
+            </div>
+
+            <div class="card-body">
+                <div class="wrapper">
+                    <ng-container *ngIf="workflowStages?.length > 0">
+                        <div class="loader-margin"> 
+                            <ngx-skeleton-loader  *ngIf="skeletonLoading && workflowStages?.length !== 0"   count="1"></ngx-skeleton-loader>
+                            <span *ngIf="!skeletonLoading && workflowStages?.length === 0" class="nodatafound">No data found</span>
+                        </div>
+                        <app-customtabs *ngIf="!skeletonLoading"  [flowStatus]="workflowStatus" [inputData]="workflowStages" [currentTab]="order"
+                            (currentStageEvent)="clickOnWorkflowStages($event)">
+                        </app-customtabs>                        
+                    </ng-container>
+                    <span *ngIf="!skeletonLoading && workflowStages?.length === 0" class="nodatafound">No data found</span>
+                    <div class="col-sm-6 mb-3">
+                        <form #quillEditorForm="ngForm">
+                            <div [ngClass]="{'hide':!skeletonLoading && !quillEditorForm.valid && workflowStages?.length == 0,'showerror':!skeletonLoading && !quillEditorForm.valid && workflowStages?.length != 0}">
+                            <label class="tx-10 tx-uppercase tx-medium"> <span class="red">*</span>
+                                Stage</label>
+                            <input type="text" [(ngModel)]="stageTitle"  #stage_title="ngModel" name="stageTitle" (keyup)="update($event)"
+                                class="form-control mb-1" 
+                                [attr.disabled]="isControlDisabled?true:null"
+                                [class.disabled]="isControlDisabled"
+                                [ngClass]="{ 'is-invalid': stage_title?.invalid && (stage_title?.dirty || stage_title?.touched) && submitted && !skeletonLoading }" required />
+                            <div *ngIf="stage_title?.invalid && !skeletonLoading" class="invalid-feedback">
+                                <div *ngIf="stage_title?.invalid && submitted">Stage is required</div>
+                            </div>
+                            <label class="tx-10 tx-uppercase tx-medium"> <span class="red">*</span>
+                                Guidance Text</label>
+                            <div [ngClass]="{ 'quilleditor-invalid':  guidanceText.invalid && submitted && !skeletonLoading}">
+                                <quill-editor [(ngModel)]="guidancetext" name="guidancetext" [modules]="quillConfig" 
+                            #guidanceText = "ngModel"
+                                [class.disabled]="isControlDisabled" (onContentChanged)="updateGuidanceText($event)"
+                                [ngClass]="{ 'is-invalid': guidanceText?.invalid && (guidanceText?.dirty || guidanceText?.touched) && submitted }"
+                                 [styles]="{height: '200px'}"   
+                                 [required]="true">
+                            </quill-editor>
+                            <div *ngIf="guidanceText?.invalid && submitted && !skeletonLoading" class="invalid-feedback position-absolute">
+                                <div *ngIf="guidanceText?.invalid">Guidance text is required</div>
+                            </div>
+                            </div>
+                        </div>
+                        </form>
+                    </div>
+                
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-sm-5 mr-0 float-right flotingdiv" [ngClass]="{'hide':!isOpen}">
+<alert *ngIf="isOpen" [type]="alertType" dismissOnTimeout="5000" [dismissible]="dismissible" (onClosed)="onClosed(alertMsg)">{{alertMsg}}</alert>
+</div>

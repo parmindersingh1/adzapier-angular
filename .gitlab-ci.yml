@@ -1,0 +1,262 @@
+image: node:14
+cache:
+  untracked: false
+  key: "$CI_BUILD_REF_NAME"
+  paths:
+    - dist/
+variables:
+  IMAGE_TAG: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME
+  TAG: ${CI_COMMIT_SHORT_SHA}
+
+stages:
+  - test
+  - build
+  - docker
+  - deploy
+
+before_script:
+  - printenv
+  - export CAL_VER=$(date +"%y%m%d%H")
+
+test:
+  stage: test
+  artifacts:
+    paths:
+      - node_modules/
+    expire_in: 1 hr
+  script:
+    - npm uninstall -g @angular/cli angular-cli
+    - npm install -g @angular/cli@8.3.1
+    - rm -rf node_modules
+    - npm install
+    - npm update
+  before_script:
+    - ls -ltr
+
+build-develop:
+  environment:
+    name: develop
+  stage: build
+  artifacts:
+    paths:
+      - dist/
+    expire_in: 1 hr
+  script:
+    - npm install -g @angular/cli@8.3.1
+    - npm update
+    - ./node_modules/@angular/cli/bin/ng build --configuration=develop 
+  only:
+   - develop
+   - /^develop_[0-9]+(?:.[0-9]+)+$/
+   
+build-stage:
+  environment:
+    name: staging
+  stage: build
+  artifacts:
+    paths:
+      - dist/
+    expire_in: 1 hr
+  script:
+    - npm install -g @angular/cli@8.3.1
+    - npm update
+    - ./node_modules/@angular/cli/bin/ng build --configuration=staging 
+  only:
+   - feature-ci-cd
+   - staging
+   - /^staging_[0-9]+(?:.[0-9]+)+$/
+
+build-prod:
+  environment:
+    name: production
+  stage: build
+  artifacts:
+    paths:
+      - dist/
+    expire_in: 1 hr
+  script:
+    - npm install -g @angular/cli@8.3.1
+    - npm update
+    - ./node_modules/@angular/cli/bin/ng build --configuration=production 
+  only:
+   - master
+   - /^v[0-9]+(?:.[0-9]+)+$/
+
+build_docker_image-develop:
+  stage: docker
+  image: docker:19
+  script:
+    - pwd
+    - ls -ltra ./dist/
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD ${CI_REGISTRY}
+    - cp ./docker/Dockerfile ./
+    - docker build --no-cache -t ${CI_REGISTRY_IMAGE}:${CI_COMMIT_TAG:-$CI_COMMIT_REF_NAME-$TAG} .
+    - docker push                ${CI_REGISTRY_IMAGE}:${CI_COMMIT_TAG:-$CI_COMMIT_REF_NAME-$TAG}
+    - docker rmi                 ${CI_REGISTRY_IMAGE}:${CI_COMMIT_TAG:-$CI_COMMIT_REF_NAME-$TAG}
+  only:
+    - develop
+    - /^develop_[0-9]+(?:.[0-9]+)+$/
+
+build_docker_image-staging:
+  stage: docker
+  image: docker:19
+  script:
+    - pwd
+    - ls -ltra ./dist/
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD ${CI_REGISTRY}
+    - cp ./docker/Dockerfile ./
+    - docker build --no-cache -t ${CI_REGISTRY_IMAGE}:${CI_COMMIT_TAG:-$CI_COMMIT_REF_NAME-$TAG} .
+    - docker push                ${CI_REGISTRY_IMAGE}:${CI_COMMIT_TAG:-$CI_COMMIT_REF_NAME-$TAG}
+    - docker rmi                 ${CI_REGISTRY_IMAGE}:${CI_COMMIT_TAG:-$CI_COMMIT_REF_NAME-$TAG}
+  only:
+    - staging
+    - /^staging_[0-9]+(?:.[0-9]+)+$/
+
+build_docker_image-prod:
+  stage: docker
+  image: docker:19
+  before_script:
+    - export TAGS=$(echo ${CI_COMMIT_TAG} | sed 's/^.//') || true
+  script:
+    - pwd
+    - ls -ltra ./dist/
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD ${CI_REGISTRY}
+    - cp ./docker/Dockerfile ./
+    - docker build --no-cache -t ${CI_REGISTRY_IMAGE}:${TAGS} .
+    - docker push                ${CI_REGISTRY_IMAGE}:${TAGS}
+    - docker rmi                 ${CI_REGISTRY_IMAGE}:${TAGS}
+  only:
+    - tags
+  except:
+    - master
+    - staging
+    - develop
+
+deploy-to-swarm-develop:
+  stage: deploy
+  variables:
+    DOCKER_HOST: tcp://staging-manager-01-nyc3.adzapsrv.com:2375
+    DOMAINS: "Host(`develop-cmp.adzpier-staging.com`)"
+    SERVICE_NAME: ${CI_BUILD_REF_NAME}-ui
+    TARGET_PORT: 8080
+    PUBLISH_PORT: 8190
+    SERVICE_MIN_REPLICAS: 2
+    TAGS: ${CI_COMMIT_REF_NAME}-${TAG}
+    RESERVE_CPU: "'0.25'"
+    LIMIT_CPU: "'0.5'"
+    RESERVE_MEMORY: 64M 
+    LIMIT_MEMORY: 128M
+  image: docker:19
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD ${CI_REGISTRY}
+    - docker service scale ${CI_PROJECT_NAMESPACE}-${CI_PROJECT_NAME}_${SERVICE_NAME}=$SCALABLE_REPLICAS || true
+    - echo "Deploying Stack"
+    - docker stack deploy --with-registry-auth --compose-file=docker-stack-out.yaml ${CI_PROJECT_NAMESPACE}-${CI_PROJECT_NAME}
+    - docker service scale ${CI_PROJECT_NAMESPACE}-${CI_PROJECT_NAME}_${SERVICE_NAME}=$RUNNING_REPLICAS
+  before_script:
+    - export CAL_VER=$(date +"%y%m%d%H")
+    - apk add gettext
+    - RUNNING_REPLICAS=$(docker service ps ${CI_PROJECT_NAMESPACE}-${CI_PROJECT_NAME}_${SERVICE_NAME} | grep -i running | wc -l) || true
+    - echo $RUNNING_REPLICAS
+    - |
+      if [[ $RUNNING_REPLICAS == 0 ]]; then
+        RUNNING_REPLICAS=`expr $RUNNING_REPLICAS + $SERVICE_MIN_REPLICAS`
+      fi
+    - echo $RUNNING_REPLICAS
+    - SCALABLE=`expr $RUNNING_REPLICAS \* $SERVICE_MIN_REPLICAS`
+    - export SCALABLE_REPLICAS=$(echo $SCALABLE)
+    - echo $SCALABLE_REPLICAS
+    - envsubst < docker-compose.yaml > docker-stack-out.yaml
+    - cat docker-stack-out.yaml
+  only:
+   - develop
+   - /^develop_[0-9]+(?:.[0-9]+)+$/
+    
+deploy-to-swarm-staging:
+  stage: deploy
+  variables:
+    DOCKER_HOST: tcp://staging-manager-01-nyc3.adzapsrv.com:2375
+    SERVICE_NAME: ${CI_BUILD_REF_NAME}-ui
+    DOMAINS: "Host(`cmp.adzpier-staging.com`)"
+    SERVICE_MIN_REPLICAS: 2
+    TARGET_PORT: 8080
+    PUBLISH_PORT: 8191
+    TAGS: ${CI_COMMIT_REF_NAME}-${TAG}
+    RESERVE_CPU: "'0.25'"
+    LIMIT_CPU: "'0.5'"
+    RESERVE_MEMORY: 64M 
+    LIMIT_MEMORY: 128M
+  image: docker:19
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD ${CI_REGISTRY}
+    - docker service scale ${CI_PROJECT_NAMESPACE}-${CI_PROJECT_NAME}_${SERVICE_NAME}=$SCALABLE_REPLICAS || true
+    - echo "Deploying Stack"
+    - docker stack deploy --with-registry-auth --compose-file=docker-stack-out.yaml ${CI_PROJECT_NAMESPACE}-${CI_PROJECT_NAME}
+    - docker service scale ${CI_PROJECT_NAMESPACE}-${CI_PROJECT_NAME}_${SERVICE_NAME}=$RUNNING_REPLICAS
+  before_script:
+    - export CAL_VER=$(date +"%y%m%d%H")
+    - apk add gettext
+    - RUNNING_REPLICAS=$(docker service ps ${CI_PROJECT_NAMESPACE}-${CI_PROJECT_NAME}_${SERVICE_NAME} | grep -i running | wc -l) || true
+    - echo $RUNNING_REPLICAS
+    - |
+      if [[ $RUNNING_REPLICAS == 0 ]]; then
+        RUNNING_REPLICAS=`expr $RUNNING_REPLICAS + $SERVICE_MIN_REPLICAS`
+      fi
+    - echo $RUNNING_REPLICAS
+    - SCALABLE=`expr $RUNNING_REPLICAS \* $SERVICE_MIN_REPLICAS`
+    - export SCALABLE_REPLICAS=$(echo $SCALABLE)
+    - echo $SCALABLE_REPLICAS
+    - envsubst < docker-compose.yaml > docker-stack-out.yaml
+    - cat docker-stack-out.yaml
+  environment:
+    name: master
+    url: http://${CI_BUILD_REF_NAME}.example.com
+  only:
+    - staging
+    - /^staging_[0-9]+(?:.[0-9]+)+$/
+
+deploy-to-swarm-prod:
+  stage: deploy
+  variables:
+    DOCKER_HOST: tcp://production-manager-01-nyc3.adzapsrv.com:2375
+    SERVICE_MIN_REPLICAS: 2
+    TARGET_PORT: 8080
+    PUBLISH_PORT: 8190
+    SERVICE_NAME: cmp-adminportal
+    DOMAINS: "Host(`portal.adzapier.com`)"
+    RESERVE_CPU: "'0.5'"
+    LIMIT_CPU: "'1'"
+    RESERVE_MEMORY: 256M 
+    LIMIT_MEMORY: 512M
+  image: docker:19
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD ${CI_REGISTRY}
+    - docker service scale ${CI_PROJECT_NAMESPACE}-${CI_PROJECT_NAME}_${SERVICE_NAME}=$SCALABLE_REPLICAS || true
+    - echo "Deploying Stack"
+    - docker stack deploy --prune --with-registry-auth --compose-file=docker-compose-out.yaml ${CI_PROJECT_NAMESPACE}-${CI_PROJECT_NAME}
+    - docker service scale ${CI_PROJECT_NAMESPACE}-${CI_PROJECT_NAME}_${SERVICE_NAME}=$RUNNING_REPLICAS
+  before_script:
+    - apk add gettext
+    - export CAL_VER=$(date +"%y%m%d%H")
+    - export TAGS=$(echo ${CI_COMMIT_TAG} | sed 's/^.//') || true
+    - RUNNING_REPLICAS=$(docker service ps ${CI_PROJECT_NAMESPACE}-${CI_PROJECT_NAME}_${SERVICE_NAME} | grep -i running | wc -l) || true
+    - echo $RUNNING_REPLICAS
+    - |
+      if [[ $RUNNING_REPLICAS == 0 ]]; then
+        RUNNING_REPLICAS=`expr $RUNNING_REPLICAS + $SERVICE_MIN_REPLICAS`
+      fi
+    - echo $RUNNING_REPLICAS
+    - SCALABLE=`expr $RUNNING_REPLICAS \* $SERVICE_MIN_REPLICAS`
+    - export SCALABLE_REPLICAS=$(echo $SCALABLE)
+    - echo $SCALABLE_REPLICAS
+    - envsubst < docker-compose.yaml > docker-compose-out.yaml
+    - cat docker-compose-out.yaml
+  environment:
+    name: master
+    url: http://${CI_BUILD_REF_NAME}.adzpier.com
+  only:
+    - tags
+  except:
+    - master
+    - staging
+    - develop

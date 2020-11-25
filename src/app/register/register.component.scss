@@ -42,3 +42,28 @@
       display: block;
       margin-bottom: 5px; }
   
+.alert-success {
+  background-color: #5cb85c;
+ border-color: #4cae4c;
+ color: #fff;
+ padding: 12px 32px 12px 12px !important;
+}
+
+.alert-danger {
+ color: #721c24;
+ background-color: #f8d7da;
+ border-color: #f5c6cb;
+}
+ 
+.flotingdiv {
+	position: fixed;
+	bottom: 0;
+	top: 84%;
+	right:0;
+	overflow-x: hidden;
+  overflow-y: auto;
+}
+
+::ng-deep .alert {
+  padding: 12px 35px 12px 12px;
+}

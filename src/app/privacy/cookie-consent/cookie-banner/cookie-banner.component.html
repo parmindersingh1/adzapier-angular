@@ -1,0 +1,1171 @@
+<div class="container">
+
+
+
+  <form [formGroup]="cookieBannerForm" (ngSubmit)="onSubmit()">
+    <div class="d-sm-flex align-items-center justify-content-between">
+      <div>
+        <nav aria-label="breadcrumb" style="margin-left: -14px">
+          <ol class="breadcrumb breadcrumb-style1 mg-b-10">
+            <li class="breadcrumb-item">Privacy</li>
+            <li class="breadcrumb-item"><a routerLink="/home/dashboard/cookie-consent">Cookie Consent</a></li>
+            <li class="breadcrumb-item active">Banner Configuration</li>
+
+          </ol>
+        </nav>
+        <!-- <h4 class="mg-b-0 tx-spacing--1">Welcome to Dashboard</h4> -->
+      </div>
+
+
+      <div class="d-none d-md-block">
+        <button (click)="onResetConfig()" type="button" class="btn btn-sm pd-x-15 btn-primary mr-2 btn-uppercase">
+          Reset Configuration
+        </button>
+
+
+        <button (click)="type = 'draft'" type="submit" class="btn btn-sm pd-x-15 btn-white btn-uppercase">
+          <ng-container *ngIf="!isPublish || type === 'publish'">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-save wd-10 mg-r-5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+          Save
+          </ng-container>
+          <ng-container *ngIf="isPublish && type === 'draft'">
+            <div class="spinner-border"></div>
+            Saving...
+          </ng-container>
+        </button>
+        <button (click)="type = 'publish'" type="submit"
+                class="btn btn-sm pd-x-15 btn-primary btn-uppercase mg-l-5" href="#modalAddCategory"
+                data-toggle="modal">
+          <ng-container *ngIf="!isPublish || type === 'draft'">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                         viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                         stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-sliders wd-10 mg-r-5"><line x1="4" y1="21" x2="4" y2="14"></line><line x1="4" y1="10" x2="4" y2="3"></line><line x1="12" y1="21" x2="12" y2="12"></line><line x1="12" y1="8" x2="12" y2="3"></line><line x1="20" y1="21" x2="20" y2="16"></line><line x1="20" y1="12" x2="20" y2="3"></line><line x1="1" y1="14" x2="7" y2="14"></line><line x1="9" y1="8" x2="15" y2="8"></line><line x1="17" y1="16" x2="23" y2="16"></line></svg>
+          Publish
+          </ng-container>
+        <ng-container *ngIf="isPublish && type === 'publish'">
+          <div class="spinner-border"></div>
+          Publishing...
+        </ng-container>
+        </button>
+      </div>
+    </div> <!-- breadcrumb -->
+
+
+    <div class="row">
+      <div class="w-100">
+        <h4 class="mat-h2">
+          Configure your Banner
+        </h4>
+        <div class="card">
+          <div class="card-body">
+            <div [ngStyle]="{display: skeletonLoading ? 'none': ''}" class="row">
+              <div class="col-md-6">
+                <div class="divider-text mt-0">Banner Configuration</div>
+              <div class="row">
+              <div class="col-md-6">
+                <div class="form-group mb-1 row">
+                  <label for="sel1"
+                    class="tx-13 tx-medium tx-spacing-1 pb-0 tx-color-03 tx-uppercase col-sm-12  col-form-label">CCPA
+                    Target:</label>
+                  <div class="col-sm-12">
+                    <select  formControlName="ccpaTarget" [disabled]="isGdprGlobal" class="form-control" id="sel1">
+                      <option *ngFor="let ccpaCountry of bannerConstant.ccpaTargetCountry" [value]="ccpaCountry.value">
+                        {{ccpaCountry.title}}</option>
+                    </select>
+
+                    <div *ngIf="submitted && f.ccpaTarget.errors">
+                      <div class="text-danger mt-2" *ngIf="f.ccpaTarget.errors.required">
+                        Choose CCPA Target
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+
+
+                <div class="form-group mb-1 row">
+                  <label for="sel1"
+                         class="tx-13 tx-medium pb-0 tx-spacing-1 tx-color-03 tx-uppercase col-sm-12  col-form-label">GDPR Target:</label>
+                  <div class="col-sm-12">
+                    <p-multiSelect class="gdprSelect" [disabled]="gdprGlobal.checked ? true : false" [ngClass]="{ 'is-invalid': submitted && f.gdprTarget.errors }"
+                                   formControlName="gdprTarget" [style]="{'width':'100%'}" [options]="gdprTarget" ></p-multiSelect>
+                    <div *ngIf="submitted && f.gdprTarget.errors">
+                      <div class="text-danger mt-2" *ngIf="f.gdprTarget.errors.required">
+                        Choose GDPR Target
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                 <div class="col-md-2 ">
+                 <p-checkbox class="pt-1" binary="true"
+                             formControlName="logo"></p-checkbox>
+                 </div>
+                 <div class="col-md-9">
+                  <label class="tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase col-sm-12 col-form-label">
+                    Show Watermark
+                  </label>
+                 </div>
+                </div>
+
+
+                <div class="row">
+                  <div class="col-md-2">
+                    <p-checkbox binary="true" class="pt-1 checkbox" formControlName="showBadge"></p-checkbox>
+                  </div>
+                  <div class="col-md-9">
+                    <label class="tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase col-sm-12  col-form-label">
+                      Show Badge
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+
+                <div class="col-md-6 mt-3 border-right">
+                  <div class="form-group row pd-0 mg-b-0">
+                    <label class="col-sm-8 tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label">
+                      COOKIE BLOCKING</label>
+                    <div class="col-sm-4">
+                      <label class="switch">
+                        <input type="checkbox" formControlName="cookieBlocking">
+                        <span class="slider round"></span>
+                      </label>
+                    </div>
+                  </div>
+                  <div class="form-group row pd-0 mg-b-0">
+                    <label class="col-sm-8 tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label">
+                      ENABLE IAB</label>
+                    <div class="col-sm-4">
+                      <label class="switch">
+                        <input type="checkbox" [disabled]="isGdprGlobal" [checked]="isGdprGlobal"
+                               formControlName="enableIab">
+                        <span class="slider round"></span>
+                      </label>
+                    </div>
+                  </div>
+                  <div class="form-group row pd-0 mg-b-0">
+                    <label class="col-sm-8 tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label">
+                      Google Vendors</label>
+                    <div class="col-sm-4">
+                      <label class="switch">
+                        <input type="checkbox" formControlName="google_vendors">
+                        <span class="slider round"></span>
+                      </label>
+                    </div>
+                  </div>
+
+                  <div class="form-group row pd-0 mg-b-0">
+                    <label class="col-sm-8 tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label">
+                      GDPR GLOBAL</label>
+                    <div class="col-sm-4">
+                      <label class="switch">
+                        <input type="checkbox" (ngModelChange)="onSetGdprGlobal($event)" #gdprGlobal formControlName="gdpr_global">
+                        <span class="slider round"></span>
+                      </label>
+                    </div>
+                  </div>
+
+
+                  <div class="form-group row pd-0 mg-b-0">
+                    <label class="col-sm-8 tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label">
+                      Configure banner</label>
+                    <div class="col-sm-4">
+                      <label class="switch">
+                        <input checked type="checkbox" #showConfig>
+                        <span class="slider round"></span>
+                      </label>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+              </div>
+              <div class="col-md-6 switch-btn">
+                  <div class="col-md-12">
+                    <div class="divider-text mt-0">Display Frequency</div>
+                    <div class="row">
+                      <div class="col-md-12">
+                        <h6 class=" tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label">Show the Consent Manager UI to users the partial consent status every:</h6>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="input-group mb-1">
+                          <input oninput="validity.valid||(value='');" min="1" type="number"
+                                 formControlName="bannerPartialConsent" class="form-control" value="1" name="email">
+                          <div class="input-group-append">
+                            <select class="form-control"  formControlName="bannerPartialConsentType">
+                              <option *ngFor="let type of bannerConstant.BannerDisplayFrequency" [value]="type.value">{{type.label}}</option>
+                            </select>
+                          </div>
+                        </div>
+                    </div>
+                    </div>
+
+                    <div class="row">
+                      <div class="col-md-12">
+                        <h6 class=" tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label">Show the Consent Manager UI to users who rejected all purposes every:</h6>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="input-group mb-1">
+                          <input oninput="validity.valid||(value='');" min="1" type="number"
+                                 formControlName="bannerRejectAllConsent"  class="form-control" value="1" name="email">
+                          <div class="input-group-append">
+                            <select  formControlName="bannerRejectAllConsentType" class="form-control">
+                              <option *ngFor="let type of bannerConstant.BannerDisplayFrequency" [value]="type.value">{{type.label}}</option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-12">
+                        <h6 class=" tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label">Show the Consent Manager UI to users who made no consent choice every:</h6>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="input-group mb-1">
+                          <input  formControlName="bannerClosedConsent" oninput="validity.valid||(value='');" min="1" type="number"class="form-control" value="1" name="email">
+                          <div class="input-group-append">
+                            <select  formControlName="bannerClosedConsentType" class="form-control">
+                              <option *ngFor="let type of bannerConstant.BannerDisplayFrequency" [value]="type.value">{{type.label}}</option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+
+
+
+              </div>
+            </div>
+            <ngx-skeleton-loader *ngIf="skeletonLoading" count="6" class="pt-4"></ngx-skeleton-loader>
+          </div>
+        </div>
+        <!--      End Configure your theme -->
+        <div class="divider-text">Display Setting/s</div>
+        <div class="col-md-12">
+          <ul class="nav  nav-pills mb-3 d-flex justify-content-center " id="pills-tab" role="tablist">
+
+
+            <li class="nav-item">
+
+              <a class="nav-link  btn-xs bd" [ngClass]="{'active': currentState === 'banner'}"
+                (click)="onChoiceBanner('banner')" id="pills-banner-tab" data-toggle="pill" href="javascript:;"
+                role="tab" aria-controls="pills-banner" aria-selected="true">Banner</a>
+            </li>
+
+            <li class="nav-item ml-2">
+              <a class="nav-link  btn-xs bd" [ngClass]="{'active': currentState === 'popup'}"
+                (click)="onChoiceBanner('popup')" id="pills-preference-tab" data-toggle="pill" href="javascript:;"
+                role="tab" aria-controls="pills-preference" aria-selected="false">Preference</a>
+            </li>
+          </ul>
+        </div>
+
+<!--       <p-tabView>-->
+<!--          <p-tabPanel  header="Banner">-->
+        <ng-container *ngIf="currentState === 'banner'">
+          <div class="row">
+            <div *ngIf="showConfig.checked" class="col-md-5">
+              <div class="card mb-0">
+                <div class="card-header">Banner Styling and Content
+                </div>
+                <div class="card-body p-0 banner-body">
+                  <div class="row banner-row">
+                    <p-accordion>
+                      <p-accordionTab header="General Configuration" [selected]="true">
+                        <div class="col-md-12">
+                          <div class="form-group">
+                            <label for="lang"
+                              class="tx-12 tx-medium tx-middle tx-spacing-1 tx-color-03 tx-uppercase">Language </label>
+                            <select [disabled]="isFieldDisabled" formControlName="Bannerlanguage"
+                              class="form-control w-75" id="lang">
+                              <option *ngFor="let gdprLang of bannerConstant.Bannerlanguage"
+                                [value]="gdprLang.value">{{gdprLang.title}}</option>
+
+                            </select>
+                            <div *ngIf="submitted && f.Bannerlanguage.errors">
+                              <div class="text-danger mt-2" *ngIf="f.Bannerlanguage.errors.required">
+                                Language is <strong>required</strong>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-12 mb-4">
+                          <h6 class="tx-12 tx-medium tx-middle tx-spacing-1 tx-color-03 tx-uppercase">Position</h6>
+                          <div *ngFor="let gdprPosition of bannerConstant.BannerPosition"
+                            class="form-check-inline">
+                            <label class="form-check-label">
+                              <input formControlName="BannerPosition" [(ngModel)]="formContent.position"
+                                [disabled]="isFieldDisabled" [value]="gdprPosition.value" type="radio"
+                                class="form-check-input" name="BannerPosition">{{gdprPosition.title}}
+                            </label>
+                          </div>
+                        </div>
+
+
+                        <div class="col-md-12 mb-4">
+                          <h6 class="tx-12 tx-medium tx-middle tx-spacing-1 tx-color-03 tx-uppercase">Badge Position</h6>
+                          <div *ngFor="let badgePosition of bannerConstant.BadgePosition"
+                               class="form-check-inline">
+                            <label class="form-check-label">
+                              <input formControlName="BadgePosition"
+                                     [disabled]="isFieldDisabled" [value]="badgePosition.value" type="radio"
+                                     class="form-check-input" name="BadgePosition">{{badgePosition.title}}
+                            </label>
+                          </div>
+                        </div>
+
+                      </p-accordionTab>
+
+                      <p-accordionTab header="Content">
+                        <div class="col-md-12 mt-2">
+                          <h5 class="tx-12 tx-medium tx-spacing-1 tx-color-03 tx-uppercase ">Title</h5>
+                          <input type="text" [attr.disabled]="isFieldDisabled" formControlName="BannerTitle"
+                            [(ngModel)]="formContent.bannerTitle" class="form-control w-100"
+                            [placeholder]="formContent.bannerTitle">
+                          <div *ngIf="submitted && f.BannerTitle.errors">
+                            <div class="text-danger mt-2" *ngIf="f.BannerTitle.errors.minlength">
+                              Minimum 2 characters required
+                            </div>
+                            <div class="text-danger mt-2" *ngIf="f.BannerTitle.errors.maxlength">
+                              Maximum 50 characters required
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-12 mt-2">
+                          <div [ngStyle]="{display: isFieldDisabled ? 'none' : ''}" class="w-100">
+                            <h6 class="tx-12 tx-medium tx-spacing-1 tx-color-03 tx-uppercase">Description</h6>
+                            <quill-editor  [(ngModel)]="formContent.bannerDescription" maxlength="300"
+                              [placeholder]="formContent.bannerDescription"
+                              formControlName="BannerDescription" [modules]="quillConfig" [styles]="{height: '150px'}">
+                            </quill-editor>
+                            <div *ngIf="submitted && f.BannerDescription.errors">
+                              <div class="text-danger mt-2" *ngIf="f.BannerDescription.errors.minlength">
+                                Minimum 20 characters required
+                              </div>
+                              <div class="text-danger mt-2" *ngIf="f.BannerDescription.errors.maxlength">
+                                Maximum 300 characters required
+                              </div>
+                            </div>
+                          </div>
+
+
+                          <div [ngStyle]="{display: !isFieldDisabled ? 'none' : ''}" class="w-100">
+
+                            <div class="w-100 mt-2">
+                              <h5 class="tx-12 tx-medium tx-spacing-1 tx-color-03 tx-uppercase ">Privacy Text</h5>
+                              <input type="text" formControlName="privacyText"
+                                     [(ngModel)]="formContent.privacy" class="form-control w-100"
+                                     [placeholder]="formContent.privacy">
+                              <div *ngIf="submitted && f.privacyText.errors">
+                                <div class="text-danger mt-2" *ngIf="f.privacyText.errors.minlength">
+                                  Minimum 2 characters required
+                                </div>
+                                <div class="text-danger mt-2" *ngIf="f.privacyText.errors.maxlength">
+                                  Maximum 30 characters required
+                                </div>
+                              </div>
+                            </div>
+
+                            <div class=" w-100 mt-2">
+                              <h5 class="tx-12 tx-medium tx-spacing-1 tx-color-03 tx-uppercase ">Privacy Link</h5>
+                              <input type="text"  formControlName="privacyLink"
+                                     [(ngModel)]="formContent.privacyLink" class="form-control w-100"
+                                     [placeholder]="formContent.privacyLink">
+                              <div *ngIf="submitted && f.privacyLink.errors">
+                                <div class="text-danger mt-2" *ngIf="f.privacyLink.errors.minlength">
+                                  Minimum 2 characters required
+                                </div>
+                                <div class="text-danger mt-2" *ngIf="f.privacyLink.errors.maxlength">
+                                  Maximum 30 characters required
+                                </div>
+                              </div>
+                            </div>
+
+
+                            <div class="w-100 p-0">
+                              <ul style="list-style: none; display: flex" class="ml-2 pl-0 mt-2">
+                                <li class="tx-12 w-50 tx-medium tx-middle tx-spacing-1 tx-color-03 tx-uppercase">Text Color
+                                </li>
+                                <li class="text-left tx-middle"><input #privacyTextColor
+                                                                       [(ngModel)]="formContent.privacyTextColor" formControlName="privacyTextColor"
+                                                                       type="color" ></li>
+                                <li class="ml-4"><input class="form-control input-sm" [value]="privacyTextColor.value">
+                                </li>
+                              </ul>
+                            </div>
+
+
+                          </div>
+
+
+
+
+                          </div>
+                      </p-accordionTab>
+                      <p-accordionTab class="mt-2" header="Global Styles">
+                        <div class="col-md-12 p-0">
+                          <ul style="list-style: none; display: flex" class="ml-2 pl-0 mt-2">
+                            <li class="tx-12 tx-medium tx-middle tx-spacing-1 tx-color-03 tx-uppercase">Text Color
+                            </li>
+                            <li class="text-left tx-middle"><input #bannerTextColor
+                                [(ngModel)]="formContent.bannerTextColor" formControlName="BannerGlobalStyleTextColor"
+                                type="color"></li>
+                            <li class="ml-4"><input class="form-control input-sm" [value]="bannerTextColor.value">
+                            </li>
+                          </ul>
+                        </div>
+
+                        <div class="col-md-12 mt-2 p-0">
+                          <ul style="list-style: none; display: flex" class="ml-2 pl-0 mt-2">
+                            <li class="tx-12 tx-medium tx-middle tx-spacing-1 tx-color-03 tx-uppercase">Background
+                              Color
+                            </li>
+                            <li class="tx-middle ml-4"><input #bannerBackGroundColor
+                                [(ngModel)]="formContent.bannerBackGroundColor"
+                                formControlName="BannerGlobalStyleBackgroundColor" type="color"
+                                ></li>
+                            <li class="ml-4"><input class="form-control input-sm" [value]="bannerBackGroundColor.value">
+                            </li>
+                          </ul>
+                        </div>
+                      </p-accordionTab>
+                      <p-accordionTab header="Preference Button">
+                        <div class="col-md-12 p-0 ml-0 mb-4 row mt-2">
+                          <h5 class="col-sm-4 pl-2 tx-middle tx-12 tx-medium tx-spacing-1 tx-color-03 tx-uppercase">
+                            Text Content </h5>
+                          <div class="col-sm-8 ml-0">
+                            <input type="text" [attr.disabled]="isFieldDisabled" class="form-control input-sm"
+                              [(ngModel)]="formContent.bannerPreferenceButtonTextContent"
+                              id="BannerPreferenceButtonTextContent" formControlName="BannerPreferenceButtonTextContent"
+                              [placeholder]="formContent.bannerPreferenceButtonTextContent">
+                            <div *ngIf="submitted && f.BannerPreferenceButtonTextContent.errors">
+                              <div class="text-danger mt-2"
+                                *ngIf="f.BannerPreferenceButtonTextContent.errors.minlength">
+                                Minimum 2 characters required
+                              </div>
+                              <div class="text-danger mt-2"
+                                *ngIf="f.BannerPreferenceButtonTextContent.errors.maxlength">
+                                Maximum 25 characters required
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+
+                        <div class="col-md-12 mt-2 p-0">
+                          <ul style="list-style: none; display: flex" class="ml-2 pl-0 mt-2">
+                            <li class="tx-12 tx-medium tx-middle tx-spacing-1 tx-color-03 tx-uppercase">Text Color
+                            </li>
+                            <li class="text-left tx-middle"><input #bannerCustomizeButtonTextColor
+                                [(ngModel)]="formContent.bannerPreferenceButtonTextColor"
+                                formControlName="BannerPreferenceButtonTextColor" type="color"
+                                ></li>
+                            <li class="ml-3"><input class="form-control input-sm"
+                                [value]="bannerCustomizeButtonTextColor.value"></li>
+                          </ul>
+                        </div>
+
+                        <div class="col-md-12 mt-2 p-0">
+                          <ul style="list-style: none; display: flex" class="ml-2 pl-0 mt-2">
+                            <li class="tx-12 tx-medium tx-middle tx-spacing-1 tx-color-03 tx-uppercase">BackGround
+                              Color
+                            </li>
+                            <li class="ml-3"><input formControlName="BannerPreferenceButtonBackgroundColor"
+                                [(ngModel)]="formContent.bannerPreferenceButtonBackGroundColor"
+                                #bannerCustomizeButtonBackGroundColor type="color">
+                            </li>
+                            <li class="ml-3"><input class="form-control input-sm"
+                                [value]="bannerCustomizeButtonBackGroundColor.value"></li>
+                          </ul>
+                        </div>
+                      </p-accordionTab>
+
+                      <p-accordionTab header="Allow Required Button (For GDPR Only)">
+                        <div class="col-md-12 p-0 ml-0 mb-4 row mt-2">
+                          <h5 class="col-sm-4 pl-2 tx-middle tx-12 tx-medium tx-spacing-1 tx-color-03 tx-uppercase">
+                            Text Content </h5>
+                          <div class="col-sm-8 ml-0">
+                            <input type="text" [attr.disabled]="isFieldDisabled" class="form-control input-sm"
+                              formControlName="BannerAllowRequiredTextContent"
+                              [(ngModel)]="formContent.bannerAllowReqButtonTextContent"
+                              [placeholder]="formContent.bannerAllowReqButtonTextContent">
+                            <div *ngIf="submitted && f.BannerAllowRequiredTextContent.errors">
+                              <div class="text-danger mt-2" *ngIf="f.BannerAllowRequiredTextContent.errors.minlength">
+                                Minimum 2 characters required
+                              </div>
+                              <div class="text-danger mt-2" *ngIf="f.BannerAllowRequiredTextContent.errors.maxlength">
+                                Maximum 25 characters required
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-12 mt-2 p-0">
+                          <ul style="list-style: none; display: flex" class="ml-2 pl-0 mt-2">
+                            <li class="tx-12 tx-medium tx-middle tx-spacing-1 tx-color-03 tx-uppercase">Text Color
+                            </li>
+                            <li class="text-left tx-middle"><input
+                                [(ngModel)]="formContent.bannerAllowReqButtonTextColor"
+                                formControlName="BannerAllowRequiredButtonTextColor" #bannerAllowReqButtonTextColor
+                                type="color"></li>
+                            <li class="ml-3"><input class="form-control input-sm"
+                                [value]="bannerAllowReqButtonTextColor.value"></li>
+                          </ul>
+                        </div>
+
+                        <div class="col-md-12 mt-2 p-0">
+                          <ul style="list-style: none; display: flex" class="ml-2 pl-0 mt-2">
+                            <li class="tx-12 tx-middle tx-medium tx-spacing-1 tx-color-03 tx-uppercase">BackGround
+                              Color
+                            </li>
+                            <li class="ml-3 tx-middle"><input
+                                [(ngModel)]="formContent.bannerAllowReqButtonBackgroundColor"
+                                formControlName="BannerAllowRequiredButtonBackgroundColor"
+                                #bannerAllowReqButtonBackGroundColor type="color">
+                            </li>
+                            <li class="ml-3"><input class="form-control input-sm"
+                                [value]="bannerAllowReqButtonBackGroundColor.value"></li>
+                          </ul>
+                        </div>
+                      </p-accordionTab>
+
+
+                      <p-accordionTab header="Allow All Button">
+                        <div class="col-md-12 p-0 ml-0 mb-4 row mt-2">
+                          <h5 class="col-sm-4 pl-2 tx-middle tx-12 tx-medium tx-spacing-1 tx-color-03 tx-uppercase">
+                            Text Content </h5>
+                          <div class="col-sm-8 ml-0">
+                            <input type="text" [attr.disabled]="isFieldDisabled" class="form-control input-sm"
+                              formControlName="BannerAllowAllButtonTextContent"
+                              [(ngModel)]="formContent.bannerAcceptButtonTextContent"
+                              [placeholder]="formContent.bannerAcceptButtonTextContent">
+                            <div *ngIf="submitted && f.BannerAllowAllButtonTextContent.errors">
+                              <div class="text-danger mt-2" *ngIf="f.BannerAllowAllButtonTextContent.errors.minlength">
+                                Minimum 2 characters required
+                              </div>
+                              <div class="text-danger mt-2" *ngIf="f.BannerAllowAllButtonTextContent.errors.maxlength">
+                                Maximum 25 characters required
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="col-md-12 p-0 mt-2">
+                          <ul style="list-style: none; display: flex" class="ml-2 pl-0 mt-2">
+                            <li class="tx-12 tx-medium tx-middle tx-spacing-1 tx-color-03 tx-uppercase">Text Color
+                            </li>
+                            <li class="text-left tx-middle"><input formControlName="BannerAllowAllButtonTextColor"
+                                [(ngModel)]="formContent.bannerAcceptButtonTextColor" #bannerAllowButtonTextColor
+                                type="color"></li>
+                            <li class="ml-3"><input class="form-control input-sm"
+                                [value]="bannerAllowButtonTextColor.value"></li>
+                          </ul>
+                        </div>
+
+                        <div class="col-md-12 p-0 mt-2">
+                          <ul style="list-style: none; display: flex" class="ml-2 pl-0 mt-2">
+                            <li class="tx-12 tx-medium tx-middle tx-spacing-1 tx-color-03 tx-uppercase">BackGround
+                              Color
+                            </li>
+                            <li class="ml-3"><input formControlName="BannerAllowAllButtonBackgroundColor"
+                                [(ngModel)]="formContent.bannerAcceptButtonBackgroundColor"
+                                #bannerAllowButtonBackGroundColor type="color"></li>
+                            <li class="ml-3"><input class="form-control input-sm"
+                                [value]="bannerAllowButtonBackGroundColor.value"></li>
+                          </ul>
+                        </div>
+                      </p-accordionTab>
+
+                      <p-accordionTab header="Disable All Button">
+
+                        <div class="col-md-12 ml-0 mb-4  p-0 row mt-2">
+                          <h5 class="col-sm-4 pl-2 tx-middle tx-12 tx-medium tx-spacing-1 tx-color-03 tx-uppercase">
+                            Text Content </h5>
+                          <div class="col-sm-8 ml-0">
+                            <input type="text" [attr.disabled]="isFieldDisabled" class="form-control input-sm"
+                              [(ngModel)]="formContent.bannerDisableButtonTextContent"
+                              formControlName="BannerDisableAllButtonTextContent"
+                              [placeholder]="formContent.bannerDisableButtonTextContent">
+                            <div *ngIf="submitted && f.BannerDisableAllButtonTextContent.errors">
+                              <div class="text-danger mt-2"
+                                *ngIf="f.BannerDisableAllButtonTextContent.errors.minlength">
+                                Minimum 2 characters required
+                              </div>
+                              <div class="text-danger mt-2"
+                                *ngIf="f.BannerDisableAllButtonTextContent.errors.maxlength">
+                                Maximum 25 characters required
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="col-md-12 mt-2 p-0">
+                          <ul style="list-style: none; display: flex" class="ml-2 pl-0 mt-2">
+                            <li class="tx-12 tx-medium tx-middle tx-spacing-1 tx-color-03 tx-uppercase">Text Color
+                            </li>
+                            <li class="text-left tx-middle"><input
+                                [(ngModel)]="formContent.bannerDisableButtonTextColor"
+                                formControlName="BannerDisableAllButtonTextColor" #bannerDisableButtonTextColor
+                                type="color" ></li>
+                            <li class="ml-3"><input class="form-control input-sm"
+                                [value]="bannerDisableButtonTextColor.value"></li>
+                          </ul>
+                        </div>
+
+                        <div class="col-md-12 p-0 mt-2">
+                          <ul style="list-style: none; display: flex" class="ml-2 pl-0 mt-2">
+                            <li class="tx-12 tx-medium tx-middle tx-spacing-1 tx-color-03 tx-uppercase">BackGround
+                              Color
+                            </li>
+                            <li class="ml-3"><input [(ngModel)]="formContent.bannerDisableButtonBackGroundColor"
+                                formControlName="BannerDisableAllButtonBackgroundColor"
+                                #bannerDisableButtonBackGroundColor type="color"></li>
+                            <li class="ml-3"><input class="form-control input-sm"
+                                [value]="bannerDisableButtonBackGroundColor.value"></li>
+                          </ul>
+                        </div>
+                      </p-accordionTab>
+
+
+                      <p-accordionTab header="Do Not Sell My Data (For CCPA Only)">
+
+                        <div class="col-md-12 ml-0 mb-4  p-0 row mt-2">
+                          <h5 class="col-sm-4 pl-2 tx-middle tx-12 tx-medium tx-spacing-1 tx-color-03 tx-uppercase">
+                            Text Content </h5>
+                          <div class="col-sm-8 ml-0">
+                            <input type="text" [attr.disabled]="isFieldDisabled" class="form-control input-sm"
+                                   [(ngModel)]="formContent.bannerDoNotSellMyDataTextContent"
+                                   formControlName="bannerDoNotSellMyDataTextContent"
+                                   [placeholder]="formContent.bannerDoNotSellMyDataTextContent">
+                            <div *ngIf="submitted && f.bannerDoNotSellMyDataTextContent.errors">
+                              <div class="text-danger mt-2"
+                                   *ngIf="f.bannerDoNotSellMyDataTextContent.errors.minlength">
+                                Minimum 2 characters required
+                              </div>
+                              <div class="text-danger mt-2"
+                                   *ngIf="f.bannerDoNotSellMyDataTextContent.errors.maxlength">
+                                Maximum 25 characters required
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="col-md-12 mt-2 p-0">
+                          <ul style="list-style: none; display: flex" class="ml-2 pl-0 mt-2">
+                            <li class="tx-12 tx-medium tx-middle tx-spacing-1 tx-color-03 tx-uppercase">Text Color
+                            </li>
+                            <li class="text-left tx-middle"><input
+                              [(ngModel)]="formContent.bannerDoNotSellMyDataTextColor"
+                              formControlName="bannerDoNotSellMyDataTextColor" #bannerDoNotSellMyDataTextColor
+                              type="color" ></li>
+                            <li class="ml-3"><input class="form-control input-sm"
+                                                    [value]="bannerDoNotSellMyDataTextColor.value"></li>
+                          </ul>
+                        </div>
+
+                        <div class="col-md-12 p-0 mt-2">
+                          <ul style="list-style: none; display: flex" class="ml-2 pl-0 mt-2">
+                            <li class="tx-12 tx-medium tx-middle tx-spacing-1 tx-color-03 tx-uppercase">BackGround
+                              Color
+                            </li>
+                            <li class="ml-3"><input [(ngModel)]="formContent.bannerDoNotSellMyDataBackGroundColor"
+                                                    formControlName="bannerDoNotSellMyDataBackGroundColor"
+                                                    #bannerDoNotSellMyDataBackGroundColor type="color"></li>
+                            <li class="ml-3"><input class="form-control input-sm"
+                                                    [value]="bannerDoNotSellMyDataBackGroundColor.value"></li>
+                          </ul>
+                        </div>
+                      </p-accordionTab>
+
+
+                    </p-accordion>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+            <div class="white-back" [ngClass]="{'col-md-12' : !showConfig.checked , 'col-md-7' : showConfig.checked }" >
+              <app-banner-live-priview *ngIf="!skeletonLoading" [isDisabled]="isFieldDisabled" [formData]="formContent"></app-banner-live-priview>
+              <ngx-skeleton-loader *ngIf="skeletonLoading" count="14"></ngx-skeleton-loader>
+            </div>
+
+
+          </div>
+        </ng-container>
+<!--         </p-tabPanel>-->
+
+
+
+<!--         <p-tabPanel header="Preferences">-->
+        <ng-container  >
+          <div class="row" [ngStyle]="{display: currentState === 'popup' ? '' : 'none'}">
+            <div *ngIf="showConfig.checked" class="col-md-5">
+              <div class="card mb-0">
+                <div class="card-header">Preference Styling and Content
+                </div>
+                <div class="card-body p-0 popup-body">
+                  <p-accordion>
+                    <p-accordionTab header="Purpose & Vendors (For GDPR Only)">
+                      <div class="col-md-12 mt-2">
+                        <div class="w-100">
+                          <h6 class="tx-12 tx-medium tx-spacing-1 tx-color-03 tx-uppercase">Purpose Description</h6>
+                          <textarea [attr.disabled]="isFieldDisabled" class="form-control w-100" rows="3"
+                            formControlName="PopUpPurposeBodyDescription"
+                            [(ngModel)]="formContent.popUpPurposeDescription"
+                            [placeholder]="formContent.popUpPurposeDescription"></textarea>
+                          <div *ngIf="submitted && f.PopUpPurposeBodyDescription.errors">
+                            <div class="text-danger mt-2" *ngIf="f.PopUpPurposeBodyDescription.errors.minlength">
+                              Minimum 20 characters required
+                            </div>
+                            <div class="text-danger mt-2" *ngIf="f.PopUpPurposeBodyDescription.errors.maxlength">
+                              Maximum 300 characters required
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+
+
+
+
+                      <div class="col-md-12 mt-2">
+                        <div class="w-100">
+                          <h6 class="tx-12 tx-medium tx-spacing-1 tx-color-03 tx-uppercase">Vendor Description</h6>
+                          <textarea [attr.disabled]="isFieldDisabled" class="form-control w-100" rows="3"
+                            formControlName="PopUpVendorBodyDescription"
+                            [(ngModel)]="formContent.popUpVendorsDescription"
+                            [placeholder]="formContent.popUpVendorsDescription"></textarea>
+                          <div *ngIf="submitted && f.PopUpVendorBodyDescription.errors">
+                            <div class="text-danger mt-2" *ngIf="f.PopUpVendorBodyDescription.errors.minlength">
+                              Minimum 20 characters required
+                            </div>
+                            <div class="text-danger mt-2" *ngIf="f.PopUpVendorBodyDescription.errors.maxlength">
+                              Maximum 300 characters required
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                    </p-accordionTab>
+
+                    <p-accordionTab header="Switch Button">
+
+                      <div class="col-md-12 mt-2 p-0">
+                        <ul style="list-style: none; display: flex" class="ml-2 pl-0 mt-2">
+                          <li class="tx-12 tx-medium tx-middle tx-spacing-1 tx-color-03 tx-uppercase">Color
+                          </li>
+                          <li class="text-left tx-middle"><input formControlName="PopUpSwitchButton"
+                              [(ngModel)]="formContent.popUpSwitchButtonColor" #PopUpSwitchButton type="color"
+                              >
+                          <li class="ml-3"><input class="form-control input-sm" [value]="PopUpSwitchButton.value"></li>
+                        </ul>
+                      </div>
+
+                    </p-accordionTab>
+                    <p-accordionTab header="Purpose Button">
+                      <div class="col-md-12 mt-2 p-0">
+                        <ul style="list-style: none; display: flex" class="ml-2 pl-0 mt-2">
+                          <li class="tx-12 tx-medium tx-middle tx-spacing-1 tx-color-03 tx-uppercase">Text Color
+                          </li>
+                          <li class="text-left tx-middle"><input [(ngModel)]="formContent.popUpPurposeButtonTextColor"
+                              formControlName="PopUpPurposeButtonTextColor" #popUpPurposeButtonTextColor type="color"
+                             ></li>
+                          <li class="ml-3"><input class="form-control input-sm"
+                              [value]="popUpPurposeButtonTextColor.value"></li>
+                        </ul>
+                      </div>
+                      <div class="col-md-12 p-0 mt-2">
+                        <ul style="list-style: none; display: flex" class="ml-2 pl-0 mt-2">
+                          <li class="tx-12 tx-medium tx-middle tx-spacing-1 tx-color-03 tx-uppercase">BackGround
+                            Color
+                          </li>
+                          <li class="ml-3"><input type="color" [(ngModel)]="formContent.popUpPurposeButtonBackGroundColor"
+                              formControlName="PopUpPurposeButtonBackgroundColor" #popUpPurposeButtonBackGroundColor
+                              ></li>
+                          <li class="ml-3"><input class="form-control input-sm"
+                              [value]="popUpPurposeButtonBackGroundColor.value"></li>
+                        </ul>
+                      </div>
+                    </p-accordionTab>
+
+
+
+                    <p-accordionTab header="Disable All Button">
+                      <div class="col-md-12 ml-0 mb-4  p-0 row mt-2">
+                        <h5 class="col-sm-4 pl-2 tx-middle tx-12 tx-medium tx-spacing-1 tx-color-03 tx-uppercase">
+                          Text Content </h5>
+                        <div class="col-sm-8 ml-0">
+                          <input type="text" [attr.disabled]="isFieldDisabled" class="form-control"
+                            class="form-control input-sm" [(ngModel)]="formContent.popUpDisableAllButtonTextContent"
+                            formControlName="PopUpDisableAllButtonTextContent"
+                            [placeholder]="formContent.popUpDisableAllButtonTextContent">
+                          <div *ngIf="submitted && f.PopUpDisableAllButtonTextContent.errors">
+                            <div class="text-danger mt-2" *ngIf="f.PopUpDisableAllButtonTextContent.errors.minlength">
+                              Minimum 2 characters required
+                            </div>
+                            <div class="text-danger mt-2" *ngIf="f.PopUpDisableAllButtonTextContent.errors.maxlength">
+                              Maximum 25 characters required
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="col-md-12 mt-2 p-0">
+                        <ul style="list-style: none; display: flex" class="ml-2 pl-0 mt-2">
+                          <li class="tx-12 tx-medium tx-middle tx-spacing-1 tx-color-03 tx-uppercase">Text Color
+                          </li>
+                          <li class="text-left tx-middle"><input formControlName="PopUpDisableAllButtonTextColor"
+                              [(ngModel)]="formContent.popUpDisableAllButtonTextColor" #popUpDisableAllButtonTextColor
+                              type="color" ></li>
+                          <li class="ml-3"><input class="form-control input-sm"
+                              [value]="popUpDisableAllButtonTextColor.value"></li>
+                        </ul>
+                      </div>
+
+                      <div class="col-md-12 p-0 mt-2">
+                        <ul style="list-style: none; display: flex" class="ml-2 pl-0 mt-2">
+                          <li class="tx-12 tx-medium tx-middle tx-spacing-1 tx-color-03 tx-uppercase">BackGround
+                            Color
+                          </li>
+                          <li class="ml-3"><input [(ngModel)]="formContent.popUpDisableAllButtonBackgroundColor"
+                              formControlName="PopUpDisableAllButtonBackgroundColor"
+                              #popUpDisableAllButtonBackGroundColor type="color"></li>
+                          <li class="ml-3"><input class="form-control input-sm"
+                              [value]="popUpDisableAllButtonBackGroundColor.value"></li>
+                        </ul>
+                      </div>
+                    </p-accordionTab>
+
+
+                    <p-accordionTab header="Do Not Sell My Data (For CCPA Only)">
+                      <div class="col-md-12 ml-0 mb-4  p-0 row mt-2">
+                        <h5 class="col-sm-4 pl-2 tx-middle tx-12 tx-medium tx-spacing-1 tx-color-03 tx-uppercase">
+                          Text Content </h5>
+                        <div class="col-sm-8 ml-0">
+                          <input type="text"  class="form-control"
+                                 class="form-control input-sm" [(ngModel)]="formContent.popUpDoNotSellTextContent"
+                                 formControlName="popUpDoNotSellTextContent"
+                                 [placeholder]="formContent.popUpDoNotSellTextContent">
+                          <div *ngIf="submitted && f.popUpDoNotSellTextContent.errors">
+                            <div class="text-danger mt-2" *ngIf="f.popUpDoNotSellTextContent.errors.minlength">
+                              Minimum 2 characters required
+                            </div>
+                            <div class="text-danger mt-2" *ngIf="f.popUpDoNotSellTextContent.errors.maxlength">
+                              Maximum 25 characters required
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="col-md-12 mt-2 p-0">
+                        <ul style="list-style: none; display: flex" class="ml-2 pl-0 mt-2">
+                          <li class="tx-12 tx-medium tx-middle tx-spacing-1 tx-color-03 tx-uppercase">Text Color
+                          </li>
+                          <li class="text-left tx-middle"><input formControlName="popUpDoNotSellTextColor"
+                                                                 [(ngModel)]="formContent.popUpDoNotSellTextColor" #popUpDoNotSellTextColor
+                                                                 type="color"></li>
+                          <li class="ml-3"><input class="form-control input-sm"
+                                                  [value]="popUpDoNotSellTextColor.value"></li>
+                        </ul>
+                      </div>
+
+                      <div class="col-md-12 p-0 mt-2">
+                        <ul style="list-style: none; display: flex" class="ml-2 pl-0 mt-2">
+                          <li class="tx-12 tx-medium tx-middle tx-spacing-1 tx-color-03 tx-uppercase">BackGround
+                            Color
+                          </li>
+                          <li class="ml-3"><input [(ngModel)]="formContent.popUpDoNotSellBackgroundColor"
+                                                  formControlName="popUpDoNotSellBackgroundColor"
+                                                  #popUpDoNotSellBackgroundColor type="color"></li>
+                          <li class="ml-3"><input class="form-control input-sm"
+                                                  [value]="popUpDoNotSellBackgroundColor.value"></li>
+                        </ul>
+                      </div>
+                    </p-accordionTab>
+
+
+
+
+                    <p-accordionTab header="Save My Choice Button">
+                      <div class="col-md-12 ml-0 mb-4  p-0 row mt-2">
+                        <h5 class="col-sm-4 pl-2 tx-middle tx-12 tx-medium tx-spacing-1 tx-color-03 tx-uppercase">
+                          Text Content </h5>
+                        <div class="col-sm-8 ml-0">
+                          <input type="text" [attr.disabled]="isFieldDisabled" class="form-control input-sm"
+                            formControlName="PopUpSaveMyChoiceButtonContentText"
+                            [(ngModel)]="formContent.popUpSaveMyChoiceButtonTextContent"
+                            [placeholder]="formContent.popUpSaveMyChoiceButtonTextContent">
+                          <div *ngIf="submitted && f.PopUpSaveMyChoiceButtonContentText.errors">
+                            <div class="text-danger mt-2" *ngIf="f.PopUpSaveMyChoiceButtonContentText.errors.minlength">
+                              Minimum 2 characters required
+                            </div>
+                            <div class="text-danger mt-2" *ngIf="f.PopUpSaveMyChoiceButtonContentText.errors.maxlength">
+                              Maximum 25 characters required
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="col-md-12 mt-2 p-0">
+                        <ul style="list-style: none; display: flex" class="ml-2 pl-0 mt-2">
+                          <li class="tx-12 tx-medium tx-middle tx-spacing-1 tx-color-03 tx-uppercase">Text Color
+                          </li>
+                          <li class="text-left tx-middle"><input
+                              [(ngModel)]="formContent.popUpSaveMyChoiceButtonTextColor"
+                              formControlName="PopUpSaveMyChoiceButtonTextColor" #popUpSaveMyChoiseButtonTextColor
+                              type="color"></li>
+                          <li class="ml-3"><input class="form-control input-sm"
+                              [value]="popUpSaveMyChoiseButtonTextColor.value"></li>
+                        </ul>
+                      </div>
+
+                      <div class="col-md-12 p-0 mt-2">
+                        <ul style="list-style: none; display: flex" class="ml-2 pl-0 mt-2">
+                          <li class="tx-12 tx-medium tx-middle tx-spacing-1 tx-color-03 tx-uppercase">BackGround
+                            Color
+                          </li>
+                          <li class="ml-3"><input formControlName="PopUpSaveMyChoiceButtonBackgroundColor"
+                              [(ngModel)]="formContent.popUpSaveMyChoiceButtonBackgroundColor"
+                              #popUpSaveMyChoiseButtonBackGroundColor type="color">
+                          </li>
+                          <li class="ml-3"><input class="form-control input-sm"
+                              [value]="popUpSaveMyChoiseButtonBackGroundColor.value"></li>
+                        </ul>
+                      </div>
+
+
+                    </p-accordionTab>
+
+
+
+                    <p-accordionTab header="Allow All Button">
+                      <div class="col-md-12 ml-0 mb-4  p-0 row mt-2">
+                        <h5 class="col-sm-4 pl-2 tx-middle tx-12 tx-medium tx-spacing-1 tx-color-03 tx-uppercase">
+                          Text Content </h5>
+                        <div class="col-sm-8 ml-0">
+                          <input type="text" [attr.disabled]="isFieldDisabled" class="form-control input-sm"
+                            formControlName="PopUpAllowAllButtonTextContent"
+                            [(ngModel)]="formContent.popUpAllowAllButtonTextContent"
+                            [placeholder]="formContent.popUpAllowAllButtonTextContent">
+                          <div *ngIf="submitted && f.PopUpAllowAllButtonTextContent.errors">
+                            <div class="text-danger mt-2" *ngIf="f.PopUpAllowAllButtonTextContent.errors.minlength">
+                              Minimum 2 characte rs required
+                            </div>
+                            <div class="text-danger mt-2" *ngIf="f.PopUpAllowAllButtonTextContent.errors.maxlength">
+                              Maximum 25 characters required
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="col-md-12 mt-2 p-0">
+                        <ul style="list-style: none; display: flex" class="ml-2 pl-0 mt-2">
+                          <li class="tx-12 tx-medium tx-middle tx-spacing-1 tx-color-03 tx-uppercase">Text Color
+                          </li>
+                          <li class="text-left tx-middle"><input [(ngModel)]="formContent.popUpAllowAllButtonTextColor"
+                              formControlName="PopUpAllowAllButtonTextColor" #popUPAllowButtonTextColor type="color"
+                              ></li>
+                          <li class="ml-3"><input class="form-control input-sm"
+                              [value]="popUPAllowButtonTextColor.value"></li>
+                        </ul>
+                      </div>
+
+                      <div class="col-md-12 p-0 mt-2">
+                        <ul style="list-style: none; display: flex" class="ml-2 pl-0 mt-2">
+                          <li class="tx-12 tx-medium tx-middle tx-spacing-1 tx-color-03 tx-uppercase">BackGround
+                            Color
+                          </li>
+                          <li class="ml-3"><input [(ngModel)]="formContent.popUpAllowAllButtonBackgroundColor"
+                              formControlName="PopUpAllowAllButtonBackgroundColor" #popUPAllowButtonBackGroundColor
+                              type="color"></li>
+                          <li class="ml-3"><input class="form-control input-sm"
+                              [value]="popUPAllowButtonBackGroundColor.value"></li>
+                        </ul>
+                      </div>
+                    </p-accordionTab>
+
+
+                    <div class="col-md-12 mt-3 mb-2">
+                      <h6 class="mb-4"> Purpose Content</h6>
+                    </div>
+
+
+                    <p-accordionTab [header]="formContent.NecessaryText">
+                      <h6>Title</h6>
+                      <input type="text" [attr.disabled]="isFieldDisabled" class="form-control input-sm w-100"
+                             formControlName="PopUpNecessaryHeading" [(ngModel)]="formContent.PopUpNecessaryHead"
+                             [placeholder]="formContent.PopUpNecessaryHead">
+                      <div *ngIf="submitted && f.PopUpAdvertisingHeading.errors">
+                        <div class="text-danger mt-2" *ngIf="f.PopUpAdvertisingHeading.errors.minlength">
+                          Minimum 2 characters required
+                        </div>
+                        <div class="text-danger mt-2" *ngIf="f.PopUpAdvertisingHeading.errors.maxlength">
+                          Maximum 50 characters required
+                        </div>
+                      </div>
+                      <br>
+
+                      <h6>Description</h6>
+                      <textarea [attr.disabled]="isFieldDisabled" class="form-control input-sm w-100" rows="3"
+                                formControlName="PopUpNecessaryDescription" [(ngModel)]="formContent.PopUpNecessaryDescription"
+                                [placeholder]="formContent.PopUpNecessaryDescription"></textarea>
+                      <div *ngIf="submitted && f.PopUpNecessaryDescription.errors">
+                        <div class="text-danger mt-2" *ngIf="f.PopUpNecessaryDescription.errors.minlength">
+                          Minimum 20 characters required
+                        </div>
+                        <div class="text-danger mt-2" *ngIf="f.PopUpNecessaryDescription.errors.maxlength">
+                          Maximum 300 characters required
+                        </div>
+                      </div>
+                    </p-accordionTab>
+
+
+                    <p-accordionTab [header]="formContent.AdvertisingText">
+                      <h6>Title</h6>
+                      <input type="text" [attr.disabled]="isFieldDisabled" class="form-control input-sm w-100"
+                        formControlName="PopUpAdvertisingHeading" [(ngModel)]="formContent.PopUpAdvertisingHead"
+                        [placeholder]="formContent.PopUpAdvertisingHead">
+                      <div *ngIf="submitted && f.PopUpAdvertisingHeading.errors">
+                        <div class="text-danger mt-2" *ngIf="f.PopUpAdvertisingHeading.errors.minlength">
+                          Minimum 2 characters required
+                        </div>
+                        <div class="text-danger mt-2" *ngIf="f.PopUpAdvertisingHeading.errors.maxlength">
+                          Maximum 50 characters required
+                        </div>
+                      </div>
+                      <br>
+                      <h6>Description</h6>
+                      <textarea [attr.disabled]="isFieldDisabled" class="form-control w-100" rows="3"
+                        formControlName="PopUpAdvertisingDescription"
+                        [(ngModel)]="formContent.PopUpAdvertisingDescription"
+                        [placeholder]="formContent.PopUpAdvertisingDescription"></textarea>
+                      <div *ngIf="submitted && f.PopUpAdvertisingDescription.errors">
+                        <div class="text-danger mt-2" *ngIf="f.PopUpAdvertisingDescription.errors.minlength">
+                          Minimum 20 characters required
+                        </div>
+                        <div class="text-danger mt-2" *ngIf="f.PopUpAdvertisingDescription.errors.maxlength">
+                          Maximum 300 characters required
+                        </div>
+                      </div>
+                    </p-accordionTab>
+
+
+
+                    <p-accordionTab [header]="formContent.SocialMediaText">
+                      <h6>Title</h6>
+                      <input type="text" [attr.disabled]="isFieldDisabled" class="form-control input-sm w-100"
+                        formControlName="PopUpSocialMediaHeading" [(ngModel)]="formContent.PopUpSocialMediaHead"
+                        [placeholder]="formContent.PopUpSocialMediaHead">
+                      <div *ngIf="submitted && f.PopUpSocialMediaHeading.errors">
+                        <div class="text-danger mt-2" *ngIf="f.PopUpSocialMediaHeading.errors.minlength">
+                          Minimum 2 characters required
+                        </div>
+                        <div class="text-danger mt-2" *ngIf="f.PopUpSocialMediaHeading.errors.maxlength">
+                          Maximum 50 characters required
+                        </div>
+                      </div>
+                      <br>
+                      <h6>Description</h6>
+                      <textarea [attr.disabled]="isFieldDisabled" class="form-control w-100" rows="3"
+                        formControlName="PopUpSocialMediaDescription"
+                        [(ngModel)]="formContent.PopUpSocialMediaDescription"
+                        [placeholder]="formContent.PopUpSocialMediaDescription"></textarea>
+                      <div *ngIf="submitted && f.PopUpSocialMediaDescription.errors">
+                        <div class="text-danger mt-2" *ngIf="f.PopUpSocialMediaDescription.errors.minlength">
+                          Minimum 20 characters required
+                        </div>
+                        <div class="text-danger mt-2" *ngIf="f.PopUpSocialMediaDescription.errors.maxlength">
+                          Maximum 300 characters required
+                        </div>
+                      </div>
+                    </p-accordionTab>
+
+
+                    <p-accordionTab [header]="formContent.AnalyticsText">
+                      <h6>Title</h6>
+                      <input type="text" [attr.disabled]="isFieldDisabled" class="form-control w-100"
+                        formControlName="PopUpAnalyticsHeading" [(ngModel)]="formContent.PopUpAnalyticsHead"
+                        [placeholder]="formContent.PopUpAnalyticsHead">
+                      <div *ngIf="submitted && f.PopUpAnalyticsHeading.errors">
+                        <div class="text-danger mt-2" *ngIf="f.PopUpAnalyticsHeading.errors.minlength">
+                          Minimum 2 characters required
+                        </div>
+                        <div class="text-danger mt-2" *ngIf="f.PopUpAnalyticsHeading.errors.maxlength">
+                          Maximum 50 characters required
+                        </div>
+                      </div>
+                      <br>
+                      <h6>Description</h6>
+                      <textarea [attr.disabled]="isFieldDisabled" class="form-control w-100" rows="3"
+                        formControlName="PopUpAnalyticsDescription" [(ngModel)]="formContent.PopUpAnalyticsDescription"
+                        [placeholder]="formContent.PopUpAnalyticsDescription"></textarea>
+                      <div *ngIf="submitted && f.PopUpAnalyticsDescription.errors">
+                        <div class="text-danger mt-2" *ngIf="f.PopUpAnalyticsDescription.errors.minlength">
+                          Minimum 20 characters required
+                        </div>
+                        <div class="text-danger mt-2" *ngIf="f.PopUpAnalyticsDescription.errors.maxlength">
+                          Maximum 300 characters required
+                        </div>
+                      </div>
+                    </p-accordionTab>
+
+
+
+
+                  </p-accordion>
+                </div>
+              </div>
+            </div>
+
+
+            <div class="white-back" [ngClass]="{'col-md-12' : !showConfig.checked , 'col-md-7' : showConfig.checked }">
+              <app-popup-live-preview [formData]="formContent">></app-popup-live-preview>
+            </div>
+          </div>
+<!--         </p-tabPanel>-->
+<!--       </p-tabView>-->
+        </ng-container>
+      </div>
+
+<!--      <div class="col-md-12 mt-5">-->
+<!--        <div class="text-center">-->
+<!--          <button (click)="backClicked()" class="btn btn-default btn-md mr-4" type="button">Back</button>-->
+<!--          <button *ngIf="!isEdit" class="btn btn-primary btn-md" type="submit">Save and Next-->
+<!--          </button>-->
+<!--          <button *ngIf="isEdit"  class="btn btn-primary btn-md" type="submit">Update and Next-->
+<!--          </button>-->
+<!--        </div>-->
+<!--      </div>-->
+    </div>
+  </form>
+</div>
+<!--<div class="col-sm-5 mt-3 mr-0 float-right">-->
+<!--  <alert *ngIf="isOpen" [type]="alertType" [dismissible]="dismissible" (onClosed)="onClosed(alertMsg)">{{  alertMsg}}-->
+<!--  </alert>-->
+<!--</div>-->
+
+<div class="col-sm-5 mr-0 float-right flotingdiv" [ngClass]="{'hide':!isOpen}">
+  <alert *ngIf="isOpen" [type]="alertType" dismissOnTimeout="5000" [dismissible]="dismissible" (onClosed)="onClosed(alertMsg)">{{  alertMsg}}</alert>
+</div>
+<ng-template #template>
+  <div class="modal-body text-center">
+    <p>You don't have any cookies<br />
+      you need to create cookie manually or scan the property
+    </p>
+        <button type="button" class="btn btn-primary" (click)="navigate()" >Go Now </button>
+  </div>
+</ng-template>
+
+
+<ng-template #template1>
+  <div class="modal-body text-center">
+    <p>This will reset all the configuration<br />
+    </p>
+    <button type="button" class="btn btn-primary mr-3" (click)="modalRef.hide()" >No </button>
+    <button type="button" class="btn btn-white" (click)="modalRef.hide(); onSetDefaultValue()" >Yes </button>
+  </div>
+</ng-template>

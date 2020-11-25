@@ -1,0 +1,58 @@
+.table > tbody > tr:hover {
+    background-color:#e9ecf1;
+}
+
+.invalid-radio {
+    width: 100%;
+    margin-top: 0.25rem;
+    font-size: 80%;
+    color: #dc3545;
+}
+
+.form-check-inline > input[type='radio'] {
+    margin: 0 5px 0 0;
+}
+
+
+.searchfield {
+    display: flex;
+}
+
+.searchfield .input-group {
+    align-items: center;
+}
+
+.searchfield > div > span.input-group-append {
+    height: 38px;
+    display: flex;
+}
+
+.searchfield > div > span > div.input-group-text {
+    align-items: center;
+}
+
+.searchfield.mt-3 .form-inline {
+    font-weight: normal;
+}
+
+.table-responsive.team-members-div > .card > .card-header {
+    padding-top: 0;
+    padding-right: 0;
+    padding-left: 0;
+}
+
+.datatable-header-cell {
+  background-color: rgb(3, 40, 147) !important;
+}
+
+.pagination-wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: normal;
+    align-items: center;
+}
+
+.height28 {
+    height: 28px;
+}

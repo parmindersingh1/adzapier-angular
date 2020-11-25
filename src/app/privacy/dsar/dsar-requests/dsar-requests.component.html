@@ -1,0 +1,201 @@
+<div class="container">
+  <div class="mb-3">
+    <nav aria-label="breadcrumb" class="align-navbtn">
+      <ol class="breadcrumb breadcrumb-style1 mg-b-0">
+        <li class="breadcrumb-item">Privacy</li>
+        <li class="breadcrumb-item">Data Subject Access Request</li>
+        <li class="breadcrumb-item active" aria-current="page"> Data Subject Requests</li>
+      </ol>
+      <button (click)="createWebFormRequestModal(createRequestModal,'')" data-toggle="modal" type="button"
+        class="btn btn-white">
+        <span class="d-none d-sm-inline mg-l-5">
+          Create Request</span>
+      </button>
+    </nav>
+
+  </div>
+
+  <p-table class="dsar-request-table" #ptable [value]="requestsList" [columns]="selectedColumns" [paginator]="true" [lazy]="true"
+    [loading]="isloading" (onLazyLoad)="loadrequestsListLazy($event)" [rows]="5" [showCurrentPageReport]="true"
+    [totalRecords]="totalRecords" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+    [rowsPerPageOptions]="[5,10,15]" styleClass="p-datatable-sm">
+    <ng-template pTemplate="caption">
+      <div class="searchfield row mt-1 pl-2 pr-2">
+        <div class="col-sm-2 col-md-2 input-group">
+          <input class="form-control border-right-0 border" [(ngModel)]="inputValue" type="text"
+            (keyup.enter)="onSearchInputChange()" placeholder="Search" id="example-search-input" />
+          <span class="input-group-append">
+            <div *ngIf="inputValue !== ''" (click)="clearSearchfield()" class="input-group-text bg-transparent"
+              style="background-color: #fff !important;">
+              <i class="fa fa-times color-red" aria-hidden="true"></i>
+            </div>
+            <div class="input-group-text bg-transparent" (click)="onSearchInputChange()">
+              <i class="fa fa-search"></i>
+            </div>
+
+          </span>
+        </div>
+        <div class="col-sm-2 col-md-2">
+          <select (change)="onChangeRequestType($event)" class="form-control">
+            <option selected value="">Type Of Request</option>
+            <ng-container *ngFor="let obj of allFilterData.filter_Request_type">
+              <option [value]="obj.key">{{obj.value}}</option>
+            </ng-container>
+          </select>
+        </div>
+
+        <div class="col-sm-2 col-md-2">
+          <select (change)="onChangeSubjectType($event)" class="form-control">
+            <option selected value="">Subject Type</option>
+            <ng-container *ngFor="let obj of allFilterData.filter_Subject_type">
+              <option [value]="obj.key">{{obj.value}}</option>
+            </ng-container>
+          </select>
+        </div>
+
+        <div class="col-sm-2 col-md-2">
+          <select (change)="onChangeStatus($event)" class="form-control">
+            <option selected value="">Status</option>
+            <ng-container *ngFor="let obj of allFilterData.filter_status">
+              <option [value]="obj.key">{{obj.value}}</option>
+            </ng-container>
+          </select>
+        </div>
+
+        <div class="col-sm-2 col-md-2">
+          <select (change)="onChangeDueIn($event)" class="form-control">
+            <option selected value="">Due in</option>
+            <ng-container *ngFor="let obj of allFilterData.filter_due_in">
+              <option [value]="obj.key">{{obj.value}}</option>
+            </ng-container>
+          </select>
+        </div>
+        <div class="row col-sm-2 col-md-2">
+          <p-multiSelect [options]="cols" [(ngModel)]="selectedColumns" optionLabel="header"
+            selectedItemsLabel="{0} columns selected" [style]="{minWidth: '200px'}" placeholder="Choose Columns">
+          </p-multiSelect>
+        </div>
+      </div>
+
+    </ng-template>
+
+    <ng-template pTemplate="header" let-columns>
+
+      <tr>
+        <th pSortableColumn="id">Id <p-sortIcon field="id"></p-sortIcon>
+        </th>
+        <th pSortableColumn="request_type">Request Type <p-sortIcon field="request_type"></p-sortIcon>
+        </th>
+        <th pSortableColumn="subject_type">Subject Type <p-sortIcon field="subject_type"></p-sortIcon>
+        </th>
+        <th pSortableColumn="status">Status <p-sortIcon field="status"></p-sortIcon>
+        </th>
+        <th pSortableColumn="name">Name <p-sortIcon field="name"></p-sortIcon>
+        </th>
+        <th pSortableColumn="web_form_name">Web Form <p-sortIcon field="web_form_name"></p-sortIcon>
+        </th>
+
+        <th pSortableColumn="{{col.field}}" *ngFor="let col of columns">
+          {{col.header}} <p-sortIcon field="{{col.field}}"></p-sortIcon>
+        </th>
+        <th pSortableColumn="days_left">Days left<p-sortIcon field="days_left"></p-sortIcon>
+        </th>
+        <th pSortableColumn="created_at">Created At <p-sortIcon field="created_at"></p-sortIcon>
+        </th>
+      </tr>
+
+    </ng-template>
+    <ng-template pTemplate="body" let-rowData let-columns="columns" styleClass="p-datatable-responsive-demo">
+      <tr>
+        <td>
+          <a (click)="viewDSARRequestDetails(rowData.id)" title="{{rowData.id}}">
+            {{rowData.id}}
+          </a>
+        </td>
+        <td>{{rowData.request_type}}</td>
+        <td>{{rowData.subject_type}}</td>
+        <td>
+
+          <span *ngIf="rowData.status === 'New'" class="badge badge-primary">{{rowData.status}}</span>
+          <span *ngIf="rowData.status === 'Verify Request'" class="badge badge-info">{{rowData.status}}</span>
+          <span *ngIf="rowData.status === 'InProgress'" class="badge badge-warning">{{rowData.status}}</span>
+          <span *ngIf="rowData.status === 'Complete'" class="badge badge-success">{{rowData.status}}</span>
+          <span *ngIf="rowData.status === 'UnVerifed'" class="badge badge-danger">{{rowData.status}}</span>
+
+        </td>
+        <td>{{rowData.name}}</td>
+        <td><a (click)="navigateToWebForm(rowData)" class="linkcolor">{{rowData.web_form_name}}</a></td>
+
+        <td *ngFor="let col of columns">
+          {{rowData[col.field]}}
+        </td>
+        <td>
+          <span class="badge"
+            [ngClass]="{'badge-danger':rowData.days_left < 10,'badge-warning':rowData.days_left < 30,'badge-success':rowData.days_left >= 20}">{{rowData.days_left}}
+            Days</span>
+
+        </td>
+        <td>{{rowData.created_at | timeAgo}}</td>
+      </tr>
+
+    </ng-template>
+    <ng-template pTemplate="emptymessage" let-columns>
+      <tr>
+        <td [attr.colspan]="columns.length === 5 ? 13 : 8">
+          No records found
+        </td>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="footer" let-columns="columns">
+      <tr>
+        <td *ngFor="let col of columns">
+          {{col.header}}
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+
+  <ng-template #createRequestModal let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Create New Request
+      </h4>
+      <button type="button" class="close" aria-label="Close" (click)="onCancelClick()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <form [formGroup]="createDSARWebFormRequest" (ngSubmit)="previewCCPAForm()">
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="form-group">
+              <label for="webformselection"
+                class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">Web form templates</label>
+              <select class="form-control" formControlName="webformselection" (change)="onWebformChange($event)"
+                [ngClass]="{ 'is-invalid': submitted && dsar.webformselection.errors }">
+                <option selected value="">Please select web form</option>
+                <ng-container *ngFor="let opt of activeWebFormList">
+                  <option *ngIf="opt.active" [value]="opt | json">
+                    {{ opt.form_name }}
+                  </option>
+                </ng-container>
+              </select>
+              <div *ngIf="submitted && dsar.webformselection.errors" class="invalid-feedback">
+                <div *ngIf="dsar.webformselection.errors.required">Select webform is required</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary tx-13" (click)="onCancelClick()">Cancel</button>
+        <button class="btn btn-primary tx-13">Create</button>
+      </div>
+    </form>
+  </ng-template>
+
+  <div class="col-sm-5 mt-3 mr-0 float-right">
+    <alert *ngIf="isOpen" [type]="alertType" dismissOnTimeout="5000" [dismissible]="dismissible"
+      (onClosed)="onClosed(alertMsg)">{{alertMsg}}</alert>
+  </div>
+</div>

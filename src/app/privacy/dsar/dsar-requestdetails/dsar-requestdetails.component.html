@@ -1,0 +1,850 @@
+<div class="container">
+    <div class="mb-3">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb breadcrumb-style1 mg-b-0">
+                <li class="breadcrumb-item"> Privacy</li>
+                <li class="breadcrumb-item"> Data Subject Access Request</li>
+                <li class="breadcrumb-item"><a (click)="backToDSARRequest()">DSAR Request</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{{requestID}}</li>
+            </ol>
+        </nav>
+    </div>
+    <div class="row row-sm ">
+        <div class="col-lg-6 col-xl-12 mg-t-10">
+            <div class="card">
+                <div class="card-header  d-flex align-items-center justify-content-between pd-13">
+                    <span class="tx-12 tx-color-03 mg-b-0">
+                        <h6 class="mg-b-0">Request Details</h6>
+                        Current Status of DSAR Request
+                    </span>
+                    <div class="d-flex">
+
+                        <button (click)="openModalPopup(editRequestDetails,'')" data-toggle="modal"
+                            class="btn btn-xs btn-white mr-2"><svg xmlns="http://www.w3.org/2000/svg" width="24"
+                                height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-2">
+                                <polygon points="16 3 21 8 8 21 3 21 3 16 16 3"></polygon>
+                            </svg><span class="d-none d-sm-inline mg-l-5">
+                                Edit</span></button>
+
+
+
+                        <div class="dropdown extenddays" [ngClass]="{'show':isListVisible,'':!isListVisible}">
+                            <button class="btn btn-xs btn-primary mr-2" role="button" #btnDaysLeft (click)="toggleBtn()">
+                                Extend Days
+                            </button>
+                            <button class="btn btn-xs btn-primary" (click)="removeDSARRequest('DSAR Request detail')">Delete</button>
+                            <div class="dropdown-menu" #toggleDayleftdiv
+                                [ngClass]="{'show':isListVisible,'':!isListVisible}">
+                                <ul>
+                                    <li *ngFor="let item of customdayslist;let last = last">
+                                        <div class="dropdown-item" (click)="onClickEndDays(item)"> {{item}}</div>
+                                        <div *ngIf="last" class="aligncenter">
+                                            <form #endDaysform='ngForm' autocomplete="false"
+                                                (ngSubmit)="onSubmitEndDays(endDaysform)" class="d-flex">
+
+                                                <input type="number" min="1" #customDaysInput
+                                                    class="form-control form-control-sm" max="45"
+                                                    [(ngModel)]="customdays" name="customdays"
+                                                    placeholder="custom value" />
+
+                                                <button class="btn btn-xs btn-primary ml-2">select</button>
+                                            </form>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="card-body pd-10">
+                    <div class="row row-sm pd-t-5">
+                        <div class="col-sm">
+                            <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Request
+                                ID</label>
+                            <p class="mg-b-0">{{respCDID}}</p>
+                        </div>
+                        <div class="col-sm">
+                            <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Request
+                                Types
+                            </label>
+                            <p class="mg-b-0">{{requestType}}</p>
+                        </div>
+                        <div class="col-sm">
+                            <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Due
+                                in
+                            </label>
+                            <p class="mg-b-0"> {{getDueIn(respCreatedAt,respDaysLeft)}}</p>
+                        </div>
+
+                        <div class="col-sm">
+                            <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Date
+                                Opened
+                            </label>
+                            <p class="mg-b-0" *ngIf="respCreatedAt">{{respCreatedAt | date:'longDate'}}</p>
+                        </div>
+
+                        <div class="col-sm">
+                            <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Request
+                                Accepting Agent</label>
+                            <p class="mg-b-0">{{reqAcceptingagent}}</p>
+                        </div>
+
+
+                        <div class="col-sm ">
+                            <label
+                                class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Workflow</label>
+                            <p class="mg-b-0">{{workflowName}}</p>
+                        </div>
+                    </div>
+                    <div class="row row-sm pd-t-10 bd-t">
+                        <div class="col-sm">
+                            <label
+                                class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Status</label>
+                            <p class="tx-spacing-1 tx-semibold status-text tx-success">
+                                {{currentWorkflowStage ? currentWorkflowStage : 'New'}}
+                            </p>
+                        </div>
+                        <div class="col-sm">
+                            <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Subject
+                                Type
+                            </label>
+                            <p class="mg-b-0">{{subjectType}}</p>
+                        </div>
+                        <div class="col-sm">
+                            <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Risk
+                                Factor
+                            </label>
+                            <p class="tx-spacing-1 tx-13 tx-semibold mg-b-0 tx-danger">{{riskFactorText}}</p>
+                        </div>
+
+                        <div class="col-sm">
+                            <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Deadline
+                            </label>
+                            <p class="mg-b-0" *ngIf="respCreatedAt && respDaysLeft">
+                                {{getDeadLine(respCreatedAt,respDaysLeft) | date:'longDate'}}</p>
+                        </div>
+
+                        <div class="col-sm">
+                            <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Approver
+                            </label>
+                            <p class="mg-b-0">{{respApprover}}</p>
+                        </div>
+
+
+                        <div class="col-sm ">
+                            <label
+                                class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Form</label>
+                            <p class="mg-b-0">{{formName}}</p>
+                        </div>
+                    </div>
+
+                    <div class="divwrapper">
+                        <div class="customdata">
+                            <label
+                                class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Property</label>
+
+                            <p class="tx-13 tx-spacing-1  mg-b-0 " *ngIf="currentPropertyName">{{currentPropertyName}}
+                            </p>
+                        </div>
+                        <div *ngFor="let data of getCustomFields(customFields) | keyvalue; let i = index">
+                            <div class="customdata">
+                                <label class="tx-sans">{{data.key}}
+                                    <span *ngIf="isemailverificationRequired" class="badge" (click)="verifyUserEmailID()"
+                                        [ngClass]="{'badge-danger':isCustomFieldEmail(data.key,isEmailVerified),'hide':!isCustomFieldEmail(data.key,isEmailVerified)}">
+                                        Resend Verification</span>
+                                    <span class="badge"
+                                        [ngClass]="{'badge-success':isEmailIDVerified(data.key,isEmailVerified),'hide':!isEmailIDVerified(data.key,isEmailVerified)}">
+                                        <i-feather class="feather-tick" name="check"></i-feather> Verified
+                                    </span>
+                                </label>
+                                <p class="mg-b-0">{{data.value}}</p>
+                            </div>
+                            <ng-template #elseEmailverified>
+                                <div class="customdata">
+                                    <label class="tx-sans">{{data.key}}</label>
+                                    <p class="mg-b-0">{{data.value}} </p>
+                                </div>
+                            </ng-template>
+                            <div *ngIf="i==getCustomFields(customFields).length"
+                                class="col-sm-2 customdata downloadFile">
+                                <label class="tx-sans"> Attachments</label>
+                                <p [ngClass]="{'show':isAttachmentExist,'hide':!isAttachmentExist}">
+                                    <i-feather class="feather-file" name="file"></i-feather>
+                                    <a (click)="viewFile()" style="cursor: pointer;">View File</a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="stagediv">
+                        <div class="divider-text mg-y-5">Advance Status</div>
+                        <button (click)="onPreviousSearchPosition()"  class="arrowbtn leftarrow" [ngClass]="{'hidebtns':leftClickStatus()}"><i class="fa fa-angle-left"></i></button>
+                        <div class="divflex">
+                            <div class="customtab" #panel>
+                        <ul class="nav-tabs" [ngStyle]="{'transform': 'translateX(' + translateX + 'px)'}" #workflowStageScroller>
+                            <li *ngFor="let stage of workflowStages">
+                                <div #stageContent class="tabTitleWrapper" (click)="stageSelection(stage)" [ngClass]="{'completedStage':  isStageCompleted(stage),'':stage.order < nextStage || stage.order == nextStage}">
+
+                                    <a> <span class="step-number"
+                                            [ngClass]="{' ':currentStage==stage.order && !isPreviousStageExist(stage),'':nextStage > currentStage}">{{stage.order}}</span>
+                                        <span
+                                            [ngClass]="{' ':currentStage==stage.order && !isPreviousStageExist(stage),'':nextStage > currentStage}">
+                                            {{stage.stage_title}} 
+                                        </span>
+                                    </a>
+                                  
+                                </div>
+                                <ng-container>{{showStageTitleAndContent(stage)}}</ng-container>
+                            </li>
+                        </ul>
+                        <!-- <div>{{selectedStageContent}}</div> -->
+                        </div>
+                        </div>
+                        <button (click)="onNextSearchPosition()" class="arrowbtn rightarrow" [ngClass]="{'hidebtns':rightClickStatus()}"><i class="fa fa-angle-right"></i></button>
+                    </div>
+                    <div class="title-guidancetext-wrapper" [ngStyle]="stageContentStyle()">
+                    <h4 class="selected-title" [innerHTML]="showStageTitle"></h4>
+                    <div class="word-wrap selected-stage-content">
+                       <span [innerHTML]="showStageGuidanceText"></span> 
+                    </div>
+                    </div>
+                </div><!-- card-body -->
+            </div><!-- card -->
+            <div class="card mt-2 activitytab">
+                <ul ngbNav #nav="ngbNav" class="nav-tabs" (navChange)="onNavChange($event)">
+                    <li [ngbNavItem]="1">
+                        <a ngbNavLink>Activity</a>
+                        <ng-template ngbNavContent>
+                            <div class="form-check-inline"> 
+                                <input class="form-check-input" type="radio" name="privatetype"
+                                    id="privatetype" [value]="0" [(ngModel)]="activitytype">
+                                <label for="privatetype">Private</label>
+                                <input class="form-check-input" type="radio" name="publictype"
+                                    id="publictype" [value]="1" [(ngModel)]="activitytype" >
+                                <label for="publictype">Public</label>
+                            </div>
+                            
+                            <form [formGroup]="quillEditorText" (ngSubmit)="onSubmitActivityPost()">
+                                <quill-editor formControlName="editor" [modules]="quillConfig"
+                                    [ngClass]="{ 'is-invalid': isActivitysubmitted && addActivity.editor?.errors }">
+                                    <!-- [(ngModel)]="editorActivityPost"-->
+                                </quill-editor>
+                                <div *ngIf="isActivitysubmitted && addActivity.editor?.errors"
+                                    class="invalid-feedback float-left col-5">
+                                    <div *ngIf="addActivity.editor?.errors.required">Activity can not be empty, add your
+                                        post.</div>
+                                </div>
+                                <button type="submit" class="btn btn-xs btn-primary float-right mb-2 mt-2">Post</button>
+                            </form>
+
+                        </ng-template>
+
+
+                    </li>
+                    <li [ngbNavItem]="2">
+                        <a ngbNavLink>Email</a>
+                        <ng-template ngbNavContent>
+                            <form [formGroup]="quillEditorEmailText" autocomplete="false"
+                                (ngSubmit)="onSubmitEmailPost()">
+                                <div class="d-flex">
+                                    <div class="d-flex align-items-center mb-2 ml-auto">
+                                        <label class="mr-2"> Select template </label>
+                                        <div class="flex-row m1">
+                                            <select (change)="onChangeRequestType($event)"
+                                                formControlName="dropdownEmailTemplate" class="form-control">
+                                                <option selected disabled value="">select email template</option>
+                                                <ng-container *ngFor="let obj of emailTemplates">
+                                                    <option [value]="obj.template">{{obj.name}}</option>
+                                                </ng-container>
+                                            </select>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <quill-editor formControlName="editorEmailMessage" [modules]="quillConfig"
+                                [ngClass]="{ 'is-invalid': isEmailPostsubmitted && addEmailPost.editorEmailMessage?.errors }"
+                                >
+                                </quill-editor>
+                                <div *ngIf="isEmailPostsubmitted && addEmailPost.editorEmailMessage?.errors"
+                                    class="invalid-feedback float-left col-5">
+                                    <div *ngIf="addEmailPost.editorEmailMessage?.errors.required">Message can not be empty, add your
+                                        message.</div>
+                                </div>
+                                <div class="email-attachment-wrapper">
+                                    <label class="email-lbl">Attach file</label>
+                                    <div class="input-group">
+                                        <div class="custom-file">
+                                            <input type="file" class="custom-file-input"
+                                                (change)="uploadFile($event,'email')" id="emailAttachment">
+                                            <label class="custom-file-label"
+                                                for="inputGroupFile01">{{uploadFilename?uploadFilename:'Choose file'}}</label>
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="btn btn-xs btn-primary float-right mb-2 mt-2">Post
+                                    </button>
+                                </div>
+                            </form>
+                        </ng-template>
+                    </li>
+                    <li [ngbNavItem]="3">
+                        <a ngbNavLink>Tasks</a>
+
+                        <ng-template ngbNavContent>
+
+                            <table class="table table-primary table-bordered">
+                                <thead class="thead-primary">
+                                    <tr>
+                                        <th>Task</th>
+                                        <th>Stage</th>
+                                        <th>Status</th>
+                                        <th>Assignee</th>
+                                        <th>Deadline</th>
+                                        <th>Reminder</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let task of subTaskListResponse">
+                                        <!-- subTaskList$ | async-->
+                                        <!-- <td>{{task | json}}</td> -->
+                                        <td>
+                                            <div class="tasklink"><span *ngIf="task.required" class="color-red">*</span>
+                                                <a
+                                                    (click)="openResponseModalPopup(subTaskResponseModal,task)">{{task.name}}</a>
+                                            </div>
+                                        </td>
+                                        <td><span [innerHTML]="getStagename(task.workflow_stage) | safe : 'html'">
+
+                                            </span></td>
+                                        <td><span class="badge"
+                                                [ngClass]="{'badge-success':task.mark_completed,'badge-warning':!task.mark_completed}">
+                                                {{task.mark_completed ? 'Completed': 'Assigned' }}</span></td>
+                                        <td>
+                                            <span
+                                                [innerHTML]="displayApproverName(task.assignee) | safe : 'html'"></span>
+                                        </td>
+                                        <td>
+                                            {{task.deadline | date : 'dd-MM-yyyy'}}
+                                        </td>
+                                        <td>{{task.reminder | date: 'dd-MM-yyyy'}}</td>
+
+                                        <td>
+                                            <a class="pd-r-5 cursor" (click)="openModalPopup(subTask,task)">
+                                                <i class="far fa-edit fa-1x"></i> Edit
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    <tr *ngIf="subTaskListResponse.length === 0">
+                                        <td colspan="7">No record found.</td>
+                                    </tr>
+                                    <!-- <tr *ngIf="(subTaskList$ | async)?.length === 0">
+                                        <td colspan="7">No record found.</td>
+                                    </tr> -->
+                                </tbody>
+                            </table>
+                        </ng-template>
+                    </li>
+                    <!-- <li ngbNavItem>
+                        <a ngbNavLink>Systems</a>
+                        <ng-template ngbNavContent>System content</ng-template>
+                    </li> -->
+                </ul>
+
+                <button *ngIf="isTaskTabOpen" class="btn btn-xs btn-primary btnSubtask"
+                    (click)="openModalPopup(subTask,'')" data-toggle="modal">
+                    Subtask
+                </button>
+                <div [ngbNavOutlet]="nav" class="m-2"></div>
+                <div class="activity" *ngIf="isActivityLogOpen">
+                    <ul>
+                        <li *ngFor="let data of activityLog; let i = index;">
+                            <div class="activity-log">
+
+                                <div class="chat-group-divider">
+                                    <span
+                                        *ngIf=" !i || ( data.created_at | date: 'shortDate') !== (activityLog[i-1].created_at | date: 'shortDate' ) ">
+                                        {{data.created_at | date:'mediumDate'}}
+                                    </span>
+                                </div>
+
+                                <div class="chat-stage-wrapper">
+                                    <div class="media pl-0 col-9">
+                                        <div class="avatar avatar-sm avatar-online">
+                                            <span
+                                                class="avatar-initial rounded-circle">{{nameInitials(data.user_firstname,data.user_lastname)}}</span>
+                                        </div>
+                                        <div class="media-body">
+                                            <p class="feedback" *ngIf="data.activity_feedback">
+                                                <strong> {{data.user_firstname}} {{data.user_lastname}}</strong>
+                                                posted feedback at <small class="lightgray">
+                                                    {{data.created_at | date:'mediumTime'}}</small>
+                                            </p>
+                                            <div class="userfeedback"
+                                                [innerHTML]="data.activity_feedback | safe : 'html'">
+                                            </div>
+                                            <p class="feedback"
+                                                *ngIf="data.previous_status && data.activity_feedback === ''">
+                                                <strong>{{data.user_firstname}} {{data.user_lastname}}
+                                                </strong>chagne status from
+                                                <strong>{{data.previous_status}}</strong> to
+                                                <strong>{{data.current_status}}</strong>
+                                                at <small
+                                                    class="lightgray">{{data.created_at | date: 'mediumTime'}}</small>
+                                            </p>
+
+                                            <p class="feedback"
+                                                *ngIf="data.previous_status === null && data.activity_feedback === ''">
+                                                <strong>{{data.user_firstname}} {{data.user_lastname}}
+                                                </strong>selected stage                                              
+                                                <strong>{{data.current_status}}</strong>
+                                                at <small
+                                                    class="lightgray">{{data.created_at | date: 'mediumTime'}}</small>
+                                            </p>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="activitystage">{{data.current_status}}</div>
+                                </div>
+
+                            </div>
+
+                        </li>
+                    </ul>
+
+                </div>
+                <!--email log-->
+                <div class="activity" *ngIf="isEmailLogOpen">
+                    <ul>
+                        <li *ngFor="let data of emailLog; let k = index;  first as isFirst">
+                            <div class="activity-log">
+                                <div class="chat-group-divider">
+                                    <!-- *ngIf="isFirst || data.created_at != emailLog[i+1].created_at"-->
+                                    <!-- <span>{{data.created_at | date:'longDate'}}</span> -->
+                                    <span
+                                        *ngIf=" !k || ( data.created_at | date: 'longDate') !== (emailLog[k-1].created_at | date: 'longDate' ) ">
+                                        {{data.created_at | date:'longDate'}}
+                                    </span>
+                                </div>
+                                <div class="chat-stage-wrapper">
+                                    <div class="media pl-0 col-9">
+                                        <div class="avatar avatar-sm avatar-online">
+                                            <span
+                                                class="avatar-initial rounded-circle">{{nameInitials(data.user_firstname,data.user_lastname)}}</span>
+                                        </div>
+                                        <div class="media-body">
+                                            <p class="feedback">
+                                                <strong> {{data.user_firstname}} {{data.user_lastname}}</strong>
+                                                posted feedback at <small
+                                                    class="lightgray">{{data.created_at | date: 'mediumTime'}}</small>
+                                                <!-- at <span *ngIf="data.created_at">{{data.created_at | date:'medium'}}</span> -->
+                                            </p>
+
+                                            <div class="userfeedback" [innerHTML]="data.email_body | safe : 'html'">
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="activitystage">{{data.current_status}}</div>
+
+                                </div>
+                            </div>
+
+                        </li>
+                    </ul>
+
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+<ng-template #editRequestDetails let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Update Request Details</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Close Clicked')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <!-- {{requestDetailsbyId | json}} -->
+    <form [formGroup]="editRequestDetailForm" autocomplete="false" (ngSubmit)="updateRequestDetails()">
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label for="requestacceptingagent"
+                            class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">Request accepting
+                            agent</label>
+                        <input type="text" class="form-control" formControlName="requestacceptingagent"
+                            [ngClass]="{ 'is-invalid': isRequestDetailFormsubmit && editRequest.requestacceptingagent.errors }" />
+                        <div *ngIf="isRequestDetailFormsubmit && editRequest.requestacceptingagent.errors"
+                            class="invalid-feedback">
+                            <div *ngIf="editRequest.requestacceptingagent.errors.required">Request accepting agent is
+                                required</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-sm-12 mb-3">
+
+                    <label for="riskfactor" class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">
+                        Select Risk factor</label>
+                    <select class="form-control" formControlName="riskfactor"
+                        [ngClass]="{ 'is-invalid': isRequestDetailFormsubmit && editRequest.riskfactor.errors }">
+                        <ng-container *ngFor="let opt of riskFactorList">
+                            <option [value]="opt.value">
+                                {{ opt.value }}
+                            </option>
+                        </ng-container>
+                    </select>
+                    <div *ngIf="isRequestDetailFormsubmit && editRequest.riskfactor.errors" class="invalid-feedback">
+                        <div *ngIf="editRequest.riskfactor.errors.required">risk factor is required</div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <label for="workflowselect" class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">
+                        Select Approver</label>
+                    <select class="form-control" formControlName="approver"
+                        [ngClass]="{ 'is-invalid':  isRequestDetailFormsubmit && editRequest.approver.errors}">
+                        <ng-container *ngFor="let opt of ApproverList">
+                            <option [value]="opt.approver_id" [selected]="opt.approver_id === selectedApprover">
+                                {{ opt.user_name }}
+                            </option>
+                        </ng-container>
+
+                    </select>
+                    <div *ngIf="isRequestDetailFormsubmit && editRequest.approver.errors">
+                        <div *ngIf="editRequest.approver.errors.required">Approver is required</div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <label for="workflowselect" class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">
+                        Country</label>
+                    <input formControlName="country" autocomplete="false" [typeahead]="countryList"
+                        typeaheadOptionField="name" [typeaheadScrollable]="true" [typeaheadOptionsInScrollableView]="5"
+                        placeholder="type and search country"
+                        [ngClass]="{ 'is-invalid': isRequestDetailFormsubmit && editRequest.country.errors }"
+                        (typeaheadOnSelect)="onSelectCountry($event)" class="form-control">
+                    <div *ngIf="isRequestDetailFormsubmit && editRequest.requestacceptingagent.errors"
+                        class="invalid-feedback">
+                        <div *ngIf="editRequest.requestacceptingagent.errors.required">Country is required</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <label for="workflowselect" class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">
+                        Select State</label>
+                    <input formControlName="state" autocomplete="new" [typeahead]="filteredStateList"
+                        typeaheadOptionField="name"
+                        [ngClass]="{ 'is-invalid': isRequestDetailFormsubmit && editRequest.state.errors }"
+                        placeholder="type and search state" [typeaheadScrollable]="true"
+                        [typeaheadOptionsInScrollableView]="5" class="form-control">
+                    <div *ngIf="isRequestDetailFormsubmit && editRequest.state.errors" class="invalid-feedback">
+                        <div *ngIf="editRequest.state.errors.required">State is required</div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <label for="workflowselect" class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">
+                        City</label>
+                    <input type="text" autocomplete="false" class="form-control" formControlName="city"
+                        [ngClass]="{ 'is-invalid': isRequestDetailFormsubmit && editRequest.city.errors }" />
+                    <div *ngIf="isRequestDetailFormsubmit && editRequest.city.errors" class="invalid-feedback">
+                        <div *ngIf="editRequest.city.errors.required">City is required</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary tx-13" (click)="onCancelClick()">Cancel</button>
+            <button class="btn btn-primary tx-13" type="submit">Save</button>
+        </div>
+
+    </form>
+</ng-template>
+
+<ng-template #confirmTemplate>
+    <div class="modal-body text-center">
+        <p>Do you want to revert stages?</p>
+        <button type="button" class="btn btn-xs btn-primary mr-2" (click)="confirm()">Yes</button>
+        <button type="button" class="btn btn-xs btn-secondary" (click)="decline()">No</button>
+    </div>
+</ng-template>
+
+
+<!--Subtask popup-->
+<ng-template #subTask let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">{{isEditSubTask ? 'Edit Subtask' : 'Add Subtask'}}</h4>
+        <button type="button" class="close" aria-label="Close" (click)="onResetSubTask()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <!-- {{requestDetailsbyId | json}} -->
+   <form #subTaskForm="ngForm" (ngSubmit)="onSubmitAddSubTask(subTaskForm)">
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group mg-b-5">
+                        <label for="defaultapprover"
+                            class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">
+                            Assignee</label>
+                        <select class="form-control" name="assignee" [(ngModel)]="subTaskFields.assignee" #assignee="ngModel"
+                        [ngClass]="{ 'is-invalid': assignee.invalid && subTaskForm.submitted }"
+                              required>
+                            <ng-container *ngFor="let opt of ApproverList">
+                                <option *ngIf="opt.user_name !== ' '" [value]="opt.approver_id"
+                                    [selected]="opt.approver_id === selectedAssignee">
+                                    {{ opt.user_name }}
+                                </option>
+                            </ng-container>
+
+                        </select>
+                        <div *ngIf="assignee.invalid && subTaskForm.submitted" class="invalid-feedback">
+                            <div *ngIf="assignee?.errors.required">Assignee is required</div>
+                        </div>
+                         
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label for="subtaskname"
+                            class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">Sub Task Name</label>
+                        <input type="text" class="form-control" name="name" [(ngModel)]="subTaskFields.name"  #name="ngModel"
+                        [ngClass]="{ 'is-invalid': name.invalid && subTaskForm.submitted }"
+                            required />
+                        <div *ngIf="name.invalid && subTaskForm.submitted" class="invalid-feedback">
+                            <div *ngIf="name?.errors.required">Sub Task Name is  required</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-sm-12 mb-3">
+                    <label for="subtaskdescription"
+                        class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">
+                        Sub task description</label>
+                    <textarea class="form-control" name="description" [(ngModel)]="subTaskFields.description"
+                    #description="ngModel" 
+                        [ngClass]="{ 'is-invalid': description.invalid && subTaskForm.submitted }"
+                        required>
+                        </textarea>
+                    <div *ngIf="description.invalid && subTaskForm.submitted" class="invalid-feedback">
+                        <div *ngIf="description?.errors.required">Subtask description is required
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-12 ml-1 mb-3">
+                    <div class="form-check">
+                        <label for="issubtaskrequired"
+                            class="form-check-label tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">
+                            <input type="checkbox" class="form-check-input" [(ngModel)]="subTaskFields.required" name="required" />
+                            <span>Is Required</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12 mb-3">
+                    <label for="subtaskdescription"
+                        class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">
+                        Deadline</label>
+                    <input name="deadline" type="text" [(ngModel)]="subTaskFields.deadline" #deadline="ngModel"
+                        [ngClass]="{ 'is-invalid': deadline.invalid && subTaskForm.submitted }" autocomplete="off"
+                        class="form-control" #dp="bsDatepicker" bsDatepicker (bsValueChange)="onValueChange($event)"
+                        [maxDate]="subtaskDeadlineDate" [minDate]="minDate"
+                        [bsConfig]="{ dateInputFormat: 'MM-DD-YYYY',  adaptivePosition: true, returnFocusToInput: true, selectFromOtherMonth: true }"
+                        [(bsValue)]="subTaskFields.deadline" required />
+                    
+                    <div *ngIf="deadline.invalid && subTaskForm.submitted " class="invalid-feedback">
+                        <div *ngIf="deadline?.errors.required">Deadline date is required</div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+
+                <div class="col-sm-12 mb-3">
+                    <label for="subtaskdescription"
+                        class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">
+                        Reminder </label>
+                   <input name="reminder" [(ngModel)]="subTaskFields.reminder"   #reminder="ngModel" class="form-control" autocomplete="off"
+                   #dp="bsDatepicker" bsDatepicker (bsValueChange)="onValueChange($event)" [maxDate]="maxDate" type="text"
+                [bsConfig]="{ dateInputFormat: 'MM-DD-YYYY', adaptivePosition: true, selectFromOtherMonth: true, returnFocusToInput: true }"
+                 [minDate]="minDate" [bsValue]="bsValue" />
+                </div>
+            </div>
+
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-white tx-13" (click)="onResetSubTask()">Cancel</button>
+            <button class="btn btn-primary tx-13" type="submit">Save</button>
+        </div>
+    </form>
+</ng-template>
+
+<!--Subtask Response-->
+<ng-template #subTaskResponseModal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Task Response</h4>
+        <button type="button" class="close" aria-label="Close" (click)="onCancelSubTaskResponse()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body pb-0">
+        <div class="row">
+            <!-- <div class="col-sm-12">
+                <span *ngIf="displayAssignee" class="badge badge-info">Assigned</span>
+            </div> -->
+            <div class="col-sm-10 form-group divflex-column">
+                <label class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">Task Name</label>
+                <label class="tx-13 tx-medium tx-spacing-1 mg-b-5 tx-color-03"> {{displayTaskname}}</label>
+            </div>
+            <div class="col-sm-10 form-group divflex-column">
+                <label class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">Task Description</label>
+                <label class="tx-13 tx-medium tx-spacing-1 mg-b-5 tx-color-03"> {{displayTaskDescription}}</label>
+            </div>
+            <div class="col-sm-10 form-group divflex-column mb-0">
+                <label class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">Task Deadline</label>
+                <label class="tx-13 tx-medium tx-spacing-1 mg-b-5 tx-color-03">
+                    {{displayTaskDeadline | date:'dd/MM/yyyy'}}</label>
+            </div>
+        </div>
+    </div>
+
+    <form [formGroup]="subTaskResponseForm" autocomplete="false" (ngSubmit)="onSubmitSubTaskResponse()">
+        <div class="modal-body">
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group mg-b-5">
+                        <label for="taskresponse" class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">
+                            Task Response</label>
+                        <textarea class="form-control" formControlName="taskresponse" required
+                            [ngClass]="{ 'is-invalid': isResponseSubmitted && subTaskResponse.taskresponse?.errors }">
+                            </textarea>
+
+                        <div *ngIf="isResponseSubmitted && subTaskResponse.taskresponse?.errors"
+                            class="invalid-feedback">
+                            <div *ngIf="subTaskResponse.taskresponse?.errors.required">Sub Task Response is
+                                required</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="row">
+                <div class="col-sm-12 ml-2 mb-3">
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" formControlName="markcompleted"
+                            id="markcompleted" required />
+                        <label for="markcompleted"
+                            class="form-check-label tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">
+                            <span>Mark as complete</span>
+                        </label>
+                        <div class="is-invalid" *ngIf="isResponseSubmitted && subTaskResponse.markcompleted.errors">Mark
+                            as complete is required</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <label for="taskresponse" class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">
+                        Attachments</label>
+                    <div class="input-group">
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" (change)="uploadFile($event)"
+                                id="uploaddocument">
+                            <label class="custom-file-label"
+                                for="inputGroupFile01">{{uploadFilename?uploadFilename:'Choose file'}}</label>
+                        </div>
+
+                    </div>
+                    <div *ngIf="showFilesizeerror" class="color-red tx-12 mt-2">
+                        File size should not exceed 2MB
+                    </div>
+                    <div *ngIf="showFileExtnerror" class="color-red tx-12 mt-2">
+                        Only pdf, jpg, txt, doc, docx file area allowed.
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-white tx-13" (click)="onCancelSubTaskResponse()">Cancel</button>
+            <button class="btn btn-primary tx-13" type="submit">Save</button>
+        </div>
+
+    </form>
+</ng-template>
+
+
+<div *ngIf="isOpen" class="col-sm-5 mr-0 float-right flotingdiv" [ngClass]="{'hide':!isOpen}">
+    <!-- dismissOnTimeout="5000"-->
+    <alert *ngIf="isOpen" [type]="alertType" dismissOnTimeout="10000" [dismissible]="dismissible"
+        (onClosed)="onClosed(alertMsg)">{{alertMsg}}
+    </alert>
+</div>
+
+<ng-template #confirmDeleteTemplate let-modal>
+    <div class="modal-header">
+        <h5 class="modal-title">Are you absolutely sure?</h5>
+        <button type="button" class="close" (click)="cancelModal()" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body text-center">
+        <p> This will delete selected 
+            <span class="font-weight-bold"> {{showControlContent()}}</span>
+             <!-- <span class="font-weight-bold">{{controlname === 'team member' ? selectedTeamMember : organizationName}}</span>
+             <span class="font-weight-bold"> {{controlname === 'organization' ? organizationName : confirmProperty}}</span> -->
+             {{controlname}}</p>
+        <p>Please type <strong>'Delete'</strong> to confirm</p>
+
+        <form [formGroup]="confirmationForm" (ngSubmit)="onSubmitConfirmation(controlname)">
+            <input type="text" class="form-control" formControlName="userInput" name="userInput" required
+                [ngClass]="{ 'is-invalid': isconfirmationsubmitted && confirmDelete.userInput.value !== 'Delete' }" />
+            <div *ngIf="isconfirmationsubmitted && confirmDelete.userInput.value !== 'Delete'" class="invalid-feedback text-left">
+                Enter appropriate text
+            </div>
+            <div class="mt-2 d-flex">
+                    <button class="btn btn-xs btn-primary btn-block" *ngIf="controlname == 'DSAR Request detail'">I understand the
+                        consequences, delete this
+                        {{controlname}}</button>
+            </div>
+        </form>
+    </div>
+</ng-template>
+
+<ng-template #previewFile>
+    <div class="modal-body">
+        <button type="button" class="close" aria-label="Close" (click)="onCancelFilePreview()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <iframe #filePreview name="iframeFilepreview" style="height:200px;width:300px"></iframe>
+    </div>
+</ng-template>

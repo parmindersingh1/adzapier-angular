@@ -1,0 +1,66 @@
+<div class="container" xmlns="http://www.w3.org/1999/html">
+  <div class="d-sm-flex align-items-center justify-content-between mg-b-5 mg-lg-b-10 mg-xl-b-15">
+    <div>
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb breadcrumb-style1 mg-b-10">
+          <li class="breadcrumb-item">Privacy</li>
+          <li class="breadcrumb-item"><a routerLink="/home/dashboard/cookie-consent">Cookie Consent</a></li>
+          <li class="breadcrumb-item"><a routerLink="/cookie-consent/cookie-banner">Banner Configuration</a></li>
+          <li class="breadcrumb-item active">Setup</li>
+        </ol>
+      </nav>
+    </div>
+  </div>
+  <alert type="warning">
+    <strong>Hold On!</strong> If You Recenlty updated the Configuration, It would take around 1 Hours to Reflect the changes
+  </alert>
+  <h5 class="mt-2 head">Implementing Banner Scripts</h5>
+  <p class="alert alert-info">
+    <b>Note! </b> The script must be placed before any other script in your site in order to ensure the banner is loaded before any other scripts have the chance to load or set cookies. This allows for the script tag to communicate the site visitor's consent preferences to downstream vendors and for those vendors to show content and set cookies as allowed by the site visitor.
+  </p>
+  <div class="card mt-3">
+    <div  class="card-header"><h6 style="float: left"><b>Production CDN </b></h6>
+    <button (click)="copyToClipboard()" style="float: right" type="button" class=" pull-right btn-sm btn btn-primary"><i class="mr-1 fa fa-clipboard" aria-hidden="true"></i>
+       {{ isCopied ? 'Copied' : 'Copy Script'}}</button>
+    </div>
+    <div *ngIf="!loadingSkeleton" style="background: #282a36" class="card-body">
+      <p  class="text-danger codeText">
+          <span>
+            <code style="color: #8be9fd">{{addScript}}</code>
+          </span>
+          <span style="color: #fff; font-size: 16px">//{{scriptUrl}}
+          </span>
+          <span>
+            <code style="color: #8be9fd">{{closeScript}}</code>
+          </span>
+<!--        </b>-->
+      </p>
+    </div>
+  </div>
+  <ngx-skeleton-loader *ngIf="loadingSkeleton" count="3"></ngx-skeleton-loader>
+
+  <div class="card mt-3">
+    <div class="card-header"><b>To implement the Production CDN script</b></div>
+    <div class="card-body">
+      <ul style="list-style-type: decimal">
+        <li class="mb-1">Click the Publish button. The Publish Website pane appears.</li>
+        <li class="mb-1">Click the Publish button.</li>
+        <li class="mb-1">Go to the Production Scripts Header Tab</li>
+        <li class="mb-1">Click the Copy Script button for the Production CDN script.</li>
+        <li class="mb-1">Paste the copied script in the head for your site.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="col-sm-5 mt-3 mr-0 float-right">
+  <alert *ngIf="isOpen" [type]="alertType"  dismissOnTimeout="5000" [dismissible]="dismissible" (onClosed)="onClosed(alertMsg)">{{  alertMsg}}</alert>
+</div>
+<ng-template #template>
+  <div class="modal-body text-center">
+    <p>Selected Property does not have any Banner Configuration <br />
+       First create your Banner Configuration
+    </p>
+        <button type="button" class="btn btn-primary" (click)="navigate()" >Go Now </button>
+  </div>
+</ng-template>

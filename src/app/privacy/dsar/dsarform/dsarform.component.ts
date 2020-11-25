@@ -1,0 +1,1849 @@
+import {
+  Component, OnInit, OnDestroy, ViewChild, ViewEncapsulation,
+  ChangeDetectionStrategy, ChangeDetectorRef, ElementRef, AfterContentChecked, TemplateRef
+} from '@angular/core';
+import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import { FormBuilder, FormGroup, NgForm, FormControl, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { NgbModal, NgbNavChangeEvent, NgbNav } from '@ng-bootstrap/ng-bootstrap';
+import { NgxUiLoaderService } from 'ngx-ui-loader';
+import { OrganizationService } from 'src/app/_services';
+import { CcparequestService } from 'src/app/_services/ccparequest.service';
+import { DsarformService } from 'src/app/_services/dsarform.service';
+import { CCPAFormConfigurationService } from 'src/app/_services/ccpaform-configuration.service';
+import { WorkflowService } from 'src/app/_services/workflow.service';
+import { Observable } from 'rxjs';
+import { moduleName } from '../../../_constant/module-name.constant';
+import { WebControlProperties } from 'src/app/_models/webcontrolproperties';
+import { DomSanitizer } from '@angular/platform-browser';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+@Component({
+  selector: 'app-dsarform',
+  templateUrl: './dsarform.component.html',
+  styleUrls: ['./dsarform.component.scss'],
+  encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.Default
+
+})
+export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy {
+  @ViewChild('editor', { static: true }) editor;
+  @ViewChild('azEmbedCode', { static: false }) public azEmbedCode: ElementRef<any>;
+  @ViewChild('shareLinkCode', { static: false }) public shareLinkCode: ElementRef<any>;
+  @ViewChild('nav', { static: false }) navTab: ElementRef<any>;
+  @ViewChild(NgbNav, { static: false }) navDirective = null;
+  @ViewChild('confirmEdit', { static: false }) confirmModal: TemplateRef<any>;
+  public requestObject: any = {};
+  public selectedFormOption: any;
+  public selectedControlType: any;
+  public selectOptions: any;
+  public selectOptionText: any;
+  public count: number;
+  public selectOptionControl: any;
+  selectedControlId: any;
+  changeControlType: any;
+  lblText: any;
+  inputOrSelectOption: boolean;
+  firstField = true;
+  firstFieldName = 'First Item name';
+  isEditItems: boolean;
+  showFormOption: boolean;
+  selectedRow: any;
+  isEditingList: boolean;
+  isOptionSelected: boolean; // check if change from radio to select dropdown;
+  isRequestTypeSelected: boolean;
+  isSubjectTypeSelected: boolean;
+  editSelectionType: boolean;
+  updatedControl: any;
+  organizationID: any;
+  formControlList: any;
+  isAddingFormControl: boolean;
+  webFormControlList: any;
+  questionGroups: any;
+  dataSubjectAccessRightsForm: any;
+  questionControlArray: any;
+  public requestType: any = [];
+  public subjectType: any = [];
+  existingControl: any;
+  checkboxBtnType: boolean;
+  radioBtnType: boolean;
+  subjectTyperadioBtn: boolean;
+  subjectTypecheckboxBtnType: boolean;
+  selectedProperty: any;
+  currentOrgID: any;
+  formName: any;
+  public propId: any;
+  public orgId: any;
+  public crid: any;
+  propertyname: any;
+  private webFormSelectedData;
+  selectedwebFormControlList;
+  activatedRouteQuery: any;
+  loading = false;
+  previewPublishedForm: any;
+  headerlogoBase64: string;
+  blured = false;
+  focused = false;
+  trimLabel: any;
+  currentOrganization: any;
+  headerColor: any;
+  welcomeTextColor: any;
+  welcomeFontSize: any;
+  footerTextColor: any;
+  footerFontSize: any;
+  formObject: any;
+  sideMenuRequestTypeOptions: any = [];
+  sideMenuSubjectTypeOptions: any = [];
+  isRequestType: boolean;
+  isSubjectType: boolean;
+  countryStateList: any;
+  stateList: any;
+  contactList: any;
+  filteredStateList: any;
+  workFlowList: any;
+  currentManagedPropID: any;
+  currentManagedOrgID: any;
+  uploadFilename: any;
+  capthchaID: Observable<any>; // SafeHtml;
+  controlOption = [
+    {
+      id: 1,
+      control: 'textbox',
+      display: 'Textbox'
+    },
+    {
+      id: 2,
+      control: 'select',
+      display: 'Select'
+    },
+    {
+      id: 3,
+      control: 'radio',
+      display: 'Radio'
+    },
+    {
+      id: 4,
+      control: 'textarea',
+      display: 'Textarea'
+    },
+    {
+      id: 5,
+      control: 'checkbox',
+      display: 'Checkbox'
+    },
+    {
+      id: 6,
+      control: 'datepicker',
+      display: 'Datepicker'
+    }
+  ];
+
+  editableControlOption = [
+    {
+      id: 1,
+      control: 'select',
+      display: 'Select'
+    },
+    {
+      id: 2,
+      control: 'radio',
+      display: 'Radio'
+    },
+    {
+      id: 3,
+      control: 'checkbox',
+      display: 'Checkbox'
+    }
+  ];
+  isWelcomeEditor: boolean;
+  quillEditorText: FormGroup;
+  quillConfig = {
+    toolbar: {
+      container: [
+        ['bold', 'italic', 'underline', 'strike'],
+        [{ header: 1 }, { header: 2 }],
+        ['link'],
+        [{ align: [] }],
+        [{ size: ['small', false, 'large', 'huge'] }]
+      ]
+    }
+  };
+  editorData: string;
+  editorDataWelcome: string;
+  editorDataFooter: string;
+  active = 1;
+  footerText: any;
+  welcomeText: any;
+  headerLogoPath: any;
+  ApproverList: any = [];
+  selectedApproverID: any;
+  selectedWorkflowID: any;
+  defaultapprover: any;
+  workflow: any;
+  daysleft: number;
+  public reqURLObj = {};
+  isControlDisabled: boolean;
+  alertMsg: any;
+  alertType: any;
+  dismissible = true;
+  isOpen = false;
+  showFilesizeerror: boolean = false;
+  showFileExtnerror: boolean = false;
+  isFileUploadRequired: boolean = false;
+  isEmailVerificationRequired: boolean = false;
+  isCaptchaVerificationRequired: boolean = false;
+  imgUrl: string;
+  isDraftWebForm = false;
+  imageToShow: any;
+  isImageLoading: boolean;
+  captchacode: any;
+  captchaid: any;
+  isRequiredField = false;
+  isFileuploadRequiredField = false;
+  isFileuploadRequiredFieldVisible = false;
+  selectedControlObj: WebControlProperties;
+  scriptcode: string;
+  activeId: number;
+  nextId: number;
+  isWebFormPublished: boolean;
+  basicForm: FormGroup;
+  basicFormSubmitted: boolean;
+  headerLogoForm: FormGroup;
+  uploadedLogoFile: any;
+  isLogoLoaded = false;
+  imageError: string;
+  isImageSaved: boolean;
+  logoFilename: string;
+  logoFilesize: number | string;
+  logoHeight: number;
+  logoWidth: number;
+  isCodeCopied = false;
+  isdraftsubmitted = false;
+  isResetlinkEnable = false;
+  isEditingPublishedForm = false;
+  modalRef: BsModalRef;
+  constructor(private fb: FormBuilder, private ccpaRequestService: CcparequestService,
+    private organizationService: OrganizationService,
+    private dsarFormService: DsarformService,
+    private ccpaFormConfigService: CCPAFormConfigurationService,
+    private workFlowService: WorkflowService,
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
+    private loadingbar: NgxUiLoaderService,
+    private modalService: NgbModal,
+    private cd: ChangeDetectorRef,
+    private sanitizer: DomSanitizer,
+    private bsmodalService: BsModalService
+  ) {
+
+    this.count = 0;
+
+    this.activatedRoute.paramMap.subscribe(params => {
+      // console.log(params, 'params..');
+      this.crid = params.get('id');
+      // this.selectedwebFormControlList = this.
+    });
+
+  }
+
+  ngOnInit() {
+    this.getCCPAdefaultConfigById();
+    // this.loadWebControl();
+    this.organizationService.currentProperty.subscribe((response) => {
+      //  this.loadingbar.stop();
+      if (response !== '') {
+        this.selectedProperty = response.property_name;
+        this.currentOrganization = response.organization_name;
+        this.orgId = response.organization_id;
+        this.propId = response.property_id;
+      } else {
+        const orgDetails = this.organizationService.getCurrentOrgWithProperty();
+        this.currentOrganization = orgDetails.organization_name;
+        this.selectedProperty = orgDetails.property_name;
+        this.orgId = orgDetails.organization_id;
+        this.propId = orgDetails.property_id;
+        this.loading = false;
+      }
+    });
+
+    this.basicForm = this.fb.group({
+      formname: ['', [Validators.required]],
+      currentOrganization: [{ value: '', disabled: true }],
+      selectedProperty: [{ value: '', disabled: true }]
+    });
+
+    // this.loading = true;
+    this.CreateUpdateDSARForm(this.crid);
+
+    this.quillEditorText = this.fb.group({
+      editor: new FormControl(null)
+    });
+    this.isWelcomeEditor = false;
+    this.loadDefaultApprover();
+    this.getCCPAdefaultConfigById();
+    this.loadCountryList();
+    this.loadStateList();
+    this.loadWorkFlowList();
+    this.loadCaptcha();
+    this.getWebFormScriptLink();
+    this.basicForm.controls['formname'].setValue(this.formName);
+    this.basicForm.controls['currentOrganization'].setValue(this.currentOrganization);
+    this.basicForm.controls['selectedProperty'].setValue(this.selectedProperty);
+
+    this.headerLogoForm = this.fb.group({
+      headerlogo: ['']
+    });
+  }
+  get stepFormOne() { return this.basicForm.controls; }
+  get formLogo() { return this.headerLogoForm.controls; }
+  basicFormdata() {
+    this.basicFormSubmitted = true;
+    if (this.basicForm.invalid) {
+      return false;
+    } else {
+      this.formName = this.basicForm.value.formname;
+      this.navDirective.select(2);
+    }
+
+  }
+
+  CreateUpdateDSARForm(formcrid) {
+    if (formcrid !== null) {
+      // this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
+      // this.getCCPAdefaultConfigById();
+      const uuidRegx = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/;
+      //  this.loadingbar.start();
+      this.webFormSelectedData = this.ccpaFormConfigService.currentFormData.subscribe((data) => {
+        //   this.loadingbar.stop();
+        if (data) {
+          (this.propId !== '') ? this.propId = this.propId : this.propId = data.PID;
+          (this.orgId !== '') ? this.orgId = this.orgId : this.orgId = data.OID;
+          // this.orgId = data.OID;
+          //  this.crid = data.crid;
+          // this.propertyname = data.form_name;
+          this.formName = data.form_name || data.web_form_name;
+          this.daysleft = data.days_left || 45;
+          if (data.form_status === 'draft') {
+            this.isDraftWebForm = true;
+            this.isEditingPublishedForm = true;
+          }
+          //  this.selectedApproverID = data.approver;
+          // this.selectedWorkflowID = data.workflow;
+          const isUUID = uuidRegx.test(data.approver);
+          if (isUUID) {
+            this.selectedApproverID = data.approver;
+            this.selectedWorkflowID = data.workflow;
+          } else {
+            this.selectedApproverID = data.approver_id;
+            this.selectedWorkflowID = data.workflow_id;
+            //  this.getWorkflowWithApproverID();
+          }
+          // this.requestFormControls = data.request_form;
+          if (data.request_form) {
+            this.selectedwebFormControlList = this.rearrangeFormSequence(data.request_form);
+            this.webFormControlList = this.selectedwebFormControlList;
+          } else {
+            this.selectedwebFormControlList = this.rearrangeFormSequence(this.ccpaFormConfigService.getFormControlList());
+            this.webFormControlList = this.selectedwebFormControlList;
+          }
+
+          this.webFormControlList.filter((t) => {
+            if (t.controlId === 'footertext') {
+              this.footerText = t.footerText;
+              this.footerTextColor = t.footerTextColor;
+              this.footerFontSize = t.footerFontSize;
+            } else if (t.controlId === 'welcometext') {
+              this.welcomeText = t.welcomeText;
+              this.welcomeTextColor = t.welcomeTextColor;
+              this.welcomeFontSize = t.welcomeFontSize;
+            } else if (t.controlId === 'headerlogo') {
+              this.headerlogoBase64 = t.logoURL;
+              this.headerColor = t.headerColor;
+            } else if (t.controlId === 'fileupload') {
+              this.isFileUploadRequired = t.requiredfield;
+              this.isFileuploadRequiredField = t.ismandatory;
+            } else if (t.controlId === 'captchacontrol') {
+              this.isCaptchaVerificationRequired = (t.requiredfield === '') ? false : true;
+            }
+          });
+          // this.ccpaFormConfigService.removeControls();
+          this.ccpaFormConfigService.setFormControlList(this.webFormControlList);
+
+        } else {
+          // const retrivedData = this.ccpaFormConfigService.getCurrentSelectedFormData();
+          // this.selectedApproverID = retrivedData.approver;
+          // this.selectedWorkflowID = retrivedData.workflow;
+          // this.formName = retrivedData.form_name;
+          this.getWorkflowWithApproverID();
+          this.daysleft = data.days_left || 45;
+        }
+      });
+      // this.getDSARFormByCRID(this.crid);
+    } else {
+      this.radioBtnType = true;
+      this.subjectTyperadioBtn = true;
+      // this.loadWebControl();
+      this.createNewForm();
+      this.webFormControlList = this.dsarFormService.getFormControlList();
+      this.webFormControlList.filter((t) => {
+        if (t.controlId === 'footertext') {
+          this.footerText = t.footerText;
+          this.footerTextColor = t.footerTextColor;
+          this.footerFontSize = t.footerFontSize;
+        } else if (t.controlId === 'welcometext') {
+          this.welcomeText = t.welcomeText;
+          this.welcomeTextColor = t.welcomeTextColor;
+          this.welcomeFontSize = t.welcomeFontSize;
+        } else if (t.controlId === 'headerlogo') {
+          this.headerlogoBase64 = t.logoURL;
+          this.headerColor = t.headerColor;
+        } else if (t.controlId === 'fileupload') {
+          this.isFileUploadRequired = t.requiredfield;
+          this.isFileuploadRequiredField = (t.ismandatory === '') ? false : true;
+        } else if (t.controlId === 'captchacontrol') {
+          this.isCaptchaVerificationRequired = (t.requiredfield === '') ? false : true;
+        }
+      });
+      this.dsarFormService.setFormControlList(this.webFormControlList);
+      this.webFormControlList = this.dsarFormService.getFormControlList();
+      //  this.selectOptionControl = this.controlOption[0].control;
+      this.selectOptions = [{
+        id: this.count++,
+        name: ' '
+      }];
+      this.daysleft = 45;
+      // this.getCCPAdefaultConfigById();
+      this.reqURLObj = { crid: formcrid, orgid: this.organizationID, propid: this.propId };
+      this.organizationService.getOrganization.subscribe((response) => this.currentOrgID = response);
+    }
+  }
+
+  getCCPAdefaultConfigById() {
+    this.ccpaRequestService.getCCPAdefaultRequestSubjectType().subscribe((data) => {
+      if (data !== undefined) {
+        const rdata = data.request_type;
+        const sdata = data.subject_type;
+        this.requestType = rdata;
+        this.subjectType = sdata;
+        this.loadWebControl();
+        this.loading = false;
+      }
+    }, (error) => {
+      // this.loadingbar.stop();
+      this.alertMsg = error;
+      this.isOpen = true;
+      this.alertType = 'danger';
+    });
+    this.loadWebControl();
+  }
+
+  loadWebControl() {
+    if (this.crid) {
+      this.getDSARFormByCRID(this.crid);
+    } else {
+      this.isEditingPublishedForm = false;
+      this.webFormControlList = this.dsarFormService.getFormControlList();
+      this.webFormControlList.filter((t) => {
+        if (t.controlId === 'requesttype') {
+          //  this.sideMenuRequestTypeOptions = this.requestType;
+          t.selectOptions = this.requestType;
+        } else if (t.controlId === 'subjecttype') {
+          // this.sideMenuSubjectTypeOptions = this.subjectType;
+          t.selectOptions = this.subjectType;
+        }
+      });
+      this.dsarFormService.setFormControlList(this.webFormControlList);
+    }
+
+  }
+
+  loadSubjectRequestTypeForSideNav(selectedType) {
+
+    this.webFormControlList.filter((t) => {
+      if (t.controlId === selectedType) {
+        if (selectedType === 'subjecttype') {
+          t.selectOptions = this.subjectType;
+          this.sideMenuSubjectTypeOptions = this.subjectType;
+        } else {
+          t.selectOptions = this.requestType;
+          this.sideMenuRequestTypeOptions = this.requestType;
+        }
+
+      }
+    });
+    if (this.sideMenuRequestTypeOptions.length !== 0 && this.isRequestType) {
+      console.log(this.sideMenuRequestTypeOptions);
+      return this.sideMenuRequestTypeOptions;
+    } else {
+      console.log(this.sideMenuSubjectTypeOptions);
+      return this.sideMenuSubjectTypeOptions;
+    }
+
+
+  }
+
+  trackByIndex(index: number, obj: any): any {
+    return index;
+  }
+
+
+
+  register(formData: NgForm) {
+    console.log(formData.value, 'register..');
+  }
+
+  drop(event: CdkDragDrop<any>) {
+    if (event.previousContainer === event.container) {
+      moveItemInArray(this.webFormControlList, event.previousIndex, event.currentIndex);
+      if (this.crid) {
+        this.ccpaFormConfigService.setFormControlList(this.webFormControlList);
+      } else {
+        this.dsarFormService.setFormControlList(this.webFormControlList);
+      }
+
+
+    } else {
+      transferArrayItem(event.previousContainer.data,
+        event.container.data,
+        event.previousIndex,
+        event.currentIndex);
+    }
+  }
+
+
+
+  onFormSubmit(data: NgForm) {
+    console.log(data, 'onFormSubmit..');
+  }
+
+
+  onEditCloseItems() {
+    this.isEditItems = !this.isEditItems;
+  }
+  // this.existingControl.control === 'textbox' || this.existingControl.control === 'textarea'
+  addFormField() {
+    this.showFormOption = !this.showFormOption;
+    if (this.isEditingList) {
+      if (this.existingControl.controlId === 'country' || this.existingControl.controlId === 'state' ||
+        this.existingControl.control === 'textbox' || this.existingControl.control === 'textarea') {
+        this.selectedControlType = false;
+        this.isSubjectType = false;
+        this.isRequestType = false;
+      } else if (this.existingControl.controlId === 'subjecttype') {
+        this.isSubjectType = true;
+        this.isRequestType = false;
+        this.loadSubjectRequestTypeForSideNav('subjecttype');
+      } else if (this.existingControl.controlId === 'requesttype') {
+        this.isRequestType = true;
+        this.isSubjectType = false;
+        this.loadSubjectRequestTypeForSideNav('requesttype');
+      } else {
+        this.selectedControlType = true;
+      }
+    } else if (this.selectedFormOption === 'select' || this.selectedFormOption === 'radio' || this.selectedFormOption === 'checkbox') {
+      this.selectedControlType = !this.selectedControlType; // true;
+      if (this.selectedControlType) {
+        this.selectOptions = [];
+        this.addOptions();
+      } else {
+        this.selectOptions = [];
+      }
+      // this.addOptions();
+    } else {
+      this.selectedControlType = false;
+      this.isSubjectType = false;
+      this.isRequestType = false;
+    }
+  }
+
+  editSelectedRow(data) {
+    this.selectedControlObj = data;
+    this.lblText = data.controllabel;
+    this.isEditingList = true;
+    this.isAddingFormControl = true;
+    this.showFormOption = false;
+    this.selectedControlId = data.controlId;
+    this.existingControl = data;
+    this.isRequiredField = data.requiredfield === '' ? false : data.requiredfield;
+    (data.control === 'textbox' || data.control === 'textarea') ? this.inputOrSelectOption = true : this.inputOrSelectOption = false;
+    if (data.control === 'select' && data.controlId !== 'state' && data.controlId !== 'country' || data.control === 'radio'
+      || data.control === 'checkbox') {
+      this.editSelectionType = true;
+      this.changeControlType = data.control;
+      this.selectOptions = data.selectOptions;
+    } else {
+      this.editSelectionType = false;
+    }
+    this.selectedFormOption = data.control;
+    this.selectOptionControl = data.control;
+
+    this.addFormField();
+  }
+
+  deleteSelectedItem(item) {
+    if (this.crid) {
+      this.ccpaFormConfigService.deleteControl(item);
+      this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
+    } else {
+      this.dsarFormService.deleteControl(item);
+      this.webFormControlList = this.dsarFormService.getFormControlList();
+    }
+  }
+
+  isSelected(i): boolean {
+    return this.selectedRow === i;
+  }
+
+  saveCurrentItem(i) {
+    console.log(!this.isSelected(i), 'isSelected..');
+    return !this.isSelected(i);
+  }
+
+
+  addOptions() {
+    let count = 0;
+    let customObj: CustomControls = {};
+    const keylabel = this.lblText.split(' ').join('_').toLowerCase();
+    const id = count++;
+    customObj = {
+      id: this.selectOptions.length + 1,
+      keylabel
+    };
+    this.selectOptions.push(customObj);
+  }
+
+  addCustomReqestSubjectType() {
+    // isSubjectType,isRequestType
+    let subjectObj: CustomControls = {};
+    let requestObj: CustomControls = {};
+    const keylabel = this.lblText.split(' ').join('_');
+    if (this.isSubjectType) {
+      subjectObj = {
+        subject_type_id: this.generateUUID(),
+        active: true,
+        created_at: new Date().toJSON(),
+        updated_at: new Date().toJSON(),
+      };
+
+      this.sideMenuSubjectTypeOptions.push(subjectObj);
+    } else {
+      requestObj = {
+        request_type_id: this.generateUUID(),
+        active: true,
+        created_at: new Date().toJSON(),
+        updated_at: new Date().toJSON(),
+      };
+
+      this.sideMenuRequestTypeOptions.push(requestObj);
+    }
+
+  }
+  generateUUID() {
+    let dt = new Date().getTime();
+    const custUuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+      let r = (dt + Math.random() * 16) % 16 | 0;
+      dt = Math.floor(dt / 16);
+      return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+    });
+    return custUuid;
+  }
+
+  deleteSelectOption(index) {
+    this.selectOptions.splice(index, 1);
+  }
+
+  deleteSubjectOption(index) {
+    this.sideMenuSubjectTypeOptions.splice(index, 1);
+    if (this.crid) {
+      this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
+      this.webFormControlList.filter((t) => {
+        if (t.controlId === 'subjecttype') {
+          t.selectOptions = this.sideMenuSubjectTypeOptions;
+        }
+      });
+      this.ccpaFormConfigService.setFormControlList(this.webFormControlList);
+    } else {
+      this.webFormControlList = this.dsarFormService.getFormControlList();
+      this.webFormControlList.filter((t) => {
+        if (t.controlId === 'subjecttype') {
+          t.selectOptions = this.sideMenuSubjectTypeOptions;
+        }
+      });
+      this.dsarFormService.setFormControlList(this.webFormControlList);
+    }
+  }
+
+  deleteRequestOption(index) {
+    this.sideMenuRequestTypeOptions.splice(index, 1);
+  }
+
+
+  cancelForm() {
+    this.showFormOption = true;
+  }
+
+  addCustomFields(formControls: NgForm) {
+    this.trimLabel = formControls.value.lblText.split(' ').join('_').toLowerCase();
+    if (this.isEditingList) {
+      const req = 'requesttype';
+      const sub = 'subjecttype';
+      if (this.selectedControlId === req || this.selectedControlId === sub) {
+
+        let updatedObj;
+        const oldControlIndex = this.webFormControlList.findIndex((t) =>
+          t.controlId === this.existingControl.controlId);
+
+        updatedObj = {
+          controllabel: formControls.value.lblText,
+          indexCount: this.existingControl.indexCount,
+          control: this.changeControlType,
+          controlId: this.selectedControlId,
+          selectOptions: this.existingControl.selectOptions,
+          requiredfield: this.isRequiredField
+        };
+        this.addUpdateFormControls(oldControlIndex, updatedObj);
+      } else if (this.existingControl.control === 'textbox' || this.existingControl.control === 'textarea' ||
+        this.existingControl.controlId === 'state' || this.existingControl.controlId === 'country') {
+        let updatedTextobj;
+        const oldControlIndex = this.webFormControlList.findIndex((t) =>
+          t.controlId === this.existingControl.controlId);
+        //  if (oldControlIndex) {
+        updatedTextobj = {
+          controllabel: formControls.value.lblText,
+          controlId: this.existingControl.controlId,
+          indexCount: this.existingControl.indexCount,
+          control: this.existingControl.control,
+          selectOptions: this.existingControl.selectOptions,
+          requiredfield: this.isRequiredField
+        };
+        this.addUpdateFormControls(oldControlIndex, updatedTextobj);
+      } else if (this.existingControl) {
+        if (this.crid) {
+          this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
+        } else {
+          this.webFormControlList = this.dsarFormService.getFormControlList();
+        }
+        let updateCustomObj;
+        const customControlIndex = this.webFormControlList.findIndex((t) =>
+          t.controlId === this.existingControl.controlId);
+
+        this.selectOptions.forEach(element => {
+          element.keylabel = this.trimLabel;
+        });
+        // }
+
+        if (customControlIndex !== -1) {
+          updateCustomObj = {
+            controllabel: formControls.value.lblText,
+            indexCount: this.trimLabel,
+            control: this.changeControlType,
+            controlId: this.existingControl.controlId,
+            selectOptions: this.existingControl.selectOptions,
+            requiredfield: this.isRequiredField
+          };
+          const optionLength = this.selectOptions.length;
+          if (optionLength > 0) {
+            if (this.selectOptions[optionLength - 1].name !== undefined) {
+              this.lblText = '';
+              this.cancelAddingFormControl();
+            } else {
+              return false;
+            }
+          } else {
+            this.cancelAddingFormControl();
+          }
+          if (this.crid) {
+            this.ccpaFormConfigService.updateControl(this.webFormControlList[customControlIndex], customControlIndex, updateCustomObj);
+            this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
+            this.cancelAddingFormControl();
+          } else {
+            this.dsarFormService.updateControl(this.webFormControlList[customControlIndex], customControlIndex, updateCustomObj);
+            this.webFormControlList = this.dsarFormService.getFormControlList();
+          }
+
+        }
+
+      }
+    } else {
+      if (this.crid) {
+        const count = this.webFormControlList.length + 1;
+        //  const emptyIndex = this.selectOptions.findIndex((t) => t.keylabel === '');
+        //  if (emptyIndex !== -1) {
+        this.selectOptions.forEach(element => {
+          element.keylabel = this.trimLabel;
+        });
+        // } 
+        const newWebControl = {
+          control: this.selectedFormOption,
+          controllabel: formControls.value.lblText,
+          controlId: 'CustomInput' + count,
+          indexCount: this.trimLabel + '_Index',
+          selectOptions: this.selectOptions,
+          requiredfield: this.isRequiredField
+        };
+        const optionLength = this.selectOptions.length;
+        if (optionLength > 0) {
+          if (this.selectOptions[optionLength - 1].name !== undefined) {
+            this.lblText = '';
+            this.cancelAddingFormControl();
+          } else {
+            return false;
+          }
+        } else {
+          this.cancelAddingFormControl();
+        }
+        this.ccpaFormConfigService.addControl(newWebControl);
+        this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
+        this.updateCaptchaPosition();
+      } else {
+        this.selectOptions.forEach(element => {
+          element.keylabel = this.trimLabel;
+        });
+
+        const count = this.webFormControlList.length + 1;
+        const newWebControl = {
+          control: this.selectedFormOption,
+          controllabel: formControls.value.lblText,
+          controlId: 'CustomInput' + count,
+          indexCount: this.trimLabel + '_Index',
+          selectOptions: this.selectOptions,
+          requiredfield: this.isRequiredField
+        };
+
+        const optionLength = this.selectOptions.length;
+        if (optionLength > 0) {
+          if (this.selectOptions[optionLength - 1].name !== undefined) {
+            this.lblText = '';
+            this.cancelAddingFormControl();
+          } else {
+            return false;
+          }
+        } else {
+          this.cancelAddingFormControl();
+        }
+
+        this.dsarFormService.addControl(newWebControl);
+        this.webFormControlList = this.dsarFormService.getFormControlList();
+        this.lblText = '';
+        this.cancelAddingFormControl();
+        this.updateCaptchaPosition();
+        //  this.selectedControlType = false;
+      }
+    }
+
+  }
+  //  // JSON.stringify(this.uploadedLogoFile), // this.getBase64Image(this.uploadedLogoFile), // this.headerlogoURL,
+  onSubmitHeaderLogo() { //addHeaderLogo
+    const newWebControl = {
+      control: 'img',
+      controllabel: 'Header Logo',
+      controlId: 'headerlogo',
+      logoURL: this.headerlogoBase64,
+      headerColor: this.headerColor
+    };
+    if (this.crid) {
+      this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
+      const customControlIndex = this.webFormControlList.findIndex((t) => t.controlId === 'headerlogo');
+      this.ccpaFormConfigService.updateControl(this.webFormControlList[customControlIndex], customControlIndex, newWebControl);
+      this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
+    } else {
+      this.webFormControlList = this.dsarFormService.getFormControlList();
+      const customControlIndex = this.webFormControlList.findIndex((t) => t.controlId === 'headerlogo');
+      this.dsarFormService.updateControl(this.webFormControlList[customControlIndex], customControlIndex, newWebControl);
+      this.webFormControlList = this.dsarFormService.getFormControlList();
+    }
+    this.setHeaderStyle();
+  }
+
+  onSubmitQuillEditorData() {
+    if (this.isWelcomeEditor) {
+      const newWebControl = {
+        control: 'text',
+        controllabel: 'Welcome Text',
+        controlId: 'welcometext',
+        indexCount: 'welcome_text_Index',
+        welcomeText: this.editorDataWelcome,
+        welcomeFontSize: this.welcomeFontSize || '13px',
+        welcomeTextColor: this.welcomeTextColor || '#000',
+        preferControlOrder: ''
+      };
+      if (this.crid) {
+        this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
+        const customControlIndex = this.webFormControlList.findIndex((t) => t.controlId === 'welcometext');
+        this.ccpaFormConfigService.updateControl(this.webFormControlList[customControlIndex], customControlIndex, newWebControl);
+        this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
+      } else {
+        this.webFormControlList = this.dsarFormService.getFormControlList();
+        const customControlIndex = this.webFormControlList.findIndex((t) => t.controlId === 'welcometext');
+        this.dsarFormService.updateControl(this.webFormControlList[customControlIndex], customControlIndex, newWebControl);
+        this.webFormControlList = this.dsarFormService.getFormControlList();
+      }
+      this.modalService.dismissAll('Data Saved!');
+    } else {
+      const footerTextControl = {
+        control: 'text',
+        controllabel: 'Footer Text',
+        controlId: 'footertext',
+        indexCount: 'footer_text_Index',
+        footerText: this.editorDataFooter,
+        footerTextColor: this.footerTextColor || '#000',
+        footerFontSize: this.footerFontSize || '13px',
+        preferControlOrder: ''
+      };
+
+      if (this.crid) {
+        this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
+        const customControlIndex = this.webFormControlList.findIndex((t) => t.controlId === 'footertext');
+        this.ccpaFormConfigService.updateControl(this.webFormControlList[customControlIndex], customControlIndex, footerTextControl);
+        this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
+      } else {
+        this.webFormControlList = this.dsarFormService.getFormControlList();
+        const customControlIndex = this.webFormControlList.findIndex((t) => t.controlId === 'footertext');
+        this.dsarFormService.updateControl(this.webFormControlList[customControlIndex], customControlIndex, footerTextControl);
+        this.webFormControlList = this.dsarFormService.getFormControlList();
+      }
+      this.modalService.dismissAll('Data Saved!');
+    }
+
+
+  }
+
+  onChangeEvent(event) {
+    this.selectedFormOption = event.currentTarget.value;
+    if (this.selectedFormOption === 'checkbox' || this.selectedFormOption === 'radio' || this.selectedFormOption === 'select') {
+      this.showFormOption = true;
+      this.selectedControlType = true;
+      if (this.selectOptions.length === 0) {
+        this.addOptions();
+      }
+
+    } else {
+      this.showFormOption = false;
+    }
+  }
+
+  updateControlType(event) {
+
+    this.changeControlType = event.currentTarget.value;
+    if (this.selectedControlId === 'requesttype') {
+      this.updatedControl = this.changeControlType;
+      if (this.changeControlType === 'select') {
+        this.isRequestTypeSelected = true;
+        this.checkboxBtnType = false;
+        this.radioBtnType = false;
+      } else if (this.changeControlType === 'radio') {
+        this.isRequestTypeSelected = false;
+        this.radioBtnType = true;
+        this.checkboxBtnType = false;
+      } else if (this.changeControlType === 'checkbox') {
+        this.isRequestTypeSelected = false;
+        this.radioBtnType = false;
+        this.checkboxBtnType = true;
+      }
+
+    } else if (this.selectedControlId === 'subjecttype') {
+      this.updatedControl = this.changeControlType;
+      if (this.changeControlType === 'select') {
+        this.isSubjectTypeSelected = true;
+        this.subjectTypecheckboxBtnType = false;
+        this.subjectTyperadioBtn = false;
+      } else if (this.changeControlType === 'radio') {
+        this.isSubjectTypeSelected = false;
+        this.subjectTyperadioBtn = true;
+        this.subjectTypecheckboxBtnType = false;
+      } else if (this.changeControlType === 'checkbox') {
+        this.isSubjectTypeSelected = false;
+        this.subjectTyperadioBtn = false;
+        this.subjectTypecheckboxBtnType = true;
+      }
+
+    }
+  }
+
+  addingFormControl() {
+    this.isAddingFormControl = !this.isAddingFormControl;
+    this.selectOptions = [];
+    this.lblText = '';
+  }
+
+  isCustomControlWithRadioBtn(item): boolean {
+    return item.controlId.startsWith('Custom') ? true : false;
+  }
+
+  isContainHeaderLogo(item): boolean {
+    return item.control.startsWith('img') ? true : false;
+  }
+
+  isContainWelcomeText(item): boolean {
+    return item.controlId === 'welcometext' ? true : false;
+  }
+
+  isContainFooterText(item): boolean {
+    return item.controlId === 'footertext' ? true : false;
+  }
+
+  isContainFileUpload(item): boolean {
+    return item.controlId === 'fileupload' ? true : false;
+  }
+
+  isContainCaptchaControl(item): boolean {
+    return item.controlId === 'captchacontrol' ? true : false;
+  }
+
+  isCaptchaControlRequired(): boolean {
+    if (this.crid) {
+      this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
+      return this.webFormControlList.findIndex((t) => t.controlId === 'captchacontrol');
+    } else {
+      this.webFormControlList = this.dsarFormService.getFormControlList();
+      return this.webFormControlList.some((t) => t.controlId === 'captchacontrol');
+    }
+  }
+
+  cancelAddingFormControl() {
+    this.isAddingFormControl = false;
+    this.isEditingList = false;
+    this.inputOrSelectOption = false;
+    this.showFormOption = false; // true
+    this.editSelectionType = false;
+    this.isSubjectType = false;
+    this.isRequestType = false;
+    this.selectedControlType = false;
+    this.changeControlType = null;
+    this.isRequiredField = false;
+  }
+
+  saveAsDraftCCPAFormConfiguration(registerForm) {
+    if (this.isWebFormPublished && !this.isEditingPublishedForm) {
+      this.navDirective.select(3);
+    } else {
+    //  this.isResetlinkEnable = !this.isResetlinkEnable;
+      this.isdraftsubmitted = false;
+      this.setHeaderStyle();
+      if (this.crid) {
+        this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
+        this.webFormControlList.filter((t) => {
+          if (t.controlId === 'footertext') {
+            t.footerTextColor = this.footerTextColor;
+            t.footerFontSize = this.footerFontSize;
+          } else if (t.controlId === 'welcometext') {
+            t.welcomeTextColor = this.welcomeTextColor;
+            t.welcomeFontSize = this.welcomeFontSize;
+          }
+        });
+        this.updateWebcontrolIndex(registerForm.value, this.webFormControlList);
+      } else {
+        this.webFormControlList = this.dsarFormService.getFormControlList();
+        this.webFormControlList.filter((t) => {
+          if (t.controlId === 'footertext') {
+            t.footerTextColor = this.footerTextColor;
+            t.footerFontSize = this.footerFontSize;
+          } else if (t.controlId === 'welcometext') {
+            t.welcomeTextColor = this.welcomeTextColor;
+            t.welcomeFontSize = this.welcomeFontSize;
+          }
+        });
+        this.updateWebcontrolIndex(registerForm.value, this.webFormControlList);
+      }
+      this.isWebFormPublished = false;
+      this.isDraftWebForm = true;
+      this.active = 3;
+    }
+  }
+
+  createDraft() {
+    if (this.isWebFormPublished) {
+      this.navDirective.select(4);
+    } else {
+      this.isResetlinkEnable = false;
+      this.isdraftsubmitted = true;
+      if (this.defaultapprover === undefined) {
+        return false;
+      } else {
+        if (this.crid) {
+          this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
+        } else {
+          this.webFormControlList = this.dsarFormService.getFormControlList();
+        }
+        this.formObject = {
+          form_name: this.formName,
+          form_status: 'draft',
+          settings: {
+            approver: this.defaultapprover,
+            workflow: this.workflow,
+            days_left: Number(this.daysleft),
+            email_verified: this.isEmailVerificationRequired || false,
+            captcha: this.isCaptchaVerificationRequired || false,
+          },
+          request_form: this.webFormControlList
+        };
+        if (this.orgId !== undefined && this.propId !== undefined && this.crid !== null) {
+          this.loadingbar.start();
+          this.ccpaFormConfigService.updateCCPAForm(this.orgId, this.propId, this.crid, this.formObject,
+            this.constructor.name, moduleName.dsarWebFormModule)
+            .subscribe((data) => {
+              this.navDirective.select(4);
+              this.isDraftWebForm = true;
+              this.isWebFormPublished = false;
+              this.showFormStatus();
+              this.alertMsg = data.response;
+              this.isOpen = true;
+              this.alertType = 'success';
+              this.loadingbar.stop();
+            }, (error) => {
+              this.loadingbar.stop();
+              this.alertMsg = error;
+              this.isOpen = true;
+              this.alertType = 'danger';
+            });
+
+        } else {
+
+          this.loadingbar.start();
+          this.ccpaFormConfigService.createCCPAForm(this.orgId, this.propId, this.formObject,
+            this.constructor.name, moduleName.dsarWebFormModule)
+            .subscribe((data) => {
+              this.navDirective.select(4);
+              this.loadingbar.stop();
+              this.crid = data.id;
+              this.alertMsg = data.response;
+              this.isOpen = true;
+              this.alertType = 'success';
+
+            }, (error) => {
+              this.loadingbar.stop();
+              this.alertMsg = error;
+              this.isOpen = true;
+              this.alertType = 'danger';
+            });
+
+        }
+      }
+    }
+  }
+  // this.basicForm.value.formname === '' || this.basicForm.value.formname === undefined || !this.basicFormSubmitted
+  onNavChange(changeEvent: NgbNavChangeEvent) {
+    if (changeEvent.nextId === 2) {
+      if (this.isEditingPublishedForm) {
+        changeEvent.preventDefault();
+        this.alertMsg = 'Please complete step 1 Basic and press next';
+        this.isOpen = true;
+        this.alertType = 'danger';
+      }
+
+    } else if (changeEvent.nextId === 3) {
+      if (this.isEditingPublishedForm) {
+        changeEvent.preventDefault();
+        this.alertMsg = 'Please complete step 2 Form and press next';
+        this.isOpen = true;
+        this.alertType = 'danger';
+      }
+    } else if (changeEvent.nextId === 4) {
+      if (this.isEditingPublishedForm) {
+        changeEvent.preventDefault();
+        this.alertMsg = 'Please complete step 3 Settings and press next';
+        this.isOpen = true;
+        this.alertType = 'danger';
+      }
+    }
+
+  }
+
+  finalPublishDSARForm() {
+    if (this.crid !== undefined) {
+      this.loadingbar.start();
+      this.ccpaFormConfigService.publishDSARForm(this.orgId, this.propId, this.crid,
+        this.constructor.name, moduleName.dsarWebFormModule).subscribe((resp) => {
+          this.isWebFormPublished = true;
+          this.isDraftWebForm = false;
+          this.showFormStatus();
+          this.alertMsg = resp.response;
+          this.isOpen = true;
+          this.alertType = 'success';
+          this.getDSARFormByCRID(this.crid);
+          this.navDirective.select(4);
+          this.getWebFormScriptLink();
+          this.loadingbar.stop();
+        }, (error) => {
+          this.alertMsg = error;
+          this.isOpen = true;
+          this.alertType = 'danger';
+        });
+    }
+
+  }
+
+  updateWebcontrolIndex(indexData, arrayData) {
+    //  this.webFormControlList = this.dsarFormService.getFormControlList();
+    const controlArr: any = [];
+    Object.keys(indexData).filter((t) => {
+      if (t.includes('Index')) {
+        controlArr.push(t);
+      }
+    });
+
+    // for (const i in this.webFormControlList) {
+
+    //   if (this.webFormControlList[i].indexCount == controlArr[i]) {
+    //     this.webFormControlList[i].preferControlOrder = registerForm.value[controlArr[i]];
+    //   }
+    // }
+    arrayData.forEach(e1 => controlArr.forEach((e2) => {
+      if (e1.indexCount === e2) {
+        e1.preferControlOrder = indexData[e2];
+      }
+    }));
+    // console.log(arrayData, 'arrayData..');
+    return arrayData;
+  }
+  createNewForm() {
+    this.dsarFormService.removeControls();
+    this.webFormControlList = this.dsarFormService.loadWebControls();
+  }
+
+  addUpdateFormControls(oldControlIndex, controlObj) {
+    if (this.crid) {
+      const customControlIndex = this.ccpaFormConfigService.getFormControlList()
+        .findIndex((t) => t.indexCount === this.existingControl.indexCount);
+      this.ccpaFormConfigService.updateControl(this.webFormControlList[customControlIndex], customControlIndex, controlObj);
+      this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
+    } else {
+      this.dsarFormService.updateControl(this.webFormControlList[oldControlIndex], oldControlIndex, controlObj);
+      this.webFormControlList = this.dsarFormService.getFormControlList();
+      this.cancelAddingFormControl();
+    }
+  }
+
+  rearrangeFormSequence(dataArray) {
+    dataArray.sort((a, b) => {
+      return a.preferControlOrder - b.preferControlOrder;
+    });
+    return dataArray;
+  }
+
+  priviewPublishedForm() {
+    this.router.navigate(['/editwebforms', { crid: this.crid }]);
+  }
+
+  onSubmitQuillEditorDataX() {
+    // this.editorData =  this.quillEditorText.get('editor').value;
+    console.log(this.editorData, 'editorData..');
+  }
+
+  editQuillEditorDataPopup(content, field) {
+    if (field === 'welcomeText') {
+      this.isWelcomeEditor = true;
+      if (this.crid) {
+        this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
+        if (this.webFormControlList !== null) {
+          const editText = this.webFormControlList.filter((t) => t.indexCount === 'welcome_text_Index');
+          this.editorDataWelcome = editText[0].welcomeText;
+        }
+      } else {
+        this.webFormControlList = this.dsarFormService.getFormControlList();
+        const editText = this.webFormControlList.filter((t) => t.indexCount === 'welcome_text_Index');
+        this.editorDataWelcome = editText[0].welcomeText;
+      }
+
+    } else {
+      this.isWelcomeEditor = false;
+      if (this.crid) {
+        this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
+        if (this.webFormControlList !== null) {
+          const editText = this.webFormControlList.filter((t) => t.indexCount === 'footer_text_Index');
+          this.editorDataFooter = editText[0].footerText;
+        }
+      } else {
+        this.webFormControlList = this.dsarFormService.getFormControlList();
+        const editText = this.webFormControlList.filter((t) => t.indexCount === 'footer_text_Index');
+        this.editorDataFooter = editText[0].footerText;
+      }
+    }
+
+    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
+      this.quillEditorText.reset();
+      // this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.quillEditorText.reset();
+      // this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  welcomeStyle(): object {
+
+    return {
+      'color': this.welcomeTextColor,
+      'font-size': this.welcomeFontSize + 'px'
+    };
+
+
+  }
+
+  footerStyle(): object {
+
+    return {
+      'color': this.footerTextColor,
+      'font-size': this.footerFontSize + 'px'
+    };
+  }
+
+  setHeaderStyle() {
+    const headerObj = {
+      control: 'img',
+      controllabel: 'Header Logo',
+      controlId: 'headerlogo',
+      indexCount: 'header_logo_Index',
+      headerColor: this.headerColor,
+      logoURL: this.headerlogoBase64 // || this.cardImageBase64
+    };
+    if (this.crid) {
+      this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
+      const customControlIndex = this.webFormControlList.findIndex((t) => t.controlId === 'headerlogo');
+      this.ccpaFormConfigService.updateControl(this.webFormControlList[customControlIndex], customControlIndex, headerObj);
+      this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
+    } else {
+      this.webFormControlList = this.dsarFormService.getFormControlList();
+      const customControlIndex = this.webFormControlList.findIndex((t) => t.controlId === 'headerlogo');
+      this.dsarFormService.updateControl(this.webFormControlList[customControlIndex], customControlIndex, headerObj);
+      this.webFormControlList = this.dsarFormService.getFormControlList();
+    }
+  }
+
+
+  loadDefaultApprover() {
+    if (this.orgId) {
+      this.organizationService.getOrgTeamMembers(this.orgId).subscribe((data) => {
+        this.ApproverList = data.response;
+        const filterValue = this.ApproverList.filter((t) => t.approver_id === this.selectedApproverID);
+        if (filterValue.length > 0) {
+          this.defaultapprover = filterValue[0].approver_id;
+        }
+      });
+    }
+  }
+
+  loadWorkFlowList() {
+    this.workFlowService.getWorkflow(this.constructor.name, moduleName.workFlowModule).subscribe((data) => {
+      this.workFlowList = data.response;
+      const filterValue = this.workFlowList.filter((t) => t.id === this.selectedWorkflowID);
+      if (filterValue.length > 0) {
+        this.workflow = filterValue[0].id;
+      }
+    }, (error) => {
+      this.alertMsg = error;
+      this.isOpen = true;
+      this.alertType = 'danger';
+    });
+  }
+
+  loadCountryList() {
+    this.ccpaFormConfigService.getCountryList().subscribe((data) => this.contactList = data);
+  }
+
+  loadStateList() {
+    this.ccpaFormConfigService.getStateList().subscribe((data) => this.stateList = data);
+  }
+
+  onSelectCountry(countryid) {
+    this.filteredStateList = this.stateList.filter((item) => item.country_id === countryid);
+  }
+
+  previewCCPAForm() {
+    if (this.orgId && this.propId) {
+      if (window.location.hostname === 'localhost') {
+        window.open('http://localhost:4500/dsar/form/' + this.orgId + '/' + this.propId + '/' + this.crid);
+      }
+      if (window.location.hostname === 'develop-cmp.adzpier-staging.com') {
+        window.open('https://develop-privacyportal.adzpier-staging.com/dsar/form/' + this.orgId + '/' + this.propId + '/' + this.crid);
+      } else if (window.location.hostname === 'cmp.adzpier-staging.com') {
+        window.open('https://privacyportal.adzpier-staging.com/dsar/form/' + this.orgId + '/' + this.propId + '/' + this.crid);
+      }
+    } else {
+      this.alertMsg = 'Organization or Property not found!';
+      this.isOpen = true;
+      this.alertType = 'danger';
+    }
+  }
+
+  getWebFormScriptLink() {
+    if (this.orgId && this.propId) {
+      if (window.location.hostname === 'localhost') {
+        this.scriptcode = 'http://localhost:4500/dsar/form/' + this.orgId + '/' + this.propId + '/' + this.crid;
+      }
+      if (window.location.hostname === 'develop-cmp.adzpier-staging.com') {
+        this.scriptcode = 'https://develop-privacyportal.adzpier-staging.com/dsar/form/' + this.orgId + '/' + this.propId + '/' + this.crid;
+      } else if (window.location.hostname === 'cmp.adzpier-staging.com') {
+        this.scriptcode = 'https://privacyportal.adzpier-staging.com/dsar/form/' + this.orgId + '/' + this.propId + '/' + this.crid;
+      }
+    }
+  }
+
+  onClosed(dismissedAlert: any): void {
+    this.alertMsg = !dismissedAlert;
+    this.isOpen = false;
+  }
+
+  onPrevious(tabid) {
+    if (this.crid) {
+      this.getDSARFormByCRID(this.crid);
+    }
+    this.navDirective.select(tabid);
+  }
+
+  getWorkflowWithApproverID() {
+    const retrivedData = this.ccpaFormConfigService.getCurrentSelectedFormData();
+    this.selectedApproverID = retrivedData.approver;
+    this.selectedWorkflowID = retrivedData.workflow;
+    this.formName = this.formName || retrivedData.form_name;
+    this.isEmailVerificationRequired = retrivedData.email_verified;
+    retrivedData.request_form.filter((t) => {
+      if (t.controlId === 'fileupload') {
+        this.isFileUploadRequired = t.requiredfield;
+        this.isFileuploadRequiredField = (t.ismandatory === '') ? false : true;
+      } else if (t.controlId === 'captchacontrol') {
+        this.isCaptchaVerificationRequired = t.requiredfield;
+      } else if (t.controlId === 'footertext') {
+        this.footerText = t.footerText;
+        this.footerTextColor = t.footerTextColor;
+        this.footerFontSize = t.footerFontSize;
+      } else if (t.controlId === 'welcometext') {
+        this.welcomeText = t.welcomeText;
+        this.welcomeTextColor = t.welcomeTextColor;
+        this.welcomeFontSize = t.welcomeFontSize;
+      } else if (t.controlId === 'headerlogo') {
+        this.headerlogoBase64 = t.logoURL;
+        this.headerColor = t.headerColor;
+      }
+    });
+    if (retrivedData.form_status === 'draft') {
+      this.isDraftWebForm = true;
+      this.isWebFormPublished = false;
+      this.isEditingPublishedForm = true;
+    }
+  }
+
+  uploadFile(event) {
+    const fileExtArray = ['pdf', 'txt', 'jpeg', 'jpg', 'png', 'doc', 'docx', 'csv', 'xls'];
+    // if (event.target.files.length > 0) {
+    if (event.target.files[0].size > (2 * 1024 * 1024)) {
+      this.showFilesizeerror = true;
+      return false;
+    } else {
+      const fileExtn = event.target.files[0].name.split('.').pop();
+      if (fileExtArray.some((t) => t == fileExtn)) {
+        this.showFilesizeerror = false;
+        this.showFileExtnerror = false;
+        const file = event.target.files[0];
+        this.uploadFilename = file.name;
+        // this.subTaskResponseForm.get('uploaddocument').setValue(file);
+      } else {
+        this.showFileExtnerror = true;
+      }
+
+    }
+
+    // }
+  }
+
+  allowFileupload(event) {
+    this.isFileUploadRequired = event.target.checked;
+    (this.isFileUploadRequired) ? this.isFileuploadRequiredFieldVisible = true : this.isFileuploadRequiredFieldVisible = false;
+    if (this.crid) {
+      this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
+      const customControlIndex = this.webFormControlList.findIndex((t) => t.controlId === 'fileupload');
+      const updateobj = this.webFormControlList[customControlIndex];
+      updateobj.requiredfield = event.target.checked;
+      // const isMandatoryField = this.isFileuploadRequiredField ? true : false;
+      // updateobj.ismandatory = isMandatoryField;
+      updateobj.ismandatory = false;
+      updateobj.preferControlOrder = this.webFormControlList.length - 1;
+      this.ccpaFormConfigService.updateControl(this.webFormControlList[customControlIndex], customControlIndex, updateobj);
+      this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
+      this.rearrangeFormSequence(this.webFormControlList);
+    } else {
+      this.webFormControlList = this.dsarFormService.getFormControlList();
+      const oldControlIndex = this.webFormControlList.findIndex((t) => t.controlId === 'fileupload');
+      const obj = this.webFormControlList[oldControlIndex];
+      obj.requiredfield = event.target.checked;
+      // const isMandatoryField = this.isFileuploadRequiredField ? true : false;
+      obj.ismandatory = false;
+      obj.preferControlOrder = this.webFormControlList.length - 1;
+      this.dsarFormService.updateControl(this.webFormControlList[oldControlIndex], oldControlIndex, obj);
+      this.webFormControlList = this.dsarFormService.getFormControlList();
+      this.rearrangeFormSequence(this.webFormControlList);
+    }
+  }
+
+  allowEmailVerification(event) {
+    this.isEmailVerificationRequired = event.target.checked;
+  }
+
+  allowCaptchaVerification(event) {
+    this.isCaptchaVerificationRequired = event.target.checked;
+    if (this.crid) {
+      this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
+      const customControlIndex = this.webFormControlList.findIndex((t) => t.controlId === 'captchacontrol');
+      const updateobj = this.webFormControlList[customControlIndex];
+      updateobj.requiredfield = event.target.checked;
+      updateobj.preferControlOrder = this.webFormControlList.length - 1;
+      this.ccpaFormConfigService.updateControl(this.webFormControlList[customControlIndex], customControlIndex, updateobj);
+      this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
+      this.rearrangeFormSequence(this.webFormControlList);
+    } else {
+      this.webFormControlList = this.dsarFormService.getFormControlList();
+      const oldControlIndex = this.webFormControlList.findIndex((t) => t.controlId === 'captchacontrol');
+      const obj = this.webFormControlList[oldControlIndex];
+      obj.requiredfield = event.target.checked;
+      obj.preferControlOrder = this.webFormControlList.length - 1;
+      this.dsarFormService.updateControl(this.webFormControlList[oldControlIndex], oldControlIndex, obj);
+      this.webFormControlList = this.dsarFormService.getFormControlList();
+      this.rearrangeFormSequence(this.webFormControlList);
+    }
+  }
+
+  loadCaptcha() {
+    if (window.location.hostname === 'localhost') {
+      this.imgUrl = 'https://develop-cmp-api.adzpier-staging.com/api/v1/captcha/image';
+    }
+    if (window.location.hostname === 'develop-cmp.adzpier-staging.com') {
+      this.imgUrl = 'https://develop-cmp-api.adzpier-staging.com/api/v1/captcha/image';
+    } else if (window.location.hostname === 'cmp.adzpier-staging.com') {
+      this.imgUrl = 'https://privacyportal.adzpier-staging.com/api/v1/captcha/image';
+    }
+
+    this.ccpaFormConfigService.getCaptcha(this.constructor.name, moduleName.dsarWebFormModule).subscribe((data) => {
+      this.captchaid = data.id;
+      this.imageToShow = 'data:image/png;base64' + ',' + data.captcha;
+    });
+
+  }
+
+  onCheckboxChange($event) {
+    this.isRequiredField = $event.target.checked;
+    // console.log(this.selectedControlObj,'selectedControlObj..');
+    if (this.selectedControlObj !== undefined) {
+      this.selectedControlObj.requiredfield = $event.target.checked;
+      if (this.crid) {
+        const customControlIndex = this.ccpaFormConfigService.getFormControlList()
+          .findIndex((t) => t.indexCount === this.selectedControlObj.indexCount);
+        this.ccpaFormConfigService.updateControl(this.webFormControlList[customControlIndex], customControlIndex, this.selectedControlObj);
+        this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
+      } else {
+        const customControlIndex = this.dsarFormService.getFormControlList()
+          .findIndex((t) => t.indexCount === this.selectedControlObj.indexCount);
+        this.dsarFormService.updateControl(this.webFormControlList[customControlIndex], customControlIndex, this.selectedControlObj);
+        this.webFormControlList = this.dsarFormService.getFormControlList();
+      }
+    }
+  }
+
+  onCheckboxChangeUpload($event) {
+    this.isFileuploadRequiredField = $event.target.checked;
+    if (this.crid) {
+      const customControlIndex = this.webFormControlList.findIndex((t) => t.controlId === 'fileupload');
+      const updateobj = this.webFormControlList[customControlIndex];
+      updateobj.ismandatory = this.isFileuploadRequiredField ? true : false;
+      updateobj.preferControlOrder = this.webFormControlList.length - 1;
+      this.ccpaFormConfigService.updateControl(this.webFormControlList[customControlIndex], customControlIndex, updateobj);
+      this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
+      this.rearrangeFormSequence(this.webFormControlList);
+    } else {
+      this.webFormControlList = this.dsarFormService.getFormControlList();
+      const oldControlIndex = this.webFormControlList.findIndex((t) => t.controlId === 'fileupload');
+      const obj = this.webFormControlList[oldControlIndex];
+      obj.ismandatory = this.isFileuploadRequiredField ? true : false;
+      obj.preferControlOrder = this.webFormControlList.length - 1;
+      this.dsarFormService.updateControl(this.webFormControlList[oldControlIndex], oldControlIndex, obj);
+      this.webFormControlList = this.dsarFormService.getFormControlList();
+      this.rearrangeFormSequence(this.webFormControlList);
+    }
+  }
+
+  ngOnDestroy() {
+    this.webFormControlList = [];
+    this.selectedwebFormControlList = [];
+  }
+
+  copyToClipBoard(contentType) {
+    let textarea = null;
+    textarea = document.createElement('textarea');
+    textarea.style.height = '0px';
+    textarea.style.left = '-100px';
+    textarea.style.opacity = '0';
+    textarea.style.position = 'fixed';
+    textarea.style.top = '-100px';
+    textarea.style.width = '0px';
+    document.body.appendChild(textarea);
+    // Set and select the value (creating an active Selection range).
+    if (contentType === 'embedcode') {
+      textarea.value = this.azEmbedCode.nativeElement.innerText.trim();
+      textarea.select();
+      document.execCommand('copy');
+      this.isCodeCopied = !this.isCodeCopied;
+    } else {
+      textarea.value = this.shareLinkCode.nativeElement.innerText.trim();
+      textarea.select();
+      document.execCommand('copy');
+      this.isCodeCopied = !this.isCodeCopied;
+    }
+
+    if (textarea && textarea.parentNode) {
+      textarea.parentNode.removeChild(textarea);
+    }
+  }
+
+  updateCaptchaPosition() {
+    if (this.crid) {
+      this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
+
+      const fileUploadControlIndex = this.webFormControlList.findIndex((t) => t.controlId === 'fileupload');
+      const updateFileuploadposition = this.webFormControlList.splice(fileUploadControlIndex, 1);
+      this.webFormControlList = this.webFormControlList.concat(updateFileuploadposition);
+
+      const customControlIndex = this.webFormControlList.findIndex((t) => t.controlId === 'captchacontrol');
+      const updateobj = this.webFormControlList[customControlIndex];
+      const elementToReplace = this.webFormControlList.splice(customControlIndex, 1);
+      this.webFormControlList = this.webFormControlList.concat(elementToReplace);
+
+      this.ccpaFormConfigService.setFormControlList(this.webFormControlList);
+
+      // updateobj.preferControlOrder = this.webFormControlList.length - 1;
+      // this.ccpaFormConfigService.updateControl(this.webFormControlList[customControlIndex], customControlIndex, updateobj);
+      this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
+      this.rearrangeFormSequence(this.webFormControlList);
+      // "fileupload"
+    } else {
+      this.webFormControlList = this.dsarFormService.getFormControlList();
+
+      const fileUploadControlIndex = this.webFormControlList.findIndex((t) => t.controlId === 'fileupload');
+      const updateFileuploadposition = this.webFormControlList.splice(fileUploadControlIndex, 1);
+      this.webFormControlList = this.webFormControlList.concat(updateFileuploadposition);
+
+      const customControlIndex = this.webFormControlList.findIndex((t) => t.controlId === 'captchacontrol');
+      const updateobj = this.webFormControlList[customControlIndex];
+      const elementToReplace = this.webFormControlList.splice(customControlIndex, 1);
+      this.webFormControlList = this.webFormControlList.concat(elementToReplace);
+
+      this.dsarFormService.setFormControlList(this.webFormControlList);
+      // updateobj.preferControlOrder = this.webFormControlList.length + 1;
+      // this.dsarFormService.updateControl(this.webFormControlList[customControlIndex], customControlIndex, updateobj);
+      this.webFormControlList = this.dsarFormService.getFormControlList();
+      this.rearrangeFormSequence(this.webFormControlList);
+    }
+  }
+
+  showFormStatus(): string {
+    if (this.isWebFormPublished && !this.isDraftWebForm) {
+      // this.isResetlinkEnable = true;
+      return 'Active';
+    } else {
+      //  this.isResetlinkEnable = false;
+      return 'Draft';
+    }
+
+  }
+
+  transform(imgData) {
+    return this.sanitizer.bypassSecurityTrustResourceUrl(imgData);
+  }
+
+  fileChangeEvent(fileInput: any) {
+    this.imageError = null;
+    if (fileInput.target.files && fileInput.target.files[0]) {
+      // Size Filter Bytes
+      const max_size = 1000000;
+      const allowed_types = ['image/png', 'image/jpeg'];
+      const max_height = 15200;
+      const max_width = 25600;
+      this.logoFilename = fileInput.target.files[0].name;
+      const fileExtn = fileInput.target.files[0].name.split('.').pop();
+      this.logoFilesize = this.formatBytes(fileInput.target.files[0].size);
+      if (fileInput.target.files[0].size > max_size) {
+        this.alertMsg = 'Maxium 1 MB size is allowed!';
+        this.isOpen = true;
+        this.alertType = 'danger';
+        return false;
+      }
+      if (allowed_types.some((t) => t === fileExtn)) {
+        // if (fileInput.target.files[0].some((t) => t === allowed_types)) {
+        this.imageError = 'Only Images are allowed ( JPG | PNG )';
+        return false;
+      }
+
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        const image = new Image();
+        image.src = e.target.result;
+        image.onload = rs => {
+          const img_height = rs.currentTarget['height'];
+          const img_width = rs.currentTarget['width'];
+          this.logoHeight = img_height / 2;
+          this.logoWidth = img_width / 2;
+
+          if (img_height > max_height && img_width > max_width) {
+            this.imageError =
+              'Maximum dimentions allowed ' +
+              max_height +
+              '*' +
+              max_width +
+              'px';
+            return false;
+          } else {
+            const imgBase64Path = e.target.result;
+            this.headerlogoBase64 = imgBase64Path;
+            this.isImageSaved = true;
+            // this.previewImagePath = imgBase64Path;
+          }
+        };
+      };
+      this.setHeaderStyle();
+      // this.getWorkflowWithApproverID();
+      reader.readAsDataURL(fileInput.target.files[0]);
+    }
+  }
+
+  formatBytes(bytes, decimals = 2) {
+    if (bytes === 0) {
+      return '0 Bytes';
+    }
+
+    const k = 1024;
+    const dm = decimals < 0 ? 0 : decimals;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+  }
+
+  deleteSelectedLogo() {
+    this.headerlogoBase64 = '';
+    this.logoFilesize = '';
+    this.logoWidth = 0;
+    this.logoHeight = 0;
+    this.logoFilename = '';
+    this.headerLogoForm.reset();
+  }
+
+  getDSARFormByCRID(responsID) {
+    //  this.loadingbar.start();
+    if (this.orgId && this.propId) {
+      this.ccpaFormConfigService.getCCPAFormConfigByID(this.orgId, this.propId, responsID,
+        this.constructor.name, moduleName.dsarWebFormModule).subscribe((data) => {
+          // tslint:disable-next-line: max-line-length
+          if (this.isResetlinkEnable) {
+            if (this.basicForm.controls['formname'].value !== '') {
+              this.basicForm.controls['formname'].setValue(this.basicForm.controls['formname'].value);
+            }
+          } else {
+            this.formName = data.response.form_name;
+            this.basicForm.controls['formname'].setValue(data.response.form_name);
+          }
+
+          const key = 'request_form';
+          this.webFormControlList = data.response[key];
+          data.response[key].filter((t) => {
+            if (t.controlId === 'fileupload') {
+              this.isFileUploadRequired = t.requiredfield;
+              this.isFileuploadRequiredField = (t.ismandatory === '') ? false : true;
+            } else if (t.controlId === 'captchacontrol') {
+              this.isCaptchaVerificationRequired = t.requiredfield;
+            } else if (t.controlId === 'footertext') {
+              this.footerText = t.footerText;
+              this.footerTextColor = t.footerTextColor;
+              this.footerFontSize = t.footerFontSize;
+              this.editorDataFooter = this.footerText;
+            } else if (t.controlId === 'welcometext') {
+              this.welcomeText = t.welcomeText;
+              this.welcomeTextColor = t.welcomeTextColor;
+              this.welcomeFontSize = t.welcomeFontSize;
+              this.editorDataWelcome = this.welcomeText;
+            } else if (t.controlId === 'headerlogo') {
+              this.headerlogoBase64 = t.logoURL;
+              this.headerColor = t.headerColor;
+            } else if (t.controlId === 'subjecttype') {
+              this.sideMenuSubjectTypeOptions = t.selectOptions;
+              this.lblText = t.controllabel;
+            } else if (t.controlId === 'requesttype') {
+              this.sideMenuRequestTypeOptions = t.selectOptions;
+              this.lblText = t.controllabel;
+            }
+          });
+          this.ccpaFormConfigService.setFormControlList(this.webFormControlList);
+          if (data.response['form_status'] === 'publish') {
+            if (!this.isResetlinkEnable) {
+              this.isWebFormPublished = true;
+              this.isDraftWebForm = false;
+              this.isEditingPublishedForm = false;
+            }
+          } else {
+            this.isWebFormPublished = false;
+            this.isDraftWebForm = true;
+            this.isEditingPublishedForm = true;
+          }
+          this.showFormStatus();
+          // this.loadingbar.stop();
+        }, (error) => {
+          this.alertMsg = error;
+          this.isOpen = true;
+          this.alertType = 'danger';
+        }
+        );
+    }
+  }
+
+  editFormAfterPublish() {
+    this.isEditingPublishedForm = !this.isEditingPublishedForm;
+    this.isWebFormPublished = true;
+    this.isDraftWebForm = true;
+    this.isEditingPublishedForm ? this.isResetlinkEnable = true : this.isResetlinkEnable = false;
+  }
+
+  togglePublish() {
+    if (this.isWebFormPublished) {
+      this.openModal(this.confirmModal);
+    } else {
+      return this.finalPublishDSARForm();
+    }
+  }
+
+  openModal(template: TemplateRef<any>) {
+    this.modalRef = this.bsmodalService.show(template, { class: '' });
+  }
+
+  confirmForEditing() {
+    this.editFormAfterPublish();
+    this.navDirective.select(1);
+    this.modalRef.hide();
+  }
+
+  decline() {
+    this.modalRef.hide();
+  }
+
+  resetWebform() {
+    this.isEditingPublishedForm = !this.isEditingPublishedForm;
+    this.isResetlinkEnable = !this.isResetlinkEnable;
+    this.getDSARFormByCRID(this.crid);
+  }
+
+  disableEditPublishBtn(): boolean {
+    if (!this.isWebFormPublished && this.isEditingPublishedForm && !this.isResetlinkEnable) {
+    //  this.isResetlinkEnable = false;
+      return false;
+    } else if (this.isWebFormPublished && this.isEditingPublishedForm && this.isResetlinkEnable) {
+    //  this.isResetlinkEnable = true;
+      return true;
+    }
+  }
+
+  ngAfterContentChecked(): void {
+    this.cd.detectChanges();
+  }
+
+}
+
+interface CustomControls {
+  [key: string]: any;
+}
+
+

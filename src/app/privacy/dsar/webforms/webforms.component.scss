@@ -1,0 +1,78 @@
+.webformlist ul{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+// .webformlist ul li {
+//     display: flex;
+//     padding: 0;
+// }
+
+.webformlist ul li{
+    display: block;
+    width: 100%;
+    position: relative;
+    padding: 0;
+    margin: 0;
+    list-style-type: none !important;
+}
+
+// .webformlist ul li .card:nth-child(3){
+//     border: 1px solid #f90;
+// }
+
+.webformlist {
+    display: block;
+    width: 100%;
+    position: relative;
+}
+
+.feather-16 {
+    margin-top: 1px;
+}
+
+.cardtext {
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    height: 40px; 
+    padding: 10px;
+}
+
+.txt-bold {
+    font-weight: bold;
+    height: 10px;
+}
+
+.webform-title {
+    font-size: 15px;
+    font-weight: normal;
+    border-bottom: 1px solid #ccc;
+}
+
+
+.alert-success {
+    background-color: #5cb85c;
+ border-color: #4cae4c;
+ color: #fff;
+ padding: 12px 32px 12px 12px !important;
+}
+
+.alert-danger {
+ color: #721c24;
+ background-color: #f8d7da;
+ border-color: #f5c6cb;
+}
+
+.flotingdiv{
+ position: fixed;
+ bottom: 40px;
+ right:10px;
+ overflow-x: hidden;
+ overflow-y: auto;
+ z-index: 0;
+}
+
+.text-capitalize {
+    text-transform: capitalize !important;
+}

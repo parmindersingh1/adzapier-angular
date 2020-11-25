@@ -1,11 +1,11 @@
-
-  
-<app-header></app-header>        
-  
-  <div class="content content-fixed content-auth ">
-      <div class="container">        
-            <router-outlet></router-outlet>        
-      </div><!-- container -->
+<div class="container-fluid">
+  <div class="row">
+    <app-header class="w-100" *ngIf="hideHeaderFooter"></app-header>
+    <div id="main" class="container site-content">
+      <router-outlet></router-outlet>
+      <!-- container -->
     </div><!-- content -->
-  
-<app-footer></app-footer>
+    <ngx-ui-loader></ngx-ui-loader>
+    <app-footer class="w-100" *ngIf="hideHeaderFooter"></app-footer>
+  </div>
+</div>

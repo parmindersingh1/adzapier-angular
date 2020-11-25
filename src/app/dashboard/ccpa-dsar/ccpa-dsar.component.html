@@ -1,0 +1,360 @@
+<div class="container pd-x-0 pd-lg-x-10 pd-xl-x-0">
+  <div class="d-sm-flex align-items-center justify-content-between mg-b-5 mg-lg-b-10 mg-xl-b-15">
+    <div>
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb breadcrumb-style1 mg-b-10">
+          <li class="breadcrumb-item">Privacy</li>
+          <li class="breadcrumb-item">Data Subject Access Request</li>
+          <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
+        </ol>
+      </nav>
+      <h4 class="mg-b-0 tx-spacing--1">DSAR to Dashboard</h4>
+    </div>
+    <div class="d-none d-md-block">
+      <span id="reportrange"
+            style="background: #fff; cursor: pointer; padding: 9px 10px; border: 1px solid #ccc; width: 100%"
+            class="rounded-5">
+        <i class="fa fa-calendar"></i>&nbsp;
+        <span></span> <i class="fa fa-caret-down"></i>
+
+      </span>
+      <button style="width: 110px" (click)="onPrint()" class="btn btn-sm pd-x-15 btn-white btn-uppercase mg-l-5" id="printReport"><i
+        class="fas fa-print" style='font-size:14px'></i> Print
+      </button>
+
+      <button style="width: 110px" (click)="onGetPropsAndOrgId(); onGetCcpaAndDsar(); onGetRequestByState()"
+              class="btn btn-sm pd-x-15 btn-white btn-uppercase mg-l-5"><i class="fas fa-sync"></i> Refresh
+      </button>
+
+
+    </div>
+  </div>
+
+  <div class="row row-xs">
+    <div class="col-sm-6 col-lg-3">
+      <div class="card card-body">
+        <h6 class="tx-uppercase tx-11 tx-spacing-1 tx-color-02 tx-semibold mg-b-8">Request Received</h6>
+        <div class="d-flex d-lg-block d-xl-flex align-items-end">
+          <h3 class="tx-normal tx-rubik mg-b-0 mg-r-5 lh-1">{{dashboardCount.REQUEST_RECEIVED}}</h3>
+          <!-- <p class="tx-11 tx-color-03 mg-b-0"><span class="tx-medium tx-success">100 <i class="icon ion-md-arrow-up"></i></span> than last week</p> -->
+        </div>
+        <div class="chart-three">
+          <div id="flotChart3" class="flot-chart ht-30" style="padding: 0px; position: relative;">
+            <canvas
+              class="flot-base" width="501" height="60"
+              style="direction: ltr; position: absolute; left: 0px; top: 0px; width: 250.5px; height: 30px;"></canvas>
+            <canvas
+              class="flot-overlay" width="501" height="60"
+              style="direction: ltr; position: absolute; left: 0px; top: 0px; width: 250.5px; height: 30px;"></canvas>
+          </div>
+        </div><!-- chart-three -->
+      </div>
+    </div><!-- col -->
+    <div class="col-sm-6 col-lg-3 mg-t-10 mg-sm-t-0">
+      <div class="card card-body">
+        <h6 class="tx-uppercase tx-11 tx-spacing-1 tx-color-02 tx-semibold mg-b-8">Request In PROGRESS</h6>
+        <div class="d-flex d-lg-block d-xl-flex align-items-end">
+          <h3 class="tx-normal tx-rubik mg-b-0 mg-r-5 lh-1">{{dashboardCount.REQUEST_IN_PROGRESS}}</h3>
+          <!-- <p class="tx-11 tx-color-03 mg-b-0"><span class="tx-medium tx-danger">10 <i class="icon ion-md-arrow-down"></i></span> than last week</p> -->
+        </div>
+        <div class="chart-three">
+          <div id="flotChart4" class="flot-chart ht-30" style="padding: 0px; position: relative;">
+            <canvas
+              class="flot-base" width="501" height="60"
+              style="direction: ltr; position: absolute; left: 0px; top: 0px; width: 250.5px; height: 30px;"></canvas>
+            <canvas
+              class="flot-overlay" width="501" height="60"
+              style="direction: ltr; position: absolute; left: 0px; top: 0px; width: 250.5px; height: 30px;"></canvas>
+          </div>
+        </div><!-- chart-three -->
+      </div>
+    </div><!-- col -->
+    <div class="col-sm-6 col-lg-3 mg-t-10 mg-lg-t-0">
+      <div class="card card-body">
+        <h6 class="tx-uppercase tx-11 tx-spacing-1 tx-color-02 tx-semibold mg-b-8">Request Completed</h6>
+        <div class="d-flex d-lg-block d-xl-flex align-items-end">
+          <h3 class="tx-normal tx-rubik mg-b-0 mg-r-5 lh-1">{{dashboardCount.REQUEST_COMPLETED}}</h3>
+          <!-- <p class="tx-11 tx-color-03 mg-b-0"><span class="tx-medium tx-danger">0.3% <i class="icon ion-md-arrow-down"></i></span> than last week</p> -->
+        </div>
+        <div class="chart-three">
+          <div id="flotChart5" class="flot-chart ht-30" style="padding: 0px; position: relative;">
+            <canvas
+              class="flot-base" width="501" height="60"
+              style="direction: ltr; position: absolute; left: 0px; top: 0px; width: 250.5px; height: 30px;"></canvas>
+            <canvas
+              class="flot-overlay" width="501" height="60"
+              style="direction: ltr; position: absolute; left: 0px; top: 0px; width: 250.5px; height: 30px;"></canvas>
+          </div>
+        </div><!-- chart-three -->
+      </div>
+    </div><!-- col -->
+    <div class="col-sm-6 col-lg-3 mg-t-10 mg-lg-t-0">
+      <div class="card card-body">
+        <h6 class="tx-uppercase tx-11 tx-spacing-1 tx-color-02 tx-semibold mg-b-8">Avg. Time to Complete</h6>
+        <div class="d-flex d-lg-block d-xl-flex align-items-end">
+          <h3 class="tx-normal tx-rubik mg-b-0 mg-r-5 lh-1">{{onAvgTime()}} days</h3>
+          <!-- <p class="tx-11 tx-color-03 mg-b-0"><span class="tx-medium tx-success">2.1% <i class="icon ion-md-arrow-up"></i></span> than last week</p> -->
+        </div>
+        <div class="chart-three">
+          <div id="flotChart6" class="flot-chart ht-30" style="padding: 0px; position: relative;">
+            <canvas
+              class="flot-base" width="501" height="60"
+              style="direction: ltr; position: absolute; left: 0px; top: 0px; width: 250.5px; height: 30px;"></canvas>
+            <canvas
+              class="flot-overlay" width="501" height="60"
+              style="direction: ltr; position: absolute; left: 0px; top: 0px; width: 250.5px; height: 30px;"></canvas>
+          </div>
+        </div><!-- chart-three -->
+      </div>
+    </div><!-- col -->
+
+<!--
+    <div *ngIf="skeletonLoading" class="col-md-12 pt-3 card">
+      <div class="card-body">
+        <ngx-skeleton-loader count="3"></ngx-skeleton-loader>
+      </div>
+    </div> -->
+
+
+    <div class="col-lg-8 col-xl-7 mg-t-10">
+      <div class="card chart-height">
+        <div class="card-header pd-y-15 d-md-flex align-items-center justify-content-between">
+          <h6 class="mg-b-0">Requests</h6>
+        </div>
+<!--        <h6 class="mg-b-0"> Requests</h6>-->
+      <ng-container *ngIf="!skeletonLoading">
+        <div *ngIf="!requestChartError; else noChart" class="chart-one mt-1">
+          <canvas baseChart
+                  [datasets]="lineChartData"
+                  [labels]="lineChartLabels"
+                  [options]="lineChartOptions"
+                  [colors]="lineChartColors"
+                  [legend]="lineChartLegend"
+                  [chartType]="lineChartType"
+                  [plugins]="lineChartPlugins">
+          </canvas>
+        </div>
+        <ng-template #noChart>
+          <div class="text-center mt-5">
+            <img src="assets/imgs/dash.png" style="width: 100px">
+            <h6> No Record</h6>
+          </div>
+        </ng-template>
+      </ng-container>
+          <ng-container *ngIf="skeletonLoading">
+        <ngx-skeleton-loader class="p-4 pb-0" count="7"></ngx-skeleton-loader>
+        </ng-container>
+      </div><!-- card -->
+    </div>
+    <div class="col-md-6 col-lg-6 col-xl-5 mg-t-10">
+      <div  class="card chart-height">
+        <div class="card-header">
+          <h6 class="mg-b-0">Request Type</h6>
+        </div><!-- card-header -->
+        <ng-container *ngIf="!skeletonLoading">
+        <div *ngIf="requestType.length > 0" class="card-body pd-lg-25">
+          <canvas baseChart height="140"
+                  [data]="doughnutChartData"
+                  [colors]="doughnutColors"
+                  [options]="doughnutChartOptions"
+                  [labels]="doughnutChartLabels"
+                  [chartType]="doughnutChartType">
+          </canvas>
+        </div><!-- card-body -->
+
+        <div *ngIf="requestType.length > 0" class="card-footer pd-20">
+          <div class="row">
+
+            <div *ngFor="let obj of requestType" class="col-4">
+              <p class="tx-10 tx-uppercase tx-medium tx-color-03 tx-spacing-1 tx-nowrap mg-b-5">{{obj.label}}
+              </p>
+              <div class="d-flex align-items-center">
+                <div  [ngStyle]="{ background: obj.color }" class="wd-10 ht-10 rounded-circle mg-r-5"></div>
+                <h5 class="tx-normal tx-rubik mg-b-0">{{obj.value}} </h5>
+              </div>
+            </div>
+          </div><!-- row -->
+        </div>
+        <div *ngIf="requestType.length === 0" class="text-center mt-5">
+          <img src="assets/imgs/dash.png" style="width: 100px">
+          <h6> No Record</h6>
+        </div>
+        </ng-container>
+        <ng-container *ngIf="skeletonLoading">
+          <ngx-skeleton-loader class="p-4 pb-0" count="7"></ngx-skeleton-loader>
+        </ng-container>
+
+      </div><!-- card -->
+
+    </div>
+    <div class="div-height col-md-6 col-xl-4 mg-t-10 order-md-1 order-xl-0">
+      <div class="card card-height">
+        <div class="card-header state-header d-flex align-items-center justify-content-between">
+          <h6 class="mg-b-0">Request By State</h6>
+          <div class="tx-13 d-flex align-items-center">
+            <div class="btn-group" dropdown>
+
+              <select (change)="onSelectCountry($event)" class=" country-dropdown form-control" id="sel1">
+                <option value="usa">USA</option>
+                <option value="world">World</option>
+              </select>
+            </div>
+          </div>
+        </div><!-- card-header -->
+        <!--        <ng-container *ngIf="stateList.length > 0; else noStateList">-->
+        <div class="card-body pd-0">
+          <div class="pd-y-25 pd-x-20">
+            <div id="vmap" *ngIf="currentState === 'usa'" class="ht-200"></div>
+            <div id="worldMap" *ngIf="currentState !== 'usa'" class="ht-200"></div>
+          </div>
+
+
+
+          <div *ngIf="currentState === 'usa' && stateList.length > 0" class="table-responsive state-count-list">
+            <table class="table table-borderless table-dashboard table-dashboard-one">
+              <thead>
+              <tr>
+                <th class="wd-25">States</th>
+                <th class="wd-25 ">Count</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr *ngFor="let state of stateList">
+                <td class="tx-medium">{{state.statename}}</td>
+                <td class="">{{state.count}}</td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+
+
+
+          <div *ngIf="currentState !== 'usa' && countryList.length > 0" class="table-responsive state-count-list">
+            <table class="table table-borderless table-dashboard table-dashboard-one">
+              <thead>
+              <tr>
+                <th class="wd-25">Country</th>
+                <th class="wd-25 ">Count</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr *ngFor="let countryData of countryList">
+                <td class="tx-medium">{{countryData.countryname}}</td>
+                <td class="">{{countryData.count}}</td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+
+
+        </div><!-- card-body -->
+        <!--        </ng-container>-->
+        <!--        <ng-template #noStateList>-->
+        <!--            <p>No Record Found</p>-->
+        <!--        </ng-template>-->
+      </div><!-- card -->
+    </div><!-- col -->
+
+    <div class="div-height col-md-6 col-xl-4 mg-t-10">
+      <div class="card ht-lg-100p">
+        <div class="card-header d-flex align-items-center justify-content-between">
+          <h6 class="mg-b-0">Requests By Subject Type</h6>
+
+        </div><!-- card-header -->
+        <ng-container *ngIf="!skeletonLoading">
+        <div  *ngIf="subjectType.length > 0" class="card-body pd-b-0">
+          <canvas baseChart height="200"
+                  [data]="pieChartData"
+                  [labels]="pieChartLabels"
+                  [chartType]="pieChartType"
+                  [colors]="pieColors"
+                  [options]="pieChartOptions"
+                  [plugins]="pieChartPlugins"
+                  [legend]="pieChartLegend">
+          </canvas>
+        </div><!-- card-body -->
+
+
+        <div *ngIf="subjectType.length > 0" class="card-footer pd-20">
+          <div class="row">
+
+            <div *ngFor="let obj of subjectType" class="col-4">
+              <p class="tx-10 tx-uppercase tx-medium tx-color-03 tx-spacing-1 tx-nowrap mg-b-5">{{obj.label}}
+              </p>
+              <div class="d-flex align-items-center">
+                <div [ngStyle]="{ background: obj.color }" class="wd-10 ht-10 rounded-circle mg-r-5"></div>
+                <h5 class="tx-normal tx-rubik mg-b-0">{{obj.value}} </h5>
+              </div>
+            </div>
+          </div><!-- row -->
+        </div>
+        <div *ngIf="subjectType.length === 0" class="text-center mt-5">
+          <img src="assets/imgs/dash.png" style="width: 100px">
+          <h6> No Record</h6>
+        </div>
+        </ng-container>
+        <ng-container *ngIf="skeletonLoading">
+          <ngx-skeleton-loader class="p-4 pb-0" count="10"></ngx-skeleton-loader>
+        </ng-container>
+      </div>
+    </div>
+
+
+    <div class="div-height col-md-6 col-xl-4 mg-t-10">
+      <div class="card ht-100p">
+        <div class="card-header d-flex align-items-center justify-content-between">
+          <h6 class="mg-b-0">Requests</h6>
+          <div class="d-flex tx-18">
+            <a href="" class="link-03 lh-0"><i class="icon ion-md-refresh"></i></a>
+            <a href="" class="link-03 lh-0 mg-l-10"><i class="icon ion-md-more"></i></a>
+          </div>
+        </div>
+        <ng-container *ngIf="!skeletonLoading">
+        <ng-container *ngIf="Requests.length > 0; else noRequests">
+          <ul class="list-group list-group-flush tx-13">
+            <li *ngFor="let request of Requests | slice:0:6" class="list-group-item d-flex pd-sm-x-20">
+              <div class="avatar d-none d-sm-block">
+                <span *ngIf="request.status ==='New'" class="avatar-initial rounded-circle bg-primary">
+                  <i class="fas fa-plus"></i>
+                </span>
+                <span *ngIf="request.status ==='InProgress'" class="avatar-initial rounded-circle bg-orange op-5">
+                  <i class="fas fa-sync"></i>
+                </span>
+                <span *ngIf="request.status ==='Completed'" class="avatar-initial rounded-circle bg-teal">
+                  <i class="fas fa-check"></i>
+                </span>
+              </div>
+
+              <div class="pd-sm-l-10">
+                <p style="text-transform: capitalize" class="tx-medium mg-b-0">{{request.name}}</p>
+                <small class="tx-12 tx-color-03 mg-b-0">{{request.time | timeAgo}}</small>
+              </div>
+              <div class="mg-l-auto text-right">
+                <p class="tx-medium mg-b-0">Status</p>
+                <small *ngIf="request.status === 'In Progress'; else success"
+                       class="tx-12 tx-orange mg-b-0">In Progress</small>
+                <ng-template #success>
+                  <small class="tx-12 tx-success mg-b-0">{{request.status}}</small>
+                </ng-template>
+              </div>
+            </li>
+          </ul>
+          <div class="card-footer text-center tx-13">
+            <a routerLink="/privacy/dsar/dsar-requests" class="link-03">View All Transactions <i
+              class="icon ion-md-arrow-down mg-l-5"></i></a>
+          </div><!-- card-footer -->
+        </ng-container>
+        <ng-template #noRequests>
+          <p class="text-center mt-5">No Record Found</p>
+        </ng-template>
+        </ng-container>
+        <ng-container *ngIf="skeletonLoading">
+          <ngx-skeleton-loader class="p-4 pb-0" count="10"></ngx-skeleton-loader>
+        </ng-container>
+      </div><!-- card -->
+    </div>
+  </div><!-- row -->
+</div>
+<div class="col-sm-5 mt-3 mr-0 float-right">
+  <alert *ngIf="isOpen" [type]="alertType"  dismissOnTimeout="5000" [dismissible]="dismissible" (onClosed)="onClosed(alertMsg)">{{  alertMsg}}</alert>
+</div>
