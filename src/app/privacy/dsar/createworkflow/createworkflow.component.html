@@ -47,12 +47,12 @@
                         </div>
                         <app-customtabs *ngIf="!skeletonLoading"  [flowStatus]="workflowStatus" [inputData]="workflowStages" [currentTab]="order"
                             (currentStageEvent)="clickOnWorkflowStages($event)">
-                        </app-customtabs>
+                        </app-customtabs>                        
                     </ng-container>
-                   
+                    <span *ngIf="!skeletonLoading && workflowStages?.length === 0" class="nodatafound">No data found</span>
                     <div class="col-sm-6 mb-3">
                         <form #quillEditorForm="ngForm">
-                            <div  [class.hide]="!skeletonLoading && !quillEditorForm.valid">
+                            <div [ngClass]="{'hide':!skeletonLoading && !quillEditorForm.valid && workflowStages?.length == 0,'showerror':!skeletonLoading && !quillEditorForm.valid && workflowStages?.length != 0}">
                             <label class="tx-10 tx-uppercase tx-medium"> <span class="red">*</span>
                                 Stage</label>
                             <input type="text" [(ngModel)]="stageTitle"  #stage_title="ngModel" name="stageTitle" (keyup)="update($event)"
