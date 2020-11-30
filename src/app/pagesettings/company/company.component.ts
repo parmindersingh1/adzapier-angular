@@ -56,6 +56,7 @@ export class CompanyComponent implements OnInit {
   confirmTeammember: any;
   selectedTeamMember: any;
   controlname: string;
+  userList: any = [];
   constructor(private companyService: CompanyService, private modalService: NgbModal,
               private formBuilder: FormBuilder,
               private userService: UserService,
@@ -92,6 +93,7 @@ export class CompanyComponent implements OnInit {
     this.loadCompanyDetails();
     this.pathValues();
     this.loadCompanyTeamMembers();
+    this.loadUserListForInvitation();
   }
   get f() { return this.companyForm.controls; }
   get userInvite() { return this.inviteUserForm.controls; }
@@ -217,7 +219,7 @@ export class CompanyComponent implements OnInit {
               this.isUpdateUserinvitation = false;
             }
           }, (error) => {
-            this.alertMsg = JSON.stringify(error);
+            this.alertMsg = error;
             this.isOpen = true;
             this.alertType = 'danger';
             this.onCancelClick();
@@ -344,6 +346,12 @@ export class CompanyComponent implements OnInit {
       this.alertMsg = err;
       this.isOpen = true;
       this.alertType = 'danger';
+    });
+  }
+
+  loadUserListForInvitation() {
+    this.companyService.getUserList(this.constructor.name, moduleName.companyModule).subscribe((data) => {
+      this.userList = data.response;
     });
   }
 

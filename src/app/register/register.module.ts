@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { RegisterRoutingModule } from './register-routing.module';
 import { RegisterComponent } from './register.component';
-import {AlertModule} from 'ngx-bootstrap/alert';
+import { AlertConfig, AlertModule} from 'ngx-bootstrap/alert';
 
 @NgModule({
   declarations: [RegisterComponent],
@@ -12,7 +12,8 @@ import {AlertModule} from 'ngx-bootstrap/alert';
     ReactiveFormsModule,
     FormsModule,
     RegisterRoutingModule,
-    AlertModule,
-  ]
+    AlertModule
+  ],
+  providers: [AlertConfig]
 })
 export class RegisterModule { }

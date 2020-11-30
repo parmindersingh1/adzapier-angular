@@ -1019,7 +1019,9 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
       return false;
     }
     console.log(subtaskForm.value, 'sv..');
-    const currentStageID = this.currentStageId ? this.currentStageId : this.currentWorkflowStageID;
+    let currentStageID;
+    this.isConfirmed ? currentStageID = this.currentWorkflowStageID : currentStageID = this.currentStageId;
+   // const currentStageID = this.currentStageId ? this.currentStageId : this.currentWorkflowStageID;
     if (currentStageID) {
       const obj = {
         assignee: subtaskForm.value.assignee,

@@ -89,3 +89,10 @@
 .height28 {
     height: 28px;
 }
+
+:host ::ng-deep typeahead-container.dropdown-menu {
+    left: 50% !important;
+    transform: translateX(-50%);
+}
+
+ 
