@@ -394,11 +394,11 @@
                                         </div>
 
                                         <div class="col-sm-12 mb-1">
-                                            <div class="formgroup row">
-                                                <div class="col-md-5">
+                                            <div class="formgroup d-flex justify-content">
+                                                <div class="col-md-5 p-0">
                                                     <label class="col-form-label-sm tx-10 tx-uppercase tx-medium tx-spacing-1">Header Color</label>
                                                 </div>
-                                                <div class="col-md-7 d-flex color-controlwrapper">
+                                                <div class="col-md-6 d-flex color-controlwrapper">
                                                     <input type="color" [(ngModel)]="headerColor" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null" />
                                                     <input type="text" class="form-control form-control-sm ml-1" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm? '' : null"
                                                     [(ngModel)]="headerColor" />
@@ -407,11 +407,11 @@
                                             </div>
                                         </div>
                                         <div class="col-sm-12 mb-1">
-                                            <div class="formgroup row">
-                                                <div class="col-md-5">
+                                            <div class="formgroup d-flex justify-content">
+                                                <div class="col-md-5 p-0">
                                                     <label class="col-form-label-sm tx-10 tx-uppercase tx-medium tx-spacing-1">Welcome Text Color</label>
                                                 </div>
-                                                <div class="col-md-7 d-flex color-controlwrapper"><input type="color" class="form-control" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
+                                                <div class="col-md-6 d-flex color-controlwrapper"><input type="color" class="form-control" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
                                                         [(ngModel)]="welcomeTextColor" />
                                                         <input type="text" class="form-control form-control-sm ml-1" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
                                                         [(ngModel)]="welcomeTextColor" />
@@ -419,11 +419,11 @@
                                             </div>
                                         </div>
                                         <div class="col-sm-12 mb-1">
-                                            <div class="formgroup row">
+                                            <div class="formgroup row justify-content">
                                                 <div class="col-md-5">
                                                     <label class="col-form-label-sm tx-10 tx-uppercase tx-medium tx-spacing-1">Welcome Font Size </label>
                                                 </div>
-                                                <div class="col-sm-3 offset-md-4">
+                                                <div class="col-sm-3">
                                                     <input type="number" min="13" max="20" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
                                                         class="form-control form-control-sm h-75"
                                                         [(ngModel)]="welcomeFontSize" />
@@ -431,11 +431,11 @@
                                             </div>
                                         </div>
                                         <div class="col-sm-12 mb-1">
-                                            <div class="formgroup row">
-                                                <div class="col-md-5">
+                                            <div class="formgroup d-flex justify-content">
+                                                <div class="col-md-5 p-0">
                                                     <label class="col-form-label-sm tx-10 tx-uppercase tx-medium tx-spacing-1">Footer Text Color</label>
                                                 </div>
-                                                <div class="col-md-7 d-flex color-controlwrapper">
+                                                <div class="col-md-6 d-flex color-controlwrapper">
                                                     <input type="color" [(ngModel)]="footerTextColor" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null" />
                                                     <input type="text" class="form-control form-control-sm ml-1" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm? '' : null"
                                                         [(ngModel)]="footerTextColor" />
@@ -443,11 +443,11 @@
                                             </div>
                                         </div>
                                         <div class="col-sm-12 mb-1">
-                                            <div class="formgroup row">
+                                            <div class="formgroup row justify-content">
                                                 <div class="col-md-5">
                                                     <label class="col-form-label-sm tx-10 tx-uppercase tx-medium tx-spacing-1">Footer Text Size</label>
                                                 </div>
-                                                <div class="col-md-3 offset-md-4">
+                                                <div class="col-sm-3">
                                                     <input type="number" min="13" max="20"
                                                         class="form-control form-control-sm h-75" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
                                                         [(ngModel)]="footerFontSize" />
@@ -494,7 +494,7 @@
                 </div>
                 <div class="col-sm-8">
                     <!-- webFormControlList  {{webFormControlList | json}} -->
-                    <div class="headerwrapper"> 
+                    <div class="headerwrapper">
                         <div  class="logocontainer pd-10" [style.background-color]="headerColor">
                                 <img *ngIf="headerlogoBase64" class="img-responsive logowidth" 
                                 [src]="transform(headerlogoBase64)" width="150px" />
@@ -696,7 +696,7 @@
                                     [ngClass]="{'displaynone':!webcontrol.requiredfield,'':webcontrol.requiredfield ||isFileUploadRequired}"
                                     *ngIf="webcontrol.requiredfield && webcontrol.controlId == 'fileupload'">
                                     <label class="form-check-label"><span *ngIf="webcontrol.ismandatory"
-                                            class="color-red">*</span> {{webcontrol.controllabel}}</label>
+                                            class="color-red">*</span>{{webcontrol.controllabel}}</label>
                                     <div class="input-group">
                                         <div class="custom-file">
                                             <input type="file" class="custom-file-input" (change)="uploadFile($event)"

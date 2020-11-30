@@ -79,6 +79,7 @@ export class OrganizationdetailsComponent implements OnInit {
   confirmProperty: any;
   confirmTeammember: any;
   selectedTeamMember: any;
+  userList: any = [];
   constructor(private activatedRoute: ActivatedRoute,
               private orgService: OrganizationService,
               private modalService: NgbModal,
@@ -153,7 +154,7 @@ export class OrganizationdetailsComponent implements OnInit {
     this.confirmationForm = this.formBuilder.group({
       userInput: ['', [Validators.required]]
     });
-    this.loadUserList();
+    this.loadUserListForInvitation();
   }
   get f() { return this.inviteUserOrgForm.controls; }
   get orgProp() { return this.organisationPropertyForm.controls; }
@@ -478,9 +479,9 @@ export class OrganizationdetailsComponent implements OnInit {
     });
   }
 
-  loadUserList() {
-    this.companyService.getUserList(this.constructor.name, moduleName.organizationDetailsModule).subscribe((data) => {
-      console.log(data,'data..');
+  loadUserListForInvitation() {
+    this.companyService.getUserList(this.constructor.name, moduleName.companyModule).subscribe((data) => {
+      this.userList = data.response;
     });
   }
 

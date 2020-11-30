@@ -129,14 +129,17 @@
     <div class="modal-body">
         <div>Enter the email addresses of the users you'd like to invite, and choose the role they should have.
         </div>
-        <form [formGroup]="inviteUserOrgForm" (ngSubmit)="onSubmitInviteUserOrganization()">
+        <form [formGroup]="inviteUserOrgForm" autocomplete="off" (ngSubmit)="onSubmitInviteUserOrganization()">
             <div class="row">
                 <div class="col-sm-12">
                     <div class="form-group">
                         <label for="emailid" class="d-block">Email Id</label>
-                        <input type="text" formControlName="emailid" name="emailid" class="form-control"
-                            placeholder="Enter email id" pattern="^\w+@[a-zA-Z_0-9]+?\.[a-zA-Z]{2,3}$"
-                            [ngClass]="{ 'is-invalid': submitted && f.emailid.errors }" />
+                        <input type="text" formControlName="emailid" name="emailid" [typeahead]="userList"
+                        typeaheadOptionField="email" [typeaheadScrollable]="true" [typeaheadOptionsInScrollableView]="5"
+                        placeholder="type and search country"
+                                class="form-control" placeholder="Enter email id"
+                                pattern="^\w+@[a-zA-Z_0-9]+?\.[a-zA-Z]{2,3}$"
+                                [ngClass]="{ 'is-invalid': submitted && f.emailid.errors }" />
                         <div *ngIf="submitted && f.emailid.errors" class="invalid-feedback">
                             <div *ngIf="f.emailid.errors.required">Email Address is required</div>
                             <div *ngIf="f.emailid.errors.pattern">Please enter valid email address</div>

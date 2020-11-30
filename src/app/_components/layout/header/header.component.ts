@@ -113,7 +113,7 @@ export class HeaderComponent implements OnInit {
         this.userRole = this.currentUser.response.role;
         this.userID = this.currentUser.response.uid;
         this.loadOrganizationWithProperty();
-
+        this.loadNotification();
       }
     });
     this.orgservice.emitUpdatedOrgList.subscribe((data) => {
@@ -130,7 +130,7 @@ export class HeaderComponent implements OnInit {
       }, {
         showlink: 'Contact Us', routerLink: '/contactus'
       }];
-    this.loadNotification();
+
   }
 
   logout() {
