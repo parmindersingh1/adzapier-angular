@@ -45,6 +45,7 @@ export class CompanyteamComponent implements OnInit {
   confirmTeammember: any;
   selectedTeamMember: any;
   controlname: string;
+  userList: any = [];
   constructor(private companyService: CompanyService, private modalService: NgbModal,
               private formBuilder: FormBuilder,
               private userService: UserService,
@@ -79,6 +80,7 @@ export class CompanyteamComponent implements OnInit {
       userInput: ['', [Validators.required]]
     });
     this.loadCompanyTeamMembers();
+    this.loadUserListForInvitation();
   }
   get confirmDelete() { return this.confirmationForm.controls; }
   get userInvite() { return this.inviteUserForm.controls; }
@@ -321,6 +323,12 @@ export class CompanyteamComponent implements OnInit {
     if (this.controlname === 'team member') {
       return this.selectedTeamMember;
     }
+  }
+
+  loadUserListForInvitation() {
+    this.companyService.getUserList(this.constructor.name, moduleName.companyModule).subscribe((data) => {
+      this.userList = data.response;
+    });
   }
 
 }

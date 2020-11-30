@@ -1016,7 +1016,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
     if (this.isWebFormPublished && !this.isEditingPublishedForm) {
       this.navDirective.select(3);
     } else {
-    //  this.isResetlinkEnable = !this.isResetlinkEnable;
+      //  this.isResetlinkEnable = !this.isResetlinkEnable;
       this.isdraftsubmitted = false;
       this.setHeaderStyle();
       if (this.crid) {
@@ -1030,6 +1030,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
             t.welcomeFontSize = this.welcomeFontSize;
           }
         });
+        this.ccpaFormConfigService.setFormControlList(this.webFormControlList);
         this.updateWebcontrolIndex(registerForm.value, this.webFormControlList);
       } else {
         this.webFormControlList = this.dsarFormService.getFormControlList();
@@ -1042,6 +1043,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
             t.welcomeFontSize = this.welcomeFontSize;
           }
         });
+        this.dsarFormService.setFormControlList(this.webFormControlList);
         this.updateWebcontrolIndex(registerForm.value, this.webFormControlList);
       }
       this.isWebFormPublished = false;
@@ -1059,11 +1061,8 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
       if (this.defaultapprover === undefined) {
         return false;
       } else {
-        if (this.crid) {
-          this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
-        } else {
-          this.webFormControlList = this.dsarFormService.getFormControlList();
-        }
+
+        const updatedWebForm = this.crid ? this.ccpaFormConfigService.getFormControlList() : this.dsarFormService.getFormControlList();
         this.formObject = {
           form_name: this.formName,
           form_status: 'draft',
@@ -1074,7 +1073,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
             email_verified: this.isEmailVerificationRequired || false,
             captcha: this.isCaptchaVerificationRequired || false,
           },
-          request_form: this.webFormControlList
+          request_form: updatedWebForm
         };
         if (this.orgId !== undefined && this.propId !== undefined && this.crid !== null) {
           this.loadingbar.start();
@@ -1129,6 +1128,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
         this.isOpen = true;
         this.alertType = 'danger';
       }
+      this.formName = this.basicForm.controls['formname'].value;
 
     } else if (changeEvent.nextId === 3) {
       if (this.isEditingPublishedForm) {
@@ -1383,8 +1383,13 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
   }
 
   onPrevious(tabid) {
-    if (this.crid) {
-      this.getDSARFormByCRID(this.crid);
+    if (tabid === 2) {
+     if (this.crid) {
+        this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
+      } else {
+        this.webFormControlList = this.dsarFormService.getFormControlList();
+      }
+     // this.getDSARFormByCRID(this.crid);
     }
     this.navDirective.select(tabid);
   }
@@ -1539,6 +1544,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
   onCheckboxChangeUpload($event) {
     this.isFileuploadRequiredField = $event.target.checked;
     if (this.crid) {
+      this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
       const customControlIndex = this.webFormControlList.findIndex((t) => t.controlId === 'fileupload');
       const updateobj = this.webFormControlList[customControlIndex];
       updateobj.ismandatory = this.isFileuploadRequiredField ? true : false;

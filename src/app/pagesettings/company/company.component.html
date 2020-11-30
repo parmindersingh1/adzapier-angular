@@ -159,28 +159,28 @@
                         </tr>
                     </tbody>
                 </table>
-                
- <div class="pagination-wrapper">
-    <div class="col-4 pl-0">
-        <div class="form-inline">
-            <div class="form-group pr-0">
-                <label class="col-sm-5 col-form-label" for="name">View</label>
-                <select id="PerPage" class="form-control" [(ngModel)]="pageSize"
-                    (change)="onChangeEvent($event)">
-                    <option value="5">5</option>
-                    <option value="10">10</option>
-                    <option value="15">15</option>
-                </select>
+
+                <div class="pagination-wrapper">
+                    <div class="col-4 pl-0">
+                        <div class="form-inline">
+                            <div class="form-group pr-0">
+                                <label class="col-sm-5 col-form-label" for="name">View</label>
+                                <select id="PerPage" class="form-control" [(ngModel)]="pageSize"
+                                    (change)="onChangeEvent($event)">
+                                    <option value="5">5</option>
+                                    <option value="10">10</option>
+                                    <option value="15">15</option>
+                                </select>
+                            </div>
+                            <div class="row col-md-5"><label class="d-block">records at a time</label></div>
+                        </div>
+                    </div>
+                    <div class="height28">
+                        <pagination-controls (pageChange)="pageChangeEvent($event)"></pagination-controls>
+                    </div>
+                </div>
             </div>
-            <div class="row col-md-5"><label class="d-block">records at a time</label></div>
-        </div>
-    </div>
-    <div class="height28">
-    <pagination-controls (pageChange)="pageChangeEvent($event)"></pagination-controls>
-    </div>
-    </div>
-            </div>
-            
+
         </div>
     </div>
 </div>
@@ -197,14 +197,15 @@
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label for="orgname" class="d-block">Company Name</label>
-                        <input type="text" formControlName="orgname" name="orgname" [(ngModel)]="orgname" minlength="2" maxlength="20"
-                            class="form-control" placeholder="Enter your company name"
+                        <input type="text" formControlName="orgname" name="orgname" [(ngModel)]="orgname" minlength="2"
+                            maxlength="20" class="form-control" placeholder="Enter your company name"
                             [ngClass]="{ 'is-invalid': submitted && f.orgname.errors }" />
                         <div *ngIf="submitted && f.orgname.errors" class="invalid-feedback">
                             <div *ngIf="f.orgname.errors.required">Company Name is required</div>
                             <div *ngIf="f.orgname.errors.pattern">Company Name allow only alphanumeric</div>
                             <div *ngIf="f.orgname.errors.minlength">Company must be at least 2 characters long.</div>
-                            <div *ngIf="f.orgname.errors.maxlength">Company should not be greater than 20 characters.</div>
+                            <div *ngIf="f.orgname.errors.maxlength">Company should not be greater than 20 characters.
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -221,23 +222,24 @@
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label for="addressone">Address 1</label>
-                        <input type="text" formControlName="address1" class="form-control"  minlength="6" maxlength="200"
+                        <input type="text" formControlName="address1" class="form-control" minlength="6" maxlength="200"
                             [ngClass]="{ 'is-invalid': submitted && f.address1.errors }"
                             placeholder="Enter your address" />
                         <div *ngIf="submitted && f.address1.errors" class="invalid-feedback">
                             <div *ngIf="f.address1.errors.required">Address 1 is required</div>
                             <div *ngIf="f.address1.errors.pattern">Address 1 allow only alphanumeric</div>
                             <div *ngIf="f.address1.errors.minlength">Address 1 must be at least 6 characters long.</div>
-                          <div *ngIf="f.address1.errors.maxlength">Address 1 should not be greater than 200 characters.</div>
+                            <div *ngIf="f.address1.errors.maxlength">Address 1 should not be greater than 200
+                                characters.</div>
                         </div>
                     </div>
                 </div>
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label for="address2">Address 2</label>
-                        <input type="text" formControlName="address2" class="form-control"                           
+                        <input type="text" formControlName="address2" class="form-control"
                             placeholder="Enter your address" />
-                         
+
                     </div>
                 </div>
 
@@ -270,9 +272,9 @@
             <div class="row">
                 <div class="col-sm-6">
                     <div class="form-group"><label for="email">Email</label>
-                        <input type="text" class="form-control"  formControlName="email"
-                        pattern="^\w+@[a-zA-Z_0-9]+?\.[a-zA-Z]{2,3}$"
-                        name="email" [ngClass]="{ 'is-invalid': submitted && f.email.errors }" />
+                        <input type="text" class="form-control" formControlName="email"
+                            pattern="^\w+@[a-zA-Z_0-9]+?\.[a-zA-Z]{2,3}$" name="email"
+                            [ngClass]="{ 'is-invalid': submitted && f.email.errors }" />
                         <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
                             <div *ngIf="f.email.errors.required">Email is required</div>
                             <div *ngIf="f.email.errors.pattern">Please enter valid email address</div>
@@ -281,8 +283,8 @@
                 </div>
                 <div class="col-sm-6">
                     <div class="form-group"><label for="phone">Phone</label>
-                        <input type="text" class="form-control"  formControlName="phone"
-                        name="phone" [ngClass]="{ 'is-invalid': submitted && f.phone.errors }" />
+                        <input type="text" class="form-control" formControlName="phone" name="phone"
+                            [ngClass]="{ 'is-invalid': submitted && f.phone.errors }" />
                         <div *ngIf="submitted && f.phone.errors" class="invalid-feedback">
                             <div *ngIf="f.phone.errors.required">Phone is required</div>
                         </div>
@@ -319,7 +321,8 @@
 
 <ng-template #inviteuserModal let-modal>
     <div class="modal-header">
-        <h4 class="modal-title" id="modal-basic-title" *ngIf="!isUpdateUserinvitation;else editInviteUserHeading">Invite New User</h4>
+        <h4 class="modal-title" id="modal-basic-title" *ngIf="!isUpdateUserinvitation;else editInviteUserHeading">Invite
+            New User</h4>
         <ng-template #editInviteUserHeading>
             <h4 class="modal-title" id="modal-basic-title">Update user</h4>
         </ng-template>
@@ -330,12 +333,14 @@
     <div class="modal-body">
         <div>Enter the email addresses of the users you'd like to invite, and choose the role they should have.
         </div>
-        <form [formGroup]="inviteUserForm" (ngSubmit)="onSubmitInviteUser()">
+        <form [formGroup]="inviteUserForm" autocomplete="off" (ngSubmit)="onSubmitInviteUser()">
             <div class="row">
                 <div class="col-sm-12">
                     <div class="form-group">
                         <label for="emailid" class="d-block">Email Id</label>
-                        <input type="text" formControlName="emailid" name="emailid" 
+                    <input type="text" formControlName="emailid" name="emailid" [typeahead]="userList"
+                    typeaheadOptionField="email" [typeaheadScrollable]="true" [typeaheadOptionsInScrollableView]="5"
+                    placeholder="type and search country"
                             class="form-control" placeholder="Enter email id"
                             pattern="^\w+@[a-zA-Z_0-9]+?\.[a-zA-Z]{2,3}$"
                             [ngClass]="{ 'is-invalid': isInviteFormSubmitted && userInvite.emailid.errors }" />
@@ -358,9 +363,8 @@
 
             </div>
             <div class="float-right">
-            <button class="btn btn-outline-dark btn-xs mr-2"
-            (click)="onCancelClick()">Cancel</button>
-            <button class="btn btn-primary btn-xs" type="submit">Submit</button>
+                <button class="btn btn-outline-dark btn-xs mr-2" (click)="onCancelClick()">Cancel</button>
+                <button class="btn btn-primary btn-xs" type="submit">Submit</button>
             </div>
         </form>
     </div>
@@ -376,21 +380,22 @@
     <div class="modal-body text-center">
         <p> This will delete selected 
             <span class="font-weight-bold"> {{showControlContent()}}</span>
-             <!-- <span class="font-weight-bold">{{controlname === 'team member' ? selectedTeamMember : organizationName}}</span>
+            <!-- <span class="font-weight-bold">{{controlname === 'team member' ? selectedTeamMember : organizationName}}</span>
              <span class="font-weight-bold"> {{controlname === 'organization' ? organizationName : confirmProperty}}</span> -->
-             {{controlname}}</p>
+            {{controlname}}</p>
         <p>Please type <strong>'Delete'</strong> to confirm</p>
 
         <form [formGroup]="confirmationForm" (ngSubmit)="onSubmitConfirmation(controlname)">
             <input type="text" class="form-control" formControlName="userInput" name="userInput" required
                 [ngClass]="{ 'is-invalid': isconfirmationsubmitted && confirmDelete.userInput.value !== 'Delete' }" />
-            <div *ngIf="isconfirmationsubmitted && confirmDelete.userInput.value !== 'Delete'" class="invalid-feedback text-left">
+            <div *ngIf="isconfirmationsubmitted && confirmDelete.userInput.value !== 'Delete'"
+                class="invalid-feedback text-left">
                 Enter appropriate text
             </div>
             <div class="mt-2 d-flex">
-                    <button class="btn btn-xs btn-primary btn-block" *ngIf="controlname == 'team member'">I understand the
-                        consequences, delete this
-                        {{controlname}}</button>
+                <button class="btn btn-xs btn-primary btn-block" *ngIf="controlname == 'team member'">I understand the
+                    consequences, delete this
+                    {{controlname}}</button>
             </div>
         </form>
     </div>

@@ -128,12 +128,13 @@
     <div class="modal-body">
         <div>Enter the email addresses of the users you'd like to invite, and choose the role they should have.
         </div>
-        <form [formGroup]="inviteUserForm" (ngSubmit)="onSubmitInviteUser()">
+        <form [formGroup]="inviteUserForm" autocomplete="off" (ngSubmit)="onSubmitInviteUser()">
             <div class="row">
                 <div class="col-sm-12">
                     <div class="form-group">
                         <label for="emailid" class="d-block">Email Id</label>
-                        <input type="text" formControlName="emailid" name="emailid" 
+                        <input type="text" formControlName="emailid" name="emailid" [typeahead]="userList"
+                        typeaheadOptionField="email" [typeaheadScrollable]="true" [typeaheadOptionsInScrollableView]="5"
                             class="form-control" placeholder="Enter email id"
                             pattern="^\w+@[a-zA-Z_0-9]+?\.[a-zA-Z]{2,3}$"
                             [ngClass]="{ 'is-invalid': isInviteFormSubmitted && userInvite.emailid.errors }" />

@@ -911,6 +911,7 @@ span.previewbtn a {
 .color-controlwrapper input[type=color] {
   width: 36px;
   height: 30px;
+  min-width: 30px;
 }
 
 .color-controlwrapper .form-control-sm {
@@ -927,4 +928,8 @@ span.previewbtn a {
   font-weight: bold;
   text-transform: uppercase;
   font-size: 12px;
+}
+
+.justify-content {
+  justify-content: flex-start;
 }
