@@ -73,6 +73,7 @@ export class HeaderComponent implements OnInit {
         this.getLoggedInUserDetails();
         this.loadOrganizationList();
         this.loadOrganizationWithProperty();
+        this.loadNotification();
       }
     });
 
@@ -81,6 +82,7 @@ export class HeaderComponent implements OnInit {
       if (this.isOrganizationUpdated) {
         this.loadOrganizationWithProperty();
         this.currentSelectedProperty();
+        this.loadNotification();
       }
     });
     this.router.routeReuseStrategy.shouldReuseRoute = () => {
@@ -458,8 +460,8 @@ export class HeaderComponent implements OnInit {
     if (link.indexOf('workflow') !== -1) {
       return false;
     } else if (link.indexOf('cookie') !== -1 || link.indexOf('privacy') !== -1 || link.indexOf('webform') !== -1 ||
-    link.indexOf('ccpa') !== -1) {
-        return true;
+      link.indexOf('ccpa') !== -1) {
+      return true;
     }
   }
 
@@ -508,7 +510,7 @@ export class HeaderComponent implements OnInit {
     if (purpose === 'read') {
       obj = {
         id: [requestid],
-        read: status, // false,
+        read: !status, // false,
       };
     } else {
       obj = {
@@ -524,5 +526,21 @@ export class HeaderComponent implements OnInit {
 
   isProperyDisabled(item): boolean {
     return item.property_active === null || false;
+  }
+
+  readAllNotification(reqdata) {
+    const readIds = [];
+    for (const key of Object.keys(reqdata)) {
+      readIds.push(reqdata[key].id);
+    }
+    let obj;
+    obj = {
+      id: readIds,
+      read: false, // false,
+    };
+    this.userService.updateNotification(this.constructor.name, moduleName.headerModule, obj).subscribe((data) => {
+      console.log(data.response);
+      this.loadNotification();
+    });
   }
 }

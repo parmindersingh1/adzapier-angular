@@ -9,6 +9,7 @@ import { FilterPipe } from '../filter.pipe';
 import { FeatherModule } from 'angular-feather';
 import { allIcons } from 'angular-feather/icons';
 import { TimeAgoPipe } from 'time-ago-pipe';
+import {TimeAgoExtendsPipePipe} from '../timeago.pipe';
 import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
 import { AlertModule} from 'ngx-bootstrap/alert';
 import { TabsModule} from 'ngx-bootstrap/tabs';
@@ -18,9 +19,13 @@ import { SafePipe } from 'src/app/_helpers/safe.pipe';
 import {NgxSkeletonLoaderModule} from 'ngx-skeleton-loader';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
+// import { TimeagoModule, TimeagoIntl, TimeagoFormatter, TimeagoCustomFormatter } from 'ngx-timeago';
+import { CollapseModule } from 'ngx-bootstrap/collapse';
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { TooltipModule } from 'ngx-bootstrap/tooltip';
 
 @NgModule({
-  declarations: [FilterPipe, TimeAgoPipe, SafePipe],
+  declarations: [FilterPipe, SafePipe, TimeAgoPipe, TimeAgoExtendsPipePipe],
   imports: [
     CommonModule,
     NgbModule,
@@ -35,19 +40,27 @@ import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
     FeatherModule.pick(allIcons),
     PaginationModule.forRoot(),
     AlertModule.forRoot(),
+  //  TimeagoModule.forRoot({formatter: { provide: TimeagoFormatter, useClass: TimeagoCustomFormatter }}),
     // ModalModule.forRoot(),
     TypeaheadModule.forRoot(),
     BsDatepickerModule.forRoot(),
     TabsModule.forRoot(),
     AccordionModule.forRoot(),
-    // CollapseModule.forRoot(),
+    CollapseModule.forRoot(),
+    BsDropdownModule.forRoot(),
+    TooltipModule.forRoot(),
     // FeatherModule.pick(allIcons),
     // SimpleNotificationsModule.forRoot(),
     FontAwesomeModule,
     DragDropModule,
+    
   ],
-  exports: [NgbModule, NgxSkeletonLoaderModule, DragDropModule, QuillModule, NgxPaginationModule, BsDatepickerModule,
-  AlertModule, TypeaheadModule, FilterPipe, TimeAgoPipe, SafePipe]
+  
+
+  exports: [NgbModule, CollapseModule, BsDropdownModule, NgxSkeletonLoaderModule, DragDropModule, QuillModule, FeatherModule,
+     NgxPaginationModule, BsDatepickerModule, TooltipModule, AlertModule, TypeaheadModule, FilterPipe, 
+     TimeAgoPipe, TimeAgoExtendsPipePipe, SafePipe],
+  providers: [ ]
 
 })
 export class SharedbootstrapModule { }

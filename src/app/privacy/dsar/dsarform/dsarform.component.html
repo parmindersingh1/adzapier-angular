@@ -85,9 +85,10 @@
                                                             (click)="deleteSelectedItem(item)">
                                                             <i class="fa fa-trash" aria-hidden="true"></i>
                                                         </button>
-                                                        <button class="btn btn-sm btn-outline-primary editbtn" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
-                                                            (click)="editSelectedRow(item)">
-                                                            <div><i class="fas fa-pen"></i></div>
+                                                        <button class="btn btn-sm btn-outline-primary editbtn" (click)="editSelectedRow(item)">
+                                                            <div>
+                                                                <i [ngClass]="{'fa fa-angle-down':isWebFormPublished && !isEditingPublishedForm,'fas fa-pen':!isWebFormPublished || isWebFormPublished && isEditingPublishedForm  }"></i>
+                                                            </div>
                                                         </button>
                                                     </div>
                                                 </div>
@@ -111,7 +112,7 @@
                                                         <h5>Create Custom Fields<div>
                                                                 <button type="button"
                                                                     (click)="cancelAddingFormControl()"
-                                                                    class="btn btn-danger" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null">
+                                                                    class="btn btn-danger">
                                                                     <span>&#10006;</span>
                                                                 </button>
                                                             </div>
@@ -325,8 +326,7 @@
                                                     </div>
                                                     <div class="row">
                                                         <div class="col-sm-6">
-                                                            <button type="submit" class="btn btn-xs btn-success" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
-                                                                [disabled]="( !customFields.form.valid )">Save</button>
+                                                            <button type="submit" class="btn btn-xs btn-success" [attr.disabled]="!customFields.form.valid || isWebFormPublished && !isEditingPublishedForm ? true : null">Save</button>
                                                         </div>
 
                                                     </div>
@@ -472,17 +472,17 @@
 
                                     <div class="pd-5">
                                         <h6>Welcome Text <span style="float: right;">
-                                                <button type="button" class="btn btn-sm btn-default" data-toggle="modal" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm? '' : null"
+                                                <button type="button" class="btn btn-sm btn-default p-0 mr-1" data-toggle="modal" 
                                                     (click)="editQuillEditorDataPopup(quillEditorModal,'welcomeText')">
-                                                    <i class="fa fa-edit"></i>
+                                                    <i [ngClass]="{'fas fa-chevron-down':isWebFormPublished && !isEditingPublishedForm,'fa fa-edit':!isWebFormPublished || isWebFormPublished && isEditingPublishedForm }"></i>
                                                 </button>
                                             </span></h6>
                                     </div>
                                     <div class="pd-5">
                                         <h6>Footer Text <span style="float: right;">
-                                                <button type="button" class="btn btn-sm btn-default" data-toggle="modal" [attr.disabled]="isWebFormPublished  && !isEditingPublishedForm? '' : null"
+                                                <button type="button" class="btn btn-sm btn-default p-0 mr-1" data-toggle="modal"
                                                     (click)="editQuillEditorDataPopup(quillEditorModal,'footerText')">
-                                                    <i class="fa fa-edit"></i>
+                                                    <i [ngClass]="{'fas fa-chevron-down':isWebFormPublished && !isEditingPublishedForm,'fa fa-edit': !isWebFormPublished || isWebFormPublished && isEditingPublishedForm }"></i>
                                                 </button>
                                             </span></h6>
                                     </div>
@@ -770,7 +770,7 @@
                 <div>
                     <button class="btn btn-primary sw-btn-prev mr-2" (click)="onPrevious(1)">Previous</button>
                     <button class="btn btn-primary sw-btn-next mr-2" [disabled]="active === 1"
-                        (click)="saveAsDraftCCPAFormConfiguration(registerForm)">Next</button>
+                        (click)="saveAsDraftCCPAFormConfiguration()">Next</button>
                 </div>
             </div>
         </ng-template>
@@ -975,25 +975,33 @@
         </ng-template>
 
         <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Close Clicked')">
-            <span aria-hidden="true">×</span>
+            <span aria-hidden="true">&times;</span>
         </button>
     </div>
     <div class="modal-body" *ngIf="isWelcomeEditor;else footerContent">
-        <form [formGroup]="quillEditorText" (ngSubmit)="onSubmitQuillEditorData()">
+        <form [formGroup]="quillEditorText" (ngSubmit)="onSubmitQuillEditorData()"
+        [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? true : null">
             <quill-editor formControlName="editor" [modules]="quillConfig" [(ngModel)]="editorDataWelcome"
-                [styles]="{height: '200px'}"></quill-editor>
+                [readOnly]="isWebFormPublished && !isEditingPublishedForm ? true : null"
+                [styles]="isEditorDisabled()"></quill-editor>
 
-            <button class="btn btn-primary float-right mt-2" type="submit">Save</button>
+            <button class="btn btn-primary float-right mt-2" 
+            [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? true : null"
+            type="submit">Save</button>
             <button class="btn btn-outline-dark float-right mt-2 mr-2"
                 (click)="modal.dismiss('Close Clicked')">Close</button>
         </form>
     </div>
     <ng-template #footerContent>
         <div class="modal-body">
-            <form [formGroup]="quillEditorText" (ngSubmit)="onSubmitQuillEditorData()">
+            <form [formGroup]="quillEditorText" (ngSubmit)="onSubmitQuillEditorData()" 
+            [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? true : null">
                 <quill-editor formControlName="editor" [modules]="quillConfig" [(ngModel)]="editorDataFooter"
-                    [styles]="{height: '200px'}"></quill-editor>
-                <button class="btn btn-primary float-right mt-2" type="submit">Save</button>
+                [readOnly]="isWebFormPublished && !isEditingPublishedForm ? true : null"
+                [styles]="isEditorDisabled()"></quill-editor>
+                <button class="btn btn-primary float-right mt-2"
+                [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? true : null"
+                type="submit">Save</button>
                 <button class="btn btn-outline-dark float-right mt-2 mr-2"
                     (click)="modal.dismiss('Close Clicked')">Close</button>
             </form>

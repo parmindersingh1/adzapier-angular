@@ -76,7 +76,7 @@ i {
 }
 .notification-menu-right{
   right: 42px !important;
-  width: 250px;
+  width: 35%;
   top: 59px !important;
   left: auto !important;
   position: absolute;
@@ -602,7 +602,7 @@ a.nav-link:hover {
 }
 
 .cross-icon {
-  margin: 2px 4px 0 0;
+  margin: 0px 4px 0 0;
   font-size: 12px;
   height: 14px;
 }
@@ -640,7 +640,8 @@ a.nav-link:hover {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  padding: 4px 5px 1px 5px;
+  padding: 5px 5px 1px 5px;
+  font-size: 13px;
 }
 
 .notification-wrapper:hover {
@@ -651,8 +652,19 @@ a.nav-link:hover {
 
 .notification-wrapper:hover .cross-icon {
   color:#000;
+  font-weight: bold;
 }
 
+.notification-time {
+  color: #7e7b7b;
+  font-weight: normal;
+}
+
+.notification-task-time-wrapper {
+  display: flex;
+  flex-direction: column;
+
+}
 
 ::ng-deep .tooltip {
   top: 6px !important;
@@ -688,4 +700,12 @@ a.nav-link:hover {
   border: 1px solid rgba(192, 204, 218, 0.53) !important;
   left: -39px !important;
   right: auto !important;
+}
+
+.txt-right {
+  text-align: right;
+}
+
+button.btn.btn-link:hover {
+  text-decoration: underline;
 }

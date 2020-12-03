@@ -4,6 +4,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from './../../environments/environment';
 import { Orglist } from './../_models';
 import { Organization } from '../_models/organization';
+import { Organizationdetails } from '../_models/organizationdetails';
 import { map, shareReplay } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
@@ -46,8 +47,8 @@ export class OrganizationService {
         return this.http.get<any>(environment.apiUrl + '/organizations');
     }
 
-    viewOrganizationDetails(orgId): Observable<Organization[]> {
-        return this.http.get<Organization[]>(environment.apiUrl + '/organizations/' + orgId);
+    viewOrganizationDetails(orgId): Observable<Organizationdetails[]> {
+        return this.http.get<Organizationdetails[]>(environment.apiUrl + '/organizations/' + orgId);
     }
 
     updateOrganization(orgId, data): Observable<any> {
