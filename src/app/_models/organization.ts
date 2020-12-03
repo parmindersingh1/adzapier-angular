@@ -1,12 +1,21 @@
 import { Properties } from './properties';
 
 export class Organization {
-    orgName: string;
-    orgid: number;
-    addressOne: string;
-    addressTwo: string;
+    active: boolean;
+    address1: string;
+    address2: string;
+    cid: any;
     city: string;
+    created_at: Date;
+    email: string;
+    id: any;
+    orgname: string;
+    phone: number;
+    secret_key: any;
     state: string;
-    zipcode: string;
-    property: Properties[];
+    tax_id: any;
+    uid: any;
+    update_reason: string;
+    updated_at: Date;
+    zipcode: number;
 }

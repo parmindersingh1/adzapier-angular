@@ -276,13 +276,15 @@ export class CreateworkflowComponent implements OnInit {
           this.workflowStatus = data[0].workflow_status;
           this.workflowType = data[0].workflow_type;
           if (this.workflowStatus === 'active') {
+            console.log(this.workflowStatus, 'workflowStatus..');
             this.isControlDisabled = true;
+          } else {
+            this.isControlDisabled = false;
           }
           this.workflowName = data[0].workflow_name;
           this.stageTitle = stageTitle;
           this.guidancetext = guidanceText;
           this.skeletonLoading = false;
-          this.isControlDisabled = false;
         } else {
           this.skeletonLoading = false;
           this.alertMsg = 'No data found!';
@@ -300,6 +302,19 @@ export class CreateworkflowComponent implements OnInit {
   onClosed(dismissedAlert: any): void {
     this.alertMsg = !dismissedAlert;
     this.isOpen = false;
+  }
+
+  isEditorDisabled(): object {
+    if (this.isControlDisabled) {
+      return {
+        'background-color': '#f5f6fa',
+        'cursor': 'not-allowed'
+    };
+  } else {
+  return {
+    'background-color': '#ffffff'
+    };
+     }
   }
 
 }

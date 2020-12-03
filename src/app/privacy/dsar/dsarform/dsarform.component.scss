@@ -154,11 +154,15 @@
       display: flex;
       width: auto;
       justify-content: space-between;
-      padding: 3px 5px 5px 5px;
+      padding: 4px 6px 4px 6px; /*3px 5px 5px 5px;*/
       line-height: 0px;
       font-size: 11px;
       align-items: center;
       margin: 0px 5px 0px 0px;
+  }
+
+  .editbtn .fa {
+    font-size: 14px;
   }
 
   .rotateEditicon {
@@ -397,6 +401,7 @@
   border-radius: 4px 4px 0px 0px;
   background-color: #3968fa;
   color:#fff;
+  height: 50px;
 }
 
 #cdk-drop-list-0 .dsarform-box:first-child, #cdk-drop-list-0 .dsarform-box:nth-child(2) {
@@ -932,4 +937,13 @@ span.previewbtn a {
 
 .justify-content {
   justify-content: flex-start;
+}
+
+.disabled {
+  cursor: not-allowed;
+  background-color: #ccc;
+}
+
+.ql-container .ql-snow .ql-disabled {
+  background-color: #ccc;
 }
