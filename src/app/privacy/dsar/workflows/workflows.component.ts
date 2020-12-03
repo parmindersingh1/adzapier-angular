@@ -9,6 +9,8 @@ import { moduleName } from '../../../_constant/module-name.constant';
 import { LazyLoadEvent } from 'primeng/api';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+// import { strings } from "ngx-timeago/language-strings/en";
+// import { TimeagoIntl } from "ngx-timeago";
 @Component({
   selector: 'app-workflows',
   templateUrl: './workflows.component.html',
@@ -49,8 +51,11 @@ export class WorkflowsComponent implements OnInit, AfterViewInit  {
               private modalService: NgbModal,
               private formBuilder: FormBuilder,
               private loading: NgxUiLoaderService,
-              private cdRef: ChangeDetectorRef
+              private cdRef: ChangeDetectorRef,
+            //  intl: TimeagoIntl
   ) {
+  //  intl.strings = strings;
+   // intl.changes.next();
     this.paginationConfig = { itemsPerPage: this.pgSize, currentPage: this.page, totalItems: this.listTotalCount, id: 'propertyPagination' };
   }
 

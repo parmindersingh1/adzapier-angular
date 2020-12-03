@@ -32,6 +32,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
   @ViewChild('nav', { static: false }) navTab: ElementRef<any>;
   @ViewChild(NgbNav, { static: false }) navDirective = null;
   @ViewChild('confirmEdit', { static: false }) confirmModal: TemplateRef<any>;
+  @ViewChild('registerForm', { static: false }) registerForm: any;
   public requestObject: any = {};
   public selectedFormOption: any;
   public selectedControlType: any;
@@ -1012,7 +1013,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
     this.isRequiredField = false;
   }
 
-  saveAsDraftCCPAFormConfiguration(registerForm) {
+  saveAsDraftCCPAFormConfiguration() {
     if (this.isWebFormPublished && !this.isEditingPublishedForm) {
       this.navDirective.select(3);
     } else {
@@ -1031,7 +1032,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
           }
         });
         this.ccpaFormConfigService.setFormControlList(this.webFormControlList);
-        this.updateWebcontrolIndex(registerForm.value, this.webFormControlList);
+        this.updateWebcontrolIndex(this.registerForm.value, this.webFormControlList);
       } else {
         this.webFormControlList = this.dsarFormService.getFormControlList();
         this.webFormControlList.filter((t) => {
@@ -1044,7 +1045,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
           }
         });
         this.dsarFormService.setFormControlList(this.webFormControlList);
-        this.updateWebcontrolIndex(registerForm.value, this.webFormControlList);
+        this.updateWebcontrolIndex(this.registerForm.value, this.webFormControlList);
       }
       this.isWebFormPublished = false;
       this.isDraftWebForm = true;
@@ -1122,25 +1123,39 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
   // this.basicForm.value.formname === '' || this.basicForm.value.formname === undefined || !this.basicFormSubmitted
   onNavChange(changeEvent: NgbNavChangeEvent) {
     if (changeEvent.nextId === 2) {
-      if (this.isEditingPublishedForm) {
-        changeEvent.preventDefault();
-        this.alertMsg = 'Please complete step 1 Basic and press next';
-        this.isOpen = true;
-        this.alertType = 'danger';
-      }
       this.formName = this.basicForm.controls['formname'].value;
-
-    } else if (changeEvent.nextId === 3) {
-      if (this.isEditingPublishedForm) {
+      this.basicFormSubmitted = true;
+      if (this.formName) {
+        this.basicFormdata();
+      } else {
         changeEvent.preventDefault();
-        this.alertMsg = 'Please complete step 2 Form and press next';
+        this.alertMsg = `Please complete step 1 Basic and press next`;
         this.isOpen = true;
         this.alertType = 'danger';
       }
-    } else if (changeEvent.nextId === 4) {
-      if (this.isEditingPublishedForm) {
+    } else if (changeEvent.nextId === 3) {
+      this.isdraftsubmitted = true;
+      this.basicFormSubmitted = true;
+      if (this.formName) {
+        this.basicFormdata();
+        this.saveAsDraftCCPAFormConfiguration();
+      } else {
         changeEvent.preventDefault();
-        this.alertMsg = 'Please complete step 3 Settings and press next';
+        this.alertMsg = `Please complete step 1 Basic & 2 Form and press next`;
+        this.isOpen = true;
+        this.alertType = 'danger';
+      }
+      //   this.alertMsg = 'Please complete step 2 Form and press next';
+    } else if (changeEvent.nextId === 4) {
+      this.isdraftsubmitted = true;
+      this.basicFormSubmitted = true;
+      if (this.formName && this.defaultapprover && this.workflow) {
+        this.daysleft !== null ? this.daysleft = this.daysleft : this.daysleft = 45;
+        this.createDraft();
+      } else {
+        changeEvent.preventDefault();
+        const stepnumber: number | string = '1 Basic, 2 Form & 3 Settings';
+        this.alertMsg = `Please complete step ${stepnumber} and press next`;
         this.isOpen = true;
         this.alertType = 'danger';
       }
@@ -1356,6 +1371,8 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
         window.open('https://develop-privacyportal.adzpier-staging.com/dsar/form/' + this.orgId + '/' + this.propId + '/' + this.crid);
       } else if (window.location.hostname === 'cmp.adzpier-staging.com') {
         window.open('https://privacyportal.adzpier-staging.com/dsar/form/' + this.orgId + '/' + this.propId + '/' + this.crid);
+      } else if (window.location.hostname === 'portal.adzapier.com') {
+        window.open('https://privacyportal.primeconsent.com/dsar/form/' + this.orgId + '/' + this.propId + '/' + this.crid);
       }
     } else {
       this.alertMsg = 'Organization or Property not found!';
@@ -1384,12 +1401,12 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
 
   onPrevious(tabid) {
     if (tabid === 2) {
-     if (this.crid) {
+      if (this.crid) {
         this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
       } else {
         this.webFormControlList = this.dsarFormService.getFormControlList();
       }
-     // this.getDSARFormByCRID(this.crid);
+      // this.getDSARFormByCRID(this.crid);
     }
     this.navDirective.select(tabid);
   }
@@ -1839,6 +1856,21 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
     } else if (this.isWebFormPublished && this.isEditingPublishedForm && this.isResetlinkEnable) {
     //  this.isResetlinkEnable = true;
       return true;
+    }
+  }
+
+  isEditorDisabled(): object {
+    if (this.isWebFormPublished && !this.isEditingPublishedForm) {
+      return {
+        'height': '200px',
+        'background-color': '#f5f6fa',
+        'cursor': 'not-allowed'
+      };
+    } else {
+      return {
+        'height': '200px',
+        'background-color': '#ffffff'
+      };
     }
   }
 
