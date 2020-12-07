@@ -41,7 +41,7 @@
     "ngx-pagination": "^5.0.0",
     "ngx-quill": "^7.3.12",
     "ngx-quill-editor": "^2.2.2",
-    "ngx-skeleton-loader": "^2.6.1",
+    "ngx-skeleton-loader": "^2.5.0",
     "ngx-ui-loader": "^9.1.1",
     "primeicons": "^4.0.0",
     "primeng": "^10.0.0-rc.3",
