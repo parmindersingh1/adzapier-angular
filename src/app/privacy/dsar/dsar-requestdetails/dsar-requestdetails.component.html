@@ -60,34 +60,41 @@
                 </div>
                 <div class="card-body pd-10">
                     <div class="row row-sm pd-t-5">
+                        <!-- <ngx-skeleton-loader  *ngIf="skeletonLoading && respCDID"   count="3"></ngx-skeleton-loader> -->
+                        
                         <div class="col-sm">
                             <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Request
                                 ID</label>
+                                <ngx-skeleton-loader  *ngIf="!respCDID" count="1"></ngx-skeleton-loader> 
                             <p class="mg-b-0">{{respCDID}}</p>
                         </div>
                         <div class="col-sm">
                             <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Request
                                 Types
                             </label>
+                            <ngx-skeleton-loader  *ngIf="!requestType" count="1"></ngx-skeleton-loader>
                             <p class="mg-b-0">{{requestType}}</p>
                         </div>
                         <div class="col-sm">
                             <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Due
-                                in
+                                in {{isNumber(getDueIn(respCreatedAt,respDaysLeft))}}
                             </label>
-                            <p class="mg-b-0"> {{getDueIn(respCreatedAt,respDaysLeft)}}</p>
+                            <ngx-skeleton-loader  *ngIf="isNumber(getDueIn(respCreatedAt,respDaysLeft))" count="1"></ngx-skeleton-loader>
+                            <p class="mg-b-0" *ngIf="!isNumber(getDueIn(respCreatedAt,respDaysLeft))"> {{getDueIn(respCreatedAt,respDaysLeft)}}</p>
                         </div>
 
                         <div class="col-sm">
                             <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Date
                                 Opened
                             </label>
+                            <ngx-skeleton-loader *ngIf="!respCreatedAt" count="1"></ngx-skeleton-loader>
                             <p class="mg-b-0" *ngIf="respCreatedAt">{{respCreatedAt | date:'longDate'}}</p>
                         </div>
 
                         <div class="col-sm">
                             <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Request
                                 Accepting Agent</label>
+                                <ngx-skeleton-loader *ngIf="!reqAcceptingagent" count="1"></ngx-skeleton-loader> 
                             <p class="mg-b-0">{{reqAcceptingagent}}</p>
                         </div>
 
@@ -95,33 +102,37 @@
                         <div class="col-sm ">
                             <label
                                 class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Workflow</label>
+                                <ngx-skeleton-loader *ngIf="!workflowName" count="1"></ngx-skeleton-loader>
                             <p class="mg-b-0">{{workflowName}}</p>
                         </div>
                     </div>
                     <div class="row row-sm pd-t-10 bd-t">
-                        <div class="col-sm">
-                            <label
-                                class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Status</label>
+                        <div class="col-sm"> 
+                            <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Status</label>
+                                <ngx-skeleton-loader *ngIf="!currentWorkflowStage" count="1"></ngx-skeleton-loader>
                             <p class="tx-spacing-1 tx-semibold status-text tx-success">
-                                {{currentWorkflowStage ? currentWorkflowStage : 'New'}}
+                                {{currentWorkflowStage}}
                             </p>
                         </div>
                         <div class="col-sm">
                             <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Subject
                                 Type
                             </label>
+                            <ngx-skeleton-loader *ngIf="!subjectType" count="1"></ngx-skeleton-loader>
                             <p class="mg-b-0">{{subjectType}}</p>
                         </div>
                         <div class="col-sm">
                             <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Risk
                                 Factor
                             </label>
+                            <ngx-skeleton-loader *ngIf="!riskFactorText" count="1"></ngx-skeleton-loader>
                             <p class="tx-spacing-1 tx-13 tx-semibold mg-b-0 tx-danger">{{riskFactorText}}</p>
                         </div>
 
                         <div class="col-sm">
                             <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Deadline
                             </label>
+                            <ngx-skeleton-loader *ngIf="!respDaysLeft" count="1"></ngx-skeleton-loader>
                             <p class="mg-b-0" *ngIf="respCreatedAt && respDaysLeft">
                                 {{getDeadLine(respCreatedAt,respDaysLeft) | date:'longDate'}}</p>
                         </div>
@@ -129,6 +140,7 @@
                         <div class="col-sm">
                             <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Approver
                             </label>
+                            <ngx-skeleton-loader *ngIf="!respApprover" count="1"></ngx-skeleton-loader>
                             <p class="mg-b-0">{{respApprover}}</p>
                         </div>
 
@@ -136,6 +148,7 @@
                         <div class="col-sm ">
                             <label
                                 class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Form</label>
+                                <ngx-skeleton-loader *ngIf="!formName" count="1"></ngx-skeleton-loader>
                             <p class="mg-b-0">{{formName}}</p>
                         </div>
                     </div>
@@ -144,10 +157,11 @@
                         <div class="customdata">
                             <label
                                 class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Property</label>
-
-                            <p class="tx-13 tx-spacing-1  mg-b-0 " *ngIf="currentPropertyName">{{currentPropertyName}}
+                                <ngx-skeleton-loader *ngIf="skeletonCustomLoading" count="1"></ngx-skeleton-loader>
+                            <p class="tx-13 tx-spacing-1  mg-b-0" *ngIf="!skeletonCustomLoading">{{currentPropertyName}}
                             </p>
                         </div>
+                        <ngx-skeleton-loader *ngIf="skeletonCustomLoading" count="2"></ngx-skeleton-loader>
                         <div *ngFor="let data of getCustomFields(customFields) | keyvalue; let i = index">
                             <div class="customdata">
                                 <label class="tx-sans">{{data.key}}
@@ -174,16 +188,20 @@
                                     <i-feather class="feather-file" name="file"></i-feather>
                                     <a (click)="viewFile()" style="cursor: pointer;">View File</a>
                                 </p>
+                                <p *ngIf="!isAttachmentExist">No attachment found</p>
                             </div>
                         </div>
                     </div>
                     <div class="stagediv">
                         <div class="divider-text mg-y-5">Advance Status</div>
                         <button (click)="onPreviousSearchPosition()"  class="arrowbtn leftarrow" [ngClass]="{'hidebtns':leftClickStatus()}"><i class="fa fa-angle-left"></i></button>
-                        <div class="divflex">
+                        <div class="divflex" [ngClass]="{'add-min-height':workflowStages.length == 0}">
                             <div class="customtab" #panel>
+                                <ngx-skeleton-loader *ngIf="skeletonStageLoading && workflowStages.length === 0"  count="2"></ngx-skeleton-loader>
                         <ul class="nav-tabs" [ngStyle]="{'transform': 'translateX(' + translateX + 'px)'}" #workflowStageScroller>
-                            <li *ngFor="let stage of workflowStages">
+
+                            <li *ngFor="let stage of workflowStages; let i = index">
+                                
                                 <div #stageContent class="tabTitleWrapper" (click)="stageSelection(stage)" [ngClass]="{'completedStage':  isStageCompleted(stage),'':stage.order < nextStage || stage.order == nextStage}">
 
                                     <a> <span class="step-number"
@@ -197,6 +215,7 @@
                                 </div>
                                 <ng-container>{{showStageTitleAndContent(stage)}}</ng-container>
                             </li>
+                            <li *ngIf="!skeletonStageLoading && workflowStages?.length === 0"> No stage record found </li>
                         </ul>
                         <!-- <div>{{selectedStageContent}}</div> -->
                         </div>
