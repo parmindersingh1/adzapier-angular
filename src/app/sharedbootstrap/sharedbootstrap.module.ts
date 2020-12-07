@@ -33,7 +33,7 @@ import { TooltipModule } from 'ngx-bootstrap/tooltip';
     ReactiveFormsModule,
     FontAwesomeModule,
     DragDropModule,
-    NgxSkeletonLoaderModule,
+    NgxSkeletonLoaderModule.forRoot(),
     DragDropModule,
     QuillModule.forRoot(),
     NgxPaginationModule,
