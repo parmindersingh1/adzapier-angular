@@ -180,7 +180,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
   selectedWorkflowID: any;
   defaultapprover: any;
   workflow: any;
-  daysleft: number;
+  daysleft: number | string;
   public reqURLObj = {};
   isControlDisabled: boolean;
   alertMsg: any;
@@ -1150,7 +1150,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
       this.isdraftsubmitted = true;
       this.basicFormSubmitted = true;
       if (this.formName && this.defaultapprover && this.workflow) {
-        this.daysleft !== null ? this.daysleft = this.daysleft : this.daysleft = 45;
+        this.daysleft !== '' ? this.daysleft = this.daysleft : this.daysleft = 45;
         this.createDraft();
       } else {
         changeEvent.preventDefault();

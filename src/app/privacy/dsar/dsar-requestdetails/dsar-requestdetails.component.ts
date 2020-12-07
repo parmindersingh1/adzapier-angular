@@ -1,5 +1,5 @@
-import { Component, OnInit, ViewChild, ElementRef, Renderer2, TemplateRef, AfterContentInit, AfterContentChecked,
-AfterViewInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Renderer2, TemplateRef, AfterContentChecked,AfterViewInit, 
+ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { OrganizationService } from 'src/app/_services';
 import { DsarRequestService } from 'src/app/_services/dsar-request.service';
@@ -27,9 +27,9 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
   @ViewChild('confirmTemplate', { static: false }) confirmModal: TemplateRef<any>;
   @ViewChild('filePreview', { static: true }) filePreview: ElementRef;
   @ViewChild('panel', { static: true }) public panel: ElementRef<any>;
-  @ViewChild('workflowStageScroller', {static: false}) public workflowStageScroller: ElementRef<any>;
+  @ViewChild('workflowStageScroller', { static: false }) public workflowStageScroller: ElementRef<any>;
   @ViewChild('confirmDeleteTemplate', { static: false }) confirmDeleteModal: TemplateRef<any>;
-  
+
   // @ViewChild('subTaskForm', null) subTaskTempForm: NgForm;
 
   confirmationForm: FormGroup;
@@ -168,6 +168,8 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
   selectedStageContent: string;
   bsErrordate: any;
   skeletonLoading = true;
+  skeletonCustomLoading = true;
+  skeletonStageLoading = true;
   subTaskFields: IsubtaskType;
   translateX: number = 0;
   leftbtnVisibility = false;
@@ -175,6 +177,7 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
   scrollLimit: number;
   showStageTitle: string;
   showStageGuidanceText: string;
+  dueInDays: number;
   constructor(private activatedRoute: ActivatedRoute,
               private router: Router,
               private orgService: OrganizationService,
@@ -310,13 +313,14 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
         this.subjectType = data.response.subject_type;
         this.workflowName = data.response.workflow_name;
         this.workflowId = data.response.workflow_id;
-        this.reqAcceptingagent = data.response.req_accepting_agent;
+        this.reqAcceptingagent = data.response.req_accepting_agent || 'No records';
         this.riskFactorText = data.response.risk_factor;
-        this.currentWorkflowStage = data.response.workflow_stage || '';
+        this.currentWorkflowStage = data.response.workflow_stage || 'New';
         this.currentWorkflowStageID = data.response.workflow_stage_id || '';
         this.isEmailVerified = data.response.email_verified;
         this.isemailverificationRequired = data.response.required_email_verification;
         this.isAttachmentExist = this.isFileExist(data.response.upload_exist);
+        this.skeletonCustomLoading = false;
         this.getCustomFields(this.customFields);
         this.getWorkflowStages(this.workflowId);
         //        this.selectStageOnPageLoad(this.currentWorkflowStageID);
@@ -326,6 +330,7 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
         this.editRequestDetailForm.controls['city'].setValue(this.respCity);
         this.editRequestDetailForm.controls['requestacceptingagent'].setValue(this.reqAcceptingagent);
         this.editRequestDetailForm.controls['riskfactor'].setValue(this.riskFactorText);
+        this.skeletonLoading = false;
       }, (error) => {
         this.alertMsg = error;
         this.isOpen = true;
@@ -414,6 +419,10 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
     return daysLeft - diffDays;
   }
 
+  isNumber(value): boolean {
+    return Number.isNaN(value);
+  }
+
   getCustomFields(data: any) {
 
     let updatedObj = [];
@@ -442,17 +451,18 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
       if (data.length > 0) {
         const respData = data[0].workflow_stages;
         this.workflowStages = this.rearrangeArrayResponse(respData);
-        this.skeletonLoading = false;
+        this.skeletonStageLoading = false;
         // this.selectedStages.push(this.workflowStages[0]);
         this.selectStageOnPageLoad(this.currentWorkflowStageID);
         this.getSubTaskList();
       } else {
+        this.skeletonStageLoading = false;
         this.alertMsg = 'No records found!';
         this.isOpen = true;
         this.alertType = 'info';
       }
     }, (error) => {
-      this.skeletonLoading = false;
+      this.skeletonStageLoading = false;
       alert(JSON.stringify(error));
     });
   }
@@ -532,13 +542,13 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
   }
 
   openModal(template: TemplateRef<any>, diff?, item?) {
-    this.modalRef = this.bsmodalService.show(template, { class: 'modal-sm' });
+    this.modalRef = this.bsmodalService.show(template, { class: 'modal-sm', keyboard: false });
     this.stageDiff = diff;
     this.revertedStage = item;
   }
 
   deleteModal(template: TemplateRef<any>) {
-    this.modalRef = this.bsmodalService.show(template, { class: '' });
+    this.modalRef = this.bsmodalService.show(template, { class: '', keyboard: false });
   }
 
   confirm() {
@@ -808,8 +818,8 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
         deadline: data.deadline,
         reminder: data.reminder
       };
-     // this.subTaskFields = obj;
-     // this.subTaskTempForm.setValue(obj);
+      // this.subTaskFields = obj;
+      // this.subTaskTempForm.setValue(obj);
       this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
 
       }, (reason) => {
@@ -1022,7 +1032,7 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
     let currentStageID;
     this.isConfirmed ? currentStageID = this.currentWorkflowStageID : currentStageID = this.currentStageId;
    // const currentStageID = this.currentStageId ? this.currentStageId : this.currentWorkflowStageID;
-    if (currentStageID) {
+    if (currentStageID !== undefined) {
       const obj = {
         assignee: subtaskForm.value.assignee,
         name: subtaskForm.value.name,
@@ -1063,7 +1073,12 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
           this.onResetSubTask();
         });
       }
-      
+
+    } else {
+      this.onResetSubTask();
+      this.alertMsg = 'Workflow stages are not available!';
+      this.isOpen = true;
+      this.alertType = 'info';
     }
   }
 
@@ -1231,11 +1246,11 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
   }
 
   viewFile() {
-    this.loading.start();
+    this.skeletonLoading = true;
     let ext;
     let documentType;
     this.dsarRequestService.viewUserUploadedFile(this.requestID, this.constructor.name, moduleName.dsarRequestModule).subscribe((data) => {
-      this.loading.stop();
+      this.skeletonLoading = false;
       if (data) {
         this.base64FileCode = data.upload;
         ext = data.upload_ext;
@@ -1247,7 +1262,7 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
         return window.open(url, 'iframeFilepreview');
       }
     }, (error) => {
-      this.loading.stop();
+      this.skeletonLoading = false;
     });
 
   }
@@ -1388,10 +1403,10 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
       } else if (this.showStageGuidanceText.length <= 650) {
         return { 'min-height': '120px' };
       } else if (this.showStageGuidanceText.length <= 1050) {
-        return { 'min-height': '340px' };
+        return { 'min-height': '210px' };
       }
     } else {
-      return { 'min-height': '110px' };
+      return { 'min-height': '20px' };
     }
 
   }

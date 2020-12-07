@@ -162,7 +162,7 @@ export class EditProfileComponent implements OnInit {
   }
 
   editOrganizationModalPopup(content) {
-    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
+    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title', keyboard: false }).result.then((result) => {
     }, (reason) => {
       // this.profileForm.reset();
     });
@@ -232,6 +232,7 @@ export class EditProfileComponent implements OnInit {
   onResetProfile() {
     this.submitted = false;
     this.modalService.dismissAll('Data Saved!');
+    this.loadUserDetails();
   }
 
   onClosed(dismissedAlert: any): void {

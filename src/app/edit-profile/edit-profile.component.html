@@ -133,12 +133,6 @@
                             <button class="btn btn-primary mr-2" type="reset">Cancel</button>
                         </div>
 
-                        <div *ngIf="show" style="color: green; margin-top: 10px;" class="tx-13">
-                            <p>{{successMsg}}</p>
-                        </div>
-                        <div *ngIf="!show" style="color:red; margin-top: 10px">
-                            <p>{{errorMsg}}</p>
-                        </div>
                     </form>
                 </div>
             </div>
@@ -148,8 +142,8 @@
     <ng-template #editUserModal let-modal>
         <div class="modal-header">
             <h4 class="modal-title" id="modal-basic-title">Edit User Preferences</h4>
-            <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Close Clicked')">
-                <span aria-hidden="true">×</span>
+            <button type="button" class="close" aria-label="Close" (click)="onResetProfile()">
+                <span aria-hidden="true">&times;</span>
             </button>
         </div>
         <div class="modal-body">

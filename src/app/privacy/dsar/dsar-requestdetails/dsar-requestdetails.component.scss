@@ -700,6 +700,9 @@ ul.ngx-pagination {
     min-height: 70px;
 }
 
+.add-min-height {
+    min-height: 20px;
+}
 
 .customtab {
     flex-grow: 1;
@@ -844,7 +847,7 @@ ul.ngx-pagination {
      display: block;
      position: absolute;
      width: 93%;
-     left: 40px;
+     left: 45px;
      top: 30px;     
  }
 
@@ -854,7 +857,7 @@ ul.ngx-pagination {
     padding: 0;
     position: absolute;
     text-transform: CAPITALIZE;
-    left: 40px;
+    left: 45px;
     top: 0;
  }
 
