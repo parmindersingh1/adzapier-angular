@@ -326,7 +326,7 @@ export class CompanyteamComponent implements OnInit {
   }
 
   loadUserListForInvitation() {
-    this.companyService.getUserList(this.constructor.name, moduleName.companyModule).subscribe((data) => {
+    this.companyService.getUserList('', this.constructor.name, moduleName.companyModule).subscribe((data) => {
       this.userList = data.response;
     });
   }

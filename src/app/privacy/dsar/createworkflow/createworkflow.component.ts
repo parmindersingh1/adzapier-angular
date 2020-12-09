@@ -276,7 +276,6 @@ export class CreateworkflowComponent implements OnInit {
           this.workflowStatus = data[0].workflow_status;
           this.workflowType = data[0].workflow_type;
           if (this.workflowStatus === 'active') {
-            console.log(this.workflowStatus, 'workflowStatus..');
             this.isControlDisabled = true;
           } else {
             this.isControlDisabled = false;

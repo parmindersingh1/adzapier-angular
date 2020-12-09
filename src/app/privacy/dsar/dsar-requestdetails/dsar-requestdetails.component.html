@@ -76,9 +76,7 @@
                             <p class="mg-b-0">{{requestType}}</p>
                         </div>
                         <div class="col-sm">
-                            <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Due
-                                in {{isNumber(getDueIn(respCreatedAt,respDaysLeft))}}
-                            </label>
+                            <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Due in</label>
                             <ngx-skeleton-loader  *ngIf="isNumber(getDueIn(respCreatedAt,respDaysLeft))" count="1"></ngx-skeleton-loader>
                             <p class="mg-b-0" *ngIf="!isNumber(getDueIn(respCreatedAt,respDaysLeft))"> {{getDueIn(respCreatedAt,respDaysLeft)}}</p>
                         </div>

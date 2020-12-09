@@ -328,7 +328,9 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
         this.editRequestDetailForm.controls['country'].setValue(this.respCountry);
         this.editRequestDetailForm.controls['state'].setValue(this.respState);
         this.editRequestDetailForm.controls['city'].setValue(this.respCity);
-        this.editRequestDetailForm.controls['requestacceptingagent'].setValue(this.reqAcceptingagent);
+        if (this.reqAcceptingagent !== 'No records') {
+          this.editRequestDetailForm.controls['requestacceptingagent'].setValue(this.reqAcceptingagent);
+        }
         this.editRequestDetailForm.controls['riskfactor'].setValue(this.riskFactorText);
         this.skeletonLoading = false;
       }, (error) => {
@@ -1000,7 +1002,9 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
     this.editRequestDetailForm.controls['country'].setValue(this.respCountry);
     this.editRequestDetailForm.controls['state'].setValue(this.respState);
     this.editRequestDetailForm.controls['city'].setValue(this.respCity);
-    this.editRequestDetailForm.controls['requestacceptingagent'].setValue(this.reqAcceptingagent);
+    if (this.reqAcceptingagent !== 'No records') {
+      this.editRequestDetailForm.controls['requestacceptingagent'].setValue(this.reqAcceptingagent);
+    }
   }
 
   pageChangeEvent(event) {
@@ -1208,7 +1212,9 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
 
   getStagename(stageid): string {
     const stage = this.workflowStages.filter((e) => e.id === stageid);
-    return stage[0].stage_title;
+    if (stage.length !== 0) {
+      return stage[0].stage_title;
+    }
   }
 
 
@@ -1432,12 +1438,16 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
 
   ngAfterContentChecked() {
     setTimeout(() => {
-      const parentElementSize = this.workflowStageScroller.nativeElement.parentElement.offsetWidth;
-      const itemSize = this.workflowStageScroller.nativeElement.querySelector('li').offsetWidth;
-      const itemLength = this.workflowStageScroller.nativeElement.childElementCount;
-      const menuSize = itemSize * itemLength;
-      const visibleSize = menuSize - parentElementSize;
-      this.scrollLimit = -visibleSize;
+      if (this.workflowStageScroller !== undefined) {
+        const parentElementSize = this.workflowStageScroller.nativeElement.parentElement.offsetWidth;
+        const itemSize = this.workflowStageScroller.nativeElement.querySelector('li').offsetWidth;
+        const itemLength = this.workflowStageScroller.nativeElement.childElementCount;
+        const menuSize = itemSize * itemLength;
+        const visibleSize = menuSize - parentElementSize;
+        this.scrollLimit = -visibleSize;
+      } else {
+        return false;
+      }
     }, 3000);
   }
 

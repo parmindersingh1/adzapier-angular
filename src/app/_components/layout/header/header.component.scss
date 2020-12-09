@@ -276,6 +276,7 @@ a.nav-link:hover {
   width: 20px;
   height: 20px;
   margin: 0 -15px 0 0;
+  z-index: 1;
 }
 
 .line-partition {
@@ -639,15 +640,18 @@ a.nav-link:hover {
 .notification-wrapper {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
-  padding: 5px 5px 1px 5px;
+  justify-content: space-evenly;
+  padding: 5px 25px 1px 5px;
   font-size: 13px;
+  margin-bottom: 10px;
 }
 
 .notification-wrapper:hover {
   background: #f3f3f3;
   color:#222;
   border-radius: 5px;
+  width: 100%;
+  color: #333;
 }
 
 .notification-wrapper:hover .cross-icon {
@@ -708,4 +712,33 @@ a.nav-link:hover {
 
 button.btn.btn-link:hover {
   text-decoration: underline;
+}
+
+.example-viewport {
+  height: 200px;
+  width: 100%;
+  color: #333;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 5px 5px 1px 5px;
+  font-size: 13px;
+}
+
+.example-item {
+  height: 50px;
+}
+
+.notification-number {
+  position: absolute;
+  right: 58px;
+  top: 4px;
+  border: 2px solid #fff;
+  padding: 0px 8px;
+  color: #fff;
+  font-size: 11px;
+  text-align: center;
+  line-height: 22px;
+  background: #dc3545;
+  border-radius: 13px;
 }
