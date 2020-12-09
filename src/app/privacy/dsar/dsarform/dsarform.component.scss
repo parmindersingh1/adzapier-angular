@@ -404,6 +404,10 @@
   height: 50px;
 }
 
+.img-container {
+  height: auto !important;
+}
+
 #cdk-drop-list-0 .dsarform-box:first-child, #cdk-drop-list-0 .dsarform-box:nth-child(2) {
   display: none;
 }

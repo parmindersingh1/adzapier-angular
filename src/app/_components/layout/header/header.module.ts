@@ -3,18 +3,19 @@ import { CommonModule } from '@angular/common';
 import { SharedbootstrapModule } from 'src/app/sharedbootstrap/sharedbootstrap.module';
 import { HeaderComponent } from './header.component';
 import { HeaderRoutingModule } from './header-routing.module';
-import { TimeAgoPipe } from 'time-ago-pipe';
+import {ScrollingModule} from '@angular/cdk/scrolling';
 
 @NgModule({
     declarations: [HeaderComponent],
       imports: [
           CommonModule,
           SharedbootstrapModule,
-          HeaderRoutingModule
+          HeaderRoutingModule,
+          ScrollingModule
       ],
       schemas: [
         CUSTOM_ELEMENTS_SCHEMA
       ],
-      exports: [SharedbootstrapModule, HeaderComponent]
+      exports: [SharedbootstrapModule, ScrollingModule, HeaderComponent]
   })
   export class HeaderModule { }

@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { OrganizationService, AuthenticationService, UserService } from '../../../_services';
 import { Observable } from 'rxjs';
@@ -12,7 +12,8 @@ import { Location } from '@angular/common';
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss']
+  styleUrls: ['./header.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Default
 })
 export class HeaderComponent implements OnInit {
   @ViewChild('confirmTemplate', { static: false }) confirmModal: TemplateRef<any>;
@@ -56,6 +57,8 @@ export class HeaderComponent implements OnInit {
   isSublinkActive = false;
   selectedSubmenu: any = [];
   notificationList: any = [];
+  notificationsNumber: number;
+  isNotificationBellClicked = false;
   constructor(
     private router: Router,
     private activatedroute: ActivatedRoute,
@@ -502,7 +505,12 @@ export class HeaderComponent implements OnInit {
   loadNotification() {
     this.userService.getNotification(this.constructor.name, moduleName.headerModule).subscribe((data) => {
       this.notificationList = data.response;
+      this.showNotificationNumber(this.notificationList);
     });
+  }
+
+  showNotificationNumber(list) {
+    return this.notificationsNumber = list.filter((t) => t.read === true).length;
   }
 
   clearNotification(requestid, purpose: string, status: boolean) {

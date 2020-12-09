@@ -135,6 +135,9 @@
                     <div class="form-group">
                         <label for="emailid" class="d-block">Email Id</label>
                         <input type="text" formControlName="emailid" name="emailid" [typeahead]="userList"
+                        typeaheadWaitMs="1000"
+                        (typeaheadNoResults)="typeaheadNoResults($event)"
+                        (keypress)="onSearchEmailId($event.target.value)"
                         typeaheadOptionField="email" [typeaheadScrollable]="true" [typeaheadOptionsInScrollableView]="5"
                         placeholder="type and search country"
                                 class="form-control" placeholder="Enter email id"

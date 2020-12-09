@@ -43,6 +43,7 @@ export class OrganizationteamComponent implements OnInit {
   controlname: string;
   organizationName: any;
   userList: any = [];
+  noResult = false;
   constructor(private activatedRoute: ActivatedRoute,
               private router: Router,
               private modalService: NgbModal,
@@ -68,7 +69,7 @@ export class OrganizationteamComponent implements OnInit {
     this.confirmationForm = this.formBuilder.group({
       userInput: ['', [Validators.required]]
     });
-    this.loadUserListForInvitation();
+   // this.loadUserListForInvitation();
   }
   get f() { return this.inviteUserOrgForm.controls; }
   get confirmDelete() { return this.confirmationForm.controls; }
@@ -299,11 +300,19 @@ export class OrganizationteamComponent implements OnInit {
     }
   }
 
-  loadUserListForInvitation() {
-    this.companyService.getUserList(this.constructor.name, moduleName.companyModule).subscribe((data) => {
+  loadUserListForInvitation(searchText) {
+    this.companyService.getUserList(searchText,
+      this.constructor.name, moduleName.companyModule).subscribe((data) => {
       this.userList = data.response;
     });
-  }
+}
 
+typeaheadNoResults(event: boolean): void {
+  this.noResult = event;
+}
+
+onSearchEmailId(searchEmail: string) {
+  this.loadUserListForInvitation(searchEmail);
+}
 
 }
