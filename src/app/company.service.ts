@@ -77,8 +77,8 @@ export class CompanyService {
       }));
   }
 
-  getUserList(componentName, moduleName): Observable<any> {
-    const path = '/invite/user/list';
+  getUserList(query, componentName, moduleName): Observable<any> {
+    const path = '/invite/user/list?query=' + query;
     return this.httpClient.get<any>(environment.apiUrl + path)
       .pipe(catchError(error => {
         this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.getUserList, componentName, moduleName, path);

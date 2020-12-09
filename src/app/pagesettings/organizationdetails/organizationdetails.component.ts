@@ -80,6 +80,7 @@ export class OrganizationdetailsComponent implements OnInit {
   confirmTeammember: any;
   selectedTeamMember: any;
   userList: any = [];
+  noResult = false;
   constructor(private activatedRoute: ActivatedRoute,
               private orgService: OrganizationService,
               private modalService: NgbModal,
@@ -154,7 +155,7 @@ export class OrganizationdetailsComponent implements OnInit {
     this.confirmationForm = this.formBuilder.group({
       userInput: ['', [Validators.required]]
     });
-    this.loadUserListForInvitation();
+   // this.loadUserListForInvitation();
   }
   get f() { return this.inviteUserOrgForm.controls; }
   get orgProp() { return this.organisationPropertyForm.controls; }
@@ -479,10 +480,19 @@ export class OrganizationdetailsComponent implements OnInit {
     });
   }
 
-  loadUserListForInvitation() {
-    this.companyService.getUserList(this.constructor.name, moduleName.companyModule).subscribe((data) => {
-      this.userList = data.response;
-    });
+  loadUserListForInvitation(searchText) {
+      this.companyService.getUserList(searchText,
+        this.constructor.name, moduleName.companyModule).subscribe((data) => {
+        this.userList = data.response;
+      });
+  }
+
+  typeaheadNoResults(event: boolean): void {
+    this.noResult = event;
+  }
+
+  onSearchEmailId(searchEmail: string) {
+    this.loadUserListForInvitation(searchEmail);
   }
 
   viewOrganizationTeam() {

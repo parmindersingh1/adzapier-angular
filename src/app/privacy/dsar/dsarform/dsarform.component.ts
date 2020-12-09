@@ -472,10 +472,10 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
       }
     });
     if (this.sideMenuRequestTypeOptions.length !== 0 && this.isRequestType) {
-      console.log(this.sideMenuRequestTypeOptions);
+     // console.log(this.sideMenuRequestTypeOptions);
       return this.sideMenuRequestTypeOptions;
     } else {
-      console.log(this.sideMenuSubjectTypeOptions);
+     // console.log(this.sideMenuSubjectTypeOptions);
       return this.sideMenuSubjectTypeOptions;
     }
 
@@ -1390,6 +1390,8 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
         this.scriptcode = 'https://develop-privacyportal.adzpier-staging.com/dsar/form/' + this.orgId + '/' + this.propId + '/' + this.crid;
       } else if (window.location.hostname === 'cmp.adzpier-staging.com') {
         this.scriptcode = 'https://privacyportal.adzpier-staging.com/dsar/form/' + this.orgId + '/' + this.propId + '/' + this.crid;
+      } else if (window.location.hostname === 'portal.adzapier.com') {
+        this.scriptcode = 'https://privacyportal.primeconsent.com/dsar/form/' + this.orgId + '/' + this.propId + '/' + this.crid;
       }
     }
   }

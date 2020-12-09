@@ -57,6 +57,7 @@ export class CompanyComponent implements OnInit {
   selectedTeamMember: any;
   controlname: string;
   userList: any = [];
+  noResult = false;
   constructor(private companyService: CompanyService, private modalService: NgbModal,
               private formBuilder: FormBuilder,
               private userService: UserService,
@@ -93,7 +94,7 @@ export class CompanyComponent implements OnInit {
     this.loadCompanyDetails();
     this.pathValues();
     this.loadCompanyTeamMembers();
-    this.loadUserListForInvitation();
+   // this.loadUserListForInvitation();
   }
   get f() { return this.companyForm.controls; }
   get userInvite() { return this.inviteUserForm.controls; }
@@ -349,10 +350,18 @@ export class CompanyComponent implements OnInit {
     });
   }
 
-  loadUserListForInvitation() {
-    this.companyService.getUserList(this.constructor.name, moduleName.companyModule).subscribe((data) => {
+  loadUserListForInvitation(searchText) {
+    this.companyService.getUserList(searchText, this.constructor.name, moduleName.companyModule).subscribe((data) => {
       this.userList = data.response;
     });
+  }
+
+  onSearchEmailId(searchEmail: string) {
+    this.loadUserListForInvitation(searchEmail);
+  }
+
+  typeaheadNoResults(event: boolean): void {
+    this.noResult = event;
   }
 
   removeTeamMember(obj, control: string) {

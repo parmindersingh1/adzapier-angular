@@ -515,6 +515,10 @@
                             placeholder="Enter email id" pattern="^\w+@[a-zA-Z_0-9]+?\.[a-zA-Z]{2,3}$"
                             [ngClass]="{ 'is-invalid': isInviteFormSubmitted && f.emailid.errors }" /> -->
                             <input type="text" formControlName="emailid" name="emailid" [typeahead]="userList"
+                            [typeaheadMinLength]="0"
+                            typeaheadWaitMs="1000"
+                            (typeaheadNoResults)="typeaheadNoResults($event)"
+                            (keypress)="onSearchEmailId($event.target.value)"
                             typeaheadOptionField="email" [typeaheadScrollable]="true" [typeaheadOptionsInScrollableView]="5"
                             placeholder="type and search country"
                                     class="form-control" placeholder="Enter email id"
@@ -524,6 +528,7 @@
                             <div *ngIf="f.emailid.errors.required">User email address is required</div>
                             <div *ngIf="f.emailid.errors.pattern">Please enter valid email address</div>
                         </div>
+                        <!-- <div class="alert alert-danger" *ngIf="noResult">No Results Found</div> -->
                     </div>
 
                     <!-- <div class="form-group">
