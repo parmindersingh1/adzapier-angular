@@ -495,10 +495,9 @@
                 <div class="col-sm-8">
                     <!-- webFormControlList  {{webFormControlList | json}} -->
                     <div class="headerwrapper">
-                        <div  class="logocontainer pd-10" [style.background-color]="headerColor">
+                        <div  class="logocontainer pd-10" [ngClass]="{'img-container':headerlogoBase64,'':!headerlogoBase64}" [style.background-color]="headerColor">
                                 <img *ngIf="headerlogoBase64" class="img-responsive logowidth" 
                                 [src]="transform(headerlogoBase64)" width="150px" />
-
                             <h3 *ngIf="!headerlogoBase64" class="txt-capitalize m-0">{{formName}}</h3>
                         </div>
                         <div class="quilleditor-wrapper py-2">
