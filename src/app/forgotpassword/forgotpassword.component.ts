@@ -81,7 +81,7 @@ export class ForgotpasswordComponent implements OnInit {
         error => {
           this.loadingBar.stop();
           this.showMessage = false;
-          this.alertMsg = error;
+          this.alertMsg = 'Email ID is not registered';
           this.isOpen = true;
           this.alertType = 'danger';
           this.loading = false;

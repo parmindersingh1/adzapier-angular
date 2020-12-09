@@ -156,12 +156,12 @@
                             </td>
                             <td>
                                 <!-- <i-feather name="edit-3" class="feather-16"></i-feather> -->
-                                <a class="pd-r-5 cursor" (click)="editModalPopup(propertyModal,list)">
-                                    <i class="far fa-edit fa-1x"></i>
+                                <a class="pd-r-5" (click)="editModalPopup(propertyModal,list)">
+                                   <span class="cursorpointer"><i class="far fa-edit fa-1x"></i></span>
                                 </a>
-                                <a class="pd-r-5 cursor" *ngIf="list.active"
+                                <a class="pd-r-5" *ngIf="list.active"
                                     (click)="disableProperty(list,'property')">
-                                    <i class="far fa-trash-alt tx-danger fa-sm"></i>
+                                    <span class="cursorpointer">  <i class="far fa-trash-alt tx-danger fa-sm"></i></span>
                                 </a>
                                 <!-- <i-feather name="trash-2" class="feather-16"></i-feather> -->
                             </td>
@@ -273,10 +273,10 @@
                             </td>
                             <td>
                                 <a class="pd-r-5" (click)="editUserInvitation(inviteuserModal,list)">
-                                    <span class="d-none d-sm-inline cursorpointer mg-l-0"> <i
+                                    <span class="d-none d-sm-inline mg-l-0 cursorpointer"> <i
                                             class="fa fa-pen mr-1 colorblue" aria-hidden="true"></i></span>
                                 </a>
-                                <a class="pd-r-5" (click)="removeTeamMember(list,'team member')">
+                                <a class="pd-r-5 cursorpointer" (click)="removeTeamMember(list,'team member')">
                                     <i class="far fa-trash-alt tx-danger fa-sm"></i>
                                 </a>
                             </td>
