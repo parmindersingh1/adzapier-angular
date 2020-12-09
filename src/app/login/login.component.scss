@@ -45,3 +45,12 @@
       .float-right {
         float: right !important; }
   
+.flotingdiv{
+	position: fixed;
+	bottom: 0;
+	top: 80%;
+	right:0;
+	overflow-x: hidden;
+    overflow-y: auto;
+    z-index: 0;    
+}
