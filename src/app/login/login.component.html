@@ -35,7 +35,7 @@
                   <label class="mg-b-0-f">Password</label>
                   <a routerLink="/forgot-password" tabindex="-1">Forgot password?</a>
                 </div>
-                <input type="password" formControlName="password" class="form-control"
+                <input type="password" toggle formControlName="password" class="form-control"
                  [ngClass]="{ 'is-invalid': submitted && f.password.errors }" placeholder="Enter your password"
                 pattern="(?=^.{6,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9]).*$" (ngModelChange)="clearError()"/>
                 <div *ngIf="submitted && f.password.errors"  class="invalid-feedback">

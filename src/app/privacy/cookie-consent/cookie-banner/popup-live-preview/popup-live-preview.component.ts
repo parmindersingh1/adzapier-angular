@@ -1,5 +1,5 @@
 import {Component,  Input,  OnInit} from '@angular/core';
-import {defaultBannerContent, FormDefaultData} from '../../../../_constant/consent-banner.constant';
+import {defaultBannerContent, FormDefaultData, iabPurposeList} from '../../../../_constant/consent-banner.constant';
 
 @Component({
   selector: 'app-popup-live-preview',
@@ -9,6 +9,8 @@ import {defaultBannerContent, FormDefaultData} from '../../../../_constant/conse
 export class PopupLivePreviewComponent implements OnInit {
   public defaultContent = defaultBannerContent;
   currentPurpose = '';
+  iabPurposeList = iabPurposeList;
+  type = 'gdpr';
   @Input('formData') formData: FormDefaultData = new FormDefaultData();
 
   ngOnInit() {
