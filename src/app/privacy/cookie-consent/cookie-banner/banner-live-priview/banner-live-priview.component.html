@@ -4,13 +4,13 @@
     [ngStyle]="{background: formData.bannerBackGroundColor, color: formData.bannerTextColor,
     top : formData.position === 'bottom' ? '377px' : '0px'
     }"
-    class="banner-shadow" id="onetrust-banner-sdk"
+    class="banner-shadow m-0" id="onetrust-banner-sdk"
     style="
        top: 377px;
            position: relative;
    z-index: 0; width: 100%;">
-    <div class="row pd-10">
-      <div class="col-7">
+    <div class="row pd-10 m-0 banner-br-top">
+      <div class="col-6">
         <div id="onetrust-policy">
           <h6 style="font-size: 11px" class="cc-font-size-16 cc-floating-title" id="onetrust-policy-title"
               [ngStyle]="{color: formData.bannerTextColor}">
@@ -23,11 +23,11 @@
 
         </div>
       </div>
-      <div class="col-5 pd-y-10">
-        <div class="floating-flat-margin-cls ng-star-inserted" id="onetrust-button-group">
+      <div class="col-6 p-0">
+        <div class="floating-flat-margin-cls ng-star-inserted mt-3" id="onetrust-button-group">
           <button
             type="button"
-            class="font-size-thirteen mr-2 onetrust-pc-btn-handler cc-float-rounded-icon-btn cookie-setting-link ng-star-inserted"
+            class="font-size-thirteen mr-2 btn-grr cc-float-rounded-icon-btn cookie-setting-link ng-star-inserted"
             [ngStyle]="{background: formData.bannerPreferenceButtonBackGroundColor, borderColor:formData.bannerPreferenceButtonBackGroundColor,
              color: formData.bannerPreferenceButtonTextColor}"
           >
@@ -35,7 +35,7 @@
           </button>
           <button
             type="button"
-            class="onetrust-accept-btn-handler-btn mr-2 onetrust-accept-btn-handler cc-float-rounded-icon-btn ng-star-inserted"
+            class="onetrust-accept-btn-handler-btn btn-grr mr-2  cc-float-rounded-icon-btn ng-star-inserted"
             [ngStyle]="{background: formData.bannerDisableButtonBackGroundColor,
             borderColor: formData.bannerDisableButtonBackGroundColor,
             color: formData.bannerDisableButtonTextColor}"
@@ -45,7 +45,7 @@
 
           <button
             type="button"
-            class="onetrust-accept-btn-handler-btn onetrust-accept-btn-handler cc-float-rounded-icon-btn ng-star-inserted"
+            class="onetrust-accept-btn-handler-btn btn-grr cc-float-rounded-icon-btn ng-star-inserted"
             [ngStyle]="{background: formData.bannerAcceptButtonBackgroundColor,
             borderColor: formData.bannerAcceptButtonBackgroundColor,
             color: formData.bannerAcceptButtonTextColor}"

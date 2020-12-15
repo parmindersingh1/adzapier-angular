@@ -1,111 +1,117 @@
+<div class="text-center mb-3">
+  <div class="form-check-inline">
+    <label class="form-check-label">
+      <input type="radio" class="form-check-input" [(ngModel)]="type" value="gdpr" name="optradio">GDPR
+    </label>
+  </div>
+  <div class="form-check-inline">
+    <label class="form-check-label">
+      <input type="radio" class="form-check-input" [(ngModel)]="type" value="ccpa" name="optradio">CCPA
+    </label>
+  </div>
+
+  <div class="form-check-inline">
+    <label class="form-check-label">
+      <input type="radio" class="form-check-input" [(ngModel)]="type" value="generic" name="optradio">GENERIC
+    </label>
+  </div>
+
+</div>
+
 <div class="cc-banner-preview " style=" height: 27rem; font-size: 9px;">
   <div class="banner-shadow" id="onetrust-preference-sdk"
     style="background-color: rgb(255, 255, 255); color: rgb(105, 105, 105); z-index: 0; max-width: 46rem;">
 
-    <div class="card ">
+    <div *ngIf="type === 'gdpr'" class="card ">
 
       <div class="card-body p-0">
         <p-tabView headerAlignment="center">
           <p-tabPanel header="Purpose">
             <p class="desc">{{formData.popUpPurposeDescription ? formData.popUpPurposeDescription : defaultContent.popUpPurposeDescription}}</p>
-            <div class="row">
-              <div class="col-md-4">
-                <button type="button"
-                        (click)="onSelectPurpose(formData.NecessaryText ? formData.NecessaryText : defaultContent.NecessaryText)"
-                        [ngStyle]="{color: formData.popUpPurposeButtonTextColor, background: formData.popUpPurposeButtonBackGroundColor}"
-                        class="btn btn-default purpose-btn w-100 mb-2">{{formData.NecessaryText ? formData.NecessaryText : defaultContent.NecessaryText}}</button>
-                <button type="button"
-                  (click)="onSelectPurpose(formData.AdvertisingText ? formData.AdvertisingText : defaultContent.AdvertisingText)"
-                  [ngStyle]="{color: formData.popUpPurposeButtonTextColor, background: formData.popUpPurposeButtonBackGroundColor}"
-                  class="btn btn-default purpose-btn w-100 mb-2">{{formData.AdvertisingText ? formData.AdvertisingText : defaultContent.AdvertisingText}}</button>
-                <button type="button"
-                (click)="onSelectPurpose(formData.SocialMediaText ? formData.SocialMediaText : defaultContent.SocialMediaText)"
-                  [ngStyle]="{color: formData.popUpPurposeButtonTextColor, background: formData.popUpPurposeButtonBackGroundColor}"
-                  class="btn btn-default purpose-btn w-100 mb-2">{{formData.SocialMediaText ? formData.SocialMediaText : defaultContent.SocialMediaText}}</button>
-                <button type="button"
-                (click)="onSelectPurpose(formData.AnalyticsText ? formData.AnalyticsText : defaultContent.AnalyticsText)"
-                  [ngStyle]="{color: formData.popUpPurposeButtonTextColor, background: formData.popUpPurposeButtonBackGroundColor}"
-                  class="btn btn-default purpose-btn w-100 mb-2">{{formData.AnalyticsText ? formData.AnalyticsText : defaultContent.AnalyticsText }}</button>
+            <div class="row purpose-list">
+                <div class="card w-100">
 
-              </div>
-              <div class="col-md-8">
-                <ng-container *ngIf="currentPurpose === defaultContent.NecessaryText">
-                  <div class="row">
+
+                  <div [ngStyle]="{color: formData.popUpPurposeButtonTextColor, background: formData.popUpPurposeButtonBackGroundColor}" class=" row purpose-div" >
+                      <div class="col-md-9">
+                        <p class="mt-2 purpose-text mb-2 ml-3">{{formData.NecessaryText ? formData.NecessaryText : defaultContent.NecessaryText}}</p>
+                      </div>
+                      <div class="col-md-3">
+                        <span style="    font-size: 12px;
+                        font-weight: 600;">Always Allow <i class="ml-1 fa fa-chevron-right" aria-hidden="true"></i></span>
+
+                      </div>
+                  </div>
+
+
+
+                  <div [ngStyle]="{color: formData.popUpPurposeButtonTextColor, background: formData.popUpPurposeButtonBackGroundColor}" class=" row purpose-div" >
                     <div class="col-md-9">
-                      <h6> {{formData.PopUpNecessaryHead ? formData.PopUpNecessaryHead : defaultContent.PopUpNecessaryHead}} </h6>
+                      <p class="mt-2 purpose-text mb-2 ml-3">{{formData.AdvertisingText ? formData.AdvertisingText : defaultContent.AdvertisingText}}</p>
                     </div>
                     <div class="col-md-3">
-                      <label class="switch">
-                        <input type="checkbox" #switchBtn checked>
-                        <span [ngStyle]="{background: switchBtn.checked ? formData.popUpSwitchButtonColor: ''}"
-                              class="slider round"></span>
+                      <label class="switch mb-2 mt-2">
+                        <input type="checkbox" #switchBtnn1 checked>
+
+                        <span [ngStyle]="{background: switchBtnn1.checked ? formData.popUpSwitchButtonColor: ''}"
+                          class="slider round"></span>
                       </label>
+                      <i class="ml-3 fa fa-chevron-right" aria-hidden="true"></i>
                     </div>
-                  </div>
-                  <p class="desc">{{formData.PopUpNecessaryDescription ? formData.PopUpNecessaryDescription : defaultContent.PopUpNecessaryDescription}}</p>
-                </ng-container>
-                <ng-container *ngIf="currentPurpose === defaultContent.AdvertisingText">
-                <div class="row">
+                </div>
+
+
+                <div [ngStyle]="{color: formData.popUpPurposeButtonTextColor, background: formData.popUpPurposeButtonBackGroundColor}" class=" row purpose-div" >
                   <div class="col-md-9">
-                    <h6> {{formData.PopUpAdvertisingHead ? formData.PopUpAdvertisingHead : defaultContent.PopUpAdvertisingHead}} </h6>
+                    <p class="mt-2 purpose-text mb-2 ml-3">{{formData.SocialMediaText ? formData.SocialMediaText : defaultContent.SocialMediaText}}</p>
                   </div>
                   <div class="col-md-3">
-                    <label class="switch">
-                      <input type="checkbox" #switchBtn checked>
-                      <span [ngStyle]="{background: switchBtn.checked ? formData.popUpSwitchButtonColor: ''}"
+                    <label class="switch mb-2 mt-2">
+                      <input type="checkbox" #switchBtnn2 checked>
+                      <span [ngStyle]="{background: switchBtnn2.checked ? formData.popUpSwitchButtonColor: ''}"
                         class="slider round"></span>
                     </label>
+                    <i class="ml-3 fa fa-chevron-right" aria-hidden="true"></i>
                   </div>
-                </div>
-                <p class="desc">{{formData.PopUpAdvertisingDescription ? formData.PopUpAdvertisingDescription : defaultContent.PopUpAdvertisingDescription}}</p>
-                </ng-container>
+              </div>
 
-                <ng-container *ngIf="currentPurpose === defaultContent.SocialMediaText ">
-                  <div class="row">
+
+              <div [ngStyle]="{color: formData.popUpPurposeButtonTextColor, background: formData.popUpPurposeButtonBackGroundColor}" class=" row purpose-div" >
+                <div class="col-md-9">
+                  <p class="mt-2 purpose-text mb-2 ml-3">{{formData.AnalyticsText ? formData.AnalyticsText : defaultContent.AnalyticsText }} </p>
+                </div>
+                <div class="col-md-3">
+                  <label class="switch mb-2 mt-2">
+                    <input type="checkbox" #switchBtnn3 checked>
+                    <span [ngStyle]="{background: switchBtnn3.checked ? formData.popUpSwitchButtonColor: ''}"
+                      class="slider round"></span>
+                  </label>
+                  <i class="ml-3 fa fa-chevron-right" aria-hidden="true"></i>
+                </div>
+            </div>
+
+
+                  <div [ngStyle]="{color: formData.popUpPurposeButtonTextColor, background: formData.popUpPurposeButtonBackGroundColor}"
+                  *ngFor="let iabPurpose of iabPurposeList" class="purpose-div row">
                     <div class="col-md-9">
-                      <h6> {{formData.PopUpSocialMediaHead ? formData.PopUpSocialMediaHead : defaultContent.PopUpSocialMediaHead}} </h6>
+                      <p class="mt-2 purpose-text mb-2 ml-3">{{iabPurpose.name}}</p>
                     </div>
                     <div class="col-md-3">
-                      <label class="switch">
+                      <label class="switch mb-2 mt-2">
                         <input type="checkbox" #switchBtn checked>
                         <span [ngStyle]="{background: switchBtn.checked ? formData.popUpSwitchButtonColor: ''}"
                           class="slider round"></span>
                       </label>
+                      <i class="ml-3 fa fa-chevron-right" aria-hidden="true"></i>
                     </div>
-                  </div>
-                  <p class="desc">{{formData.PopUpSocialMediaDescription ? formData.PopUpSocialMediaDescription : defaultContent.PopUpSocialMediaDescription}}</p>
-                  </ng-container>
+                </div>
 
 
-
-                  <ng-container *ngIf="currentPurpose === defaultContent.AnalyticsText">
-                    <div class="row">
-                      <div class="col-md-9">
-                        <h6> {{formData.PopUpAnalyticsHead ? formData.PopUpAnalyticsHead : defaultContent.PopUpAnalyticsHead}} </h6>
-                      </div>
-                      <div class="col-md-3">
-                        <label class="switch">
-                          <input type="checkbox" #switchBtn checked>
-                          <span [ngStyle]="{background: switchBtn.checked ? formData.popUpSwitchButtonColor: ''}"
-                            class="slider round"></span>
-                        </label>
-                      </div>
-                    </div>
-                    <p class="desc">{{formData.PopUpAnalyticsDescription ? formData.PopUpAnalyticsDescription : defaultContent.PopUpAnalyticsDescription}}</p>
-                    </ng-container>
-
-
-
-
-
-
-
-              </div>
+                </div>
             </div>
           </p-tabPanel>
           <p-tabPanel header="Vendors">
             <p class="desc">{{formData.popUpVendorsDescription ? formData.popUpVendorsDescription : defaultContent.popUpVendorsDescription}}</p>
-<!--            <ngx-skeleton-loader count="5" animation="false"></ngx-skeleton-loader>-->
 
            <div class="row" style="align-items: center;">
              <h6 class="tx-10 col-md-5"><b>Company</b></h6>
@@ -119,8 +125,8 @@
               <h6   class="tx-10 col-md-5">https://facebook.com/privacy</h6>
               <h6 class="tx-10 col-md-2 mb-0">
                 <label class="switch">
-                  <input type="checkbox" #switchBtn5 checked>
-                  <span [ngStyle]="{background: switchBtn5.checked ? formData.popUpSwitchButtonColor: ''}"
+                  <input type="checkbox" #switchBtn35 checked>
+                  <span [ngStyle]="{background: switchBtn35.checked ? formData.popUpSwitchButtonColor: ''}"
                         class="slider round"></span>
                 </label>
                 </h6>
@@ -131,8 +137,8 @@
               <h6   class="tx-10 col-md-5">https//google.com/privacy</h6>
               <h6 class="tx-10 col-md-2 mb-0">
                 <label class="switch">
-                  <input type="checkbox" #switchBtn4 checked>
-                  <span [ngStyle]="{background: switchBtn4.checked ? formData.popUpSwitchButtonColor: ''}"
+                  <input type="checkbox" #switchBtn34 checked>
+                  <span [ngStyle]="{background: switchBtn34.checked ? formData.popUpSwitchButtonColor: ''}"
                         class="slider round"></span>
                 </label>
               </h6>
@@ -143,8 +149,8 @@
               <h6   class="tx-10 col-md-5">https://adzpaier.com/privacy</h6>
               <h6 class="tx-10 col-md-2 mb-0">
                 <label class="switch">
-                  <input type="checkbox" #switchBtn3 checked>
-                  <span [ngStyle]="{background: switchBtn3.checked ? formData.popUpSwitchButtonColor: ''}"
+                  <input type="checkbox" #switchBtn73 checked>
+                  <span [ngStyle]="{background: switchBtn73.checked ? formData.popUpSwitchButtonColor: ''}"
                         class="slider round"></span>
                 </label>
               </h6>
@@ -155,8 +161,8 @@
               <h6   class="tx-10 col-md-5">https://phonetechtalk.com/privacy</h6>
               <h6 class="tx-10 col-md-2 mb-0">
                 <label class="switch">
-                  <input type="checkbox" #switchBtn2 checked>
-                  <span [ngStyle]="{background: switchBtn2.checked ? formData.popUpSwitchButtonColor: ''}"
+                  <input type="checkbox" #switchBtn72 checked>
+                  <span [ngStyle]="{background: switchBtn72.checked ? formData.popUpSwitchButtonColor: ''}"
                         class="slider round"></span>
                 </label>
               </h6>
@@ -167,8 +173,8 @@
               <h6   class="tx-10 col-md-5">https//stacktrick.com/privacy</h6>
               <h6 class="tx-10 col-md-2 mb-0">
                 <label class="switch">
-                  <input type="checkbox" #switchBtn1 checked>
-                  <span [ngStyle]="{background: switchBtn1.checked ? formData.popUpSwitchButtonColor: ''}"
+                  <input type="checkbox" #switchBtn71 checked>
+                  <span [ngStyle]="{background: switchBtn71.checked ? formData.popUpSwitchButtonColor: ''}"
                         class="slider round"></span>
                 </label>
               </h6>
@@ -214,7 +220,465 @@
       </div>
     </div>
 
+
+
+
+
+
+    <div *ngIf="type === 'ccpa'" class="card ">
+
+      <div class="card-body p-0">
+        <p-tabView headerAlignment="center">
+          <p-tabPanel header="Purpose">
+            <p class="desc">{{formData.popUpPurposeDescription ? formData.popUpPurposeDescription : defaultContent.popUpPurposeDescription}}</p>
+            <div class="row purpose-list">
+                <div class="card w-100">
+
+
+                  <div [ngStyle]="{color: formData.popUpPurposeButtonTextColor, background: formData.popUpPurposeButtonBackGroundColor}" class=" row purpose-div" >
+                      <div class="col-md-9">
+                        <p class="mt-2 purpose-text mb-2 ml-3">{{formData.NecessaryText ? formData.NecessaryText : defaultContent.NecessaryText}}</p>
+                      </div>
+                      <div class="col-md-3">
+                        <span style="    font-size: 12px;
+                        font-weight: 600;">Always Allow <i class="ml-1 fa fa-chevron-right" aria-hidden="true"></i></span>
+
+                      </div>
+                  </div>
+
+
+
+                  <div [ngStyle]="{color: formData.popUpPurposeButtonTextColor, background: formData.popUpPurposeButtonBackGroundColor}" class=" row purpose-div" >
+                    <div class="col-md-9">
+                      <p class="mt-2 purpose-text mb-2 ml-3">{{formData.AdvertisingText ? formData.AdvertisingText : defaultContent.AdvertisingText}}</p>
+                    </div>
+                    <div class="col-md-3">
+                      <label class="switch mb-2 mt-2">
+                        <input type="checkbox" #switchBtn11 checked>
+                        <span [ngStyle]="{background: switchBtn11.checked ? formData.popUpSwitchButtonColor: ''}"
+                          class="slider round"></span>
+                      </label>
+                      <i class="ml-3 fa fa-chevron-right" aria-hidden="true"></i>
+                    </div>
+                </div>
+
+
+                <div [ngStyle]="{color: formData.popUpPurposeButtonTextColor, background: formData.popUpPurposeButtonBackGroundColor}" class=" row purpose-div" >
+                  <div class="col-md-9">
+                    <p class="mt-2 purpose-text mb-2 ml-3">{{formData.SocialMediaText ? formData.SocialMediaText : defaultContent.SocialMediaText}}</p>
+                  </div>
+                  <div class="col-md-3">
+                    <label class="switch mb-2 mt-2">
+                      <input type="checkbox" #switchBtn22 checked>
+
+                      <span [ngStyle]="{background: switchBtn22.checked ? formData.popUpSwitchButtonColor: ''}"
+                        class="slider round"></span>
+                    </label>
+                    <i class="ml-3 fa fa-chevron-right" aria-hidden="true"></i>
+                  </div>
+              </div>
+
+
+              <div [ngStyle]="{color: formData.popUpPurposeButtonTextColor, background: formData.popUpPurposeButtonBackGroundColor}" class=" row purpose-div" >
+                <div class="col-md-9">
+                  <p class="mt-2 purpose-text mb-2 ml-3">{{formData.AnalyticsText ? formData.AnalyticsText : defaultContent.AnalyticsText }} </p>
+                </div>
+                <div class="col-md-3">
+                  <label class="switch mb-2 mt-2">
+                    <input type="checkbox" #switchBtn33 checked>
+                    <span [ngStyle]="{background: switchBtn33.checked ? formData.popUpSwitchButtonColor: ''}"
+                      class="slider round"></span>
+                  </label>
+                  <i class="ml-3 fa fa-chevron-right" aria-hidden="true"></i>
+                </div>
+            </div>
+
+
+
+
+                </div>
+            </div>
+          </p-tabPanel>
+          <p-tabPanel header="Privacy Info">
+            <p class="desc">{{formData.popUpVendorsDescription ? formData.popUpVendorsDescription : defaultContent.popUpVendorsDescription}}</p>
+
+
+            <div class="row w-100" style=" align-items: center;">
+              <p-accordion class="w-100">
+                <p-accordionTab header="Why do you need my consent?">
+                  What are cookies used?
+                  Whit this information is created a user profile based on this and other Data. It is anonymous and only linked to a device or in in combination with your browser.
+                </p-accordionTab>
+                <p-accordionTab header="What about cookies?">
+                  How they work
+                  By placing cookies in your device provide insight into a number of technical data when you visit our website (e.g your IP address, your operating system , the browser you use, the internet page you visit our website).                </p-accordionTab>
+                <p-accordionTab header="Audit ID">
+                  Audit Id is a random unique number that is generated for you when you visit this website. The purpose of the Audit ID is to keep a record of your consent history on which cookies you accepted and when. The information kept in relation to your Audit ID includes, timestamp, version of cookie vendor list and a list of vendors that are allowed to process your data.                </p-accordionTab>
+            </p-accordion>
+            </div>
+            <hr class="mt-1 mb-1" />
+          </p-tabPanel>
+        </p-tabView>
+      </div>
+      <div class="card-footer">
+          <div class="row">
+            <div class="col-md-6">
+              <button type="button"
+              style="font-size: 11px"
+               [ngStyle]="{
+                background: formData.popUpDoNotSellBackgroundColor,
+                color: formData.popUpDoNotSellTextColor
+              }" class="w-100 btn btn-default">
+                <span role="img" aria-label="stop" class="anticon anticon-stop"><svg viewBox="64 64 896 896" focusable="false" class="" data-icon="stop" width="1em" height="1em" fill="currentColor" aria-hidden="true"><path d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm0 820c-205.4 0-372-166.6-372-372 0-89 31.3-170.8 83.5-234.8l523.3 523.3C682.8 852.7 601 884 512 884zm288.5-137.2L277.2 223.5C341.2 171.3 423 140 512 140c205.4 0 372 166.6 372 372 0 89-31.3 170.8-83.5 234.8z"></path></svg></span>
+                {{formData.popUpDoNotSellTextContent ? formData.popUpDoNotSellTextContent : defaultContent.popUpDoNotSellTextContent}}</button>
+            </div>
+            <div class="col-md-6">
+              <button type="button"
+              style="font-size: 11px"
+              [ngStyle]="{
+                background: formData.popUpSaveMyChoiceButtonBackgroundColor,
+                color: formData.popUpSaveMyChoiceButtonTextColor
+              }" class="w-100 btn btn-default">
+                <span role="img" aria-label="check" class="anticon anticon-check"><svg viewBox="64 64 896 896" focusable="false" class="" data-icon="check" width="1em" height="1em" fill="currentColor" aria-hidden="true"><path d="M912 190h-69.9c-9.8 0-19.1 4.5-25.1 12.2L404.7 724.5 207 474a32 32 0 00-25.1-12.2H112c-6.7 0-10.4 7.7-6.3 12.9l273.9 347c12.8 16.2 37.4 16.2 50.3 0l488.4-618.9c4.1-5.1.4-12.8-6.3-12.8z"></path></svg></span>
+                {{formData.popUpSaveMyChoiceButtonTextContent ? formData.popUpSaveMyChoiceButtonTextContent : defaultContent.popUpSaveMyChoiceButtonTextContent}}</button>
+
+            </div>
+          </div>
+      </div>
+    </div>
+
+
+
+
+
+    <div *ngIf="type === 'generic'" class="card ">
+
+      <div class="card-body p-0">
+        <p-tabView headerAlignment="center">
+          <p-tabPanel header="Purpose">
+            <p class="desc">{{formData.popUpPurposeDescription ? formData.popUpPurposeDescription : defaultContent.popUpPurposeDescription}}</p>
+            <div class="row purpose-list">
+                <div class="card w-100">
+
+
+                  <div [ngStyle]="{color: formData.popUpPurposeButtonTextColor, background: formData.popUpPurposeButtonBackGroundColor}" class=" row purpose-div" >
+                      <div class="col-md-9">
+                        <p class="mt-2 purpose-text mb-2 ml-3">{{formData.NecessaryText ? formData.NecessaryText : defaultContent.NecessaryText}}</p>
+                      </div>
+                      <div class="col-md-3">
+                        <span style="    font-size: 12px;
+                        font-weight: 600;">Always Allow <i class="ml-1 fa fa-chevron-right" aria-hidden="true"></i></span>
+
+                      </div>
+                  </div>
+
+
+
+                  <div [ngStyle]="{color: formData.popUpPurposeButtonTextColor, background: formData.popUpPurposeButtonBackGroundColor}" class=" row purpose-div" >
+                    <div class="col-md-9">
+                      <p class="mt-2 purpose-text mb-2 ml-3">{{formData.AdvertisingText ? formData.AdvertisingText : defaultContent.AdvertisingText}}</p>
+                    </div>
+                    <div class="col-md-3">
+                      <label class="switch mb-2 mt-2">
+                        <input type="checkbox" #switchBtn14 checked>
+                        <span [ngStyle]="{background: switchBtn14.checked ? formData.popUpSwitchButtonColor: ''}"
+                          class="slider round"></span>
+                      </label>
+                      <i class="ml-3 fa fa-chevron-right" aria-hidden="true"></i>
+                    </div>
+                </div>
+
+
+                <div [ngStyle]="{color: formData.popUpPurposeButtonTextColor, background: formData.popUpPurposeButtonBackGroundColor}" class=" row purpose-div" >
+                  <div class="col-md-9">
+                    <p class="mt-2 purpose-text mb-2 ml-3">{{formData.SocialMediaText ? formData.SocialMediaText : defaultContent.SocialMediaText}}</p>
+                  </div>
+                  <div class="col-md-3">
+                    <label class="switch mb-2 mt-2">
+                      <input type="checkbox" #switchBtn25 checked>
+                      <span [ngStyle]="{background: switchBtn25.checked ? formData.popUpSwitchButtonColor: ''}"
+                        class="slider round"></span>
+                    </label>
+                    <i class="ml-3 fa fa-chevron-right" aria-hidden="true"></i>
+                  </div>
+              </div>
+
+
+              <div [ngStyle]="{color: formData.popUpPurposeButtonTextColor, background: formData.popUpPurposeButtonBackGroundColor}" class=" row purpose-div" >
+                <div class="col-md-9">
+                  <p class="mt-2 purpose-text mb-2 ml-3">{{formData.AnalyticsText ? formData.AnalyticsText : defaultContent.AnalyticsText }} </p>
+                </div>
+                <div class="col-md-3">
+                  <label class="switch mb-2 mt-2">
+                    <input type="checkbox" #switchBtn36 checked>
+                    <span [ngStyle]="{background: switchBtn36.checked ? formData.popUpSwitchButtonColor: ''}"
+                      class="slider round"></span>
+                  </label>
+                  <i class="ml-3 fa fa-chevron-right" aria-hidden="true"></i>
+                </div>
+            </div>
+
+
+
+
+                </div>
+            </div>
+          </p-tabPanel>
+          <p-tabPanel header="Privacy Info">
+            <p class="desc">{{formData.popUpVendorsDescription ? formData.popUpVendorsDescription : defaultContent.popUpVendorsDescription}}</p>
+
+
+            <div class="row w-100" style=" align-items: center;">
+              <p-accordion class="w-100">
+                <p-accordionTab header="Why do you need my consent?">
+                  What are cookies used?
+                  Whit this information is created a user profile based on this and other Data. It is anonymous and only linked to a device or in in combination with your browser.
+                </p-accordionTab>
+                <p-accordionTab header="What about cookies?">
+                  How they work
+                  By placing cookies in your device provide insight into a number of technical data when you visit our website (e.g your IP address, your operating system , the browser you use, the internet page you visit our website).                </p-accordionTab>
+                <p-accordionTab header="Audit ID">
+                  Audit Id is a random unique number that is generated for you when you visit this website. The purpose of the Audit ID is to keep a record of your consent history on which cookies you accepted and when. The information kept in relation to your Audit ID includes, timestamp, version of cookie vendor list and a list of vendors that are allowed to process your data.                </p-accordionTab>
+            </p-accordion>
+            </div>
+            <hr class="mt-1 mb-1" />
+          </p-tabPanel>
+        </p-tabView>
+      </div>
+      <div class="card-footer">
+          <div class="row">
+            <div class="col-md-6">
+              <button type="button"
+              style="font-size: 11px"
+               [ngStyle]="{
+                background: formData.popUpSaveMyChoiceButtonBackgroundColor,
+                color: formData.popUpSaveMyChoiceButtonTextColor
+              }" class="w-100 btn btn-default">
+                <span role="img" aria-label="stop" class="anticon anticon-stop"><svg viewBox="64 64 896 896" focusable="false" class="" data-icon="stop" width="1em" height="1em" fill="currentColor" aria-hidden="true"><path d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm0 820c-205.4 0-372-166.6-372-372 0-89 31.3-170.8 83.5-234.8l523.3 523.3C682.8 852.7 601 884 512 884zm288.5-137.2L277.2 223.5C341.2 171.3 423 140 512 140c205.4 0 372 166.6 372 372 0 89-31.3 170.8-83.5 234.8z"></path></svg></span>
+                {{formData.popUpDoNotSellTextContent ? formData.popUpSaveMyChoiceButtonTextContent : defaultContent.popUpSaveMyChoiceButtonTextContent}}</button>
+            </div>
+            <div class="col-md-6">
+              <button type="button"
+              style="font-size: 11px"
+              [ngStyle]="{
+                background: formData.popUpAllowAllButtonBackgroundColor,
+                color: formData.popUpAllowAllButtonTextColor
+              }" class="w-100 btn btn-default">
+                <span role="img" aria-label="check" class="anticon anticon-check"><svg viewBox="64 64 896 896" focusable="false" class="" data-icon="check" width="1em" height="1em" fill="currentColor" aria-hidden="true"><path d="M912 190h-69.9c-9.8 0-19.1 4.5-25.1 12.2L404.7 724.5 207 474a32 32 0 00-25.1-12.2H112c-6.7 0-10.4 7.7-6.3 12.9l273.9 347c12.8 16.2 37.4 16.2 50.3 0l488.4-618.9c4.1-5.1.4-12.8-6.3-12.8z"></path></svg></span>
+                {{formData.popUpAllowAllButtonTextContent ? formData.popUpAllowAllButtonTextContent : defaultContent.popUpAllowAllButtonTextContent}}</button>
+
+            </div>
+          </div>
+      </div>
+    </div>
+
+
+
   </div>
 </div>
 <style>
 </style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--
+<div class="card-body p-0">
+  <p-tabView headerAlignment="center">
+    <p-tabPanel header="Purpose">
+      <p class="desc">{{formData.popUpPurposeDescription ? formData.popUpPurposeDescription : defaultContent.popUpPurposeDescription}}</p>
+      <div class="row">
+        <div class="col-md-4">
+          <button type="button"
+                  (click)="onSelectPurpose(formData.NecessaryText ? formData.NecessaryText : defaultContent.NecessaryText)"
+                  [ngStyle]="{color: formData.popUpPurposeButtonTextColor, background: formData.popUpPurposeButtonBackGroundColor}"
+                  class="btn btn-default purpose-btn w-100 mb-2">{{formData.NecessaryText ? formData.NecessaryText : defaultContent.NecessaryText}}</button>
+          <button type="button"
+            (click)="onSelectPurpose(formData.AdvertisingText ? formData.AdvertisingText : defaultContent.AdvertisingText)"
+            [ngStyle]="{color: formData.popUpPurposeButtonTextColor, background: formData.popUpPurposeButtonBackGroundColor}"
+            class="btn btn-default purpose-btn w-100 mb-2">{{formData.AdvertisingText ? formData.AdvertisingText : defaultContent.AdvertisingText}}</button>
+          <button type="button"
+          (click)="onSelectPurpose(formData.SocialMediaText ? formData.SocialMediaText : defaultContent.SocialMediaText)"
+            [ngStyle]="{color: formData.popUpPurposeButtonTextColor, background: formData.popUpPurposeButtonBackGroundColor}"
+            class="btn btn-default purpose-btn w-100 mb-2">{{formData.SocialMediaText ? formData.SocialMediaText : defaultContent.SocialMediaText}}</button>
+          <button type="button"
+          (click)="onSelectPurpose(formData.AnalyticsText ? formData.AnalyticsText : defaultContent.AnalyticsText)"
+            [ngStyle]="{color: formData.popUpPurposeButtonTextColor, background: formData.popUpPurposeButtonBackGroundColor}"
+            class="btn btn-default purpose-btn w-100 mb-2">{{formData.AnalyticsText ? formData.AnalyticsText : defaultContent.AnalyticsText }}</button>
+
+        </div>
+        <div class="col-md-8">
+          <ng-container *ngIf="currentPurpose === defaultContent.NecessaryText">
+            <div class="row">
+              <div class="col-md-9">
+                <h6> {{formData.PopUpNecessaryHead ? formData.PopUpNecessaryHead : defaultContent.PopUpNecessaryHead}} </h6>
+              </div>
+              <div class="col-md-3">
+                <label class="switch">
+                  <input type="checkbox" #switchBtn checked>
+                  <span [ngStyle]="{background: switchBtn.checked ? formData.popUpSwitchButtonColor: ''}"
+                        class="slider round"></span>
+                </label>
+              </div>
+            </div>
+            <p class="desc">{{formData.PopUpNecessaryDescription ? formData.PopUpNecessaryDescription : defaultContent.PopUpNecessaryDescription}}</p>
+          </ng-container>
+          <ng-container *ngIf="currentPurpose === defaultContent.AdvertisingText">
+          <div class="row">
+            <div class="col-md-9">
+              <h6> {{formData.PopUpAdvertisingHead ? formData.PopUpAdvertisingHead : defaultContent.PopUpAdvertisingHead}} </h6>
+            </div>
+            <div class="col-md-3">
+              <label class="switch">
+                <input type="checkbox" #switchBtn checked>
+                <span [ngStyle]="{background: switchBtn.checked ? formData.popUpSwitchButtonColor: ''}"
+                  class="slider round"></span>
+              </label>
+            </div>
+          </div>
+          <p class="desc">{{formData.PopUpAdvertisingDescription ? formData.PopUpAdvertisingDescription : defaultContent.PopUpAdvertisingDescription}}</p>
+          </ng-container>
+
+          <ng-container *ngIf="currentPurpose === defaultContent.SocialMediaText ">
+            <div class="row">
+              <div class="col-md-9">
+                <h6> {{formData.PopUpSocialMediaHead ? formData.PopUpSocialMediaHead : defaultContent.PopUpSocialMediaHead}} </h6>
+              </div>
+              <div class="col-md-3">
+                <label class="switch">
+                  <input type="checkbox" #switchBtn checked>
+                  <span [ngStyle]="{background: switchBtn.checked ? formData.popUpSwitchButtonColor: ''}"
+                    class="slider round"></span>
+                </label>
+              </div>
+            </div>
+            <p class="desc">{{formData.PopUpSocialMediaDescription ? formData.PopUpSocialMediaDescription : defaultContent.PopUpSocialMediaDescription}}</p>
+            </ng-container>
+
+
+
+            <ng-container *ngIf="currentPurpose === defaultContent.AnalyticsText">
+              <div class="row">
+                <div class="col-md-9">
+                  <h6> {{formData.PopUpAnalyticsHead ? formData.PopUpAnalyticsHead : defaultContent.PopUpAnalyticsHead}} </h6>
+                </div>
+                <div class="col-md-3">
+                  <label class="switch">
+                    <input type="checkbox" #switchBtn checked>
+                    <span [ngStyle]="{background: switchBtn.checked ? formData.popUpSwitchButtonColor: ''}"
+                      class="slider round"></span>
+                  </label>
+                </div>
+              </div>
+              <p class="desc">{{formData.PopUpAnalyticsDescription ? formData.PopUpAnalyticsDescription : defaultContent.PopUpAnalyticsDescription}}</p>
+              </ng-container>
+
+
+
+
+
+
+
+        </div>
+      </div>
+    </p-tabPanel>
+    <p-tabPanel header="Vendors">
+      <p class="desc">{{formData.popUpVendorsDescription ? formData.popUpVendorsDescription : defaultContent.popUpVendorsDescription}}</p>
+
+     <div class="row" style="align-items: center;">
+       <h6 class="tx-10 col-md-5"><b>Company</b></h6>
+       <h6 class="tx-10 col-md-5"><b>Privacy</b></h6>
+       <h6 class="tx-10 col-md-2"><b>
+         Off / ON</b></h6>
+     </div>
+      <hr class="mt-1 mb-1" />
+      <div class="row" style="align-items: center;">
+        <h6 class="tx-10 col-md-5">Facebook</h6>
+        <h6   class="tx-10 col-md-5">https://facebook.com/privacy</h6>
+        <h6 class="tx-10 col-md-2 mb-0">
+          <label class="switch">
+            <input type="checkbox" #switchBtn5 checked>
+            <span [ngStyle]="{background: switchBtn5.checked ? formData.popUpSwitchButtonColor: ''}"
+                  class="slider round"></span>
+          </label>
+          </h6>
+      </div>
+      <hr class="mt-1 mb-1" />
+      <div class="row" style="align-items: center;">
+        <h6 class="tx-10 col-md-5">Google</h6>
+        <h6   class="tx-10 col-md-5">https//google.com/privacy</h6>
+        <h6 class="tx-10 col-md-2 mb-0">
+          <label class="switch">
+            <input type="checkbox" #switchBtn4 checked>
+            <span [ngStyle]="{background: switchBtn4.checked ? formData.popUpSwitchButtonColor: ''}"
+                  class="slider round"></span>
+          </label>
+        </h6>
+      </div>
+      <hr class="mt-1 mb-1" />
+      <div class="row" style="align-items: center;">
+        <h6 class="tx-10 col-md-5">Adzapier</h6>
+        <h6   class="tx-10 col-md-5">https://adzpaier.com/privacy</h6>
+        <h6 class="tx-10 col-md-2 mb-0">
+          <label class="switch">
+            <input type="checkbox" #switchBtn3 checked>
+            <span [ngStyle]="{background: switchBtn3.checked ? formData.popUpSwitchButtonColor: ''}"
+                  class="slider round"></span>
+          </label>
+        </h6>
+      </div>
+      <hr class="mt-1 mb-1" />
+      <div class="row" style="align-items: center;">
+        <h6 class="tx-10 col-md-5">Phonetechtalk</h6>
+        <h6   class="tx-10 col-md-5">https://phonetechtalk.com/privacy</h6>
+        <h6 class="tx-10 col-md-2 mb-0">
+          <label class="switch">
+            <input type="checkbox" #switchBtn2 checked>
+            <span [ngStyle]="{background: switchBtn2.checked ? formData.popUpSwitchButtonColor: ''}"
+                  class="slider round"></span>
+          </label>
+        </h6>
+      </div>
+      <hr class="mt-1 mb-1" />
+      <div class="row" style="align-items: center;">
+        <h6 class="tx-10 col-md-5">Stacktrick</h6>
+        <h6   class="tx-10 col-md-5">https//stacktrick.com/privacy</h6>
+        <h6 class="tx-10 col-md-2 mb-0">
+          <label class="switch">
+            <input type="checkbox" #switchBtn1 checked>
+            <span [ngStyle]="{background: switchBtn1.checked ? formData.popUpSwitchButtonColor: ''}"
+                  class="slider round"></span>
+          </label>
+        </h6>
+      </div>
+      <hr class="mt-1 mb-1" />
+    </p-tabPanel>
+  </p-tabView>
+</div> -->

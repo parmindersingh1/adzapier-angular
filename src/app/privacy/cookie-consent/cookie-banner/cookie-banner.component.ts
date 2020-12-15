@@ -122,12 +122,10 @@ export class CookieBannerComponent implements OnInit {
 
   onSetValueConfig() {
     const configData: any = this.bannerCookieData;
-    // console.log('configData', configData);
     if ( configData.gdpr_global === 'true' || configData.gdpr_global === true) {
       this.cookieBannerForm.get('gdprTarget').clearValidators();
     }
     this.cookieBannerForm.get('gdprTarget').updateValueAndValidity();
-    console.log('configData', configData);
 
     this.cookieBannerForm.patchValue({
       ccpaTarget: configData.ccpa_target,
@@ -337,7 +335,7 @@ export class CookieBannerComponent implements OnInit {
 
 
   onSetValue() {
-    console.log('this.bannerCookieData.config.BadgePosition', this.bannerCookieData.config)
+    try {
     this.cookieBannerForm.patchValue({
       // DISPLAY FREQUENCY
       bannerPartialConsent: this.bannerCookieData.config.DisplayFrequency.bannerPartialConsent,
@@ -491,7 +489,10 @@ export class CookieBannerComponent implements OnInit {
     this.formContent.popUpDoNotSellTextContent = this.bannerCookieData.config.POPUP.DoNotSellButtonStylesAndContent.textContent ? this.bannerCookieData.config.POPUP.DoNotSellButtonStylesAndContent.textContent : this.data.popUpDoNotSellTextContent;
     this.formContent.popUpDoNotSellTextColor = this.bannerCookieData.config.POPUP.DoNotSellButtonStylesAndContent.textColor;
     this.formContent.popUpDoNotSellBackgroundColor = this.bannerCookieData.config.POPUP.DoNotSellButtonStylesAndContent.backgroundColor;
+  } catch (e) {
+    console.log('Get Config From Server Error', e);
 
+  }
 
 
   }
@@ -583,7 +584,6 @@ export class CookieBannerComponent implements OnInit {
     };
     this.loading.start();
     this.isPublish = true;
-    console.log('datassdfsadf', JSON.stringify(userPrefrencesData))
     this.cookieBannerService.onUpdateCookieBannerData(userPrefrencesData, this.currentManagedOrgID , this.currrentManagedPropID, this.constructor.name, moduleName.cookieBannerModule)
       .subscribe((res: any) => {
         this.loading.stop();
