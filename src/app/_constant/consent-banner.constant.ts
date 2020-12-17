@@ -24,8 +24,10 @@ export const defaultBannerContent = {
   privacyTextColor: '#162893',
   position: 'bottom',
   bannerTitle: 'We use cookies Data',
+  bannerTitle2: 'We and our Partners data to provide',
   bannerDescription: 'We may place these for analysis of our visitor data, to improve our website, show personalised content and to give you a great website experience. For more information about the cookies we use open the settings.',
   bannerTextColor: '#ffffff',
+  bannerBorderColor: '#162893',
   bannerBackGroundColor: '#000000',
   //
   bannerPreferenceButtonTextContent: 'Privacy Setting',
@@ -103,9 +105,11 @@ export class FormDefaultData {
   privacyTextColor: '#162893';
   position: 'bottom';
   bannerTitle: 'We use cookies Data';
+  bannerTitle2: 'We and our Partners data to provide';
   bannerDescription: 'We may place these for analysis of our visitor data, to improve our website, show personalised content and to give you a great website experience. For more information about the cookies we use open the settings.';
-  bannerTextColor: '#fff';
-  bannerBackGroundColor: '#000';
+  bannerTextColor: '#ffffff';
+  bannerBorderColor: '#162893';
+  bannerBackGroundColor: '#000000';
   //
   bannerPreferenceButtonTextContent: 'Privacy Setting';
   bannerPreferenceButtonTextColor: '#ffffff';
@@ -114,6 +118,10 @@ export class FormDefaultData {
   bannerDisableButtonTextContent: 'Disable Button';
   bannerDisableButtonTextColor: '#ffffff';
   bannerDisableButtonBackGroundColor: '#162893';
+
+  bannerDoNotSellMyDataTextContent: 'Do Not Sell My Data';
+  bannerDoNotSellMyDataTextColor: '#ffffff';
+  bannerDoNotSellMyDataBackGroundColor: '#162893';
   //
   bannerAcceptButtonTextContent: 'Accept All';
   bannerAcceptButtonTextColor: '#ffffff';

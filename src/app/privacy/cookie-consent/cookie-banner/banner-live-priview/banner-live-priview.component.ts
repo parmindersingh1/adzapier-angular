@@ -1,5 +1,5 @@
 import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
-import {defaultBannerContent, FormDefaultData} from '../../../../_constant/consent-banner.constant';
+import {defaultBannerContent, FormDefaultData, iabPurposeList} from '../../../../_constant/consent-banner.constant';
 
 @Component({
   selector: 'app-banner-live-priview',
@@ -8,8 +8,12 @@ import {defaultBannerContent, FormDefaultData} from '../../../../_constant/conse
 })
 export class BannerLivePriviewComponent implements OnInit, OnChanges {
   public defaultContent = defaultBannerContent;
+  type = 'gdpr';
+  iabPurposeList = iabPurposeList;
+
 @Input('formData') formData: FormDefaultData = new FormDefaultData();
 @Input('isDisabled') isDisabled = false;
+@Input('isGdprGlobal') isGdprGlobal = false;
   constructor() { }
 
   ngOnInit() {
