@@ -4,13 +4,13 @@
       <input type="radio" class="form-check-input" [(ngModel)]="type" value="gdpr" name="optradio">GDPR
     </label>
   </div>
-  <div class="form-check-inline">
+  <div *ngIf="!isGdprGlobal" class="form-check-inline">
     <label class="form-check-label">
       <input type="radio" class="form-check-input" [(ngModel)]="type" value="ccpa" name="optradio">CCPA
     </label>
   </div>
 
-  <div class="form-check-inline">
+  <div class="form-check-inline" *ngIf="!isGdprGlobal">
     <label class="form-check-label">
       <input type="radio" class="form-check-input" [(ngModel)]="type" value="generic" name="optradio">GENERIC
     </label>

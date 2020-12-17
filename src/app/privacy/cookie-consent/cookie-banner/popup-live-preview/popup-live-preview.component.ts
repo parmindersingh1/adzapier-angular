@@ -11,6 +11,7 @@ export class PopupLivePreviewComponent implements OnInit {
   currentPurpose = '';
   iabPurposeList = iabPurposeList;
   type = 'gdpr';
+  @Input('isGdprGlobal') isGdprGlobal = false;
   @Input('formData') formData: FormDefaultData = new FormDefaultData();
 
   ngOnInit() {

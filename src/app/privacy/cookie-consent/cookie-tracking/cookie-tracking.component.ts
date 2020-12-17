@@ -3,6 +3,7 @@ import {CookieTrackingService} from '../../../_services/cookie-tracking.service'
 import {OrganizationService} from '../../../_services';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
 import {moduleName} from '../../../_constant/module-name.constant';
+import { GdprService } from 'src/app/_services/gdpr.service';
 
 @Component({
   selector: 'app-cookie-consent',
@@ -21,11 +22,15 @@ export class CookieTrackingComponent implements OnInit {
   constructor(private cookieConsentService: CookieTrackingService,
               private  orgservice: OrganizationService,
               private loading: NgxUiLoaderService,
+              private gdprService: GdprService
 
   ) { }
 
   ngOnInit() {
     this.onGetPropsAndOrgId();
+    console.log(
+    //  this.gdprService.docodeTcString()
+    )
   }
 
   onGetPropsAndOrgId() {
@@ -59,5 +64,10 @@ export class CookieTrackingComponent implements OnInit {
         }, error => {
           this.tLoading = false;
         });
+  }
+
+  onDecodeString(consent) {
+    this.gdprService.setConsent(consent);
+    // console.log(tcString, status);
   }
 }
