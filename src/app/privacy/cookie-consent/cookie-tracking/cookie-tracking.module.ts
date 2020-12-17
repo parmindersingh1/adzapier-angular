@@ -8,7 +8,8 @@ import {FormsModule} from '@angular/forms';
 import {RouterModule, Routes} from '@angular/router';
 
 const route: Routes = [
-  {path: '', component: CookieTrackingComponent}
+  {path: '', component: CookieTrackingComponent},
+  {path: 'decode', loadChildren: () => import('./decode/decode.module').then(m => m.DecodeModule)}
 ];
 
 @NgModule({

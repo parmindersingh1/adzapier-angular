@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {CookieBannerComponent} from './cookie-banner.component';
 import {RouterModule, Routes} from '@angular/router';
-import {ReactiveFormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { SharedbootstrapModule } from 'src/app/sharedbootstrap/sharedbootstrap.module';
 import {SetupComponent} from './setup/setup.component';
 import {TabsModule} from 'ngx-bootstrap/tabs';
@@ -24,6 +24,7 @@ const path: Routes = [{
     RouterModule.forChild(path),
     ReactiveFormsModule,
     SharedbootstrapModule,
+    FormsModule,
     TabsModule,
     TabViewModule,
     AccordionModule,

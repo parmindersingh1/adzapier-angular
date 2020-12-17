@@ -5,8 +5,8 @@
 }
 .banner-shadow{
   position: relative;
-  top: 70px;
-  width: 500px;
+  top: 30px;
+  width: 600px;
   margin: auto;
 }
 .purpose-btn {
@@ -78,9 +78,35 @@ input:checked + .slider:before {
 .slider.round:before {
   border-radius: 50%;
 }
+.purpose-text {
+  font-size: 12px;
+  font-weight: 600;
+}
+.purpose-list{
+  max-height: 250px;
+  overflow: overlay;
+}
+.purpose-div{
+  margin-right: 0px;
+    margin-left: 0px;
+    border-bottom: 1px solid lightgray;
+}
 
 
+*::-webkit-scrollbar {
+  width: 12px;
+  min-height: 100px;
+}
 
-
-
-
+*::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+::-webkit-scrollbar-thumb {
+  min-height: 60px;
+}
+*::-webkit-scrollbar-thumb {
+  background-color: #c1c1c1;
+  border-radius: 20px;
+  min-height: 60px;
+  border: 3px solid #f1f1f1;
+}

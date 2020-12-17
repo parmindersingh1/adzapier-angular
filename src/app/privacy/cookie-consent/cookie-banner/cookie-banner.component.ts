@@ -122,12 +122,10 @@ export class CookieBannerComponent implements OnInit {
 
   onSetValueConfig() {
     const configData: any = this.bannerCookieData;
-    // console.log('configData', configData);
     if ( configData.gdpr_global === 'true' || configData.gdpr_global === true) {
       this.cookieBannerForm.get('gdprTarget').clearValidators();
     }
     this.cookieBannerForm.get('gdprTarget').updateValueAndValidity();
-    console.log('configData', configData);
 
     this.cookieBannerForm.patchValue({
       ccpaTarget: configData.ccpa_target,
@@ -212,8 +210,10 @@ export class CookieBannerComponent implements OnInit {
       BannerPosition: [this.defaultData.DefaultBannerPosition],
       BadgePosition: [this.defaultData.DefaultBadgePosition],
       BannerTitle: ['', [Validators.minLength(2), Validators.maxLength(50)]],
+      BannerTitle2: ['', [Validators.minLength(2), Validators.maxLength(50)]],
       BannerDescription: ['',  [Validators.minLength(20)]],
       BannerGlobalStyleTextColor: [''],
+      BannerGlobalStyleBorderColor: [''],
       BannerGlobalStyleBackgroundColor: [''],
       BannerPreferenceButtonTextContent: ['', [Validators.minLength(2), Validators.maxLength(25)]],
       BannerPreferenceButtonTextColor: [''],
@@ -274,8 +274,10 @@ export class CookieBannerComponent implements OnInit {
       privacyLink: this.data.privacyLink,
       privacyTextColor: this.data.privacyTextColor,
       BannerTitle: this.data.bannerTitle,
+      BannerTitle2: this.data.bannerTitle2,
       BannerDescription: this.data.bannerDescription,
       BannerGlobalStyleTextColor: this.data.bannerTextColor,
+      BannerGlobalStyleBorderColor: this.data.bannerBorderColor,
       BannerGlobalStyleBackgroundColor: this.data.bannerBackGroundColor,
       BannerPreferenceButtonTextContent: this.data.bannerPreferenceButtonTextContent,
       BannerPreferenceButtonTextColor: this.data.bannerPreferenceButtonTextColor,
@@ -337,7 +339,7 @@ export class CookieBannerComponent implements OnInit {
 
 
   onSetValue() {
-    console.log('this.bannerCookieData.config.BadgePosition', this.bannerCookieData.config)
+    try {
     this.cookieBannerForm.patchValue({
       // DISPLAY FREQUENCY
       bannerPartialConsent: this.bannerCookieData.config.DisplayFrequency.bannerPartialConsent,
@@ -357,8 +359,10 @@ export class CookieBannerComponent implements OnInit {
       privacyTextColor: this.bannerCookieData.config.Banner.Privacy.textColor,
 
       BannerTitle: this.bannerCookieData.config.Banner.Content.title ? this.bannerCookieData.config.Banner.Content.title : this.data.bannerTitle,
+      BannerTitle2: this.bannerCookieData.config.Banner.Content.title2 ? this.bannerCookieData.config.Banner.Content.title2 : this.data.bannerTitle2,
       BannerDescription: this.bannerCookieData.config.Banner.Content.description ? this.bannerCookieData.config.Banner.Content.description : this.data.bannerDescription,
       BannerGlobalStyleTextColor: this.bannerCookieData.config.Banner.GlobalStyles.textColor,
+      BannerGlobalStyleBorderColor: this.bannerCookieData.config.Banner.GlobalStyles.borderColor,
       BannerGlobalStyleBackgroundColor: this.bannerCookieData.config.Banner.GlobalStyles.background,
       BannerPreferenceButtonTextContent: this.bannerCookieData.config.Banner.PreferenceButtonStylesAndContent.textContent ? this.bannerCookieData.config.Banner.PreferenceButtonStylesAndContent.textContent : this.data.bannerPreferenceButtonTextContent,
       BannerPreferenceButtonTextColor: this.bannerCookieData.config.Banner.PreferenceButtonStylesAndContent.textColor,
@@ -451,6 +455,7 @@ export class CookieBannerComponent implements OnInit {
     this.formContent.position = this.bannerCookieData.config.BannerPosition;
     //
     this.formContent.bannerTitle = this.bannerCookieData.config.Banner.Content.title ? this.bannerCookieData.config.Banner.Content.title : this.data.bannerTitle;
+    this.formContent.bannerTitle2 = this.bannerCookieData.config.Banner.Content.title2 ? this.bannerCookieData.config.Banner.Content.title2 : this.data.bannerTitle2;
     this.formContent.bannerDescription = this.bannerCookieData.config.Banner.Content.description ? this.bannerCookieData.config.Banner.Content.description : this.data.bannerDescription;
     this.formContent.bannerTextColor = this.bannerCookieData.config.Banner.GlobalStyles.textColor;
     this.formContent.bannerBackGroundColor = this.bannerCookieData.config.Banner.GlobalStyles.background;
@@ -491,7 +496,10 @@ export class CookieBannerComponent implements OnInit {
     this.formContent.popUpDoNotSellTextContent = this.bannerCookieData.config.POPUP.DoNotSellButtonStylesAndContent.textContent ? this.bannerCookieData.config.POPUP.DoNotSellButtonStylesAndContent.textContent : this.data.popUpDoNotSellTextContent;
     this.formContent.popUpDoNotSellTextColor = this.bannerCookieData.config.POPUP.DoNotSellButtonStylesAndContent.textColor;
     this.formContent.popUpDoNotSellBackgroundColor = this.bannerCookieData.config.POPUP.DoNotSellButtonStylesAndContent.backgroundColor;
+  } catch (e) {
+    console.log('Get Config From Server Error', e);
 
+  }
 
 
   }
@@ -543,6 +551,8 @@ export class CookieBannerComponent implements OnInit {
       show_badge: this.cookieBannerForm.value.showBadge,
       CONFIG: this.onGetFormData()
     };
+    console.log(' this.onGetFormData()',  JSON.stringify(this.onGetFormData()));
+
     this.isPublish = true;
     this.loading.start();
     this.cookieBannerService.onSubmitCookieBannerData(userPrefrencesData, this.currentManagedOrgID, this.currrentManagedPropID, this.constructor.name , moduleName.cookieBannerModule)
@@ -583,7 +593,6 @@ export class CookieBannerComponent implements OnInit {
     };
     this.loading.start();
     this.isPublish = true;
-    console.log('datassdfsadf', JSON.stringify(userPrefrencesData))
     this.cookieBannerService.onUpdateCookieBannerData(userPrefrencesData, this.currentManagedOrgID , this.currrentManagedPropID, this.constructor.name, moduleName.cookieBannerModule)
       .subscribe((res: any) => {
         this.loading.stop();
@@ -620,6 +629,7 @@ export class CookieBannerComponent implements OnInit {
       Banner: {
         Content: {
           title: this.isFieldDisabled ? null : this.cookieBannerForm.value.BannerTitle,
+          title2: this.isFieldDisabled ? null : this.cookieBannerForm.value.BannerTitle2,
           description: this.isFieldDisabled ? null : this.cookieBannerForm.value.BannerDescription,
         },
         Privacy: {
@@ -629,6 +639,7 @@ export class CookieBannerComponent implements OnInit {
         },
         GlobalStyles: {
           textColor: this.cookieBannerForm.value.BannerGlobalStyleTextColor,
+          borderColor: this.cookieBannerForm.value.BannerGlobalStyleBorderColor,
           background: this.cookieBannerForm.value.BannerGlobalStyleBackgroundColor,
         },
         PreferenceButtonStylesAndContent: {
