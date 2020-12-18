@@ -21,10 +21,32 @@
   <div class="card mt-3">
     <div  class="card-header"><h6 style="float: left"><b>Production CDN </b></h6>
     <button (click)="copyToClipboard()" style="float: right" type="button" class=" pull-right btn-sm btn btn-primary"><i class="mr-1 fa fa-clipboard" aria-hidden="true"></i>
-       {{ isCopied ? 'Copied' : 'Copy Script'}}</button>
+       {{ isCopied.one ? 'Copied' : 'Copy Script'}}</button>
     </div>
     <div *ngIf="!loadingSkeleton" style="background: #282a36" class="card-body">
       <p  class="text-danger codeText">
+        <span>
+          <code style="color: #8be9fd">{{tagEle.openHead}}</code>
+        </span> <br />
+
+        <span>
+          <code style="color: #8be9fd">{{tagEle.openScript}}</code>
+        </span> <br />
+
+        <span>
+          <code style="color: rgb(116, 116, 116)">// Replace Your AuthId '123123123' </code>
+        </span> <br />
+
+        <span>
+          <code style="color: #fff">document.</code> <code style="color: #ff3f7c">cookie </code>  <code style="color: #ffffff"> = </code>
+           <code style="color: #8be9fd">"</code><code style="color: #f5cea9">authId=123123123</code><code style="color: #8be9fd">"</code>
+           <code style="color: #fff">;</code>
+        </span> <br />
+
+        <span>
+          <code style="color: #8be9fd">{{tagEle.closeScript}}</code>
+        </span> <br />
+
           <span>
             <code style="color: #8be9fd">{{addScript}}</code>
           </span>
@@ -32,12 +54,53 @@
           </span>
           <span>
             <code style="color: #8be9fd">{{closeScript}}</code>
+          </span> <br />
+          <span>
+            <code style="color: #8be9fd">{{tagEle.closeHead}}</code>
           </span>
-<!--        </b>-->
       </p>
     </div>
   </div>
-  <ngx-skeleton-loader *ngIf="loadingSkeleton" count="3"></ngx-skeleton-loader>
+  <ngx-skeleton-loader *ngIf="loadingSkeleton" count="5"></ngx-skeleton-loader>
+
+
+
+
+
+
+
+
+  <div class="card mt-3">
+    <div  class="card-header"><h6 style="float: left"><b>Open Preferences Method </b></h6>
+    <button (click)="copyToClipboardMethod()" style="float: right" type="button" class=" pull-right btn-sm btn btn-primary"><i class="mr-1 fa fa-clipboard" aria-hidden="true"></i>
+       {{ isCopied.two ? 'Copied' : 'Copy Script'}}</button>
+    </div>
+    <div *ngIf="!loadingSkeleton" style="background: #282a36" class="card-body">
+      <p  class="text-danger codeText">
+
+
+        <span>
+          <code style="color: #8be9fd">{{tagEle.openScript}}</code>
+        </span> <br />
+
+        <span>
+          <code style="color: rgb(116, 116, 116)">// Execute the method for open Preferences </code>
+        </span> <br />
+
+        <span>
+          <code style="color: #fff">window</code> <code style="color: #8be9fd">.AzCMP</code><code style="color: #ff3f7c">.onOpenPopUp();</code>
+        </span> <br />
+
+        <span>
+          <code style="color: #8be9fd">{{tagEle.closeScript}}</code>
+        </span> <br />
+      </p>
+    </div>
+  </div>
+
+
+
+
 
   <div class="card mt-3">
     <div class="card-header"><b>To implement the Production CDN script</b></div>

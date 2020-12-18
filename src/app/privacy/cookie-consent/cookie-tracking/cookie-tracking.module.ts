@@ -6,9 +6,12 @@ import { RatingModule} from 'primeng/rating';
 import { TableModule} from 'primeng/table';
 import {FormsModule} from '@angular/forms';
 import {RouterModule, Routes} from '@angular/router';
+import {MultiSelectModule} from 'primeng/multiselect';
+
 
 const route: Routes = [
-  {path: '', component: CookieTrackingComponent}
+  {path: '', component: CookieTrackingComponent},
+  {path: 'decode', loadChildren: () => import('./decode/decode.module').then(m => m.DecodeModule)}
 ];
 
 @NgModule({
@@ -19,6 +22,7 @@ const route: Routes = [
     CommonModule,
     RatingModule,
     FormsModule,
+    MultiSelectModule,
     ButtonModule,
     TableModule,
     RouterModule.forChild(route)

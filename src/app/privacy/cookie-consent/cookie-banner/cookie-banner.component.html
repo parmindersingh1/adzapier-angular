@@ -322,7 +322,7 @@
 
                       <p-accordionTab header="Content">
                         <div class="col-md-12 mt-2">
-                          <h5 class="tx-12 tx-medium tx-spacing-1 tx-color-03 tx-uppercase ">Title</h5>
+                          <h5 class="tx-12 tx-medium tx-spacing-1 tx-color-03 tx-uppercase ">Title 1</h5>
                           <input type="text" [attr.disabled]="isFieldDisabled" formControlName="BannerTitle"
                             [(ngModel)]="formContent.bannerTitle" class="form-control w-100"
                             [placeholder]="formContent.bannerTitle">
@@ -335,6 +335,24 @@
                             </div>
                           </div>
                         </div>
+
+
+                        <div class="col-md-12 mt-2">
+                          <h5 class="tx-12 tx-medium tx-spacing-1 tx-color-03 tx-uppercase ">Title 2</h5>
+                          <input type="text" [attr.disabled]="isFieldDisabled" formControlName="BannerTitle2"
+                            [(ngModel)]="formContent.bannerTitle2" class="form-control w-100"
+                            [placeholder]="formContent.bannerTitle2">
+                          <div *ngIf="submitted && f.BannerTitle.errors">
+                            <div class="text-danger mt-2" *ngIf="f.BannerTitle2.errors.minlength">
+                              Minimum 2 characters required
+                            </div>
+                            <div class="text-danger mt-2" *ngIf="f.BannerTitle2.errors.maxlength">
+                              Maximum 50 characters required
+                            </div>
+                          </div>
+                        </div>
+
+
                         <div class="col-md-12 mt-2">
                           <div [ngStyle]="{display: isFieldDisabled ? 'none' : ''}" class="w-100">
                             <h6 class="tx-12 tx-medium tx-spacing-1 tx-color-03 tx-uppercase">Description</h6>
@@ -418,6 +436,20 @@
                             </li>
                           </ul>
                         </div>
+
+
+                        <div class="col-md-12 p-0">
+                          <ul style="list-style: none; display: flex" class="ml-2 pl-0 mt-2">
+                            <li class="tx-12 tx-medium tx-middle tx-spacing-1 tx-color-03 tx-uppercase">Border Color
+                            </li>
+                            <li class="text-left tx-middle"><input #bannerBorderColor
+                                [(ngModel)]="formContent.bannerBorderColor" formControlName="BannerGlobalStyleBorderColor"
+                                type="color"></li>
+                            <li class="ml-4"><input class="form-control input-sm" [value]="bannerBorderColor.value">
+                            </li>
+                          </ul>
+                        </div>
+
 
                         <div class="col-md-12 mt-2 p-0">
                           <ul style="list-style: none; display: flex" class="ml-2 pl-0 mt-2">
@@ -533,7 +565,7 @@
                       </p-accordionTab>
 
 
-                      <p-accordionTab header="Allow All Button">
+                      <p-accordionTab header="Accept All Button">
                         <div class="col-md-12 p-0 ml-0 mb-4 row mt-2">
                           <h5 class="col-sm-4 pl-2 tx-middle tx-12 tx-medium tx-spacing-1 tx-color-03 tx-uppercase">
                             Text Content </h5>
@@ -689,7 +721,7 @@
             </div>
 
             <div class="white-back" [ngClass]="{'col-md-12' : !showConfig.checked , 'col-md-7' : showConfig.checked }" >
-              <app-banner-live-priview *ngIf="!skeletonLoading" [isDisabled]="isFieldDisabled" [formData]="formContent"></app-banner-live-priview>
+              <app-banner-live-priview *ngIf="!skeletonLoading" [isDisabled]="isFieldDisabled" [isGdprGlobal]="gdprGlobal.checked" [formData]="formContent"></app-banner-live-priview>
               <ngx-skeleton-loader *ngIf="skeletonLoading" count="14"></ngx-skeleton-loader>
             </div>
 
@@ -942,7 +974,7 @@
 
 
 
-                    <p-accordionTab header="Allow All Button">
+                    <p-accordionTab header="Accept All Button">
                       <div class="col-md-12 ml-0 mb-4  p-0 row mt-2">
                         <h5 class="col-sm-4 pl-2 tx-middle tx-12 tx-medium tx-spacing-1 tx-color-03 tx-uppercase">
                           Text Content </h5>
@@ -1123,7 +1155,7 @@
 
 
             <div class="white-back" [ngClass]="{'col-md-12' : !showConfig.checked , 'col-md-7' : showConfig.checked }">
-              <app-popup-live-preview [formData]="formContent">></app-popup-live-preview>
+              <app-popup-live-preview  [isGdprGlobal]="gdprGlobal.checked" [formData]="formContent">></app-popup-live-preview>
             </div>
           </div>
 <!--         </p-tabPanel>-->

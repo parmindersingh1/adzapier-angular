@@ -325,3 +325,31 @@ ul.notification-menu-right::after {
 .breadcrumb-style1 .breadcrumb-item.active {
     font-weight: 500;
 }
+
+
+
+*::-webkit-scrollbar {
+  width: 12px;
+  min-height: 100px;
+}
+
+*::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+::-webkit-scrollbar-thumb {
+  min-height: 60px;
+}
+*::-webkit-scrollbar-thumb {
+  background-color: #c1c1c1;
+  border-radius: 20px;
+  min-height: 60px;
+  border: 3px solid #f1f1f1;
+}
+
+.password-toggle-eye{
+  position: relative;
+  top: -26px;
+  float: right;
+  right: 12px;
+  cursor: pointer;
+}

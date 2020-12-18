@@ -24,8 +24,10 @@ export const defaultBannerContent = {
   privacyTextColor: '#162893',
   position: 'bottom',
   bannerTitle: 'We use cookies Data',
+  bannerTitle2: 'We and our Partners data to provide',
   bannerDescription: 'We may place these for analysis of our visitor data, to improve our website, show personalised content and to give you a great website experience. For more information about the cookies we use open the settings.',
   bannerTextColor: '#ffffff',
+  bannerBorderColor: '#162893',
   bannerBackGroundColor: '#000000',
   //
   bannerPreferenceButtonTextContent: 'Privacy Setting',
@@ -53,7 +55,7 @@ export const defaultBannerContent = {
   popUpVendorsDescription: 'During consted in the stub are filtered out if not valid. Ping and custom commands are executed and removed from the queue while all other commands remain queued until a valid TC string is set.',
   //
   popUpPurposeButtonTextColor: '#575751',
-  popUpPurposeButtonBackGroundColor: '#fafafa',
+  popUpPurposeButtonBackGroundColor: '#ffffff',
   //
   popUpSwitchButtonColor: '#4b90ff',
   //
@@ -72,7 +74,7 @@ export const defaultBannerContent = {
 
   //
 
-  popUpAllowAllButtonTextContent: 'Allow All',
+  popUpAllowAllButtonTextContent: 'Accept All',
   popUpAllowAllButtonTextColor: '#ffffff',
   popUpAllowAllButtonBackgroundColor: '#162893',
 
@@ -103,9 +105,11 @@ export class FormDefaultData {
   privacyTextColor: '#162893';
   position: 'bottom';
   bannerTitle: 'We use cookies Data';
+  bannerTitle2: 'We and our Partners data to provide';
   bannerDescription: 'We may place these for analysis of our visitor data, to improve our website, show personalised content and to give you a great website experience. For more information about the cookies we use open the settings.';
-  bannerTextColor: '#fff';
-  bannerBackGroundColor: '#000';
+  bannerTextColor: '#ffffff';
+  bannerBorderColor: '#162893';
+  bannerBackGroundColor: '#000000';
   //
   bannerPreferenceButtonTextContent: 'Privacy Setting';
   bannerPreferenceButtonTextColor: '#ffffff';
@@ -114,6 +118,10 @@ export class FormDefaultData {
   bannerDisableButtonTextContent: 'Disable Button';
   bannerDisableButtonTextColor: '#ffffff';
   bannerDisableButtonBackGroundColor: '#162893';
+
+  bannerDoNotSellMyDataTextContent: 'Do Not Sell My Data';
+  bannerDoNotSellMyDataTextColor: '#ffffff';
+  bannerDoNotSellMyDataBackGroundColor: '#162893';
   //
   bannerAcceptButtonTextContent: 'Accept All';
   bannerAcceptButtonTextColor: '#ffffff';
@@ -131,7 +139,7 @@ export class FormDefaultData {
   popUpSwitchButtonColor: '#4b90ff';
   //
   popUpPurposeButtonTextColor: '#575751';
-  popUpPurposeButtonBackGroundColor: '#fafafa';
+  popUpPurposeButtonBackGroundColor: '#ffffff';
   //
 
   popUpDisableAllButtonTextContent: 'Disable All';
@@ -139,6 +147,9 @@ export class FormDefaultData {
   popUpDisableAllButtonBackgroundColor: '#000000';
 
   //
+  popUpDoNotSellTextContent: 'Do Not Sell My Data';
+  popUpDoNotSellTextColor: '#ffffff';
+  popUpDoNotSellBackgroundColor: '#162893';
 
   popUpSaveMyChoiceButtonTextContent: 'Save My Choice';
   popUpSaveMyChoiceButtonTextColor: '#ffffff';
@@ -146,7 +157,7 @@ export class FormDefaultData {
 
   //
 
-  popUpAllowAllButtonTextContent: 'Allow All';
+  popUpAllowAllButtonTextContent: 'Accept All';
   popUpAllowAllButtonTextColor: '#ffffff';
   popUpAllowAllButtonBackgroundColor: '#162893';
 
@@ -231,3 +242,67 @@ export const IabPurposeIds = {
   socialMedia: [1, 2],
   analytics: [5, 6],
 }
+
+
+export const iabPurposeList = [
+  {
+  id: 1,
+  name: "Store and/or access information on a device",
+  description: "Cookies, device identifiers, or other information can be stored or accessed on your device for the purposes presented to you.",
+  descriptionLegal: "Vendors can: * Store and access information on the device such as cookies and device identifiers presented to a user."
+  },
+   {
+  id: 2,
+  name: "Select basic ads",
+  description: "Ads can be shown to you based on the content you’re viewing, the app you’re using, your approximate location, or your device type.",
+  descriptionLegal: "To do basic ad selection vendors can: * Use real-time information about the context in which the ad will be shown, to show the ad, including information about the content and the device, such as: device type and capabilities, user agent, URL, IP address * Use a user’s non-precise geolocation data * Control the frequency of ads shown to a user. * Sequence the order in which ads are shown to a user. * Prevent an ad from serving in an unsuitable editorial (brand-unsafe) context Vendors cannot: * Create a personalised ads profile using this information for the selection of future ads without a separate legal basis to create a personalised ads profile. * N.B. Non-precise means only an approximate location involving at least a radius of 500 meters is permitted."
+  },
+   {
+  id: 3,
+  name: "Create a personalised ads profile",
+  description: "A profile can be built about you and your interests to show you personalised ads that are relevant to you.",
+  descriptionLegal: "To create a personalised ads profile vendors can: * Collect information about a user, including a user's activity, interests, demographic information, or location, to create or edit a user profile for use in personalised advertising. * Combine this information with other information previously collected, including from across websites and apps, to create or edit a user profile for use in personalised advertising."
+  },
+  {
+  id: 4,
+  name: "Select personalised ads",
+  description: "Personalised ads can be shown to you based on a profile about you.",
+  descriptionLegal: "To select personalised ads vendors can: * Select personalised ads based on a user profile or other historical user data, including a user’s prior activity, interests, visits to sites or apps, location, or demographic information."
+  },
+   {
+  id: 5,
+  name: "Create a personalised content profile",
+  description: "A profile can be built about you and your interests to show you personalised content that is relevant to you.",
+  descriptionLegal: "To create a personalised content profile vendors can: * Collect information about a user, including a user's activity, interests, visits to sites or apps, demographic information, or location, to create or edit a user profile for personalising content. * Combine this information with other information previously collected, including from across websites and apps, to create or edit a user profile for use in personalising content."
+  },
+   {
+  id: 6,
+  name: "Select personalised content",
+  description: "Personalised content can be shown to you based on a profile about you.",
+  descriptionLegal: "To select personalised content vendors can: * Select personalised content based on a user profile or other historical user data, including a user’s prior activity, interests, visits to sites or apps, location, or demographic information."
+  },
+ {
+  id: 7,
+  name: "Measure ad performance",
+  description: "The performance and effectiveness of ads that you see or interact with can be measured.",
+  descriptionLegal: "To measure ad performance vendors can: * Measure whether and how ads were delivered to and interacted with by a user * Provide reporting about ads including their effectiveness and performance * Provide reporting about users who interacted with ads using data observed during the course of the user's interaction with that ad * Provide reporting to publishers about the ads displayed on their property * Measure whether an ad is serving in a suitable editorial environment (brand-safe) context * Determine the percentage of the ad that had the opportunity to be seen and the duration of that opportunity * Combine this information with other information previously collected, including from across websites and apps Vendors cannot: *Apply panel- or similarly-derived audience insights data to ad measurement data without a Legal Basis to apply market research to generate audience insights (Purpose 9)"
+  },
+   {
+  id: 8,
+  name: "Measure content performance",
+  description: "The performance and effectiveness of content that you see or interact with can be measured.",
+  descriptionLegal: "To measure content performance vendors can: * Measure and report on how content was delivered to and interacted with by users. * Provide reporting, using directly measurable or known information, about users who interacted with the content * Combine this information with other information previously collected, including from across websites and apps. Vendors cannot: * Measure whether and how ads (including native ads) were delivered to and interacted with by a user. * Apply panel- or similarly derived audience insights data to ad measurement data without a Legal Basis to apply market research to generate audience insights (Purpose 9)"
+  },
+  {
+  id: 9,
+  name: "Apply market research to generate audience insights",
+  description: "Market research can be used to learn more about the audiences who visit sites/apps and view ads.",
+  descriptionLegal: "To apply market research to generate audience insights vendors can: * Provide aggregate reporting to advertisers or their representatives about the audiences reached by their ads, through panel-based and similarly derived insights. * Provide aggregate reporting to publishers about the audiences that were served or interacted with content and/or ads on their property by applying panel-based and similarly derived insights. * Associate offline data with an online user for the purposes of market research to generate audience insights if vendors have declared to match and combine offline data sources (Feature 1) * Combine this information with other information previously collected including from across websites and apps. Vendors cannot: * Measure the performance and effectiveness of ads that a specific user was served or interacted with, without a Legal Basis to measure ad performance. * Measure which content a specific user was served and how they interacted with it, without a Legal Basis to measure content performance."
+  },
+  {
+  id: 10,
+  name: "Develop and improve products",
+  description: "Your data can be used to improve existing systems and software, and to develop new products",
+  descriptionLegal: "To develop new products and improve products vendors can: * Use information to improve their existing products with new features and to develop new products * Create new models and algorithms through machine learning Vendors cannot: * Conduct any other data processing operation allowed under a different purpose under this purpose"
+  }
+]
