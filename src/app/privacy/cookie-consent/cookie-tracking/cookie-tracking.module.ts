@@ -6,6 +6,8 @@ import { RatingModule} from 'primeng/rating';
 import { TableModule} from 'primeng/table';
 import {FormsModule} from '@angular/forms';
 import {RouterModule, Routes} from '@angular/router';
+import {MultiSelectModule} from 'primeng/multiselect';
+
 
 const route: Routes = [
   {path: '', component: CookieTrackingComponent},
@@ -20,6 +22,7 @@ const route: Routes = [
     CommonModule,
     RatingModule,
     FormsModule,
+    MultiSelectModule,
     ButtonModule,
     TableModule,
     RouterModule.forChild(route)

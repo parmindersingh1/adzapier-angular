@@ -77,11 +77,12 @@ export class DecodeComponent implements OnInit {
   })
   }
   onSetGoogleVendors(){
+    if( this.obj.google_consent) {
       this.googleVendorsIds = this.obj.google_consent.length > 2 ? this.obj.google_consent.substring(3, this.obj.google_consent.length - 1).split('.') : [];
       this.gdprService.getGoogleVendors().subscribe((res: any[]) => {
         this.googleVendorsList = res;
       })
-
+    }
   }
 
   decodeString(){

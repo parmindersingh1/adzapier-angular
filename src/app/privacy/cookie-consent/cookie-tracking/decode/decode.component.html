@@ -6,11 +6,11 @@
           <ol class="breadcrumb breadcrumb-style1 mg-b-10">
             <li class="breadcrumb-item">Privacy</li>
             <li class="breadcrumb-item"><a routerLink="/home/dashboard/cookie-consent">Cookie Consent</a></li>
-            <li class="breadcrumb-item"><a routerLink="/cookie-consent/cookie-tracking">Cookie Consent Tracking</a></li>
-            <li class="breadcrumb-item active">Decode String</li>
+            <li class="breadcrumb-item"><a routerLink="/cookie-consent/cookie-tracking"> Tracking</a></li>
+            <li class="breadcrumb-item active">Details</li>
           </ol>
         </nav>
-        <h4 class="mg-b-0 tx-spacing--1">Decode Consent String</h4>
+        <h4 class="mg-b-0 tx-spacing--1">Consent Details</h4>
       </div>
     </div>
 
@@ -694,8 +694,9 @@
 
             <div class="row">
               <div class="w-75">
-                <div class="alert alert-success ccpa-status-text">CCPA and GDPR does not apply - ({{obj.consent}})
-                  <i class="fa fa-check-circle pl-2" aria-hidden="true"></i>
+                <div class="alert alert-info ccpa-status-text">CCPA and GDPR does not apply - ({{obj.consent}})
+                  <i class="fa fa-info-circle pl-2" aria-hidden="true"></i>
+
                 </div>
               </div>
             </div>
