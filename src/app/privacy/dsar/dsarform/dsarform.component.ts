@@ -82,6 +82,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
   loading = false;
   previewPublishedForm: any;
   headerlogoBase64: string;
+  headerfaviconBase64: string;
   blured = false;
   focused = false;
   trimLabel: any;
@@ -209,6 +210,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
   basicForm: FormGroup;
   basicFormSubmitted: boolean;
   headerLogoForm: FormGroup;
+  faviconForm: FormGroup;
   uploadedLogoFile: any;
   isLogoLoaded = false;
   imageError: string;
@@ -222,6 +224,8 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
   isResetlinkEnable = false;
   isEditingPublishedForm = false;
   modalRef: BsModalRef;
+  faviconFilename: string;
+  faviconFilesize: number | string;
   constructor(private fb: FormBuilder, private ccpaRequestService: CcparequestService,
     private organizationService: OrganizationService,
     private dsarFormService: DsarformService,
@@ -293,9 +297,14 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
     this.headerLogoForm = this.fb.group({
       headerlogo: ['']
     });
+
+    this.faviconForm = this.fb.group({
+      titlefavicon: ['']
+    })
   }
   get stepFormOne() { return this.basicForm.controls; }
   get formLogo() { return this.headerLogoForm.controls; }
+  get faviconLogo() { return this.faviconForm.controls; }
   basicFormdata() {
     this.basicFormSubmitted = true;
     if (this.basicForm.invalid) {
@@ -364,6 +373,8 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
               this.isFileuploadRequiredField = t.ismandatory;
             } else if (t.controlId === 'captchacontrol') {
               this.isCaptchaVerificationRequired = (t.requiredfield === '') ? false : true;
+            } else if (t.controlId === 'favicon') {
+              this.headerfaviconBase64 = t.faviconURL;
             }
           });
           // this.ccpaFormConfigService.removeControls();
@@ -402,6 +413,8 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
           this.isFileuploadRequiredField = (t.ismandatory === '') ? false : true;
         } else if (t.controlId === 'captchacontrol') {
           this.isCaptchaVerificationRequired = (t.requiredfield === '') ? false : true;
+        } else if (t.controlId === 'favicon') {
+          this.headerfaviconBase64 = t.faviconURL;
         }
       });
       this.dsarFormService.setFormControlList(this.webFormControlList);
@@ -409,7 +422,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
       //  this.selectOptionControl = this.controlOption[0].control;
       this.selectOptions = [{
         id: this.count++,
-        name: ' '
+        value: ' '
       }];
       this.daysleft = 45;
       // this.getCCPAdefaultConfigById();
@@ -490,6 +503,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
 
   register(formData: NgForm) {
     console.log(formData.value, 'register..');
+    this.setHeaderStyle();
   }
 
   drop(event: CdkDragDrop<any>) {
@@ -684,6 +698,14 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
 
   addCustomFields(formControls: NgForm) {
     this.trimLabel = formControls.value.lblText.split(' ').join('_').toLowerCase();
+  //  const isLabelExist = this.webFormControlList.filter((t) => t.controllabel === this.trimLabel).length > 0;
+    // const isLabelExist = this.webFormControlList.findIndex((t) =>  t.controllabel === formControls.value.lblText);
+    // if(isLabelExist !== -1){
+    //   this.alertMsg = 'Label already exist!'
+    //   this.isOpen = true;
+    //   this.alertType = 'danger';
+    //   return false
+    // }
     if (this.isEditingList) {
       const req = 'requesttype';
       const sub = 'subjecttype';
@@ -736,7 +758,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
           updateCustomObj = {
             controllabel: formControls.value.lblText,
             indexCount: this.trimLabel,
-            control: this.changeControlType,
+            control: this.changeControlType || this.existingControl.control,
             controlId: this.existingControl.controlId,
             selectOptions: this.existingControl.selectOptions,
             requiredfield: this.isRequiredField
@@ -972,6 +994,10 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
 
   isContainHeaderLogo(item): boolean {
     return item.control.startsWith('img') ? true : false;
+  }
+
+  isContainFavicon(item): boolean {
+     return item.control.startsWith('favicon') ? true : false;
   }
 
   isContainWelcomeText(item): boolean {
@@ -1310,16 +1336,35 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
       headerColor: this.headerColor,
       logoURL: this.headerlogoBase64 // || this.cardImageBase64
     };
+    const faviconObj = {
+      control: 'favicon',
+      controllabel: 'favicon',
+      controlId: 'favicon',
+      indexCount: 'favicon_Index',
+      faviconURL: this.headerfaviconBase64
+    };
     if (this.crid) {
       this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
       const customControlIndex = this.webFormControlList.findIndex((t) => t.controlId === 'headerlogo');
       this.ccpaFormConfigService.updateControl(this.webFormControlList[customControlIndex], customControlIndex, headerObj);
       this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
+
+      this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
+      const faviconIndex = this.webFormControlList.findIndex((t) => t.controlId === 'favicon');
+      this.ccpaFormConfigService.updateControl(this.webFormControlList[faviconIndex], faviconIndex, faviconObj);
+      this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
+      
     } else {
       this.webFormControlList = this.dsarFormService.getFormControlList();
       const customControlIndex = this.webFormControlList.findIndex((t) => t.controlId === 'headerlogo');
       this.dsarFormService.updateControl(this.webFormControlList[customControlIndex], customControlIndex, headerObj);
       this.webFormControlList = this.dsarFormService.getFormControlList();
+
+      this.webFormControlList = this.dsarFormService.getFormControlList();
+      const faviconIndex = this.webFormControlList.findIndex((t) => t.controlId === 'favicon');
+      this.dsarFormService.updateControl(this.webFormControlList[faviconIndex], faviconIndex, faviconObj);
+      this.webFormControlList = this.dsarFormService.getFormControlList();
+
     }
   }
 
@@ -1436,6 +1481,8 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
       } else if (t.controlId === 'headerlogo') {
         this.headerlogoBase64 = t.logoURL;
         this.headerColor = t.headerColor;
+      } else if (t.controlId === 'favicon') {
+        this.headerfaviconBase64 = t.faviconURL;
       }
     });
     if (retrivedData.form_status === 'draft') {
@@ -1447,8 +1494,8 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
 
   uploadFile(event) {
     const fileExtArray = ['pdf', 'txt', 'jpeg', 'jpg', 'png', 'doc', 'docx', 'csv', 'xls'];
-    // if (event.target.files.length > 0) {
-    if (event.target.files[0].size > (2 * 1024 * 1024)) {
+    let totalSizeMB = event.target.files[0].size / Math.pow(1024,2)
+     if (totalSizeMB > 10.5) {
       this.showFilesizeerror = true;
       return false;
     } else {
@@ -1726,6 +1773,48 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
     }
   }
 
+  faviconChangeEvent(fileInput: any) {
+    this.imageError = null;
+    if (fileInput.target.files && fileInput.target.files[0]) {
+      // Size Filter Bytes
+      const max_size = 1000000;
+      const allowed_types = ['image/png', 'image/jpeg'];
+      const max_height = 32;
+      const max_width = 32;
+      this.faviconFilename = fileInput.target.files[0].name;
+      const fileExtn = fileInput.target.files[0].name.split('.').pop();
+      this.faviconFilesize = this.formatBytes(fileInput.target.files[0].size);
+      
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        const image = new Image();
+        image.src = e.target.result;
+        image.onload = rs => {
+          const img_height = rs.currentTarget['height'];
+          const img_width = rs.currentTarget['width'];
+          this.logoHeight = img_height;
+          this.logoWidth = img_width;
+
+          if (img_height > max_height && img_width > max_width) {
+            this.imageError =
+              'Maximum dimentions allowed ' +
+              max_height +
+              '*' +
+              max_width +
+              'px';
+            return false;
+          } else {
+            const imgBase64Path = e.target.result;
+            this.headerfaviconBase64 = imgBase64Path;
+            this.isImageSaved = true;
+          }
+        };
+      };
+      this.setHeaderStyle();
+      reader.readAsDataURL(fileInput.target.files[0]);
+    }
+  }
+
   formatBytes(bytes, decimals = 2) {
     if (bytes === 0) {
       return '0 Bytes';
@@ -1747,6 +1836,15 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
     this.logoHeight = 0;
     this.logoFilename = '';
     this.headerLogoForm.reset();
+  }
+
+  deleteSelectedFavicon() {
+    this.headerfaviconBase64 = '';
+    this.faviconFilesize = '';
+    this.logoWidth = 0;
+    this.logoHeight = 0;
+    this.faviconFilename = '';
+    this.faviconForm.reset();
   }
 
   getDSARFormByCRID(responsID) {
@@ -1791,6 +1889,8 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
             } else if (t.controlId === 'requesttype') {
               this.sideMenuRequestTypeOptions = t.selectOptions;
               this.lblText = t.controllabel;
+            } else if (t.controlId === 'favicon') {
+              this.headerfaviconBase64 = t.faviconURL;
             }
           });
           this.ccpaFormConfigService.setFormControlList(this.webFormControlList);

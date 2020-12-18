@@ -46,6 +46,14 @@ loadWebControls() {
                 preferControlOrder: ''
             },
             {
+                control: 'favicon',
+                controllabel: 'favicon',
+                controlId: 'favicon',
+                indexCount: 'favicon_Index',
+                faviconURL: '',
+                preferControlOrder: ''
+            },
+            {
                 control: 'text',
                 controllabel: 'Welcome Text',
                 controlId: 'welcometext',
