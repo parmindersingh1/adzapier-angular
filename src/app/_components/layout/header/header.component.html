@@ -56,12 +56,12 @@
     [ngClass]="{'hidemenu':!currentUser, 'showmenu':currentUser}">
     <ul  class="navbar-nav nav-mr" dropdown container="body">
       <a class="nav-link dropdown-link"  dropdownToggle (click)="false">
-       <div>{{currentOrganization}}
+       <div>{{currentOrganization}} 
        </div>
        <span>{{currentProperty ? currentProperty : 'Select Property'}}</span>
       </a>
      <!--(orgPropertyMenu | async).response-->
-      <ul *dropdownMenu class="dropdown-menu propMenu">
+      <ul *dropdownMenu class="dropdown-menu propMenu" [ngStyle]="addColumncount()"> <!--[ngStyle]="addColumncount()"-->
           <li role="menuitem" *ngFor="let item of orgPropertyMenu; first as isFirst; let i = index;">
             <a class="dropdown-item" title="{{item.orgname}}"  (click)="goto('settings/organizations/details',item.id)">
              <span [ngClass]="[isOrgSelected(item) ? 'active' : '']">{{item.orgname}}</span>

@@ -72,7 +72,7 @@
                                         <div *ngIf="!isEditingList">
                                             <div *ngFor="let item of webFormControlList; let i = index;" cdkDrag>
                                                 <div class="example-box"
-                                                    *ngIf="!isContainHeaderLogo(item) && !isContainWelcomeText(item) && !isContainFileUpload(item) && !isContainCaptchaControl(item) && !isContainFooterText(item)">
+                                                    *ngIf="!isContainFavicon(item) && !isContainHeaderLogo(item) && !isContainWelcomeText(item) && !isContainFileUpload(item) && !isContainCaptchaControl(item) && !isContainFooterText(item)">
                                                     <div class="icon-label-wrapper">
                                                         <i class="fa fa-bars" aria-hidden="true"></i>
                                                         <span class="control-label">
@@ -356,7 +356,7 @@
 
                                             <form [formGroup]="headerLogoForm">
                                             <div>
-                                                <label for="taskresponse" class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">
+                                                <label for="taskresponse" class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5">
                                                     Header logo</label> 
                                                     <div class="upload-wrapper" [ngClass]="{'hide':headerlogoBase64,'show':!headerlogoBase64}">
                                                         <p>File Format PNG, JPG or JPEG, Max Size 1MB</p>
@@ -392,7 +392,45 @@
                                         
                                             </form>
                                         </div>
-
+                                        <div class="col-sm-12 mb-2">
+                                            <form [formGroup]="faviconForm">
+                                                <div>
+                                                    <label for="taskresponse" class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5">
+                                                        Header Favicon</label> 
+                                                        <div class="upload-wrapper" [ngClass]="{'hide':headerfaviconBase64,'show':!headerfaviconBase64}">
+                                                            <p>File Format PNG, JPG or JPEG, Max Size 1MB</p>
+                                                    <div class="input-group">
+                                                        <label for="file-upload" class="custom-file-upload btn btn-primary" [ngClass]="{'disabled':isWebFormPublished && !isEditingPublishedForm}">
+                                                            Upload
+                                                        </label>
+                                                        <input type="file" class="custom-file-input" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
+                                                        formControlName="titlefavicon"
+                                                        (change)="faviconChangeEvent($event)" id="titlefavicon">
+                                                        
+                                                    </div>
+                                                        </div>
+                                                    <div class="favicon-img-space" [ngClass]="{'hide':!headerfaviconBase64,'show':headerfaviconBase64}">
+                                                        <ng-container *ngIf="headerfaviconBase64; else elseTemplate">
+                                                            <img [src]="headerfaviconBase64" class="uploaded-favicon-width" [height]="logoHeight" [width]="logoWidth" />
+                                                        </ng-container>
+                                                        <ng-template #elseTemplate>                                    
+                                                            <img src="assets/imgs/no_image.png" class="img-responsive">
+                                                        </ng-template>                                
+                                                    </div>
+                                                    <div class="filedetails" [ngClass]="{'hide':!headerfaviconBase64,'show':headerfaviconBase64}">
+                                                       <div> <span><i-feather name="image" class="feathericon"></i-feather>
+                                                        </span>
+                                                       <span class="ml-1"> File Name:  {{faviconFilename}}</span>
+                                                       </div>
+                                                        <span class="ml-4">File size: {{faviconFilesize}}</span>
+                                                        <button class="logodelete" (click)="deleteSelectedFavicon()">
+                                                            <i-feather name="trash-2" class="feathericon"></i-feather>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            
+                                                </form>
+                                        </div>
                                         <div class="col-sm-12 mb-1">
                                             <div class="formgroup d-flex justify-content">
                                                 <div class="col-md-5 p-0">
@@ -625,11 +663,11 @@
                                 <div class="col-sm-12"
                                     *ngIf="webcontrol.control === 'radio' && webcontrol.controlId !== 'requesttype' && webcontrol.controlId !== 'subjecttype'">
                                     <label class="heading"><span *ngIf="webcontrol.requiredfield"
-                                            class="color-red">*</span>{{webcontrol.controllabel}}
+                                            class="color-red">*</span>{{webcontrol.controllabel}} 
                                     </label>
                                     <div *ngFor="let userOpt of webcontrol.selectOptions" class="form-check-inline">
-                                        <input class="form-check-input" type="radio" name="{{webcontrol.controllabel}}"
-                                            [value]='userOpt.name' [(ngModel)]="requestObject[userOpt.name]" />
+                                        <input class="form-check-input" type="radio" name="{{userOpt.keylabel}}"
+                                        id="{{userOpt.keylabel}}"   [value]='userOpt.name' [(ngModel)]="requestObject[userOpt.keylabel]" />
                                         {{userOpt.name}}
                                         <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
 
@@ -685,7 +723,7 @@
                                     <div *ngFor="let opt of webcontrol.selectOptions; let i = index;"
                                         class="form-check-inline">
                                         <input class="form-check-input" type="checkbox"
-                                            name="{{webcontrol.controllabel}}" [value]='opt.id'
+                                            name="{{opt.keylabel}}" [value]='opt.id'
                                             [(ngModel)]="requestObject[opt.name]" />{{opt.name}}
                                         <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
 
@@ -708,7 +746,7 @@
 
                                     </div>
                                     <div *ngIf="showFilesizeerror" class="color-red tx-12 mt-2">
-                                        File size should not exceed 2MB
+                                        File size should not exceed 10 MB
                                     </div>
                                     <div *ngIf="showFileExtnerror" class="color-red tx-12 mt-2">
                                         Only pdf, jpg, txt, doc, docx file area allowed.

@@ -9,6 +9,7 @@ export const apiConstant = {
   COOKIE: '/cookie/:orgId/:propId',
   // Cookie Consent
   COOKIE_CONSENT: '/consents/tracking/:propId',
+  COOKIE_TRACKING_FILTER: '/consents/trackingbyfilter/:propId',
   // Dashboard CCPA
   DASHBOARD_CCPA_REQUEST_CHART: '/ccpa/request/chart/:orgId/:propId',
   DASHBOARD_REQUEST_BY_STATE: '/ccpa/chart/state/:orgId/:propId',

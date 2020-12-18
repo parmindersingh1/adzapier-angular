@@ -37,6 +37,8 @@ export class DecodeComponent implements OnInit {
   public searchVendorsArray = [];
   public searchLegiVendorsArray = [];
   public decodeStringData = null;
+  public googleVendorsList = [];
+  public searchGoogleVendorsArray = [];
   public obj = null;
   public loading = {
     one: true,
@@ -51,18 +53,13 @@ export class DecodeComponent implements OnInit {
   ngOnInit() {
     this.getAllVendorsData();
     this.gdprService.getConsentInfo.subscribe(data =>{
-
         this.obj = data;
+
         if (this.obj) {
-      if(Object.keys(this.obj).length > 0) {
-              if(this.obj.google_consent) {
-            this.onSetGoogleVendors();
-              }
+           if(Object.keys(this.obj).length > 0) {
               if (this.obj.consent_type === 'GDPR') {
                     this.decodeString();
               }
-
-
               setTimeout( () =>{
                 this.loading.two = false;
               },3000)
@@ -70,7 +67,7 @@ export class DecodeComponent implements OnInit {
               setTimeout( () =>{
                 this.loading.one = false;
               },2000)
-      }
+        }
       else {
         this.router.navigateByUrl('/cookie-consent/cookie-tracking');
       }
@@ -80,13 +77,16 @@ export class DecodeComponent implements OnInit {
   })
   }
   onSetGoogleVendors(){
-    this.googleVendorsIds = this.obj.google_consent.substring(3, this.obj.google_consent.length - 1).split('.');
-    this.gdprService.getGoogleVendors().subscribe(res => {
-    })
-
+    if( this.obj.google_consent) {
+      this.googleVendorsIds = this.obj.google_consent.length > 2 ? this.obj.google_consent.substring(3, this.obj.google_consent.length - 1).split('.') : [];
+      this.gdprService.getGoogleVendors().subscribe((res: any[]) => {
+        this.googleVendorsList = res;
+      })
+    }
   }
 
   decodeString(){
+      this.onSetGoogleVendors();
       const decodeString = this.gdprService.decodeTcString(this.obj.consent);
       this.decodeStringData = decodeString;
       this.onGetTcStringData(decodeString);
@@ -116,6 +116,15 @@ export class DecodeComponent implements OnInit {
     for (const obj of Object.values(this.vendorsList.vendors)) {
       if (obj['name'].toLowerCase().indexOf(searchText.toLowerCase()) > -1) {
           this.searchVendorsArray.push(obj);
+      }
+  }
+  }
+  onSearchGoogleVendors(e) {
+    const searchText = e.target.value;
+    this.searchGoogleVendorsArray = [];
+    for (const obj of this.googleVendorsList) {
+      if (obj['provider_name'].toLowerCase().indexOf(searchText.toLowerCase()) > -1) {
+          this.searchGoogleVendorsArray.push(obj);
       }
   }
   }

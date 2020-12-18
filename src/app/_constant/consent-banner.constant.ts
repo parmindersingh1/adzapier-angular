@@ -55,7 +55,7 @@ export const defaultBannerContent = {
   popUpVendorsDescription: 'During consted in the stub are filtered out if not valid. Ping and custom commands are executed and removed from the queue while all other commands remain queued until a valid TC string is set.',
   //
   popUpPurposeButtonTextColor: '#575751',
-  popUpPurposeButtonBackGroundColor: '#fafafa',
+  popUpPurposeButtonBackGroundColor: '#ffffff',
   //
   popUpSwitchButtonColor: '#4b90ff',
   //
@@ -139,7 +139,7 @@ export class FormDefaultData {
   popUpSwitchButtonColor: '#4b90ff';
   //
   popUpPurposeButtonTextColor: '#575751';
-  popUpPurposeButtonBackGroundColor: '#fafafa';
+  popUpPurposeButtonBackGroundColor: '#ffffff';
   //
 
   popUpDisableAllButtonTextContent: 'Disable All';

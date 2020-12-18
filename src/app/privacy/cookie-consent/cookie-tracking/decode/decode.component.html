@@ -6,11 +6,11 @@
           <ol class="breadcrumb breadcrumb-style1 mg-b-10">
             <li class="breadcrumb-item">Privacy</li>
             <li class="breadcrumb-item"><a routerLink="/home/dashboard/cookie-consent">Cookie Consent</a></li>
-            <li class="breadcrumb-item"><a routerLink="/cookie-consent/cookie-tracking">Cookie Consent Tracking</a></li>
-            <li class="breadcrumb-item active">Decode String</li>
+            <li class="breadcrumb-item"><a routerLink="/cookie-consent/cookie-tracking"> Tracking</a></li>
+            <li class="breadcrumb-item active">Details</li>
           </ol>
         </nav>
-        <h4 class="mg-b-0 tx-spacing--1">Decode Consent String</h4>
+        <h4 class="mg-b-0 tx-spacing--1">Consent Details</h4>
       </div>
     </div>
 
@@ -446,19 +446,55 @@
 
 
 
-        <!-- <ul  *ngIf="vendorsList.specialFeatures"  class="list-group mt-4">
+        <ul  class="list-group mt-4 google-vendors-list">
           <li class="list-group-item active pb-3 pt-3 bor-bm">Google Vendors
-            <span class="badge  badge-pill">{{decodedIds.specialFeaturesIds.length}}</span>
+            <span class="badge  badge-pill">{{googleVendorsIds.length}}</span>
           </li>
-          <li  *ngFor="let obj of convertToArray(vendorsList.specialFeatures)" class="list-group-item p-0">
-            <p  *ngIf="decodedIds.specialFeaturesIds.includes(obj.id)" class="bor-bm pl-3 pt-3 pb-3">{{obj.name}}</p></li>
+          <li  class="list-group-item p-0">
+            <input type="text" #googleVendorsText (input)="onSearchGoogleVendors($event)" class="bor-bm form-control" placeholder="Search Google Vendors" id="usr">
+          </li>
+          <!-- <li  *ngFor="let obj of googleVendorsList" class="list-group-item p-0">
+            <p  *ngIf="googleVendorsIds.includes(obj.provider_id)" class="bor-bm pl-3 pt-3 pb-3">{{obj.provider_name}}</p></li>
 
             <li class="list-group-item p-0">
-              <p *ngIf="decodedIds.specialFeaturesIds.length === 0" class="alert alert-danger bor-bm pl-3 pt-3 pb-3">
-                No Special Features Allowed
-              </p></li>
+              <p *ngIf="googleVendorsIds.length === 0" class="alert alert-danger bor-bm pl-3 pt-3 pb-3">
+                No Google Vendors Allowed
+              </p></li> -->
 
-        </ul> -->
+              <ng-container *ngIf="searchGoogleVendorsArray.length > 0">
+                <ng-container *ngFor="let obj of searchGoogleVendorsArray">
+
+              <li  *ngIf="googleVendorsIds.includes(obj.provider_id)" class="list-group-item p-0">
+                <p   class="bor-bm pl-3 pt-3 pb-3">{{obj.provider_name}}</p>
+              </li>
+              </ng-container>
+              </ng-container>
+
+
+              <ng-container *ngIf="searchGoogleVendorsArray.length === 0 && !googleVendorsText.value">
+                <ng-container *ngFor="let obj of googleVendorsList">
+                <li  *ngIf="googleVendorsIds.includes(obj.provider_id)"  class="list-group-item p-0">
+                  <p  class="bor-bm pl-3 pt-3 pb-3">{{obj.provider_name}}</p>
+                </li>
+                </ng-container>
+              </ng-container>
+
+
+              <ng-container *ngIf="searchGoogleVendorsArray.length === 0 && googleVendorsText.value">
+                <li class="list-group-item p-0">
+                  <p class="alert alert-danger bor-bm pl-3 pt-3 pb-3">
+                   Google Vendors not found
+                  </p></li>
+              </ng-container>
+              <ng-container *ngIf="googleVendorsIds.length === 0 && !googleVendorsText.value">
+                <li class="list-group-item p-0">
+                  <p class="alert alert-danger bor-bm pl-3 pt-3 pb-3">
+                   Google Vendors not Allowed
+                  </p></li>
+              </ng-container>
+
+
+        </ul>
 
 
 
@@ -658,8 +694,9 @@
 
             <div class="row">
               <div class="w-75">
-                <div class="alert alert-success ccpa-status-text">CCPA and GDPR does not apply - ({{obj.consent}})
-                  <i class="fa fa-check-circle pl-2" aria-hidden="true"></i>
+                <div class="alert alert-info ccpa-status-text">CCPA and GDPR does not apply - ({{obj.consent}})
+                  <i class="fa fa-info-circle pl-2" aria-hidden="true"></i>
+
                 </div>
               </div>
             </div>

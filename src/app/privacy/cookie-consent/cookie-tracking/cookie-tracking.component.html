@@ -8,6 +8,33 @@
   </nav>
   <h4 class="mg-b-0 tx-spacing--1">Cookie Consent Tracking</h4>
 </div>
+<div class="card">
+  <div class="card-body p-2">
+      <div class="row">
+        <div class="col-md-3">
+          <select (change)="onGetFromServer()" [(ngModel)]="filterTypes.consentType" class="form-control form-control-sm">
+            <option value=""> -- Select Consent Type -- </option>
+            <option *ngFor="let obj of filterTypesData.consent_type" [value]="obj.consent_type">{{obj.consent_type}}</option>
+          </select>
+        </div>
+
+        <div class="col-md-3">
+          <select (change)="onGetFromServer()" [(ngModel)]="filterTypes.status" class="form-control form-control-sm">
+            <option value=""> -- Select Status -- </option>
+            <option *ngFor="let obj of filterTypesData.status" [value]="obj.status">{{obj.status}}</option>
+          </select>
+        </div>
+
+        <div class="col-md-3">
+          <select (change)="onGetFromServer()" [(ngModel)]="filterTypes.country" class="form-control form-control-sm">
+            <option value=""> -- Select Country -- </option>
+            <option *ngFor="let obj of filterTypesData.country" [value]="obj.country">{{obj.country}}</option>
+          </select>
+        </div>
+      </div>
+    </div>
+</div>
+
 <p-table
   styleClass="p-datatable-sm"
   [value]="cookieConsents"
@@ -20,7 +47,7 @@
 >
   <ng-template pTemplate="header">
     <tr>
-      <th>ID</th>
+      <th style="width: 125px">ID</th>
       <th>Consent</th>
       <th>Type</th>
       <th>Status</th>
@@ -36,7 +63,7 @@
   </ng-template>
   <ng-template pTemplate="body" let-consent   styleClass="p-datatable-responsive-demo">
     <tr>
-      <td >
+      <td style="width: 125px">
        <a (click)="onDecodeString(consent)" [routerLink]="['/cookie-consent/cookie-tracking/decode']"  [queryParams]="{tcstring: consent.consent, type: consent.consent_type}">{{consent.id}}</a>
       </td>
       <td  data-toggle="tooltip" title="{{consent.consent}}"> {{ consent.consent.length > 10 ? consent.consent.slice(0, 10) + '...' : consent.consent}} </td>

@@ -572,8 +572,8 @@ ul.ngx-pagination {
   }
 
   .feather-file {
-    height: 20px;
-    width: 20px;
+    height: 18px;
+    width: 18px;
     margin-right: 10px;
   }
 
@@ -872,4 +872,22 @@ ul.ngx-pagination {
 
 .hidebtns {
     visibility: hidden;
+}
+
+.btn-file {
+    background: #fff;
+    font-size: 13px;
+    color: #00f;
+    border-radius: 20px;
+    border: 1px solid #ccc;
+    padding: 4px 20px;
+    text-decoration: none;
+}
+
+.btn-file:hover {
+    text-decoration: underline;
+}
+
+.btn-file:focus {
+    outline: none;
 }
