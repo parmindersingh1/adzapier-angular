@@ -8,7 +8,9 @@ import {defaultBannerContent, FormDefaultData, iabPurposeList} from '../../../..
 })
 export class PopupLivePreviewComponent implements OnInit {
   public defaultContent = defaultBannerContent;
+  openPurposeType = '';
   currentPurpose = '';
+  checkedPurposeIds = [];
   iabPurposeList = iabPurposeList;
   type = 'gdpr';
   @Input('isGdprGlobal') isGdprGlobal = false;
@@ -20,5 +22,25 @@ export class PopupLivePreviewComponent implements OnInit {
 
   onSelectPurpose(val: string) {
     this.currentPurpose = val;
+  }
+
+  onOpenDesc(purpose){
+    if (this.openPurposeType === purpose) {
+      this.openPurposeType = '';
+    } else {
+    this.openPurposeType = purpose;
+    }
+  }
+  onSetPurposeIds(name, e) {
+    console.log('e', e);
+
+    if (e) {
+      this.checkedPurposeIds.push(name);
+  } else {
+        const index = this.checkedPurposeIds.indexOf(name);
+        if (index > -1) {
+            this.checkedPurposeIds.splice(index, 1);
+        }
+    }
   }
 }
