@@ -92,7 +92,7 @@
                         <div class="col-sm">
                             <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Request
                                 Accepting Agent</label>
-                                <ngx-skeleton-loader *ngIf="!reqAcceptingagent" count="1"></ngx-skeleton-loader> 
+                                <ngx-skeleton-loader *ngIf="!reqAcceptingagent && skeletonCustomLoading" count="1"></ngx-skeleton-loader> 
                             <p class="mg-b-0">{{reqAcceptingagent}}</p>
                         </div>
 
@@ -376,7 +376,8 @@
                 <div class="activity" *ngIf="isActivityLogOpen">
                     <ul>
                         <li *ngFor="let data of activityLog; let i = index;">
-                            <div class="activity-log">
+                            <!-- {{data | json}} -->
+                            <div class="activity-log" *ngIf="data.activity_feedback !== 'submit'">
 
                                 <div class="chat-group-divider">
                                     <span
@@ -388,12 +389,13 @@
                                 <div class="chat-stage-wrapper">
                                     <div class="media pl-0 col-9">
                                         <div class="avatar avatar-sm avatar-online">
-                                            <span
-                                                class="avatar-initial rounded-circle">{{nameInitials(data.user_firstname,data.user_lastname)}}</span>
+                                            <span class="avatar-initial rounded-circle" *ngIf="data.internal_firstname !== null || data.internal_lastname !== null">{{nameInitials(data.internal_firstname,data.internal_lastname)}}</span>
+                                            <span class="avatar-initial rounded-circle" *ngIf="data.public_firstname !== null || data.public_lastname !== null">{{nameInitials(data.public_firstname,data.public_lastname)}}</span>
                                         </div>
                                         <div class="media-body">
-                                            <p class="feedback" *ngIf="data.activity_feedback">
-                                                <strong> {{data.user_firstname}} {{data.user_lastname}}</strong>
+                                            <p class="feedback">
+                                                <strong *ngIf="data.internal_firstname !== null || data.internal_lastname !== null"> {{data.internal_firstname}} {{data.internal_lastname}}</strong>
+                                                <strong *ngIf="data.public_firstname !== null || data.public_lastname !== null"> {{data.public_firstname}} {{data.public_lastname}}</strong>
                                                 posted feedback at <small class="lightgray">
                                                     {{data.created_at | date:'mediumTime'}}</small>
                                             </p>
@@ -402,8 +404,10 @@
                                             </div>
                                             <p class="feedback"
                                                 *ngIf="data.previous_status && data.activity_feedback === ''">
-                                                <strong>{{data.user_firstname}} {{data.user_lastname}}
-                                                </strong>chagne status from
+                                                <!-- <strong>{{data.user_firstname}} {{data.user_lastname}}</strong> -->
+                                                <strong *ngIf="data.internal_firstname !== null || data.internal_lastname !== null"> {{data.internal_firstname}} {{data.internal_lastname}}</strong>
+                                                <strong *ngIf="data.public_firstname !== null || data.public_lastname !== null"> {{data.public_firstname}} {{data.public_lastname}}</strong>
+                                                chagne status from
                                                 <strong>{{data.previous_status}}</strong> to
                                                 <strong>{{data.current_status}}</strong>
                                                 at <small
@@ -412,8 +416,10 @@
 
                                             <p class="feedback"
                                                 *ngIf="data.previous_status === null && data.activity_feedback === ''">
-                                                <strong>{{data.user_firstname}} {{data.user_lastname}}
-                                                </strong>selected stage                                              
+                                                <!-- <strong>{{data.user_firstname}} {{data.user_lastname}}</strong>  -->
+                                                <strong *ngIf="data.internal_firstname !== null || data.internal_lastname !== null"> {{data.internal_firstname}} {{data.internal_lastname}}</strong>
+                                                <strong *ngIf="data.public_firstname !== null || data.public_lastname !== null"> {{data.public_firstname}} {{data.public_lastname}}</strong>
+                                                selected stage                                              
                                                 <strong>{{data.current_status}}</strong>
                                                 at <small
                                                     class="lightgray">{{data.created_at | date: 'mediumTime'}}</small>
@@ -421,7 +427,10 @@
                                         </div>
 
                                     </div>
-
+                                    <div  *ngIf="data.upload_exist">
+                                        <button class="btn-file" (click)="viewClientAttachedFile(data.id)"> 
+                                            <i-feather class="feather-file mr-0" name="file"></i-feather>
+                                        {{data.upload_exist}} </button> </div>
                                     <div class="activitystage">{{data.current_status}}</div>
                                 </div>
 

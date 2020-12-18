@@ -162,4 +162,14 @@ export class DsarRequestService {
   onSendLogs(errorType, msg, functionality, componentName, moduleName, path) {
     this.lokiService.onSendErrorLogs(errorType, msg, functionality, componentName, moduleName, path).subscribe();
   }
+
+  viewClientsFileAttachments(activityID, componentName, moduleName){
+    const path = '/dsar/file/' + activityID;
+    return this.http.get<any>(environment.apiUrl + path, {})
+      .pipe(catchError(error => {
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.viewClientsFileAttachments, componentName, moduleName, path);
+        return throwError(error);
+      }));
+  }
+
 }

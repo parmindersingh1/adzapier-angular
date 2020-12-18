@@ -81,6 +81,11 @@ body{
     transition: all 0.2s ease-in-out;
 }
 
+a.nav-link.dropdown-toggle.active:after {
+    border-right: 1.5px solid #0168fa !important;
+    border-bottom: 1.5px solid #0168fa !important;
+}
+
 a.nav-link.dropdown-toggle:hover:after {
     border-right: 1.5px solid #0168fa !important;
     border-bottom: 1.5px solid #0168fa !important;

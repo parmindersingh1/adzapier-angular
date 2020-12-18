@@ -313,7 +313,7 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
         this.subjectType = data.response.subject_type;
         this.workflowName = data.response.workflow_name;
         this.workflowId = data.response.workflow_id;
-        this.reqAcceptingagent = data.response.req_accepting_agent || 'No records';
+        this.reqAcceptingagent = data.response.req_accepting_agent;
         this.riskFactorText = data.response.risk_factor;
         this.currentWorkflowStage = data.response.workflow_stage || 'New';
         this.currentWorkflowStageID = data.response.workflow_stage_id || '';
@@ -328,9 +328,9 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
         this.editRequestDetailForm.controls['country'].setValue(this.respCountry);
         this.editRequestDetailForm.controls['state'].setValue(this.respState);
         this.editRequestDetailForm.controls['city'].setValue(this.respCity);
-        if (this.reqAcceptingagent !== 'No records') {
+       // if (this.reqAcceptingagent !== 'No records') {
           this.editRequestDetailForm.controls['requestacceptingagent'].setValue(this.reqAcceptingagent);
-        }
+       // }
         this.editRequestDetailForm.controls['riskfactor'].setValue(this.riskFactorText);
         this.skeletonLoading = false;
       }, (error) => {
@@ -470,6 +470,7 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
   }
   stageSelection(item) {
     let isEmailGetVerified: boolean;
+    let formData;
     if (this.isemailverificationRequired) {
       if (this.isEmailIDVerified('Email', this.isEmailVerified)) {
         isEmailGetVerified = true;
@@ -509,17 +510,21 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
               current_status: this.currentStageId,
               previous_status: this.previousStageId
             };
+            formData = new FormData();
+            formData.append('current_status', reqObj.current_status);
+            formData.append('previous_status', reqObj.previous_status);
           } else {
             reqObj = {
               current_status: this.currentStageId
             };
+            formData.append('current_status', reqObj.current_status);
           }
           // const reqObj = {
           //   current_status: this.currentStageId,
           //   previous_status: this.previousStageId ? this.previousStageId : this.previousStageId = ''
           // }
           //  console.log(reqObj, 'stage selection..');
-          this.stageAPI(this.requestID, reqObj);
+          this.stageAPI(this.requestID, formData);
           // this.getSubTaskList();
         } else {
           this.alertMsg = 'Can not skip stages!';
@@ -554,6 +559,7 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
   }
 
   confirm() {
+    let formData;
     this.modalRef.hide();
     this.isConfirmed = true;
     if (this.isConfirmed) {
@@ -572,7 +578,10 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
               current_status: this.previousStageId,
               previous_status: this.currentStageId
             };
-            this.stageAPI(this.requestID, reqObj);
+            formData = new FormData();
+            formData.append('current_status', reqObj.current_status);
+            formData.append('previous_status', reqObj.previous_status);
+            this.stageAPI(this.requestID, formData);
             this.getSubTaskList();
           } else {
             this.previousStageId = this.selectedStages[this.selectedStages.length - 1].id;
@@ -583,7 +592,10 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
               current_status: this.revertedStage.id,
               previous_status: this.previousStageId,
             };
-            this.stageAPI(this.requestID, reqObj);
+            formData = new FormData();
+            formData.append('current_status', reqObj.current_status);
+            formData.append('previous_status', reqObj.previous_status);
+            this.stageAPI(this.requestID, formData);
             this.getSubTaskList();
           }
 
@@ -688,7 +700,11 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
             delete reqObj[key];
           }
         });
-        this.stageAPI(this.requestID, reqObj);
+        const fd = new FormData();
+        fd.append('current_status', reqObj.current_status);
+        fd.append('previous_status', reqObj.previous_status);
+        fd.append('activity_feedback', reqObj.activity_feedback);
+        this.stageAPI(this.requestID, fd);
       }
     }
 
@@ -1002,9 +1018,9 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
     this.editRequestDetailForm.controls['country'].setValue(this.respCountry);
     this.editRequestDetailForm.controls['state'].setValue(this.respState);
     this.editRequestDetailForm.controls['city'].setValue(this.respCity);
-    if (this.reqAcceptingagent !== 'No records') {
+   // if (this.reqAcceptingagent !== 'No records') {
       this.editRequestDetailForm.controls['requestacceptingagent'].setValue(this.reqAcceptingagent);
-    }
+   // }
   }
 
   pageChangeEvent(event) {
@@ -1036,6 +1052,9 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
     let currentStageID;
     this.isConfirmed ? currentStageID = this.currentWorkflowStageID : currentStageID = this.currentStageId;
    // const currentStageID = this.currentStageId ? this.currentStageId : this.currentWorkflowStageID;
+    if(this.isConfirmed == undefined) {
+      currentStageID = this.currentWorkflowStageID;
+    }
     if (currentStageID !== undefined) {
       const obj = {
         assignee: subtaskForm.value.assignee,
@@ -1145,7 +1164,7 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
       //  return false;
       this.dsarRequestService.addSubTaskResponse(this.selectedTaskID, fd, this.constructor.name, moduleName.dsarRequestModule)
         .subscribe((data) => {
-          this.alertMsg = data.response;
+          this.alertMsg = 'subtask response submitted successfully';
           this.isOpen = true;
           this.alertType = 'success';
           this.getSubTaskList();
@@ -1436,8 +1455,31 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
     }
   }
 
+  viewClientAttachedFile(id) {
+    this.skeletonLoading = true;
+    let ext;
+    let documentType;
+    this.dsarRequestService.viewClientsFileAttachments(id, this.constructor.name, moduleName.dsarRequestModule).subscribe((data) => {
+      this.skeletonLoading = false;
+      if (data) {
+        this.base64FileCode = data.response.upload;
+        ext = data.response.filename;
+        documentType = this.changeFileType(ext);
+        const blob = new Blob([this._base64ToArrayBuffer(this.base64FileCode)], {
+          type: documentType // type: 'application/pdf',
+        });
+        const url = URL.createObjectURL(blob);
+        return window.open(url, 'iframeFilepreview');
+      }
+    }, (error) => {
+      this.skeletonLoading = false;
+    });
+
+  }
+
   ngAfterContentChecked() {
     setTimeout(() => {
+      this.cdRef.detectChanges();
       if (this.workflowStageScroller !== undefined) {
         const parentElementSize = this.workflowStageScroller.nativeElement.parentElement.offsetWidth;
         const itemSize = this.workflowStageScroller.nativeElement.querySelector('li').offsetWidth;

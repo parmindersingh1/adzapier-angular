@@ -827,6 +827,21 @@ span.previewbtn a {
   cursor: pointer;
 }
 
+.favicon-img-space {
+  border: solid 1px #737373;
+  border-radius: 8px;
+  background: #f1f1f1;
+  height: auto;
+  width: 100%;
+  padding: 10px;
+}
+
+.favicon-img-space img {
+  display: block;
+  margin: auto;
+  cursor: pointer;
+}
+
 .fileInputProfileWrap {
   width: 100%;
   height: auto;
@@ -915,6 +930,11 @@ span.previewbtn a {
 .uploaded-logo-width {
     width: 150px;
     height: auto;
+}
+
+.uploaded-favicon-width {
+  width: auto;
+  height: auto;
 }
 
 .color-controlwrapper input[type=color] {

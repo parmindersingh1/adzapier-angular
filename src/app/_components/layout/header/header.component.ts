@@ -13,7 +13,7 @@ import { Location } from '@angular/common';
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
-  changeDetection: ChangeDetectionStrategy.Default
+  // changeDetection: ChangeDetectionStrategy.Default
 })
 export class HeaderComponent implements OnInit {
   @ViewChild('confirmTemplate', { static: false }) confirmModal: TemplateRef<any>;
@@ -551,4 +551,18 @@ export class HeaderComponent implements OnInit {
       this.loadNotification();
     });
   }
+
+  addColumncount(): object {
+    if(this.orgPropertyMenu.length <= 2){
+      return { 'column-count': 2  }
+    }  else if(this.orgPropertyMenu.length >= 4 && this.orgPropertyMenu.length <= 5 ){
+      return { 'column-count': 2  }
+    } else if(this.orgPropertyMenu.length >= 4 && this.orgPropertyMenu.length <= 6 ){
+      return { 'column-count': 3  }
+    } else if(this.orgPropertyMenu.length > 8 ){
+      return { 'column-count': 4  }
+    } 
+    
+  }
+
 }
