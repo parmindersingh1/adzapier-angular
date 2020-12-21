@@ -159,6 +159,7 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
   filePreviewURL: any;
   isEmailVerified = false;
   isAttachmentExist: boolean;
+  attachedfileName: string;
   activitytype: any;
   bsValue: Date = null;
   subtaskDeadlineDate: Date;
@@ -320,6 +321,7 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
         this.isEmailVerified = data.response.email_verified;
         this.isemailverificationRequired = data.response.required_email_verification;
         this.isAttachmentExist = this.isFileExist(data.response.upload_exist);
+        this.attachedfileName = data.response.upload_exist;
         this.skeletonCustomLoading = false;
         this.getCustomFields(this.customFields);
         this.getWorkflowStages(this.workflowId);
