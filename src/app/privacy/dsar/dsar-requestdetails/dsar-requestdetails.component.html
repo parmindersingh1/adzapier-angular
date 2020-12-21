@@ -184,7 +184,7 @@
                                 <label class="tx-sans"> Attachments</label>
                                 <p [ngClass]="{'show':isAttachmentExist,'hide':!isAttachmentExist}">
                                     <i-feather class="feather-file" name="file"></i-feather>
-                                    <a (click)="viewFile()" style="cursor: pointer;">View File</a>
+                                    <a (click)="viewFile()" style="cursor: pointer;">{{attachedfileName}}</a>
                                 </p>
                                 <p *ngIf="!isAttachmentExist">No attachment found</p>
                             </div>
@@ -407,7 +407,7 @@
                                                 <!-- <strong>{{data.user_firstname}} {{data.user_lastname}}</strong> -->
                                                 <strong *ngIf="data.internal_firstname !== null || data.internal_lastname !== null"> {{data.internal_firstname}} {{data.internal_lastname}}</strong>
                                                 <strong *ngIf="data.public_firstname !== null || data.public_lastname !== null"> {{data.public_firstname}} {{data.public_lastname}}</strong>
-                                                chagne status from
+                                                change status from
                                                 <strong>{{data.previous_status}}</strong> to
                                                 <strong>{{data.current_status}}</strong>
                                                 at <small

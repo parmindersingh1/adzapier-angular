@@ -421,7 +421,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
       this.webFormControlList = this.dsarFormService.getFormControlList();
       //  this.selectOptionControl = this.controlOption[0].control;
       this.selectOptions = [{
-        id: this.count++,
+        id: new Date().valueOf(), // this.count++,
         value: ' '
       }];
       this.daysleft = 45;
@@ -620,7 +620,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
     const keylabel = this.lblText.split(' ').join('_').toLowerCase();
     const id = count++;
     customObj = {
-      id: this.selectOptions.length + 1,
+      id: new Date().valueOf(), // this.selectOptions.length + 1,
       keylabel
     };
     this.selectOptions.push(customObj);
@@ -699,13 +699,13 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
   addCustomFields(formControls: NgForm) {
     this.trimLabel = formControls.value.lblText.split(' ').join('_').toLowerCase();
   //  const isLabelExist = this.webFormControlList.filter((t) => t.controllabel === this.trimLabel).length > 0;
-    // const isLabelExist = this.webFormControlList.findIndex((t) =>  t.controllabel === formControls.value.lblText);
-    // if(isLabelExist !== -1){
-    //   this.alertMsg = 'Label already exist!'
-    //   this.isOpen = true;
-    //   this.alertType = 'danger';
-    //   return false
-    // }
+    const isLabelExist = this.webFormControlList.findIndex((t) =>  t.controllabel === formControls.value.lblText);
+    if(isLabelExist !== -1 && this.changeControlType === null){
+      this.alertMsg = 'Label already exist!'
+      this.isOpen = true;
+      this.alertType = 'danger';
+      return false;
+    }
     if (this.isEditingList) {
       const req = 'requesttype';
       const sub = 'subjecttype';

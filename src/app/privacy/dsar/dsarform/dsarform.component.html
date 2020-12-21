@@ -723,8 +723,8 @@
                                     <div *ngFor="let opt of webcontrol.selectOptions; let i = index;"
                                         class="form-check-inline">
                                         <input class="form-check-input" type="checkbox"
-                                            name="{{opt.keylabel}}" [value]='opt.id'
-                                            [(ngModel)]="requestObject[opt.name]" />{{opt.name}}
+                                            id="{{opt.id}}"  name="{{opt.keylabel}}" [value]='opt.id'
+                                            [(ngModel)]="requestObject[opt.id]" />{{opt.name}}
                                         <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
 
                                     </div>
