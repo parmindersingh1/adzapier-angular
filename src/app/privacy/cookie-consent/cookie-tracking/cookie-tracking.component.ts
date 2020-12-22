@@ -4,6 +4,7 @@ import {OrganizationService} from '../../../_services';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
 import {moduleName} from '../../../_constant/module-name.constant';
 import { GdprService } from 'src/app/_services/gdpr.service';
+import * as moment from 'moment';
 
 class FilterType {
   consentType = '';
@@ -26,6 +27,8 @@ export class CookieTrackingComponent implements OnInit {
   private currentManagedOrgID: any;
   private currrentManagedPropID: any;
   totalCookieCount;
+  startDate: any;
+  endDate: any;
   private firstone: number;
   public filterTypes: FilterType = new FilterType();
   public filterTypesData: FilterTypeData = new FilterTypeData();
@@ -42,9 +45,40 @@ export class CookieTrackingComponent implements OnInit {
   ngOnInit() {
     this.onGetPropsAndOrgId();
     this.onGetFilterData();
+    this.onSetUpDate();
     console.log(
     //  this.gdprService.docodeTcString()
     )
+  }
+
+
+  onSetUpDate() {
+    const that = this;
+    const start = moment().subtract(29, 'days');
+    const end = moment();
+    function cb(start, end) {
+      jQuery('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+      that.startDate = start.format('YYYY-MM-DD');
+      that.endDate = end.format('YYYY-MM-DD');
+      that.onGetFromServer();
+    }
+
+    (<any>$('#reportrange')).daterangepicker({
+      startDate: start,
+      endDate: end,
+      maxDate: new Date(),
+      ranges: {
+        Today: [moment(), moment()],
+        Yesterday: [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+        'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+        'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+        'This Month': [moment().startOf('month'), moment().endOf('month')],
+        'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+        'This Year': [moment().startOf('year'), moment().endOf('year')],
+        'Last Year': [moment().subtract(1, 'year').startOf('year'), moment().subtract(1, 'year').endOf('year')],
+      }
+    }, cb);
+    cb(start, end);
   }
 
   onGetPropsAndOrgId() {
@@ -73,7 +107,8 @@ export class CookieTrackingComponent implements OnInit {
 
   onGetFromServer(){
     this.loading.start();
-    const filter = '&consent-type=' + this.filterTypes.consentType + '&status=' + this.filterTypes.status + '&country=' + this.filterTypes.country;
+    const filter = '&consent-type=' + this.filterTypes.consentType + '&status=' + this.filterTypes.status + '&country=' + this.filterTypes.country
+    + '&startDate=' + this.startDate + '&endDate=' + this.endDate;
     this.cookieConsentService.getConsent(this.currrentManagedPropID, this.pagelimit + filter, this.constructor.name, moduleName.cookieTrackingModule)
     .subscribe(res => {
       this.loading.stop();
