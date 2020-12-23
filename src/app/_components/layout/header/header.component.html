@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg">
+<nav *ngIf="currentUser" class="navbar navbar-expand-lg">
   <!-- Brand -->
   <!-- Toggler/collapsibe Button -->
 
@@ -75,7 +75,7 @@
                    <span (click)="isProperyDisabled(submenu) ? false : isCurrentPropertySelected(item,submenu)"> {{ submenu.property_name? submenu.property_name: 'No Property' }}
                     <span class="ml-2" *ngIf="isPropSelected(submenu)">
                     <i class="fa fa-check"></i></span>
-                  </span>                       
+                  </span>
                   </a>
                 </li>
               </ng-container>
@@ -134,15 +134,15 @@
                  <div class="d-flex">
               <button class="clear-notification cross-icon" tooltip="Clear notification"
               placement="bottom" [adaptivePosition]="true"
-              [ngClass]="{'clear-notification':data.active}" (click)="clearNotification(data.id,'clear',false)">&#10005;</button>  
+              [ngClass]="{'clear-notification':data.active}" (click)="clearNotification(data.id,'clear',false)">&#10005;</button>
               <button class="clear-notification" tooltip="{{data.read ? 'Mark as read':'Mark as unread'}}" placement="bottom" [adaptivePosition]="true"
                [ngClass]="{'unreadicon':data.read,'readicon':!data.read}" (click)="clearNotification(data.id,'read',data.read)">&#9679;</button>
-               
+
               </div>
           </div>
           <!-- <div *ngFor="let data of notificationList" class="notification-wrapper"></div> -->
         </cdk-virtual-scroll-viewport>
-       
+
       </li>
     </ul>
   </div>
@@ -205,7 +205,7 @@
     </ul>
   </div>
 
-  
+
   <!--usermenuends after login-->
 </nav>
 
@@ -317,4 +317,3 @@
       <button type="button" class="btn btn-xs btn-primary mr-2" (click)="confirm()">OK</button>
   </div>
 </ng-template>
- 
