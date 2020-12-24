@@ -1,5 +1,7 @@
-import { Component, OnInit, ViewChild, ElementRef, Renderer2, TemplateRef, AfterContentChecked,AfterViewInit, 
-ChangeDetectorRef } from '@angular/core';
+import {
+  Component, OnInit, ViewChild, ElementRef, Renderer2, TemplateRef, AfterContentChecked, AfterViewInit,
+  ChangeDetectorRef
+} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { OrganizationService } from 'src/app/_services';
 import { DsarRequestService } from 'src/app/_services/dsar-request.service';
@@ -159,6 +161,7 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
   filePreviewURL: any;
   isEmailVerified = false;
   isAttachmentExist: boolean;
+  attachedfileName: string;
   activitytype: any;
   bsValue: Date = null;
   subtaskDeadlineDate: Date;
@@ -178,6 +181,9 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
   showStageTitle: string;
   showStageGuidanceText: string;
   dueInDays: number;
+  multipleFile: any = [];
+  subtaskAttachments: any = [];
+  subtaskFileID: any;
   constructor(private activatedRoute: ActivatedRoute,
               private router: Router,
               private orgService: OrganizationService,
@@ -320,6 +326,7 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
         this.isEmailVerified = data.response.email_verified;
         this.isemailverificationRequired = data.response.required_email_verification;
         this.isAttachmentExist = this.isFileExist(data.response.upload_exist);
+        this.attachedfileName = data.response.upload_exist;
         this.skeletonCustomLoading = false;
         this.getCustomFields(this.customFields);
         this.getWorkflowStages(this.workflowId);
@@ -328,9 +335,9 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
         this.editRequestDetailForm.controls['country'].setValue(this.respCountry);
         this.editRequestDetailForm.controls['state'].setValue(this.respState);
         this.editRequestDetailForm.controls['city'].setValue(this.respCity);
-       // if (this.reqAcceptingagent !== 'No records') {
-          this.editRequestDetailForm.controls['requestacceptingagent'].setValue(this.reqAcceptingagent);
-       // }
+        // if (this.reqAcceptingagent !== 'No records') {
+        this.editRequestDetailForm.controls['requestacceptingagent'].setValue(this.reqAcceptingagent);
+        // }
         this.editRequestDetailForm.controls['riskfactor'].setValue(this.riskFactorText);
         this.skeletonLoading = false;
       }, (error) => {
@@ -868,7 +875,7 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
     this.isResponseToSubTask = false;
     // this.isEditSubTask = true;
     this.selectedTaskID = data.id;
-
+    this.subtaskAttachments = data.upload;
     this.displayTaskDescription = data.description;
     this.displayTaskname = data.name; //data.deadline
     this.displayTaskDeadline = data.deadline;
@@ -1018,9 +1025,9 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
     this.editRequestDetailForm.controls['country'].setValue(this.respCountry);
     this.editRequestDetailForm.controls['state'].setValue(this.respState);
     this.editRequestDetailForm.controls['city'].setValue(this.respCity);
-   // if (this.reqAcceptingagent !== 'No records') {
-      this.editRequestDetailForm.controls['requestacceptingagent'].setValue(this.reqAcceptingagent);
-   // }
+    // if (this.reqAcceptingagent !== 'No records') {
+    this.editRequestDetailForm.controls['requestacceptingagent'].setValue(this.reqAcceptingagent);
+    // }
   }
 
   pageChangeEvent(event) {
@@ -1048,7 +1055,6 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
     if (subtaskForm.invalid) {
       return false;
     }
-    console.log(subtaskForm.value, 'sv..');
     let currentStageID;
     this.isConfirmed ? currentStageID = this.currentWorkflowStageID : currentStageID = this.currentStageId;
    // const currentStageID = this.currentStageId ? this.currentStageId : this.currentWorkflowStageID;
@@ -1136,7 +1142,8 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
         const file = event.target.files[0];
         if (tag !== 'email') {
           this.uploadFilename = file.name;
-          this.subTaskResponseForm.get('uploaddocument').setValue(file);
+          this.multipleFile.push(event.target.files[0]);
+          this.subTaskResponseForm.get('uploaddocument').setValue(this.multipleFile);
         } else {
           this.uploadFilename = file.name;
           this.quillEditorEmailText.get('emailAttachment').setValue(file);
@@ -1151,6 +1158,11 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
     // }
   }
 
+  removeFile(item) {
+    const index = this.multipleFile.indexOf(item);
+    this.multipleFile.splice(index, 1);
+  }
+
   onSubmitSubTaskResponse() {
     this.isResponseSubmitted = true;
     if (this.subTaskResponseForm.invalid) {
@@ -1159,21 +1171,24 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
       const fd = new FormData();
       fd.append('task_response', this.subTaskResponseForm.get('taskresponse').value);
       fd.append('mark_completed', this.subTaskResponseForm.get('markcompleted').value);
-      fd.append('upload', this.subTaskResponseForm.get('uploaddocument').value);
-
+      //  fd.append('upload', this.subTaskResponseForm.get('uploaddocument').value);
+      for (var i = 0; i < this.multipleFile.length; i++) {
+        fd.append('upload[]', this.multipleFile[i]);
+      }
       //  return false;
       this.dsarRequestService.addSubTaskResponse(this.selectedTaskID, fd, this.constructor.name, moduleName.dsarRequestModule)
         .subscribe((data) => {
+          this.getSubTaskList();
           this.alertMsg = 'subtask response submitted successfully';
           this.isOpen = true;
           this.alertType = 'success';
-          this.getSubTaskList();
+          this.multipleFile = [];
           this.onCancelSubTaskResponse();
         }, (error) => {
+          this.onCancelSubTaskResponse();
           this.alertMsg = JSON.stringify(error);
           this.isOpen = true;
           this.alertType = 'danger';
-          this.onCancelSubTaskResponse();
         });
     }
   }
@@ -1270,7 +1285,7 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
     });
   }
 
-  viewFile() {
+  viewClientRequestFileAttachment() {
     this.skeletonLoading = true;
     let ext;
     let documentType;
@@ -1279,7 +1294,8 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
       if (data) {
         this.base64FileCode = data.upload;
         ext = data.upload_ext;
-        documentType = this.changeFileType(ext);
+        let fileExtn = ext.split('.');
+        documentType = this.changeFileType(fileExtn[1]);
         const blob = new Blob([this._base64ToArrayBuffer(this.base64FileCode)], {
           type: documentType // type: 'application/pdf',
         });
@@ -1376,10 +1392,6 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
       });
   }
 
-  onCheckboxChange($event) {
-    console.log($event);
-  }
-
   cancelModal() {
     this.modalRef.hide();
     this.confirmationForm.reset();
@@ -1464,7 +1476,8 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
       if (data) {
         this.base64FileCode = data.response.upload;
         ext = data.response.filename;
-        documentType = this.changeFileType(ext);
+        let fileExtn = ext.split('.');
+        documentType = this.changeFileType(fileExtn[1]);
         const blob = new Blob([this._base64ToArrayBuffer(this.base64FileCode)], {
           type: documentType // type: 'application/pdf',
         });
@@ -1475,6 +1488,46 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
       this.skeletonLoading = false;
     });
 
+  }
+
+  viewClientsEmailAttachment(id) {
+    this.skeletonLoading = true;
+    let ext;
+    let documentType;
+    this.dsarRequestService.getClientsEmailAttachments(id, this.constructor.name, moduleName.dsarRequestModule).subscribe((data) => {
+      this.skeletonLoading = false;
+      if (data) {
+        this.base64FileCode = data.response.upload;
+        ext = data.response.filename;
+        let fileExtn = ext.split('.');
+        documentType = this.changeFileType(fileExtn[1]);
+        const blob = new Blob([this._base64ToArrayBuffer(this.base64FileCode)], {
+          type: documentType // type: 'application/pdf',
+        });
+        const url = URL.createObjectURL(blob);
+        return window.open(url, 'iframeFilepreview');
+      }
+    }, (error) => {
+      this.skeletonLoading = false;
+    });
+
+  }
+
+  viewSubtaskResponseAttachedFile(data) {
+    let documentType;
+    let fileExtn = data.filename.split('.');
+    documentType = this.changeFileType(fileExtn[1]);
+    this.dsarRequestService.getSubtaskFileAttachements(data.id, this.constructor.name, moduleName.dsarRequestModule)
+      .subscribe((data) => {
+        this.subtaskAttachments = data.response;
+        const blob = new Blob([this._base64ToArrayBuffer(data.response[0].content)], {
+          type: documentType // type: 'application/pdf',
+        });
+        const url = URL.createObjectURL(blob);
+        return window.open(url, 'iframeFilepreview');
+      }, (error) => {
+        console.log(error, 'error..');
+      })
   }
 
   ngAfterContentChecked() {

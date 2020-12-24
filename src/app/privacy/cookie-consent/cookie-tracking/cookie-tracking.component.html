@@ -18,19 +18,29 @@
           </select>
         </div>
 
-        <div class="col-md-3">
+        <div class="col-md-2">
           <select (change)="onGetFromServer()" [(ngModel)]="filterTypes.status" class="form-control form-control-sm">
             <option value=""> -- Select Status -- </option>
             <option *ngFor="let obj of filterTypesData.status" [value]="obj.status">{{obj.status}}</option>
           </select>
         </div>
 
-        <div class="col-md-3">
+        <div class="col-md-2">
           <select (change)="onGetFromServer()" [(ngModel)]="filterTypes.country" class="form-control form-control-sm">
             <option value=""> -- Select Country -- </option>
             <option *ngFor="let obj of filterTypesData.country" [value]="obj.country">{{obj.country}}</option>
           </select>
         </div>
+
+        <div class="col-md-5 mt-2">
+          <span id="reportrange"
+              style="background: #fff; cursor: pointer; padding: 9px 10px; border: 1px solid #ccc; width: 100%"
+                class="rounded-5">
+            <i class="fa fa-calendar"></i>&nbsp;
+            <span></span> <i class="fa fa-caret-down"></i>
+          </span>
+        </div>
+
       </div>
     </div>
 </div>

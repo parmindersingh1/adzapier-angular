@@ -557,9 +557,9 @@ export class HeaderComponent implements OnInit {
       return { 'column-count': 2  }
     }  else if(this.orgPropertyMenu.length >= 4 && this.orgPropertyMenu.length <= 5 ){
       return { 'column-count': 2  }
-    } else if(this.orgPropertyMenu.length >= 4 && this.orgPropertyMenu.length <= 6 ){
+    } else if(this.orgPropertyMenu.length >= 4 && this.orgPropertyMenu.length <= 8 ){
       return { 'column-count': 3  }
-    } else if(this.orgPropertyMenu.length > 8 ){
+    } else if(this.orgPropertyMenu.length >= 8 ){
       return { 'column-count': 4  }
     } 
     

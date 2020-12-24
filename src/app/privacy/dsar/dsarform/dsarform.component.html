@@ -566,25 +566,26 @@
                                         </select>
                                         <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
                                     </div>
-                                    <div class="form-check"
+                                    <div class="form-group"
                                         *ngIf="webcontrol.control === 'radio' && webcontrol.controlId === 'requesttype'">
-                                        <!-- *ngIf="radioBtnType"-->
                                         <div *ngFor="let opt of webcontrol.selectOptions" class="form-check-inline">
                                             <input class="form-check-input" type="radio" name="requesttype"
-                                                [value]='opt.request_type_id'
-                                                [(ngModel)]="requestObject[opt.name]" />{{opt.name}}
+                                            id="{{opt.name}}"  [value]='opt.request_type_id' #requestype="ngModel"
+                                                [(ngModel)]="requestObject[opt.request_type_id]" />
+                                                <label for="{{opt.name}}">{{opt.name}}</label>
                                             <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
 
                                         </div>
                                     </div>
-                                    <div class="form-check"
+                                   
+                                    <div class="form-group"
                                         *ngIf="webcontrol.control === 'checkbox' && webcontrol.controlId === 'requesttype'">
                                         <!-- *ngIf="checkboxBtnType"-->
-                                        <div *ngFor="let opt of webcontrol.selectOptions; let i = index;"
-                                            class="form-check-inline">
-                                            <input class="form-check-input" type="checkbox"
-                                                name="{{webcontrol.controllabel}}" [value]='opt.request_type_id'
-                                                [(ngModel)]="requestObject[opt.name]" />{{opt.name}}
+                                        <div *ngFor="let opt of webcontrol.selectOptions; let i = index;" class="form-check-inline">
+                                            <input class="form-check-input" type="checkbox"  name="requestype"
+                                            id="{{opt.name}}"  [value]='opt.request_type_id'  #requestype="ngModel"
+                                                [(ngModel)]="requestObject[opt.request_type_id]" />
+                                                <label for="{{opt.name}}">{{opt.name}}</label>
                                             <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
 
                                         </div>
@@ -607,25 +608,29 @@
                                         </select>
                                         <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
                                     </div>
-                                    <div class="form-check"
+                                    <div class="form-group"
                                         *ngIf="webcontrol.control == 'radio' && webcontrol.controlId === 'subjecttype'">
                                         <!--*ngIf="subjectTyperadioBtn"-->
                                         <div *ngFor="let userOpt of webcontrol.selectOptions" class="form-check-inline">
-                                            <input class="form-check-input" type="radio" name="subjecttype"
+                                            <input class="form-check-input" type="radio" name="subjecttype" 
+                                          id="{{userOpt.name}}"  #subjecttype="ngModel"
                                                 [value]='userOpt.subject_type_id'
-                                                [(ngModel)]="requestObject[userOpt.name]" />
-                                            {{userOpt.name}}
+                                                [(ngModel)]="requestObject[userOpt.subject_type_id]" />
+                                            <label for="{{userOpt.name}}">{{userOpt.name}}</label>
+
                                             <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
                                         </div>
                                     </div>
-                                    <div
+                                    <div class="form-group"
                                         *ngIf="webcontrol.control == 'checkbox' && webcontrol.controlId === 'subjecttype'">
                                         <!--*ngIf="subjectTypecheckboxBtnType"-->
                                         <div *ngFor="let opt of webcontrol.selectOptions; let i = index;"
                                             class="form-check-inline">
                                             <input class="form-check-input" type="checkbox"
-                                                name="{{webcontrol.controllabel}}" [value]='opt.subject_type_id'
-                                                [(ngModel)]="requestObject[opt.name]" />{{opt.name}}
+                                            id="{{opt.name}}"  name="{{webcontrol.controllabel}}" 
+                                            [value]='opt.subject_type_id'
+                                                [(ngModel)]="requestObject[opt.subject_type_id]" />
+                                                <label for="{{opt.name}}">{{opt.name}}</label>
                                             <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
 
                                         </div>
@@ -666,10 +671,13 @@
                                             class="color-red">*</span>{{webcontrol.controllabel}} 
                                     </label>
                                     <div *ngFor="let userOpt of webcontrol.selectOptions" class="form-check-inline">
-                                        <input class="form-check-input" type="radio" name="{{userOpt.keylabel}}"
-                                        id="{{userOpt.keylabel}}"   [value]='userOpt.name' [(ngModel)]="requestObject[userOpt.keylabel]" />
-                                        {{userOpt.name}}
-                                        <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
+                                            <input class="form-check-input" type="radio" #customRadio="ngModel"
+                                                id="{{userOpt.id}}" name="{{userOpt.keylabel}}" [value]='userOpt.name'
+                                                [(ngModel)]="requestObject[userOpt.id]"
+                                                [ngClass]="{ 'is-invalid': registerForm.submitted && customRadio.invalid }"
+                                                [required]="webcontrol.requiredfield ? 'required' : null" />
+                                            <label for="{{userOpt.id}}">{{userOpt.name}}</label>
+                                            <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
 
                                     </div>
                                 </div>
@@ -720,12 +728,13 @@
                                     *ngIf="webcontrol.control == 'checkbox' && webcontrol.controlId !== 'subjecttype' && webcontrol.controlId !== 'requesttype'">
                                     <label class="form-check-label"><span *ngIf="webcontrol.requiredfield"
                                             class="color-red">*</span> {{webcontrol.controllabel}}</label>
-                                    <div *ngFor="let opt of webcontrol.selectOptions; let i = index;"
-                                        class="form-check-inline">
-                                        <input class="form-check-input" type="checkbox"
-                                            name="{{opt.keylabel}}" [value]='opt.id'
-                                            [(ngModel)]="requestObject[opt.name]" />{{opt.name}}
-                                        <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
+                                    <div *ngFor="let opt of webcontrol.selectOptions; let i = index;"  class="form-check-inline">
+                                        <input class="form-check-input" type="checkbox" #customChkbox="ngModel"
+                                        id="{{opt.id}}"  name="{{opt.keylabel}}" [value]="opt.name"
+                                        [ngClass]="{ 'is-invalid': registerForm.submitted && customChkbox.invalid }"
+                                        [required]="webcontrol.requiredfield ? 'required' : null" [(ngModel)]="requestObject[opt.id]" />
+                                    <label for="{{opt.id}}">{{opt.name}}</label>
+                                    <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
 
                                     </div>
                                 </div>

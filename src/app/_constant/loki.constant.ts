@@ -64,5 +64,6 @@ export enum LokiFunctionality {
   getNotification = 'getNotification',
   updateNotification = 'updateNotification',
   getUserList = 'getUserList',
-  viewClientsFileAttachments = 'viewClientsFileAttachments'
+  viewClientsFileAttachments = 'viewClientsFileAttachments',
+  viewSubtaskFileAttachements = 'viewSubtaskFileAttachements'
 }
