@@ -286,6 +286,7 @@ ul.nav-tabs > li:last-child > div > a::after {
     height: auto;
     width: auto;
     align-items: center;
+    white-space: nowrap;
  }
 
  .activity-log {
@@ -569,6 +570,7 @@ ul.ngx-pagination {
   .downloadFile {
       position: absolute;
       right: 0px;
+      display: inline-block;
   }
 
   .feather-file {
@@ -661,6 +663,7 @@ ul.ngx-pagination {
 
   .show {
       display:inline-flex;
+      word-break: break-all;
   }
 
   .hide {
@@ -882,6 +885,7 @@ ul.ngx-pagination {
     border: 1px solid #ccc;
     padding: 4px 20px;
     text-decoration: none;
+    white-space: nowrap;
 }
 
 .btn-file:hover {
