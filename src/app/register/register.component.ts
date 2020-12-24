@@ -85,13 +85,13 @@ export class RegisterComponent implements OnInit {
                 .pipe(first())
                 .subscribe(
                     data => {
-                        this.alertMsg = data.response;
+                        this.alertMsg = 'Account created successfully';
                         this.isOpen = true;
                         this.alertType = 'success';
                         this.router.navigate(['/login']);
                     },
                     error => {
-                        this.alertMsg = error;
+                        this.alertMsg = error.company_error || error;
                         this.isOpen = true;
                         this.alertType = 'info';
                         this.loading = false;

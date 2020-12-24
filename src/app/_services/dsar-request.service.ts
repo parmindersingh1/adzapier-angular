@@ -172,4 +172,22 @@ export class DsarRequestService {
       }));
   }
 
+  getSubtaskFileAttachements(fileId,componentName, moduleName){
+    const path = '/upload/file?id='+fileId;
+    return this.http.get<any>(environment.apiUrl + path, {})
+      .pipe(catchError(error => {
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.viewSubtaskFileAttachements, componentName, moduleName, path);
+        return throwError(error);
+      }));
+  }
+
+  getClientsEmailAttachments(fileId, componentName, moduleName){
+    const path = '/ccpa/file/email?email_activity_id=' + fileId;
+    return this.http.get<any>(environment.apiUrl + path, {})
+      .pipe(catchError(error => {
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.viewClientsFileAttachments, componentName, moduleName, path);
+        return throwError(error);
+      }));
+  }
+
 }
