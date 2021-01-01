@@ -17,7 +17,9 @@ export class CompanyComponent implements OnInit {
   @ViewChild('confirmTemplate', { static: false }) confirmModal: TemplateRef<any>;
   modalRef: BsModalRef;
   companyDetails: any;
+  appId: any;
   address1: any;
+  cid: any;
   address2: any;
   city: string;
   name: any;
@@ -114,6 +116,8 @@ export class CompanyComponent implements OnInit {
       this.companyId = data.response.id;
       this.email = data.response.email;
       this.phone = data.response.phone;
+      this.cid = data.response.id;
+      this.onGetToken(data.response.id);
     }, (err) => {
       this.loading.stop();
       this.alertMsg = err;
@@ -197,7 +201,60 @@ export class CompanyComponent implements OnInit {
         );
     }
   }
+  onGenerateToken(cId){
+    this.loading.start();
+    this.companyService.generateToken( this.constructor.name, moduleName.organizationDetailsModule, cId)
+    .subscribe(res => {
+      this.loading.stop();
+      this.alertMsg = res.message;
+      this.isOpen = true;
+      this.alertType = 'success';
+      this.onGetToken(this.cid)
+    }, err => {
+      this.loading.stop();
+      this.alertMsg = err.message;
+      this.isOpen = true;
+      this.alertType = 'danger';
+    })
 
+  }
+
+  onUpdateToken(cId){
+    this.loading.start();
+    this.companyService.updateToken( this.constructor.name, moduleName.organizationDetailsModule, cId)
+    .subscribe(res => {
+      this.loading.stop();
+      this.alertMsg = res.message;
+      this.isOpen = true;
+      this.alertType = 'success';
+      this.onGetToken(this.cid)
+    }, err => {
+      this.loading.stop();
+      this.alertMsg = err.message;
+      this.isOpen = true;
+      this.alertType = 'danger';
+    })
+
+  }
+
+
+  onGetToken(cid){
+    this.loading.start();
+    this.companyService.getToken( this.constructor.name, moduleName.organizationDetailsModule,cid)
+    .subscribe(res => {
+      this.loading.stop();
+      this.alertMsg = res.message;
+      this.appId = res.response.app_id;
+      this.isOpen = true;
+      this.alertType = 'success';
+    }, err => {
+      this.loading.stop();
+      this.alertMsg = err.message;
+      this.isOpen = true;
+      this.alertType = 'danger';
+    })
+
+  }
   onSubmitInviteUser() {
     this.isInviteFormSubmitted = true;
     if (this.inviteUserForm.invalid) {
@@ -277,7 +334,7 @@ export class CompanyComponent implements OnInit {
     this.inviteUserForm.controls['emailid'].setValue(data.user_email);
     this.inviteUserForm.get('emailid')[this.isUpdateUserinvitation ? 'disable' : 'enable']();
     this.inviteUserForm.controls['permissions'].setValue(data.role_id);
-     
+
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
       this.inviteUserForm.reset();
       // this.closeResult = `Closed with: ${result}`;
@@ -400,7 +457,7 @@ export class CompanyComponent implements OnInit {
     });
   }
 
- 
+
 
   confirmDeleteTeamMember() {
     this.modalRef.hide();

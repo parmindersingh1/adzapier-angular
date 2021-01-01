@@ -6,6 +6,9 @@ import { Location } from '@angular/common';
 import {moduleName} from '../../../../_constant/module-name.constant';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
 import {Router} from '@angular/router';
+import { environment } from 'src/environments/environment';
+import { apiConstant } from 'src/app/_constant/api.constant';
+
 
 @Component({
   selector: 'app-setup',
@@ -14,6 +17,8 @@ import {Router} from '@angular/router';
 })
 export class SetupComponent implements OnInit {
   private currentManagedOrgID: any;
+  env = environment;
+  apiConstant = apiConstant;
   modalRef: BsModalRef;
   isCopied = {
     one: false,
