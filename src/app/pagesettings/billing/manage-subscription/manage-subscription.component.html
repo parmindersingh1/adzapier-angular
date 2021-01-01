@@ -17,24 +17,23 @@
         <th>Name</th>
         <th>Available Licenses</th>
         <th>Type</th>
+        <th>Price</th>
       </tr>
       </thead>
       <tbody>
-      <tr>
-        <td><a routerLink="/settings/billing/manage-product"> Gold Plan</a></td>
+      <tr *ngFor="let plan of activeSubscriptionList">
+        <td><a [routerLink]="'/settings/billing/manage-product/' + plan.id"> {{plan.plan_name}}</a></td>
         <td>0 Property Available </td>
-        <td>john@example.com</td>
-      </tr>     <tr>
-        <td>Silver Plan</td>
-        <td>0 Property Available </td>
-        <td>john@example.com</td>
-      </tr>     <tr>
-        <td>Platinum Plan</td>
-        <td>0 Property Available </td>
-        <td>john@example.com</td>
+        <td>{{plan.email}}</td>
+        <td>{{plan.amount}}</td>
       </tr>
 
       </tbody>
     </table>
   </div>
+</div>
+
+
+<div class="col-sm-5 mt-3 mr-0 float-right">
+  <alert *ngIf="isOpen" [type]="alertType"  dismissOnTimeout="5000" [dismissible]="dismissible" (onClosed)="onClosed(alertMsg)">{{  alertMsg}}</alert>
 </div>

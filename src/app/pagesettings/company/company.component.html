@@ -59,12 +59,15 @@
                                 class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Phone</label>
                             <p class=" mg-b-0">{{phone}}</p>
                         </div>
-                        <!-- <div class="col-sm-3 mg-t-5 mg-sm-t-5">
+                        <div class="col-sm-6 mg-t-5 mg-sm-t-5">
                         <label
-                            class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">City</label>
-                        <p class="mg-b-0">{{city}}</p>
-                    </div>
+                            class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">App ID</label>
+                        <p *ngIf="!appId" (click)="onGenerateToken(cid)" style="cursor: pointer" class="mg-b-0 tx-primary"> Generate App ID</p>
+                        <p class="mg-b-0" *ngIf="appId">{{appId}}</p>
+                        <p *ngIf="appId" (click)="onUpdateToken(cid)" style="cursor: pointer" class="mg-b-0 tx-primary"> Update App ID</p>
 
+                    </div>
+<!--
                     <div class="col-sm-3 mg-t-5 mg-sm-t-5">
                         <label
                             class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">State</label>
@@ -94,7 +97,7 @@
                             <div class="input-group-text bg-transparent"><i class="fa fa-search"></i></div>
                         </span>
                     </div>
-                    
+
                     <div class="col-sm-2 ml-auto">
                         <button type="button" class="btn btn-primary btn-xs float-right" data-toggle="modal"
                             (click)="editOrganizationModalPopup(inviteuserModal)"><i class="fas fa-plus"></i> Add
@@ -134,7 +137,7 @@
                                 <span *ngIf="!isDateOrString(list.user_last_login)">{{list.user_last_login}}</span>
                             </td>
                             <td class="text-center">
-                              
+
                                 <button type="button"
                                     *ngIf="list.user_last_login === 'Invitation sent' || list.user_last_login === 'Invitation Pending'"
                                     (click)="onResendInvitation(list.approver_id)" class="btn btn-xs btn-primary"><i
@@ -148,7 +151,7 @@
                                 <a class="pd-r-5 cursorpointer" (click)="removeTeamMember(list,'team member')">
                                     <i class="far fa-trash-alt tx-danger fa-sm"></i>
                                 </a>
- 
+
                             </td>
 
                         </tr>
@@ -381,7 +384,7 @@
         </button>
     </div>
     <div class="modal-body text-center">
-        <p> This will delete selected 
+        <p> This will delete selected
             <span class="font-weight-bold"> {{showControlContent()}}</span>
             <!-- <span class="font-weight-bold">{{controlname === 'team member' ? selectedTeamMember : organizationName}}</span>
              <span class="font-weight-bold"> {{controlname === 'organization' ? organizationName : confirmProperty}}</span> -->
