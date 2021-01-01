@@ -22,6 +22,6 @@ export const moduleName = {
   organizationTeamModule: 'OrganizationTeamModule',
   organizationDetailsModule: 'OrganizationDetailsModule',
   headerModule: 'HeaderModule',
-  forgotPasswordModule: 'ForgotPasswordModule'
-
+  forgotPasswordModule: 'ForgotPasswordModule',
+  manageSubscriptionsModule: 'ManageSubscriptionModule'
 };

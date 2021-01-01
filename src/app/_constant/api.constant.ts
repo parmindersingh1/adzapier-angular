@@ -10,6 +10,7 @@ export const apiConstant = {
   // Cookie Consent
   COOKIE_CONSENT: '/consents/tracking/:propId',
   COOKIE_TRACKING_FILTER: '/consents/trackingbyfilter/:propId',
+  COOKIE_CONSENT_PUBLISHER: '/consent/cookieconsent',
   // Dashboard CCPA
   DASHBOARD_CCPA_REQUEST_CHART: '/ccpa/request/chart/:orgId/:propId',
   DASHBOARD_REQUEST_BY_STATE: '/ccpa/chart/state/:orgId/:propId',
@@ -29,6 +30,7 @@ export const apiConstant = {
   BILLING_UPDATE_SESSION_ID: '/billing/update/card/session',
   BILLING_CURRENT_SUBSCRIPTION: '/billing/current/subscription',
   BILLING_COUPON: '/billing/coupon/:coupon_code',
+  BILLING_ACTIVE_PLAN: '/billing/active/subscription',
   // Workflow
   WORKFLOW: '/workflow',
   WORKFLOW_STATUS: '/workflow?workflow_status=',
