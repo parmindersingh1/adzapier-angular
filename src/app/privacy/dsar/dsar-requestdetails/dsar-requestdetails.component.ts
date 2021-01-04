@@ -1,9 +1,9 @@
 import {
-  Component, OnInit, ViewChild, ElementRef, Renderer2, TemplateRef, AfterContentChecked, AfterViewInit,
+  Component, OnInit, ViewChild, ElementRef, Renderer2, TemplateRef, AfterViewInit, AfterViewChecked,
   ChangeDetectorRef
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { OrganizationService } from 'src/app/_services';
+import { AuthenticationService, OrganizationService, UserService } from 'src/app/_services';
 import { DsarRequestService } from 'src/app/_services/dsar-request.service';
 import { NgbModal, NgbNavChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 import { FormGroup, FormBuilder, FormControl, Validators, NgForm } from '@angular/forms';
@@ -22,14 +22,14 @@ import { formatDate } from '@angular/common';
   templateUrl: './dsar-requestdetails.component.html',
   styleUrls: ['./dsar-requestdetails.component.scss']
 })
-export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, AfterContentChecked {
+export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, AfterViewInit, AfterViewChecked {
   @ViewChild('toggleDayleftdiv', { static: true }) toggleDayleftdiv: ElementRef;
   @ViewChild('btnDaysLeft', { static: true }) btnDaysLeft: ElementRef;
   @ViewChild('customDaysInput', { static: false }) customDaysInput: ElementRef;
   @ViewChild('confirmTemplate', { static: false }) confirmModal: TemplateRef<any>;
   @ViewChild('filePreview', { static: true }) filePreview: ElementRef;
   @ViewChild('panel', { static: true }) public panel: ElementRef<any>;
-  @ViewChild('workflowStageScroller', { static: false }) public workflowStageScroller: ElementRef<any>;
+  @ViewChild('workflowStageScroller', { static: true, read: ElementRef }) public workflowStageScroller: ElementRef<any>;
   @ViewChild('confirmDeleteTemplate', { static: false }) confirmDeleteModal: TemplateRef<any>;
 
   // @ViewChild('subTaskForm', null) subTaskTempForm: NgForm;
@@ -184,6 +184,12 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
   multipleFile: any = [];
   subtaskAttachments: any = [];
   subtaskFileID: any;
+  queryCompanyID: any;
+  queryOrgID: any;
+  queryPropID: any;
+  currentManagedcID: any;
+  resuserCID: any;
+  userData: any;
   constructor(private activatedRoute: ActivatedRoute,
               private router: Router,
               private orgService: OrganizationService,
@@ -196,7 +202,9 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
               private renderer2: Renderer2,
               private bsmodalService: BsModalService,
               private loading: NgxUiLoaderService,
-              private cdRef: ChangeDetectorRef
+              private cdRef: ChangeDetectorRef,
+              private userService: UserService,
+              private authService: AuthenticationService
   ) {
     this.renderer2.listen('window', 'click', (e: Event) => {
       if (e.target !== this.toggleDayleftdiv.nativeElement &&
@@ -206,9 +214,11 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
     });
     this.paginationConfig = { itemsPerPage: this.pageSize, currentPage: this.p, totalItems: this.totalCount, id: 'userPagination' };
     this.activitytype = 0; // 0 = private (internal), 1 = public
+    this.getCurrentLoggedInUser();
   }
 
   ngOnInit() {
+    this.getCurrentLoggedInUser();
     this.subTaskFields = {
       assignee: '',
       name: '',
@@ -219,7 +229,10 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
     };
     this.bsValue = new Date();
     this.activatedRoute.paramMap.subscribe(params => {
-      this.requestID = params.get('id');
+      this.requestID = params.get('reqid');
+      this.queryCompanyID = params.get('companyid');
+      this.queryOrgID = params.get('orgid');
+      this.queryPropID = params.get('propid');
     });
 
     this.quillEditorText = new FormGroup({
@@ -294,6 +307,21 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
 
   backToDSARRequest() {
     this.router.navigate(['privacy/dsar/dsar-requests']);
+  }
+
+  getCurrentLoggedInUser(){
+    this.userService.getLoggedInUserDetails(this.constructor.name, moduleName.headerModule).subscribe((data) => {
+      this.userData = data;
+      this.resuserCID = this.userData.response.cID;
+      if(this.resuserCID !== undefined){
+        if(this.queryCompanyID !== this.resuserCID){
+           this.authService.logout();
+           localStorage.removeItem('currentUser');
+           this.userService.getCurrentUser.unsubscribe();
+         this.router.navigate(['/login']);
+        }
+      }
+    });
   }
 
   loadDataRequestDetails() {
@@ -1530,16 +1558,18 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
       })
   }
 
-  ngAfterContentChecked() {
+  ngAfterViewChecked() {
     setTimeout(() => {
       this.cdRef.detectChanges();
       if (this.workflowStageScroller !== undefined) {
-        const parentElementSize = this.workflowStageScroller.nativeElement.parentElement.offsetWidth;
-        const itemSize = this.workflowStageScroller.nativeElement.querySelector('li').offsetWidth;
-        const itemLength = this.workflowStageScroller.nativeElement.childElementCount;
-        const menuSize = itemSize * itemLength;
-        const visibleSize = menuSize - parentElementSize;
-        this.scrollLimit = -visibleSize;
+        if(this.workflowStageScroller.nativeElement.querySelector('li').offsetWidth !== undefined){
+          const parentElementSize = this.workflowStageScroller.nativeElement.parentElement.offsetWidth;
+          const itemSize = this.workflowStageScroller.nativeElement.querySelector('li').offsetWidth;
+          const itemLength = this.workflowStageScroller.nativeElement.childElementCount;
+          const menuSize = itemSize * itemLength;
+          const visibleSize = menuSize - parentElementSize;
+          this.scrollLimit = -visibleSize;
+        }
       } else {
         return false;
       }

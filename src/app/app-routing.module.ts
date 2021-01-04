@@ -36,8 +36,12 @@ const routes: Routes = [
     path: 'privacy/dsar/dsar-requests', loadChildren: () => import('./privacy/dsar/dsar-requests/dsar-requests.module')
       .then(m => m.DsarRequestsModule)
   },
+  // {
+  //   path: 'privacy/dsar/dsar-requests-details/:id',
+  //   loadChildren: () => import('./privacy/dsar/dsar-requestdetails/dsar-requestdetails.module').then(m => m.DsarRequestdetailsModule)
+  // },
   {
-    path: 'privacy/dsar/dsar-requests-details/:id',
+    path: 'privacy/dsar/dsar-requests-details/:reqid/:companyid/:orgid/:propid',
     loadChildren: () => import('./privacy/dsar/dsar-requestdetails/dsar-requestdetails.module').then(m => m.DsarRequestdetailsModule)
   },
   { path: 'privacy/dsar/webforms', loadChildren: () => import('./privacy/dsar/webforms/webforms.module').then(m => m.WebformsModule) },

@@ -10,7 +10,7 @@ import {LokiFunctionality, LokiStatusType} from '../_constant/loki.constant';
 
 @Injectable({ providedIn: 'root' })
 export class AuthenticationService {
-
+    public redirectUrl: string;
     public userLoggedIn: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
     get isUserLoggedIn() {
@@ -37,6 +37,10 @@ export class AuthenticationService {
                     // store user details and jwt token in local storage to keep user logged in between page refreshes
                     localStorage.setItem('currentUser', JSON.stringify(user));
                     this.currentUserSubject.next(user);
+                    if(this.redirectUrl){
+                        this.router.navigate([this.redirectUrl]);
+                        this.redirectUrl = null;
+                    }
                 }
                 return user;
             }),

@@ -41,8 +41,7 @@
                                         <div class="dropdown-item" (click)="onClickEndDays(item)"> {{item}}</div>
                                         <div *ngIf="last" class="aligncenter">
                                             <form #endDaysform='ngForm' autocomplete="false"
-                                                (ngSubmit)="onSubmitEndDays(endDaysform)" class="d-flex">
-
+                                                (ngSubmit)="onSubmitEndDays(endDaysform)" class="d-flex ml-1 mr-1">
                                                 <input type="number" min="1" #customDaysInput
                                                     class="form-control form-control-sm" max="45"
                                                     [(ngModel)]="customdays" name="customdays"
@@ -190,13 +189,13 @@
                             </div>
                         </div>
                     </div>
-                    <div class="stagediv">
+                    <div class="stagediv" *ngIf="workflowStages !== null">
                         <div class="divider-text mg-y-5">Advance Status</div>
                         <button (click)="onPreviousSearchPosition()"  class="arrowbtn leftarrow" [ngClass]="{'hidebtns':leftClickStatus()}"><i class="fa fa-angle-left"></i></button>
                         <div class="divflex" [ngClass]="{'add-min-height':workflowStages.length == 0}">
                             <div class="customtab" #panel>
                                 <ngx-skeleton-loader *ngIf="skeletonStageLoading && workflowStages.length === 0"  count="2"></ngx-skeleton-loader>
-                        <ul class="nav-tabs" [ngStyle]="{'transform': 'translateX(' + translateX + 'px)'}" #workflowStageScroller>
+                        <ul class="nav-tabs" *ngIf="workflowStages.length !== 0" [ngStyle]="{'transform': 'translateX(' + translateX + 'px)'}" #workflowStageScroller>
 
                             <li *ngFor="let stage of workflowStages; let i = index">
                                 
