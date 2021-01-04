@@ -59,6 +59,8 @@ export class HeaderComponent implements OnInit {
   notificationList: any = [];
   notificationsNumber: number;
   isNotificationBellClicked = false;
+  resCID: any;
+  resuserCID: any;
   constructor(
     private router: Router,
     private activatedroute: ActivatedRoute,
@@ -227,6 +229,7 @@ export class HeaderComponent implements OnInit {
     this.isCollapsed = false;
     this.userService.getLoggedInUserDetails(this.constructor.name, moduleName.headerModule).subscribe((data) => {
       this.currentUser = data;
+      this.resuserCID = this.currentUser.response.cID;
       this.currentLoggedInUser = this.currentUser.response.firstname + ' ' + this.currentUser.response.lastname;
       this.currentLoggedInUser = this.currentLoggedInUser.toLowerCase().split(' ')
         .map((s) => s.charAt(0).toUpperCase() + s.substring(1)).join(' ');
@@ -349,6 +352,7 @@ export class HeaderComponent implements OnInit {
     this.orgservice.getOrganizationWithProperty().subscribe((data) => {
       this.loading.stop();
       this.orgPropertyMenu = data.response;
+      this.resCID = data.response.cID;
       if (data.response.length > 0) {
         this.rearrangeFormSequence(this.orgPropertyMenu);
         this.selectedOrgProperties.length = 0;

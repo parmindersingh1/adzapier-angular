@@ -33,6 +33,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
   @ViewChild(NgbNav, { static: false }) navDirective = null;
   @ViewChild('confirmEdit', { static: false }) confirmModal: TemplateRef<any>;
   @ViewChild('registerForm', { static: false }) registerForm: any;
+  @ViewChild('customFields', {static: false}) customFormFields: NgForm;
   public requestObject: any = {};
   public selectedFormOption: any;
   public selectedControlType: any;
@@ -119,19 +120,19 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
     },
     {
       id: 3,
-      control: 'radio',
-      display: 'Radio'
+      control: 'button',
+      display: 'Button'
     },
     {
       id: 4,
       control: 'textarea',
       display: 'Textarea'
     },
-    {
-      id: 5,
-      control: 'checkbox',
-      display: 'Checkbox'
-    },
+    // {
+    //   id: 5,
+    //   control: 'checkbox',
+    //   display: 'checkbox'
+    // },
     {
       id: 6,
       control: 'datepicker',
@@ -147,14 +148,14 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
     },
     {
       id: 2,
-      control: 'radio',
-      display: 'Radio'
-    },
-    {
-      id: 3,
-      control: 'checkbox',
-      display: 'Checkbox'
+      control: 'button',
+      display: 'Button'
     }
+    // {
+    //   id: 3,
+    //   control: 'button',
+    //   display: 'button'
+    // }
   ];
   isWelcomeEditor: boolean;
   quillEditorText: FormGroup;
@@ -226,6 +227,9 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
   modalRef: BsModalRef;
   faviconFilename: string;
   faviconFilesize: number | string;
+  formControlLabel: string;
+  multiselect = false;
+  ismultiselectrequired = false;
   constructor(private fb: FormBuilder, private ccpaRequestService: CcparequestService,
     private organizationService: OrganizationService,
     private dsarFormService: DsarformService,
@@ -524,7 +528,53 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
     }
   }
 
+  dragDropOptionRequestType(event: CdkDragDrop<any>) {
+    if (event.previousContainer === event.container) {
+      moveItemInArray(this.sideMenuRequestTypeOptions, event.previousIndex, event.currentIndex);
+      if (this.crid) {
+        this.ccpaFormConfigService.setFormControlList(this.webFormControlList);
+      } else {
+        this.dsarFormService.setFormControlList(this.webFormControlList);
+      }
+    } else {
+      transferArrayItem(event.previousContainer.data,
+        event.container.data,
+        event.previousIndex,
+        event.currentIndex);
+    }
+  }
 
+  dragDropOptionSubjectType(event: CdkDragDrop<any>) {
+    if (event.previousContainer === event.container) {
+      moveItemInArray(this.sideMenuSubjectTypeOptions, event.previousIndex, event.currentIndex);
+      if (this.crid) {
+        this.ccpaFormConfigService.setFormControlList(this.webFormControlList);
+      } else {
+        this.dsarFormService.setFormControlList(this.webFormControlList);
+      }
+    } else {
+      transferArrayItem(event.previousContainer.data,
+        event.container.data,
+        event.previousIndex,
+        event.currentIndex);
+    }
+  }
+
+  dragDropCustomOption(event: CdkDragDrop<any>) {
+    if (event.previousContainer === event.container) {
+      moveItemInArray(this.selectOptions, event.previousIndex, event.currentIndex);
+      if (this.crid) {
+        this.ccpaFormConfigService.setFormControlList(this.webFormControlList);
+      } else {
+        this.dsarFormService.setFormControlList(this.webFormControlList);
+      }
+    } else {
+      transferArrayItem(event.previousContainer.data,
+        event.container.data,
+        event.previousIndex,
+        event.currentIndex);
+    }
+  }
 
   onFormSubmit(data: NgForm) {
     console.log(data, 'onFormSubmit..');
@@ -554,7 +604,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
       } else {
         this.selectedControlType = true;
       }
-    } else if (this.selectedFormOption === 'select' || this.selectedFormOption === 'radio' || this.selectedFormOption === 'checkbox') {
+    } else if (this.selectedFormOption === 'select' || this.selectedFormOption === 'button') {
       this.selectedControlType = !this.selectedControlType; // true;
       if (this.selectedControlType) {
         this.selectOptions = [];
@@ -579,12 +629,24 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
     this.selectedControlId = data.controlId;
     this.existingControl = data;
     this.isRequiredField = data.requiredfield === '' ? false : data.requiredfield;
+    this.changeControlType = data.control;
     (data.control === 'textbox' || data.control === 'textarea') ? this.inputOrSelectOption = true : this.inputOrSelectOption = false;
-    if (data.control === 'select' && data.controlId !== 'state' && data.controlId !== 'country' || data.control === 'radio'
-      || data.control === 'checkbox') {
+    if (data.control === 'select' && data.controlId !== 'state' && data.controlId !== 'country' || data.control === 'checkbox'
+      || data.control === 'radio') {
       this.editSelectionType = true;
-      this.changeControlType = data.control;
+      if(data.control === 'checkbox'){
+        this.selectOptionControl = this.editableControlOption[1].control;
+        this.changeControlType = this.editableControlOption[1].control;
+       // this.customFormFields.form.get("changeControlType").patchValue('Button');
+      } else if(data.control === 'radio'){
+        this.selectOptionControl = this.editableControlOption[1].control;
+        this.changeControlType = this.editableControlOption[1].control;
+       // this.changeControlType = 'Select'
+       // this.customFormFields.form.get("changeControlType").patchValue('Select');
+      }
+     // this.changeControlType = data.control;
       this.selectOptions = data.selectOptions;
+      // const updatedControlType = this.changeControlType === 'button' && !this.multiselect ? 'radio' : 'checkbox';
     } else {
       this.editSelectionType = false;
     }
@@ -698,9 +760,17 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
 
   addCustomFields(formControls: NgForm) {
     this.trimLabel = formControls.value.lblText.split(' ').join('_').toLowerCase();
+    this.formControlLabel = formControls.value.lblText;
   //  const isLabelExist = this.webFormControlList.filter((t) => t.controllabel === this.trimLabel).length > 0;
-    const isLabelExist = this.webFormControlList.findIndex((t) =>  t.controllabel === formControls.value.lblText);
-    if(isLabelExist !== -1 && this.changeControlType === null){
+    this.changeControlTypes();
+    this.cancelAddingFormControl();
+  }
+
+  changeControlTypes(){
+ //  const controlLabel =  this.formControlLabel !== undefined ? this.formControlLabel : this.lblText;
+    this.trimLabel = this.lblText.split(' ').join('_').toLowerCase();
+    const isLabelExist = this.webFormControlList.findIndex((t) =>  t.controllabel === this.formControlLabel || this.lblText);
+    if(isLabelExist !== -1 && this.changeControlType === null && this.isEditingList){
       this.alertMsg = 'Label already exist!'
       this.isOpen = true;
       this.alertType = 'danger';
@@ -714,11 +784,17 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
         let updatedObj;
         const oldControlIndex = this.webFormControlList.findIndex((t) =>
           t.controlId === this.existingControl.controlId);
-
+          let updatedControlType;
+          if(this.changeControlType === 'button' && !this.multiselect){
+            updatedControlType = 'radio';
+          } else if(this.changeControlType === 'button' && this.multiselect) {
+            updatedControlType = 'checkbox';
+          }
+      //  const updatedControlType = this.changeControlType === 'button' && this.changeControlType !== 'select' && !this.multiselect ? 'radio' : 'checkbox';
         updatedObj = {
-          controllabel: formControls.value.lblText,
+          controllabel: this.formControlLabel || this.lblText, // formControls.value.lblText,
           indexCount: this.existingControl.indexCount,
-          control: this.changeControlType,
+          control: updatedControlType || this.changeControlType,
           controlId: this.selectedControlId,
           selectOptions: this.existingControl.selectOptions,
           requiredfield: this.isRequiredField
@@ -729,12 +805,19 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
         let updatedTextobj;
         const oldControlIndex = this.webFormControlList.findIndex((t) =>
           t.controlId === this.existingControl.controlId);
+          let updatedControlType;
+          if(this.changeControlType === 'button' && !this.multiselect){
+            updatedControlType = 'radio';
+          } else if(this.changeControlType === 'button' && this.multiselect) {
+            updatedControlType = 'checkbox';
+          }
+       // const updatedControlType = this.changeControlType === 'button' && this.changeControlType !== 'select' && !this.multiselect ? 'radio' : 'checkbox';
         //  if (oldControlIndex) {
         updatedTextobj = {
-          controllabel: formControls.value.lblText,
+          controllabel: this.formControlLabel || this.lblText, // formControls.value.lblText,
           controlId: this.existingControl.controlId,
           indexCount: this.existingControl.indexCount,
-          control: this.existingControl.control,
+          control: updatedControlType || this.existingControl.control,
           selectOptions: this.existingControl.selectOptions,
           requiredfield: this.isRequiredField
         };
@@ -753,12 +836,18 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
           element.keylabel = this.trimLabel;
         });
         // }
-
+        let updatedControlType;
+          if(this.changeControlType === 'button' && !this.multiselect){
+            updatedControlType = 'radio';
+          } else if(this.changeControlType === 'button' && this.multiselect) {
+            updatedControlType = 'checkbox';
+          }
+      //  const updatedControlType = this.changeControlType === 'button' && this.changeControlType !== 'select' && !this.multiselect ? 'radio' : 'checkbox';
         if (customControlIndex !== -1) {
           updateCustomObj = {
-            controllabel: formControls.value.lblText,
+            controllabel: this.formControlLabel || this.lblText, // formControls.value.lblText,
             indexCount: this.trimLabel,
-            control: this.changeControlType || this.existingControl.control,
+            control: updatedControlType || this.existingControl.control,
             controlId: this.existingControl.controlId,
             selectOptions: this.existingControl.selectOptions,
             requiredfield: this.isRequiredField
@@ -766,8 +855,8 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
           const optionLength = this.selectOptions.length;
           if (optionLength > 0) {
             if (this.selectOptions[optionLength - 1].name !== undefined) {
-              this.lblText = '';
-              this.cancelAddingFormControl();
+              // this.lblText = '';
+             // this.cancelAddingFormControl();
             } else {
               return false;
             }
@@ -777,7 +866,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
           if (this.crid) {
             this.ccpaFormConfigService.updateControl(this.webFormControlList[customControlIndex], customControlIndex, updateCustomObj);
             this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
-            this.cancelAddingFormControl();
+           // this.cancelAddingFormControl();
           } else {
             this.dsarFormService.updateControl(this.webFormControlList[customControlIndex], customControlIndex, updateCustomObj);
             this.webFormControlList = this.dsarFormService.getFormControlList();
@@ -786,6 +875,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
         }
 
       }
+      
     } else {
       if (this.crid) {
         const count = this.webFormControlList.length + 1;
@@ -795,9 +885,16 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
           element.keylabel = this.trimLabel;
         });
         // } 
+        let updatedControlType;
+          if(this.selectOptionControl === 'button' && !this.multiselect){
+            updatedControlType = 'radio';
+          } else if(this.selectOptionControl === 'button' && this.multiselect) {
+            updatedControlType = 'checkbox';
+          }
+       // const updatedControlType = this.selectedFormOption === 'button' && this.selectedFormOption !== 'select' && !this.multiselect ? 'radio' : 'checkbox';
         const newWebControl = {
-          control: this.selectedFormOption,
-          controllabel: formControls.value.lblText,
+          control: updatedControlType || this.selectedFormOption,
+          controllabel: this.formControlLabel || this.lblText, // formControls.value.lblText,
           controlId: 'CustomInput' + count,
           indexCount: this.trimLabel + '_Index',
           selectOptions: this.selectOptions,
@@ -823,9 +920,16 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
         });
 
         const count = this.webFormControlList.length + 1;
+        let updatedControlType;
+          if(this.changeControlType === 'button' && !this.multiselect){
+            updatedControlType = 'radio';
+          } else if(this.changeControlType === 'button' && this.multiselect) {
+            updatedControlType = 'checkbox';
+          }
+       // const updatedControlType = this.selectedFormOption === 'button' && this.selectedFormOption !== 'select' && !this.multiselect ? 'radio' : 'checkbox';
         const newWebControl = {
-          control: this.selectedFormOption,
-          controllabel: formControls.value.lblText,
+          control: updatedControlType || this.selectedFormOption,
+          controllabel: this.formControlLabel || this.lblText, // formControls.value.lblText,
           controlId: 'CustomInput' + count,
           indexCount: this.trimLabel + '_Index',
           selectOptions: this.selectOptions,
@@ -847,12 +951,11 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
         this.dsarFormService.addControl(newWebControl);
         this.webFormControlList = this.dsarFormService.getFormControlList();
         this.lblText = '';
-        this.cancelAddingFormControl();
+      //  this.cancelAddingFormControl();
         this.updateCaptchaPosition();
         //  this.selectedControlType = false;
       }
     }
-
   }
   //  // JSON.stringify(this.uploadedLogoFile), // this.getBase64Image(this.uploadedLogoFile), // this.headerlogoURL,
   onSubmitHeaderLogo() { //addHeaderLogo
@@ -931,16 +1034,19 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
   }
 
   onChangeEvent(event) {
+    this.selectOptions = [];
     this.selectedFormOption = event.currentTarget.value;
-    if (this.selectedFormOption === 'checkbox' || this.selectedFormOption === 'radio' || this.selectedFormOption === 'select') {
+    if (this.selectedFormOption === 'button') { // || this.selectedFormOption === 'radio' || this.selectedFormOption === 'select'
       this.showFormOption = true;
       this.selectedControlType = true;
+      this.ismultiselectrequired = true;
       if (this.selectOptions.length === 0) {
         this.addOptions();
       }
 
     } else {
       this.showFormOption = false;
+      this.ismultiselectrequired = false;
     }
   }
 
@@ -953,36 +1059,60 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
         this.isRequestTypeSelected = true;
         this.checkboxBtnType = false;
         this.radioBtnType = false;
-      } else if (this.changeControlType === 'radio') {
+        this.ismultiselectrequired = false;
+      } else if (this.changeControlType === 'button' && !this.multiselect) {
         this.isRequestTypeSelected = false;
         this.radioBtnType = true;
         this.checkboxBtnType = false;
-      } else if (this.changeControlType === 'checkbox') {
+        this.ismultiselectrequired = true;
+      } else if (this.changeControlType === 'button' && this.multiselect) {
         this.isRequestTypeSelected = false;
         this.radioBtnType = false;
         this.checkboxBtnType = true;
+        this.ismultiselectrequired = true;
       }
-
+    //  this.changeControlTypes();
     } else if (this.selectedControlId === 'subjecttype') {
       this.updatedControl = this.changeControlType;
       if (this.changeControlType === 'select') {
         this.isSubjectTypeSelected = true;
         this.subjectTypecheckboxBtnType = false;
         this.subjectTyperadioBtn = false;
-      } else if (this.changeControlType === 'radio') {
+        this.ismultiselectrequired = false;
+      } else if (this.changeControlType === 'button' && !this.multiselect) { // radio, button with multiselect false
         this.isSubjectTypeSelected = false;
         this.subjectTyperadioBtn = true;
         this.subjectTypecheckboxBtnType = false;
-      } else if (this.changeControlType === 'checkbox') {
+        this.ismultiselectrequired = true;
+      } else if (this.changeControlType === 'button' && this.multiselect) { // checkbox, button with multiselect true
         this.isSubjectTypeSelected = false;
         this.subjectTyperadioBtn = false;
         this.subjectTypecheckboxBtnType = true;
+        this.ismultiselectrequired = true;
       }
-
+        this.changeControlTypes();
+    } else if(this.selectedControlId !== 'subjecttype' || this.selectedControlId !== 'requesttype'){
+      this.updatedControl = this.changeControlType;
+       if (this.changeControlType === 'button' && !this.multiselect) {
+        this.isRequestTypeSelected = false;
+        this.radioBtnType = true;
+        this.checkboxBtnType = false;
+        this.ismultiselectrequired = true;
+      } else if (this.changeControlType === 'button' && this.multiselect) {
+        this.isRequestTypeSelected = false;
+        this.radioBtnType = false;
+        this.checkboxBtnType = true;
+        this.ismultiselectrequired = true;
+      }
     }
+    this.changeControlTypes();
   }
 
   addingFormControl() {
+  //  console.log(this.selectedFormOption,'selectedFormOption..');
+    this.selectedFormOption = null;
+    this.selectOptionControl = '';
+    this.changeControlType = null;
     this.isAddingFormControl = !this.isAddingFormControl;
     this.selectOptions = [];
     this.lblText = '';
@@ -1976,8 +2106,25 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
     }
   }
 
-  ngAfterContentChecked(): void {
+  ngAfterContentChecked() {
     this.cd.detectChanges();
+  }
+
+  onLabelChange($event) {
+    console.log($event.target.value,'event..');
+  //  this.cd.detectChanges();
+    if(this.webFormControlList !== undefined){
+      const isLabelExist = this.webFormControlList.findIndex((t) => {
+          t.controllabel === $event.target.value;
+      });
+      if(isLabelExist !== -1 && this.changeControlType === null){
+        this.alertMsg = 'Label already exist!'
+        this.isOpen = true;
+        this.alertType = 'danger';
+        return false;
+      }
+    }   
+   
   }
 
 }

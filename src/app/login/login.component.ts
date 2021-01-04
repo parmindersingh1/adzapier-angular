@@ -83,7 +83,14 @@ export class LoginComponent implements OnInit {
                     this.authenticationService.userLoggedIn.next(true);
                     this.authenticationService.currentUserSubject.next(data);
                     localStorage.setItem('currentUser', JSON.stringify(data));
-                    this.router.navigate(['/home/dashboard/analytics']);
+                    let params = this.route.snapshot.queryParams;
+                    this.returnUrl = params['redirectURL'];
+                   // if (params['redirectURL']) {
+                    if(this.returnUrl){
+                        this.router.navigate([params['redirectURL']]);
+                    }else{
+                        this.router.navigate(['/home/dashboard/analytics']);
+                    }
                 },
                 error => {
                     this.isOpen = true;
