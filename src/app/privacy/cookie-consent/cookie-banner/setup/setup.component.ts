@@ -24,7 +24,7 @@ export class SetupComponent implements OnInit {
     one: false,
     two: false
   };
-  private currrentManagedPropID: any;
+  currrentManagedPropID: any;
   @ViewChild('template', { static: true}) template: ElementRef;
   closeScript = `"></script>`;
   addScript = `<script src="`;

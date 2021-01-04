@@ -1105,7 +1105,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
         this.ismultiselectrequired = true;
       }
     }
-    this.changeControlTypes();
+  //  this.changeControlTypes();
   }
 
   addingFormControl() {
