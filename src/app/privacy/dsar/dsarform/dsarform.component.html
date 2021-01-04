@@ -589,7 +589,7 @@
                                     <div class="form-group"
                                         *ngIf="webcontrol.control === 'checkbox' && webcontrol.controlId === 'requesttype'">
                                         <!-- *ngIf="checkboxBtnType"-->
-                                        <div *ngFor="let opt of webcontrol.selectOptions; let i = index;" class="form-check-inline">
+                                        <div *ngFor="let opt of webcontrol.selectOptions; let i = index;" class="form-check-inline" cdkDrag [cdkDragDisabled]="true">
                                             <input class="form-check-input" type="checkbox"  name="requestype"
                                             id="{{opt.name}}"  [value]='opt.request_type_id'  #requestype="ngModel"
                                                 [(ngModel)]="requestObject[opt.request_type_id]" />

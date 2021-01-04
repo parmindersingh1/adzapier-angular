@@ -742,3 +742,10 @@ button.btn.btn-link:hover {
   background: #dc3545;
   border-radius: 13px;
 }
+
+@media(min-width:767px) and (max-width:1024px) {
+  .nav-mr {
+    margin-left: 0;
+  }
+ 
+}
