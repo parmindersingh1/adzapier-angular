@@ -145,7 +145,7 @@ export class HeaderComponent implements OnInit {
     this.isCollapsed = true;
     localStorage.removeItem('currentUser');
     // this.orgservice.removeControls();
-    // this.userService.getCurrentUser.unsubscribe();
+    this.userService.getCurrentUser.unsubscribe();
     this.router.navigate(['/login']);
     location.reload();
 
