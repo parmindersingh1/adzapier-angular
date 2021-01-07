@@ -34,6 +34,48 @@ export class BillingService {
       }),
     );
   }
+  // /assign/license/property?planID="xxxx"&pID="yyyy"
+
+  assignPropertyLicence(componentName, moduleName, payloads){
+    const path = apiConstant.BILLING_ASSIGNE_PROPERTY;
+    return this.http.post(environment.apiUrl + path, '' , { params: payloads}).pipe(map(res => res),
+      catchError(error => {
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.updateBilling, componentName, moduleName, path);
+        return throwError(error);
+      }),
+    );
+  }
+
+
+  getAllPropertyList(componentName, moduleName){
+    const path = apiConstant.BILLING_LIST_ALL_PROPERTY;
+    return this.http.get(environment.apiUrl + path).pipe(map(res => res),
+      catchError(error => {
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.updateBilling, componentName, moduleName, path);
+        return throwError(error);
+      }),
+    );
+  }
+
+  removeProperty(componentName, moduleName, payloads){
+    const path = apiConstant.BILLING_UNSSIGNE_PROPERTY;
+    return this.http.put(environment.apiUrl + path, '' , { params: payloads}).pipe(map(res => res),
+      catchError(error => {
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.updateBilling, componentName, moduleName, path);
+        return throwError(error);
+      }),
+    );
+  }
+
+  getAssignedLicenseByPropsID(componentName, moduleName, planID){
+    const path = apiConstant.BILLING_GET_ASSIGNE_PROP;
+    return this.http.get(environment.apiUrl + path, { params: {planID: planID}}).pipe(map(res => res),
+      catchError(error => {
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.updateBilling, componentName, moduleName, path);
+        return throwError(error);
+      }),
+    );
+  }
   createSessionId(componentName, moduleName) {
     const path = apiConstant.BILLING_UPDATE_SESSION_ID;
     return this.http.get(environment.apiUrl + path).pipe(map(res => res),
