@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { moduleName } from 'src/app/_constant/module-name.constant';
 import { BillingService } from 'src/app/_services/billing.service';
@@ -13,9 +14,11 @@ export class ManageSubscriptionComponent implements OnInit {
   alertMsg: any;
   isOpen = false;
   alertType: any;
+
   constructor(
     private loading: NgxUiLoaderService,
-    private billingService: BillingService
+    private billingService: BillingService,
+    private formBuilder: FormBuilder
   ) { }
 
   ngOnInit() {
@@ -32,5 +35,14 @@ export class ManageSubscriptionComponent implements OnInit {
         this.alertMsg = err;
         this.alertType = 'danger';
       })
+  }
+
+  onCalculateOptValue(val, totalConsent) {
+    const cal = Math.ceil(val * 100 / totalConsent);
+    if (isNaN(cal)) {
+      return 0;
+    } else {
+      return cal;
+    }
   }
 }
