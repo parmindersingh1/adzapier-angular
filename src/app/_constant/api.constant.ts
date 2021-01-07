@@ -33,7 +33,7 @@ export const apiConstant = {
   BILLING_ACTIVE_PLAN: '/billing/active/subscription',
   BILLING_GET_ASSIGNE_PROP : '/licensed/property',
   BILLING_ASSIGNE_PROPERTY: '/assign/license/property',
-  BILLING_LIST_ALL_PROPERTY: '/list/property',
+  BILLING_LIST_ALL_PROPERTY: '/unlicensed/property',
   BILLING_UNSSIGNE_PROPERTY: '/unassign/license/property',
   // Workflow
   WORKFLOW: '/workflow',
