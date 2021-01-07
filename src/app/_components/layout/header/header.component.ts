@@ -265,9 +265,11 @@ export class HeaderComponent implements OnInit {
   }
 
   isPropSelected(selectedItem): boolean {
-    this.isPropertySelected = this.selectedOrgProperties.filter((t) => t.property_id === selectedItem.property_id).length > 0
+    if(!this.isProperyDisabled(selectedItem)){
+      this.isPropertySelected = this.selectedOrgProperties.filter((t) => t.property_id === selectedItem.property_id).length > 0
       ? true : false;
     return this.isPropertySelected;
+    }
   }
 
   isOrgSelected(selectedItem): boolean {
@@ -362,21 +364,19 @@ export class HeaderComponent implements OnInit {
             this.router.navigate(['settings/organizations/details/' + this.orgPropertyMenu[0].id]);
             return false;
           } else {
-            this.activeProp = this.orgPropertyMenu[0].property[0].property_name;
-            const obj = {
-              organization_id: this.orgPropertyMenu[0].id,
-              organization_name: this.orgPropertyMenu[0].orgname,
-              property_id: this.orgPropertyMenu[0].property[0].property_id,
-              property_name: this.orgPropertyMenu[0].property[0].property_name,
-              user_id: this.userID
-            };
+            let activePro = this.filterProp(this.orgPropertyMenu);
+            const proIndex = activePro[0].property.findIndex((t)=>t.property_active === true);
+            this.activeProp = activePro[0].property[proIndex];
+              const obj = {
+                organization_id: activePro[0].id,
+                organization_name: activePro[0].orgname,
+                property_id: activePro[0].property[proIndex].property_id,
+                property_name: activePro[0].property[proIndex].property_name,
+                user_id: this.userID
+              };
             this.orgservice.changeCurrentSelectedProperty(obj);
             // this.orgservice.getSelectedOrgProperty.emit(obj);
             //  this.firstElement = false;
-            const orgIndex = this.selectedOrgProperties.findIndex((t) => t.organization_id === obj.organization_id);
-            if (orgIndex === -1) {
-              this.selectedOrgProperties.push(obj);
-            }
             this.orgservice.setCurrentOrgWithProperty(obj);
           }
         } else {
@@ -394,6 +394,17 @@ export class HeaderComponent implements OnInit {
   getColumnCountSize() {
     return this.orgPropertyMenu.length < 3 ? 2 : 4;
   }
+
+  filterProp(propArry){
+    let activePro = [];
+    for(let i = 0; i < propArry.length; i++){
+      if(propArry[i].property.some((t)=> t.property_active === true)){
+        activePro.push(propArry[i]);
+        break;
+      }
+    }
+    return activePro;
+ }
 
   checkPropertyStatus(prop): boolean {
     if (this.propList) {
