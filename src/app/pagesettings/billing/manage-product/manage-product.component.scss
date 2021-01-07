@@ -15,3 +15,34 @@ tbody tr td{
 .fa-check-circle {
   color: #29c429;
 }
+.plan-name{
+  border-bottom: 1px solid #e1e5ed;
+    font-weight: bold;
+    margin-left: 20px;
+    margin-right: 20px;
+    padding-bottom: 20px;
+    font-size: 23px;
+    padding-left: 9px !important;
+}
+
+.action-btn {
+  font-size: 16px;
+    font-weight: 500;
+}
+.icon-text {
+   color: #8d8dff;
+}
+.assign-text{
+  font-weight: 700;
+  font-size: 23px;
+  padding-left: 17px;
+  padding-top: 16px;
+}
+.type-text{
+  font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+.br-t{
+  border-top: 1px solid #e1e5ed;
+}
