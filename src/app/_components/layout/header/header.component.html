@@ -115,10 +115,12 @@
   <!--end of general menu after login-->
   <!--notification after login-->
   <div class="navbar-right" *ngIf="currentUser" dropdown [insideClick]="true">
+    <div class="responsive-notification"> 
     <span class="notification-number" *ngIf="!isNotificationBellClicked">{{notificationsNumber}}</span>
     <a  class="nav-link dropdown-link" (click)="isNotificationBellClicked = true"  dropdownToggle>
       <i-feather name="bell" class="feather-20"></i-feather>
     </a>
+    </div>
     <ul class="dropdown-menu notification-menu-right" *dropdownMenu>
     <li>  <div class="dropdown-header">Notifications</div></li>
       <li class="nav-item notification-height">

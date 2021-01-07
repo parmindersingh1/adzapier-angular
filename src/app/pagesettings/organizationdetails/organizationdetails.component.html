@@ -607,3 +607,15 @@
         </form>
     </div>
 </ng-template>
+
+<ng-template #deletePropertyAlert let-modal>
+    <div class="modal-body text-center">
+        <button type="button" class="close" (click)="cancelModal()" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <p>Currently you are managing this property so you can not delete, In order to delete this property manage other property</p>
+        <button type="button" class="btn btn-xs btn-primary" (click)="cancelModal()" data-dismiss="modal" aria-label="Close">
+            OK
+        </button>
+    </div>
+</ng-template>

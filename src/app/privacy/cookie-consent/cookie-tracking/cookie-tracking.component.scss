@@ -353,3 +353,102 @@ tr.row-disabled > td > a {
   border-radius: 0px 0px 10px 10px;
   border-bottom: 0;
 }
+
+span.ui-column-title {
+  display: none;
+  width: 100%;
+}
+
+.date-range-picker label {
+  margin-bottom: 0;
+}
+
+.date-range-picker .form-control {
+  border-left:0;
+  border-right:0;
+}
+
+.date-range-picker .form-control:focus {
+  border-color: #ccc;
+}
+
+.date-range-picker .calandericon {
+  border-color: #ccc;
+  border-right: 0;
+  border-radius: 3px 0px 0px 3px;
+}
+
+.date-range-picker .arrowicon {
+  border-color: #ccc;
+  border-left: 0;
+  border-radius: 0px 3px 3px 0px;
+}
+
+.cookie-tracking-table ::ng-deep .p-datatable {
+  border: 1px solid rgba(72, 94, 144, 0.16);
+  border-top: 0;
+}
+
+.cookie-tracking-table ::ng-deep .p-datatable .p-paginator-bottom {
+  border-top: 0;
+}
+
+.border-radius-lt-rt {
+  border-radius: 3px 3px 0 0 !important;
+}
+
+@media screen and (max-width: 48em) {
+ 
+  :host::ng-deep .container {
+     max-width: 768px !important;
+   }
+   .cookie-tracking-table ::ng-deep {
+         .p-datatable {
+                 .p-datatable-thead > tr > th,
+                 .p-datatable-tfoot > tr > td {
+                     display: none !important;
+                 }
+ 
+                 .p-datatable-tbody > tr > td {
+                     text-align: left;
+                     display: block;
+                     width: 100%;
+                     float: left;
+                     clear: left;
+                     border: 0 none;
+ 
+                     .p-column-title {
+                         padding: .4rem;
+                         min-width: 50%;
+                         display: inline-block;
+                         margin: -.4em 1em -.4em -.4rem;
+                         font-weight: bold;
+                     }
+ 
+                     &:last-child {
+                         border-bottom: 1px solid var(--surface-d);
+                     }
+                 }
+             
+         }
+     }
+ 
+     span.ui-column-title {
+       display: block;
+       font-weight: 500;
+     }
+ 
+     .cookie-tracking-table ::ng-deep .p-datatable .p-datatable-tbody > tr > td:first-child {
+       width: auto !important;
+     }
+ 
+     .cookie-tracking-table ::ng-deep .p-multiselect .p-multiselect-label {
+       padding: 0.3rem;
+     }
+ 
+     .cookie-tracking-table ::ng-deep .p-multiselect {
+       width: 100%
+     }
+  
+  }
+ 

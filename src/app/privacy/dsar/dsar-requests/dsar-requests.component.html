@@ -15,13 +15,13 @@
 
   </div>
 
-  <p-table class="dsar-request-table" #ptable [value]="requestsList"  [responsive]="true" [columns]="selectedColumns" [paginator]="true" [lazy]="true"
+  <p-table class="dsar-request-table" #ptable [value]="requestsList" [responsive]="true" [columns]="selectedColumns" [paginator]="true" [lazy]="true"
     [loading]="isloading" (onLazyLoad)="loadrequestsListLazy($event)" [rows]="5" [showCurrentPageReport]="true"
     [totalRecords]="totalRecords" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
     [rowsPerPageOptions]="[5,10,15]" styleClass="p-datatable-sm">
     <ng-template pTemplate="caption">
       <div class="searchfield row mt-1 pl-2 pr-2">
-        <div class="col-sm-2 col-md-2 input-group">
+        <div class="col-sm-2 input-group">
           <input class="form-control border-right-0 border" [(ngModel)]="inputValue" type="text"
             (keyup.enter)="onSearchInputChange()" placeholder="Search" id="example-search-input" />
           <span class="input-group-append">
@@ -35,7 +35,7 @@
 
           </span>
         </div>
-        <div class="col-sm-2 col-md-2">
+        <div class="col-sm-2">
           <select (change)="onChangeRequestType($event)" class="form-control">
             <option selected value="">Type Of Request</option>
             <ng-container *ngFor="let obj of allFilterData.filter_Request_type">
@@ -44,7 +44,7 @@
           </select>
         </div>
 
-        <div class="col-sm-2 col-md-2">
+        <div class="col-sm-2">
           <select (change)="onChangeSubjectType($event)" class="form-control">
             <option selected value="">Subject Type</option>
             <ng-container *ngFor="let obj of allFilterData.filter_Subject_type">
@@ -53,7 +53,7 @@
           </select>
         </div>
 
-        <div class="col-sm-2 col-md-2">
+        <div class="col-sm-2">
           <select (change)="onChangeStatus($event)" class="form-control">
             <option selected value="">Status</option>
             <ng-container *ngFor="let obj of allFilterData.filter_status">
@@ -62,7 +62,7 @@
           </select>
         </div>
 
-        <div class="col-sm-2 col-md-2">
+        <div class="col-sm-2">
           <select (change)="onChangeDueIn($event)" class="form-control">
             <option selected value="">Due in</option>
             <ng-container *ngFor="let obj of allFilterData.filter_due_in">
@@ -70,16 +70,16 @@
             </ng-container>
           </select>
         </div>
-        <div class="row col-sm-2 col-md-2">
+        <div class="col-sm-2">
           <p-multiSelect [options]="cols" [(ngModel)]="selectedColumns" optionLabel="header"
-            selectedItemsLabel="{0} columns selected" [style]="{minWidth: '200px'}" placeholder="Choose Columns">
+            selectedItemsLabel="{0} columns selected" placeholder="Choose Columns">
           </p-multiSelect>
         </div>
       </div>
 
     </ng-template>
 
-    <ng-template pTemplate="header" let-columns>
+    <ng-template pTemplate="header"  let-columns>
 
       <tr>
         <th pSortableColumn="id">Id <p-sortIcon field="id"></p-sortIcon>
@@ -105,17 +105,17 @@
       </tr>
 
     </ng-template>
-    <ng-template pTemplate="body" let-rowData let-columns="columns" styleClass="p-datatable-responsive-demo">
+    <ng-template pTemplate="body" let-rowData let-columns="columns">
       <tr>
-        <td>
+        <td><span class="ui-column-title">ID</span>
           <a (click)="viewDSARRequestDetails(rowData)" title="{{rowData.id}}">
             {{rowData.id}}
           </a>
         </td>
-        <td>{{rowData.request_type}}</td>
-        <td>{{rowData.subject_type}}</td>
+        <td><span class="ui-column-title">Request Type</span>{{rowData.request_type}}</td>
+        <td><span class="ui-column-title">Subject Type</span>{{rowData.subject_type}}</td>
         <td>
-
+          <span class="ui-column-title">Status</span>
           <span *ngIf="rowData.status === 'New'" class="badge badge-primary">{{rowData.status}}</span>
           <span *ngIf="rowData.status === 'Verify Request'" class="badge badge-info">{{rowData.status}}</span>
           <span *ngIf="rowData.status === 'InProgress'" class="badge badge-warning">{{rowData.status}}</span>
@@ -123,19 +123,21 @@
           <span *ngIf="rowData.status === 'UnVerifed'" class="badge badge-danger">{{rowData.status}}</span>
 
         </td>
-        <td>{{rowData.name}}</td>
-        <td><a (click)="navigateToWebForm(rowData)" class="linkcolor">{{rowData.web_form_name}}</a></td>
+        <td><span class="ui-column-title">Name</span>{{rowData.name}}</td>
+        <td><span class="ui-column-title">Web form name</span><a (click)="navigateToWebForm(rowData)" class="linkcolor">{{rowData.web_form_name}}</a></td>
 
         <td *ngFor="let col of columns">
+          <span class="ui-column-title">{{col.header}}</span>
           {{rowData[col.field]}}
         </td>
         <td>
+          <span class="ui-column-title">Days left</span>
           <span class="badge"
             [ngClass]="{'badge-danger':rowData.days_left < 10,'badge-warning':rowData.days_left < 30,'badge-success':rowData.days_left >= 20}">{{rowData.days_left}}
             Days</span>
 
         </td>
-        <td>{{rowData.created_at | timeAgo}}</td>
+        <td><span class="ui-column-title">Created At</span>{{rowData.created_at | timeAgo}}</td>
       </tr>
 
     </ng-template>
