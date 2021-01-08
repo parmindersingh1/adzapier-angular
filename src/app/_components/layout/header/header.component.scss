@@ -749,3 +749,30 @@ button.btn.btn-link:hover {
   }
  
 }
+
+@media(min-width:375px) and (max-width:667px) {
+  .nav-item {
+    margin:0 10px 0 0;
+  }
+
+  .navbar-right {
+    position: absolute;
+    right:10px;
+  }
+
+  .notification-number {
+    position: absolute;
+    right: -10px;
+    top: -8px;
+  }
+
+  .responsive-notification {
+    position: absolute;
+    right: 75px;
+    top: -12px
+  }
+
+  .site-content {
+    padding: 20px 5px !important;
+  }
+}

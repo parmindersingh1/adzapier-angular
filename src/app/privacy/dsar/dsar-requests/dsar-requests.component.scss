@@ -176,10 +176,10 @@ tr.row-disabled > td > a {
   background-color: #0168fa;
 }
 
-.dsar-request-table ::ng-deep .p-multiselect {
-  position: absolute;
-  width: 200px;
-}
+// .dsar-request-table ::ng-deep .p-multiselect {
+//   position: absolute;
+//   width: 200px;
+// }
 
 .dsar-request-table ::ng-deep .p-datatable.p-datatable-sm .p-datatable-header {
   display: flex;
@@ -316,3 +316,78 @@ tr.row-disabled > td > a {
   display: flex;
   justify-content: space-between;
 }
+
+span.ui-column-title {
+  display: none;
+  width: 100%;
+}
+ 
+.dsar-request-table ::ng-deep .searchfield .col-sm-2 .p-multiselect {
+  width:160px !important;
+}
+
+@media (min-width: 1024px) { 
+  .container {
+    max-width: 1024px;
+  }
+
+  .dsar-request-table ::ng-deep .p-multiselect .p-multiselect-label {
+    padding: 0.3rem;
+    width: 100px;
+  }
+}
+
+@media screen and (max-width: 48em) {
+ 
+ :host::ng-deep .container {
+    max-width: 768px !important;
+  }
+  .dsar-request-table ::ng-deep {
+        .p-datatable {
+                .p-datatable-thead > tr > th,
+                .p-datatable-tfoot > tr > td {
+                    display: none !important;
+                }
+
+                .p-datatable-tbody > tr > td {
+                    text-align: left;
+                    display: block;
+                    width: 100%;
+                    float: left;
+                    clear: left;
+                    border: 0 none;
+
+                    .p-column-title {
+                        padding: .4rem;
+                        min-width: 50%;
+                        display: inline-block;
+                        margin: -.4em 1em -.4em -.4rem;
+                        font-weight: bold;
+                    }
+
+                    &:last-child {
+                        border-bottom: 1px solid var(--surface-d);
+                    }
+                }
+            
+        }
+    }
+
+    span.ui-column-title {
+      display: block;
+      font-weight: 500;
+    }
+
+    .dsar-request-table ::ng-deep .p-datatable .p-datatable-tbody > tr > td:first-child {
+      width: auto !important;
+    }
+
+    .dsar-request-table ::ng-deep .p-multiselect .p-multiselect-label {
+      padding: 0.3rem;
+    }
+
+    .dsar-request-table ::ng-deep .searchfield .col-sm-2 .p-multiselect {
+      width: 100% !important;
+    }
+ 
+ }
