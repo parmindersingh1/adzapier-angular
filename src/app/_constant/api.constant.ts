@@ -31,10 +31,20 @@ export const apiConstant = {
   BILLING_CURRENT_SUBSCRIPTION: '/billing/current/subscription',
   BILLING_COUPON: '/billing/coupon/:coupon_code',
   BILLING_ACTIVE_PLAN: '/billing/active/subscription',
+  //
   BILLING_GET_ASSIGNE_PROP : '/licensed/property',
+  BILLING_GET_ASSIGNE_ORG: '/licensed/organizations',
+
   BILLING_ASSIGNE_PROPERTY: '/assign/license/property',
+  BILLING_ASSIGNE_ORG: '/assign/license/organization',
+  //
   BILLING_LIST_ALL_PROPERTY: '/unlicensed/property',
+  BILLING_LIST_ALL_ORG: '/unlicensed/organizations',
+  //
   BILLING_UNSSIGNE_PROPERTY: '/unassign/license/property',
+  BILLING_UNSSIGNE_ORG: '/unassign/license/organization',
+  //
+  BILLING_MANAGE_SESSION_ID_GEN : '/billing/customerportal/session',
   // Workflow
   WORKFLOW: '/workflow',
   WORKFLOW_STATUS: '/workflow?workflow_status=',
