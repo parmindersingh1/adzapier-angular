@@ -1,5 +1,4 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
 // import { NgbModal, NgbModule, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { DsarformComponent } from './dsarform.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -14,7 +13,6 @@ import { allIcons } from 'angular-feather/icons';
 @NgModule({
   declarations: [DsarformComponent],
   imports: [
-    CommonModule,
     FormsModule,
     ReactiveFormsModule,
   //  DragDropModule,

@@ -1167,6 +1167,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
     this.selectedControlType = false;
     this.changeControlType = null;
     this.isRequiredField = false;
+    this.webFormControlList = this.dsarFormService.getFormControlList();
   }
 
   saveAsDraftCCPAFormConfiguration() {

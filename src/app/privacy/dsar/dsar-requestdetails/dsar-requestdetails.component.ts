@@ -24,14 +24,15 @@ import { formatDate } from '@angular/common';
 })
 export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, AfterViewInit, AfterViewChecked {
   @ViewChild('toggleDayleftdiv', { static: true }) toggleDayleftdiv: ElementRef;
-  @ViewChild('btnDaysLeft', { static: true }) btnDaysLeft: ElementRef;
+  // @ViewChild('btnDaysLeft', { static: true }) btnDaysLeft: ElementRef;
   @ViewChild('customDaysInput', { static: false }) customDaysInput: ElementRef;
   @ViewChild('confirmTemplate', { static: false }) confirmModal: TemplateRef<any>;
   @ViewChild('filePreview', { static: true }) filePreview: ElementRef;
   @ViewChild('panel', { static: true }) public panel: ElementRef<any>;
   @ViewChild('workflowStageScroller', { static: true, read: ElementRef }) public workflowStageScroller: ElementRef<any>;
   @ViewChild('confirmDeleteTemplate', { static: false }) confirmDeleteModal: TemplateRef<any>;
-
+  @ViewChild('extendDays',{static:true}) extendDaysModal: TemplateRef<any>;
+  @ViewChild('rejectRequest',{static:true}) rejectRequestModal: TemplateRef<any>;
   // @ViewChild('subTaskForm', null) subTaskTempForm: NgForm;
 
   confirmationForm: FormGroup;
@@ -83,6 +84,8 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
   customFields: any;
   quillEditorText: FormGroup;
   quillEditorEmailText: FormGroup;
+  quillEditorExtendDays: FormGroup;
+  quillEditorRejectRequest: FormGroup;
   emailTemplates: any = [];
   selectedTemplate: any;
   private fb: FormBuilder;
@@ -190,6 +193,9 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
   currentManagedcID: any;
   resuserCID: any;
   userData: any;
+  emailVerificationStatus = false;
+  isExtenddasysubmitted = false;
+  isRejectrequestsubmitted = false;
   constructor(private activatedRoute: ActivatedRoute,
               private router: Router,
               private orgService: OrganizationService,
@@ -206,12 +212,12 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
               private userService: UserService,
               private authService: AuthenticationService
   ) {
-    this.renderer2.listen('window', 'click', (e: Event) => {
-      if (e.target !== this.toggleDayleftdiv.nativeElement &&
-        e.target !== this.btnDaysLeft.nativeElement && e.target !== this.customDaysInput.nativeElement) {
-        this.isListVisible = false;
-      }
-    });
+    // this.renderer2.listen('window', 'click', (e: Event) => {
+    //   if (e.target !== this.toggleDayleftdiv.nativeElement &&
+    //     e.target !== this.btnDaysLeft.nativeElement && e.target !== this.customDaysInput.nativeElement) {
+    //     this.isListVisible = false;
+    //   }
+    // });
     this.paginationConfig = { itemsPerPage: this.pageSize, currentPage: this.p, totalItems: this.totalCount, id: 'userPagination' };
     this.activitytype = 0; // 0 = private (internal), 1 = public
     this.getCurrentLoggedInUser();
@@ -242,6 +248,14 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
       dropdownEmailTemplate: [''],
       editorEmailMessage: ['', [Validators.required]],
       emailAttachment: ['']
+    });
+    this.quillEditorExtendDays = new FormGroup({
+      customdays: new FormControl('', Validators.required),
+      editorReason: new FormControl('', Validators.required)
+    });
+    this.quillEditorRejectRequest = new FormGroup({
+      reason: new FormControl('', Validators.required),
+      editorComments: new FormControl('', Validators.required)
     });
     this.loadActivityLog(this.requestID);
     this.loadEmailLog(this.requestID);
@@ -286,6 +300,8 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
   get editRequest() { return this.editRequestDetailForm.controls; }
   get subTaskResponse() { return this.subTaskResponseForm.controls; }
   get confirmDelete() { return this.confirmationForm.controls; }
+  get dayExtend() { return this.quillEditorExtendDays.controls; }
+  get requestReject() {return this.quillEditorRejectRequest.controls}
   getSelectedOrgIDPropertyID() {
     this.orgService.currentProperty.subscribe((response) => {
       if (response !== '') {
@@ -552,6 +568,7 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
             reqObj = {
               current_status: this.currentStageId
             };
+            formData = new FormData();
             formData.append('current_status', reqObj.current_status);
           }
           // const reqObj = {
@@ -589,8 +606,16 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
     this.revertedStage = item;
   }
 
-  deleteModal(template: TemplateRef<any>) {
+  openCommonModal(template: TemplateRef<any>) {
     this.modalRef = this.bsmodalService.show(template, { class: '', keyboard: false });
+  }
+
+  openExtendModal(){
+    this.openCommonModal(this.extendDaysModal);
+  }
+
+  openReqestRejectModal(){
+    this.openCommonModal(this.rejectRequestModal);
   }
 
   confirm() {
@@ -751,7 +776,7 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
       return false;
     } else {
       if (this.selectedStages.length === 0) {
-        this.alertMsg = 'Stage is not selected! email';
+        this.alertMsg = 'Stage is not selected!';
         this.isOpen = true;
         this.alertType = 'info';
         return false;
@@ -833,6 +858,10 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
     //  const dropdownEmailTemplate = event.target.value;
     // this.selectedTemplate = event.target.value;
     this.quillEditorEmailText.controls['editorEmailMessage'].setValue(event.target.value);
+  }
+
+  onChangeReason(event){
+    this.quillEditorRejectRequest.controls['reason'].setValue(event.target.value);
   }
 
   nameInitials(firststr, secondstr) {
@@ -1139,6 +1168,66 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
     }
   }
 
+  onSubmitExtendDays(){
+    this.isExtenddasysubmitted = true;
+    if (this.quillEditorExtendDays.invalid) {
+      return false;
+    } else {
+      this.onClickEndDays(this.quillEditorExtendDays.get('customdays').value);
+      if(this.selectedStages.length !== 0){
+        const reqObj = {
+          current_status: this.selectedStages[this.selectedStages.length - 1].id,
+          previous_status: this.previousStageId,
+          activity_feedback: 'Days Extended: ' +  this.quillEditorExtendDays.get('customdays').value + '<br/>' + this.quillEditorExtendDays.get('editorReason').value // this.editorActivityPost
+        };
+        console.log(reqObj,'reqObj..');
+        Object.keys(reqObj).forEach(key => {
+          if (reqObj[key] === undefined) {
+            delete reqObj[key];
+          }
+        });
+        const fd = new FormData();
+        fd.append('current_status', reqObj.current_status);
+        fd.append('previous_status', reqObj.previous_status);
+        fd.append('activity_feedback', reqObj.activity_feedback);
+        this.stageAPI(this.requestID, fd);
+        this.decline();
+        this.isExtenddasysubmitted = false;
+      }else{
+        this.alertMsg = 'Select stage!';
+        this.isOpen = true;
+        this.alertType = 'danger';
+      }
+    } 
+  }
+
+  onSubmitRejectRequest(){
+    this.isRejectrequestsubmitted = true;
+    if (this.quillEditorRejectRequest.invalid) {
+      return false;
+    } else {
+        const reqObj = {
+        //  current_status: this.selectedStages[this.selectedStages.length - 1].id,
+         // previous_status: this.previousStageId,
+          activity_feedback: 'Request rejected: ' +  this.quillEditorRejectRequest.get('reason').value + '<br/>' + this.quillEditorRejectRequest.get('editorComments').value // this.editorActivityPost
+        };
+        console.log(reqObj,'reqObj..');
+        this.decline();
+        this.alertMsg = 'Request has been rejected!';
+        this.isOpen = true;
+        this.alertType = 'success';
+        return false;
+        Object.keys(reqObj).forEach(key => {
+          if (reqObj[key] === undefined) {
+            delete reqObj[key];
+          }
+        });
+        const fd = new FormData();
+        fd.append('activity_feedback', reqObj.activity_feedback);
+        this.stageAPI(this.requestID, fd);
+    } 
+  }
+
   resetSubtaskForm(subtaskForm: NgForm) {
     subtaskForm.resetForm();
   }
@@ -1374,7 +1463,8 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
   }
 
   isEmailIDVerified(key, isEmailVerified): boolean {
-    return key === 'Email' && isEmailVerified;
+     this.emailVerificationStatus = (key === 'Email' && isEmailVerified);
+     return this.emailVerificationStatus;
   }
 
   isFileExist(uploadexist): boolean {
@@ -1403,7 +1493,7 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
 
   removeDSARRequest(control: string) {
     this.controlname = control;
-    this.deleteModal(this.confirmDeleteModal);
+    this.openCommonModal(this.confirmDeleteModal);
   }
 
   deleteDSARRequest() {
