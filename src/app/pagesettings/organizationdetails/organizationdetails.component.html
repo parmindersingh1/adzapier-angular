@@ -551,7 +551,7 @@
                                 [value]='opt.id' (change)="onCheckChange($event)"/>{{opt.role_name}}
                         </div>
                     </div> -->
-                <div class="col-sm-12">
+                <div class="col-sm-12 user-roles">
                     <label for="permissions" class="d-block">Select roles</label>
                     <div *ngFor="let order of roleList;" class="form-check-inline">
                         <input type="radio" id="permissions" name="permissions" formControlName="permissions"
