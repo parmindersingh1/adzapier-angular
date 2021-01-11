@@ -30,7 +30,7 @@ export const apiConstant = {
   BILLING_UPDATE_SESSION_ID: '/billing/update/card/session',
   BILLING_CURRENT_SUBSCRIPTION: '/billing/current/subscription',
   BILLING_COUPON: '/billing/coupon/:coupon_code',
-  BILLING_ACTIVE_PLAN: '/billing/active/subscription',
+  BILLING_ACTIVE_PLAN: '/billing/list/subscription',
   //
   BILLING_GET_ASSIGNE_PROP : '/licensed/property',
   BILLING_GET_ASSIGNE_ORG: '/licensed/organizations',
@@ -53,3 +53,19 @@ export const apiConstant = {
   COOKIE_CATEGORY_CHART: '/cookiepurpose/:propId',
   COOKIE_CATEGORY_TYPE_CHART: '/cookietype/:propId'
 };
+
+// {
+//   response: {
+//     cookieConsent: {
+//       higherPlanID: '',
+//       cycle: '',
+//       price: '',
+//     },
+//     dsar: {
+//       higherPlanID: '',
+//       cycle: '',
+//       price: '',
+//     }
+//   },
+//   status: 200
+// }
