@@ -1011,7 +1011,7 @@ span.previewbtn a {
 }
 
 
-.form-check-inline input[type="radio"], .form-check-inline input[type="checkbox"] {
+.dsarform-box .form-check-inline input[type="radio"], .dsarform-box .form-check-inline input[type="checkbox"] {
   margin: 3px 5px 0 0;
   opacity: 0;
   display: none;
@@ -1021,7 +1021,7 @@ span.previewbtn a {
   left: 5px; */
 }
 
-.form-check-inline label {
+.dsarform-box .form-check-inline label {
     display: inline-block;
     background-color: #f5f5f5;
     padding: 5px 10px;
@@ -1033,18 +1033,18 @@ span.previewbtn a {
     font-weight: normal !important;
 }
 
-.form-check-inline label:hover {
+.dsarform-box .form-check-inline label:hover {
   background-color: #f5f5f5;
   color:#0168fa;
   border-color: #0168fa;
   cursor: pointer;
 }
 
-.form-check-inline input[type="radio"]:focus + label, .form-check-inline input[type="checkbox"]:focus + label {
+.dsarform-box .form-check-inline input[type="radio"]:focus + label, .dsarform-box .form-check-inline input[type="checkbox"]:focus + label {
     border: 1px solid #0168fa;
 }
 
-.form-check-inline input[type="radio"]:checked + label, .form-check-inline input[type="checkbox"]:checked + label {
+.dsarform-box .form-check-inline input[type="radio"]:checked + label, .dsarform-box .form-check-inline input[type="checkbox"]:checked + label {
     background-color: #4994fe;
     border-color: #0168fa;
     color: #fff;

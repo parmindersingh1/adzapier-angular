@@ -1,3 +1,4 @@
+import { OnDestroy } from '@angular/core';
 import { TemplateRef } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
 import { Validators } from '@angular/forms';
@@ -12,13 +13,12 @@ import { debounceTime } from 'rxjs/operators';
 import { moduleName } from 'src/app/_constant/module-name.constant';
 import { BillingService } from 'src/app/_services/billing.service';
 import { OrganizationService } from 'src/app/_services/organization.service';
-let propertyList = [];
 @Component({
   selector: 'app-manage-product',
-  templateUrl: './manage-product.component.html',
-  styleUrls: ['./manage-product.component.scss']
+  templateUrl: './manage-property.component.html',
+  styleUrls: ['./manage-property.component.scss']
 })
-export class ManageProductComponent implements OnInit {
+export class ManagePropertyComponent implements OnInit, OnDestroy {
   planID = '';
   propertyName: any;
   propertyNameError = false;
@@ -27,14 +27,21 @@ export class ManageProductComponent implements OnInit {
   private currrentManagedPropID: any;
 
   planName = '';
+
   totalLicence = 0;
   assigneLicence = 0;
+  productName = '';
   propertyForm: FormGroup;
-
+  allUnSignPropertyList = [];
+  orgList = [];
   percents = {
     totalLicence: 0,
     assigneLicence: 0
   }
+  alertMsg: any;
+  isOpen = false;
+  alertType: any;
+
   modalRef: BsModalRef;
   skLoading = true;
   propertyList = [];
@@ -51,19 +58,21 @@ export class ManageProductComponent implements OnInit {
   ngOnInit(
 
   ) {
-    this.onGetPropsAndOrgId();
+
     this.propertyForm = this.formBuilder.group({
-      title: ['', Validators.required]
+      propID: ['', Validators.required]
     });
     this.activatedRoute.queryParams.subscribe(params => {
       this.planID = params.planid;
       this.planName = params.plan_name;
       this.totalLicence = params.total_licence;
+      this.productName = params.product_name;
       this.assigneLicence = params.assigned_licence;
       this.onGetAssingedProperty();
       this.onCalculateValue()
     })
-    this.onGetAllPropertyList();
+
+    this.getAllOrgList();
   }
   onCalculateValue() {
     const cal = Math.ceil(this.assigneLicence * 100 / this.totalLicence);
@@ -75,45 +84,55 @@ export class ManageProductComponent implements OnInit {
   }
   get f() { return this.propertyForm.controls; }
 
-  onGetAllPropertyList(){
+  onGetAllPropertyList(e){
+    const payload = { oid: e.target.value}
     this.loading.start('2');
-    this.service.getAllPropertyList(this.constructor.name, moduleName.billingModule)
+    this.service.getAllPropertyList(this.constructor.name, moduleName.billingModule, payload)
     .subscribe((res: any) => {
       this.loading.stop('2');
-      this.allPropertyList = res.response;
-      propertyList = [];
+      // this.allPropertyList = res.response;
+      this.allUnSignPropertyList = [];
       for(const propertyObj of res.response) {
-        propertyList.push(propertyObj.name)
+        this.allUnSignPropertyList.push({label: propertyObj.name, value: propertyObj.id})
       }
       this.search
     }, err => {
       this.loading.stop('2');
+      this.isOpen = true;
+      this.alertMsg = err;
+      this.alertType = 'danger';
+    })
+  }
+  getAllOrgList(){
+    this.loading.start('3');
+    this.service.getAllOrgList(this.constructor.name, moduleName.billingModule)
+    .subscribe((res: any) => {
+      this.loading.stop('3');
+      this.orgList = res.response;
+    }, err => {
+      this.loading.stop('3');
+      this.isOpen = true;
+      this.alertMsg = err;
+      this.alertType = 'danger';
     })
   }
 
   onGetAssingedProperty() {
     this.loading.start();
     this.skLoading = true;
-    this.service.getAssignedLicenseByPropsID(this.constructor.name, moduleName.billingModule, this.planID).subscribe( (res: any) => {
+    this.service.getAssignedPropByPlanID(this.constructor.name, moduleName.billingModule, this.planID).subscribe( (res: any) => {
       this.loading.stop();
       this.skLoading = false;
       this.assigneLicence = res.response.length;
       this.propertyList = res.response;
       this.onCalculateValue();
+    }, err => {
+      this.loading.stop();
+      this.skLoading = false;
+      this.isOpen = true;
+      this.alertMsg = err;
+      this.alertType = 'danger';
     })
-  }
-
-  onGetPropsAndOrgId() {
-    this.orgservice.currentProperty.subscribe((response) => {
-      if (response !== '') {
-        this.currentManagedOrgID = response.organization_id;
-        this.currrentManagedPropID = response.property_id;
-      } else {
-        const orgDetails = this.orgservice.getCurrentOrgWithProperty();
-        this.currentManagedOrgID = orgDetails.organization_id;
-        this.currrentManagedPropID = orgDetails.property_id;
-      }
-    });
   }
 
   openModal(template: TemplateRef<any>) {
@@ -128,38 +147,36 @@ export class ManageProductComponent implements OnInit {
 
   onSubmit() {
     this.submitted = true;
-
+this.propertyNameError = this.propertyForm.value.propID.length > this.totalLicence - this.assigneLicence ? true : false;
     // stop here if form is invalid
     if (this.propertyForm.invalid) {
         return;
     }
-    let pID = '';
-    for(const propertyObj of this.allPropertyList) {
-      if(propertyObj.name === this.propertyName) {
-        pID = propertyObj.id;
-      }
-    }
-
-    if(pID === '') {
-      this.propertyNameError = true;
-    } else {
-      this.propertyNameError = false;
-    const payloads = {
-      planID : this.planID,
-      pID: pID
-    }
+  const payload = {
+    planID: this.planID,
+    propID: this.propertyForm.value.propID
+  }
     this.loading.start();
-    this.service.assignPropertyLicence(this.constructor.name, moduleName.billingModule, payloads)
-    .subscribe(res => {
+
+    this.skLoading = true;
+    this.service.assignPropertyLicence(this.constructor.name, moduleName.billingModule, payload)
+    .subscribe((res: any) => {
       this.loading.stop();
+      this.skLoading = false;
       this.modalRef.hide();
+      this.isOpen = true;
+      this.alertMsg = res.response;
+      this.alertType = 'success';
       this.propertyForm.reset()
       this.onGetAssingedProperty()
-      this.onGetAllPropertyList()
+
     }, err => {
       this.loading.stop();
+      this.skLoading = false;
+      this.isOpen = true;
+      this.alertMsg = err;
+      this.alertType = 'danger';
     })
-  }
     // display form values on success
 }
 
@@ -168,19 +185,34 @@ export class ManageProductComponent implements OnInit {
     debounceTime(200),
     distinctUntilChanged(),
     map(term => term.length < 0 ? []
-      : propertyList.filter(v => v.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10))
+      : this.allUnSignPropertyList.filter(v => v.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10))
   )
 
   onRemoveProperty(pID){
     this.loading.start();
+    this.skLoading = true;
     this.service.removeProperty(this.constructor.name, moduleName.billingModule, {pID: pID})
-    .subscribe(res => {
+    .subscribe((res: any) => {
       this.loading.stop();
+      this.skLoading = false;
       this.onGetAssingedProperty()
-      this.onGetAllPropertyList()
+      this.isOpen = true;
+      this.alertMsg = res.response;
+      this.alertType = 'success';
+
     }, err => {
       this.loading.stop();
+      this.skLoading = false;
+      this.isOpen = true;
+      this.alertMsg = err;
+      this.alertType = 'danger';
     })
   }
 
+  onCheckAvailableLic(e) {
+    console.log("EEEEEEEEEEEEE", e)
+  }
+  ngOnDestroy() {
+    // this.modalRef.hide();
+  }
 }

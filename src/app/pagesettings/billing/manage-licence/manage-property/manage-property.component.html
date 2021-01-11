@@ -1,24 +1,24 @@
-<!-- <div>
+<div>
   <nav aria-label="breadcrumb" style="margin-left: -14px">
     <ol class="breadcrumb breadcrumb-style1 mg-b-10">
       <li class="breadcrumb-item">Billing</li>
-      <li class="breadcrumb-item active">Assigned Licenses</li>
+      <li class="breadcrumb-item"><a routerLink="/settings/billing/manage">Manage Licenses</a></li>
+      <li class="breadcrumb-item active">Properties</li>
 
     </ol>
   </nav>
-  <h4 class="mg-b-0 tx-spacing--1">Assigned Licenses</h4>
+  <h4 class="mg-b-0 tx-spacing--1">Manage Properties</h4>
 
-</div> -->
 <div class="card mt-4">
   <div class="row">
-    <h5 class=" col-md-12 mt-4 plan-name" style="font-weight: bold;">{{planName}}</h5>
+    <h5 class=" col-md-12 mt-4 plan-name cl-gray" style="font-weight: bold;">{{productName + ' - ' +planName}}</h5>
     <div class=" col-md-12">
-      <h4 class="assign-text">{{assigneLicence}}/{{totalLicence}} Assigned</h4>
+      <h4 class="assign-text cl-gray">{{assigneLicence}}/{{totalLicence}} Assigned</h4>
       <div class="col-md-4">
         <div class="progress" style="height:16px">
           <div class="progress-bar" [ngStyle]="{width: percents.assigneLicence +'%'}" style=" background-color: #11188f">
           </div>
-          <div class="progress-bar"  [ngStyle]="{width: percents.totalLicence +'%'}" style=" background-color: #"style="background-color: #3d78d4">
+          <div class="progress-bar"  [ngStyle]="{width: percents.totalLicence +'%'}" style="background-color: #3d78d4">
           </div>
         </div>
       </div>
@@ -26,11 +26,11 @@
       <div class="row pl-3 mt-3">
         <div class="col-md-5">
           <div class="row">
-          <div class="col-md-3 type-text">
+          <div class="col-md-3 cl-gray type-text">
             <i class="fa fa-square" style="color:#11188f" aria-hidden="true"></i>
             Assigned
           </div>
-          <div class="col-md-3 type-text pl-0">
+          <div class="col-md-3 cl-gray type-text pl-0">
             <i class="fa fa-square" style="color:#3d78d4" aria-hidden="true"></i>
             Available
           </div>
@@ -41,10 +41,10 @@
 
     <div class="col-md-12 mt-4">
       <div class="btn-group">
-        <button type="button" (click)="openModal(template)" class="btn btn-default action-btn">
+        <button type="button" (click)="openModal(template)" class="btn cl-gray btn-default action-btn">
           <i class="fa icon-text pr-2 fa-plus" aria-hidden="true"></i>
            Assign New Property</button>
-        <button type="button" (click)="onGetAssingedProperty()" class="btn  btn-default action-btn">
+        <button type="button" (click)="onGetAssingedProperty()" class="btn cl-gray btn-default action-btn">
           <i class="fa icon-text fa-retweet pr-2" aria-hidden="true"></i>
           Refresh</button>
       </div>
@@ -53,7 +53,8 @@
 
 
   <div class="card-body">
-    <table class="table" *ngIf="!skLoading">
+    <ng-container  *ngIf="!skLoading">
+    <table class="table">
       <thead>
       <tr>
         <th>Property Name</th>
@@ -91,7 +92,10 @@
 
       </tbody>
     </table>
-
+    <ng-container *ngIf="propertyList.length == 0">
+      <div class="alert cs-alert w-100 alert-info">There is no property assign to this plan</div>
+      </ng-container>
+      </ng-container>
     <ngx-skeleton-loader  *ngIf="skLoading" count="6" class="pt-4"></ngx-skeleton-loader>
 
   </div>
@@ -108,11 +112,22 @@
   </div>
   <div class="modal-body">
     <form [formGroup]="propertyForm" (ngSubmit)="onSubmit()">
-    <label for="typeahead-basic">Find Property:</label>
-    <input formControlName="title"  id="typeahead-basic" type="text" class="form-control" [(ngModel)]="propertyName" [ngbTypeahead]="search"/>
+      <div class="form-group">
+        <label for="usr">Find Organization:</label>
+        <select (change)="onGetAllPropertyList($event)" class="form-control" id="sel1">
+          <option [value]="">-- Select Orgnization --</option>
+          <option *ngFor="let obj of orgList" [value]="obj.id">{{obj.orgname}}</option>
+        </select>
+      </div>
 
-    <div *ngIf="submitted && f.title.errors" class="invalid-feedback">
-      <div *ngIf="f.title.errors.required">This Field is required</div>
+    <label for="typeahead-basic">Find Property:</label>
+
+    <p-multiSelect class="gdprSelect" [disabled]="totalLicence - assigneLicence === 0" [selectionLimit]="totalLicence - assigneLicence " (onChange)="onCheckAvailableLic($event)"
+    formControlName="propID" [style]="{'width':'100%'}" [options]="allUnSignPropertyList" ></p-multiSelect>
+    <!-- <input formControlName="title"  id="typeahead-basic" type="text" class="form-control" [(ngModel)]="propertyName" [ngbTypeahead]="search"/> -->
+
+    <div *ngIf="submitted && f.propID.errors" class="invalid-feedback">
+      <div *ngIf="f.propID.errors.required">This Field is required</div>
   </div>
   <div class="text-danger" *ngIf="propertyNameError">Property is not Valid</div>
     <div class="mt-4 text-center">
@@ -122,3 +137,6 @@
     </form>
   </div>
 </ng-template>
+<div class="col-sm-5 mr-0 float-right flotingdiv" [ngClass]="{'hide':!isOpen}">
+  <alert *ngIf="isOpen" [type]="alertType" dismissOnTimeout="5000" >{{  alertMsg}}</alert>
+</div>
