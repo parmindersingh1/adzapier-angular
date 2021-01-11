@@ -215,7 +215,7 @@ export class HeaderComponent implements OnInit {
             { showlink: 'Consent Tracking', routerLink: '/cookie-consent/cookie-tracking', icon: 'fas fa-file-contract feather-16' },
             { showlink: 'Setup', routerLink: '/cookie-consent/cookie-banner/setup', icon: 'fas fa-wrench feather-16' }
           ]
-        }, { showlink: 'Billing', routerLink: 'settings/billing' }];
+        }, { showlink: 'Billing', routerLink: 'settings/billing/manage' }];
     }, (error) => {
       console.log(error);
     });
@@ -576,8 +576,8 @@ export class HeaderComponent implements OnInit {
       return { 'column-count': 3  }
     } else if(this.orgPropertyMenu.length >= 8 ){
       return { 'column-count': 4  }
-    } 
-    
+    }
+
   }
 
 }
