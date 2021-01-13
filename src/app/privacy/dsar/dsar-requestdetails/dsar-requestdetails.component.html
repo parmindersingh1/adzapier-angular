@@ -27,33 +27,10 @@
                             </svg><span class="d-none d-sm-inline mg-l-5">
                                 Edit</span></button>
 
+                        <button  class="btn btn-xs btn-primary mr-2" *ngIf="selectedStages.length !== 0"  (click)="openExtendModal()">Extend Days</button>
+                        <button  class="btn btn-xs btn-primary mr-2"  (click)="openReqestRejectModal()">Reject</button>
+                         <button class="btn btn-xs btn-primary" (click)="removeDSARRequest('DSAR Request detail')">Delete</button>
 
-
-                        <div class="dropdown extenddays" [ngClass]="{'show':isListVisible,'':!isListVisible}">
-                            <button class="btn btn-xs btn-primary mr-2" role="button" #btnDaysLeft (click)="toggleBtn()">
-                                Extend Days
-                            </button>
-                            <button class="btn btn-xs btn-primary" (click)="removeDSARRequest('DSAR Request detail')">Delete</button>
-                            <div class="dropdown-menu" #toggleDayleftdiv
-                                [ngClass]="{'show':isListVisible,'':!isListVisible}">
-                                <ul>
-                                    <li *ngFor="let item of customdayslist;let last = last">
-                                        <div class="dropdown-item" (click)="onClickEndDays(item)"> {{item}}</div>
-                                        <div *ngIf="last" class="aligncenter">
-                                            <form #endDaysform='ngForm' autocomplete="false"
-                                                (ngSubmit)="onSubmitEndDays(endDaysform)" class="d-flex ml-1 mr-1">
-                                                <input type="number" min="1" #customDaysInput
-                                                    class="form-control form-control-sm" max="45"
-                                                    [(ngModel)]="customdays" name="customdays"
-                                                    placeholder="custom value" />
-
-                                                <button class="btn btn-xs btn-primary ml-2">select</button>
-                                            </form>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
                     </div>
 
                 </div>
@@ -232,6 +209,7 @@
                     <li [ngbNavItem]="1">
                         <a ngbNavLink>Activity</a>
                         <ng-template ngbNavContent>
+                            <div class="nav-group"> 
                             <div class="form-check-inline"> 
                                 <input class="form-check-input" type="radio" name="privatetype"
                                     id="privatetype" [value]="0" [(ngModel)]="activitytype">
@@ -239,6 +217,7 @@
                                 <input class="form-check-input" type="radio" name="publictype"
                                     id="publictype" [value]="1" [(ngModel)]="activitytype" >
                                 <label for="publictype">Public</label>
+                            </div>
                             </div>
                             
                             <form [formGroup]="quillEditorText" (ngSubmit)="onSubmitActivityPost()">
@@ -615,7 +594,100 @@
     </div>
 </ng-template>
 
+<ng-template #extendDays let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Extend days</h4>
+        <button type="button" class="close" aria-label="Close" (click)="decline()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div>
+    <form [formGroup]="quillEditorExtendDays" (ngSubmit)="onSubmitExtendDays()">
+        <div class="modal-body"> 
+            <div class="row">
+                <div class="col-sm-6">
+                    <label for="customdays" class="mb-0"> <span class="color-red">*</span>Days required to extend</label>
+                        <input type="number" min="1" style="width: 80px;"
+                        class="form-control mb-1" max="45" formControlName="customdays"  name="customdays" />
+                          <div *ngIf="isExtenddasysubmitted && dayExtend.customdays?.errors"  class="color-red">
+                            Enter days
+                          </div>
+                </div>
+                
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <label class="mt-2 mb-0"><span class="color-red">*</span>Reason for extending the request</label>
 
+                    <quill-editor formControlName="editorReason" class="quilleditorextenddays" [styles]="{height: '90px'}"
+                     [modules]="quillConfig" 
+                     [ngClass]="{ 'is-invalid': isExtenddasysubmitted && dayExtend.editorReason?.errors }">
+                    </quill-editor>
+                    <div *ngIf="isExtenddasysubmitted && dayExtend.editorReason?.errors"
+                    class="color-red">Reason can not be empty, add your post.</div>
+                </div>
+                </div>
+            <div class="row">
+                <div class="ml-auto col-sm-2">
+                    <button type="submit" class="btn btn-xs btn-primary float-right mb-2 mt-2">Post</button>
+                </div>
+            </div>
+        
+        </div>
+    </form>
+</div>
+</ng-template>
+<ng-template #rejectRequest let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Reject request</h4>
+        <button type="button" class="close" aria-label="Close" (click)="decline()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    
+    <form [formGroup]="quillEditorRejectRequest" (ngSubmit)="onSubmitRejectRequest()">
+        <div class="modal-body"> 
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group mg-b-5">
+                        <label for="reason"
+                            class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">
+                            Select reason</label>
+                            <select (change)="onChangeReason($event)"
+                                                formControlName="reason" class="form-control">
+                                                <option selected disabled value="">select reason</option>
+                                                <ng-container *ngFor="let obj of emailTemplates">
+                                                    <option [value]="obj.template">{{obj.name}}</option>
+                                                </ng-container>
+                                            </select>
+
+                        <div *ngIf="isRejectrequestsubmitted && requestReject.reason?.errors" class="color-red">
+                            Assignee is required
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <label class="mt-2 mb-0"><span class="color-red">*</span>Reason for extending the request</label>
+
+                    <quill-editor formControlName="editorComments" class="quilleditorextenddays" [styles]="{height: '90px'}"
+                     [modules]="quillConfig">
+                    </quill-editor>
+                    <div *ngIf="isRejectrequestsubmitted && requestReject.editorComments?.errors"
+                    class="color-red">Reason can not be empty, add your post.</div>
+                </div>
+                </div>
+            <div class="row">
+                <div class="ml-auto col-sm-2">
+                    <button type="submit" class="btn btn-xs btn-primary float-right mb-2 mt-2">Post</button>
+                </div>
+            </div>
+        
+        </div>
+    </form>
+</ng-template>
 <!--Subtask popup-->
 <ng-template #subTask let-modal>
     <div class="modal-header">
