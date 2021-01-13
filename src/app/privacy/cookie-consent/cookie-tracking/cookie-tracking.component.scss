@@ -225,9 +225,9 @@ tr.row-disabled > td > a {
   background-color: #0168fa;
 }
 
-::ng-deep .p-multiselect {
-  width: 200px !important;
-}
+// ::ng-deep .p-multiselect {
+//   width: 200px !important;
+// }
 
 ::ng-deep .p-datatable.p-datatable-sm .p-datatable-header {
   display: flex;
@@ -398,7 +398,7 @@ span.ui-column-title {
 }
 
 @media screen and (max-width: 48em) {
- 
+
   :host::ng-deep .container {
      max-width: 768px !important;
    }
@@ -408,7 +408,7 @@ span.ui-column-title {
                  .p-datatable-tfoot > tr > td {
                      display: none !important;
                  }
- 
+
                  .p-datatable-tbody > tr > td {
                      text-align: left;
                      display: block;
@@ -416,7 +416,7 @@ span.ui-column-title {
                      float: left;
                      clear: left;
                      border: 0 none;
- 
+
                      .p-column-title {
                          padding: .4rem;
                          min-width: 50%;
@@ -424,31 +424,30 @@ span.ui-column-title {
                          margin: -.4em 1em -.4em -.4rem;
                          font-weight: bold;
                      }
- 
+
                      &:last-child {
                          border-bottom: 1px solid var(--surface-d);
                      }
                  }
-             
+
          }
      }
- 
+
      span.ui-column-title {
        display: block;
        font-weight: 500;
      }
- 
+
      .cookie-tracking-table ::ng-deep .p-datatable .p-datatable-tbody > tr > td:first-child {
        width: auto !important;
      }
- 
+
      .cookie-tracking-table ::ng-deep .p-multiselect .p-multiselect-label {
        padding: 0.3rem;
      }
- 
+
      .cookie-tracking-table ::ng-deep .p-multiselect {
        width: 100%
      }
-  
+
   }
- 
