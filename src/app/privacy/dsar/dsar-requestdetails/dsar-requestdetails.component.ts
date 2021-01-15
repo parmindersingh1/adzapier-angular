@@ -1637,7 +1637,6 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
     documentType = this.changeFileType(fileExtn[1]);
     this.dsarRequestService.getSubtaskFileAttachements(data.id, this.constructor.name, moduleName.dsarRequestModule)
       .subscribe((data) => {
-        this.subtaskAttachments = data.response;
         const blob = new Blob([this._base64ToArrayBuffer(data.response[0].content)], {
           type: documentType // type: 'application/pdf',
         });

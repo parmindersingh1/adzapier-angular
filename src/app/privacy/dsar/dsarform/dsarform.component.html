@@ -112,7 +112,7 @@
                                                         <h5> <span *ngIf="isAddingFormControl && isEditingList">Edit Field</span>
                                                             <span *ngIf="isAddingFormControl && !isEditingList">Custom Fields</span>
                                                             <div>
-                                                               <button class="btn btn-link" (click)="cancelAddingFormControl()">Cancel</button>
+                                                               <button class="btn btn-link" type="button" (click)="cancelAddingFormControl('cancel')">Cancel</button>
                                                                 <button type="submit" class="btn btn-link" [attr.disabled]="!customFields.form.valid || isWebFormPublished && !isEditingPublishedForm ? true : null">Save and close</button>
                                                             </div>
                                                         </h5>
