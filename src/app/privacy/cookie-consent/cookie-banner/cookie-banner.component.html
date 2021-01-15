@@ -189,11 +189,11 @@
                       <div class="col-md-12">
                         <h6 class=" tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label">Show the Consent Manager UI to users the partial consent status every:</h6>
                       </div>
-                      <div class="col-md-6">
-                        <div class="input-group mb-1">
+                      <div class="col-md-8">
+                        <div class="input-group row m-0 mb-1">
                           <input oninput="validity.valid||(value='');" min="1" type="number"
-                                 formControlName="bannerPartialConsent" class="form-control" value="1" name="email">
-                          <div class="input-group-append">
+                                 formControlName="bannerPartialConsent" class="form-control col-md-5" value="1" name="email">
+                          <div class="input-group-append col-md-7 pl-0">
                             <select class="form-control"  formControlName="bannerPartialConsentType">
                               <option *ngFor="let type of bannerConstant.BannerDisplayFrequency" [value]="type.value">{{type.label}}</option>
                             </select>
@@ -206,11 +206,11 @@
                       <div class="col-md-12">
                         <h6 class=" tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label">Show the Consent Manager UI to users who rejected all purposes every:</h6>
                       </div>
-                      <div class="col-md-6">
-                        <div class="input-group mb-1">
+                      <div class="col-md-8">
+                        <div class="input-group row ml-0 mb-1">
                           <input oninput="validity.valid||(value='');" min="1" type="number"
-                                 formControlName="bannerRejectAllConsent"  class="form-control" value="1" name="email">
-                          <div class="input-group-append">
+                                 formControlName="bannerRejectAllConsent"  class="form-control col-md-5" value="1" name="email">
+                          <div class="input-group-append col-md-7 pl-0">
                             <select  formControlName="bannerRejectAllConsentType" class="form-control">
                               <option *ngFor="let type of bannerConstant.BannerDisplayFrequency" [value]="type.value">{{type.label}}</option>
                             </select>
@@ -222,10 +222,10 @@
                       <div class="col-md-12">
                         <h6 class=" tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label">Show the Consent Manager UI to users who made no consent choice every:</h6>
                       </div>
-                      <div class="col-md-6">
-                        <div class="input-group mb-1">
-                          <input  formControlName="bannerClosedConsent" oninput="validity.valid||(value='');" min="1" type="number"class="form-control" value="1" name="email">
-                          <div class="input-group-append">
+                      <div class="col-md-8">
+                        <div class="input-group row ml-0 mb-1">
+                          <input  formControlName="bannerClosedConsent" oninput="validity.valid||(value='');" min="1" type="number"class="form-control col-md-5" value="1" name="email">
+                          <div class="input-group-append col-md-7 pl-0">
                             <select  formControlName="bannerClosedConsentType" class="form-control">
                               <option *ngFor="let type of bannerConstant.BannerDisplayFrequency" [value]="type.value">{{type.label}}</option>
                             </select>

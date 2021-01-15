@@ -6,7 +6,8 @@
     <div class="navbar-brand">
       <button class="navbar-toggler navbar-left" type="button" (click)="openNav()" data-toggle="collapse"
         data-target="#collapsibleNavbar">
-        <i-feather name="menu" class="feather-16"></i-feather>
+        <i-feather name="menu" *ngIf="!close" class="feather-16"></i-feather>
+        <i-feather name="plus" *ngIf="close" class="feather-16 menuplus-icon"></i-feather>
       </button>
       <a class="df-logo" (click)="goto('/login')"> <!--routerLink="/login"-->
         Ad<span>Zapier</span>
@@ -210,12 +211,12 @@
 
   <!--usermenuends after login-->
 </nav>
-
-<div id="divSidenav" class="sidenav" [ngClass]="{'addWidth':close,'removeWidth':!close}">
-  <div class="sidebar sidebar-components">
+<!---iPad / Mobile Menu-->
+<div id="divSidenav" class="sidenav">
+  <div class="sidebar sidebar-components" [ngStyle]="addMenuWidth()">
     <div class="sidebar-header">
       <i-feather name="menu"></i-feather>
-      <a class="df-logo" routerLink="/">
+      <a class="df-logo" (click)="goto('/login')">
         <span>AdZapier</span>
       </a>
       <button class="btn btn-sm closebtn" (click)="closeNav()">
@@ -226,18 +227,18 @@
 
   <ul class="navbar-nav" *ngIf="!currentUser">
     <li *ngFor="let menu of publicNavigationMenu" class="nav-item">
-      <div *ngIf="menu.showlink" (click)="isCollapsed = !isCollapsed" [attr.aria-expanded]="!isCollapsed" aria-controls="collapseExample" container="body">
+      <div *ngIf="menu.showlink"  (click)="isMobileMenuCollapsed = !isMobileMenuCollapsed" [attr.aria-expanded]="!isMobileMenuCollapsed" aria-controls="collapseExample" container="body">
         <div *ngIf="!menu.subcategory">
-          <a class="nav-link" routerLinkActive="active" (click)="true" routerLink="{{menu.routerLink}}">
+          <a class="nav-link" href="javascript:void(0)" (click)="goto(menu)"> <!-- routerLink="{{menu.routerLink}}"-->
             {{ menu.showlink }}</a></div>
         <div *ngIf="menu.subcategory">
-          <a class="nav-link" routerLinkActive="active" *ngIf="menu.subcategory" (click)="true">
+          <a class="nav-link"  href="javascript:void(0)"  (click)="goto(menu)">
             {{ menu.showlink }}</a></div>
         <div *ngIf="menu.subcategory">
-          <ul id="collapseExample" [ngbCollapse]="!isCollapsed" >
+          <ul id="collapseExample" [ngbCollapse]="!isMobileMenuCollapsed" >
             <ng-container *ngFor="let item of menu.subcategory;">
               <li role="menuitem">
-                <a class="dropdown-item" routerLinkActive="active" routerLink="{{item.routerLink}}">
+                <a class="dropdown-item" href="javascript:void(0)"  (click)="goto(item)">
                   {{item.showlink}}
                 </a>
               </li>
@@ -255,15 +256,16 @@
 
   <!--sidemenu property list after login-->
   <ul  class="navbar-nav" dropdown container="body">
-    <a class="nav-link dropdown-link" routerLinkActive="active" dropdownToggle (click)="false">
+    <a class="nav-link dropdown-link"  (click)="onMobilePropertyMenuClicked(true)">
      <div>{{currentOrganization}}
      </div>
      <span>{{currentProperty?currentProperty:'Select Property'}}</span>
     </a>
-    <ul *dropdownMenu class="dropdown-menu propMenu">
+    <ul class="dropdown-menu propMenu" [isAnimated]="true"  [collapse]="isMobilePropertyCollapsed">
         <li role="menuitem" *ngFor="let item of orgPropertyMenu; first as isFirst; let i = index;">
-          <a class="dropdown-item" routerLinkActive="active" routerLink="organizationdetails/{{item.id}}">
-            {{item.orgname}}  <span class="align-right width25"><i-feather class="feather-plus" name="plus"></i-feather></span>
+          <a class="dropdown-item" title="{{item.orgname}}" (click)="goto('settings/organizations/details',item.id)">
+            <span [ngClass]="[isOrgSelected(item) ? 'active' : '']">{{item.orgname}}</span>
+            <span class="align-right width25"><i-feather class="feather-plus" name="plus"></i-feather></span>
           </a>
           <div *ngIf="item.property.length=='0'">No Property</div>
           <ul role="menu">
@@ -283,19 +285,19 @@
   <!--end of sidemenu property list after login-->
   <!--sidemenu general menu after login-->
   <ul class="navbar-nav mr-auto" *ngIf="currentUser">
-    <li *ngFor="let menu of navigationMenu" class="nav-item">
-      <div *ngIf="menu.showlink" dropdown container="body">
+    <li *ngFor="let menu of navigationMenu; let r = index" class="nav-item">
+      <div *ngIf="menu.showlink"  container="body">
         <div *ngIf="!menu.subcategory">
-          <a class="nav-link" routerLinkActive="active" (click)="true" routerLink="{{menu.routerLink}}">
-            {{ menu.showlink }}</a></div>
+          <a class="nav-link"  [class.active]="menu.showlink === 'Billing' && isBillingActivelinkMatched"  (click)="onMobileMenuClicked(menu)">
+          {{ menu.showlink }}</a></div>
         <div *ngIf="menu.subcategory">
-          <a class="nav-link dropdown-toggle"  routerLinkActive="active"*ngIf="menu.subcategory" dropdownToggle (click)="true">
-            {{ menu.showlink }}</a></div>
-        <ul *dropdownMenu class="dropdown-menu">
+          <a class="nav-link"  [class.active]="menu.showlink === 'Privacy' && isPrivacyActivelinkMatched" (click)="onMobileMenuClicked(menu.showlink)" *ngIf="menu.subcategory">
+           {{ menu.showlink }}</a></div>
+        <ul [isAnimated]="true" [collapse]="collapseStatus(r)" class="dropdown-menu">
           <ng-container *ngFor="let item of menu.subcategory;let q = index;">
             <li *ngIf="menu.showlink == 'Privacy' && q===0" class="displayflex"><span>DSAR</span></li>
             <li role="menuitem">
-              <a class="dropdown-item" routerLinkActive="active" routerLink="{{item.routerLink}}">
+              <a class="dropdown-item" [class.active]="activateSublink(item)" (click)="goto(item)">
                 <span *ngIf="item.icon.indexOf('fa')===-1">
                   <i-feather name="{{item.icon}}" class="feather-16"></i-feather>{{item.showlink}}
                 </span>

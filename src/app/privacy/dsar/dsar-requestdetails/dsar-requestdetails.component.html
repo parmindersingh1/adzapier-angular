@@ -305,8 +305,7 @@
                                         <!-- <td>{{task | json}}</td> -->
                                         <td>
                                             <div class="tasklink"><span *ngIf="task.required" class="color-red">*</span>
-                                                <a
-                                                    (click)="openResponseModalPopup(subTaskResponseModal,task)">{{task.name}}</a>
+                                                <a (click)="openResponseModalPopup(subTaskResponseModal,task)">{{task.name}}</a>
                                             </div>
                                         </td>
                                         <td><span [innerHTML]="getStagename(task.workflow_stage) | safe : 'html'">

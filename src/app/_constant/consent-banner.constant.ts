@@ -26,28 +26,28 @@ export const defaultBannerContent = {
   bannerTitle: 'We use cookies Data',
   bannerTitle2: 'We and our Partners data to provide',
   bannerDescription: 'We may place these for analysis of our visitor data, to improve our website, show personalised content and to give you a great website experience. For more information about the cookies we use open the settings.',
-  bannerTextColor: '#ffffff',
+  bannerTextColor: '#f5f5f5',
   bannerBorderColor: '#162893',
   bannerBackGroundColor: '#000000',
   //
   bannerPreferenceButtonTextContent: 'Privacy Setting',
-  bannerPreferenceButtonTextColor: '#ffffff',
+  bannerPreferenceButtonTextColor: '#f5f5f5',
   bannerPreferenceButtonBackGroundColor: 'transparent',
   //
   bannerDisableButtonTextContent: 'Disable Button',
-  bannerDisableButtonTextColor: '#ffffff',
+  bannerDisableButtonTextColor: '#f5f5f5',
   bannerDisableButtonBackGroundColor: '#162893',
   //
   bannerDoNotSellMyDataTextContent: 'Do Not Sell My Data',
-  bannerDoNotSellMyDataTextColor: '#ffffff',
+  bannerDoNotSellMyDataTextColor: '#f5f5f5',
   bannerDoNotSellMyDataBackGroundColor: '#162893',
   //
   bannerAcceptButtonTextContent: 'Accept All',
-  bannerAcceptButtonTextColor: '#ffffff',
+  bannerAcceptButtonTextColor: '#f5f5f5',
   bannerAcceptButtonBackgroundColor: '#162893',
   //
   bannerAllowReqButtonTextContent: 'Allow Required',
-  bannerAllowReqButtonTextColor: '#ffffff',
+  bannerAllowReqButtonTextColor: '#f5f5f5',
   bannerAllowReqButtonBackgroundColor: '#162893',
 
   //PopUp
@@ -55,27 +55,27 @@ export const defaultBannerContent = {
   popUpVendorsDescription: 'During consted in the stub are filtered out if not valid. Ping and custom commands are executed and removed from the queue while all other commands remain queued until a valid TC string is set.',
   //
   popUpPurposeButtonTextColor: '#575751',
-  popUpPurposeButtonBackGroundColor: '#ffffff',
+  popUpPurposeButtonBackGroundColor: '#f5f5f5',
   //
   popUpSwitchButtonColor: '#4b90ff',
   //
   popUpDisableAllButtonTextContent: 'Disable All',
-  popUpDisableAllButtonTextColor: '#ffffff',
+  popUpDisableAllButtonTextColor: '#f5f5f5',
   popUpDisableAllButtonBackgroundColor: '#000000',
 
   //
   popUpDoNotSellTextContent: 'Do Not Sell My Data',
-  popUpDoNotSellTextColor: '#ffffff',
+  popUpDoNotSellTextColor: '#f5f5f5',
   popUpDoNotSellBackgroundColor: '#162893',
 
   popUpSaveMyChoiceButtonTextContent: 'Save My Choice',
-  popUpSaveMyChoiceButtonTextColor: '#ffffff',
+  popUpSaveMyChoiceButtonTextColor: '#f5f5f5',
   popUpSaveMyChoiceButtonBackgroundColor: '#162893',
 
   //
 
   popUpAllowAllButtonTextContent: 'Accept All',
-  popUpAllowAllButtonTextColor: '#ffffff',
+  popUpAllowAllButtonTextColor: '#f5f5f5',
   popUpAllowAllButtonBackgroundColor: '#162893',
 
 
@@ -107,28 +107,28 @@ export class FormDefaultData {
   bannerTitle: 'We use cookies Data';
   bannerTitle2: 'We and our Partners data to provide';
   bannerDescription: 'We may place these for analysis of our visitor data, to improve our website, show personalised content and to give you a great website experience. For more information about the cookies we use open the settings.';
-  bannerTextColor: '#ffffff';
+  bannerTextColor: '#f5f5f5';
   bannerBorderColor: '#162893';
   bannerBackGroundColor: '#000000';
   //
   bannerPreferenceButtonTextContent: 'Privacy Setting';
-  bannerPreferenceButtonTextColor: '#ffffff';
+  bannerPreferenceButtonTextColor: '#f5f5f5';
   bannerPreferenceButtonBackGroundColor: 'transparent';
   //
   bannerDisableButtonTextContent: 'Disable Button';
-  bannerDisableButtonTextColor: '#ffffff';
+  bannerDisableButtonTextColor: '#f5f5f5';
   bannerDisableButtonBackGroundColor: '#162893';
 
   bannerDoNotSellMyDataTextContent: 'Do Not Sell My Data';
-  bannerDoNotSellMyDataTextColor: '#ffffff';
+  bannerDoNotSellMyDataTextColor: '#f5f5f5';
   bannerDoNotSellMyDataBackGroundColor: '#162893';
   //
   bannerAcceptButtonTextContent: 'Accept All';
-  bannerAcceptButtonTextColor: '#ffffff';
+  bannerAcceptButtonTextColor: '#f5f5f5';
   bannerAcceptButtonBackgroundColor: '#162893';
   //
   bannerAllowReqButtonTextContent: 'Allow Required';
-  bannerAllowReqButtonTextColor: '#ffffff';
+  bannerAllowReqButtonTextColor: '#f5f5f5';
   bannerAllowReqButtonBackgroundColor: '#162893';
 
 
@@ -139,26 +139,26 @@ export class FormDefaultData {
   popUpSwitchButtonColor: '#4b90ff';
   //
   popUpPurposeButtonTextColor: '#575751';
-  popUpPurposeButtonBackGroundColor: '#ffffff';
+  popUpPurposeButtonBackGroundColor: '#f5f5f5';
   //
 
   popUpDisableAllButtonTextContent: 'Disable All';
-  popUpDisableAllButtonTextColor: '#ffffff';
+  popUpDisableAllButtonTextColor: '#f5f5f5';
   popUpDisableAllButtonBackgroundColor: '#000000';
 
   //
   popUpDoNotSellTextContent: 'Do Not Sell My Data';
-  popUpDoNotSellTextColor: '#ffffff';
+  popUpDoNotSellTextColor: '#f5f5f5';
   popUpDoNotSellBackgroundColor: '#162893';
 
   popUpSaveMyChoiceButtonTextContent: 'Save My Choice';
-  popUpSaveMyChoiceButtonTextColor: '#ffffff';
+  popUpSaveMyChoiceButtonTextColor: '#f5f5f5';
   popUpSaveMyChoiceButtonBackgroundColor: '#162893';
 
   //
 
   popUpAllowAllButtonTextContent: 'Accept All';
-  popUpAllowAllButtonTextColor: '#ffffff';
+  popUpAllowAllButtonTextColor: '#f5f5f5';
   popUpAllowAllButtonBackgroundColor: '#162893';
 
   //
