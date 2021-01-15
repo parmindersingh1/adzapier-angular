@@ -97,4 +97,17 @@
 
 .cursorpointer {
     cursor: pointer;
-} 
+}
+
+.user-notes {
+    background: #f2f8ff;
+    border: 1px solid #d6e0ff;
+    width: 100%;
+    padding: 5px;
+    margin: 10px 0 0 0;
+}
+
+.user-notes p {
+    font-style: italic;
+    font-weight: normal;
+}

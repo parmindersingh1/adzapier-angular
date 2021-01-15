@@ -38,7 +38,6 @@
                         <th>Email</th>
                         <th>Roles</th>
                         <th>Last Login</th>
-                        <td>Resend</td>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -56,15 +55,13 @@
                             {{list.role_name}}
                         </td>
                         <td>
-                            <span
-                                *ngIf="isDateOrString(list.user_last_login)">{{list.user_last_login | date:'medium'}}</span>
-                            <span *ngIf="!isDateOrString(list.user_last_login)">{{list.user_last_login}}</span>
-                        </td>
-                        <td class="text-center">
                             <button type="button"
-                                *ngIf="list.user_last_login === 'Invitation sent' || list.user_last_login === 'Invitation Pending'"
-                                (click)="onResendInvitation(list.approver_id)" class="btn btn-xs btn-primary"><i
-                                    class="fas fa-envelope	"></i> Resend Invitation</button>
+                            *ngIf="!isDateOrString(list.user_last_login) else LoginDate"
+                            (click)="onResendInvitation(list.approver_id)" class="btn btn-xs btn-primary"><i
+                                class="fas fa-envelope"></i> Resend Invitation</button>
+                                <ng-template #LoginDate>
+                                    {{list.user_last_login | timeAgo}}
+                                </ng-template>     
                         </td>
                         <td>
                             <a class="pd-r-5" (click)="editUserInvitation(inviteuserModal,list)">
