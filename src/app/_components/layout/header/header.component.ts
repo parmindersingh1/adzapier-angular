@@ -188,7 +188,7 @@ export class HeaderComponent implements OnInit {
           items: [
             { label: 'User Preferences', routerLink: '/userprofile', icon: 'edit-3' },
             { label: 'Organizations', routerLink: 'settings/organizations', icon: 'activity' },
-            { label: 'Billing', routerLink: 'settings/billing//manage', icon: 'credit-card' },
+            { label: 'Billing', routerLink: 'settings/billing/manage', icon: 'credit-card' },
             { label: 'Settings', routerLink: '/settings', icon: 'settings' },
             { label: 'Help Center', routerLink: '/pagenotfound', icon: 'help-circle' },
             { label: 'Signout', routerLink: '/login', icon: 'log-out' }
