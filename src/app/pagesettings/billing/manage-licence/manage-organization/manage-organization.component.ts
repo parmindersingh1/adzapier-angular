@@ -29,7 +29,7 @@ export class ManageOrganizationComponent implements OnInit, OnDestroy {
   alertType: any;
   private currentManagedOrgID: any;
   private currrentManagedPropID: any;
-
+  delOrgID: any;
   planName = '';
 
   totalLicence = 0;
@@ -179,6 +179,7 @@ this.orgNameError = !this.orgForm.value.orgID ? true : false;
     .subscribe(res => {
       this.loading.stop();
       this.skLoading = false;
+      this.modalRef.hide();
       this.onGetAssingedOrg()
       this.isOpen = true;
       this.alertMsg = res;
@@ -187,12 +188,15 @@ this.orgNameError = !this.orgForm.value.orgID ? true : false;
     }, err => {
       this.skLoading = false;
       this.loading.stop();
+      this.modalRef.hide();
       this.isOpen = true;
       this.alertMsg = err;
       this.alertType = 'danger';
     })
   }
-
+  decline(): void {
+    this.modalRef.hide();
+  }
   ngOnDestroy() {
     // this.modalRef.hide();
 
