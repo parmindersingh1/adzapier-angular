@@ -1,4 +1,5 @@
 import { OnDestroy } from '@angular/core';
+import { ViewChild } from '@angular/core';
 import { TemplateRef } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
 import { Validators } from '@angular/forms';
@@ -25,6 +26,7 @@ export class ManagePropertyComponent implements OnInit, OnDestroy {
   submitted = false;
   private currentManagedOrgID: any;
   private currrentManagedPropID: any;
+  delPropID: any;
 
   planName = '';
 
@@ -43,6 +45,7 @@ export class ManagePropertyComponent implements OnInit, OnDestroy {
   alertType: any;
 
   modalRef: BsModalRef;
+  @ViewChild('delConfirm', { static: false }) delConfirm;
   skLoading = true;
   propertyList = [];
   allPropertyList = [];
@@ -85,7 +88,7 @@ export class ManagePropertyComponent implements OnInit, OnDestroy {
   get f() { return this.propertyForm.controls; }
 
   onGetAllPropertyList(e){
-    const payload = { oid: e.target.value}
+    const payload = { oID: e.target.value}
     this.loading.start('2');
     this.service.getAllPropertyList(this.constructor.name, moduleName.billingModule, payload)
     .subscribe((res: any) => {
@@ -194,6 +197,7 @@ this.propertyNameError = this.propertyForm.value.propID.length > this.totalLicen
     this.service.removeProperty(this.constructor.name, moduleName.billingModule, {pID: pID})
     .subscribe((res: any) => {
       this.loading.stop();
+      this.modalRef.hide();
       this.skLoading = false;
       this.onGetAssingedProperty()
       this.isOpen = true;
@@ -204,11 +208,14 @@ this.propertyNameError = this.propertyForm.value.propID.length > this.totalLicen
       this.loading.stop();
       this.skLoading = false;
       this.isOpen = true;
+      this.modalRef.hide();
       this.alertMsg = err;
       this.alertType = 'danger';
     })
   }
-
+  decline(): void {
+    this.modalRef.hide();
+  }
   onCheckAvailableLic(e) {
     console.log("EEEEEEEEEEEEE", e)
   }
