@@ -67,14 +67,14 @@ export class PricingComponent implements OnInit, OnDestroy {
   }
 
   onGetActivePlan() {
-    this.loading.start()
+    this.loading.start('2')
     this.skeletonLoader = true;
     this.billingService.getActivePlan(this.constructor.name, moduleName.manageSubscriptionsModule).subscribe( (res: any) => {
-      this.loading.stop();
+      this.loading.stop('2');
       this.skeletonLoader = false;
       this.onSelectActivePlan(res.response)
     }, err => {
-      this.loading.stop();
+      this.loading.stop('2');
       this.skeletonLoader = false;
       this.isOpen = true;
       this.alertMsg = err;
@@ -105,7 +105,7 @@ onSelectActivePlan(record) {
    this.activeData = activeData;
    console.log('activeData', activeData)
    this.subscriptionList = this.planDetails.base[`${this.billingCycle}`];
-   this.addonsList = this.planDetails.addons[`${this.billingAddonCycle}`];
+   this.addonsList = this.planDetails.addons[`${this.billingCycle}`];
   }
   onGetPlanDetails() {
     this.loading.start();
@@ -126,7 +126,7 @@ onSelectActivePlan(record) {
   }
   onSetPlans(plansData){
     this.subscriptionList = plansData.base[`${this.billingCycle}`];
-    this.addonsList = plansData.addons[`${this.billingAddonCycle}`];
+    this.addonsList = plansData.addons[`${this.billingCycle}`];
   }
   ngOnDestroy() {
     const div = document.querySelector('#main');
@@ -188,12 +188,12 @@ onSelectActivePlan(record) {
       this.billingCycle = 'yearly';
       this.billingAddonCycle = 'yearly';
       this.subscriptionList = this.planDetails.base[`${this.billingCycle}`];
-      this.addonsList = this.planDetails.addons[`${this.billingAddonCycle}`];
+      this.addonsList = this.planDetails.addons[`${this.billingCycle}`];
     } else {
       this.billingCycle = 'monthly';
       this.billingAddonCycle = 'monthly';
       this.subscriptionList = this.planDetails.base[`${this.billingCycle}`];
-      this.addonsList = this.planDetails.addons[`${this.billingAddonCycle}`];
+      this.addonsList = this.planDetails.addons[`${this.billingCycle}`];
     }
   }
   onGetCurrentPlan() {

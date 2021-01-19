@@ -68,6 +68,9 @@ ul {
   position: fixed;
   top: 100px;
   border-top: 3px solid #3968fa;
+
+  max-height: 550px;
+  overflow: overlay;
 }
 .add-addons{
   color: #3968fa;
