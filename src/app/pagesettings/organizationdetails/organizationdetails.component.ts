@@ -208,11 +208,11 @@ export class OrganizationdetailsComponent implements OnInit {
   editModalPopup(content, data) {
     this.isEditProperty = true;
     // this.selectedOrg = data;
-    this.propertyname = data.name;
+    this.propertyname = data.name.replace(/&amp;/g,'&');
     this.website = data.website;
     this.logourl = data.logo_url;
     this.myContext = { oid: data.oid, pid: data.id };
-    this.organisationPropertyForm.controls['propertyname'].setValue(data.name);
+    this.organisationPropertyForm.controls['propertyname'].setValue(this.propertyname);
     this.organisationPropertyForm.controls['website'].setValue(data.website);
     this.organisationPropertyForm.controls['logourl'].setValue(data.logo_url);
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {

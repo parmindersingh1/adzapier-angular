@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { OrganizationService, AuthenticationService, UserService } from '../../../_services';
 import { Observable } from 'rxjs';
@@ -12,8 +12,7 @@ import { Location } from '@angular/common';
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss'],
-  // changeDetection: ChangeDetectionStrategy.Default
+  styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit {
   @ViewChild('confirmTemplate', { static: false }) confirmModal: TemplateRef<any>;
@@ -66,6 +65,7 @@ export class HeaderComponent implements OnInit {
   resCID: any;
   resuserCID: any;
   navbarOpen = false;
+  addMobileMenuWidth: any;
   constructor(
     private router: Router,
     private activatedroute: ActivatedRoute,
@@ -348,6 +348,7 @@ export class HeaderComponent implements OnInit {
 
   openNav() {
     this.close = !this.close;
+    this.addMobileMenuWidth = this.addMenuWidth(); // to avoid countinous background call
   }
 
   closeNav() {
@@ -575,7 +576,9 @@ export class HeaderComponent implements OnInit {
   }
 
   addColumncount(): object {
-    if (this.orgPropertyMenu.length <= 2) {
+    if (this.orgPropertyMenu.length < 2) {
+      return { 'column-count': 1 }
+    } else if (this.orgPropertyMenu.length <= 2) {
       return { 'column-count': 2 }
     } else if (this.orgPropertyMenu.length >= 4 && this.orgPropertyMenu.length <= 5) {
       return { 'column-count': 2 }
@@ -640,7 +643,7 @@ export class HeaderComponent implements OnInit {
     }
     if(this.currentOrganization !== undefined){
       textLength = this.currentOrganization.length;
-      console.log(textLength,'textLength..');
+     // console.log(textLength,'textLength..');
       let generatedWidth = (textLength * 10) <= 250 ? 250 : textLength * 10;
       let addStyle = { 
         'width': generatedWidth + 'px',
@@ -658,6 +661,10 @@ export class HeaderComponent implements OnInit {
        };
        return addStyle;
     }
+  }
+
+  convertAmpersand(item){
+    return item.replace(/&amp;/g,'&');
   }
 
 }

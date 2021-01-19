@@ -31,9 +31,10 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
   @ViewChild('panel', { static: true }) public panel: ElementRef<any>;
   @ViewChild('workflowStageScroller', { static: true, read: ElementRef }) public workflowStageScroller: ElementRef<any>;
   @ViewChild('confirmDeleteTemplate', { static: false }) confirmDeleteModal: TemplateRef<any>;
-  @ViewChild('extendDays',{static:true}) extendDaysModal: TemplateRef<any>;
-  @ViewChild('rejectRequest',{static:true}) rejectRequestModal: TemplateRef<any>;
+  @ViewChild('extendDays', { static: true }) extendDaysModal: TemplateRef<any>;
+  @ViewChild('rejectRequest', { static: true }) rejectRequestModal: TemplateRef<any>;
   // @ViewChild('subTaskForm', null) subTaskTempForm: NgForm;
+  @ViewChild('userAuthenticationAlert', { static: false }) userAuthenticationModal: TemplateRef<any>;
 
   confirmationForm: FormGroup;
   modalRef: BsModalRef;
@@ -196,6 +197,8 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
   emailVerificationStatus = false;
   isExtenddasysubmitted = false;
   isRejectrequestsubmitted = false;
+  isUserNotMatched: boolean = false;
+  reasonList: any = [];
   constructor(private activatedRoute: ActivatedRoute,
               private router: Router,
               private orgService: OrganizationService,
@@ -220,11 +223,10 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
     // });
     this.paginationConfig = { itemsPerPage: this.pageSize, currentPage: this.p, totalItems: this.totalCount, id: 'userPagination' };
     this.activitytype = 0; // 0 = private (internal), 1 = public
-    this.getCurrentLoggedInUser();
+    // this.getCurrentLoggedInUser();
   }
 
   ngOnInit() {
-    this.getCurrentLoggedInUser();
     this.subTaskFields = {
       assignee: '',
       name: '',
@@ -281,7 +283,7 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
     this.confirmationForm = this.formBuilder.group({
       userInput: ['', [Validators.required]]
     });
-
+    this.getCurrentLoggedInUser();
     this.getSelectedOrgIDPropertyID();
 
 
@@ -294,6 +296,7 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
     this.preFillData();
     // this.onChanges();
     this.minDate = new Date();
+    this.loadReasonList();
   }
   get addActivity() { return this.quillEditorText.controls; }
   get addEmailPost() { return this.quillEditorEmailText.controls; }
@@ -301,7 +304,7 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
   get subTaskResponse() { return this.subTaskResponseForm.controls; }
   get confirmDelete() { return this.confirmationForm.controls; }
   get dayExtend() { return this.quillEditorExtendDays.controls; }
-  get requestReject() {return this.quillEditorRejectRequest.controls}
+  get requestReject() { return this.quillEditorRejectRequest.controls }
   getSelectedOrgIDPropertyID() {
     this.orgService.currentProperty.subscribe((response) => {
       if (response !== '') {
@@ -325,16 +328,13 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
     this.router.navigate(['privacy/dsar/dsar-requests']);
   }
 
-  getCurrentLoggedInUser(){
+  getCurrentLoggedInUser() {
     this.userService.getLoggedInUserDetails(this.constructor.name, moduleName.headerModule).subscribe((data) => {
       this.userData = data;
       this.resuserCID = this.userData.response.cID;
-      if(this.resuserCID !== undefined){
-        if(this.queryCompanyID !== this.resuserCID){
-           this.authService.logout();
-           localStorage.removeItem('currentUser');
-           this.userService.getCurrentUser.unsubscribe();
-         this.router.navigate(['/login']);
+      if (this.resuserCID !== undefined) {
+        if (this.queryCompanyID !== this.resuserCID) {
+          this.openModal(this.userAuthenticationModal);
         }
       }
     });
@@ -345,6 +345,7 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
     this.dsarRequestService.getDSARRequestDetails(this.currentManagedOrgID, this.currrentManagedPropID, this.requestID,
       this.constructor.name, moduleName.dsarRequestModule)
       .subscribe((data) => {
+      if (data.response !== "No data found.") {
         this.requestDetails.push(data.response);
         this.customFields = data.response.custom_data;
         this.respApprover = data.response.approver_firstname + ' ' + data.response.approver_lastname;
@@ -384,6 +385,7 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
         // }
         this.editRequestDetailForm.controls['riskfactor'].setValue(this.riskFactorText);
         this.skeletonLoading = false;
+      }
       }, (error) => {
         this.alertMsg = error;
         this.isOpen = true;
@@ -516,7 +518,9 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
       }
     }, (error) => {
       this.skeletonStageLoading = false;
-      alert(JSON.stringify(error));
+      this.alertMsg = JSON.stringify(error);
+      this.isOpen = true;
+      this.alertType = 'danger';
     });
   }
   stageSelection(item) {
@@ -601,7 +605,7 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
   }
 
   openModal(template: TemplateRef<any>, diff?, item?) {
-    this.modalRef = this.bsmodalService.show(template, { class: 'modal-sm', keyboard: false });
+    this.modalRef = this.bsmodalService.show(template, { class: '', keyboard: false });
     this.stageDiff = diff;
     this.revertedStage = item;
   }
@@ -610,12 +614,12 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
     this.modalRef = this.bsmodalService.show(template, { class: '', keyboard: false });
   }
 
-  openExtendModal(){
-    this.openCommonModal(this.extendDaysModal);
+  openExtendModal() {
+    this.openModal(this.extendDaysModal);
   }
 
-  openReqestRejectModal(){
-    this.openCommonModal(this.rejectRequestModal);
+  openReqestRejectModal() {
+    this.openModal(this.rejectRequestModal);
   }
 
   confirm() {
@@ -683,8 +687,12 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
 
 
   isStageCompleted(item): boolean {
-    if (item !== undefined) {
-      return this.selectedStages.some((t) => t.order == item.order);
+    if (this.currentWorkflowStage !== 'Rejected') {
+      if (item !== undefined) {
+        return this.selectedStages.some((t) => t.order == item.order);
+      }
+    } else {
+      return false;
     }
   }
 
@@ -854,13 +862,20 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
     });
   }
 
+  loadReasonList() {
+    this.dsarRequestService.getRejectionReason().subscribe((data) => {
+      this.reasonList.push(data);
+    });
+    return this.reasonList;
+  }
+
   onChangeRequestType(event) {
     //  const dropdownEmailTemplate = event.target.value;
     // this.selectedTemplate = event.target.value;
     this.quillEditorEmailText.controls['editorEmailMessage'].setValue(event.target.value);
   }
 
-  onChangeReason(event){
+  onChangeReason(event) {
     this.quillEditorRejectRequest.controls['reason'].setValue(event.target.value);
   }
 
@@ -990,7 +1005,7 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
     this.dsarRequestService.getDSARRequestDetailsByID(currentManagedOrgID, currrentManagedPropID, requestID,
       this.constructor.name, moduleName.dsarRequestModule)
       .subscribe((data) => {
-        if (data) {
+        if (data.response !== 'No data found.') {
           this.requestDetailsbyId = data.response;
           this.riskFactorList = data.response.risk_factor;
           approver = data.response.approver;
@@ -1115,7 +1130,7 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
     let currentStageID;
     this.isConfirmed ? currentStageID = this.currentWorkflowStageID : currentStageID = this.currentStageId;
    // const currentStageID = this.currentStageId ? this.currentStageId : this.currentWorkflowStageID;
-    if(this.isConfirmed == undefined) {
+    if (this.isConfirmed == undefined) {
       currentStageID = this.currentWorkflowStageID;
     }
     if (currentStageID !== undefined) {
@@ -1168,19 +1183,19 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
     }
   }
 
-  onSubmitExtendDays(){
+  onSubmitExtendDays() {
     this.isExtenddasysubmitted = true;
     if (this.quillEditorExtendDays.invalid) {
       return false;
     } else {
       this.onClickEndDays(this.quillEditorExtendDays.get('customdays').value);
-      if(this.selectedStages.length !== 0){
+      if (this.selectedStages.length !== 0) {
         const reqObj = {
           current_status: this.selectedStages[this.selectedStages.length - 1].id,
           previous_status: this.previousStageId,
-          activity_feedback: 'Days Extended: ' +  this.quillEditorExtendDays.get('customdays').value + '<br/>' + this.quillEditorExtendDays.get('editorReason').value // this.editorActivityPost
+          activity_feedback: 'Days Extended: ' + this.quillEditorExtendDays.get('customdays').value + '<br/>' + this.quillEditorExtendDays.get('editorReason').value // this.editorActivityPost
         };
-        console.log(reqObj,'reqObj..');
+       // console.log(reqObj, 'reqObj..');
         Object.keys(reqObj).forEach(key => {
           if (reqObj[key] === undefined) {
             delete reqObj[key];
@@ -1193,39 +1208,47 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
         this.stageAPI(this.requestID, fd);
         this.decline();
         this.isExtenddasysubmitted = false;
-      }else{
+      } else {
         this.alertMsg = 'Select stage!';
         this.isOpen = true;
         this.alertType = 'danger';
       }
-    } 
+    }
   }
 
-  onSubmitRejectRequest(){
+  onSubmitRejectRequest() {
     this.isRejectrequestsubmitted = true;
     if (this.quillEditorRejectRequest.invalid) {
       return false;
     } else {
-        const reqObj = {
-        //  current_status: this.selectedStages[this.selectedStages.length - 1].id,
-         // previous_status: this.previousStageId,
-          activity_feedback: 'Request rejected: ' +  this.quillEditorRejectRequest.get('reason').value + '<br/>' + this.quillEditorRejectRequest.get('editorComments').value // this.editorActivityPost
-        };
-        console.log(reqObj,'reqObj..');
-        this.decline();
-        this.alertMsg = 'Request has been rejected!';
+      const reqObj = {
+        comment: 'Reason for rejection: ' + this.quillEditorRejectRequest.get('reason').value + '<br/> comments: ' + this.quillEditorRejectRequest.get('editorComments').value // this.editorActivityPost
+      };
+    //  console.log(reqObj, 'reqObj..');
+      this.alertMsg = 'Request has been rejected!';
+      this.isOpen = true;
+      this.alertType = 'success';
+      Object.keys(reqObj).forEach(key => {
+        if (reqObj[key] === undefined) {
+          delete reqObj[key];
+        }
+      });
+      const fd = new FormData();
+      fd.append('comment', reqObj.comment);
+      this.dsarRequestService.rejectDSARRequest(this.requestID, reqObj, this.constructor.name, moduleName.dsarRequestModule).subscribe((data) => {
+        this.alertMsg = data.response;
         this.isOpen = true;
         this.alertType = 'success';
-        return false;
-        Object.keys(reqObj).forEach(key => {
-          if (reqObj[key] === undefined) {
-            delete reqObj[key];
-          }
-        });
-        const fd = new FormData();
-        fd.append('activity_feedback', reqObj.activity_feedback);
-        this.stageAPI(this.requestID, fd);
-    } 
+        this.loadDataRequestDetails();
+        this.loadActivityLog(this.requestID);
+        //this.router.navigate(['privacy/dsar/dsar-requests']);
+      }, (err) => {
+        this.alertMsg = 'error';
+        this.isOpen = true;
+        this.alertType = 'danger';
+      });
+      this.decline();
+    }
   }
 
   resetSubtaskForm(subtaskForm: NgForm) {
@@ -1463,8 +1486,8 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
   }
 
   isEmailIDVerified(key, isEmailVerified): boolean {
-     this.emailVerificationStatus = (key === 'Email' && isEmailVerified);
-     return this.emailVerificationStatus;
+    this.emailVerificationStatus = (key === 'Email' && isEmailVerified);
+    return this.emailVerificationStatus;
   }
 
   isFileExist(uploadexist): boolean {
@@ -1493,7 +1516,7 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
 
   removeDSARRequest(control: string) {
     this.controlname = control;
-    this.openCommonModal(this.confirmDeleteModal);
+    this.openModal(this.confirmDeleteModal);
   }
 
   deleteDSARRequest() {
@@ -1648,25 +1671,32 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
   }
 
   ngAfterViewChecked() {
-    setTimeout(() => {
-      this.cdRef.detectChanges();
-      if (this.workflowStageScroller !== undefined) {
-        if(this.workflowStageScroller.nativeElement.querySelector('li').offsetWidth !== undefined){
-          const parentElementSize = this.workflowStageScroller.nativeElement.parentElement.offsetWidth;
-          const itemSize = this.workflowStageScroller.nativeElement.querySelector('li').offsetWidth;
-          const itemLength = this.workflowStageScroller.nativeElement.childElementCount;
-          const menuSize = itemSize * itemLength;
-          const visibleSize = menuSize - parentElementSize;
-          this.scrollLimit = -visibleSize;
-        }
-      } else {
-        return false;
+    // setTimeout(() => {
+    this.cdRef.detectChanges();
+    if (this.workflowStageScroller !== undefined) {
+      if (this.workflowStageScroller.nativeElement.querySelector('li').offsetWidth !== undefined) {
+        const parentElementSize = this.workflowStageScroller.nativeElement.parentElement.offsetWidth;
+        const itemSize = this.workflowStageScroller.nativeElement.querySelector('li').offsetWidth;
+        const itemLength = this.workflowStageScroller.nativeElement.childElementCount;
+        const menuSize = itemSize * itemLength;
+        const visibleSize = menuSize - parentElementSize;
+        this.scrollLimit = -visibleSize;
       }
-    }, 3000);
+    } else {
+      return false;
+    }
+    // }, 3000);
+  }
+
+  onCloseUserAuthModal() {
+    this.bsmodalService.hide(1);
+    this.backToDSARRequest();
   }
 
   ngAfterViewInit(): void {
-    this.cdRef.detectChanges();
+    if (!this.cdRef['destroyed']) {
+      this.cdRef.detectChanges();
+    }
   }
 
 }
