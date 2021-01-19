@@ -114,6 +114,11 @@ i {
 .dropdown-item{
   padding: 0.25rem 0;
   cursor: pointer;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: pointer;
+  display: inline-block;
+  overflow: hidden !important;
   // justify-content: space-between;
   // display: flex;
 }
@@ -176,6 +181,9 @@ ul.dropdown-menu.propMenu.show > li > ul {
 
 .dropdown-item.active, .dropdown-item:active {
   background: none !important;
+  text-overflow: ellipsis;
+  width: 200px;
+  overflow: hidden;
 }
 
 .activeFirstIndex {

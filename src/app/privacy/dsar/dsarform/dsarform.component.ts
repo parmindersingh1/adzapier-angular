@@ -230,6 +230,12 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
   formControlLabel: string;
   multiselect = false;
   ismultiselectrequired = false;
+  isAccordionOpen: boolean;
+  accordionStatus = {
+    isFirstopen : false,
+    isSecondopen : false,
+    isThirdopen : false,
+  }
   constructor(private fb: FormBuilder, private ccpaRequestService: CcparequestService,
     private organizationService: OrganizationService,
     private dsarFormService: DsarformService,
@@ -1935,12 +1941,10 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
           this.logoWidth = img_width;
 
           if (img_height > max_height && img_width > max_width) {
-            this.imageError =
-              'Maximum dimentions allowed ' +
-              max_height +
-              '*' +
-              max_width +
-              'px';
+            this.imageError = 'Maximum dimentions allowed ' + max_height + '*' + max_width + ' px' + ' for favicon';
+            this.alertMsg = this.imageError;
+            this.isOpen = true;
+            this.alertType = 'danger';
             return false;
           } else {
             const imgBase64Path = e.target.result;
@@ -2134,6 +2138,16 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
       }
     }   
    
+  }
+
+  accordionChangeStatus(event:boolean,tag){
+    if(tag === 'first'){
+     return this.accordionStatus.isFirstopen = event;
+    }else if(tag === 'second'){
+     return this.accordionStatus.isSecondopen = event;
+    }else if(tag === 'third'){
+     return this.accordionStatus.isThirdopen = event;
+    }
   }
 
 }

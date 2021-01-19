@@ -58,7 +58,7 @@ import { TooltipModule } from 'ngx-bootstrap/tooltip';
   
 
   exports: [CommonModule, NgbModule, CollapseModule, BsDropdownModule, NgxSkeletonLoaderModule, DragDropModule, QuillModule, FeatherModule,
-     NgxPaginationModule, BsDatepickerModule, TooltipModule, AlertModule, TypeaheadModule, FilterPipe, 
+     NgxPaginationModule, BsDatepickerModule, TooltipModule, AlertModule, TypeaheadModule, AccordionModule, FilterPipe, 
      TimeAgoPipe, TimeAgoExtendsPipePipe, SafePipe],
   providers: [ ]
 
