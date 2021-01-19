@@ -144,15 +144,15 @@ deploy-to-swarm-develop:
     TAGS: ${CI_COMMIT_REF_NAME}-${TAG}
     RESERVE_CPU: "'0.25'"
     LIMIT_CPU: "'0.5'"
-    RESERVE_MEMORY: 64M 
-    LIMIT_MEMORY: 128M
+    RESERVE_MEMORY: 32M 
+    LIMIT_MEMORY: 64M
   image: docker:19
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD ${CI_REGISTRY}
-    - docker service scale ${CI_PROJECT_NAMESPACE}-${CI_PROJECT_NAME}_${SERVICE_NAME}=$SCALABLE_REPLICAS || true
+    - docker service update --with-registry-auth --replicas $SCALABLE_REPLICAS --update-parallelism 1 --update-delay 10s ${CI_PROJECT_NAMESPACE}-${CI_PROJECT_NAME}_${SERVICE_NAME} || true
     - echo "Deploying Stack"
     - docker stack deploy --with-registry-auth --compose-file=docker-stack-out.yaml ${CI_PROJECT_NAMESPACE}-${CI_PROJECT_NAME}
-    - docker service scale ${CI_PROJECT_NAMESPACE}-${CI_PROJECT_NAME}_${SERVICE_NAME}=$RUNNING_REPLICAS
+    - docker service update --with-registry-auth --replicas $RUNNING_REPLICAS --update-parallelism 1 --update-delay 10s ${CI_PROJECT_NAMESPACE}-${CI_PROJECT_NAME}_${SERVICE_NAME}
   before_script:
     - export CAL_VER=$(date +"%y%m%d%H")
     - apk add gettext
@@ -184,15 +184,15 @@ deploy-to-swarm-staging:
     TAGS: ${CI_COMMIT_REF_NAME}-${TAG}
     RESERVE_CPU: "'0.25'"
     LIMIT_CPU: "'0.5'"
-    RESERVE_MEMORY: 64M 
-    LIMIT_MEMORY: 128M
+    RESERVE_MEMORY: 32M 
+    LIMIT_MEMORY: 64M
   image: docker:19
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD ${CI_REGISTRY}
-    - docker service scale ${CI_PROJECT_NAMESPACE}-${CI_PROJECT_NAME}_${SERVICE_NAME}=$SCALABLE_REPLICAS || true
+    - docker service update --with-registry-auth --replicas $SCALABLE_REPLICAS --update-parallelism 1 --update-delay 10s ${CI_PROJECT_NAMESPACE}-${CI_PROJECT_NAME}_${SERVICE_NAME} || true
     - echo "Deploying Stack"
     - docker stack deploy --with-registry-auth --compose-file=docker-stack-out.yaml ${CI_PROJECT_NAMESPACE}-${CI_PROJECT_NAME}
-    - docker service scale ${CI_PROJECT_NAMESPACE}-${CI_PROJECT_NAME}_${SERVICE_NAME}=$RUNNING_REPLICAS
+    - docker service update --with-registry-auth --replicas $RUNNING_REPLICAS --update-parallelism 1 --update-delay 10s ${CI_PROJECT_NAMESPACE}-${CI_PROJECT_NAME}_${SERVICE_NAME}
   before_script:
     - export CAL_VER=$(date +"%y%m%d%H")
     - apk add gettext
@@ -231,10 +231,10 @@ deploy-to-swarm-prod:
   image: docker:19
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD ${CI_REGISTRY}
-    - docker service scale ${CI_PROJECT_NAMESPACE}-${CI_PROJECT_NAME}_${SERVICE_NAME}=$SCALABLE_REPLICAS || true
+    - docker service update --with-registry-auth --replicas $SCALABLE_REPLICAS --update-parallelism 1 --update-delay 10s ${CI_PROJECT_NAMESPACE}-${CI_PROJECT_NAME}_${SERVICE_NAME} || true
     - echo "Deploying Stack"
     - docker stack deploy --prune --with-registry-auth --compose-file=docker-compose-out.yaml ${CI_PROJECT_NAMESPACE}-${CI_PROJECT_NAME}
-    - docker service scale ${CI_PROJECT_NAMESPACE}-${CI_PROJECT_NAME}_${SERVICE_NAME}=$RUNNING_REPLICAS
+    - docker service update --with-registry-auth --replicas $RUNNING_REPLICAS --update-parallelism 1 --update-delay 10s ${CI_PROJECT_NAMESPACE}-${CI_PROJECT_NAME}_${SERVICE_NAME}
   before_script:
     - apk add gettext
     - export CAL_VER=$(date +"%y%m%d%H")

@@ -9,6 +9,8 @@ export const apiConstant = {
   COOKIE: '/cookie/:orgId/:propId',
   // Cookie Consent
   COOKIE_CONSENT: '/consents/tracking/:propId',
+  COOKIE_TRACKING_FILTER: '/consents/trackingbyfilter/:propId',
+  COOKIE_CONSENT_PUBLISHER: '/consent/cookieconsent',
   // Dashboard CCPA
   DASHBOARD_CCPA_REQUEST_CHART: '/ccpa/request/chart/:orgId/:propId',
   DASHBOARD_REQUEST_BY_STATE: '/ccpa/chart/state/:orgId/:propId',
@@ -28,6 +30,21 @@ export const apiConstant = {
   BILLING_UPDATE_SESSION_ID: '/billing/update/card/session',
   BILLING_CURRENT_SUBSCRIPTION: '/billing/current/subscription',
   BILLING_COUPON: '/billing/coupon/:coupon_code',
+  BILLING_ACTIVE_PLAN: '/billing/list/subscription',
+  //
+  BILLING_GET_ASSIGNE_PROP : '/licensed/property',
+  BILLING_GET_ASSIGNE_ORG: '/licensed/organizations',
+
+  BILLING_ASSIGNE_PROPERTY: '/assign/license/property',
+  BILLING_ASSIGNE_ORG: '/assign/license/organization',
+  //
+  BILLING_LIST_ALL_PROPERTY: '/unlicensed/property',
+  BILLING_LIST_ALL_ORG: '/unlicensed/organizations',
+  //
+  BILLING_UNSSIGNE_PROPERTY: '/unassign/license/property',
+  BILLING_UNSSIGNE_ORG: '/unassign/license/organization',
+  //
+  BILLING_MANAGE_SESSION_ID_GEN : '/billing/customerportal/session',
   // Workflow
   WORKFLOW: '/workflow',
   WORKFLOW_STATUS: '/workflow?workflow_status=',
@@ -36,3 +53,19 @@ export const apiConstant = {
   COOKIE_CATEGORY_CHART: '/cookiepurpose/:propId',
   COOKIE_CATEGORY_TYPE_CHART: '/cookietype/:propId'
 };
+
+// {
+//   response: {
+//     cookieConsent: {
+//       higherPlanID: '',
+//       cycle: '',
+//       price: '',
+//     },
+//     dsar: {
+//       higherPlanID: '',
+//       cycle: '',
+//       price: '',
+//     }
+//   },
+//   status: 200
+// }

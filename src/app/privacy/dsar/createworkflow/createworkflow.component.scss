@@ -281,3 +281,12 @@ flex-direction: column;
 .showerror {
 	display: block;
 }
+
+.quill-disabled {
+	background-color: #ccc;
+	cursor: not-allowed;
+}
+
+.ql-disabled {
+	background-color: #ccc !important;
+}

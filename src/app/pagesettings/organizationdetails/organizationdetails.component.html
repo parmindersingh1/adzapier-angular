@@ -148,20 +148,20 @@
                             <td>
                                <div class="img-wrapper"><img class="img-fluid" [src]="loadLogoURL(list.logo_url)" /> </div>
                             </td>
-                            <td>
-                                {{list.name}}
+                            <td> <span [innerHTML]="list.name"></span>
+                                <!-- {{list.name}} -->
                             </td>
                             <td>
                                 {{list.website}}
                             </td>
                             <td>
                                 <!-- <i-feather name="edit-3" class="feather-16"></i-feather> -->
-                                <a class="pd-r-5 cursor" (click)="editModalPopup(propertyModal,list)">
-                                    <i class="far fa-edit fa-1x"></i>
+                                <a class="pd-r-5" (click)="editModalPopup(propertyModal,list)">
+                                   <span class="cursorpointer"><i class="far fa-edit fa-1x"></i></span>
                                 </a>
-                                <a class="pd-r-5 cursor" *ngIf="list.active"
+                                <a class="pd-r-5" *ngIf="list.active"
                                     (click)="disableProperty(list,'property')">
-                                    <i class="far fa-trash-alt tx-danger fa-sm"></i>
+                                    <span class="cursorpointer">  <i class="far fa-trash-alt tx-danger fa-sm"></i></span>
                                 </a>
                                 <!-- <i-feather name="trash-2" class="feather-16"></i-feather> -->
                             </td>
@@ -238,7 +238,6 @@
                             <th>Email</th>
                             <th>Roles</th>
                             <th>Last Login</th>
-                            <th>Resend</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -256,27 +255,21 @@
                             <td>
                                 {{list.role_name}}
                             </td>
-                            <td>
-                                <span class="text-center"
-                                *ngIf="list.user_last_login === 'Invitation Pending' || list.user_last_login === 'Invitation sent'; else LoginDate">
-                                {{list.user_last_login }}
-                            </span>
+                            <td class="text-center">
+                            <button  *ngIf="list.user_last_login === 'Invitation Pending' || list.user_last_login === 'Invitation sent'; else LoginDate" type="button"
+                            (click)="onResendInvitation(list.approver_id)" class="btn btn-xs btn-primary">
+                            <i class="fas fa-envelope"></i> Resend Invitation</button>
                             <ng-template #LoginDate>
                                 {{list.user_last_login | timeAgo}}
                             </ng-template>
 
                             </td>
-                            <td class="text-center">
-                                <button *ngIf="list.user_last_login === 'Invitation sent'" type="button"
-                                    (click)="onResendInvitation(list.approver_id)" class="btn btn-xs btn-primary"><i
-                                        class="fas fa-envelope"></i> Resend Invitation</button>
-                            </td>
                             <td>
                                 <a class="pd-r-5" (click)="editUserInvitation(inviteuserModal,list)">
-                                    <span class="d-none d-sm-inline cursorpointer mg-l-0"> <i
+                                    <span class="d-none d-sm-inline mg-l-0 cursorpointer"> <i
                                             class="fa fa-pen mr-1 colorblue" aria-hidden="true"></i></span>
                                 </a>
-                                <a class="pd-r-5" (click)="removeTeamMember(list,'team member')">
+                                <a class="pd-r-5 cursorpointer" (click)="removeTeamMember(list,'team member')">
                                     <i class="far fa-trash-alt tx-danger fa-sm"></i>
                                 </a>
                             </td>
@@ -478,6 +471,7 @@
                     [ngClass]="{ 'is-invalid': submitted && orgProp.website.errors }" />
                 <div *ngIf="submitted && orgProp.website.errors" class="invalid-feedback">
                     <div *ngIf="orgProp.website.errors.required">Website address is required</div>
+                    <div *ngIf="orgProp.website.errors.pattern">Website address should to be lower case </div>
                 </div>
             </div>
             <div class="form-group">
@@ -506,18 +500,29 @@
     <div class="modal-body">
         <div>Enter the email addresses of the users you'd like to invite, and choose the role they should have.
         </div>
-        <form [formGroup]="inviteUserOrgForm" (ngSubmit)="onSubmitInviteUserOrganization()">
+        <form [formGroup]="inviteUserOrgForm" autocomplete="off" (ngSubmit)="onSubmitInviteUserOrganization()">
             <div class="row">
                 <div class="col-sm-12">
                     <div class="form-group">
                         <label for="emailid" class="d-block">Email Id</label>
-                        <input type="email" formControlName="emailid" name="emailid" class="form-control"
+                        <!-- <input type="email" formControlName="emailid" name="emailid" class="form-control"
                             placeholder="Enter email id" pattern="^\w+@[a-zA-Z_0-9]+?\.[a-zA-Z]{2,3}$"
-                            [ngClass]="{ 'is-invalid': isInviteFormSubmitted && f.emailid.errors }" />
+                            [ngClass]="{ 'is-invalid': isInviteFormSubmitted && f.emailid.errors }" /> -->
+                            <input type="text" formControlName="emailid" name="emailid" [typeahead]="userList"
+                            [typeaheadMinLength]="0"
+                            typeaheadWaitMs="1000"
+                            (typeaheadNoResults)="typeaheadNoResults($event)"
+                            (keypress)="onSearchEmailId($event.target.value)"
+                            typeaheadOptionField="email" [typeaheadScrollable]="true" [typeaheadOptionsInScrollableView]="5"
+                            placeholder="type and search country"
+                                    class="form-control" placeholder="Enter email id"
+                                    pattern="^\w+@[a-zA-Z_0-9]+?\.[a-zA-Z]{2,3}$"
+                                    [ngClass]="{ 'is-invalid': isInviteFormSubmitted && f.emailid.errors }" />    
                         <div *ngIf="isInviteFormSubmitted && f.emailid.errors" class="invalid-feedback">
                             <div *ngIf="f.emailid.errors.required">User email address is required</div>
                             <div *ngIf="f.emailid.errors.pattern">Please enter valid email address</div>
                         </div>
+                        <!-- <div class="alert alert-danger" *ngIf="noResult">No Results Found</div> -->
                     </div>
 
                     <!-- <div class="form-group">
@@ -539,7 +544,7 @@
                                 [value]='opt.id' (change)="onCheckChange($event)"/>{{opt.role_name}}
                         </div>
                     </div> -->
-                <div class="col-sm-12">
+                <div class="col-sm-12 user-roles">
                     <label for="permissions" class="d-block">Select roles</label>
                     <div *ngFor="let order of roleList;" class="form-check-inline">
                         <input type="radio" id="permissions" name="permissions" formControlName="permissions"
@@ -593,5 +598,17 @@
                         {{controlname}}</button>
             </div>
         </form>
+    </div>
+</ng-template>
+
+<ng-template #deletePropertyAlert let-modal>
+    <div class="modal-body text-center">
+        <button type="button" class="close" (click)="cancelModal()" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <p>Currently you are managing this property so you can not delete, In order to delete this property manage other property</p>
+        <button type="button" class="btn btn-xs btn-primary" (click)="cancelModal()" data-dismiss="modal" aria-label="Close">
+            OK
+        </button>
     </div>
 </ng-template>

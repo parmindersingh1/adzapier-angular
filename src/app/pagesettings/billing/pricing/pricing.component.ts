@@ -9,8 +9,10 @@ import {moduleName} from '../../../_constant/module-name.constant';
 import any = jasmine.any;
 import {environment} from '../../../../environments/environment';
 declare var jQuery: any;
+
+
 class PlanDetails {
-  addons: any[];
+  addonss: any[];
   monthly: any[];
   yearly: any[];
 }
@@ -21,10 +23,12 @@ class PlanDetails {
 })
 export class PricingComponent implements OnInit, OnDestroy {
   subscriptionPlan;
-  planDetails: PlanDetails =  new PlanDetails();
+  planDetails: any;
+  addonsList: any;
   skeletonLoader = false;
   subscriptionList = [];
   billingCycle = 'monthly';
+  billingAddonCycle = 'monthly';
   stripe = (window as any).Stripe(environment.stripePublishablekey);
   cartItem = [];
   // subscriptionPlanType = 'CCPA';
@@ -42,6 +46,9 @@ export class PricingComponent implements OnInit, OnDestroy {
   alertType: any;
   percentOff = 0;
   promoCode: any;
+ activeData = { base: {maxPrice : 0, maxPlanID: '', cycle: 'monthly'},
+ addons: {maxPrice : 0, maxPlanID: '', cycle: 'monthly'}
+};
   constructor(private router: Router,
               private loading: NgxUiLoaderService,
               private dataService: DataService,
@@ -50,12 +57,55 @@ export class PricingComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.onGetActivePlan();
     this.onGetPlanDetails();
     this.onGetUserEmail();
     // this.onSetValue();
-    this.onGetCurrentPlan();
+    // this.onGetCurrentPlan();
     // const div = document.querySelector('#main');
     // div.classList.remove('container');
+  }
+
+  onGetActivePlan() {
+    this.loading.start('2')
+    this.skeletonLoader = true;
+    this.billingService.getActivePlan(this.constructor.name, moduleName.manageSubscriptionsModule).subscribe( (res: any) => {
+      this.loading.stop('2');
+      this.skeletonLoader = false;
+      this.onSelectActivePlan(res.response)
+    }, err => {
+      this.loading.stop('2');
+      this.skeletonLoader = false;
+      this.isOpen = true;
+      this.alertMsg = err;
+      this.alertType = 'danger';
+    })
+}
+
+onSelectActivePlan(record) {
+  let activeData = this.activeData;
+    for (const data of record) {
+      if (data.active && data.planDetails.type === 0) {
+        if(data.planDetails.price > activeData.base.maxPrice) {
+          activeData.base.maxPrice = data.planDetails.price;
+          activeData.base.maxPlanID = data.planDetails.stripe_plan_id;
+          activeData.base.cycle = data.planDetails.cycle;
+          this.billingCycle = data.planDetails.cycle;
+        }
+      } else {
+        if(data.planDetails.price > activeData.addons.maxPrice) {
+          activeData.addons.maxPrice = data.planDetails.price;
+          activeData.addons.maxPlanID = data.planDetails.stripe_plan_id;
+          activeData.addons.cycle = data.planDetails.cycle;
+          this.billingAddonCycle = data.planDetails.cycle;
+        }
+      }
+    }
+
+   this.activeData = activeData;
+   console.log('activeData', activeData)
+   this.subscriptionList = this.planDetails.base[`${this.billingCycle}`];
+   this.addonsList = this.planDetails.addons[`${this.billingCycle}`];
   }
   onGetPlanDetails() {
     this.loading.start();
@@ -64,7 +114,8 @@ export class PricingComponent implements OnInit, OnDestroy {
       this.loading.stop();
       this.skeletonLoader = false;
       this.planDetails = res.response;
-      this.subscriptionList = res.response.monthly;
+      this.onSetPlans(res.response);
+      // this.subscriptionList = res.response.monthly;
     }, error => {
       this.loading.stop();
       this.skeletonLoader = false;
@@ -72,6 +123,10 @@ export class PricingComponent implements OnInit, OnDestroy {
       this.alertMsg = error;
       this.alertType = 'danger';
     });
+  }
+  onSetPlans(plansData){
+    this.subscriptionList = plansData.base[`${this.billingCycle}`];
+    this.addonsList = plansData.addons[`${this.billingCycle}`];
   }
   ngOnDestroy() {
     const div = document.querySelector('#main');
@@ -131,10 +186,14 @@ export class PricingComponent implements OnInit, OnDestroy {
   onSelectBillingCycle(e) {
     if (e.checked) {
       this.billingCycle = 'yearly';
-      this.subscriptionList = this.planDetails[`${this.billingCycle}`];
+      this.billingAddonCycle = 'yearly';
+      this.subscriptionList = this.planDetails.base[`${this.billingCycle}`];
+      this.addonsList = this.planDetails.addons[`${this.billingCycle}`];
     } else {
       this.billingCycle = 'monthly';
-      this.subscriptionList = this.planDetails[`${this.billingCycle}`];
+      this.billingAddonCycle = 'monthly';
+      this.subscriptionList = this.planDetails.base[`${this.billingCycle}`];
+      this.addonsList = this.planDetails.addons[`${this.billingCycle}`];
     }
   }
   onGetCurrentPlan() {
@@ -265,4 +324,20 @@ export class PricingComponent implements OnInit, OnDestroy {
     this.percentOff = 0;
     this.promoCode = null;
   }
+  onGenerateSessionID() {
+    this.loading.start()
+    this.billingService.getManageSessionID(this.constructor.name, moduleName.manageSubscriptionsModule).subscribe( (res: any) => {
+      this.loading.stop();
+      if(res.status === 200) {
+        window.open(res.response, '_blank');
+      }
+
+    }, err => {
+      this.loading.stop();
+      this.isOpen = true;
+      this.alertMsg = err;
+      this.alertType = 'danger';
+    })
+}
+
 }

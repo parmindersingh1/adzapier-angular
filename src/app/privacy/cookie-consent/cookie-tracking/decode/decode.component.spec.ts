@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ManageSubscriptionComponent } from './manage-subscription.component';
+import { DecodeComponent } from './decode.component';
 
-describe('ManageSubscriptionComponent', () => {
-  let component: ManageSubscriptionComponent;
-  let fixture: ComponentFixture<ManageSubscriptionComponent>;
+describe('DecodeComponent', () => {
+  let component: DecodeComponent;
+  let fixture: ComponentFixture<DecodeComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ManageSubscriptionComponent ]
+      declarations: [ DecodeComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ManageSubscriptionComponent);
+    fixture = TestBed.createComponent(DecodeComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

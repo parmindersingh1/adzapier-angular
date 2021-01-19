@@ -18,6 +18,10 @@ export class HeaderComponent implements OnInit {
   @ViewChild('confirmTemplate', { static: false }) confirmModal: TemplateRef<any>;
   modalRef: BsModalRef;
   isCollapsed = true;
+  isMobileMenuCollapsed = false;
+  isMobilePropertyCollapsed = true;
+  isMobileDashboardMenuCollapsed = true;
+  isMobilePrivacyMenuCollapsed = true;
   accessHeader: boolean;
   public currentLoggedInUser: string;
   uid: string;
@@ -40,7 +44,7 @@ export class HeaderComponent implements OnInit {
   publicNavigationMenu: any;
   currentProperty: any;
   navToggleStatus = false;
-  close: boolean;
+  close: boolean = true;
   userRole: string;
   propertyList: any;
   listOfProp: any;
@@ -56,6 +60,12 @@ export class HeaderComponent implements OnInit {
   isSublinkActive = false;
   selectedSubmenu: any = [];
   notificationList: any = [];
+  notificationsNumber: number;
+  isNotificationBellClicked = false;
+  resCID: any;
+  resuserCID: any;
+  navbarOpen = false;
+  addMobileMenuWidth: any;
   constructor(
     private router: Router,
     private activatedroute: ActivatedRoute,
@@ -73,6 +83,7 @@ export class HeaderComponent implements OnInit {
         this.getLoggedInUserDetails();
         this.loadOrganizationList();
         this.loadOrganizationWithProperty();
+        this.loadNotification();
       }
     });
 
@@ -81,6 +92,7 @@ export class HeaderComponent implements OnInit {
       if (this.isOrganizationUpdated) {
         this.loadOrganizationWithProperty();
         this.currentSelectedProperty();
+        this.loadNotification();
       }
     });
     this.router.routeReuseStrategy.shouldReuseRoute = () => {
@@ -113,7 +125,7 @@ export class HeaderComponent implements OnInit {
         this.userRole = this.currentUser.response.role;
         this.userID = this.currentUser.response.uid;
         this.loadOrganizationWithProperty();
-
+        this.loadNotification();
       }
     });
     this.orgservice.emitUpdatedOrgList.subscribe((data) => {
@@ -130,7 +142,7 @@ export class HeaderComponent implements OnInit {
       }, {
         showlink: 'Contact Us', routerLink: '/contactus'
       }];
-    this.loadNotification();
+
   }
 
   logout() {
@@ -138,7 +150,7 @@ export class HeaderComponent implements OnInit {
     this.isCollapsed = true;
     localStorage.removeItem('currentUser');
     // this.orgservice.removeControls();
-    // this.userService.getCurrentUser.unsubscribe();
+    this.userService.getCurrentUser.unsubscribe();
     this.router.navigate(['/login']);
     location.reload();
 
@@ -181,7 +193,7 @@ export class HeaderComponent implements OnInit {
           items: [
             { label: 'User Preferences', routerLink: '/userprofile', icon: 'edit-3' },
             { label: 'Organizations', routerLink: 'settings/organizations', icon: 'activity' },
-            { label: 'Billing', routerLink: 'settings/billing', icon: 'credit-card' },
+            { label: 'Billing', routerLink: 'settings/billing/manage', icon: 'credit-card' },
             { label: 'Settings', routerLink: '/settings', icon: 'settings' },
             { label: 'Help Center', routerLink: '/pagenotfound', icon: 'help-circle' },
             { label: 'Signout', routerLink: '/login', icon: 'log-out' }
@@ -208,7 +220,7 @@ export class HeaderComponent implements OnInit {
             { showlink: 'Consent Tracking', routerLink: '/cookie-consent/cookie-tracking', icon: 'fas fa-file-contract feather-16' },
             { showlink: 'Setup', routerLink: '/cookie-consent/cookie-banner/setup', icon: 'fas fa-wrench feather-16' }
           ]
-        }, { showlink: 'Billing', routerLink: 'settings/billing' }];
+        }, { showlink: 'Billing', routerLink: 'settings/billing/manage' }];
     }, (error) => {
       console.log(error);
     });
@@ -222,6 +234,7 @@ export class HeaderComponent implements OnInit {
     this.isCollapsed = false;
     this.userService.getLoggedInUserDetails(this.constructor.name, moduleName.headerModule).subscribe((data) => {
       this.currentUser = data;
+      this.resuserCID = this.currentUser.response.cID;
       this.currentLoggedInUser = this.currentUser.response.firstname + ' ' + this.currentUser.response.lastname;
       this.currentLoggedInUser = this.currentLoggedInUser.toLowerCase().split(' ')
         .map((s) => s.charAt(0).toUpperCase() + s.substring(1)).join(' ');
@@ -253,13 +266,15 @@ export class HeaderComponent implements OnInit {
     } else {
       this.router.navigate([this.router.url]);
     }
-
+    this.openNav();
   }
 
   isPropSelected(selectedItem): boolean {
-    this.isPropertySelected = this.selectedOrgProperties.filter((t) => t.property_id === selectedItem.property_id).length > 0
-      ? true : false;
-    return this.isPropertySelected;
+    if (!this.isProperyDisabled(selectedItem)) {
+      this.isPropertySelected = this.selectedOrgProperties.filter((t) => t.property_id === selectedItem.property_id).length > 0
+        ? true : false;
+      return this.isPropertySelected;
+    }
   }
 
   isOrgSelected(selectedItem): boolean {
@@ -332,18 +347,17 @@ export class HeaderComponent implements OnInit {
   }
 
   openNav() {
-    this.close = true;
+    this.close = !this.close;
+    this.addMobileMenuWidth = this.addMenuWidth(); // to avoid countinous background call
   }
 
-  closeNav() {
-    this.close = false;
-  }
 
   loadOrganizationWithProperty() {
     this.loading.start();
     this.orgservice.getOrganizationWithProperty().subscribe((data) => {
       this.loading.stop();
       this.orgPropertyMenu = data.response;
+      this.resCID = data.response.cID;
       if (data.response.length > 0) {
         this.rearrangeFormSequence(this.orgPropertyMenu);
         this.selectedOrgProperties.length = 0;
@@ -353,21 +367,19 @@ export class HeaderComponent implements OnInit {
             this.router.navigate(['settings/organizations/details/' + this.orgPropertyMenu[0].id]);
             return false;
           } else {
-            this.activeProp = this.orgPropertyMenu[0].property[0].property_name;
+            let activePro = this.filterProp(this.orgPropertyMenu);
+            const proIndex = activePro[0].property.findIndex((t) => t.property_active === true);
+            this.activeProp = activePro[0].property[proIndex];
             const obj = {
-              organization_id: this.orgPropertyMenu[0].id,
-              organization_name: this.orgPropertyMenu[0].orgname,
-              property_id: this.orgPropertyMenu[0].property[0].property_id,
-              property_name: this.orgPropertyMenu[0].property[0].property_name,
+              organization_id: activePro[0].id,
+              organization_name: activePro[0].orgname,
+              property_id: activePro[0].property[proIndex].property_id,
+              property_name: activePro[0].property[proIndex].property_name,
               user_id: this.userID
             };
             this.orgservice.changeCurrentSelectedProperty(obj);
             // this.orgservice.getSelectedOrgProperty.emit(obj);
             //  this.firstElement = false;
-            const orgIndex = this.selectedOrgProperties.findIndex((t) => t.organization_id === obj.organization_id);
-            if (orgIndex === -1) {
-              this.selectedOrgProperties.push(obj);
-            }
             this.orgservice.setCurrentOrgWithProperty(obj);
           }
         } else {
@@ -384,6 +396,17 @@ export class HeaderComponent implements OnInit {
 
   getColumnCountSize() {
     return this.orgPropertyMenu.length < 3 ? 2 : 4;
+  }
+
+  filterProp(propArry) {
+    let activePro = [];
+    for (let i = 0; i < propArry.length; i++) {
+      if (propArry[i].property.some((t) => t.property_active === true)) {
+        activePro.push(propArry[i]);
+        break;
+      }
+    }
+    return activePro;
   }
 
   checkPropertyStatus(prop): boolean {
@@ -458,8 +481,8 @@ export class HeaderComponent implements OnInit {
     if (link.indexOf('workflow') !== -1) {
       return false;
     } else if (link.indexOf('cookie') !== -1 || link.indexOf('privacy') !== -1 || link.indexOf('webform') !== -1 ||
-    link.indexOf('ccpa') !== -1) {
-        return true;
+      link.indexOf('ccpa') !== -1) {
+      return true;
     }
   }
 
@@ -474,17 +497,17 @@ export class HeaderComponent implements OnInit {
       }
       return this.isPrivacyActivelinkMatched = false;
     } else if (navLink.indexOf('/settings') >= 0) {
-      this.isBillingActivelinkMatched = false;
       if (menu.icon !== undefined) {
         this.activateSublink(menu);
       }
+    } else {
+      this.isBillingActivelinkMatched = false;
+      this.openNav();
     }
   }
 
   activateSublink(selectedItem): boolean {
-    this.isBillingActivelinkMatched = false;
-    return this.isSublinkActive = this.selectedSubmenu.some((t) =>
-      t.showlink === selectedItem.showlink && t.icon === selectedItem.icon);
+       return this.isSublinkActive = this.selectedSubmenu.some((t) => t.showlink === selectedItem.showlink && t.icon === selectedItem.icon);
   }
 
   confirm() {
@@ -500,7 +523,14 @@ export class HeaderComponent implements OnInit {
   loadNotification() {
     this.userService.getNotification(this.constructor.name, moduleName.headerModule).subscribe((data) => {
       this.notificationList = data.response;
+      this.showNotificationNumber(this.notificationList);
     });
+  }
+
+  showNotificationNumber(list) {
+    if (list.filter((t) => t.read === true).length !== 0) {
+      return this.notificationsNumber = list.filter((t) => t.read === true).length;
+    }
   }
 
   clearNotification(requestid, purpose: string, status: boolean) {
@@ -508,7 +538,7 @@ export class HeaderComponent implements OnInit {
     if (purpose === 'read') {
       obj = {
         id: [requestid],
-        read: status, // false,
+        read: !status, // false,
       };
     } else {
       obj = {
@@ -525,4 +555,110 @@ export class HeaderComponent implements OnInit {
   isProperyDisabled(item): boolean {
     return item.property_active === null || false;
   }
+
+  readAllNotification(reqdata) {
+    const readIds = [];
+    for (const key of Object.keys(reqdata)) {
+      readIds.push(reqdata[key].id);
+    }
+    let obj;
+    obj = {
+      id: readIds,
+      read: false, // false,
+    };
+    this.userService.updateNotification(this.constructor.name, moduleName.headerModule, obj).subscribe((data) => {
+      console.log(data.response);
+      this.loadNotification();
+    });
+  }
+
+  addColumncount(): object {
+    if (this.orgPropertyMenu.length < 2) {
+      return { 'column-count': 1 }
+    } else if (this.orgPropertyMenu.length <= 2) {
+      return { 'column-count': 2 }
+    } else if (this.orgPropertyMenu.length >= 4 && this.orgPropertyMenu.length <= 5) {
+      return { 'column-count': 2 }
+    } else if (this.orgPropertyMenu.length >= 4 && this.orgPropertyMenu.length <= 8) {
+      return { 'column-count': 3 }
+    } else if (this.orgPropertyMenu.length >= 8) {
+      return { 'column-count': 4 }
+    }
+
+  }
+
+  toggleSideNavbar() {
+    this.navbarOpen = !this.navbarOpen;
+  }
+
+
+  onMobileMenuClicked(link) {
+    
+    if (link === 'Dashboard' && this.isMobileDashboardMenuCollapsed) {
+      this.isMobileDashboardMenuCollapsed = false;
+      this.isMobilePrivacyMenuCollapsed = true;
+      this.isMobilePropertyCollapsed = true;
+    } else if (link === 'Dashboard' && !this.isMobileDashboardMenuCollapsed) {
+      this.isMobileDashboardMenuCollapsed = true;
+      this.isMobilePrivacyMenuCollapsed = true;
+      this.isMobilePropertyCollapsed = true;
+    } else if (link === 'Privacy' && this.isMobilePrivacyMenuCollapsed) {
+      this.isMobilePrivacyMenuCollapsed = false;
+      this.isMobileDashboardMenuCollapsed = true;
+      this.isMobilePropertyCollapsed = true;
+    }  else if (link === 'Privacy' && !this.isMobilePrivacyMenuCollapsed) {
+      this.isMobileDashboardMenuCollapsed = true;
+      this.isMobilePrivacyMenuCollapsed = true;
+      this.isMobilePropertyCollapsed = true;
+    } else {
+      this.goto(link); // for billing link
+      this.openNav();
+    }
+  }
+
+  collapseStatus(activeIndex): boolean {
+    if (activeIndex === 0) {
+      return activeIndex == 0 && this.isMobileDashboardMenuCollapsed;
+    } else {
+      return activeIndex == 1 && this.isMobilePrivacyMenuCollapsed;
+    }
+  }
+
+  onMobilePropertyMenuClicked(status) {
+    if (status) {
+      this.isMobilePropertyCollapsed = !this.isMobilePropertyCollapsed;
+      this.isMobilePrivacyMenuCollapsed = true;
+      this.isMobileDashboardMenuCollapsed = true;
+    }
+
+  }
+
+  addMenuWidth(){
+    let textLength;
+    if(this.currentOrganization !== undefined){
+      textLength = this.currentOrganization.length;
+     // console.log(textLength,'textLength..');
+      let generatedWidth = (textLength * 10) <= 250 ? 250 : textLength * 10;
+      let addStyle = { 
+        'width': generatedWidth + 'px',
+        'left': !this.close ? 0 : '-' +  generatedWidth + 'px',
+        'transform': !this.close ? 'translateX(0)' : 'translateX(-'+ generatedWidth +'px)',
+        'padding': 0
+       };
+       return addStyle;
+    }else{
+      let addStyle = { 
+        'width': 260 + 'px',
+        'left': !this.close ? 0 : '-' +  26 * 10 + 'px',
+        'transform': !this.close ? 'translateX(0)' : 'translateX(-'+ 26 * 10 +'px)',
+        'padding': 0
+       };
+       return addStyle;
+    }
+  }
+
+  convertAmpersand(item){
+    return item.replace(/&amp;/g,'&');
+  }
+
 }

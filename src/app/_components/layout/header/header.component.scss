@@ -76,7 +76,7 @@ i {
 }
 .notification-menu-right{
   right: 42px !important;
-  width: 250px;
+  width: 35%;
   top: 59px !important;
   left: auto !important;
   position: absolute;
@@ -114,6 +114,11 @@ i {
 .dropdown-item{
   padding: 0.25rem 0;
   cursor: pointer;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: pointer;
+  display: inline-block;
+  overflow: hidden !important;
   // justify-content: space-between;
   // display: flex;
 }
@@ -124,7 +129,7 @@ i {
 
 ul.dropdown-menu.propMenu.show {
   display: block;
-  column-count: 4;
+  // column-count: 4;
   // width: 60rem;
 }
 
@@ -176,6 +181,9 @@ ul.dropdown-menu.propMenu.show > li > ul {
 
 .dropdown-item.active, .dropdown-item:active {
   background: none !important;
+  text-overflow: ellipsis;
+  width: 200px;
+  overflow: hidden;
 }
 
 .activeFirstIndex {
@@ -275,7 +283,8 @@ a.nav-link:hover {
 .feather-20{
   width: 20px;
   height: 20px;
-  margin: 0 -15px 0 0;
+  margin: 0 -8px 0 0;
+  z-index: 1;
 }
 
 .line-partition {
@@ -312,6 +321,7 @@ a.nav-link:hover {
 
 .show {
   display: block;
+  left: -39px;
 }
 
 .sidebar-header {
@@ -381,16 +391,21 @@ a.nav-link:hover {
 /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
 @media screen and (max-height: 450px) {
   .sidenav {padding-top: 15px;}
-  .sidenav a {font-size: 18px;}
+  .sidenav a {
+    font-size: 14px;
+    padding: 8px 0;
+  }
 }
 
 .addWidth {
-  //   width: 250px;
+  width: 360px;
+  transform: translateX(0);
 }
 
 .removeWidth {
   width: 0;
   padding: 0;
+  transform: translateX(-360px);
 }
 
 .addWidth .sidebar {
@@ -409,6 +424,7 @@ a.nav-link:hover {
   }
   .navbar-expand-lg .navbar-toggler {
     display: block !important;
+    outline: none;
   }
 }
 
@@ -601,7 +617,7 @@ a.nav-link:hover {
 }
 
 .cross-icon {
-  margin: 2px 4px 0 0;
+  margin: 0px 4px 0 0;
   font-size: 12px;
   height: 14px;
 }
@@ -638,20 +654,35 @@ a.nav-link:hover {
 .notification-wrapper {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
-  padding: 4px 5px 1px 5px;
+  justify-content: space-evenly;
+  padding: 5px 25px 1px 5px;
+  font-size: 13px;
+  margin-bottom: 10px;
 }
 
 .notification-wrapper:hover {
   background: #f3f3f3;
   color:#222;
   border-radius: 5px;
+  width: 100%;
+  color: #333;
 }
 
 .notification-wrapper:hover .cross-icon {
   color:#000;
+  font-weight: bold;
 }
 
+.notification-time {
+  color: #7e7b7b;
+  font-weight: normal;
+}
+
+.notification-task-time-wrapper {
+  display: flex;
+  flex-direction: column;
+
+}
 
 ::ng-deep .tooltip {
   top: 6px !important;
@@ -677,4 +708,176 @@ a.nav-link:hover {
 .disableproperty {
   color: #b3b3b3 !important;
   cursor: auto;
+}
+
+
+:host ::ng-deep bs-dropdown-container.dropdown > .dropdown-menu {
+  padding: 10px 25px 20px 25px !important;
+  border-radius: 0 !important;
+  margin: 0.68rem 0 0 !important;
+  border: 1px solid rgba(192, 204, 218, 0.53) !important;
+  left: -39px !important;
+  right: auto !important;
+}
+
+.txt-right {
+  text-align: right;
+}
+
+button.btn.btn-link:hover {
+  text-decoration: underline;
+}
+
+.example-viewport {
+  height: 200px;
+  width: 100%;
+  color: #333;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 5px 5px 1px 5px;
+  font-size: 13px;
+}
+
+.example-item {
+  height: 50px;
+}
+
+.notification-number {
+  position: absolute;
+  right: 58px;
+  top: 4px;
+  border: 2px solid #fff;
+  padding: 0px 8px;
+  color: #fff;
+  font-size: 11px;
+  text-align: center;
+  line-height: 22px;
+  background: #dc3545;
+  border-radius: 13px;
+}
+
+@media(min-width:767px) and (max-width:1024px) {
+  .nav-mr {
+    margin-left: 0;
+  }
+ 
+}
+
+@media(min-width:320px) and (max-width:667px) {
+  ul.navbar-nav > a.nav-link.dropdown-link::after {
+    width: 10px;
+    height: 10px;
+    position: relative;
+    right: -13px;
+    float: right;
+  }
+
+  .menuplus-icon {
+    transform: rotate(45deg);
+    height: 16px !important;
+    width: 16px !important;
+    outline: none;
+  }
+
+  .nav-item {
+    margin:0 10px 0 0;
+  }
+
+  .navbar-right {
+    position: absolute;
+    right: 0;
+  }
+
+  .notification-number {
+    position: absolute;
+    right: -10px;
+    top: -8px;
+  }
+
+  .responsive-notification {
+    position: absolute;
+    right: 75px;
+    top: -12px
+  }
+
+  .site-content {
+    padding: 20px 5px !important;
+  }
+
+  .dropdown-menu ul li {
+    list-style-type: none;
+  }
+
+  ul.dropdown-menu.propMenu.show {
+    border: 0 !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+  }
+
+  ul.dropdown-menu.propMenu.show > li > a {
+    font-weight: bold;
+    margin-bottom: 5px;
+    border-radius: 0;
+    border-bottom: 1px solid rgb(104, 13, 13);
+    font-size: 12px !important;
+    display: flex;
+    justify-content: space-between;
+    text-overflow: ellipsis;
+  }
+
+  ul.dropdown-menu.propMenu.show > li {
+    // width: 250px;
+  }
+
+  .sidebar {
+    background: #fff;
+  }
+
+  .sidenav a {
+    padding: 8px 8px 8px 0;
+  }
+
+  .sidenav a.nav-link::after {
+    content: '';
+    right: 20px;
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-right: 1.5px solid #8392a5;
+    border-bottom: 1.5px solid #8392a5;
+    display: inline-block;
+    transform: rotate(45deg);
+    margin-left: auto;
+    transition: all 0.2s ease-in-out;
+  }
+
+  .sidenav .nav-item:last-child .nav-link::after {
+    border: 0;
+  }
+
+  .dropdown-menu {
+    padding: 0 !important;
+    border: 0 !important;
+    box-shadow: none;
+    margin: 0!important;
+  }
+
+  .dropdown-menu-right {
+    padding: 10px 25px 20px 25px !important;
+    border: 1px solid rgba(192, 204, 218, 0.53) !important;
+  }
+
+  .dropdown-item.active{
+    background: none !important;
+    border-radius: 0;
+  }
+
+  .sidebar-components .sidebar-body {
+    padding: 0px 25px;
+    width: 100%;
+    max-height: 600px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+ }
 }

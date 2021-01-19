@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { CompanyService } from 'src/app/company.service';
 import { TablePaginationConfig } from 'src/app/_models/tablepaginationconfig';
+import { Orglist } from 'src/app/_models/org';
 @Component({
   selector: 'app-orgpage',
   templateUrl: './orgpage.component.html',
@@ -107,7 +108,7 @@ export class OrgpageComponent implements OnInit {
     // this.paginationConfig.currentPage = event;
     const pagelimit = '?limit=' + this.paginationConfig.itemsPerPage + '&page=' + this.paginationConfig.currentPage;
     this.loading.start();
-    this.orgservice.orglist(pagelimit).subscribe((data) => {
+    this.orgservice.orglist(pagelimit).subscribe((data: Orglist) => {
       this.loading.stop();
       const key = 'response';
       this.orgList = data[key];
@@ -131,7 +132,7 @@ export class OrgpageComponent implements OnInit {
   loadOrganizationDetails(org) {
     this.orgDetails = [];
     this.showOrgDetails = !this.showOrgDetails;
-    this.orgservice.viewOrganizationDetails(org.orgid).subscribe((data) => {
+    this.orgservice.viewOrganizationDetails(org.orgid).subscribe((data: any) => {
       const key = 'response';
       this.orgDetails.push(data[key]);
     }, (error) => {

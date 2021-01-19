@@ -46,6 +46,35 @@ export class CompanyService {
     }));
   }
 
+
+  generateToken(componentName, moduleName, cId): Observable<any> {
+    const path = '/company/create-app-id/' + cId;
+    return this.httpClient.get<any>(environment.apiUrl + path).pipe(shareReplay(1), catchError(error => {
+      this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.inviteUser, componentName, moduleName, path);
+      return throwError(error);
+    }));
+  }
+
+
+  updateToken(componentName, moduleName, cId): Observable<any> {
+    const path = '/company/update-app-id/' + cId;
+    return this.httpClient.get<any>(environment.apiUrl + path).pipe(shareReplay(1), catchError(error => {
+      this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.inviteUser, componentName, moduleName, path);
+      return throwError(error);
+    }));
+  }
+
+
+  getToken(componentName, moduleName, cId): Observable<any> {
+    const path = '/company/get-app-id/' + cId;
+    return this.httpClient.get<any>(environment.apiUrl + path).pipe(shareReplay(1), catchError(error => {
+      this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.inviteUser, componentName, moduleName, path);
+      return throwError(error);
+    }));
+  }
+
+
+
   updateUserRole(componentName, moduleName, reqestObj): Observable<any> {
     const path = '/invite/user';
     return this.httpClient.put<any>(environment.apiUrl + path, reqestObj).pipe(catchError(error => {
@@ -77,8 +106,8 @@ export class CompanyService {
       }));
   }
 
-  getUserList(componentName, moduleName): Observable<any> {
-    const path = '/invite/user/list';
+  getUserList(query, componentName, moduleName): Observable<any> {
+    const path = '/invite/user/list?query=' + query;
     return this.httpClient.get<any>(environment.apiUrl + path)
       .pipe(catchError(error => {
         this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.getUserList, componentName, moduleName, path);

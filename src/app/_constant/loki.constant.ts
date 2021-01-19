@@ -63,5 +63,8 @@ export enum LokiFunctionality {
   addCCPADataActivity = 'addCCPADataActivity',
   getNotification = 'getNotification',
   updateNotification = 'updateNotification',
-  getUserList = 'getUserList'
+  getUserList = 'getUserList',
+  viewClientsFileAttachments = 'viewClientsFileAttachments',
+  viewSubtaskFileAttachements = 'viewSubtaskFileAttachements',
+  rejectDSARRequest = 'rejectDSARRequest'
 }

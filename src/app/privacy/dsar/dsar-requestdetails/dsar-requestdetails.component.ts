@@ -1,7 +1,9 @@
-import { Component, OnInit, ViewChild, ElementRef, Renderer2, TemplateRef, AfterContentInit, AfterContentChecked,
-AfterViewInit, ChangeDetectorRef } from '@angular/core';
+import {
+  Component, OnInit, ViewChild, ElementRef, Renderer2, TemplateRef, AfterViewInit, AfterViewChecked,
+  ChangeDetectorRef
+} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { OrganizationService } from 'src/app/_services';
+import { AuthenticationService, OrganizationService, UserService } from 'src/app/_services';
 import { DsarRequestService } from 'src/app/_services/dsar-request.service';
 import { NgbModal, NgbNavChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 import { FormGroup, FormBuilder, FormControl, Validators, NgForm } from '@angular/forms';
@@ -20,17 +22,19 @@ import { formatDate } from '@angular/common';
   templateUrl: './dsar-requestdetails.component.html',
   styleUrls: ['./dsar-requestdetails.component.scss']
 })
-export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, AfterContentChecked {
+export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, AfterViewInit, AfterViewChecked {
   @ViewChild('toggleDayleftdiv', { static: true }) toggleDayleftdiv: ElementRef;
-  @ViewChild('btnDaysLeft', { static: true }) btnDaysLeft: ElementRef;
+  // @ViewChild('btnDaysLeft', { static: true }) btnDaysLeft: ElementRef;
   @ViewChild('customDaysInput', { static: false }) customDaysInput: ElementRef;
   @ViewChild('confirmTemplate', { static: false }) confirmModal: TemplateRef<any>;
   @ViewChild('filePreview', { static: true }) filePreview: ElementRef;
   @ViewChild('panel', { static: true }) public panel: ElementRef<any>;
-  @ViewChild('workflowStageScroller', {static: false}) public workflowStageScroller: ElementRef<any>;
+  @ViewChild('workflowStageScroller', { static: true, read: ElementRef }) public workflowStageScroller: ElementRef<any>;
   @ViewChild('confirmDeleteTemplate', { static: false }) confirmDeleteModal: TemplateRef<any>;
-  
+  @ViewChild('extendDays', { static: true }) extendDaysModal: TemplateRef<any>;
+  @ViewChild('rejectRequest', { static: true }) rejectRequestModal: TemplateRef<any>;
   // @ViewChild('subTaskForm', null) subTaskTempForm: NgForm;
+  @ViewChild('userAuthenticationAlert', { static: false }) userAuthenticationModal: TemplateRef<any>;
 
   confirmationForm: FormGroup;
   modalRef: BsModalRef;
@@ -81,6 +85,8 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
   customFields: any;
   quillEditorText: FormGroup;
   quillEditorEmailText: FormGroup;
+  quillEditorExtendDays: FormGroup;
+  quillEditorRejectRequest: FormGroup;
   emailTemplates: any = [];
   selectedTemplate: any;
   private fb: FormBuilder;
@@ -159,6 +165,7 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
   filePreviewURL: any;
   isEmailVerified = false;
   isAttachmentExist: boolean;
+  attachedfileName: string;
   activitytype: any;
   bsValue: Date = null;
   subtaskDeadlineDate: Date;
@@ -168,6 +175,8 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
   selectedStageContent: string;
   bsErrordate: any;
   skeletonLoading = true;
+  skeletonCustomLoading = true;
+  skeletonStageLoading = true;
   subTaskFields: IsubtaskType;
   translateX: number = 0;
   leftbtnVisibility = false;
@@ -175,6 +184,21 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
   scrollLimit: number;
   showStageTitle: string;
   showStageGuidanceText: string;
+  dueInDays: number;
+  multipleFile: any = [];
+  subtaskAttachments: any = [];
+  subtaskFileID: any;
+  queryCompanyID: any;
+  queryOrgID: any;
+  queryPropID: any;
+  currentManagedcID: any;
+  resuserCID: any;
+  userData: any;
+  emailVerificationStatus = false;
+  isExtenddasysubmitted = false;
+  isRejectrequestsubmitted = false;
+  isUserNotMatched: boolean = false;
+  reasonList: any = [];
   constructor(private activatedRoute: ActivatedRoute,
               private router: Router,
               private orgService: OrganizationService,
@@ -187,16 +211,19 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
               private renderer2: Renderer2,
               private bsmodalService: BsModalService,
               private loading: NgxUiLoaderService,
-              private cdRef: ChangeDetectorRef
+              private cdRef: ChangeDetectorRef,
+              private userService: UserService,
+              private authService: AuthenticationService
   ) {
-    this.renderer2.listen('window', 'click', (e: Event) => {
-      if (e.target !== this.toggleDayleftdiv.nativeElement &&
-        e.target !== this.btnDaysLeft.nativeElement && e.target !== this.customDaysInput.nativeElement) {
-        this.isListVisible = false;
-      }
-    });
+    // this.renderer2.listen('window', 'click', (e: Event) => {
+    //   if (e.target !== this.toggleDayleftdiv.nativeElement &&
+    //     e.target !== this.btnDaysLeft.nativeElement && e.target !== this.customDaysInput.nativeElement) {
+    //     this.isListVisible = false;
+    //   }
+    // });
     this.paginationConfig = { itemsPerPage: this.pageSize, currentPage: this.p, totalItems: this.totalCount, id: 'userPagination' };
     this.activitytype = 0; // 0 = private (internal), 1 = public
+    // this.getCurrentLoggedInUser();
   }
 
   ngOnInit() {
@@ -210,7 +237,10 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
     };
     this.bsValue = new Date();
     this.activatedRoute.paramMap.subscribe(params => {
-      this.requestID = params.get('id');
+      this.requestID = params.get('reqid');
+      this.queryCompanyID = params.get('companyid');
+      this.queryOrgID = params.get('orgid');
+      this.queryPropID = params.get('propid');
     });
 
     this.quillEditorText = new FormGroup({
@@ -220,6 +250,14 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
       dropdownEmailTemplate: [''],
       editorEmailMessage: ['', [Validators.required]],
       emailAttachment: ['']
+    });
+    this.quillEditorExtendDays = new FormGroup({
+      customdays: new FormControl('', Validators.required),
+      editorReason: new FormControl('', Validators.required)
+    });
+    this.quillEditorRejectRequest = new FormGroup({
+      reason: new FormControl('', Validators.required),
+      editorComments: new FormControl('', Validators.required)
     });
     this.loadActivityLog(this.requestID);
     this.loadEmailLog(this.requestID);
@@ -245,7 +283,7 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
     this.confirmationForm = this.formBuilder.group({
       userInput: ['', [Validators.required]]
     });
-
+    this.getCurrentLoggedInUser();
     this.getSelectedOrgIDPropertyID();
 
 
@@ -258,12 +296,15 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
     this.preFillData();
     // this.onChanges();
     this.minDate = new Date();
+    this.loadReasonList();
   }
   get addActivity() { return this.quillEditorText.controls; }
   get addEmailPost() { return this.quillEditorEmailText.controls; }
   get editRequest() { return this.editRequestDetailForm.controls; }
   get subTaskResponse() { return this.subTaskResponseForm.controls; }
   get confirmDelete() { return this.confirmationForm.controls; }
+  get dayExtend() { return this.quillEditorExtendDays.controls; }
+  get requestReject() { return this.quillEditorRejectRequest.controls }
   getSelectedOrgIDPropertyID() {
     this.orgService.currentProperty.subscribe((response) => {
       if (response !== '') {
@@ -287,11 +328,24 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
     this.router.navigate(['privacy/dsar/dsar-requests']);
   }
 
+  getCurrentLoggedInUser() {
+    this.userService.getLoggedInUserDetails(this.constructor.name, moduleName.headerModule).subscribe((data) => {
+      this.userData = data;
+      this.resuserCID = this.userData.response.cID;
+      if (this.resuserCID !== undefined) {
+        if (this.queryCompanyID !== this.resuserCID) {
+          this.openModal(this.userAuthenticationModal);
+        }
+      }
+    });
+  }
+
   loadDataRequestDetails() {
 
     this.dsarRequestService.getDSARRequestDetails(this.currentManagedOrgID, this.currrentManagedPropID, this.requestID,
       this.constructor.name, moduleName.dsarRequestModule)
       .subscribe((data) => {
+      if (data.response !== "No data found.") {
         this.requestDetails.push(data.response);
         this.customFields = data.response.custom_data;
         this.respApprover = data.response.approver_firstname + ' ' + data.response.approver_lastname;
@@ -312,11 +366,13 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
         this.workflowId = data.response.workflow_id;
         this.reqAcceptingagent = data.response.req_accepting_agent;
         this.riskFactorText = data.response.risk_factor;
-        this.currentWorkflowStage = data.response.workflow_stage || '';
+        this.currentWorkflowStage = data.response.workflow_stage || 'New';
         this.currentWorkflowStageID = data.response.workflow_stage_id || '';
         this.isEmailVerified = data.response.email_verified;
         this.isemailverificationRequired = data.response.required_email_verification;
         this.isAttachmentExist = this.isFileExist(data.response.upload_exist);
+        this.attachedfileName = data.response.upload_exist;
+        this.skeletonCustomLoading = false;
         this.getCustomFields(this.customFields);
         this.getWorkflowStages(this.workflowId);
         //        this.selectStageOnPageLoad(this.currentWorkflowStageID);
@@ -324,8 +380,12 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
         this.editRequestDetailForm.controls['country'].setValue(this.respCountry);
         this.editRequestDetailForm.controls['state'].setValue(this.respState);
         this.editRequestDetailForm.controls['city'].setValue(this.respCity);
+        // if (this.reqAcceptingagent !== 'No records') {
         this.editRequestDetailForm.controls['requestacceptingagent'].setValue(this.reqAcceptingagent);
+        // }
         this.editRequestDetailForm.controls['riskfactor'].setValue(this.riskFactorText);
+        this.skeletonLoading = false;
+      }
       }, (error) => {
         this.alertMsg = error;
         this.isOpen = true;
@@ -414,6 +474,10 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
     return daysLeft - diffDays;
   }
 
+  isNumber(value): boolean {
+    return Number.isNaN(value);
+  }
+
   getCustomFields(data: any) {
 
     let updatedObj = [];
@@ -442,22 +506,26 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
       if (data.length > 0) {
         const respData = data[0].workflow_stages;
         this.workflowStages = this.rearrangeArrayResponse(respData);
-        this.skeletonLoading = false;
+        this.skeletonStageLoading = false;
         // this.selectedStages.push(this.workflowStages[0]);
         this.selectStageOnPageLoad(this.currentWorkflowStageID);
         this.getSubTaskList();
       } else {
+        this.skeletonStageLoading = false;
         this.alertMsg = 'No records found!';
         this.isOpen = true;
         this.alertType = 'info';
       }
     }, (error) => {
-      this.skeletonLoading = false;
-      alert(JSON.stringify(error));
+      this.skeletonStageLoading = false;
+      this.alertMsg = JSON.stringify(error);
+      this.isOpen = true;
+      this.alertType = 'danger';
     });
   }
   stageSelection(item) {
     let isEmailGetVerified: boolean;
+    let formData;
     if (this.isemailverificationRequired) {
       if (this.isEmailIDVerified('Email', this.isEmailVerified)) {
         isEmailGetVerified = true;
@@ -497,17 +565,22 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
               current_status: this.currentStageId,
               previous_status: this.previousStageId
             };
+            formData = new FormData();
+            formData.append('current_status', reqObj.current_status);
+            formData.append('previous_status', reqObj.previous_status);
           } else {
             reqObj = {
               current_status: this.currentStageId
             };
+            formData = new FormData();
+            formData.append('current_status', reqObj.current_status);
           }
           // const reqObj = {
           //   current_status: this.currentStageId,
           //   previous_status: this.previousStageId ? this.previousStageId : this.previousStageId = ''
           // }
           //  console.log(reqObj, 'stage selection..');
-          this.stageAPI(this.requestID, reqObj);
+          this.stageAPI(this.requestID, formData);
           // this.getSubTaskList();
         } else {
           this.alertMsg = 'Can not skip stages!';
@@ -532,16 +605,25 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
   }
 
   openModal(template: TemplateRef<any>, diff?, item?) {
-    this.modalRef = this.bsmodalService.show(template, { class: 'modal-sm' });
+    this.modalRef = this.bsmodalService.show(template, { class: '', keyboard: false });
     this.stageDiff = diff;
     this.revertedStage = item;
   }
 
-  deleteModal(template: TemplateRef<any>) {
-    this.modalRef = this.bsmodalService.show(template, { class: '' });
+  openCommonModal(template: TemplateRef<any>) {
+    this.modalRef = this.bsmodalService.show(template, { class: '', keyboard: false });
+  }
+
+  openExtendModal() {
+    this.openModal(this.extendDaysModal);
+  }
+
+  openReqestRejectModal() {
+    this.openModal(this.rejectRequestModal);
   }
 
   confirm() {
+    let formData;
     this.modalRef.hide();
     this.isConfirmed = true;
     if (this.isConfirmed) {
@@ -560,7 +642,10 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
               current_status: this.previousStageId,
               previous_status: this.currentStageId
             };
-            this.stageAPI(this.requestID, reqObj);
+            formData = new FormData();
+            formData.append('current_status', reqObj.current_status);
+            formData.append('previous_status', reqObj.previous_status);
+            this.stageAPI(this.requestID, formData);
             this.getSubTaskList();
           } else {
             this.previousStageId = this.selectedStages[this.selectedStages.length - 1].id;
@@ -571,7 +656,10 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
               current_status: this.revertedStage.id,
               previous_status: this.previousStageId,
             };
-            this.stageAPI(this.requestID, reqObj);
+            formData = new FormData();
+            formData.append('current_status', reqObj.current_status);
+            formData.append('previous_status', reqObj.previous_status);
+            this.stageAPI(this.requestID, formData);
             this.getSubTaskList();
           }
 
@@ -599,8 +687,12 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
 
 
   isStageCompleted(item): boolean {
-    if (item !== undefined) {
-      return this.selectedStages.some((t) => t.order == item.order);
+    if (this.currentWorkflowStage !== 'Rejected') {
+      if (item !== undefined) {
+        return this.selectedStages.some((t) => t.order == item.order);
+      }
+    } else {
+      return false;
     }
   }
 
@@ -676,7 +768,11 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
             delete reqObj[key];
           }
         });
-        this.stageAPI(this.requestID, reqObj);
+        const fd = new FormData();
+        fd.append('current_status', reqObj.current_status);
+        fd.append('previous_status', reqObj.previous_status);
+        fd.append('activity_feedback', reqObj.activity_feedback);
+        this.stageAPI(this.requestID, fd);
       }
     }
 
@@ -688,7 +784,7 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
       return false;
     } else {
       if (this.selectedStages.length === 0) {
-        this.alertMsg = 'Stage is not selected! email';
+        this.alertMsg = 'Stage is not selected!';
         this.isOpen = true;
         this.alertType = 'info';
         return false;
@@ -766,10 +862,21 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
     });
   }
 
+  loadReasonList() {
+    this.dsarRequestService.getRejectionReason().subscribe((data) => {
+      this.reasonList.push(data);
+    });
+    return this.reasonList;
+  }
+
   onChangeRequestType(event) {
     //  const dropdownEmailTemplate = event.target.value;
     // this.selectedTemplate = event.target.value;
     this.quillEditorEmailText.controls['editorEmailMessage'].setValue(event.target.value);
+  }
+
+  onChangeReason(event) {
+    this.quillEditorRejectRequest.controls['reason'].setValue(event.target.value);
   }
 
   nameInitials(firststr, secondstr) {
@@ -808,8 +915,8 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
         deadline: data.deadline,
         reminder: data.reminder
       };
-     // this.subTaskFields = obj;
-     // this.subTaskTempForm.setValue(obj);
+      // this.subTaskFields = obj;
+      // this.subTaskTempForm.setValue(obj);
       this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
 
       }, (reason) => {
@@ -840,7 +947,7 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
     this.isResponseToSubTask = false;
     // this.isEditSubTask = true;
     this.selectedTaskID = data.id;
-
+    this.subtaskAttachments = data.upload;
     this.displayTaskDescription = data.description;
     this.displayTaskname = data.name; //data.deadline
     this.displayTaskDeadline = data.deadline;
@@ -898,7 +1005,7 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
     this.dsarRequestService.getDSARRequestDetailsByID(currentManagedOrgID, currrentManagedPropID, requestID,
       this.constructor.name, moduleName.dsarRequestModule)
       .subscribe((data) => {
-        if (data) {
+        if (data.response !== 'No data found.') {
           this.requestDetailsbyId = data.response;
           this.riskFactorList = data.response.risk_factor;
           approver = data.response.approver;
@@ -990,7 +1097,9 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
     this.editRequestDetailForm.controls['country'].setValue(this.respCountry);
     this.editRequestDetailForm.controls['state'].setValue(this.respState);
     this.editRequestDetailForm.controls['city'].setValue(this.respCity);
+    // if (this.reqAcceptingagent !== 'No records') {
     this.editRequestDetailForm.controls['requestacceptingagent'].setValue(this.reqAcceptingagent);
+    // }
   }
 
   pageChangeEvent(event) {
@@ -1018,9 +1127,13 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
     if (subtaskForm.invalid) {
       return false;
     }
-    console.log(subtaskForm.value, 'sv..');
-    const currentStageID = this.currentStageId ? this.currentStageId : this.currentWorkflowStageID;
-    if (currentStageID) {
+    let currentStageID;
+    this.isConfirmed ? currentStageID = this.currentWorkflowStageID : currentStageID = this.currentStageId;
+   // const currentStageID = this.currentStageId ? this.currentStageId : this.currentWorkflowStageID;
+    if (this.isConfirmed == undefined) {
+      currentStageID = this.currentWorkflowStageID;
+    }
+    if (currentStageID !== undefined) {
       const obj = {
         assignee: subtaskForm.value.assignee,
         name: subtaskForm.value.name,
@@ -1061,7 +1174,80 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
           this.onResetSubTask();
         });
       }
-      
+
+    } else {
+      this.onResetSubTask();
+      this.alertMsg = 'Workflow stages are not available!';
+      this.isOpen = true;
+      this.alertType = 'info';
+    }
+  }
+
+  onSubmitExtendDays() {
+    this.isExtenddasysubmitted = true;
+    if (this.quillEditorExtendDays.invalid) {
+      return false;
+    } else {
+      this.onClickEndDays(this.quillEditorExtendDays.get('customdays').value);
+      if (this.selectedStages.length !== 0) {
+        const reqObj = {
+          current_status: this.selectedStages[this.selectedStages.length - 1].id,
+          previous_status: this.previousStageId,
+          activity_feedback: 'Days Extended: ' + this.quillEditorExtendDays.get('customdays').value + '<br/>' + this.quillEditorExtendDays.get('editorReason').value // this.editorActivityPost
+        };
+       // console.log(reqObj, 'reqObj..');
+        Object.keys(reqObj).forEach(key => {
+          if (reqObj[key] === undefined) {
+            delete reqObj[key];
+          }
+        });
+        const fd = new FormData();
+        fd.append('current_status', reqObj.current_status);
+        fd.append('previous_status', reqObj.previous_status);
+        fd.append('activity_feedback', reqObj.activity_feedback);
+        this.stageAPI(this.requestID, fd);
+        this.decline();
+        this.isExtenddasysubmitted = false;
+      } else {
+        this.alertMsg = 'Select stage!';
+        this.isOpen = true;
+        this.alertType = 'danger';
+      }
+    }
+  }
+
+  onSubmitRejectRequest() {
+    this.isRejectrequestsubmitted = true;
+    if (this.quillEditorRejectRequest.invalid) {
+      return false;
+    } else {
+      const reqObj = {
+        comment: 'Reason for rejection: ' + this.quillEditorRejectRequest.get('reason').value + '<br/> comments: ' + this.quillEditorRejectRequest.get('editorComments').value // this.editorActivityPost
+      };
+    //  console.log(reqObj, 'reqObj..');
+      this.alertMsg = 'Request has been rejected!';
+      this.isOpen = true;
+      this.alertType = 'success';
+      Object.keys(reqObj).forEach(key => {
+        if (reqObj[key] === undefined) {
+          delete reqObj[key];
+        }
+      });
+      const fd = new FormData();
+      fd.append('comment', reqObj.comment);
+      this.dsarRequestService.rejectDSARRequest(this.requestID, reqObj, this.constructor.name, moduleName.dsarRequestModule).subscribe((data) => {
+        this.alertMsg = data.response;
+        this.isOpen = true;
+        this.alertType = 'success';
+        this.loadDataRequestDetails();
+        this.loadActivityLog(this.requestID);
+        //this.router.navigate(['privacy/dsar/dsar-requests']);
+      }, (err) => {
+        this.alertMsg = 'error';
+        this.isOpen = true;
+        this.alertType = 'danger';
+      });
+      this.decline();
     }
   }
 
@@ -1096,7 +1282,8 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
         const file = event.target.files[0];
         if (tag !== 'email') {
           this.uploadFilename = file.name;
-          this.subTaskResponseForm.get('uploaddocument').setValue(file);
+          this.multipleFile.push(event.target.files[0]);
+          this.subTaskResponseForm.get('uploaddocument').setValue(this.multipleFile);
         } else {
           this.uploadFilename = file.name;
           this.quillEditorEmailText.get('emailAttachment').setValue(file);
@@ -1111,6 +1298,11 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
     // }
   }
 
+  removeFile(item) {
+    const index = this.multipleFile.indexOf(item);
+    this.multipleFile.splice(index, 1);
+  }
+
   onSubmitSubTaskResponse() {
     this.isResponseSubmitted = true;
     if (this.subTaskResponseForm.invalid) {
@@ -1119,21 +1311,24 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
       const fd = new FormData();
       fd.append('task_response', this.subTaskResponseForm.get('taskresponse').value);
       fd.append('mark_completed', this.subTaskResponseForm.get('markcompleted').value);
-      fd.append('upload', this.subTaskResponseForm.get('uploaddocument').value);
-
+      //  fd.append('upload', this.subTaskResponseForm.get('uploaddocument').value);
+      for (var i = 0; i < this.multipleFile.length; i++) {
+        fd.append('upload[]', this.multipleFile[i]);
+      }
       //  return false;
       this.dsarRequestService.addSubTaskResponse(this.selectedTaskID, fd, this.constructor.name, moduleName.dsarRequestModule)
         .subscribe((data) => {
-          this.alertMsg = data.response;
+          this.getSubTaskList();
+          this.alertMsg = 'subtask response submitted successfully';
           this.isOpen = true;
           this.alertType = 'success';
-          this.getSubTaskList();
+          this.multipleFile = [];
           this.onCancelSubTaskResponse();
         }, (error) => {
+          this.onCancelSubTaskResponse();
           this.alertMsg = JSON.stringify(error);
           this.isOpen = true;
           this.alertType = 'danger';
-          this.onCancelSubTaskResponse();
         });
     }
   }
@@ -1191,7 +1386,9 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
 
   getStagename(stageid): string {
     const stage = this.workflowStages.filter((e) => e.id === stageid);
-    return stage[0].stage_title;
+    if (stage.length !== 0) {
+      return stage[0].stage_title;
+    }
   }
 
 
@@ -1228,16 +1425,17 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
     });
   }
 
-  viewFile() {
-    this.loading.start();
+  viewClientRequestFileAttachment() {
+    this.skeletonLoading = true;
     let ext;
     let documentType;
     this.dsarRequestService.viewUserUploadedFile(this.requestID, this.constructor.name, moduleName.dsarRequestModule).subscribe((data) => {
-      this.loading.stop();
+      this.skeletonLoading = false;
       if (data) {
         this.base64FileCode = data.upload;
         ext = data.upload_ext;
-        documentType = this.changeFileType(ext);
+        let fileExtn = ext.split('.');
+        documentType = this.changeFileType(fileExtn[1]);
         const blob = new Blob([this._base64ToArrayBuffer(this.base64FileCode)], {
           type: documentType // type: 'application/pdf',
         });
@@ -1245,7 +1443,7 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
         return window.open(url, 'iframeFilepreview');
       }
     }, (error) => {
-      this.loading.stop();
+      this.skeletonLoading = false;
     });
 
   }
@@ -1288,7 +1486,8 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
   }
 
   isEmailIDVerified(key, isEmailVerified): boolean {
-    return key === 'Email' && isEmailVerified;
+    this.emailVerificationStatus = (key === 'Email' && isEmailVerified);
+    return this.emailVerificationStatus;
   }
 
   isFileExist(uploadexist): boolean {
@@ -1317,7 +1516,7 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
 
   removeDSARRequest(control: string) {
     this.controlname = control;
-    this.deleteModal(this.confirmDeleteModal);
+    this.openModal(this.confirmDeleteModal);
   }
 
   deleteDSARRequest() {
@@ -1332,10 +1531,6 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
         this.isOpen = true;
         this.alertType = 'danger';
       });
-  }
-
-  onCheckboxChange($event) {
-    console.log($event);
   }
 
   cancelModal() {
@@ -1386,10 +1581,10 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
       } else if (this.showStageGuidanceText.length <= 650) {
         return { 'min-height': '120px' };
       } else if (this.showStageGuidanceText.length <= 1050) {
-        return { 'min-height': '340px' };
+        return { 'min-height': '210px' };
       }
     } else {
-      return { 'min-height': '110px' };
+      return { 'min-height': '20px' };
     }
 
   }
@@ -1413,19 +1608,95 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
     }
   }
 
-  ngAfterContentChecked() {
-    setTimeout(() => {
-      const parentElementSize = this.workflowStageScroller.nativeElement.parentElement.offsetWidth;
-      const itemSize = this.workflowStageScroller.nativeElement.querySelector('li').offsetWidth;
-      const itemLength = this.workflowStageScroller.nativeElement.childElementCount;
-      const menuSize = itemSize * itemLength;
-      const visibleSize = menuSize - parentElementSize;
-      this.scrollLimit = -visibleSize;
-    }, 3000);
+  viewClientAttachedFile(id) {
+    this.skeletonLoading = true;
+    let ext;
+    let documentType;
+    this.dsarRequestService.viewClientsFileAttachments(id, this.constructor.name, moduleName.dsarRequestModule).subscribe((data) => {
+      this.skeletonLoading = false;
+      if (data) {
+        this.base64FileCode = data.response.upload;
+        ext = data.response.filename;
+        let fileExtn = ext.split('.');
+        documentType = this.changeFileType(fileExtn[1]);
+        const blob = new Blob([this._base64ToArrayBuffer(this.base64FileCode)], {
+          type: documentType // type: 'application/pdf',
+        });
+        const url = URL.createObjectURL(blob);
+        return window.open(url, 'iframeFilepreview');
+      }
+    }, (error) => {
+      this.skeletonLoading = false;
+    });
+
+  }
+
+  viewClientsEmailAttachment(id) {
+    this.skeletonLoading = true;
+    let ext;
+    let documentType;
+    this.dsarRequestService.getClientsEmailAttachments(id, this.constructor.name, moduleName.dsarRequestModule).subscribe((data) => {
+      this.skeletonLoading = false;
+      if (data) {
+        this.base64FileCode = data.response.upload;
+        ext = data.response.filename;
+        let fileExtn = ext.split('.');
+        documentType = this.changeFileType(fileExtn[1]);
+        const blob = new Blob([this._base64ToArrayBuffer(this.base64FileCode)], {
+          type: documentType // type: 'application/pdf',
+        });
+        const url = URL.createObjectURL(blob);
+        return window.open(url, 'iframeFilepreview');
+      }
+    }, (error) => {
+      this.skeletonLoading = false;
+    });
+
+  }
+
+  viewSubtaskResponseAttachedFile(data) {
+    let documentType;
+    let fileExtn = data.filename.split('.');
+    documentType = this.changeFileType(fileExtn[1]);
+    this.dsarRequestService.getSubtaskFileAttachements(data.id, this.constructor.name, moduleName.dsarRequestModule)
+      .subscribe((data) => {
+        const blob = new Blob([this._base64ToArrayBuffer(data.response[0].content)], {
+          type: documentType // type: 'application/pdf',
+        });
+        const url = URL.createObjectURL(blob);
+        return window.open(url, 'iframeFilepreview');
+      }, (error) => {
+        console.log(error, 'error..');
+      })
+  }
+
+  ngAfterViewChecked() {
+    // setTimeout(() => {
+    this.cdRef.detectChanges();
+    if (this.workflowStageScroller !== undefined) {
+      if (this.workflowStageScroller.nativeElement.querySelector('li').offsetWidth !== undefined) {
+        const parentElementSize = this.workflowStageScroller.nativeElement.parentElement.offsetWidth;
+        const itemSize = this.workflowStageScroller.nativeElement.querySelector('li').offsetWidth;
+        const itemLength = this.workflowStageScroller.nativeElement.childElementCount;
+        const menuSize = itemSize * itemLength;
+        const visibleSize = menuSize - parentElementSize;
+        this.scrollLimit = -visibleSize;
+      }
+    } else {
+      return false;
+    }
+    // }, 3000);
+  }
+
+  onCloseUserAuthModal() {
+    this.bsmodalService.hide(1);
+    this.backToDSARRequest();
   }
 
   ngAfterViewInit(): void {
-    this.cdRef.detectChanges();
+    if (!this.cdRef['destroyed']) {
+      this.cdRef.detectChanges();
+    }
   }
 
 }

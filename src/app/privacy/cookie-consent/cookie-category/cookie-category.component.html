@@ -68,6 +68,8 @@
               <span class="tx-medium mg-l-10" *ngIf="chart.category === 'analytics'">Analytics Cookies</span>
               <span class="tx-medium mg-l-10" *ngIf="chart.category === 'essential'">Essential Cookies</span>
               <span class="tx-medium mg-l-10" *ngIf="chart.category === 'unknown'">Unknown Cookies</span>
+              <span *ngIf="!chart.category" class="tx-medium mg-l-10">Unknown Cookies</span>
+
 
               <span class="tx-rubik mg-l-auto">{{chart.count}}</span>
 <!--              <span class="wd-60 tx-right tx-rubik mg-l-5 tx-success">0.96% <i class="icon ion-md-arrow-up"></i></span>-->
@@ -100,8 +102,8 @@
           <div class="col-6 tx-12 mg-t-10">
             <div *ngFor="let chart of typeChart" class="cookie-name-list d-flex align-items-center">
               <div [ngStyle]="{background: chart.color}" class="wd-10 ht-10 rounded-circle pos-relative t--1"></div>
-              <span *ngIf="chart.type" class="tx-medium mg-l-10">{{chart.type}}</span>
-              <span *ngIf="!chart.type" class="tx-medium mg-l-10">Unknown</span>
+              <span *ngIf="chart.party" class="tx-medium mg-l-10">{{chart.party}}</span>
+              <span *ngIf="!chart.party" class="tx-medium mg-l-10">Unknown</span>
               <span class="tx-rubik mg-l-auto">{{chart.count}}</span>
               <!-- <span class="wd-60 tx-right tx-rubik mg-l-5 tx-success">0.96% <i class="icon ion-md-arrow-up"></i></span> -->
             </div>
@@ -190,7 +192,7 @@
       </p-table>
     </div>
 
-    <p-dialog [(visible)]="productDialog" [style]="{width: '700px'}" header="Add Cookie" [modal]="true" styleClass="p-fluid">
+    <p-dialog [(visible)]="productDialog" [style]="{width: '700px', zIndex: '999999', height: '500px'}" header="Add Cookie" [modal]="true" styleClass="p-fluid">
       <ng-template pTemplate="content">
         <form [formGroup]="addCookieForm" (ngSubmit)="onSubmit()">
         <div class="form-row">
@@ -273,11 +275,11 @@
           <div class="col-sm-10">
             <div class="form-check form-check-inline">
               <input class="form-check-input" type="radio" formControlName="expiry"  name="expiry" value="seesion">
-              <label class="form-check-label" for="inlineRadio1">Seesion</label>
+              <label class="form-check-label" for="inlineRadio1">Session </label>
             </div>
             <div class="form-check form-check-inline">
               <input class="form-check-input" type="radio" formControlName="expiry" name="expiry" value="presistent">
-              <label class="form-check-label" for="inlineRadio2">Presistent</label>
+              <label class="form-check-label" for="inlineRadio2">Persistent </label>
             </div>
           </div>
 

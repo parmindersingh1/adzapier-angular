@@ -16,11 +16,14 @@ export class ForgotpasswordComponent implements OnInit {
 
   forgotpasswordForm: FormGroup;
   submitted: boolean;
-  show: boolean;
-  show1: Boolean = false;
+  showMessage = false;
   //errorMsg: string;
   loading: boolean;
   navbarCollapsed: boolean = false;
+  alertMsg: any;
+  isOpen = false;
+  alertType: any;
+  dismissible = true;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -56,10 +59,7 @@ export class ForgotpasswordComponent implements OnInit {
 
   onSubmit() {
     this.submitted = true;
-    //debugger;
-    // reset alerts on submit
     this.alertService.clear();
-    this.show = false;
     // stop here if form is invalid
     if (this.forgotpasswordForm.invalid) {
       return;
@@ -73,21 +73,23 @@ export class ForgotpasswordComponent implements OnInit {
       .pipe(first())
       .subscribe(data => {
         this.loadingBar.stop();
-        //debugger;
-        //this.alertService.success('Registration successful', true);
-        //this.router.navigate(['/login']);
-        //console.log();
+        this.showMessage = true;
+        this.alertMsg = 'Link sent to your Email, please Reset Your Password..!';
+        this.isOpen = true;
+        this.alertType = 'success';
       },
         error => {
           this.loadingBar.stop();
-          this.alertService.error(error);
+          this.showMessage = false;
+          this.alertMsg = 'Email ID is not registered';
+          this.isOpen = true;
+          this.alertType = 'danger';
           this.loading = false;
         });
+  }
 
-
-    if (this.f.emailid.value) {
-      this.show = true;
-    }
-
+  onClosed(dismissedAlert: any): void {
+    this.alertMsg = !dismissedAlert;
+    this.isOpen = false;
   }
 }

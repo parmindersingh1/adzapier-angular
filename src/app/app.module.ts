@@ -4,7 +4,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { JwtInterceptor, fakeBackendProvider, ErrorInterceptor } from './_helpers';
-import { HeaderComponent } from './_components/layout/header/header.component';
+import { HeaderModule } from './_components/layout/header/header.module';
 import { FooterComponent } from './_components/layout/footer/footer.component';
 import { PagenotfoundComponent } from './errorpages/pagenotfound.component';
 import { InternalerrorComponent } from './errorpages/internalerror.component';
@@ -13,8 +13,8 @@ import { AuthenticationService } from './_services';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
-import { FeatherModule } from 'angular-feather';
-import { allIcons } from 'angular-feather/icons';
+// import { FeatherModule } from 'angular-feather';
+// import { allIcons } from 'angular-feather/icons';
 import {NgxUiLoaderModule, NgxUiLoaderService} from 'ngx-ui-loader';
 import { ngxUiLoaderConfig } from './_constant/loading.contant';
 import { WelcomeComponent } from './welcome/welcome.component';
@@ -26,7 +26,7 @@ import { TooltipModule } from 'ngx-bootstrap/tooltip';
   declarations: [
     AppComponent,
     // HomeComponent,
-    HeaderComponent,
+    // HeaderComponent,
     FooterComponent,
     // AlertComponent,
     // ForgotpasswordComponent,
@@ -55,9 +55,10 @@ import { TooltipModule } from 'ngx-bootstrap/tooltip';
     // SharedbootstrapModule,
     BsDropdownModule.forRoot(),
     CollapseModule.forRoot(),
-    FeatherModule.pick(allIcons),
+  //  FeatherModule.pick(allIcons),
     NgxUiLoaderModule.forRoot(ngxUiLoaderConfig),
     TooltipModule.forRoot(),
+    HeaderModule,
     // MatButtonModule,
     // TableModule,
     // MultiSelectModule,
@@ -89,6 +90,7 @@ import { TooltipModule } from 'ngx-bootstrap/tooltip';
   bootstrap: [AppComponent],
   exports: [
     // AnalyticsModule,
+    HeaderModule,
     TooltipModule,
     BsDropdownModule, CollapseModule]
 })

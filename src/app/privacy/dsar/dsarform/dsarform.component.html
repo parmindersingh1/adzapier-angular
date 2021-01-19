@@ -53,27 +53,23 @@
         <a ngbNavLink>2 Form</a>
         <ng-template ngbNavContent>
             <div class="row">
-                <div class="col-sm-4 form-field-section">
-                    <ngb-accordion #acc="ngbAccordion" activeIds="ngb-panel-0">
-                        <ngb-panel title="Form Fields">
-                            <ng-template ngbPanelHeader>
-                                <div class="d-flex align-items-center justify-content-between">
-                                    <button ngbPanelToggle class="btn btn-link p-0 collapse-btn">
-                                        <h6 class="form-tl m-0">Form Fields</h6>
-                                        <i class="fas fa-chevron-down"></i>
-                                    </button>
-                                </div>
-                            </ng-template>
-                            <ng-template ngbPanelContent>
-                                <div cdkDropList [cdkDropListData]="webFormControlList" class="formfield-list"
+                <div class="col-sm-4 form-field-section bordermargin">
+                    <accordion closeOthers="1" [isAnimated]="true">
+                        <accordion-group [isOpen]="accordionStatus.isFirstopen" (isOpenChange)="accordionChangeStatus($event,'first')">
+                            <button class="btn btn-link btn-block clearfix" accordion-heading type="button">
+                                <div class="pull-left float-left" [ngClass]="accordionStatus.isFirstopen ? 'template-blue':'light-black'">Form Fields</div>
+                                <span class="float-right pull-right"><i class="fas fa-chevron-right" [ngClass]="accordionStatus.isFirstopen ? 'rotateicon':'resumeiconstate'"></i></span>
+                              </button>
+                           
+                            <div cdkDropList [cdkDropListData]="webFormControlList" class="formfield-list"
                                     (cdkDropListDropped)="drop($event)">
 
-                                    <div *ngIf="!isAddingFormControl">
+                                    <div *ngIf="!isAddingFormControl" >
                                         <div *ngIf="!isEditingList">
                                             <div *ngFor="let item of webFormControlList; let i = index;" cdkDrag>
                                                 <div class="example-box"
-                                                    *ngIf="!isContainHeaderLogo(item) && !isContainWelcomeText(item) && !isContainFileUpload(item) && !isContainCaptchaControl(item) && !isContainFooterText(item)">
-                                                    <div class="icon-label-wrapper">
+                                                    *ngIf="!isContainFavicon(item) && !isContainHeaderLogo(item) && !isContainWelcomeText(item) && !isContainFileUpload(item) && !isContainCaptchaControl(item) && !isContainFooterText(item)">
+                                                    <div class="icon-label-wrapper mr-2">
                                                         <i class="fa fa-bars" aria-hidden="true"></i>
                                                         <span class="control-label">
                                                             {{item.controllabel}}
@@ -85,9 +81,10 @@
                                                             (click)="deleteSelectedItem(item)">
                                                             <i class="fa fa-trash" aria-hidden="true"></i>
                                                         </button>
-                                                        <button class="btn btn-sm btn-outline-primary editbtn" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
-                                                            (click)="editSelectedRow(item)">
-                                                            <div><i class="fas fa-pen"></i></div>
+                                                        <button class="btn btn-sm btn-outline-primary editbtn" (click)="editSelectedRow(item)">
+                                                            <div>
+                                                                <i [ngClass]="{'fa fa-angle-down':isWebFormPublished && !isEditingPublishedForm,'fas fa-pen':!isWebFormPublished || isWebFormPublished && isEditingPublishedForm  }"></i>
+                                                            </div>
                                                         </button>
                                                     </div>
                                                 </div>
@@ -108,12 +105,11 @@
                                                 (ngSubmit)="customFields.form.valid && addCustomFields(customFields)">
                                                 <div class="row">
                                                     <div class="col-sm-12">
-                                                        <h5>Create Custom Fields<div>
-                                                                <button type="button"
-                                                                    (click)="cancelAddingFormControl()"
-                                                                    class="btn btn-danger" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null">
-                                                                    <span>&#10006;</span>
-                                                                </button>
+                                                        <h5> <span *ngIf="isAddingFormControl && isEditingList">Edit Field</span>
+                                                            <span *ngIf="isAddingFormControl && !isEditingList">Custom Fields</span>
+                                                            <div>
+                                                               <button class="btn btn-link" type="button" (click)="cancelAddingFormControl('cancel')">Cancel</button>
+                                                                <button type="submit" class="btn btn-link" [attr.disabled]="!customFields.form.valid || isWebFormPublished && !isEditingPublishedForm ? true : null">Save and close</button>
                                                             </div>
                                                         </h5>
                                                     </div>
@@ -121,16 +117,14 @@
                                                     <div style="display: flex;" *ngIf="!isEditingList">
                                                         <div class="form-inline custom-controls">
                                                             <div class="col-md-12">
-                                                                <label>Select Field Type </label>
+                                                                <label>Select Field Type</label>
                                                             </div>
                                                             <div class="col-md-12 form-group pr-0">
                                                                 <select class="form-control" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
                                                                     (change)="onChangeEvent($event)"
                                                                     name="selectOptionControl" #ngModel="ngModel"
                                                                     [(ngModel)]="selectOptionControl" required>
-                                                                    <option selected disabled value="">select
-                                                                        field
-                                                                    </option>
+                                                                    <option selected disabled value="">select field</option>
                                                                     <ng-container
                                                                         *ngFor="let status_item of controlOption">
                                                                         <option [value]="status_item.control">
@@ -149,24 +143,32 @@
                                                     </div>
 
                                                     <div *ngIf="isEditingList && editSelectionType">
-                                                        <div class="col-sm-12 custom-controls">
+                                                        <div class="col-sm-12">
                                                             <label>Display Type
                                                                 <select class="form-control"
                                                                     (change)="updateControlType($event)"
                                                                     name="changeControlType" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
                                                                     [(ngModel)]="changeControlType">
-                                                                    <option
-                                                                        *ngFor="let status_item of editableControlOption"
-                                                                        [value]="status_item.control">
-                                                                        {{status_item.control}}
-                                                                    </option>
+                                                                    <option selected value="">select option</option>
+                                                                    <ng-container *ngFor="let status_item of editableControlOption">
+                                                                      <option [value]="status_item.control"> {{status_item.display}}</option>
+                                                                    </ng-container>
+ 
                                                                 </select>
                                                             </label>
+                                                           
                                                         </div>
+ 
+                                                    </div>
+                                                    <div *ngIf="ismultiselectrequired" class="pl-3">
+                                                        <label for="multiselect">
+                                                            <input type="checkbox" id="multicheck" name="multicheck"  #ismulticheck="ngModel" [(ngModel)]="multiselect"/>
+                                                            Enable multiselect
+                                                            </label>
                                                     </div>
                                                 </div>
-
-                                                <div class="form-check required-check">
+                                                
+                                                <div class="form-check required-check mt-2">
                                                     <input class="form-check-input" name="changeControlType" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
                                                         [checked]="isRequiredField" (change)="onCheckboxChange($event)"
                                                         type="checkbox" id="gridCheck1">
@@ -181,21 +183,26 @@
                                                         <span *ngIf="ngModel.errors?.required"
                                                             style="color:red;font-size:11px">Name of control is
                                                             mandatory</span>
-                                                        <input type="text" class="form-control" name="lblText"
+                                                        <input type="text" class="form-control" name="lblText" 
+                                                            (input)="onLabelChange($event)"
                                                             #ngModel="ngModel" [(ngModel)]="lblText" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
                                                             placeholder="Add label text" required />
-
                                                     </label>
+                                                  
                                                     <!--*ngIf="isSubjectType"-->
 
                                                     <div class="list-wrapper"
                                                         *ngIf="isSubjectType == true && isRequestType == false">
-                                                        <ul>
-
-                                                            <li
-                                                                *ngFor="let item of sideMenuSubjectTypeOptions; let i = index;let last = last">
+                                                        <ul cdkDropList [cdkDropListData]="sideMenuSubjectTypeOptions" class="formfield-list"
+                                                        (cdkDropListDropped)="dragDropOptionSubjectType($event)">
+                                                            <li *ngFor="let item of sideMenuSubjectTypeOptions; let i = index;let last = last" cdkDrag>
+                                                               
                                                                 <div class="row">
+                                                                    <div class="icon-label-wrapper mr-2">
+                                                                        <i class="fa fa-bars" aria-hidden="true"></i>
+                                                                    </div>
                                                                     <div class="form-inline">
+                                                                        
                                                                         <div class="control-wrapper form-group pl-3">
                                                                             <input type="text" [(ngModel)]="item.name"
                                                                                 name="{{item.name}}" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
@@ -234,11 +241,14 @@
                                                     </div>
                                                     <div class="list-wrapper"
                                                         *ngIf="isSubjectType == false && isRequestType == true">
-                                                        <ul>
-                                                            <li
-                                                                *ngFor="let item of sideMenuRequestTypeOptions; let i = index; let last = last;">
+                                                        <ul cdkDropList [cdkDropListData]="sideMenuRequestTypeOptions" class="formfield-list"
+                                                        (cdkDropListDropped)="dragDropOptionRequestType($event)">
+                                                            <li  *ngFor="let item of sideMenuRequestTypeOptions; let i = index; let last = last;" cdkDrag>
                                                                 <div class="row">
                                                                     <div class="form-inline">
+                                                                        <div class="icon-label-wrapper mr-2">
+                                                                            <i class="fa fa-bars" aria-hidden="true"></i>
+                                                                        </div>
                                                                         <div class="control-wrapper form-group pl-3">
                                                                             <input type="text" [(ngModel)]="item.name"
                                                                                 name="{{item.name}}" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
@@ -280,12 +290,14 @@
 
                                                     </div>
                                                     <div *ngIf="selectedControlType" class="addoption">
-
-                                                        <ul>
+                                                        <ul class="formfield-list"  cdkDropList [cdkDropListData]="selectOptions" (cdkDropListDropped)="dragDropCustomOption($event)">
                                                             <li
-                                                                *ngFor="let item of selectOptions; let i = index; let last = last;">
+                                                                *ngFor="let item of selectOptions; let i = index; let last = last;" cdkDrag>
                                                                 <div class="row form-inline">
                                                                     <div class="col-md-12 form-group pr-0">
+                                                                        <div class="icon-label-wrapper mr-2">
+                                                                            <i class="fa fa-bars" aria-hidden="true"></i>
+                                                                        </div>
                                                                         <div class="dispalyflex-column">
                                                                             <input type="text" [(ngModel)]="item.name"
                                                                                 name="{{item.name}}" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
@@ -323,182 +335,197 @@
                                                         </ul>
 
                                                     </div>
-                                                    <div class="row">
-                                                        <div class="col-sm-6">
-                                                            <button type="submit" class="btn btn-xs btn-success" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
-                                                                [disabled]="( !customFields.form.valid )">Save</button>
-                                                        </div>
-
-                                                    </div>
-
                                                 </div>
                                             </form>
                                         </div>
                                     </div>
                                 </div>
+                        </accordion-group>
+                        <accordion-group (isOpenChange)="accordionChangeStatus($event,'second')">
+                            <button class="btn btn-link btn-block clearfix" type="button" accordion-heading>
+                                <div class="pull-left float-left" [ngClass]="accordionStatus.isSecondopen ? 'template-blue':'light-black'">Form Styling</div>
+                                <span class="float-right pull-right"><i class="fas fa-chevron-right" [ngClass]="accordionStatus.isSecondopen ? 'rotateicon':'resumeiconstate'"></i></span>
+                            </button>
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div class="row">
+                                    <div class="col-sm-12 mb-2">
+                                        <!-- (ngSubmit)="onSubmitHeaderLogo()"-->
 
-                            </ng-template>
-                        </ngb-panel>
-                        <ngb-panel title="Form Styling">
-                            <ng-template ngbPanelHeader>
-                                <div class="d-flex align-items-center justify-content-between">
-                                    <button ngbPanelToggle class="btn btn-link p-0 collapse-btn">
-                                        <h6 class="form-tl m-0">Form Styling</h6>
-                                        <i class="fas fa-chevron-down"></i>
-                                    </button>
-                                </div>
-                            </ng-template>
-                            <ng-template ngbPanelContent>
-                                <div class="d-flex align-items-center justify-content-between">
-                                    <div class="row">
-                                        <div class="col-sm-12 mb-2">
-                                            <!-- (ngSubmit)="onSubmitHeaderLogo()"-->
-
-                                            <form [formGroup]="headerLogoForm">
+                                        <form [formGroup]="headerLogoForm">
+                                        <div>
+                                            <label for="taskresponse" class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5">
+                                                Header logo</label> 
+                                                <div class="upload-wrapper" [ngClass]="{'hide':headerlogoBase64,'show':!headerlogoBase64}">
+                                                    <p>File Format PNG, JPG or JPEG, Max Size 1MB</p>
+                                            <div class="input-group">
+                                                <label for="file-upload" class="custom-file-upload btn btn-primary" [ngClass]="{'disabled':isWebFormPublished && !isEditingPublishedForm}">
+                                                    Upload
+                                                </label>
+                                                <input type="file" class="custom-file-input" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
+                                                formControlName="headerlogo"
+                                                (change)="fileChangeEvent($event)" id="headerlogo">
+                                                
+                                            </div>
+                                                </div>
+                                            <div class="img-space" [ngClass]="{'hide':!headerlogoBase64,'show':headerlogoBase64}">
+                                                <ng-container *ngIf="headerlogoBase64; else elseTemplate">
+                                                    <img [src]="headerlogoBase64" class="uploaded-logo-width" [height]="logoHeight" [width]="logoWidth" />
+                                                </ng-container>
+                                                <ng-template #elseTemplate>                                    
+                                                    <img src="assets/imgs/no_image.png" class="img-responsive">
+                                                </ng-template>                                
+                                            </div>
+                                            <div class="filedetails" [ngClass]="{'hide':!headerlogoBase64,'show':headerlogoBase64}">
+                                               <div> <span><i-feather name="image" class="feathericon"></i-feather>
+                                                </span>
+                                               <span class="ml-1"> File Name:  {{logoFilename}}</span>
+                                               </div>
+                                                <span class="ml-4">File size: {{logoFilesize}}</span>
+                                                <button class="logodelete" (click)="deleteSelectedLogo()">
+                                                    <i-feather name="trash-2" class="feathericon"></i-feather>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    
+                                        </form>
+                                    </div>
+                                    <div class="col-sm-12 mb-2">
+                                        <form [formGroup]="faviconForm">
                                             <div>
-                                                <label for="taskresponse" class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">
-                                                    Header logo</label> 
-                                                    <div class="upload-wrapper" [ngClass]="{'hide':headerlogoBase64,'show':!headerlogoBase64}">
+                                                <label for="taskresponse" class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5">
+                                                    Header Favicon</label> 
+                                                    <div class="upload-wrapper" [ngClass]="{'hide':headerfaviconBase64,'show':!headerfaviconBase64}">
                                                         <p>File Format PNG, JPG or JPEG, Max Size 1MB</p>
                                                 <div class="input-group">
                                                     <label for="file-upload" class="custom-file-upload btn btn-primary" [ngClass]="{'disabled':isWebFormPublished && !isEditingPublishedForm}">
                                                         Upload
                                                     </label>
                                                     <input type="file" class="custom-file-input" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
-                                                    formControlName="headerlogo"
-                                                    (change)="fileChangeEvent($event)" id="headerlogo">
+                                                    formControlName="titlefavicon"
+                                                    (change)="faviconChangeEvent($event)" id="titlefavicon">
                                                     
                                                 </div>
                                                     </div>
-                                                <div class="img-space" [ngClass]="{'hide':!headerlogoBase64,'show':headerlogoBase64}">
-                                                    <ng-container *ngIf="headerlogoBase64; else elseTemplate">
-                                                        <img [src]="headerlogoBase64" class="uploaded-logo-width" [height]="logoHeight" [width]="logoWidth" />
+                                                <div class="favicon-img-space" [ngClass]="{'hide':!headerfaviconBase64,'show':headerfaviconBase64}">
+                                                    <ng-container *ngIf="headerfaviconBase64; else elseTemplate">
+                                                        <img [src]="headerfaviconBase64" class="uploaded-favicon-width" [height]="logoHeight" [width]="logoWidth" />
                                                     </ng-container>
-                                                    <ng-template #elseTemplate>                                    
+                                                    <ng-template #elseTemplate>
                                                         <img src="assets/imgs/no_image.png" class="img-responsive">
-                                                    </ng-template>                                
+                                                    </ng-template>
                                                 </div>
-                                                <div class="filedetails" [ngClass]="{'hide':!headerlogoBase64,'show':headerlogoBase64}">
+                                                <div class="filedetails" [ngClass]="{'hide':!headerfaviconBase64,'show':headerfaviconBase64}">
                                                    <div> <span><i-feather name="image" class="feathericon"></i-feather>
                                                     </span>
-                                                   <span class="ml-1"> File Name:  {{logoFilename}}</span>
+                                                   <span class="ml-1"> File Name:  {{faviconFilename}}</span>
                                                    </div>
-                                                    <span class="ml-4">File size: {{logoFilesize}}</span>
-                                                    <button class="logodelete" (click)="deleteSelectedLogo()">
+                                                    <span class="ml-4">File size: {{faviconFilesize}}</span>
+                                                    <button class="logodelete" (click)="deleteSelectedFavicon()">
                                                         <i-feather name="trash-2" class="feathericon"></i-feather>
                                                     </button>
                                                 </div>
                                             </div>
                                         
                                             </form>
+                                    </div>
+                                    <div class="col-sm-12 mb-1">
+                                        <div class="formgroup d-flex justify-content">
+                                            <div class="col-md-5 p-0">
+                                                <label class="col-form-label-sm tx-10 tx-uppercase tx-medium tx-spacing-1">Header Color</label>
+                                            </div>
+                                            <div class="col-md-6 d-flex color-controlwrapper">
+                                                <input type="color" [(ngModel)]="headerColor" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null" />
+                                                <input type="text" class="form-control form-control-sm ml-1" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm? '' : null"
+                                                [(ngModel)]="headerColor" />
+                                            </div>
+                                            
                                         </div>
-
-                                        <div class="col-sm-12 mb-1">
-                                            <div class="formgroup row">
-                                                <div class="col-md-5">
-                                                    <label class="col-form-label-sm tx-10 tx-uppercase tx-medium tx-spacing-1">Header Color</label>
+                                    </div>
+                                    <div class="col-sm-12 mb-1">
+                                        <div class="formgroup d-flex justify-content">
+                                            <div class="col-md-5 p-0">
+                                                <label class="col-form-label-sm tx-10 tx-uppercase tx-medium tx-spacing-1">Welcome Text Color</label>
+                                            </div>
+                                            <div class="col-md-6 d-flex color-controlwrapper"><input type="color" class="form-control" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
+                                                    [(ngModel)]="welcomeTextColor" />
+                                                    <input type="text" class="form-control form-control-sm ml-1" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
+                                                    [(ngModel)]="welcomeTextColor" />
                                                 </div>
-                                                <div class="col-md-7 d-flex color-controlwrapper">
-                                                    <input type="color" [(ngModel)]="headerColor" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null" />
-                                                    <input type="text" class="form-control form-control-sm ml-1" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm? '' : null"
-                                                    [(ngModel)]="headerColor" />
-                                                </div>
-                                                
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 mb-1">
+                                        <div class="formgroup row justify-content">
+                                            <div class="col-md-5">
+                                                <label class="col-form-label-sm tx-10 tx-uppercase tx-medium tx-spacing-1">Welcome Font Size </label>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <input type="number" min="13" max="20" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
+                                                    class="form-control form-control-sm h-75"
+                                                    [(ngModel)]="welcomeFontSize" />
                                             </div>
                                         </div>
-                                        <div class="col-sm-12 mb-1">
-                                            <div class="formgroup row">
-                                                <div class="col-md-5">
-                                                    <label class="col-form-label-sm tx-10 tx-uppercase tx-medium tx-spacing-1">Welcome Text Color</label>
-                                                </div>
-                                                <div class="col-md-7 d-flex color-controlwrapper"><input type="color" class="form-control" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
-                                                        [(ngModel)]="welcomeTextColor" />
-                                                        <input type="text" class="form-control form-control-sm ml-1" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
-                                                        [(ngModel)]="welcomeTextColor" />
-                                                    </div>
+                                    </div>
+                                    <div class="col-sm-12 mb-1">
+                                        <div class="formgroup d-flex justify-content">
+                                            <div class="col-md-5 p-0">
+                                                <label class="col-form-label-sm tx-10 tx-uppercase tx-medium tx-spacing-1">Footer Text Color</label>
+                                            </div>
+                                            <div class="col-md-6 d-flex color-controlwrapper">
+                                                <input type="color" [(ngModel)]="footerTextColor" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null" />
+                                                <input type="text" class="form-control form-control-sm ml-1" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm? '' : null"
+                                                    [(ngModel)]="footerTextColor" />
                                             </div>
                                         </div>
-                                        <div class="col-sm-12 mb-1">
-                                            <div class="formgroup row">
-                                                <div class="col-md-5">
-                                                    <label class="col-form-label-sm tx-10 tx-uppercase tx-medium tx-spacing-1">Welcome Font Size </label>
-                                                </div>
-                                                <div class="col-sm-3 offset-md-4">
-                                                    <input type="number" min="13" max="20" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
-                                                        class="form-control form-control-sm h-75"
-                                                        [(ngModel)]="welcomeFontSize" />
-                                                </div>
+                                    </div>
+                                    <div class="col-sm-12 mb-1">
+                                        <div class="formgroup row justify-content">
+                                            <div class="col-md-5">
+                                                <label class="col-form-label-sm tx-10 tx-uppercase tx-medium tx-spacing-1">Footer Text Size</label>
                                             </div>
-                                        </div>
-                                        <div class="col-sm-12 mb-1">
-                                            <div class="formgroup row">
-                                                <div class="col-md-5">
-                                                    <label class="col-form-label-sm tx-10 tx-uppercase tx-medium tx-spacing-1">Footer Text Color</label>
-                                                </div>
-                                                <div class="col-md-7 d-flex color-controlwrapper">
-                                                    <input type="color" [(ngModel)]="footerTextColor" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null" />
-                                                    <input type="text" class="form-control form-control-sm ml-1" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm? '' : null"
-                                                        [(ngModel)]="footerTextColor" />
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-12 mb-1">
-                                            <div class="formgroup row">
-                                                <div class="col-md-5">
-                                                    <label class="col-form-label-sm tx-10 tx-uppercase tx-medium tx-spacing-1">Footer Text Size</label>
-                                                </div>
-                                                <div class="col-md-3 offset-md-4">
-                                                    <input type="number" min="13" max="20"
-                                                        class="form-control form-control-sm h-75" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
-                                                        [(ngModel)]="footerFontSize" />
-                                                </div>
+                                            <div class="col-sm-3">
+                                                <input type="number" min="13" max="20"
+                                                    class="form-control form-control-sm h-75" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
+                                                    [(ngModel)]="footerFontSize" />
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </ng-template>
-                        </ngb-panel>
-                        <ngb-panel title="Form Text">
-                            <ng-template ngbPanelHeader>
-                                <div class="d-flex align-items-center justify-content-between">
-                                    <button ngbPanelToggle class="btn btn-link p-0 collapse-btn">
-                                        <h6 class="form-tl m-0">Form Text</h6>
-                                        <i class="fas fa-chevron-down"></i>
-                                    </button>
-                                </div>
-                            </ng-template>
-                            <ng-template ngbPanelContent>
-                                <div class="editorwrapper">
+                            </div>
+                        </accordion-group>
+                        <accordion-group (isOpenChange)="accordionChangeStatus($event,'third')">
+                            <button class="btn btn-link btn-block clearfix" accordion-heading type="button">
+                                <div class="pull-left float-left" [ngClass]="accordionStatus.isThirdopen ? 'template-blue':'light-black'">Form Text</div>
+                                <span class="float-right pull-right"><i class="fas fa-chevron-right" [ngClass]="accordionStatus.isThirdopen ? 'rotateicon':'resumeiconstate'"></i></span>
+                              </button>
+                            <div class="editorwrapper">
 
-                                    <div class="pd-5">
-                                        <h6>Welcome Text <span style="float: right;">
-                                                <button type="button" class="btn btn-sm btn-default" data-toggle="modal" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm? '' : null"
-                                                    (click)="editQuillEditorDataPopup(quillEditorModal,'welcomeText')">
-                                                    <i class="fa fa-edit"></i>
-                                                </button>
-                                            </span></h6>
-                                    </div>
-                                    <div class="pd-5">
-                                        <h6>Footer Text <span style="float: right;">
-                                                <button type="button" class="btn btn-sm btn-default" data-toggle="modal" [attr.disabled]="isWebFormPublished  && !isEditingPublishedForm? '' : null"
-                                                    (click)="editQuillEditorDataPopup(quillEditorModal,'footerText')">
-                                                    <i class="fa fa-edit"></i>
-                                                </button>
-                                            </span></h6>
-                                    </div>
-
+                                <div class="pd-5">
+                                    <h6>Welcome Text <span style="float: right;">
+                                            <button type="button" class="btn btn-sm btn-default p-0 mr-1" data-toggle="modal" 
+                                                (click)="editQuillEditorDataPopup(quillEditorModal,'welcomeText')">
+                                                <i [ngClass]="{'fas fa-chevron-down':isWebFormPublished && !isEditingPublishedForm,'fa fa-edit':!isWebFormPublished || isWebFormPublished && isEditingPublishedForm }"></i>
+                                            </button>
+                                        </span></h6>
                                 </div>
-                            </ng-template>
-                        </ngb-panel>
-                    </ngb-accordion>
+                                <div class="pd-5">
+                                    <h6>Footer Text <span style="float: right;">
+                                            <button type="button" class="btn btn-sm btn-default p-0 mr-1" data-toggle="modal"
+                                                (click)="editQuillEditorDataPopup(quillEditorModal,'footerText')">
+                                                <i [ngClass]="{'fas fa-chevron-down':isWebFormPublished && !isEditingPublishedForm,'fa fa-edit': !isWebFormPublished || isWebFormPublished && isEditingPublishedForm }"></i>
+                                            </button>
+                                        </span></h6>
+                                </div>
+
+                            </div>
+                        </accordion-group>
+                    </accordion>
                 </div>
                 <div class="col-sm-8">
                     <!-- webFormControlList  {{webFormControlList | json}} -->
-                    <div class="headerwrapper"> 
-                        <div  class="logocontainer pd-10" [style.background-color]="headerColor">
+                    <div class="headerwrapper">
+                        <div  class="logocontainer pd-10" [ngClass]="{'img-container':headerlogoBase64,'':!headerlogoBase64}" [style.background-color]="headerColor">
                                 <img *ngIf="headerlogoBase64" class="img-responsive logowidth" 
                                 [src]="transform(headerlogoBase64)" width="150px" />
-
                             <h3 *ngIf="!headerlogoBase64" class="txt-capitalize m-0">{{formName}}</h3>
                         </div>
                         <div class="quilleditor-wrapper py-2">
@@ -512,7 +539,7 @@
                         (cdkDropListDropped)="drop($event)">
 
                         <form #registerForm="ngForm" (ngSubmit)="register(registerForm)">
-                            <div class="dsarform-box" *ngFor="let webcontrol of webFormControlList; let j = index;"
+                            <div class="dsarform-box" cdkDragBoundary=".dsarform-box" *ngFor="let webcontrol of webFormControlList; let j = index;"
                                 cdkDrag [cdkDragDisabled]="true">
 
                                 <div *ngIf="webcontrol.controlId === 'requesttype'" class="col-sm-12">
@@ -529,25 +556,26 @@
                                         </select>
                                         <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
                                     </div>
-                                    <div class="form-check"
+                                    <div class="form-group" 
                                         *ngIf="webcontrol.control === 'radio' && webcontrol.controlId === 'requesttype'">
-                                        <!-- *ngIf="radioBtnType"-->
-                                        <div *ngFor="let opt of webcontrol.selectOptions" class="form-check-inline">
+                                        <div *ngFor="let opt of webcontrol.selectOptions" class="form-check-inline"  cdkDrag [cdkDragDisabled]="true">
                                             <input class="form-check-input" type="radio" name="requesttype"
-                                                [value]='opt.request_type_id'
-                                                [(ngModel)]="requestObject[opt.name]" />{{opt.name}}
+                                            id="{{opt.name}}"  [value]='opt.request_type_id' #requestype="ngModel"
+                                                [(ngModel)]="requestObject[opt.request_type_id]" />
+                                                <label for="{{opt.name}}">{{opt.name}}</label>
                                             <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
 
                                         </div>
                                     </div>
-                                    <div class="form-check"
+                                   
+                                    <div class="form-group"
                                         *ngIf="webcontrol.control === 'checkbox' && webcontrol.controlId === 'requesttype'">
                                         <!-- *ngIf="checkboxBtnType"-->
-                                        <div *ngFor="let opt of webcontrol.selectOptions; let i = index;"
-                                            class="form-check-inline">
-                                            <input class="form-check-input" type="checkbox"
-                                                name="{{webcontrol.controllabel}}" [value]='opt.request_type_id'
-                                                [(ngModel)]="requestObject[opt.name]" />{{opt.name}}
+                                        <div *ngFor="let opt of webcontrol.selectOptions; let i = index;" class="form-check-inline" cdkDrag [cdkDragDisabled]="true">
+                                            <input class="form-check-input" type="checkbox"  name="requestype"
+                                            id="{{opt.name}}"  [value]='opt.request_type_id'  #requestype="ngModel"
+                                                [(ngModel)]="requestObject[opt.request_type_id]" />
+                                                <label for="{{opt.name}}">{{opt.name}}</label>
                                             <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
 
                                         </div>
@@ -570,25 +598,30 @@
                                         </select>
                                         <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
                                     </div>
-                                    <div class="form-check"
+                                    <div class="form-group"
                                         *ngIf="webcontrol.control == 'radio' && webcontrol.controlId === 'subjecttype'">
                                         <!--*ngIf="subjectTyperadioBtn"-->
-                                        <div *ngFor="let userOpt of webcontrol.selectOptions" class="form-check-inline">
-                                            <input class="form-check-input" type="radio" name="subjecttype"
+                                        <div *ngFor="let userOpt of webcontrol.selectOptions" class="form-check-inline"
+                                        cdkDrag [cdkDragDisabled]="true">
+                                            <input class="form-check-input" type="radio" name="subjecttype" 
+                                          id="{{userOpt.name}}"  #subjecttype="ngModel"
                                                 [value]='userOpt.subject_type_id'
-                                                [(ngModel)]="requestObject[userOpt.name]" />
-                                            {{userOpt.name}}
+                                                [(ngModel)]="requestObject[userOpt.subject_type_id]" />
+                                            <label for="{{userOpt.name}}">{{userOpt.name}}</label>
+
                                             <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
                                         </div>
                                     </div>
-                                    <div
+                                    <div class="form-group"
                                         *ngIf="webcontrol.control == 'checkbox' && webcontrol.controlId === 'subjecttype'">
                                         <!--*ngIf="subjectTypecheckboxBtnType"-->
                                         <div *ngFor="let opt of webcontrol.selectOptions; let i = index;"
                                             class="form-check-inline">
                                             <input class="form-check-input" type="checkbox"
-                                                name="{{webcontrol.controllabel}}" [value]='opt.subject_type_id'
-                                                [(ngModel)]="requestObject[opt.name]" />{{opt.name}}
+                                            id="{{opt.name}}"  name="{{webcontrol.controllabel}}" 
+                                            [value]='opt.subject_type_id'
+                                                [(ngModel)]="requestObject[opt.subject_type_id]" />
+                                                <label for="{{opt.name}}">{{opt.name}}</label>
                                             <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
 
                                         </div>
@@ -622,18 +655,25 @@
                                             required</div>
                                     </div>
                                 </div>
-
+ 
                                 <div class="col-sm-12"
                                     *ngIf="webcontrol.control === 'radio' && webcontrol.controlId !== 'requesttype' && webcontrol.controlId !== 'subjecttype'">
+                                    <div  cdkDropList [cdkDropListData]="webcontrol.selectOptions"
+                                    (cdkDropListDropped)="dragDropCustomOption($event)"> 
                                     <label class="heading"><span *ngIf="webcontrol.requiredfield"
-                                            class="color-red">*</span>{{webcontrol.controllabel}}
+                                            class="color-red">*</span>{{webcontrol.controllabel}} 
                                     </label>
-                                    <div *ngFor="let userOpt of webcontrol.selectOptions" class="form-check-inline">
-                                        <input class="form-check-input" type="radio" name="{{webcontrol.controllabel}}"
-                                            [value]='userOpt.name' [(ngModel)]="requestObject[userOpt.name]" />
-                                        {{userOpt.name}}
-                                        <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
+                                    <div *ngFor="let userOpt of webcontrol.selectOptions" class="form-check-inline" 
+                                    [cdkDragDisabled]="true" cdkDrag>
+                                            <input class="form-check-input" type="radio" #customRadio="ngModel"
+                                                id="{{userOpt.id}}" name="{{userOpt.keylabel}}" [value]='userOpt.name'
+                                                [(ngModel)]="requestObject[userOpt.id]"
+                                                [ngClass]="{ 'is-invalid': registerForm.submitted && customRadio.invalid }"
+                                                [required]="webcontrol.requiredfield ? 'required' : null" />
+                                            <label for="{{userOpt.id}}">{{userOpt.name}}</label>
+                                            <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
 
+                                    </div>
                                     </div>
                                 </div>
 
@@ -683,12 +723,13 @@
                                     *ngIf="webcontrol.control == 'checkbox' && webcontrol.controlId !== 'subjecttype' && webcontrol.controlId !== 'requesttype'">
                                     <label class="form-check-label"><span *ngIf="webcontrol.requiredfield"
                                             class="color-red">*</span> {{webcontrol.controllabel}}</label>
-                                    <div *ngFor="let opt of webcontrol.selectOptions; let i = index;"
-                                        class="form-check-inline">
-                                        <input class="form-check-input" type="checkbox"
-                                            name="{{webcontrol.controllabel}}" [value]='opt.id'
-                                            [(ngModel)]="requestObject[opt.name]" />{{opt.name}}
-                                        <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
+                                    <div *ngFor="let opt of webcontrol.selectOptions; let i = index;"  class="form-check-inline">
+                                        <input class="form-check-input" type="checkbox" #customChkbox="ngModel"
+                                        id="{{opt.name}}"  name="{{opt.name}}" [value]="opt.id"
+                                        [ngClass]="{ 'is-invalid': registerForm.submitted && customChkbox.invalid }"
+                                        [required]="webcontrol.requiredfield ? 'required' : null" [(ngModel)]="requestObject[opt.id]" />
+                                    <label for="{{opt.name}}">{{opt.name}}</label>
+                                    <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
 
                                     </div>
                                 </div>
@@ -696,7 +737,7 @@
                                     [ngClass]="{'displaynone':!webcontrol.requiredfield,'':webcontrol.requiredfield ||isFileUploadRequired}"
                                     *ngIf="webcontrol.requiredfield && webcontrol.controlId == 'fileupload'">
                                     <label class="form-check-label"><span *ngIf="webcontrol.ismandatory"
-                                            class="color-red">*</span> {{webcontrol.controllabel}}</label>
+                                            class="color-red">*</span>{{webcontrol.controllabel}}</label>
                                     <div class="input-group">
                                         <div class="custom-file">
                                             <input type="file" class="custom-file-input" (change)="uploadFile($event)"
@@ -709,7 +750,7 @@
 
                                     </div>
                                     <div *ngIf="showFilesizeerror" class="color-red tx-12 mt-2">
-                                        File size should not exceed 2MB
+                                        File size should not exceed 10 MB
                                     </div>
                                     <div *ngIf="showFileExtnerror" class="color-red tx-12 mt-2">
                                         Only pdf, jpg, txt, doc, docx file area allowed.
@@ -770,7 +811,7 @@
                 <div>
                     <button class="btn btn-primary sw-btn-prev mr-2" (click)="onPrevious(1)">Previous</button>
                     <button class="btn btn-primary sw-btn-next mr-2" [disabled]="active === 1"
-                        (click)="saveAsDraftCCPAFormConfiguration(registerForm)">Next</button>
+                        (click)="saveAsDraftCCPAFormConfiguration()">Next</button>
                 </div>
             </div>
         </ng-template>
@@ -975,25 +1016,33 @@
         </ng-template>
 
         <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Close Clicked')">
-            <span aria-hidden="true">×</span>
+            <span aria-hidden="true">&times;</span>
         </button>
     </div>
     <div class="modal-body" *ngIf="isWelcomeEditor;else footerContent">
-        <form [formGroup]="quillEditorText" (ngSubmit)="onSubmitQuillEditorData()">
+        <form [formGroup]="quillEditorText" (ngSubmit)="onSubmitQuillEditorData()"
+        [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? true : null">
             <quill-editor formControlName="editor" [modules]="quillConfig" [(ngModel)]="editorDataWelcome"
-                [styles]="{height: '200px'}"></quill-editor>
+                [readOnly]="isWebFormPublished && !isEditingPublishedForm ? true : null"
+                [styles]="isEditorDisabled()"></quill-editor>
 
-            <button class="btn btn-primary float-right mt-2" type="submit">Save</button>
+            <button class="btn btn-primary float-right mt-2" 
+            [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? true : null"
+            type="submit">Save</button>
             <button class="btn btn-outline-dark float-right mt-2 mr-2"
                 (click)="modal.dismiss('Close Clicked')">Close</button>
         </form>
     </div>
     <ng-template #footerContent>
         <div class="modal-body">
-            <form [formGroup]="quillEditorText" (ngSubmit)="onSubmitQuillEditorData()">
+            <form [formGroup]="quillEditorText" (ngSubmit)="onSubmitQuillEditorData()" 
+            [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? true : null">
                 <quill-editor formControlName="editor" [modules]="quillConfig" [(ngModel)]="editorDataFooter"
-                    [styles]="{height: '200px'}"></quill-editor>
-                <button class="btn btn-primary float-right mt-2" type="submit">Save</button>
+                [readOnly]="isWebFormPublished && !isEditingPublishedForm ? true : null"
+                [styles]="isEditorDisabled()"></quill-editor>
+                <button class="btn btn-primary float-right mt-2"
+                [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? true : null"
+                type="submit">Save</button>
                 <button class="btn btn-outline-dark float-right mt-2 mr-2"
                     (click)="modal.dismiss('Close Clicked')">Close</button>
             </form>

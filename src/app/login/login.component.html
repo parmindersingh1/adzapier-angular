@@ -35,7 +35,7 @@
                   <label class="mg-b-0-f">Password</label>
                   <a routerLink="/forgot-password" tabindex="-1">Forgot password?</a>
                 </div>
-                <input type="password" formControlName="password" class="form-control"
+                <input type="password" toggle formControlName="password" class="form-control"
                  [ngClass]="{ 'is-invalid': submitted && f.password.errors }" placeholder="Enter your password"
                 pattern="(?=^.{6,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9]).*$" (ngModelChange)="clearError()"/>
                 <div *ngIf="submitted && f.password.errors"  class="invalid-feedback">
@@ -61,7 +61,7 @@
           <div class="divider-text">or</div>
           <div class="tx-13 mg-t-20 tx-center">Don't have an account? <a routerLink="/signup" >Create an Account</a></div>
         </div>
-        <div class="col-sm-12">
+        <div class="col-sm-5 mr-0 float-right flotingdiv">
           <alert *ngIf="isOpen" [type]="alertType" [dismissible]="dismissible" (onClosed)="onClosed(alertMsg)">{{  alertMsg}}
           </alert>
         </div>

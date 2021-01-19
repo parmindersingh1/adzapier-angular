@@ -279,11 +279,10 @@ export class CookieCategoryComponent implements OnInit {
       const key = [];
       for (const data of chartData) {
         val.push(data.count);
-        console.log('data.type', data.type);
-        if (!data.type) {
+        if (!data.party) {
           key.push('Unknown');
         } else {
-          key.push(data.type);
+          key.push(data.party);
         }
       }
       this.chartTypeLabels = key;

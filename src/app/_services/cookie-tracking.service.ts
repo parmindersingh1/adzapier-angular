@@ -26,6 +26,15 @@ export class CookieTrackingService {
     );
   }
 
+  onGetFilter(propsId, componentName, moduleName){
+    const path = apiConstant.COOKIE_TRACKING_FILTER.replace(':propId', propsId);
+    return this.http.get(environment.apiUrl + path ).pipe(map(res => res),
+    catchError(error => {
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.cookieConsent, componentName, moduleName, path);
+        return throwError(error);
+      }),
+    );
+  }
   onSendLogs(errorType, msg, functionality, componentName, moduleName, path) {
     this.loki.onSendErrorLogs(errorType, msg, functionality, componentName, moduleName, path).subscribe();
   }

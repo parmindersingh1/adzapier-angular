@@ -6,10 +6,10 @@ import { AuthGuard } from 'src/app/_helpers';
 // import {UpdateBillingComponent} from "../../update-billing/update-billing.component";
 
 const routes: Routes = [
-  {path: '', component: BillingComponent,  canActivate: [AuthGuard]},
+  {path: '', redirectTo: 'manage', pathMatch: 'full' , canActivate: [AuthGuard]},
  {path: 'pricing', loadChildren: () => import('./pricing/pricing.module').then(m => m.PricingModule), canActivate: [AuthGuard]},
- {path: 'manage', loadChildren: () => import('./manage-subscription/manage-subscription.module').then(m => m.ManageSubscriptionModule), canActivate: [AuthGuard]},
- {path: 'manage-product', loadChildren: () => import('./manage-product/manage-product.module').then(m => m.ManageProductModule), canActivate: [AuthGuard]}
+ {path: 'manage', loadChildren: () => import('./manage-licence/manage-licence.module').then(m => m.ManageLicenceModule), canActivate: [AuthGuard]},
+//  {path: 'manage-product', loadChildren: () => import('./manage-product/manage-product.module').then(m => m.ManageProductModule), canActivate: [AuthGuard]}
   ];
 @NgModule({
   imports: [RouterModule.forChild(routes)],

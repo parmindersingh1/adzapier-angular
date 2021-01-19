@@ -1,0 +1,96 @@
+thead tr {
+  height: 65px;
+}
+thead tr th {
+  padding-bottom: 20px;
+}
+
+tbody tr{
+  height: 50px;
+}
+tbody tr td{
+  padding-top: 20px;
+}
+
+.fa-check-circle {
+  color: #29c429;
+}
+.plan-name{
+  border-bottom: 1px solid #e1e5ed;
+    font-weight: bold;
+    margin-left: 20px;
+    margin-right: 20px;
+    padding-bottom: 20px;
+    font-size: 23px;
+    padding-left: 9px !important;
+}
+
+.action-btn {
+  font-size: 16px;
+    font-weight: 500;
+}
+.icon-text {
+   color: #11188f;
+}
+.assign-text{
+  font-weight: 700;
+  font-size: 23px;
+  padding-left: 17px;
+  padding-top: 16px;
+}
+.type-text{
+  font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+.br-t{
+  border-top: 1px solid #e1e5ed;
+}
+.cl-gray{
+  color: #555f5e;
+}
+.cs-alert{
+  text-align: center;
+  font-size: 18px;
+  font-weight: 500;
+  letter-spacing: 1px;
+
+}
+
+
+
+
+.alert-info {
+  color: #0c5460;
+  background-color: #d1ecf1;
+  border-color: #bee5eb;
+}
+
+.alert-success {
+  background-color: #10b759;
+  border-color: #10b759;
+  color: #fff;
+}
+
+.alert-danger {
+  color: #721c24;
+  background-color: #f8d7da;
+  border-color: #f5c6cb;
+}
+
+.flotingdiv{
+  position: fixed;
+  bottom: 0;
+  top: 84%;
+  right:0;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.cursorpointer {
+  cursor: pointer;
+}
+
+.colorblue {
+  color: #00f;
+}

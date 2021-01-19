@@ -235,8 +235,8 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
     this.searchFilter();
   }
 
-  viewDSARRequestDetails(id) {
-    this.router.navigate(['privacy/dsar/dsar-requests-details', id]);
+  viewDSARRequestDetails(res) {
+    this.router.navigate(['privacy/dsar/dsar-requests-details', res.id,res.cid,this.currentManagedOrgID,this.currrentManagedPropID]);
   }
 
   navigateToWebForm(obj) {

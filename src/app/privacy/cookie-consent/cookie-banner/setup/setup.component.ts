@@ -6,6 +6,9 @@ import { Location } from '@angular/common';
 import {moduleName} from '../../../../_constant/module-name.constant';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
 import {Router} from '@angular/router';
+import { environment } from 'src/environments/environment';
+import { apiConstant } from 'src/app/_constant/api.constant';
+
 
 @Component({
   selector: 'app-setup',
@@ -14,12 +17,23 @@ import {Router} from '@angular/router';
 })
 export class SetupComponent implements OnInit {
   private currentManagedOrgID: any;
+  env = environment;
+  apiConstant = apiConstant;
   modalRef: BsModalRef;
-  isCopied = false;
-  private currrentManagedPropID: any;
+  isCopied = {
+    one: false,
+    two: false
+  };
+  currrentManagedPropID: any;
   @ViewChild('template', { static: true}) template: ElementRef;
   closeScript = `"></script>`;
   addScript = `<script src="`;
+  tagEle = {
+    openHead: '<head>',
+    closeHead: '</head>',
+    openScript: '<script>',
+    closeScript: '</script>'
+  }
   loadingSkeleton = false;
   scriptUrl: any;
   dismissible = true;
@@ -78,8 +92,12 @@ export class SetupComponent implements OnInit {
     this.scriptUrl.setSelectionRange(0, 0);
   }
   copyToClipboard() {
-    this.isCopied = true;
-    const copyText: any = this.addScript + '//' + this.scriptUrl + this.closeScript;
+    this.isCopied.one = true;
+    const copyText: any = `<script>
+    // Replace Your AuthId '123123123'
+    document.cookie = "authId=123123123";
+    </script> ` +
+     this.addScript + '//' + this.scriptUrl + this.closeScript;
     let textarea = null;
     textarea = document.createElement('textarea');
     textarea.style.height = '0px';
@@ -106,5 +124,25 @@ export class SetupComponent implements OnInit {
 
   onClosed(alertMsg: any) {
 
+  }
+
+  copyToClipboardMethod() {
+    this.isCopied.two = true;
+    const copyText: any = `<script>
+    // Execute the method for open Preferences
+    window.AzCMP.onOpenPopUp();
+    </script> `;
+    let textarea = null;
+    textarea = document.createElement('textarea');
+    textarea.style.height = '0px';
+    textarea.style.left = '-100px';
+    textarea.style.opacity = '0';
+    textarea.style.position = 'fixed';
+    textarea.style.top = '-100px';
+    textarea.style.width = '0px';
+    document.body.appendChild(textarea);
+    textarea.value = copyText.trim();
+    textarea.select();
+    document.execCommand('copy');
   }
 }

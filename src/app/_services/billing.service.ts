@@ -34,6 +34,100 @@ export class BillingService {
       }),
     );
   }
+  // /assign/license/property?planID="xxxx"&pID="yyyy"
+
+  assignPropertyLicence(componentName, moduleName, payload){
+    const path = apiConstant.BILLING_ASSIGNE_PROPERTY;
+    return this.http.post(environment.apiUrl + path, payload).pipe(map(res => res),
+      catchError(error => {
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.updateBilling, componentName, moduleName, path);
+        return throwError(error);
+      }),
+    );
+  }
+
+  assignOrgLicence(componentName, moduleName, payload){
+    const path = apiConstant.BILLING_ASSIGNE_ORG;
+    return this.http.post(environment.apiUrl + path, payload).pipe(map(res => res),
+      catchError(error => {
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.updateBilling, componentName, moduleName, path);
+        return throwError(error);
+      }),
+    );
+  }
+
+
+  getAllPropertyList(componentName, moduleName, payload){
+    const path = apiConstant.BILLING_LIST_ALL_PROPERTY;
+    return this.http.get(environment.apiUrl + path, {params: payload}).pipe(map(res => res),
+      catchError(error => {
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.updateBilling, componentName, moduleName, path);
+        return throwError(error);
+      }),
+    );
+  }
+
+  getAllOrgList(componentName, moduleName){
+    const path = apiConstant.BILLING_LIST_ALL_ORG;
+    return this.http.get(environment.apiUrl + path).pipe(map(res => res),
+      catchError(error => {
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.updateBilling, componentName, moduleName, path);
+        return throwError(error);
+      }),
+    );
+  }
+
+  removeProperty(componentName, moduleName, payloads){
+    const path = apiConstant.BILLING_UNSSIGNE_PROPERTY;
+    return this.http.put(environment.apiUrl + path, '' , { params: payloads}).pipe(map(res => res),
+      catchError(error => {
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.updateBilling, componentName, moduleName, path);
+        return throwError(error);
+      }),
+    );
+  }
+
+
+  removeOrg(componentName, moduleName, payloads){
+    const path = apiConstant.BILLING_UNSSIGNE_ORG;
+    return this.http.put(environment.apiUrl + path, '' , { params: payloads}).pipe(map(res => res),
+      catchError(error => {
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.updateBilling, componentName, moduleName, path);
+        return throwError(error);
+      }),
+    );
+  }
+
+  getManageSessionID(componentName, moduleName){
+    const path = apiConstant.BILLING_MANAGE_SESSION_ID_GEN;
+    return this.http.get(environment.apiUrl + path).pipe(map(res => res),
+      catchError(error => {
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.updateBilling, componentName, moduleName, path);
+        return throwError(error);
+      }),
+    );
+  }
+
+  getAssignedPropByPlanID(componentName, moduleName, planID){
+    const path = apiConstant.BILLING_GET_ASSIGNE_PROP;
+    return this.http.get(environment.apiUrl + path, { params: {planID: planID}}).pipe(map(res => res),
+      catchError(error => {
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.updateBilling, componentName, moduleName, path);
+        return throwError(error);
+      }),
+    );
+  }
+
+  getAssignedOrgByPlanID(componentName, moduleName, planID){
+    const path = apiConstant.BILLING_GET_ASSIGNE_ORG;
+    return this.http.get(environment.apiUrl + path, { params: {planID: planID}}).pipe(map(res => res),
+      catchError(error => {
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.updateBilling, componentName, moduleName, path);
+        return throwError(error);
+      }),
+    );
+  }
+
   createSessionId(componentName, moduleName) {
     const path = apiConstant.BILLING_UPDATE_SESSION_ID;
     return this.http.get(environment.apiUrl + path).pipe(map(res => res),
@@ -61,6 +155,17 @@ export class BillingService {
     }),
   );
 }
+
+  getActivePlan(componentName, moduleName) {
+    const path = apiConstant.BILLING_ACTIVE_PLAN;
+    return this.http.get(environment.apiUrl + path).pipe(map(res => res),
+      catchError(error => {
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.billing, componentName, moduleName, path);
+        return throwError(error);
+      }),
+    );
+  }
+
 
   cancelPlan(componentName, moduleName) {
     const path = apiConstant.BILLING_CANCEL_PLAN;

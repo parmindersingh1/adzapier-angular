@@ -30,7 +30,6 @@
             <table class="table table-bordered mb-2">
                 <thead class="thead-primary">
                     <tr>
-                        <th>ID</th>
                         <th>Name</th>
                         <th>Address</th>
                         <th>City</th>
@@ -42,9 +41,10 @@
                 <tbody>
                     <ng-container *ngFor="let data of orgList |  filter: searchText:'orgname':'city':'state' | paginate:paginationConfig; let i = index">
                     <tr [ngClass]="{'row-disabled':data.active == false, 'row-enabled':data.active == true}">
-                        <td>{{ (paginationConfig.currentPage - 1) * paginationConfig.itemsPerPage + i + 1 }}
+                       
+                        <td><a *ngIf="data.active == true" (click)="viewOrganization(data.id)">{{data.orgname}}</a>
+                            <span *ngIf="data.active == false">{{data.orgname}}</span>
                         </td>
-                        <td>{{data.orgname}}</td>
                         <td>{{data.address1}} {{data.address2}}</td>
                         <td>{{data.city}}</td>
                         <td>{{data.state}}</td>

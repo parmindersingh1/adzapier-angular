@@ -12,7 +12,7 @@
     </div>
 </div>
 <div>
-    <div class="col-lg-6 col-xl-12 workflowcontainer">
+    <div class="col-md-12 col-xl-12 workflowcontainer">
         <div class="card">
             <div class="card-header  d-flex align-items-center justify-content-between pd-y-10">
                 <span class="tx-12 tx-color-03 mg-b-0">
@@ -57,7 +57,7 @@
                                 Stage</label>
                             <input type="text" [(ngModel)]="stageTitle"  #stage_title="ngModel" name="stageTitle" (keyup)="update($event)"
                                 class="form-control mb-1" 
-                                [attr.disabled]="isControlDisabled?true:null"
+                                [attr.disabled]="isControlDisabled ? true : null"
                                 [class.disabled]="isControlDisabled"
                                 [ngClass]="{ 'is-invalid': stage_title?.invalid && (stage_title?.dirty || stage_title?.touched) && submitted && !skeletonLoading }" required />
                             <div *ngIf="stage_title?.invalid && !skeletonLoading" class="invalid-feedback">
@@ -67,11 +67,13 @@
                                 Guidance Text</label>
                             <div [ngClass]="{ 'quilleditor-invalid':  guidanceText.invalid && submitted && !skeletonLoading}">
                                 <quill-editor [(ngModel)]="guidancetext" name="guidancetext" [modules]="quillConfig" 
-                            #guidanceText = "ngModel"
-                                [class.disabled]="isControlDisabled" (onContentChanged)="updateGuidanceText($event)"
+                                #guidanceText = "ngModel"
+                                [readOnly]="isControlDisabled"
+                                (onContentChanged)="updateGuidanceText($event)"
                                 [ngClass]="{ 'is-invalid': guidanceText?.invalid && (guidanceText?.dirty || guidanceText?.touched) && submitted }"
-                                 [styles]="{height: '200px'}"   
-                                 [required]="true">
+                                [styles]="isEditorDisabled()"
+                                style="height: 200px;"
+                                [required]="true">
                             </quill-editor>
                             <div *ngIf="guidanceText?.invalid && submitted && !skeletonLoading" class="invalid-feedback position-absolute">
                                 <div *ngIf="guidanceText?.invalid">Guidance text is required</div>

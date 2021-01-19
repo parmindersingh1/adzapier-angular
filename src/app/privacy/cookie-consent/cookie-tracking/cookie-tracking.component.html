@@ -8,10 +8,60 @@
   </nav>
   <h4 class="mg-b-0 tx-spacing--1">Cookie Consent Tracking</h4>
 </div>
-<p-table
+<div class="card border-radius-lt-rt">
+  <div class="card-body p-2">
+      <div class="row">
+        <div class="col-sm-3">
+          <select (change)="onGetFromServer()" [(ngModel)]="filterTypes.consentType" class="form-control form-control-sm">
+            <option value=""> -- Select Consent Type -- </option>
+            <option *ngFor="let obj of filterTypesData.consent_type" [value]="obj.consent_type">{{obj.consent_type}}</option>
+          </select>
+        </div>
+
+        <div class="col-sm-3">
+          <select (change)="onGetFromServer()" [(ngModel)]="filterTypes.status" class="form-control form-control-sm">
+            <option value=""> -- Select Status -- </option>
+            <option *ngFor="let obj of filterTypesData.status" [value]="obj.status">{{obj.status}}</option>
+          </select>
+        </div>
+
+        <div class="col-sm-2">
+          <select (change)="onGetFromServer()" [(ngModel)]="filterTypes.country" class="form-control form-control-sm">
+            <option value=""> -- Select Country -- </option>
+            <option *ngFor="let obj of filterTypesData.country" [value]="obj.country">{{obj.country}}</option>
+          </select>
+        </div>
+
+        <div class="col-sm-4">
+         <div class="input-group date-range-picker">
+          <label class="input-group-btn calandericon" for="reportrange">
+            <span class="btn btn-default calandericon">
+              <i class="fa fa-calendar"></i>
+            </span>
+        </label>
+          <input type="text" name="reportrange" class="form-control fa-calendar" id="reportrange"/>
+          <label class="input-group-btn" for="reportrange">
+            <span class="btn btn-default arrowicon">
+                <i class="fa fa-caret-down"></i>
+            </span>
+        </label>
+        </div>
+          
+          <!-- <span id="reportrange"
+                class="rounded-5">
+            <i class="fa fa-calendar"></i>&nbsp;
+            <span></span> <i class="fa fa-caret-down"></i>
+          </span> -->
+        </div>
+
+      </div>
+    </div>
+</div>
+
+<p-table class="cookie-tracking-table"
   styleClass="p-datatable-sm"
   [value]="cookieConsents"
-  [lazy]="true"
+  [lazy]="true" [responsive]="true"
   [loading]="tLoading"
   [totalRecords]="totalCookieCount"
   [rowsPerPageOptions]="[10,20,30]"
@@ -20,12 +70,13 @@
 >
   <ng-template pTemplate="header">
     <tr>
-      <th>ID</th>
+      <th style="width: 125px">ID</th>
       <th>Consent</th>
       <th>Type</th>
       <th>Status</th>
       <th>Date</th>
       <th>Device ID</th>
+      <th>Auth ID</th>
       <th>IP Address</th>
       <th>OS</th>
       <th>Country</th>
@@ -35,24 +86,35 @@
   </ng-template>
   <ng-template pTemplate="body" let-consent   styleClass="p-datatable-responsive-demo">
     <tr>
-      <td>{{consent.id}}</td>
-      <td  data-toggle="tooltip" title="{{consent.consent}}"> {{ consent.consent.length > 10 ? consent.consent.slice(0, 10) + '...' : consent.consent}} </td>
-      <td>{{consent.consent_type }}</td>
+      <td style="width: 125px">
+        <span class="ui-column-title">ID</span>
+       <a (click)="onDecodeString(consent)" [routerLink]="['/cookie-consent/cookie-tracking/decode']"  [queryParams]="{tcstring: consent.consent, type: consent.consent_type}">{{consent.id}}</a>
+      </td>
+      <td  data-toggle="tooltip" title="{{consent.consent}}">
+        <span class="ui-column-title">Consent</span>
+        {{ consent.consent.length > 10 ? consent.consent.slice(0, 10) + '...' : consent.consent}}
+       </td>
+      <td>  <span class="ui-column-title">Type</span>{{consent.consent_type }}</td>
       <td>
+        <span class="ui-column-title">Status</span>
         <span *ngIf="consent.status === 'do_not_sell'" class="product-badge status-outofstock">{{consent.status}}</span>
         <span *ngIf="consent.status === 'reject_all'" class="product-badge status-outofstock">{{consent.status}}</span>
         <span *ngIf="consent.status === 'accept_all'" class="product-badge status-instock">{{consent.status}}</span>
         <span *ngIf="consent.status === 'save_setting'" class="product-badge status-lowstock">{{consent.status}}</span>
       </td>
-      <td > {{consent.consent_date | date}} </td>
-      <td data-toggle="tooltip" title="{{consent.device_id}}">{{consent.device_id.slice(0, 10)}} ...</td>
+      <td >  <span class="ui-column-title">Date</span> {{consent.consent_date | date}} </td>
+      <td data-toggle="tooltip" title="{{consent.device_id}}"><span class="ui-column-title">Device ID</span>{{consent.device_id.slice(0, 10)}} ...</td>
+      <td data-toggle="tooltip" title="{{consent.auth_id ? consent.auth_id : ''}}">
+        <span class="ui-column-title">Auth ID</span>
+        {{consent.auth_id ? consent.auth_id.slice(0, 10): ''}} ...</td>
       <td data-toggle="tooltip" title="{{consent.ip_address}}">
+        <span class="ui-column-title">IP Address</span>
         {{ consent.ip_address.length > 12 ? consent.ip_address.slice(0, 12) + '...' : consent.ip_address}}
       </td>
-      <td>{{consent.os}}</td>
-      <td> {{consent.country}}</td>
-      <td> {{consent.city}}</td>
-      <td> {{consent.state}}</td>
+      <td>  <span class="ui-column-title">OS</span>{{consent.os}}</td>
+      <td>  <span class="ui-column-title">Country</span>{{consent.country}}</td>
+      <td>  <span class="ui-column-title">City</span>{{consent.city}}</td>
+      <td> <span class="ui-column-title">State</span> {{consent.state}}</td>
     </tr>
   </ng-template>
   <ng-template pTemplate="summary">

@@ -5,6 +5,7 @@ import { LoginRoutingModule } from './login-routing.module';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 // import {AlertModule} from 'ngx-bootstrap';
 import { SharedbootstrapModule } from '../sharedbootstrap/sharedbootstrap.module';
+// import { ToggleDirective } from '../_pipe/toggle.pipe';
 // import {AlertConfig, AlertModule} from 'ngx-bootstrap';
 
 

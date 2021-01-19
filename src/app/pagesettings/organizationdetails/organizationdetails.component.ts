@@ -19,6 +19,7 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 export class OrganizationdetailsComponent implements OnInit {
   @ViewChild('propertyModal', { static: true }) propertyModal: TemplateRef<any>;
   @ViewChild('confirmTemplate', { static: false }) confirmModal: TemplateRef<any>;
+  @ViewChild('deletePropertyAlert',{static: false}) deleteAlertModal: TemplateRef<any>;
   modalRef: BsModalRef;
   organisationPropertyForm: FormGroup;
   editOrganisationForm: FormGroup;
@@ -79,6 +80,8 @@ export class OrganizationdetailsComponent implements OnInit {
   confirmProperty: any;
   confirmTeammember: any;
   selectedTeamMember: any;
+  userList: any = [];
+  noResult = false;
   constructor(private activatedRoute: ActivatedRoute,
               private orgService: OrganizationService,
               private modalService: NgbModal,
@@ -153,7 +156,7 @@ export class OrganizationdetailsComponent implements OnInit {
     this.confirmationForm = this.formBuilder.group({
       userInput: ['', [Validators.required]]
     });
-    this.loadUserList();
+   // this.loadUserListForInvitation();
   }
   get f() { return this.inviteUserOrgForm.controls; }
   get orgProp() { return this.organisationPropertyForm.controls; }
@@ -205,11 +208,11 @@ export class OrganizationdetailsComponent implements OnInit {
   editModalPopup(content, data) {
     this.isEditProperty = true;
     // this.selectedOrg = data;
-    this.propertyname = data.name;
+    this.propertyname = data.name.replace(/&amp;/g,'&');
     this.website = data.website;
     this.logourl = data.logo_url;
     this.myContext = { oid: data.oid, pid: data.id };
-    this.organisationPropertyForm.controls['propertyname'].setValue(data.name);
+    this.organisationPropertyForm.controls['propertyname'].setValue(this.propertyname);
     this.organisationPropertyForm.controls['website'].setValue(data.website);
     this.organisationPropertyForm.controls['logourl'].setValue(data.logo_url);
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
@@ -279,6 +282,10 @@ export class OrganizationdetailsComponent implements OnInit {
     this.selectedPropID = obj.id;
     this.selectedOrgID = obj.oid;
     this.confirmProperty = obj.name;
+    if(this.selectedPropID === this.currrentManagedPropID){
+      this.openModal(this.deleteAlertModal);
+      return false;
+    }
     this.openModal(this.confirmModal);
   }
 
@@ -291,6 +298,7 @@ export class OrganizationdetailsComponent implements OnInit {
         this.isOpen = true;
         this.alertType = 'success';
         this.getPropertyList(this.organizationID);
+        this.orgService.isOrganizationUpdated.next(true);
         this.onCancelClick();
       }
     }, (err) => {
@@ -478,10 +486,19 @@ export class OrganizationdetailsComponent implements OnInit {
     });
   }
 
-  loadUserList() {
-    this.companyService.getUserList(this.constructor.name, moduleName.organizationDetailsModule).subscribe((data) => {
-      console.log(data,'data..');
-    });
+  loadUserListForInvitation(searchText) {
+      this.companyService.getUserList(searchText,
+        this.constructor.name, moduleName.companyModule).subscribe((data) => {
+        this.userList = data.response;
+      });
+  }
+
+  typeaheadNoResults(event: boolean): void {
+    this.noResult = event;
+  }
+
+  onSearchEmailId(searchEmail: string) {
+    this.loadUserListForInvitation(searchEmail);
   }
 
   viewOrganizationTeam() {

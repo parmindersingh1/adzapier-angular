@@ -17,7 +17,9 @@ export class CompanyComponent implements OnInit {
   @ViewChild('confirmTemplate', { static: false }) confirmModal: TemplateRef<any>;
   modalRef: BsModalRef;
   companyDetails: any;
+  appId: any;
   address1: any;
+  cid: any;
   address2: any;
   city: string;
   name: any;
@@ -56,6 +58,8 @@ export class CompanyComponent implements OnInit {
   confirmTeammember: any;
   selectedTeamMember: any;
   controlname: string;
+  userList: any = [];
+  noResult = false;
   constructor(private companyService: CompanyService, private modalService: NgbModal,
               private formBuilder: FormBuilder,
               private userService: UserService,
@@ -79,8 +83,8 @@ export class CompanyComponent implements OnInit {
       city: ['', [Validators.required, Validators.pattern(strRegx)]],
       state: ['', [Validators.required, Validators.pattern(strRegx)]],
       zipcode: ['', [Validators.required, Validators.pattern(numZip)]],
-      email: ['', [Validators.required]],
-      phone: ['', [Validators.required]]
+      email: [''],
+      phone: ['']
     });
     this.inviteUserForm = this.formBuilder.group({
       emailid: ['', [Validators.required, Validators.pattern]],
@@ -92,6 +96,7 @@ export class CompanyComponent implements OnInit {
     this.loadCompanyDetails();
     this.pathValues();
     this.loadCompanyTeamMembers();
+   // this.loadUserListForInvitation();
   }
   get f() { return this.companyForm.controls; }
   get userInvite() { return this.inviteUserForm.controls; }
@@ -111,6 +116,8 @@ export class CompanyComponent implements OnInit {
       this.companyId = data.response.id;
       this.email = data.response.email;
       this.phone = data.response.phone;
+      this.cid = data.response.id;
+      this.onGetToken(data.response.id);
     }, (err) => {
       this.loading.stop();
       this.alertMsg = err;
@@ -194,7 +201,60 @@ export class CompanyComponent implements OnInit {
         );
     }
   }
+  onGenerateToken(cId){
+    this.loading.start();
+    this.companyService.generateToken( this.constructor.name, moduleName.organizationDetailsModule, cId)
+    .subscribe(res => {
+      this.loading.stop();
+      this.alertMsg = res.message;
+      this.isOpen = true;
+      this.alertType = 'success';
+      this.onGetToken(this.cid)
+    }, err => {
+      this.loading.stop();
+      this.alertMsg = err.message;
+      this.isOpen = true;
+      this.alertType = 'danger';
+    })
 
+  }
+
+  onUpdateToken(cId){
+    this.loading.start();
+    this.companyService.updateToken( this.constructor.name, moduleName.organizationDetailsModule, cId)
+    .subscribe(res => {
+      this.loading.stop();
+      this.alertMsg = res.message;
+      this.isOpen = true;
+      this.alertType = 'success';
+      this.onGetToken(this.cid)
+    }, err => {
+      this.loading.stop();
+      this.alertMsg = err.message;
+      this.isOpen = true;
+      this.alertType = 'danger';
+    })
+
+  }
+
+
+  onGetToken(cid){
+    this.loading.start();
+    this.companyService.getToken( this.constructor.name, moduleName.organizationDetailsModule,cid)
+    .subscribe(res => {
+      this.loading.stop();
+      this.alertMsg = res.message;
+      this.appId = res.response.app_id;
+      this.isOpen = true;
+      this.alertType = 'success';
+    }, err => {
+      this.loading.stop();
+      this.alertMsg = err.message;
+      this.isOpen = true;
+      this.alertType = 'danger';
+    })
+
+  }
   onSubmitInviteUser() {
     this.isInviteFormSubmitted = true;
     if (this.inviteUserForm.invalid) {
@@ -217,7 +277,7 @@ export class CompanyComponent implements OnInit {
               this.isUpdateUserinvitation = false;
             }
           }, (error) => {
-            this.alertMsg = JSON.stringify(error);
+            this.alertMsg = error;
             this.isOpen = true;
             this.alertType = 'danger';
             this.onCancelClick();
@@ -274,7 +334,7 @@ export class CompanyComponent implements OnInit {
     this.inviteUserForm.controls['emailid'].setValue(data.user_email);
     this.inviteUserForm.get('emailid')[this.isUpdateUserinvitation ? 'disable' : 'enable']();
     this.inviteUserForm.controls['permissions'].setValue(data.role_id);
-     
+
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
       this.inviteUserForm.reset();
       // this.closeResult = `Closed with: ${result}`;
@@ -347,6 +407,20 @@ export class CompanyComponent implements OnInit {
     });
   }
 
+  loadUserListForInvitation(searchText) {
+    this.companyService.getUserList(searchText, this.constructor.name, moduleName.companyModule).subscribe((data) => {
+      this.userList = data.response;
+    });
+  }
+
+  onSearchEmailId(searchEmail: string) {
+    this.loadUserListForInvitation(searchEmail);
+  }
+
+  typeaheadNoResults(event: boolean): void {
+    this.noResult = event;
+  }
+
   removeTeamMember(obj, control: string) {
     this.confirmTeammember = obj;
     this.controlname = control;
@@ -383,7 +457,7 @@ export class CompanyComponent implements OnInit {
     });
   }
 
- 
+
 
   confirmDeleteTeamMember() {
     this.modalRef.hide();
