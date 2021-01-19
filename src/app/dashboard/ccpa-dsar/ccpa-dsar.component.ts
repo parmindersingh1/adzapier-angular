@@ -418,7 +418,7 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
       const colorChart = [];
       for (const chart of reqChartData) {
         data.push({data:  chart.value.map(x => +x), label: chart.label});
-        if (chart.label === 'Recevied') {
+        if (chart.label === 'Received') {
           colorChart.push(colorValues[0])
         }
         if (chart.label === 'InProgress') {
