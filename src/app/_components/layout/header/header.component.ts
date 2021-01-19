@@ -44,7 +44,7 @@ export class HeaderComponent implements OnInit {
   publicNavigationMenu: any;
   currentProperty: any;
   navToggleStatus = false;
-  close: boolean;
+  close: boolean = true;
   userRole: string;
   propertyList: any;
   listOfProp: any;
@@ -266,7 +266,7 @@ export class HeaderComponent implements OnInit {
     } else {
       this.router.navigate([this.router.url]);
     }
-
+    this.openNav();
   }
 
   isPropSelected(selectedItem): boolean {
@@ -351,9 +351,6 @@ export class HeaderComponent implements OnInit {
     this.addMobileMenuWidth = this.addMenuWidth(); // to avoid countinous background call
   }
 
-  closeNav() {
-    this.close = false;
-  }
 
   loadOrganizationWithProperty() {
     this.loading.start();
@@ -505,7 +502,7 @@ export class HeaderComponent implements OnInit {
       }
     } else {
       this.isBillingActivelinkMatched = false;
-      this.closeNav();
+      this.openNav();
     }
   }
 
@@ -615,7 +612,7 @@ export class HeaderComponent implements OnInit {
       this.isMobilePropertyCollapsed = true;
     } else {
       this.goto(link); // for billing link
-      this.closeNav();
+      this.openNav();
     }
   }
 
@@ -638,25 +635,22 @@ export class HeaderComponent implements OnInit {
 
   addMenuWidth(){
     let textLength;
-    if(this.close === undefined){
-      this.close = false;
-    }
     if(this.currentOrganization !== undefined){
       textLength = this.currentOrganization.length;
      // console.log(textLength,'textLength..');
       let generatedWidth = (textLength * 10) <= 250 ? 250 : textLength * 10;
       let addStyle = { 
         'width': generatedWidth + 'px',
-        'left': this.close ? 0 : '-' +  generatedWidth + 'px',
-        'transform': this.close ? 'translateX(0)' : 'translateX(-'+ generatedWidth +'px)',
+        'left': !this.close ? 0 : '-' +  generatedWidth + 'px',
+        'transform': !this.close ? 'translateX(0)' : 'translateX(-'+ generatedWidth +'px)',
         'padding': 0
        };
        return addStyle;
     }else{
       let addStyle = { 
         'width': 260 + 'px',
-        'left': this.close ? 0 : '-' +  26 * 10 + 'px',
-        'transform': this.close ? 'translateX(0)' : 'translateX(-'+ 26 * 10 +'px)',
+        'left': !this.close ? 0 : '-' +  26 * 10 + 'px',
+        'transform': !this.close ? 'translateX(0)' : 'translateX(-'+ 26 * 10 +'px)',
         'padding': 0
        };
        return addStyle;

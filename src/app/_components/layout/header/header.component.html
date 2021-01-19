@@ -6,8 +6,8 @@
     <div class="navbar-brand">
       <button class="navbar-toggler navbar-left" type="button" (click)="openNav()" data-toggle="collapse"
         data-target="#collapsibleNavbar">
-        <i-feather name="menu" *ngIf="!close" class="feather-16"></i-feather>
-        <i-feather name="plus" *ngIf="close" class="feather-16 menuplus-icon"></i-feather>
+        <i-feather name="menu" *ngIf="close" class="feather-16"></i-feather>
+        <i-feather name="plus" *ngIf="!close" class="feather-16 menuplus-icon"></i-feather>
       </button>
       <a class="df-logo" (click)="goto('/login')"> <!--routerLink="/login"-->
         Ad<span>Zapier</span>
@@ -214,15 +214,7 @@
 <!---iPad / Mobile Menu-->
 <div id="divSidenav" class="sidenav">
   <div class="sidebar sidebar-components" [ngStyle]="addMobileMenuWidth">
-    <div class="sidebar-header">
-      <i-feather name="menu"></i-feather>
-      <a class="df-logo" (click)="goto('/login')">
-        <span>AdZapier</span>
-      </a>
-      <button class="btn btn-sm closebtn" (click)="closeNav()">
-        <i-feather name="x"></i-feather>
-      </button>
-    </div>
+    <div class="sidebar-header"></div>
     <div class="sidebar-body">
 
   <ul class="navbar-nav" *ngIf="!currentUser">
@@ -259,7 +251,7 @@
     <a class="nav-link dropdown-link"  (click)="onMobilePropertyMenuClicked(true)">
      <div>{{currentOrganization}}
      </div>
-     <span>{{currentProperty?currentProperty:'Select Property'}}</span>
+     <span>{{currentProperty ? convertAmpersand(currentProperty):'Select Property'}}</span>
     </a>
     <ul class="dropdown-menu propMenu" [isAnimated]="true"  [collapse]="isMobilePropertyCollapsed">
         <li role="menuitem" *ngFor="let item of orgPropertyMenu; first as isFirst; let i = index;">
@@ -270,11 +262,12 @@
           <div *ngIf="item.property.length=='0'">No Property</div>
           <ul role="menu">
             <ng-container  *ngFor="let submenu of item.property">
-              <li role="menuitem" (click)="isCurrentPropertySelected(item,submenu)">
-                <a class="dropdown-item" routerLinkActive="active" [ngClass]="[isPropSelected(submenu) ? 'active' : '']"> <!-- routerLink="{{item.id}}/{{submenu.property_id}}"-->
-                  {{ submenu.property_name? submenu.property_name: 'No Property' }}
+              <li role="menuitem">
+                <a class="dropdown-item" routerLinkActive="active" [class.disableproperty]="isProperyDisabled(submenu)" [ngClass]="[isPropSelected(submenu) ? 'active' : '']"> <!-- routerLink="{{item.id}}/{{submenu.property_id}}"-->
+                 <span (click)="isProperyDisabled(submenu) ? false : isCurrentPropertySelected(item,submenu)">  {{ submenu.property_name ? convertAmpersand(submenu.property_name) : 'No Property' }}
                   <span class="ml-2" *ngIf="isPropSelected(submenu)">
                   <i class="fa fa-check"></i></span>
+                </span>
                 </a>
               </li>
             </ng-container>
