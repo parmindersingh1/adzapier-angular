@@ -55,7 +55,7 @@
             <div class="row">
                 <div class="col-sm-4 form-field-section bordermargin">
                     <accordion closeOthers="1" [isAnimated]="true">
-                        <accordion-group [panelClass]="formtab-one" [isOpen]="accordionStatus.isFirstopen" (isOpenChange)="accordionChangeStatus($event,'first')">
+                        <accordion-group [isOpen]="accordionStatus.isFirstopen" (isOpenChange)="accordionChangeStatus($event,'first')">
                             <button class="btn btn-link btn-block clearfix" accordion-heading type="button">
                                 <div class="pull-left float-left" [ngClass]="accordionStatus.isFirstopen ? 'template-blue':'light-black'">Form Fields</div>
                                 <span class="float-right pull-right"><i class="fas fa-chevron-right" [ngClass]="accordionStatus.isFirstopen ? 'rotateicon':'resumeiconstate'"></i></span>
