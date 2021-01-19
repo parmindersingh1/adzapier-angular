@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import {  Router, ActivatedRoute } from '@angular/router';
 import { UserService } from '../_services';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
 import { moduleName } from '../_constant/module-name.constant';
@@ -14,6 +14,7 @@ export class VerifyemailComponent implements OnInit {
   isUserVarified = false;
   message: string;
   constructor( private activatedRoute: ActivatedRoute,
+               private router: Router,
                private loading: NgxUiLoaderService,
                private userService: UserService) {
     this.activatedRoute.snapshot.paramMap.get('id');
@@ -29,6 +30,9 @@ export class VerifyemailComponent implements OnInit {
       this.loading.stop();
       this.isUserVarified = true;
       this.message = 'Your email address is successfully verified ! please login to access your account!';
+      setInterval(()=>{
+        return this.router.navigate(['/login']);
+       },3000);
     }, error => {
       this.loading.stop();
       this.isUserVarified = false;

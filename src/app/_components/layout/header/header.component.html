@@ -59,7 +59,7 @@
       <a class="nav-link dropdown-link"  dropdownToggle (click)="false">
        <div>{{currentOrganization}} 
        </div>
-       <span>{{currentProperty ? currentProperty : 'Select Property'}}</span>
+       <span>{{currentProperty ? convertAmpersand(currentProperty) : 'Select Property'}}</span>
       </a>
      <!--(orgPropertyMenu | async).response-->
       <ul *dropdownMenu class="dropdown-menu propMenu" [ngStyle]="addColumncount()"> <!--[ngStyle]="addColumncount()"-->
@@ -73,7 +73,7 @@
               <ng-container  *ngFor="let submenu of item.property">
                 <li role="menuitem">
                   <a class="dropdown-item" routerLinkActive="active" [class.disableproperty]="isProperyDisabled(submenu)" [ngClass]="[isPropSelected(submenu) ? 'active' : '']"> <!-- routerLink="{{item.id}}/{{submenu.property_id}}"-->
-                   <span (click)="isProperyDisabled(submenu) ? false : isCurrentPropertySelected(item,submenu)"> {{ submenu.property_name? submenu.property_name: 'No Property' }}
+                   <span (click)="isProperyDisabled(submenu) ? false : isCurrentPropertySelected(item,submenu)">  {{ submenu.property_name ? convertAmpersand(submenu.property_name) : 'No Property' }}
                     <span class="ml-2" *ngIf="isPropSelected(submenu)">
                     <i class="fa fa-check"></i></span>
                   </span>
@@ -213,7 +213,7 @@
 </nav>
 <!---iPad / Mobile Menu-->
 <div id="divSidenav" class="sidenav">
-  <div class="sidebar sidebar-components" [ngStyle]="addMenuWidth()">
+  <div class="sidebar sidebar-components" [ngStyle]="addMobileMenuWidth">
     <div class="sidebar-header">
       <i-feather name="menu"></i-feather>
       <a class="df-logo" (click)="goto('/login')">

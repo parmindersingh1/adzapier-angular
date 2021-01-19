@@ -148,8 +148,8 @@
                             <td>
                                <div class="img-wrapper"><img class="img-fluid" [src]="loadLogoURL(list.logo_url)" /> </div>
                             </td>
-                            <td>
-                                {{list.name}}
+                            <td> <span [innerHTML]="list.name"></span>
+                                <!-- {{list.name}} -->
                             </td>
                             <td>
                                 {{list.website}}

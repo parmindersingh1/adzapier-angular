@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from './../../environments/environment';
-import { Observable, throwError } from 'rxjs';
+import { from, Observable, throwError } from 'rxjs';
 import { shareReplay, map, catchError } from 'rxjs/operators';
 import { LokiService } from './loki.service';
 import { LokiFunctionality, LokiStatusType } from '../_constant/loki.constant';
@@ -188,6 +188,26 @@ export class DsarRequestService {
         this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.viewClientsFileAttachments, componentName, moduleName, path);
         return throwError(error);
       }));
+  }
+
+  getRejectionReason(): Observable<any> {
+    return from([{id:1,reason:'Excessive request'},
+                {id:2,reason:'Frivolous / unfounded request'},
+                {id:3,reason:'Incomplete / partial request'},
+                {id:4,reason:'No response verification'},
+                {id:5,reason:'Not a privacy related request'},
+                {id:6,reason:'Non-EU request'},
+                {id:7,reason:'Repetitive request'}]);
+  }
+
+  rejectDSARRequest(requestID, requestObj, componentName,moduleName){
+    const path = '/ccpa/activity/reject/' + requestID;
+    return this.http.put<any>(environment.apiUrl + path, requestObj)
+      .pipe(shareReplay(1), catchError(error => {
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.rejectDSARRequest, componentName, moduleName, path);
+        return throwError(error);
+      }));
+
   }
 
 }

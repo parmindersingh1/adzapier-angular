@@ -896,6 +896,12 @@ ul.ngx-pagination {
     outline: none;
 }
 
+.rejectedstatus {
+    color: #b10202;
+    background: #fff2f2;
+    border: 1px solid #b10202;
+}
+
 @media(max-width:768px){
 .activitytab .nav-tabs .nav-link {
     padding: 0 30px;

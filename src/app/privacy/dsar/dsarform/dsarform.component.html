@@ -53,22 +53,18 @@
         <a ngbNavLink>2 Form</a>
         <ng-template ngbNavContent>
             <div class="row">
-                <div class="col-sm-4 form-field-section">
-                    <ngb-accordion #acc="ngbAccordion" activeIds="ngb-panel-0">
-                        <ngb-panel title="Form Fields">
-                            <ng-template ngbPanelHeader>
-                                <div class="d-flex align-items-center justify-content-between">
-                                    <button ngbPanelToggle class="btn btn-link p-0 collapse-btn">
-                                        <h6 class="form-tl m-0">Form Fields</h6>
-                                        <i class="fas fa-chevron-down"></i>
-                                    </button>
-                                </div>
-                            </ng-template>
-                            <ng-template ngbPanelContent>
-                                <div cdkDropList [cdkDropListData]="webFormControlList" class="formfield-list"
+                <div class="col-sm-4 form-field-section bordermargin">
+                    <accordion closeOthers="1" [isAnimated]="true">
+                        <accordion-group [panelClass]="formtab-one" [isOpen]="accordionStatus.isFirstopen" (isOpenChange)="accordionChangeStatus($event,'first')">
+                            <button class="btn btn-link btn-block clearfix" accordion-heading type="button">
+                                <div class="pull-left float-left" [ngClass]="accordionStatus.isFirstopen ? 'template-blue':'light-black'">Form Fields</div>
+                                <span class="float-right pull-right"><i class="fas fa-chevron-right" [ngClass]="accordionStatus.isFirstopen ? 'rotateicon':'resumeiconstate'"></i></span>
+                              </button>
+                           
+                            <div cdkDropList [cdkDropListData]="webFormControlList" class="formfield-list"
                                     (cdkDropListDropped)="drop($event)">
 
-                                    <div *ngIf="!isAddingFormControl">
+                                    <div *ngIf="!isAddingFormControl" >
                                         <div *ngIf="!isEditingList">
                                             <div *ngFor="let item of webFormControlList; let i = index;" cdkDrag>
                                                 <div class="example-box"
@@ -344,199 +340,185 @@
                                         </div>
                                     </div>
                                 </div>
+                        </accordion-group>
+                        <accordion-group (isOpenChange)="accordionChangeStatus($event,'second')">
+                            <button class="btn btn-link btn-block clearfix" type="button" accordion-heading>
+                                <div class="pull-left float-left" [ngClass]="accordionStatus.isSecondopen ? 'template-blue':'light-black'">Form Styling</div>
+                                <span class="float-right pull-right"><i class="fas fa-chevron-right" [ngClass]="accordionStatus.isSecondopen ? 'rotateicon':'resumeiconstate'"></i></span>
+                            </button>
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div class="row">
+                                    <div class="col-sm-12 mb-2">
+                                        <!-- (ngSubmit)="onSubmitHeaderLogo()"-->
 
-                            </ng-template>
-                        </ngb-panel>
-                        <ngb-panel title="Form Styling">
-                            <ng-template ngbPanelHeader>
-                                <div class="d-flex align-items-center justify-content-between">
-                                    <button ngbPanelToggle class="btn btn-link p-0 collapse-btn">
-                                        <h6 class="form-tl m-0">Form Styling</h6>
-                                        <i class="fas fa-chevron-down"></i>
-                                    </button>
-                                </div>
-                            </ng-template>
-                            <ng-template ngbPanelContent>
-                                <div class="d-flex align-items-center justify-content-between">
-                                    <div class="row">
-                                        <div class="col-sm-12 mb-2">
-                                            <!-- (ngSubmit)="onSubmitHeaderLogo()"-->
-
-                                            <form [formGroup]="headerLogoForm">
+                                        <form [formGroup]="headerLogoForm">
+                                        <div>
+                                            <label for="taskresponse" class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5">
+                                                Header logo</label> 
+                                                <div class="upload-wrapper" [ngClass]="{'hide':headerlogoBase64,'show':!headerlogoBase64}">
+                                                    <p>File Format PNG, JPG or JPEG, Max Size 1MB</p>
+                                            <div class="input-group">
+                                                <label for="file-upload" class="custom-file-upload btn btn-primary" [ngClass]="{'disabled':isWebFormPublished && !isEditingPublishedForm}">
+                                                    Upload
+                                                </label>
+                                                <input type="file" class="custom-file-input" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
+                                                formControlName="headerlogo"
+                                                (change)="fileChangeEvent($event)" id="headerlogo">
+                                                
+                                            </div>
+                                                </div>
+                                            <div class="img-space" [ngClass]="{'hide':!headerlogoBase64,'show':headerlogoBase64}">
+                                                <ng-container *ngIf="headerlogoBase64; else elseTemplate">
+                                                    <img [src]="headerlogoBase64" class="uploaded-logo-width" [height]="logoHeight" [width]="logoWidth" />
+                                                </ng-container>
+                                                <ng-template #elseTemplate>                                    
+                                                    <img src="assets/imgs/no_image.png" class="img-responsive">
+                                                </ng-template>                                
+                                            </div>
+                                            <div class="filedetails" [ngClass]="{'hide':!headerlogoBase64,'show':headerlogoBase64}">
+                                               <div> <span><i-feather name="image" class="feathericon"></i-feather>
+                                                </span>
+                                               <span class="ml-1"> File Name:  {{logoFilename}}</span>
+                                               </div>
+                                                <span class="ml-4">File size: {{logoFilesize}}</span>
+                                                <button class="logodelete" (click)="deleteSelectedLogo()">
+                                                    <i-feather name="trash-2" class="feathericon"></i-feather>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    
+                                        </form>
+                                    </div>
+                                    <div class="col-sm-12 mb-2">
+                                        <form [formGroup]="faviconForm">
                                             <div>
                                                 <label for="taskresponse" class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5">
-                                                    Header logo</label> 
-                                                    <div class="upload-wrapper" [ngClass]="{'hide':headerlogoBase64,'show':!headerlogoBase64}">
+                                                    Header Favicon</label> 
+                                                    <div class="upload-wrapper" [ngClass]="{'hide':headerfaviconBase64,'show':!headerfaviconBase64}">
                                                         <p>File Format PNG, JPG or JPEG, Max Size 1MB</p>
                                                 <div class="input-group">
                                                     <label for="file-upload" class="custom-file-upload btn btn-primary" [ngClass]="{'disabled':isWebFormPublished && !isEditingPublishedForm}">
                                                         Upload
                                                     </label>
                                                     <input type="file" class="custom-file-input" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
-                                                    formControlName="headerlogo"
-                                                    (change)="fileChangeEvent($event)" id="headerlogo">
+                                                    formControlName="titlefavicon"
+                                                    (change)="faviconChangeEvent($event)" id="titlefavicon">
                                                     
                                                 </div>
                                                     </div>
-                                                <div class="img-space" [ngClass]="{'hide':!headerlogoBase64,'show':headerlogoBase64}">
-                                                    <ng-container *ngIf="headerlogoBase64; else elseTemplate">
-                                                        <img [src]="headerlogoBase64" class="uploaded-logo-width" [height]="logoHeight" [width]="logoWidth" />
+                                                <div class="favicon-img-space" [ngClass]="{'hide':!headerfaviconBase64,'show':headerfaviconBase64}">
+                                                    <ng-container *ngIf="headerfaviconBase64; else elseTemplate">
+                                                        <img [src]="headerfaviconBase64" class="uploaded-favicon-width" [height]="logoHeight" [width]="logoWidth" />
                                                     </ng-container>
-                                                    <ng-template #elseTemplate>                                    
+                                                    <ng-template #elseTemplate>
                                                         <img src="assets/imgs/no_image.png" class="img-responsive">
-                                                    </ng-template>                                
+                                                    </ng-template>
                                                 </div>
-                                                <div class="filedetails" [ngClass]="{'hide':!headerlogoBase64,'show':headerlogoBase64}">
+                                                <div class="filedetails" [ngClass]="{'hide':!headerfaviconBase64,'show':headerfaviconBase64}">
                                                    <div> <span><i-feather name="image" class="feathericon"></i-feather>
                                                     </span>
-                                                   <span class="ml-1"> File Name:  {{logoFilename}}</span>
+                                                   <span class="ml-1"> File Name:  {{faviconFilename}}</span>
                                                    </div>
-                                                    <span class="ml-4">File size: {{logoFilesize}}</span>
-                                                    <button class="logodelete" (click)="deleteSelectedLogo()">
+                                                    <span class="ml-4">File size: {{faviconFilesize}}</span>
+                                                    <button class="logodelete" (click)="deleteSelectedFavicon()">
                                                         <i-feather name="trash-2" class="feathericon"></i-feather>
                                                     </button>
                                                 </div>
                                             </div>
                                         
                                             </form>
-                                        </div>
-                                        <div class="col-sm-12 mb-2">
-                                            <form [formGroup]="faviconForm">
-                                                <div>
-                                                    <label for="taskresponse" class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5">
-                                                        Header Favicon</label> 
-                                                        <div class="upload-wrapper" [ngClass]="{'hide':headerfaviconBase64,'show':!headerfaviconBase64}">
-                                                            <p>File Format PNG, JPG or JPEG, Max Size 1MB</p>
-                                                    <div class="input-group">
-                                                        <label for="file-upload" class="custom-file-upload btn btn-primary" [ngClass]="{'disabled':isWebFormPublished && !isEditingPublishedForm}">
-                                                            Upload
-                                                        </label>
-                                                        <input type="file" class="custom-file-input" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
-                                                        formControlName="titlefavicon"
-                                                        (change)="faviconChangeEvent($event)" id="titlefavicon">
-                                                        
-                                                    </div>
-                                                        </div>
-                                                    <div class="favicon-img-space" [ngClass]="{'hide':!headerfaviconBase64,'show':headerfaviconBase64}">
-                                                        <ng-container *ngIf="headerfaviconBase64; else elseTemplate">
-                                                            <img [src]="headerfaviconBase64" class="uploaded-favicon-width" [height]="logoHeight" [width]="logoWidth" />
-                                                        </ng-container>
-                                                        <ng-template #elseTemplate>                                    
-                                                            <img src="assets/imgs/no_image.png" class="img-responsive">
-                                                        </ng-template>                                
-                                                    </div>
-                                                    <div class="filedetails" [ngClass]="{'hide':!headerfaviconBase64,'show':headerfaviconBase64}">
-                                                       <div> <span><i-feather name="image" class="feathericon"></i-feather>
-                                                        </span>
-                                                       <span class="ml-1"> File Name:  {{faviconFilename}}</span>
-                                                       </div>
-                                                        <span class="ml-4">File size: {{faviconFilesize}}</span>
-                                                        <button class="logodelete" (click)="deleteSelectedFavicon()">
-                                                            <i-feather name="trash-2" class="feathericon"></i-feather>
-                                                        </button>
-                                                    </div>
-                                                </div>
+                                    </div>
+                                    <div class="col-sm-12 mb-1">
+                                        <div class="formgroup d-flex justify-content">
+                                            <div class="col-md-5 p-0">
+                                                <label class="col-form-label-sm tx-10 tx-uppercase tx-medium tx-spacing-1">Header Color</label>
+                                            </div>
+                                            <div class="col-md-6 d-flex color-controlwrapper">
+                                                <input type="color" [(ngModel)]="headerColor" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null" />
+                                                <input type="text" class="form-control form-control-sm ml-1" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm? '' : null"
+                                                [(ngModel)]="headerColor" />
+                                            </div>
                                             
-                                                </form>
                                         </div>
-                                        <div class="col-sm-12 mb-1">
-                                            <div class="formgroup d-flex justify-content">
-                                                <div class="col-md-5 p-0">
-                                                    <label class="col-form-label-sm tx-10 tx-uppercase tx-medium tx-spacing-1">Header Color</label>
+                                    </div>
+                                    <div class="col-sm-12 mb-1">
+                                        <div class="formgroup d-flex justify-content">
+                                            <div class="col-md-5 p-0">
+                                                <label class="col-form-label-sm tx-10 tx-uppercase tx-medium tx-spacing-1">Welcome Text Color</label>
+                                            </div>
+                                            <div class="col-md-6 d-flex color-controlwrapper"><input type="color" class="form-control" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
+                                                    [(ngModel)]="welcomeTextColor" />
+                                                    <input type="text" class="form-control form-control-sm ml-1" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
+                                                    [(ngModel)]="welcomeTextColor" />
                                                 </div>
-                                                <div class="col-md-6 d-flex color-controlwrapper">
-                                                    <input type="color" [(ngModel)]="headerColor" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null" />
-                                                    <input type="text" class="form-control form-control-sm ml-1" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm? '' : null"
-                                                    [(ngModel)]="headerColor" />
-                                                </div>
-                                                
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 mb-1">
+                                        <div class="formgroup row justify-content">
+                                            <div class="col-md-5">
+                                                <label class="col-form-label-sm tx-10 tx-uppercase tx-medium tx-spacing-1">Welcome Font Size </label>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <input type="number" min="13" max="20" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
+                                                    class="form-control form-control-sm h-75"
+                                                    [(ngModel)]="welcomeFontSize" />
                                             </div>
                                         </div>
-                                        <div class="col-sm-12 mb-1">
-                                            <div class="formgroup d-flex justify-content">
-                                                <div class="col-md-5 p-0">
-                                                    <label class="col-form-label-sm tx-10 tx-uppercase tx-medium tx-spacing-1">Welcome Text Color</label>
-                                                </div>
-                                                <div class="col-md-6 d-flex color-controlwrapper"><input type="color" class="form-control" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
-                                                        [(ngModel)]="welcomeTextColor" />
-                                                        <input type="text" class="form-control form-control-sm ml-1" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
-                                                        [(ngModel)]="welcomeTextColor" />
-                                                    </div>
+                                    </div>
+                                    <div class="col-sm-12 mb-1">
+                                        <div class="formgroup d-flex justify-content">
+                                            <div class="col-md-5 p-0">
+                                                <label class="col-form-label-sm tx-10 tx-uppercase tx-medium tx-spacing-1">Footer Text Color</label>
+                                            </div>
+                                            <div class="col-md-6 d-flex color-controlwrapper">
+                                                <input type="color" [(ngModel)]="footerTextColor" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null" />
+                                                <input type="text" class="form-control form-control-sm ml-1" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm? '' : null"
+                                                    [(ngModel)]="footerTextColor" />
                                             </div>
                                         </div>
-                                        <div class="col-sm-12 mb-1">
-                                            <div class="formgroup row justify-content">
-                                                <div class="col-md-5">
-                                                    <label class="col-form-label-sm tx-10 tx-uppercase tx-medium tx-spacing-1">Welcome Font Size </label>
-                                                </div>
-                                                <div class="col-sm-3">
-                                                    <input type="number" min="13" max="20" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
-                                                        class="form-control form-control-sm h-75"
-                                                        [(ngModel)]="welcomeFontSize" />
-                                                </div>
+                                    </div>
+                                    <div class="col-sm-12 mb-1">
+                                        <div class="formgroup row justify-content">
+                                            <div class="col-md-5">
+                                                <label class="col-form-label-sm tx-10 tx-uppercase tx-medium tx-spacing-1">Footer Text Size</label>
                                             </div>
-                                        </div>
-                                        <div class="col-sm-12 mb-1">
-                                            <div class="formgroup d-flex justify-content">
-                                                <div class="col-md-5 p-0">
-                                                    <label class="col-form-label-sm tx-10 tx-uppercase tx-medium tx-spacing-1">Footer Text Color</label>
-                                                </div>
-                                                <div class="col-md-6 d-flex color-controlwrapper">
-                                                    <input type="color" [(ngModel)]="footerTextColor" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null" />
-                                                    <input type="text" class="form-control form-control-sm ml-1" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm? '' : null"
-                                                        [(ngModel)]="footerTextColor" />
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-12 mb-1">
-                                            <div class="formgroup row justify-content">
-                                                <div class="col-md-5">
-                                                    <label class="col-form-label-sm tx-10 tx-uppercase tx-medium tx-spacing-1">Footer Text Size</label>
-                                                </div>
-                                                <div class="col-sm-3">
-                                                    <input type="number" min="13" max="20"
-                                                        class="form-control form-control-sm h-75" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
-                                                        [(ngModel)]="footerFontSize" />
-                                                </div>
+                                            <div class="col-sm-3">
+                                                <input type="number" min="13" max="20"
+                                                    class="form-control form-control-sm h-75" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
+                                                    [(ngModel)]="footerFontSize" />
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </ng-template>
-                        </ngb-panel>
-                        <ngb-panel title="Form Text">
-                            <ng-template ngbPanelHeader>
-                                <div class="d-flex align-items-center justify-content-between">
-                                    <button ngbPanelToggle class="btn btn-link p-0 collapse-btn">
-                                        <h6 class="form-tl m-0">Form Text</h6>
-                                        <i class="fas fa-chevron-down"></i>
-                                    </button>
-                                </div>
-                            </ng-template>
-                            <ng-template ngbPanelContent>
-                                <div class="editorwrapper">
+                            </div>
+                        </accordion-group>
+                        <accordion-group (isOpenChange)="accordionChangeStatus($event,'third')">
+                            <button class="btn btn-link btn-block clearfix" accordion-heading type="button">
+                                <div class="pull-left float-left" [ngClass]="accordionStatus.isThirdopen ? 'template-blue':'light-black'">Form Text</div>
+                                <span class="float-right pull-right"><i class="fas fa-chevron-right" [ngClass]="accordionStatus.isThirdopen ? 'rotateicon':'resumeiconstate'"></i></span>
+                              </button>
+                            <div class="editorwrapper">
 
-                                    <div class="pd-5">
-                                        <h6>Welcome Text <span style="float: right;">
-                                                <button type="button" class="btn btn-sm btn-default p-0 mr-1" data-toggle="modal" 
-                                                    (click)="editQuillEditorDataPopup(quillEditorModal,'welcomeText')">
-                                                    <i [ngClass]="{'fas fa-chevron-down':isWebFormPublished && !isEditingPublishedForm,'fa fa-edit':!isWebFormPublished || isWebFormPublished && isEditingPublishedForm }"></i>
-                                                </button>
-                                            </span></h6>
-                                    </div>
-                                    <div class="pd-5">
-                                        <h6>Footer Text <span style="float: right;">
-                                                <button type="button" class="btn btn-sm btn-default p-0 mr-1" data-toggle="modal"
-                                                    (click)="editQuillEditorDataPopup(quillEditorModal,'footerText')">
-                                                    <i [ngClass]="{'fas fa-chevron-down':isWebFormPublished && !isEditingPublishedForm,'fa fa-edit': !isWebFormPublished || isWebFormPublished && isEditingPublishedForm }"></i>
-                                                </button>
-                                            </span></h6>
-                                    </div>
-
+                                <div class="pd-5">
+                                    <h6>Welcome Text <span style="float: right;">
+                                            <button type="button" class="btn btn-sm btn-default p-0 mr-1" data-toggle="modal" 
+                                                (click)="editQuillEditorDataPopup(quillEditorModal,'welcomeText')">
+                                                <i [ngClass]="{'fas fa-chevron-down':isWebFormPublished && !isEditingPublishedForm,'fa fa-edit':!isWebFormPublished || isWebFormPublished && isEditingPublishedForm }"></i>
+                                            </button>
+                                        </span></h6>
                                 </div>
-                            </ng-template>
-                        </ngb-panel>
-                    </ngb-accordion>
+                                <div class="pd-5">
+                                    <h6>Footer Text <span style="float: right;">
+                                            <button type="button" class="btn btn-sm btn-default p-0 mr-1" data-toggle="modal"
+                                                (click)="editQuillEditorDataPopup(quillEditorModal,'footerText')">
+                                                <i [ngClass]="{'fas fa-chevron-down':isWebFormPublished && !isEditingPublishedForm,'fa fa-edit': !isWebFormPublished || isWebFormPublished && isEditingPublishedForm }"></i>
+                                            </button>
+                                        </span></h6>
+                                </div>
+
+                            </div>
+                        </accordion-group>
+                    </accordion>
                 </div>
                 <div class="col-sm-8">
                     <!-- webFormControlList  {{webFormControlList | json}} -->
