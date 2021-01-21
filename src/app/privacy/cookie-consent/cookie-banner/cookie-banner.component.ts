@@ -773,4 +773,14 @@ export class CookieBannerComponent implements OnInit {
     this.modalRef = this.modalService.show(this.template1, { animated: false,    keyboard: false,     ignoreBackdropClick: true
     });
   }
+
+  onKeyChanges($event,targetElement){
+     if($event.target.value.length === 7){
+      this.cookieBannerForm.controls[targetElement].setValue($event.target.value);
+     }
+   }
+
+   onColorChange($event,currentElement){
+     this.cookieBannerForm.controls[currentElement].setValue($event.target.value);
+   }
 }
