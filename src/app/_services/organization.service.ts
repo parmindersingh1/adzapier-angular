@@ -25,7 +25,7 @@ export class OrganizationService {
 
     public editedOrganizationSource = new BehaviorSubject<any>('');
     editedOrganization = this.editedOrganizationSource.asObservable();
-    
+
     public editedPropertySource = new BehaviorSubject<any>('');
     editedProperty = this.editedPropertySource.asObservable();
 
@@ -35,7 +35,8 @@ export class OrganizationService {
     public get currentOrgValue(): Orglist {
         return this.currentOrgSubject.value;
     }
- 
+
+
     addOrganization(reqObj): Observable<any> {
         return this.http.post<any>(environment.apiUrl + '/organizations', reqObj);
     }

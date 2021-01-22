@@ -9,6 +9,8 @@ import { UserService } from 'src/app/_services/user.service';
 import { TablePaginationConfig } from 'src/app/_models/tablepaginationconfig';
 import { moduleName } from 'src/app/_constant/module-name.constant';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { DataService } from 'src/app/_services/data.service';
+import { featuresName } from 'src/app/_constant/features-name.constant';
 
 // import { CompanyService } from '../company.service';
 @Component({
@@ -89,6 +91,7 @@ export class OrganizationdetailsComponent implements OnInit {
               private companyService: CompanyService,
               private userService: UserService,
               private router: Router,
+              private dataService: DataService,
               private bsmodalService: BsModalService,
               private cdref: ChangeDetectorRef) {
     this.orgService.currentProperty.subscribe((data) => {
@@ -415,11 +418,24 @@ export class OrganizationdetailsComponent implements OnInit {
     this.propertyPageConfig.currentPage = 1;
   }
 
+
+  onCheckSubscription(){
+    const resData: any = this.dataService.getCurrentPropertyPlanDetails();
+      const status = this.dataService.checkUserForOrg(resData.response, featuresName.USER_PER_ORG, this.organizationTeamMemberList.length);
+     if ( status === false) {
+       return false;
+     }
+     return true;
+  }
+
   onSubmitInviteUserOrganization() {
     this.isInviteFormSubmitted = true;
     if (this.inviteUserOrgForm.invalid) {
       return false;
     } else {
+      if(!this.onCheckSubscription()){
+        return false;
+      }
       if (!this.isUpdateUserinvitation) {
         const requestObj = {
           email: this.inviteUserOrgForm.value.emailid,

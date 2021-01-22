@@ -56,7 +56,7 @@
     [ngClass]="{'hidemenu':!currentUser, 'showmenu':currentUser}">
     <ul  class="navbar-nav nav-mr" dropdown container="body">
       <a class="nav-link dropdown-link"  dropdownToggle (click)="false">
-       <div>{{currentOrganization}} 
+       <div>{{currentOrganization}}
        </div>
        <span>{{currentProperty ? currentProperty : 'Select Property'}}</span>
       </a>
@@ -115,7 +115,7 @@
   <!--end of general menu after login-->
   <!--notification after login-->
   <div class="navbar-right" *ngIf="currentUser" dropdown [insideClick]="true">
-    <div class="responsive-notification"> 
+    <div class="responsive-notification">
     <span class="notification-number" *ngIf="!isNotificationBellClicked">{{notificationsNumber}}</span>
     <a  class="nav-link dropdown-link" (click)="isNotificationBellClicked = true"  dropdownToggle>
       <i-feather name="bell" class="feather-20"></i-feather>

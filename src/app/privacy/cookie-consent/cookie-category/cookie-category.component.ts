@@ -10,6 +10,8 @@ import { MessageService } from 'primeng/api';
 import {moduleName} from '../../../_constant/module-name.constant';
 import {cookieName} from '../../../_constant/cookies-name.constant';
 import {ChartOptions} from 'chart.js';
+import { DataService } from 'src/app/_services/data.service';
+import { featuresName } from 'src/app/_constant/features-name.constant';
 const colorCodes = [ '#f77eb9', '#fdb16d', '#c693f9',   '#65e0e0', '#69b2f8',   '#6fd39b'];
 
 
@@ -84,6 +86,7 @@ export class CookieCategoryComponent implements OnInit {
   alertType: any;
   constructor(private service: CookieCategoryService,
     private cd: ChangeDetectorRef,
+    private dataService: DataService,
     private modalService: BsModalService,
     private loading: NgxUiLoaderService,
     private orgservice: OrganizationService,
@@ -463,7 +466,19 @@ export class CookieCategoryComponent implements OnInit {
       this.alertType = 'danger';
     });
   }
+
+    onCheckSubscription(){
+      const resData: any = this.dataService.getCurrentPropertyPlanDetails();
+        const status = this.dataService.isAllowFeature(resData.response, featuresName.DOMAIN_SCAN);
+       if ( status === false) {
+         return false;
+       }
+       return true;
+    }
   onRescanCookie() {
+    if(!this.onCheckSubscription()){
+      return false;
+    }
     this.isScanning = true;
     this.service.cookieScanning(this.constructor.name, moduleName.cookieCategoryModule).subscribe(res => {
       this.isScanning = false;
