@@ -315,4 +315,12 @@ onSearchEmailId(searchEmail: string) {
   this.loadUserListForInvitation(searchEmail);
 }
 
+isDateOrString(status): boolean {
+  const date = Date.parse(status);
+  if (isNaN(date)) {
+    return false;
+  }
+  return true;
+}
+
 }

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { OrganizationService, AuthenticationService, UserService } from '../../../_services';
 import { Observable } from 'rxjs';
@@ -13,13 +13,16 @@ import { DataService } from 'src/app/_services/data.service';
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss'],
-  // changeDetection: ChangeDetectionStrategy.Default
+  styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit {
   @ViewChild('confirmTemplate', { static: false }) confirmModal: TemplateRef<any>;
   modalRef: BsModalRef;
   isCollapsed = true;
+  isMobileMenuCollapsed = false;
+  isMobilePropertyCollapsed = true;
+  isMobileDashboardMenuCollapsed = true;
+  isMobilePrivacyMenuCollapsed = true;
   accessHeader: boolean;
   public currentLoggedInUser: string;
   uid: string;
@@ -42,7 +45,7 @@ export class HeaderComponent implements OnInit {
   publicNavigationMenu: any;
   currentProperty: any;
   navToggleStatus = false;
-  close: boolean;
+  close: boolean = true;
   userRole: string;
   propertyList: any;
   listOfProp: any;
@@ -62,6 +65,8 @@ export class HeaderComponent implements OnInit {
   isNotificationBellClicked = false;
   resCID: any;
   resuserCID: any;
+  navbarOpen = false;
+  addMobileMenuWidth: any;
   constructor(
     private router: Router,
     private activatedroute: ActivatedRoute,
@@ -280,6 +285,7 @@ export class HeaderComponent implements OnInit {
       }, err => {
         this.loading.stop('1')
       })
+      this.openNav();
 
 
 
@@ -295,10 +301,10 @@ export class HeaderComponent implements OnInit {
   }
 
   isPropSelected(selectedItem): boolean {
-    if(!this.isProperyDisabled(selectedItem)){
+    if (!this.isProperyDisabled(selectedItem)) {
       this.isPropertySelected = this.selectedOrgProperties.filter((t) => t.property_id === selectedItem.property_id).length > 0
-      ? true : false;
-    return this.isPropertySelected;
+        ? true : false;
+      return this.isPropertySelected;
     }
   }
 
@@ -372,12 +378,10 @@ export class HeaderComponent implements OnInit {
   }
 
   openNav() {
-    this.close = true;
+    this.close = !this.close;
+    this.addMobileMenuWidth = this.addMenuWidth(); // to avoid countinous background call
   }
 
-  closeNav() {
-    this.close = false;
-  }
 
   loadOrganizationWithProperty() {
     this.loading.start();
@@ -395,15 +399,15 @@ export class HeaderComponent implements OnInit {
             return false;
           } else {
             let activePro = this.filterProp(this.orgPropertyMenu);
-            const proIndex = activePro[0].property.findIndex((t)=>t.property_active === true);
+            const proIndex = activePro[0].property.findIndex((t) => t.property_active === true);
             this.activeProp = activePro[0].property[proIndex];
-              const obj = {
-                organization_id: activePro[0].id,
-                organization_name: activePro[0].orgname,
-                property_id: activePro[0].property[proIndex].property_id,
-                property_name: activePro[0].property[proIndex].property_name,
-                user_id: this.userID
-              };
+            const obj = {
+              organization_id: activePro[0].id,
+              organization_name: activePro[0].orgname,
+              property_id: activePro[0].property[proIndex].property_id,
+              property_name: activePro[0].property[proIndex].property_name,
+              user_id: this.userID
+            };
             this.orgservice.changeCurrentSelectedProperty(obj);
             // this.orgservice.getSelectedOrgProperty.emit(obj);
             //  this.firstElement = false;
@@ -425,16 +429,16 @@ export class HeaderComponent implements OnInit {
     return this.orgPropertyMenu.length < 3 ? 2 : 4;
   }
 
-  filterProp(propArry){
+  filterProp(propArry) {
     let activePro = [];
-    for(let i = 0; i < propArry.length; i++){
-      if(propArry[i].property.some((t)=> t.property_active === true)){
+    for (let i = 0; i < propArry.length; i++) {
+      if (propArry[i].property.some((t) => t.property_active === true)) {
         activePro.push(propArry[i]);
         break;
       }
     }
     return activePro;
- }
+  }
 
   checkPropertyStatus(prop): boolean {
     if (this.propList) {
@@ -524,17 +528,17 @@ export class HeaderComponent implements OnInit {
       }
       return this.isPrivacyActivelinkMatched = false;
     } else if (navLink.indexOf('/settings') >= 0) {
-      this.isBillingActivelinkMatched = false;
       if (menu.icon !== undefined) {
         this.activateSublink(menu);
       }
+    } else {
+      this.isBillingActivelinkMatched = false;
+      this.openNav();
     }
   }
 
   activateSublink(selectedItem): boolean {
-    this.isBillingActivelinkMatched = false;
-    return this.isSublinkActive = this.selectedSubmenu.some((t) =>
-      t.showlink === selectedItem.showlink && t.icon === selectedItem.icon);
+       return this.isSublinkActive = this.selectedSubmenu.some((t) => t.showlink === selectedItem.showlink && t.icon === selectedItem.icon);
   }
 
   confirm() {
@@ -555,7 +559,9 @@ export class HeaderComponent implements OnInit {
   }
 
   showNotificationNumber(list) {
-    return this.notificationsNumber = list.filter((t) => t.read === true).length;
+    if (list.filter((t) => t.read === true).length !== 0) {
+      return this.notificationsNumber = list.filter((t) => t.read === true).length;
+    }
   }
 
   clearNotification(requestid, purpose: string, status: boolean) {
@@ -598,16 +604,92 @@ export class HeaderComponent implements OnInit {
   }
 
   addColumncount(): object {
-    if(this.orgPropertyMenu.length <= 2){
-      return { 'column-count': 2  }
-    }  else if(this.orgPropertyMenu.length >= 4 && this.orgPropertyMenu.length <= 5 ){
-      return { 'column-count': 2  }
-    } else if(this.orgPropertyMenu.length >= 4 && this.orgPropertyMenu.length <= 8 ){
-      return { 'column-count': 3  }
-    } else if(this.orgPropertyMenu.length >= 8 ){
-      return { 'column-count': 4  }
+    if (this.orgPropertyMenu.length < 2) {
+      return { 'column-count': 1 }
+    } else if (this.orgPropertyMenu.length <= 2) {
+      return { 'column-count': 2 }
+    } else if (this.orgPropertyMenu.length >= 4 && this.orgPropertyMenu.length <= 5) {
+      return { 'column-count': 2 }
+    } else if (this.orgPropertyMenu.length >= 4 && this.orgPropertyMenu.length <= 8) {
+      return { 'column-count': 3 }
+    } else if (this.orgPropertyMenu.length >= 8) {
+      return { 'column-count': 4 }
     }
 
+  }
+
+  toggleSideNavbar() {
+    this.navbarOpen = !this.navbarOpen;
+  }
+
+
+  onMobileMenuClicked(link) {
+
+    if (link === 'Dashboard' && this.isMobileDashboardMenuCollapsed) {
+      this.isMobileDashboardMenuCollapsed = false;
+      this.isMobilePrivacyMenuCollapsed = true;
+      this.isMobilePropertyCollapsed = true;
+    } else if (link === 'Dashboard' && !this.isMobileDashboardMenuCollapsed) {
+      this.isMobileDashboardMenuCollapsed = true;
+      this.isMobilePrivacyMenuCollapsed = true;
+      this.isMobilePropertyCollapsed = true;
+    } else if (link === 'Privacy' && this.isMobilePrivacyMenuCollapsed) {
+      this.isMobilePrivacyMenuCollapsed = false;
+      this.isMobileDashboardMenuCollapsed = true;
+      this.isMobilePropertyCollapsed = true;
+    }  else if (link === 'Privacy' && !this.isMobilePrivacyMenuCollapsed) {
+      this.isMobileDashboardMenuCollapsed = true;
+      this.isMobilePrivacyMenuCollapsed = true;
+      this.isMobilePropertyCollapsed = true;
+    } else {
+      this.goto(link); // for billing link
+      this.openNav();
+    }
+  }
+
+  collapseStatus(activeIndex): boolean {
+    if (activeIndex === 0) {
+      return activeIndex == 0 && this.isMobileDashboardMenuCollapsed;
+    } else {
+      return activeIndex == 1 && this.isMobilePrivacyMenuCollapsed;
+    }
+  }
+
+  onMobilePropertyMenuClicked(status) {
+    if (status) {
+      this.isMobilePropertyCollapsed = !this.isMobilePropertyCollapsed;
+      this.isMobilePrivacyMenuCollapsed = true;
+      this.isMobileDashboardMenuCollapsed = true;
+    }
+
+  }
+
+  addMenuWidth(){
+    let textLength;
+    if(this.currentOrganization !== undefined){
+      textLength = this.currentOrganization.length;
+     // console.log(textLength,'textLength..');
+      let generatedWidth = (textLength * 10) <= 250 ? 250 : textLength * 10;
+      let addStyle = {
+        'width': generatedWidth + 'px',
+        'left': !this.close ? 0 : '-' +  generatedWidth + 'px',
+        'transform': !this.close ? 'translateX(0)' : 'translateX(-'+ generatedWidth +'px)',
+        'padding': 0
+       };
+       return addStyle;
+    }else{
+      let addStyle = {
+        'width': 260 + 'px',
+        'left': !this.close ? 0 : '-' +  26 * 10 + 'px',
+        'transform': !this.close ? 'translateX(0)' : 'translateX(-'+ 26 * 10 +'px)',
+        'padding': 0
+       };
+       return addStyle;
+    }
+  }
+
+  convertAmpersand(item){
+    return item.replace(/&amp;/g,'&');
   }
 
 }

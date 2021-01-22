@@ -226,7 +226,7 @@
     min-height: 60px;
     display: block;
     background: white;
-    border-radius: 0px 0px 4px 4px;
+    border-radius: 0;
     overflow: hidden;
     margin-bottom: 10px;
   }
@@ -415,12 +415,12 @@
 .headerwrapper {
   border: 1px solid #ccc;
   text-align: center;
-  border-radius: 5px 5px 0px 0px;
+  border-radius: 0;
   border-bottom: 0px;
 }
 
 .logocontainer {
-  border-radius: 4px 4px 0px 0px;
+  border-radius: 0;
   background-color: #3968fa;
   color:#fff;
   height: 50px;
@@ -482,11 +482,40 @@ input[type='color'] {
 
 .form-field-section .card {
   padding: 0;
+  border-radius: 5px;
+  margin: 0 -15px -1px -5px;
+  border: 0;
+}
+
+.bordermargin {
+  border-right: 1px solid #ccc !important;
+  margin-top: 0 !important;
+}
+
+.rotateicon {
+  transform: rotate(90deg);
+  transition: transform .1s ease-in-out;
+}
+
+.resumeiconstate {
+  transform: rotate(0deg);
+  transition: transform .1s ease-in-out;
 }
 
 .form-field-section .card .card-header {
-  border-bottom: 1px solid #ccc !important;
-  padding: 0px !important;
+  padding: 5px !important;
+  border-bottom: 1px solid #ccc;
+  border-top: 1px solid #ccc;
+  border-radius: 0;
+}
+
+.formtab-one{
+  border-radius: 0;
+  background-color: brown;
+}
+
+.panel-heading.card-header.panel-enabled :last-child{
+  border-bottom: 0 !important;
 }
 
 .icon-label-wrapper span {
@@ -551,6 +580,12 @@ input[type='color'] {
 
 .card-body .align-items-center {
   margin: 5px;
+}
+
+.editorwrapper {
+  border-bottom: 1px solid #ccc;
+  margin: 0 -2px;
+  padding: 8px 15px;
 }
 
 .editorwrapper > div > h6 {
@@ -1065,6 +1100,18 @@ span.previewbtn a {
   content: "";
   background-color: #fff;
   border: #97a3b9 solid 1px;
+}
+
+.light-black {
+  color: #596882;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.template-blue {
+  color: #0168fa;
+  font-weight: 500;
+  font-size: 14px;
 }
 
 @media(min-width:767px) and (max-width:1024px) {

@@ -273,7 +273,7 @@
                 <div class="card-header">Banner Styling and Content
                 </div>
                 <div class="card-body p-0 banner-body">
-                  <div class="row banner-row">
+                  <div class="banner-row">
                     <p-accordion>
                       <p-accordionTab header="General Configuration" [selected]="true">
                         <div class="col-md-12">
@@ -405,13 +405,11 @@
 
 
                             <div class="w-100 p-0">
-                              <ul style="list-style: none; display: flex" class="ml-2 pl-0 mt-2">
-                                <li class="tx-12 w-50 tx-medium tx-middle tx-spacing-1 tx-color-03 tx-uppercase">Text Color
-                                </li>
-                                <li class="text-left tx-middle"><input #privacyTextColor
-                                                                       [(ngModel)]="formContent.privacyTextColor" formControlName="privacyTextColor"
-                                                                       type="color" ></li>
-                                <li class="ml-4"><input class="form-control input-sm" [value]="privacyTextColor.value">
+                              <ul class="ml-2 pl-0 mt-2 colorpicker-wrapper">
+                                <li class="tx-12 w-50 tx-medium tx-spacing-1 tx-color-03 tx-uppercase">Text Color</li>
+                                <li class="d-flex col-sm-5">
+                                  <input  #privacyTextColor class="mr-1" (change)="onColorChange($event,'privacyTextColor')" [(ngModel)]="formContent.privacyTextColor" formControlName="privacyTextColor" type="color">
+                                  <input class="form-control input-sm"  type="text" maxlength="7" (input)="onKeyChanges($event,'privacyTextColor')" [value]="privacyTextColor.value">
                                 </li>
                               </ul>
                             </div>
@@ -426,41 +424,39 @@
                       </p-accordionTab>
                       <p-accordionTab class="mt-2" header="Global Styles">
                         <div class="col-md-12 p-0">
-                          <ul style="list-style: none; display: flex" class="ml-2 pl-0 mt-2">
-                            <li class="tx-12 tx-medium tx-middle tx-spacing-1 tx-color-03 tx-uppercase">Text Color
-                            </li>
-                            <li class="text-left tx-middle"><input #bannerTextColor
-                                [(ngModel)]="formContent.bannerTextColor" formControlName="BannerGlobalStyleTextColor"
-                                type="color"></li>
-                            <li class="ml-4"><input class="form-control input-sm" [value]="bannerTextColor.value">
+                          <ul class="ml-2 pl-0 mt-2 colorpicker-wrapper">
+                            <li class="tx-12 tx-medium tx-spacing-1 tx-color-03 tx-uppercase">Text Color</li>
+                            <li class="d-flex col-sm-5"><input #bannerTextColor class="mr-1" (change)="onColorChange($event,'BannerGlobalStyleTextColor')"
+                              [(ngModel)]="formContent.bannerTextColor" formControlName="BannerGlobalStyleTextColor"
+                              type="color"><input type="text"maxlength="7" class="form-control input-sm" (keyup)="onKeyChanges($event,'BannerGlobalStyleTextColor')" [value]="bannerTextColor.value">
                             </li>
                           </ul>
                         </div>
 
 
                         <div class="col-md-12 p-0">
-                          <ul style="list-style: none; display: flex" class="ml-2 pl-0 mt-2">
-                            <li class="tx-12 tx-medium tx-middle tx-spacing-1 tx-color-03 tx-uppercase">Border Color
+                          <ul class="ml-2 pl-0 mt-2 colorpicker-wrapper">
+                            <li class="tx-12 tx-medium tx-spacing-1 tx-color-03 tx-uppercase">Border Color
                             </li>
-                            <li class="text-left tx-middle"><input #bannerBorderColor
+                            <li class="d-flex col-sm-5">
+                              <input #bannerBorderColor class="mr-1"
                                 [(ngModel)]="formContent.bannerBorderColor" formControlName="BannerGlobalStyleBorderColor"
-                                type="color"></li>
-                            <li class="ml-4"><input class="form-control input-sm" [value]="bannerBorderColor.value">
+                                (change)="onColorChange($event,'BannerGlobalStyleBorderColor')" type="color">
+                              <input class="form-control input-sm" type="text" maxlength="7" (input)="onKeyChanges($event,'BannerGlobalStyleBorderColor')" [value]="bannerBorderColor.value">
                             </li>
                           </ul>
                         </div>
 
-
                         <div class="col-md-12 mt-2 p-0">
-                          <ul style="list-style: none; display: flex" class="ml-2 pl-0 mt-2">
-                            <li class="tx-12 tx-medium tx-middle tx-spacing-1 tx-color-03 tx-uppercase">Background
+                          <ul class="ml-2 pl-0 mt-2 colorpicker-wrapper">
+                            <li class="tx-12 tx-medium tx-spacing-1 tx-color-03 tx-uppercase">Background
                               Color
                             </li>
-                            <li class="tx-middle ml-4"><input #bannerBackGroundColor
-                                [(ngModel)]="formContent.bannerBackGroundColor"
-                                formControlName="BannerGlobalStyleBackgroundColor" type="color"
-                                ></li>
-                            <li class="ml-4"><input class="form-control input-sm" [value]="bannerBackGroundColor.value">
+                            <li class="d-flex col-sm-5">
+                              <input #bannerBackGroundColor class="mr-1"
+                                [(ngModel)]="formContent.bannerBackGroundColor" (change)="onColorChange($event,'BannerGlobalStyleBackgroundColor')"
+                                formControlName="BannerGlobalStyleBackgroundColor" type="color">
+                              <input class="form-control input-sm" maxlength="7" (input)="onKeyChanges($event,'BannerGlobalStyleBackgroundColor')" [value]="bannerBackGroundColor.value">
                             </li>
                           </ul>
                         </div>
@@ -489,28 +485,26 @@
 
 
                         <div class="col-md-12 mt-2 p-0">
-                          <ul style="list-style: none; display: flex" class="ml-2 pl-0 mt-2">
-                            <li class="tx-12 tx-medium tx-middle tx-spacing-1 tx-color-03 tx-uppercase">Text Color
+                          <ul class="ml-2 pl-0 mt-2 colorpicker-wrapper">
+                            <li class="tx-12 tx-medium tx-spacing-1 tx-color-03 tx-uppercase">Text Color
                             </li>
-                            <li class="text-left tx-middle"><input #bannerCustomizeButtonTextColor
-                                [(ngModel)]="formContent.bannerPreferenceButtonTextColor"
-                                formControlName="BannerPreferenceButtonTextColor" type="color"
-                                ></li>
-                            <li class="ml-3"><input class="form-control input-sm"
+                            <li class="d-flex col-sm-5">
+                              <input #bannerCustomizeButtonTextColor (change)="onColorChange($event,'BannerPreferenceButtonTextColor')"
+                                [(ngModel)]="formContent.bannerPreferenceButtonTextColor" class="mr-1"
+                                formControlName="BannerPreferenceButtonTextColor" type="color">
+                              <input class="form-control input-sm" type="text" maxlength="7" (input)="onKeyChanges($event,'BannerPreferenceButtonTextColor')"
                                 [value]="bannerCustomizeButtonTextColor.value"></li>
                           </ul>
                         </div>
 
                         <div class="col-md-12 mt-2 p-0">
-                          <ul style="list-style: none; display: flex" class="ml-2 pl-0 mt-2">
-                            <li class="tx-12 tx-medium tx-middle tx-spacing-1 tx-color-03 tx-uppercase">BackGround
-                              Color
-                            </li>
-                            <li class="ml-3"><input formControlName="BannerPreferenceButtonBackgroundColor"
-                                [(ngModel)]="formContent.bannerPreferenceButtonBackGroundColor"
+                          <ul class="ml-2 pl-0 mt-2 colorpicker-wrapper">
+                            <li class="tx-12 tx-medium tx-spacing-1 tx-color-03 tx-uppercase">BackGround Color</li>
+                            <li class="d-flex col-sm-5">
+                              <input class="mr-1" formControlName="BannerPreferenceButtonBackgroundColor" (change)="onColorChange($event,'BannerPreferenceButtonBackgroundColor')"
+                                [(ngModel)]="formContent.bannerPreferenceButtonBackGroundColor" class="mr-1"
                                 #bannerCustomizeButtonBackGroundColor type="color">
-                            </li>
-                            <li class="ml-3"><input class="form-control input-sm"
+                              <input class="form-control input-sm" type="text" maxlength="7" (input)="onKeyChanges($event,'BannerPreferenceButtonBackgroundColor')"
                                 [value]="bannerCustomizeButtonBackGroundColor.value"></li>
                           </ul>
                         </div>
@@ -536,29 +530,26 @@
                           </div>
                         </div>
                         <div class="col-md-12 mt-2 p-0">
-                          <ul style="list-style: none; display: flex" class="ml-2 pl-0 mt-2">
-                            <li class="tx-12 tx-medium tx-middle tx-spacing-1 tx-color-03 tx-uppercase">Text Color
+                          <ul class="ml-2 pl-0 mt-2 colorpicker-wrapper">
+                            <li class="tx-12 tx-medium tx-spacing-1 tx-color-03 tx-uppercase">Text Color
                             </li>
-                            <li class="text-left tx-middle"><input
-                                [(ngModel)]="formContent.bannerAllowReqButtonTextColor"
-                                formControlName="BannerAllowRequiredButtonTextColor" #bannerAllowReqButtonTextColor
-                                type="color"></li>
-                            <li class="ml-3"><input class="form-control input-sm"
+                            <li class="d-flex col-sm-5">
+                              <input class="mr-1" [(ngModel)]="formContent.bannerAllowReqButtonTextColor" (change)="onColorChange($event,'BannerAllowRequiredButtonTextColor')"
+                                formControlName="BannerAllowRequiredButtonTextColor" #bannerAllowReqButtonTextColor class="mr-1"  type="color">
+                              <input class="form-control input-sm" type="text" maxlength="7" (input)="onKeyChanges($event,'BannerAllowRequiredButtonTextColor')"
                                 [value]="bannerAllowReqButtonTextColor.value"></li>
                           </ul>
                         </div>
 
                         <div class="col-md-12 mt-2 p-0">
-                          <ul style="list-style: none; display: flex" class="ml-2 pl-0 mt-2">
-                            <li class="tx-12 tx-middle tx-medium tx-spacing-1 tx-color-03 tx-uppercase">BackGround
+                          <ul class="ml-2 pl-0 mt-2 colorpicker-wrapper">
+                            <li class="tx-12 tx-medium tx-spacing-1 tx-color-03 tx-uppercase">BackGround
                               Color
                             </li>
-                            <li class="ml-3 tx-middle"><input
-                                [(ngModel)]="formContent.bannerAllowReqButtonBackgroundColor"
-                                formControlName="BannerAllowRequiredButtonBackgroundColor"
-                                #bannerAllowReqButtonBackGroundColor type="color">
-                            </li>
-                            <li class="ml-3"><input class="form-control input-sm"
+                            <li class="d-flex col-sm-5">
+                              <input class="mr-1" [(ngModel)]="formContent.bannerAllowReqButtonBackgroundColor" (change)="onColorChange($event,'BannerAllowRequiredButtonBackgroundColor')"
+                                formControlName="BannerAllowRequiredButtonBackgroundColor" #bannerAllowReqButtonBackGroundColor type="color">
+                              <input class="form-control input-sm" type="text" maxlength="7" (input)="onKeyChanges($event,'BannerAllowRequiredButtonBackgroundColor')"
                                 [value]="bannerAllowReqButtonBackGroundColor.value"></li>
                           </ul>
                         </div>
@@ -586,26 +577,31 @@
                         </div>
 
                         <div class="col-md-12 p-0 mt-2">
-                          <ul style="list-style: none; display: flex" class="ml-2 pl-0 mt-2">
-                            <li class="tx-12 tx-medium tx-middle tx-spacing-1 tx-color-03 tx-uppercase">Text Color
+                          <ul class="ml-2 pl-0 mt-2 colorpicker-wrapper">
+                            <li class="tx-12 tx-medium tx-spacing-1 tx-color-03 tx-uppercase">Text Color
                             </li>
-                            <li class="text-left tx-middle"><input formControlName="BannerAllowAllButtonTextColor"
-                                [(ngModel)]="formContent.bannerAcceptButtonTextColor" #bannerAllowButtonTextColor
-                                type="color"></li>
-                            <li class="ml-3"><input class="form-control input-sm"
-                                [value]="bannerAllowButtonTextColor.value"></li>
+                            <li class="d-flex col-sm-5">
+                              <input class="mr-1" formControlName="BannerAllowAllButtonTextColor"
+                              (change)="onColorChange($event,'BannerAllowAllButtonTextColor')" #bannerAllowButtonTextColor
+                                type="color">
+                              <input class="form-control input-sm" maxlength="7"  [value]="bannerAllowButtonTextColor.value"
+                              (input)="onKeyChanges($event,'BannerAllowAllButtonTextColor')" type="text"
+                            ></li>
                           </ul>
                         </div>
 
                         <div class="col-md-12 p-0 mt-2">
-                          <ul style="list-style: none; display: flex" class="ml-2 pl-0 mt-2">
-                            <li class="tx-12 tx-medium tx-middle tx-spacing-1 tx-color-03 tx-uppercase">BackGround
+                          <ul class="ml-2 pl-0 mt-2 colorpicker-wrapper">
+                            <li class="tx-12 tx-medium tx-spacing-1 tx-color-03 tx-uppercase">BackGround
                               Color
                             </li>
-                            <li class="ml-3"><input formControlName="BannerAllowAllButtonBackgroundColor"
+                            <li class="d-flex col-sm-5">
+                              <input class="mr-1" formControlName="BannerAllowAllButtonBackgroundColor"
                                 [(ngModel)]="formContent.bannerAcceptButtonBackgroundColor"
-                                #bannerAllowButtonBackGroundColor type="color"></li>
-                            <li class="ml-3"><input class="form-control input-sm"
+                                (change)="onColorChange($event,'BannerAllowAllButtonBackgroundColor')" 
+                                #bannerAllowButtonBackGroundColor type="color">
+                              <input class="form-control input-sm" type="text"  maxlength="7" 
+                              (input)="onKeyChanges($event,'BannerAllowAllButtonBackgroundColor')"
                                 [value]="bannerAllowButtonBackGroundColor.value"></li>
                           </ul>
                         </div>
@@ -635,27 +631,29 @@
                         </div>
 
                         <div class="col-md-12 mt-2 p-0">
-                          <ul style="list-style: none; display: flex" class="ml-2 pl-0 mt-2">
-                            <li class="tx-12 tx-medium tx-middle tx-spacing-1 tx-color-03 tx-uppercase">Text Color
+                          <ul class="ml-2 pl-0 mt-2 colorpicker-wrapper">
+                            <li class="tx-12 tx-medium tx-spacing-1 tx-color-03 tx-uppercase">Text Color
                             </li>
-                            <li class="text-left tx-middle"><input
-                                [(ngModel)]="formContent.bannerDisableButtonTextColor"
+                            <li class="d-flex col-sm-5">
+                              <input class="mr-1"
+                                [(ngModel)]="formContent.bannerDisableButtonTextColor" (change)="onColorChange($event,'BannerDisableAllButtonTextColor')"
                                 formControlName="BannerDisableAllButtonTextColor" #bannerDisableButtonTextColor
-                                type="color" ></li>
-                            <li class="ml-3"><input class="form-control input-sm"
+                                type="color">
+                              <input class="form-control input-sm" type="text" maxlength="7" (input)="onKeyChanges($event,'BannerDisableAllButtonTextColor')"
                                 [value]="bannerDisableButtonTextColor.value"></li>
                           </ul>
                         </div>
 
                         <div class="col-md-12 p-0 mt-2">
-                          <ul style="list-style: none; display: flex" class="ml-2 pl-0 mt-2">
-                            <li class="tx-12 tx-medium tx-middle tx-spacing-1 tx-color-03 tx-uppercase">BackGround
+                          <ul class="ml-2 pl-0 mt-2 colorpicker-wrapper">
+                            <li class="tx-12 tx-medium tx-spacing-1 tx-color-03 tx-uppercase">BackGround
                               Color
                             </li>
-                            <li class="ml-3"><input [(ngModel)]="formContent.bannerDisableButtonBackGroundColor"
-                                formControlName="BannerDisableAllButtonBackgroundColor"
-                                #bannerDisableButtonBackGroundColor type="color"></li>
-                            <li class="ml-3"><input class="form-control input-sm"
+                            <li class="d-flex col-sm-5">
+                              <input class="mr-1" [(ngModel)]="formContent.bannerDisableButtonBackGroundColor" (change)="onColorChange($event,'BannerDisableAllButtonBackgroundColor')"
+                                formControlName="BannerDisableAllButtonBackgroundColor" 
+                                #bannerDisableButtonBackGroundColor type="color">
+                              <input class="form-control input-sm" type="text" maxlength="7" (input)="onKeyChanges($event,'BannerDisableAllButtonBackgroundColor')"
                                 [value]="bannerDisableButtonBackGroundColor.value"></li>
                           </ul>
                         </div>
@@ -686,27 +684,28 @@
                         </div>
 
                         <div class="col-md-12 mt-2 p-0">
-                          <ul style="list-style: none; display: flex" class="ml-2 pl-0 mt-2">
-                            <li class="tx-12 tx-medium tx-middle tx-spacing-1 tx-color-03 tx-uppercase">Text Color
-                            </li>
-                            <li class="text-left tx-middle"><input
-                              [(ngModel)]="formContent.bannerDoNotSellMyDataTextColor"
+                          <ul class="ml-2 pl-0 mt-2 colorpicker-wrapper">
+                            <li class="tx-12 tx-medium tx-spacing-1 tx-color-03 tx-uppercase">Text Color</li>
+                            <li class="d-flex col-sm-5">
+                              <input class="mr-1"
+                              [(ngModel)]="formContent.bannerDoNotSellMyDataTextColor" (change)="onColorChange($event,'bannerDoNotSellMyDataTextColor')"
                               formControlName="bannerDoNotSellMyDataTextColor" #bannerDoNotSellMyDataTextColor
-                              type="color" ></li>
-                            <li class="ml-3"><input class="form-control input-sm"
+                              type="color">
+                              <input class="form-control input-sm" type="text" maxlength="7" (input)="onKeyChanges($event,'bannerDoNotSellMyDataTextColor')"
                                                     [value]="bannerDoNotSellMyDataTextColor.value"></li>
                           </ul>
                         </div>
 
                         <div class="col-md-12 p-0 mt-2">
-                          <ul style="list-style: none; display: flex" class="ml-2 pl-0 mt-2">
+                          <ul class="ml-2 pl-0 mt-2 colorpicker-wrapper">
                             <li class="tx-12 tx-medium tx-middle tx-spacing-1 tx-color-03 tx-uppercase">BackGround
                               Color
                             </li>
-                            <li class="ml-3"><input [(ngModel)]="formContent.bannerDoNotSellMyDataBackGroundColor"
-                                                    formControlName="bannerDoNotSellMyDataBackGroundColor"
-                                                    #bannerDoNotSellMyDataBackGroundColor type="color"></li>
-                            <li class="ml-3"><input class="form-control input-sm"
+                            <li class="d-flex col-sm-5">
+                              <input class="mr-1" [(ngModel)]="formContent.bannerDoNotSellMyDataBackGroundColor"
+                                                    formControlName="bannerDoNotSellMyDataBackGroundColor" (change)="onColorChange($event,'bannerDoNotSellMyDataBackGroundColor')"
+                                                    #bannerDoNotSellMyDataBackGroundColor type="color">
+                              <input class="form-control input-sm" type="text" maxlength="7" (input)="onKeyChanges($event,'bannerDoNotSellMyDataBackGroundColor')"
                                                     [value]="bannerDoNotSellMyDataBackGroundColor.value"></li>
                           </ul>
                         </div>
@@ -787,38 +786,37 @@
                     <p-accordionTab header="Switch Button">
 
                       <div class="col-md-12 mt-2 p-0">
-                        <ul style="list-style: none; display: flex" class="ml-2 pl-0 mt-2">
+                        <ul class="ml-2 pl-0 mt-2 colorpicker-wrapper">
                           <li class="tx-12 tx-medium tx-middle tx-spacing-1 tx-color-03 tx-uppercase">Color
                           </li>
-                          <li class="text-left tx-middle"><input formControlName="PopUpSwitchButton"
-                              [(ngModel)]="formContent.popUpSwitchButtonColor" #PopUpSwitchButton type="color"
-                              >
-                          <li class="ml-3"><input class="form-control input-sm" [value]="PopUpSwitchButton.value"></li>
+                          <li class="d-flex col-sm-5">
+                            <input formControlName="PopUpSwitchButton" class="mr-1"
+                            [(ngModel)]="formContent.popUpSwitchButtonColor" #PopUpSwitchButton type="color" (change)="onColorChange($event,'PopUpSwitchButton')">
+                            <input class="form-control input-sm" [value]="PopUpSwitchButton.value" type="text" maxlength="7" (input)="onKeyChanges($event,'PopUpSwitchButton')"></li>
                         </ul>
                       </div>
 
                     </p-accordionTab>
                     <p-accordionTab header="Purpose Button">
                       <div class="col-md-12 mt-2 p-0">
-                        <ul style="list-style: none; display: flex" class="ml-2 pl-0 mt-2">
-                          <li class="tx-12 tx-medium tx-middle tx-spacing-1 tx-color-03 tx-uppercase">Text Color
+                        <ul class="ml-2 pl-0 mt-2 colorpicker-wrapper">
+                          <li class="tx-12 tx-medium tx-spacing-1 tx-color-03 tx-uppercase">Text Color
                           </li>
-                          <li class="text-left tx-middle"><input [(ngModel)]="formContent.popUpPurposeButtonTextColor"
-                              formControlName="PopUpPurposeButtonTextColor" #popUpPurposeButtonTextColor type="color"
-                             ></li>
-                          <li class="ml-3"><input class="form-control input-sm"
+                          <li class="d-flex col-sm-5">
+                            <input [(ngModel)]="formContent.popUpPurposeButtonTextColor" class="mr-1"
+                              formControlName="PopUpPurposeButtonTextColor" #popUpPurposeButtonTextColor type="color" (change)="onColorChange($event,'PopUpPurposeButtonTextColor')">
+                            <input class="form-control input-sm" type="text" maxlength="7" (input)="onKeyChanges($event,'PopUpPurposeButtonTextColor')"
                               [value]="popUpPurposeButtonTextColor.value"></li>
                         </ul>
                       </div>
                       <div class="col-md-12 p-0 mt-2">
-                        <ul style="list-style: none; display: flex" class="ml-2 pl-0 mt-2">
-                          <li class="tx-12 tx-medium tx-middle tx-spacing-1 tx-color-03 tx-uppercase">BackGround
+                        <ul class="ml-2 pl-0 mt-2 colorpicker-wrapper">
+                          <li class="tx-12 tx-medium tx-spacing-1 tx-color-03 tx-uppercase">BackGround
                             Color
                           </li>
-                          <li class="ml-3"><input type="color" [(ngModel)]="formContent.popUpPurposeButtonBackGroundColor"
-                              formControlName="PopUpPurposeButtonBackgroundColor" #popUpPurposeButtonBackGroundColor
-                              ></li>
-                          <li class="ml-3"><input class="form-control input-sm"
+                          <li class="d-flex col-sm-5"><input type="color" class="mr-1" [(ngModel)]="formContent.popUpPurposeButtonBackGroundColor" (change)="onColorChange($event,'PopUpPurposeButtonBackgroundColor')"
+                            formControlName="PopUpPurposeButtonBackgroundColor" #popUpPurposeButtonBackGroundColor
+                            ><input class="form-control input-sm" type="text" maxlength="7" (input)="onKeyChanges($event,'PopUpPurposeButtonBackgroundColor')"
                               [value]="popUpPurposeButtonBackGroundColor.value"></li>
                         </ul>
                       </div>
@@ -847,26 +845,28 @@
                       </div>
 
                       <div class="col-md-12 mt-2 p-0">
-                        <ul style="list-style: none; display: flex" class="ml-2 pl-0 mt-2">
-                          <li class="tx-12 tx-medium tx-middle tx-spacing-1 tx-color-03 tx-uppercase">Text Color
+                        <ul class="ml-2 pl-0 mt-2 colorpicker-wrapper">
+                          <li class="tx-12 tx-medium tx-spacing-1 tx-color-03 tx-uppercase">Text Color
                           </li>
-                          <li class="text-left tx-middle"><input formControlName="PopUpDisableAllButtonTextColor"
+                          <li class="d-flex col-sm-5">
+                            <input class="mr-1" formControlName="PopUpDisableAllButtonTextColor" (change)="onColorChange($event,'PopUpDisableAllButtonTextColor')"
                               [(ngModel)]="formContent.popUpDisableAllButtonTextColor" #popUpDisableAllButtonTextColor
-                              type="color" ></li>
-                          <li class="ml-3"><input class="form-control input-sm"
+                              type="color">
+                            <input class="form-control input-sm"  type="text" maxlength="7" (input)="onKeyChanges($event,'PopUpDisableAllButtonTextColor')"
                               [value]="popUpDisableAllButtonTextColor.value"></li>
                         </ul>
                       </div>
 
                       <div class="col-md-12 p-0 mt-2">
-                        <ul style="list-style: none; display: flex" class="ml-2 pl-0 mt-2">
+                        <ul class="ml-2 pl-0 mt-2 colorpicker-wrapper">
                           <li class="tx-12 tx-medium tx-middle tx-spacing-1 tx-color-03 tx-uppercase">BackGround
                             Color
                           </li>
-                          <li class="ml-3"><input [(ngModel)]="formContent.popUpDisableAllButtonBackgroundColor"
-                              formControlName="PopUpDisableAllButtonBackgroundColor"
-                              #popUpDisableAllButtonBackGroundColor type="color"></li>
-                          <li class="ml-3"><input class="form-control input-sm"
+                          <li class="d-flex col-sm-5">
+                            <input [(ngModel)]="formContent.popUpDisableAllButtonBackgroundColor" class="mr-1"
+                              formControlName="PopUpDisableAllButtonBackgroundColor" (change)="onColorChange($event,'PopUpDisableAllButtonBackgroundColor')"
+                              #popUpDisableAllButtonBackGroundColor type="color">
+                            <input class="form-control input-sm" type="text" maxlength="7" (input)="onKeyChanges($event,'PopUpDisableAllButtonBackgroundColor')"
                               [value]="popUpDisableAllButtonBackGroundColor.value"></li>
                         </ul>
                       </div>
@@ -894,26 +894,28 @@
                       </div>
 
                       <div class="col-md-12 mt-2 p-0">
-                        <ul style="list-style: none; display: flex" class="ml-2 pl-0 mt-2">
-                          <li class="tx-12 tx-medium tx-middle tx-spacing-1 tx-color-03 tx-uppercase">Text Color
+                        <ul class="ml-2 pl-0 mt-2 colorpicker-wrapper">
+                          <li class="tx-12 tx-medium tx-spacing-1 tx-color-03 tx-uppercase">Text Color
                           </li>
-                          <li class="text-left tx-middle"><input formControlName="popUpDoNotSellTextColor"
+                          <li class="d-flex col-sm-5">
+                            <input class="mr-1" formControlName="popUpDoNotSellTextColor" (change)="onColorChange($event,'popUpDoNotSellTextColor')"
                                                                  [(ngModel)]="formContent.popUpDoNotSellTextColor" #popUpDoNotSellTextColor
-                                                                 type="color"></li>
-                          <li class="ml-3"><input class="form-control input-sm"
+                                                                 type="color">
+                            <input class="form-control input-sm" type="text" maxlength="7" (input)="onKeyChanges($event,'popUpDoNotSellTextColor')"
                                                   [value]="popUpDoNotSellTextColor.value"></li>
                         </ul>
                       </div>
 
                       <div class="col-md-12 p-0 mt-2">
-                        <ul style="list-style: none; display: flex" class="ml-2 pl-0 mt-2">
+                        <ul class="ml-2 pl-0 mt-2 colorpicker-wrapper">
                           <li class="tx-12 tx-medium tx-middle tx-spacing-1 tx-color-03 tx-uppercase">BackGround
                             Color
                           </li>
-                          <li class="ml-3"><input [(ngModel)]="formContent.popUpDoNotSellBackgroundColor"
-                                                  formControlName="popUpDoNotSellBackgroundColor"
-                                                  #popUpDoNotSellBackgroundColor type="color"></li>
-                          <li class="ml-3"><input class="form-control input-sm"
+                          <li class="d-flex col-sm-5">
+                            <input [(ngModel)]="formContent.popUpDoNotSellBackgroundColor" class="mr-1"
+                                                  formControlName="popUpDoNotSellBackgroundColor" (change)="onColorChange($event,'popUpDoNotSellBackgroundColor')"
+                                                  #popUpDoNotSellBackgroundColor type="color">
+                            <input class="form-control input-sm" type="text" maxlength="7" (input)="onKeyChanges($event,'popUpDoNotSellBackgroundColor')"
                                                   [value]="popUpDoNotSellBackgroundColor.value"></li>
                         </ul>
                       </div>
@@ -943,28 +945,28 @@
                       </div>
 
                       <div class="col-md-12 mt-2 p-0">
-                        <ul style="list-style: none; display: flex" class="ml-2 pl-0 mt-2">
-                          <li class="tx-12 tx-medium tx-middle tx-spacing-1 tx-color-03 tx-uppercase">Text Color
+                        <ul class="ml-2 pl-0 mt-2 colorpicker-wrapper">
+                          <li class="tx-12 tx-medium tx-spacing-1 tx-color-03 tx-uppercase">Text Color
                           </li>
-                          <li class="text-left tx-middle"><input
-                              [(ngModel)]="formContent.popUpSaveMyChoiceButtonTextColor"
+                          <li class="d-flex col-sm-5">
+                            <input class="mr-1" [(ngModel)]="formContent.popUpSaveMyChoiceButtonTextColor" (change)="onColorChange($event,'PopUpSaveMyChoiceButtonTextColor')"
                               formControlName="PopUpSaveMyChoiceButtonTextColor" #popUpSaveMyChoiseButtonTextColor
-                              type="color"></li>
-                          <li class="ml-3"><input class="form-control input-sm"
+                              type="color">
+                            <input class="form-control input-sm" type="text" maxlength="7" (input)="onKeyChanges($event,'PopUpSaveMyChoiceButtonTextColor')"
                               [value]="popUpSaveMyChoiseButtonTextColor.value"></li>
                         </ul>
                       </div>
 
                       <div class="col-md-12 p-0 mt-2">
-                        <ul style="list-style: none; display: flex" class="ml-2 pl-0 mt-2">
-                          <li class="tx-12 tx-medium tx-middle tx-spacing-1 tx-color-03 tx-uppercase">BackGround
+                        <ul class="ml-2 pl-0 mt-2 colorpicker-wrapper">
+                          <li class="tx-12 tx-medium tx-spacing-1 tx-color-03 tx-uppercase">BackGround
                             Color
                           </li>
-                          <li class="ml-3"><input formControlName="PopUpSaveMyChoiceButtonBackgroundColor"
+                          <li class="d-flex col-sm-5">
+                            <input class="mr-1" formControlName="PopUpSaveMyChoiceButtonBackgroundColor" (change)="onColorChange($event,'PopUpSaveMyChoiceButtonBackgroundColor')"
                               [(ngModel)]="formContent.popUpSaveMyChoiceButtonBackgroundColor"
                               #popUpSaveMyChoiseButtonBackGroundColor type="color">
-                          </li>
-                          <li class="ml-3"><input class="form-control input-sm"
+                            <input class="form-control input-sm" type="text" maxlength="7" (input)="onKeyChanges($event,'PopUpSaveMyChoiceButtonBackgroundColor')"
                               [value]="popUpSaveMyChoiseButtonBackGroundColor.value"></li>
                         </ul>
                       </div>
@@ -995,26 +997,28 @@
                       </div>
 
                       <div class="col-md-12 mt-2 p-0">
-                        <ul style="list-style: none; display: flex" class="ml-2 pl-0 mt-2">
-                          <li class="tx-12 tx-medium tx-middle tx-spacing-1 tx-color-03 tx-uppercase">Text Color
+                        <ul class="ml-2 pl-0 mt-2 colorpicker-wrapper">
+                          <li class="tx-12 tx-medium tx-spacing-1 tx-color-03 tx-uppercase">Text Color
                           </li>
-                          <li class="text-left tx-middle"><input [(ngModel)]="formContent.popUpAllowAllButtonTextColor"
+                          <li class="d-flex col-sm-5">
+                            <input [(ngModel)]="formContent.popUpAllowAllButtonTextColor" class="mr-1" (change)="onColorChange($event,'PopUpAllowAllButtonTextColor')"
                               formControlName="PopUpAllowAllButtonTextColor" #popUPAllowButtonTextColor type="color"
-                              ></li>
-                          <li class="ml-3"><input class="form-control input-sm"
+                              >
+                            <input class="form-control input-sm" type="text" maxlength="7" (input)="onKeyChanges($event,'PopUpAllowAllButtonTextColor')"
                               [value]="popUPAllowButtonTextColor.value"></li>
                         </ul>
                       </div>
 
                       <div class="col-md-12 p-0 mt-2">
-                        <ul style="list-style: none; display: flex" class="ml-2 pl-0 mt-2">
-                          <li class="tx-12 tx-medium tx-middle tx-spacing-1 tx-color-03 tx-uppercase">BackGround
+                        <ul class="ml-2 pl-0 mt-2 colorpicker-wrapper">
+                          <li class="tx-12 tx-medium tx-spacing-1 tx-color-03 tx-uppercase">BackGround
                             Color
                           </li>
-                          <li class="ml-3"><input [(ngModel)]="formContent.popUpAllowAllButtonBackgroundColor"
+                          <li class="d-flex col-sm-5">
+                            <input class="mr-1" [(ngModel)]="formContent.popUpAllowAllButtonBackgroundColor" (change)="onColorChange($event,'PopUpAllowAllButtonBackgroundColor')"
                               formControlName="PopUpAllowAllButtonBackgroundColor" #popUPAllowButtonBackGroundColor
-                              type="color"></li>
-                          <li class="ml-3"><input class="form-control input-sm"
+                              type="color">
+                            <input class="form-control input-sm" type="text" maxlength="7" (input)="onKeyChanges($event,'PopUpAllowAllButtonBackgroundColor')"
                               [value]="popUPAllowButtonBackGroundColor.value"></li>
                         </ul>
                       </div>

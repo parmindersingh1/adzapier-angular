@@ -19,16 +19,15 @@
                     </span>
                     <div class="d-flex">
 
-                        <button (click)="openModalPopup(editRequestDetails,'')" data-toggle="modal"
+                        <button *ngIf="currentWorkflowStage !== 'Rejected'" (click)="openModalPopup(editRequestDetails,'')" data-toggle="modal"
                             class="btn btn-xs btn-white mr-2"><svg xmlns="http://www.w3.org/2000/svg" width="24"
                                 height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                 stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-2">
                                 <polygon points="16 3 21 8 8 21 3 21 3 16 16 3"></polygon>
                             </svg><span class="d-none d-sm-inline mg-l-5">
                                 Edit</span></button>
-
-                        <button  class="btn btn-xs btn-primary mr-2" *ngIf="selectedStages.length !== 0"  (click)="openExtendModal()">Extend Days</button>
-                        <button  class="btn btn-xs btn-primary mr-2"  (click)="openReqestRejectModal()">Reject</button>
+                        <button  class="btn btn-xs btn-primary mr-2" *ngIf="selectedStages.length !== 0 && currentWorkflowStage !== 'Rejected'"  (click)="openExtendModal()">Extend Days</button>
+                        <button  class="btn btn-xs btn-primary mr-2" *ngIf="currentWorkflowStage !== 'COMPLETED' && currentWorkflowStage !== 'Rejected'" (click)="openReqestRejectModal()">Reject</button>
                          <button class="btn btn-xs btn-primary" (click)="removeDSARRequest('DSAR Request detail')">Delete</button>
 
                     </div>
@@ -84,7 +83,8 @@
                         <div class="col-sm"> 
                             <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Status</label>
                                 <ngx-skeleton-loader *ngIf="!currentWorkflowStage" count="1"></ngx-skeleton-loader>
-                            <p class="tx-spacing-1 tx-semibold status-text tx-success">
+                            <p class="tx-spacing-1 tx-semibold status-text tx-success" 
+                            [ngClass]="{'tx-success':currentWorkflowStage !== 'Rejected','tx-danger':currentWorkflowStage == 'Rejected' }">
                                 {{currentWorkflowStage}}
                             </p>
                         </div>
@@ -305,8 +305,7 @@
                                         <!-- <td>{{task | json}}</td> -->
                                         <td>
                                             <div class="tasklink"><span *ngIf="task.required" class="color-red">*</span>
-                                                <a
-                                                    (click)="openResponseModalPopup(subTaskResponseModal,task)">{{task.name}}</a>
+                                                <a (click)="openResponseModalPopup(subTaskResponseModal,task)">{{task.name}}</a>
                                             </div>
                                         </td>
                                         <td><span [innerHTML]="getStagename(task.workflow_stage) | safe : 'html'">
@@ -346,7 +345,7 @@
                     </li> -->
                 </ul>
 
-                <button *ngIf="isTaskTabOpen" class="btn btn-xs btn-primary btnSubtask"
+                <button *ngIf="isTaskTabOpen" class="btn btn-xs btn-primary btnSubtask" [disabled]="currentWorkflowStage == 'Rejected'"
                     (click)="openModalPopup(subTask,'')" data-toggle="modal">
                     Subtask
                 </button>
@@ -409,7 +408,7 @@
                                         <button class="btn-file" (click)="viewClientAttachedFile(data.id)"> 
                                             <i-feather class="feather-file mr-0" name="file"></i-feather>
                                         {{data.upload_exist}} </button> </div>
-                                    <div class="activitystage">{{data.current_status}}</div>
+                                    <div class="activitystage" [ngClass]="{'rejectedstatus':data.current_status=='Rejected','':data.current_status !== 'Rejected'}">{{data.current_status}}</div>
                                 </div>
 
                             </div>
@@ -656,8 +655,8 @@
                             <select (change)="onChangeReason($event)"
                                                 formControlName="reason" class="form-control">
                                                 <option selected disabled value="">select reason</option>
-                                                <ng-container *ngFor="let obj of emailTemplates">
-                                                    <option [value]="obj.template">{{obj.name}}</option>
+                                                <ng-container *ngFor="let obj of reasonList">
+                                                    <option [value]="obj.reason">{{obj.reason}}</option>
                                                 </ng-container>
                                             </select>
 
@@ -946,5 +945,14 @@
             <span aria-hidden="true">&times;</span>
         </button>
         <iframe #filePreview name="iframeFilepreview" style="height:200px;width:300px"></iframe>
+    </div>
+</ng-template>
+
+<ng-template #userAuthenticationAlert>
+    <div class="modal-body text-center">
+        <p>You are not authorized to check this request!</p>
+        <button type="button" class="btn btn-xs btn-primary" (click)="onCloseUserAuthModal()">
+            OK
+        </button>
     </div>
 </ng-template>

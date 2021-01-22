@@ -828,4 +828,13 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
       this.dataService.openUpgradeModal(this.planDetails);
     }
   }
+  onKeyChanges($event,targetElement){
+     if($event.target.value.length === 7){
+      this.cookieBannerForm.controls[targetElement].setValue($event.target.value);
+     }
+   }
+
+   onColorChange($event,currentElement){
+     this.cookieBannerForm.controls[currentElement].setValue($event.target.value);
+   }
 }

@@ -121,7 +121,7 @@
           <span *ngIf="rowData.status === 'InProgress'" class="badge badge-warning">{{rowData.status}}</span>
           <span *ngIf="rowData.status === 'Complete'" class="badge badge-success">{{rowData.status}}</span>
           <span *ngIf="rowData.status === 'UnVerifed'" class="badge badge-danger">{{rowData.status}}</span>
-
+          <span *ngIf="rowData.status === 'Rejected'" class="badge badge-danger">{{rowData.status}}</span>
         </td>
         <td><span class="ui-column-title">Name</span>{{rowData.name}}</td>
         <td><span class="ui-column-title">Web form name</span><a (click)="navigateToWebForm(rowData)" class="linkcolor">{{rowData.web_form_name}}</a></td>

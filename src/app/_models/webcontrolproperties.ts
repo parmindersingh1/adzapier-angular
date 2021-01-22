@@ -6,4 +6,5 @@ export interface WebControlProperties {
     preferControlOrder: number;
     requiredfield: boolean;
     ismandatory: boolean;
+    selectOptions: any;
   }

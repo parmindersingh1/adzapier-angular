@@ -230,6 +230,12 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
   formControlLabel: string;
   multiselect = false;
   ismultiselectrequired = false;
+  isAccordionOpen: boolean;
+  accordionStatus = {
+    isFirstopen : false,
+    isSecondopen : false,
+    isThirdopen : false,
+  }
   constructor(private fb: FormBuilder, private ccpaRequestService: CcparequestService,
     private organizationService: OrganizationService,
     private dsarFormService: DsarformService,
@@ -480,10 +486,10 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
       if (t.controlId === selectedType) {
         if (selectedType === 'subjecttype') {
           t.selectOptions = this.subjectType;
-          this.sideMenuSubjectTypeOptions = this.subjectType;
+          this.sideMenuSubjectTypeOptions = this.selectedControlObj.selectOptions;// || this.subjectType;
         } else {
           t.selectOptions = this.requestType;
-          this.sideMenuRequestTypeOptions = this.requestType;
+          this.sideMenuRequestTypeOptions = this.selectedControlObj.selectOptions;// || this.requestType;
         }
 
       }
@@ -596,11 +602,13 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
       } else if (this.existingControl.controlId === 'subjecttype') {
         this.isSubjectType = true;
         this.isRequestType = false;
-        this.loadSubjectRequestTypeForSideNav('subjecttype');
+        this.sideMenuSubjectTypeOptions = this.selectedControlObj.selectOptions;
+       // this.loadSubjectRequestTypeForSideNav('subjecttype');
       } else if (this.existingControl.controlId === 'requesttype') {
         this.isRequestType = true;
         this.isSubjectType = false;
-        this.loadSubjectRequestTypeForSideNav('requesttype');
+        this.sideMenuRequestTypeOptions = this.selectedControlObj.selectOptions
+       // this.loadSubjectRequestTypeForSideNav('requesttype');
       } else {
         this.selectedControlType = true;
       }
@@ -763,7 +771,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
     this.formControlLabel = formControls.value.lblText;
   //  const isLabelExist = this.webFormControlList.filter((t) => t.controllabel === this.trimLabel).length > 0;
     this.changeControlTypes();
-    this.cancelAddingFormControl();
+    this.cancelAddingFormControl('submit');
   }
 
   changeControlTypes(){
@@ -861,7 +869,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
               return false;
             }
           } else {
-            this.cancelAddingFormControl();
+            this.cancelAddingFormControl('submit');
           }
           if (this.crid) {
             this.ccpaFormConfigService.updateControl(this.webFormControlList[customControlIndex], customControlIndex, updateCustomObj);
@@ -904,12 +912,12 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
         if (optionLength > 0) {
           if (this.selectOptions[optionLength - 1].name !== undefined) {
             this.lblText = '';
-            this.cancelAddingFormControl();
+            this.cancelAddingFormControl('submit');
           } else {
             return false;
           }
         } else {
-          this.cancelAddingFormControl();
+          this.cancelAddingFormControl('submit');
         }
         this.ccpaFormConfigService.addControl(newWebControl);
         this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
@@ -940,12 +948,12 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
         if (optionLength > 0) {
           if (this.selectOptions[optionLength - 1].name !== undefined) {
             this.lblText = '';
-            this.cancelAddingFormControl();
+            this.cancelAddingFormControl('submit');
           } else {
             return false;
           }
         } else {
-          this.cancelAddingFormControl();
+          this.cancelAddingFormControl('submit');
         }
 
         this.dsarFormService.addControl(newWebControl);
@@ -1156,7 +1164,14 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
     }
   }
 
-  cancelAddingFormControl() {
+  cancelAddingFormControl(actionType) {
+    if(actionType === 'cancel' && this.crid === null){
+      this.webFormControlList = this.dsarFormService.getFormControlList();
+    } else if(actionType === 'cancel' && this.crid !== null){
+      this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
+    } else if(actionType === 'submit' && this.crid !== null){
+      this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
+    } 
     this.isAddingFormControl = false;
     this.isEditingList = false;
     this.inputOrSelectOption = false;
@@ -1167,7 +1182,6 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
     this.selectedControlType = false;
     this.changeControlType = null;
     this.isRequiredField = false;
-    this.webFormControlList = this.dsarFormService.getFormControlList();
   }
 
   saveAsDraftCCPAFormConfiguration() {
@@ -1381,7 +1395,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
     } else {
       this.dsarFormService.updateControl(this.webFormControlList[oldControlIndex], oldControlIndex, controlObj);
       this.webFormControlList = this.dsarFormService.getFormControlList();
-      this.cancelAddingFormControl();
+      this.cancelAddingFormControl('submit');
     }
   }
 
@@ -1927,12 +1941,10 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
           this.logoWidth = img_width;
 
           if (img_height > max_height && img_width > max_width) {
-            this.imageError =
-              'Maximum dimentions allowed ' +
-              max_height +
-              '*' +
-              max_width +
-              'px';
+            this.imageError = 'Maximum dimentions allowed ' + max_height + '*' + max_width + ' px' + ' for favicon';
+            this.alertMsg = this.imageError;
+            this.isOpen = true;
+            this.alertType = 'danger';
             return false;
           } else {
             const imgBase64Path = e.target.result;
@@ -2126,6 +2138,16 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
       }
     }   
    
+  }
+
+  accordionChangeStatus(event:boolean,tag){
+    if(tag === 'first'){
+     return this.accordionStatus.isFirstopen = event;
+    }else if(tag === 'second'){
+     return this.accordionStatus.isSecondopen = event;
+    }else if(tag === 'third'){
+     return this.accordionStatus.isThirdopen = event;
+    }
   }
 
 }
