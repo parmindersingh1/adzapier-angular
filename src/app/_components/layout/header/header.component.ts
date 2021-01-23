@@ -554,7 +554,7 @@ export class HeaderComponent implements OnInit {
   }
 
   loadNotification() {
-    // this.isNotificationBellClicked = true;
+    //this.isNotificationBellClicked = true;
     this.userService.getNotification(this.constructor.name, moduleName.headerModule).subscribe((data) => {
       this.notificationList = data.response.notification_data;
       this.notificationsNumber = data.response.new_count;
