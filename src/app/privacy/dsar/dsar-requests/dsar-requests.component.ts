@@ -344,6 +344,10 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
           window.open('https://privacyportal.adzpier-staging.com/dsar/form/' + this.selectedOrgID + '/'
             + this.selectedPropID + '/' + this.selectedCRID);
           this.onCancelClick();
+        } else if(window.location.hostname === 'portal.adzapier.com'){
+          window.open('https://privacyportal.primeconsent.com/dsar/form/' + this.selectedOrgID + '/'
+          + this.selectedPropID + '/' + this.selectedCRID);
+          this.onCancelClick();
         }
       } else {
         this.alertMsg = 'Organization or Property not found!';

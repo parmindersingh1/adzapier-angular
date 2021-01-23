@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, HostListener, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { OrganizationService, AuthenticationService, UserService } from '../../../_services';
 import { Observable } from 'rxjs';
@@ -67,6 +67,7 @@ export class HeaderComponent implements OnInit {
   resuserCID: any;
   navbarOpen = false;
   addMobileMenuWidth: any;
+  addMobileBackdrop: any;
   constructor(
     private router: Router,
     private activatedroute: ActivatedRoute,
@@ -380,6 +381,7 @@ export class HeaderComponent implements OnInit {
   openNav() {
     this.close = !this.close;
     this.addMobileMenuWidth = this.addMenuWidth(); // to avoid countinous background call
+    this.addMobileBackdrop = this.addBackdrop(); // to avoid countinous background call
   }
 
 
@@ -552,16 +554,11 @@ export class HeaderComponent implements OnInit {
   }
 
   loadNotification() {
+    // this.isNotificationBellClicked = true;
     this.userService.getNotification(this.constructor.name, moduleName.headerModule).subscribe((data) => {
-      this.notificationList = data.response;
-      this.showNotificationNumber(this.notificationList);
+      this.notificationList = data.response.notification_data;
+      this.notificationsNumber = data.response.new_count;
     });
-  }
-
-  showNotificationNumber(list) {
-    if (list.filter((t) => t.read === true).length !== 0) {
-      return this.notificationsNumber = list.filter((t) => t.read === true).length;
-    }
   }
 
   clearNotification(requestid, purpose: string, status: boolean) {
@@ -668,7 +665,6 @@ export class HeaderComponent implements OnInit {
     let textLength;
     if(this.currentOrganization !== undefined){
       textLength = this.currentOrganization.length;
-     // console.log(textLength,'textLength..');
       let generatedWidth = (textLength * 10) <= 250 ? 250 : textLength * 10;
       let addStyle = {
         'width': generatedWidth + 'px',
@@ -688,8 +684,34 @@ export class HeaderComponent implements OnInit {
     }
   }
 
+  addBackdrop(){
+    let textLength = this.currentOrganization.length;
+    let generatedWidth = (textLength * 10) <= 250 ? 250 : textLength * 10;
+    if(!this.close){
+      let backDropStyle = {
+        'opacity': !this.close ? 1 : 0,
+        'visibility': !this.close ? 'visible' : 'hidden',
+        'left': !this.close ? generatedWidth + 'px' : 0
+      };
+      return backDropStyle;
+    }
+    
+  }
+
   convertAmpersand(item){
     return item.replace(/&amp;/g,'&');
   }
 
+  @HostListener('window:resize',['$event'])
+  onWindowResize(event){
+    if(event.target.outerWidth <= 767){
+     // !this.close ? this.close = true : this.close = false;
+      console.log(this.close,'close..');
+      if(!this.close){
+        this.close = true;
+        this.addMobileMenuWidth = this.addMenuWidth();
+        this.addMobileBackdrop = this.addBackdrop();
+      }
+    }
+  }
 }

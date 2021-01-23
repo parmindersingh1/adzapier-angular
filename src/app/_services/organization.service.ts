@@ -48,6 +48,10 @@ export class OrganizationService {
         return this.http.get<any>(environment.apiUrl + '/organizations');
     }
 
+    searchOragnization(companyID,searchText): Observable<any> {
+        return this.http.get<any>(environment.apiUrl + '/organizationsbyname/' + companyID + '?name='+searchText);
+    }
+
     viewOrganizationDetails(orgId): Observable<Organizationdetails[]> {
         return this.http.get<Organizationdetails[]>(environment.apiUrl + '/organizations/' + orgId);
     }

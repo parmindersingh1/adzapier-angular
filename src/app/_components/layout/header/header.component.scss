@@ -75,7 +75,7 @@ i {
   left: auto !important;
 }
 .notification-menu-right{
-  right: 42px !important;
+  right: 54px !important;
   width: 35%;
   top: 59px !important;
   left: auto !important;
@@ -117,7 +117,7 @@ i {
   text-overflow: ellipsis;
   white-space: nowrap;
   cursor: pointer;
-  display: inline-block;
+  // display: inline-block;
   overflow: hidden !important;
   // justify-content: space-between;
   // display: flex;
@@ -283,7 +283,7 @@ a.nav-link:hover {
 .feather-20{
   width: 20px;
   height: 20px;
-  margin: 0 -8px 0 0;
+  margin: 0;
   z-index: 1;
 }
 
@@ -745,16 +745,43 @@ button.btn.btn-link:hover {
 
 .notification-number {
   position: absolute;
-  right: 58px;
-  top: 4px;
-  border: 2px solid #fff;
-  padding: 0px 8px;
+  top: -16px;
+  right: -12px;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
   color: #fff;
   font-size: 11px;
   text-align: center;
-  line-height: 22px;
+  line-height: 24px;
   background: #dc3545;
-  border-radius: 13px;
+  border: 2px solid #fff;
+}
+
+.hide-notification-number {
+  display: none;
+ }
+
+.responsive-notification {
+  // position: absolute;
+  // right: 75px;
+  // top: -12px
+  position: relative;
+  display: inline-block;
+  right:10px;
+}
+
+.back-drop {
+  visibility: hidden;
+  opacity: 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(15, 21, 32, 0.7);
+  z-index: 40;
+  transition: all 0.4s;
 }
 
 @media(min-width:767px) and (max-width:1024px) {
@@ -764,7 +791,35 @@ button.btn.btn-link:hover {
  
 }
 
-@media(min-width:320px) and (max-width:667px) {
+@media(min-width:768px) and (max-width:1024px) {
+  .responsive-notification {
+    right:20px;
+    position: relative;
+    top: 0;
+  }
+
+  .notification-number {
+    position: absolute;
+    right: -10px;
+    top: -15px;
+    z-index: 1000;
+  }
+}
+
+
+@media(min-width:768px){
+  .sidebar .sidebar-components {
+    display: none;
+  }
+
+  .sidenav {
+    display: none;
+  }
+
+ 
+}
+
+@media(min-width:320px) and (max-width:767px) {
   ul.navbar-nav > a.nav-link.dropdown-link::after {
     width: 10px;
     height: 10px;
@@ -781,24 +836,33 @@ button.btn.btn-link:hover {
   }
 
   .nav-item {
-    margin:0 10px 0 0;
+    margin:0;
   }
 
   .navbar-right {
     position: absolute;
-    right: 0;
+    right: 0 !important;
+  }
+
+  .feather-20 {
+    width: 20px;
+    height: 20px;
+    margin: 0;
+    z-index: 1;
+    position: absolute;
+    top: -10px;
+    right: 75px;
   }
 
   .notification-number {
     position: absolute;
-    right: -10px;
-    top: -8px;
+    right: 62px;
+    top: -24px;
+    z-index: 1000;
   }
 
   .responsive-notification {
-    position: absolute;
-    right: 75px;
-    top: -12px
+    right:0;
   }
 
   .site-content {
