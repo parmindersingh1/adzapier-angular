@@ -8,6 +8,7 @@ import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { moduleName } from 'src/app/_constant/module-name.constant';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Location } from '@angular/common';
+import { DataService } from 'src/app/_services/data.service';
 
 @Component({
   selector: 'app-header',
@@ -75,6 +76,7 @@ export class HeaderComponent implements OnInit {
     private userService: UserService,
     private loading: NgxUiLoaderService,
     private bsmodalService: BsModalService,
+    private dataService: DataService,
     private location: Location
   ) {
     this.authService.currentUser.subscribe(x => {
@@ -244,7 +246,20 @@ export class HeaderComponent implements OnInit {
     });
   }
 
-  isCurrentPropertySelected(org, prop) {
+  async isCurrentPropertySelected(org, prop) {
+    this.loading.start('2');
+    this.dataService.getOrgPlanDetails(this.constructor.name, moduleName.cookieConsentModule, org.id)
+      .subscribe((res: any) => {
+          this.loading.stop('2')
+        this.dataService.setOrgPlanToLocalStorage(res);
+      }, error => {
+        this.loading.stop('2')
+      });
+    this.loading.start('1');
+     this.dataService.getPropertyPlanDetails(this.constructor.name, moduleName.cookieConsentModule, prop.property_id)
+      .subscribe((res: any) => {
+        this.dataService.setPropertyPlanToLocalStorage(res);
+        this.loading.stop('1')
     this.selectedOrgProperties.length = 0;
     this.activeProp = prop.property_name;
     const obj = {
@@ -267,7 +282,23 @@ export class HeaderComponent implements OnInit {
     } else {
       this.router.navigate([this.router.url]);
     }
-    this.openNav();
+
+      }, err => {
+        this.loading.stop('1')
+      })
+      this.openNav();
+
+
+
+    // this.dataService.changeCurrentPropertyPlan(res.response);
+
+    // this.dataService.currentPropertyPlanDetails.subscribe(res => {
+    //   this.dataService.setPropertyPlanToLocalStorage(res);
+    //   console.log('Res DAta', res);
+    // }, err => {
+    //   console.log('Error Property Plan Change', err)
+    // })
+
   }
 
   isPropSelected(selectedItem): boolean {
@@ -590,7 +621,7 @@ export class HeaderComponent implements OnInit {
 
 
   onMobileMenuClicked(link) {
-    
+
     if (link === 'Dashboard' && this.isMobileDashboardMenuCollapsed) {
       this.isMobileDashboardMenuCollapsed = false;
       this.isMobilePrivacyMenuCollapsed = true;
@@ -635,7 +666,7 @@ export class HeaderComponent implements OnInit {
     if(this.currentOrganization !== undefined){
       textLength = this.currentOrganization.length;
       let generatedWidth = (textLength * 10) <= 250 ? 250 : textLength * 10;
-      let addStyle = { 
+      let addStyle = {
         'width': generatedWidth + 'px',
         'left': !this.close ? 0 : '-' +  generatedWidth + 'px',
         'transform': !this.close ? 'translateX(0)' : 'translateX(-'+ generatedWidth +'px)',
@@ -643,7 +674,7 @@ export class HeaderComponent implements OnInit {
        };
        return addStyle;
     }else{
-      let addStyle = { 
+      let addStyle = {
         'width': 260 + 'px',
         'left': !this.close ? 0 : '-' +  26 * 10 + 'px',
         'transform': !this.close ? 'translateX(0)' : 'translateX(-'+ 26 * 10 +'px)',

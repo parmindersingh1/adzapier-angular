@@ -51,7 +51,11 @@ export const apiConstant = {
   WORKFLOW_ID: '/workflow?workflow_id=',
   // COOKIE_CATEGORY_CHART
   COOKIE_CATEGORY_CHART: '/cookiepurpose/:propId',
-  COOKIE_CATEGORY_TYPE_CHART: '/cookietype/:propId'
+  COOKIE_CATEGORY_TYPE_CHART: '/cookietype/:propId',
+
+  // PROPERTY PLAN
+  PROPERTY_PLAN: '/billing/plan/features',
+  ORG_PLAN: '/billing/plan/features'
 };
 
 // {

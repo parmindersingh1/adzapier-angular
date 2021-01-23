@@ -1,4 +1,5 @@
 export const moduleName = {
+  appModule: 'AppModule',
   billingModule: 'BillingModule',
   pricingModule: 'PricingModule',
   updateBillingModule: 'UpdateBillingModule',

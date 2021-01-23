@@ -99,7 +99,7 @@
 
                 <div class="row">
                  <div class="col-md-2 ">
-                 <p-checkbox class="pt-1" binary="true"
+                 <p-checkbox (click)="onCheckLogoAllow()"  [disabled]="disablePlanFeatures.hideLogo"  class="pt-1" binary="true"
                              formControlName="logo"></p-checkbox>
                  </div>
                  <div class="col-md-9">
@@ -128,8 +128,8 @@
                     <label class="col-sm-8 tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label">
                       COOKIE BLOCKING</label>
                     <div class="col-sm-4">
-                      <label class="switch">
-                        <input type="checkbox" formControlName="cookieBlocking">
+                      <label class="switch" (click)="onCheckDisableCookiebloking()">
+                        <input type="checkbox"  [attr.disabled]="disablePlanFeatures.disableCookieblocking ? true : null"  formControlName="cookieBlocking">
                         <span class="slider round"></span>
                       </label>
                     </div>
@@ -138,7 +138,7 @@
                     <label class="col-sm-8 tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label">
                       ENABLE IAB</label>
                     <div class="col-sm-4">
-                      <label class="switch">
+                      <label class="switch" >
                         <input type="checkbox" [disabled]="isGdprGlobal" [checked]="isGdprGlobal"
                                formControlName="enableIab">
                         <span class="slider round"></span>
@@ -149,8 +149,8 @@
                     <label class="col-sm-8 tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label">
                       Google Vendors</label>
                     <div class="col-sm-4">
-                      <label class="switch">
-                        <input type="checkbox" formControlName="google_vendors">
+                      <label class="switch"  (click)="onCheckAllowGoogleVendors()" >
+                        <input type="checkbox"  [attr.disabled]="disablePlanFeatures.disableGoogleVendors ? true : null" formControlName="google_vendors">
                         <span class="slider round"></span>
                       </label>
                     </div>
@@ -172,8 +172,8 @@
                     <label class="col-sm-8 tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label">
                       Configure banner</label>
                     <div class="col-sm-4">
-                      <label class="switch">
-                        <input checked type="checkbox" #showConfig>
+                      <label class="switch"   (click)="onCheckAllowBannerConfig()">
+                        <input [attr.disabled]="disablePlanFeatures.disableBannerConfig ? true : null"    type="checkbox" #showConfig>
                         <span class="slider round"></span>
                       </label>
                     </div>

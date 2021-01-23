@@ -57,7 +57,7 @@
     [ngClass]="{'hidemenu':!currentUser, 'showmenu':currentUser}">
     <ul  class="navbar-nav nav-mr" dropdown container="body">
       <a class="nav-link dropdown-link"  dropdownToggle (click)="false">
-       <div>{{currentOrganization}} 
+       <div>{{currentOrganization}}
        </div>
        <span>{{currentProperty ? convertAmpersand(currentProperty) : 'Select Property'}}</span>
       </a>
