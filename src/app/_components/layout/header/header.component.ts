@@ -704,7 +704,6 @@ export class HeaderComponent implements OnInit {
 
   @HostListener('window:resize',['$event'])
   onWindowResize(event){
-    console.log(event.target.outerWidth);
     if(event.target.outerWidth <= 767){
      // !this.close ? this.close = true : this.close = false;
       console.log(this.close,'close..');
