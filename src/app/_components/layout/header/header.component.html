@@ -117,7 +117,8 @@
   <!--notification after login-->
   <div class="navbar-right" *ngIf="currentUser" dropdown [insideClick]="true">
     <div class="responsive-notification"> 
-    <span [ngClass]="{'hide-notification-number':notificationsNumber == '0'}" class="notification-number">{{notificationsNumber}}</span>
+
+    <span  class="notification-number" [ngClass]="notificationsNumber == 0 ? 'hide-notification-number' : ''">{{notificationsNumber}}</span> <!--[ngClass]="{'hide-notification-number':notificationsNumber == '0'}"-->
     <a  class="nav-link dropdown-link p-0" (click)="loadNotification();"  dropdownToggle>
       <i-feather name="bell" class="feather-20"></i-feather>
     </a>
