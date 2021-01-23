@@ -30,7 +30,7 @@ export class VerifyemailComponent implements OnInit {
       this.loading.stop();
       this.isUserVarified = true;
       this.message = 'Your email address is successfully verified ! please login to access your account!';
-      setInterval(()=>{
+      setTimeout(()=>{
         return this.router.navigate(['/login']);
        },3000);
     }, error => {

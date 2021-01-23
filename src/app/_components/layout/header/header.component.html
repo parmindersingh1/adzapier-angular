@@ -117,8 +117,8 @@
   <!--notification after login-->
   <div class="navbar-right" *ngIf="currentUser" dropdown [insideClick]="true">
     <div class="responsive-notification"> 
-    <span class="notification-number" *ngIf="!isNotificationBellClicked">{{notificationsNumber}}</span>
-    <a  class="nav-link dropdown-link" (click)="isNotificationBellClicked = true"  dropdownToggle>
+    <span [ngClass]="{'hide-notification-number':notificationsNumber == '0','':notificationsNumber !== '0'}" class="notification-number">{{notificationsNumber}}</span>
+    <a  class="nav-link dropdown-link p-0" (click)="loadNotification();"  dropdownToggle>
       <i-feather name="bell" class="feather-20"></i-feather>
     </a>
     </div>
@@ -212,7 +212,7 @@
   <!--usermenuends after login-->
 </nav>
 <!---iPad / Mobile Menu-->
-<div id="divSidenav" class="sidenav">
+<div id="divSidenav" class="sidenav back-drop" [ngStyle]="addMobileBackdrop">
   <div class="sidebar sidebar-components" [ngStyle]="addMobileMenuWidth">
     <div class="sidebar-header"></div>
     <div class="sidebar-body">

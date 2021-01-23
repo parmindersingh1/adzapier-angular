@@ -310,7 +310,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
 
     this.faviconForm = this.fb.group({
       titlefavicon: ['']
-    })
+    });
   }
   get stepFormOne() { return this.basicForm.controls; }
   get formLogo() { return this.headerLogoForm.controls; }
@@ -355,7 +355,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
           } else {
             this.selectedApproverID = data.approver_id;
             this.selectedWorkflowID = data.workflow_id;
-            //  this.getWorkflowWithApproverID();
+            this.getWorkflowWithApproverID();
           }
           // this.requestFormControls = data.request_form;
           if (data.request_form) {
@@ -849,6 +849,8 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
             updatedControlType = 'radio';
           } else if(this.changeControlType === 'button' && this.multiselect) {
             updatedControlType = 'checkbox';
+          } else {
+            updatedControlType = this.changeControlType;
           }
       //  const updatedControlType = this.changeControlType === 'button' && this.changeControlType !== 'select' && !this.multiselect ? 'radio' : 'checkbox';
         if (customControlIndex !== -1) {
@@ -929,9 +931,9 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
 
         const count = this.webFormControlList.length + 1;
         let updatedControlType;
-          if(this.changeControlType === 'button' && !this.multiselect){
+          if(this.selectedFormOption === 'button' && !this.multiselect){
             updatedControlType = 'radio';
-          } else if(this.changeControlType === 'button' && this.multiselect) {
+          } else if(this.selectedFormOption === 'button' && this.multiselect) {
             updatedControlType = 'checkbox';
           }
        // const updatedControlType = this.selectedFormOption === 'button' && this.selectedFormOption !== 'select' && !this.multiselect ? 'radio' : 'checkbox';
@@ -1118,6 +1120,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
 
   addingFormControl() {
   //  console.log(this.selectedFormOption,'selectedFormOption..');
+    this.multiselect = false;
     this.selectedFormOption = null;
     this.selectOptionControl = '';
     this.changeControlType = null;
@@ -1203,7 +1206,9 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
           }
         });
         this.ccpaFormConfigService.setFormControlList(this.webFormControlList);
-        this.updateWebcontrolIndex(this.registerForm.value, this.webFormControlList);
+        if(this.registerForm !== undefined){
+          this.updateWebcontrolIndex(this.registerForm.value, this.webFormControlList);
+        }
       } else {
         this.webFormControlList = this.dsarFormService.getFormControlList();
         this.webFormControlList.filter((t) => {

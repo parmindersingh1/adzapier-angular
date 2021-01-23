@@ -809,6 +809,8 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
               this.alertType = 'success';
               this.loadEmailLog(this.requestID);
               this.quillEditorEmailText.get('editorEmailMessage').reset();
+              this.quillEditorEmailText.get('emailAttachment').reset();
+              this.uploadFilename = '';
               this.isEmailPostsubmitted = false;
             }
           }, (error) => {
