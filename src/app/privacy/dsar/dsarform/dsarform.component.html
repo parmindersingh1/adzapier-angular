@@ -541,7 +541,6 @@
                         <form #registerForm="ngForm" (ngSubmit)="register(registerForm)">
                             <div class="dsarform-box" cdkDragBoundary=".dsarform-box" *ngFor="let webcontrol of webFormControlList; let j = index;"
                                 cdkDrag [cdkDragDisabled]="true">
-
                                 <div *ngIf="webcontrol.controlId === 'requesttype'" class="col-sm-12">
                                     <label><span *ngIf="webcontrol.requiredfield" class="color-red">*</span>
                                         {{webcontrol.controllabel}}</label>
