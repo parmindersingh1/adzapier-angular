@@ -36,6 +36,7 @@ export class AppComponent implements OnInit {
   hideHeaderFooter = true;
   billingCycle = 'monthly';
   currentPlanData = new DefaultPlanData();
+  type = 'cookieConsent';
   constructor(private router: Router,
     private modalService: BsModalService,
               private billingService: BillingService,
@@ -81,9 +82,13 @@ export class AppComponent implements OnInit {
 
   openModal() {
     this.dataService.openModalWithData.subscribe( res => {
+
       if(res.openModal) {
-        // debugger
-        if(res.data !== null) {
+        if(!res.data) {
+          this.currentPlanData = new DefaultPlanData();
+        }
+        if(res.data) {
+          this.type = res.type;
           this.currentPlanData = res.data
         } else {
             this.currentPlanData = new DefaultPlanData();

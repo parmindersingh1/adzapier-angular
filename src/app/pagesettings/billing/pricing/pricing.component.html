@@ -73,7 +73,7 @@
             </div>
 
         <div class="col-md-12 cycle-type">
-          <input (change)="onSelectBillingCycle(subType)" [disabled]="activeData.base.cycle === 'yearly'"  #subType type="checkbox" id="lol-checkbox">
+          <input (change)="onSelectBillingCycle(subType)" #subType type="checkbox" id="lol-checkbox">
 
           <label id="button" for="lol-checkbox">
             <div id="knob"></div>
@@ -112,7 +112,7 @@
               </select>
             </div>
 
-            <button *ngIf="plan.price !=  activeData.base.maxPrice" (click)="onAddToCart(plan, planUnit)" [disabled]="plan.price <=  activeData.base.maxPrice" class="btn mt-4 mb-4 add-to-cart-btn btn-primary btn-block">
+            <button *ngIf="plan.price !=  activeData.base.maxPrice" (click)="onAddToCart(plan, planUnit)"  class="btn mt-4 mb-4 add-to-cart-btn btn-primary btn-block">
               Add To Cart
             </button>
 

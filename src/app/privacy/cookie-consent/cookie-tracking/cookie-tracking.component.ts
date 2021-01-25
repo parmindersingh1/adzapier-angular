@@ -5,6 +5,8 @@ import {NgxUiLoaderService} from 'ngx-ui-loader';
 import {moduleName} from '../../../_constant/module-name.constant';
 import { GdprService } from 'src/app/_services/gdpr.service';
 import * as moment from 'moment';
+import {featuresName} from '../../../_constant/features-name.constant';
+import {DataService} from '../../../_services/data.service';
 
 class FilterType {
   consentType = '';
@@ -35,22 +37,28 @@ export class CookieTrackingComponent implements OnInit {
   eventRows;
   tLoading = true;
   pagelimit;
+  planDetails: any;
+  isDisabledScreen = false;
   constructor(private cookieConsentService: CookieTrackingService,
               private  orgservice: OrganizationService,
               private loading: NgxUiLoaderService,
-              private gdprService: GdprService
-
+              private gdprService: GdprService,
+              private dataService: DataService
   ) { }
 
   ngOnInit() {
     this.onGetPropsAndOrgId();
     this.onGetFilterData();
     this.onSetUpDate();
-    console.log(
-    //  this.gdprService.docodeTcString()
-    )
+    this.onCheckSubscription();
   }
 
+onCheckSubscription() {
+  this.planDetails = this.dataService.getCurrentPropertyPlanDetails();
+  const isAllowViewConsent = this.dataService.isAllowCookieTracking(this.planDetails, featuresName.FULL_CONVERSION_AND_VISITOR, featuresName.CONSENT_RECORD_KEEPING);
+  this.isDisabledScreen = !isAllowViewConsent
+  this.dataService.openUpgradeModalForCookieConsent(this.planDetails)
+}
 
   onSetUpDate() {
     const that = this;

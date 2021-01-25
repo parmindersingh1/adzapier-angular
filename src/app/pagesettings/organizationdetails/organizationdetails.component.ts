@@ -11,6 +11,7 @@ import { moduleName } from 'src/app/_constant/module-name.constant';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { DataService } from 'src/app/_services/data.service';
 import { featuresName } from 'src/app/_constant/features-name.constant';
+import {NgxUiLoaderService} from 'ngx-ui-loader';
 
 // import { CompanyService } from '../company.service';
 @Component({
@@ -84,6 +85,7 @@ export class OrganizationdetailsComponent implements OnInit {
   selectedTeamMember: any;
   userList: any = [];
   noResult = false;
+  private orgPlanDetails: any;
   constructor(private activatedRoute: ActivatedRoute,
               private orgService: OrganizationService,
               private modalService: NgbModal,
@@ -93,6 +95,7 @@ export class OrganizationdetailsComponent implements OnInit {
               private router: Router,
               private dataService: DataService,
               private bsmodalService: BsModalService,
+              private loading: NgxUiLoaderService,
               private cdref: ChangeDetectorRef) {
     this.orgService.currentProperty.subscribe((data) => {
       this.currentManagedOrgID = data.organization_id;
@@ -160,6 +163,7 @@ export class OrganizationdetailsComponent implements OnInit {
       userInput: ['', [Validators.required]]
     });
    // this.loadUserListForInvitation();
+    this.onGetOrgPlan();
   }
   get f() { return this.inviteUserOrgForm.controls; }
   get orgProp() { return this.organisationPropertyForm.controls; }
@@ -180,6 +184,16 @@ export class OrganizationdetailsComponent implements OnInit {
     // this.pathValues();
   }
 
+  onGetOrgPlan() {
+    this.loading.start('2');
+    this.dataService.getOrgPlanDetails(this.constructor.name, moduleName.cookieConsentModule, this.currentManagedOrgID)
+      .subscribe((res: any) => {
+        this.orgPlanDetails = res.response;
+        this.loading.stop('2')
+      }, error => {
+        this.loading.stop('2')
+      });
+  }
   getPropertyList(id): any {
     // this.isOpen = !this.isOpen;
     this.orgService.getPropertyList(id).subscribe((data) => {
@@ -420,8 +434,7 @@ export class OrganizationdetailsComponent implements OnInit {
 
 
   onCheckSubscription(){
-    const resData: any = this.dataService.getCurrentPropertyPlanDetails();
-      const status = this.dataService.checkUserForOrg(resData.response, featuresName.USER_PER_ORG, this.organizationTeamMemberList.length);
+      const status = this.dataService.checkUserForOrg(this.orgPlanDetails, featuresName.USER_PER_ORG, this.organizationTeamMemberList.length);
      if ( status === false) {
        return false;
      }
