@@ -12,11 +12,16 @@
         <div class="card-header">
             <div class="searchfield mt-3">
                 <div class="col-3 input-group">
-                    <input class="form-control py-2 border-right-0 border" [(ngModel)]="searchText" type="search"
+                    <input class="form-control py-2 border-right-0 border" [(ngModel)]="searchText" type="text" (keyup.enter)="searchOrganization(searchText)"
                         value="search" id="example-search-input" />
-                    <span class="input-group-append">
-                        <div class="input-group-text bg-transparent"><i class="fa fa-search"></i></div>
-                    </span>
+                        <span class="input-group-append">
+                            <div *ngIf="searchText !== ''" (click)="clearSearchfield()" class="input-group-text bg-transparent">
+                              <i class="fa fa-times color-red" aria-hidden="true"></i>
+                            </div>
+                            <div class="input-group-text bg-transparent" (click)="searchOrganization(searchText)">
+                              <i class="fa fa-search"></i>
+                            </div>
+                          </span>
                 </div>
                  
                 <div class="ml-auto mr-3">
@@ -39,9 +44,8 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <ng-container *ngFor="let data of orgList |  filter: searchText:'orgname':'city':'state' | paginate:paginationConfig; let i = index">
+                    <ng-container *ngFor="let data of orgList | paginate:paginationConfig; let i = index"> <!--filter: searchText:'orgname':'city':'state' -->
                     <tr [ngClass]="{'row-disabled':data.active == false, 'row-enabled':data.active == true}">
-                       
                         <td><a *ngIf="data.active == true" (click)="viewOrganization(data.id)">{{data.orgname}}</a>
                             <span *ngIf="data.active == false">{{data.orgname}}</span>
                         </td>
@@ -63,7 +67,7 @@
                     </tr>
                     </ng-container>
                     <tr>
-                        <td colspan="8" *ngIf="(orgList | filter: searchText:'orgname':'city':'state').length===0">No
+                        <td colspan="8" *ngIf="orgList.length===0">No
                             records found.</td>
                     </tr>
                 </tbody>

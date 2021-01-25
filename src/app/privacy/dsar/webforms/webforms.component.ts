@@ -5,6 +5,8 @@ import { OrganizationService, UserService } from 'src/app/_services';
 import { CCPAFormFields } from 'src/app/_models/ccpaformfields';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 import {moduleName} from '../../../_constant/module-name.constant';
+import { DataService } from 'src/app/_services/data.service';
+import { featuresName } from 'src/app/_constant/features-name.constant';
 
 interface WebFormModel {
   crid: any;
@@ -47,6 +49,7 @@ export class WebformsComponent implements OnInit {
               private organizationService: OrganizationService,
               private loading: NgxUiLoaderService,
               private userService: UserService,
+              private dataService: DataService,
               private router: Router) {
     this.router.events.subscribe((e) => {
       if (e instanceof NavigationEnd) {
@@ -110,7 +113,9 @@ export class WebformsComponent implements OnInit {
 
   navigateToDSARForm() {
    if (this.currentPropertyName !== undefined) {
+    // if(this.onCheckSubscription()){
       this.router.navigate(['/privacy/dsar/dsarform']);
+    // }
     } else {
       alert('Please Select property first!');
     }
@@ -128,6 +133,14 @@ export class WebformsComponent implements OnInit {
         });
   }
 
+  onCheckSubscription(){
+    const resData: any = this.dataService.getCurrentOrgPlanDetails();
+    const status = this.dataService.isAllowFeature(resData.response, featuresName.USER_PER_ORG);
+    if ( status === false) {
+      return false;
+    }
+    return true;
+  }
   // ngOnDestroy() {
   //   if (this.mySubscription) {
   //     this.mySubscription.unsubscribe();

@@ -10,6 +10,8 @@ import { MessageService } from 'primeng/api';
 import {moduleName} from '../../../_constant/module-name.constant';
 import {cookieName} from '../../../_constant/cookies-name.constant';
 import {ChartOptions} from 'chart.js';
+import { DataService } from 'src/app/_services/data.service';
+import { featuresName } from 'src/app/_constant/features-name.constant';
 const colorCodes = [ '#f77eb9', '#fdb16d', '#c693f9',   '#65e0e0', '#69b2f8',   '#6fd39b'];
 
 
@@ -82,8 +84,14 @@ export class CookieCategoryComponent implements OnInit {
   alertMsg: any;
   isOpen = false;
   alertType: any;
+  availablePlan = {
+    scan_available: 0,
+    scan_done: 0,
+    scan_limit: 0
+  }
   constructor(private service: CookieCategoryService,
     private cd: ChangeDetectorRef,
+    private dataService: DataService,
     private modalService: BsModalService,
     private loading: NgxUiLoaderService,
     private orgservice: OrganizationService,
@@ -94,11 +102,23 @@ export class CookieCategoryComponent implements OnInit {
     this.onInItCategoryForm();
   }
   ngOnInit() {
+    this.onGetSubscriptionData();
     this.onSelectedColummFormServer();
     this.onInItCookieForm();
     this.onGetCategoryAndDurationList();
     this.onGetChartData();
   }
+
+  onGetSubscriptionData() {
+    this.service.getSubscrptionData(this.constructor.name, moduleName.cookieCategoryModule)
+      .subscribe((res: any) => {
+        if(res.status == 200) {
+          this.availablePlan = res.response;
+        }
+      })
+  }
+
+
   onSelectedColummFormServer() {
     this.cols = this.onGetColumms();
     const tableCols = localStorage.getItem('cookieCat');
@@ -463,7 +483,23 @@ export class CookieCategoryComponent implements OnInit {
       this.alertType = 'danger';
     });
   }
+
+    onCheckSubscription(){
+      const resData: any = this.dataService.getCurrentPropertyPlanDetails();
+        const status = this.dataService.isAllowFeature(resData.response, featuresName.DOMAIN_SCAN);
+        if (!this.availablePlan.scan_available || this.availablePlan.scan_available < 0) {
+          this.dataService.openUpgradeModalForCookieConsent(resData)
+          return false;
+        }
+       if ( status === false) {
+         return false;
+       }
+       return true;
+    }
   onRescanCookie() {
+    if(!this.onCheckSubscription()){
+      return false;
+    }
     this.isScanning = true;
     this.service.cookieScanning(this.constructor.name, moduleName.cookieCategoryModule).subscribe(res => {
       this.isScanning = false;

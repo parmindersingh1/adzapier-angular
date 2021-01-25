@@ -1,4 +1,12 @@
-import {ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  OnInit,
+  ViewChild,
+  ViewEncapsulation
+} from '@angular/core';
 import {FormBuilder, FormControl, Validators, FormGroup, FormGroupDirective, NgForm} from '@angular/forms';
 import {ErrorStateMatcher} from '@angular/material/core';
 import {
@@ -16,6 +24,8 @@ import {Router} from '@angular/router';
 import {moduleName} from '../../../_constant/module-name.constant';
 import { CookieCategoryService } from 'src/app/_services/cookie-category.service';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { DataService } from 'src/app/_services/data.service';
+import { featuresName } from 'src/app/_constant/features-name.constant';
 
 
 /** Error when invalid control is dirty, touched, or submitted. */
@@ -31,7 +41,7 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
   templateUrl: './cookie-banner.component.html',
   styleUrls: ['./cookie-banner.component.scss'],
 })
-export class CookieBannerComponent implements OnInit {
+export class CookieBannerComponent implements OnInit, AfterViewInit {
   panelOpenState = false;
   @ViewChild('template', { static: true}) template: ElementRef;
   @ViewChild('template1', { static: true}) template1: ElementRef;
@@ -45,7 +55,7 @@ export class CookieBannerComponent implements OnInit {
   currentState = 'banner';
   data = { ...defaultBannerContent};
   formContent: any = { ...defaultBannerContent};
-  isFieldDisabled = true;
+  isFieldDisabled = null;
   bannerCookieData = null;
   isGdprGlobal = false;
   dismissible = true;
@@ -57,6 +67,13 @@ export class CookieBannerComponent implements OnInit {
   public defaultData = defaultData;
   private currentManagedOrgID: any;
   private currrentManagedPropID: any;
+  planDetails: any;
+  disablePlanFeatures = {
+    hideLogo: false,
+    disableGoogleVendors: false,
+    disableCookieblocking: false,
+    disableBannerConfig: false
+  }
   quillConfig = {
     toolbar: {
       container: [
@@ -81,7 +98,8 @@ export class CookieBannerComponent implements OnInit {
               private loading: NgxUiLoaderService,
               private  orgservice: OrganizationService,
               private _location: Location,
-              private router: Router
+              private router: Router,
+              private dataService: DataService
   ) {
 
   }
@@ -98,6 +116,21 @@ export class CookieBannerComponent implements OnInit {
     this.onGetPropsAndOrgId();
     this.onGetCurrentPlan();
     this.onGetCookieBannerData();
+  }
+
+  ngAfterViewInit(){
+    this.planDetails = this.dataService.getCurrentPropertyPlanDetails();
+    // debugger
+    const isAllowLogo = this.dataService.isAllowFeatureByYes(this.planDetails.response, featuresName.REMOVE_ADZAPIER_LOGO);
+    const isAllowGoogleVendors = this.dataService.isAllowFeatureByYes(this.planDetails.response, featuresName.GOOGLE_VENDORS);
+    const isThridPartyBlock = this.dataService.isAllowFeatureByYes(this.planDetails.response, featuresName.THIRD_PARTY_COOKIE_BLOCKING);
+    const isBannerConfig= this.dataService.isAllowFeatureByYes(this.planDetails.response, featuresName.HIGHLY_BANNER_CONFIG);
+  this.disablePlanFeatures = {
+    hideLogo: !isAllowLogo,
+    disableGoogleVendors: !isAllowGoogleVendors,
+    disableCookieblocking: !isThridPartyBlock,
+    disableBannerConfig: !isBannerConfig
+  }
   }
 
   onGetCookieBannerData() {
@@ -706,29 +739,25 @@ export class CookieBannerComponent implements OnInit {
         },
         PurposeBody: this.isFieldDisabled ? [] :  [
           {
-            id : 1,
-            purposeId : IabPurposeIds.essentiial,
+            id : 101,
             title: this.formContent.NecessaryText,
             heading: this.cookieBannerForm.value.PopUpNecessaryHeading,
             description: this.cookieBannerForm.value.PopUpNecessaryDescription
           },
           {
-            id : 2,
-            purposeId : IabPurposeIds.advertising,
+            id : 102,
             title: this.formContent.AdvertisingText,
             heading: this.cookieBannerForm.value.PopUpAdvertisingHeading,
             description: this.cookieBannerForm.value.PopUpAdvertisingDescription
           },
           {
-            id : 3,
-            purposeId : IabPurposeIds.socialMedia,
+            id : 103,
             title: this.formContent.SocialMediaText,
             heading: this.cookieBannerForm.value.PopUpSocialMediaHeading,
             description: this.cookieBannerForm.value.PopUpSocialMediaDescription
           },
           {
-            id : 4,
-            purposeId : IabPurposeIds.analytics,
+            id : 104,
             title: this.formContent.AnalyticsText,
             heading: this.cookieBannerForm.value.PopUpAnalyticsHeading,
             description: this.cookieBannerForm.value.PopUpAnalyticsDescription
@@ -774,6 +803,29 @@ export class CookieBannerComponent implements OnInit {
     });
   }
 
+  onCheckLogoAllow() {
+      if(this.disablePlanFeatures.hideLogo) {
+        this.dataService.openUpgradeModalForCookieConsent(this.planDetails);
+      }
+  }
+
+  onCheckAllowGoogleVendors() {
+    if(this.disablePlanFeatures.disableGoogleVendors) {
+      this.dataService.openUpgradeModalForCookieConsent(this.planDetails);
+    }
+  }
+
+  onCheckDisableCookiebloking() {
+    if(this.disablePlanFeatures.disableCookieblocking) {
+      this.dataService.openUpgradeModalForCookieConsent(this.planDetails);
+    }
+  }
+
+  onCheckAllowBannerConfig() {
+    if(this.disablePlanFeatures.disableBannerConfig) {
+      this.dataService.openUpgradeModalForCookieConsent(this.planDetails);
+    }
+  }
   onKeyChanges($event,targetElement){
      if($event.target.value.length === 7){
       this.cookieBannerForm.controls[targetElement].setValue($event.target.value);

@@ -136,4 +136,14 @@ export class CookieCategoryService  {
       })
     );
   }
+
+  getSubscrptionData(componentName, moduleName) {
+    const path = apiConstant.COOKIE_CATEGORY_AVALIBLE.replace(':propId', this.currrentManagedPropID).replace(':orgId', this.currentManagedOrgID);
+    return this.http.get(environment.apiUrl + path).pipe( map ( res => res),
+      catchError(err => {
+        this.onSendLogs(LokiStatusType.ERROR, err, LokiFunctionality.cookieCategory, componentName, moduleName, path);
+        return throwError(err);
+      })
+    );
+  }
 }

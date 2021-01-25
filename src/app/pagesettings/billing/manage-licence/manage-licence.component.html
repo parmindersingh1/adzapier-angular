@@ -89,12 +89,13 @@
         <td style="width: 120px">{{plan.planDetails.price + '.00 ' + plan.currency | uppercase}}  </td>
         <th style="width: 170px;text-transform: capitalize;">**** <span class="pr-1">{{plan.planDetails.card_number}}</span>
 
-          <span *ngIf="plan.planDetails.brand !== 'mastercard' && plan.planDetails.brand !== 'visa' && plan.planDetails.brand !== 'amex'">{{plan.planDetails.card_number + ' ' + plan.planDetails.brand}}</span>
+          <span *ngIf="plan.planDetails.brand !== 'mastercard' && plan.planDetails.brand !== 'visa' && plan.planDetails.brand !== 'amex'">{{' ' + plan.planDetails.brand}}</span>
           <img *ngIf="plan.planDetails.brand === 'mastercard'" alt="Credit Card Logos" title="Credit Card Logos" src="assets/card-logo/mc.png" width="40" height="25" border="0" />
           <img *ngIf="plan.planDetails.brand === 'visa'" alt="Credit Card Logos" title="Credit Card Logos" src="assets/card-logo/visa.gif" width="35" height="16" border="0" />
           <img *ngIf="plan.planDetails.brand === 'amex'" alt="Credit Card Logos" title="Credit Card Logos" src="/assets/card-logo/amex.gif" width="35" height="22" border="0" />
 
         </th>
+
         </ng-container>
       </tr>
     </tbody>
@@ -167,7 +168,7 @@
           <td style="width: 120px">{{plan.planDetails.price + '.00 ' + plan.currency | uppercase}}  </td>
           <th style="width: 170px;text-transform: capitalize;">**** <span class="pr-1">{{plan.planDetails.card_number}}</span>
 
-            <span *ngIf="plan.planDetails.brand !== 'mastercard' && plan.planDetails.brand !== 'visa' && plan.planDetails.brand !== 'amex'">{{plan.planDetails.card_number + ' ' + plan.planDetails.brand}}</span>
+            <span *ngIf="plan.planDetails.brand !== 'mastercard' && plan.planDetails.brand !== 'visa' && plan.planDetails.brand !== 'amex'">{{ ' ' + plan.planDetails.brand}}</span>
             <img *ngIf="plan.planDetails.brand === 'mastercard'" alt="Credit Card Logos" title="Credit Card Logos" src="assets/card-logo/mc.png" width="40" height="25" border="0" />
             <img *ngIf="plan.planDetails.brand === 'visa'" alt="Credit Card Logos" title="Credit Card Logos" src="assets/card-logo/visa.gif" width="35" height="16" border="0" />
             <img *ngIf="plan.planDetails.brand === 'amex'" alt="Credit Card Logos" title="Credit Card Logos" src="/assets/card-logo/amex.gif" width="35" height="22" border="0" />
