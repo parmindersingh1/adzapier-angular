@@ -84,6 +84,11 @@ export class CookieCategoryComponent implements OnInit {
   alertMsg: any;
   isOpen = false;
   alertType: any;
+  availablePlan = {
+    scan_available: 0,
+    scan_done: 0,
+    scan_limit: 0
+  }
   constructor(private service: CookieCategoryService,
     private cd: ChangeDetectorRef,
     private dataService: DataService,
@@ -97,11 +102,23 @@ export class CookieCategoryComponent implements OnInit {
     this.onInItCategoryForm();
   }
   ngOnInit() {
+    this.onGetSubscriptionData();
     this.onSelectedColummFormServer();
     this.onInItCookieForm();
     this.onGetCategoryAndDurationList();
     this.onGetChartData();
   }
+
+  onGetSubscriptionData() {
+    this.service.getSubscrptionData(this.constructor.name, moduleName.cookieCategoryModule)
+      .subscribe((res: any) => {
+        if(res.status == 200) {
+          this.availablePlan = res.response;
+        }
+      })
+  }
+
+
   onSelectedColummFormServer() {
     this.cols = this.onGetColumms();
     const tableCols = localStorage.getItem('cookieCat');
@@ -470,6 +487,10 @@ export class CookieCategoryComponent implements OnInit {
     onCheckSubscription(){
       const resData: any = this.dataService.getCurrentPropertyPlanDetails();
         const status = this.dataService.isAllowFeature(resData.response, featuresName.DOMAIN_SCAN);
+        if (!this.availablePlan.scan_available || this.availablePlan.scan_available < 0) {
+          this.dataService.openUpgradeModalForCookieConsent(resData)
+          return false;
+        }
        if ( status === false) {
          return false;
        }

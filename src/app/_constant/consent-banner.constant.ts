@@ -1,10 +1,10 @@
 export const defaultData = {
   ccpaDefaultTarget: 'ca',
   gdprDefaultTarget: 'eu',
-  defaultCookieBlocking: true,
+  defaultCookieBlocking: false,
   defaultEnableIab: true,
   defaultEmail: false,
-  google_vendors: true,
+  google_vendors: false,
   gdprGlobal: false,
   showBadge: true,
   logo: true,

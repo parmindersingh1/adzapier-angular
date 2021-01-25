@@ -121,11 +121,10 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(){
     this.planDetails = this.dataService.getCurrentPropertyPlanDetails();
     // debugger
-    const isAllowLogo = this.dataService.isAllowFeatureByYes(this.planDetails, featuresName.REMOVE_ADZAPIER_LOGO);
-    const isAllowGoogleVendors = this.dataService.isAllowFeatureByYes(this.planDetails, featuresName.GOOGLE_VENDORS);
-    const isThridPartyBlock = this.dataService.isAllowFeatureByYes(this.planDetails, featuresName.THIRD_PARTY_COOKIE_BLOCKING);
-    const isBannerConfig= this.dataService.isAllowFeatureByYes(this.planDetails, featuresName.HIGHLY_BANNER_CONFIG);
-
+    const isAllowLogo = this.dataService.isAllowFeatureByYes(this.planDetails.response, featuresName.REMOVE_ADZAPIER_LOGO);
+    const isAllowGoogleVendors = this.dataService.isAllowFeatureByYes(this.planDetails.response, featuresName.GOOGLE_VENDORS);
+    const isThridPartyBlock = this.dataService.isAllowFeatureByYes(this.planDetails.response, featuresName.THIRD_PARTY_COOKIE_BLOCKING);
+    const isBannerConfig= this.dataService.isAllowFeatureByYes(this.planDetails.response, featuresName.HIGHLY_BANNER_CONFIG);
   this.disablePlanFeatures = {
     hideLogo: !isAllowLogo,
     disableGoogleVendors: !isAllowGoogleVendors,
@@ -806,26 +805,25 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
 
   onCheckLogoAllow() {
       if(this.disablePlanFeatures.hideLogo) {
-        this.dataService.openUpgradeModal(this.planDetails);
+        this.dataService.openUpgradeModalForCookieConsent(this.planDetails);
       }
   }
 
   onCheckAllowGoogleVendors() {
     if(this.disablePlanFeatures.disableGoogleVendors) {
-      this.dataService.openUpgradeModal(this.planDetails);
+      this.dataService.openUpgradeModalForCookieConsent(this.planDetails);
     }
   }
 
   onCheckDisableCookiebloking() {
     if(this.disablePlanFeatures.disableCookieblocking) {
-      this.dataService.openUpgradeModal(this.planDetails);
+      this.dataService.openUpgradeModalForCookieConsent(this.planDetails);
     }
   }
 
   onCheckAllowBannerConfig() {
-    debugger
     if(this.disablePlanFeatures.disableBannerConfig) {
-      this.dataService.openUpgradeModal(this.planDetails);
+      this.dataService.openUpgradeModalForCookieConsent(this.planDetails);
     }
   }
   onKeyChanges($event,targetElement){

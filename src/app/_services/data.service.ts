@@ -131,7 +131,7 @@ export class DataService {
       }
     }
     if (flag === false) {
-      this.openModal.next({openModal : true, data: res.plan_details})
+      this.openModal.next({openModal : true, data: res.plan_details, type: 'org'})
     }
     return flag;
   }
@@ -150,8 +150,33 @@ export class DataService {
       flag = false;
     }
     if(flag) {
+      flag = false;
       for(const features of res.features) {
-        if(features.feature === featuresName) {
+        if(features.feature == featuresName) {
+            flag = true;
+        }
+      }
+    }
+    return flag;
+  }
+
+  openUpgradeModalForCookieConsent(res){
+    this.openModal.next({openModal : true, data: res.response.plan_details, type: 'cookieConsent'})
+  }
+  // getLicensesDetails() {
+
+  // }
+  isAllowCookieTracking(res, plan1, plan2) {
+    let flag = true;
+    if(!res) {
+      flag = false;
+    }
+    if(!res.features){
+      flag = false;
+    }
+    if(flag) {
+      for(const features of res.features) {
+        if(features.feature === plan1 || features.feature ===plan2) {
           if (features.quantity != 'YES') {
             flag = false;
           }
@@ -160,11 +185,4 @@ export class DataService {
     }
     return flag;
   }
-
-  openUpgradeModal(res){
-    this.openModal.next({openModal : true, data: res.response.plan_details})
-  }
-  // getLicensesDetails() {
-
-  // }
 }
