@@ -14,7 +14,8 @@ import { LazyLoadEvent } from 'primeng/api';
 import { moduleName } from 'src/app/_constant/module-name.constant';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-
+import { DataService } from 'src/app/_services/data.service';
+import { featuresName } from 'src/app/_constant/features-name.constant';
 @Component({
   selector: 'app-dsar-requests',
   templateUrl: './dsar-requests.component.html',
@@ -78,7 +79,8 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
     private ccpaFormConfigService: CCPAFormConfigurationService,
     private cdRef: ChangeDetectorRef,
     private modalService: NgbModal,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private dataService: DataService
   ) { }
 
   ngOnInit() {
@@ -315,12 +317,13 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
 
       });
     } else {
-
+     // if(this.onCheckSubscription()){
       this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
 
       }, (reason) => {
 
       });
+  //  }
     }
 
   }
@@ -355,5 +358,14 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
         this.alertType = 'danger';
       }
     }
+  }
+
+  onCheckSubscription(){
+    const resData: any = this.dataService.getCurrentOrgPlanDetails();
+    const status = this.dataService.isAllowFeature(resData.response, featuresName.NUM_OF_REQUESTS);
+    if ( status === false) {
+      return false;
+    }
+    return true;
   }
 }
