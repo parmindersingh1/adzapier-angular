@@ -46,15 +46,15 @@
                 <tbody>
                     <ng-container *ngFor="let data of orgList | paginate:paginationConfig; let i = index"> <!--filter: searchText:'orgname':'city':'state' -->
                     <tr [ngClass]="{'row-disabled':data.active == false, 'row-enabled':data.active == true}">
-                        <td><a *ngIf="data.active == true" (click)="viewOrganization(data.id)">{{data.orgname}}</a>
-                            <span *ngIf="data.active == false">{{data.orgname}}</span>
+                        <td><a *ngIf="data.active == true || data.active == 'undefined'" (click)="viewOrganization(data.id)">{{data.orgname}}</a>
+                            <span *ngIf="data.active == false || data.active === undefined">{{data.orgname}}</span>
                         </td>
                         <td>{{data.address1}} {{data.address2}}</td>
                         <td>{{data.city}}</td>
                         <td>{{data.state}}</td>
                         <td>{{data.zipcode}}</td>
                         <td>
-                            <a class="pd-r-5" *ngIf="data.active == true" (click)="viewOrganization(data.id)"><i
+                            <a class="pd-r-5" *ngIf="data.active == true || data.active === undefined" (click)="viewOrganization(data.id)"><i
                                     class="fas fa-external-link-alt"></i> View</a>
                             <!-- <a class="pd-r-5" *ngIf="data.active == true" data-toggle="modal" (click)="organizationModalPopup(editOrgModal,data)">
                                 <i class="far fa-edit fa-1x"></i> Edit

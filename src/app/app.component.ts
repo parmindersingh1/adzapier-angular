@@ -30,6 +30,7 @@ export class AppComponent implements OnInit {
   modalRef: BsModalRef;
   listAllPlans = [];
   @ViewChild('template', { static: true}) template: any;
+  @ViewChild('unauth', { static: true}) unauth: any;
   title = 'adzapier-analytics-ng';
   faCoffee = faCoffee;
   allPlanData: any;
@@ -37,6 +38,9 @@ export class AppComponent implements OnInit {
   billingCycle = 'monthly';
   currentPlanData = new DefaultPlanData();
   type = 'cookieConsent';
+  msg = '';
+  listAddonPlan: any
+  public unAuthMsg: any;
   constructor(private router: Router,
     private modalService: BsModalService,
               private billingService: BillingService,
@@ -52,6 +56,7 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     this.onGetPlanDetails();
     this.openModal();
+    this.openUnAuthModal();
     this.onGetFeaturesList();
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
@@ -82,7 +87,9 @@ export class AppComponent implements OnInit {
 
   openModal() {
     this.dataService.openModalWithData.subscribe( res => {
-
+      if(res.hasOwnProperty('msg')) {
+      this.msg = res.msg;
+    }
       if(res.openModal) {
         if(!res.data) {
           this.currentPlanData = new DefaultPlanData();
@@ -90,7 +97,11 @@ export class AppComponent implements OnInit {
         if(res.data) {
           this.type = res.type;
           this.currentPlanData = res.data
+        } else if (!res.data && res.type == 'org'){
+          this.type = 'org'
+          this.currentPlanData = new DefaultPlanData();
         } else {
+            this.type = 'noPlan'
             this.currentPlanData = new DefaultPlanData();
         }
         this.template.show();
@@ -100,8 +111,10 @@ export class AppComponent implements OnInit {
 
   onGetPlanDetails() {
     this.billingService.getCurrentPlanInfo(this.constructor.name, moduleName.pricingModule).subscribe((res: any) => {
-      this.allPlanData = res.response.base;
+      this.allPlanData = res.response;
       this.listAllPlans = res.response.base[`${this.billingCycle}`];
+      this.listAddonPlan = res.response.addons[`${this.billingCycle}`]
+      console.log('this.allPlanData',  this.allPlanData)
       // this.subscriptionList = res.response.monthly;
     }, error => {
     });
@@ -109,15 +122,31 @@ export class AppComponent implements OnInit {
   onSelectBillingCycle(e) {
     if (e.checked) {
       this.billingCycle = 'yearly';
-      this.listAllPlans = this.allPlanData[`${this.billingCycle}`]
+      this.listAllPlans = this.allPlanData.base[`${this.billingCycle}`]
+      this.listAddonPlan = this.allPlanData.addons[`${this.billingCycle}`]
     } else {
       this.billingCycle = 'monthly';
-      this.listAllPlans = this.allPlanData[`${this.billingCycle}`]
+      this.listAllPlans = this.allPlanData.base[`${this.billingCycle}`]
+      this.listAddonPlan = this.allPlanData.addons[`${this.billingCycle}`]
     }
   }
 
   onNavigate() {
     this.template.hide();
     this.router.navigateByUrl('/settings/billing/pricing')
+  }
+
+  private openUnAuthModal() {
+    this.dataService.unAuthPopUp.subscribe((res: any) => {
+      // console.log("EEorr", res.error.error)
+      if(res.isTrue)  {
+        this.unAuthMsg = res.error.error;
+        console.log('unAuthMsg', this.unAuthMsg.error)
+        this.openUnAuthPopUp()
+      }
+    })
+  }
+  openUnAuthPopUp() {
+    this.modalRef = this.modalService.show(this.unauth, {class: 'modal-sm'});
   }
 }

@@ -210,6 +210,9 @@ export class OrganizationdetailsComponent implements OnInit {
   }
 
   open(content) {
+    if(!this.onCheckSubscription()){
+      return false;
+    }
     this.propertyname = '';
     this.website = '';
     this.logourl = '';
@@ -434,7 +437,7 @@ export class OrganizationdetailsComponent implements OnInit {
 
 
   onCheckSubscription(){
-      const status = this.dataService.checkUserForOrg(this.orgPlanDetails, featuresName.USER_PER_ORG, this.organizationTeamMemberList.length);
+      const status = this.dataService.checkUserForOrgAndCompany(this.orgPlanDetails, this.paginationConfig.totalItems);
      if ( status === false) {
        return false;
      }
@@ -456,8 +459,10 @@ export class OrganizationdetailsComponent implements OnInit {
           orgid: this.organizationID,
           user_level: 'organization'
         };
+        this.loading.start();
         this.companyService.inviteUser(this.constructor.name, moduleName.organizationDetailsModule, requestObj)
           .subscribe((data) => {
+            this.loading.stop();
             if (data) {
               this.alertMsg = data.response;
               this.isOpen = true;
@@ -466,6 +471,7 @@ export class OrganizationdetailsComponent implements OnInit {
               this.onCancelClick();
             }
           }, (error) => {
+            this.loading.stop();
             this.alertMsg = JSON.stringify(error);
             this.isOpen = true;
             this.alertType = 'danger';

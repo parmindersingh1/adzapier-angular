@@ -24,7 +24,7 @@
       <div *ngIf="type ===  'cookieConsent' " class="modal-body">
         <div class="text-center">
           <h4>Your Property License need to Upgrade </h4>
-          <p>This feature is not allowed in your current plan please upgrade it</p>
+          <p>This feature is not allowed in your current plan please upgrade it  {{currentPlanData.price}}</p>
         </div>
 
         <div class="plan-body">
@@ -55,7 +55,7 @@
           </div>
 
           <div class="text-center">
-            <a routerLink="/settings/billing/manage" (click)="template.hide()" class="btn mt-3 btn-primary"> <i _aria-hidden="true" class="fa fa-cogs pr-1"></i>  Manage Subscription</a>
+            <a routerLink="/settings/billing/manage" (click)="template.hide()" class="btn mt-3 btn-primary"> <i _aria-hidden="true" class="fa fa-cogs pr-1"></i>  Manage License</a>
             <p class="cancel-btn mt-2 mb-2" (click)="template.hide()">or Cancel & Go Back</p>
           </div>
         </div>
@@ -64,8 +64,9 @@
 
       <div *ngIf="type ===  'org' " class="modal-body">
         <div class="text-center">
-          <h4>Your Orgnization License need to Upgrade </h4>
-          <p>This feature is not allowed in your current plan please upgrade it</p>
+          <h4>Your Organization License need to Upgrade </h4>
+          <p *ngIf="!msg">This feature is not allowed in your current plan please upgrade it {{currentPlanData.price}}</p>
+          <p *ngIf="msg">{{msg}}</p>
         </div>
 
         <div class="plan-body">
@@ -79,7 +80,7 @@
             </label>
           </div>
           <div class="row ml-2 mr-2">
-            <div *ngFor="let plan of listAllPlans" class=" mt-2 col ml-2 d-flex bg-white-col bt-card flex-column bd pt-0 mr-2  pd-20 ">
+            <div *ngFor="let plan of listAddonPlan" class=" mt-2 col ml-2 d-flex bg-white-col bt-card flex-column bd pt-0 mr-2  pd-20 ">
               <h4 class="text-center popular-text" [ngStyle]="{background: plan.price ==  currentPlanData.price ? '#3968fa' : null}">
                 <ng-container *ngIf="plan.price ==  currentPlanData.price">CURRENT PLAN</ng-container>
               </h4>
@@ -96,7 +97,7 @@
           </div>
 
           <div class="text-center">
-            <a routerLink="/settings/billing/manage" (click)="template.hide()" class="btn mt-3 btn-primary"> <i _aria-hidden="true" class="fa fa-cogs pr-1"></i>  Manage Subscription</a>
+            <a routerLink="/settings/billing/manage" (click)="template.hide()" class="btn mt-3 btn-primary"> <i _aria-hidden="true" class="fa fa-cogs pr-1"></i>  Manage License</a>
             <p class="cancel-btn mt-2 mb-2" (click)="template.hide()">or Cancel & Go Back</p>
           </div>
         </div>
@@ -104,8 +105,30 @@
       </div>
 
 
+      <div *ngIf="type ===  'noPlan' " class="modal-body">
+        <div class="text-center">
+          <h4>You haven't  assign license in this property</h4>
+        </div>
 
+        <div class="text-center">
+          <a routerLink="/settings/billing/manage" (click)="template.hide()" class="btn mt-3 btn-primary"> <i _aria-hidden="true" class="fa fa-cogs pr-1"></i>  Manage License</a>
+          <p class="cancel-btn mt-2 mb-2" (click)="template.hide()">or Cancel & Go Back</p>
+        </div>
+
+
+      </div>
 
     </div>
   </div>
 </div>
+
+
+
+
+
+<ng-template #unauth>
+  <div class="modal-body text-center">
+    <h4>Unauthorized Access Detected </h4>
+    <p>{{unAuthMsg.error}}</p>
+  </div>
+</ng-template>
