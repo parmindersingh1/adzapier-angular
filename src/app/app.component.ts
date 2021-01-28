@@ -40,7 +40,7 @@ export class AppComponent implements OnInit {
   type = 'cookieConsent';
   msg = '';
   listAddonPlan: any
-  private unAuthMsg: any;
+  public unAuthMsg: any;
   constructor(private router: Router,
     private modalService: BsModalService,
               private billingService: BillingService,
@@ -87,7 +87,7 @@ export class AppComponent implements OnInit {
 
   openModal() {
     this.dataService.openModalWithData.subscribe( res => {
-    if(res.hasOwnProperty('msg')) {
+      if(res.hasOwnProperty('msg')) {
       this.msg = res.msg;
     }
       if(res.openModal) {
@@ -137,7 +137,7 @@ export class AppComponent implements OnInit {
   }
 
   private openUnAuthModal() {
-    this.dataService.unAuthPopUp.subscribe(res => {
+    this.dataService.unAuthPopUp.subscribe((res: any) => {
       // console.log("EEorr", res.error.error)
       if(res.isTrue)  {
         this.unAuthMsg = res.error.error;
