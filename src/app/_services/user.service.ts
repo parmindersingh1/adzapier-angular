@@ -164,6 +164,16 @@ export class UserService {
 
     }
 
+    checkIsNotificationVisited(componentName, moduleName): Observable<any>{
+        const path = "/notification/time";
+        return this.http.put<any>(environment.apiUrl + path, {}).pipe(
+            catchError(error => {
+                this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.checkIsNotificationVisited, componentName, moduleName, path);
+                return throwError(error);
+              })
+        );
+    }
+
     onSendLogs(errorType, msg, functionality, componentName, moduleName, path) {
         this.lokiService.onSendErrorLogs(errorType, msg, functionality, componentName, moduleName, path).subscribe();
       }

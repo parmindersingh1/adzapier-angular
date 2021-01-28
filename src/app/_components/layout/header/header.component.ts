@@ -561,6 +561,14 @@ export class HeaderComponent implements OnInit {
     });
   }
 
+  onClickNotificationBell(){
+    this.userService.checkIsNotificationVisited(this.constructor.name, moduleName.headerModule).subscribe((data) => {
+      if(data.status === 200){
+        this.loadNotification();
+      }
+    });
+  }
+
   clearNotification(requestid, purpose: string, status: boolean) {
     let obj;
     if (purpose === 'read') {

@@ -6,5 +6,8 @@ export const featuresName = {
   THIRD_PARTY_COOKIE_BLOCKING: '3rd-party Cookie Blocking',
   HIGHLY_BANNER_CONFIG:'highly configurable GDPR & CCPA consent settings',
   FULL_CONVERSION_AND_VISITOR :'Full conversion and visitor consent state reporting',
-  CONSENT_RECORD_KEEPING:'Consent Record Keeping'
+  CONSENT_RECORD_KEEPING:'Consent Record Keeping',
+  NUM_OF_REQUESTS: 'Requests',
+  NUM_OF_WORKFLOWS: 'Workflow',
+  NUM_OF_DSAR_FORMS: 'Forms'
 }

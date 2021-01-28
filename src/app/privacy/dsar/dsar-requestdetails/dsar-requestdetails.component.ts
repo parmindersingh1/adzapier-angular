@@ -22,7 +22,7 @@ import { formatDate } from '@angular/common';
   templateUrl: './dsar-requestdetails.component.html',
   styleUrls: ['./dsar-requestdetails.component.scss']
 })
-export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, AfterViewInit, AfterViewChecked {
+export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, AfterViewChecked {
   @ViewChild('toggleDayleftdiv', { static: true }) toggleDayleftdiv: ElementRef;
   // @ViewChild('btnDaysLeft', { static: true }) btnDaysLeft: ElementRef;
   @ViewChild('customDaysInput', { static: false }) customDaysInput: ElementRef;

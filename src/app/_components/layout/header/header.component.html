@@ -119,7 +119,7 @@
     <div class="responsive-notification"> 
 
     <span  class="notification-number" [ngClass]="notificationsNumber == 0 ? 'hide-notification-number' : ''">{{notificationsNumber}}</span> <!--[ngClass]="{'hide-notification-number':notificationsNumber == '0'}"-->
-    <a  class="nav-link dropdown-link p-0" (click)="loadNotification();"  dropdownToggle>
+    <a  class="nav-link dropdown-link p-0" (click)="onClickNotificationBell();"  dropdownToggle>
       <i-feather name="bell" class="feather-20"></i-feather>
     </a>
     </div>
