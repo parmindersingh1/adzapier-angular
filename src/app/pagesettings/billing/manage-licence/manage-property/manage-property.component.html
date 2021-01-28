@@ -115,7 +115,7 @@
       <div class="form-group">
         <label for="usr">Find Organization:</label>
         <select (change)="onGetAllPropertyList($event)" class="form-control" id="sel1">
-          <option [value]="">-- Select Orgnization --</option>
+          <option [value]="">-- Select Organization --</option>
           <option *ngFor="let obj of orgList" [value]="obj.id">{{obj.orgname}}</option>
         </select>
       </div>

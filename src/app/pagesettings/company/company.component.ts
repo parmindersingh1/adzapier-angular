@@ -7,6 +7,7 @@ import { CompanyService } from 'src/app/company.service';
 import { TablePaginationConfig } from 'src/app/_models/tablepaginationconfig';
 import { moduleName } from 'src/app/_constant/module-name.constant';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import {DataService} from '../../_services/data.service';
 
 @Component({
   selector: 'app-company',
@@ -60,10 +61,12 @@ export class CompanyComponent implements OnInit {
   controlname: string;
   userList: any = [];
   noResult = false;
+  private companyPlanDetails: any;
   constructor(private companyService: CompanyService, private modalService: NgbModal,
               private formBuilder: FormBuilder,
               private userService: UserService,
               private loading: NgxUiLoaderService,
+              private dataService: DataService,
               private bsmodalService: BsModalService
   ) {
     this.paginationConfig = { itemsPerPage: this.pageSize, currentPage: this.p, totalItems: this.totalCount };
@@ -97,6 +100,17 @@ export class CompanyComponent implements OnInit {
     this.pathValues();
     this.loadCompanyTeamMembers();
    // this.loadUserListForInvitation();
+    this.onGetCompanyPlan();
+  }
+  onGetCompanyPlan() {
+    this.loading.start('2');
+    this.dataService.getCompanyPlanDetails(this.constructor.name, moduleName.cookieConsentModule)
+      .subscribe((res: any) => {
+        this.companyPlanDetails = res.response;
+        this.loading.stop('2')
+      }, error => {
+        this.loading.stop('2')
+      });
   }
   get f() { return this.companyForm.controls; }
   get userInvite() { return this.inviteUserForm.controls; }
@@ -128,6 +142,9 @@ export class CompanyComponent implements OnInit {
   }
 
   editOrganizationModalPopup(content) {
+    if(!this.onCheckSubscription()){
+      return false;
+    }
     this.isInviteFormSubmitted = false;
     this.isUpdateUserinvitation = false;
     this.inviteUserForm.reset();
@@ -163,6 +180,7 @@ export class CompanyComponent implements OnInit {
       this.modalService.dismissAll('Error!');
   });
   }
+
 
   onSubmit() {
     this.submitted = true;
@@ -255,11 +273,23 @@ export class CompanyComponent implements OnInit {
     })
 
   }
+
+  onCheckSubscription(){
+    const status = this.dataService.checkUserForOrgAndCompany(this.companyPlanDetails, this.paginationConfig.totalItems);
+    if ( status === false) {
+      return false;
+    }
+    return true;
+  }
+
   onSubmitInviteUser() {
     this.isInviteFormSubmitted = true;
     if (this.inviteUserForm.invalid) {
       return false;
     } else {
+      if(!this.onCheckSubscription()){
+        return false;
+      }
       if (!this.isUpdateUserinvitation) {
         const requestObj = {
           email: this.inviteUserForm.value.emailid,

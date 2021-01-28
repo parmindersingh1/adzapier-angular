@@ -21,6 +21,9 @@ export class DataService {
   private openModal = new BehaviorSubject<any>({openModal: false, data: {}});
   public openModalWithData = this.openModal.asObservable();
 
+  public openUnAuthModal = new BehaviorSubject<any>({isTrue: false, error: ''});
+  public unAuthPopUp = this.openUnAuthModal.asObservable();
+
 
   constructor(private http: HttpClient, private lokiService: LokiService) { }
   setBillingPlan(plan) {
@@ -50,7 +53,7 @@ export class DataService {
     // debugger;
     localStorage.setItem('orgPlan', planData);
   }
-  getCurrentOrgPlanDetails(){
+  getCurrentOrgPlanDetails(): any{
     let planData = localStorage.getItem('orgPlan')
     if(planData) {
       planData = JSON.parse(atob(planData))
@@ -70,8 +73,18 @@ export class DataService {
   }
 
   getOrgPlanDetails(componentName, moduleName, orgID) {
-    const path = apiConstant.ORG_PLAN;
-    return this.http.get(environment.apiUrl  + path, {params: {oID: orgID}}).pipe(map(res => res),
+    const path = apiConstant.ORG_PLAN.replace(':orgId', orgID);
+    return this.http.get(environment.apiUrl  + path).pipe(map(res => res),
+      catchError(error => {
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.consentDashboard, componentName, moduleName, path);
+        return throwError(error);
+      }),
+    );
+  }
+
+  getCompanyPlanDetails(componentName, moduleName) {
+    const path = apiConstant.COMPANY_PLAN;
+    return this.http.get(environment.apiUrl  + path).pipe(map(res => res),
       catchError(error => {
         this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.consentDashboard, componentName, moduleName, path);
         return throwError(error);
@@ -113,25 +126,21 @@ export class DataService {
     return flag;
   }
 
-  checkUserForOrg(res, featuresName, currentUser){
+  checkUserForOrgAndCompany(res , currentUser){
+    const planData = this.getCurrentOrgPlanDetails();
+    let msg = '';
     let flag = true;
     if(!res) {
       flag = false;
     }
-    if(!res.features){
-      flag = false;
-    }
     if(flag) {
-      for(const features of res.features) {
-        if(features.feature === featuresName) {
-          if (features.quantity <= currentUser) {
+      msg = `You can not add more than ${res.user_limit} Users`;
+      if (currentUser >= res.user_limit) {
             flag = false;
-          }
-        }
       }
     }
     if (flag === false) {
-      this.openModal.next({openModal : true, data: res.plan_details, type: 'org'})
+      this.openModal.next({openModal : true, data: planData.response.plan_details, type: 'org', msg: msg})
     }
     return flag;
   }
@@ -160,8 +169,23 @@ export class DataService {
     return flag;
   }
 
+
+  isPropertyHasPlan(res, featuresName){
+    let flag = true;
+    if(!res) {
+      flag = false;
+    }
+    if(!res.features){
+      flag = false;
+    }
+    if (flag === false) {
+      let msg = 'Sorry, You Are Not Allowed to Access This  Feature'
+      this.openModal.next({openModal : true, data: res.plan_details, type: 'noPlan', msg: msg})    }
+    return flag;
+  }
   openUpgradeModalForCookieConsent(res){
-    this.openModal.next({openModal : true, data: res.response.plan_details, type: 'cookieConsent'})
+    let msg = 'Sorry, You Are Not Allowed to Access This  Feature'
+    this.openModal.next({openModal : true, data: res.response.plan_details, type: 'cookieConsent', msg: msg})
   }
   // getLicensesDetails() {
 
@@ -175,11 +199,10 @@ export class DataService {
       flag = false;
     }
     if(flag) {
+      flag = false;
       for(const features of res.features) {
-        if(features.feature === plan1 || features.feature ===plan2) {
-          if (features.quantity != 'YES') {
-            flag = false;
-          }
+        if(features.feature == plan1 || features.feature ==plan2) {
+            flag = true;
         }
       }
     }

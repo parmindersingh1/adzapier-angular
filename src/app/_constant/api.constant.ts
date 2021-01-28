@@ -56,7 +56,8 @@ export const apiConstant = {
 
   // PROPERTY PLAN
   PROPERTY_PLAN: '/billing/plan/features',
-  ORG_PLAN: '/billing/plan/features'
+  ORG_PLAN: '/available/user/organization/:orgId',
+  COMPANY_PLAN: '/available/user/company'
 };
 
 // {

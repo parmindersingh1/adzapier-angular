@@ -55,9 +55,11 @@ export class CookieTrackingComponent implements OnInit {
 
 onCheckSubscription() {
   this.planDetails = this.dataService.getCurrentPropertyPlanDetails();
-  const isAllowViewConsent = this.dataService.isAllowCookieTracking(this.planDetails, featuresName.FULL_CONVERSION_AND_VISITOR, featuresName.CONSENT_RECORD_KEEPING);
+  const isAllowViewConsent = this.dataService.isAllowCookieTracking(this.planDetails.response, featuresName.FULL_CONVERSION_AND_VISITOR, featuresName.CONSENT_RECORD_KEEPING);
   this.isDisabledScreen = !isAllowViewConsent
-  this.dataService.openUpgradeModalForCookieConsent(this.planDetails)
+  if(!isAllowViewConsent) {
+    this.dataService.openUpgradeModalForCookieConsent(this.planDetails)
+  }
 }
 
   onSetUpDate() {
@@ -147,5 +149,11 @@ onCheckSubscription() {
   onDecodeString(consent) {
     this.gdprService.setConsent(consent);
     // console.log(tcString, status);
+  }
+
+  openDisablePopUp() {
+    if(this.isDisabledScreen) {
+      this.dataService.openUpgradeModalForCookieConsent(this.planDetails)
+    }
   }
 }
