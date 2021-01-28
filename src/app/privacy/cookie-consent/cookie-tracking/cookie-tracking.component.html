@@ -1,6 +1,6 @@
 <div [ngClass]="{'spinner': isDisabledScreen}" ></div>
 <div [ngClass]="{'pano': isDisabledScreen}" ></div>
-<div [ngClass]="{'container-body': isDisabledScreen}">
+<div (click)="openDisablePopUp()"  >
 <div class="mb-4">
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb breadcrumb-style1 mg-b-10">
@@ -60,7 +60,7 @@
       </div>
     </div>
 </div>
-
+<div [ngClass]="{'container-body': isDisabledScreen}">
 <p-table class="cookie-tracking-table"
   styleClass="p-datatable-sm"
   [value]="cookieConsents"
@@ -127,3 +127,4 @@
   </ng-template>
 </p-table>
 </div>
+</div >

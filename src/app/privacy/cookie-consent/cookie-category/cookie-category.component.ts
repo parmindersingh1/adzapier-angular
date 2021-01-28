@@ -85,7 +85,7 @@ export class CookieCategoryComponent implements OnInit {
   isOpen = false;
   alertType: any;
   availablePlan = {
-    scan_available: 0,
+    scan_available: -1,
     scan_done: 0,
     scan_limit: 0
   }
@@ -487,6 +487,9 @@ export class CookieCategoryComponent implements OnInit {
     onCheckSubscription(){
       const resData: any = this.dataService.getCurrentPropertyPlanDetails();
         const status = this.dataService.isAllowFeature(resData.response, featuresName.DOMAIN_SCAN);
+          if(this.availablePlan.scan_available == -1) {
+            return true;
+          }
         if (!this.availablePlan.scan_available || this.availablePlan.scan_available < 0) {
           this.dataService.openUpgradeModalForCookieConsent(resData)
           return false;
@@ -503,7 +506,7 @@ export class CookieCategoryComponent implements OnInit {
     this.isScanning = true;
     this.service.cookieScanning(this.constructor.name, moduleName.cookieCategoryModule).subscribe(res => {
       this.isScanning = false;
-
+    this.onGetSubscriptionData();
         this.isOpen = true;
         this.alertMsg = res['response'];
         this.alertType = 'success'

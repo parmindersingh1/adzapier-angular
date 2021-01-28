@@ -35,7 +35,8 @@
     </div>
     <div class="row">
       <div class="col-md-12">
-        <h6 class="text-info text-right" style="float: right">{{availablePlan.scan_available}} Scan are Available </h6>
+        <h6  *ngIf="availablePlan.scan_available != -1" class="text-info text-right" style="float: right">{{availablePlan.scan_available}} Scan are Available </h6>
+        <h6  *ngIf="availablePlan.scan_available == -1"  class="text-info text-right" style="float: right">Unlimited  Scan are Available </h6>
       </div>
     </div>
 <div class="row mb-3">

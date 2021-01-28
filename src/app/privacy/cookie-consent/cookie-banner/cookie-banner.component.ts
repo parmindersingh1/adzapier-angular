@@ -557,8 +557,10 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
   }
 
   onSubmit() {
-
-      console.log('abc', this.cookieBannerForm.value.gdprTarget);
+    const isPropertyPlan = this.dataService.isPropertyHasPlan(this.planDetails.response, featuresName.HIGHLY_BANNER_CONFIG);
+    if (!isPropertyPlan) {
+return false;
+    } else {
       this.submitted = true;
       if (this.cookieBannerForm.invalid) {
         return;
@@ -568,6 +570,7 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
       } else {
         this.onSubmitForm();
       }
+    }
   }
 
   onSubmitForm() {
