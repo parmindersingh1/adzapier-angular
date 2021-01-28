@@ -166,13 +166,13 @@
                             </div>
                         </div>
                     </div>
-                    <div class="stagediv" *ngIf="workflowStages !== null">
+                    <div class="stagediv">
                         <div class="divider-text mg-y-5">Advance Status</div>
                         <button (click)="onPreviousSearchPosition()"  class="arrowbtn leftarrow" [ngClass]="{'hidebtns':leftClickStatus()}"><i class="fa fa-angle-left"></i></button>
                         <div class="divflex" [ngClass]="{'add-min-height':workflowStages.length == 0}">
                             <div class="customtab" #panel>
-                                <ngx-skeleton-loader *ngIf="skeletonStageLoading && workflowStages.length === 0"  count="2"></ngx-skeleton-loader>
-                        <ul class="nav-tabs" *ngIf="workflowStages.length !== 0" [ngStyle]="{'transform': 'translateX(' + translateX + 'px)'}" #workflowStageScroller>
+                                 <ngx-skeleton-loader *ngIf="skeletonStageLoading && workflowStages.length === 0"  count="2"></ngx-skeleton-loader>
+                        <ul class="nav-tabs" [ngStyle]="{'transform': 'translateX(' + translateX + 'px)'}" #workflowStageScroller>
 
                             <li *ngFor="let stage of workflowStages; let i = index">
                                 
@@ -345,7 +345,7 @@
                     </li> -->
                 </ul>
 
-                <button *ngIf="isTaskTabOpen" class="btn btn-xs btn-primary btnSubtask" [disabled]="currentWorkflowStage == 'Rejected'"
+                <button *ngIf="isTaskTabOpen" class="btn btn-xs btn-primary btnSubtask" [disabled]="currentWorkflowStage === 'Rejected'"
                     (click)="openModalPopup(subTask,'')" data-toggle="modal">
                     Subtask
                 </button>

@@ -135,7 +135,7 @@ export class WebformsComponent implements OnInit {
 
   onCheckSubscription(){
     const resData: any = this.dataService.getCurrentOrgPlanDetails();
-    const status = this.dataService.isAllowFeature(resData.response, featuresName.USER_PER_ORG);
+    const status = this.dataService.isAllowFeature(resData.response, featuresName.NUM_OF_REQUESTS);
     if ( status === false) {
       return false;
     }
