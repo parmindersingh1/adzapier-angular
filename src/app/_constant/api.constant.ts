@@ -40,6 +40,7 @@ export const apiConstant = {
   //
   BILLING_LIST_ALL_PROPERTY: '/unlicensed/property',
   BILLING_LIST_ALL_ORG: '/unlicensed/organizations',
+  ORG_ACITVE_LIST:'/organizations',
   //
   BILLING_UNSSIGNE_PROPERTY: '/unassign/license/property',
   BILLING_UNSSIGNE_ORG: '/unassign/license/organization',
@@ -52,7 +53,7 @@ export const apiConstant = {
   // COOKIE_CATEGORY_CHART
   COOKIE_CATEGORY_CHART: '/cookiepurpose/:propId',
   COOKIE_CATEGORY_TYPE_CHART: '/cookietype/:propId',
-  COOKIE_CATEGORY_AVALIBLE: '/scanner/available/:orgId/:propId',
+  COOKIE_CATEGORY_AVALIBLE: '/available/scan/:orgId/:propId',
 
   // PROPERTY PLAN
   PROPERTY_PLAN: '/billing/plan/features',
