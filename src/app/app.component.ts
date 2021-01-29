@@ -57,6 +57,7 @@ export class AppComponent implements OnInit {
     this.onGetPlanDetails();
     this.openModal();
     this.openUnAuthModal();
+    // this.onGetFeaturesList();
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
         if (event.url.indexOf('/resetpswd') !== -1 || event.url.indexOf('/verify-email') !== -1) {
@@ -72,6 +73,15 @@ export class AppComponent implements OnInit {
     feather.replace();
   }
 
+  // onGetFeaturesList(){
+  //   this.dataService.getFeaturesList(this.constructor.name, moduleName.appModule)
+  //   .subscribe(res => {
+  //     // debugger;
+  //   })
+  // }
+  // ngAfterViewInit(){
+  //   this.headerComponent.loadOrganizationList();
+  // }
 
 
 
