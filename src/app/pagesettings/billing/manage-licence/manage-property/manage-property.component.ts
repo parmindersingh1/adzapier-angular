@@ -108,7 +108,7 @@ export class ManagePropertyComponent implements OnInit, OnDestroy {
   }
   getAllOrgList(){
     this.loading.start('3');
-    this.service.getAllOrgList(this.constructor.name, moduleName.billingModule)
+    this.service.getAllActiveOrgList(this.constructor.name, moduleName.billingModule)
     .subscribe((res: any) => {
       this.loading.stop('3');
       this.orgList = res.response;

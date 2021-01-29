@@ -91,10 +91,10 @@
                             <div class="input-group-text bg-transparent"><i class="fa fa-search"></i></div>
                         </span>
                     </div>
-                    
+
                     <div class="ml-auto">
                         <button type="button" class="btn btn-primary btn-xs float-right" data-toggle="modal"
-                            (click)="open(propertyModal)"><i class="fas fa-plus"></i> Add Property</button>
+                            (click)="open(propertyModal, 'property')"><i class="fas fa-plus"></i> Add Property</button>
                     </div>
                 </div>
             </div>
@@ -222,10 +222,10 @@
                             <div class="input-group-text bg-transparent"><i class="fa fa-search"></i></div>
                         </span>
                     </div>
-                    
+
                     <div class="col-sm-2 ml-auto">
                         <button type="button" class="btn btn-primary btn-xs float-right" data-toggle="modal"
-                            (click)="open(inviteuserModal)"><i class="fas fa-plus"></i> Invite User</button>
+                            (click)="open(inviteuserModal, 'invite')"><i class="fas fa-plus"></i> Invite User</button>
                     </div>
                 </div>
             </div>
@@ -284,7 +284,7 @@
                         </tr>
                     </tbody>
                 </table>
-                
+
  <div class="row pagination-wrapper">
     <div class="col-4">
         <div class="form-inline">
@@ -305,7 +305,7 @@
     </div>
     </div>
             </div>
-            
+
 
         </div>
     </div>
@@ -517,7 +517,7 @@
                             placeholder="type and search country"
                                     class="form-control" placeholder="Enter email id"
                                     pattern="^\w+@[a-zA-Z_0-9]+?\.[a-zA-Z]{2,3}$"
-                                    [ngClass]="{ 'is-invalid': isInviteFormSubmitted && f.emailid.errors }" />    
+                                    [ngClass]="{ 'is-invalid': isInviteFormSubmitted && f.emailid.errors }" />
                         <div *ngIf="isInviteFormSubmitted && f.emailid.errors" class="invalid-feedback">
                             <div *ngIf="f.emailid.errors.required">User email address is required</div>
                             <div *ngIf="f.emailid.errors.pattern">Please enter valid email address</div>
@@ -573,7 +573,7 @@
         </button>
     </div>
     <div class="modal-body text-center">
-        <p> This will delete selected 
+        <p> This will delete selected
             <span class="font-weight-bold"> {{showControlContent()}}</span>
              <!-- <span class="font-weight-bold">{{controlname === 'team member' ? selectedTeamMember : organizationName}}</span>
              <span class="font-weight-bold"> {{controlname === 'organization' ? organizationName : confirmProperty}}</span> -->

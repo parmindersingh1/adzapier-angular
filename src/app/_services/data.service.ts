@@ -72,6 +72,16 @@ export class DataService {
     );
   }
 
+  getOrgPlanInfo(componentName, moduleName, orgID) {
+    const path = apiConstant.PROPERTY_PLAN.replace(':orgId', orgID);
+    return this.http.get(environment.apiUrl  + path, {params: {oID: orgID}}).pipe(map(res => res),
+      catchError(error => {
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.consentDashboard, componentName, moduleName, path);
+        return throwError(error);
+      }),
+    );
+  }
+
   getOrgPlanDetails(componentName, moduleName, orgID) {
     const path = apiConstant.ORG_PLAN.replace(':orgId', orgID);
     return this.http.get(environment.apiUrl  + path).pipe(map(res => res),

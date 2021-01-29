@@ -209,9 +209,11 @@ export class OrganizationdetailsComponent implements OnInit {
     });
   }
 
-  open(content) {
-    if(!this.onCheckSubscription()){
-      return false;
+  open(content, type) {
+    if(type === 'invite' ) {
+      if (!this.onCheckSubscription()) {
+        return false;
+      }
     }
     this.propertyname = '';
     this.website = '';
