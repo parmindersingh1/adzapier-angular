@@ -72,6 +72,7 @@ export class WebformsComponent implements OnInit {
        } else {
         const orgDetails = this.organizationService.getCurrentOrgWithProperty();
         this.orgDetails = orgDetails;
+        this.currentOrgID = orgDetails.organization_id;
         }
     });
 
@@ -113,9 +114,9 @@ export class WebformsComponent implements OnInit {
 
   navigateToDSARForm() {
    if (this.currentPropertyName !== undefined) {
-    // if(this.onCheckSubscription()){
+    if(this.isLicenseLimitAvailable()){
       this.router.navigate(['/privacy/dsar/dsarform']);
-    // }
+     }
     } else {
       alert('Please Select property first!');
     }
@@ -133,13 +134,13 @@ export class WebformsComponent implements OnInit {
         });
   }
 
-  onCheckSubscription(){
-    const resData: any = this.dataService.getCurrentOrgPlanDetails();
-    const status = this.dataService.isAllowFeature(resData.response, featuresName.NUM_OF_REQUESTS);
-    if ( status === false) {
-      return false;
-    }
-    return true;
+  isLicenseLimitAvailable(): boolean{
+      const status = this.dataService.isLicenseLimitAvailableForOrganization('form',this.dataService.getAvailableLicenseForFormAndRequestPerOrg());
+      if(!status){
+        return status; 
+      } else {
+        return status;
+      }
   }
   // ngOnDestroy() {
   //   if (this.mySubscription) {

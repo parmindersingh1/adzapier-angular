@@ -142,10 +142,10 @@ deploy-to-swarm-develop:
     PUBLISH_PORT: 8190
     SERVICE_MIN_REPLICAS: 2
     TAGS: ${CI_COMMIT_REF_NAME}-${TAG}
-    RESERVE_CPU: "'0.25'"
-    LIMIT_CPU: "'0.5'"
-    RESERVE_MEMORY: 32M 
-    LIMIT_MEMORY: 64M
+    RESERVE_CPU: "'0.50'"
+    LIMIT_CPU: "'0.75'"
+    RESERVE_MEMORY: 64M 
+    LIMIT_MEMORY: 128M
   image: docker:19
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD ${CI_REGISTRY}
@@ -182,10 +182,10 @@ deploy-to-swarm-staging:
     TARGET_PORT: 8080
     PUBLISH_PORT: 8191
     TAGS: ${CI_COMMIT_REF_NAME}-${TAG}
-    RESERVE_CPU: "'0.25'"
-    LIMIT_CPU: "'0.5'"
-    RESERVE_MEMORY: 32M 
-    LIMIT_MEMORY: 64M
+    RESERVE_CPU: "'0.50'"
+    LIMIT_CPU: "'0.75'"
+    RESERVE_MEMORY: 64M 
+    LIMIT_MEMORY: 128M
   image: docker:19
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD ${CI_REGISTRY}
