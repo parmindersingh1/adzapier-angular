@@ -392,8 +392,8 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
 
   onSetUpDate() {
     const that = this;
-    const start = moment().subtract(29, 'days');
-    const end = moment();
+    const start = moment().utc().subtract(29, 'days');
+    const end = moment().utc();
 
     // tslint:disable-next-line:no-shadowed-variable
     function cb(start, end) {
@@ -409,14 +409,14 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
       endDate: end,
       maxDate: new Date(),
       ranges: {
-        Today: [moment(), moment()],
-        Yesterday: [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-        'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-        'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-        'This Month': [moment().startOf('month'), moment().endOf('month')],
-        'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
-        'This Year': [moment().startOf('year'), moment().endOf('year')],
-        'Last Year': [moment().subtract(1, 'year').startOf('year'), moment().subtract(1, 'year').endOf('year')],
+        Today: [moment().utc(), moment().utc()],
+        Yesterday: [moment().utc().subtract(1, 'days'), moment().utc().subtract(1, 'days')],
+        'Last 7 Days': [moment().utc().subtract(6, 'days'), moment().utc()],
+        'Last 30 Days': [moment().utc().subtract(29, 'days'), moment().utc()],
+        'This Month': [moment().utc().startOf('month'), moment().utc().endOf('month')],
+        'Last Month': [moment().utc().subtract(1, 'month').startOf('month'), moment().utc().subtract(1, 'month').endOf('month')],
+        'This Year': [moment().utc().startOf('year'), moment().utc().endOf('year')],
+        'Last Year': [moment().utc().subtract(1, 'year').startOf('year'), moment().utc().subtract(1, 'year').endOf('year')],
       }
     }, cb);
     cb(start, end);

@@ -248,7 +248,7 @@ export class HeaderComponent implements OnInit {
 
   async isCurrentPropertySelected(org, prop) {
     this.loading.start('2');
-    this.dataService.getOrgPlanDetails(this.constructor.name, moduleName.cookieConsentModule, org.id)
+    this.dataService.getOrgPlanInfo(this.constructor.name, moduleName.cookieConsentModule, org.id)
       .subscribe((res: any) => {
           this.loading.stop('2')
         this.dataService.setOrgPlanToLocalStorage(res);
@@ -710,7 +710,7 @@ export class HeaderComponent implements OnInit {
       };
       return backDropStyle;
     }
-    
+
   }
 
   convertAmpersand(item){
