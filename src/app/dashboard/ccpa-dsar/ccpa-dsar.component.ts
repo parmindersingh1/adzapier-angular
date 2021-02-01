@@ -392,8 +392,8 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
 
   onSetUpDate() {
     const that = this;
-    const start = moment().subtract(29, 'days');
-    const end = moment();
+    const start = moment().subtract(29, 'days').utc();
+    const end = moment().utc();
 
     // tslint:disable-next-line:no-shadowed-variable
     function cb(start, end) {
