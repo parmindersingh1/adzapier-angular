@@ -106,9 +106,9 @@ export class WorkflowsComponent implements OnInit, AfterViewInit  {
       }
       const pagelimit = '?limit=' + this.eventRows + '&page=' + this.firstone;
       const sortOrder = event.sortOrder === -1 ? 'DESC' : 'ASC';
-      const orderBy = '&orderby=' + event.sortField + ' ' + sortOrder;
+      const orderBy =  event.sortField === 'workflow_name' ? '&name_order' + '=' + sortOrder : + '&' + event.sortField + '=' + sortOrder;
 
-      this.workflowService.getWorkflow(this.constructor.name, moduleName.workFlowModule, pagelimit).subscribe((data) => {
+      this.workflowService.getWorkflow(this.constructor.name, moduleName.workFlowModule, pagelimit, orderBy).subscribe((data) => {
         this.isloading = false;
         this.workflowList = data.response;
         this.rows = data.response.length;

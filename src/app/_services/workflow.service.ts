@@ -17,7 +17,7 @@ export class WorkflowService {
 
   constructor(private httpClient: HttpClient, private lokiService: LokiService) { }
 
-  getWorkflow(componentName, moduleName, pageLimit?): Observable<any> {
+  getWorkflow(componentName, moduleName, pageLimit?, orderBy?): Observable<any> {
     const key = 'response';
     const pgLimit = pageLimit !== undefined ? pageLimit : '';
     const path = apiConstant.WORKFLOW;
@@ -30,7 +30,10 @@ export class WorkflowService {
         })); // map(res => res[key])
      // }
      // return this.workflowlist$;
-    } else {
+    } else if(orderBy !== undefined){
+      return this.httpClient.get<any>(environment.apiUrl + apiConstant.WORKFLOW + pgLimit + orderBy)
+      .pipe(shareReplay(1));
+    }else {
      // if (!this.workflowlist$) {
        return this.httpClient.get<any>(environment.apiUrl + apiConstant.WORKFLOW + pgLimit)
         .pipe(shareReplay(1)); // map(res => res[key]),
