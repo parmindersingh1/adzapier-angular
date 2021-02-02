@@ -6,7 +6,6 @@ import { CCPAFormFields } from 'src/app/_models/ccpaformfields';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 import {moduleName} from '../../../_constant/module-name.constant';
 import { DataService } from 'src/app/_services/data.service';
-import { featuresName } from 'src/app/_constant/features-name.constant';
 
 interface WebFormModel {
   crid: any;
@@ -72,6 +71,7 @@ export class WebformsComponent implements OnInit {
        } else {
         const orgDetails = this.organizationService.getCurrentOrgWithProperty();
         this.orgDetails = orgDetails;
+        this.currentOrgID = orgDetails.organization_id;
         }
     });
 
@@ -113,9 +113,9 @@ export class WebformsComponent implements OnInit {
 
   navigateToDSARForm() {
    if (this.currentPropertyName !== undefined) {
-    // if(this.onCheckSubscription()){
+    if(this.isLicenseLimitAvailable()){
       this.router.navigate(['/privacy/dsar/dsarform']);
-    // }
+     }
     } else {
       alert('Please Select property first!');
     }
@@ -133,13 +133,8 @@ export class WebformsComponent implements OnInit {
         });
   }
 
-  onCheckSubscription(){
-    const resData: any = this.dataService.getCurrentOrgPlanDetails();
-    const status = this.dataService.isAllowFeature(resData.response, featuresName.NUM_OF_REQUESTS);
-    if ( status === false) {
-      return false;
-    }
-    return true;
+  isLicenseLimitAvailable(): boolean{
+      return this.dataService.isLicenseLimitAvailableForOrganization('form',this.dataService.getAvailableLicenseForFormAndRequestPerOrg());
   }
   // ngOnDestroy() {
   //   if (this.mySubscription) {

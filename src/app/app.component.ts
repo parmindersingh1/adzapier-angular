@@ -149,4 +149,5 @@ export class AppComponent implements OnInit {
   openUnAuthPopUp() {
     this.modalRef = this.modalService.show(this.unauth, {class: 'modal-sm'});
   }
+
 }

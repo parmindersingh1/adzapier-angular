@@ -1,6 +1,8 @@
 import {
   Component, OnInit, ViewChild, ElementRef, Renderer2, TemplateRef, AfterViewInit, AfterViewChecked,
-  ChangeDetectorRef
+  ChangeDetectorRef,
+  ChangeDetectionStrategy,
+  OnDestroy
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthenticationService, OrganizationService, UserService } from 'src/app/_services';
@@ -20,7 +22,9 @@ import { formatDate } from '@angular/common';
 @Component({
   selector: 'app-dsar-requestdetails',
   templateUrl: './dsar-requestdetails.component.html',
-  styleUrls: ['./dsar-requestdetails.component.scss']
+  styleUrls: ['./dsar-requestdetails.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Default
+
 })
 export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, AfterViewChecked {
   @ViewChild('toggleDayleftdiv', { static: true }) toggleDayleftdiv: ElementRef;
@@ -235,7 +239,7 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
       deadline: new Date(null),
       reminder: new Date(null)
     };
-    this.bsValue = new Date();
+  //  this.bsValue = new Date();
     this.activatedRoute.paramMap.subscribe(params => {
       this.requestID = params.get('reqid');
       this.queryCompanyID = params.get('companyid');
@@ -907,7 +911,7 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
       this.subTaskFields.description = data.description;
       this.subTaskFields.required = data.required;
       this.subTaskFields.deadline = new Date(data.deadline);
-      this.subTaskFields.reminder = new Date(data.reminder);
+      this.subTaskFields.reminder = data.reminder === null ?  null : new Date(data.reminder);
 
       const obj = {
         assignee: data.assignee,
@@ -1600,6 +1604,8 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
   rightClickStatus(): boolean {
     if (this.translateX <= this.scrollLimit) {
       return true;
+    }else{
+      return false;
     }
   }
 
@@ -1673,21 +1679,22 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
   }
 
   ngAfterViewChecked() {
-    // setTimeout(() => {
-    this.cdRef.detectChanges();
+    // const myEl = this.elRef.nativeElement.querySelector('.my-elment');
+  //  this.cdRef.detectChanges();
+    setTimeout(() => {
+   
     if (this.workflowStageScroller !== undefined) {
-      if (this.workflowStageScroller.nativeElement.querySelector('li').offsetWidth !== undefined) {
+      const liElement = this.workflowStageScroller.nativeElement.querySelector('li').offsetWidth;
+    if (liElement !== null) {
         const parentElementSize = this.workflowStageScroller.nativeElement.parentElement.offsetWidth;
         const itemSize = this.workflowStageScroller.nativeElement.querySelector('li').offsetWidth;
         const itemLength = this.workflowStageScroller.nativeElement.childElementCount;
         const menuSize = itemSize * itemLength;
         const visibleSize = menuSize - parentElementSize;
         this.scrollLimit = -visibleSize;
-      }
-    } else {
-      return false;
-    }
-    // }, 3000);
+     }
+    } 
+    }, 3000);
   }
 
   onCloseUserAuthModal() {
@@ -1695,12 +1702,25 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
     this.backToDSARRequest();
   }
 
-  ngAfterViewInit(): void {
+  ngAfterViewInit() {
     if (!this.cdRef['destroyed']) {
       this.cdRef.detectChanges();
+    // if (this.workflowStageScroller !== undefined) {
+    //   if (this.workflowStageScroller.nativeElement.querySelector('li').offsetWidth !== undefined) {
+    //     const parentElementSize = this.workflowStageScroller.nativeElement.parentElement.offsetWidth;
+    //     const itemSize = this.workflowStageScroller.nativeElement.querySelector('li').offsetWidth;
+    //     const itemLength = this.workflowStageScroller.nativeElement.childElementCount;
+    //     const menuSize = itemSize * itemLength;
+    //     const visibleSize = menuSize - parentElementSize;
+    //     this.scrollLimit = -visibleSize;
+    //   }
+    // } else {
+    //   return false;
+    // }
     }
   }
 
+   
 }
 
 interface SubTaskList {

@@ -16,6 +16,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DataService } from 'src/app/_services/data.service';
 import { featuresName } from 'src/app/_constant/features-name.constant';
+import { BillingService } from 'src/app/_services/billing.service';
 @Component({
   selector: 'app-dsar-requests',
   templateUrl: './dsar-requests.component.html',
@@ -69,6 +70,8 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
   selectedOrgID: any;
   selectedPropID: any;
   selectedCRID: any;
+  organizationSubscription: any;
+  organizationPlanDetails: any;
   constructor(
     private orgservice: OrganizationService,
     private userService: UserService,
@@ -80,7 +83,8 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
     private cdRef: ChangeDetectorRef,
     private modalService: NgbModal,
     private formBuilder: FormBuilder,
-    private dataService: DataService
+    private dataService: DataService,
+    private billingService: BillingService
   ) { }
 
   ngOnInit() {
@@ -130,8 +134,9 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
         this.firstone = (event.first / event.rows) + 1;
       }
       const pagelimit = '?limit=' + this.eventRows + '&page=' + this.firstone;
-      const sortOrder = event.sortOrder === -1 ? 'DESC' : 'ASC';
-      const orderBy = '&orderby=' + event.sortField + ' ' + sortOrder;
+      const sortOrder = event.sortOrder === -1 ? 'desc' : 'asc';
+      // const orderBy = '&orderby=' + event.sortField + ' ' + sortOrder;
+      const orderBy = '&order_by_date=' + sortOrder;
 
       this.dsarRequestService.getDsarRequestList(this.constructor.name, moduleName.dsarRequestModule, this.currentManagedOrgID,
         this.currrentManagedPropID, pagelimit, orderBy)
@@ -317,13 +322,13 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
 
       });
     } else {
-     // if(this.onCheckSubscription()){
+     if(this.isLicenseLimitAvailable()){
       this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
 
       }, (reason) => {
 
       });
-  //  }
+    }
     }
 
   }
@@ -361,11 +366,23 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
   }
 
   onCheckSubscription(){
-    const resData: any = this.dataService.getCurrentOrgPlanDetails();
-    const status = this.dataService.isAllowFeature(resData.response, featuresName.NUM_OF_REQUESTS);
-    if ( status === false) {
-      return false;
-    }
-    return true;
+    // const resData: any = this.dataService.getCurrentOrgPlanDetails();
+    this.billingService.getActivePlan(this.constructor.name, moduleName.manageSubscriptionsModule)
+    .subscribe(data => {
+      this.organizationSubscription = data;
+      if(this.organizationSubscription !== undefined){
+        for(let key of this.organizationSubscription){
+          if(key.planDetails.level === 'organization' && key.total_licence > key.assigned_licence ){
+            this.organizationPlanDetails = key.planDetails;
+            return true;
+          }
+        }
+      }
+    });
+ 
+  }
+
+  isLicenseLimitAvailable(): boolean {
+      return this.dataService.isLicenseLimitAvailableForOrganization('request',this.dataService.getAvailableLicenseForFormAndRequestPerOrg());
   }
 }

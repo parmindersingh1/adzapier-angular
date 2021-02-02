@@ -17,6 +17,7 @@ import { moduleName } from '../../../_constant/module-name.constant';
 import { WebControlProperties } from 'src/app/_models/webcontrolproperties';
 import { DomSanitizer } from '@angular/platform-browser';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { DataService } from 'src/app/_services/data.service';
 @Component({
   selector: 'app-dsarform',
   templateUrl: './dsarform.component.html',
@@ -247,7 +248,8 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
     private modalService: NgbModal,
     private cd: ChangeDetectorRef,
     private sanitizer: DomSanitizer,
-    private bsmodalService: BsModalService
+    private bsmodalService: BsModalService,
+    private dataService: DataService
   ) {
 
     this.count = 0;
@@ -261,6 +263,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
   }
 
   ngOnInit() {
+    this.ismultiselectrequired = true;
     this.getCCPAdefaultConfigById();
     // this.loadWebControl();
     this.organizationService.currentProperty.subscribe((response) => {
@@ -316,6 +319,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
   get formLogo() { return this.headerLogoForm.controls; }
   get faviconLogo() { return this.faviconForm.controls; }
   basicFormdata() {
+  if (this.isLicenseLimitAvailable()) {
     this.basicFormSubmitted = true;
     if (this.basicForm.invalid) {
       return false;
@@ -325,6 +329,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
     }
 
   }
+}
 
   CreateUpdateDSARForm(formcrid) {
     if (formcrid !== null) {
@@ -1298,6 +1303,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
   }
   // this.basicForm.value.formname === '' || this.basicForm.value.formname === undefined || !this.basicFormSubmitted
   onNavChange(changeEvent: NgbNavChangeEvent) {
+  if (this.isLicenseLimitAvailable()) {
     if (changeEvent.nextId === 2) {
       this.formName = this.basicForm.controls['formname'].value;
       this.basicFormSubmitted = true;
@@ -1336,7 +1342,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
         this.alertType = 'danger';
       }
     }
-
+  }
   }
 
   finalPublishDSARForm() {
@@ -2153,6 +2159,10 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
     }else if(tag === 'third'){
      return this.accordionStatus.isThirdopen = event;
     }
+  }
+
+  isLicenseLimitAvailable(): boolean {
+    return this.dataService.isLicenseLimitAvailableForOrganization('form', this.dataService.getAvailableLicenseForFormAndRequestPerOrg());
   }
 
 }

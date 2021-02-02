@@ -1,9 +1,9 @@
 import { Component, HostListener, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { OrganizationService, AuthenticationService, UserService } from '../../../_services';
-import { Observable } from 'rxjs';
+import { forkJoin, Observable } from 'rxjs';
 import { Organization } from 'src/app/_models/organization';
-import { distinctUntilChanged } from 'rxjs/operators';
+import { distinctUntilChanged, map } from 'rxjs/operators';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { moduleName } from 'src/app/_constant/module-name.constant';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
@@ -285,8 +285,10 @@ export class HeaderComponent implements OnInit {
 
       }, err => {
         this.loading.stop('1')
-      })
-      this.openNav();
+      });
+          this.licenseAvailabilityForFormAndRequestPerOrg(org.id);
+          this.router.navigate(['/privacy/dsar/webforms']);
+     this.openNav();
 
 
 
@@ -708,6 +710,29 @@ export class HeaderComponent implements OnInit {
 
   convertAmpersand(item){
     return item.replace(/&amp;/g,'&');
+  }
+
+  licenseAvailabilityForFormAndRequestPerOrg(orgID){
+    let webFormLicense = this.dataService.getWebFormLicenseLimit( this.constructor.name, moduleName.headerModule, orgID);
+    let requestLicense = this.dataService.getDSARRequestLicenseLimit( this.constructor.name, moduleName.headerModule, orgID);
+    forkJoin([webFormLicense, requestLicense]).subscribe(results => {
+      let finalObj = {
+        ...results[0].response,
+        ...results[1].response,
+      }
+      this.dataService.setAvailableLicenseForFormAndRequestPerOrg(finalObj);
+    },(error)=>{
+      console.log(error)
+    });
+  }
+
+  isLicenseLimitAvailable(): boolean{
+    const status = this.dataService.isLicenseLimitAvailableForOrganization('form',this.dataService.getAvailableLicenseForFormAndRequestPerOrg());
+    if(!status){
+      return status; 
+    } else {
+      return status;
+    }
   }
 
   @HostListener('window:resize',['$event'])
