@@ -383,13 +383,6 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
   }
 
   isLicenseLimitAvailable(): boolean {
-      const status = this.dataService.isLicenseLimitAvailableForOrganization('request',this.dataService.getAvailableLicenseForFormAndRequestPerOrg());
-      if(!status){
-        // this.dataService.openModal.next({openModal : true, data: this.dataService.getAvailableLicenseForFormAndRequestPerOrg(), type: 'org', msg: 'You have exceeded form creation limit. For more details Manage subscription or upgrade plan'});
-        return status; 
-      } else {
-        return status;
-      }
- 
+      return this.dataService.isLicenseLimitAvailableForOrganization('request',this.dataService.getAvailableLicenseForFormAndRequestPerOrg());
   }
 }

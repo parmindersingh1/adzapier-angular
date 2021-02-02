@@ -66,8 +66,6 @@ export class AppComponent implements OnInit {
           this.ccpaFormConfigurationService.removeControls();
           this.dsarformService.removeControls();
           this.organizationService.removeControls();
-        } else if(event.url.indexOf('/dsarform') !== -1){
-          this.isLicenseLimitAvailable();
         }
 
       }
@@ -152,12 +150,4 @@ export class AppComponent implements OnInit {
     this.modalRef = this.modalService.show(this.unauth, {class: 'modal-sm'});
   }
 
-  isLicenseLimitAvailable(): boolean {
-    const status = this.dataService.isLicenseLimitAvailableForOrganization('form',this.dataService.getAvailableLicenseForFormAndRequestPerOrg());
-    if(!status){
-      return status; 
-    } else {
-      return status;
-    }
-  }
 }
