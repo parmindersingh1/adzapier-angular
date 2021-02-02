@@ -286,13 +286,8 @@ export class HeaderComponent implements OnInit {
       }, err => {
         this.loading.stop('1')
       });
-      if(!this.isOrgSelected(org)){
-        if(this.router.url.indexOf('dsarform') !== -1 ){
-         // this.router.navigate(['/privacy/dsar/webforms']);
           this.licenseAvailabilityForFormAndRequestPerOrg(org.id);
-        }
-      }
-     this.licenseAvailabilityForFormAndRequestPerOrg(org.id);
+          this.router.navigate(['/privacy/dsar/webforms']);
      this.openNav();
 
 
@@ -729,6 +724,15 @@ export class HeaderComponent implements OnInit {
     },(error)=>{
       console.log(error)
     });
+  }
+
+  isLicenseLimitAvailable(): boolean{
+    const status = this.dataService.isLicenseLimitAvailableForOrganization('form',this.dataService.getAvailableLicenseForFormAndRequestPerOrg());
+    if(!status){
+      return status; 
+    } else {
+      return status;
+    }
   }
 
   @HostListener('window:resize',['$event'])

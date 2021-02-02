@@ -263,6 +263,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
   }
 
   ngOnInit() {
+    this.ismultiselectrequired = true;
     this.getCCPAdefaultConfigById();
     // this.loadWebControl();
     this.organizationService.currentProperty.subscribe((response) => {
@@ -2161,12 +2162,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
   }
 
   isLicenseLimitAvailable(): boolean {
-    const status = this.dataService.isLicenseLimitAvailableForOrganization('form', this.dataService.getAvailableLicenseForFormAndRequestPerOrg());
-    if (!status) {
-      return status;
-    } else {
-      return status;
-    }
+    return this.dataService.isLicenseLimitAvailableForOrganization('form', this.dataService.getAvailableLicenseForFormAndRequestPerOrg());
   }
 
 }

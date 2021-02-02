@@ -6,7 +6,6 @@ import { CCPAFormFields } from 'src/app/_models/ccpaformfields';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 import {moduleName} from '../../../_constant/module-name.constant';
 import { DataService } from 'src/app/_services/data.service';
-import { featuresName } from 'src/app/_constant/features-name.constant';
 
 interface WebFormModel {
   crid: any;
@@ -135,12 +134,7 @@ export class WebformsComponent implements OnInit {
   }
 
   isLicenseLimitAvailable(): boolean{
-      const status = this.dataService.isLicenseLimitAvailableForOrganization('form',this.dataService.getAvailableLicenseForFormAndRequestPerOrg());
-      if(!status){
-        return status; 
-      } else {
-        return status;
-      }
+      return this.dataService.isLicenseLimitAvailableForOrganization('form',this.dataService.getAvailableLicenseForFormAndRequestPerOrg());
   }
   // ngOnDestroy() {
   //   if (this.mySubscription) {
