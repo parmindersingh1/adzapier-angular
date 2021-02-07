@@ -33,7 +33,7 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
   @ViewChild('confirmTemplate', { static: false }) confirmModal: TemplateRef<any>;
   @ViewChild('filePreview', { static: true }) filePreview: ElementRef;
   @ViewChild('panel', { static: true }) public panel: ElementRef<any>;
-  @ViewChild('workflowStageScroller', { static: true, read: ElementRef }) public workflowStageScroller: ElementRef<any>;
+  @ViewChild('workflowStageScroller', { static: false, read: ElementRef }) public workflowStageScroller: ElementRef<any>;
   @ViewChild('confirmDeleteTemplate', { static: false }) confirmDeleteModal: TemplateRef<any>;
   @ViewChild('extendDays', { static: true }) extendDaysModal: TemplateRef<any>;
   @ViewChild('rejectRequest', { static: true }) rejectRequestModal: TemplateRef<any>;
@@ -185,7 +185,7 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
   translateX: number = 0;
   leftbtnVisibility = false;
   rightbtnVisibility = true;
-  scrollLimit: number;
+  scrollLimit: number = 0;
   showStageTitle: string;
   showStageGuidanceText: string;
   dueInDays: number;
@@ -203,6 +203,7 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
   isRejectrequestsubmitted = false;
   isUserNotMatched: boolean = false;
   reasonList: any = [];
+  rightArrowStatus = false;
   constructor(private activatedRoute: ActivatedRoute,
               private router: Router,
               private orgService: OrganizationService,
@@ -329,7 +330,7 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
   }
 
   backToDSARRequest() {
-    this.router.navigate(['privacy/dsar/dsar-requests']);
+    this.router.navigate(['privacy/dsar/requests']);
   }
 
   getCurrentLoggedInUser() {
@@ -1247,7 +1248,7 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
         this.alertType = 'success';
         this.loadDataRequestDetails();
         this.loadActivityLog(this.requestID);
-        //this.router.navigate(['privacy/dsar/dsar-requests']);
+        //this.router.navigate(['privacy/dsar/requests']);
       }, (err) => {
         this.alertMsg = 'error';
         this.isOpen = true;
@@ -1531,7 +1532,7 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
         this.alertMsg = data.response;
         this.isOpen = true;
         this.alertType = 'success';
-        this.router.navigate(['privacy/dsar/dsar-requests']);
+        this.router.navigate(['privacy/dsar/requests']);
       }, (err) => {
         this.alertMsg = 'error';
         this.isOpen = true;
@@ -1602,11 +1603,7 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
   }
 
   rightClickStatus(): boolean {
-    if (this.translateX <= this.scrollLimit) {
-      return true;
-    }else{
-      return false;
-    }
+    return this.translateX <= this.scrollLimit;
   }
 
   showStageTitleAndContent(selectedStage) {
@@ -1679,9 +1676,11 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
   }
 
   ngAfterViewChecked() {
-    // const myEl = this.elRef.nativeElement.querySelector('.my-elment');
-  //  this.cdRef.detectChanges();
-    setTimeout(() => {
+     let rightArrowStatus = this.rightClickStatus();
+     if(rightArrowStatus !== this.rightArrowStatus){
+       this.rightArrowStatus = rightArrowStatus;
+       this.cdRef.detectChanges();
+     }
    
     if (this.workflowStageScroller !== undefined) {
       const liElement = this.workflowStageScroller.nativeElement.querySelector('li').offsetWidth;
@@ -1694,7 +1693,6 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
         this.scrollLimit = -visibleSize;
      }
     } 
-    }, 3000);
   }
 
   onCloseUserAuthModal() {
@@ -1703,21 +1701,7 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
   }
 
   ngAfterViewInit() {
-    if (!this.cdRef['destroyed']) {
       this.cdRef.detectChanges();
-    // if (this.workflowStageScroller !== undefined) {
-    //   if (this.workflowStageScroller.nativeElement.querySelector('li').offsetWidth !== undefined) {
-    //     const parentElementSize = this.workflowStageScroller.nativeElement.parentElement.offsetWidth;
-    //     const itemSize = this.workflowStageScroller.nativeElement.querySelector('li').offsetWidth;
-    //     const itemLength = this.workflowStageScroller.nativeElement.childElementCount;
-    //     const menuSize = itemSize * itemLength;
-    //     const visibleSize = menuSize - parentElementSize;
-    //     this.scrollLimit = -visibleSize;
-    //   }
-    // } else {
-    //   return false;
-    // }
-    }
   }
 
    

@@ -194,7 +194,7 @@
                         <!-- <div>{{selectedStageContent}}</div> -->
                         </div>
                         </div>
-                        <button (click)="onNextSearchPosition()" class="arrowbtn rightarrow" [ngClass]="{'hidebtns':rightClickStatus()}"><i class="fa fa-angle-right"></i></button>
+                        <button (click)="onNextSearchPosition()" class="arrowbtn rightarrow" [ngClass]="{'hidebtns':rightArrowStatus}"><i class="fa fa-angle-right"></i></button>
                     </div>
                     <div class="title-guidancetext-wrapper" [ngStyle]="stageContentStyle()">
                     <h4 class="selected-title" [innerHTML]="showStageTitle"></h4>
@@ -903,7 +903,7 @@
     </form>
 </ng-template>
 
-<div class="col-sm-5 mt-3 mr-0 float-right">
+ <div class="col-sm-5 mr-0 float-right flotingdiv">
     <alert *ngIf="isOpen" [type]="alertType" dismissOnTimeout="5000" [dismissible]="dismissible"
       (onClosed)="onClosed(alertMsg)">{{alertMsg}}</alert>
   </div>
