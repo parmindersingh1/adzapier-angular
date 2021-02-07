@@ -214,7 +214,7 @@ export class HeaderComponent implements OnInit {
           subcategory: [
             { showlink: 'Dashboard', routerLink: '/home/dashboard/ccpa-dsar', icon: 'bar-chart-2' },
             { showlink: 'Webforms', routerLink: '/privacy/dsar/webforms', icon: 'pie-chart' },
-            { showlink: 'Requests', routerLink: '/privacy/dsar/dsar-requests', icon: 'fa fa-ticket-alt feather-16' },
+            { showlink: 'Requests', routerLink: '/privacy/dsar/requests', icon: 'fa fa-ticket-alt feather-16' },
             { showlink: 'Workflow', routerLink: '/privacy/dsar/workflows', icon: 'shield-off' },
 
             { showlink: 'Dashboard', routerLink: '/home/dashboard/cookie-consent', icon: 'fas fa-cookie feather-16' },
@@ -277,8 +277,8 @@ export class HeaderComponent implements OnInit {
     }
     this.orgservice.setCurrentOrgWithProperty(obj);
     this.currentSelectedProperty();
-    if (this.router.url.indexOf('privacy/dsar/dsar-requests-details') !== -1) {
-      this.router.navigate(['/privacy/dsar/dsar-requests']);
+    if (this.router.url.indexOf('privacy/dsar/requests-details') !== -1) {
+      this.router.navigate(['/privacy/dsar/requests']);
     } else {
       this.router.navigate([this.router.url]);
     }
@@ -286,8 +286,10 @@ export class HeaderComponent implements OnInit {
       }, err => {
         this.loading.stop('1')
       });
-          this.licenseAvailabilityForFormAndRequestPerOrg(org.id);
-          this.router.navigate(['/privacy/dsar/webforms']);
+      this.licenseAvailabilityForFormAndRequestPerOrg(org);
+      if(this.router.url.indexOf('dsarform') !== -1){
+        this.router.navigate(['/privacy/dsar/webforms']);
+      }
      this.openNav();
 
 
@@ -416,6 +418,7 @@ export class HeaderComponent implements OnInit {
             // this.orgservice.getSelectedOrgProperty.emit(obj);
             //  this.firstElement = false;
             this.orgservice.setCurrentOrgWithProperty(obj);
+            this.licenseAvailabilityForFormAndRequestPerOrg(obj);
           }
         } else {
           this.currentSelectedProperty();
@@ -461,6 +464,7 @@ export class HeaderComponent implements OnInit {
           this.selectedOrgProperties.push(orgDetails);
         }
         this.isPropSelected(orgDetails);
+        this.licenseAvailabilityForFormAndRequestPerOrg(orgDetails);
       }
       return this.currentProperty;
     }
@@ -486,6 +490,7 @@ export class HeaderComponent implements OnInit {
       const result = data.filter((t) => t.id === orgDetails.organization_id).length > 0;
       const isSameUserLoggedin = orgDetails.user_id === this.userID;
       if (result && isSameUserLoggedin) {
+        this.licenseAvailabilityForFormAndRequestPerOrg(orgDetails);
         return true;
       } else {
         return false;
@@ -712,9 +717,9 @@ export class HeaderComponent implements OnInit {
     return item.replace(/&amp;/g,'&');
   }
 
-  licenseAvailabilityForFormAndRequestPerOrg(orgID){
-    let webFormLicense = this.dataService.getWebFormLicenseLimit( this.constructor.name, moduleName.headerModule, orgID);
-    let requestLicense = this.dataService.getDSARRequestLicenseLimit( this.constructor.name, moduleName.headerModule, orgID);
+  licenseAvailabilityForFormAndRequestPerOrg(org){
+    let webFormLicense = this.dataService.getWebFormLicenseLimit( this.constructor.name, moduleName.headerModule, org.id || org.organization_id);
+    let requestLicense = this.dataService.getDSARRequestLicenseLimit( this.constructor.name, moduleName.headerModule, org.id || org.organization_id);
     forkJoin([webFormLicense, requestLicense]).subscribe(results => {
       let finalObj = {
         ...results[0].response,

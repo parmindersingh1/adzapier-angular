@@ -76,9 +76,10 @@
                 <div *ngIf="show" style="color: blue;" class="tx-13"><p>Account Created Successfully...!</p></div>
                 <div  style="color:red;"><p >{{errorMsg}}</p></div>
 
-            <div class="form-group tx-12">
-                By clicking <strong>Create an account</strong> below, you agree to our terms of service and privacy
-                statement.
+            <div class="form-group form-check">
+                <input type="checkbox" formControlName="acceptPolicy" id="acceptPolicy" class="form-check-input" />
+                <label for="acceptPolicy" class="form-check-label" [ngClass]="{ 'is-invalid': submitted && f.acceptPolicy.errors }">By clicking <strong>Create an account</strong> below, you agree to our <a href="https://adzapier.com/terms-of-service" target="_blank">terms of service</a> and <a href="https://adzapier.com/privacy-policy" target="_blank">privacy statement</a>.</label>
+                <div *ngIf="submitted && f.acceptPolicy.errors" class="invalid-feedback">Accept terms of service & privacy statement is required</div>
             </div>
             <div class="text-center">
                 <button class="btn btn-primary mr-2" type="submit"> Create Account</button>

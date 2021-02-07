@@ -256,7 +256,7 @@
                                 {{list.role_name}}
                             </td>
                             <td class="text-center">
-                            <button  *ngIf="list.user_last_login === 'Invitation Pending' || list.user_last_login === 'Invitation sent'; else LoginDate" type="button"
+                            <button  *ngIf="list.user_last_login === 'Invitation Pending' || list.user_last_login === 'Invitation sent' || list.user_last_login === ''; else LoginDate" type="button"
                             (click)="onResendInvitation(list.approver_id)" class="btn btn-xs btn-primary">
                             <i class="fas fa-envelope"></i> Resend Invitation</button>
                             <ng-template #LoginDate>

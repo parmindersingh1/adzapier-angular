@@ -182,7 +182,7 @@ ul.dropdown-menu.propMenu.show > li > ul {
 .dropdown-item.active, .dropdown-item:active {
   background: none !important;
   text-overflow: ellipsis;
-  width: 200px;
+  // width: 200px;
   overflow: hidden;
 }
 
@@ -301,7 +301,7 @@ a.nav-link:hover {
   color: #8392a5;
   text-transform: uppercase;
   display: block;
-  margin: 10px 0;
+  margin: 5px 0;
   font-weight: 600;
 }
 

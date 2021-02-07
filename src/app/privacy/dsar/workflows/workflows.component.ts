@@ -104,11 +104,11 @@ export class WorkflowsComponent implements OnInit, AfterViewInit  {
       } else {
         this.firstone = (event.first / event.rows) + 1;
       }
-      const pagelimit = '?limit=' + this.eventRows + '&page=' + this.firstone;
-      const sortOrder = event.sortOrder === -1 ? 'DESC' : 'ASC';
+      const pagelimit = '?' + this.eventRows + '&page=' + this.firstone;
+      const sortOrder = event.sortOrder === -1 ? 'ASC' : 'DESC';
       let orderBy;
       if(event.sortField !== undefined){
-        orderBy = event.sortField === 'workflow_name' ? '&name_order=' + sortOrder :  '&' + event.sortField + '=' + sortOrder;
+        orderBy = '&order_by=' + event.sortField + ':' + sortOrder;
       }
      
 

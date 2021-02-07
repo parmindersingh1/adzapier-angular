@@ -7,11 +7,12 @@ import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
-import { Observable } from 'rxjs';
+import { forkJoin, Observable } from 'rxjs';
 import { distinctUntilChanged, map } from 'rxjs/operators';
 import { debounceTime } from 'rxjs/operators';
 import { moduleName } from 'src/app/_constant/module-name.constant';
 import { BillingService } from 'src/app/_services/billing.service';
+import { DataService } from 'src/app/_services/data.service';
 import { OrganizationService } from 'src/app/_services/organization.service';
 
 @Component({
@@ -51,7 +52,7 @@ export class ManageOrganizationComponent implements OnInit, OnDestroy {
               private activatedRoute: ActivatedRoute,
               private loading: NgxUiLoaderService,
               private formBuilder: FormBuilder,
-              private orgservice: OrganizationService
+              private dataService: DataService
 
     ) { }
 
@@ -151,6 +152,7 @@ this.orgNameError = !this.orgForm.value.orgID ? true : false;
       this.loading.stop();
       this.skLoading = false;
       this.modalRef.hide();
+      this.licenseAvailabilityForFormAndRequestPerOrg(this.orgForm.value.orgID);
       this.orgForm.reset()
       this.onGetAssingedOrg()
 
@@ -197,6 +199,21 @@ this.orgNameError = !this.orgForm.value.orgID ? true : false;
   decline(): void {
     this.modalRef.hide();
   }
+
+  licenseAvailabilityForFormAndRequestPerOrg(orgID){
+    let webFormLicense = this.dataService.getWebFormLicenseLimit( this.constructor.name, moduleName.headerModule, orgID);
+    let requestLicense = this.dataService.getDSARRequestLicenseLimit( this.constructor.name, moduleName.headerModule, orgID);
+    forkJoin([webFormLicense, requestLicense]).subscribe(results => {
+      let finalObj = {
+        ...results[0].response,
+        ...results[1].response,
+      }
+      this.dataService.setAvailableLicenseForFormAndRequestPerOrg(finalObj);
+    },(error)=>{
+      console.log(error)
+    });
+  }
+  
   ngOnDestroy() {
     // this.modalRef.hide();
 
