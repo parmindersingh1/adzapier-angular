@@ -55,7 +55,7 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
   currentState = 'banner';
   data = { ...defaultBannerContent};
   formContent: any = { ...defaultBannerContent};
-  isFieldDisabled = null;
+  isFieldDisabled = true;
   bannerCookieData = null;
   isGdprGlobal = false;
   dismissible = true;
