@@ -326,6 +326,50 @@ span.ui-column-title {
   width:160px !important;
 }
 
+::ng-deep .theme-dark-blue {
+  flex-direction: row-reverse !important;
+}
+
+::ng-deep .theme-dark-blue  .bs-datepicker-predefined-btns button {
+  margin-bottom: 2px !important;
+}
+
+
+.datepickerwrapper {
+  justify-content: flex-end !important;
+  display: flex !important;
+}
+
+.border-zero-left {
+  border-left: 0;
+}
+
+.datepickerwrapper .form-control:focus {
+  outline: none;
+  border-radius: 0px 5px 5px 0px;
+  box-shadow: none;
+  border-color: #c0ccda;
+}
+
+.datepickerwrapper .form-control {
+  border-radius: 0!important;
+}
+
+.datepickerwrapper .input-group-prepend {
+  height: 38px;
+}
+
+.row-reverse {
+  flex-direction: row-reverse;
+}
+
+.input-group-prepend span {
+  background-color: #fff;
+  border-color: #c0ccda !important;
+  border-radius: 0px; // 5px 0px 0px 5px;
+  cursor: pointer;
+}
+
 @media (min-width: 1024px) { 
   .container {
     max-width: 1024px;

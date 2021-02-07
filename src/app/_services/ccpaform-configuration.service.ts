@@ -116,8 +116,12 @@ export class CCPAFormConfigurationService extends WebControls {
   }
 
   captureCurrentSelectedFormData(currentItem) {
-    sessionStorage.setItem('currentwebform', JSON.stringify(currentItem));
+    localStorage.setItem('currentwebform', JSON.stringify(currentItem));
     this.captureFormDataWhileNavigate.next(currentItem);
+  }
+
+  removeCurrentSelectedFormData(){
+    localStorage.removeItem('currentwebform');
   }
 
   getStateList(): Observable<any> {
@@ -129,7 +133,7 @@ export class CCPAFormConfigurationService extends WebControls {
   }
 
   getCurrentSelectedFormData() {
-    return JSON.parse(sessionStorage.getItem('currentwebform'));
+    return JSON.parse(localStorage.getItem('currentwebform'));
   }
 
   getCaptcha(componentName, moduleName): Observable<any> {

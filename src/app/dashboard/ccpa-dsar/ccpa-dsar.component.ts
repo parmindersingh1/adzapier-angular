@@ -32,8 +32,8 @@ const colorValues =  [
     borderWidth: 1
   },
   {
-    borderColor: '#c40e20',
-    backgroundColor: 'rgba(220, 53, 69, 0.68)',
+    borderColor: '#5cb85c',
+    backgroundColor: 'rgba(92, 184, 92, 0.68)',
     borderWidth: 1
   },
   {
@@ -42,8 +42,8 @@ const colorValues =  [
     borderWidth: 1
   },
   {
-    borderColor: '#c40e20',
-    backgroundColor: 'rgba(220, 53, 69, 0.68)',
+    borderColor: '#292b2c',
+    backgroundColor: 'rgba(41, 43, 44, 0.68)',
     borderWidth: 1
   },
 ];

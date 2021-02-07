@@ -6,6 +6,7 @@ import { CCPAFormFields } from 'src/app/_models/ccpaformfields';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 import {moduleName} from '../../../_constant/module-name.constant';
 import { DataService } from 'src/app/_services/data.service';
+import { forkJoin } from 'rxjs';
 
 interface WebFormModel {
   crid: any;
@@ -107,6 +108,7 @@ export class WebformsComponent implements OnInit {
   }
 
   showForm(data) {
+    this.ccpaFormConfigService.removeCurrentSelectedFormData();
     this.ccpaFormConfigService.captureCurrentSelectedFormData(data);
     this.router.navigate(['/privacy/dsar/dsarform', data.crid]);
   }
@@ -114,10 +116,13 @@ export class WebformsComponent implements OnInit {
   navigateToDSARForm() {
    if (this.currentPropertyName !== undefined) {
     if(this.isLicenseLimitAvailable()){
+      this.ccpaFormConfigService.removeCurrentSelectedFormData();
       this.router.navigate(['/privacy/dsar/dsarform']);
      }
     } else {
-      alert('Please Select property first!');
+      this.alertMsg = 'Please Select property first!';
+      this.isOpen = true;
+      this.alertType = 'danger';
     }
   }
 
@@ -136,6 +141,21 @@ export class WebformsComponent implements OnInit {
   isLicenseLimitAvailable(): boolean{
       return this.dataService.isLicenseLimitAvailableForOrganization('form',this.dataService.getAvailableLicenseForFormAndRequestPerOrg());
   }
+
+  licenseAvailabilityForFormAndRequestPerOrg(orgID){
+    let webFormLicense = this.dataService.getWebFormLicenseLimit( this.constructor.name, moduleName.headerModule, orgID);
+    let requestLicense = this.dataService.getDSARRequestLicenseLimit( this.constructor.name, moduleName.headerModule, orgID);
+    forkJoin([webFormLicense, requestLicense]).subscribe(results => {
+      let finalObj = {
+        ...results[0].response,
+        ...results[1].response,
+      }
+      this.dataService.setAvailableLicenseForFormAndRequestPerOrg(finalObj);
+    },(error)=>{
+      console.log(error)
+    });
+  }
+
   // ngOnDestroy() {
   //   if (this.mySubscription) {
   //     this.mySubscription.unsubscribe();

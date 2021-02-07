@@ -162,7 +162,7 @@
                                                     </div>
                                                     <div *ngIf="ismultiselectrequired" class="pl-3">
                                                         <label for="multiselect">
-                                                            <input type="checkbox" id="multicheck" name="multicheck"  #ismulticheck="ngModel" [(ngModel)]="multiselect"/>
+                                                            <input type="checkbox" [attr.disabled]="!customFields.form.valid || isWebFormPublished && !isEditingPublishedForm ? true : null" id="multicheck" name="multicheck"  #ismulticheck="ngModel" [(ngModel)]="multiselect"/>
                                                             Enable multiselect
                                                             </label>
                                                     </div>
@@ -615,7 +615,7 @@
                                         *ngIf="webcontrol.control == 'checkbox' && webcontrol.controlId === 'subjecttype'">
                                         <!--*ngIf="subjectTypecheckboxBtnType"-->
                                         <div *ngFor="let opt of webcontrol.selectOptions; let i = index;"
-                                            class="form-check-inline">
+                                            class="form-check-inline" cdkDrag [cdkDragDisabled]="true">
                                             <input class="form-check-input" type="checkbox"
                                             id="{{opt.name}}"  name="{{webcontrol.controllabel}}" 
                                             [value]='opt.subject_type_id'

@@ -252,6 +252,9 @@ export class DataService {
         const respMsg = changeResponseProperty == 'form_available' ? formMsg : requestMsg;
         this.openModal.next({openModal : true, data: responseData, type: 'org', msg: respMsg });
         return false;
+      } else {
+        this.openModal.next({openModal : true, data: responseData, type: 'org', msg: ''});
+        return false;
       }
   }
 
