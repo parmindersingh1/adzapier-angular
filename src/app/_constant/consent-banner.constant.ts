@@ -6,6 +6,7 @@ export const defaultData = {
   defaultEmail: false,
   google_vendors: false,
   gdprGlobal: false,
+  ccpaGlobal: false,
   showBadge: true,
   logo: true,
   gdprDefaultLang: 'en',
