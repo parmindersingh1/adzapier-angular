@@ -263,7 +263,6 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
   }
 
   ngOnInit() {
-    this.ismultiselectrequired = true;
     this.getCCPAdefaultConfigById();
     // this.loadWebControl();
     this.organizationService.currentProperty.subscribe((response) => {
@@ -319,7 +318,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
   get formLogo() { return this.headerLogoForm.controls; }
   get faviconLogo() { return this.faviconForm.controls; }
   basicFormdata() {
-  if (this.isLicenseLimitAvailable()) {
+
     this.basicFormSubmitted = true;
     if (this.basicForm.invalid) {
       return false;
@@ -328,7 +327,6 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
       this.navDirective.select(2);
     }
 
-  }
 }
 
   CreateUpdateDSARForm(formcrid) {
@@ -360,7 +358,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
           } else {
             this.selectedApproverID = data.approver_id;
             this.selectedWorkflowID = data.workflow_id;
-            this.getWorkflowWithApproverID();
+          //  this.getWorkflowWithApproverID();
           }
           // this.requestFormControls = data.request_form;
           if (data.request_form) {
@@ -395,13 +393,6 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
           // this.ccpaFormConfigService.removeControls();
           this.ccpaFormConfigService.setFormControlList(this.webFormControlList);
 
-        } else {
-          // const retrivedData = this.ccpaFormConfigService.getCurrentSelectedFormData();
-          // this.selectedApproverID = retrivedData.approver;
-          // this.selectedWorkflowID = retrivedData.workflow;
-          // this.formName = retrivedData.form_name;
-          this.getWorkflowWithApproverID();
-          this.daysleft = data.days_left || 45;
         }
       });
       // this.getDSARFormByCRID(this.crid);
@@ -468,6 +459,8 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
   loadWebControl() {
     if (this.crid) {
       this.getDSARFormByCRID(this.crid);
+      this.getWorkflowWithApproverID();
+      this.loadWorkFlowList();
     } else {
       this.isEditingPublishedForm = false;
       this.webFormControlList = this.dsarFormService.getFormControlList();
@@ -647,13 +640,16 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
     if (data.control === 'select' && data.controlId !== 'state' && data.controlId !== 'country' || data.control === 'checkbox'
       || data.control === 'radio') {
       this.editSelectionType = true;
+      this.ismultiselectrequired = true;
       if(data.control === 'checkbox'){
         this.selectOptionControl = this.editableControlOption[1].control;
         this.changeControlType = this.editableControlOption[1].control;
+        this.multiselect = true;
        // this.customFormFields.form.get("changeControlType").patchValue('Button');
       } else if(data.control === 'radio'){
         this.selectOptionControl = this.editableControlOption[1].control;
         this.changeControlType = this.editableControlOption[1].control;
+        this.multiselect = false;
        // this.changeControlType = 'Select'
        // this.customFormFields.form.get("changeControlType").patchValue('Select');
       }
@@ -1190,6 +1186,8 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
     this.selectedControlType = false;
     this.changeControlType = null;
     this.isRequiredField = false;
+    this.ismultiselectrequired = false;
+    this.multiselect = false;
   }
 
   saveAsDraftCCPAFormConfiguration() {
@@ -1303,7 +1301,6 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
   }
   // this.basicForm.value.formname === '' || this.basicForm.value.formname === undefined || !this.basicFormSubmitted
   onNavChange(changeEvent: NgbNavChangeEvent) {
-  if (this.isLicenseLimitAvailable()) {
     if (changeEvent.nextId === 2) {
       this.formName = this.basicForm.controls['formname'].value;
       this.basicFormSubmitted = true;
@@ -1318,6 +1315,10 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
     } else if (changeEvent.nextId === 3) {
       this.isdraftsubmitted = true;
       this.basicFormSubmitted = true;
+      if(this.crid !== null){
+        this.getWorkflowWithApproverID();
+        this.loadWorkFlowList();
+      }
       if (this.formName) {
         this.basicFormdata();
         this.saveAsDraftCCPAFormConfiguration();
@@ -1342,7 +1343,6 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
         this.alertType = 'danger';
       }
     }
-  }
   }
 
   finalPublishDSARForm() {
@@ -1620,6 +1620,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
     this.selectedWorkflowID = retrivedData.workflow;
     this.formName = this.formName || retrivedData.form_name;
     this.isEmailVerificationRequired = retrivedData.email_verified;
+    this.daysleft = retrivedData.days_left;
     retrivedData.request_form.filter((t) => {
       if (t.controlId === 'fileupload') {
         this.isFileUploadRequired = t.requiredfield;

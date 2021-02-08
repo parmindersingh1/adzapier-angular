@@ -13,7 +13,7 @@ export class DsarRequestService {
   subTasklist$: Observable<any[]>;
   constructor(private http: HttpClient, private lokiService: LokiService) { }
 
-  getDsarRequestList(componentName, moduleName, orgId, propsID, pagelimit, orderBy?): Observable<any> {
+  getDsarRequestList(componentName, moduleName, orgId, propsID, pagelimit, orderBy?, dateRange?): Observable<any> {
     let path = '/ccpa/data/' + orgId + '/' + propsID + pagelimit;
     if (orderBy === undefined) {
       return this.http.get<any>(environment.apiUrl + path)
@@ -21,6 +21,12 @@ export class DsarRequestService {
           this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.getDsarRequestList, componentName, moduleName, path);
           return throwError(error);
         }));
+    } else if(dateRange !== undefined){
+      return this.http.get<any>(environment.apiUrl + path + dateRange)
+      .pipe(shareReplay(1), catchError(error => {
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.getDsarRequestList, componentName, moduleName, path);
+        return throwError(error);
+      }));
     } else {
       path = '/ccpa/data/' + orgId + '/' + propsID + pagelimit + orderBy;
       return this.http.get<any>(environment.apiUrl + path)

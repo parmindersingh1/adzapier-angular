@@ -6,11 +6,26 @@
         <li class="breadcrumb-item">Data Subject Access Request</li>
         <li class="breadcrumb-item active" aria-current="page"> Data Subject Requests</li>
       </ol>
+      <div class="datepickerwrapper col-sm-6 pr-0 mr-0 ml-auto">
+      <div class="col-sm-7 mr-2 d-flex row-reverse">
+        <div class="input-group-prepend"  (click)="clearDateRangePicker()">
+          <span class="input-group-text rounded-right border-left-0" id="inputGroup-sizing-sm"><i class="fa" [ngClass]="searchbydaterange !== '' ? 'fa-times':' '"></i></span>
+        </div>
+        <input type="text" [(ngModel)]="searchbydaterange" 
+         class="form-control border-left-0  border-right-0 rounded-right" 
+        bsDaterangepicker [bsConfig]="bsConfig"  #dp="bsDaterangepicker"  (onHidden)="onDateSelection()">
+        <div class="input-group-prepend border-left-0"  (click)="dp.show()">
+          <span class="input-group-text rounded-left border-right-0" id="inputGroup-sizing-sm"><i class="fa fa-calendar"></i></span>
+        </div>
+      </div>
+      <div>
       <button (click)="createWebFormRequestModal(createRequestModal,'')" data-toggle="modal" type="button"
         class="btn btn-white">
         <span class="d-none d-sm-inline mg-l-5">
-          Create Request</span>
+          Create Request </span>
       </button>
+      </div>
+    </div>
     </nav>
 
   </div>
@@ -82,23 +97,23 @@
     <ng-template pTemplate="header"  let-columns>
 
       <tr>
-        <th pSortableColumn="id">Id <p-sortIcon field="id"></p-sortIcon>
+        <th>Id 
         </th>
-        <th pSortableColumn="request_type">Request Type <p-sortIcon field="request_type"></p-sortIcon>
+        <th>Request Type 
         </th>
-        <th pSortableColumn="subject_type">Subject Type <p-sortIcon field="subject_type"></p-sortIcon>
+        <th>Subject Type 
         </th>
-        <th pSortableColumn="status">Status <p-sortIcon field="status"></p-sortIcon>
+        <th>Status 
         </th>
-        <th pSortableColumn="name">Name <p-sortIcon field="name"></p-sortIcon>
+        <th>Name 
         </th>
-        <th pSortableColumn="web_form_name">Web Form <p-sortIcon field="web_form_name"></p-sortIcon>
+        <th>Web Form 
         </th>
 
-        <th pSortableColumn="{{col.field}}" *ngFor="let col of columns">
-          {{col.header}} <p-sortIcon field="{{col.field}}"></p-sortIcon>
+        <th  *ngFor="let col of columns">
+          {{col.header}} <!--pSortableColumn="{{col.field}}" <p-sortIcon field="{{col.field}}"></p-sortIcon>-->
         </th>
-        <th pSortableColumn="days_left">Days left<p-sortIcon field="days_left"></p-sortIcon>
+        <th>Days left
         </th>
         <th pSortableColumn="created_at">Created At <p-sortIcon field="created_at"></p-sortIcon>
         </th>

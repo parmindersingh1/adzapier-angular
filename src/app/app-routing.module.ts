@@ -33,15 +33,15 @@ const routes: Routes = [
 
   { path: 'privacy/dsar/dsarform/:id', loadChildren: () => import('./privacy/dsar/dsarform/dsarform.module').then(m => m.DsarformModule) },
   {
-    path: 'privacy/dsar/dsar-requests', loadChildren: () => import('./privacy/dsar/dsar-requests/dsar-requests.module')
+    path: 'privacy/dsar/requests', loadChildren: () => import('./privacy/dsar/dsar-requests/dsar-requests.module')
       .then(m => m.DsarRequestsModule)
   },
   // {
-  //   path: 'privacy/dsar/dsar-requests-details/:id',
+  //   path: 'privacy/dsar/requests-details/:id',
   //   loadChildren: () => import('./privacy/dsar/dsar-requestdetails/dsar-requestdetails.module').then(m => m.DsarRequestdetailsModule)
   // },
   {
-    path: 'privacy/dsar/dsar-requests-details/:reqid/:companyid/:orgid/:propid',
+    path: 'privacy/dsar/requests-details/:reqid/:companyid/:orgid/:propid',
     loadChildren: () => import('./privacy/dsar/dsar-requestdetails/dsar-requestdetails.module').then(m => m.DsarRequestdetailsModule)
   },
   { path: 'privacy/dsar/webforms', loadChildren: () => import('./privacy/dsar/webforms/webforms.module').then(m => m.WebformsModule) },
@@ -66,7 +66,7 @@ const routes: Routes = [
   { path: 'plans', loadChildren: () => import('./plans/plan.module').then(m => m.PlanModule) },
   // { path: '', redirectTo: 'home/dashboard/analytics', pathMatch:'full' },
   // otherwise redirect to home
-  { path: '**', redirectTo: '404page' }
+  { path: '**', redirectTo: 'home/dashboard/analytics' , pathMatch: 'full', canActivate: [AuthGuard] }
 ];
 
 @NgModule({
