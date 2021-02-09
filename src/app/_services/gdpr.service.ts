@@ -99,7 +99,7 @@ export class GdprService {
   getAllData() {
     // return this.gvl.changeLanguage(this.lang).then((res) => {
         return this.gvl.readyPromise.then(() => {
-            return this.gvl.getJson();
+            return this.gvl;
         });
     // });
 }
