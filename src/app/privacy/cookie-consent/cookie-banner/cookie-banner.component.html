@@ -368,7 +368,7 @@
                           </th>
                           <th scope="col"> Name</th>
                           <th scope="col cell-width">Policy URL</th>
-                          <th scope="col">cookieMaxAgeSeconds</th>
+<!--                          <th scope="col">cookieMaxAgeSeconds</th>-->
                         </tr>
                         </thead>
                         <tbody>
@@ -381,8 +381,8 @@
                             </div>
                           </td>
                           <td>{{iabVendor.name}}</td>
-                          <td class="cell-width">{{iabVendor.policyUrl}}</td>
-                          <td>{{iabVendor.cookieMaxAgeSeconds}}</td>
+                          <td class="cell-width"><a [href]="iabVendor.policyUrl" target="_blank"> {{iabVendor.policyUrl}}</a></td>
+<!--                          <td>{{iabVendor.cookieMaxAgeSeconds}}</td>-->
                         </tr>
                         </tbody>
                       </table>
@@ -421,7 +421,7 @@
                             </div>
                           </td>
                           <td>{{googleVendor.provider_name}}</td>
-                          <td>{{googleVendor.policy_url}}</td>
+                          <td> <a [href]="googleVendor.policy_url" target="_blank"> {{googleVendor.policy_url}}</a></td>
                         </tr>
 
                         </tbody>
@@ -983,8 +983,8 @@
 
         <!--         <p-tabPanel header="Preferences">-->
         <ng-container>
-          <div class="row" [ngStyle]="{display: currentState === 'popup' ? '' : 'none'}">
-            <div *ngIf="showConfig.checked" class="col-md-5 pr-0">
+          <div class="row m-0" [ngStyle]="{display: currentState === 'popup' ? '' : 'none'}">
+            <div *ngIf="showConfig.checked" class="col-md-5 p-0">
               <div class="card mb-0">
                 <div class="card-header">Preference Styling and Content
                 </div>
