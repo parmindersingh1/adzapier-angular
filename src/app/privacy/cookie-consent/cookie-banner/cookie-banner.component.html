@@ -210,13 +210,26 @@
                     </div>
 
 
+<!--                    <div class="form-group row pd-0 mg-b-0">-->
+<!--                      <label class="col-sm-8 tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label">-->
+<!--                        Configure banner</label>-->
+<!--                      <div class="col-sm-4">-->
+<!--                        <label class="switch" (click)="onCheckAllowBannerConfig()">-->
+<!--                          <input [attr.disabled]="disablePlanFeatures.disableBannerConfig ? true : null" type="checkbox"-->
+<!--                                 #showConfig>-->
+<!--                          <span class="slider round"></span>-->
+<!--                        </label>-->
+<!--                      </div>-->
+<!--                    </div>-->
+
+
                     <div class="form-group row pd-0 mg-b-0">
                       <label class="col-sm-8 tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label">
-                        Configure banner</label>
+                        Custom Vendors</label>
                       <div class="col-sm-4">
                         <label class="switch" (click)="onCheckAllowBannerConfig()">
                           <input [attr.disabled]="disablePlanFeatures.disableBannerConfig ? true : null" type="checkbox"
-                                 #showConfig>
+                                 #allowCustom>
                           <span class="slider round"></span>
                         </label>
                       </div>
@@ -295,48 +308,135 @@
           </div>
         </div>
 
-        <div class="card">
+        <div *ngIf="allowCustom.checked" class="card">
           <div class="card-body">
-            <div class="row">
-                <div class="col-md-6">
-                  <div class="divider-text mt-0">Customize Vendors </div>
+<!--            <div class="row">-->
+<!--                <div class="col-md-6">-->
+<!--                  <div class="divider-text mt-0">Customize Vendors </div>-->
 
-                  <div class="form-group mb-1 row">
-                    <label for="sel1"
-                           class="tx-13 tx-medium pb-0 tx-spacing-1 tx-color-03 tx-uppercase col-sm-12  col-form-label">IAB Vendors:</label>
-                    <div class="col-sm-12">
-                      <p-multiSelect class="gdprSelect"
-                                     [style]="{'width':'100%'}"
-                                     formControlName="iabVendorsList"
-                                     [options]="iabVendorsList"></p-multiSelect>
-                      <div *ngIf="submitted && f.iabVendorsList.errors">
-                        <div class="text-danger mt-2" *ngIf="f.iabVendorsList.errors.required">
-                          Choose GDPR Target
-                        </div>
-                      </div>
+<!--                  <div class="form-group mb-1 row">-->
+<!--                    <label for="sel1"-->
+<!--                           class="tx-13 tx-medium pb-0 tx-spacing-1 tx-color-03 tx-uppercase col-sm-12  col-form-label">IAB Vendors:</label>-->
+<!--                    <div class="col-sm-12">-->
+<!--                      <p-multiSelect class="gdprSelect"-->
+<!--                                     [style]="{'width':'100%'}"-->
+<!--                                     formControlName="iabVendorsList"-->
+<!--                                     [options]="iabVendorsList"></p-multiSelect>-->
+<!--                      <div *ngIf="submitted && f.iabVendorsList.errors">-->
+<!--                        <div class="text-danger mt-2" *ngIf="f.iabVendorsList.errors.required">-->
+<!--                          Choose GDPR Target-->
+<!--                        </div>-->
+<!--                      </div>-->
+<!--                    </div>-->
+<!--                  </div>-->
+
+
+<!--                  <div class="form-group mb-1 row">-->
+<!--                    <label for="sel1"-->
+<!--                           class="tx-13 tx-medium pb-0 tx-spacing-1 tx-color-03 tx-uppercase col-sm-12  col-form-label">Google Vendors:</label>-->
+<!--                    <div class="col-sm-12">-->
+<!--                      <p-multiSelect class="gdprSelect"-->
+<!--                                     [style]="{'width':'100%'}"-->
+<!--                                     formControlName="googleVendorsList"-->
+<!--                                     [options]="googleVendorsList"></p-multiSelect>-->
+<!--                      <div *ngIf="submitted && f.googleVendorsList.errors">-->
+<!--                        <div class="text-danger mt-2" *ngIf="f.googleVendorsList.errors.required">-->
+<!--                          Choose GDPR Target-->
+<!--                        </div>-->
+<!--                      </div>-->
+<!--                    </div>-->
+<!--                  </div>-->
+
+
+<!--                </div>-->
+<!--            </div>-->
+
+            <tabset [justified]="true">
+              <tab heading="IAB Vendors ">
+                <div class="vendors-list-table">
+                  <div class="row">
+                    <div class="col-12">
+                      <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                          <th scope="col">
+                            <div class="custom-control custom-checkbox">
+                              <input type="checkbox" class="custom-control-input" id="customCheckAll"
+                                     (change)="onAllowAllIabVendor($event)" [checked]="iabVendorsList.length === iabVendorsID.length" >
+                              <label class="custom-control-label" for="customCheckAll"></label>
+                            </div>
+                          </th>
+                          <th scope="col"> Name</th>
+                          <th scope="col cell-width">Policy URL</th>
+                          <th scope="col">cookieMaxAgeSeconds</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr *ngFor="let iabVendor of iabVendorsList">
+                          <td>
+                            <div class="custom-control custom-checkbox">
+                              <input type="checkbox" class="custom-control-input" id="customCheck{{iabVendor.id}}"
+                                     (change)="onSelectIabVendor($event, iabVendor.id)" [checked]="iabVendorsID.includes(iabVendor.id)" >
+                              <label class="custom-control-label" for="customCheck{{iabVendor.id}}"></label>
+                            </div>
+                          </td>
+                          <td>{{iabVendor.name}}</td>
+                          <td class="cell-width">{{iabVendor.policyUrl}}</td>
+                          <td>{{iabVendor.cookieMaxAgeSeconds}}</td>
+                        </tr>
+                        </tbody>
+                      </table>
                     </div>
                   </div>
-
-
-                  <div class="form-group mb-1 row">
-                    <label for="sel1"
-                           class="tx-13 tx-medium pb-0 tx-spacing-1 tx-color-03 tx-uppercase col-sm-12  col-form-label">Google Vendors:</label>
-                    <div class="col-sm-12">
-                      <p-multiSelect class="gdprSelect"
-                                     [style]="{'width':'100%'}"
-                                     formControlName="googleVendorsList"
-                                     [options]="googleVendorsList"></p-multiSelect>
-                      <div *ngIf="submitted && f.googleVendorsList.errors">
-                        <div class="text-danger mt-2" *ngIf="f.googleVendorsList.errors.required">
-                          Choose GDPR Target
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-
                 </div>
-            </div>
+              </tab>
+              <tab heading="Google Vendors">
+
+                <div class="vendors-list-table">
+                  <div class="row">
+                    <div class="col-12">
+                      <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                          <th scope="col">
+
+                            <div class="custom-control custom-checkbox">
+                              <input type="checkbox" class="custom-control-input" id="customCheckAllGoogle"
+                                     (change)="onAllowAllGoogleVendor($event)" [checked]="googleVendorsList.length <= googleVendorsID.length" >
+                              <label class="custom-control-label" for="customCheckAllGoogle"></label>
+                            </div>
+
+                          </th>
+                          <th scope="col"> Name</th>
+                          <th scope="col">Policy URL</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr *ngFor="let googleVendor of googleVendorsList">
+                          <td>
+                            <div class="custom-control custom-checkbox">
+                              <input type="checkbox" class="custom-control-input" id="{{'customCheckGoogle' + googleVendor.provider_id}}"
+                                     (change)="onSelectGoogleVendor($event, googleVendor.provider_id)" [checked]="googleVendorsID.includes(googleVendor.provider_id)" >
+                              <label class="custom-control-label" for="{{'customCheckGoogle' + googleVendor.provider_id}}"></label>
+                            </div>
+                          </td>
+                          <td>{{googleVendor.provider_name}}</td>
+                          <td>{{googleVendor.policy_url}}</td>
+                        </tr>
+
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </tab>
+            </tabset>
+
+
+
+
+
+
           </div>
         </div>
         <!--      End Configure your theme -->
@@ -362,9 +462,25 @@
 
         <!--       <p-tabView>-->
         <!--          <p-tabPanel  header="Banner">-->
+                    <div class="card m-0">
+                      <div class="card-body">
+                            <div class="form-group row pd-0 mg-b-0">
+                              <label class="cs-banner col-sm-2 tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label">
+                                Configure banner</label>
+                              <div class="col-sm-4 pt-2">
+                                <label class="switch" (click)="onCheckAllowBannerConfig()">
+                                  <input [attr.disabled]="disablePlanFeatures.disableBannerConfig ? true : null" type="checkbox"
+                                         #showConfig>
+                                  <span class="slider round"></span>
+                                </label>
+                              </div>
+                            </div>
+                      </div>
+                    </div>
+
         <ng-container *ngIf="currentState === 'banner'">
-          <div class="row">
-            <div *ngIf="showConfig.checked" class="col-md-5">
+          <div class="row m-0">
+            <div *ngIf="showConfig.checked" class="col-md-5 p-0">
               <div class="card mb-0">
                 <div class="card-header">Banner Styling and Content
                 </div>
@@ -868,7 +984,7 @@
         <!--         <p-tabPanel header="Preferences">-->
         <ng-container>
           <div class="row" [ngStyle]="{display: currentState === 'popup' ? '' : 'none'}">
-            <div *ngIf="showConfig.checked" class="col-md-5">
+            <div *ngIf="showConfig.checked" class="col-md-5 pr-0">
               <div class="card mb-0">
                 <div class="card-header">Preference Styling and Content
                 </div>
