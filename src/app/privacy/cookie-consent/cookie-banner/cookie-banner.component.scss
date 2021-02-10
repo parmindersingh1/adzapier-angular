@@ -231,3 +231,25 @@ input:checked + .slider {
   justify-content: space-between;
   align-items: center;
 }
+
+
+.vendors-list-table {
+  max-height: 430px;
+  overflow: overlay;
+}
+
+.cell-width {
+  width: 200px !important;
+}
+.cs-banner{
+  font-size: 14px;
+}
+h4 {
+  margin: 2rem 0rem 1rem;
+}
+
+.table-image {
+  td, th {
+    vertical-align: middle;
+  }
+}

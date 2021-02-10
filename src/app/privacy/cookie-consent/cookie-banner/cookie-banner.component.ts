@@ -77,8 +77,12 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
 
   public isPublish: boolean;
   vendorsList: any;
-  iabVendorsList: any;
-  googleVendorsList: any;
+  iabVendorsList = [];
+  googleVendorsList = [];
+  iabVendorsID = [];
+  googleVendorsID = [];
+  allowAllIabVendors = false;
+
   constructor(private formBuilder: FormBuilder,
               private cd: ChangeDetectorRef,
               private modalService: BsModalService,
@@ -108,22 +112,23 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
     this.onGetCurrentPlan();
     this.onGetCookieBannerData();
   }
-  async getAllVendorsData(){
+
+  async getAllVendorsData() {
     this.vendorsList = await this.gdprService.getAllData();
-    console.log('vendorsList', Object.values(this.vendorsList.vendors))
-    const vendorsList = [];
-    for (const  vendor of Object.values(this.vendorsList.vendors)) {
-      vendorsList.push({label: vendor['name'], value: vendor['id']});
-    }
-    this.iabVendorsList = vendorsList;
+    // console.log('vendorsList', Object.values(this.vendorsList.vendors))
+    // const vendorsList = [];
+    // for (const  vendor of Object.values(this.vendorsList.vendors)) {
+    //   vendorsList.push({label: vendor['name'], value: vendor['id']});
+    // }
+    this.iabVendorsList = Object.values(this.vendorsList.vendors);
 
 
     this.gdprService.getGoogleVendors().subscribe((res: any[]) => {
-      const googleVendorsList = [];
-      for (const  vendor of res) {
-        googleVendorsList.push({label: vendor['provider_name'], value: vendor['provider_id']});
-      }
-      this.googleVendorsList = googleVendorsList;
+      // const googleVendorsList = [];
+      // for (const  vendor of res) {
+      //   googleVendorsList.push({label: vendor['provider_name'], value: vendor['provider_id']});
+      // }
+      this.googleVendorsList = res;
     })
   }
 
@@ -187,9 +192,9 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
       google_vendors: configData.google_vendors,
       showBadge: configData.show_badge,
       logo: configData.logo,
-      iabVendorsList: configData.iab_vendors_ids,
-      googleVendorsList: configData.google_vendors_ids,
     });
+    this.iabVendorsID =  configData.iab_vendors_ids ? configData.iab_vendors_ids : [];
+    this.googleVendorsID = configData.google_vendors_ids ? configData.google_vendors_ids : [];
   }
 
   onGetCookies() {
@@ -248,8 +253,8 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
       showBadge: [this.defaultData.showBadge],
       logo: [this.defaultData.logo],
       // Vendors
-      iabVendorsList: [''],
-      googleVendorsList: [''],
+      // iabVendorsList: [''],
+      // googleVendorsList: [''],
       // DISPLAY FREQUENCY
       bannerPartialConsent: [1],
       bannerPartialConsentType: [this.defaultData.BannerDisplayFrequency.partialConsent],
@@ -612,8 +617,8 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
       logo: this.cookieBannerForm.value.logo,
       gdpr_global: this.cookieBannerForm.value.gdpr_global,
       ccpa_global: this.cookieBannerForm.value.ccpa_global,
-      iab_vendors_ids: this.cookieBannerForm.value.iabVendorsList,
-      google_vendors_ids: this.cookieBannerForm.value.googleVendorsList,
+      iab_vendors_ids: this.iabVendorsID,
+      google_vendors_ids: this.googleVendorsID,
       show_badge: this.cookieBannerForm.value.showBadge,
       CONFIG: this.onGetFormData()
     };
@@ -651,8 +656,8 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
       gdpr_global: this.cookieBannerForm.value.gdpr_global,
       ccpa_global: this.cookieBannerForm.value.ccpa_global,
       gdpr_target: this.cookieBannerForm.value.gdprTarget,
-      iab_vendors_ids: this.cookieBannerForm.value.iabVendorsList,
-      google_vendors_ids: this.cookieBannerForm.value.googleVendorsList,
+      iab_vendors_ids: this.iabVendorsID,
+      google_vendors_ids: this.googleVendorsID,
       cookie_blocking: this.cookieBannerForm.value.cookieBlocking,
       enable_iab: this.cookieBannerForm.value.enableIab,
       email: this.cookieBannerForm.value.email,
@@ -888,5 +893,55 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
 
   onColorChange($event, currentElement) {
     this.cookieBannerForm.controls[currentElement].setValue($event.target.value);
+  }
+
+  onSelectGoogleVendor(event, id) {
+    const isChecked = event.target.checked;
+    if (isChecked) {
+      this.googleVendorsID.push(id)
+    } else {
+      const index = this.googleVendorsID.indexOf(id);
+      if (index > -1) {
+        this.googleVendorsID.splice(index, 1);
+      }
+    }
+    console.log('googleVendorsID', this.googleVendorsID)
+  }
+
+  onSelectIabVendor(event, id) {
+    const isChecked = event.target.checked;
+    if (isChecked) {
+      this.iabVendorsID.push(id)
+    } else {
+      const index = this.iabVendorsID.indexOf(id);
+      if (index > -1) {
+        this.iabVendorsID.splice(index, 1);
+      }
+    }
+  }
+
+  onAllowAllIabVendor(event) {
+    const isChecked = event.target.checked;
+    this.iabVendorsID = [];
+    if (isChecked) {
+      for (const iabObj of this.iabVendorsList) {
+        this.iabVendorsID.push(iabObj.id)
+      }
+    } else {
+      this.iabVendorsID = [];
+    }
+  }
+
+
+  onAllowAllGoogleVendor(event) {
+    const isChecked = event.target.checked;
+    this.googleVendorsID = [];
+    if (isChecked) {
+      for (const iabObj of this.googleVendorsList) {
+        this.googleVendorsID.push(iabObj.provider_id)
+      }
+    } else {
+      this.googleVendorsID = [];
+    }
   }
 }
