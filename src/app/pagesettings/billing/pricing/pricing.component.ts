@@ -49,6 +49,7 @@ export class PricingComponent implements OnInit, OnDestroy {
  activeData = { base: {maxPrice : 0, maxPlanID: '', cycle: 'monthly'},
  addons: {maxPrice : 0, maxPlanID: '', cycle: 'monthly'}
 };
+ isPromoCodeActive = false;
   constructor(private router: Router,
               private loading: NgxUiLoaderService,
               private dataService: DataService,
@@ -155,7 +156,7 @@ onSelectActivePlan(record) {
     if (this.userEmail) {
       let payloads = {};
       payloads = {
-        coupon_code: this.promoCode ? this.promoCode : '',
+        coupon_code: this.isPromoCodeActive ? this.promoCode : '',
         plan_details: plans,
           email: this.userEmail
         };
@@ -299,14 +300,17 @@ onSelectActivePlan(record) {
     this.loading.stop();
       this.percentOff = 0;
       if (res.response.valid) {
+        this.isPromoCodeActive = true;
         this.percentOff = res.response.percent_off;
       } else {
         this.isOpen = true;
+        this.isPromoCodeActive = false;
         this.alertMsg = 'Promo Code is not Valid';
         this.alertType = 'danger';
       }
     }, error => {
       this.loading.stop();
+      this.isPromoCodeActive = false
     });
   }
 

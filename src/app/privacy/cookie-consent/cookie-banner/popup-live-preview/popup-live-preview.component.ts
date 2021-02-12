@@ -1,5 +1,6 @@
-import {Component,  Input,  OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit} from '@angular/core';
 import {defaultBannerContent, FormDefaultData, iabPurposeList} from '../../../../_constant/consent-banner.constant';
+import {ChangeDetection} from '@angular/cli/lib/config/schema';
 
 @Component({
   selector: 'app-popup-live-preview',
@@ -16,6 +17,8 @@ export class PopupLivePreviewComponent implements OnInit {
   @Input('isGdprGlobal') isGdprGlobal = false;
   @Input('formData') formData: FormDefaultData = new FormDefaultData();
 
+  constructor(private _cd: ChangeDetectorRef) {
+  }
   ngOnInit() {
     this.currentPurpose = this.defaultContent.NecessaryText ;
   }
@@ -42,5 +45,9 @@ export class PopupLivePreviewComponent implements OnInit {
             this.checkedPurposeIds.splice(index, 1);
         }
     }
+  }
+
+  onChangeDet() {
+    this._cd.detectChanges()
   }
 }

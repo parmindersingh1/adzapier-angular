@@ -6,6 +6,7 @@ export const defaultData = {
   defaultEmail: false,
   google_vendors: false,
   gdprGlobal: false,
+  ccpaGlobal: false,
   showBadge: true,
   logo: true,
   gdprDefaultLang: 'en',
@@ -176,7 +177,7 @@ export class FormDefaultData {
   PopUpAnalyticsHead: 'Functional Cookies\n';
   PopUpAnalyticsDescription: 'Functional cookies enhance functions, performance, and services on the website. Some examples include: cookies used to analyze site traffic, cookies used for market research, and cookies used to display advertising that is not directed to a particular individual.';
 
-  NecessaryText: 'Essentiial';
+  NecessaryText: 'Essential';
   PopUpNecessaryHead: 'Required Cookies\n';
   PopUpNecessaryDescription: 'Required cookies are necessary for basic website functionality. Some examples include: session cookies needed to transmit the website, authentication cookies, and security cookies';
 }
