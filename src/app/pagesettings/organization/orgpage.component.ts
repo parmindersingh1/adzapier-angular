@@ -47,7 +47,7 @@ export class OrgpageComponent implements OnInit {
   totalCount: any;
   paginationConfig: TablePaginationConfig;
   selectedOrganization: any = [];
-  searchText;
+  searchText = '';
   ascNumberSort: any;
 
   isControlDisabled: boolean;

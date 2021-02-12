@@ -21,6 +21,7 @@ export class WorkflowsComponent implements OnInit, AfterViewInit  {
   dismissible = true;
   alertMsg: any;
   workflowList: any = [];
+  reloadWorkflowList = [];
   activeWorkflowList: any;
   isOpen = false;
   alertType: any;
@@ -60,7 +61,7 @@ export class WorkflowsComponent implements OnInit, AfterViewInit  {
   }
 
   ngOnInit() {
-    this.loadWorkflowList();
+ //   this.loadWorkflowList();
     this.loadActiveWorkflowList();
     this.setupSearchDebouncer();
     const alphaNumeric = '^(?![0-9]*$)[a-zA-Z0-9 ]+$';
@@ -94,7 +95,7 @@ export class WorkflowsComponent implements OnInit, AfterViewInit  {
     this.selectedCols = this.cols.filter(col => val.includes(col));
   }
   
-  loadrequestsListLazy(event: LazyLoadEvent) {
+  loadworkflowListLazy(event: LazyLoadEvent) {
     this.isloading = true;
     this.eventRows = event.rows;
     if (this.workflowList) {
@@ -104,7 +105,7 @@ export class WorkflowsComponent implements OnInit, AfterViewInit  {
       } else {
         this.firstone = (event.first / event.rows) + 1;
       }
-      const pagelimit = '?' + this.eventRows + '&page=' + this.firstone;
+      const pagelimit = '?limit=' + this.eventRows + '&page=' + this.firstone;
       const sortOrder = event.sortOrder === -1 ? 'ASC' : 'DESC';
       let orderBy;
       if(event.sortField !== undefined){
@@ -115,6 +116,7 @@ export class WorkflowsComponent implements OnInit, AfterViewInit  {
       this.workflowService.getWorkflow(this.constructor.name, moduleName.workFlowModule, pagelimit, orderBy).subscribe((data) => {
         this.isloading = false;
         this.workflowList = data.response;
+        this.reloadWorkflowList = [...this.workflowList];
         this.rows = data.response.length;
         this.totalRecords = data.count;
       }, error => {
@@ -214,9 +216,14 @@ private searchFilter(): void {
   this.isloading = true;
   this.workflowService.getWorkflow(this.constructor.name, moduleName.workFlowModule, params).subscribe((data) => {
     this.isloading = false;
-    this.workflowList = data.response;
+  //  this.workflowList = data.response;
     this.rows = data.response.length;
     this.totalRecords = data.count;
+    if (data.response) {
+      this.workflowList = data.response;
+    } else{
+      this.workflowList = this.reloadWorkflowList;
+    }
   }, error => {
     this.loading.stop();
     this.alertMsg = error;
