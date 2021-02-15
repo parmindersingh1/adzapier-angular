@@ -135,7 +135,7 @@ build_docker_image-prod:
 deploy-to-swarm-develop:
   stage: deploy
   variables:
-    DOCKER_HOST: tcp://staging-manager-01-nyc3.adzapsrv.com:2375
+    DOCKER_HOST: tcp://${DOCKER_HOST_STAGING}:2375
     DOMAINS: "Host(`develop-cmp.adzpier-staging.com`)"
     SERVICE_NAME: ${CI_BUILD_REF_NAME}-ui
     TARGET_PORT: 8080
@@ -144,8 +144,8 @@ deploy-to-swarm-develop:
     TAGS: ${CI_COMMIT_REF_NAME}-${TAG}
     RESERVE_CPU: "'0.50'"
     LIMIT_CPU: "'0.75'"
-    RESERVE_MEMORY: 64M 
-    LIMIT_MEMORY: 128M
+    RESERVE_MEMORY: 128M 
+    LIMIT_MEMORY: 256M
   image: docker:19
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD ${CI_REGISTRY}
@@ -175,7 +175,7 @@ deploy-to-swarm-develop:
 deploy-to-swarm-staging:
   stage: deploy
   variables:
-    DOCKER_HOST: tcp://staging-manager-01-nyc3.adzapsrv.com:2375
+    DOCKER_HOST: tcp://${DOCKER_HOST_STAGING}:2375
     SERVICE_NAME: ${CI_BUILD_REF_NAME}-ui
     DOMAINS: "Host(`cmp.adzpier-staging.com`)"
     SERVICE_MIN_REPLICAS: 2
@@ -184,8 +184,8 @@ deploy-to-swarm-staging:
     TAGS: ${CI_COMMIT_REF_NAME}-${TAG}
     RESERVE_CPU: "'0.50'"
     LIMIT_CPU: "'0.75'"
-    RESERVE_MEMORY: 64M 
-    LIMIT_MEMORY: 128M
+    RESERVE_MEMORY: 128M 
+    LIMIT_MEMORY: 256M
   image: docker:19
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD ${CI_REGISTRY}
@@ -218,7 +218,7 @@ deploy-to-swarm-staging:
 deploy-to-swarm-prod:
   stage: deploy
   variables:
-    DOCKER_HOST: tcp://production-manager-01-nyc3.adzapsrv.com:2375
+    DOCKER_HOST: tcp://${DOCKER_HOST_PRODUCTION}:2375
     SERVICE_MIN_REPLICAS: 2
     TARGET_PORT: 8080
     PUBLISH_PORT: 8190

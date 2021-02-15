@@ -15,9 +15,9 @@ COPY dist/adzapier-analytics-ng /usr/share/nginx/html
 
 RUN addgroup appGroup \
  && adduser -D -G appGroup appUser \
- && mkdir -p /var/run/nginx /var/tmp/nginx /var/cache/nginx /var/log/nginx \
+ && mkdir -p /var/run/nginx /var/tmp/nginx /var/cache/nginx /var/log/nginx /data/nginx/cache \
  && chown -R appUser:appGroup /app && chmod -R 755 /app \
- && chown -R appUser:appGroup /usr/share/nginx /var/run/nginx /var/tmp/nginx /var/cache/nginx /var/log/nginx
+ && chown -R appUser:appGroup /usr/share/nginx /var/run/nginx /var/tmp/nginx /var/cache/nginx /var/log/nginx /data/nginx/cache
 
 USER appUser
 

@@ -37,13 +37,13 @@ const colorValues =  [
     borderWidth: 1
   },
   {
-    borderColor: '#c40e20',
-    backgroundColor: 'rgba(220, 53, 69, 0.68)',
+    borderColor: '#f10075',
+    backgroundColor: 'rgba(241, 0, 117, 1)',
     borderWidth: 1
   },
   {
-    borderColor: '#292b2c',
-    backgroundColor: 'rgba(41, 43, 44, 0.68)',
+    borderColor: '#6f42c1',
+    backgroundColor: 'rgba(111, 66, 193, 1)',
     borderWidth: 1
   },
 ];

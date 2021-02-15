@@ -11,8 +11,8 @@
 </div>
 
 <div class="workflow-primeng-wrapper">
-<p-table class="workflows-table" #ptable [value]="workflowList" [columns]="selectedColumns" [paginator]="true" [lazy]="true"
-    [loading]="isloading" (onLazyLoad)="loadrequestsListLazy($event)" [rows]="5" [showCurrentPageReport]="true"
+<p-table class="workflows-table" #ptable [value]="workflowList" [responsive]="true" [columns]="selectedColumns" [paginator]="true" [lazy]="true"
+    [loading]="isloading" (onLazyLoad)="loadworkflowListLazy($event)" [rows]="5" [showCurrentPageReport]="true"
     [totalRecords]="totalRecords" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
     [rowsPerPageOptions]="[5,10,15]" styleClass="p-datatable-sm">
     <ng-template pTemplate="caption">
