@@ -104,6 +104,11 @@ export class GdprService {
     // });
 }
 
+getIabCustomVendors() {
+    return this.http.get('assets/vendors/custom-vendors.json')
+}
+
+
 
 setConsent(consent){
   console.log('consent', consent);

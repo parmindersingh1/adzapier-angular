@@ -14,6 +14,7 @@ export class BannerLivePriviewComponent implements OnInit, OnChanges {
 @Input('formData') formData: FormDefaultData = new FormDefaultData();
 @Input('isDisabled') isDisabled = false;
 @Input('isGdprGlobal') isGdprGlobal = false;
+@Input('ccpaGlobal') ccpaGlobal = false;
   constructor() { }
 
   ngOnInit() {

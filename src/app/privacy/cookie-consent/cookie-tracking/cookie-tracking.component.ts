@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {CookieTrackingService} from '../../../_services/cookie-tracking.service';
 import {OrganizationService} from '../../../_services';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
 import {moduleName} from '../../../_constant/module-name.constant';
-import { GdprService } from 'src/app/_services/gdpr.service';
+import {GdprService} from 'src/app/_services/gdpr.service';
 import * as moment from 'moment';
 import {featuresName} from '../../../_constant/features-name.constant';
 import {DataService} from '../../../_services/data.service';
@@ -19,6 +19,7 @@ class FilterTypeData {
   status: any[];
   country: any[];
 }
+
 @Component({
   selector: 'app-cookie-consent',
   templateUrl: './cookie-tracking.component.html',
@@ -39,12 +40,14 @@ export class CookieTrackingComponent implements OnInit {
   pagelimit;
   planDetails: any;
   isDisabledScreen = false;
+
   constructor(private cookieConsentService: CookieTrackingService,
               private  orgservice: OrganizationService,
               private loading: NgxUiLoaderService,
               private gdprService: GdprService,
               private dataService: DataService
-  ) { }
+  ) {
+  }
 
   ngOnInit() {
     this.onGetPropsAndOrgId();
@@ -53,19 +56,20 @@ export class CookieTrackingComponent implements OnInit {
     this.onCheckSubscription();
   }
 
-onCheckSubscription() {
-  this.planDetails = this.dataService.getCurrentPropertyPlanDetails();
-  const isAllowViewConsent = this.dataService.isAllowCookieTracking(this.planDetails.response, featuresName.FULL_CONVERSION_AND_VISITOR, featuresName.CONSENT_RECORD_KEEPING);
-  this.isDisabledScreen = !isAllowViewConsent
-  if(!isAllowViewConsent) {
-    this.dataService.openUpgradeModalForCookieConsent(this.planDetails)
+  onCheckSubscription() {
+    this.planDetails = this.dataService.getCurrentPropertyPlanDetails();
+    const isAllowViewConsent = this.dataService.isAllowCookieTracking(this.planDetails.response, featuresName.FULL_CONVERSION_AND_VISITOR, featuresName.CONSENT_RECORD_KEEPING);
+    this.isDisabledScreen = !isAllowViewConsent;
+    if (!isAllowViewConsent) {
+      this.dataService.openUpgradeModalForCookieConsent(this.planDetails);
+    }
   }
-}
 
   onSetUpDate() {
     const that = this;
     const start = moment().subtract(29, 'days');
     const end = moment();
+
     function cb(start, end) {
       jQuery('#reportrange').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
       that.startDate = start.format('YYYY-MM-DD');
@@ -103,6 +107,7 @@ onCheckSubscription() {
       }
     });
   }
+
   onGetCookieConsentData(event) {
     this.tLoading = true;
     this.eventRows = event.rows;
@@ -115,35 +120,35 @@ onCheckSubscription() {
     this.onGetFromServer();
   }
 
-  onGetFromServer(){
+  onGetFromServer() {
     this.loading.start();
-    const filter = '&consent-type=' + this.filterTypes.consentType + '&status=' + this.filterTypes.status + '&country=' + this.filterTypes.country
-    + '&startDate=' + this.startDate + '&endDate=' + this.endDate;
+    const filter = '&consent_type=' + this.filterTypes.consentType + '&status=' + this.filterTypes.status + '&country=' + this.filterTypes.country
+      + '&startDate=' + this.startDate + '&endDate=' + this.endDate;
     this.cookieConsentService.getConsent(this.currrentManagedPropID, this.pagelimit + filter, this.constructor.name, moduleName.cookieTrackingModule)
-    .subscribe(res => {
-      this.loading.stop();
-      this.tLoading = false;
-      if (res['status'] === 200) {
-        this.cookieConsents = Object.values(res['response']['CookieConsent']);
-        this.totalCookieCount = res['count'];
-      }
-    }, error => {
-      this.loading.stop();
-      this.tLoading = false;
-    });
+      .subscribe(res => {
+        this.loading.stop();
+        this.tLoading = false;
+        if (res['status'] === 200) {
+          this.cookieConsents = Object.values(res['response']['CookieConsent']);
+          this.totalCookieCount = res['count'];
+        }
+      }, error => {
+        this.loading.stop();
+        this.tLoading = false;
+      });
   }
 
-  onGetFilterData(){
+  onGetFilterData() {
     this.loading.start();
     this.cookieConsentService.onGetFilter(this.currrentManagedPropID, this.constructor.name, moduleName.cookieTrackingModule)
-    .subscribe((res: any) => {
-      this.loading.stop();
-      if (res['status'] === 200) {
-        this.filterTypesData = res.response;
-      }
-    }, error => {
-      this.loading.stop();
-    });
+      .subscribe((res: any) => {
+        this.loading.stop();
+        if (res['status'] === 200) {
+          this.filterTypesData = res.response;
+        }
+      }, error => {
+        this.loading.stop();
+      });
   }
 
   onDecodeString(consent) {
@@ -152,7 +157,7 @@ onCheckSubscription() {
   }
 
   openDisablePopUp() {
-    if(this.isDisabledScreen) {
+    if (this.isDisabledScreen) {
       this.dataService.openUpgradeModalForCookieConsent(this.planDetails)
     }
   }

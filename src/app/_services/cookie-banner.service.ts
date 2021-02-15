@@ -60,4 +60,26 @@ export class CookieBannerService {
   onSendLogs(errorType, msg, functionality, componentName, moduleName, path) {
     this.loki.onSendErrorLogs(errorType, msg, functionality, componentName, moduleName, path).subscribe();
   }
+
+  updateVendors(payloads, orgId, propId, componentName, moduleName ): Observable<any> {
+    let path = apiConstant.UPDATE_VENDORS.replace(':orgId', orgId);
+    path = path.replace(':propId', propId);
+    return this.http.post(environment.apiUrl + path, payloads).pipe(map(res => res),
+      catchError(error => {
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.cookieBanner, componentName, moduleName, path);
+        return throwError(error);
+      }),
+    );
+  }
+
+  onGetVendorsData( orgId, propId, componentName, moduleName ): Observable<any> {
+    let path = apiConstant.UPDATE_VENDORS.replace(':orgId', orgId);
+    path = path.replace(':propId', propId);
+    return this.http.get(environment.apiUrl + path).pipe(map(res => res),
+      catchError(error => {
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.cookieBanner, componentName, moduleName, path);
+        return throwError(error);
+      }),
+    );
+  }
 }
