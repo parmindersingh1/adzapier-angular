@@ -178,15 +178,14 @@ this.orgNameError = !this.orgForm.value.orgID ? true : false;
     this.loading.start();
     this.skLoading = true;
     this.service.removeOrg(this.constructor.name, moduleName.billingModule, {orgID: oID})
-    .subscribe(res => {
+    .subscribe((res: any) => {
       this.loading.stop();
       this.skLoading = false;
       this.modalRef.hide();
       this.onGetAssingedOrg()
       this.isOpen = true;
-      this.alertMsg = res;
-      this.alertType = 'danger';
-
+      this.alertMsg = res.response;
+      this.alertType = 'info';
     }, err => {
       this.skLoading = false;
       this.loading.stop();
@@ -213,7 +212,7 @@ this.orgNameError = !this.orgForm.value.orgID ? true : false;
       console.log(error)
     });
   }
-  
+
   ngOnDestroy() {
     // this.modalRef.hide();
 

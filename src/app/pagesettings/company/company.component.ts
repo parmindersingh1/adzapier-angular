@@ -141,9 +141,11 @@ export class CompanyComponent implements OnInit {
   });
   }
 
-  editOrganizationModalPopup(content) {
-    if(!this.onCheckSubscription()){
-      return false;
+  editOrganizationModalPopup(content, type) {
+    if (type === 'add' ) {
+      if (!this.onCheckSubscription()) {
+        return false;
+      }
     }
     this.isInviteFormSubmitted = false;
     this.isUpdateUserinvitation = false;

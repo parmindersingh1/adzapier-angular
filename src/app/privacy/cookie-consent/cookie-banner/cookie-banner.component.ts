@@ -77,8 +77,6 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
 
   public isPublish: boolean;
   vendorsList: any;
-  iabVendorsList = [];
-  googleVendorsList = [];
   iabVendorsID = [];
   googleVendorsID = [];
   allowAllIabVendors = false;
@@ -102,35 +100,45 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
   submitted = true;
 
   ngOnInit() {
+    this.onGetPropsAndOrgId();
     // window.scroll(0, 500)
-    this.getAllVendorsData();
+    this.onGetAllowVendors();
     this.onGetCookies();
     this.onFormInIt();
     this.onSetDefaultValue();
     this.gdprTarget = this.bannerConstant.gdprTargetCountry;
-    this.onGetPropsAndOrgId();
+
     this.onGetCurrentPlan();
     this.onGetCookieBannerData();
   }
 
-  async getAllVendorsData() {
-    this.vendorsList = await this.gdprService.getAllData();
-    // console.log('vendorsList', Object.values(this.vendorsList.vendors))
-    // const vendorsList = [];
-    // for (const  vendor of Object.values(this.vendorsList.vendors)) {
-    //   vendorsList.push({label: vendor['name'], value: vendor['id']});
-    // }
-    this.iabVendorsList = Object.values(this.vendorsList.vendors);
 
-
-    this.gdprService.getGoogleVendors().subscribe((res: any[]) => {
-      // const googleVendorsList = [];
-      // for (const  vendor of res) {
-      //   googleVendorsList.push({label: vendor['provider_name'], value: vendor['provider_id']});
-      // }
-      this.googleVendorsList = res;
-    })
+  onGetAllowVendors() {
+    this.loading.start('23');
+    this.skeletonLoading = true;
+    this.isOpen = false;
+    this.cookieBannerService.onGetVendorsData(this.currentManagedOrgID, this.currrentManagedPropID, this.constructor.name, moduleName.manageVendorsModule)
+      .subscribe(res => {
+        this.skeletonLoading = false;
+        this.loading.stop('23');
+        if (res.status === 200) {
+          const result = res.response;
+          this.googleVendorsID = JSON.parse(result.google_vendors);
+          this.iabVendorsID = JSON.parse(result.iab_vendors);
+        }
+        this.isOpen = true;
+        this.alertMsg = res.message;
+        this.alertType = 'success';
+      }, error => {
+        this.skeletonLoading = false;
+        this.loading.stop('23');
+        this.isOpen = true;
+        this.alertMsg = error.message;
+        this.alertType = 'danger';
+      })
   }
+
+
 
   ngAfterViewInit() {
     this.planDetails = this.dataService.getCurrentPropertyPlanDetails();
@@ -193,8 +201,6 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
       showBadge: configData.show_badge,
       logo: configData.logo,
     });
-    this.iabVendorsID =  configData.iab_vendors_ids ? configData.iab_vendors_ids : [];
-    this.googleVendorsID = configData.google_vendors_ids ? configData.google_vendors_ids : [];
   }
 
   onGetCookies() {
@@ -895,53 +901,4 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
     this.cookieBannerForm.controls[currentElement].setValue($event.target.value);
   }
 
-  onSelectGoogleVendor(event, id) {
-    const isChecked = event.target.checked;
-    if (isChecked) {
-      this.googleVendorsID.push(id)
-    } else {
-      const index = this.googleVendorsID.indexOf(id);
-      if (index > -1) {
-        this.googleVendorsID.splice(index, 1);
-      }
-    }
-    console.log('googleVendorsID', this.googleVendorsID)
-  }
-
-  onSelectIabVendor(event, id) {
-    const isChecked = event.target.checked;
-    if (isChecked) {
-      this.iabVendorsID.push(id)
-    } else {
-      const index = this.iabVendorsID.indexOf(id);
-      if (index > -1) {
-        this.iabVendorsID.splice(index, 1);
-      }
-    }
-  }
-
-  onAllowAllIabVendor(event) {
-    const isChecked = event.target.checked;
-    this.iabVendorsID = [];
-    if (isChecked) {
-      for (const iabObj of this.iabVendorsList) {
-        this.iabVendorsID.push(iabObj.id)
-      }
-    } else {
-      this.iabVendorsID = [];
-    }
-  }
-
-
-  onAllowAllGoogleVendor(event) {
-    const isChecked = event.target.checked;
-    this.googleVendorsID = [];
-    if (isChecked) {
-      for (const iabObj of this.googleVendorsList) {
-        this.googleVendorsID.push(iabObj.provider_id)
-      }
-    } else {
-      this.googleVendorsID = [];
-    }
-  }
 }

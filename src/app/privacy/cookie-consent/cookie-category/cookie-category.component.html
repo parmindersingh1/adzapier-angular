@@ -9,11 +9,13 @@
             <li class="breadcrumb-item active">Cookie Category</li>
           </ol>
         </nav>
-        <h4 class="mg-b-0 tx-spacing--1">Cookie Category</h4>
       </div>
     </div>
     <p-toast></p-toast>
-    <div class="row">
+    <div class="card">
+    <div class="card-header pb-0">
+      <h4 class="mg-b-0 tx-spacing--1">Cookie Category</h4>
+      <div class="row mt-4">
       <div class="col-md-12 btn-list">
       <div style="float: right" class="d-flex flex-column flex-sm-row mg-t-20 mg-md-t-0">
         <button type="button" class="btn-primary btn btn-sm mr-3" (click)="openNew()">Add Cookie </button>
@@ -31,14 +33,18 @@
         </a>
       </div>
       </div>
-
     </div>
-    <div class="row">
-      <div class="col-md-12">
-        <h6  *ngIf="availablePlan.scan_available != -1" class="text-info text-right" style="float: right">{{availablePlan.scan_available}} Scan are Available </h6>
-        <h6  *ngIf="availablePlan.scan_available == -1"  class="text-info text-right" style="float: right">Unlimited  Scan are Available </h6>
+      <div class="row">
+        <div class="col-md-12">
+          <h6  *ngIf="availablePlan.scan_available > 0 && availablePlan.scan_available != -1" class="text-info text-right" style="float: right">{{availablePlan.scan_available}} Scan are Available </h6>
+          <h6  *ngIf="availablePlan.scan_available == 0" class="text-info text-right" style="float: right"> Scan is not Available </h6>
+          <h6  *ngIf="availablePlan.scan_available == -1"  class="text-info text-right" style="float: right">Unlimited  Scan are Available </h6>
+        </div>
       </div>
     </div>
+  </div>
+
+
 <div class="row mb-3">
 
   <div *ngIf="categoryChart.length > 0 || skeletonLoading.one" class="col-sm-6 col-lg-5 col-xl-6 mg-t-10">

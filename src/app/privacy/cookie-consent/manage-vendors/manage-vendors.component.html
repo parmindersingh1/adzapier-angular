@@ -1,0 +1,179 @@
+<div class="card">
+  <div class="card-header">
+    <div class="d-sm-flex align-items-center justify-content-between">
+<div>
+    <h4 class="mat-h2 m-0">
+     Manage Vendors
+    </h4>
+</div>
+
+      <div class="d-none d-md-block">
+
+        <button  (click)="onGetAllowVendors()" *ngIf="!skeletonLoading.one && !skeletonLoading.two"
+                 class="btn btn-sm pd-x-15 btn-white btn-uppercase mg-l-5" style="width: 102px">
+          <i  class="fas fa-sync"></i> Refresh </button>
+        <button   *ngIf="skeletonLoading.one || skeletonLoading.two"
+                 class="btn btn-sm pd-x-15 btn-white btn-uppercase mg-l-5" style="width: 130px">
+                <span class="spinner-border spinner-border-sm txt-info" role="status"
+                      aria-hidden="true"></span> Refreshing </button>
+
+        <button *ngIf="updating" [disabled]="updating"   type="button" class="ml-3 btn btn-sm pd-x-15 btn-primary mr-2 btn-uppercase">
+                  <span class="spinner-border spinner-border-sm txt-info" role="status"
+                        aria-hidden="true"></span> Updating
+        </button>
+
+        <button  type="button" *ngIf="!updating" (click)="onUpdateVendors()" class="ml-3 btn btn-sm pd-x-15 btn-primary mr-2 btn-uppercase">
+          <i class="fas fa-edit"></i> Update
+        </button>
+
+      </div>
+
+  </div>
+  </div>
+  <div class="card-body">
+    <ngx-skeleton-loader *ngIf="skeletonLoading.one || skeletonLoading.two" count="10" class="pt-4"></ngx-skeleton-loader>
+  <ng-container *ngIf="!skeletonLoading.one && !skeletonLoading.two">
+<!--    <tabset [justified]="true"  type="pills">-->
+<!--      <tab heading="IAB Vendors ">-->
+    <p-tabView >
+      <p-tabPanel header="IAB Vendors">
+        <div class="vendors-list-table">
+          <div class="row">
+            <div class="col-12">
+              <table class="table table-bordered table-responsive">
+                <thead>
+                <tr>
+                  <th scope="col">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="customCheckAll"
+                             (change)="onAllowAllIabVendor($event)" [checked]="iabVendorsList.length === iabVendorsID.length" >
+                      <label class="custom-control-label" for="customCheckAll"></label>
+                    </div>
+                  </th>
+                  <th scope="col"> Name</th>
+                  <th scope="col cell-width">Policy URL</th>
+                  <!--                          <th scope="col">cookieMaxAgeSeconds</th>-->
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td class="cell-width">
+                    <div class="form-group m-0">
+                      <input type="text" #iabVendorText (keyup)="onSearchIabVendors($event)" placeholder="Find Vendors By Name" class="m-0 form-control" id="usr">
+                    </div>
+                  </td>
+                </tr>
+                <ng-container *ngIf="searchIabVendors.length > 0 && iabVendorText.value ">
+                  <tr *ngFor="let iabVendor of searchIabVendors">
+                    <td>
+                      <div class="custom-control custom-checkbox">
+                        <input type="checkbox"  class="custom-control-input" id="customCheck{{iabVendor.id}}"
+                               (change)="onSelectIabVendor($event, iabVendor.id)" [checked]="iabVendorsID.includes(iabVendor.id)" >
+                        <label class="custom-control-label" for="customCheck{{iabVendor.id}}"></label>
+                      </div>
+                    </td>
+                    <td>{{iabVendor.name}}</td>
+                    <td class="cell-width"><a [href]="iabVendor.policyUrl" target="_blank"> {{iabVendor.policyUrl}}</a></td>
+                    <!--                          <td>{{iabVendor.cookieMaxAgeSeconds}}</td>-->
+                  </tr>
+                </ng-container>
+                <ng-container *ngIf=" !iabVendorText.value ">
+                <tr *ngFor="let iabVendor of iabVendorsList">
+                  <td>
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="customCheck{{iabVendor.id}}"
+                             (change)="onSelectIabVendor($event, iabVendor.id)" [checked]="iabVendorsID.includes(iabVendor.id)" >
+                      <label class="custom-control-label" for="customCheck{{iabVendor.id}}"></label>
+                    </div>
+                  </td>
+                  <td>{{iabVendor.name}}</td>
+                  <td class="cell-width"><a [href]="iabVendor.policyUrl" target="_blank"> {{iabVendor.policyUrl}}</a></td>
+                  <!--                          <td>{{iabVendor.cookieMaxAgeSeconds}}</td>-->
+                </tr>
+                </ng-container>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </p-tabPanel>
+      <p-tabPanel header="Google Vendors">
+        <div class="vendors-list-table">
+          <div class="row">
+            <div class="col-12">
+              <table class="table table-bordered">
+                <thead>
+                <tr>
+                  <th scope="col">
+
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="customCheckAllGoogle"
+                             (change)="onAllowAllGoogleVendor($event)" [checked]="googleVendorsList.length <= googleVendorsID.length" >
+                      <label class="custom-control-label" for="customCheckAllGoogle"></label>
+                    </div>
+
+                  </th>
+                  <th scope="col"> Name</th>
+                  <th scope="col">Policy URL</th>
+                </tr>
+                <tr>
+                  <th></th>
+                  <th></th>
+                  <th> <div class="form-group m-0">
+                    <input type="text" #googleVendorText (keyup)="onSearchGoogleVendors($event)" placeholder="Find Vendors By Name" class="m-0 form-control" id="usr">
+                  </div></th>
+                </tr>
+                </thead>
+                <tbody>
+                <ng-container *ngIf="searchGoogleVendors.length > 0 && googleVendorText.value ">
+                <tr *ngFor="let googleVendor of searchGoogleVendors">
+                  <td>
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="{{'customCheckGoogle' + googleVendor.provider_id}}"
+                             (change)="onSelectGoogleVendor($event, googleVendor.provider_id)" [checked]="googleVendorsID.includes(googleVendor.provider_id)" >
+                      <label class="custom-control-label" for="{{'customCheckGoogle' + googleVendor.provider_id}}"></label>
+                    </div>
+                  </td>
+                  <td>{{googleVendor.provider_name}}</td>
+                  <td> <a [href]="googleVendor.policy_url" target="_blank"> {{googleVendor.policy_url}}</a></td>
+                </tr>
+                </ng-container>
+
+                <ng-container *ngIf=" !googleVendorText.value ">
+                  <tr *ngFor="let googleVendor of googleVendorsList">
+                    <td>
+                      <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="{{'customCheckGoogle' + googleVendor.provider_id}}"
+                               (change)="onSelectGoogleVendor($event, googleVendor.provider_id)" [checked]="googleVendorsID.includes(googleVendor.provider_id)" >
+                        <label class="custom-control-label" for="{{'customCheckGoogle' + googleVendor.provider_id}}"></label>
+                      </div>
+                    </td>
+                    <td>{{googleVendor.provider_name}}</td>
+                    <td> <a [href]="googleVendor.policy_url" target="_blank"> {{googleVendor.policy_url}}</a></td>
+                  </tr>
+                </ng-container>
+
+
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </p-tabPanel>
+    </p-tabView>
+
+
+</ng-container>
+
+
+
+  </div>
+</div>
+
+
+<div class="col-sm-5 mr-0 float-right flotingdiv" [ngClass]="{'hide':!isOpen}">
+  <alert *ngIf="isOpen" [type]="alertType" dismissOnTimeout="5000" [dismissible]="dismissible"
+         >{{  alertMsg}}</alert>
+</div>

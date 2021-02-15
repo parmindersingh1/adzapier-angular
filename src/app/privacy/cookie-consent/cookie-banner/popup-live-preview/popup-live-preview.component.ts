@@ -15,6 +15,7 @@ export class PopupLivePreviewComponent implements OnInit {
   iabPurposeList = iabPurposeList;
   type = 'gdpr';
   @Input('isGdprGlobal') isGdprGlobal = false;
+  @Input('ccpaGlobal') ccpaGlobal = false;
   @Input('formData') formData: FormDefaultData = new FormDefaultData();
 
   constructor(private _cd: ChangeDetectorRef) {

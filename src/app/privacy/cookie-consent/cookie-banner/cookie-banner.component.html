@@ -16,63 +16,77 @@
       </div>
 
 
-      <div class="d-none d-md-block">
-        <button (click)="onResetConfig()" type="button" class="btn btn-sm pd-x-15 btn-primary mr-2 btn-uppercase">
-          Reset Configuration
-        </button>
 
 
-        <button (click)="type = 'draft'" type="submit" class="btn btn-sm pd-x-15 btn-white btn-uppercase">
-          <ng-container *ngIf="!isPublish || type === 'publish'">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                 class="feather feather-save wd-10 mg-r-5">
-              <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
-              <polyline points="17 21 17 13 7 13 7 21"></polyline>
-              <polyline points="7 3 7 8 15 8"></polyline>
-            </svg>
-            Save
-          </ng-container>
-          <ng-container *ngIf="isPublish && type === 'draft'">
-            <div class="spinner-border"></div>
-            Saving...
-          </ng-container>
-        </button>
-        <button (click)="type = 'publish'" type="submit"
-                class="btn btn-sm pd-x-15 btn-primary btn-uppercase mg-l-5" href="#modalAddCategory"
-                data-toggle="modal">
-          <ng-container *ngIf="!isPublish || type === 'draft'">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                 viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                 class="feather feather-sliders wd-10 mg-r-5">
-              <line x1="4" y1="21" x2="4" y2="14"></line>
-              <line x1="4" y1="10" x2="4" y2="3"></line>
-              <line x1="12" y1="21" x2="12" y2="12"></line>
-              <line x1="12" y1="8" x2="12" y2="3"></line>
-              <line x1="20" y1="21" x2="20" y2="16"></line>
-              <line x1="20" y1="12" x2="20" y2="3"></line>
-              <line x1="1" y1="14" x2="7" y2="14"></line>
-              <line x1="9" y1="8" x2="15" y2="8"></line>
-              <line x1="17" y1="16" x2="23" y2="16"></line>
-            </svg>
-            Publish
-          </ng-container>
-          <ng-container *ngIf="isPublish && type === 'publish'">
-            <div class="spinner-border"></div>
-            Publishing...
-          </ng-container>
-        </button>
-      </div>
     </div> <!-- breadcrumb -->
 
 
     <div class="row">
       <div class="w-100">
-        <h4 class="mat-h2">
-          Configure your Banner
-        </h4>
         <div class="card">
+          <div class="card-header">
+            <div class="d-sm-flex align-items-center justify-content-between">
+              <div>
+            <h4 class="mat-h2 m-0">
+              Configure your Banner
+            </h4>
+              </div>
+
+
+            <div class="d-none d-md-block">
+              <a class=" text-info  tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label" routerLink="/cookie-consent/manage-vendors">
+                Manage Vendors
+              </a>
+
+              <button (click)="onResetConfig()" type="button" class="ml-3 btn btn-sm pd-x-15 btn-primary mr-2 btn-uppercase">
+                Reset Configuration
+              </button>
+
+
+              <button (click)="type = 'draft'" type="submit" class="btn btn-sm pd-x-15 btn-white btn-uppercase">
+                <ng-container *ngIf="!isPublish || type === 'publish'">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                       class="feather feather-save wd-10 mg-r-5">
+                    <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                    <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                    <polyline points="7 3 7 8 15 8"></polyline>
+                  </svg>
+                  Save
+                </ng-container>
+                <ng-container *ngIf="isPublish && type === 'draft'">
+                  <div class="spinner-border"></div>
+                  Saving...
+                </ng-container>
+              </button>
+              <button (click)="type = 'publish'" type="submit"
+                      class="btn btn-sm pd-x-15 btn-primary btn-uppercase mg-l-5" href="#modalAddCategory"
+                      data-toggle="modal">
+                <ng-container *ngIf="!isPublish || type === 'draft'">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                       viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                       stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                       class="feather feather-sliders wd-10 mg-r-5">
+                    <line x1="4" y1="21" x2="4" y2="14"></line>
+                    <line x1="4" y1="10" x2="4" y2="3"></line>
+                    <line x1="12" y1="21" x2="12" y2="12"></line>
+                    <line x1="12" y1="8" x2="12" y2="3"></line>
+                    <line x1="20" y1="21" x2="20" y2="16"></line>
+                    <line x1="20" y1="12" x2="20" y2="3"></line>
+                    <line x1="1" y1="14" x2="7" y2="14"></line>
+                    <line x1="9" y1="8" x2="15" y2="8"></line>
+                    <line x1="17" y1="16" x2="23" y2="16"></line>
+                  </svg>
+                  Publish
+                </ng-container>
+                <ng-container *ngIf="isPublish && type === 'publish'">
+                  <div class="spinner-border"></div>
+                  Publishing...
+                </ng-container>
+              </button>
+            </div>
+          </div>
+          </div>
           <div class="card-body">
             <div [ngStyle]="{display: skeletonLoading ? 'none': ''}" class="row">
               <div class="col-md-6">
@@ -194,6 +208,10 @@
                           <span class="slider round"></span>
                         </label>
                       </div>
+                      <div class="row">
+                        <p class="p-0 global-text text-info  tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label" *ngIf="ccpaGlobal.checked"> CCPA Global Applied </p>
+                      </div>
+
                     </div>
 
 
@@ -206,6 +224,9 @@
                                  formControlName="ccpa_global">
                           <span class="slider round"></span>
                         </label>
+                      </div>
+                      <div class="row">
+                        <p class="p-0 global-text text-info  tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label" *ngIf="gdprGlobal.checked"> GDPR Global Applied </p>
                       </div>
                     </div>
 
@@ -223,17 +244,17 @@
 <!--                    </div>-->
 
 
-                    <div class="form-group row pd-0 mg-b-0">
-                      <label class="col-sm-8 tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label">
-                        Custom Vendors</label>
-                      <div class="col-sm-4">
-                        <label class="switch" (click)="onCheckAllowBannerConfig()">
-                          <input [attr.disabled]="disablePlanFeatures.disableBannerConfig ? true : null" type="checkbox"
-                                 #allowCustom>
-                          <span class="slider round"></span>
-                        </label>
-                      </div>
-                    </div>
+<!--                    <div class="form-group row pd-0 mg-b-0">-->
+<!--                      <label class="col-sm-8 tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label">-->
+<!--                        Custom Vendors</label>-->
+<!--                      <div class="col-sm-4">-->
+<!--                        <label class="switch" (click)="onCheckAllowBannerConfig()">-->
+<!--                          <input [attr.disabled]="disablePlanFeatures.disableBannerConfig ? true : null" type="checkbox"-->
+<!--                                 #allowCustom>-->
+<!--                          <span class="slider round"></span>-->
+<!--                        </label>-->
+<!--                      </div>-->
+<!--                    </div>-->
 
                   </div>
                 </div>
@@ -308,137 +329,7 @@
           </div>
         </div>
 
-        <div *ngIf="allowCustom.checked" class="card">
-          <div class="card-body">
-<!--            <div class="row">-->
-<!--                <div class="col-md-6">-->
-<!--                  <div class="divider-text mt-0">Customize Vendors </div>-->
 
-<!--                  <div class="form-group mb-1 row">-->
-<!--                    <label for="sel1"-->
-<!--                           class="tx-13 tx-medium pb-0 tx-spacing-1 tx-color-03 tx-uppercase col-sm-12  col-form-label">IAB Vendors:</label>-->
-<!--                    <div class="col-sm-12">-->
-<!--                      <p-multiSelect class="gdprSelect"-->
-<!--                                     [style]="{'width':'100%'}"-->
-<!--                                     formControlName="iabVendorsList"-->
-<!--                                     [options]="iabVendorsList"></p-multiSelect>-->
-<!--                      <div *ngIf="submitted && f.iabVendorsList.errors">-->
-<!--                        <div class="text-danger mt-2" *ngIf="f.iabVendorsList.errors.required">-->
-<!--                          Choose GDPR Target-->
-<!--                        </div>-->
-<!--                      </div>-->
-<!--                    </div>-->
-<!--                  </div>-->
-
-
-<!--                  <div class="form-group mb-1 row">-->
-<!--                    <label for="sel1"-->
-<!--                           class="tx-13 tx-medium pb-0 tx-spacing-1 tx-color-03 tx-uppercase col-sm-12  col-form-label">Google Vendors:</label>-->
-<!--                    <div class="col-sm-12">-->
-<!--                      <p-multiSelect class="gdprSelect"-->
-<!--                                     [style]="{'width':'100%'}"-->
-<!--                                     formControlName="googleVendorsList"-->
-<!--                                     [options]="googleVendorsList"></p-multiSelect>-->
-<!--                      <div *ngIf="submitted && f.googleVendorsList.errors">-->
-<!--                        <div class="text-danger mt-2" *ngIf="f.googleVendorsList.errors.required">-->
-<!--                          Choose GDPR Target-->
-<!--                        </div>-->
-<!--                      </div>-->
-<!--                    </div>-->
-<!--                  </div>-->
-
-
-<!--                </div>-->
-<!--            </div>-->
-
-            <tabset [justified]="true">
-              <tab heading="IAB Vendors ">
-                <div class="vendors-list-table">
-                  <div class="row">
-                    <div class="col-12">
-                      <table class="table table-bordered">
-                        <thead>
-                        <tr>
-                          <th scope="col">
-                            <div class="custom-control custom-checkbox">
-                              <input type="checkbox" class="custom-control-input" id="customCheckAll"
-                                     (change)="onAllowAllIabVendor($event)" [checked]="iabVendorsList.length === iabVendorsID.length" >
-                              <label class="custom-control-label" for="customCheckAll"></label>
-                            </div>
-                          </th>
-                          <th scope="col"> Name</th>
-                          <th scope="col cell-width">Policy URL</th>
-<!--                          <th scope="col">cookieMaxAgeSeconds</th>-->
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr *ngFor="let iabVendor of iabVendorsList">
-                          <td>
-                            <div class="custom-control custom-checkbox">
-                              <input type="checkbox" class="custom-control-input" id="customCheck{{iabVendor.id}}"
-                                     (change)="onSelectIabVendor($event, iabVendor.id)" [checked]="iabVendorsID.includes(iabVendor.id)" >
-                              <label class="custom-control-label" for="customCheck{{iabVendor.id}}"></label>
-                            </div>
-                          </td>
-                          <td>{{iabVendor.name}}</td>
-                          <td class="cell-width"><a [href]="iabVendor.policyUrl" target="_blank"> {{iabVendor.policyUrl}}</a></td>
-<!--                          <td>{{iabVendor.cookieMaxAgeSeconds}}</td>-->
-                        </tr>
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                </div>
-              </tab>
-              <tab heading="Google Vendors">
-
-                <div class="vendors-list-table">
-                  <div class="row">
-                    <div class="col-12">
-                      <table class="table table-bordered">
-                        <thead>
-                        <tr>
-                          <th scope="col">
-
-                            <div class="custom-control custom-checkbox">
-                              <input type="checkbox" class="custom-control-input" id="customCheckAllGoogle"
-                                     (change)="onAllowAllGoogleVendor($event)" [checked]="googleVendorsList.length <= googleVendorsID.length" >
-                              <label class="custom-control-label" for="customCheckAllGoogle"></label>
-                            </div>
-
-                          </th>
-                          <th scope="col"> Name</th>
-                          <th scope="col">Policy URL</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr *ngFor="let googleVendor of googleVendorsList">
-                          <td>
-                            <div class="custom-control custom-checkbox">
-                              <input type="checkbox" class="custom-control-input" id="{{'customCheckGoogle' + googleVendor.provider_id}}"
-                                     (change)="onSelectGoogleVendor($event, googleVendor.provider_id)" [checked]="googleVendorsID.includes(googleVendor.provider_id)" >
-                              <label class="custom-control-label" for="{{'customCheckGoogle' + googleVendor.provider_id}}"></label>
-                            </div>
-                          </td>
-                          <td>{{googleVendor.provider_name}}</td>
-                          <td> <a [href]="googleVendor.policy_url" target="_blank"> {{googleVendor.policy_url}}</a></td>
-                        </tr>
-
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                </div>
-              </tab>
-            </tabset>
-
-
-
-
-
-
-          </div>
-        </div>
         <!--      End Configure your theme -->
         <div class="divider-text">Display Setting/s</div>
         <div class="col-md-12">
@@ -463,7 +354,7 @@
         <!--       <p-tabView>-->
         <!--          <p-tabPanel  header="Banner">-->
                     <div class="card m-0">
-                      <div class="card-body">
+                      <div class="card-header">
                             <div class="form-group row pd-0 mg-b-0">
                               <label class="cs-banner col-sm-2 tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label">
                                 Configure banner</label>
@@ -971,6 +862,7 @@
             <div class="white-back" [ngClass]="{'col-md-12' : !showConfig.checked , 'col-md-7' : showConfig.checked }">
               <app-banner-live-priview *ngIf="!skeletonLoading" [isDisabled]="isFieldDisabled"
                                        [isGdprGlobal]="gdprGlobal.checked"
+                                       [ccpaGlobal]="ccpaGlobal.checked"
                                        [formData]="formContent"></app-banner-live-priview>
               <ngx-skeleton-loader *ngIf="skeletonLoading" count="14"></ngx-skeleton-loader>
             </div>
@@ -1428,7 +1320,9 @@
 
 
             <div class="white-back" [ngClass]="{'col-md-12' : !showConfig.checked , 'col-md-7' : showConfig.checked }">
-              <app-popup-live-preview [isGdprGlobal]="gdprGlobal.checked" [formData]="formContent">>
+              <app-popup-live-preview [isGdprGlobal]="gdprGlobal.checked"
+                                      [ccpaGlobal]="ccpaGlobal.checked"
+                                      [formData]="formContent">>
               </app-popup-live-preview>
             </div>
           </div>
