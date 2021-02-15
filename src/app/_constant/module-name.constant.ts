@@ -4,6 +4,7 @@ export const moduleName = {
   pricingModule: 'PricingModule',
   updateBillingModule: 'UpdateBillingModule',
   cookieBannerModule: 'CookieBannerModule',
+  manageVendorsModule: 'ManageVendorsrModule',
   setUpModule: 'SetUpModule',
   cookieCategoryModule: 'CookieCategoryModule',
   cookieTrackingModule: 'CookieTrackingModule',

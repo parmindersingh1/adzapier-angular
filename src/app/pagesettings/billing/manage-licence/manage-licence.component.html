@@ -6,7 +6,6 @@
 
     </ol>
   </nav>
-   <h4 class="mg-b-0 tx-spacing--1">Manage Licenses</h4>
 </div>
 <div *ngIf="isSuccess" class="mb-0 mt-3 alert alert-success">
   <strong> Payment Received!</strong> Thanks for the payment - Your Product added on Active Products & Plans
@@ -21,17 +20,24 @@
 </div>
 
 <div class="card mt-4">
-  <div class="row">
+  <div class="card-header row ml-0 mr-0">
     <div class="col-md-7">
-      <h4 class="mt-4 pl-4 cl-gray">Active Products & Plans</h4>
+    <h4 class="mg-b-0 mt-2 tx-spacing--1">Manage Licenses</h4>
     </div>
     <div class="col-md-5 text-right">
-      <a routerLink="/settings/billing/pricing" class="btn add-sub-btn mt-4 ml-0 btn-default">
+      <a routerLink="/settings/billing/pricing" class="btn add-sub-btn mt-1 ml-0 btn-default">
         <i class="fa fa-plus pr-1" style="color:#11188f;" aria-hidden="true"></i>  Add Subscription</a>
 
-      <button (click)="onGenerateSessionID()" type="button" class="btn pull-left mt-4 ml-2 mr-2 btn-primary"><i class="fa fa-cogs pr-1" aria-hidden="true"></i>
-         Manage Subscription</button>
+      <button (click)="onGenerateSessionID()" type="button" class="btn pull-left mt-1 ml-2 mr-2 btn-primary"><i class="fa fa-cogs pr-1" aria-hidden="true"></i>
+        Manage Subscription</button>
     </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <h4 class="mt-4 pl-4 cl-gray">Active Products & Plans</h4>
+    </div>
+
   </div>
 
   <div class="card-body mt-2">

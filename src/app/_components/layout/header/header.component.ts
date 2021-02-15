@@ -218,6 +218,7 @@ export class HeaderComponent implements OnInit {
             { showlink: 'Workflow', routerLink: '/privacy/dsar/workflows', icon: 'shield-off' },
 
             { showlink: 'Dashboard', routerLink: '/home/dashboard/cookie-consent', icon: 'fas fa-cookie feather-16' },
+            { showlink: 'Manage Vendors', routerLink: '/cookie-consent/manage-vendors', icon: 'fas fa-tasks feather-16' },
             { showlink: 'Cookie Category', routerLink: '/cookie-consent/cookie-category', icon: 'fab fa-microsoft feather-16' },
             { showlink: 'Cookie Banner', routerLink: '/cookie-consent/cookie-banner', icon: 'fas fa-cookie feather-16' },
             { showlink: 'Consent Tracking', routerLink: '/cookie-consent/cookie-tracking', icon: 'fas fa-file-contract feather-16' },
@@ -734,7 +735,7 @@ export class HeaderComponent implements OnInit {
   isLicenseLimitAvailable(): boolean{
     const status = this.dataService.isLicenseLimitAvailableForOrganization('form',this.dataService.getAvailableLicenseForFormAndRequestPerOrg());
     if(!status){
-      return status; 
+      return status;
     } else {
       return status;
     }
