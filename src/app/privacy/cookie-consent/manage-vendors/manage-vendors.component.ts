@@ -223,7 +223,9 @@ export class ManageVendorsComponent implements OnInit {
 
   confirm(): void {
     if (this.actionType === 'active') {
-      this.onUpdateVendors(this.iabVendorsID, this.googleVendorsID)
+      const iabVendors = this.iabVendorsDefaultID.concat(this.iabVendorsID);
+      const  googleVendors = this.googleVendorsDefaultID.concat(this.googleVendorsID);
+      this.onUpdateVendors(iabVendors, googleVendors)
     } else {
       const iabVendorsID =  this.iabVendorsDefaultID.filter(item => !this.iabVendorsID.includes(item));
       const googleVendorsID =  this.googleVendorsDefaultID.filter(item => !this.googleVendorsID.includes(item));
