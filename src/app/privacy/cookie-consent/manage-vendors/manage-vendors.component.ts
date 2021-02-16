@@ -1,9 +1,10 @@
-import {Component, OnInit, ViewEncapsulation} from '@angular/core';
+import {Component, OnInit, TemplateRef, ViewEncapsulation} from '@angular/core';
 import {GdprService} from '../../../_services/gdpr.service';
 import {CookieBannerService} from '../../../_services/cookie-banner.service';
 import {OrganizationService} from '../../../_services';
 import {moduleName} from '../../../_constant/module-name.constant';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
+import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
 
 @Component({
   selector: 'app-manage-vendors',
@@ -15,7 +16,9 @@ export class ManageVendorsComponent implements OnInit {
   vendorsList: any = [];
   googleVendorsList: any = [];
   googleVendorsID: any = [];
+  googleVendorsDefaultID: any = [];
   iabVendorsID: any = [];
+  iabVendorsDefaultID: any = [];
   iabVendorsList = [];
   skeletonLoading = {
     one: true,
@@ -32,11 +35,13 @@ export class ManageVendorsComponent implements OnInit {
   private currrentManagedPropID: any;
   searchIabVendors: any[] = [];
   searchGoogleVendors: any[] = [];
-
+  modalRef: BsModalRef;
+  actionType = 'active';
   constructor(
     private orgservice: OrganizationService,
     private gdprService: GdprService,
     private loading: NgxUiLoaderService,
+    private modalService: BsModalService,
     private cookieBanner: CookieBannerService
   ) {
   }
@@ -45,6 +50,9 @@ export class ManageVendorsComponent implements OnInit {
     this.onGetPropsAndOrgId();
     this.getAllVendorsData();
     this.onGetAllowVendors();
+  }
+  openModal(template: TemplateRef<any>) {
+    this.modalRef = this.modalService.show(template, {class: 'modal-md'});
   }
 
   onGetPropsAndOrgId() {
@@ -98,8 +106,8 @@ export class ManageVendorsComponent implements OnInit {
         this.loading.stop();
         if (res.status === 200) {
           const result = res.response;
-          this.googleVendorsID = JSON.parse(result.google_vendors);
-          this.iabVendorsID = JSON.parse(result.iab_vendors);
+          this.googleVendorsDefaultID = JSON.parse(result.google_vendors);
+          this.iabVendorsDefaultID = JSON.parse(result.iab_vendors);
         }
         this.isOpen = true;
         this.alertMsg = res.message;
@@ -162,10 +170,10 @@ export class ManageVendorsComponent implements OnInit {
     }
   }
 
-  onUpdateVendors() {
+  onUpdateVendors(iabVendorsID, googleVendorsID ) {
     const payloads = {
-      iab_vendors: JSON.stringify(this.iabVendorsID),
-      google_vendors: JSON.stringify(this.googleVendorsID)
+      iab_vendors: JSON.stringify(iabVendorsID),
+      google_vendors: JSON.stringify(googleVendorsID)
     };
     this.loading.start();
     this.updating = true;
@@ -175,6 +183,8 @@ export class ManageVendorsComponent implements OnInit {
         this.loading.stop();
         this.updating = false;
         if (res.status === 201) {
+          this.iabVendorsID = [];
+          this.googleVendorsID = [];
           this.onGetAllowVendors();
         }
         this.isOpen = true;
@@ -210,6 +220,22 @@ export class ManageVendorsComponent implements OnInit {
     }
   }
 
+
+  confirm(): void {
+    if (this.actionType === 'active') {
+      this.onUpdateVendors(this.iabVendorsID, this.googleVendorsID)
+    } else {
+      const iabVendorsID =  this.iabVendorsDefaultID.filter(item => !this.iabVendorsID.includes(item));
+      const googleVendorsID =  this.googleVendorsDefaultID.filter(item => !this.googleVendorsID.includes(item));
+      this.onUpdateVendors(iabVendorsID, googleVendorsID)
+    }
+    this.decline();
+  }
+
+
+  decline(): void {
+    this.modalRef.hide();
+  }
 
 }
 
