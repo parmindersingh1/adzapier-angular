@@ -43,7 +43,7 @@
               </button>
 
 
-              <button (click)="type = 'draft'" type="submit" class="btn btn-sm pd-x-15 btn-white btn-uppercase">
+              <button (click)="type = 'draft'" type="submit" [disabled]="cookieBannerForm.invalid" class="btn btn-sm pd-x-15 btn-white btn-uppercase">
                 <ng-container *ngIf="!isPublish || type === 'publish'">
                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -59,7 +59,7 @@
                   Saving...
                 </ng-container>
               </button>
-              <button (click)="type = 'publish'" type="submit"
+              <button (click)="type = 'publish'" type="submit" [disabled]="cookieBannerForm.invalid"
                       class="btn btn-sm pd-x-15 btn-primary btn-uppercase mg-l-5" href="#modalAddCategory"
                       data-toggle="modal">
                 <ng-container *ngIf="!isPublish || type === 'draft'">
@@ -84,6 +84,9 @@
                   Publishing...
                 </ng-container>
               </button>
+
+              <p  *ngIf="cookieBannerForm.invalid" class="pb-0 text-right text-danger tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label"> <i class="fas fa-info-circle"></i>  Validation Error</p>
+
             </div>
           </div>
           </div>
@@ -208,10 +211,10 @@
                           <span class="slider round"></span>
                         </label>
                       </div>
-                      <div class="row">
-                        <p class="p-0 global-text text-info  tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label" *ngIf="ccpaGlobal.checked"> CCPA Global Applied </p>
-                      </div>
 
+                      <div class="row">
+                        <p class="p-0 global-text text-info  tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label" *ngIf="gdprGlobal.checked"> GDPR Global Applied </p>
+                      </div>
                     </div>
 
 
@@ -225,11 +228,24 @@
                           <span class="slider round"></span>
                         </label>
                       </div>
+
                       <div class="row">
-                        <p class="p-0 global-text text-info  tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label" *ngIf="gdprGlobal.checked"> GDPR Global Applied </p>
+                        <p class="p-0 global-text text-info  tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label" *ngIf="ccpaGlobal.checked"> CCPA Global Applied </p>
                       </div>
                     </div>
 
+
+                    <div class="form-group row pd-0 mg-b-0">
+                      <label class="col-sm-8 tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label">
+                        Allow Purposes By Default</label>
+                      <div class="col-sm-4">
+                        <label class="switch">
+                          <input type="checkbox"
+                                 formControlName="ccpa_global">
+                          <span class="slider round"></span>
+                        </label>
+                      </div>
+                    </div>
 
 <!--                    <div class="form-group row pd-0 mg-b-0">-->
 <!--                      <label class="col-sm-8 tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label">-->
@@ -470,7 +486,7 @@
                                 Minimum 20 characters required
                               </div>
                               <div class="text-danger mt-2" *ngIf="f.BannerDescription.errors.maxlength">
-                                Maximum 300 characters required
+                                Maximum 700 characters required
                               </div>
                             </div>
                           </div>
@@ -597,7 +613,7 @@
                               </div>
                               <div class="text-danger mt-2"
                                    *ngIf="f.BannerPreferenceButtonTextContent.errors.maxlength">
-                                Maximum 25 characters required
+                                Maximum 45 characters required
                               </div>
                             </div>
                           </div>
@@ -648,7 +664,7 @@
                                 Minimum 2 characters required
                               </div>
                               <div class="text-danger mt-2" *ngIf="f.BannerAllowRequiredTextContent.errors.maxlength">
-                                Maximum 25 characters required
+                                Maximum 45 characters required
                               </div>
                             </div>
                           </div>
@@ -700,7 +716,7 @@
                                 Minimum 2 characters required
                               </div>
                               <div class="text-danger mt-2" *ngIf="f.BannerAllowAllButtonTextContent.errors.maxlength">
-                                Maximum 25 characters required
+                                Maximum 45 characters required
                               </div>
                             </div>
                           </div>
@@ -756,7 +772,7 @@
                               </div>
                               <div class="text-danger mt-2"
                                    *ngIf="f.BannerDisableAllButtonTextContent.errors.maxlength">
-                                Maximum 25 characters required
+                                Maximum 45 characters required
                               </div>
                             </div>
                           </div>
@@ -813,7 +829,7 @@
                               </div>
                               <div class="text-danger mt-2"
                                    *ngIf="f.bannerDoNotSellMyDataTextContent.errors.maxlength">
-                                Maximum 25 characters required
+                                Maximum 45 characters required
                               </div>
                             </div>
                           </div>
@@ -895,7 +911,7 @@
                               Minimum 20 characters required
                             </div>
                             <div class="text-danger mt-2" *ngIf="f.PopUpPurposeBodyDescription.errors.maxlength">
-                              Maximum 300 characters required
+                              Maximum 700 characters required
                             </div>
                           </div>
                         </div>
@@ -914,7 +930,7 @@
                               Minimum 20 characters required
                             </div>
                             <div class="text-danger mt-2" *ngIf="f.PopUpVendorBodyDescription.errors.maxlength">
-                              Maximum 300 characters required
+                              Maximum 700 characters required
                             </div>
                           </div>
                         </div>
@@ -985,7 +1001,7 @@
                               Minimum 2 characters required
                             </div>
                             <div class="text-danger mt-2" *ngIf="f.PopUpDisableAllButtonTextContent.errors.maxlength">
-                              Maximum 25 characters required
+                              Maximum 45 characters required
                             </div>
                           </div>
                         </div>
@@ -1039,7 +1055,7 @@
                               Minimum 2 characters required
                             </div>
                             <div class="text-danger mt-2" *ngIf="f.popUpDoNotSellTextContent.errors.maxlength">
-                              Maximum 25 characters required
+                              Maximum 45 characters required
                             </div>
                           </div>
                         </div>
@@ -1092,7 +1108,7 @@
                               Minimum 2 characters required
                             </div>
                             <div class="text-danger mt-2" *ngIf="f.PopUpSaveMyChoiceButtonContentText.errors.maxlength">
-                              Maximum 25 characters required
+                              Maximum 45 characters required
                             </div>
                           </div>
                         </div>
@@ -1147,7 +1163,7 @@
                               Minimum 2 characte rs required
                             </div>
                             <div class="text-danger mt-2" *ngIf="f.PopUpAllowAllButtonTextContent.errors.maxlength">
-                              Maximum 25 characters required
+                              Maximum 45 characters required
                             </div>
                           </div>
                         </div>
@@ -1217,7 +1233,7 @@
                           Minimum 20 characters required
                         </div>
                         <div class="text-danger mt-2" *ngIf="f.PopUpNecessaryDescription.errors.maxlength">
-                          Maximum 300 characters required
+                          Maximum 700 characters required
                         </div>
                       </div>
                     </p-accordionTab>
@@ -1247,7 +1263,7 @@
                           Minimum 20 characters required
                         </div>
                         <div class="text-danger mt-2" *ngIf="f.PopUpAdvertisingDescription.errors.maxlength">
-                          Maximum 300 characters required
+                          Maximum 700 characters required
                         </div>
                       </div>
                     </p-accordionTab>
@@ -1277,7 +1293,7 @@
                           Minimum 20 characters required
                         </div>
                         <div class="text-danger mt-2" *ngIf="f.PopUpSocialMediaDescription.errors.maxlength">
-                          Maximum 300 characters required
+                          Maximum 700 characters required
                         </div>
                       </div>
                     </p-accordionTab>
@@ -1307,7 +1323,7 @@
                           Minimum 20 characters required
                         </div>
                         <div class="text-danger mt-2" *ngIf="f.PopUpAnalyticsDescription.errors.maxlength">
-                          Maximum 300 characters required
+                          Maximum 700 characters required
                         </div>
                       </div>
                     </p-accordionTab>

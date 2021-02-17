@@ -6,6 +6,8 @@ import {TabsModule} from 'ngx-bootstrap/tabs';
 import {NgxSkeletonLoaderModule} from 'ngx-skeleton-loader';
 import {TabViewModule} from 'primeng/tabview';
 import {AlertModule} from 'ngx-bootstrap/alert';
+import {TableModule} from 'primeng/table';
+import {FormsModule} from '@angular/forms';
 
 const path: Routes = [
   {path : '', component: ManageVendorsComponent}
@@ -20,7 +22,9 @@ const path: Routes = [
     TabsModule,
     NgxSkeletonLoaderModule,
     TabViewModule,
-    AlertModule
+    AlertModule,
+    TableModule,
+    FormsModule
   ]
 })
 export class ManageVendorsModule { }
