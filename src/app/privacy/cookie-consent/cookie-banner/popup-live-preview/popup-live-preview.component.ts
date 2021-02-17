@@ -1,4 +1,11 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit} from '@angular/core';
+import {
+  ChangeDetectionStrategy, ChangeDetectorRef,
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges
+} from '@angular/core';
 import {defaultBannerContent, FormDefaultData, iabPurposeList} from '../../../../_constant/consent-banner.constant';
 import {ChangeDetection} from '@angular/cli/lib/config/schema';
 
@@ -7,7 +14,7 @@ import {ChangeDetection} from '@angular/cli/lib/config/schema';
   templateUrl: './popup-live-preview.component.html',
   styleUrls: ['./popup-live-preview.component.scss']
 })
-export class PopupLivePreviewComponent implements OnInit {
+export class PopupLivePreviewComponent implements OnInit, OnChanges {
   public defaultContent = defaultBannerContent;
   openPurposeType = '';
   currentPurpose = '';
@@ -16,12 +23,22 @@ export class PopupLivePreviewComponent implements OnInit {
   type = 'gdpr';
   @Input('isGdprGlobal') isGdprGlobal = false;
   @Input('ccpaGlobal') ccpaGlobal = false;
+  @Input('popUpTitleLang') popUpTitleLang = {
+    purpose: 'Purpose',
+    privacyInfo: 'Privacy Info',
+    vendors: 'Vendors'
+  };
   @Input('formData') formData: FormDefaultData = new FormDefaultData();
 
   constructor(private _cd: ChangeDetectorRef) {
   }
   ngOnInit() {
     this.currentPurpose = this.defaultContent.NecessaryText ;
+  }
+  ngOnChanges(changes: SimpleChanges) {
+console.log('Change', this.popUpTitleLang)
+    this._cd.detectChanges()
+
   }
 
   onSelectPurpose(val: string) {

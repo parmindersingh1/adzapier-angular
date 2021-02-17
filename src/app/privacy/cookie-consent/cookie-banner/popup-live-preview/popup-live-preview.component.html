@@ -25,22 +25,23 @@
     <div *ngIf="type === 'gdpr'" class="card ">
 
       <div class="card-body p-0">
+
         <p-tabView headerAlignment="center">
-          <p-tabPanel header="Purpose">
+          <p-tabPanel [header]="popUpTitleLang.purpose">
             <p class="desc">{{formData.popUpPurposeDescription ? formData.popUpPurposeDescription : defaultContent.popUpPurposeDescription}}</p>
             <div class="row purpose-list">
                 <div class="card w-100">
 
 
-                  <div (click)="onOpenDesc(defaultContent.NecessaryText)" [ngStyle]="{color: formData.popUpPurposeButtonTextColor, background: formData.popUpPurposeButtonBackGroundColor}" class=" row purpose-div" >
+                  <div (click)="onOpenDesc(defaultContent.PopUpNecessaryHead)" [ngStyle]="{color: formData.popUpPurposeButtonTextColor, background: formData.popUpPurposeButtonBackGroundColor}" class=" row purpose-div" >
                       <div class="col-md-9">
-                        <p class="mt-2 purpose-text mb-2 ml-3">{{formData.NecessaryText ? formData.NecessaryText : defaultContent.NecessaryText}}</p>
+                        <p class="mt-2 purpose-text mb-2 ml-3">{{formData.PopUpNecessaryHead ? formData.PopUpNecessaryHead : defaultContent.PopUpNecessaryHead}}</p>
                       </div>
                       <div class="col-md-3">
                         <span style="    font-size: 12px;
                         font-weight: 600;">Always Allow <i class="ml-1 fa fa-chevron-right" aria-hidden="true"></i></span>
                       </div>
-                        <div *ngIf="openPurposeType === defaultContent.NecessaryText" class="col-md-12 purpose-desc w-100">
+                        <div *ngIf="openPurposeType === defaultContent.PopUpNecessaryHead" class="col-md-12 purpose-desc w-100">
                           <p>{{formData.PopUpNecessaryDescription ? formData.PopUpNecessaryDescription : defaultContent.PopUpNecessaryDescription}}</p>
                         </div>
 
@@ -48,9 +49,9 @@
 
 
 
-                  <div (click)="onOpenDesc(defaultContent.AdvertisingText)" [ngStyle]="{color: formData.popUpPurposeButtonTextColor, background: formData.popUpPurposeButtonBackGroundColor}" class=" row purpose-div" >
+                  <div (click)="onOpenDesc(defaultContent.PopUpAdvertisingHead)" [ngStyle]="{color: formData.popUpPurposeButtonTextColor, background: formData.popUpPurposeButtonBackGroundColor}" class=" row purpose-div" >
                     <div class="col-md-9">
-                      <p class="mt-2 purpose-text mb-2 ml-3">{{formData.AdvertisingText ? formData.AdvertisingText : defaultContent.AdvertisingText}}</p>
+                      <p class="mt-2 purpose-text mb-2 ml-3">{{formData.PopUpAdvertisingHead ? formData.PopUpAdvertisingHead : defaultContent.PopUpAdvertisingHead}}</p>
                     </div>
                     <div class="col-md-3">
                       <label class="switch mb-2 mt-2">
@@ -62,15 +63,15 @@
                       <i class="ml-3 fa fa-chevron-right" aria-hidden="true"></i>
                     </div>
 
-                    <div *ngIf="openPurposeType === defaultContent.AdvertisingText" class="col-md-12 purpose-desc w-100">
+                    <div *ngIf="openPurposeType === defaultContent.PopUpAdvertisingHead" class="col-md-12 purpose-desc w-100">
                       <p>{{formData.PopUpAdvertisingDescription ? formData.PopUpAdvertisingDescription : defaultContent.PopUpAdvertisingDescription}}</p>
                     </div>
                 </div>
 
 
-                <div (click)="onOpenDesc(defaultContent.SocialMediaText)" [ngStyle]="{color: formData.popUpPurposeButtonTextColor, background: formData.popUpPurposeButtonBackGroundColor}" class=" row purpose-div" >
+                <div (click)="onOpenDesc(defaultContent.PopUpSocialMediaHead)" [ngStyle]="{color: formData.popUpPurposeButtonTextColor, background: formData.popUpPurposeButtonBackGroundColor}" class=" row purpose-div" >
                   <div class="col-md-9">
-                    <p class="mt-2 purpose-text mb-2 ml-3">{{formData.SocialMediaText ? formData.SocialMediaText : defaultContent.SocialMediaText}}</p>
+                    <p class="mt-2 purpose-text mb-2 ml-3">{{formData.PopUpSocialMediaHead ? formData.PopUpSocialMediaHead : defaultContent.SocialMediaText}}</p>
                   </div>
                   <div class="col-md-3">
                     <label class="switch mb-2 mt-2">
@@ -80,15 +81,15 @@
                     </label>
                     <i class="ml-3 fa fa-chevron-right" aria-hidden="true"></i>
                   </div>
-                  <div *ngIf="openPurposeType === defaultContent.SocialMediaText" class="col-md-12 purpose-desc w-100">
+                  <div *ngIf="openPurposeType === defaultContent.PopUpSocialMediaHead" class="col-md-12 purpose-desc w-100">
                     <p>{{formData.PopUpSocialMediaDescription ? formData.PopUpSocialMediaDescription : defaultContent.PopUpSocialMediaDescription}}</p>
                   </div>
               </div>
 
 
-              <div (click)="onOpenDesc(defaultContent.AnalyticsText)" [ngStyle]="{color: formData.popUpPurposeButtonTextColor, background: formData.popUpPurposeButtonBackGroundColor}" class=" row purpose-div" >
+              <div (click)="onOpenDesc(defaultContent.PopUpAnalyticsHead)" [ngStyle]="{color: formData.popUpPurposeButtonTextColor, background: formData.popUpPurposeButtonBackGroundColor}" class=" row purpose-div" >
                 <div class="col-md-9">
-                  <p class="mt-2 purpose-text mb-2 ml-3">{{formData.AnalyticsText ? formData.AnalyticsText : defaultContent.AnalyticsText }} </p>
+                  <p class="mt-2 purpose-text mb-2 ml-3">{{formData.PopUpAnalyticsHead ? formData.PopUpAnalyticsHead : defaultContent.AnalyticsText }} </p>
                 </div>
                 <div class="col-md-3">
                   <label class="switch mb-2 mt-2">
@@ -98,7 +99,7 @@
                   </label>
                   <i class="ml-3 fa fa-chevron-right" aria-hidden="true"></i>
                 </div>
-                <div *ngIf="openPurposeType === defaultContent.AnalyticsText" class="col-md-12 purpose-desc w-100">
+                <div *ngIf="openPurposeType === defaultContent.PopUpAnalyticsHead" class="col-md-12 purpose-desc w-100">
                   <p>{{formData.PopUpAnalyticsDescription ? formData.PopUpAnalyticsDescription : defaultContent.PopUpAnalyticsDescription}}</p>
                 </div>
             </div>
@@ -128,7 +129,7 @@
                 </div>
             </div>
           </p-tabPanel>
-          <p-tabPanel header="Vendors">
+          <p-tabPanel header="{{popUpTitleLang.vendors}}">
             <p class="desc">{{formData.popUpVendorsDescription ? formData.popUpVendorsDescription : defaultContent.popUpVendorsDescription}}</p>
 
            <div class="row" style="align-items: center;">
@@ -254,76 +255,77 @@
 
 
 
-                  <div (click)="onOpenDesc(defaultContent.NecessaryText)" [ngStyle]="{color: formData.popUpPurposeButtonTextColor, background: formData.popUpPurposeButtonBackGroundColor}" class=" row purpose-div" >
+                  <div (click)="onOpenDesc(defaultContent.PopUpNecessaryHead)" [ngStyle]="{color: formData.popUpPurposeButtonTextColor, background: formData.popUpPurposeButtonBackGroundColor}" class=" row purpose-div" >
                     <div class="col-md-9">
-                      <p class="mt-2 purpose-text mb-2 ml-3">{{formData.NecessaryText ? formData.NecessaryText : defaultContent.NecessaryText}}</p>
+                      <p class="mt-2 purpose-text mb-2 ml-3">{{formData.PopUpNecessaryHead ? formData.PopUpNecessaryHead : defaultContent.PopUpNecessaryHead}}</p>
                     </div>
                     <div class="col-md-3">
-                      <span style="    font-size: 12px;
-                      font-weight: 600;">Always Allow <i class="ml-1 fa fa-chevron-right" aria-hidden="true"></i></span>
+                        <span style="    font-size: 12px;
+                        font-weight: 600;">Always Allow <i class="ml-1 fa fa-chevron-right" aria-hidden="true"></i></span>
                     </div>
-                      <div *ngIf="openPurposeType === defaultContent.NecessaryText" class="col-md-12 purpose-desc w-100">
-                        <p>{{formData.PopUpNecessaryDescription ? formData.PopUpNecessaryDescription : defaultContent.PopUpNecessaryDescription}}</p>
-                      </div>
+                    <div *ngIf="openPurposeType === defaultContent.PopUpNecessaryHead" class="col-md-12 purpose-desc w-100">
+                      <p>{{formData.PopUpNecessaryDescription ? formData.PopUpNecessaryDescription : defaultContent.PopUpNecessaryDescription}}</p>
+                    </div>
 
-                </div>
-
-
-
-                <div (click)="onOpenDesc(defaultContent.AdvertisingText)" [ngStyle]="{color: formData.popUpPurposeButtonTextColor, background: formData.popUpPurposeButtonBackGroundColor}" class=" row purpose-div" >
-                  <div class="col-md-9">
-                    <p class="mt-2 purpose-text mb-2 ml-3">{{formData.AdvertisingText ? formData.AdvertisingText : defaultContent.AdvertisingText}}</p>
-                  </div>
-                  <div class="col-md-3">
-                    <label class="switch mb-2 mt-2">
-                      <input type="checkbox" #switchBtnn1 checked>
-
-                      <span [ngStyle]="{background: switchBtnn1.checked ? formData.popUpSwitchButtonColor: ''}"
-                        class="slider round"></span>
-                    </label>
-                    <i class="ml-3 fa fa-chevron-right" aria-hidden="true"></i>
                   </div>
 
-                  <div *ngIf="openPurposeType === defaultContent.AdvertisingText" class="col-md-12 purpose-desc w-100">
-                    <p>{{formData.PopUpAdvertisingDescription ? formData.PopUpAdvertisingDescription : defaultContent.PopUpAdvertisingDescription}}</p>
+
+
+                  <div (click)="onOpenDesc(defaultContent.PopUpAdvertisingHead)" [ngStyle]="{color: formData.popUpPurposeButtonTextColor, background: formData.popUpPurposeButtonBackGroundColor}" class=" row purpose-div" >
+                    <div class="col-md-9">
+                      <p class="mt-2 purpose-text mb-2 ml-3">{{formData.PopUpAdvertisingHead ? formData.PopUpAdvertisingHead : defaultContent.PopUpAdvertisingHead}}</p>
+                    </div>
+                    <div class="col-md-3">
+                      <label class="switch mb-2 mt-2">
+                        <input type="checkbox" #switchBtnn1 checked>
+
+                        <span [ngStyle]="{background: switchBtnn1.checked ? formData.popUpSwitchButtonColor: ''}"
+                              class="slider round"></span>
+                      </label>
+                      <i class="ml-3 fa fa-chevron-right" aria-hidden="true"></i>
+                    </div>
+
+                    <div *ngIf="openPurposeType === defaultContent.PopUpAdvertisingHead" class="col-md-12 purpose-desc w-100">
+                      <p>{{formData.PopUpAdvertisingDescription ? formData.PopUpAdvertisingDescription : defaultContent.PopUpAdvertisingDescription}}</p>
+                    </div>
                   </div>
-              </div>
 
 
-              <div (click)="onOpenDesc(defaultContent.SocialMediaText)" [ngStyle]="{color: formData.popUpPurposeButtonTextColor, background: formData.popUpPurposeButtonBackGroundColor}" class=" row purpose-div" >
-                <div class="col-md-9">
-                  <p class="mt-2 purpose-text mb-2 ml-3">{{formData.SocialMediaText ? formData.SocialMediaText : defaultContent.SocialMediaText}}</p>
-                </div>
-                <div class="col-md-3">
-                  <label class="switch mb-2 mt-2">
-                    <input type="checkbox" #switchBtnn2 checked>
-                    <span [ngStyle]="{background: switchBtnn2.checked ? formData.popUpSwitchButtonColor: ''}"
-                      class="slider round"></span>
-                  </label>
-                  <i class="ml-3 fa fa-chevron-right" aria-hidden="true"></i>
-                </div>
-                <div *ngIf="openPurposeType === defaultContent.SocialMediaText" class="col-md-12 purpose-desc w-100">
-                  <p>{{formData.PopUpSocialMediaDescription ? formData.PopUpSocialMediaDescription : defaultContent.PopUpSocialMediaDescription}}</p>
-                </div>
-            </div>
+                  <div (click)="onOpenDesc(defaultContent.PopUpSocialMediaHead)" [ngStyle]="{color: formData.popUpPurposeButtonTextColor, background: formData.popUpPurposeButtonBackGroundColor}" class=" row purpose-div" >
+                    <div class="col-md-9">
+                      <p class="mt-2 purpose-text mb-2 ml-3">{{formData.PopUpSocialMediaHead ? formData.PopUpSocialMediaHead : defaultContent.SocialMediaText}}</p>
+                    </div>
+                    <div class="col-md-3">
+                      <label class="switch mb-2 mt-2">
+                        <input type="checkbox" #switchBtnn2 checked>
+                        <span [ngStyle]="{background: switchBtnn2.checked ? formData.popUpSwitchButtonColor: ''}"
+                              class="slider round"></span>
+                      </label>
+                      <i class="ml-3 fa fa-chevron-right" aria-hidden="true"></i>
+                    </div>
+                    <div *ngIf="openPurposeType === defaultContent.PopUpSocialMediaHead" class="col-md-12 purpose-desc w-100">
+                      <p>{{formData.PopUpSocialMediaDescription ? formData.PopUpSocialMediaDescription : defaultContent.PopUpSocialMediaDescription}}</p>
+                    </div>
+                  </div>
 
 
-            <div (click)="onOpenDesc(defaultContent.AnalyticsText)" [ngStyle]="{color: formData.popUpPurposeButtonTextColor, background: formData.popUpPurposeButtonBackGroundColor}" class=" row purpose-div" >
-              <div class="col-md-9">
-                <p class="mt-2 purpose-text mb-2 ml-3">{{formData.AnalyticsText ? formData.AnalyticsText : defaultContent.AnalyticsText }} </p>
-              </div>
-              <div class="col-md-3">
-                <label class="switch mb-2 mt-2">
-                  <input type="checkbox" #switchBtnn3 checked>
-                  <span [ngStyle]="{background: switchBtnn3.checked ? formData.popUpSwitchButtonColor: ''}"
-                    class="slider round"></span>
-                </label>
-                <i class="ml-3 fa fa-chevron-right" aria-hidden="true"></i>
-              </div>
-              <div *ngIf="openPurposeType === defaultContent.AnalyticsText" class="col-md-12 purpose-desc w-100">
-                <p>{{formData.PopUpAnalyticsDescription ? formData.PopUpAnalyticsDescription : defaultContent.PopUpAnalyticsDescription}}</p>
-              </div>
-          </div>
+                  <div (click)="onOpenDesc(defaultContent.PopUpAnalyticsHead)" [ngStyle]="{color: formData.popUpPurposeButtonTextColor, background: formData.popUpPurposeButtonBackGroundColor}" class=" row purpose-div" >
+                    <div class="col-md-9">
+                      <p class="mt-2 purpose-text mb-2 ml-3">{{formData.PopUpAnalyticsHead ? formData.PopUpAnalyticsHead : defaultContent.AnalyticsText }} </p>
+                    </div>
+                    <div class="col-md-3">
+                      <label class="switch mb-2 mt-2">
+                        <input type="checkbox" #switchBtnn3 checked>
+                        <span [ngStyle]="{background: switchBtnn3.checked ? formData.popUpSwitchButtonColor: ''}"
+                              class="slider round"></span>
+                      </label>
+                      <i class="ml-3 fa fa-chevron-right" aria-hidden="true"></i>
+                    </div>
+                    <div *ngIf="openPurposeType === defaultContent.PopUpAnalyticsHead" class="col-md-12 purpose-desc w-100">
+                      <p>{{formData.PopUpAnalyticsDescription ? formData.PopUpAnalyticsDescription : defaultContent.PopUpAnalyticsDescription}}</p>
+                    </div>
+                  </div>
+
 
                 </div>
             </div>
@@ -390,77 +392,76 @@
                 <div class="card w-100">
 
 
-                  <div (click)="onOpenDesc(defaultContent.NecessaryText)" [ngStyle]="{color: formData.popUpPurposeButtonTextColor, background: formData.popUpPurposeButtonBackGroundColor}" class=" row purpose-div" >
+                  <div (click)="onOpenDesc(defaultContent.PopUpNecessaryHead)" [ngStyle]="{color: formData.popUpPurposeButtonTextColor, background: formData.popUpPurposeButtonBackGroundColor}" class=" row purpose-div" >
                     <div class="col-md-9">
-                      <p class="mt-2 purpose-text mb-2 ml-3">{{formData.NecessaryText ? formData.NecessaryText : defaultContent.NecessaryText}}</p>
+                      <p class="mt-2 purpose-text mb-2 ml-3">{{formData.PopUpNecessaryHead ? formData.PopUpNecessaryHead : defaultContent.PopUpNecessaryHead}}</p>
                     </div>
                     <div class="col-md-3">
-                      <span style="    font-size: 12px;
-                      font-weight: 600;">Always Allow <i class="ml-1 fa fa-chevron-right" aria-hidden="true"></i></span>
+                        <span style="    font-size: 12px;
+                        font-weight: 600;">Always Allow <i class="ml-1 fa fa-chevron-right" aria-hidden="true"></i></span>
                     </div>
-                      <div *ngIf="openPurposeType === defaultContent.NecessaryText" class="col-md-12 purpose-desc w-100">
-                        <p>{{formData.PopUpNecessaryDescription ? formData.PopUpNecessaryDescription : defaultContent.PopUpNecessaryDescription}}</p>
-                      </div>
+                    <div *ngIf="openPurposeType === defaultContent.PopUpNecessaryHead" class="col-md-12 purpose-desc w-100">
+                      <p>{{formData.PopUpNecessaryDescription ? formData.PopUpNecessaryDescription : defaultContent.PopUpNecessaryDescription}}</p>
+                    </div>
 
-                </div>
-
-
-
-                <div (click)="onOpenDesc(defaultContent.AdvertisingText)" [ngStyle]="{color: formData.popUpPurposeButtonTextColor, background: formData.popUpPurposeButtonBackGroundColor}" class=" row purpose-div" >
-                  <div class="col-md-9">
-                    <p class="mt-2 purpose-text mb-2 ml-3">{{formData.AdvertisingText ? formData.AdvertisingText : defaultContent.AdvertisingText}}</p>
-                  </div>
-                  <div class="col-md-3">
-                    <label class="switch mb-2 mt-2">
-                      <input type="checkbox" #switchBtnn1 checked>
-
-                      <span [ngStyle]="{background: switchBtnn1.checked ? formData.popUpSwitchButtonColor: ''}"
-                        class="slider round"></span>
-                    </label>
-                    <i class="ml-3 fa fa-chevron-right" aria-hidden="true"></i>
                   </div>
 
-                  <div *ngIf="openPurposeType === defaultContent.AdvertisingText" class="col-md-12 purpose-desc w-100">
-                    <p>{{formData.PopUpAdvertisingDescription ? formData.PopUpAdvertisingDescription : defaultContent.PopUpAdvertisingDescription}}</p>
+
+
+                  <div (click)="onOpenDesc(defaultContent.PopUpAdvertisingHead)" [ngStyle]="{color: formData.popUpPurposeButtonTextColor, background: formData.popUpPurposeButtonBackGroundColor}" class=" row purpose-div" >
+                    <div class="col-md-9">
+                      <p class="mt-2 purpose-text mb-2 ml-3">{{formData.PopUpAdvertisingHead ? formData.PopUpAdvertisingHead : defaultContent.PopUpAdvertisingHead}}</p>
+                    </div>
+                    <div class="col-md-3">
+                      <label class="switch mb-2 mt-2">
+                        <input type="checkbox" #switchBtnn1 checked>
+
+                        <span [ngStyle]="{background: switchBtnn1.checked ? formData.popUpSwitchButtonColor: ''}"
+                              class="slider round"></span>
+                      </label>
+                      <i class="ml-3 fa fa-chevron-right" aria-hidden="true"></i>
+                    </div>
+
+                    <div *ngIf="openPurposeType === defaultContent.PopUpAdvertisingHead" class="col-md-12 purpose-desc w-100">
+                      <p>{{formData.PopUpAdvertisingDescription ? formData.PopUpAdvertisingDescription : defaultContent.PopUpAdvertisingDescription}}</p>
+                    </div>
                   </div>
-              </div>
 
 
-              <div (click)="onOpenDesc(defaultContent.SocialMediaText)" [ngStyle]="{color: formData.popUpPurposeButtonTextColor, background: formData.popUpPurposeButtonBackGroundColor}" class=" row purpose-div" >
-                <div class="col-md-9">
-                  <p class="mt-2 purpose-text mb-2 ml-3">{{formData.SocialMediaText ? formData.SocialMediaText : defaultContent.SocialMediaText}}</p>
-                </div>
-                <div class="col-md-3">
-                  <label class="switch mb-2 mt-2">
-                    <input type="checkbox" #switchBtnn2 checked>
-                    <span [ngStyle]="{background: switchBtnn2.checked ? formData.popUpSwitchButtonColor: ''}"
-                      class="slider round"></span>
-                  </label>
-                  <i class="ml-3 fa fa-chevron-right" aria-hidden="true"></i>
-                </div>
-                <div *ngIf="openPurposeType === defaultContent.SocialMediaText" class="col-md-12 purpose-desc w-100">
-                  <p>{{formData.PopUpSocialMediaDescription ? formData.PopUpSocialMediaDescription : defaultContent.PopUpSocialMediaDescription}}</p>
-                </div>
-            </div>
+                  <div (click)="onOpenDesc(defaultContent.PopUpSocialMediaHead)" [ngStyle]="{color: formData.popUpPurposeButtonTextColor, background: formData.popUpPurposeButtonBackGroundColor}" class=" row purpose-div" >
+                    <div class="col-md-9">
+                      <p class="mt-2 purpose-text mb-2 ml-3">{{formData.PopUpSocialMediaHead ? formData.PopUpSocialMediaHead : defaultContent.SocialMediaText}}</p>
+                    </div>
+                    <div class="col-md-3">
+                      <label class="switch mb-2 mt-2">
+                        <input type="checkbox" #switchBtnn2 checked>
+                        <span [ngStyle]="{background: switchBtnn2.checked ? formData.popUpSwitchButtonColor: ''}"
+                              class="slider round"></span>
+                      </label>
+                      <i class="ml-3 fa fa-chevron-right" aria-hidden="true"></i>
+                    </div>
+                    <div *ngIf="openPurposeType === defaultContent.PopUpSocialMediaHead" class="col-md-12 purpose-desc w-100">
+                      <p>{{formData.PopUpSocialMediaDescription ? formData.PopUpSocialMediaDescription : defaultContent.PopUpSocialMediaDescription}}</p>
+                    </div>
+                  </div>
 
 
-            <div (click)="onOpenDesc(defaultContent.AnalyticsText)" [ngStyle]="{color: formData.popUpPurposeButtonTextColor, background: formData.popUpPurposeButtonBackGroundColor}" class=" row purpose-div" >
-              <div class="col-md-9">
-                <p class="mt-2 purpose-text mb-2 ml-3">{{formData.AnalyticsText ? formData.AnalyticsText : defaultContent.AnalyticsText }} </p>
-              </div>
-              <div class="col-md-3">
-                <label class="switch mb-2 mt-2">
-                  <input type="checkbox" #switchBtnn3 checked>
-                  <span [ngStyle]="{background: switchBtnn3.checked ? formData.popUpSwitchButtonColor: ''}"
-                    class="slider round"></span>
-                </label>
-                <i class="ml-3 fa fa-chevron-right" aria-hidden="true"></i>
-              </div>
-              <div *ngIf="openPurposeType === defaultContent.AnalyticsText" class="col-md-12 purpose-desc w-100">
-                <p>{{formData.PopUpAnalyticsDescription ? formData.PopUpAnalyticsDescription : defaultContent.PopUpAnalyticsDescription}}</p>
-              </div>
-          </div>
-
+                  <div (click)="onOpenDesc(defaultContent.PopUpAnalyticsHead)" [ngStyle]="{color: formData.popUpPurposeButtonTextColor, background: formData.popUpPurposeButtonBackGroundColor}" class=" row purpose-div" >
+                    <div class="col-md-9">
+                      <p class="mt-2 purpose-text mb-2 ml-3">{{formData.PopUpAnalyticsHead ? formData.PopUpAnalyticsHead : defaultContent.AnalyticsText }} </p>
+                    </div>
+                    <div class="col-md-3">
+                      <label class="switch mb-2 mt-2">
+                        <input type="checkbox" #switchBtnn3 checked>
+                        <span [ngStyle]="{background: switchBtnn3.checked ? formData.popUpSwitchButtonColor: ''}"
+                              class="slider round"></span>
+                      </label>
+                      <i class="ml-3 fa fa-chevron-right" aria-hidden="true"></i>
+                    </div>
+                    <div *ngIf="openPurposeType === defaultContent.PopUpAnalyticsHead" class="col-md-12 purpose-desc w-100">
+                      <p>{{formData.PopUpAnalyticsDescription ? formData.PopUpAnalyticsDescription : defaultContent.PopUpAnalyticsDescription}}</p>
+                    </div>
+                  </div>
 
 
 

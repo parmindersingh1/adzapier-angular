@@ -82,4 +82,9 @@ export class CookieBannerService {
       }),
     );
   }
+
+  GetLangData(lang) {
+    const url = environment.langURL.replace(':lang', lang);
+    return this.http.get(url);
+  }
 }

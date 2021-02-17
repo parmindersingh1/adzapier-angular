@@ -42,7 +42,7 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
   currentState = 'banner';
   data = {...defaultBannerContent};
   formContent: any = {...defaultBannerContent};
-  isFieldDisabled = true;
+  isFieldDisabled = null;
   bannerCookieData = null;
   isGdprGlobal = false;
   dismissible = true;
@@ -74,7 +74,11 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
       ]
     }
   };
-
+  popUpTitleLang = {
+    purpose: 'Purpose',
+    privacyInfo: 'Privacy Info',
+    vendors: 'Vendors'
+  };
   public isPublish: boolean;
   vendorsList: any;
   iabVendorsID = [];
@@ -105,13 +109,111 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
     this.onGetAllowVendors();
     this.onGetCookies();
     this.onFormInIt();
-    this.onSetDefaultValue();
+    this.onGetLangData({target: {value: 'en'}});
+
+    // this.onSetDefaultValue();
     this.gdprTarget = this.bannerConstant.gdprTargetCountry;
 
     this.onGetCurrentPlan();
     this.onGetCookieBannerData();
   }
 
+  onGetLangData(event) {
+    const lang = event.target.value;
+    this.loading.start('lang');
+    this.cookieBannerService.GetLangData(lang).subscribe(res => {
+      this.loading.stop('lang');
+      this.onSetDynamicLang(res);
+    }, error => {
+      this.loading.stop('lang');
+    })
+  }
+
+  onSetDynamicLang(lang) {
+    const langConfig = lang;
+    this.cookieBannerForm.patchValue({
+//
+      privacyText: langConfig.CONFIG.POPUP.PRIVACY,
+
+      BannerTitle: langConfig.CONFIG.BANNER.title,
+      BannerDescription: langConfig.CONFIG.BANNER.body,
+      BannerPreferenceButtonTextContent: langConfig.CONFIG.BANNER.buttonCustomize,
+      BannerAllowAllButtonTextContent: langConfig.CONFIG.BANNER.buttonAllow,
+      BannerAllowRequiredTextContent: langConfig.CONFIG.BANNER.buttonAllowReq,
+      BannerDisableAllButtonTextContent: langConfig.CONFIG.BANNER.buttonDisable,
+
+      bannerDoNotSellMyDataTextContent: langConfig.CONFIG.DONOTSELL,
+      //  POPUP
+      PopUpPurposeBodyDescription: langConfig.CONFIG.POPUP.PURPOSES_BODY,
+      PopUpVendorBodyDescription: langConfig.CONFIG.POPUP.VENDORS_DESC,
+      // PopUpPurposeButtonBorderColor: this.bannerCookieData.CONFIG,
+      PopUpDisableAllButtonTextContent: langConfig.CONFIG.POPUP.DISABLE_ALL,
+      PopUpSaveMyChoiceButtonContentText: langConfig.CONFIG.POPUP.SAVE_EXIT,
+      PopUpAllowAllButtonTextContent: langConfig.CONFIG.POPUP.ACCEPT_ALL_BTN,
+      popUpDoNotSellTextContent: langConfig.CONFIG.POPUP.DO_NOT_SELL_MY_DATA
+
+
+    });
+
+
+    this.formContent.bannerTitle = langConfig.CONFIG.BANNER.title;
+    this.formContent.bannerDescription = langConfig.CONFIG.BANNER.body;
+    this.formContent.bannerPreferenceButtonTextContent = langConfig.CONFIG.BANNER.buttonCustomize;
+    this.formContent.bannerAcceptButtonTextContent = langConfig.CONFIG.BANNER.buttonAllow;
+    this.formContent.bannerAllowReqButtonTextContent = langConfig.CONFIG.BANNER.buttonAllowReq;
+    this.formContent.bannerDisableButtonTextContent = langConfig.CONFIG.BANNER.buttonDisable;
+    this.formContent.bannerDoNotSellMyDataTextContent = langConfig.CONFIG.BANNER.DONOTSELL;
+    // //  POPUP
+    this.formContent.popUpPurposeDescription = langConfig.CONFIG.POPUP.PURPOSES_BODY;
+    this.formContent.popUpVendorsDescription = langConfig.CONFIG.POPUP.VENDORS_DESC;
+    this.formContent.popUpDisableAllButtonTextContent = langConfig.CONFIG.POPUP.DISABLE_ALL;
+    this.formContent.popUpSaveMyChoiceButtonTextContent = langConfig.CONFIG.POPUP.SAVE_EXIT;
+    this.formContent.popUpAllowAllButtonTextContent = langConfig.CONFIG.POPUP.ACCEPT_ALL_BTN;
+    this.formContent.popUpDoNotSellTextContent = langConfig.CONFIG.POPUP.DO_NOT_SELL_MY_DATA;
+
+
+    // if (this.bannerCookieData.config.POPUP.PurposeBody.length > 0) {
+    this.cookieBannerForm.patchValue({
+      PopUpNecessaryHeading: langConfig.purposes.essential.heading,
+      necessaryBtnText: langConfig.purposes.essential.title,
+      PopUpNecessaryDescription: langConfig.purposes.essential.description,
+
+      PopUpAdvertisingHeading: langConfig.purposes.advertising.heading,
+      advertisingBtnText: langConfig.purposes.advertising.title,
+      PopUpAdvertisingDescription: langConfig.purposes.advertising.description,
+
+      PopUpSocialMediaHeading: langConfig.purposes.socialmedia.heading,
+      socialMediaBtnText: langConfig.purposes.socialmedia.title,
+      PopUpSocialMediaDescription: langConfig.purposes.socialmedia.description,
+
+      PopUpAnalyticsHeading: langConfig.purposes.analytics.heading,
+      analyticsBtnText: langConfig.purposes.analytics.title,
+      PopUpAnalyticsDescription: langConfig.purposes.analytics.description,
+    });
+
+    this.formContent.PopUpNecessaryHead = langConfig.purposes.essential.heading;
+    this.formContent.NecessaryText = langConfig.purposes.essential.title;
+    this.formContent.PopUpNecessaryDescription = langConfig.purposes.essential.description;
+
+    this.formContent.PopUpAdvertisingHead = langConfig.purposes.advertising.heading;
+    this.formContent.AdvertisingText = langConfig.purposes.advertising.title;
+    this.formContent.PopUpAdvertisingDescription = langConfig.purposes.advertising.description;
+
+    this.formContent.PopUpSocialMediaHead = langConfig.purposes.socialmedia.heading;
+    this.formContent.SocialMediaText = langConfig.purposes.socialmedia.title;
+    this.formContent.PopUpSocialMediaDescription = langConfig.purposes.socialmedia.description;
+
+    this.formContent.PopUpAnalyticsHead = langConfig.purposes.analytics.heading;
+    this.formContent.AnalyticsText = langConfig.purposes.analytics.title;
+    this.formContent.PopUpAnalyticsDescription = langConfig.purposes.analytics.description;
+
+    this.popUpTitleLang = {
+      purpose: langConfig.CONFIG.POPUP.PURPOSE_TEXT,
+      privacyInfo: langConfig.CONFIG.POPUP.PRIVACY_INFO_TITLE,
+      vendors: langConfig.CONFIG.POPUP.VENDORS
+    };
+    // }
+  }
 
   onGetAllowVendors() {
     this.loading.start('23');
@@ -137,7 +239,6 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
         this.alertType = 'danger';
       })
   }
-
 
 
   ngAfterViewInit() {
@@ -409,6 +510,7 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
 
   onSetValue() {
     try {
+      // this.onGetLangData({target: {value:  this.bannerCookieData.config.Language}});
       this.cookieBannerForm.patchValue({
         // DISPLAY FREQUENCY
         bannerPartialConsent: this.bannerCookieData.config.DisplayFrequency.bannerPartialConsent,
