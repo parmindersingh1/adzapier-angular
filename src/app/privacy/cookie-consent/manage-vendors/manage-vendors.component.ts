@@ -37,6 +37,7 @@ export class ManageVendorsComponent implements OnInit {
   searchGoogleVendors: any[] = [];
   modalRef: BsModalRef;
   actionType = 'active';
+
   constructor(
     private orgservice: OrganizationService,
     private gdprService: GdprService,
@@ -51,6 +52,7 @@ export class ManageVendorsComponent implements OnInit {
     this.getAllVendorsData();
     this.onGetAllowVendors();
   }
+
   openModal(template: TemplateRef<any>) {
     this.modalRef = this.modalService.show(template, {class: 'modal-md'});
   }
@@ -104,14 +106,16 @@ export class ManageVendorsComponent implements OnInit {
       .subscribe(res => {
         this.skeletonLoading.two = false;
         this.loading.stop();
-        if (res.status === 200) {
-          const result = res.response;
-          this.googleVendorsDefaultID = JSON.parse(result.google_vendors);
-          this.iabVendorsDefaultID = JSON.parse(result.iab_vendors);
+        if (res) {
+          if (res.status === 200) {
+            const result = res.response;
+            this.googleVendorsDefaultID = JSON.parse(result.google_vendors);
+            this.iabVendorsDefaultID = JSON.parse(result.iab_vendors);
+          }
+          this.isOpen = true;
+          this.alertMsg = res.message;
+          this.alertType = 'success';
         }
-        this.isOpen = true;
-        this.alertMsg = res.message;
-        this.alertType = 'success';
       }, error => {
         this.skeletonLoading.two = false;
         this.loading.stop();
@@ -170,7 +174,7 @@ export class ManageVendorsComponent implements OnInit {
     }
   }
 
-  onUpdateVendors(iabVendorsID, googleVendorsID ) {
+  onUpdateVendors(iabVendorsID, googleVendorsID) {
     const payloads = {
       iab_vendors: JSON.stringify(iabVendorsID),
       google_vendors: JSON.stringify(googleVendorsID)
@@ -224,11 +228,11 @@ export class ManageVendorsComponent implements OnInit {
   confirm(): void {
     if (this.actionType === 'active') {
       const iabVendors = this.iabVendorsDefaultID.concat(this.iabVendorsID);
-      const  googleVendors = this.googleVendorsDefaultID.concat(this.googleVendorsID);
+      const googleVendors = this.googleVendorsDefaultID.concat(this.googleVendorsID);
       this.onUpdateVendors(iabVendors, googleVendors)
     } else {
-      const iabVendorsID =  this.iabVendorsDefaultID.filter(item => !this.iabVendorsID.includes(item));
-      const googleVendorsID =  this.googleVendorsDefaultID.filter(item => !this.googleVendorsID.includes(item));
+      const iabVendorsID = this.iabVendorsDefaultID.filter(item => !this.iabVendorsID.includes(item));
+      const googleVendorsID = this.googleVendorsDefaultID.filter(item => !this.googleVendorsID.includes(item));
       this.onUpdateVendors(iabVendorsID, googleVendorsID)
     }
     this.decline();
