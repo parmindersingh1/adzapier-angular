@@ -121,14 +121,16 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
       .subscribe(res => {
         this.skeletonLoading = false;
         this.loading.stop('23');
-        if (res.status === 200) {
-          const result = res.response;
-          this.googleVendorsID = JSON.parse(result.google_vendors);
-          this.iabVendorsID = JSON.parse(result.iab_vendors);
+        if (res) {
+          if (res.status === 200) {
+            const result = res.response;
+            this.googleVendorsID = JSON.parse(result.google_vendors);
+            this.iabVendorsID = JSON.parse(result.iab_vendors);
+          }
+          this.isOpen = true;
+          this.alertMsg = res.message;
+          this.alertType = 'success';
         }
-        this.isOpen = true;
-        this.alertMsg = res.message;
-        this.alertType = 'success';
       }, error => {
         this.skeletonLoading = false;
         this.loading.stop('23');
@@ -137,7 +139,6 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
         this.alertType = 'danger';
       })
   }
-
 
 
   ngAfterViewInit() {
@@ -256,6 +257,7 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
       google_vendors: [this.defaultData.google_vendors],
       gdpr_global: [this.defaultData.gdprGlobal],
       ccpa_global: [this.defaultData.ccpaGlobal],
+      purposes_by_default: [this.defaultData.allowPurposeByDefault],
       showBadge: [this.defaultData.showBadge],
       logo: [this.defaultData.logo],
       // Vendors
@@ -284,54 +286,54 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
       BannerGlobalStyleTextColor: [''],
       BannerGlobalStyleBorderColor: [''],
       BannerGlobalStyleBackgroundColor: [''],
-      BannerPreferenceButtonTextContent: ['', [Validators.minLength(2), Validators.maxLength(25)]],
+      BannerPreferenceButtonTextContent: ['', [Validators.minLength(2), Validators.maxLength(45)]],
       BannerPreferenceButtonTextColor: [''],
       BannerPreferenceButtonBackgroundColor: [''],
-      BannerAllowAllButtonTextContent: ['', [Validators.minLength(2), Validators.maxLength(25)]],
+      BannerAllowAllButtonTextContent: ['', [Validators.minLength(2), Validators.maxLength(45)]],
       BannerAllowAllButtonTextColor: [''],
       BannerAllowAllButtonBackgroundColor: [''],
-      BannerAllowRequiredTextContent: ['', [Validators.minLength(2), Validators.maxLength(25)]],
+      BannerAllowRequiredTextContent: ['', [Validators.minLength(2), Validators.maxLength(45)]],
       BannerAllowRequiredButtonTextColor: [''],
       BannerAllowRequiredButtonBackgroundColor: [''],
-      BannerDisableAllButtonTextContent: ['', [Validators.minLength(2), Validators.maxLength(25)]],
+      BannerDisableAllButtonTextContent: ['', [Validators.minLength(2), Validators.maxLength(45)]],
       BannerDisableAllButtonTextColor: [''],
       BannerDisableAllButtonBackgroundColor: [''],
-      bannerDoNotSellMyDataTextContent: ['', [Validators.minLength(2), Validators.maxLength(25)]],
+      bannerDoNotSellMyDataTextContent: ['', [Validators.minLength(2), Validators.maxLength(45)]],
       bannerDoNotSellMyDataTextColor: [''],
       bannerDoNotSellMyDataBackGroundColor: [''],
       //  POPUP
-      PopUpPurposeBodyDescription: ['', [Validators.minLength(20), Validators.maxLength(300)]],
-      PopUpVendorBodyDescription: ['', [Validators.minLength(20), Validators.maxLength(300)]],
+      PopUpPurposeBodyDescription: ['', [Validators.minLength(20), Validators.maxLength(700)]],
+      PopUpVendorBodyDescription: ['', [Validators.minLength(20), Validators.maxLength(700)]],
       PopUpSwitchButton: [''],
       PopUpGlobalTextColor: [''],
       PopUpGlobalBackgroundColor: [''],
       PopUpPurposeButtonTextColor: [''],
       PopUpPurposeButtonBackgroundColor: [''],
       PopUpPurposeButtonBorderColor: [''],
-      PopUpDisableAllButtonTextContent: ['', [Validators.minLength(2), Validators.maxLength(25)]],
+      PopUpDisableAllButtonTextContent: ['', [Validators.minLength(2), Validators.maxLength(45)]],
       PopUpDisableAllButtonTextColor: [''],
       PopUpDisableAllButtonBackgroundColor: [''],
-      popUpDoNotSellTextContent: ['', [Validators.minLength(2), Validators.maxLength(25)]],
+      popUpDoNotSellTextContent: ['', [Validators.minLength(2), Validators.maxLength(45)]],
       popUpDoNotSellTextColor: [''],
       popUpDoNotSellBackgroundColor: [''],
-      PopUpSaveMyChoiceButtonContentText: ['', [Validators.minLength(2), Validators.maxLength(25)]],
+      PopUpSaveMyChoiceButtonContentText: ['', [Validators.minLength(2), Validators.maxLength(45)]],
       PopUpSaveMyChoiceButtonTextColor: [''],
       PopUpSaveMyChoiceButtonBackgroundColor: [''],
-      PopUpAllowAllButtonTextContent: ['', [Validators.minLength(2), Validators.maxLength(25)]],
+      PopUpAllowAllButtonTextContent: ['', [Validators.minLength(2), Validators.maxLength(45)]],
       PopUpAllowAllButtonTextColor: [''],
       PopUpAllowAllButtonBackgroundColor: [''],
       PopUpSocialMediaHeading: ['', [Validators.minLength(2), Validators.maxLength(50)]],
       // informationBtnText: [BannerConstant.CCPA.POPUP.PopUpInformationBtnText],
-      PopUpSocialMediaDescription: ['', [Validators.minLength(20), Validators.maxLength(300)]],
+      PopUpSocialMediaDescription: ['', [Validators.minLength(20), Validators.maxLength(700)]],
       PopUpNecessaryHeading: ['', [Validators.minLength(2), Validators.maxLength(50)]],
       // necessaryBtnText: [BannerConstant.CCPA.POPUP.necessaryBtnText],
-      PopUpNecessaryDescription: ['', [Validators.minLength(20), Validators.maxLength(300)]],
+      PopUpNecessaryDescription: ['', [Validators.minLength(20), Validators.maxLength(700)]],
       PopUpAnalyticsHeading: ['', [Validators.minLength(2), Validators.maxLength(50)]],
       // analyticsBtnText: [BannerConstant.CCPA.POPUP.advertisingBtnText],
-      PopUpAnalyticsDescription: ['', [Validators.minLength(20), Validators.maxLength(300)]],
+      PopUpAnalyticsDescription: ['', [Validators.minLength(20), Validators.maxLength(700)]],
       PopUpAdvertisingHeading: ['', [Validators.minLength(2), Validators.maxLength(50)]],
       // advertisingBtnText: [BannerConstant.CCPA.POPUP.advertisingBtnText],
-      PopUpAdvertisingDescription: ['', [Validators.minLength(20), Validators.maxLength(300)]],
+      PopUpAdvertisingDescription: ['', [Validators.minLength(20), Validators.maxLength(700)]],
     });
   }
 
@@ -623,6 +625,7 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
       logo: this.cookieBannerForm.value.logo,
       gdpr_global: this.cookieBannerForm.value.gdpr_global,
       ccpa_global: this.cookieBannerForm.value.ccpa_global,
+      purposes_by_default: this.cookieBannerForm.value.purposes_by_default,
       iab_vendors_ids: this.iabVendorsID,
       google_vendors_ids: this.googleVendorsID,
       show_badge: this.cookieBannerForm.value.showBadge,
@@ -661,6 +664,7 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
       logo: this.cookieBannerForm.value.logo,
       gdpr_global: this.cookieBannerForm.value.gdpr_global,
       ccpa_global: this.cookieBannerForm.value.ccpa_global,
+      purposes_by_default: this.cookieBannerForm.value.purposes_by_default,
       gdpr_target: this.cookieBannerForm.value.gdprTarget,
       iab_vendors_ids: this.iabVendorsID,
       google_vendors_ids: this.googleVendorsID,
