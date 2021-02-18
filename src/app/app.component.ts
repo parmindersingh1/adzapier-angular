@@ -3,7 +3,7 @@ import { faCoffee } from '@fortawesome/free-solid-svg-icons';
 import { AuthenticationService, OrganizationService } from './_services';
 import { User } from './_models';
 import { HeaderComponent } from './_components/layout/header/header.component';
-import { Router, NavigationEnd } from '@angular/router';
+import {Router, NavigationEnd, RouterEvent, RouteConfigLoadStart, RouteConfigLoadEnd} from '@angular/router';
 import * as feather from 'feather-icons';
 import { CCPAFormConfigurationService } from './_services/ccpaform-configuration.service';
 import { DsarformService } from './_services/dsarform.service';
@@ -41,6 +41,7 @@ export class AppComponent implements OnInit {
   msg = '';
   listAddonPlan: any
   public unAuthMsg: any;
+   isShowingRouteLoadIndicator: boolean;
   constructor(private router: Router,
     private modalService: BsModalService,
               private billingService: BillingService,
@@ -51,6 +52,19 @@ export class AppComponent implements OnInit {
               private organizationService: OrganizationService
   ) {
     //  this.headerComponent.loadOrganizationList();
+    // Lazy Loading indicator
+    this.isShowingRouteLoadIndicator = false;
+    let asyncLoadCount = 0;
+    router.events.subscribe(
+      ( event: RouterEvent ): void => {
+        if ( event instanceof RouteConfigLoadStart ) {
+          asyncLoadCount++;
+        } else if ( event instanceof RouteConfigLoadEnd ) {
+          asyncLoadCount--;
+        }
+        this.isShowingRouteLoadIndicator = !! asyncLoadCount;
+      }
+    );
   }
 
   ngOnInit() {
