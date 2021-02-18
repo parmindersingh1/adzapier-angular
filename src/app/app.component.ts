@@ -61,12 +61,12 @@ export class AppComponent implements OnInit {
       ( event: RouterEvent ): void => {
         if ( event instanceof RouteConfigLoadStart ) {
           this.loadingStage = 1;
-          asyncLoadCount++;
+          this.isShowingRouteLoadIndicator = true;
         } else if ( event instanceof RouteConfigLoadEnd ) {
           this.loadingStage = 0;
-          asyncLoadCount--;
+          this.isShowingRouteLoadIndicator = false;
         }
-        this.isShowingRouteLoadIndicator = !! asyncLoadCount;
+        // this.isShowingRouteLoadIndicator = !! asyncLoadCount;
         setTimeout( () => {
           this.loadingStage = 2;
         }, 3000);
@@ -78,7 +78,7 @@ export class AppComponent implements OnInit {
         setTimeout( () => {
           this.loadingStage = 0;
           this.isShowingRouteLoadIndicator = false;
-        }, 15000);
+        }, 25000);
 
       }
     );
