@@ -1,3 +1,4 @@
+
 <div class="container-fluid">
   <div class="row">
     <app-header class="w-100" *ngIf="hideHeaderFooter"></app-header>
@@ -9,13 +10,11 @@
     <app-footer class="w-100" *ngIf="hideHeaderFooter"></app-footer>
   </div>
 </div>
-
-<!-- I indicate that a router module is being loaded asynchronously. -->
-<div
-  *ngIf="isShowingRouteLoadIndicator"
-  class="router-load-indicator">
-  <span class="spinner-border spinner-border-sm txt-info" role="status" aria-hidden="true"></span>
-  Loading...
+<div  *ngIf="isShowingRouteLoadIndicator"  class="full-back" >
+  <div style="margin-left: 49%; margin-top: 15%; color: #040d26" class="spinner-border"></div> <br />
+  <p *ngIf="loadingStage === 1" class="text-center loading-text">Loading...</p>
+  <p *ngIf="loadingStage === 2" class="text-center loading-text">Still Loading...</p>
+  <p *ngIf="loadingStage === 3" class="text-center loading-text">Slow Connection...</p>
 </div>
 
 
