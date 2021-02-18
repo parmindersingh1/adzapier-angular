@@ -168,6 +168,7 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
           this.isEdit = true;
         }
       }, error => {
+        this.bannerCookieData = null;
         this.loading.stop('2');
         this.isOpen = true;
         this.alertMsg = error;
@@ -675,7 +676,6 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
       show_badge: this.cookieBannerForm.value.showBadge,
       CONFIG: this.onGetFormData()
     };
-    console.log(' this.onGetFormData()', JSON.stringify(userPrefrencesData));
     this.loading.start();
     this.isPublish = true;
     this.cookieBannerService.onUpdateCookieBannerData(userPrefrencesData, this.currentManagedOrgID, this.currrentManagedPropID, this.constructor.name, moduleName.cookieBannerModule)
