@@ -7,6 +7,7 @@ import { NgxUiLoaderService } from 'ngx-ui-loader';
 import {moduleName} from '../../../_constant/module-name.constant';
 import { DataService } from 'src/app/_services/data.service';
 import { forkJoin } from 'rxjs';
+import { DirtyComponents } from 'src/app/_models/dirtycomponents';
 
 interface WebFormModel {
   crid: any;
@@ -29,7 +30,7 @@ interface WebFormModel {
   templateUrl: './webforms.component.html',
   styleUrls: ['./webforms.component.scss']
 })
-export class WebformsComponent implements OnInit {
+export class WebformsComponent implements OnInit, DirtyComponents {
   selectedProperty: any;
   currentOrgID: any;
   propertyID: any;
@@ -45,6 +46,7 @@ export class WebformsComponent implements OnInit {
   currentUser: any;
   currentuserID: any;
   orgDetails: any;
+  isDirty = false;
   constructor(private ccpaFormConfigService: CCPAFormConfigurationService,
               private organizationService: OrganizationService,
               private loading: NgxUiLoaderService,
@@ -156,6 +158,9 @@ export class WebformsComponent implements OnInit {
     });
   }
 
+  canDeactivate(){
+    return this.isDirty;
+  }
   // ngOnDestroy() {
   //   if (this.mySubscription) {
   //     this.mySubscription.unsubscribe();
