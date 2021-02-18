@@ -10,13 +10,16 @@
         </nav>
     </div>
     <div class="shadowdiv">
-        <ul ngbNav #nav="ngbNav" (navChange)="onNavChange($event)" [(activeId)]="active" class="nav-tabs">
+        <div class="webformheading p-3">
+            <h3 class="tx-uppercase tx-14 mb-0 tx-spacing-1 tx-color-02 tx-semibold">Web form name: <span class="text-capitalize text-primary mr-2">{{formName}}</span> <span class="badge tx-11" [ngClass]="showFormStatus() === 'Publish' ? 'badge-primary':'badge-secondary'">{{showFormStatus() === 'Publish' ? 'Active': 'Draft'}}</span></h3>
+        </div>
+        <ul ngbNav #nav="ngbNav" (navChange)="onNavChange($event)" (activeIdChange)="onChangeNavID($event)" [(activeId)]="active" class="nav-tabs">
             <li [ngbNavItem]="1">
                 <a ngbNavLink>1 Basic</a>
                 <ng-template ngbNavContent>
-                    <form [formGroup]="basicForm" (ngSubmit)="basicFormdata()">
+                    <form [formGroup]="basicForm">
                         <div id="step-1" class="p-10 mt-2 tab-pane step-content" style="display: block;">
-                            <div class="col-6 align-items-center justify-content-between">
+                            <div class="col-6 align-items-center justify-content-between margin-auto">
 
                                 <div class="form-group mb-2">
                                     <label for="formname" class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">Name</label>
@@ -41,7 +44,6 @@
                         </div>
                         <div class="btn-toolbar sw-toolbar sw-toolbar-bottom justify-content-end">
                             <div class="btn-group mr-2 mb-2 sw-btn-group" role="group">
-                                <button class="btn btn-primary sw-btn-next">Next</button>
                             </div>
                         </div>
                     </form>              
@@ -434,8 +436,8 @@
                                                 <label class="col-form-label-sm tx-10 tx-uppercase tx-medium tx-spacing-1">Header Color</label>
                                             </div>
                                             <div class="col-md-6 d-flex color-controlwrapper">
-                                                <input type="color" [(ngModel)]="headerColor" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null" />
-                                                <input type="text" class="form-control form-control-sm ml-1" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm? '' : null"
+                                                <input type="color" [(ngModel)]="headerColor" (ngModelChange)="onColorSelection($event,'headerColor')" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null" />
+                                                <input type="text" class="form-control form-control-sm ml-1" (ngModelChange)="onColorSelection($event,'headerColor')" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm? '' : null"
                                                 [(ngModel)]="headerColor" />
                                             </div>
                                             
@@ -447,9 +449,9 @@
                                                 <label class="col-form-label-sm tx-10 tx-uppercase tx-medium tx-spacing-1">Welcome Text Color</label>
                                             </div>
                                             <div class="col-md-6 d-flex color-controlwrapper"><input type="color" class="form-control" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
-                                                    [(ngModel)]="welcomeTextColor" />
+                                                    [(ngModel)]="welcomeTextColor" (ngModelChange)="onColorSelection($event,'welcomeTextColor')"/>
                                                     <input type="text" class="form-control form-control-sm ml-1" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
-                                                    [(ngModel)]="welcomeTextColor" />
+                                                    [(ngModel)]="welcomeTextColor" (ngModelChange)="onColorSelection($event,'welcomeTextColor')" />
                                                 </div>
                                         </div>
                                     </div>
@@ -471,8 +473,8 @@
                                                 <label class="col-form-label-sm tx-10 tx-uppercase tx-medium tx-spacing-1">Footer Text Color</label>
                                             </div>
                                             <div class="col-md-6 d-flex color-controlwrapper">
-                                                <input type="color" [(ngModel)]="footerTextColor" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null" />
-                                                <input type="text" class="form-control form-control-sm ml-1" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm? '' : null"
+                                                <input type="color" [(ngModel)]="footerTextColor" (ngModelChange)="onColorSelection($event,'footerTextColor')" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null" />
+                                                <input type="text" class="form-control form-control-sm ml-1" (ngModelChange)="onColorSelection($event,'footerTextColor')" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm? '' : null"
                                                     [(ngModel)]="footerTextColor" />
                                             </div>
                                         </div>
@@ -792,9 +794,6 @@
 
                             </div>
 
-                            <div class="col-sm-3 center-div"> <button class="btn btn-primary btn-block"
-                                    [disabled]="true" type="submit">
-                                    Submit</button></div>
                         </form>
                         <div class="quilleditor-wrapper py-2 border-top">
                             <div class="quilleditor" [ngStyle]="footerStyle()"
@@ -806,19 +805,12 @@
 
                 </div>
             </div>
-            <div class="btn-toolbar sw-toolbar sw-toolbar-bottom justify-content-end mb-2">
-                <div>
-                    <button class="btn btn-primary sw-btn-prev mr-2" (click)="onPrevious(1)">Previous</button>
-                    <button class="btn btn-primary sw-btn-next mr-2" [disabled]="active === 1"
-                        (click)="saveAsDraftCCPAFormConfiguration()">Next</button>
-                </div>
-            </div>
         </ng-template>
     </li>
     <li [ngbNavItem]="3">
         <a ngbNavLink>3 Settings</a>
         <ng-template ngbNavContent>
-            <div class="col-5">
+            <div class="col-5 margin-auto">
 
                 <div class="form-group mg-b-5">
                     <label for="defaultapprover" class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">
@@ -899,13 +891,6 @@
                 </div>
             </div>
 
-            <div class="btn-toolbar sw-toolbar sw-toolbar-bottom justify-content-end mb-2">
-                <div>
-                    <button class="btn btn-primary sw-btn-prev mr-2" (click)="onPrevious(2)">Previous</button>
-                    <button class="btn btn-primary sw-btn-next mr-2" [disabled]="active === 1"
-                        (click)="createDraft()">Next</button>
-                </div>
-            </div>
         </ng-template>
     </li>
     <li [ngbNavItem]="4">
@@ -917,7 +902,7 @@
                     <li ngbNavItem>
                         <a ngbNavLink>Embed Code</a>
                         <ng-template ngbNavContent>
-                            <span *ngIf="!isWebFormPublished">Integrate options will be available once the webform is
+                            <span *ngIf="!isWebFormPublished" class="mb-2">Integrate options will be available once the webform is
                                 published.
                             </span>
                             <div class="code-link-wrapper"
@@ -977,25 +962,27 @@
                 </ul>
 
             </div>
-            <div class="publish-content" [ngbNavOutlet]="nav"></div>
+            <div class="publish-content mb-3" [ngbNavOutlet]="nav"></div>
 
 
 
-            <div class="btn-toolbar sw-toolbar sw-toolbar-bottom justify-content-end mb-2">
-                <div>
-                    <button class="btn btn-primary sw-btn-prev mr-2" (click)="onPrevious(3)">Previous</button>
-
-                    <button class="btn btn-primary sw-btn-next mr-2" [disabled]="true">Submit</button>
-                </div>
-            </div>
         </ng-template>
     </li>
-    <li> <!-- *ngIf="!isDraftWebForm && isWebFormPublished && isEditingPublishedForm" disableEditPublishBtn()-->
-        <button type="button" *ngIf="crid" type="button" class="btn btn-xs btn-primary publishbtn" [attr.disabled]="isResetlinkEnable ? true : null"
-           (click)="togglePublish()"> {{isWebFormPublished && !isEditingPublishedForm && !isResetlinkEnable ? 'Edit':'Publish'}}</button><span class="draftspan">{{showFormStatus()}}</span>
-        <button [ngClass]="{'hide':!isResetlinkEnable,'':isResetlinkEnable}" class="btn btn-xs btn-primary reset-link" (click)="resetWebform()">Reset</button>
-        <span *ngIf="crid" class="previewbtn"><a target="_blank" class="btn btn-xs btn-primary"
-            (click)="previewCCPAForm()">Preview</a></span>
+    <li> 
+        <div class="button-wrapper" [ngClass]="{ 'min-width-75' : isWebFormPublished && isDraftWebForm, 'min-width-170': crid !== null}">
+        <button *ngIf="!isWebFormPublished && !isDraftWebForm" 
+        class="btn btn-link cancel-link" (click)="navigateToWebForm()">Cancel</button>   
+        <button class="btn btn-sm pd-x-15 savebtn btn-uppercase btn-outline-primary" *ngIf="formwizardStatus.isFormOnefinish" (click)="basicFormdata('save')" [ngClass]="isWebFormPublished && !isEditingPublishedForm ? 'hide' : ''">Save</button>
+        <button class="btn btn-sm pd-x-15 savebtn btn-uppercase btn-outline-primary" *ngIf="formwizardStatus.isFormTwofinish" [ngClass]="isWebFormPublished && !isEditingPublishedForm ? 'hide' : ''"
+        (click)="saveAsDraftCCPAFormConfiguration('save')">Save</button>
+        <button class="btn btn-sm pd-x-15 savebtn btn-uppercase btn-outline-primary" *ngIf="formwizardStatus.isFormThreefinish" [ngClass]="isWebFormPublished && !isEditingPublishedForm ? 'hide' : ''"
+        (click)="createDraft('save')">Save</button>
+
+        <button type="button" *ngIf="crid" type="button" class="btn btn-sm pd-x-15 btn-outline-primary btn-uppercase ml-2 mr-1" 
+           (click)="togglePublish()"> {{isWebFormPublished && !isEditingPublishedForm && !isResetlinkEnable ? 'Edit':'Publish'}}</button>
+          
+           <a target="_blank"  (click)="previewCCPAForm()"><button *ngIf="crid"  class="btn btn-sm pd-x-15 btn-outline-primary btn-uppercase mg-l-5">Preview</button></a>
+        </div>
     </li>
     </ul>
 
@@ -1053,6 +1040,13 @@
         <p>Do you want to edit published form? You may loose previous data!</p>
         <button type="button" class="btn btn-xs btn-primary mr-2" (click)="confirmForEditing()">Yes</button>
         <button type="button" class="btn btn-xs btn-secondary" (click)="decline()">No</button>
+    </div>
+</ng-template>
+<ng-template #confirmSaveAlert>
+    <div class="modal-body text-center">
+        <p>Do you want save changes?</p>
+        <button type="button" class="btn btn-xs btn-primary mr-2" (click)="addUpdateDSARForm()">Yes</button>
+        <button type="button" class="btn btn-xs btn-secondary" (click)="resetWebform()">No</button>
     </div>
 </ng-template>
 <div class="col-sm-5 mr-0 float-right flotingdiv">
