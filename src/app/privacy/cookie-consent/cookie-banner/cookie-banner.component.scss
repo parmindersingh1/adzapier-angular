@@ -63,8 +63,7 @@ input[type=color] {
 
 .banner-body {
   height: 445px;
-  overflow: overlay;
-}
+  overflow: auto;}
 
 .banner-row {
   width: 100%;
@@ -74,7 +73,7 @@ input[type=color] {
 }
 .popup-body {
   max-height: 440px;
-  overflow: overlay;
+  overflow: auto;
 }
 .divider-text {
   position: relative;
@@ -235,7 +234,7 @@ input:checked + .slider {
 
 .vendors-list-table {
   max-height: 430px;
-  overflow: overlay;
+  overflow: auto;
 }
 
 .cell-width {
