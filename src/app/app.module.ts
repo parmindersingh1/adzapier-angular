@@ -19,7 +19,7 @@ import {NgxUiLoaderModule, NgxUiLoaderService} from 'ngx-ui-loader';
 import { ngxUiLoaderConfig } from './_constant/loading.contant';
 import { WelcomeComponent } from './welcome/welcome.component';
 import { ModalModule } from 'ngx-bootstrap/modal';
-import {NgbCollapseModule} from '@ng-bootstrap/ng-bootstrap';
+import {NgbCollapseModule, NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import {TimeagoModule} from 'ngx-timeago';
 
@@ -69,7 +69,8 @@ import {TimeagoModule} from 'ngx-timeago';
     TimeagoModule.forRoot(),
     // TabsModule.forRoot(),
     // AccordionModule.forRoot(),
-    NgbCollapseModule
+    NgbCollapseModule,
+    NgbModule
   ],
   providers: [
     NgxUiLoaderService,

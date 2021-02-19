@@ -354,3 +354,6 @@ ul.notification-menu-right::after {
   right: 12px;
   cursor: pointer;
 }
+
+/* Importing Bootstrap SCSS file. */
+@import '~bootstrap/scss/bootstrap';
