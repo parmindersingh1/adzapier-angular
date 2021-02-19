@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -8,7 +8,7 @@ fdescribe('EditProfileComponent', () => {
   let component: EditProfileComponent;
   let fixture: ComponentFixture<EditProfileComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
         RouterTestingModule,
@@ -45,7 +45,7 @@ fdescribe('EditProfileComponent', () => {
     expect(email.valid).toBeFalsy();
   });
 
-  it('edit button status', async(() => {
+  it('edit button status', waitForAsync(() => {
     spyOn(component, 'editUserDetails');
 
     let button = fixture.debugElement.nativeElement.querySelector('button');
