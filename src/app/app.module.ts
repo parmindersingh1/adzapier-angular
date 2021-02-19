@@ -21,6 +21,7 @@ import { WelcomeComponent } from './welcome/welcome.component';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import {NgbCollapseModule} from '@ng-bootstrap/ng-bootstrap';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
+import {TimeagoModule} from 'ngx-timeago';
 
 @NgModule({
   declarations: [
@@ -65,6 +66,7 @@ import { TooltipModule } from 'ngx-bootstrap/tooltip';
     // ChartsModule,
     // Ng2ChartJsModules,
     ModalModule.forRoot(),
+    TimeagoModule.forRoot(),
     // TabsModule.forRoot(),
     // AccordionModule.forRoot(),
     NgbCollapseModule
