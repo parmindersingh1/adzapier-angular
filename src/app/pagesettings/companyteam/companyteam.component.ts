@@ -14,7 +14,7 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
   styleUrls: ['./companyteam.component.scss']
 })
 export class CompanyteamComponent implements OnInit {
-  @ViewChild('confirmTemplate', { static: false }) confirmModal: TemplateRef<any>;
+  @ViewChild('confirmTemplate') confirmModal: TemplateRef<any>;
   modalRef: BsModalRef;
   teamMemberList: any;
   companyForm: FormGroup;

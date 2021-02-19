@@ -45,7 +45,7 @@ export class ManagePropertyComponent implements OnInit, OnDestroy {
   alertType: any;
 
   modalRef: BsModalRef;
-  @ViewChild('delConfirm', { static: false }) delConfirm;
+  @ViewChild('delConfirm') delConfirm;
   skLoading = true;
   propertyList = [];
   allPropertyList = [];

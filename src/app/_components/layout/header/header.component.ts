@@ -16,7 +16,7 @@ import { DataService } from 'src/app/_services/data.service';
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit {
-  @ViewChild('confirmTemplate', { static: false }) confirmModal: TemplateRef<any>;
+  @ViewChild('confirmTemplate') confirmModal: TemplateRef<any>;
   modalRef: BsModalRef;
   isCollapsed = true;
   isMobileMenuCollapsed = false;

@@ -29,16 +29,16 @@ import { formatDate } from '@angular/common';
 export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, AfterViewChecked {
   @ViewChild('toggleDayleftdiv', { static: true }) toggleDayleftdiv: ElementRef;
   // @ViewChild('btnDaysLeft', { static: true }) btnDaysLeft: ElementRef;
-  @ViewChild('customDaysInput', { static: false }) customDaysInput: ElementRef;
-  @ViewChild('confirmTemplate', { static: false }) confirmModal: TemplateRef<any>;
+  @ViewChild('customDaysInput') customDaysInput: ElementRef;
+  @ViewChild('confirmTemplate') confirmModal: TemplateRef<any>;
   @ViewChild('filePreview', { static: true }) filePreview: ElementRef;
   @ViewChild('panel', { static: true }) public panel: ElementRef<any>;
-  @ViewChild('workflowStageScroller', { static: false, read: ElementRef }) public workflowStageScroller: ElementRef<any>;
-  @ViewChild('confirmDeleteTemplate', { static: false }) confirmDeleteModal: TemplateRef<any>;
+  @ViewChild('workflowStageScroller', { read: ElementRef }) public workflowStageScroller: ElementRef<any>;
+  @ViewChild('confirmDeleteTemplate') confirmDeleteModal: TemplateRef<any>;
   @ViewChild('extendDays', { static: true }) extendDaysModal: TemplateRef<any>;
   @ViewChild('rejectRequest', { static: true }) rejectRequestModal: TemplateRef<any>;
   // @ViewChild('subTaskForm', null) subTaskTempForm: NgForm;
-  @ViewChild('userAuthenticationAlert', { static: false }) userAuthenticationModal: TemplateRef<any>;
+  @ViewChild('userAuthenticationAlert') userAuthenticationModal: TemplateRef<any>;
 
   confirmationForm: FormGroup;
   modalRef: BsModalRef;

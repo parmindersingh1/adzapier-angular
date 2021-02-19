@@ -15,7 +15,7 @@ import {DataService} from '../../_services/data.service';
   styleUrls: ['./company.component.scss']
 })
 export class CompanyComponent implements OnInit {
-  @ViewChild('confirmTemplate', {static: false}) confirmModal: TemplateRef<any>;
+  @ViewChild('confirmTemplate') confirmModal: TemplateRef<any>;
   modalRef: BsModalRef;
   companyDetails: any;
   appId: any;

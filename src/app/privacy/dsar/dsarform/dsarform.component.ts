@@ -29,15 +29,15 @@ import { DirtyComponents } from 'src/app/_models/dirtycomponents';
 })
 export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy, DirtyComponents {
   @ViewChild('editor', { static: true }) editor;
-  @ViewChild('azEmbedCode', { static: false }) public azEmbedCode: ElementRef<any>;
-  @ViewChild('shareLinkCode', { static: false }) public shareLinkCode: ElementRef<any>;
-  @ViewChild('nav', { static: false }) navTab: ElementRef<any>;
-  @ViewChild(NgbNav, { static: false }) navDirective = null;
-  @ViewChild('confirmEdit', { static: false }) confirmModal: TemplateRef<any>;
-  @ViewChild('registerForm', { static: false }) registerForm: any;
-  @ViewChild('customFields', { static: false }) customFormFields: NgForm;
-  @ViewChild('confirmSaveAlert', { static: false }) confirmSaveAlert: TemplateRef<any>;
-  @ViewChild('basicForm', { static: false }) basicDetailForm: NgForm;
+  @ViewChild('azEmbedCode') public azEmbedCode: ElementRef<any>;
+  @ViewChild('shareLinkCode') public shareLinkCode: ElementRef<any>;
+  @ViewChild('nav') navTab: ElementRef<any>;
+  @ViewChild(NgbNav) navDirective = null;
+  @ViewChild('confirmEdit') confirmModal: TemplateRef<any>;
+  @ViewChild('registerForm') registerForm: any;
+  @ViewChild('customFields') customFormFields: NgForm;
+  @ViewChild('confirmSaveAlert') confirmSaveAlert: TemplateRef<any>;
+  @ViewChild('basicForm') basicDetailForm: NgForm;
   public requestObject: any = {};
   public selectedFormOption: any;
   public selectedControlType: any;

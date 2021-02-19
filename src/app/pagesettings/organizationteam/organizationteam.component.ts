@@ -15,7 +15,7 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
   styleUrls: ['./organizationteam.component.scss']
 })
 export class OrganizationteamComponent implements OnInit {
-  @ViewChild('confirmTemplate', { static: false }) confirmModal: TemplateRef<any>;
+  @ViewChild('confirmTemplate') confirmModal: TemplateRef<any>;
   modalRef: BsModalRef;
   inviteUserOrgForm: FormGroup;
   confirmationForm: FormGroup;
