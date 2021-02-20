@@ -13,7 +13,7 @@ RUN  rm -rf /usr/share/nginx/html/* \
 COPY docker/nginx-custom.conf /etc/nginx/nginx.conf
 COPY docker/default.conf /etc/nginx/conf.d/default.conf
 COPY docker/security-headers.conf /etc/nginx/security-headers.conf
-
+COPY dist/adzapier-analytics-ng /usr/share/nginx/html
 WORKDIR /app
 
 #test the Nginx configuration
