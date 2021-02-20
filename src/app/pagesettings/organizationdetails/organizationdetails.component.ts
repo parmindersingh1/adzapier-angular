@@ -235,19 +235,21 @@ export class OrganizationdetailsComponent implements OnInit {
     this.isEditProperty = true;
     // this.selectedOrg = data;
     let extractProtocol;
+    let onlywebsitename;
     if(data.website.indexOf('//') !== -1){
       extractProtocol = data.website.split('//');
       this.protocol = extractProtocol[0] + '//';
     }else{
-      extractProtocol = data.website;
+      onlywebsitename = data.website;
     }
+    const urlname = extractProtocol !== undefined ? extractProtocol[1] : onlywebsitename;
     this.propertyname = data.name.replace(/&amp;/g,'&');
     this.website = data.website;
     this.logourl = data.logo_url;
     this.myContext = { oid: data.oid, pid: data.id };
     this.organisationPropertyForm.controls['protocol'].setValue(this.protocol);
     this.organisationPropertyForm.controls['propertyname'].setValue(this.propertyname);
-    this.organisationPropertyForm.controls['website'].setValue(extractProtocol || extractProtocol[1]);
+    this.organisationPropertyForm.controls['website'].setValue(urlname);
     this.organisationPropertyForm.controls['logourl'].setValue(data.logo_url);
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
       this.organisationPropertyForm.reset();
