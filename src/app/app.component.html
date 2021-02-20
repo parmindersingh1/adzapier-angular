@@ -1,3 +1,4 @@
+
 <div class="container-fluid">
   <div class="row">
     <app-header class="w-100" *ngIf="hideHeaderFooter"></app-header>
@@ -9,8 +10,12 @@
     <app-footer class="w-100" *ngIf="hideHeaderFooter"></app-footer>
   </div>
 </div>
-
-
+<div  *ngIf="isShowingRouteLoadIndicator"  class="full-back" >
+  <div style="margin-left: 49%; margin-top: 15%; color: #040d26" class="spinner-border"></div> <br />
+  <p *ngIf="loadingStage === 1" class="text-center loading-text">Loading...</p>
+  <p *ngIf="loadingStage === 2" class="text-center loading-text">Still Loading...</p>
+  <p *ngIf="loadingStage === 3" class="text-center loading-text">Slow Connection...</p>
+</div>
 
 
 <!--[config]="{backdrop: 'static'}" -->
@@ -18,7 +23,6 @@
      role="dialog" aria-labelledby="dialog-sizes-name1">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
-
 
 
       <div *ngIf="type ===  'cookieConsent' " class="modal-body">
@@ -38,24 +42,31 @@
             </label>
           </div>
           <div class="row ml-2 mr-2">
-            <div *ngFor="let plan of listAllPlans" class=" mt-2 col ml-2 d-flex bg-white-col bt-card flex-column bd pt-0 mr-2  pd-20 ">
-              <h4 class="text-center popular-text" [ngStyle]="{background: plan.price ==  currentPlanData.price ? '#3968fa' : null}">
+            <div *ngFor="let plan of listAllPlans"
+                 class=" mt-2 col ml-2 d-flex bg-white-col bt-card flex-column bd pt-0 mr-2  pd-20 ">
+              <h4 class="text-center popular-text"
+                  [ngStyle]="{background: plan.price ==  currentPlanData.price ? '#3968fa' : null}">
                 <ng-container *ngIf="plan.price ==  currentPlanData.price">CURRENT PLAN</ng-container>
               </h4>
-              <h3 [ngStyle]="{color: plan.price <=  currentPlanData.price ? '#999' : ''}" class="mt-4 plan-type">{{plan.name}}</h3>
-              <p [ngStyle]="{color: plan.price <=  currentPlanData.price ? '#999' : ''}" class="tx-color-03 mg-b-50">{{plan.description}}</p>
+              <h3 [ngStyle]="{color: plan.price <=  currentPlanData.price ? '#999' : ''}"
+                  class="mt-4 plan-type">{{plan.name}}</h3>
+              <p [ngStyle]="{color: plan.price <=  currentPlanData.price ? '#999' : ''}"
+                 class="tx-color-03 mg-b-50">{{plan.description}}</p>
               <h1 class="tx-rubik tx-normal mb-3 mg-t-auto price-text">
                 <sup [ngStyle]="{color: plan.price <=  currentPlanData.price ? '#999' : ''}" class="doller">$</sup>
-                <span [ngStyle]="{color: plan.price <=  currentPlanData.price ? '#999' : ''}" class="font-weight-bold">{{plan.price}}</span>
+                <span [ngStyle]="{color: plan.price <=  currentPlanData.price ? '#999' : ''}"
+                      class="font-weight-bold">{{plan.price}}</span>
               </h1>
-              <button (click)="onNavigate()"  [disabled]="plan.price <=  currentPlanData.price" class="btn mt-4 mb-4 add-to-cart-btn btn-primary btn-block">
+              <button (click)="onNavigate()" [disabled]="plan.price <=  currentPlanData.price"
+                      class="btn mt-4 mb-4 add-to-cart-btn btn-primary btn-block">
                 Choose Plan
               </button>
             </div><!-- col -->
           </div>
 
           <div class="text-center">
-            <a routerLink="/settings/billing/manage" (click)="template.hide()" class="btn mt-3 btn-primary"> <i _aria-hidden="true" class="fa fa-cogs pr-1"></i>  Manage License</a>
+            <a routerLink="/settings/billing/manage" (click)="template.hide()" class="btn mt-3 btn-primary"> <i
+              _aria-hidden="true" class="fa fa-cogs pr-1"></i> Manage License</a>
             <p class="cancel-btn mt-2 mb-2" (click)="template.hide()">or Cancel & Go Back</p>
           </div>
         </div>
@@ -65,7 +76,8 @@
       <div *ngIf="type ===  'org' " class="modal-body">
         <div class="text-center">
           <h4>Your Organization License need to Upgrade </h4>
-          <p *ngIf="!msg">This feature is not allowed in your current plan please upgrade it {{currentPlanData.price}}</p>
+          <p *ngIf="!msg">This feature is not allowed in your current plan please upgrade
+            it {{currentPlanData.price}}</p>
           <p *ngIf="msg">{{msg}}</p>
         </div>
 
@@ -80,24 +92,31 @@
             </label>
           </div>
           <div class="row ml-2 mr-2">
-            <div *ngFor="let plan of listAddonPlan" class=" mt-2 col ml-2 d-flex bg-white-col bt-card flex-column bd pt-0 mr-2  pd-20 ">
-              <h4 class="text-center popular-text" [ngStyle]="{background: plan.price ==  currentPlanData.price ? '#3968fa' : null}">
+            <div *ngFor="let plan of listAddonPlan"
+                 class=" mt-2 col ml-2 d-flex bg-white-col bt-card flex-column bd pt-0 mr-2  pd-20 ">
+              <h4 class="text-center popular-text"
+                  [ngStyle]="{background: plan.price ==  currentPlanData.price ? '#3968fa' : null}">
                 <ng-container *ngIf="plan.price ==  currentPlanData.price">CURRENT PLAN</ng-container>
               </h4>
-              <h3 [ngStyle]="{color: plan.price <=  currentPlanData.price ? '#999' : ''}" class="mt-4 plan-type">{{plan.name}}</h3>
-              <p [ngStyle]="{color: plan.price <=  currentPlanData.price ? '#999' : ''}" class="tx-color-03 mg-b-50">{{plan.description}}</p>
+              <h3 [ngStyle]="{color: plan.price <=  currentPlanData.price ? '#999' : ''}"
+                  class="mt-4 plan-type">{{plan.name}}</h3>
+              <p [ngStyle]="{color: plan.price <=  currentPlanData.price ? '#999' : ''}"
+                 class="tx-color-03 mg-b-50">{{plan.description}}</p>
               <h1 class="tx-rubik tx-normal mb-3 mg-t-auto price-text">
                 <sup [ngStyle]="{color: plan.price <=  currentPlanData.price ? '#999' : ''}" class="doller">$</sup>
-                <span [ngStyle]="{color: plan.price <=  currentPlanData.price ? '#999' : ''}" class="font-weight-bold">{{plan.price}}</span>
+                <span [ngStyle]="{color: plan.price <=  currentPlanData.price ? '#999' : ''}"
+                      class="font-weight-bold">{{plan.price}}</span>
               </h1>
-              <button (click)="onNavigate()"  [disabled]="plan.price <=  currentPlanData.price" class="btn mt-4 mb-4 add-to-cart-btn btn-primary btn-block">
+              <button (click)="onNavigate()" [disabled]="plan.price <=  currentPlanData.price"
+                      class="btn mt-4 mb-4 add-to-cart-btn btn-primary btn-block">
                 Choose Plan
               </button>
             </div><!-- col -->
           </div>
 
           <div class="text-center">
-            <a routerLink="/settings/billing/manage" (click)="template.hide()" class="btn mt-3 btn-primary"> <i _aria-hidden="true" class="fa fa-cogs pr-1"></i>  Manage License</a>
+            <a routerLink="/settings/billing/manage" (click)="template.hide()" class="btn mt-3 btn-primary"> <i
+              _aria-hidden="true" class="fa fa-cogs pr-1"></i> Manage License</a>
             <p class="cancel-btn mt-2 mb-2" (click)="template.hide()">or Cancel & Go Back</p>
           </div>
         </div>
@@ -107,11 +126,12 @@
 
       <div *ngIf="type ===  'noPlan' " class="modal-body">
         <div class="text-center">
-          <h4>You haven't  assign license to this property</h4>
+          <h4>You haven't assign license to this property</h4>
         </div>
 
         <div class="text-center">
-          <a routerLink="/settings/billing/manage" (click)="template.hide()" class="btn mt-3 btn-primary"> <i _aria-hidden="true" class="fa fa-cogs pr-1"></i>  Manage License</a>
+          <a routerLink="/settings/billing/manage" (click)="template.hide()" class="btn mt-3 btn-primary"> <i
+            _aria-hidden="true" class="fa fa-cogs pr-1"></i> Manage License</a>
           <p class="cancel-btn mt-2 mb-2" (click)="template.hide()">or Cancel & Go Back</p>
         </div>
 
@@ -121,9 +141,6 @@
     </div>
   </div>
 </div>
-
-
-
 
 
 <ng-template #unauth>
