@@ -86,7 +86,7 @@ export class CookieConsentComponent implements OnInit {
     this.loading.start('1');
     this.loadingSkeleton.one = true;
     this.dashboardService.getDashboardData(this.currrentManagedPropID, this.constructor.name, moduleName.cookieConsentModule)
-      .subscribe(res => {
+      .subscribe((res: any) => {
         this.loading.stop('1');
         this.loadingSkeleton.one = false;
         if (res) {
@@ -222,6 +222,7 @@ export class CookieConsentComponent implements OnInit {
         this.loadingSkeleton.five = false;
         this.loading.stop('f7');
         const result = res.response;
+        const resData = [...res.response];
 
         if (this.currentCountryMap === 'us') {
           for (const  countryData of result) {
@@ -234,8 +235,10 @@ export class CookieConsentComponent implements OnInit {
           for (const  countryData of result) {
             this.countryColor[`${countryData.country.toLowerCase()}`] = '#69b2f8';
           }
-          this.countryList = result;
-          this.onInItWorldMap();
+
+          // this.countryList = resData;
+          // console.log('Count', this.countryList)
+          this.onInItWorldMap(resData);
         }
 
       }, error => {
@@ -269,7 +272,7 @@ export class CookieConsentComponent implements OnInit {
         }
       });
   }
-  onInItWorldMap() {
+  onInItWorldMap(resData) {
     const that = this
     jQuery('#worldMap').empty();
     jQuery('#worldMap').vectorMap({
@@ -284,8 +287,9 @@ export class CookieConsentComponent implements OnInit {
       scaleColors: ['#d1e6fa', '#00cccc'],
       normalizeFunction: 'polynomial',
       onLabelShow:  (event, label, code) => {
-        for (const  countryData of that.countryList) {
+        for (const  countryData of resData) {
           if (code === countryData.country.toLowerCase()) {
+
             label.append(' : ' + countryData.count);
           } else {
             // label.append(' : 0');
