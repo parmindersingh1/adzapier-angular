@@ -332,8 +332,15 @@ span.ui-column-title {
 
 ::ng-deep .theme-dark-blue  .bs-datepicker-predefined-btns button {
   margin-bottom: 2px !important;
+  background: #fff;
+  color: #333;
+  border: 1px solid #ccc;
 }
 
+::ng-deep .theme-dark-blue .bs-datepicker-predefined-btns button.selected {
+  color: #fff;
+  background: #0168fa;
+}
 
 .datepickerwrapper {
   justify-content: flex-end !important;

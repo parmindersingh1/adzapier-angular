@@ -467,12 +467,21 @@
             </div>
             <div class="form-group">
                 <label for="website">Website</label>
-                <input type="text" class="form-control" name="website" formControlName="website"
+                <div class="input-group">
+                  <select class="custom-select col-sm-3" name="protocol" formControlName="protocol">
+                      <ng-container *ngFor="let opt of protocolList">
+                        <option [value]="opt"  [selected]="opt === protocol">{{ opt }}</option>
+                      </ng-container>
+                    </select>
+                  <div class="col-sm-9 p-0 input-group-append flex-column">
+                    <input type="text" class="form-control" name="website" formControlName="website" placeholder="propertydomain.com"
                     [ngClass]="{ 'is-invalid': submitted && orgProp.website.errors }" />
-                <div *ngIf="submitted && orgProp.website.errors" class="invalid-feedback">
-                    <div *ngIf="orgProp.website.errors.required">Website address is required</div>
-                    <div *ngIf="orgProp.website.errors.pattern">Website address should to be lower case </div>
-                </div>
+                    <div *ngIf="submitted && orgProp.website.errors" class="invalid-feedback">
+                        <div *ngIf="orgProp.website.errors.required">Website address is required</div>
+                        <div *ngIf="orgProp.website.errors.pattern">Website address should to be lower case </div>
+                    </div>
+                    </div>
+                  </div>
             </div>
             <div class="form-group">
                 <label for="logourl">Logo URL</label>
