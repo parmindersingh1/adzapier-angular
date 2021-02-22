@@ -253,6 +253,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
     isFormThreefinish: false,
     isFormFourfinish: false
   }
+  formSaveMethod: string;
   customFormchangeSubscription: any;
   constructor(private fb: FormBuilder, private ccpaRequestService: CcparequestService,
     private organizationService: OrganizationService,
@@ -355,6 +356,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
 
   basicFormdata(saveMethod) {
     let isFormnameChanged;
+    this.formSaveMethod = saveMethod;
     this.basicFormSubmitted = true;
     if (this.basicForm.invalid) {
       return false;
@@ -380,10 +382,14 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
           this.navDirective.select(2);
         }
       }else{
-        this.isDirty = true;
-
-        this.navDirective.select(2); // for first time form creation
-        this.openModal(this.confirmSaveAlert);
+       // this.isDirty = true;
+        if(saveMethod === 'save'){
+          this.navDirective.select(2);
+          this.addUpdateDSARForm();  
+        }else{
+          this.navDirective.select(2); // for first time form creation
+          this.openModal(this.confirmSaveAlert);
+        }
       }
       
      this.formwizardStatus.isFormOnefinish = false;
@@ -1314,6 +1320,10 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
         }else{
           this.addUpdateDSARForm();
         }
+      } else{
+        if(this.isDirty){
+          this.openModal(this.confirmSaveAlert);
+        }
       }
       this.formwizardStatus.isFormTwofinish = false;
       this.formwizardStatus.isFormThreefinish = true;
@@ -1412,14 +1422,18 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
           this.alertType = 'success';
           this.loadingbar.stop();
           this.isDirty = false;
-          this.decline();
+          if(this.formSaveMethod !== 'save'){
+            this.decline();
+          }
           this.getDSARFormByCRID(this.crid);
         }, (error) => {
           this.loadingbar.stop();
           this.alertMsg = error;
           this.isOpen = true;
           this.alertType = 'danger';
-          this.decline();
+          if(this.formSaveMethod !== 'save'){
+            this.decline();
+          }
         });
          this.isDirty = false;
     } else {
@@ -1444,7 +1458,13 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
         });
       this.isDirty = false;
       } else{
-        this.modalRef.hide();
+        if(this.formSaveMethod === 'nav'){
+          this.modalRef.hide();
+          this.isDirty = false;
+        }else{
+          this.isDirty = false;
+        }
+       
       }
     }
   
@@ -1485,7 +1505,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
         }
       });
       this.basicFormSubmitted = true;
-      if (this.formName) {
+      if (this.formName !== undefined) {
         this.basicFormdata('nav');
       } else {
         changeEvent.preventDefault();
@@ -1495,10 +1515,10 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
       }
     }
     } else if (changeEvent.nextId === 3) {
-      this.isdraftsubmitted = true;
-      this.basicFormSubmitted = true;
-      if(this.isDirty){
+      if(this.basicForm.valid && this.isDirty){
         this.saveAsDraftCCPAFormConfiguration('nav');
+      }else{
+        this.navDirective.select(3);
       }
     } else if (changeEvent.nextId === 4) {
       this.activeId = changeEvent.activeId;
@@ -1506,7 +1526,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
       this.isdraftsubmitted = true;
       this.basicFormSubmitted = true;
       this.isResetlinkEnable = false;
-      if (this.formName && this.defaultapprover && this.workflow) {
+      if (this.formName && this.workflow && (this.defaultapprover || this.selectedApproverID)) {
         this.daysleft !== '' ? this.daysleft = this.daysleft : this.daysleft = 45;
         let isFormSettingsChanged;
         const updatedWebForm = this.crid ? this.ccpaFormConfigService.getFormControlList() : this.dsarFormService.getFormControlList();
@@ -1514,7 +1534,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
           form_name: this.formName,
           form_status: 'draft',
           settings: {
-            approver: this.defaultapprover,
+            approver: this.defaultapprover || this.selectedApproverID,
             workflow: this.workflow,
             days_left: Number(this.daysleft),
             email_verified: this.isEmailVerificationRequired || false,
@@ -1547,11 +1567,14 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
         }
       } else {
         changeEvent.preventDefault();
-        const stepnumber: number | string = '1 Basic, 2 Form & 3 Settings';
+        const stepnumber: number | string = this.formName === undefined ? '1 Basic, 2 Form & 3 Settings': '2 Form & 3 Settings';
         this.alertMsg = `Please complete step ${stepnumber} and press next`;
         this.isOpen = true;
         this.alertType = 'danger';
+        this.navDirective.select(this.activeId);
       }
+    } else {
+      this.navDirective.select(this.activeId);
     }
   }
 
@@ -2401,6 +2424,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
     this.isDirty = false;
     this.modalRef.hide();
     this.navDirective.select(this.activeId);
+    return false;
   }
 
   disableEditPublishBtn(): boolean {
