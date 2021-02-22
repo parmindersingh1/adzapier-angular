@@ -381,6 +381,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
         }
       }else{
         this.isDirty = true;
+
         this.navDirective.select(2); // for first time form creation
         this.openModal(this.confirmSaveAlert);
       }
@@ -1470,6 +1471,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
   }
   // this.basicForm.value.formname === '' || this.basicForm.value.formname === undefined || !this.basicFormSubmitted
   onNavChange(changeEvent: NgbNavChangeEvent) {
+    this.activeId = changeEvent.activeId;
     if (changeEvent.nextId === 2) {
       if(changeEvent.nextId === 2 && changeEvent.activeId > 2){
         if(this.crid){
@@ -1837,6 +1839,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
 
   getWorkflowWithApproverID() {
     const retrivedData = this.ccpaFormConfigService.getCurrentSelectedFormData();
+    if(retrivedData !== null){
     this.selectedApproverID = retrivedData.approver || retrivedData.approver_id;
     this.workflow = retrivedData.workflow || retrivedData.workflow_id;
    // this.formName = this.formName || retrivedData.form_name;
@@ -1890,7 +1893,9 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
         request_form: retrivedData.request_form
       }
     }
-   
+  } else{
+    return false;
+  }
   }
 
   uploadFile(event) {
@@ -2387,12 +2392,15 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
 
   resetWebform() {
     this.isEditingPublishedForm = !this.isEditingPublishedForm;
-    this.getDSARFormByCRID(this.crid);
-    this.CreateUpdateDSARForm(this.crid);
+    if(this.crid){
+      this.getDSARFormByCRID(this.crid);
+      this.CreateUpdateDSARForm(this.crid);
+    }
     this.getWorkflowWithApproverID();
     this.loadDefaultApprover();
     this.isDirty = false;
     this.modalRef.hide();
+    this.navDirective.select(this.activeId);
   }
 
   disableEditPublishBtn(): boolean {
