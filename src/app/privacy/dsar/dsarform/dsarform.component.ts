@@ -277,44 +277,12 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
       this.crid = params.get('id');
       // this.selectedwebFormControlList = this.
     });
-    this.organizationService.currentProperty.subscribe((response) => {
-      //  this.loadingbar.stop();
-      if (response !== '') {
-        this.selectedProperty = response.property_name;
-        this.currentOrganization = response.organization_name;
-        this.orgId = response.organization_id;
-        this.propId = response.property_id;
-      } else {
-        const orgDetails = this.organizationService.getCurrentOrgWithProperty();
-        this.currentOrganization = orgDetails.organization_name;
-        this.selectedProperty = orgDetails.property_name;
-        this.orgId = orgDetails.organization_id;
-        this.propId = orgDetails.property_id;
-        this.loading = false;
-      }
-    });
   }
 
   ngOnInit() {
     this.loadWebControl();
     this.getCCPAdefaultConfigById();
-    
-    this.organizationService.currentProperty.subscribe((response) => {
-      //  this.loadingbar.stop();
-      if (response !== '') {
-        this.selectedProperty = response.property_name;
-        this.currentOrganization = response.organization_name;
-        this.orgId = response.organization_id;
-        this.propId = response.property_id;
-      } else {
-        const orgDetails = this.organizationService.getCurrentOrgWithProperty();
-        this.currentOrganization = orgDetails.organization_name;
-        this.selectedProperty = orgDetails.property_name;
-        this.orgId = orgDetails.organization_id;
-        this.propId = orgDetails.property_id;
-        this.loading = false;
-      }
-    });
+    this.loadCurrentProperty();
 
     this.basicForm = this.fb.group({
       formname: ['', [Validators.required]],
@@ -365,6 +333,26 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
   get stepFormOne() { return this.basicForm.controls; }
   get formLogo() { return this.headerLogoForm.controls; }
   get faviconLogo() { return this.faviconForm.controls; }
+
+  loadCurrentProperty(){
+    this.organizationService.currentProperty.subscribe((response) => {
+      //  this.loadingbar.stop();
+      if (response !== '') {
+        this.selectedProperty = response.property_name;
+        this.currentOrganization = response.organization_name;
+        this.orgId = response.organization_id;
+        this.propId = response.property_id;
+      } else {
+        const orgDetails = this.organizationService.getCurrentOrgWithProperty();
+        this.currentOrganization = orgDetails.organization_name;
+        this.selectedProperty = orgDetails.property_name;
+        this.orgId = orgDetails.organization_id;
+        this.propId = orgDetails.property_id;
+        this.loading = false;
+      }
+    });
+  }
+
   basicFormdata(saveMethod) {
     let isFormnameChanged;
     this.basicFormSubmitted = true;
@@ -1757,14 +1745,14 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
 
   loadDefaultApprover() {
     if (this.orgId) {
+      setTimeout(()=>{
       this.organizationService.getOrgTeamMembers(this.orgId).subscribe((data) => {
         this.ApproverList = data.response;
         const filterValue = this.ApproverList.filter((t) => t.approver_id === this.selectedApproverID);
         if (filterValue.length > 0) {
           this.defaultapprover = filterValue[0].approver_id;
-          console.log(this.defaultapprover,'defaultapprover..');
-          console.log(this.selectedApproverID,'selectedApproverID..');
         }
+      });
       });
     }
   }
@@ -2400,9 +2388,9 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
   resetWebform() {
     this.isEditingPublishedForm = !this.isEditingPublishedForm;
     this.getDSARFormByCRID(this.crid);
-    this.loadDefaultApprover();
     this.CreateUpdateDSARForm(this.crid);
     this.getWorkflowWithApproverID();
+    this.loadDefaultApprover();
     this.isDirty = false;
     this.modalRef.hide();
   }
@@ -2450,9 +2438,6 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
     this.isDirty = true;
   }
 
-  ngAfterContentChecked() {
-    this.cd.detectChanges();
-  }
 
   onLabelChange($event) {
   //  this.cd.detectChanges();
@@ -2492,6 +2477,10 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
 
   canDeactivate() {
     return this.isDirty;
+  }
+
+  ngAfterContentChecked() {
+    this.cd.detectChanges();
   }
 
   ngAfterViewChecked(){
