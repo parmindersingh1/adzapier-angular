@@ -9,12 +9,12 @@
             </ol>
         </nav>
     </div>
-    <div class="shadowdiv">
+    <div class="shadowdiv" *ngIf="webFormControlList">
         <div class="webformheading p-3">
             <h3 class="tx-uppercase tx-14 mb-0 tx-spacing-1 tx-color-02 tx-semibold">Web form name: <span class="text-capitalize text-primary mr-2">{{formName}}</span> <span class="badge tx-11" [ngClass]="showFormStatus() === 'Publish' ? 'badge-primary':'badge-secondary'">{{showFormStatus() === 'Publish' ? 'Active': 'Draft'}}</span></h3>
         </div>
-        <ul ngbNav #nav="ngbNav" (navChange)="onNavChange($event)" (activeIdChange)="onChangeNavID($event)" [(activeId)]="active" class="nav-tabs">
-            <li [ngbNavItem]="1">
+        <ul ngbNav #nav="ngbNav"  (navChange)="onNavChange($event)" (activeIdChange)="onChangeNavID($event)" [(activeId)]="active" class="nav-tabs">
+            <li [ngbNavItem]="1" [destroyOnHide]="false">
                 <a ngbNavLink>1 Basic</a>
                 <ng-template ngbNavContent>
                     <form [formGroup]="basicForm">
@@ -50,7 +50,7 @@
             </ng-template>
             <!-- End Step-1-->  
     </li>
-    <li [ngbNavItem]="2">
+    <li [ngbNavItem]="2" [destroyOnHide]="false">
         <!--[disabled]="disabled"-->
         <a ngbNavLink>2 Form</a>
         <ng-template ngbNavContent>
@@ -104,14 +104,14 @@
 
                                         <div *ngIf="isAddingFormControl" class="col-sm-11 custom-controls">
                                             <form #customFields="ngForm"
-                                                (ngSubmit)="customFields.form.valid && addCustomFields(customFields)">
+                                                (ngSubmit)="customFields.form.valid">
                                                 <div class="row">
                                                     <div class="col-sm-12">
                                                         <h5> <span *ngIf="isAddingFormControl && isEditingList">Edit Field</span>
                                                             <span *ngIf="isAddingFormControl && !isEditingList">Custom Fields</span>
                                                             <div>
-                                                               <button class="btn btn-link" type="button" (click)="cancelAddingFormControl('cancel')">Cancel</button>
-                                                                <button type="submit" class="btn btn-link" [attr.disabled]="!customFields.form.valid || isWebFormPublished && !isEditingPublishedForm ? true : null">Save and close</button>
+                                                               <button class="btn btn-sm btn-outline-secondary mr-2" type="button" (click)="cancelAddingFormControl('cancel')">Cancel</button>
+                                                                <button type="submit" class="btn btn-sm btn-outline-primary" (click)="addCustomFields(customFields)" [attr.disabled]="!customFields.form.valid || isWebFormPublished && !isEditingPublishedForm ? true : null">Save and close</button>
                                                             </div>
                                                         </h5>
                                                     </div>
@@ -383,7 +383,7 @@
                                                <span class="ml-1"> File Name:  {{logoFilename}}</span>
                                                </div>
                                                 <span class="ml-4">File size: {{logoFilesize}}</span>
-                                                <button class="logodelete" (click)="deleteSelectedLogo()">
+                                                <button class="logodelete" (click)="deleteSelectedLogo()" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null">
                                                     <i-feather name="trash-2" class="feathericon"></i-feather>
                                                 </button>
                                             </div>
@@ -419,10 +419,10 @@
                                                 <div class="filedetails" [ngClass]="{'hide':!headerfaviconBase64,'show':headerfaviconBase64}">
                                                    <div> <span><i-feather name="image" class="feathericon"></i-feather>
                                                     </span>
-                                                   <span class="ml-1"> File Name:  {{faviconFilename}}</span>
+                                                   <span class="ml-1"> File Name:  {{faviconFilename ? faviconFilename :''}}</span>
                                                    </div>
-                                                    <span class="ml-4">File size: {{faviconFilesize}}</span>
-                                                    <button class="logodelete" (click)="deleteSelectedFavicon()">
+                                                    <span class="ml-4">File size: {{faviconFilesize ? faviconFilesize : ''}}</span>
+                                                    <button class="logodelete" (click)="deleteSelectedFavicon()" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null">
                                                         <i-feather name="trash-2" class="feathericon"></i-feather>
                                                     </button>
                                                 </div>
@@ -807,23 +807,22 @@
             </div>
         </ng-template>
     </li>
-    <li [ngbNavItem]="3">
+    <li [ngbNavItem]="3" [destroyOnHide]="false">
         <a ngbNavLink>3 Settings</a>
         <ng-template ngbNavContent>
             <div class="col-5 margin-auto">
-
+                 <form novalidate>
                 <div class="form-group mg-b-5">
                     <label for="defaultapprover" class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">
                         Default Approver</label>
                     <select class="form-control" name="user" #userselect="ngModel" name="defaultapprover" [(ngModel)]="defaultapprover"
-                        [ngClass]="{ 'is-invalid':  isdraftsubmitted && userselect.invalid && userselect.errors?.required}" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null" required>
+                        [ngClass]="{ 'is-invalid': userselect.invalid && userselect.errors?.required && isdraftsubmitted}" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null" required>
                         <ng-container *ngFor="let opt of ApproverList">
                             <option *ngIf="opt.user_name !== ' '" [value]="opt.approver_id"
-                                [selected]="opt.approver_id === defaultapprover">
-                                {{ opt.user_name }}
+                                [selected]="defaultapprover ? opt.approver_id === defaultapprover : opt.approver_id === selectedApproverID">
+                                {{ opt.user_name }} 
                             </option>
                         </ng-container>
-
                     </select>
                     <div *ngIf="userselect.invalid" class="invalid-feedback">
                         <div *ngIf="userselect.errors?.required">Default approver is required</div>
@@ -832,18 +831,19 @@
                 <div class="form-group mg-b-5">
                     <label for="workflow" class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">
                         Select Work flow</label>
-                    <select class="form-control" name="workflow" #workflowselect="ngModel" [(ngModel)]="workflow" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
-                        [ngClass]="{ 'is-invalid': isdraftsubmitted && workflowselect.invalid && workflowselect.errors?.required}"
+                    <select class="form-control" name="workflow" #workflowselect="ngModel" [(ngModel)]="workflow" 
+                    [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
+                        [ngClass]="{ 'is-invalid': workflowselect.invalid && workflowselect.errors?.required && isdraftsubmitted}"
                         required>
                         <ng-container *ngFor="let opt of workFlowList">
                             <option *ngIf="opt.workflow_status == 'active'" [value]="opt.id"
-                                [selected]="opt.approver_id === workflow">
+                                [selected]="opt.id === workflow">
                                 {{ opt.workflow_name }}
                             </option>
                         </ng-container>
 
                     </select>
-                    <div *ngIf="isdraftsubmitted && workflowselect.invalid" class="invalid-feedback">
+                    <div *ngIf="workflowselect.invalid && isdraftsubmitted" class="invalid-feedback">
                         <div *ngIf="workflowselect.errors?.required">Workflow is required</div>
                     </div>
                 </div>
@@ -889,11 +889,12 @@
                         <span class="pad-right-20"> Captcha Verificatioin</span>
                     </label>
                 </div>
+            </form>
             </div>
 
         </ng-template>
     </li>
-    <li [ngbNavItem]="4">
+    <li [ngbNavItem]="4" [destroyOnHide]="false">
         <a ngbNavLink>4 Integrate</a>
         <ng-template ngbNavContent>
             <div class="publishwrapper">
@@ -902,9 +903,9 @@
                     <li ngbNavItem>
                         <a ngbNavLink>Embed Code</a>
                         <ng-template ngbNavContent>
-                            <span *ngIf="!isWebFormPublished" class="mb-2">Integrate options will be available once the webform is
+                            <div *ngIf="!isWebFormPublished" class="mb-2 txt-center">Integrate options will be available once the webform is
                                 published.
-                            </span>
+                            </div>
                             <div class="code-link-wrapper"
                                 [ngClass]="{'hide':!isWebFormPublished,'show':isWebFormPublished}">
                                 <p class="script-title">
@@ -970,18 +971,25 @@
     </li>
     <li> 
         <div class="button-wrapper" [ngClass]="{ 'min-width-75' : isWebFormPublished && isDraftWebForm, 'min-width-170': crid !== null}">
-        <button *ngIf="!isWebFormPublished && !isDraftWebForm" 
-        class="btn btn-link cancel-link" (click)="navigateToWebForm()">Cancel</button>   
-        <button class="btn btn-sm pd-x-15 savebtn btn-uppercase btn-outline-primary" *ngIf="formwizardStatus.isFormOnefinish" (click)="basicFormdata('save')" [ngClass]="isWebFormPublished && !isEditingPublishedForm ? 'hide' : ''">Save</button>
-        <button class="btn btn-sm pd-x-15 savebtn btn-uppercase btn-outline-primary" *ngIf="formwizardStatus.isFormTwofinish" [ngClass]="isWebFormPublished && !isEditingPublishedForm ? 'hide' : ''"
-        (click)="saveAsDraftCCPAFormConfiguration('save')">Save</button>
-        <button class="btn btn-sm pd-x-15 savebtn btn-uppercase btn-outline-primary" *ngIf="formwizardStatus.isFormThreefinish" [ngClass]="isWebFormPublished && !isEditingPublishedForm ? 'hide' : ''"
-        (click)="createDraft('save')">Save</button>
+        <button  class="btn btn-link cancel-link" (click)="navigateToWebForm()">Back</button>   
+        <button class="btn btn-sm pd-x-15 savebtn btn-uppercase lineheight-22 btn-outline-secondary" *ngIf="formwizardStatus.isFormOnefinish" (click)="basicFormdata('save')" [ngClass]="isWebFormPublished && !isEditingPublishedForm ? 'hide' : ''"><i-feather name="save"></i-feather>
+            Save</button>
+        <button class="btn btn-sm pd-x-15 savebtn btn-uppercase lineheight-22 btn-outline-secondary" *ngIf="formwizardStatus.isFormTwofinish" [ngClass]="isWebFormPublished && !isEditingPublishedForm ? 'hide' : ''"
+        (click)="saveAsDraftCCPAFormConfiguration('save')"> <i-feather name="save"></i-feather>
+        Save</button>
+        <button class="btn btn-sm pd-x-15 savebtn btn-uppercase lineheight-22 btn-outline-secondary" *ngIf="formwizardStatus.isFormThreefinish" [ngClass]="isWebFormPublished && !isEditingPublishedForm ? 'hide' : ''"
+        (click)="createDraft('save')"><i-feather name="save"></i-feather>
+        Save</button>
 
-        <button type="button" *ngIf="crid" type="button" class="btn btn-sm pd-x-15 btn-outline-primary btn-uppercase ml-2 mr-1" 
-           (click)="togglePublish()"> {{isWebFormPublished && !isEditingPublishedForm && !isResetlinkEnable ? 'Edit':'Publish'}}</button>
+        <button type="button" *ngIf="crid" type="button" class="btn btn-sm pd-x-15 lineheight-22 btn-outline-secondary btn-uppercase ml-2 mr-1" 
+           (click)="togglePublish()">
+           <i-feather *ngIf="isWebFormPublished" class="feather-24" name="edit-2"></i-feather>
+           <i-feather *ngIf="!isWebFormPublished && !isResetlinkEnable" name="upload-cloud"></i-feather>
+           {{isWebFormPublished && !isEditingPublishedForm && !isResetlinkEnable ? 'Edit':' Publish'}}</button>
           
-           <a target="_blank"  (click)="previewCCPAForm()"><button *ngIf="crid"  class="btn btn-sm pd-x-15 btn-outline-primary btn-uppercase mg-l-5">Preview</button></a>
+           <a target="_blank"  (click)="previewCCPAForm()"><button *ngIf="crid"  class="btn btn-sm pd-x-15 lineheight-22 btn-outline-secondary btn-uppercase mg-l-5">
+            <i-feather name="file-text" class="feather-24"></i-feather>   
+            Preview</button></a>
         </div>
     </li>
     </ul>

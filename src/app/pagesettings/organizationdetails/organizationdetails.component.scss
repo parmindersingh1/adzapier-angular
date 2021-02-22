@@ -146,6 +146,14 @@ table > tbody > tr > td:nth-child(2) > div > img.img-fluid {
     height: 28px;
 }
 
+.input-group-append .form-control {
+    border-radius: 0 5px 5px 0;
+}
+
+.flex-column {
+    flex-direction: column !important;
+}
+
 // .modal-body > form > .form-check-inline {
 //     opacity: 1;
 //     display: block;

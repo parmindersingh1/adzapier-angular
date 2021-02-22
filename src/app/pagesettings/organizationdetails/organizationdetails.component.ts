@@ -48,13 +48,14 @@ export class OrganizationdetailsComponent implements OnInit {
   propertyTotalCount: any;
   propertyPageConfig: TablePaginationConfig;
   // = { itemsPerPage: this.propertyPgSize, currentPage: this.p2, totalItems: this.propertyTotalCount, id: 'propertyPagination' };
-
+  protocolList = ['http://','https://'];
   propertyList: any;
   submitted;
   isEditProperty: boolean;
   propertyname: any;
   website: any;
   logourl: any;
+  protocol: string;
   myContext;
   isInviteFormSubmitted: any;
   organizationTeamMemberList: any;
@@ -141,6 +142,7 @@ export class OrganizationdetailsComponent implements OnInit {
     const phoneNumRegx = '^[0-9]*$'; // '^-?(0|[1-9]\d*)?$';
     this.organisationPropertyForm = this.formBuilder.group({
       propertyname: ['', [Validators.required, Validators.pattern(alphaNumeric)]],
+      protocol: [''],
       website: ['', [Validators.required, Validators.pattern(urlRegex)]],
       logourl: ['']
     });
@@ -164,6 +166,8 @@ export class OrganizationdetailsComponent implements OnInit {
     });
    // this.loadUserListForInvitation();
     this.onGetOrgPlan();
+    this.protocol = 'https://';
+    this.organisationPropertyForm.controls['protocol'].setValue(this.protocol, {onlySelf: true});
   }
   get f() { return this.inviteUserOrgForm.controls; }
   get orgProp() { return this.organisationPropertyForm.controls; }
@@ -230,12 +234,22 @@ export class OrganizationdetailsComponent implements OnInit {
   editModalPopup(content, data) {
     this.isEditProperty = true;
     // this.selectedOrg = data;
+    let extractProtocol;
+    let onlywebsitename;
+    if(data.website.indexOf('//') !== -1){
+      extractProtocol = data.website.split('//');
+      this.protocol = extractProtocol[0] + '//';
+    }else{
+      onlywebsitename = data.website;
+    }
+    const urlname = extractProtocol !== undefined ? extractProtocol[1] : onlywebsitename;
     this.propertyname = data.name.replace(/&amp;/g,'&');
     this.website = data.website;
     this.logourl = data.logo_url;
     this.myContext = { oid: data.oid, pid: data.id };
+    this.organisationPropertyForm.controls['protocol'].setValue(this.protocol);
     this.organisationPropertyForm.controls['propertyname'].setValue(this.propertyname);
-    this.organisationPropertyForm.controls['website'].setValue(data.website);
+    this.organisationPropertyForm.controls['website'].setValue(urlname);
     this.organisationPropertyForm.controls['logourl'].setValue(data.logo_url);
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
       this.organisationPropertyForm.reset();
@@ -352,7 +366,7 @@ export class OrganizationdetailsComponent implements OnInit {
       if (!this.isEditProperty) {
         const reqObj = {
           name: this.organisationPropertyForm.value.propertyname,
-          website: this.organisationPropertyForm.value.website,
+          website: this.organisationPropertyForm.value.protocol + this.organisationPropertyForm.value.website,
           logo_url: this.organisationPropertyForm.value.logourl
         };
         this.orgService.addProperties(this.organizationID, reqObj).subscribe((result) => {
@@ -375,7 +389,7 @@ export class OrganizationdetailsComponent implements OnInit {
       } else {
         const reqObj = {
           name: this.organisationPropertyForm.value.propertyname,
-          website: this.organisationPropertyForm.value.website,
+          website: this.organisationPropertyForm.value.protocol + this.organisationPropertyForm.value.website,
           logo_url: this.organisationPropertyForm.value.logourl
         };
         this.orgService.editProperties(this.myContext.oid, this.myContext.pid, reqObj).subscribe((res) => {
@@ -423,7 +437,7 @@ export class OrganizationdetailsComponent implements OnInit {
 
   propertyPageChangeEvent(event) {
     this.propertyPageConfig.currentPage = event;
-    const pagelimit = '&limit=' + this.propertyPageConfig.itemsPerPage + '&page=' + this.propertyPageConfig.currentPage;
+    const pagelimit = '?limit=' + this.propertyPageConfig.itemsPerPage + '&page=' + this.propertyPageConfig.currentPage;
     // const key = 'response';
     this.orgService.getPropertyList(this.organizationID, pagelimit).subscribe((data) => {
       this.propertyPageConfig.totalItems = data.count;

@@ -147,12 +147,12 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    align-items: baseline;
   }
 
   .custom-controls h5 button {
-    padding: 5px 7px 0 7px;
-    font-size: 14px;
-    line-height: 15px;
+    cursor: pointer;
+    text-decoration: none !important;
   }
 
   .custom-controls h5 button:hover {
@@ -394,7 +394,7 @@ border-bottom: 2px solid #5cb85c;
 .shadowdiv .tab-content {
   padding: 5px 5px 30px 5px;
   background: #fff;
-  text-align: center;
+  text-align: left;
 }
 
 .displayblock {
@@ -810,6 +810,7 @@ font-size: 22px;
 .publishwrapper {
 // width: 22%;
 margin: 20px 0 10px 25px;
+text-align: center;
 }
 
 .publish-content {
@@ -818,6 +819,7 @@ margin: 20px 0 10px 25px;
 
 .active .publishwrapper ul.nav-tabs {
 border: 0 !important;
+display: inline-flex;
 }
 
 .publishwrapper ul > li.nav-item .nav-tabs .nav-link {
@@ -874,22 +876,26 @@ top: -43px;
   top: 0px;
 }
 
+// .savebtn:hover {
+//   background: #0168fa !important;
+// }
+
 .hide {
 display: none;
 }
 
 .show {
- 
+  display: inherit;
 }
 
 ul li > .button-wrapper {
   width: auto;
   display: flex;
   min-width: auto;
-  top: -43px;
+  top: -49px;
   height: 35px;
   justify-content: center;
-  right: 8px;
+  right: 14px;
   position: absolute;
   flex-direction: row;
 }
@@ -1061,7 +1067,9 @@ top: 3px;
 font-weight: bold;
 text-transform: uppercase;
 font-size: 12px;
+// background: url(../../../../assets/imgs/x-circle.svg) no-repeat 0px 55%  !important;   
 }
+
 
 .reset-link:hover{
 text-decoration: none;
@@ -1176,11 +1184,14 @@ background-color: #fff;
 border-bottom: 1px solid #ccc;
 border-radius: 5px 5px 0 0;
 position: relative;
+height: 65px;
+padding: 15px !important;
 }
 
 .webformheading h3 {
 color: #596882;
 font-size: 14px;
+margin: 10px 0 0;
 }
 
 .webformheading h3 span {
@@ -1190,6 +1201,24 @@ padding: 3px 5px 2px 5px;
 .margin-auto {
   margin: 0 auto;
   text-align: left;
+}
+
+.feather-24 {
+  width:20px;
+  height: 20px;
+}
+
+.lineheight-22 {
+  line-height: 22px;
+}
+
+.txt-center {
+  text-align: center !important;
+}
+
+button > i-feather {
+  width: auto !important;
+  height: auto !important;
 }
 
 @media(min-width:767px) and (max-width:1024px) {
