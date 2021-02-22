@@ -1401,7 +1401,11 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
 
   onValueChange(value: Date): void {
     this.minDate = new Date();
-    this.maxDate = new Date(value);
+    if (value === null) {
+      this.maxDate = new Date(this.subTaskFields.deadline);
+    } else {
+      this.maxDate = new Date(value);
+    }
     this.minDate.setDate(this.minDate.getDate());
     this.maxDate.setDate(this.maxDate.getDate());
   }
@@ -1676,12 +1680,12 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
   }
 
   ngAfterViewChecked() {
-     let rightArrowStatus = this.rightClickStatus();
-     if(rightArrowStatus !== this.rightArrowStatus){
-       this.rightArrowStatus = rightArrowStatus;
-       this.cdRef.detectChanges();
-     }
-   
+      let rightArrowStatus = this.rightClickStatus();
+    if (rightArrowStatus !== this.rightArrowStatus) {
+        this.rightArrowStatus = rightArrowStatus;
+        this.cdRef.detectChanges();
+      }
+
     if (this.workflowStageScroller !== undefined) {
       const liElement = this.workflowStageScroller.nativeElement.querySelector('li').offsetWidth;
     if (liElement !== null) {
@@ -1692,7 +1696,7 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
         const visibleSize = menuSize - parentElementSize;
         this.scrollLimit = -visibleSize;
      }
-    } 
+    }
   }
 
   onCloseUserAuthModal() {
@@ -1701,10 +1705,9 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
   }
 
   ngAfterViewInit() {
-      this.cdRef.detectChanges();
+    this.cdRef.detectChanges();
   }
 
-   
 }
 
 interface SubTaskList {
