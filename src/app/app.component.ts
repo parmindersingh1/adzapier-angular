@@ -42,7 +42,6 @@ export class AppComponent implements OnInit {
   listAddonPlan: any
   public unAuthMsg: any;
    isShowingRouteLoadIndicator: boolean;
-   loadingStage = 0;
   constructor(private router: Router,
     private modalService: BsModalService,
               private billingService: BillingService,
@@ -55,30 +54,16 @@ export class AppComponent implements OnInit {
     //  this.headerComponent.loadOrganizationList();
     // Lazy Loading indicator
     this.isShowingRouteLoadIndicator = false;
-    this.loadingStage = 0;
-    let asyncLoadCount = 0;
     router.events.subscribe(
       ( event: RouterEvent ): void => {
         if ( event instanceof RouteConfigLoadStart ) {
-          this.loadingStage = 1;
           this.isShowingRouteLoadIndicator = true;
         } else if ( event instanceof RouteConfigLoadEnd ) {
-          this.loadingStage = 0;
           this.isShowingRouteLoadIndicator = false;
         }
-        // this.isShowingRouteLoadIndicator = !! asyncLoadCount;
-        setTimeout( () => {
-          this.loadingStage = 2;
-        }, 3000);
-
-        setTimeout( () => {
-          this.loadingStage = 3;
-        }, 7000);
-
-        setTimeout( () => {
-          this.loadingStage = 0;
-          this.isShowingRouteLoadIndicator = false;
-        }, 25000);
+        // setTimeout( () => {
+        //   this.isShowingRouteLoadIndicator = false;
+        // }, 25000);
 
       }
     );
