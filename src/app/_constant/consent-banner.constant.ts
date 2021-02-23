@@ -1,6 +1,6 @@
 export const defaultData = {
-  ccpaDefaultTarget: 'ca',
-  gdprDefaultTarget: 'eu',
+  ccpaDefaultTarget: 'us',
+  gdprDefaultTarget: ["be", "bg", "cz", "dk", "de", "ee", "ie", "el", "es", "fr", "hr", "it", "cy", "lv", "lt", "lu", "hu"],
   defaultCookieBlocking: false,
   defaultEnableIab: true,
   defaultEmail: false,
