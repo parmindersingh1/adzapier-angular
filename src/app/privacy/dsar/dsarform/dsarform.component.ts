@@ -535,7 +535,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
 
   loadWebControl() {
     if (this.crid) {
-      this.getDSARFormByCRID(this.crid);
+      this.getDSARFormByCRID(this.crid,'dataview');
       this.getWorkflowWithApproverID();
       this.loadWorkFlowList();
     } else {
@@ -1281,7 +1281,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
     } else {
       //  this.isResetlinkEnable = !this.isResetlinkEnable;
       this.isdraftsubmitted = false;
-    //  this.setHeaderStyle();
+      this.setHeaderStyle();
       if (this.crid) {
         this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
         this.webFormControlList.filter((t) => {
@@ -1423,16 +1423,16 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
           this.loadingbar.stop();
           this.isDirty = false;
           if(this.formSaveMethod !== 'save'){
-            this.decline();
+            this.closeModal();
           }
-          this.getDSARFormByCRID(this.crid);
+          this.getDSARFormByCRID(this.crid,'dataupdated');
         }, (error) => {
           this.loadingbar.stop();
           this.alertMsg = error;
           this.isOpen = true;
           this.alertType = 'danger';
           if(this.formSaveMethod !== 'save'){
-            this.decline();
+            this.closeModal();
           }
         });
          this.isDirty = false;
@@ -1495,7 +1495,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
     if (changeEvent.nextId === 2) {
       if(changeEvent.nextId === 2 && changeEvent.activeId > 2){
         if(this.crid){
-          this.getDSARFormByCRID(this.crid);
+          this.getDSARFormByCRID(this.crid,'dataview');
        } 
      }else{
       this.formName = this.basicForm.controls['formname'].value;
@@ -1518,7 +1518,10 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
       if(this.basicForm.valid && this.isDirty){
         this.saveAsDraftCCPAFormConfiguration('nav');
       }else{
-        this.navDirective.select(3);
+        if(this.workflow !== undefined || this.selectedApproverID !== undefined){
+          this.isdraftsubmitted = false;
+          this.navDirective.select(3);
+        }
       }
     } else if (changeEvent.nextId === 4) {
       this.activeId = changeEvent.activeId;
@@ -1589,7 +1592,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
           this.alertMsg = resp.response;
           this.isOpen = true;
           this.alertType = 'success';
-          this.getDSARFormByCRID(this.crid);
+          this.getDSARFormByCRID(this.crid,'dataupdated');
           this.navDirective.select(4);
           this.getWebFormScriptLink();
           this.loadingbar.stop();
@@ -1898,7 +1901,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
       }
   
       this.pageLoadFormObj = {
-        form_name: this.formName,
+        form_name: retrivedData.form_name,
         form_status: retrivedData.form_status, // 'draft',
       };
 
@@ -2278,10 +2281,10 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
     this.faviconForm.reset();
   }
 
-  getDSARFormByCRID(responsID) {
+  getDSARFormByCRID(responsID,actionperformed) {
     //  this.loadingbar.start();
     if (this.orgId && this.propId) {
-      this.ccpaFormConfigService.getCCPAFormConfigByID(this.orgId, this.propId, responsID,
+      this.ccpaFormConfigService.getCCPAFormConfigByID(this.orgId, this.propId, responsID, actionperformed,
         this.constructor.name, moduleName.dsarWebFormModule).subscribe((data) => {
          // this.ccpaFormConfigService.captureCurrentSelectedFormData(data);
           // tslint:disable-next-line: max-line-length
@@ -2409,14 +2412,22 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
   }
 
   decline() {
-    this.isDirty = false;
     this.modalRef.hide();
+  }
+
+  closeModal() {
+    if(this.formSaveMethod === 'nav'){
+      this.isDirty = false;
+      if(this.modalRef !== undefined){
+        this.modalRef.hide();
+      }
+    }
   }
 
   resetWebform() {
     this.isEditingPublishedForm = !this.isEditingPublishedForm;
     if(this.crid){
-      this.getDSARFormByCRID(this.crid);
+      this.getDSARFormByCRID(this.crid,'existingdata');
       this.CreateUpdateDSARForm(this.crid);
     }
     this.getWorkflowWithApproverID();
