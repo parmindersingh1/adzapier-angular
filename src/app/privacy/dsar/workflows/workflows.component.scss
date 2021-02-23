@@ -151,6 +151,20 @@ table.table.table-bordered > tbody > tr > td:first-child {
   width: auto;
 }
 
+.workflows-table ::ng-deep .p-paginator-bottom .p-paginator {
+  display: flex;
+  position: relative;
+}
+
+.workflows-table ::ng-deep .p-paginator-current {
+  position: absolute;
+  right: 0;
+}
+
+.workflows-table ::ng-deep .p-inputwrapper-filled {
+  position: absolute;
+  left: 0;
+}
 
 // ::ng-deep .p-datatable .p-sortable-column:not(.p-highlight):hover .p-sortable-column-icon {
 //   color:#fff;

@@ -273,6 +273,26 @@ export class DataService {
     
   }
  
+  getWorkflowLicenseLimit(componentName, moduleName): Observable<any>{
+    const path = '/available/workflow/';
+    return this.http.get(environment.apiUrl  + path).pipe(map(response => response),
+      catchError(error => {
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.workFlow, componentName, moduleName, path);
+        return throwError(error);
+      }),
+    ); 
+  }
 
+  setWorkflowLicenseToLocalStorage(planDetails) {
+    const planData = btoa(JSON.stringify(planDetails))
+    localStorage.setItem('workflowPlan', planData);
+  }
+
+  getWorkflowLicenseToLocalStorage() {
+    let planData = localStorage.getItem('workflowPlan')
+    if(planData) {
+     return planData = JSON.parse(atob(planData))
+    }
+  }
 
 }
