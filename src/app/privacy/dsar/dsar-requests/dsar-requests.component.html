@@ -9,7 +9,7 @@
       <div class="datepickerwrapper col-sm-6 pr-0 mr-0 ml-auto">
       <div class="col-sm-7 mr-2 d-flex row-reverse">
         <div class="input-group-prepend"  (click)="clearDateRangePicker()">
-          <span class="input-group-text rounded-right border-left-0" id="inputGroup-sizing-sm"><i class="fa" [ngClass]="searchbydaterange !== '' ? 'fa-times':'fa-search'"></i></span>
+          <span class="input-group-text rounded-right border-left-0" id="inputGroup-sizing-sm"><i class="fa" [ngClass]="searchbydaterange !== '' ? 'fa-caret-down':'fa-search'"></i></span>
         </div>
         <input type="text" [(ngModel)]="searchbydaterange" 
          class="form-control border-left-0  border-right-0 rounded-right" 
