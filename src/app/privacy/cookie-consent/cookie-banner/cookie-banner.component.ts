@@ -250,8 +250,8 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
 
   onFormInIt() {
     this.cookieBannerForm = this.formBuilder.group({
-      ccpaTarget: ['', Validators.required],
-      gdprTarget: ['', Validators.required],
+      ccpaTarget: [defaultData.ccpaDefaultTarget, Validators.required],
+      gdprTarget: [defaultData.gdprDefaultTarget, Validators.required],
       cookieBlocking: [this.defaultData.defaultCookieBlocking],
       enableIab: [this.defaultData.defaultEnableIab],
       email: [this.defaultData.defaultEmail],
