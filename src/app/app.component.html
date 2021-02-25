@@ -91,6 +91,7 @@
           <div class="row ml-2 mr-2">
             <div *ngFor="let plan of listAddonPlan"
                  class=" mt-2 col ml-2 d-flex bg-white-col bt-card flex-column bd pt-0 mr-2  pd-20 ">
+                 <div class="pl-3 pr-3" [ngClass]="{'highlight-activeplan' : plan.id === this.existingOrgPlan.stripe_plan_id}"> 
               <h4 class="text-center popular-text"
                   [ngStyle]="{background: plan.price ==  currentPlanData.price ? '#3968fa' : null}">
                 <ng-container *ngIf="plan.price ==  currentPlanData.price">CURRENT PLAN</ng-container>
@@ -104,10 +105,14 @@
                 <span [ngStyle]="{color: plan.price <=  currentPlanData.price ? '#999' : ''}"
                       class="font-weight-bold">{{plan.price}}</span>
               </h1>
-              <button (click)="onNavigate()" [disabled]="plan.price <=  currentPlanData.price"
+              <button (click)="onNavigate()" *ngIf="plan.id !== this.existingOrgPlan.stripe_plan_id" [disabled]="plan.price <=  currentPlanData.price"
                       class="btn mt-4 mb-4 add-to-cart-btn btn-primary btn-block">
                 Choose Plan
               </button>
+              <h4 class="current-activeplan tx-primary" *ngIf="plan.id === this.existingOrgPlan.stripe_plan_id">
+               Current active plan
+              </h4>
+              </div>
             </div><!-- col -->
           </div>
 
