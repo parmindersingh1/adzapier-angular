@@ -242,7 +242,7 @@ export class DataService {
   isLicenseLimitAvailableForOrganization(reqestType,responseData): boolean {
     const changeResponseProperty = reqestType === 'form' ? 'form_available' : 'request_available';
       if(Object.keys(responseData).length === 0){
-        this.openModal.next({openModal : true, data: responseData, type: 'org', msg: ''});
+        this.openModal.next({openModal : true, data: responseData, type: 'org', msg: '', currentplan: this.getCurrentOrgPlanDetails().response.plan_details});
         return false;
       } else if(responseData[changeResponseProperty] > 0 || responseData[changeResponseProperty] === -1){
         return true;
@@ -250,10 +250,10 @@ export class DataService {
         const formMsg = 'You have exceeded form creation limit. For more details Manage subscription or upgrade plan';
         const requestMsg = 'You have exceeded request creation limit. For more details Manage subscription or upgrade plan'
         const respMsg = changeResponseProperty == 'form_available' ? formMsg : requestMsg;
-        this.openModal.next({openModal : true, data: responseData, type: 'org', msg: respMsg });
+        this.openModal.next({openModal : true, data: responseData, type: 'org', msg: respMsg, currentplan: this.getCurrentOrgPlanDetails().response.plan_details });
         return false;
       } else {
-        this.openModal.next({openModal : true, data: responseData, type: 'org', msg: ''});
+        this.openModal.next({openModal : true, data: responseData, type: 'org', msg: '', currentplan: this.getCurrentOrgPlanDetails().response.plan_details});
         return false;
       }
   }

@@ -41,7 +41,8 @@ export class AppComponent implements OnInit {
   msg = '';
   listAddonPlan: any
   public unAuthMsg: any;
-   isShowingRouteLoadIndicator: boolean;
+  isShowingRouteLoadIndicator: boolean;
+  existingOrgPlan:any;
   constructor(private router: Router,
     private modalService: BsModalService,
               private billingService: BillingService,
@@ -112,7 +113,8 @@ export class AppComponent implements OnInit {
         }
         if(res.data) {
           this.type = res.type;
-          this.currentPlanData = res.data
+          this.currentPlanData = res.data;
+          this.existingOrgPlan = res.currentplan;
         } else if (!res.data && res.type == 'org'){
           this.type = 'org'
           this.currentPlanData = new DefaultPlanData();
@@ -164,6 +166,10 @@ export class AppComponent implements OnInit {
   }
   openUnAuthPopUp() {
     this.modalRef = this.modalService.show(this.unauth, {class: 'modal-sm'});
+  }
+  
+  isCurrentPlanActive():boolean {
+    return 
   }
 
 }

@@ -107,6 +107,7 @@ table.table.table-bordered > tbody > tr > td:first-child {
   border-top: 1px solid #ccc;
   border-radius: 0px 0px 10px 10px;
   border-bottom: 0;
+  justify-content: center;
 }
 
 .workflows-table ::ng-deep .p-datatable.p-datatable-sm .p-datatable-header {
