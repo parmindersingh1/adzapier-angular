@@ -310,6 +310,7 @@ tr.row-disabled > td > a {
   border-radius: 0px 0px 10px 10px;
   border-bottom: 0;
   position: relative;
+  justify-content:center;
 }
 
 .dsar-request-table ::ng-deep .p-datatable .p-paginator .p-paginator-current{
@@ -384,6 +385,10 @@ span.ui-column-title {
   border-color: #c0ccda !important;
   border-radius: 0px; // 5px 0px 0px 5px;
   cursor: pointer;
+}
+
+.lineheight-22 {
+  line-height: 22px;
 }
 
 @media (min-width: 1024px) { 
