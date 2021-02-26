@@ -144,20 +144,6 @@ export class WebformsComponent implements OnInit, DirtyComponents {
       return this.dataService.isLicenseLimitAvailableForOrganization('form',this.dataService.getAvailableLicenseForFormAndRequestPerOrg());
   }
 
-  licenseAvailabilityForFormAndRequestPerOrg(orgID){
-    let webFormLicense = this.dataService.getWebFormLicenseLimit( this.constructor.name, moduleName.headerModule, orgID);
-    let requestLicense = this.dataService.getDSARRequestLicenseLimit( this.constructor.name, moduleName.headerModule, orgID);
-    forkJoin([webFormLicense, requestLicense]).subscribe(results => {
-      let finalObj = {
-        ...results[0].response,
-        ...results[1].response,
-      }
-      this.dataService.setAvailableLicenseForFormAndRequestPerOrg(finalObj);
-    },(error)=>{
-      console.log(error)
-    });
-  }
-
   canDeactivate(){
     return this.isDirty;
   }
