@@ -819,7 +819,7 @@
                         [ngClass]="{ 'is-invalid': userselect.invalid && userselect.errors?.required && isdraftsubmitted}" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null" required>
                         <ng-container *ngFor="let opt of ApproverList">
                             <option *ngIf="opt.user_name !== ' '" [value]="opt.approver_id"
-                                [selected]="defaultapprover ? opt.approver_id === defaultapprover : opt.approver_id === selectedApproverID">
+                                [selected]="opt.approver_id === selectedApproverID">
                                 {{ opt.user_name }} 
                             </option>
                         </ng-container>
