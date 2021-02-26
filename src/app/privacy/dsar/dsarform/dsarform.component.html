@@ -815,11 +815,11 @@
                 <div class="form-group mg-b-5">
                     <label for="defaultapprover" class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">
                         Default Approver</label>
-                    <select class="form-control" name="user" #userselect="ngModel" name="defaultapprover" [(ngModel)]="defaultapprover"
+                    <select class="form-control" name="user" #userselect="ngModel" name="selectedApproverID" [(ngModel)]="selectedApproverID"
                         [ngClass]="{ 'is-invalid': userselect.invalid && userselect.errors?.required && isdraftsubmitted}" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null" required>
                         <ng-container *ngFor="let opt of ApproverList">
                             <option *ngIf="opt.user_name !== ' '" [value]="opt.approver_id"
-                                [selected]="defaultapprover ? opt.approver_id === defaultapprover : opt.approver_id === selectedApproverID">
+                                [selected]="opt.approver_id === selectedApproverID">
                                 {{ opt.user_name }} 
                             </option>
                         </ng-container>
@@ -993,13 +993,13 @@
         (click)="createDraft('save')"><i-feather name="save"></i-feather>
         Save</button>
 
-        <button type="button" *ngIf="crid" type="button" class="btn btn-sm pd-x-15 lineheight-22 btn-outline-secondary btn-uppercase ml-2 mr-1" 
+        <button type="button" *ngIf="crid !== null" type="button" class="btn btn-sm pd-x-15 lineheight-22 btn-outline-secondary btn-uppercase ml-2 mr-1" 
            (click)="togglePublish()">
            <i-feather *ngIf="isWebFormPublished" class="feather-24" name="edit-2"></i-feather>
            <i-feather *ngIf="!isWebFormPublished && !isResetlinkEnable" name="upload-cloud"></i-feather>
            {{isWebFormPublished && !isEditingPublishedForm && !isResetlinkEnable ? 'Edit':' Publish'}}</button>
           
-           <a target="_blank"  (click)="previewCCPAForm()"><button *ngIf="crid"  class="btn btn-sm pd-x-15 lineheight-22 btn-outline-secondary btn-uppercase mg-l-5">
+           <a target="_blank"  (click)="previewCCPAForm()"><button *ngIf="crid !== null"  class="btn btn-sm pd-x-15 lineheight-22 btn-outline-secondary btn-uppercase mg-l-5">
             <i-feather name="file-text" class="feather-24"></i-feather>   
             Preview</button></a>
         </div>
@@ -1059,7 +1059,7 @@
     <div class="modal-body text-center">
         <p>Do you want to edit published form? You may loose previous data!</p>
         <button type="button" class="btn btn-xs btn-primary mr-2" (click)="confirmForEditing()">Yes</button>
-        <button type="button" class="btn btn-xs btn-secondary" (click)="decline()">No</button>
+        <button type="button" class="btn btn-xs btn-secondary" (click)="closeModal()">No</button>
     </div>
 </ng-template>
 <ng-template #confirmSaveAlert>

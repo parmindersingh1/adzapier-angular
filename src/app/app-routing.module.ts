@@ -20,7 +20,7 @@ const routes: Routes = [
   { path: 'gethelp', loadChildren: () => import('./gethelp/gethelp.module').then(m => m.GethelpModule) },
   {
     path: 'home/dashboard', loadChildren: () => import('./dashboard/analytics.module')
-      .then(m => m.AnalyticsModule)
+      .then(m => m.AnalyticsModule), canActivate: [AuthGuard]
   },
   { path: 'userprofile', loadChildren: () => import('./edit-profile/edit-profile.module').then(m => m.EditProfileModule) },
   // {path: 'pricing', loadChildren: () =>

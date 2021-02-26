@@ -15,7 +15,7 @@
                 <div class="card-header  d-flex align-items-center justify-content-between pd-13">
                     <span class="tx-12 tx-color-03 mg-b-0">
                         <h6 class="mg-b-0">Request Details</h6>
-                        Current Status of DSAR Request
+                        Current Status of DSAR Request isRequestCompleted | {{isRequestCompleted}}
                     </span>
                     <div class="d-flex">
 
@@ -27,7 +27,7 @@
                             </svg><span class="d-none d-sm-inline mg-l-5">
                                 Edit</span></button>
                         <button  class="btn btn-xs btn-primary mr-2" *ngIf="selectedStages.length !== 0 && currentWorkflowStage !== 'Rejected'"  (click)="openExtendModal()">Extend Days</button>
-                        <button  class="btn btn-xs btn-primary mr-2" *ngIf="currentWorkflowStage !== 'COMPLETED' && currentWorkflowStage !== 'Rejected'" (click)="openReqestRejectModal()">Reject</button>
+                        <button  class="btn btn-xs btn-primary mr-2" *ngIf="!isRequestCompleted && currentWorkflowStage !== 'Rejected'" (click)="openReqestRejectModal()">Reject</button>
                          <button class="btn btn-xs btn-primary" (click)="removeDSARRequest('DSAR Request detail')">Delete</button>
 
                     </div>
@@ -83,7 +83,7 @@
                         <div class="col-sm"> 
                             <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Status</label>
                                 <ngx-skeleton-loader *ngIf="!currentWorkflowStage" count="1"></ngx-skeleton-loader>
-                            <p class="tx-spacing-1 tx-semibold status-text tx-success" 
+                            <p class="tx-spacing-1 tx-12 tx-semibold status-text tx-success" 
                             [ngClass]="{'tx-success':currentWorkflowStage !== 'Rejected','tx-danger':currentWorkflowStage == 'Rejected' }">
                                 {{currentWorkflowStage}}
                             </p>
