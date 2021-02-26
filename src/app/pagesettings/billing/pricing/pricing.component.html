@@ -89,7 +89,7 @@
               <ng-container *ngIf="plan.price ==  activeData.base.maxPrice">CURRENT PLAN</ng-container>
             </h4>
             <h3 class="mt-4 plan-type">{{plan.name}}</h3>
-            <p class="tx-color-03 mg-b-50">{{plan.description}}</p>
+            <p class="tx-color-03 mg-b-50">{{plan.product_name}}</p>
             <h1 class="tx-rubik tx-normal mb-3 mg-t-auto price-text">
               <sup class="doller">$</sup>
               <span class="font-weight-bold">{{plan.price}}</span>
@@ -112,7 +112,7 @@
               </select>
             </div>
 
-            <button *ngIf="plan.price !=  activeData.base.maxPrice" (click)="onAddToCart(plan, planUnit)" [disabled]="plan.price <=  activeData.base.maxPrice" class="btn mt-4 mb-4 add-to-cart-btn btn-primary btn-block">
+            <button *ngIf="plan.price !=  activeData.base.maxPrice" [disabled]="plan.price <=  activeData.base.maxPrice" (click)="onAddToCart(plan, planUnit)"  class="btn mt-4 mb-4 add-to-cart-btn btn-primary btn-block">
               Add To Cart
             </button>
 
@@ -129,7 +129,7 @@
             <p class="tx-color-03 mg-b-25">Advanced enterprise features and global coverage. Volume discount available.</p>
             <h2 class="tx-rubik tx-normal ">Contact Us</h2>
             <p class="tx-size-10 mg-b-30 "> </p>
-            <button class="btn mt-5 mb-4 add-to-cart-btn btn-primary btn-block">Chat with us</button>
+            <a href="https://adzapier.com/connect" target="_blank" class="btn mt-5 mb-4 add-to-cart-btn btn-primary btn-block">Chat with us</a>
           </div><!-- col -->
         </div>
         <div *ngIf="skeletonLoader" class=" loader mt-5 card">
@@ -146,11 +146,12 @@
         <!--          <button *ngIf="plan.plan && currentPlan.amount < plan.price" (click)="onUpgradePlan(plan)" class="btn btn-primary btn-block">{{plan.button}}</button>-->
         <!--          </ng-template>-->
       <div class="mt-3 row">
+        <h4 class="ml-2 mt-2">Addon Plans</h4>
         <div class="card cookie-addons-card col-md-12">
           <div *ngIf="!skeletonLoader" class="card-body">
             <div *ngFor="let addons of addonsList" class="row mt-4" style="border-bottom: 1px dotted lightgray">
               <div class="text-left col-md-7">
-                <h5 class="addons-head">{{addons.name}}</h5>
+                <h5 class="addons-head">{{addons.product_name}}</h5>
                 <p>{{addons.description}}</p>
               </div>
               <div class="col-md-2">
@@ -188,6 +189,23 @@
                 <h4 class="mt-4"><b>${{addons.price}}.00</b></h4>
               </div>
             </div>
+
+
+
+            <div class="row mt-4" style="border-bottom: 1px dotted lightgray">
+              <div class="text-left col-md-7">
+                <h5 class="addons-head">Enterprise </h5>
+                <p>Advanced enterprise features and global coverage. Volume discount available.
+                </p>
+              </div>
+              <div class="col-md-2">
+              </div>
+              <div class="col-md-3">
+                <a href="https://adzapier.com/connect" target="_blank" class="btn mt-1 mb-4 add-to-cart-btn btn-primary btn-block">Chat with us</a>
+              </div>
+            </div>
+
+
           </div>
 
             <div *ngIf="skeletonLoader" class="card-body">

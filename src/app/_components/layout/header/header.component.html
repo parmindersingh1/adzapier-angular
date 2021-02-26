@@ -57,7 +57,7 @@
     [ngClass]="{'hidemenu':!currentUser, 'showmenu':currentUser}">
     <ul  class="navbar-nav nav-mr" dropdown container="body">
       <a class="nav-link dropdown-link"  dropdownToggle (click)="false">
-       <div>{{currentOrganization}} 
+       <div>{{currentOrganization}}
        </div>
        <span>{{currentProperty ? convertAmpersand(currentProperty) : 'Select Property'}}</span>
       </a>
@@ -73,10 +73,17 @@
               <ng-container  *ngFor="let submenu of item.property">
                 <li role="menuitem">
                   <a class="dropdown-item" routerLinkActive="active" [class.disableproperty]="isProperyDisabled(submenu)" [ngClass]="[isPropSelected(submenu) ? 'active' : '']"> <!-- routerLink="{{item.id}}/{{submenu.property_id}}"-->
-                   <span (click)="isProperyDisabled(submenu) ? false : isCurrentPropertySelected(item,submenu)">  {{ submenu.property_name ? convertAmpersand(submenu.property_name) : 'No Property' }}
+                   <span *ngIf="!isProperyDisabled(submenu); else disabledProperty" (click)="isCurrentPropertySelected(item,submenu)">  {{ submenu.property_name ? convertAmpersand(submenu.property_name) : 'No Property' }}
                     <span class="ml-2" *ngIf="isPropSelected(submenu)">
                     <i class="fa fa-check"></i></span>
                   </span>
+                  <ng-template #disabledProperty>
+                    <span (click)="false">
+                    {{ submenu.property_name ? convertAmpersand(submenu.property_name) : 'No Property' }}
+                    <span class="ml-2" *ngIf="isPropSelected(submenu)">
+                      <i class="fa fa-check"></i></span>
+                    </span>
+                  </ng-template>
                   </a>
                 </li>
               </ng-container>
@@ -117,8 +124,9 @@
   <!--notification after login-->
   <div class="navbar-right" *ngIf="currentUser" dropdown [insideClick]="true">
     <div class="responsive-notification"> 
-    <span class="notification-number" *ngIf="!isNotificationBellClicked">{{notificationsNumber}}</span>
-    <a  class="nav-link dropdown-link" (click)="isNotificationBellClicked = true"  dropdownToggle>
+
+    <span  class="notification-number" [ngClass]="notificationsNumber == 0 ? 'hide-notification-number' : ''">{{notificationsNumber}}</span> <!--[ngClass]="{'hide-notification-number':notificationsNumber == '0'}"-->
+    <a  class="nav-link dropdown-link p-0" (click)="onClickNotificationBell();"  dropdownToggle>
       <i-feather name="bell" class="feather-20"></i-feather>
     </a>
     </div>
@@ -212,7 +220,7 @@
   <!--usermenuends after login-->
 </nav>
 <!---iPad / Mobile Menu-->
-<div id="divSidenav" class="sidenav">
+<div id="divSidenav" class="sidenav back-drop" [ngStyle]="addMobileBackdrop">
   <div class="sidebar sidebar-components" [ngStyle]="addMobileMenuWidth">
     <div class="sidebar-header"></div>
     <div class="sidebar-body">

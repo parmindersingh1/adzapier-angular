@@ -54,15 +54,16 @@
                   "with": "src/environments/environment.prod.ts"
                 }
               ],
-              "optimization": false,
+              "optimization": true,
               "outputHashing": "all",
-              "sourceMap": true,
+              "sourceMap": false,
               "extractCss": true,
               "namedChunks": true,
               "aot": true,
               "extractLicenses": true,
               "vendorChunk": true,
               "buildOptimizer": true,
+              "deleteOutputPath": true,
               "budgets": [
                 {
                   "type": "initial",
@@ -85,13 +86,14 @@
               ],
               "optimization": true,
               "outputHashing": "all",
-              "sourceMap": true,
+              "sourceMap": false,
               "extractCss": true,
               "namedChunks": true,
               "aot": true,
               "extractLicenses": true,
               "vendorChunk": true,
               "buildOptimizer": true,
+              "deleteOutputPath": true,
               "budgets": [
                 {
                   "type": "initial",
@@ -114,13 +116,14 @@
               ],
               "optimization": true,
               "outputHashing": "all",
-              "sourceMap": true,
+              "sourceMap": false,
               "extractCss": true,
               "namedChunks": true,
               "aot": true,
               "extractLicenses": true,
               "vendorChunk": true,
               "buildOptimizer": true,
+              "deleteOutputPath": true,
               "budgets": [
                 {
                   "type": "initial",

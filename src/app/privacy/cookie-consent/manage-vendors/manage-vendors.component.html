@@ -1,0 +1,233 @@
+<div class="d-sm-flex align-items-center justify-content-between">
+  <div>
+    <nav aria-label="breadcrumb" style="margin-left: -14px">
+      <ol class="breadcrumb breadcrumb-style1 mg-b-10">
+        <li class="breadcrumb-item">Privacy</li>
+        <li class="breadcrumb-item"><a routerLink="/home/dashboard/cookie-consent">Cookie Consent</a></li>
+        <li class="breadcrumb-item active">Manage Vendors</li>
+      </ol>
+    </nav>
+  </div>
+</div>
+
+
+<div class="card">
+  <div class="card-header">
+    <div class="d-sm-flex align-items-center justify-content-between">
+      <div>
+        <h4 class="mat-h2 m-0">
+          Manage Vendors
+        </h4>
+      </div>
+
+      <div class="d-none d-md-block">
+
+        <button (click)="onGetAllowVendors()" *ngIf="!skeletonLoading.one && !skeletonLoading.two"
+                class="btn btn-sm pd-x-15 btn-white btn-uppercase mg-l-5" style="width: 102px">
+          <i class="fas fa-sync"></i> Refresh
+        </button>
+        <button *ngIf="skeletonLoading.one || skeletonLoading.two"
+                class="btn btn-sm pd-x-15 btn-white btn-uppercase mg-l-5" style="width: 130px">
+                <span class="spinner-border spinner-border-sm txt-info" role="status"
+                      aria-hidden="true"></span> Refreshing
+        </button>
+
+        <button *ngIf="updating" [disabled]="updating" type="button"
+                class="ml-3 btn btn-sm pd-x-15 btn-primary mr-2 btn-uppercase">
+                  <span class="spinner-border spinner-border-sm txt-info" role="status"
+                        aria-hidden="true"></span> Updating
+        </button>
+
+        <button type="button" *ngIf="!updating" (click)="openModal(template)"
+                class="ml-3 btn btn-sm pd-x-15 btn-primary mr-2 btn-uppercase">
+          <i class="fas fa-pencil-alt"></i> Action
+        </button>
+
+      </div>
+
+    </div>
+  </div>
+  <div class="card-body p-0">
+    <ngx-skeleton-loader *ngIf="skeletonLoading.one || skeletonLoading.two" count="18"
+                         class="pt-4"></ngx-skeleton-loader>
+    <ng-container *ngIf="!skeletonLoading.one && !skeletonLoading.two">
+      <p-tabView>
+        <p-tabPanel header="IAB Vendors">
+          <div class="row">
+            <div class="col-md-8">
+            </div>
+            <div class="col-md-4 form-group m-0">
+              <input type="text" (keyup)="onSearchIabVendors($event)" #searchIAB placeholder="Find Vendors By Name"
+                     class="m-0 form-control search-input">
+            </div>
+          </div>
+          <div class="card">
+            <p-table [value]="searchIAB.value ?  searchIabVendors :  iabVendorsList"
+                     styleClass="p-datatable-sm" [scrollable]="true" scrollHeight="550px">
+              <ng-template pTemplate="colgroup">
+                <colgroup>
+                  <col style="width:5%">
+                  <col style="width:7%">
+                  <col style="width:18%">
+                  <col style="width:50%">
+                  <col style="width:10%">
+                  <col style="width:10%">
+                </colgroup>
+              </ng-template>
+              <ng-template pTemplate="header">
+                <tr>
+                  <th pResizableColumn>
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="customCheckAll"
+                             (change)="onAllowAllIabVendor($event)"
+                             [checked]="iabVendorsList.length === iabVendorsID.length">
+                      <label class="custom-control-label" for="customCheckAll"></label>
+                    </div>
+                  </th>
+                  <th pResizableColumn>ID</th>
+                  <th pResizableColumn>Name</th>
+                  <th pResizableColumn>Policy URL</th>
+                  <th pResizableColumn>Framework</th>
+                  <th pResizableColumn>Status</th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-vendor>
+                <tr>
+                  <td>
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="customCheck{{vendor.id}}"
+                             (change)="onSelectIabVendor($event, vendor.id)"
+                             [checked]="iabVendorsID.includes(vendor.id)">
+                      <label class="custom-control-label" for="customCheck{{vendor.id}}"></label>
+                    </div>
+                  </td>
+                  <th class="id-cell">{{vendor.id}}</th>
+                  <td>{{vendor.name}}</td>
+                  <td><a [href]="vendor.policyUrl" target="_blank">{{vendor.policyUrl}}</a></td>
+                  <td>IAB TCF 2.0</td>
+                  <td>
+                    <p>
+                      <span *ngIf="iabVendorsDefaultID.includes(vendor.id)"
+                            class="btn btn-primary btn-sm active-btn">Active</span>
+                      <span *ngIf="!iabVendorsDefaultID.includes(vendor.id)"
+                            class="btn btn-default btn-sm inactive-btn">Inactive</span>
+                    </p>
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </div>
+
+        </p-tabPanel>
+        <p-tabPanel header="Google Vendors">
+
+          <div class="row">
+            <div class="col-md-8">
+            </div>
+            <div class="col-md-4 form-group m-0">
+              <input type="text" (keyup)="onSearchGoogleVendors($event)" #searchGoogle placeholder="Find Vendors By Name"
+                     class="m-0 form-control search-input">
+            </div>
+          </div>
+
+          <div class="card">
+            <p-table [value]="searchGoogle.value ?  searchGoogleVendors :  googleVendorsList"
+                     styleClass="p-datatable-sm" [scrollable]="true" scrollHeight="550px">
+              <ng-template pTemplate="colgroup">
+                <colgroup>
+                  <col style="width:5%">
+                  <col style="width:7%">
+                  <col style="width:18%">
+                  <col style="width:50%">
+                  <col style="width:10%">
+                  <col style="width:10%">
+                </colgroup>
+              </ng-template>
+              <ng-template pTemplate="header">
+                <tr>
+                  <th pResizableColumn>
+
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="customCheckAllGoogle"
+                             (change)="onAllowAllGoogleVendor($event)"
+                             [checked]="googleVendorsList.length <= googleVendorsID.length">
+                      <label class="custom-control-label" for="customCheckAllGoogle"></label>
+                    </div>
+                  </th>
+                  <th pResizableColumn>ID</th>
+                  <th pResizableColumn>Name</th>
+                  <th pResizableColumn>Policy URL</th>
+                  <th pResizableColumn>Framework</th>
+                  <th pResizableColumn>Status</th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-vendor>
+                <tr>
+                  <td>
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input"
+                             id="{{'customCheckGoogle' + vendor.provider_id}}"
+                             (change)="onSelectGoogleVendor($event, vendor.provider_id)"
+                             [checked]="googleVendorsID.includes(vendor.provider_id)">
+                      <label class="custom-control-label" for="{{'customCheckGoogle' + vendor.provider_id}}"></label>
+                    </div>
+                  </td>
+                  <th class="id-cell">{{vendor.provider_id}}</th>
+                  <td>{{vendor.provider_name}}</td>
+                  <td><a [href]="vendor.policy_url" target="_blank">{{vendor.policy_url}}</a></td>
+                  <td>Google Vendor</td>
+                  <td>
+                    <p>
+                      <span *ngIf="googleVendorsDefaultID.includes(vendor.provider_id)"
+                            class="btn btn-primary btn-sm active-btn">Active</span>
+                      <span *ngIf="!googleVendorsDefaultID.includes(vendor.provider_id)"
+                            class="btn btn-default btn-sm inactive-btn">Inactive</span>
+                    </p>
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </div>
+        </p-tabPanel>
+      </p-tabView>
+
+
+    </ng-container>
+
+
+  </div>
+</div>
+
+
+<div class="col-sm-5 mr-0 float-right flotingdiv" [ngClass]="{'hide':!isOpen}">
+  <alert *ngIf="isOpen" [type]="alertType" dismissOnTimeout="5000" [dismissible]="dismissible"
+  >{{  alertMsg}}</alert>
+</div>
+
+
+<ng-template #template>
+  <div class="font-weight-bold modal-body text-center">
+    <p>You will no longer be able to send or receive signals to and from vendors once they are set to Inactive. A
+      vendor’s status can be updated to Active or Inactive at any time.</p>
+    <div class="row mt-5">
+      <div class="col-md-7 text-left">
+        <div class="form-check">
+          <label class="form-check-label">
+            <input type="radio" class="form-check-input" [(ngModel)]="actionType" value="inactive" name="optradio">Inactive
+          </label>
+        </div>
+        <div class="form-check mt-2">
+          <label class="form-check-label">
+            <input type="radio" class="form-check-input" [(ngModel)]="actionType" value="active" name="optradio">Active
+          </label>
+        </div>
+
+      </div>
+      <div class="col-md-5 pt-4">
+        <button type="button" class="btn btn-sm btn-default" (click)="decline()">Cancel</button>
+        <button type="button" class="btn btn-sm btn-primary" (click)="confirm()">Save</button>
+      </div>
+    </div>
+
+  </div>
+</ng-template>

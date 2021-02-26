@@ -1,13 +1,14 @@
-import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, HostListener, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { OrganizationService, AuthenticationService, UserService } from '../../../_services';
-import { Observable } from 'rxjs';
+import { forkJoin, Observable } from 'rxjs';
 import { Organization } from 'src/app/_models/organization';
-import { distinctUntilChanged } from 'rxjs/operators';
+import { distinctUntilChanged, map } from 'rxjs/operators';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { moduleName } from 'src/app/_constant/module-name.constant';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Location } from '@angular/common';
+import { DataService } from 'src/app/_services/data.service';
 
 @Component({
   selector: 'app-header',
@@ -66,6 +67,7 @@ export class HeaderComponent implements OnInit {
   resuserCID: any;
   navbarOpen = false;
   addMobileMenuWidth: any;
+  addMobileBackdrop: any;
   constructor(
     private router: Router,
     private activatedroute: ActivatedRoute,
@@ -74,6 +76,7 @@ export class HeaderComponent implements OnInit {
     private userService: UserService,
     private loading: NgxUiLoaderService,
     private bsmodalService: BsModalService,
+    private dataService: DataService,
     private location: Location
   ) {
     this.authService.currentUser.subscribe(x => {
@@ -211,10 +214,11 @@ export class HeaderComponent implements OnInit {
           subcategory: [
             { showlink: 'Dashboard', routerLink: '/home/dashboard/ccpa-dsar', icon: 'bar-chart-2' },
             { showlink: 'Webforms', routerLink: '/privacy/dsar/webforms', icon: 'pie-chart' },
-            { showlink: 'Requests', routerLink: '/privacy/dsar/dsar-requests', icon: 'fa fa-ticket-alt feather-16' },
+            { showlink: 'Requests', routerLink: '/privacy/dsar/requests', icon: 'fa fa-ticket-alt feather-16' },
             { showlink: 'Workflow', routerLink: '/privacy/dsar/workflows', icon: 'shield-off' },
 
             { showlink: 'Dashboard', routerLink: '/home/dashboard/cookie-consent', icon: 'fas fa-cookie feather-16' },
+            { showlink: 'Manage Vendors', routerLink: '/cookie-consent/manage-vendors', icon: 'fas fa-tasks feather-16' },
             { showlink: 'Cookie Category', routerLink: '/cookie-consent/cookie-category', icon: 'fab fa-microsoft feather-16' },
             { showlink: 'Cookie Banner', routerLink: '/cookie-consent/cookie-banner', icon: 'fas fa-cookie feather-16' },
             { showlink: 'Consent Tracking', routerLink: '/cookie-consent/cookie-tracking', icon: 'fas fa-file-contract feather-16' },
@@ -243,7 +247,20 @@ export class HeaderComponent implements OnInit {
     });
   }
 
-  isCurrentPropertySelected(org, prop) {
+  async isCurrentPropertySelected(org, prop) {
+    this.loading.start('2');
+    this.dataService.getOrgPlanInfo(this.constructor.name, moduleName.cookieConsentModule, org.id)
+      .subscribe((res: any) => {
+          this.loading.stop('2')
+        this.dataService.setOrgPlanToLocalStorage(res);
+      }, error => {
+        this.loading.stop('2')
+      });
+    this.loading.start('1');
+     this.dataService.getPropertyPlanDetails(this.constructor.name, moduleName.cookieConsentModule, prop.property_id)
+      .subscribe((res: any) => {
+        this.dataService.setPropertyPlanToLocalStorage(res);
+        this.loading.stop('1')
     this.selectedOrgProperties.length = 0;
     this.activeProp = prop.property_name;
     const obj = {
@@ -251,6 +268,7 @@ export class HeaderComponent implements OnInit {
       organization_name: org.orgname,
       property_id: prop.property_id,
       property_name: prop.property_name,
+      property_active: prop.property_active,
       user_id: this.userID
     };
     this.orgservice.changeCurrentSelectedProperty(obj);
@@ -261,12 +279,32 @@ export class HeaderComponent implements OnInit {
     }
     this.orgservice.setCurrentOrgWithProperty(obj);
     this.currentSelectedProperty();
-    if (this.router.url.indexOf('privacy/dsar/dsar-requests-details') !== -1) {
-      this.router.navigate(['/privacy/dsar/dsar-requests']);
+    if (this.router.url.indexOf('privacy/dsar/requests-details') !== -1) {
+      this.router.navigate(['/privacy/dsar/requests']);
     } else {
       this.router.navigate([this.router.url]);
     }
-    this.openNav();
+
+      }, err => {
+        this.loading.stop('1')
+      });
+      this.licenseAvailabilityForFormAndRequestPerOrg(org);
+      if(this.router.url.indexOf('dsarform') !== -1){
+        this.router.navigate(['/privacy/dsar/webforms']);
+      }
+     this.openNav();
+
+
+
+    // this.dataService.changeCurrentPropertyPlan(res.response);
+
+    // this.dataService.currentPropertyPlanDetails.subscribe(res => {
+    //   this.dataService.setPropertyPlanToLocalStorage(res);
+    //   console.log('Res DAta', res);
+    // }, err => {
+    //   console.log('Error Property Plan Change', err)
+    // })
+
   }
 
   isPropSelected(selectedItem): boolean {
@@ -349,6 +387,7 @@ export class HeaderComponent implements OnInit {
   openNav() {
     this.close = !this.close;
     this.addMobileMenuWidth = this.addMenuWidth(); // to avoid countinous background call
+    this.addMobileBackdrop = this.addBackdrop(); // to avoid countinous background call
   }
 
 
@@ -381,6 +420,7 @@ export class HeaderComponent implements OnInit {
             // this.orgservice.getSelectedOrgProperty.emit(obj);
             //  this.firstElement = false;
             this.orgservice.setCurrentOrgWithProperty(obj);
+            this.licenseAvailabilityForFormAndRequestPerOrg(obj);
           }
         } else {
           this.currentSelectedProperty();
@@ -426,6 +466,7 @@ export class HeaderComponent implements OnInit {
           this.selectedOrgProperties.push(orgDetails);
         }
         this.isPropSelected(orgDetails);
+        this.licenseAvailabilityForFormAndRequestPerOrg(orgDetails);
       }
       return this.currentProperty;
     }
@@ -451,6 +492,7 @@ export class HeaderComponent implements OnInit {
       const result = data.filter((t) => t.id === orgDetails.organization_id).length > 0;
       const isSameUserLoggedin = orgDetails.user_id === this.userID;
       if (result && isSameUserLoggedin) {
+        this.licenseAvailabilityForFormAndRequestPerOrg(orgDetails);
         return true;
       } else {
         return false;
@@ -521,16 +563,19 @@ export class HeaderComponent implements OnInit {
   }
 
   loadNotification() {
+    //this.isNotificationBellClicked = true;
     this.userService.getNotification(this.constructor.name, moduleName.headerModule).subscribe((data) => {
-      this.notificationList = data.response;
-      this.showNotificationNumber(this.notificationList);
+      this.notificationList = data.response.notification_data;
+      this.notificationsNumber = data.response.new_count;
     });
   }
 
-  showNotificationNumber(list) {
-    if (list.filter((t) => t.read === true).length !== 0) {
-      return this.notificationsNumber = list.filter((t) => t.read === true).length;
-    }
+  onClickNotificationBell(){
+    this.userService.checkIsNotificationVisited(this.constructor.name, moduleName.headerModule).subscribe((data) => {
+      if(data.status === 200){
+        this.loadNotification();
+      }
+    });
   }
 
   clearNotification(requestid, purpose: string, status: boolean) {
@@ -593,7 +638,7 @@ export class HeaderComponent implements OnInit {
 
 
   onMobileMenuClicked(link) {
-    
+
     if (link === 'Dashboard' && this.isMobileDashboardMenuCollapsed) {
       this.isMobileDashboardMenuCollapsed = false;
       this.isMobilePrivacyMenuCollapsed = true;
@@ -637,9 +682,8 @@ export class HeaderComponent implements OnInit {
     let textLength;
     if(this.currentOrganization !== undefined){
       textLength = this.currentOrganization.length;
-     // console.log(textLength,'textLength..');
       let generatedWidth = (textLength * 10) <= 250 ? 250 : textLength * 10;
-      let addStyle = { 
+      let addStyle = {
         'width': generatedWidth + 'px',
         'left': !this.close ? 0 : '-' +  generatedWidth + 'px',
         'transform': !this.close ? 'translateX(0)' : 'translateX(-'+ generatedWidth +'px)',
@@ -647,7 +691,7 @@ export class HeaderComponent implements OnInit {
        };
        return addStyle;
     }else{
-      let addStyle = { 
+      let addStyle = {
         'width': 260 + 'px',
         'left': !this.close ? 0 : '-' +  26 * 10 + 'px',
         'transform': !this.close ? 'translateX(0)' : 'translateX(-'+ 26 * 10 +'px)',
@@ -657,8 +701,57 @@ export class HeaderComponent implements OnInit {
     }
   }
 
+  addBackdrop(){
+    let textLength = this.currentOrganization.length;
+    let generatedWidth = (textLength * 10) <= 250 ? 250 : textLength * 10;
+    if(!this.close){
+      let backDropStyle = {
+        'opacity': !this.close ? 1 : 0,
+        'visibility': !this.close ? 'visible' : 'hidden',
+        'left': !this.close ? generatedWidth + 'px' : 0
+      };
+      return backDropStyle;
+    }
+
+  }
+
   convertAmpersand(item){
     return item.replace(/&amp;/g,'&');
   }
 
+  licenseAvailabilityForFormAndRequestPerOrg(org){
+    let webFormLicense = this.dataService.getWebFormLicenseLimit( this.constructor.name, moduleName.headerModule, org.id || org.organization_id);
+    let requestLicense = this.dataService.getDSARRequestLicenseLimit( this.constructor.name, moduleName.headerModule, org.id || org.organization_id);
+    forkJoin([webFormLicense, requestLicense]).subscribe(results => {
+      let finalObj = {
+        ...results[0].response,
+        ...results[1].response,
+      }
+      this.dataService.setAvailableLicenseForFormAndRequestPerOrg(finalObj);
+    },(error)=>{
+      console.log(error)
+    });
+  }
+
+  isLicenseLimitAvailable(): boolean{
+    const status = this.dataService.isLicenseLimitAvailableForOrganization('form',this.dataService.getAvailableLicenseForFormAndRequestPerOrg());
+    if(!status){
+      return status;
+    } else {
+      return status;
+    }
+  }
+
+  @HostListener('window:resize',['$event'])
+  onWindowResize(event){
+    if(event.target.outerWidth <= 767){
+     // !this.close ? this.close = true : this.close = false;
+      console.log(this.close,'close..');
+      if(!this.close){
+        this.close = true;
+        this.addMobileMenuWidth = this.addMenuWidth();
+        this.addMobileBackdrop = this.addBackdrop();
+      }
+    }
+  }
 }

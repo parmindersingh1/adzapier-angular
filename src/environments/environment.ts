@@ -10,6 +10,7 @@ export const environment = {
   iabUrl: 'https://staging-cdn.adzapsrv.com/vendorlist/IABvendors/',
   googleVendorsUrl: 'https://staging-cdn.adzapsrv.com/vendorlist/googlevendorlist/google.json',
   apiUrl: 'https://develop-cmp-api.adzpier-staging.com/api/v1',
+  // apiUrl: 'http://localhost:8888/api/v1',
   stripePublishablekey : 'pk_test_Bea8DtMw2JDaQoZuvyd2yEdE00wtdPEyoM',
   lokiUrl: 'https://logs.adzpier-staging.com/loki/api/v1/push',
   lokiConfig: {

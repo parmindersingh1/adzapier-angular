@@ -32,8 +32,18 @@ const colorValues =  [
     borderWidth: 1
   },
   {
-    borderColor: '#c40e20',
-    backgroundColor: 'rgba(220, 53, 69, 0.68)',
+    borderColor: '#5cb85c',
+    backgroundColor: 'rgba(92, 184, 92, 0.68)',
+    borderWidth: 1
+  },
+  {
+    borderColor: '#f10075',
+    backgroundColor: 'rgba(241, 0, 117, 1)',
+    borderWidth: 1
+  },
+  {
+    borderColor: '#6f42c1',
+    backgroundColor: 'rgba(111, 66, 193, 1)',
     borderWidth: 1
   },
 ];
@@ -133,7 +143,9 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
     AVG_TIME_TO_COMPLETE: 0,
     REQUEST_COMPLETED: 0,
     REQUEST_IN_PROGRESS: 0,
-    REQUEST_RECEIVED: 0
+    REQUEST_RECEIVED: 0,
+    REQUEST_REJECTED: 0,
+    REQUEST_DELETED: 0
   };
   Requests = [];
   stateList: Country[] = [];
@@ -163,7 +175,7 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
     this.onSetUpDate();
   }
 
-  onCountMap(requestComplete, requestReceived, requestInProgress, timeToComplete, dashBoardChartCount) {
+  onCountMap(requestComplete, requestReceived, requestInProgress, timeToComplete, requestRejected, requestDeleted, dashBoardChartCount) {
     jQuery.plot('#flotChart3', [{
       data: requestReceived,
       color: '#9db2c6'
@@ -264,6 +276,58 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
       },
       xaxis: {show: false}
     });
+
+    jQuery.plot('#flotChart7', [{
+      //data: timeToComplete,
+      data: requestRejected,//.length > 0 ? requestRejected : nullStatics,
+      color: '#9db2c6'
+    }], {
+      series: {
+        shadowSize: 0,
+        lines: {
+          show: true,
+          lineWidth: 2,
+          fill: true,
+          fillColor: {colors: [{opacity: 0}, {opacity: .5}]}
+        }
+      },
+      grid: {
+        borderWidth: 0,
+        labelMargin: 0
+      },
+      yaxis: {
+        show: false,
+        min: 0,
+        max: dashBoardChartCount.REQUEST_REJECTED * 2
+      },
+      xaxis: {show: false}
+    });
+
+    jQuery.plot('#flotChart8', [{
+      //data: timeToComplete,
+      data: requestDeleted,//.length > 0 ? requestRejected : nullStatics,
+      color: '#9db2c6'
+    }], {
+      series: {
+        shadowSize: 0,
+        lines: {
+          show: true,
+          lineWidth: 2,
+          fill: true,
+          fillColor: {colors: [{opacity: 0}, {opacity: .5}]}
+        }
+      },
+      grid: {
+        borderWidth: 0,
+        labelMargin: 0
+      },
+      yaxis: {
+        show: false,
+        min: 0,
+        max: dashBoardChartCount.REQUEST_DELETED * 2
+      },
+      xaxis: {show: false}
+    });
   }
 
   onSelectCountry(e) {
@@ -328,8 +392,8 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
 
   onSetUpDate() {
     const that = this;
-    const start = moment().subtract(29, 'days');
-    const end = moment();
+    const start = moment().utc().subtract(29, 'days');
+    const end = moment().utc();
 
     // tslint:disable-next-line:no-shadowed-variable
     function cb(start, end) {
@@ -345,14 +409,14 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
       endDate: end,
       maxDate: new Date(),
       ranges: {
-        Today: [moment(), moment()],
-        Yesterday: [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-        'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-        'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-        'This Month': [moment().startOf('month'), moment().endOf('month')],
-        'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
-        'This Year': [moment().startOf('year'), moment().endOf('year')],
-        'Last Year': [moment().subtract(1, 'year').startOf('year'), moment().subtract(1, 'year').endOf('year')],
+        Today: [moment().utc(), moment().utc()],
+        Yesterday: [moment().utc().subtract(1, 'days'), moment().utc().subtract(1, 'days')],
+        'Last 7 Days': [moment().utc().subtract(6, 'days'), moment().utc()],
+        'Last 30 Days': [moment().utc().subtract(29, 'days'), moment().utc()],
+        'This Month': [moment().utc().startOf('month'), moment().utc().endOf('month')],
+        'Last Month': [moment().utc().subtract(1, 'month').startOf('month'), moment().utc().subtract(1, 'month').endOf('month')],
+        'This Year': [moment().utc().startOf('year'), moment().utc().endOf('year')],
+        'Last Year': [moment().utc().subtract(1, 'year').startOf('year'), moment().utc().subtract(1, 'year').endOf('year')],
       }
     }, cb);
     cb(start, end);
@@ -385,6 +449,8 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
         const result = res.response;
         if (Object.keys(result).length > 0) {
           this.dashboardCount = result.dashboardCount;
+          this.dashboardCount.REQUEST_DELETED = result.dashboardCount.REQUEST_DELETED;
+          this.dashboardCount.REQUEST_REJECTED = result.dashboardCount.REQUEST_REJECTED;
           this.Requests = result.hasOwnProperty('Requests') ? result.Requests : [];
           this.requestType = result['RequestType']['data'];
           this.requestType.forEach( (element, index) => {
@@ -427,6 +493,12 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
         if (chart.label === 'Complete') {
           colorChart.push(colorValues[2])
         }
+        if (chart.label === 'Deleted') {
+          colorChart.push(colorValues[3])
+        }
+        if (chart.label === 'Rejected') {
+          colorChart.push(colorValues[4])
+        }
       }
       this.lineChartLabels = reqChartLabel;
       this.lineChartData = data;
@@ -438,7 +510,9 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
       REQUEST_COMPLETED: 0,
       REQUEST_RECEIVED: 0,
       REQUEST_IN_PROGRESS: 0,
-      AVG_TIME_TO_COMPLETE: 0
+      AVG_TIME_TO_COMPLETE: 0,
+      REQUEST_REJECTED: 0,
+      REQUEST_DELETED: 0
     };
     const newRequestComplete = [...chart.dashboardStatistics.REQUEST_COMPLETED];
     const requestComplete = [];
@@ -475,7 +549,25 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
       }
     }
 
-    this.onCountMap(requestComplete, requestReceived, requestInProgress, timeToComplete, dashBoardChartCount);
+    const newRequestRejected = [...chart.dashboardStatistics.REQUEST_REJECTED];
+    const requestRejected = [];
+    for (let i = 0; newRequestRejected.length > i; i++) {
+      requestRejected.push([i, newRequestRejected[i]]);
+      if (dashBoardChartCount.REQUEST_REJECTED < newRequestRejected[i]) {
+        dashBoardChartCount.REQUEST_REJECTED = newRequestRejected[i];
+      }
+    }
+
+    const newRequestDeleted = [...chart.dashboardStatistics.REQUEST_DELETED];
+    const requestDeleted = [];
+    for (let i = 0; newRequestDeleted.length > i; i++) {
+      requestDeleted.push([i, newRequestDeleted[i]]);
+      if (dashBoardChartCount.REQUEST_DELETED < newRequestDeleted[i]) {
+        dashBoardChartCount.REQUEST_DELETED = newRequestDeleted[i];
+      }
+    }
+
+    this.onCountMap(requestComplete, requestReceived, requestInProgress, timeToComplete, requestRejected, requestDeleted, dashBoardChartCount);
 
     // doughnutChartData
     if (chart.RequestType.data) {

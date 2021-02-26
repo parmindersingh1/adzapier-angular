@@ -1,3 +1,6 @@
+<div [ngClass]="{'spinner': isDisabledScreen}" ></div>
+<div [ngClass]="{'pano': isDisabledScreen}" ></div>
+<div (click)="openDisablePopUp()"  >
 <div class="mb-4">
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb breadcrumb-style1 mg-b-10">
@@ -6,9 +9,11 @@
       <li class="breadcrumb-item active" aria-current="page">Tracking</li>
     </ol>
   </nav>
-  <h4 class="mg-b-0 tx-spacing--1">Cookie Consent Tracking</h4>
 </div>
 <div class="card border-radius-lt-rt">
+  <div class="card-header">
+    <h4 class="mg-b-0 tx-spacing--1">Cookie Consent Tracking</h4>
+  </div>
   <div class="card-body p-2">
       <div class="row">
         <div class="col-sm-3">
@@ -46,7 +51,7 @@
             </span>
         </label>
         </div>
-          
+
           <!-- <span id="reportrange"
                 class="rounded-5">
             <i class="fa fa-calendar"></i>&nbsp;
@@ -57,7 +62,7 @@
       </div>
     </div>
 </div>
-
+<div [ngClass]="{'container-body': isDisabledScreen}">
 <p-table class="cookie-tracking-table"
   styleClass="p-datatable-sm"
   [value]="cookieConsents"
@@ -123,3 +128,5 @@
     </div>
   </ng-template>
 </p-table>
+</div>
+</div >

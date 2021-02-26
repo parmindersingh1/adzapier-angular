@@ -1,12 +1,13 @@
-import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { Validators, FormBuilder, FormGroup, FormArray, FormControl } from '@angular/forms';
+import {Component, OnInit, TemplateRef, ViewChild} from '@angular/core';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
-import { UserService } from 'src/app/_services';
-import { CompanyService } from 'src/app/company.service';
-import { TablePaginationConfig } from 'src/app/_models/tablepaginationconfig';
-import { moduleName } from 'src/app/_constant/module-name.constant';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import {UserService} from 'src/app/_services';
+import {CompanyService} from 'src/app/company.service';
+import {TablePaginationConfig} from 'src/app/_models/tablepaginationconfig';
+import {moduleName} from 'src/app/_constant/module-name.constant';
+import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
+import {DataService} from '../../_services/data.service';
 
 @Component({
   selector: 'app-company',
@@ -14,7 +15,7 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
   styleUrls: ['./company.component.scss']
 })
 export class CompanyComponent implements OnInit {
-  @ViewChild('confirmTemplate', { static: false }) confirmModal: TemplateRef<any>;
+  @ViewChild('confirmTemplate', {static: false}) confirmModal: TemplateRef<any>;
   modalRef: BsModalRef;
   companyDetails: any;
   appId: any;
@@ -60,19 +61,22 @@ export class CompanyComponent implements OnInit {
   controlname: string;
   userList: any = [];
   noResult = false;
+  private companyPlanDetails: any;
+
   constructor(private companyService: CompanyService, private modalService: NgbModal,
               private formBuilder: FormBuilder,
               private userService: UserService,
               private loading: NgxUiLoaderService,
+              private dataService: DataService,
               private bsmodalService: BsModalService
   ) {
-    this.paginationConfig = { itemsPerPage: this.pageSize, currentPage: this.p, totalItems: this.totalCount };
-   }
+    this.paginationConfig = {itemsPerPage: this.pageSize, currentPage: this.p, totalItems: this.totalCount};
+  }
 
   ngOnInit() {
     this.loadRoleList();
     const numZip = '^[0-9]{5,20}$'; // '^[0-9]{5}(?:-[0-9]{4})?$';
-    const numRegex =  '^[0-9]*$';
+    const numRegex = '^[0-9]*$';
     const strRegx = '^[a-zA-Z\-\']+';
     const alphaNumeric = '.*\\S.*[a-zA-z0-9 ]';
     this.companyForm = this.formBuilder.group({
@@ -96,15 +100,37 @@ export class CompanyComponent implements OnInit {
     this.loadCompanyDetails();
     this.pathValues();
     this.loadCompanyTeamMembers();
-   // this.loadUserListForInvitation();
+    // this.loadUserListForInvitation();
+    this.onGetCompanyPlan();
   }
-  get f() { return this.companyForm.controls; }
-  get userInvite() { return this.inviteUserForm.controls; }
-  get confirmDelete() { return this.confirmationForm.controls; }
+
+  onGetCompanyPlan() {
+    this.loading.start('2');
+    this.dataService.getCompanyPlanDetails(this.constructor.name, moduleName.cookieConsentModule)
+      .subscribe((res: any) => {
+        this.companyPlanDetails = res.response;
+        this.loading.stop('2')
+      }, error => {
+        this.loading.stop('2')
+      });
+  }
+
+  get f() {
+    return this.companyForm.controls;
+  }
+
+  get userInvite() {
+    return this.inviteUserForm.controls;
+  }
+
+  get confirmDelete() {
+    return this.confirmationForm.controls;
+  }
+
   loadCompanyDetails() {
     this.loading.start();
     this.companyService.getCompanyDetails(this.constructor.name, moduleName.companyModule).subscribe((data) => {
-      console.log(data,'CC data..');
+      console.log(data, 'CC data..');
       this.loading.stop();
       this.orgname = data.response.name;
       this.address1 = data.response.address1;
@@ -124,15 +150,20 @@ export class CompanyComponent implements OnInit {
       this.isOpen = true;
       this.alertType = 'danger';
       this.modalService.dismissAll('Error!');
-  });
+    });
   }
 
-  editOrganizationModalPopup(content) {
+  editOrganizationModalPopup(content, type) {
+    if (type === 'add') {
+      if (!this.onCheckSubscription()) {
+        return false;
+      }
+    }
     this.isInviteFormSubmitted = false;
     this.isUpdateUserinvitation = false;
     this.inviteUserForm.reset();
     this.inviteUserForm.get('emailid')[this.isUpdateUserinvitation ? 'disable' : 'enable']();
-    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
+    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
     }, (reason) => {
       // this.profileForm.reset();
     });
@@ -161,8 +192,9 @@ export class CompanyComponent implements OnInit {
       this.isOpen = true;
       this.alertType = 'danger';
       this.modalService.dismissAll('Error!');
-  });
+    });
   }
+
 
   onSubmit() {
     this.submitted = true;
@@ -183,90 +215,106 @@ export class CompanyComponent implements OnInit {
       this.loading.start();
       this.companyService.updateCompanyDetails(this.constructor.name, moduleName.companyModule, editObj)
         .subscribe((data) => {
-          this.loading.stop();
-          if (data) {
-            this.alertMsg = 'Details has been updated successfully!';
-            this.isOpen = true;
-            this.alertType = 'success';
-            this.loadCompanyDetails();
-            this.modalService.dismissAll('Data Saved!');
-          }
-        }, (err) => {
+            this.loading.stop();
+            if (data) {
+              this.alertMsg = 'Details has been updated successfully!';
+              this.isOpen = true;
+              this.alertType = 'success';
+              this.loadCompanyDetails();
+              this.modalService.dismissAll('Data Saved!');
+            }
+          }, (err) => {
             this.loading.stop();
             this.alertMsg = err;
             this.isOpen = true;
             this.alertType = 'danger';
             this.modalService.dismissAll('Error!');
-        }
+          }
         );
     }
   }
-  onGenerateToken(cId){
+
+  onGenerateToken(cId) {
     this.loading.start();
-    this.companyService.generateToken( this.constructor.name, moduleName.organizationDetailsModule, cId)
-    .subscribe(res => {
-      this.loading.stop();
-      this.alertMsg = res.message;
-      this.isOpen = true;
-      this.alertType = 'success';
-      this.onGetToken(this.cid)
-    }, err => {
-      this.loading.stop();
-      this.alertMsg = err.message;
-      this.isOpen = true;
-      this.alertType = 'danger';
-    })
+    this.companyService.generateToken(this.constructor.name, moduleName.organizationDetailsModule, cId)
+      .subscribe(res => {
+        this.loading.stop();
+        this.alertMsg = res.message;
+        this.isOpen = true;
+        this.alertType = 'success';
+        this.onGetToken(this.cid)
+      }, err => {
+        this.loading.stop();
+        this.alertMsg = err.message;
+        this.isOpen = true;
+        this.alertType = 'danger';
+      })
 
   }
 
-  onUpdateToken(cId){
+  onUpdateToken(cId) {
     this.loading.start();
-    this.companyService.updateToken( this.constructor.name, moduleName.organizationDetailsModule, cId)
-    .subscribe(res => {
-      this.loading.stop();
-      this.alertMsg = res.message;
-      this.isOpen = true;
-      this.alertType = 'success';
-      this.onGetToken(this.cid)
-    }, err => {
-      this.loading.stop();
-      this.alertMsg = err.message;
-      this.isOpen = true;
-      this.alertType = 'danger';
-    })
+    this.companyService.updateToken(this.constructor.name, moduleName.organizationDetailsModule, cId)
+      .subscribe(res => {
+        this.loading.stop();
+        this.alertMsg = res.message;
+        this.isOpen = true;
+        this.alertType = 'success';
+        this.onGetToken(this.cid)
+      }, err => {
+        this.loading.stop();
+        this.alertMsg = err.message;
+        this.isOpen = true;
+        this.alertType = 'danger';
+      })
 
   }
 
 
-  onGetToken(cid){
+  onGetToken(cid) {
     this.loading.start();
-    this.companyService.getToken( this.constructor.name, moduleName.organizationDetailsModule,cid)
-    .subscribe(res => {
-      this.loading.stop();
-      this.alertMsg = res.message;
-      this.appId = res.response.app_id;
-      this.isOpen = true;
-      this.alertType = 'success';
-    }, err => {
-      this.loading.stop();
-      this.alertMsg = err.message;
-      this.isOpen = true;
-      this.alertType = 'danger';
-    })
+    this.companyService.getToken(this.constructor.name, moduleName.organizationDetailsModule, cid)
+      .subscribe(res => {
+        this.loading.stop();
+        this.alertMsg = res.message;
+        this.appId = res.response.app_id;
+        this.isOpen = true;
+        this.alertType = 'success';
+      }, err => {
+        this.loading.stop();
+        this.alertMsg = err.message;
+        this.isOpen = true;
+        this.alertType = 'danger';
+      })
 
   }
+
+  onCheckSubscription() {
+    const status = this.dataService.checkUserForOrgAndCompany(this.companyPlanDetails, this.paginationConfig.totalItems);
+    if (status === false) {
+      return false;
+    }
+    return true;
+  }
+
   onSubmitInviteUser() {
+    console.log('isUpdateUserinvitation', this.isUpdateUserinvitation)
     this.isInviteFormSubmitted = true;
     if (this.inviteUserForm.invalid) {
       return false;
     } else {
+      if (!this.isUpdateUserinvitation) {
+        if (!this.onCheckSubscription()) {
+          return false;
+        }
+      }
       if (!this.isUpdateUserinvitation) {
         const requestObj = {
           email: this.inviteUserForm.value.emailid,
           role_id: this.inviteUserForm.value.permissions,
           user_level: 'company'
         };
-        this.companyService.inviteUser( this.constructor.name, moduleName.organizationDetailsModule, requestObj)
+        this.companyService.inviteUser(this.constructor.name, moduleName.organizationDetailsModule, requestObj)
           .subscribe((data) => {
             if (data) {
               this.alertMsg = data.response;
@@ -289,7 +337,7 @@ export class CompanyComponent implements OnInit {
           user_id: this.approverID,
           role_id: this.inviteUserForm.value.permissions,
         };
-        this.companyService.updateUserRole( this.constructor.name, moduleName.organizationDetailsModule, requestObj)
+        this.companyService.updateUserRole(this.constructor.name, moduleName.organizationDetailsModule, requestObj)
           .subscribe((data) => {
             if (data) {
               this.alertMsg = data.response;
@@ -335,7 +383,7 @@ export class CompanyComponent implements OnInit {
     this.inviteUserForm.get('emailid')[this.isUpdateUserinvitation ? 'disable' : 'enable']();
     this.inviteUserForm.controls['permissions'].setValue(data.role_id);
 
-    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
+    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
       this.inviteUserForm.reset();
       // this.closeResult = `Closed with: ${result}`;
     }, (reason) => {
@@ -438,25 +486,24 @@ export class CompanyComponent implements OnInit {
 
   onResendInvitation(id) {
     this.companyService.resendInvitation(this.constructor.name, moduleName.companyModule, id)
-    .subscribe((data) => {
-      this.loading.stop();
-      if (data) {
-        this.alertMsg = 'We have sent a email on your Email Id';
+      .subscribe((data) => {
+        this.loading.stop();
+        if (data) {
+          this.alertMsg = 'We have sent a email on your Email Id';
+          this.isOpen = true;
+          this.alertType = 'success';
+
+          this.loadCompanyTeamMembers();
+          this.onCancelClick();
+        }
+      }, (err) => {
+        this.loading.stop();
+        this.alertMsg = err;
         this.isOpen = true;
-        this.alertType = 'success';
-
-        this.loadCompanyTeamMembers();
+        this.alertType = 'danger';
         this.onCancelClick();
-      }
-    }, (err) => {
-      this.loading.stop();
-      this.alertMsg = err;
-      this.isOpen = true;
-      this.alertType = 'danger';
-      this.onCancelClick();
-    });
+      });
   }
-
 
 
   confirmDeleteTeamMember() {
@@ -470,10 +517,10 @@ export class CompanyComponent implements OnInit {
         this.onCancelClick();
       }
     }, (err) => {
-        this.alertMsg = err;
-        this.isOpen = true;
-        this.alertType = 'danger';
-        this.onCancelClick();
+      this.alertMsg = err;
+      this.isOpen = true;
+      this.alertType = 'danger';
+      this.onCancelClick();
     });
   }
 
@@ -484,7 +531,7 @@ export class CompanyComponent implements OnInit {
     } else {
       const userInput = this.confirmationForm.value.userInput;
       if (userInput === 'Delete') {
-         if (selectedaction === 'team member') {
+        if (selectedaction === 'team member') {
           this.confirmDeleteTeamMember();
         }
       } else {
@@ -507,7 +554,7 @@ export class CompanyComponent implements OnInit {
   }
 
   openModal(template: TemplateRef<any>) {
-    this.modalRef = this.bsmodalService.show(template, { class: '' });
+    this.modalRef = this.bsmodalService.show(template, {class: ''});
   }
 
   showControlContent(): string {

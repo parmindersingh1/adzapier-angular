@@ -11,6 +11,9 @@ const route: Routes = [
   },  {
     path: 'cookie-category', loadChildren: () => import('./cookie-category/cookie-category.module').then(m => m.CookieCategoryModule), canActivate: [AuthGuard]
   },
+  {
+    path: 'manage-vendors', loadChildren: () => import('./manage-vendors/manage-vendors.module').then(m => m.ManageVendorsModule), canActivate: [AuthGuard]
+  },
 ]
 
 @NgModule({

@@ -1,0 +1,92 @@
+.vendors-list-table {
+  max-height: 490px;
+  overflow: overlay;
+}
+.cell-width {
+  width: 500px;
+}
+
+
+
+
+.p-tabview .p-tabview-nav {
+  padding-left: 37% !important;
+}
+
+.p-tabview-panels{
+  padding-left: 0px !important;
+  padding-right: 0px !important;
+}
+
+
+.alert-info {
+  color: #0c5460;
+  background-color: #d1ecf1;
+  border-color: #bee5eb;
+}
+
+.alert-success {
+  background-color: #10b759;
+  border-color: #10b759;
+  color: #fff;
+}
+
+.alert-danger {
+  color: #721c24;
+  background-color: #f8d7da;
+  border-color: #f5c6cb;
+}
+
+.flotingdiv{
+  position: fixed;
+  bottom: 0;
+  top: 84%;
+  right:0;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.id-cell{
+  text-align: left;
+border: 1px solid #e9ecef;
+  border-width: 0 0 1px 0;
+  padding: 1rem 1rem;
+}
+
+.active-btn {
+  border-radius: 30px;
+  width: 100px;
+  padding-top: 3px;
+  height: 25px;
+  font-size: 12px;
+}
+.inactive-btn {
+  border-radius: 30px;
+  width: 100px;
+  padding-top: 3px;
+  height: 25px;
+  font-size: 12px;
+  background: #c8c6c6;
+}
+.p-tabview .p-tabview-panels {
+  padding: 0px;
+}
+
+.search-input{
+  margin-top: 5px !important;
+  margin-bottom: 5px !important;
+}
+.p-tabview .p-tabview-nav li .p-tabview-nav-link:not(.p-disabled):focus {
+  box-shadow: none;
+}
+//.p-tabview {
+//  position: relative;
+//  top: -48px;
+//  z-index: 0;
+//}
+//.card-header{
+//  z-index: 999;
+//}
+//.p-tabview-nav li {
+//  z-index:  999999 !important;
+//}

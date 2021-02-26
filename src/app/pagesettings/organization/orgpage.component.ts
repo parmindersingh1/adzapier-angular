@@ -8,6 +8,7 @@ import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { CompanyService } from 'src/app/company.service';
 import { TablePaginationConfig } from 'src/app/_models/tablepaginationconfig';
 import { Orglist } from 'src/app/_models/org';
+import { moduleName } from 'src/app/_constant/module-name.constant';
 @Component({
   selector: 'app-orgpage',
   templateUrl: './orgpage.component.html',
@@ -46,7 +47,7 @@ export class OrgpageComponent implements OnInit {
   totalCount: any;
   paginationConfig: TablePaginationConfig;
   selectedOrganization: any = [];
-  searchText;
+  searchText = '';
   ascNumberSort: any;
 
   isControlDisabled: boolean;
@@ -56,6 +57,8 @@ export class OrgpageComponent implements OnInit {
   isOpen = false;
   email: any;
   phone: any;
+  companyID: any;
+  currentUser: any;
   constructor(private formBuilder: FormBuilder,
               private orgservice: OrganizationService,
               private modalService: NgbModal, private sanitizer: DomSanitizer,
@@ -92,10 +95,22 @@ export class OrgpageComponent implements OnInit {
       phone: ['', [Validators.required, Validators.pattern(phoneNumRegx)]]
     });
     this.loadOrganizationList();
-
+    this.getLoggedInUserDetails();
   }
   get orgProp() { return this.organisationPropertyForm.controls; }
   get editOrg() { return this.editOrganisationForm.controls; }
+
+
+  getLoggedInUserDetails() {
+    this.userService.getLoggedInUserDetails(this.constructor.name, moduleName.headerModule).subscribe((data) => {
+      this.currentUser = data;
+      this.companyID = this.currentUser.response.cID;
+    },error => {
+      this.alertMsg = JSON.stringify(error);
+      this.isOpen = true;
+      this.alertType = 'danger';
+    });
+  }
 
   uploadFile(event) {
     if (event.target.files.length > 0) {
@@ -128,6 +143,16 @@ export class OrgpageComponent implements OnInit {
 
   }
 
+  searchOrganization(searchTerm){
+   this.orgservice.searchOragnization(this.companyID,searchTerm).subscribe((data) => {
+     this.orgList = data.response;
+   })
+  }
+
+  clearSearchfield(){
+    this.searchText = '';
+    this.loadOrganizationList();
+  }
 
   loadOrganizationDetails(org) {
     this.orgDetails = [];

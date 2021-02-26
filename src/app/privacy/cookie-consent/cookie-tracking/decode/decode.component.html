@@ -558,7 +558,7 @@
           <ng-container *ngIf="searchLegiVendorsArray.length > 0">
             <ng-container *ngFor="let obj of searchLegiVendorsArray">
             <li *ngIf="decodedIds.vendorsLegiIds.includes(obj.id)"  class="list-group-item p-0">
-              <p   class="bor-bm pl-3 pt-3 pb-3">{{obj.name}}</p>
+              <p   class="bor-bm pl-3 pt-3 pb-3">{{obj.name}} </p>
             </li>
           </ng-container>
           </ng-container>
@@ -572,7 +572,7 @@
             </ng-container>
 
 
-            <ng-container *ngIf="searchVendorsArray.length === 0 && legiVendorText.value">
+            <ng-container *ngIf="searchLegiVendorsArray.length === 0 && legiVendorText.value">
               <li class="list-group-item p-0">
                 <p class="alert alert-danger bor-bm pl-3 pt-3 pb-3">
                  Legitimate Vendor not found

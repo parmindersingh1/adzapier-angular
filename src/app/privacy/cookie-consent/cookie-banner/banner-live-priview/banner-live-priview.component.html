@@ -25,23 +25,23 @@
   <div
   *ngIf="type == 'gdpr'"
     [ngStyle]="{background: formData.bannerBackGroundColor, color: formData.bannerTextColor,
-    top : formData.position === 'bottom' ? '310px' : '0px'
+    top : formData.position === 'bottom' ? '335px' : '0px'
     }"
-    class="banner-shadow m-0" id="onetrust-banner-sdk"
+    class="banner-shadow m-0"
     style="
-       top: 310px;
+       top: 335px;
            position: relative;
    z-index: 0; width: 100%;">
     <div class="row pd-10 m-0"  [ngStyle]="{borderTop: '3px solid' + formData.bannerBorderColor }">
       <div class="col-md-10">
         <div class="row">
         <div class="col-md-6">
-              <h6 style="font-size: 11px" class="cc-font-size-16 cc-floating-title" id="onetrust-policy-title"
+              <h6 style="font-size: 11px" class="cc-font-size-16 cc-floating-title"
                   [ngStyle]="{color: formData.bannerTextColor}">
                 {{formData.bannerTitle ? formData.bannerTitle : defaultContent.bannerTitle}}
               </h6>
               <div class="text-small float-rounded-corner-main line-height-nineteen font-size-thirteen onetrust-policy-text"
-                  id="onetrust-policy-text">
+                  >
                 <span [ngStyle]="{color: formData.bannerTextColor}" [innerHTML]="formData.bannerDescription ? formData.bannerDescription : defaultContent.bannerDescription"></span>
             </div>
           </div>
@@ -49,12 +49,12 @@
 
 
           <div class=" col-md-6" [ngStyle]="{borderLeft: '3px solid' + formData.bannerBorderColor }">
-            <h6 style="font-size: 11px" class="cc-font-size-16 cc-floating-title" id="onetrust-policy-title"
-                [ngStyle]="{color: formData.bannerTextColor}">
-              {{formData.bannerTitle2 ? formData.bannerTitle2 : defaultContent.bannerTitle2}}
-            </h6>
+<!--            <h6 style="font-size: 11px" class="cc-font-size-16 cc-floating-title" -->
+<!--                [ngStyle]="{color: formData.bannerTextColor}">-->
+<!--              {{formData.bannerTitle2 ? formData.bannerTitle2 : defaultContent.bannerTitle2}}-->
+<!--            </h6>-->
             <div class="text-small float-rounded-corner-main line-height-nineteen font-size-thirteen onetrust-policy-text"
-                id="onetrust-policy-text">
+                >
               <span *ngFor="let purpose of iabPurposeList" [ngStyle]="{color: formData.bannerTextColor}">{{purpose.name}} , </span>
           </div>
         </div>
@@ -106,22 +106,22 @@
   <div
   *ngIf="type == 'generic'"
     [ngStyle]="{background: formData.bannerBackGroundColor, color: formData.bannerTextColor,
-    top : formData.position === 'bottom' ? '350px' : '0px'
+    top : formData.position === 'bottom' ? '360px' : '0px'
     }"
-    class="banner-shadow m-0" id="onetrust-banner-sdk"
+    class="banner-shadow m-0"
     style="
-       top: 350px;
+       top: 360px;
            position: relative;
    z-index: 0; width: 100%;">
     <div class="row pd-10 m-0" [ngStyle]="{borderTop: '3px solid' + formData.bannerBorderColor }">
       <div class="col-6">
         <div id="onetrust-policy">
-          <h6 style="font-size: 11px" class="cc-font-size-16 cc-floating-title" id="onetrust-policy-title"
+          <h6 style="font-size: 11px" class="cc-font-size-16 cc-floating-title"
               [ngStyle]="{color: formData.bannerTextColor}">
             {{formData.bannerTitle ? formData.bannerTitle : defaultContent.bannerTitle}}
           </h6>
           <div class="text-small float-rounded-corner-main line-height-nineteen font-size-thirteen onetrust-policy-text"
-               id="onetrust-policy-text">
+               >
             <span [ngStyle]="{color: formData.bannerTextColor}" [innerHTML]="formData.bannerDescription ? formData.bannerDescription : defaultContent.bannerDescription"></span>
        </div>
 
@@ -174,22 +174,22 @@
   <div
   *ngIf="type == 'ccpa'"
     [ngStyle]="{background: formData.bannerBackGroundColor, color: formData.bannerTextColor,
-    top : formData.position === 'bottom' ? '350px' : '0px'
+    top : formData.position === 'bottom' ? '360px' : '0px'
     }"
-    class="banner-shadow m-0" id="onetrust-banner-sdk"
+    class="banner-shadow m-0"
     style="
-       top: 350px;
+       top: 360px;
            position: relative;
    z-index: 0; width: 100%;">
     <div class="row pd-10 m-0" [ngStyle]="{borderTop: '3px solid' + formData.bannerBorderColor }">
       <div class="col-6">
         <div id="onetrust-policy">
-          <h6 style="font-size: 11px" class="cc-font-size-16 cc-floating-title" id="onetrust-policy-title"
+          <h6 style="font-size: 11px" class="cc-font-size-16 cc-floating-title"
               [ngStyle]="{color: formData.bannerTextColor}">
             {{formData.bannerTitle ? formData.bannerTitle : defaultContent.bannerTitle}}
           </h6>
           <div class="text-small float-rounded-corner-main line-height-nineteen font-size-thirteen onetrust-policy-text"
-               id="onetrust-policy-text">
+               >
             <span [ngStyle]="{color: formData.bannerTextColor}" [innerHTML]="formData.bannerDescription ? formData.bannerDescription : defaultContent.bannerDescription"></span>
        </div>
 
