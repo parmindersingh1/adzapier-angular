@@ -107,7 +107,6 @@ export class AppComponent implements OnInit {
       if(res.hasOwnProperty('msg')) {
       this.msg = res.msg;
     }
-      debugger
       if(res.openModal) {
         if(!res.data) {
           this.currentPlanData = new DefaultPlanData();
