@@ -91,10 +91,10 @@
                             <div class="input-group-text bg-transparent"><i class="fa fa-search"></i></div>
                         </span>
                     </div>
-                    
+
                     <div class="ml-auto">
                         <button type="button" class="btn btn-primary btn-xs float-right" data-toggle="modal"
-                            (click)="open(propertyModal)"><i class="fas fa-plus"></i> Add Property</button>
+                            (click)="open(propertyModal, 'property')"><i class="fas fa-plus"></i> Add Property</button>
                     </div>
                 </div>
             </div>
@@ -222,10 +222,10 @@
                             <div class="input-group-text bg-transparent"><i class="fa fa-search"></i></div>
                         </span>
                     </div>
-                    
+
                     <div class="col-sm-2 ml-auto">
                         <button type="button" class="btn btn-primary btn-xs float-right" data-toggle="modal"
-                            (click)="open(inviteuserModal)"><i class="fas fa-plus"></i> Invite User</button>
+                            (click)="open(inviteuserModal, 'invite')"><i class="fas fa-plus"></i> Invite User</button>
                     </div>
                 </div>
             </div>
@@ -256,7 +256,7 @@
                                 {{list.role_name}}
                             </td>
                             <td class="text-center">
-                            <button  *ngIf="list.user_last_login === 'Invitation Pending' || list.user_last_login === 'Invitation sent'; else LoginDate" type="button"
+                            <button  *ngIf="list.user_last_login === 'Invitation Pending' || list.user_last_login === 'Invitation sent' || list.user_last_login === ''; else LoginDate" type="button"
                             (click)="onResendInvitation(list.approver_id)" class="btn btn-xs btn-primary">
                             <i class="fas fa-envelope"></i> Resend Invitation</button>
                             <ng-template #LoginDate>
@@ -284,7 +284,7 @@
                         </tr>
                     </tbody>
                 </table>
-                
+
  <div class="row pagination-wrapper">
     <div class="col-4">
         <div class="form-inline">
@@ -305,7 +305,7 @@
     </div>
     </div>
             </div>
-            
+
 
         </div>
     </div>
@@ -467,12 +467,21 @@
             </div>
             <div class="form-group">
                 <label for="website">Website</label>
-                <input type="text" class="form-control" name="website" formControlName="website"
+                <div class="input-group">
+                  <select class="custom-select col-sm-3" name="protocol" formControlName="protocol">
+                      <ng-container *ngFor="let opt of protocolList">
+                        <option [value]="opt"  [selected]="opt === protocol">{{ opt }}</option>
+                      </ng-container>
+                    </select>
+                  <div class="col-sm-9 p-0 input-group-append flex-column">
+                    <input type="text" class="form-control" name="website" formControlName="website" placeholder="propertydomain.com"
                     [ngClass]="{ 'is-invalid': submitted && orgProp.website.errors }" />
-                <div *ngIf="submitted && orgProp.website.errors" class="invalid-feedback">
-                    <div *ngIf="orgProp.website.errors.required">Website address is required</div>
-                    <div *ngIf="orgProp.website.errors.pattern">Website address should to be lower case </div>
-                </div>
+                    <div *ngIf="submitted && orgProp.website.errors" class="invalid-feedback">
+                        <div *ngIf="orgProp.website.errors.required">Website address is required</div>
+                        <div *ngIf="orgProp.website.errors.pattern">Website address should to be lower case </div>
+                    </div>
+                    </div>
+                  </div>
             </div>
             <div class="form-group">
                 <label for="logourl">Logo URL</label>
@@ -517,7 +526,7 @@
                             placeholder="type and search country"
                                     class="form-control" placeholder="Enter email id"
                                     pattern="^\w+@[a-zA-Z_0-9]+?\.[a-zA-Z]{2,3}$"
-                                    [ngClass]="{ 'is-invalid': isInviteFormSubmitted && f.emailid.errors }" />    
+                                    [ngClass]="{ 'is-invalid': isInviteFormSubmitted && f.emailid.errors }" />
                         <div *ngIf="isInviteFormSubmitted && f.emailid.errors" class="invalid-feedback">
                             <div *ngIf="f.emailid.errors.required">User email address is required</div>
                             <div *ngIf="f.emailid.errors.pattern">Please enter valid email address</div>
@@ -573,7 +582,7 @@
         </button>
     </div>
     <div class="modal-body text-center">
-        <p> This will delete selected 
+        <p> This will delete selected
             <span class="font-weight-bold"> {{showControlContent()}}</span>
              <!-- <span class="font-weight-bold">{{controlname === 'team member' ? selectedTeamMember : organizationName}}</span>
              <span class="font-weight-bold"> {{controlname === 'organization' ? organizationName : confirmProperty}}</span> -->

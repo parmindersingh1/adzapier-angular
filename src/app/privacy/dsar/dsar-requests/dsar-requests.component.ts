@@ -14,7 +14,9 @@ import { LazyLoadEvent } from 'primeng/api';
 import { moduleName } from 'src/app/_constant/module-name.constant';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-
+import { DataService } from 'src/app/_services/data.service';
+import { BillingService } from 'src/app/_services/billing.service';
+import { BsDatepickerConfig, DatepickerDateCustomClasses } from 'ngx-bootstrap/datepicker';
 @Component({
   selector: 'app-dsar-requests',
   templateUrl: './dsar-requests.component.html',
@@ -29,6 +31,7 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
   @ViewChild('editor', { static: true }) editor;
   submitted: boolean;
   propertyname: any;
+  reloadRequestList = [];
   requestsList = [];
   website: any;
   logourl: any;
@@ -68,6 +71,59 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
   selectedOrgID: any;
   selectedPropID: any;
   selectedCRID: any;
+  organizationSubscription: any;
+  organizationPlanDetails: any;
+  bsConfig: Partial<BsDatepickerConfig>;
+  dateCustomClasses: DatepickerDateCustomClasses[];
+  searchbydaterange: any = '';
+  date1: Date = new Date('yyyy-mm-dd');
+  ranges: any = [
+    {
+      value: [new Date(),new Date()],
+      label: "Today"
+    },
+    {
+      value: [new Date(new Date().setDate(new Date().getDate() - 1)),
+      new Date(new Date().setDate(new Date().getDate() - 1))],
+      label: "Yesterday"
+    },
+    {
+      value: [
+        new Date(new Date().setDate(new Date().getDate() - 7)),
+        new Date()
+      ],
+      label: "Last 7 Days"
+    },
+    {
+      value: [
+        new Date(new Date().setDate(new Date().getDate() - 30)),
+        new Date()
+      ],
+      label: "Last 30 Days"
+    },
+    {
+      value: [new Date(new Date().setDate(new Date().getMonth())), new Date()],
+      label: "This Month"
+    },
+    {
+      value: [
+        new Date(new Date().getFullYear(), new Date().getMonth() - 1, 1),
+        new Date(new Date().getFullYear(), new Date().getMonth(), 0)
+      ],
+      label: "Last Month"
+    },
+    {
+      value: [new Date(new Date().getFullYear(), 0, 1),new Date()],
+      label: "This Year"
+    },
+    {
+      value: [
+        new Date(new Date().setFullYear(new Date().getFullYear() - 1)),
+        new Date()
+      ],
+      label: "Last Year"
+    },
+  ];
   constructor(
     private orgservice: OrganizationService,
     private userService: UserService,
@@ -78,8 +134,15 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
     private ccpaFormConfigService: CCPAFormConfigurationService,
     private cdRef: ChangeDetectorRef,
     private modalService: NgbModal,
-    private formBuilder: FormBuilder
-  ) { }
+    private formBuilder: FormBuilder,
+    private dataService: DataService,
+    private billingService: BillingService
+  ) { 
+    this.dateCustomClasses = [
+      { date: new Date(), classes: ['theme-dark-blue'] },
+    ];
+    this.searchbydaterange = [new Date(new Date().setDate(new Date().getDate() - 30)),new Date()]
+    }
 
   ngOnInit() {
     this.onGetPropsAndOrgId();
@@ -90,6 +153,7 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
     this.createDSARWebFormRequest = this.formBuilder.group({
       webformselection: ['', [Validators.required]]
     });
+    this.bsConfig = Object.assign({}, { containerClass: 'theme-dark-blue', showClearButton: true, returnFocusToInput: true, dateInputFormat: 'yyyy-mm-dd', adaptivePosition : true, showTodayButton:true, ranges: this.ranges  });
   }
 
   get dsar() { return this.createDSARWebFormRequest.controls; }
@@ -120,6 +184,7 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
   loadrequestsListLazy(event: LazyLoadEvent) {
     this.isloading = true;
     this.eventRows = event.rows;
+    let selectedDateRange;
     if (this.requestsList) {
 
       if (event.first === 0) {
@@ -128,8 +193,9 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
         this.firstone = (event.first / event.rows) + 1;
       }
       const pagelimit = '?limit=' + this.eventRows + '&page=' + this.firstone;
-      const sortOrder = event.sortOrder === -1 ? 'DESC' : 'ASC';
-      const orderBy = '&orderby=' + event.sortField + ' ' + sortOrder;
+      const sortOrder = event.sortOrder === -1 ? 'asc' : 'desc';
+      // const orderBy = '&orderby=' + event.sortField + ' ' + sortOrder;
+      const orderBy = '&order_by_date=' + sortOrder;
 
       this.dsarRequestService.getDsarRequestList(this.constructor.name, moduleName.dsarRequestModule, this.currentManagedOrgID,
         this.currrentManagedPropID, pagelimit, orderBy)
@@ -137,6 +203,7 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
           this.isloading = false;
           const key = 'response';
           this.requestsList = data[key];
+          this.reloadRequestList = [...this.requestsList];
           this.rows = data[key].length;
           this.totalRecords = data.count;
         }, error => {
@@ -207,6 +274,8 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
         const key = 'response';
         if (res[key]) {
           this.requestsList = res[key];
+        } else{
+          this.requestsList = this.reloadRequestList;
         }
       }, error => {
         this.isloading = false;
@@ -236,10 +305,11 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
   }
 
   viewDSARRequestDetails(res) {
-    this.router.navigate(['privacy/dsar/dsar-requests-details', res.id,res.cid,this.currentManagedOrgID,this.currrentManagedPropID]);
+    this.router.navigate(['privacy/dsar/requests-details', res.id,res.cid,this.currentManagedOrgID,this.currrentManagedPropID]);
   }
 
   navigateToWebForm(obj) {
+    this.ccpaFormConfigService.removeCurrentSelectedFormData();
     this.ccpaFormConfigService.captureCurrentSelectedFormData(obj);
     this.router.navigate(['/privacy/dsar/dsarform', obj.web_form_id]);
   }
@@ -315,12 +385,13 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
 
       });
     } else {
-
+     if(this.isLicenseLimitAvailable()){
       this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
 
       }, (reason) => {
 
       });
+    }
     }
 
   }
@@ -330,19 +401,24 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
     if (this.createDSARWebFormRequest.invalid) {
       return false;
     } else {
+      const formStatus = '/publish';
       if (this.selectedOrgID && this.selectedPropID) {
         if (window.location.hostname === 'localhost') {
           window.open('http://localhost:4500/dsar/form/' + this.selectedOrgID + '/'
-            + this.selectedPropID + '/' + this.selectedCRID);
+            + this.selectedPropID + '/' + this.selectedCRID + formStatus);
           this.onCancelClick();
         }
         if (window.location.hostname === 'develop-cmp.adzpier-staging.com') {
           window.open('https://develop-privacyportal.adzpier-staging.com/dsar/form/' + this.selectedOrgID + '/'
-            + this.selectedPropID + '/' + this.selectedCRID);
+            + this.selectedPropID + '/' + this.selectedCRID + formStatus);
           this.onCancelClick();
         } else if (window.location.hostname === 'cmp.adzpier-staging.com') {
           window.open('https://privacyportal.adzpier-staging.com/dsar/form/' + this.selectedOrgID + '/'
-            + this.selectedPropID + '/' + this.selectedCRID);
+            + this.selectedPropID + '/' + this.selectedCRID + formStatus);
+          this.onCancelClick();
+        } else if(window.location.hostname === 'portal.adzapier.com'){
+          window.open('https://privacyportal.primeconsent.com/dsar/form/' + this.selectedOrgID + '/'
+          + this.selectedPropID + '/' + this.selectedCRID + formStatus);
           this.onCancelClick();
         }
       } else {
@@ -351,5 +427,58 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
         this.alertType = 'danger';
       }
     }
+  }
+
+  onCheckSubscription(){
+    // const resData: any = this.dataService.getCurrentOrgPlanDetails();
+    this.billingService.getActivePlan(this.constructor.name, moduleName.manageSubscriptionsModule)
+    .subscribe(data => {
+      this.organizationSubscription = data;
+      if(this.organizationSubscription !== undefined){
+        for(let key of this.organizationSubscription){
+          if(key.planDetails.level === 'organization' && key.total_licence > key.assigned_licence ){
+            this.organizationPlanDetails = key.planDetails;
+            return true;
+          }
+        }
+      }
+    });
+ 
+  }
+
+  onDateSelection(){
+      let date1 = this.searchbydaterange[0].toJSON().split('T')[0];
+      let date2 = this.searchbydaterange[1].toJSON().split('T')[0]; 
+      let pageLimit = '?limit=' + this.eventRows + '&page=' + this.firstone;
+      let selectedDateRange = '&start_date=' + date1 +  '&end_date=' + date2;
+      this.isloading = true;
+      this.dsarRequestService.getDsarRequestList(this.constructor.name, moduleName.dsarRequestModule, this.currentManagedOrgID,
+        this.currrentManagedPropID, pageLimit, '', selectedDateRange)
+        .subscribe((data) => {
+          this.isloading = false;
+          const key = 'response';
+          if(data[key] !== "No data found."){
+            this.requestsList = data[key];
+            this.rows = data[key].length;
+            this.totalRecords = data.count;
+          }else{
+            this.requestsList = [];
+          }
+        }, error => {
+          this.loading.stop();
+          this.alertMsg = error;
+          this.isOpen = true;
+          this.alertType = 'danger';
+        });
+     
+  }
+
+  clearDateRangePicker(){
+    this.searchbydaterange = '';
+    this.searchFilter();
+  }
+
+  isLicenseLimitAvailable(): boolean {
+      return this.dataService.isLicenseLimitAvailableForOrganization('request',this.dataService.getAvailableLicenseForFormAndRequestPerOrg());
   }
 }

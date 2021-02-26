@@ -4,7 +4,7 @@
             <ol class="breadcrumb breadcrumb-style1 mg-b-0">
                 <li class="breadcrumb-item"> Privacy</li>
                 <li class="breadcrumb-item"> Data Subject Access Request</li>
-                <li class="breadcrumb-item"><a (click)="backToDSARRequest()">DSAR Request</a></li>
+                <li class="breadcrumb-item"><a (click)="backToDSARRequest()">DSAR Request</a></li><!-- (click)="backToDSARRequest()"-->
                 <li class="breadcrumb-item active" aria-current="page">{{requestID}}</li>
             </ol>
         </nav>
@@ -15,7 +15,7 @@
                 <div class="card-header  d-flex align-items-center justify-content-between pd-13">
                     <span class="tx-12 tx-color-03 mg-b-0">
                         <h6 class="mg-b-0">Request Details</h6>
-                        Current Status of DSAR Request
+                        Current Status of DSAR Request isRequestCompleted | {{isRequestCompleted}}
                     </span>
                     <div class="d-flex">
 
@@ -27,7 +27,7 @@
                             </svg><span class="d-none d-sm-inline mg-l-5">
                                 Edit</span></button>
                         <button  class="btn btn-xs btn-primary mr-2" *ngIf="selectedStages.length !== 0 && currentWorkflowStage !== 'Rejected'"  (click)="openExtendModal()">Extend Days</button>
-                        <button  class="btn btn-xs btn-primary mr-2" *ngIf="currentWorkflowStage !== 'COMPLETED' && currentWorkflowStage !== 'Rejected'" (click)="openReqestRejectModal()">Reject</button>
+                        <button  class="btn btn-xs btn-primary mr-2" *ngIf="!isRequestCompleted && currentWorkflowStage !== 'Rejected'" (click)="openReqestRejectModal()">Reject</button>
                          <button class="btn btn-xs btn-primary" (click)="removeDSARRequest('DSAR Request detail')">Delete</button>
 
                     </div>
@@ -83,7 +83,7 @@
                         <div class="col-sm"> 
                             <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Status</label>
                                 <ngx-skeleton-loader *ngIf="!currentWorkflowStage" count="1"></ngx-skeleton-loader>
-                            <p class="tx-spacing-1 tx-semibold status-text tx-success" 
+                            <p class="tx-spacing-1 tx-12 tx-semibold status-text tx-success" 
                             [ngClass]="{'tx-success':currentWorkflowStage !== 'Rejected','tx-danger':currentWorkflowStage == 'Rejected' }">
                                 {{currentWorkflowStage}}
                             </p>
@@ -166,13 +166,13 @@
                             </div>
                         </div>
                     </div>
-                    <div class="stagediv" *ngIf="workflowStages !== null">
+                    <div class="stagediv" *ngIf="workflowStages.length !== 0">
                         <div class="divider-text mg-y-5">Advance Status</div>
                         <button (click)="onPreviousSearchPosition()"  class="arrowbtn leftarrow" [ngClass]="{'hidebtns':leftClickStatus()}"><i class="fa fa-angle-left"></i></button>
                         <div class="divflex" [ngClass]="{'add-min-height':workflowStages.length == 0}">
                             <div class="customtab" #panel>
-                                <ngx-skeleton-loader *ngIf="skeletonStageLoading && workflowStages.length === 0"  count="2"></ngx-skeleton-loader>
-                        <ul class="nav-tabs" *ngIf="workflowStages.length !== 0" [ngStyle]="{'transform': 'translateX(' + translateX + 'px)'}" #workflowStageScroller>
+                                 <ngx-skeleton-loader *ngIf="skeletonStageLoading && workflowStages.length === 0"  count="2"></ngx-skeleton-loader>
+                        <ul class="nav-tabs" [ngStyle]="{'transform': 'translateX(' + translateX + 'px)'}" #workflowStageScroller>
 
                             <li *ngFor="let stage of workflowStages; let i = index">
                                 
@@ -194,7 +194,7 @@
                         <!-- <div>{{selectedStageContent}}</div> -->
                         </div>
                         </div>
-                        <button (click)="onNextSearchPosition()" class="arrowbtn rightarrow" [ngClass]="{'hidebtns':rightClickStatus()}"><i class="fa fa-angle-right"></i></button>
+                        <button (click)="onNextSearchPosition()" class="arrowbtn rightarrow" [ngClass]="{'hidebtns':rightArrowStatus}"><i class="fa fa-angle-right"></i></button>
                     </div>
                     <div class="title-guidancetext-wrapper" [ngStyle]="stageContentStyle()">
                     <h4 class="selected-title" [innerHTML]="showStageTitle"></h4>
@@ -319,9 +319,9 @@
                                                 [innerHTML]="displayApproverName(task.assignee) | safe : 'html'"></span>
                                         </td>
                                         <td>
-                                            {{task.deadline | date : 'dd-MM-yyyy'}}
+                                            {{task.deadline | date : 'MM-dd-yyyy'}}
                                         </td>
-                                        <td>{{task.reminder | date: 'dd-MM-yyyy'}}</td>
+                                        <td>{{task.reminder | date: 'MM-dd-yyyy'}}</td>
 
                                         <td>
                                             <a class="pd-r-5 cursor" (click)="openModalPopup(subTask,task)">
@@ -345,7 +345,7 @@
                     </li> -->
                 </ul>
 
-                <button *ngIf="isTaskTabOpen" class="btn btn-xs btn-primary btnSubtask" [disabled]="currentWorkflowStage == 'Rejected'"
+                <button *ngIf="isTaskTabOpen" class="btn btn-xs btn-primary btnSubtask" [disabled]="currentWorkflowStage === 'Rejected'"
                     (click)="openModalPopup(subTask,'')" data-toggle="modal">
                     Subtask
                 </button>
@@ -827,7 +827,7 @@
             <div class="col-sm-10 form-group divflex-column mb-0">
                 <label class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">Task Deadline</label>
                 <label class="tx-13 tx-medium tx-spacing-1 mg-b-5 tx-color-03">
-                    {{displayTaskDeadline | date:'dd/MM/yyyy'}}</label>
+                    {{displayTaskDeadline | date:'MM/dd/yyyy'}}</label>
             </div>
         </div>
     </div>
@@ -903,13 +903,10 @@
     </form>
 </ng-template>
 
-
-<div *ngIf="isOpen" class="col-sm-5 mr-0 float-right flotingdiv" [ngClass]="{'hide':!isOpen}">
-    <!-- dismissOnTimeout="5000"-->
-    <alert *ngIf="isOpen" [type]="alertType" dismissOnTimeout="10000" [dismissible]="dismissible"
-        (onClosed)="onClosed(alertMsg)">{{alertMsg}}
-    </alert>
-</div>
+ <div class="col-sm-5 mr-0 float-right flotingdiv">
+    <alert *ngIf="isOpen" [type]="alertType" dismissOnTimeout="5000" [dismissible]="dismissible"
+      (onClosed)="onClosed(alertMsg)">{{alertMsg}}</alert>
+  </div>
 
 <ng-template #confirmDeleteTemplate let-modal>
     <div class="modal-header">

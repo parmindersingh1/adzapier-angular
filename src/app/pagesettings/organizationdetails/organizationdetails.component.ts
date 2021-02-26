@@ -9,6 +9,9 @@ import { UserService } from 'src/app/_services/user.service';
 import { TablePaginationConfig } from 'src/app/_models/tablepaginationconfig';
 import { moduleName } from 'src/app/_constant/module-name.constant';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { DataService } from 'src/app/_services/data.service';
+import { featuresName } from 'src/app/_constant/features-name.constant';
+import {NgxUiLoaderService} from 'ngx-ui-loader';
 
 // import { CompanyService } from '../company.service';
 @Component({
@@ -45,13 +48,14 @@ export class OrganizationdetailsComponent implements OnInit {
   propertyTotalCount: any;
   propertyPageConfig: TablePaginationConfig;
   // = { itemsPerPage: this.propertyPgSize, currentPage: this.p2, totalItems: this.propertyTotalCount, id: 'propertyPagination' };
-
+  protocolList = ['http://','https://'];
   propertyList: any;
   submitted;
   isEditProperty: boolean;
   propertyname: any;
   website: any;
   logourl: any;
+  protocol: string;
   myContext;
   isInviteFormSubmitted: any;
   organizationTeamMemberList: any;
@@ -82,6 +86,7 @@ export class OrganizationdetailsComponent implements OnInit {
   selectedTeamMember: any;
   userList: any = [];
   noResult = false;
+  private orgPlanDetails: any;
   constructor(private activatedRoute: ActivatedRoute,
               private orgService: OrganizationService,
               private modalService: NgbModal,
@@ -89,7 +94,9 @@ export class OrganizationdetailsComponent implements OnInit {
               private companyService: CompanyService,
               private userService: UserService,
               private router: Router,
+              private dataService: DataService,
               private bsmodalService: BsModalService,
+              private loading: NgxUiLoaderService,
               private cdref: ChangeDetectorRef) {
     this.orgService.currentProperty.subscribe((data) => {
       this.currentManagedOrgID = data.organization_id;
@@ -135,6 +142,7 @@ export class OrganizationdetailsComponent implements OnInit {
     const phoneNumRegx = '^[0-9]*$'; // '^-?(0|[1-9]\d*)?$';
     this.organisationPropertyForm = this.formBuilder.group({
       propertyname: ['', [Validators.required, Validators.pattern(alphaNumeric)]],
+      protocol: [''],
       website: ['', [Validators.required, Validators.pattern(urlRegex)]],
       logourl: ['']
     });
@@ -157,6 +165,9 @@ export class OrganizationdetailsComponent implements OnInit {
       userInput: ['', [Validators.required]]
     });
    // this.loadUserListForInvitation();
+    this.onGetOrgPlan();
+    this.protocol = 'https://';
+    this.organisationPropertyForm.controls['protocol'].setValue(this.protocol, {onlySelf: true});
   }
   get f() { return this.inviteUserOrgForm.controls; }
   get orgProp() { return this.organisationPropertyForm.controls; }
@@ -177,6 +188,16 @@ export class OrganizationdetailsComponent implements OnInit {
     // this.pathValues();
   }
 
+  onGetOrgPlan() {
+    this.loading.start('2');
+    this.dataService.getOrgPlanDetails(this.constructor.name, moduleName.cookieConsentModule, this.currentManagedOrgID)
+      .subscribe((res: any) => {
+        this.orgPlanDetails = res.response;
+        this.loading.stop('2')
+      }, error => {
+        this.loading.stop('2')
+      });
+  }
   getPropertyList(id): any {
     // this.isOpen = !this.isOpen;
     this.orgService.getPropertyList(id).subscribe((data) => {
@@ -192,7 +213,12 @@ export class OrganizationdetailsComponent implements OnInit {
     });
   }
 
-  open(content) {
+  open(content, type) {
+    if(type === 'invite' ) {
+      if (!this.onCheckSubscription()) {
+        return false;
+      }
+    }
     this.propertyname = '';
     this.website = '';
     this.logourl = '';
@@ -208,12 +234,22 @@ export class OrganizationdetailsComponent implements OnInit {
   editModalPopup(content, data) {
     this.isEditProperty = true;
     // this.selectedOrg = data;
+    let extractProtocol;
+    let onlywebsitename;
+    if(data.website.indexOf('//') !== -1){
+      extractProtocol = data.website.split('//');
+      this.protocol = extractProtocol[0] + '//';
+    }else{
+      onlywebsitename = data.website;
+    }
+    const urlname = extractProtocol !== undefined ? extractProtocol[1] : onlywebsitename;
     this.propertyname = data.name.replace(/&amp;/g,'&');
     this.website = data.website;
     this.logourl = data.logo_url;
     this.myContext = { oid: data.oid, pid: data.id };
+    this.organisationPropertyForm.controls['protocol'].setValue(this.protocol);
     this.organisationPropertyForm.controls['propertyname'].setValue(this.propertyname);
-    this.organisationPropertyForm.controls['website'].setValue(data.website);
+    this.organisationPropertyForm.controls['website'].setValue(urlname);
     this.organisationPropertyForm.controls['logourl'].setValue(data.logo_url);
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
       this.organisationPropertyForm.reset();
@@ -330,7 +366,7 @@ export class OrganizationdetailsComponent implements OnInit {
       if (!this.isEditProperty) {
         const reqObj = {
           name: this.organisationPropertyForm.value.propertyname,
-          website: this.organisationPropertyForm.value.website,
+          website: this.organisationPropertyForm.value.protocol + this.organisationPropertyForm.value.website,
           logo_url: this.organisationPropertyForm.value.logourl
         };
         this.orgService.addProperties(this.organizationID, reqObj).subscribe((result) => {
@@ -353,7 +389,7 @@ export class OrganizationdetailsComponent implements OnInit {
       } else {
         const reqObj = {
           name: this.organisationPropertyForm.value.propertyname,
-          website: this.organisationPropertyForm.value.website,
+          website: this.organisationPropertyForm.value.protocol + this.organisationPropertyForm.value.website,
           logo_url: this.organisationPropertyForm.value.logourl
         };
         this.orgService.editProperties(this.myContext.oid, this.myContext.pid, reqObj).subscribe((res) => {
@@ -401,7 +437,7 @@ export class OrganizationdetailsComponent implements OnInit {
 
   propertyPageChangeEvent(event) {
     this.propertyPageConfig.currentPage = event;
-    const pagelimit = '&limit=' + this.propertyPageConfig.itemsPerPage + '&page=' + this.propertyPageConfig.currentPage;
+    const pagelimit = '?limit=' + this.propertyPageConfig.itemsPerPage + '&page=' + this.propertyPageConfig.currentPage;
     // const key = 'response';
     this.orgService.getPropertyList(this.organizationID, pagelimit).subscribe((data) => {
       this.propertyPageConfig.totalItems = data.count;
@@ -415,11 +451,23 @@ export class OrganizationdetailsComponent implements OnInit {
     this.propertyPageConfig.currentPage = 1;
   }
 
+
+  onCheckSubscription(){
+      const status = this.dataService.checkUserForOrgAndCompany(this.orgPlanDetails, this.paginationConfig.totalItems);
+     if ( status === false) {
+       return false;
+     }
+     return true;
+  }
+
   onSubmitInviteUserOrganization() {
     this.isInviteFormSubmitted = true;
     if (this.inviteUserOrgForm.invalid) {
       return false;
     } else {
+      if(!this.onCheckSubscription()){
+        return false;
+      }
       if (!this.isUpdateUserinvitation) {
         const requestObj = {
           email: this.inviteUserOrgForm.value.emailid,
@@ -427,8 +475,10 @@ export class OrganizationdetailsComponent implements OnInit {
           orgid: this.organizationID,
           user_level: 'organization'
         };
+        this.loading.start();
         this.companyService.inviteUser(this.constructor.name, moduleName.organizationDetailsModule, requestObj)
           .subscribe((data) => {
+            this.loading.stop();
             if (data) {
               this.alertMsg = data.response;
               this.isOpen = true;
@@ -437,6 +487,7 @@ export class OrganizationdetailsComponent implements OnInit {
               this.onCancelClick();
             }
           }, (error) => {
+            this.loading.stop();
             this.alertMsg = JSON.stringify(error);
             this.isOpen = true;
             this.alertType = 'danger';

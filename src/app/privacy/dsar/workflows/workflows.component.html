@@ -11,8 +11,8 @@
 </div>
 
 <div class="workflow-primeng-wrapper">
-<p-table class="workflows-table" #ptable [value]="workflowList" [columns]="selectedColumns" [paginator]="true" [lazy]="true"
-    [loading]="isloading" (onLazyLoad)="loadrequestsListLazy($event)" [rows]="5" [showCurrentPageReport]="true"
+<p-table class="workflows-table" #ptable [value]="workflowList" [responsive]="true" [columns]="selectedColumns" [paginator]="true" [lazy]="true"
+    [loading]="isloading" (onLazyLoad)="loadworkflowListLazy($event)" [rows]="5" [showCurrentPageReport]="true"
     [totalRecords]="totalRecords" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
     [rowsPerPageOptions]="[5,10,15]" styleClass="p-datatable-sm">
     <ng-template pTemplate="caption">
@@ -36,7 +36,7 @@
         (click)="createWorkflowModalPopup(createworkflowModal,'')"><i class="fas fa-plus"></i> Create</button>
      </div> -->
                <div class="float-right mr-1"> <button (click)="createWorkflowModalPopup(createworkflowModal,'')" data-toggle="modal" type="button"
-                    class="btn btn-white">
+                    class="btn btn-sm btn-uppercase btn-outline-secondary">
                     <i-feather class="feather-16" name="plus"></i-feather>
                     <span class="d-none d-sm-inline mg-l-5">
                         Create</span>
@@ -52,12 +52,11 @@
 
             <th pSortableColumn="workflow_name">Workflow Name <p-sortIcon field="workflow_name"></p-sortIcon>
             </th>
-            <th pSortableColumn="workflow_status">Status<p-sortIcon field="workflow_status"></p-sortIcon>
+            <th>Status
             </th>
-            <th pSortableColumn="createdby_firstname">Created by<p-sortIcon field="createdby_firstname"></p-sortIcon>
+            <th>Created by
             </th>
-            <th pSortableColumn="updatedby_firstname">Last updated by<p-sortIcon field="updatedby_firstname">
-                </p-sortIcon>
+            <th pSortableColumn="updatedby_firstname">Last updated by
             </th>
             <th pSortableColumn="created_at">Created at <p-sortIcon field="created_at"></p-sortIcon>
             </th>
@@ -70,19 +69,19 @@
     <ng-template pTemplate="body" let-rowData let-columns="columns" styleClass="p-datatable-responsive-demo">
         <tr>
             <td>
-                <a (click)="navigateToWorkflow(rowData)" title="{{rowData.id}}">
-                    {{rowData.workflow_name}}
+                <a (click)="navigateToWorkflow(rowData)" title="{{rowData?.id}}">
+                    {{rowData?.workflow_name}}
                 </a>
             </td>
             <td> <span class="badge"
-                    [ngClass]="{'badge-primary':rowData.workflow_status === 'active','badge-light':rowData.workflow_status === 'draft'}">
-                    {{rowData.workflow_status}}</span>
+                    [ngClass]="{'badge-primary':rowData?.workflow_status === 'active','badge-light':rowData?.workflow_status === 'draft'}">
+                    {{rowData?.workflow_status}}</span>
 
             </td>
-            <td>{{rowData.createdby_firstname}} {{rowData.createdby_lastname}}</td>
-            <td>{{rowData.updatedby_firstname}} {{rowData.updatedby_lastname}}</td>
-            <td>{{rowData.created_at | timeAgo}}</td>
-            <td>{{rowData.updated_at | timeAgo}}</td>
+            <td>{{rowData?.createdby_firstname}} {{rowData?.createdby_lastname}}</td>
+            <td>{{rowData?.updatedby_firstname}} {{rowData?.updatedby_lastname}}</td>
+            <td>{{rowData?.created_at | timeAgo}}</td>
+            <td>{{rowData?.updated_at | timeAgo}}</td>
 
         </tr>
 

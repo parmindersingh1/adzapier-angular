@@ -8,6 +8,7 @@ export const apiConstant = {
   COOKIE_WITH_ID: '/cookie/:orgId/:propId/:id',
   COOKIE: '/cookie/:orgId/:propId',
   // Cookie Consent
+  UPDATE_VENDORS  : '/consent/manage-vendors/:orgId/:propId',
   COOKIE_CONSENT: '/consents/tracking/:propId',
   COOKIE_TRACKING_FILTER: '/consents/trackingbyfilter/:propId',
   COOKIE_CONSENT_PUBLISHER: '/consent/cookieconsent',
@@ -40,6 +41,7 @@ export const apiConstant = {
   //
   BILLING_LIST_ALL_PROPERTY: '/unlicensed/property',
   BILLING_LIST_ALL_ORG: '/unlicensed/organizations',
+  ORG_ACITVE_LIST:'/organizations',
   //
   BILLING_UNSSIGNE_PROPERTY: '/unassign/license/property',
   BILLING_UNSSIGNE_ORG: '/unassign/license/organization',
@@ -51,7 +53,13 @@ export const apiConstant = {
   WORKFLOW_ID: '/workflow?workflow_id=',
   // COOKIE_CATEGORY_CHART
   COOKIE_CATEGORY_CHART: '/cookiepurpose/:propId',
-  COOKIE_CATEGORY_TYPE_CHART: '/cookietype/:propId'
+  COOKIE_CATEGORY_TYPE_CHART: '/cookietype/:propId',
+  COOKIE_CATEGORY_AVALIBLE: '/available/scan/:orgId/:propId',
+
+  // PROPERTY PLAN
+  PROPERTY_PLAN: '/billing/plan/features',
+  ORG_PLAN: '/available/user/organization/:orgId',
+  COMPANY_PLAN: '/available/user/company'
 };
 
 // {

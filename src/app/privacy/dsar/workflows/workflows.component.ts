@@ -1,6 +1,7 @@
 import { AfterViewInit, ChangeDetectorRef, Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 import { WorkflowService } from 'src/app/_services/workflow.service';
+import { DataService } from 'src/app/_services/data.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
@@ -21,6 +22,7 @@ export class WorkflowsComponent implements OnInit, AfterViewInit  {
   dismissible = true;
   alertMsg: any;
   workflowList: any = [];
+  reloadWorkflowList = [];
   activeWorkflowList: any;
   isOpen = false;
   alertType: any;
@@ -47,7 +49,9 @@ export class WorkflowsComponent implements OnInit, AfterViewInit  {
   public debouncedInputValue = this.inputValue;
   private searchDecouncer$: Subject<string> = new Subject();
   
-  constructor(private router: Router, private workflowService: WorkflowService,
+  constructor(private router: Router, 
+              private workflowService: WorkflowService,
+              private dataService: DataService,
               private modalService: NgbModal,
               private formBuilder: FormBuilder,
               private loading: NgxUiLoaderService,
@@ -60,7 +64,7 @@ export class WorkflowsComponent implements OnInit, AfterViewInit  {
   }
 
   ngOnInit() {
-    this.loadWorkflowList();
+ //   this.loadWorkflowList();
     this.loadActiveWorkflowList();
     this.setupSearchDebouncer();
     const alphaNumeric = '^(?![0-9]*$)[a-zA-Z0-9 ]+$';
@@ -69,11 +73,18 @@ export class WorkflowsComponent implements OnInit, AfterViewInit  {
       workflowselection: ['', [Validators.required]]
     });
     this.isloading = true;
+    this.getlicenseAvailabilityForWorkflow();
   }
   get addWorkflow() { return this.createWorkFlowForm.controls; }
 
   createWorkflow() {
+    if(this.isLicenseLimitAvailable()){
     this.router.navigate(['/privacy/dsar/createworkflow']);
+    } else {
+      this.alertMsg = 'Please Select property first!';
+      this.isOpen = true;
+      this.alertType = 'danger';
+    }
   }
 
   // to retrive all and show only active workflow in dropdown  
@@ -94,7 +105,7 @@ export class WorkflowsComponent implements OnInit, AfterViewInit  {
     this.selectedCols = this.cols.filter(col => val.includes(col));
   }
   
-  loadrequestsListLazy(event: LazyLoadEvent) {
+  loadworkflowListLazy(event: LazyLoadEvent) {
     this.isloading = true;
     this.eventRows = event.rows;
     if (this.workflowList) {
@@ -105,12 +116,17 @@ export class WorkflowsComponent implements OnInit, AfterViewInit  {
         this.firstone = (event.first / event.rows) + 1;
       }
       const pagelimit = '?limit=' + this.eventRows + '&page=' + this.firstone;
-      const sortOrder = event.sortOrder === -1 ? 'DESC' : 'ASC';
-      const orderBy = '&orderby=' + event.sortField + ' ' + sortOrder;
+      const sortOrder = event.sortOrder === -1 ? 'ASC' : 'DESC';
+      let orderBy;
+      if(event.sortField !== undefined){
+        orderBy = '&order_by=' + event.sortField + ':' + sortOrder;
+      }
+     
 
-      this.workflowService.getWorkflow(this.constructor.name, moduleName.workFlowModule, pagelimit).subscribe((data) => {
+      this.workflowService.getWorkflow(this.constructor.name, moduleName.workFlowModule, pagelimit, orderBy).subscribe((data) => {
         this.isloading = false;
         this.workflowList = data.response;
+        this.reloadWorkflowList = [...this.workflowList];
         this.rows = data.response.length;
         this.totalRecords = data.count;
       }, error => {
@@ -173,12 +189,17 @@ createWorkflowModalPopup(content, data) {
 
     });
   } else {
-
+    if(this.isLicenseLimitAvailable()){
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
 
     }, (reason) => {
 
     });
+  }else {
+    this.alertMsg = 'Please Select property first!';
+    this.isOpen = true;
+    this.alertType = 'danger';
+  }
   }
 
 }
@@ -210,9 +231,14 @@ private searchFilter(): void {
   this.isloading = true;
   this.workflowService.getWorkflow(this.constructor.name, moduleName.workFlowModule, params).subscribe((data) => {
     this.isloading = false;
-    this.workflowList = data.response;
+  //  this.workflowList = data.response;
     this.rows = data.response.length;
     this.totalRecords = data.count;
+    if (data.response) {
+      this.workflowList = data.response;
+    } else{
+      this.workflowList = this.reloadWorkflowList;
+    }
   }, error => {
     this.loading.stop();
     this.alertMsg = error;
@@ -301,6 +327,16 @@ onCancelClick() {
 onClosed(dismissedAlert: any): void {
   this.alertMsg = !dismissedAlert;
   this.isOpen = false;
+}
+
+isLicenseLimitAvailable(){
+  return this.dataService.isLicenseLimitAvailableForOrganization('workflow',this.dataService.getWorkflowLicenseToLocalStorage());
+}
+
+getlicenseAvailabilityForWorkflow(){
+   this.dataService.getWorkflowLicenseLimit(this.constructor.name, moduleName.headerModule).subscribe((data) => {
+    this.dataService.setWorkflowLicenseToLocalStorage(data.response);
+  })
 }
 
 ngAfterViewInit() {

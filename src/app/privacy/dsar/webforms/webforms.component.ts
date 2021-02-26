@@ -5,6 +5,9 @@ import { OrganizationService, UserService } from 'src/app/_services';
 import { CCPAFormFields } from 'src/app/_models/ccpaformfields';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 import {moduleName} from '../../../_constant/module-name.constant';
+import { DataService } from 'src/app/_services/data.service';
+import { forkJoin } from 'rxjs';
+import { DirtyComponents } from 'src/app/_models/dirtycomponents';
 
 interface WebFormModel {
   crid: any;
@@ -27,7 +30,7 @@ interface WebFormModel {
   templateUrl: './webforms.component.html',
   styleUrls: ['./webforms.component.scss']
 })
-export class WebformsComponent implements OnInit {
+export class WebformsComponent implements OnInit, DirtyComponents {
   selectedProperty: any;
   currentOrgID: any;
   propertyID: any;
@@ -43,10 +46,12 @@ export class WebformsComponent implements OnInit {
   currentUser: any;
   currentuserID: any;
   orgDetails: any;
+  isDirty = false;
   constructor(private ccpaFormConfigService: CCPAFormConfigurationService,
               private organizationService: OrganizationService,
               private loading: NgxUiLoaderService,
               private userService: UserService,
+              private dataService: DataService,
               private router: Router) {
     this.router.events.subscribe((e) => {
       if (e instanceof NavigationEnd) {
@@ -69,6 +74,7 @@ export class WebformsComponent implements OnInit {
        } else {
         const orgDetails = this.organizationService.getCurrentOrgWithProperty();
         this.orgDetails = orgDetails;
+        this.currentOrgID = orgDetails.organization_id;
         }
     });
 
@@ -104,15 +110,21 @@ export class WebformsComponent implements OnInit {
   }
 
   showForm(data) {
+    this.ccpaFormConfigService.removeCurrentSelectedFormData();
     this.ccpaFormConfigService.captureCurrentSelectedFormData(data);
     this.router.navigate(['/privacy/dsar/dsarform', data.crid]);
   }
 
   navigateToDSARForm() {
    if (this.currentPropertyName !== undefined) {
+    if(this.isLicenseLimitAvailable()){
+      this.ccpaFormConfigService.removeCurrentSelectedFormData();
       this.router.navigate(['/privacy/dsar/dsarform']);
+     }
     } else {
-      alert('Please Select property first!');
+      this.alertMsg = 'Please Select property first!';
+      this.isOpen = true;
+      this.alertType = 'danger';
     }
   }
 
@@ -128,6 +140,13 @@ export class WebformsComponent implements OnInit {
         });
   }
 
+  isLicenseLimitAvailable(): boolean{
+      return this.dataService.isLicenseLimitAvailableForOrganization('form',this.dataService.getAvailableLicenseForFormAndRequestPerOrg());
+  }
+
+  canDeactivate(){
+    return this.isDirty;
+  }
   // ngOnDestroy() {
   //   if (this.mySubscription) {
   //     this.mySubscription.unsubscribe();

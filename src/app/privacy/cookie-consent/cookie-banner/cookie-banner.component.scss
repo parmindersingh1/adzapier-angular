@@ -63,17 +63,17 @@ input[type=color] {
 
 .banner-body {
   height: 445px;
-  overflow: overlay;
-}
+  overflow: auto;}
 
 .banner-row {
   width: 100%;
   margin-right: 0px;
   margin-left: 0px;
+  padding-right: 12px;
 }
 .popup-body {
   max-height: 440px;
-  overflow: overlay;
+  overflow: auto;
 }
 .divider-text {
   position: relative;
@@ -210,4 +210,50 @@ input:checked + .slider {
 .spinner-border {
   width: 1rem;
   height: 1rem;
+}
+
+.colorpicker-wrapper input[type=color] {
+  width: 42px;
+  height: 36px;
+  min-width: 30px;
+  cursor: pointer;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  outline: none;
+}
+
+.colorpicker-wrapper {
+  list-style: none;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+
+.vendors-list-table {
+  max-height: 430px;
+  overflow: auto;
+}
+
+.cell-width {
+  width: 200px !important;
+}
+.cs-banner{
+  font-size: 14px;
+}
+h4 {
+  margin: 2rem 0rem 1rem;
+}
+
+.table-image {
+  td, th {
+    vertical-align: middle;
+  }
+}
+
+
+.global-text {
+  margin-left: 30px !important;
 }

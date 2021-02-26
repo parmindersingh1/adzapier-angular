@@ -214,7 +214,7 @@ tr.row-disabled > td > a {
 }
 
 .dsar-request-table ::ng-deep .p-datatable .p-paginator-bottom {
-  justify-content: flex-end;
+  // justify-content: flex-end;
 }
 
 // ::ng-deep .pi {
@@ -279,6 +279,9 @@ tr.row-disabled > td > a {
 
 .dsar-request-table ::ng-deep .p-paginator .p-dropdown {
   height: 2rem;
+  position: absolute;
+  left: 0;
+  top: 12px;
 }
 
 .dsar-request-table ::ng-deep .p-multiselect-panel .p-multiselect-header {
@@ -306,6 +309,13 @@ tr.row-disabled > td > a {
   border-top: 1px solid #ccc;
   border-radius: 0px 0px 10px 10px;
   border-bottom: 0;
+  position: relative;
+  justify-content:center;
+}
+
+.dsar-request-table ::ng-deep .p-datatable .p-paginator .p-paginator-current{
+  right: 0 !important;
+  position: absolute !important;
 }
 
 .hide {
@@ -324,6 +334,61 @@ span.ui-column-title {
  
 .dsar-request-table ::ng-deep .searchfield .col-sm-2 .p-multiselect {
   width:160px !important;
+}
+
+::ng-deep .theme-dark-blue {
+  flex-direction: row-reverse !important;
+}
+
+::ng-deep .theme-dark-blue  .bs-datepicker-predefined-btns button {
+  margin-bottom: 2px !important;
+  background: #fff;
+  color: #333;
+  border: 1px solid #ccc;
+}
+
+::ng-deep .theme-dark-blue .bs-datepicker-predefined-btns button.selected {
+  color: #fff;
+  background: #0168fa;
+}
+
+.datepickerwrapper {
+  justify-content: flex-end !important;
+  display: flex !important;
+}
+
+.border-zero-left {
+  border-left: 0;
+}
+
+.datepickerwrapper .form-control:focus {
+  outline: none;
+  border-radius: 0px 5px 5px 0px;
+  box-shadow: none;
+  border-color: #c0ccda;
+}
+
+.datepickerwrapper .form-control {
+  border-radius: 0!important;
+}
+
+.datepickerwrapper .input-group-prepend {
+  height: 38px;
+}
+
+.row-reverse {
+  flex-direction: row-reverse;
+}
+
+.input-group-prepend span {
+  background-color: #fff;
+  border-color: #c0ccda !important;
+  border-radius: 0px; // 5px 0px 0px 5px;
+  cursor: pointer;
+}
+
+.lineheight-22 {
+  line-height: 22px;
 }
 
 @media (min-width: 1024px) { 
@@ -389,5 +454,22 @@ span.ui-column-title {
     .dsar-request-table ::ng-deep .searchfield .col-sm-2 .p-multiselect {
       width: 100% !important;
     }
- 
- }
+
+    .dsar-request-table ::ng-deep .p-paginator-bottom .p-paginator {
+      display: flex;
+      position: relative;
+    }
+    
+    .dsar-request-table ::ng-deep .p-paginator .p-paginator-current {
+      position: absolute !important;
+      right: 0 !important;
+      border: 2px solid red;
+    }
+    
+    .dsar-request-table ::ng-deep .p-inputwrapper-filled {
+      position: absolute;
+      left: 0;
+    }
+
+  }
+    

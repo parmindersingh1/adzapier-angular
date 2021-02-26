@@ -66,5 +66,6 @@ export enum LokiFunctionality {
   getUserList = 'getUserList',
   viewClientsFileAttachments = 'viewClientsFileAttachments',
   viewSubtaskFileAttachements = 'viewSubtaskFileAttachements',
-  rejectDSARRequest = 'rejectDSARRequest'
+  rejectDSARRequest = 'rejectDSARRequest',
+  checkIsNotificationVisited = 'checkIsNotificationVisited'
 }

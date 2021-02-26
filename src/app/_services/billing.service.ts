@@ -67,6 +67,16 @@ export class BillingService {
     );
   }
 
+  getAllActiveOrgList(componentName, moduleName){
+    const path = apiConstant.ORG_ACITVE_LIST + '?active=true';
+    return this.http.get(environment.apiUrl + path).pipe(map(res => res),
+      catchError(error => {
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.updateBilling, componentName, moduleName, path);
+        return throwError(error);
+      }),
+    );
+  }
+
   getAllOrgList(componentName, moduleName){
     const path = apiConstant.BILLING_LIST_ALL_ORG;
     return this.http.get(environment.apiUrl + path).pipe(map(res => res),

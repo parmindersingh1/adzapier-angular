@@ -16,7 +16,7 @@
                     </h6>
                     <div class="d-flex pd-0">
                         <a routerLink="/settings/organizations" class="btn btn-link">Add Organization</a>
-                        <button (click)="editOrganizationModalPopup(editCompanyModal)"
+                        <button (click)="editOrganizationModalPopup(editCompanyModal, 'edit')"
                             class="btn btn-xs btn-white float-right">
                             <!-- <i-feather name="edit-2" class="feather-16"></i-feather> -->
                             <i class="fa fa-pen mr-1" aria-hidden="true"></i>
@@ -100,7 +100,7 @@
 
                     <div class="col-sm-2 ml-auto">
                         <button type="button" class="btn btn-primary btn-xs float-right" data-toggle="modal"
-                            (click)="editOrganizationModalPopup(inviteuserModal)"><i class="fas fa-plus"></i> Add
+                            (click)="editOrganizationModalPopup(inviteuserModal, 'add')"><i class="fas fa-plus"></i> Add
                             User</button>
                     </div>
                 </div>
@@ -137,10 +137,10 @@
                                     class="fas fa-envelope	"></i> Resend Invitation</button>
                                     <ng-template #LoginDate>
                                         {{list.user_last_login | timeAgo}}
-                                    </ng-template>                               
+                                    </ng-template>
 
                             </td>
-                           
+
                             <td>
                                 <a class="pd-r-5 cursorpointer" (click)="editUserInvitation(inviteuserModal,list)">
                                     <span class="d-none d-sm-inline mg-l-0">  <i class="fa fa-pen mr-1 colorblue" aria-hidden="true"></i></span>
