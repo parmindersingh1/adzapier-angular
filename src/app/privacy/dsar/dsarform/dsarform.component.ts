@@ -1336,7 +1336,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
     } else {
       this.isResetlinkEnable = false;
       this.isdraftsubmitted = true;
-      if (this.defaultapprover === undefined) {
+      if (this.selectedApproverID === undefined) {
         return false;
       } else {
 
@@ -1345,7 +1345,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
           form_name: this.formName,
           form_status: 'draft',
           settings: {
-            approver: this.defaultapprover,
+            approver: this.selectedApproverID,
             workflow: this.workflow,
             days_left: Number(this.daysleft),
             email_verified: this.isEmailVerificationRequired || false,
@@ -1437,7 +1437,8 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
         });
          this.isDirty = false;
     } else {
-      if(this.activeId === 3 && this.nextId === 4){
+     // let idStatus = typeof(this.activeId) !== undefined && this.activeId !== null;
+      if(typeof(this.activeId) !== undefined && this.activeId === 3 && this.nextId === 4 || this.active === 3){
       this.loadingbar.start();
       this.ccpaFormConfigService.createCCPAForm(this.orgId, this.propId, this.formObject,
         this.constructor.name, moduleName.dsarWebFormModule)
@@ -1449,7 +1450,10 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
           this.isOpen = true;
           this.alertType = 'success';
           this.isDirty = false;
-          this.modalRef.hide();
+          if(this.formSaveMethod === 'nav'){
+            this.modalRef.hide();
+            this.isDirty = false;
+          }
         }, (error) => {
           this.loadingbar.stop();
           this.alertMsg = error;

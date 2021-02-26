@@ -83,7 +83,7 @@
                         <div class="col-sm"> 
                             <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Status</label>
                                 <ngx-skeleton-loader *ngIf="!currentWorkflowStage" count="1"></ngx-skeleton-loader>
-                            <p class="tx-spacing-1 tx-semibold status-text tx-success" 
+                            <p class="tx-spacing-1 tx-12 tx-semibold status-text tx-success" 
                             [ngClass]="{'tx-success':currentWorkflowStage !== 'Rejected','tx-danger':currentWorkflowStage == 'Rejected' }">
                                 {{currentWorkflowStage}}
                             </p>
