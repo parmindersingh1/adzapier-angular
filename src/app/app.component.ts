@@ -107,22 +107,27 @@ export class AppComponent implements OnInit {
       if(res.hasOwnProperty('msg')) {
       this.msg = res.msg;
     }
+      debugger
       if(res.openModal) {
         if(!res.data) {
           this.currentPlanData = new DefaultPlanData();
         }
-        if(Object.keys(res.data).length !== 0) {
-          this.type = res.type;
-          this.currentPlanData = res.data;
-          if(res.currentplan !== undefined){
-            this.existingOrgPlan = res.currentplan;
-          }
-        } else if (!res.data && res.type == 'org'){
-          this.type = 'org'
-          this.currentPlanData = new DefaultPlanData();
-        } else {
+        if (res.data) {
+          if (Object.keys(res.data).length !== 0) {
+            this.type = res.type;
+            this.currentPlanData = res.data;
+            if (res.currentplan !== undefined) {
+              this.existingOrgPlan = res.currentplan;
+            }
+          } else if (!res.data && res.type == 'org') {
+            this.type = 'org'
+            this.currentPlanData = new DefaultPlanData();
+          } else {
             this.type = 'noPlan'
             this.currentPlanData = new DefaultPlanData();
+          }
+        } else {
+          this.type = 'noPlan'
         }
         this.template.show();
       }
@@ -169,9 +174,9 @@ export class AppComponent implements OnInit {
   openUnAuthPopUp() {
     this.modalRef = this.modalService.show(this.unauth, {class: 'modal-sm'});
   }
-  
+
   isCurrentPlanActive():boolean {
-    return 
+    return
   }
 
 }
