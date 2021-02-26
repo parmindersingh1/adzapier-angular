@@ -111,10 +111,12 @@ export class AppComponent implements OnInit {
         if(!res.data) {
           this.currentPlanData = new DefaultPlanData();
         }
-        if(res.data) {
+        if(Object.keys(res.data).length !== 0) {
           this.type = res.type;
           this.currentPlanData = res.data;
-          this.existingOrgPlan = res.currentplan;
+          if(res.currentplan !== undefined){
+            this.existingOrgPlan = res.currentplan;
+          }
         } else if (!res.data && res.type == 'org'){
           this.type = 'org'
           this.currentPlanData = new DefaultPlanData();

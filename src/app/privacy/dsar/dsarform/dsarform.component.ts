@@ -425,7 +425,6 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
             this.isDraftWebForm = true;
             this.isEditingPublishedForm = true;
           }
-          //  this.selectedApproverID = data.approver;
           // this.selectedWorkflowID = data.workflow;
           const isUUID = uuidRegx.test(data.approver);
           if (isUUID) {
@@ -434,7 +433,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
           } else {
             this.selectedApproverID = data.approver_id;
             this.workflow = data.workflow_id;
-            //  this.getWorkflowWithApproverID();
+            this.getWorkflowWithApproverID();
           }
           // this.requestFormControls = data.request_form;
           if (data.request_form) {
@@ -1272,6 +1271,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
   }
 
   saveAsDraftCCPAFormConfiguration(saveType) {
+    this.formSaveMethod = saveType;
     if(this.customFormFields !== undefined){
       this.addCustomFields(this.customFormFields);
     }
@@ -1400,7 +1400,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
       form_name: this.formName,
       form_status: 'draft',
       settings: {
-        approver: this.defaultapprover,
+        approver: this.defaultapprover || this.selectedApproverID,
         workflow: this.workflow,
         days_left: Number(this.daysleft),
         email_verified: this.isEmailVerificationRequired || false,
@@ -1491,10 +1491,10 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
   }
   // this.basicForm.value.formname === '' || this.basicForm.value.formname === undefined || !this.basicFormSubmitted
   onNavChange(changeEvent: NgbNavChangeEvent) {
-    this.activeId = changeEvent.activeId;
     if (changeEvent.nextId === 2) {
       if(changeEvent.nextId === 2 && changeEvent.activeId > 2){
         if(this.crid){
+          this.activeId = changeEvent.activeId;
           this.getDSARFormByCRID(this.crid,'dataview');
        } 
      }else{
@@ -1513,13 +1513,15 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
         this.isOpen = true;
         this.alertType = 'danger';
       }
+      this.activeId = changeEvent.activeId;
     }
     } else if (changeEvent.nextId === 3) {
       if(this.basicForm.valid && this.isDirty){
         this.saveAsDraftCCPAFormConfiguration('nav');
       }else{
-        if(this.workflow !== undefined || this.selectedApproverID !== undefined){
+        if(this.workflow !== undefined || this.selectedApproverID !== undefined || this.daysleft !== null){
           this.isdraftsubmitted = false;
+        //  this.getDSARFormByCRID(this.crid,'dataview');
           this.navDirective.select(3);
         }
       }
@@ -1866,12 +1868,19 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
   getWorkflowWithApproverID() {
     const retrivedData = this.ccpaFormConfigService.getCurrentSelectedFormData();
     if(retrivedData !== null){
-    this.selectedApproverID = retrivedData.approver || retrivedData.approver_id;
-    this.workflow = retrivedData.workflow || retrivedData.workflow_id;
-   // this.formName = this.formName || retrivedData.form_name;
-    this.isEmailVerificationRequired = retrivedData.email_verified;
-    this.daysleft = retrivedData.days_left;
-    if(retrivedData.request_form !== undefined){
+    if(retrivedData.approver){
+      this.defaultapprover = retrivedData.approver;
+      this.selectedApproverID = retrivedData.approver;
+      this.workflow = retrivedData.workflow;
+      this.isEmailVerificationRequired = retrivedData.email_verified;
+      this.daysleft = retrivedData.days_left;
+    }else if(retrivedData.approver_id !== undefined){
+      this.defaultapprover = retrivedData.approver_id;
+      this.selectedApproverID = retrivedData.approver_id;
+      this.workflow = retrivedData.workflow_id;
+      this.daysleft = retrivedData.days_left;
+    }
+    if(retrivedData.request_form !== undefined && retrivedData.request_form !== null){
       retrivedData.request_form.filter((t) => {
         if (t.controlId === 'fileupload') {
           this.isFileUploadRequired = t.requiredfield;
