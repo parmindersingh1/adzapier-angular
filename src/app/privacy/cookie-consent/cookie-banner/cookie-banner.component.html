@@ -34,16 +34,18 @@
 
 
             <div class="d-none d-md-block">
-              <a class=" text-info  tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label" routerLink="/cookie-consent/manage-vendors">
-                Manage Vendors
-              </a>
-
-              <button (click)="onResetConfig()" type="button" class="ml-3 btn btn-sm pd-x-15 btn-primary mr-2 btn-uppercase">
+              <button (click)="onResetConfig()" type="button" class="btn  btn-sm btn-uppercase btn-outline-secondary">
                 Reset Configuration
               </button>
 
+              <a class="btn ml-2 btn-sm btn-uppercase btn-outline-secondary" routerLink="/cookie-consent/manage-vendors">
+                Manage Vendors
+              </a>
 
-              <button (click)="type = 'draft'" type="submit" [disabled]="cookieBannerForm.invalid" class="btn btn-sm pd-x-15 btn-white btn-uppercase">
+              <button type="button" class="btn btn-sm ml-2 btn-uppercase btn-outline-secondary" (click)="openModal(templateManageLang)">Manage Languages</button>
+
+
+              <button (click)="type = 'draft'" type="submit" [disabled]="cookieBannerForm.invalid" class="btn ml-2  btn-sm btn-uppercase btn-outline-secondary">
                 <ng-container *ngIf="!isPublish || type === 'publish'">
                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -1384,5 +1386,60 @@
     </p>
     <button type="button" class="btn btn-primary mr-3" (click)="modalRef.hide()">No</button>
     <button type="button" class="btn btn-white" (click)="modalRef.hide(); onSetDefaultValue()">Yes</button>
+  </div>
+</ng-template>
+
+
+<ng-template #templateManageLang>
+  <div class="modal-header">
+    <h4 class="modal-title lang-title pull-left">Manage Languages</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="card lang-table-box  mb-0">
+      <p-table [value]="bannerConstant.Bannerlanguage" styleClass="p-datatable-sm">
+        <ng-template pTemplate="header">
+          <tr>
+            <th>
+              <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" id="customCheckAll"
+                       (change)="onAllowAllLang($event)"
+                       [checked]="bannerConstant.Bannerlanguage.length === langValueList.length">
+                <label class="custom-control-label" for="customCheckAll"></label>
+              </div>
+            </th>
+            <th>Name</th>
+            <th>Code</th>
+            <th class="text-center">Default</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-lang>
+          <tr>
+            <td>
+              <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" id="customCheck{{lang.value}}"
+                       (change)="onSelectLang($event, lang.value)"
+                       [checked]="langValueList.includes(lang.value)">
+                <label class="custom-control-label" for="customCheck{{lang.value}}"></label>
+              </div>
+              </td>
+            <td>{{lang.title}}</td>
+            <td>{{lang.value | uppercase}}</td>
+            <td class="text-center"><input type="radio" class="" [(ngModel)]="langDefault"  name="defaultLang" [value]="lang.value" />
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+    <p class="text-info">* Language would be save when you will Publish & Save Banner Configurations</p>
+
+  </div>
+  <div class="modal-footer">
+        <div class="text-center m-auto">
+          <button type="button" aria-label="Close" (click)="modalRef.hide()" class="btn btn-sm btn-uppercase btn-outline-secondary">Cancel</button>
+          <button type="button" aria-label="Close" (click)="modalRef.hide()" class="ml-3 btn btn-sm btn-uppercase btn-primary">Save</button>
+        </div>
   </div>
 </ng-template>

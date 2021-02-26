@@ -221,7 +221,39 @@ export const BannerConstant = {
     {
       title: 'German',
       value: 'de'
+    },
+    {
+      title: 'Spanish',
+      value: 'es'
+    },
+    {
+      title: 'French',
+      value: 'fr'
+    },    {
+      title: 'Italian',
+      value: 'it'
+    },
+    {
+      title: 'Japanese',
+      value: 'ja'
+    },
+    {
+      title: 'Dutch',
+      value: 'nl'
+    },
+    {
+      title: 'Portuguese',
+      value: 'pt'
+    },
+    {
+      title: 'Russian',
+      value: 'ru'
+    },
+    {
+      title: 'Chinese',
+      value: 'zh'
     }
+
   ],
   BannerPosition: [
     {title: 'Top', value: 'top'},
