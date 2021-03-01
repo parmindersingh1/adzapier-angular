@@ -1,4 +1,4 @@
-import {AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, FormGroupDirective, NgForm, Validators} from '@angular/forms';
 import {ErrorStateMatcher} from '@angular/material/core';
 import {BannerConstant, defaultBannerContent, defaultData} from '../../../_constant/consent-banner.constant';
@@ -80,6 +80,8 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
   iabVendorsID = [];
   googleVendorsID = [];
   allowAllIabVendors = false;
+  langValueList = [];
+  langDefault = 'en';
 
   constructor(private formBuilder: FormBuilder,
               private cd: ChangeDetectorRef,
@@ -203,6 +205,9 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
       showBadge: configData.show_badge,
       logo: configData.logo,
     });
+
+    this.langValueList = configData.config.LangConfig.allowedLang;
+    this.langDefault = configData.config.LangConfig.defaultLang;
   }
 
   onGetCookies() {
@@ -702,6 +707,10 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
   onGetFormData() {
     return {
       Language: this.cookieBannerForm.value.Bannerlanguage,
+      LangConfig: {
+        allowedLang: this.langValueList,
+        defaultLang: this.langDefault
+      },
       BannerPosition: this.cookieBannerForm.value.BannerPosition,
       BadgePosition: this.cookieBannerForm.value.BadgePosition,
       DisplayFrequency: {
@@ -905,4 +914,31 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
     this.cookieBannerForm.controls[currentElement].setValue($event.target.value);
   }
 
+  openModal(template: TemplateRef<any>) {
+    this.modalRef = this.modalService.show(template);
+  }
+
+  onSelectLang(event, id) {
+    const isChecked = event.target.checked;
+    if (isChecked) {
+      this.langValueList.push(id);
+    } else {
+      const index = this.langValueList.indexOf(id);
+      if (index > -1) {
+        this.langValueList.splice(index, 1);
+      }
+    }
+  }
+
+  onAllowAllLang(event) {
+    const isChecked = event.target.checked;
+    this.langValueList = [];
+    if (isChecked) {
+      for (const iabObj of this.bannerConstant.Bannerlanguage) {
+        this.langValueList.push(iabObj.value)
+      }
+    } else {
+      this.langValueList = [];
+    }
+  }
 }
