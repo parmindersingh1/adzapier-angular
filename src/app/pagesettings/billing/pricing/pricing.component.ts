@@ -49,6 +49,7 @@ export class PricingComponent implements OnInit, OnDestroy {
  activeData = { base: {maxPrice : 0, maxPlanID: '', cycle: 'monthly'},
  addons: {maxPrice : 0, maxPlanID: '', cycle: 'monthly'}
 };
+ featuresList = [];
  isPromoCodeActive = false;
   constructor(private router: Router,
               private loading: NgxUiLoaderService,
@@ -58,6 +59,7 @@ export class PricingComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.onGetPlanCompareData()
     this.onGetActivePlan();
     this.onGetPlanDetails();
     this.onGetUserEmail();
@@ -65,6 +67,16 @@ export class PricingComponent implements OnInit, OnDestroy {
     // this.onGetCurrentPlan();
     // const div = document.querySelector('#main');
     // div.classList.remove('container');
+  }
+
+  onGetPlanCompareData() {
+    this.loading.start('f1');
+    this.billingService.getFeaureData(this.constructor.name, moduleName.manageSubscriptionsModule).subscribe((res: any) => {
+      this.loading.stop('f1');
+      this.featuresList = res.response;
+    }, error => {
+      this.loading.stop('f1');
+    })
   }
 
   onGetActivePlan() {

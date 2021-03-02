@@ -12,6 +12,8 @@ import {AccordionModule} from 'primeng/accordion';
 import { PopupLivePreviewComponent } from './popup-live-preview/popup-live-preview.component';
 import {CheckboxModule} from 'primeng/checkbox';
 import {MultiSelectModule} from 'primeng/multiselect';
+import {TableModule} from 'primeng/table';
+import {RadioButtonModule} from 'primeng/radiobutton';
 const path: Routes = [{
   path: '', component: CookieBannerComponent,
 },
@@ -30,6 +32,8 @@ const path: Routes = [{
     AccordionModule,
     CheckboxModule,
     MultiSelectModule,
+    TableModule,
+    RadioButtonModule,
     // TabsModule
   ]
 })

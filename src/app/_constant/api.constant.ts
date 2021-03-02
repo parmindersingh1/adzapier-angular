@@ -32,6 +32,7 @@ export const apiConstant = {
   BILLING_CURRENT_SUBSCRIPTION: '/billing/current/subscription',
   BILLING_COUPON: '/billing/coupon/:coupon_code',
   BILLING_ACTIVE_PLAN: '/billing/list/subscription',
+  BILLING_FEATURES: '/billing/plan/allowed-features',
   //
   BILLING_GET_ASSIGNE_PROP : '/licensed/property',
   BILLING_GET_ASSIGNE_ORG: '/licensed/organizations',
