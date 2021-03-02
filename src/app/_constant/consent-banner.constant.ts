@@ -1,12 +1,13 @@
 export const defaultData = {
-  ccpaDefaultTarget: 'ca',
-  gdprDefaultTarget: 'eu',
+  ccpaDefaultTarget: 'us',
+  gdprDefaultTarget: ["be", "bg", "cz", "dk", "de", "ee", "ie", "el", "es", "fr", "hr", "it", "cy", "lv", "lt", "lu", "hu"],
   defaultCookieBlocking: false,
   defaultEnableIab: true,
   defaultEmail: false,
   google_vendors: false,
   gdprGlobal: false,
   ccpaGlobal: false,
+  allowPurposeByDefault: true,
   showBadge: true,
   logo: true,
   gdprDefaultLang: 'en',
@@ -56,7 +57,7 @@ export const defaultBannerContent = {
   popUpVendorsDescription: 'During consted in the stub are filtered out if not valid. Ping and custom commands are executed and removed from the queue while all other commands remain queued until a valid TC string is set.',
   //
   popUpPurposeButtonTextColor: '#575751',
-  popUpPurposeButtonBackGroundColor: '#f5f5f5',
+  popUpPurposeButtonBackGroundColor: 'rgb(250, 250, 250)',
   //
   popUpSwitchButtonColor: '#4b90ff',
   //
@@ -94,7 +95,7 @@ export const defaultBannerContent = {
   PopUpAnalyticsHead: 'Functional Cookies\n',
   PopUpAnalyticsDescription: 'Functional cookies enhance functions, performance, and services on the website. Some examples include: cookies used to analyze site traffic, cookies used for market research, and cookies used to display advertising that is not directed to a particular individual.',
 
-  NecessaryText: 'Essentiial',
+  NecessaryText: 'Essential',
   PopUpNecessaryHead: 'Required Cookies\n',
   PopUpNecessaryDescription: 'Required cookies are necessary for basic website functionality. Some examples include: session cookies needed to transmit the website, authentication cookies, and security cookies',
 
@@ -140,7 +141,7 @@ export class FormDefaultData {
   popUpSwitchButtonColor: '#4b90ff';
   //
   popUpPurposeButtonTextColor: '#575751';
-  popUpPurposeButtonBackGroundColor: '#f5f5f5';
+  popUpPurposeButtonBackGroundColor: 'rgb(250, 250, 250)';
   //
 
   popUpDisableAllButtonTextContent: 'Disable All';
@@ -253,6 +254,7 @@ export const BannerConstant = {
       title: 'Chinese',
       value: 'zh'
     }
+
   ],
   BannerPosition: [
     {title: 'Top', value: 'top'},

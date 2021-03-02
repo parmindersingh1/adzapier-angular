@@ -239,21 +239,28 @@ export class DataService {
     return flag;
   }
 
-  isLicenseLimitAvailableForOrganization(reqestType,responseData): boolean {
-    const changeResponseProperty = reqestType === 'form' ? 'form_available' : 'request_available';
+  isLicenseLimitAvailableForOrganization(requestType,responseData): boolean {
+    let changeResponseProperty;
+    if(requestType === 'form'){
+      changeResponseProperty = 'form_available';
+    } else if(requestType === 'request'){
+      changeResponseProperty = 'request_available';
+    } else if(requestType === 'workflow'){
+      changeResponseProperty = 'workflow_available';
+    }
       if(Object.keys(responseData).length === 0){
         this.openModal.next({openModal : true, data: responseData, type: 'org', msg: ''});
         return false;
-      } else if(responseData[changeResponseProperty] > 0 || responseData[changeResponseProperty] === -1){
+      } else if(responseData[changeResponseProperty] === -1 || responseData[changeResponseProperty] > 0){
         return true;
       } else if(responseData[changeResponseProperty] === 0){
         const formMsg = 'You have exceeded form creation limit. For more details Manage subscription or upgrade plan';
         const requestMsg = 'You have exceeded request creation limit. For more details Manage subscription or upgrade plan'
         const respMsg = changeResponseProperty == 'form_available' ? formMsg : requestMsg;
-        this.openModal.next({openModal : true, data: responseData, type: 'org', msg: respMsg });
+        this.openModal.next({openModal : true, data: responseData, type: 'org', msg: respMsg, currentplan: this.getCurrentOrgPlanDetails().response.plan_details });
         return false;
       } else {
-        this.openModal.next({openModal : true, data: responseData, type: 'org', msg: ''});
+        this.openModal.next({openModal : true, data: responseData, type: 'org', msg: '', currentplan: this.getCurrentOrgPlanDetails().response.plan_details});
         return false;
       }
   }
@@ -273,6 +280,26 @@ export class DataService {
     
   }
  
+  getWorkflowLicenseLimit(componentName, moduleName): Observable<any>{
+    const path = '/available/workflow';
+    return this.http.get(environment.apiUrl  + path).pipe(map(response => response),
+      catchError(error => {
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.workFlow, componentName, moduleName, path);
+        return throwError(error);
+      }),
+    ); 
+  }
 
+  setWorkflowLicenseToLocalStorage(planDetails) {
+    const planData = btoa(JSON.stringify(planDetails))
+    localStorage.setItem('workflowPlan', planData);
+  }
+
+  getWorkflowLicenseToLocalStorage() {
+    let planData = localStorage.getItem('workflowPlan')
+    if(planData) {
+     return planData = JSON.parse(atob(planData))
+    }
+  }
 
 }

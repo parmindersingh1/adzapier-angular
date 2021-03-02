@@ -34,16 +34,18 @@
 
 
             <div class="d-none d-md-block">
-              <a class=" text-info  tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label" routerLink="/cookie-consent/manage-vendors">
-                Manage Vendors
-              </a>
-
-              <button (click)="onResetConfig()" type="button" class="ml-3 btn btn-sm pd-x-15 btn-primary mr-2 btn-uppercase">
+              <button (click)="onResetConfig()" type="button" class="btn  btn-sm btn-uppercase btn-outline-secondary">
                 Reset Configuration
               </button>
 
+              <a class="btn ml-2 btn-sm btn-uppercase btn-outline-secondary" routerLink="/cookie-consent/manage-vendors">
+                Manage Vendors
+              </a>
 
-              <button (click)="type = 'draft'" type="submit" class="btn btn-sm pd-x-15 btn-white btn-uppercase">
+              <button type="button" class="btn btn-sm ml-2 btn-uppercase btn-outline-secondary" (click)="openModal(templateManageLang)">Manage Languages</button>
+
+
+              <button (click)="type = 'draft'" type="submit" [disabled]="cookieBannerForm.invalid" class="btn ml-2  btn-sm btn-uppercase btn-outline-secondary">
                 <ng-container *ngIf="!isPublish || type === 'publish'">
                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -59,7 +61,7 @@
                   Saving...
                 </ng-container>
               </button>
-              <button (click)="type = 'publish'" type="submit"
+              <button (click)="type = 'publish'" type="submit" [disabled]="cookieBannerForm.invalid"
                       class="btn btn-sm pd-x-15 btn-primary btn-uppercase mg-l-5" href="#modalAddCategory"
                       data-toggle="modal">
                 <ng-container *ngIf="!isPublish || type === 'draft'">
@@ -84,6 +86,9 @@
                   Publishing...
                 </ng-container>
               </button>
+
+<!--              <p  *ngIf="cookieBannerForm.invalid" class="pb-0 text-right text-danger tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label"> <i class="fas fa-info-circle"></i>  Validation Error</p>-->
+
             </div>
           </div>
           </div>
@@ -208,10 +213,10 @@
                           <span class="slider round"></span>
                         </label>
                       </div>
-                      <div class="row">
-                        <p class="p-0 global-text text-info  tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label" *ngIf="ccpaGlobal.checked"> CCPA Global Applied </p>
-                      </div>
 
+                      <div class="row">
+                        <p class="p-0 global-text text-info  tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label" *ngIf="gdprGlobal.checked"> GDPR Global Applied </p>
+                      </div>
                     </div>
 
 
@@ -225,11 +230,24 @@
                           <span class="slider round"></span>
                         </label>
                       </div>
+
                       <div class="row">
-                        <p class="p-0 global-text text-info  tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label" *ngIf="gdprGlobal.checked"> GDPR Global Applied </p>
+                        <p class="p-0 global-text text-info  tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label" *ngIf="ccpaGlobal.checked"> CCPA Global Applied </p>
                       </div>
                     </div>
 
+
+                    <div class="form-group row pd-0 mg-b-0">
+                      <label class="col-sm-8 tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label">
+                        Allow Purposes By Default</label>
+                      <div class="col-sm-4">
+                        <label class="switch">
+                          <input type="checkbox"
+                                 formControlName="ccpa_global">
+                          <span class="slider round"></span>
+                        </label>
+                      </div>
+                    </div>
 
 <!--                    <div class="form-group row pd-0 mg-b-0">-->
 <!--                      <label class="col-sm-8 tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label">-->
@@ -492,7 +510,7 @@
                                 Minimum 20 characters required
                               </div>
                               <div class="text-danger mt-2" *ngIf="f.BannerDescription.errors.maxlength">
-                                Maximum 300 characters required
+                                Maximum 700 characters required
                               </div>
                             </div>
                           </div>
@@ -619,7 +637,7 @@
                               </div>
                               <div class="text-danger mt-2"
                                    *ngIf="f.BannerPreferenceButtonTextContent.errors.maxlength">
-                                Maximum 25 characters required
+                                Maximum 45 characters required
                               </div>
                             </div>
                           </div>
@@ -670,7 +688,7 @@
                                 Minimum 2 characters required
                               </div>
                               <div class="text-danger mt-2" *ngIf="f.BannerAllowRequiredTextContent.errors.maxlength">
-                                Maximum 25 characters required
+                                Maximum 45 characters required
                               </div>
                             </div>
                           </div>
@@ -722,7 +740,7 @@
                                 Minimum 2 characters required
                               </div>
                               <div class="text-danger mt-2" *ngIf="f.BannerAllowAllButtonTextContent.errors.maxlength">
-                                Maximum 25 characters required
+                                Maximum 45 characters required
                               </div>
                             </div>
                           </div>
@@ -778,7 +796,7 @@
                               </div>
                               <div class="text-danger mt-2"
                                    *ngIf="f.BannerDisableAllButtonTextContent.errors.maxlength">
-                                Maximum 25 characters required
+                                Maximum 45 characters required
                               </div>
                             </div>
                           </div>
@@ -835,7 +853,7 @@
                               </div>
                               <div class="text-danger mt-2"
                                    *ngIf="f.bannerDoNotSellMyDataTextContent.errors.maxlength">
-                                Maximum 25 characters required
+                                Maximum 45 characters required
                               </div>
                             </div>
                           </div>
@@ -917,7 +935,7 @@
                               Minimum 20 characters required
                             </div>
                             <div class="text-danger mt-2" *ngIf="f.PopUpPurposeBodyDescription.errors.maxlength">
-                              Maximum 300 characters required
+                              Maximum 700 characters required
                             </div>
                           </div>
                         </div>
@@ -936,7 +954,7 @@
                               Minimum 20 characters required
                             </div>
                             <div class="text-danger mt-2" *ngIf="f.PopUpVendorBodyDescription.errors.maxlength">
-                              Maximum 300 characters required
+                              Maximum 700 characters required
                             </div>
                           </div>
                         </div>
@@ -1007,7 +1025,7 @@
                               Minimum 2 characters required
                             </div>
                             <div class="text-danger mt-2" *ngIf="f.PopUpDisableAllButtonTextContent.errors.maxlength">
-                              Maximum 25 characters required
+                              Maximum 45 characters required
                             </div>
                           </div>
                         </div>
@@ -1061,7 +1079,7 @@
                               Minimum 2 characters required
                             </div>
                             <div class="text-danger mt-2" *ngIf="f.popUpDoNotSellTextContent.errors.maxlength">
-                              Maximum 25 characters required
+                              Maximum 45 characters required
                             </div>
                           </div>
                         </div>
@@ -1114,7 +1132,7 @@
                               Minimum 2 characters required
                             </div>
                             <div class="text-danger mt-2" *ngIf="f.PopUpSaveMyChoiceButtonContentText.errors.maxlength">
-                              Maximum 25 characters required
+                              Maximum 45 characters required
                             </div>
                           </div>
                         </div>
@@ -1169,7 +1187,7 @@
                               Minimum 2 characte rs required
                             </div>
                             <div class="text-danger mt-2" *ngIf="f.PopUpAllowAllButtonTextContent.errors.maxlength">
-                              Maximum 25 characters required
+                              Maximum 45 characters required
                             </div>
                           </div>
                         </div>
@@ -1239,7 +1257,7 @@
                           Minimum 20 characters required
                         </div>
                         <div class="text-danger mt-2" *ngIf="f.PopUpNecessaryDescription.errors.maxlength">
-                          Maximum 300 characters required
+                          Maximum 700 characters required
                         </div>
                       </div>
                     </p-accordionTab>
@@ -1269,7 +1287,7 @@
                           Minimum 20 characters required
                         </div>
                         <div class="text-danger mt-2" *ngIf="f.PopUpAdvertisingDescription.errors.maxlength">
-                          Maximum 300 characters required
+                          Maximum 700 characters required
                         </div>
                       </div>
                     </p-accordionTab>
@@ -1299,7 +1317,7 @@
                           Minimum 20 characters required
                         </div>
                         <div class="text-danger mt-2" *ngIf="f.PopUpSocialMediaDescription.errors.maxlength">
-                          Maximum 300 characters required
+                          Maximum 700 characters required
                         </div>
                       </div>
                     </p-accordionTab>
@@ -1329,7 +1347,7 @@
                           Minimum 20 characters required
                         </div>
                         <div class="text-danger mt-2" *ngIf="f.PopUpAnalyticsDescription.errors.maxlength">
-                          Maximum 300 characters required
+                          Maximum 700 characters required
                         </div>
                       </div>
                     </p-accordionTab>
@@ -1391,5 +1409,60 @@
     </p>
     <button type="button" class="btn btn-primary mr-3" (click)="modalRef.hide()">No</button>
     <button type="button" class="btn btn-white" (click)="modalRef.hide(); onSetDefaultValue()">Yes</button>
+  </div>
+</ng-template>
+
+
+<ng-template #templateManageLang>
+  <div class="modal-header">
+    <h4 class="modal-title lang-title pull-left">Manage Languages</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="card lang-table-box  mb-0">
+      <p-table [value]="bannerConstant.Bannerlanguage" styleClass="p-datatable-sm">
+        <ng-template pTemplate="header">
+          <tr>
+            <th>
+              <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" id="customCheckAll"
+                       (change)="onAllowAllLang($event)"
+                       [checked]="bannerConstant.Bannerlanguage.length === langValueList.length">
+                <label class="custom-control-label" for="customCheckAll"></label>
+              </div>
+            </th>
+            <th>Name</th>
+            <th>Code</th>
+            <th class="text-center">Default</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-lang>
+          <tr>
+            <td>
+              <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" id="customCheck{{lang.value}}"
+                       (change)="onSelectLang($event, lang.value)"
+                       [checked]="langValueList.includes(lang.value)">
+                <label class="custom-control-label" for="customCheck{{lang.value}}"></label>
+              </div>
+              </td>
+            <td>{{lang.title}}</td>
+            <td>{{lang.value | uppercase}}</td>
+            <td class="text-center"><input type="radio" class="" [(ngModel)]="langDefault"  name="defaultLang" [value]="lang.value" />
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+    <p class="text-info">* Language would be save when you will Publish & Save Banner Configurations</p>
+
+  </div>
+  <div class="modal-footer">
+        <div class="text-center m-auto">
+          <button type="button" aria-label="Close" (click)="modalRef.hide()" class="btn btn-sm btn-uppercase btn-outline-secondary">Cancel</button>
+          <button type="button" aria-label="Close" (click)="modalRef.hide()" class="ml-3 btn btn-sm btn-uppercase btn-primary">Save</button>
+        </div>
   </div>
 </ng-template>

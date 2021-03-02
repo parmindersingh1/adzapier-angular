@@ -57,18 +57,18 @@
             <div class="col-md-8">
             </div>
             <div class="col-md-4 form-group m-0">
-              <input type="text" (keyup)="onSearchIabVendors($event)" placeholder="Find Vendors By Name"
+              <input type="text" (keyup)="onSearchIabVendors($event)" #searchIAB placeholder="Find Vendors By Name"
                      class="m-0 form-control search-input">
             </div>
           </div>
           <div class="card">
-            <p-table [value]="searchIabVendors.length > 0 ?  searchIabVendors :  iabVendorsList"
+            <p-table [value]="searchIAB.value ?  searchIabVendors :  iabVendorsList"
                      styleClass="p-datatable-sm" [scrollable]="true" scrollHeight="550px">
               <ng-template pTemplate="colgroup">
                 <colgroup>
                   <col style="width:5%">
-                  <col style="width:5%">
-                  <col style="width:20%">
+                  <col style="width:7%">
+                  <col style="width:18%">
                   <col style="width:50%">
                   <col style="width:10%">
                   <col style="width:10%">
@@ -125,13 +125,13 @@
             <div class="col-md-8">
             </div>
             <div class="col-md-4 form-group m-0">
-              <input type="text" (keyup)="onSearchGoogleVendors($event)" placeholder="Find Vendors By Name"
+              <input type="text" (keyup)="onSearchGoogleVendors($event)" #searchGoogle placeholder="Find Vendors By Name"
                      class="m-0 form-control search-input">
             </div>
           </div>
 
           <div class="card">
-            <p-table [value]="searchGoogleVendors.length > 0 ?  searchGoogleVendors :  googleVendorsList"
+            <p-table [value]="searchGoogle.value ?  searchGoogleVendors :  googleVendorsList"
                      styleClass="p-datatable-sm" [scrollable]="true" scrollHeight="550px">
               <ng-template pTemplate="colgroup">
                 <colgroup>

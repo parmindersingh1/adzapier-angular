@@ -3,7 +3,7 @@ import { faCoffee } from '@fortawesome/free-solid-svg-icons';
 import { AuthenticationService, OrganizationService } from './_services';
 import { User } from './_models';
 import { HeaderComponent } from './_components/layout/header/header.component';
-import { Router, NavigationEnd } from '@angular/router';
+import {Router, NavigationEnd, RouterEvent, RouteConfigLoadStart, RouteConfigLoadEnd} from '@angular/router';
 import * as feather from 'feather-icons';
 import { CCPAFormConfigurationService } from './_services/ccpaform-configuration.service';
 import { DsarformService } from './_services/dsarform.service';
@@ -41,6 +41,8 @@ export class AppComponent implements OnInit {
   msg = '';
   listAddonPlan: any
   public unAuthMsg: any;
+  isShowingRouteLoadIndicator: boolean;
+  existingOrgPlan:any;
   constructor(private router: Router,
     private modalService: BsModalService,
               private billingService: BillingService,
@@ -51,6 +53,21 @@ export class AppComponent implements OnInit {
               private organizationService: OrganizationService
   ) {
     //  this.headerComponent.loadOrganizationList();
+    // Lazy Loading indicator
+    this.isShowingRouteLoadIndicator = false;
+    router.events.subscribe(
+      ( event: RouterEvent ): void => {
+        if ( event instanceof RouteConfigLoadStart ) {
+          this.isShowingRouteLoadIndicator = true;
+        } else if ( event instanceof RouteConfigLoadEnd ) {
+          this.isShowingRouteLoadIndicator = false;
+        }
+        // setTimeout( () => {
+        //   this.isShowingRouteLoadIndicator = false;
+        // }, 25000);
+
+      }
+    );
   }
 
   ngOnInit() {
@@ -94,15 +111,22 @@ export class AppComponent implements OnInit {
         if(!res.data) {
           this.currentPlanData = new DefaultPlanData();
         }
-        if(res.data) {
-          this.type = res.type;
-          this.currentPlanData = res.data
-        } else if (!res.data && res.type == 'org'){
-          this.type = 'org'
-          this.currentPlanData = new DefaultPlanData();
-        } else {
+        if (res.data) {
+          if (Object.keys(res.data).length !== 0) {
+            this.type = res.type;
+            this.currentPlanData = res.data;
+            if (res.currentplan !== undefined) {
+              this.existingOrgPlan = res.currentplan;
+            }
+          } else if (!res.data && res.type == 'org') {
+            this.type = 'org'
+            this.currentPlanData = new DefaultPlanData();
+          } else {
             this.type = 'noPlan'
             this.currentPlanData = new DefaultPlanData();
+          }
+        } else {
+          this.type = 'noPlan'
         }
         this.template.show();
       }
@@ -148,6 +172,10 @@ export class AppComponent implements OnInit {
   }
   openUnAuthPopUp() {
     this.modalRef = this.modalService.show(this.unauth, {class: 'modal-sm'});
+  }
+
+  isCurrentPlanActive():boolean {
+    return
   }
 
 }

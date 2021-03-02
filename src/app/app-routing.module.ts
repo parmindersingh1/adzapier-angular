@@ -20,7 +20,7 @@ const routes: Routes = [
   { path: 'gethelp', loadChildren: () => import('./gethelp/gethelp.module').then(m => m.GethelpModule) },
   {
     path: 'home/dashboard', loadChildren: () => import('./dashboard/analytics.module')
-      .then(m => m.AnalyticsModule)
+      .then(m => m.AnalyticsModule), canActivate: [AuthGuard]
   },
   { path: 'userprofile', loadChildren: () => import('./edit-profile/edit-profile.module').then(m => m.EditProfileModule) },
   // {path: 'pricing', loadChildren: () =>
@@ -44,7 +44,7 @@ const routes: Routes = [
     path: 'privacy/dsar/requests-details/:reqid/:companyid/:orgid/:propid',
     loadChildren: () => import('./privacy/dsar/dsar-requestdetails/dsar-requestdetails.module').then(m => m.DsarRequestdetailsModule)
   },
-  { path: 'privacy/dsar/webforms', loadChildren: () => import('./privacy/dsar/webforms/webforms.module').then(m => m.WebformsModule) },
+  { path: 'privacy/dsar/webforms', loadChildren: () => import('./privacy/dsar/webforms/webforms.module').then(m => m.WebformsModule), canActivate: [AuthGuard] },
   {
     path: 'privacy/dsar/workflows', loadChildren: () => import('./privacy/dsar/workflows/workflows.module')
     .then(m => m.WorkflowsModule)

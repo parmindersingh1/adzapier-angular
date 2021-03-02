@@ -141,6 +141,7 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
     this.dateCustomClasses = [
       { date: new Date(), classes: ['theme-dark-blue'] },
     ];
+    this.searchbydaterange = [new Date(new Date().setDate(new Date().getDate() - 30)),new Date()]
     }
 
   ngOnInit() {
@@ -308,6 +309,7 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
   }
 
   navigateToWebForm(obj) {
+    this.ccpaFormConfigService.removeCurrentSelectedFormData();
     this.ccpaFormConfigService.captureCurrentSelectedFormData(obj);
     this.router.navigate(['/privacy/dsar/dsarform', obj.web_form_id]);
   }
@@ -399,23 +401,24 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
     if (this.createDSARWebFormRequest.invalid) {
       return false;
     } else {
+      const formStatus = '/publish';
       if (this.selectedOrgID && this.selectedPropID) {
         if (window.location.hostname === 'localhost') {
           window.open('http://localhost:4500/dsar/form/' + this.selectedOrgID + '/'
-            + this.selectedPropID + '/' + this.selectedCRID);
+            + this.selectedPropID + '/' + this.selectedCRID + formStatus);
           this.onCancelClick();
         }
         if (window.location.hostname === 'develop-cmp.adzpier-staging.com') {
           window.open('https://develop-privacyportal.adzpier-staging.com/dsar/form/' + this.selectedOrgID + '/'
-            + this.selectedPropID + '/' + this.selectedCRID);
+            + this.selectedPropID + '/' + this.selectedCRID + formStatus);
           this.onCancelClick();
         } else if (window.location.hostname === 'cmp.adzpier-staging.com') {
           window.open('https://privacyportal.adzpier-staging.com/dsar/form/' + this.selectedOrgID + '/'
-            + this.selectedPropID + '/' + this.selectedCRID);
+            + this.selectedPropID + '/' + this.selectedCRID + formStatus);
           this.onCancelClick();
         } else if(window.location.hostname === 'portal.adzapier.com'){
           window.open('https://privacyportal.primeconsent.com/dsar/form/' + this.selectedOrgID + '/'
-          + this.selectedPropID + '/' + this.selectedCRID);
+          + this.selectedPropID + '/' + this.selectedCRID + formStatus);
           this.onCancelClick();
         }
       } else {

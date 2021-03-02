@@ -17,7 +17,7 @@
                     Data Subject Requests (DSR) Forms
                 </span>
                 <div class="d-flex ml-auto pd-0">
-                    <button (click)="navigateToDSARForm()" class="btn btn-white float-right">
+                    <button (click)="navigateToDSARForm()" class="btn btn-sm btn-uppercase btn-outline-secondary">
                         <i-feather class="feather-16" name="plus"></i-feather>
                         <span class="d-none d-sm-inline mg-l-5">
                             Create</span>
@@ -25,7 +25,7 @@
                 </div>
 
             </div>
-            <div class="card-body">
+            <div class="card-body webform-wrapper">
                 <div *ngIf="formList.length === 0">No web form found</div>
                 <div class="card-columns">
                     <ng-container *ngFor="let data of formList;let i = index;">
@@ -33,7 +33,7 @@
                             <div class="card-body">
 
                                 <div class="row">
-                                    <div class="col-6">
+                                    <div class="col-7">
                                         <p
                                             class="tx-10 tx-uppercase tx-medium tx-color-03 tx-spacing-1 tx-nowrap mg-b-5">
                                             Name</p>
@@ -42,7 +42,7 @@
                                                 class=" tx-12  tx-normal tx-spacing-1 tx-color-01 ">{{data.form_name?data.form_name:'form name not available'}}</span>
                                         </div>
                                     </div>
-                                    <div class="col-6">
+                                    <div class="col-5 pr-0 pl-0">
                                         <p class="tx-10 tx-uppercase tx-medium tx-color-03 tx-spacing-1 mg-b-5">
                                             ORGANIZATION</p>
                                         <div class="d-flex">
@@ -51,7 +51,7 @@
                                                 class=" tx-12  tx-normal tx-spacing-1 tx-color-01 ">{{currentOrganization}}</span>
                                         </div>
                                     </div>
-                                    <div class="col-6 mg-t-10">
+                                    <div class="col-7 mg-t-10">
                                         <p class="tx-10 tx-uppercase tx-medium tx-color-03 tx-spacing-1 mg-b-5">Property
                                         </p>
                                         <div class="d-flex">
@@ -61,7 +61,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-6 mg-t-10">
+                                    <div class="col-5 mg-t-10 pr-0 pl-0">
                                         <p class="tx-10 tx-uppercase tx-medium tx-color-03 tx-spacing-1 mg-b-5">Create
                                         </p>
                                         <div class="d-flex">
@@ -70,7 +70,7 @@
 
                                         </div>
                                     </div>
-                                    <div class="col-6 mg-t-10">
+                                    <div class="col-7 mg-t-10">
                                         <p class="tx-10 tx-uppercase tx-medium tx-color-03 tx-spacing-1 mg-b-5">Status
                                         </p>
                                         <div class="d-flex align-items-center">
@@ -78,7 +78,7 @@
                                                 [ngClass]="{'badge-success':data.form_status=='publish','badge-light':data.form_status=='draft' || data.form_status=='Draft'}">{{data.form_status}}</span>
                                         </div>
                                     </div>
-                                    <div class="col-6 mg-t-10">
+                                    <div class="col-5 mg-t-10 pr-0 pl-0">
                                         <p class="tx-10 tx-uppercase tx-medium tx-color-03 tx-spacing-1 mg-b-5">Update
                                         </p>
                                         <div class="d-flex">

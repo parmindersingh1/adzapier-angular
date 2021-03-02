@@ -14,8 +14,14 @@
     <p-toast></p-toast>
     <div class="card">
     <div class="card-header pb-0">
-      <h4 class="mg-b-0 tx-spacing--1">Cookie Category</h4>
-      <div class="row mt-4">
+      <h4 class="mg-b-0 tx-spacing--1">Cookie Category
+
+
+            <span  *ngIf="availablePlan.scan_available > 0 && availablePlan.scan_available != -1" class="avalible-text text-info">{{availablePlan.scan_available}} Scan are Available </span>
+            <span  *ngIf="availablePlan.scan_available == 0" class=" avalible-text text-info"> Scan is not Available </span>
+            <span  *ngIf="availablePlan.scan_available == -1"  class="text-info avalible-text">Unlimited  Scan are Available </span>
+      </h4>
+      <div class="row mt-3">
       <div class="col-md-12 btn-list">
       <div style="float: right" class="d-flex flex-column flex-sm-row mg-t-20 mg-md-t-0">
         <button type="button" class="btn-primary btn btn-sm mr-3" (click)="openNew()">Add Cookie </button>
@@ -34,13 +40,7 @@
       </div>
       </div>
     </div>
-      <div class="row">
-        <div class="col-md-12">
-          <h6  *ngIf="availablePlan.scan_available > 0 && availablePlan.scan_available != -1" class="text-info text-right" style="float: right">{{availablePlan.scan_available}} Scan are Available </h6>
-          <h6  *ngIf="availablePlan.scan_available == 0" class="text-info text-right" style="float: right"> Scan is not Available </h6>
-          <h6  *ngIf="availablePlan.scan_available == -1"  class="text-info text-right" style="float: right">Unlimited  Scan are Available </h6>
-        </div>
-      </div>
+
     </div>
   </div>
 
@@ -75,16 +75,16 @@
           </div>
           <div class="col-6 tx-12 mg-t-10">
             <div *ngFor="let chart of categoryChart" class=" cookie-name-list d-flex align-items-center">
-              <div  [ngStyle]="{background: chart.color}" class="wd-10 ht-10  rounded-circle pos-relative t--1"></div>
+              <div *ngIf="chart.count"  [ngStyle]="{background: chart.color}" class="wd-10 ht-10  rounded-circle pos-relative t--1"></div>
               <span class="tx-medium mg-l-10" *ngIf="chart.category === 'advertising'">Advertising Cookies</span>
               <span class="tx-medium mg-l-10" *ngIf="chart.category === 'social_media'">Social Media Cookies</span>
               <span class="tx-medium mg-l-10" *ngIf="chart.category === 'analytics'">Analytics Cookies</span>
               <span class="tx-medium mg-l-10" *ngIf="chart.category === 'essential'">Essential Cookies</span>
               <span class="tx-medium mg-l-10" *ngIf="chart.category === 'unknown'">Unknown Cookies</span>
-              <span *ngIf="!chart.category" class="tx-medium mg-l-10">Unknown Cookies</span>
+              <span *ngIf="!chart.category && chart.count" class="tx-medium mg-l-10">Unknown Cookies</span>
 
 
-              <span class="tx-rubik mg-l-auto">{{chart.count}}</span>
+              <span *ngIf="chart.count" class="tx-rubik mg-l-auto">{{chart.count}}</span>
 <!--              <span class="wd-60 tx-right tx-rubik mg-l-5 tx-success">0.96% <i class="icon ion-md-arrow-up"></i></span>-->
             </div>
           </div>
@@ -199,7 +199,7 @@
         </ng-template>
         <ng-template pTemplate="summary">
           <div class="p-d-flex p-ai-center p-jc-between">
-            In total there are {{totalCookieCount}} Cookies.
+<!--            In total there are {{totalCookieCount}} Cookies.-->
           </div>
         </ng-template>
       </p-table>
