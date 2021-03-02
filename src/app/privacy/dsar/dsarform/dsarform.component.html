@@ -13,7 +13,7 @@
         <div class="webformheading p-3">
             <h3 class="tx-uppercase tx-14 mb-0 tx-spacing-1 tx-color-02 tx-semibold">Web form name: <span class="text-capitalize text-primary mr-2">{{formName}}</span> <span class="badge tx-11" [ngClass]="showFormStatus() === 'Publish' ? 'badge-primary':'badge-secondary'">{{showFormStatus() === 'Publish' ? 'Active': 'Draft'}}</span></h3>
         </div>
-        <ul ngbNav #nav="ngbNav"  (navChange)="onNavChange($event)" (activeIdChange)="onChangeNavID($event)" [(activeId)]="active" class="nav-tabs">
+        <ul ngbNav #nav="ngbNav"  (navChange)="onNavChange($event)"  [(activeId)]="active" class="nav-tabs">
             <li [ngbNavItem]="1" [destroyOnHide]="false">
                 <a ngbNavLink>1 Basic</a>
                 <ng-template ngbNavContent>
@@ -164,7 +164,7 @@
                                                     </div>
                                                     <div *ngIf="ismultiselectrequired" class="pl-3">
                                                         <label for="multiselect">
-                                                            <input type="checkbox" [attr.disabled]="!customFields.form.valid || isWebFormPublished && !isEditingPublishedForm ? true : null" id="multicheck" name="multicheck"  #ismulticheck="ngModel" [(ngModel)]="multiselect"/>
+                                                            <input type="checkbox" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null" id="multicheck" name="multicheck"  #ismulticheck="ngModel" [(ngModel)]="multiselect"/>
                                                             Enable multiselect
                                                             </label>
                                                     </div>
@@ -811,7 +811,7 @@
         <a ngbNavLink>3 Settings</a>
         <ng-template ngbNavContent>
             <div class="col-5 margin-auto">
-                 <form novalidate>
+                <form #settingsForm="ngForm">
                 <div class="form-group mg-b-5">
                     <label for="defaultapprover" class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">
                         Default Approver</label>
@@ -851,8 +851,13 @@
                     <label for="daysleft" class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">Default
                         days to
                         respond</label>
-                    <input type="text" class="form-control" [ngModelOptions]="{standalone: true}" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
-                        [(ngModel)]="daysleft">
+                 <input type="number" min="1" max="45" class="form-control" name="daysleft" #daysleftinput="ngModel" [(ngModel)]="daysleft" 
+                (input)="onChangeDaysLeft($event,daysleft)"  [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
+                [ngClass]="{ 'is-invalid': daysleftinput.invalid && daysleftinput.errors?.required && isdraftsubmitted}" required>
+                <div *ngIf="daysleftinput.invalid && isdraftsubmitted" class="invalid-feedback">
+                    <div *ngIf="daysleftinput.errors?.required">Days left is required</div>                           
+                </div>
+                <div *ngIf="errorMsgdaysleft" class="red p-1">{{errorMsgdaysleft}}</div>
                 </div>
                 <div class="form-group mg-b-5">
                     <label for="fileupload"
@@ -984,14 +989,7 @@
     <li> 
         <div class="button-wrapper" [ngClass]="{ 'min-width-75' : isWebFormPublished && isDraftWebForm, 'min-width-170': crid !== null}">
         <button  class="btn btn-link cancel-link" (click)="navigateToWebForm()">Back</button>   
-        <button class="btn btn-sm pd-x-15 savebtn btn-uppercase lineheight-22 btn-outline-secondary" *ngIf="formwizardStatus.isFormOnefinish" (click)="basicFormdata('save')" [ngClass]="isWebFormPublished && !isEditingPublishedForm ? 'hide' : ''"><i-feather name="save"></i-feather>
-            Save</button>
-        <button class="btn btn-sm pd-x-15 savebtn btn-uppercase lineheight-22 btn-outline-secondary" *ngIf="formwizardStatus.isFormTwofinish" [ngClass]="isWebFormPublished && !isEditingPublishedForm ? 'hide' : ''"
-        (click)="saveAsDraftCCPAFormConfiguration('save')"> <i-feather name="save"></i-feather>
-        Save</button>
-        <button class="btn btn-sm pd-x-15 savebtn btn-uppercase lineheight-22 btn-outline-secondary" *ngIf="formwizardStatus.isFormThreefinish" [ngClass]="isWebFormPublished && !isEditingPublishedForm ? 'hide' : ''"
-        (click)="createDraft('save')"><i-feather name="save"></i-feather>
-        Save</button>
+        <button (click)="addUpdateDSARForm()" class="btn btn-sm pd-x-15 savebtn btn-uppercase lineheight-22 btn-outline-secondary" [ngClass]="isWebFormPublished && !isEditingPublishedForm ? 'hide' : ''">Save</button>
 
         <button type="button" *ngIf="crid !== null" type="button" class="btn btn-sm pd-x-15 lineheight-22 btn-outline-secondary btn-uppercase ml-2 mr-1" 
            (click)="togglePublish()">
@@ -999,9 +997,9 @@
            <i-feather *ngIf="!isWebFormPublished && !isResetlinkEnable" name="upload-cloud"></i-feather>
            {{isWebFormPublished && !isEditingPublishedForm && !isResetlinkEnable ? 'Edit':' Publish'}}</button>
           
-           <a target="_blank"  (click)="previewCCPAForm()"><button *ngIf="crid !== null"  class="btn btn-sm pd-x-15 lineheight-22 btn-outline-secondary btn-uppercase mg-l-5">
+           <a target="_blank" *ngIf="crid !== null" role="button" (click)="previewCCPAForm()" class="btn btn-sm pd-x-15 txt-gray lineheight-22 btn-outline-secondary btn-uppercase mg-l-5">
             <i-feather name="file-text" class="feather-24"></i-feather>   
-            Preview</button></a>
+            Preview</a>
         </div>
     </li>
     </ul>
