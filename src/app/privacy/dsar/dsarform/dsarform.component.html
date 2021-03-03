@@ -989,12 +989,13 @@
     <li> 
         <div class="button-wrapper" [ngClass]="{ 'min-width-75' : isWebFormPublished && isDraftWebForm, 'min-width-170': crid !== null}">
         <button  class="btn btn-link cancel-link" (click)="navigateToWebForm()">Back</button>   
-        <button (click)="addUpdateDSARForm()" class="btn btn-sm pd-x-15 savebtn btn-uppercase lineheight-22 btn-outline-secondary" [ngClass]="isWebFormPublished && !isEditingPublishedForm ? 'hide' : ''">Save</button>
+        <button (click)="addUpdateDSARForm('save')" class="btn btn-sm pd-x-15 savebtn btn-uppercase lineheight-22 btn-outline-secondary" [ngClass]="isWebFormPublished && !isEditingPublishedForm ? 'hide' : ''">
+        <i-feather class="feather-24 mr-1" name="save"></i-feather>Save</button>
 
         <button type="button" *ngIf="crid !== null" type="button" class="btn btn-sm pd-x-15 lineheight-22 btn-outline-secondary btn-uppercase ml-2 mr-1" 
            (click)="togglePublish()">
-           <i-feather *ngIf="isWebFormPublished" class="feather-24" name="edit-2"></i-feather>
-           <i-feather *ngIf="!isWebFormPublished && !isResetlinkEnable" name="upload-cloud"></i-feather>
+           <i-feather *ngIf="isWebFormPublished && !isEditingPublishedForm && !isResetlinkEnable" class="feather-24" name="edit-2"></i-feather>
+           <i-feather *ngIf="isWebFormPublished && isEditingPublishedForm || !(isWebFormPublished && isEditingPublishedForm || isWebFormPublished)" name="upload-cloud"></i-feather>
            {{isWebFormPublished && !isEditingPublishedForm && !isResetlinkEnable ? 'Edit':' Publish'}}</button>
           
            <a target="_blank" *ngIf="crid !== null" role="button" (click)="previewCCPAForm()" class="btn btn-sm pd-x-15 txt-gray lineheight-22 btn-outline-secondary btn-uppercase mg-l-5">
@@ -1063,7 +1064,7 @@
 <ng-template #confirmSaveAlert>
     <div class="modal-body text-center">
         <p>Do you want save changes?</p>
-        <button type="button" class="btn btn-xs btn-primary mr-2" (click)="addUpdateDSARForm()">Yes</button>
+        <button type="button" class="btn btn-xs btn-primary mr-2" (click)="addUpdateDSARForm('nav')">Yes</button>
         <button type="button" class="btn btn-xs btn-secondary" (click)="resetWebform()">No</button>
     </div>
 </ng-template>
