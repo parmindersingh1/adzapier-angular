@@ -410,8 +410,8 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
       bannerDoNotSellMyDataTextColor: [''],
       bannerDoNotSellMyDataBackGroundColor: [''],
       //  POPUP
-      PopUpPurposeBodyDescription: ['', [Validators.minLength(20), Validators.maxLength(700)]],
-      PopUpVendorBodyDescription: ['', [Validators.minLength(20), Validators.maxLength(700)]],
+      PopUpPurposeBodyDescription: ['', [Validators.minLength(20), Validators.maxLength(1000)]],
+      PopUpVendorBodyDescription: ['', [Validators.minLength(20), Validators.maxLength(1000)]],
       PopUpSwitchButton: [''],
       PopUpGlobalTextColor: [''],
       PopUpGlobalBackgroundColor: [''],
@@ -432,16 +432,16 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
       PopUpAllowAllButtonBackgroundColor: [''],
       PopUpSocialMediaHeading: ['', [Validators.minLength(2), Validators.maxLength(50)]],
       // informationBtnText: [BannerConstant.CCPA.POPUP.PopUpInformationBtnText],
-      PopUpSocialMediaDescription: ['', [Validators.minLength(20), Validators.maxLength(700)]],
+      PopUpSocialMediaDescription: ['', [Validators.minLength(20), Validators.maxLength(1000)]],
       PopUpNecessaryHeading: ['', [Validators.minLength(2), Validators.maxLength(50)]],
       // necessaryBtnText: [BannerConstant.CCPA.POPUP.necessaryBtnText],
-      PopUpNecessaryDescription: ['', [Validators.minLength(20), Validators.maxLength(700)]],
+      PopUpNecessaryDescription: ['', [Validators.minLength(20), Validators.maxLength(1000)]],
       PopUpAnalyticsHeading: ['', [Validators.minLength(2), Validators.maxLength(50)]],
       // analyticsBtnText: [BannerConstant.CCPA.POPUP.advertisingBtnText],
-      PopUpAnalyticsDescription: ['', [Validators.minLength(20), Validators.maxLength(700)]],
+      PopUpAnalyticsDescription: ['', [Validators.minLength(20), Validators.maxLength(1000)]],
       PopUpAdvertisingHeading: ['', [Validators.minLength(2), Validators.maxLength(50)]],
       // advertisingBtnText: [BannerConstant.CCPA.POPUP.advertisingBtnText],
-      PopUpAdvertisingDescription: ['', [Validators.minLength(20), Validators.maxLength(700)]],
+      PopUpAdvertisingDescription: ['', [Validators.minLength(20), Validators.maxLength(1000)]],
     });
   }
 
