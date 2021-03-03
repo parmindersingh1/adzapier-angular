@@ -85,7 +85,7 @@ loadWebControls() {
             {
                 control: 'textbox',
                 controllabel: 'First Name',
-                controlId: 'firstname',
+                controlId: 'first_name',
                 indexCount: 'first_name_Index',
                 preferControlOrder: '',
                 requiredfield: true
@@ -93,7 +93,7 @@ loadWebControls() {
             {
                 control: 'textbox',
                 controllabel: 'Last Name',
-                controlId: 'lastname',
+                controlId: 'last_name',
                 indexCount: 'last_name_Index',
                 preferControlOrder: '',
                 requiredfield: true
