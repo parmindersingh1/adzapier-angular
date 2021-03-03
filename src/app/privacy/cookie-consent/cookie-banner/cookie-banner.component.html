@@ -372,9 +372,11 @@
         <!--       <p-tabView>-->
         <!--          <p-tabPanel  header="Banner">-->
                     <div class="card m-0">
-                      <div class="card-header">
-                            <div class="form-group row pd-0 mg-b-0">
-                              <label class="cs-banner col-sm-2 tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label">
+                      <div class="card-header pb-0">
+                        <div class="row">
+                        <div class="col-md-7">
+                            <div class="form-group mb-0 row pd-0 mg-b-0">
+                              <label class="cs-banner col-sm-4 tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label">
                                 Configure banner</label>
                               <div class="col-sm-4 pt-2">
                                 <label class="switch" (click)="onCheckAllowBannerConfig()">
@@ -384,6 +386,27 @@
                                 </label>
                               </div>
                             </div>
+                        </div>
+                        <div class="col-md-5 ">
+                          <div class="form-group row">
+                            <label for="lang" style="font-size: 15px"
+                                   class="tx-12 col-md-6  tx-medium tx-middle tx-spacing-1 tx-color-03 tx-uppercase">Customize  Language </label>
+                            <select [disabled]="isFieldDisabled" (change)="onGetLangData($event)" formControlName="Bannerlanguage"
+                                    class="form-control col-md-6" id="lang">
+                              <option value="">-- Select Language --</option>
+                              <ng-container *ngFor="let gdprLang of bannerConstant.Bannerlanguage">
+                              <option *ngIf="langValueList.includes(gdprLang.value)" [value]="gdprLang.value">{{gdprLang.title}}</option>
+                              </ng-container>
+                            </select>
+                            <div *ngIf="submitted && f.Bannerlanguage.errors">
+                              <div class="text-danger mt-2" *ngIf="f.Bannerlanguage.errors.required">
+                                Language is <strong>required</strong>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        </div>
                       </div>
                     </div>
 
@@ -397,23 +420,23 @@
                   <div class="banner-row">
                     <p-accordion>
                       <p-accordionTab header="General Configuration" [selected]="true">
-                        <div class="col-md-12">
-                          <div class="form-group">
-                            <label for="lang"
-                                   class="tx-12 tx-medium tx-middle tx-spacing-1 tx-color-03 tx-uppercase">Language </label>
-                            <select [disabled]="isFieldDisabled" formControlName="Bannerlanguage"
-                                    class="form-control w-75" id="lang">
-                              <option *ngFor="let gdprLang of bannerConstant.Bannerlanguage"
-                                      [value]="gdprLang.value">{{gdprLang.title}}</option>
+<!--                        <div class="col-md-12">-->
+<!--                          <div class="form-group">-->
+<!--                            <label for="lang"-->
+<!--                                   class="tx-12 tx-medium tx-middle tx-spacing-1 tx-color-03 tx-uppercase">Language </label>-->
+<!--                            <select [disabled]="isFieldDisabled" (change)="onGetLangData()" formControlName="Bannerlanguage"-->
+<!--                                    class="form-control w-75" id="lang">-->
+<!--                              <option *ngFor="let gdprLang of bannerConstant.Bannerlanguage"-->
+<!--                                      [value]="gdprLang.value">{{gdprLang.title}}</option>-->
 
-                            </select>
-                            <div *ngIf="submitted && f.Bannerlanguage.errors">
-                              <div class="text-danger mt-2" *ngIf="f.Bannerlanguage.errors.required">
-                                Language is <strong>required</strong>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
+<!--                            </select>-->
+<!--                            <div *ngIf="submitted && f.Bannerlanguage.errors">-->
+<!--                              <div class="text-danger mt-2" *ngIf="f.Bannerlanguage.errors.required">-->
+<!--                                Language is <strong>required</strong>-->
+<!--                              </div>-->
+<!--                            </div>-->
+<!--                          </div>-->
+<!--                        </div>-->
                         <div class="col-md-12 mb-4">
                           <h6 class="tx-12 tx-medium tx-middle tx-spacing-1 tx-color-03 tx-uppercase">Position</h6>
                           <div *ngFor="let gdprPosition of bannerConstant.BannerPosition"
@@ -478,7 +501,7 @@
                         <div class="col-md-12 mt-2">
                           <div [ngStyle]="{display: isFieldDisabled ? 'none' : ''}" class="w-100">
                             <h6 class="tx-12 tx-medium tx-spacing-1 tx-color-03 tx-uppercase">Description</h6>
-                            <quill-editor [(ngModel)]="formContent.bannerDescription" maxlength="300"
+                            <quill-editor [(ngModel)]="formContent.bannerDescription" maxlength="1000"
                                           [placeholder]="formContent.bannerDescription"
                                           formControlName="BannerDescription" [modules]="quillConfig"
                                           [styles]="{height: '150px'}">
@@ -488,7 +511,7 @@
                                 Minimum 20 characters required
                               </div>
                               <div class="text-danger mt-2" *ngIf="f.BannerDescription.errors.maxlength">
-                                Maximum 700 characters required
+                                Maximum 1000 characters required
                               </div>
                             </div>
                           </div>
@@ -913,7 +936,7 @@
                               Minimum 20 characters required
                             </div>
                             <div class="text-danger mt-2" *ngIf="f.PopUpPurposeBodyDescription.errors.maxlength">
-                              Maximum 700 characters required
+                              Maximum 1000 characters required
                             </div>
                           </div>
                         </div>
@@ -932,7 +955,7 @@
                               Minimum 20 characters required
                             </div>
                             <div class="text-danger mt-2" *ngIf="f.PopUpVendorBodyDescription.errors.maxlength">
-                              Maximum 700 characters required
+                              Maximum 1000 characters required
                             </div>
                           </div>
                         </div>
@@ -1235,7 +1258,7 @@
                           Minimum 20 characters required
                         </div>
                         <div class="text-danger mt-2" *ngIf="f.PopUpNecessaryDescription.errors.maxlength">
-                          Maximum 700 characters required
+                          Maximum 1000 characters required
                         </div>
                       </div>
                     </p-accordionTab>
@@ -1265,7 +1288,7 @@
                           Minimum 20 characters required
                         </div>
                         <div class="text-danger mt-2" *ngIf="f.PopUpAdvertisingDescription.errors.maxlength">
-                          Maximum 700 characters required
+                          Maximum 1000 characters required
                         </div>
                       </div>
                     </p-accordionTab>
@@ -1295,7 +1318,7 @@
                           Minimum 20 characters required
                         </div>
                         <div class="text-danger mt-2" *ngIf="f.PopUpSocialMediaDescription.errors.maxlength">
-                          Maximum 700 characters required
+                          Maximum 1000 characters required
                         </div>
                       </div>
                     </p-accordionTab>
@@ -1325,7 +1348,7 @@
                           Minimum 20 characters required
                         </div>
                         <div class="text-danger mt-2" *ngIf="f.PopUpAnalyticsDescription.errors.maxlength">
-                          Maximum 700 characters required
+                          Maximum 1000 characters required
                         </div>
                       </div>
                     </p-accordionTab>
@@ -1340,6 +1363,7 @@
             <div class="white-back" [ngClass]="{'col-md-12' : !showConfig.checked , 'col-md-7' : showConfig.checked }">
               <app-popup-live-preview [isGdprGlobal]="gdprGlobal.checked"
                                       [ccpaGlobal]="ccpaGlobal.checked"
+                                      [popUpTitleLang]="popUpTitleLang"
                                       [formData]="formContent">>
               </app-popup-live-preview>
             </div>
