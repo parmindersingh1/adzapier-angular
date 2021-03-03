@@ -1248,17 +1248,18 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
         if(this.isDirty && saveType === 'nav'){
           this.openModal(this.confirmSaveAlert); 
         }else{
-          this.addUpdateDSARForm();
+          this.addUpdateDSARForm('save');
         }
       } else{
-        if(this.isDirty && this.isStepCovered){
+        if(this.isDirty){
           this.openModal(this.confirmSaveAlert);
         }
       }
     }
   }
 
-  addUpdateDSARForm() {
+  addUpdateDSARForm(saveType) {
+    this.formSaveMethod = saveType;
     // this.isDirty = false;
   if(this.basicForm.controls['formname'].value === ''){
       this.basicFormSubmitted = true;
@@ -1269,6 +1270,16 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
       this.isDirty = false;
       this.closeModal();
       return false;
+  }  else if(this.active === 3 && saveType !== 'nav' && this.settingsForm.controls['workflow'].value === undefined && this.settingsForm.controls['selectedApproverID'].value === undefined){
+    this.isdraftsubmitted = true;
+    this.isDirty = false;
+    const stepnumber: number | string = this.formName === undefined ? '1 Basic, 2 Form & 3 Settings': '2 Form & 3 Settings';
+    this.alertMsg = `Please complete step ${stepnumber} and save`;
+    this.isOpen = true;
+    this.alertType = 'danger';
+    this.closeModal();
+    this.navDirective.select(3);
+    return false;
   } else if(this.nextId === 4 && this.settingsForm.controls['workflow'].value === undefined && this.settingsForm.controls['selectedApproverID'].value === undefined ){ //&& this.activeId === 2
     this.isdraftsubmitted = true;
     this.isDirty = false;
@@ -1287,7 +1298,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
       updatedWebForm = this.dsarFormService.getFormControlList();
     }
     this.formObject = {
-      form_name: this.formName,
+      form_name: this.basicForm.controls['formname'].value,
       form_status: 'draft',
       settings: {
         approver: this.defaultapprover || this.selectedApproverID,
@@ -1323,12 +1334,18 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
           this.modalRef.hide();
           this.isDirty = false;
         }
-       this.settingsFormchangeSubscription.unsubscribe();
-       this.customFormchangeSubscription.unsubscribe();
-       this.basicFormSubscription.unsubscribe();
+        if(this.settingsFormchangeSubscription !== undefined){
+          this.settingsFormchangeSubscription.unsubscribe();
+        }else if(this.customFormchangeSubscription !== undefined) {
+          this.customFormchangeSubscription.unsubscribe();
+        } else if(this.basicFormSubscription !== undefined){
+          this.basicFormSubscription.unsubscribe();
+        }
     } else {
       if(this.formSaveMethod !== 'save' && this.isDirty && this.nextId !== 4){
-        this.modalRef.hide();
+        if(this.modalRef !== undefined){
+          this.modalRef.hide();
+        } 
         this.isStepCovered = false;
        // this.isDirty = false;
        return true;
@@ -1339,7 +1356,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
       }
      // let idStatus = typeof(this.activeId) !== undefined && this.activeId !== null;
       if(typeof(this.activeId) !== undefined && this.activeId === 3 && this.nextId === 4 || this.active === 3){
-    //  this.loadingbar.start();
+      this.loadingbar.start();
      // return false;
       this.ccpaFormConfigService.createCCPAForm(this.orgId, this.propId, this.formObject,
         this.constructor.name, moduleName.dsarWebFormModule)
@@ -1371,6 +1388,13 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
           this.isDirty = false;
         }else{
           this.isDirty = false;
+          if(this.active === 1){
+            this.navDirective.select(2);
+          } else if(this.active === 2){
+            this.navDirective.select(3);
+          } else if(this.active === 3){
+            this.navDirective.select(4);
+          }         
         }
        
       }
