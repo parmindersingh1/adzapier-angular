@@ -271,14 +271,14 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
 
     this.count = 0;
 
+  }
+
+  ngOnInit() {
     this.activatedRoute.paramMap.subscribe(params => {
       // console.log(params, 'params..');
       this.crid = params.get('id');
       // this.selectedwebFormControlList = this.
     });
-  }
-
-  ngOnInit() {
     this.loadWebControl();
     this.getCCPAdefaultConfigById();
     this.loadCurrentProperty();
@@ -1242,14 +1242,12 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
         this.updateWebcontrolIndex(this.registerForm.value, this.webFormControlList);
       }
       this.isWebFormPublished = false;
-      this.isDraftWebForm = true;
-      this.active = 3;
-      if(this.crid){
-        if(this.isDirty && saveType === 'nav'){
-          this.openModal(this.confirmSaveAlert); 
-        }else{
-          this.addUpdateDSARForm('save');
-        }
+      if(this.active === 2 && saveType !== 'nav'){
+        this.isDraftWebForm = false;
+        this.active = 3;
+      }else if(this.active === 2 && saveType !== 'save'){
+        this.isDraftWebForm = false;
+        this.active = 3;
       } else{
         if(this.isDirty){
           this.openModal(this.confirmSaveAlert);
@@ -1311,6 +1309,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
     }
     //return false;
     }
+    this.formName = this.basicForm.controls['formname'].value;
     let updatedWebForm;
     if(this.crid){
       updatedWebForm = this.ccpaFormConfigService.getFormControlList();
@@ -1354,6 +1353,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
           this.modalRef.hide();
           this.isDirty = false;
         }
+        this.isDirty = false;
         if(this.settingsFormchangeSubscription !== undefined){
           this.settingsFormchangeSubscription.unsubscribe();
         }else if(this.customFormchangeSubscription !== undefined) {
@@ -1374,8 +1374,8 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
        // this.isDirty = false;
         return true;
       }
-     // let idStatus = typeof(this.activeId) !== undefined && this.activeId !== null;
-      if(typeof(this.activeId) !== undefined && this.activeId === 3 && this.nextId === 4 || this.active === 3){
+      const isWorkflowApproverIDAvailable = this.settingsForm.controls['workflow'].value !== undefined && this.settingsForm.controls['selectedApproverID'].value !== undefined;
+      if(this.activeId === 3 && this.nextId === 4 || this.active === 3 && isWorkflowApproverIDAvailable){
       this.loadingbar.start();
      // return false;
       this.ccpaFormConfigService.createCCPAForm(this.orgId, this.propId, this.formObject,
@@ -1413,7 +1413,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
           } else if(this.active === 2){
             this.navDirective.select(3);
           } else if(this.active === 3){
-            this.navDirective.select(4);
+            this.navDirective.select(3);
           }         
         }
        
@@ -1586,10 +1586,12 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
   }
 
   rearrangeFormSequence(dataArray) {
+    if(dataArray !== null){
     dataArray.sort((a, b) => {
       return a.preferControlOrder - b.preferControlOrder;
     });
     return dataArray;
+    }
   }
 
   priviewPublishedForm() {
@@ -2478,13 +2480,17 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
     this.cdRef.detectChanges();
     if(this.customFormFields !== undefined){
       this.customFormchangeSubscription = this.customFormFields.valueChanges.subscribe((data)=> {
+        if(this.customFormFields.form.dirty){
         this.isDirty = true;
+        }
       });
     }
    if(this.settingsForm !== undefined){
       this.settingsFormchangeSubscription = this.settingsForm.valueChanges.subscribe(e => {
         // console.log(e,'settingsForm..afterviewchecked');
-      this.isDirty = true;
+      if(this.settingsForm.form.dirty){
+         this.isDirty = true;
+      }
     });
    }
    if(this.basicForm !== undefined){
