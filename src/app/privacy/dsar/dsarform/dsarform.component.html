@@ -870,7 +870,7 @@
                     <div class="tx-10 tx-spacing-1 tx-color-03">
                         <span>Allow user to attach file through portal</span>
                     </div>
-                    <div class="form-check required-check" *ngIf="isFileuploadRequiredFieldVisible || isFileuploadRequiredField">
+                    <div class="form-check required-check" [ngClass]="{'show':isFileuploadRequiredFieldVisible ||!isFileuploadRequiredFieldVisible && isFileUploadRequired,'hide':!isFileuploadRequiredFieldVisible || isFileuploadRequiredFieldVisible && isFileUploadRequired}">
                         <label class="form-check-label pt-1 tx-10 tx-uppercase tx-medium tx-spacing-1 tx-color-03"><span> Required Attachements </span></label>
                         <label class="switchchkbox float-right mt-n3 form-check-label tx-10 tx-uppercase tx-medium tx-spacing-1 tx-color-03"
                             for="gridCheck1">
@@ -992,7 +992,7 @@
     <li> 
         <div class="button-wrapper" [ngClass]="{ 'min-width-75' : isWebFormPublished && isDraftWebForm, 'min-width-170': crid !== null}">
         <button  class="btn btn-link cancel-link" (click)="navigateToWebForm()">Back</button>   
-        <button (click)="addUpdateDSARForm('save')" class="btn btn-sm pd-x-15 savebtn btn-uppercase lineheight-22 btn-outline-secondary" [ngClass]="isWebFormPublished && !isEditingPublishedForm ? 'hide' : ''">
+        <button (click)="addUpdateDSARForm('save')" class="btn btn-sm pd-x-15 savebtn btn-uppercase lineheight-22 btn-outline-secondary" [ngClass]="isWebFormPublished && !isEditingPublishedForm || active === 4 ? 'hide' : ''">
         <i-feather class="feather-24 mr-1" name="save"></i-feather>Save</button>
 
         <button type="button" *ngIf="crid !== null" type="button" class="btn btn-sm pd-x-15 lineheight-22 btn-outline-secondary btn-uppercase ml-2 mr-1" 
