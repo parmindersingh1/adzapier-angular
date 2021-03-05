@@ -1248,6 +1248,9 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
       }else if(this.active === 2 && saveType !== 'save'){
         this.isDraftWebForm = false;
         this.active = 3;
+        if(this.isDirty){
+          this.openModal(this.confirmSaveAlert);
+        }
       } else{
         if(this.isDirty){
           this.openModal(this.confirmSaveAlert);
