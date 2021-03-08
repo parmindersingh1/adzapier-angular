@@ -27,7 +27,8 @@
             </div>
             <div class="card-body">
                 <div *ngIf="dataLoadingMsg">{{dataLoadingMsg}}</div>
-                    <app-customcards [dataList]="formList" (onClickViewForm)="showForm($event)"></app-customcards>
+                    <app-customcards [dataList]="formList" [currentOrganization]="currentOrganization" 
+                    [currentPropertyName]="currentPropertyName" (onClickViewForm)="showForm($event)"></app-customcards>
                     <div class="pagination-wrapper tx-color-03" *ngIf="formList.length !== 0">
                     <div class="form-inline align-item-start">
                         <div class="form-group pr-0">
