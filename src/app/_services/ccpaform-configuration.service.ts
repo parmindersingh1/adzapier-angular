@@ -91,10 +91,10 @@ export class CCPAFormConfigurationService extends WebControls {
     }));
   }
 
-  getCCPAFormList(orgId, propId, componentName, moduleName): Observable<any> {
+  getCCPAFormList(orgId, propId, componentName, moduleName, pagelimit?): Observable<any> {
     // this.ccpaFormList$ =
     const key = 'response';
-    const path = '/ccpa/form/' + orgId + '/' + propId;
+    const path = '/ccpa/form/' + orgId + '/' + propId + pagelimit;
     return this.httpClient.get<any>(environment.apiUrl + path).pipe(
       map(res => res[key]),
       catchError(error => {

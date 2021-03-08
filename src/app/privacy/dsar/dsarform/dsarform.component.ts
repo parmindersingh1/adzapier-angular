@@ -2374,6 +2374,10 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
       if(this.modalRef !== undefined){
         this.modalRef.hide();
       }
+    } else{ // for edit button
+      if(this.modalRef !== undefined){
+        this.modalRef.hide();
+      }
     }
   }
 
