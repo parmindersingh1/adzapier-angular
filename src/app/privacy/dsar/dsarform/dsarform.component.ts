@@ -271,14 +271,14 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
 
     this.count = 0;
 
+  }
+
+  ngOnInit() {
     this.activatedRoute.paramMap.subscribe(params => {
       // console.log(params, 'params..');
       this.crid = params.get('id');
       // this.selectedwebFormControlList = this.
     });
-  }
-
-  ngOnInit() {
     this.loadWebControl();
     this.getCCPAdefaultConfigById();
     this.loadCurrentProperty();
@@ -1242,25 +1242,27 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
         this.updateWebcontrolIndex(this.registerForm.value, this.webFormControlList);
       }
       this.isWebFormPublished = false;
-      this.isDraftWebForm = true;
-      this.active = 3;
-      if(this.crid){
-        if(this.isDirty && saveType === 'nav'){
-          this.openModal(this.confirmSaveAlert); 
-        }else{
-          this.addUpdateDSARForm();
+      if(this.active === 2 && saveType !== 'nav'){
+        this.isDraftWebForm = false;
+        this.active = 3;
+      }else if(this.active === 2 && saveType !== 'save'){
+        this.isDraftWebForm = false;
+        this.active = 3;
+        if(this.isDirty){
+          this.openModal(this.confirmSaveAlert);
         }
       } else{
-        if(this.isDirty && this.isStepCovered){
+        if(this.isDirty){
           this.openModal(this.confirmSaveAlert);
         }
       }
     }
   }
 
-  addUpdateDSARForm() {
+  addUpdateDSARForm(saveType) {
+    this.formSaveMethod = saveType;
     // this.isDirty = false;
-  if(this.basicForm.controls['formname'].value === ''){
+  if(this.basicForm.controls['formname'].value === undefined){
       this.basicFormSubmitted = true;
       this.alertMsg = `Please complete step 1 Basic`;
       this.isOpen = true;
@@ -1269,6 +1271,32 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
       this.isDirty = false;
       this.closeModal();
       return false;
+  } else if(this.active === 1 && saveType !== 'nav' && this.basicForm.controls['formname'].value === undefined){
+    this.basicFormSubmitted = true;
+    this.isDirty = false;
+    this.alertMsg = `Please complete step 1 Basic and save`;
+    this.isOpen = true;
+    this.alertType = 'danger';
+    this.closeModal();
+    this.navDirective.select(1);
+    return false;
+  }  else if(this.active === 2 && saveType !== 'nav' && this.isDirty){
+    this.saveAsDraftCCPAFormConfiguration(saveType);
+  }
+    else if(this.active === 3 && saveType !== 'nav' && this.settingsForm.controls['workflow'].value === undefined && this.settingsForm.controls['selectedApproverID'].value === undefined){
+    this.isdraftsubmitted = true;
+    this.isDirty = false;
+    const stepnumber: number | string = this.formName === undefined ? '1 Basic, 2 Form & 3 Settings': '2 Form & 3 Settings';
+    this.alertMsg = `Please complete step ${stepnumber} and save`;
+    this.isOpen = true;
+    this.alertType = 'danger';
+    this.closeModal();
+    if(this.basicForm.controls['formname'].value === undefined ){
+      this.navDirective.select(1);
+    }else{
+      this.navDirective.select(3);
+    }
+    return false;
   } else if(this.nextId === 4 && this.settingsForm.controls['workflow'].value === undefined && this.settingsForm.controls['selectedApproverID'].value === undefined ){ //&& this.activeId === 2
     this.isdraftsubmitted = true;
     this.isDirty = false;
@@ -1277,9 +1305,14 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
     this.isOpen = true;
     this.alertType = 'danger';
     this.closeModal();
-    this.navDirective.select(3);
+    if( this.formName === undefined ){
+      this.navDirective.select(1);
+    }else{
+      this.navDirective.select(3);
+    }
     //return false;
     }
+    this.formName = this.basicForm.controls['formname'].value;
     let updatedWebForm;
     if(this.crid){
       updatedWebForm = this.ccpaFormConfigService.getFormControlList();
@@ -1287,7 +1320,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
       updatedWebForm = this.dsarFormService.getFormControlList();
     }
     this.formObject = {
-      form_name: this.formName,
+      form_name: this.basicForm.controls['formname'].value,
       form_status: 'draft',
       settings: {
         approver: this.defaultapprover || this.selectedApproverID,
@@ -1323,12 +1356,19 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
           this.modalRef.hide();
           this.isDirty = false;
         }
-       this.settingsFormchangeSubscription.unsubscribe();
-       this.customFormchangeSubscription.unsubscribe();
-       this.basicFormSubscription.unsubscribe();
+        this.isDirty = false;
+        if(this.settingsFormchangeSubscription !== undefined){
+          this.settingsFormchangeSubscription.unsubscribe();
+        }else if(this.customFormchangeSubscription !== undefined) {
+          this.customFormchangeSubscription.unsubscribe();
+        } else if(this.basicFormSubscription !== undefined){
+          this.basicFormSubscription.unsubscribe();
+        }
     } else {
       if(this.formSaveMethod !== 'save' && this.isDirty && this.nextId !== 4){
-        this.modalRef.hide();
+        if(this.modalRef !== undefined){
+          this.modalRef.hide();
+        } 
         this.isStepCovered = false;
        // this.isDirty = false;
        return true;
@@ -1337,9 +1377,9 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
        // this.isDirty = false;
         return true;
       }
-     // let idStatus = typeof(this.activeId) !== undefined && this.activeId !== null;
-      if(typeof(this.activeId) !== undefined && this.activeId === 3 && this.nextId === 4 || this.active === 3){
-    //  this.loadingbar.start();
+      const isWorkflowApproverIDAvailable = this.settingsForm.controls['workflow'].value !== undefined && this.settingsForm.controls['selectedApproverID'].value !== undefined;
+      if(this.activeId === 3 && this.nextId === 4 || this.active === 3 && isWorkflowApproverIDAvailable){
+      this.loadingbar.start();
      // return false;
       this.ccpaFormConfigService.createCCPAForm(this.orgId, this.propId, this.formObject,
         this.constructor.name, moduleName.dsarWebFormModule)
@@ -1371,6 +1411,13 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
           this.isDirty = false;
         }else{
           this.isDirty = false;
+          if(this.active === 1){
+            this.navDirective.select(2);
+          } else if(this.active === 2){
+            this.navDirective.select(3);
+          } else if(this.active === 3){
+            this.navDirective.select(3);
+          }         
         }
        
       }
@@ -1403,10 +1450,10 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
       this.nextId = changeEvent.nextId;
       this.formSaveMethod = 'nav';
       this.basicFormSubmitted = true;
-      if(this.basicForm.valid && this.isDirty){ // if(this.basicForm.controls['formname'].value !== '' && this.isDirty){
+      if(this.basicForm.controls['formname'].value !== undefined && this.isDirty){
         this.saveAsDraftCCPAFormConfiguration('nav');
       }else{
-        if(this.workflow !== undefined || this.selectedApproverID !== undefined || this.daysleft !== null){ // if( this.basicForm.controls['formname'].value !== ''){
+        if(this.basicForm.controls['formname'].value !== undefined && (this.workflow !== undefined || this.selectedApproverID !== undefined || this.daysleft !== null)){
           if(this.isdraftsubmitted && this.basicFormSubmitted){
             this.navDirective.select(3);
           }
@@ -1422,7 +1469,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
           this.alertMsg = `Please complete step ${stepnumber} and press next`;
           this.isOpen = true;
           this.alertType = 'danger';
-          if(this.basicForm.controls['formname'].value === ''){
+          if(this.basicForm.controls['formname'].value === undefined){
             this.navDirective.select(1);
           }else{
             this.navDirective.select(3);
@@ -1542,10 +1589,12 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
   }
 
   rearrangeFormSequence(dataArray) {
+    if(dataArray !== null){
     dataArray.sort((a, b) => {
       return a.preferControlOrder - b.preferControlOrder;
     });
     return dataArray;
+    }
   }
 
   priviewPublishedForm() {
@@ -2433,14 +2482,18 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
   ngAfterViewChecked(){
     this.cdRef.detectChanges();
     if(this.customFormFields !== undefined){
-      this.customFormchangeSubscription = this.customFormFields.statusChanges.subscribe((data)=> {
+      this.customFormchangeSubscription = this.customFormFields.valueChanges.subscribe((data)=> {
+        if(this.customFormFields.form.dirty){
         this.isDirty = true;
+        }
       });
     }
    if(this.settingsForm !== undefined){
       this.settingsFormchangeSubscription = this.settingsForm.valueChanges.subscribe(e => {
         // console.log(e,'settingsForm..afterviewchecked');
-      this.isDirty = true;
+      if(this.settingsForm.form.dirty){
+         this.isDirty = true;
+      }
     });
    }
    if(this.basicForm !== undefined){

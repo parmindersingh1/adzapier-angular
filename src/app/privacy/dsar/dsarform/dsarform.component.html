@@ -860,49 +860,52 @@
                 <div *ngIf="errorMsgdaysleft" class="red p-1">{{errorMsgdaysleft}}</div>
                 </div>
                 <div class="form-group mg-b-5">
+                    <label class="form-check-label pt-1 tx-10 tx-uppercase tx-medium tx-spacing-1 tx-color-03"> <span>Allow attachments</span></label>
                     <label for="fileupload"
-                        class="form-check-label tx-10 tx-uppercase tx-medium tx-spacing-1 tx-color-03">
+                        class="switchchkbox float-right mt-n3 form-check-label tx-10 tx-uppercase tx-medium tx-spacing-1 tx-color-03">
                         <input type="checkbox" [checked]="isFileUploadRequired" class="form-check-input" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
                             (click)="allowFileupload($event)" />
-                        <span class="pad-right-20">Allow attachments</span>
+                        <span class="slider round"></span>
                     </label>
-                    <div class="ml-3 pl-1 tx-10 tx-spacing-1 tx-color-03">
+                    <div class="tx-10 tx-spacing-1 tx-color-03">
                         <span>Allow user to attach file through portal</span>
                     </div>
-                    <div class="form-check required-check" *ngIf="isFileuploadRequiredFieldVisible">
-                        <label class="form-check-label tx-10 tx-uppercase tx-medium tx-spacing-1 tx-color-03"
+                    <div class="form-check required-check" [ngClass]="{'show':isFileuploadRequiredFieldVisible ||!isFileuploadRequiredFieldVisible && isFileUploadRequired,'hide':!isFileuploadRequiredFieldVisible || isFileuploadRequiredFieldVisible && isFileUploadRequired}">
+                        <label class="form-check-label pt-1 tx-10 tx-uppercase tx-medium tx-spacing-1 tx-color-03"><span> Required Attachements </span></label>
+                        <label class="switchchkbox float-right mt-n3 form-check-label tx-10 tx-uppercase tx-medium tx-spacing-1 tx-color-03"
                             for="gridCheck1">
                             <input class="form-check-input" name="changeControlType"
                                 [checked]="isFileuploadRequiredField" (change)="onCheckboxChangeUpload($event)"
                                 type="checkbox" id="gridCheck1" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm? '' : null">
-                            <span class="pad-right-20 ml-1"> Required Attachements </span>
+                                <span class="slider round"></span>
+                            <!-- <span class="pad-right-20"> Required Attachements </span> -->
                         </label>
-                        <div class="ml-5 tx-10 tx-spacing-1 tx-color-03">
+                        <div class="ml-3 pl-1  tx-10 tx-spacing-1 tx-color-03">
                            <span> User must attach file</span>
                         </div>
                     </div>
                 </div>
                 <div class="form-group mg-b-5">
-                    <label for="emailverificatioin"
-                        class="form-check-label tx-10 tx-uppercase tx-medium tx-spacing-1 tx-color-03"
-                        >
+                    <label class="form-check-label pt-1 tx-10 tx-uppercase tx-medium tx-spacing-1 tx-color-03"><span>Email Verification</span></label>
+                    <label for="emailverification"
+                        class="switchchkbox float-right mt-n3 form-check-label tx-10 tx-uppercase tx-medium tx-spacing-1 tx-color-03">
                         <input type="checkbox" [checked]="isEmailVerificationRequired" class="form-check-input"
                             (click)="allowEmailVerification($event)" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm? '' : null"/>
-                        <span class="pad-right-20"> Email Verificatioin</span>
+                            <span class="slider round"></span>
                     </label>
-                    <div class="ml-3 pl-1 tx-10 tx-spacing-1 tx-color-03">
+                    <div class="tx-10 tx-spacing-1 tx-color-03">
                         Required user to verify email their email address
                     </div>
                 </div>
                 <div class="form-group mg-b-5">
+                    <label class="form-check-label pt-1 tx-10 tx-uppercase tx-medium tx-spacing-1 tx-color-03"><span>Captcha Verification</span></label>
                     <label for="captcha"
-                        class="form-check-label tx-10 tx-uppercase tx-medium tx-spacing-1 tx-color-03"
-                        >
+                        class="switchchkbox float-right mt-n3 form-check-label tx-10 tx-uppercase tx-medium tx-spacing-1 tx-color-03">
                         <input type="checkbox" [checked]="isCaptchaVerificationRequired" class="form-check-input"
                             (click)="allowCaptchaVerification($event)" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"/>
-                        <span class="pad-right-20"> Captcha Verificatioin</span>
+                        <span class="slider round"></span>
                     </label>
-                    <div class="ml-3 pl-1 tx-10 tx-spacing-1 tx-color-03">
+                    <div class="tx-10 tx-spacing-1 tx-color-03">
                         <span>Require CAPTCHA Validation</span>
                     </div>
                 </div>
@@ -989,12 +992,13 @@
     <li> 
         <div class="button-wrapper" [ngClass]="{ 'min-width-75' : isWebFormPublished && isDraftWebForm, 'min-width-170': crid !== null}">
         <button  class="btn btn-link cancel-link" (click)="navigateToWebForm()">Back</button>   
-        <button (click)="addUpdateDSARForm()" class="btn btn-sm pd-x-15 savebtn btn-uppercase lineheight-22 btn-outline-secondary" [ngClass]="isWebFormPublished && !isEditingPublishedForm ? 'hide' : ''">Save</button>
+        <button (click)="addUpdateDSARForm('save')" class="btn btn-sm pd-x-15 savebtn btn-uppercase lineheight-22 btn-outline-secondary" [ngClass]="isWebFormPublished && !isEditingPublishedForm || active === 4 ? 'hide' : ''">
+        <i-feather class="feather-24 mr-1" name="save"></i-feather>Save</button>
 
         <button type="button" *ngIf="crid !== null" type="button" class="btn btn-sm pd-x-15 lineheight-22 btn-outline-secondary btn-uppercase ml-2 mr-1" 
            (click)="togglePublish()">
-           <i-feather *ngIf="isWebFormPublished" class="feather-24" name="edit-2"></i-feather>
-           <i-feather *ngIf="!isWebFormPublished && !isResetlinkEnable" name="upload-cloud"></i-feather>
+           <i-feather *ngIf="isWebFormPublished && !isEditingPublishedForm && !isResetlinkEnable" class="feather-24" name="edit-2"></i-feather>
+           <i-feather *ngIf="isWebFormPublished && isEditingPublishedForm || !(isWebFormPublished && isEditingPublishedForm || isWebFormPublished)" name="upload-cloud"></i-feather>
            {{isWebFormPublished && !isEditingPublishedForm && !isResetlinkEnable ? 'Edit':' Publish'}}</button>
           
            <a target="_blank" *ngIf="crid !== null" role="button" (click)="previewCCPAForm()" class="btn btn-sm pd-x-15 txt-gray lineheight-22 btn-outline-secondary btn-uppercase mg-l-5">
@@ -1063,7 +1067,7 @@
 <ng-template #confirmSaveAlert>
     <div class="modal-body text-center">
         <p>Do you want save changes?</p>
-        <button type="button" class="btn btn-xs btn-primary mr-2" (click)="addUpdateDSARForm()">Yes</button>
+        <button type="button" class="btn btn-xs btn-primary mr-2" (click)="addUpdateDSARForm('nav')">Yes</button>
         <button type="button" class="btn btn-xs btn-secondary" (click)="resetWebform()">No</button>
     </div>
 </ng-template>
