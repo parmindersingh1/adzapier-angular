@@ -1,0 +1,9 @@
+.webform-wrapper .card-columns {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.webform-wrapper .card-columns .card {
+    display: inline-block;
+    width: 32%;
+}

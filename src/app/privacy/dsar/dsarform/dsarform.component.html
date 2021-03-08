@@ -996,6 +996,7 @@
         <i-feather class="feather-24 mr-1" name="save"></i-feather>Save</button>
 
         <button type="button" *ngIf="crid !== null" type="button" class="btn btn-sm pd-x-15 lineheight-22 btn-outline-secondary btn-uppercase ml-2 mr-1" 
+        [attr.disabled]="isDirty ? true : null"
            (click)="togglePublish()">
            <i-feather *ngIf="isWebFormPublished && !isEditingPublishedForm && !isResetlinkEnable" class="feather-24" name="edit-2"></i-feather>
            <i-feather *ngIf="isWebFormPublished && isEditingPublishedForm || !(isWebFormPublished && isEditingPublishedForm || isWebFormPublished)" name="upload-cloud"></i-feather>
