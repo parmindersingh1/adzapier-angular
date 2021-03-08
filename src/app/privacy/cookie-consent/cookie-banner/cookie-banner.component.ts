@@ -84,7 +84,7 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
   iabVendorsID = [];
   googleVendorsID = [];
   allowAllIabVendors = false;
-  langValueList = [];
+  langValueList = ['en'];
   langDefault = 'en';
 
   constructor(private formBuilder: FormBuilder,
@@ -113,7 +113,7 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
     this.onFormInIt();
     this.onGetLangData({target: {value: 'en'}});
 
-    // this.onSetDefaultValue();
+    this.onSetDefaultValue();
     this.gdprTarget = this.bannerConstant.gdprTargetCountry;
 
     this.onGetCurrentPlan();
