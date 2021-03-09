@@ -39,7 +39,7 @@
                       </div>
                       <div class="col-md-3">
                         <span style="    font-size: 12px;
-                        font-weight: 600;">Always Allow <i class="ml-1 fa fa-chevron-right" aria-hidden="true"></i></span>
+                        font-weight: 600;">{{extraProperty.alwaysAllow}} <i class="ml-1 fa fa-chevron-right" aria-hidden="true"></i></span>
                       </div>
                         <div *ngIf="openPurposeType === defaultContent.PopUpNecessaryHead" class="col-md-12 purpose-desc w-100">
                           <p>{{formData.PopUpNecessaryDescription ? formData.PopUpNecessaryDescription : defaultContent.PopUpNecessaryDescription}}</p>
@@ -248,7 +248,7 @@
 
       <div class="card-body p-0">
         <p-tabView headerAlignment="center">
-          <p-tabPanel header="Purpose">
+          <p-tabPanel [header]="popUpTitleLang.purpose">
             <p class="desc">{{formData.popUpPurposeDescription ? formData.popUpPurposeDescription : defaultContent.popUpPurposeDescription}}</p>
             <div class="row purpose-list">
                 <div class="card w-100">
@@ -261,7 +261,7 @@
                     </div>
                     <div class="col-md-3">
                         <span style="    font-size: 12px;
-                        font-weight: 600;">Always Allow <i class="ml-1 fa fa-chevron-right" aria-hidden="true"></i></span>
+                        font-weight: 600;">{{extraProperty.alwaysAllow}} <i class="ml-1 fa fa-chevron-right" aria-hidden="true"></i></span>
                     </div>
                     <div *ngIf="openPurposeType === defaultContent.PopUpNecessaryHead" class="col-md-12 purpose-desc w-100">
                       <p>{{formData.PopUpNecessaryDescription ? formData.PopUpNecessaryDescription : defaultContent.PopUpNecessaryDescription}}</p>
@@ -330,7 +330,7 @@
                 </div>
             </div>
           </p-tabPanel>
-          <p-tabPanel header="Privacy Info">
+          <p-tabPanel header="{{extraProperty.privacyInfo}}">
             <p class="desc">{{formData.popUpVendorsDescription ? formData.popUpVendorsDescription : defaultContent.popUpVendorsDescription}}</p>
 
 
@@ -386,7 +386,7 @@
 
       <div class="card-body p-0">
         <p-tabView headerAlignment="center">
-          <p-tabPanel header="Purpose">
+          <p-tabPanel  [header]="popUpTitleLang.purpose">
             <p class="desc">{{formData.popUpPurposeDescription ? formData.popUpPurposeDescription : defaultContent.popUpPurposeDescription}}</p>
             <div class="row purpose-list">
                 <div class="card w-100">
@@ -398,7 +398,7 @@
                     </div>
                     <div class="col-md-3">
                         <span style="    font-size: 12px;
-                        font-weight: 600;">Always Allow <i class="ml-1 fa fa-chevron-right" aria-hidden="true"></i></span>
+                        font-weight: 600;">{{extraProperty.alwaysAllow}} <i class="ml-1 fa fa-chevron-right" aria-hidden="true"></i></span>
                     </div>
                     <div *ngIf="openPurposeType === defaultContent.PopUpNecessaryHead" class="col-md-12 purpose-desc w-100">
                       <p>{{formData.PopUpNecessaryDescription ? formData.PopUpNecessaryDescription : defaultContent.PopUpNecessaryDescription}}</p>
@@ -468,7 +468,7 @@
                 </div>
             </div>
           </p-tabPanel>
-          <p-tabPanel header="Privacy Info">
+          <p-tabPanel header="{{extraProperty.privacyInfo}}">
             <p class="desc">{{formData.popUpVendorsDescription ? formData.popUpVendorsDescription : defaultContent.popUpVendorsDescription}}</p>
 
 
