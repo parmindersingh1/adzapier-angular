@@ -23,6 +23,10 @@ export class PopupLivePreviewComponent implements OnInit, OnChanges {
   type = 'gdpr';
   @Input('isGdprGlobal') isGdprGlobal = false;
   @Input('ccpaGlobal') ccpaGlobal = false;
+  @Input('extraProperty') extraProperty = {
+    alwaysAllow: 'Always Allow',
+    privacyInfo: 'Privacy Info'
+  };
   @Input('popUpTitleLang') popUpTitleLang = {
     purpose: 'Purpose',
     privacyInfo: 'Privacy Info',
