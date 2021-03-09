@@ -104,6 +104,10 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
 
   cookieBannerForm: FormGroup;
   submitted = true;
+  extraProperty = {
+    alwaysAllow: 'Always Allow',
+    privacyInfo: 'Privacy Info'
+  };
 
   ngOnInit() {
     this.onGetPropsAndOrgId();
@@ -214,6 +218,11 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
       privacyInfo: langConfig.CONFIG.POPUP.PRIVACY_INFO_TITLE,
       vendors: langConfig.CONFIG.POPUP.VENDORS
     };
+    console.log('Extra', langConfig.COMMOM.ALWAYS_ALLOW)
+
+    this.extraProperty.alwaysAllow =  langConfig.COMMOM.ALWAYS_ALLOW;
+    this.extraProperty.privacyInfo = langConfig.CONFIG.POPUP.PRIVACY_INFO_TITLE
+    // console.log('Extra', this.extraProperty)
     // }
   }
 
