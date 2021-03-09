@@ -641,7 +641,7 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
 
   onAvgTime() {
     if (this.dashboardCount.AVG_TIME_TO_COMPLETE) {
-      return this.dashboardCount.AVG_TIME_TO_COMPLETE;
+      return this.dashboardCount.AVG_TIME_TO_COMPLETE.toFixed(2);
     }
     return 0;
   }
