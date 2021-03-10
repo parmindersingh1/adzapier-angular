@@ -26,7 +26,7 @@ import { formatDate } from '@angular/common';
   changeDetection: ChangeDetectionStrategy.Default
 
 })
-export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, AfterViewChecked {
+export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChecked, OnInit {
   @ViewChild('toggleDayleftdiv', { static: true }) toggleDayleftdiv: ElementRef;
   // @ViewChild('btnDaysLeft', { static: true }) btnDaysLeft: ElementRef;
   @ViewChild('customDaysInput') customDaysInput: ElementRef;
@@ -1610,6 +1610,7 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
     if (selectedStage.id === this.currentWorkflowStageID) {
       this.showStageTitle = selectedStage.stage_title;
       this.showStageGuidanceText = selectedStage.guidance_text;
+      this.cdRef.markForCheck();
     }
   }
 
