@@ -35,6 +35,7 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
   modalRef: BsModalRef;
   // @ViewChild('showConfig', {static: false}) showConfig : ElementRef;
   skeletonLoading = true;
+
   type = 'draft';
   matcher = new MyErrorStateMatcher();
   currentPlan;
