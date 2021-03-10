@@ -35,6 +35,7 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
   modalRef: BsModalRef;
   // @ViewChild('showConfig', {static: false}) showConfig : ElementRef;
   skeletonLoading = true;
+
   type = 'draft';
   matcher = new MyErrorStateMatcher();
   currentPlan;
@@ -86,9 +87,7 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
   allowAllIabVendors = false;
   langValueList = ['en'];
   langDefault = 'en';
-  ccpaBannerConfig = false;
-  gdprBannerConfig = false;
-  genericBannerConfig = false;
+
   constructor(private formBuilder: FormBuilder,
               private cd: ChangeDetectorRef,
               private modalService: BsModalService,
@@ -1057,16 +1056,5 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
     } else {
       this.langValueList = [];
     }
-  }
-
-  onCheckBannerConfig($event){
-    if($event.target.value === 'ccpa'){
-      this.ccpaBannerConfig = $event.target.checked;
-    }else if($event.target.value === 'gdpr'){
-      this.gdprBannerConfig = $event.target.checked;
-    } else if($event.target.value === 'generic'){
-      this.genericBannerConfig = $event.target.checked;
-    }
-
   }
 }
