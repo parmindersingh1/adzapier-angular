@@ -213,6 +213,9 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
     this.formContent.AnalyticsText = langConfig.purposes.analytics.title;
     this.formContent.PopUpAnalyticsDescription = langConfig.purposes.analytics.description;
 
+    this.formContent.popUpCcpaPurposeDescription  = langConfig.CONFIG.POPUP.PURPOSES_BODY_CCPA;
+    this.formContent.popUpCcpaPrivacyInfo  = langConfig.CONFIG.POPUP.PRIVACY_INFO_BODY_TEXT;
+
     this.popUpTitleLang = {
       purpose: langConfig.CONFIG.POPUP.PURPOSE_TEXT,
       privacyInfo: langConfig.CONFIG.POPUP.PRIVACY_INFO_TITLE,
@@ -1027,7 +1030,7 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
   }
 
   openModal(template: TemplateRef<any>) {
-    this.modalRef = this.modalService.show(template);
+    this.modalRef = this.modalService.show(template, {ignoreBackdropClick: true});
   }
 
   onSelectLang(event, id) {
