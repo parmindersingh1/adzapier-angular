@@ -56,6 +56,9 @@ export const defaultBannerContent = {
   popUpPurposeDescription: 'In order to comply with data protection laws, we ask you to review the key pointsbelow of our Privacy Policy. To continue using our website, you need to select yourpreferences and click "Save".',
   popUpVendorsDescription: 'During consted in the stub are filtered out if not valid. Ping and custom commands are executed and removed from the queue while all other commands remain queued until a valid TC string is set.',
   //
+  popUpCcpaPurposeDescription: 'IWhen you visit our website, we store cookie on your browser to collection information. This information might be related to you or your device, your preferences, and mostly used to make the website work as you expect it to and to provide a more personalized web browsing experience. Your privacy is important to us, you can choose not to allow some types of cookies. Click on the different cookie category heading to find out more information and change our default settings. You have the option of disabling certain types of storage that may not be necessary for the basic functioning of the website. If you decide to decline, we may not be able to provide you the optimal website browsing experience. You cannot disable our Essential First Party Strictly Necessary Cookies as they are implemented to ensure the proper functioning of our website. Such as log into your account, remembering your settings, prompting the cookie banner and redirect when you logout etc.".',
+  popUpCcpaPrivacyInfo: 'Use this page to learn more about data privacy and how data is used to improve your site experience.',
+
   popUpPurposeButtonTextColor: '#575751',
   popUpPurposeButtonBackGroundColor: 'rgb(250, 250, 250)',
   //
@@ -138,6 +141,8 @@ export class FormDefaultData {
   popUpVendorsDescription: 'During consted in the stub are filtered out if not valid. Ping and custom commands are executed and removed from the queue while all other commands remain queued until a valid TC string is set.';
   popUpPurposeDescription: 'In order to comply with data protection laws, we ask you to review the key pointsbelow of our Privacy Policy. To continue using our website, you need to select yourpreferences and click "Save".';
   //
+  popUpCcpaPurposeDescription: 'IWhen you visit our website, we store cookie on your browser to collection information. This information might be related to you or your device, your preferences, and mostly used to make the website work as you expect it to and to provide a more personalized web browsing experience. Your privacy is important to us, you can choose not to allow some types of cookies. Click on the different cookie category heading to find out more information and change our default settings. You have the option of disabling certain types of storage that may not be necessary for the basic functioning of the website. If you decide to decline, we may not be able to provide you the optimal website browsing experience. You cannot disable our Essential First Party Strictly Necessary Cookies as they are implemented to ensure the proper functioning of our website. Such as log into your account, remembering your settings, prompting the cookie banner and redirect when you logout etc.".';
+  popUpCcpaPrivacyInfo: 'Use this page to learn more about data privacy and how data is used to improve your site experience.';
   popUpSwitchButtonColor: '#4b90ff';
   //
   popUpPurposeButtonTextColor: '#575751';
