@@ -150,7 +150,7 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
 
       bannerDoNotSellMyDataTextContent: langConfig.CONFIG.DONOTSELL,
       //  POPUP
-      PopUpPurposeBodyDescription: langConfig.CONFIG.POPUP.PURPOSES_BODY,
+      PopUpPurposeBodyDescription: langConfig.CONFIG.POPUP.PURPOSES_BODY_GDPR,
       PopUpVendorBodyDescription: langConfig.CONFIG.POPUP.VENDORS_DESC,
       // PopUpPurposeButtonBorderColor: this.bannerCookieData.CONFIG,
       PopUpDisableAllButtonTextContent: langConfig.CONFIG.POPUP.DISABLE_ALL,
@@ -170,7 +170,7 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
     this.formContent.bannerDisableButtonTextContent = langConfig.CONFIG.BANNER.buttonDisable;
     this.formContent.bannerDoNotSellMyDataTextContent = langConfig.CONFIG.BANNER.DONOTSELL;
     // //  POPUP
-    this.formContent.popUpPurposeDescription = langConfig.CONFIG.POPUP.PURPOSES_BODY;
+    this.formContent.popUpPurposeDescription = langConfig.CONFIG.POPUP.PURPOSES_BODY_GDPR;
     this.formContent.popUpVendorsDescription = langConfig.CONFIG.POPUP.VENDORS_DESC;
     this.formContent.popUpDisableAllButtonTextContent = langConfig.CONFIG.POPUP.DISABLE_ALL;
     this.formContent.popUpSaveMyChoiceButtonTextContent = langConfig.CONFIG.POPUP.SAVE_EXIT;
@@ -224,7 +224,7 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
     console.log('Extra', langConfig.COMMOM.ALWAYS_ALLOW)
 
     this.extraProperty.alwaysAllow =  langConfig.COMMOM.ALWAYS_ALLOW;
-    this.extraProperty.privacyInfo = langConfig.CONFIG.POPUP.PRIVACY_INFO_TITLE
+    this.extraProperty.privacyInfo = langConfig.CONFIG.POPUP.PRIVACY_INFO_TITLE;
     // console.log('Extra', this.extraProperty)
     // }
   }
