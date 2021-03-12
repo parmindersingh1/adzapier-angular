@@ -1,19 +1,14 @@
-import { OnDestroy } from '@angular/core';
-import { TemplateRef } from '@angular/core';
-import { Component, OnInit } from '@angular/core';
-import { Validators } from '@angular/forms';
-import { FormGroup } from '@angular/forms';
-import { FormBuilder } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-import { NgxUiLoaderService } from 'ngx-ui-loader';
-import { forkJoin, Observable } from 'rxjs';
-import { distinctUntilChanged, map } from 'rxjs/operators';
-import { debounceTime } from 'rxjs/operators';
-import { moduleName } from 'src/app/_constant/module-name.constant';
-import { BillingService } from 'src/app/_services/billing.service';
-import { DataService } from 'src/app/_services/data.service';
-import { OrganizationService } from 'src/app/_services/organization.service';
+import {Component, OnDestroy, OnInit, TemplateRef} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {ActivatedRoute} from '@angular/router';
+import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
+import {NgxUiLoaderService} from 'ngx-ui-loader';
+import {forkJoin, Observable} from 'rxjs';
+import {debounceTime, distinctUntilChanged, map} from 'rxjs/operators';
+import {moduleName} from 'src/app/_constant/module-name.constant';
+import {BillingService} from 'src/app/_services/billing.service';
+import {DataService} from 'src/app/_services/data.service';
+import {OrganizationService} from 'src/app/_services/organization.service';
 
 @Component({
   selector: 'app-manage-organization',
@@ -47,18 +42,19 @@ export class ManageOrganizationComponent implements OnInit, OnDestroy {
   skLoading = true;
   propertyList = [];
   allPropertyList = [];
+
   constructor(private service: BillingService,
-               private modalService: BsModalService,
+              private modalService: BsModalService,
               private activatedRoute: ActivatedRoute,
               private loading: NgxUiLoaderService,
               private formBuilder: FormBuilder,
-              private dataService: DataService
-
-    ) { }
-
-  ngOnInit(
-
+              private dataService: DataService,
+              private orgservice: OrganizationService
   ) {
+  }
+
+  ngOnInit() {
+    this.onGetPropsAndOrgId();
     this.orgForm = this.formBuilder.group({
       orgID: ['', Validators.required]
     });
@@ -74,6 +70,7 @@ export class ManageOrganizationComponent implements OnInit, OnDestroy {
 
     this.getAllOrgList();
   }
+
   onCalculateValue() {
     const cal = Math.ceil(this.assigneLicence * 100 / this.totalLicence);
     this.percents = {
@@ -82,32 +79,48 @@ export class ManageOrganizationComponent implements OnInit, OnDestroy {
     }
 
   }
-  get f() { return this.orgForm.controls; }
 
-  getAllOrgList(){
+  get f() {
+    return this.orgForm.controls;
+  }
+
+  onGetPropsAndOrgId() {
+    this.orgservice.currentProperty.subscribe((response) => {
+      if (response !== '') {
+        this.currentManagedOrgID = response.organization_id;
+        this.currrentManagedPropID = response.property_id;
+      } else {
+        const orgDetails = this.orgservice.getCurrentOrgWithProperty();
+        this.currentManagedOrgID = orgDetails.organization_id;
+        this.currrentManagedPropID = orgDetails.property_id;
+      }
+    });
+  }
+
+  getAllOrgList() {
     this.loading.start('3');
     this.service.getAllOrgList(this.constructor.name, moduleName.billingModule)
-    .subscribe((res: any) => {
-      this.loading.stop('3');
-      // this.orgList = res.response;
+      .subscribe((res: any) => {
+        this.loading.stop('3');
+        // this.orgList = res.response;
 
-      this.allUnSignOrgList = [];
-      for(const orgObj of res.response) {
-        this.allUnSignOrgList.push({label: orgObj.orgname, value: orgObj.id})
-      }
-      this.search
-    }, err => {
-      this.loading.stop('3');
-      this.isOpen = true;
-      this.alertMsg = err;
-      this.alertType = 'danger';
-    })
+        this.allUnSignOrgList = [];
+        for (const orgObj of res.response) {
+          this.allUnSignOrgList.push({label: orgObj.orgname, value: orgObj.id})
+        }
+        this.search
+      }, err => {
+        this.loading.stop('3');
+        this.isOpen = true;
+        this.alertMsg = err;
+        this.alertType = 'danger';
+      })
   }
 
   onGetAssingedOrg() {
     this.loading.start();
     this.skLoading = true;
-    this.service.getAssignedOrgByPlanID(this.constructor.name, moduleName.billingModule, this.planID).subscribe( (res: any) => {
+    this.service.getAssignedOrgByPlanID(this.constructor.name, moduleName.billingModule, this.planID).subscribe((res: any) => {
       this.loading.stop();
       this.skLoading = false;
       this.assigneLicence = res.response.length;
@@ -136,79 +149,102 @@ export class ManageOrganizationComponent implements OnInit, OnDestroy {
   onSubmit() {
     this.submitted = true;
     console.log('this.orgForm.value.orgID', this.orgForm.value.orgID)
-this.orgNameError = !this.orgForm.value.orgID ? true : false;
+    this.orgNameError = !this.orgForm.value.orgID ? true : false;
     // stop here if form is invalid
     if (this.orgForm.invalid) {
-        return;
+      return;
     }
-  const payload = {
-    planID: this.planID,
-    orgID: this.orgForm.value.orgID
-  }
+    const payload = {
+      planID: this.planID,
+      orgID: this.orgForm.value.orgID
+    }
     this.loading.start();
     this.skLoading = true;
     this.service.assignOrgLicence(this.constructor.name, moduleName.billingModule, payload)
-    .subscribe(res => {
-      this.loading.stop();
-      this.skLoading = false;
-      this.modalRef.hide();
-      this.licenseAvailabilityForFormAndRequestPerOrg(this.orgForm.value.orgID);
-      this.orgForm.reset()
-      this.onGetAssingedOrg()
+      .subscribe(res => {
+        this.loading.stop();
+        this.skLoading = false;
+        this.modalRef.hide();
+        this.licenseAvailabilityForFormAndRequestPerOrg(this.orgForm.value.orgID);
+        this.orgForm.reset()
+        this.onGetAssingedOrg()
+        this.isCurrentPropertySelected(this.currentManagedOrgID, this.currrentManagedPropID)
 
-    }, err => {
-      this.loading.stop();
-      this.skLoading = false;
-      this.isOpen = true;
-      this.alertMsg = err;
-      this.alertType = 'danger';
-    })
+      }, err => {
+        this.loading.stop();
+        this.skLoading = false;
+        this.isOpen = true;
+        this.alertMsg = err;
+        this.alertType = 'danger';
+      })
     // display form values on success
-}
+  }
 
   search = (text$: Observable<string>) =>
-  text$.pipe(
-    debounceTime(200),
-    distinctUntilChanged(),
-    map(term => term.length < 0 ? []
-      : this.allUnSignOrgList.filter(v => v.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10))
-  )
+    text$.pipe(
+      debounceTime(200),
+      distinctUntilChanged(),
+      map(term => term.length < 0 ? []
+        : this.allUnSignOrgList.filter(v => v.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10))
+    )
 
-  onRemoveOrg(oID){
+  async isCurrentPropertySelected(orgID, propID) {
+    this.loading.start('2');
+    this.dataService.getOrgPlanInfo(this.constructor.name, moduleName.cookieConsentModule, orgID)
+      .subscribe((res: any) => {
+        this.loading.stop('2');
+        this.dataService.setOrgPlanToLocalStorage(res);
+      }, error => {
+        this.loading.stop('2');
+      });
+    this.loading.start('1');
+    this.dataService.getPropertyPlanDetails(this.constructor.name, moduleName.cookieConsentModule, propID)
+      .subscribe((res: any) => {
+        this.dataService.setPropertyPlanToLocalStorage(res);
+        this.loading.stop('1');
+      }, err => {
+        this.loading.stop('1');
+      });
+  }
+
+  onRemoveOrg(oID) {
     this.loading.start();
     this.skLoading = true;
     this.service.removeOrg(this.constructor.name, moduleName.billingModule, {orgID: oID})
-    .subscribe((res: any) => {
-      this.loading.stop();
-      this.skLoading = false;
-      this.modalRef.hide();
-      this.onGetAssingedOrg()
-      this.isOpen = true;
-      this.alertMsg = res.response;
-      this.alertType = 'info';
-    }, err => {
-      this.skLoading = false;
-      this.loading.stop();
-      this.modalRef.hide();
-      this.isOpen = true;
-      this.alertMsg = err;
-      this.alertType = 'danger';
-    })
+      .subscribe((res: any) => {
+        this.loading.stop();
+        this.skLoading = false;
+        this.modalRef.hide();
+        this.onGetAssingedOrg()
+        this.isOpen = true;
+        this.alertMsg = res.response;
+        this.alertType = 'info';
+        this.isCurrentPropertySelected(this.currentManagedOrgID, this.currrentManagedPropID);
+
+      }, err => {
+        this.skLoading = false;
+        this.loading.stop();
+        this.modalRef.hide();
+        this.isOpen = true;
+        this.alertMsg = err;
+        this.alertType = 'danger';
+      })
   }
+
   decline(): void {
     this.modalRef.hide();
   }
 
-  licenseAvailabilityForFormAndRequestPerOrg(orgID){
-    let webFormLicense = this.dataService.getWebFormLicenseLimit( this.constructor.name, moduleName.headerModule, orgID);
-    let requestLicense = this.dataService.getDSARRequestLicenseLimit( this.constructor.name, moduleName.headerModule, orgID);
+  licenseAvailabilityForFormAndRequestPerOrg(orgID) {
+    let webFormLicense = this.dataService.getWebFormLicenseLimit(this.constructor.name, moduleName.headerModule, orgID);
+    let requestLicense = this.dataService.getDSARRequestLicenseLimit(this.constructor.name, moduleName.headerModule, orgID);
     forkJoin([webFormLicense, requestLicense]).subscribe(results => {
       let finalObj = {
         ...results[0].response,
         ...results[1].response,
       }
       this.dataService.setAvailableLicenseForFormAndRequestPerOrg(finalObj);
-    },(error)=>{
+    }, (error) => {
       console.log(error)
     });
   }
