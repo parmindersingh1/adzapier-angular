@@ -89,7 +89,7 @@ export class RegisterComponent implements OnInit {
                         this.alertMsg = 'Account created successfully';
                         this.isOpen = true;
                         this.alertType = 'success';
-                        this.router.navigate(['/login']);
+                        this.router.navigate(['signup/thankyou']);
                     },
                     error => {
                         this.alertMsg = error.company_error || error;
