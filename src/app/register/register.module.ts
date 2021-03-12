@@ -5,9 +5,10 @@ import { RegisterRoutingModule } from './register-routing.module';
 import { RegisterComponent } from './register.component';
 import {AlertConfig, AlertModule} from 'ngx-bootstrap/alert';
 import { ToggleDirective } from '../_pipe/toggle.pipe';
+import { ThankyoupageComponent } from './thankyoupage.component';
 
 @NgModule({
-  declarations: [RegisterComponent, ToggleDirective],
+  declarations: [RegisterComponent, ToggleDirective, ThankyoupageComponent],
   imports: [
     CommonModule,
     ReactiveFormsModule,

@@ -2328,7 +2328,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
 
   editFormAfterPublish() {
     this.isEditingPublishedForm = !this.isEditingPublishedForm;
-    this.isWebFormPublished = true;
+    this.isWebFormPublished = false;
     this.isDraftWebForm = true;
     this.pageLoadFormObj = {
       form_name: this.formName,
