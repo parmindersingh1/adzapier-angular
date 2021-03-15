@@ -104,6 +104,15 @@ export class HeaderComponent implements OnInit {
 
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
+        if (event.url.indexOf('signup') >= 0) {
+         if(this.currentUser === null){
+           return true;
+         } else{
+          this.router.navigate(['/home/dashboard/analytics']);
+         }
+        }
+      }
+      if (event instanceof NavigationEnd) {
         this.isPrivacyActivelinkMatched = event.url.indexOf('privacy') >= 0 || event.url.indexOf('home') >= 0
           || event.url.indexOf('cookie') >= 0;
       } else if (event instanceof NavigationEnd) {
