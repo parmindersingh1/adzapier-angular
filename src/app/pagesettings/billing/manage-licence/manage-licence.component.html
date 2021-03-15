@@ -28,7 +28,7 @@
       <a routerLink="/settings/billing/pricing" class="btn btn-sm btn-outline-secondary btn-uppercase mr-2">
         <i class="fa fa-plus pr-1"  aria-hidden="true"></i>  Add Subscription</a>
 
-      <button (click)="onGenerateSessionID()" type="button" class="btn btn-sm btn-uppercase btn-outline-secondary"><i class="fa fa-cogs pr-1" aria-hidden="true"></i>
+      <button *ngIf="activeSubscriptionList.length > 0" (click)="onGenerateSessionID()" type="button" class="btn btn-sm btn-uppercase btn-outline-secondary"><i class="fa fa-cogs pr-1" aria-hidden="true"></i>
         Manage Subscription</button>
     </div>
   </div>
@@ -94,7 +94,7 @@
         <td class="validity"><span class="activeplan"><i class="fa fa-check-circle pr-2" aria-hidden="true"></i> Active</span>
           Renews on  {{plan.planDetails.plan_ends | date}}</td>
         <td>{{plan.planDetails.price + '.00 ' + plan.currency | uppercase}}  </td>
-        <th>**** <span class="pr-1">{{plan.planDetails.card_number}}</span>
+        <th class="d-flex">**** <span class="pr-1">{{plan.planDetails.card_number}}</span>
 
           <span *ngIf="plan.planDetails.brand !== 'mastercard' && plan.planDetails.brand !== 'visa' && plan.planDetails.brand !== 'amex'">{{' ' + plan.planDetails.brand}}</span>
           <img *ngIf="plan.planDetails.brand === 'mastercard'" alt="Credit Card Logos" title="Credit Card Logos" src="assets/card-logo/mc.png" width="40" height="25" border="0" />
@@ -119,18 +119,22 @@
 
 
 
-<div class="card mt-4">
-  <h4 class="mt-4 pl-4">Expired Products & Plans</h4>
-  <div class="card-body mt-2">
+<div class="card mt-4 manage-license">
+  <div class="card-header row ml-0 mr-0">
+    <div class="col-md-7 p-0 align-items">
+    <h4 class="tx-14 tx-uppercase  mb-0 tx-spacing-1 tx-color-02 tx-semibold">Expired Products & Plans</h4>
+    </div>
+  </div>
+  <div class="card-body border-top-0 p-1 mt-0">
     <ng-container *ngIf="!skLoading">
-      <table class="table">
+      <table class="table mb-0 tx-14">
         <thead>
         <tr>
-          <th>Product Name</th>
+          <th class="pl-2">Product Name</th>
           <th>Plan Name</th>
-          <th style="width: 150px">Available Licenses</th>
-          <th>Total Licenses</th>
-          <th>Valid Up to</th>
+          <th>Available Licenses</th>
+          <th>Used / Total Licenses</th>
+          <th class="text-left pl-2">Valid Up to</th>
           <th>Price</th>
           <th>Pay By</th>
         </tr>
@@ -154,26 +158,22 @@
 
 
              <td style="width: 150px">{{plan.plan_name}}</td>
-          <td style="width: 10px" >{{ plan.total_licence - plan.assigned_licence}} </td>
-          <td style="width: 200px">
-            <div class="row">
+          <td class="text-center">{{ plan.total_licence - plan.assigned_licence}} </td>
+          <td>
+            <div class="row justify-content-center">
               <div class="col-md-7 p-0">
-              <div class="progress mt-1" style="height:8px">
-              <div class="progress-bar" [ngStyle]="{width:  onCalculateOptValue(plan.assigned_licence, plan.total_licence)+'%'}" style=" background-color: #11188f">
-              </div>
-              <div class="progress-bar"  [ngStyle]="{width:  100 - onCalculateOptValue(plan.assigned_licence, plan.total_licence) +'%'}" style="background-color: #3d78d4">
+             <div class="progress mt-1">
+              <span class="txt-center-bold"> {{plan.assigned_licence}} / {{plan.total_licence}}</span>
+                  <div class="progress-bar" [ngStyle]="{width:  onCalculateOptValue(plan.assigned_licence, plan.total_licence)+'%'}">
               </div>
             </div>
-          </div>
-          <div class="col-md-5">
-           <span style="font-weight: 600"> {{plan.assigned_licence}} / {{plan.total_licence}}</span>
           </div>
           </div>
 
           </td>
-          <td style="width: 280px"> <i class="fa fa-times-circle pr-2" aria-hidden="true"></i>Expired on {{plan.planDetails.plan_ends | date}}</td>
-          <td style="width: 120px">{{plan.planDetails.price + '.00 ' + plan.currency | uppercase}}  </td>
-          <th style="width: 170px;text-transform: capitalize;">**** <span class="pr-1">{{plan.planDetails.card_number}}</span>
+          <td class="validity"><span class="inactiveplan"> <i class="fa fa-times-circle pr-2" aria-hidden="true"></i>Inactive</span>Expired on {{plan.planDetails.plan_ends | date}}</td>
+          <td>{{plan.planDetails.price + '.00 ' + plan.currency | uppercase}}  </td>
+          <th style="text-transform: capitalize;display: flex;">**** <span class="pr-1">{{plan.planDetails.card_number}}</span>
 
             <span *ngIf="plan.planDetails.brand !== 'mastercard' && plan.planDetails.brand !== 'visa' && plan.planDetails.brand !== 'amex'">{{ ' ' + plan.planDetails.brand}}</span>
             <img *ngIf="plan.planDetails.brand === 'mastercard'" alt="Credit Card Logos" title="Credit Card Logos" src="assets/card-logo/mc.png" width="40" height="25" border="0" />
