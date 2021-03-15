@@ -8,8 +8,8 @@
       </ol>
       <div class="datepickerwrapper col-sm-6 pr-0 mr-0 ml-auto">
       <div class="col-sm-7 mr-2 d-flex row-reverse">
-        <div class="input-group-prepend"  (click)="clearDateRangePicker()">
-          <span class="input-group-text rounded-right border-left-0" id="inputGroup-sizing-sm"><i class="fa" [ngClass]="searchbydaterange !== '' ? 'fa-times':'fa-search'"></i></span>
+        <div class="input-group-prepend"  (click)="dp.show()">
+          <span class="input-group-text rounded-right border-left-0" id="inputGroup-sizing-sm"><i class="fa" [ngClass]="searchbydaterange !== '' ? 'fa-caret-down':'fa-search'"></i></span>
         </div>
         <input type="text" [(ngModel)]="searchbydaterange"
          class="form-control border-left-0  border-right-0 rounded-right"
@@ -18,9 +18,10 @@
           <span class="input-group-text rounded-left border-right-0" id="inputGroup-sizing-sm"><i class="fa fa-calendar"></i></span>
         </div>
       </div>
-      <div>
+      <div class="bg-white">
       <button (click)="createWebFormRequestModal(createRequestModal,'')" data-toggle="modal" type="button"
-        class="btn btn-white">
+        class="btn btn-sm btn-uppercase btn-outline-secondary pt-2 lineheight-22">
+        <i-feather class="feather-16" name="plus"></i-feather>
         <span class="d-none d-sm-inline mg-l-5">
           Create Request </span>
       </button>
@@ -123,36 +124,47 @@
     <ng-template pTemplate="body" let-rowData let-columns="columns">
       <tr>
         <td><span class="ui-column-title">ID</span>
-          <a (click)="viewDSARRequestDetails(rowData)" title="{{rowData.id}}">
-            {{rowData.id}}
+          <a (click)="viewDSARRequestDetails(rowData)" title="{{rowData?.id}}">
+            {{rowData?.id}}
           </a>
         </td>
-        <td><span class="ui-column-title">Request Type</span>{{rowData.request_type}}</td>
-        <td><span class="ui-column-title">Subject Type</span>{{rowData.subject_type}}</td>
+        <td><span class="ui-column-title">Request Type</span>{{rowData?.request_type}}</td>
+        <td><span class="ui-column-title">Subject Type</span>{{rowData?.subject_type}}</td>
         <td>
           <span class="ui-column-title">Status</span>
+          <ng-container *ngIf="rowData">
           <span *ngIf="rowData.status === 'New'" class="badge badge-primary">{{rowData.status}}</span>
           <span *ngIf="rowData.status === 'Verify Request'" class="badge badge-info">{{rowData.status}}</span>
           <span *ngIf="rowData.status === 'InProgress'" class="badge badge-warning">{{rowData.status}}</span>
           <span *ngIf="rowData.status === 'Complete'" class="badge badge-success">{{rowData.status}}</span>
           <span *ngIf="rowData.status === 'UnVerifed'" class="badge badge-danger">{{rowData.status}}</span>
           <span *ngIf="rowData.status === 'Rejected'" class="badge badge-danger">{{rowData.status}}</span>
+        </ng-container>
         </td>
-        <td><span class="ui-column-title">Name</span>{{rowData.name}}</td>
-        <td><span class="ui-column-title">Web form name</span><a (click)="navigateToWebForm(rowData)" class="linkcolor">{{rowData.web_form_name}}</a></td>
+        <td><span class="ui-column-title">Name</span>{{rowData?.name}}</td>
+        <td><span class="ui-column-title">Web form name</span><a (click)="navigateToWebForm(rowData)" class="linkcolor">{{rowData?.web_form_name}}</a></td>
 
         <td *ngFor="let col of columns">
           <span class="ui-column-title">{{col.header}}</span>
+          <ng-container *ngIf="rowData">
           {{rowData[col.field]}}
+        </ng-container>
         </td>
         <td>
           <span class="ui-column-title">Days left</span>
           <span class="badge"
-            [ngClass]="{'badge-danger':rowData.days_left < 10,'badge-warning':rowData.days_left < 30,'badge-success':rowData.days_left >= 20}">{{rowData.days_left}}
-            Days</span>
+            [ngClass]="{'badge-danger':rowData?.days_left < 10,'badge-warning':rowData?.days_left < 30,'badge-success':rowData?.days_left >= 20}">
+            <ng-container *ngIf="rowData">
+            {{rowData?.days_left}} Days
+            </ng-container>
+            </span>
 
         </td>
-        <td><span class="ui-column-title">Created At</span>{{rowData.created_at | timeago}}</td>
+        <td><span class="ui-column-title">Created At</span>
+          <ng-container *ngIf="rowData">
+          {{rowData.created_at | timeAgo}}
+        </ng-container>
+        </td>
       </tr>
 
     </ng-template>

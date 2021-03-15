@@ -204,6 +204,7 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
   isUserNotMatched: boolean = false;
   reasonList: any = [];
   rightArrowStatus = false;
+  isRequestCompleted = false;
   constructor(private activatedRoute: ActivatedRoute,
               private router: Router,
               private orgService: OrganizationService,
@@ -1150,7 +1151,7 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
         reminder: subtaskForm.value.reminder
       };
       if (!this.isEditSubTask) {
-        this.dsarRequestService.addSubTask(this.requestID, currentStageID, obj,
+        this.dsarRequestService.addSubTask(this.queryCompanyID,this.requestID, currentStageID, obj,
           this.constructor.name, moduleName.dsarRequestModule)
           .subscribe((data) => {
             this.alertMsg = data.response;
@@ -1166,7 +1167,7 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
             this.alertType = 'danger';
           });
       } else {
-        this.dsarRequestService.updateSubTask(this.selectedTaskID, obj, this.constructor.name, moduleName.dsarRequestModule)
+        this.dsarRequestService.updateSubTask(this.queryCompanyID, this.selectedTaskID, obj, this.constructor.name, moduleName.dsarRequestModule)
         .subscribe((data) => {
           this.alertMsg = data.response;
           this.isOpen = true;
@@ -1401,7 +1402,11 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
 
   onValueChange(value: Date): void {
     this.minDate = new Date();
-    this.maxDate = new Date(value);
+    if (value === null) {
+      this.maxDate = new Date(this.subTaskFields.deadline);
+    } else {
+      this.maxDate = new Date(value);
+    }
     this.minDate.setDate(this.minDate.getDate());
     this.maxDate.setDate(this.maxDate.getDate());
   }
@@ -1676,13 +1681,22 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
       })
   }
 
+  isWorkflowStageCompleted(): boolean {
+    return this.selectedStages.length === this.workflowStages.length;
+  }
+
   ngAfterViewChecked() {
-     let rightArrowStatus = this.rightClickStatus();
-     if(rightArrowStatus !== this.rightArrowStatus){
-       this.rightArrowStatus = rightArrowStatus;
-       this.cdRef.detectChanges();
-     }
-   
+      let rightArrowStatus = this.rightClickStatus();
+      let requestCompleted = this.isWorkflowStageCompleted();
+      if (rightArrowStatus !== this.rightArrowStatus) {
+        this.rightArrowStatus = rightArrowStatus;
+        this.cdRef.detectChanges();
+      }
+      if(requestCompleted !== this.isRequestCompleted){
+        this.isRequestCompleted = requestCompleted;
+        this.cdRef.detectChanges();
+      }
+
     if (this.workflowStageScroller !== undefined) {
       const liElement = this.workflowStageScroller.nativeElement.querySelector('li').offsetWidth;
     if (liElement !== null) {
@@ -1693,7 +1707,7 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
         const visibleSize = menuSize - parentElementSize;
         this.scrollLimit = -visibleSize;
      }
-    } 
+    }
   }
 
   onCloseUserAuthModal() {
@@ -1702,10 +1716,9 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
   }
 
   ngAfterViewInit() {
-      this.cdRef.detectChanges();
+    this.cdRef.detectChanges();
   }
 
-   
 }
 
 interface SubTaskList {

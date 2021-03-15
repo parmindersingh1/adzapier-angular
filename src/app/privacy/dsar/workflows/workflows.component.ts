@@ -1,6 +1,7 @@
 import { AfterViewInit, ChangeDetectorRef, Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 import { WorkflowService } from 'src/app/_services/workflow.service';
+import { DataService } from 'src/app/_services/data.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
@@ -48,7 +49,9 @@ export class WorkflowsComponent implements OnInit, AfterViewInit  {
   public debouncedInputValue = this.inputValue;
   private searchDecouncer$: Subject<string> = new Subject();
   
-  constructor(private router: Router, private workflowService: WorkflowService,
+  constructor(private router: Router, 
+              private workflowService: WorkflowService,
+              private dataService: DataService,
               private modalService: NgbModal,
               private formBuilder: FormBuilder,
               private loading: NgxUiLoaderService,
@@ -70,11 +73,18 @@ export class WorkflowsComponent implements OnInit, AfterViewInit  {
       workflowselection: ['', [Validators.required]]
     });
     this.isloading = true;
+    this.getlicenseAvailabilityForWorkflow();
   }
   get addWorkflow() { return this.createWorkFlowForm.controls; }
 
   createWorkflow() {
+    if(this.isLicenseLimitAvailable()){
     this.router.navigate(['/privacy/dsar/createworkflow']);
+    } else {
+      this.alertMsg = 'Please Select property first!';
+      this.isOpen = true;
+      this.alertType = 'danger';
+    }
   }
 
   // to retrive all and show only active workflow in dropdown  
@@ -179,12 +189,17 @@ createWorkflowModalPopup(content, data) {
 
     });
   } else {
-
+    if(this.isLicenseLimitAvailable()){
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
 
     }, (reason) => {
 
     });
+  }else {
+    this.alertMsg = 'Please Select property first!';
+    this.isOpen = true;
+    this.alertType = 'danger';
+  }
   }
 
 }
@@ -312,6 +327,16 @@ onCancelClick() {
 onClosed(dismissedAlert: any): void {
   this.alertMsg = !dismissedAlert;
   this.isOpen = false;
+}
+
+isLicenseLimitAvailable(){
+  return this.dataService.isLicenseLimitAvailableForOrganization('workflow',this.dataService.getWorkflowLicenseToLocalStorage());
+}
+
+getlicenseAvailabilityForWorkflow(){
+   this.dataService.getWorkflowLicenseLimit(this.constructor.name, moduleName.headerModule).subscribe((data) => {
+    this.dataService.setWorkflowLicenseToLocalStorage(data.response);
+  })
 }
 
 ngAfterViewInit() {

@@ -41,8 +41,8 @@ export class AppComponent implements OnInit {
   msg = '';
   listAddonPlan: any
   public unAuthMsg: any;
-   isShowingRouteLoadIndicator: boolean;
-   loadingStage = 0;
+  isShowingRouteLoadIndicator: boolean;
+  existingOrgPlan:any;
   constructor(private router: Router,
     private modalService: BsModalService,
               private billingService: BillingService,
@@ -55,30 +55,16 @@ export class AppComponent implements OnInit {
     //  this.headerComponent.loadOrganizationList();
     // Lazy Loading indicator
     this.isShowingRouteLoadIndicator = false;
-    this.loadingStage = 0;
-    let asyncLoadCount = 0;
     router.events.subscribe(
       ( event: RouterEvent ): void => {
         if ( event instanceof RouteConfigLoadStart ) {
-          this.loadingStage = 1;
           this.isShowingRouteLoadIndicator = true;
         } else if ( event instanceof RouteConfigLoadEnd ) {
-          this.loadingStage = 0;
           this.isShowingRouteLoadIndicator = false;
         }
-        // this.isShowingRouteLoadIndicator = !! asyncLoadCount;
-        setTimeout( () => {
-          this.loadingStage = 2;
-        }, 3000);
-
-        setTimeout( () => {
-          this.loadingStage = 3;
-        }, 7000);
-
-        setTimeout( () => {
-          this.loadingStage = 0;
-          this.isShowingRouteLoadIndicator = false;
-        }, 25000);
+        // setTimeout( () => {
+        //   this.isShowingRouteLoadIndicator = false;
+        // }, 25000);
 
       }
     );
@@ -125,15 +111,22 @@ export class AppComponent implements OnInit {
         if(!res.data) {
           this.currentPlanData = new DefaultPlanData();
         }
-        if(res.data) {
-          this.type = res.type;
-          this.currentPlanData = res.data
-        } else if (!res.data && res.type == 'org'){
-          this.type = 'org'
-          this.currentPlanData = new DefaultPlanData();
-        } else {
+        if (res.data) {
+          if (Object.keys(res.data).length !== 0) {
+            this.type = res.type;
+            this.currentPlanData = res.data;
+            if (res.currentplan !== undefined) {
+              this.existingOrgPlan = res.currentplan;
+            }
+          } else if (!res.data && res.type == 'org') {
+            this.type = 'org'
+            this.currentPlanData = new DefaultPlanData();
+          } else {
             this.type = 'noPlan'
             this.currentPlanData = new DefaultPlanData();
+          }
+        } else {
+          this.type = 'noPlan'
         }
         this.template.show();
       }
@@ -179,6 +172,10 @@ export class AppComponent implements OnInit {
   }
   openUnAuthPopUp() {
     this.modalRef = this.modalService.show(this.unauth, {class: 'modal-sm'});
+  }
+
+  isCurrentPlanActive():boolean {
+    return
   }
 
 }

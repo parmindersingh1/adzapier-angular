@@ -36,7 +36,7 @@
         (click)="createWorkflowModalPopup(createworkflowModal,'')"><i class="fas fa-plus"></i> Create</button>
      </div> -->
                <div class="float-right mr-1"> <button (click)="createWorkflowModalPopup(createworkflowModal,'')" data-toggle="modal" type="button"
-                    class="btn btn-white">
+                    class="btn btn-sm btn-uppercase btn-outline-secondary">
                     <i-feather class="feather-16" name="plus"></i-feather>
                     <span class="d-none d-sm-inline mg-l-5">
                         Create</span>
@@ -69,19 +69,19 @@
     <ng-template pTemplate="body" let-rowData let-columns="columns" styleClass="p-datatable-responsive-demo">
         <tr>
             <td>
-                <a (click)="navigateToWorkflow(rowData)" title="{{rowData.id}}">
-                    {{rowData.workflow_name}}
+                <a (click)="navigateToWorkflow(rowData)" title="{{rowData?.id}}">
+                    {{rowData?.workflow_name}}
                 </a>
             </td>
             <td> <span class="badge"
-                    [ngClass]="{'badge-primary':rowData.workflow_status === 'active','badge-light':rowData.workflow_status === 'draft'}">
-                    {{rowData.workflow_status}}</span>
+                    [ngClass]="{'badge-primary':rowData?.workflow_status === 'active','badge-light':rowData?.workflow_status === 'draft'}">
+                    {{rowData?.workflow_status}}</span>
 
             </td>
-            <td>{{rowData.createdby_firstname}} {{rowData.createdby_lastname}}</td>
-            <td>{{rowData.updatedby_firstname}} {{rowData.updatedby_lastname}}</td>
-            <td>{{rowData.created_at | timeago}}</td>
-            <td>{{rowData.updated_at | timeago}}</td>
+            <td>{{rowData?.createdby_firstname}} {{rowData?.createdby_lastname}}</td>
+            <td>{{rowData?.updatedby_firstname}} {{rowData?.updatedby_lastname}}</td>
+            <td>{{rowData?.created_at | timeAgo}}</td>
+            <td>{{rowData?.updated_at | timeAgo}}</td>
 
         </tr>
 

@@ -309,6 +309,7 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
   }
 
   navigateToWebForm(obj) {
+    this.ccpaFormConfigService.removeCurrentSelectedFormData();
     this.ccpaFormConfigService.captureCurrentSelectedFormData(obj);
     this.router.navigate(['/privacy/dsar/dsarform', obj.web_form_id]);
   }

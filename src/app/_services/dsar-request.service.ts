@@ -87,8 +87,8 @@ export class DsarRequestService {
       }));
   }
 
-  addSubTask(requestID, stageID, requestObj, componentName, moduleName) {
-    const path = '/ccpa/subtask/' + requestID + '/' + stageID;
+  addSubTask(companyID, requestID, stageID, requestObj, componentName, moduleName) {
+    const path = '/ccpa/subtask/' + companyID + '/' + requestID + '/' + stageID;
     return this.http.post<any>(environment.apiUrl + path, requestObj)
       .pipe(shareReplay(1), catchError(error => {
         this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.addSubTask, componentName, moduleName, path);
@@ -96,8 +96,8 @@ export class DsarRequestService {
       }));
   }
 
-  updateSubTask(subtaskID, requestObj, componentName, moduleName) {
-    const path = '/ccpa/subtask/edit/' + subtaskID;
+  updateSubTask(companyID, subtaskID, requestObj, componentName, moduleName) {
+    const path = '/ccpa/subtask/edit/' + companyID + '/' + subtaskID;
     return this.http.put<any>(environment.apiUrl + path, requestObj)
       .pipe(shareReplay(1), catchError(error => {
         this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.updateSubTask, componentName, moduleName, path);

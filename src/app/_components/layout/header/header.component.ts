@@ -268,6 +268,7 @@ export class HeaderComponent implements OnInit {
       organization_name: org.orgname,
       property_id: prop.property_id,
       property_name: prop.property_name,
+      property_active: prop.property_active,
       user_id: this.userID
     };
     this.orgservice.changeCurrentSelectedProperty(obj);
