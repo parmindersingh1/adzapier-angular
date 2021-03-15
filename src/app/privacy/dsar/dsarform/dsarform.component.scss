@@ -1216,9 +1216,80 @@ padding: 3px 5px 2px 5px;
   text-align: center !important;
 }
 
-button > i-feather {
-  width: auto !important;
-  height: auto !important;
+// button > i-feather {
+//   width: auto !important;
+//   height: auto !important;
+// }
+
+.txt-gray {
+  color: #7987a1 !important;
+}
+
+.txt-gray:hover {
+  color: #fff !important;
+}
+
+.switchchkbox {
+  position: relative;
+  display: inline-block;
+  width: 42px;
+  height: 22px;
+}
+
+.switchchkbox input { 
+  opacity: 0;
+  width: 40px;
+  z-index: 1200;
+  height: 20px;
+  left: 5px;
+  top: 1px;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 2px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.switchchkbox input:checked + .slider {
+  background-color: #2196F3;
+}
+
+.switchchkbox input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+.switchchkbox input:checked + .slider:before {
+  -webkit-transform: translateX(18px);
+  -ms-transform: translateX(18px);
+  transform: translateX(18px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
 }
 
 @media(min-width:767px) and (max-width:1024px) {

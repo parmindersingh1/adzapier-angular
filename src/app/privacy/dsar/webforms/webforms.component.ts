@@ -47,6 +47,16 @@ export class WebformsComponent implements OnInit, DirtyComponents {
   currentuserID: any;
   orgDetails: any;
   isDirty = false;
+  activePage = 0;
+  numofRecords: number = 10;
+  totalRecordsAvailable: number;
+  dataLoadingMsg: string;
+  startrecord: number;
+  endrecords: number;
+  selectedPageNumber: number;
+  previousNumbersLeft: number;
+  toNumbers: number;
+  fromNumbers: number;
   constructor(private ccpaFormConfigService: CCPAFormConfigurationService,
               private organizationService: OrganizationService,
               private loading: NgxUiLoaderService,
@@ -86,13 +96,16 @@ export class WebformsComponent implements OnInit, DirtyComponents {
 
   getCCPAFormList(orgDetails) {
     this.loading.start();
+    const perPageRecords = this.numofRecords ? this.numofRecords : 10;
+     const pagelimit = '?limit=' + perPageRecords + '&page=' + this.activePage;
     if (orgDetails !== undefined) {
       this.ccpaFormConfigService.getCCPAFormList(orgDetails.organization_id, orgDetails.property_id,
-        this.constructor.name, moduleName.dsarWebFormModule)
+        this.constructor.name, moduleName.dsarWebFormModule,pagelimit)
         .subscribe((data) => {
           this.loading.stop();
           if (data.length !== 0) {
             this.formList = data;
+            this.totalRecordsAvailable = 10;
             // this.loading = false;
             return this.formList;
           } else {
@@ -147,6 +160,28 @@ export class WebformsComponent implements OnInit, DirtyComponents {
   canDeactivate(){
     return this.isDirty;
   }
+
+  onPagesizeChangeEvent(event) {
+    this.numofRecords =  Number(event.target.value);
+  }
+
+  displayActivePage(activePageNumber: number): void {
+    this.activePage = activePageNumber;
+    this.selectedPageNumber = this.activePage;
+    if(activePageNumber === 1){
+      this.fromNumbers = activePageNumber;
+    }else{
+      this.fromNumbers = this.numofRecords * (this.selectedPageNumber - 1) + 1; // activePageNumber + (activePageNumber - 1);
+    }
+    let toNumbers = this.numofRecords * this.selectedPageNumber;
+    if(toNumbers >= this.totalRecordsAvailable){
+      this.toNumbers = this.totalRecordsAvailable;
+    }else {
+      this.toNumbers = toNumbers;
+    }
+    this.getCCPAFormList(this.orgDetails);
+  }
+
   // ngOnDestroy() {
   //   if (this.mySubscription) {
   //     this.mySubscription.unsubscribe();
