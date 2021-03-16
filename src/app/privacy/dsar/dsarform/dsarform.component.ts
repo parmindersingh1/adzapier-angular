@@ -38,6 +38,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
   @ViewChild('customFields') customFormFields: NgForm;
   @ViewChild('confirmSaveAlert') confirmSaveAlert: TemplateRef<any>;
   @ViewChild('basicForm') basicDetailForm: NgForm;
+  @ViewChild('settingsForm',{static:false}) settingsForm: NgForm;
   public requestObject: any = {};
   public selectedFormOption: any;
   public selectedControlType: any;
@@ -63,7 +64,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
   organizationID: any;
   formControlList: any;
   isAddingFormControl: boolean;
-  webFormControlList: any;
+  webFormControlList: any = [];
   questionGroups: any;
   dataSubjectAccessRightsForm: any;
   questionControlArray: any;
@@ -246,12 +247,12 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
   modalSubscription: Subscription;
   isModalOpen: boolean;
   isDirty: boolean;
-  formwizardStatus = {
-    isFormOnefinish: true,
-    isFormTwofinish: false,
-    isFormThreefinish: false,
-    isFormFourfinish: false
-  }
+  isStepCovered: boolean;
+  formSaveMethod: string;
+  customFormchangeSubscription: any;
+  settingsFormchangeSubscription: any;
+  basicFormSubscription: any;
+  errorMsgdaysleft: string;
   constructor(private fb: FormBuilder, private ccpaRequestService: CcparequestService,
     private organizationService: OrganizationService,
     private dsarFormService: DsarformService,
@@ -264,57 +265,37 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
     private cd: ChangeDetectorRef,
     private sanitizer: DomSanitizer,
     private bsmodalService: BsModalService,
-    private dataService: DataService
+    private dataService: DataService,
+    private cdRef: ChangeDetectorRef
   ) {
 
     this.count = 0;
 
+  }
+
+  ngOnInit() {
     this.activatedRoute.paramMap.subscribe(params => {
       // console.log(params, 'params..');
       this.crid = params.get('id');
       // this.selectedwebFormControlList = this.
     });
-
-  }
-
-  ngOnInit() {
+    this.loadWebControl();
     this.getCCPAdefaultConfigById();
-    // this.loadWebControl();
-    this.organizationService.currentProperty.subscribe((response) => {
-      //  this.loadingbar.stop();
-      if (response !== '') {
-        this.selectedProperty = response.property_name;
-        this.currentOrganization = response.organization_name;
-        this.orgId = response.organization_id;
-        this.propId = response.property_id;
-      } else {
-        const orgDetails = this.organizationService.getCurrentOrgWithProperty();
-        this.currentOrganization = orgDetails.organization_name;
-        this.selectedProperty = orgDetails.property_name;
-        this.orgId = orgDetails.organization_id;
-        this.propId = orgDetails.property_id;
-        this.loading = false;
-      }
-    });
+    this.loadCurrentProperty();
 
     this.basicForm = this.fb.group({
       formname: ['', [Validators.required]],
       currentOrganization: [{ value: '', disabled: true }],
       selectedProperty: [{ value: '', disabled: true }]
     });
-    this.basicForm.valueChanges.subscribe(e => {
-      if (e.formname !== this.basicForm.controls['formname'].value) {
-        this.isDirty = true;
-      } else {
-        this.isDirty = false;
-      }
-    })
     // this.loading = true;
     this.CreateUpdateDSARForm(this.crid);
 
     this.quillEditorText = this.fb.group({
       editor: new FormControl(null)
     });
+
+
     this.isWelcomeEditor = false;
     this.loadDefaultApprover();
     this.getCCPAdefaultConfigById();
@@ -338,47 +319,24 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
   get stepFormOne() { return this.basicForm.controls; }
   get formLogo() { return this.headerLogoForm.controls; }
   get faviconLogo() { return this.faviconForm.controls; }
-  basicFormdata(saveMethod) {
-    let isFormnameChanged;
-    this.basicFormSubmitted = true;
-    if (this.basicForm.invalid) {
-      return false;
-    } else {
-      this.formName = this.basicForm.value.formname;
-      let formObjstatus = {
-        form_name: this.formName,
-        form_status: this.showFormStatus().toLowerCase()
-      }
-      if(this.pageLoadFormObj !== undefined){
-        isFormnameChanged = JSON.stringify(this.pageLoadFormObj) !== JSON.stringify(formObjstatus);
-        console.log(this.canDeactivate(), 'this.canDeactivate()..');
-        if(saveMethod === 'nav' && isFormnameChanged){
-         // if (this.canDeactivate()) {
-            this.openModal(this.confirmSaveAlert);
-        //  }
-          
-        } else if(saveMethod === 'save' && isFormnameChanged){
-          this.addUpdateDSARForm();  
-        } else{
-            // if(this.crid){
-            //  this.getDSARFormByCRID(this.crid);
-            // } 
-          this.navDirective.select(2);
-        }
-      }else{
-        this.isDirty = true;
-        this.navDirective.select(2); // for first time form creation
-      }
-      
-     this.formwizardStatus.isFormOnefinish = false;
-     this.formwizardStatus.isFormTwofinish = true;
-     
-      // else{
-      //   this.addUpdateDSARForm();
-      // }     
-    
-    }
 
+  loadCurrentProperty(){
+    this.organizationService.currentProperty.subscribe((response) => {
+      //  this.loadingbar.stop();
+      if (response !== '') {
+        this.selectedProperty = response.property_name;
+        this.currentOrganization = response.organization_name;
+        this.orgId = response.organization_id;
+        this.propId = response.property_id;
+      } else {
+        const orgDetails = this.organizationService.getCurrentOrgWithProperty();
+        this.currentOrganization = orgDetails.organization_name;
+        this.selectedProperty = orgDetails.property_name;
+        this.orgId = orgDetails.organization_id;
+        this.propId = orgDetails.property_id;
+        this.loading = false;
+      }
+    });
   }
 
   CreateUpdateDSARForm(formcrid) {
@@ -403,7 +361,6 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
             this.isDraftWebForm = true;
             this.isEditingPublishedForm = true;
           }
-          //  this.selectedApproverID = data.approver;
           // this.selectedWorkflowID = data.workflow;
           const isUUID = uuidRegx.test(data.approver);
           if (isUUID) {
@@ -412,7 +369,6 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
           } else {
             this.selectedApproverID = data.approver_id;
             this.workflow = data.workflow_id;
-            //  this.getWorkflowWithApproverID();
           }
           // this.requestFormControls = data.request_form;
           if (data.request_form) {
@@ -471,7 +427,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
           this.headerColor = t.headerColor;
         } else if (t.controlId === 'fileupload') {
           this.isFileUploadRequired = t.requiredfield;
-          this.isFileuploadRequiredField = (t.ismandatory === '') ? false : true;
+          this.isFileuploadRequiredField = t.ismandatory;
         } else if (t.controlId === 'captchacontrol') {
           this.isCaptchaVerificationRequired = (t.requiredfield === '') ? false : true;
         } else if (t.controlId === 'favicon') {
@@ -513,8 +469,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
 
   loadWebControl() {
     if (this.crid) {
-      this.getDSARFormByCRID(this.crid);
-      this.getWorkflowWithApproverID();
+      this.getDSARFormByCRID(this.crid,'dataview');
       this.loadWorkFlowList();
     } else {
       this.isEditingPublishedForm = false;
@@ -633,10 +588,6 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
         event.previousIndex,
         event.currentIndex);
     }
-  }
-
-  onFormSubmit(data: NgForm) {
-    console.log(data, 'onFormSubmit..');
   }
 
 
@@ -829,7 +780,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
     //  const isLabelExist = this.webFormControlList.filter((t) => t.controllabel === this.trimLabel).length > 0;
     this.changeControlTypes();
     this.cancelAddingFormControl('submit');
-    
+
   }
 
   changeControlTypes() {
@@ -953,7 +904,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
         this.selectOptions.forEach(element => {
           element.keylabel = this.trimLabel;
         });
-        // } 
+        // }
         let updatedControlType;
         if (this.selectOptionControl === 'button' && !this.multiselect) {
           updatedControlType = 'radio';
@@ -1234,7 +1185,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
     } else if (actionType === 'submit' && this.crid !== null) {
       this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
       this.isDirty = true;
-    } 
+    }
       this.isAddingFormControl = false;
       this.isEditingList = false;
       this.inputOrSelectOption = false;
@@ -1250,6 +1201,11 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
   }
 
   saveAsDraftCCPAFormConfiguration(saveType) {
+    this.formSaveMethod = saveType;
+    if(this.customFormFields !== undefined){
+      this.addCustomFields(this.customFormFields);
+    }
+
     if (this.isWebFormPublished && !this.isEditingPublishedForm) {
       this.navDirective.select(3);
     } else {
@@ -1286,80 +1242,77 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
         this.updateWebcontrolIndex(this.registerForm.value, this.webFormControlList);
       }
       this.isWebFormPublished = false;
-      this.isDraftWebForm = true;
-      this.active = 3;
-      if(this.crid){
-        if(this.isDirty && saveType === 'nav'){
-          this.openModal(this.confirmSaveAlert); 
-        }else{
-          this.addUpdateDSARForm();
-        }
-      }
-      this.formwizardStatus.isFormTwofinish = false;
-      this.formwizardStatus.isFormThreefinish = true;
-    }
-  }
-
-  createDraft(saveType) {
-    if (this.isWebFormPublished) {
-      this.navDirective.select(4);
-    } else {
-      this.isResetlinkEnable = false;
-      this.isdraftsubmitted = true;
-      if (this.defaultapprover === undefined) {
-        return false;
-      } else {
-
-        const updatedWebForm = this.crid ? this.ccpaFormConfigService.getFormControlList() : this.dsarFormService.getFormControlList();
-        this.formObject = {
-          form_name: this.formName,
-          form_status: 'draft',
-          settings: {
-            approver: this.defaultapprover,
-            workflow: this.workflow,
-            days_left: Number(this.daysleft),
-            email_verified: this.isEmailVerificationRequired || false,
-            captcha: this.isCaptchaVerificationRequired || false,
-          },
-          request_form: updatedWebForm
-        };
-        let formObjstatus = {
-          form_name: this.formName,
-          form_status: 'draft',
-        }
-        let formRequestForm = {
-          request_form: updatedWebForm
-        }
-        if (this.crid) {
-          this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
-        } else {
-          this.webFormControlList = this.dsarFormService.getFormControlList();
-        }
-        
-        let isFormnameChanged = JSON.stringify(this.pageLoadFormObj) === JSON.stringify(formObjstatus);
-        let isFormSettingsChanged;
-        if (this.pageLoadFormSettingsObj !== undefined) {
-          isFormSettingsChanged = JSON.stringify(this.pageLoadFormSettingsObj.settings) === JSON.stringify(this.formObject.settings);
-        }
-
-        let finalStatus = isFormnameChanged && isFormSettingsChanged && this.isDirty;
-         
-        if (finalStatus && saveType !== 'save') {
+      if(this.active === 2 && saveType !== 'nav'){
+        this.isDraftWebForm = false;
+        this.active = 3;
+      }else if(this.active === 2 && saveType !== 'save'){
+        this.isDraftWebForm = false;
+        this.active = 3;
+        if(this.isDirty){
           this.openModal(this.confirmSaveAlert);
-        } else {
-          this.addUpdateDSARForm();
-          this.navDirective.select(4);
-          this.isDirty = false;
+        }
+      } else{
+        if(this.isDirty){
+          this.openModal(this.confirmSaveAlert);
         }
       }
-      this.formwizardStatus.isFormTwofinish = false;
-      this.formwizardStatus.isFormThreefinish = false;
-      
     }
   }
 
-  addUpdateDSARForm() {
+  addUpdateDSARForm(saveType) {
+    this.formSaveMethod = saveType;
+    // this.isDirty = false;
+  if(this.basicForm.controls['formname'].value === undefined){
+      this.basicFormSubmitted = true;
+      this.alertMsg = `Please complete step 1 Basic`;
+      this.isOpen = true;
+      this.alertType = 'danger';
+      this.navDirective.select(1);
+      this.isDirty = false;
+      this.closeModal();
+      return false;
+  } else if(this.active === 1 && saveType !== 'nav' && this.basicForm.controls['formname'].value === undefined){
+    this.basicFormSubmitted = true;
     this.isDirty = false;
+    this.alertMsg = `Please complete step 1 Basic and save`;
+    this.isOpen = true;
+    this.alertType = 'danger';
+    this.closeModal();
+    this.navDirective.select(1);
+    return false;
+  }  else if(this.active === 2 && saveType !== 'nav' && this.isDirty){
+    this.saveAsDraftCCPAFormConfiguration(saveType);
+  }
+    else if(this.active === 3 && saveType !== 'nav' && this.settingsForm.controls['workflow'].value === undefined && this.settingsForm.controls['selectedApproverID'].value === undefined){
+    this.isdraftsubmitted = true;
+    this.isDirty = false;
+    const stepnumber: number | string = this.formName === undefined ? '1 Basic, 2 Form & 3 Settings': '2 Form & 3 Settings';
+    this.alertMsg = `Please complete step ${stepnumber} and save`;
+    this.isOpen = true;
+    this.alertType = 'danger';
+    this.closeModal();
+    if(this.basicForm.controls['formname'].value === undefined ){
+      this.navDirective.select(1);
+    }else{
+      this.navDirective.select(3);
+    }
+    return false;
+  } else if(this.nextId === 4 && this.settingsForm.controls['workflow'].value === undefined && this.settingsForm.controls['selectedApproverID'].value === undefined ){ //&& this.activeId === 2
+    this.isdraftsubmitted = true;
+    this.isDirty = false;
+    const stepnumber: number | string = this.formName === undefined ? '1 Basic, 2 Form & 3 Settings': '2 Form & 3 Settings';
+    this.alertMsg = `Please complete step ${stepnumber} and save`;
+    this.isOpen = true;
+    this.alertType = 'danger';
+    this.closeModal();
+    if( this.formName === undefined ){
+      this.navDirective.select(1);
+    }else{
+      this.navDirective.select(3);
+    }
+    //return false;
+    }
+    this.formName = this.basicForm.controls['formname'].value;
     let updatedWebForm;
     if(this.crid){
       updatedWebForm = this.ccpaFormConfigService.getFormControlList();
@@ -1367,12 +1320,12 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
       updatedWebForm = this.dsarFormService.getFormControlList();
     }
     this.formObject = {
-      form_name: this.formName,
+      form_name: this.basicForm.controls['formname'].value,
       form_status: 'draft',
       settings: {
-        approver: this.defaultapprover,
+        approver: this.defaultapprover || this.selectedApproverID,
         workflow: this.workflow,
-        days_left: Number(this.daysleft),
+        days_left: Number(this.daysleft) === 0 ? '45' : Number(this.daysleft),
         email_verified: this.isEmailVerificationRequired || false,
         captcha: this.isCaptchaVerificationRequired || false,
       },
@@ -1392,18 +1345,42 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
           this.alertType = 'success';
           this.loadingbar.stop();
           this.isDirty = false;
-            this.decline();
+          this.getDSARFormByCRID(this.crid,'dataupdated');
         }, (error) => {
           this.loadingbar.stop();
           this.alertMsg = error;
           this.isOpen = true;
           this.alertType = 'danger';
-          this.decline();
         });
-         this.isDirty = false;
+        if(this.formSaveMethod !== 'save'){
+          this.modalRef.hide();
+          this.isDirty = false;
+        }
+        this.isDirty = false;
+        if(this.settingsFormchangeSubscription !== undefined){
+          this.settingsFormchangeSubscription.unsubscribe();
+        }else if(this.customFormchangeSubscription !== undefined) {
+          this.customFormchangeSubscription.unsubscribe();
+        } else if(this.basicFormSubscription !== undefined){
+          this.basicFormSubscription.unsubscribe();
+        }
     } else {
-
+      if(this.formSaveMethod !== 'save' && this.isDirty && this.nextId !== 4){
+        if(this.modalRef !== undefined){
+          this.modalRef.hide();
+        }
+        this.isStepCovered = false;
+       // this.isDirty = false;
+       return true;
+      } else if(this.formSaveMethod !== 'save' && !this.isDirty){ // just to check form
+        this.modalRef.hide();
+       // this.isDirty = false;
+        return true;
+      }
+      const isWorkflowApproverIDAvailable = this.settingsForm.controls['workflow'].value !== undefined && this.settingsForm.controls['selectedApproverID'].value !== undefined;
+      if(this.activeId === 3 && this.nextId === 4 || this.active === 3 && isWorkflowApproverIDAvailable){
       this.loadingbar.start();
+     // return false;
       this.ccpaFormConfigService.createCCPAForm(this.orgId, this.propId, this.formObject,
         this.constructor.name, moduleName.dsarWebFormModule)
         .subscribe((data) => {
@@ -1414,115 +1391,131 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
           this.isOpen = true;
           this.alertType = 'success';
           this.isDirty = false;
+          if(this.formSaveMethod !== 'save'){
+            this.modalRef.hide();
+            this.isDirty = false;
+          }else{
+            this.isDirty = false;
+          }
         }, (error) => {
           this.loadingbar.stop();
           this.alertMsg = error;
           this.isOpen = true;
           this.alertType = 'danger';
         });
-      this.isDirty = false;
+        this.isDirty = false;
+        this.settingsFormchangeSubscription.unsubscribe();
+      } else{
+        if(this.formSaveMethod !== 'save'){
+          this.modalRef.hide();
+          this.isDirty = false;
+        }else{
+          this.isDirty = false;
+          if(this.active === 1){
+            this.navDirective.select(2);
+          } else if(this.active === 2){
+            this.navDirective.select(3);
+          } else if(this.active === 3){
+            this.navDirective.select(3);
+          }
+        }
+
+      }
     }
+
   }
 
-  onChangeNavID($event){
-    if($event === 1){
-      this.formwizardStatus.isFormOnefinish = true;
-      this.formwizardStatus.isFormThreefinish = false;
-      this.formwizardStatus.isFormTwofinish = false;
-    }else if($event === 2){
-      this.formwizardStatus.isFormTwofinish = true;
-      this.formwizardStatus.isFormOnefinish = false;
-      this.formwizardStatus.isFormThreefinish = false;
-    } else if($event === 3){
-      this.formwizardStatus.isFormThreefinish = true;
-      this.formwizardStatus.isFormOnefinish = false;
-      this.formwizardStatus.isFormTwofinish = false;
-    } else if($event === 4){
-      this.formwizardStatus.isFormOnefinish = false;
-      this.formwizardStatus.isFormTwofinish = false;
-      this.formwizardStatus.isFormThreefinish = false;
-    }
-  }
-  // this.basicForm.value.formname === '' || this.basicForm.value.formname === undefined || !this.basicFormSubmitted
   onNavChange(changeEvent: NgbNavChangeEvent) {
     if (changeEvent.nextId === 2) {
-      if(changeEvent.nextId === 2 && changeEvent.activeId > 2){
-        if(this.crid){
-          this.getDSARFormByCRID(this.crid);
-       } 
-     }else{
-      this.formName = this.basicForm.controls['formname'].value;
-      this.basicForm.valueChanges.subscribe(e => {
-        if (e.formname !== this.formName) {
-          this.isDirty = true;
-        }
-      });
+      this.activeId = changeEvent.activeId;
+      this.nextId = changeEvent.nextId;
+      this.formSaveMethod = 'nav';
       this.basicFormSubmitted = true;
-      if (this.formName) {
-        this.basicFormdata('nav');
-      } else {
+      this.formName = this.basicForm.controls['formname'].value;
+      if (this.formName === undefined || this.formName === '') {
         changeEvent.preventDefault();
         this.alertMsg = `Please complete step 1 Basic and press next`;
         this.isOpen = true;
         this.alertType = 'danger';
+        this.navDirective.select(1);
+        this.isDirty = false;
+      } else if (this.isDirty) {
+          this.openModal(this.confirmSaveAlert);
       }
-    }
+       else{
+        this.navDirective.select(2);
+      }
     } else if (changeEvent.nextId === 3) {
-      console.log(this.basicDetailForm, 'basicDetailForm..');
-      this.isdraftsubmitted = true;
+      this.activeId = changeEvent.activeId;
+      this.nextId = changeEvent.nextId;
+      this.formSaveMethod = 'nav';
       this.basicFormSubmitted = true;
-      if(this.isDirty){
+      if(this.basicForm.controls['formname'].value !== undefined && this.isDirty){
         this.saveAsDraftCCPAFormConfiguration('nav');
+      }else{
+        if(this.basicForm.controls['formname'].value !== undefined && (this.workflow !== undefined || this.selectedApproverID !== undefined || this.daysleft !== null)){
+          if(this.isdraftsubmitted && this.basicFormSubmitted){
+            this.navDirective.select(3);
+          }
+          // this.basicFormSubmitted = false;
+       //  this.getDSARFormByCRID(this.crid,'dataupdated');
+
+        }else{
+          this.isdraftsubmitted = true;
+          this.basicFormSubmitted = true;
+          this.isDirty = false;
+          changeEvent.preventDefault();
+          const stepnumber: number | string = this.formName === undefined ? '1 Basic, 2 Form & 3 Settings': '2 Form & 3 Settings';
+          this.alertMsg = `Please complete step ${stepnumber} and press next`;
+          this.isOpen = true;
+          this.alertType = 'danger';
+          if(this.basicForm.controls['formname'].value === undefined){
+            this.navDirective.select(1);
+          }else{
+            this.navDirective.select(3);
+          }
+
+        }
       }
     } else if (changeEvent.nextId === 4) {
-      this.isdraftsubmitted = true;
-      this.basicFormSubmitted = true;
-      this.isResetlinkEnable = false;
-      if (this.formName && this.defaultapprover && this.workflow) {
-        this.daysleft !== '' ? this.daysleft = this.daysleft : this.daysleft = 45;
-        let isFormSettingsChanged;
-        const updatedWebForm = this.crid ? this.ccpaFormConfigService.getFormControlList() : this.dsarFormService.getFormControlList();
-        this.formObject = {
-          form_name: this.formName,
-          form_status: 'draft',
-          settings: {
-            approver: this.defaultapprover,
-            workflow: this.workflow,
-            days_left: Number(this.daysleft),
-            email_verified: this.isEmailVerificationRequired || false,
-            captcha: this.isCaptchaVerificationRequired || false,
-          },
-          request_form: updatedWebForm
-        };
-        let formRequestForm = {
-          request_form: updatedWebForm
-        }
-        if (this.crid) {
-          this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
-        } else {
-          this.webFormControlList = this.dsarFormService.getFormControlList();
-        }
-        let isFormFieldsChanged = JSON.stringify(this.webFormControlList) === JSON.stringify(formRequestForm.request_form);
-        if (this.pageLoadFormSettingsObj !== undefined) {
-          isFormSettingsChanged = JSON.stringify(this.pageLoadFormSettingsObj.settings) === JSON.stringify(this.formObject.settings);
-          if (!isFormSettingsChanged && this.showFormStatus() !== 'Publish') {
+        this.formSaveMethod = 'nav';
+          this.activeId = changeEvent.activeId;
+          this.nextId = changeEvent.nextId;
+          this.isdraftsubmitted = true;
+          this.basicFormSubmitted = true;
+          this.isResetlinkEnable = false;
+          if (this.isDirty && this.workflow !== undefined && this.selectedApproverID !== undefined) {
             this.openModal(this.confirmSaveAlert);
           }
-          this.isDirty = false;
-          this.navDirective.select(4);
-        } else {
-          if(this.isDirty){
-            this.addUpdateDSARForm();
-          }
-          this.navDirective.select(4);
-        }
-      } else {
+          else if(this.workflow == undefined && this.selectedApproverID == undefined){
+            this.isdraftsubmitted = true;
+            this.isDirty = false;
         changeEvent.preventDefault();
-        const stepnumber: number | string = '1 Basic, 2 Form & 3 Settings';
+        const stepnumber: number | string = this.formName === undefined ? '1 Basic, 2 Form & 3 Settings': '2 Form & 3 Settings';
         this.alertMsg = `Please complete step ${stepnumber} and press next`;
         this.isOpen = true;
         this.alertType = 'danger';
+        this.navDirective.select(3);
       }
+      else {
+        this.isStepCovered = true;
+        this.navDirective.select(3);
+      }
+    } else {
+      this.navDirective.select(this.activeId);
+    }
+  }
+
+  onChangeDaysLeft($event,daysleft){
+    if ($event.target.value <= 45) {
+      this.errorMsgdaysleft = '';
+      this.isDirty = true;
+     if(this.settingsForm !== undefined){
+      this.settingsForm.control.get("daysleft").setValue($event.target.value);
+     }
+    }else{
+      this.isDirty = false;
+      this.errorMsgdaysleft = 'Should not greater than 45';
     }
   }
 
@@ -1537,7 +1530,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
           this.alertMsg = resp.response;
           this.isOpen = true;
           this.alertType = 'success';
-          this.getDSARFormByCRID(this.crid);
+          this.getDSARFormByCRID(this.crid,'dataupdated');
           this.navDirective.select(4);
           this.getWebFormScriptLink();
           this.loadingbar.stop();
@@ -1596,10 +1589,12 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
   }
 
   rearrangeFormSequence(dataArray) {
+    if(dataArray !== null){
     dataArray.sort((a, b) => {
       return a.preferControlOrder - b.preferControlOrder;
     });
     return dataArray;
+    }
   }
 
   priviewPublishedForm() {
@@ -1618,6 +1613,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
   editQuillEditorDataPopup(content, field) {
     if (field === 'welcomeText') {
       this.isWelcomeEditor = true;
+      this.isDirty = true;
       if (this.crid) {
         this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
         if (this.webFormControlList !== null) {
@@ -1632,6 +1628,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
 
     } else {
       this.isWelcomeEditor = false;
+      this.isDirty = true;
       if (this.crid) {
         this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
         if (this.webFormControlList !== null) {
@@ -1716,12 +1713,14 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
 
   loadDefaultApprover() {
     if (this.orgId) {
+      setTimeout(()=>{
       this.organizationService.getOrgTeamMembers(this.orgId).subscribe((data) => {
         this.ApproverList = data.response;
         const filterValue = this.ApproverList.filter((t) => t.approver_id === this.selectedApproverID);
         if (filterValue.length > 0) {
           this.defaultapprover = filterValue[0].approver_id;
         }
+      });
       });
     }
   }
@@ -1806,56 +1805,70 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
 
   getWorkflowWithApproverID() {
     const retrivedData = this.ccpaFormConfigService.getCurrentSelectedFormData();
-    this.selectedApproverID = retrivedData.approver;
-    this.workflow = retrivedData.workflow;
-   // this.formName = this.formName || retrivedData.form_name;
-    this.isEmailVerificationRequired = retrivedData.email_verified;
-    this.daysleft = retrivedData.days_left;
-    retrivedData.request_form.filter((t) => {
-      if (t.controlId === 'fileupload') {
-        this.isFileUploadRequired = t.requiredfield;
-        this.isFileuploadRequiredField = (t.ismandatory === '') ? false : true;
-      } else if (t.controlId === 'captchacontrol') {
-        this.isCaptchaVerificationRequired = t.requiredfield;
-      } else if (t.controlId === 'footertext') {
-        this.footerText = t.footerText;
-        this.footerTextColor = t.footerTextColor;
-        this.footerFontSize = t.footerFontSize;
-      } else if (t.controlId === 'welcometext') {
-        this.welcomeText = t.welcomeText;
-        this.welcomeTextColor = t.welcomeTextColor;
-        this.welcomeFontSize = t.welcomeFontSize;
-      } else if (t.controlId === 'headerlogo') {
-        this.headerlogoBase64 = t.logoURL;
-        this.headerColor = t.headerColor;
-      } else if (t.controlId === 'favicon') {
-        this.headerfaviconBase64 = t.faviconURL;
+    if(retrivedData !== null){
+    if(retrivedData.approver){
+      this.defaultapprover = retrivedData.approver;
+      this.selectedApproverID = retrivedData.approver;
+      this.workflow = retrivedData.workflow;
+      this.isEmailVerificationRequired = retrivedData.email_verified;
+      this.daysleft = retrivedData.days_left;
+    }else if(retrivedData.approver_id !== undefined){
+      this.defaultapprover = retrivedData.approver_id;
+      this.selectedApproverID = retrivedData.approver_id;
+      this.workflow = retrivedData.workflow_id;
+      this.daysleft = retrivedData.days_left;
+    }
+    if(retrivedData.request_form !== undefined && retrivedData.request_form !== null){
+      retrivedData.request_form.filter((t) => {
+        if (t.controlId === 'fileupload') {
+          this.isFileUploadRequired = t.requiredfield;
+          this.isFileuploadRequiredField = t.ismandatory;
+        } else if (t.controlId === 'captchacontrol') {
+          this.isCaptchaVerificationRequired = t.requiredfield;
+        } else if (t.controlId === 'footertext') {
+          this.footerText = t.footerText;
+          this.footerTextColor = t.footerTextColor;
+          this.footerFontSize = t.footerFontSize;
+        } else if (t.controlId === 'welcometext') {
+          this.welcomeText = t.welcomeText;
+          this.welcomeTextColor = t.welcomeTextColor;
+          this.welcomeFontSize = t.welcomeFontSize;
+        } else if (t.controlId === 'headerlogo') {
+          this.headerlogoBase64 = t.logoURL;
+          this.headerColor = t.headerColor;
+        } else if (t.controlId === 'favicon') {
+          this.headerfaviconBase64 = t.faviconURL;
+        }
+      });
+
+      if (retrivedData.form_status === 'draft') {
+        this.isDraftWebForm = true;
+        this.isWebFormPublished = false;
+        this.isEditingPublishedForm = true;
       }
-    });
-    if (retrivedData.form_status === 'draft') {
-      this.isDraftWebForm = true;
-      this.isWebFormPublished = false;
-      this.isEditingPublishedForm = true;
-    }
 
-    this.pageLoadFormObj = {
-      form_name: this.formName,
-      form_status: retrivedData.form_status, // 'draft',
-    };
+      this.pageLoadFormObj = {
+        form_name: retrivedData.form_name,
+        form_status: retrivedData.form_status, // 'draft',
+      };
 
-    this.pageLoadFormSettingsObj = {
-      settings: {
-        approver: this.selectedApproverID, // this.defaultapprover,
-        workflow: this.workflow,
-        days_left: Number(this.daysleft),
-        email_verified: this.isEmailVerificationRequired || false,
-        captcha: this.isCaptchaVerificationRequired || false
+      this.pageLoadFormSettingsObj = {
+        settings: {
+          approver: this.selectedApproverID, // this.defaultapprover,
+          workflow: this.workflow,
+          days_left: Number(this.daysleft),
+          email_verified: this.isEmailVerificationRequired || false,
+          captcha: this.isCaptchaVerificationRequired || false
+        }
+      }
+
+      this.pageLoadFormControls = {
+        request_form: retrivedData.request_form
       }
     }
-
-    this.pageLoadFormControls = {
-      request_form: retrivedData.request_form
-    }
+  } else{
+    return false;
+  }
   }
 
   uploadFile(event) {
@@ -1882,6 +1895,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
   }
 
   allowFileupload(event) {
+    this.isDirty = true;
     this.isFileUploadRequired = event.target.checked;
     (this.isFileUploadRequired) ? this.isFileuploadRequiredFieldVisible = true : this.isFileuploadRequiredFieldVisible = false;
     if (this.crid) {
@@ -1911,10 +1925,12 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
   }
 
   allowEmailVerification(event) {
+    this.isDirty = true;
     this.isEmailVerificationRequired = event.target.checked;
   }
 
   allowCaptchaVerification(event) {
+    this.isDirty = true;
     this.isCaptchaVerificationRequired = event.target.checked;
     if (this.crid) {
       this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
@@ -1945,6 +1961,8 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
       this.imgUrl = 'https://develop-cmp-api.adzpier-staging.com/api/v1/captcha/image';
     } else if (window.location.hostname === 'cmp.adzpier-staging.com') {
       this.imgUrl = 'https://privacyportal.adzpier-staging.com/api/v1/captcha/image';
+    } else if (window.location.hostname === 'portal.adzapier.com') {
+      this.imgUrl = 'https://privacyportal.primeconsent.com/api/v1/captcha/image';
     }
 
     this.ccpaFormConfigService.getCaptcha(this.constructor.name, moduleName.dsarWebFormModule).subscribe((data) => {
@@ -1996,10 +2014,6 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
     }
   }
 
-  ngOnDestroy() {
-    this.webFormControlList = [];
-    this.selectedwebFormControlList = [];
-  }
 
   copyToClipBoard(contentType) {
     let textarea = null;
@@ -2085,6 +2099,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
   fileChangeEvent(fileInput: any) {
     this.imageError = null;
     if (fileInput.target.files && fileInput.target.files[0]) {
+      this.isDirty = true;
       // Size Filter Bytes
       const max_size = 1000000;
       const allowed_types = ['image/png', 'image/jpeg'];
@@ -2127,11 +2142,13 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
             const imgBase64Path = e.target.result;
             this.headerlogoBase64 = imgBase64Path;
             this.isImageSaved = true;
+            this.setHeaderStyle();
             // this.previewImagePath = imgBase64Path;
           }
         };
+        this.cdRef.markForCheck();
       };
-      this.setHeaderStyle();
+     // this.setHeaderStyle();
       // this.getWorkflowWithApproverID();
       reader.readAsDataURL(fileInput.target.files[0]);
     }
@@ -2140,6 +2157,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
   faviconChangeEvent(fileInput: any) {
     this.imageError = null;
     if (fileInput.target.files && fileInput.target.files[0]) {
+      this.isDirty = true;
       // Size Filter Bytes
       const max_size = 1000000;
       const allowed_types = ['image/png', 'image/jpeg'];
@@ -2148,7 +2166,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
       this.faviconFilename = fileInput.target.files[0].name;
       const fileExtn = fileInput.target.files[0].name.split('.').pop();
       this.faviconFilesize = this.formatBytes(fileInput.target.files[0].size);
-      
+
       const reader = new FileReader();
       reader.onload = (e: any) => {
         const image = new Image();
@@ -2169,10 +2187,12 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
             const imgBase64Path = e.target.result;
             this.headerfaviconBase64 = imgBase64Path;
             this.isImageSaved = true;
+            this.setHeaderStyle();
           }
         };
+        this.cdRef.markForCheck();
       };
-      this.setHeaderStyle();
+     // this.setHeaderStyle();
       reader.readAsDataURL(fileInput.target.files[0]);
     }
   }
@@ -2197,6 +2217,8 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
     this.logoWidth = 0;
     this.logoHeight = 0;
     this.logoFilename = '';
+    this.isDirty = true;
+    this.setHeaderStyle();
     this.headerLogoForm.reset();
   }
 
@@ -2206,15 +2228,21 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
     this.logoWidth = 0;
     this.logoHeight = 0;
     this.faviconFilename = '';
+    this.isDirty = true;
+    this.setHeaderStyle();
     this.faviconForm.reset();
   }
 
-  getDSARFormByCRID(responsID) {
+  getDSARFormByCRID(responsID,actionperformed) {
     //  this.loadingbar.start();
     if (this.orgId && this.propId) {
-      this.ccpaFormConfigService.getCCPAFormConfigByID(this.orgId, this.propId, responsID,
+     return this.ccpaFormConfigService.getCCPAFormConfigByID(this.orgId, this.propId, responsID, actionperformed,
         this.constructor.name, moduleName.dsarWebFormModule).subscribe((data) => {
+         // this.ccpaFormConfigService.captureCurrentSelectedFormData(data);
           // tslint:disable-next-line: max-line-length
+         if(data){
+          this.ccpaFormConfigService.removeCurrentSelectedFormData();
+          this.ccpaFormConfigService.captureCurrentSelectedFormData(data);
           if (this.isResetlinkEnable && this.isWebFormPublished && this.isEditingPublishedForm) {
             if (this.basicForm.controls['formname'].value !== '') {
               this.basicForm.controls['formname'].setValue(this.basicForm.controls['formname'].value);
@@ -2226,14 +2254,19 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
           this.pageLoadFormObj = {
             form_name: data.response.form_name,
             form_status: data.response.form_status
-          }       
+          }
+          this.selectedApproverID = data.response.settings.approver;// || retrivedData.approver_id;
+          this.workflow = data.response.settings.workflow;// || retrivedData.workflow_id;
+         // this.formName = this.formName || retrivedData.form_name;
+          this.isEmailVerificationRequired = data.response.email_verified || data.response.settings.email_verified || false;
+          this.daysleft = data.response.settings.days_left;
 
           const key = 'request_form';
           this.webFormControlList = data.response[key];
           data.response[key].filter((t) => {
             if (t.controlId === 'fileupload') {
               this.isFileUploadRequired = t.requiredfield;
-              this.isFileuploadRequiredField = (t.ismandatory === '') ? false : true;
+              this.isFileuploadRequiredField = t.ismandatory;
             } else if (t.controlId === 'captchacontrol') {
               this.isCaptchaVerificationRequired = t.requiredfield;
             } else if (t.controlId === 'footertext') {
@@ -2282,6 +2315,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
             }
           }
           // this.loadingbar.stop();
+        }
         }, (error) => {
           this.alertMsg = error;
           this.isOpen = true;
@@ -2289,11 +2323,12 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
         }
         );
     }
+    this.isDirty = false;
   }
 
   editFormAfterPublish() {
     this.isEditingPublishedForm = !this.isEditingPublishedForm;
-    this.isWebFormPublished = true;
+    this.isWebFormPublished = false;
     this.isDraftWebForm = true;
     this.pageLoadFormObj = {
       form_name: this.formName,
@@ -2330,18 +2365,34 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
   }
 
   decline() {
-    this.isDirty = false;
     this.modalRef.hide();
+  }
+
+  closeModal() {
+    if(this.formSaveMethod === 'nav'){
+     // this.isDirty = false;
+      if(this.modalRef !== undefined){
+        this.modalRef.hide();
+      }
+    } else{ // for edit button
+      if(this.modalRef !== undefined){
+        this.modalRef.hide();
+      }
+    }
   }
 
   resetWebform() {
     this.isEditingPublishedForm = !this.isEditingPublishedForm;
-    this.getDSARFormByCRID(this.crid);
-    this.loadDefaultApprover();
-    this.CreateUpdateDSARForm(this.crid);
-    this.getWorkflowWithApproverID();
-    this.isDirty = false;
+    this.isdraftsubmitted = false;
+    this.basicFormSubmitted = false;
+    if(this.crid){
+      this.isDirty = false;
+      this.getDSARFormByCRID(this.crid,'existingdata');
+    }
+  //  this.isDirty = false;
     this.modalRef.hide();
+    this.navDirective.select(this.activeId);
+   // return false;
   }
 
   disableEditPublishBtn(): boolean {
@@ -2387,9 +2438,6 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
     this.isDirty = true;
   }
 
-  ngAfterContentChecked() {
-    this.cd.detectChanges();
-  }
 
   onLabelChange($event) {
   //  this.cd.detectChanges();
@@ -2430,6 +2478,59 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
   canDeactivate() {
     return this.isDirty;
   }
+
+  ngAfterContentChecked() {
+    this.cd.detectChanges();
+  }
+
+  ngAfterViewChecked(){
+    this.cdRef.detectChanges();
+    if(this.customFormFields !== undefined){
+      this.customFormchangeSubscription = this.customFormFields.valueChanges.subscribe((data)=> {
+        if(this.customFormFields.form.dirty){
+        this.isDirty = true;
+        }
+      });
+    }
+   if(this.settingsForm !== undefined){
+      this.settingsFormchangeSubscription = this.settingsForm.valueChanges.subscribe(e => {
+        // console.log(e,'settingsForm..afterviewchecked');
+      if(this.settingsForm.form.dirty){
+         this.isDirty = true;
+      }
+    });
+   }
+   if(this.basicForm !== undefined){
+    this.basicFormSubscription = this.basicForm.valueChanges.subscribe(e => {
+      if (e.formname !== this.formName) {
+        this.isDirty = true;
+      }else{
+        this.isDirty = false;
+      }
+    });
+   }
+
+  }
+
+  // ngAfterViewInit(){
+  //   this.cdRef.detectChanges();
+  // }
+
+  ngOnDestroy() {
+    this.webFormControlList = [];
+    this.selectedwebFormControlList = [];
+    if(this.customFormchangeSubscription !== undefined){
+      this.customFormchangeSubscription.unsubscribe();
+    }
+    if(this.settingsFormchangeSubscription !== undefined){
+      this.settingsFormchangeSubscription.unsubscribe();
+    }
+    if(this.basicFormSubscription !== undefined){
+      this.basicFormSubscription.unsubscribe();
+    }
+
+  }
+
 }
 
 interface CustomControls {

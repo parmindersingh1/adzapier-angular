@@ -361,10 +361,23 @@
     width: 100%;
     padding-top: 200px;
     height: 100%;
-    background: rgba(0, 0, 0, 0.1);
+    background: #fff;
   }
   .loading-text {
     font-weight: 600;
     font-size: 17px;
     margin-top: 7px;
   }
+  
+.highlight-activeplan {
+  background-color: #f4f5f8;
+  margin: 0 -20px -50px -20px;
+  padding: 0 20px 33px 20px;
+  border-radius: 5px;
+}
+
+.current-activeplan {
+  margin-left: 22px;
+  font-size: 16px !important;
+  margin-bottom: 49px;
+}

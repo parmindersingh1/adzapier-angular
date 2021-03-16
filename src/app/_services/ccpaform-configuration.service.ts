@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { Observable, BehaviorSubject, of } from 'rxjs';
 import { WebControls } from '../_models/webcontrols';
 import { CCPAFormFields } from '../_models/ccpaformfields';
-import { shareReplay, map, switchMap, catchError } from 'rxjs/operators';
+import { shareReplay, map,  catchError, tap, share, finalize } from 'rxjs/operators';
 import {LokiService} from './loki.service';
 import {LokiFunctionality, LokiStatusType} from '../_constant/loki.constant';
 import {throwError} from 'rxjs';
@@ -19,6 +19,8 @@ export class CCPAFormConfigurationService extends WebControls {
   currentFormData = this.captureFormDataWhileNavigate.asObservable();
   subjectType: any;
   requestType: any;
+  dsarformbycrid: any;
+  cachedDSARObservable: Observable<any>;
   constructor(private httpClient: HttpClient, private lokiService: LokiService) {
     super();
     // this.loadCreatedWebControls();
@@ -89,10 +91,15 @@ export class CCPAFormConfigurationService extends WebControls {
     }));
   }
 
-  getCCPAFormList(orgId, propId, componentName, moduleName): Observable<any> {
+  getCCPAFormList(orgId, propId, componentName, moduleName, pagelimit?): Observable<any> {
     // this.ccpaFormList$ =
     const key = 'response';
-    const path = '/ccpa/form/' + orgId + '/' + propId;
+    let path;
+    if(pagelimit !== undefined){
+      path = '/ccpa/form/' + orgId + '/' + propId + pagelimit;
+    }else{
+      path = '/ccpa/form/' + orgId + '/' + propId; 
+    }
     return this.httpClient.get<any>(environment.apiUrl + path).pipe(
       map(res => res[key]),
       catchError(error => {
@@ -104,15 +111,28 @@ export class CCPAFormConfigurationService extends WebControls {
     // return this.ccpaFormList$;
   }
 
-  getCCPAFormConfigByID(orgId, propId, ccparequestid, componentName, moduleName): Observable<any> {
-    const path = '/ccpa/form/' + orgId + '/' + propId + '/' + ccparequestid;
-    return this.httpClient.get<any>(environment.apiUrl + path ).pipe(
-      shareReplay(1),
-      catchError(error => {
-        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.getCCPAFormConfigByID, componentName, moduleName, path);
-        return throwError(error);
-      })
-    );
+  getCCPAFormConfigByID(orgId, propId, ccparequestid,actionperformed, componentName, moduleName): Observable<any> {
+    let observable: Observable<any>;
+      if (this.dsarformbycrid !== undefined && this.dsarformbycrid.response.crid === ccparequestid && actionperformed !== 'dataupdated') {
+        observable = of(this.dsarformbycrid);
+      }  else if (this.cachedDSARObservable) {
+        observable = this.cachedDSARObservable;
+      } else {
+        const path = '/ccpa/form/' + orgId + '/' + propId + '/' + ccparequestid;
+        this.cachedDSARObservable = this.httpClient.get<any>(environment.apiUrl + path )
+          .pipe(
+            tap(res => this.dsarformbycrid = res),
+            share(),
+            finalize(() => this.cachedDSARObservable = null),
+            catchError(error => {
+              this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.getCCPAFormConfigByID, componentName, moduleName, path);
+              return throwError(error);
+            })
+          );
+        observable = this.cachedDSARObservable;
+      }
+    return observable;
+
   }
 
   captureCurrentSelectedFormData(currentItem) {

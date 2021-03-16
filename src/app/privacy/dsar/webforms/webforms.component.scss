@@ -77,6 +77,32 @@
     text-transform: capitalize !important;
 }
 
+.webform-wrapper .card-columns {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.webform-wrapper .card-columns .card {
+    display: inline-block;
+    width: 32%;
+}
+
+
+.align-item-start {
+    align-items: flex-start;
+}
+
+.pagination-wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: baseline;
+    border-top: 1px solid #ccc;
+    /* background: #ccc; */
+    padding: 10px 20px 10px 20px;
+    margin: 0 -20px -19px -20px;
+}
+
 @media(max-width:768px){
     .card-columns{
         column-count: 2;

@@ -106,7 +106,7 @@ input[type=color] {
   // width: 52px;
   // height: 28px;
   width: 45px;
-    height: 22px;
+  height: 21px;
 }
 
 .switch input {
@@ -132,8 +132,8 @@ input[type=color] {
   content: "";
   height: 17px;
   width: 17px;
-  left: 0px;
-  bottom: 3px;
+  left: 3px;
+  bottom: 2px;
   background-color: white;
   -webkit-transition: .4s;
   transition: .4s;
@@ -151,9 +151,9 @@ input:focus + .slider {
 }
 
 input:checked + .slider:before {
-  -webkit-transform: translateX(26px);
-  -ms-transform: translateX(26px);
-  transform: translateX(26px);
+  -webkit-transform: translateX(22px);
+  -ms-transform: translateX(22px);
+  transform: translateX(22px);
 }
 
 /* Rounded sliders */
@@ -256,4 +256,85 @@ h4 {
 
 .global-text {
   margin-left: 30px !important;
+}
+.lang-title {
+  margin: 0px;
+}
+.lang-table-box {
+  height: 300px;
+  overflow: auto;
+}
+
+.setting-icon{
+  cursor: pointer;
+  font-size: 25px;
+  padding-top: 7px;
+  color: #8392a5;
+}
+
+
+.border-gray {
+  border: 1px solid #ccc;
+}
+
+.banner-config-title {
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 5px;
+  padding: 10px;
+  /* color: #333; */
+  font-weight: 600;
+  background: #fbfbfb;
+  margin: 0 -15px;
+}
+
+.common-action {
+  width: 100%;
+  flex-direction: row;
+  display: flex;
+  align-items: baseline;
+}
+
+.hide-banner-config {
+  display: none;
+}
+
+.showbanner-config {
+  display: block;
+}
+
+.show-controls{
+  display: flex;
+}
+
+.hide-controls{
+  display: none;
+}
+
+.regulation-div .form-group label {
+  margin-bottom: 0;
+}
+
+
+.feather-16{
+  width: 16px;
+  height: 16px;
+  margin: 0 15px 0 0;
+}
+
+h6 ::ng-deep .tooltip {
+  top: 6px !important;
+}
+
+h6 ::ng-deep .tooltip .arrow {
+  display: block;
+}
+
+h6 ::ng-deep .tooltip-inner {
+  font-size: 11px;
+  padding: 2px 4px;
+  width: 220px;
+}
+
+h6 ::ng-deep .tooltip-arrow .arrow {
+  display: block;
 }
