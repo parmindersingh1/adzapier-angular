@@ -1,6 +1,6 @@
 import {
   Component, OnInit, OnDestroy, ViewChild, ViewEncapsulation,
-  ChangeDetectionStrategy, ChangeDetectorRef, ElementRef, AfterContentChecked, TemplateRef
+  ChangeDetectionStrategy, ChangeDetectorRef, ElementRef, AfterContentChecked, AfterViewChecked, TemplateRef
 } from '@angular/core';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { FormBuilder, FormGroup, NgForm, FormControl, Validators } from '@angular/forms';
@@ -27,7 +27,7 @@ import { DirtyComponents } from 'src/app/_models/dirtycomponents';
   changeDetection: ChangeDetectionStrategy.Default
 
 })
-export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy, DirtyComponents {
+export class DsarformComponent implements OnInit, AfterContentChecked, AfterViewChecked, OnDestroy, DirtyComponents {
   @ViewChild('editor', { static: true }) editor;
   @ViewChild('azEmbedCode') public azEmbedCode: ElementRef<any>;
   @ViewChild('shareLinkCode') public shareLinkCode: ElementRef<any>;
@@ -2355,7 +2355,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
       this.isModalOpen = status ? true : false;
       this.modalSubscription.unsubscribe();
     });
-    this.modalRef = this.bsmodalService.show(template, { class: '' });
+    this.modalRef = this.bsmodalService.show(template, { class: '', keyboard: false, backdrop: true, ignoreBackdropClick: true });
   }
 
   confirmForEditing() {
@@ -2385,8 +2385,9 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
     this.isEditingPublishedForm = !this.isEditingPublishedForm;
     this.isdraftsubmitted = false;
     this.basicFormSubmitted = false;
-    if(this.crid){
+    if(this.crid || this.settingsForm.form.dirty){
       this.isDirty = false;
+      this.settingsForm.form.markAsPristine();
       this.getDSARFormByCRID(this.crid,'existingdata');
     }
   //  this.isDirty = false;
@@ -2484,12 +2485,14 @@ export class DsarformComponent implements OnInit, AfterContentChecked, OnDestroy
   }
 
   ngAfterViewChecked(){
-    this.cdRef.detectChanges();
+    // this.cdRef.detectChanges();
     if(this.customFormFields !== undefined){
       this.customFormchangeSubscription = this.customFormFields.valueChanges.subscribe((data)=> {
+      if(this.customFormFields !== undefined){
         if(this.customFormFields.form.dirty){
         this.isDirty = true;
         }
+      }
       });
     }
    if(this.settingsForm !== undefined){

@@ -1320,8 +1320,10 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
       fd.append('task_response', this.subTaskResponseForm.get('taskresponse').value);
       fd.append('mark_completed', this.subTaskResponseForm.get('markcompleted').value);
       //  fd.append('upload', this.subTaskResponseForm.get('uploaddocument').value);
-      for (var i = 0; i < this.multipleFile.length; i++) {
-        fd.append('upload[]', this.multipleFile[i]);
+      if(this.multipleFile.length !== 0){
+        for (var i = 0; i < this.multipleFile.length; i++) {
+          fd.append('upload[]', this.multipleFile[i]);
+        }
       }
       //  return false;
       this.dsarRequestService.addSubTaskResponse(this.selectedTaskID, fd, this.constructor.name, moduleName.dsarRequestModule)
