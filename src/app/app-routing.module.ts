@@ -4,6 +4,7 @@ import { AuthGuard } from './_helpers';
 import { PagenotfoundComponent } from './errorpages/pagenotfound.component';
 import { InternalerrorComponent } from './errorpages/internalerror.component';
 import { PagenotfoundComponent1 } from './errorpages/404page.component';
+import { ConsentSolutionsComponent } from './privacy/consent_solutions/consent-solutions/consent-solutions.component';
 
 const routes: Routes = [
 
@@ -27,6 +28,7 @@ const routes: Routes = [
   //     import('./pagesettings/billing/pricing/pricing.module').then(m => m.PricingModule)},
   { path: 'resetpswd/:id', loadChildren: () => import('./resetpassword/resetpassword.module').then(m => m.ResetpasswordModule) },
   { path: 'pagenotfound', component: PagenotfoundComponent },
+  {path: 'consent',component: ConsentSolutionsComponent},
   { path: '404page', component: PagenotfoundComponent1 },
   { path: 'internalerror', component: InternalerrorComponent },
   { path: 'privacy/dsar/dsarform', loadChildren: () => import('./privacy/dsar/dsarform/dsarform.module').then(m => m.DsarformModule) },

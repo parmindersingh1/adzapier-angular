@@ -21,6 +21,12 @@ import { WelcomeComponent } from './welcome/welcome.component';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import {NgbCollapseModule} from '@ng-bootstrap/ng-bootstrap';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
+import { ConsentSolutionsComponent } from './privacy/consent_solutions/consent-solutions/consent-solutions.component';
+import { TabsModule } from 'ngx-bootstrap/tabs';
+import {ButtonModule} from 'primeng/button';
+import {TableModule} from 'primeng/table';
+
+
 
 @NgModule({
   declarations: [
@@ -41,7 +47,8 @@ import { TooltipModule } from 'ngx-bootstrap/tooltip';
    //  CCPAComponent,
    // VerifyemailComponent,
    //  CheckoutConfirmationComponent,
-    WelcomeComponent
+    WelcomeComponent,
+    ConsentSolutionsComponent
   ],
   imports: [
     BrowserModule,
@@ -67,7 +74,10 @@ import { TooltipModule } from 'ngx-bootstrap/tooltip';
     ModalModule.forRoot(),
     // TabsModule.forRoot(),
     // AccordionModule.forRoot(),
-    NgbCollapseModule
+    NgbCollapseModule,
+    TabsModule.forRoot(),
+    ButtonModule,
+    TableModule
   ],
   providers: [
     NgxUiLoaderService,
