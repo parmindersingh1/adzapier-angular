@@ -9,6 +9,23 @@
     
 }
 
+.borderless td{
+    border: none;
+}
+.borderless th{
+    border-bottom: 1px solid rgb(218, 214, 214);
+}
+
+.droped{
+    border-radius: 20px;
+    margin-right: 10px;
+
+}
+.sel{
+    border-radius:25px;}
+
+
+
 .dot {
   height: 85px;
   width: 85px;
@@ -48,8 +65,9 @@
 
   .pbut{
     border-radius: 30px;
-    width: 70px;
-    height: 40px;
+    text-align: center;
+    width: 60px;
+    height: 33px;
   }
 
 input[type='radio']:checked:after {

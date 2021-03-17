@@ -28,7 +28,7 @@ const routes: Routes = [
   //     import('./pagesettings/billing/pricing/pricing.module').then(m => m.PricingModule)},
   { path: 'resetpswd/:id', loadChildren: () => import('./resetpassword/resetpassword.module').then(m => m.ResetpasswordModule) },
   { path: 'pagenotfound', component: PagenotfoundComponent },
-  {path: 'consent',component: ConsentSolutionsComponent},
+  {path: 'privacy/consent_solutions/consent-solutions',component: ConsentSolutionsComponent},
   { path: '404page', component: PagenotfoundComponent1 },
   { path: 'internalerror', component: InternalerrorComponent },
   { path: 'privacy/dsar/dsarform', loadChildren: () => import('./privacy/dsar/dsarform/dsarform.module').then(m => m.DsarformModule) },

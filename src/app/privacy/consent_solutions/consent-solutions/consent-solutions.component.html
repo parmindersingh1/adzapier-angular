@@ -1,11 +1,11 @@
 <div class="container-fluid">
-  <div class="row">
+  <div class="row mt-2">
       <div class="col-sm-1">
-        <i class="pi pi-desktop desk_img" style="font-size: 3.5rem;opacity: 0.5;"></i>
+        <i class="pi pi-desktop desk_img" style="font-size: 3.2rem;opacity: 0.5;"></i>
       </div>
       <div class="col-sm-11">
         <div class=" ml-1 mt-3 d-flex" style="justify-content: space-between;">
-          <h1 style="opacity: 0.8;">My website</h1>
+          <h2 style="opacity: 0.8;">My website</h2>
           <button type="button" class="btn btn-primary pbut">Edit</button>
         </div>
 
@@ -15,23 +15,22 @@
            <div>
                <input type="radio" name="Ultra"><b class="ml-3" style="opacity: 0.6;">Ultra</b>
            </div>
-          <h5 class="ml-5" style="opacity: 0.6;">Type: Site</h5>
-          <h5 class="ml-5" style="opacity: 0.6;">Owner: Adzapier</h5>
+          <h6 class="ml-4" style="opacity: 0.6;">Type: Site</h6>
+          <h6 class="ml-4" style="opacity: 0.6;">Owner: Adzapier</h6>
           </div>
 
           <div class="col-sm-5 d-flex documents" >
-              <h5 class="ml-5" style="opacity: 0.6;" >Document Languages:</h5>
-              <div class="d-flex" >
-                  <div class="dropdown">
-                      <button class="dropbtn">ADD</button>
-                      <div class="dropdown-content">
-                        <a href="#">Link 1</a>
-                        <a href="#">Link 2</a>
-                        <a href="#">Link 3</a>
-                      </div>
-                  </div>
-              
-              <a href="#"><i class="pi pi-trash mt-1" style="font-size: 1.1rem"></i></a>
+              <h6 class="ml-5" style="opacity: 0.6;" >Document Languages:</h6>
+              <div class="d-flex">
+                <div class="droped">
+                <select class="sel" name="languages" id="cars">
+                  <option value="volvo">English</option>
+                  <option value="saab">French</option>
+                  <option value="mercedes">german</option>
+                  <option value="audi">Spanish</option>
+                </select>
+                </div> 
+              <a href="#"><i class="pi pi-trash" style="font-size: 1.1rem"></i></a>
               </div>
           </div>
         </div>
@@ -42,15 +41,16 @@
     
 
     <div style="margin-top: 100px;">
-        <h3 class="headings mb-4">CONSENT SOLUTION DASHBOARD</h3>
+        <h4 class="headings mb-4">CONSENT SOLUTION DASHBOARD</h4>
        
+
      
       
-<tabset #tabset>
-<tab customClass="customClass"
+<tabset #tabset >
+<tab customClass="customClass" 
   heading="CONSENTS">
-  <div style="overflow-x:scroll;height:50vh;margin-top: 20px;">
-  <table class="table" >
+  <div style="overflow:auto;height:50vh;margin-top: 20px;">
+  <table class="table borderless">
       <thead>
           <tr>
               <th><b>Creation Date</b></th>
@@ -59,25 +59,26 @@
               <th></th>
           </tr>
       </thead>
-      <tbody>
-          <tr *ngFor="let consen of data">
+      <tbody style="overflow-x:scroll;height:50vh;margin-top: 20px;">
+          <tr *ngFor="let consen of data" >
               <td>{{consen.creation}}</td>
               <td>{{consen.subject}}</td>
               <td>{{consen.source}}</td>
               <td style="text-align-last:right;">
-                  <a href="#"><i class="pi pi-user mr-3" style="font-size: 1.2rem;"></i></a>
-                  <a href="#"><i class="pi pi-eye" style="font-size: 1.2rem"></i></a>
+                  <a href="#"><i class="pi pi-user mr-3" style="font-size: 1.1rem;"></i></a>
+                  <a href="#"><i class="pi pi-eye" style="font-size: 1.1rem"></i></a>
               </td>
           </tr>
       </tbody>
   </table>
-</div>
+  </div>
+
 </tab>
 
 <tab class="tbs" customClass="customClass"
   heading="SUBJECTS">
-  <div style="overflow-x:scroll;height:50vh;margin-top: 20px;">
-  <table class="table" >
+  <div style="overflow:auto;height:50vh;margin-top: 20px;">
+  <table class="table borderless" >
       <thead>
           <tr>
               <th><b>Creation Date</b></th>
@@ -91,13 +92,13 @@
           <tr *ngFor="let consen of data">
               <td>{{consen.creation}}</td>
               <td>{{consen.subject}}</td>
-              <td style="text-align-last:center;"><a href="#"><i class="pi pi-times" style="font-size: 1.2rem; color: black;"></i></a>
+              <td style="text-align-last:center;"><a href="#"><i class="pi pi-times" style="font-size: 1.1rem; color: black;"></i></a>
               </td>
-              <td><button pButton type="button" label="newsletter" style="margin-right: 5px; height: 40px;"></button>
-                  <button pButton type="button" style="height: 40px;" label="generic"></button>
+              <td><button pButton type="button" label="newsletter" style="margin-right: 5px; height: 30px;"></button>
+                  <button pButton type="button" style="height: 30px;width:100px;" label="generic"></button>
               </td>
               <td  style="text-align-last:right;">
-                  <a href="#"><i class="pi pi-eye" style="font-size: 1.2rem"></i></a>
+                  <a href="#"><i class="pi pi-eye" style="font-size: 1.1rem"></i></a>
               </td>
           </tr>
       </tbody>
@@ -108,8 +109,8 @@
 
     <tab class="tbs" customClass="customClass"
   heading="LEGAL NOTICES">
-  <div style="overflow-x:scroll;height:50vh;margin-top: 20px;">
-  <table class="table" >
+  <div style="overflow:auto;height:50vh;margin-top: 20px;">
+  <table class="table borderless" >
       <thead>
           <tr>
               <th><b>Creation Date</b></th>
@@ -126,7 +127,7 @@
               <td>{{consen.version}}
               </td>
               <td  style="text-align-last:right;">
-                  <a href="#"><i class="pi pi-eye" style="font-size: 1.2rem"></i></a>
+                  <a href="#"><i class="pi pi-eye" style="font-size: 1.1rem"></i></a>
               </td>
           </tr>
       </tbody>
