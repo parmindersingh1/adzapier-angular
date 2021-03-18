@@ -1,9 +1,9 @@
-<div class="container-fluid">
-  <div class="row mt-2">
-      <div class="col-sm-1">
-        <i class="pi pi-desktop desk_img" style="font-size: 3.2rem;opacity: 0.5;"></i>
+<div class="container-fluid" style="background-color: white;width: 100%; height: 100%;">
+  <div class="row mt-2"> 
+      <div class="col-md-1 col-sm-2">
+        <i class="pi pi-desktop desk_img" style="font-size: 3.0rem;opacity: 0.5;"></i>
       </div>
-      <div class="col-sm-11">
+      <div class="col-md-11 col-sm-10">
         <div class=" ml-1 mt-3 d-flex" style="justify-content: space-between;">
           <h2 style="opacity: 0.8;">My website</h2>
           <button type="button" class="btn btn-primary pbut">Edit</button>
@@ -30,7 +30,7 @@
                   <option value="audi">Spanish</option>
                 </select>
                 </div> 
-              <a href="#"><i class="pi pi-trash" style="font-size: 1.1rem"></i></a>
+              <a href="#"><i class="pi pi-trash dust" style="font-size: 0.8rem;color:black;"></i></a>
               </div>
           </div>
         </div>
@@ -40,15 +40,15 @@
 
     
 
-    <div style="margin-top: 100px;">
+    <div style="margin-top: 110px;">
         <h4 class="headings mb-4">CONSENT SOLUTION DASHBOARD</h4>
        
 
      
       
-<tabset #tabset >
+<tabset #tabset class="tabsets">
 <tab customClass="customClass" 
-  heading="CONSENTS">
+  heading="Consents">
   <div style="overflow:auto;height:50vh;margin-top: 20px;">
   <table class="table borderless">
       <thead>
@@ -65,8 +65,8 @@
               <td>{{consen.subject}}</td>
               <td>{{consen.source}}</td>
               <td style="text-align-last:right;">
-                  <a href="#"><i class="pi pi-user mr-3" style="font-size: 1.1rem;"></i></a>
-                  <a href="#"><i class="pi pi-eye" style="font-size: 1.1rem"></i></a>
+                  <a href="#"><i class="pi pi-user mr-2" style="font-size: 1.0rem;"></i></a>
+                  <a href="#"><i class="pi pi-eye" style="font-size: 1.0rem;"></i></a>
               </td>
           </tr>
       </tbody>
@@ -76,7 +76,7 @@
 </tab>
 
 <tab class="tbs" customClass="customClass"
-  heading="SUBJECTS">
+  heading="Subjects">
   <div style="overflow:auto;height:50vh;margin-top: 20px;">
   <table class="table borderless" >
       <thead>
@@ -94,11 +94,11 @@
               <td>{{consen.subject}}</td>
               <td style="text-align-last:center;"><a href="#"><i class="pi pi-times" style="font-size: 1.1rem; color: black;"></i></a>
               </td>
-              <td><button pButton type="button" label="newsletter" style="margin-right: 5px; height: 30px;"></button>
-                  <button pButton type="button" style="height: 30px;width:100px;" label="generic"></button>
+              <td><button pButton type="button" label="newsletter" style="margin-right: 5px; height: 30px;text-align: center;"></button>
+                  <button pButton type="button" style="height: 30px;width:100px;text-align: center;" label="generic"></button>
               </td>
               <td  style="text-align-last:right;">
-                  <a href="#"><i class="pi pi-eye" style="font-size: 1.1rem"></i></a>
+                  <a href="#"><i class="pi pi-eye" style="font-size: 1.0rem"></i></a>
               </td>
           </tr>
       </tbody>
@@ -108,7 +108,7 @@
 </tab>
 
     <tab class="tbs" customClass="customClass"
-  heading="LEGAL NOTICES">
+  heading="Legal Notices">
   <div style="overflow:auto;height:50vh;margin-top: 20px;">
   <table class="table borderless" >
       <thead>
@@ -127,7 +127,7 @@
               <td>{{consen.version}}
               </td>
               <td  style="text-align-last:right;">
-                  <a href="#"><i class="pi pi-eye" style="font-size: 1.1rem"></i></a>
+                  <a href="#"><i class="pi pi-eye" style="font-size: 1.0rem"></i></a>
               </td>
           </tr>
       </tbody>

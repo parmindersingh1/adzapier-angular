@@ -364,6 +364,7 @@ ul.notification-menu-right::after {
     border-bottom: 5px solid #0367fa !important;
     outline: none;
     border: none;
+    background-color: white;
     
     text-decoration-thickness:4px ;
     opacity: 1;
@@ -372,16 +373,20 @@ ul.notification-menu-right::after {
 
 
 .customClass > a{
-    color: black;
-    opacity: 0.7;
+    
+    opacity: 0.8;
+    background-color:white !important;
+    border: none !important;
     font-weight: bold;
-    font-size: smaller;
+    font-size: small;
     margin-top:5px;
     margin-right: 13px;
-    box-shadow: 0px 1px rgb(156, 156, 156);
+    box-shadow: 0px 1px rgb(197, 196, 196);
     border-bottom: none;
-    outline: 0 !important; 
+    outline: none !important; 
     
    
 }
+
+
 

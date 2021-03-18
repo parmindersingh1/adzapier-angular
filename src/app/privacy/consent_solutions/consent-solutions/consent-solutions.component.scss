@@ -8,6 +8,14 @@
     
     
 }
+.dust{
+
+    
+    
+  padding: 0.25em 0.4em;
+  border-radius: 30%;
+  box-shadow: 0px 0px 2px rgb(99, 99, 99);
+}
 
 .borderless td{
     border: none;
@@ -94,8 +102,45 @@ input[type='radio']:checked:after {
 .headings{
   text-decoration-line: underline;
   text-decoration-style: solid;
+  text-underline-position: under;
+
   text-decoration-thickness: 4px;
   opacity: 0.8;
+  font-size: x-large;
+}
+
+.pi-user{
+  padding: 0.25em 0.4em;
+  border-radius: 10%;
+  box-shadow: 0px 0px 2px rgb(99, 99, 99);
+  background-color: rgb(241, 239, 239);
+  opacity: 0.8;
+  color: gray;
+  
+}
+.pi-user:hover{
+  background-color:rgb(230, 230, 230); 
+  color:  #0367fa;
+
+}
+.pi-eye{
+  padding: 0.25em 0.4em;
+  border-radius: 10%;
+  box-shadow: 0px 0px 2px rgb(99, 99, 99);
+  background-color: rgb(241, 239, 239);
+  opacity: 0.8;
+ color: gray;
+
+}
+
+.pi-eye:hover{
+  background-color:rgb(230, 230, 230); ; 
+  color:  #0367fa;
+}
+
+.pi-trash:hover{
+  background-color:rgb(230, 230, 230); ; 
+  color:  #0367fa;
 }
 
 heading{
