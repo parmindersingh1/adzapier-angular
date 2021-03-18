@@ -18,13 +18,13 @@
                         <div class="input-group-text bg-transparent"><i class="fa fa-search"></i></div>
                     </span>
                 </div>
-                
+
                 <div class="ml-auto mr-3">
                     <button type="button" class="btn btn-white" data-toggle="modal"
-                        (click)="editOrganizationModalPopup(inviteuserModal)"><i class="fas fa-plus"></i> Add
+                        (click)="editOrganizationModalPopup(inviteuserModal, 'add')"><i class="fas fa-plus"></i> Add
                         User</button>
                 </div>
-                
+
             </div>
         </div>
 
@@ -100,7 +100,7 @@
             </div>
             </div>
         </div>
-         
+
     </div>
 </div>
 
@@ -170,7 +170,7 @@
         </button>
     </div>
     <div class="modal-body text-center">
-        <p> This will delete selected 
+        <p> This will delete selected
             <span class="font-weight-bold"> {{showControlContent()}}</span>
              <!-- <span class="font-weight-bold">{{controlname === 'team member' ? selectedTeamMember : organizationName}}</span>
              <span class="font-weight-bold"> {{controlname === 'organization' ? organizationName : confirmProperty}}</span> -->

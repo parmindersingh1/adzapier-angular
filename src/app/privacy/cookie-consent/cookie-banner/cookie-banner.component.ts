@@ -60,7 +60,8 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
     hideLogo: false,
     disableGoogleVendors: false,
     disableCookieblocking: false,
-    disableBannerConfig: false
+    disableBannerConfig: false,
+    disableManageVendors: false
   };
   quillConfig = {
     toolbar: {
@@ -270,11 +271,13 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
     const isAllowGoogleVendors = this.dataService.isAllowFeatureByYes(this.planDetails.response, featuresName.GOOGLE_VENDORS);
     const isThridPartyBlock = this.dataService.isAllowFeatureByYes(this.planDetails.response, featuresName.THIRD_PARTY_COOKIE_BLOCKING);
     const isBannerConfig = this.dataService.isAllowFeatureByYes(this.planDetails.response, featuresName.HIGHLY_BANNER_CONFIG);
+    const isManageBanner = this.dataService.isAllowFeatureByYes(this.planDetails.response, featuresName.MANAGE_VENDORS);
     this.disablePlanFeatures = {
       hideLogo: !isAllowLogo,
       disableGoogleVendors: !isAllowGoogleVendors,
       disableCookieblocking: !isThridPartyBlock,
-      disableBannerConfig: !isBannerConfig
+      disableBannerConfig: !isBannerConfig,
+      disableManageVendors: !isManageBanner
     };
   }
 
@@ -1084,20 +1087,7 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
     }
   }
 
-  onCheckBannerConfig($event){
-    if($event.target.value === 'ccpa'){
-      this.ccpaBannerConfig = $event.target.checked;
-    }else if($event.target.value === 'gdpr'){
-      this.gdprBannerConfig = $event.target.checked;
-    } else if($event.target.value === 'generic'){
-      this.genericBannerConfig = $event.target.checked;
-    }
-
-  }
-
-  onCheckGenericGlobal($event) {
-      this.isGenericglobalchecked = $event.target.checked;
-      this.ccpaBannerConfig = false;
-      this.gdprBannerConfig = false;
-  }
+  onNavigateToManageVendor() {
+this.router.navigateByUrl('/cookie-consent/manage-vendors');
+}
 }

@@ -1,4 +1,4 @@
-import {Component, OnInit, AfterViewInit, ChangeDetectorRef} from '@angular/core';
+import {Component, OnInit, AfterViewInit, ChangeDetectorRef, ViewChild, OnDestroy} from '@angular/core';
 import {ChartDataSets, ChartOptions, ChartType} from 'chart.js';
 import {
   Color,
@@ -8,11 +8,14 @@ import {
   MultiDataSet,
   SingleDataSet
 } from 'ng2-charts';
+import {Location} from '@angular/common';
 import {OrganizationService} from '../../_services';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
 import {DashboardService} from '../../_services/dashboard.service';
 import * as moment from 'moment';
 import {moduleName} from '../../_constant/module-name.constant';
+import {DataService} from '../../_services/data.service';
+import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
 
 declare var jQuery: any;
 interface Country {
@@ -154,12 +157,17 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
   private countryColor = {};
   private stateColor = {};
   public countryList = [];
-
+  isShowDashboard = false;
+@ViewChild('noSup', {static: true}) noSup;
+  modalRef: BsModalRef;
   constructor(
     private orgservice: OrganizationService,
+    private modalService: BsModalService,
     private loading: NgxUiLoaderService,
     private cd: ChangeDetectorRef,
     private dashboardService: DashboardService,
+    private dataService: DataService,
+    private _location: Location
   ) {
 
     monkeyPatchChartJsTooltip();
@@ -169,11 +177,36 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     // this.onSetUpMainMap([], [], 0);
     this.onGetPropsAndOrgId();
+    this.onCheckSubscription();
   }
 
   ngAfterViewInit() {
     this.onSetUpDate();
   }
+
+
+  onCheckSubscription() {
+    const resData: any = this.dataService.getCurrentPropertyPlanDetails();
+    const features = resData.response.features;
+    console.log('features', !features)
+    if (features == null) {
+      this.isShowDashboard = false;
+    } else {
+      if( Object.keys(features).length > 0) {
+        this.isShowDashboard = true;
+      } else {
+        this.isShowDashboard = false;
+      }
+    }
+    this.onOpenPopUp();
+  }
+
+  onOpenPopUp() {
+    if (!this.isShowDashboard) {
+        this.modalRef = this.modalService.show(this.noSup, {class: 'modal-md', ignoreBackdropClick: true});
+    }
+  }
+
 
   onCountMap(requestComplete, requestReceived, requestInProgress, timeToComplete, requestRejected, requestDeleted, dashBoardChartCount) {
     jQuery.plot('#flotChart3', [{
@@ -650,4 +683,11 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
     this.alertMsg = !dismissedAlert;
     this.isOpen = false;
   }
+  onGoBack() {
+    this.modalRef.hide();
+    this._location.back();
+  }
+
 }
+
+

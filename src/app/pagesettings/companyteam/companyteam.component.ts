@@ -7,6 +7,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TablePaginationConfig } from 'src/app/_models/tablepaginationconfig';
 import { moduleName } from 'src/app/_constant/module-name.constant';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import {DataService} from '../../_services/data.service';
 
 @Component({
   selector: 'app-companyteam',
@@ -45,13 +46,15 @@ export class CompanyteamComponent implements OnInit {
   confirmTeammember: any;
   selectedTeamMember: any;
   controlname: string;
+  companyPlanDetails: any;
   userList: any = [];
   constructor(private companyService: CompanyService, private modalService: NgbModal,
               private formBuilder: FormBuilder,
               private userService: UserService,
               private loading: NgxUiLoaderService,
-              private bsmodalService: BsModalService
-              ) { 
+              private bsmodalService: BsModalService,
+              private dataService: DataService
+              ) {
                 this.paginationConfig = { itemsPerPage: this.pageSize, currentPage: this.p, totalItems: this.totalCount };
               }
 
@@ -81,6 +84,17 @@ export class CompanyteamComponent implements OnInit {
     });
     this.loadCompanyTeamMembers();
     this.loadUserListForInvitation();
+    this.onGetCompanyPlan();
+  }
+  onGetCompanyPlan() {
+    this.loading.start('2');
+    this.dataService.getCompanyPlanDetails(this.constructor.name, moduleName.cookieConsentModule)
+      .subscribe((res: any) => {
+        this.companyPlanDetails = res.response;
+        this.loading.stop('2')
+      }, error => {
+        this.loading.stop('2')
+      });
   }
   get confirmDelete() { return this.confirmationForm.controls; }
   get userInvite() { return this.inviteUserForm.controls; }
@@ -154,7 +168,15 @@ export class CompanyteamComponent implements OnInit {
       }
     }
   }
-  
+
+  onCheckSubscription(){
+    const status = this.dataService.checkUserForCompany(this.companyPlanDetails, this.paginationConfig.totalItems);
+    if ( status === false) {
+      return false;
+    }
+    return true;
+  }
+
 
   onSubmitInviteUser() {
     this.isInviteFormSubmitted = true;
@@ -162,6 +184,9 @@ export class CompanyteamComponent implements OnInit {
       return false;
     } else {
       if (!this.isUpdateUserinvitation) {
+        if (!this.onCheckSubscription()) {
+          return false;
+        }
         const requestObj = {
           email: this.inviteUserForm.value.emailid,
           role_id: this.inviteUserForm.value.permissions,
@@ -248,7 +273,12 @@ export class CompanyteamComponent implements OnInit {
     this.modalService.dismissAll('Data Saved!');
   }
 
-  editOrganizationModalPopup(content) {
+  editOrganizationModalPopup(content, type) {
+    if (type === 'add') {
+      if (!this.onCheckSubscription()) {
+        return false;
+      }
+    }
     this.isInviteFormSubmitted = false;
     this.isUpdateUserinvitation = false;
     this.inviteUserForm.reset();
@@ -280,7 +310,7 @@ export class CompanyteamComponent implements OnInit {
     this.inviteUserForm.controls['emailid'].setValue(data.user_email);
     this.inviteUserForm.get('emailid')[this.isUpdateUserinvitation ? 'disable' : 'enable']();
     this.inviteUserForm.controls['permissions'].setValue(data.role_id);
-     
+
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
       this.inviteUserForm.reset();
       // this.closeResult = `Closed with: ${result}`;
@@ -289,7 +319,7 @@ export class CompanyteamComponent implements OnInit {
       // this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
   }
-  
+
   onChangeEvent(event) {
     this.paginationConfig.itemsPerPage = Number(event.target.value);
     this.paginationConfig.currentPage = 1;

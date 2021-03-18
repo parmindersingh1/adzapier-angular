@@ -9,6 +9,7 @@ import { moduleName } from 'src/app/_constant/module-name.constant';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Location } from '@angular/common';
 import { DataService } from 'src/app/_services/data.service';
+import {featuresName} from '../../../_constant/features-name.constant';
 
 @Component({
   selector: 'app-header',
@@ -68,6 +69,8 @@ export class HeaderComponent implements OnInit {
   navbarOpen = false;
   addMobileMenuWidth: any;
   addMobileBackdrop: any;
+  isShowDashboard = false;
+  planDetails: any;
   constructor(
     private router: Router,
     private activatedroute: ActivatedRoute,
@@ -154,7 +157,7 @@ export class HeaderComponent implements OnInit {
       }, {
         showlink: 'Contact Us', routerLink: '/contactus'
       }];
-
+    this.onCheckSubscription();
   }
 
   logout() {
@@ -293,6 +296,8 @@ export class HeaderComponent implements OnInit {
     } else {
       this.router.navigate([this.router.url]);
     }
+
+        this.onCheckSubscription();
 
       }, err => {
         this.loading.stop('1')
@@ -510,6 +515,14 @@ export class HeaderComponent implements OnInit {
   }
 
   goto(link: any, id?: any) {
+    if (link.routerLink === '/home/dashboard/ccpa-dsar' || link.routerLink === '/home/dashboard/cookie-consent') {
+      this.onCheckAllowDashboard();
+      if (!this.isShowDashboard) {
+        return false;
+      }
+    }
+
+
     if (id !== undefined) {
       this.router.navigate([link.routerLink || link, id]);
     } else {
@@ -761,6 +774,32 @@ export class HeaderComponent implements OnInit {
         this.addMobileMenuWidth = this.addMenuWidth();
         this.addMobileBackdrop = this.addBackdrop();
       }
+    }
+  }
+
+
+
+
+  onCheckSubscription() {
+    const resData: any = this.dataService.getCurrentPropertyPlanDetails();
+    const features = resData.response.features;
+    console.log('features', !features)
+    if (features == null) {
+      this.isShowDashboard = false;
+    } else {
+      if( Object.keys(features).length > 0) {
+        this.isShowDashboard = true;
+      } else {
+        this.isShowDashboard = false;
+      }
+    }
+    console.log('isShowDashboard', this.isShowDashboard)
+  }
+
+  onCheckAllowDashboard() {
+    this.planDetails = this.dataService.getCurrentPropertyPlanDetails();
+    if (!this.isShowDashboard) {
+      this.dataService.openUpgradeModalForCookieConsent(this.planDetails);
     }
   }
 }
