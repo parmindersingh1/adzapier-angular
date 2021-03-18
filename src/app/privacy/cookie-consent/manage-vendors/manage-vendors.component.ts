@@ -5,6 +5,8 @@ import {OrganizationService} from '../../../_services';
 import {moduleName} from '../../../_constant/module-name.constant';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
+import {featuresName} from '../../../_constant/features-name.constant';
+import {DataService} from '../../../_services/data.service';
 
 @Component({
   selector: 'app-manage-vendors',
@@ -31,19 +33,22 @@ export class ManageVendorsComponent implements OnInit {
   isEdit = false;
   isOpen = false;
   alertType: any;
+  planDetails: any;
   private currentManagedOrgID: any;
   private currrentManagedPropID: any;
   searchIabVendors: any[] = [];
   searchGoogleVendors: any[] = [];
   modalRef: BsModalRef;
   actionType = 'active';
+  isFeatureAvaliable = false;
 
   constructor(
     private orgservice: OrganizationService,
     private gdprService: GdprService,
     private loading: NgxUiLoaderService,
     private modalService: BsModalService,
-    private cookieBanner: CookieBannerService
+    private cookieBanner: CookieBannerService,
+    private dataService: DataService
   ) {
   }
 
@@ -51,6 +56,25 @@ export class ManageVendorsComponent implements OnInit {
     this.onGetPropsAndOrgId();
     this.getAllVendorsData();
     this.onGetAllowVendors();
+    this.onCheckSubscription();
+  }
+
+
+    onCheckSubscription() {
+      const resData: any = this.dataService.getCurrentPropertyPlanDetails();
+      const status = this.dataService.isAllowFeatureByYes(resData.response, featuresName.MANAGE_VENDORS);
+      console.log('state', status)
+      this.isFeatureAvaliable = status;
+      if (!this.isFeatureAvaliable) {
+        this.onCheckAllowBannerConfig();
+      }
+    }
+
+  onCheckAllowBannerConfig() {
+    this.planDetails = this.dataService.getCurrentPropertyPlanDetails();
+    if (!this.isFeatureAvaliable) {
+      this.dataService.openUpgradeModalForCookieConsent(this.planDetails);
+    }
   }
 
   openModal(template: TemplateRef<any>) {
@@ -116,6 +140,7 @@ export class ManageVendorsComponent implements OnInit {
           this.alertMsg = res.message;
           this.alertType = 'success';
         }
+        this.onAllowAllVendors();
       }, error => {
         this.skeletonLoading.two = false;
         this.loading.stop();
@@ -124,7 +149,22 @@ export class ManageVendorsComponent implements OnInit {
         this.alertType = 'danger';
       })
   }
-
+  onAllowAllVendors() {
+    const googleVendorsID = [];
+    const iabVendorsID = [];
+    if (this.googleVendorsDefaultID.length === 0) {
+      for (const googleVendor of this.googleVendorsList) {
+        googleVendorsID.push(googleVendor.provider_id);
+      }
+      this.googleVendorsDefaultID = googleVendorsID;
+    }
+    if (this.iabVendorsDefaultID.length === 0) {
+      for (const iabVendor of this.iabVendorsList) {
+        iabVendorsID.push(iabVendor.id);
+      }
+      this.iabVendorsDefaultID = iabVendorsID;
+    }
+  }
   onSelectGoogleVendor(event, id) {
     const isChecked = event.target.checked;
     if (isChecked) {
@@ -226,16 +266,20 @@ export class ManageVendorsComponent implements OnInit {
 
 
   confirm(): void {
-    if (this.actionType === 'active') {
-      const iabVendors = this.iabVendorsDefaultID.concat(this.iabVendorsID);
-      const googleVendors = this.googleVendorsDefaultID.concat(this.googleVendorsID);
-      this.onUpdateVendors(iabVendors, googleVendors)
+    if (!this.isFeatureAvaliable) {
+      this.onCheckAllowBannerConfig();
     } else {
-      const iabVendorsID = this.iabVendorsDefaultID.filter(item => !this.iabVendorsID.includes(item));
-      const googleVendorsID = this.googleVendorsDefaultID.filter(item => !this.googleVendorsID.includes(item));
-      this.onUpdateVendors(iabVendorsID, googleVendorsID)
+      if (this.actionType === 'active') {
+        const iabVendors = this.iabVendorsDefaultID.concat(this.iabVendorsID);
+        const googleVendors = this.googleVendorsDefaultID.concat(this.googleVendorsID);
+        this.onUpdateVendors(iabVendors, googleVendors)
+      } else {
+        const iabVendorsID = this.iabVendorsDefaultID.filter(item => !this.iabVendorsID.includes(item));
+        const googleVendorsID = this.googleVendorsDefaultID.filter(item => !this.googleVendorsID.includes(item));
+        this.onUpdateVendors(iabVendorsID, googleVendorsID)
+      }
+      this.decline();
     }
-    this.decline();
   }
 
 
