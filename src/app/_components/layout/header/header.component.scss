@@ -788,7 +788,7 @@ button.btn.btn-link:hover {
   .nav-mr {
     margin-left: 0;
   }
- 
+
 }
 
 @media(min-width:768px) and (max-width:1024px) {
@@ -816,7 +816,7 @@ button.btn.btn-link:hover {
     display: none;
   }
 
- 
+
 }
 
 @media(min-width:320px) and (max-width:767px) {
@@ -944,4 +944,9 @@ button.btn.btn-link:hover {
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
  }
+}
+
+.cancel-btn{
+  font-weight: bold;
+  cursor: pointer;
 }
