@@ -323,6 +323,7 @@ export class CompanyComponent implements OnInit {
               this.onCancelClick();
               this.isUpdateUserinvitation = false;
             }
+            this.onGetCompanyPlan();
           }, (error) => {
             this.alertMsg = error;
             this.isOpen = true;
@@ -514,6 +515,7 @@ export class CompanyComponent implements OnInit {
         this.alertType = 'success';
         this.loadCompanyTeamMembers();
         this.onCancelClick();
+        this.onGetCompanyPlan();
       }
     }, (err) => {
       this.alertMsg = err;
