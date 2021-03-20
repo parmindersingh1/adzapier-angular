@@ -144,6 +144,7 @@ export class CompanyteamComponent implements OnInit {
         this.alertType = 'success';
         this.loadCompanyTeamMembers();
       }
+      this.onGetCompanyPlan();
     }, (err) => {
       this.alertMsg = err;
       this.isOpen = true;
@@ -201,6 +202,7 @@ export class CompanyteamComponent implements OnInit {
               this.loadCompanyTeamMembers();
               this.modalService.dismissAll('Data Saved!');
             }
+            this.onGetCompanyPlan();
           }, (error) => {
             this.alertMsg = JSON.stringify(error);
             this.isOpen = true;
@@ -251,7 +253,6 @@ export class CompanyteamComponent implements OnInit {
         this.alertMsg = 'We have sent a email on your Email Id';
         this.isOpen = true;
         this.alertType = 'success';
-
         this.inviteUserForm.reset();
         this.loadCompanyTeamMembers();
         this.modalService.dismissAll('Data Saved!');
@@ -303,7 +304,6 @@ export class CompanyteamComponent implements OnInit {
   }
 
   editUserInvitation(content, data) {
-    console.log(data, 'editUserInvitation..');
     this.isUpdateUserinvitation = true;
     this.approverID = data.approver_id;
     this.recordID = data.id;
