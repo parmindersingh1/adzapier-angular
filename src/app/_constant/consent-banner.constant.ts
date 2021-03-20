@@ -7,6 +7,7 @@ export const defaultData = {
   google_vendors: false,
   gdprGlobal: false,
   ccpaGlobal: false,
+  genericGlobal: false,
   allowPurposeByDefault: true,
   showBadge: true,
   logo: true,

@@ -47,7 +47,7 @@ export class WebformsComponent implements OnInit, DirtyComponents {
   currentuserID: any;
   orgDetails: any;
   isDirty = false;
-  activePage = 0;
+  activePage = 1;
   numofRecords: number = 10;
   totalRecordsAvailable: number;
   dataLoadingMsg: string;
