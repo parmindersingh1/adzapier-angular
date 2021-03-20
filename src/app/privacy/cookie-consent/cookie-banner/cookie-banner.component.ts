@@ -328,6 +328,7 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
       google_vendors: configData.google_vendors,
       showBadge: configData.show_badge,
       logo: configData.logo,
+      purposes_by_default: configData.purposes_by_default
     });
 
     this.langValueList = configData.config.LangConfig.allowedLang;
