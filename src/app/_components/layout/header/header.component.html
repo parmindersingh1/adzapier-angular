@@ -138,9 +138,9 @@
           <div *cdkVirtualFor="let data of notificationList" class="notification-wrapper">
             <!-- {{data.notification}} -->
             <div class="notification-task-time-wrapper col-sm-10 p-0">
-              <span class="p-0 col-sm-9 tx-color-02">
+              <span class="p-0 col-sm-9 tx-color-02 font-weight-bold">
               {{data.notification}}</span>
-              <span class="tx-color-02 notification-time"> {{data.created_at | timeAgo}} </span>
+              <span class="tx-color-02 notification-time"> {{data.created_at | timeago}} </span>
               </div>
                  <div class="d-flex">
               <button class="clear-notification cross-icon" tooltip="Clear notification"

@@ -1504,6 +1504,10 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
     return this.emailVerificationStatus;
   }
 
+  isContainCaptchacodeLabel(key): boolean {
+    return key === 'Captcha code'
+  }
+
   isFileExist(uploadexist): boolean {
     return uploadexist !== '';
   }
