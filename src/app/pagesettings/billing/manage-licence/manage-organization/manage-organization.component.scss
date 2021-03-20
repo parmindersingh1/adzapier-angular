@@ -1,16 +1,16 @@
-thead tr {
-  height: 65px;
-}
-thead tr th {
-  padding-bottom: 20px;
-}
+// thead tr {
+//   height: 65px;
+// }
+// thead tr th {
+//   padding-bottom: 20px;
+// }
 
-tbody tr{
-  height: 50px;
-}
-tbody tr td{
-  padding-top: 20px;
-}
+// tbody tr{
+//   height: 50px;
+// }
+// tbody tr td{
+//   padding-top: 20px;
+// }
 
 .fa-check-circle {
   color: #29c429;
@@ -96,6 +96,127 @@ tbody tr td{
 }
 
 .txt-center-bold {
-  font-weight: 600;
+  color: #fff;
   text-align: center;
+  position: absolute;
+  left: 35%;
+  top: 0 !important;
+  text-shadow: 1px 1px 0px #11188f;
+  z-index: 1000;
+  font-weight: 600;
+  font-size: 13px;
+}
+
+
+.progress {
+  position: relative;
+  background-color: #3d78d4;
+  border-radius: 10px;
+  height: 20px;
+  width: 130px;
+}
+
+.progress-bar{
+  background-color: #11188f;
+}
+
+.flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.flex-column span {
+  font-size: 13px;
+  color: #3d78d4;
+  line-height: 25px;
+  font-weight: 500;
+}
+
+.align-heading-progressbar {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+}
+
+.commom-feathericon-height {
+  height: 16px !important;
+}
+
+
+.manage-license .card-header {
+  display: flex;
+}
+
+.align-items {
+  align-items: center;
+  justify-content: inherit;
+  align-self: center;
+}
+
+.manage-license .card-body table {
+  border: 1px solid #e8e8e8 !important;
+}
+
+.manage-license .card-body .table td:first-child {
+  width: 270px;
+}
+
+.manage-license .card-body .table td {
+  width:180px;
+}
+
+.manage-license .card-body .table thead th {
+  width: auto !important;
+  padding: 8px 4px;
+}
+
+.manage-license .card-body table thead tr {
+  font-size: 14px;
+  vertical-align: super;
+  justify-content: space-around;
+  align-self: initial;
+  background: #f5f6fa;
+}
+
+.unlimited-plan-light {
+  background-color: #00d9cf !important;
+}
+
+.unlimited-plan-dark {
+  background-color: #00b7af !important;
+}
+
+
+.essential-plan-light {
+  background-color: #00d9cf !important;
+}
+
+.essential-plan-dark {
+  background-color: #00b7af !important;
+}
+
+.professional-plan-light {
+  background-color: #b3fc60 !important;
+}
+
+.professional-plan-dark {
+  background-color: #067700 !important;
+}
+
+.nohover:hover {
+  background-color: transparent;
+  cursor: pointer;
+  color: #333;
+}
+
+.border-gray{
+  border:1px solid #e8e8e8;
+}
+
+.manage-license .table thead tr {
+  background-color: #f5f6fa !important;
+}
+
+.hide {
+  display: none;
 }
