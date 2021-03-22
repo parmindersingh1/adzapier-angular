@@ -736,7 +736,7 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
       } else {
         return true; // if selected stage subtask is already completed
       }
-      //  } 
+      //  }
       // else {
       //   return true;
       // }
@@ -1326,7 +1326,8 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
         }
       }
       //  return false;
-      this.dsarRequestService.addSubTaskResponse(this.selectedTaskID, fd, this.constructor.name, moduleName.dsarRequestModule)
+      this.dsarRequestService.addSubTaskResponse(this.selectedTaskID, this.queryCompanyID, this.currentManagedOrgID, this.currrentManagedPropID,
+        fd, this.constructor.name, moduleName.dsarRequestModule)
         .subscribe((data) => {
           this.getSubTaskList();
           this.alertMsg = 'subtask response submitted successfully';
