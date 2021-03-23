@@ -782,18 +782,20 @@ export class HeaderComponent implements OnInit {
 
   onCheckSubscription() {
     const resData: any = this.dataService.getCurrentPropertyPlanDetails();
-    const features = resData.response.features;
-    console.log('features', !features)
-    if (features == null) {
-      this.isShowDashboard = false;
-    } else {
-      if( Object.keys(features).length > 0) {
-        this.isShowDashboard = true;
-      } else {
-        this.isShowDashboard = false;
+    if (resData.hasOwnProperty('response')) {
+      if (resData.response.hasOwnProperty('features')) {
+        const features = resData.response.features;
+        if (features == null) {
+          this.isShowDashboard = false;
+        } else {
+          if (Object.keys(features).length > 0) {
+            this.isShowDashboard = true;
+          } else {
+            this.isShowDashboard = false;
+          }
+        }
       }
     }
-    console.log('isShowDashboard', this.isShowDashboard)
   }
 
   onCheckAllowDashboard() {
