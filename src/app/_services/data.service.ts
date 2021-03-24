@@ -160,6 +160,7 @@ export class DataService {
     }
     return flag;
   }
+
   checkUserForCompany(res, currentUser) {
     const planData = this.getCurrentOrgPlanDetails();
     let msg = '';
@@ -174,7 +175,13 @@ export class DataService {
       }
     }
     if (flag === false) {
-      this.openModal.next({openModal: true, data: planData.response.plan_details, type: 'company', msg: msg, currentplan: this.getCurrentOrgPlanDetails().response.plan_details})
+      this.openModal.next({
+        openModal: true,
+        data: planData.response.plan_details,
+        type: 'company',
+        msg: msg,
+        currentplan: this.getCurrentOrgPlanDetails().response.plan_details
+      })
     }
     return flag;
   }
@@ -193,7 +200,13 @@ export class DataService {
       }
     }
     if (flag === false) {
-      this.openModal.next({openModal: true, data: planData.response.plan_details, type: 'org', msg: msg, currentplan: this.getCurrentOrgPlanDetails().response.plan_details})
+      this.openModal.next({
+        openModal: true,
+        data: planData.response.plan_details,
+        type: 'org',
+        msg: msg,
+        currentplan: this.getCurrentOrgPlanDetails().response.plan_details
+      })
     }
     return flag;
   }
@@ -233,14 +246,40 @@ export class DataService {
     }
     if (flag === false) {
       let msg = 'Sorry, You Are Not Allowed to Access This  Feature'
-      this.openModal.next({openModal: true, data: res.plan_details, type: 'cookieConsent', msg: msg, currentplan: this.getCurrentOrgPlanDetails().response.plan_details})
+      this.openModal.next({
+        openModal: true,
+        data: res.plan_details,
+        type: 'cookieConsent',
+        msg: msg,
+        currentplan: this.getCurrentOrgPlanDetails().response.plan_details
+      })
     }
     return flag;
   }
 
   openUpgradeModalForCookieConsent(res) {
-    let msg = 'Sorry, You Are Not Allowed to Access This  Feature'
-    this.openModal.next({openModal: true, data: res.response.plan_details, type: 'cookieConsent', msg: msg, currentplan: this.getCurrentOrgPlanDetails().response.plan_details})
+    const msg = 'Sorry, You Are Not Allowed to Access This  Feature';
+    let planDetails = null;
+    if (res.hasOwnProperty('response')) {
+      if (res.response.hasOwnProperty('plan_details')) {
+        planDetails = res.response.plan_details;
+      }
+    }
+    let currentplan = null;
+    if (this.getCurrentOrgPlanDetails().hasOwnProperty('response')) {
+      if (this.getCurrentOrgPlanDetails().response.hasOwnProperty('plan_details')) {
+        currentplan = res.response.plan_details;
+      }
+    }
+
+
+    this.openModal.next({
+      openModal: true,
+      data: planDetails,
+      type: 'cookieConsent',
+      msg: msg,
+      currentplan: currentplan
+    })
   }
 
   // getLicensesDetails() {
