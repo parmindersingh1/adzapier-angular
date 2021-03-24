@@ -101,7 +101,7 @@ export class CCPAFormConfigurationService extends WebControls {
       path = '/ccpa/form/' + orgId + '/' + propId; 
     }
     return this.httpClient.get<any>(environment.apiUrl + path).pipe(
-      map(res => res[key]),
+      map(res => res),
       catchError(error => {
         this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.getCCPAFormList, componentName, moduleName, path);
         return throwError(error);
