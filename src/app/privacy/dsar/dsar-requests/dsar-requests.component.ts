@@ -326,7 +326,7 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
       .subscribe((data) => {
         this.loading.stop();
         if (data.count !== 0) {
-          this.activeWebFormList = data;
+          this.activeWebFormList = data.response;
           // this.loading = false;
           return this.activeWebFormList;
         } else {
