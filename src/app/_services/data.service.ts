@@ -31,8 +31,18 @@ export class DataService {
     this.billingPPlanDetails.next(plan);
   }
 
-  getCurrentPropertyPlanDetails() {
+  getCurrentPropertyPlanDetails(): any {
     let planData = localStorage.getItem('propertyPlan')
+    if (planData) {
+      planData = JSON.parse(atob(planData))
+    } else {
+      planData = '';
+    }
+    return planData;
+  }
+
+  getCurrentOrganizationPlanDetails() {
+    let planData = localStorage.getItem('orgPlan')
     if (planData) {
       planData = JSON.parse(atob(planData))
     } else {
@@ -257,7 +267,7 @@ export class DataService {
     return flag;
   }
 
-  openUpgradeModalForCookieConsent(res) {
+  checkNullPlanForProp(res) {
     const msg = 'Sorry, You Are Not Allowed to Access This  Feature';
     let planDetails = null;
     if (res.hasOwnProperty('response')) {
@@ -282,6 +292,65 @@ export class DataService {
     })
   }
 
+
+  openUpgradeModalForCookieConsent(res) {
+    const msg = 'Sorry, You Are Not Allowed to Access This  Feature';
+    let planDetails = null;
+    if (res.hasOwnProperty('response')) {
+      if (res.response.hasOwnProperty('plan_details')) {
+        planDetails = res.response.plan_details;
+      }
+    }
+    // let currentplan = null;
+    // if (this.getCurrentOrgPlanDetails().hasOwnProperty('response')) {
+    //   if (this.getCurrentOrgPlanDetails().response.hasOwnProperty('plan_details')) {
+    //     currentplan = res.response.plan_details;
+    //   }
+    // }
+    let currentplan = null;
+    if (this.getCurrentPropertyPlanDetails().hasOwnProperty('response')) {
+      if (this.getCurrentPropertyPlanDetails().response.hasOwnProperty('plan_details')) {
+        currentplan = res.response.plan_details;
+      }
+    }
+
+
+    this.openModal.next({
+      openModal: true,
+      data: planDetails,
+      type: 'cookieConsent',
+      msg: msg,
+      currentplan: currentplan
+    })
+  }
+
+
+
+
+  openUpgradeModalForDsar(res) {
+    const msg = 'Sorry, You Are Not Allowed to Access This  Feature';
+    let planDetails = null;
+    if (res.hasOwnProperty('response')) {
+      if (res.response.hasOwnProperty('plan_details')) {
+        planDetails = res.response.plan_details;
+      }
+    }
+    let currentplan = null;
+    if (this.getCurrentOrgPlanDetails().hasOwnProperty('response')) {
+      if (this.getCurrentOrgPlanDetails().response.hasOwnProperty('plan_details')) {
+        currentplan = res.response.plan_details;
+      }
+    }
+
+
+    this.openModal.next({
+      openModal: true,
+      data: planDetails,
+      type: 'org',
+      msg: msg,
+      currentplan: currentplan
+    })
+  }
   // getLicensesDetails() {
 
   // }
