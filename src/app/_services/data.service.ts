@@ -186,7 +186,7 @@ export class DataService {
     return flag;
   }
 
-  checkUserForOrg(res, currentUser) {
+  checkUserForOrg(res, currentUser, plan_details) {
     const planData = this.getCurrentOrgPlanDetails();
     let msg = '';
     let flag = true;
@@ -202,10 +202,10 @@ export class DataService {
     if (flag === false) {
       this.openModal.next({
         openModal: true,
-        data: planData.response.plan_details,
+        data: plan_details,
         type: 'org',
         msg: msg,
-        currentplan: this.getCurrentOrgPlanDetails().response.plan_details
+        currentplan: plan_details
       })
     }
     return flag;
