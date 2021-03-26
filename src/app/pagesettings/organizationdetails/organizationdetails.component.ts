@@ -190,7 +190,7 @@ export class OrganizationdetailsComponent implements OnInit {
 
   onGetOrgPlan() {
     this.loading.start('2');
-    this.dataService.getOrgPlanDetails(this.constructor.name, moduleName.cookieConsentModule, this.currentManagedOrgID)
+    this.dataService.getOrgPlanDetails(this.constructor.name, moduleName.cookieConsentModule, this.organizationID)
       .subscribe((res: any) => {
         this.orgPlanDetails = res.response;
         this.loading.stop('2');
