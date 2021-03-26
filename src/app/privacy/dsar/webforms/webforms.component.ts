@@ -104,8 +104,8 @@ export class WebformsComponent implements OnInit, DirtyComponents {
         .subscribe((data) => {
           this.loading.stop();
           if (data.length !== 0) {
-            this.formList = data;
-            this.totalRecordsAvailable = 10;
+            this.formList = data.response;
+            this.totalRecordsAvailable = data.count;
             // this.loading = false;
             return this.formList;
           } else {
