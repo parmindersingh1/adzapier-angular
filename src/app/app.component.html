@@ -126,7 +126,7 @@
       </div>
 
 
-      <div *ngIf="type ===  'noPlan' " class="modal-body">
+      <div *ngIf="type !==  'cookieConsent' && type !==  'org' " class="modal-body">
         <div class="text-center">
           <h4 *ngIf="noPlanType == 'cookieConsent'">You haven't assign license to
             this property</h4>

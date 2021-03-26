@@ -213,9 +213,9 @@ export class OrganizationdetailsComponent implements OnInit {
     });
   }
 
-  open(content, type) {
+ async open(content, type) {
     if(type === 'invite' ) {
-      if (!this.onCheckSubscription()) {
+      if (! await this.onCheckSubscription()) {
         return false;
       }
     }
@@ -453,11 +453,23 @@ export class OrganizationdetailsComponent implements OnInit {
 
 
   onCheckSubscription(){
-      const status = this.dataService.checkUserForOrg(this.orgPlanDetails, this.paginationConfig.totalItems);
-     if ( status === false) {
-       return false;
-     }
-     return true;
+    this.loading.start('2');
+    return new Promise(resolve => {
+      this.dataService.getOrgPlanInfo(this.constructor.name, moduleName.cookieConsentModule, this.organizationID)
+        .subscribe((res: any) => {
+          this.loading.stop('2');
+          const status = this.dataService.checkUserForOrg(this.orgPlanDetails, this.paginationConfig.totalItems, res.response.plan_details);
+          if (status === false) {
+            // return false;
+            resolve(false);
+          }
+          // return true;
+          resolve(true);
+        }, error => {
+          this.loading.stop('2');
+          resolve(false);
+        });
+    });
   }
 
   onSubmitInviteUserOrganization() {
