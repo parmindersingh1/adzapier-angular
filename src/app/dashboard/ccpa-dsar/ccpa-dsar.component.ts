@@ -186,7 +186,7 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
 
 
   onCheckSubscription() {
-    const resData: any = this.dataService.getCurrentPropertyPlanDetails();
+    const resData: any = this.dataService.getCurrentOrganizationPlanDetails();
     const features = resData.response.features;
     console.log('features', !features)
     if (features == null) {
