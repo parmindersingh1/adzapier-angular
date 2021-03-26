@@ -69,7 +69,8 @@ export class HeaderComponent implements OnInit {
   navbarOpen = false;
   addMobileMenuWidth: any;
   addMobileBackdrop: any;
-  isShowDashboard = false;
+  isShowDashboardForCookieConsent = false;
+  isShowDashboardForDsar = false;
   planDetails: any;
   constructor(
     private router: Router,
@@ -157,7 +158,8 @@ export class HeaderComponent implements OnInit {
       }, {
         showlink: 'Contact Us', routerLink: '/contactus'
       }];
-    this.onCheckSubscription();
+    this.onCheckSubscriptionForProperty();
+    this.onCheckSubscriptionForOrg()
   }
 
   logout() {
@@ -297,7 +299,8 @@ export class HeaderComponent implements OnInit {
       this.router.navigate([this.router.url]);
     }
 
-        this.onCheckSubscription();
+        this.onCheckSubscriptionForProperty();
+        this.onCheckSubscriptionForOrg();
 
       }, err => {
         this.loading.stop('1')
@@ -515,13 +518,19 @@ export class HeaderComponent implements OnInit {
   }
 
   goto(link: any, id?: any) {
-    if (link.routerLink === '/home/dashboard/ccpa-dsar' || link.routerLink === '/home/dashboard/cookie-consent') {
-      this.onCheckAllowDashboard();
-      if (!this.isShowDashboard) {
+    if (link.routerLink === '/home/dashboard/cookie-consent') {
+      this.onCheckAllowCookieConsentDashboard();
+      if (!this.isShowDashboardForCookieConsent) {
         return false;
       }
     }
 
+    if (link.routerLink === '/home/dashboard/ccpa-dsar') {
+      this.onCheckAllowOrgDashboard();
+      if (!this.isShowDashboardForDsar) {
+        return false;
+      }
+    }
 
     if (id !== undefined) {
       this.router.navigate([link.routerLink || link, id]);
@@ -780,27 +789,52 @@ export class HeaderComponent implements OnInit {
 
 
 
-  onCheckSubscription() {
+  onCheckSubscriptionForProperty() {
     const resData: any = this.dataService.getCurrentPropertyPlanDetails();
     if (resData.hasOwnProperty('response')) {
       if (resData.response.hasOwnProperty('features')) {
         const features = resData.response.features;
         if (features == null) {
-          this.isShowDashboard = false;
+          this.isShowDashboardForCookieConsent = false;
         } else {
           if (Object.keys(features).length > 0) {
-            this.isShowDashboard = true;
+            this.isShowDashboardForCookieConsent = true;
           } else {
-            this.isShowDashboard = false;
+            this.isShowDashboardForCookieConsent = false;
           }
         }
       }
     }
   }
 
-  onCheckAllowDashboard() {
+  onCheckSubscriptionForOrg() {
+    const resData: any = this.dataService.getCurrentOrganizationPlanDetails();
+    if (resData.hasOwnProperty('response')) {
+      if (resData.response.hasOwnProperty('features')) {
+        const features = resData.response.features;
+        if (features == null) {
+          this.isShowDashboardForDsar = false;
+        } else {
+          if (Object.keys(features).length > 0) {
+            this.isShowDashboardForDsar = true;
+          } else {
+            this.isShowDashboardForDsar = false;
+          }
+        }
+      }
+    }
+  }
+
+  onCheckAllowOrgDashboard() {
+    this.planDetails = this.dataService.getCurrentOrganizationPlanDetails();
+    if (!this.isShowDashboardForDsar) {
+      this.dataService.openUpgradeModalForDsar(this.planDetails);
+    }
+  }
+
+  onCheckAllowCookieConsentDashboard() {
     this.planDetails = this.dataService.getCurrentPropertyPlanDetails();
-    if (!this.isShowDashboard) {
+    if (!this.isShowDashboardForCookieConsent) {
       this.dataService.openUpgradeModalForCookieConsent(this.planDetails);
     }
   }
