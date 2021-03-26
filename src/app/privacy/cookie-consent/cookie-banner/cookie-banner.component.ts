@@ -765,12 +765,12 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
       show_badge: this.cookieBannerForm.value.showBadge,
       CONFIG: this.onGetFormData()
     };
-    console.log(' this.onGetFormData()', JSON.stringify(userPrefrencesData));
 
     this.isPublish = true;
     this.loading.start();
     this.cookieBannerService.onSubmitCookieBannerData(userPrefrencesData, this.currentManagedOrgID, this.currrentManagedPropID, this.constructor.name, moduleName.cookieBannerModule)
       .subscribe((res: any) => {
+        this.onGetCookieBannerData();
         this.loading.stop();
         this.isPublish = false;
         this.isOpen = true;
@@ -1000,7 +1000,7 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
         this.ccpaBannerConfig = true;
         this.genericBannerConfig = false;
         this.isCCPAGlobalChecked = true;
-      } 
+      }
       this.cookieBannerForm.get('gdprTarget').clearValidators();
       this.cookieBannerForm.get('ccpaTarget').clearValidators();
 
