@@ -325,14 +325,12 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
       this.constructor.name, moduleName.dsarWebFormModule)
       .subscribe((data) => {
         this.loading.stop();
-        if (data.length !== 0) {
-          this.activeWebFormList = data;
+        if (data.count !== 0) {
+          this.activeWebFormList = data.response;
           // this.loading = false;
           return this.activeWebFormList;
         } else {
-          return this.activeWebFormList.length = 0;
-          //  this.loading = false;
-
+          this.activeWebFormList.length = 0;
         }
       }, (error) => {
         this.alertMsg = error;
@@ -343,10 +341,17 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
   }
 
   onWebformChange($event) {
-    const obj = JSON.parse($event.target.value);
-    this.selectedOrgID = obj.OID;
-    this.selectedPropID = obj.PID;
-    this.selectedCRID = obj.crid;
+    if($event.target.value !== ''){
+      const obj = JSON.parse($event.target.value);
+      this.selectedOrgID = obj.OID;
+      this.selectedPropID = obj.PID;
+      this.selectedCRID = obj.crid;
+    } else {
+      this.alertMsg = 'Webform not found!';
+      this.isOpen = true;
+      this.alertType = 'info';
+    }
+    
   }
 
   onCancelClick() {

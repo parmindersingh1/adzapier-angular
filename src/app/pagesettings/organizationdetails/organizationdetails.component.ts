@@ -190,12 +190,12 @@ export class OrganizationdetailsComponent implements OnInit {
 
   onGetOrgPlan() {
     this.loading.start('2');
-    this.dataService.getOrgPlanDetails(this.constructor.name, moduleName.cookieConsentModule, this.currentManagedOrgID)
+    this.dataService.getOrgPlanDetails(this.constructor.name, moduleName.cookieConsentModule, this.organizationID)
       .subscribe((res: any) => {
         this.orgPlanDetails = res.response;
-        this.loading.stop('2')
+        this.loading.stop('2');
       }, error => {
-        this.loading.stop('2')
+        this.loading.stop('2');
       });
   }
   getPropertyList(id): any {
@@ -213,9 +213,9 @@ export class OrganizationdetailsComponent implements OnInit {
     });
   }
 
-  open(content, type) {
+ async open(content, type) {
     if(type === 'invite' ) {
-      if (!this.onCheckSubscription()) {
+      if (! await this.onCheckSubscription()) {
         return false;
       }
     }
@@ -453,11 +453,23 @@ export class OrganizationdetailsComponent implements OnInit {
 
 
   onCheckSubscription(){
-      const status = this.dataService.checkUserForOrgAndCompany(this.orgPlanDetails, this.paginationConfig.totalItems);
-     if ( status === false) {
-       return false;
-     }
-     return true;
+    this.loading.start('2');
+    return new Promise(resolve => {
+      this.dataService.getOrgPlanInfo(this.constructor.name, moduleName.cookieConsentModule, this.organizationID)
+        .subscribe((res: any) => {
+          this.loading.stop('2');
+          const status = this.dataService.checkUserForOrg(this.orgPlanDetails, this.paginationConfig.totalItems, res.response.plan_details);
+          if (status === false) {
+            // return false;
+            resolve(false);
+          }
+          // return true;
+          resolve(true);
+        }, error => {
+          this.loading.stop('2');
+          resolve(false);
+        });
+    });
   }
 
   onSubmitInviteUserOrganization() {
@@ -465,10 +477,10 @@ export class OrganizationdetailsComponent implements OnInit {
     if (this.inviteUserOrgForm.invalid) {
       return false;
     } else {
-      if(!this.onCheckSubscription()){
-        return false;
-      }
       if (!this.isUpdateUserinvitation) {
+        if(!this.onCheckSubscription()){
+          return false;
+        }
         const requestObj = {
           email: this.inviteUserOrgForm.value.emailid,
           role_id: this.inviteUserOrgForm.value.permissions,
@@ -485,6 +497,7 @@ export class OrganizationdetailsComponent implements OnInit {
               this.alertType = 'success';
               this.loadOrgTeamMembers(this.organizationID);
               this.onCancelClick();
+              this.onGetOrgPlan();
             }
           }, (error) => {
             this.loading.stop();
@@ -571,6 +584,7 @@ export class OrganizationdetailsComponent implements OnInit {
           this.alertType = 'success';
           this.loadOrgTeamMembers(this.organizationID);
           this.onCancelClick();
+          this.onGetOrgPlan();
         }
       }, (err) => {
         this.alertMsg = err;

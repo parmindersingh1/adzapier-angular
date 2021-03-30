@@ -136,7 +136,7 @@
                                 (click)="onResendInvitation(list.approver_id)" class="btn btn-xs btn-primary"><i
                                     class="fas fa-envelope	"></i> Resend Invitation</button>
                                     <ng-template #LoginDate>
-                                        {{list.user_last_login | timeAgo}}
+                                        {{list.user_last_login | timeago}}
                                     </ng-template>
 
                             </td>
@@ -201,7 +201,7 @@
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label for="orgname" class="d-block">Company Name</label>
-                        <input type="text" formControlName="orgname" name="orgname" [(ngModel)]="orgname" minlength="2"
+                        <input type="text" disabled formControlName="orgname" name="orgname" [(ngModel)]="orgname" minlength="2"
                             maxlength="20" class="form-control" placeholder="Enter your company name"
                             [ngClass]="{ 'is-invalid': submitted && f.orgname.errors }" />
                         <div *ngIf="submitted && f.orgname.errors" class="invalid-feedback">

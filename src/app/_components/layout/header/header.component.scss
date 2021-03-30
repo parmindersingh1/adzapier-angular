@@ -618,8 +618,8 @@ a.nav-link:hover {
 
 .cross-icon {
   margin: 0px 4px 0 0;
-  font-size: 12px;
-  height: 14px;
+  font-size: 13px;
+  height: 16px;
 }
 
 .cross-icon:hover {
@@ -646,41 +646,43 @@ a.nav-link:hover {
 .notification-height {
   overflow-y: auto;
   max-height: 250px;
-  padding: 6px 6px 0px 6px;
+  padding: 6px;
   height: 100%;
-  min-height: 100px;
+  min-height: 250px;
 }
 
 .notification-wrapper {
   display: flex;
   flex-direction: row;
-  justify-content: space-evenly;
-  padding: 5px 25px 1px 5px;
+  justify-content: space-between;
+  // padding: 5px 0 1px 5px;
   font-size: 13px;
-  margin-bottom: 10px;
+  // width: 100%;
+  margin: 0 30px 0 20px;
 }
 
 .notification-wrapper:hover {
   background: #f3f3f3;
-  color:#222;
   border-radius: 5px;
-  width: 100%;
   color: #333;
+  margin: 0 30px 0 20px;
 }
 
 .notification-wrapper:hover .cross-icon {
   color:#000;
   font-weight: bold;
+  cursor: pointer;
 }
 
 .notification-time {
-  color: #7e7b7b;
+  color: #596882;
   font-weight: normal;
 }
 
 .notification-task-time-wrapper {
   display: flex;
   flex-direction: column;
+  padding: 10px;
 
 }
 
@@ -788,7 +790,7 @@ button.btn.btn-link:hover {
   .nav-mr {
     margin-left: 0;
   }
- 
+
 }
 
 @media(min-width:768px) and (max-width:1024px) {
@@ -816,7 +818,7 @@ button.btn.btn-link:hover {
     display: none;
   }
 
- 
+
 }
 
 @media(min-width:320px) and (max-width:767px) {
@@ -944,4 +946,9 @@ button.btn.btn-link:hover {
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
  }
+}
+
+.cancel-btn{
+  font-weight: bold;
+  cursor: pointer;
 }

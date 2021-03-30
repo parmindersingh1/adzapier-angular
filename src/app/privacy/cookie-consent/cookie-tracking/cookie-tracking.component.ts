@@ -58,7 +58,8 @@ export class CookieTrackingComponent implements OnInit {
 
   onCheckSubscription() {
     this.planDetails = this.dataService.getCurrentPropertyPlanDetails();
-    const isAllowViewConsent = this.dataService.isAllowCookieTracking(this.planDetails.response, featuresName.FULL_CONVERSION_AND_VISITOR, featuresName.CONSENT_RECORD_KEEPING);
+    const isAllowViewConsent = this.dataService.isAllowCookieTracking
+    (this.planDetails.response, featuresName.FULL_CONVERSION_AND_VISITOR, featuresName.CONSENT_RECORD_KEEPING);
     this.isDisabledScreen = !isAllowViewConsent;
     if (!isAllowViewConsent) {
       this.dataService.openUpgradeModalForCookieConsent(this.planDetails);
