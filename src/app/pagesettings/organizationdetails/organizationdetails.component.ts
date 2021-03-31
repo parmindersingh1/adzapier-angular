@@ -455,7 +455,7 @@ export class OrganizationdetailsComponent implements OnInit {
   onCheckSubscription(){
     this.loading.start('2');
     return new Promise(resolve => {
-      this.dataService.getOrgPlanInfo(this.constructor.name, moduleName.cookieConsentModule, this.organizationID)
+      this.dataService.getOrgAndPropPlanInfo(this.constructor.name, moduleName.cookieConsentModule, this.organizationID)
         .subscribe((res: any) => {
           this.loading.stop('2');
           const status = this.dataService.checkUserForOrg(this.orgPlanDetails, this.paginationConfig.totalItems, res.response.plan_details);
