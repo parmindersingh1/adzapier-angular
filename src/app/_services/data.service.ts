@@ -97,6 +97,16 @@ export class DataService {
     );
   }
 
+  getOrgAndPropPlanInfo(componentName, moduleName, orgID) {
+    const path = apiConstant.PROP_AND_ORG_PLAN.replace(':orgId', orgID);
+    return this.http.get(environment.apiUrl + path, {params: {oID: orgID}}).pipe(map(res => res),
+      catchError(error => {
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.consentDashboard, componentName, moduleName, path);
+        return throwError(error);
+      }),
+    );
+  }
+
   getOrgPlanDetails(componentName, moduleName, orgID) {
     const path = apiConstant.ORG_PLAN.replace(':orgId', orgID);
     return this.http.get(environment.apiUrl + path).pipe(map(res => res),
@@ -209,11 +219,18 @@ export class DataService {
         flag = false;
       }
     }
+    let planType = 'org';
+    if (plan_details) {
+      if (plan_details.hasOwnProperty('product_name')) {
+        planType = plan_details.product_name.includes('Cookie Consent') ? 'cookieConsent' : 'org';
+      }
+    }
+
     if (flag === false) {
       this.openModal.next({
         openModal: true,
         data: plan_details,
-        type: 'org',
+        type: planType,
         msg: msg,
         currentplan: plan_details
       })
