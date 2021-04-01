@@ -21,7 +21,6 @@ import { WelcomeComponent } from './welcome/welcome.component';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import {NgbCollapseModule} from '@ng-bootstrap/ng-bootstrap';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
-import { ConsentSolutionsComponent } from './privacy/consent_solutions/consent-solutions/consent-solutions.component';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import {ButtonModule} from 'primeng/button';
 import {TableModule} from 'primeng/table';
@@ -48,7 +47,6 @@ import {TableModule} from 'primeng/table';
    // VerifyemailComponent,
    //  CheckoutConfirmationComponent,
     WelcomeComponent,
-    ConsentSolutionsComponent
   ],
   imports: [
     BrowserModule,

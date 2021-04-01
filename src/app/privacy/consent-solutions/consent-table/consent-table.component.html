@@ -1,5 +1,5 @@
 <div class="container-fluid" style="background-color: white;width: 100%; height: 100%;">
-  <div class="row mt-2"> 
+  <div class="row mt-2">
       <div class="col-md-1 col-sm-2">
         <i class="pi pi-desktop desk_img" style="font-size: 3.0rem;opacity: 0.5;"></i>
       </div>
@@ -29,48 +29,80 @@
                   <option value="mercedes">german</option>
                   <option value="audi">Spanish</option>
                 </select>
-                </div> 
+                </div>
               <a href="#"><i class="pi pi-trash dust" style="font-size: 0.8rem;color:black;"></i></a>
               </div>
           </div>
         </div>
   </div>
-     
+
 </div>
 
-    
+
 
     <div style="margin-top: 110px;">
         <h4 class="headings mb-4">CONSENT SOLUTION DASHBOARD</h4>
-       
 
-     
-      
+
+
+
 <tabset #tabset class="tabsets">
-<tab customClass="customClass" 
+<tab customClass="customClass"
   heading="Consents">
-  <div style="overflow:auto;height:50vh;margin-top: 20px;">
-  <table class="table borderless">
-      <thead>
-          <tr>
-            <th>Owner ID</th>
-            <th>CreatedAt</th>
-            <th>Data Source</th>
-              <th></th>
-          </tr>
-      </thead>
-      <tbody style="overflow-x:scroll;height:50vh;margin-top: 20px;">
-          <tr *ngFor="let consen of consents" >
-            <td>{{consen.owner_id}}</td>
-            <td>{{consen.created_at | date}}</td>
-            <td>{{consen.data_source}}</td>
-              <td style="text-align-last:right;">
-                  <a href="#"><i class="pi pi-user mr-2" style="font-size: 1.0rem;"></i></a>
-                  <a href="#"><i class="pi pi-eye" style="font-size: 1.0rem;"></i></a>
-              </td>
-          </tr>
-      </tbody>
-  </table>
+<!--  <div style="overflow:auto;height:50vh;margin-top: 20px;">-->
+<!--  <table class="table borderless">-->
+<!--      <thead>-->
+<!--          <tr>-->
+<!--            <th>Owner ID</th>-->
+<!--            <th>CreatedAt</th>-->
+<!--            <th>Data Source</th>-->
+<!--              <th></th>-->
+<!--          </tr>-->
+<!--      </thead>-->
+<!--      <tbody style="overflow-x:scroll;height:50vh;margin-top: 20px;">-->
+<!--          <tr *ngFor="let consentRecord of consentRecordList" >-->
+<!--            <td>{{consentRecord.owner_id}}</td>-->
+<!--            <td>{{consentRecord.created_at | date}}</td>-->
+<!--            <td>{{consentRecord.data_source}}</td>-->
+<!--              <td style="text-align-last:right;">-->
+<!--                  <a href="#"><i class="pi pi-user mr-2" style="font-size: 1.0rem;"></i></a>-->
+<!--                  <a href="#"><i class="pi pi-eye" style="font-size: 1.0rem;"></i></a>-->
+<!--              </td>-->
+<!--          </tr>-->
+<!--      </tbody>-->
+<!--  </table>-->
+<!--  </div>-->
+
+  <div class="card">
+    <p-table [value]="consentRecordList"
+             [lazy]="true" [responsive]="true"
+             [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+             currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,20,30]"
+             (onLazyLoad)="onGetConsentSolutionData($event)"
+             styleClass="p-datatable-sm">
+      <ng-template pTemplate="header">
+                  <tr>
+                    <th>Owner ID</th>
+                    <th>CreatedAt</th>
+                    <th>Data Source</th>
+                      <th></th>
+                  </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-consentRecord>
+                  <tr >
+                    <td>{{consentRecord.owner_id}}</td>
+                    <td>{{consentRecord.created_at | date}}</td>
+                    <td>{{consentRecord.data_source}}</td>
+                      <td style="text-align-last:right;">
+                          <a href="#"><i class="pi pi-user mr-2" style="font-size: 1.0rem;"></i></a>
+                          <a href="#"><i class="pi pi-eye" style="font-size: 1.0rem;"></i></a>
+                      </td>
+                  </tr>
+      </ng-template>
+
+
+
+    </p-table>
   </div>
 
 </tab>
@@ -83,12 +115,12 @@
           <tr>
             <th>Email</th>
             <th>Verified</th>
-            <th>Preferences</th>  
+            <th>Preferences</th>
               <th></th>
           </tr>
       </thead>
       <tbody>
-          <tr *ngFor="let consen of consents">
+          <tr *ngFor="let consen of consentRecordList">
             <td>{{consen.email}}</td>
             <td>
             <div *ngIf="consen.verified;else elseBlock">
@@ -106,7 +138,7 @@
       </tbody>
   </table>
   </div>
- 
+
 </tab>
 
     <tab class="tbs" customClass="customClass"
@@ -121,7 +153,7 @@
             <th>Identifier</th>
             <th>CreatedAt</th>
             <th>Updated At</th>
-             
+
           </tr>
       </thead>
       <tbody>
@@ -143,10 +175,10 @@
 </tab>
 
 
-  
+
 </tabset>
     </div>
-    
+
 
 
 </div>
