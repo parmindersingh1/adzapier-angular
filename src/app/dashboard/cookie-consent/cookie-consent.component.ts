@@ -1,8 +1,11 @@
-import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
 import {DashboardService} from '../../_services/dashboard.service';
 import { OrganizationService} from '../../_services';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
 import {moduleName} from '../../_constant/module-name.constant';
+import {DataService} from '../../_services/data.service';
+import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
+import {Location} from '@angular/common';
 interface Country {
   count: number;
   state: string;
@@ -54,10 +57,16 @@ export class CookieConsentComponent implements OnInit {
    stateCountryColor = {};
   stateList: Country[] = [];
   private countryColor: any;
+  isShowDashboard = false;
+  @ViewChild('noSup', {static: true}) noSup;
+  modalRef: BsModalRef;
   constructor(private dashboardService: DashboardService,
               private orgservice: OrganizationService,
               private cd: ChangeDetectorRef,
-              private loading: NgxUiLoaderService
+              private loading: NgxUiLoaderService,
+              private dataService: DataService,
+              private modalService: BsModalService,
+              private _location: Location
   ) { }
 
   ngOnInit() {
@@ -68,6 +77,29 @@ export class CookieConsentComponent implements OnInit {
     this.onGetCountryList();
     this.onConsentDetails();
     this.onGetMapData();
+    this.onCheckSubscription()
+  }
+
+  onCheckSubscription() {
+    const resData: any = this.dataService.getCurrentPropertyPlanDetails();
+    const features = resData.response.features;
+    console.log('features', !features)
+    if (features == null) {
+      this.isShowDashboard = false;
+    } else {
+      if( Object.keys(features).length > 0) {
+        this.isShowDashboard = true;
+      } else {
+        this.isShowDashboard = false;
+      }
+    }
+    this.onOpenPopUp();
+  }
+
+  onOpenPopUp() {
+    if (!this.isShowDashboard) {
+      this.modalRef = this.modalService.show(this.noSup, {class: 'modal-md', ignoreBackdropClick: true});
+    }
   }
 
   onGetPropsAndOrgId() {
@@ -311,6 +343,10 @@ export class CookieConsentComponent implements OnInit {
     this.onGetCountryList();
     this.onConsentDetails();
     this.onGetMapData();
+  }
+  onGoBack() {
+    this.modalRef.hide();
+    this._location.back();
   }
 
 }

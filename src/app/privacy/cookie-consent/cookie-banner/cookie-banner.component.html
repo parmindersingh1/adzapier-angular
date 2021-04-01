@@ -38,9 +38,10 @@
                 Reset Configuration
               </button>
 
-              <a class="btn ml-2 btn-sm btn-uppercase btn-outline-secondary" routerLink="/cookie-consent/manage-vendors">
+              <button class="btn ml-2 btn-sm btn-uppercase btn-outline-secondary"
+                 [attr.disabled]="disablePlanFeatures.disableManageVendors ? true : null" (click)="onNavigateToManageVendor()">
                 Manage Vendors
-              </a>
+              </button>
 
               <button type="button" class="btn btn-sm ml-2 btn-uppercase btn-outline-secondary" (click)="openModal(templateManageLang)">Manage Languages</button>
 
@@ -244,7 +245,7 @@
                       <div class="col-sm-4">
                         <label class="switch">
                           <input type="checkbox"
-                                 formControlName="ccpa_global">
+                                 formControlName="purposes_by_default">
                           <span class="slider round"></span>
                         </label>
                       </div>

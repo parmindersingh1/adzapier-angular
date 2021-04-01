@@ -368,7 +368,7 @@
 
               <div class="pd-sm-l-10">
                 <p style="text-transform: capitalize" class="tx-medium mg-b-0">{{request.name}}</p>
-                <small class="tx-12 tx-color-03 mg-b-0">{{request.time | timeAgo}}</small>
+                <small class="tx-12 tx-color-03 mg-b-0">{{request.time | timeago}}</small>
               </div>
               <div class="mg-l-auto text-right">
                 <p class="tx-medium mg-b-0">Status</p>
@@ -399,3 +399,11 @@
 <div class="col-sm-5 mt-3 mr-0 float-right">
   <alert *ngIf="isOpen" [type]="alertType"  dismissOnTimeout="5000" [dismissible]="dismissible" (onClosed)="onClosed(alertMsg)">{{  alertMsg}}</alert>
 </div>
+
+
+<ng-template #noSup>
+  <div class="modal-body text-center">
+    <h4>You haven't assign license to this Organization</h4>
+    <p (click)="onGoBack()" class="cancel-btn btn btn-primary mt-2 mb-2">or Cancel &amp; Go Back</p>
+  </div>
+</ng-template>

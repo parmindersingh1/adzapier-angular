@@ -9,5 +9,6 @@ export const featuresName = {
   CONSENT_RECORD_KEEPING:'Consent Record Keeping',
   NUM_OF_REQUESTS: 'Requests',
   NUM_OF_WORKFLOWS: 'Workflow',
-  NUM_OF_DSAR_FORMS: 'Forms'
+  NUM_OF_DSAR_FORMS: 'Forms',
+  MANAGE_VENDORS: 'Manage Vendors'
 }
