@@ -53,17 +53,17 @@
   <table class="table borderless">
       <thead>
           <tr>
-              <th><b>Creation Date</b></th>
-              <th><b>Subject</b></th>
-              <th><b>Source</b></th>
+            <th>Owner ID</th>
+            <th>CreatedAt</th>
+            <th>Data Source</th>
               <th></th>
           </tr>
       </thead>
       <tbody style="overflow-x:scroll;height:50vh;margin-top: 20px;">
-          <tr *ngFor="let consen of data" >
-              <td>{{consen.creation}}</td>
-              <td>{{consen.subject}}</td>
-              <td>{{consen.source}}</td>
+          <tr *ngFor="let consen of consents" >
+            <td>{{consen.owner_id}}</td>
+            <td>{{consen.created_at | date}}</td>
+            <td>{{consen.data_source}}</td>
               <td style="text-align-last:right;">
                   <a href="#"><i class="pi pi-user mr-2" style="font-size: 1.0rem;"></i></a>
                   <a href="#"><i class="pi pi-eye" style="font-size: 1.0rem;"></i></a>
@@ -81,19 +81,21 @@
   <table class="table borderless" >
       <thead>
           <tr>
-              <th><b>Creation Date</b></th>
-              <th><b>Subject</b></th>
-              <th style="text-align-last:center;"><b>Verified</b></th>
-              <th><b>Preferences</b></th>
+            <th>Email</th>
+            <th>Verified</th>
+            <th>Preferences</th>  
               <th></th>
           </tr>
       </thead>
       <tbody>
-          <tr *ngFor="let consen of data">
-              <td>{{consen.creation}}</td>
-              <td>{{consen.subject}}</td>
-              <td style="text-align-last:center;"><a href="#"><i class="pi pi-times" style="font-size: 1.1rem; color: black;"></i></a>
-              </td>
+          <tr *ngFor="let consen of consents">
+            <td>{{consen.email}}</td>
+            <td>
+            <div *ngIf="consen.verified;else elseBlock">
+             <i class="pi pi-check" style="font-size: 1.2rem; color:#5cb85c;"></i>
+             </div>
+             <ng-template #elseBlock><i class="pi pi-times" style="font-size: 1.2rem; color: #d9534f;"></i></ng-template>
+            </td>
               <td><button pButton type="button" label="newsletter" style="margin-right: 5px; height: 30px;text-align: center;"></button>
                   <button pButton type="button" style="height: 30px;width:100px;text-align: center;" label="generic"></button>
               </td>
@@ -113,19 +115,23 @@
   <table class="table borderless" >
       <thead>
           <tr>
-              <th><b>Creation Date</b></th>
-              <th><b>Identifier</b></th>
-              <th><b>Version</b></th>
-              <th></th>
+            <th>Id</th>
+            <th>Consent_id</th>
+            <th>Version</th>
+            <th>Identifier</th>
+            <th>CreatedAt</th>
+            <th>Updated At</th>
              
           </tr>
       </thead>
       <tbody>
-          <tr *ngFor="let consen of data">
-              <td>{{consen.creation}}</td>
-              <td>{{consen.identifier}}</td>
-              <td>{{consen.version}}
-              </td>
+          <tr *ngFor="let consen of legal_notices">
+            <td>{{consen.id}}</td>
+            <td>{{consen.consent_id}}</td>
+            <td>{{consen.version}}</td>
+            <td>{{consen.identifier}}</td>
+            <td>{{consen.created_at | date}}</td>
+            <td>{{consen.updated_at | date}}</td>
               <td  style="text-align-last:right;">
                   <a href="#"><i class="pi pi-eye" style="font-size: 1.0rem"></i></a>
               </td>
