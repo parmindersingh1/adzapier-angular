@@ -16,8 +16,6 @@
       </div>
 
 
-
-
     </div> <!-- breadcrumb -->
 
 
@@ -27,79 +25,115 @@
           <div class="card-header">
             <div class="d-sm-flex align-items-center justify-content-between">
               <div>
-            <h4 class="mat-h2 m-0">
-              Configure your Banner
-            </h4>
+                <h4 class="mat-h2 m-0">
+                  Configure your Banner
+                </h4>
               </div>
 
 
-            <div class="d-none d-md-block">
-              <button (click)="onResetConfig()" type="button" class="btn  btn-sm btn-uppercase btn-outline-secondary">
-                Reset Configuration
-              </button>
+              <div class="d-none d-md-block">
+                <button (click)="onResetConfig()" type="button" class="btn  btn-sm btn-uppercase btn-outline-secondary">
+                  Reset Configuration
+                </button>
 
-              <a class="btn ml-2 btn-sm btn-uppercase btn-outline-secondary" routerLink="/cookie-consent/manage-vendors">
-                Manage Vendors
-              </a>
+                <!-- <a class="btn ml-2 btn-sm btn-uppercase btn-outline-secondary" routerLink="/cookie-consent/manage-vendors">
+                  Manage Vendors
+                </a> -->
 
-              <button type="button" class="btn btn-sm ml-2 btn-uppercase btn-outline-secondary" (click)="openModal(templateManageLang)">Manage Languages</button>
+                <button type="button" class="btn btn-sm ml-2 btn-uppercase btn-outline-secondary"
+                        (click)="openModal(templateManageLang)">Manage Languages
+                </button>
 
 
+                <button (click)="type = 'draft'" type="submit" [disabled]="cookieBannerForm.invalid"
+                        class="btn ml-2  btn-sm btn-uppercase btn-success">
+                  <ng-container *ngIf="!isPublish || type === 'publish'">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                         class="feather feather-save wd-10 mg-r-5">
+                      <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                      <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                      <polyline points="7 3 7 8 15 8"></polyline>
+                    </svg>
+                    Save
+                  </ng-container>
+                  <ng-container *ngIf="isPublish && type === 'draft'">
+                    <div class="spinner-border"></div>
+                    Saving...
+                  </ng-container>
+                </button>
+                <button (click)="type = 'publish'" type="submit" [disabled]="cookieBannerForm.invalid"
+                        class="btn btn-sm pd-x-15 btn-primary btn-uppercase mg-l-5" href="#modalAddCategory"
+                        data-toggle="modal">
+                  <ng-container *ngIf="!isPublish || type === 'draft'">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                         viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                         stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                         class="feather feather-sliders wd-10 mg-r-5">
+                      <line x1="4" y1="21" x2="4" y2="14"></line>
+                      <line x1="4" y1="10" x2="4" y2="3"></line>
+                      <line x1="12" y1="21" x2="12" y2="12"></line>
+                      <line x1="12" y1="8" x2="12" y2="3"></line>
+                      <line x1="20" y1="21" x2="20" y2="16"></line>
+                      <line x1="20" y1="12" x2="20" y2="3"></line>
+                      <line x1="1" y1="14" x2="7" y2="14"></line>
+                      <line x1="9" y1="8" x2="15" y2="8"></line>
+                      <line x1="17" y1="16" x2="23" y2="16"></line>
+                    </svg>
+                    Publish
+                  </ng-container>
+                  <ng-container *ngIf="isPublish && type === 'publish'">
+                    <div class="spinner-border"></div>
+                    Publishing...
+                  </ng-container>
+                </button>
 
-              <button (click)="type = 'draft'" type="submit" [disabled]="cookieBannerForm.invalid" class="btn ml-2  btn-sm btn-uppercase btn-outline-secondary">
-                <ng-container *ngIf="!isPublish || type === 'publish'">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                       class="feather feather-save wd-10 mg-r-5">
-                    <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
-                    <polyline points="17 21 17 13 7 13 7 21"></polyline>
-                    <polyline points="7 3 7 8 15 8"></polyline>
-                  </svg>
-                  Save
-                </ng-container>
-                <ng-container *ngIf="isPublish && type === 'draft'">
-                  <div class="spinner-border"></div>
-                  Saving...
-                </ng-container>
-              </button>
-              <button (click)="type = 'publish'" type="submit" [disabled]="cookieBannerForm.invalid"
-                      class="btn btn-sm pd-x-15 btn-primary btn-uppercase mg-l-5" href="#modalAddCategory"
-                      data-toggle="modal">
-                <ng-container *ngIf="!isPublish || type === 'draft'">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                       viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                       stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                       class="feather feather-sliders wd-10 mg-r-5">
-                    <line x1="4" y1="21" x2="4" y2="14"></line>
-                    <line x1="4" y1="10" x2="4" y2="3"></line>
-                    <line x1="12" y1="21" x2="12" y2="12"></line>
-                    <line x1="12" y1="8" x2="12" y2="3"></line>
-                    <line x1="20" y1="21" x2="20" y2="16"></line>
-                    <line x1="20" y1="12" x2="20" y2="3"></line>
-                    <line x1="1" y1="14" x2="7" y2="14"></line>
-                    <line x1="9" y1="8" x2="15" y2="8"></line>
-                    <line x1="17" y1="16" x2="23" y2="16"></line>
-                  </svg>
-                  Publish
-                </ng-container>
-                <ng-container *ngIf="isPublish && type === 'publish'">
-                  <div class="spinner-border"></div>
-                  Publishing...
-                </ng-container>
-              </button>
+                <!--              <p  *ngIf="cookieBannerForm.invalid" class="pb-0 text-right text-danger tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label"> <i class="fas fa-info-circle"></i>  Validation Error</p>-->
 
-<!--              <p  *ngIf="cookieBannerForm.invalid" class="pb-0 text-right text-danger tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label"> <i class="fas fa-info-circle"></i>  Validation Error</p>-->
-
+              </div>
             </div>
           </div>
-          </div>
-          <div class="card-body">
-            <div [ngStyle]="{display: skeletonLoading ? 'none': ''}" class="row">
-              <div class="col-md-6">
-                <div class="divider-text mt-0">Banner Configuration</div>
-                <div class="row">
+
+
+
+          <div class="card-body pt-2">
+            <div class="row d-flex mr-1 "><label
+              class="tx-11 pb-2 tx-medium tx-spacing-1 pb-0 tx-color-03 mb-1 tx-uppercase col-sm-12  col-form-label mt-n2"
+              for="sel1">Allow Regulations    <i-feather *ngIf="gdprGlobal.checked || ccpaGlobal.checked || genericGlobal.checked" class="feather-16" name="info"
+                                                         [tooltip]="gdprGlobal.checked ? 'GDPR Global Applied' : ccpaGlobal.checked ? 'CCPA Global Applied' : genericGlobal.checked ? 'Generic Global Applied' : null"></i-feather></label>
+              <div class="col-sm-12 pb-3 d-flex regulation-div">
+                <div class="form-group mb-0 pr-3">
+                  <label><input type="checkbox" [checked]="ccpaBannerConfig" name="ccpaBannerConfig"
+                      (change)="onCheckBannerConfig($event)" [disabled]="gdprGlobal.checked || ccpaGlobal.checked || genericGlobal.checked" value="ccpa"> CCPA</label>
+                </div>
+                <div class="form-group mb-0 pr-3">
+                  <label><input type="checkbox" [checked]="gdprBannerConfig" name="gdprBannerConfig"
+                               (change)="onCheckBannerConfig($event)" [disabled]="gdprGlobal.checked || ccpaGlobal.checked || genericGlobal.checked" value="gdpr"> GDPR</label>
+                </div>
+                <div class="form-group mb-0">
+                  <label><input type="checkbox" name="genericBannerConfig" [checked]="genericBannerConfig"
+                                 (change)="onCheckBannerConfig($event)"  [disabled]="(!gdprBannerConfig && !ccpaBannerConfig) || (gdprGlobal.checked || ccpaGlobal.checked || genericGlobal.checked)"
+                                 value="generic"> GENERIC
+
+                  </label>
+                </div>
+
+              </div>
+            </div>
+
+            <div [ngStyle]="{display: skeletonLoading ? 'none': ''}" class="d-flex mt-2">
+              <div class="col-md-5  col-xs-12 border-gray"
+                   [ngClass]="genericBannerConfig || gdprBannerConfig || ccpaBannerConfig?'show-banner-config':'hide-banner-config'">
+                <div class="banner-config-title tx-medium tx-13 tx-spacing-1 tx-color-03 tx-uppercase">
+                  REGULATION Configuration
+
+                </div>
+
+                <div class="divider-text mb-0"  *ngIf="ccpaBannerConfig">CCPA </div>
+
+                <div class="row position-relative ccpa "   [ngClass]="ccpaBannerConfig?'show-controls':'hide-controls'">
                   <div class="col-md-6">
-                    <div class="form-group mb-1 row">
+                    <div class="form-group mb-1 row" *ngIf="ccpaBannerConfig">
                       <label for="sel1"
                              class="tx-13 tx-medium tx-spacing-1 pb-0 tx-color-03 tx-uppercase col-sm-12  col-form-label">CCPA
                         Target:</label>
@@ -111,18 +145,44 @@
                                   [value]="ccpaCountry.value">
                             {{ccpaCountry.title}}</option>
                         </select>
-
                         <div *ngIf="submitted && f.ccpaTarget.errors">
                           <div class="text-danger mt-2" *ngIf="f.ccpaTarget.errors.required">
                             Choose CCPA Target
                           </div>
                         </div>
-
                       </div>
                     </div>
+                  </div>
 
 
-                    <div class="form-group mb-1 row">
+                  <div class="col-md-6 pt-4">
+                  <div class="form-group row pd-0 mg-b-0"
+                       [ngClass]="ccpaBannerConfig?'show-controls':'hide-controls'">
+                    <label class="col-sm-8 tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label">
+                      CCPA GLOBAL</label>
+                    <div class="col-sm-4 pt-2">
+                      <label class="switch">
+                        <input type="checkbox"
+                               [attr.disabled]="cookieBannerForm.value.gdpr_global || cookieBannerForm.value.generic_global ? true : null"
+                               (ngModelChange)="onSetGdprGlobal($event, 'ccpa')" #ccpaGlobal
+                               formControlName="ccpa_global">
+                        <span class="slider round"></span>
+                      </label>
+                    </div>
+
+                    <div class="row">
+                      <p
+                        class="p-0 global-text text-info  tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label"
+                        *ngIf="ccpaGlobal.checked"> CCPA Global Applied </p>
+                    </div>
+                  </div>
+                  </div>
+                </div>
+
+                <div class="divider-text mb-0"  *ngIf="gdprBannerConfig" >GDPR </div>
+                <div class="row position-relative gdpr"   [ngClass]="gdprBannerConfig?'show-controls':'hide-controls'">
+                  <div class="col-md-6">
+                    <div class="form-group mb-1 row" *ngIf="gdprBannerConfig">
                       <label for="sel1"
                              class="tx-13 tx-medium pb-0 tx-spacing-1 tx-color-03 tx-uppercase col-sm-12  col-form-label">GDPR
                         Target:</label>
@@ -140,47 +200,22 @@
                       </div>
                     </div>
 
-                    <div class="row">
-                      <div class="col-md-2 ">
-                        <p-checkbox (click)="onCheckLogoAllow()" [disabled]="disablePlanFeatures.hideLogo" class="pt-1"
-                                    binary="true"
-                                    formControlName="logo"></p-checkbox>
-                      </div>
-                      <div class="col-md-9">
-                        <label class="tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase col-sm-12 col-form-label">
-                          Show Watermark
-                        </label>
-                      </div>
-                    </div>
-
-
-                    <div class="row">
-                      <div class="col-md-2">
-                        <p-checkbox binary="true" class="pt-1 checkbox" formControlName="showBadge"></p-checkbox>
-                      </div>
-                      <div class="col-md-9">
-                        <label class="tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase col-sm-12  col-form-label">
-                          Show Badge
-                        </label>
-                      </div>
+                    <div class="form-group row pd-0 mg-b-0 manage-vendor-btn"
+                         *ngIf="gdprBannerConfig">
+                      <a class="mt-n2 mr-n2 float-right btn-xs btn-uppercase "
+                         style="font-size: 12px"
+                         routerLink="/cookie-consent/manage-vendors">
+                        <i class="fa fa-cogs" style="    font-size: 15px;
+    margin-right: 5px;" aria-hidden="true"></i>
+                        Manage Vendors
+                      </a>
                     </div>
                   </div>
 
 
-                  <div class="col-md-6 mt-3 border-right">
-                    <div class="form-group row pd-0 mg-b-0">
-                      <label class="col-sm-8 tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label">
-                        COOKIE BLOCKING</label>
-                      <div class="col-sm-4">
-                        <label class="switch" (click)="onCheckDisableCookiebloking()">
-                          <input type="checkbox"
-                                 [attr.disabled]="disablePlanFeatures.disableCookieblocking ? true : null"
-                                 formControlName="cookieBlocking">
-                          <span class="slider round"></span>
-                        </label>
-                      </div>
-                    </div>
-                    <div class="form-group row pd-0 mg-b-0">
+                  <div class="col-md-6 mt-3">
+                    <div class="form-group row pd-0 mg-b-0"
+                         [ngClass]="gdprBannerConfig?'show-controls':'hide-controls'">
                       <label class="col-sm-8 tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label">
                         ENABLE IAB</label>
                       <div class="col-sm-4">
@@ -191,7 +226,8 @@
                         </label>
                       </div>
                     </div>
-                    <div class="form-group row pd-0 mg-b-0">
+                    <div class="form-group row pd-0 mg-b-0"
+                         [ngClass]="gdprBannerConfig?'show-controls':'hide-controls'">
                       <label class="col-sm-8 tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label">
                         Google Vendors</label>
                       <div class="col-sm-4">
@@ -204,89 +240,173 @@
                       </div>
                     </div>
 
-                    <div class="form-group row pd-0 mg-b-0">
+                    <div class="form-group row pd-0 mg-b-0"
+                         [ngClass]="gdprBannerConfig?'show-controls':'hide-controls'">
                       <label class="col-sm-8 tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label">
                         GDPR GLOBAL</label>
                       <div class="col-sm-4">
                         <label class="switch">
-                          <input type="checkbox" [attr.disabled]="cookieBannerForm.value.ccpa_global ? true : null" (ngModelChange)="onSetGdprGlobal($event, 'gdpr')" #gdprGlobal
+                          <input type="checkbox"
+                                 [attr.disabled]="cookieBannerForm.value.ccpa_global || cookieBannerForm.value.generic_global ? true : null"
+                                 (ngModelChange)="onSetGdprGlobal($event, 'gdpr')" #gdprGlobal
                                  formControlName="gdpr_global">
                           <span class="slider round"></span>
                         </label>
                       </div>
 
                       <div class="row">
-                        <p class="p-0 global-text text-info  tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label" *ngIf="gdprGlobal.checked"> GDPR Global Applied </p>
+                        <p
+                          class="p-0 global-text text-info  tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label"
+                          *ngIf="gdprGlobal.checked"> GDPR Global Applied </p>
                       </div>
                     </div>
 
-
-                    <div class="form-group row pd-0 mg-b-0">
-                      <label class="col-sm-8 tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label">
-                        CCPA GLOBAL</label>
-                      <div class="col-sm-4">
-                        <label class="switch">
-                          <input type="checkbox"  [attr.disabled]="cookieBannerForm.value.gdpr_global ? true : null" (ngModelChange)="onSetGdprGlobal($event, 'ccpa')" #ccpaGlobal
-                                 formControlName="ccpa_global">
-                          <span class="slider round"></span>
-                        </label>
-                      </div>
-
-                      <div class="row">
-                        <p class="p-0 global-text text-info  tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label" *ngIf="ccpaGlobal.checked"> CCPA Global Applied </p>
-                      </div>
-                    </div>
-
-
-                    <div class="form-group row pd-0 mg-b-0">
-                      <label class="col-sm-8 tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label">
-                        Allow Purposes By Default</label>
-                      <div class="col-sm-4">
-                        <label class="switch">
-                          <input type="checkbox"
-                                 formControlName="ccpa_global">
-                          <span class="slider round"></span>
-                        </label>
-                      </div>
-                    </div>
-
-<!--                    <div class="form-group row pd-0 mg-b-0">-->
+<!--                    <div class="form-group row pd-0 mg-b-0"-->
+<!--                         [ngClass]="genericBannerConfig?'show-controls':'hide-controls'">-->
 <!--                      <label class="col-sm-8 tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label">-->
-<!--                        Configure banner</label>-->
+<!--                        GENERIC GLOBAL</label>-->
 <!--                      <div class="col-sm-4">-->
-<!--                        <label class="switch" (click)="onCheckAllowBannerConfig()">-->
-<!--                          <input [attr.disabled]="disablePlanFeatures.disableBannerConfig ? true : null" type="checkbox"-->
-<!--                                 #showConfig>-->
+<!--                        <label class="switch">-->
+<!--                          <input type="checkbox"-->
+<!--                                 [attr.disabled]="cookieBannerForm.value.gdpr_global || cookieBannerForm.value.ccpa_global ? true : null"-->
+<!--                                 (ngModelChange)="onSetGdprGlobal($event, 'generic')" #genericGlobal-->
+<!--                                 formControlName="generic_global">-->
 <!--                          <span class="slider round"></span>-->
 <!--                        </label>-->
 <!--                      </div>-->
-<!--                    </div>-->
 
-
-<!--                    <div class="form-group row pd-0 mg-b-0">-->
-<!--                      <label class="col-sm-8 tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label">-->
-<!--                        Custom Vendors</label>-->
-<!--                      <div class="col-sm-4">-->
-<!--                        <label class="switch" (click)="onCheckAllowBannerConfig()">-->
-<!--                          <input [attr.disabled]="disablePlanFeatures.disableBannerConfig ? true : null" type="checkbox"-->
-<!--                                 #allowCustom>-->
-<!--                          <span class="slider round"></span>-->
-<!--                        </label>-->
+<!--                      <div class="row">-->
+<!--                        <p-->
+<!--                          class="p-0 global-text text-info  tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label"-->
+<!--                          *ngIf="genericGlobal.checked"> Generic Global Applied </p>-->
 <!--                      </div>-->
 <!--                    </div>-->
+                  </div>
 
+
+                </div>
+
+                <div class="divider-text mb-0"  *ngIf="genericBannerConfig" >GENERIC </div>
+                <div class="row position-relative gdpr"   [ngClass]="genericBannerConfig?'show-controls':'hide-controls'">
+                  <div class="col-md-6">
+                  </div>
+                  <div class="col-md-6">
+                <div class="form-group row pd-0 mg-b-0"
+                     [ngClass]="genericBannerConfig?'show-controls':'hide-controls'">
+                  <label class="col-sm-8 tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label">
+                    GENERIC GLOBAL</label>
+                  <div class="col-sm-4">
+                    <label class="switch">
+                      <input type="checkbox"
+                             [attr.disabled]="cookieBannerForm.value.gdpr_global || cookieBannerForm.value.ccpa_global ? true : null"
+                             (ngModelChange)="onSetGdprGlobal($event, 'generic')" #genericGlobal
+                             formControlName="generic_global">
+                      <span class="slider round"></span>
+                    </label>
+                  </div>
+
+                  <div class="row">
+                    <p
+                      class="p-0 global-text text-info  tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label"
+                      *ngIf="genericGlobal.checked"> Generic Global Applied </p>
                   </div>
                 </div>
+                </div>
+                </div>
+
               </div>
-              <div class="col-md-6 switch-btn">
-                <div class="col-md-12">
-                  <div class="divider-text mt-0">Display Frequency</div>
+
+
+
+              <div class="col-md-4 col-xs-12 pr-0 switch-btn" >
+                <div class="col-md-12 border-gray">
+                  <div class="banner-config-title tx-medium tx-13  tx-spacing-1 tx-color-03 tx-uppercase">
+                    Global Configuration
+                  </div>
+
+                      <div class="row">
+                        <div class="col-md-12 config-pd">
+                          <div class="form-group mt-2 mb-1 row">
+                            <label for="sel1"
+                                   class="tx-13 tx-medium tx-spacing-1 pb-0 tx-color-03 tx-uppercase col-sm-10  col-form-label">
+                              Default REGULATION:</label>
+                            <div class="col-sm-12">
+                              <select formControlName="defaultRegulation"
+                                      class="form-control" id="sel1">
+                                <option *ngIf="genericBannerConfig" value="generic" selected>Generic</option>
+                                <option *ngIf="ccpaBannerConfig" value="ccpa" selected>CCPA</option>
+                                <option *ngIf="gdprBannerConfig" value="gdpr" selected>GDPR</option>
+                              </select>
+                            </div>
+                          </div>
+
+
+                          <div class="mt-3 form-group col-sm-12 p-0 m-0">
+                            <label class="tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label">
+                              COOKIE BLOCKING</label>
+                            <label class="switch float-right" (click)="onCheckDisableCookiebloking()">
+                              <input type="checkbox"
+                                     [attr.disabled]="disablePlanFeatures.disableCookieblocking ? true : null"
+                                     formControlName="cookieBlocking">
+                              <span class="slider round"></span>
+                            </label>
+                          </div>
+
+                          <div class="form-group col-sm-12 p-0 m-0">
+                            <label class="tx-13 tx-medium tx-spacing-1 p-0 col-md-8 tx-color-03 tx-uppercase  col-form-label">
+                              Allow Purposes By Default</label>
+                            <label class="switch col-md-4 float-right mt-1">
+                              <input type="checkbox"
+                                     formControlName="purposes_by_default">
+                              <span class="slider round"></span>
+                            </label>
+                          </div>
+
+
+                          <div class="mt-3">
+                            <div>
+                              <p-checkbox (click)="onCheckLogoAllow()" [disabled]="disablePlanFeatures.hideLogo"
+                                          class=""
+                                          binary="true"
+                                          formControlName="logo"></p-checkbox>
+                              <label class="tx-13 tx-medium tx-spacing-1 ml-2 p-0 tx-color-03 tx-uppercase col-form-label">
+                                Show Watermark
+                              </label>
+                            </div>
+                          </div>
+                          <div class=" mt-3 mr-3">
+                            <div>
+                              <p-checkbox binary="true" class=" checkbox" formControlName="showBadge"></p-checkbox>
+                              <label class="tx-13 tx-medium tx-spacing-1 ml-2 p-0 tx-color-03 tx-uppercase col-form-label">
+                                Show Badge
+                              </label>
+                            </div>
+                          </div>
+
+                        </div>
+<!--                        <div class="col-md-6" style="padding-top: 30px;">-->
+<!--                   -->
+<!--                        </div>-->
+
+                      </div>
+              </div>
+              </div>
+
+              <div class="col-md-3 col-xs-12 pr-0 switch-btn" >
+                <div class="col-md-12 border-gray">
+                  <div class="banner-config-title tx-medium tx-13  tx-spacing-1 tx-color-03 tx-uppercase">
+                    Display Frequency
+                  </div>
+                  <div class="pb-4">
                   <div class="row">
                     <div class="col-md-12">
-                      <h6 class=" tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label">Show the
-                        Consent Manager UI to users the partial consent status every:</h6>
+                      <h6 class=" tx-9 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label">The partial
+                        consent status every:
+                        <i-feather name="info" class="feather-16"
+                                   tooltip="Show the Consent Manager UI to users"></i-feather>
+                      </h6>
                     </div>
-                    <div class="col-md-8">
+                    <div class="col-md-12">
                       <div class="input-group row m-0 mb-1">
                         <input oninput="validity.valid||(value='');" min="1" type="number"
                                formControlName="bannerPartialConsent" class="form-control col-md-5" value="1"
@@ -303,10 +423,13 @@
 
                   <div class="row">
                     <div class="col-md-12">
-                      <h6 class=" tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label">Show the
-                        Consent Manager UI to users who rejected all purposes every:</h6>
+                      <h6 class=" tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label"> Rejected all
+                        purposes every:
+                        <i-feather class="feather-16" name="info"
+                                   tooltip="Show the Consent Manager UI to users who rejects all purposes on mentioned time"></i-feather>
+                      </h6>
                     </div>
-                    <div class="col-md-8">
+                    <div class="col-md-12">
                       <div class="input-group row ml-0 mb-1">
                         <input oninput="validity.valid||(value='');" min="1" type="number"
                                formControlName="bannerRejectAllConsent" class="form-control col-md-5" value="1"
@@ -322,10 +445,13 @@
                   </div>
                   <div class="row">
                     <div class="col-md-12">
-                      <h6 class=" tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label">Show the
-                        Consent Manager UI to users who made no consent choice every:</h6>
+                      <h6 class=" tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label">
+                        No consent choice every:
+                        <i-feather name="info" class="feather-16"
+                                   tooltip="Show the Consent Manager UI to users who made no consent choice"></i-feather>
+                      </h6>
                     </div>
-                    <div class="col-md-8">
+                    <div class="col-md-12">
                       <div class="input-group row ml-0 mb-1">
                         <input formControlName="bannerClosedConsent" oninput="validity.valid||(value='');" min="1"
                                type="number" class="form-control col-md-5" value="1" name="email">
@@ -338,14 +464,81 @@
                       </div>
                     </div>
                   </div>
+                  </div>
 
                 </div>
-
-
               </div>
             </div>
             <ngx-skeleton-loader *ngIf="skeletonLoading" count="6" class="pt-4"></ngx-skeleton-loader>
           </div>
+
+<!--          <div class="card-footer">-->
+<!--            <div class="row">-->
+<!--              <div class="col-md-6">-->
+<!--                <div class="row">-->
+<!--              <div class="col-md-6">-->
+<!--                <div class="form-group mb-1 row">-->
+<!--                  <label for="sel1"-->
+<!--                         class="tx-13 tx-medium tx-spacing-1 pb-0 tx-color-03 tx-uppercase col-sm-10  col-form-label">-->
+<!--                    Default REGULATION:</label>-->
+<!--                  <div class="col-sm-12">-->
+<!--                    <select formControlName="defaultRegulation"-->
+<!--                            class="form-control" id="sel1">-->
+<!--                      <option value="generic" selected>Generic</option>-->
+<!--                      <option value="ccpa">CCPA</option>-->
+<!--                      <option value="gdpr">GDPR</option>-->
+<!--                    </select>-->
+<!--                  </div>-->
+<!--                </div>-->
+
+<!--                  <div class="mt-3">-->
+<!--                    <div>-->
+<!--                      <p-checkbox (click)="onCheckLogoAllow()" [disabled]="disablePlanFeatures.hideLogo"-->
+<!--                                  class=""-->
+<!--                                  binary="true"-->
+<!--                                  formControlName="logo"></p-checkbox>-->
+<!--                      <label class="tx-13 tx-medium tx-spacing-1 ml-2 p-0 tx-color-03 tx-uppercase col-form-label">-->
+<!--                        Show Watermark-->
+<!--                      </label>-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                  <div class=" mt-3 mr-3">-->
+<!--                    <div>-->
+<!--                      <p-checkbox binary="true" class=" checkbox" formControlName="showBadge"></p-checkbox>-->
+<!--                      <label class="tx-13 tx-medium tx-spacing-1 ml-2 p-0 tx-color-03 tx-uppercase col-form-label">-->
+<!--                        Show Badge-->
+<!--                      </label>-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--              </div>-->
+<!--              <div class="col-md-6" style="padding-top: 30px;">-->
+<!--                <div class="form-group col-sm-8 p-0 m-0">-->
+<!--                  <label class="tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label">-->
+<!--                    COOKIE BLOCKING</label>-->
+<!--                  <label class="switch float-right" (click)="onCheckDisableCookiebloking()">-->
+<!--                    <input type="checkbox"-->
+<!--                           [attr.disabled]="disablePlanFeatures.disableCookieblocking ? true : null"-->
+<!--                           formControlName="cookieBlocking">-->
+<!--                    <span class="slider round"></span>-->
+<!--                  </label>-->
+<!--                </div>-->
+
+<!--                <div class="form-group col-sm-8 p-0 m-0">-->
+<!--                  <label class="tx-13 tx-medium tx-spacing-1 p-0 col-md-8 tx-color-03 tx-uppercase  col-form-label">-->
+<!--                    Allow Purposes By Default</label>-->
+<!--                  <label class="switch col-md-4 float-right mt-1">-->
+<!--                    <input type="checkbox"-->
+<!--                           formControlName="ccpa_global">-->
+<!--                    <span class="slider round"></span>-->
+<!--                  </label>-->
+<!--                </div>-->
+<!--              </div>-->
+
+<!--                </div>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+
         </div>
 
 
@@ -372,47 +565,50 @@
 
         <!--       <p-tabView>-->
         <!--          <p-tabPanel  header="Banner">-->
-                    <div class="card m-0">
-                      <div class="card-header pb-0">
-                        <div class="row">
-                        <div class="col-md-7">
-                            <div class="form-group mb-0 row pd-0 mg-b-0">
-                              <label class="cs-banner col-sm-4 tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label">
-                                Configure banner</label>
-                              <div class="col-sm-4 pt-2">
-                                <label class="switch" (click)="onCheckAllowBannerConfig()">
-                                  <input [attr.disabled]="disablePlanFeatures.disableBannerConfig ? true : null" type="checkbox"
-                                         #showConfig>
-                                  <span class="slider round"></span>
-                                </label>
-                              </div>
-                            </div>
-                        </div>
-                        <div class="col-md-5 ">
-                          <div class="form-group row">
-                            <label for="lang" style="font-size: 15px"
-                                   class="tx-12 col-md-3  tx-medium tx-middle tx-spacing-1 tx-color-03 tx-uppercase"> Language </label>
-                            <select [disabled]="isFieldDisabled" (change)="onGetLangData($event)" formControlName="Bannerlanguage"
-                                    class="form-control col-md-7" id="lang">
-<!--                              <option value="">&#45;&#45; Select Language &#45;&#45;</option>-->
-                              <ng-container *ngFor="let gdprLang of bannerConstant.Bannerlanguage">
-                              <option *ngIf="langValueList.includes(gdprLang.value)" [value]="gdprLang.value">{{gdprLang.title}}</option>
-                              </ng-container>
-                            </select>
-                            <div class="col-md-2">
-                              <i  (click)="openModal(templateManageLang)" class="setting-icon  fas fa-cog"></i>
-                            </div>
-                            <div *ngIf="submitted && f.Bannerlanguage.errors">
-                              <div class="text-danger mt-2" *ngIf="f.Bannerlanguage.errors.required">
-                                Language is <strong>required</strong>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-
-                        </div>
-                      </div>
+        <div class="card m-0">
+          <div class="card-header pb-0">
+            <div class="row">
+              <div class="col-md-7">
+                <div class="form-group mb-0 row pd-0 mg-b-0">
+                  <label
+                    class="cs-banner col-sm-4 tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label">
+                    Configure banner</label>
+                  <div class="col-sm-4 pt-2">
+                    <label class="switch" (click)="onCheckAllowBannerConfig()">
+                      <input [attr.disabled]="disablePlanFeatures.disableBannerConfig ? true : null" type="checkbox"
+                             #showConfig>
+                      <span class="slider round"></span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-5 ">
+                <div class="form-group row">
+                  <label for="lang" style="font-size: 15px"
+                         class="tx-12 col-md-3  tx-medium tx-middle tx-spacing-1 tx-color-03 tx-uppercase">
+                    Language </label>
+                  <select [disabled]="isFieldDisabled" (change)="onGetLangData($event)" formControlName="Bannerlanguage"
+                          class="form-control col-md-7" id="lang">
+                    <!--                              <option value="">&#45;&#45; Select Language &#45;&#45;</option>-->
+                    <ng-container *ngFor="let gdprLang of bannerConstant.Bannerlanguage">
+                      <option *ngIf="langValueList.includes(gdprLang.value)"
+                              [value]="gdprLang.value">{{gdprLang.title}}</option>
+                    </ng-container>
+                  </select>
+                  <div class="col-md-2">
+                    <i (click)="openModal(templateManageLang)" class="setting-icon  fas fa-cog"></i>
+                  </div>
+                  <div *ngIf="submitted && f.Bannerlanguage.errors">
+                    <div class="text-danger mt-2" *ngIf="f.Bannerlanguage.errors.required">
+                      Language is <strong>required</strong>
                     </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
 
         <ng-container *ngIf="currentState === 'banner'">
           <div class="row m-0">
@@ -424,23 +620,23 @@
                   <div class="banner-row">
                     <p-accordion>
                       <p-accordionTab header="General Configuration" [selected]="true">
-<!--                        <div class="col-md-12">-->
-<!--                          <div class="form-group">-->
-<!--                            <label for="lang"-->
-<!--                                   class="tx-12 tx-medium tx-middle tx-spacing-1 tx-color-03 tx-uppercase">Language </label>-->
-<!--                            <select [disabled]="isFieldDisabled" (change)="onGetLangData()" formControlName="Bannerlanguage"-->
-<!--                                    class="form-control w-75" id="lang">-->
-<!--                              <option *ngFor="let gdprLang of bannerConstant.Bannerlanguage"-->
-<!--                                      [value]="gdprLang.value">{{gdprLang.title}}</option>-->
+                        <!--                        <div class="col-md-12">-->
+                        <!--                          <div class="form-group">-->
+                        <!--                            <label for="lang"-->
+                        <!--                                   class="tx-12 tx-medium tx-middle tx-spacing-1 tx-color-03 tx-uppercase">Language </label>-->
+                        <!--                            <select [disabled]="isFieldDisabled" (change)="onGetLangData()" formControlName="Bannerlanguage"-->
+                        <!--                                    class="form-control w-75" id="lang">-->
+                        <!--                              <option *ngFor="let gdprLang of bannerConstant.Bannerlanguage"-->
+                        <!--                                      [value]="gdprLang.value">{{gdprLang.title}}</option>-->
 
-<!--                            </select>-->
-<!--                            <div *ngIf="submitted && f.Bannerlanguage.errors">-->
-<!--                              <div class="text-danger mt-2" *ngIf="f.Bannerlanguage.errors.required">-->
-<!--                                Language is <strong>required</strong>-->
-<!--                              </div>-->
-<!--                            </div>-->
-<!--                          </div>-->
-<!--                        </div>-->
+                        <!--                            </select>-->
+                        <!--                            <div *ngIf="submitted && f.Bannerlanguage.errors">-->
+                        <!--                              <div class="text-danger mt-2" *ngIf="f.Bannerlanguage.errors.required">-->
+                        <!--                                Language is <strong>required</strong>-->
+                        <!--                              </div>-->
+                        <!--                            </div>-->
+                        <!--                          </div>-->
+                        <!--                        </div>-->
                         <div class="col-md-12 mb-4">
                           <h6 class="tx-12 tx-medium tx-middle tx-spacing-1 tx-color-03 tx-uppercase">Position</h6>
                           <div *ngFor="let gdprPosition of bannerConstant.BannerPosition"
@@ -486,20 +682,20 @@
                         </div>
 
 
-<!--                        <div class="col-md-12 mt-2">-->
-<!--                          <h5 class="tx-12 tx-medium tx-spacing-1 tx-color-03 tx-uppercase ">Title 2</h5>-->
-<!--                          <input type="text" [attr.disabled]="isFieldDisabled" formControlName="BannerTitle2"-->
-<!--                                 [(ngModel)]="formContent.bannerTitle2" class="form-control w-100"-->
-<!--                                 [placeholder]="formContent.bannerTitle2">-->
-<!--                          <div *ngIf="submitted && f.BannerTitle.errors">-->
-<!--                            <div class="text-danger mt-2" *ngIf="f.BannerTitle2.errors.minlength">-->
-<!--                              Minimum 2 characters required-->
-<!--                            </div>-->
-<!--                            <div class="text-danger mt-2" *ngIf="f.BannerTitle2.errors.maxlength">-->
-<!--                              Maximum 50 characters required-->
-<!--                            </div>-->
-<!--                          </div>-->
-<!--                        </div>-->
+                        <!--                        <div class="col-md-12 mt-2">-->
+                        <!--                          <h5 class="tx-12 tx-medium tx-spacing-1 tx-color-03 tx-uppercase ">Title 2</h5>-->
+                        <!--                          <input type="text" [attr.disabled]="isFieldDisabled" formControlName="BannerTitle2"-->
+                        <!--                                 [(ngModel)]="formContent.bannerTitle2" class="form-control w-100"-->
+                        <!--                                 [placeholder]="formContent.bannerTitle2">-->
+                        <!--                          <div *ngIf="submitted && f.BannerTitle.errors">-->
+                        <!--                            <div class="text-danger mt-2" *ngIf="f.BannerTitle2.errors.minlength">-->
+                        <!--                              Minimum 2 characters required-->
+                        <!--                            </div>-->
+                        <!--                            <div class="text-danger mt-2" *ngIf="f.BannerTitle2.errors.maxlength">-->
+                        <!--                              Maximum 50 characters required-->
+                        <!--                            </div>-->
+                        <!--                          </div>-->
+                        <!--                        </div>-->
 
 
                         <div class="col-md-12 mt-2">
@@ -1422,9 +1618,9 @@
 <ng-template #templateManageLang>
   <div class="modal-header">
     <h4 class="modal-title lang-title pull-left">Manage Languages</h4>
-<!--    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">-->
-<!--      <span aria-hidden="true">&times;</span>-->
-<!--    </button>-->
+    <!--    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">-->
+    <!--      <span aria-hidden="true">&times;</span>-->
+    <!--    </button>-->
   </div>
   <div class="modal-body">
     <div class="card lang-table-box  mb-0">
@@ -1453,10 +1649,11 @@
                        [checked]="langValueList.includes(lang.value)">
                 <label class="custom-control-label" for="customCheck{{lang.value}}"></label>
               </div>
-              </td>
+            </td>
             <td>{{lang.title}}</td>
             <td>{{lang.value | uppercase}}</td>
-            <td class="text-center"><input type="radio" class="" [(ngModel)]="langDefault"  name="defaultLang" [value]="lang.value" />
+            <td class="text-center"><input type="radio" class="" [(ngModel)]="langDefault" name="defaultLang"
+                                           [value]="lang.value"/>
             </td>
           </tr>
         </ng-template>
@@ -1466,9 +1663,11 @@
 
   </div>
   <div class="modal-footer">
-        <div class="text-center m-auto">
-<!--          <button type="button" aria-label="Close" (click)="modalRef.hide()" class="btn btn-sm btn-uppercase btn-outline-secondary">Cancel</button>-->
-          <button type="button" aria-label="Close" (click)="modalRef.hide()" class="ml-3 btn btn-sm btn-uppercase btn-primary">Save</button>
-        </div>
+    <div class="text-center m-auto">
+      <!--          <button type="button" aria-label="Close" (click)="modalRef.hide()" class="btn btn-sm btn-uppercase btn-outline-secondary">Cancel</button>-->
+      <button type="button" aria-label="Close" (click)="modalRef.hide()"
+              class="ml-3 btn btn-sm btn-uppercase btn-primary">Save
+      </button>
+    </div>
   </div>
 </ng-template>

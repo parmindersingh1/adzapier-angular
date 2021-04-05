@@ -142,19 +142,11 @@
         <ng-container *ngIf="inActiveplans.length > 0">
         <tbody>
         <tr *ngFor="let plan of inActiveplans">
-          <td *ngIf="plan.planDetails.level === 'property'" style="width: 320px"><a class="plan-name" [routerLink]="'/settings/billing/manage/property'"
-            [queryParams]="{planid: plan.id, plan_name: plan.plan_name,
-               total_licence: plan.total_licence, assigned_licence: plan.assigned_licence,
-                product_name: plan.planDetails.product_name
-              }">
-             {{plan.planDetails.product_name}}</a></td>
+          <td *ngIf="plan.planDetails.level === 'property'" style="width: 320px"><span class="plan-name">
+             {{plan.planDetails.product_name}}</span></td>
 
-             <td *ngIf="plan.planDetails.level !== 'property'" style="width: 320px"><a class="plan-name" [routerLink]="'/settings/billing/manage/organizations'"
-              [queryParams]="{planid: plan.id, plan_name: plan.plan_name,
-                 total_licence: plan.total_licence, assigned_licence: plan.assigned_licence,
-                  product_name: plan.planDetails.product_name
-                }">
-               {{plan.planDetails.product_name}}</a></td>
+             <td *ngIf="plan.planDetails.level !== 'property'" style="width: 320px"><span class="plan-name">
+               {{plan.planDetails.product_name}}</span></td>
 
 
              <td style="width: 150px">{{plan.plan_name}}</td>

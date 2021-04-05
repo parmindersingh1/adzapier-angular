@@ -42,7 +42,8 @@ export class AppComponent implements OnInit {
   listAddonPlan: any
   public unAuthMsg: any;
   isShowingRouteLoadIndicator: boolean;
-  existingOrgPlan:any;
+  existingOrgPlan = null;
+  noPlanType = 'org';
   constructor(private router: Router,
     private modalService: BsModalService,
               private billingService: BillingService,
@@ -111,6 +112,9 @@ export class AppComponent implements OnInit {
         if(!res.data) {
           this.currentPlanData = new DefaultPlanData();
         }
+        if (res.type) {
+          this.noPlanType = res.type;
+        }
         if (res.data) {
           if (Object.keys(res.data).length !== 0) {
             this.type = res.type;
@@ -138,7 +142,6 @@ export class AppComponent implements OnInit {
       this.allPlanData = res.response;
       this.listAllPlans = res.response.base[`${this.billingCycle}`];
       this.listAddonPlan = res.response.addons[`${this.billingCycle}`]
-      console.log('this.allPlanData',  this.allPlanData)
       // this.subscriptionList = res.response.monthly;
     }, error => {
     });
@@ -162,10 +165,8 @@ export class AppComponent implements OnInit {
 
   private openUnAuthModal() {
     this.dataService.unAuthPopUp.subscribe((res: any) => {
-      // console.log("EEorr", res.error.error)
       if(res.isTrue)  {
         this.unAuthMsg = res.error.error;
-        console.log('unAuthMsg', this.unAuthMsg.error)
         this.openUnAuthPopUp()
       }
     })

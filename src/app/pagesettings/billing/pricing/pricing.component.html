@@ -112,13 +112,16 @@
               </select>
             </div>
 
-            <button *ngIf="plan.price !=  activeData.base.maxPrice" [disabled]="plan.price <=  activeData.base.maxPrice" (click)="onAddToCart(plan, planUnit)"  class="btn mt-4 mb-4 add-to-cart-btn btn-primary btn-block">
+            <button (click)="onAddToCart(plan, planUnit)"  class="btn mt-4 mb-4 add-to-cart-btn btn-primary btn-block">
               Add To Cart
             </button>
+<!--            <button *ngIf="plan.price !=  activeData.base.maxPrice" [disabled]="plan.price <=  activeData.base.maxPrice" (click)="onAddToCart(plan, planUnit)"  class="btn mt-4 mb-4 add-to-cart-btn btn-primary btn-block">-->
+<!--              Add To Cart-->
+<!--            </button>-->
 
-            <button  *ngIf="plan.price ==  activeData.base.maxPrice"  (click)="onGenerateSessionID()" class="btn mt-4 mb-4 add-to-cart-btn btn-primary btn-block">
-              Manage Plan
-            </button>
+<!--            <button  *ngIf="plan.price ==  activeData.base.maxPrice"  (click)="onGenerateSessionID()" class="btn mt-4 mb-4 add-to-cart-btn btn-primary btn-block">-->
+<!--              Manage Plan-->
+<!--            </button>-->
 
 
           </div><!-- col -->

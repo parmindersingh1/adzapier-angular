@@ -1,5 +1,5 @@
 <div>
-  <nav aria-label="breadcrumb" style="margin-left: -14px">
+  <nav aria-label="breadcrumb">
     <ol class="breadcrumb breadcrumb-style1 mg-b-10">
       <li class="breadcrumb-item">Billing</li>
       <li class="breadcrumb-item"><a routerLink="/settings/billing/manage">Manage Licenses</a></li>
@@ -11,82 +11,80 @@
 
 </div>
 <div class="card mt-4">
-  <div class="row">
-    <h5 class=" col-md-12 mt-4 plan-name cl-gray" style="font-weight: bold;">{{productName + ' - ' +planName}}</h5>
-    <div class=" col-md-12">
-      <h4 class="assign-text cl-gray">{{assigneLicence}}/{{totalLicence}} Assigned</h4>
-      <div class="col-md-4">
-        <div class="progress" style="height:16px">
-          <div class="progress-bar" [ngStyle]="{width: percents.assigneLicence +'%'}" style=" background-color: #11188f">
-          </div>
-          <div class="progress-bar"  [ngStyle]="{width: percents.totalLicence +'%'}" style="background-color: #3d78d4">
-          </div>
-        </div>
-      </div>
-
-      <div class="row pl-3 mt-3">
-        <div class="col-md-5">
-          <div class="row">
-          <div class="col-md-3 cl-gray type-text">
-            <i class="fa fa-square" style="color:#11188f" aria-hidden="true"></i>
-            Assigned
-          </div>
-          <div class="col-md-3 cl-gray type-text pl-0">
-            <i class="fa fa-square" style="color:#3d78d4" aria-hidden="true"></i>
-            Available
-          </div>
-        </div>
-        </div>
-      </div>
+  <div class="card-header row ml-0 mr-0">
+    <div class="col-md-7 p-0 align-items align-heading-progressbar">
+    <h4 class="tx-14 tx-uppercase  mb-0 tx-spacing-1 tx-color-02 tx-semibold flex-column">{{productName}}
+      <span>{{planName}}</span>
+    </h4>
+    <div class="mt-n1 mr-4 ml-auto">
+    <span class="tx-12 tx-semibold tx-uppercase">Assigned</span>
+    <span class="progress">
+      <span class="txt-center-bold"> {{assigneLicence}}/{{totalLicence}}</span>
+      <span class="progress-bar" [ngStyle]="{width: percents.assigneLicence +'%'}"></span>
+    </span>
+  </div>
+   </div>
+   <div class="col-md-5 pr-0 ml-auto">
+    <div class="float-right">
+      <button type="button" (click)="openModal(template)" class="btn btn-sm btn-outline-secondary btn-uppercase mr-2">
+        <i-feather name="plus" class="commom-feathericon-height"></i-feather>
+         Assign New Organization</button>
+      <button type="button" (click)="onGetAssingedOrg()" class="btn btn-sm btn-outline-secondary btn-uppercase">
+        <i-feather name="refresh-ccw" class="commom-feathericon-height"></i-feather>
+        Refresh</button>
     </div>
-
-    <div class="col-md-12 mt-4">
-      <div class="btn-group">
-        <button type="button" (click)="openModal(template)" class="btn cl-gray btn-default action-btn">
-          <i class="fa icon-text pr-2 fa-plus" aria-hidden="true"></i>
-           Assign New Organization</button>
-        <button type="button" (click)="onGetAssingedOrg()" class="btn cl-gray btn-default action-btn">
-          <i class="fa icon-text fa-retweet pr-2" aria-hidden="true"></i>
-          Refresh</button>
-      </div>
-    </div>
+   </div>
   </div>
 
 
-  <div class="card-body">
+  <div class="card-body border-top-0 p-1 mt-0 manage-license">
     <ng-container *ngIf="!skLoading">
-    <table class="table" >
+    <table class="table mb-0 tx-14 border-gray">
       <thead>
       <tr>
         <th>Organization Name</th>
-        <th></th>
+        <th>Created webforms</th>
+        <th>Created workflows</th>
+        <th>Created requests</th>
         <th>Email</th>
-        <th>Organization</th>
+        <th>Action</th>
       </tr>
       </thead>
       <tbody>
       <tr *ngFor="let obj of orgList">
-        <td>{{obj.orgname}}</td>
-        <td>
-
-
-
-          <div class="btn-group" dropdown>
-            <button  id="button-basic" dropdownToggle type="button" class="btn btn-default"
-                    aria-controls="dropdown-basic">
-                    <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
-            </button>
-            <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu"
-                role="menu" aria-labelledby="button-basic">
-              <li role="menuitem"><a class="dropdown-item"  (click)="delOrgID = obj.id; openModal(delConfirm)" href="javascript:void(0)">Remove</a></li>
-
-            </ul>
-          </div>
-
+        <td>{{obj.orgname}}
+        </td>
+        <td colspan="3"> 
+           
+          <!-- <div> -->
+            <ng-container *ngFor="let data of planUsageByOrgid">
+              <span *ngIf="obj.id === data.organizationID" style="display: flex;">
+                <span class="progress w-75 " [ngClass]="[data.form_available === -1 ? 'unlimited-plan-light':'',data.form_available >= 15 ? 'professional-plan-light':'']">
+                  <span class="txt-center-bold">   {{data.form_created}} / {{data.form_available === -1 ? "Unlimited" : data.form_limit}}</span>
+                  <span class="progress-bar" [ngClass]="[data.form_available === -1 ? 'unlimited-plan-dark':'',data.form_available >= 15 ? 'professional-plan-dark':'']" 
+                    [ngStyle]="{width: limitUsedVsAvailable(data.form_created,data.form_limit)  + '%'}"></span>
+                </span>
+             
+                <span class="progress w-75 ml-3 mr-3" [ngClass]="data.workflow_limit === -1 ? 'unlimited-plan-light':''">
+                  <span class="txt-center-bold">   {{data.workflow_created}} /  {{data.workflow_limit === -1 ? "Unlimited" : data.workflow_limit}}</span>
+                  <span class="progress-bar" [ngClass]="data.workflow_limit === -1 ? 'unlimited-plan-dark':''"  
+                  [ngStyle]="{width:  limitUsedVsAvailable(data.workflow_created,data.workflow_limit) + '%'}"></span> 
+                </span>
+               
+                <span class="progress w-75" [ngClass]="data.request_limit === -1 ? 'unlimited-plan-light':''">
+                  <span class="txt-center-bold"> {{data.request_created}} / {{data.request_limit === -1 ? "Unlimited" : data.request_limit}}</span>
+                  <span class="progress-bar" [ngClass]="data.request_limit === -1 ? 'unlimited-plan-dark':''" 
+                  [ngStyle]="{width: limitUsedVsAvailable(data.request_created,data.request_limit) + '%'}"></span> <!--limitUsedVsAvailable(data.request_created,data.request_limit)-->
+                </span>
+              </span>
+             
+            </ng-container>
         </td>
         <td>{{obj.email }}</td>
-        <td> {{obj.city+ ', ' + obj.state + ', ' + obj.zipcode}} </td>
-        <td><i class="fa fa-check" aria-hidden="true"></i>
+        <!-- <td> {{obj.city+ ', ' + obj.state + ', ' + obj.zipcode}} </td> -->
+      <td>
+          <button class="btn btn-sm btn-outline-secondary btn-uppercase nohover border-0" (click)="delOrgID = obj.id; openModal(delConfirm)">
+            <i-feather name="trash-2" class="commom-feathericon-height"></i-feather></button>
         </td>
 
       </tr>
@@ -116,14 +114,17 @@
   <div class="modal-body">
     <form [formGroup]="orgForm" (ngSubmit)="onSubmit()">
       <label for="typeahead-basic">Find Organization:</label>
+      <div class="row">
+      <div class="col-sm-8">
       <p-multiSelect class="gdprSelect"  [disabled]="totalLicence - assigneLicence === 0"  [selectionLimit]="totalLicence - assigneLicence"
       formControlName="orgID" [style]="{'width':'100%'}" [options]="allUnSignOrgList" ></p-multiSelect>
-      <p *ngIf="orgNameError">This Field is Required</p>
-
-    <div class="mt-4 text-center">
-      <button type="button" class="btn btn-primary" aria-label="Close" (click)="modalRef.hide()">Cancel</button>
-      <button type="submit" class="btn ml-3 btn-primary">Assign</button>
+      </div>
+      <div class="col-sm-4 p-0">
+        <button type="submit" class="btn btn-primary mr-1" [disabled]="totalLicence - assigneLicence === 0">Assign</button>
+        <button type="button" class="btn btn-primary" aria-label="Close" (click)="modalRef.hide()">Cancel</button>
+      </div>
     </div>
+      <p *ngIf="orgNameError">This Field is Required</p>
     </form>
   </div>
 </ng-template>

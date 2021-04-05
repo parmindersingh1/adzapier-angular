@@ -47,7 +47,7 @@ export class WebformsComponent implements OnInit, DirtyComponents {
   currentuserID: any;
   orgDetails: any;
   isDirty = false;
-  activePage = 0;
+  activePage = 1;
   numofRecords: number = 10;
   totalRecordsAvailable: number;
   dataLoadingMsg: string;
@@ -104,8 +104,8 @@ export class WebformsComponent implements OnInit, DirtyComponents {
         .subscribe((data) => {
           this.loading.stop();
           if (data.length !== 0) {
-            this.formList = data;
-            this.totalRecordsAvailable = 10;
+            this.formList = data.response;
+            this.totalRecordsAvailable = data.count;
             // this.loading = false;
             return this.formList;
           } else {
