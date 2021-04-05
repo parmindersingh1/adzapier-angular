@@ -61,7 +61,12 @@ export const apiConstant = {
   PROPERTY_PLAN: '/billing/plan/features',
   ORG_PLAN: '/available/user/organization/:orgId',
   COMPANY_PLAN: '/available/user/company',
-  PROP_AND_ORG_PLAN : '/billing/plan/inviteuser'
+  PROP_AND_ORG_PLAN : '/billing/plan/inviteuser',
+
+
+  // Consent Solution
+  GET_CONSENT_RECORDS: '/consent/solution/:pid',
+  GET_LEGAL_RECORDS:'/consent/legal_notices/:pid'
 };
 
 // {

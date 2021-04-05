@@ -4,7 +4,6 @@ import { AuthGuard } from './_helpers';
 import { PagenotfoundComponent } from './errorpages/pagenotfound.component';
 import { InternalerrorComponent } from './errorpages/internalerror.component';
 import { PagenotfoundComponent1 } from './errorpages/404page.component';
-import { ConsentSolutionsComponent } from './privacy/consent_solutions/consent-solutions/consent-solutions.component';
 
 const routes: Routes = [
 
@@ -28,7 +27,6 @@ const routes: Routes = [
   //     import('./pagesettings/billing/pricing/pricing.module').then(m => m.PricingModule)},
   { path: 'resetpswd/:id', loadChildren: () => import('./resetpassword/resetpassword.module').then(m => m.ResetpasswordModule) },
   { path: 'pagenotfound', component: PagenotfoundComponent },
-  {path: 'privacy/consent_solutions/consent-solutions',component: ConsentSolutionsComponent},
   { path: '404page', component: PagenotfoundComponent1 },
   { path: 'internalerror', component: InternalerrorComponent },
   { path: 'privacy/dsar/dsarform', loadChildren: () => import('./privacy/dsar/dsarform/dsarform.module').then(m => m.DsarformModule) },
@@ -54,6 +52,10 @@ const routes: Routes = [
   {
     path: 'cookie-consent', loadChildren: () => import('./privacy/cookie-consent/cookie-consent.module')
       .then(m => m.CookieConsentModule), canActivate: [AuthGuard]
+  },
+  {
+    path: 'consent-solutions', loadChildren: () => import('./privacy/consent-solutions/consent-solutions.module')
+      .then(m => m.ConsentSolutionsModule), canActivate: [AuthGuard]
   },
   { path: 'privacy/dsar/createworkflow', loadChildren: () => import('./privacy/dsar/createworkflow/createworkflow.module')
   .then(m => m.CreateworkflowModule) },
