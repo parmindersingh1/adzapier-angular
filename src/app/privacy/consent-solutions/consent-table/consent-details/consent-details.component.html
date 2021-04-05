@@ -1,0 +1,27 @@
+<div class="card">
+  <p-table [value]="consentData.LegalNotice"
+           styleClass="p-datatable-sm">
+    <ng-template pTemplate="header">
+      <tr>
+        <th >Version</th>
+        <th>Identifier</th>
+        <th>CreatedAt</th>
+        <th></th>
+
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-legalRecord>
+      <tr >
+        <td >{{legalRecord.version}}</td>
+        <td>{{legalRecord.identifier}}</td>
+        <td>{{legalRecord.created_at | date}}</td>
+        <td  style="text-align-last:right;">
+          <a href="#"><i class="pi pi-eye" style="font-size: 1.0rem"></i></a>
+        </td>
+      </tr>
+    </ng-template>
+
+
+
+  </p-table>
+</div>

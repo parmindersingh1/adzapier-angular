@@ -3,6 +3,7 @@ import {OrganizationService} from '../../../_services';
 import {ConsentSolutionsService} from '../../../_services/consent-solutions.service';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
 import {moduleName} from '../../../_constant/module-name.constant';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-consent-solutions',
@@ -24,7 +25,8 @@ export class ConsentTableComponent implements OnInit {
   planDetails: any;
   constructor(private orgservice: OrganizationService,
               private consentSolutionService: ConsentSolutionsService,
-              private loading: NgxUiLoaderService
+              private loading: NgxUiLoaderService,
+              private router: Router
               ) {}
 
   ngOnInit() {
@@ -99,4 +101,8 @@ export class ConsentTableComponent implements OnInit {
       });
   }
 
+  async onNavigateToDetails(consentRecord) {
+  await  this.consentSolutionService.onPushConsentData(consentRecord);
+  await this.router.navigateByUrl('/consent-solutions/consent-records/details/' + consentRecord.id);
+  }
 }

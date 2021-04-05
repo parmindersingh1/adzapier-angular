@@ -1,17 +1,17 @@
 .desk_img{
     margin-top: 20px;
-    
+
     margin-right: 10px;
     padding: 0.25em 0.3em;
   border-radius: 50%;
   box-shadow: 0px 0px 4px #888;
-    
-    
+
+
 }
 .dust{
 
-    
-    
+
+
   padding: 0.25em 0.4em;
   border-radius: 30%;
   box-shadow: 0px 0px 2px rgb(99, 99, 99);
@@ -97,16 +97,10 @@ input[type='radio']:checked:after {
 
 .documents{
     justify-content: space-between;
-    
+
 }
 .headings{
-  text-decoration-line: underline;
-  text-decoration-style: solid;
-  text-underline-position: under;
-
-  text-decoration-thickness: 4px;
-  opacity: 0.8;
-  font-size: x-large;
+  color: #666666;
 }
 
 .pi-user{
@@ -116,10 +110,10 @@ input[type='radio']:checked:after {
   background-color: rgb(241, 239, 239);
   opacity: 0.8;
   color: gray;
-  
+
 }
 .pi-user:hover{
-  background-color:rgb(230, 230, 230); 
+  background-color:rgb(230, 230, 230);
   color:  #0367fa;
 
 }
@@ -134,12 +128,12 @@ input[type='radio']:checked:after {
 }
 
 .pi-eye:hover{
-  background-color:rgb(230, 230, 230); ; 
+  background-color:rgb(230, 230, 230); ;
   color:  #0367fa;
 }
 
 .pi-trash:hover{
-  background-color:rgb(230, 230, 230); ; 
+  background-color:rgb(230, 230, 230); ;
   color:  #0367fa;
 }
 
@@ -159,11 +153,11 @@ input[type='radio']:checked:after {
   border-radius:40px;
   height:50px;
   margin-right: 15px;
-  
+
 }
 
 .dropdown {
-  
+
   position: relative;
   display: inline-block;
 }
@@ -174,7 +168,7 @@ input[type='radio']:checked:after {
   background-color: #f9f9f9;
   min-width: 160px;
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-  
+
 }
 
 .dropdown-content a {
