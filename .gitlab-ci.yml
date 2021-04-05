@@ -26,6 +26,7 @@ test:
   script:
     - npm install -g @angular/cli@11
     - npm install
+    - npm audit
   before_script:
     - ls -ltr
 
