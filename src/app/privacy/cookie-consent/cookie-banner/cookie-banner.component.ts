@@ -86,8 +86,8 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
   allowAllIabVendors = false;
   langValueList = ['en'];
   langDefault = 'en';
-  ccpaBannerConfig = false;
-  gdprBannerConfig = false;
+  ccpaBannerConfig = true;
+  gdprBannerConfig = true;
   genericBannerConfig = true;
 
   constructor(private formBuilder: FormBuilder,
@@ -119,7 +119,6 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
     this.onGetCookies();
     this.onFormInIt();
     this.onGetLangData({target: {value: 'en'}});
-
     this.onSetDefaultValue();
     this.gdprTarget = this.bannerConstant.gdprTargetCountry;
 
@@ -770,6 +769,7 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
     this.loading.start();
     this.cookieBannerService.onSubmitCookieBannerData(userPrefrencesData, this.currentManagedOrgID, this.currrentManagedPropID, this.constructor.name, moduleName.cookieBannerModule)
       .subscribe((res: any) => {
+        this.onGetCookieBannerData();
         this.loading.stop();
         this.isPublish = false;
         this.isOpen = true;
@@ -815,6 +815,7 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
     this.isPublish = true;
     this.cookieBannerService.onUpdateCookieBannerData(userPrefrencesData, this.currentManagedOrgID, this.currrentManagedPropID, this.constructor.name, moduleName.cookieBannerModule)
       .subscribe((res: any) => {
+        this.onGetCookieBannerData();
         this.loading.stop();
         this.isPublish = false;
         this.isOpen = true;
