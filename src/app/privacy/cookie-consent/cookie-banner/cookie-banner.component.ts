@@ -86,8 +86,8 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
   allowAllIabVendors = false;
   langValueList = ['en'];
   langDefault = 'en';
-  ccpaBannerConfig = false;
-  gdprBannerConfig = false;
+  ccpaBannerConfig = true;
+  gdprBannerConfig = true;
   genericBannerConfig = true;
 
   constructor(private formBuilder: FormBuilder,
