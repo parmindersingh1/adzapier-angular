@@ -88,7 +88,8 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
   langDefault = 'en';
   ccpaBannerConfig = false;
   gdprBannerConfig = false;
-  genericBannerConfig = false;
+  genericBannerConfig = true;
+
   constructor(private formBuilder: FormBuilder,
               private cd: ChangeDetectorRef,
               private modalService: BsModalService,
@@ -215,20 +216,17 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
     this.formContent.AnalyticsText = langConfig.purposes.analytics.title;
     this.formContent.PopUpAnalyticsDescription = langConfig.purposes.analytics.description;
 
-    this.formContent.popUpCcpaPurposeDescription  = langConfig.CONFIG.POPUP.PURPOSES_BODY_CCPA;
-    this.formContent.popUpCcpaPrivacyInfo  = langConfig.CONFIG.POPUP.PRIVACY_INFO_BODY_TEXT;
+    this.formContent.popUpCcpaPurposeDescription = langConfig.CONFIG.POPUP.PURPOSES_BODY_CCPA;
+    this.formContent.popUpCcpaPrivacyInfo = langConfig.CONFIG.POPUP.PRIVACY_INFO_BODY_TEXT;
 
     this.popUpTitleLang = {
       purpose: langConfig.CONFIG.POPUP.PURPOSE_TEXT,
       privacyInfo: langConfig.CONFIG.POPUP.PRIVACY_INFO_TITLE,
       vendors: langConfig.CONFIG.POPUP.VENDORS
     };
-    console.log('Extra', langConfig.COMMOM.ALWAYS_ALLOW)
 
-    this.extraProperty.alwaysAllow =  langConfig.COMMOM.ALWAYS_ALLOW;
+    this.extraProperty.alwaysAllow = langConfig.COMMOM.ALWAYS_ALLOW;
     this.extraProperty.privacyInfo = langConfig.CONFIG.POPUP.PRIVACY_INFO_TITLE;
-    // console.log('Extra', this.extraProperty)
-    // }
   }
 
   onGetAllowVendors() {
@@ -305,6 +303,10 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
       this.cookieBannerForm.get('ccpaTarget').clearValidators();
       this.cookieBannerForm.get('gdprTarget').clearValidators();
     }
+    if (configData.generic_global === 'true' || configData.generic_global === true) {
+      this.cookieBannerForm.get('ccpaTarget').clearValidators();
+      this.cookieBannerForm.get('gdprTarget').clearValidators();
+    }
 
     this.cookieBannerForm.get('ccpaTarget').updateValueAndValidity();
     this.cookieBannerForm.get('gdprTarget').updateValueAndValidity();
@@ -315,6 +317,7 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
       gdpr_global: configData.gdpr_global === 'true' || configData.gdpr_global === true ? true : false,
       ccpa_global: configData.ccpa_global === 'true' || configData.ccpa_global === true ? true : false,
       generic_global: configData.generic_global === 'true' || configData.generic_global === true ? true : false,
+      defaultRegulation: configData.defaultRegulation,
       cookieBlocking: configData.cookie_blocking,
       enableIab: configData.enable_iab,
       email: configData.email,
@@ -380,6 +383,7 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
       google_vendors: [this.defaultData.google_vendors],
       gdpr_global: [this.defaultData.gdprGlobal],
       ccpa_global: [this.defaultData.ccpaGlobal],
+      defaultRegulation: ['generic'],
       generic_global: [this.defaultData.genericGlobal],
       purposes_by_default: [this.defaultData.allowPurposeByDefault],
       showBadge: [this.defaultData.showBadge],
@@ -529,7 +533,6 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
       PopUpNecessaryDescription: this.data.PopUpNecessaryDescription,
     });
     this.formContent = {...defaultBannerContent};
-    // console.log('datasfdafsd', this.formContent.)
   }
 
 
@@ -647,6 +650,10 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
 
       }
 
+      this.ccpaBannerConfig = this.bannerCookieData.config.AllowedBanners.ccpa;
+      this.gdprBannerConfig = this.bannerCookieData.config.AllowedBanners.gdpr;
+      this.genericBannerConfig = this.bannerCookieData.config.AllowedBanners.generic;
+
 
       this.formContent.position = this.bannerCookieData.config.BannerPosition;
       //
@@ -751,14 +758,13 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
       gdpr_global: this.cookieBannerForm.value.gdpr_global,
       ccpa_global: this.cookieBannerForm.value.ccpa_global,
       generic_global: this.cookieBannerForm.value.generic_global,
+      defaultRegulation: this.cookieBannerForm.value.defaultRegulation,
       purposes_by_default: this.cookieBannerForm.value.purposes_by_default,
       iab_vendors_ids: JSON.stringify(this.iabVendorsID),
       google_vendors_ids: JSON.stringify(this.googleVendorsID),
       show_badge: this.cookieBannerForm.value.showBadge,
       CONFIG: this.onGetFormData()
     };
-    console.log(' this.onGetFormData()', JSON.stringify(userPrefrencesData));
-
     this.isPublish = true;
     this.loading.start();
     this.cookieBannerService.onSubmitCookieBannerData(userPrefrencesData, this.currentManagedOrgID, this.currrentManagedPropID, this.constructor.name, moduleName.cookieBannerModule)
@@ -791,6 +797,7 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
       gdpr_global: this.cookieBannerForm.value.gdpr_global,
       ccpa_global: this.cookieBannerForm.value.ccpa_global,
       generic_global: this.cookieBannerForm.value.generic_global,
+      defaultRegulation: this.cookieBannerForm.value.defaultRegulation,
       purposes_by_default: this.cookieBannerForm.value.purposes_by_default,
       gdpr_target: this.cookieBannerForm.value.gdprTarget,
       iab_vendors_ids: JSON.stringify(this.iabVendorsID),
@@ -802,6 +809,8 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
       show_badge: this.cookieBannerForm.value.showBadge,
       CONFIG: this.onGetFormData()
     };
+    console.log(' this.onGetFormData()', JSON.stringify(userPrefrencesData));
+    console.log('default regu', this.cookieBannerForm.value.defaultRegulation)
     this.loading.start();
     this.isPublish = true;
     this.cookieBannerService.onUpdateCookieBannerData(userPrefrencesData, this.currentManagedOrgID, this.currrentManagedPropID, this.constructor.name, moduleName.cookieBannerModule)
@@ -831,6 +840,11 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
       LangConfig: {
         allowedLang: this.langValueList,
         defaultLang: this.langDefault
+      },
+      AllowedBanners: {
+        ccpa: this.ccpaBannerConfig,
+        gdpr: this.gdprBannerConfig,
+        generic: this.genericBannerConfig
       },
       BannerPosition: this.cookieBannerForm.value.BannerPosition,
       BadgePosition: this.cookieBannerForm.value.BadgePosition,
@@ -972,18 +986,30 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
 
   onSetGdprGlobal(event: any, type: string) {
     if (event) {
-      if (this.cookieBannerForm.value.gdpr_global  && this.cookieBannerForm.value.generic_global && type === 'ccpa') {
+      if (type === 'ccpa') {
+        this.genericBannerConfig = false;
+        this.gdprBannerConfig = false;
+      }
+      if (type === 'gdpr') {
+        this.genericBannerConfig = false;
+        this.ccpaBannerConfig = false;
+      }
+      if (type === 'generic') {
+        this.ccpaBannerConfig = false;
+        this.gdprBannerConfig = false;
+      }
+      if (this.cookieBannerForm.value.gdpr_global && this.cookieBannerForm.value.generic_global && type === 'ccpa') {
         alert('GDPR GLOBAL or GENERIC GLOBAL is Applied, Please turn off GDPR GLOBAL or GENERIC GLOBAL to apply CCPA Global');
         this.cookieBannerForm.patchValue({ccpa_global: false});
         return false;
       }
-      if (this.cookieBannerForm.value.ccpa_global  && this.cookieBannerForm.value.generic_global && type === 'gdpr') {
+      if (this.cookieBannerForm.value.ccpa_global && this.cookieBannerForm.value.generic_global && type === 'gdpr') {
         alert('CCPA GLOBAL or GENERIC GLOBAL is Applied, Please turn off CCPA GLOBAL or GENERIC GLOBAL to apply GDPR Global');
         this.cookieBannerForm.patchValue({gdpr_global: false});
         return false;
       }
 
-      if (this.cookieBannerForm.value.ccpa_global && this.cookieBannerForm.value.gdpr_global  && type === 'generic') {
+      if (this.cookieBannerForm.value.ccpa_global && this.cookieBannerForm.value.gdpr_global && type === 'generic') {
         alert('CCPA GLOBAL or GENERIC GLOBAL is Applied, Please turn off CCPA GLOBAL or GENERIC GLOBAL to apply GENERIC Global');
         this.cookieBannerForm.patchValue({generic_global: false});
         return false;
@@ -1069,14 +1095,18 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
     }
   }
 
-  onCheckBannerConfig($event){
-    if($event.target.value === 'ccpa'){
+  onCheckBannerConfig($event) {
+    if ($event.target.value === 'ccpa') {
       this.ccpaBannerConfig = $event.target.checked;
-    }else if($event.target.value === 'gdpr'){
+    } else if ($event.target.value === 'gdpr') {
       this.gdprBannerConfig = $event.target.checked;
-    } else if($event.target.value === 'generic'){
+    } else if ($event.target.value === 'generic') {
       this.genericBannerConfig = $event.target.checked;
     }
-
+    if ($event.target.value === 'gdpr' || $event.target.value === 'ccpa') {
+      if (!this.ccpaBannerConfig && !this.gdprBannerConfig) {
+        this.genericBannerConfig = true;
+      }
+    }
   }
 }

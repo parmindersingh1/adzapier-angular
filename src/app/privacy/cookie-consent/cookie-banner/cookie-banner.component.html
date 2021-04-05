@@ -16,8 +16,6 @@
       </div>
 
 
-
-
     </div> <!-- breadcrumb -->
 
 
@@ -42,10 +40,13 @@
                   Manage Vendors
                 </a> -->
 
-                <button type="button" class="btn btn-sm ml-2 btn-uppercase btn-outline-secondary" (click)="openModal(templateManageLang)">Manage Languages</button>
+                <button type="button" class="btn btn-sm ml-2 btn-uppercase btn-outline-secondary"
+                        (click)="openModal(templateManageLang)">Manage Languages
+                </button>
 
 
-                <button (click)="type = 'draft'" type="submit" [disabled]="cookieBannerForm.invalid" class="btn ml-2  btn-sm btn-uppercase btn-outline-secondary">
+                <button (click)="type = 'draft'" type="submit" [disabled]="cookieBannerForm.invalid"
+                        class="btn ml-2  btn-sm btn-uppercase btn-success">
                   <ng-container *ngIf="!isPublish || type === 'publish'">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -92,29 +93,45 @@
               </div>
             </div>
           </div>
-          <div class="card-body">
-            <div class="row d-flex mr-1"><label class="tx-11 tx-medium tx-spacing-1 pb-0 tx-color-03 mb-1 tx-uppercase col-sm-12  col-form-label mt-n2" for="sel1">Regulation</label>
-              <div class="col-sm-12 d-flex regulation-div">
+
+
+
+          <div class="card-body pt-2">
+            <div class="row d-flex mr-1 "><label
+              class="tx-11 pb-2 tx-medium tx-spacing-1 pb-0 tx-color-03 mb-1 tx-uppercase col-sm-12  col-form-label mt-n2"
+              for="sel1">Allow Regulations    <i-feather *ngIf="gdprGlobal.checked || ccpaGlobal.checked || genericGlobal.checked" class="feather-16" name="info"
+                                                         [tooltip]="gdprGlobal.checked ? 'GDPR Global Applied' : ccpaGlobal.checked ? 'CCPA Global Applied' : genericGlobal.checked ? 'Generic Global Applied' : null"></i-feather></label>
+              <div class="col-sm-12 pb-3 d-flex regulation-div">
                 <div class="form-group mb-0 pr-3">
-                  <label><input type="checkbox" [checked]="ccpaBannerConfig" name="ccpaBannerConfig" (change)="onCheckBannerConfig($event)"  value="ccpa"> CCPA</label>
+                  <label><input type="checkbox" [checked]="ccpaBannerConfig" name="ccpaBannerConfig"
+                      (change)="onCheckBannerConfig($event)" [disabled]="gdprGlobal.checked || ccpaGlobal.checked || genericGlobal.checked" value="ccpa"> CCPA</label>
                 </div>
                 <div class="form-group mb-0 pr-3">
-                  <label><input type="checkbox" [checked]="gdprBannerConfig" name="gdprBannerConfig" (change)="onCheckBannerConfig($event)" value="gdpr"> GDPR</label>
+                  <label><input type="checkbox" [checked]="gdprBannerConfig" name="gdprBannerConfig"
+                               (change)="onCheckBannerConfig($event)" [disabled]="gdprGlobal.checked || ccpaGlobal.checked || genericGlobal.checked" value="gdpr"> GDPR</label>
                 </div>
                 <div class="form-group mb-0">
-                  <label><input type="checkbox" [checked]="genericBannerConfig" name="genericBannerConfig" (change)="onCheckBannerConfig($event)" value="generic"> GENERIC</label>
+                  <label><input type="checkbox" name="genericBannerConfig" [checked]="genericBannerConfig"
+                                 (change)="onCheckBannerConfig($event)"  [disabled]="(!gdprBannerConfig && !ccpaBannerConfig) || (gdprGlobal.checked || ccpaGlobal.checked || genericGlobal.checked)"
+                                 value="generic"> GENERIC
+
+                  </label>
                 </div>
 
               </div>
             </div>
+
             <div [ngStyle]="{display: skeletonLoading ? 'none': ''}" class="d-flex mt-2">
-              <div class="col-md-6 border-gray" [ngClass]="genericBannerConfig || gdprBannerConfig || ccpaBannerConfig?'show-banner-config':'hide-banner-config'">
-                <div class="banner-config-title tx-medium tx-13 text-primary tx-spacing-1 tx-color-03 tx-uppercase">Banner Configuration
-                  <a class="btn mt-n2 mr-n2 float-right btn-xs btn-uppercase btn-outline-primary" *ngIf="gdprBannerConfig" routerLink="/cookie-consent/manage-vendors">
-                    Manage Vendors
-                  </a>
+              <div class="col-md-5  col-xs-12 border-gray"
+                   [ngClass]="genericBannerConfig || gdprBannerConfig || ccpaBannerConfig?'show-banner-config':'hide-banner-config'">
+                <div class="banner-config-title tx-medium tx-13 tx-spacing-1 tx-color-03 tx-uppercase">
+                  REGULATION Configuration
+
                 </div>
-                <div class="row position-relative">
+
+                <div class="divider-text mb-0"  *ngIf="ccpaBannerConfig">CCPA </div>
+
+                <div class="row position-relative ccpa "   [ngClass]="ccpaBannerConfig?'show-controls':'hide-controls'">
                   <div class="col-md-6">
                     <div class="form-group mb-1 row" *ngIf="ccpaBannerConfig">
                       <label for="sel1"
@@ -128,15 +145,43 @@
                                   [value]="ccpaCountry.value">
                             {{ccpaCountry.title}}</option>
                         </select>
-
                         <div *ngIf="submitted && f.ccpaTarget.errors">
                           <div class="text-danger mt-2" *ngIf="f.ccpaTarget.errors.required">
                             Choose CCPA Target
                           </div>
                         </div>
-
                       </div>
                     </div>
+                  </div>
+
+
+                  <div class="col-md-6 pt-4">
+                  <div class="form-group row pd-0 mg-b-0"
+                       [ngClass]="ccpaBannerConfig?'show-controls':'hide-controls'">
+                    <label class="col-sm-8 tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label">
+                      CCPA GLOBAL</label>
+                    <div class="col-sm-4 pt-2">
+                      <label class="switch">
+                        <input type="checkbox"
+                               [attr.disabled]="cookieBannerForm.value.gdpr_global || cookieBannerForm.value.generic_global ? true : null"
+                               (ngModelChange)="onSetGdprGlobal($event, 'ccpa')" #ccpaGlobal
+                               formControlName="ccpa_global">
+                        <span class="slider round"></span>
+                      </label>
+                    </div>
+
+                    <div class="row">
+                      <p
+                        class="p-0 global-text text-info  tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label"
+                        *ngIf="ccpaGlobal.checked"> CCPA Global Applied </p>
+                    </div>
+                  </div>
+                  </div>
+                </div>
+
+                <div class="divider-text mb-0"  *ngIf="gdprBannerConfig" >GDPR </div>
+                <div class="row position-relative gdpr"   [ngClass]="gdprBannerConfig?'show-controls':'hide-controls'">
+                  <div class="col-md-6">
                     <div class="form-group mb-1 row" *ngIf="gdprBannerConfig">
                       <label for="sel1"
                              class="tx-13 tx-medium pb-0 tx-spacing-1 tx-color-03 tx-uppercase col-sm-12  col-form-label">GDPR
@@ -155,11 +200,22 @@
                       </div>
                     </div>
 
+                    <div class="form-group row pd-0 mg-b-0 manage-vendor-btn"
+                         *ngIf="gdprBannerConfig">
+                      <a class="mt-n2 mr-n2 float-right btn-xs btn-uppercase "
+                         style="font-size: 12px"
+                         routerLink="/cookie-consent/manage-vendors">
+                        <i class="fa fa-cogs" style="    font-size: 15px;
+    margin-right: 5px;" aria-hidden="true"></i>
+                        Manage Vendors
+                      </a>
+                    </div>
                   </div>
 
 
                   <div class="col-md-6 mt-3">
-                    <div class="form-group row pd-0 mg-b-0" [ngClass]="gdprBannerConfig?'show-controls':'hide-controls'">
+                    <div class="form-group row pd-0 mg-b-0"
+                         [ngClass]="gdprBannerConfig?'show-controls':'hide-controls'">
                       <label class="col-sm-8 tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label">
                         ENABLE IAB</label>
                       <div class="col-sm-4">
@@ -170,7 +226,8 @@
                         </label>
                       </div>
                     </div>
-                    <div class="form-group row pd-0 mg-b-0" [ngClass]="gdprBannerConfig?'show-controls':'hide-controls'">
+                    <div class="form-group row pd-0 mg-b-0"
+                         [ngClass]="gdprBannerConfig?'show-controls':'hide-controls'">
                       <label class="col-sm-8 tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label">
                         Google Vendors</label>
                       <div class="col-sm-4">
@@ -183,141 +240,173 @@
                       </div>
                     </div>
 
-                    <div class="form-group row pd-0 mg-b-0" [ngClass]="gdprBannerConfig?'show-controls':'hide-controls'">
+                    <div class="form-group row pd-0 mg-b-0"
+                         [ngClass]="gdprBannerConfig?'show-controls':'hide-controls'">
                       <label class="col-sm-8 tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label">
                         GDPR GLOBAL</label>
                       <div class="col-sm-4">
                         <label class="switch">
-                          <input type="checkbox" [attr.disabled]="cookieBannerForm.value.ccpa_global || cookieBannerForm.value.generic_global ? true : null" (ngModelChange)="onSetGdprGlobal($event, 'gdpr')" #gdprGlobal
+                          <input type="checkbox"
+                                 [attr.disabled]="cookieBannerForm.value.ccpa_global || cookieBannerForm.value.generic_global ? true : null"
+                                 (ngModelChange)="onSetGdprGlobal($event, 'gdpr')" #gdprGlobal
                                  formControlName="gdpr_global">
                           <span class="slider round"></span>
                         </label>
                       </div>
 
                       <div class="row">
-                        <p class="p-0 global-text text-info  tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label" *ngIf="gdprGlobal.checked"> GDPR Global Applied </p>
-                      </div>
-                    </div>
-                    <div class="form-group row pd-0 mg-b-0" [ngClass]="ccpaBannerConfig?'show-controls':'hide-controls'">
-                      <label class="col-sm-8 tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label">
-                        CCPA GLOBAL</label>
-                      <div class="col-sm-4">
-                        <label class="switch">
-                          <input type="checkbox"  [attr.disabled]="cookieBannerForm.value.gdpr_global || cookieBannerForm.value.generic_global ? true : null" (ngModelChange)="onSetGdprGlobal($event, 'ccpa')" #ccpaGlobal
-                                 formControlName="ccpa_global">
-                          <span class="slider round"></span>
-                        </label>
-                      </div>
-
-                      <div class="row">
-                        <p class="p-0 global-text text-info  tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label" *ngIf="ccpaGlobal.checked"> CCPA Global Applied </p>
+                        <p
+                          class="p-0 global-text text-info  tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label"
+                          *ngIf="gdprGlobal.checked"> GDPR Global Applied </p>
                       </div>
                     </div>
 
+<!--                    <div class="form-group row pd-0 mg-b-0"-->
+<!--                         [ngClass]="genericBannerConfig?'show-controls':'hide-controls'">-->
+<!--                      <label class="col-sm-8 tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label">-->
+<!--                        GENERIC GLOBAL</label>-->
+<!--                      <div class="col-sm-4">-->
+<!--                        <label class="switch">-->
+<!--                          <input type="checkbox"-->
+<!--                                 [attr.disabled]="cookieBannerForm.value.gdpr_global || cookieBannerForm.value.ccpa_global ? true : null"-->
+<!--                                 (ngModelChange)="onSetGdprGlobal($event, 'generic')" #genericGlobal-->
+<!--                                 formControlName="generic_global">-->
+<!--                          <span class="slider round"></span>-->
+<!--                        </label>-->
+<!--                      </div>-->
 
-                    <div class="form-group row pd-0 mg-b-0" [ngClass]="genericBannerConfig?'show-controls':'hide-controls'">
-                      <label class="col-sm-8 tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label">
-                        GENERIC GLOBAL</label>
-                      <div class="col-sm-4">
-                        <label class="switch">
-                          <input type="checkbox"  [attr.disabled]="cookieBannerForm.value.gdpr_global || cookieBannerForm.value.ccpa_global ? true : null"
-                                 (ngModelChange)="onSetGdprGlobal($event, 'generic')" #genericGlobal
-                                 formControlName="generic_global">
-                          <span class="slider round"></span>
-                        </label>
-                      </div>
-
-                      <div class="row">
-                        <p class="p-0 global-text text-info  tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label"
-                           *ngIf="genericGlobal.checked"> Generic Global Applied </p>
-                      </div>
-                    </div>
-
-                    <!--                    <div class="form-group row pd-0 mg-b-0">-->
-                    <!--                      <label class="col-sm-8 tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label">-->
-                    <!--                        Configure banner</label>-->
-                    <!--                      <div class="col-sm-4">-->
-                    <!--                        <label class="switch" (click)="onCheckAllowBannerConfig()">-->
-                    <!--                          <input [attr.disabled]="disablePlanFeatures.disableBannerConfig ? true : null" type="checkbox"-->
-                    <!--                                 #showConfig>-->
-                    <!--                          <span class="slider round"></span>-->
-                    <!--                        </label>-->
-                    <!--                      </div>-->
-                    <!--                    </div>-->
-
-
-                    <!--                    <div class="form-group row pd-0 mg-b-0">-->
-                    <!--                      <label class="col-sm-8 tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label">-->
-                    <!--                        Custom Vendors</label>-->
-                    <!--                      <div class="col-sm-4">-->
-                    <!--                        <label class="switch" (click)="onCheckAllowBannerConfig()">-->
-                    <!--                          <input [attr.disabled]="disablePlanFeatures.disableBannerConfig ? true : null" type="checkbox"-->
-                    <!--                                 #allowCustom>-->
-                    <!--                          <span class="slider round"></span>-->
-                    <!--                        </label>-->
-                    <!--                      </div>-->
-                    <!--                    </div>-->
-
+<!--                      <div class="row">-->
+<!--                        <p-->
+<!--                          class="p-0 global-text text-info  tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label"-->
+<!--                          *ngIf="genericGlobal.checked"> Generic Global Applied </p>-->
+<!--                      </div>-->
+<!--                    </div>-->
                   </div>
-                  <div class="common-action">
-                    <div class="d-flex">
-                      <div>
-                        <p-checkbox (click)="onCheckLogoAllow()" [disabled]="disablePlanFeatures.hideLogo" class="ml-3"
-                                    binary="true"
-                                    formControlName="logo"></p-checkbox>
-                        <label class="tx-13 tx-medium tx-spacing-1 ml-2 p-0 tx-color-03 tx-uppercase col-form-label">
-                          Show Watermark
-                        </label>
-                      </div>
-
-                    </div>
 
 
-                    <div class="d-flex mr-3">
-                      <div>
-                        <p-checkbox binary="true" class="ml-3 checkbox" formControlName="showBadge"></p-checkbox>
-                        <label class="tx-13 tx-medium tx-spacing-1 ml-2 p-0 tx-color-03 tx-uppercase col-form-label">
-                          Show Badge
-                        </label>
-                      </div>
+                </div>
 
-                    </div>
-
-                    <div class="form-group col-sm-5 p-0 m-0">
-                      <label class="tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label">
-                        COOKIE BLOCKING</label>
-                      <label class="switch float-right" (click)="onCheckDisableCookiebloking()">
-                        <input type="checkbox"
-                               [attr.disabled]="disablePlanFeatures.disableCookieblocking ? true : null"
-                               formControlName="cookieBlocking">
-                        <span class="slider round"></span>
-                      </label>
-                    </div>
-
-
-
+                <div class="divider-text mb-0"  *ngIf="genericBannerConfig" >GENERIC </div>
+                <div class="row position-relative gdpr"   [ngClass]="genericBannerConfig?'show-controls':'hide-controls'">
+                  <div class="col-md-6">
                   </div>
-                  <div class="form-group pd-0 mg-b-0" [ngClass]="ccpaBannerConfig || genericBannerConfig ?'show-controls':'hide-controls'">
-                    <label class="col-sm-10 tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label">
-                      Allow Purposes By Default</label>
-                    <label class="switch mt-1">
+                  <div class="col-md-6">
+                <div class="form-group row pd-0 mg-b-0"
+                     [ngClass]="genericBannerConfig?'show-controls':'hide-controls'">
+                  <label class="col-sm-8 tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label">
+                    GENERIC GLOBAL</label>
+                  <div class="col-sm-4">
+                    <label class="switch">
                       <input type="checkbox"
-                             formControlName="ccpa_global">
+                             [attr.disabled]="cookieBannerForm.value.gdpr_global || cookieBannerForm.value.ccpa_global ? true : null"
+                             (ngModelChange)="onSetGdprGlobal($event, 'generic')" #genericGlobal
+                             formControlName="generic_global">
                       <span class="slider round"></span>
                     </label>
                   </div>
+
+                  <div class="row">
+                    <p
+                      class="p-0 global-text text-info  tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label"
+                      *ngIf="genericGlobal.checked"> Generic Global Applied </p>
+                  </div>
                 </div>
+                </div>
+                </div>
+
               </div>
-              <div class="col-md-6 pr-0 switch-btn" *ngIf="genericBannerConfig || gdprBannerConfig || ccpaBannerConfig">
+
+
+
+              <div class="col-md-4 col-xs-12 pr-0 switch-btn" >
                 <div class="col-md-12 border-gray">
-                  <div class="banner-config-title tx-medium tx-13 text-primary  tx-spacing-1 tx-color-03 tx-uppercase">Display Frequency</div>
+                  <div class="banner-config-title tx-medium tx-13  tx-spacing-1 tx-color-03 tx-uppercase">
+                    Global Configuration
+                  </div>
+
+                      <div class="row">
+                        <div class="col-md-12 config-pd">
+                          <div class="form-group mt-2 mb-1 row">
+                            <label for="sel1"
+                                   class="tx-13 tx-medium tx-spacing-1 pb-0 tx-color-03 tx-uppercase col-sm-10  col-form-label">
+                              Default REGULATION:</label>
+                            <div class="col-sm-12">
+                              <select formControlName="defaultRegulation"
+                                      class="form-control" id="sel1">
+                                <option *ngIf="genericBannerConfig" value="generic" selected>Generic</option>
+                                <option *ngIf="ccpaBannerConfig" value="ccpa" selected>CCPA</option>
+                                <option *ngIf="gdprBannerConfig" value="gdpr" selected>GDPR</option>
+                              </select>
+                            </div>
+                          </div>
+
+
+                          <div class="mt-3 form-group col-sm-12 p-0 m-0">
+                            <label class="tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label">
+                              COOKIE BLOCKING</label>
+                            <label class="switch float-right" (click)="onCheckDisableCookiebloking()">
+                              <input type="checkbox"
+                                     [attr.disabled]="disablePlanFeatures.disableCookieblocking ? true : null"
+                                     formControlName="cookieBlocking">
+                              <span class="slider round"></span>
+                            </label>
+                          </div>
+
+                          <div class="form-group col-sm-12 p-0 m-0">
+                            <label class="tx-13 tx-medium tx-spacing-1 p-0 col-md-8 tx-color-03 tx-uppercase  col-form-label">
+                              Allow Purposes By Default</label>
+                            <label class="switch col-md-4 float-right mt-1">
+                              <input type="checkbox"
+                                     formControlName="purposes_by_default">
+                              <span class="slider round"></span>
+                            </label>
+                          </div>
+
+
+                          <div class="mt-3">
+                            <div>
+                              <p-checkbox (click)="onCheckLogoAllow()" [disabled]="disablePlanFeatures.hideLogo"
+                                          class=""
+                                          binary="true"
+                                          formControlName="logo"></p-checkbox>
+                              <label class="tx-13 tx-medium tx-spacing-1 ml-2 p-0 tx-color-03 tx-uppercase col-form-label">
+                                Show Watermark
+                              </label>
+                            </div>
+                          </div>
+                          <div class=" mt-3 mr-3">
+                            <div>
+                              <p-checkbox binary="true" class=" checkbox" formControlName="showBadge"></p-checkbox>
+                              <label class="tx-13 tx-medium tx-spacing-1 ml-2 p-0 tx-color-03 tx-uppercase col-form-label">
+                                Show Badge
+                              </label>
+                            </div>
+                          </div>
+
+                        </div>
+<!--                        <div class="col-md-6" style="padding-top: 30px;">-->
+<!--                   -->
+<!--                        </div>-->
+
+                      </div>
+              </div>
+              </div>
+
+              <div class="col-md-3 col-xs-12 pr-0 switch-btn" >
+                <div class="col-md-12 border-gray">
+                  <div class="banner-config-title tx-medium tx-13  tx-spacing-1 tx-color-03 tx-uppercase">
+                    Display Frequency
+                  </div>
+                  <div class="pb-4">
                   <div class="row">
                     <div class="col-md-12">
-                      <h6 class=" tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label">The partial consent status every:
-                        <i-feather name="info" class="feather-16" tooltip="Show the Consent Manager UI to users"></i-feather>
+                      <h6 class=" tx-9 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label">The partial
+                        consent status every:
+                        <i-feather name="info" class="feather-16"
+                                   tooltip="Show the Consent Manager UI to users"></i-feather>
                       </h6>
                     </div>
-                    <div class="col-md-8">
+                    <div class="col-md-12">
                       <div class="input-group row m-0 mb-1">
                         <input oninput="validity.valid||(value='');" min="1" type="number"
                                formControlName="bannerPartialConsent" class="form-control col-md-5" value="1"
@@ -334,11 +423,13 @@
 
                   <div class="row">
                     <div class="col-md-12">
-                      <h6 class=" tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label"> Rejected all purposes every:
-                        <i-feather class="feather-16" name="info" tooltip="Show the Consent Manager UI to users who rejects all purposes on mentioned time"></i-feather>
+                      <h6 class=" tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label"> Rejected all
+                        purposes every:
+                        <i-feather class="feather-16" name="info"
+                                   tooltip="Show the Consent Manager UI to users who rejects all purposes on mentioned time"></i-feather>
                       </h6>
                     </div>
-                    <div class="col-md-8">
+                    <div class="col-md-12">
                       <div class="input-group row ml-0 mb-1">
                         <input oninput="validity.valid||(value='');" min="1" type="number"
                                formControlName="bannerRejectAllConsent" class="form-control col-md-5" value="1"
@@ -356,10 +447,11 @@
                     <div class="col-md-12">
                       <h6 class=" tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label">
                         No consent choice every:
-                        <i-feather name="info" class="feather-16" tooltip="Show the Consent Manager UI to users who made no consent choice"></i-feather>
+                        <i-feather name="info" class="feather-16"
+                                   tooltip="Show the Consent Manager UI to users who made no consent choice"></i-feather>
                       </h6>
                     </div>
-                    <div class="col-md-8">
+                    <div class="col-md-12">
                       <div class="input-group row ml-0 mb-1">
                         <input formControlName="bannerClosedConsent" oninput="validity.valid||(value='');" min="1"
                                type="number" class="form-control col-md-5" value="1" name="email">
@@ -372,14 +464,81 @@
                       </div>
                     </div>
                   </div>
+                  </div>
 
                 </div>
-
-
               </div>
             </div>
             <ngx-skeleton-loader *ngIf="skeletonLoading" count="6" class="pt-4"></ngx-skeleton-loader>
           </div>
+
+<!--          <div class="card-footer">-->
+<!--            <div class="row">-->
+<!--              <div class="col-md-6">-->
+<!--                <div class="row">-->
+<!--              <div class="col-md-6">-->
+<!--                <div class="form-group mb-1 row">-->
+<!--                  <label for="sel1"-->
+<!--                         class="tx-13 tx-medium tx-spacing-1 pb-0 tx-color-03 tx-uppercase col-sm-10  col-form-label">-->
+<!--                    Default REGULATION:</label>-->
+<!--                  <div class="col-sm-12">-->
+<!--                    <select formControlName="defaultRegulation"-->
+<!--                            class="form-control" id="sel1">-->
+<!--                      <option value="generic" selected>Generic</option>-->
+<!--                      <option value="ccpa">CCPA</option>-->
+<!--                      <option value="gdpr">GDPR</option>-->
+<!--                    </select>-->
+<!--                  </div>-->
+<!--                </div>-->
+
+<!--                  <div class="mt-3">-->
+<!--                    <div>-->
+<!--                      <p-checkbox (click)="onCheckLogoAllow()" [disabled]="disablePlanFeatures.hideLogo"-->
+<!--                                  class=""-->
+<!--                                  binary="true"-->
+<!--                                  formControlName="logo"></p-checkbox>-->
+<!--                      <label class="tx-13 tx-medium tx-spacing-1 ml-2 p-0 tx-color-03 tx-uppercase col-form-label">-->
+<!--                        Show Watermark-->
+<!--                      </label>-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                  <div class=" mt-3 mr-3">-->
+<!--                    <div>-->
+<!--                      <p-checkbox binary="true" class=" checkbox" formControlName="showBadge"></p-checkbox>-->
+<!--                      <label class="tx-13 tx-medium tx-spacing-1 ml-2 p-0 tx-color-03 tx-uppercase col-form-label">-->
+<!--                        Show Badge-->
+<!--                      </label>-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--              </div>-->
+<!--              <div class="col-md-6" style="padding-top: 30px;">-->
+<!--                <div class="form-group col-sm-8 p-0 m-0">-->
+<!--                  <label class="tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label">-->
+<!--                    COOKIE BLOCKING</label>-->
+<!--                  <label class="switch float-right" (click)="onCheckDisableCookiebloking()">-->
+<!--                    <input type="checkbox"-->
+<!--                           [attr.disabled]="disablePlanFeatures.disableCookieblocking ? true : null"-->
+<!--                           formControlName="cookieBlocking">-->
+<!--                    <span class="slider round"></span>-->
+<!--                  </label>-->
+<!--                </div>-->
+
+<!--                <div class="form-group col-sm-8 p-0 m-0">-->
+<!--                  <label class="tx-13 tx-medium tx-spacing-1 p-0 col-md-8 tx-color-03 tx-uppercase  col-form-label">-->
+<!--                    Allow Purposes By Default</label>-->
+<!--                  <label class="switch col-md-4 float-right mt-1">-->
+<!--                    <input type="checkbox"-->
+<!--                           formControlName="ccpa_global">-->
+<!--                    <span class="slider round"></span>-->
+<!--                  </label>-->
+<!--                </div>-->
+<!--              </div>-->
+
+<!--                </div>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+
         </div>
 
 
@@ -411,7 +570,8 @@
             <div class="row">
               <div class="col-md-7">
                 <div class="form-group mb-0 row pd-0 mg-b-0">
-                  <label class="cs-banner col-sm-4 tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label">
+                  <label
+                    class="cs-banner col-sm-4 tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label">
                     Configure banner</label>
                   <div class="col-sm-4 pt-2">
                     <label class="switch" (click)="onCheckAllowBannerConfig()">
@@ -425,16 +585,18 @@
               <div class="col-md-5 ">
                 <div class="form-group row">
                   <label for="lang" style="font-size: 15px"
-                         class="tx-12 col-md-3  tx-medium tx-middle tx-spacing-1 tx-color-03 tx-uppercase"> Language </label>
+                         class="tx-12 col-md-3  tx-medium tx-middle tx-spacing-1 tx-color-03 tx-uppercase">
+                    Language </label>
                   <select [disabled]="isFieldDisabled" (change)="onGetLangData($event)" formControlName="Bannerlanguage"
                           class="form-control col-md-7" id="lang">
                     <!--                              <option value="">&#45;&#45; Select Language &#45;&#45;</option>-->
                     <ng-container *ngFor="let gdprLang of bannerConstant.Bannerlanguage">
-                      <option *ngIf="langValueList.includes(gdprLang.value)" [value]="gdprLang.value">{{gdprLang.title}}</option>
+                      <option *ngIf="langValueList.includes(gdprLang.value)"
+                              [value]="gdprLang.value">{{gdprLang.title}}</option>
                     </ng-container>
                   </select>
                   <div class="col-md-2">
-                    <i  (click)="openModal(templateManageLang)" class="setting-icon  fas fa-cog"></i>
+                    <i (click)="openModal(templateManageLang)" class="setting-icon  fas fa-cog"></i>
                   </div>
                   <div *ngIf="submitted && f.Bannerlanguage.errors">
                     <div class="text-danger mt-2" *ngIf="f.Bannerlanguage.errors.required">
@@ -1490,7 +1652,8 @@
             </td>
             <td>{{lang.title}}</td>
             <td>{{lang.value | uppercase}}</td>
-            <td class="text-center"><input type="radio" class="" [(ngModel)]="langDefault"  name="defaultLang" [value]="lang.value" />
+            <td class="text-center"><input type="radio" class="" [(ngModel)]="langDefault" name="defaultLang"
+                                           [value]="lang.value"/>
             </td>
           </tr>
         </ng-template>
@@ -1502,7 +1665,9 @@
   <div class="modal-footer">
     <div class="text-center m-auto">
       <!--          <button type="button" aria-label="Close" (click)="modalRef.hide()" class="btn btn-sm btn-uppercase btn-outline-secondary">Cancel</button>-->
-      <button type="button" aria-label="Close" (click)="modalRef.hide()" class="ml-3 btn btn-sm btn-uppercase btn-primary">Save</button>
+      <button type="button" aria-label="Close" (click)="modalRef.hide()"
+              class="ml-3 btn btn-sm btn-uppercase btn-primary">Save
+      </button>
     </div>
   </div>
 </ng-template>
