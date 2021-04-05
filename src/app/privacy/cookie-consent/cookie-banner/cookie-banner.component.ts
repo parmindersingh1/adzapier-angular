@@ -317,13 +317,14 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
       gdpr_global: configData.gdpr_global === 'true' || configData.gdpr_global === true ? true : false,
       ccpa_global: configData.ccpa_global === 'true' || configData.ccpa_global === true ? true : false,
       generic_global: configData.generic_global === 'true' || configData.generic_global === true ? true : false,
-      defaultRegulation: configData.defaultRegulation,
+      defaultRegulation: configData.default_regulation,
       cookieBlocking: configData.cookie_blocking,
       enableIab: configData.enable_iab,
       email: configData.email,
       google_vendors: configData.google_vendors,
       showBadge: configData.show_badge,
       logo: configData.logo,
+      purposes_by_default: configData.purposes_by_default
     });
 
     this.langValueList = configData.config.LangConfig.allowedLang;
@@ -392,11 +393,11 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
       // iabVendorsList: [''],
       // googleVendorsList: [''],
       // DISPLAY FREQUENCY
-      bannerPartialConsent: [1],
+      bannerPartialConsent: [24],
       bannerPartialConsentType: [this.defaultData.BannerDisplayFrequency.partialConsent],
-      bannerRejectAllConsent: [1],
+      bannerRejectAllConsent: [2],
       bannerRejectAllConsentType: [this.defaultData.BannerDisplayFrequency.rejectAll],
-      bannerClosedConsent: [1],
+      bannerClosedConsent: [10],
       bannerClosedConsentType: [this.defaultData.BannerDisplayFrequency.noConsent],
       //  BANNER
       privacyText: [this.data.privacy],
@@ -758,7 +759,7 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
       gdpr_global: this.cookieBannerForm.value.gdpr_global,
       ccpa_global: this.cookieBannerForm.value.ccpa_global,
       generic_global: this.cookieBannerForm.value.generic_global,
-      defaultRegulation: this.cookieBannerForm.value.defaultRegulation,
+      default_regulation: this.cookieBannerForm.value.defaultRegulation,
       purposes_by_default: this.cookieBannerForm.value.purposes_by_default,
       iab_vendors_ids: JSON.stringify(this.iabVendorsID),
       google_vendors_ids: JSON.stringify(this.googleVendorsID),
@@ -797,7 +798,7 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
       gdpr_global: this.cookieBannerForm.value.gdpr_global,
       ccpa_global: this.cookieBannerForm.value.ccpa_global,
       generic_global: this.cookieBannerForm.value.generic_global,
-      defaultRegulation: this.cookieBannerForm.value.defaultRegulation,
+      default_regulation: this.cookieBannerForm.value.defaultRegulation,
       purposes_by_default: this.cookieBannerForm.value.purposes_by_default,
       gdpr_target: this.cookieBannerForm.value.gdprTarget,
       iab_vendors_ids: JSON.stringify(this.iabVendorsID),
@@ -809,8 +810,7 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
       show_badge: this.cookieBannerForm.value.showBadge,
       CONFIG: this.onGetFormData()
     };
-    console.log(' this.onGetFormData()', JSON.stringify(userPrefrencesData));
-    console.log('default regu', this.cookieBannerForm.value.defaultRegulation)
+
     this.loading.start();
     this.isPublish = true;
     this.cookieBannerService.onUpdateCookieBannerData(userPrefrencesData, this.currentManagedOrgID, this.currrentManagedPropID, this.constructor.name, moduleName.cookieBannerModule)
