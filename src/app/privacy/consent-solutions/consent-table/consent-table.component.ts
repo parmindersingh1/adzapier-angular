@@ -15,8 +15,6 @@ export class ConsentTableComponent implements OnInit {
   currentManagedOrgID: any;
   currrentManagedPropID: any;
   consentRecordList = [];
-  legalRecordList = [];
-  legalRecordCount = 0;
   consentRecordCount = 0;
   private firstone: number;
   eventRows;
@@ -31,7 +29,6 @@ export class ConsentTableComponent implements OnInit {
 
   ngOnInit() {
     this.onGetPropsAndOrgId();
-    // this.onGetConsentRecord();
   }
 
   onGetPropsAndOrgId() {
@@ -68,7 +65,6 @@ export class ConsentTableComponent implements OnInit {
       this.firstone = (event.first / event.rows) + 1;
     }
     this.pagelimit = '?limit=' + this.eventRows + '&page=' + this.firstone;
-    this.onGetLegalRecord();
   }
 
   onGetConsentRecord() {
@@ -85,22 +81,6 @@ export class ConsentTableComponent implements OnInit {
         this.loading.stop();
       });
   }
-
-  onGetLegalRecord() {
-    this.loading.start();
-    this.consentSolutionService.getLegalRecord(this.constructor.name, moduleName.consentSolutionModule, this.pagelimit, this.currrentManagedPropID)
-      .subscribe((res: any) => {
-        this.loading.stop();
-        const result: any = res;
-        if (result.status === 200) {
-          this.legalRecordList = result.response;
-          this.legalRecordCount = result.count;
-        }
-      }, error => {
-        this.loading.stop();
-      });
-  }
-
   async onNavigateToDetails(consentRecord) {
   await  this.consentSolutionService.onPushConsentData(consentRecord);
   await this.router.navigateByUrl('/consent-solutions/consent-records/details/' + consentRecord.id);
