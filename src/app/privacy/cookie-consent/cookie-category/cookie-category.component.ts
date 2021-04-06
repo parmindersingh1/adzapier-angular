@@ -137,8 +137,7 @@ export class CookieCategoryComponent implements OnInit {
       { field: 'party', header: 'Party' },
       { field: 'description', header: 'Description' },
       { field: 'value', header: 'Value' },
-      { field: 'expiry', header: 'Expires' },
-      { field: 'duration', header: 'Duration' },
+      { field: 'expiry', header: 'Expires' }
     ];
   }
   onInItCookieForm() {
@@ -270,6 +269,7 @@ export class CookieCategoryComponent implements OnInit {
       if (res.status === 200) {
         this.typeChart = res.response;
         this.typeChart.forEach( (element, index) => {
+          element.party = element.party === 'third_party' ? 'Third Party' : element.party === 'first_party' ? 'First Party' : element.party;
           return element.color = colorCodes[index];
         });
         this.onSetUpTypeChartData(res.response);
