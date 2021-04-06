@@ -169,7 +169,8 @@
               {{col.header}}
             </th>
                         <th>Domain</th>
-                        <th>Http Type</th>
+                        <th>Http Only</th>
+                        <th>Secure</th>
             <th>Edit</th>
             <th>Delete</th>
           </tr>
@@ -184,10 +185,15 @@
               {{cookieList[col.field]}}
             </td>
             <td>
-              <i *ngIf="cookieList.secure" class="fa fa-check-circle" aria-hidden="true"></i>
+              {{cookieList.domain}}
             </td>
-            <td>
-              <i *ngIf="cookieList.http_only" class="fa fa-check-circle" aria-hidden="true"></i>
+            <td class="pl-4">
+              <i *ngIf="cookieList.http_only"  style="font-size: 18px;" class="text-success fas fa-check"></i>
+              <i *ngIf="!cookieList.http_only " style="font-size: 18px;"class="fas fa-times text-danger"></i>
+            </td>
+            <td class="pl-4">
+              <i *ngIf="cookieList.secure"  style="font-size: 18px;" class="text-success fas fa-check"></i>
+              <i *ngIf="!cookieList.secure " style="font-size: 18px;"class="fas fa-times text-danger"></i>
             </td>
             <td>
               <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-button-sm" (click)="editProduct(cookieList)"></button>
@@ -284,7 +290,7 @@
 
 
         <div class="form-group">
-          <label class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-0 tx-color-03">Expires</label>
+          <label class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-0 tx-color-03">Duration Type</label>
           <div class="col-sm-10">
             <div class="form-check form-check-inline">
               <input class="form-check-input" type="radio" formControlName="expiry"  name="expiry" value="seesion">

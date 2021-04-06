@@ -394,8 +394,6 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
             } else if (t.controlId === 'fileupload') {
               this.isFileUploadRequired = t.requiredfield;
               this.isFileuploadRequiredField = t.ismandatory;
-            } else if (t.controlId === 'captchacontrol') {
-              this.isCaptchaVerificationRequired = (t.requiredfield === '') ? false : true;
             } else if (t.controlId === 'favicon') {
               this.headerfaviconBase64 = t.faviconURL;
             }
@@ -428,8 +426,6 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
         } else if (t.controlId === 'fileupload') {
           this.isFileUploadRequired = t.requiredfield;
           this.isFileuploadRequiredField = t.ismandatory;
-        } else if (t.controlId === 'captchacontrol') {
-          this.isCaptchaVerificationRequired = (t.requiredfield === '') ? false : true;
         } else if (t.controlId === 'favicon') {
           this.headerfaviconBase64 = t.faviconURL;
         }
@@ -1823,8 +1819,6 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
         if (t.controlId === 'fileupload') {
           this.isFileUploadRequired = t.requiredfield;
           this.isFileuploadRequiredField = t.ismandatory;
-        } else if (t.controlId === 'captchacontrol') {
-          this.isCaptchaVerificationRequired = t.requiredfield;
         } else if (t.controlId === 'footertext') {
           this.footerText = t.footerText;
           this.footerTextColor = t.footerTextColor;
@@ -2243,6 +2237,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
          if(data){
           this.ccpaFormConfigService.removeCurrentSelectedFormData();
           this.ccpaFormConfigService.captureCurrentSelectedFormData(data);
+          this.isCaptchaVerificationRequired = data.response.captcha;
           if (this.isResetlinkEnable && this.isWebFormPublished && this.isEditingPublishedForm) {
             if (this.basicForm.controls['formname'].value !== '') {
               this.basicForm.controls['formname'].setValue(this.basicForm.controls['formname'].value);
@@ -2267,8 +2262,6 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
             if (t.controlId === 'fileupload') {
               this.isFileUploadRequired = t.requiredfield;
               this.isFileuploadRequiredField = t.ismandatory;
-            } else if (t.controlId === 'captchacontrol') {
-              this.isCaptchaVerificationRequired = t.requiredfield;
             } else if (t.controlId === 'footertext') {
               this.footerText = t.footerText;
               this.footerTextColor = t.footerTextColor;
