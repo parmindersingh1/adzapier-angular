@@ -39,7 +39,6 @@
               "./node_modules/ngx-bootstrap/datepicker/bs-datepicker.css",
               "src/styles.scss",
               "src/assets/css/dashforge.css",
-              "./node_modules/quill-emoji/dist/quill-emoji.css",
               "./src/assets/css/map/jqvmap.min.css",
               "./src/assets/css/daterangepicker.css"
             ],
