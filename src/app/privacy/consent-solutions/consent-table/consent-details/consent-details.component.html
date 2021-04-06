@@ -1,27 +1,142 @@
-<div class="card">
-  <p-table [value]="consentData.LegalNotice"
-           styleClass="p-datatable-sm">
-    <ng-template pTemplate="header">
-      <tr>
-        <th >Version</th>
-        <th>Identifier</th>
-        <th>CreatedAt</th>
-        <th></th>
+<div class="ml-2 bb-crum d-sm-flex align-items-center justify-content-between">
+  <div>
+    <nav aria-label="breadcrumb" style="margin-left: -14px">
+      <ol class="breadcrumb breadcrumb-style1 mg-b-10">
+        <li class="breadcrumb-item">Privacy</li>
+        <li class="breadcrumb-item"><a routerLink="/consent-solutions/consent-records">Cookie Solution</a></li>
+        <li class="breadcrumb-item"><a routerLink="/consent-solutions/consent-records"> Consent Records</a></li>
+        <li class="breadcrumb-item active">Consent Details</li>
 
-      </tr>
-    </ng-template>
-    <ng-template pTemplate="body" let-legalRecord>
-      <tr >
-        <td >{{legalRecord.version}}</td>
-        <td>{{legalRecord.identifier}}</td>
-        <td>{{legalRecord.created_at | date}}</td>
-        <td  style="text-align-last:right;">
-          <a href="#"><i class="pi pi-eye" style="font-size: 1.0rem"></i></a>
-        </td>
-      </tr>
-    </ng-template>
+      </ol>
+    </nav>
+  </div>
+
+</div>
+
+<div class="">
+  <div class="card-body mb-3">
+    <h4 class="mb-4 "><span class="head-iab mb-4">Consent Details</span></h4>
 
 
+    <div class="row mt-3">
+      <div class="col-md-5">
+        <div class="row">
+          <div class="col-md-4"><h6>Consent ID</h6>
+          </div>
+          <div class="col-md-8"><p>{{consentData.id}}</p></div>
+        </div>
+        <div class="row">
+          <div class="col-md-4"><h6>First Name</h6>
+          </div>
+          <div class="col-md-8"><p>{{consentData.first_name}}</p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4"><h6>Last Name</h6></div>
+          <div class="col-md-8"><p>{{consentData.last_name}}</p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4"><h6>Email</h6></div>
+          <div class="col-md-8"><p>
+           {{consentData.email}}
+          </p></div>
+        </div>
+        <div class="row">
+          <div class="col-md-4"><h6>Data Source</h6></div>
+          <div class="col-md-8">
+            <p>{{consentData.data_source}}</p>
+          </div>
+        </div>
+        <div  class="row" >
+          <div  class="col-md-4" ><h6 >Owner ID</h6>
+          </div>
+          <div  class="col-md-8 " ><p >
+            {{consentData.owner_id}}</p></div>
+        </div>
+      </div>
 
-  </p-table>
+
+      <div  class="col-md-7" >
+        <div  class="row" >
+          <div  class="col-md-3" ><h6 >IP Address</h6></div>
+          <div  class="col-md-9" ><p >{{consentData.ip_address}}</p></div>
+        </div>
+        <div  class="row" >
+          <div  class="col-md-3" ><h6 >Owner ID</h6>
+          </div>
+          <div  class="col-md-9" ><p >
+            {{consentData.owner_id}}</p></div>
+        </div>
+        <div  class="row" >
+          <div  class="col-md-3" ><h6 >Created Date</h6>
+          </div>
+          <div  class="col-md-9" ><p >{{consentData.created_at}}</p>
+          </div>
+        </div>
+        <div class="divider-text text-line mt-0">Preferences</div>
+
+                <div  class="row" >
+          <div  class="col-md-3" ><h6 >Newsletter</h6></div>
+          <div  class="col-md-9" ><p >
+            <span  class="product-badge "
+                   [ngClass]="{'status-instock': consentData.preferences.newsletter, 'status-outofstock' : !consentData.preferences.newsletter }" >{{consentData.preferences.newsletter}}</span>
+          </p></div>
+        </div>
+        <div  class="row" >
+          <div  class="col-md-3" ><h6 >Privacy Policy</h6></div>
+          <div  class="col-md-9" ><p >
+            <span  class="product-badge "
+                   [ngClass]="{'status-instock': consentData.preferences.privacy_policy, 'status-outofstock' : !consentData.preferences.privacy_policy }" >{{consentData.preferences.privacy_policy}}</span>
+          </p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="card-body">
+    <div class="divider-text text-line">Proofs</div>
+    <div class="row">
+        <p-table [value]="consentData.proofs"
+                 [scrollable]="true" scrollHeight="170px"
+                 styleClass="p-datatable-sm">
+          <ng-template pTemplate="header">
+            <tr>
+              <th>Consent</th>
+              <th>Form</th>
+              <th>Created Date</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-proofs>
+            <tr>
+              <td>{{proofs.content}}</td>
+              <td>{{proofs.form}}</td>
+              <td>{{proofs.created_at | date}}</td>
+            </tr>
+          </ng-template>
+        </p-table>
+        </div>
+    <div class="divider-text text-line">Legal Notice</div>
+    <div class="row">
+        <p-table [value]="consentData.legal_notices"
+                 [scrollable]="true" scrollHeight="170px"
+                 styleClass="p-datatable-sm">
+          <ng-template pTemplate="header">
+            <tr>
+              <th>Identifier</th>
+              <th>Version</th>
+              <th>Created Date</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-legalRecord>
+            <tr>
+              <td>{{legalRecord.version}}</td>
+              <td>{{legalRecord.version}}</td>
+              <td>{{legalRecord.created_at | date}}</td>
+            </tr>
+          </ng-template>
+        </p-table>
+    </div>
+  </div>
 </div>

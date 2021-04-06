@@ -10,6 +10,7 @@ import {Location} from '@angular/common';
 export class ConsentDetailsComponent implements OnInit {
   consentData: any;
 
+
   constructor(private consentSolutionService: ConsentSolutionsService,
               private location: Location) {
   }
