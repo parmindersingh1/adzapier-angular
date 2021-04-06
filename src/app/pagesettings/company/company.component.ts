@@ -289,9 +289,10 @@ export class CompanyComponent implements OnInit {
 
   }
 
-  onCheckSubscription() {
-    const status = this.dataService.checkUserForOrgAndCompany(this.companyPlanDetails, this.paginationConfig.totalItems);
-    if (status === false) {
+
+  onCheckSubscription(){
+    const status = this.dataService.checkUserForCompany(this.companyPlanDetails, this.paginationConfig.totalItems);
+    if ( status === false) {
       return false;
     }
     return true;
@@ -307,8 +308,6 @@ export class CompanyComponent implements OnInit {
         if (!this.onCheckSubscription()) {
           return false;
         }
-      }
-      if (!this.isUpdateUserinvitation) {
         const requestObj = {
           email: this.inviteUserForm.value.emailid,
           role_id: this.inviteUserForm.value.permissions,
@@ -324,6 +323,7 @@ export class CompanyComponent implements OnInit {
               this.onCancelClick();
               this.isUpdateUserinvitation = false;
             }
+            this.onGetCompanyPlan();
           }, (error) => {
             this.alertMsg = error;
             this.isOpen = true;
@@ -515,6 +515,7 @@ export class CompanyComponent implements OnInit {
         this.alertType = 'success';
         this.loadCompanyTeamMembers();
         this.onCancelClick();
+        this.onGetCompanyPlan();
       }
     }, (err) => {
       this.alertMsg = err;

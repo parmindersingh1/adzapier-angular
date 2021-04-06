@@ -8,6 +8,7 @@ import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { FilterPipe } from '../filter.pipe';
 import { FeatherModule } from 'angular-feather';
 import { allIcons } from 'angular-feather/icons';
+
 import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
 import { AlertModule} from 'ngx-bootstrap/alert';
 import { TabsModule} from 'ngx-bootstrap/tabs';
@@ -17,7 +18,7 @@ import { SafePipe } from 'src/app/_helpers/safe.pipe';
 import {NgxSkeletonLoaderModule} from 'ngx-skeleton-loader';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
-// import { TimeagoModule, TimeagoIntl, TimeagoFormatter, TimeagoCustomFormatter } from 'ngx-timeago';
+// import { TimeagoModule } from 'ngx-timeago';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
@@ -49,6 +50,7 @@ import {TimeagoModule} from 'ngx-timeago';
     CollapseModule.forRoot(),
     BsDropdownModule.forRoot(),
     TooltipModule.forRoot(),
+    TimeagoModule.forRoot(),
     // FeatherModule.pick(allIcons),
     // SimpleNotificationsModule.forRoot(),
     FontAwesomeModule,

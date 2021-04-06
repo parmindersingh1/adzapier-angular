@@ -42,7 +42,11 @@ export class ManageOrganizationComponent implements OnInit, OnDestroy {
   skLoading = true;
   propertyList = [];
   allPropertyList = [];
-
+  licenseAvailabilityObj = {};
+  planUsageByOrgid = [];
+  calculateFormUsage;
+  calculateWorkflowUsage;
+  calculateRequestUsage;
   constructor(private service: BillingService,
               private modalService: BsModalService,
               private activatedRoute: ActivatedRoute,
@@ -126,6 +130,7 @@ export class ManageOrganizationComponent implements OnInit, OnDestroy {
       this.assigneLicence = res.response.length;
       this.orgList = res.response;
       this.onCalculateValue();
+      this.getAvailableLimitByOrgID();
     }, err => {
       this.loading.stop();
       this.skLoading = false;
@@ -165,7 +170,7 @@ export class ManageOrganizationComponent implements OnInit, OnDestroy {
         this.loading.stop();
         this.skLoading = false;
         this.modalRef.hide();
-        this.licenseAvailabilityForFormAndRequestPerOrg(this.orgForm.value.orgID);
+        // this.licenseAvailabilityForFormAndRequestPerOrg(this.orgForm.value.orgID);
         this.orgForm.reset()
         this.onGetAssingedOrg()
         this.isCurrentPropertySelected(this.currentManagedOrgID, this.currrentManagedPropID)
@@ -238,15 +243,36 @@ export class ManageOrganizationComponent implements OnInit, OnDestroy {
   licenseAvailabilityForFormAndRequestPerOrg(orgID) {
     let webFormLicense = this.dataService.getWebFormLicenseLimit(this.constructor.name, moduleName.headerModule, orgID);
     let requestLicense = this.dataService.getDSARRequestLicenseLimit(this.constructor.name, moduleName.headerModule, orgID);
-    forkJoin([webFormLicense, requestLicense]).subscribe(results => {
-      let finalObj = {
+    let workflowLicense = this.dataService.getWorkflowLicenseLimit(this.constructor.name, moduleName.headerModule);
+    forkJoin([webFormLicense, requestLicense, workflowLicense]).subscribe(results => {
+    this.licenseAvailabilityObj = {
         ...results[0].response,
         ...results[1].response,
+        ...results[2].response,
+        organizationID : orgID
       }
-      this.dataService.setAvailableLicenseForFormAndRequestPerOrg(finalObj);
+    this.planUsageByOrgid.push(this.licenseAvailabilityObj);
+    this.dataService.setAvailableLicenseForFormAndRequestPerOrg(this.licenseAvailabilityObj);
     }, (error) => {
       console.log(error)
     });
+  }
+  
+  getAvailableLimitByOrgID(){
+    for(const key of this.orgList){
+        this.planUsageByOrgid.length = 0
+        this.licenseAvailabilityForFormAndRequestPerOrg(key.id);
+    }
+  }
+ // use to fill background of progressbar
+  limitUsedVsAvailable(usedLimit,currentLimit):number{
+    if(currentLimit === -1){
+      return Math.ceil(usedLimit / currentLimit * -1);
+    } else if(currentLimit >= 250000) {
+      return Math.ceil((usedLimit / currentLimit) * 100000);
+    } else {
+       return usedLimit > 0 ? Math.ceil(usedLimit / currentLimit * 100) : 0;
+    }
   }
 
   ngOnDestroy() {

@@ -105,8 +105,8 @@ export class DsarRequestService {
       }));
   }
 
-  addSubTaskResponse(taskID, requestObj, componentName, moduleName) {
-    const path = '/ccpa/subtask/response/' + taskID;
+  addSubTaskResponse(taskID, companyID, orgID, propID, requestObj, componentName, moduleName) {
+    const path = '/ccpa/subtask/response/' +  companyID + '/' + orgID + '/' + propID + '/' + taskID;
     return this.http.put<any>(environment.apiUrl + path, requestObj)
       .pipe(shareReplay(1), catchError(error => {
         this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.addSubTaskResponse, componentName, moduleName, path);

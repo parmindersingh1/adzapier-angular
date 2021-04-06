@@ -736,7 +736,7 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
       } else {
         return true; // if selected stage subtask is already completed
       }
-      //  } 
+      //  }
       // else {
       //   return true;
       // }
@@ -1326,7 +1326,8 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
         }
       }
       //  return false;
-      this.dsarRequestService.addSubTaskResponse(this.selectedTaskID, fd, this.constructor.name, moduleName.dsarRequestModule)
+      this.dsarRequestService.addSubTaskResponse(this.selectedTaskID, this.queryCompanyID, this.currentManagedOrgID, this.currrentManagedPropID,
+        fd, this.constructor.name, moduleName.dsarRequestModule)
         .subscribe((data) => {
           this.getSubTaskList();
           this.alertMsg = 'subtask response submitted successfully';
@@ -1502,6 +1503,10 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
   isEmailIDVerified(key, isEmailVerified): boolean {
     this.emailVerificationStatus = (key === 'Email' && isEmailVerified);
     return this.emailVerificationStatus;
+  }
+
+  isContainCaptchacodeLabel(key): boolean {
+    return key === 'Captcha code'
   }
 
   isFileExist(uploadexist): boolean {
