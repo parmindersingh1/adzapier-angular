@@ -9,7 +9,7 @@ import {Location} from '@angular/common';
 })
 export class ConsentDetailsComponent implements OnInit {
   consentData: any;
-  preferenceList=[];
+  consentPrefrenseList = [];
 
 
   constructor(private consentSolutionService: ConsentSolutionsService,
@@ -23,9 +23,6 @@ export class ConsentDetailsComponent implements OnInit {
       }
       if (Object.keys(res).length > 0) {
         this.consentData = res;
-        if(res.preferences){
-        this.preferenceList.push(res.preferences);
-        }
       }
       console.log('this.consent', this.consentData);
     }, error => {
