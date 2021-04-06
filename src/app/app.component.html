@@ -48,7 +48,7 @@
               <h3 [ngStyle]="{color: plan.price <=  currentPlanData.price ? '#999' : ''}"
                   class="mt-4 plan-type">{{plan.name}}</h3>
               <p [ngStyle]="{color: plan.price <=  currentPlanData.price ? '#999' : ''}"
-                 class="tx-color-03 mg-b-50">{{plan.description}}</p>
+                 class="tx-color-03 mg-b-50">{{plan.product_name}}</p>
               <h1 class="tx-rubik tx-normal mb-3 mg-t-auto price-text">
                 <sup [ngStyle]="{color: plan.price <=  currentPlanData.price ? '#999' : ''}" class="doller">$</sup>
                 <span [ngStyle]="{color: plan.price <=  currentPlanData.price ? '#999' : ''}"
@@ -91,7 +91,7 @@
           <div class="row ml-2 mr-2">
             <div *ngFor="let plan of listAddonPlan"
                  class=" mt-2 col ml-2 d-flex bg-white-col bt-card flex-column bd pt-0 mr-2  pd-20 ">
-                 <div class="pl-3 pr-3" *ngIf="this.existingOrgPlan.stripe_plan_id !== null" [ngClass]="{'highlight-activeplan' : plan.id === this.existingOrgPlan.stripe_plan_id}">
+                 <div class="pl-3 pr-3" *ngIf="existingOrgPlan.stripe_plan_id !== null" [ngClass]="{'highlight-activeplan' : plan.id === existingOrgPlan.stripe_plan_id}">
               <h4 class="text-center popular-text"
                   [ngStyle]="{background: plan.price ==  currentPlanData.price ? '#3968fa' : null}">
                 <ng-container *ngIf="plan.price ==  currentPlanData.price">CURRENT PLAN</ng-container>
