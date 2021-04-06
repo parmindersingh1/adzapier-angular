@@ -1,5 +1,5 @@
 import {
-  Component, OnInit, ViewChild, ElementRef, Renderer2, TemplateRef, AfterViewInit, AfterViewChecked,
+  Component, OnInit, ViewChild, ElementRef, Renderer2, TemplateRef, AfterViewInit, AfterViewChecked, AfterContentChecked,
   ChangeDetectorRef,
   ChangeDetectionStrategy,
   OnDestroy
@@ -26,7 +26,7 @@ import { formatDate } from '@angular/common';
   changeDetection: ChangeDetectionStrategy.Default
 
 })
-export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChecked, OnInit {
+export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChecked, AfterContentChecked, OnInit {
   @ViewChild('toggleDayleftdiv', { static: true }) toggleDayleftdiv: ElementRef;
   // @ViewChild('btnDaysLeft', { static: true }) btnDaysLeft: ElementRef;
   @ViewChild('customDaysInput') customDaysInput: ElementRef;
@@ -1723,6 +1723,10 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
   }
 
   ngAfterViewInit() {
+    this.cdRef.detectChanges();
+  }
+
+  ngAfterContentChecked(){
     this.cdRef.detectChanges();
   }
 

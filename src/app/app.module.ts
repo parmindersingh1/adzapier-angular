@@ -93,6 +93,7 @@ import {TimeagoModule} from 'ngx-timeago';
   bootstrap: [AppComponent],
   exports: [
     // AnalyticsModule,
+    TimeagoModule,
     HeaderModule,
     TooltipModule,
     BsDropdownModule, CollapseModule]
