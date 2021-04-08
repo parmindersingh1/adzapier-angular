@@ -153,7 +153,19 @@ table > tbody > tr > td:nth-child(2) > div > img.img-fluid {
 .flex-column {
     flex-direction: column !important;
 }
-
+.invite-user-btn {
+    margin-left:28px;
+}
+.btn-border-radius {
+    border-radius:8px;
+}
+.pull-right-btn{
+    float: right;
+    margin-right: 1px;
+}
+.tx-decoration-underline:hover {
+    text-decoration: underline;
+   }
 // .modal-body > form > .form-check-inline {
 //     opacity: 1;
 //     display: block;

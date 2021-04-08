@@ -20,15 +20,15 @@
                     <div class="d-flex">
 
                         <button *ngIf="currentWorkflowStage !== 'Rejected'" (click)="openModalPopup(editRequestDetails,'')" data-toggle="modal"
-                            class="btn btn-xs btn-white mr-2"><svg xmlns="http://www.w3.org/2000/svg" width="24"
+                            class="btn btn-sm btn-outline-secondary btn-uppercase mr-2"><svg xmlns="http://www.w3.org/2000/svg" width="24"
                                 height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                 stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-2">
                                 <polygon points="16 3 21 8 8 21 3 21 3 16 16 3"></polygon>
                             </svg><span class="d-none d-sm-inline mg-l-5">
                                 Edit</span></button>
-                        <button  class="btn btn-xs btn-primary mr-2" *ngIf="selectedStages.length !== 0 && currentWorkflowStage !== 'Rejected'"  (click)="openExtendModal()">Extend Days</button>
-                        <button  class="btn btn-xs btn-primary mr-2" *ngIf="!isRequestCompleted && currentWorkflowStage !== 'Rejected'" (click)="openReqestRejectModal()">Reject</button>
-                         <button class="btn btn-xs btn-primary" (click)="removeDSARRequest('DSAR Request detail')">Delete</button>
+                        <button  class="btn btn-sm btn-outline-secondary btn-uppercase mr-2" *ngIf="selectedStages.length !== 0 && currentWorkflowStage !== 'Rejected'"  (click)="openExtendModal()">Extend Days</button>
+                        <button  class="btn btn-sm btn-outline-secondary btn-uppercase mr-2" *ngIf="!isRequestCompleted && currentWorkflowStage !== 'Rejected'" (click)="openReqestRejectModal()">Reject</button>
+                         <button class="btn btn-xs btn-danger float-right" (click)="removeDSARRequest('DSAR Request detail')">Delete</button>
 
                     </div>
 
@@ -213,12 +213,11 @@
                         <ng-template ngbNavContent>
                             <div class="nav-group"> 
                             <div class="form-check-inline"> 
-                                <input class="form-check-input" type="radio" name="privatetype"
-                                    id="privatetype" [value]="0" [(ngModel)]="activitytype">
-                                <label for="privatetype">Private</label>
-                                <input class="form-check-input" type="radio" name="publictype"
-                                    id="publictype" [value]="1" [(ngModel)]="activitytype" >
-                                <label for="publictype">Public</label>
+                                <input class="btn btn-primary mr-2" type="radio" name="privatetype" id="privatetype" [value]="0" [(ngModel)]="activitytype">
+                                <button type="submit" class="btn btn-primary mr-2">Private</button>
+                         
+                                <input class="form-check-input" type="radio" name="publictype" id="publictype" [value]="1" [(ngModel)]="activitytyp">
+                                <button type="submit" class="btn btn-primary mr-2">Public</button>
                             </div>
                             </div>
                             
@@ -232,7 +231,7 @@
                                     <div *ngIf="addActivity.editor?.errors.required">Activity can not be empty, add your
                                         post.</div>
                                 </div>
-                                <button type="submit" class="btn btn-xs btn-primary float-right mb-2 mt-2">Post</button>
+                                <button type="submit" class="btn btn-primary mr-2">Post</button>
                             </form>
 
                         </ng-template>
@@ -347,7 +346,7 @@
                     </li> -->
                 </ul>
 
-                <button *ngIf="isTaskTabOpen" class="btn btn-xs btn-primary btnSubtask" [disabled]="currentWorkflowStage === 'Rejected'"
+                <button *ngIf="isTaskTabOpen" class="btn btn-sm btn-outline-secondary btn-uppercase btnSubtask" [disabled]="currentWorkflowStage === 'Rejected'"
                     (click)="openModalPopup(subTask,'')" data-toggle="modal">
                     Subtask
                 </button>
@@ -580,8 +579,8 @@
 
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-secondary tx-13" (click)="onCancelClick()">Cancel</button>
-            <button class="btn btn-primary tx-13" type="submit">Save</button>
+            <button type="button" class="btn btn-link tx-decoration-underline" (click)="onCancelClick()">Cancel</button>
+            <button class="btn btn-primary" type="submit">Save</button>
         </div>
 
     </form>
@@ -799,8 +798,8 @@
 
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-white tx-13" (click)="onResetSubTask()">Cancel</button>
-            <button class="btn btn-primary tx-13" type="submit">Save</button>
+            <button type="button" class="btn btn-link tx-decoration-underline" (click)="onResetSubTask()">Cancel</button>
+            <button class="btn btn-primary" type="submit">Save</button>
         </div>
     </form>
 </ng-template>
@@ -898,7 +897,7 @@
             </div>
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-white tx-13" (click)="onCancelSubTaskResponse()">Cancel</button>
+            <button type="button" class="btn btn-link tx-decoration-underline" (click)="onCancelSubTaskResponse()">Cancel</button>
             <button class="btn btn-primary tx-13" type="submit">Save</button>
         </div>
 
