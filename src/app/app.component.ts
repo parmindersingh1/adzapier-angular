@@ -1,24 +1,22 @@
-import { Component, OnInit } from '@angular/core';
-import { faCoffee } from '@fortawesome/free-solid-svg-icons';
-import { AuthenticationService, OrganizationService } from './_services';
-import { User } from './_models';
-import { HeaderComponent } from './_components/layout/header/header.component';
-import {Router, NavigationEnd, RouterEvent, RouteConfigLoadStart, RouteConfigLoadEnd} from '@angular/router';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {faCoffee} from '@fortawesome/free-solid-svg-icons';
+import {AuthenticationService, OrganizationService} from './_services';
+import {NavigationEnd, RouteConfigLoadEnd, RouteConfigLoadStart, Router, RouterEvent} from '@angular/router';
 import * as feather from 'feather-icons';
-import { CCPAFormConfigurationService } from './_services/ccpaform-configuration.service';
-import { DsarformService } from './_services/dsarform.service';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-import { ViewChild } from '@angular/core';
-import { DataService } from './_services/data.service';
-import { moduleName } from './_constant/module-name.constant';
-import { TemplateRef } from '@angular/core';
+import {CCPAFormConfigurationService} from './_services/ccpaform-configuration.service';
+import {DsarformService} from './_services/dsarform.service';
+import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
+import {DataService} from './_services/data.service';
+import {moduleName} from './_constant/module-name.constant';
 import {BillingService} from './_services/billing.service';
+
 class DefaultPlanData {
   plan_name: '';
   price: 0;
   product_name: '';
   stripe_plan_id: '';
 }
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -29,8 +27,8 @@ class DefaultPlanData {
 export class AppComponent implements OnInit {
   modalRef: BsModalRef;
   listAllPlans = [];
-  @ViewChild('template', { static: true}) template: any;
-  @ViewChild('unauth', { static: true}) unauth: any;
+  @ViewChild('template', {static: true}) template: any;
+  @ViewChild('unauth', {static: true}) unauth: any;
   title = 'adzapier-analytics-ng';
   faCoffee = faCoffee;
   allPlanData: any;
@@ -44,8 +42,9 @@ export class AppComponent implements OnInit {
   isShowingRouteLoadIndicator: boolean;
   existingOrgPlan = null;
   noPlanType = 'org';
+
   constructor(private router: Router,
-    private modalService: BsModalService,
+              private modalService: BsModalService,
               private billingService: BillingService,
               private authenticationService: AuthenticationService,
               private ccpaFormConfigurationService: CCPAFormConfigurationService,
@@ -57,10 +56,10 @@ export class AppComponent implements OnInit {
     // Lazy Loading indicator
     this.isShowingRouteLoadIndicator = false;
     router.events.subscribe(
-      ( event: RouterEvent ): void => {
-        if ( event instanceof RouteConfigLoadStart ) {
+      (event: RouterEvent): void => {
+        if (event instanceof RouteConfigLoadStart) {
           this.isShowingRouteLoadIndicator = true;
-        } else if ( event instanceof RouteConfigLoadEnd ) {
+        } else if (event instanceof RouteConfigLoadEnd) {
           this.isShowingRouteLoadIndicator = false;
         }
         // setTimeout( () => {
@@ -102,14 +101,13 @@ export class AppComponent implements OnInit {
   // }
 
 
-
   openModal() {
-    this.dataService.openModalWithData.subscribe( res => {
-      if(res.hasOwnProperty('msg')) {
-      this.msg = res.msg;
-    }
-      if(res.openModal) {
-        if(!res.data) {
+    this.dataService.openModalWithData.subscribe(res => {
+      if (res.hasOwnProperty('msg')) {
+        this.msg = res.msg;
+      }
+      if (res.openModal) {
+        if (!res.data) {
           this.currentPlanData = new DefaultPlanData();
         }
         if (res.type) {
@@ -140,10 +138,41 @@ export class AppComponent implements OnInit {
   onGetPlanDetails() {
     this.billingService.getCurrentPlanInfo(this.constructor.name, moduleName.pricingModule).subscribe((res: any) => {
       this.allPlanData = res.response;
-      this.listAllPlans = res.response.base[`${this.billingCycle}`];
-      this.listAddonPlan = res.response.addons[`${this.billingCycle}`]
+      this.onSetEnterPrice();
+      this.listAllPlans = this.allPlanData.base[`${this.billingCycle}`];
+      this.listAddonPlan = this.allPlanData.addons[`${this.billingCycle}`]
       // this.subscriptionList = res.response.monthly;
     }, error => {
+    });
+  }
+  onSetEnterPrice() {
+    this.allPlanData.base['yearly'].push({
+      cycle: 'Enterprise',
+      description: '',
+      id: '',
+      name: 'Enterprise',
+      price: -1,
+      product_name: 'Advanced enterprise features and global coverage. Volume discount available.',
+      type: 0
+    });
+
+    this.allPlanData.addons['monthly'].push({
+      cycle: 'Enterprise',
+      description: '',
+      id: '',
+      name: 'Enterprise',
+      price: -1,
+      product_name: 'Advanced enterprise features and global coverage. Volume discount available.',
+      type: 0
+    });
+    this.allPlanData.addons['yearly'].push({
+      cycle: 'Enterprise',
+      description: '',
+      id: '',
+      name: 'Enterprise',
+      price: -1,
+      product_name: 'Advanced enterprise features and global coverage. Volume discount available.',
+      type: 0
     });
   }
   onSelectBillingCycle(e) {
@@ -151,6 +180,7 @@ export class AppComponent implements OnInit {
       this.billingCycle = 'yearly';
       this.listAllPlans = this.allPlanData.base[`${this.billingCycle}`]
       this.listAddonPlan = this.allPlanData.addons[`${this.billingCycle}`]
+
     } else {
       this.billingCycle = 'monthly';
       this.listAllPlans = this.allPlanData.base[`${this.billingCycle}`]
@@ -165,17 +195,18 @@ export class AppComponent implements OnInit {
 
   private openUnAuthModal() {
     this.dataService.unAuthPopUp.subscribe((res: any) => {
-      if(res.isTrue)  {
+      if (res.isTrue) {
         this.unAuthMsg = res.error.error;
         this.openUnAuthPopUp()
       }
     })
   }
+
   openUnAuthPopUp() {
     this.modalRef = this.modalService.show(this.unauth, {class: 'modal-sm'});
   }
 
-  isCurrentPlanActive():boolean {
+  isCurrentPlanActive(): boolean {
     return
   }
 
