@@ -20,7 +20,7 @@
                             [class.workflowname]="workflowName !== ''">{{workflowStatus?workflowStatus:''}}</span></h6>
                 </span>
                 <div class="d-flex" *ngIf="!skeletonLoading && quillEditorForm.valid">
-                    <button class="btn btn-xs btn-primary d-flex align-items-center mg-r-5" 
+                    <button class="btn btn-sm btn-outline-secondary btn-uppercase d-flex align-items-center mg-r-5" 
                     [ngClass]="{'hideEditSave-btn':workflowType == 'default', '': workflowType !== 'default'}"
                     [attr.disabled]="(workflowStatus === 'draft' && !isworkflowSaved) || (workflowStatus == 'draft' && isControlDisabled) ? true:null"
                         (click)="editWorkflow($event,workflowStatus)">
@@ -28,7 +28,7 @@
                             <i *ngIf="workflowStatus == 'active'" class="fa fa-pen mr-1" aria-hidden="true"></i>
                             {{workflowStatus == 'active' ? 'Edit' : 'Activate'}}</span></button>
 
-                    <button class="btn btn-xs btn-white d-flex align-items-center mg-r-5" type="button"
+                    <button class="btn btn-xs btn-primary d-flex align-items-center mg-r-5" type="button"
                     [ngClass]="{'hideEditSave-btn':workflowType == 'default', '': workflowType !== 'default'}"
                     [attr.disabled]="checkButtonStatus() &&  workflowStatus !== 'draft' || isControlDisabled && workflowStatus !== 'draft' ? true : null"
                         (click)="saveWorkflow(quillEditorForm, workflowStatus)">
