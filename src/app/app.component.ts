@@ -138,28 +138,49 @@ export class AppComponent implements OnInit {
   onGetPlanDetails() {
     this.billingService.getCurrentPlanInfo(this.constructor.name, moduleName.pricingModule).subscribe((res: any) => {
       this.allPlanData = res.response;
-      this.listAllPlans = res.response.base[`${this.billingCycle}`];
-      this.listAddonPlan = res.response.addons[`${this.billingCycle}`]
+      this.onSetEnterPrice();
+      this.listAllPlans = this.allPlanData.base[`${this.billingCycle}`];
+      this.listAddonPlan = this.allPlanData.addons[`${this.billingCycle}`]
       // this.subscriptionList = res.response.monthly;
     }, error => {
     });
   }
+  onSetEnterPrice() {
+    this.allPlanData.base['yearly'].push({
+      cycle: 'Enterprise',
+      description: '',
+      id: '',
+      name: 'Enterprise',
+      price: -1,
+      product_name: 'Advanced enterprise features and global coverage. Volume discount available.',
+      type: 0
+    });
 
+    this.allPlanData.addons['monthly'].push({
+      cycle: 'Enterprise',
+      description: '',
+      id: '',
+      name: 'Enterprise',
+      price: -1,
+      product_name: 'Advanced enterprise features and global coverage. Volume discount available.',
+      type: 0
+    });
+    this.allPlanData.addons['yearly'].push({
+      cycle: 'Enterprise',
+      description: '',
+      id: '',
+      name: 'Enterprise',
+      price: -1,
+      product_name: 'Advanced enterprise features and global coverage. Volume discount available.',
+      type: 0
+    });
+  }
   onSelectBillingCycle(e) {
     if (e.checked) {
       this.billingCycle = 'yearly';
       this.listAllPlans = this.allPlanData.base[`${this.billingCycle}`]
       this.listAddonPlan = this.allPlanData.addons[`${this.billingCycle}`]
 
-      // this.listAllPlans.push({
-      //   cycle: 'Enterprise',
-      //   description: '',
-      //   id: '',
-      //   name: 'Enterprise',
-      //   price: 0,
-      //   product_name: 'Advanced enterprise features and global coverage. Volume discount available.',
-      //   type: 0
-      // });
     } else {
       this.billingCycle = 'monthly';
       this.listAllPlans = this.allPlanData.base[`${this.billingCycle}`]
