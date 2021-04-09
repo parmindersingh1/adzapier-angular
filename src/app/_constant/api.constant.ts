@@ -5,6 +5,7 @@ export const apiConstant = {
   // Cookie Category
   COOKIE_CATEGORY: '/cookiecategory',
   COOKIE_SCANNER: '/scanner/request/:orgId/:propId',
+  COOKIE_PUBLISH: '/publish-cookie/:orgId/:propId',
   COOKIE_WITH_ID: '/cookie/:orgId/:propId/:id',
   COOKIE: '/cookie/:orgId/:propId',
   // Cookie Consent
