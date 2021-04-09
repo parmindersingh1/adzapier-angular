@@ -6,6 +6,14 @@ import {TabsModule} from 'ngx-bootstrap/tabs';
 import {TableModule} from 'primeng/table';
 import {ButtonModule} from 'primeng/button';
 import {ConsentDetailsComponent} from './consent-table/consent-details/consent-details.component';
+import {InputTextModule} from 'primeng/inputtext';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { SharedbootstrapModule } from 'src/app/sharedbootstrap/sharedbootstrap.module';
+import {RadioButtonModule} from 'primeng/radiobutton';
+import {TabViewModule} from 'primeng/tabview';
+
+
+
 
 const path: Routes = [
   {path: 'consent-records', component: ConsentTableComponent},
@@ -19,7 +27,13 @@ const path: Routes = [
     RouterModule.forChild(path),
     TabsModule,
     TableModule,
-    ButtonModule
+    ButtonModule,
+    InputTextModule,
+    FormsModule,
+    ReactiveFormsModule,
+    SharedbootstrapModule,
+    RadioButtonModule,
+    TabViewModule
   ]
 })
 export class ConsentSolutionsModule {

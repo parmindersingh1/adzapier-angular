@@ -1,21 +1,78 @@
-<div class="ml-2 d-sm-flex align-items-center justify-content-between">
-  <div>
-    <nav aria-label="breadcrumb" style="margin-left: -14px">
-      <ol class="breadcrumb breadcrumb-style1 mg-b-10">
-        <li class="breadcrumb-item">Privacy</li>
-        <li class="breadcrumb-item"><a routerLink="/consent-solutions/consent-records">Cookie Solution</a></li>
-        <li class="breadcrumb-item active">Records</li>
-
-      </ol>
-    </nav>
+<div class="container">
+<div class="mb-3">
+  <nav aria-label="breadcrumb" class="align-navbtn">
+    <ol class="breadcrumb breadcrumb-style1 mg-b-0">
+      <li class="breadcrumb-item">Privacy</li>
+      <li class="breadcrumb-item">Consent Solutions</li>
+      <li class="breadcrumb-item active" aria-current="page">Consent Records</li>
+    </ol>
+    <div class="datepickerwrapper  col-sm-6 pr-0 mr-0 ml-auto">
+    <div class="col-sm-6 mr-2 d-flex row-reverse">
+      <div class="input-group-prepend">
+        <span class="input-group-text rounded-right border-left-0" id="inputGroup-sizing-sm"><i class="fa" [ngClass]="searchbydaterange !== '' ? 'fa-caret-down':'fa-search'"></i></span>
+      </div>
+      <input type="text"  
+       class="form-control border-left-0  border-right-0 rounded-right" >
+      <div class="input-group-prepend border-left-0" >
+        <span class="input-group-text rounded-left border-right-0" id="inputGroup-sizing-sm"><i class="fa fa-calendar"></i></span>
+      </div>
+    </div>
   </div>
+  </nav>
 
 </div>
+
+
+
+
 <div class="card">
   <div class="card-header">
-    <h4 class="headings pt-2">Consent Records </h4>
+    <h4 class="headings">Consent Records </h4>
   </div>
+  
+  
   <div class="card-body">
+    <div>
+      <label><b>Search Filters</b></label>
+    </div>
+    <div style="margin-top: 1px; justify-content: space-between;" class="d-flex mb-3" >
+      <span class="p-input-icon-left">
+        <i class="pi pi-search"></i>
+        <input type="text" pInputText placeholder="Search">         
+    </span>
+      <input style="margin-left:3px; width:200px;" type="text" pInputText placeholder="Email" />
+      <input style="margin-left:3px; width:200px;" type="text" pInputText placeholder="First Name"/>
+      <input style="margin-left:3px; width:200px;" type="text" pInputText  placeholder="Last Name"/>
+      <input style="margin-left:3px; width:200px;" type="text" pInputText placeholder="Ip Address"/>
+      <!-- <input style="margin-left:3px; width:160px;" type="text" pInputText placeholder="Source"/>   -->
+
+    </div>
+    <div class="d-flex" style="justify-content: space-between;">
+      <div class="mt-1">
+        <label><b>Source</b></label>
+      </div>
+      </div>
+      <div class="d-flex" style="justify-content: space-between;">
+        <div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
+        <label class="form-check-label" for="inlineRadio1">Both</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
+        <label class="form-check-label" for="inlineRadio2">Private</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option2">
+        <label class="form-check-label" for="inlineRadio2">Public</label>
+      </div>
+    </div>
+    <div class="mb-0">
+      <button type="button" class="btn btn-secondary btn-sm mr-2">Reset</button>
+      <button type="button" class="btn btn-primary btn-sm" style="height:34px;">Apply Filters</button>
+  </div>
+    </div>
+    <hr>
     <div class="card">
       <p-table [value]="consentRecordList"
                [lazy]="true" [responsive]="true"
@@ -49,9 +106,9 @@
             <td>{{consentRecord.ip_address}}</td>
             <td>
               <ng-container *ngIf="consentRecord.verified;else elseBlock">
-                <i class="pi pi-check" style="font-size: 1.2rem; color:#5cb85c;"></i>
+                <i class="pi pi-check" style="font-size: 1.0rem; color:#5cb85c;"></i>
               </ng-container>
-              <ng-template #elseBlock><i class="pi pi-times" style="font-size: 1.2rem; color: #d9534f;"></i>
+              <ng-template #elseBlock><i class="pi pi-times" style="font-size: 1.0rem; color: #d9534f;"></i>
               </ng-template>
             </td>
             <td>{{consentRecord.created_at | date}}</td>
@@ -60,6 +117,7 @@
       </p-table>
     </div>
   </div>
+</div>
 </div>
 
 

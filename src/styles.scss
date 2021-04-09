@@ -360,31 +360,39 @@ ul.notification-menu-right::after {
     width: 100% !important;
 }
 
-.customClass > a:focus{
-    border-bottom: 5px solid #0367fa !important;
-    outline: none;
-    border: none;
-    background-color: white;
+// .customClass > a:focus{
+//     border-bottom: 5px solid #0367fa !important;
+//     outline: none;
+//     border: none;
+//     background-color: white;
     
-    text-decoration-thickness:4px ;
-    opacity: 1;
+//     text-decoration-thickness:4px ;
+//     opacity: 1;
 
-}
+// }
 
 
-.customClass > a{
+// .customClass > a{
     
-    opacity: 0.8;
-    background-color:white !important;
-    border: none !important;
-    font-weight: bold;
-    font-size: small;
-    margin-right: 13px;
-    box-shadow: 0px 1px rgb(197, 196, 196);
-    border-bottom: none;
-    outline: none !important; 
+//     opacity: 0.8;
+//     background-color:white !important;
+//     border: none !important;
+//     font-weight: bold;
+//     font-size: small;
+//     margin-right: 11px;
+//     box-shadow: 0px 1px rgb(197, 196, 196);
+//     border-bottom: none;
+//     outline: none !important; 
+//     margin-top: 20px;
     
    
+// }
+
+.customClass > a{
+    margin-right: 4px !important;
+    text-align: center !important;
+
+
 }
 
 

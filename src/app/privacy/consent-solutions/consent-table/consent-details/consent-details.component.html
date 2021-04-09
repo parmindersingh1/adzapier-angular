@@ -1,21 +1,22 @@
-<!-- <div class="ml-2 bb-crum d-sm-flex align-items-center justify-content-between">
+<div class="ml-2 bb-crum d-sm-flex align-items-center justify-content-between">
   <div>
-    <nav aria-label="breadcrumb" style="margin-left: -14px">
+    <nav aria-label="breadcrumb" style="margin-left: 2px">
       <ol class="breadcrumb breadcrumb-style1 mg-b-10">
         <li class="breadcrumb-item">Privacy</li>
-        <li class="breadcrumb-item"><a routerLink="/consent-solutions/consent-records">Cookie Solution</a></li>
+        <li class="breadcrumb-item"><a routerLink="/consent-solutions/consent-records">Consent Solution</a></li>
         <li class="breadcrumb-item"><a routerLink="/consent-solutions/consent-records"> Consent Records</a></li>
         <li class="breadcrumb-item active">Consent Details</li>
 
       </ol>
+      
     </nav>
   </div>
 
-</div> -->
-<div class="container">
-<div class="row row-sm ">
-  <div class="col-lg-6 col-xl-12 mg-t-10">
-      <div class="card">
+</div>
+<div class="container-fluid">
+<div class="row row-sm">
+  <div class="col-lg-6 col-xl-12 ">
+      <div class="card w-100">
           <div class="card-header  d-flex align-items-center justify-content-between pd-13">
               <span class="tx-12 tx-color-03 mg-b-0">
                   <h6 class="mg-b-0">Consent Details</h6>
@@ -30,14 +31,14 @@
                       <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Consent
                           ID</label>
                           
-                      <p class="mg-b-0">{{consentData.id}}</p>
+                      <p class="mg-b-0" style="font-size:small;">{{consentData.id}}</p>
                   </div>
                   <div class="col-sm">
                       <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">First Name
                           
                       </label>
   
-                      <p class="mg-b-0">{{consentData.first_name}}</p>
+                      <p class="mg-b-0" style="font-size:small;">{{consentData.first_name}}</p>
                   </div>
 
                   <div class="col-sm">
@@ -45,7 +46,7 @@
                           
                       </label>
                       
-                      <p class="mg-b-0">{{consentData.last_name}}</p>
+                      <p class="mg-b-0" style="font-size:small;">{{consentData.last_name}}</p>
                   </div>
 
                   <div class="col-sm">
@@ -53,7 +54,7 @@
                         
                     </label>
                     
-                    <p class="mg-b-0">{{consentData.email}}</p>
+                    <p class="mg-b-0" style="font-size:small;">{{consentData.email}}</p>
                 </div>
 
 
@@ -61,7 +62,7 @@
                       <label
                           class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Data Source</label>
                         
-                      <p class="mg-b-0">{{consentData.data_source}}</p>
+                      <p class="mg-b-0" style="font-size:small;">{{consentData.data_source}}</p>
                   </div>
               </div>
               <div class="row row-sm pd-t-10 bd-t">
@@ -69,28 +70,28 @@
                     <label
                         class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Owner ID</label>
                        
-                    <p class="mg-b-0">{{consentData.owner_id}}</p>
+                    <p class="mg-b-0" style="font-size:small;">{{consentData.owner_id}}</p>
                 </div>
                   <div class="col-sm">
                       <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">IP Address
                          
                       </label>
           
-                      <p class="mg-b-0">{{consentData.ip_address}}</p>
+                      <p class="mg-b-0" style="font-size:small;">{{consentData.ip_address}}</p>
                   </div>
                   <div class="col-sm">
                                           <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Created At
                           
                       </label>
                      
-                      <p class="mg-b-0">{{consentData.created_at | date}}</p>
+                      <p class="mg-b-0" style="font-size:small;">{{consentData.created_at | date}}</p>
                   </div>
                   <div class="col-sm">
                     <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Updated At
                         
                     </label>
                    
-                    <p class="mg-b-0">{{consentData.updated_at | date}}</p>
+                    <p class="mg-b-0" style="font-size:small;">{{consentData.updated_at | date}}</p>
                 </div>
                   
 
@@ -101,23 +102,24 @@
                     </label>
                   
                       <div class="d-flex mg-b-0" style="justify-content:start;">
-                      <label style=" margin-top: 4px;">Newsletter </label>
+                      <label style="font-size: small;">Newsletter </label>
                       <!-- <span  class="product-badge ml-2" style="height: 30px;"
                              [ngClass]="{'status-instock': consentData.preferences.newsletter, 'status-outofstock' : !consentData.preferences.newsletter }" >{{consentData.preferences.newsletter}}</span> -->
-                             <ng-container *ngIf="consentData.preferences.newsletter;else elseBlock" >
-                              <i class="pi pi-check ml-4" style="font-size: 1.2rem; color:#5cb85c;"></i>
+                             <ng-container *ngIf="consentData.preferences.newsletter;else elseblock" >
+                              <i class="pi pi-check ml-4" style="font-size: 1.0rem; color:#5cb85c;"></i>
                             </ng-container>
-                            <ng-template #elseBlock><i class="pi pi-times ml-2" style="font-size: 1.2rem; color: #d9534f;"></i>
+                            <ng-template #elseblock>
+                              <i class="pi pi-times ml-4" style="font-size: 1.0rem; color: #d9534f;"></i>
                             </ng-template>
                   </div>
                       <div class="d-flex mg-b-0" style="justify-content:start;">
-                      <label>Privacy Policy</label>
+                      <label style="font-size:small;">Privacy Policy</label>
                       <!-- <span  class="product-badge ml-2" style="height: 30px;"
                              [ngClass]="{'status-instock': consentData.preferences.privacy_policy, 'status-outofstock' : !consentData.preferences.privacy_policy }" >{{consentData.preferences.privacy_policy}}</span> -->
                              <ng-container *ngIf="consentData.preferences.privacy_policy;else elseBlock" >
-                              <i class="pi pi-check ml-2" style="font-size: 1.2rem; color:#5cb85c;"></i>
+                              <i class="pi pi-check ml-2" style="font-size: 1.0rem; color:#5cb85c;"></i>
                             </ng-container>
-                            <ng-template #elseBlock><i class="pi pi-times ml-2" style="font-size: 1.2rem; color: #d9534f;"></i>
+                            <ng-template #elseBlock><i class="pi pi-times ml-2" style="font-size: 1.0rem; color: #d9534f;"></i>
                             </ng-template>
                   </div>
                 </div>
@@ -129,6 +131,7 @@
 
 
                   
+              </div>
               </div>
               </div>
               </div>
@@ -218,62 +221,124 @@
       </div>
     </div>
   </div> -->
-
-<div class="card mt-3">
+<div class=" card mt-3">
   <div class="card-body">
-    <div class="divider-text text-line">Proofs</div>
-    <div class="row">
-        <p-table [value]="consentData.proofs"
-                 [scrollable]="true" scrollHeight="170px"
-                 styleClass="p-datatable-sm padding-right">
+  <p-tabView customClass="customClass">
+    <p-tabPanel header="Proofs">
+      <p-table [value]="consentData.proofs"
+                 [scrollable]="true" scrollHeight="185px"
+                 styleClass="p-datatable-sm">
                  <!-- <ng-template pTemplate="caption">
                   Proofs
               </ng-template> -->
           <ng-template pTemplate="header">
-            <tr>
-              <th style="text-align: center;">Consent</th>
-              <th style="text-align: center;">Form</th>
-              <th style="text-align: center;">Created Date</th>
+            <tr style="text-align:center;">
+              <th>Proof</th>
+              <th >Form</th>
+              <th >Created Date</th>
+              <th style="width:40px"></th>
             </tr>
           </ng-template>
           <ng-template pTemplate="body" let-proofs>
             <tr>
-              <td style="text-align: center;">{{proofs.content}}</td>
-              <td style="text-align: center;">{{proofs.form}}</td>
-              <td style="text-align: center;">{{proofs.created_at | date}}</td>
+              <td>{{proofs.content}}</td>
+              <td >{{proofs.form}}</td>
+              <td >{{proofs.created_at | date}}</td>
+              <td style="text-align-last:right;width:40px"> <a href="#"><i class="pi pi-eye" style="font-size: 0.9rem"></i></a></td>
+            </tr>
+          </ng-template>
+          </p-table>
+    </p-tabPanel> 
+    <p-tabPanel header="Legal Notice" class="customs">
+  
+        
+      <p-table [value]="consentData.legal_notices"
+      [scrollable]="true" scrollHeight="185px"
+      styleClass="p-datatable-sm ">
+      <!-- <ng-template pTemplate="caption">
+       Legal Notice
+   </ng-template> -->
+<ng-template pTemplate="header">
+ <tr style="text-align:center;">
+   <th >Version</th>
+   <th >Identifier</th>
+   <th >Created Date</th>
+   <th style="width:40px"></th>
+ </tr>
+</ng-template>
+<ng-template pTemplate="body" let-legalRecord>
+ <tr>
+   <td >{{legalRecord.version}}</td>
+   <td>{{legalRecord.identifier}}</td>
+   <td >{{legalRecord.created_at | date}}</td>
+   <td style="text-align-last:right;width:40px;"><a href="#"><i class="pi pi-eye" style="font-size: 0.9rem;"></i></a></td>
+ </tr>
+</ng-template>
+</p-table>
+
+
+    </p-tabPanel>
+</p-tabView>
+</div>
+
+</div>
+</div>
+
+  <!-- <tabset #tabset>
+    <tab customClass="customClass"
+      heading="Proofs">
+        <p-table [value]="consentData.proofs"
+                 [scrollable]="true" scrollHeight="185px"
+                 styleClass="p-datatable-sm"> -->
+                 <!-- <ng-template pTemplate="caption">
+                  Proofs
+              </ng-template> -->
+          <!-- <ng-template pTemplate="header">
+            <tr style="text-align:center;">
+              <th >Proof</th>
+              <th >Form</th>
+              <th >Created Date</th>
+              <th></th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-proofs>
+            <tr>
+              <td>{{proofs.content}}</td>
+              <td>{{proofs.form}}</td>
+              <td>{{proofs.created_at | date}}</td>
+              <td style="text-align-last:right;"> <a href="#"><i class="pi pi-eye" style="font-size: 0.9rem"></i></a></td>
             </tr>
           </ng-template>
         </p-table>
-        </div>
-        <div>
-          <div class="card-body mt-3">
-          <div class="divider-text text-line">Legal notices</div>
-    <div class="row">
+        </tab>
+
+        <tab class="tbs" customClass="customClass"
+        heading="Legal Notice">
         <p-table [value]="consentData.legal_notices"
-                 [scrollable]="true" scrollHeight="170px"
-                 styleClass="p-datatable-sm ">
+                 [scrollable]="true" scrollHeight="185px"
+                 styleClass="p-datatable-sm "> -->
                  <!-- <ng-template pTemplate="caption">
                   Legal Notice
               </ng-template> -->
-          <ng-template pTemplate="header">
-            <tr>
-              <th style="text-align: center;">Identifier</th>
-              <th style="text-align: center;">Version</th>
-              <th style="text-align: center;">Created Date</th>
+          <!-- <ng-template pTemplate="header">
+            <tr style="text-align:center;">
+              <th >Identifier</th>
+              <th >Version</th>
+              <th >Created Date</th>
+              <th></th>
             </tr>
           </ng-template>
           <ng-template pTemplate="body" let-legalRecord>
             <tr>
-              <td style="text-align: center;">{{legalRecord.version}}</td>
-              <td style="text-align: center;">{{legalRecord.version}}</td>
-              <td style="text-align: center;">{{legalRecord.created_at | date}}</td>
+              <td >{{legalRecord.version}}</td>
+              <td >{{legalRecord.version}}</td>
+              <td>{{legalRecord.created_at | date}}</td>
+              <td style="text-align-last:right;"><a href="#"><i class="pi pi-eye" style="font-size: 0.9rem;"></i></a></td>
             </tr>
           </ng-template>
         </p-table>
-        </div>
-        </div>
-    </div>
-    </div>
-  </div>
-</div>
-</div>
+    
+    </tab>
+    </tabset> -->
+
+
