@@ -112,6 +112,17 @@ export class CookieCategoryService  {
     );
   }
 
+  publishCookieCategory(componentName, moduleName) {
+    let path = apiConstant.COOKIE_PUBLISH.replace(':orgId', this.currentManagedOrgID);
+    path = path.replace(':propId', this.currrentManagedPropID);
+    return this.http.get(environment.apiUrl + path).pipe(map(res => res),
+      catchError(error => {
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.cookieCategory, componentName, moduleName, path);
+        return throwError(error);
+      }),
+    );
+  }
+
 
   onSendLogs(errorType, msg, functionality, componentName, moduleName, path) {
     this.loki.onSendErrorLogs(errorType, msg, functionality, componentName, moduleName, path).subscribe();

@@ -24,19 +24,38 @@
       <div class="row mt-3">
       <div class="col-md-12 btn-list">
       <div style="float: right" class="d-flex flex-column flex-sm-row mg-t-20 mg-md-t-0">
-        <button type="button" class="btn-primary btn btn-sm mr-3" (click)="openNew()">Add Cookie </button>
-        <button *ngIf="!isScanning" (click)="onRescanCookie()" class="btn-primary btn btn-sm mr-3 mg-r-3" type="button">
+        <a class="btn btn-sm btn-outline-secondary btn-uppercase mr-3" type="button" routerLink="/cookie-consent/cookie-banner">
+          <i class="fa fa-cog" aria-hidden="true"></i>
+          Configure Banner
+        </a>
+        <button type="button" class="btn btn-sm btn-outline-secondary btn-uppercase mr-3" (click)="openNew()">
+          <i aria-hidden="true" class="fa fa-plus pr-1"></i> Add Cookie </button>
+        <button *ngIf="!isScanning" (click)="onRescanCookie()" class="btn-success pl-3 pr-4 btn btn-sm mr-3 mg-r-3" type="button">
+          <i-feather name="refresh-ccw" class="commom-feathericon-height pr-1" ></i-feather>
           Scan
         </button>
-        <button *ngIf="isScanning" class="btn-primary btn mr-3 btn-smmg-r-3" type="button" disabled>
+        <button *ngIf="isScanning" class="btn-success pl-4 pr-4 btn mr-3 btn-smmg-r-3" type="button" disabled>
                             <span class="spinner-border spinner-border-sm txt-info" role="status"
                                   aria-hidden="true"></span>
           Scanning...
         </button>
         <!--            <button class="btn btn-white btn-sm cat-btn" (click)="openCategoryModal(category)">Add Category</button>-->
-        <a class="btn btn-secondary btn-sm" type="button" routerLink="/cookie-consent/cookie-banner">
-          Configure Banner
-        </a>
+
+
+
+        <button (click)="onPublishCookie()" type="submit"
+                class="btn btn-sm pd-x-15 btn-primary btn-uppercase mg-l-5"
+                data-toggle="modal">
+          <ng-container *ngIf="!isPublish">
+            <i class="fa fa-upload pr-1" aria-hidden="true"></i>
+            Publish
+          </ng-container>
+          <ng-container *ngIf="isPublish">
+            <div class="spinner-border"></div>
+            Publishing...
+          </ng-container>
+        </button>
+
       </div>
       </div>
     </div>
@@ -163,7 +182,7 @@
           <tr>
             <td class="id-box"><span class="ml-4">ID</span></td>
             <th pSortableColumn="name">Name <p-sortIcon field="name"></p-sortIcon></th>
-            <th>Host</th>
+            <th>Path</th>
             <th pSortableColumn="category">Category <p-sortIcon field="category"></p-sortIcon></th>
             <th  *ngFor="let col of columns">
               {{col.header}}
