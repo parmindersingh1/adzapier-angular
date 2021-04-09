@@ -120,8 +120,9 @@
       formControlName="orgID" [style]="{'width':'100%'}" [options]="allUnSignOrgList" ></p-multiSelect>
       </div>
       <div class="col-sm-4 p-0">
+        <button class="btn btn-link tx-decoration-underline" aria-label="Close"
+        (click)="modalRef.hide()">Cancel</button>
         <button type="submit" class="btn btn-primary mr-1" [disabled]="totalLicence - assigneLicence === 0">Assign</button>
-        <button type="button" class="btn btn-primary" aria-label="Close" (click)="modalRef.hide()">Cancel</button>
       </div>
     </div>
       <p *ngIf="orgNameError">This Field is Required</p>
@@ -136,7 +137,7 @@
 <ng-template #delConfirm>
   <div class="modal-body text-center">
     <p>Do you want to remove license from this organization?</p>
-    <button type="button" class="btn btn-default" (click)="onRemoveOrg(delOrgID)" >Yes</button>
-    <button type="button" class="btn btn-primary" (click)="decline()" >No</button>
+    <button type="button" class="btn btn-primary mr-2" (click)="onRemoveOrg(delOrgID)" >Yes</button>
+    <button type="button" class="btn btn-sm btn-outline-secondary btn-uppercase" (click)="decline()" >No</button>
   </div>
 </ng-template>
