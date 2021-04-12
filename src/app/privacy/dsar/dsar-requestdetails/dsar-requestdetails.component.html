@@ -162,7 +162,7 @@
                                 <label class="tx-sans"> Attachments</label>
                                 <p [ngClass]="{'show':isAttachmentExist,'hide':!isAttachmentExist}">
                                     <i-feather class="feather-file" name="file"></i-feather>
-                                    <a (click)="viewClientRequestFileAttachment()" style="cursor: pointer;">{{attachedfileName}}</a>
+                                    <a class="width120" (click)="viewClientRequestFileAttachment()" style="cursor: pointer;">{{attachedfileName}}</a>
                                 </p>
                                 <p *ngIf="!isAttachmentExist">No attachment found</p>
                             </div>

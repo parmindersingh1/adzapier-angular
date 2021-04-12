@@ -239,17 +239,16 @@ export class ManageOrganizationComponent implements OnInit, OnDestroy {
   decline(): void {
     this.modalRef.hide();
   }
-
-  licenseAvailabilityForFormAndRequestPerOrg(orgID) {
-    let webFormLicense = this.dataService.getWebFormLicenseLimit(this.constructor.name, moduleName.headerModule, orgID);
-    let requestLicense = this.dataService.getDSARRequestLicenseLimit(this.constructor.name, moduleName.headerModule, orgID);
-    let workflowLicense = this.dataService.getWorkflowLicenseLimit(this.constructor.name, moduleName.headerModule);
-    forkJoin([webFormLicense, requestLicense, workflowLicense]).subscribe(results => {
+  
+  getAvailableLimitByOrgID(){
+    for(const key of this.orgList){
+        this.planUsageByOrgid.length = 0
+        const result = this.dataService.checkLicenseAvailabilityPerOrganization(key.id).subscribe(results => {
     this.licenseAvailabilityObj = {
         ...results[0].response,
         ...results[1].response,
         ...results[2].response,
-        organizationID : orgID
+        organizationID : key.id
       }
     this.planUsageByOrgid.push(this.licenseAvailabilityObj);
     this.dataService.setAvailableLicenseForFormAndRequestPerOrg(this.licenseAvailabilityObj);
@@ -258,11 +257,7 @@ export class ManageOrganizationComponent implements OnInit, OnDestroy {
     });
   }
   
-  getAvailableLimitByOrgID(){
-    for(const key of this.orgList){
-        this.planUsageByOrgid.length = 0
-        this.licenseAvailabilityForFormAndRequestPerOrg(key.id);
-    }
+  this.planUsageByOrgid
   }
  // use to fill background of progressbar
   limitUsedVsAvailable(usedLimit,currentLimit):number{
