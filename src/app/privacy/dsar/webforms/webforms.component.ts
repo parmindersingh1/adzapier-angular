@@ -77,7 +77,7 @@ export class WebformsComponent implements OnInit, DirtyComponents {
     // this.loading = true;
     this.loadCurrentProperty();
     this.currentLoggedInUser();
-    this.checkFormAvailability();
+  //  this.checkFormAvailability();
   }
 
   loadCurrentProperty() {
@@ -132,7 +132,7 @@ export class WebformsComponent implements OnInit, DirtyComponents {
   }
 
   navigateToDSARForm() {
-    this.checkFormAvailability();
+ //   this.checkFormAvailability();
    if (this.currentPropertyName !== undefined) {
     if(this.isLicenseLimitAvailable()){
       this.ccpaFormConfigService.removeCurrentSelectedFormData();
