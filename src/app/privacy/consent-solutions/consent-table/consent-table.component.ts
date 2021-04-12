@@ -1,11 +1,11 @@
 import {Component, OnInit, ViewEncapsulation} from '@angular/core';
 import {OrganizationService} from '../../../_services';
-import {ConsentSolutionsService} from '../../../_services/consent-solutions.service';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
 import {moduleName} from '../../../_constant/module-name.constant';
 import {Router} from '@angular/router';
 import {Subject} from 'rxjs';
 import {debounceTime, distinctUntilChanged} from 'rxjs/operators';
+import {ConsentSolutionsService} from '../../../_services/consent-solutions.service';
 
 
 @Component({
@@ -43,7 +43,7 @@ export class ConsentTableComponent implements OnInit {
   public sourceSearch = '';
 
 
-    
+
 
   constructor(private orgservice: OrganizationService,
               private consentSolutionService: ConsentSolutionsService,
@@ -62,7 +62,7 @@ export class ConsentTableComponent implements OnInit {
     this.setupLastNameDebouncer();
     this.setupIpAddressDebouncer();
     this.setupSourceDebouncer();
-  
+
   }
 
   onGetPropsAndOrgId() {
