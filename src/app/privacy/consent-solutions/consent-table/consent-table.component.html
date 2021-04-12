@@ -11,7 +11,7 @@
       <div class="input-group-prepend">
         <span class="input-group-text rounded-right border-left-0" id="inputGroup-sizing-sm"><i class="fa" [ngClass]="searchbydaterange !== '' ? 'fa-caret-down':'fa-search'"></i></span>
       </div>
-      <input type="text"  
+      <input type="text"
        class="form-control border-left-0  border-right-0 rounded-right" >
       <div class="input-group-prepend border-left-0" >
         <span class="input-group-text rounded-left border-right-0" id="inputGroup-sizing-sm"><i class="fa fa-calendar"></i></span>
@@ -29,8 +29,8 @@
   <div class="card-header">
     <h4 class="headings">Consent Records </h4>
   </div>
-  
-  
+
+
   <div class="card-body">
     <div>
       <label><b>Search Filters</b></label>
@@ -38,9 +38,9 @@
     <div style="margin-top: 1px; justify-content: space-between;" class="d-flex mb-3" >
       <span class="p-input-icon-left">
         <i class="pi pi-search"></i>
-        <input type="text" pInputText placeholder="Search">         
+        <input type="text"    (keyup)="onSearchInputChange($event)" pInputText placeholder="Search">
     </span>
-      <input style="margin-left:3px; width:200px;" type="text" pInputText placeholder="Email" />
+      <input style="margin-left:3px; width:200px;"  (keyup)="onEmailInputChange($event)" type="text" pInputText placeholder="Email" />
       <input style="margin-left:3px; width:200px;" type="text" pInputText placeholder="First Name"/>
       <input style="margin-left:3px; width:200px;" type="text" pInputText  placeholder="Last Name"/>
       <input style="margin-left:3px; width:200px;" type="text" pInputText placeholder="Ip Address"/>

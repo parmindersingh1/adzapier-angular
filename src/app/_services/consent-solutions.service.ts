@@ -19,8 +19,8 @@ export class ConsentSolutionsService {
   }
 
   getConsentRecord(componentName, moduleName, pageLimit, pid: string) {
-    const path = apiConstant.GET_CONSENT_RECORDS.replace(':pid', pid) + pageLimit;
-    return this.http.get(environment.apiUrl + path).pipe(map(res => res),
+    const path = apiConstant.GET_CONSENT_RECORDS.replace(':pid', pid);
+    return this.http.get(environment.apiUrl + path, {params: pageLimit}).pipe(map(res => res),
       catchError(error => {
         this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.billing, componentName, moduleName, path);
         return throwError(error);
