@@ -64,6 +64,12 @@
                         
                       <p class="mg-b-0" style="font-size:small;">{{consentData.data_source}}</p>
                   </div>
+                  <div class="col-sm ">
+                    <label
+                        class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Country</label>
+                      
+                    <p class="mg-b-0" style="font-size:small;">{{consentData.country}}</p>
+                </div>
               </div>
               <div class="row row-sm pd-t-10 bd-t">
                   <div class="col-sm ">
@@ -80,12 +86,31 @@
                       <p class="mg-b-0" style="font-size:small;">{{consentData.ip_address}}</p>
                   </div>
                   <div class="col-sm">
+                    <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Option Out
+                        
+                    </label>
+                  
+                      <div class="d-flex mg-b-0" style="justify-content:start;">
+                      <label style="font-size: small;">OptOut</label>
+                      <!-- <span  class="product-badge ml-2" style="height: 30px;"
+                             [ngClass]="{'status-instock': consentData.preferences.newsletter, 'status-outofstock' : !consentData.preferences.newsletter }" >{{consentData.preferences.newsletter}}</span> -->
+                             <ng-container *ngIf="consentData.optout;else elsebblock" >
+                              <i class="pi pi-check ml-2" style="font-size: 1.0rem; color:#5cb85c;"></i>
+                            </ng-container>
+                            <ng-template #elsebblock>
+                              <i class="pi pi-times ml-2" style="font-size: 1.0rem; color: #d9534f;"></i>
+                            </ng-template>
+                  </div>
+                  </div>
+                  
+                  <div class="col-sm">
                                           <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Created At
                           
                       </label>
                      
                       <p class="mg-b-0" style="font-size:small;">{{consentData.created_at | date}}</p>
                   </div>
+                  
                   <div class="col-sm">
                     <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Updated At
                         
@@ -221,10 +246,10 @@
       </div>
     </div>
   </div> -->
-<div class=" card mt-3">
+<div class="card mt-3">
   <div class="card-body">
   <p-tabView customClass="customClass">
-    <p-tabPanel header="Proofs">
+    <p-tabPanel header="Proofs" class="hello">
       <p-table [value]="consentData.proofs"
                  [scrollable]="true" scrollHeight="185px"
                  styleClass="p-datatable-sm">

@@ -36,14 +36,14 @@
       <label><b>Search Filters</b></label>
     </div>
     <div style="margin-top: 1px; justify-content: space-between;" class="d-flex mb-3" >
-      <span class="p-input-icon-left">
+      <!-- <span class="p-input-icon-left">
         <i class="pi pi-search"></i>
         <input type="text"    (keyup)="onSearchInputChange($event)" pInputText placeholder="Search">
-    </span>
-      <input style="margin-left:3px; width:200px;"  (keyup)="onEmailInputChange($event)" type="text" pInputText placeholder="Email" />
-      <input style="margin-left:3px; width:200px;" type="text" pInputText placeholder="First Name"/>
-      <input style="margin-left:3px; width:200px;" type="text" pInputText  placeholder="Last Name"/>
-      <input style="margin-left:3px; width:200px;" type="text" pInputText placeholder="Ip Address"/>
+    </span> -->
+      <input style="margin-left:3px; width:230px;"  (keyup)="onEmailInputChange($event)" type="text" pInputText placeholder="Email" />
+      <input style="margin-left:3px; width:230px;"  (keyup)="onFirstNameInputChange($event)"type="text" pInputText placeholder="First Name"/>
+      <input style="margin-left:3px; width:230px;" (keyup)="onLastNameInputChange($event)" type="text" pInputText  placeholder="Last Name"/>
+      <input style="margin-left:3px; width:230px;" (keyup)="onIpAddressInputChange($event)" type="text" pInputText placeholder="Ip Address"/>
       <!-- <input style="margin-left:3px; width:160px;" type="text" pInputText placeholder="Source"/>   -->
 
     </div>
@@ -55,20 +55,19 @@
       <div class="d-flex" style="justify-content: space-between;">
         <div>
       <div class="form-check form-check-inline">
-        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
+        <input class="form-check-input" (click)="onSourceInputChange($event)" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="Both">
         <label class="form-check-label" for="inlineRadio1">Both</label>
       </div>
       <div class="form-check form-check-inline">
-        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
+        <input class="form-check-input" (click)="onSourceInputChange($event)" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="Private">
         <label class="form-check-label" for="inlineRadio2">Private</label>
       </div>
       <div class="form-check form-check-inline">
-        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option2">
+        <input class="form-check-input"  (click)="onSourceInputChange($event)" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="Public">
         <label class="form-check-label" for="inlineRadio2">Public</label>
       </div>
     </div>
     <div class="mb-0">
-      <button type="button" class="btn btn-secondary btn-sm mr-2">Reset</button>
       <button type="button" class="btn btn-primary btn-sm" style="height:34px;">Apply Filters</button>
   </div>
     </div>
@@ -86,9 +85,11 @@
           <tr style="text-align:center;">
             <th>ID</th>
             <th>Owner ID</th>
-            <th>Email</th>
             <th>First Name</th>
             <th>Last Name</th>
+            <th>Email</th>
+            <th>Country</th>
+            <th>OptOut</th>
             <th>Data Source</th>
             <th>IP Address</th>
             <th>Verified</th>
@@ -99,9 +100,15 @@
           <tr>
             <td><a href="javascript:;" (click)="onNavigateToDetails(consentRecord)">{{consentRecord.id}}</a></td>
             <td>{{consentRecord.owner_id}}</td>
-            <td>{{consentRecord.email}}</td>
             <td>{{consentRecord.first_name}}</td>
             <td>{{consentRecord.last_name}}</td>
+            <td>{{consentRecord.email}}</td>
+            <td>{{consentRecord.country}}</td>
+            <td><ng-container *ngIf="consentRecord.optout;else elseBlock">
+              <i class="pi pi-check" style="font-size: 1.0rem; color:#5cb85c;"></i>
+            </ng-container>
+            <ng-template #elseBlock><i class="pi pi-times" style="font-size: 1.0rem; color: #d9534f;"></i>
+            </ng-template></td>
             <td>{{consentRecord.data_source}}</td>
             <td>{{consentRecord.ip_address}}</td>
             <td>

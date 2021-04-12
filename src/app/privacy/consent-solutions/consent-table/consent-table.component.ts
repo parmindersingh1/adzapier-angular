@@ -7,6 +7,7 @@ import {Router} from '@angular/router';
 import {Subject} from 'rxjs';
 import {debounceTime, distinctUntilChanged} from 'rxjs/operators';
 
+
 @Component({
   selector: 'app-consent-solutions',
   templateUrl: './consent-table.component.html',
@@ -26,8 +27,23 @@ export class ConsentTableComponent implements OnInit {
   searchDecouncer$: Subject<any> = new Subject();
   public inputSearch = '';
 
-  emailDecouncer$: Subject<any> = new Subject();
+  emailDebouncer$: Subject<any> = new Subject();
   public emailSearch = '';
+
+  firstnameDebouncer$: Subject<any> = new Subject();
+  public firstnameSearch = '';
+
+  lastnameDebouncer$: Subject<any> = new Subject();
+  public lastnameSearch = '';
+
+  IpAddressDebouncer$: Subject<any> = new Subject();
+  public IpAddressSearch = '';
+
+  source$: Subject<any> = new Subject();
+  public sourceSearch = '';
+
+
+    
 
   constructor(private orgservice: OrganizationService,
               private consentSolutionService: ConsentSolutionsService,
@@ -42,6 +58,11 @@ export class ConsentTableComponent implements OnInit {
   onSetUpDebounce() {
     this.setupSearchDebouncer();
     this.setupEmailDebouncer();
+    this.setupFirstNameDebouncer();
+    this.setupLastNameDebouncer();
+    this.setupIpAddressDebouncer();
+    this.setupSourceDebouncer();
+  
   }
 
   onGetPropsAndOrgId() {
@@ -85,7 +106,11 @@ export class ConsentTableComponent implements OnInit {
       limit: this.eventRows,
       page: this.firstone,
       search: this.inputSearch,
-      email: this.emailSearch
+      email: this.emailSearch,
+      first_name:this.firstnameSearch,
+      last_name:this.lastnameSearch,
+      ip_address:this.IpAddressSearch,
+      data_source:this.sourceSearch
     };
 
     this.consentSolutionService.getConsentRecord(this.constructor.name, moduleName.consentSolutionModule, this.pagelimit, this.currrentManagedPropID)
@@ -122,15 +147,78 @@ export class ConsentTableComponent implements OnInit {
 // Email
   public onEmailInputChange(e): void {
     this.emailSearch = e.target.value;
-    this.emailDecouncer$.next(e.target.value);
+    this.emailDebouncer$.next(e.target.value);
   }
 
   private setupEmailDebouncer(): void {
-    this.emailDecouncer$.pipe(
+    this.emailDebouncer$.pipe(
       debounceTime(1000),
       distinctUntilChanged(),
     ).subscribe((term: string) => {
       this.onGetConsentRecord();
     });
   }
+
+  //firstname
+  public onFirstNameInputChange(e): void {
+    this.firstnameSearch = e.target.value;
+    this.firstnameDebouncer$.next(e.target.value);
+  }
+
+  private setupFirstNameDebouncer(): void {
+    this.firstnameDebouncer$.pipe(
+      debounceTime(1000),
+      distinctUntilChanged(),
+    ).subscribe((term: string) => {
+      this.onGetConsentRecord();
+    });
+  }
+
+  //lastname
+  public onLastNameInputChange(e): void {
+    this.lastnameSearch = e.target.value;
+    this.lastnameDebouncer$.next(e.target.value);
+  }
+
+  private setupLastNameDebouncer(): void {
+    this.lastnameDebouncer$.pipe(
+      debounceTime(1000),
+      distinctUntilChanged(),
+    ).subscribe((term: string) => {
+      this.onGetConsentRecord();
+    });
+  }
+
+  //IPAddress
+  public onIpAddressInputChange(e): void {
+    this.IpAddressSearch = e.target.value;
+    this.IpAddressDebouncer$.next(e.target.value);
+  }
+
+  private setupIpAddressDebouncer(): void {
+    this.IpAddressDebouncer$.pipe(
+      debounceTime(1000),
+      distinctUntilChanged(),
+    ).subscribe((term: string) => {
+      this.onGetConsentRecord();
+    });
+  }
+
+  //source
+  public onSourceInputChange(e): void {
+    this.sourceSearch = e.target.value;
+    this.source$.next(e.target.value);
+  }
+
+  private setupSourceDebouncer(): void {
+    this.source$.pipe(
+      debounceTime(1000),
+      distinctUntilChanged(),
+    ).subscribe((term: string) => {
+      this.onGetConsentRecord();
+    });
+  }
+
+
+
 }
