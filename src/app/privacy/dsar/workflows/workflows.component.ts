@@ -47,6 +47,7 @@ export class WorkflowsComponent implements OnInit, AfterViewInit  {
   totalRecords: number;
   public inputValue = '';
   public debouncedInputValue = this.inputValue;
+  addBlurbackgroundToTable: any;
   private searchDecouncer$: Subject<string> = new Subject();
   
   constructor(private router: Router, 
@@ -74,6 +75,7 @@ export class WorkflowsComponent implements OnInit, AfterViewInit  {
     });
     this.isloading = true;
     this.getlicenseAvailabilityForWorkflow();
+    this.isLicenseLimitAvailable();
   }
   get addWorkflow() { return this.createWorkFlowForm.controls; }
 
@@ -91,8 +93,8 @@ export class WorkflowsComponent implements OnInit, AfterViewInit  {
   loadWorkflowList() {
     const pagelimit = '?limit=' + this.paginationConfig.itemsPerPage + '&page=' + this.paginationConfig.currentPage;
     this.workflowService.getWorkflow(this.constructor.name, moduleName.workFlowModule, pagelimit).subscribe((data) => {
-      this.workflowList = data.response;
-      this.paginationConfig.totalItems = data.count;
+    this.workflowList = data.response;
+    this.paginationConfig.totalItems = data.count;
     });
   }
 
@@ -195,10 +197,6 @@ createWorkflowModalPopup(content, data) {
     }, (reason) => {
 
     });
-  }else {
-    this.alertMsg = 'Please Select property first!';
-    this.isOpen = true;
-    this.alertType = 'danger';
   }
   }
 
@@ -314,8 +312,10 @@ propertyPageChangeEvent(event) {
 }
 
 navigateToWorkflow(obj) {
-  this.workflowService.changeCurrentSelectedWorkflow(obj);
-  this.router.navigate(['privacy/dsar/createworkflow/', obj.id]);
+  if(this.isLicenseLimitAvailable()){
+    this.workflowService.changeCurrentSelectedWorkflow(obj);
+    this.router.navigate(['privacy/dsar/createworkflow/', obj.id]);
+  }
 }
 
 onCancelClick() {
@@ -330,7 +330,7 @@ onClosed(dismissedAlert: any): void {
 }
 
 isLicenseLimitAvailable(){
-  return this.dataService.isLicenseLimitAvailableForOrganization('workflow',this.dataService.getWorkflowLicenseToLocalStorage());
+  return this.dataService.isLicenseLimitAvailableForOrganization('workflow',this.dataService.getAvailableLicenseForFormAndRequestPerOrg());
 }
 
 getlicenseAvailabilityForWorkflow(){
@@ -353,6 +353,23 @@ ngAfterViewInit() {
 
   this.selectedCols = this.cols;
   this.cdRef.detectChanges();
+}
+
+ngAfterViewChecked(){
+  let addBlurbg = this.addBlurBackground();
+  if(addBlurbg !== this.addBlurbackgroundToTable){
+    this.addBlurbackgroundToTable = this.addBlurBackground();
+  }
+}
+
+addBlurBackground() :object{
+  if(!this.isLicenseLimitAvailable()){
+    return {
+      "filter": "blur(3px)"
+    }
+  } else {
+    return {}
+  }
 }
 
 }
