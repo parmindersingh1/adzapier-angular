@@ -77,7 +77,6 @@ export class WebformsComponent implements OnInit, DirtyComponents {
     // this.loading = true;
     this.loadCurrentProperty();
     this.currentLoggedInUser();
-    this.checkFormAvailability();
   }
 
   loadCurrentProperty() {
@@ -132,7 +131,6 @@ export class WebformsComponent implements OnInit, DirtyComponents {
   }
 
   navigateToDSARForm() {
-    this.checkFormAvailability();
    if (this.currentPropertyName !== undefined) {
     if(this.isLicenseLimitAvailable()){
       this.ccpaFormConfigService.removeCurrentSelectedFormData();
@@ -186,23 +184,7 @@ export class WebformsComponent implements OnInit, DirtyComponents {
     this.getCCPAFormList(this.orgDetails);
   }
 
-  checkFormAvailability(){
-    this.dataService.checkLicenseAvailabilityPerOrganization(this.orgDetails).subscribe(results => {
-      this.licenseAvailabilityObj = {
-          ...results[0].response,
-          ...results[1].response,
-          ...results[2].response,
-          organizationID : this.orgDetails.organization_id
-        }
-      this.planUsageByOrgid.push(this.licenseAvailabilityObj);
-      this.dataService.setAvailableLicenseForFormAndRequestPerOrg(this.licenseAvailabilityObj);
-      console.log(this.planUsageByOrgid,"planUsageByOrgid..");
-      
-      return this.planUsageByOrgid;
-      }, (error) => {
-        console.log(error)
-      });
-  }
+  
 
   // ngOnDestroy() {
   //   if (this.mySubscription) {
