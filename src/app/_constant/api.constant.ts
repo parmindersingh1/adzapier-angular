@@ -8,6 +8,7 @@ export const apiConstant = {
   COOKIE_PUBLISH: '/publish-cookie/:orgId/:propId',
   COOKIE_WITH_ID: '/cookie/:orgId/:propId/:id',
   COOKIE: '/cookie/:orgId/:propId',
+  COOKIE_SCANNER_STATUS: '/scannerstatus/:orgId/:propId',
   // Cookie Consent
   UPDATE_VENDORS  : '/consent/manage-vendors/:orgId/:propId',
   COOKIE_CONSENT: '/consents/tracking/:propId',
