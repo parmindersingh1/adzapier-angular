@@ -166,6 +166,9 @@ table.table.table-bordered > tbody > tr > td:first-child {
   position: absolute;
   left: 0;
 }
+.tx-decoration-underline:hover {
+  text-decoration: underline;
+ }
 
 // ::ng-deep .p-datatable .p-sortable-column:not(.p-highlight):hover .p-sortable-column-icon {
 //   color:#fff;
