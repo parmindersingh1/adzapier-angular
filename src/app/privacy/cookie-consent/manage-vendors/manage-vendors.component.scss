@@ -90,3 +90,10 @@ border: 1px solid #e9ecef;
 //.p-tabview-nav li {
 //  z-index:  999999 !important;
 //}
+
+.radiobtn-wrapper{
+  display: flex;
+  justify-content: space-around;
+  flex-direction: row;
+  margin: 0 auto;
+}

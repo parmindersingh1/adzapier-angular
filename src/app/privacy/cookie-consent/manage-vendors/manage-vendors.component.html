@@ -209,25 +209,29 @@
   <div class="font-weight-bold modal-body text-center">
     <p>You will no longer be able to send or receive signals to and from vendors once they are set to Inactive. A
       vendor’s status can be updated to Active or Inactive at any time.</p>
-    <div class="row mt-5">
-      <div class="col-md-7 text-left">
+    <div class="row mt-2 mb-2">
+      <div class="col-md-5 radiobtn-wrapper">
         <div class="form-check">
-          <label class="form-check-label">
-            <input type="radio" class="form-check-input" [(ngModel)]="actionType" value="inactive" name="optradio">Inactive
+            <input type="radio" class="form-check-input" [(ngModel)]="actionType" value="inactive" name="optradio">
+            <label class="form-check-label mt-1" for="actionType">
+            Inactive
           </label>
         </div>
-        <div class="form-check mt-2">
-          <label class="form-check-label">
-            <input type="radio" class="form-check-input" [(ngModel)]="actionType" value="active" name="optradio">Active
+        <div class="form-check">
+            <input type="radio" class="form-check-input" [(ngModel)]="actionType" value="active" name="optradio">
+            <label class="form-check-label  mt-1" for="actionType">
+            Active
           </label>
         </div>
 
       </div>
-      <div class="col-md-5 pt-4">
+    
+    </div>
+    <div class="row">
+      <div class="col-md-12 text-right">
         <button type="button" class="btn btn-sm btn-default" (click)="decline()">Cancel</button>
         <button type="button" class="btn btn-sm btn-primary" (click)="confirm()">Save</button>
       </div>
     </div>
-
   </div>
 </ng-template>

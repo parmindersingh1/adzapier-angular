@@ -149,7 +149,7 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
     this.onGetRequestListFilter();
     this.setupSearchDebouncer();
     this.isloading = true;
-    this.getCCPAFormList();
+    this.getDSARFormListToCreateRequest();
     this.createDSARWebFormRequest = this.formBuilder.group({
       webformselection: ['', [Validators.required]]
     });
@@ -319,9 +319,9 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
     this.isOpen = false;
   }
 
-  getCCPAFormList() {
+  getDSARFormListToCreateRequest() {
     this.loading.start();
-    this.ccpaFormConfigService.getCCPAFormList(this.currentManagedOrgID, this.currrentManagedPropID,
+    this.ccpaFormConfigService.getDSARFormList(this.currentManagedOrgID, this.currrentManagedPropID,
       this.constructor.name, moduleName.dsarWebFormModule)
       .subscribe((data) => {
         this.loading.stop();
