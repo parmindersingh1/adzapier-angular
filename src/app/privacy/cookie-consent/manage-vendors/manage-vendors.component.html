@@ -211,15 +211,15 @@
       vendor’s status can be updated to Active or Inactive at any time.</p>
     <div class="row mt-2 mb-2">
       <div class="col-md-5 radiobtn-wrapper">
-        <div class="form-check">
-            <input type="radio" class="form-check-input" [(ngModel)]="actionType" value="inactive" name="optradio">
-            <label class="form-check-label mt-1" for="actionType">
+        <div class="form-check d-flex">
+            <input type="radio" class="form-check-input ml-n3 mt-1" [(ngModel)]="actionType" value="inactive" name="optradio">
+            <label class="form-check-label" for="actionType">
             Inactive
           </label>
         </div>
-        <div class="form-check">
-            <input type="radio" class="form-check-input" [(ngModel)]="actionType" value="active" name="optradio">
-            <label class="form-check-label  mt-1" for="actionType">
+        <div class="form-check d-flex">
+            <input type="radio" class="form-check-input ml-n3 mt-1" [(ngModel)]="actionType" value="active" name="optradio">
+            <label class="form-check-label" for="actionType">
             Active
           </label>
         </div>
