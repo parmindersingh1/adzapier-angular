@@ -98,7 +98,8 @@
                 <h3 [ngStyle]="{color: plan.price <=  currentPlanData.price && plan.price !== -1 ? '#999' : ''}"
                     class="mt-4 plan-type">{{plan.name}}</h3>
                 <p [ngStyle]="{color: plan.price <=  currentPlanData.price ? '#999' : ''}"
-                   class="tx-color-03 " [ngStyle]="{'margin-bottom': plan.price === -1 ? '40px' : '50px'}">{{plan.product_name}}</p>
+                   class="tx-color-03 " [ngStyle]="{'margin-bottom': plan.price === -1 ? '40px' : '50px'}"
+                   [ngClass]="{'mg-b-50' : plan.price !== -1, 'mg-b-40' : plan.price === -1}">{{plan.product_name}}</p>
                 <h1 *ngIf="plan.price !== -1" class="tx-rubik tx-normal mb-3 mg-t-auto price-text">
                   <sup [ngStyle]="{color: plan.price <=  currentPlanData.price ? '#999' : ''}" class="doller">$</sup>
                   <span [ngStyle]="{color: plan.price <=  currentPlanData.price ? '#999' : ''}"
