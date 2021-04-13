@@ -23,23 +23,23 @@
       <div class="d-none d-md-block">
 
         <button (click)="onGetAllowVendors()" *ngIf="!skeletonLoading.one && !skeletonLoading.two"
-                class="btn btn-sm pd-x-15 btn-white btn-uppercase mg-l-5" style="width: 102px">
+                class="btn  btn-sm btn-uppercase btn-outline-secondary" style="width: 102px">
           <i class="fas fa-sync"></i> Refresh
         </button>
         <button *ngIf="skeletonLoading.one || skeletonLoading.two"
-                class="btn btn-sm pd-x-15 btn-white btn-uppercase mg-l-5" style="width: 130px">
+                class="btn  btn-sm btn-uppercase btn-outline-secondary" style="width: 130px">
                 <span class="spinner-border spinner-border-sm txt-info" role="status"
                       aria-hidden="true"></span> Refreshing
         </button>
 
         <button *ngIf="updating" [disabled]="updating" type="button"
-                class="ml-3 btn btn-sm pd-x-15 btn-primary mr-2 btn-uppercase">
+                class="ml-2 btn btn-sm pd-x-15 btn-primary mr-2 btn-uppercase">
                   <span class="spinner-border spinner-border-sm txt-info" role="status"
                         aria-hidden="true"></span> Updating
         </button>
 
         <button type="button" *ngIf="!updating" (click)="openModal(template)"
-                class="ml-3 btn btn-sm pd-x-15 btn-primary mr-2 btn-uppercase">
+                class="ml-2 btn btn-sm pd-x-15 btn-primary mr-2 btn-uppercase">
           <i class="fas fa-pencil-alt"></i> Action
         </button>
 

@@ -104,11 +104,17 @@ export class CookieCategoryComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.onGetScanningStatus();
     this.onGetSubscriptionData();
     this.onSelectedColummFormServer();
     this.onInItCookieForm();
     this.onGetCategoryAndDurationList();
     this.onGetChartData();
+  }
+  onGetScanningStatus() {
+    this.service.getCookieCategoriesStatus(this.constructor.name, moduleName.cookieCategoryModule).subscribe( res => {
+        // debugger
+    })
   }
 
   onGetSubscriptionData() {
