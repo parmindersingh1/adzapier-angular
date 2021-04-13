@@ -90,6 +90,8 @@ export class CookieCategoryComponent implements OnInit {
     scan_limit: 0
   };
   isPublish = false;
+  scanningStatus = '';
+  scanError = false;
   constructor(private service: CookieCategoryService,
               private cd: ChangeDetectorRef,
               private dataService: DataService,
@@ -104,7 +106,9 @@ export class CookieCategoryComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.onGetScanningStatus();
+    setInterval( () => {
+      this.onGetScanningStatus();
+    }, 5000);
     this.onGetSubscriptionData();
     this.onSelectedColummFormServer();
     this.onInItCookieForm();
@@ -112,15 +116,26 @@ export class CookieCategoryComponent implements OnInit {
     this.onGetChartData();
   }
   onGetScanningStatus() {
-    this.service.getCookieCategoriesStatus(this.constructor.name, moduleName.cookieCategoryModule).subscribe( res => {
-        // debugger
-    })
+    if (!this.scanError) {
+      this.service.getCookieCategoriesStatus(this.constructor.name, moduleName.cookieCategoryModule).subscribe( (res: any) => {
+        if (res.status === 200) {
+          this.scanningStatus = res.response.scanner_status;
+          if (this.scanningStatus === 'successfull') {
+            this.scanError = true;
+            this.onGetDataFromServer();
+          }
+        }
+      }, err => {
+        this.scanError = true;
+      });
+    }
+
   }
 
   onGetSubscriptionData() {
     this.service.getSubscrptionData(this.constructor.name, moduleName.cookieCategoryModule)
       .subscribe((res: any) => {
-        if (res.status == 200) {
+        if (res.status === 200) {
           this.availablePlan = res.response;
         }
       });
@@ -526,6 +541,8 @@ export class CookieCategoryComponent implements OnInit {
     }
     this.isScanning = true;
     this.service.cookieScanning(this.constructor.name, moduleName.cookieCategoryModule).subscribe((res: any) => {
+      this.scanError = false;
+      this.onGetScanningStatus();
       this.isScanning = false;
       this.onGetSubscriptionData();
       this.isOpen = true;

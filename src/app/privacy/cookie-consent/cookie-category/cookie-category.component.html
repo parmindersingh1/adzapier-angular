@@ -13,181 +13,200 @@
     </div>
     <p-toast></p-toast>
     <div class="card">
-    <div class="card-header pb-0">
-      <h4 class="mg-b-0 tx-spacing--1">Cookie Category
+      <div class="card-header pb-0">
+        <h4 class="mg-b-0 tx-spacing--1">Cookie Category
 
 
-            <span  *ngIf="availablePlan.scan_available > 0 && availablePlan.scan_available != -1" class="avalible-text text-info">{{availablePlan.scan_available}} Scan are Available </span>
-            <span  *ngIf="availablePlan.scan_available == 0" class=" avalible-text text-info"> Scan is not Available </span>
-            <span  *ngIf="availablePlan.scan_available == -1"  class="text-info avalible-text">Unlimited  Scan are Available </span>
-      </h4>
-      <div class="row mt-3">
-      <div class="col-md-12 btn-list">
-      <div style="float: right" class="d-flex flex-column flex-sm-row mg-t-20 mg-md-t-0">
-        <a class="btn btn-sm btn-outline-secondary btn-uppercase mr-2" type="button" routerLink="/cookie-consent/cookie-banner">
-          <i class="fa fa-cog" aria-hidden="true"></i>
-          Configure Banner
-        </a>
-        <button type="button" class="btn btn-sm btn-outline-secondary btn-uppercase mr-2" (click)="openNew()">
-          <i aria-hidden="true" class="fa fa-plus pr-1"></i> Add Cookie </button>
-        <button *ngIf="!isScanning" (click)="onRescanCookie()" class="btn-success pl-3 pr-4 btn btn-sm mr-2 mg-r-3" type="button">
-          <i-feather name="refresh-ccw" class="commom-feathericon-height pr-1" ></i-feather>
-          Scan
-        </button>
-        <button *ngIf="isScanning" class="btn-success pl-4 pr-4 btn mr-2 btn-smmg-r-3" type="button" disabled>
+          <span *ngIf="availablePlan.scan_available > 0 && availablePlan.scan_available != -1"
+                class="avalible-text text-info">{{availablePlan.scan_available}} Scan are Available </span>
+          <span *ngIf="availablePlan.scan_available == 0"
+                class=" avalible-text text-info"> Scan is not Available </span>
+          <span *ngIf="availablePlan.scan_available == -1"
+                class="text-info avalible-text">Unlimited  Scan are Available </span>
+        </h4>
+        <div class="row mt-3">
+          <div class="col-md-12 btn-list">
+            <div style="float: right" class="d-flex flex-column flex-sm-row mg-t-20 mg-md-t-0">
+              <a class="btn btn-sm btn-outline-secondary btn-uppercase mr-2" type="button"
+                 routerLink="/cookie-consent/cookie-banner">
+                <i class="fa fa-cog" aria-hidden="true"></i>
+                Configure Banner
+              </a>
+              <button type="button" class="btn btn-sm btn-outline-secondary btn-uppercase mr-2" (click)="openNew()">
+                <i aria-hidden="true" class="fa fa-plus pr-1"></i> Add Cookie
+              </button>
+              <button *ngIf="!isScanning" (click)="onRescanCookie()"
+                      class="btn-success pl-3 pr-4 btn btn-sm mr-2 mg-r-3" type="button">
+                <i-feather name="refresh-ccw" class="commom-feathericon-height pr-1"></i-feather>
+                Scan
+              </button>
+              <button *ngIf="isScanning" class="btn-success pl-4 pr-4 btn mr-2 btn-smmg-r-3" type="button" disabled>
                             <span class="spinner-border spinner-border-sm txt-info" role="status"
                                   aria-hidden="true"></span>
-          Scanning...
-        </button>
-        <!--            <button class="btn btn-white btn-sm cat-btn" (click)="openCategoryModal(category)">Add Category</button>-->
+                Scanning...
+              </button>
+              <!--            <button class="btn btn-white btn-sm cat-btn" (click)="openCategoryModal(category)">Add Category</button>-->
 
 
+              <button (click)="onPublishCookie()" type="submit"
+                      class="btn btn-sm pd-x-15 btn-primary btn-uppercase mg-l-5"
+                      data-toggle="modal">
+                <ng-container *ngIf="!isPublish">
+                  <i class="fa fa-upload pr-1" aria-hidden="true"></i>
+                  Publish
+                </ng-container>
+                <ng-container *ngIf="isPublish">
+                  <div class="spinner-border"></div>
+                  Publishing...
+                </ng-container>
+              </button>
 
-        <button (click)="onPublishCookie()" type="submit"
-                class="btn btn-sm pd-x-15 btn-primary btn-uppercase mg-l-5"
-                data-toggle="modal">
-          <ng-container *ngIf="!isPublish">
-            <i class="fa fa-upload pr-1" aria-hidden="true"></i>
-            Publish
-          </ng-container>
-          <ng-container *ngIf="isPublish">
-            <div class="spinner-border"></div>
-            Publishing...
-          </ng-container>
-        </button>
+            </div>
+          </div>
+        </div>
+
+
+        <div *ngIf="scanningStatus" class="status-bar">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="mb-3">
+                <div class="progress" *ngIf="scanningStatus !== 'error'">
+                  <div class="progress-bar progress-bar-striped "
+                       [ngClass]="{'progress-bar-animated': scanningStatus !== 'successfull'}"
+                       role="progressbar"
+                       aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"
+                       [ngStyle]="{width:  scanningStatus === 'In Kafka Queue' ? '33%' :
+                        scanningStatus === 'started' ? '66%' :
+                        scanningStatus ===   'successfull' ? '100%' : null
+                      }"
+                  >
+                  <span class="status-text">
+                  {{scanningStatus === 'In Kafka Queue' ? 'Started' : scanningStatus === 'started' ? 'Scanning' : scanningStatus === 'successfull' ? 'Completed' : scanningStatus}}
+                </span>
+                  </div>
+                </div>
+
+
+                <div class="progress" *ngIf="scanningStatus === 'error'">
+                  <div class="progress-bar progress-bar-striped bg-danger" role="progressbar"
+                       style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
+                  <span class="status-text">
+                    Scanning Failed
+                  </span>
+                  </div>
+                </div>
+
+
+              </div>
+            </div>
+          </div>
+        </div>
+
 
       </div>
-      </div>
+
+
     </div>
 
-    </div>
+
+    <div class="row mb-3">
+
+      <div *ngIf="categoryChart.length > 0 || skeletonLoading.one" class="col-sm-6 col-lg-5 col-xl-6 mg-t-10">
+        <div class="card">
+          <div class="card-header pd-y-20 d-md-flex align-items-center justify-content-between">
+            <h6 class="mg-b-0">Cookies by Purpose</h6>
+            <ul class="list-inline d-flex mg-t-20 mg-sm-t-10 mg-md-t-0 mg-b-0">
+              <li class="list-inline-item d-flex align-items-center">
+                <!-- <span class="d-block wd-10 ht-10 bg-df-1 rounded mg-r-5"></span> -->
+                <span class="tx-sans tx-uppercase tx-10 tx-medium tx-color-03  mg-r-5 ">Total Cookies</span>
+                <span class="tx-sans tx-uppercase tx-10 tx-bold tx-color-03">{{purposeTotalCount}}</span>
+              </li>
+
+            </ul>
+          </div>
+
+          <div class="card-body pd-y-25">
+            <div *ngIf="!skeletonLoading.one" class="row">
+              <div class="col-6">
+                <canvas baseChart height="240"
+                        [chartType]="chartType"
+                        [options]="doughnutChartOptions"
+                        [labels]="chartLabels"
+                        [colors]="pieColors"
+                        [data]="chartData"
+                >
+                </canvas>
+              </div>
+              <div class="col-6 tx-12 mg-t-10">
+                <div *ngFor="let chart of categoryChart" class=" cookie-name-list d-flex align-items-center">
+                  <div *ngIf="chart.count" [ngStyle]="{background: chart.color}"
+                       class="wd-10 ht-10  rounded-circle pos-relative t--1"></div>
+                  <span class="tx-medium mg-l-10" *ngIf="chart.category === 'advertising'">Advertising Cookies</span>
+                  <span class="tx-medium mg-l-10" *ngIf="chart.category === 'social_media'">Social Media Cookies</span>
+                  <span class="tx-medium mg-l-10" *ngIf="chart.category === 'analytics'">Analytics Cookies</span>
+                  <span class="tx-medium mg-l-10" *ngIf="chart.category === 'essential'">Essential Cookies</span>
+                  <span class="tx-medium mg-l-10" *ngIf="chart.category === 'unknown'">Unknown Cookies</span>
+                  <span *ngIf="!chart.category && chart.count" class="tx-medium mg-l-10">Unknown Cookies</span>
 
 
-      <div class="card-body" >
-        <div class="row">
-          <div class="col-md-12">
-            <div class="bg-white p-2 border rounded px-3">
-              <div class="d-flex flex-row justify-content-between align-items-center order">
-                <div class="d-flex flex-column order-details"><span>Scanning Progress...</span>
+                  <span *ngIf="chart.count" class="tx-rubik mg-l-auto">{{chart.count}}</span>
+                  <!--              <span class="wd-60 tx-right tx-rubik mg-l-5 tx-success">0.96% <i class="icon ion-md-arrow-up"></i></span>-->
                 </div>
               </div>
-              <hr class="divider mb-4">
-              <div class="d-flex flex-row justify-content-between align-items-center align-content-center"><span class="dot"></span>
-                <hr class="flex-fill " [ngClass]="{'track-line' : true}" ><span class="dot"></span>
-                <hr class="flex-fill " [ngClass]="{'track-line' : false, 'not-avaliable' : true}"><span class="dot"></span>
-                <hr class="flex-fill "  [ngClass]="{'track-line' : false, 'not-avaliable' : true}"><span class="dot"></span>
-                <hr class="flex-fill "  [ngClass]="{'track-line' : false, 'not-avaliable' : true}"><span class="d-flex justify-content-center align-items-center big-dot dot"><i class="fa fa-check text-white"></i></span></div>
-              <div class="d-flex flex-row justify-content-between align-items-center">
-                <div class="d-flex flex-column align-items-start"><span>Scan Started</span></div>
-                <div class="d-flex flex-column justify-content-center"><span>IN Processing </span></div>
-                <div class="d-flex flex-column justify-content-center align-items-center"><span>text</span></div>
-                <div class="d-flex flex-column align-items-center"><span>text</span></div>
-                <div class="d-flex flex-column align-items-end"><span>Complete</span></div>
+            </div>
+            <ngx-skeleton-loader *ngIf="skeletonLoading.one" class="p-4 pb-0" count="4"></ngx-skeleton-loader>
+          </div><!-- card-body -->
+        </div><!-- card -->
+      </div>
+
+
+      <div *ngIf="typeChart.length > 0  || skeletonLoading.two" class="col-sm-6 col-lg-5 col-xl-6 mg-t-10">
+        <div class="card">
+          <div class="card-header d-flex justify-content-between">
+            <h6 class="lh-5 mg-b-0">Cookies by Type</h6>
+          </div><!-- card-header -->
+          <div class="card-body pd-y-25">
+            <div *ngIf="!skeletonLoading.two" class="row">
+              <div class="col-6">
+                <canvas baseChart height="240"
+                        [chartType]="chartType"
+                        [options]="doughnutChartOptions"
+                        [colors]="pieColors"
+                        [labels]="chartTypeLabels"
+                        [data]="chartTypeData"
+                >
+                </canvas>
+              </div>
+              <div class="col-6 tx-12 mg-t-10">
+                <div *ngFor="let chart of typeChart" class="cookie-name-list d-flex align-items-center">
+                  <div [ngStyle]="{background: chart.color}" class="wd-10 ht-10 rounded-circle pos-relative t--1"></div>
+                  <span *ngIf="chart.party" class="tx-medium mg-l-10">{{chart.party}}</span>
+                  <span *ngIf="!chart.party" class="tx-medium mg-l-10">Unknown</span>
+                  <span class="tx-rubik mg-l-auto">{{chart.count}}</span>
+                  <!-- <span class="wd-60 tx-right tx-rubik mg-l-5 tx-success">0.96% <i class="icon ion-md-arrow-up"></i></span> -->
+                </div>
               </div>
             </div>
-          </div>
-        </div>
+            <ngx-skeleton-loader *ngIf="skeletonLoading.two" class="p-4 pb-0" count="4"></ngx-skeleton-loader>
+
+          </div><!-- card-body -->
+        </div><!-- card -->
+
       </div>
 
-
-  </div>
-
-
-<div class="row mb-3">
-
-  <div *ngIf="categoryChart.length > 0 || skeletonLoading.one" class="col-sm-6 col-lg-5 col-xl-6 mg-t-10">
-    <div class="card">
-      <div class="card-header pd-y-20 d-md-flex align-items-center justify-content-between">
-        <h6 class="mg-b-0">Cookies by Purpose</h6>
-        <ul class="list-inline d-flex mg-t-20 mg-sm-t-10 mg-md-t-0 mg-b-0">
-          <li class="list-inline-item d-flex align-items-center">
-            <!-- <span class="d-block wd-10 ht-10 bg-df-1 rounded mg-r-5"></span> -->
-            <span class="tx-sans tx-uppercase tx-10 tx-medium tx-color-03  mg-r-5 ">Total Cookies</span>
-            <span class="tx-sans tx-uppercase tx-10 tx-bold tx-color-03">{{purposeTotalCount}}</span>
-          </li>
-
-        </ul>
-      </div>
-
-      <div class="card-body pd-y-25">
-        <div *ngIf="!skeletonLoading.one" class="row">
-          <div class="col-6">
-            <canvas baseChart height="240"
-                    [chartType]="chartType"
-                    [options]="doughnutChartOptions"
-                    [labels]="chartLabels"
-                    [colors]="pieColors"
-                    [data]="chartData"
-                    >
-            </canvas>
-          </div>
-          <div class="col-6 tx-12 mg-t-10">
-            <div *ngFor="let chart of categoryChart" class=" cookie-name-list d-flex align-items-center">
-              <div *ngIf="chart.count"  [ngStyle]="{background: chart.color}" class="wd-10 ht-10  rounded-circle pos-relative t--1"></div>
-              <span class="tx-medium mg-l-10" *ngIf="chart.category === 'advertising'">Advertising Cookies</span>
-              <span class="tx-medium mg-l-10" *ngIf="chart.category === 'social_media'">Social Media Cookies</span>
-              <span class="tx-medium mg-l-10" *ngIf="chart.category === 'analytics'">Analytics Cookies</span>
-              <span class="tx-medium mg-l-10" *ngIf="chart.category === 'essential'">Essential Cookies</span>
-              <span class="tx-medium mg-l-10" *ngIf="chart.category === 'unknown'">Unknown Cookies</span>
-              <span *ngIf="!chart.category && chart.count" class="tx-medium mg-l-10">Unknown Cookies</span>
-
-
-              <span *ngIf="chart.count" class="tx-rubik mg-l-auto">{{chart.count}}</span>
-<!--              <span class="wd-60 tx-right tx-rubik mg-l-5 tx-success">0.96% <i class="icon ion-md-arrow-up"></i></span>-->
-            </div>
-          </div>
-        </div>
-        <ngx-skeleton-loader  *ngIf="skeletonLoading.one" class="p-4 pb-0" count="4"></ngx-skeleton-loader>
-      </div><!-- card-body -->
-    </div><!-- card -->
-  </div>
-
-
-  <div *ngIf="typeChart.length > 0  || skeletonLoading.two" class="col-sm-6 col-lg-5 col-xl-6 mg-t-10">
-    <div class="card">
-      <div class="card-header d-flex justify-content-between">
-        <h6 class="lh-5 mg-b-0">Cookies by Type</h6>
-      </div><!-- card-header -->
-      <div class="card-body pd-y-25">
-        <div  *ngIf="!skeletonLoading.two" class="row">
-          <div class="col-6">
-            <canvas baseChart height="240"
-                    [chartType]="chartType"
-                    [options]="doughnutChartOptions"
-                    [colors]="pieColors"
-                    [labels]="chartTypeLabels"
-                    [data]="chartTypeData"
-            >
-            </canvas>
-          </div>
-          <div class="col-6 tx-12 mg-t-10">
-            <div *ngFor="let chart of typeChart" class="cookie-name-list d-flex align-items-center">
-              <div [ngStyle]="{background: chart.color}" class="wd-10 ht-10 rounded-circle pos-relative t--1"></div>
-              <span *ngIf="chart.party" class="tx-medium mg-l-10">{{chart.party}}</span>
-              <span *ngIf="!chart.party" class="tx-medium mg-l-10">Unknown</span>
-              <span class="tx-rubik mg-l-auto">{{chart.count}}</span>
-              <!-- <span class="wd-60 tx-right tx-rubik mg-l-5 tx-success">0.96% <i class="icon ion-md-arrow-up"></i></span> -->
-            </div>
-          </div>
-        </div>
-        <ngx-skeleton-loader  *ngIf="skeletonLoading.two" class="p-4 pb-0" count="4"></ngx-skeleton-loader>
-
-      </div><!-- card-body -->
-    </div><!-- card -->
-
-  </div>
-
-</div>
+    </div>
     <div class="card">
       <p-toolbar styleClass="p-mb-4">
         <ng-template pTemplate="left">
-<!--          <button type="button" class="btn-primary btn btn-sm mr-3" (click)="openNew()">New </button>-->
+          <!--          <button type="button" class="btn-primary btn btn-sm mr-3" (click)="openNew()">New </button>-->
           <span class="p-input-icon-left">
-                    <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search..." />
+                    <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
+                           placeholder="Search..."/>
                                   <i class="pi pi-search"></i>
                 </span>
           <p-multiSelect class="ml-3" [options]="cols" [(ngModel)]="selectedColumns" optionLabel="header"
-                         selectedItemsLabel="{0} columns selected" [style]="{minWidth: '200px'}" placeholder="Choose Columns">
+                         selectedItemsLabel="{0} columns selected" [style]="{minWidth: '200px'}"
+                         placeholder="Choose Columns">
           </p-multiSelect>
         </ng-template>
 
@@ -210,20 +229,24 @@
         <ng-template pTemplate="header" let-columns>
           <tr>
             <td class="id-box"><span class="ml-4">ID</span></td>
-            <th pSortableColumn="name">Name <p-sortIcon field="name"></p-sortIcon></th>
+            <th pSortableColumn="name">Name
+              <p-sortIcon field="name"></p-sortIcon>
+            </th>
             <th>Path</th>
-            <th pSortableColumn="category">Category <p-sortIcon field="category"></p-sortIcon></th>
-            <th  *ngFor="let col of columns">
+            <th pSortableColumn="category">Category
+              <p-sortIcon field="category"></p-sortIcon>
+            </th>
+            <th *ngFor="let col of columns">
               {{col.header}}
             </th>
-                        <th>Domain</th>
-                        <th>Http Only</th>
-                        <th>Secure</th>
+            <th>Domain</th>
+            <th>Http Only</th>
+            <th>Secure</th>
             <th>Edit</th>
             <th>Delete</th>
           </tr>
         </ng-template>
-        <ng-template pTemplate="body" let-cookieList  let-columns="columns" styleClass="p-datatable-responsive-demo">
+        <ng-template pTemplate="body" let-cookieList let-columns="columns" styleClass="p-datatable-responsive-demo">
           <tr>
             <td>{{cookieList.id}}</td>
             <td>{{cookieList.name}}</td>
@@ -236,171 +259,158 @@
               {{cookieList.domain}}
             </td>
             <td class="pl-4">
-              <i *ngIf="cookieList.http_only"  style="font-size: 18px;" class="text-success fas fa-check"></i>
-              <i *ngIf="!cookieList.http_only " style="font-size: 18px;"class="fas fa-times text-danger"></i>
+              <i *ngIf="cookieList.http_only" style="font-size: 18px;" class="text-success fas fa-check"></i>
+              <i *ngIf="!cookieList.http_only " style="font-size: 18px;" class="fas fa-times text-danger"></i>
             </td>
             <td class="pl-4">
-              <i *ngIf="cookieList.secure"  style="font-size: 18px;" class="text-success fas fa-check"></i>
-              <i *ngIf="!cookieList.secure " style="font-size: 18px;"class="fas fa-times text-danger"></i>
+              <i *ngIf="cookieList.secure" style="font-size: 18px;" class="text-success fas fa-check"></i>
+              <i *ngIf="!cookieList.secure " style="font-size: 18px;" class="fas fa-times text-danger"></i>
             </td>
             <td>
-              <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-button-sm" (click)="editProduct(cookieList)"></button>
+              <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-button-sm"
+                      (click)="editProduct(cookieList)"></button>
             </td>
             <td>
-              <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger p-button-sm" (click)="deleteProduct(cookieList)"></button>
+              <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger p-button-sm"
+                      (click)="deleteProduct(cookieList)"></button>
             </td>
           </tr>
         </ng-template>
         <ng-template pTemplate="summary">
           <div class="p-d-flex p-ai-center p-jc-between">
-<!--            In total there are {{totalCookieCount}} Cookies.-->
+            <!--            In total there are {{totalCookieCount}} Cookies.-->
           </div>
         </ng-template>
       </p-table>
     </div>
 
-    <p-dialog [(visible)]="productDialog" [style]="{width: '700px', zIndex: '999999', height: '500px'}" header="Add Cookie" [modal]="true" styleClass="p-fluid">
+    <p-dialog [(visible)]="productDialog" [style]="{width: '700px', zIndex: '999999', height: '500px'}"
+              header="Add Cookie" [modal]="true" styleClass="p-fluid">
       <ng-template pTemplate="content">
         <form [formGroup]="addCookieForm" (ngSubmit)="onSubmit()">
-        <div class="form-row">
+          <div class="form-row">
 
-          <div class="form-group col-md-6">
-            <label class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-0 tx-color-03"><i class="tx-8 fa fa-asterisk tx-danger " aria-hidden="true"></i>Cookie
-              Name</label>
-            <input type="text" formControlName="name" class="form-control" placeholder="Cookie Name">
-            <div *ngIf="submitted && f.name.errors"
-            >
-              <div class="text-danger mt-2" *ngIf="f.name.errors.required">This Field is required</div>
-            </div>
-          </div>
-
-          <div class="form-group col-md-6">
-            <label class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-0 tx-color-03"><i class="tx-8 fa fa-asterisk tx-danger " aria-hidden="true"></i> Host</label>
-            <input type="text" formControlName="path" class="form-control" placeholder="Host">
-            <div *ngIf="submitted && f.path.errors"
-            >
-              <div class="text-danger mt-2" *ngIf="f.path.errors.required">This Field is required</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-group col-md-6">
-            <label class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-0 tx-color-03">
-              <i class="tx-8 fa fa-asterisk tx-danger " aria-hidden="true"></i> Category</label>
-            <select formControlName="category" id="my-select" class="form-control" >
-              <option *ngFor="let obj of cookieCategories" [value]="obj.value">{{obj.label}}</option>
-            </select>
-            <div *ngIf="submitted && f.category.errors"
-            >
-              <div class="text-danger mt-2" *ngIf="f.category.errors.required">This Field is required</div>
-            </div>
-          </div>
-
-          <div class="form-group col-md-6">
-            <label class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-0 tx-color-03"><i class="tx-8 fa fa-asterisk tx-danger " aria-hidden="true"></i> Party</label>
-            <div class="col-sm-10">
-              <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" formControlName="party" name="party" id="inlineRadio1" value="first_party">
-                <label class="form-check-label" for="inlineRadio1">First Party</label>
-              </div>
-              <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" formControlName="party" name="party" id="inlineRadio2" value="third_party">
-                <label class="form-check-label" for="inlineRadio2">Third Party</label>
+            <div class="form-group col-md-6">
+              <label class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-0 tx-color-03"><i
+                class="tx-8 fa fa-asterisk tx-danger " aria-hidden="true"></i>Cookie
+                Name</label>
+              <input type="text" formControlName="name" class="form-control" placeholder="Cookie Name">
+              <div *ngIf="submitted && f.name.errors"
+              >
+                <div class="text-danger mt-2" *ngIf="f.name.errors.required">This Field is required</div>
               </div>
             </div>
-            <div *ngIf="submitted && f.party.errors"
-            >
-              <div class="text-danger mt-2" *ngIf="f.party.errors.required">This Field is required</div>
-            </div>
-          </div>
 
-        </div>
-
-
-        <div class="form-group mg-b-5">
-          <label for="exampleFormControlTextarea1"><i class="tx-8 fa fa-asterisk tx-danger " aria-hidden="true"></i> Description</label>
-          <textarea formControlName="description" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-          <div *ngIf="submitted && f.description.errors"
-          >
-            <div class="text-danger mt-2" *ngIf="f.description.errors.required">This Field is required</div>
-          </div>
-        </div>
-
-        <div class="form-group mg-b-5">
-          <label for="exampleFormControlTextarea1"><i class="tx-8 fa fa-asterisk tx-danger " aria-hidden="true"></i> Value</label>
-          <textarea formControlName="value" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-          <div *ngIf="submitted && f.value.errors"
-          >
-            <div class="text-danger mt-2" *ngIf="f.value.errors.required">This Field is required</div>
-          </div>
-        </div>
-
-
-        <div class="form-group">
-          <label class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-0 tx-color-03">Duration Type</label>
-          <div class="col-sm-10">
-            <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" formControlName="expiry"  name="expiry" value="seesion">
-              <label class="form-check-label" for="inlineRadio1">Session </label>
-            </div>
-            <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" formControlName="expiry" name="expiry" value="presistent">
-              <label class="form-check-label" for="inlineRadio2">Persistent </label>
+            <div class="form-group col-md-6">
+              <label class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-0 tx-color-03"><i
+                class="tx-8 fa fa-asterisk tx-danger " aria-hidden="true"></i> Host</label>
+              <input type="text" formControlName="path" class="form-control" placeholder="Host">
+              <div *ngIf="submitted && f.path.errors"
+              >
+                <div class="text-danger mt-2" *ngIf="f.path.errors.required">This Field is required</div>
+              </div>
             </div>
           </div>
 
           <div class="form-row">
-            <div class="form-group col-md-2">
-              <label class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-0 tx-color-03">Duration</label>
-              <input formControlName="duration"  oninput="validity.valid||(value='');" min="1" type="number" class="form-control" placeholder="1">
-
-            </div>
-            <div class="form-group col-md-3 d-flex align-items-end">
-              <select formControlName="duration_type" class="custom-select">
-                <option *ngFor="let dur of durationType" [value]="dur.key">{{dur.value}}</option>
+            <div class="form-group col-md-6">
+              <label class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-0 tx-color-03">
+                <i class="tx-8 fa fa-asterisk tx-danger " aria-hidden="true"></i> Category</label>
+              <select formControlName="category" id="my-select" class="form-control">
+                <option *ngFor="let obj of cookieCategories" [value]="obj.value">{{obj.label}}</option>
               </select>
+              <div *ngIf="submitted && f.category.errors"
+              >
+                <div class="text-danger mt-2" *ngIf="f.category.errors.required">This Field is required</div>
+              </div>
+            </div>
+
+            <div class="form-group col-md-6">
+              <label class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-0 tx-color-03"><i
+                class="tx-8 fa fa-asterisk tx-danger " aria-hidden="true"></i> Party</label>
+              <div class="col-sm-10">
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" formControlName="party" name="party" id="inlineRadio1"
+                         value="first_party">
+                  <label class="form-check-label" for="inlineRadio1">First Party</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" formControlName="party" name="party" id="inlineRadio2"
+                         value="third_party">
+                  <label class="form-check-label" for="inlineRadio2">Third Party</label>
+                </div>
+              </div>
+              <div *ngIf="submitted && f.party.errors"
+              >
+                <div class="text-danger mt-2" *ngIf="f.party.errors.required">This Field is required</div>
+              </div>
+            </div>
+
+          </div>
+
+
+          <div class="form-group mg-b-5">
+            <label for="exampleFormControlTextarea1"><i class="tx-8 fa fa-asterisk tx-danger " aria-hidden="true"></i>
+              Description</label>
+            <textarea formControlName="description" class="form-control" id="exampleFormControlTextarea1"
+                      rows="3"></textarea>
+            <div *ngIf="submitted && f.description.errors"
+            >
+              <div class="text-danger mt-2" *ngIf="f.description.errors.required">This Field is required</div>
             </div>
           </div>
-        </div>
-          <input type="hidden" formControlName="property" />
-          <input type="hidden" formControlName="http_only" />
+
+          <div class="form-group mg-b-5">
+            <label for="exampleFormControlTextarea1"><i class="tx-8 fa fa-asterisk tx-danger " aria-hidden="true"></i>
+              Value</label>
+            <textarea formControlName="value" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+            <div *ngIf="submitted && f.value.errors"
+            >
+              <div class="text-danger mt-2" *ngIf="f.value.errors.required">This Field is required</div>
+            </div>
+          </div>
+
+
+          <div class="form-group">
+            <label class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-0 tx-color-03">Duration Type</label>
+            <div class="col-sm-10">
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" formControlName="expiry" name="expiry" value="seesion">
+                <label class="form-check-label" for="inlineRadio1">Session </label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" formControlName="expiry" name="expiry" value="presistent">
+                <label class="form-check-label" for="inlineRadio2">Persistent </label>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group col-md-2">
+                <label class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-0 tx-color-03">Duration</label>
+                <input formControlName="duration" oninput="validity.valid||(value='');" min="1" type="number"
+                       class="form-control" placeholder="1">
+
+              </div>
+              <div class="form-group col-md-3 d-flex align-items-end">
+                <select formControlName="duration_type" class="custom-select">
+                  <option *ngFor="let dur of durationType" [value]="dur.key">{{dur.value}}</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <input type="hidden" formControlName="property"/>
+          <input type="hidden" formControlName="http_only"/>
           <div class="text-center">
-            <button type="button"  (click)="hideDialog()"  label="Cancel" icon="pi pi-times" class="btn btn-white mr-4">Cancel</button>
-            <button type="submit"  label="Save" icon="pi pi-check" class="btn btn-primary">Save</button>
+            <button type="button" (click)="hideDialog()" label="Cancel" icon="pi pi-times" class="btn btn-white mr-4">
+              Cancel
+            </button>
+            <button type="submit" label="Save" icon="pi pi-check" class="btn btn-primary">Save</button>
           </div>
         </form>
       </ng-template>
     </p-dialog>
 
     <p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
   </div>
@@ -415,7 +425,7 @@
     <div class="modal-body ">
       <div class="form-group mg-b-5">
         <label class="tx-small">Category Name <i style="font-size: 9px;" class="fa fa-asterisk tx-danger "
-                                                                                                     aria-hidden="true"></i></label>
+                                                 aria-hidden="true"></i></label>
         <input type="text" formControlName="categoryName" class="form-control" placeholder="Category Name"
                [ngClass]="{ 'is-invalid': categoryFromSubmitted && c.categoryName.errors }"
         >
@@ -425,7 +435,8 @@
         </div>
       </div>
       <div class="form-group mg-b-5 mt-3">
-        <label for="exampleFormControlTextarea1" class="tx-small"> Description <i style="font-size: 9px;" class="fa fa-asterisk tx-danger "
+        <label for="exampleFormControlTextarea1" class="tx-small"> Description <i style="font-size: 9px;"
+                                                                                  class="fa fa-asterisk tx-danger "
                                                                                   aria-hidden="true"></i></label>
         <textarea class="form-control" formControlName="description" id="exampleFormControlTextarea1"
                   [ngClass]="{ 'is-invalid': categoryFromSubmitted && c.description.errors }"
@@ -451,5 +462,6 @@
 
 
 <div class="col-sm-5 mr-0 float-right flotingdiv" [ngClass]="{'hide':!isOpen}">
-  <alert *ngIf="isOpen" [type]="alertType" dismissOnTimeout="5000" [dismissible]="dismissible" (onClosed)="onClosed(alertMsg)">{{  alertMsg}}</alert>
+  <alert *ngIf="isOpen" [type]="alertType" dismissOnTimeout="5000" [dismissible]="dismissible"
+         (onClosed)="onClosed(alertMsg)">{{  alertMsg}}</alert>
 </div>
