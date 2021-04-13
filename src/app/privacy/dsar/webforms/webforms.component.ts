@@ -6,7 +6,6 @@ import { CCPAFormFields } from 'src/app/_models/ccpaformfields';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 import {moduleName} from '../../../_constant/module-name.constant';
 import { DataService } from 'src/app/_services/data.service';
-import { forkJoin } from 'rxjs';
 import { DirtyComponents } from 'src/app/_models/dirtycomponents';
 
 interface WebFormModel {
@@ -57,6 +56,9 @@ export class WebformsComponent implements OnInit, DirtyComponents {
   previousNumbersLeft: number;
   toNumbers: number;
   fromNumbers: number;
+  licenseAvailabilityObj = {};
+  planUsageByOrgid = [];
+
   constructor(private ccpaFormConfigService: CCPAFormConfigurationService,
               private organizationService: OrganizationService,
               private loading: NgxUiLoaderService,
@@ -181,6 +183,8 @@ export class WebformsComponent implements OnInit, DirtyComponents {
     }
     this.getCCPAFormList(this.orgDetails);
   }
+
+  
 
   // ngOnDestroy() {
   //   if (this.mySubscription) {

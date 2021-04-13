@@ -204,7 +204,7 @@
                 [ngClass]="{ 'is-invalid': submitted && dsar.webformselection.errors }">
                 <option selected value="">Please select web form</option>
                 <ng-container *ngFor="let opt of activeWebFormList">
-                  <option *ngIf="opt.active" [value]="opt | json">
+                  <option [value]="opt | json">
                     {{ opt.form_name }}
                   </option>
                 </ng-container>
