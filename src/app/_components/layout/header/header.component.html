@@ -62,7 +62,9 @@
        <span>{{currentProperty ? convertAmpersand(currentProperty) : 'Select Property'}}</span>
       </a>
      <!--(orgPropertyMenu | async).response-->
-      <ul *dropdownMenu class="dropdown-menu propMenu" [ngStyle]="addColumncount()"> <!--[ngStyle]="addColumncount()"-->
+     <div *dropdownMenu>
+       <div class="dropdown-wrapper">
+      <ul class="dropdown-menu propMenu" [ngStyle]="addColumncount()"> <!--[ngStyle]="addColumncount()"-->
           <li role="menuitem" *ngFor="let item of orgPropertyMenu; first as isFirst; let i = index;">
             <a class="dropdown-item" title="{{item.orgname}}"  (click)="goto('settings/organizations/details',item.id)">
              <span [ngClass]="[isOrgSelected(item) ? 'active' : '']">{{item.orgname}}</span>
@@ -90,6 +92,8 @@
             </ul>
           </li>
       </ul>
+      </div>
+    </div>
     <!-- </ng-container> -->
     </ul>
       <!--end of organization / property menu after login-->
@@ -135,14 +139,13 @@
       <li class="nav-item notification-height">
         <div class="txt-right mr-3"><button class="btn btn-link" (click)="readAllNotification(notificationList)">Mark all as read</button></div>
         <cdk-virtual-scroll-viewport itemSize="10" class="example-viewport">
-          <div *cdkVirtualFor="let data of notificationList" class="notification-wrapper">
-            <!-- {{data.notification}} -->
-            <div class="notification-task-time-wrapper col-sm-10">
+          <div *cdkVirtualFor="let data of storeNotificationList" class="notification-wrapper">
+            <div class="notification-task-time-wrapper col-sm-10" *ngIf="data.active">
               <span class="pl-0 pr-2 col-sm-9 tx-color-02 font-weight-bold">
               {{data.notification}}</span>
               <span class="tx-color-02 notification-time"> {{data.created_at | timeago}} </span>
               </div>
-                 <div class="d-flex p-2">
+                 <div class="d-flex p-2" *ngIf="data.active">
               <button class="clear-notification cross-icon" tooltip="Clear notification"
               placement="bottom" [adaptivePosition]="true"
               [ngClass]="{'clear-notification':data.active}" (click)="clearNotification(data.id,'clear',false)">&#10005;</button>

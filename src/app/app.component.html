@@ -24,7 +24,7 @@
       <div *ngIf="type ===  'cookieConsent' " class="modal-body">
         <div class="text-center">
           <h4>Your Property License need to Upgrade </h4>
-          <p>This feature is not allowed in your current plan please upgrade it  {{currentPlanData.price}}</p>
+          <p>This feature is not allowed in your current plan please upgrade it </p>
         </div>
 
         <div class="plan-body">
@@ -72,8 +72,7 @@
       <div *ngIf="type ===  'org' " class="modal-body">
         <div class="text-center">
           <h4>Your Organization License need to Upgrade </h4>
-          <p *ngIf="!msg">This feature is not allowed in your current plan please upgrade
-            it {{currentPlanData.price}}</p>
+          <p *ngIf="!msg">This feature is not allowed in your current plan please upgrade it </p>
           <p *ngIf="msg">{{msg}}</p>
         </div>
 
@@ -99,7 +98,8 @@
                 <h3 [ngStyle]="{color: plan.price <=  currentPlanData.price && plan.price !== -1 ? '#999' : ''}"
                     class="mt-4 plan-type">{{plan.name}}</h3>
                 <p [ngStyle]="{color: plan.price <=  currentPlanData.price ? '#999' : ''}"
-                   class="tx-color-03 mg-b-50">{{plan.product_name}}</p>
+                   class="tx-color-03 " [ngStyle]="{'margin-bottom': plan.price === -1 ? '40px' : '50px'}"
+                   [ngClass]="{'mg-b-50' : plan.price !== -1, 'mg-b-40' : plan.price === -1}">{{plan.product_name}}</p>
                 <h1 *ngIf="plan.price !== -1" class="tx-rubik tx-normal mb-3 mg-t-auto price-text">
                   <sup [ngStyle]="{color: plan.price <=  currentPlanData.price ? '#999' : ''}" class="doller">$</sup>
                   <span [ngStyle]="{color: plan.price <=  currentPlanData.price ? '#999' : ''}"
@@ -111,7 +111,7 @@
                   Choose Plan
                 </button>
                 <button (click)="onNavigate()" *ngIf="plan.price === -1"
-                        class="btn mt-4 mb-4 add-to-cart-btn btn-primary btn-block">
+                        class="btn mt-0 mb-4 add-to-cart-btn btn-primary btn-block">
                   Choose Plan
                 </button>
                 <h4 class="current-activeplan tx-primary" *ngIf="plan.id === existingOrgPlan.stripe_plan_id">

@@ -7,12 +7,12 @@
         <li class="breadcrumb-item active" aria-current="page"> Data Subject Requests</li>
       </ol>
       <div class="datepickerwrapper col-sm-6 pr-0 mr-0 ml-auto">
-      <div class="col-sm-7 mr-2 d-flex row-reverse">
+      <div class="col-sm-7 pr-0 mr-2 d-flex row-reverse">
         <div class="input-group-prepend"  (click)="dp.show()">
           <span class="input-group-text rounded-right border-left-0" id="inputGroup-sizing-sm"><i class="fa" [ngClass]="searchbydaterange !== '' ? 'fa-caret-down':'fa-search'"></i></span>
         </div>
-        <input type="text" [(ngModel)]="searchbydaterange" 
-         class="form-control border-left-0  border-right-0 rounded-right" 
+        <input type="text" [(ngModel)]="searchbydaterange"
+         class="form-control border-left-0  border-right-0 rounded-right"
         bsDaterangepicker [bsConfig]="bsConfig"  #dp="bsDaterangepicker"  (onHidden)="onDateSelection()">
         <div class="input-group-prepend border-left-0"  (click)="dp.show()">
           <span class="input-group-text rounded-left border-right-0" id="inputGroup-sizing-sm"><i class="fa fa-calendar"></i></span>
@@ -98,17 +98,17 @@
     <ng-template pTemplate="header"  let-columns>
 
       <tr>
-        <th>Id 
+        <th>Id
         </th>
-        <th>Request Type 
+        <th>Request Type
         </th>
-        <th>Subject Type 
+        <th>Subject Type
         </th>
-        <th>Status 
+        <th>Status
         </th>
-        <th>Name 
+        <th>Name
         </th>
-        <th>Web Form 
+        <th>Web Form
         </th>
 
         <th  *ngFor="let col of columns">
@@ -204,7 +204,7 @@
                 [ngClass]="{ 'is-invalid': submitted && dsar.webformselection.errors }">
                 <option selected value="">Please select web form</option>
                 <ng-container *ngFor="let opt of activeWebFormList">
-                  <option *ngIf="opt.active" [value]="opt | json">
+                  <option [value]="opt | json">
                     {{ opt.form_name }}
                   </option>
                 </ng-container>

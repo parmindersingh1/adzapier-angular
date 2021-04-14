@@ -197,6 +197,17 @@ export class CCPAFormConfigurationService extends WebControls {
     }));
   }
 
+  getDSARFormList(orgId, propId, componentName, moduleName): Observable<any> {
+    const path = '/dsar/form/' + orgId + '/' + propId;
+    return this.httpClient.get<any>(environment.apiUrl + path).pipe(
+      map(res => res),
+      catchError(error => {
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.getCCPAFormList, componentName, moduleName, path);
+        return throwError(error);
+      })
+    );
+  }
+
   onSendLogs(errorType, msg, functionality, componentName, moduleName, path) {
     this.lokiService.onSendErrorLogs(errorType, msg, functionality, componentName, moduleName, path).subscribe();
   }

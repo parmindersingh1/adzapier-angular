@@ -1,9 +1,10 @@
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {BehaviorSubject, Observable, throwError} from 'rxjs';
+import {BehaviorSubject, forkJoin, Observable, throwError} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
 import {environment} from 'src/environments/environment';
 import {apiConstant} from '../_constant/api.constant';
+import {moduleName} from 'src/app/_constant/module-name.constant';
 import {LokiFunctionality, LokiStatusType} from '../_constant/loki.constant';
 import {LokiService} from './loki.service';
 
@@ -22,8 +23,8 @@ export class DataService {
 
   public openUnAuthModal = new BehaviorSubject<any>({isTrue: false, error: ''});
   public unAuthPopUp = this.openUnAuthModal.asObservable();
-
-
+  licenseAvailabilityObj = {};
+  planUsageByOrgid = [];
   constructor(private http: HttpClient, private lokiService: LokiService) {
   }
 
@@ -444,8 +445,13 @@ export class DataService {
 
   }
 
-  getWorkflowLicenseLimit(componentName, moduleName): Observable<any> {
-    const path = '/available/workflow';
+  getWorkflowLicenseLimit(componentName, moduleName,orgid?): Observable<any> {
+    let path
+    if(orgid){
+       path = '/available/workflow/' + orgid;
+    }else{
+      path = '/available/workflow/'
+    }
     return this.http.get(environment.apiUrl + path).pipe(map(response => response),
       catchError(error => {
         this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.workFlow, componentName, moduleName, path);
@@ -464,6 +470,13 @@ export class DataService {
     if (planData) {
       return planData = JSON.parse(atob(planData))
     }
+  }
+
+  checkLicenseAvailabilityPerOrganization(org): Observable<any>{
+    let webFormLicense = this.getWebFormLicenseLimit(this.constructor.name, moduleName.headerModule, org.id || org.organization_id || org);
+    let requestLicense = this.getDSARRequestLicenseLimit(this.constructor.name, moduleName.headerModule, org.id || org.organization_id || org);
+    let workflowLicense = this.getWorkflowLicenseLimit(this.constructor.name, moduleName.headerModule, org.id || org.organization_id || org);
+    return forkJoin([webFormLicense, requestLicense, workflowLicense])
   }
 
 }

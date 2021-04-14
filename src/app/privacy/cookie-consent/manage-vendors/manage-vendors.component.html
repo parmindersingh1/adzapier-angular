@@ -23,23 +23,23 @@
       <div class="d-none d-md-block">
 
         <button (click)="onGetAllowVendors()" *ngIf="!skeletonLoading.one && !skeletonLoading.two"
-                class="btn btn-sm pd-x-15 btn-white btn-uppercase mg-l-5" style="width: 102px">
+                class="btn  btn-sm btn-uppercase btn-outline-secondary" style="width: 102px">
           <i class="fas fa-sync"></i> Refresh
         </button>
         <button *ngIf="skeletonLoading.one || skeletonLoading.two"
-                class="btn btn-sm pd-x-15 btn-white btn-uppercase mg-l-5" style="width: 130px">
+                class="btn  btn-sm btn-uppercase btn-outline-secondary" style="width: 130px">
                 <span class="spinner-border spinner-border-sm txt-info" role="status"
                       aria-hidden="true"></span> Refreshing
         </button>
 
         <button *ngIf="updating" [disabled]="updating" type="button"
-                class="ml-3 btn btn-sm pd-x-15 btn-primary mr-2 btn-uppercase">
+                class="ml-2 btn btn-sm pd-x-15 btn-primary mr-2 btn-uppercase">
                   <span class="spinner-border spinner-border-sm txt-info" role="status"
                         aria-hidden="true"></span> Updating
         </button>
 
         <button type="button" *ngIf="!updating" (click)="openModal(template)"
-                class="ml-3 btn btn-sm pd-x-15 btn-primary mr-2 btn-uppercase">
+                class="ml-2 btn btn-sm pd-x-15 btn-primary mr-2 btn-uppercase">
           <i class="fas fa-pencil-alt"></i> Action
         </button>
 
@@ -209,25 +209,29 @@
   <div class="font-weight-bold modal-body text-center">
     <p>You will no longer be able to send or receive signals to and from vendors once they are set to Inactive. A
       vendor’s status can be updated to Active or Inactive at any time.</p>
-    <div class="row mt-5">
-      <div class="col-md-7 text-left">
-        <div class="form-check">
-          <label class="form-check-label">
-            <input type="radio" class="form-check-input" [(ngModel)]="actionType" value="inactive" name="optradio">Inactive
+    <div class="row mt-2 mb-2">
+      <div class="col-md-5 radiobtn-wrapper">
+        <div class="form-check d-flex">
+            <input type="radio" class="form-check-input ml-n3 mt-1" [(ngModel)]="actionType" value="inactive" name="optradio">
+            <label class="form-check-label" for="actionType">
+            Inactive
           </label>
         </div>
-        <div class="form-check mt-2">
-          <label class="form-check-label">
-            <input type="radio" class="form-check-input" [(ngModel)]="actionType" value="active" name="optradio">Active
+        <div class="form-check d-flex">
+            <input type="radio" class="form-check-input ml-n3 mt-1" [(ngModel)]="actionType" value="active" name="optradio">
+            <label class="form-check-label" for="actionType">
+            Active
           </label>
         </div>
 
       </div>
-      <div class="col-md-5 pt-4">
+    
+    </div>
+    <div class="row">
+      <div class="col-md-12 text-right">
         <button type="button" class="btn btn-sm btn-default" (click)="decline()">Cancel</button>
         <button type="button" class="btn btn-sm btn-primary" (click)="confirm()">Save</button>
       </div>
     </div>
-
   </div>
 </ng-template>
