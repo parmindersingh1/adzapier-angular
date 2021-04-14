@@ -1,6 +1,7 @@
-import {Component, OnInit, ViewEncapsulation} from '@angular/core';
+import {Component, OnInit, ViewEncapsulation,TemplateRef} from '@angular/core';
 import {Location} from '@angular/common';
 import {ConsentSolutionsService} from '../../../../_services/consent-solutions.service';
+import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 
 @Component({
   selector: 'app-consentlegal-table',
@@ -11,10 +12,12 @@ import {ConsentSolutionsService} from '../../../../_services/consent-solutions.s
 export class ConsentDetailsComponent implements OnInit {
   consentData: any;
   consentPrefrenseList = [];
+  consentRecordList=[];
+  modalRef: BsModalRef;
 
 
   constructor(private consentSolutionService: ConsentSolutionsService,
-              private location: Location) {
+              private location: Location,private modalService: BsModalService) {
   }
 
   ngOnInit() {
@@ -30,5 +33,19 @@ export class ConsentDetailsComponent implements OnInit {
       console.error(error);
     });
   }
+
+  
+
+  editUser(edit, proofs) {
+
+  
+    this.consentData.proofs.form = proofs.form;
+  
+    this.modalRef = this.modalService.show(edit, {});
+  
+    
+  }
+  
+
 
 }

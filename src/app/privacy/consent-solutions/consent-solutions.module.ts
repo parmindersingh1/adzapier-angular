@@ -11,6 +11,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedbootstrapModule } from 'src/app/sharedbootstrap/sharedbootstrap.module';
 import {RadioButtonModule} from 'primeng/radiobutton';
 import {TabViewModule} from 'primeng/tabview';
+import { ModalModule } from 'ngx-bootstrap/modal';
 
 
 
@@ -33,7 +34,8 @@ const path: Routes = [
     ReactiveFormsModule,
     SharedbootstrapModule,
     RadioButtonModule,
-    TabViewModule
+    TabViewModule,
+    ModalModule
   ]
 })
 export class ConsentSolutionsModule {

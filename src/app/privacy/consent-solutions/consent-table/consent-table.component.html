@@ -89,7 +89,6 @@
             <th>Last Name</th>
             <th>Email</th>
             <th>Country</th>
-            <th>OptOut</th>
             <th>Data Source</th>
             <th>IP Address</th>
             <th>Verified</th>
@@ -104,11 +103,6 @@
             <td>{{consentRecord.last_name}}</td>
             <td>{{consentRecord.email}}</td>
             <td>{{consentRecord.country}}</td>
-            <td><ng-container *ngIf="consentRecord.optout;else elseBlock">
-              <i class="pi pi-check" style="font-size: 1.0rem; color:#5cb85c;"></i>
-            </ng-container>
-            <ng-template #elseBlock><i class="pi pi-times" style="font-size: 1.0rem; color: #d9534f;"></i>
-            </ng-template></td>
             <td>{{consentRecord.data_source}}</td>
             <td>{{consentRecord.ip_address}}</td>
             <td>

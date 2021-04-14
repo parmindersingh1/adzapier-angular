@@ -85,23 +85,6 @@
           
                       <p class="mg-b-0" style="font-size:small;">{{consentData.ip_address}}</p>
                   </div>
-                  <div class="col-sm">
-                    <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Option Out
-                        
-                    </label>
-                  
-                      <div class="d-flex mg-b-0" style="justify-content:start;">
-                      <label style="font-size: small;">OptOut</label>
-                      <!-- <span  class="product-badge ml-2" style="height: 30px;"
-                             [ngClass]="{'status-instock': consentData.preferences.newsletter, 'status-outofstock' : !consentData.preferences.newsletter }" >{{consentData.preferences.newsletter}}</span> -->
-                             <ng-container *ngIf="consentData.optout;else elsebblock" >
-                              <i class="pi pi-check ml-2" style="font-size: 1.0rem; color:#5cb85c;"></i>
-                            </ng-container>
-                            <ng-template #elsebblock>
-                              <i class="pi pi-times ml-2" style="font-size: 1.0rem; color: #d9534f;"></i>
-                            </ng-template>
-                  </div>
-                  </div>
                   
                   <div class="col-sm">
                                           <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Created At
@@ -122,7 +105,7 @@
 
 
                   <div class="col-sm">
-                    <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Preferences
+                    <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Preferences-Newsletter
                         
                     </label>
                   
@@ -131,23 +114,45 @@
                       <!-- <span  class="product-badge ml-2" style="height: 30px;"
                              [ngClass]="{'status-instock': consentData.preferences.newsletter, 'status-outofstock' : !consentData.preferences.newsletter }" >{{consentData.preferences.newsletter}}</span> -->
                              <ng-container *ngIf="consentData.preferences.newsletter;else elseblock" >
-                              <i class="pi pi-check ml-4" style="font-size: 1.0rem; color:#5cb85c;"></i>
+                              <i class="pi pi-check ml-2" style="font-size: 1.0rem; color:#5cb85c;"></i>
                             </ng-container>
                             <ng-template #elseblock>
-                              <i class="pi pi-times ml-4" style="font-size: 1.0rem; color: #d9534f;"></i>
+                              <i class="pi pi-times ml-2" style="font-size: 1.0rem; color: #d9534f;"></i>
                             </ng-template>
                   </div>
+                  </div>
+
+                  <div class="col-sm">
+                    <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Preferences-Privacy Policy
+                        
+                    </label>
+                  
                       <div class="d-flex mg-b-0" style="justify-content:start;">
-                      <label style="font-size:small;">Privacy Policy</label>
+                      <label style="font-size: small;">Privacy Policy</label>
+                      <!-- <span  class="product-badge ml-2" style="height: 30px;"
+                             [ngClass]="{'status-instock': consentData.preferences.newsletter, 'status-outofstock' : !consentData.preferences.newsletter }" >{{consentData.preferences.newsletter}}</span> -->
+                             <ng-container *ngIf="consentData.preferences.privacy_policy;else elseblock" >
+                              <i class="pi pi-check ml-2" style="font-size: 1.0rem; color:#5cb85c;"></i>
+                            </ng-container>
+                            <ng-template #elseblock>
+                              <i class="pi pi-times ml-2" style="font-size: 1.0rem; color: #d9534f;"></i>
+                            </ng-template>
+                  </div>
+                  </div>
+
+
+
+                      <!-- <div class="d-flex mg-b-0" style="justify-content:start;">
+                      <label style="font-size:small;">Privacy Policy</label> -->
                       <!-- <span  class="product-badge ml-2" style="height: 30px;"
                              [ngClass]="{'status-instock': consentData.preferences.privacy_policy, 'status-outofstock' : !consentData.preferences.privacy_policy }" >{{consentData.preferences.privacy_policy}}</span> -->
-                             <ng-container *ngIf="consentData.preferences.privacy_policy;else elseBlock" >
+                             <!-- <ng-container *ngIf="consentData.preferences.privacy_policy;else elseBlock" >
                               <i class="pi pi-check ml-2" style="font-size: 1.0rem; color:#5cb85c;"></i>
                             </ng-container>
                             <ng-template #elseBlock><i class="pi pi-times ml-2" style="font-size: 1.0rem; color: #d9534f;"></i>
                             </ng-template>
-                  </div>
-                </div>
+                  </div> -->
+                
                   
                
 
@@ -267,7 +272,8 @@
           <ng-template pTemplate="body" let-proofs>
             <tr>
               <td>{{proofs.content}}</td>
-              <td >{{proofs.form}}</td>
+              <td><i (click)="editUser(edit, proofs)" class="pi pi-eye" style="font-size: 0.9rem"></i></td>
+              <!-- <td>{{proofs.form}}</td> -->
               <td >{{proofs.created_at | date}}</td>
               <td style="text-align-last:right;width:40px"> <a href="#"><i class="pi pi-eye" style="font-size: 0.9rem"></i></a></td>
             </tr>
@@ -308,6 +314,28 @@
 
 </div>
 </div>
+
+
+
+<ng-template #edit let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Modal</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form>
+      <div class="form-group">
+        <label>Form</label>
+        <div class="input-group">
+          <input id="form" class="form-control" [(ngModel)]="consentData.proofs.form" name="fm" readonly>
+        </div>
+      </div>
+      <button type="button" class="btn btn-danger pull-right"  (click)="modalRef.hide()">Close</button>
+    </form>
+  </div>
+</ng-template>
 
   <!-- <tabset #tabset>
     <tab customClass="customClass"
