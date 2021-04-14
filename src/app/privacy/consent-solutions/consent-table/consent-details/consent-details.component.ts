@@ -14,6 +14,7 @@ export class ConsentDetailsComponent implements OnInit {
   consentPrefrenseList = [];
   consentRecordList=[];
   modalRef: BsModalRef;
+  proofFormConsent = '';
 
 
   constructor(private consentSolutionService: ConsentSolutionsService,
@@ -34,18 +35,18 @@ export class ConsentDetailsComponent implements OnInit {
     });
   }
 
-  
+
 
   editUser(edit, proofs) {
 
-  
-    this.consentData.proofs.form = proofs.form;
-  
+
+    this.proofFormConsent = proofs.form;
+
     this.modalRef = this.modalService.show(edit, {});
-  
-    
+
+
   }
-  
+
 
 
 }
