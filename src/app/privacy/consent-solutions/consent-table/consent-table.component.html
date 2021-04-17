@@ -16,8 +16,8 @@
 <div class="card">
   <div class="card-header row ml-1 mr-1">
     <h4 class="headings col-md-10">Consent Records </h4>
-    <button type="button"  *ngIf="!showFilters" (click)="showFilters = !showFilters" class=" btn btn-primary col-md-2 btn-sm">Show Filters</button>
-    <button type="button"  *ngIf="showFilters" (click)="showFilters = !showFilters" class=" btn btn-primary col-md-2 btn-sm">Hide Filters</button>
+    <button type="button"  *ngIf="!showFilters" (click)="showFilters = !showFilters" class=" btn btn-primary col-md-2 btn-sm filbutton">Show Filters</button>
+    <button type="button"  *ngIf="showFilters" (click)="showFilters = !showFilters" class=" btn btn-primary col-md-2 btn-sm filbutton">Hide Filters</button>
   </div>
 
 
@@ -26,15 +26,15 @@
     <div>
       <label><b>Search Filters</b></label>
     </div>
-    <div style="margin-top: 1px; justify-content: space-between;" class="d-flex mb-3" >
+    <div style="margin-top: 1px; justify-content: space-between;" class="d-flex mb-3 fil" >
       <!-- <span class="p-input-icon-left">
         <i class="pi pi-search"></i>
         <input type="text"    (keyup)="onSearchInputChange($event)" pInputText placeholder="Search">
     </span> -->
-      <input style="margin-left:3px; width:230px;"  (keyup)="onEmailInputChange($event)" type="text" pInputText placeholder="Email" />
-      <input style="margin-left:3px; width:230px;"  (keyup)="onFirstNameInputChange($event)"type="text" pInputText placeholder="First Name"/>
-      <input style="margin-left:3px; width:230px;" (keyup)="onLastNameInputChange($event)" type="text" pInputText  placeholder="Last Name"/>
-      <input style="margin-left:3px; width:230px;" (keyup)="onIpAddressInputChange($event)" type="text" pInputText placeholder="Ip Address"/>
+      <input style="margin-left:2px; width:230px;" class="txtfil" (keyup)="onEmailInputChange($event)" type="text" pInputText placeholder="Email" />
+      <input style="margin-left:2px; width:230px;" class="txtfil"   (keyup)="onFirstNameInputChange($event)"type="text" pInputText placeholder="First Name"/>
+      <input style="margin-left:2px; width:230px;" class="txtfil"  (keyup)="onLastNameInputChange($event)" type="text" pInputText  placeholder="Last Name"/>
+      <input style="margin-left:2px; width:230px;" class="txtfil"  (keyup)="onIpAddressInputChange($event)" type="text" pInputText placeholder="Ip Address"/>
       <!-- <input style="margin-left:3px; width:160px;" type="text" pInputText placeholder="Source"/>   -->
 
     </div>
@@ -101,22 +101,22 @@
         </ng-template>
         <ng-template pTemplate="body" let-consentRecord>
           <tr>
-            <td><a href="javascript:;" (click)="onNavigateToDetails(consentRecord)">{{consentRecord.id}}</a></td>
-            <td>{{consentRecord.owner_id}}</td>
-            <td>{{consentRecord.first_name}}</td>
-            <td>{{consentRecord.last_name}}</td>
-            <td>{{consentRecord.email}}</td>
-            <td>{{consentRecord.country}}</td>
-            <td>{{consentRecord.data_source}}</td>
-            <td>{{consentRecord.ip_address}}</td>
-            <td>
+            <td class="al"><a href="javascript:;" (click)="onNavigateToDetails(consentRecord)">{{consentRecord.id}}</a></td>
+            <td class="al">{{consentRecord.owner_id}}</td>
+            <td class="al">{{consentRecord.first_name}}</td>
+            <td class="al">{{consentRecord.last_name}}</td>
+            <td class="al">{{consentRecord.email}}</td>
+            <td class="al">{{consentRecord.country}}</td>
+            <td class="al">{{consentRecord.data_source}}</td>
+            <td class="al">{{consentRecord.ip_address}}</td>
+            <td class="al">
               <ng-container *ngIf="consentRecord.verified;else elseBlock">
                 <i class="pi pi-check" style="font-size: 1.0rem; color:#5cb85c;"></i>
               </ng-container>
               <ng-template #elseBlock><i class="pi pi-times" style="font-size: 1.0rem; color: #d9534f;"></i>
               </ng-template>
             </td>
-            <td>{{consentRecord.created_at | date}}</td>
+            <td class="al">{{consentRecord.created_at | date}}</td>
           </tr>
         </ng-template>
       </p-table>

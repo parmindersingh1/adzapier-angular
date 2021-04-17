@@ -15,6 +15,20 @@ export class ConsentDetailsComponent implements OnInit {
   consentRecordList=[];
   modalRef: BsModalRef;
   proofFormConsent = '';
+  consentDataId='';
+  consentDatafirstname='';
+  consentDatalastname='';
+  consentDataemail='';
+  consentDatads='';
+  consentDatacountry='';
+  consentDataowner='';
+  consentDataip='';
+  consentDatacreated='';
+  consentDataupadted='';
+  consentDatanews='';
+  consentDataprivacy='';
+
+
 
 
   constructor(private consentSolutionService: ConsentSolutionsService,
@@ -43,6 +57,23 @@ export class ConsentDetailsComponent implements OnInit {
     this.proofFormConsent = proofs.form;
 
     this.modalRef = this.modalService.show(edit, {});
+
+
+  }
+
+  editDetails(editdetails , consentData) {
+
+    this.consentDatafirstname=consentData.first_name;
+    this.consentDatalastname=consentData.last_name;
+    this.consentDataemail=consentData.email;
+    this.consentDatads=consentData.data_source;
+    this.consentDatacountry=consentData.country;
+    this.consentDataowner=consentData.owner_id;
+    this.consentDataip=consentData.ip_address;
+    this.consentDatacreated=consentData.created_at;
+    this.consentDataupadted=consentData.updated_at;
+    
+    this.modalRef = this.modalService.show(editdetails, {});
 
 
   }

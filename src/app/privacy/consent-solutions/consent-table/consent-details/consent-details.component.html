@@ -1,3 +1,69 @@
+<ng-template #editdetails let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Update Consent Details </h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form>
+      <div class="form-group d-flex">
+        <div>
+        <label for="first_name">Firstname</label>
+        <div class="input-group">
+          <input value="{{consentDatafirstname}}"  class="form-control">
+        </div>
+      </div>
+      <div class="ml-5">
+        <label for="last_name" >Lastname</label>
+        <div class="input-group">
+          <input value="{{consentDatalastname}}" class="form-control">
+        </div>
+      </div>
+      </div>
+      <div class="form-group">
+        <label for="email">Email</label>
+        <div class="input-group">
+          <input value="{{consentDataemail}}" class="form-control">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="data_source">Data Source</label>
+        <div class="input-group">
+          <input value="{{consentDatads}}" class="form-control">
+        </div>
+      </div>
+      <div class="form-group d-flex">
+        <div>
+        <label for="country">Country</label>
+        <div class="input-group">
+          <input value="{{consentDatacountry}}" class="form-control">
+        </div>
+      </div>
+      <div class="ml-5">
+        <label for="owner_id">Owner Id</label>
+        <div class="input-group">
+          <input value="{{consentDataowner}}" class="form-control" disabled>
+        </div>
+      </div>
+      </div>
+      <div class="form-group">
+        <label for="ip_address">Ip Address</label>
+        <div class="input-group">
+          <input value="{{consentDataip}}" class="form-control">
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <div style="text-align: right;">
+      <button type="button" class="btn btn-primary btn-sm">Update</button> 
+    </div>
+    <button type="button" class="btn btn-danger btn-sm pull-right "  (click)="modalRef.hide()">Cancel</button>
+  </div>
+</ng-template>
+
+
 <div class="ml-2 bb-crum d-sm-flex align-items-center justify-content-between">
   <div>
     <nav aria-label="breadcrumb" style="margin-left: 2px">
@@ -22,6 +88,7 @@
                   <h6 class="mg-b-0">Consent Details</h6>
                   Current Status of Consent
               </span>
+              <button type="button" (click)="editDetails(editdetails,consentData)"  class="btn btn-primary btn-sm">Edit</button>
           </div>
           <div class="card-body pd-10">
               <div class="row row-sm pd-t-5">
@@ -105,7 +172,7 @@
 
 
                   <div class="col-sm">
-                    <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Preferences-Newsletter
+                    <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Preference
 
                     </label>
 
@@ -123,7 +190,7 @@
                   </div>
 
                   <div class="col-sm">
-                    <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Preferences-Privacy Policy
+                    <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Preference
 
                     </label>
 
@@ -264,18 +331,18 @@
           <ng-template pTemplate="header">
             <tr style="text-align:center;">
               <th>Proof</th>
-              <th >Form</th>
-              <th >Created Date</th>
-              <th style="width:40px"></th>
+              <th>Form</th>
+              <th>Created Date</th>
+              <!-- <th style="width:40px"></th> -->
             </tr>
           </ng-template>
           <ng-template pTemplate="body" let-proofs>
-            <tr>
-              <td>{{proofs.content}}</td>
-              <td><i (click)="editUser(edit, proofs)" class="pi pi-eye" style="font-size: 0.9rem"></i></td>
+            <tr >
+              <td class="tabledata">{{proofs.content}}</td>
+              <td class="tabledata"><i (click)="editUser(edit, proofs)" class="pi pi-eye" style="font-size: 0.9rem"></i></td>
               <!-- <td>{{proofs.form}}</td> -->
-              <td >{{proofs.created_at | date}}</td>
-              <td style="text-align-last:right;width:40px"> <a href="#"><i class="pi pi-eye" style="font-size: 0.9rem"></i></a></td>
+              <td class="tabledata">{{proofs.created_at | date}}</td>
+              <!-- <td style="text-align-last:right;width:40px"> <a href="#"><i class="pi pi-eye" style="font-size: 0.9rem"></i></a></td> -->
             </tr>
           </ng-template>
           </p-table>
@@ -299,10 +366,10 @@
 </ng-template>
 <ng-template pTemplate="body" let-legalRecord>
  <tr>
-   <td >{{legalRecord.version}}</td>
-   <td>{{legalRecord.identifier}}</td>
-   <td >{{legalRecord.created_at | date}}</td>
-   <td style="text-align-last:right;width:40px;"><a href="#"><i class="pi pi-eye" style="font-size: 0.9rem;"></i></a></td>
+   <td class="tabledatas">{{legalRecord.version}}</td>
+   <td class="tabledatas">{{legalRecord.identifier}}</td>
+   <td class="tabledatas">{{legalRecord.created_at | date}}</td>
+   <td class="tabledatas" style="text-align-last:right;width:40px;"><a href="#"><i class="pi pi-eye" style="font-size: 0.9rem;"></i></a></td>
  </tr>
 </ng-template>
 </p-table>

@@ -8,10 +8,9 @@
 
 
 }
+
+
 .dust{
-
-
-
   padding: 0.25em 0.4em;
   border-radius: 30%;
   box-shadow: 0px 0px 2px rgb(99, 99, 99);
@@ -41,6 +40,56 @@ background-color: rgb(230, 230, 230);
 height: 20px;
 }
 
+@media 
+only screen and (max-width: 760px),
+(min-device-width: 768px) and (max-device-width: 1024px)  {
+
+	/* Force table to not be like tables anymore */
+	table, thead, tbody, th, tr,.al { 
+		display: block; 
+	}
+	
+	/* Hide table headers (but not display: none;, for accessibility) */
+	thead tr { 
+		position: absolute;
+		top: -9999px;
+		left: -9999px;
+	}
+	
+	
+	.al { 
+		/* Behave  like a "row" */
+		border: none;
+		border-bottom: 1px solid #eee; 
+		position: relative;
+		padding-left: 50%; 
+	}
+	
+	// td:before { 
+	// 	/* Now like a table header */
+	// 	position: absolute;
+	// 	/* Top/left values mimic padding */
+	// 	top: 6px;
+	// 	left: 6px;
+	// 	width: 45%; 
+	// 	padding-right: 10px; 
+	// 	white-space: nowrap;
+	// }
+	
+	/*
+	Label the data
+	*/
+	.al:nth-of-type(1):before { content: "Id : "; }
+	.al:nth-of-type(2):before { content: "Owner ID  : "; }
+	.al:nth-of-type(3):before { content: "First Name  : "; }
+	.al:nth-of-type(4):before { content: "Last Name  : "; }
+	.al:nth-of-type(5):before { content: "Email  : "; }
+	.al:nth-of-type(6):before { content: "Country  : "; }
+	.al:nth-of-type(7):before { content: "Data Source  : "; }
+	.al:nth-of-type(8):before { content: "IP Address : "; }
+	.al:nth-of-type(9):before { content: "Verified  : "; }
+	.al:nth-of-type(10):before { content: "Created Date : "; }
+}
 
 
 .dot {
@@ -143,6 +192,27 @@ input[type='radio']:checked:after {
   color:  #0367fa;
 }
 
+@media only screen and (max-width: 600px) {
+  .fil {
+    margin-bottom: 10px;
+    flex-direction: column;
+    .p-inputtext{
+      margin-bottom: 4px;
+    }
+    
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .filbutton{
+    width: 120px;
+    margin-left: 84px;
+    margin-top: 5px;  }
+  .headings{
+    text-align: center;
+  }
+}
+
 .pi-trash:hover{
   background-color:rgb(230, 230, 230); ;
   color:  #0367fa;
@@ -153,6 +223,7 @@ input[type='radio']:checked:after {
   text-decoration-style: solid;
 
 }
+
 
 .dropbtn {
   background-color: #a1a8a2;
