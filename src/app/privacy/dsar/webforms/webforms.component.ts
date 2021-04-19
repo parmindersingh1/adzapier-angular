@@ -77,12 +77,14 @@ export class WebformsComponent implements OnInit, DirtyComponents {
     // this.loading = true;
     this.loadCurrentProperty();
     this.currentLoggedInUser();
+    this.licenseAvailabilityForFormAndRequestPerOrg(this.currentOrgID);
   }
 
   loadCurrentProperty() {
     this.organizationService.currentProperty.subscribe((data) => {
       if (data !== '') {
         this.orgDetails = data;
+        this.currentOrgID = this.orgDetails.organization_id;
        } else {
         const orgDetails = this.organizationService.getCurrentOrgWithProperty();
         this.orgDetails = orgDetails;
@@ -157,6 +159,20 @@ export class WebformsComponent implements OnInit, DirtyComponents {
 
   isLicenseLimitAvailable(): boolean{
       return this.dataService.isLicenseLimitAvailableForOrganization('form',this.dataService.getAvailableLicenseForFormAndRequestPerOrg());
+  }
+
+  licenseAvailabilityForFormAndRequestPerOrg(org){
+    this.dataService.removeAvailableLicenseForFormAndRequestPerOrg();
+    this.dataService.checkLicenseAvailabilityPerOrganization(org).subscribe(results => {
+      let finalObj = {
+        ...results[0].response,
+        ...results[1].response,
+        ...results[2].response
+      }
+      this.dataService.setAvailableLicenseForFormAndRequestPerOrg(finalObj);
+    },(error)=>{
+      console.log(error)
+    });
   }
 
   canDeactivate(){
