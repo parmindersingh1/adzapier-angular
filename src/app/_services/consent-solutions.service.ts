@@ -6,6 +6,7 @@ import {catchError, map} from 'rxjs/operators';
 import {LokiService} from './loki.service';
 import {LokiFunctionality, LokiStatusType} from '../_constant/loki.constant';
 import {BehaviorSubject, throwError} from 'rxjs';
+import {OrganizationService} from './organization.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,9 +14,25 @@ import {BehaviorSubject, throwError} from 'rxjs';
 export class ConsentSolutionsService {
   private consentSolutionData = new BehaviorSubject(null);
   public consentSolutionDetails = this.consentSolutionData.asObservable();
-
+  currentManagedOrgID: any;
+  currrentManagedPropID: any;
   constructor(private http: HttpClient,
+              private orgservice: OrganizationService,
               private loki: LokiService) {
+    this.onGetPropsAndOrgId();
+  }
+
+  onGetPropsAndOrgId() {
+    this.orgservice.currentProperty.subscribe((response) => {
+      if (response !== '') {
+        this.currentManagedOrgID = response.organization_id;
+        this.currrentManagedPropID = response.property_id;
+      } else {
+        const orgDetails = this.orgservice.getCurrentOrgWithProperty();
+        this.currentManagedOrgID = orgDetails.organization_id;
+        this.currrentManagedPropID = orgDetails.property_id;
+      }
+    });
   }
 
   getConsentRecord(componentName, moduleName, pageLimit, pid: string) {
@@ -41,9 +58,18 @@ export class ConsentSolutionsService {
   }
 
   onPushConsentData(consentData) {
-   return new Promise(resolve => {
+    return new Promise(resolve => {
       resolve(this.consentSolutionData.next(consentData));
     });
   }
 
+  updateConsent(componentName, moduleName,  payload, id) {
+    let path = apiConstant.UPDATE_CONSENT.replace(':pid', this.currrentManagedPropID);
+    path = path.replace(':id', id);
+    return this.http.put(environment.apiUrl + path, payload).pipe(map(res => res),
+      catchError(error => {
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.billing, componentName, moduleName, path);
+        return throwError(error);
+      }));
+  }
 }
