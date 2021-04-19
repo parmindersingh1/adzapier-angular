@@ -552,7 +552,7 @@ export class HeaderComponent implements OnInit {
 
   checkLinkAccess(link): boolean {
     if (link.indexOf('workflow') !== -1) {
-      if(this.isLicenseLimitAvailable()){
+      if(this.isLicenseLimitAvailable("workflow")){
          return true
       }
     } else if (link.indexOf('cookie') !== -1 || link.indexOf('privacy') !== -1 || link.indexOf('webform') !== -1 ||
@@ -788,8 +788,8 @@ export class HeaderComponent implements OnInit {
     });
   }
 
-  isLicenseLimitAvailable(): boolean{
-    const status = this.dataService.isLicenseLimitAvailableForOrganization('form',this.dataService.getAvailableLicenseForFormAndRequestPerOrg());
+  isLicenseLimitAvailable(requestType): boolean{
+    const status = this.dataService.isLicenseLimitAvailableForOrganization(requestType,this.dataService.getAvailableLicenseForFormAndRequestPerOrg());
     if(!status){
       return status;
     } else {

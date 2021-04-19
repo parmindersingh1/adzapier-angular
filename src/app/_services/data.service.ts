@@ -434,6 +434,10 @@ export class DataService {
     localStorage.setItem('OrgLicenseFormAndRequest', planData);
   }
 
+  removeAvailableLicenseForFormAndRequestPerOrg() {
+    localStorage.removeItem('OrgLicenseFormAndRequest');
+  }
+
   getAvailableLicenseForFormAndRequestPerOrg() {
     let planData = localStorage.getItem('OrgLicenseFormAndRequest')
     if (planData) {
