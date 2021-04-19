@@ -508,7 +508,7 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
 
   getWorkflowStages(id) {
     ///workflowId
-    this.workflowService.getWorkflowById(this.constructor.name, moduleName.workFlowModule, id).subscribe((data) => {
+    this.workflowService.getWorkflowById(this.constructor.name, moduleName.workFlowModule, this.currentManagedOrgID, id).subscribe((data) => {
       if (data.length > 0) {
         const respData = data[0].workflow_stages;
         this.workflowStages = this.rearrangeArrayResponse(respData);
