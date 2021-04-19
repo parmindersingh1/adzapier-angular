@@ -279,9 +279,10 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
       this.crid = params.get('id');
       // this.selectedwebFormControlList = this.
     });
+    this.loadCurrentProperty();
     this.loadWebControl();
     this.getCCPAdefaultConfigById();
-    this.loadCurrentProperty();
+    
 
     this.basicForm = this.fb.group({
       formname: ['', [Validators.required]],
@@ -328,12 +329,14 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
         this.currentOrganization = response.organization_name;
         this.orgId = response.organization_id;
         this.propId = response.property_id;
+        this.currentManagedOrgID = response.organization_id;
       } else {
         const orgDetails = this.organizationService.getCurrentOrgWithProperty();
         this.currentOrganization = orgDetails.organization_name;
         this.selectedProperty = orgDetails.property_name;
         this.orgId = orgDetails.organization_id;
         this.propId = orgDetails.property_id;
+        this.currentManagedOrgID = orgDetails.organization_id;
         this.loading = false;
       }
     });
@@ -1342,6 +1345,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
           this.loadingbar.stop();
           this.isDirty = false;
           this.getDSARFormByCRID(this.crid,'dataupdated');
+          this.licenseAvailabilityForFormAndRequestPerOrg(this.orgId)
         }, (error) => {
           this.loadingbar.stop();
           this.alertMsg = error;
@@ -1529,6 +1533,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
           this.getDSARFormByCRID(this.crid,'dataupdated');
           this.navDirective.select(4);
           this.getWebFormScriptLink();
+          this.licenseAvailabilityForFormAndRequestPerOrg(this.orgId);
           this.loadingbar.stop();
           if(this.isDirty){
             this.isDirty = false;
@@ -1722,7 +1727,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
   }
 
   loadWorkFlowList() {
-    this.workFlowService.getWorkflow(this.constructor.name, moduleName.workFlowModule).subscribe((data) => {
+    this.workFlowService.getWorkflow(this.constructor.name, moduleName.workFlowModule, this.currentManagedOrgID).subscribe((data) => {
       this.workFlowList = data.response;
       const filterValue = this.workFlowList.filter((t) => t.id === this.selectedWorkflowID);
       if (filterValue.length > 0) {
@@ -2461,8 +2466,17 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
     }
   }
 
-  isLicenseLimitAvailable(): boolean {
-    return this.dataService.isLicenseLimitAvailableForOrganization('form', this.dataService.getAvailableLicenseForFormAndRequestPerOrg());
+  licenseAvailabilityForFormAndRequestPerOrg(org){
+    this.dataService.checkLicenseAvailabilityPerOrganization(org).subscribe(results => {
+      let finalObj = {
+        ...results[0].response,
+        ...results[1].response,
+        ...results[2].response
+      }
+      this.dataService.setAvailableLicenseForFormAndRequestPerOrg(finalObj);
+    },(error)=>{
+      console.log(error)
+    });
   }
 
   navigateToWebForm() {

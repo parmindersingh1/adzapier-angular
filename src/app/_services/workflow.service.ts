@@ -17,10 +17,10 @@ export class WorkflowService {
 
   constructor(private httpClient: HttpClient, private lokiService: LokiService) { }
 
-  getWorkflow(componentName, moduleName, pageLimit?, orderBy?): Observable<any> {
+  getWorkflow(componentName, moduleName, orgid, pageLimit?, orderBy?): Observable<any> {
     const key = 'response';
     const pgLimit = pageLimit !== undefined ? pageLimit : '';
-    const path = apiConstant.WORKFLOW;
+    const path = apiConstant.WORKFLOW + '/' + orgid;
     if (pageLimit === '') {
     //  if (!this.workflowlist$) {
         return this.httpClient.get<any>(environment.apiUrl + path).pipe(shareReplay(1),
@@ -31,11 +31,11 @@ export class WorkflowService {
      // }
      // return this.workflowlist$;
     } else if(orderBy !== undefined){
-      return this.httpClient.get<any>(environment.apiUrl + apiConstant.WORKFLOW + pgLimit + orderBy)
+      return this.httpClient.get<any>(environment.apiUrl + path + pgLimit + orderBy)
       .pipe(shareReplay(1));
     }else {
      // if (!this.workflowlist$) {
-       return this.httpClient.get<any>(environment.apiUrl + apiConstant.WORKFLOW + pgLimit)
+       return this.httpClient.get<any>(environment.apiUrl + path + pgLimit)
         .pipe(shareReplay(1)); // map(res => res[key]),
     //  }
     //  return this.workflowlist$;
@@ -57,10 +57,10 @@ export class WorkflowService {
   }
 
   // to get all stages
-  getWorkflowById(componentName, moduleName, id?, pageLimit?): Observable<any> {
+  getWorkflowById(componentName, moduleName, orgid, id?, pageLimit?): Observable<any> {
     const key = 'response';
     const pgLimit = pageLimit !== undefined ? pageLimit : '';
-    const path = apiConstant.WORKFLOW_ID;
+    const path = apiConstant.WORKFLOW_ORGID_WORKFLOW_ID.replace(':orgid', orgid); //'/workflow/'+orgid+'?workflow_id='; 
     if (pgLimit === '') {
       return this.httpClient.get<any>(environment.apiUrl + path + id)
       .pipe(map(res => res[key]), shareReplay(1),
@@ -102,8 +102,8 @@ export class WorkflowService {
     this.workflowSource.next(currentItem);
   }
 
-  getActiveWorkflowList(componentName, moduleName, pagelimit): Observable<any> {
-    const path = '/workflow?workflow_status=active' + pagelimit;
+  getActiveWorkflowList(componentName, moduleName, orgid, pagelimit): Observable<any> {
+    const path = '/workflow/'+ orgid +'?workflow_status=active' + pagelimit;
 
     return this.httpClient.get<any>(environment.apiUrl + path).pipe(
       catchError(error => {
