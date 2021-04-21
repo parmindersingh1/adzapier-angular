@@ -16,7 +16,8 @@
       <div class="card-header pb-0">
         <h4 class="mg-b-0 tx-spacing--1">Cookie Category
 
-
+          <span *ngIf="availablePlan.scan_available > 0 && availablePlan.scan_available == 1"
+                class="avalible-text text-info">{{availablePlan.scan_available}} Scan is Available </span>
           <span *ngIf="availablePlan.scan_available > 0 && availablePlan.scan_available != -1"
                 class="avalible-text text-info">{{availablePlan.scan_available}} Scan are Available </span>
           <span *ngIf="availablePlan.scan_available == 0"

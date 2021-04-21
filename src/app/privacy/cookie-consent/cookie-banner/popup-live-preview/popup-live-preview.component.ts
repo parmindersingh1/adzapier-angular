@@ -1,18 +1,11 @@
-import {
-  ChangeDetectionStrategy, ChangeDetectorRef,
-  Component,
-  Input,
-  OnChanges,
-  OnInit,
-  SimpleChanges
-} from '@angular/core';
+import {ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges, ViewEncapsulation} from '@angular/core';
 import {defaultBannerContent, FormDefaultData, iabPurposeList} from '../../../../_constant/consent-banner.constant';
-import {ChangeDetection} from '@angular/cli/lib/config/schema';
 
 @Component({
   selector: 'app-popup-live-preview',
   templateUrl: './popup-live-preview.component.html',
-  styleUrls: ['./popup-live-preview.component.scss']
+  styleUrls: ['./popup-live-preview.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class PopupLivePreviewComponent implements OnInit, OnChanges {
   public defaultContent = defaultBannerContent;
