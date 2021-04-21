@@ -7,3 +7,12 @@
     display: inline-block;
     width: 32%;
 }
+
+.flex-justify-content {
+    display: flex;
+    justify-content: space-between;
+}
+
+.btn-outline-danger:disabled {
+    pointer-events: none;
+}
