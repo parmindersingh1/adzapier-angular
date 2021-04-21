@@ -208,6 +208,15 @@ export class CCPAFormConfigurationService extends WebControls {
     );
   }
 
+  deleteDSARForm(orgid, propid, form_config_id, reqObj, componentName, moduleName){
+    const path = '/dsar/form/' + orgid +'/' + propid + '/' +  form_config_id;
+    return this.httpClient.put<any>(environment.apiUrl + path, reqObj)
+    .pipe(catchError(error => {
+      this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.webForm, componentName, moduleName, path);
+      return throwError(error);
+    }));
+  }
+
   onSendLogs(errorType, msg, functionality, componentName, moduleName, path) {
     this.lokiService.onSendErrorLogs(errorType, msg, functionality, componentName, moduleName, path).subscribe();
   }
