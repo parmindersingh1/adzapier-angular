@@ -33,9 +33,9 @@
            position: relative;
    z-index: 0; width: 100%;">
     <div class="row pd-10 m-0"  [ngStyle]="{borderTop: '3px solid' + formData.bannerBorderColor }">
-      <div class="col-md-10">
+      <div class="col-md-10 col-10">
         <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-6 col-6">
               <h6 style="font-size: 11px" class="cc-font-size-16 cc-floating-title"
                   [ngStyle]="{color: formData.bannerTextColor}">
                 {{formData.bannerTitle ? formData.bannerTitle : defaultContent.bannerTitle}}
@@ -48,7 +48,7 @@
 
 
 
-          <div class=" col-md-6" [ngStyle]="{borderLeft: '3px solid' + formData.bannerBorderColor }">
+          <div class=" col-md-6 col-6" [ngStyle]="{borderLeft: '3px solid' + formData.bannerBorderColor }">
 <!--            <h6 style="font-size: 11px" class="cc-font-size-16 cc-floating-title" -->
 <!--                [ngStyle]="{color: formData.bannerTextColor}">-->
 <!--              {{formData.bannerTitle2 ? formData.bannerTitle2 : defaultContent.bannerTitle2}}-->
@@ -62,7 +62,7 @@
 
         </div>
       </div>
-      <div class="col-md-2 p-0">
+      <div class="col-md-2 col-2 p-0">
         <div class="floating-flat-margin-cls ng-star-inserted mt-3" id="onetrust-button-group">
           <button
             type="button"
