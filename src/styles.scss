@@ -336,7 +336,9 @@ ul.notification-menu-right::after {
 
 *::-webkit-scrollbar {
   width: 12px;
-//    min-height: 100px;
+  min-height: 3px;
+
+  //    min-height: 100px;
 }
 
 *::-webkit-scrollbar-track {
