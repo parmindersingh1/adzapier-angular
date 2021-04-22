@@ -261,6 +261,7 @@ export class WebformsComponent implements OnInit, DirtyComponents {
         if(data.response.indexOf('Selected webform') != -1){
           this.formList[i].active = false;
           this.formList = [...this.formList];
+          this.totalRecordsAvailable = this.totalRecordsAvailable - 1;
         }
         this.confirmationForm.value.userInput = '';
         this.alertMsg = data.response

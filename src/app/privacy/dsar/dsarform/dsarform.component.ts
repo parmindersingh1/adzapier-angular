@@ -442,7 +442,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
       }];
       this.daysleft = 45;
       // this.getCCPAdefaultConfigById();
-      this.reqURLObj = { crid: formcrid, orgid: this.organizationID, propid: this.propId };
+    // this.reqURLObj = { crid: this.crid, orgid: this.organizationID, propid: this.propId };
       this.organizationService.getOrganization.subscribe((response) => this.currentOrgID = response);
     }
   }
@@ -785,7 +785,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
   changeControlTypes() {
     //  const controlLabel =  this.formControlLabel !== undefined ? this.formControlLabel : this.lblText;
     this.trimLabel = this.lblText.split(' ').join('_').toLowerCase();
-    const isLabelExist = this.webFormControlList.findIndex((t) => t.controllabel === this.formControlLabel || this.lblText);
+    const isLabelExist = this.webFormControlList.findIndex((t) => t.controllabel === this.lblText ); //this.formControlLabel || this.lblText
     if (isLabelExist !== -1 && this.changeControlType === null && this.isEditingList) {
       this.alertMsg = 'Label already exist!'
       this.isOpen = true;
@@ -808,7 +808,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
         }
         //  const updatedControlType = this.changeControlType === 'button' && this.changeControlType !== 'select' && !this.multiselect ? 'radio' : 'checkbox';
         updatedObj = {
-          controllabel: this.formControlLabel || this.lblText, // formControls.value.lblText,
+          controllabel: this.lblText, // formControls.value.lblText,
           indexCount: this.existingControl.indexCount,
           control: updatedControlType || this.changeControlType,
           controlId: this.selectedControlId,
@@ -1124,7 +1124,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
         this.ismultiselectrequired = true;
       }
     }
-  //  this.changeControlTypes();
+    this.changeControlTypes();
   }
 
   addingFormControl() {
@@ -1178,7 +1178,10 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
 
   cancelAddingFormControl(actionType) {
     if (actionType === 'cancel' && this.crid === null) {
-      this.webFormControlList = this.dsarFormService.getFormControlList();
+       this.webFormControlList = this.dsarFormService.getFormControlList();
+       const customControlIndex = this.webFormControlList.findIndex((t) => t.controlId === this.selectedControlObj.controlId);
+       this.dsarFormService.updateControl(this.webFormControlList[customControlIndex], customControlIndex, this.selectedControlObj);
+       this.webFormControlList = this.dsarFormService.getFormControlList();
     } else if (actionType === 'cancel' && this.crid !== null) {
       this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
     } else if (actionType === 'submit' && this.crid !== null) {
@@ -1585,7 +1588,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
     } else {
       this.dsarFormService.updateControl(this.webFormControlList[oldControlIndex], oldControlIndex, controlObj);
       this.webFormControlList = this.dsarFormService.getFormControlList();
-      this.cancelAddingFormControl('submit');
+      // this.cancelAddingFormControl('submit');
     }
   }
 
