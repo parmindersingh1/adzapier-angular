@@ -96,7 +96,7 @@ input:checked + .slider:before {
 
 *::-webkit-scrollbar {
   width: 12px;
-  min-height: 100px;
+  min-height: 10px;
 }
 
 *::-webkit-scrollbar-track {
@@ -115,4 +115,28 @@ input:checked + .slider:before {
 .purpose-desc {
   border-top: 1px solid lightgray;
     padding-top: 13px;
+}
+
+.p-tabview .p-tabview-nav li .p-tabview-nav-link:not(.p-disabled):focus{
+  box-shadow: none !important;
+}
+.p-tabview .p-tabview-nav {
+  align-items: center !important;
+  justify-content: center !important;
+  padding-left: 0% !important;
+
+}
+@media only screen and (max-width: 600px) {
+#onetrust-preference-sdk{
+  width: 371px;
+  left: -12px;
+}
+  .gdpr-btn-padding{
+    padding: 0 !important;
+  }
+  .mobile-btn{
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+    width: 93% !important;
+  }
 }
