@@ -28,7 +28,7 @@
             <div class="card-body">
                 <div *ngIf="dataLoadingMsg">{{dataLoadingMsg}}</div>
                     <app-customcards [dataList]="formList" [currentOrganization]="currentOrganization" 
-                    [currentPropertyName]="currentPropertyName" (onClickViewForm)="showForm($event)"></app-customcards>
+                    [currentPropertyName]="currentPropertyName" (onClickViewForm)="showForm($event)" (onDeleteWebForm)="removeWebForm($event,'web form')"></app-customcards>
                     <div class="pagination-wrapper tx-color-03" *ngIf="formList.length !== 0">
                     <div class="form-inline align-item-start">
                         <div class="form-group pr-0">
@@ -48,7 +48,34 @@
     </div>
 
 </div>
+<ng-template #confirmTemplate let-modal>
+    <div class="modal-header">
+        <h5 class="modal-title">Are you absolutely sure?</h5>
+        <button type="button" class="close" (click)="cancelModal()" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body text-center">
+        <p>This will delete selected <span class="font-weight-bold"> {{showControlContent()}} </span>{{controlname}}</p>
+        <p>Please type <strong>'Delete'</strong> to confirm</p>
+
+        <form [formGroup]="confirmationForm" (ngSubmit)="onSubmitConfirmation(controlname)">
+            <input type="text" class="form-control" formControlName="userInput" name="userInput" required
+                [ngClass]="{ 'is-invalid': isconfirmationsubmitted && confirmDelete.userInput.value !== 'Delete' }" />
+            <div *ngIf="isconfirmationsubmitted && confirmDelete.userInput.value !== 'Delete'" class="invalid-feedback text-left">
+                Enter appropriate text
+            </div>
+            <div class="mt-2 d-flex">
+                <button class="btn btn-xs btn-primary btn-block" *ngIf="controlname == 'web form'">I understand the
+                    consequences, delete this
+                    {{controlname}}</button>
+            </div>
+        </form>
+    </div>
+</ng-template>
 <div class="float-right flotingdiv"> <!--dismissOnTimeout="5000"-->
-    <alert *ngIf="isOpen" [type]="alertType"  [dismissible]="dismissible"
-        (onClosed)="onClosed(alertMsg)">{{alertMsg}}</alert>
+    <alert *ngIf="isOpen" [type]="alertType" dismissOnTimeout="5000" [dismissible]="dismissible"
+        (onClosed)="onClosed(alertMsg)">
+        <span class="mr-3">{{alertMsg}}</span>
+    </alert>
 </div>
