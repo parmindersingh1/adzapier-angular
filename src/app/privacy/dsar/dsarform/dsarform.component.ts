@@ -1001,6 +1001,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
 
   onSubmitQuillEditorData() {
     if (this.isWelcomeEditor) {
+      this.getEditorFontSize();
       const newWebControl = {
         control: 'text',
         controllabel: 'Welcome Text',
@@ -1024,6 +1025,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
       }
       this.modalService.dismissAll('Data Saved!');
     } else {
+      this.getEditorFontSize();
       const footerTextControl = {
         control: 'text',
         controllabel: 'Footer Text',
@@ -1653,6 +1655,36 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
       this.quillEditorText.reset();
       // this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
+  }
+
+  onCloseWelcomeTextEditor(){
+    this.modalService.dismissAll();
+    if (this.crid) {
+      this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
+      if (this.webFormControlList !== null) {
+        const editText = this.webFormControlList.filter((t) => t.indexCount === 'welcome_text_Index');
+        this.editorDataWelcome = editText[0].welcomeText;
+      }
+    } else {
+      this.webFormControlList = this.dsarFormService.getFormControlList();
+      const editText = this.webFormControlList.filter((t) => t.indexCount === 'welcome_text_Index');
+      this.editorDataWelcome = editText[0].welcomeText;
+    }
+  }
+
+  onCloseFooterTextEditor(){
+    this.modalService.dismissAll();
+    if (this.crid) {
+      this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
+      if (this.webFormControlList !== null) {
+        const editText = this.webFormControlList.filter((t) => t.indexCount === 'footer_text_Index');
+        this.editorDataFooter = editText[0].footerText;
+      }
+    } else {
+      this.webFormControlList = this.dsarFormService.getFormControlList();
+      const editText = this.webFormControlList.filter((t) => t.indexCount === 'footer_text_Index');
+      this.editorDataFooter = editText[0].footerText;
+    }
   }
 
   welcomeStyle(): object {
@@ -2440,6 +2472,18 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
     this.isDirty = true;
   }
 
+  getEditorFontSize(){
+    const tagObj = [{"ql-size-large":'24'},{"ql-size-small":'12'},{"<p>":'14'},{"<h1>":'28'},{"<h2>":'24'}]
+      for (const key in tagObj){
+        if(this.quillEditorText.get('editor').value.indexOf(Object.keys(tagObj[key])) !== -1){
+          if(this.isWelcomeEditor){
+            return  this.welcomeFontSize = Object.values(tagObj[key])[0];
+          } else{
+            return this.footerFontSize = Object.values(tagObj[key])[0];
+          } 
+        }
+      }
+  }
 
   onLabelChange($event) {
   //  this.cd.detectChanges();
