@@ -634,12 +634,12 @@
         <div class="card m-0">
           <div class="card-header pb-0">
             <div class="row">
-              <div class="col-md-7">
+              <div class="col-md-5">
                 <div class="form-group mb-0 row pd-0 mg-b-0">
                   <label
-                    class="cs-banner col-sm-4 col-6 tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label">
+                    class="cs-banner col-sm-5 col-6 tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label">
                     Configure banner</label>
-                  <div class="col-sm-4 col-6 pt-2">
+                  <div class="col-sm-3 col-6 pt-2">
                     <label class="switch" (click)="onCheckAllowBannerConfig()">
                       <input [attr.disabled]="disablePlanFeatures.disableBannerConfig ? true : null" type="checkbox"
                              #showConfig>
@@ -653,23 +653,21 @@
                   <label for="lang" style="font-size: 15px"
                          class="tx-12 col-md-3 col-4  tx-medium tx-middle tx-spacing-1 tx-color-03 tx-uppercase">
                     Language </label>
-                  <select [disabled]="isFieldDisabled" (change)="onGetLangData($event)" formControlName="Bannerlanguage"
+                  <select  name="activeBannerlanguage"  (change)="onCheckFormChanges($event)"
                           class="form-control col-6 col-md-7" id="lang">
                     <!--                              <option value="">&#45;&#45; Select Language &#45;&#45;</option>-->
                     <ng-container *ngFor="let gdprLang of bannerConstant.Bannerlanguage">
-                      <option *ngIf="langValueList.includes(gdprLang.value)"
-                              [value]="gdprLang.value">{{gdprLang.title}}</option>
+                      <option *ngIf="allowLanguagesList.includes(gdprLang.value)"
+                              [value]="gdprLang.value" [selected]="activeBannerlanguage === gdprLang.value" >{{gdprLang.title}}</option>
                     </ng-container>
                   </select>
-                  <div class="col-md-2 col-2">
+                  <div class="col-md-2 col-2 pr-0">
                     <i (click)="openModal(templateManageLang)" class="setting-icon  fas fa-cog"></i>
                   </div>
-                  <div *ngIf="submitted && f.Bannerlanguage.errors">
-                    <div class="text-danger mt-2" *ngIf="f.Bannerlanguage.errors.required">
-                      Language is <strong>required</strong>
-                    </div>
-                  </div>
                 </div>
+              </div>
+              <div class="col-md-2">
+                <button type="button" (click)="onSaveCustomLang()" [disabled]="!cookieBannerForm.dirty" class="btn btn-success"> Save Changes </button>
               </div>
 
             </div>
@@ -765,7 +763,7 @@
 
 
                         <div class="col-md-12 mt-2">
-                          <div [ngStyle]="{display: isFieldDisabled ? 'none' : ''}" class="w-100">
+                          <div  class="w-100">
                             <h6 class="tx-12 tx-medium tx-spacing-1 tx-color-03 tx-uppercase">Description</h6>
                             <quill-editor [(ngModel)]="formContent.bannerDescription" maxlength="1000"
                                           [placeholder]="formContent.bannerDescription"
@@ -783,7 +781,7 @@
                           </div>
 
 
-                          <div [ngStyle]="{display: !isFieldDisabled ? 'none' : ''}" class="w-100">
+                          <div class="w-100">
 
                             <div class="w-100 mt-2">
                               <h5 class="tx-12 tx-medium tx-spacing-1 tx-color-03 tx-uppercase ">Privacy Text</h5>
@@ -893,17 +891,17 @@
                             Text Content </h5>
                           <div class="col-sm-8 ml-0">
                             <input type="text" [attr.disabled]="isFieldDisabled" class="form-control input-sm"
-                                   [(ngModel)]="formContent.bannerPreferenceButtonTextContent"
-                                   id="BannerPreferenceButtonTextContent"
-                                   formControlName="BannerPreferenceButtonTextContent"
-                                   [placeholder]="formContent.bannerPreferenceButtonTextContent">
-                            <div *ngIf="submitted && f.BannerPreferenceButtonTextContent.errors">
+                                   [(ngModel)]="formContent.bannerPreferenceButtonText"
+                                   id="BannerPreferenceButtonText"
+                                   formControlName="BannerPreferenceButtonText"
+                                   [placeholder]="formContent.bannerPreferenceButtonText">
+                            <div *ngIf="submitted && f.BannerPreferenceButtonText.errors">
                               <div class="text-danger mt-2"
-                                   *ngIf="f.BannerPreferenceButtonTextContent.errors.minlength">
+                                   *ngIf="f.BannerPreferenceButtonText.errors.minlength">
                                 Minimum 2 characters required
                               </div>
                               <div class="text-danger mt-2"
-                                   *ngIf="f.BannerPreferenceButtonTextContent.errors.maxlength">
+                                   *ngIf="f.BannerPreferenceButtonText.errors.maxlength">
                                 Maximum 45 characters required
                               </div>
                             </div>
@@ -941,56 +939,7 @@
                         </div>
                       </p-accordionTab>
 
-                      <p-accordionTab header="Allow Required Button (For GDPR Only)">
-                        <div class="col-md-12 p-0 ml-0 mb-4 row mt-2">
-                          <h5 class="col-sm-4 pl-2 tx-middle tx-12 tx-medium tx-spacing-1 tx-color-03 tx-uppercase">
-                            Text Content </h5>
-                          <div class="col-sm-8 ml-0">
-                            <input type="text" [attr.disabled]="isFieldDisabled" class="form-control input-sm"
-                                   formControlName="BannerAllowRequiredTextContent"
-                                   [(ngModel)]="formContent.bannerAllowReqButtonTextContent"
-                                   [placeholder]="formContent.bannerAllowReqButtonTextContent">
-                            <div *ngIf="submitted && f.BannerAllowRequiredTextContent.errors">
-                              <div class="text-danger mt-2" *ngIf="f.BannerAllowRequiredTextContent.errors.minlength">
-                                Minimum 2 characters required
-                              </div>
-                              <div class="text-danger mt-2" *ngIf="f.BannerAllowRequiredTextContent.errors.maxlength">
-                                Maximum 45 characters required
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="col-md-12 mt-2 p-0">
-                          <ul class="ml-2 pl-0 mt-2 colorpicker-wrapper">
-                            <li class="tx-12 tx-medium tx-spacing-1 tx-color-03 tx-uppercase">Text Color
-                            </li>
-                            <li class="d-flex col-sm-5">
-                              <input class="mr-1" [(ngModel)]="formContent.bannerAllowReqButtonTextColor"
-                                     (change)="onColorChange($event,'BannerAllowRequiredButtonTextColor')"
-                                     formControlName="BannerAllowRequiredButtonTextColor" #bannerAllowReqButtonTextColor
-                                     class="mr-1" type="color">
-                              <input class="form-control input-sm" type="text" maxlength="7"
-                                     (input)="onKeyChanges($event,'BannerAllowRequiredButtonTextColor')"
-                                     [value]="bannerAllowReqButtonTextColor.value"></li>
-                          </ul>
-                        </div>
 
-                        <div class="col-md-12 mt-2 p-0">
-                          <ul class="ml-2 pl-0 mt-2 colorpicker-wrapper">
-                            <li class="tx-12 tx-medium tx-spacing-1 tx-color-03 tx-uppercase">BackGround
-                              Color
-                            </li>
-                            <li class="d-flex col-sm-5">
-                              <input class="mr-1" [(ngModel)]="formContent.bannerAllowReqButtonBackgroundColor"
-                                     (change)="onColorChange($event,'BannerAllowRequiredButtonBackgroundColor')"
-                                     formControlName="BannerAllowRequiredButtonBackgroundColor"
-                                     #bannerAllowReqButtonBackGroundColor type="color">
-                              <input class="form-control input-sm" type="text" maxlength="7"
-                                     (input)="onKeyChanges($event,'BannerAllowRequiredButtonBackgroundColor')"
-                                     [value]="bannerAllowReqButtonBackGroundColor.value"></li>
-                          </ul>
-                        </div>
-                      </p-accordionTab>
 
 
                       <p-accordionTab header="Accept All Button">
@@ -999,14 +948,14 @@
                             Text Content </h5>
                           <div class="col-sm-8 ml-0">
                             <input type="text" [attr.disabled]="isFieldDisabled" class="form-control input-sm"
-                                   formControlName="BannerAllowAllButtonTextContent"
-                                   [(ngModel)]="formContent.bannerAcceptButtonTextContent"
-                                   [placeholder]="formContent.bannerAcceptButtonTextContent">
-                            <div *ngIf="submitted && f.BannerAllowAllButtonTextContent.errors">
-                              <div class="text-danger mt-2" *ngIf="f.BannerAllowAllButtonTextContent.errors.minlength">
+                                   formControlName="BannerAcceptAllButtonText"
+                                   [(ngModel)]="formContent.bannerAcceptButtonText"
+                                   [placeholder]="formContent.bannerAcceptButtonText">
+                            <div *ngIf="submitted && f.BannerAcceptAllButtonText.errors">
+                              <div class="text-danger mt-2" *ngIf="f.BannerAcceptAllButtonText.errors.minlength">
                                 Minimum 2 characters required
                               </div>
-                              <div class="text-danger mt-2" *ngIf="f.BannerAllowAllButtonTextContent.errors.maxlength">
+                              <div class="text-danger mt-2" *ngIf="f.BannerAcceptAllButtonText.errors.maxlength">
                                 Maximum 45 characters required
                               </div>
                             </div>
@@ -1018,13 +967,13 @@
                             <li class="tx-12 tx-medium tx-spacing-1 tx-color-03 tx-uppercase">Text Color
                             </li>
                             <li class="d-flex col-sm-5">
-                              <input class="mr-1" formControlName="BannerAllowAllButtonTextColor"
-                                     (change)="onColorChange($event,'BannerAllowAllButtonTextColor')"
+                              <input class="mr-1" formControlName="BannerAcceptAllButtonTextColor"
+                                     (change)="onColorChange($event,'BannerAcceptAllButtonTextColor')"
                                      #bannerAllowButtonTextColor
                                      type="color">
                               <input class="form-control input-sm" maxlength="7"
                                      [value]="bannerAllowButtonTextColor.value"
-                                     (input)="onKeyChanges($event,'BannerAllowAllButtonTextColor')" type="text"
+                                     (input)="onKeyChanges($event,'BannerAcceptAllButtonTextColor')" type="text"
                               ></li>
                           </ul>
                         </div>
@@ -1053,16 +1002,16 @@
                             Text Content </h5>
                           <div class="col-sm-8 ml-0">
                             <input type="text" [attr.disabled]="isFieldDisabled" class="form-control input-sm"
-                                   [(ngModel)]="formContent.bannerDisableButtonTextContent"
-                                   formControlName="BannerDisableAllButtonTextContent"
-                                   [placeholder]="formContent.bannerDisableButtonTextContent">
-                            <div *ngIf="submitted && f.BannerDisableAllButtonTextContent.errors">
+                                   [(ngModel)]="formContent.bannerDisableButtonText"
+                                   formControlName="BannerDisableAllButtonText"
+                                   [placeholder]="formContent.bannerDisableButtonText">
+                            <div *ngIf="submitted && f.BannerDisableAllButtonText.errors">
                               <div class="text-danger mt-2"
-                                   *ngIf="f.BannerDisableAllButtonTextContent.errors.minlength">
+                                   *ngIf="f.BannerDisableAllButtonText.errors.minlength">
                                 Minimum 2 characters required
                               </div>
                               <div class="text-danger mt-2"
-                                   *ngIf="f.BannerDisableAllButtonTextContent.errors.maxlength">
+                                   *ngIf="f.BannerDisableAllButtonText.errors.maxlength">
                                 Maximum 45 characters required
                               </div>
                             </div>
@@ -1110,16 +1059,16 @@
                             Text Content </h5>
                           <div class="col-sm-8 ml-0">
                             <input type="text" [attr.disabled]="isFieldDisabled" class="form-control input-sm"
-                                   [(ngModel)]="formContent.bannerDoNotSellMyDataTextContent"
-                                   formControlName="bannerDoNotSellMyDataTextContent"
-                                   [placeholder]="formContent.bannerDoNotSellMyDataTextContent">
-                            <div *ngIf="submitted && f.bannerDoNotSellMyDataTextContent.errors">
+                                   [(ngModel)]="formContent.bannerDoNotSellMyDataText"
+                                   formControlName="bannerDoNotSellMyDataText"
+                                   [placeholder]="formContent.bannerDoNotSellMyDataText">
+                            <div *ngIf="submitted && f.bannerDoNotSellMyDataText.errors">
                               <div class="text-danger mt-2"
-                                   *ngIf="f.bannerDoNotSellMyDataTextContent.errors.minlength">
+                                   *ngIf="f.bannerDoNotSellMyDataText.errors.minlength">
                                 Minimum 2 characters required
                               </div>
                               <div class="text-danger mt-2"
-                                   *ngIf="f.bannerDoNotSellMyDataTextContent.errors.maxlength">
+                                   *ngIf="f.bannerDoNotSellMyDataText.errors.maxlength">
                                 Maximum 45 characters required
                               </div>
                             </div>
@@ -1194,15 +1143,15 @@
                         <div class="w-100">
                           <h6 class="tx-12 tx-medium tx-spacing-1 tx-color-03 tx-uppercase">Purpose Description</h6>
                           <textarea [attr.disabled]="isFieldDisabled" class="form-control w-100" rows="3"
-                                    formControlName="PopUpPurposeBodyDescription"
-                                    [(ngModel)]="formContent.popUpPurposeDescription"
-                                    [placeholder]="formContent.popUpPurposeDescription"></textarea>
-                          <div *ngIf="submitted && f.PopUpPurposeBodyDescription.errors">
-                            <div class="text-danger mt-2" *ngIf="f.PopUpPurposeBodyDescription.errors.minlength">
+                                    formControlName="PopUpGdprPurposeDescription"
+                                    [(ngModel)]="formContent.PopUpGdprPurposeDescription"
+                                    [placeholder]="formContent.PopUpGdprPurposeDescription"></textarea>
+                          <div *ngIf="submitted && f.PopUpGdprPurposeDescription.errors">
+                            <div class="text-danger mt-2" *ngIf="f.PopUpGdprPurposeDescription.errors.minlength">
                               Minimum 20 characters required
                             </div>
-                            <div class="text-danger mt-2" *ngIf="f.PopUpPurposeBodyDescription.errors.maxlength">
-                              Maximum 1000 characters required
+                            <div class="text-danger mt-2" *ngIf="f.PopUpGdprPurposeDescription.errors.maxlength">
+                              Maximum 1500 characters required
                             </div>
                           </div>
                         </div>
@@ -1213,24 +1162,62 @@
                         <div class="w-100">
                           <h6 class="tx-12 tx-medium tx-spacing-1 tx-color-03 tx-uppercase">Vendor Description</h6>
                           <textarea [attr.disabled]="isFieldDisabled" class="form-control w-100" rows="3"
-                                    formControlName="PopUpVendorBodyDescription"
-                                    [(ngModel)]="formContent.popUpVendorsDescription"
-                                    [placeholder]="formContent.popUpVendorsDescription"></textarea>
-                          <div *ngIf="submitted && f.PopUpVendorBodyDescription.errors">
-                            <div class="text-danger mt-2" *ngIf="f.PopUpVendorBodyDescription.errors.minlength">
+                                    formControlName="PopUpGdprVendorDescription"
+                                    [(ngModel)]="formContent.PopUpGdprVendorDescription"
+                                    [placeholder]="formContent.PopUpGdprVendorDescription"></textarea>
+                          <div *ngIf="submitted && f.PopUpGdprVendorDescription.errors">
+                            <div class="text-danger mt-2" *ngIf="f.PopUpGdprVendorDescription.errors.minlength">
                               Minimum 20 characters required
                             </div>
-                            <div class="text-danger mt-2" *ngIf="f.PopUpVendorBodyDescription.errors.maxlength">
+                            <div class="text-danger mt-2" *ngIf="f.PopUpGdprVendorDescription.errors.maxlength">
                               Maximum 1000 characters required
                             </div>
                           </div>
                         </div>
                       </div>
-
                     </p-accordionTab>
 
-                    <p-accordionTab header="Switch Button">
 
+                    <p-accordionTab header="Purpose & Privacy Info (For CCPA and GENERIC Only)">
+                      <div class="col-md-12 mt-2">
+                        <div class="w-100">
+                          <h6 class="tx-12 tx-medium tx-spacing-1 tx-color-03 tx-uppercase">Purpose Description</h6>
+                          <textarea [attr.disabled]="isFieldDisabled" class="form-control w-100" rows="3"
+                                    formControlName="PopUpCcpaGenericPurposeDescription"
+                                    [(ngModel)]="formContent.PopUpCcpaGenericPurposeDescription"
+                                    [placeholder]="formContent.PopUpCcpaGenericPurposeDescription"></textarea>
+                          <div *ngIf="submitted && f.PopUpCcpaGenericPurposeDescription.errors">
+                            <div class="text-danger mt-2" *ngIf="f.PopUpCcpaGenericPurposeDescription.errors.minlength">
+                              Minimum 20 characters required
+                            </div>
+                            <div class="text-danger mt-2" *ngIf="f.PopUpCcpaGenericPurposeDescription.errors.maxlength">
+                              Maximum 1500 characters required
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="col-md-12 mt-2">
+                        <div class="w-100">
+                          <h6 class="tx-12 tx-medium tx-spacing-1 tx-color-03 tx-uppercase">Privacy Info Description</h6>
+                          <textarea [attr.disabled]="isFieldDisabled" class="form-control w-100" rows="3"
+                                    formControlName="PopUpGdprVendorDescription"
+                                    [(ngModel)]="formContent.PopUpCcpaGenericPrivacyInfoDescription"
+                                    [placeholder]="formContent.PopUpCcpaGenericPrivacyInfoDescription"></textarea>
+                          <div *ngIf="submitted && f.PopUpCcpaGenericPrivacyInfoDescription.errors">
+                            <div class="text-danger mt-2" *ngIf="f.PopUpCcpaGenericPrivacyInfoDescription.errors.minlength">
+                              Minimum 20 characters required
+                            </div>
+                            <div class="text-danger mt-2" *ngIf="f.PopUpCcpaGenericPrivacyInfoDescription.errors.maxlength">
+                              Maximum 1000 characters required
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </p-accordionTab>
+
+
+                    <p-accordionTab header="Switch Button">
                       <div class="col-md-12 mt-2 p-0">
                         <ul class="ml-2 pl-0 mt-2 colorpicker-wrapper">
                           <li class="tx-12 tx-medium tx-middle tx-spacing-1 tx-color-03 tx-uppercase">Color
@@ -1284,14 +1271,14 @@
                         <div class="col-sm-8 ml-0">
                           <input type="text" [attr.disabled]="isFieldDisabled" class="form-control"
                                  class="form-control input-sm"
-                                 [(ngModel)]="formContent.popUpDisableAllButtonTextContent"
-                                 formControlName="PopUpDisableAllButtonTextContent"
-                                 [placeholder]="formContent.popUpDisableAllButtonTextContent">
-                          <div *ngIf="submitted && f.PopUpDisableAllButtonTextContent.errors">
-                            <div class="text-danger mt-2" *ngIf="f.PopUpDisableAllButtonTextContent.errors.minlength">
+                                 [(ngModel)]="formContent.popUpDisableAllButtonText"
+                                 formControlName="PopUpDisableAllButtonText"
+                                 [placeholder]="formContent.popUpDisableAllButtonText">
+                          <div *ngIf="submitted && f.PopUpDisableAllButtonText.errors">
+                            <div class="text-danger mt-2" *ngIf="f.PopUpDisableAllButtonText.errors.minlength">
                               Minimum 2 characters required
                             </div>
-                            <div class="text-danger mt-2" *ngIf="f.PopUpDisableAllButtonTextContent.errors.maxlength">
+                            <div class="text-danger mt-2" *ngIf="f.PopUpDisableAllButtonText.errors.maxlength">
                               Maximum 45 characters required
                             </div>
                           </div>
@@ -1338,14 +1325,14 @@
                           Text Content </h5>
                         <div class="col-sm-8 ml-0">
                           <input type="text" class="form-control"
-                                 class="form-control input-sm" [(ngModel)]="formContent.popUpDoNotSellTextContent"
-                                 formControlName="popUpDoNotSellTextContent"
-                                 [placeholder]="formContent.popUpDoNotSellTextContent">
-                          <div *ngIf="submitted && f.popUpDoNotSellTextContent.errors">
-                            <div class="text-danger mt-2" *ngIf="f.popUpDoNotSellTextContent.errors.minlength">
+                                 class="form-control input-sm" [(ngModel)]="formContent.popUpDoNotSellText"
+                                 formControlName="popUpDoNotSellText"
+                                 [placeholder]="formContent.popUpDoNotSellText">
+                          <div *ngIf="submitted && f.popUpDoNotSellText.errors">
+                            <div class="text-danger mt-2" *ngIf="f.popUpDoNotSellText.errors.minlength">
                               Minimum 2 characters required
                             </div>
-                            <div class="text-danger mt-2" *ngIf="f.popUpDoNotSellTextContent.errors.maxlength">
+                            <div class="text-danger mt-2" *ngIf="f.popUpDoNotSellText.errors.maxlength">
                               Maximum 45 characters required
                             </div>
                           </div>
@@ -1385,20 +1372,23 @@
                     </p-accordionTab>
 
 
+
+
+
                     <p-accordionTab header="Save My Choice Button">
                       <div class="col-md-12 ml-0 mb-4  p-0 row mt-2">
                         <h5 class="col-sm-4 pl-2 tx-middle tx-12 tx-medium tx-spacing-1 tx-color-03 tx-uppercase">
                           Text Content </h5>
                         <div class="col-sm-8 ml-0">
                           <input type="text" [attr.disabled]="isFieldDisabled" class="form-control input-sm"
-                                 formControlName="PopUpSaveMyChoiceButtonContentText"
-                                 [(ngModel)]="formContent.popUpSaveMyChoiceButtonTextContent"
-                                 [placeholder]="formContent.popUpSaveMyChoiceButtonTextContent">
-                          <div *ngIf="submitted && f.PopUpSaveMyChoiceButtonContentText.errors">
-                            <div class="text-danger mt-2" *ngIf="f.PopUpSaveMyChoiceButtonContentText.errors.minlength">
+                                 formControlName="PopUpSaveMyChoiceButtonText"
+                                 [(ngModel)]="formContent.popUpSaveMyChoiceButtonText"
+                                 [placeholder]="formContent.popUpSaveMyChoiceButtonText">
+                          <div *ngIf="submitted && f.PopUpSaveMyChoiceButtonText.errors">
+                            <div class="text-danger mt-2" *ngIf="f.PopUpSaveMyChoiceButtonText.errors.minlength">
                               Minimum 2 characters required
                             </div>
-                            <div class="text-danger mt-2" *ngIf="f.PopUpSaveMyChoiceButtonContentText.errors.maxlength">
+                            <div class="text-danger mt-2" *ngIf="f.PopUpSaveMyChoiceButtonText.errors.maxlength">
                               Maximum 45 characters required
                             </div>
                           </div>
@@ -1436,8 +1426,8 @@
                         </ul>
                       </div>
 
-
                     </p-accordionTab>
+
 
 
                     <p-accordionTab header="Accept All Button">
@@ -1446,14 +1436,14 @@
                           Text Content </h5>
                         <div class="col-sm-8 ml-0">
                           <input type="text" [attr.disabled]="isFieldDisabled" class="form-control input-sm"
-                                 formControlName="PopUpAllowAllButtonTextContent"
-                                 [(ngModel)]="formContent.popUpAllowAllButtonTextContent"
-                                 [placeholder]="formContent.popUpAllowAllButtonTextContent">
-                          <div *ngIf="submitted && f.PopUpAllowAllButtonTextContent.errors">
-                            <div class="text-danger mt-2" *ngIf="f.PopUpAllowAllButtonTextContent.errors.minlength">
+                                 formControlName="PopUpAllowAllButtonText"
+                                 [(ngModel)]="formContent.popUpAllowAllButtonText"
+                                 [placeholder]="formContent.popUpAllowAllButtonText">
+                          <div *ngIf="submitted && f.PopUpAllowAllButtonText.errors">
+                            <div class="text-danger mt-2" *ngIf="f.PopUpAllowAllButtonText.errors.minlength">
                               Minimum 2 characte rs required
                             </div>
-                            <div class="text-danger mt-2" *ngIf="f.PopUpAllowAllButtonTextContent.errors.maxlength">
+                            <div class="text-danger mt-2" *ngIf="f.PopUpAllowAllButtonText.errors.maxlength">
                               Maximum 45 characters required
                             </div>
                           </div>
@@ -1499,16 +1489,16 @@
                     </div>
 
 
-                    <p-accordionTab [header]="formContent.NecessaryText">
+                    <p-accordionTab [header]="formContent.EssentialTitle">
                       <h6>Title</h6>
                       <input type="text" [attr.disabled]="isFieldDisabled" class="form-control input-sm w-100"
-                             formControlName="PopUpNecessaryHeading" [(ngModel)]="formContent.PopUpNecessaryHead"
-                             [placeholder]="formContent.PopUpNecessaryHead">
-                      <div *ngIf="submitted && f.PopUpAdvertisingHeading.errors">
-                        <div class="text-danger mt-2" *ngIf="f.PopUpAdvertisingHeading.errors.minlength">
+                             formControlName="EssentialTitle" [(ngModel)]="formContent.EssentialTitle"
+                             [placeholder]="formContent.EssentialTitle">
+                      <div *ngIf="submitted && f.EssentialTitle.errors">
+                        <div class="text-danger mt-2" *ngIf="f.EssentialTitle.errors.minlength">
                           Minimum 2 characters required
                         </div>
-                        <div class="text-danger mt-2" *ngIf="f.PopUpAdvertisingHeading.errors.maxlength">
+                        <div class="text-danger mt-2" *ngIf="f.EssentialTitle.errors.maxlength">
                           Maximum 50 characters required
                         </div>
                       </div>
@@ -1516,108 +1506,170 @@
 
                       <h6>Description</h6>
                       <textarea [attr.disabled]="isFieldDisabled" class="form-control input-sm w-100" rows="3"
-                                formControlName="PopUpNecessaryDescription"
-                                [(ngModel)]="formContent.PopUpNecessaryDescription"
-                                [placeholder]="formContent.PopUpNecessaryDescription"></textarea>
-                      <div *ngIf="submitted && f.PopUpNecessaryDescription.errors">
-                        <div class="text-danger mt-2" *ngIf="f.PopUpNecessaryDescription.errors.minlength">
+                                formControlName="EssentialDescription"
+                                [(ngModel)]="formContent.EssentialDescription"
+                                [placeholder]="formContent.EssentialDescription"></textarea>
+                      <div *ngIf="submitted && f.EssentialDescription.errors">
+                        <div class="text-danger mt-2" *ngIf="f.EssentialDescription.errors.minlength">
                           Minimum 20 characters required
                         </div>
-                        <div class="text-danger mt-2" *ngIf="f.PopUpNecessaryDescription.errors.maxlength">
+                        <div class="text-danger mt-2" *ngIf="f.EssentialDescription.errors.maxlength">
                           Maximum 1000 characters required
                         </div>
                       </div>
                     </p-accordionTab>
 
 
-                    <p-accordionTab [header]="formContent.AdvertisingText">
+                    <p-accordionTab [header]="formContent.FunctionalTitle">
                       <h6>Title</h6>
                       <input type="text" [attr.disabled]="isFieldDisabled" class="form-control input-sm w-100"
-                             formControlName="PopUpAdvertisingHeading" [(ngModel)]="formContent.PopUpAdvertisingHead"
-                             [placeholder]="formContent.PopUpAdvertisingHead">
-                      <div *ngIf="submitted && f.PopUpAdvertisingHeading.errors">
-                        <div class="text-danger mt-2" *ngIf="f.PopUpAdvertisingHeading.errors.minlength">
+                             formControlName="FunctionalTitle" [(ngModel)]="formContent.FunctionalTitle"
+                             [placeholder]="formContent.FunctionalTitle">
+                      <div *ngIf="submitted && f.FunctionalTitle.errors">
+                        <div class="text-danger mt-2" *ngIf="f.FunctionalTitle.errors.minlength">
                           Minimum 2 characters required
                         </div>
-                        <div class="text-danger mt-2" *ngIf="f.PopUpAdvertisingHeading.errors.maxlength">
+                        <div class="text-danger mt-2" *ngIf="f.FunctionalTitle.errors.maxlength">
                           Maximum 50 characters required
                         </div>
                       </div>
                       <br>
                       <h6>Description</h6>
                       <textarea [attr.disabled]="isFieldDisabled" class="form-control w-100" rows="3"
-                                formControlName="PopUpAdvertisingDescription"
-                                [(ngModel)]="formContent.PopUpAdvertisingDescription"
-                                [placeholder]="formContent.PopUpAdvertisingDescription"></textarea>
-                      <div *ngIf="submitted && f.PopUpAdvertisingDescription.errors">
-                        <div class="text-danger mt-2" *ngIf="f.PopUpAdvertisingDescription.errors.minlength">
+                                formControlName="AdvertisingDescription"
+                                [(ngModel)]="formContent.FunctionalDescription"
+                                [placeholder]="formContent.FunctionalDescription"></textarea>
+                      <div *ngIf="submitted && f.FunctionalDescription.errors">
+                        <div class="text-danger mt-2" *ngIf="f.FunctionalDescription.errors.minlength">
                           Minimum 20 characters required
                         </div>
-                        <div class="text-danger mt-2" *ngIf="f.PopUpAdvertisingDescription.errors.maxlength">
+                        <div class="text-danger mt-2" *ngIf="f.FunctionalDescription.errors.maxlength">
                           Maximum 1000 characters required
                         </div>
                       </div>
                     </p-accordionTab>
 
 
-                    <p-accordionTab [header]="formContent.SocialMediaText">
-                      <h6>Title</h6>
-                      <input type="text" [attr.disabled]="isFieldDisabled" class="form-control input-sm w-100"
-                             formControlName="PopUpSocialMediaHeading" [(ngModel)]="formContent.PopUpSocialMediaHead"
-                             [placeholder]="formContent.PopUpSocialMediaHead">
-                      <div *ngIf="submitted && f.PopUpSocialMediaHeading.errors">
-                        <div class="text-danger mt-2" *ngIf="f.PopUpSocialMediaHeading.errors.minlength">
-                          Minimum 2 characters required
-                        </div>
-                        <div class="text-danger mt-2" *ngIf="f.PopUpSocialMediaHeading.errors.maxlength">
-                          Maximum 50 characters required
-                        </div>
-                      </div>
-                      <br>
-                      <h6>Description</h6>
-                      <textarea [attr.disabled]="isFieldDisabled" class="form-control w-100" rows="3"
-                                formControlName="PopUpSocialMediaDescription"
-                                [(ngModel)]="formContent.PopUpSocialMediaDescription"
-                                [placeholder]="formContent.PopUpSocialMediaDescription"></textarea>
-                      <div *ngIf="submitted && f.PopUpSocialMediaDescription.errors">
-                        <div class="text-danger mt-2" *ngIf="f.PopUpSocialMediaDescription.errors.minlength">
-                          Minimum 20 characters required
-                        </div>
-                        <div class="text-danger mt-2" *ngIf="f.PopUpSocialMediaDescription.errors.maxlength">
-                          Maximum 1000 characters required
-                        </div>
-                      </div>
-                    </p-accordionTab>
-
-
-                    <p-accordionTab [header]="formContent.AnalyticsText">
+                    <p-accordionTab [header]="formContent.AnalyticsTitle">
                       <h6>Title</h6>
                       <input type="text" [attr.disabled]="isFieldDisabled" class="form-control w-100"
-                             formControlName="PopUpAnalyticsHeading" [(ngModel)]="formContent.PopUpAnalyticsHead"
-                             [placeholder]="formContent.PopUpAnalyticsHead">
-                      <div *ngIf="submitted && f.PopUpAnalyticsHeading.errors">
-                        <div class="text-danger mt-2" *ngIf="f.PopUpAnalyticsHeading.errors.minlength">
+                             formControlName="AnalyticsTitle" [(ngModel)]="formContent.AnalyticsTitle"
+                             [placeholder]="formContent.AnalyticsTitle">
+                      <div *ngIf="submitted && f.AnalyticsTitle.errors">
+                        <div class="text-danger mt-2" *ngIf="f.AnalyticsTitle.errors.minlength">
                           Minimum 2 characters required
                         </div>
-                        <div class="text-danger mt-2" *ngIf="f.PopUpAnalyticsHeading.errors.maxlength">
+                        <div class="text-danger mt-2" *ngIf="f.AnalyticsTitle.errors.maxlength">
                           Maximum 50 characters required
                         </div>
                       </div>
                       <br>
                       <h6>Description</h6>
                       <textarea [attr.disabled]="isFieldDisabled" class="form-control w-100" rows="3"
-                                formControlName="PopUpAnalyticsDescription"
-                                [(ngModel)]="formContent.PopUpAnalyticsDescription"
-                                [placeholder]="formContent.PopUpAnalyticsDescription"></textarea>
-                      <div *ngIf="submitted && f.PopUpAnalyticsDescription.errors">
-                        <div class="text-danger mt-2" *ngIf="f.PopUpAnalyticsDescription.errors.minlength">
+                                formControlName="AnalyticsDescription"
+                                [(ngModel)]="formContent.AnalyticsDescription"
+                                [placeholder]="formContent.AnalyticsDescription"></textarea>
+                      <div *ngIf="submitted && f.AnalyticsDescription.errors">
+                        <div class="text-danger mt-2" *ngIf="f.AnalyticsDescription.errors.minlength">
                           Minimum 20 characters required
                         </div>
-                        <div class="text-danger mt-2" *ngIf="f.PopUpAnalyticsDescription.errors.maxlength">
+                        <div class="text-danger mt-2" *ngIf="f.AnalyticsDescription.errors.maxlength">
                           Maximum 1000 characters required
                         </div>
                       </div>
                     </p-accordionTab>
+
+
+                    <p-accordionTab [header]="formContent.AdvertisingTitle">
+                      <h6>Title</h6>
+                      <input type="text" [attr.disabled]="isFieldDisabled" class="form-control input-sm w-100"
+                             formControlName="AdvertisingTitle" [(ngModel)]="formContent.AdvertisingTitle"
+                             [placeholder]="formContent.AdvertisingTitle">
+                      <div *ngIf="submitted && f.AdvertisingTitle.errors">
+                        <div class="text-danger mt-2" *ngIf="f.AdvertisingTitle.errors.minlength">
+                          Minimum 2 characters required
+                        </div>
+                        <div class="text-danger mt-2" *ngIf="f.AdvertisingTitle.errors.maxlength">
+                          Maximum 50 characters required
+                        </div>
+                      </div>
+                      <br>
+                      <h6>Description</h6>
+                      <textarea [attr.disabled]="isFieldDisabled" class="form-control w-100" rows="3"
+                                formControlName="AdvertisingDescription"
+                                [(ngModel)]="formContent.AdvertisingDescription"
+                                [placeholder]="formContent.AdvertisingDescription"></textarea>
+                      <div *ngIf="submitted && f.AdvertisingDescription.errors">
+                        <div class="text-danger mt-2" *ngIf="f.AdvertisingDescription.errors.minlength">
+                          Minimum 20 characters required
+                        </div>
+                        <div class="text-danger mt-2" *ngIf="f.AdvertisingDescription.errors.maxlength">
+                          Maximum 1000 characters required
+                        </div>
+                      </div>
+                    </p-accordionTab>
+
+
+                    <p-accordionTab [header]="formContent.SocialMediaTitle">
+                      <h6>Title</h6>
+                      <input type="text" [attr.disabled]="isFieldDisabled" class="form-control input-sm w-100"
+                             formControlName="SocialMediaTitle" [(ngModel)]="formContent.SocialMediaTitle"
+                             [placeholder]="formContent.SocialMediaTitle">
+ r                     <div *ngIf="submitted && f.SocialMediaTitle.errors">
+                        <div class="text-danger mt-2" *ngIf="f.SocialMediaTitle.errors.minlength">
+                          Minimum 2 characters required
+                        </div>
+                        <div class="text-danger mt-2" *ngIf="f.SocialMediaTitle.errors.maxlength">
+                          Maximum 50 characters required
+                        </div>
+                      </div>
+                      <br>
+                      <h6>Description</h6>
+                      <textarea [attr.disabled]="isFieldDisabled" class="form-control w-100" rows="3"
+                                formControlName="SocialMediaDescription"
+                                [(ngModel)]="formContent.SocialMediaDescription"
+                                [placeholder]="formContent.SocialMediaDescription"></textarea>
+                      <div *ngIf="submitted && f.SocialMediaDescription.errors">
+                        <div class="text-danger mt-2" *ngIf="f.SocialMediaDescription.errors.minlength">
+                          Minimum 20 characters required
+                        </div>
+                        <div class="text-danger mt-2" *ngIf="f.SocialMediaDescription.errors.maxlength">
+                          Maximum 1000 characters required
+                        </div>
+                      </div>
+                    </p-accordionTab>
+
+
+                    <p-accordionTab [header]="formContent.UnknownTitle">
+                      <h6>Title</h6>
+                      <input type="text" [attr.disabled]="isFieldDisabled" class="form-control input-sm w-100"
+                             formControlName="UnknownTitle" [(ngModel)]="formContent.UnknownTitle"
+                             [placeholder]="formContent.UnknownTitle">
+                                        <div *ngIf="submitted && f.UnknownTitle.errors">
+                      <div class="text-danger mt-2" *ngIf="f.UnknownTitle.errors.minlength">
+                        Minimum 2 characters required
+                      </div>
+                      <div class="text-danger mt-2" *ngIf="f.UnknownTitle.errors.maxlength">
+                        Maximum 50 characters required
+                      </div>
+                    </div>
+                      <br>
+                      <h6>Description</h6>
+                      <textarea [attr.disabled]="isFieldDisabled" class="form-control w-100" rows="3"
+                                formControlName="SocialMediaDescription"
+                                [(ngModel)]="formContent.UnknownDescription"
+                                [placeholder]="formContent.UnknownDescription"></textarea>
+                      <div *ngIf="submitted && f.UnknownDescription.errors">
+                        <div class="text-danger mt-2" *ngIf="f.UnknownDescription.errors.minlength">
+                          Minimum 20 characters required
+                        </div>
+                        <div class="text-danger mt-2" *ngIf="f.UnknownDescription.errors.maxlength">
+                          Maximum 1000 characters required
+                        </div>
+                      </div>
+                    </p-accordionTab>
+
+
 
 
                   </p-accordion>
@@ -1631,6 +1683,7 @@
                                       [ccpaGlobal]="ccpaGlobal.checked"
                                       [popUpTitleLang]="popUpTitleLang"
                                       [extraProperty]="extraProperty"
+                                      [showConfigType]="showConfig.checked"
                                       [formData]="formContent">>
               </app-popup-live-preview>
             </div>
@@ -1681,6 +1734,25 @@
 </ng-template>
 
 
+<ng-template #template2>
+  <div class="modal-body text-center">
+    <p>You have not save your customization, Would you like to save it ..?<br/>
+    </p>
+    <button type="button" class="btn btn-primary mr-3" (click)="modalRef.hide(); activeBannerlanguage  = currentBannerlanguage; onGetLangData();">No</button>
+    <button type="button" class="btn btn-white" (click)="modalRef.hide(); onSaveCustomLang()">Yes</button>
+  </div>
+</ng-template>
+
+
+<ng-template #resetPopup>
+  <div class="modal-body text-center">
+    <p>Do you want to reset this language?</p>
+    <button type="button" class="btn btn-default" (click)="modalRef.hide(); onResetCustomConfig()" >Yes</button>
+    <button type="button" class="btn btn-primary" (click)="modalRef.hide()" >No</button>
+  </div>
+</ng-template>
+
+
 <ng-template #templateManageLang>
   <div class="modal-header">
     <h4 class="modal-title lang-title pull-left">Manage Languages</h4>
@@ -1691,19 +1763,29 @@
   <div class="modal-body">
     <div class="card lang-table-box  mb-0">
       <p-table [value]="bannerConstant.Bannerlanguage" styleClass="p-datatable-sm">
+
+        <ng-template pTemplate="colgroup">
+          <colgroup>
+            <col style="width:15%">
+            <col style="width:  50%">
+            <col style="width:  20%">
+            <col style="width: 15%">
+          </colgroup>
+        </ng-template>
+
         <ng-template pTemplate="header">
           <tr>
-            <th>
+            <th pResizableColumn>
               <div class="custom-control custom-checkbox">
                 <input type="checkbox" class="custom-control-input" id="customCheckAll"
                        (change)="onAllowAllLang($event)"
-                       [checked]="bannerConstant.Bannerlanguage.length === langValueList.length">
+                       [checked]="bannerConstant.Bannerlanguage.length === allowLanguagesList.length">
                 <label class="custom-control-label" for="customCheckAll"></label>
               </div>
             </th>
-            <th>Name</th>
-            <th>Code</th>
-            <th class="text-center">Default</th>
+            <th pResizableColumn>Name</th>
+            <th pResizableColumn></th>
+            <th pResizableColumn class="text-center">Default</th>
           </tr>
         </ng-template>
         <ng-template pTemplate="body" let-lang>
@@ -1712,13 +1794,15 @@
               <div class="custom-control custom-checkbox">
                 <input type="checkbox" class="custom-control-input" id="customCheck{{lang.value}}"
                        (change)="onSelectLang($event, lang.value)"
-                       [checked]="langValueList.includes(lang.value)">
+                       [checked]="allowLanguagesList.includes(lang.value)">
                 <label class="custom-control-label" for="customCheck{{lang.value}}"></label>
               </div>
             </td>
             <td>{{lang.title}}</td>
-            <td>{{lang.value | uppercase}}</td>
-            <td class="text-center"><input type="radio" class="" [(ngModel)]="langDefault" name="defaultLang"
+            <td><button *ngIf="saveCustomLang.includes(lang.value)"
+                        (click)="resetLang = lang.value; openModal(resetPopup)"
+                        class="btn btn-link" type="button">Reset</button></td>
+            <td class="text-center"><input type="radio" class="" [(ngModel)]="defaultLanguage" name="defaultLang"
                                            [value]="lang.value"/>
             </td>
           </tr>

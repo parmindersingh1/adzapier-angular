@@ -16,6 +16,7 @@ export class PopupLivePreviewComponent implements OnInit, OnChanges {
   type = 'gdpr';
   @Input('isGdprGlobal') isGdprGlobal = false;
   @Input('ccpaGlobal') ccpaGlobal = false;
+  @Input('showConfigType') showConfigType = false;
   @Input('extraProperty') extraProperty = {
     alwaysAllow: 'Always Allow',
     privacyInfo: 'Privacy Info'
@@ -30,10 +31,9 @@ export class PopupLivePreviewComponent implements OnInit, OnChanges {
   constructor(private _cd: ChangeDetectorRef) {
   }
   ngOnInit() {
-    this.currentPurpose = this.defaultContent.NecessaryText ;
+    this.currentPurpose = this.defaultContent.EssentialTitle ;
   }
   ngOnChanges(changes: SimpleChanges) {
-console.log('Change', this.popUpTitleLang)
     this._cd.detectChanges()
 
   }
@@ -50,8 +50,6 @@ console.log('Change', this.popUpTitleLang)
     }
   }
   onSetPurposeIds(name, e) {
-    console.log('e', e);
-
     if (e) {
       this.checkedPurposeIds.push(name);
   } else {

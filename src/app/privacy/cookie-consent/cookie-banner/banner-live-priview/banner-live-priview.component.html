@@ -42,11 +42,14 @@
               </h6>
               <div class="text-small float-rounded-corner-main line-height-nineteen font-size-thirteen onetrust-policy-text"
                   >
-                <span [ngStyle]="{color: formData.bannerTextColor}" [innerHTML]="formData.bannerDescription ? formData.bannerDescription : defaultContent.bannerDescription"></span>
+                <span [ngStyle]="{color: formData.bannerTextColor}"
+                      [innerHTML]="formData.bannerDescription ? formData.bannerDescription : defaultContent.bannerDescription"></span>
+                <a  [ngStyle]="{'color': formData.privacyTextColor ? formData.privacyTextColor: defaultContent.privacyTextColor}"
+                    target="_blank"
+                    [href]="formData.privacyLink ? formData.privacyLink : '#'">
+                  {{formData.privacy ? formData.privacy : defaultContent.privacy}} </a>
             </div>
           </div>
-
-
 
           <div class=" col-md-6 col-6" [ngStyle]="{borderLeft: '3px solid' + formData.bannerBorderColor }">
 <!--            <h6 style="font-size: 11px" class="cc-font-size-16 cc-floating-title" -->
@@ -63,14 +66,14 @@
         </div>
       </div>
       <div class="col-md-2 col-2 p-0">
-        <div class="floating-flat-margin-cls ng-star-inserted mt-3" id="onetrust-button-group">
+        <div class="floating-flat-margin-cls ng-star-inserted mt-3" >
           <button
             type="button"
             class="font-size-thirteen mr-2 btn-grr cc-float-rounded-icon-btn cookie-setting-link ng-star-inserted"
             [ngStyle]="{background: formData.bannerPreferenceButtonBackGroundColor, borderColor:formData.bannerPreferenceButtonBackGroundColor,
              color: formData.bannerPreferenceButtonTextColor}"
           >
-           {{formData.bannerPreferenceButtonTextContent ? formData.bannerPreferenceButtonTextContent : defaultContent.bannerPreferenceButtonTextContent}}
+           {{formData.bannerPreferenceButtonText ? formData.bannerPreferenceButtonText : defaultContent.bannerPreferenceButtonText}}
           </button>
           <!-- <button
             type="button"
@@ -79,7 +82,7 @@
             borderColor: formData.bannerDisableButtonBackGroundColor,
             color: formData.bannerDisableButtonTextColor}"
           >
-            {{formData.bannerDisableButtonTextContent ? formData.bannerDisableButtonTextContent : defaultContent.bannerDisableButtonTextContent}}
+            {{formData.bannerDisableButtonText ? formData.bannerDisableButtonText : defaultContent.bannerDisableButtonText}}
           </button> -->
 
           <button
@@ -89,7 +92,7 @@
             borderColor: formData.bannerAcceptButtonBackgroundColor,
             color: formData.bannerAcceptButtonTextColor}"
             >
-            {{formData.bannerAcceptButtonTextContent ? formData.bannerAcceptButtonTextContent : defaultContent.bannerAcceptButtonTextContent}}
+            {{formData.bannerAcceptButtonText ? formData.bannerAcceptButtonText : defaultContent.bannerAcceptButtonText}}
           </button>
 
         </div>
@@ -115,27 +118,33 @@
    z-index: 0; width: 100%;">
     <div class="row pd-10 m-0" [ngStyle]="{borderTop: '3px solid' + formData.bannerBorderColor }">
       <div class="col-6">
-        <div id="onetrust-policy">
+        <div >
           <h6 style="font-size: 11px" class="cc-font-size-16 cc-floating-title"
               [ngStyle]="{color: formData.bannerTextColor}">
             {{formData.bannerTitle ? formData.bannerTitle : defaultContent.bannerTitle}}
           </h6>
           <div class="text-small float-rounded-corner-main line-height-nineteen font-size-thirteen onetrust-policy-text"
                >
-            <span [ngStyle]="{color: formData.bannerTextColor}" [innerHTML]="formData.bannerDescription ? formData.bannerDescription : defaultContent.bannerDescription"></span>
+            <span [ngStyle]="{color: formData.bannerTextColor}"
+                  [innerHTML]="formData.bannerDescription ? formData.bannerDescription : defaultContent.bannerDescription">
+            </span>
+            <a  [ngStyle]="{'color': formData.privacyTextColor ? formData.privacyTextColor: defaultContent.privacyTextColor}"
+                target="_blank"
+                [href]="formData.privacyLink ? formData.privacyLink : '#'">
+              {{formData.privacy ? formData.privacy : defaultContent.privacy}} </a>
        </div>
 
         </div>
       </div>
       <div class="col-6 p-0">
-        <div class="floating-flat-margin-cls ng-star-inserted mt-3" id="onetrust-button-group">
+        <div class="floating-flat-margin-cls ng-star-inserted mt-3" >
           <button
             type="button"
             class="font-size-thirteen mr-2 btn-grr cc-float-rounded-icon-btn cookie-setting-link ng-star-inserted"
             [ngStyle]="{background: formData.bannerPreferenceButtonBackGroundColor, borderColor:formData.bannerPreferenceButtonBackGroundColor,
              color: formData.bannerPreferenceButtonTextColor}"
           >
-           {{formData.bannerPreferenceButtonTextContent ? formData.bannerPreferenceButtonTextContent : defaultContent.bannerPreferenceButtonTextContent}}
+           {{formData.bannerPreferenceButtonText ? formData.bannerPreferenceButtonText : defaultContent.bannerPreferenceButtonText}}
           </button>
           <button
             type="button"
@@ -144,7 +153,7 @@
             borderColor: formData.bannerDisableButtonBackGroundColor,
             color: formData.bannerDisableButtonTextColor}"
           >
-            {{formData.bannerDisableButtonTextContent ? formData.bannerDisableButtonTextContent : defaultContent.bannerDisableButtonTextContent}}
+            {{formData.bannerDisableButtonText ? formData.bannerDisableButtonText : defaultContent.bannerDisableButtonText}}
           </button>
 
           <button
@@ -154,7 +163,7 @@
             borderColor: formData.bannerAcceptButtonBackgroundColor,
             color: formData.bannerAcceptButtonTextColor}"
             >
-            {{formData.bannerAcceptButtonTextContent ? formData.bannerAcceptButtonTextContent : defaultContent.bannerAcceptButtonTextContent}}
+            {{formData.bannerAcceptButtonText ? formData.bannerAcceptButtonText : defaultContent.bannerAcceptButtonText}}
           </button>
 
         </div>
@@ -183,27 +192,32 @@
    z-index: 0; width: 100%;">
     <div class="row pd-10 m-0" [ngStyle]="{borderTop: '3px solid' + formData.bannerBorderColor }">
       <div class="col-6">
-        <div id="onetrust-policy">
+        <div >
           <h6 style="font-size: 11px" class="cc-font-size-16 cc-floating-title"
               [ngStyle]="{color: formData.bannerTextColor}">
             {{formData.bannerTitle ? formData.bannerTitle : defaultContent.bannerTitle}}
           </h6>
           <div class="text-small float-rounded-corner-main line-height-nineteen font-size-thirteen onetrust-policy-text"
                >
-            <span [ngStyle]="{color: formData.bannerTextColor}" [innerHTML]="formData.bannerDescription ? formData.bannerDescription : defaultContent.bannerDescription"></span>
+            <span [ngStyle]="{color: formData.bannerTextColor}"
+                  [innerHTML]="formData.bannerDescription ? formData.bannerDescription : defaultContent.bannerDescription"></span>
+            <a  [ngStyle]="{'color': formData.privacyTextColor ? formData.privacyTextColor: defaultContent.privacyTextColor}"
+                target="_blank"
+                [href]="formData.privacyLink ? formData.privacyLink : '#'">
+              {{formData.privacy ? formData.privacy : defaultContent.privacy}} </a>
        </div>
 
         </div>
       </div>
       <div class="col-6 p-0">
-        <div class="floating-flat-margin-cls ng-star-inserted mt-3" id="onetrust-button-group">
+        <div class="floating-flat-margin-cls ng-star-inserted mt-3" >
           <button
             type="button"
             class="font-size-thirteen mr-2 btn-grr cc-float-rounded-icon-btn cookie-setting-link ng-star-inserted"
             [ngStyle]="{background: formData.bannerPreferenceButtonBackGroundColor, borderColor:formData.bannerPreferenceButtonBackGroundColor,
              color: formData.bannerPreferenceButtonTextColor}"
           >
-           {{formData.bannerPreferenceButtonTextContent ? formData.bannerPreferenceButtonTextContent : defaultContent.bannerPreferenceButtonTextContent}}
+           {{formData.bannerPreferenceButtonText ? formData.bannerPreferenceButtonText : defaultContent.bannerPreferenceButtonText}}
           </button>
           <button
             type="button"
@@ -212,7 +226,7 @@
             borderColor: formData.bannerDoNotSellMyDataBackGroundColor,
             color: formData.bannerDoNotSellMyDataTextColor}"
           >
-            {{formData.bannerDoNotSellMyDataTextContent ? formData.bannerDoNotSellMyDataTextContent : defaultContent.bannerDoNotSellMyDataTextContent}}
+            {{formData.bannerDoNotSellMyDataText ? formData.bannerDoNotSellMyDataText : defaultContent.bannerDoNotSellMyDataText}}
           </button>
 
           <button
@@ -222,7 +236,7 @@
             borderColor: formData.bannerAcceptButtonBackgroundColor,
             color: formData.bannerAcceptButtonTextColor}"
             >
-            {{formData.bannerAcceptButtonTextContent ? formData.bannerAcceptButtonTextContent : defaultContent.bannerAcceptButtonTextContent}}
+            {{formData.bannerAcceptButtonText ? formData.bannerAcceptButtonText : defaultContent.bannerAcceptButtonText}}
           </button>
 
         </div>
