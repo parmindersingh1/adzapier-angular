@@ -41,9 +41,9 @@ export const defaultBannerContent = {
   bannerDisableButtonTextColor: '#f5f5f5',
   bannerDisableButtonBackGroundColor: '#162893',
   //
-  bannerDoNotSellMyDataText: 'Do Not Sell My Data',
-  bannerDoNotSellMyDataTextColor: '#f5f5f5',
-  bannerDoNotSellMyDataBackGroundColor: '#162893',
+  BannerDoNotSellMyDataText: 'Do Not Sell My Data',
+  BannerDoNotSellMyDataTextColor: '#f5f5f5',
+  BannerDoNotSellMyDataBackGroundColor: '#162893',
   //
   bannerAcceptButtonText: 'Accept All',
   bannerAcceptButtonTextColor: '#f5f5f5',
@@ -56,29 +56,29 @@ export const defaultBannerContent = {
   PopUpCcpaGenericPurposeDescription: 'IWhen you visit our website, we store cookie on your browser to collection information. This information might be related to you or your device, your preferences, and mostly used to make the website work as you expect it to and to provide a more personalized web browsing experience. Your privacy is important to us, you can choose not to allow some types of cookies. Click on the different cookie category heading to find out more information and change our default settings. You have the option of disabling certain types of storage that may not be Essential for the basic functioning of the website. If you decide to decline, we may not be able to provide you the optimal website browsing experience. You cannot disable our Essential First Party Strictly Essential Cookies as they are implemented to ensure the proper functioning of our website. Such as log into your account, remembering your settings, prompting the cookie banner and redirect when you logout etc.".',
   PopUpCcpaGenericPrivacyInfoDescription: 'Use this page to learn more about data privacy and how data is used to improve your site experience.',
 
-  popUpPurposeButtonTextColor: '#575751',
-  popUpPurposeButtonBackGroundColor: 'rgb(250, 250, 250)',
+  PopUpPurposeButtonTextColor: '#575751',
+  PopUpPurposeButtonBackGroundColor: 'rgb(250, 250, 250)',
   //
-  popUpSwitchButtonColor: '#4b90ff',
+  PopUpSwitchButtonColor: '#4b90ff',
   //
-  popUpDisableAllButtonText: 'Disable All',
-  popUpDisableAllButtonTextColor: '#f5f5f5',
-  popUpDisableAllButtonBackgroundColor: '#000000',
+  PopUpDisableAllButtonText: 'Disable All',
+  PopUpDisableAllButtonTextColor: '#f5f5f5',
+  PopUpDisableAllButtonBackgroundColor: '#000000',
 
   //
-  popUpDoNotSellText: 'Do Not Sell My Data',
-  popUpDoNotSellTextColor: '#f5f5f5',
-  popUpDoNotSellBackgroundColor: '#162893',
+  PopUpDoNotSellText: 'Do Not Sell My Data',
+  PopUpDoNotSellTextColor: '#f5f5f5',
+  PopUpDoNotSellBackgroundColor: '#162893',
 
-  popUpSaveMyChoiceButtonText: 'Save My Choice',
-  popUpSaveMyChoiceButtonTextColor: '#f5f5f5',
-  popUpSaveMyChoiceButtonBackgroundColor: '#162893',
+  PopUpSaveMyChoiceButtonText: 'Save My Choice',
+  PopUpSaveMyChoiceButtonTextColor: '#f5f5f5',
+  PopUpSaveMyChoiceButtonBackgroundColor: '#162893',
 
   //
 
-  popUpAllowAllButtonText: 'Accept All',
-  popUpAllowAllButtonTextColor: '#f5f5f5',
-  popUpAllowAllButtonBackgroundColor: '#162893',
+  PopUpAllowAllButtonText: 'Accept All',
+  PopUpAllowAllButtonTextColor: '#f5f5f5',
+  PopUpAllowAllButtonBackgroundColor: '#162893',
 
 
   //
@@ -103,80 +103,79 @@ export const defaultBannerContent = {
 }
 
 export class FormDefaultData {
-  privacy: 'Privacy';
-  privacyLink: 'http://google.com';
-  privacyTextColor: '#162893';
-  position: 'bottom';
-  bannerTitle: 'We use cookies Data';
-  bannerTitle2: 'We and our Partners data to provide';
-  bannerDescription: 'We may place these for analysis of our visitor data, to improve our website, show personalised content and to give you a great website experience. For more information about the cookies we use open the settings.';
-  bannerTextColor: '#f5f5f5';
-  bannerBorderColor: '#162893';
-  bannerBackGroundColor: '#000000';
-  //
-  bannerPreferenceButtonText: 'Privacy Setting';
-  bannerPreferenceButtonTextColor: '#f5f5f5';
-  bannerPreferenceButtonBackGroundColor: 'transparent';
-  //
-  bannerDisableButtonText: 'Disable Button';
-  bannerDisableButtonTextColor: '#f5f5f5';
-  bannerDisableButtonBackGroundColor: '#162893';
+  privacy: string;
+  privacyLink: string;
+  privacyTextColor: string;
+  position: string;
+  bannerTitle: string;
+  bannerTitle2: string;
+  bannerDescription: string;
+  bannerTextColor: string;
+  bannerBorderColor: string;
+  bannerBackGroundColor: string;
 
-  bannerDoNotSellMyDataText: 'Do Not Sell My Data';
-  bannerDoNotSellMyDataTextColor: '#f5f5f5';
-  bannerDoNotSellMyDataBackGroundColor: '#162893';
+  bannerPreferenceButtonText: string;
+  bannerPreferenceButtonTextColor: string;
+  bannerPreferenceButtonBackGroundColor: string;
   //
-  bannerAcceptButtonText: 'Accept All';
-  bannerAcceptButtonTextColor: '#f5f5f5';
-  bannerAcceptButtonBackgroundColor: '#162893';
+  bannerDisableButtonText: string;
+  bannerDisableButtonTextColor: string;
+  bannerDisableButtonBackGroundColor: string;
+
+  BannerDoNotSellMyDataText: string;
+  BannerDoNotSellMyDataTextColor: string;
+  BannerDoNotSellMyDataBackGroundColor: string;
+  //
+  bannerAcceptButtonText: string;
+  bannerAcceptButtonTextColor: string;
+  bannerAcceptButtonBackgroundColor: string;
 
 
   // PopUp
-  PopUpGdprVendorDescription: 'During consted in the stub are filtered out if not valid. Ping and custom commands are executed and removed from the queue while all other commands remain queued until a valid TC string is set.';
-  PopUpGdprPurposeDescription: 'In order to comply with data protection laws, we ask you to review the key pointsbelow of our Privacy Policy. To continue using our website, you need to select yourpreferences and click "Save".';
+  PopUpGdprVendorDescription: string;
+  PopUpGdprPurposeDescription: string;
   //
   PopUpCcpaGenericPurposeDescription: string;
   PopUpCcpaGenericPrivacyInfoDescription: string;
 
-  popUpSwitchButtonColor: '#4b90ff';
+  PopUpSwitchButtonColor: string;
   //
-  popUpPurposeButtonTextColor: '#575751';
-  popUpPurposeButtonBackGroundColor: 'rgb(250, 250, 250)';
-  //
-
-  popUpDisableAllButtonText: 'Disable All';
-  popUpDisableAllButtonTextColor: '#f5f5f5';
-  popUpDisableAllButtonBackgroundColor: '#000000';
-
-  //
-  popUpDoNotSellText: 'Do Not Sell My Data';
-  popUpDoNotSellTextColor: '#f5f5f5';
-  popUpDoNotSellBackgroundColor: '#162893';
-
-  popUpSaveMyChoiceButtonText: 'Save My Choice';
-  popUpSaveMyChoiceButtonTextColor: '#f5f5f5';
-  popUpSaveMyChoiceButtonBackgroundColor: '#162893';
-
+  PopUpPurposeButtonTextColor: string;
+  PopUpPurposeButtonBackGroundColor: string;
   //
 
-  popUpAllowAllButtonText: 'Accept All';
-  popUpAllowAllButtonTextColor: '#f5f5f5';
-  popUpAllowAllButtonBackgroundColor: '#162893';
+  PopUpDisableAllButtonText: string;
+  PopUpDisableAllButtonTextColor: string;
+  PopUpDisableAllButtonBackgroundColor: string;
+
+  //
+  PopUpDoNotSellText: string;
+  PopUpDoNotSellTextColor: string;
+  PopUpDoNotSellBackgroundColor: string;
+
+  PopUpSaveMyChoiceButtonText: string;
+  PopUpSaveMyChoiceButtonTextColor: string;
+  PopUpSaveMyChoiceButtonBackgroundColor: string;
 
   //
 
-  AdvertisingTitle: 'Advertising';
-  AdvertisingDescription: 'Advertising cookies track activity across websites in order to understand a viewer’s interests, and direct them specific marketing. Some examples include: cookies used for remarketing, or interest-based advertising.';
+  PopUpAllowAllButtonText: string;
+  PopUpAllowAllButtonTextColor: string;
+  PopUpAllowAllButtonBackgroundColor: string;
 
+  //
 
-  SocialMediaTitle: 'Social Media';
-  SocialMediaDescription: 'In order to comply with data protection laws, we ask you to review the key points below of our Privacy Policy. To continue using our website, you need to select your preferences and click "Save". Privacy Statement';
+  AdvertisingTitle: string;
+  AdvertisingDescription: string;
 
-  AnalyticsTitle: 'Analytics';
-  AnalyticsDescription: 'Functional cookies enhance functions, performance, and services on the website. Some examples include: cookies used to analyze site traffic, cookies used for market research, and cookies used to display advertising that is not directed to a particular individual.';
+  SocialMediaTitle: string;
+  SocialMediaDescription: string;
 
-  EssentialTitle: 'Essential';
-  EssentialDescription: 'Required cookies are Essential for basic website functionality. Some examples include: session cookies needed to transmit the website, authentication cookies, and security cookies';
+  AnalyticsTitle: string;
+  AnalyticsDescription: string;
+
+  EssentialTitle: string;
+  EssentialDescription: string;
 
   FunctionalTitle: string;
   FunctionalDescription: string;

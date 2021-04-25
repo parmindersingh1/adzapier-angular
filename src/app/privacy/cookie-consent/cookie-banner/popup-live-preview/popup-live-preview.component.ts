@@ -21,7 +21,7 @@ export class PopupLivePreviewComponent implements OnInit, OnChanges {
     alwaysAllow: 'Always Allow',
     privacyInfo: 'Privacy Info'
   };
-  @Input('popUpTitleLang') popUpTitleLang = {
+  @Input('popUpTitleLang') PopUpTitleLang = {
     purpose: 'Purpose',
     privacyInfo: 'Privacy Info',
     vendors: 'Vendors'

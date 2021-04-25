@@ -968,6 +968,7 @@
                             </li>
                             <li class="d-flex col-sm-5">
                               <input class="mr-1" formControlName="BannerAcceptAllButtonTextColor"
+                                     [(ngModel)]="formContent.bannerAcceptButtonTextColor"
                                      (change)="onColorChange($event,'BannerAcceptAllButtonTextColor')"
                                      #bannerAllowButtonTextColor
                                      type="color">
@@ -995,7 +996,7 @@
                         </div>
                       </p-accordionTab>
 
-                      <p-accordionTab header="Disable All Button">
+                      <p-accordionTab header="Disable All Button (For Generic Only)">
 
                         <div class="col-md-12 ml-0 mb-4  p-0 row mt-2">
                           <h5 class="col-sm-4 pl-2 tx-middle tx-12 tx-medium tx-spacing-1 tx-color-03 tx-uppercase">
@@ -1059,16 +1060,16 @@
                             Text Content </h5>
                           <div class="col-sm-8 ml-0">
                             <input type="text" [attr.disabled]="isFieldDisabled" class="form-control input-sm"
-                                   [(ngModel)]="formContent.bannerDoNotSellMyDataText"
-                                   formControlName="bannerDoNotSellMyDataText"
-                                   [placeholder]="formContent.bannerDoNotSellMyDataText">
-                            <div *ngIf="submitted && f.bannerDoNotSellMyDataText.errors">
+                                   [(ngModel)]="formContent.BannerDoNotSellMyDataText"
+                                   formControlName="BannerDoNotSellMyDataText"
+                                   [placeholder]="formContent.BannerDoNotSellMyDataText">
+                            <div *ngIf="submitted && f.BannerDoNotSellMyDataText.errors">
                               <div class="text-danger mt-2"
-                                   *ngIf="f.bannerDoNotSellMyDataText.errors.minlength">
+                                   *ngIf="f.BannerDoNotSellMyDataText.errors.minlength">
                                 Minimum 2 characters required
                               </div>
                               <div class="text-danger mt-2"
-                                   *ngIf="f.bannerDoNotSellMyDataText.errors.maxlength">
+                                   *ngIf="f.BannerDoNotSellMyDataText.errors.maxlength">
                                 Maximum 45 characters required
                               </div>
                             </div>
@@ -1080,13 +1081,13 @@
                             <li class="tx-12 tx-medium tx-spacing-1 tx-color-03 tx-uppercase">Text Color</li>
                             <li class="d-flex col-sm-5">
                               <input class="mr-1"
-                                     [(ngModel)]="formContent.bannerDoNotSellMyDataTextColor"
-                                     (change)="onColorChange($event,'bannerDoNotSellMyDataTextColor')"
-                                     formControlName="bannerDoNotSellMyDataTextColor" #bannerDoNotSellMyDataTextColor
+                                     [(ngModel)]="formContent.BannerDoNotSellMyDataTextColor"
+                                     (change)="onColorChange($event,'BannerDoNotSellMyDataTextColor')"
+                                     formControlName="BannerDoNotSellMyDataTextColor" #BannerDoNotSellMyDataTextColor
                                      type="color">
                               <input class="form-control input-sm" type="text" maxlength="7"
-                                     (input)="onKeyChanges($event,'bannerDoNotSellMyDataTextColor')"
-                                     [value]="bannerDoNotSellMyDataTextColor.value"></li>
+                                     (input)="onKeyChanges($event,'BannerDoNotSellMyDataTextColor')"
+                                     [value]="BannerDoNotSellMyDataTextColor.value"></li>
                           </ul>
                         </div>
 
@@ -1096,13 +1097,13 @@
                               Color
                             </li>
                             <li class="d-flex col-sm-5">
-                              <input class="mr-1" [(ngModel)]="formContent.bannerDoNotSellMyDataBackGroundColor"
-                                     formControlName="bannerDoNotSellMyDataBackGroundColor"
-                                     (change)="onColorChange($event,'bannerDoNotSellMyDataBackGroundColor')"
-                                     #bannerDoNotSellMyDataBackGroundColor type="color">
+                              <input class="mr-1" [(ngModel)]="formContent.BannerDoNotSellMyDataBackGroundColor"
+                                     formControlName="BannerDoNotSellMyDataBackGroundColor"
+                                     (change)="onColorChange($event,'BannerDoNotSellMyDataBackGroundColor')"
+                                     #BannerDoNotSellMyDataBackGroundColor type="color">
                               <input class="form-control input-sm" type="text" maxlength="7"
-                                     (input)="onKeyChanges($event,'bannerDoNotSellMyDataBackGroundColor')"
-                                     [value]="bannerDoNotSellMyDataBackGroundColor.value"></li>
+                                     (input)="onKeyChanges($event,'BannerDoNotSellMyDataBackGroundColor')"
+                                     [value]="BannerDoNotSellMyDataBackGroundColor.value"></li>
                           </ul>
                         </div>
                       </p-accordionTab>
@@ -1224,7 +1225,7 @@
                           </li>
                           <li class="d-flex col-sm-5">
                             <input formControlName="PopUpSwitchButton" class="mr-1"
-                                   [(ngModel)]="formContent.popUpSwitchButtonColor" #PopUpSwitchButton type="color"
+                                   [(ngModel)]="formContent.PopUpSwitchButtonColor" #PopUpSwitchButton type="color"
                                    (change)="onColorChange($event,'PopUpSwitchButton')">
                             <input class="form-control input-sm" [value]="PopUpSwitchButton.value" type="text"
                                    maxlength="7" (input)="onKeyChanges($event,'PopUpSwitchButton')"></li>
@@ -1238,12 +1239,12 @@
                           <li class="tx-12 tx-medium tx-spacing-1 tx-color-03 tx-uppercase">Text Color
                           </li>
                           <li class="d-flex col-sm-5">
-                            <input [(ngModel)]="formContent.popUpPurposeButtonTextColor" class="mr-1"
-                                   formControlName="PopUpPurposeButtonTextColor" #popUpPurposeButtonTextColor
+                            <input [(ngModel)]="formContent.PopUpPurposeButtonTextColor" class="mr-1"
+                                   formControlName="PopUpPurposeButtonTextColor" #PopUpPurposeButtonTextColor
                                    type="color" (change)="onColorChange($event,'PopUpPurposeButtonTextColor')">
                             <input class="form-control input-sm" type="text" maxlength="7"
                                    (input)="onKeyChanges($event,'PopUpPurposeButtonTextColor')"
-                                   [value]="popUpPurposeButtonTextColor.value"></li>
+                                   [value]="PopUpPurposeButtonTextColor.value"></li>
                         </ul>
                       </div>
                       <div class="col-md-12 p-0 mt-2">
@@ -1252,16 +1253,127 @@
                             Color
                           </li>
                           <li class="d-flex col-sm-5"><input type="color" class="mr-1"
-                                                             [(ngModel)]="formContent.popUpPurposeButtonBackGroundColor"
+                                                             [(ngModel)]="formContent.PopUpPurposeButtonBackGroundColor"
                                                              (change)="onColorChange($event,'PopUpPurposeButtonBackgroundColor')"
                                                              formControlName="PopUpPurposeButtonBackgroundColor"
-                                                             #popUpPurposeButtonBackGroundColor
+                                                             #PopUpPurposeButtonBackGroundColor
                           ><input class="form-control input-sm" type="text" maxlength="7"
                                   (input)="onKeyChanges($event,'PopUpPurposeButtonBackgroundColor')"
-                                  [value]="popUpPurposeButtonBackGroundColor.value"></li>
+                                  [value]="PopUpPurposeButtonBackGroundColor.value"></li>
                         </ul>
                       </div>
                     </p-accordionTab>
+
+
+                    <p-accordionTab header="Accept All Button">
+                      <div class="col-md-12 ml-0 mb-4  p-0 row mt-2">
+                        <h5 class="col-sm-4 pl-2 tx-middle tx-12 tx-medium tx-spacing-1 tx-color-03 tx-uppercase">
+                          Text Content </h5>
+                        <div class="col-sm-8 ml-0">
+                          <input type="text" [attr.disabled]="isFieldDisabled" class="form-control input-sm"
+                                 formControlName="PopUpAllowAllButtonText"
+                                 [(ngModel)]="formContent.PopUpAllowAllButtonText"
+                                 [placeholder]="formContent.PopUpAllowAllButtonText">
+                          <div *ngIf="submitted && f.PopUpAllowAllButtonText.errors">
+                            <div class="text-danger mt-2" *ngIf="f.PopUpAllowAllButtonText.errors.minlength">
+                              Minimum 2 characte rs required
+                            </div>
+                            <div class="text-danger mt-2" *ngIf="f.PopUpAllowAllButtonText.errors.maxlength">
+                              Maximum 45 characters required
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="col-md-12 mt-2 p-0">
+                        <ul class="ml-2 pl-0 mt-2 colorpicker-wrapper">
+                          <li class="tx-12 tx-medium tx-spacing-1 tx-color-03 tx-uppercase">Text Color
+                          </li>
+                          <li class="d-flex col-sm-5">
+                            <input [(ngModel)]="formContent.PopUpAllowAllButtonTextColor" class="mr-1"
+                                   (change)="onColorChange($event,'PopUpAllowAllButtonTextColor')"
+                                   formControlName="PopUpAllowAllButtonTextColor" #popUPAllowButtonTextColor
+                                   type="color"
+                            >
+                            <input class="form-control input-sm" type="text" maxlength="7"
+                                   (input)="onKeyChanges($event,'PopUpAllowAllButtonTextColor')"
+                                   [value]="popUPAllowButtonTextColor.value"></li>
+                        </ul>
+                      </div>
+
+                      <div class="col-md-12 p-0 mt-2">
+                        <ul class="ml-2 pl-0 mt-2 colorpicker-wrapper">
+                          <li class="tx-12 tx-medium tx-spacing-1 tx-color-03 tx-uppercase">BackGround
+                            Color
+                          </li>
+                          <li class="d-flex col-sm-5">
+                            <input class="mr-1" [(ngModel)]="formContent.PopUpAllowAllButtonBackgroundColor"
+                                   (change)="onColorChange($event,'PopUpAllowAllButtonBackgroundColor')"
+                                   formControlName="PopUpAllowAllButtonBackgroundColor" #popUPAllowButtonBackGroundColor
+                                   type="color">
+                            <input class="form-control input-sm" type="text" maxlength="7"
+                                   (input)="onKeyChanges($event,'PopUpAllowAllButtonBackgroundColor')"
+                                   [value]="popUPAllowButtonBackGroundColor.value"></li>
+                        </ul>
+                      </div>
+                    </p-accordionTab>
+
+
+
+
+                    <p-accordionTab header="Save My Choice Button">
+                      <div class="col-md-12 ml-0 mb-4  p-0 row mt-2">
+                        <h5 class="col-sm-4 pl-2 tx-middle tx-12 tx-medium tx-spacing-1 tx-color-03 tx-uppercase">
+                          Text Content </h5>
+                        <div class="col-sm-8 ml-0">
+                          <input type="text" [attr.disabled]="isFieldDisabled" class="form-control input-sm"
+                                 formControlName="PopUpSaveMyChoiceButtonText"
+                                 [(ngModel)]="formContent.PopUpSaveMyChoiceButtonText"
+                                 [placeholder]="formContent.PopUpSaveMyChoiceButtonText">
+                          <div *ngIf="submitted && f.PopUpSaveMyChoiceButtonText.errors">
+                            <div class="text-danger mt-2" *ngIf="f.PopUpSaveMyChoiceButtonText.errors.minlength">
+                              Minimum 2 characters required
+                            </div>
+                            <div class="text-danger mt-2" *ngIf="f.PopUpSaveMyChoiceButtonText.errors.maxlength">
+                              Maximum 45 characters required
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="col-md-12 mt-2 p-0">
+                        <ul class="ml-2 pl-0 mt-2 colorpicker-wrapper">
+                          <li class="tx-12 tx-medium tx-spacing-1 tx-color-03 tx-uppercase">Text Color
+                          </li>
+                          <li class="d-flex col-sm-5">
+                            <input class="mr-1" [(ngModel)]="formContent.PopUpSaveMyChoiceButtonTextColor"
+                                   (change)="onColorChange($event,'PopUpSaveMyChoiceButtonTextColor')"
+                                   formControlName="PopUpSaveMyChoiceButtonTextColor" #PopUpSaveMyChoiseButtonTextColor
+                                   type="color">
+                            <input class="form-control input-sm" type="text" maxlength="7"
+                                   (input)="onKeyChanges($event,'PopUpSaveMyChoiceButtonTextColor')"
+                                   [value]="PopUpSaveMyChoiseButtonTextColor.value"></li>
+                        </ul>
+                      </div>
+
+                      <div class="col-md-12 p-0 mt-2">
+                        <ul class="ml-2 pl-0 mt-2 colorpicker-wrapper">
+                          <li class="tx-12 tx-medium tx-spacing-1 tx-color-03 tx-uppercase">BackGround
+                            Color
+                          </li>
+                          <li class="d-flex col-sm-5">
+                            <input class="mr-1" formControlName="PopUpSaveMyChoiceButtonBackgroundColor"
+                                   (change)="onColorChange($event,'PopUpSaveMyChoiceButtonBackgroundColor')"
+                                   [(ngModel)]="formContent.PopUpSaveMyChoiceButtonBackgroundColor"
+                                   #PopUpSaveMyChoiseButtonBackGroundColor type="color">
+                            <input class="form-control input-sm" type="text" maxlength="7"
+                                   (input)="onKeyChanges($event,'PopUpSaveMyChoiceButtonBackgroundColor')"
+                                   [value]="PopUpSaveMyChoiseButtonBackGroundColor.value"></li>
+                        </ul>
+                      </div>
+
+                    </p-accordionTab>
+
 
 
                     <p-accordionTab header="Disable All Button">
@@ -1271,9 +1383,9 @@
                         <div class="col-sm-8 ml-0">
                           <input type="text" [attr.disabled]="isFieldDisabled" class="form-control"
                                  class="form-control input-sm"
-                                 [(ngModel)]="formContent.popUpDisableAllButtonText"
+                                 [(ngModel)]="formContent.PopUpDisableAllButtonText"
                                  formControlName="PopUpDisableAllButtonText"
-                                 [placeholder]="formContent.popUpDisableAllButtonText">
+                                 [placeholder]="formContent.PopUpDisableAllButtonText">
                           <div *ngIf="submitted && f.PopUpDisableAllButtonText.errors">
                             <div class="text-danger mt-2" *ngIf="f.PopUpDisableAllButtonText.errors.minlength">
                               Minimum 2 characters required
@@ -1292,12 +1404,12 @@
                           <li class="d-flex col-sm-5">
                             <input class="mr-1" formControlName="PopUpDisableAllButtonTextColor"
                                    (change)="onColorChange($event,'PopUpDisableAllButtonTextColor')"
-                                   [(ngModel)]="formContent.popUpDisableAllButtonTextColor"
-                                   #popUpDisableAllButtonTextColor
+                                   [(ngModel)]="formContent.PopUpDisableAllButtonTextColor"
+                                   #PopUpDisableAllButtonTextColor
                                    type="color">
                             <input class="form-control input-sm" type="text" maxlength="7"
                                    (input)="onKeyChanges($event,'PopUpDisableAllButtonTextColor')"
-                                   [value]="popUpDisableAllButtonTextColor.value"></li>
+                                   [value]="PopUpDisableAllButtonTextColor.value"></li>
                         </ul>
                       </div>
 
@@ -1307,13 +1419,13 @@
                             Color
                           </li>
                           <li class="d-flex col-sm-5">
-                            <input [(ngModel)]="formContent.popUpDisableAllButtonBackgroundColor" class="mr-1"
+                            <input [(ngModel)]="formContent.PopUpDisableAllButtonBackgroundColor" class="mr-1"
                                    formControlName="PopUpDisableAllButtonBackgroundColor"
                                    (change)="onColorChange($event,'PopUpDisableAllButtonBackgroundColor')"
-                                   #popUpDisableAllButtonBackGroundColor type="color">
+                                   #PopUpDisableAllButtonBackGroundColor type="color">
                             <input class="form-control input-sm" type="text" maxlength="7"
                                    (input)="onKeyChanges($event,'PopUpDisableAllButtonBackgroundColor')"
-                                   [value]="popUpDisableAllButtonBackGroundColor.value"></li>
+                                   [value]="PopUpDisableAllButtonBackGroundColor.value"></li>
                         </ul>
                       </div>
                     </p-accordionTab>
@@ -1325,14 +1437,14 @@
                           Text Content </h5>
                         <div class="col-sm-8 ml-0">
                           <input type="text" class="form-control"
-                                 class="form-control input-sm" [(ngModel)]="formContent.popUpDoNotSellText"
-                                 formControlName="popUpDoNotSellText"
-                                 [placeholder]="formContent.popUpDoNotSellText">
-                          <div *ngIf="submitted && f.popUpDoNotSellText.errors">
-                            <div class="text-danger mt-2" *ngIf="f.popUpDoNotSellText.errors.minlength">
+                                 class="form-control input-sm" [(ngModel)]="formContent.PopUpDoNotSellText"
+                                 formControlName="PopUpDoNotSellText"
+                                 [placeholder]="formContent.PopUpDoNotSellText">
+                          <div *ngIf="submitted && f.PopUpDoNotSellText.errors">
+                            <div class="text-danger mt-2" *ngIf="f.PopUpDoNotSellText.errors.minlength">
                               Minimum 2 characters required
                             </div>
-                            <div class="text-danger mt-2" *ngIf="f.popUpDoNotSellText.errors.maxlength">
+                            <div class="text-danger mt-2" *ngIf="f.PopUpDoNotSellText.errors.maxlength">
                               Maximum 45 characters required
                             </div>
                           </div>
@@ -1344,13 +1456,13 @@
                           <li class="tx-12 tx-medium tx-spacing-1 tx-color-03 tx-uppercase">Text Color
                           </li>
                           <li class="d-flex col-sm-5">
-                            <input class="mr-1" formControlName="popUpDoNotSellTextColor"
-                                   (change)="onColorChange($event,'popUpDoNotSellTextColor')"
-                                   [(ngModel)]="formContent.popUpDoNotSellTextColor" #popUpDoNotSellTextColor
+                            <input class="mr-1" formControlName="PopUpDoNotSellTextColor"
+                                   (change)="onColorChange($event,'PopUpDoNotSellTextColor')"
+                                   [(ngModel)]="formContent.PopUpDoNotSellTextColor" #PopUpDoNotSellTextColor
                                    type="color">
                             <input class="form-control input-sm" type="text" maxlength="7"
-                                   (input)="onKeyChanges($event,'popUpDoNotSellTextColor')"
-                                   [value]="popUpDoNotSellTextColor.value"></li>
+                                   (input)="onKeyChanges($event,'PopUpDoNotSellTextColor')"
+                                   [value]="PopUpDoNotSellTextColor.value"></li>
                         </ul>
                       </div>
 
@@ -1360,13 +1472,13 @@
                             Color
                           </li>
                           <li class="d-flex col-sm-5">
-                            <input [(ngModel)]="formContent.popUpDoNotSellBackgroundColor" class="mr-1"
-                                   formControlName="popUpDoNotSellBackgroundColor"
-                                   (change)="onColorChange($event,'popUpDoNotSellBackgroundColor')"
-                                   #popUpDoNotSellBackgroundColor type="color">
+                            <input [(ngModel)]="formContent.PopUpDoNotSellBackgroundColor" class="mr-1"
+                                   formControlName="PopUpDoNotSellBackgroundColor"
+                                   (change)="onColorChange($event,'PopUpDoNotSellBackgroundColor')"
+                                   #PopUpDoNotSellBackgroundColor type="color">
                             <input class="form-control input-sm" type="text" maxlength="7"
-                                   (input)="onKeyChanges($event,'popUpDoNotSellBackgroundColor')"
-                                   [value]="popUpDoNotSellBackgroundColor.value"></li>
+                                   (input)="onKeyChanges($event,'PopUpDoNotSellBackgroundColor')"
+                                   [value]="PopUpDoNotSellBackgroundColor.value"></li>
                         </ul>
                       </div>
                     </p-accordionTab>
@@ -1375,113 +1487,9 @@
 
 
 
-                    <p-accordionTab header="Save My Choice Button">
-                      <div class="col-md-12 ml-0 mb-4  p-0 row mt-2">
-                        <h5 class="col-sm-4 pl-2 tx-middle tx-12 tx-medium tx-spacing-1 tx-color-03 tx-uppercase">
-                          Text Content </h5>
-                        <div class="col-sm-8 ml-0">
-                          <input type="text" [attr.disabled]="isFieldDisabled" class="form-control input-sm"
-                                 formControlName="PopUpSaveMyChoiceButtonText"
-                                 [(ngModel)]="formContent.popUpSaveMyChoiceButtonText"
-                                 [placeholder]="formContent.popUpSaveMyChoiceButtonText">
-                          <div *ngIf="submitted && f.PopUpSaveMyChoiceButtonText.errors">
-                            <div class="text-danger mt-2" *ngIf="f.PopUpSaveMyChoiceButtonText.errors.minlength">
-                              Minimum 2 characters required
-                            </div>
-                            <div class="text-danger mt-2" *ngIf="f.PopUpSaveMyChoiceButtonText.errors.maxlength">
-                              Maximum 45 characters required
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="col-md-12 mt-2 p-0">
-                        <ul class="ml-2 pl-0 mt-2 colorpicker-wrapper">
-                          <li class="tx-12 tx-medium tx-spacing-1 tx-color-03 tx-uppercase">Text Color
-                          </li>
-                          <li class="d-flex col-sm-5">
-                            <input class="mr-1" [(ngModel)]="formContent.popUpSaveMyChoiceButtonTextColor"
-                                   (change)="onColorChange($event,'PopUpSaveMyChoiceButtonTextColor')"
-                                   formControlName="PopUpSaveMyChoiceButtonTextColor" #popUpSaveMyChoiseButtonTextColor
-                                   type="color">
-                            <input class="form-control input-sm" type="text" maxlength="7"
-                                   (input)="onKeyChanges($event,'PopUpSaveMyChoiceButtonTextColor')"
-                                   [value]="popUpSaveMyChoiseButtonTextColor.value"></li>
-                        </ul>
-                      </div>
-
-                      <div class="col-md-12 p-0 mt-2">
-                        <ul class="ml-2 pl-0 mt-2 colorpicker-wrapper">
-                          <li class="tx-12 tx-medium tx-spacing-1 tx-color-03 tx-uppercase">BackGround
-                            Color
-                          </li>
-                          <li class="d-flex col-sm-5">
-                            <input class="mr-1" formControlName="PopUpSaveMyChoiceButtonBackgroundColor"
-                                   (change)="onColorChange($event,'PopUpSaveMyChoiceButtonBackgroundColor')"
-                                   [(ngModel)]="formContent.popUpSaveMyChoiceButtonBackgroundColor"
-                                   #popUpSaveMyChoiseButtonBackGroundColor type="color">
-                            <input class="form-control input-sm" type="text" maxlength="7"
-                                   (input)="onKeyChanges($event,'PopUpSaveMyChoiceButtonBackgroundColor')"
-                                   [value]="popUpSaveMyChoiseButtonBackGroundColor.value"></li>
-                        </ul>
-                      </div>
-
-                    </p-accordionTab>
 
 
 
-                    <p-accordionTab header="Accept All Button">
-                      <div class="col-md-12 ml-0 mb-4  p-0 row mt-2">
-                        <h5 class="col-sm-4 pl-2 tx-middle tx-12 tx-medium tx-spacing-1 tx-color-03 tx-uppercase">
-                          Text Content </h5>
-                        <div class="col-sm-8 ml-0">
-                          <input type="text" [attr.disabled]="isFieldDisabled" class="form-control input-sm"
-                                 formControlName="PopUpAllowAllButtonText"
-                                 [(ngModel)]="formContent.popUpAllowAllButtonText"
-                                 [placeholder]="formContent.popUpAllowAllButtonText">
-                          <div *ngIf="submitted && f.PopUpAllowAllButtonText.errors">
-                            <div class="text-danger mt-2" *ngIf="f.PopUpAllowAllButtonText.errors.minlength">
-                              Minimum 2 characte rs required
-                            </div>
-                            <div class="text-danger mt-2" *ngIf="f.PopUpAllowAllButtonText.errors.maxlength">
-                              Maximum 45 characters required
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="col-md-12 mt-2 p-0">
-                        <ul class="ml-2 pl-0 mt-2 colorpicker-wrapper">
-                          <li class="tx-12 tx-medium tx-spacing-1 tx-color-03 tx-uppercase">Text Color
-                          </li>
-                          <li class="d-flex col-sm-5">
-                            <input [(ngModel)]="formContent.popUpAllowAllButtonTextColor" class="mr-1"
-                                   (change)="onColorChange($event,'PopUpAllowAllButtonTextColor')"
-                                   formControlName="PopUpAllowAllButtonTextColor" #popUPAllowButtonTextColor
-                                   type="color"
-                            >
-                            <input class="form-control input-sm" type="text" maxlength="7"
-                                   (input)="onKeyChanges($event,'PopUpAllowAllButtonTextColor')"
-                                   [value]="popUPAllowButtonTextColor.value"></li>
-                        </ul>
-                      </div>
-
-                      <div class="col-md-12 p-0 mt-2">
-                        <ul class="ml-2 pl-0 mt-2 colorpicker-wrapper">
-                          <li class="tx-12 tx-medium tx-spacing-1 tx-color-03 tx-uppercase">BackGround
-                            Color
-                          </li>
-                          <li class="d-flex col-sm-5">
-                            <input class="mr-1" [(ngModel)]="formContent.popUpAllowAllButtonBackgroundColor"
-                                   (change)="onColorChange($event,'PopUpAllowAllButtonBackgroundColor')"
-                                   formControlName="PopUpAllowAllButtonBackgroundColor" #popUPAllowButtonBackGroundColor
-                                   type="color">
-                            <input class="form-control input-sm" type="text" maxlength="7"
-                                   (input)="onKeyChanges($event,'PopUpAllowAllButtonBackgroundColor')"
-                                   [value]="popUPAllowButtonBackGroundColor.value"></li>
-                        </ul>
-                      </div>
-                    </p-accordionTab>
 
 
                     <div class="col-md-12 mt-3 mb-2">
@@ -1681,7 +1689,7 @@
             <div class="white-back" [ngClass]="{'col-md-12' : !showConfig.checked , 'col-md-7' : showConfig.checked }">
               <app-popup-live-preview [isGdprGlobal]="gdprGlobal.checked"
                                       [ccpaGlobal]="ccpaGlobal.checked"
-                                      [popUpTitleLang]="popUpTitleLang"
+                                      [popUpTitleLang]="PopUpTitleLang"
                                       [extraProperty]="extraProperty"
                                       [showConfigType]="showConfig.checked"
                                       [formData]="formContent">>
@@ -1712,7 +1720,7 @@
 
 <div class="col-sm-5 mr-0 float-right flotingdiv" [ngClass]="{'hide':!isOpen}">
   <alert *ngIf="isOpen" [type]="alertType" dismissOnTimeout="5000" [dismissible]="dismissible"
-         (onClosed)="onClosed(alertMsg)">{{  alertMsg}}</alert>
+         (onClosed)="onClosed(alertMsg) "  ><span [innerHTML]="alertMsg"></span></alert>
 </div>
 <ng-template #template>
   <div class="modal-body text-center">
