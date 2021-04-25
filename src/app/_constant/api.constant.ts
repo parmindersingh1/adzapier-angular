@@ -3,6 +3,7 @@ export const apiConstant = {
   // Consent Banner
   CONSENT_BANNER: '/consent/banner/:orgId/:propId',
   // Cookie Category
+  COOKIE_BANNER: '/consent/save-custom-lang/:orgId/:propId',
   COOKIE_CATEGORY: '/cookiecategory',
   COOKIE_SCANNER: '/scanner/request/:orgId/:propId',
   COOKIE_PUBLISH: '/publish-cookie/:orgId/:propId',
@@ -44,7 +45,7 @@ export const apiConstant = {
   //
   BILLING_LIST_ALL_PROPERTY: '/unlicensed/property',
   BILLING_LIST_ALL_ORG: '/unlicensed/organizations',
-  ORG_ACITVE_LIST:'/organizations',
+  ORG_ACITVE_LIST: '/organizations',
   //
   BILLING_UNSSIGNE_PROPERTY: '/unassign/license/property',
   BILLING_UNSSIGNE_ORG: '/unassign/license/organization',
