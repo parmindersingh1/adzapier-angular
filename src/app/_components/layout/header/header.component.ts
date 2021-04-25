@@ -312,6 +312,9 @@ export class HeaderComponent implements OnInit {
       if(this.router.url.indexOf('dsarform') !== -1){
         this.router.navigate(['/privacy/dsar/webforms']);
       }
+      if(this.router.url.indexOf('createworkflow') !== -1){
+        this.router.navigate(['/privacy/dsar/workflows']);
+      }
      this.openNav();
 
 
@@ -551,11 +554,7 @@ export class HeaderComponent implements OnInit {
   }
 
   checkLinkAccess(link): boolean {
-    if (link.indexOf('workflow') !== -1) {
-      if(this.isLicenseLimitAvailable("workflow")){
-         return true
-      }
-    } else if (link.indexOf('cookie') !== -1 || link.indexOf('privacy') !== -1 || link.indexOf('webform') !== -1 ||
+    if (link.indexOf('cookie') !== -1 || link.indexOf('privacy') !== -1 || link.indexOf('webform') !== -1 ||
       link.indexOf('ccpa') !== -1) {
       return true;
     } else {

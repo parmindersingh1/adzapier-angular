@@ -1038,8 +1038,7 @@
             <button class="btn btn-primary float-right mt-2" 
             [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? true : null"
             type="submit">Save</button>
-            <button class="btn btn-outline-dark float-right mt-2 mr-2"
-                (click)="modal.dismiss('Close Clicked')">Close</button>
+            <button type="button" class="btn btn-outline-dark float-right mt-2 mr-2" (click)="onCloseWelcomeTextEditor()">Close</button>
         </form>
     </div>
     <ng-template #footerContent>
@@ -1052,8 +1051,8 @@
                 <button class="btn btn-primary float-right mt-2"
                 [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? true : null"
                 type="submit">Save</button>
-                <button class="btn btn-outline-dark float-right mt-2 mr-2"
-                    (click)="modal.dismiss('Close Clicked')">Close</button>
+                <button type="button" class="btn btn-outline-dark float-right mt-2 mr-2" 
+                    (click)="onCloseFooterTextEditor()">Close</button>
             </form>
         </div>
     </ng-template>
