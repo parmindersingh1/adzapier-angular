@@ -9,6 +9,8 @@ export const environment = {
   googleVendorsUrl: 'https://staging-cdn.adzapsrv.com/vendorlist/googlevendorlist/google.json',
   apiUrl: 'https://cmp-api.adzpier-staging.com/api/v1',
   lokiUrl: 'https://logs.adzpier-staging.com/loki/api/v1/push',
+  globleLangURL: 'https://staging-cdn.adzapsrv.com/cookiebanner/banner-language/test/:lang.json',
+  customLangURL: 'https://staging-cdn.adzapsrv.com/cmp/v1/web/:oid/lang/:pid-:lang.json',
   lokiConfig: {
     app: 'cmp-adminportal-staging',
     env: 'staging',
