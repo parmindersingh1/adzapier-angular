@@ -1088,4 +1088,35 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
       })
     }
   }
+
+  onIsFieldDirty() {
+    return this.cookieBannerForm.controls.BannerTitle.dirty ||
+      this.cookieBannerForm.controls.BannerDescription.dirty ||
+      this.cookieBannerForm.controls.BannerPreferenceButtonText.dirty ||
+      this.cookieBannerForm.controls.BannerAcceptAllButtonText.dirty ||
+      this.cookieBannerForm.controls.BannerDisableAllButtonText.dirty ||
+      this.cookieBannerForm.controls.bannerDoNotSellMyDataText.dirty ||
+      this.cookieBannerForm.controls.PopUpGdprPurposeDescription.dirty ||
+      this.cookieBannerForm.controls.PopUpGdprVendorDescription.dirty ||
+      this.cookieBannerForm.controls.PopUpCcpaGenericPurposeDescription.dirty ||
+      this.cookieBannerForm.controls.PopUpCcpaGenericPrivacyInfoDescription.dirty ||
+      this.cookieBannerForm.controls.PopUpDisableAllButtonText.dirty ||
+      this.cookieBannerForm.controls.popUpDoNotSellText.dirty ||
+      this.cookieBannerForm.controls.PopUpSaveMyChoiceButtonText.dirty ||
+      this.cookieBannerForm.controls.PopUpAllowAllButtonText.dirty ||
+      this.cookieBannerForm.controls.EssentialTitle.dirty ||
+      this.cookieBannerForm.controls.EssentialDescription.dirty ||
+      this.cookieBannerForm.controls.FunctionalTitle.dirty ||
+      this.cookieBannerForm.controls.FunctionalDescription.dirty ||
+      this.cookieBannerForm.controls.AnalyticsTitle.dirty ||
+      this.cookieBannerForm.controls.AnalyticsDescription.dirty ||
+      this.cookieBannerForm.controls.AdvertisingTitle.dirty ||
+      this.cookieBannerForm.controls.AdvertisingDescription.dirty ||
+      this.cookieBannerForm.controls.SocialMediaTitle.dirty ||
+      this.cookieBannerForm.controls.SocialMediaDescription.dirty ||
+      this.cookieBannerForm.controls.UnknownTitle.dirty ||
+      this.cookieBannerForm.controls.SocialMediaDescription.dirty;
+  }
+
 }
+
