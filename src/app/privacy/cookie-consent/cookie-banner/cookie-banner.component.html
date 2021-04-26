@@ -667,7 +667,7 @@
                 </div>
               </div>
               <div class="col-md-2">
-                <button type="button" (click)="onSaveCustomLang()" [disabled]="!onIsFieldDirty()" class="btn btn-success"> Save Changes </button>
+                <button type="button" (click)="onSaveCustomLang()" [disabled]="!onIsFieldDirty" class="btn btn-success"> Save Changes </button>
               </div>
 
             </div>
@@ -684,23 +684,6 @@
                   <div class="banner-row">
                     <p-accordion>
                       <p-accordionTab header="General Configuration" [selected]="true">
-                        <!--                        <div class="col-md-12">-->
-                        <!--                          <div class="form-group">-->
-                        <!--                            <label for="lang"-->
-                        <!--                                   class="tx-12 tx-medium tx-middle tx-spacing-1 tx-color-03 tx-uppercase">Language </label>-->
-                        <!--                            <select [disabled]="isFieldDisabled" (change)="onGetLangData()" formControlName="Bannerlanguage"-->
-                        <!--                                    class="form-control w-75" id="lang">-->
-                        <!--                              <option *ngFor="let gdprLang of bannerConstant.Bannerlanguage"-->
-                        <!--                                      [value]="gdprLang.value">{{gdprLang.title}}</option>-->
-
-                        <!--                            </select>-->
-                        <!--                            <div *ngIf="submitted && f.Bannerlanguage.errors">-->
-                        <!--                              <div class="text-danger mt-2" *ngIf="f.Bannerlanguage.errors.required">-->
-                        <!--                                Language is <strong>required</strong>-->
-                        <!--                              </div>-->
-                        <!--                            </div>-->
-                        <!--                          </div>-->
-                        <!--                        </div>-->
                         <div class="col-md-12 mb-4">
                           <h6 class="tx-12 tx-medium tx-middle tx-spacing-1 tx-color-03 tx-uppercase">Position</h6>
                           <div *ngFor="let gdprPosition of bannerConstant.BannerPosition"
@@ -1822,8 +1805,8 @@
   </div>
   <div class="modal-footer">
     <div class="text-center m-auto">
-      <!--          <button type="button" aria-label="Close" (click)="modalRef.hide()" class="btn btn-sm btn-uppercase btn-outline-secondary">Cancel</button>-->
-      <button type="button" aria-label="Close" (click)="modalRef.hide()"
+                <button type="button" aria-label="Close" (click)="modalRef.hide();onCancelLang()" class="btn btn-sm btn-uppercase btn-outline-secondary">Cancel</button>
+      <button type="button" aria-label="Close" (click)="modalRef.hide(); onSaveAllowedLang()"
               class="ml-3 btn btn-sm btn-uppercase btn-primary">Save
       </button>
     </div>

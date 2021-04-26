@@ -13,6 +13,7 @@ import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
 import {DataService} from 'src/app/_services/data.service';
 import {featuresName} from 'src/app/_constant/features-name.constant';
 import {GdprService} from '../../../_services/gdpr.service';
+import {BehaviorSubject} from 'rxjs';
 
 
 /** Error when invalid control is dirty, touched, or submitted. */
@@ -102,6 +103,10 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
   languageData = null;
   saveCustomLang = [];
   resetLang = null;
+  allowedLanguageListObj = {
+    allowedLang: [],
+    defaultLang: 'en-US'
+  }
 
   constructor(private formBuilder: FormBuilder,
               private cd: ChangeDetectorRef,
@@ -121,13 +126,11 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
 
   async ngOnInit() {
     this.onGetPropsAndOrgId();
-    // window.scroll(0, 500)
     this.onGetAllowVendors();
     this.onGetCookies();
     this.onFormInIt();
     this.onSetDefaultValue();
     this.gdprTarget = this.bannerConstant.gdprTargetCountry;
-    // this.onGetBannerDataFromServer();
     await this.onGetSavedCookieBannerConfig();
     this.onGetLangData();
   }
@@ -361,6 +364,11 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
     this.allowLanguagesList = configData.config.LanguageConfig.allowedLang;
     this.defaultLanguage = configData.config.LanguageConfig.defaultLang;
     this.saveCustomLang = configData.config.LanguageConfig.customLang;
+    const langConfig = {...configData.config.LanguageConfig};
+    this.allowedLanguageListObj = {
+      allowedLang: langConfig.allowedLang,
+      defaultLang: langConfig.defaultLang
+    };
   }
 
   onGetCookies() {
@@ -748,8 +756,8 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
     console.log('Form Data', this.cookieBannerForm)
     return {
       LanguageConfig: {
-        allowedLang: this.allowLanguagesList,
-        defaultLang: this.defaultLanguage,
+        allowedLang: this.allowedLanguageListObj.allowedLang,
+        defaultLang: this.allowedLanguageListObj.defaultLang,
         customLang: this.saveCustomLang
       },
       AllowedBanners: {
@@ -921,14 +929,17 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
 
   onSelectLang(event, id) {
     const isChecked = event.target.checked;
+    const  allowLanguagesList = [... this.allowLanguagesList]
     if (isChecked) {
-      this.allowLanguagesList.push(id);
+      allowLanguagesList.push(id);
     } else {
       const index = this.allowLanguagesList.indexOf(id);
       if (index > -1) {
-        this.allowLanguagesList.splice(index, 1);
+        allowLanguagesList.splice(index, 1);
       }
     }
+    this.allowLanguagesList = [];
+    this.allowLanguagesList = allowLanguagesList;
   }
 
   onAllowAllLang(event) {
@@ -1061,7 +1072,7 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
     }
   }
 
-  onIsFieldDirty() {
+  get onIsFieldDirty() {
     return this.cookieBannerForm.controls.BannerTitle.dirty ||
       this.cookieBannerForm.controls.BannerDescription.dirty ||
       this.cookieBannerForm.controls.BannerPreferenceButtonText.dirty ||
@@ -1088,6 +1099,20 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
       this.cookieBannerForm.controls.SocialMediaDescription.dirty ||
       this.cookieBannerForm.controls.UnknownTitle.dirty ||
       this.cookieBannerForm.controls.SocialMediaDescription.dirty;
+  }
+
+  onSaveAllowedLang() {
+    this.allowedLanguageListObj = {
+      allowedLang: this.allowLanguagesList,
+      defaultLang: this.defaultLanguage
+    };
+  }
+  onCancelLang() {
+    this.allowLanguagesList = [];
+    this.allowLanguagesList = this.allowedLanguageListObj.allowedLang;
+    this.defaultLanguage = this.allowedLanguageListObj.defaultLang;
+    this.cd.detectChanges()
+
   }
 
 }
