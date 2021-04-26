@@ -655,14 +655,13 @@
                     Language </label>
                   <select  name="activeBannerlanguage"  (change)="onCheckFormChanges($event)"
                           class="form-control col-6 col-md-7" id="lang">
-                    <!--                              <option value="">&#45;&#45; Select Language &#45;&#45;</option>-->
                     <ng-container *ngFor="let gdprLang of bannerConstant.Bannerlanguage">
                       <option *ngIf="allowLanguagesList.includes(gdprLang.value)"
                               [value]="gdprLang.value" [selected]="activeBannerlanguage === gdprLang.value" >{{gdprLang.title}}</option>
                     </ng-container>
                   </select>
                   <div class="col-md-2 col-2 pr-0">
-                    <i (click)="openModal(templateManageLang)" class="setting-icon  fas fa-cog"></i>
+                    <i (click)="openModal(templateManageLang)" class="setting-icon  fas fa-language"></i>
                   </div>
                 </div>
               </div>
