@@ -25,6 +25,8 @@ class Opt {
   allow_analytics: 0;
   allow_essantial: 0;
   allow_socialmedia: 0;
+  allow_functional: 0;
+  allow_unknown: 0;
   total_consents: 0;
 }
 @Component({
