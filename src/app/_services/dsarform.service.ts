@@ -63,4 +63,12 @@ export class DsarformService extends WebControls {
     return localStorage.removeItem('formControlList');
   }
 
+  storeDataBeforeEdit(data) {
+    sessionStorage.setItem('storeCurrentFieldData', JSON.stringify(data));
+  }
+
+  getStoreDataBeforeEdit() {
+    return JSON.parse(sessionStorage.getItem('storeCurrentFieldData'));
+  }
+
 }
