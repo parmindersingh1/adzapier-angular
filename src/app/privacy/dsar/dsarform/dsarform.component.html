@@ -111,7 +111,7 @@
                                                             <span *ngIf="isAddingFormControl && !isEditingList">Custom Fields</span>
                                                             <div>
                                                                <button class="btn btn-sm btn-outline-secondary mr-2" type="button" (click)="cancelAddingFormControl('cancel')">Cancel</button>
-                                                                <button type="submit" class="btn btn-sm btn-outline-primary" (click)="addCustomFields(customFields)" [attr.disabled]="!customFields.form.valid || isWebFormPublished && !isEditingPublishedForm ? true : null">Save and close</button>
+                                                                <button type="submit" class="btn btn-sm btn-outline-primary" (click)="addCustomFields(customFields)" [attr.disabled]="isCustomOptionEmpty() && isSideMenuRequestTypeOptionEmpty() || isCustomOptionEmpty() && isSideMenuSubjectTypeOptionEmpty() || isCustomOptionEmpty() || !customFields.form.valid || isWebFormPublished && !isEditingPublishedForm ? true : null">Save and close</button>
                                                             </div>
                                                         </h5>
                                                     </div>
@@ -151,7 +151,7 @@
                                                                     (change)="updateControlType($event)"
                                                                     name="changeControlType" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
                                                                     [(ngModel)]="changeControlType">
-                                                                    <option selected value="">select option</option>
+                                                                    <option disabled selected value="">select option</option>
                                                                     <ng-container *ngFor="let status_item of editableControlOption">
                                                                       <option [value]="status_item.control"> {{status_item.display}}</option>
                                                                     </ng-container>
@@ -210,18 +210,17 @@
                                                                                 name="{{item.name}}" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
                                                                                 [ngModelOptions]="{standalone: true}"
                                                                                 #ngModel="ngModel"
-                                                                                [ngClass]="{ 'is-invalid': customFields.submitted && ngModel.invalid }"
+                                                                                [ngClass]="{ 'invalid-txtbox': ngModel.errors?.required && !(ngModel.dirty || ngModel.touched)}"
                                                                                 class="form-control mb-1" required />
                                                                             <div
-                                                                                *ngIf="customFields.submitted && ngModel.invalid">
-                                                                                <span *ngIf="ngModel.errors.required"
-                                                                                    class="red">
+                                                                                *ngIf="ngModel.errors?.required && !(ngModel.dirty || ngModel.touched)">
+                                                                                <span class="red">
                                                                                     Add value
                                                                                 </span>
                                                                             </div>
                                                                         </div>
                                                                         <button type="button" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
-                                                                            class="btn btn-sm btn-danger ml-2"
+                                                                            class="btn btn-sm btn-danger ml-2" *ngIf="sideMenuSubjectTypeOptions.length !== 1"
                                                                             (click)="deleteSubjectOption(i)"><span
                                                                                 style="font-size: 13px;"><i
                                                                                     class="fa fa-minus"
@@ -257,11 +256,11 @@
                                                                                 [ngModelOptions]="{standalone: true}"
                                                                                 #ngModel="ngModel"
                                                                                 class="form-control mb-1"
-                                                                                [ngClass]="{ 'is-invalid': customFields.submitted && ngModel.invalid }"
+                                                                                [ngClass]="{ 'invalid-txtbox': ngModel.errors?.required && !(ngModel.dirty || ngModel.touched)}"
                                                                                 required />
                                                                             <div
-                                                                                *ngIf="customFields.submitted && ngModel.invalid">
-                                                                                <span *ngIf="ngModel.errors?.required"
+                                                                                *ngIf="ngModel.errors?.required && !(ngModel.dirty || ngModel.touched)">
+                                                                                <span 
                                                                                     class="red">
                                                                                     Add value
                                                                                 </span>
@@ -269,7 +268,7 @@
 
                                                                         </div>
                                                                         <button type="button" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
-                                                                            class="btn btn-sm btn-danger ml-2"
+                                                                            class="btn btn-sm btn-danger ml-2" *ngIf="sideMenuRequestTypeOptions.length !== 1"
                                                                             (click)="deleteRequestOption(i)"><span
                                                                                 style="font-size: 13px;">
                                                                                 <i class="fa fa-minus"
@@ -305,20 +304,17 @@
                                                                                 name="{{item.name}}" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
                                                                                 [ngModelOptions]="{standalone: true}"
                                                                                 #customControl="ngModel"
-                                                                                [ngClass]="{ 'is-invalid': customFields.submitted && customControl.invalid }"
+                                                                                [ngClass]="{ 'invalid-txtbox': customControl.errors?.required && !(customControl.dirty || customControl.touched)}"
                                                                                 class="form-control mb-1" required />
-                                                                            <div
-                                                                                *ngIf="customFields.submitted && customControl.invalid">
-                                                                                <span
-                                                                                    *ngIf="customControl.errors?.required"
-                                                                                    class="red">
+                                                                            <div *ngIf="customControl.errors?.required && !(customControl.dirty || customControl.touched)">
+                                                                                <span class="color-red">
                                                                                     Add value
                                                                                 </span>
                                                                             </div>
 
                                                                         </div>
                                                                         <button type="button" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
-                                                                            class="btn btn-sm btn-danger ml-2"
+                                                                            class="btn btn-sm btn-danger ml-2" *ngIf="selectOptions.length !== 1"
                                                                             (click)="deleteSelectOption(i)"><span
                                                                                 style="font-size: 13px;"><i
                                                                                     class="fa fa-minus"
@@ -545,7 +541,11 @@
                                 cdkDrag [cdkDragDisabled]="true">
                                 <div *ngIf="webcontrol.controlId === 'requesttype'" class="col-sm-12">
                                     <label><span *ngIf="webcontrol.requiredfield" class="color-red">*</span>
-                                        {{webcontrol.controllabel}}</label>
+                                        <span [ngClass]="{'hidelabel':webcontrol.controlId == selectedControlId && isEditingList}">{{webcontrol.controllabel}}</span>
+                                        <span *ngIf="webcontrol.controlId == selectedControlId && isEditingList">
+                                            <span>{{lblText && isEditingList ? lblText : webcontrol.controllabel}}</span> 
+                                         </span>
+                                        </label>
                                     <div
                                         *ngIf="webcontrol.control === 'select' && webcontrol.controlId === 'requesttype'">
                                         <select class="form-control" name="{{webcontrol.controllabel}}"
@@ -585,8 +585,12 @@
                                 </div>
                                 <div *ngIf="webcontrol.controlId === 'subjecttype'" class="col-sm-12">
                                     <!--webcontrol.control == 'select' && webcontrol.controlId === 'subjecttype' && isSubjectTypeSelected-->
-                                    <label><span *ngIf="webcontrol.requiredfield"
-                                            class="color-red">*</span>{{webcontrol.controllabel}}</label>
+                                    <label><span *ngIf="webcontrol.requiredfield" class="color-red">*</span>
+                                        <span [ngClass]="{'hidelabel':webcontrol.controlId == selectedControlId && isEditingList}">{{webcontrol.controllabel}} </span>
+                                        <span *ngIf="webcontrol.controlId == selectedControlId && isEditingList">
+                                            <span>{{lblText && isEditingList ? lblText : webcontrol.controllabel}}</span> 
+                                         </span>
+                                    </label>
                                     <div
                                         *ngIf="webcontrol.control == 'select' && webcontrol.controlId === 'subjecttype'">
                                         <!-- *ngIf="isSubjectTypeSelected"-->
@@ -631,7 +635,11 @@
                                 </div>
                                 <div *ngIf="webcontrol.control === 'textbox';else selectOption" class="col-sm-12">
                                     <label> <span *ngIf="webcontrol.requiredfield" class="color-red">*</span>
-                                        {{webcontrol.controllabel}} </label>
+                                        <span [ngClass]="{'hidelabel':webcontrol.controlId == selectedControlId && isEditingList}">{{webcontrol.controllabel}} </span>
+                                        <span *ngIf="webcontrol.controlId == selectedControlId && isEditingList">
+                                            <span>{{lblText && isEditingList ? lblText : webcontrol.controllabel}}</span> 
+                                         </span>
+                                    </label>
                                     <input class="form-control" type="text" name="{{webcontrol.controllabel}}"
                                         [(ngModel)]="requestObject[webcontrol.controllabel]" />
                                     <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
@@ -639,7 +647,11 @@
                                 </div>
                                 <div *ngIf="webcontrol.control === 'textarea'" class="col-sm-12">
                                     <label><span *ngIf="webcontrol.requiredfield" class="color-red">*</span>
-                                        {{webcontrol.controllabel}} </label>
+                                        <span [ngClass]="{'hidelabel':webcontrol.controlId == selectedControlId && isEditingList}">{{webcontrol.controllabel}} </span>
+                                        <span *ngIf="webcontrol.controlId == selectedControlId && isEditingList">
+                                            <span>{{lblText && isEditingList ? lblText : webcontrol.controllabel}}</span> 
+                                         </span>
+                                    </label>
                                     <textarea class="form-control" type="text" name="{{webcontrol.controllabel}}"
                                         [(ngModel)]="requestObject[webcontrol.controllabel]"></textarea>
                                     <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
@@ -647,7 +659,12 @@
                                 </div>
                                 <div *ngIf="webcontrol.control === 'datepicker'" class="col-sm-12">
                                     <label><span *ngIf="webcontrol.requiredfield" class="color-red">*</span>
-                                        {{webcontrol.controllabel}} </label>
+                                        <!-- {{webcontrol.controllabel}}  -->
+                                        <span [ngClass]="{'hidelabel':webcontrol.controlId == selectedControlId && isEditingList}">{{webcontrol.controllabel}} </span>
+                                        <span *ngIf="webcontrol.controlId == selectedControlId && isEditingList">
+                                            <span>{{lblText && isEditingList? lblText : webcontrol.controllabel}}</span> 
+                                         </span>
+                                    </label>
                                     <input class="form-control" type="date" name="{{webcontrol.controllabel}}"
                                         #datePicker="ngModel" [(ngModel)]="requestObject[webcontrol.controllabel]" />
                                     <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
@@ -662,7 +679,12 @@
                                     <div  cdkDropList [cdkDropListData]="webcontrol.selectOptions"
                                     (cdkDropListDropped)="dragDropCustomOption($event)"> 
                                     <label class="heading"><span *ngIf="webcontrol.requiredfield"
-                                            class="color-red">*</span>{{webcontrol.controllabel}} 
+                                            class="color-red">*</span>
+                                            <!-- {{webcontrol.controllabel}}  -->
+                                            <span [ngClass]="{'hidelabel':webcontrol.controlId == selectedControlId && isEditingList}">{{webcontrol.controllabel}} </span>
+                                            <span *ngIf="webcontrol.controlId == selectedControlId && isEditingList">
+                                            <span>{{lblText && isEditingList ? lblText : webcontrol.controllabel}}</span> 
+                                         </span>
                                     </label>
                                     <div *ngFor="let userOpt of webcontrol.selectOptions" class="form-check-inline" 
                                     [cdkDragDisabled]="true" cdkDrag>
@@ -682,7 +704,12 @@
                                     <div class="col-sm-12"
                                         *ngIf="webcontrol.control == 'select' && webcontrol.controlId !== 'state' && webcontrol.controlId !== 'country' && webcontrol.controlId !== 'subjecttype' && webcontrol.controlId !== 'requesttype'">
                                         <label><span *ngIf="webcontrol.requiredfield" class="color-red">*</span>
-                                            {{webcontrol.controllabel}}</label>
+                                            <!-- {{webcontrol.controllabel}} -->
+                                            <span [ngClass]="{'hidelabel':webcontrol.controlId == selectedControlId && isEditingList}">{{webcontrol.controllabel}} </span>
+                                            <span *ngIf="webcontrol.controlId == selectedControlId && isEditingList">
+                                            <span>{{lblText && isEditingList ? lblText : webcontrol.controllabel}}</span> 
+                                         </span>
+                                        </label>
                                         <select class="form-control" name="{{webcontrol.controllabel}}"
                                             [(ngModel)]="requestObject[webcontrol.controllabel]">
                                             <option *ngFor="let data of webcontrol.selectOptions" [value]="data.id">
@@ -695,7 +722,12 @@
                                     <div class="col-sm-12"
                                         *ngIf="webcontrol.control == 'select' && webcontrol.controlId == 'country'">
                                         <label><span *ngIf="webcontrol.requiredfield" class="color-red">*</span>
-                                            {{webcontrol.controllabel}} </label>
+                                            <!-- {{webcontrol.controllabel}} -->
+                                            <span [ngClass]="{'hidelabel':webcontrol.controlId == selectedControlId && isEditingList}">{{webcontrol.controllabel}} </span>
+                                            <span *ngIf="webcontrol.controlId == selectedControlId && isEditingList">
+                                                <span>{{lblText && isEditingList ? lblText : webcontrol.controllabel}}</span> 
+                                             </span>
+                                        </label>
                                         <select class="form-control" name="{{webcontrol.controllabel}}"
                                             [(ngModel)]="requestObject[webcontrol.controllabel]"
                                             (change)="onSelectCountry($event.target.value)">
@@ -709,7 +741,12 @@
                                     <div class="col-sm-12"
                                         *ngIf="webcontrol.control == 'select' && webcontrol.controlId == 'state'">
                                         <label><span *ngIf="webcontrol.requiredfield" class="color-red">*</span>
-                                            {{webcontrol.controllabel}} </label>
+                                            <!-- {{webcontrol.controllabel}}  -->
+                                            <span [ngClass]="{'hidelabel':webcontrol.controlId == selectedControlId && isEditingList}">{{webcontrol.controllabel}} </span>
+                                            <span *ngIf="webcontrol.controlId == selectedControlId && isEditingList">
+                                            <span>{{lblText && isEditingList ? lblText : webcontrol.controllabel}}</span> 
+                                         </span>
+                                        </label>
                                         <select class="form-control" name="{{webcontrol.controllabel}}"
                                             [(ngModel)]="requestObject[webcontrol.controllabel]">
                                             <option *ngFor="let data of filteredStateList" [value]="data.name">
@@ -723,7 +760,12 @@
                                 <div class="col-sm-12"
                                     *ngIf="webcontrol.control == 'checkbox' && webcontrol.controlId !== 'subjecttype' && webcontrol.controlId !== 'requesttype'">
                                     <label class="form-check-label"><span *ngIf="webcontrol.requiredfield"
-                                            class="color-red">*</span> {{webcontrol.controllabel}}</label>
+                                            class="color-red">*</span>
+                                            <span [ngClass]="{'hidelabel':webcontrol.controlId == selectedControlId && isEditingList}">{{webcontrol.controllabel}} </span>
+                                            <span *ngIf="webcontrol.controlId == selectedControlId && isEditingList">
+                                                <span>{{lblText && isEditingList ? lblText : webcontrol.controllabel}}</span> 
+                                             </span>
+                                        </label>
                                     <div *ngFor="let opt of webcontrol.selectOptions; let i = index;"  class="form-check-inline">
                                         <input class="form-check-input" type="checkbox" [ngModelOptions]="{standalone: true}" #customChkbox="ngModel"
                                         id="{{opt.name}}"  name="{{opt.name}}" [value]="opt.id"
@@ -738,7 +780,12 @@
                                     [ngClass]="{'displaynone':!webcontrol.requiredfield,'':webcontrol.requiredfield ||isFileUploadRequired}"
                                     *ngIf="webcontrol.requiredfield && webcontrol.controlId == 'fileupload'">
                                     <label class="form-check-label"><span *ngIf="webcontrol.ismandatory"
-                                            class="color-red">*</span>{{webcontrol.controllabel}}</label>
+                                            class="color-red">*</span>
+                                            <span [ngClass]="{'hidelabel':webcontrol.controlId == selectedControlId && isEditingList}">{{webcontrol.controllabel}} </span>
+                                            <span *ngIf="webcontrol.controlId == selectedControlId && isEditingList">
+                                                <span>{{lblText && isEditingList ? lblText : webcontrol.controllabel}}</span> 
+                                             </span>
+                                        </label>
                                     <div class="input-group">
                                         <div class="custom-file">
                                             <input type="file" class="custom-file-input" (change)="uploadFile($event)"
