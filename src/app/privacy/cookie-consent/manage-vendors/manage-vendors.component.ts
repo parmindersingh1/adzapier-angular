@@ -1,4 +1,4 @@
-import {Component, OnInit, TemplateRef, ViewEncapsulation} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit, TemplateRef, ViewEncapsulation} from '@angular/core';
 import {GdprService} from '../../../_services/gdpr.service';
 import {CookieBannerService} from '../../../_services/cookie-banner.service';
 import {OrganizationService} from '../../../_services';
@@ -41,6 +41,8 @@ export class ManageVendorsComponent implements OnInit {
   modalRef: BsModalRef;
   actionType = 'active';
   isFeatureAvaliable = false;
+  isAlliavinactive = true;
+  isAllgoogleinactive = true;
 
   constructor(
     private orgservice: OrganizationService,
@@ -48,7 +50,8 @@ export class ManageVendorsComponent implements OnInit {
     private loading: NgxUiLoaderService,
     private modalService: BsModalService,
     private cookieBanner: CookieBannerService,
-    private dataService: DataService
+    private dataService: DataService,
+    private cd: ChangeDetectorRef
   ) {
   }
 
@@ -135,6 +138,10 @@ export class ManageVendorsComponent implements OnInit {
             const result = res.response;
             this.googleVendorsDefaultID = JSON.parse(result.google_vendors);
             this.iabVendorsDefaultID = JSON.parse(result.iab_vendors);
+            this.isAlliavinactive = this.iabVendorsDefaultID.length > 0 ? true : false
+            this.cd.detectChanges()
+            this.isAllgoogleinactive = this.googleVendorsDefaultID > 0 ? true : false
+            this.cd.detectChanges()
           }
           this.isOpen = true;
           this.alertMsg = res.message;
@@ -152,13 +159,13 @@ export class ManageVendorsComponent implements OnInit {
   onAllowAllVendors() {
     const googleVendorsID = [];
     const iabVendorsID = [];
-    if (this.googleVendorsDefaultID.length === 0) {
+    if (this.googleVendorsDefaultID.length === 0 && this.isAllgoogleinactive) {
       for (const googleVendor of this.googleVendorsList) {
         googleVendorsID.push(googleVendor.provider_id);
       }
       this.googleVendorsDefaultID = googleVendorsID;
     }
-    if (this.iabVendorsDefaultID.length === 0) {
+    if (this.iabVendorsDefaultID.length === 0 && this.isAlliavinactive) {
       for (const iabVendor of this.iabVendorsList) {
         iabVendorsID.push(iabVendor.id);
       }
