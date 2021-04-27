@@ -148,6 +148,14 @@
                  [ngStyle]="{'width': onCalculateOptValue(optIn.allow_socialmedia, optIn.total_consents)+'%'}"
                  role="progressbar" aria-valuenow="5" aria-valuemin="0"
                  aria-valuemax="100"></div>
+            <div class="progress-bar bg-purple  bd-l bd-white"
+                 [ngStyle]="{'width': onCalculateOptValue(optIn.allow_functional, optIn.total_consents)+'%'}"
+                 role="progressbar" aria-valuenow="5" aria-valuemin="0"
+                 aria-valuemax="100"></div>
+            <div class="progress-bar bg-teal  bd-l bd-white"
+                 [ngStyle]="{'width': onCalculateOptValue(optIn.allow_unknown, optIn.total_consents)+'%'}"
+                 role="progressbar" aria-valuenow="5" aria-valuemin="0"
+                 aria-valuemax="100"></div>
           </div>
           <table class="table-dashboard-two">
             <tbody>
@@ -183,6 +191,23 @@
               <td class="text-right">{{optIn.allow_socialmedia}}</td>
               <td class="text-right">{{onCalculateOptValue(optIn.allow_socialmedia, optIn.total_consents)}}%</td>
             </tr>
+
+            <tr>
+              <td>
+                <div class="wd-12 ht-12 rounded-circle bd bd-3 bd-purple"></div>
+              </td>
+              <td class="tx-medium">Functional</td>
+              <td class="text-right">{{optIn.allow_functional}}</td>
+              <td class="text-right">{{onCalculateOptValue(optIn.allow_functional, optIn.total_consents)}}%</td>
+            </tr>
+            <tr>
+              <td>
+                <div class="wd-12 ht-12 rounded-circle bd bd-3 bd-teal"></div>
+              </td>
+              <td class="tx-medium">Unknown</td>
+              <td class="text-right">{{optIn.allow_unknown}}</td>
+              <td class="text-right">{{onCalculateOptValue(optIn.allow_unknown, optIn.total_consents)}}%</td>
+            </tr>
             </tbody>
           </table>
           </div>
@@ -216,6 +241,14 @@
                  aria-valuemin="0" aria-valuemax="100"></div>
             <div class="progress-bar bg-gray-600 bd-l bd-white"
                  [ngStyle]="{'width': onCalculateOptValue(optOut.allow_socialmedia, optOut.total_consents)+'%'}"
+                 role="progressbar" aria-valuenow="5"
+                 aria-valuemin="0" aria-valuemax="100"></div>
+            <div class="progress-bar bg-gray-600 bd-l bd-white"
+                 [ngStyle]="{'width': onCalculateOptValue(optOut.allow_functional, optOut.total_consents)+'%'}"
+                 role="progressbar" aria-valuenow="5"
+                 aria-valuemin="0" aria-valuemax="100"></div>
+            <div class="progress-bar bg-gray-600 bd-l bd-white"
+                 [ngStyle]="{'width': onCalculateOptValue(optOut.allow_unknown, optOut.total_consents)+'%'}"
                  role="progressbar" aria-valuenow="5"
                  aria-valuemin="0" aria-valuemax="100"></div>
           </div>
@@ -253,6 +286,24 @@
               <td class="tx-medium">Social Media</td>
               <td class="text-right">{{optOut.allow_socialmedia}}</td>
               <td class="text-right">{{onCalculateOptValue(optOut.allow_socialmedia, optOut.total_consents)}}%</td>
+            </tr>
+
+            <tr>
+              <td>
+                <div class="wd-12 ht-12 rounded-circle bd bd-3 bd-gray-600"></div>
+              </td>
+              <td class="tx-medium">Functional</td>
+              <td class="text-right">{{optOut.allow_functional}}</td>
+              <td class="text-right">{{onCalculateOptValue(optOut.allow_functional, optOut.total_consents)}}%</td>
+            </tr>
+
+            <tr>
+              <td>
+                <div class="wd-12 ht-12 rounded-circle bd bd-3 bd-gray-600"></div>
+              </td>
+              <td class="tx-medium">Unknown</td>
+              <td class="text-right">{{optOut.allow_socialmedia}}</td>
+              <td class="text-right">{{onCalculateOptValue(optOut.allow_unknown, optOut.total_consents)}}%</td>
             </tr>
             </tbody>
           </table>
@@ -293,6 +344,8 @@
                 <th class="text-right"> Analytics</th>
                 <th class="text-right">Advertising</th>
                 <th class="text-right"> Social Media</th>
+                <th class="text-right"> Functional</th>
+                <th class="text-right"> Unknown</th>
               </tr>
               </thead>
               <tbody>
@@ -303,6 +356,8 @@
                 <td class="tx-medium text-right"> {{obj.allow_analytics ? obj.allow_analytics : 0}}</td>
                 <td class="tx-medium text-right"> {{obj.allow_advertising ? obj.allow_advertising : 0}}</td>
                 <td class="tx-medium text-right"> {{obj.allow_socialmedia ? obj.allow_socialmedia : 0}}</td>
+                <td class="tx-medium text-right"> {{obj.allow_functional ? obj.allow_functional : 0}}</td>
+                <td class="tx-medium text-right"> {{obj.allow_unknown ? obj.allow_unknown : 0}}</td>
               </tr>
               </tbody>
 

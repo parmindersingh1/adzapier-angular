@@ -41,7 +41,6 @@
               </div>
 
 
-
               <div class="row">
                 <div class="col-md-4">
                   <h6>Location</h6>
@@ -52,21 +51,21 @@
               </div>
 
 
-
               <div class="row">
                 <div class="col-md-4">
                   <h6>Status</h6>
                 </div>
                 <div class="col-md-8">
                   <p>
-                    <span *ngIf="obj.status === 'do_not_sell'" class="product-badge status-outofstock">DoNotSellMyData</span>
-              <span *ngIf="obj.status === 'reject_all'" class="product-badge status-outofstock">Reject All</span>
-              <span *ngIf="obj.status === 'accept_all'" class="product-badge status-instock">Accept All</span>
-              <span *ngIf="obj.status === 'save_setting'" class="product-badge status-lowstock">Save Setting</span>
+                    <span *ngIf="obj.status === 'do_not_sell'"
+                          class="product-badge status-outofstock">DoNotSellMyData</span>
+                    <span *ngIf="obj.status === 'reject_all'" class="product-badge status-outofstock">Reject All</span>
+                    <span *ngIf="obj.status === 'accept_all'" class="product-badge status-instock">Accept All</span>
+                    <span *ngIf="obj.status === 'save_setting'"
+                          class="product-badge status-lowstock">Save Setting</span>
                   </p>
                 </div>
               </div>
-
 
 
               <div class="row">
@@ -74,7 +73,7 @@
                   <h6>Consent</h6>
                 </div>
                 <div class="col-md-8">
-                  <p  data-toggle="tooltip" title="{{obj?.consent}}">
+                  <p data-toggle="tooltip" title="{{obj?.consent}}">
                     {{ obj.consent.length > 30 ? obj.consent.slice(0, 30) + '...' : obj.consent}}
                   </p>
                 </div>
@@ -84,541 +83,551 @@
             </div>
             <div class="col-md-7">
               <div class="row">
-                    <div class="col-md-3">
-                      <h6>Auth ID</h6>
-                    </div>
-                    <div class="col-md-9">
-                      <p>{{obj?.auth_id}}</p>
-                    </div>
-                  </div>
+                <div class="col-md-3">
+                  <h6>Auth ID</h6>
+                </div>
+                <div class="col-md-9">
+                  <p>{{obj?.auth_id}}</p>
+                </div>
+              </div>
 
 
-
-                  <div class="row">
-                    <div class="col-md-3">
-                      <h6>Device ID</h6>
-                    </div>
-                    <div class="col-md-9">
-                      <p>{{obj?.device_id}}</p>
-                    </div>
-                  </div>
-
+              <div class="row">
+                <div class="col-md-3">
+                  <h6>Device ID</h6>
+                </div>
+                <div class="col-md-9">
+                  <p>{{obj?.device_id}}</p>
+                </div>
+              </div>
 
 
-                  <div class="row">
-                    <div class="col-md-3">
-                      <h6>IP Address</h6>
-                    </div>
-                    <div class="col-md-9">
-                      <p>{{obj?.ip_address}}</p>
-                    </div>
-                  </div>
+              <div class="row">
+                <div class="col-md-3">
+                  <h6>IP Address</h6>
+                </div>
+                <div class="col-md-9">
+                  <p>{{obj?.ip_address}}</p>
+                </div>
+              </div>
 
 
-                  <div class="row">
-                    <div class="col-md-3">
-                      <h6>OS</h6>
-                    </div>
-                    <div class="col-md-9">
-                      <p>{{obj?.os}}</p>
-                    </div>
-                  </div>
+              <div class="row">
+                <div class="col-md-3">
+                  <h6>OS</h6>
+                </div>
+                <div class="col-md-9">
+                  <p>{{obj?.os}}</p>
+                </div>
+              </div>
 
 
-                  <div class="row">
-                    <div class="col-md-3">
-                      <h6>Consent Version</h6>
-                    </div>
-                    <div class="col-md-9">
-                      <p>{{obj?.consent_version}}</p>
-                    </div>
-                  </div>
+              <div class="row">
+                <div class="col-md-3">
+                  <h6>Consent Version</h6>
+                </div>
+                <div class="col-md-9">
+                  <p>{{obj?.consent_version}}</p>
+                </div>
+              </div>
+            </div>
+
           </div>
-
         </div>
       </div>
-    </div>
 
 
-    <div *ngIf="loading.one" class="w-100 card mt-3">
-      <ngx-skeleton-loader  class="p-4 pb-0" count="2"></ngx-skeleton-loader>
-      <h5 class="text-center">Getting Consent Information ...</h5>
-    <div class="loading text-center">
-      <div class="spinner-grow text-primary" role="status">
-        <span class="sr-only">Loading...</span>
-      </div>
-      <div class="spinner-grow text-secondary" role="status">
-        <span class="sr-only">Loading...</span>
-      </div>
-      <div class="spinner-grow text-success" role="status">
-        <span class="sr-only">Loading...</span>
-      </div>
-      <div class="spinner-grow text-danger" role="status">
-        <span class="sr-only">Loading...</span>
-      </div>
-      <div class="spinner-grow text-warning" role="status">
-        <span class="sr-only">Loading...</span>
-      </div>
-      <div class="spinner-grow text-info" role="status">
-        <span class="sr-only">Loading...</span>
-      </div>
-      <div class="spinner-grow text-light" role="status">
-        <span class="sr-only">Loading...</span>
-      </div>
-      <div class="spinner-grow text-dark" role="status">
-        <span class="sr-only">Loading...</span>
-      </div>
-    </div>
-
-    <ngx-skeleton-loader  class="p-4 pb-0" count="2"></ngx-skeleton-loader>
-
-    </div>
-
-
-
-
-
-    <div *ngIf="!loading.two && obj.consent_type === 'GDPR'" class="w-100 card mt-3">
-      <div class="card-body">
-        <h4 class="mb-4 "><span class="head-iab mb-4">IAB  Decode Information</span></h4>
-
-        <div class="row">
-          <div class="col-md-4">
-            <div class="row">
-              <div class="col-md-4">
-                <h6>Version</h6>
-              </div>
-              <div class="col-md-8">
-                <p>{{decodeStringData?.cmpVersion}}</p>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="col-md-4">
-                <h6>Cmp ID</h6>
-              </div>
-              <div class="col-md-8">
-                <p>{{decodeStringData?.cmpId}}</p>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="col-md-4">
-                <h6>Policy Version</h6>
-              </div>
-              <div class="col-md-8">
-                <p>{{decodeStringData?.policyVersion}}</p>
-              </div>
-            </div>
-
-
-            <div class="row">
-              <div class="col-md-4">
-                <h6>Created Date</h6>
-              </div>
-              <div class="col-md-8">
-                <p>{{decodeStringData?.created | date:'medium'}}</p>
-              </div>
-            </div>
-
-
-            <div class="row">
-              <div class="col-md-4">
-                <h6>Last Updated</h6>
-              </div>
-              <div class="col-md-8">
-                <p>{{decodeStringData?.lastUpdated | date:'medium'}}</p>
-              </div>
-            </div>
-
-
+      <div *ngIf="loading.one" class="w-100 card mt-3">
+        <ngx-skeleton-loader class="p-4 pb-0" count="2"></ngx-skeleton-loader>
+        <h5 class="text-center">Getting Consent Information ...</h5>
+        <div class="loading text-center">
+          <div class="spinner-grow text-primary" role="status">
+            <span class="sr-only">Loading...</span>
+          </div>
+          <div class="spinner-grow text-secondary" role="status">
+            <span class="sr-only">Loading...</span>
+          </div>
+          <div class="spinner-grow text-success" role="status">
+            <span class="sr-only">Loading...</span>
+          </div>
+          <div class="spinner-grow text-danger" role="status">
+            <span class="sr-only">Loading...</span>
+          </div>
+          <div class="spinner-grow text-warning" role="status">
+            <span class="sr-only">Loading...</span>
+          </div>
+          <div class="spinner-grow text-info" role="status">
+            <span class="sr-only">Loading...</span>
+          </div>
+          <div class="spinner-grow text-light" role="status">
+            <span class="sr-only">Loading...</span>
+          </div>
+          <div class="spinner-grow text-dark" role="status">
+            <span class="sr-only">Loading...</span>
+          </div>
         </div>
 
+        <ngx-skeleton-loader class="p-4 pb-0" count="2"></ngx-skeleton-loader>
 
-        <div class="col-md-4">
-          <div class="row">
-            <div class="col-md-7">
-              <h6>Consent Language</h6>
-            </div>
-            <div class="col-md-5">
-              <p>{{decodeStringData?.consentLanguage}}</p>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-md-7">
-              <h6>Vendor List Version</h6>
-            </div>
-            <div class="col-md-5">
-              <p>{{decodeStringData?.vendorListVersion}}</p>
-            </div>
-          </div>
-
-
-          <div class="row">
-            <div class="col-md-7">
-              <h6>Publisher Country Code</h6>
-            </div>
-            <div class="col-md-5">
-              <p>{{decodeStringData?.publisherCountryCode}}</p>
-            </div>
-          </div>
-
-
-          <div class="row">
-            <div class="col-md-7">
-              <h6>Is Service Specific</h6>
-            </div>
-            <div class="col-md-5">
-              <p>{{decodeStringData?.isServiceSpecific}}</p>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-md-7">
-              <h6>Use Non Standard Stacks</h6>
-            </div>
-            <div class="col-md-5">
-              <p>{{decodeStringData?.useNonStandardStacks}}</p>
-            </div>
-          </div>
-
-          </div>
-
-        <div class="col-md-4">
-          <div class="row">
-            <div class="col-md-8">
-              <h6>Purpose Consent</h6>
-            </div>
-            <div class="col-md-4">
-              <p>{{decodedIds.purposeIds.length}}</p>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-md-8">
-              <h6>  Purpose Legitimate Interests  </h6>
-            </div>
-            <div class="col-md-4">
-              <p>{{decodedIds.purposeLegiIds.length}}</p>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-md-8">
-              <h6>
-                Special Feature Optins
-                  </h6>
-            </div>
-            <div class="col-md-4">
-              <p>{{decodedIds.specialFeaturesIds.length}}</p>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-md-8">
-              <h6>
-                Vendor Consents
-                  </h6>
-            </div>
-            <div class="col-md-4">
-              <p>{{decodedIds.vendorsIds.length}}</p>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-md-8">
-              <h6>
-                Vendor Legitimate Interests
-                  </h6>
-            </div>
-            <div class="col-md-4">
-              <p>{{decodedIds.vendorsLegiIds.length}}</p>
-            </div>
-          </div>
-
-
-        </div>
-
-</div>
-    <div class="row mt-3 vendors-list-group">
-      <div class="col-md-4 ">
-        <ul *ngIf="vendorsList.purposes" class="list-group">
-          <li class="list-group-item active pb-3 pt-3 bor-bm">Purpose Consents List
-            <span class="badge  badge-pill">{{decodedIds.purposeIds.length}}</span>
-          </li>
-          <li  *ngFor="let obj of convertToArray(vendorsList.purposes)" class="list-group-item p-0">
-            <p *ngIf="decodedIds.purposeIds.includes(obj.id)" class="bor-bm pl-3 pt-3 pb-3">{{obj.name}}</p></li>
-
-            <li class="list-group-item p-0">
-              <p *ngIf="decodedIds.purposeIds.length === 0" class="alert alert-danger bor-bm pl-3 pt-3 pb-3">
-                No Purpose Allowed
-              </p></li>
-        </ul>
-
-
-        <ul *ngIf="vendorsList.purposes" class="mt-4 list-group">
-          <li class="list-group-item active pb-3 pt-3 bor-bm">Purpose Legitimate Interest
-            <span class="badge  badge-pill">{{decodedIds.purposeLegiIds.length}}</span>
-          </li>
-          <li  *ngFor="let obj of convertToArray(vendorsList.purposes)" class="list-group-item p-0">
-            <p *ngIf="decodedIds.purposeLegiIds.includes(obj.id)" class="bor-bm pl-3 pt-3 pb-3">{{obj.name}}</p></li>
-
-            <li class="list-group-item p-0">
-              <p *ngIf="decodedIds.purposeLegiIds.length === 0" class="alert alert-danger bor-bm pl-3 pt-3 pb-3">
-                No Legitimate Purpose Allowed
-              </p></li>
-
-
-        </ul>
       </div>
 
 
-      <div class="col-md-4 ">
+      <div *ngIf="!loading.two && obj.consent_type === 'GDPR'" class="w-100 card mt-3">
+        <div class="card-body">
+          <h4 class="mb-4 "><span class="head-iab mb-4">IAB  Decode Information</span></h4>
 
-        <ul class="list-group">
-          <li class="list-group-item d-flex active justify-content-between pb-3 pt-3 bor-bm align-items-center">
-            Allowed Cookie Consents
-          </li>
-          <li class="list-group-item d-flex pb-2 pt-2 bor-bm justify-content-between align-items-center">
-            Essential
-            <span class="badge badge-primary badge-pill">
-              <i *ngIf="obj.allow_essantial"  class="fa fa-check" aria-hidden="true"></i>
+          <div class="row">
+            <div class="col-md-4">
+              <div class="row">
+                <div class="col-md-4">
+                  <h6>Version</h6>
+                </div>
+                <div class="col-md-8">
+                  <p>{{decodeStringData?.cmpVersion}}</p>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-4">
+                  <h6>Cmp ID</h6>
+                </div>
+                <div class="col-md-8">
+                  <p>{{decodeStringData?.cmpId}}</p>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-4">
+                  <h6>Policy Version</h6>
+                </div>
+                <div class="col-md-8">
+                  <p>{{decodeStringData?.policyVersion}}</p>
+                </div>
+              </div>
+
+
+              <div class="row">
+                <div class="col-md-4">
+                  <h6>Created Date</h6>
+                </div>
+                <div class="col-md-8">
+                  <p>{{decodeStringData?.created | date:'medium'}}</p>
+                </div>
+              </div>
+
+
+              <div class="row">
+                <div class="col-md-4">
+                  <h6>Last Updated</h6>
+                </div>
+                <div class="col-md-8">
+                  <p>{{decodeStringData?.lastUpdated | date:'medium'}}</p>
+                </div>
+              </div>
+
+
+            </div>
+
+
+            <div class="col-md-4">
+              <div class="row">
+                <div class="col-md-7">
+                  <h6>Consent Language</h6>
+                </div>
+                <div class="col-md-5">
+                  <p>{{decodeStringData?.consentLanguage}}</p>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-7">
+                  <h6>Vendor List Version</h6>
+                </div>
+                <div class="col-md-5">
+                  <p>{{decodeStringData?.vendorListVersion}}</p>
+                </div>
+              </div>
+
+
+              <div class="row">
+                <div class="col-md-7">
+                  <h6>Publisher Country Code</h6>
+                </div>
+                <div class="col-md-5">
+                  <p>{{decodeStringData?.publisherCountryCode}}</p>
+                </div>
+              </div>
+
+
+              <div class="row">
+                <div class="col-md-7">
+                  <h6>Is Service Specific</h6>
+                </div>
+                <div class="col-md-5">
+                  <p>{{decodeStringData?.isServiceSpecific}}</p>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-7">
+                  <h6>Use Non Standard Stacks</h6>
+                </div>
+                <div class="col-md-5">
+                  <p>{{decodeStringData?.useNonStandardStacks}}</p>
+                </div>
+              </div>
+
+            </div>
+
+            <div class="col-md-4">
+              <div class="row">
+                <div class="col-md-8">
+                  <h6>Purpose Consent</h6>
+                </div>
+                <div class="col-md-4">
+                  <p>{{decodedIds.purposeIds.length}}</p>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-8">
+                  <h6> Purpose Legitimate Interests </h6>
+                </div>
+                <div class="col-md-4">
+                  <p>{{decodedIds.purposeLegiIds.length}}</p>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-8">
+                  <h6>
+                    Special Feature Optins
+                  </h6>
+                </div>
+                <div class="col-md-4">
+                  <p>{{decodedIds.specialFeaturesIds.length}}</p>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-8">
+                  <h6>
+                    Vendor Consents
+                  </h6>
+                </div>
+                <div class="col-md-4">
+                  <p>{{decodedIds.vendorsIds.length}}</p>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-8">
+                  <h6>
+                    Vendor Legitimate Interests
+                  </h6>
+                </div>
+                <div class="col-md-4">
+                  <p>{{decodedIds.vendorsLegiIds.length}}</p>
+                </div>
+              </div>
+
+
+            </div>
+
+          </div>
+          <div class="row mt-3 vendors-list-group">
+            <div class="col-md-4 ">
+              <ul *ngIf="vendorsList.purposes" class="list-group">
+                <li class="list-group-item active pb-3 pt-3 bor-bm">Purpose Consents List
+                  <span class="badge  badge-pill">{{decodedIds.purposeIds.length}}</span>
+                </li>
+                <li *ngFor="let obj of convertToArray(vendorsList.purposes)" class="list-group-item p-0">
+                  <p *ngIf="decodedIds.purposeIds.includes(obj.id)" class="bor-bm pl-3 pt-3 pb-3">{{obj.name}}</p></li>
+
+                <li class="list-group-item p-0">
+                  <p *ngIf="decodedIds.purposeIds.length === 0" class="alert alert-danger bor-bm pl-3 pt-3 pb-3">
+                    No Purpose Allowed
+                  </p></li>
+              </ul>
+
+
+              <ul *ngIf="vendorsList.purposes" class="mt-4 list-group">
+                <li class="list-group-item active pb-3 pt-3 bor-bm">Purpose Legitimate Interest
+                  <span class="badge  badge-pill">{{decodedIds.purposeLegiIds.length}}</span>
+                </li>
+                <li *ngFor="let obj of convertToArray(vendorsList.purposes)" class="list-group-item p-0">
+                  <p *ngIf="decodedIds.purposeLegiIds.includes(obj.id)" class="bor-bm pl-3 pt-3 pb-3">{{obj.name}}</p>
+                </li>
+
+                <li class="list-group-item p-0">
+                  <p *ngIf="decodedIds.purposeLegiIds.length === 0" class="alert alert-danger bor-bm pl-3 pt-3 pb-3">
+                    No Legitimate Purpose Allowed
+                  </p></li>
+
+
+              </ul>
+            </div>
+
+
+            <div class="col-md-4 ">
+
+              <ul class="list-group">
+                <li class="list-group-item d-flex active justify-content-between pb-3 pt-3 bor-bm align-items-center">
+                  Allowed Cookie Consents
+                </li>
+                <li class="list-group-item d-flex pb-2 pt-2 bor-bm justify-content-between align-items-center">
+                  Essential
+                  <span class="badge badge-primary badge-pill">
+              <i *ngIf="obj.allow_essantial" class="fa fa-check" aria-hidden="true"></i>
               <i *ngIf="!obj.allow_essantial" class="fa fa-times" aria-hidden="true"></i>
             </span>
-          </li>
-          <li class="list-group-item d-flex pb-2 pt-2 bor-bm justify-content-between align-items-center">
-            Advertising
-            <span class="badge badge-primary badge-pill">
-              <i *ngIf="obj.allow_advertising"  class="fa fa-check" aria-hidden="true"></i>
+                </li>
+                <li class="list-group-item d-flex pb-2 pt-2 bor-bm justify-content-between align-items-center">
+                  Functional
+                  <span class="badge badge-primary badge-pill">
+              <i *ngIf="obj.allow_functional" class="fa fa-check" aria-hidden="true"></i>
+              <i *ngIf="!obj.allow_functional" class="fa fa-times" aria-hidden="true"></i>
+            </span>
+                </li>
+                <li class="list-group-item d-flex pb-2 pt-2 bor-bm justify-content-between align-items-center">
+                  Advertising
+                  <span class="badge badge-primary badge-pill">
+              <i *ngIf="obj.allow_advertising" class="fa fa-check" aria-hidden="true"></i>
               <i *ngIf="!obj.allow_advertising" class="fa fa-times" aria-hidden="true"></i>
             </span>
-          </li>
-          <li class="list-group-item d-flex pb-2 pt-2 bor-bm justify-content-between align-items-center">
-            Social Media
-            <span class="badge badge-primary badge-pill">
-              <i *ngIf="obj.allow_social_media"  class="fa fa-check" aria-hidden="true"></i>
+                </li>
+                <li class="list-group-item d-flex pb-2 pt-2 bor-bm justify-content-between align-items-center">
+                  Social Media
+                  <span class="badge badge-primary badge-pill">
+              <i *ngIf="obj.allow_social_media" class="fa fa-check" aria-hidden="true"></i>
               <i *ngIf="!obj.allow_social_media" class="fa fa-times" aria-hidden="true"></i>
             </span>
-          </li>
-          <li class="list-group-item d-flex pb-2 pt-2 bor-bm justify-content-between align-items-center">
-            Analytics
-            <span class="badge badge-primary badge-pill">
-              <i *ngIf="obj.allow_analytics"  class="fa fa-check" aria-hidden="true"></i>
+                </li>
+                <li class="list-group-item d-flex pb-2 pt-2 bor-bm justify-content-between align-items-center">
+                  Analytics
+                  <span class="badge badge-primary badge-pill">
+              <i *ngIf="obj.allow_analytics" class="fa fa-check" aria-hidden="true"></i>
               <i *ngIf="!obj.allow_analytics" class="fa fa-times" aria-hidden="true"></i>
             </span>
-          </li>
-        </ul>
-
-
-
-        <ul *ngIf="vendorsList.specialPurposes"  class="list-group mt-4">
-          <li class="list-group-item active pb-3 pt-3 bor-bm">Special Purposes List
-            <span class="badge  badge-pill">{{getLength(vendorsList.specialPurposes)}}</span>
-          </li>
-          <li  *ngFor="let obj of convertToArray(vendorsList.specialPurposes)" class="list-group-item p-0">
-            <p class="bor-bm pl-3 pt-3 pb-3">{{obj.name}}</p></li>
-        </ul>
-
-
-        <ul  *ngIf="vendorsList.features"  class="list-group mt-4">
-          <li class="list-group-item active pb-3 pt-3 bor-bm">Features List
-            <span class="badge  badge-pill">{{getLength(vendorsList.features)}}</span>
-          </li>
-          <li  *ngFor="let obj of convertToArray(vendorsList.features)" class="list-group-item p-0"><p class="bor-bm pl-3 pt-3 pb-3">{{obj.name}}</p></li>
-        </ul>
-
-
-        <ul  *ngIf="vendorsList.specialFeatures"  class="list-group mt-4">
-          <li class="list-group-item active pb-3 pt-3 bor-bm">Special Feature Optins
-            <span class="badge  badge-pill">{{decodedIds.specialFeaturesIds.length}}</span>
-          </li>
-          <li  *ngFor="let obj of convertToArray(vendorsList.specialFeatures)" class="list-group-item p-0">
-            <p  *ngIf="decodedIds.specialFeaturesIds.includes(obj.id)" class="bor-bm pl-3 pt-3 pb-3">{{obj.name}}</p></li>
-
-            <li class="list-group-item p-0">
-              <p *ngIf="decodedIds.specialFeaturesIds.length === 0" class="alert alert-danger bor-bm pl-3 pt-3 pb-3">
-                No Special Features Allowed
-              </p></li>
-
-        </ul>
-
-
-
-
-        <ul  class="list-group mt-4 google-vendors-list">
-          <li class="list-group-item active pb-3 pt-3 bor-bm">Google Vendors
-            <span class="badge  badge-pill">{{googleVendorsIds.length}}</span>
-          </li>
-          <li  class="list-group-item p-0">
-            <input type="text" #googleVendorsText (input)="onSearchGoogleVendors($event)" class="bor-bm form-control" placeholder="Search Google Vendors" id="usr">
-          </li>
-          <!-- <li  *ngFor="let obj of googleVendorsList" class="list-group-item p-0">
-            <p  *ngIf="googleVendorsIds.includes(obj.provider_id)" class="bor-bm pl-3 pt-3 pb-3">{{obj.provider_name}}</p></li>
-
-            <li class="list-group-item p-0">
-              <p *ngIf="googleVendorsIds.length === 0" class="alert alert-danger bor-bm pl-3 pt-3 pb-3">
-                No Google Vendors Allowed
-              </p></li> -->
-
-              <ng-container *ngIf="searchGoogleVendorsArray.length > 0">
-                <ng-container *ngFor="let obj of searchGoogleVendorsArray">
-
-              <li  *ngIf="googleVendorsIds.includes(obj.provider_id)" class="list-group-item p-0">
-                <p   class="bor-bm pl-3 pt-3 pb-3">{{obj.provider_name}}</p>
-              </li>
-              </ng-container>
-              </ng-container>
-
-
-              <ng-container *ngIf="searchGoogleVendorsArray.length === 0 && !googleVendorsText.value">
-                <ng-container *ngFor="let obj of googleVendorsList">
-                <li  *ngIf="googleVendorsIds.includes(obj.provider_id)"  class="list-group-item p-0">
-                  <p  class="bor-bm pl-3 pt-3 pb-3">{{obj.provider_name}}</p>
                 </li>
+                <li class="list-group-item d-flex pb-2 pt-2 bor-bm justify-content-between align-items-center">
+                  Unknown & Unclassified
+                  <span class="badge badge-primary badge-pill">
+              <i *ngIf="obj.allow_unknown" class="fa fa-check" aria-hidden="true"></i>
+              <i *ngIf="!obj.allow_unknown" class="fa fa-times" aria-hidden="true"></i>
+            </span>
+                </li>
+              </ul>
+
+
+              <ul *ngIf="vendorsList.specialPurposes" class="list-group mt-4">
+                <li class="list-group-item active pb-3 pt-3 bor-bm">Special Purposes List
+                  <span class="badge  badge-pill">{{getLength(vendorsList.specialPurposes)}}</span>
+                </li>
+                <li *ngFor="let obj of convertToArray(vendorsList.specialPurposes)" class="list-group-item p-0">
+                  <p class="bor-bm pl-3 pt-3 pb-3">{{obj.name}}</p></li>
+              </ul>
+
+
+              <ul *ngIf="vendorsList.features" class="list-group mt-4">
+                <li class="list-group-item active pb-3 pt-3 bor-bm">Features List
+                  <span class="badge  badge-pill">{{getLength(vendorsList.features)}}</span>
+                </li>
+                <li *ngFor="let obj of convertToArray(vendorsList.features)" class="list-group-item p-0"><p
+                  class="bor-bm pl-3 pt-3 pb-3">{{obj.name}}</p></li>
+              </ul>
+
+
+              <ul *ngIf="vendorsList.specialFeatures" class="list-group mt-4">
+                <li class="list-group-item active pb-3 pt-3 bor-bm">Special Feature Optins
+                  <span class="badge  badge-pill">{{decodedIds.specialFeaturesIds.length}}</span>
+                </li>
+                <li *ngFor="let obj of convertToArray(vendorsList.specialFeatures)" class="list-group-item p-0">
+                  <p *ngIf="decodedIds.specialFeaturesIds.includes(obj.id)"
+                     class="bor-bm pl-3 pt-3 pb-3">{{obj.name}}</p></li>
+
+                <li class="list-group-item p-0">
+                  <p *ngIf="decodedIds.specialFeaturesIds.length === 0"
+                     class="alert alert-danger bor-bm pl-3 pt-3 pb-3">
+                    No Special Features Allowed
+                  </p></li>
+
+              </ul>
+
+
+              <ul class="list-group mt-4 google-vendors-list">
+                <li class="list-group-item active pb-3 pt-3 bor-bm">Google Vendors
+                  <span class="badge  badge-pill">{{googleVendorsIds.length}}</span>
+                </li>
+                <li class="list-group-item p-0">
+                  <input type="text" #googleVendorsText (input)="onSearchGoogleVendors($event)"
+                         class="bor-bm form-control" placeholder="Search Google Vendors" id="usr">
+                </li>
+                <!-- <li  *ngFor="let obj of googleVendorsList" class="list-group-item p-0">
+                  <p  *ngIf="googleVendorsIds.includes(obj.provider_id)" class="bor-bm pl-3 pt-3 pb-3">{{obj.provider_name}}</p></li>
+
+                  <li class="list-group-item p-0">
+                    <p *ngIf="googleVendorsIds.length === 0" class="alert alert-danger bor-bm pl-3 pt-3 pb-3">
+                      No Google Vendors Allowed
+                    </p></li> -->
+
+                <ng-container *ngIf="searchGoogleVendorsArray.length > 0">
+                  <ng-container *ngFor="let obj of searchGoogleVendorsArray">
+
+                    <li *ngIf="googleVendorsIds.includes(obj.provider_id)" class="list-group-item p-0">
+                      <p class="bor-bm pl-3 pt-3 pb-3">{{obj.provider_name}}</p>
+                    </li>
+                  </ng-container>
                 </ng-container>
-              </ng-container>
 
 
-              <ng-container *ngIf="searchGoogleVendorsArray.length === 0 && googleVendorsText.value">
+                <ng-container *ngIf="searchGoogleVendorsArray.length === 0 && !googleVendorsText.value">
+                  <ng-container *ngFor="let obj of googleVendorsList">
+                    <li *ngIf="googleVendorsIds.includes(obj.provider_id)" class="list-group-item p-0">
+                      <p class="bor-bm pl-3 pt-3 pb-3">{{obj.provider_name}}</p>
+                    </li>
+                  </ng-container>
+                </ng-container>
+
+
+                <ng-container *ngIf="searchGoogleVendorsArray.length === 0 && googleVendorsText.value">
+                  <li class="list-group-item p-0">
+                    <p class="alert alert-danger bor-bm pl-3 pt-3 pb-3">
+                      Google Vendors not found
+                    </p></li>
+                </ng-container>
+                <ng-container *ngIf="googleVendorsIds.length === 0 && !googleVendorsText.value">
+                  <li class="list-group-item p-0">
+                    <p class="alert alert-danger bor-bm pl-3 pt-3 pb-3">
+                      Google Vendors not Allowed
+                    </p></li>
+                </ng-container>
+
+
+              </ul>
+
+
+            </div>
+
+            <div class="col-md-4 ">
+              <ul *ngIf="vendorsList.vendors" class="list-group vendors-list">
+                <li class="list-group-item active pb-3 pt-3 bor-bm">Vendors List
+                  <span class="badge  badge-pill">{{decodedIds.vendorsIds.length}}</span>
+                </li>
                 <li class="list-group-item p-0">
-                  <p class="alert alert-danger bor-bm pl-3 pt-3 pb-3">
-                   Google Vendors not found
-                  </p></li>
-              </ng-container>
-              <ng-container *ngIf="googleVendorsIds.length === 0 && !googleVendorsText.value">
+                  <input type="text" #vendorsText (input)="onSearchVendors($event)" class="bor-bm form-control"
+                         placeholder="Search Vendors" id="usr">
+                </li>
+                <ng-container *ngIf="searchVendorsArray.length > 0">
+                  <ng-container *ngFor="let obj of searchVendorsArray">
+
+                    <li *ngIf="decodedIds.vendorsIds.includes(obj.id)" class="list-group-item p-0">
+                      <p class="bor-bm pl-3 pt-3 pb-3">{{obj.name}}</p>
+                    </li>
+                  </ng-container>
+                </ng-container>
+
+
+                <ng-container *ngIf="searchVendorsArray.length === 0 && !vendorsText.value">
+                  <ng-container *ngFor="let obj of convertToArray(vendorsList.vendors)">
+                    <li *ngIf="decodedIds.vendorsIds.includes(obj.id)" class="list-group-item p-0">
+                      <p class="bor-bm pl-3 pt-3 pb-3">{{obj.name}}</p>
+                    </li>
+                  </ng-container>
+                </ng-container>
+
+
+                <ng-container *ngIf="searchVendorsArray.length === 0 && vendorsText.value">
+                  <li class="list-group-item p-0">
+                    <p class="alert alert-danger bor-bm pl-3 pt-3 pb-3">
+                      Vendor not found
+                    </p></li>
+                </ng-container>
+
+                <ng-container *ngIf="decodedIds.vendorsIds.length === 0 && !vendorsText.value">
+                  <li class="list-group-item p-0">
+                    <p class="alert alert-danger bor-bm pl-3 pt-3 pb-3">
+                      Vendor not Allowed
+                    </p></li>
+                </ng-container>
+
+
+              </ul>
+
+
+              <ul *ngIf="vendorsList.vendors" class="list-group mt-4 vendors-list">
+                <li class="list-group-item active pb-3 pt-3 bor-bm">Vendors Legitimate Interest
+                  <span class="badge  badge-pill">{{ decodedIds.vendorsLegiIds.length}}</span>
+                </li>
+
                 <li class="list-group-item p-0">
-                  <p class="alert alert-danger bor-bm pl-3 pt-3 pb-3">
-                   Google Vendors not Allowed
-                  </p></li>
-              </ng-container>
+                  <input type="text" #legiVendorText (input)="onSearchLegiVendors($event)" class="bor-bm form-control"
+                         placeholder="Search Legitimate Vendors" id="usr">
+                </li>
+
+                <ng-container *ngIf="searchLegiVendorsArray.length > 0">
+                  <ng-container *ngFor="let obj of searchLegiVendorsArray">
+                    <li *ngIf="decodedIds.vendorsLegiIds.includes(obj.id)" class="list-group-item p-0">
+                      <p class="bor-bm pl-3 pt-3 pb-3">{{obj.name}} </p>
+                    </li>
+                  </ng-container>
+                </ng-container>
 
 
-        </ul>
+                <ng-container *ngIf="searchLegiVendorsArray.length === 0 && !legiVendorText.value">
+                  <ng-container *ngFor="let obj of convertToArray(vendorsList.vendors)">
+                    <li *ngIf="decodedIds.vendorsLegiIds.includes(obj.id)" class="list-group-item p-0">
+                      <p class="bor-bm pl-3 pt-3 pb-3">{{obj.name}}</p></li>
+                  </ng-container>
+                </ng-container>
 
 
+                <ng-container *ngIf="searchLegiVendorsArray.length === 0 && legiVendorText.value">
+                  <li class="list-group-item p-0">
+                    <p class="alert alert-danger bor-bm pl-3 pt-3 pb-3">
+                      Legitimate Vendor not found
+                    </p></li>
+                </ng-container>
 
+
+                <ng-container *ngIf="decodedIds.vendorsLegiIds.length === 0 && !legiVendorText.value">
+                  <li class="list-group-item p-0">
+                    <p class="alert alert-danger bor-bm pl-3 pt-3 pb-3">
+                      Legitimate Vendor not Allowed
+                    </p></li>
+                </ng-container>
+
+
+              </ul>
+            </div>
+
+
+          </div>
+        </div>
       </div>
 
-      <div class="col-md-4 ">
-        <ul  *ngIf="vendorsList.vendors"  class="list-group vendors-list">
-          <li class="list-group-item active pb-3 pt-3 bor-bm">Vendors List
-            <span class="badge  badge-pill">{{decodedIds.vendorsIds.length}}</span>
-          </li>
-          <li  class="list-group-item p-0">
-            <input type="text" #vendorsText (input)="onSearchVendors($event)" class="bor-bm form-control" placeholder="Search Vendors" id="usr">
-          </li>
-          <ng-container *ngIf="searchVendorsArray.length > 0">
-            <ng-container *ngFor="let obj of searchVendorsArray">
 
-          <li  *ngIf="decodedIds.vendorsIds.includes(obj.id)" class="list-group-item p-0">
-            <p   class="bor-bm pl-3 pt-3 pb-3">{{obj.name}}</p>
-          </li>
-          </ng-container>
-          </ng-container>
-
-
-          <ng-container *ngIf="searchVendorsArray.length === 0 && !vendorsText.value">
-            <ng-container *ngFor="let obj of convertToArray(vendorsList.vendors)">
-            <li  *ngIf="decodedIds.vendorsIds.includes(obj.id)"  class="list-group-item p-0">
-              <p  class="bor-bm pl-3 pt-3 pb-3">{{obj.name}}</p>
-            </li>
-            </ng-container>
-          </ng-container>
-
-
-          <ng-container *ngIf="searchVendorsArray.length === 0 && vendorsText.value">
-            <li class="list-group-item p-0">
-              <p class="alert alert-danger bor-bm pl-3 pt-3 pb-3">
-                Vendor not found
-              </p></li>
-          </ng-container>
-
-          <ng-container *ngIf="decodedIds.vendorsIds.length === 0 && !vendorsText.value">
-            <li class="list-group-item p-0">
-              <p class="alert alert-danger bor-bm pl-3 pt-3 pb-3">
-                Vendor not Allowed
-              </p></li>
-          </ng-container>
-
-
-        </ul>
-
-
-
-        <ul  *ngIf="vendorsList.vendors"  class="list-group mt-4 vendors-list">
-          <li class="list-group-item active pb-3 pt-3 bor-bm">Vendors Legitimate Interest
-            <span class="badge  badge-pill">{{ decodedIds.vendorsLegiIds.length}}</span>
-          </li>
-
-          <li  class="list-group-item p-0">
-            <input type="text" #legiVendorText (input)="onSearchLegiVendors($event)" class="bor-bm form-control" placeholder="Search Legitimate Vendors" id="usr">
-          </li>
-
-          <ng-container *ngIf="searchLegiVendorsArray.length > 0">
-            <ng-container *ngFor="let obj of searchLegiVendorsArray">
-            <li *ngIf="decodedIds.vendorsLegiIds.includes(obj.id)"  class="list-group-item p-0">
-              <p   class="bor-bm pl-3 pt-3 pb-3">{{obj.name}} </p>
-            </li>
-          </ng-container>
-          </ng-container>
-
-
-          <ng-container *ngIf="searchLegiVendorsArray.length === 0 && !legiVendorText.value">
-            <ng-container *ngFor="let obj of convertToArray(vendorsList.vendors)">
-          <li  *ngIf="decodedIds.vendorsLegiIds.includes(obj.id)" class="list-group-item p-0">
-            <p   class="bor-bm pl-3 pt-3 pb-3">{{obj.name}}</p></li>
-            </ng-container>
-            </ng-container>
-
-
-            <ng-container *ngIf="searchLegiVendorsArray.length === 0 && legiVendorText.value">
-              <li class="list-group-item p-0">
-                <p class="alert alert-danger bor-bm pl-3 pt-3 pb-3">
-                 Legitimate Vendor not found
-                </p></li>
-            </ng-container>
-
-
-            <ng-container *ngIf="decodedIds.vendorsLegiIds.length === 0 && !legiVendorText.value">
-              <li class="list-group-item p-0">
-                <p class="alert alert-danger bor-bm pl-3 pt-3 pb-3">
-                  Legitimate Vendor not Allowed
-                </p></li>
-            </ng-container>
-
-
-        </ul>
-      </div>
-
-
-    </div>
-    </div>
-    </div>
-
-
-
-    <div *ngIf="!loading.two && obj.consent_type === 'CCPA'" class="w-100 pb-5 card mt-3">
-      <div class="card-body">
-        <h4 class="mb-5 "><span class="head-iab mb-4">US Privacy String - (CCPA)</span></h4>
+      <div *ngIf="!loading.two && obj.consent_type === 'CCPA'" class="w-100 pb-5 card mt-3">
+        <div class="card-body">
+          <h4 class="mb-5 "><span class="head-iab mb-4">US Privacy String - (CCPA)</span></h4>
 
           <div class="row mt-2">
             <div class="col-md-8">
 
               <div class="" *ngIf="obj.consent === '1YNY'">
-              <div class="row">
-                <div class="w-50">
-                  <div class="alert alert-success ccpa-status-text">Not Opt Out of Sale - ({{obj.consent}})
-                    <i class="fa fa-check-circle pl-2" aria-hidden="true"></i>
+                <div class="row">
+                  <div class="w-50">
+                    <div class="alert alert-success ccpa-status-text">Not Opt Out of Sale - ({{obj.consent}})
+                      <i class="fa fa-check-circle pl-2" aria-hidden="true"></i>
 
+                    </div>
                   </div>
                 </div>
-              </div>
-              <ul class="ccpa-list">
-                <li>Version 1 of the US Privacy string is being used. (1)</li>
-                <li>The digital property has provided explicit user notice. (Y)</li>
-                <li>The user has NOT made a choice to opt out of sale. (N)</li>
-                <li>The digital property is operating under the Limited Service Provider Agreement. (Y)</li>
+                <ul class="ccpa-list">
+                  <li>Version 1 of the US Privacy string is being used. (1)</li>
+                  <li>The digital property has provided explicit user notice. (Y)</li>
+                  <li>The user has NOT made a choice to opt out of sale. (N)</li>
+                  <li>The digital property is operating under the Limited Service Provider Agreement. (Y)</li>
                 </ul>
               </div>
 
@@ -636,75 +645,10 @@
                   <li>The digital property has provided explicit user notice. (Y)</li>
                   <li>The user has made a choice to opt out of sale. (Y)</li>
                   <li>The digital property is operating under the Limited Service Provider Agreement. (Y)</li>
-                  </ul>
-                </div>
-
-</div>
-              <div class="col-md-4">
-
-                <ul class="list-group">
-                  <li class="list-group-item d-flex active justify-content-between pb-3 pt-3 bor-bm align-items-center">
-                    Allowed Cookie Consents
-                  </li>
-                  <li class="list-group-item d-flex pb-2 pt-2 bor-bm justify-content-between align-items-center">
-                    Essential
-                    <span class="badge badge-primary badge-pill">
-                      <i *ngIf="obj.allow_essantial"  class="fa fa-check" aria-hidden="true"></i>
-                      <i *ngIf="!obj.allow_essantial" class="fa fa-times" aria-hidden="true"></i>
-                    </span>
-                  </li>
-                  <li class="list-group-item d-flex pb-2 pt-2 bor-bm justify-content-between align-items-center">
-                    Advertising
-                    <span class="badge badge-primary badge-pill">
-                      <i *ngIf="obj.allow_advertising"  class="fa fa-check" aria-hidden="true"></i>
-                      <i *ngIf="!obj.allow_advertising" class="fa fa-times" aria-hidden="true"></i>
-                    </span>
-                  </li>
-                  <li class="list-group-item d-flex pb-2 pt-2 bor-bm justify-content-between align-items-center">
-                    Social Media
-                    <span class="badge badge-primary badge-pill">
-                      <i *ngIf="obj.allow_social_media"  class="fa fa-check" aria-hidden="true"></i>
-                      <i *ngIf="!obj.allow_social_media" class="fa fa-times" aria-hidden="true"></i>
-                    </span>
-                  </li>
-                  <li class="list-group-item d-flex pb-2 pt-2 bor-bm justify-content-between align-items-center">
-                    Analytics
-                    <span class="badge badge-primary badge-pill">
-                      <i *ngIf="obj.allow_analytics"  class="fa fa-check" aria-hidden="true"></i>
-                      <i *ngIf="!obj.allow_analytics" class="fa fa-times" aria-hidden="true"></i>
-                    </span>
-                  </li>
                 </ul>
               </div>
+
             </div>
-      </div>
-   </div>
-
-
-
-
-
-
-   <div *ngIf="!loading.two && obj.consent_type === 'GENERIC'" class="w-100 pb-5 card mt-3">
-    <div class="card-body">
-      <h4 class="mb-5 "><span class="head-iab mb-4">Generic Consent</span></h4>
-
-        <div class="row mt-2">
-          <div class="col-md-8">
-
-            <div class="row">
-              <div class="w-75">
-                <div class="alert alert-info ccpa-status-text">CCPA and GDPR does not apply - ({{obj.consent}})
-                  <i class="fa fa-info-circle pl-2" aria-hidden="true"></i>
-
-                </div>
-              </div>
-            </div>
-
-           <footer class="blockquote-footer"> A digital property has determined to use a US Privacy String and that CCPA does not apply to the transaction.</footer>
-
-
-        </div>
             <div class="col-md-4">
 
               <ul class="list-group">
@@ -714,78 +658,167 @@
                 <li class="list-group-item d-flex pb-2 pt-2 bor-bm justify-content-between align-items-center">
                   Essential
                   <span class="badge badge-primary badge-pill">
-                    <i *ngIf="obj.allow_essantial"  class="fa fa-check" aria-hidden="true"></i>
-                    <i *ngIf="!obj.allow_essantial" class="fa fa-times" aria-hidden="true"></i>
-                  </span>
+                      <i *ngIf="obj.allow_essantial" class="fa fa-check" aria-hidden="true"></i>
+                      <i *ngIf="!obj.allow_essantial" class="fa fa-times" aria-hidden="true"></i>
+                    </span>
+                </li>
+                <li class="list-group-item d-flex pb-2 pt-2 bor-bm justify-content-between align-items-center">
+                  Functional
+                  <span class="badge badge-primary badge-pill">
+              <i *ngIf="obj.allow_functional" class="fa fa-check" aria-hidden="true"></i>
+              <i *ngIf="!obj.allow_functional" class="fa fa-times" aria-hidden="true"></i>
+            </span>
                 </li>
                 <li class="list-group-item d-flex pb-2 pt-2 bor-bm justify-content-between align-items-center">
                   Advertising
                   <span class="badge badge-primary badge-pill">
-                    <i *ngIf="obj.allow_advertising"  class="fa fa-check" aria-hidden="true"></i>
+                      <i *ngIf="obj.allow_advertising" class="fa fa-check" aria-hidden="true"></i>
+                      <i *ngIf="!obj.allow_advertising" class="fa fa-times" aria-hidden="true"></i>
+                    </span>
+                </li>
+                <li class="list-group-item d-flex pb-2 pt-2 bor-bm justify-content-between align-items-center">
+                  Social Media
+                  <span class="badge badge-primary badge-pill">
+                      <i *ngIf="obj.allow_social_media" class="fa fa-check" aria-hidden="true"></i>
+                      <i *ngIf="!obj.allow_social_media" class="fa fa-times" aria-hidden="true"></i>
+                    </span>
+                </li>
+                <li class="list-group-item d-flex pb-2 pt-2 bor-bm justify-content-between align-items-center">
+                  Analytics
+                  <span class="badge badge-primary badge-pill">
+                      <i *ngIf="obj.allow_analytics" class="fa fa-check" aria-hidden="true"></i>
+                      <i *ngIf="!obj.allow_analytics" class="fa fa-times" aria-hidden="true"></i>
+                    </span>
+                </li>
+                <li class="list-group-item d-flex pb-2 pt-2 bor-bm justify-content-between align-items-center">
+                  Unknown & Unclassified
+                  <span class="badge badge-primary badge-pill">
+                    <i *ngIf="obj.allow_unknown" class="fa fa-check" aria-hidden="true"></i>
+                    <i *ngIf="!obj.allow_unknown" class="fa fa-times" aria-hidden="true"></i>
+                  </span>
+                </li>
+
+
+
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <div *ngIf="!loading.two && obj.consent_type === 'GENERIC'" class="w-100 pb-5 card mt-3">
+        <div class="card-body">
+          <h4 class="mb-5 "><span class="head-iab mb-4">Generic Consent</span></h4>
+
+          <div class="row mt-2">
+            <div class="col-md-8">
+
+              <div class="row">
+                <div class="w-75">
+                  <div class="alert alert-info ccpa-status-text">CCPA and GDPR does not apply - ({{obj.consent}})
+                    <i class="fa fa-info-circle pl-2" aria-hidden="true"></i>
+
+                  </div>
+                </div>
+              </div>
+
+              <footer class="blockquote-footer"> A digital property has determined to use a US Privacy String and that
+                CCPA does not apply to the transaction.
+              </footer>
+
+
+            </div>
+            <div class="col-md-4">
+
+              <ul class="list-group">
+                <li class="list-group-item d-flex active justify-content-between pb-3 pt-3 bor-bm align-items-center">
+                  Allowed Cookie Consents
+                </li>
+                <li class="list-group-item d-flex pb-2 pt-2 bor-bm justify-content-between align-items-center">
+                  Essential
+                  <span class="badge badge-primary badge-pill">
+                    <i *ngIf="obj.allow_essantial" class="fa fa-check" aria-hidden="true"></i>
+                    <i *ngIf="!obj.allow_essantial" class="fa fa-times" aria-hidden="true"></i>
+                  </span>
+                </li>
+                <li class="list-group-item d-flex pb-2 pt-2 bor-bm justify-content-between align-items-center">
+                  Functional
+                  <span class="badge badge-primary badge-pill">
+              <i *ngIf="obj.allow_functional" class="fa fa-check" aria-hidden="true"></i>
+              <i *ngIf="!obj.allow_functional" class="fa fa-times" aria-hidden="true"></i>
+            </span>
+                </li>
+                <li class="list-group-item d-flex pb-2 pt-2 bor-bm justify-content-between align-items-center">
+                  Advertising
+                  <span class="badge badge-primary badge-pill">
+                    <i *ngIf="obj.allow_advertising" class="fa fa-check" aria-hidden="true"></i>
                     <i *ngIf="!obj.allow_advertising" class="fa fa-times" aria-hidden="true"></i>
                   </span>
                 </li>
                 <li class="list-group-item d-flex pb-2 pt-2 bor-bm justify-content-between align-items-center">
                   Social Media
                   <span class="badge badge-primary badge-pill">
-                    <i *ngIf="obj.allow_social_media"  class="fa fa-check" aria-hidden="true"></i>
+                    <i *ngIf="obj.allow_social_media" class="fa fa-check" aria-hidden="true"></i>
                     <i *ngIf="!obj.allow_social_media" class="fa fa-times" aria-hidden="true"></i>
                   </span>
                 </li>
                 <li class="list-group-item d-flex pb-2 pt-2 bor-bm justify-content-between align-items-center">
                   Analytics
                   <span class="badge badge-primary badge-pill">
-                    <i *ngIf="obj.allow_analytics"  class="fa fa-check" aria-hidden="true"></i>
+                    <i *ngIf="obj.allow_analytics" class="fa fa-check" aria-hidden="true"></i>
                     <i *ngIf="!obj.allow_analytics" class="fa fa-times" aria-hidden="true"></i>
                   </span>
                 </li>
+                <li class="list-group-item d-flex pb-2 pt-2 bor-bm justify-content-between align-items-center">
+                  Unknown & Unclassified
+                  <span class="badge badge-primary badge-pill">
+                    <i *ngIf="obj.allow_unknown" class="fa fa-check" aria-hidden="true"></i>
+                    <i *ngIf="!obj.allow_unknown" class="fa fa-times" aria-hidden="true"></i>
+                  </span>
+                </li>
+
               </ul>
             </div>
           </div>
+        </div>
+      </div>
+
+
+      <div *ngIf="loading.two" class="w-100 card mt-3">
+        <ngx-skeleton-loader class="p-4 pb-0" count="4"></ngx-skeleton-loader>
+        <h5 class="text-center">Decoding Encrypted Payload ...</h5>
+        <div class="loading text-center">
+          <div class="spinner-grow text-primary" role="status">
+            <span class="sr-only">Loading...</span>
+          </div>
+          <div class="spinner-grow text-secondary" role="status">
+            <span class="sr-only">Loading...</span>
+          </div>
+          <div class="spinner-grow text-success" role="status">
+            <span class="sr-only">Loading...</span>
+          </div>
+          <div class="spinner-grow text-danger" role="status">
+            <span class="sr-only">Loading...</span>
+          </div>
+          <div class="spinner-grow text-warning" role="status">
+            <span class="sr-only">Loading...</span>
+          </div>
+          <div class="spinner-grow text-info" role="status">
+            <span class="sr-only">Loading...</span>
+          </div>
+          <div class="spinner-grow text-light" role="status">
+            <span class="sr-only">Loading...</span>
+          </div>
+          <div class="spinner-grow text-dark" role="status">
+            <span class="sr-only">Loading...</span>
+          </div>
+        </div>
+
+        <ngx-skeleton-loader class="p-4 pb-0" count="4"></ngx-skeleton-loader>
+
+      </div>
+
+
     </div>
- </div>
-
-
-
-
-
-    <div *ngIf="loading.two" class="w-100 card mt-3">
-      <ngx-skeleton-loader  class="p-4 pb-0" count="4"></ngx-skeleton-loader>
-      <h5 class="text-center">Decoding Encrypted Payload ...</h5>
-    <div class="loading text-center">
-      <div class="spinner-grow text-primary" role="status">
-        <span class="sr-only">Loading...</span>
-      </div>
-      <div class="spinner-grow text-secondary" role="status">
-        <span class="sr-only">Loading...</span>
-      </div>
-      <div class="spinner-grow text-success" role="status">
-        <span class="sr-only">Loading...</span>
-      </div>
-      <div class="spinner-grow text-danger" role="status">
-        <span class="sr-only">Loading...</span>
-      </div>
-      <div class="spinner-grow text-warning" role="status">
-        <span class="sr-only">Loading...</span>
-      </div>
-      <div class="spinner-grow text-info" role="status">
-        <span class="sr-only">Loading...</span>
-      </div>
-      <div class="spinner-grow text-light" role="status">
-        <span class="sr-only">Loading...</span>
-      </div>
-      <div class="spinner-grow text-dark" role="status">
-        <span class="sr-only">Loading...</span>
-      </div>
-    </div>
-
-    <ngx-skeleton-loader  class="p-4 pb-0" count="4"></ngx-skeleton-loader>
-
-    </div>
-
-
-
-
-
-  </div>
   </div>
