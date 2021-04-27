@@ -217,6 +217,18 @@ export class CCPAFormConfigurationService extends WebControls {
     }));
   }
 
+  storeDataBeforeEdit(data) {
+    sessionStorage.setItem('storeCurrentFieldData', JSON.stringify(data));
+  }
+
+  getStoreDataBeforeEdit() {
+    return JSON.parse(sessionStorage.getItem('storeCurrentFieldData'));
+  }
+
+  removeStoredDataBeforeEdit(){
+    return sessionStorage.removeItem('storeCurrentFieldData')
+  }
+
   onSendLogs(errorType, msg, functionality, componentName, moduleName, path) {
     this.lokiService.onSendErrorLogs(errorType, msg, functionality, componentName, moduleName, path).subscribe();
   }
