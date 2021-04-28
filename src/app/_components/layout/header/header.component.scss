@@ -690,20 +690,20 @@ a.nav-link:hover {
   transition-duration: 3s;
 }
 
-::ng-deep .tooltip {
+.notification-wrapper ::ng-deep .tooltip {
   top: 6px !important;
 }
 
-::ng-deep .tooltip .arrow {
+.notification-wrapper ::ng-deep .tooltip .arrow {
   display: none;
 }
 
-::ng-deep .tooltip-inner {
+.notification-wrapper ::ng-deep .tooltip-inner {
   font-size: 11px;
   padding: 0px 5px;
 }
 
-::ng-deep .tooltip-arrow .arrow {
+.notification-wrapper ::ng-deep .tooltip-arrow .arrow {
   display: none;
 }
 
