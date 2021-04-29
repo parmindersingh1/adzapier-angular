@@ -250,7 +250,8 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
     });
 
     this.quillEditorText = new FormGroup({
-      editor: new FormControl('', Validators.required)
+      editor: new FormControl('', Validators.required),
+      publicprivatetype: new FormControl('0')
     });
     this.quillEditorEmailText = this.formBuilder.group({
       dropdownEmailTemplate: [''],
@@ -258,7 +259,7 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
       emailAttachment: ['']
     });
     this.quillEditorExtendDays = new FormGroup({
-      customdays: new FormControl('', Validators.required),
+      customdays: new FormControl('20', Validators.required),
       editorReason: new FormControl('', Validators.required)
     });
     this.quillEditorRejectRequest = new FormGroup({
@@ -774,6 +775,7 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
             delete reqObj[key];
           }
         });
+        this.activitytype = this.quillEditorText.value.publicprivatetype;
         const fd = new FormData();
         fd.append('current_status', reqObj.current_status);
         fd.append('previous_status', reqObj.previous_status);

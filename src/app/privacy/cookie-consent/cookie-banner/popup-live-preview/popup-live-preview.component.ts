@@ -1,18 +1,11 @@
-import {
-  ChangeDetectionStrategy, ChangeDetectorRef,
-  Component,
-  Input,
-  OnChanges,
-  OnInit,
-  SimpleChanges
-} from '@angular/core';
+import {ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges, ViewEncapsulation} from '@angular/core';
 import {defaultBannerContent, FormDefaultData, iabPurposeList} from '../../../../_constant/consent-banner.constant';
-import {ChangeDetection} from '@angular/cli/lib/config/schema';
 
 @Component({
   selector: 'app-popup-live-preview',
   templateUrl: './popup-live-preview.component.html',
-  styleUrls: ['./popup-live-preview.component.scss']
+  styleUrls: ['./popup-live-preview.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class PopupLivePreviewComponent implements OnInit, OnChanges {
   public defaultContent = defaultBannerContent;
@@ -23,11 +16,12 @@ export class PopupLivePreviewComponent implements OnInit, OnChanges {
   type = 'gdpr';
   @Input('isGdprGlobal') isGdprGlobal = false;
   @Input('ccpaGlobal') ccpaGlobal = false;
+  @Input('showConfigType') showConfigType = false;
   @Input('extraProperty') extraProperty = {
     alwaysAllow: 'Always Allow',
     privacyInfo: 'Privacy Info'
   };
-  @Input('popUpTitleLang') popUpTitleLang = {
+  @Input('popUpTitleLang') PopUpTitleLang = {
     purpose: 'Purpose',
     privacyInfo: 'Privacy Info',
     vendors: 'Vendors'
@@ -37,10 +31,9 @@ export class PopupLivePreviewComponent implements OnInit, OnChanges {
   constructor(private _cd: ChangeDetectorRef) {
   }
   ngOnInit() {
-    this.currentPurpose = this.defaultContent.NecessaryText ;
+    this.currentPurpose = this.defaultContent.EssentialTitle ;
   }
   ngOnChanges(changes: SimpleChanges) {
-console.log('Change', this.popUpTitleLang)
     this._cd.detectChanges()
 
   }
@@ -57,8 +50,6 @@ console.log('Change', this.popUpTitleLang)
     }
   }
   onSetPurposeIds(name, e) {
-    console.log('e', e);
-
     if (e) {
       this.checkedPurposeIds.push(name);
   } else {

@@ -77,8 +77,8 @@ export class WorkflowsComponent implements OnInit, AfterViewInit  {
       workflowselection: ['', [Validators.required]]
     });
     this.isloading = true;
-    this.getlicenseAvailabilityForWorkflow();
-    this.isLicenseLimitAvailable();
+    this.licenseAvailabilityForFormAndRequestPerOrg(this.currentManagedOrgID)
+    // this.isLicenseLimitAvailable();
   }
   get addWorkflow() { return this.createWorkFlowForm.controls; }
 
@@ -326,10 +326,10 @@ propertyPageChangeEvent(event) {
 }
 
 navigateToWorkflow(obj) {
-  if(this.isLicenseLimitAvailable()){
+ // if(this.isLicenseLimitAvailable()){
     this.workflowService.changeCurrentSelectedWorkflow(obj);
     this.router.navigate(['privacy/dsar/createworkflow/', obj.id]);
-  }
+ // }
 }
 
 onCancelClick() {
@@ -347,10 +347,18 @@ isLicenseLimitAvailable(){
   return this.dataService.isLicenseLimitAvailableForOrganization('workflow',this.dataService.getAvailableLicenseForFormAndRequestPerOrg());
 }
 
-getlicenseAvailabilityForWorkflow(){
-   this.dataService.getWorkflowLicenseLimit(this.constructor.name, moduleName.headerModule).subscribe((data) => {
-    this.dataService.setWorkflowLicenseToLocalStorage(data.response);
-  })
+licenseAvailabilityForFormAndRequestPerOrg(org){
+  this.dataService.removeAvailableLicenseForFormAndRequestPerOrg();
+  this.dataService.checkLicenseAvailabilityPerOrganization(org).subscribe(results => {
+    let finalObj = {
+      ...results[0].response,
+      ...results[1].response,
+      ...results[2].response
+    }
+    this.dataService.setAvailableLicenseForFormAndRequestPerOrg(finalObj);
+  },(error)=>{
+    console.log(error)
+  });
 }
 
 ngAfterViewInit() {
@@ -369,13 +377,13 @@ ngAfterViewInit() {
   this.cdRef.detectChanges();
 }
 
-ngAfterViewChecked(){
-  let addBlurbg = this.addBlurBackground();
-  if(addBlurbg !== this.addBlurbackgroundToTable){
-    this.addBlurbackgroundToTable = this.addBlurBackground();
-    this.cdRef.detectChanges();
-  }
-}
+// ngAfterViewChecked(){
+//   let addBlurbg = this.addBlurBackground();
+//   if(addBlurbg !== this.addBlurbackgroundToTable){
+//     this.addBlurbackgroundToTable = this.addBlurBackground();
+//     this.cdRef.detectChanges();
+//   }
+// }
 
 addBlurBackground() :object{
   if(!this.isLicenseLimitAvailable()){

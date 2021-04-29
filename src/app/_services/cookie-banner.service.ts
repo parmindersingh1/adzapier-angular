@@ -83,8 +83,28 @@ export class CookieBannerService {
     );
   }
 
-  GetLangData(lang) {
-    const url = environment.langURL.replace(':lang', lang);
+  GetGlobleLangData(lang) {
+    const url = environment.globleLangURL.replace(':lang', lang);
     return this.http.get(url);
   }
+
+  GetCustomLangData(lang, oid, pid) {
+    let url = environment.customLangURL.replace(':lang', lang);
+    url = url.replace(':oid', oid)
+    url = url.replace(':pid', pid)
+    return this.http.get(url);
+  }
+
+  saveCustomLang(payloads, lang, orgId, propId, componentName, moduleName ): Observable<any> {
+    let path = apiConstant.COOKIE_BANNER.replace(':orgId', orgId);
+    path = path.replace(':propId', propId);
+    return this.http.post(environment.apiUrl + path, payloads, {params: {lang}}).pipe(map(res => res),
+      catchError(error => {
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.cookieBanner, componentName, moduleName, path);
+        return throwError(error);
+      }),
+    );
+  }
+
+
 }

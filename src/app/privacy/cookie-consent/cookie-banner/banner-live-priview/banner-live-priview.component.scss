@@ -29,3 +29,11 @@
 .br-l {
   border-left: 2px solid  #162893;
 }
+
+@media only screen and (max-width: 600px) {
+.banner-shadow {
+  top: 123px !important;
+  width: 800px !important;
+}
+
+}

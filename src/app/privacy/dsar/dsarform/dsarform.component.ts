@@ -280,8 +280,8 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
       // this.selectedwebFormControlList = this.
     });
     this.loadCurrentProperty();
-    this.loadWebControl();
-    this.getCCPAdefaultConfigById();
+   // this.loadWebControl();
+   // this.getCCPAdefaultConfigById();
     
 
     this.basicForm = this.fb.group({
@@ -442,12 +442,13 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
       }];
       this.daysleft = 45;
       // this.getCCPAdefaultConfigById();
-      this.reqURLObj = { crid: formcrid, orgid: this.organizationID, propid: this.propId };
+    // this.reqURLObj = { crid: this.crid, orgid: this.organizationID, propid: this.propId };
       this.organizationService.getOrganization.subscribe((response) => this.currentOrgID = response);
     }
   }
 
   getCCPAdefaultConfigById() {
+    this.ccpaRequestService.clearCacheRequestSubjectType();
     this.ccpaRequestService.getCCPAdefaultRequestSubjectType().subscribe((data) => {
       if (data !== undefined) {
         const rdata = data.request_type;
@@ -610,7 +611,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
       } else if (this.existingControl.controlId === 'requesttype') {
         this.isRequestType = true;
         this.isSubjectType = false;
-        this.sideMenuRequestTypeOptions = this.selectedControlObj.selectOptions
+        this.sideMenuRequestTypeOptions = this.selectedControlObj.selectOptions;
         // this.loadSubjectRequestTypeForSideNav('requesttype');
       } else {
         this.selectedControlType = true;
@@ -631,7 +632,26 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
     }
   }
 
+  isCustomOptionEmpty():boolean{
+    if(this.selectOptions !== undefined){
+      return  this.selectOptions.filter((t) => t.name === undefined || t.name === '').length > 0;
+    }
+  }
+
+  isSideMenuRequestTypeOptionEmpty():boolean{
+    if(this.sideMenuRequestTypeOptions !== undefined){
+      return  this.sideMenuRequestTypeOptions.filter((t) => t.name === undefined || t.name === '').length > 0;
+    }
+  }
+
+  isSideMenuSubjectTypeOptionEmpty():boolean{
+    if(this.sideMenuSubjectTypeOptions !== undefined){
+      return  this.sideMenuSubjectTypeOptions.filter((t) => t.name === undefined || t.name === '').length > 0;
+    }
+  }
+
   editSelectedRow(data) {
+    this.ccpaFormConfigService.storeDataBeforeEdit(data);
     this.selectedControlObj = data;
     this.lblText = data.controllabel;
     this.isEditingList = true;
@@ -672,11 +692,15 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
 
   deleteSelectedItem(item) {
     if (this.crid) {
+      this.ccpaFormConfigService.storeDataBeforeEdit(item);
       this.ccpaFormConfigService.deleteControl(item);
       this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
+      this.isDirty = true;
     } else {
+      this.dsarFormService.storeDataBeforeEdit(item);
       this.dsarFormService.deleteControl(item);
       this.webFormControlList = this.dsarFormService.getFormControlList();
+      this.isDirty = true;
     }
   }
 
@@ -700,9 +724,11 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
       keylabel
     };
     this.selectOptions.push(customObj);
+    this.isDirty = true;
   }
 
   addCustomReqestSubjectType() {
+    this.isDirty = true;
     // isSubjectType,isRequestType
     let subjectObj: CustomControls = {};
     let requestObj: CustomControls = {};
@@ -739,10 +765,12 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
   }
 
   deleteSelectOption(index) {
+    this.isDirty = true;
     this.selectOptions.splice(index, 1);
   }
 
   deleteSubjectOption(index) {
+    this.isDirty = true;
     this.sideMenuSubjectTypeOptions.splice(index, 1);
     if (this.crid) {
       this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
@@ -764,6 +792,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
   }
 
   deleteRequestOption(index) {
+    this.isDirty = true;
     this.sideMenuRequestTypeOptions.splice(index, 1);
   }
 
@@ -773,6 +802,9 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
   }
 
   addCustomFields(formControls: NgForm) {
+    if(this.isCustomOptionEmpty() || this.isSideMenuRequestTypeOptionEmpty() || this.isSideMenuSubjectTypeOptionEmpty()){
+      return false;
+    }
    // this.isDirty = true;
     this.trimLabel = formControls.value.lblText.split(' ').join('_').toLowerCase();
     this.formControlLabel = formControls.value.lblText;
@@ -784,8 +816,13 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
 
   changeControlTypes() {
     //  const controlLabel =  this.formControlLabel !== undefined ? this.formControlLabel : this.lblText;
+    if(this.crid){
+      this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
+    }else{
+      this.webFormControlList = this.dsarFormService.getFormControlList();
+    }
     this.trimLabel = this.lblText.split(' ').join('_').toLowerCase();
-    const isLabelExist = this.webFormControlList.findIndex((t) => t.controllabel === this.formControlLabel || this.lblText);
+    const isLabelExist = this.webFormControlList.findIndex((t) => t.controllabel === this.lblText ); //this.formControlLabel || this.lblText
     if (isLabelExist !== -1 && this.changeControlType === null && this.isEditingList) {
       this.alertMsg = 'Label already exist!'
       this.isOpen = true;
@@ -808,7 +845,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
         }
         //  const updatedControlType = this.changeControlType === 'button' && this.changeControlType !== 'select' && !this.multiselect ? 'radio' : 'checkbox';
         updatedObj = {
-          controllabel: this.formControlLabel || this.lblText, // formControls.value.lblText,
+          controllabel: this.lblText, // formControls.value.lblText,
           indexCount: this.existingControl.indexCount,
           control: updatedControlType || this.changeControlType,
           controlId: this.selectedControlId,
@@ -848,10 +885,11 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
         let updateCustomObj;
         const customControlIndex = this.webFormControlList.findIndex((t) =>
           t.controlId === this.existingControl.controlId);
-
-        this.selectOptions.forEach(element => {
-          element.keylabel = this.trimLabel;
-        });
+        if(this.selectOptions !== undefined){
+          this.selectOptions.forEach(element => {
+            element.keylabel = this.trimLabel;
+          });
+        }
         // }
         let updatedControlType;
         if (this.changeControlType === 'button' && !this.multiselect) {
@@ -864,14 +902,17 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
         //  const updatedControlType = this.changeControlType === 'button' && this.changeControlType !== 'select' && !this.multiselect ? 'radio' : 'checkbox';
         if (customControlIndex !== -1) {
           updateCustomObj = {
-            controllabel: this.formControlLabel || this.lblText, // formControls.value.lblText,
+            controllabel: this.lblText,
             indexCount: this.trimLabel,
             control: updatedControlType || this.existingControl.control,
             controlId: this.existingControl.controlId,
             selectOptions: this.existingControl.selectOptions,
             requiredfield: this.isRequiredField
           };
-          const optionLength = this.selectOptions.length;
+          let optionLength;
+          if(this.selectOptions !== undefined){
+             optionLength = this.selectOptions.length;
+          }
           if (optionLength > 0) {
             if (this.selectOptions[optionLength - 1].name !== undefined) {
               // this.lblText = '';
@@ -1001,6 +1042,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
 
   onSubmitQuillEditorData() {
     if (this.isWelcomeEditor) {
+      this.getEditorFontSize();
       const newWebControl = {
         control: 'text',
         controllabel: 'Welcome Text',
@@ -1024,6 +1066,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
       }
       this.modalService.dismissAll('Data Saved!');
     } else {
+      this.getEditorFontSize();
       const footerTextControl = {
         control: 'text',
         controllabel: 'Footer Text',
@@ -1124,11 +1167,15 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
         this.ismultiselectrequired = true;
       }
     }
-  //  this.changeControlTypes();
+    this.changeControlTypes();
   }
 
   addingFormControl() {
-  //  console.log(this.selectedFormOption,'selectedFormOption..');
+    if(this.crid){
+      this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
+    }else{
+      this.webFormControlList = this.dsarFormService.getFormControlList();
+    }
     this.multiselect = false;
     this.selectedFormOption = null;
     this.selectOptionControl = '';
@@ -1178,13 +1225,26 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
 
   cancelAddingFormControl(actionType) {
     if (actionType === 'cancel' && this.crid === null) {
-      this.webFormControlList = this.dsarFormService.getFormControlList();
+       let obj = this.ccpaFormConfigService.getStoreDataBeforeEdit();
+       const customControlIndex = this.webFormControlList.findIndex((t) => t.controlId === obj.controlId);
+       this.dsarFormService.updateControl(this.webFormControlList[customControlIndex], customControlIndex, obj);
+       this.webFormControlList = this.dsarFormService.getFormControlList();
     } else if (actionType === 'cancel' && this.crid !== null) {
-      this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
+      this.isDirty = true;
+      const previousobj = this.ccpaFormConfigService.getStoreDataBeforeEdit();
+      if(previousobj !== undefined){
+        const customControlIndex = this.webFormControlList.findIndex((t) => t.controlId === previousobj.controlId);
+        this.ccpaFormConfigService.updateControl(this.webFormControlList[customControlIndex], customControlIndex, previousobj);
+        this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
+      } 
     } else if (actionType === 'submit' && this.crid !== null) {
       this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
       this.isDirty = true;
+    } else if (actionType === 'submit' && this.crid == null) {
+      this.webFormControlList = this.dsarFormService.getFormControlList();
+      this.isDirty = true;
     } 
+      this.lblText = '';
       this.isAddingFormControl = false;
       this.isEditingList = false;
       this.inputOrSelectOption = false;
@@ -1585,7 +1645,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
     } else {
       this.dsarFormService.updateControl(this.webFormControlList[oldControlIndex], oldControlIndex, controlObj);
       this.webFormControlList = this.dsarFormService.getFormControlList();
-      this.cancelAddingFormControl('submit');
+      // this.cancelAddingFormControl('submit');
     }
   }
 
@@ -1650,6 +1710,36 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
       this.quillEditorText.reset();
       // this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
+  }
+
+  onCloseWelcomeTextEditor(){
+    this.modalService.dismissAll();
+    if (this.crid) {
+      this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
+      if (this.webFormControlList !== null) {
+        const editText = this.webFormControlList.filter((t) => t.indexCount === 'welcome_text_Index');
+        this.editorDataWelcome = editText[0].welcomeText;
+      }
+    } else {
+      this.webFormControlList = this.dsarFormService.getFormControlList();
+      const editText = this.webFormControlList.filter((t) => t.indexCount === 'welcome_text_Index');
+      this.editorDataWelcome = editText[0].welcomeText;
+    }
+  }
+
+  onCloseFooterTextEditor(){
+    this.modalService.dismissAll();
+    if (this.crid) {
+      this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
+      if (this.webFormControlList !== null) {
+        const editText = this.webFormControlList.filter((t) => t.indexCount === 'footer_text_Index');
+        this.editorDataFooter = editText[0].footerText;
+      }
+    } else {
+      this.webFormControlList = this.dsarFormService.getFormControlList();
+      const editText = this.webFormControlList.filter((t) => t.indexCount === 'footer_text_Index');
+      this.editorDataFooter = editText[0].footerText;
+    }
   }
 
   welcomeStyle(): object {
@@ -2388,7 +2478,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
       this.settingsForm.form.markAsPristine();
       this.getDSARFormByCRID(this.crid,'existingdata');
     }
-  //  this.isDirty = false;
+    this.isDirty = false;
     this.modalRef.hide();
     this.navDirective.select(this.activeId);
    // return false;
@@ -2437,6 +2527,18 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
     this.isDirty = true;
   }
 
+  getEditorFontSize(){
+    const tagObj = [{"ql-size-large":'24'},{"ql-size-small":'12'},{"<p>":'14'},{"<h1>":'28'},{"<h2>":'24'}]
+      for (const key in tagObj){
+        if(this.quillEditorText.get('editor').value.indexOf(Object.keys(tagObj[key])) !== -1){
+          if(this.isWelcomeEditor){
+            return  this.welcomeFontSize = Object.values(tagObj[key])[0];
+          } else{
+            return this.footerFontSize = Object.values(tagObj[key])[0];
+          } 
+        }
+      }
+  }
 
   onLabelChange($event) {
   //  this.cd.detectChanges();
@@ -2525,6 +2627,10 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
   // ngAfterViewInit(){
   //   this.cdRef.detectChanges();
   // }
+
+  getUpdatedFormList():any {
+    return this.dsarFormService.getFormControlList();
+  }
 
   ngOnDestroy() {
     this.webFormControlList = [];

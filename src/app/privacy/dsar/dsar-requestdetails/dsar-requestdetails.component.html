@@ -28,7 +28,7 @@
                                 Edit</span></button>
                         <button  class="btn btn-sm btn-outline-secondary btn-uppercase mr-2" *ngIf="selectedStages.length !== 0 && currentWorkflowStage !== 'Rejected'"  (click)="openExtendModal()">Extend Days</button>
                         <button  class="btn btn-sm btn-outline-secondary btn-uppercase mr-2" *ngIf="!isRequestCompleted && currentWorkflowStage !== 'Rejected'" (click)="openReqestRejectModal()">Reject</button>
-                         <button class="btn btn-xs btn-danger float-right" (click)="removeDSARRequest('DSAR Request detail')">Delete</button>
+                         <button class="btn btn-sm  btn-uppercase btn-danger" (click)="removeDSARRequest('DSAR Request detail')">Delete</button>
 
                     </div>
 
@@ -148,7 +148,7 @@
                                         <i-feather class="feather-tick" name="check"></i-feather> Verified
                                     </span>
                                 </label>
-                                <p class="mg-b-0"><span [ngClass]="data.key==='Captchacode' ? 'text-success' : ''">{{data.key!=='Captchacode' ? data.value:'Verified'}}</span></p>
+                                <p class="mg-b-0">{{data.value}}</p>
                             </div>
 
                             <ng-template #elseEmailverified>
@@ -207,19 +207,11 @@
                 </div><!-- card-body -->
             </div><!-- card -->
             <div class="card mt-2 activitytab">
-                <ul ngbNav #nav="ngbNav" class="nav-tabs" (navChange)="onNavChange($event)">
+                <ul ngbNav #nav="ngbNav" class="nav-tabs nav mt-1 mb-1" (navChange)="onNavChange($event)">
                     <li [ngbNavItem]="1">
                         <a ngbNavLink>Activity</a>
                         <ng-template ngbNavContent>
-                            <div class="nav-group">
-                            <div class="form-check-inline">
-                                <input class="btn btn-primary mr-2" type="radio" name="privatetype" id="privatetype" [value]="0" [(ngModel)]="activitytype">
-                                <button type="submit" class="btn btn-primary mr-2">Private</button>
 
-                                <input class="form-check-input" type="radio" name="publictype" id="publictype" [value]="1" [(ngModel)]="activitytype">
-                                <button type="submit" class="btn btn-primary mr-2">Public</button>
-                            </div>
-                            </div>
 
                             <form [formGroup]="quillEditorText" (ngSubmit)="onSubmitActivityPost()">
                                 <quill-editor formControlName="editor" [modules]="quillConfig"
@@ -231,7 +223,17 @@
                                     <div *ngIf="addActivity.editor?.errors.required">Activity can not be empty, add your
                                         post.</div>
                                 </div>
-                                <button type="submit" class="btn btn-primary mr-2">Post</button>
+                                <button type="submit" class="btn btn-sm  btn-uppercase btn-primary float-right mb-2 mt-2">Post</button>
+                                <div class="radiobtn-wrapper">
+                                    <div class="form-check mr-2" tooltip="For Private conversation" placement="top" [adaptivePosition]="true">
+                                        <input class="form-check-input" type="radio"  name="publicprivatetype" id="private" value="0" checked>
+                                        <label class="form-check-label" for="private">Private</label>
+                                    </div>
+                                    <div class="form-check mr-2" tooltip="For Public conversation" placement="top" [adaptivePosition]="true">
+                                        <input class="form-check-input" type="radio"  name="publicprivatetype" id="public" value="1">
+                                        <label class="form-check-label" for="public">Public</label>
+                                    </div>
+                                </div>
                             </form>
 
                         </ng-template>
@@ -277,7 +279,7 @@
                                                 for="inputGroupFile01">{{uploadFilename?uploadFilename:'Choose file'}}</label>
                                         </div>
                                     </div>
-                                    <button type="submit" class="btn btn-xs btn-primary float-right mb-2 mt-2">Post
+                                    <button type="submit" class="btn btn-sm btn-uppercase btn-primary float-right mb-2 mt-2">Post
                                     </button>
                                 </div>
                             </form>
@@ -579,8 +581,8 @@
 
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-link tx-decoration-underline" (click)="onCancelClick()">Cancel</button>
-            <button class="btn btn-primary" type="submit">Save</button>
+            <button type="button" class="btn btn-link tx-decoration-underline m-0" (click)="onCancelClick()">Cancel</button>
+            <button class="btn btn-primary tx-13 m-0" type="submit">Save</button>
         </div>
 
     </form>
@@ -798,8 +800,8 @@
 
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-link tx-decoration-underline" (click)="onResetSubTask()">Cancel</button>
-            <button class="btn btn-primary" type="submit">Save</button>
+            <button type="button" class="btn btn-link tx-decoration-underline m-0" (click)="onResetSubTask()">Cancel</button>
+            <button class="btn btn-primary m-0" type="submit">Save</button>
         </div>
     </form>
 </ng-template>
@@ -897,8 +899,8 @@
             </div>
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-link tx-decoration-underline" (click)="onCancelSubTaskResponse()">Cancel</button>
-            <button class="btn btn-primary tx-13" type="submit">Save</button>
+            <button type="button" class="btn btn-link tx-decoration-underline m-0" (click)="onCancelSubTaskResponse()">Cancel</button>
+            <button class="btn btn-primary tx-13 m-0" type="submit">Save</button>
         </div>
 
     </form>

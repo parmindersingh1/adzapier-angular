@@ -23,4 +23,7 @@ export class CcparequestService {
     return this.httpClient.get<any>(environment.apiUrl + '/ccpa/default/config/' + orgId );
   }
 
+  clearCacheRequestSubjectType(){
+    this.cacheRequestSubjectType = null;
+  }
 }
