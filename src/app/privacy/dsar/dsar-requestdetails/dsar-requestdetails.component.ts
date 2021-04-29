@@ -1161,6 +1161,7 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
             this.alertType = 'success';
             subtaskForm.resetForm();
             this.getSubTaskList();
+            this.authService.notificationUpdated.next(true);
             this.modalService.dismissAll('Canceled');
           }, (error) => {
             this.onResetSubTask();
@@ -1177,6 +1178,7 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
           this.getSubTaskList();
           subtaskForm.resetForm();
           this.onResetSubTask();
+          this.authService.notificationUpdated.next(true);
         }, (error) => {
           this.alertMsg = error;
           this.isOpen = true;
@@ -1337,6 +1339,7 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
           this.alertType = 'success';
           this.multipleFile = [];
           this.onCancelSubTaskResponse();
+          this.authService.notificationUpdated.next(true);
         }, (error) => {
           this.onCancelSubTaskResponse();
           this.alertMsg = JSON.stringify(error);
