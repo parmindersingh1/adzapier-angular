@@ -321,6 +321,7 @@ export class OrgpageComponent implements OnInit {
   }
 
   onResetEditOrganization() {
+    this.submitted = false;
     this.editOrganisationForm.reset();
     this.modalService.dismissAll('Data Saved!');
   }
