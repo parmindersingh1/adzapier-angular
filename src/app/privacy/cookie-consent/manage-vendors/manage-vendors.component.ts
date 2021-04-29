@@ -139,7 +139,6 @@ export class ManageVendorsComponent implements OnInit {
             this.googleVendorsDefaultID = JSON.parse(result.google_vendors);
             this.iabVendorsDefaultID = JSON.parse(result.iab_vendors);
             this.isAlliavinactive = this.iabVendorsDefaultID.length > 0 ? true : false
-            this.cd.detectChanges()
             this.isAllgoogleinactive = this.googleVendorsDefaultID > 0 ? true : false
             this.cd.detectChanges()
           }
