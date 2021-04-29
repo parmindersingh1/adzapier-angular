@@ -74,6 +74,7 @@ export class HeaderComponent implements OnInit {
   isShowDashboardForCookieConsent = false;
   isShowDashboardForDsar = false;
   planDetails: any;
+  isNewnotification: boolean;
   constructor(
     private router: Router,
     private activatedroute: ActivatedRoute,
@@ -130,7 +131,12 @@ export class HeaderComponent implements OnInit {
         }
       }
     });
-
+    this.authService.isNotificationUpdated.subscribe((status) => {
+      this.isNewnotification = status;
+      if(this.isNewnotification){
+        this.loadNotification();
+      }
+    });
   }
 
   ngOnInit() {
@@ -162,7 +168,7 @@ export class HeaderComponent implements OnInit {
         showlink: 'Contact Us', routerLink: '/contactus'
       }];
     this.onCheckSubscriptionForProperty();
-    this.onCheckSubscriptionForOrg()
+    this.onCheckSubscriptionForOrg();
   }
 
   logout() {

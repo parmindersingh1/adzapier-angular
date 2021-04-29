@@ -4,7 +4,7 @@ import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MatDialog} from '@angular/material/dialog';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
-import {OrganizationService} from '../../../_services';
+import {AuthenticationService, OrganizationService} from '../../../_services';
 import {ConfirmationService, MessageService, SortEvent} from 'primeng/api';
 import {moduleName} from '../../../_constant/module-name.constant';
 import {cookieName} from '../../../_constant/cookies-name.constant';
@@ -100,7 +100,8 @@ export class CookieCategoryComponent implements OnInit {
               private orgservice: OrganizationService,
               public dialog: MatDialog,
               private formBuilder: FormBuilder,
-              private messageService: MessageService, private confirmationService: ConfirmationService
+              private messageService: MessageService, private confirmationService: ConfirmationService,
+              private authService: AuthenticationService,
   ) {
     this.onInItCategoryForm();
   }
@@ -548,6 +549,7 @@ export class CookieCategoryComponent implements OnInit {
       this.isOpen = true;
       this.alertMsg = res.response;
       this.alertType = 'success';
+      this.authService.notificationUpdated.next(true);
     }, error => {
       this.isScanning = false;
       this.isOpen = true;
