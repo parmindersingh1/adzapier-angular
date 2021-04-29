@@ -14,6 +14,7 @@ import {CheckboxModule} from 'primeng/checkbox';
 import {MultiSelectModule} from 'primeng/multiselect';
 import {TableModule} from 'primeng/table';
 import {RadioButtonModule} from 'primeng/radiobutton';
+
 const path: Routes = [{
   path: '', component: CookieBannerComponent,
 },

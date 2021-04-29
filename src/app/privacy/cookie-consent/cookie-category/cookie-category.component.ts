@@ -109,7 +109,7 @@ export class CookieCategoryComponent implements OnInit {
   ngOnInit() {
     setInterval( () => {
       this.onGetScanningStatus();
-    }, 5000);
+    }, 30000);
     this.onGetSubscriptionData();
     this.onSelectedColummFormServer();
     this.onInItCookieForm();
