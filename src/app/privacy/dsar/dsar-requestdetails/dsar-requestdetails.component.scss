@@ -918,6 +918,12 @@ ul.ngx-pagination {
     float: right;
 }
 
+.radiobtn-wrapper > .form-check > input[type="radio"] {
+    margin: 0px 5px 0px 0;
+    top: 2px;
+    position: relative;
+}
+
 .radiobtn-wrapper .form-check .form-check-input {
     margin-top: 0.1rem;
 }
