@@ -124,6 +124,7 @@ export class CookieCategoryComponent implements OnInit {
           if (this.scanningStatus === 'successfull') {
             this.scanError = true;
             this.onGetDataFromServer();
+            this.onGetChartData();
           }
         }
       }, err => {
