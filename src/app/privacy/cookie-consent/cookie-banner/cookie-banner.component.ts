@@ -1042,6 +1042,8 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
         this.isOpen = true;
         this.alertMsg = 'Saved';
         this.alertType = 'success';
+        this.type = 'draft';
+        this.onSubmit();
       }, error => {
         this.loading.stop('lang');
         this.isOpen = true;
