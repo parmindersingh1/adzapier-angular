@@ -74,11 +74,16 @@
             </button>
           </div>
           <div class="modal-body">
-            Automated scan usually finish within 3 minutes but during peak demand, your scan may take up to 10 minutes. . 
+            Automated scan usually finish within 3 minutes but during peak demand, your scan may take up to 10 minutes.
             You can leave this page and your scan will continue in the background.
 
+            <div class="d-flex" style="justify-content:flex-end;">
+              <button type="button" class="btn btn-primary btn-sm" (click)="categoryModalRef.hide()">OK</button>
+
+            </div>
 
           </div>
+
         </ng-template>
 
 

@@ -146,9 +146,6 @@ export class CookieCategoryComponent implements OnInit {
     if(this.onCheckSubscription()){
     this.categoryModalRef = this.modalService.show(template);
     }
-    else{
-      return false;
-    }
   }
 
   
