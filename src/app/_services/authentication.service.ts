@@ -12,7 +12,10 @@ import {LokiFunctionality, LokiStatusType} from '../_constant/loki.constant';
 export class AuthenticationService {
     public redirectUrl: string;
     public userLoggedIn: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-
+    public notificationUpdated: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+    get isNotificationUpdated(){
+        return this.notificationUpdated.asObservable();
+    }
     get isUserLoggedIn() {
         return this.userLoggedIn.asObservable();
     }

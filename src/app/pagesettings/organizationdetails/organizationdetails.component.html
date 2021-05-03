@@ -467,11 +467,13 @@
             <div class="form-group">
                 <label for="website">Website</label>
                 <div class="input-group">
-                  <select class="custom-select col-sm-3" name="protocol" formControlName="protocol">
+                  <select class="custom-select" name="protocol" formControlName="protocol" [ngClass]="{ 'is-invalid': submitted && orgProp.protocol.errors }">
                       <ng-container *ngFor="let opt of protocolList">
-                        <option [value]="opt"  [selected]="opt === protocol">{{ opt }}</option>
+                        <option [value]="opt">{{opt}}</option>
                       </ng-container>
                     </select>
+                    
+                   
                   <div class="col-sm-9 p-0 input-group-append flex-column">
                     <input type="text" class="form-control" name="website" formControlName="website" placeholder="propertydomain.com"
                     [ngClass]="{ 'is-invalid': submitted && orgProp.website.errors }" />

@@ -599,7 +599,7 @@ ul.ngx-pagination {
     background: #0168fa;
     border: 1px solid #0062cc;
     border-radius: 3px;
-    padding: 5px 8px;
+    padding: 7px 8px;
     outline: none;
     white-space: nowrap;
     -webkit-user-select: none;
@@ -623,20 +623,21 @@ ul.ngx-pagination {
     width: 400px;
   }
   .email-attachment-wrapper .input-group {
-      margin: 0 10px;
+      margin: 4px 10px;
   }
 
   .email-attachment-wrapper .input-group .custom-file .custom-file-label {
-    height: 30px !important;
+    height: 34px !important;
     border-radius: 0.35rem;
     border: 1px solid #3968fa !important;
   }
 
   .email-attachment-wrapper .input-group .custom-file .custom-file-label::after {
     background-color: #3968fa;
-    height: 28px !important;
+    height: 33px !important;
     font-size: 12px;
-    font-weight: normal;
+    font-weight: 500;
+    text-transform: uppercase;
     color: #fff;
   }
 
@@ -658,7 +659,7 @@ ul.ngx-pagination {
   
   .email-lbl {
     width: 110px;
-    margin: 10px 0 10px 0px;
+    margin: 0px 0 14px 0px;
   }
 
   .show {
@@ -909,6 +910,48 @@ ul.ngx-pagination {
 .width120{
     width:120px;
 }
+
+.radiobtn-wrapper {
+    justify-content: center;
+    display: flex;
+    margin: 13px 10px; 
+    float: right;
+}
+
+.radiobtn-wrapper > .form-check > input[type="radio"] {
+    margin: 0px 5px 0px 0;
+    top: 2px;
+    position: relative;
+}
+
+.radiobtn-wrapper .form-check .form-check-input {
+    margin-top: 0.1rem;
+}
+
+.radiobtn-wrapper .tooltip .arrow {
+        display: block;
+      }
+
+// ::ng-deep .tooltip {
+//     top: 6px !important;
+//   }
+  
+//   ::ng-deep .tooltip .arrow {
+//     display: none;
+//   }
+  
+//   ::ng-deep .tooltip-inner {
+//     font-size: 11px;
+//     padding: 0px 5px;
+//   }
+  
+//   ::ng-deep .tooltip-arrow .arrow {
+//     display: none;
+//   }
+  
+//   .tooltip-inner {
+//     padding: 0px 5px !important;
+//   }
 
 @media(max-width:768px){
 .activitytab .nav-tabs .nav-link {
