@@ -104,7 +104,7 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
   saveCustomLang = [];
   resetLang = null;
   allowedLanguageListObj = {
-    allowedLang: [],
+    allowedLang: ['en-US'],
     defaultLang: 'en-US'
   }
 
@@ -1113,8 +1113,7 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
     this.allowLanguagesList = [];
     this.allowLanguagesList = this.allowedLanguageListObj.allowedLang;
     this.defaultLanguage = this.allowedLanguageListObj.defaultLang;
-    this.cd.detectChanges()
-
+    this.cd.detectChanges();
   }
 
 }
