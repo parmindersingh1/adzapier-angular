@@ -169,7 +169,8 @@ export class CookieCategoryComponent implements OnInit {
   onInItCookieForm() {
     this.addCookieForm = this.formBuilder.group({
       name: ['', Validators.required],
-      path: ['', Validators.required],
+      domain: ['', Validators.required],
+      path: ['/', Validators.required],
       category: ['', Validators.required],
       party: ['', Validators.required],
       description: ['', Validators.required],
@@ -236,6 +237,7 @@ export class CookieCategoryComponent implements OnInit {
       expiry: this.addCookieForm.value.expiry,
       name: this.addCookieForm.value.name,
       party: this.addCookieForm.value.party,
+      domain: this.addCookieForm.value.domain,
       path: this.addCookieForm.value.path,
       value: this.addCookieForm.value.value
     };
