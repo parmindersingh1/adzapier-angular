@@ -10,7 +10,7 @@ export const environment = {
   iabUrl: 'https://staging-cdn.adzapsrv.com/vendorlist/IABvendors/',
   googleVendorsUrl: 'https://staging-cdn.adzapsrv.com/vendorlist/googlevendorlist/google.json',
   apiUrl: 'https://develop-cmp-api.adzpier-staging.com/api/v1',
-  globleLangURL: 'https://staging-cdn.adzapsrv.com/cookiebanner/banner-language/test/:lang.json',
+  globleLangURL: 'https://staging-cdn.adzapsrv.com/cookiebanner/banner-language/:lang.json',
   customLangURL: 'https://staging-cdn.adzapsrv.com/cmp/v1/web/:oid/lang/:pid-:lang.json',
   // apiUrl: 'https://cmp-api.adzpier-staging.com/api/v1',
   // apiUrl: 'http://localhost:8888/api/v1',
