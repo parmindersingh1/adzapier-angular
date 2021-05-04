@@ -72,4 +72,16 @@ export class ConsentSolutionsService {
         return throwError(error);
       }));
   }
+
+
+  // Dashboard
+
+  getConsentDataForDashboard(componentName, moduleName) {
+    const path = apiConstant.CONSENT_DASHBOARD.replace(':pid', this.currrentManagedPropID);
+    return this.http.get(environment.apiUrl + path).pipe(map(res => res),
+      catchError(error => {
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.billing, componentName, moduleName, path);
+        return throwError(error);
+      }));
+  }
 }

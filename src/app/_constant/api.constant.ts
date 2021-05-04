@@ -71,7 +71,8 @@ export const apiConstant = {
   // Consent Solution
   GET_CONSENT_RECORDS: '/consent/solution/:pid',
   GET_LEGAL_RECORDS: '/consent/legal_notices/:pid',
-  UPDATE_CONSENT: '/consent/solution/:pid/:id'
+  UPDATE_CONSENT: '/consent/solution/:pid/:id',
+  CONSENT_DASHBOARD: '/consent/dashboard/:pid'
 };
 
 // {
