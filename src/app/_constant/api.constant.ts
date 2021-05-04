@@ -3,6 +3,7 @@ export const apiConstant = {
   // Consent Banner
   CONSENT_BANNER: '/consent/banner/:orgId/:propId',
   // Cookie Category
+  COOKIE_BANNER: '/consent/save-custom-lang/:orgId/:propId',
   COOKIE_CATEGORY: '/cookiecategory',
   COOKIE_SCANNER: '/scanner/request/:orgId/:propId',
   COOKIE_PUBLISH: '/publish-cookie/:orgId/:propId',
@@ -53,6 +54,7 @@ export const apiConstant = {
   // Workflow
   WORKFLOW: '/workflow',
   WORKFLOW_STATUS: '/workflow?workflow_status=',
+  WORKFLOW_ORGID_WORKFLOW_ID: '/workflow/:orgid?workflow_id=',
   WORKFLOW_ID: '/workflow?workflow_id=',
   // COOKIE_CATEGORY_CHART
   COOKIE_CATEGORY_CHART: '/cookiepurpose/:propId',

@@ -6,7 +6,7 @@ import {defaultBannerContent, FormDefaultData, iabPurposeList} from '../../../..
   templateUrl: './banner-live-priview.component.html',
   styleUrls: ['./banner-live-priview.component.scss']
 })
-export class BannerLivePriviewComponent implements OnInit, OnChanges {
+export class BannerLivePriviewComponent  {
   public defaultContent = defaultBannerContent;
   type = 'gdpr';
   iabPurposeList = iabPurposeList;
@@ -16,12 +16,5 @@ export class BannerLivePriviewComponent implements OnInit, OnChanges {
 @Input('isGdprGlobal') isGdprGlobal = false;
 @Input('ccpaGlobal') ccpaGlobal = false;
   constructor() { }
-
-  ngOnInit() {
-    console.log('defaultContent', this.formData);
-  }
-  ngOnChanges(changes: SimpleChanges) {
-    console.log('changes', changes)
-  }
 
 }

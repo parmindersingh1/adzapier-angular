@@ -1,7 +1,7 @@
 <div class="webform-wrapper">
 <div class="card-columns">
 <ng-container *ngFor="let data of dataList;let i = index;">
-    <div class="card">
+    <div class="card" *ngIf="data.active">
         <div class="card-body">
 
             <div class="row">
@@ -62,10 +62,9 @@
 
             </div>
         </div>
-        <div class="card-footer">
-            <div class="d-flex justify-content-center">
+        <div class="card-footer flex-justify-content">
                 <button class="btn btn-primary btn-xs button" (click)="showForm(data)">View</button>
-            </div>
+                <button class="btn btn-outline-danger btn-xs button" [disabled]="data.form_status=='publish'" (click)="deleteForm(data)">Delete</button>
         </div>
     </div>
 </ng-container>

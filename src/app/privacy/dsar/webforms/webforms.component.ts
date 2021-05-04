@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { CCPAFormConfigurationService } from 'src/app/_services/ccpaform-configuration.service';
 import { OrganizationService, UserService } from 'src/app/_services';
@@ -7,7 +7,8 @@ import { NgxUiLoaderService } from 'ngx-ui-loader';
 import {moduleName} from '../../../_constant/module-name.constant';
 import { DataService } from 'src/app/_services/data.service';
 import { DirtyComponents } from 'src/app/_models/dirtycomponents';
-
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 interface WebFormModel {
   crid: any;
   form_name: string;
@@ -30,6 +31,9 @@ interface WebFormModel {
   styleUrls: ['./webforms.component.scss']
 })
 export class WebformsComponent implements OnInit, DirtyComponents {
+  @ViewChild('confirmTemplate', { static: false }) confirmModal: TemplateRef<any>;
+  modalRef: BsModalRef;
+  confirmationForm: FormGroup;
   selectedProperty: any;
   currentOrgID: any;
   propertyID: any;
@@ -58,12 +62,16 @@ export class WebformsComponent implements OnInit, DirtyComponents {
   fromNumbers: number;
   licenseAvailabilityObj = {};
   planUsageByOrgid = [];
-
+  isconfirmationsubmitted: boolean;
+  selectedWebForm: any;
+  controlname: string;
   constructor(private ccpaFormConfigService: CCPAFormConfigurationService,
               private organizationService: OrganizationService,
               private loading: NgxUiLoaderService,
               private userService: UserService,
               private dataService: DataService,
+              private formBuilder: FormBuilder,
+              private bsmodalService: BsModalService,
               private router: Router) {
     this.router.events.subscribe((e) => {
       if (e instanceof NavigationEnd) {
@@ -77,12 +85,19 @@ export class WebformsComponent implements OnInit, DirtyComponents {
     // this.loading = true;
     this.loadCurrentProperty();
     this.currentLoggedInUser();
+    this.licenseAvailabilityForFormAndRequestPerOrg(this.currentOrgID);
+    this.confirmationForm = this.formBuilder.group({
+      userInput: ['', [Validators.required]]
+    });
   }
+
+  get confirmDelete() { return this.confirmationForm.controls; }
 
   loadCurrentProperty() {
     this.organizationService.currentProperty.subscribe((data) => {
       if (data !== '') {
         this.orgDetails = data;
+        this.currentOrgID = this.orgDetails.organization_id;
        } else {
         const orgDetails = this.organizationService.getCurrentOrgWithProperty();
         this.orgDetails = orgDetails;
@@ -159,6 +174,20 @@ export class WebformsComponent implements OnInit, DirtyComponents {
       return this.dataService.isLicenseLimitAvailableForOrganization('form',this.dataService.getAvailableLicenseForFormAndRequestPerOrg());
   }
 
+  licenseAvailabilityForFormAndRequestPerOrg(org){
+    this.dataService.removeAvailableLicenseForFormAndRequestPerOrg();
+    this.dataService.checkLicenseAvailabilityPerOrganization(org).subscribe(results => {
+      let finalObj = {
+        ...results[0].response,
+        ...results[1].response,
+        ...results[2].response
+      }
+      this.dataService.setAvailableLicenseForFormAndRequestPerOrg(finalObj);
+    },(error)=>{
+      console.log(error)
+    });
+  }
+
   canDeactivate(){
     return this.isDirty;
   }
@@ -184,11 +213,69 @@ export class WebformsComponent implements OnInit, DirtyComponents {
     this.getCCPAFormList(this.orgDetails);
   }
 
-  
+  cancelModal() {
+    this.modalRef.hide();
+    this.confirmationForm.reset();
+    this.isconfirmationsubmitted = false;
+    return false;
+  }
 
-  // ngOnDestroy() {
-  //   if (this.mySubscription) {
-  //     this.mySubscription.unsubscribe();
-  //   }
-  // }
+  onSubmitConfirmation(selectedaction) {
+    this.isconfirmationsubmitted = true;
+    if (this.confirmationForm.invalid) {
+      return false;
+    } else {
+      const userInput = this.confirmationForm.value.userInput;
+      if (userInput === 'Delete') {
+         if (selectedaction === 'web form') {
+          this.confirmDeleteWebForm();
+        }
+      } else {
+        return false;
+      }
+    }
+  }
+
+  removeWebForm(obj, control: string) {
+    this.controlname = control;
+    this.selectedWebForm = obj;
+    this.openModal(this.confirmModal);
+  }
+
+  openModal(template: TemplateRef<any>) {
+    this.modalRef = this.bsmodalService.show(template, { class: '' });
+  }
+
+  showControlContent(): string {
+      return this.selectedWebForm.form_name;
+  }
+
+  confirmDeleteWebForm() {
+    const i = this.formList.findIndex((t) => t.crid === this.selectedWebForm.crid);
+    this.modalRef.hide();
+    let reqObj = {
+      active:false
+    }
+    this.ccpaFormConfigService.deleteDSARForm(this.selectedWebForm.OID,this.selectedWebForm.PID,this.selectedWebForm.crid,reqObj,this.constructor.name, moduleName.webFormModule).subscribe(data => {
+      if(data.status == 200){
+        if(data.response.indexOf('Selected webform') != -1){
+          this.formList[i].active = false;
+          this.formList = [...this.formList];
+          this.totalRecordsAvailable = this.totalRecordsAvailable - 1;
+        }
+        this.confirmationForm.value.userInput = '';
+        this.alertMsg = data.response
+        this.isOpen = true;
+        this.alertType = 'info';
+        this.confirmationForm.controls['userInput'].setValue('');
+        this.isconfirmationsubmitted = false;
+      }
+    },(error) => {
+      this.alertMsg = error;
+      this.isOpen = true;
+      this.alertType = 'danger';
+      this.confirmationForm.controls['userInput'].setValue('');
+      this.isconfirmationsubmitted = false;
+    })
+  }
 }

@@ -4,7 +4,7 @@ import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MatDialog} from '@angular/material/dialog';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
-import {OrganizationService} from '../../../_services';
+import {AuthenticationService, OrganizationService} from '../../../_services';
 import {ConfirmationService, MessageService, SortEvent} from 'primeng/api';
 import {moduleName} from '../../../_constant/module-name.constant';
 import {cookieName} from '../../../_constant/cookies-name.constant';
@@ -100,7 +100,8 @@ export class CookieCategoryComponent implements OnInit {
               private orgservice: OrganizationService,
               public dialog: MatDialog,
               private formBuilder: FormBuilder,
-              private messageService: MessageService, private confirmationService: ConfirmationService
+              private messageService: MessageService, private confirmationService: ConfirmationService,
+              private authService: AuthenticationService,
   ) {
     this.onInItCategoryForm();
   }
@@ -108,7 +109,7 @@ export class CookieCategoryComponent implements OnInit {
   ngOnInit() {
     setInterval( () => {
       this.onGetScanningStatus();
-    }, 5000);
+    }, 30000);
     this.onGetSubscriptionData();
     this.onSelectedColummFormServer();
     this.onInItCookieForm();
@@ -123,6 +124,7 @@ export class CookieCategoryComponent implements OnInit {
           if (this.scanningStatus === 'successfull') {
             this.scanError = true;
             this.onGetDataFromServer();
+            this.onGetChartData();
           }
         }
       }, err => {
@@ -168,7 +170,8 @@ export class CookieCategoryComponent implements OnInit {
   onInItCookieForm() {
     this.addCookieForm = this.formBuilder.group({
       name: ['', Validators.required],
-      path: ['', Validators.required],
+      domain: ['', Validators.required],
+      path: ['/', Validators.required],
       category: ['', Validators.required],
       party: ['', Validators.required],
       description: ['', Validators.required],
@@ -235,6 +238,7 @@ export class CookieCategoryComponent implements OnInit {
       expiry: this.addCookieForm.value.expiry,
       name: this.addCookieForm.value.name,
       party: this.addCookieForm.value.party,
+      domain: this.addCookieForm.value.domain,
       path: this.addCookieForm.value.path,
       value: this.addCookieForm.value.value
     };
@@ -548,6 +552,7 @@ export class CookieCategoryComponent implements OnInit {
       this.isOpen = true;
       this.alertMsg = res.response;
       this.alertType = 'success';
+      this.authService.notificationUpdated.next(true);
     }, error => {
       this.isScanning = false;
       this.isOpen = true;

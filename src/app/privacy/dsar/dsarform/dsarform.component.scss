@@ -717,6 +717,11 @@ padding: 12px !important;
 
 ::ng-deep .form-control .is-invalid {
 padding-right: 0 !important;
+border:1px solid #f00;
+}
+
+.invalid-txtbox {
+  border:1px solid #f00;
 }
 
 .container .shadowdiv .nav-tabs {
@@ -886,6 +891,14 @@ display: none;
 
 .show {
   display: inherit;
+}
+
+.hidelabel {
+  display: none;
+}
+
+.showlable {
+  display: flex;
 }
 
 ul li > .button-wrapper {
