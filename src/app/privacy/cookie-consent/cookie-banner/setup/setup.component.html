@@ -19,10 +19,10 @@
     <b>Note! </b> The script must be placed before any other script in your site in order to ensure the banner is loaded before any other scripts have the chance to load or set cookies. This allows for the script tag to communicate the site visitor's consent preferences to downstream vendors and for those vendors to show content and set cookies as allowed by the site visitor.
   </p>
   <div class="card mt-3">
-    <div  class="card-header"><h6 style="float: left"><b>Production CDN <span>
-      <code style="color: rgb(116, 116, 116)">// Please copy and paste this code into the header for each page on your website(s). It is important that this code be the first script in your document.</code></span>
-    </b></h6>
-    <button (click)="copyToClipboard()" style="float: right" type="button" class=" pull-right btn-sm btn btn-primary"><i class="mr-1 fa fa-clipboard" aria-hidden="true"></i>
+    <div  class="card-header"><h6 style="float: left"><b>Production CDN </b><span>
+      <p class="tx-12 tx-color-03 mg-b-0 mt-1">Please copy and paste this code into the header for each page on your website(s). It is important that this code be the first script in your document.</p></span>
+    </h6>
+    <button (click)="copyToClipboard()" style="float: right" type="button" class=" pull-right btn-sm btn btn-primary mt-4"><i class="mr-1 fa fa-clipboard" aria-hidden="true"></i>
        {{ isCopied.one ? 'Copied' : 'Copy Script'}}</button>
     </div>
     <div *ngIf="!loadingSkeleton" style="background: #282a36" class="card-body">
@@ -70,9 +70,9 @@
 
 
   <div class="card mt-3">
-    <div  class="card-header"><h6 style="float: left"><b>API EndPoint <span>
-      <code style="color: rgb(116, 116, 116)">// Get Cookie Consent List by AuthID </code>
-    </span></b></h6>
+    <div  class="card-header"><h6 style="float: left"><b>API EndPoint</b> <span>
+      <p class="tx-12 tx-color-03 mg-b-0 mt-1"> Get Cookie Consent List by AuthID </p>
+    </span></h6>
     </div>
     <div *ngIf="!loadingSkeleton" style="background: #282a36" class="card-body">
       <p  class="text-danger codeText">
