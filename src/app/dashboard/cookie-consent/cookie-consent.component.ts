@@ -85,7 +85,6 @@ export class CookieConsentComponent implements OnInit {
   onCheckSubscription() {
     const resData: any = this.dataService.getCurrentPropertyPlanDetails();
     const features = resData.response.features;
-    console.log('features', !features)
     if (features == null) {
       this.isShowDashboard = false;
     } else {
@@ -271,7 +270,6 @@ export class CookieConsentComponent implements OnInit {
           }
 
           // this.countryList = resData;
-          // console.log('Count', this.countryList)
           this.onInItWorldMap(resData);
         }
 

@@ -109,7 +109,6 @@ export class CreateworkflowComponent implements OnInit {
   }
 
   onWorkflowChange($event) {
-    console.log($event, '$event.');
     this.loadWorkflowById($event.target.value);
   }
 
