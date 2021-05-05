@@ -76,9 +76,9 @@ export class ConsentSolutionsService {
 
   // Dashboard
 
-  getConsentDataForDashboard(componentName, moduleName) {
+  getConsentDataForDashboard(componentName, params, moduleName) {
     const path = apiConstant.CONSENT_DASHBOARD.replace(':pid', this.currrentManagedPropID);
-    return this.http.get(environment.apiUrl + path).pipe(map(res => res),
+    return this.http.get(environment.apiUrl + path, {params}).pipe(map(res => res),
       catchError(error => {
         this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.billing, componentName, moduleName, path);
         return throwError(error);
