@@ -25,7 +25,6 @@ test:
     expire_in: 1 hr
   script:
     - npm install
-    - npm audit
   before_script:
     - ls -ltr
 
