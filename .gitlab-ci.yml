@@ -24,7 +24,6 @@ test:
       - node_modules/
     expire_in: 1 hr
   script:
-    - npm install -g @angular/cli@11
     - npm install
     - npm audit
   before_script:
@@ -39,8 +38,7 @@ build-develop:
       - dist/
     expire_in: 1 hr
   script:
-    - npm install -g @angular/cli@11
-    - ./node_modules/@angular/cli/bin/ng build --configuration=develop
+    - npm run dev
   only:
    - develop
    - /^develop_[0-9]+(?:.[0-9]+)+$/
