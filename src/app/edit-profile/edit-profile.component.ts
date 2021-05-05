@@ -129,7 +129,6 @@ export class EditProfileComponent implements OnInit {
     this.userService.getLoggedInUserDetails(this.constructor.name, moduleName.editProfileModule).subscribe((user) => {
       this.loadingBar.stop();
       this.userProfile = Object.values(user);
-      console.log(this.userProfile, 'userProfile..');
       this.profileForm.patchValue({
         newemail: this.userProfile[0].email,
         firstName: this.userProfile[0].firstname,

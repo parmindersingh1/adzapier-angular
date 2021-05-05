@@ -47,8 +47,6 @@ export class GdprService {
 
 
   getSpecialFeatureIds(decodeData) {
-    console.log('decodeData', decodeData);
-
     const specialFeaturesIds = [];
     for(let i = 0; decodeData.specialFeatureOptins.maxId >= i; i++){
         if(decodeData.specialFeatureOptins.has(i)) {
@@ -84,18 +82,6 @@ export class GdprService {
   getGoogleVendors(){
     return this.http.get(environment.googleVendorsUrl);
   }
-  // getPurposeSpecialIds(decodeData) {
-  //   const specialPurposesIds = [];
-  //   console.log('decodeData', decodeData);
-
-  //   for(let i = 0; decodeData.specialPurposes.maxId > i; i++){
-  //       if(decodeData.specialPurposes.has(i)) {
-  //         specialPurposesIds.push(i);
-  //       }
-  //   }
-  //   return specialPurposesIds;
-  // }
-
   getAllData() {
     // return this.gvl.changeLanguage(this.lang).then((res) => {
         return this.gvl.readyPromise.then(() => {
@@ -111,13 +97,9 @@ getIabCustomVendors() {
 
 
 setConsent(consent){
-  console.log('consent', consent);
-
   this.consentInfo.next(consent);
 
   this.getConsentInfo.subscribe(res => {
-    console.log('abc', res);
-
   })
 }
 

@@ -586,7 +586,6 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
           //   current_status: this.currentStageId,
           //   previous_status: this.previousStageId ? this.previousStageId : this.previousStageId = ''
           // }
-          //  console.log(reqObj, 'stage selection..');
           this.stageAPI(this.requestID, formData);
           // this.getSubTaskList();
         } else {
@@ -758,7 +757,6 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
     if (this.quillEditorText.invalid) {
       return false;
     } else {
-      //  console.log(this.selectedStages[this.selectedStages.length - 1].id);
       if (this.selectedStages.length === 0) {
         this.alertMsg = 'Stage not selected!';
         this.isOpen = true;
@@ -1207,7 +1205,6 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
           previous_status: this.previousStageId,
           activity_feedback: 'Days Extended: ' + this.quillEditorExtendDays.get('customdays').value + '<br/>' + this.quillEditorExtendDays.get('editorReason').value // this.editorActivityPost
         };
-       // console.log(reqObj, 'reqObj..');
         Object.keys(reqObj).forEach(key => {
           if (reqObj[key] === undefined) {
             delete reqObj[key];
@@ -1236,7 +1233,6 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
       const reqObj = {
         comment: 'Reason for rejection: ' + this.quillEditorRejectRequest.get('reason').value + '<br/> comments: ' + this.quillEditorRejectRequest.get('editorComments').value // this.editorActivityPost
       };
-    //  console.log(reqObj, 'reqObj..');
       this.alertMsg = 'Request has been rejected!';
       this.isOpen = true;
       this.alertType = 'success';
@@ -1353,7 +1349,6 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
   selectStageOnPageLoad(id) {
     if (id) {
       const workfloworder = this.workflowStages.filter((t) => t.id === id);
-      // console.log(workfloworder[0].order,'workfloworder..');
       const x = this.workflowStages.slice(0, workfloworder[0].order);
       this.selectedStages = x;
     }

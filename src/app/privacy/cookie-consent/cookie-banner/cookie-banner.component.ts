@@ -753,7 +753,6 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
   }
 
   onGetStyleConfiguration() {
-    console.log('Form Data', this.cookieBannerForm)
     return {
       LanguageConfig: {
         allowedLang: this.allowedLanguageListObj.allowedLang,

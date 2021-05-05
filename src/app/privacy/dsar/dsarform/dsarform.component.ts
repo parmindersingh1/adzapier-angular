@@ -275,13 +275,10 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
 
   ngOnInit() {
     this.activatedRoute.paramMap.subscribe(params => {
-      // console.log(params, 'params..');
       this.crid = params.get('id');
-      // this.selectedwebFormControlList = this.
     });
     this.loadCurrentProperty();
-   // this.loadWebControl();
-   // this.getCCPAdefaultConfigById();
+
 
 
     this.basicForm = this.fb.group({
@@ -503,10 +500,8 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
       }
     });
     if (this.sideMenuRequestTypeOptions.length !== 0 && this.isRequestType) {
-      // console.log(this.sideMenuRequestTypeOptions);
       return this.sideMenuRequestTypeOptions;
     } else {
-      // console.log(this.sideMenuSubjectTypeOptions);
       return this.sideMenuSubjectTypeOptions;
     }
 
@@ -520,7 +515,6 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
 
 
   register(formData: NgForm) {
-    console.log(formData.value, 'register..');
     this.setHeaderStyle();
   }
 
@@ -709,7 +703,6 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
   }
 
   saveCurrentItem(i) {
-    console.log(!this.isSelected(i), 'isSelected..');
     return !this.isSelected(i);
   }
 
@@ -1627,7 +1620,6 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
         e1.preferControlOrder = indexData[e2];
       }
     }));
-    // console.log(arrayData, 'arrayData..');
     return arrayData;
   }
   createNewForm() {
@@ -1668,7 +1660,6 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
 
   onSubmitQuillEditorDataX() {
     // this.editorData =  this.quillEditorText.get('editor').value;
-    console.log(this.editorData, 'editorData..');
   }
 
   editQuillEditorDataPopup(content, field) {
@@ -2063,7 +2054,6 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
 
   onCheckboxChange($event) {
     this.isRequiredField = $event.target.checked;
-    // console.log(this.selectedControlObj,'selectedControlObj..');
     if (this.selectedControlObj !== undefined) {
       this.selectedControlObj.requiredfield = $event.target.checked;
       if (this.crid) {
@@ -2606,7 +2596,6 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
     }
    if(this.settingsForm !== undefined){
       this.settingsFormchangeSubscription = this.settingsForm.valueChanges.subscribe(e => {
-        // console.log(e,'settingsForm..afterviewchecked');
       if(this.settingsForm.form.dirty){
          this.isDirty = true;
       }

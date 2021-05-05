@@ -130,7 +130,6 @@ export class CompanyComponent implements OnInit {
   loadCompanyDetails() {
     this.loading.start();
     this.companyService.getCompanyDetails(this.constructor.name, moduleName.companyModule).subscribe((data) => {
-      console.log(data, 'CC data..');
       this.loading.stop();
       this.orgname = data.response.name;
       this.address1 = data.response.address1;
@@ -174,7 +173,6 @@ export class CompanyComponent implements OnInit {
     this.companyService.getCompanyDetails(this.constructor.name, moduleName.companyModule).subscribe((user) => {
       this.companyDetails = Object.values(user);
       this.loading.stop();
-      console.log(this.companyDetails, 'userProfile..');
       this.companyForm.patchValue({
         orgname: this.companyDetails[0].name,
         address1: this.companyDetails[0].address1,
@@ -299,7 +297,6 @@ export class CompanyComponent implements OnInit {
   }
 
   onSubmitInviteUser() {
-    console.log('isUpdateUserinvitation', this.isUpdateUserinvitation)
     this.isInviteFormSubmitted = true;
     if (this.inviteUserForm.invalid) {
       return false;
@@ -375,7 +372,6 @@ export class CompanyComponent implements OnInit {
 
 
   editUserInvitation(content, data) {
-    console.log(data, 'editUserInvitation..');
     this.isUpdateUserinvitation = true;
     this.approverID = data.approver_id;
     this.recordID = data.id;
