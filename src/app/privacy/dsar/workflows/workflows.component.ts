@@ -10,6 +10,7 @@ import { moduleName } from '../../../_constant/module-name.constant';
 import { LazyLoadEvent } from 'primeng/api';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { OrganizationService } from 'src/app/_services';
 // import { strings } from "ngx-timeago/language-strings/en";
 // import { TimeagoIntl } from "ngx-timeago";
 @Component({
@@ -47,8 +48,9 @@ export class WorkflowsComponent implements OnInit, AfterViewInit  {
   totalRecords: number;
   public inputValue = '';
   public debouncedInputValue = this.inputValue;
+  addBlurbackgroundToTable: any;
   private searchDecouncer$: Subject<string> = new Subject();
-  
+  currentManagedOrgID: any;
   constructor(private router: Router, 
               private workflowService: WorkflowService,
               private dataService: DataService,
@@ -56,6 +58,7 @@ export class WorkflowsComponent implements OnInit, AfterViewInit  {
               private formBuilder: FormBuilder,
               private loading: NgxUiLoaderService,
               private cdRef: ChangeDetectorRef,
+              private orgservice: OrganizationService
             //  intl: TimeagoIntl
   ) {
   //  intl.strings = strings;
@@ -65,6 +68,7 @@ export class WorkflowsComponent implements OnInit, AfterViewInit  {
 
   ngOnInit() {
  //   this.loadWorkflowList();
+    this.onGetOrgId();
     this.loadActiveWorkflowList();
     this.setupSearchDebouncer();
     const alphaNumeric = '^(?![0-9]*$)[a-zA-Z0-9 ]+$';
@@ -73,7 +77,8 @@ export class WorkflowsComponent implements OnInit, AfterViewInit  {
       workflowselection: ['', [Validators.required]]
     });
     this.isloading = true;
-    this.getlicenseAvailabilityForWorkflow();
+    this.licenseAvailabilityForFormAndRequestPerOrg(this.currentManagedOrgID)
+    // this.isLicenseLimitAvailable();
   }
   get addWorkflow() { return this.createWorkFlowForm.controls; }
 
@@ -90,9 +95,9 @@ export class WorkflowsComponent implements OnInit, AfterViewInit  {
   // to retrive all and show only active workflow in dropdown  
   loadWorkflowList() {
     const pagelimit = '?limit=' + this.paginationConfig.itemsPerPage + '&page=' + this.paginationConfig.currentPage;
-    this.workflowService.getWorkflow(this.constructor.name, moduleName.workFlowModule, pagelimit).subscribe((data) => {
-      this.workflowList = data.response;
-      this.paginationConfig.totalItems = data.count;
+    this.workflowService.getWorkflow(this.constructor.name, moduleName.workFlowModule, this.currentManagedOrgID,  pagelimit).subscribe((data) => {
+    this.workflowList = data.response;
+    this.paginationConfig.totalItems = data.count;
     });
   }
 
@@ -105,6 +110,17 @@ export class WorkflowsComponent implements OnInit, AfterViewInit  {
     this.selectedCols = this.cols.filter(col => val.includes(col));
   }
   
+  onGetOrgId() {
+    this.orgservice.currentProperty.subscribe((response) => {
+      if (response !== '') {
+        this.currentManagedOrgID = response.organization_id;
+      } else {
+        const orgDetails = this.orgservice.getCurrentOrgWithProperty();
+        this.currentManagedOrgID = orgDetails.organization_id;
+      }
+    });
+  }
+
   loadworkflowListLazy(event: LazyLoadEvent) {
     this.isloading = true;
     this.eventRows = event.rows;
@@ -123,7 +139,7 @@ export class WorkflowsComponent implements OnInit, AfterViewInit  {
       }
      
 
-      this.workflowService.getWorkflow(this.constructor.name, moduleName.workFlowModule, pagelimit, orderBy).subscribe((data) => {
+      this.workflowService.getWorkflow(this.constructor.name, moduleName.workFlowModule, this.currentManagedOrgID, pagelimit, orderBy).subscribe((data) => {
         this.isloading = false;
         this.workflowList = data.response;
         this.reloadWorkflowList = [...this.workflowList];
@@ -156,7 +172,7 @@ export class WorkflowsComponent implements OnInit, AfterViewInit  {
 
 loadActiveWorkflowList() {
   const pagelimit = '&limit=' + 0;
-  this.workflowService.getActiveWorkflowList(this.constructor.name, moduleName.workFlowModule, pagelimit).subscribe((data) => {
+  this.workflowService.getActiveWorkflowList(this.constructor.name, moduleName.workFlowModule, this.currentManagedOrgID, pagelimit).subscribe((data) => {
     this.activeWorkflowList = data.response;
     this.paginationConfig.totalItems = data.count;
   });
@@ -165,11 +181,10 @@ loadActiveWorkflowList() {
 
   public loadWorkflowById(id) {
   // this.loadingBar.start();
-  this.workflowService.getWorkflowById(this.constructor.name, moduleName.workFlowModule, id)
+  this.workflowService.getWorkflowById(this.constructor.name, moduleName.workFlowModule, this.currentManagedOrgID, id)
     .subscribe((data: any) => {
       const stages = data[0].workflow_stages;
       this.workflowStages = this.rearrangeArrayResponse(stages);
-      let x = this.workflowStages.length;
       // this.loadingBar.stop();
     }, (error) => {
       // this.loadingBar.stop();
@@ -195,10 +210,6 @@ createWorkflowModalPopup(content, data) {
     }, (reason) => {
 
     });
-  }else {
-    this.alertMsg = 'Please Select property first!';
-    this.isOpen = true;
-    this.alertType = 'danger';
   }
   }
 
@@ -229,7 +240,7 @@ private searchFilter(): void {
   const params = '?limit=' + this.eventRows + '&page=' + this.firstone
     + '&search=' + this.inputValue;
   this.isloading = true;
-  this.workflowService.getWorkflow(this.constructor.name, moduleName.workFlowModule, params).subscribe((data) => {
+  this.workflowService.getWorkflow(this.constructor.name, moduleName.workFlowModule, this.currentManagedOrgID, params).subscribe((data) => {
     this.isloading = false;
   //  this.workflowList = data.response;
     this.rows = data.response.length;
@@ -262,7 +273,8 @@ createWorkFlow() {
     const requestObj = {
       workflow_name: this.createWorkFlowForm.value.workflowName,
       workflow_stages: this.workflowStages,
-      workflow_status: 'draft'
+      workflow_status: 'draft',
+      oid: this.currentManagedOrgID
     };
     this.workflowService.changeCurrentSelectedWorkflow(requestObj);
     // return false;
@@ -314,8 +326,10 @@ propertyPageChangeEvent(event) {
 }
 
 navigateToWorkflow(obj) {
-  this.workflowService.changeCurrentSelectedWorkflow(obj);
-  this.router.navigate(['privacy/dsar/createworkflow/', obj.id]);
+ // if(this.isLicenseLimitAvailable()){
+    this.workflowService.changeCurrentSelectedWorkflow(obj);
+    this.router.navigate(['privacy/dsar/createworkflow/', obj.id]);
+ // }
 }
 
 onCancelClick() {
@@ -330,13 +344,21 @@ onClosed(dismissedAlert: any): void {
 }
 
 isLicenseLimitAvailable(){
-  return this.dataService.isLicenseLimitAvailableForOrganization('workflow',this.dataService.getWorkflowLicenseToLocalStorage());
+  return this.dataService.isLicenseLimitAvailableForOrganization('workflow',this.dataService.getAvailableLicenseForFormAndRequestPerOrg());
 }
 
-getlicenseAvailabilityForWorkflow(){
-   this.dataService.getWorkflowLicenseLimit(this.constructor.name, moduleName.headerModule).subscribe((data) => {
-    this.dataService.setWorkflowLicenseToLocalStorage(data.response);
-  })
+licenseAvailabilityForFormAndRequestPerOrg(org){
+  this.dataService.removeAvailableLicenseForFormAndRequestPerOrg();
+  this.dataService.checkLicenseAvailabilityPerOrganization(org).subscribe(results => {
+    let finalObj = {
+      ...results[0].response,
+      ...results[1].response,
+      ...results[2].response
+    }
+    this.dataService.setAvailableLicenseForFormAndRequestPerOrg(finalObj);
+  },(error)=>{
+    console.log(error)
+  });
 }
 
 ngAfterViewInit() {
@@ -353,6 +375,24 @@ ngAfterViewInit() {
 
   this.selectedCols = this.cols;
   this.cdRef.detectChanges();
+}
+
+// ngAfterViewChecked(){
+//   let addBlurbg = this.addBlurBackground();
+//   if(addBlurbg !== this.addBlurbackgroundToTable){
+//     this.addBlurbackgroundToTable = this.addBlurBackground();
+//     this.cdRef.detectChanges();
+//   }
+// }
+
+addBlurBackground() :object{
+  if(!this.isLicenseLimitAvailable()){
+    return {
+      "filter": "blur(3px)"
+    }
+  } else {
+    return {}
+  }
 }
 
 }

@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpParams} from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 import {environment} from '../../environments/environment';
 import {OrganizationService} from './index';
 import {LokiService} from './loki.service';
@@ -7,21 +7,25 @@ import {apiConstant} from '../_constant/api.constant';
 import {catchError, map} from 'rxjs/operators';
 import {LokiFunctionality, LokiStatusType} from '../_constant/loki.constant';
 import {Observable, throwError} from 'rxjs';
+
 interface CreateCookie {
   response: [];
 }
+
 @Injectable({
   providedIn: 'root'
 })
-export class CookieCategoryService  {
+export class CookieCategoryService {
   primaryKeys: string[] = ['id'];
   currentManagedOrgID: any;
   currrentManagedPropID: any;
+
   constructor(private http: HttpClient,
               private loki: LokiService,
               private orgservice: OrganizationService) {
     this.onGetPropsAndOrgId();
   }
+
   onGetPropsAndOrgId() {
     this.orgservice.currentProperty.subscribe((response) => {
       if (response !== '') {
@@ -35,10 +39,10 @@ export class CookieCategoryService  {
     });
   }
 
-  getCookieData(requestMeta, componentName, moduleName): Observable<any>  {
+  getCookieData(requestMeta, componentName, moduleName): Observable<any> {
     let path = apiConstant.COOKIE.replace(':orgId', this.currentManagedOrgID);
     path = path.replace(':propId', this.currrentManagedPropID);
-    return this.http.get(environment.apiUrl + path, { params: requestMeta}).pipe(map(res => res),
+    return this.http.get(environment.apiUrl + path, {params: requestMeta}).pipe(map(res => res),
       catchError(error => {
         this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.cookie, componentName, moduleName, path);
         return throwError(error);
@@ -46,18 +50,19 @@ export class CookieCategoryService  {
     );
   }
 
-   post(item: any, componentName, moduleName): Observable<any>   {
-     let path = apiConstant.COOKIE.replace(':orgId', this.currentManagedOrgID);
-     path = path.replace(':propId', this.currrentManagedPropID);
-     return this.http.post(environment.apiUrl + path, item).pipe(map(res => res),
+  post(item: any, componentName, moduleName): Observable<any> {
+    let path = apiConstant.COOKIE.replace(':orgId', this.currentManagedOrgID);
+    path = path.replace(':propId', this.currrentManagedPropID);
+    return this.http.post(environment.apiUrl + path, item).pipe(map(res => res),
       catchError(error => {
         this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.cookie, componentName, moduleName, path);
         return throwError(error);
       }),
     );
   }
+
   //
-  put(catData: any, id: any, componentName, moduleName): Observable<any>  {
+  put(catData: any, id: any, componentName, moduleName): Observable<any> {
     let path = apiConstant.COOKIE_WITH_ID.replace(':orgId', this.currentManagedOrgID);
     path = path.replace(':propId', this.currrentManagedPropID);
     path = path.replace(':id', id);
@@ -69,7 +74,7 @@ export class CookieCategoryService  {
     );
   }
 
-  delete(item: any, componentName, moduleName): Observable<any>  {
+  delete(item: any, componentName, moduleName): Observable<any> {
     let path = apiConstant.COOKIE_WITH_ID.replace(':orgId', this.currentManagedOrgID);
     path = path.replace(':propId', this.currrentManagedPropID);
     path = path.replace(':id', item.id);
@@ -81,7 +86,7 @@ export class CookieCategoryService  {
     );
   }
 
-  createCategory(categoryData: { name: any; description: any }, componentName, moduleName): Observable<any>  {
+  createCategory(categoryData: { name: any; description: any }, componentName, moduleName): Observable<any> {
     const path = apiConstant.COOKIE_CATEGORY;
     return this.http.post(environment.apiUrl + path, categoryData).pipe(map(res => res),
       catchError(error => {
@@ -90,19 +95,31 @@ export class CookieCategoryService  {
       }),
     );
   }
+
   //
   getCategoriesList(componentName, moduleName): Observable<any> {
     const path = apiConstant.COOKIE_CATEGORY;
     return this.http.get(environment.apiUrl + path).pipe(map(res => res),
-        catchError(error => {
-          this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.cookieCategory, componentName, moduleName, path);
-          return throwError(error);
-        }),
-      );
+      catchError(error => {
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.cookieCategory, componentName, moduleName, path);
+        return throwError(error);
+      }),
+    );
   }
 
   cookieScanning(componentName, moduleName) {
     let path = apiConstant.COOKIE_SCANNER.replace(':orgId', this.currentManagedOrgID);
+    path = path.replace(':propId', this.currrentManagedPropID);
+    return this.http.get(environment.apiUrl + path).pipe(map(res => res),
+      catchError(error => {
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.cookieCategory, componentName, moduleName, path);
+        return throwError(error);
+      }),
+    );
+  }
+
+  publishCookieCategory(componentName, moduleName) {
+    let path = apiConstant.COOKIE_PUBLISH.replace(':orgId', this.currentManagedOrgID);
     path = path.replace(':propId', this.currrentManagedPropID);
     return this.http.get(environment.apiUrl + path).pipe(map(res => res),
       catchError(error => {
@@ -119,17 +136,17 @@ export class CookieCategoryService  {
 
   getCategoryChatData(componentName, moduleName) {
     const path = apiConstant.COOKIE_CATEGORY_CHART.replace(':propId', this.currrentManagedPropID);
-    return this.http.get(environment.apiUrl + path).pipe( map ( res => res),
+    return this.http.get(environment.apiUrl + path).pipe(map(res => res),
       catchError(err => {
         this.onSendLogs(LokiStatusType.ERROR, err, LokiFunctionality.cookieCategory, componentName, moduleName, path);
         return throwError(err);
       })
-      );
+    );
   }
 
   getPartyChartData(componentName, moduleName) {
     const path = apiConstant.COOKIE_CATEGORY_TYPE_CHART.replace(':propId', this.currrentManagedPropID);
-    return this.http.get(environment.apiUrl + path).pipe( map ( res => res),
+    return this.http.get(environment.apiUrl + path).pipe(map(res => res),
       catchError(err => {
         this.onSendLogs(LokiStatusType.ERROR, err, LokiFunctionality.cookieCategory, componentName, moduleName, path);
         return throwError(err);
@@ -139,11 +156,23 @@ export class CookieCategoryService  {
 
   getSubscrptionData(componentName, moduleName) {
     const path = apiConstant.COOKIE_CATEGORY_AVALIBLE.replace(':propId', this.currrentManagedPropID).replace(':orgId', this.currentManagedOrgID);
-    return this.http.get(environment.apiUrl + path).pipe( map ( res => res),
+    return this.http.get(environment.apiUrl + path).pipe(map(res => res),
       catchError(err => {
         this.onSendLogs(LokiStatusType.ERROR, err, LokiFunctionality.cookieCategory, componentName, moduleName, path);
         return throwError(err);
       })
     );
   }
+
+  getCookieCategoriesStatus(componentName, moduleName) {
+    let path = apiConstant.COOKIE_SCANNER_STATUS.replace(':orgId', this.currentManagedOrgID);
+    path = path.replace(':propId', this.currrentManagedPropID);
+    return this.http.get(environment.apiUrl + path).pipe(map(res => res),
+      catchError(error => {
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.cookieCategory, componentName, moduleName, path);
+        return throwError(error);
+      }),
+    );
+  }
+
 }

@@ -10,7 +10,7 @@
     </div>
 </div>
 
-<div class="workflow-primeng-wrapper">
+<div class="workflow-primeng-wrapper" [ngStyle]="addBlurbackgroundToTable"> <!--[ngStyle]="addBlurbackgroundToTable"-->
 <p-table class="workflows-table" #ptable [value]="workflowList" [responsive]="true" [columns]="selectedColumns" [paginator]="true" [lazy]="true"
     [loading]="isloading" (onLazyLoad)="loadworkflowListLazy($event)" [rows]="5" [showCurrentPageReport]="true"
     [totalRecords]="totalRecords" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
@@ -36,7 +36,7 @@
         (click)="createWorkflowModalPopup(createworkflowModal,'')"><i class="fas fa-plus"></i> Create</button>
      </div> -->
                <div class="float-right mr-1"> <button (click)="createWorkflowModalPopup(createworkflowModal,'')" data-toggle="modal" type="button"
-                    class="btn btn-sm btn-uppercase btn-outline-secondary">
+                    class="btn btn-sm btn-uppercase btn-outline-secondary mr-2">
                     <i-feather class="feather-16" name="plus"></i-feather>
                     <span class="d-none d-sm-inline mg-l-5">
                         Create</span>
@@ -159,8 +159,8 @@
 
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-secondary tx-13" (click)="onCancelClick()">Cancel</button>
-            <button class="btn btn-primary tx-13">Save</button>
+            <button type="button" class="btn btn-link tx-decoration-underline" (click)="onCancelClick()">Cancel</button>
+            <button class="btn btn-primary mr-0">Save</button>
         </div>
 
     </form>

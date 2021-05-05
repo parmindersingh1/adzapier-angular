@@ -197,6 +197,38 @@ export class CCPAFormConfigurationService extends WebControls {
     }));
   }
 
+  getDSARFormList(orgId, propId, componentName, moduleName): Observable<any> {
+    const path = '/dsar/form/' + orgId + '/' + propId;
+    return this.httpClient.get<any>(environment.apiUrl + path).pipe(
+      map(res => res),
+      catchError(error => {
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.getCCPAFormList, componentName, moduleName, path);
+        return throwError(error);
+      })
+    );
+  }
+
+  deleteDSARForm(orgid, propid, form_config_id, reqObj, componentName, moduleName){
+    const path = '/dsar/form/' + orgid +'/' + propid + '/' +  form_config_id;
+    return this.httpClient.put<any>(environment.apiUrl + path, reqObj)
+    .pipe(catchError(error => {
+      this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.webForm, componentName, moduleName, path);
+      return throwError(error);
+    }));
+  }
+
+  storeDataBeforeEdit(data) {
+    sessionStorage.setItem('storeCurrentFieldData', JSON.stringify(data));
+  }
+
+  getStoreDataBeforeEdit() {
+    return JSON.parse(sessionStorage.getItem('storeCurrentFieldData'));
+  }
+
+  removeStoredDataBeforeEdit(){
+    return sessionStorage.removeItem('storeCurrentFieldData')
+  }
+
   onSendLogs(errorType, msg, functionality, componentName, moduleName, path) {
     this.lokiService.onSendErrorLogs(errorType, msg, functionality, componentName, moduleName, path).subscribe();
   }

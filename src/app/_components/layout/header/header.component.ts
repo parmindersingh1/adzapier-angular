@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { OrganizationService, AuthenticationService, UserService } from '../../../_services';
 import { forkJoin, Observable } from 'rxjs';
@@ -14,7 +14,8 @@ import {featuresName} from '../../../_constant/features-name.constant';
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss']
+  styleUrls: ['./header.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Default
 })
 export class HeaderComponent implements OnInit {
   @ViewChild('confirmTemplate') confirmModal: TemplateRef<any>;
@@ -62,6 +63,7 @@ export class HeaderComponent implements OnInit {
   isSublinkActive = false;
   selectedSubmenu: any = [];
   notificationList: any = [];
+  storeNotificationList: any = [];
   notificationsNumber: number;
   isNotificationBellClicked = false;
   resCID: any;
@@ -72,6 +74,7 @@ export class HeaderComponent implements OnInit {
   isShowDashboardForCookieConsent = false;
   isShowDashboardForDsar = false;
   planDetails: any;
+  isNewnotification: boolean;
   constructor(
     private router: Router,
     private activatedroute: ActivatedRoute,
@@ -81,7 +84,8 @@ export class HeaderComponent implements OnInit {
     private loading: NgxUiLoaderService,
     private bsmodalService: BsModalService,
     private dataService: DataService,
-    private location: Location
+    private location: Location,
+    private cdRef: ChangeDetectorRef
   ) {
     this.authService.currentUser.subscribe(x => {
       this.currentUser = x;
@@ -127,7 +131,12 @@ export class HeaderComponent implements OnInit {
         }
       }
     });
-
+    this.authService.isNotificationUpdated.subscribe((status) => {
+      this.isNewnotification = status;
+      if(this.isNewnotification){
+        this.loadNotification();
+      }
+    });
   }
 
   ngOnInit() {
@@ -159,7 +168,7 @@ export class HeaderComponent implements OnInit {
         showlink: 'Contact Us', routerLink: '/contactus'
       }];
     this.onCheckSubscriptionForProperty();
-    this.onCheckSubscriptionForOrg()
+    this.onCheckSubscriptionForOrg();
   }
 
   logout() {
@@ -229,7 +238,7 @@ export class HeaderComponent implements OnInit {
             { showlink: 'Dashboard', routerLink: '/home/dashboard/ccpa-dsar', icon: 'bar-chart-2' },
             { showlink: 'Webforms', routerLink: '/privacy/dsar/webforms', icon: 'pie-chart' },
             { showlink: 'Requests', routerLink: '/privacy/dsar/requests', icon: 'fa fa-ticket-alt feather-16' },
-            { showlink: 'Workflow', routerLink: '/privacy/dsar/workflows', icon: 'shield-off' },
+            { showlink: 'Workflow', routerLink: '/privacy/dsar/workflows', icon: 'fas fa-sitemap' },
 
             { showlink: 'Dashboard', routerLink: '/home/dashboard/cookie-consent', icon: 'fas fa-cookie feather-16' },
             { showlink: 'Manage Vendors', routerLink: '/cookie-consent/manage-vendors', icon: 'fas fa-tasks feather-16' },
@@ -308,6 +317,9 @@ export class HeaderComponent implements OnInit {
       this.licenseAvailabilityForFormAndRequestPerOrg(org);
       if(this.router.url.indexOf('dsarform') !== -1){
         this.router.navigate(['/privacy/dsar/webforms']);
+      }
+      if(this.router.url.indexOf('createworkflow') !== -1){
+        this.router.navigate(['/privacy/dsar/workflows']);
       }
      this.openNav();
 
@@ -543,19 +555,17 @@ export class HeaderComponent implements OnInit {
           this.openModal(this.confirmModal);
           return false;
         }
-      } else {
-        this.router.navigate([link.routerLink || link]);
-        this.activateActiveClass(link);
       }
     }
   }
 
   checkLinkAccess(link): boolean {
-    if (link.indexOf('workflow') !== -1) {
-      return false;
-    } else if (link.indexOf('cookie') !== -1 || link.indexOf('privacy') !== -1 || link.indexOf('webform') !== -1 ||
+    if (link.indexOf('cookie') !== -1 || link.indexOf('privacy') !== -1 || link.indexOf('webform') !== -1 ||
       link.indexOf('ccpa') !== -1) {
       return true;
+    } else {
+      this.router.navigate([link.routerLink || link]);
+      this.activateActiveClass(link);
     }
   }
 
@@ -597,7 +607,9 @@ export class HeaderComponent implements OnInit {
     //this.isNotificationBellClicked = true;
     this.userService.getNotification(this.constructor.name, moduleName.headerModule).subscribe((data) => {
       this.notificationList = data.response.notification_data;
+      this.storeNotificationList = [...this.notificationList];
       this.notificationsNumber = data.response.new_count;
+      this.cdRef.markForCheck();
     });
   }
 
@@ -610,6 +622,7 @@ export class HeaderComponent implements OnInit {
   }
 
   clearNotification(requestid, purpose: string, status: boolean) {
+    const i = this.storeNotificationList.findIndex((t) => t.id === requestid)
     let obj;
     if (purpose === 'read') {
       obj = {
@@ -622,9 +635,17 @@ export class HeaderComponent implements OnInit {
         active: status // false
       };
     }
-    this.userService.updateNotification(this.constructor.name, moduleName.headerModule, obj).subscribe((data) => {
-      console.log(data.response);
-      this.loadNotification();
+    this.userService.updateNotification(this.constructor.name, moduleName.headerModule, obj)
+    .subscribe((data) => {
+      if(data.status === 200 && purpose == 'read'){
+        this.storeNotificationList[i].read = !status;
+        this.storeNotificationList = [...this.storeNotificationList];
+       
+      }else{
+        this.storeNotificationList[i].active = false;
+        this.storeNotificationList = [...this.storeNotificationList];
+      }
+      
     });
   }
 
@@ -658,7 +679,16 @@ export class HeaderComponent implements OnInit {
     } else if (this.orgPropertyMenu.length >= 4 && this.orgPropertyMenu.length <= 8) {
       return { 'column-count': 3 }
     } else if (this.orgPropertyMenu.length >= 8) {
-      return { 'column-count': 4 }
+      return { 
+        'column-count': 4,
+        'overflow-x': "scroll",
+        'width': "950px",
+        'position': "absolute",
+        'min-height': "490px",
+        'overflow-y': "auto",
+        'height': "300px",
+        'top': '0'
+       }
     }
 
   }
@@ -751,12 +781,11 @@ export class HeaderComponent implements OnInit {
   }
 
   licenseAvailabilityForFormAndRequestPerOrg(org){
-    let webFormLicense = this.dataService.getWebFormLicenseLimit( this.constructor.name, moduleName.headerModule, org.id || org.organization_id);
-    let requestLicense = this.dataService.getDSARRequestLicenseLimit( this.constructor.name, moduleName.headerModule, org.id || org.organization_id);
-    forkJoin([webFormLicense, requestLicense]).subscribe(results => {
+    this.dataService.checkLicenseAvailabilityPerOrganization(org).subscribe(results => {
       let finalObj = {
         ...results[0].response,
         ...results[1].response,
+        ...results[2].response
       }
       this.dataService.setAvailableLicenseForFormAndRequestPerOrg(finalObj);
     },(error)=>{
@@ -764,8 +793,8 @@ export class HeaderComponent implements OnInit {
     });
   }
 
-  isLicenseLimitAvailable(): boolean{
-    const status = this.dataService.isLicenseLimitAvailableForOrganization('form',this.dataService.getAvailableLicenseForFormAndRequestPerOrg());
+  isLicenseLimitAvailable(requestType): boolean{
+    const status = this.dataService.isLicenseLimitAvailableForOrganization(requestType,this.dataService.getAvailableLicenseForFormAndRequestPerOrg());
     if(!status){
       return status;
     } else {

@@ -20,7 +20,7 @@
                 </div>
 
                 <div class="ml-auto mr-3">
-                    <button type="button" class="btn btn-white" data-toggle="modal"
+                    <button type="button" class="btn btn-sm btn-outline-secondary btn-uppercase mr-1" data-toggle="modal"
                         (click)="editOrganizationModalPopup(inviteuserModal, 'add')"><i class="fas fa-plus"></i> Add
                         User</button>
                 </div>
@@ -154,8 +154,8 @@
 
             </div>
             <div class="float-right">
-            <button class="btn btn-outline-dark btn-xs mr-2"
-            (click)="onResetInviteUser()">Cancel</button>
+                <button class="btn btn-link tx-decoration-underline" aria-label="Close"
+                (click)="modal.dismiss('Close Clicked')">Cancel</button>
             <button class="btn btn-primary btn-xs" type="submit">Submit</button>
             </div>
         </form>

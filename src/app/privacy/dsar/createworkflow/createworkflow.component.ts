@@ -4,6 +4,7 @@ import { FormGroup, NgForm } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { moduleName } from '../../../_constant/module-name.constant';
+import { OrganizationService } from 'src/app/_services';
 @Component({
   selector: 'app-createworkflow',
   templateUrl: './createworkflow.component.html',
@@ -50,13 +51,16 @@ export class CreateworkflowComponent implements OnInit {
   skeletonLoading = true;
   selectedStageId: any;
   selectedIndex: number;
+  currentManagedOrgID: any;
   constructor(private activatedRoute: ActivatedRoute,
               private workflowService: WorkflowService,
               private loadingBar: NgxUiLoaderService,
+              private orgservice: OrganizationService,
               private cd: ChangeDetectorRef) {
   }
 
   ngOnInit() {
+    this.onGetOrgId();
     this.isWorkflowEditing = false;
     this.loadWorkflowList();
 
@@ -73,7 +77,7 @@ export class CreateworkflowComponent implements OnInit {
     });
 
 
-    this.loadWorkflowById();
+    this.loadWorkflowById(this.selectedWorkflowId);
 
   }
 
@@ -85,9 +89,20 @@ export class CreateworkflowComponent implements OnInit {
     }
   }
 
+  onGetOrgId() {
+    this.orgservice.currentProperty.subscribe((response) => {
+      if (response !== '') {
+        this.currentManagedOrgID = response.organization_id;
+      } else {
+        const orgDetails = this.orgservice.getCurrentOrgWithProperty();
+        this.currentManagedOrgID = orgDetails.organization_id;
+      }
+    });
+  }
+
   loadWorkflowList() {
     this.loadingBar.start();
-    this.workflowService.getWorkflow(this.constructor.name, moduleName.workFlowModule).subscribe((data) => {
+    this.workflowService.getWorkflow(this.constructor.name, moduleName.workFlowModule, this.currentManagedOrgID).subscribe((data) => {
       this.workflowList = data.response;
       this.loadingBar.stop();
     });
@@ -154,7 +169,8 @@ export class CreateworkflowComponent implements OnInit {
 
   activateWorkflowById(id) {
     const reqObj = {
-      workflow_status: 'Active'
+      workflow_status: 'Active',
+      oid: this.currentManagedOrgID
     };
     this.workflowService.updateWorkflow(this.constructor.name, moduleName.workFlowModule, id, reqObj).subscribe((data) => {
       if (data) {
@@ -181,7 +197,8 @@ export class CreateworkflowComponent implements OnInit {
       const requestObj = {
         workflow_name: this.workflowName,
         workflow_stages: this.workflowStages,
-        workflow_status: status
+        workflow_status: status,
+        oid: this.currentManagedOrgID
       };
       this.skeletonLoading = true;
       this.workflowService.updateWorkflow(this.constructor.name, moduleName.workFlowModule, this.selectedWorkflowId, requestObj)
@@ -222,7 +239,8 @@ export class CreateworkflowComponent implements OnInit {
       this.isControlDisabled = false;
     }
     const reqObj = {
-      workflow_status: flowStatus
+      workflow_status: flowStatus,
+      oid: this.currentManagedOrgID
     };
     this.workflowService.updateWorkflow(this.constructor.name, moduleName.workFlowModule, this.selectedWorkflowId, reqObj)
       .subscribe((data) => {
@@ -263,7 +281,7 @@ export class CreateworkflowComponent implements OnInit {
   loadWorkflowById(id?) {
     this.skeletonLoading = true;
     let resp: any;
-    this.workflowService.getWorkflowById(this.constructor.name, moduleName.workFlowModule, this.selectedWorkflowId)
+    this.workflowService.getWorkflowById(this.constructor.name, moduleName.workFlowModule, this.currentManagedOrgID, id)
       .subscribe((data) => {
         if (data.length > 0) {
           resp = this.rearrangeArrayResponse(data[0].workflow_stages);

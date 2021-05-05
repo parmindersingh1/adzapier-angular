@@ -5,12 +5,11 @@
 .cell-width {
   width: 500px;
 }
-
-
-
-
 .p-tabview .p-tabview-nav {
-  padding-left: 37% !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding-left: 0% !important;
+
 }
 
 .p-tabview-panels{
@@ -90,3 +89,10 @@ border: 1px solid #e9ecef;
 //.p-tabview-nav li {
 //  z-index:  999999 !important;
 //}
+
+.radiobtn-wrapper{
+  display: flex;
+  justify-content: space-around;
+  flex-direction: row;
+  margin: 0 auto;
+}

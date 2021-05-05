@@ -142,7 +142,7 @@ export class OrganizationdetailsComponent implements OnInit {
     const phoneNumRegx = '^[0-9]*$'; // '^-?(0|[1-9]\d*)?$';
     this.organisationPropertyForm = this.formBuilder.group({
       propertyname: ['', [Validators.required, Validators.pattern(alphaNumeric)]],
-      protocol: [''],
+      protocol: ['',Validators.required],
       website: ['', [Validators.required, Validators.pattern(urlRegex)]],
       logourl: ['']
     });
@@ -167,7 +167,10 @@ export class OrganizationdetailsComponent implements OnInit {
    // this.loadUserListForInvitation();
     this.onGetOrgPlan();
     this.protocol = 'https://';
-    this.organisationPropertyForm.controls['protocol'].setValue(this.protocol, {onlySelf: true});
+    //this.organisationPropertyForm.controls['protocol'].setValue(this.protocol, {onlySelf: true});
+    this.organisationPropertyForm.patchValue({
+      protocol:this.protocol
+    })
   }
   get f() { return this.inviteUserOrgForm.controls; }
   get orgProp() { return this.organisationPropertyForm.controls; }
@@ -252,10 +255,16 @@ export class OrganizationdetailsComponent implements OnInit {
     this.organisationPropertyForm.controls['website'].setValue(urlname);
     this.organisationPropertyForm.controls['logourl'].setValue(data.logo_url);
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
+      
       this.organisationPropertyForm.reset();
+      
+      
       // this.closeResult = `Closed with: ${result}`;
     }, (reason) => {
       this.organisationPropertyForm.reset();
+      this.organisationPropertyForm.patchValue({
+        protocol:'https://'
+      })
       // this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
   }
@@ -378,6 +387,9 @@ export class OrganizationdetailsComponent implements OnInit {
             this.orgService.isOrganizationUpdated.next(true);
             this.organisationPropertyForm.reset();
             this.submitted = false;
+            this.organisationPropertyForm.patchValue({
+              protocol:this.protocol
+            })
           }
         }, (error) => {
           this.alertMsg = error;
@@ -386,6 +398,7 @@ export class OrganizationdetailsComponent implements OnInit {
         });
         this.organisationPropertyForm.reset();
         this.modalService.dismissAll('Data Saved!');
+        
       } else {
         const reqObj = {
           name: this.organisationPropertyForm.value.propertyname,
@@ -662,6 +675,9 @@ export class OrganizationdetailsComponent implements OnInit {
     this.submitted = false;
     this.organisationPropertyForm.reset();
     this.modalService.dismissAll('Canceled');
+    this.organisationPropertyForm.patchValue({
+      protocol:'https://'
+    })
   }
 
   loadLogoURL(logourl): string {

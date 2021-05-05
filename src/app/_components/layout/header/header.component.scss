@@ -134,11 +134,12 @@ ul.dropdown-menu.propMenu.show {
 }
 
 ul.dropdown-menu.propMenu.show > li {
-  margin-right: 0px;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
   flex-direction: column;
+  display: -webkit-inline-box;
   display: inline-flex;
   width: 200px;
-  margin-left: 0;
 }
 
 ul.dropdown-menu.propMenu.show > li > a {
@@ -494,6 +495,10 @@ a.nav-link:hover {
     width: auto;
   }
 
+  .navbar-header .navbar-brand > a > img{
+    cursor: pointer;
+  }
+
   .addWidth {
     width: 0;
   }
@@ -620,6 +625,7 @@ a.nav-link:hover {
   margin: 0px 4px 0 0;
   font-size: 13px;
   height: 16px;
+  border:0;
 }
 
 .cross-icon:hover {
@@ -638,8 +644,8 @@ a.nav-link:hover {
 .readicon {
   border-radius: 30px;
   border: 3px solid #fffc;
-  height: 16px;
-  width: 16px;
+  height: 18px;
+  width: 18px;
   background: #ccc;
 }
 
@@ -649,6 +655,7 @@ a.nav-link:hover {
   padding: 6px;
   height: 100%;
   min-height: 250px;
+  overflow: hidden;
 }
 
 .notification-wrapper {
@@ -683,23 +690,24 @@ a.nav-link:hover {
   display: flex;
   flex-direction: column;
   padding: 10px;
-
+  transition-property: padding;
+  transition-duration: 3s;
 }
 
-::ng-deep .tooltip {
+.notification-wrapper ::ng-deep .tooltip {
   top: 6px !important;
 }
 
-::ng-deep .tooltip .arrow {
+.notification-wrapper ::ng-deep .tooltip .arrow {
   display: none;
 }
 
-::ng-deep .tooltip-inner {
+.notification-wrapper ::ng-deep .tooltip-inner {
   font-size: 11px;
   padding: 0px 5px;
 }
 
-::ng-deep .tooltip-arrow .arrow {
+.notification-wrapper ::ng-deep .tooltip-arrow .arrow {
   display: none;
 }
 
@@ -951,4 +959,26 @@ button.btn.btn-link:hover {
 .cancel-btn{
   font-weight: bold;
   cursor: pointer;
+}
+
+.dropdown-wrapper::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  z-index: 10000;
+  left: 0;
+  border-bottom: 10px solid rgb(255 255 255);
+  border-left: 10px solid #512c2c00;
+  border-right: 10px solid transparent;
+}
+
+.dropdown-wrapper::before {
+  content: "";
+  position: absolute;
+  top: 2px;
+  z-index: 10000;
+  left: -1px;
+  border-bottom: 11px solid rgb(0 0 0 / 14%);
+  border-left: 11px solid #00000000;
+  border-right: 11px solid transparent;
 }

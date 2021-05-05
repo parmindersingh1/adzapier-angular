@@ -7,7 +7,7 @@
         <li class="breadcrumb-item active" aria-current="page"> Data Subject Requests</li>
       </ol>
       <div class="datepickerwrapper col-sm-6 pr-0 mr-0 ml-auto">
-      <div class="col-sm-7 mr-2 d-flex row-reverse">
+      <div class="col-sm-7 pr-0 mr-2 d-flex row-reverse">
         <div class="input-group-prepend"  (click)="dp.show()">
           <span class="input-group-text rounded-right border-left-0" id="inputGroup-sizing-sm"><i class="fa" [ngClass]="searchbydaterange !== '' ? 'fa-caret-down':'fa-search'"></i></span>
         </div>
@@ -204,7 +204,7 @@
                 [ngClass]="{ 'is-invalid': submitted && dsar.webformselection.errors }">
                 <option selected value="">Please select web form</option>
                 <ng-container *ngFor="let opt of activeWebFormList">
-                  <option *ngIf="opt.active" [value]="opt | json">
+                  <option [value]="opt | json">
                     {{ opt.form_name }}
                   </option>
                 </ng-container>
@@ -217,8 +217,8 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary tx-13" (click)="onCancelClick()">Cancel</button>
-        <button class="btn btn-primary tx-13">Create</button>
+        <button class="btn btn-link tx-decoration-underline tx-13"  aria-label="Close" (click)="onCancelClick()">Cancel</button>
+        <button class="btn btn-sm btn-outline-secondary btn-uppercase tx-13">Create</button>
       </div>
     </form>
   </ng-template>

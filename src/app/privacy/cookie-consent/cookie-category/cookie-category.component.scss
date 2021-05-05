@@ -117,7 +117,7 @@
 }
 
 .checked {
-  background: green;
+  background: #0c1a61;
 }
 
 .feather-16 {
@@ -382,4 +382,78 @@ tr.row-disabled > td > a {
 .avalible-text {
   font-size: 15px;
   margin-left: 20px;
+}
+.spinner-border {
+  width: 1rem;
+  height: 1rem;
+}
+.commom-feathericon-height {
+  height: 16px !important;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.date {
+  font-size: 11px
+}
+
+.divider {
+  height: 0px !important;
+  background-color: blue
+}
+
+.track-line {
+  height: 2px !important;
+  background-color: #0c1a61
+}
+.not-avaliable {
+  height: 2px !important;
+  background-color: #99a6ea
+}
+
+.dot {
+  height: 10px;
+  width: 10px;
+  margin-left: 3px;
+  margin-right: 3px;
+  margin-top: 0px;
+  background-color: #0c1a61;
+  border-radius: 50%;
+  display: inline-block
+}
+
+.big-dot {
+  height: 25px;
+  width: 25px;
+  margin-left: 0px;
+  margin-right: 0px;
+  margin-top: 0px;
+  background-color: #0c1a61;
+  border-radius: 50%;
+  display: inline-block
+}
+
+.big-dot i {
+  font-size: 12px
+}
+.progress {
+  height: 15px;
+}
+.status-text{
+  font-size: 14px;
+  font-weight: 600;
 }
