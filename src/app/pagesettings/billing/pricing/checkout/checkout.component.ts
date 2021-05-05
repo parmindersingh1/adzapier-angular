@@ -19,7 +19,6 @@ export class CheckoutComponent implements OnInit {
 
   ngOnInit() {
     this.dataService.getBillingPlanDetails.subscribe(res => {
-      console.log(res);
       if (res) {
        this.planDetails = res;
       } else {
@@ -32,9 +31,7 @@ export class CheckoutComponent implements OnInit {
     this.stripe.redirectToCheckout({
       sessionId: this.planDetails.sessionId
     }).then( (result) => {
-      console.log(result);
     }).catch( error => {
-      console.log(error);
     });
   }
 

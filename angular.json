@@ -1,5 +1,8 @@
 {
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "cli": {
+    "analytics": "859a0a54-b33f-4573-b905-1fcd5f385986"
+  },
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
@@ -17,6 +20,10 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "allowedCommonJsDependencies":[
+              "@iabtcf/core",
+              "chart.js"
+            ],
             "outputPath": "dist/adzapier-analytics-ng",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -56,9 +63,7 @@
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
-              "extractCss": true,
               "namedChunks": true,
-              "aot": true,
               "extractLicenses": true,
               "vendorChunk": true,
               "buildOptimizer": true,
@@ -66,13 +71,13 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "4mb",
-                  "maximumError": "5mb"
+                  "maximumWarning": "10mb",
+                  "maximumError": "15mb"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "6kb",
-                  "maximumError": "10kb"
+                  "maximumWarning": "20kb",
+                  "maximumError": "30kb"
                 }
               ]
             },
@@ -86,9 +91,7 @@
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
-              "extractCss": true,
               "namedChunks": true,
-              "aot": true,
               "extractLicenses": true,
               "vendorChunk": true,
               "buildOptimizer": true,
@@ -96,13 +99,13 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "4mb",
-                  "maximumError": "5mb"
+                  "maximumWarning": "10mb",
+                  "maximumError": "15mb"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "6kb",
-                  "maximumError": "10kb"
+                  "maximumWarning": "20kb",
+                  "maximumError": "30kb"
                 }
               ]
             },
@@ -118,7 +121,6 @@
               "sourceMap": false,
               "extractCss": true,
               "namedChunks": true,
-              "aot": true,
               "extractLicenses": true,
               "vendorChunk": true,
               "buildOptimizer": true,
@@ -126,13 +128,13 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "4mb",
-                  "maximumError": "5mb"
+                  "maximumWarning": "10mb",
+                  "maximumError": "15mb"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "6kb",
-                  "maximumError": "10kb"
+                  "maximumWarning": "20kb",
+                  "maximumError": "30kb"
                 }
               ]
             }

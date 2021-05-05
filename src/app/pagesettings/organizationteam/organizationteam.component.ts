@@ -15,7 +15,7 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
   styleUrls: ['./organizationteam.component.scss']
 })
 export class OrganizationteamComponent implements OnInit {
-  @ViewChild('confirmTemplate', { static: false }) confirmModal: TemplateRef<any>;
+  @ViewChild('confirmTemplate') confirmModal: TemplateRef<any>;
   modalRef: BsModalRef;
   inviteUserOrgForm: FormGroup;
   confirmationForm: FormGroup;
@@ -58,7 +58,6 @@ export class OrganizationteamComponent implements OnInit {
   ngOnInit() {
     this.activatedRoute.paramMap.subscribe(params => {
       this.organizationID = params.get('id');
-      console.log(this.organizationID, 'organizationID..');
       this.loadOrgTeamMembers(this.organizationID);
     });
     this.loadRoleList();
@@ -80,7 +79,6 @@ export class OrganizationteamComponent implements OnInit {
   loadOrgTeamMembers(orgID) {
     const key = 'response';
     const pagelimit = '&limit=' + this.paginationConfig.itemsPerPage + '&page=' + this.paginationConfig.currentPage;
-    console.log('page Limit', pagelimit);
     this.orgService.getOrgTeamMembers(orgID, pagelimit).subscribe((data) => {
       this.loading.stop();
       this.organizationTeamMemberList = data.response;
@@ -211,9 +209,8 @@ export class OrganizationteamComponent implements OnInit {
     this.selectedTeamMember = obj.user_email;
     this.openModal(this.confirmModal);
   }
- 
+
   editUserInvitation(content, data) {
-    console.log(data, 'editUserInvitation..');
     this.isUpdateUserinvitation = true;
     this.approverID = data.approver_id;
     this.recordID = data.id;
@@ -265,7 +262,7 @@ export class OrganizationteamComponent implements OnInit {
       }
     }
   }
-  
+
   onCancelClick() {
     this.submitted = false;
     this.isUpdateUserinvitation = false;

@@ -1,5 +1,5 @@
 import {
-  Component, OnInit, ViewChild, ElementRef, Renderer2, TemplateRef, AfterViewInit, AfterViewChecked,
+  Component, OnInit, ViewChild, ElementRef, Renderer2, TemplateRef, AfterViewInit, AfterViewChecked, AfterContentChecked,
   ChangeDetectorRef,
   ChangeDetectionStrategy,
   OnDestroy
@@ -26,19 +26,19 @@ import { formatDate } from '@angular/common';
   changeDetection: ChangeDetectionStrategy.Default
 
 })
-export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, AfterViewChecked {
+export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChecked, AfterContentChecked, OnInit {
   @ViewChild('toggleDayleftdiv', { static: true }) toggleDayleftdiv: ElementRef;
   // @ViewChild('btnDaysLeft', { static: true }) btnDaysLeft: ElementRef;
-  @ViewChild('customDaysInput', { static: false }) customDaysInput: ElementRef;
-  @ViewChild('confirmTemplate', { static: false }) confirmModal: TemplateRef<any>;
+  @ViewChild('customDaysInput') customDaysInput: ElementRef;
+  @ViewChild('confirmTemplate') confirmModal: TemplateRef<any>;
   @ViewChild('filePreview', { static: true }) filePreview: ElementRef;
   @ViewChild('panel', { static: true }) public panel: ElementRef<any>;
-  @ViewChild('workflowStageScroller', { static: false, read: ElementRef }) public workflowStageScroller: ElementRef<any>;
-  @ViewChild('confirmDeleteTemplate', { static: false }) confirmDeleteModal: TemplateRef<any>;
+  @ViewChild('workflowStageScroller', { read: ElementRef }) public workflowStageScroller: ElementRef<any>;
+  @ViewChild('confirmDeleteTemplate') confirmDeleteModal: TemplateRef<any>;
   @ViewChild('extendDays', { static: true }) extendDaysModal: TemplateRef<any>;
   @ViewChild('rejectRequest', { static: true }) rejectRequestModal: TemplateRef<any>;
   // @ViewChild('subTaskForm', null) subTaskTempForm: NgForm;
-  @ViewChild('userAuthenticationAlert', { static: false }) userAuthenticationModal: TemplateRef<any>;
+  @ViewChild('userAuthenticationAlert') userAuthenticationModal: TemplateRef<any>;
 
   confirmationForm: FormGroup;
   modalRef: BsModalRef;
@@ -586,7 +586,6 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
           //   current_status: this.currentStageId,
           //   previous_status: this.previousStageId ? this.previousStageId : this.previousStageId = ''
           // }
-          //  console.log(reqObj, 'stage selection..');
           this.stageAPI(this.requestID, formData);
           // this.getSubTaskList();
         } else {
@@ -758,7 +757,6 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
     if (this.quillEditorText.invalid) {
       return false;
     } else {
-      //  console.log(this.selectedStages[this.selectedStages.length - 1].id);
       if (this.selectedStages.length === 0) {
         this.alertMsg = 'Stage not selected!';
         this.isOpen = true;
@@ -1207,7 +1205,6 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
           previous_status: this.previousStageId,
           activity_feedback: 'Days Extended: ' + this.quillEditorExtendDays.get('customdays').value + '<br/>' + this.quillEditorExtendDays.get('editorReason').value // this.editorActivityPost
         };
-       // console.log(reqObj, 'reqObj..');
         Object.keys(reqObj).forEach(key => {
           if (reqObj[key] === undefined) {
             delete reqObj[key];
@@ -1236,7 +1233,6 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
       const reqObj = {
         comment: 'Reason for rejection: ' + this.quillEditorRejectRequest.get('reason').value + '<br/> comments: ' + this.quillEditorRejectRequest.get('editorComments').value // this.editorActivityPost
       };
-    //  console.log(reqObj, 'reqObj..');
       this.alertMsg = 'Request has been rejected!';
       this.isOpen = true;
       this.alertType = 'success';
@@ -1353,7 +1349,6 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
   selectStageOnPageLoad(id) {
     if (id) {
       const workfloworder = this.workflowStages.filter((t) => t.id === id);
-      // console.log(workfloworder[0].order,'workfloworder..');
       const x = this.workflowStages.slice(0, workfloworder[0].order);
       this.selectedStages = x;
     }
@@ -1627,6 +1622,7 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
     if (selectedStage.id === this.currentWorkflowStageID) {
       this.showStageTitle = selectedStage.stage_title;
       this.showStageGuidanceText = selectedStage.guidance_text;
+      this.cdRef.markForCheck();
     }
   }
 
@@ -1727,6 +1723,10 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
   }
 
   ngAfterViewInit() {
+    this.cdRef.detectChanges();
+  }
+
+  ngAfterContentChecked(){
     this.cdRef.detectChanges();
   }
 

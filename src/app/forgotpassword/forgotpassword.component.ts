@@ -66,8 +66,6 @@ export class ForgotpasswordComponent implements OnInit {
     }
 
     this.loading = true;
-    // debugger;
-    // console.log(this.f.token.value, this.f.newpsw.value, this.f.renewpsw.value);
     this.loadingBar.start();
     this.userService.forgotpswd(this.constructor.name, moduleName.forgotPasswordModule, this.f.emailid.value)
       .pipe(first())

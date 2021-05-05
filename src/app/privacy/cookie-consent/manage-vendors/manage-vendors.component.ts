@@ -66,7 +66,6 @@ export class ManageVendorsComponent implements OnInit {
     onCheckSubscription() {
       const resData: any = this.dataService.getCurrentPropertyPlanDetails();
       const status = this.dataService.isAllowFeatureByYes(resData.response, featuresName.MANAGE_VENDORS);
-      console.log('state', status)
       this.isFeatureAvaliable = status;
       if (!this.isFeatureAvaliable) {
         this.onCheckAllowBannerConfig();
@@ -102,24 +101,10 @@ export class ManageVendorsComponent implements OnInit {
     this.vendorsList = await this.gdprService.getAllData();
     this.iabVendorsList = Object.values(this.vendorsList.vendors);
 
-    // console.log('vendorsList', Object.values(this.vendorsList.vendors))
-    // const vendorsList = [];
-    // for (const  vendor of Object.values(this.vendorsList.vendors)) {
-    //   vendorsList.push({label: vendor['name'], value: vendor['id']});
-    // }
-    // this.gdprService.getIabCustomVendors().subscribe((res: any) => {
-    //   this.vendorsList = res;
-    //   this.iabVendorsList = Object.values(this.vendorsList.vendors);
-    // });
-
     this.skeletonLoading.one = false;
     this.skeletonLoading.one = true;
     this.gdprService.getGoogleVendors().subscribe((res: any[]) => {
       this.skeletonLoading.one = false;
-      // const googleVendorsList = [];
-      // for (const  vendor of res) {
-      //   googleVendorsList.push({label: vendor['provider_name'], value: vendor['provider_id']});
-      // }
       this.googleVendorsList = res;
     })
 

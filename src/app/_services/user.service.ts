@@ -1,4 +1,4 @@
-﻿import { Injectable, EventEmitter, Output } from '@angular/core';
+﻿import { Injectable, EventEmitter, Output, Directive } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from './../../environments/environment';
 import { User } from './../_models';
@@ -7,6 +7,7 @@ import { map, shareReplay, retry, catchError } from 'rxjs/operators';
 import {LokiService} from './loki.service';
 import {LokiFunctionality, LokiStatusType} from '../_constant/loki.constant';
 
+@Directive()
 @Injectable({ providedIn: 'root' })
 export class UserService {
 
