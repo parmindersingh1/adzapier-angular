@@ -1,4 +1,4 @@
-import { Injectable, EventEmitter, Output } from '@angular/core';
+import { Injectable, EventEmitter, Output, Directive } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from './../../environments/environment';
@@ -7,6 +7,7 @@ import { Organization } from '../_models/organization';
 import { Organizationdetails } from '../_models/organizationdetails';
 import { map, shareReplay } from 'rxjs/operators';
 
+@Directive()
 @Injectable({ providedIn: 'root' })
 
 export class OrganizationService {

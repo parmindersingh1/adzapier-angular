@@ -15,7 +15,7 @@ import {moduleName} from '../../_constant/module-name.constant';
 export class BillingComponent implements OnInit {
   isSuccess = false;
   isError = false;
-  @ViewChild('showAlertMsg', { static: false}) showAlertMsg;
+  @ViewChild('showAlertMsg') showAlertMsg;
   modalRef: BsModalRef;
   confirmModal: BsModalRef;
   billingDetails: any = {

@@ -1,5 +1,5 @@
 import {
-  Component, OnInit, ViewChild, ElementRef, Renderer2, TemplateRef, AfterViewInit, AfterViewChecked,
+  Component, OnInit, ViewChild, ElementRef, Renderer2, TemplateRef, AfterViewInit, AfterViewChecked, AfterContentChecked,
   ChangeDetectorRef,
   ChangeDetectionStrategy,
   OnDestroy
@@ -26,19 +26,19 @@ import { formatDate } from '@angular/common';
   changeDetection: ChangeDetectionStrategy.Default
 
 })
-export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, AfterViewChecked {
+export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChecked, AfterContentChecked, OnInit {
   @ViewChild('toggleDayleftdiv', { static: true }) toggleDayleftdiv: ElementRef;
   // @ViewChild('btnDaysLeft', { static: true }) btnDaysLeft: ElementRef;
-  @ViewChild('customDaysInput', { static: false }) customDaysInput: ElementRef;
-  @ViewChild('confirmTemplate', { static: false }) confirmModal: TemplateRef<any>;
+  @ViewChild('customDaysInput') customDaysInput: ElementRef;
+  @ViewChild('confirmTemplate') confirmModal: TemplateRef<any>;
   @ViewChild('filePreview', { static: true }) filePreview: ElementRef;
   @ViewChild('panel', { static: true }) public panel: ElementRef<any>;
-  @ViewChild('workflowStageScroller', { static: false, read: ElementRef }) public workflowStageScroller: ElementRef<any>;
-  @ViewChild('confirmDeleteTemplate', { static: false }) confirmDeleteModal: TemplateRef<any>;
+  @ViewChild('workflowStageScroller', { read: ElementRef }) public workflowStageScroller: ElementRef<any>;
+  @ViewChild('confirmDeleteTemplate') confirmDeleteModal: TemplateRef<any>;
   @ViewChild('extendDays', { static: true }) extendDaysModal: TemplateRef<any>;
   @ViewChild('rejectRequest', { static: true }) rejectRequestModal: TemplateRef<any>;
   // @ViewChild('subTaskForm', null) subTaskTempForm: NgForm;
-  @ViewChild('userAuthenticationAlert', { static: false }) userAuthenticationModal: TemplateRef<any>;
+  @ViewChild('userAuthenticationAlert') userAuthenticationModal: TemplateRef<any>;
 
   confirmationForm: FormGroup;
   modalRef: BsModalRef;
@@ -1627,6 +1627,7 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
     if (selectedStage.id === this.currentWorkflowStageID) {
       this.showStageTitle = selectedStage.stage_title;
       this.showStageGuidanceText = selectedStage.guidance_text;
+      this.cdRef.markForCheck();
     }
   }
 
@@ -1727,6 +1728,10 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
   }
 
   ngAfterViewInit() {
+    this.cdRef.detectChanges();
+  }
+
+  ngAfterContentChecked(){
     this.cdRef.detectChanges();
   }
 

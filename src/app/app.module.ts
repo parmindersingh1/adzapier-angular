@@ -19,8 +19,9 @@ import {NgxUiLoaderModule, NgxUiLoaderService} from 'ngx-ui-loader';
 import { ngxUiLoaderConfig } from './_constant/loading.contant';
 import { WelcomeComponent } from './welcome/welcome.component';
 import { ModalModule } from 'ngx-bootstrap/modal';
-import {NgbCollapseModule} from '@ng-bootstrap/ng-bootstrap';
+import {NgbCollapseModule, NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
+import {TimeagoModule} from 'ngx-timeago';
 
 @NgModule({
   declarations: [
@@ -65,9 +66,11 @@ import { TooltipModule } from 'ngx-bootstrap/tooltip';
     // ChartsModule,
     // Ng2ChartJsModules,
     ModalModule.forRoot(),
+    TimeagoModule.forRoot(),
     // TabsModule.forRoot(),
     // AccordionModule.forRoot(),
-    NgbCollapseModule
+    NgbCollapseModule,
+    NgbModule
   ],
   providers: [
     NgxUiLoaderService,
@@ -90,6 +93,7 @@ import { TooltipModule } from 'ngx-bootstrap/tooltip';
   bootstrap: [AppComponent],
   exports: [
     // AnalyticsModule,
+    TimeagoModule,
     HeaderModule,
     TooltipModule,
     BsDropdownModule, CollapseModule]

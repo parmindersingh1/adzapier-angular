@@ -29,15 +29,15 @@ import { DirtyComponents } from 'src/app/_models/dirtycomponents';
 })
 export class DsarformComponent implements OnInit, AfterContentChecked, AfterViewChecked, OnDestroy, DirtyComponents {
   @ViewChild('editor', { static: true }) editor;
-  @ViewChild('azEmbedCode', { static: false }) public azEmbedCode: ElementRef<any>;
-  @ViewChild('shareLinkCode', { static: false }) public shareLinkCode: ElementRef<any>;
-  @ViewChild('nav', { static: false }) navTab: ElementRef<any>;
-  @ViewChild(NgbNav, { static: false }) navDirective = null;
-  @ViewChild('confirmEdit', { static: false }) confirmModal: TemplateRef<any>;
-  @ViewChild('registerForm', { static: false }) registerForm: any;
-  @ViewChild('customFields', { static: false }) customFormFields: NgForm;
-  @ViewChild('confirmSaveAlert', { static: false }) confirmSaveAlert: TemplateRef<any>;
-  @ViewChild('basicForm', { static: false }) basicDetailForm: NgForm;
+  @ViewChild('azEmbedCode') public azEmbedCode: ElementRef<any>;
+  @ViewChild('shareLinkCode') public shareLinkCode: ElementRef<any>;
+  @ViewChild('nav') navTab: ElementRef<any>;
+  @ViewChild(NgbNav) navDirective = null;
+  @ViewChild('confirmEdit') confirmModal: TemplateRef<any>;
+  @ViewChild('registerForm') registerForm: any;
+  @ViewChild('customFields') customFormFields: NgForm;
+  @ViewChild('confirmSaveAlert') confirmSaveAlert: TemplateRef<any>;
+  @ViewChild('basicForm') basicDetailForm: NgForm;
   @ViewChild('settingsForm',{static:false}) settingsForm: NgForm;
   public requestObject: any = {};
   public selectedFormOption: any;
@@ -282,7 +282,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
     this.loadCurrentProperty();
    // this.loadWebControl();
    // this.getCCPAdefaultConfigById();
-    
+
 
     this.basicForm = this.fb.group({
       formname: ['', [Validators.required]],
@@ -295,7 +295,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
     this.quillEditorText = this.fb.group({
       editor: new FormControl(null)
     });
-    
+
 
     this.isWelcomeEditor = false;
     this.loadDefaultApprover();
@@ -811,7 +811,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
     //  const isLabelExist = this.webFormControlList.filter((t) => t.controllabel === this.trimLabel).length > 0;
     this.changeControlTypes();
     this.cancelAddingFormControl('submit');
-    
+
   }
 
   changeControlTypes() {
@@ -944,7 +944,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
         this.selectOptions.forEach(element => {
           element.keylabel = this.trimLabel;
         });
-        // } 
+        // }
         let updatedControlType;
         if (this.selectOptionControl === 'button' && !this.multiselect) {
           updatedControlType = 'radio';
@@ -1236,14 +1236,14 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
         const customControlIndex = this.webFormControlList.findIndex((t) => t.controlId === previousobj.controlId);
         this.ccpaFormConfigService.updateControl(this.webFormControlList[customControlIndex], customControlIndex, previousobj);
         this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
-      } 
+      }
     } else if (actionType === 'submit' && this.crid !== null) {
       this.webFormControlList = this.ccpaFormConfigService.getFormControlList();
       this.isDirty = true;
     } else if (actionType === 'submit' && this.crid == null) {
       this.webFormControlList = this.dsarFormService.getFormControlList();
       this.isDirty = true;
-    } 
+    }
       this.lblText = '';
       this.isAddingFormControl = false;
       this.isEditingList = false;
@@ -1264,7 +1264,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
     if(this.customFormFields !== undefined){
       this.addCustomFields(this.customFormFields);
     }
-    
+
     if (this.isWebFormPublished && !this.isEditingPublishedForm) {
       this.navDirective.select(3);
     } else {
@@ -1428,7 +1428,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
       if(this.formSaveMethod !== 'save' && this.isDirty && this.nextId !== 4){
         if(this.modalRef !== undefined){
           this.modalRef.hide();
-        } 
+        }
         this.isStepCovered = false;
        // this.isDirty = false;
        return true;
@@ -1477,12 +1477,12 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
             this.navDirective.select(3);
           } else if(this.active === 3){
             this.navDirective.select(3);
-          }         
+          }
         }
-       
+
       }
     }
-  
+
   }
 
   onNavChange(changeEvent: NgbNavChangeEvent) {
@@ -1519,7 +1519,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
           }
           // this.basicFormSubmitted = false;
        //  this.getDSARFormByCRID(this.crid,'dataupdated');
-          
+
         }else{
           this.isdraftsubmitted = true;
           this.basicFormSubmitted = true;
@@ -1534,7 +1534,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
           }else{
             this.navDirective.select(3);
           }
-          
+
         }
       }
     } else if (changeEvent.nextId === 4) {
@@ -1935,7 +1935,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
         this.isWebFormPublished = false;
         this.isEditingPublishedForm = true;
       }
-  
+
       this.pageLoadFormObj = {
         form_name: retrivedData.form_name,
         form_status: retrivedData.form_status, // 'draft',
@@ -1950,7 +1950,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
           captcha: this.isCaptchaVerificationRequired || false
         }
       }
-  
+
       this.pageLoadFormControls = {
         request_form: retrivedData.request_form
       }
@@ -2344,7 +2344,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
           this.pageLoadFormObj = {
             form_name: data.response.form_name,
             form_status: data.response.form_status
-          }       
+          }
           this.selectedApproverID = data.response.settings.approver;// || retrivedData.approver_id;
           this.workflow = data.response.settings.workflow;// || retrivedData.workflow_id;
          // this.formName = this.formName || retrivedData.form_name;
@@ -2535,7 +2535,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
             return  this.welcomeFontSize = Object.values(tagObj[key])[0];
           } else{
             return this.footerFontSize = Object.values(tagObj[key])[0];
-          } 
+          }
         }
       }
   }
@@ -2621,7 +2621,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
       }
     });
    }
-   
+
   }
 
   // ngAfterViewInit(){
@@ -2643,10 +2643,10 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
     }
     if(this.basicFormSubscription !== undefined){
       this.basicFormSubscription.unsubscribe();
-    }  
+    }
 
   }
- 
+
 }
 
 interface CustomControls {

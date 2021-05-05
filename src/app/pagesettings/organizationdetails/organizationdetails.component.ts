@@ -21,8 +21,8 @@ import {NgxUiLoaderService} from 'ngx-ui-loader';
 })
 export class OrganizationdetailsComponent implements OnInit {
   @ViewChild('propertyModal', { static: true }) propertyModal: TemplateRef<any>;
-  @ViewChild('confirmTemplate', { static: false }) confirmModal: TemplateRef<any>;
-  @ViewChild('deletePropertyAlert',{static: false}) deleteAlertModal: TemplateRef<any>;
+  @ViewChild('confirmTemplate') confirmModal: TemplateRef<any>;
+  @ViewChild('deletePropertyAlert') deleteAlertModal: TemplateRef<any>;
   modalRef: BsModalRef;
   organisationPropertyForm: FormGroup;
   editOrganisationForm: FormGroup;

@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { BannerLivePriviewComponent } from './banner-live-priview.component';
 
@@ -6,7 +6,7 @@ describe('BannerLivePriviewComponent', () => {
   let component: BannerLivePriviewComponent;
   let fixture: ComponentFixture<BannerLivePriviewComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ BannerLivePriviewComponent ]
     })

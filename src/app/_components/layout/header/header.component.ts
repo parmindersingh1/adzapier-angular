@@ -18,7 +18,7 @@ import {featuresName} from '../../../_constant/features-name.constant';
   changeDetection: ChangeDetectionStrategy.Default
 })
 export class HeaderComponent implements OnInit {
-  @ViewChild('confirmTemplate', { static: false }) confirmModal: TemplateRef<any>;
+  @ViewChild('confirmTemplate') confirmModal: TemplateRef<any>;
   modalRef: BsModalRef;
   isCollapsed = true;
   isMobileMenuCollapsed = false;
