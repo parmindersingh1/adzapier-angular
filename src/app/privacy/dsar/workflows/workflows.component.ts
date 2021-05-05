@@ -51,7 +51,7 @@ export class WorkflowsComponent implements OnInit, AfterViewInit  {
   addBlurbackgroundToTable: any;
   private searchDecouncer$: Subject<string> = new Subject();
   currentManagedOrgID: any;
-  constructor(private router: Router, 
+  constructor(private router: Router,
               private workflowService: WorkflowService,
               private dataService: DataService,
               private modalService: NgbModal,
@@ -92,7 +92,7 @@ export class WorkflowsComponent implements OnInit, AfterViewInit  {
     }
   }
 
-  // to retrive all and show only active workflow in dropdown  
+  // to retrive all and show only active workflow in dropdown
   loadWorkflowList() {
     const pagelimit = '?limit=' + this.paginationConfig.itemsPerPage + '&page=' + this.paginationConfig.currentPage;
     this.workflowService.getWorkflow(this.constructor.name, moduleName.workFlowModule, this.currentManagedOrgID,  pagelimit).subscribe((data) => {
@@ -109,7 +109,7 @@ export class WorkflowsComponent implements OnInit, AfterViewInit  {
     // restore original order
     this.selectedCols = this.cols.filter(col => val.includes(col));
   }
-  
+
   onGetOrgId() {
     this.orgservice.currentProperty.subscribe((response) => {
       if (response !== '') {
@@ -137,7 +137,7 @@ export class WorkflowsComponent implements OnInit, AfterViewInit  {
       if(event.sortField !== undefined){
         orderBy = '&order_by=' + event.sortField + ':' + sortOrder;
       }
-     
+
 
       this.workflowService.getWorkflow(this.constructor.name, moduleName.workFlowModule, this.currentManagedOrgID, pagelimit, orderBy).subscribe((data) => {
         this.isloading = false;
@@ -152,7 +152,7 @@ export class WorkflowsComponent implements OnInit, AfterViewInit  {
         this.alertType = 'danger';
       });
 
-      
+
     }
 
     this.cols = [
@@ -168,7 +168,7 @@ export class WorkflowsComponent implements OnInit, AfterViewInit  {
 
     this.selectedCols = this.cols;
   }
- 
+
 
 loadActiveWorkflowList() {
   const pagelimit = '&limit=' + 0;
@@ -259,7 +259,6 @@ private searchFilter(): void {
 }
 
 onWorkflowChange($event) {
-  console.log($event, '$event.');
   this.selectedWorkflowId = $event.target.value;
   this.loadWorkflowById($event.target.value);
 }

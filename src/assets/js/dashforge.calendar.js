@@ -13,7 +13,6 @@ $(function(){
 
       // add leading zero to single digit date
       var day = date.getDate();
-      console.log(day);
       return [true, (day < 10 ? 'zero' : '')];
     }
   });
@@ -67,9 +66,7 @@ $(function(){
           if(now === text[1]) { $(this).addClass('now'); }
         });
       }
-
-      console.log(view.el);
-    },
+      },
     eventRender: function(event, element) {
 
       if(event.description) {

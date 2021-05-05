@@ -322,18 +322,6 @@ export class HeaderComponent implements OnInit {
         this.router.navigate(['/privacy/dsar/workflows']);
       }
      this.openNav();
-
-
-
-    // this.dataService.changeCurrentPropertyPlan(res.response);
-
-    // this.dataService.currentPropertyPlanDetails.subscribe(res => {
-    //   this.dataService.setPropertyPlanToLocalStorage(res);
-    //   console.log('Res DAta', res);
-    // }, err => {
-    //   console.log('Error Property Plan Change', err)
-    // })
-
   }
 
   isPropSelected(selectedItem): boolean {
@@ -640,12 +628,12 @@ export class HeaderComponent implements OnInit {
       if(data.status === 200 && purpose == 'read'){
         this.storeNotificationList[i].read = !status;
         this.storeNotificationList = [...this.storeNotificationList];
-       
+
       }else{
         this.storeNotificationList[i].active = false;
         this.storeNotificationList = [...this.storeNotificationList];
       }
-      
+
     });
   }
 
@@ -664,7 +652,6 @@ export class HeaderComponent implements OnInit {
       read: false, // false,
     };
     this.userService.updateNotification(this.constructor.name, moduleName.headerModule, obj).subscribe((data) => {
-      console.log(data.response);
       this.loadNotification();
     });
   }
@@ -679,7 +666,7 @@ export class HeaderComponent implements OnInit {
     } else if (this.orgPropertyMenu.length >= 4 && this.orgPropertyMenu.length <= 8) {
       return { 'column-count': 3 }
     } else if (this.orgPropertyMenu.length >= 8) {
-      return { 
+      return {
         'column-count': 4,
         'overflow-x': "scroll",
         'width': "950px",
@@ -805,8 +792,6 @@ export class HeaderComponent implements OnInit {
   @HostListener('window:resize',['$event'])
   onWindowResize(event){
     if(event.target.outerWidth <= 767){
-     // !this.close ? this.close = true : this.close = false;
-      console.log(this.close,'close..');
       if(!this.close){
         this.close = true;
         this.addMobileMenuWidth = this.addMenuWidth();

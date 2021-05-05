@@ -12,13 +12,7 @@ export class PropertydashboardComponent implements OnInit {
 
   ngOnInit() {
     this.activatedRoute.paramMap.subscribe(params => {
-      console.log(params, 'params..');
-      this.propertyID = params.get('pid'); 
-     // alert(this.crid);
+      this.propertyID = params.get('pid');
       });
   }
-
-  
-  
-
 }

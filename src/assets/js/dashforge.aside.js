@@ -50,7 +50,6 @@ $(function(){
   })
 
   $('body').on('mouseenter', '.minimize .aside-body', function(e){
-    console.log('e');
     $(this).parent().addClass('maximize');
   })
 

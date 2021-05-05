@@ -35,7 +35,6 @@ export class CookieBannerService {
     );
   }
   onGetPlanType(componentName, moduleName): Observable<any> {
-    console.log('compone', componentName)
     const path = apiConstant.COMPANY_SERVICE;
     return this.http.get(environment.apiUrl + path)
       .pipe(map(res => res),

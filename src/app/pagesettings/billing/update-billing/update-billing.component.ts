@@ -79,7 +79,6 @@ export class UpdateBillingComponent implements OnInit {
       this.loading.stop('2');
       if (res['status'] === 200) {
         this.billingDetails = res['response'];
-        console.log(this.billingDetails);
       }
     }, error => {
       this.loading.stop('2');

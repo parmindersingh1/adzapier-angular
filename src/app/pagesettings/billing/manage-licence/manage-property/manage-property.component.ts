@@ -255,7 +255,6 @@ export class ManagePropertyComponent implements OnInit, OnDestroy {
   }
 
   onCheckAvailableLic(e) {
-    console.log('EEEEEEEEEEEEE', e)
   }
 
   ngOnDestroy() {
