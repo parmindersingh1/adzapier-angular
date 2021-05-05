@@ -130,6 +130,7 @@
                             [ngClass]="{ 'is-invalid': submitted && addWorkflow.workflowName.errors }" />
                         <div *ngIf="submitted && addWorkflow.workflowName.errors" class="invalid-feedback">
                             <div *ngIf="addWorkflow.workflowName.errors.required">Workflow name is required</div>
+                            <div *ngIf="addWorkflow.workflowName.hasError('trimError')" > {{ addWorkflow.workflowName.errors.trimError.value }} </div>
                         </div>
                     </div>
                 </div>
@@ -160,7 +161,8 @@
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-link tx-decoration-underline" (click)="onCancelClick()">Cancel</button>
-            <button class="btn btn-primary mr-0">Save</button>
+            <button [disabled]="isSaveClicked" class="btn btn-primary mr-0" type="submit">
+                <span *ngIf="isSaveClicked" class="spinner-border spinner-border-sm mr-1"></span> Save</button>
         </div>
 
     </form>
