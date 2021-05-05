@@ -174,6 +174,16 @@ export class UserService {
         );
     }
 
+    resendEmailVerificationToken(componentName, moduleName,reqObj): Observable<any>{
+        const path = "/user/verifyemail";
+        return this.http.post<any>(environment.apiUrl + path, reqObj).pipe(
+            catchError(error => {
+                this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.resendEmailVerificationToken, componentName, moduleName, path);
+                return throwError(error);
+              })
+        );
+    }
+
     onSendLogs(errorType, msg, functionality, componentName, moduleName, path) {
         this.lokiService.onSendErrorLogs(errorType, msg, functionality, componentName, moduleName, path).subscribe();
       }

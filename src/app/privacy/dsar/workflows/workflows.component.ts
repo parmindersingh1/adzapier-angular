@@ -11,6 +11,7 @@ import { LazyLoadEvent } from 'primeng/api';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { OrganizationService } from 'src/app/_services';
+import { trimValidator } from 'src/app/_helpers/trimspace.validator';
 // import { strings } from "ngx-timeago/language-strings/en";
 // import { TimeagoIntl } from "ngx-timeago";
 @Component({
@@ -51,6 +52,7 @@ export class WorkflowsComponent implements OnInit, AfterViewInit  {
   addBlurbackgroundToTable: any;
   private searchDecouncer$: Subject<string> = new Subject();
   currentManagedOrgID: any;
+  isSaveClicked = false;
   constructor(private router: Router, 
               private workflowService: WorkflowService,
               private dataService: DataService,
@@ -73,7 +75,7 @@ export class WorkflowsComponent implements OnInit, AfterViewInit  {
     this.setupSearchDebouncer();
     const alphaNumeric = '^(?![0-9]*$)[a-zA-Z0-9 ]+$';
     this.createWorkFlowForm = this.formBuilder.group({
-      workflowName: ['', [Validators.required, Validators.pattern(alphaNumeric)]],
+      workflowName: ['', [Validators.required, Validators.pattern(alphaNumeric),trimValidator]],
       workflowselection: ['', [Validators.required]]
     });
     this.isloading = true;
@@ -179,7 +181,7 @@ loadActiveWorkflowList() {
 }
 
 
-  public loadWorkflowById(id) {
+  loadWorkflowById(id) {
   // this.loadingBar.start();
   this.workflowService.getWorkflowById(this.constructor.name, moduleName.workFlowModule, this.currentManagedOrgID, id)
     .subscribe((data: any) => {
@@ -266,12 +268,15 @@ onWorkflowChange($event) {
 
 
 createWorkFlow() {
+  this.isSaveClicked = true;
   this.submitted = true;
   if (this.createWorkFlowForm.invalid) {
     return false;
   } else {
+    
+  if (this.workflowStages.length !== 0){
     const requestObj = {
-      workflow_name: this.createWorkFlowForm.value.workflowName,
+      workflow_name: this.createWorkFlowForm.value.workflowName.trim(),
       workflow_stages: this.workflowStages,
       workflow_status: 'draft',
       oid: this.currentManagedOrgID
@@ -286,7 +291,7 @@ createWorkFlow() {
         this.createWorkFlowForm.reset();
         this.modalService.dismissAll('Data Saved!');
         this.router.navigate(['privacy/dsar/createworkflow', data.id]);
-        this.loadWorkflowList();
+        // this.loadWorkflowList();
       }
     }, (error) => {
       this.isOpen = true;
@@ -296,6 +301,7 @@ createWorkFlow() {
       this.modalService.dismissAll('error!');
     });
   }
+}
 }
 
 rearrangeArrayResponse(dataArray) {
@@ -334,6 +340,7 @@ navigateToWorkflow(obj) {
 
 onCancelClick() {
   this.submitted = false;
+  this.isSaveClicked = false;
   this.createWorkFlowForm.reset();
   this.modalService.dismissAll('Canceled');
 }

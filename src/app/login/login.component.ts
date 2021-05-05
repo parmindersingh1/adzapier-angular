@@ -6,10 +6,24 @@ import { AlertService, AuthenticationService, UserService } from './../_services
 import { OrganizationService } from '../_services/organization.service';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { moduleName } from '../_constant/module-name.constant';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 
 @Component({
     templateUrl: 'login.component.html',
-    styleUrls: ['./login.component.scss']
+    styleUrls: ['./login.component.scss'],
+    animations: [
+        trigger('slideInOut', [
+            state('false', style({
+              transform: 'translateX(0)'
+            })),
+            state('true', style({
+              transform: 'translateX(-550px)'
+            })),
+            transition('false <=> true', animate('400ms ease-in-out'))
+          ])
+       
+      ]
+    
 })
 export class LoginComponent implements OnInit {
 
@@ -26,6 +40,9 @@ export class LoginComponent implements OnInit {
     alertMsg: any;
     isOpen = false;
     alertType: any;
+    isEmailVerified : boolean;
+    isMsgConfirm = false;
+    isVerificationBtnClick = false;
     constructor(
         private formBuilder: FormBuilder,
         private route: ActivatedRoute,
@@ -40,6 +57,7 @@ export class LoginComponent implements OnInit {
         if (this.authenticationService.currentUserValue) {
             this.router.navigate(['/']);
         }
+        this.isEmailVerified = true;
     }
 
 
@@ -93,10 +111,16 @@ export class LoginComponent implements OnInit {
                     }
                 },
                 error => {
-                    this.isOpen = true;
-                    this.alertMsg = error;
-                    this.alertType = 'danger';
-                    this.loading = false;
+                    if(error == 'Please verify email address.'){
+                        this.isEmailVerified = false;
+                        this.loading = false;
+                        this.isOpen = false;
+                    } else{
+                        this.isOpen = true;
+                        this.alertMsg = error;
+                        this.alertType = 'danger';
+                        this.loading = false;
+                    }
                 });
 
     }
@@ -112,6 +136,27 @@ export class LoginComponent implements OnInit {
     onClosed(dismissedAlert: any): void {
         this.alertMsg = !dismissedAlert;
         this.isOpen = false;
+    }
+
+    onToggle(){
+        this.isEmailVerified = !this.isEmailVerified;
+        this.loading = false;
+        this.isVerificationBtnClick = false;
+        this.isMsgConfirm = false;
+    }
+
+    resendToken(){
+        this.isVerificationBtnClick = true;
+        const reqObj =  {
+            email:this.f.email.value
+        }
+        this.userService.resendEmailVerificationToken(this.constructor.name,moduleName.loginModule,reqObj).subscribe((data) =>
+        {   
+            if(data.status === 200){
+                this.isMsgConfirm = true;
+                this.isVerificationBtnClick = false;
+            }
+        })
     }
 
 }
