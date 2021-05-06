@@ -82,7 +82,9 @@
                 <div *ngIf="submitted && f.acceptPolicy.errors" class="invalid-feedback">Accept terms of service & privacy statement is required</div>
             </div>
             <div class="text-center">
-                <button class="btn btn-primary mr-2" type="submit"> Create Account</button>
+                <button class="btn btn-primary mr-2" [disabled]="loading" type="submit">
+                    <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span> Create Account
+                </button>
                 <!-- <button class="btn btn-primary mr-2" type="reset" (click)="onReset()">Reset</button> -->
             </div>
         </form>
