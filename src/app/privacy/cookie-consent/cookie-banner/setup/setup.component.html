@@ -19,16 +19,9 @@
     <b>Note! </b> The script must be placed before any other script in your site in order to ensure the banner is loaded before any other scripts have the chance to load or set cookies. This allows for the script tag to communicate the site visitor's consent preferences to downstream vendors and for those vendors to show content and set cookies as allowed by the site visitor.
   </p>
   <div class="card mt-3">
-    <div class="card-header">
-      <div class="d-flex" style="flex-direction: column;">
-        <h6 style="float: left"><b>Production CDN </b></h6>
-      <span class="d-flex" style="justify-content: space-between;">
-      <p class="tx-12 tx-color-03 mg-b-0">Please copy and paste this code into the header for each page on your website(s). It is important that this code be the first script in your document.</p>
+    <div  class="card-header"><h6 style="float: left"><b>Production CDN </b></h6>
       <button (click)="copyToClipboard()" style="float: right" type="button" class=" pull-right btn-sm btn btn-primary"><i class="mr-1 fa fa-clipboard" aria-hidden="true"></i>
-        {{ isCopied.one ? 'Copied' : 'Copy Script'}}</button>
-    </span>
-    
-    </div>
+         {{ isCopied.one ? 'Copied' : 'Copy Script'}}</button>
     
     
     </div>
@@ -37,13 +30,16 @@
         <!-- <span>
           <code style="color: #8be9fd">{{tagEle.openHead}}</code>
         </span> <br /> -->
+        <span>
+          <code style="color: rgb(116, 116, 116)">//Please copy and paste this code into the header for each page on your website(s). It is important that this code be the first script in your document.  </code>
+        </span> <br />
 
         <span>
           <code style="color: #8be9fd">{{tagEle.openScript}}</code>
         </span> <br />
 
         <span>
-          <code style="color: rgb(116, 116, 116)">// Replace Your AuthId '123123123' </code>
+          <code style="color: rgb(116, 116, 116)">//To implement authenticated consent on a web page, you can place a cookie on the page and pass the authenticated consent identifier to Adzapier. </code>
         </span> <br />
 
         <span>
@@ -77,14 +73,9 @@
 
 
   <div class="card mt-3">
-    <div  class="card-header">
-      <div class="d-flex" style="flex-direction: column;">
-        <div><h6 style="float: left"><b>API EndPoint</b></h6></div> 
-        <div><span>
-      <p class="tx-12 tx-color-03 mg-b-0"> Get Cookie Consent List by AuthID </p>
-    </span>
-    </div>
-    </div>
+    <div  class="card-header"><h6 style="float: left"><b>API EndPoint <span>
+      <code style="color: rgb(116, 116, 116)">// Get Cookie Consent List by AuthID </code>
+    </span></b></h6>
     </div>
     <div *ngIf="!loadingSkeleton" style="background: #282a36" class="card-body">
       <p  class="text-danger codeText">

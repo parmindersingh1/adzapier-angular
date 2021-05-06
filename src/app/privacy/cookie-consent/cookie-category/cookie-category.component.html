@@ -36,7 +36,7 @@
               <button type="button" class="btn btn-sm btn-outline-secondary btn-uppercase mr-2" (click)="openNew()">
                 <i aria-hidden="true" class="fa fa-plus pr-1"></i> Add Cookie
               </button>
-              <button *ngIf="!isScanning" (click)="onRescanCookie()" (click)="openModal(template)" data-toggle="modal" data-target="#myModal"
+              <button *ngIf="!isScanning" (click)="onRescanCookie(); openModal(template)" data-toggle="modal" data-target="#myModal"
                       class="btn-success pl-3 pr-4 btn btn-sm mr-2 mg-r-3" type="button">
                 <i-feather name="refresh-ccw" class="commom-feathericon-height pr-1"></i-feather>
                 Scan
