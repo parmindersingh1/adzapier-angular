@@ -267,12 +267,11 @@ onWorkflowChange($event) {
 
 
 createWorkFlow() {
-  this.isSaveClicked = true;
   this.submitted = true;
   if (this.createWorkFlowForm.invalid) {
     return false;
   } else {
-    
+    this.isSaveClicked = true;
   if (this.workflowStages.length !== 0){
     const requestObj = {
       workflow_name: this.createWorkFlowForm.value.workflowName.trim(),
@@ -288,6 +287,7 @@ createWorkFlow() {
         this.isOpen = true;
         this.alertType = 'success';
         this.createWorkFlowForm.reset();
+        this.isSaveClicked = false;
         this.modalService.dismissAll('Data Saved!');
         this.router.navigate(['privacy/dsar/createworkflow', data.id]);
         // this.loadWorkflowList();
