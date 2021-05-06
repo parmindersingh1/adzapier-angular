@@ -363,6 +363,8 @@ ul.notification-menu-right::after {
   cursor: pointer;
 }
 
+/* Importing Bootstrap SCSS file. */
+@import '~bootstrap/scss/bootstrap';
 .propertyLink{
     display: flex !important;
     width: 100% !important;

@@ -1,4 +1,4 @@
-﻿import { Injectable, EventEmitter, Output } from '@angular/core';
+﻿import { Injectable, EventEmitter, Output, Directive } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from './../../environments/environment';
 import { User } from './../_models';
@@ -7,6 +7,7 @@ import { map, shareReplay, retry, catchError } from 'rxjs/operators';
 import {LokiService} from './loki.service';
 import {LokiFunctionality, LokiStatusType} from '../_constant/loki.constant';
 
+@Directive()
 @Injectable({ providedIn: 'root' })
 export class UserService {
 
@@ -169,6 +170,16 @@ export class UserService {
         return this.http.put<any>(environment.apiUrl + path, {}).pipe(
             catchError(error => {
                 this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.checkIsNotificationVisited, componentName, moduleName, path);
+                return throwError(error);
+              })
+        );
+    }
+
+    resendEmailVerificationToken(componentName, moduleName,reqObj): Observable<any>{
+        const path = "/user/verifyemail";
+        return this.http.post<any>(environment.apiUrl + path, reqObj).pipe(
+            catchError(error => {
+                this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.resendEmailVerificationToken, componentName, moduleName, path);
                 return throwError(error);
               })
         );

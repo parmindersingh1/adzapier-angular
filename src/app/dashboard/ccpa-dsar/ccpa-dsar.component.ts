@@ -188,7 +188,6 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
   onCheckSubscription() {
     const resData: any = this.dataService.getCurrentOrganizationPlanDetails();
     const features = resData.response.features;
-    console.log('features', !features)
     if (features == null) {
       this.isShowDashboard = false;
     } else {
@@ -643,7 +642,6 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
         this.loading.stop();
         this.skeletonLoadingState = false;
         const result = res.response;
-        console.log('result', result)
         if (this.currentState === 'usa') {
           this.stateColor = {};
           for (const  countryData of result) {

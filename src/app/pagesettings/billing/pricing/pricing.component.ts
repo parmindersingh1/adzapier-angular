@@ -116,7 +116,6 @@ onSelectActivePlan(record) {
     }
 
    this.activeData = activeData;
-   console.log('activeData', activeData)
    this.subscriptionList = this.planDetails.base[`${this.billingCycle}`];
    this.addonsList = this.planDetails.addons[`${this.billingCycle}`];
   }
@@ -230,19 +229,7 @@ onSelectActivePlan(record) {
 
   onUpgradePlan(plan) {
     this.loading.start();
-    console.log('currentPlan', this.currentPlan);
     const payloads = {};
-    // if (this.subscriptionPlanType === 'GDPR') {
-    //   payloads = {
-    //     service: [this.currentPlan.services.GDPR.key, this.currentPlan.services.CCPA.key],
-    //     plan: plan.plan
-    //   };
-    // } else {
-    //   payloads = {
-    //     service: [this.currentPlan.services.CCPA.key],
-    //     plan: plan.plan
-    //   };
-    // }
     this.billingService.upGradePlan(payloads, this.constructor.name, moduleName.pricingModule).subscribe((res: any) => {
       this.loading.stop();
       if (res.status === 200) {
@@ -330,9 +317,7 @@ onSelectActivePlan(record) {
     this.stripe.redirectToCheckout({
       sessionId: response
     }).then( (result) => {
-      console.log(result);
     }).catch( error => {
-      console.log(error);
     });
   }
 

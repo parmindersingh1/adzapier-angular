@@ -8,11 +8,9 @@ import { Component, OnInit } from '@angular/core';
 export class GDPRComponent implements OnInit {
 
   constructor() {
-    console.log('GDPRComponent Constructor method');
    }
 
   ngOnInit() {
-    console.log('GDPRComponent ngOnInit method');
   }
 
 }
