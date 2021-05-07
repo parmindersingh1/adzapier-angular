@@ -143,6 +143,13 @@ export class CookieCategoryComponent implements OnInit {
       });
   }
 
+  openModal(template) {
+    if(this.onCheckSubscription()){
+    this.categoryModalRef = this.modalService.show(template);
+    }
+  }
+
+  
 
   onSelectedColummFormServer() {
     this.cols = this.onGetColumms();

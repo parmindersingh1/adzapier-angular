@@ -36,7 +36,7 @@
               <button type="button" class="btn btn-sm btn-outline-secondary btn-uppercase mr-2" (click)="openNew()">
                 <i aria-hidden="true" class="fa fa-plus pr-1"></i> Add Cookie
               </button>
-              <button *ngIf="!isScanning" (click)="onRescanCookie()"
+              <button *ngIf="!isScanning" (click)="onRescanCookie(); openModal(template)" data-toggle="modal" data-target="#myModal"
                       class="btn-success pl-3 pr-4 btn btn-sm mr-2 mg-r-3" type="button">
                 <i-feather name="refresh-ccw" class="commom-feathericon-height pr-1"></i-feather>
                 Scan
@@ -65,6 +65,26 @@
             </div>
           </div>
         </div>
+
+        <ng-template #template let-modal>
+          <div class="modal-header">
+            <h4 class="modal-title pull-left">Reminder</h4>
+            <button type="button" class="close pull-right" aria-label="Close" (click)="categoryModalRef.hide()">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            Automated scan usually finish within 3 minutes but during peak demand, your scan may take up to 10 minutes.
+            You can leave this page and your scan will continue in the background.
+
+            <div class="d-flex" style="justify-content:flex-end;">
+              <button type="button" class="btn btn-primary btn-sm" (click)="categoryModalRef.hide()">OK</button>
+
+            </div>
+
+          </div>
+
+        </ng-template>
 
 
         <div *ngIf="scanningStatus" class="status-bar">
