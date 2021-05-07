@@ -125,6 +125,20 @@
     </ul>
   </div>
   <!--end of general menu after login-->
+  <!--Help center after login-->
+  <div class="navbar-right" *ngIf="currentUser"  dropdown [insideClick]="true">
+  <a  class="nav-link dropdown-link mr-3" dropdownToggle>
+    <i-feather name="help-circle" class="feather-20"></i-feather>
+  </a>
+  <ul class="dropdown-menu helpcenter-menu-right" *dropdownMenu>
+    <li>
+      <div class="dropdown-header">
+        <a href="https://adzapier.atlassian.net/wiki/spaces/PD/pages/884637701/Adzapier+Portal" target="_blank">Help center</a>
+      </div>
+    </li>
+  </ul>
+    </div>
+  <!--Help center after login ends-->
   <!--notification after login-->
   <div class="navbar-right" *ngIf="currentUser" dropdown [insideClick]="true">
     <div class="responsive-notification">
@@ -135,7 +149,8 @@
     </a>
     </div>
     <ul class="dropdown-menu notification-menu-right" *dropdownMenu>
-    <li>  <div class="dropdown-header">Notifications</div></li>
+    <li>
+      <div class="dropdown-header">Notifications</div></li>
       <li class="nav-item notification-height">
         <div class="txt-right mr-3"><button class="btn btn-link" (click)="readAllNotification(notificationList)">Mark all as read</button></div>
         <cdk-virtual-scroll-viewport itemSize="10" class="example-viewport">
@@ -182,11 +197,14 @@
                   <p class="tx-12 tx-color-03">{{userRole}}</p>
                 </div>
                 <li *ngIf="!item.items" role="menuitem">
-                  <a class="dropdown-item" *ngIf="item.label !== 'Signout'" [class.active]="activateSublink(item)" (click)="goto(item)">
+                  <a class="dropdown-item" *ngIf="item.label !== 'Signout' && item.label !== 'Help Center'" [class.active]="activateSublink(item)" (click)="goto(item)">
                     <i-feather *ngIf="item.icon" name="{{item.icon}}" class="feather-16"></i-feather>{{item.label}}
                   </a>
                   <a class="dropdown-item" *ngIf="item.label === 'Signout'" (click)="logout()"
                     routerLink="{{item.routerLink}}">
+                    <i-feather *ngIf="item.icon" name="{{item.icon}}" class="feather-16"></i-feather>{{item.label}}
+                  </a>
+                  <a class="dropdown-item" *ngIf="item.label !== 'Signout' && item.label === 'Help Center'" target="_blank" href="{{item.routerLink}}">
                     <i-feather *ngIf="item.icon" name="{{item.icon}}" class="feather-16"></i-feather>{{item.label}}
                   </a>
                 </li>

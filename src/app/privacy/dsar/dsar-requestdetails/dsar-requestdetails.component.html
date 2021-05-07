@@ -245,10 +245,10 @@
                         <ng-template ngbNavContent>
                             <form [formGroup]="quillEditorEmailText" autocomplete="false"
                                 (ngSubmit)="onSubmitEmailPost()">
-                                <div class="d-flex">
-                                    <div class="d-flex align-items-center mb-2 ml-auto">
-                                        <label class="mr-2"> Select template </label>
-                                        <div class="flex-row m1">
+                                <div class="col-sm-5 mr-0 pr-0 template-dp-position">
+                                    <div class="email-template-dropdown">
+                                        <label class="mr-2 label-bold"> Select template </label>
+                                        <div class="col-sm-6 mr-0 pr-0">
                                             <select (change)="onChangeRequestType($event)"
                                                 formControlName="dropdownEmailTemplate" class="form-control">
                                                 <option selected disabled value="">select email template</option>

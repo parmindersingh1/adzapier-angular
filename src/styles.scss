@@ -302,7 +302,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   padding-left: 31% !important;
 }
 
-ul.notification-menu-right.show::before {
+ul.notification-menu-right.show::before,ul.helpcenter-menu-right.show::before,.dropdown-menu-right.show::before {
     content: '';
     position: absolute;
     top: -10px;
@@ -313,7 +313,7 @@ ul.notification-menu-right.show::before {
     border-right: 10px solid transparent;
 }
 
-ul.notification-menu-right::after {
+ul.notification-menu-right::after,ul.helpcenter-menu-right::after {
     content: '';
     position: absolute;
     top: -8.5px;
@@ -322,6 +322,27 @@ ul.notification-menu-right::after {
     border-bottom: 9px solid #fff;
     border-left: 9px solid transparent;
     border-right: 9px solid transparent;
+}
+
+ul.dropdown-menu-right.show::before {
+    top: -10px;
+    right: 15px !important;
+    left: auto !important;
+    
+}
+
+ul.helpcenter-menu-right.show::before{
+    top: -10px;
+    right: 20px !important;
+    left: auto !important;
+}
+
+ul.helpcenter-menu-right::after{
+    
+    top: -8.5px;
+    right: 21px !important;
+    left: auto !important;
+     
 }
 
 .breadcrumb-style1 .breadcrumb-item, .breadcrumb-style2 .breadcrumb-item, .breadcrumb-style3 .breadcrumb-item {

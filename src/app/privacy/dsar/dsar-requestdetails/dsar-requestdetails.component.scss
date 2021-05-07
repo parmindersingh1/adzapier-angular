@@ -50,6 +50,10 @@
     width: auto;
 }
 
+.activitytab {
+    position: relative;
+}
+
 li.nav-item {
     margin: 0;
 }
@@ -931,6 +935,24 @@ ul.ngx-pagination {
 .radiobtn-wrapper .tooltip .arrow {
         display: block;
       }
+
+ .email-template-dropdown {
+    justify-content: flex-end;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+ }     
+
+ .template-dp-position {
+    position: absolute;
+    right: 5px;
+    z-index: 1;
+    top: 4px;
+ }
+
+ .label-bold {
+     font-weight: 500 !important;
+ }
 
 // ::ng-deep .tooltip {
 //     top: 6px !important;

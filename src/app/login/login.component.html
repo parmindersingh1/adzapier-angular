@@ -55,7 +55,7 @@
                     </div>
                     <div class="text-center">
                       <button [disabled]="loading" class="btn btn-brand-02 btn-block" type="submit">
-                         <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                        <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
                         {{sign_in}} </button>
 
 
@@ -68,12 +68,12 @@
                     Account</a></div>
               </div>
               <!--email verification start-->
-              <div [@slideInOut]="isEmailVerified ? true : false"
-                class="p-5 email-verification-panel"
+              <div [@slideInOut]="isEmailVerified ? true : false" class="p-5 email-verification-panel"
                 [ngClass]="{'hide-emailpanel':isEmailVerified,'show-emailpanel':!isEmailVerified}">
-                <div  class="wd-100p">
-                  <h3 class="tx-color-01 mg-b-5 relative-txt-center"><span  (click)="onToggle()" class="back-arrow">🡠</span>Email Verification</h3>
-                  <p  class="tx-color-05 tx-16 mg-b-40 tx-center">Your email address is not verified</p>
+                <div class="wd-100p">
+                  <h3 class="tx-color-01 mg-b-5 relative-txt-center"><span (click)="onToggle()"
+                      class="back-arrow">🡠</span>Email Verification</h3>
+                  <p class="tx-color-05 tx-16 mg-b-40 tx-center">Your email address is not verified</p>
                 </div>
                 <div class="justify-content-center">
                   <div *ngIf="isMsgConfirm">
@@ -85,19 +85,24 @@
                           stroke-linecap="round" stroke-miterlimit="10" points="100.2,40.2 51.5,88.8 29.8,67.5 " />
                       </svg>
                       <span> Confirmation email sent</span>
-
                     </p>
                     <p>
                       If you do not receive the confirmation message within a few minutes, please check your Spam folder
                       just in case the confirmation email got delivered there instead of your inbox.
                     </p>
                   </div>
-                    <div class="text-center">
-                      <button class="btn btn-lg btn-uppercase btn-brand-02 btn-block" type="button" [disabled]="isVerificationBtnClick"
-                        (click)="resendToken()">
-                        <span *ngIf="isVerificationBtnClick"
-                            class="spinner-border spinner-border-sm mr-1"></span>
-                        Click here to resend</button></div>
+                  <div class="text-center">
+                    <button class="btn btn-lg btn-uppercase btn-brand-02 btn-block" type="button"
+                      *ngIf="!isEmailVerified && !isMsgConfirm" [disabled]="isVerificationBtnClick"
+                      (click)="resendToken()">
+                      <span *ngIf="isVerificationBtnClick" class="spinner-border spinner-border-sm mr-1"></span>
+                      Resend Verification
+                    </button>
+                    <button class="btn btn-lg btn-uppercase btn-brand-02 btn-block" *ngIf="isMsgConfirm" type="button"
+                      (click)="onToggle()">
+                      <span class="h6 mr-3 tx-white">🡠</span> Login
+                    </button>
+                  </div>
                 </div>
               </div>
               <!--email verification end-->
