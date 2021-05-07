@@ -34,7 +34,7 @@
           <code style="color: rgb(116, 116, 116)">//Please copy and paste this code into the header for each page on your website(s). It is important that this code be the first script in your document.  </code>
         </span> <br />
 
-        <span>
+        <!-- <span>
           <code style="color: #8be9fd">{{tagEle.openScript}}</code>
         </span> <br />
 
@@ -50,7 +50,7 @@
 
         <span>
           <code style="color: #8be9fd">{{tagEle.closeScript}}</code>
-        </span> <br />
+        </span> <br /> -->
 
           <span>
             <code style="color: #8be9fd">{{addScript}}</code>
@@ -60,6 +60,56 @@
           <span>
             <code style="color: #8be9fd">{{closeScript}}</code>
           </span> <br />
+          <!-- <span>
+            <code style="color: #8be9fd">{{tagEle.closeHead}}</code>
+          </span> -->
+      </p>
+    </div>
+  </div>
+  <ngx-skeleton-loader *ngIf="loadingSkeleton" count="5"></ngx-skeleton-loader>
+
+  <div class="card mt-3">
+    <div  class="card-header"><h6 style="float: left"><b>Authenticated Consent</b></h6>
+      <button (click)="copyToClipboards()" style="float: right" type="button" class=" pull-right btn-sm btn btn-primary"><i class="mr-1 fa fa-clipboard" aria-hidden="true"></i>
+         {{ isCopied.three ? 'Copied' : 'Copy Script'}}</button>
+    
+    
+    </div>
+    <div *ngIf="!loadingSkeleton" style="background: #282a36" class="card-body">
+      <p  class="text-danger codeText">
+        <!-- <span>
+          <code style="color: #8be9fd">{{tagEle.openHead}}</code>
+        </span> <br /> -->
+        <span>
+          <code style="color: rgb(116, 116, 116)">//To implement authenticated consent on a web page, you can place a cookie on the page and pass the authenticated consent identifier to Adzapier.  </code>
+        </span> <br />
+
+        <span>
+          <code style="color: #8be9fd">{{tagEle.openScript}}</code>
+        </span> <br />
+
+        <span>
+          <code style="color: rgb(116, 116, 116)">// Replace Your AuthId '123123123' </code>
+        </span> <br />
+
+        <span>
+          <code style="color: #fff">document.</code> <code style="color: #ff3f7c">cookie </code>  <code style="color: #ffffff"> = </code>
+           <code style="color: #8be9fd">"</code><code style="color: #f5cea9">authId=123123123</code><code style="color: #8be9fd">"</code>
+           <code style="color: #fff">;</code>
+        </span> <br />
+
+        <span>
+          <code style="color: #8be9fd">{{tagEle.closeScript}}</code>
+        </span> <br />
+
+          <!-- <span>
+            <code style="color: #8be9fd">{{addScript}}</code>
+          </span>
+          <span style="color: #fff; font-size: 16px">//{{scriptUrl}}
+          </span>
+          <span>
+            <code style="color: #8be9fd">{{closeScript}}</code>
+          </span> <br /> -->
           <!-- <span>
             <code style="color: #8be9fd">{{tagEle.closeHead}}</code>
           </span> -->
