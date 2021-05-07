@@ -426,8 +426,7 @@
                         <li *ngFor="let data of emailLog; let k = index;  first as isFirst">
                             <div class="activity-log">
                                 <div class="chat-group-divider">
-                                    <!-- *ngIf="isFirst || data.created_at != emailLog[i+1].created_at"-->
-                                    <!-- <span>{{data.created_at | date:'longDate'}}</span> -->
+                                    
                                     <span
                                         *ngIf=" !k || ( data.created_at | date: 'longDate') !== (emailLog[k-1].created_at | date: 'longDate' ) ">
                                         {{data.created_at | date:'longDate'}}
