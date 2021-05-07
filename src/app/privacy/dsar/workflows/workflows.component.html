@@ -161,7 +161,7 @@
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-link tx-decoration-underline" (click)="onCancelClick()">Cancel</button>
-            <button [disabled]="isSaveClicked" class="btn btn-primary mr-0" type="submit">
+            <button [attr.disabled]="isSaveClicked ? true : null" class="btn btn-primary mr-0" type="submit">
                 <span *ngIf="isSaveClicked" class="spinner-border spinner-border-sm mr-1"></span> Save</button>
         </div>
 

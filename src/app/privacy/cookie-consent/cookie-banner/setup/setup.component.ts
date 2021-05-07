@@ -22,7 +22,8 @@ export class SetupComponent implements OnInit {
   modalRef: BsModalRef;
   isCopied = {
     one: false,
-    two: false
+    two: false,
+    three:false
   };
   currrentManagedPropID: any;
   @ViewChild('template', { static: true}) template: ElementRef;
@@ -93,11 +94,29 @@ export class SetupComponent implements OnInit {
   }
   copyToClipboard() {
     this.isCopied.one = true;
+    const copyText: any = 
+     this.addScript + '//' + this.scriptUrl + this.closeScript;
+    let textarea = null;
+    textarea = document.createElement('textarea');
+    textarea.style.height = '0px';
+    textarea.style.left = '-100px';
+    textarea.style.opacity = '0';
+    textarea.style.position = 'fixed';
+    textarea.style.top = '-100px';
+    textarea.style.width = '0px';
+    document.body.appendChild(textarea);
+    textarea.value = copyText.trim();
+    textarea.select();
+    document.execCommand('copy');
+  }
+
+
+  copyToClipboards() {
+    this.isCopied.three = true;
     const copyText: any = `<script>
     // Replace Your AuthId '123123123'
     document.cookie = "authId=123123123";
-    </script> ` +
-     this.addScript + '//' + this.scriptUrl + this.closeScript;
+    </script> `;
     let textarea = null;
     textarea = document.createElement('textarea');
     textarea.style.height = '0px';
