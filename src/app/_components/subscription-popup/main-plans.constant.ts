@@ -3,7 +3,7 @@ export const mainPlans = {
     free: [
       {
         featureName: 'Monthly Pageviews\n',
-        featureValue: 'Less than 500K\n'
+        featureValue: 'Less than 250K'
       },
       {
         featureName: 'Domain Scan\n',
@@ -25,7 +25,7 @@ export const mainPlans = {
     essentials: [
       {
         featureName: 'Monthly Pageviews\n',
-        featureValue: '1M to 5M\n'
+        featureValue: '250K to 500K'
       },
       {
         featureName: 'Domain Scan\n',
@@ -99,7 +99,7 @@ export const mainPlans = {
     professional: [
       {
         featureName: 'Monthly Pageviews\n',
-        featureValue: '5M to 20M'
+        featureValue: '500K to 1M'
       },
       {
         featureName: 'Domain Scan\n',
@@ -173,7 +173,7 @@ export const mainPlans = {
     enterprise: [
       {
         featureName: 'Monthly Pageviews\n',
-        featureValue: '20M+\n'
+        featureValue: '1M+'
       },
       {
         featureName: 'Domain Scan\n',
@@ -257,7 +257,7 @@ export const mainPlans = {
       },
       {
         featureName: 'Requests\n',
-        featureValue: '250K\n'
+        featureValue: '150K'
       },
       {
         featureName: 'Support Response Time\n',
@@ -275,7 +275,7 @@ export const mainPlans = {
       },
       {
         featureName: 'Requests\n',
-        featureValue: '1M\n'
+        featureValue: '250K'
       },
       {
         featureName: 'Support Response Time\n',
