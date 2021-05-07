@@ -34,7 +34,7 @@ export class PricingComponent implements OnInit, OnDestroy {
   // subscriptionPlanType = 'CCPA';
   subTotal = 0;
   userEmail: any;
-  discountPrice = 0;
+  skeletonLoaderFeature = true;
   currentPlan = {
     amount: null,
     duration: null,
@@ -71,10 +71,13 @@ export class PricingComponent implements OnInit, OnDestroy {
 
   onGetPlanCompareData() {
     this.loading.start('f1');
+    this.skeletonLoaderFeature = true;
     this.billingService.getFeaureData(this.constructor.name, moduleName.manageSubscriptionsModule).subscribe((res: any) => {
+      this.skeletonLoaderFeature = false;
       this.loading.stop('f1');
       this.featuresList = res.response;
     }, error => {
+      this.skeletonLoaderFeature = false;
       this.loading.stop('f1');
     })
   }

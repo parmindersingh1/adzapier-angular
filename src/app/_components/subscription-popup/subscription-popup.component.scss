@@ -1,3 +1,4 @@
+
 .btn-default{
   background: #fff;
   border: 1px solid lightgray;
@@ -7,8 +8,9 @@
   background: #fff;
 }
 .price-text {
-  font-size: 45px;
-  line-height: 1px;
+  font-size: 35px;
+  margin-top: 5px;
+  margin-bottom: 5px !important;
 }
 .billing-type{
   //font-size: 16px;
@@ -23,6 +25,7 @@
   border-radius: 7px;
 }
 .popular-text {
+  margin-top: -2px;
   margin-left: -20px;
   height: 35px;
   margin-right: -20px;
@@ -32,7 +35,7 @@
   font-size: 13px;
 }
 .text-head{
-  //margin-bottom: 50px;
+  margin-bottom: 50px;
 }
 .text-head h1{
   font-size: 44px;
@@ -52,8 +55,8 @@
 .add-to-cart-btn {
   font-size: 16px;
   font-weight: 600;
-  padding-top: 12px;
-  padding-bottom: 12px;
+  padding-top: 8px;
+  padding-bottom: 8px;
 }
 .plan-type {
   font-size: 28px;
@@ -92,18 +95,18 @@ ul {
   border-radius: 6px;
   border-top: 3px solid #3968fa;
 }
-li {
-  padding: 6px;
-  cursor: pointer;
-  text-transform: capitalize;
-  padding-top: 12px;
-  padding-bottom: 10px;
-  text-align: center;
-}
-li:hover {
-  background: #007bff;
-  color: #fff;
-}
+//li {
+//  padding: 6px;
+//  cursor: pointer;
+//  text-transform: capitalize;
+//  padding-top: 12px;
+//  padding-bottom: 10px;
+//  text-align: center;
+//}
+//li:hover {
+//  background: #007bff;
+//  color: #fff;
+//}
 .solution {
   margin-bottom: 8px;
   margin-top: 25px;
@@ -192,8 +195,8 @@ input[type="checkbox"] {
 #button {
   position: relative;
   display: block;
-  width: 375px;
-  height: 105px;
+  width: 290px;
+  height: 71px;
   background-color: #fff;
   cursor: pointer;
   transform: scale(0.4);
@@ -203,13 +206,14 @@ input[type="checkbox"] {
 }
 
 #knob {
-  width: 167px;
-  height: 83px;
+  width: 130px;
+  height: 59px;
   background: #3968fa;
+  background-size: auto;
   background-size: 700px;
   position: relative;
-  top: 10px;
-  left: 11px;
+  top: 5px;
+  left: 7px;
   border-radius: 290px;
   transition: 0.4s ease left, 0.4s ease background-position;
   z-index: 2;
@@ -221,10 +225,10 @@ input[type="checkbox"] {
   top: 50%;
   transform: translateY(-50%);
   color: gray;
-  font-size: 35px;
+  font-size: 27px;
   font-weight: bold;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  margin-left: 231px;
+  margin-left: 173px;
   z-index: 1;
 }
 
@@ -233,14 +237,19 @@ input[type="checkbox"] {
 }
 
 #lol-checkbox:checked + #button #knob {
-  left: 180px;
+  left: 150px;
   background-position: -150px 0;
 }
 .cycle-type{
   height: 65px;
-  margin-top: -75px;
+  margin-top: -26px;
+  margin-left: -86px;
+  width: 200px;
 }
-
+.cancel-btn{
+  font-weight: bold;
+  cursor: pointer;
+}
 
 .alert-info {
   color: #0c5460;
@@ -296,6 +305,25 @@ input[type="checkbox"] {
   float: right;
   padding-top: 3px;
 }
-.text-feature-left {
-  text-align: left;
+
+.feature-list-group {
+  height: 205px;
+}
+.feature-list-group-dsar {
+  height: 104px;
+}
+.feature-list {
+  padding-top: 5px;
+  padding-bottom: 0px;
+  font-size: 11px;
+}
+.prod-name{
+  height: 35px;
+}
+.more-text{
+  font-size: 12px;
+  font-weight: 600;
+}
+.text-color-nr {
+  color:#333 !important;
 }
