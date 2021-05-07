@@ -1,18 +1,3 @@
-<!--<div  class="d-sm-flex align-items-center justify-content-between ">-->
-
-  <!--    <button id="toggleplan" class="btn btn-primary">Paid/Free</button>-->
-<!--</div>-->
-<!--<div class="row">-->
-<!--  <div class="col-md-7"></div>-->
-<!--  <div class="col-md-5">-->
-<!--    <span class="mr-2"> Yearly Type </span>-->
-<!--    <label class="switch">-->
-<!--      <input #subType (change)="onSelectBillingCycle(subType)" type="checkbox">-->
-<!--      <span class="slider round"></span>-->
-<!--    </label>-->
-<!--  </div>-->
-<!--</div>-->
-
 
   <div class=" ht-100p tx-center">
     <div class="row justify-content-center">
@@ -72,6 +57,36 @@
               <p class="text-success">A PLAN FOR EVERY BUSINESS</p>
             </div>
 
+
+          <div class="container row table-responsive mg-t-30 ">
+            <h4 class="mg-b-10 align-baseline">Feature comparison</h4>
+            <table class="table ">
+              <tbody>
+              <tr>
+                <th scope="row"></th>
+                <td><div class="rounded-10 pd-y-10 pd-x-20 bg-ui-01">Free</div></td>
+                <td><div class="rounded-10 pd-y-10 pd-x-20 bg-ui-01">Essentials</div></td>
+                <td><div class="rounded-10 pd-y-10 pd-x-20 bg-ui-01">Professional</div></td>
+                <td><div class="rounded-10 pd-y-10 pd-x-20 bg-ui-01">Enterprise</div></td>
+              </tr>
+
+              <tr *ngFor="let feature of featuresList">
+                <th scope="row text-feature-left" style="text-align: left">{{feature.feature}}</th>
+                <td><svg *ngIf="feature.free" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-square tx-primary"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg></td>
+                <td><svg  *ngIf="feature.essentials" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-square tx-primary"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg></td>
+                <td><svg *ngIf="feature.professional" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-square tx-primary"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg></td>
+                <td><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-square tx-primary"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg></td>
+              </tr>
+
+
+              </tbody>
+            </table>
+
+            <div *ngIf="skeletonLoaderFeature" class=" loader  ">
+                <ngx-skeleton-loader count="10" class="pt-4"></ngx-skeleton-loader>
+            </div>
+          </div>
+
         <div class="col-md-12 cycle-type">
           <input (change)="onSelectBillingCycle(subType)" [disabled]="activeData.base.cycle === 'yearly'"  #subType type="checkbox" id="lol-checkbox">
 
@@ -95,7 +110,8 @@
               <span class="font-weight-bold">{{plan.price}}</span>
               <span class="billing-type">/{{billingCycle}}</span>
             </h1>
-            <p class="tx-size-10 mg-b-30 mt-2 ">Billed {{billingCycle}} </p>
+            <p class="tx-size-10  mt-2 ">Billed {{billingCycle}} </p>
+            <p class="tx-size-10  mg-b-30  text-info tx-bold" *ngIf="billingCycle === 'yearly'"> 1 Month Free*</p>
             <div class="form-group row mb-2 ">
               <label class="property-type col-md-6" for="sel1">Property</label>
               <select #planUnit style="height: 32px;" class="mb-2 col-md-5 form-control" id="sel1">
@@ -112,16 +128,16 @@
               </select>
             </div>
 
-            <button (click)="onAddToCart(plan, planUnit)"  class="btn mt-4 mb-4 add-to-cart-btn btn-primary btn-block">
-              Add To Cart
-            </button>
-<!--            <button *ngIf="plan.price !=  activeData.base.maxPrice" [disabled]="plan.price <=  activeData.base.maxPrice" (click)="onAddToCart(plan, planUnit)"  class="btn mt-4 mb-4 add-to-cart-btn btn-primary btn-block">-->
+<!--            <button (click)="onAddToCart(plan, planUnit)"  class="btn mt-4 mb-4 add-to-cart-btn btn-primary btn-block">-->
 <!--              Add To Cart-->
 <!--            </button>-->
+            <button *ngIf="plan.price !=  activeData.base.maxPrice" [disabled]="plan.price <=  activeData.base.maxPrice" (click)="onAddToCart(plan, planUnit)"  class="btn mt-4 mb-4 add-to-cart-btn btn-primary btn-block">
+              Add To Cart
+            </button>
 
-<!--            <button  *ngIf="plan.price ==  activeData.base.maxPrice"  (click)="onGenerateSessionID()" class="btn mt-4 mb-4 add-to-cart-btn btn-primary btn-block">-->
-<!--              Manage Plan-->
-<!--            </button>-->
+            <button  *ngIf="plan.price ==  activeData.base.maxPrice"  (click)="onGenerateSessionID()" class="btn mt-4 mb-4 add-to-cart-btn btn-primary btn-block">
+              Manage Plan
+            </button>
 
 
           </div><!-- col -->
@@ -218,29 +234,7 @@
         </div>
       </div>
 
-        <div class="container row table-responsive mg-t-30 ">
-          <h4 class="mg-b-10 align-baseline">Feature comparison</h4>
-          <table class="table ">
-            <tbody>
-            <tr>
-              <th scope="row"></th>
-              <td><div class="rounded-10 pd-y-10 pd-x-20 bg-ui-01">Free</div></td>
-              <td><div class="rounded-10 pd-y-10 pd-x-20 bg-ui-01">Essentials</div></td>
-              <td><div class="rounded-10 pd-y-10 pd-x-20 bg-ui-01">Professional</div></td>
-              <td><div class="rounded-10 pd-y-10 pd-x-20 bg-ui-01">Enterprise</div></td>
-            </tr>
 
-            <tr *ngFor="let feature of featuresList">
-              <th scope="row text-feature-left" style="text-align: left">{{feature.feature}}</th>
-              <td><svg *ngIf="feature.free" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-square tx-primary"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg></td>
-              <td><svg  *ngIf="feature.essentials" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-square tx-primary"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg></td>
-              <td><svg *ngIf="feature.professional" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-square tx-primary"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg></td>
-              <td><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-square tx-primary"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg></td>
-            </tr>
-
-            </tbody>
-          </table>
-        </div>
 
 
       </div>

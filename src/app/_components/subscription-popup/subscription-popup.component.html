@@ -1,0 +1,306 @@
+
+<!--[config]="{backdrop: 'static'}" -->
+<div bsModal #template="bs-modal" class="modal fade" style="  z-index: 9999999" tabindex="-1"
+     role="dialog" aria-labelledby="dialog-sizes-name1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+
+      <div *ngIf="type ===  'cookieConsent' " class="modal-body">
+        <div class="text-center">
+          <h3 class="font-weight-bold">Cookie Consent Management </h3>
+          <p>Upgrade your plan to access this feature</p>
+        </div>
+
+        <div class="plan-body">
+          <div class="col-md-12 cycle-type">
+            <input (change)="onSelectBillingCycle(subType)" #subType type="checkbox" id="lol-checkbox">
+            <label id="button" for="lol-checkbox">
+              <div id="knob"></div>
+              <div id="subscribe">Yearly</div>
+              <div id="alright">Monthly</div>
+            </label>
+          </div>
+          <div class="row ml-2 mr-2">
+            <div *ngFor="let plan of cookieConsentPlans"
+                 class=" mt-2 col ml-2 d-flex bg-white-col bt-card flex-column bd pt-0 mr-2  pd-20 pb-0 ">
+              <h4 class="text-center popular-text"
+                  [ngStyle]="{background: plan.price ==  currentPlanData.price ? '#3968fa' : null}">
+                <ng-container *ngIf="plan.price ==  currentPlanData.price">CURRENT PLAN</ng-container>
+              </h4>
+              <h3 [ngStyle]="{color: plan.price <=  currentPlanData.price && plan.price !== -1  ? '#999' : ''}"
+                  class="mt-1 plan-type">{{plan.name}}</h3>
+              <p [ngStyle]="{color: plan.price <=  currentPlanData.price ? '#999' : ''}"
+                 class="tx-color-03 tx-12 mb-0 prod-name">{{plan.product_name}}</p>
+
+              <ul [ngStyle]="{height: showFeatureCount === 25 ? '515px' : '205px'}">
+                <ng-container *ngIf="plan.name === 'Free'">
+                  <li class="text-left feature-list" *ngFor="let  features of mainFeatures.cookieConsent.free">{{features.featureName}}
+                    <span class="font-weight-bold" *ngIf="features.featureValue"> - {{features.featureValue}}</span></li>
+                </ng-container>
+                <ng-container *ngIf="plan.name === 'Essentials'">
+                  <li class="text-left feature-list" *ngFor="let  features of mainFeatures.cookieConsent.essentials  | slice : 0: showFeatureCount">{{features.featureName}} <span class="font-weight-bold" *ngIf="features.featureValue"> - {{features.featureValue}}</span></li>
+                </ng-container>
+                <ng-container *ngIf="plan.name === 'Professional'">
+                  <li class="text-left feature-list" *ngFor="let  features of mainFeatures.cookieConsent.professional | slice : 0: showFeatureCount">{{features.featureName}} <span class="font-weight-bold" *ngIf="features.featureValue"> - {{features.featureValue}}</span></li>
+                </ng-container>
+                <ng-container *ngIf="plan.name === 'Enterprise'">
+                  <li class="text-left feature-list" *ngFor="let  features of mainFeatures.cookieConsent.enterprise | slice : 0: showFeatureCount">{{features.featureName}} <span class="font-weight-bold" *ngIf="features.featureValue"> - {{features.featureValue}}</span></li>
+                </ng-container>
+                <a *ngIf="plan.name !== 'Free' && showFeatureCount !== 25" (click)="showFeatureCount = 25" class="more-text" href="javascript:;">More ...</a>
+                <a *ngIf="plan.name !== 'Free'  && showFeatureCount === 25" (click)="showFeatureCount = 6" class="more-text" href="javascript:;">Hide ...</a>
+              </ul>
+
+
+              <h1 *ngIf="plan.price !== -1" class="tx-rubik tx-normal mb-3 mg-t-auto price-text">
+                <sup [ngStyle]="{color: plan.price <=  currentPlanData.price ? '#999' : ''}" class="doller">$</sup>
+                <span [ngStyle]="{color: plan.price <=  currentPlanData.price ? '#999' : ''}"
+                      class="font-weight-bold">{{plan.price}}</span>
+              </h1>
+              <button (click)="onNavigate()" [ngStyle]="{marginTop: plan.price == -1 ? '58px' : '0.25rem'}"  [disabled]="plan.price <=  currentPlanData.price && plan.price !== -1"
+                      class="btn mb-2 add-to-cart-btn btn-primary btn-block">
+                Choose Plan
+              </button>
+
+            </div><!-- col -->
+          </div>
+
+          <div class="text-center">
+            <a routerLink="/settings/billing/manage" (click)="template.hide()" class="btn mt-3 btn-primary"> <i
+              _aria-hidden="true" class="fa fa-cogs pr-1"></i> Manage License</a>
+            <p class="cancel-btn mt-2 mb-2" (click)="template.hide()">or Cancel & Go Back</p>
+          </div>
+        </div>
+
+      </div>
+
+      <div *ngIf="type ===  'org' " class="modal-body">
+        <div class="text-center">
+          <h4 class="font-weight-bold">Data Subject Assess Request (DSAR)</h4>
+          <p >Upgrade your plan to access this feature</p>
+          <p class="text-info" *ngIf="msg">{{msg}}</p>
+        </div>
+
+        <div class="plan-body">
+          <div class="col-md-12 cycle-type">
+            <input (change)="onSelectBillingCycle(subType)" #subType type="checkbox" id="lol-checkbox">
+
+            <label id="button" for="lol-checkbox">
+              <div id="knob"></div>
+              <div id="subscribe">Yearly</div>
+              <div id="alright">Monthly</div>
+            </label>
+          </div>
+          <div class="row ml-2 mr-2">
+<!--            <div *ngFor="let plan of dsarPlans"-->
+<!--                 class=" mt-2 col ml-2 d-flex bg-white-col bt-card flex-column bd pt-0 mr-2  pd-20 ">-->
+<!--              <div class="pl-3 pr-3" *ngIf="existingOrgPlan.stripe_plan_id !== null"-->
+<!--                   [ngClass]="{'highlight-activeplan' : plan.id === existingOrgPlan.stripe_plan_id}">-->
+<!--                <h4 class="text-center popular-text"-->
+<!--                    [ngStyle]="{background: plan.price ==  currentPlanData.price ? '#3968fa' : null}">-->
+<!--                  <ng-container *ngIf="plan.price ==  currentPlanData.price">CURRENT PLAN</ng-container>-->
+<!--                </h4>-->
+<!--                <h3 [ngStyle]="{color: plan.price <=  currentPlanData.price && plan.price !== -1 ? '#999' : ''}"-->
+<!--                    class="mt-4 plan-type">{{plan.name}}</h3>-->
+<!--                <p [ngStyle]="{color: plan.price <=  currentPlanData.price ? '#999' : ''}"-->
+<!--                   class="tx-color-03 " [ngStyle]="{'margin-bottom': plan.price === -1 ? '40px' : '50px'}"-->
+<!--                   [ngClass]="{'mg-b-50' : plan.price !== -1, 'mg-b-40' : plan.price === -1}">{{plan.product_name}}</p>-->
+<!--                <h1 *ngIf="plan.price !== -1" class="tx-rubik tx-normal mb-3 mg-t-auto price-text">-->
+<!--                  <sup [ngStyle]="{color: plan.price <=  currentPlanData.price ? '#999' : ''}" class="doller">$</sup>-->
+<!--                  <span [ngStyle]="{color: plan.price <=  currentPlanData.price ? '#999' : ''}"-->
+<!--                        class="font-weight-bold">{{plan.price}}</span>-->
+<!--                </h1>-->
+<!--                <button (click)="onNavigate()" *ngIf="plan.id !== existingOrgPlan.stripe_plan_id && plan.price !== -1"-->
+<!--                        [disabled]="plan.price <=  currentPlanData.price"-->
+<!--                        class="btn mt-4 mb-4 add-to-cart-btn btn-primary btn-block">-->
+<!--                  Choose Plan-->
+<!--                </button>-->
+<!--                <button (click)="onNavigate()" *ngIf="plan.price === -1"-->
+<!--                        class="btn mt-0 mb-4 add-to-cart-btn btn-primary btn-block">-->
+<!--                  Choose Plan-->
+<!--                </button>-->
+<!--                <h4 class="current-activeplan tx-primary" *ngIf="plan.id === existingOrgPlan.stripe_plan_id">-->
+<!--                  Current active plan-->
+<!--                </h4>-->
+<!--              </div>-->
+<!--            </div>&lt;!&ndash; col &ndash;&gt;-->
+
+
+
+
+
+            <div *ngFor="let plan of dsarPlans"
+                 class=" mt-2 col ml-2 d-flex bg-white-col bt-card flex-column bd pt-0 mr-2  pd-20 pb-0 ">
+              <h4 class="text-center popular-text"
+                  [ngStyle]="{background: plan.price ==  currentPlanData.price ? '#3968fa' : null}">
+                <ng-container *ngIf="plan.price ==  currentPlanData.price">CURRENT PLAN</ng-container>
+              </h4>
+              <h3 [ngStyle]="{color: plan.price <=  currentPlanData.price && plan.price !== -1  ? '#999' : ''}"
+                  class="mt-1 plan-type">{{plan.name}}</h3>
+              <p [ngStyle]="{color: plan.price <=  currentPlanData.price ? '#999' : ''}"
+                 class="tx-color-03 tx-12 mb-0 prod-name">{{plan.product_name}}</p>
+
+              <ul class="feature-list-group-dsar">
+                <ng-container *ngIf="plan.name === 'Essentials'">
+                  <li class="text-left feature-list" *ngFor="let  features of mainFeatures.dsar.essentials">{{features.featureName}} <span class="font-weight-bold" *ngIf="features.featureValue"> - {{features.featureValue}}</span></li>
+                </ng-container>
+                <ng-container *ngIf="plan.name === 'Professional'">
+                  <li class="text-left feature-list" *ngFor="let  features of mainFeatures.dsar.professional">{{features.featureName}} <span class="font-weight-bold" *ngIf="features.featureValue"> - {{features.featureValue}}</span></li>
+                </ng-container>
+                <ng-container *ngIf="plan.name === 'Enterprise'">
+                  <li class="text-left feature-list" *ngFor="let  features of mainFeatures.dsar.enterprise">{{features.featureName}} <span class="font-weight-bold" *ngIf="features.featureValue"> - {{features.featureValue}}</span></li>
+                </ng-container>
+<!--                <a *ngIf="plan.name !== 'Free'" class="more-text" routerLink="/settings/billing/manage">More ...</a>-->
+              </ul>
+
+
+              <h3 *ngIf="plan.price !== -1" class="tx-rubik tx-normal mb-3 mg-t-auto price-text">
+                <sup [ngStyle]="{color: plan.price <=  currentPlanData.price ? '#999' : ''}" class="doller">$</sup>
+                <span [ngStyle]="{color: plan.price <=  currentPlanData.price ? '#999' : ''}"
+                      class="font-weight-bold">{{plan.price}}</span>
+              </h3>
+              <button (click)="onNavigate()" [ngStyle]="{marginTop: plan.price == -1 ? '58px' : '0.25rem'}"  [disabled]="plan.price <=  currentPlanData.price && plan.price !== -1"
+                      class="btn mb-2 add-to-cart-btn btn-primary btn-block">
+                Choose Plan
+              </button>
+
+            </div><!-- col -->
+
+
+
+
+          </div>
+
+          <div class="text-center">
+            <a routerLink="/settings/billing/manage" (click)="template.hide()" class="btn mt-3 btn-primary"> <i
+              _aria-hidden="true" class="fa fa-cogs pr-1"></i> Manage License</a>
+            <p class="cancel-btn mt-2 mb-2" (click)="template.hide()">or Cancel & Go Back</p>
+          </div>
+        </div>
+
+      </div>
+
+
+      <div *ngIf="type !==  'cookieConsent' && type !==  'org' " class="modal-body">
+        <div class="text-center">
+          <ng-container *ngIf="noPlanType == 'cookieConsent' && isUserSubscribe">
+            <h3 class="font-weight-bold">Cookie Consent Management </h3>
+            <h5> You haven't assigned a license to this property </h5></ng-container>
+          <ng-container *ngIf="noPlanType == 'org' && isUserSubscribe">
+            <h3 class="font-weight-bold">Data Subject Assess Request (DSAR) </h3>
+            <h5>You haven't assigned a license to this Organization</h5>
+          </ng-container>
+          <h4 *ngIf="noPlanType == 'company' && isUserSubscribe">You can not add more users, Please Upgrade your existing plan </h4>
+          <ng-container class="mb-4" *ngIf="!isUserSubscribe">
+            <h3 class="font-weight-bold" *ngIf="noPlanType == 'cookieConsent'">Cookie Consent Management </h3>
+            <h3 class="font-weight-bold" *ngIf="noPlanType == 'org'">Data Subject Assess Request (DSAR) </h3>
+            <h5> You don't have an active plan, please choose a new plan below </h5>
+          </ng-container>
+        </div>
+
+
+        <div class="plan-body" *ngIf="noPlanType == 'cookieConsent' && !isUserSubscribe">
+          <div class="col-md-12 cycle-type">
+            <input (change)="onSelectBillingCycle(subType)" #subType type="checkbox" id="lol-checkbox">
+            <label id="button" for="lol-checkbox">
+              <div id="knob"></div>
+              <div id="subscribe">Yearly</div>
+              <div id="alright">Monthly</div>
+            </label>
+          </div>
+          <div class="row ml-2 mr-2">
+            <div *ngFor="let plan of cookieConsentPlans"
+                 class=" mt-2 col ml-2 d-flex bg-white-col bt-card flex-column bd pt-0 mr-2  pd-20 pb-0 ">
+              <h4 class="text-center popular-text">
+              </h4>
+              <h3 [ngStyle]="{color: plan.price !== -1  ? '#999' : ''}"
+                  class="mt-1 text-color-nr plan-type">{{plan.name}}</h3>
+              <p  class="tx-color-03 text-color-nr text-color-nr tx-12 mb-0 prod-name">{{plan.product_name}}</p>
+
+              <ul [ngStyle]="{height: showFeatureCount === 25 ? '515px' : '205px'}">
+                <ng-container *ngIf="plan.name === 'Free'">
+                  <li class="text-left feature-list" *ngFor="let  features of mainFeatures.cookieConsent.free">{{features.featureName}}
+                    <span class="font-weight-bold" *ngIf="features.featureValue"> - {{features.featureValue}}</span></li>
+                </ng-container>
+                <ng-container *ngIf="plan.name === 'Essentials'">
+                  <li class="text-left feature-list" *ngFor="let  features of mainFeatures.cookieConsent.essentials | slice : 0: showFeatureCount">{{features.featureName}} <span class="font-weight-bold" *ngIf="features.featureValue"> - {{features.featureValue}}</span></li>
+                </ng-container>
+                <ng-container *ngIf="plan.name === 'Professional'">
+                  <li class="text-left feature-list" *ngFor="let  features of mainFeatures.cookieConsent.professional | slice : 0: showFeatureCount">{{features.featureName}} <span class="font-weight-bold" *ngIf="features.featureValue"> - {{features.featureValue}}</span></li>
+                </ng-container>
+                <ng-container *ngIf="plan.name === 'Enterprise'">
+                  <li class="text-left feature-list" *ngFor="let  features of mainFeatures.cookieConsent.enterprise | slice : 0: showFeatureCount">{{features.featureName}} <span class="font-weight-bold" *ngIf="features.featureValue"> - {{features.featureValue}}</span></li>
+                </ng-container>
+                <a *ngIf="plan.name !== 'Free' && showFeatureCount !== 25" (click)="showFeatureCount = 25" class="more-text" href="javascript:;">More ...</a>
+                <a *ngIf="plan.name !== 'Free'  && showFeatureCount === 25" (click)="showFeatureCount = 6" class="more-text" href="javascript:;">Hide ...</a>              </ul>
+
+
+              <h1 *ngIf="plan.price !== -1" class="text-color-nr tx-rubik tx-normal mb-3 mg-t-auto price-text">
+                <sup class="doller">$</sup>
+                <span class="font-weight-bold">{{plan.price}}</span>
+              </h1>
+              <button (click)="onNavigate()" [ngStyle]="{marginTop: plan.price == -1 ? '55px' : '0.25rem'}"
+                      class="btn mb-2 add-to-cart-btn btn-primary btn-block">
+                Choose Plan
+              </button>
+
+            </div><!-- col -->
+          </div>
+        </div>
+
+
+
+
+
+
+
+        <div class="plan-body" *ngIf="noPlanType == 'org' && !isUserSubscribe">
+          <div class="col-md-12 cycle-type">
+            <input (change)="onSelectBillingCycle(subType)" #subType type="checkbox" id="lol-checkbox">
+
+            <label id="button" for="lol-checkbox">
+              <div id="knob"></div>
+              <div id="subscribe">Yearly</div>
+              <div id="alright">Monthly</div>
+            </label>
+          </div>
+          <div class="row ml-2 mr-2">
+            <div *ngFor="let plan of dsarPlans"
+                 class=" mt-2 col ml-2 d-flex bg-white-col bt-card flex-column bd pt-0 mr-2  pd-20 pb-0 ">
+              <h4 class="text-center popular-text">
+              </h4>
+              <h3 class="mt-1 plan-type text-color-nr">{{plan.name}}</h3>
+              <p class="tx-color-03 text-color-nr tx-12 mb-0 prod-name">{{plan.product_name}}</p>
+              <ul class="feature-list-group-dsar">
+                <ng-container *ngIf="plan.name === 'Essentials'">
+                  <li class="text-left feature-list" *ngFor="let  features of mainFeatures.dsar.essentials">{{features.featureName}} <span class="font-weight-bold" *ngIf="features.featureValue"> - {{features.featureValue}}</span></li>
+                </ng-container>
+                <ng-container *ngIf="plan.name === 'Professional'">
+                  <li class="text-left feature-list" *ngFor="let  features of mainFeatures.dsar.professional">{{features.featureName}} <span class="font-weight-bold" *ngIf="features.featureValue"> - {{features.featureValue}}</span></li>
+                </ng-container>
+                <ng-container *ngIf="plan.name === 'Enterprise'">
+                  <li class="text-left feature-list" *ngFor="let  features of mainFeatures.dsar.enterprise">{{features.featureName}} <span class="font-weight-bold" *ngIf="features.featureValue"> - {{features.featureValue}}</span></li>
+                </ng-container>
+              </ul>
+
+
+              <h3 *ngIf="plan.price !== -1" class="tx-rubik tx-normal mb-3 mg-t-auto price-text">
+                <sup  class="doller">$</sup>
+                <span class="font-weight-bold">{{plan.price}}</span>
+              </h3>
+              <button (click)="onNavigate()" [ngStyle]="{marginTop: plan.price == -1 ? '58px' : '0.25rem'}"
+                      class="btn mb-2 add-to-cart-btn btn-primary btn-block">
+                Choose Plan
+              </button>
+
+            </div><!-- col -->
+          </div>
+      </div>
+        <div class="text-center">
+          <a routerLink="/settings/billing/manage" (click)="template.hide()" class="btn mt-3 btn-primary"> <i
+            _aria-hidden="true" class="fa fa-cogs pr-1"></i> Manage License</a>
+          <p class="cancel-btn mt-2 mb-2" (click)="template.hide()">or Cancel & Go Back</p>
+        </div>
+
+    </div>
+  </div>
+</div>
