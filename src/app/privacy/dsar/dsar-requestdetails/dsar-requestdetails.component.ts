@@ -205,6 +205,9 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
   reasonList: any = [];
   rightArrowStatus = false;
   isRequestCompleted = false;
+  customFieldObj = [];
+  firstName:string;
+  currentSelectedOrgname: string;
   constructor(private activatedRoute: ActivatedRoute,
               private router: Router,
               private orgService: OrganizationService,
@@ -318,11 +321,13 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
         this.currentManagedOrgID = response.organization_id;
         this.currrentManagedPropID = response.property_id;
         this.currentPropertyName = response.property_name;
+        this.currentSelectedOrgname = response.organization_name;
       } else {
         const orgDetails = this.orgService.getCurrentOrgWithProperty();
         this.currentManagedOrgID = orgDetails.organization_id;
         this.currrentManagedPropID = orgDetails.property_id;
         this.currentPropertyName = orgDetails.property_name;
+        this.currentSelectedOrgname = orgDetails.organization_name;
       }
     }, (error) => {
       this.alertMsg = error;
@@ -382,6 +387,7 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
         this.skeletonCustomLoading = false;
         this.getCustomFields(this.customFields);
         this.getWorkflowStages(this.workflowId);
+        this.showCustomFieldValues();
         //        this.selectStageOnPageLoad(this.currentWorkflowStageID);
 
         this.editRequestDetailForm.controls['country'].setValue(this.respCountry);
@@ -487,18 +493,17 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
 
   getCustomFields(data: any) {
 
-    let updatedObj = [];
     if (data !== undefined) {
       // tslint:disable-next-line: forin
       for (const k in data) {
         let value = data[k];
         let key = k.replace('_', ' ');
         let updatedKey = this.capitalizeFirstLetter(key);
-        updatedObj[updatedKey] = value;
+        this.customFieldObj[updatedKey] = value;
       }
 
     }
-    return updatedObj;
+    return this.customFieldObj;
   }
 
 
@@ -878,9 +883,24 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
   }
 
   onChangeRequestType(event) {
-    //  const dropdownEmailTemplate = event.target.value;
-    // this.selectedTemplate = event.target.value;
-    this.quillEditorEmailText.controls['editorEmailMessage'].setValue(event.target.value);
+    let convertedString = this.checkHtmlText(event.target.value); //this.checkForCompanyOrConsumeName(str);
+    let removedBrackets = convertedString.replace(/\[/g, '').replace(/]/g, '');
+    this.quillEditorEmailText.controls['editorEmailMessage'].setValue(removedBrackets);
+  }
+
+  checkHtmlText(str){
+    const mapObj = {
+      "Data Subject Name":this.firstName,
+      "Consumer Name":this.firstName,
+      "Company name":this.currentSelectedOrgname,
+      "Company name privacy team":this.currentSelectedOrgname,
+      "Company Name":this.currentSelectedOrgname   
+   };
+    var re = new RegExp(Object.keys(mapObj).join("|"),"gi");
+    str = str.replace(re, function(matched){
+      return mapObj[matched];
+    });
+    return str;
   }
 
   onChangeReason(event) {
@@ -1690,6 +1710,21 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
 
   isWorkflowStageCompleted(): boolean {
     return this.selectedStages.length === this.workflowStages.length;
+  }
+
+  showCustomFieldValues(){
+    let fname; 
+    let lname;
+    if(this.customFieldObj !== undefined){
+      for(const key in this.customFieldObj){
+        if(key == 'First name'){
+          fname = this.customFieldObj[key];
+        } else if(key == 'Last name'){
+          lname = this.customFieldObj[key]
+          this.firstName = fname + ' ' + lname;
+        }
+      }
+    }
   }
 
   ngAfterViewChecked() {
