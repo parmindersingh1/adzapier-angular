@@ -43,9 +43,9 @@
       <thead>
       <tr>
         <th>Organization Name</th>
-        <th>Created webforms</th>
-        <th>Created workflows</th>
-        <th>Created requests</th>
+        <th>Created Webforms</th>
+        <th>Created Workflows</th>
+        <th>Created Requests</th>
         <th>Email</th>
         <th>Action</th>
       </tr>
@@ -83,7 +83,7 @@
         <td>{{obj.email }}</td>
         <!-- <td> {{obj.city+ ', ' + obj.state + ', ' + obj.zipcode}} </td> -->
       <td>
-          <button class="btn btn-sm btn-outline-secondary btn-uppercase nohover border-0" (click)="delOrgID = obj.id; openModal(delConfirm)">
+          <button class="btn btn-sm btn-outline-secondary tx-danger btn-uppercase nohover border-0" (click)="delOrgID = obj.id; openModal(delConfirm)">
             <i-feather name="trash-2" class="commom-feathericon-height"></i-feather></button>
         </td>
 
