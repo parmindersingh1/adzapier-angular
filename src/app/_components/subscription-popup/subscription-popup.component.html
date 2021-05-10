@@ -75,7 +75,7 @@
 
       <div *ngIf="type ===  'org' " class="modal-body">
         <div class="text-center">
-          <h4 class="font-weight-bold">Data Subject Assess Request (DSAR)</h4>
+          <h4 class="font-weight-bold">Data Subject Access Request (DSAR)</h4>
           <p >Upgrade your plan to access this feature</p>
 <!--          <p class="text-info" *ngIf="msg">{{msg}}</p>-->
         </div>
@@ -186,13 +186,13 @@
             <h3 class="font-weight-bold">Cookie Consent Management </h3>
             <h5> You haven't assigned a license to this property </h5></ng-container>
           <ng-container *ngIf="noPlanType == 'org' && isUserSubscribe">
-            <h3 class="font-weight-bold">Data Subject Assess Request (DSAR) </h3>
+            <h3 class="font-weight-bold">Data Subject Access Request (DSAR) </h3>
             <h5>You haven't assigned a license to this Organization</h5>
           </ng-container>
           <h4 *ngIf="noPlanType == 'company' && isUserSubscribe">You can not add more users, Please Upgrade your existing plan </h4>
           <ng-container class="mb-4" *ngIf="!isUserSubscribe">
             <h3 class="font-weight-bold" *ngIf="noPlanType == 'cookieConsent'">Cookie Consent Management </h3>
-            <h3 class="font-weight-bold" *ngIf="noPlanType == 'org'">Data Subject Assess Request (DSAR) </h3>
+            <h3 class="font-weight-bold" *ngIf="noPlanType == 'org'">Data Subject Access Request (DSAR) </h3>
             <h5> You don't have an active plan, please choose a new plan below </h5>
           </ng-container>
         </div>

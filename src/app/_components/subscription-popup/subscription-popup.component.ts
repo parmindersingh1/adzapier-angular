@@ -60,13 +60,11 @@ export class SubscriptionPopupComponent implements OnInit {
       if (res.status === 200) {
         const result = res.response;
         for (const obj of result) {
-          console.log('obj.active', obj.active)
           if (obj.active) {
             this.isUserSubscribe = true;
           }
         }
       }
-      console.log('obj.isUserSubscribe', this.isUserSubscribe)
     });
   }
 
