@@ -46,8 +46,8 @@ export class PricingComponent implements OnInit, OnDestroy {
   alertType: any;
   percentOff = 0;
   promoCode: any;
- activeData = { base: {maxPrice : 0, maxPlanID: '', cycle: 'monthly'},
- addons: {maxPrice : 0, maxPlanID: '', cycle: 'monthly'}
+ activeData = { base: {maxPrice : -1, maxPlanID: '', cycle: 'monthly'},
+ addons: {maxPrice : -1, maxPlanID: '', cycle: 'monthly'}
 };
  featuresList = [];
  isPromoCodeActive = false;
