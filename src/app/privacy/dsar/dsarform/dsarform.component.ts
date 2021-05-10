@@ -1695,10 +1695,10 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
     }
 
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
-      this.quillEditorText.reset();
+     // this.quillEditorText.reset();
       // this.closeResult = `Closed with: ${result}`;
     }, (reason) => {
-      this.quillEditorText.reset();
+     // this.quillEditorText.reset();
       // this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
   }
