@@ -9,7 +9,7 @@
         <i-feather name="menu" *ngIf="close" class="feather-16"></i-feather>
         <i-feather name="plus" *ngIf="!close" class="feather-16 menuplus-icon"></i-feather>
       </button>
-      <a href="/home/dashboard/analytics"> <!--routerLink="/login"-->
+      <a routerLink="/home/dashboard/analytics"> <!--routerLink="/login"-->
         <img src="assets/imgs/adzapier_logo.svg" width="130" height="30" alt="Adzapier | Ad Tech for Publishers"/>
       </a>
     </div>
@@ -23,16 +23,16 @@
       <li *ngFor="let menu of publicNavigationMenu" class="nav-item">
         <div *ngIf="menu.showlink" dropdown container="body">
           <div *ngIf="!menu.subcategory">
-            <a class="nav-link" (click)="true" routerLinkActive="active" href="{{menu.routerLink}}" routerLink="{{menu.routerLink}}">
+            <a class="nav-link" (click)="true" routerLinkActive="active" routerLink="{{menu.routerLink}}" routerLink="{{menu.routerLink}}">
               {{ menu.showlink }}</a></div>
           <div *ngIf="menu.subcategory">
-            <a class="nav-link dropdown-toggle" routerLinkActive="active" href="{{menu.routerLink}}" *ngIf="menu.subcategory" dropdownToggle (click)="true">
+            <a class="nav-link dropdown-toggle" routerLinkActive="active" routerLink="{{menu.routerLink}}" *ngIf="menu.subcategory" dropdownToggle (click)="true">
               {{ menu.showlink }}</a></div>
           <div *ngIf="menu.subcategory">
             <ul *dropdownMenu class="dropdown-menu">
               <ng-container *ngFor="let item of menu.subcategory;">
                 <li role="menuitem">
-                  <a class="dropdown-item" routerLinkActive="active" href="{{item.routerLink}}" routerLink="{{item.routerLink}}">
+                  <a class="dropdown-item" routerLinkActive="active" routerLink="{{item.routerLink}}" routerLink="{{item.routerLink}}">
                     {{item.showlink}}
                   </a>
                 </li>
@@ -44,10 +44,10 @@
     </ul>
     <ul class="navbar-nav navbar-right" *ngIf="!currentUser">
       <li class="nav-item">
-        <a class="btn btn-sm btn-primary" href="/login" routerLink="/login">Sign In</a>
+        <a class="btn btn-sm btn-primary" routerLink="/login" routerLink="/login">Sign In</a>
       </li>
       <li class="nav-item">
-        <a class="btn btn-sm btn-primary mg-l-10" href="/signup" routerLink="/signup">Try for Free</a>
+        <a class="btn btn-sm btn-primary mg-l-10" routerLink="/signup" routerLink="/signup">Try for Free</a>
       </li>
     </ul>
   </div>
@@ -66,7 +66,7 @@
        <div class="dropdown-wrapper">
       <ul class="dropdown-menu propMenu" [ngStyle]="addColumncount()"> <!--[ngStyle]="addColumncount()"-->
           <li role="menuitem" *ngFor="let item of orgPropertyMenu; first as isFirst; let i = index;">
-            <a class="dropdown-item" title="{{item.orgname}}" href="settings/organizations/details/{{item.id}}"  (click)="goto('settings/organizations/details',item.id)">
+            <a class="dropdown-item" title="{{item.orgname}}" (click)="goto('settings/organizations/details',item.id)">
              <span [ngClass]="[isOrgSelected(item) ? 'active' : '']">{{item.orgname}}</span>
              <span class="align-right width25"><i-feather class="feather-plus" name="plus"></i-feather></span>
             </a>
@@ -101,7 +101,7 @@
       <li *ngFor="let menu of navigationMenu" class="nav-item">
         <div *ngIf="menu.showlink" dropdown container="body">
           <div *ngIf="!menu.subcategory">
-            <a class="nav-link" href="{{menu.routerLink}}" [class.active]="menu.showlink === 'Billing' && isBillingActivelinkMatched" (click)="goto(menu)">
+            <a class="nav-link" routerLink="{{menu.routerLink}}" [class.active]="menu.showlink === 'Billing' && isBillingActivelinkMatched" (click)="goto(menu)">
               {{ menu.showlink }}</a></div>
           <div *ngIf="menu.subcategory">
             <a class="nav-link dropdown-toggle"  [class.active]="menu.showlink === 'Privacy' && isPrivacyActivelinkMatched" *ngIf="menu.subcategory" dropdownToggle (click)="true">
@@ -110,7 +110,7 @@
             <ng-container *ngFor="let item of menu.subcategory;let q = index;">
               <li *ngIf="menu.showlink == 'Privacy' && q===0" class="displayflex"><span>DSAR</span></li>
               <li role="menuitem">
-                <a class="dropdown-item" [class.active]="activateSublink(item)"  href="{{item.routerLink}}" (click)="goto(item)">
+                <a class="dropdown-item" [class.active]="activateSublink(item)" routerLink="{{item.routerLink}}" (click)="goto(item)">
                   <span *ngIf="item.icon.indexOf('fa')===-1">
                     <i-feather name="{{item.icon}}" class="feather-16"></i-feather> {{item.showlink}}
                   </span>
@@ -197,14 +197,14 @@
                   <p class="tx-12 tx-color-03">{{userRole}}</p>
                 </div>
                 <li *ngIf="!item.items" role="menuitem">
-                  <a class="dropdown-item" href="{{item.routerLink}}" *ngIf="item.label !== 'Signout' && item.label !== 'Help Center'" [class.active]="activateSublink(item)" (click)="goto(item)">
+                  <a class="dropdown-item" routerLink="{{item.routerLink}}" *ngIf="item.label !== 'Signout' && item.label !== 'Help Center'" [class.active]="activateSublink(item)" (click)="goto(item)">
                     <i-feather *ngIf="item.icon" name="{{item.icon}}" class="feather-16"></i-feather>{{item.label}}
                   </a>
                   <a class="dropdown-item" *ngIf="item.label === 'Signout'" (click)="logout()"
                     routerLink="{{item.routerLink}}">
                     <i-feather *ngIf="item.icon" name="{{item.icon}}" class="feather-16"></i-feather>{{item.label}}
                   </a>
-                  <a class="dropdown-item" href="{{item.routerLink}}" *ngIf="item.label !== 'Signout' && item.label === 'Help Center'" target="_blank">
+                  <a class="dropdown-item" routerLink="{{item.routerLink}}" *ngIf="item.label !== 'Signout' && item.label === 'Help Center'" target="_blank">
                     <i-feather *ngIf="item.icon" name="{{item.icon}}" class="feather-16"></i-feather>{{item.label}}
                   </a>
                 </li>
@@ -213,7 +213,7 @@
                 </li>
                 <li *ngIf="item.items" role="menuitem" dropdown triggers="mouseover" placement="top left"
                   container="body">
-                  <a class="dropdown-item"  href="{{item.routerLink}}" routerLinkActive="active" (click)="false">
+                  <a class="dropdown-item"  routerLink="{{item.routerLink}}" routerLinkActive="active" (click)="false">
                     <i class="fas fa-caret-left dropdown-submenu-left"></i> {{ item.label }}</a>
                   <ul *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu">
                     <ng-container *ngFor="let submenu of item.items">
@@ -250,16 +250,16 @@
     <li *ngFor="let menu of publicNavigationMenu" class="nav-item">
       <div *ngIf="menu.showlink"  (click)="isMobileMenuCollapsed = !isMobileMenuCollapsed" [attr.aria-expanded]="!isMobileMenuCollapsed" aria-controls="collapseExample" container="body">
         <div *ngIf="!menu.subcategory">
-          <a class="nav-link" href="{{menu.routerLink}}" (click)="goto(menu)"> <!-- routerLink="{{menu.routerLink}}"-->
+          <a class="nav-link" routerLink="{{menu.routerLink}}" (click)="goto(menu)"> <!-- routerLink="{{menu.routerLink}}"-->
             {{ menu.showlink }}</a></div>
         <div *ngIf="menu.subcategory">
-          <a class="nav-link"  href="{{menu.routerLink}}"  (click)="goto(menu)">
+          <a class="nav-link"  routerLink="{{menu.routerLink}}"  (click)="goto(menu)">
             {{ menu.showlink }}</a></div>
         <div *ngIf="menu.subcategory">
           <ul id="collapseExample" [ngbCollapse]="!isMobileMenuCollapsed" >
             <ng-container *ngFor="let item of menu.subcategory;">
               <li role="menuitem">
-                <a class="dropdown-item" href="{{item.routerLink}}"  (click)="goto(item)">
+                <a class="dropdown-item" routerLink="{{item.routerLink}}"  (click)="goto(item)">
                   {{item.showlink}}
                 </a>
               </li>
@@ -269,8 +269,8 @@
       </div>
     </li>
     <li class="nav-item" *ngIf="!currentUser">
-      <a  class="nav-link" routerLinkActive="active" href="/login" routerLink="/login">Sign In</a> </li>
-    <li *ngIf="!currentUser" class="nav-item"> <a  class="nav-link" href="/signup" routerLink="/signup">Try for Free</a>
+      <a  class="nav-link" routerLinkActive="active" routerLink="/login">Sign In</a> </li>
+    <li *ngIf="!currentUser" class="nav-item"> <a  class="nav-link" routerLink="/signup">Try for Free</a>
     </li>
   </ul>
   <!--sidemenu before login-->
@@ -284,7 +284,7 @@
     </a>
     <ul class="dropdown-menu propMenu" [isAnimated]="true"  [collapse]="isMobilePropertyCollapsed">
         <li role="menuitem" *ngFor="let item of orgPropertyMenu; first as isFirst; let i = index;">
-          <a class="dropdown-item" title="{{item.orgname}}" href="settings/organizations/details/{{item.id}}" (click)="goto('settings/organizations/details',item.id)">
+          <a class="dropdown-item" title="{{item.orgname}}" (click)="goto('settings/organizations/details',item.id)">
             <span [ngClass]="[isOrgSelected(item) ? 'active' : '']">{{item.orgname}}</span>
             <span class="align-right width25"><i-feather class="feather-plus" name="plus"></i-feather></span>
           </a>
@@ -310,7 +310,7 @@
     <li *ngFor="let menu of navigationMenu; let r = index" class="nav-item">
       <div *ngIf="menu.showlink"  container="body">
         <div *ngIf="!menu.subcategory">
-          <a class="nav-link" href="{{menu.routerLink}}" [class.active]="menu.showlink === 'Billing' && isBillingActivelinkMatched"  (click)="onMobileMenuClicked(menu)">
+          <a class="nav-link" routerLink="{{menu.routerLink}}" [class.active]="menu.showlink === 'Billing' && isBillingActivelinkMatched"  (click)="onMobileMenuClicked(menu)">
           {{ menu.showlink }}</a></div>
         <div *ngIf="menu.subcategory">
           <a class="nav-link"  [class.active]="menu.showlink === 'Privacy' && isPrivacyActivelinkMatched" (click)="onMobileMenuClicked(menu.showlink)" *ngIf="menu.subcategory">
@@ -319,7 +319,7 @@
           <ng-container *ngFor="let item of menu.subcategory;let q = index;">
             <li *ngIf="menu.showlink == 'Privacy' && q===0" class="displayflex"><span>DSAR</span></li>
             <li role="menuitem">
-              <a class="dropdown-item" [class.active]="activateSublink(item)" href="{{item.routerLink}}" (click)="goto(item)">
+              <a class="dropdown-item" [class.active]="activateSublink(item)" routerLink="{{item.routerLink}}" (click)="goto(item)">
                 <span *ngIf="item.icon.indexOf('fa')===-1">
                   <i-feather name="{{item.icon}}" class="feather-16"></i-feather>{{item.showlink}}
                 </span>
