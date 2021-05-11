@@ -710,27 +710,37 @@ export class OrganizationdetailsComponent implements OnInit {
       this.alertMsg = err;
       this.isOpen = true;
       this.alertType = 'danger';
+      this.onCanceled();
     });
     // } else {
     //   alert('aaa');
     // }
   }
 
+  onCanceled(){
+    this.isconfirmationsubmitted = false;
+    this.modalService.dismissAll('Canceled');
+    this.confirmationForm.reset();
+  }
+    
+
   onSubmitConfirmation(selectedaction) {
     this.isconfirmationsubmitted = true;
     if (this.confirmationForm.invalid) {
+      
       return false;
     } else {
       const userInput = this.confirmationForm.value.userInput;
       if (userInput === 'Delete') {
         if (selectedaction === 'organization') {
           this.confirmOrganizationDelete();
-          this.router.navigate(['settings/organizations']);
+          //this.router.navigate(['settings/organizations']);
         } else if (selectedaction === 'property') {
           this.confirmPropertyDelete();
         } else if (selectedaction === 'team member') {
           this.confirmDeleteTeamMember();
         }
+        
       } else {
         // this.confirmationForm.reset();
         // this.isconfirmationsubmitted = false;

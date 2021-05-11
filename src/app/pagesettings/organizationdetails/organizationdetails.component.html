@@ -578,7 +578,7 @@
     </div>
 </ng-template>
 <div class="col-sm-5 mr-0 float-right flotingdiv" [ngClass]="{'hide':!isOpen}">
-    <alert *ngIf="isOpen" [type]="alertType" dismissOnTimeout="5000" [dismissible]="dismissible"
+    <alert class="mr-1" *ngIf="isOpen" [type]="alertType" dismissOnTimeout="5000" [dismissible]="dismissible"
         (onClosed)="onClosed(alertType)">{{alertMsg}}</alert>
 </div>
 <ng-template #confirmTemplate let-modal>

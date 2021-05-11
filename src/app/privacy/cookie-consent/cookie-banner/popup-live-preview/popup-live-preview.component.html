@@ -29,7 +29,7 @@
         <p-tabView headerAlignment="center">
           <p-tabPanel [header]="PopUpTitleLang.purpose">
             <p class="desc">{{formData.PopUpGdprPurposeDescription ? formData.PopUpGdprPurposeDescription : defaultContent.PopUpGdprPurposeDescription}}</p>
-            <div class="row purpose-list">
+            <div class="row purpose-list no-gutters">
                 <div class="card w-100">
 
 
@@ -283,7 +283,7 @@
         <p-tabView headerAlignment="center">
           <p-tabPanel [header]="PopUpTitleLang.purpose">
             <p class="desc">{{formData.PopUpCcpaGenericPurposeDescription ? formData.PopUpCcpaGenericPurposeDescription : defaultContent.PopUpCcpaGenericPurposeDescription}}</p>
-            <div class="row purpose-list">
+            <div class="row purpose-list no-gutters">
                 <div class="card w-100">
 
                   <div (click)="onOpenDesc(defaultContent.EssentialTitle)" [ngStyle]="{color: formData.PopUpPurposeButtonTextColor, background: formData.PopUpPurposeButtonBackGroundColor}" class=" row purpose-div" >
@@ -452,7 +452,7 @@
         <p-tabView headerAlignment="center">
           <p-tabPanel  [header]="PopUpTitleLang.purpose">
             <p class="desc">{{formData.PopUpCcpaGenericPurposeDescription ? formData.PopUpCcpaGenericPurposeDescription : defaultContent.PopUpCcpaGenericPurposeDescription}}</p>
-            <div class="row purpose-list">
+            <div class="row purpose-list no-gutters">
                 <div class="card w-100">
 
 
