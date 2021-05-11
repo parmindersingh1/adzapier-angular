@@ -80,7 +80,7 @@ export class CompanyComponent implements OnInit {
     const strRegx = '^[a-zA-Z\-\']+';
     const alphaNumeric = '.*\\S.*[a-zA-z0-9 ]';
     this.companyForm = this.formBuilder.group({
-      orgname: ['', [Validators.required, Validators.pattern(alphaNumeric)]],
+      orgname: [''],
       tax_id: [''],
       address1: ['', [Validators.required, Validators.pattern(alphaNumeric)]],
       address2: [''],
