@@ -66,7 +66,7 @@
        <div class="dropdown-wrapper">
       <ul class="dropdown-menu propMenu" [ngStyle]="addColumncount()"> <!--[ngStyle]="addColumncount()"-->
           <li role="menuitem" *ngFor="let item of orgPropertyMenu; first as isFirst; let i = index;">
-            <a class="dropdown-item" title="{{item.orgname}}" (click)="goto('settings/organizations/details',item.id)">
+            <a class="dropdown-item" title="{{item.orgname}}" routerLink="/settings/organizations/details/{{item.id}}" (click)="goto('settings/organizations/details',item.id)">
              <span [ngClass]="[isOrgSelected(item) ? 'active' : '']">{{item.orgname}}</span>
              <span class="align-right width25"><i-feather class="feather-plus" name="plus"></i-feather></span>
             </a>
@@ -204,7 +204,7 @@
                     routerLink="{{item.routerLink}}">
                     <i-feather *ngIf="item.icon" name="{{item.icon}}" class="feather-16"></i-feather>{{item.label}}
                   </a>
-                  <a class="dropdown-item" routerLink="{{item.routerLink}}" *ngIf="item.label !== 'Signout' && item.label === 'Help Center'" target="_blank">
+                  <a class="dropdown-item" href="{{item.routerLink}}" *ngIf="item.label !== 'Signout' && item.label === 'Help Center'" target="_blank">
                     <i-feather *ngIf="item.icon" name="{{item.icon}}" class="feather-16"></i-feather>{{item.label}}
                   </a>
                 </li>
@@ -284,7 +284,7 @@
     </a>
     <ul class="dropdown-menu propMenu" [isAnimated]="true"  [collapse]="isMobilePropertyCollapsed">
         <li role="menuitem" *ngFor="let item of orgPropertyMenu; first as isFirst; let i = index;">
-          <a class="dropdown-item" title="{{item.orgname}}" (click)="goto('settings/organizations/details',item.id)">
+          <a class="dropdown-item" title="{{item.orgname}}" routerLink="/settings/organizations/details/{{item.id}}" (click)="goto('settings/organizations/details',item.id)">
             <span [ngClass]="[isOrgSelected(item) ? 'active' : '']">{{item.orgname}}</span>
             <span class="align-right width25"><i-feather class="feather-plus" name="plus"></i-feather></span>
           </a>

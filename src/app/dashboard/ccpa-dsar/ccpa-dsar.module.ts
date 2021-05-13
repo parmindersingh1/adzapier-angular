@@ -5,9 +5,9 @@ import {AuthGuard} from '../../_helpers';
 import {CcpaDsarComponent} from './ccpa-dsar.component';
 import {ChartsModule, ThemeService} from 'ng2-charts';
 import {SharedbootstrapModule} from '../../sharedbootstrap/sharedbootstrap.module';
-
+import {LicenseguardService} from '../../_services/licenseguard.service';
 const routes: Routes = [
-  {path: '', component: CcpaDsarComponent,  canActivate: [AuthGuard]}
+  {path: '', component: CcpaDsarComponent,  canActivate: [AuthGuard, LicenseguardService]}
 ];
 
 @NgModule({
