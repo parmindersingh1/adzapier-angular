@@ -167,7 +167,8 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
     private cd: ChangeDetectorRef,
     private dashboardService: DashboardService,
     private dataService: DataService,
-    private _location: Location
+    private _location: Location,
+    private cdRef: ChangeDetectorRef
   ) {
 
     monkeyPatchChartJsTooltip();
@@ -182,6 +183,7 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     this.onSetUpDate();
+    this.cdRef.detectChanges();
   }
 
 
@@ -190,11 +192,14 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
     const features = resData.response.features;
     if (features == null) {
       this.isShowDashboard = false;
+      this.dataService.isLicenseApplied.next({requesttype:'organization',hasaccess:false});
     } else {
       if( Object.keys(features).length > 0) {
         this.isShowDashboard = true;
+        this.dataService.isLicenseApplied.next({requesttype:'organization',hasaccess:true});
       } else {
         this.isShowDashboard = false;
+        this.dataService.isLicenseApplied.next({requesttype:'organization',hasaccess:false});
       }
     }
     this.onOpenPopUp();
