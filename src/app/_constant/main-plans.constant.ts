@@ -302,3 +302,209 @@ export const mainPlans = {
     ],
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+export const highLightFeatures = {
+  cookieConsent: {
+    free: [
+      {
+        featureName: 'Monthly Pageviews\n',
+        featureValue: 'Less than 250K'
+      },
+      {
+        featureName: 'Domain Scan\n',
+        featureValue: '1/Month\n'
+      },
+      {
+        featureName: 'Users Per Organization\n',
+        featureValue: '1'
+      },
+      {
+        featureName: 'Support Response Time',
+        featureValue: 'Best effort'
+      },
+    ],
+    essentials: [
+      {
+        featureName: 'Monthly Pageviews\n',
+        featureValue: '250K to 500K'
+      },
+      {
+        featureName: 'Domain Scan\n',
+        featureValue: '2/Month\n'
+      },
+      {
+        featureName: 'Users Per Organization\n',
+        featureValue: 'up to 2\n'
+      },
+      {
+        featureName: 'Support Response Time\n',
+        featureValue: '24 Hours'
+      },
+    ],
+    professional: [
+      {
+        featureName: 'Monthly Pageviews\n',
+        featureValue: '500K to 1M'
+      },
+      {
+        featureName: 'Domain Scan\n',
+        featureValue: '5/month\n'
+      },
+      {
+        featureName: 'Users Per Organization\n',
+        featureValue: 'up to 5\n'
+      },
+      {
+        featureName: 'Support Response Time\n',
+        featureValue: '12 Hours'
+      },
+    ],
+    enterprise: [
+      {
+        featureName: 'Monthly Pageviews\n',
+        featureValue: '1M+'
+      },
+      {
+        featureName: 'Domain Scan\n',
+        featureValue: 'Unlimited'
+      },
+      {
+        featureName: 'Users Per Organization\n',
+        featureValue: 'Unlimited\n'
+      },
+      {
+        featureName: 'Support Response Time\n',
+        featureValue: '3 Hours\n'
+      },
+    ]
+  },
+  dsar: {
+    essentials: [
+      {
+        featureName: 'Forms\n',
+        featureValue: '2'
+      },
+      {
+        featureName: 'Workflow\n',
+        featureValue: '5\n'
+      },
+      {
+        featureName: 'Requests\n',
+        featureValue: '150K'
+      },
+      {
+        featureName: 'Support Response Time\n',
+        featureValue: '24 Hours\n'
+      }
+    ],
+    professional: [
+      {
+        featureName: 'Forms\n',
+        featureValue: '10\n'
+      },
+      {
+        featureName: 'Workflow\n',
+        featureValue: '15\n'
+      },
+      {
+        featureName: 'Requests\n',
+        featureValue: '250K'
+      },
+      {
+        featureName: 'Support Response Time\n',
+        featureValue: '12 HR\n'
+      }
+    ],
+    enterprise: [
+      {
+        featureName: 'Forms\n',
+        featureValue: 'Unlimited\n'
+      },
+      {
+        featureName: 'Workflow\n',
+        featureValue: 'Unlimited\n'
+      },
+      {
+        featureName: 'Requests\n',
+        featureValue: 'Unlimited\n'
+      },
+      {
+        featureName: 'Support Response Time\n',
+        featureValue: '3 Hours\n'
+      }
+    ],
+  }
+}
+
+
+
+
+export const featureCount = [
+  {
+    featureName: 'Monthly Pageviews',
+    free: 'Less Than 250K',
+    essentials: '250K To 500K',
+    professional: '500K To 1M',
+    enterprise: '1M+'
+  },
+  {
+    featureName: 'Domain Scan',
+    free: '1/Month',
+    essentials: '2/Month',
+    professional: '5/Month',
+    enterprise: 'Unlimited'
+  },
+  {
+    featureName: 'Users Per Organization',
+    free: '1',
+    essentials: 'Up To 2',
+    professional: 'Up To 5',
+    enterprise: 'Unlimited'
+  },
+  {
+    featureName: 'Support Response Time',
+    free: 'Best Effort',
+    essentials: ' 24 Hours',
+    professional: '12 Hours',
+    enterprise: '3 Hours'
+  },
+
+  {
+    featureName: 'DSAR - Forms',
+    free: '',
+    essentials: ' 2',
+    professional: '10',
+    enterprise: 'Unlimited'
+  },
+  {
+    featureName: 'DSAR - Workflow',
+    free: '',
+    essentials: ' 5',
+    professional: '15',
+    enterprise: 'Unlimited'
+  },
+  {
+    featureName: 'DSAR - Requests',
+    free: '',
+    essentials: '150K',
+    professional: '250K',
+    enterprise: 'Unlimited'
+  },
+]

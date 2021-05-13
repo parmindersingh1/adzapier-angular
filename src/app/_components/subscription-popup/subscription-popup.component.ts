@@ -7,7 +7,7 @@ import {CCPAFormConfigurationService} from '../../_services/ccpaform-configurati
 import {DsarformService} from '../../_services/dsarform.service';
 import {DataService} from '../../_services/data.service';
 import {Router} from '@angular/router';
-import {mainPlans} from './main-plans.constant';
+import {mainPlans} from '../../_constant/main-plans.constant';
 
 class DefaultPlanData {
   plan_name: '';
