@@ -142,7 +142,9 @@ export class ManageOrganizationComponent implements OnInit, OnDestroy {
 
 
   openModal(template: TemplateRef<any>) {
+    this.orgNameError=false
     this.modalRef = this.modalService.show(template);
+    this.orgForm.reset();
   }
 
   selected($e) {
