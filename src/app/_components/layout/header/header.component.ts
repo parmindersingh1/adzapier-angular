@@ -218,8 +218,8 @@ export class HeaderComponent implements OnInit {
           label: 'User', icon: 'assets/imgs/glass.jpg',
           items: [
             { label: 'User Preferences', routerLink: '/userprofile', icon: 'edit-3' },
-            { label: 'Organizations', routerLink: 'settings/organizations', icon: 'activity' },
-            { label: 'Billing', routerLink: 'settings/billing/manage', icon: 'credit-card' },
+            { label: 'Organizations', routerLink: '/settings/organizations', icon: 'activity' },
+            { label: 'Billing', routerLink: '/settings/billing/manage', icon: 'credit-card' },
             { label: 'Settings', routerLink: '/settings', icon: 'settings' },
             { label: 'Help Center', routerLink: 'https://adzapier.atlassian.net/wiki/spaces/PD/pages/884637701/Adzapier+Portal', icon: 'help-circle' },
             { label: 'Signout', routerLink: '/login', icon: 'log-out' }
@@ -247,7 +247,7 @@ export class HeaderComponent implements OnInit {
             { showlink: 'Consent Tracking', routerLink: '/cookie-consent/cookie-tracking', icon: 'fas fa-file-contract feather-16' },
             { showlink: 'Setup', routerLink: '/cookie-consent/cookie-banner/setup', icon: 'fas fa-wrench feather-16' }
           ]
-        }, { showlink: 'Billing', routerLink: 'settings/billing/manage' }];
+        }, { showlink: 'Billing', routerLink: '/settings/billing/manage' }];
     }, (error) => {
       console.log(error);
     });
@@ -276,6 +276,11 @@ export class HeaderComponent implements OnInit {
       .subscribe((res: any) => {
           this.loading.stop('2')
         this.dataService.setOrgPlanToLocalStorage(res);
+        if((typeof res !== undefined || res!== null) && res.response.features !== null){
+          this.dataService.isLicenseApplied.next({requesttype:'organization',hasaccess:true});
+        } else{
+          this.dataService.isLicenseApplied.next({requesttype:'organization',hasaccess:false});
+        }
       }, error => {
         this.loading.stop('2')
       });
@@ -810,11 +815,14 @@ export class HeaderComponent implements OnInit {
         const features = resData.response.features;
         if (features == null) {
           this.isShowDashboardForCookieConsent = false;
+          this.dataService.isLicenseAppliedForProperty.next({requesttype:'property',hasaccess:false});
         } else {
           if (Object.keys(features).length > 0) {
             this.isShowDashboardForCookieConsent = true;
+            this.dataService.isLicenseAppliedForProperty.next({requesttype:'property',hasaccess:true});
           } else {
             this.isShowDashboardForCookieConsent = false;
+            this.dataService.isLicenseAppliedForProperty.next({requesttype:'property',hasaccess:false});
           }
         }
       }
@@ -828,11 +836,14 @@ export class HeaderComponent implements OnInit {
         const features = resData.response.features;
         if (features == null) {
           this.isShowDashboardForDsar = false;
+          this.dataService.isLicenseApplied.next({requesttype:'organization',hasaccess:false});
         } else {
           if (Object.keys(features).length > 0) {
             this.isShowDashboardForDsar = true;
+            this.dataService.isLicenseApplied.next({requesttype:'organization',hasaccess:true});
           } else {
             this.isShowDashboardForDsar = false;
+            this.dataService.isLicenseApplied.next({requesttype:'organization',hasaccess:false});
           }
         }
       }

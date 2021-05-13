@@ -2,6 +2,7 @@ import {NgModule} from '@angular/core';
 import {Routes, RouterModule} from '@angular/router';
 import {AnalyticsComponent} from './analytics.component';
 import {AuthGuard} from 'src/app/_helpers';
+import { LicenseguardPropertyService } from '../_services/licenseguardproperty.service';
 
 
 const routes: Routes = [
@@ -10,7 +11,7 @@ const routes: Routes = [
   {
     path: 'cookie-consent',
     loadChildren: () => import('./cookie-consent/cookie-consent.module').then(m => m.CookieConsentModule),
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard, LicenseguardPropertyService]
   }
 ];
 
