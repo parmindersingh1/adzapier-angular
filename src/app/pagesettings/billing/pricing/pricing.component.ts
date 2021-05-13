@@ -9,6 +9,7 @@ import {moduleName} from '../../../_constant/module-name.constant';
 import any = jasmine.any;
 import {environment} from '../../../../environments/environment';
 declare var jQuery: any;
+import {highLightFeatures, featureCount} from '../../../_constant/main-plans.constant';
 
 
 class PlanDetails {
@@ -26,6 +27,8 @@ export class PricingComponent implements OnInit, OnDestroy {
   planDetails: any;
   addonsList: any;
   skeletonLoader = false;
+  highLightFeatures = highLightFeatures;
+  featureCount = featureCount;
   subscriptionList = [];
   billingCycle = 'monthly';
   billingAddonCycle = 'monthly';

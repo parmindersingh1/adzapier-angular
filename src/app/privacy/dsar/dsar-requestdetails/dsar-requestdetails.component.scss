@@ -895,6 +895,9 @@ ul.ngx-pagination {
     padding: 4px 20px;
     text-decoration: none;
     white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 160px;
 }
 
 .btn-file:hover {
