@@ -1,4 +1,13 @@
-import {AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnInit, TemplateRef, ViewChild} from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  HostListener,
+  OnInit,
+  TemplateRef,
+  ViewChild
+} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, FormGroupDirective, NgForm, Validators} from '@angular/forms';
 import {ErrorStateMatcher} from '@angular/material/core';
 import {BannerConstant, defaultBannerContent, defaultData} from '../../../_constant/consent-banner.constant';
@@ -13,7 +22,7 @@ import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
 import {DataService} from 'src/app/_services/data.service';
 import {featuresName} from 'src/app/_constant/features-name.constant';
 import {GdprService} from '../../../_services/gdpr.service';
-
+import { HasUnsavedData } from '../../../_helpers/formUnsaved.guard';
 
 /** Error when invalid control is dirty, touched, or submitted. */
 export class MyErrorStateMatcher implements ErrorStateMatcher {
@@ -121,7 +130,6 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
   ) {
 
   }
-
 
   async ngOnInit() {
     this.onGetPropsAndOrgId();
@@ -1139,6 +1147,13 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
     this.defaultLanguage = this.allowedLanguageListObj.defaultLang;
     this.cd.detectChanges();
   }
-
+  hasUnsavedData() {
+    return this.cookieBannerForm.dirty;
+  }
+  @HostListener('window:beforeunload', ['$event'])
+  public onPageUnload($event: BeforeUnloadEvent) {
+    if (this.hasUnsavedData()) {
+      $event.returnValue = true;
+    }
+  }
 }
-
