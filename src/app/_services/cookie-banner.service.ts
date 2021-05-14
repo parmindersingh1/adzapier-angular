@@ -87,17 +87,33 @@ export class CookieBannerService {
     return this.http.get(url);
   }
 
-  GetCustomLangData(lang, oid, pid) {
-    let url = environment.customLangURL.replace(':lang', lang);
-    url = url.replace(':oid', oid)
-    url = url.replace(':pid', pid)
-    return this.http.get(url);
+  GetCustomLangData(componentName, moduleName, lang, oid, pid) {
+    let url = apiConstant.COOKIE_BANNER_GET_LANG_FROM_DB.replace(':lang', lang);
+    url = url.replace(':orgId', oid);
+    url = url.replace(':propId', pid);
+    return this.http.get(environment.apiUrl + url).pipe(map(res => res),
+      catchError(error => {
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.cookieBanner, componentName, moduleName, url);
+        return throwError(error);
+      }),
+    );
   }
 
   saveCustomLang(payloads, lang, orgId, propId, componentName, moduleName ): Observable<any> {
-    let path = apiConstant.COOKIE_BANNER.replace(':orgId', orgId);
+    let path = apiConstant.COOKIE_BANNER_LANG_PUBLISH_JSON.replace(':orgId', orgId);
     path = path.replace(':propId', propId);
     return this.http.post(environment.apiUrl + path, payloads, {params: {lang}}).pipe(map(res => res),
+      catchError(error => {
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.cookieBanner, componentName, moduleName, path);
+        return throwError(error);
+      }),
+    );
+  }
+
+  saveCustomLangInDB(payloads, orgId, propId, componentName, moduleName ): Observable<any> {
+    let path = apiConstant.COOKIE_BANNER_LANG_SAVE_IN_DB.replace(':orgId', orgId);
+    path = path.replace(':propId', propId);
+    return this.http.post(environment.apiUrl + path, payloads).pipe(map(res => res),
       catchError(error => {
         this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.cookieBanner, componentName, moduleName, path);
         return throwError(error);
