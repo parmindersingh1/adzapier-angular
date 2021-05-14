@@ -1,15 +1,14 @@
-import {Component, OnDestroy, OnInit, Renderer2} from '@angular/core';
-import { Router } from '@angular/router';
-import { BillingService } from '../../../_services/billing.service';
-import { subscriptionPlan } from '../../../_constant/pricing.contant';
-import { NgxUiLoaderService } from 'ngx-ui-loader';
-import { DataService } from '../../../_services/data.service';
-import { UserService } from '../../../_services';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Router} from '@angular/router';
+import {BillingService} from '../../../_services/billing.service';
+import {NgxUiLoaderService} from 'ngx-ui-loader';
+import {DataService} from '../../../_services/data.service';
+import {UserService} from '../../../_services';
 import {moduleName} from '../../../_constant/module-name.constant';
-import any = jasmine.any;
 import {environment} from '../../../../environments/environment';
+import {featureCount, highLightFeatures} from '../../../_constant/main-plans.constant';
+
 declare var jQuery: any;
-import {highLightFeatures, featureCount} from '../../../_constant/main-plans.constant';
 
 
 class PlanDetails {
@@ -17,6 +16,7 @@ class PlanDetails {
   monthly: any[];
   yearly: any[];
 }
+
 @Component({
   selector: 'app-pricing',
   templateUrl: './pricing.component.html',
@@ -49,12 +49,14 @@ export class PricingComponent implements OnInit, OnDestroy {
   alertType: any;
   percentOff = 0;
   promoCode: any;
- activeData = { base: {maxPrice : -1, maxPlanID: '', cycle: 'monthly'},
- addons: {maxPrice : -1, maxPlanID: '', cycle: 'monthly'}
-};
- featuresList = [];
- isPromoCodeActive = false;
- isPromoCodeError = false;
+  activeData = {
+    base: {maxPrice: -1, maxPlanID: '', cycle: 'monthly'},
+    addons: {maxPrice: -1, maxPlanID: '', cycle: 'monthly'}
+  };
+  featuresList = [];
+  isPromoCodeActive = false;
+  isPromoCodeError = false;
+
   constructor(private router: Router,
               private loading: NgxUiLoaderService,
               private dataService: DataService,
@@ -89,7 +91,7 @@ export class PricingComponent implements OnInit, OnDestroy {
   onGetActivePlan() {
     this.loading.start('2')
     this.skeletonLoader = true;
-    this.billingService.getActivePlan(this.constructor.name, moduleName.manageSubscriptionsModule).subscribe( (res: any) => {
+    this.billingService.getActivePlan(this.constructor.name, moduleName.manageSubscriptionsModule).subscribe((res: any) => {
       this.loading.stop('2');
       this.skeletonLoader = false;
       this.onSelectActivePlan(res.response)
@@ -100,20 +102,20 @@ export class PricingComponent implements OnInit, OnDestroy {
       this.alertMsg = err;
       this.alertType = 'danger';
     })
-}
+  }
 
-onSelectActivePlan(record) {
-  let activeData = this.activeData;
+  onSelectActivePlan(record) {
+    const activeData = this.activeData;
     for (const data of record) {
       if (data.active && data.planDetails.type === 0) {
-        if(data.planDetails.price > activeData.base.maxPrice) {
+        if (data.planDetails.price > activeData.base.maxPrice) {
           activeData.base.maxPrice = data.planDetails.price;
           activeData.base.maxPlanID = data.planDetails.stripe_plan_id;
           activeData.base.cycle = data.planDetails.cycle;
           this.billingCycle = data.planDetails.cycle;
         }
       } else {
-        if(data.planDetails.price > activeData.addons.maxPrice) {
+        if (data.planDetails.price > activeData.addons.maxPrice && data.active) {
           activeData.addons.maxPrice = data.planDetails.price;
           activeData.addons.maxPlanID = data.planDetails.stripe_plan_id;
           activeData.addons.cycle = data.planDetails.cycle;
@@ -122,10 +124,11 @@ onSelectActivePlan(record) {
       }
     }
 
-   this.activeData = activeData;
-   this.subscriptionList = this.planDetails.base[`${this.billingCycle}`];
-   this.addonsList = this.planDetails.addons[`${this.billingAddonCycle}`];
+    this.activeData = activeData;
+    this.subscriptionList = this.planDetails.base[`${this.billingCycle}`];
+    this.addonsList = this.planDetails.addons[`${this.billingAddonCycle}`];
   }
+
   onGetPlanDetails() {
     this.loading.start();
     this.skeletonLoader = true;
@@ -143,15 +146,18 @@ onSelectActivePlan(record) {
       this.alertType = 'danger';
     });
   }
-  onSetPlans(plansData){
+
+  onSetPlans(plansData) {
     this.subscriptionList = plansData.base[`${this.billingCycle}`];
     this.addonsList = plansData.addons[`${this.billingAddonCycle}`];
   }
+
   ngOnDestroy() {
     const div = document.querySelector('#main');
     // div.classList.remove('container');
     div.classList.add('container');
   }
+
   onGetUserEmail() {
     this.loading.start();
     this.userService.getLoggedInUserDetails(this.constructor.name, moduleName.pricingModule).subscribe(res => {
@@ -169,15 +175,15 @@ onSelectActivePlan(record) {
   onSelectPlan() {
     const plans = [];
     for (const pricing of this.cartItem) {
-      plans.push({plan_id : pricing.id, units: pricing.unit});
+      plans.push({plan_id: pricing.id, units: pricing.unit});
     }
     if (this.userEmail) {
       let payloads = {};
       payloads = {
         coupon_code: this.isPromoCodeActive ? this.promoCode : '',
         plan_details: plans,
-          email: this.userEmail
-        };
+        email: this.userEmail
+      };
       this.loading.start();
       this.billingService.getSessionId(payloads, this.constructor.name, moduleName.pricingModule).subscribe(res => {
         this.loading.stop();
@@ -298,11 +304,12 @@ onSelectActivePlan(record) {
       }
     }
   }
-  onRemoveCartItem(i, item) {
-      this.cartItem.splice(i, 1);
 
-      this.subTotal = 0;
-      if (this.cartItem.length > 0) {
+  onRemoveCartItem(i, item) {
+    this.cartItem.splice(i, 1);
+
+    this.subTotal = 0;
+    if (this.cartItem.length > 0) {
       for (const itemVal of this.cartItem) {
         this.subTotal += Number(itemVal.priceTotal);
       }
@@ -312,7 +319,7 @@ onSelectActivePlan(record) {
   onApplyCoupon() {
     this.loading.start();
     this.billingService.coupon(this.promoCode, this.constructor.name, moduleName.pricingModule).subscribe((res: any) => {
-    this.loading.stop();
+      this.loading.stop();
       this.percentOff = 0;
       if (res.response.valid) {
         this.isPromoCodeActive = true;
@@ -335,8 +342,8 @@ onSelectActivePlan(record) {
   private onCheckOut(response: any) {
     this.stripe.redirectToCheckout({
       sessionId: response
-    }).then( (result) => {
-    }).catch( error => {
+    }).then((result) => {
+    }).catch(error => {
     });
   }
 
@@ -344,11 +351,12 @@ onSelectActivePlan(record) {
     this.percentOff = 0;
     this.promoCode = null;
   }
+
   onGenerateSessionID() {
     this.loading.start()
-    this.billingService.getManageSessionID(this.constructor.name, moduleName.manageSubscriptionsModule).subscribe( (res: any) => {
+    this.billingService.getManageSessionID(this.constructor.name, moduleName.manageSubscriptionsModule).subscribe((res: any) => {
       this.loading.stop();
-      if(res.status === 200) {
+      if (res.status === 200) {
         window.open(res.response, '_blank');
       }
 
@@ -358,6 +366,6 @@ onSelectActivePlan(record) {
       this.alertMsg = err;
       this.alertType = 'danger';
     })
-}
+  }
 
 }
