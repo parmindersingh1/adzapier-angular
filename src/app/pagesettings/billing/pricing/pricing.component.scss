@@ -286,14 +286,15 @@ li {
   text-align: left;
 }
 .close-btn {
-  padding-right: 5px;
-  float: right;
+  padding-left: 5px;
   padding-top: 3px;
 }
 .text-feature-left {
   text-align: left;
 }
-
+.is-invalid {
+  background-image: none !important;
+}
 
 
 
@@ -324,7 +325,7 @@ li {
   display: inline;
 }
 .plan-discount {
-  background-color: #c9356e;
+  background-color: #0da1dd;
   box-sizing: content-box;
   color: #fff;
   display: block;
@@ -452,7 +453,7 @@ li {
 }
 
 .plan-discount-dsar {
-  background-color: #c9356e;
+  background-color: #0da1dd;
   box-sizing: content-box;
   color: #fff;
   display: block;
@@ -490,4 +491,95 @@ li {
   font-size: 18px;
   color: #3560d7 !important;
   font-weight: 600;
+}
+
+
+
+
+
+
+.toggle-period_addon {
+  margin: 0px auto 0;
+}
+.toggle-period__checkbox_addon {
+  display: none;
+}
+.toggle-period__label_addon {
+  cursor: pointer;
+  display: inline-block;
+  font-weight: 700;
+  height: 24px;
+  letter-spacing: .3px;
+  line-height: 24px;
+  text-transform: uppercase;
+}
+.toggle-period__monthly_addon {
+  color: #0546a3;
+  transition: all .2s ease;
+}
+.toggle-period__switch_addon {
+  background-color: #0546a3;
+  border-radius: 12px;
+  box-sizing: border-box;
+  display: inline-block;
+  height: 24px;
+  margin: 0 20px;
+  outline: 0;
+  position: relative;
+  vertical-align: top;
+  width: 60px;
+}
+.pricing-table .toggle-period__label_addon {
+  cursor: pointer;
+  display: inline-block;
+  font-weight: 700;
+  height: 24px;
+  letter-spacing: .3px;
+  line-height: 24px;
+  text-transform: uppercase;
+}
+.toggle-period__checkbox_addon:checked+.toggle-period__label_addon .toggle-period__switch_addon:after {
+  left: 37px;
+}
+.toggle-period__switch_addon:after {
+  background-color: #fff;
+  border-radius: 10px;
+  content: "";
+  display: block;
+  height: 20px;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  transition: all .2s ease;
+  width: 20px;
+}
+.toggle-period__yearly_addon {
+  color: var(--color-neutral-10);
+  transition: all .2s ease;
+}
+
+.flag_addon {
+  position: relative;
+  background-color: #0168fa;
+  color: #fff;
+  text-transform: none;
+  line-height: 1.875rem;
+  width: 100px;
+  margin-left: 20px;
+  font-weight: 400;
+  padding: 8px 15px 8px 10px;
+}
+.flag_addon:before {
+  right: 100%;
+  top: 50%;
+  border: solid transparent;
+  content: " ";
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none;
+  border-color: rgba(167,210,179,0);
+  border-right-color: #0168fa;
+  border-width: 15px;
+  margin-top: -15px;
 }
