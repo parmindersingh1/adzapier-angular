@@ -7,6 +7,9 @@
 .bg-white-col {
   background: #fff;
 }
+.overflow-hidden{
+  overflow: hidden;
+}
 .price-text {
   font-size: 35px;
   margin-top: 5px;
@@ -326,4 +329,130 @@ input[type="checkbox"] {
 }
 .text-color-nr {
   color:#333 !important;
+}
+
+.annual {
+  display: inline;
+}
+.plan-discount {
+  background-color: #0da1dd;
+  box-sizing: content-box;
+  color: #fff;
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  height: 26px;
+  line-height: 26px;
+  opacity: 1;
+  padding: 0 30px;
+  position: absolute;
+  top: 25px;
+  right: -31px;
+  text-align: center;
+  -webkit-transform: rotateZ(
+      45deg
+  );
+  transform: rotateZ(
+      45deg
+  );
+  transition: all .15s ease-out;
+  width: 80px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+
+
+
+
+
+.toggle-period {
+  padding-left: 20px;
+  margin: 30px auto 0;
+}
+.toggle-period__checkbox {
+  display: none;
+}
+.toggle-period__label {
+  cursor: pointer;
+  display: inline-block;
+  font-weight: 700;
+  height: 24px;
+  letter-spacing: .3px;
+  line-height: 24px;
+  text-transform: uppercase;
+}
+.toggle-period__monthly {
+  color: #0546a3;
+  transition: all .2s ease;
+}
+.toggle-period__switch {
+  background-color: #0546a3;
+  border-radius: 12px;
+  box-sizing: border-box;
+  display: inline-block;
+  height: 24px;
+  margin: 0 20px;
+  outline: 0;
+  position: relative;
+  vertical-align: top;
+  width: 60px;
+}
+.pricing-table .toggle-period__label {
+  cursor: pointer;
+  display: inline-block;
+  font-weight: 700;
+  height: 24px;
+  letter-spacing: .3px;
+  line-height: 24px;
+  text-transform: uppercase;
+}
+.toggle-period__checkbox:checked+.toggle-period__label .toggle-period__switch:after {
+  left: 37px;
+}
+.toggle-period__switch:after {
+  background-color: #fff;
+  border-radius: 10px;
+  content: "";
+  display: block;
+  height: 20px;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  transition: all .2s ease;
+  width: 20px;
+}
+.toggle-period__yearly {
+  color: var(--color-neutral-10);
+  transition: all .2s ease;
+}
+
+.flag {
+  position: relative;
+  background-color: #0168fa;
+  color: #fff;
+  text-transform: none;
+  line-height: 1.875rem;
+  width: 100px;
+  margin-left: 20px;
+  font-weight: 400;
+  padding: 8px 15px 8px 10px;
+}
+.flag:before {
+  right: 100%;
+  top: 50%;
+  border: solid transparent;
+  content: " ";
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none;
+  border-color: rgba(167,210,179,0);
+  border-right-color: #0168fa;
+  border-width: 15px;
+  margin-top: -15px;
+}
+
+.modal-lg {
+  max-width: 1000px !important;
 }

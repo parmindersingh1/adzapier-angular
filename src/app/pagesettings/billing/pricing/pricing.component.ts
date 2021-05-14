@@ -54,6 +54,7 @@ export class PricingComponent implements OnInit, OnDestroy {
 };
  featuresList = [];
  isPromoCodeActive = false;
+ isPromoCodeError = false;
   constructor(private router: Router,
               private loading: NgxUiLoaderService,
               private dataService: DataService,
@@ -123,7 +124,7 @@ onSelectActivePlan(record) {
 
    this.activeData = activeData;
    this.subscriptionList = this.planDetails.base[`${this.billingCycle}`];
-   this.addonsList = this.planDetails.addons[`${this.billingCycle}`];
+   this.addonsList = this.planDetails.addons[`${this.billingAddonCycle}`];
   }
   onGetPlanDetails() {
     this.loading.start();
@@ -144,7 +145,7 @@ onSelectActivePlan(record) {
   }
   onSetPlans(plansData){
     this.subscriptionList = plansData.base[`${this.billingCycle}`];
-    this.addonsList = plansData.addons[`${this.billingCycle}`];
+    this.addonsList = plansData.addons[`${this.billingAddonCycle}`];
   }
   ngOnDestroy() {
     const div = document.querySelector('#main');
@@ -204,16 +205,25 @@ onSelectActivePlan(record) {
   onSelectBillingCycle(e) {
     if (e.checked) {
       this.billingCycle = 'yearly';
-      this.billingAddonCycle = 'yearly';
       this.subscriptionList = this.planDetails.base[`${this.billingCycle}`];
-      this.addonsList = this.planDetails.addons[`${this.billingCycle}`];
     } else {
       this.billingCycle = 'monthly';
-      this.billingAddonCycle = 'monthly';
       this.subscriptionList = this.planDetails.base[`${this.billingCycle}`];
-      this.addonsList = this.planDetails.addons[`${this.billingCycle}`];
     }
   }
+
+
+  onSelectAddonBillingCycle(e) {
+    if (e.checked) {
+      this.billingAddonCycle = 'yearly';
+      this.addonsList = this.planDetails.addons[`${this.billingAddonCycle}`];
+    } else {
+      this.billingAddonCycle = 'monthly';
+      this.addonsList = this.planDetails.addons[`${this.billingAddonCycle}`];
+    }
+  }
+
+
   onGetCurrentPlan() {
     this.loading.start();
     this.billingService.getCurrentPlanInfo(this.constructor.name, moduleName.pricingModule).subscribe((res: any) => {
@@ -306,16 +316,19 @@ onSelectActivePlan(record) {
       this.percentOff = 0;
       if (res.response.valid) {
         this.isPromoCodeActive = true;
+        this.isPromoCodeError = false;
         this.percentOff = res.response.percent_off;
       } else {
-        this.isOpen = true;
+        // this.isOpen = true;
         this.isPromoCodeActive = false;
-        this.alertMsg = 'Promo Code is not Valid';
-        this.alertType = 'danger';
+        this.isPromoCodeError = true;
+        // this.alertMsg = 'Promo Code is not Valid';
+        // this.alertType = 'danger';
       }
     }, error => {
       this.loading.stop();
-      this.isPromoCodeActive = false
+      this.isPromoCodeActive = false;
+      this.isPromoCodeError = true;
     });
   }
 
