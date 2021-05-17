@@ -698,6 +698,7 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
     this.loading.start();
     this.cookieBannerService.onSubmitCookieBannerData(userPrefrencesData, this.currentManagedOrgID, this.currrentManagedPropID, this.constructor.name, moduleName.cookieBannerModule)
       .subscribe((res: any) => {
+        this.cookieBannerForm.markAsPristine();
         this.onGetSavedCookieBannerConfig();
         this.loading.stop();
         this.isPublish = false;
@@ -744,6 +745,7 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
     this.isPublish = true;
     this.cookieBannerService.onUpdateCookieBannerData(userPrefrencesData, this.currentManagedOrgID, this.currrentManagedPropID, this.constructor.name, moduleName.cookieBannerModule)
       .subscribe((res: any) => {
+        this.cookieBannerForm.markAsPristine();
         this.onGetSavedCookieBannerConfig();
         this.loading.stop();
         this.isPublish = false;
