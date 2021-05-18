@@ -295,23 +295,21 @@
                                                             <li
                                                                 *ngFor="let item of selectOptions; let i = index; let last = last;" cdkDrag>
                                                                 <div class="row form-inline">
+                                                                  
                                                                     <div class="col-md-12 form-group pr-0">
                                                                         <div class="icon-label-wrapper mr-2">
                                                                             <i class="fa fa-bars" aria-hidden="true"></i>
-                                                                        </div>
-                                                                        <div class="dispalyflex-column">
+                                                                        </div> <!--[ngClass]="{ 'invalid-txtbox': customControl.errors?.required && isCustomFieldAdded}"-->
+                                                                        <div class="dispalyflex-column"> 
                                                                             <input type="text" [(ngModel)]="item.name"
                                                                                 name="{{item.name}}" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
                                                                                 [ngModelOptions]="{standalone: true}"
                                                                                 #customControl="ngModel"
-                                                                                [ngClass]="{ 'invalid-txtbox': customControl.errors?.required && !(customControl.dirty || customControl.touched)}"
-                                                                                class="form-control mb-1" required />
-                                                                            <div *ngIf="customControl.errors?.required && !(customControl.dirty || customControl.touched)">
-                                                                                <span class="color-red">
-                                                                                    Add value
-                                                                                </span>
-                                                                            </div>
-
+                                                                                [ngClass]="{ 'invalid-txtbox':!last && !customControl.valid  && this.selectOptions[i].name !== '' && customControl.errors?.required !== '' }"    class="form-control mb-1" required/>
+                                                                                
+                                                                                <div *ngIf="!last && !customControl.valid  && this.selectOptions[i].name !== '' && customControl.errors?.required !== '' ">
+                                                                                    <span class="color-red">  Add value </span>
+                                                                                </div>
                                                                         </div>
                                                                         <button type="button" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
                                                                             class="btn btn-sm btn-danger ml-2" *ngIf="selectOptions.length !== 1"
@@ -320,6 +318,7 @@
                                                                                     class="fa fa-minus"
                                                                                     aria-hidden="true"></i></span>
                                                                         </button>
+                                                                       
                                                                         <button type="button" *ngIf="last" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
                                                                             class="btn btn-xs btn-primary add-icon"
                                                                             (click)="addOptions()">
@@ -1114,7 +1113,7 @@
 <ng-template #confirmSaveAlert>
     <div class="modal-body text-center">
         <p>Do you want save changes?</p>
-        <button type="button" class="btn btn-xs btn-primary mr-2" (click)="addUpdateDSARForm('nav')">Yes</button>
+        <button type="button" class="btn btn-sm btn-uppercase btn-primary mr-2" (click)="addUpdateDSARForm('nav')">Yes</button>
         <button type="button" class="btn btn-sm btn-outline-secondary btn-uppercase mr-2" (click)="resetWebform()">No</button>
     </div>
 </ng-template>

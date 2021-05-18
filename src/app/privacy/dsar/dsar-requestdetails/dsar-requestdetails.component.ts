@@ -1,5 +1,5 @@
 import {
-  Component, OnInit, ViewChild, ElementRef, Renderer2, TemplateRef, AfterViewInit, AfterViewChecked,
+  Component, OnInit, ViewChild, ElementRef, Renderer2, TemplateRef, AfterViewInit, AfterViewChecked, AfterContentChecked,
   ChangeDetectorRef,
   ChangeDetectionStrategy,
   OnDestroy
@@ -26,19 +26,19 @@ import { formatDate } from '@angular/common';
   changeDetection: ChangeDetectionStrategy.Default
 
 })
-export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, AfterViewChecked {
+export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChecked, AfterContentChecked, OnInit {
   @ViewChild('toggleDayleftdiv', { static: true }) toggleDayleftdiv: ElementRef;
   // @ViewChild('btnDaysLeft', { static: true }) btnDaysLeft: ElementRef;
-  @ViewChild('customDaysInput', { static: false }) customDaysInput: ElementRef;
-  @ViewChild('confirmTemplate', { static: false }) confirmModal: TemplateRef<any>;
+  @ViewChild('customDaysInput') customDaysInput: ElementRef;
+  @ViewChild('confirmTemplate') confirmModal: TemplateRef<any>;
   @ViewChild('filePreview', { static: true }) filePreview: ElementRef;
   @ViewChild('panel', { static: true }) public panel: ElementRef<any>;
-  @ViewChild('workflowStageScroller', { static: false, read: ElementRef }) public workflowStageScroller: ElementRef<any>;
-  @ViewChild('confirmDeleteTemplate', { static: false }) confirmDeleteModal: TemplateRef<any>;
+  @ViewChild('workflowStageScroller', { read: ElementRef }) public workflowStageScroller: ElementRef<any>;
+  @ViewChild('confirmDeleteTemplate') confirmDeleteModal: TemplateRef<any>;
   @ViewChild('extendDays', { static: true }) extendDaysModal: TemplateRef<any>;
   @ViewChild('rejectRequest', { static: true }) rejectRequestModal: TemplateRef<any>;
   // @ViewChild('subTaskForm', null) subTaskTempForm: NgForm;
-  @ViewChild('userAuthenticationAlert', { static: false }) userAuthenticationModal: TemplateRef<any>;
+  @ViewChild('userAuthenticationAlert') userAuthenticationModal: TemplateRef<any>;
 
   confirmationForm: FormGroup;
   modalRef: BsModalRef;
@@ -205,6 +205,9 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
   reasonList: any = [];
   rightArrowStatus = false;
   isRequestCompleted = false;
+  customFieldObj = [];
+  firstName:string;
+  currentSelectedOrgname: string;
   constructor(private activatedRoute: ActivatedRoute,
               private router: Router,
               private orgService: OrganizationService,
@@ -318,11 +321,13 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
         this.currentManagedOrgID = response.organization_id;
         this.currrentManagedPropID = response.property_id;
         this.currentPropertyName = response.property_name;
+        this.currentSelectedOrgname = response.organization_name;
       } else {
         const orgDetails = this.orgService.getCurrentOrgWithProperty();
         this.currentManagedOrgID = orgDetails.organization_id;
         this.currrentManagedPropID = orgDetails.property_id;
         this.currentPropertyName = orgDetails.property_name;
+        this.currentSelectedOrgname = orgDetails.organization_name;
       }
     }, (error) => {
       this.alertMsg = error;
@@ -382,6 +387,7 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
         this.skeletonCustomLoading = false;
         this.getCustomFields(this.customFields);
         this.getWorkflowStages(this.workflowId);
+        this.showCustomFieldValues();
         //        this.selectStageOnPageLoad(this.currentWorkflowStageID);
 
         this.editRequestDetailForm.controls['country'].setValue(this.respCountry);
@@ -487,18 +493,17 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
 
   getCustomFields(data: any) {
 
-    let updatedObj = [];
     if (data !== undefined) {
       // tslint:disable-next-line: forin
       for (const k in data) {
         let value = data[k];
         let key = k.replace('_', ' ');
         let updatedKey = this.capitalizeFirstLetter(key);
-        updatedObj[updatedKey] = value;
+        this.customFieldObj[updatedKey] = value;
       }
 
     }
-    return updatedObj;
+    return this.customFieldObj;
   }
 
 
@@ -586,7 +591,6 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
           //   current_status: this.currentStageId,
           //   previous_status: this.previousStageId ? this.previousStageId : this.previousStageId = ''
           // }
-          //  console.log(reqObj, 'stage selection..');
           this.stageAPI(this.requestID, formData);
           // this.getSubTaskList();
         } else {
@@ -758,7 +762,6 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
     if (this.quillEditorText.invalid) {
       return false;
     } else {
-      //  console.log(this.selectedStages[this.selectedStages.length - 1].id);
       if (this.selectedStages.length === 0) {
         this.alertMsg = 'Stage not selected!';
         this.isOpen = true;
@@ -880,9 +883,24 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
   }
 
   onChangeRequestType(event) {
-    //  const dropdownEmailTemplate = event.target.value;
-    // this.selectedTemplate = event.target.value;
-    this.quillEditorEmailText.controls['editorEmailMessage'].setValue(event.target.value);
+    let convertedString = this.checkHtmlText(event.target.value); //this.checkForCompanyOrConsumeName(str);
+    let removedBrackets = convertedString.replace(/\[/g, '').replace(/]/g, '');
+    this.quillEditorEmailText.controls['editorEmailMessage'].setValue(removedBrackets);
+  }
+
+  checkHtmlText(str){
+    const mapObj = {
+      "Data Subject Name":this.firstName,
+      "Consumer Name":this.firstName,
+      "Company name":this.currentSelectedOrgname,
+      "Company name privacy team":this.currentSelectedOrgname,
+      "Company Name":this.currentSelectedOrgname   
+   };
+    var re = new RegExp(Object.keys(mapObj).join("|"),"gi");
+    str = str.replace(re, function(matched){
+      return mapObj[matched];
+    });
+    return str;
   }
 
   onChangeReason(event) {
@@ -1207,7 +1225,6 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
           previous_status: this.previousStageId,
           activity_feedback: 'Days Extended: ' + this.quillEditorExtendDays.get('customdays').value + '<br/>' + this.quillEditorExtendDays.get('editorReason').value // this.editorActivityPost
         };
-       // console.log(reqObj, 'reqObj..');
         Object.keys(reqObj).forEach(key => {
           if (reqObj[key] === undefined) {
             delete reqObj[key];
@@ -1236,7 +1253,6 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
       const reqObj = {
         comment: 'Reason for rejection: ' + this.quillEditorRejectRequest.get('reason').value + '<br/> comments: ' + this.quillEditorRejectRequest.get('editorComments').value // this.editorActivityPost
       };
-    //  console.log(reqObj, 'reqObj..');
       this.alertMsg = 'Request has been rejected!';
       this.isOpen = true;
       this.alertType = 'success';
@@ -1353,7 +1369,6 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
   selectStageOnPageLoad(id) {
     if (id) {
       const workfloworder = this.workflowStages.filter((t) => t.id === id);
-      // console.log(workfloworder[0].order,'workfloworder..');
       const x = this.workflowStages.slice(0, workfloworder[0].order);
       this.selectedStages = x;
     }
@@ -1627,6 +1642,7 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
     if (selectedStage.id === this.currentWorkflowStageID) {
       this.showStageTitle = selectedStage.stage_title;
       this.showStageGuidanceText = selectedStage.guidance_text;
+      this.cdRef.markForCheck();
     }
   }
 
@@ -1696,6 +1712,21 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
     return this.selectedStages.length === this.workflowStages.length;
   }
 
+  showCustomFieldValues(){
+    let fname; 
+    let lname;
+    if(this.customFieldObj !== undefined){
+      for(const key in this.customFieldObj){
+        if(key == 'First name'){
+          fname = this.customFieldObj[key];
+        } else if(key == 'Last name'){
+          lname = this.customFieldObj[key]
+          this.firstName = fname + ' ' + lname;
+        }
+      }
+    }
+  }
+
   ngAfterViewChecked() {
       let rightArrowStatus = this.rightClickStatus();
       let requestCompleted = this.isWorkflowStageCompleted();
@@ -1727,6 +1758,10 @@ export class DsarRequestdetailsComponent implements OnInit, AfterViewInit, After
   }
 
   ngAfterViewInit() {
+    this.cdRef.detectChanges();
+  }
+
+  ngAfterContentChecked(){
     this.cdRef.detectChanges();
   }
 

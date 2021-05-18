@@ -184,7 +184,7 @@ tr.row-disabled > td > a {
 .dsar-request-table ::ng-deep .p-datatable.p-datatable-sm .p-datatable-header {
   display: flex;
   width: 100%;
-  border-radius: 5px 5px 0 0;
+  border-radius: 0;
   border-top:1px solid #dde2ea;
 }
 
@@ -192,8 +192,8 @@ tr.row-disabled > td > a {
   position: relative;
   border: 1px solid #ccc;
   border-top: 0;
-  margin: 20px 0;
-  border-radius: 5px;
+  margin: 0;
+  border-radius: 0 0 5px 5px;
 }
 
 .dsar-request-table ::ng-deep .p-datatable .p-datatable-header {
@@ -307,7 +307,7 @@ tr.row-disabled > td > a {
 
 .dsar-request-table ::ng-deep .p-datatable .p-paginator-bottom {
   border-top: 1px solid #ccc;
-  border-radius: 0px 0px 10px 10px;
+  border-radius: 0px 0px 5px 5px;
   border-bottom: 0;
   position: relative;
   justify-content:center;
@@ -389,6 +389,17 @@ span.ui-column-title {
 
 .lineheight-22 {
   line-height: 22px;
+}
+
+.align-item-center {
+  align-items: center;
+  border-bottom : 0;
+}
+
+.card-wrapper {
+  margin: 0 0 0 0;
+  border-radius: 5px 5px 0 0;
+  border-bottom: 0;
 }
 
 @media (min-width: 1024px) { 

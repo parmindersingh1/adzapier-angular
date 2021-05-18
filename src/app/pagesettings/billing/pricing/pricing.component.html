@@ -1,165 +1,195 @@
-<!--<div  class="d-sm-flex align-items-center justify-content-between ">-->
+<div class=" ht-100p tx-center">
+  <div class="row justify-content-center">
+    <div [ngClass]="{'col-md-12' : cartItem.length === 0 ,  'col-md-9' : cartItem.length > 0}">
+      <div class="row">
+        <div class="text-center text-head col-md-12 mb-2">
+          <h1>Get Started: <span style="color: #3560d7">Free 14 Days Trial</span></h1>
+          <p class="text-info tx-16 desc-text">You can make account changes at any time -no hassle and no questions
+            asked</p>
+        </div>
 
-  <!--    <button id="toggleplan" class="btn btn-primary">Paid/Free</button>-->
-<!--</div>-->
-<!--<div class="row">-->
-<!--  <div class="col-md-7"></div>-->
-<!--  <div class="col-md-5">-->
-<!--    <span class="mr-2"> Yearly Type </span>-->
-<!--    <label class="switch">-->
-<!--      <input #subType (change)="onSelectBillingCycle(subType)" type="checkbox">-->
-<!--      <span class="slider round"></span>-->
-<!--    </label>-->
-<!--  </div>-->
-<!--</div>-->
-
-
-  <div class=" ht-100p tx-center">
-    <div class="row justify-content-center">
-
-<!--      <div class="col-10 cmol-sm-6 col-md-4 col-lg-2 d-flex flex-column bg-ui-01 mg-t-100 mg-10 pd-t-30 rounded-10">-->
-
-<!--        <label>Select Billing Cycle:</label>-->
-<!--        <div class="btn-group" dropdown>-->
-<!--          <ng-container *ngIf="!currentPlan || currentPlan.duration == 'month'">-->
-<!--          <button dropdownToggle type="button" class="btn btn-default dropdown-toggle"-->
-<!--                  aria-controls="dropdown-basic">-->
-<!--            {{billingCycle | titlecase}}<span class="ml-3 caret"></span>-->
-<!--          </button>-->
-<!--          </ng-container>-->
-<!--          <ng-container *ngIf="currentPlan && currentPlan.duration == 'year'">-->
-<!--            <button type="button" class="btn btn-default dropdown-toggle">-->
-<!--              {{billingCycle | titlecase}}<span class="ml-3 caret"></span>-->
-<!--            </button>-->
-<!--          </ng-container>-->
-
-<!--          <ng-container *ngIf="currentPlan.duration == null">-->
-<!--          <button id="button-basic" dropdownToggle type="button" class="btn btn-default dropdown-toggle"-->
-<!--                  aria-controls="dropdown-basic">-->
-<!--            {{billingCycle | titlecase}}<span class="ml-3 caret"></span> </button>-->
-<!--          </ng-container>-->
-
-
-<!--          <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu"-->
-<!--              role="menu" aria-labelledby="button-basic">-->
-<!--            <li role="menuitem" (click)="onSelectBillingCycle('MONTHLY')" >Monthly Plans</li>-->
-<!--            <li role="menuitem" (click)="onSelectBillingCycle('YEARLY')">Yearly Plans</li>-->
-<!--          </ul>-->
-<!--        </div>-->
-<!--        <p class="tx-size-20 tx-normal mg-b-30 solution">Customize your solution here </p>-->
-<!--        <div class="custom-control custom-switch mg-5">-->
-<!--          <input type="checkbox" class="custom-control-input" checked (change)="$event.target.checked = true" id="customSwitch1">-->
-<!--          <label class="custom-control-label" for="customSwitch1">CCPA</label>-->
-<!--        </div>-->
-<!--        <div class=" custom-control custom-switch mg-5">-->
-<!--          <input type="checkbox" class="custom-control-input" (change)="onSelectPlanType($event)" id="customSwitch2">-->
-<!--          <label class="custom-control-label" for="customSwitch2">GDPR</label>-->
-<!--        </div>-->
-<!--      </div>-->
-      <div class="col-md-9">
-        <div class="row">
-<!--        <div class="pull-right ">-->
-<!--          <span class="mr-2"> Yearly Type  </span>-->
-<!--          <label class="switch">-->
-<!--            <input #subType (change)="onSelectBillingCycle(subType)" type="checkbox">-->
-<!--            <span class="slider round"></span>-->
-<!--          </label>-->
-<!--        </div>-->
-
-
-            <div class="text-center text-head col-md-12">
-              <h1>Pricing & Plans</h1>
-              <p class="text-success">A PLAN FOR EVERY BUSINESS</p>
-            </div>
-
-        <div class="col-md-12 cycle-type">
-          <input (change)="onSelectBillingCycle(subType)" [disabled]="activeData.base.cycle === 'yearly'"  #subType type="checkbox" id="lol-checkbox">
-
-          <label id="button" for="lol-checkbox">
-            <div id="knob"></div>
-            <div id="subscribe">Yearly</div>
-            <div id="alright">Monthly</div>
+        <div class="toggle-period"
+             [tooltip]="activeData.base.cycle === 'yearly' ? 'You can not downgrade your plan' : null">
+          <input id="toggle-period" (change)="onSelectBillingCycle(subType)"
+                 [disabled]="activeData.base.cycle === 'yearly'"
+                 [checked]="billingCycle === 'yearly'" #subType class="toggle-period__checkbox" type="checkbox">
+          <label for="toggle-period" class="toggle-period__label">
+            <span class="toggle-period__monthly" [ngStyle]="{color: billingCycle == 'yearly' ? '#c3c4c7' : '#0546a3'}"
+                  role="checkbox" aria-checked="false">Billed monthly</span>
+            <span class="toggle-period__switch"
+                  [ngStyle]="{backgroundColor: billingCycle == 'yearly' ? '#0da1dd' : '#0546a3'}" role="checkbox"
+                  aria-checked="true" tabindex="0"></span>
+            <span class="toggle-period__yearly" [ngStyle]="{color: billingCycle == 'yearly' ? '#0da1dd' : '#c3c4c7'}"
+                  role="checkbox" aria-checked="true">Billed annually</span>
+            <span class="flag" [ngStyle]="{opacity: billingCycle == 'yearly' ? 1 : .4}">2 Months Free</span>
           </label>
         </div>
-        </div>
 
-        <div *ngIf="!skeletonLoader" class="row justify-content-center mt-5">
-          <div *ngFor="let plan of subscriptionList" class="col d-flex bg-white-col bt-card flex-column bd pt-0 mr-2  pd-20 ">
-            <h4 class="popular-text" [ngStyle]="{background: plan.price ==  activeData.base.maxPrice ? '#3968fa' : null}">
-              <ng-container *ngIf="plan.price ==  activeData.base.maxPrice">CURRENT PLAN</ng-container>
-            </h4>
-            <h3 class="mt-4 plan-type">{{plan.name}}</h3>
-            <p class="tx-color-03 mg-b-50">{{plan.product_name}}</p>
-            <h1 class="tx-rubik tx-normal mb-3 mg-t-auto price-text">
-              <sup class="doller">$</sup>
-              <span class="font-weight-bold">{{plan.price}}</span>
-              <span class="billing-type">/{{billingCycle}}</span>
-            </h1>
-            <p class="tx-size-10 mg-b-30 mt-2 ">Billed {{billingCycle}} </p>
-            <div class="form-group row mb-2 ">
-              <label class="property-type col-md-6" for="sel1">Property</label>
-              <select #planUnit style="height: 32px;" class="mb-2 col-md-5 form-control" id="sel1">
-                <option>1</option>
-                <option>2</option>
-                <option>3</option>
-                <option>4</option>
-                <option>5</option>
-                <option>6</option>
-                <option>7</option>
-                <option>8</option>
-                <option>9</option>
-                <option>10</option>
-              </select>
-            </div>
+      </div>
 
-            <button (click)="onAddToCart(plan, planUnit)"  class="btn mt-4 mb-4 add-to-cart-btn btn-primary btn-block">
-              Add To Cart
-            </button>
-<!--            <button *ngIf="plan.price !=  activeData.base.maxPrice" [disabled]="plan.price <=  activeData.base.maxPrice" (click)="onAddToCart(plan, planUnit)"  class="btn mt-4 mb-4 add-to-cart-btn btn-primary btn-block">-->
-<!--              Add To Cart-->
-<!--            </button>-->
+      <div *ngIf="!skeletonLoader" class="row justify-content-center mt-5">
+        <div *ngFor="let plan of subscriptionList" style="overflow: hidden"
+             class="col d-flex bg-white-col bt-card flex-column bd pt-0 mr-2  ">
 
-<!--            <button  *ngIf="plan.price ==  activeData.base.maxPrice"  (click)="onGenerateSessionID()" class="btn mt-4 mb-4 add-to-cart-btn btn-primary btn-block">-->
-<!--              Manage Plan-->
-<!--            </button>-->
-
-
-          </div><!-- col -->
-          <div class="col-3 mg-t-40 mg-md-t-0 bg-white-col pt-0 bt-card d-flex flex-column bd pd-30">
-            <!-- <div class="tx-100 lh-1"><i class="icon ion-ios-boat"></i></div> -->
-            <h4 class="popular-text" ></h4>
-            <h3 class="mt-4 plan-type">Enterprise</h3>
-            <p class="tx-color-03 mg-b-25">Advanced enterprise features and global coverage. Volume discount available.</p>
-            <h2 class="tx-rubik tx-normal ">Contact Us</h2>
-            <p class="tx-size-10 mg-b-30 "> </p>
-            <a href="https://adzapier.com/connect" target="_blank" class="btn mt-5 mb-4 add-to-cart-btn btn-primary btn-block">Chat with us</a>
-          </div><!-- col -->
-        </div>
-        <div *ngIf="skeletonLoader" class=" loader mt-5 card">
-          <div class="card-body">
-            <ngx-skeleton-loader count="10" class="pt-4"></ngx-skeleton-loader>
+          <div *ngIf="billingCycle === 'yearly'" class="plan-discount">
+            <span class="annual">2 Months Free</span>
           </div>
-        </div>
 
-        <!--          <button *ngIf="plan.plan && !currentPlan.amount; else upGradePlan" (click)="onSelectPlan(plan)" class="btn btn-primary btn-block">{{plan.button}}</button>-->
-        <!--          <button *ngIf="!plan.plan" [disabled]="!plan.plan" (click)="onSelectPlan(plan)" class="btn btn-primary btn-block">{{plan.button}}</button>-->
-        <!--          <ng-template #upGradePlan>-->
-        <!--          <button *ngIf="plan.plan && currentPlan.amount > plan.price" [disabled]="currentPlan.amount > plan.price"  (click)="onUpgradePlan(plan)" class="btn btn-primary btn-block">{{plan.button}}</button>-->
-        <!--          <button *ngIf="plan.plan && currentPlan.amount == plan.price" [disabled]="currentPlan.amount == plan.price"  (click)="onUpgradePlan(plan)" class="btn btn-primary btn-block">Current Plan</button>-->
-        <!--          <button *ngIf="plan.plan && currentPlan.amount < plan.price" (click)="onUpgradePlan(plan)" class="btn btn-primary btn-block">{{plan.button}}</button>-->
-        <!--          </ng-template>-->
-      <div class="mt-3 row">
-        <h4 class="ml-2 mt-2">Add-On Plans</h4>
+
+          <h4 class="popular-text" [ngStyle]="{background: plan.price ==  activeData.base.maxPrice ? '#3968fa' : null}">
+            <ng-container *ngIf="plan.price ==  activeData.base.maxPrice">CURRENT PLAN</ng-container>
+          </h4>
+          <h3 class="mt-1 plan-type">{{plan.name}}</h3>
+          <p class="tx-color-03">{{plan.product_name}}</p>
+
+          <ul class="pl-3 mr-feature">
+            <ng-container *ngIf="plan.name === 'Free'">
+              <li class="text-left feature-list"
+                  *ngFor="let  features of highLightFeatures.cookieConsent.free">{{features.featureName}}
+                <span class="font-weight-bold" *ngIf="features.featureValue"> - {{features.featureValue}}</span></li>
+            </ng-container>
+            <ng-container *ngIf="plan.name === 'Essentials'">
+              <li class="text-left feature-list"
+                  *ngFor="let  features of highLightFeatures.cookieConsent.essentials">{{features.featureName}} <span
+                class="font-weight-bold" *ngIf="features.featureValue"> - {{features.featureValue}}</span></li>
+            </ng-container>
+            <ng-container *ngIf="plan.name === 'Professional'">
+              <li class="text-left feature-list"
+                  *ngFor="let  features of highLightFeatures.cookieConsent.professional">{{features.featureName}} <span
+                class="font-weight-bold" *ngIf="features.featureValue"> - {{features.featureValue}}</span></li>
+            </ng-container>
+            <ng-container *ngIf="plan.name === 'Enterprise'">
+              <li class="text-left feature-list"
+                  *ngFor="let  features of highLightFeatures.cookieConsent.enterprise">{{features.featureName}} <span
+                class="font-weight-bold" *ngIf="features.featureValue"> - {{features.featureValue}}</span></li>
+            </ng-container>
+          </ul>
+
+          <h1 class="tx-rubik tx-normal mb-3 mg-t-auto price-text">
+            <sup class="doller">$</sup>
+            <span class="font-weight-bold" *ngIf="billingCycle === 'monthly'">{{plan.price}}</span>
+            <span class="font-weight-bold" *ngIf="billingCycle !== 'monthly'">{{plan.price / 12}}</span>
+            <span class="billing-type">/Month</span>
+          </h1>
+          <p class="tx-size-10  mt-2 ">Billed {{billingCycle}} </p>
+          <div class="form-group row mb-2 ">
+            <label class="property-type col-md-6" for="sel1">Property</label>
+            <select #planUnit style="height: 32px;" class="mb-2 col-md-5 form-control" id="sel1">
+              <option>1</option>
+              <option>2</option>
+              <option>3</option>
+              <option>4</option>
+              <option>5</option>
+              <option>6</option>
+              <option>7</option>
+              <option>8</option>
+              <option>9</option>
+              <option>10</option>
+            </select>
+          </div>
+
+
+          <button data-toggle="tooltip" data-placement="top"
+                  [title]="plan.price <=  activeData.base.maxPrice ? 'You can not downgrade your plan' : 'Add to Cart'"
+                  *ngIf="plan.price !=  activeData.base.maxPrice" [disabled]="plan.price <=  activeData.base.maxPrice"
+                  (click)="onAddToCart(plan, planUnit)" class="btn mt-4 mb-4 add-to-cart-btn btn-primary btn-block">
+            Add To Cart
+          </button>
+
+
+          <button *ngIf="plan.price ==  activeData.base.maxPrice" (click)="onGenerateSessionID()"
+                  class="btn mt-4 mb-4 add-to-cart-btn btn-primary btn-block">
+            Manage Plan
+          </button>
+
+
+        </div><!-- col -->
+        <div class="col-3 mg-t-40 mg-md-t-0 bg-white-col pt-0 bt-card d-flex flex-column bd pb-20-i">
+          <h4 class="popular-text"></h4>
+          <h3 class="mt-1 plan-type">Enterprise</h3>
+          <p class="tx-color-03 mg-b-25">Advanced enterprise features and global coverage. Volume discount
+            available.</p>
+          <ul class="pl-3 mr-feature">
+            <li class="text-left feature-list"
+                *ngFor="let  features of highLightFeatures.cookieConsent.enterprise">{{features.featureName}}
+              <span class="font-weight-bold" *ngIf="features.featureValue"> - {{features.featureValue}}</span></li>
+          </ul>
+          <h2 class="tx-rubik tx-normal ">Contact Us</h2>
+          <p class="tx-size-10 mg-b-30 "></p>
+          <a href="https://adzapier.com/get-started/" target="_blank"
+             class="enterprise-btn btn mb-4 add-to-cart-btn btn-primary btn-block">Get Enterprise</a>
+        </div><!-- col -->
+      </div>
+      <div *ngIf="skeletonLoader" class=" loader mt-5 card">
+        <div class="card-body">
+          <ngx-skeleton-loader count="10" class="pt-4"></ngx-skeleton-loader>
+        </div>
+      </div>
+
+      <div class="mt-3 border-top-blue row">
+
         <div class="card cookie-addons-card col-md-12">
-          <div *ngIf="!skeletonLoader" class="card-body">
+          <div class="card-header row">
+            <div class="col-md-3">
+              <h4 class=" mt-2 addon-text">Add-On Plans</h4>
+            </div>
+            <div class="col-md-9 pr-2">
+
+              <div class="toggle-period_addon" style="    float: right;"
+                   [tooltip]="activeData.addons.cycle === 'yearly' ? 'You can not downgrade your plan' : null">
+                <input id="toggle-period_addon" (change)="onSelectAddonBillingCycle(subTypeAddon)"
+                       [disabled]="activeData.addons.cycle === 'yearly'"
+                       [checked]="billingAddonCycle === 'yearly'" #subTypeAddon class="toggle-period__checkbox_addon"
+                       type="checkbox">
+                <label for="toggle-period_addon" class="toggle-period__label_addon">
+                  <span class="toggle-period__monthly_addon"
+                        [ngStyle]="{color: billingAddonCycle == 'yearly' ? '#c3c4c7' : '#0546a3'}" role="checkbox"
+                        aria-checked="false">Billed monthly</span>
+                  <span class="toggle-period__switch_addon"
+                        [ngStyle]="{backgroundColor: billingAddonCycle == 'yearly' ? '#0da1dd' : '#0546a3'}"
+                        role="checkbox" aria-checked="true" tabindex="0"></span>
+                  <span class="toggle-period__yearly_addon"
+                        [ngStyle]="{color: billingAddonCycle == 'yearly' ? '#0da1dd' : '#c3c4c7'}" role="checkbox"
+                        aria-checked="true">Billed annually</span>
+                  <span class="flag_addon"
+                        [ngStyle]="{opacity: billingAddonCycle == 'yearly' ? 1 : .4}">2 Months Free</span>
+                </label>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="!skeletonLoader" class="card-body pt-0">
             <div *ngFor="let addons of addonsList" class="row mt-4" style="border-bottom: 1px dotted lightgray">
+              <div class="col-md-12">
+                <div *ngIf="billingAddonCycle === 'yearly'" class="plan-discount-dsar">
+                  <span class="annual">2 Months Free</span>
+                </div>
+              </div>
               <div class="text-left col-md-7">
                 <h5 class="addons-head">{{addons.product_name}}</h5>
                 <p>{{addons.description}}</p>
+
+                <ul class="feature-list-group-dsar">
+                  <ng-container *ngIf="addons.name === 'Essentials'">
+                    <li class="text-left feature-list"
+                        *ngFor="let  features of highLightFeatures.dsar.essentials">{{features.featureName}} <span
+                      class="font-weight-bold" *ngIf="features.featureValue"> - {{features.featureValue}}</span></li>
+                  </ng-container>
+                  <ng-container *ngIf="addons.name === 'Professional'">
+                    <li class="text-left feature-list"
+                        *ngFor="let  features of highLightFeatures.dsar.professional">{{features.featureName}} <span
+                      class="font-weight-bold" *ngIf="features.featureValue"> - {{features.featureValue}}</span></li>
+                  </ng-container>
+                  <ng-container *ngIf="addons.name === 'Enterprise'">
+                    <li class="text-left feature-list"
+                        *ngFor="let  features of highLightFeatures.dsar.enterprise">{{features.featureName}} <span
+                      class="font-weight-bold" *ngIf="features.featureValue"> - {{features.featureValue}}</span></li>
+                  </ng-container>
+                </ul>
+
               </div>
               <div class="col-md-2">
                 <div class="w-100 form-group m-auto mb-2 ">
-                  <label for="sel1">Property</label>
+                  <label for="sel1">Organization: </label>
                   <select #addonsUnit style="height: 32px;" class="mb-2 form-control">
                     <option>1</option>
                     <option>2</option>
@@ -177,22 +207,27 @@
               <div class="col-md-1">
 
                 <h3 *ngIf="addons.price <=  activeData.addons.maxPrice" class="mt-3">
-                  <i class="fa fa-plus" aria-hidden="true"></i>
+                  <i class="fa fa-plus"
+                     data-toggle="tooltip" data-placement="top" title="You can not downgrade your plan"
+                     aria-hidden="true"></i>
                 </h3>
 
 
                 <h3 *ngIf="addons.price !=  activeData.addons.maxPrice && addons.price >=  activeData.addons.maxPrice"
-                   (click)="onAddToCart(addons, addonsUnit)" class="mt-3 add-addons">
+                    data-toggle="tooltip" data-placement="top" title="Add to Cart"
+                    (click)="onAddToCart(addons, addonsUnit)" class="mt-3 add-addons">
                   <i class="fa fa-plus" aria-hidden="true"></i>
                 </h3>
 
 
               </div>
               <div class="col-md-2">
-                <h4 class="mt-4"><b>${{addons.price}}.00</b></h4>
+                <h4 class="mt-4" *ngIf="billingAddonCycle === 'monthly'"><b>${{addons.price}} </b> <span class="tx-12">/Month</span>
+                </h4>
+                <h4 class="mt-4" *ngIf="billingAddonCycle !== 'monthly'">
+                  <b>${{addons.price / 12 | number : '1.0-0'}} </b> <span class="tx-12">/Month</span></h4>
               </div>
             </div>
-
 
 
             <div class="row mt-4" style="border-bottom: 1px dotted lightgray">
@@ -200,134 +235,217 @@
                 <h5 class="addons-head">Enterprise </h5>
                 <p>Advanced enterprise features and global coverage. Volume discount available.
                 </p>
+
+                <ul class="feature-list-group-dsar">
+                  <li class="text-left feature-list" *ngFor="let  features of highLightFeatures.dsar.enterprise">
+                    {{features.featureName}} <span class="font-weight-bold"
+                                                   *ngIf="features.featureValue"> - {{features.featureValue}}</span>
+                  </li>
+                </ul>
+
               </div>
               <div class="col-md-2">
               </div>
               <div class="col-md-3">
-                <a href="https://adzapier.com/connect" target="_blank" class="btn mt-1 mb-4 add-to-cart-btn btn-primary btn-block">Chat with us</a>
+                <a href="https://adzapier.com/get-started/" target="_blank"
+                   class="btn mt-1 mb-4 add-to-cart-btn btn-primary btn-block">Get Enterprise</a>
               </div>
             </div>
 
 
           </div>
 
-            <div *ngIf="skeletonLoader" class="card-body">
-              <ngx-skeleton-loader count="5" class="pt-4"></ngx-skeleton-loader>
-            </div>
-
-        </div>
-      </div>
-
-        <div class="container row table-responsive mg-t-30 ">
-          <h4 class="mg-b-10 align-baseline">Feature comparison</h4>
-          <table class="table ">
-            <tbody>
-            <tr>
-              <th scope="row"></th>
-              <td><div class="rounded-10 pd-y-10 pd-x-20 bg-ui-01">Free</div></td>
-              <td><div class="rounded-10 pd-y-10 pd-x-20 bg-ui-01">Essentials</div></td>
-              <td><div class="rounded-10 pd-y-10 pd-x-20 bg-ui-01">Professional</div></td>
-              <td><div class="rounded-10 pd-y-10 pd-x-20 bg-ui-01">Enterprise</div></td>
-            </tr>
-
-            <tr *ngFor="let feature of featuresList">
-              <th scope="row text-feature-left" style="text-align: left">{{feature.feature}}</th>
-              <td><svg *ngIf="feature.free" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-square tx-primary"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg></td>
-              <td><svg  *ngIf="feature.essentials" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-square tx-primary"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg></td>
-              <td><svg *ngIf="feature.professional" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-square tx-primary"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg></td>
-              <td><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-square tx-primary"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg></td>
-            </tr>
-
-            </tbody>
-          </table>
-        </div>
-
-
-      </div>
-
-      <div class="col-md-3">
-        <div *ngIf="cartItem.length > 0" class="card cart-box ">
-          <div class="card-body">
-            <h3 class="mb-4 text-center">Your Cart</h3>
-
-            <div *ngFor="let cart of cartItem; let i = index" class="row mt-2" style="border-bottom: 1px solid lightgray;">
-              <div style="text-align: left" class="col-md-6">
-                <h5 class="cart-head">{{cart.name}}
-                </h5>
-                <h6 class="pt-2 font-weight-bold">Property</h6>
-              </div>
-              <div class="col-md-5">
-                <h5>${{cart.priceTotal}}.00</h5>
-                <div class=" w-100 m-auto form-group">
-                  <select (change)="onUpdateCart(cartProperty, i)" #cartProperty [value]="cart.unit" style="height: 32px;" class="mb-2  form-control">
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
-                    <option>6</option>
-                    <option>7</option>
-                    <option>8</option>
-                    <option>9</option>
-                    <option>10</option>
-                  </select>
-                </div>
-              </div>
-
-              <div>
-               <h4 (click)="onRemoveCartItem(i , cart)" style="cursor: pointer" class="pt-3 text-danger"><i class="fa fa-times" aria-hidden="true"></i>
-               </h4>
-              </div>
-            </div>
-
-
-            <div class="row mt-3">
-              <div class="col-md-6">
-               <h5 class="pt-2 font-weight-bold text-left"> Promo Code</h5>
-              </div>
-              <div class="col-md-6 text-right">
-                <input type="text" class="form-control mb-1 w-100" [(ngModel)]="promoCode" [disabled]="percentOff" [value]="percentOff ? null : promoCode" placeholder="Promo Code">
-                <a href="javascript:;" *ngIf="promoCode && !percentOff" class="mr-1 text-primary" (click)="onApplyCoupon()">Apply</a>
-<!--                <a href="javascript:;"  class="mr-1 text-primary" (click)="onRemoveCoupon()">Remove</a>-->
-                <p *ngIf="percentOff" class="alert-success promoCode-text alert">{{promoCode}}
-                  <i class="fa fa-times cursorpointer close-btn" (click)="onRemoveCoupon()" aria-hidden="true"></i></p>
-              </div>
-            </div>
-
-              <div class="row mt-1 pt-3" style="border-top: 1px solid lightgray">
-                <div class="col-md-6">
-                  <h5 class=" font-weight-bold text-left">Subtotal</h5>
-                  <h6 class="font-weight-bold text-left">Discount</h6>
-                </div>
-                <div class="col-md-6 text-left">
-                  <h5> ${{  subTotal + '.00' }}</h5>
-                  <h5> ${{percentOff ? subTotal * percentOff / 100 : '0.00'}} ({{percentOff}}%)</h5>
-                </div>
-
-              </div>
-
-
-            <div class="row mt-3 pt-3" style="border-top: 1px dotted lightgray">
-              <div class="col-md-6">
-                <h5 class="text-left font-weight-bold">Total</h5>
-              </div>
-              <div class="col-md-5">
-                <h5>${{ percentOff ? subTotal - subTotal * percentOff / 100 : subTotal + '.00' }}</h5>
-              </div>
-              <div class="col-md-12">
-                <button type="button" (click)="onSelectPlan()" class="pl-5 mb-3 font-weight-bold pr-5 btn-lg btn btn-primary">Checkout</button>
-              </div>
-            </div>
-
-
+          <div *ngIf="skeletonLoader" class="card-body">
+            <ngx-skeleton-loader count="5" class="pt-4"></ngx-skeleton-loader>
           </div>
+
         </div>
       </div>
+
 
     </div>
-  </div><!-- container -->
+
+    <div *ngIf="cartItem.length > 0" class="col-md-3">
+      <div class="card cart-box ">
+        <div class="card-body">
+          <h3 class="mb-4 text-center">Your Cart</h3>
+
+          <div *ngFor="let cart of cartItem; let i = index" class="row mt-2"
+               style="border-bottom: 1px solid lightgray;">
+            <div style="text-align: left" class="col-md-6">
+              <h5 class="cart-head">{{cart.name}}
+              </h5>
+              <h6 class="pt-2 font-weight-bold tx-13">Property / Organization</h6>
+            </div>
+            <div class="col-md-5">
+              <h5>${{cart.priceTotal}}.00</h5>
+              <div class=" w-100 m-auto form-group">
+                <select (change)="onUpdateCart(cartProperty, i)" #cartProperty [value]="cart.unit" style="height: 32px;"
+                        class="mb-2 w-75  form-control">
+                  <option>1</option>
+                  <option>2</option>
+                  <option>3</option>
+                  <option>4</option>
+                  <option>5</option>
+                  <option>6</option>
+                  <option>7</option>
+                  <option>8</option>
+                  <option>9</option>
+                  <option>10</option>
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <h4 (click)="onRemoveCartItem(i , cart)" style="cursor: pointer" class="pt-3 text-danger"><i
+                class="fa fa-times" aria-hidden="true"></i>
+              </h4>
+            </div>
+          </div>
+
+
+          <div class="row mt-3">
+            <div class="col-md-4">
+              <h5 class="pt-2 font-weight-bold text-left tx-14"> Promo Code</h5>
+            </div>
+            <div class="col-md-5 text-right p-0">
+              <input type="text" class="form-control mb-1 w-100" [(ngModel)]="promoCode" [disabled]="percentOff"
+                     [ngClass]="{'is-invalid' : isPromoCodeError}"
+                     placeholder="Promo Code">
+              <div *ngIf="isPromoCodeError" class="invalid-feedback" style="width: 205px;">
+                The promo code you entered is not valid
+              </div>
+<!--              <a href="javascript:;" *ngIf="promoCode && !percentOff" class="mr-1 text-primary"-->
+<!--                 (click)="onApplyCoupon()">Apply</a>-->
+              <!--                <a href="javascript:;"  class="mr-1 text-primary" (click)="onRemoveCoupon()">Remove</a>-->
+              <div *ngIf="percentOff"  class="text-success text-left" >Promo Code Applied
+                <i class="fa fa-times cursorpointer close-btn" (click)="onRemoveCoupon()" aria-hidden="true"></i></div>
+            </div>
+            <div class="col-md-3">
+              <button type="button"  class="btn btn-outline-secondary" [disabled]="percentOff"
+                 (click)="onApplyCoupon()">Apply</button>
+            </div>
+          </div>
+
+          <div class="row mt-1 pt-3" style="border-top: 1px solid lightgray">
+            <div class="col-md-6">
+              <h5 class=" font-weight-bold text-left">Subtotal</h5>
+              <h6 class="font-weight-bold text-left">Discount</h6>
+            </div>
+            <div class="col-md-6 text-left">
+              <h5> ${{  subTotal + '.00' }}</h5>
+              <h5> ${{percentOff ? subTotal * percentOff / 100 : '0.00'}} ({{percentOff}}%)</h5>
+            </div>
+
+          </div>
+
+
+          <div class="row mt-3 pt-3" style="border-top: 1px dotted lightgray">
+            <div class="col-md-6">
+              <h5 class="text-left font-weight-bold">Total</h5>
+            </div>
+            <div class="col-md-5">
+              <h5>${{ percentOff ? subTotal - subTotal * percentOff / 100 : subTotal + '.00' }}</h5>
+            </div>
+            <div class="col-md-12">
+              <button type="button" (click)="onSelectPlan()"
+                      class="pl-5 mb-3 font-weight-bold pr-5 btn-lg btn btn-primary">Checkout
+              </button>
+            </div>
+          </div>
+
+
+        </div>
+      </div>
+    </div>
+
+
+    <div class="mt-4 card border-top-blue "
+         [ngClass]="{'col-md-12' : cartItem.length === 0 ,  'col-md-9' : cartItem.length > 0}">
+
+
+      <div class="container card-body row table-responsive mg-t-10 ">
+        <h4 class="mg-b-10 align-baseline blue-text">Feature comparison</h4>
+        <table class="table ">
+          <tbody>
+          <tr>
+            <th scope="row"></th>
+            <td>
+              <div class="rounded-10 pd-y-10 pd-x-20 bg-ui-01">Free</div>
+            </td>
+            <td>
+              <div class="rounded-10 pd-y-10 pd-x-20 bg-ui-01">Essentials</div>
+            </td>
+            <td>
+              <div class="rounded-10 pd-y-10 pd-x-20 bg-ui-01">Professional</div>
+            </td>
+            <td>
+              <div class="rounded-10 pd-y-10 pd-x-20 bg-ui-01">Enterprise</div>
+            </td>
+          </tr>
+
+
+          <tr *ngFor="let feature of featureCount">
+            <th scope="row text-feature-left" style="text-align: left">{{feature.featureName}}</th>
+            <td>{{feature.free}}</td>
+            <td>{{feature.essentials}}</td>
+            <td>{{feature.professional}}</td>
+            <td>{{feature.enterprise}}</td>
+          </tr>
+
+          <tr *ngFor="let feature of featuresList">
+            <th scope="row text-feature-left" style="text-align: left">{{feature.feature}}</th>
+            <td>
+              <svg *ngIf="feature.free" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                   fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                   class="feather feather-check-square tx-primary">
+                <polyline points="9 11 12 14 22 4"></polyline>
+                <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+              </svg>
+            </td>
+            <td>
+              <svg *ngIf="feature.essentials" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                   viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                   stroke-linejoin="round" class="feather feather-check-square tx-primary">
+                <polyline points="9 11 12 14 22 4"></polyline>
+                <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+              </svg>
+            </td>
+            <td>
+              <svg *ngIf="feature.professional" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                   viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                   stroke-linejoin="round" class="feather feather-check-square tx-primary">
+                <polyline points="9 11 12 14 22 4"></polyline>
+                <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+              </svg>
+            </td>
+            <td>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                   stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                   class="feather feather-check-square tx-primary">
+                <polyline points="9 11 12 14 22 4"></polyline>
+                <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+              </svg>
+            </td>
+          </tr>
+
+
+          </tbody>
+        </table>
+
+        <div *ngIf="skeletonLoaderFeature" class=" loader  ">
+          <ngx-skeleton-loader count="10" class="pt-4"></ngx-skeleton-loader>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="cartItem.length > 0" class="col-md-3"></div>
+
+  </div>
+</div><!-- container -->
 
 
 <div class="col-sm-5 mr-0 float-right flotingdiv" [ngClass]="{'hide':!isOpen}">
-  <alert *ngIf="isOpen" [type]="alertType" dismissOnTimeout="5000" [dismissible]="dismissible" (onClosed)="onClosed(alertMsg)">{{  alertMsg}}</alert>
+  <alert *ngIf="isOpen" [type]="alertType" dismissOnTimeout="5000" [dismissible]="dismissible"
+         (onClosed)="onClosed(alertMsg)">{{  alertMsg}}</alert>
 </div>

@@ -11,6 +11,7 @@ import { LazyLoadEvent } from 'primeng/api';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { OrganizationService } from 'src/app/_services';
+import { trimValidator } from 'src/app/_helpers/trimspace.validator';
 // import { strings } from "ngx-timeago/language-strings/en";
 // import { TimeagoIntl } from "ngx-timeago";
 @Component({
@@ -51,6 +52,7 @@ export class WorkflowsComponent implements OnInit, AfterViewInit  {
   addBlurbackgroundToTable: any;
   private searchDecouncer$: Subject<string> = new Subject();
   currentManagedOrgID: any;
+  isSaveClicked = false;
   constructor(private router: Router, 
               private workflowService: WorkflowService,
               private dataService: DataService,
@@ -73,7 +75,7 @@ export class WorkflowsComponent implements OnInit, AfterViewInit  {
     this.setupSearchDebouncer();
     const alphaNumeric = '^(?![0-9]*$)[a-zA-Z0-9 ]+$';
     this.createWorkFlowForm = this.formBuilder.group({
-      workflowName: ['', [Validators.required, Validators.pattern(alphaNumeric)]],
+      workflowName: ['', [Validators.required, Validators.pattern(alphaNumeric),trimValidator]],
       workflowselection: ['', [Validators.required]]
     });
     this.isloading = true;
@@ -92,7 +94,7 @@ export class WorkflowsComponent implements OnInit, AfterViewInit  {
     }
   }
 
-  // to retrive all and show only active workflow in dropdown  
+  // to retrive all and show only active workflow in dropdown
   loadWorkflowList() {
     const pagelimit = '?limit=' + this.paginationConfig.itemsPerPage + '&page=' + this.paginationConfig.currentPage;
     this.workflowService.getWorkflow(this.constructor.name, moduleName.workFlowModule, this.currentManagedOrgID,  pagelimit).subscribe((data) => {
@@ -109,7 +111,7 @@ export class WorkflowsComponent implements OnInit, AfterViewInit  {
     // restore original order
     this.selectedCols = this.cols.filter(col => val.includes(col));
   }
-  
+
   onGetOrgId() {
     this.orgservice.currentProperty.subscribe((response) => {
       if (response !== '') {
@@ -137,7 +139,7 @@ export class WorkflowsComponent implements OnInit, AfterViewInit  {
       if(event.sortField !== undefined){
         orderBy = '&order_by=' + event.sortField + ':' + sortOrder;
       }
-     
+
 
       this.workflowService.getWorkflow(this.constructor.name, moduleName.workFlowModule, this.currentManagedOrgID, pagelimit, orderBy).subscribe((data) => {
         this.isloading = false;
@@ -152,7 +154,7 @@ export class WorkflowsComponent implements OnInit, AfterViewInit  {
         this.alertType = 'danger';
       });
 
-      
+
     }
 
     this.cols = [
@@ -168,7 +170,7 @@ export class WorkflowsComponent implements OnInit, AfterViewInit  {
 
     this.selectedCols = this.cols;
   }
- 
+
 
 loadActiveWorkflowList() {
   const pagelimit = '&limit=' + 0;
@@ -179,7 +181,7 @@ loadActiveWorkflowList() {
 }
 
 
-  public loadWorkflowById(id) {
+  loadWorkflowById(id) {
   // this.loadingBar.start();
   this.workflowService.getWorkflowById(this.constructor.name, moduleName.workFlowModule, this.currentManagedOrgID, id)
     .subscribe((data: any) => {
@@ -259,7 +261,6 @@ private searchFilter(): void {
 }
 
 onWorkflowChange($event) {
-  console.log($event, '$event.');
   this.selectedWorkflowId = $event.target.value;
   this.loadWorkflowById($event.target.value);
 }
@@ -270,8 +271,10 @@ createWorkFlow() {
   if (this.createWorkFlowForm.invalid) {
     return false;
   } else {
+    this.isSaveClicked = true;
+  if (this.workflowStages.length !== 0){
     const requestObj = {
-      workflow_name: this.createWorkFlowForm.value.workflowName,
+      workflow_name: this.createWorkFlowForm.value.workflowName.trim(),
       workflow_stages: this.workflowStages,
       workflow_status: 'draft',
       oid: this.currentManagedOrgID
@@ -284,9 +287,10 @@ createWorkFlow() {
         this.isOpen = true;
         this.alertType = 'success';
         this.createWorkFlowForm.reset();
+        this.isSaveClicked = false;
         this.modalService.dismissAll('Data Saved!');
         this.router.navigate(['privacy/dsar/createworkflow', data.id]);
-        this.loadWorkflowList();
+        // this.loadWorkflowList();
       }
     }, (error) => {
       this.isOpen = true;
@@ -296,6 +300,7 @@ createWorkFlow() {
       this.modalService.dismissAll('error!');
     });
   }
+}
 }
 
 rearrangeArrayResponse(dataArray) {
@@ -334,6 +339,7 @@ navigateToWorkflow(obj) {
 
 onCancelClick() {
   this.submitted = false;
+  this.isSaveClicked = false;
   this.createWorkFlowForm.reset();
   this.modalService.dismissAll('Canceled');
 }

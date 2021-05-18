@@ -2,6 +2,7 @@ import {NgModule} from '@angular/core';
 import {Routes, RouterModule} from '@angular/router';
 import {AnalyticsComponent} from './analytics.component';
 import {AuthGuard} from 'src/app/_helpers';
+import { LicenseguardPropertyService } from '../_services/licenseguardproperty.service';
 
 
 const routes: Routes = [

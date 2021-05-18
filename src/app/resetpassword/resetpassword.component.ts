@@ -33,7 +33,7 @@ export class ResetpasswordComponent implements OnInit {
     private alertService: AlertService
   ) {
     this.activatedRoute.snapshot.paramMap.get('id');
-    
+
   }
 
   ngOnInit() {
@@ -73,8 +73,6 @@ export class ResetpasswordComponent implements OnInit {
     }
 
     this.loading = true;
-    // debugger;
-    // console.log(this.f.token.value, this.f.newpsw.value, this.f.renewpsw.value);
     this.userService.resetpassword(this.constructor.name, moduleName.resetPasswordModule,
        this.f.token.value, this.f.newpsw.value, this.f.renewpsw.value)
       .pipe(first())

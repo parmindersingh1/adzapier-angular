@@ -54,7 +54,6 @@ export class RegisterComponent implements OnInit {
 
     // convenience getter for easy access to form fields
     get f() {
-       // console.log(this.regForm.controls);
         return this.regForm.controls;
     }
 
@@ -90,6 +89,7 @@ export class RegisterComponent implements OnInit {
                         this.isOpen = true;
                         this.alertType = 'success';
                         this.router.navigate(['signup/thankyou']);
+                        this.loading = false;
                     },
                     error => {
                         this.alertMsg = error.company_error || error;

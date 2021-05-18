@@ -19,13 +19,10 @@ import {NgxUiLoaderModule, NgxUiLoaderService} from 'ngx-ui-loader';
 import { ngxUiLoaderConfig } from './_constant/loading.contant';
 import { WelcomeComponent } from './welcome/welcome.component';
 import { ModalModule } from 'ngx-bootstrap/modal';
-import {NgbCollapseModule} from '@ng-bootstrap/ng-bootstrap';
+import {NgbCollapseModule, NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
-import { TabsModule } from 'ngx-bootstrap/tabs';
-import {ButtonModule} from 'primeng/button';
-import {TableModule} from 'primeng/table';
-
-
+import {TimeagoModule} from 'ngx-timeago';
+import { SubscriptionPopupComponent } from './_components/subscription-popup/subscription-popup.component';
 
 @NgModule({
   declarations: [
@@ -47,6 +44,7 @@ import {TableModule} from 'primeng/table';
    // VerifyemailComponent,
    //  CheckoutConfirmationComponent,
     WelcomeComponent,
+    SubscriptionPopupComponent
   ],
   imports: [
     BrowserModule,
@@ -70,12 +68,11 @@ import {TableModule} from 'primeng/table';
     // ChartsModule,
     // Ng2ChartJsModules,
     ModalModule.forRoot(),
+    TimeagoModule.forRoot(),
     // TabsModule.forRoot(),
     // AccordionModule.forRoot(),
     NgbCollapseModule,
-    TabsModule.forRoot(),
-    ButtonModule,
-    TableModule
+    NgbModule
   ],
   providers: [
     NgxUiLoaderService,
@@ -98,6 +95,7 @@ import {TableModule} from 'primeng/table';
   bootstrap: [AppComponent],
   exports: [
     // AnalyticsModule,
+    TimeagoModule,
     HeaderModule,
     TooltipModule,
     BsDropdownModule, CollapseModule]

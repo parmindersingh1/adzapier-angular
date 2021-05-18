@@ -16,7 +16,6 @@ stages:
 
 before_script:
   - printenv
-  - export CAL_VER=$(date +"%y%m%d%H")
 
 test:
   stage: test
@@ -25,11 +24,7 @@ test:
       - node_modules/
     expire_in: 1 hr
   script:
-    - npm uninstall -g @angular/cli angular-cli
-    - npm install -g @angular/cli@8.3.1
-    - rm -rf node_modules
     - npm install
-    - npm update
   before_script:
     - ls -ltr
 
@@ -42,13 +37,11 @@ build-develop:
       - dist/
     expire_in: 1 hr
   script:
-    - npm install -g @angular/cli@8.3.1
-    - npm update
-    - ./node_modules/@angular/cli/bin/ng build --configuration=develop 
+    - npm run build:dev
   only:
    - develop
    - /^develop_[0-9]+(?:.[0-9]+)+$/
-   
+
 build-stage:
   environment:
     name: staging
@@ -58,11 +51,8 @@ build-stage:
       - dist/
     expire_in: 1 hr
   script:
-    - npm install -g @angular/cli@8.3.1
-    - npm update
-    - ./node_modules/@angular/cli/bin/ng build --configuration=staging 
+    - npm run build:staging
   only:
-   - feature-ci-cd
    - staging
    - /^staging_[0-9]+(?:.[0-9]+)+$/
 
@@ -75,9 +65,7 @@ build-prod:
       - dist/
     expire_in: 1 hr
   script:
-    - npm install -g @angular/cli@8.3.1
-    - npm update
-    - ./node_modules/@angular/cli/bin/ng build --configuration=production 
+    - npm run build:prod
   only:
    - master
    - /^v[0-9]+(?:.[0-9]+)+$/
@@ -144,7 +132,7 @@ deploy-to-swarm-develop:
     TAGS: ${CI_COMMIT_REF_NAME}-${TAG}
     RESERVE_CPU: "'0.5'"
     LIMIT_CPU: "'1'"
-    RESERVE_MEMORY: 256M 
+    RESERVE_MEMORY: 256M
     LIMIT_MEMORY: 512M
   image: docker:19
   script:
@@ -154,7 +142,6 @@ deploy-to-swarm-develop:
     - docker stack deploy --with-registry-auth --compose-file=docker-stack-out.yaml ${CI_PROJECT_NAMESPACE}-${CI_PROJECT_NAME}
     - docker service update --with-registry-auth --replicas $RUNNING_REPLICAS --update-parallelism 1 --update-delay 10s ${CI_PROJECT_NAMESPACE}-${CI_PROJECT_NAME}_${SERVICE_NAME}
   before_script:
-    - export CAL_VER=$(date +"%y%m%d%H")
     - apk add gettext
     - RUNNING_REPLICAS=$(docker service ps ${CI_PROJECT_NAMESPACE}-${CI_PROJECT_NAME}_${SERVICE_NAME} | grep -i running | wc -l) || true
     - echo $RUNNING_REPLICAS
@@ -171,7 +158,7 @@ deploy-to-swarm-develop:
   only:
    - develop
    - /^develop_[0-9]+(?:.[0-9]+)+$/
-    
+
 deploy-to-swarm-staging:
   stage: deploy
   variables:
@@ -184,7 +171,7 @@ deploy-to-swarm-staging:
     TAGS: ${CI_COMMIT_REF_NAME}-${TAG}
     RESERVE_CPU: "'0.5'"
     LIMIT_CPU: "'1'"
-    RESERVE_MEMORY: 256M 
+    RESERVE_MEMORY: 256M
     LIMIT_MEMORY: 512M
   image: docker:19
   script:
@@ -194,7 +181,6 @@ deploy-to-swarm-staging:
     - docker stack deploy --with-registry-auth --compose-file=docker-stack-out.yaml ${CI_PROJECT_NAMESPACE}-${CI_PROJECT_NAME}
     - docker service update --with-registry-auth --replicas $RUNNING_REPLICAS --update-parallelism 1 --update-delay 10s ${CI_PROJECT_NAMESPACE}-${CI_PROJECT_NAME}_${SERVICE_NAME}
   before_script:
-    - export CAL_VER=$(date +"%y%m%d%H")
     - apk add gettext
     - RUNNING_REPLICAS=$(docker service ps ${CI_PROJECT_NAMESPACE}-${CI_PROJECT_NAME}_${SERVICE_NAME} | grep -i running | wc -l) || true
     - echo $RUNNING_REPLICAS
@@ -226,7 +212,7 @@ deploy-to-swarm-prod:
     DOMAINS: "Host(`portal.adzapier.com`)"
     RESERVE_CPU: "'0.5'"
     LIMIT_CPU: "'1'"
-    RESERVE_MEMORY: 256M 
+    RESERVE_MEMORY: 256M
     LIMIT_MEMORY: 512M
   image: docker:19
   script:
@@ -237,7 +223,6 @@ deploy-to-swarm-prod:
     - docker service update --with-registry-auth --replicas $RUNNING_REPLICAS --update-parallelism 1 --update-delay 10s ${CI_PROJECT_NAMESPACE}-${CI_PROJECT_NAME}_${SERVICE_NAME}
   before_script:
     - apk add gettext
-    - export CAL_VER=$(date +"%y%m%d%H")
     - export TAGS=$(echo ${CI_COMMIT_TAG} | sed 's/^.//') || true
     - RUNNING_REPLICAS=$(docker service ps ${CI_PROJECT_NAMESPACE}-${CI_PROJECT_NAME}_${SERVICE_NAME} | grep -i running | wc -l) || true
     - echo $RUNNING_REPLICAS

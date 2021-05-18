@@ -171,7 +171,6 @@ loadWebControls() {
         localStorage.setItem('formControlList', JSON.stringify(controlsList));
         return;
     } else {
-        console.log('else webcontrolList..');
     }
 
 }
@@ -259,7 +258,6 @@ if (localStorage.getItem('CCPAformControlList') === null || localStorage.getItem
     localStorage.setItem('CCPAformControlList', JSON.stringify(controlsList));
     return;
 } else {
-    console.log('else webcontrolList..');
 }
 
 }*/

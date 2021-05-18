@@ -142,7 +142,9 @@ export class ManageOrganizationComponent implements OnInit, OnDestroy {
 
 
   openModal(template: TemplateRef<any>) {
+    this.orgNameError=false
     this.modalRef = this.modalService.show(template);
+    this.orgForm.reset();
   }
 
   selected($e) {
@@ -153,7 +155,6 @@ export class ManageOrganizationComponent implements OnInit, OnDestroy {
 
   onSubmit() {
     this.submitted = true;
-    console.log('this.orgForm.value.orgID', this.orgForm.value.orgID)
     this.orgNameError = !this.orgForm.value.orgID ? true : false;
     // stop here if form is invalid
     if (this.orgForm.invalid) {
@@ -239,7 +240,7 @@ export class ManageOrganizationComponent implements OnInit, OnDestroy {
   decline(): void {
     this.modalRef.hide();
   }
-  
+
   getAvailableLimitByOrgID(){
     for(const key of this.orgList){
         this.planUsageByOrgid.length = 0
@@ -256,7 +257,7 @@ export class ManageOrganizationComponent implements OnInit, OnDestroy {
       console.log(error)
     });
   }
-  
+
   this.planUsageByOrgid
   }
  // use to fill background of progressbar

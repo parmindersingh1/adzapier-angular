@@ -3,7 +3,9 @@ export const apiConstant = {
   // Consent Banner
   CONSENT_BANNER: '/consent/banner/:orgId/:propId',
   // Cookie Category
-  COOKIE_BANNER: '/consent/save-custom-lang/:orgId/:propId',
+  COOKIE_BANNER_LANG_PUBLISH_JSON: '/consent/save-custom-lang/:orgId/:propId',
+  COOKIE_BANNER_LANG_SAVE_IN_DB: '/consent/save-lang/:orgId/:propId',
+  COOKIE_BANNER_GET_LANG_FROM_DB: '/consent/save-lang/:orgId/:propId/:lang',
   COOKIE_CATEGORY: '/cookiecategory',
   COOKIE_SCANNER: '/scanner/request/:orgId/:propId',
   COOKIE_PUBLISH: '/publish-cookie/:orgId/:propId',

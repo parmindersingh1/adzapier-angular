@@ -14,9 +14,10 @@ import {CheckboxModule} from 'primeng/checkbox';
 import {MultiSelectModule} from 'primeng/multiselect';
 import {TableModule} from 'primeng/table';
 import {RadioButtonModule} from 'primeng/radiobutton';
+import {HasUnsavedDataGuard} from '../../../_helpers/formUnsaved.guard';
 
 const path: Routes = [{
-  path: '', component: CookieBannerComponent,
+  path: '', component: CookieBannerComponent, canDeactivate: [HasUnsavedDataGuard]
 },
   { path: 'setup', component: SetupComponent}
 ];
@@ -36,6 +37,7 @@ const path: Routes = [{
     TableModule,
     RadioButtonModule,
     // TabsModule
-  ]
+  ],
+  providers: [HasUnsavedDataGuard]
 })
 export class CookieBannerModule { }

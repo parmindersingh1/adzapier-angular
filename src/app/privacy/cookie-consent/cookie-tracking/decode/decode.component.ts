@@ -54,8 +54,6 @@ export class DecodeComponent implements OnInit {
     this.getAllVendorsData();
     this.gdprService.getConsentInfo.subscribe(data =>{
         this.obj = data;
-        console.log(data);
-
         if (this.obj) {
            if(Object.keys(this.obj).length > 0) {
               if (this.obj.consent_type === 'GDPR') {

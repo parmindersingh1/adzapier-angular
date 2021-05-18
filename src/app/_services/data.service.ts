@@ -23,6 +23,17 @@ export class DataService {
 
   public openUnAuthModal = new BehaviorSubject<any>({isTrue: false, error: ''});
   public unAuthPopUp = this.openUnAuthModal.asObservable();
+
+  public isLicenseApplied = new BehaviorSubject<accesstype>({requesttype:'organization',hasaccess:false});
+  get isLicenseAvailable(){
+    return this.isLicenseApplied.asObservable();
+  }
+
+  public isLicenseAppliedForProperty = new BehaviorSubject<accesstype>({requesttype:'property',hasaccess:false});
+  get isLicenseAvailableForProperty(){
+    return this.isLicenseAppliedForProperty.asObservable();
+  }
+
   licenseAvailabilityObj = {};
   planUsageByOrgid = [];
   constructor(private http: HttpClient, private lokiService: LokiService) {
@@ -311,7 +322,7 @@ export class DataService {
   }
 
 
-  openUpgradeModalForCookieConsent(res) {
+  openUpgradeModalForCookieConsent(res):any {
     const msg = 'Sorry, You Are Not Allowed to Access This  Feature';
     let planDetails = null;
     if (res.hasOwnProperty('response')) {
@@ -340,12 +351,13 @@ export class DataService {
       msg: msg,
       currentplan: currentplan
     })
+    return currentplan !== null ? true : false;
   }
 
 
 
 
-  openUpgradeModalForDsar(res) {
+  openUpgradeModalForDsar(res):any {
     const msg = 'Sorry, You Are Not Allowed to Access This  Feature';
     let planDetails = null;
     if (res.hasOwnProperty('response')) {
@@ -368,6 +380,7 @@ export class DataService {
       msg: msg,
       currentplan: currentplan
     })
+    return currentplan !== null ? true : false;
   }
   // getLicensesDetails() {
 
@@ -483,4 +496,9 @@ export class DataService {
     return forkJoin([webFormLicense, requestLicense, workflowLicense])
   }
 
+}
+
+export class accesstype {
+  public requesttype: string;
+  public hasaccess:boolean;
 }

@@ -38,7 +38,6 @@ export class CookieBannerService {
   }
 
   onGetPlanType(componentName, moduleName): Observable<any> {
-    console.log('compone', componentName)
     const path = apiConstant.COMPANY_SERVICE;
     return this.http.get(environment.apiUrl + path)
       .pipe(map(res => res),
@@ -96,21 +95,33 @@ export class CookieBannerService {
     return this.http.get(url, { headers });
   }
 
-  GetCustomLangData(lang, oid, pid) {
-    const headers = new HttpHeaders()
-      .set('Cache-Control', 'no-cache, no-store, must-revalidate, post-check=0, pre-check=0')
-      .set('Pragma', 'no-cache')
-      .set('Expires', '0');
-    let url = environment.customLangURL.replace(':lang', lang);
-    url = url.replace(':oid', oid)
-    url = url.replace(':pid', pid)
-    return this.http.get(url, {headers});
+  GetCustomLangData(componentName, moduleName, lang, oid, pid) {
+    let url = apiConstant.COOKIE_BANNER_GET_LANG_FROM_DB.replace(':lang', lang);
+    url = url.replace(':orgId', oid);
+    url = url.replace(':propId', pid);
+    return this.http.get(environment.apiUrl + url).pipe(map(res => res),
+      catchError(error => {
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.cookieBanner, componentName, moduleName, url);
+        return throwError(error);
+      }),
+    );
   }
 
-  saveCustomLang(payloads, lang, orgId, propId, componentName, moduleName): Observable<any> {
-    let path = apiConstant.COOKIE_BANNER.replace(':orgId', orgId);
+  saveCustomLang(payloads, lang, orgId, propId, componentName, moduleName ): Observable<any> {
+    let path = apiConstant.COOKIE_BANNER_LANG_PUBLISH_JSON.replace(':orgId', orgId);
     path = path.replace(':propId', propId);
     return this.http.post(environment.apiUrl + path, payloads, {params: {lang}}).pipe(map(res => res),
+      catchError(error => {
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.cookieBanner, componentName, moduleName, path);
+        return throwError(error);
+      }),
+    );
+  }
+
+  saveCustomLangInDB(payloads, orgId, propId, componentName, moduleName ): Observable<any> {
+    let path = apiConstant.COOKIE_BANNER_LANG_SAVE_IN_DB.replace(':orgId', orgId);
+    path = path.replace(':propId', propId);
+    return this.http.post(environment.apiUrl + path, payloads).pipe(map(res => res),
       catchError(error => {
         this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.cookieBanner, componentName, moduleName, path);
         return throwError(error);

@@ -18,7 +18,7 @@ import {featuresName} from '../../../_constant/features-name.constant';
   changeDetection: ChangeDetectionStrategy.Default
 })
 export class HeaderComponent implements OnInit {
-  @ViewChild('confirmTemplate', { static: false }) confirmModal: TemplateRef<any>;
+  @ViewChild('confirmTemplate') confirmModal: TemplateRef<any>;
   modalRef: BsModalRef;
   isCollapsed = true;
   isMobileMenuCollapsed = false;
@@ -218,10 +218,10 @@ export class HeaderComponent implements OnInit {
           label: 'User', icon: 'assets/imgs/glass.jpg',
           items: [
             { label: 'User Preferences', routerLink: '/userprofile', icon: 'edit-3' },
-            { label: 'Organizations', routerLink: 'settings/organizations', icon: 'activity' },
-            { label: 'Billing', routerLink: 'settings/billing/manage', icon: 'credit-card' },
+            { label: 'Organizations', routerLink: '/settings/organizations', icon: 'activity' },
+            { label: 'Billing', routerLink: '/settings/billing/manage', icon: 'credit-card' },
             { label: 'Settings', routerLink: '/settings', icon: 'settings' },
-            { label: 'Help Center', routerLink: '/pagenotfound', icon: 'help-circle' },
+            { label: 'Help Center', routerLink: 'https://adzapier.atlassian.net/wiki/spaces/PD/pages/884637701/Adzapier+Portal', icon: 'help-circle' },
             { label: 'Signout', routerLink: '/login', icon: 'log-out' }
           ]
         }];
@@ -247,7 +247,7 @@ export class HeaderComponent implements OnInit {
             { showlink: 'Consent Tracking', routerLink: '/cookie-consent/cookie-tracking', icon: 'fas fa-file-contract feather-16' },
             { showlink: 'Setup', routerLink: '/cookie-consent/cookie-banner/setup', icon: 'fas fa-wrench feather-16' }
           ]
-        }, { showlink: 'Billing', routerLink: 'settings/billing/manage' }];
+        }, { showlink: 'Billing', routerLink: '/settings/billing/manage' }];
     }, (error) => {
       console.log(error);
     });
@@ -276,6 +276,11 @@ export class HeaderComponent implements OnInit {
       .subscribe((res: any) => {
           this.loading.stop('2')
         this.dataService.setOrgPlanToLocalStorage(res);
+        if((typeof res !== undefined || res!== null) && res.response.features !== null){
+          this.dataService.isLicenseApplied.next({requesttype:'organization',hasaccess:true});
+        } else{
+          this.dataService.isLicenseApplied.next({requesttype:'organization',hasaccess:false});
+        }
       }, error => {
         this.loading.stop('2')
       });
@@ -322,18 +327,6 @@ export class HeaderComponent implements OnInit {
         this.router.navigate(['/privacy/dsar/workflows']);
       }
      this.openNav();
-
-
-
-    // this.dataService.changeCurrentPropertyPlan(res.response);
-
-    // this.dataService.currentPropertyPlanDetails.subscribe(res => {
-    //   this.dataService.setPropertyPlanToLocalStorage(res);
-    //   console.log('Res DAta', res);
-    // }, err => {
-    //   console.log('Error Property Plan Change', err)
-    // })
-
   }
 
   isPropSelected(selectedItem): boolean {
@@ -640,12 +633,12 @@ export class HeaderComponent implements OnInit {
       if(data.status === 200 && purpose == 'read'){
         this.storeNotificationList[i].read = !status;
         this.storeNotificationList = [...this.storeNotificationList];
-       
+
       }else{
         this.storeNotificationList[i].active = false;
         this.storeNotificationList = [...this.storeNotificationList];
       }
-      
+
     });
   }
 
@@ -664,7 +657,6 @@ export class HeaderComponent implements OnInit {
       read: false, // false,
     };
     this.userService.updateNotification(this.constructor.name, moduleName.headerModule, obj).subscribe((data) => {
-      console.log(data.response);
       this.loadNotification();
     });
   }
@@ -679,7 +671,7 @@ export class HeaderComponent implements OnInit {
     } else if (this.orgPropertyMenu.length >= 4 && this.orgPropertyMenu.length <= 8) {
       return { 'column-count': 3 }
     } else if (this.orgPropertyMenu.length >= 8) {
-      return { 
+      return {
         'column-count': 4,
         'overflow-x': "scroll",
         'width': "950px",
@@ -805,8 +797,6 @@ export class HeaderComponent implements OnInit {
   @HostListener('window:resize',['$event'])
   onWindowResize(event){
     if(event.target.outerWidth <= 767){
-     // !this.close ? this.close = true : this.close = false;
-      console.log(this.close,'close..');
       if(!this.close){
         this.close = true;
         this.addMobileMenuWidth = this.addMenuWidth();
@@ -825,11 +815,14 @@ export class HeaderComponent implements OnInit {
         const features = resData.response.features;
         if (features == null) {
           this.isShowDashboardForCookieConsent = false;
+          this.dataService.isLicenseAppliedForProperty.next({requesttype:'property',hasaccess:false});
         } else {
           if (Object.keys(features).length > 0) {
             this.isShowDashboardForCookieConsent = true;
+            this.dataService.isLicenseAppliedForProperty.next({requesttype:'property',hasaccess:true});
           } else {
             this.isShowDashboardForCookieConsent = false;
+            this.dataService.isLicenseAppliedForProperty.next({requesttype:'property',hasaccess:false});
           }
         }
       }
@@ -843,11 +836,14 @@ export class HeaderComponent implements OnInit {
         const features = resData.response.features;
         if (features == null) {
           this.isShowDashboardForDsar = false;
+          this.dataService.isLicenseApplied.next({requesttype:'organization',hasaccess:false});
         } else {
           if (Object.keys(features).length > 0) {
             this.isShowDashboardForDsar = true;
+            this.dataService.isLicenseApplied.next({requesttype:'organization',hasaccess:true});
           } else {
             this.isShowDashboardForDsar = false;
+            this.dataService.isLicenseApplied.next({requesttype:'organization',hasaccess:false});
           }
         }
       }

@@ -245,10 +245,10 @@
                         <ng-template ngbNavContent>
                             <form [formGroup]="quillEditorEmailText" autocomplete="false"
                                 (ngSubmit)="onSubmitEmailPost()">
-                                <div class="d-flex">
-                                    <div class="d-flex align-items-center mb-2 ml-auto">
-                                        <label class="mr-2"> Select template </label>
-                                        <div class="flex-row m1">
+                                <div class="col-sm-5 mr-0 pr-0 template-dp-position">
+                                    <div class="email-template-dropdown">
+                                        <label class="mr-2 mb-0 label-bold"> Select template </label>
+                                        <div class="col-sm-6 mr-0 pr-0">
                                             <select (change)="onChangeRequestType($event)"
                                                 formControlName="dropdownEmailTemplate" class="form-control">
                                                 <option selected disabled value="">select email template</option>
@@ -426,8 +426,7 @@
                         <li *ngFor="let data of emailLog; let k = index;  first as isFirst">
                             <div class="activity-log">
                                 <div class="chat-group-divider">
-                                    <!-- *ngIf="isFirst || data.created_at != emailLog[i+1].created_at"-->
-                                    <!-- <span>{{data.created_at | date:'longDate'}}</span> -->
+                                    
                                     <span
                                         *ngIf=" !k || ( data.created_at | date: 'longDate') !== (emailLog[k-1].created_at | date: 'longDate' ) ">
                                         {{data.created_at | date:'longDate'}}
@@ -672,7 +671,7 @@
             </div>
             <div class="row">
                 <div class="col-sm-12">
-                    <label class="mt-2 mb-0"><span class="color-red">*</span>Reason for extending the request</label>
+                    <label class="mt-2 mb-0"><span class="color-red">*</span>Reason for rejecting the request</label>
 
                     <quill-editor formControlName="editorComments" class="quilleditorextenddays" [styles]="{height: '90px'}"
                      [modules]="quillConfig">
@@ -760,9 +759,9 @@
             <div class="row">
                 <div class="col-sm-12 ml-1 mb-3">
                     <div class="form-check">
+                        <input type="checkbox" id="issubtaskrequired" class="form-check-input" [(ngModel)]="subTaskFields.required" name="required" />
                         <label for="issubtaskrequired"
                             class="form-check-label tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">
-                            <input type="checkbox" class="form-check-input" [(ngModel)]="subTaskFields.required" name="required" />
                             <span>Is Required</span>
                         </label>
                     </div>

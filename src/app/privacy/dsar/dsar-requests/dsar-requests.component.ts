@@ -17,6 +17,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DataService } from 'src/app/_services/data.service';
 import { BillingService } from 'src/app/_services/billing.service';
 import { BsDatepickerConfig, DatepickerDateCustomClasses } from 'ngx-bootstrap/datepicker';
+import { Table } from "primeng/table";
+
 @Component({
   selector: 'app-dsar-requests',
   templateUrl: './dsar-requests.component.html',
@@ -29,6 +31,7 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
   cols: any[];
   selectedCols: any[];
   @ViewChild('editor', { static: true }) editor;
+  @ViewChild("ptable") pTable: Table;
   submitted: boolean;
   propertyname: any;
   reloadRequestList = [];
@@ -399,6 +402,10 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
     }
     }
 
+  }
+
+  onRefresh(){
+    this.pTable.reset();
   }
 
   previewCCPAForm() {

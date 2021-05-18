@@ -21,8 +21,8 @@ import {NgxUiLoaderService} from 'ngx-ui-loader';
 })
 export class OrganizationdetailsComponent implements OnInit {
   @ViewChild('propertyModal', { static: true }) propertyModal: TemplateRef<any>;
-  @ViewChild('confirmTemplate', { static: false }) confirmModal: TemplateRef<any>;
-  @ViewChild('deletePropertyAlert',{static: false}) deleteAlertModal: TemplateRef<any>;
+  @ViewChild('confirmTemplate') confirmModal: TemplateRef<any>;
+  @ViewChild('deletePropertyAlert') deleteAlertModal: TemplateRef<any>;
   modalRef: BsModalRef;
   organisationPropertyForm: FormGroup;
   editOrganisationForm: FormGroup;
@@ -211,7 +211,6 @@ export class OrganizationdetailsComponent implements OnInit {
         this.alertType = 'info';
         this.modalService.open(this.propertyModal);
       }
-      // console.log(this.propertyList,'this.propertyList..');
       return this.propertyList = data.response;
     });
   }
@@ -255,10 +254,10 @@ export class OrganizationdetailsComponent implements OnInit {
     this.organisationPropertyForm.controls['website'].setValue(urlname);
     this.organisationPropertyForm.controls['logourl'].setValue(data.logo_url);
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
-      
+
       this.organisationPropertyForm.reset();
-      
-      
+
+
       // this.closeResult = `Closed with: ${result}`;
     }, (reason) => {
       this.organisationPropertyForm.reset();
@@ -306,7 +305,6 @@ export class OrganizationdetailsComponent implements OnInit {
           this.alertMsg = 'Organization has been updated!';
           this.isOpen = true;
           this.alertType = 'success';
-          console.log(this.currentManagedOrgID, 'currentManagedOrgID..');
           this.loadOrganizationByID(this.organizationID);
           if (res.response.id === this.currentManagedOrgID) {
             this.orgService.updateEditedOrganization(res);
@@ -398,7 +396,7 @@ export class OrganizationdetailsComponent implements OnInit {
         });
         this.organisationPropertyForm.reset();
         this.modalService.dismissAll('Data Saved!');
-        
+
       } else {
         const reqObj = {
           name: this.organisationPropertyForm.value.propertyname,
@@ -640,7 +638,6 @@ export class OrganizationdetailsComponent implements OnInit {
   }
 
   editUserInvitation(content, data) {
-    console.log(data, 'editUserInvitation..');
     this.isUpdateUserinvitation = true;
     this.recordID = data.id;
     this.approverID = data.approver_id;
@@ -713,27 +710,37 @@ export class OrganizationdetailsComponent implements OnInit {
       this.alertMsg = err;
       this.isOpen = true;
       this.alertType = 'danger';
+      this.onCanceled();
     });
     // } else {
     //   alert('aaa');
     // }
   }
 
+  onCanceled(){
+    this.isconfirmationsubmitted = false;
+    this.modalService.dismissAll('Canceled');
+    this.confirmationForm.reset();
+  }
+    
+
   onSubmitConfirmation(selectedaction) {
     this.isconfirmationsubmitted = true;
     if (this.confirmationForm.invalid) {
+      
       return false;
     } else {
       const userInput = this.confirmationForm.value.userInput;
       if (userInput === 'Delete') {
         if (selectedaction === 'organization') {
           this.confirmOrganizationDelete();
-          this.router.navigate(['settings/organizations']);
+          //this.router.navigate(['settings/organizations']);
         } else if (selectedaction === 'property') {
           this.confirmPropertyDelete();
         } else if (selectedaction === 'team member') {
           this.confirmDeleteTeamMember();
         }
+        
       } else {
         // this.confirmationForm.reset();
         // this.isconfirmationsubmitted = false;

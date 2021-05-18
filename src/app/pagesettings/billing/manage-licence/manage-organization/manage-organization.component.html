@@ -43,9 +43,9 @@
       <thead>
       <tr>
         <th>Organization Name</th>
-        <th>Created webforms</th>
-        <th>Created workflows</th>
-        <th>Created requests</th>
+        <th>Created Webforms</th>
+        <th>Created Workflows</th>
+        <th>Created Requests</th>
         <th>Email</th>
         <th>Action</th>
       </tr>
@@ -54,36 +54,36 @@
       <tr *ngFor="let obj of orgList">
         <td>{{obj.orgname}}
         </td>
-        <td colspan="3"> 
-           
+        <td colspan="3">
+
           <!-- <div> -->
             <ng-container *ngFor="let data of planUsageByOrgid">
               <span *ngIf="obj.id === data.organizationID" style="display: flex;">
                 <span class="progress w-75 " [ngClass]="[data.form_available === -1 ? 'unlimited-plan-light':'',data.form_available >= 15 ? 'professional-plan-light':'']">
                   <span class="txt-center-bold">   {{data.form_created}} / {{data.form_available === -1 ? "Unlimited" : data.form_limit}}</span>
-                  <span class="progress-bar" [ngClass]="[data.form_available === -1 ? 'unlimited-plan-dark':'',data.form_available >= 15 ? 'professional-plan-dark':'']" 
+                  <span class="progress-bar" [ngClass]="[data.form_available === -1 ? 'unlimited-plan-dark':'',data.form_available >= 15 ? 'professional-plan-dark':'']"
                     [ngStyle]="{width: limitUsedVsAvailable(data.form_created,data.form_limit)  + '%'}"></span>
                 </span>
-             
+
                 <span class="progress w-75 ml-3 mr-3" [ngClass]="data.workflow_limit === -1 ? 'unlimited-plan-light':''">
                   <span class="txt-center-bold">   {{data.workflow_created}} /  {{data.workflow_limit === -1 ? "Unlimited" : data.workflow_limit}}</span>
-                  <span class="progress-bar" [ngClass]="data.workflow_limit === -1 ? 'unlimited-plan-dark':''"  
-                  [ngStyle]="{width:  limitUsedVsAvailable(data.workflow_created,data.workflow_limit) + '%'}"></span> 
+                  <span class="progress-bar" [ngClass]="data.workflow_limit === -1 ? 'unlimited-plan-dark':''"
+                  [ngStyle]="{width:  limitUsedVsAvailable(data.workflow_created,data.workflow_limit) + '%'}"></span>
                 </span>
-               
+
                 <span class="progress w-75" [ngClass]="data.request_limit === -1 ? 'unlimited-plan-light':''">
                   <span class="txt-center-bold"> {{data.request_created}} / {{data.request_limit === -1 ? "Unlimited" : data.request_limit}}</span>
-                  <span class="progress-bar" [ngClass]="data.request_limit === -1 ? 'unlimited-plan-dark':''" 
+                  <span class="progress-bar" [ngClass]="data.request_limit === -1 ? 'unlimited-plan-dark':''"
                   [ngStyle]="{width: limitUsedVsAvailable(data.request_created,data.request_limit) + '%'}"></span> <!--limitUsedVsAvailable(data.request_created,data.request_limit)-->
                 </span>
               </span>
-             
+
             </ng-container>
         </td>
         <td>{{obj.email }}</td>
         <!-- <td> {{obj.city+ ', ' + obj.state + ', ' + obj.zipcode}} </td> -->
       <td>
-          <button class="btn btn-sm btn-outline-secondary btn-uppercase nohover border-0" (click)="delOrgID = obj.id; openModal(delConfirm)">
+          <button class="btn btn-sm btn-outline-secondary tx-danger btn-uppercase nohover border-0" (click)="delOrgID = obj.id; openModal(delConfirm)">
             <i-feather name="trash-2" class="commom-feathericon-height"></i-feather></button>
         </td>
 
@@ -120,7 +120,7 @@
       formControlName="orgID" [style]="{'width':'100%'}" [options]="allUnSignOrgList" ></p-multiSelect>
       </div>
       <div class="col-sm-4 p-0">
-        <button class="btn btn-link tx-decoration-underline" aria-label="Close"
+        <button class="btn btn-link tx-decoration-underline" aria-label="Close" type="button"
         (click)="modalRef.hide()">Cancel</button>
         <button type="submit" class="btn btn-primary mr-1" [disabled]="totalLicence - assigneLicence === 0">Assign</button>
       </div>

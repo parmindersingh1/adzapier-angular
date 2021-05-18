@@ -23,16 +23,17 @@
   border-radius: 7px;
 }
 .popular-text {
-  margin-left: -20px;
+  margin-left: -15px;
   height: 35px;
-  margin-right: -20px;
+  margin-right: -15px;
   padding-top: 10px;
   padding-bottom: 10px;
   color: #fff;
   font-size: 13px;
+  margin-top: -2px;
 }
 .text-head{
-  margin-bottom: 50px;
+  //margin-bottom: 50px;
 }
 .text-head h1{
   font-size: 44px;
@@ -58,10 +59,6 @@
 .plan-type {
   font-size: 28px;
   font-weight: bold;
-}
-ul {
-  margin: 0px !important;
-  padding: 0px !important;
 }
 .cart-box {
   border-radius: 8px;
@@ -100,10 +97,7 @@ li {
   padding-bottom: 10px;
   text-align: center;
 }
-li:hover {
-  background: #007bff;
-  color: #fff;
-}
+
 .solution {
   margin-bottom: 8px;
   margin-top: 25px;
@@ -158,15 +152,15 @@ li:hover {
 //     height: 1.25rem;
 // }
 
-input:focus + .slider {
-  box-shadow: 0 0 1px #2196F3;
-}
-
-input:checked + .slider:before {
-  -webkit-transform: translateX(26px);
-  -ms-transform: translateX(26px);
-  transform: translateX(26px);
-}
+//input:focus + .slider {
+//  box-shadow: 0 0 1px #2196F3;
+//}
+//
+//input:checked + .slider:before {
+//  -webkit-transform: translateX(26px);
+//  -ms-transform: translateX(26px);
+//  transform: translateX(26px);
+//}
 
 /* Rounded sliders */
 .slider.round {
@@ -176,18 +170,18 @@ input:checked + .slider:before {
 .slider.round:before {
   border-radius: 50%;
 }
-input:checked + .slider {
-  background-color: #2196F3;
-}
+//input:checked + .slider {
+//  background-color: #2196F3;
+//}
 
 
 
 
 
 
-input[type="checkbox"] {
-  display: none;
-}
+//input[type="checkbox"] {
+//  display: none;
+//}
 
 #button {
   position: relative;
@@ -232,10 +226,10 @@ input[type="checkbox"] {
   margin-left: 30px;
 }
 
-#lol-checkbox:checked + #button #knob {
-  left: 180px;
-  background-position: -150px 0;
-}
+//#lol-checkbox:checked + #button #knob {
+//  left: 180px;
+//  background-position: -150px 0;
+//}
 .cycle-type{
   height: 65px;
   margin-top: -75px;
@@ -292,10 +286,300 @@ input[type="checkbox"] {
   text-align: left;
 }
 .close-btn {
-  padding-right: 5px;
-  float: right;
+  padding-left: 5px;
   padding-top: 3px;
 }
 .text-feature-left {
   text-align: left;
+}
+.is-invalid {
+  background-image: none !important;
+}
+
+
+
+
+
+.feature-list-group {
+  height: 205px;
+}
+.feature-list {
+  padding-top: 5px;
+  padding-bottom: 0px;
+  font-size: 11px;
+}
+.prod-name{
+  height: 35px;
+}
+.more-text{
+  font-size: 12px;
+  font-weight: 600;
+}
+.text-color-nr {
+  color:#333 !important;
+}
+.mr-feature {
+  margin-bottom: 40px;
+}
+.annual {
+  display: inline;
+}
+.plan-discount {
+  background-color: #0da1dd;
+  box-sizing: content-box;
+  color: #fff;
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  height: 26px;
+  line-height: 26px;
+  opacity: 1;
+  padding: 0 30px;
+  position: absolute;
+  top: 25px;
+  right: -31px;
+  text-align: center;
+  -webkit-transform: rotateZ(
+      45deg
+  );
+  transform: rotateZ(
+      45deg
+  );
+  transition: all .15s ease-out;
+  width: 80px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+
+
+
+
+
+.toggle-period {
+  margin: 0px auto 0;
+}
+.toggle-period__checkbox {
+  display: none;
+}
+.toggle-period__label {
+  cursor: pointer;
+  display: inline-block;
+  font-weight: 700;
+  height: 24px;
+  letter-spacing: .3px;
+  line-height: 24px;
+  text-transform: uppercase;
+}
+.toggle-period__monthly {
+  color: #0546a3;
+  transition: all .2s ease;
+}
+.toggle-period__switch {
+  background-color: #0546a3;
+  border-radius: 12px;
+  box-sizing: border-box;
+  display: inline-block;
+  height: 24px;
+  margin: 0 20px;
+  outline: 0;
+  position: relative;
+  vertical-align: top;
+  width: 60px;
+}
+.pricing-table .toggle-period__label {
+  cursor: pointer;
+  display: inline-block;
+  font-weight: 700;
+  height: 24px;
+  letter-spacing: .3px;
+  line-height: 24px;
+  text-transform: uppercase;
+}
+.toggle-period__checkbox:checked+.toggle-period__label .toggle-period__switch:after {
+  left: 37px;
+}
+.toggle-period__switch:after {
+  background-color: #fff;
+  border-radius: 10px;
+  content: "";
+  display: block;
+  height: 20px;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  transition: all .2s ease;
+  width: 20px;
+}
+.toggle-period__yearly {
+  color: var(--color-neutral-10);
+  transition: all .2s ease;
+}
+
+.flag {
+  position: relative;
+  background-color: #0168fa;
+  color: #fff;
+  text-transform: none;
+  line-height: 1.875rem;
+  width: 100px;
+  margin-left: 20px;
+  font-weight: 400;
+  padding: 8px 15px 8px 10px;
+}
+.flag:before {
+  right: 100%;
+  top: 50%;
+  border: solid transparent;
+  content: " ";
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none;
+  border-color: rgba(167,210,179,0);
+  border-right-color: #0168fa;
+  border-width: 15px;
+  margin-top: -15px;
+}
+.pb-20-i{
+  padding-bottom: 20px !important;
+}
+.enterprise-btn {
+  margin-top: 53px;
+  margin-bottom: 0px !important;
+}
+.feature-list-group-dsar {
+  padding-left: 14px;
+}
+
+.plan-discount-dsar {
+  background-color: #0da1dd;
+  box-sizing: content-box;
+  color: #fff;
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  height: 26px;
+  line-height: 26px;
+  opacity: 1;
+  padding: 0 30px;
+  position: absolute;
+  top: -23px;
+  right: -19px;
+  text-align: center;
+  transition: all 0.15s ease-out;
+  width: 80px;
+  -webkit-font-smoothing: antialiased;
+}
+.addon-text {
+  text-align: left;
+  color: #0f1e70;
+  font-size: 21px;
+  font-weight: 600;
+  margin: 0px;
+}
+
+.blue-text{
+  color: #0f1e70;
+}
+
+.border-top-blue {
+  border-top: 4px solid #3968fa;
+  border-radius: 7px;
+}
+.desc-text {
+  font-size: 18px;
+  color: #3560d7 !important;
+  font-weight: 600;
+}
+
+
+
+
+
+
+.toggle-period_addon {
+  margin: 0px auto 0;
+}
+.toggle-period__checkbox_addon {
+  display: none;
+}
+.toggle-period__label_addon {
+  cursor: pointer;
+  display: inline-block;
+  font-weight: 700;
+  height: 24px;
+  letter-spacing: .3px;
+  line-height: 24px;
+  text-transform: uppercase;
+}
+.toggle-period__monthly_addon {
+  color: #0546a3;
+  transition: all .2s ease;
+}
+.toggle-period__switch_addon {
+  background-color: #0546a3;
+  border-radius: 12px;
+  box-sizing: border-box;
+  display: inline-block;
+  height: 24px;
+  margin: 0 20px;
+  outline: 0;
+  position: relative;
+  vertical-align: top;
+  width: 60px;
+}
+.pricing-table .toggle-period__label_addon {
+  cursor: pointer;
+  display: inline-block;
+  font-weight: 700;
+  height: 24px;
+  letter-spacing: .3px;
+  line-height: 24px;
+  text-transform: uppercase;
+}
+.toggle-period__checkbox_addon:checked+.toggle-period__label_addon .toggle-period__switch_addon:after {
+  left: 37px;
+}
+.toggle-period__switch_addon:after {
+  background-color: #fff;
+  border-radius: 10px;
+  content: "";
+  display: block;
+  height: 20px;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  transition: all .2s ease;
+  width: 20px;
+}
+.toggle-period__yearly_addon {
+  color: var(--color-neutral-10);
+  transition: all .2s ease;
+}
+
+.flag_addon {
+  position: relative;
+  background-color: #0168fa;
+  color: #fff;
+  text-transform: none;
+  line-height: 1.875rem;
+  width: 100px;
+  margin-left: 20px;
+  font-weight: 400;
+  padding: 8px 15px 8px 10px;
+}
+.flag_addon:before {
+  right: 100%;
+  top: 50%;
+  border: solid transparent;
+  content: " ";
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none;
+  border-color: rgba(167,210,179,0);
+  border-right-color: #0168fa;
+  border-width: 15px;
+  margin-top: -15px;
 }
