@@ -107,7 +107,7 @@ export class LoginComponent implements OnInit {
                     if(this.returnUrl){
                         this.router.navigate([params['redirectURL']]);
                     }else{
-                        this.router.navigate(['/home/dashboard/analytics']);
+                        this.router.navigate(['/home/welcome']);
                     }
                 },
                 error => {

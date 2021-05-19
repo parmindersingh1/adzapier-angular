@@ -19,7 +19,7 @@ const routes: Routes = [
   { path: 'changelog', loadChildren: () => import('./changelog/changelog.module').then(m => m.ChangelogModule) },
   { path: 'gethelp', loadChildren: () => import('./gethelp/gethelp.module').then(m => m.GethelpModule) },
   {
-    path: 'home/dashboard', loadChildren: () => import('./dashboard/analytics.module')
+    path: 'home', loadChildren: () => import('./dashboard/analytics.module')
       .then(m => m.AnalyticsModule), canActivate: [AuthGuard]
   },
   { path: 'userprofile', loadChildren: () => import('./edit-profile/edit-profile.module').then(m => m.EditProfileModule) },
@@ -62,11 +62,11 @@ const routes: Routes = [
   { path: 'verify-email/:id', loadChildren: () => import('./verifyemail/verifyemail.module').then(m => m.VerifyemailModule) },
   // { path: 'checkout', component: CheckoutComponent, canActivate: [AuthGuard] },
   // { path: 'success', component: CheckoutConfirmationComponent, canActivate: [AuthGuard] },
-  { path: '', redirectTo: 'home/dashboard/analytics', pathMatch: 'full' },
+  { path: '', redirectTo: 'home/welcome', pathMatch: 'full' },
   { path: 'plans', loadChildren: () => import('./plans/plan.module').then(m => m.PlanModule) },
   // { path: '', redirectTo: 'home/dashboard/analytics', pathMatch:'full' },
   // otherwise redirect to home
-  { path: '**', redirectTo: 'home/dashboard/analytics', pathMatch: 'full' }
+  { path: '**', redirectTo: 'home/welcome', pathMatch: 'full' }
 ];
 
 @NgModule({
