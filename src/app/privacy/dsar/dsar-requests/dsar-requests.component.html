@@ -1,13 +1,20 @@
 <div class="container">
-  <div class="mb-3">
-    <nav aria-label="breadcrumb" class="align-navbtn">
-      <ol class="breadcrumb breadcrumb-style1 mg-b-0">
-        <li class="breadcrumb-item">Privacy</li>
-        <li class="breadcrumb-item">Data Subject Access Request</li>
-        <li class="breadcrumb-item active" aria-current="page"> Data Subject Requests</li>
-      </ol>
-      <div class="datepickerwrapper col-sm-6 pr-0 mr-0 ml-auto">
-      <div class="col-sm-7 pr-0 mr-2 d-flex row-reverse">
+  <nav aria-label="breadcrumb" class="align-navbtn mb-3">
+    <ol class="breadcrumb breadcrumb-style1 mg-b-0">
+      <li class="breadcrumb-item">Privacy</li>
+      <li class="breadcrumb-item">Data Subject Access Request</li>
+      <li class="breadcrumb-item active" aria-current="page"> Data Subject Requests</li>
+    </ol>
+    </nav>
+  <div class="card card-wrapper">
+    <div class="card-header d-flex align-item-center">
+      <span class="tx-16 mg-b-0">
+        Data Subject Access Requests
+    </span>
+      <div class="datepickerwrapper col-sm-9 pr-0 mr-0 ml-auto">
+        <button (click)="onRefresh()" class="btn btn-sm btn-uppercase btn-outline-secondary pt-2 lineheight-22">
+          <i class="fas fa-sync feather-16"></i> Refresh</button>
+      <div class="col-sm-5 pr-0 pl-2 mr-2 d-flex row-reverse">
         <div class="input-group-prepend"  (click)="dp.show()">
           <span class="input-group-text rounded-right border-left-0" id="inputGroup-sizing-sm"><i class="fa" [ngClass]="searchbydaterange !== '' ? 'fa-caret-down':'fa-search'"></i></span>
         </div>
@@ -27,7 +34,7 @@
       </button>
       </div>
     </div>
-    </nav>
+    </div>
 
   </div>
 

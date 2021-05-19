@@ -1,4 +1,13 @@
-import {AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnInit, TemplateRef, ViewChild} from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  HostListener,
+  OnInit,
+  TemplateRef,
+  ViewChild
+} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, FormGroupDirective, NgForm, Validators} from '@angular/forms';
 import {ErrorStateMatcher} from '@angular/material/core';
 import {BannerConstant, defaultBannerContent, defaultData} from '../../../_constant/consent-banner.constant';
@@ -13,8 +22,7 @@ import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
 import {DataService} from 'src/app/_services/data.service';
 import {featuresName} from 'src/app/_constant/features-name.constant';
 import {GdprService} from '../../../_services/gdpr.service';
-import {BehaviorSubject} from 'rxjs';
-
+import { HasUnsavedData } from '../../../_helpers/formUnsaved.guard';
 
 /** Error when invalid control is dirty, touched, or submitted. */
 export class MyErrorStateMatcher implements ErrorStateMatcher {
@@ -106,7 +114,7 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
   allowedLanguageListObj = {
     allowedLang: ['en-US'],
     defaultLang: 'en-US'
-  }
+  };
 
   constructor(private formBuilder: FormBuilder,
               private cd: ChangeDetectorRef,
@@ -122,7 +130,6 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
   ) {
 
   }
-
 
   async ngOnInit() {
     this.onGetPropsAndOrgId();
@@ -152,19 +159,24 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
       this.onSetDynamicLang(res);
     }, error => {
       this.loading.stop('lang');
-    })
+    });
   }
 
   onGetCustomLangData() {
     this.loading.start('lang');
-    this.cookieBannerService.GetCustomLangData(this.activeBannerlanguage, this.currentManagedOrgID, this.currrentManagedPropID).subscribe(res => {
-      this.languageData = res;
-      this.loading.stop('lang');
-      this.cookieBannerForm.markAsPristine();
-      this.onSetDynamicLang(res);
+    this.cookieBannerService.GetCustomLangData( this.constructor.name, moduleName.cookieBannerModule, this.activeBannerlanguage, this.currentManagedOrgID, this.currrentManagedPropID)
+      .subscribe((res: any) => {
+        this.loading.stop('lang');
+        if (res.status === 200 ) {
+        const langData = JSON.parse(res.response.lang_data);
+        this.languageData = langData;
+        this.loading.stop('lang');
+        this.cookieBannerForm.markAsPristine();
+        this.onSetDynamicLang(langData);
+      }
     }, error => {
       this.loading.stop('lang');
-    })
+    });
   }
 
   onSetDynamicLang(lang) {
@@ -203,8 +215,8 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
     this.formContent.PopUpCcpaGenericPurposeDescription = LANG_CONFIG.CONFIG.POPUP.CCPA_AND_GENERIC_PURPOSES_DESC;
     this.formContent.PopUpCcpaGenericPrivacyInfoDescription = LANG_CONFIG.CONFIG.POPUP.CCPA_AND_GENERIC_PRIVACY_INFO_DESCRIPTION;
     this.formContent.PopUpDisableAllButtonText = LANG_CONFIG.CONFIG.POPUP.DISABLE_ALL_BTN;
-    this.formContent.PopUpSaveMyChoiceButtonText = LANG_CONFIG.CONFIG.POPUP.SAVE_AND_EXIT_BTN;  //DOUBLE
-    this.formContent.PopUpSaveMyChoiceButtonText = LANG_CONFIG.CONFIG.POPUP.SAVE_MY_CHOICE_BTN;  //DOUBLE
+    this.formContent.PopUpSaveMyChoiceButtonText = LANG_CONFIG.CONFIG.POPUP.SAVE_AND_EXIT_BTN;  // DOUBLE
+    this.formContent.PopUpSaveMyChoiceButtonText = LANG_CONFIG.CONFIG.POPUP.SAVE_MY_CHOICE_BTN;  // DOUBLE
     this.formContent.PopUpAllowAllButtonText = LANG_CONFIG.CONFIG.POPUP.ACCEPT_ALL_BTN;
     this.formContent.PopUpDoNotSellText = LANG_CONFIG.CONFIG.POPUP.DO_NOT_SELL_BTN;
 
@@ -285,7 +297,7 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
         this.isOpen = true;
         this.alertMsg = error.message;
         this.alertType = 'danger';
-      })
+      });
   }
 
 
@@ -373,7 +385,7 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
 
   onGetCookies() {
     this.loading.start();
-    this.cookieCategoryService.getCookieData({}, this.constructor.name, moduleName).subscribe((res: any) => {
+    this.cookieCategoryService.getCookieData({}, this.constructor.name, moduleName.cookieBannerModule).subscribe((res: any) => {
       this.loading.stop();
       if (res.response.length === 0) {
         this.modalRef = this.modalService.show(this.template, {
@@ -601,7 +613,7 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
       this.formContent.bannerBackGroundColor = this.bannerCookieData.config.Banner.GlobalStyles.background;
       this.formContent.bannerPreferenceButtonTextColor = this.bannerCookieData.config.Banner.PreferenceButtonStylesAndContent.textColor;
       this.formContent.bannerPreferenceButtonBackGroundColor = this.bannerCookieData.config.Banner.PreferenceButtonStylesAndContent.background,
-      this.formContent.bannerAcceptButtonTextColor = this.bannerCookieData.config.Banner.AllowAllButtonStylesAndContent.textColor;
+        this.formContent.bannerAcceptButtonTextColor = this.bannerCookieData.config.Banner.AllowAllButtonStylesAndContent.textColor;
       this.formContent.bannerAcceptButtonBackgroundColor = this.bannerCookieData.config.Banner.AllowAllButtonStylesAndContent.background;
       this.formContent.bannerDisableButtonTextColor = this.bannerCookieData.config.Banner.DisableAllButtonStylesAndContent.textColor;
       this.formContent.bannerDisableButtonBackGroundColor = this.bannerCookieData.config.Banner.DisableAllButtonStylesAndContent.background;
@@ -686,6 +698,7 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
     this.loading.start();
     this.cookieBannerService.onSubmitCookieBannerData(userPrefrencesData, this.currentManagedOrgID, this.currrentManagedPropID, this.constructor.name, moduleName.cookieBannerModule)
       .subscribe((res: any) => {
+        this.cookieBannerForm.markAsPristine();
         this.onGetSavedCookieBannerConfig();
         this.loading.stop();
         this.isPublish = false;
@@ -732,6 +745,7 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
     this.isPublish = true;
     this.cookieBannerService.onUpdateCookieBannerData(userPrefrencesData, this.currentManagedOrgID, this.currrentManagedPropID, this.constructor.name, moduleName.cookieBannerModule)
       .subscribe((res: any) => {
+        this.cookieBannerForm.markAsPristine();
         this.onGetSavedCookieBannerConfig();
         this.loading.stop();
         this.isPublish = false;
@@ -928,7 +942,7 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
 
   onSelectLang(event, id) {
     const isChecked = event.target.checked;
-    const  allowLanguagesList = [... this.allowLanguagesList]
+    const allowLanguagesList = [...this.allowLanguagesList];
     if (isChecked) {
       allowLanguagesList.push(id);
     } else {
@@ -1030,23 +1044,43 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
     this.loading.start('lang');
     this.cookieBannerService.saveCustomLang(payload, this.activeBannerlanguage, this.currentManagedOrgID, this.currrentManagedPropID, this.constructor.name, moduleName.manageVendorsModule)
       .subscribe(res => {
-        this.loading.stop('lang');
-        this.cookieBannerForm.markAsPristine();
-        if (!this.saveCustomLang.includes(this.activeBannerlanguage)) {
-          this.saveCustomLang.push(this.activeBannerlanguage);
+        if (res.status === 200) {
+          const langPayload = {
+            lang_code: this.activeBannerlanguage,
+            lang_data: payload
+          };
+          this.cookieBannerService.saveCustomLangInDB(langPayload, this.currentManagedOrgID, this.currrentManagedPropID, this.constructor.name, moduleName.manageVendorsModule)
+            .subscribe((res: any) => {
+              if (res.status === 201) {
+                this.loading.stop('lang');
+                this.cookieBannerForm.markAsPristine();
+                if (!this.saveCustomLang.includes(this.activeBannerlanguage)) {
+                  this.saveCustomLang.push(this.activeBannerlanguage);
+                }
+                this.onGetLangData();
+                this.activeBannerlanguage = this.currentBannerlanguage;
+                this.onGetLangData();
+                this.isOpen = true;
+                this.alertMsg = 'Saved';
+                this.alertType = 'success';
+                this.type = 'draft';
+                this.onSubmit();
+              }
+            }, error => {
+              this.loading.stop('lang');
+              this.isOpen = true;
+              this.alertMsg = error;
+              this.alertType = 'error';
+            });
+        } else {
+          this.isOpen = true;
+          this.alertMsg = 'Failed to Publish Language';
+          this.alertType = 'error';
         }
-        this.onGetLangData();
-        this.activeBannerlanguage = this.currentBannerlanguage;
-        this.onGetLangData();
-        this.isOpen = true;
-        this.alertMsg = 'Saved';
-        this.alertType = 'success';
-        this.type = 'draft';
-        this.onSubmit();
       }, error => {
         this.loading.stop('lang');
         this.isOpen = true;
-        this.alertMsg = error
+        this.alertMsg = error;
         this.alertType = 'error';
       });
   }
@@ -1069,7 +1103,7 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
         this.resetLang = null;
       }, error => {
         this.loading.stop('lang');
-      })
+      });
     }
   }
 
@@ -1108,12 +1142,20 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
       defaultLang: this.defaultLanguage
     };
   }
+
   onCancelLang() {
     this.allowLanguagesList = [];
     this.allowLanguagesList = this.allowedLanguageListObj.allowedLang;
     this.defaultLanguage = this.allowedLanguageListObj.defaultLang;
     this.cd.detectChanges();
   }
-
+  hasUnsavedData() {
+    return this.cookieBannerForm.dirty;
+  }
+  @HostListener('window:beforeunload', ['$event'])
+  public onPageUnload($event: BeforeUnloadEvent) {
+    if (this.hasUnsavedData()) {
+      $event.returnValue = true;
+    }
+  }
 }
-

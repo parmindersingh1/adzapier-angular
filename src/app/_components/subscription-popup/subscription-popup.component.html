@@ -12,17 +12,26 @@
         </div>
 
         <div class="plan-body">
-          <div class="col-md-12 cycle-type">
-            <input (change)="onSelectBillingCycle(subType)" #subType type="checkbox" id="lol-checkbox">
-            <label id="button" for="lol-checkbox">
-              <div id="knob"></div>
-              <div id="subscribe">Yearly</div>
-              <div id="alright">Monthly</div>
+          <div class="toggle-period">
+            <input id="toggle-period_2" (change)="onSelectBillingCycle(subType)" #subType [checked]="billingCycle === 'yearly'" class="toggle-period__checkbox" type="checkbox">
+            <label for="toggle-period_2" class="toggle-period__label">
+            <span class="toggle-period__monthly" [ngStyle]="{color: billingCycle == 'yearly' ? '#c3c4c7' : '#0546a3'}"
+                  role="checkbox" aria-checked="false">Billed monthly</span>
+              <span class="toggle-period__switch"
+                    [ngStyle]="{backgroundColor: billingCycle == 'yearly' ? '#0da1dd' : '#0546a3'}" role="checkbox"
+                    aria-checked="true" tabindex="0"></span>
+              <span class="toggle-period__yearly" [ngStyle]="{color: billingCycle == 'yearly' ? '#0da1dd' : '#c3c4c7'}"
+                    role="checkbox" aria-checked="true">Billed annually</span>
+              <span class="flag" [ngStyle]="{opacity: billingCycle == 'yearly' ? 1 : .4}">2 Months Free</span>
             </label>
           </div>
+
           <div class="row ml-2 mr-2">
             <div *ngFor="let plan of cookieConsentPlans"
-                 class=" mt-2 col ml-2 d-flex bg-white-col bt-card flex-column bd pt-0 mr-2  pd-20 pb-0 ">
+                 class=" mt-2 col ml-2 d-flex bg-white-col bt-card flex-column bd pt-0 mr-2 overflow-hidden  pd-20 pb-0 ">
+              <div  *ngIf="billingCycle === 'yearly' && plan.name !== 'Enterprise'" class="plan-discount">
+                <span class="annual">2 Months Free</span>
+              </div>
               <h4 class="text-center popular-text"
                   [ngStyle]="{background: plan.price ==  currentPlanData.price ? '#3968fa' : null}">
                 <ng-container *ngIf="plan.price ==  currentPlanData.price">CURRENT PLAN</ng-container>
@@ -53,8 +62,8 @@
 
               <h1 *ngIf="plan.price !== -1" class="tx-rubik tx-normal mb-3 mg-t-auto price-text">
                 <sup [ngStyle]="{color: plan.price <=  currentPlanData.price ? '#999' : ''}" class="doller">$</sup>
-                <span [ngStyle]="{color: plan.price <=  currentPlanData.price ? '#999' : ''}"
-                      class="font-weight-bold">{{plan.price}}</span>
+                <span *ngIf="billingCycle === 'monthly'" [ngStyle]="{color: plan.price <=  currentPlanData.price ? '#999' : ''}" class="font-weight-bold">{{plan.price}} <span class="tx-15">/ Month</span></span>
+                <span *ngIf="billingCycle === 'yearly'" [ngStyle]="{color: plan.price <=  currentPlanData.price ? '#999' : ''}" class="font-weight-bold">{{plan.price / 12 | number : '1.0-0'}} <span class="tx-15">/ Month</span></span>
               </h1>
               <button (click)="onNavigate()" [ngStyle]="{marginTop: plan.price == -1 ? '58px' : '0.25rem'}"  [disabled]="plan.price <=  currentPlanData.price && plan.price !== -1"
                       class="btn mb-2 add-to-cart-btn btn-primary btn-block">
@@ -77,59 +86,28 @@
         <div class="text-center">
           <h4 class="font-weight-bold">Data Subject Access Request (DSAR)</h4>
           <p >Upgrade your plan to access this feature</p>
-<!--          <p class="text-info" *ngIf="msg">{{msg}}</p>-->
         </div>
 
         <div class="plan-body">
-          <div class="col-md-12 cycle-type">
-            <input (change)="onSelectBillingCycle(subType)" #subType type="checkbox" id="lol-checkbox">
-
-            <label id="button" for="lol-checkbox">
-              <div id="knob"></div>
-              <div id="subscribe">Yearly</div>
-              <div id="alright">Monthly</div>
+          <div class="toggle-period">
+            <input id="toggle-period_4" (change)="onSelectBillingCycle(subType)" #subType [checked]="billingCycle === 'yearly'" class="toggle-period__checkbox" type="checkbox">
+            <label for="toggle-period_4" class="toggle-period__label">
+            <span class="toggle-period__monthly" [ngStyle]="{color: billingCycle == 'yearly' ? '#c3c4c7' : '#0546a3'}"
+                  role="checkbox" aria-checked="false">Billed monthly</span>
+              <span class="toggle-period__switch"
+                    [ngStyle]="{backgroundColor: billingCycle == 'yearly' ? '#0da1dd' : '#0546a3'}" role="checkbox"
+                    aria-checked="true" tabindex="0"></span>
+              <span class="toggle-period__yearly" [ngStyle]="{color: billingCycle == 'yearly' ? '#0da1dd' : '#c3c4c7'}"
+                    role="checkbox" aria-checked="true">Billed annually</span>
+              <span class="flag" [ngStyle]="{opacity: billingCycle == 'yearly' ? 1 : .4}">2 Months Free</span>
             </label>
           </div>
           <div class="row ml-2 mr-2">
-<!--            <div *ngFor="let plan of dsarPlans"-->
-<!--                 class=" mt-2 col ml-2 d-flex bg-white-col bt-card flex-column bd pt-0 mr-2  pd-20 ">-->
-<!--              <div class="pl-3 pr-3" *ngIf="existingOrgPlan.stripe_plan_id !== null"-->
-<!--                   [ngClass]="{'highlight-activeplan' : plan.id === existingOrgPlan.stripe_plan_id}">-->
-<!--                <h4 class="text-center popular-text"-->
-<!--                    [ngStyle]="{background: plan.price ==  currentPlanData.price ? '#3968fa' : null}">-->
-<!--                  <ng-container *ngIf="plan.price ==  currentPlanData.price">CURRENT PLAN</ng-container>-->
-<!--                </h4>-->
-<!--                <h3 [ngStyle]="{color: plan.price <=  currentPlanData.price && plan.price !== -1 ? '#999' : ''}"-->
-<!--                    class="mt-4 plan-type">{{plan.name}}</h3>-->
-<!--                <p [ngStyle]="{color: plan.price <=  currentPlanData.price ? '#999' : ''}"-->
-<!--                   class="tx-color-03 " [ngStyle]="{'margin-bottom': plan.price === -1 ? '40px' : '50px'}"-->
-<!--                   [ngClass]="{'mg-b-50' : plan.price !== -1, 'mg-b-40' : plan.price === -1}">{{plan.product_name}}</p>-->
-<!--                <h1 *ngIf="plan.price !== -1" class="tx-rubik tx-normal mb-3 mg-t-auto price-text">-->
-<!--                  <sup [ngStyle]="{color: plan.price <=  currentPlanData.price ? '#999' : ''}" class="doller">$</sup>-->
-<!--                  <span [ngStyle]="{color: plan.price <=  currentPlanData.price ? '#999' : ''}"-->
-<!--                        class="font-weight-bold">{{plan.price}}</span>-->
-<!--                </h1>-->
-<!--                <button (click)="onNavigate()" *ngIf="plan.id !== existingOrgPlan.stripe_plan_id && plan.price !== -1"-->
-<!--                        [disabled]="plan.price <=  currentPlanData.price"-->
-<!--                        class="btn mt-4 mb-4 add-to-cart-btn btn-primary btn-block">-->
-<!--                  Choose Plan-->
-<!--                </button>-->
-<!--                <button (click)="onNavigate()" *ngIf="plan.price === -1"-->
-<!--                        class="btn mt-0 mb-4 add-to-cart-btn btn-primary btn-block">-->
-<!--                  Choose Plan-->
-<!--                </button>-->
-<!--                <h4 class="current-activeplan tx-primary" *ngIf="plan.id === existingOrgPlan.stripe_plan_id">-->
-<!--                  Current active plan-->
-<!--                </h4>-->
-<!--              </div>-->
-<!--            </div>&lt;!&ndash; col &ndash;&gt;-->
-
-
-
-
-
             <div *ngFor="let plan of dsarPlans"
-                 class=" mt-2 col ml-2 d-flex bg-white-col bt-card flex-column bd pt-0 mr-2  pd-20 pb-0 ">
+                 class=" mt-2 col ml-2 d-flex bg-white-col bt-card overflow-hidden flex-column bd pt-0 mr-2  pd-20 pb-0 ">
+              <div  *ngIf="billingCycle === 'yearly' && plan.name !== 'Enterprise'"  class="plan-discount">
+                <span class="annual">2 Months Free</span>
+              </div>
               <h4 class="text-center popular-text"
                   [ngStyle]="{background: plan.price ==  existingOrgPlan.price ? '#3968fa' : null}">
                 <ng-container *ngIf="plan.price ==  existingOrgPlan.price">CURRENT PLAN</ng-container>
@@ -155,19 +133,15 @@
 
               <h3 *ngIf="plan.price !== -1" class="tx-rubik tx-normal mb-3 mg-t-auto price-text">
                 <sup [ngStyle]="{color: plan.price <=  existingOrgPlan.price ? '#999' : ''}" class="doller">$</sup>
-                <span [ngStyle]="{color: plan.price <=  existingOrgPlan.price ? '#999' : ''}"
-                      class="font-weight-bold">{{plan.price}}</span>
+                <span *ngIf="billingCycle === 'monthly'" [ngStyle]="{color: plan.price <=  existingOrgPlan.price ? '#999' : ''}" class="font-weight-bold">{{plan.price}} <span class="tx-15">/ Month</span></span>
+                <span *ngIf="billingCycle === 'yearly'" [ngStyle]="{color: plan.price <=  currentPlanData.price ? '#999' : ''}" class="font-weight-bold">{{plan.price / 12 | number : '1.0-0'}} <span class="tx-15">/ Month</span></span>
+
               </h3>
               <button (click)="onNavigate()" [ngStyle]="{marginTop: plan.price == -1 ? '58px' : '0.25rem'}"  [disabled]="plan.price <=  existingOrgPlan.price && plan.price !== -1"
                       class="btn mb-2 add-to-cart-btn btn-primary btn-block">
                 Choose Plan
               </button>
-
             </div><!-- col -->
-
-
-
-
           </div>
 
           <div class="text-center">
@@ -176,9 +150,7 @@
             <p class="cancel-btn mt-2 mb-2" (click)="template.hide()">or Cancel & Go Back</p>
           </div>
         </div>
-
       </div>
-
 
       <div *ngIf="type !==  'cookieConsent' && type !==  'org' " class="modal-body">
         <div class="text-center">
@@ -197,19 +169,26 @@
           </ng-container>
         </div>
 
-
         <div class="plan-body" *ngIf="noPlanType == 'cookieConsent' && !isUserSubscribe">
-          <div class="col-md-12 cycle-type">
-            <input (change)="onSelectBillingCycle(subType)" #subType type="checkbox" id="lol-checkbox">
-            <label id="button" for="lol-checkbox">
-              <div id="knob"></div>
-              <div id="subscribe">Yearly</div>
-              <div id="alright">Monthly</div>
+          <div class="toggle-period">
+            <input id="toggle-period_3" (change)="onSelectBillingCycle(subType)" #subType [checked]="billingCycle === 'yearly'" class="toggle-period__checkbox" type="checkbox">
+            <label for="toggle-period_3" class="toggle-period__label">
+            <span class="toggle-period__monthly" [ngStyle]="{color: billingCycle == 'yearly' ? '#c3c4c7' : '#0546a3'}"
+                  role="checkbox" aria-checked="false">Billed monthly</span>
+              <span class="toggle-period__switch"
+                    [ngStyle]="{backgroundColor: billingCycle == 'yearly' ? '#0da1dd' : '#0546a3'}" role="checkbox"
+                    aria-checked="true" tabindex="0"></span>
+              <span class="toggle-period__yearly" [ngStyle]="{color: billingCycle == 'yearly' ? '#0da1dd' : '#c3c4c7'}"
+                    role="checkbox" aria-checked="true">Billed annually</span>
+              <span class="flag" [ngStyle]="{opacity: billingCycle == 'yearly' ? 1 : .4}">2 Months Free</span>
             </label>
           </div>
           <div class="row ml-2 mr-2">
             <div *ngFor="let plan of cookieConsentPlans"
-                 class=" mt-2 col ml-2 d-flex bg-white-col bt-card flex-column bd pt-0 mr-2  pd-20 pb-0 ">
+                 class=" mt-2 col ml-2 d-flex bg-white-col bt-card overflow-hidden flex-column bd pt-0 mr-2  pd-20 pb-0 ">
+              <div *ngIf="billingCycle === 'yearly' && plan.name !== 'Enterprise'"  class="plan-discount">
+                <span class="annual">2 Months Free</span>
+              </div>
               <h4 class="text-center popular-text">
               </h4>
               <h3 [ngStyle]="{color: plan.price !== -1  ? '#999' : ''}"
@@ -232,11 +211,10 @@
                 </ng-container>
                 <a *ngIf="plan.name !== 'Free' && showFeatureCount !== 25" (click)="showFeatureCount = 25" class="more-text" href="javascript:;">More ...</a>
                 <a *ngIf="plan.name !== 'Free'  && showFeatureCount === 25" (click)="showFeatureCount = 6" class="more-text" href="javascript:;">Hide ...</a>              </ul>
-
-
               <h1 *ngIf="plan.price !== -1" class="text-color-nr tx-rubik tx-normal mb-3 mg-t-auto price-text">
                 <sup class="doller">$</sup>
-                <span class="font-weight-bold">{{plan.price}}</span>
+                <span *ngIf="billingCycle === 'monthly'" class="font-weight-bold">{{plan.price}} <span class="tx-15">/ Month</span></span>
+                <span *ngIf="billingCycle === 'yearly'" class="font-weight-bold">{{plan.price / 12 | number : '1.0-0'}} <span class="tx-15">/ Month</span></span>
               </h1>
               <button (click)="onNavigate()" [ngStyle]="{marginTop: plan.price == -1 ? '55px' : '0.25rem'}"
                       class="btn mb-2 add-to-cart-btn btn-primary btn-block">
@@ -246,26 +224,26 @@
             </div><!-- col -->
           </div>
         </div>
-
-
-
-
-
-
-
         <div class="plan-body" *ngIf="noPlanType == 'org' && !isUserSubscribe">
-          <div class="col-md-12 cycle-type">
-            <input (change)="onSelectBillingCycle(subType)" #subType type="checkbox" id="lol-checkbox">
-
-            <label id="button" for="lol-checkbox">
-              <div id="knob"></div>
-              <div id="subscribe">Yearly</div>
-              <div id="alright">Monthly</div>
+          <div class="toggle-period">
+            <input id="toggle-period_1" (change)="onSelectBillingCycle(subType)" #subType [checked]="billingCycle === 'yearly'" class="toggle-period__checkbox" type="checkbox">
+            <label for="toggle-period_1" class="toggle-period__label">
+            <span class="toggle-period__monthly" [ngStyle]="{color: billingCycle == 'yearly' ? '#c3c4c7' : '#0546a3'}"
+                  role="checkbox" aria-checked="false">Billed monthly</span>
+              <span class="toggle-period__switch"
+                    [ngStyle]="{backgroundColor: billingCycle == 'yearly' ? '#0da1dd' : '#0546a3'}" role="checkbox"
+                    aria-checked="true" tabindex="0"></span>
+              <span class="toggle-period__yearly" [ngStyle]="{color: billingCycle == 'yearly' ? '#0da1dd' : '#c3c4c7'}"
+                    role="checkbox" aria-checked="true">Billed annually</span>
+              <span class="flag" [ngStyle]="{opacity: billingCycle == 'yearly' ? 1 : .4}">2 Months Free</span>
             </label>
           </div>
           <div class="row ml-2 mr-2">
             <div *ngFor="let plan of dsarPlans"
-                 class=" mt-2 col ml-2 d-flex bg-white-col bt-card flex-column bd pt-0 mr-2  pd-20 pb-0 ">
+                 class=" mt-2 col ml-2 d-flex bg-white-col bt-card flex-column overflow-hidden bd pt-0 mr-2  pd-20 pb-0 overflow-hidden ">
+              <div *ngIf="billingCycle === 'yearly' && plan.name !== 'Enterprise'" class="plan-discount">
+                <span class="annual">2 Months Free</span>
+              </div>
               <h4 class="text-center popular-text">
               </h4>
               <h3 class="mt-1 plan-type text-color-nr">{{plan.name}}</h3>
@@ -285,7 +263,8 @@
 
               <h3 *ngIf="plan.price !== -1" class="tx-rubik tx-normal mb-3 mg-t-auto price-text">
                 <sup  class="doller">$</sup>
-                <span class="font-weight-bold">{{plan.price}}</span>
+                <span class="font-weight-bold" *ngIf="billingCycle === 'monthly'">{{plan.price}} <span class="tx-15">/ Month</span></span>
+                <span class="font-weight-bold" *ngIf="billingCycle === 'yearly'">{{plan.price / 12 | number : '1.0-0'}} <span class="tx-15">/ Month</span></span>
               </h3>
               <button (click)="onNavigate()" [ngStyle]="{marginTop: plan.price == -1 ? '58px' : '0.25rem'}"
                       class="btn mb-2 add-to-cart-btn btn-primary btn-block">

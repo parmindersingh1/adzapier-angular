@@ -1855,15 +1855,16 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
 
   getWebFormScriptLink() {
     if (this.orgId && this.propId) {
+      const formStatus = 'publish';
       if (window.location.hostname === 'localhost') {
-        this.scriptcode = 'http://localhost:4500/dsar/form/' + this.orgId + '/' + this.propId + '/' + this.crid;
+        this.scriptcode = 'http://localhost:4500/dsar/form/' + this.orgId + '/' + this.propId + '/' + this.crid + '/' + formStatus;
       }
       if (window.location.hostname === 'develop-cmp.adzpier-staging.com') {
-        this.scriptcode = 'https://develop-privacyportal.adzpier-staging.com/dsar/form/' + this.orgId + '/' + this.propId + '/' + this.crid;
+        this.scriptcode = 'https://develop-privacyportal.adzpier-staging.com/dsar/form/' + this.orgId + '/' + this.propId + '/' + this.crid + '/' + formStatus;
       } else if (window.location.hostname === 'cmp.adzpier-staging.com') {
-        this.scriptcode = 'https://privacyportal.adzpier-staging.com/dsar/form/' + this.orgId + '/' + this.propId + '/' + this.crid;
+        this.scriptcode = 'https://privacyportal.adzpier-staging.com/dsar/form/' + this.orgId + '/' + this.propId + '/' + this.crid + '/' + formStatus;
       } else if (window.location.hostname === 'portal.adzapier.com') {
-        this.scriptcode = 'https://privacyportal.primeconsent.com/dsar/form/' + this.orgId + '/' + this.propId + '/' + this.crid;
+        this.scriptcode = 'https://privacyportal.primeconsent.com/dsar/form/' + this.orgId + '/' + this.propId + '/' + this.crid + '/' + formStatus;
       }
     }
   }

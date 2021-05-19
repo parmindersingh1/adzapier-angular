@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" >
 
 
   <form [formGroup]="cookieBannerForm" (ngSubmit)="onSubmit()">
@@ -653,11 +653,12 @@
                   <label for="lang" style="font-size: 15px"
                          class="tx-12 col-md-3 col-4  tx-medium tx-middle tx-spacing-1 tx-color-03 tx-uppercase">
                     Language </label>
-                  <select  name="activeBannerlanguage"  (change)="onCheckFormChanges($event)"
+                  <select name="activeBannerlanguage" (change)="onCheckFormChanges($event)"
                           class="form-control col-6 col-md-7" id="lang">
                     <ng-container *ngFor="let gdprLang of bannerConstant.Bannerlanguage">
                       <option *ngIf="allowLanguagesList.includes(gdprLang.value)"
-                              [value]="gdprLang.value" [selected]="activeBannerlanguage === gdprLang.value" >{{gdprLang.title}}</option>
+                              [value]="gdprLang.value"
+                              [selected]="activeBannerlanguage === gdprLang.value">{{gdprLang.title}}</option>
                     </ng-container>
                   </select>
                   <div class="col-md-2 col-2 pr-0">
@@ -666,7 +667,9 @@
                 </div>
               </div>
               <div class="col-md-2">
-                <button type="button" (click)="onSaveCustomLang()" [disabled]="!onIsFieldDirty" class="btn btn-success"> Save Changes </button>
+                <button type="button" (click)="onSaveCustomLang()" [disabled]="!onIsFieldDirty" class="btn btn-success">
+                  Save Changes
+                </button>
               </div>
 
             </div>
@@ -745,7 +748,7 @@
 
 
                         <div class="col-md-12 mt-2">
-                          <div  class="w-100">
+                          <div class="w-100">
                             <h6 class="tx-12 tx-medium tx-spacing-1 tx-color-03 tx-uppercase">Description</h6>
                             <quill-editor [(ngModel)]="formContent.bannerDescription" maxlength="1000"
                                           [placeholder]="formContent.bannerDescription"
@@ -920,8 +923,6 @@
                           </ul>
                         </div>
                       </p-accordionTab>
-
-
 
 
                       <p-accordionTab header="Accept All Button">
@@ -1182,16 +1183,19 @@
 
                       <div class="col-md-12 mt-2">
                         <div class="w-100">
-                          <h6 class="tx-12 tx-medium tx-spacing-1 tx-color-03 tx-uppercase">Privacy Info Description</h6>
+                          <h6 class="tx-12 tx-medium tx-spacing-1 tx-color-03 tx-uppercase">Privacy Info
+                            Description</h6>
                           <textarea [attr.disabled]="isFieldDisabled" class="form-control w-100" rows="3"
                                     formControlName="PopUpCcpaGenericPrivacyInfoDescription"
                                     [(ngModel)]="formContent.PopUpCcpaGenericPrivacyInfoDescription"
                                     [placeholder]="formContent.PopUpCcpaGenericPrivacyInfoDescription"></textarea>
                           <div *ngIf="submitted && f.PopUpCcpaGenericPrivacyInfoDescription.errors">
-                            <div class="text-danger mt-2" *ngIf="f.PopUpCcpaGenericPrivacyInfoDescription.errors.minlength">
+                            <div class="text-danger mt-2"
+                                 *ngIf="f.PopUpCcpaGenericPrivacyInfoDescription.errors.minlength">
                               Minimum 20 characters required
                             </div>
-                            <div class="text-danger mt-2" *ngIf="f.PopUpCcpaGenericPrivacyInfoDescription.errors.maxlength">
+                            <div class="text-danger mt-2"
+                                 *ngIf="f.PopUpCcpaGenericPrivacyInfoDescription.errors.maxlength">
                               Maximum 1000 characters required
                             </div>
                           </div>
@@ -1301,8 +1305,6 @@
                     </p-accordionTab>
 
 
-
-
                     <p-accordionTab header="Save My Choice Button">
                       <div class="col-md-12 ml-0 mb-4  p-0 row mt-2">
                         <h5 class="col-sm-4 pl-2 tx-middle tx-12 tx-medium tx-spacing-1 tx-color-03 tx-uppercase">
@@ -1355,7 +1357,6 @@
                       </div>
 
                     </p-accordionTab>
-
 
 
                     <p-accordionTab header="Disable All Button">
@@ -1464,14 +1465,6 @@
                         </ul>
                       </div>
                     </p-accordionTab>
-
-
-
-
-
-
-
-
 
 
                     <div class="col-md-12 mt-3 mb-2">
@@ -1605,7 +1598,7 @@
                       <input type="text" [attr.disabled]="isFieldDisabled" class="form-control input-sm w-100"
                              formControlName="SocialMediaTitle" [(ngModel)]="formContent.SocialMediaTitle"
                              [placeholder]="formContent.SocialMediaTitle">
-                    <div *ngIf="submitted && f.SocialMediaTitle.errors">
+                      <div *ngIf="submitted && f.SocialMediaTitle.errors">
                         <div class="text-danger mt-2" *ngIf="f.SocialMediaTitle.errors.minlength">
                           Minimum 2 characters required
                         </div>
@@ -1635,14 +1628,14 @@
                       <input type="text" [attr.disabled]="isFieldDisabled" class="form-control input-sm w-100"
                              formControlName="UnknownTitle" [(ngModel)]="formContent.UnknownTitle"
                              [placeholder]="formContent.UnknownTitle">
-                                        <div *ngIf="submitted && f.UnknownTitle.errors">
-                      <div class="text-danger mt-2" *ngIf="f.UnknownTitle.errors.minlength">
-                        Minimum 2 characters required
+                      <div *ngIf="submitted && f.UnknownTitle.errors">
+                        <div class="text-danger mt-2" *ngIf="f.UnknownTitle.errors.minlength">
+                          Minimum 2 characters required
+                        </div>
+                        <div class="text-danger mt-2" *ngIf="f.UnknownTitle.errors.maxlength">
+                          Maximum 50 characters required
+                        </div>
                       </div>
-                      <div class="text-danger mt-2" *ngIf="f.UnknownTitle.errors.maxlength">
-                        Maximum 50 characters required
-                      </div>
-                    </div>
                       <br>
                       <h6>Description</h6>
                       <textarea [attr.disabled]="isFieldDisabled" class="form-control w-100" rows="3"
@@ -1658,8 +1651,6 @@
                         </div>
                       </div>
                     </p-accordionTab>
-
-
 
 
                   </p-accordion>
@@ -1702,7 +1693,7 @@
 
 <div class="col-sm-5 mr-0 float-right flotingdiv" [ngClass]="{'hide':!isOpen}">
   <alert *ngIf="isOpen" [type]="alertType" dismissOnTimeout="5000" [dismissible]="dismissible"
-         (onClosed)="onClosed(alertMsg) "  ><span [innerHTML]="alertMsg"></span></alert>
+         (onClosed)="onClosed(alertMsg) "><span [innerHTML]="alertMsg"></span></alert>
 </div>
 <ng-template #template>
   <div class="modal-body text-center">
@@ -1728,7 +1719,9 @@
   <div class="modal-body text-center">
     <p>You have not save your customization, Would you like to save it ..?<br/>
     </p>
-    <button type="button" class="btn btn-primary mr-3" (click)="modalRef.hide(); activeBannerlanguage  = currentBannerlanguage; onGetLangData();">No</button>
+    <button type="button" class="btn btn-primary mr-3"
+            (click)="modalRef.hide(); activeBannerlanguage  = currentBannerlanguage; onGetLangData();">No
+    </button>
     <button type="button" class="btn btn-white" (click)="modalRef.hide(); onSaveCustomLang()">Yes</button>
   </div>
 </ng-template>
@@ -1737,8 +1730,8 @@
 <ng-template #resetPopup>
   <div class="modal-body text-center">
     <p>Do you want to reset this language?</p>
-    <button type="button" class="btn btn-default" (click)="modalRef.hide(); onResetCustomConfig()" >Yes</button>
-    <button type="button" class="btn btn-primary" (click)="modalRef.hide()" >No</button>
+    <button type="button" class="btn btn-default" (click)="modalRef.hide(); onResetCustomConfig()">Yes</button>
+    <button type="button" class="btn btn-primary" (click)="modalRef.hide()">No</button>
   </div>
 </ng-template>
 
@@ -1789,9 +1782,12 @@
               </div>
             </td>
             <td>{{lang.title}}</td>
-            <td><button *ngIf="saveCustomLang.includes(lang.value)"
-                        (click)="resetLang = lang.value; openModal(resetPopup)"
-                        class="btn btn-link" type="button">Reset</button></td>
+            <td>
+              <button *ngIf="saveCustomLang.includes(lang.value)"
+                      (click)="resetLang = lang.value; openModal(resetPopup)"
+                      class="btn btn-link" type="button">Reset
+              </button>
+            </td>
             <td class="text-center"><input type="radio" class="" [(ngModel)]="defaultLanguage" name="defaultLang"
                                            [value]="lang.value"/>
             </td>
@@ -1804,7 +1800,9 @@
   </div>
   <div class="modal-footer">
     <div class="text-center m-auto">
-                <button type="button" aria-label="Close" (click)="modalRef.hide();onCancelLang()" class="btn btn-sm btn-uppercase btn-outline-secondary">Cancel</button>
+      <button type="button" aria-label="Close" (click)="modalRef.hide();onCancelLang()"
+              class="btn btn-sm btn-uppercase btn-outline-secondary">Cancel
+      </button>
       <button type="button" aria-label="Close" (click)="modalRef.hide(); onSaveAllowedLang()"
               class="ml-3 btn btn-sm btn-uppercase btn-primary">Save
       </button>

@@ -115,6 +115,15 @@ export class SubscriptionPopupComponent implements OnInit {
   }
 
   onSetEnterPrice() {
+    this.allPlanData.base['monthly'].push({
+      cycle: 'Enterprise',
+      description: '',
+      id: '',
+      name: 'Enterprise',
+      price: -1,
+      product_name: 'Advanced enterprise features and global coverage.',
+      type: 0
+    });
     this.allPlanData.base['yearly'].push({
       cycle: 'Enterprise',
       description: '',
