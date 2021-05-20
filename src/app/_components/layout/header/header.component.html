@@ -68,7 +68,9 @@
           <li role="menuitem" *ngFor="let item of orgPropertyMenu; first as isFirst; let i = index;">
             <a class="dropdown-item" title="{{item.orgname}}" routerLink="/settings/organizations/details/{{item.id}}" (click)="goto('settings/organizations/details',item.id)">
              <span [ngClass]="[isOrgSelected(item) ? 'active' : '']">{{item.orgname}}</span>
-             <span class="align-right width25"><i-feather class="feather-plus" name="plus"></i-feather></span>
+             <span class="align-right width50"><i-feather class="feather-plus" name="plus"></i-feather>
+              <i-feather title="License not assigned" *ngIf="isLicenseAssignedForOrganization(item)" class="feather-lock mr-1" name="lock"></i-feather>  
+            </span>
             </a>
             <div *ngIf="item.property.length=='0'">No Property</div>
             <ul role="menu">
@@ -76,8 +78,11 @@
                 <li role="menuitem">
                   <a class="dropdown-item" routerLinkActive="active" [class.disableproperty]="isProperyDisabled(submenu)" [ngClass]="[isPropSelected(submenu) ? 'active' : '']"> <!-- routerLink="{{item.id}}/{{submenu.property_id}}"-->
                    <span class="propertyLink" *ngIf="!isProperyDisabled(submenu); else disabledProperty" (click)="isCurrentPropertySelected(item,submenu)">  {{ submenu.property_name ? convertAmpersand(submenu.property_name) : 'No Property' }}
-                    <span class="ml-2" *ngIf="isPropSelected(submenu)">
+                   <span class="flex-spacebetween">
+                    <span class="ml-2 mr-2" *ngIf="isPropSelected(submenu)">
                     <i class="fa fa-check"></i></span>
+                    <i-feather title="License not assigned" *ngIf="isLicenseAssignedForProperty(submenu)" class="feather-lock mr-1" name="lock"></i-feather>
+                  </span>
                   </span>
                   <ng-template #disabledProperty>
                     <span (click)="false">
@@ -285,16 +290,19 @@
         <li role="menuitem" *ngFor="let item of orgPropertyMenu; first as isFirst; let i = index;">
           <a class="dropdown-item" title="{{item.orgname}}" routerLink="/settings/organizations/details/{{item.id}}" (click)="goto('settings/organizations/details',item.id)">
             <span [ngClass]="[isOrgSelected(item) ? 'active' : '']">{{item.orgname}}</span>
-            <span class="align-right width25"><i-feather class="feather-plus" name="plus"></i-feather></span>
+            <span class="align-right"><i-feather class="feather-plus" name="plus"></i-feather>
+              <i-feather title="License not assigned" *ngIf="isLicenseAssignedForOrganization(item)" class="feather-lock mr-1" name="lock"></i-feather>
+            </span>
           </a>
           <div *ngIf="item.property.length=='0'">No Property</div>
           <ul role="menu">
             <ng-container  *ngFor="let submenu of item.property">
               <li role="menuitem">
                 <a class="dropdown-item" routerLinkActive="active" [class.disableproperty]="isProperyDisabled(submenu)" [ngClass]="[isPropSelected(submenu) ? 'active' : '']"> <!-- routerLink="{{item.id}}/{{submenu.property_id}}"-->
-                 <span (click)="isProperyDisabled(submenu) ? false : isCurrentPropertySelected(item,submenu)">  {{ submenu.property_name ? convertAmpersand(submenu.property_name) : 'No Property' }}
-                  <span class="ml-2" *ngIf="isPropSelected(submenu)">
+                 <span class="flex-spacebetween" (click)="isProperyDisabled(submenu) ? false : isCurrentPropertySelected(item,submenu)">  {{ submenu.property_name ? convertAmpersand(submenu.property_name) : 'No Property' }}
+                  <span class="ml-2 mr-2" *ngIf="isPropSelected(submenu)">
                   <i class="fa fa-check"></i></span>
+                  <i-feather title="License not assigned" *ngIf="isLicenseAssignedForProperty(submenu)" class="feather-lock mr-1" name="lock"></i-feather>
                 </span>
                 </a>
               </li>

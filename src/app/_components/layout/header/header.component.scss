@@ -588,6 +588,13 @@ ul.navbar-nav > a.nav-link.dropdown-link::after{
   float: right;
 }
 
+.feather-lock {
+  height:16px;
+  width: 16px;
+  float: right;
+  color:#c4c4c4;
+}
+
 a.nav-link.dropdown-toggle:hover {
   color: #4994fe !important;
 }
@@ -608,6 +615,10 @@ a.nav-link:hover {
 
 .width25 {
   width: 25px;
+}
+
+.width50 {
+  width: 50px;
 }
 
 .clear-notification {
@@ -991,4 +1002,9 @@ button.btn.btn-link:hover {
   border-bottom: 11px solid rgb(0 0 0 / 14%);
   border-left: 11px solid #00000000;
   border-right: 11px solid transparent;
+}
+
+.flex-spacebetween {
+  display: flex;
+  justify-content: space-between;
 }
