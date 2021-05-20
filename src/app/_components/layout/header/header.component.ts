@@ -282,9 +282,14 @@ export class HeaderComponent implements OnInit {
           this.loading.stop('2')
         this.dataService.setOrgPlanToLocalStorage(res);
         if((typeof res !== undefined || res!== null) && res.response.features !== null){
+          this.isShowDashboardForDsar = true;
           this.dataService.isLicenseApplied.next({requesttype:'organization',hasaccess:true});
         } else{
+          this.isShowDashboardForDsar = false;
           this.dataService.isLicenseApplied.next({requesttype:'organization',hasaccess:false});
+          if(this.router.url.indexOf('ccpa-dsar') !== -1){
+            this.router.navigate(['/home/dashboard/analytics']);
+          }
         }
       }, error => {
         this.loading.stop('2')
@@ -867,5 +872,13 @@ export class HeaderComponent implements OnInit {
     if (!this.isShowDashboardForCookieConsent) {
       this.dataService.openUpgradeModalForCookieConsent(this.planDetails);
     }
+  }
+
+  isLicenseAssignedForOrganization(item):boolean {
+   return this.orgList.some((t)=>t.id == item.id && !t.license_assigned);
+  }
+
+  isLicenseAssignedForProperty(item): boolean {
+    return !item.license_assigned
   }
 }
