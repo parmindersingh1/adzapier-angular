@@ -41,7 +41,7 @@
                 </a> -->
 
                 <button type="button" class="btn btn-sm ml-2 btn-uppercase btn-outline-secondary"
-                        (click)="openModal(templateManageLang)">Manage Languages
+                        (click)="openFirstModal(templateManageLang)">Manage Languages
                 </button>
 
 
@@ -662,7 +662,7 @@
                     </ng-container>
                   </select>
                   <div class="col-md-2 col-2 pr-0">
-                    <i (click)="openModal(templateManageLang)" class="setting-icon  fas fa-language"></i>
+                    <i (click)="openFirstModal(templateManageLang)" class="setting-icon  fas fa-language"></i>
                   </div>
                 </div>
               </div>
@@ -1730,8 +1730,8 @@
 <ng-template #resetPopup>
   <div class="modal-body text-center">
     <p>Do you want to reset this language?</p>
-    <button type="button" class="btn btn-default" (click)="modalRef.hide(); onResetCustomConfig()">Yes</button>
-    <button type="button" class="btn btn-primary" (click)="modalRef.hide()">No</button>
+    <button type="button" class="btn btn-default" (click)="closeModal(); onResetCustomConfig()">Yes</button>
+    <button type="button" class="btn btn-primary" (click)="closeModal()">No</button>
   </div>
 </ng-template>
 
@@ -1784,7 +1784,7 @@
             <td>{{lang.title}}</td>
             <td>
               <button *ngIf="saveCustomLang.includes(lang.value)"
-                      (click)="resetLang = lang.value; openModal(resetPopup)"
+                      (click)="resetLang = lang.value; openModalSecond(resetPopup)"
                       class="btn btn-link" type="button">Reset
               </button>
             </td>
@@ -1800,10 +1800,10 @@
   </div>
   <div class="modal-footer">
     <div class="text-center m-auto">
-      <button type="button" aria-label="Close" (click)="modalRef.hide();onCancelLang()"
+      <button type="button" aria-label="Close" (click)="closeFirstModal();onCancelLang()"
               class="btn btn-sm btn-uppercase btn-outline-secondary">Cancel
       </button>
-      <button type="button" aria-label="Close" (click)="modalRef.hide(); onSaveAllowedLang()"
+      <button type="button" aria-label="Close" (click)="closeFirstModal(); onSaveAllowedLang()"
               class="ml-3 btn btn-sm btn-uppercase btn-primary">Save
       </button>
     </div>

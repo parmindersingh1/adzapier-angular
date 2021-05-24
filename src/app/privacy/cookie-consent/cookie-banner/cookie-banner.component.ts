@@ -45,6 +45,8 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
   modalRef: BsModalRef;
   // @ViewChild('showConfig', {static: false}) showConfig : ElementRef;
   skeletonLoading = true;
+  modalRef1:BsModalRef;
+  modalRef2:BsModalRef;
   type = 'draft';
   matcher = new MyErrorStateMatcher();
   currentPlan;
@@ -160,6 +162,25 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
     }, error => {
       this.loading.stop('lang');
     });
+  }
+
+  openFirstModal(template: TemplateRef<any>) {
+    this.modalRef1 = this.modalService.show(template, { });
+  }
+  openModalSecond(template: TemplateRef<any>) {
+    this.modalRef2 = this.modalService.show(template, { });
+  }
+  closeFirstModal() {
+    if (!this.modalRef1) {
+      return;
+    }
+ 
+    this.modalRef1.hide();
+    this.modalRef1 = null;
+  }
+
+  closeModal(){
+      this.modalRef2.hide();
   }
 
   onGetCustomLangData() {

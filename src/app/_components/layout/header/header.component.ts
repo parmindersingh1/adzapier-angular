@@ -11,6 +11,7 @@ import { Location } from '@angular/common';
 import { DataService } from 'src/app/_services/data.service';
 import {featuresName} from '../../../_constant/features-name.constant';
 
+
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -116,7 +117,7 @@ export class HeaderComponent implements OnInit {
          if(this.currentUser === null){
            return true;
          } else{
-          this.router.navigate(['/home/dashboard/analytics']);
+          this.router.navigate(['/home/welcome']);
          }
         }
       }
@@ -125,7 +126,7 @@ export class HeaderComponent implements OnInit {
           || event.url.indexOf('cookie') >= 0;
       } else if (event instanceof NavigationEnd) {
         if (event.url.indexOf('settings/billing') !== -1 || event.url.indexOf('pricing') !== -1 ||
-          event.url.indexOf('analytics') >= 0) {
+          event.url.indexOf('welcome') >= 0) {
           this.isBillingActivelinkMatched = true;
           this.isPrivacyActivelinkMatched = false;
         }
@@ -173,12 +174,16 @@ export class HeaderComponent implements OnInit {
 
   logout() {
     this.authService.logout();
+    
     this.isCollapsed = true;
     localStorage.removeItem('currentUser');
     // this.orgservice.removeControls();
     this.userService.getCurrentUser.unsubscribe();
+    localStorage.clear();
     this.router.navigate(['/login']);
+    sessionStorage.clear();
     location.reload();
+ 
 
   }
 
