@@ -18,8 +18,9 @@
 
           <span *ngIf="availablePlan.scan_available > 0 && availablePlan.scan_available == 1"
                 class="avalible-text text-info">{{availablePlan.scan_available}} Scan is Available </span>
-          <span *ngIf="availablePlan.scan_available > 0 && availablePlan.scan_available != -1 && availablePlan.scan_available != 1"
-                class="avalible-text text-info">{{availablePlan.scan_available}} Scans are Available </span>
+          <span
+            *ngIf="availablePlan.scan_available > 0 && availablePlan.scan_available != -1 && availablePlan.scan_available != 1"
+            class="avalible-text text-info">{{availablePlan.scan_available}} Scans are Available </span>
           <span *ngIf="availablePlan.scan_available == 0"
                 class=" avalible-text text-info"> Scan is not Available </span>
           <span *ngIf="availablePlan.scan_available == -1"
@@ -36,7 +37,20 @@
               <button type="button" class="btn btn-sm btn-outline-secondary btn-uppercase mr-2" (click)="openNew()">
                 <i aria-hidden="true" class="fa fa-plus pr-1"></i> Add Cookie
               </button>
-              <button *ngIf="!isScanning" (click)="onRescanCookie(); openModal(template)" data-toggle="modal" data-target="#myModal"
+
+              <button type="button" (click)="onGenerateCsv()" class="btn btn-sm btn-outline-secondary btn-uppercase mr-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                     class="feather feather-download mg-r-5">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="7 10 12 15 17 10"></polyline>
+                  <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                Export CSV
+              </button>
+
+              <button *ngIf="!isScanning" (click)="onRescanCookie(); openModal(template)" data-toggle="modal"
+                      data-target="#myModal"
                       class="btn-success pl-3 pr-4 btn btn-sm mr-2 mg-r-3" type="button">
                 <i-feather name="refresh-ccw" class="commom-feathericon-height pr-1"></i-feather>
                 Scan
@@ -336,7 +350,6 @@
             </div>
 
 
-
           </div>
 
           <div class="form-row">
@@ -388,7 +401,7 @@
 
 
           <div class="form-group mg-b-5">
-            <label ><i class="tx-8 fa fa-asterisk tx-danger " aria-hidden="true"></i>
+            <label><i class="tx-8 fa fa-asterisk tx-danger " aria-hidden="true"></i>
               Description</label>
             <textarea formControlName="description" class="form-control"
                       rows="3"></textarea>
@@ -399,9 +412,9 @@
           </div>
 
           <div class="form-group mg-b-5">
-            <label ><i class="tx-8 fa fa-asterisk tx-danger " aria-hidden="true"></i>
+            <label><i class="tx-8 fa fa-asterisk tx-danger " aria-hidden="true"></i>
               Value</label>
-            <textarea formControlName="value" class="form-control"  rows="3"></textarea>
+            <textarea formControlName="value" class="form-control" rows="3"></textarea>
             <div *ngIf="submitted && f.value.errors"
             >
               <div class="text-danger mt-2" *ngIf="f.value.errors.required">This Field is required</div>
@@ -473,9 +486,9 @@
         </div>
       </div>
       <div class="form-group mg-b-5 mt-3">
-        <label  class="tx-small"> Description <i style="font-size: 9px;"
-                                                                                  class="fa fa-asterisk tx-danger "
-                                                                                  aria-hidden="true"></i></label>
+        <label class="tx-small"> Description <i style="font-size: 9px;"
+                                                class="fa fa-asterisk tx-danger "
+                                                aria-hidden="true"></i></label>
         <textarea class="form-control" formControlName="description"
                   [ngClass]="{ 'is-invalid': categoryFromSubmitted && c.description.errors }"
                   rows="3"></textarea>
