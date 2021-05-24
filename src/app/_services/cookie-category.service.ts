@@ -144,6 +144,22 @@ export class CookieCategoryService {
     );
   }
 
+  getAllCookieForCsv(componentName, moduleName) {
+    let path = apiConstant.COOKIE_CATEGORY_ALL_RECORD.replace(':orgId', this.currentManagedOrgID);
+    path = path.replace(':propId', this.currrentManagedPropID);
+    return this.http.get(environment.apiUrl + path).pipe(map(res => {
+        return  {
+          res,
+          propID: this.currrentManagedPropID
+        };
+      }),
+      catchError(err => {
+        this.onSendLogs(LokiStatusType.ERROR, err, LokiFunctionality.cookieCategory, componentName, moduleName, path);
+        return throwError(err);
+      })
+    );
+  }
+
   getPartyChartData(componentName, moduleName) {
     const path = apiConstant.COOKIE_CATEGORY_TYPE_CHART.replace(':propId', this.currrentManagedPropID);
     return this.http.get(environment.apiUrl + path).pipe(map(res => res),

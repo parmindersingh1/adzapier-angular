@@ -144,12 +144,12 @@ export class CookieCategoryComponent implements OnInit {
   }
 
   openModal(template) {
-    if(this.onCheckSubscription()){
+    if (this.onCheckSubscription()){
     this.categoryModalRef = this.modalService.show(template);
     }
   }
 
-  
+
 
   onSelectedColummFormServer() {
     this.cols = this.onGetColumms();
@@ -593,4 +593,59 @@ export class CookieCategoryComponent implements OnInit {
     });
   }
 
+  onGenerateCsv() {
+    this.loading.start();
+    this.service.getAllCookieForCsv(this.constructor.name, moduleName.cookieCategoryModule).subscribe((res: any) => {
+      this.loading.stop();
+      const cookieData = res.res.response;
+      const timeStamp = Math.floor(Date.now() / 1000);
+      let data, filename, link;
+      let csv = this.convertArrayOfObjectsToCSV({
+        data: cookieData
+      });
+      if (csv == null) { return; }
+      filename = `cookies-${res.propID}-${timeStamp}.csv`;
+      if (!csv.match(/^data:text\/csv/i)) {
+        csv = 'data:text/csv;charset=utf-8,' + csv;
+      }
+      data = encodeURI(csv);
+      link = document.createElement('a');
+      link.setAttribute('href', data);
+      link.setAttribute('download', filename);
+      link.click();
+    }, err => {
+      this.loading.stop();
+    });
+  }
+
+  convertArrayOfObjectsToCSV(args) {
+    let result, ctr, keys, columnDelimiter, lineDelimiter, data;
+
+    data = args.data || null;
+    if (data == null || !data.length) {
+      return null;
+    }
+
+    columnDelimiter = args.columnDelimiter || ',';
+    lineDelimiter = args.lineDelimiter || '\n';
+
+    keys = Object.keys(data[0]);
+
+    result = '';
+    result += keys.join(columnDelimiter);
+    result += lineDelimiter;
+
+    data.forEach((item) => {
+      ctr = 0;
+      keys.forEach((key) => {
+        if (ctr > 0) result += columnDelimiter;
+
+        result += item[key];
+        ctr++;
+      });
+      result += lineDelimiter;
+    });
+
+    return result;
+  }
 }
