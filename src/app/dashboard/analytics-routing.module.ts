@@ -6,10 +6,10 @@ import { LicenseguardPropertyService } from '../_services/licenseguardproperty.s
 
 
 const routes: Routes = [
-  {path: 'analytics', component: AnalyticsComponent, canActivate: [AuthGuard]},
-  {path: 'ccpa-dsar', loadChildren: () => import('./ccpa-dsar/ccpa-dsar.module').then(m => m.CcpaDsarModule) },
+  {path: 'welcome', component: AnalyticsComponent, canActivate: [AuthGuard]},
+  {path: 'dashboard/ccpa-dsar', loadChildren: () => import('./ccpa-dsar/ccpa-dsar.module').then(m => m.CcpaDsarModule) },
   {
-    path: 'cookie-consent',
+    path: 'dashboard/cookie-consent',
     loadChildren: () => import('./cookie-consent/cookie-consent.module').then(m => m.CookieConsentModule),
     canActivate: [AuthGuard, LicenseguardPropertyService]
   }

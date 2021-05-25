@@ -65,7 +65,7 @@ export class LoginComponent implements OnInit {
     ngOnInit() {
         this.loginForm = this.formBuilder.group({
             email: ['', [Validators.required, Validators.pattern]],
-            password: ['', [Validators.required, Validators.pattern, Validators.minLength(6)]]
+            password: ['', [Validators.required]]
         });
     }
 
@@ -107,7 +107,7 @@ export class LoginComponent implements OnInit {
                     if(this.returnUrl){
                         this.router.navigate([params['redirectURL']]);
                     }else{
-                        this.router.navigate(['/home/dashboard/analytics']);
+                        this.router.navigate(['/home/welcome']);
                     }
                 },
                 error => {
