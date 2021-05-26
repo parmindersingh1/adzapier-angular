@@ -13,7 +13,7 @@ export const apiConstant = {
   COOKIE: '/cookie/:orgId/:propId',
   COOKIE_SCANNER_STATUS: '/scannerstatus/:orgId/:propId',
   // Cookie Consent
-  UPDATE_VENDORS  : '/consent/manage-vendors/:orgId/:propId',
+  UPDATE_VENDORS: '/consent/manage-vendors/:orgId/:propId',
   COOKIE_CONSENT: '/consents/tracking/:propId',
   COOKIE_TRACKING_FILTER: '/consents/trackingbyfilter/:propId',
   COOKIE_CONSENT_PUBLISHER: '/consent/cookieconsent',
@@ -39,7 +39,7 @@ export const apiConstant = {
   BILLING_ACTIVE_PLAN: '/billing/list/subscription',
   BILLING_FEATURES: '/billing/plan/allowed-features',
   //
-  BILLING_GET_ASSIGNE_PROP : '/licensed/property',
+  BILLING_GET_ASSIGNE_PROP: '/licensed/property',
   BILLING_GET_ASSIGNE_ORG: '/licensed/organizations',
 
   BILLING_ASSIGNE_PROPERTY: '/assign/license/property',
@@ -52,7 +52,7 @@ export const apiConstant = {
   BILLING_UNSSIGNE_PROPERTY: '/unassign/license/property',
   BILLING_UNSSIGNE_ORG: '/unassign/license/organization',
   //
-  BILLING_MANAGE_SESSION_ID_GEN : '/billing/customerportal/session',
+  BILLING_MANAGE_SESSION_ID_GEN: '/billing/customerportal/session',
   // Workflow
   WORKFLOW: '/workflow',
   WORKFLOW_STATUS: '/workflow?workflow_status=',
@@ -68,7 +68,13 @@ export const apiConstant = {
   PROPERTY_PLAN: '/billing/plan/features',
   ORG_PLAN: '/available/user/organization/:orgId',
   COMPANY_PLAN: '/available/user/company',
-  PROP_AND_ORG_PLAN : '/billing/plan/inviteuser'
+  PROP_AND_ORG_PLAN: '/billing/plan/inviteuser',
+
+
+  // Consent Solution
+  GET_CONSENT_RECORDS: '/consent/solution/:pid',
+  GET_LEGAL_RECORDS: '/consent/legal_notices/:pid',
+  UPDATE_CONSENT: '/consent/solution/:pid/:id'
 };
 
 // {

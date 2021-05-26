@@ -53,6 +53,10 @@ const routes: Routes = [
     path: 'cookie-consent', loadChildren: () => import('./privacy/cookie-consent/cookie-consent.module')
       .then(m => m.CookieConsentModule), canActivate: [AuthGuard]
   },
+  {
+    path: 'consent-solutions', loadChildren: () => import('./privacy/consent-solutions/consent-solutions.module')
+      .then(m => m.ConsentSolutionsModule), canActivate: [AuthGuard]
+  },
   { path: 'privacy/dsar/createworkflow', loadChildren: () => import('./privacy/dsar/createworkflow/createworkflow.module')
   .then(m => m.CreateworkflowModule) },
   { path: 'privacy/dsar/createworkflow/:id', loadChildren: () => import('./privacy/dsar/createworkflow/createworkflow.module')

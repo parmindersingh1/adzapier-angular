@@ -21,8 +21,11 @@ import { WelcomeComponent } from './welcome/welcome.component';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import {NgbCollapseModule, NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
-import {TimeagoModule} from 'ngx-timeago';
-import { SubscriptionPopupComponent } from './_components/subscription-popup/subscription-popup.component';
+import { TabsModule } from 'ngx-bootstrap/tabs';
+import {ButtonModule} from 'primeng/button';
+import {TableModule} from 'primeng/table';
+
+
 
 @NgModule({
   declarations: [
@@ -44,7 +47,6 @@ import { SubscriptionPopupComponent } from './_components/subscription-popup/sub
    // VerifyemailComponent,
    //  CheckoutConfirmationComponent,
     WelcomeComponent,
-    SubscriptionPopupComponent
   ],
   imports: [
     BrowserModule,
@@ -72,7 +74,9 @@ import { SubscriptionPopupComponent } from './_components/subscription-popup/sub
     // TabsModule.forRoot(),
     // AccordionModule.forRoot(),
     NgbCollapseModule,
-    NgbModule
+    TabsModule.forRoot(),
+    ButtonModule,
+    TableModule
   ],
   providers: [
     NgxUiLoaderService,
