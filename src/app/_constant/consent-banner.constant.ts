@@ -23,7 +23,7 @@ export const defaultData = {
 
 export const defaultBannerContent = {
   privacy: 'Privacy',
-  privacyLink: 'http://adzapier.com/privacy-policy/',
+  privacyLink: 'https://your-domain.com/privacy-policy/',
   privacyTextColor: '#4d67ff',
   position: 'bottom',
   bannerTitle: 'We use cookies Data',
