@@ -281,7 +281,7 @@
                                                 for="inputGroupFile01">{{uploadFilename?uploadFilename:'Choose file'}}</label>
                                         </div>
                                     </div>
-                                    <button type="submit" class="btn btn-sm btn-uppercase btn-primary float-right mb-2 mt-2">Post
+                                    <button type="submit" class="btn btn-sm btn-uppercase btn-primary float-right mb-2 mt-2">Send
                                     </button>
                                 </div>
                             </form>
@@ -907,7 +907,7 @@
     </form>
 </ng-template>
 
- <div class="col-sm-5 mr-0 float-right flotingdiv">
+ <div class="col-sm-5 mr-0 float-right flotingdiv" *ngIf="isOpen">
     <alert *ngIf="isOpen" [type]="alertType" dismissOnTimeout="5000" [dismissible]="dismissible"
       (onClosed)="onClosed(alertMsg)">{{alertMsg}}</alert>
   </div>

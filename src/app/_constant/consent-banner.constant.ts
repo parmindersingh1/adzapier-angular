@@ -23,12 +23,12 @@ export const defaultData = {
 
 export const defaultBannerContent = {
   privacy: 'Privacy',
-  privacyLink: 'http://adzapier.com/privacy-policy/',
+  privacyLink: 'https://your-domain.com/privacy-policy/',
   privacyTextColor: '#4d67ff',
   position: 'bottom',
-  bannerTitle: 'We use cookies Data',
+  bannerTitle: 'We Care About Your Privacy',
   bannerTitle2: 'We and our Partners data to provide',
-  bannerDescription: 'We may place these for analysis of our visitor data, to improve our website, show personalised content and to give you a great website experience. For more information about the cookies we use open the settings.',
+  bannerDescription: 'By clicking "Accept All" you consent to us and all the third-parties mentioned in our Privacy and Cookies Preference setting to store cookies and other technologies to enhance your website experience, process your personal data, show you personalized content and advertisements, analyze website efficiency, and improve our marketing efforts. ',
   bannerTextColor: '#f5f5f5',
   bannerBorderColor: '#162893',
   bannerBackGroundColor: '#000000',
@@ -37,7 +37,7 @@ export const defaultBannerContent = {
   bannerPreferenceButtonTextColor: '#f5f5f5',
   bannerPreferenceButtonBackGroundColor: 'transparent',
   //
-  bannerDisableButtonText: 'Disable Button',
+  bannerDisableButtonText: 'Disable All',
   bannerDisableButtonTextColor: '#f5f5f5',
   bannerDisableButtonBackGroundColor: '#162893',
   //
@@ -50,10 +50,10 @@ export const defaultBannerContent = {
   bannerAcceptButtonBackgroundColor: '#162893',
 
   //PopUp
-  PopUpGdprPurposeDescription: 'In order to comply with data protection laws, we ask you to review the key pointsbelow of our Privacy Policy. To continue using our website, you need to select yourpreferences and click "Save".',
-  PopUpGdprVendorDescription: 'During consted in the stub are filtered out if not valid. Ping and custom commands are executed and removed from the queue while all other commands remain queued until a valid TC string is set.',
-  //
-  PopUpCcpaGenericPurposeDescription: 'IWhen you visit our website, we store cookie on your browser to collection information. This information might be related to you or your device, your preferences, and mostly used to make the website work as you expect it to and to provide a more personalized web browsing experience. Your privacy is important to us, you can choose not to allow some types of cookies. Click on the different cookie category heading to find out more information and change our default settings. You have the option of disabling certain types of storage that may not be Essential for the basic functioning of the website. If you decide to decline, we may not be able to provide you the optimal website browsing experience. You cannot disable our Essential First Party Strictly Essential Cookies as they are implemented to ensure the proper functioning of our website. Such as log into your account, remembering your settings, prompting the cookie banner and redirect when you logout etc.".',
+  PopUpGdprPurposeDescription: 'To provide the best experiences, we and our partners use cookies and technologies to store and/or access device information. Consenting to these technologies will allow us and our partners to process personal data such as browsing behavior or unique IDs on this site. Not consenting or withdrawing consent, may adversely affect certain features and functions. You may exercise your right to consent or object to legitimate interest, based on specific purpose or at a partner level in the link under each purpose. These choices will be signaled to our vendors participating in the Transparency and Consent Framework.',
+  PopUpGdprVendorDescription: 'These are the partners whom we share data with. You can see which purposes they are requesting consent and/or which purposes they are claiming legitimate interest for by clicking on each partner. You can turn each one on and off to control whether or not data is shared with them or may disable all data processing. However, please note that by disabling all data processing, some site functionality may be affected. For some purposes, your personal data may be processed on the legal ground of legitimate interest.', //
+
+  PopUpCcpaGenericPurposeDescription: 'When you visit our website, we store cookie on your browser to collection information. This information might be related to you or your device, your preferences, and mostly used to make the website work as you expect it to and to provide a more personalized web browsing experience. Your privacy is important to us, you can choose not to allow some types of cookies. Click on the different cookie category heading to find out more information and change our default settings. You have the option of disabling certain types of storage that may not be necessary for the basic functioning of the website. If you decide to decline, we may not be able to provide you the optimal website browsing experience. You cannot disable our Essential First Party Strictly Necessary Cookies as they are implemented to ensure the proper functioning of our website. Such as log into your account, remembering your settings, prompting the cookie banner and redirect when you logout etc.',
   PopUpCcpaGenericPrivacyInfoDescription: 'Use this page to learn more about data privacy and how data is used to improve your site experience.',
 
   PopUpPurposeButtonTextColor: '#575751',
@@ -70,7 +70,7 @@ export const defaultBannerContent = {
   PopUpDoNotSellTextColor: '#f5f5f5',
   PopUpDoNotSellBackgroundColor: '#162893',
 
-  PopUpSaveMyChoiceButtonText: 'Save My Choice',
+  PopUpSaveMyChoiceButtonText: 'Save My Choices',
   PopUpSaveMyChoiceButtonTextColor: '#f5f5f5',
   PopUpSaveMyChoiceButtonBackgroundColor: '#162893',
 
@@ -87,20 +87,20 @@ export const defaultBannerContent = {
 
 
   SocialMediaTitle: 'Social Media Cookies',
-  SocialMediaDescription: 'In order to comply with data protection laws, we ask you to review the key points below of our Privacy Policy. To continue using our website, you need to select your preferences and click "Save". Privacy Statement',
+  SocialMediaDescription: 'These cookies have been added to the site by various social media services, so that you can share our content with friends and networks. They\'re capable of tracking your browser across other sites and building a profile of your interests. This may have an impact on ad personalization and messages you see on other websites you visit. If you do not allow these cookies, you may not be able to use or view these shared tools.',
 
   AnalyticsTitle: 'Analytics Cookies',
   AnalyticsDescription: 'Functional cookies enhance functions, performance, and services on the website. Some examples include: cookies used to analyze site traffic, cookies used for market research, and cookies used to display advertising that is not directed to a particular individual.',
 
   EssentialTitle: 'Essential Cookies',
-  EssentialDescription: 'Required cookies are Essential for basic website functionality. Some examples include: session cookies needed to transmit the website, authentication cookies, and security cookies',
+  EssentialDescription: 'These Cookies are essential to provide you with services available through the Website and to enable you to use some of its features. They help to authenticate users and prevent fraudulent use of user accounts. Without these Cookies, the services that you have asked for cannot be provided, and We only use these Cookies to provide you with those services.',
 
   FunctionalTitle: 'Functional Cookies',
-  FunctionalDescription: 'Functional cookies help to perform certain functionalities like sharing the content of the website on social media platforms, collect feedbacks, and other third-party features.\n',
+  FunctionalDescription: 'Functional cookies help to perform certain functionalities like sharing the content of the website on social media platforms, collect feedbacks, and other third-party features.',
 
   UnknownTitle: 'Unclassified',
   UnknownDescription: 'Unclassified cookies are cookies that we are in the process of classifying, together with the providers of individual cookies.'
-}
+};
 
 export class FormDefaultData {
   privacy: string;

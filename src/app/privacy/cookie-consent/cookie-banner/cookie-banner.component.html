@@ -45,7 +45,7 @@
                 </button>
 
 
-                <button (click)="type = 'draft'" type="submit" [disabled]="cookieBannerForm.invalid"
+                <button (click)="type = 'draft'" type="submit" [disabled]="cookieBannerForm.invalid || cookieBannerForm.dirty"
                         class="btn ml-2  btn-sm btn-uppercase btn-success">
                   <ng-container *ngIf="!isPublish || type === 'publish'">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -62,7 +62,7 @@
                     Saving...
                   </ng-container>
                 </button>
-                <button (click)="type = 'publish'" type="submit" [disabled]="cookieBannerForm.invalid"
+                <button (click)="type = 'publish'" type="submit" [disabled]="cookieBannerForm.invalid || cookieBannerForm.dirty"
                         class="btn btn-sm pd-x-15 btn-primary btn-uppercase mg-l-5" href="#modalAddCategory"
                         data-toggle="modal">
                   <ng-container *ngIf="!isPublish || type === 'draft'">
@@ -668,7 +668,7 @@
               </div>
               <div class="col-md-2">
                 <button type="button" (click)="onSaveCustomLang()" [disabled]="!onIsFieldDirty" class="btn btn-success">
-                  Save Changes
+                  Save Language
                 </button>
               </div>
 
@@ -750,11 +750,18 @@
                         <div class="col-md-12 mt-2">
                           <div class="w-100">
                             <h6 class="tx-12 tx-medium tx-spacing-1 tx-color-03 tx-uppercase">Description</h6>
-                            <quill-editor [(ngModel)]="formContent.bannerDescription" maxlength="1000"
-                                          [placeholder]="formContent.bannerDescription"
-                                          formControlName="BannerDescription" [modules]="quillConfig"
-                                          [styles]="{height: '150px'}">
-                            </quill-editor>
+<!--                            <quill-editor [(ngModel)]="formContent.bannerDescription" maxlength="1000"-->
+<!--                                          [placeholder]="formContent.bannerDescription"-->
+<!--                                          formControlName="BannerDescription" [modules]="quillConfig"-->
+<!--                                          [styles]="{height: '150px'}">-->
+<!--                            </quill-editor>-->
+
+
+                            <textarea class="form-control w-100" rows="3"
+                                      formControlName="BannerDescription"
+                                      [(ngModel)]="formContent.bannerDescription"
+                                      [placeholder]="formContent.bannerDescription"></textarea>
+
                             <div *ngIf="submitted && f.BannerDescription.errors">
                               <div class="text-danger mt-2" *ngIf="f.BannerDescription.errors.minlength">
                                 Minimum 20 characters required
@@ -1710,7 +1717,7 @@
     <p>This will reset all the configuration<br/>
     </p>
     <button type="button" class="btn btn-primary mr-3" (click)="modalRef.hide()">No</button>
-    <button type="button" class="btn btn-white" (click)="modalRef.hide(); onSetDefaultValue()">Yes</button>
+    <button type="button" class="btn btn-white" (click)="modalRef.hide(); onSetDefaultValue(); onGetGlobleLangData()">Yes</button>
   </div>
 </ng-template>
 
