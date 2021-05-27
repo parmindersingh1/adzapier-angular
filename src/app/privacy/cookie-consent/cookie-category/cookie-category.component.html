@@ -284,10 +284,10 @@
         <ng-template pTemplate="body" let-cookieList let-columns="columns" styleClass="p-datatable-responsive-demo">
           <tr>
             <td>{{cookieList.id}}</td>
-            <td>{{cookieList.name}}</td>
+            <td class="aligned">{{cookieList.name}}</td>
             <td>{{cookieList.path}}</td>
             <td>{{cookieList.category}}</td>
-            <td *ngFor="let col of columns">
+            <td class="aligned" *ngFor="let col of columns">
               {{cookieList[col.field]}}
             </td>
             <td>

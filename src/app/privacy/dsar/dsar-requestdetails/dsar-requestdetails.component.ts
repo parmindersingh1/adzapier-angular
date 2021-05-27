@@ -340,6 +340,11 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
     this.router.navigate(['privacy/dsar/requests']);
   }
 
+  onRefresh(){
+    this.loadDataRequestDetails();
+  }
+
+
   getCurrentLoggedInUser() {
     this.userService.getLoggedInUserDetails(this.constructor.name, moduleName.headerModule).subscribe((data) => {
       this.userData = data;
@@ -351,6 +356,7 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
       }
     });
   }
+
 
   loadDataRequestDetails() {
 

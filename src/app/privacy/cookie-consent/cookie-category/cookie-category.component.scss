@@ -338,7 +338,13 @@ tr.row-disabled > td > a {
   border-bottom: 0;
 }
 
-
+.aligned{
+  text-decoration: none !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  width: 50px !important;
+}
 
 
 .alert-info {
