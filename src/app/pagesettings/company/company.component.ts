@@ -92,6 +92,8 @@ export class CompanyComponent implements OnInit {
     });
     this.inviteUserForm = this.formBuilder.group({
       emailid: ['', [Validators.required, Validators.pattern]],
+      firstname: ['', [Validators.required]],
+      lastname: ['', [Validators.required]],
       permissions: ['', [Validators.required]]
     });
     this.confirmationForm = this.formBuilder.group({
@@ -307,6 +309,8 @@ export class CompanyComponent implements OnInit {
         }
         const requestObj = {
           email: this.inviteUserForm.value.emailid,
+          firstname: this.inviteUserForm.value.firstname,
+          lastname: this.inviteUserForm.value.lastname,
           role_id: this.inviteUserForm.value.permissions,
           user_level: 'company'
         };
@@ -333,6 +337,8 @@ export class CompanyComponent implements OnInit {
           id: this.recordID,
           user_id: this.approverID,
           role_id: this.inviteUserForm.value.permissions,
+          firstname: this.inviteUserForm.value.firstname,
+          lastname: this.inviteUserForm.value.lastname
         };
         this.companyService.updateUserRole(this.constructor.name, moduleName.organizationDetailsModule, requestObj)
           .subscribe((data) => {
@@ -378,7 +384,8 @@ export class CompanyComponent implements OnInit {
     this.inviteUserForm.controls['emailid'].setValue(data.user_email);
     this.inviteUserForm.get('emailid')[this.isUpdateUserinvitation ? 'disable' : 'enable']();
     this.inviteUserForm.controls['permissions'].setValue(data.role_id);
-
+    this.inviteUserForm.controls['firstname'].setValue(this.separateUsername(data.user_name)[0]);
+    this.inviteUserForm.controls['lastname'].setValue(this.separateUsername(data.user_name)[1]);
     this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
       this.inviteUserForm.reset();
       // this.closeResult = `Closed with: ${result}`;
@@ -559,4 +566,10 @@ export class CompanyComponent implements OnInit {
       return this.selectedTeamMember;
     }
   }
+
+  separateUsername(username){
+    let res = username.split(" ");
+    return res;
+  }
+
 }

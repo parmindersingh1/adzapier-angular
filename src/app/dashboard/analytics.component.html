@@ -24,7 +24,7 @@
         </div>
         <hr>
 
-        <a class="btn btn-primary" routerLink="/cookie-consent/cookie-banner">Go Now</a>
+        <a class="btn btn-primary" tooltip="{{cookieTooltiptext}}" [routerLink]="isLicenseAssignedtoProperty ? ['/cookie-consent/cookie-banner'] : ['/settings/billing/manage']">{{isLicenseAssignedtoProperty ? 'Go Now' : 'Buy Now'}}</a>
       </div>
     </div><!-- col -->
     <div class="mx-auto col-sm-6 col-lg-3">
@@ -39,7 +39,7 @@
         </div>
         <hr>
 
-        <a class="btn btn-primary" routerLink="/home/dashboard/cookie-consent">Go Now</a>
+        <a class="btn btn-primary" tooltip="{{cookieTooltiptext}}" [routerLink]="isLicenseAssignedtoProperty ? ['/home/dashboard/cookie-consent'] : ['/settings/billing/manage']">{{isLicenseAssignedtoProperty ? 'Go Now' : 'Buy Now'}}</a>
 
       </div>
     </div><!-- col -->
@@ -52,7 +52,7 @@
         <div class="d-flex d-lg-block d-xl-flex align-items-end">
         </div>
         <hr>
-        <a class="btn btn-primary" routerLink="/privacy/dsar/requests">Go Now</a>
+        <a class="btn btn-primary" tooltip="{{dsarTooltiptext}}" [routerLink]="isLicenseAssignedtoOrganization ? ['/privacy/dsar/requests'] : ['/settings/billing/manage']">{{isLicenseAssignedtoOrganization ? 'Go Now' : 'Buy Now'}}</a>
       </div>
     </div><!-- col -->
   </div><!-- row -->
