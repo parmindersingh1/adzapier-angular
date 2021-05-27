@@ -321,6 +321,26 @@
         </div>
         <form [formGroup]="inviteUserForm" autocomplete="off" (ngSubmit)="onSubmitInviteUser()">
             <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="firstname" class="d-block">First name</label>
+                        <input type="text" class="form-control" formControlName="firstname" name="firstname" (keydown.space)="$event.preventDefault()" 
+                        [ngClass]="{ 'is-invalid': isInviteFormSubmitted && userInvite.firstname.errors }" />
+                        <div *ngIf="isInviteFormSubmitted && userInvite.firstname.errors" class="invalid-feedback">
+                            <div *ngIf="userInvite.firstname.errors.required">First name is required</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="lastname" class="d-block">Last name</label>
+                        <input type="text" class="form-control" formControlName="lastname" name="lastname" (keydown.space)="$event.preventDefault()"
+                        [ngClass]="{ 'is-invalid': isInviteFormSubmitted && userInvite.lastname.errors }"/>
+                        <div *ngIf="isInviteFormSubmitted && userInvite.lastname.errors" class="invalid-feedback">
+                            <div *ngIf="userInvite.lastname.errors.required">Last name is required</div>
+                        </div>
+                    </div>
+                </div>
                 <div class="col-sm-12">
                     <div class="form-group">
                         <label for="emailid" class="d-block">Email Id</label>

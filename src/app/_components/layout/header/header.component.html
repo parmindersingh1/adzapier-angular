@@ -69,7 +69,7 @@
             <a class="dropdown-item" title="{{item.orgname}}" routerLink="/settings/organizations/details/{{item.id}}" (click)="goto('settings/organizations/details',item.id)">
              <span [ngClass]="[isOrgSelected(item) ? 'active' : '']">{{item.orgname}}</span>
              <span class="align-right width50"><i-feather class="feather-plus" name="plus"></i-feather>
-              <i-feather title="License not assigned" *ngIf="isLicenseAssignedForOrganization(item)" class="feather-lock mr-1" name="lock"></i-feather>  
+              <!-- <i-feather placement="bottom" [adaptivePosition]="true" tooltip="You have not assigned DSAR License to this organization" style="color:orange" *ngIf="isLicenseAssignedForOrganization(item)" class="feather-lock mr-1" name="lock"></i-feather>   -->
             </span>
             </a>
             <div *ngIf="item.property.length=='0'">No Property</div>
@@ -81,7 +81,7 @@
                    <span class="flex-spacebetween">
                     <span class="ml-2 mr-2" *ngIf="isPropSelected(submenu)">
                     <i class="fa fa-check"></i></span>
-                    <i-feather title="License not assigned" *ngIf="isLicenseAssignedForProperty(submenu)" class="feather-lock mr-1" name="lock"></i-feather>
+                    <i-feather  placement="bottom" [adaptivePosition]="true" tooltip="You have not assigned cookie consent license to this property" *ngIf="isLicenseAssignedForProperty(submenu)" class="feather-lock mr-1" name="lock"></i-feather>
                   </span>
                   </span>
                   <ng-template #disabledProperty>
@@ -291,7 +291,7 @@
           <a class="dropdown-item" title="{{item.orgname}}" routerLink="/settings/organizations/details/{{item.id}}" (click)="goto('settings/organizations/details',item.id)">
             <span [ngClass]="[isOrgSelected(item) ? 'active' : '']">{{item.orgname}}</span>
             <span class="align-right"><i-feather class="feather-plus" name="plus"></i-feather>
-              <i-feather title="License not assigned" *ngIf="isLicenseAssignedForOrganization(item)" class="feather-lock mr-1" name="lock"></i-feather>
+              <!-- <i-feather placement="bottom" [adaptivePosition]="true" tooltip="You have not assigned DSAR License to this organization" style="color:orange" *ngIf="isLicenseAssignedForOrganization(item)" class="feather-lock mr-1" name="lock"></i-feather> -->
             </span>
           </a>
           <div *ngIf="item.property.length=='0'">No Property</div>
@@ -302,7 +302,7 @@
                  <span class="flex-spacebetween" (click)="isProperyDisabled(submenu) ? false : isCurrentPropertySelected(item,submenu)">  {{ submenu.property_name ? convertAmpersand(submenu.property_name) : 'No Property' }}
                   <span class="ml-2 mr-2" *ngIf="isPropSelected(submenu)">
                   <i class="fa fa-check"></i></span>
-                  <i-feather title="License not assigned" *ngIf="isLicenseAssignedForProperty(submenu)" class="feather-lock mr-1" name="lock"></i-feather>
+                  <i-feather  placement="bottom" [adaptivePosition]="true" tooltip="You have not assigned cookie consent license to this property" *ngIf="isLicenseAssignedForProperty(submenu)" class="feather-lock mr-1" name="lock"></i-feather>
                 </span>
                 </a>
               </li>

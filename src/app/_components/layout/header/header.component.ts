@@ -790,6 +790,9 @@ export class HeaderComponent implements OnInit {
         ...results[2].response
       }
       this.dataService.setAvailableLicenseForFormAndRequestPerOrg(finalObj);
+      if(finalObj !== null && Object.keys(finalObj).length !== 0){
+        this.dataService.isLicenseApplied.next({requesttype:'organization',hasaccess:true});
+      }
     },(error)=>{
       console.log(error)
     });
