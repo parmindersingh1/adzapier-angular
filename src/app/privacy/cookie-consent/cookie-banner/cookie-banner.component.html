@@ -45,7 +45,7 @@
                 </button>
 
 
-                <button (click)="type = 'draft'" type="submit" [disabled]="cookieBannerForm.invalid || cookieBannerForm.dirty"
+                <button (click)="type = 'draft'" type="submit" [disabled]="cookieBannerForm.invalid || onIsFieldDirty"
                         class="btn ml-2  btn-sm btn-uppercase btn-success">
                   <ng-container *ngIf="!isPublish || type === 'publish'">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -62,7 +62,7 @@
                     Saving...
                   </ng-container>
                 </button>
-                <button (click)="type = 'publish'" type="submit" [disabled]="cookieBannerForm.invalid || cookieBannerForm.dirty"
+                <button (click)="type = 'publish'" type="submit" [disabled]="cookieBannerForm.invalid || onIsFieldDirty"
                         class="btn btn-sm pd-x-15 btn-primary btn-uppercase mg-l-5" href="#modalAddCategory"
                         data-toggle="modal">
                   <ng-container *ngIf="!isPublish || type === 'draft'">
