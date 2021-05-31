@@ -4,6 +4,7 @@ import { AuthGuard } from './_helpers';
 import { PagenotfoundComponent } from './errorpages/pagenotfound.component';
 import { InternalerrorComponent } from './errorpages/internalerror.component';
 import { PagenotfoundComponent1 } from './errorpages/404page.component';
+import { RouteguardService } from './_services/routeguard.service';
 
 const routes: Routes = [
 
@@ -51,7 +52,7 @@ const routes: Routes = [
   },
   {
     path: 'cookie-consent', loadChildren: () => import('./privacy/cookie-consent/cookie-consent.module')
-      .then(m => m.CookieConsentModule), canActivate: [AuthGuard]
+      .then(m => m.CookieConsentModule), canActivate: [AuthGuard,RouteguardService]
   },
   { path: 'privacy/dsar/createworkflow', loadChildren: () => import('./privacy/dsar/createworkflow/createworkflow.module')
   .then(m => m.CreateworkflowModule) },
