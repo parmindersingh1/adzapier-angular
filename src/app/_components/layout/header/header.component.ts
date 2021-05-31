@@ -212,8 +212,11 @@ export class HeaderComponent implements OnInit {
 
   loadOrganizationList() {
     this.orgservice.orglist().subscribe((data) => {
-      if (data === null) {
+      if (data === null || data.count == 0 || data.response.length == 0) {
+        this.dataService.OrganizationCreatedStatus.next(false);
         this.router.navigate(['settings/organizations']);
+      }else{
+        this.dataService.OrganizationCreatedStatus.next(true);
       }
       this.orgList = Object.values(data)[1];
       this.leftItems = this.orgList;
@@ -564,7 +567,7 @@ export class HeaderComponent implements OnInit {
 
   checkLinkAccess(link): boolean {
     if (link.indexOf('cookie') !== -1 || link.indexOf('privacy') !== -1 || link.indexOf('webform') !== -1 ||
-      link.indexOf('ccpa') !== -1) {
+      link.indexOf('ccpa') !== -1 || link.indexOf('billing') !== -1) {
       return true;
     } else {
       this.router.navigate([link.routerLink || link]);
