@@ -18,6 +18,8 @@
                         Current Status of DSAR Request
                     </span>
                     <div class="d-flex">
+                            <button (click)="onRefresh()" class="btn btn-sm btn-uppercase btn-outline-secondary pt-2 mr-2 lineheight-22">
+                              <i class="fas fa-sync feather-16"></i> Refresh</button>
 
                         <button *ngIf="currentWorkflowStage !== 'Rejected'" (click)="openModalPopup(editRequestDetails,'')" data-toggle="modal"
                             class="btn btn-sm btn-outline-secondary btn-uppercase mr-2"><svg xmlns="http://www.w3.org/2000/svg" width="24"
