@@ -170,6 +170,23 @@ export class HeaderComponent implements OnInit {
       }];
     this.onCheckSubscriptionForProperty();
     this.onCheckSubscriptionForOrg();
+
+    window.addEventListener('storage',event => {
+      if(event.storageArea == localStorage){
+        let token = localStorage.getItem('currentUser');
+        if(token == undefined){
+           this.authService.logout();
+    
+           this.isCollapsed = true;
+           localStorage.removeItem('currentUser');
+           // this.orgservice.removeControls();
+           this.userService.getCurrentUser.unsubscribe();
+           localStorage.clear();
+           this.router.navigate(['/login']);
+           sessionStorage.clear();
+        }
+      }
+    });
   }
 
   logout() {
@@ -227,7 +244,7 @@ export class HeaderComponent implements OnInit {
             { label: 'Billing', routerLink: '/settings/billing/manage', icon: 'credit-card' },
             { label: 'Settings', routerLink: '/settings', icon: 'settings' },
             { label: 'Help Center', routerLink: 'https://adzapier.atlassian.net/wiki/spaces/PD/pages/884637701/Adzapier+Portal', icon: 'help-circle' },
-            { label: 'Signout', routerLink: '/login', icon: 'log-out' }
+            { label: 'Signout', routerLink: '/signout', icon: 'log-out' }
           ]
         }];
       this.navigationMenu = [

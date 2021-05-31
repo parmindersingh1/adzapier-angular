@@ -6,6 +6,7 @@ import { InternalerrorComponent } from './errorpages/internalerror.component';
 import { PagenotfoundComponent1 } from './errorpages/404page.component';
 
 const routes: Routes = [
+  {path :'signout',loadChildren : () => import('./signout-page/signout-page.module').then(m => m.SignoutPageModule)},
 
   { path: 'login', loadChildren: () => import('./login/login.module').then(m => m.LoginModule) },
   { path: 'signup', loadChildren: () => import('./register/register.module').then(m => m.RegisterModule) },
