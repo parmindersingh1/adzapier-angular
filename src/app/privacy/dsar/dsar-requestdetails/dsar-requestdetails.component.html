@@ -139,7 +139,7 @@
                         </div>
                         <ngx-skeleton-loader *ngIf="skeletonCustomLoading" count="2"></ngx-skeleton-loader>
                         <div *ngFor="let data of getCustomFields(customFields) | keyvalue; let i = index">
-                            <div class="customdata">
+                            <div class="customdata" *ngIf="data.key !== 'Email verified'">
 
                                 <label class="tx-sans">{{data.key}}
                                     <span *ngIf="isemailverificationRequired" class="badge" (click)="verifyUserEmailID()"
