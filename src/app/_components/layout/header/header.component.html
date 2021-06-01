@@ -112,6 +112,8 @@
             <a class="nav-link dropdown-toggle"  [class.active]="menu.showlink === 'Privacy' && isPrivacyActivelinkMatched" *ngIf="menu.subcategory" dropdownToggle (click)="true">
               {{ menu.showlink }}</a></div>
           <ul *dropdownMenu class="dropdown-menu">
+            <div class="d-flex">
+              <div>
             <ng-container *ngFor="let item of menu.subcategory;let q = index;">
               <li *ngIf="menu.showlink == 'Privacy' && q===0" class="displayflex"><span>DSAR</span></li>
               <li role="menuitem" *ngIf="q  <= 9">
@@ -123,8 +125,13 @@
                 </a>
               </li>
               <li *ngIf="q===3" class="displayflex"><span>Cookie Consent</span></li>
-              <div class="consent-preference" *ngIf="q > 9">
-                <li *ngIf="q=== 10" class="displayflex"><span>Cookie Preference</span></li>
+              
+            </ng-container>
+            </div>
+            <div class="ml-2">
+            <ng-container *ngFor="let item of menu.subcategory;let q = index;">
+              <div class="consent-preference" style="width:135px" *ngIf="q > 9">
+                <li *ngIf="q=== 10" class="displayflex"><span>Consent Preference</span></li>
                 <li role="menuitem">
                   <a class="dropdown-item" [class.active]="activateSublink(item)" routerLink="{{item.routerLink}}" (click)="goto(item)">
                   <span *ngIf="item.icon.indexOf('fa')===-1">
@@ -135,6 +142,8 @@
                 </li>
               </div>
             </ng-container>
+            </div>
+            </div>
           </ul>
         </div>
       </li>
