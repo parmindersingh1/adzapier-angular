@@ -501,6 +501,15 @@ export class DataService {
     return forkJoin([webFormLicense, requestLicense, workflowLicense])
   }
 
+  setOrganizationPropertyCreationStatus(status){
+    localStorage.setItem('propertySelected', JSON.stringify(status));
+  }
+
+  getOrganizationPropertyCreationStatus(){
+    let isPropertystatus = localStorage.getItem('propertySelected');
+    return isPropertystatus = JSON.parse(isPropertystatus)
+  }
+
 }
 
 export class accesstype {
