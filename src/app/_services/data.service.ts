@@ -34,6 +34,11 @@ export class DataService {
     return this.isLicenseAppliedForProperty.asObservable();
   }
 
+  public OrganizationCreatedStatus = new BehaviorSubject<boolean>(false);
+  get isOrganizationCreated(){
+    return this.OrganizationCreatedStatus.asObservable();
+  }
+
   licenseAvailabilityObj = {};
   planUsageByOrgid = [];
   constructor(private http: HttpClient, private lokiService: LokiService) {
@@ -494,6 +499,15 @@ export class DataService {
     let requestLicense = this.getDSARRequestLicenseLimit(this.constructor.name, moduleName.headerModule, org.id || org.organization_id || org);
     let workflowLicense = this.getWorkflowLicenseLimit(this.constructor.name, moduleName.headerModule, org.id || org.organization_id || org);
     return forkJoin([webFormLicense, requestLicense, workflowLicense])
+  }
+
+  setOrganizationPropertyCreationStatus(status){
+    localStorage.setItem('propertySelected', JSON.stringify(status));
+  }
+
+  getOrganizationPropertyCreationStatus(){
+    let isPropertystatus = localStorage.getItem('propertySelected');
+    return isPropertystatus = JSON.parse(isPropertystatus)
   }
 
 }

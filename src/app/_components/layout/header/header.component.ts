@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { OrganizationService, AuthenticationService, UserService } from '../../../_services';
-import { forkJoin, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Organization } from 'src/app/_models/organization';
 import { distinctUntilChanged, map } from 'rxjs/operators';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
@@ -9,7 +9,6 @@ import { moduleName } from 'src/app/_constant/module-name.constant';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Location } from '@angular/common';
 import { DataService } from 'src/app/_services/data.service';
-import {featuresName} from '../../../_constant/features-name.constant';
 
 
 @Component({
@@ -170,6 +169,23 @@ export class HeaderComponent implements OnInit {
       }];
     this.onCheckSubscriptionForProperty();
     this.onCheckSubscriptionForOrg();
+
+    window.addEventListener('storage',event => {
+      if(event.storageArea == localStorage){
+        let token = localStorage.getItem('currentUser');
+        if(token == undefined){
+           this.authService.logout();
+    
+           this.isCollapsed = true;
+           localStorage.removeItem('currentUser');
+           // this.orgservice.removeControls();
+           this.userService.getCurrentUser.unsubscribe();
+           localStorage.clear();
+           this.router.navigate(['/login']);
+           sessionStorage.clear();
+        }
+      }
+    });
   }
 
   logout() {
@@ -212,8 +228,12 @@ export class HeaderComponent implements OnInit {
 
   loadOrganizationList() {
     this.orgservice.orglist().subscribe((data) => {
-      if (data === null) {
+      if (data === null || data.count == 0 || data.response.length == 0) {
+        this.dataService.OrganizationCreatedStatus.next(false);
         this.router.navigate(['settings/organizations']);
+      }else{
+        this.dataService.setOrganizationPropertyCreationStatus(true);
+        this.dataService.OrganizationCreatedStatus.next(true);
       }
       this.orgList = Object.values(data)[1];
       this.leftItems = this.orgList;
@@ -227,7 +247,7 @@ export class HeaderComponent implements OnInit {
             { label: 'Billing', routerLink: '/settings/billing/manage', icon: 'credit-card' },
             { label: 'Settings', routerLink: '/settings', icon: 'settings' },
             { label: 'Help Center', routerLink: 'https://adzapier.atlassian.net/wiki/spaces/PD/pages/884637701/Adzapier+Portal', icon: 'help-circle' },
-            { label: 'Signout', routerLink: '/login', icon: 'log-out' }
+            { label: 'Signout', routerLink: '/signout', icon: 'log-out' }
           ]
         }];
       this.navigationMenu = [
@@ -564,7 +584,7 @@ export class HeaderComponent implements OnInit {
 
   checkLinkAccess(link): boolean {
     if (link.indexOf('cookie') !== -1 || link.indexOf('privacy') !== -1 || link.indexOf('webform') !== -1 ||
-      link.indexOf('ccpa') !== -1) {
+      link.indexOf('ccpa') !== -1 || link.indexOf('billing') !== -1) {
       return true;
     } else {
       this.router.navigate([link.routerLink || link]);
@@ -598,8 +618,11 @@ export class HeaderComponent implements OnInit {
 
   confirm() {
     this.modalRef.hide();
-    this.router.navigate(['settings/organizations/details/' + this.orgPropertyMenu[0].id]);
-    // return false;
+    if(this.orgPropertyMenu[0] !== undefined){
+      this.router.navigate(['settings/organizations/details/' + this.orgPropertyMenu[0].id]);  
+    }else{
+      this.router.navigate(['settings/organizations']);
+    }
   }
 
   openModal(template: TemplateRef<any>) {

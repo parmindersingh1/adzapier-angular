@@ -496,10 +496,10 @@ export class OrganizationdetailsComponent implements OnInit {
           return false;
         }
         const requestObj = {
-          firstname: this.inviteUserOrgForm.value.firstname,
-          lastname: this.inviteUserOrgForm.value.lastname,
-          email: this.inviteUserOrgForm.value.emailid,
-          role_id: this.inviteUserOrgForm.value.permissions,
+          firstname: this.inviteUserOrgForm.value.firstname.trim(),
+          lastname: this.inviteUserOrgForm.value.lastname.trim(),
+          email: this.inviteUserOrgForm.value.emailid.trim(),
+          role_id: this.inviteUserOrgForm.value.permissions.trim(),
           orgid: this.organizationID,
           user_level: 'organization'
         };
