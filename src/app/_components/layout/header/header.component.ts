@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { OrganizationService, AuthenticationService, UserService } from '../../../_services';
-import { forkJoin, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Organization } from 'src/app/_models/organization';
 import { distinctUntilChanged, map } from 'rxjs/operators';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
@@ -9,7 +9,6 @@ import { moduleName } from 'src/app/_constant/module-name.constant';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Location } from '@angular/common';
 import { DataService } from 'src/app/_services/data.service';
-import {featuresName} from '../../../_constant/features-name.constant';
 
 
 @Component({
@@ -233,6 +232,7 @@ export class HeaderComponent implements OnInit {
         this.dataService.OrganizationCreatedStatus.next(false);
         this.router.navigate(['settings/organizations']);
       }else{
+        this.dataService.setOrganizationPropertyCreationStatus(true);
         this.dataService.OrganizationCreatedStatus.next(true);
       }
       this.orgList = Object.values(data)[1];
@@ -618,8 +618,11 @@ export class HeaderComponent implements OnInit {
 
   confirm() {
     this.modalRef.hide();
-    this.router.navigate(['settings/organizations/details/' + this.orgPropertyMenu[0].id]);
-    // return false;
+    if(this.orgPropertyMenu[0] !== undefined){
+      this.router.navigate(['settings/organizations/details/' + this.orgPropertyMenu[0].id]);  
+    }else{
+      this.router.navigate(['settings/organizations']);
+    }
   }
 
   openModal(template: TemplateRef<any>) {
