@@ -205,7 +205,7 @@
                   <a class="dropdown-item" routerLink="{{item.routerLink}}" *ngIf="item.label !== 'Signout' && item.label !== 'Help Center'" [class.active]="activateSublink(item)" (click)="goto(item)">
                     <i-feather *ngIf="item.icon" name="{{item.icon}}" class="feather-16"></i-feather>{{item.label}}
                   </a>
-                  <a class="dropdown-item" *ngIf="item.label === 'Signout'" (click)="logout()"> <!--routerLink="{{item.routerLink}}"-->
+                  <a class="dropdown-item" routerLink="{{item.routerLink}}" *ngIf="item.label === 'Signout'" (click)="logout()"> <!--routerLink="{{item.routerLink}}"-->
                     <i-feather *ngIf="item.icon" name="{{item.icon}}" class="feather-16"></i-feather>{{item.label}}
                   </a>
                   <a class="dropdown-item" href="{{item.routerLink}}" *ngIf="item.label !== 'Signout' && item.label === 'Help Center'" target="_blank">
