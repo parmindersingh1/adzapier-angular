@@ -279,7 +279,7 @@ export const mainPlans = {
       },
       {
         featureName: 'Support Response Time\n',
-        featureValue: '12 HR\n'
+        featureValue: '12 Hours\n'
       }
     ],
     enterprise: [
@@ -429,7 +429,7 @@ export const highLightFeatures = {
       },
       {
         featureName: 'Support Response Time\n',
-        featureValue: '12 HR\n'
+        featureValue: '12 Hours\n'
       }
     ],
     enterprise: [
