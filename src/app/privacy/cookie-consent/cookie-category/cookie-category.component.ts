@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, Input, OnInit, TemplateRef} from '@angular/core';
+import {ChangeDetectorRef, Component, Input, OnInit, TemplateRef, ViewEncapsulation} from '@angular/core';
 import {CookieCategoryService} from '../../../_services/cookie-category.service';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
@@ -24,6 +24,7 @@ interface ColInterface {
   selector: 'app-cookie-category',
   templateUrl: './cookie-category.component.html',
   styleUrls: ['./cookie-category.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 
 export class CookieCategoryComponent implements OnInit {
@@ -107,32 +108,32 @@ export class CookieCategoryComponent implements OnInit {
   }
 
   ngOnInit() {
-    setInterval( () => {
-      this.onGetScanningStatus();
-    }, 30000);
+    // setInterval( () => {
+    //   this.onGetScanningStatus();
+    // }, 30000);
     this.onGetSubscriptionData();
     this.onSelectedColummFormServer();
     this.onInItCookieForm();
     this.onGetCategoryAndDurationList();
     this.onGetChartData();
   }
-  onGetScanningStatus() {
-    if (!this.scanError) {
-      this.service.getCookieCategoriesStatus(this.constructor.name, moduleName.cookieCategoryModule).subscribe( (res: any) => {
-        if (res.status === 200) {
-          this.scanningStatus = res.response.scanner_status;
-          if (this.scanningStatus === 'successfull') {
-            this.scanError = true;
-            this.onGetDataFromServer();
-            this.onGetChartData();
-          }
-        }
-      }, err => {
-        this.scanError = true;
-      });
-    }
-
-  }
+  // onGetScanningStatus() {
+  //   if (!this.scanError) {
+  //     this.service.getCookieCategoriesStatus(this.constructor.name, moduleName.cookieCategoryModule).subscribe( (res: any) => {
+  //       if (res.status === 200) {
+  //         this.scanningStatus = res.response.scanner_status;
+  //         if (this.scanningStatus === 'successfull') {
+  //           this.scanError = true;
+  //           this.onGetDataFromServer();
+  //           this.onGetChartData();
+  //         }
+  //       }
+  //     }, err => {
+  //       this.scanError = true;
+  //     });
+  //   }
+  //
+  // }
 
   onGetSubscriptionData() {
     this.service.getSubscrptionData(this.constructor.name, moduleName.cookieCategoryModule)
@@ -553,7 +554,7 @@ export class CookieCategoryComponent implements OnInit {
     this.isScanning = true;
     this.service.cookieScanning(this.constructor.name, moduleName.cookieCategoryModule).subscribe((res: any) => {
       this.scanError = false;
-      this.onGetScanningStatus();
+      // this.onGetScanningStatus();
       this.isScanning = false;
       this.onGetSubscriptionData();
       this.isOpen = true;

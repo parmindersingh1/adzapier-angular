@@ -20,12 +20,14 @@ import {InputTextModule} from 'primeng/inputtext';
 import {RippleModule} from 'primeng/ripple';
 import {MultiSelectModule} from 'primeng/multiselect';
 import {ChartsModule, ThemeService} from 'ng2-charts';
+import { ScanDetailsComponent } from './scan-details/scan-details.component';
 
 const route: Routes = [
-  {path: '', component: CookieCategoryComponent, canActivate: [AuthGuard]}
+  {path: '', component: CookieCategoryComponent, canActivate: [AuthGuard]},
+  { path: 'scan-details', component: ScanDetailsComponent, canActivate: [AuthGuard] }
 ];
 @NgModule({
-  declarations: [CookieCategoryComponent],
+  declarations: [CookieCategoryComponent, ScanDetailsComponent],
     imports: [
         CommonModule,
         ModalModule.forRoot(),

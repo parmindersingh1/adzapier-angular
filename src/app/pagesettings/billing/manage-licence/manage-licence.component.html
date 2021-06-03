@@ -93,7 +93,7 @@
         </td>
         <td class="validity"><span class="activeplan"><i class="fa fa-check-circle pr-2" aria-hidden="true"></i> Active</span>
           Renews on  {{plan.planDetails.plan_ends | date}}</td>
-        <td>{{plan.planDetails.price + '.00 ' + plan.currency | uppercase}}  </td>
+        <td>{{plan.planDetails.price + '.00 '| currency : 'USD'}}  </td>
         <th class="d-flex">**** <span class="pr-1">{{plan.planDetails.card_number}}</span>
 
           <span *ngIf="plan.planDetails.brand !== 'mastercard' && plan.planDetails.brand !== 'visa' && plan.planDetails.brand !== 'amex'">{{' ' + plan.planDetails.brand}}</span>
@@ -164,7 +164,7 @@
 
           </td>
           <td class="validity"><span class="inactiveplan"> <i class="fa fa-times-circle pr-2" aria-hidden="true"></i>Inactive</span>Expired on {{plan.planDetails.plan_ends | date}}</td>
-          <td>{{plan.planDetails.price + '.00 ' + plan.currency | uppercase}}  </td>
+          <td>{{plan.planDetails.price + '.00 '| currency : 'USD'}}  </td>
           <th style="text-transform: capitalize;display: flex;">**** <span class="pr-1">{{plan.planDetails.card_number}}</span>
 
             <span *ngIf="plan.planDetails.brand !== 'mastercard' && plan.planDetails.brand !== 'visa' && plan.planDetails.brand !== 'amex'">{{ ' ' + plan.planDetails.brand}}</span>

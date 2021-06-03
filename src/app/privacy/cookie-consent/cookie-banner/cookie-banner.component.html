@@ -23,11 +23,11 @@
       <div class="w-100">
         <div class="card">
           <div class="card-header">
-            <div class="d-sm-flex align-items-center justify-content-between">
+            <div class="column-alignleft d-sm-flex justify-content-between">
               <div>
-                <h4 class="mat-h2 m-0">
+                <span class="tx-16 mg-b-0 tx-uppercase">
                   Configure your Banner
-                </h4>
+                </span>
               </div>
 
 
@@ -220,9 +220,9 @@
                     <div class="form-group row pd-0 mg-b-0"
                          [ngClass]="ccpaBannerConfig?'show-controls':'hide-controls'">
                       <label
-                        class="col-sm-8 col-5 tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label">
+                        class="tx-13 m-0 p-0 col-8 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label">
                         CCPA GLOBAL</label>
-                      <div class="col-sm-4 col-7 pt-2">
+                      <div class="col-auto p-0">
                         <label class="switch">
                           <input type="checkbox"
                                  [attr.disabled]="cookieBannerForm.value.gdpr_global || cookieBannerForm.value.generic_global ? true : null"
@@ -232,9 +232,9 @@
                         </label>
                       </div>
 
-                      <div class="row">
+                      <div>
                         <p
-                          class="p-0 global-text text-info  tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label"
+                          class="p-0 text-info  tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label"
                           *ngIf="ccpaGlobal.checked"> CCPA Global Applied </p>
                       </div>
                     </div>
@@ -279,9 +279,9 @@
                     <div class="form-group row pd-0 mg-b-0"
                          [ngClass]="gdprBannerConfig?'show-controls':'hide-controls'">
                       <label
-                        class="col-sm-8 col-5 tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label">
+                        class="col-8 m-0 p-0 tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label">
                         ENABLE IAB</label>
-                      <div class="col-sm-4 col-7 ">
+                      <div class="col-auto p-0">
                         <label class="switch">
                           <input type="checkbox" [disabled]="isGdprGlobal" [checked]="isGdprGlobal"
                                  formControlName="enableIab">
@@ -292,9 +292,9 @@
                     <div class="form-group   row pd-0 mg-b-0"
                          [ngClass]="gdprBannerConfig?'show-controls':'hide-controls'">
                       <label
-                        class="col-sm-8 col-5  tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label">
+                        class="col-8 mr-0 p-0  tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label">
                         Google Vendors</label>
-                      <div class="col-sm-4 col-7">
+                      <div class="col-auto p-0">
                         <label class="switch" (click)="onCheckAllowGoogleVendors()">
                           <input type="checkbox"
                                  [attr.disabled]="disablePlanFeatures.disableGoogleVendors ? true : null"
@@ -307,9 +307,9 @@
                     <div class="form-group row pd-0 mg-b-0"
                          [ngClass]="gdprBannerConfig?'show-controls':'hide-controls'">
                       <label
-                        class="col-sm-8 col-5  tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label">
+                        class="m-0 p-0 col-8 tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label">
                         GDPR GLOBAL</label>
-                      <div class="col-sm-4 col-7">
+                      <div class="col-auto p-0">
                         <label class="switch">
                           <input type="checkbox"
                                  [attr.disabled]="cookieBannerForm.value.ccpa_global || cookieBannerForm.value.generic_global ? true : null"
@@ -319,9 +319,8 @@
                         </label>
                       </div>
 
-                      <div class="row">
-                        <p
-                          class="p-0 global-text text-info  tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label"
+                      <div>
+                        <p class="p-0 text-info  tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label"
                           *ngIf="gdprGlobal.checked"> GDPR Global Applied </p>
                       </div>
                     </div>
@@ -355,13 +354,13 @@
                 <div class="row position-relative gdpr" [ngClass]="genericBannerConfig?'show-controls':'hide-controls'">
                   <div class="col-md-6">
                   </div>
-                  <div class="col-md-6">
+                  <div class="col-md-6 pl-0">
                     <div class="form-group row pd-0 mg-b-0"
                          [ngClass]="genericBannerConfig?'show-controls':'hide-controls'">
                       <label
-                        class="col-sm-8 col-5 tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label">
+                        class="m-0 p-0 col-8  tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label">
                         GENERIC GLOBAL</label>
-                      <div class="col-sm-4 col-7">
+                      <div class="col-auto p-0">
                         <label class="switch mt-2">
                           <input type="checkbox"
                                  [attr.disabled]="cookieBannerForm.value.gdpr_global || cookieBannerForm.value.ccpa_global ? true : null"
@@ -371,11 +370,9 @@
                         </label>
                       </div>
 
-                      <div class="row">
                         <p
-                          class="p-0 global-text text-info  tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label"
+                          class="p-0 text-info  tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label"
                           *ngIf="genericGlobal.checked"> Generic Global Applied </p>
-                      </div>
                     </div>
                   </div>
                 </div>
@@ -472,7 +469,7 @@
                                      tooltip="Show the Consent Manager UI to users"></i-feather>
                         </h6>
                       </div>
-                      <div class="col-md-12">
+                      <div class="col-md-12 mr-0 pr-0">
                         <div class="input-group row m-0 mb-1">
                           <input oninput="validity.valid||(value='');" min="1" type="number"
                                  formControlName="bannerPartialConsent" class="form-control col-md-5 col-7" value="1"
@@ -495,7 +492,7 @@
                                      tooltip="Show the Consent Manager UI to users who rejects all purposes on mentioned time"></i-feather>
                         </h6>
                       </div>
-                      <div class="col-md-12">
+                      <div class="col-md-12 mr-0 pr-0">
                         <div class="input-group row ml-0 mb-1">
                           <input oninput="validity.valid||(value='');" min="1" type="number"
                                  formControlName="bannerRejectAllConsent" class="form-control col-md-5 col-7" value="1"
@@ -517,7 +514,7 @@
                                      tooltip="Show the Consent Manager UI to users who made no consent choice"></i-feather>
                         </h6>
                       </div>
-                      <div class="col-md-12">
+                      <div class="col-md-12 mr-0 pr-0">
                         <div class="input-group row ml-0 mb-1">
                           <input formControlName="bannerClosedConsent" oninput="validity.valid||(value='');" min="1"
                                  type="number" class="form-control col-md-5 col-7" value="1" name="email">
@@ -633,13 +630,13 @@
         <!--          <p-tabPanel  header="Banner">-->
         <div class="card m-0">
           <div class="card-header pb-0">
-            <div class="row">
-              <div class="col-md-5">
+            <div class="d-flex">
+              <div class="col-md-4 p-0">
                 <div class="form-group mb-0 row pd-0 mg-b-0">
                   <label
-                    class="cs-banner col-sm-5 col-6 tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label">
+                    class="cs-banner col-8 pr-0 tx-13 tx-medium tx-spacing-1 tx-color-03 tx-uppercase  col-form-label">
                     Configure banner</label>
-                  <div class="col-sm-3 col-6 pt-2">
+                  <div class="col-sm-3 col-6 p-0 m-0 pt-2">
                     <label class="switch" (click)="onCheckAllowBannerConfig()">
                       <input [attr.disabled]="disablePlanFeatures.disableBannerConfig ? true : null" type="checkbox"
                              #showConfig>
@@ -648,10 +645,10 @@
                   </div>
                 </div>
               </div>
-              <div class="col-md-5 ">
-                <div class="form-group m-m-t-12 row">
+              <div class="col-md-5">
+                <div class="form-group d-flex">
                   <label for="lang" style="font-size: 15px"
-                         class="tx-12 col-md-3 col-4  tx-medium tx-middle tx-spacing-1 tx-color-03 tx-uppercase">
+                         class="tx-12 mr-2 tx-medium tx-middle tx-spacing-1 tx-color-03 tx-uppercase">
                     Language </label>
                   <select name="activeBannerlanguage" (change)="onCheckFormChanges($event)"
                           class="form-control col-6 col-md-7" id="lang">
@@ -661,13 +658,13 @@
                               [selected]="activeBannerlanguage === gdprLang.value">{{gdprLang.title}}</option>
                     </ng-container>
                   </select>
-                  <div class="col-md-2 col-2 pr-0">
+                  <div class="ml-2 pr-0">
                     <i (click)="openFirstModal(templateManageLang)" class="setting-icon  fas fa-language"></i>
                   </div>
                 </div>
               </div>
-              <div class="col-md-2">
-                <button type="button" (click)="onSaveCustomLang()" [disabled]="!onIsFieldDirty" class="btn btn-success">
+              <div class="col-3 pr-0 tx-right">
+                <button type="button" (click)="onSaveCustomLang()" [disabled]="!onIsFieldDirty" class="btn btn-sm btn-uppercase btn-success">
                   Save Language
                 </button>
               </div>
