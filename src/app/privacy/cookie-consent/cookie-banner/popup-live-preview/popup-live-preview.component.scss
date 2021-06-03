@@ -140,3 +140,9 @@ input:checked + .slider:before {
     width: 93% !important;
   }
 }
+
+@media only screen and (min-width: 1024px) {
+.banner-shadow{
+  width: auto;
+}
+}

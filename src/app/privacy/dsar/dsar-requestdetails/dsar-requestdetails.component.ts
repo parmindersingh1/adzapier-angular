@@ -1379,7 +1379,11 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
       this.selectedStages = x;
     } else if (!this.isEmailVerified){
       this.selectedStages.push(this.workflowStages[0]);
+    } else if(this.isEmailVerified){
+      this.selectedStages.push(this.workflowStages[0]);
+      this.selectedStages.push(this.workflowStages[1]);
     }
+
   }
 
 
