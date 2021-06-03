@@ -463,3 +463,19 @@ tr.row-disabled > td > a {
   font-size: 14px;
   font-weight: 600;
 }
+
+.flex-justifycontent {
+  justify-content: space-between;
+  display: flex;
+}
+
+.flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+@media screen and (max-width:768px) {
+.flex-justifycontent{
+  flex-direction: column;
+}
+}

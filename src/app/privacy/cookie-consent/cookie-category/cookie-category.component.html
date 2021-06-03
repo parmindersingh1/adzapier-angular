@@ -14,21 +14,22 @@
     <p-toast></p-toast>
     <div class="card">
       <div class="card-header pb-0">
-        <h4 class="mg-b-0 tx-spacing--1">Cookie Category
+        <div class="flex-justifycontent">
+        <span class="tx-spacing-1 tx-16 mg-b-0 tx-uppercase flex-column">Cookie Category
 
           <span *ngIf="availablePlan.scan_available > 0 && availablePlan.scan_available == 1"
-                class="avalible-text text-info">{{availablePlan.scan_available}} Scan is Available </span>
+                class="avalible-text text-info ml-0">{{availablePlan.scan_available}} Scan is Available </span>
           <span
             *ngIf="availablePlan.scan_available > 0 && availablePlan.scan_available != -1 && availablePlan.scan_available != 1"
-            class="avalible-text text-info">{{availablePlan.scan_available}} Scans are Available </span>
+            class="avalible-text text-info ml-0">{{availablePlan.scan_available}} Scans are Available </span>
           <span *ngIf="availablePlan.scan_available == 0"
-                class=" avalible-text text-info"> Scan is not Available </span>
+                class=" avalible-text text-info ml-0"> Scan is not Available </span>
           <span *ngIf="availablePlan.scan_available == -1"
-                class="text-info avalible-text">Unlimited Scans are Available </span>
-        </h4>
-        <div class="row mt-3">
-          <div class="col-md-12 btn-list">
-            <div style="float: right" class="d-flex flex-column flex-sm-row mg-t-20 mg-md-t-0">
+                class="text-info avalible-text ml-0">Unlimited Scans are Available </span>
+          </span>
+        <div class="mb-2">
+          <div>
+            <div>
               <a class="btn btn-sm btn-outline-secondary btn-uppercase mr-2" type="button"
                  routerLink="/cookie-consent/cookie-banner">
                 <i class="fa fa-cog" aria-hidden="true"></i>
@@ -51,7 +52,7 @@
 
               <button *ngIf="!isScanning" (click)="onRescanCookie(); openModal(template)" data-toggle="modal"
                       data-target="#myModal"
-                      class="btn-success pl-3 pr-4 btn btn-sm mr-2 mg-r-3" type="button">
+                      class="btn-success pl-3 pr-3  btn btn-sm btn-uppercase" type="button">
                 <i-feather name="refresh-ccw" class="commom-feathericon-height pr-1"></i-feather>
                 Scan
               </button>
@@ -79,7 +80,7 @@
             </div>
           </div>
         </div>
-
+        </div>
         <ng-template #template let-modal>
           <div class="modal-header">
             <h4 class="modal-title pull-left">Reminder</h4>
