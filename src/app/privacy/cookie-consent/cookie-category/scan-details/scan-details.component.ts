@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnInit} from '@angular/core';
+import {AfterViewInit, Component, OnDestroy, OnInit} from '@angular/core';
 import {FormGroup} from '@angular/forms';
 import {moduleName} from '../../../../_constant/module-name.constant';
 import {CookieCategoryService} from '../../../../_services/cookie-category.service';
@@ -14,11 +14,12 @@ import {NgxUiLoaderService} from 'ngx-ui-loader';
   templateUrl: './scan-details.component.html',
   styleUrls: ['./scan-details.component.scss']
 })
-export class ScanDetailsComponent implements OnInit, AfterViewInit {
+export class ScanDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
   scanJobsList = [];
   scanJobsCount: 0;
   isScanning = false;
   cookieCategory: any;
+  setInterval = null;
   lastScan = {
     id: null,
     scanner_status: null,
@@ -82,11 +83,11 @@ export class ScanDetailsComponent implements OnInit, AfterViewInit {
     this.onGetLastScanJobs()
   }
   ngAfterViewInit() {
-    setInterval( () => {
-      if (this.lastScan.scanner_status !== 'completed' || this.lastScan.scanner_status !== 'error' || this.lastScan.scanner_status !== 'unknown') {
+    this.setInterval = setInterval( () => {
+      if (this.lastScan.scanner_status === 'running' || this.lastScan.scanner_status === 'inQueue' || this.lastScan.scanner_status === 'inProgress') {
         this.onGetLastScanJobs();
       }
-    }, 10000);
+    }, 20000);
   }
 
   onGetCatList(event) {
@@ -218,5 +219,8 @@ export class ScanDetailsComponent implements OnInit, AfterViewInit {
   onClosed(dismissedAlert: any): void {
     this.alertMsg = !dismissedAlert;
     this.isOpen = false;
+  }
+  ngOnDestroy() {
+    clearInterval(this.setInterval);
   }
 }
