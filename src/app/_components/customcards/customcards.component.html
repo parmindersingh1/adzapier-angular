@@ -64,7 +64,7 @@
         </div>
         <div class="card-footer flex-justify-content">
                 <button class="btn btn-primary btn-xs button" (click)="showForm(data)">View</button>
-                <button class="btn btn-outline-danger btn-xs button" [disabled]="data.form_status=='publish'" (click)="deleteForm(data)">Delete</button>
+                <button class="btn btn-outline-danger btn-xs button" *ngIf="data.form_status !== 'publish'" (click)="deleteForm(data)">Delete</button>
         </div>
     </div>
 </ng-container>
