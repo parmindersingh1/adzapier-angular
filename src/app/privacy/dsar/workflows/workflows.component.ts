@@ -12,6 +12,7 @@ import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { OrganizationService } from 'src/app/_services';
 import { trimValidator } from 'src/app/_helpers/trimspace.validator';
+import { DirtyComponents } from 'src/app/_models/dirtycomponents';
 // import { strings } from "ngx-timeago/language-strings/en";
 // import { TimeagoIntl } from "ngx-timeago";
 @Component({
@@ -20,7 +21,7 @@ import { trimValidator } from 'src/app/_helpers/trimspace.validator';
   styleUrls: ['./workflows.component.scss']
 })
 
-export class WorkflowsComponent implements OnInit, AfterViewInit  {
+export class WorkflowsComponent implements OnInit, AfterViewInit, DirtyComponents  {
   dismissible = true;
   alertMsg: any;
   workflowList: any = [];
@@ -53,6 +54,7 @@ export class WorkflowsComponent implements OnInit, AfterViewInit  {
   private searchDecouncer$: Subject<string> = new Subject();
   currentManagedOrgID: any;
   isSaveClicked = false;
+  isDirty:boolean;
   constructor(private router: Router, 
               private workflowService: WorkflowService,
               private dataService: DataService,
@@ -399,6 +401,10 @@ addBlurBackground() :object{
   } else {
     return {}
   }
+}
+
+canDeactivate() {
+  return this.isDirty;
 }
 
 }
