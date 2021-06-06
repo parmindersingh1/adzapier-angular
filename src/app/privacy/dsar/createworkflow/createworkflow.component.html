@@ -30,7 +30,7 @@
 
                     <button class="btn btn-xs btn-white d-flex align-items-center mg-r-5" type="button"
                     [ngClass]="{'hideEditSave-btn':workflowType == 'default', '': workflowType !== 'default'}"
-                    [attr.disabled]="checkButtonStatus() &&  workflowStatus !== 'draft' || isControlDisabled && workflowStatus !== 'draft' ? true : null"
+                    [attr.disabled]="isControlDisabled || workflowStatus == 'active' ? true : null"
                         (click)="saveWorkflow(quillEditorForm, workflowStatus)">
                         <span class="d-none d-sm-inline">
                             <i class="fa fa-plus" aria-hidden="true"></i>
@@ -57,8 +57,8 @@
                                 Stage</label>
                             <input type="text" [(ngModel)]="stageTitle"  #stage_title="ngModel" name="stageTitle" (keyup)="update($event)"
                                 class="form-control mb-1" 
-                                [attr.disabled]="isControlDisabled ? true : null"
-                                [class.disabled]="isControlDisabled"
+                                [attr.disabled]="isControlDisabled || workflowStatus == 'active' ? true : null"
+                                [class.disabled]="isControlDisabled || workflowStatus == 'active'"
                                 [ngClass]="{ 'is-invalid': stage_title?.invalid && (stage_title?.dirty || stage_title?.touched) && submitted && !skeletonLoading }" required />
                             <div *ngIf="stage_title?.invalid && !skeletonLoading" class="invalid-feedback">
                                 <div *ngIf="stage_title?.invalid && submitted">Stage is required</div>
@@ -68,7 +68,7 @@
                             <div [ngClass]="{ 'quilleditor-invalid':  guidanceText.invalid && submitted && !skeletonLoading}">
                                 <quill-editor [(ngModel)]="guidancetext" name="guidancetext" [modules]="quillConfig" 
                                 #guidanceText = "ngModel"
-                                [readOnly]="isControlDisabled"
+                                [readOnly]="isControlDisabled || workflowStatus == 'active'"
                                 (onContentChanged)="updateGuidanceText($event)"
                                 [ngClass]="{ 'is-invalid': guidanceText?.invalid && (guidanceText?.dirty || guidanceText?.touched) && submitted }"
                                 [styles]="isEditorDisabled()"

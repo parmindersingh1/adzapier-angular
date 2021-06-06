@@ -133,6 +133,7 @@ export class CreateworkflowComponent implements OnInit, DirtyComponents {
       const index = this.workflowStages.findIndex((t) => t.order === this.selectedTab.order);
       this.workflowStages[index].stage_title = e.currentTarget.value;
       this.stageTitle = e.currentTarget.value;
+      this.isDirty = true;
     } else {
       this.workflowStages[0].stage_title = e.currentTarget.value;
       this.stageTitle = e.currentTarget.value;
@@ -216,6 +217,7 @@ export class CreateworkflowComponent implements OnInit, DirtyComponents {
             this.isOpen = true;
             this.alertType = 'success';
             this.skeletonLoading = false;
+            this.isDirty = false;
             this.loadWorkflowById(this.selectedWorkflowId);
           }
         }, (error) => {
@@ -232,8 +234,8 @@ export class CreateworkflowComponent implements OnInit, DirtyComponents {
     const flowStatus = status === 'active' ? 'draft' : 'active';
     if ($event.target.innerText === 'Activate' && !this.isControlDisabled) {
       this.activateWorkflow(status);
-    } else {
       this.isControlDisabled = false;
+    } else {
       this.workflowStatus = flowStatus;
     }
   }
@@ -270,19 +272,21 @@ export class CreateworkflowComponent implements OnInit, DirtyComponents {
     }
   }
 
-  checkButtonStatus(): boolean {
-    if (this.workflowType === 'custom') {
-      return false;
-    } else if (this.workflowStatus === 'active' && this.isControlDisabled) {
-      return true;
-    } else if (this.workflowStatus === 'draft' && this.isControlDisabled) {
-      return true;
-    } else if (this.workflowType === 'default' || this.workflowStatus === 'active' && this.isControlDisabled) {
-      return true;
-    } else if (this.workflowType === 'custom' || this.workflowStatus === 'draft' && !this.isControlDisabled) {
-      return true;
-    }
-  }
+  // checkButtonStatus(): boolean {
+  //   if (this.workflowType === 'custom') {
+  //     return false;
+  //   } else if (this.workflowStatus === 'active' || this.isControlDisabled) {
+  //     return true;
+  //   } else if (this.workflowStatus === 'draft' && !this.isControlDisabled) {
+  //     return false;
+  //   } else if (this.workflowStatus === 'draft' && this.isControlDisabled) {
+  //     return true;
+  //   } else if (this.workflowType === 'default' || this.workflowStatus === 'active' && this.isControlDisabled) {
+  //     return true;
+  //   } else if (this.workflowType === 'custom' || this.workflowStatus === 'draft' && !this.isControlDisabled) {
+  //     return true;
+  //   }
+  // }
 
   loadWorkflowById(id?) {
     this.skeletonLoading = true;
@@ -329,7 +333,7 @@ export class CreateworkflowComponent implements OnInit, DirtyComponents {
   }
 
   isEditorDisabled(): object {
-    if (this.isControlDisabled) {
+    if (this.isControlDisabled || this.workflowStatus == 'active') {
       return {
         'background-color': '#f5f6fa',
         'cursor': 'not-allowed'
