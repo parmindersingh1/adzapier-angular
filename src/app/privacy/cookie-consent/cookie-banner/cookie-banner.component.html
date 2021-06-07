@@ -1780,7 +1780,8 @@
             <td>
               <div class="custom-control custom-checkbox">
                 <input type="checkbox" class="custom-control-input" id="customCheck{{lang.value}}"
-                       (change)="onSelectLang($event, lang.value)"
+                #chk
+                       (change)="onSelectLang($event, lang.value ,chk)"
                        [checked]="allowLanguagesList.includes(lang.value)">
                 <label class="custom-control-label" for="customCheck{{lang.value}}"></label>
               </div>
@@ -1792,7 +1793,7 @@
                       class="btn btn-link" type="button">Reset
               </button>
             </td>
-            <td class="text-center"><input type="radio" class="" [(ngModel)]="defaultLanguage" name="defaultLang"
+            <td class="text-center"><input type="radio" class="" [disabled]="!chk.checked" [(ngModel)]="defaultLanguage" name="defaultLang"
                                            [value]="lang.value"/>
             </td>
           </tr>

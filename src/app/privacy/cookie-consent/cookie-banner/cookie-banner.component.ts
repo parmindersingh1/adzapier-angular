@@ -965,11 +965,12 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
     this.modalRef = this.modalService.show(template, {ignoreBackdropClick: true});
   }
 
-  onSelectLang(event, id) {
+  onSelectLang(event, id ,chk) {
     const isChecked = event.target.checked;
     const allowLanguagesList = [...this.allowLanguagesList];
     if (isChecked) {
       allowLanguagesList.push(id);
+      chk.checked;
     } else {
       const index = this.allowLanguagesList.indexOf(id);
       if (index > -1) {
