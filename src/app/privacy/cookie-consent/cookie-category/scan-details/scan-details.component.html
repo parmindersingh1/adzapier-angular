@@ -86,10 +86,8 @@
                   <div class="col-md-6">
                     <p>
                       <span *ngIf="lastScan.scanner_status === 'inProgress'" class="tx-14 badge badge-warning">In Progress</span>
-                      <span *ngIf="lastScan.scanner_status === 'running'"
-                            class="tx-14 badge badge-warning">Running</span>
-                      <span *ngIf="lastScan.scanner_status === 'completed'"
-                            class="tx-14 badge badge-success">Completed</span>
+                      <span *ngIf="lastScan.scanner_status === 'running'" class="tx-14 badge badge-warning">Running</span>
+                      <span *ngIf="lastScan.scanner_status === 'completed'" class="tx-14 badge badge-success">Completed</span>
                       <span *ngIf="lastScan.scanner_status === 'inQueue'" class="tx-14 badge badge-info">in Queue</span>
                       <span *ngIf="lastScan.scanner_status === 'error'" class="tx-14 badge badge-danger">Error</span>
                       <span *ngIf="lastScan.scanner_status === 'unknown'" class="tx-14 badge badge-info">Unknown</span>
@@ -167,7 +165,7 @@
                 </div>
                 <div class="row">
                   <div class="col-md-6">
-                    <h6>Total Tages</h6>
+                    <h6>Total Tags</h6>
                   </div>
                   <div class="col-md-6">
                     <p>

@@ -1186,4 +1186,7 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
       $event.returnValue = true;
     }
   }
+  onShowPopUp(e) {
+    this.currentState = 'popup';
+  }
 }
