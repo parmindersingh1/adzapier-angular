@@ -144,6 +144,7 @@ deploy-to-swarm-develop:
   before_script:
     - apk update && apk upgrade
     - apk add --upgrade gettext
+    - apk add --upgrade gettext-base
     - apk add --upgrade gettext-tiny
     - RUNNING_REPLICAS=$(docker service ps ${CI_PROJECT_NAMESPACE}-${CI_PROJECT_NAME}_${SERVICE_NAME} | grep -i running | wc -l) || true
     - echo $RUNNING_REPLICAS
@@ -185,6 +186,7 @@ deploy-to-swarm-staging:
   before_script:
     - apk update && apk upgrade
     - apk add --upgrade gettext
+    - apk add --upgrade gettext-base
     - apk add --upgrade gettext-tiny
     - RUNNING_REPLICAS=$(docker service ps ${CI_PROJECT_NAMESPACE}-${CI_PROJECT_NAME}_${SERVICE_NAME} | grep -i running | wc -l) || true
     - echo $RUNNING_REPLICAS
@@ -228,6 +230,7 @@ deploy-to-swarm-prod:
   before_script:
     - apk update && apk upgrade
     - apk add --upgrade gettext
+    - apk add --upgrade gettext-base
     - apk add --upgrade gettext-tiny    
     - export TAGS=$(echo ${CI_COMMIT_TAG} | sed 's/^.//') || true
     - RUNNING_REPLICAS=$(docker service ps ${CI_PROJECT_NAMESPACE}-${CI_PROJECT_NAME}_${SERVICE_NAME} | grep -i running | wc -l) || true
