@@ -32,6 +32,7 @@ export const defaultBannerContent = {
   bannerTextColor: '#f5f5f5',
   bannerBorderColor: '#162893',
   bannerBackGroundColor: '#000000',
+  badgePosition: 'left',
   //
   bannerPreferenceButtonText: 'Privacy Setting',
   bannerPreferenceButtonTextColor: '#f5f5f5',
@@ -113,6 +114,8 @@ export class FormDefaultData {
   bannerTextColor: string;
   bannerBorderColor: string;
   bannerBackGroundColor: string;
+  badgePosition: string;
+
 
   bannerPreferenceButtonText: string;
   bannerPreferenceButtonTextColor: string;

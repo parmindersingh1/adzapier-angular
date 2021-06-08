@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnDestroy, OnInit} from '@angular/core';
+import {AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
 import {FormGroup} from '@angular/forms';
 import {moduleName} from '../../../../_constant/module-name.constant';
 import {CookieCategoryService} from '../../../../_services/cookie-category.service';
@@ -74,16 +74,18 @@ export class ScanDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(private service: CookieCategoryService,
               private authService: AuthenticationService,
               private dataService: DataService,
-              private loading: NgxUiLoaderService
-              ) {
+              private loading: NgxUiLoaderService,
+              private _cd: ChangeDetectorRef
+  ) {
   }
 
   ngOnInit(): void {
     this.onGetSubscriptionData();
-    this.onGetLastScanJobs()
+    this.onGetLastScanJobs();
   }
+
   ngAfterViewInit() {
-    this.setInterval = setInterval( () => {
+    this.setInterval = setInterval(() => {
       if (this.lastScan.scanner_status === 'running' || this.lastScan.scanner_status === 'inQueue' || this.lastScan.scanner_status === 'inProgress') {
         this.onGetLastScanJobs();
       }
@@ -139,12 +141,13 @@ export class ScanDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
       this.loading.stop();
       this.scanJobsList = res.response;
       this.scanJobsCount = res.count;
-      if (res.hasOwnProperty('lastScan')) {
-        if (Object.keys(res.lastScan).length > 0) {
-          this.lastScan = res.lastScan;
-          this.chartTypeData = [this.lastScan.total_cookies, this.lastScan.total_localstorage, this.lastScan.total_page_scans, this.lastScan.total_tages];
-        }
-      }
+      // if (res.hasOwnProperty('lastScan')) {
+      //   if (Object.keys(res.lastScan).length > 0) {
+      //     this.lastScan = res.lastScan;
+      //     this.chartTypeData = [this.lastScan.total_cookies, this.lastScan.total_localstorage, this.lastScan.total_page_scans, this.lastScan.total_tages];
+      //   }
+      // }
+      this._cd.detectChanges();
     }, error => {
       this.loading.stop();
       this.tLoading = false;
@@ -157,12 +160,11 @@ export class ScanDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
     this.updaing = true;
     this.service.getLastScanningData(this.constructor.name, moduleName).subscribe(res => {
       this.updaing = false;
-      if (res.hasOwnProperty('lastScan')) {
-        if (Object.keys(res.lastScan).length > 0) {
-          this.lastScan = res.lastScan;
-          this.chartTypeData = [this.lastScan.total_cookies, this.lastScan.total_localstorage, this.lastScan.total_page_scans, this.lastScan.total_tages];
-        }
+      if (Object.keys(res).length > 0) {
+        this.lastScan = res.response;
+        this.chartTypeData = [this.lastScan.total_cookies, this.lastScan.total_localstorage, this.lastScan.total_page_scans, this.lastScan.total_tages];
       }
+      this._cd.detectChanges();
     }, error => {
       this.updaing = false;
     });
@@ -203,8 +205,9 @@ export class ScanDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
       // this.onGetScanningStatus();
       this.isScanning = false;
       this.lastScan.scanner_status = 'inQueue';
-      this.onGetLastScanJobs();
       this.onGetSubscriptionData();
+      this.onGetDataFromServer();
+      this.onGetLastScanJobs();
       this.isOpen = true;
       this.alertMsg = res.response;
       this.alertType = 'success';
@@ -216,10 +219,12 @@ export class ScanDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
       this.alertType = 'danger';
     });
   }
+
   onClosed(dismissedAlert: any): void {
     this.alertMsg = !dismissedAlert;
     this.isOpen = false;
   }
+
   ngOnDestroy() {
     clearInterval(this.setInterval);
   }
