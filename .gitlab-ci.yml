@@ -142,6 +142,7 @@ deploy-to-swarm-develop:
     - docker stack deploy --with-registry-auth --compose-file=docker-stack-out.yaml ${CI_PROJECT_NAMESPACE}-${CI_PROJECT_NAME}
     - docker service update --with-registry-auth --replicas $RUNNING_REPLICAS --update-parallelism 1 --update-delay 10s ${CI_PROJECT_NAMESPACE}-${CI_PROJECT_NAME}_${SERVICE_NAME}
   before_script:
+    - apk update && apk upgrade
     - apk add gettext
     - RUNNING_REPLICAS=$(docker service ps ${CI_PROJECT_NAMESPACE}-${CI_PROJECT_NAME}_${SERVICE_NAME} | grep -i running | wc -l) || true
     - echo $RUNNING_REPLICAS
@@ -181,6 +182,7 @@ deploy-to-swarm-staging:
     - docker stack deploy --with-registry-auth --compose-file=docker-stack-out.yaml ${CI_PROJECT_NAMESPACE}-${CI_PROJECT_NAME}
     - docker service update --with-registry-auth --replicas $RUNNING_REPLICAS --update-parallelism 1 --update-delay 10s ${CI_PROJECT_NAMESPACE}-${CI_PROJECT_NAME}_${SERVICE_NAME}
   before_script:
+    - apk update && apk upgrade
     - apk add gettext
     - RUNNING_REPLICAS=$(docker service ps ${CI_PROJECT_NAMESPACE}-${CI_PROJECT_NAME}_${SERVICE_NAME} | grep -i running | wc -l) || true
     - echo $RUNNING_REPLICAS
@@ -222,6 +224,7 @@ deploy-to-swarm-prod:
     - docker stack deploy --prune --with-registry-auth --compose-file=docker-compose-out.yaml ${CI_PROJECT_NAMESPACE}-${CI_PROJECT_NAME}
     - docker service update --with-registry-auth --replicas $RUNNING_REPLICAS --update-parallelism 1 --update-delay 10s ${CI_PROJECT_NAMESPACE}-${CI_PROJECT_NAME}_${SERVICE_NAME}
   before_script:
+    - apk update && apk upgrade
     - apk add gettext
     - export TAGS=$(echo ${CI_COMMIT_TAG} | sed 's/^.//') || true
     - RUNNING_REPLICAS=$(docker service ps ${CI_PROJECT_NAMESPACE}-${CI_PROJECT_NAME}_${SERVICE_NAME} | grep -i running | wc -l) || true
