@@ -143,4 +143,9 @@ export class OrganizationService {
     updateEditedOrganization(currentItem) {
         this.editedOrganizationSource.next(currentItem);
     }
+
+    getOrganizationLicenseNameByID(orgID,licenseID): Observable<any>{
+        return this.http.get<any>(environment.apiUrl + '/organizations/' + orgID + '/' + licenseID)
+        .pipe(shareReplay());
+    }
 }

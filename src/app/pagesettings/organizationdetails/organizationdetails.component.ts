@@ -87,6 +87,7 @@ export class OrganizationdetailsComponent implements OnInit {
   userList: any = [];
   noResult = false;
   private orgPlanDetails: any;
+  orgLicensedPlanName;
   constructor(private activatedRoute: ActivatedRoute,
               private orgService: OrganizationService,
               private modalService: NgbModal,
@@ -189,6 +190,9 @@ export class OrganizationdetailsComponent implements OnInit {
       this.zipcode = data.response.zipcode;
       this.email = data.response.email;
       this.phone = data.response.phone;
+      if(data.response.license_id){
+        this.loadOrganizationLicenseNameByID(this.organizationID,data.response.license_id)
+      }
     });
     // this.pathValues();
   }
@@ -783,6 +787,11 @@ export class OrganizationdetailsComponent implements OnInit {
       return res;
   }
 
+  loadOrganizationLicenseNameByID(orgid,licenseID){
+   this.orgService.getOrganizationLicenseNameByID(orgid,licenseID).subscribe((data)=>{
+    this.orgLicensedPlanName = data.response[0].name + " " + data.response[0].cycle;
+   })
+  }
   // ngAfterContentChecked() {
   //   this.cdref.detectChanges();
   // }
