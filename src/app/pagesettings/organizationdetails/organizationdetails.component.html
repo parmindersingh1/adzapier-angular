@@ -132,7 +132,7 @@
                             <th>Logo</th>
                             <th>Name</th>
                             <th>Domain</th>
-                            <th>License</th>
+                            <th>Plan name</th>
                             <th>Action</th>
                             <th>Status</th>
                         </tr>
@@ -154,7 +154,9 @@
                                 {{list.website}}
                             </td>
                             <td>
-                              <span *ngIf="list.planDetails !== undefined">{{list.planDetails.product_name}}</span></td>
+                              <span *ngIf="list.license_id !== null"><span *ngIf="(list.planDetails | json).length > 2">{{list.planDetails.product_name}}</span></span>
+                              <span *ngIf="list.license_id == null || list.license_id == ''"> <button class="btn btn-primary btn-xs" (click)="redirectToManageLicense()">Manage License</button></span> 
+                            </td>
                             <td>
                                 <!-- <i-feather name="edit-3" class="feather-16"></i-feather> -->
                                 <a class="pd-r-5" (click)="editModalPopup(propertyModal,list)">

@@ -792,6 +792,10 @@ export class OrganizationdetailsComponent implements OnInit {
     this.orgLicensedPlanName = data.response[0].name + " " + data.response[0].cycle;
    })
   }
+
+  redirectToManageLicense(){
+    this.router.navigate(['/settings/billing/manage']);
+  }
   // ngAfterContentChecked() {
   //   this.cdref.detectChanges();
   // }
