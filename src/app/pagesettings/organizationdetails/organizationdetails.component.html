@@ -62,12 +62,10 @@
                                 class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Phone</label>
                             <p class="mg-b-0">{{phone}}</p>
                         </div>
-                        <!--    -->
-                        <!--                        <div class="col-sm-2 mg-t-5 mg-sm-t-5">-->
-                        <!--                            <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">TaxID</label>-->
-                        <!--                            <p class="mg-b-0">{{taxID}}</p>-->
-                        <!--                        </div>-->
-                        <!--                        -->
+                        <div class="col-sm-4 mg-t-5 mg-sm-t-5" *ngIf="orgLicensedPlanName">
+                            <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Assigned Plan name</label>
+                            <p class="mg-b-0">{{orgLicensedPlanName}}</p>
+                        </div>
                         <div class="col-sm-2 mg-t-5 mg-sm-t-5">
 <!--                            <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Team-->
 <!--                                Member</label>-->
@@ -134,6 +132,7 @@
                             <th>Logo</th>
                             <th>Name</th>
                             <th>Domain</th>
+                            <th>Plan name</th>
                             <th>Action</th>
                             <th>Status</th>
                         </tr>
@@ -153,6 +152,11 @@
                             </td>
                             <td>
                                 {{list.website}}
+                            </td>
+                            <td>
+                              <span *ngIf="list.license_id !== null"><span *ngIf="(list.planDetails | json).length > 2">{{list.planDetails.product_name}}</span></span>
+                              <span *ngIf="(list.license_id == null || list.license_id == '') && list.active"> <button class="btn btn-primary btn-xs" (click)="redirectToManageLicense()">Manage License</button></span> 
+                              <span *ngIf="(list.license_id == null || list.license_id == '') && !list.active"> Not Applicable </span>
                             </td>
                             <td>
                                 <!-- <i-feather name="edit-3" class="feather-16"></i-feather> -->
