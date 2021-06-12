@@ -156,7 +156,6 @@
                             <td>
                               <span *ngIf="list.license_id !== null"><span *ngIf="(list.planDetails | json).length > 2">{{list.planDetails.product_name}}</span></span>
                               <span *ngIf="(list.license_id == null || list.license_id == '') && list.active"> <button class="btn btn-primary btn-xs" (click)="redirectToManageLicense()">Manage License</button></span> 
-                              <span *ngIf="(list.license_id == null || list.license_id == '') && !list.active"> Not Applicable </span>
                             </td>
                             <td>
                                 <!-- <i-feather name="edit-3" class="feather-16"></i-feather> -->
