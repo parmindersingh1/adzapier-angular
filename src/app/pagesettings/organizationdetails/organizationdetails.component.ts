@@ -226,6 +226,7 @@ export class OrganizationdetailsComponent implements OnInit {
       if (! await this.onCheckSubscription()) {
         return false;
       }
+      this.isUpdateUserinvitation = false;
     }
     this.propertyname = '';
     this.website = '';
@@ -390,8 +391,6 @@ export class OrganizationdetailsComponent implements OnInit {
             this.alertType = 'success';
             this.getPropertyList(this.organizationID);
             this.orgService.isOrganizationUpdated.next(true);
-            this.organisationPropertyForm.reset();
-            this.submitted = false;
             this.organisationPropertyForm.patchValue({
               protocol:this.protocol
             })
@@ -401,6 +400,7 @@ export class OrganizationdetailsComponent implements OnInit {
           this.isOpen = true;
           this.alertType = 'danger';
         });
+        this.submitted = false;
         this.organisationPropertyForm.reset();
         this.modalService.dismissAll('Data Saved!');
 
@@ -667,11 +667,11 @@ export class OrganizationdetailsComponent implements OnInit {
   }
 
   onCancelClick() {
+    this.modalService.dismissAll('Canceled');
     this.isInviteFormSubmitted = false;
-    this.isUpdateUserinvitation = false;
+  //  this.isUpdateUserinvitation = false;
     this.isconfirmationsubmitted = false;
     this.inviteUserOrgForm.reset();
-    this.modalService.dismissAll('Canceled');
     this.confirmationForm.reset();
   }
 
@@ -682,7 +682,6 @@ export class OrganizationdetailsComponent implements OnInit {
 
   onCancelClickProperty() {
     this.submitted = false;
-    this.organisationPropertyForm.reset();
     this.modalService.dismissAll('Canceled');
     this.organisationPropertyForm.patchValue({
       protocol:'https://'
@@ -791,6 +790,10 @@ export class OrganizationdetailsComponent implements OnInit {
    this.orgService.getOrganizationLicenseNameByID(orgid,licenseID).subscribe((data)=>{
     this.orgLicensedPlanName = data.response[0].name + " " + data.response[0].cycle;
    })
+  }
+
+  redirectToManageLicense(){
+    this.router.navigate(['/settings/billing/manage']);
   }
   // ngAfterContentChecked() {
   //   this.cdref.detectChanges();
