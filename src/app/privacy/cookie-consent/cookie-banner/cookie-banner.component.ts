@@ -965,19 +965,32 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
     this.modalRef = this.modalService.show(template, {ignoreBackdropClick: true});
   }
 
-  onSelectLang(event, id) {
+  onSelectLang(event, id ,chk) {
     const isChecked = event.target.checked;
     const allowLanguagesList = [...this.allowLanguagesList];
     if (isChecked) {
       allowLanguagesList.push(id);
+      chk.checked;
     } else {
       const index = this.allowLanguagesList.indexOf(id);
+      const index1 = this.allowLanguagesList.indexOf(this.defaultLanguage);
       if (index > -1) {
         allowLanguagesList.splice(index, 1);
       }
+      if(!chk.checked && index == index1){
+      this.defaultLanguage = 'en-US';
+    }
+    }
+    if(allowLanguagesList.length === 0){
+      allowLanguagesList.push('en-US');
+      this.defaultLanguage = 'en-US';
+      
     }
     this.allowLanguagesList = [];
     this.allowLanguagesList = allowLanguagesList;
+
+    
+
   }
 
   onAllowAllLang(event) {
@@ -1165,10 +1178,15 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
   }
 
   onSaveAllowedLang() {
+    if(this.allowedLanguageListObj.allowedLang == null ){
+      this.defaultLanguage='en-US';
+    }
+    else{
     this.allowedLanguageListObj = {
       allowedLang: this.allowLanguagesList,
       defaultLang: this.defaultLanguage
     };
+  }
   }
 
   onCancelLang() {
