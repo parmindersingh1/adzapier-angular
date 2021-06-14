@@ -59,7 +59,7 @@
                             <p class="tx-12 tx-color-03 mg-b-0">Create and manage subscriptions and invoices..
                             </p>
                             <p class="link">
-                                <a routerLink="billing">Subscriptions </a>
+                                <a routerLink="billing" (click)="goto('billing')">Subscriptions </a>
                             </p>
                         </div>
                     </div><!-- card-header -->
@@ -91,3 +91,11 @@
 
     </div><!-- card-body -->
 </div>
+
+<ng-template #confirmTemplate>
+    <div class="modal-body text-center">
+        <p>Property is not created! create property</p>
+        <button type="button" class="btn btn-xs btn-primary mr-2" (click)="confirm()">OK</button>
+    </div>
+  </ng-template>
+  

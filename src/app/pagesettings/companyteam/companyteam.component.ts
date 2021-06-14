@@ -76,6 +76,8 @@ export class CompanyteamComponent implements OnInit {
       phone: ['', [Validators.required]]
     });
     this.inviteUserForm = this.formBuilder.group({
+      firstname: ['', [Validators.required]],
+      lastname: ['', [Validators.required]],
       emailid: ['', [Validators.required, Validators.pattern]],
       permissions: ['', [Validators.required]]
     });
@@ -189,6 +191,8 @@ export class CompanyteamComponent implements OnInit {
           return false;
         }
         const requestObj = {
+          firstname: this.inviteUserForm.value.firstname.trim(),
+          lastname: this.inviteUserForm.value.lastname.trim(),
           email: this.inviteUserForm.value.emailid,
           role_id: this.inviteUserForm.value.permissions,
           user_level: 'company'
@@ -237,10 +241,8 @@ export class CompanyteamComponent implements OnInit {
   }
 
   onCancelClick() {
-    this.isInviteFormSubmitted = false;
-    this.isUpdateUserinvitation = false;
-    this.inviteUserForm.reset();
     this.modalService.dismissAll('Canceled');
+    this.isInviteFormSubmitted = false;
   }
 
 
@@ -307,6 +309,8 @@ export class CompanyteamComponent implements OnInit {
     this.isUpdateUserinvitation = true;
     this.approverID = data.approver_id;
     this.recordID = data.id;
+    this.inviteUserForm.controls['firstname'].setValue(this.separateUsername(data.user_name)[0]);
+    this.inviteUserForm.controls['lastname'].setValue(this.separateUsername(data.user_name)[1]);
     this.inviteUserForm.controls['emailid'].setValue(data.user_email);
     this.inviteUserForm.get('emailid')[this.isUpdateUserinvitation ? 'disable' : 'enable']();
     this.inviteUserForm.controls['permissions'].setValue(data.role_id);
@@ -359,6 +363,11 @@ export class CompanyteamComponent implements OnInit {
     this.companyService.getUserList('', this.constructor.name, moduleName.companyModule).subscribe((data) => {
       this.userList = data.response;
     });
+  }
+
+  separateUsername(username){
+    let res = username.split(" ");
+    return res;
   }
 
 }
