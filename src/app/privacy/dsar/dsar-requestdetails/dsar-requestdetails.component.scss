@@ -978,6 +978,12 @@ ul.ngx-pagination {
 //     padding: 0px 5px !important;
 //   }
 
+.checkbox-wrapper {
+    display: flex;
+    flex-direction: row;
+    padding-left: 0;
+}
+
 @media(max-width:768px){
 .activitytab .nav-tabs .nav-link {
     padding: 0 30px;
