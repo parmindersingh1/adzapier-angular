@@ -48,6 +48,7 @@ export const apiConstant = {
   BILLING_ASSIGNE_ORG: '/assign/license/organization',
   //
   BILLING_LIST_ALL_PROPERTY: '/unlicensed/property',
+  BILLING_LIST_ALL_PROPERTY_LICENSES: '/licensed/property_license',
   BILLING_LIST_ALL_ORG: '/unlicensed/organizations',
   ORG_ACITVE_LIST: '/organizations',
   //
