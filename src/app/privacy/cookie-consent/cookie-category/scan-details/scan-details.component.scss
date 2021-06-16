@@ -13,3 +13,33 @@
   height: 34px;
   margin-left: 10px;
 }
+
+// .scan-details ::ng-deep .p-datatable .p-paginator-bottom {
+//   border-bottom: 0;
+//   display: flex;
+//   justify-content: center;
+
+// }
+
+.scan-details ::ng-deep .p-paginator-bottom .p-paginator {
+  display: flex;
+  position: relative;
+}
+
+.scan-details ::ng-deep .p-paginator-current {
+  position: absolute;
+  right: 0;
+}
+
+.scan-details ::ng-deep .p-inputwrapper-filled {
+  position: absolute;
+  left: 0;
+}
+
+.scan-details::ng-deep .p-datatable .p-paginator-bottom {
+  display: flex;
+  border-top: 1px solid #ccc;
+  border-radius: 0px 0px 10px 10px;
+  border-bottom: 0;
+  justify-content: center;
+}

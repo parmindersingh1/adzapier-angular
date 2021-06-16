@@ -7,6 +7,7 @@ import {GdprService} from 'src/app/_services/gdpr.service';
 import * as moment from 'moment';
 import {featuresName} from '../../../_constant/features-name.constant';
 import {DataService} from '../../../_services/data.service';
+import { LazyLoadEvent } from 'primeng/api';
 
 class FilterType {
   consentType = '';
@@ -109,7 +110,7 @@ export class CookieTrackingComponent implements OnInit {
     });
   }
 
-  onGetCookieConsentData(event) {
+  onGetCookieConsentData(event: LazyLoadEvent) {
     this.tLoading = true;
     this.eventRows = event.rows;
     if (event.first === 0) {
