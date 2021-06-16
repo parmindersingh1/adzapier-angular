@@ -1,0 +1,337 @@
+.desk_img{
+    margin-top: 20px;
+
+    margin-right: 10px;
+    padding: 0.25em 0.3em;
+  border-radius: 50%;
+  box-shadow: 0px 0px 4px #888;
+
+
+}
+
+
+.dust{
+  padding: 0.25em 0.4em;
+  border-radius: 30%;
+  box-shadow: 0px 0px 2px rgb(99, 99, 99);
+}
+
+.borderless td{
+    border: none;
+}
+.borderless th{
+    border-bottom: 1px solid rgb(218, 214, 214);
+}
+
+.datepickerwrapper {
+  justify-content: flex-end !important;
+  display: flex !important;
+}
+
+
+.droped{
+    border-radius: 20px;
+    margin-right: 10px;
+
+}
+.sel{
+    border-radius:25px;
+background-color: rgb(230, 230, 230);
+height: 20px;
+}
+
+@media 
+only screen and (max-width: 760px),
+(min-device-width: 768px) and (max-device-width: 1024px)  {
+
+	/* Force table to not be like tables anymore */
+	table, thead, tbody, th, tr,.al { 
+		display: block; 
+	}
+	
+	/* Hide table headers (but not display: none;, for accessibility) */
+	thead tr { 
+		position: absolute;
+		top: -9999px;
+		left: -9999px;
+	}
+	
+	
+	.al { 
+		/* Behave  like a "row" */
+		border: none;
+		border-bottom: 1px solid #eee; 
+		position: relative;
+		padding-left: 50%; 
+	}
+	
+	// td:before { 
+	// 	/* Now like a table header */
+	// 	position: absolute;
+	// 	/* Top/left values mimic padding */
+	// 	top: 6px;
+	// 	left: 6px;
+	// 	width: 45%; 
+	// 	padding-right: 10px; 
+	// 	white-space: nowrap;
+	// }
+	
+	/*
+	Label the data
+	*/
+	.al:nth-of-type(1):before { content: "Id : "; }
+	.al:nth-of-type(2):before { content: "Owner ID  : "; }
+	.al:nth-of-type(3):before { content: "First Name  : "; }
+	.al:nth-of-type(4):before { content: "Last Name  : "; }
+	.al:nth-of-type(5):before { content: "Email  : "; }
+	.al:nth-of-type(6):before { content: "Country  : "; }
+	.al:nth-of-type(7):before { content: "Data Source  : "; }
+	.al:nth-of-type(8):before { content: "IP Address : "; }
+	.al:nth-of-type(9):before { content: "Verified  : "; }
+	.al:nth-of-type(10):before { content: "Created Date : "; }
+}
+
+
+.dot {
+  height: 85px;
+  width: 85px;
+  background-color: rgb(241, 237, 237);
+  border-radius: 50%;
+  border-color: rgb(206, 200, 200);
+  display: inline-block;
+}
+.btn-info {
+    font-weight: bold;
+    font-size: 13px;
+    letter-spacing: 1px;
+    line-height: 15px;
+    border-radius: 40px;
+    transition: all 0.3s ease 0s;
+    width: 70px;
+    height: 40px;
+  }
+
+  .btn-info:hover {
+    color: #FFF;
+  }
+
+  .selectWrapper{
+    border-radius:36px;
+    display:inline-block;
+    overflow:hidden;
+    background:#cccccc;
+    border:1px solid #cccccc;
+  }
+  .selectBox{
+    width:140px;
+    height:30px;
+    border:0px;
+    outline:none;
+  }
+
+  .pbut{
+    border-radius: 30px;
+    text-align: center;
+    width: 60px;
+    height: 33px;
+  }
+  .align-navbtn {
+    display: flex;
+    justify-content: space-between;
+  }
+
+input[type='radio']:checked:after {
+    width: 15px;
+    height: 15px;
+    border-radius: 15px;
+    top: -2px;
+    left: -1px;
+    position: relative;
+    background-color: #00a2ff;
+    content: '';
+    display: inline-block;
+    visibility: visible;
+    border: 2px solid white;
+}
+
+.documents{
+    justify-content: space-between;
+
+}
+.headings{
+  color: #666666;
+  margin-bottom: 0px;
+}
+
+.pi-user{
+  padding: 0.25em 0.4em;
+  border-radius: 10%;
+  box-shadow: 0px 0px 2px rgb(99, 99, 99);
+  background-color: rgb(241, 239, 239);
+  opacity: 0.8;
+  color: gray;
+
+}
+.pi-user:hover{
+  background-color:rgb(230, 230, 230);
+  color:  #0367fa;
+
+}
+.pi-eye{
+  padding: 0.25em 0.4em;
+  border-radius: 10%;
+  box-shadow: 0px 0px 2px rgb(99, 99, 99);
+  background-color: rgb(241, 239, 239);
+  opacity: 0.8;
+ color: gray;
+
+}
+
+.pi-eye:hover{
+  background-color:rgb(230, 230, 230); ;
+  color:  #0367fa;
+}
+
+@media only screen and (max-width: 600px) {
+  .fil {
+    margin-bottom: 10px;
+    flex-direction: column;
+    .p-inputtext{
+      margin-bottom: 4px;
+    }
+    
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .filbutton{
+    width: 120px;
+    margin-left: 84px;
+    margin-top: 5px;  }
+  .headings{
+    text-align: center;
+  }
+}
+
+.pi-trash:hover{
+  background-color:rgb(230, 230, 230); ;
+  color:  #0367fa;
+}
+
+.heading{
+  text-decoration-line: underline;
+  text-decoration-style: solid;
+
+}
+
+
+.dropbtn {
+  background-color: #a1a8a2;
+  color: white;
+  padding: 16px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  border-radius:40px;
+  height:50px;
+  margin-right: 15px;
+
+}
+
+.dropdown {
+
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+
+}
+
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown-content a:hover {background-color: #f1f1f1}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+.dropdown:hover .dropbtn {
+  background-color: #686868;
+}
+
+
+
+.text-divider{margin: 2em 0; line-height: 0; text-align: center;}
+.text-divider span{background-color: #f5f5f5; padding: 1em;}
+.text-divider:before{ content: " "; display: block; border-top: 1px solid #e3e3e3; border-bottom: 1px solid #f7f7f7;}
+
+
+
+
+
+::ng-deep .theme-dark-blue {
+  flex-direction: row-reverse !important;
+}
+
+::ng-deep .theme-dark-blue  .bs-datepicker-predefined-btns button {
+  margin-bottom: 2px !important;
+  background: #fff;
+  color: #333;
+  border: 1px solid #ccc;
+}
+
+::ng-deep .theme-dark-blue .bs-datepicker-predefined-btns button.selected {
+  color: #fff;
+  background: #0168fa;
+}
+
+.datepickerwrapper {
+  justify-content: flex-end !important;
+  display: flex !important;
+}
+
+.border-zero-left {
+  border-left: 0;
+}
+
+.datepickerwrapper .form-control:focus {
+  outline: none;
+  border-radius: 0px 5px 5px 0px;
+  box-shadow: none;
+  border-color: #c0ccda;
+}
+
+.datepickerwrapper .form-control {
+  border-radius: 0!important;
+}
+
+.datepickerwrapper .input-group-prepend {
+  height: 38px;
+}
+
+.row-reverse {
+  flex-direction: row-reverse;
+}
+
+.input-group-prepend span {
+  background-color: #fff;
+  border-color: #c0ccda !important;
+  border-radius: 0px; // 5px 0px 0px 5px;
+  cursor: pointer;
+}
+
+.lineheight-22 {
+  line-height: 22px;
+}
+
