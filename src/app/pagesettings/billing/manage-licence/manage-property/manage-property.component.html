@@ -10,7 +10,6 @@
   <h4 class="mg-b-0 tx-spacing--1">Manage Properties</h4>
 
 <div class="card mt-4">
-  <div class="row">
     <h5 class=" col-md-12 mt-4 plan-name cl-gray" style="font-weight: bold;">{{productName + ' - ' +planName}}</h5>
     <div class=" col-md-12">
       <h4 class="assign-text cl-gray">{{assigneLicence}}/{{totalLicence}} Assigned</h4>
@@ -49,7 +48,6 @@
           Refresh</button>
       </div>
     </div>
-  </div>
 
 
   <div class="card-body">
@@ -77,7 +75,7 @@
             </button>
             <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu"
                 role="menu" aria-labelledby="button-basic">
-              <li role="menuitem"><a class="dropdown-item"   (click)="delPropID = obj.id; openModal(delConfirm)" href="javascript:void(0)">Remove</a></li>
+              <li role="menuitem"><a class="dropdown-item"   (click)="propertlyLicensesID = obj.propertly_licenses_id; delPropID = obj.id; openModal(delConfirm)" href="javascript:void(0)">Remove</a></li>
 
             </ul>
           </div>

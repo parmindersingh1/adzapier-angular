@@ -18,6 +18,8 @@
                         Current Status of DSAR Request
                     </span>
                     <div class="d-flex">
+                            <button (click)="onRefresh()" class="btn btn-sm btn-uppercase btn-outline-secondary pt-2 mr-2 lineheight-22">
+                              <i class="fas fa-sync feather-16"></i> Refresh</button>
 
                         <button *ngIf="currentWorkflowStage !== 'Rejected'" (click)="openModalPopup(editRequestDetails,'')" data-toggle="modal"
                             class="btn btn-sm btn-outline-secondary btn-uppercase mr-2"><svg xmlns="http://www.w3.org/2000/svg" width="24"
@@ -137,7 +139,7 @@
                         </div>
                         <ngx-skeleton-loader *ngIf="skeletonCustomLoading" count="2"></ngx-skeleton-loader>
                         <div *ngFor="let data of getCustomFields(customFields) | keyvalue; let i = index">
-                            <div class="customdata">
+                            <div class="customdata" *ngIf="data.key !== 'Email verified'">
 
                                 <label class="tx-sans">{{data.key}}
                                     <span *ngIf="isemailverificationRequired" class="badge" (click)="verifyUserEmailID()"
@@ -279,7 +281,7 @@
                                                 for="inputGroupFile01">{{uploadFilename?uploadFilename:'Choose file'}}</label>
                                         </div>
                                     </div>
-                                    <button type="submit" class="btn btn-sm btn-uppercase btn-primary float-right mb-2 mt-2">Post
+                                    <button type="submit" class="btn btn-sm btn-uppercase btn-primary float-right mb-2 mt-2">Send
                                     </button>
                                 </div>
                             </form>
@@ -758,10 +760,10 @@
 
             <div class="row">
                 <div class="col-sm-12 ml-1 mb-3">
-                    <div class="form-check">
-                        <input type="checkbox" id="issubtaskrequired" class="form-check-input" [(ngModel)]="subTaskFields.required" name="required" />
+                    <div class="form-check checkbox-wrapper">
+                       <span class="mr-3 mt-0 pt-0"><input type="checkbox" id="issubtaskrequired" class="form-check-input m-0 ml-0 pr-3" [(ngModel)]="subTaskFields.required" name="required" /></span>
                         <label for="issubtaskrequired"
-                            class="form-check-label tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">
+                            class="form-check-label tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03 mb-0">
                             <span>Is Required</span>
                         </label>
                     </div>
@@ -905,7 +907,7 @@
     </form>
 </ng-template>
 
- <div class="col-sm-5 mr-0 float-right flotingdiv">
+ <div class="col-sm-5 mr-0 float-right flotingdiv" *ngIf="isOpen">
     <alert *ngIf="isOpen" [type]="alertType" dismissOnTimeout="5000" [dismissible]="dismissible"
       (onClosed)="onClosed(alertMsg)">{{alertMsg}}</alert>
   </div>

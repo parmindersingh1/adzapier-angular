@@ -338,7 +338,13 @@ tr.row-disabled > td > a {
   border-bottom: 0;
 }
 
-
+.aligned{
+  text-decoration: none !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  width: 50px !important;
+}
 
 
 .alert-info {
@@ -456,4 +462,23 @@ tr.row-disabled > td > a {
 .status-text{
   font-size: 14px;
   font-weight: 600;
+}
+.bg-white-header{
+  background-color: #fff !important;
+}
+
+.flex-justifycontent {
+  justify-content: space-between;
+  display: flex;
+}
+
+.flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+@media screen and (max-width:768px) {
+.flex-justifycontent{
+  flex-direction: column;
+}
 }

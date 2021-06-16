@@ -94,12 +94,9 @@
                             <label for="currentPassword"> Current Password</label>
                             <input type="password" formControlName="currentPassword" class="form-control"
                                 [ngClass]="{ 'is-invalid': changePwdSubmitted && f1.currentPassword.errors }"
-                                placeholder="Enter your password"
-                                pattern="(?=^.{6,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9]).*$" />
+                                placeholder="Enter your password" />
                             <div *ngIf="changePwdSubmitted && f1.currentPassword.errors" class="invalid-feedback">
                                 <div *ngIf="f1.currentPassword.errors.required">Password is required</div>
-                                <div *ngIf="f1.currentPassword.errors.pattern">Enter Valid Password (Ex: Aa@2aa) and
-                                    minimum 6 charcters </div>
                             </div>
                         </div>
 
@@ -270,7 +267,7 @@
                         <div class="form-group">
                             <label>&nbsp;</label>
                             <div class="text-right">
-                                <button class="btn btn-link tx-decoration-underline"  (click)="onResetProfile()">Cancel</button>
+                                <button class="btn btn-link tx-decoration-underline" type="button" (click)="onResetProfile()">Cancel</button>
                                     <button class="btn btn-primary mr-0">Save</button>
                             </div>
                         </div>

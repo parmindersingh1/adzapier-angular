@@ -7,10 +7,12 @@ export const apiConstant = {
   COOKIE_BANNER_LANG_SAVE_IN_DB: '/consent/save-lang/:orgId/:propId',
   COOKIE_BANNER_GET_LANG_FROM_DB: '/consent/save-lang/:orgId/:propId/:lang',
   COOKIE_CATEGORY: '/cookiecategory',
-  COOKIE_SCANNER: '/scanner/request/:orgId/:propId',
+  COOKIE_SCANNER: '/start-cookie-scanning/:orgId/:propId',
   COOKIE_PUBLISH: '/publish-cookie/:orgId/:propId',
   COOKIE_WITH_ID: '/cookie/:orgId/:propId/:id',
   COOKIE: '/cookie/:orgId/:propId',
+  COOKIE_SCAN_JOBS: '/scan-jobs/:orgId/:propId',
+  COOKIE_LAST_SCANNING_DATA: '/last-scan-jobs/:propId',
   COOKIE_SCANNER_STATUS: '/scannerstatus/:orgId/:propId',
   // Cookie Consent
   UPDATE_VENDORS: '/consent/manage-vendors/:orgId/:propId',
@@ -46,6 +48,7 @@ export const apiConstant = {
   BILLING_ASSIGNE_ORG: '/assign/license/organization',
   //
   BILLING_LIST_ALL_PROPERTY: '/unlicensed/property',
+  BILLING_LIST_ALL_PROPERTY_LICENSES: '/licensed/property_license',
   BILLING_LIST_ALL_ORG: '/unlicensed/organizations',
   ORG_ACITVE_LIST: '/organizations',
   //

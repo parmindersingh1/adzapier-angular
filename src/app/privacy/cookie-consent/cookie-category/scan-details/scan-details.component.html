@@ -1,0 +1,289 @@
+<div class="content pt-0">
+  <div class="container pd-x-0 pd-lg-x-10 pd-xl-x-0">
+    <div class="d-sm-flex align-items-center justify-content-between mg-b-5 mg-lg-b-10 mg-xl-b-15">
+      <div>
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb breadcrumb-style1 mg-b-10">
+            <li class="breadcrumb-item">Privacy</li>
+            <li class="breadcrumb-item"><a routerLink="/home/dashboard/cookie-consent">Cookie Consent</a></li>
+            <li class="breadcrumb-item "><a routerLink="/cookie-consent/cookie-category/"> Cookie Category</a></li>
+            <li class="breadcrumb-item active">Scanning Details</li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header pb-0">
+        <h4 class="tx-spacing--1 float-left">Scanning Details
+        </h4>
+
+        <button *ngIf="!isScanning" (click)="onRescanCookie()" data-toggle="modal"
+                data-target="#myModal"
+                class="btn-success scan-btn float-right mb-3 pl-3 pr-4 btn btn-sm mr-2 mg-r-3" type="button">
+          <i-feather name="refresh-ccw" class="commom-feathericon-height pr-1"></i-feather>
+          Scan
+        </button>
+        <button *ngIf="isScanning" class="btn-success scan-btn float-right mb-3 pl-4 pr-4 btn mr-2 btn-smmg-r-3" type="button" disabled>
+                            <span class="spinner-border spinner-border-sm txt-info" role="status"
+                                  aria-hidden="true"></span>
+          Scanning...
+        </button>
+        <button (click)="onGetLastScanJobs()"
+                class="btn float-right mb-3  btn-sm btn-uppercase btn-outline-secondary" style="width: 102px">
+          <i class="fas fa-sync"></i> Refresh
+        </button>
+      </div>
+      <ng-container *ngIf="scanJobsList.length > 0">
+      <div class="card-body" style="border-bottom: 1px solid lightgray;">
+        <!--        <div class="row">-->
+        <!--          <div class="progress">-->
+        <!--            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 75%"></div>-->
+        <!--          </div>-->
+        <!--        </div>-->
+        <div class="row mt-3">
+          <div class="col-md-8">
+            <h5>Last Scan Details</h5>
+              <div class="row">
+                <div class="col-md-9">
+                  <div class="progress">
+                    <div class="progress-bar progress-bar-striped "
+                         role="progressbar" aria-valuenow="75" aria-valuemin="0"
+                         aria-valuemax="100"
+                         [ngClass]="{'progress-bar-animated' : lastScan.scanner_status === 'inQueue'
+                               ||  lastScan.scanner_status === 'inProgress'
+                               || lastScan.scanner_status === 'running',
+                               'bg-danger' :  lastScan.scanner_status === 'error'}"
+                         [ngStyle]="{width: lastScan.scanner_status === 'inQueue' ? '10%' :
+                               lastScan.scanner_status === 'inProgress' ? '25%' :
+                               lastScan.scanner_status === 'running' ? '50%' :
+                               lastScan.scanner_status === 'completed' ? '100%' :
+                               lastScan.scanner_status === 'unknown' ? '0%' :
+                               lastScan.scanner_status === 'error' ? '100%' : null
+                               }">
+                      {{lastScan.scanner_status === 'inQueue' ? '10%' :
+                      lastScan.scanner_status === 'inProgress' ? '25%' :
+                        lastScan.scanner_status === 'running' ? '50%' :
+                          lastScan.scanner_status === 'completed' ? '100%' :
+                            lastScan.scanner_status === 'unknown' ? 'Unknown' :
+                              lastScan.scanner_status === 'error' ? 'Error' : null}}
+                    </div>
+                  </div>
+
+                </div>
+                <div class="col-md-3">
+                  <p *ngIf="updaing">
+                <span class="spinner-border spinner-border-sm txt-info" role="status"
+                      aria-hidden="true"></span>
+                    Updating...</p>
+                </div>
+              </div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="row">
+                  <div class="col-md-6">
+                    <h6>Scan Status</h6>
+                  </div>
+                  <div class="col-md-6">
+                    <p>
+                      <span *ngIf="lastScan.scanner_status === 'inProgress'" class="tx-14 badge badge-warning">In Progress</span>
+                      <span *ngIf="lastScan.scanner_status === 'running'" class="tx-14 badge badge-warning">Running</span>
+                      <span *ngIf="lastScan.scanner_status === 'completed'" class="tx-14 badge badge-success">Completed</span>
+                      <span *ngIf="lastScan.scanner_status === 'inQueue'" class="tx-14 badge badge-info">in Queue</span>
+                      <span *ngIf="lastScan.scanner_status === 'error'" class="tx-14 badge badge-danger">Error</span>
+                      <span *ngIf="lastScan.scanner_status === 'unknown'" class="tx-14 badge badge-info">Unknown</span>
+                    </p>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <h6>Start Scanning</h6>
+                  </div>
+                  <div class="col-md-6">
+                    <p>{{lastScan.start_time | date : 'M/d/yy, h:mm:ss a'}}</p>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <h6>End Scanning</h6>
+                  </div>
+                  <div class="col-md-6">
+                    <p>
+                    {{lastScan.scanner_status === 'inQueue'
+                      ||  lastScan.scanner_status === 'inProgress'
+                      || lastScan.scanner_status === 'running' ?  'Calculating...' : (lastScan.end_time | date : 'M/d/yy, h:mm:ss a') }}
+                    </p>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <h6>Website</h6>
+                  </div>
+                  <div class="col-md-6">
+                    <p>
+                      {{lastScan.website}}
+                    </p>
+                  </div>
+                </div>
+
+              </div>
+              <div class="col-md-6">
+                <div class="row">
+                  <div class="col-md-6">
+                    <h6>Total Cookie</h6>
+                  </div>
+                  <div class="col-md-6">
+                    <p>
+                      {{lastScan.scanner_status === 'inQueue'
+                      ||  lastScan.scanner_status === 'inProgress'
+                      || lastScan.scanner_status === 'running' ?  'Calculating...' : lastScan.total_cookies }}
+                    </p>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <h6>Total LocalStorage</h6>
+                  </div>
+                  <div class="col-md-6">
+                    <p>
+                      {{lastScan.scanner_status === 'inQueue'
+                      ||  lastScan.scanner_status === 'inProgress'
+                      || lastScan.scanner_status === 'running' ?  'Calculating...' : lastScan.total_localstorage }}
+                    </p>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <h6>Page Scan</h6>
+                  </div>
+                  <div class="col-md-6">
+                    <p>
+                      {{lastScan.scanner_status === 'inQueue'
+                      ||  lastScan.scanner_status === 'inProgress'
+                      || lastScan.scanner_status === 'running' ?  'Calculating...' : lastScan.total_page_scans}}
+                    </p>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <h6>Total Tags</h6>
+                  </div>
+                  <div class="col-md-6">
+                    <p>
+                      {{lastScan.scanner_status === 'inQueue'
+                      ||  lastScan.scanner_status === 'inProgress'
+                      || lastScan.scanner_status === 'running' ?  'Calculating...' : lastScan.total_tages }}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-12">
+                <div class="row">
+                  <div class="col-md-3">
+                    <h6>Scan Limit</h6>
+                  </div>
+                  <div class="col-md-9  ">
+                  <span *ngIf="availablePlan.scan_available > 0 && availablePlan.scan_available == 1"
+                        class="avalible-text text-info">{{availablePlan.scan_available}} Scan is Available </span>
+                    <span
+                      *ngIf="availablePlan.scan_available > 0 && availablePlan.scan_available != -1 && availablePlan.scan_available != 1"
+                      class="avalible-text text-info">{{availablePlan.scan_available}} Scans are Available </span>
+                    <span *ngIf="availablePlan.scan_available == 0"
+                          class=" avalible-text text-info"> Scan is not Available </span>
+                    <span *ngIf="availablePlan.scan_available == -1"
+                          class="text-info avalible-text">Unlimited Scans are Available </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div *ngIf="lastScan.scanner_status === 'completed'">
+            <canvas baseChart
+                    [chartType]="chartType"
+                    [options]="doughnutChartOptions"
+                    [colors]="pieColors"
+                    [labels]="chartTypeLabels"
+                    [data]="chartTypeData">
+            </canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+      </ng-container>
+      <ng-container *ngIf="scanJobsList.length === 0 && !tLoading">
+        <div class="card-body">
+          <div class="alert alert-info text-center tx-15">There is no scan record found</div>
+        </div>
+      </ng-container>
+      <div class="card-body">
+        <h5>Scans History</h5>
+        <p-table #dt [value]="scanJobsList" styleClass="p-datatable-sm"
+                 [loading]="tLoading"
+                 [totalRecords]="scanJobsCount"
+                 [lazy]="true"
+                 [rowsPerPageOptions]="[10,20,30]"
+                 [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+                 [(selection)]="selectedProducts" [rowHover]="true" dataKey="id"
+                 (sortFunction)="customSort($event)"
+                 (onLazyLoad)="onGetCatList($event)"
+                 currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries">
+          <ng-template pTemplate="header">
+            <tr>
+              <th>Scan Start</th>
+              <th>Scan End</th>
+              <th>Scan Status</th>
+              <th>Total Cookies</th>
+              <th>Total LocalStorage
+              </th>
+              <th>Total Page Scan</th>
+              <th>Total Tags</th>
+              <!--              <th>Secure</th>-->
+              <!--              <th>Edit</th>-->
+              <!--              <th>Delete</th>-->
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-scanJob styleClass="p-datatable-responsive-demo">
+            <tr *ngIf="scanJob.id !== lastScan.id">
+              <td>{{scanJob.start_time | date : 'M/d/yy, h:mm:ss a'}}</td>
+              <td>{{scanJob.end_time  | date : 'M/d/yy, h:mm:ss a'}}</td>
+              <td>
+<!--                <span *ngIf="scanJob.scanner_status === 'error'"-->
+<!--                        class="badge badge-danger w-50">{{scanJob.scanner_status}}</span>-->
+<!--                <span *ngIf="scanJob.scanner_status !== 'error'"-->
+<!--                      class="badge badge-success  w-50">{{scanJob.scanner_status}}</span>-->
+
+                <span *ngIf="scanJob.scanner_status === 'inProgress'" class="tx-14 badge badge-warning">In Progress</span>
+                <span *ngIf="scanJob.scanner_status === 'running'"
+                      class="tx-14 badge badge-warning">Running</span>
+                <span *ngIf="scanJob.scanner_status === 'completed'"
+                      class="tx-14 badge badge-success">Completed</span>
+                <span *ngIf="scanJob.scanner_status === 'inQueue'" class="tx-14 badge badge-info">in Queue</span>
+                <span *ngIf="scanJob.scanner_status === 'error'" class="tx-14 badge badge-danger">Error</span>
+                <span *ngIf="scanJob.scanner_status === 'unknown'" class="tx-14 badge badge-info">Unknown</span>
+              </td>
+              <td>{{scanJob.total_cookies}}</td>
+              <td>{{scanJob.total_localstorage}}</td>
+              <td>{{scanJob.total_page_scans}}</td>
+              <td>{{scanJob.total_tages}}</td>
+              <!--              <td>{{scanJob.domain}}</td>-->
+
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="summary">
+            <div class="p-d-flex p-ai-center p-jc-between">
+              <!--            In total there are {{scanJobsCount}} Cookies.-->
+            </div>
+          </ng-template>
+        </p-table>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<div class="col-sm-5 mr-0 float-right flotingdiv" [ngClass]="{'hide':!isOpen}">
+  <alert *ngIf="isOpen" [type]="alertType" dismissOnTimeout="5000" [dismissible]="dismissible"
+         (onClosed)="onClosed(alertMsg)">{{  alertMsg}}</alert>
+</div>

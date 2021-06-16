@@ -61,14 +61,16 @@
         <td *ngIf="plan.planDetails.level === 'property'"><a class="plan-name" [routerLink]="'/settings/billing/manage/property'"
           [queryParams]="{planid: plan.id, plan_name: plan.plan_name,
              total_licence: plan.total_licence, assigned_licence: plan.assigned_licence,
-              product_name: plan.planDetails.product_name
+              product_name: plan.planDetails.product_name,
+              type: plan.planDetails.type
             }">
            {{plan.planDetails.product_name}}</a></td>
 
            <td *ngIf="plan.planDetails.level !== 'property'"><a class="plan-name" [routerLink]="'/settings/billing/manage/organizations'"
             [queryParams]="{planid: plan.id, plan_name: plan.plan_name,
                total_licence: plan.total_licence, assigned_licence: plan.assigned_licence,
-                product_name: plan.planDetails.product_name
+                product_name: plan.planDetails.product_name,
+                type: plan.planDetails.type
               }">
              {{plan.planDetails.product_name}}</a></td>
 
@@ -93,7 +95,7 @@
         </td>
         <td class="validity"><span class="activeplan"><i class="fa fa-check-circle pr-2" aria-hidden="true"></i> Active</span>
           Renews on  {{plan.planDetails.plan_ends | date}}</td>
-        <td>{{plan.planDetails.price + '.00 ' + plan.currency | uppercase}}  </td>
+        <td>{{plan.planDetails.price + '.00 '| currency : 'USD'}}  </td>
         <th class="d-flex">**** <span class="pr-1">{{plan.planDetails.card_number}}</span>
 
           <span *ngIf="plan.planDetails.brand !== 'mastercard' && plan.planDetails.brand !== 'visa' && plan.planDetails.brand !== 'amex'">{{' ' + plan.planDetails.brand}}</span>
@@ -164,7 +166,7 @@
 
           </td>
           <td class="validity"><span class="inactiveplan"> <i class="fa fa-times-circle pr-2" aria-hidden="true"></i>Inactive</span>Expired on {{plan.planDetails.plan_ends | date}}</td>
-          <td>{{plan.planDetails.price + '.00 ' + plan.currency | uppercase}}  </td>
+          <td>{{plan.planDetails.price + '.00 '| currency : 'USD'}}  </td>
           <th style="text-transform: capitalize;display: flex;">**** <span class="pr-1">{{plan.planDetails.card_number}}</span>
 
             <span *ngIf="plan.planDetails.brand !== 'mastercard' && plan.planDetails.brand !== 'visa' && plan.planDetails.brand !== 'amex'">{{ ' ' + plan.planDetails.brand}}</span>

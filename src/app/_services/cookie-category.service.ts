@@ -50,6 +50,28 @@ export class CookieCategoryService {
     );
   }
 
+  getScanningData(requestMeta, componentName, moduleName): Observable<any> {
+    let path = apiConstant.COOKIE_SCAN_JOBS.replace(':orgId', this.currentManagedOrgID);
+    path = path.replace(':propId', this.currrentManagedPropID);
+    return this.http.get(environment.apiUrl + path, {params: requestMeta}).pipe(map(res => res),
+      catchError(error => {
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.cookie, componentName, moduleName, path);
+        return throwError(error);
+      }),
+    );
+  }
+
+  getLastScanningData(componentName, moduleName): Observable<any> {
+    let path = apiConstant.COOKIE_LAST_SCANNING_DATA;
+    path = path.replace(':propId', this.currrentManagedPropID);
+    return this.http.get(environment.apiUrl + path).pipe(map(res => res),
+      catchError(error => {
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.cookie, componentName, moduleName, path);
+        return throwError(error);
+      }),
+    );
+  }
+
   post(item: any, componentName, moduleName): Observable<any> {
     let path = apiConstant.COOKIE.replace(':orgId', this.currentManagedOrgID);
     path = path.replace(':propId', this.currrentManagedPropID);

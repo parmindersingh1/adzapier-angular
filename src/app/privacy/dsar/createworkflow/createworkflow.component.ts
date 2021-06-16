@@ -5,6 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { moduleName } from '../../../_constant/module-name.constant';
 import { OrganizationService } from 'src/app/_services';
+import { DirtyComponents } from 'src/app/_models/dirtycomponents';
 @Component({
   selector: 'app-createworkflow',
   templateUrl: './createworkflow.component.html',
@@ -12,7 +13,7 @@ import { OrganizationService } from 'src/app/_services';
   // changeDetection: ChangeDetectionStrategy.OnPush
 
 })
-export class CreateworkflowComponent implements OnInit {
+export class CreateworkflowComponent implements OnInit, DirtyComponents {
   dismissible = true;
   isOpen = false;
   workflowList: any;
@@ -52,6 +53,8 @@ export class CreateworkflowComponent implements OnInit {
   selectedStageId: any;
   selectedIndex: number;
   currentManagedOrgID: any;
+  defaultStages:any[];
+  isDirty: boolean;
   constructor(private activatedRoute: ActivatedRoute,
               private workflowService: WorkflowService,
               private loadingBar: NgxUiLoaderService,
@@ -78,7 +81,7 @@ export class CreateworkflowComponent implements OnInit {
 
 
     this.loadWorkflowById(this.selectedWorkflowId);
-
+    this.defaultStages = ['UNVERIFIED','NEW','VERIFY REQUEST','VERIFY CONSUMER REQUEST','LEGAL/PRIVACY REVIEW','REQUEST FULFILL','CONSUMER NOTIFICATION','IN PROGRESS','COMPLETE'];
   }
 
   previousTab() {
@@ -113,12 +116,16 @@ export class CreateworkflowComponent implements OnInit {
   }
 
   clickOnWorkflowStages($event) {
+    if($event.id == ''){
+      this.isDirty = true;
+    }
     this.selectedTab = $event;
     this.selectedStageId = $event.id;
     this.isTabSelected = true;
     this.stageTitle = $event.stage_title;
     this.guidancetext = $event.guidance_text;
     this.order = $event.order;
+    this.isDefaultWorkflowStage();
   }
 
   update(e) {
@@ -126,6 +133,7 @@ export class CreateworkflowComponent implements OnInit {
       const index = this.workflowStages.findIndex((t) => t.order === this.selectedTab.order);
       this.workflowStages[index].stage_title = e.currentTarget.value;
       this.stageTitle = e.currentTarget.value;
+      this.isDirty = true;
     } else {
       this.workflowStages[0].stage_title = e.currentTarget.value;
       this.stageTitle = e.currentTarget.value;
@@ -209,6 +217,7 @@ export class CreateworkflowComponent implements OnInit {
             this.isOpen = true;
             this.alertType = 'success';
             this.skeletonLoading = false;
+            this.isDirty = false;
             this.loadWorkflowById(this.selectedWorkflowId);
           }
         }, (error) => {
@@ -225,8 +234,8 @@ export class CreateworkflowComponent implements OnInit {
     const flowStatus = status === 'active' ? 'draft' : 'active';
     if ($event.target.innerText === 'Activate' && !this.isControlDisabled) {
       this.activateWorkflow(status);
-    } else {
       this.isControlDisabled = false;
+    } else {
       this.workflowStatus = flowStatus;
     }
   }
@@ -263,19 +272,21 @@ export class CreateworkflowComponent implements OnInit {
     }
   }
 
-  checkButtonStatus(): boolean {
-    if (this.workflowType === 'custom') {
-      return false;
-    } else if (this.workflowStatus === 'active' && this.isControlDisabled) {
-      return true;
-    } else if (this.workflowStatus === 'draft' && this.isControlDisabled) {
-      return true;
-    } else if (this.workflowType === 'default' || this.workflowStatus === 'active' && this.isControlDisabled) {
-      return true;
-    } else if (this.workflowType === 'custom' || this.workflowStatus === 'draft' && !this.isControlDisabled) {
-      return true;
-    }
-  }
+  // checkButtonStatus(): boolean {
+  //   if (this.workflowType === 'custom') {
+  //     return false;
+  //   } else if (this.workflowStatus === 'active' || this.isControlDisabled) {
+  //     return true;
+  //   } else if (this.workflowStatus === 'draft' && !this.isControlDisabled) {
+  //     return false;
+  //   } else if (this.workflowStatus === 'draft' && this.isControlDisabled) {
+  //     return true;
+  //   } else if (this.workflowType === 'default' || this.workflowStatus === 'active' && this.isControlDisabled) {
+  //     return true;
+  //   } else if (this.workflowType === 'custom' || this.workflowStatus === 'draft' && !this.isControlDisabled) {
+  //     return true;
+  //   }
+  // }
 
   loadWorkflowById(id?) {
     this.skeletonLoading = true;
@@ -287,16 +298,17 @@ export class CreateworkflowComponent implements OnInit {
           this.workflowStages = resp;
           this.selectedStageId = this.selectedStageId || this.workflowStages[0].id;
           const stageIndex = this.workflowStages.findIndex((t) => t.id === this.selectedStageId);
+          stageIndex == 0 ? this.isControlDisabled = true : this.isControlDisabled = false;
           const stageTitle = this.workflowStages[stageIndex].stage_title;
           const guidanceText = this.workflowStages[stageIndex].guidance_text;
           this.order = this.workflowStages[stageIndex].order;
           this.workflowStatus = data[0].workflow_status;
           this.workflowType = data[0].workflow_type;
-          if (this.workflowStatus === 'active') {
-            this.isControlDisabled = true;
-          } else {
-            this.isControlDisabled = false;
-          }
+          // if (this.workflowStatus === 'active') {
+          //   this.isControlDisabled = true;
+          // } else {
+          //   this.isControlDisabled = false;
+          // }
           this.workflowName = data[0].workflow_name;
           this.stageTitle = stageTitle;
           this.guidancetext = guidanceText;
@@ -321,7 +333,7 @@ export class CreateworkflowComponent implements OnInit {
   }
 
   isEditorDisabled(): object {
-    if (this.isControlDisabled) {
+    if (this.isControlDisabled || this.workflowStatus == 'active') {
       return {
         'background-color': '#f5f6fa',
         'cursor': 'not-allowed'
@@ -331,6 +343,15 @@ export class CreateworkflowComponent implements OnInit {
     'background-color': '#ffffff'
     };
      }
+  }
+
+  isDefaultWorkflowStage():boolean{
+    this.isControlDisabled = this.defaultStages.some((t) => t == this.stageTitle);
+    return this.isControlDisabled;
+  }
+
+  canDeactivate() {
+    return this.isDirty;
   }
 
 }

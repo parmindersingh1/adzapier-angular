@@ -87,6 +87,7 @@ export class OrganizationdetailsComponent implements OnInit {
   userList: any = [];
   noResult = false;
   private orgPlanDetails: any;
+  orgLicensedPlanName;
   constructor(private activatedRoute: ActivatedRoute,
               private orgService: OrganizationService,
               private modalService: NgbModal,
@@ -148,6 +149,8 @@ export class OrganizationdetailsComponent implements OnInit {
     });
     this.inviteUserOrgForm = this.formBuilder.group({
       emailid: ['', [Validators.required, Validators.pattern]],
+      firstname: ['', [Validators.required]],
+      lastname: ['', [Validators.required]],
       permissions: ['', [Validators.required]]
     });
     this.editOrganisationForm = this.formBuilder.group({
@@ -187,6 +190,9 @@ export class OrganizationdetailsComponent implements OnInit {
       this.zipcode = data.response.zipcode;
       this.email = data.response.email;
       this.phone = data.response.phone;
+      if(data.response.license_id){
+        this.loadOrganizationLicenseNameByID(this.organizationID,data.response.license_id)
+      }
     });
     // this.pathValues();
   }
@@ -220,10 +226,12 @@ export class OrganizationdetailsComponent implements OnInit {
       if (! await this.onCheckSubscription()) {
         return false;
       }
+      this.isUpdateUserinvitation = false;
     }
     this.propertyname = '';
     this.website = '';
     this.logourl = '';
+    this.isInviteFormSubmitted = false;
     this.inviteUserOrgForm.get('emailid')[this.isUpdateUserinvitation ? 'disable' : 'enable']();
     this.isEditProperty = false;
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
@@ -383,8 +391,6 @@ export class OrganizationdetailsComponent implements OnInit {
             this.alertType = 'success';
             this.getPropertyList(this.organizationID);
             this.orgService.isOrganizationUpdated.next(true);
-            this.organisationPropertyForm.reset();
-            this.submitted = false;
             this.organisationPropertyForm.patchValue({
               protocol:this.protocol
             })
@@ -394,6 +400,7 @@ export class OrganizationdetailsComponent implements OnInit {
           this.isOpen = true;
           this.alertType = 'danger';
         });
+        this.submitted = false;
         this.organisationPropertyForm.reset();
         this.modalService.dismissAll('Data Saved!');
 
@@ -493,8 +500,10 @@ export class OrganizationdetailsComponent implements OnInit {
           return false;
         }
         const requestObj = {
-          email: this.inviteUserOrgForm.value.emailid,
-          role_id: this.inviteUserOrgForm.value.permissions,
+          firstname: this.inviteUserOrgForm.value.firstname.trim(),
+          lastname: this.inviteUserOrgForm.value.lastname.trim(),
+          email: this.inviteUserOrgForm.value.emailid.trim(),
+          role_id: this.inviteUserOrgForm.value.permissions.trim(),
           orgid: this.organizationID,
           user_level: 'organization'
         };
@@ -521,7 +530,9 @@ export class OrganizationdetailsComponent implements OnInit {
         const requestObj = {
           id: this.recordID,
           user_id: this.approverID,
-          role_id: this.inviteUserOrgForm.value.permissions
+          role_id: this.inviteUserOrgForm.value.permissions,
+          firstname: this.inviteUserOrgForm.value.firstname,
+          lastname: this.inviteUserOrgForm.value.lastname
         };
         this.companyService.updateUserRole(this.constructor.name, moduleName.organizationDetailsModule, requestObj)
           .subscribe((data) => {
@@ -619,10 +630,10 @@ export class OrganizationdetailsComponent implements OnInit {
     return true;
   }
   onResendInvitation(userid) {
-    this.companyService.resendInvitation(this.constructor.name, moduleName.organizationDetailsModule, userid)
+    this.companyService.resendInvitation(this.constructor.name, moduleName.organizationDetailsModule, userid, this.organizationID)
       .subscribe((data) => {
         if (data) {
-          this.alertMsg = 'We have sent a email on your Email Id';
+          this.alertMsg = data.response;
           this.isOpen = true;
           this.alertType = 'info';
           this.loadOrgTeamMembers(this.organizationID);
@@ -644,7 +655,8 @@ export class OrganizationdetailsComponent implements OnInit {
     this.inviteUserOrgForm.controls['emailid'].setValue(data.user_email);
     this.inviteUserOrgForm.get('emailid')[this.isUpdateUserinvitation ? 'disable' : 'enable']();
     this.inviteUserOrgForm.controls['permissions'].setValue(data.role_id);
-
+    this.inviteUserOrgForm.controls['firstname'].setValue(this.separateUsername(data.user_name)[0]);
+    this.inviteUserOrgForm.controls['lastname'].setValue(this.separateUsername(data.user_name)[1]);
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
       this.inviteUserOrgForm.reset();
       // this.closeResult = `Closed with: ${result}`;
@@ -655,11 +667,11 @@ export class OrganizationdetailsComponent implements OnInit {
   }
 
   onCancelClick() {
+    this.modalService.dismissAll('Canceled');
     this.isInviteFormSubmitted = false;
-    this.isUpdateUserinvitation = false;
+  //  this.isUpdateUserinvitation = false;
     this.isconfirmationsubmitted = false;
     this.inviteUserOrgForm.reset();
-    this.modalService.dismissAll('Canceled');
     this.confirmationForm.reset();
   }
 
@@ -670,7 +682,6 @@ export class OrganizationdetailsComponent implements OnInit {
 
   onCancelClickProperty() {
     this.submitted = false;
-    this.organisationPropertyForm.reset();
     this.modalService.dismissAll('Canceled');
     this.organisationPropertyForm.patchValue({
       protocol:'https://'
@@ -768,6 +779,21 @@ export class OrganizationdetailsComponent implements OnInit {
     } else if (this.controlname === 'property') {
       return this.confirmProperty;
     }
+  }
+
+  separateUsername(username){
+      let res = username.split(" ");
+      return res;
+  }
+
+  loadOrganizationLicenseNameByID(orgid,licenseID){
+   this.orgService.getOrganizationLicenseNameByID(orgid,licenseID).subscribe((data)=>{
+    this.orgLicensedPlanName = data.response[0].name + " " + data.response[0].cycle;
+   })
+  }
+
+  redirectToManageLicense(){
+    this.router.navigate(['/settings/billing/manage']);
   }
   // ngAfterContentChecked() {
   //   this.cdref.detectChanges();

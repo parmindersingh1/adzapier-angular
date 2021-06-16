@@ -62,12 +62,10 @@
                                 class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Phone</label>
                             <p class="mg-b-0">{{phone}}</p>
                         </div>
-                        <!--    -->
-                        <!--                        <div class="col-sm-2 mg-t-5 mg-sm-t-5">-->
-                        <!--                            <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">TaxID</label>-->
-                        <!--                            <p class="mg-b-0">{{taxID}}</p>-->
-                        <!--                        </div>-->
-                        <!--                        -->
+                        <div class="col-sm-4 mg-t-5 mg-sm-t-5" *ngIf="orgLicensedPlanName">
+                            <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Assigned Plan name</label>
+                            <p class="mg-b-0">{{orgLicensedPlanName}}</p>
+                        </div>
                         <div class="col-sm-2 mg-t-5 mg-sm-t-5">
 <!--                            <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Team-->
 <!--                                Member</label>-->
@@ -134,6 +132,7 @@
                             <th>Logo</th>
                             <th>Name</th>
                             <th>Domain</th>
+                            <th>Plan name</th>
                             <th>Action</th>
                             <th>Status</th>
                         </tr>
@@ -153,6 +152,10 @@
                             </td>
                             <td>
                                 {{list.website}}
+                            </td>
+                            <td>
+                              <span *ngIf="list.license_id !== null"><span *ngIf="(list.planDetails | json).length > 2">{{list.planDetails.product_name}}</span></span>
+                              <span *ngIf="(list.license_id == null || list.license_id == '') && list.active"> <button class="btn btn-primary btn-xs" (click)="redirectToManageLicense()">Manage License</button></span> 
                             </td>
                             <td>
                                 <!-- <i-feather name="edit-3" class="feather-16"></i-feather> -->
@@ -490,8 +493,8 @@
             </div>
             <div class="pull-right-btn">
                 <div class="text-right">
-                <button class="btn btn-link tx-decoration-underline" (click)="onCancelClickProperty();modalRef.hide()">Cancel</button>
-                <button class="btn btn-primary">Save</button>
+                <button class="btn btn-link tx-decoration-underline" type="button" (click)="onCancelClickProperty()">Cancel</button>
+                <button class="btn btn-primary" type="submit">Save</button>
                  <!-- <div class="col-sm-6"> -->
             <!-- </div> -->
                 </div>
@@ -512,10 +515,30 @@
         </button>
     </div>
     <div class="modal-body">
-        <div>Enter the email addresses of the users you'd like to invite, and choose the role they should have.
+        <div *ngIf="!isUpdateUserinvitation">Enter the email addresses of the users you'd like to invite, and choose the role they should have.
         </div>
         <form [formGroup]="inviteUserOrgForm" autocomplete="off" (ngSubmit)="onSubmitInviteUserOrganization()">
             <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="firstname" class="d-block">First name</label>
+                        <input type="text" class="form-control" formControlName="firstname" name="firstname" (keydown.space)="$event.preventDefault()"
+                        [ngClass]="{ 'is-invalid': isInviteFormSubmitted && f.firstname.errors }" />
+                        <div *ngIf="isInviteFormSubmitted && f.firstname.errors" class="invalid-feedback">
+                            <div *ngIf="f.firstname.errors.required">First name is required</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="lastname" class="d-block">Last name</label>
+                        <input type="text" class="form-control"  formControlName="lastname" name="lastname" (keydown.space)="$event.preventDefault()"
+                        [ngClass]="{ 'is-invalid': isInviteFormSubmitted && f.lastname.errors }" />
+                        <div *ngIf="isInviteFormSubmitted && f.lastname.errors" class="invalid-feedback">
+                            <div *ngIf="f.lastname.errors.required">Last name is required</div>
+                        </div>
+                </div>
+                </div>
                 <div class="col-sm-12">
                     <div class="form-group">
                         <label for="emailid" class="d-block">Email Id</label>
@@ -570,7 +593,7 @@
             </div>
             <div class="pull-right-btn">
             <div class="text-right">
-           <button class="btn btn-link tx-decoration-underline" (click)="onCancelClick()">Cancel</button>
+           <button class="btn btn-link tx-decoration-underline" type="button" (click)="onCancelClick()">Cancel</button>
                 <button class="btn btn-xs btn-primary" type="submit">Submit</button>
             </div>
             </div>
@@ -578,7 +601,7 @@
     </div>
 </ng-template>
 <div class="col-sm-5 mr-0 float-right flotingdiv" [ngClass]="{'hide':!isOpen}">
-    <alert class="mr-1" *ngIf="isOpen" [type]="alertType" dismissOnTimeout="5000" [dismissible]="dismissible"
+    <alert class="mr-1" *ngIf="isOpen" [type]="alertType"  dismissOnTimeout="5000" [dismissible]="dismissible"
         (onClosed)="onClosed(alertType)">{{alertMsg}}</alert>
 </div>
 <ng-template #confirmTemplate let-modal>

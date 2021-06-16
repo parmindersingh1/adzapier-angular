@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { OrganizationService, AuthenticationService, UserService } from '../../../_services';
-import { forkJoin, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Organization } from 'src/app/_models/organization';
 import { distinctUntilChanged, map } from 'rxjs/operators';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
@@ -76,6 +76,7 @@ export class HeaderComponent implements OnInit {
   isShowDashboardForDsar = false;
   planDetails: any;
   isNewnotification: boolean;
+  showConsentPreference = false;
   constructor(
     private router: Router,
     private activatedroute: ActivatedRoute,
@@ -114,11 +115,11 @@ export class HeaderComponent implements OnInit {
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
         if (event.url.indexOf('signup') >= 0) {
-         if(this.currentUser === null){
-           return true;
-         } else{
-          this.router.navigate(['/home/welcome']);
-         }
+          if (this.currentUser === null) {
+            return true;
+          } else {
+            this.router.navigate(['/home/welcome']);
+          }
         }
       }
       if (event instanceof NavigationEnd) {
@@ -134,7 +135,7 @@ export class HeaderComponent implements OnInit {
     });
     this.authService.isNotificationUpdated.subscribe((status) => {
       this.isNewnotification = status;
-      if(this.isNewnotification){
+      if (this.isNewnotification) {
         this.loadNotification();
       }
     });
@@ -170,11 +171,37 @@ export class HeaderComponent implements OnInit {
       }];
     this.onCheckSubscriptionForProperty();
     this.onCheckSubscriptionForOrg();
+
+    window.addEventListener('storage', event => {
+      if (event.storageArea == localStorage) {
+        let token = localStorage.getItem('currentUser');
+        if (token == undefined) {
+          this.authService.logout();
+
+          this.isCollapsed = true;
+          localStorage.removeItem('currentUser');
+          // this.orgservice.removeControls();
+          this.userService.getCurrentUser.unsubscribe();
+          localStorage.clear();
+          this.router.navigate(['/login']);
+          sessionStorage.clear();
+        }
+      }
+    });
+    this.onCheckConsentPreferenceSubscription();
   }
+
+
+  onCheckConsentPreferenceSubscription() {
+    this.planDetails = this.dataService.getCurrentPropertyPlanDetails();
+    const isAllowConsentPreference = this.dataService.isAllowFeatureByYes(this.planDetails.response, featuresName.CONSENT_PREFERENCE);
+    this.showConsentPreference = isAllowConsentPreference;
+  }
+
 
   logout() {
     this.authService.logout();
-    
+
     this.isCollapsed = true;
     localStorage.removeItem('currentUser');
     // this.orgservice.removeControls();
@@ -183,7 +210,7 @@ export class HeaderComponent implements OnInit {
     this.router.navigate(['/login']);
     sessionStorage.clear();
     location.reload();
- 
+
 
   }
 
@@ -212,8 +239,12 @@ export class HeaderComponent implements OnInit {
 
   loadOrganizationList() {
     this.orgservice.orglist().subscribe((data) => {
-      if (data === null) {
+      if (data === null || data.count == 0 || data.response.length == 0) {
+        this.dataService.OrganizationCreatedStatus.next(false);
         this.router.navigate(['settings/organizations']);
+      } else {
+        this.dataService.setOrganizationPropertyCreationStatus(true);
+        this.dataService.OrganizationCreatedStatus.next(true);
       }
       this.orgList = Object.values(data)[1];
       this.leftItems = this.orgList;
@@ -227,7 +258,7 @@ export class HeaderComponent implements OnInit {
             { label: 'Billing', routerLink: '/settings/billing/manage', icon: 'credit-card' },
             { label: 'Settings', routerLink: '/settings', icon: 'settings' },
             { label: 'Help Center', routerLink: 'https://adzapier.atlassian.net/wiki/spaces/PD/pages/884637701/Adzapier+Portal', icon: 'help-circle' },
-            { label: 'Signout', routerLink: '/login', icon: 'log-out' }
+            { label: 'Signout', routerLink: '/signout', icon: 'log-out' }
           ]
         }];
       this.navigationMenu = [
@@ -283,15 +314,15 @@ export class HeaderComponent implements OnInit {
     this.loading.start('2');
     this.dataService.getOrgPlanInfo(this.constructor.name, moduleName.cookieConsentModule, org.id)
       .subscribe((res: any) => {
-          this.loading.stop('2')
+        this.loading.stop('2')
         this.dataService.setOrgPlanToLocalStorage(res);
-        if((typeof res !== undefined || res!== null) && res.response.features !== null){
+        if ((typeof res !== undefined || res !== null) && res.response.features !== null) {
           this.isShowDashboardForDsar = true;
-          this.dataService.isLicenseApplied.next({requesttype:'organization',hasaccess:true});
-        } else{
+          this.dataService.isLicenseApplied.next({ requesttype: 'organization', hasaccess: true });
+        } else {
           this.isShowDashboardForDsar = false;
-          this.dataService.isLicenseApplied.next({requesttype:'organization',hasaccess:false});
-          if(this.router.url.indexOf('ccpa-dsar') !== -1){
+          this.dataService.isLicenseApplied.next({ requesttype: 'organization', hasaccess: false });
+          if (this.router.url.indexOf('ccpa-dsar') !== -1) {
             this.router.navigate(['/home/dashboard/analytics']);
           }
         }
@@ -299,48 +330,48 @@ export class HeaderComponent implements OnInit {
         this.loading.stop('2')
       });
     this.loading.start('1');
-     this.dataService.getPropertyPlanDetails(this.constructor.name, moduleName.cookieConsentModule, prop.property_id)
+    this.dataService.getPropertyPlanDetails(this.constructor.name, moduleName.cookieConsentModule, prop.property_id)
       .subscribe((res: any) => {
         this.dataService.setPropertyPlanToLocalStorage(res);
         this.loading.stop('1')
-    this.selectedOrgProperties.length = 0;
-    this.activeProp = prop.property_name;
-    const obj = {
-      organization_id: org.id,
-      organization_name: org.orgname,
-      property_id: prop.property_id,
-      property_name: prop.property_name,
-      property_active: prop.property_active,
-      user_id: this.userID
-    };
-    this.orgservice.changeCurrentSelectedProperty(obj);
-    // this.selectedOrgProperties.push(obj);
-    const orgIndex = this.selectedOrgProperties.findIndex((t) => t.organization_id === obj.organization_id);
-    if (orgIndex === -1) {
-      this.selectedOrgProperties.push(obj);
-    }
-    this.orgservice.setCurrentOrgWithProperty(obj);
-    this.currentSelectedProperty();
-    if (this.router.url.indexOf('privacy/dsar/requests-details') !== -1) {
-      this.router.navigate(['/privacy/dsar/requests']);
-    } else {
-      this.router.navigate([this.router.url]);
-    }
+        this.selectedOrgProperties.length = 0;
+        this.activeProp = prop.property_name;
+        const obj = {
+          organization_id: org.id,
+          organization_name: org.orgname,
+          property_id: prop.property_id,
+          property_name: prop.property_name,
+          property_active: prop.property_active,
+          user_id: this.userID
+        };
+        this.orgservice.changeCurrentSelectedProperty(obj);
+        // this.selectedOrgProperties.push(obj);
+        const orgIndex = this.selectedOrgProperties.findIndex((t) => t.organization_id === obj.organization_id);
+        if (orgIndex === -1) {
+          this.selectedOrgProperties.push(obj);
+        }
+        this.orgservice.setCurrentOrgWithProperty(obj);
+        this.currentSelectedProperty();
+        if (this.router.url.indexOf('privacy/dsar/requests-details') !== -1) {
+          this.router.navigate(['/privacy/dsar/requests']);
+        } else {
+          this.router.navigate([this.router.url]);
+        }
 
         this.onCheckSubscriptionForProperty();
         this.onCheckSubscriptionForOrg();
-
+        this.onCheckConsentPreferenceSubscription();
       }, err => {
         this.loading.stop('1')
       });
-      this.licenseAvailabilityForFormAndRequestPerOrg(org);
-      if(this.router.url.indexOf('dsarform') !== -1){
-        this.router.navigate(['/privacy/dsar/webforms']);
-      }
-      if(this.router.url.indexOf('createworkflow') !== -1){
-        this.router.navigate(['/privacy/dsar/workflows']);
-      }
-     this.openNav();
+    this.licenseAvailabilityForFormAndRequestPerOrg(org);
+    if (this.router.url.indexOf('dsarform') !== -1) {
+      this.router.navigate(['/privacy/dsar/webforms']);
+    }
+    if (this.router.url.indexOf('createworkflow') !== -1) {
+      this.router.navigate(['/privacy/dsar/workflows']);
+    }
+    this.openNav();
   }
 
   isPropSelected(selectedItem): boolean {
@@ -538,15 +569,25 @@ export class HeaderComponent implements OnInit {
 
   goto(link: any, id?: any) {
     if (link.routerLink === '/home/dashboard/cookie-consent') {
+      if (this.selectedOrgProperties.length > 0) {
       this.onCheckAllowCookieConsentDashboard();
       if (!this.isShowDashboardForCookieConsent) {
+        return false;
+      }
+    } else {
+        this.openModal(this.confirmModal);
         return false;
       }
     }
 
     if (link.routerLink === '/home/dashboard/ccpa-dsar') {
-      this.onCheckAllowOrgDashboard();
-      if (!this.isShowDashboardForDsar) {
+      if (this.selectedOrgProperties.length > 0) {
+        this.onCheckAllowOrgDashboard();
+        if (!this.isShowDashboardForDsar) {
+          return false;
+        }
+      } else {
+        this.openModal(this.confirmModal);
         return false;
       }
     }
@@ -568,7 +609,7 @@ export class HeaderComponent implements OnInit {
 
   checkLinkAccess(link): boolean {
     if (link.indexOf('cookie') !== -1 || link.indexOf('privacy') !== -1 || link.indexOf('webform') !== -1 ||
-      link.indexOf('ccpa') !== -1) {
+      link.indexOf('ccpa') !== -1 || link.indexOf('billing') !== -1) {
       return true;
     } else {
       this.router.navigate([link.routerLink || link]);
@@ -597,13 +638,16 @@ export class HeaderComponent implements OnInit {
   }
 
   activateSublink(selectedItem): boolean {
-       return this.isSublinkActive = this.selectedSubmenu.some((t) => t.showlink === selectedItem.showlink && t.icon === selectedItem.icon);
+    return this.isSublinkActive = this.selectedSubmenu.some((t) => t.showlink === selectedItem.showlink && t.icon === selectedItem.icon);
   }
 
   confirm() {
     this.modalRef.hide();
-    this.router.navigate(['settings/organizations/details/' + this.orgPropertyMenu[0].id]);
-    // return false;
+    if (this.orgPropertyMenu[0] !== undefined) {
+      this.router.navigate(['settings/organizations/details/' + this.orgPropertyMenu[0].id]);
+    } else {
+      this.router.navigate(['settings/organizations']);
+    }
   }
 
   openModal(template: TemplateRef<any>) {
@@ -620,9 +664,9 @@ export class HeaderComponent implements OnInit {
     });
   }
 
-  onClickNotificationBell(){
+  onClickNotificationBell() {
     this.userService.checkIsNotificationVisited(this.constructor.name, moduleName.headerModule).subscribe((data) => {
-      if(data.status === 200){
+      if (data.status === 200) {
         this.loadNotification();
       }
     });
@@ -643,17 +687,17 @@ export class HeaderComponent implements OnInit {
       };
     }
     this.userService.updateNotification(this.constructor.name, moduleName.headerModule, obj)
-    .subscribe((data) => {
-      if(data.status === 200 && purpose == 'read'){
-        this.storeNotificationList[i].read = !status;
-        this.storeNotificationList = [...this.storeNotificationList];
+      .subscribe((data) => {
+        if (data.status === 200 && purpose == 'read') {
+          this.storeNotificationList[i].read = !status;
+          this.storeNotificationList = [...this.storeNotificationList];
 
-      }else{
-        this.storeNotificationList[i].active = false;
-        this.storeNotificationList = [...this.storeNotificationList];
-      }
+        } else {
+          this.storeNotificationList[i].active = false;
+          this.storeNotificationList = [...this.storeNotificationList];
+        }
 
-    });
+      });
   }
 
   isProperyDisabled(item): boolean {
@@ -694,7 +738,7 @@ export class HeaderComponent implements OnInit {
         'overflow-y': "auto",
         'height': "300px",
         'top': '0'
-       }
+      }
     }
 
   }
@@ -718,7 +762,7 @@ export class HeaderComponent implements OnInit {
       this.isMobilePrivacyMenuCollapsed = false;
       this.isMobileDashboardMenuCollapsed = true;
       this.isMobilePropertyCollapsed = true;
-    }  else if (link === 'Privacy' && !this.isMobilePrivacyMenuCollapsed) {
+    } else if (link === 'Privacy' && !this.isMobilePrivacyMenuCollapsed) {
       this.isMobileDashboardMenuCollapsed = true;
       this.isMobilePrivacyMenuCollapsed = true;
       this.isMobilePropertyCollapsed = true;
@@ -745,33 +789,33 @@ export class HeaderComponent implements OnInit {
 
   }
 
-  addMenuWidth(){
+  addMenuWidth() {
     let textLength;
-    if(this.currentOrganization !== undefined){
+    if (this.currentOrganization !== undefined) {
       textLength = this.currentOrganization.length;
       let generatedWidth = (textLength * 10) <= 250 ? 250 : textLength * 10;
       let addStyle = {
         'width': generatedWidth + 'px',
-        'left': !this.close ? 0 : '-' +  generatedWidth + 'px',
-        'transform': !this.close ? 'translateX(0)' : 'translateX(-'+ generatedWidth +'px)',
+        'left': !this.close ? 0 : '-' + generatedWidth + 'px',
+        'transform': !this.close ? 'translateX(0)' : 'translateX(-' + generatedWidth + 'px)',
         'padding': 0
-       };
-       return addStyle;
-    }else{
+      };
+      return addStyle;
+    } else {
       let addStyle = {
         'width': 260 + 'px',
-        'left': !this.close ? 0 : '-' +  26 * 10 + 'px',
-        'transform': !this.close ? 'translateX(0)' : 'translateX(-'+ 26 * 10 +'px)',
+        'left': !this.close ? 0 : '-' + 26 * 10 + 'px',
+        'transform': !this.close ? 'translateX(0)' : 'translateX(-' + 26 * 10 + 'px)',
         'padding': 0
-       };
-       return addStyle;
+      };
+      return addStyle;
     }
   }
 
-  addBackdrop(){
+  addBackdrop() {
     let textLength = this.currentOrganization.length;
     let generatedWidth = (textLength * 10) <= 250 ? 250 : textLength * 10;
-    if(!this.close){
+    if (!this.close) {
       let backDropStyle = {
         'opacity': !this.close ? 1 : 0,
         'visibility': !this.close ? 'visible' : 'hidden',
@@ -782,11 +826,11 @@ export class HeaderComponent implements OnInit {
 
   }
 
-  convertAmpersand(item){
-    return item.replace(/&amp;/g,'&');
+  convertAmpersand(item) {
+    return item.replace(/&amp;/g, '&');
   }
 
-  licenseAvailabilityForFormAndRequestPerOrg(org){
+  licenseAvailabilityForFormAndRequestPerOrg(org) {
     this.dataService.checkLicenseAvailabilityPerOrganization(org).subscribe(results => {
       let finalObj = {
         ...results[0].response,
@@ -794,24 +838,27 @@ export class HeaderComponent implements OnInit {
         ...results[2].response
       }
       this.dataService.setAvailableLicenseForFormAndRequestPerOrg(finalObj);
-    },(error)=>{
+      if (finalObj !== null && Object.keys(finalObj).length !== 0) {
+        this.dataService.isLicenseApplied.next({ requesttype: 'organization', hasaccess: true });
+      }
+    }, (error) => {
       console.log(error)
     });
   }
 
-  isLicenseLimitAvailable(requestType): boolean{
-    const status = this.dataService.isLicenseLimitAvailableForOrganization(requestType,this.dataService.getAvailableLicenseForFormAndRequestPerOrg());
-    if(!status){
+  isLicenseLimitAvailable(requestType): boolean {
+    const status = this.dataService.isLicenseLimitAvailableForOrganization(requestType, this.dataService.getAvailableLicenseForFormAndRequestPerOrg());
+    if (!status) {
       return status;
     } else {
       return status;
     }
   }
 
-  @HostListener('window:resize',['$event'])
-  onWindowResize(event){
-    if(event.target.outerWidth <= 767){
-      if(!this.close){
+  @HostListener('window:resize', ['$event'])
+  onWindowResize(event) {
+    if (event.target.outerWidth <= 767) {
+      if (!this.close) {
         this.close = true;
         this.addMobileMenuWidth = this.addMenuWidth();
         this.addMobileBackdrop = this.addBackdrop();
@@ -829,14 +876,14 @@ export class HeaderComponent implements OnInit {
         const features = resData.response.features;
         if (features == null) {
           this.isShowDashboardForCookieConsent = false;
-          this.dataService.isLicenseAppliedForProperty.next({requesttype:'property',hasaccess:false});
+          this.dataService.isLicenseAppliedForProperty.next({ requesttype: 'property', hasaccess: false });
         } else {
           if (Object.keys(features).length > 0) {
             this.isShowDashboardForCookieConsent = true;
-            this.dataService.isLicenseAppliedForProperty.next({requesttype:'property',hasaccess:true});
+            this.dataService.isLicenseAppliedForProperty.next({ requesttype: 'property', hasaccess: true });
           } else {
             this.isShowDashboardForCookieConsent = false;
-            this.dataService.isLicenseAppliedForProperty.next({requesttype:'property',hasaccess:false});
+            this.dataService.isLicenseAppliedForProperty.next({ requesttype: 'property', hasaccess: false });
           }
         }
       }
@@ -850,14 +897,14 @@ export class HeaderComponent implements OnInit {
         const features = resData.response.features;
         if (features == null) {
           this.isShowDashboardForDsar = false;
-          this.dataService.isLicenseApplied.next({requesttype:'organization',hasaccess:false});
+          this.dataService.isLicenseApplied.next({ requesttype: 'organization', hasaccess: false });
         } else {
           if (Object.keys(features).length > 0) {
             this.isShowDashboardForDsar = true;
-            this.dataService.isLicenseApplied.next({requesttype:'organization',hasaccess:true});
+            this.dataService.isLicenseApplied.next({ requesttype: 'organization', hasaccess: true });
           } else {
             this.isShowDashboardForDsar = false;
-            this.dataService.isLicenseApplied.next({requesttype:'organization',hasaccess:false});
+            this.dataService.isLicenseApplied.next({ requesttype: 'organization', hasaccess: false });
           }
         }
       }
@@ -866,9 +913,9 @@ export class HeaderComponent implements OnInit {
 
   onCheckAllowOrgDashboard() {
     this.planDetails = this.dataService.getCurrentOrganizationPlanDetails();
-    if (!this.isShowDashboardForDsar) {
-      this.dataService.openUpgradeModalForDsar(this.planDetails);
-    }
+      if (!this.isShowDashboardForDsar) {
+        this.dataService.openUpgradeModalForDsar(this.planDetails);
+      }
   }
 
   onCheckAllowCookieConsentDashboard() {
@@ -878,8 +925,8 @@ export class HeaderComponent implements OnInit {
     }
   }
 
-  isLicenseAssignedForOrganization(item):boolean {
-   return this.orgList.some((t)=>t.id == item.id && !t.license_assigned);
+  isLicenseAssignedForOrganization(item): boolean {
+    return this.orgList.some((t) => t.id == item.id && !t.license_assigned);
   }
 
   isLicenseAssignedForProperty(item): boolean {

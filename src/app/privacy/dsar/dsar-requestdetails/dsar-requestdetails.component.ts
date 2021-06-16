@@ -340,6 +340,11 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
     this.router.navigate(['privacy/dsar/requests']);
   }
 
+  onRefresh(){
+    this.loadDataRequestDetails();
+  }
+
+
   getCurrentLoggedInUser() {
     this.userService.getLoggedInUserDetails(this.constructor.name, moduleName.headerModule).subscribe((data) => {
       this.userData = data;
@@ -351,6 +356,7 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
       }
     });
   }
+
 
   loadDataRequestDetails() {
 
@@ -1371,7 +1377,13 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
       const workfloworder = this.workflowStages.filter((t) => t.id === id);
       const x = this.workflowStages.slice(0, workfloworder[0].order);
       this.selectedStages = x;
+    } else if (!this.isEmailVerified){
+      this.selectedStages.push(this.workflowStages[0]);
+    } else if(this.isEmailVerified){
+      this.selectedStages.push(this.workflowStages[0]);
+      this.selectedStages.push(this.workflowStages[1]);
     }
+
   }
 
 
