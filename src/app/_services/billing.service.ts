@@ -66,6 +66,15 @@ export class BillingService {
       }),
     );
   }
+  getAllPropertyLicenseList(componentName, moduleName, payload){
+    const path = apiConstant.BILLING_LIST_ALL_PROPERTY_LICENSES;
+    return this.http.get(environment.apiUrl + path, {params: payload}).pipe(map(res => res),
+      catchError(error => {
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.updateBilling, componentName, moduleName, path);
+        return throwError(error);
+      }),
+    );
+  }
 
   getAllActiveOrgList(componentName, moduleName){
     const path = apiConstant.ORG_ACITVE_LIST + '?active=true';

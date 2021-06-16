@@ -1,0 +1,324 @@
+<ng-template #editdetails let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Update Consent Details </h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="editConsentForm" (ngSubmit)="onUpdateConsent()">
+      <div class="form-group d-flex">
+        <div>
+          <label>Firstname</label>
+          <div class="input-group">
+            <input formControlName="firstName" class="form-control">
+          </div>
+          <div *ngIf="submitted && f.firstName.errors" class="text-danger">
+            <div *ngIf="f.firstName.errors.required">First Name is required</div>
+          </div>
+        </div>
+        <div class="ml-5">
+          <label>Lastname</label>
+          <div class="input-group">
+            <input formControlName="lastName" class="form-control">
+          </div>
+          <div *ngIf="submitted && f.lastName.errors" class="text-danger">
+            <div *ngIf="f.lastName.errors.required">Last Name is required</div>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Email</label>
+        <div class="input-group">
+          <input formControlName="email" class="form-control">
+        </div>
+        <div *ngIf="submitted && f.email.errors" class="text-danger">
+          <div *ngIf="f.email.errors.required">Email is required</div>
+          <!--          <div *ngIf="f.email.errors.email">Email must be a valid email address</div>-->
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Data Source</label>
+        <div class="input-group">
+          <input formControlName="dataSource" class="form-control">
+        </div>
+        <div *ngIf="submitted && f.dataSource.errors" class="text-danger">
+          <div *ngIf="f.dataSource.errors.required">Data Source is required</div>
+        </div>
+      </div>
+      <div class="form-group d-flex">
+        <div>
+          <label>Country</label>
+          <div class="input-group">
+            <input formControlName="country" class="form-control">
+          </div>
+          <div *ngIf="submitted && f.country.errors" class="text-danger">
+            <div *ngIf="f.country.errors.required">Country is required</div>
+          </div>
+        </div>
+        <div class="ml-5">
+          <label>Owner Id</label>
+          <div class="input-group">
+            <input formControlName="ownerID" class="form-control" disabled>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Ip Address</label>
+        <div class="input-group">
+          <input formControlName="ipAddress" class="form-control">
+        </div>
+        <div *ngIf="submitted && f.ipAddress.errors" class="text-danger">
+          <div *ngIf="f.ipAddress.errors.required">IP Address is required</div>
+        </div>
+      </div>
+
+      <div class="btn-group">
+        <button type="submit" class="btn btn-primary btn-sm">Update</button>
+        <button type="button" class="btn btn-link btn-sm pull-right " (click)="modalRef.hide()">Cancel</button>
+      </div>
+    </form>
+  </div>
+</ng-template>
+
+
+<div class="ml-2 bb-crum d-sm-flex align-items-center justify-content-between">
+  <div>
+    <nav aria-label="breadcrumb" style="margin-left: 2px">
+      <ol class="breadcrumb breadcrumb-style1 mg-b-10">
+        <li class="breadcrumb-item">Privacy</li>
+        <li class="breadcrumb-item"><a routerLink="/consent-solutions/consent-records">Consent Solution</a></li>
+        <li class="breadcrumb-item"><a routerLink="/consent-solutions/consent-records"> Consent Records</a></li>
+        <li class="breadcrumb-item active">Consent Details</li>
+
+      </ol>
+
+    </nav>
+  </div>
+
+</div>
+<div class="container-fluid">
+  <div class="row row-sm">
+    <div class="col-lg-6 col-xl-12 ">
+      <div class="card w-100">
+        <div class="card-header  d-flex align-items-center justify-content-between pd-13">
+              <span class="tx-12 tx-color-03 mg-b-0">
+                  <h6 class="mg-b-0">Consent Details</h6>
+                  Current Status of Consent
+              </span>
+          <button type="button" (click)="editConsentDetails(editdetails)" class="btn btn-primary btn-sm">Edit Consent
+          </button>
+        </div>
+        <div class="card-body pd-10">
+          <div class="row row-sm pd-t-5">
+            <!-- <ngx-skeleton-loader  *ngIf="skeletonLoading && respCDID"   count="3"></ngx-skeleton-loader> -->
+
+            <div class="col-sm">
+              <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Consent
+                ID</label>
+
+              <p class="mg-b-0" style="font-size:small;">{{consentData.id}}</p>
+            </div>
+            <div class="col-sm">
+              <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">First Name
+
+              </label>
+
+              <p class="mg-b-0" style="font-size:small;">{{consentData.first_name}}</p>
+            </div>
+
+            <div class="col-sm">
+              <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Last Name
+
+              </label>
+
+              <p class="mg-b-0" style="font-size:small;">{{consentData.last_name}}</p>
+            </div>
+
+            <div class="col-sm">
+              <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Email
+
+              </label>
+
+              <p class="mg-b-0" style="font-size:small;">{{consentData.email}}</p>
+            </div>
+
+
+            <div class="col-sm ">
+              <label
+                class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Data Source</label>
+
+              <p class="mg-b-0" style="font-size:small;">{{consentData.data_source}}</p>
+            </div>
+            <div class="col-sm ">
+              <label
+                class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Country</label>
+
+              <p class="mg-b-0" style="font-size:small;">{{consentData.country}}</p>
+            </div>
+          </div>
+          <div class="row row-sm pd-t-10 bd-t">
+            <div class="col-sm ">
+              <label
+                class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Owner ID</label>
+
+              <p class="mg-b-0" style="font-size:small;">{{consentData.owner_id}}</p>
+            </div>
+            <div class="col-sm">
+              <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">IP Address
+
+              </label>
+
+              <p class="mg-b-0" style="font-size:small;">{{consentData.ip_address}}</p>
+            </div>
+
+            <div class="col-sm">
+              <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Created At
+
+              </label>
+
+              <p class="mg-b-0" style="font-size:small;">{{consentData.created_at | date}}</p>
+            </div>
+
+            <div class="col-sm">
+              <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Updated At
+
+              </label>
+
+              <p class="mg-b-0" style="font-size:small;">{{consentData.updated_at | date}}</p>
+            </div>
+
+
+            <div class="col-sm">
+              <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Preference
+
+              </label>
+
+              <div class="d-flex mg-b-0" style="justify-content:start;">
+                <label style="font-size: small;">Newsletter </label>
+                <!-- <span  class="product-badge ml-2" style="height: 30px;"
+                       [ngClass]="{'status-instock': consentData.preferences.newsletter, 'status-outofstock' : !consentData.preferences.newsletter }" >{{consentData.preferences.newsletter}}</span> -->
+                <ng-container *ngIf="consentData.preferences.newsletter;else elseblock">
+                  <i class="pi pi-check ml-2" style="font-size: 1.0rem; color:#5cb85c;"></i>
+                </ng-container>
+                <ng-template #elseblock>
+                  <i class="pi pi-times ml-2" style="font-size: 1.0rem; color: #d9534f;"></i>
+                </ng-template>
+              </div>
+            </div>
+
+            <div class="col-sm">
+              <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Preference
+
+              </label>
+
+              <div class="d-flex mg-b-0" style="justify-content:start;">
+                <label style="font-size: small;">Privacy Policy</label>
+                <!-- <span  class="product-badge ml-2" style="height: 30px;"
+                       [ngClass]="{'status-instock': consentData.preferences.newsletter, 'status-outofstock' : !consentData.preferences.newsletter }" >{{consentData.preferences.newsletter}}</span> -->
+                <ng-container *ngIf="consentData.preferences.privacy_policy;else elseblock">
+                  <i class="pi pi-check ml-2" style="font-size: 1.0rem; color:#5cb85c;"></i>
+                </ng-container>
+                <ng-template #elseblock>
+                  <i class="pi pi-times ml-2" style="font-size: 1.0rem; color: #d9534f;"></i>
+                </ng-template>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card mt-3">
+    <div class="card-body">
+      <p-tabView customClass="customClass">
+        <p-tabPanel header="Proofs" class="hello">
+          <p-table [value]="consentData.proofs"
+                   [scrollable]="true" scrollHeight="185px"
+                   styleClass="p-datatable-sm">
+            <!-- <ng-template pTemplate="caption">
+             Proofs
+         </ng-template> -->
+            <ng-template pTemplate="header">
+              <tr style="text-align:center;">
+                <th>Proof</th>
+                <th>Form</th>
+                <th>Created Date</th>
+                <!-- <th style="width:40px"></th> -->
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-proofs>
+              <tr>
+                <td class="tabledata">{{proofs.content}}</td>
+                <td class="tabledata"><i (click)="editUser(edit, proofs)" class="pi pi-eye"
+                                         style="font-size: 0.9rem"></i></td>
+                <!-- <td>{{proofs.form}}</td> -->
+                <td class="tabledata">{{proofs.created_at | date}}</td>
+                <!-- <td style="text-align-last:right;width:40px"> <a href="#"><i class="pi pi-eye" style="font-size: 0.9rem"></i></a></td> -->
+              </tr>
+            </ng-template>
+          </p-table>
+        </p-tabPanel>
+        <p-tabPanel header="Legal Notice" class="customs">
+
+
+          <p-table [value]="consentData.legal_notices"
+                   [scrollable]="true" scrollHeight="185px"
+                   styleClass="p-datatable-sm ">
+            <!-- <ng-template pTemplate="caption">
+             Legal Notice
+         </ng-template> -->
+            <ng-template pTemplate="header">
+              <tr style="text-align:center;">
+                <th>Version</th>
+                <th>Identifier</th>
+                <th>Created Date</th>
+                <th style="width:40px"></th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-legalRecord>
+              <tr>
+                <td class="tabledatas">{{legalRecord.version}}</td>
+                <td class="tabledatas">{{legalRecord.identifier}}</td>
+                <td class="tabledatas">{{legalRecord.created_at | date}}</td>
+                <td class="tabledatas" style="text-align-last:right;width:40px;"><a href="#"><i class="pi pi-eye"
+                                                                                                style="font-size: 0.9rem;"></i></a>
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+
+
+        </p-tabPanel>
+      </p-tabView>
+    </div>
+
+  </div>
+</div>
+
+
+<ng-template #edit let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Form Consent : </h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p>
+      {{proofFormConsent}}
+    </p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-link pull-right" (click)="modalRef.hide()">Close</button>
+  </div>
+</ng-template>
+
+<div class="col-sm-5 mr-0 float-right flotingdiv" [ngClass]="{'hide':!isOpen}">
+  <alert *ngIf="isOpen" [type]="alertType" dismissOnTimeout="5000" [dismissible]="dismissible"
+  >{{  alertMsg}}</alert>
+</div>
+
+
