@@ -39,6 +39,7 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
   @ViewChild('rejectRequest', { static: true }) rejectRequestModal: TemplateRef<any>;
   // @ViewChild('subTaskForm', null) subTaskTempForm: NgForm;
   @ViewChild('userAuthenticationAlert') userAuthenticationModal: TemplateRef<any>;
+  @ViewChild('duplicateRequestModal') duplicateRequestModal: TemplateRef<any>;
 
   confirmationForm: FormGroup;
   modalRef: BsModalRef;
@@ -208,6 +209,19 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
   customFieldObj = [];
   firstName:string;
   currentSelectedOrgname: string;
+  request_typeid;
+  subject_typeid;
+  duplicateReqType;
+  duplicateSubType;
+  duplicateRequest = [];
+  duplicateReqWorkflow;
+  displayCurrentRequestData;
+  currentworkflowID;
+  currentWorkflowname;
+  duplicateRequestID;
+  progressStaus;
+  duplicateRequestStatus;
+  //isduplicatedIdSelected = false;
   constructor(private activatedRoute: ActivatedRoute,
               private router: Router,
               private orgService: OrganizationService,
@@ -380,6 +394,8 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
         this.formName = data.response.form_name;
         this.requestType = data.response.request_type;
         this.subjectType = data.response.subject_type;
+        this.request_typeid = data.response.request_type_id;
+        this.subject_typeid = data.response.subject_type_id;
         this.workflowName = data.response.workflow_name;
         this.workflowId = data.response.workflow_id;
         this.reqAcceptingagent = data.response.req_accepting_agent;
@@ -394,6 +410,12 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
         this.getCustomFields(this.customFields);
         this.getWorkflowStages(this.workflowId);
         this.showCustomFieldValues();
+        if(data.response.duplicate_request !== null){
+          this.duplicateRequest = data.response.duplicate_request;
+          this.showReqData(this.duplicateRequest[0]);
+        } else{
+          this.duplicateRequest.length = 0;
+        } 
         //        this.selectStageOnPageLoad(this.currentWorkflowStageID);
 
         this.editRequestDetailForm.controls['country'].setValue(this.respCountry);
@@ -523,6 +545,8 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
     this.workflowService.getWorkflowById(this.constructor.name, moduleName.workFlowModule, this.currentManagedOrgID, id).subscribe((data) => {
       if (data.length > 0) {
         const respData = data[0].workflow_stages;
+        this.currentworkflowID = data[0].id;
+        this.currentWorkflowname = data[0].workflow_name;
         this.workflowStages = this.rearrangeArrayResponse(respData);
         this.skeletonStageLoading = false;
         // this.selectedStages.push(this.workflowStages[0]);
@@ -629,6 +653,10 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
 
   openCommonModal(template: TemplateRef<any>) {
     this.modalRef = this.bsmodalService.show(template, { class: '', keyboard: false });
+  }
+
+  openCommonLargeModal(template: TemplateRef<any>) {
+    this.modalRef = this.bsmodalService.show(template, { class: 'modal-lg', keyboard: false });
   }
 
   openExtendModal() {
@@ -1251,7 +1279,7 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
     }
   }
 
-  onSubmitRejectRequest() {
+  onSubmitRejectRequest(rejectreason?) {
     this.isRejectrequestsubmitted = true;
     if (this.quillEditorRejectRequest.invalid) {
       return false;
@@ -1269,12 +1297,13 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
       });
       const fd = new FormData();
       fd.append('comment', reqObj.comment);
-      this.dsarRequestService.rejectDSARRequest(this.requestID, reqObj, this.constructor.name, moduleName.dsarRequestModule).subscribe((data) => {
+      const requestID = rejectreason == 'duplicate' ? this.duplicateRequestID : this.requestID;
+      this.dsarRequestService.rejectDSARRequest(requestID, reqObj, this.constructor.name, moduleName.dsarRequestModule).subscribe((data) => {
         this.alertMsg = data.response;
         this.isOpen = true;
         this.alertType = 'success';
         this.loadDataRequestDetails();
-        this.loadActivityLog(this.requestID);
+        this.loadActivityLog(requestID);
         //this.router.navigate(['privacy/dsar/requests']);
       }, (err) => {
         this.alertMsg = 'error';
@@ -1603,6 +1632,11 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
     this.deleteDSARRequest();
   }
 
+  onCloseDuplicatereqModal() {
+    this.isRejectrequestsubmitted = false;
+    this.modalRef.hide();
+  }
+
   onSubmitConfirmation(selectedaction) {
     this.isconfirmationsubmitted = true;
     if (this.confirmationForm.invalid) {
@@ -1777,6 +1811,62 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
     this.cdRef.detectChanges();
   }
 
+  openDuplicateRequest(){
+    this.openCommonLargeModal(this.duplicateRequestModal);
+  }
+
+  isSamerequestType(){
+      if(this.duplicateRequest[0].request_data){
+         if(this.subject_typeid == JSON.parse(this.duplicateRequest[0].request_data).subject_type[0]){
+           this.duplicateReqType = this.subjectType;
+         } 
+         if(this.request_typeid == JSON.parse(this.duplicateRequest[0].request_data).request_type[0]){
+          this.duplicateSubType = this.requestType;
+         }
+      }
+  }
+
+  showReqData(selectedData){
+    this.duplicateRequestID = selectedData.id;
+    this.progressStaus = selectedData.request_status == 1 ? 'New' : selectedData.request_status == 2 ? 'In progress' : selectedData.request_status == -1 ? 'Rejected' : 'Completed';
+    if(this.subject_typeid === JSON.parse(selectedData.request_data).subject_type[0]){
+      this.duplicateSubType = this.subjectType;
+    }
+    if(this.request_typeid === JSON.parse(selectedData.request_data).request_type[0]){
+      this.duplicateReqType = this.requestType;
+    }
+
+    if(this.currentworkflowID === JSON.parse(selectedData.request_data).workflow){
+      this.duplicateReqWorkflow = this.workflowName;
+    }
+
+    this.duplicateRequestStatus = this.getStatusStyle(selectedData.request_status);
+    let data = JSON.parse(selectedData.request_data);
+    
+    let result = Object.keys(data).map((key) => [key, data[key]]);
+    this.capitalizatFirstLetterForDuplicate(Object.keys(JSON.parse(selectedData.request_data)));
+    return this.displayCurrentRequestData = result;
+  }
+
+  capitalizatFirstLetterForDuplicate(data){
+    if(typeof data == "object"){
+      for(const key of data){
+        let extractedKey = key.replace('_', ' ');
+        return extractedKey.charAt(0).toUpperCase() + extractedKey.slice(1); //data.toUpperCase();
+      }
+    }else{
+      let key = data.replace('_', ' ');
+      return key.charAt(0).toUpperCase() + key.slice(1);
+    }
+   
+  }
+
+  getStatusStyle(status){
+    let colorStyle = {
+      'color': status == 1 ? '#007bff' : status == 2 ? '#ffc107' : status == -1 ? '#bd2130' : '#28a745'
+    };
+    return colorStyle;
+  }
 }
 
 interface SubTaskList {
