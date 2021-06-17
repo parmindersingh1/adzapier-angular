@@ -1,0 +1,144 @@
+.headings{
+  color: #666666;
+}
+.text-line{
+  font-size: 15px;
+  color: #444;
+  text-transform: capitalize;
+}
+.head-iab{
+  color: #666;
+  font-weight: 600;
+  border-bottom: 2px solid #3968fa;
+  padding-bottom: 8px;
+  padding-right: 170px;
+}
+.card-body{
+  background: #ffffff;
+}
+
+td:nth-child(0) { color: black !important; }
+
+.product-badge {
+  border-radius: 6px;
+  padding: .25em .5rem;
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: .3px;
+  font-size: 12px;
+  padding-top: 7px;
+  padding-bottom: 7px;
+}
+.product-badge.status-instock {
+  background: #c8e6c9;
+  color: #256029;
+}
+.product-badge.status-lowstock {
+  background: #feedaf;
+  color: #8a5340;
+}
+.product-badge.status-outofstock {
+  background: #ffcdd2;
+  color: #c63737;
+}
+.bb-crum {
+  margin-left: 16px !important;
+  margin-bottom: 15px;
+}
+
+// .customClass > a{
+//   align-items:center  !important;
+//   justify-content: center !important;
+// }
+
+
+.p-tabview .p-tabview-nav {
+  padding-left: 40% !important;
+}
+
+@media
+only screen and (max-width: 760px),
+(min-device-width: 768px) and (max-device-width: 1024px)  {
+
+	/* Force table to not be like tables anymore */
+	table, thead, tbody, th, tr,.tabledata,.tabledatas {
+		display: block;
+	}
+
+	/* Hide table headers (but not display: none;, for accessibility) */
+	thead tr {
+		position: absolute;
+		top: -9999px;
+		left: -9999px;
+	}
+
+
+	.tabledata {
+		/* Behave  like a "row" */
+		border: none;
+		border-bottom: 1px solid #eee;
+		position: relative;
+		padding-left: 50%;
+	}
+  .tabledatas{
+		/* Behave  like a "row" */
+		border: none;
+		border-bottom: 1px solid #eee;
+		position: relative;
+		padding-left: 50%;
+	}
+
+	// td:before {
+	// 	/* Now like a table header */
+	// 	position: absolute;
+	// 	/* Top/left values mimic padding */
+	// 	top: 6px;
+	// 	left: 6px;
+	// 	width: 45%;
+	// 	padding-right: 10px;
+	// 	white-space: nowrap;
+	// }
+
+	/*
+	Label the data
+	*/
+	.tabledata:nth-of-type(1):before { content: "Proof : "; }
+	.tabledata:nth-of-type(2):before { content: "Form  : "; }
+	.tabledata:nth-of-type(3):before { content: "Created Date  : "; }
+
+  .tabledatas:nth-of-type(1):before { content: "Version : "; }
+	.tabledatas:nth-of-type(2):before { content: "Identifier  : "; }
+	.tabledatas:nth-of-type(3):before { content: "Created Date  : "; }
+
+
+}
+
+
+
+
+.alert-info {
+  color: #0c5460;
+  background-color: #d1ecf1;
+  border-color: #bee5eb;
+}
+
+.alert-success {
+  background-color: #10b759;
+  border-color: #10b759;
+  color: #fff;
+}
+
+.alert-danger {
+  color: #721c24;
+  background-color: #f8d7da;
+  border-color: #f5c6cb;
+}
+
+.flotingdiv{
+  position: fixed;
+  bottom: 0;
+  top: 84%;
+  right:0;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
