@@ -40,7 +40,10 @@
               "src/styles.scss",
               "src/assets/css/dashforge.css",
               "./src/assets/css/map/jqvmap.min.css",
-              "./src/assets/css/daterangepicker.css"
+              "./src/assets/css/daterangepicker.css",
+              "node_modules/primeicons/primeicons.css",
+              "node_modules/primeng/resources/themes/saga-blue/theme.css",
+              "node_modules/primeng/resources/primeng.min.css"
             ],
             "scripts": [
               "./node_modules/jquery/dist/jquery.min.js",

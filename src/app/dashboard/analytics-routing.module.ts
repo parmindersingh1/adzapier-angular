@@ -14,6 +14,12 @@ const routes: Routes = [
     path: 'dashboard/cookie-consent',
     loadChildren: () => import('./cookie-consent/cookie-consent.module').then(m => m.CookieConsentModule),
     canActivate: [AuthGuard, RouteguardService, LicenseguardPropertyService]
+  },
+  {
+    path: 'dashboard/consent-preference',
+    loadChildren: () => import('./consent-solution/consent-solution.module').then(m => m.ConsentSolutionModule),
+    canActivate: [AuthGuard]
+
   }
 ];
 

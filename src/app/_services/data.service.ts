@@ -224,7 +224,6 @@ export class DataService {
   }
 
   checkUserForOrg(res, currentUser, plan_details) {
-    const planData = this.getCurrentOrgPlanDetails();
     let msg = '';
     let flag = true;
     if (!res) {
@@ -285,78 +284,49 @@ export class DataService {
     if (!res) {
       flag = false;
     }
-    if (!res.features) {
+    if (Object.keys(res.plan_details.cookieConsent).length === 0) {
       flag = false;
     }
     if (flag === false) {
-      let msg = 'Sorry, You Are Not Allowed to Access This  Feature'
       this.openModal.next({
         openModal: true,
-        data: res.plan_details,
+        data: res.plan_details.cookieConsent,
         type: 'cookieConsent',
-        msg: msg,
-        currentplan: this.getCurrentOrgPlanDetails().response.plan_details
-      })
+        // currentplan: this.getCurrentOrgPlanDetails().response.plan_details
+      });
     }
     return flag;
   }
 
   checkNullPlanForProp(res) {
-    const msg = 'Sorry, You Are Not Allowed to Access This  Feature';
     let planDetails = null;
     if (res.hasOwnProperty('response')) {
       if (res.response.hasOwnProperty('plan_details')) {
         planDetails = res.response.plan_details;
       }
     }
-    let currentplan = null;
-    if (this.getCurrentOrgPlanDetails().hasOwnProperty('response')) {
-      if (this.getCurrentOrgPlanDetails().response.hasOwnProperty('plan_details')) {
-        currentplan = res.response.plan_details;
-      }
-    }
-
-
     this.openModal.next({
       openModal: true,
-      data: planDetails,
+      data: planDetails.cookieConsent,
       type: 'cookieConsent',
-      msg: msg,
-      currentplan: currentplan
-    })
+    });
   }
 
 
   openUpgradeModalForCookieConsent(res):any {
-    const msg = 'Sorry, You Are Not Allowed to Access This  Feature';
     let planDetails = null;
     if (res.hasOwnProperty('response')) {
       if (res.response.hasOwnProperty('plan_details')) {
         planDetails = res.response.plan_details;
       }
     }
-    // let currentplan = null;
-    // if (this.getCurrentOrgPlanDetails().hasOwnProperty('response')) {
-    //   if (this.getCurrentOrgPlanDetails().response.hasOwnProperty('plan_details')) {
-    //     currentplan = res.response.plan_details;
-    //   }
-    // }
-    let currentplan = null;
-    if (this.getCurrentPropertyPlanDetails().hasOwnProperty('response')) {
-      if (this.getCurrentPropertyPlanDetails().response.hasOwnProperty('plan_details')) {
-        currentplan = res.response.plan_details;
-      }
-    }
-
 
     this.openModal.next({
       openModal: true,
-      data: planDetails,
+      data: planDetails.cookieConsent,
       type: 'cookieConsent',
-      msg: msg,
-      currentplan: currentplan
-    })
-    return currentplan !== null ? true : false;
+    });
+    return Object.keys(planDetails.cookieConsent).length !== 0 ? true : false;
   }
 
 

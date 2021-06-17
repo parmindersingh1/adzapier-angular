@@ -9,19 +9,19 @@
         </div>
 
         <div class="toggle-period"
-             [tooltip]="activeData.base.cycle === 'yearly' ? 'You can not downgrade your plan' : null">
-          <input id="toggle-period" (change)="onSelectBillingCycle(subType)"
-                 [disabled]="activeData.base.cycle === 'yearly'"
-                 [checked]="billingCycle === 'yearly'" #subType class="toggle-period__checkbox" type="checkbox">
+             [tooltip]="activeData.cookieConsent.cycle === 'yearly' ? 'You can not downgrade your plan' : null">
+          <input id="toggle-period" (change)="onSelectCookieConsentBillingCycle(subType)"
+                 [disabled]="activeData.cookieConsent.cycle === 'yearly'"
+                 [checked]="cookieConsentBillingCycle === 'yearly'" #subType class="toggle-period__checkbox" type="checkbox">
           <label for="toggle-period" class="toggle-period__label">
-            <span class="toggle-period__monthly" [ngStyle]="{color: billingCycle == 'yearly' ? '#c3c4c7' : '#0546a3'}"
+            <span class="toggle-period__monthly" [ngStyle]="{color: cookieConsentBillingCycle == 'yearly' ? '#c3c4c7' : '#0546a3'}"
                   role="checkbox" aria-checked="false">Billed monthly</span>
             <span class="toggle-period__switch"
-                  [ngStyle]="{backgroundColor: billingCycle == 'yearly' ? '#0da1dd' : '#0546a3'}" role="checkbox"
+                  [ngStyle]="{backgroundColor: cookieConsentBillingCycle == 'yearly' ? '#0da1dd' : '#0546a3'}" role="checkbox"
                   aria-checked="true" tabindex="0"></span>
-            <span class="toggle-period__yearly" [ngStyle]="{color: billingCycle == 'yearly' ? '#0da1dd' : '#c3c4c7'}"
+            <span class="toggle-period__yearly" [ngStyle]="{color: cookieConsentBillingCycle == 'yearly' ? '#0da1dd' : '#c3c4c7'}"
                   role="checkbox" aria-checked="true">Billed annually</span>
-            <span class="flag" [ngStyle]="{opacity: billingCycle == 'yearly' ? 1 : .4}">2 Months Free</span>
+            <span class="flag" [ngStyle]="{opacity: cookieConsentBillingCycle == 'yearly' ? 1 : .4}">2 Months Free</span>
           </label>
         </div>
 
@@ -31,13 +31,13 @@
         <div *ngFor="let plan of subscriptionList" style="overflow: hidden"
              class="col d-flex bg-white-col bt-card flex-column bd pt-0 mr-2  ">
 
-          <div *ngIf="billingCycle === 'yearly'" class="plan-discount">
+          <div *ngIf="cookieConsentBillingCycle === 'yearly'" class="plan-discount">
             <span class="annual">2 Months Free</span>
           </div>
 
 
-          <h4 class="popular-text" [ngStyle]="{background: plan.price ==  activeData.base.maxPrice ? '#3968fa' : null}">
-            <ng-container *ngIf="plan.price ==  activeData.base.maxPrice">CURRENT PLAN</ng-container>
+          <h4 class="popular-text" [ngStyle]="{background: plan.price ==  activeData.cookieConsent.maxPrice ? '#3968fa' : null}">
+            <ng-container *ngIf="plan.price ==  activeData.cookieConsent.maxPrice">CURRENT PLAN</ng-container>
           </h4>
           <h3 class="mt-1 plan-type">{{plan.name}}</h3>
           <p class="tx-color-03">{{plan.product_name}}</p>
@@ -67,11 +67,11 @@
 
           <h1 class="tx-rubik tx-normal mb-3 mg-t-auto price-text">
             <sup class="doller">$</sup>
-            <span class="font-weight-bold" *ngIf="billingCycle === 'monthly'">{{plan.price}}</span>
-            <span class="font-weight-bold" *ngIf="billingCycle !== 'monthly'">{{plan.price / 12}}</span>
+            <span class="font-weight-bold" *ngIf="cookieConsentBillingCycle === 'monthly'">{{plan.price}}</span>
+            <span class="font-weight-bold" *ngIf="cookieConsentBillingCycle !== 'monthly'">{{plan.price / 12}}</span>
             <span class="billing-type">/Month</span>
           </h1>
-          <p class="tx-size-10  mt-2 ">Billed {{billingCycle}} </p>
+          <p class="tx-size-10  mt-2 ">Billed {{cookieConsentBillingCycle}} </p>
           <div class="form-group row mb-2 ">
             <label class="property-type col-md-6" for="sel1">Property</label>
             <select #planUnit style="height: 32px;" class="mb-2 col-md-5 form-control" id="sel1">
@@ -90,14 +90,14 @@
 
 
           <button data-toggle="tooltip" data-placement="top"
-                  [title]="plan.price <=  activeData.base.maxPrice ? 'You can not downgrade your plan' : 'Add to Cart'"
-                  *ngIf="plan.price !=  activeData.base.maxPrice" [disabled]="plan.price <=  activeData.base.maxPrice"
+                  [title]="plan.price <=  activeData.cookieConsent.maxPrice ? 'You can not downgrade your plan' : 'Add to Cart'"
+                  *ngIf="plan.price !=  activeData.cookieConsent.maxPrice" [disabled]="plan.price <=  activeData.cookieConsent.maxPrice"
                   (click)="onAddToCart(plan, planUnit)" class="btn mt-4 mb-4 add-to-cart-btn btn-primary btn-block">
             Add To Cart
           </button>
 
 
-          <button *ngIf="plan.price ==  activeData.base.maxPrice" (click)="onGenerateSessionID()"
+          <button *ngIf="plan.price ==  activeData.cookieConsent.maxPrice" (click)="onGenerateSessionID()"
                   class="btn mt-4 mb-4 add-to-cart-btn btn-primary btn-block">
             Manage Plan
           </button>
@@ -136,50 +136,51 @@
             <div class="col-md-9 pr-2">
 
               <div class="toggle-period_addon" style="    float: right;"
-                   [tooltip]="activeData.addons.cycle === 'yearly' ? 'You can not downgrade your plan' : null">
-                <input id="toggle-period_addon" (change)="onSelectAddonBillingCycle(subTypeAddon)"
-                       [disabled]="activeData.addons.cycle === 'yearly'"
-                       [checked]="billingAddonCycle === 'yearly'" #subTypeAddon class="toggle-period__checkbox_addon"
+                   [tooltip]="activeData.dsar.cycle === 'yearly' ? 'You can not downgrade your plan' : null">
+                <input id="toggle-period_addon" (change)="onSelectAddoncookieConsentBillingCycle(subTypeAddon)"
+                       [disabled]="activeData.dsar.cycle === 'yearly'"
+                       [checked]="addonsBillingCycle === 'yearly'" #subTypeAddon class="toggle-period__checkbox_addon"
                        type="checkbox">
                 <label for="toggle-period_addon" class="toggle-period__label_addon">
                   <span class="toggle-period__monthly_addon"
-                        [ngStyle]="{color: billingAddonCycle == 'yearly' ? '#c3c4c7' : '#0546a3'}" role="checkbox"
+                        [ngStyle]="{color: addonsBillingCycle == 'yearly' ? '#c3c4c7' : '#0546a3'}" role="checkbox"
                         aria-checked="false">Billed monthly</span>
                   <span class="toggle-period__switch_addon"
-                        [ngStyle]="{backgroundColor: billingAddonCycle == 'yearly' ? '#0da1dd' : '#0546a3'}"
+                        [ngStyle]="{backgroundColor: addonsBillingCycle == 'yearly' ? '#0da1dd' : '#0546a3'}"
                         role="checkbox" aria-checked="true" tabindex="0"></span>
                   <span class="toggle-period__yearly_addon"
-                        [ngStyle]="{color: billingAddonCycle == 'yearly' ? '#0da1dd' : '#c3c4c7'}" role="checkbox"
+                        [ngStyle]="{color: addonsBillingCycle == 'yearly' ? '#0da1dd' : '#c3c4c7'}" role="checkbox"
                         aria-checked="true">Billed annually</span>
                   <span class="flag_addon"
-                        [ngStyle]="{opacity: billingAddonCycle == 'yearly' ? 1 : .4}">2 Months Free</span>
+                        [ngStyle]="{opacity: addonsBillingCycle == 'yearly' ? 1 : .4}">2 Months Free</span>
                 </label>
               </div>
             </div>
           </div>
           <div *ngIf="!skeletonLoader" class="card-body pt-0">
-            <div *ngFor="let addons of addonsList" class="row mt-4" style="border-bottom: 1px dotted lightgray">
+            <div class="divider-text tx-14" >Data Subject Access Request (DSAR)</div>
+            <div *ngFor="let dsar of dsarPlanList" class="row mt-4" style="border-bottom: 1px dotted lightgray">
               <div class="col-md-12">
-                <div *ngIf="billingAddonCycle === 'yearly'" class="plan-discount-dsar">
+                <div *ngIf="addonsBillingCycle === 'yearly'" class="plan-discount-dsar">
                   <span class="annual">2 Months Free</span>
                 </div>
               </div>
               <div class="text-left col-md-7">
-                <h5 class="addons-head">{{addons.product_name}}</h5>
-                <p>{{addons.description}}</p>
+                <h5 class="addons-head">{{dsar.product_name}}</h5>
+                <p>{{dsar.description}}</p>
 
                 <ul class="feature-list-group-dsar">
-                  <ng-container *ngIf="addons.name === 'Essentials'">
+                  <ng-container *ngIf="dsar.name === 'Essentials'">
                     <li class="text-left feature-list"
                         *ngFor="let  features of highLightFeatures.dsar.essentials">{{features.featureName}} <span
                       class="font-weight-bold" *ngIf="features.featureValue"> - {{features.featureValue}}</span></li>
                   </ng-container>
-                  <ng-container *ngIf="addons.name === 'Professional'">
+                  <ng-container *ngIf="dsar.name === 'Professional'">
                     <li class="text-left feature-list"
                         *ngFor="let  features of highLightFeatures.dsar.professional">{{features.featureName}} <span
                       class="font-weight-bold" *ngIf="features.featureValue"> - {{features.featureValue}}</span></li>
                   </ng-container>
-                  <ng-container *ngIf="addons.name === 'Enterprise'">
+                  <ng-container *ngIf="dsar.name === 'Enterprise'">
                     <li class="text-left feature-list"
                         *ngFor="let  features of highLightFeatures.dsar.enterprise">{{features.featureName}} <span
                       class="font-weight-bold" *ngIf="features.featureValue"> - {{features.featureValue}}</span></li>
@@ -190,7 +191,7 @@
               <div class="col-md-2">
                 <div class="w-100 form-group m-auto mb-2 ">
                   <label for="sel1">Organization: </label>
-                  <select #addonsUnit style="height: 32px;" class="mb-2 form-control">
+                  <select #dsarUnit style="height: 32px;" class="mb-2 form-control">
                     <option>1</option>
                     <option>2</option>
                     <option>3</option>
@@ -206,33 +207,33 @@
               </div>
               <div class="col-md-1">
 
-                <h3 *ngIf="addons.price <=  activeData.addons.maxPrice" class="mt-3">
+                <h3 *ngIf="dsar.price <=  activeData.dsar.maxPrice" class="mt-3">
                   <i class="fa fa-plus"
                      data-toggle="tooltip" data-placement="top" title="You can not downgrade your plan"
                      aria-hidden="true"></i>
                 </h3>
 
 
-                <h3 *ngIf="addons.price !=  activeData.addons.maxPrice && addons.price >=  activeData.addons.maxPrice"
+                <h3 *ngIf="dsar.price !=  activeData.dsar.maxPrice && dsar.price >=  activeData.dsar.maxPrice"
                     data-toggle="tooltip" data-placement="top" title="Add to Cart"
-                    (click)="onAddToCart(addons, addonsUnit)" class="mt-3 add-addons">
+                    (click)="onAddToCart(dsar, dsarUnit)" class="mt-3 add-addons">
                   <i class="fa fa-plus" aria-hidden="true"></i>
                 </h3>
 
 
               </div>
               <div class="col-md-2">
-                <h4 class="mt-4" *ngIf="billingAddonCycle === 'monthly'"><b>${{addons.price}} </b> <span class="tx-12">/Month</span>
+                <h4 class="mt-4" *ngIf="addonsBillingCycle === 'monthly'"><b>${{dsar.price}} </b> <span class="tx-12">/Month</span>
                 </h4>
-                <h4 class="mt-4" *ngIf="billingAddonCycle !== 'monthly'">
-                  <b>${{addons.price / 12 | number : '1.0-0'}} </b> <span class="tx-12">/Month</span></h4>
+                <h4 class="mt-4" *ngIf="addonsBillingCycle !== 'monthly'">
+                  <b>${{dsar.price / 12 | number : '1.0-0'}} </b> <span class="tx-12">/Month</span></h4>
               </div>
             </div>
 
 
             <div class="row mt-4" style="border-bottom: 1px dotted lightgray">
               <div class="text-left col-md-7">
-                <h5 class="addons-head">Enterprise </h5>
+                <h5 class="addons-head">Data Subject Rights - Enterprise </h5>
                 <p>Advanced enterprise features and global coverage. Volume discount available.
                 </p>
 
@@ -251,6 +252,108 @@
                    class="btn mt-1 mb-4 add-to-cart-btn btn-primary btn-block">Get Enterprise</a>
               </div>
             </div>
+
+
+
+            <div class="divider-text tx-14" >Consent Preference</div>
+            <div *ngFor="let consentPreference of consentPreferenceList" class="row mt-4" style="border-bottom: 1px dotted lightgray">
+              <div class="col-md-12">
+                <div *ngIf="addonsBillingCycle === 'yearly'" class="plan-discount-dsar">
+                  <span class="annual">2 Months Free</span>
+                </div>
+              </div>
+              <div class="text-left col-md-7">
+                <h5 class="addons-head">{{consentPreference.product_name}}</h5>
+<!--                <p>{{consentPreference.description}}</p>-->
+
+                <ul class="feature-list-group-dsar">
+                  <ng-container *ngIf="consentPreference.name === 'Essentials'">
+                    <li class="text-left feature-list"
+                        *ngFor="let  features of highLightFeatures.consentPreference.essentials.slice(0, maxCookiePreferenceList)">{{features.featureName}} <span
+                      class="font-weight-bold" *ngIf="features.featureValue"> - {{features.featureValue}}</span></li>
+                  </ng-container>
+                  <ng-container *ngIf="consentPreference.name === 'Professional'">
+                    <li class="text-left feature-list"
+                        *ngFor="let  features of highLightFeatures.consentPreference.professional.slice(0, maxCookiePreferenceList)">{{features.featureName}} <span
+                      class="font-weight-bold" *ngIf="features.featureValue"> - {{features.featureValue}}</span></li>
+                  </ng-container>
+                  <ng-container *ngIf="consentPreference.name === 'Enterprise'">
+                    <li class="text-left feature-list"
+                        *ngFor="let  features of highLightFeatures.consentPreference.enterprise.slice(0, maxCookiePreferenceList)">{{features.featureName}} <span
+                      class="font-weight-bold" *ngIf="features.featureValue"> - {{features.featureValue}}</span></li>
+                  </ng-container>
+                  <a class="more-details-text " *ngIf="maxCookiePreferenceList === 4" (click)="maxCookiePreferenceList = 15">Show More</a>
+                  <a class="more-details-text " *ngIf="maxCookiePreferenceList === 15" (click)="maxCookiePreferenceList = 4">Hide</a>
+                </ul>
+
+              </div>
+              <div class="col-md-2">
+                <div class="w-100 form-group m-auto mb-2 ">
+                  <label for="sel1">Property: </label>
+                  <select #consentPreferenceUnit style="height: 32px;" class="mb-2 form-control">
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                    <option>6</option>
+                    <option>7</option>
+                    <option>8</option>
+                    <option>9</option>
+                    <option>10</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-1">
+
+                <h3 *ngIf="consentPreference.price <=  activeData.consentPreference.maxPrice" class="mt-3">
+                  <i class="fa fa-plus"
+                     data-toggle="tooltip" data-placement="top" title="You can not downgrade your plan"
+                     aria-hidden="true"></i>
+                </h3>
+
+
+                <h3 *ngIf="consentPreference.price !=  activeData.consentPreference.maxPrice && consentPreference.price >=  activeData.consentPreference.maxPrice"
+                    data-toggle="tooltip" data-placement="top" title="Add to Cart"
+                    (click)="onAddToCart(consentPreference, consentPreferenceUnit)" class="mt-3 add-addons">
+                  <i class="fa fa-plus" aria-hidden="true"></i>
+                </h3>
+
+
+              </div>
+              <div class="col-md-2">
+                <h4 class="mt-4" *ngIf="addonsBillingCycle === 'monthly'"><b>${{consentPreference.price}} </b> <span class="tx-12">/Month</span>
+                </h4>
+                <h4 class="mt-4" *ngIf="addonsBillingCycle !== 'monthly'">
+                  <b>${{consentPreference.price / 12 | number : '1.0-0'}} </b> <span class="tx-12">/Month</span></h4>
+              </div>
+            </div>
+
+
+            <div class="row mt-4" style="border-bottom: 1px dotted lightgray">
+              <div class="text-left col-md-7">
+                <h5 class="addons-head">Consent Preference - Enterprise </h5>
+                <p>Advanced enterprise features and global coverage. Volume discount available.
+                </p>
+
+                <ul class="feature-list-group-dsar">
+                  <li class="text-left feature-list" *ngFor="let  features of highLightFeatures.consentPreference.enterprise.slice(0, maxCookiePreferenceList)">
+                    {{features.featureName}} <span class="font-weight-bold"
+                                                   *ngIf="features.featureValue"> - {{features.featureValue}}</span>
+                  </li>
+                  <a class="more-details-text " *ngIf="maxCookiePreferenceList === 4" (click)="maxCookiePreferenceList = 15">Show More</a>
+                  <a class="more-details-text " *ngIf="maxCookiePreferenceList === 15" (click)="maxCookiePreferenceList = 4">Hide</a>
+                </ul>
+
+              </div>
+              <div class="col-md-2">
+              </div>
+              <div class="col-md-3">
+                <a href="https://adzapier.com/get-started/" target="_blank"
+                   class="btn mt-1 mb-4 add-to-cart-btn btn-primary btn-block">Get Enterprise</a>
+              </div>
+            </div>
+
 
 
           </div>
