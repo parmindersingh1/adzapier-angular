@@ -107,14 +107,18 @@ export class PricingComponent implements OnInit, OnDestroy {
           activeData.cookieConsent.cycle = data.planDetails.cycle;
           this.cookieConsentBillingCycle = data.planDetails.cycle;
         }
-      } else {
-        if (data.planDetails.price > activeData.dsar.maxPrice && data.active) {
+      } else if (data.planDetails.price > activeData.dsar.maxPrice && data.active && data.planDetails.type === 1) {
           activeData.dsar.maxPrice = data.planDetails.price;
           activeData.dsar.maxPlanID = data.planDetails.stripe_plan_id;
           activeData.dsar.cycle = data.planDetails.cycle;
           this.addonsBillingCycle = data.planDetails.cycle;
         }
-      }
+       else if (data.planDetails.price > activeData.consentPreference.maxPrice && data.active && data.planDetails.type === 2) {
+          activeData.consentPreference.maxPrice = data.planDetails.price;
+          activeData.consentPreference.maxPlanID = data.planDetails.stripe_plan_id;
+          activeData.consentPreference.cycle = data.planDetails.cycle;
+
+        }
     }
     this.activeData = activeData;
     this.subscriptionList = this.planDetails.cookieConsent[`${this.cookieConsentBillingCycle}`];

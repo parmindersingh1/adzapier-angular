@@ -267,7 +267,7 @@ export class HeaderComponent implements OnInit {
           subcategory: [{ showlink: 'DSAR', routerLink: '/home/dashboard/ccpa-dsar', icon: 'bar-chart-2' },
           // { showlink: 'GDPR', routerLink: '/pagenotfound', icon: 'pie-chart' },
           { showlink: 'Cookie Consent', routerLink: '/home/dashboard/cookie-consent', icon: 'fas fa-cookie feather-16' },
-          { showlink: 'Consent Preference', routerLink:'/home/dashboard/consent-preference' , icon: 'fas fa-cookie feather-16'}
+          { showlink: 'Consent Preference', routerLink: '/home/dashboard/consent-preference' , icon: 'fas fa-cookie feather-16'}
           ]
         }, {
           showlink: 'Privacy',
@@ -284,7 +284,7 @@ export class HeaderComponent implements OnInit {
             { showlink: 'Consent Tracking', routerLink: '/cookie-consent/cookie-tracking', icon: 'fas fa-file-contract feather-16' },
             { showlink: 'Setup', routerLink: '/cookie-consent/cookie-banner/setup', icon: 'fas fa-wrench feather-16' },
 
-            { showlink: 'Dashboard', routerLink: '/home/dashboard/consent-preference', icon: 'fas fa-cookie feather-16' },
+            { showlink: 'Dashboard', routerLink: '/home/dashboard/consent-preference', icon: 'fas fa-chart-line feather-16' },
             { showlink: 'Consent Records', routerLink: '/consent-solutions/consent-records', icon: 'fas fa-tasks feather-16' },
           ]
         }, { showlink: 'Billing', routerLink: '/settings/billing/manage' }];
@@ -640,6 +640,12 @@ export class HeaderComponent implements OnInit {
   activateSublink(selectedItem): boolean {
     return this.isSublinkActive = this.selectedSubmenu.some((t) => t.showlink === selectedItem.showlink && t.icon === selectedItem.icon);
   }
+
+  activateSublinkConsentPreference(selectedItem): boolean {
+    return this.isSublinkActive = this.selectedSubmenu.some((t) => t === selectedItem.routerLink);
+  }
+
+
 
   confirm() {
     this.modalRef.hide();

@@ -134,13 +134,16 @@
               <h4 class=" mt-2 addon-text">Add-On Plans</h4>
             </div>
             <div class="col-md-9 pr-2">
-
-              <div class="toggle-period_addon" style="    float: right;"
-                   [tooltip]="activeData.dsar.cycle === 'yearly' ? 'You can not downgrade your plan' : null">
-                <input id="toggle-period_addon" (change)="onSelectAddoncookieConsentBillingCycle(subTypeAddon)"
-                       [disabled]="activeData.dsar.cycle === 'yearly'"
-                       [checked]="addonsBillingCycle === 'yearly'" #subTypeAddon class="toggle-period__checkbox_addon"
+              <div class="toggle-period_addon" style="    float: right;">
+                <input id="toggle-period_addon" (change)="onSelectAddoncookieConsentBillingCycle(subTypeAddon)" #subTypeAddon class="toggle-period__checkbox_addon"
                        type="checkbox">
+
+<!--              <div class="toggle-period_addon" style="    float: right;"-->
+<!--                   [tooltip]="activeData.dsar.cycle === 'yearly' ? 'You can not downgrade your plan' : null">-->
+<!--                <input id="toggle-period_addon" (change)="onSelectAddoncookieConsentBillingCycle(subTypeAddon)"-->
+<!--                       [disabled]="activeData.dsar.cycle === 'yearly'"-->
+<!--                       [checked]="addonsBillingCycle === 'yearly'" #subTypeAddon class="toggle-period__checkbox_addon"-->
+<!--                       type="checkbox">-->
                 <label for="toggle-period_addon" class="toggle-period__label_addon">
                   <span class="toggle-period__monthly_addon"
                         [ngStyle]="{color: addonsBillingCycle == 'yearly' ? '#c3c4c7' : '#0546a3'}" role="checkbox"

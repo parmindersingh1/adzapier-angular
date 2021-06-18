@@ -39,7 +39,7 @@ export class ManagePropertyComponent implements OnInit, OnDestroy {
   percents = {
     totalLicence: 0,
     assigneLicence: 0
-  }
+  };
   alertMsg: any;
   isOpen = false;
   alertType: any;
@@ -74,7 +74,7 @@ export class ManagePropertyComponent implements OnInit, OnDestroy {
       this.planType = params.type;
       this.onGetAssingedProperty();
       this.onCalculateValue();
-    })
+    });
 
     this.getAllOrgList();
   }
@@ -98,7 +98,7 @@ export class ManagePropertyComponent implements OnInit, OnDestroy {
     this.percents = {
       assigneLicence: cal,
       totalLicence: 100 - cal
-    }
+    };
 
   }
 
@@ -115,34 +115,48 @@ export class ManagePropertyComponent implements OnInit, OnDestroy {
       .subscribe((res: any) => {
         this.loading.stop('2');
         // this.allPropertyList = res.response;
-        const pid = [];
-        for (const property of this.propertyList) {
-          pid.push(property.id);
-        }
-        this.allUnSignPropertyList = [];
-        for (const propertyObj of res.response) {
-          if (!pid.includes(propertyObj.id)) {
-            this.allUnSignPropertyList.push({label: propertyObj.name, value: propertyObj.id})
-          }
-        }
-        this.search
+        // const pid = [];
+        // for (const property of this.propertyList) {
+        //   pid.push(property.id);
+        // }
+        // this.allUnSignPropertyList = [];
+        // for (const propertyObj of res.response) {
+        //   if (!pid.includes(propertyObj.id)) {
+        //     this.allUnSignPropertyList.push({label: propertyObj.name, value: propertyObj.id})
+        //   }
+        // }
+        // this.search
         // this.allPropertyList = res.response;
-        // this.onGetAllPropertyLicenseList(e, res);
+        this.onGetAllPropertyLicenseList(e, res);
       }, err => {
         this.loading.stop('2');
         this.isOpen = true;
         this.alertMsg = err;
         this.alertType = 'danger';
-      })
+      });
   }
 
   onGetAllPropertyLicenseList(e, res) {
-    const payload = {oID: e.target.value};
+    const payload = {oID: e.target.value, licenseType: this.planType};
     this.loading.start('3');
     this.service.getAllPropertyLicenseList(this.constructor.name, moduleName.billingModule, payload)
       .subscribe((result: any) => {
         this.loading.stop('3');
 
+        const propertyList = [...res.response];
+        const assignedLicenseProperty = [];
+
+        for (const assignedProperty of result.response) {
+           assignedLicenseProperty.push(assignedProperty.pid);
+         }
+
+        this.allUnSignPropertyList = [];
+        for (const propertyObj of propertyList) {
+          if (!assignedLicenseProperty.includes(propertyObj.id)) {
+            this.allUnSignPropertyList.push({label: propertyObj.name, value: propertyObj.id});
+          }
+        }
+        this.search;
         // this.allPropertyList = res.response;
       }, err => {
         this.loading.stop('3');
@@ -163,7 +177,7 @@ export class ManagePropertyComponent implements OnInit, OnDestroy {
         this.isOpen = true;
         this.alertMsg = err;
         this.alertType = 'danger';
-      })
+      });
   }
 
   onGetAssingedProperty() {
@@ -181,7 +195,7 @@ export class ManagePropertyComponent implements OnInit, OnDestroy {
       this.isOpen = true;
       this.alertMsg = err;
       this.alertType = 'danger';
-    })
+    });
   }
 
   openModal(template: TemplateRef<any>) {
@@ -218,8 +232,8 @@ export class ManagePropertyComponent implements OnInit, OnDestroy {
         this.isOpen = true;
         this.alertMsg = res.response;
         this.alertType = 'success';
-        this.propertyForm.reset()
-        this.onGetAssingedProperty()
+        this.propertyForm.reset();
+        this.onGetAssingedProperty();
         this.isCurrentPropertySelected(this.currentManagedOrgID, this.currrentManagedPropID);
 
       }, err => {
@@ -228,7 +242,7 @@ export class ManagePropertyComponent implements OnInit, OnDestroy {
         this.isOpen = true;
         this.alertMsg = err;
         this.alertType = 'danger';
-      })
+      });
     // display form values on success
   }
 
@@ -263,13 +277,13 @@ export class ManagePropertyComponent implements OnInit, OnDestroy {
     this.loading.start();
     this.skLoading = true;
     this.service.removeProperty(this.constructor.name, moduleName.billingModule, {properly_licenses_id: this.propertlyLicensesID,
-      pID: pID
+      pID
     })
       .subscribe((res: any) => {
         this.loading.stop();
         this.modalRef.hide();
         this.skLoading = false;
-        this.onGetAssingedProperty()
+        this.onGetAssingedProperty();
         this.isOpen = true;
         this.alertMsg = res.response;
         this.alertType = 'success';
@@ -282,7 +296,7 @@ export class ManagePropertyComponent implements OnInit, OnDestroy {
         this.modalRef.hide();
         this.alertMsg = err;
         this.alertType = 'danger';
-      })
+      });
   }
 
   decline(): void {
