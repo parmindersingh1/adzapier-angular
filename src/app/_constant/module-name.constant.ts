@@ -26,5 +26,5 @@ export const moduleName = {
   headerModule: 'HeaderModule',
   forgotPasswordModule: 'ForgotPasswordModule',
   manageSubscriptionsModule: 'ManageSubscriptionModule',
-  consentSolutionModule: 'ConsentSolutionModule'
+  consentSolutionModule: 'ConsentSolutionModule',
 };

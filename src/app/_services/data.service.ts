@@ -34,6 +34,11 @@ export class DataService {
     return this.isLicenseAppliedForProperty.asObservable();
   }
 
+  public isConsentPreferenceApplied = new BehaviorSubject<accesstype>({requesttype:'consentpreference',hasaccess:false});
+  get isConsentPreferenceAppliedForProperty(){
+    return this.isConsentPreferenceApplied.asObservable();
+  }
+  
   public OrganizationCreatedStatus = new BehaviorSubject<boolean>(false);
   get isOrganizationCreated(){
     return this.OrganizationCreatedStatus.asObservable();
