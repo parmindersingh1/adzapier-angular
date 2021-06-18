@@ -195,6 +195,7 @@ export class HeaderComponent implements OnInit {
   onCheckConsentPreferenceSubscription() {
     this.planDetails = this.dataService.getCurrentPropertyPlanDetails();
     const isAllowConsentPreference = this.dataService.isAllowFeatureByYes(this.planDetails.response, featuresName.CONSENT_PREFERENCE);
+    this.dataService.isConsentPreferenceApplied.next({ requesttype: 'consentpreference', hasaccess: isAllowConsentPreference });
     this.showConsentPreference = isAllowConsentPreference;
   }
 
@@ -878,21 +879,36 @@ export class HeaderComponent implements OnInit {
   onCheckSubscriptionForProperty() {
     const resData: any = this.dataService.getCurrentPropertyPlanDetails();
     if (resData.hasOwnProperty('response')) {
-      if (resData.response.hasOwnProperty('features')) {
-        const features = resData.response.features;
-        if (features == null) {
-          this.isShowDashboardForCookieConsent = false;
-          this.dataService.isLicenseAppliedForProperty.next({ requesttype: 'property', hasaccess: false });
-        } else {
-          if (Object.keys(features).length > 0) {
-            this.isShowDashboardForCookieConsent = true;
-            this.dataService.isLicenseAppliedForProperty.next({ requesttype: 'property', hasaccess: true });
-          } else {
-            this.isShowDashboardForCookieConsent = false;
-            this.dataService.isLicenseAppliedForProperty.next({ requesttype: 'property', hasaccess: false });
-          }
+      if(resData.response && resData.response.plan_details &&  resData.response.plan_details.consentPreference){
+        if(Object.values(resData.response.plan_details.consentPreference).length > 0){
+          this.dataService.isConsentPreferenceApplied.next({ requesttype: 'consentpreference', hasaccess: true })
+        }else{
+          this.dataService.isConsentPreferenceApplied.next({ requesttype: 'consentpreference', hasaccess: false });
         }
       }
+      if(resData.response && resData.response.plan_details &&  resData.response.plan_details.cookieConsent){
+        if(Object.values(resData.response.plan_details.cookieConsent).length > 0){
+          this.isShowDashboardForCookieConsent = true;
+          this.dataService.isLicenseAppliedForProperty.next({ requesttype: 'property', hasaccess: true });
+        }else{
+          this.dataService.isLicenseAppliedForProperty.next({ requesttype: 'property', hasaccess: false });
+        }
+      }
+      // if (resData.response.hasOwnProperty('features')) {
+      //   const features = resData.response.features;
+      //   if (features == null) {
+      //     this.isShowDashboardForCookieConsent = false;
+      //     this.dataService.isLicenseAppliedForProperty.next({ requesttype: 'property', hasaccess: false });
+      //   } else {
+      //     if (Object.keys(features).length > 0) {
+      //       this.isShowDashboardForCookieConsent = true;
+      //       this.dataService.isLicenseAppliedForProperty.next({ requesttype: 'property', hasaccess: true });
+      //     } else {
+      //       this.isShowDashboardForCookieConsent = false;
+      //       this.dataService.isLicenseAppliedForProperty.next({ requesttype: 'property', hasaccess: false });
+      //     }
+      //   }
+      // }
     }
   }
 

@@ -6,6 +6,8 @@ import {moduleName} from '../../_constant/module-name.constant';
 import {DataService} from '../../_services/data.service';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
 import {Location} from '@angular/common';
+import { Router} from '@angular/router';
+
 interface Country {
   count: number;
   state: string;
@@ -68,7 +70,8 @@ export class CookieConsentComponent implements OnInit {
               private loading: NgxUiLoaderService,
               private dataService: DataService,
               private modalService: BsModalService,
-              private _location: Location
+              private _location: Location,
+              private router:Router
   ) { }
 
   ngOnInit() {
@@ -345,8 +348,8 @@ export class CookieConsentComponent implements OnInit {
     this.onGetMapData();
   }
   onGoBack() {
+    this.router.navigate(['/home/dashboard/analytics']);
     this.modalRef.hide();
-    this._location.back();
   }
 
 }
