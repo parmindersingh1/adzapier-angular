@@ -18,9 +18,20 @@ export class ErrorInterceptor implements HttpInterceptor {
             this.dataService.openUnAuthModal.next({isTrue: true, error: err})
           }
             if (err.status === 401) {
+              this.router.navigate(['/error/unauthorized']);
               // auto logout if 401 response returned from api
               this.authenticationService.logout();
+              this.router.navigate(['/login']);
               // location.reload();
+            }
+            if(err.status === 403){
+              this.router.navigate(['/error/forbidden']);
+            }
+            if(err.status === 404){
+              this.router.navigate(['/error/pagenotfound']);
+            }
+            if(err.status === 500 || err.status === 501){
+              this.router.navigate(['/error/servererror']);
             }
             const error = err.error.error || err.statusText;
             return throwError(error);
