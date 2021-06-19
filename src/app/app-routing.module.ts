@@ -66,6 +66,7 @@ const routes: Routes = [
   { path: 'privacy/dsar/createworkflow/:id', loadChildren: () => import('./privacy/dsar/createworkflow/createworkflow.module')
   .then(m => m.CreateworkflowModule) },
   { path: 'settings', loadChildren: () => import('./pagesettings/pagesettings.module').then(m => m.PagesettingsModule) },
+  { path: 'error', loadChildren: () => import('./errorpage/errorpage.module').then(m => m.ErrorpageModule) },
   // { path: 'propertydashboard/:propid', component: PropertydashboardComponent, canActivate: [AuthGuard] },
   { path: 'verify-email/:id', loadChildren: () => import('./verifyemail/verifyemail.module').then(m => m.VerifyemailModule) },
   // { path: 'checkout', component: CheckoutComponent, canActivate: [AuthGuard] },

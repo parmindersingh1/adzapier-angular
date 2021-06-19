@@ -194,9 +194,11 @@ export class HeaderComponent implements OnInit {
 
   onCheckConsentPreferenceSubscription() {
     this.planDetails = this.dataService.getCurrentPropertyPlanDetails();
-    const isAllowConsentPreference = this.dataService.isAllowFeatureByYes(this.planDetails.response, featuresName.CONSENT_PREFERENCE);
-    this.dataService.isConsentPreferenceApplied.next({ requesttype: 'consentpreference', hasaccess: isAllowConsentPreference });
-    this.showConsentPreference = isAllowConsentPreference;
+    if(this.planDetails !== ""){
+      const isAllowConsentPreference = this.dataService.isAllowFeatureByYes(this.planDetails.response, featuresName.CONSENT_PREFERENCE);
+      this.dataService.isConsentPreferenceApplied.next({ requesttype: 'consentpreference', hasaccess: isAllowConsentPreference });
+      this.showConsentPreference = isAllowConsentPreference;
+    }
   }
 
 
