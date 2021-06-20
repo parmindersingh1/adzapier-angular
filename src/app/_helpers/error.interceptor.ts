@@ -18,10 +18,11 @@ export class ErrorInterceptor implements HttpInterceptor {
             this.dataService.openUnAuthModal.next({isTrue: true, error: err})
           }
             if (err.status === 401) {
-              this.router.navigate(['/error/unauthorized']);
               // auto logout if 401 response returned from api
-              this.authenticationService.logout();
-              this.router.navigate(['/login']);
+              if(err.url.indexOf('/api/v1/login') == -1 && err.error.error.match("exist.") == -1 || err.url.indexOf('/api/v1/login') == -1 && err.error.error.match("Incorrect") == -1){//
+                this.authenticationService.logout();
+                this.router.navigate(['/error/unauthorized']);
+              }
               // location.reload();
             }
             if(err.status === 403){
