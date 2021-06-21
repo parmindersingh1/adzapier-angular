@@ -19,8 +19,20 @@ export class ErrorInterceptor implements HttpInterceptor {
           }
             if (err.status === 401) {
               // auto logout if 401 response returned from api
-              this.authenticationService.logout();
+              if(err.url.indexOf('/api/v1/login') == -1 && err.error.error.match("exist.") == -1 || err.url.indexOf('/api/v1/login') == -1 && err.error.error.match("Incorrect") == -1){//
+                this.authenticationService.logout();
+                this.router.navigate(['/error/unauthorized']);
+              }
               // location.reload();
+            }
+            if(err.status === 403){
+              this.router.navigate(['/error/forbidden']);
+            }
+            if(err.status === 404){
+              this.router.navigate(['/error/pagenotfound']);
+            }
+            if(err.status === 500 || err.status === 501){
+              this.router.navigate(['/error/servererror']);
             }
             const error = err.error.error || err.statusText;
             return throwError(error);

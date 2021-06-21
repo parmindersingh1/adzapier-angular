@@ -310,6 +310,26 @@ h4 {
   margin: 0 -15px;
 }
 
+.banner-config-title-display {
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 2px;
+  padding: 10px;
+  /* color: #333; */
+  font-weight: 600;
+  background: #fbfbfb;
+  margin: 0 -15px;
+}
+
+.banner-desc{
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 10px;
+  margin: 0 -15px;
+
+}
+
 .common-action {
   width: 100%;
   flex-direction: row;
@@ -468,3 +488,4 @@ h6 ::ng-deep .tooltip-arrow .arrow {
     width: auto !important;
   }
 }
+

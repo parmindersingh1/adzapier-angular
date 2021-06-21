@@ -4,6 +4,7 @@ import {AnalyticsComponent} from './analytics.component';
 import {AuthGuard} from 'src/app/_helpers';
 import { LicenseguardPropertyService } from '../_services/licenseguardproperty.service';
 import { RouteguardService } from '../_services/routeguard.service';
+import { LicenseGuardConsentPreferenceService } from '../_services/licenseguardconsentpreference.service';
 
 
 const routes: Routes = [
@@ -18,7 +19,7 @@ const routes: Routes = [
   {
     path: 'dashboard/consent-preference',
     loadChildren: () => import('./consent-solution/consent-solution.module').then(m => m.ConsentSolutionModule),
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard, RouteguardService, LicenseGuardConsentPreferenceService]
 
   }
 ];

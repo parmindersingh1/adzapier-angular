@@ -218,7 +218,7 @@
       </ng-container>
       <div class="card-body">
         <h5>Scans History</h5>
-        <p-table #dt [value]="scanJobsList" styleClass="p-datatable-sm"
+        <p-table class="scan-details" #dt [value]="scanJobsList" styleClass="p-datatable-sm"
                  [loading]="tLoading"
                  [totalRecords]="scanJobsCount"
                  [lazy]="true"

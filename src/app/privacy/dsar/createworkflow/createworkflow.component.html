@@ -23,7 +23,7 @@
                     <button class="btn btn-xs btn-primary d-flex align-items-center mg-r-5" 
                     [ngClass]="{'hideEditSave-btn':workflowType == 'default', '': workflowType !== 'default'}"
                     [attr.disabled]="(workflowStatus === 'draft' && !isworkflowSaved) ? true:null"
-                        (click)="editWorkflow($event,workflowStatus)">
+                        (click)="editWorkflow($event,workflowStatus)" title="Finalize and activate this workflow">
                         <span class="d-none d-sm-inline">
                             <i *ngIf="workflowStatus == 'active'" class="fa fa-pen mr-1" aria-hidden="true"></i>
                             {{workflowStatus == 'active' ? 'Edit' : 'Activate'}}</span></button>
@@ -31,7 +31,7 @@
                     <button class="btn btn-xs btn-white d-flex align-items-center mg-r-5" type="button"
                     [ngClass]="{'hideEditSave-btn':workflowType == 'default', '': workflowType !== 'default'}"
                     [attr.disabled]="isControlDisabled || workflowStatus == 'active' ? true : null"
-                        (click)="saveWorkflow(quillEditorForm, workflowStatus)">
+                        (click)="saveWorkflow(quillEditorForm, workflowStatus)" title="Save as draft">
                         <span class="d-none d-sm-inline">
                             <i class="fa fa-plus" aria-hidden="true"></i>
                             Save</span></button>
@@ -54,7 +54,9 @@
                         <form #quillEditorForm="ngForm">
                             <div [ngClass]="{'hide':!skeletonLoading && !quillEditorForm.valid && workflowStages?.length == 0,'showerror':!skeletonLoading && !quillEditorForm.valid && workflowStages?.length != 0}">
                             <label class="tx-10 tx-uppercase tx-medium"> <span class="red">*</span>
-                                Stage</label>
+                                Stage  <i-feather name="info" class="feather-16" *ngIf="isControlDisabled"
+                                tooltip="You can't edit the predefined stage name"></i-feather>
+                                </label>
                             <input type="text" [(ngModel)]="stageTitle"  #stage_title="ngModel" name="stageTitle" (keyup)="update($event)"
                                 class="form-control mb-1" 
                                 [attr.disabled]="isControlDisabled || workflowStatus == 'active' ? true : null"
@@ -64,7 +66,9 @@
                                 <div *ngIf="stage_title?.invalid && submitted">Stage is required</div>
                             </div>
                             <label class="tx-10 tx-uppercase tx-medium"> <span class="red">*</span>
-                                Guidance Text</label>
+                                Guidance Text  <i-feather name="info" class="feather-16" *ngIf="isControlDisabled"
+                                tooltip="You can't edit the predefined guidance text"></i-feather>
+                                </label>
                             <div [ngClass]="{ 'quilleditor-invalid':  guidanceText.invalid && submitted && !skeletonLoading}">
                                 <quill-editor [(ngModel)]="guidancetext" name="guidancetext" [modules]="quillConfig" 
                                 #guidanceText = "ngModel"

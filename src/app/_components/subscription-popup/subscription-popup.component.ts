@@ -175,5 +175,9 @@ export class SubscriptionPopupComponent implements OnInit {
     this.router.navigateByUrl('/settings/billing/pricing')
   }
 
+  onTemplateHide(){
+    this.router.navigate(['/home/dashboard/analytics']);
+    this.template.hide();
+  }
 
 }

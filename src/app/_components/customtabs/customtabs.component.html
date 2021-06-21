@@ -13,7 +13,7 @@
                     </div>                                      
                 </div>
                 <button [disabled]="flowStatus === 'active'"  class="btn btn-xs btn-primary small-btn" *ngIf="i !==  item.order && i < inputData.length - 1"
-                    (click)="addCustomStages(i,item.order)">
+                    (click)="addCustomStages(i,item.order)" title="Add a new stage">
                     <span>
                         <i class="fa fa-plus" aria-hidden="true"></i>
                     </span>

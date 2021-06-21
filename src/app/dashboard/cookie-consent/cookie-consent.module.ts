@@ -3,9 +3,11 @@ import { CommonModule } from '@angular/common';
 import {CookieConsentComponent} from './cookie-consent.component';
 import {Router, RouterModule, Routes} from '@angular/router';
 import {SharedbootstrapModule} from '../../sharedbootstrap/sharedbootstrap.module';
-
+import {AuthGuard} from '../../_helpers';
+import {RouteguardService} from '../../_services/routeguard.service';
+import { LicenseguardPropertyService } from '../../_services/licenseguardproperty.service';
 const path: Routes = [
-  {path: '', component: CookieConsentComponent}
+  {path: '', component: CookieConsentComponent,canActivate: [AuthGuard, RouteguardService, LicenseguardPropertyService]}
 ];
 
 @NgModule({

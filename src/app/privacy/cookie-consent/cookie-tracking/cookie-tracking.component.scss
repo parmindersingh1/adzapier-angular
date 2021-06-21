@@ -391,6 +391,31 @@ span.ui-column-title {
 
 .cookie-tracking-table ::ng-deep .p-datatable .p-paginator-bottom {
   border-top: 0;
+  display: flex;
+  justify-content: center;
+
+}
+
+.cookie-tracking-table ::ng-deep .p-paginator-bottom .p-paginator {
+  display: flex;
+  position: relative;
+}
+
+.cookie-tracking-table ::ng-deep .p-paginator-current {
+  position: absolute;
+  right: 0;
+}
+
+.cookie-tracking-table ::ng-deep .p-inputwrapper-filled {
+  position: absolute;
+  left: 0;
+}
+
+.cookie-tracking-table::ng-deep .p-datatable .p-paginator-bottom {
+  border-top: 1px solid #ccc;
+  border-radius: 0px 0px 10px 10px;
+  border-bottom: 0;
+  justify-content: center;
 }
 
 .border-radius-lt-rt {
