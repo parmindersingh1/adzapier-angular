@@ -88,6 +88,7 @@ export class OrganizationdetailsComponent implements OnInit {
   noResult = false;
   private orgPlanDetails: any;
   orgLicensedPlanName;
+  selectusertype = true;
   constructor(private activatedRoute: ActivatedRoute,
               private orgService: OrganizationService,
               private modalService: NgbModal,

@@ -515,11 +515,15 @@
         </button>
     </div>
     <div class="modal-body">
-        <div *ngIf="!isUpdateUserinvitation">Enter the email addresses of the users you'd like to invite, and choose the role they should have.
+        <div class="tabs" *ngIf="!isUpdateUserinvitation">
+        <div class="tab"><input type="radio" class="form-check-input"  [(ngModel)]="selectusertype" name="selectusertype" [value]="true"/><label class="mr-3">New User</label></div>
+        <div class="tab"><input type="radio" class="form-check-input" [(ngModel)]="selectusertype"  name="selectusertype" [value]="false"/><label>Existing User</label></div>
         </div>
+        <div *ngIf="!isUpdateUserinvitation">Enter the email addresses of the users you'd like to invite, and choose the role they should have.</div>
         <form [formGroup]="inviteUserOrgForm" autocomplete="off" (ngSubmit)="onSubmitInviteUserOrganization()">
             <div class="row">
-                <div class="col-sm-6">
+                <div *ngIf="selectusertype" class="col-sm-12 d-flex">
+                <div class="col-sm-6 pl-0">
                     <div class="form-group">
                         <label for="firstname" class="d-block">First name</label>
                         <input type="text" class="form-control" formControlName="firstname" name="firstname" (keydown.space)="$event.preventDefault()"
@@ -529,7 +533,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-6">
+                <div class="col-sm-6 pr-0">
                     <div class="form-group">
                         <label for="lastname" class="d-block">Last name</label>
                         <input type="text" class="form-control"  formControlName="lastname" name="lastname" (keydown.space)="$event.preventDefault()"
@@ -539,6 +543,7 @@
                         </div>
                 </div>
                 </div>
+            </div>
                 <div class="col-sm-12">
                     <div class="form-group">
                         <label for="emailid" class="d-block">Email Id</label>
