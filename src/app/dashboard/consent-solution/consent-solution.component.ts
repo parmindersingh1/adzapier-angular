@@ -1,10 +1,14 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {ConsentSolutionsService} from '../../_services/consent-solutions.service';
 import {moduleName} from '../../_constant/module-name.constant';
 import {ChartOptions, ChartType} from 'chart.js';
 import {Label} from 'ng2-charts';
 import * as moment from 'moment';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
+import { DataService } from 'src/app/_services/data.service';
+import { BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
+import {Location} from '@angular/common';
+import { Router } from '@angular/router';
 
 declare var jQuery: any;
 
@@ -78,16 +82,21 @@ export class ConsentSolutionComponent implements OnInit {
       backgroundColor: this.consentColor
     },
   ];
-
-
+  modalRef: BsModalRef;
+  @ViewChild('noLicenseForConsentPreference', {static: true}) noLicenseForConsentPreference;
   constructor(private consentDashboardService: ConsentSolutionsService,
-              private loading: NgxUiLoaderService
+              private loading: NgxUiLoaderService,
+              private dataService: DataService,
+              private modalService: BsModalService,
+              private _location: Location,
+              private router:Router
               ) {
   }
 
   ngOnInit() {
     this.onSetUpDate();
     // this.onGetConsentData();
+    this.onOpenPopUp();
   }
 
 
@@ -148,5 +157,24 @@ export class ConsentSolutionComponent implements OnInit {
 
     // Consent
     this.pieChartData = [this.consentData.totalConsent, this.consentData.legalNotice, this.consentData.proofs];
+  }
+
+  isConsentPreferenceAssigned(): boolean {
+    let consentPrefrenceForProperty;
+    this.dataService.isConsentPreferenceAppliedForProperty.subscribe((status) => {
+      consentPrefrenceForProperty = status;
+    });
+    return consentPrefrenceForProperty.hasaccess;
+  }
+
+  onOpenPopUp() {
+    if (!this.isConsentPreferenceAssigned()) {
+      this.modalRef = this.modalService.show(this.noLicenseForConsentPreference, {class: 'modal-md', ignoreBackdropClick: true});
+    }
+  }
+
+  onGoBack() {
+    this.router.navigate(['/home/dashboard/analytics']);
+    this.modalRef.hide();
   }
 }

@@ -21,7 +21,9 @@ export class AnalyticsComponent implements OnInit {
   isCollapsed: any;
   isLicenseAssignedtoProperty = false;
   isLicenseAssignedtoOrganization = false;
+  isConsentPreferenceLicenseAssignedToProperty = false;
   dsarTooltiptext:string;
+  consentTooltipText:string;
   cookieTooltiptext:string;
   constructor(
     private orgservice: OrganizationService,
@@ -38,6 +40,7 @@ export class AnalyticsComponent implements OnInit {
   ngOnInit(){
    this.isPropertyLicenseAssigned();
    this.isOrganizationLicenseAssigned();
+   this.isConsentPreferenceLicenseAssigned();
   }
 
   isPropertyLicenseAssigned():boolean {
@@ -46,6 +49,14 @@ export class AnalyticsComponent implements OnInit {
     });
     this.cookieTooltiptext = this.isLicenseAssignedtoProperty ? '' : 'You have not assigned Cookie consent license to selected property';
     return this.isLicenseAssignedtoProperty;
+  }
+
+  isConsentPreferenceLicenseAssigned():boolean {
+    this.dataService.isConsentPreferenceAppliedForProperty.subscribe((status) =>  {
+    this.isConsentPreferenceLicenseAssignedToProperty = status.hasaccess;
+    });
+    this.consentTooltipText = this.isConsentPreferenceLicenseAssignedToProperty ? '' : 'You have not assigned Consent Preference to selected property';
+    return this.isConsentPreferenceLicenseAssignedToProperty;
   }
 
   isOrganizationLicenseAssigned():boolean {

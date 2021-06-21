@@ -11,7 +11,5 @@ export const featuresName = {
   NUM_OF_WORKFLOWS: 'Workflow',
   NUM_OF_DSAR_FORMS: 'Forms',
   MANAGE_VENDORS: 'Manage Vendors',
-
-  // Consent Preference
-  CONSENT_PREFERENCE: 'ConsentPreference'
+  CONSENT_PREFERENCE: 'ConsentPreference'// Consent Preference
 }
