@@ -56,6 +56,20 @@ build-stage:
    - staging
    - /^staging_[0-9]+(?:.[0-9]+)+$/
 
+build-qa:
+  environment:
+    name: qa
+  stage: build
+  artifacts:
+    paths:
+      - dist/
+    expire_in: 1 hr
+  script:
+    - npm run build:qa
+  only:
+   - qa
+   - /^qa_[0-9]+(?:.[0-9]+)+$/
+
 build-prod:
   environment:
     name: production
@@ -100,6 +114,21 @@ build_docker_image-staging:
     - staging
     - /^staging_[0-9]+(?:.[0-9]+)+$/
 
+build_docker_image-qa:
+  stage: docker
+  image: docker:19
+  script:
+    - pwd
+    - ls -ltra ./dist/
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD ${CI_REGISTRY}
+    - cp ./docker/Dockerfile ./
+    - docker build --no-cache -t ${CI_REGISTRY_IMAGE}:${CI_COMMIT_TAG:-$CI_COMMIT_REF_NAME-$TAG} .
+    - docker push                ${CI_REGISTRY_IMAGE}:${CI_COMMIT_TAG:-$CI_COMMIT_REF_NAME-$TAG}
+    - docker rmi                 ${CI_REGISTRY_IMAGE}:${CI_COMMIT_TAG:-$CI_COMMIT_REF_NAME-$TAG}
+  only:
+    - qa
+    - /^qa_[0-9]+(?:.[0-9]+)+$/
+
 build_docker_image-prod:
   stage: docker
   image: docker:19
@@ -119,16 +148,17 @@ build_docker_image-prod:
     - master
     - staging
     - develop
+    - qa
 
 deploy-to-swarm-develop:
   stage: deploy
   variables:
     DOCKER_HOST: tcp://${DOCKER_HOST_STAGING}:2375
     DOMAINS: "Host(`develop-cmp.adzpier-staging.com`)"
-    SERVICE_NAME: ${CI_BUILD_REF_NAME}-ui
+    SERVICE_NAME: ${CI_BUILD_REF_NAME}-adminportal
     TARGET_PORT: 8080
     PUBLISH_PORT: 8190
-    SERVICE_MIN_REPLICAS: 2
+    SERVICE_MIN_REPLICAS: 1
     TAGS: ${CI_COMMIT_REF_NAME}-${TAG}
     RESERVE_CPU: "'0.5'"
     LIMIT_CPU: "'1'"
@@ -150,7 +180,7 @@ deploy-to-swarm-develop:
         RUNNING_REPLICAS=`expr $RUNNING_REPLICAS + $SERVICE_MIN_REPLICAS`
       fi
     - echo $RUNNING_REPLICAS
-    - SCALABLE=`expr $RUNNING_REPLICAS \* $SERVICE_MIN_REPLICAS`
+    - SCALABLE=`expr $RUNNING_REPLICAS + $SERVICE_MIN_REPLICAS`
     - export SCALABLE_REPLICAS=$(echo $SCALABLE)
     - echo $SCALABLE_REPLICAS
     - envsubst < docker-compose.yaml > docker-stack-out.yaml
@@ -159,11 +189,50 @@ deploy-to-swarm-develop:
    - develop
    - /^develop_[0-9]+(?:.[0-9]+)+$/
 
+deploy-to-swarm-qa:
+  stage: deploy
+  variables:
+    DOCKER_HOST: tcp://${DOCKER_HOST_STAGING}:2375
+    DOMAINS: "Host(`qa-cmp.adzpier-staging.com`)"
+    SERVICE_NAME: ${CI_BUILD_REF_NAME}-adminportal
+    TARGET_PORT: 8080
+    PUBLISH_PORT: 8192
+    SERVICE_MIN_REPLICAS: 1
+    TAGS: ${CI_COMMIT_REF_NAME}-${TAG}
+    RESERVE_CPU: "'0.5'"
+    LIMIT_CPU: "'1'"
+    RESERVE_MEMORY: 256M
+    LIMIT_MEMORY: 512M
+  image: docker:19
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD ${CI_REGISTRY}
+    - docker service update --with-registry-auth --replicas $SCALABLE_REPLICAS --update-parallelism 1 --update-delay 10s ${CI_PROJECT_NAMESPACE}-${CI_PROJECT_NAME}_${SERVICE_NAME} || true
+    - echo "Deploying Stack"
+    - docker stack deploy --with-registry-auth --compose-file=docker-stack-out.yaml ${CI_PROJECT_NAMESPACE}-${CI_PROJECT_NAME}
+    - docker service update --with-registry-auth --replicas $RUNNING_REPLICAS --update-parallelism 1 --update-delay 10s ${CI_PROJECT_NAMESPACE}-${CI_PROJECT_NAME}_${SERVICE_NAME}
+  before_script:
+    - apk add --update gettext
+    - RUNNING_REPLICAS=$(docker service ps ${CI_PROJECT_NAMESPACE}-${CI_PROJECT_NAME}_${SERVICE_NAME} | grep -i running | wc -l) || true
+    - echo $RUNNING_REPLICAS
+    - |
+      if [[ $RUNNING_REPLICAS == 0 ]]; then
+        RUNNING_REPLICAS=`expr $RUNNING_REPLICAS + $SERVICE_MIN_REPLICAS`
+      fi
+    - echo $RUNNING_REPLICAS
+    - SCALABLE=`expr $RUNNING_REPLICAS + $SERVICE_MIN_REPLICAS`
+    - export SCALABLE_REPLICAS=$(echo $SCALABLE)
+    - echo $SCALABLE_REPLICAS
+    - envsubst < docker-compose.yaml > docker-stack-out.yaml
+    - cat docker-stack-out.yaml
+  only:
+   - qa
+   - /^qa_[0-9]+(?:.[0-9]+)+$/
+
 deploy-to-swarm-staging:
   stage: deploy
   variables:
     DOCKER_HOST: tcp://${DOCKER_HOST_STAGING}:2375
-    SERVICE_NAME: ${CI_BUILD_REF_NAME}-ui
+    SERVICE_NAME: ${CI_BUILD_REF_NAME}-adminportal
     DOMAINS: "Host(`cmp.adzpier-staging.com`)"
     SERVICE_MIN_REPLICAS: 2
     TARGET_PORT: 8080
@@ -245,3 +314,4 @@ deploy-to-swarm-prod:
     - master
     - staging
     - develop
+    - qa
