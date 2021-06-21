@@ -13,20 +13,7 @@
   </div>
 
   <div class="mx-2 row row-xs">
-    <div class="mx-auto col-sm-6 col-lg-3">
-      <div class="card card-body">
-        <h5 class="mx-auto card-title">Configure Cookie Consents</h5>
-        <i class="fas fa-cookie tx-primary fa-3x center tx-64 margin-15"></i>
-        <p class="mx-auto tx-11 tx-spacing-0 tx-color-02 tx-normal mg-b-8 margin-30">
-          Configure geo specific cookie banner, language and preference center.        </p>
-        <div class="d-flex d-lg-block d-xl-flex align-items-end">
-          <!-- <h3 class="tx-normal tx-rubik mg-b-0 mg-r-5 lh-1">0.81%</h3> -->
-        </div>
-        <hr>
-
-        <a class="btn btn-primary" tooltip="{{cookieTooltiptext}}" [routerLink]="isLicenseAssignedtoProperty ? ['/cookie-consent/cookie-banner'] : ['/settings/billing/manage']">{{isLicenseAssignedtoProperty ? 'Go Now' : 'Buy Now'}}</a>
-      </div>
-    </div><!-- col -->
+    <!-- col -->
     <div class="mx-auto col-sm-6 col-lg-3">
       <div class="card card-body">
         <h5 class="mx-auto card-title">Cookie Consent Dashboard</h5>
@@ -39,10 +26,43 @@
         </div>
         <hr>
 
+        <a class="btn btn-primary" tooltip="{{cookieTooltiptext}}" [routerLink]="isLicenseAssignedtoProperty ? ['/cookie-consent/cookie-banner'] : ['/settings/billing/manage']">{{isLicenseAssignedtoProperty ? 'Go Now' : 'Buy Now'}}</a>
+      </div>
+    </div><!-- col -->
+    <div class="mx-auto col-sm-6 col-lg-3">
+      <div class="card card-body">
+        <h5 class="mx-auto card-title">Banner Configuration</h5>
+        <i class="fas fa-chart-line tx-primary  center tx-64 margin-15"></i>
+        <p class="mx-auto tx-11 tx-spacing-0 tx-color-02 tx-normal mg-b-8 margin-30">
+          Configure geo specific cookie banner, language and preference center.
+        <div class="d-flex d-lg-block d-xl-flex align-items-end">
+        </div>
+        <hr>
+        <a class="btn btn-primary" tooltip="{{cookieTooltiptext}}" [routerLink]="isLicenseAssignedtoProperty ? ['/cookie-consent/cookie-banner'] : ['/settings/billing/manage']">{{isLicenseAssignedtoProperty ? 'Go Now' : 'Buy Now'}}</a>
+      </div>
+    </div><!-- col -->
+
+    <div class="mx-auto col-sm-6 col-lg-3">
+      <div class="card card-body">
+        <h5 class="mx-auto card-title">Setup</h5>
+        <i class="fas fa-cookie tx-primary fa-3x center tx-64 margin-15"></i>
+        <p class="mx-auto tx-11 tx-spacing-0 tx-color-02 tx-normal mg-b-8 margin-30">
+          Configure geo specific cookie banner, language and preference center.        </p>
+        <div class="d-flex d-lg-block d-xl-flex align-items-end">
+          <!-- <h3 class="tx-normal tx-rubik mg-b-0 mg-r-5 lh-1">0.81%</h3> -->
+        </div>
+        <hr>
+
         <a class="btn btn-primary" tooltip="{{cookieTooltiptext}}" [routerLink]="isLicenseAssignedtoProperty ? ['/home/dashboard/cookie-consent'] : ['/settings/billing/manage']">{{isLicenseAssignedtoProperty ? 'Go Now' : 'Buy Now'}}</a>
 
       </div>
-    </div><!-- col -->
+    </div>
+  </div><!-- row -->
+
+
+  <div class="mx-2 row row-xs">
+    <div class="col-md-12">
+      <h5 class="text-divider"><span>ADD-ON</span></h5>    </div>
     <div class="mx-auto col-sm-6 col-lg-3">
       <div class="card card-body">
         <h5 class="mx-auto card-title">Data Subject Request</h5>
@@ -55,5 +75,24 @@
         <a class="btn btn-primary" tooltip="{{dsarTooltiptext}}" [routerLink]="isLicenseAssignedtoOrganization ? ['/privacy/dsar/requests'] : ['/settings/billing/manage']">{{isLicenseAssignedtoOrganization ? 'Go Now' : 'Buy Now'}}</a>
       </div>
     </div><!-- col -->
-  </div><!-- row -->
+    <div class="mx-auto col-sm-6 col-lg-3">
+      <div class="card card-body">
+        <h5 class="mx-auto card-title">Consent preference</h5>
+        <i class="fas fa-file-signature tx-primary  center tx-64 margin-15"></i>
+        <p class="mx-auto tx-11 tx-spacing-0 tx-color-02 tx-normal mg-b-8 margin-30">
+          Collect user preference consent, document opt-ins/out via your web forms and systems.        </p>
+
+        <div class="d-flex d-lg-block d-xl-flex align-items-end">
+          <!-- <h3 class="tx-normal tx-rubik mg-b-0 mg-r-5 lh-1">0.81%</h3> -->
+        </div>
+        <hr>
+
+        <a class="btn btn-primary" tooltip="{{consentTooltipText}}" [routerLink]="isConsentPreferenceLicenseAssignedToProperty ? ['/home/dashboard/consent-preference'] : ['/settings/billing/manage']">{{ isConsentPreferenceLicenseAssignedToProperty ? 'Go Now' : 'Buy Now'}}</a>
+
+      </div>
+    </div><!-- col -->
+    <div class="mx-auto col-sm-6 col-lg-3">
+
+    </div>
+    </div><!-- row -->
 </div>

@@ -17,12 +17,16 @@ import {DataService} from '../../../../_services/data.service';
 })
 export class ManagePropertyComponent implements OnInit, OnDestroy {
   planID = '';
+  oID = '';
   propertyName: any;
   propertyNameError = false;
   submitted = false;
+  licensesPropertyIDs = [];
   private currentManagedOrgID: any;
   private currrentManagedPropID: any;
   delPropID: any;
+  planType: any;
+  propertlyLicensesID: any;
 
   planName = '';
 
@@ -35,7 +39,7 @@ export class ManagePropertyComponent implements OnInit, OnDestroy {
   percents = {
     totalLicence: 0,
     assigneLicence: 0
-  }
+  };
   alertMsg: any;
   isOpen = false;
   alertType: any;
@@ -57,7 +61,7 @@ export class ManagePropertyComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.onGetPropsAndOrgId()
+    this.onGetPropsAndOrgId();
     this.propertyForm = this.formBuilder.group({
       propID: ['', Validators.required]
     });
@@ -67,9 +71,10 @@ export class ManagePropertyComponent implements OnInit, OnDestroy {
       this.totalLicence = params.total_licence;
       this.productName = params.product_name;
       this.assigneLicence = params.assigned_licence;
+      this.planType = params.type;
       this.onGetAssingedProperty();
       this.onCalculateValue();
-    })
+    });
 
     this.getAllOrgList();
   }
@@ -93,7 +98,7 @@ export class ManagePropertyComponent implements OnInit, OnDestroy {
     this.percents = {
       assigneLicence: cal,
       totalLicence: 100 - cal
-    }
+    };
 
   }
 
@@ -102,23 +107,63 @@ export class ManagePropertyComponent implements OnInit, OnDestroy {
   }
 
   onGetAllPropertyList(e) {
-    const payload = {oID: e.target.value}
+    // this.onGetAllPropertyLicenseList(e);
+    this.oID = e.target.value;
+    const payload = {oID: e.target.value, planID: this.planID, planType: this.planType};
     this.loading.start('2');
     this.service.getAllPropertyList(this.constructor.name, moduleName.billingModule, payload)
       .subscribe((res: any) => {
         this.loading.stop('2');
         // this.allPropertyList = res.response;
-        this.allUnSignPropertyList = [];
-        for (const propertyObj of res.response) {
-          this.allUnSignPropertyList.push({label: propertyObj.name, value: propertyObj.id})
-        }
-        this.search
+        // const pid = [];
+        // for (const property of this.propertyList) {
+        //   pid.push(property.id);
+        // }
+        // this.allUnSignPropertyList = [];
+        // for (const propertyObj of res.response) {
+        //   if (!pid.includes(propertyObj.id)) {
+        //     this.allUnSignPropertyList.push({label: propertyObj.name, value: propertyObj.id})
+        //   }
+        // }
+        // this.search
+        // this.allPropertyList = res.response;
+        this.onGetAllPropertyLicenseList(e, res);
       }, err => {
         this.loading.stop('2');
         this.isOpen = true;
         this.alertMsg = err;
         this.alertType = 'danger';
-      })
+      });
+  }
+
+  onGetAllPropertyLicenseList(e, res) {
+    const payload = {oID: e.target.value, licenseType: this.planType};
+    this.loading.start('3');
+    this.service.getAllPropertyLicenseList(this.constructor.name, moduleName.billingModule, payload)
+      .subscribe((result: any) => {
+        this.loading.stop('3');
+
+        const propertyList = [...res.response];
+        const assignedLicenseProperty = [];
+
+        for (const assignedProperty of result.response) {
+           assignedLicenseProperty.push(assignedProperty.pid);
+         }
+
+        this.allUnSignPropertyList = [];
+        for (const propertyObj of propertyList) {
+          if (!assignedLicenseProperty.includes(propertyObj.id)) {
+            this.allUnSignPropertyList.push({label: propertyObj.name, value: propertyObj.id});
+          }
+        }
+        this.search;
+        // this.allPropertyList = res.response;
+      }, err => {
+        this.loading.stop('3');
+        this.isOpen = true;
+        this.alertMsg = err;
+        this.alertType = 'danger';
+      });
   }
 
   getAllOrgList() {
@@ -132,7 +177,7 @@ export class ManagePropertyComponent implements OnInit, OnDestroy {
         this.isOpen = true;
         this.alertMsg = err;
         this.alertType = 'danger';
-      })
+      });
   }
 
   onGetAssingedProperty() {
@@ -150,7 +195,7 @@ export class ManagePropertyComponent implements OnInit, OnDestroy {
       this.isOpen = true;
       this.alertMsg = err;
       this.alertType = 'danger';
-    })
+    });
   }
 
   openModal(template: TemplateRef<any>) {
@@ -172,8 +217,10 @@ export class ManagePropertyComponent implements OnInit, OnDestroy {
     }
     const payload = {
       planID: this.planID,
-      propID: this.propertyForm.value.propID
-    }
+      propID: this.propertyForm.value.propID,
+      orgID: this.oID,
+      planType: this.planType
+    };
     this.loading.start();
 
     this.skLoading = true;
@@ -185,8 +232,8 @@ export class ManagePropertyComponent implements OnInit, OnDestroy {
         this.isOpen = true;
         this.alertMsg = res.response;
         this.alertType = 'success';
-        this.propertyForm.reset()
-        this.onGetAssingedProperty()
+        this.propertyForm.reset();
+        this.onGetAssingedProperty();
         this.isCurrentPropertySelected(this.currentManagedOrgID, this.currrentManagedPropID);
 
       }, err => {
@@ -195,7 +242,7 @@ export class ManagePropertyComponent implements OnInit, OnDestroy {
         this.isOpen = true;
         this.alertMsg = err;
         this.alertType = 'danger';
-      })
+      });
     // display form values on success
   }
 
@@ -229,12 +276,14 @@ export class ManagePropertyComponent implements OnInit, OnDestroy {
   onRemoveProperty(pID) {
     this.loading.start();
     this.skLoading = true;
-    this.service.removeProperty(this.constructor.name, moduleName.billingModule, {pID: pID})
+    this.service.removeProperty(this.constructor.name, moduleName.billingModule, {properly_licenses_id: this.propertlyLicensesID,
+      pID
+    })
       .subscribe((res: any) => {
         this.loading.stop();
         this.modalRef.hide();
         this.skLoading = false;
-        this.onGetAssingedProperty()
+        this.onGetAssingedProperty();
         this.isOpen = true;
         this.alertMsg = res.response;
         this.alertType = 'success';
@@ -247,7 +296,7 @@ export class ManagePropertyComponent implements OnInit, OnDestroy {
         this.modalRef.hide();
         this.alertMsg = err;
         this.alertType = 'danger';
-      })
+      });
   }
 
   decline(): void {

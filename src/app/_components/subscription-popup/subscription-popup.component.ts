@@ -27,7 +27,11 @@ export class SubscriptionPopupComponent implements OnInit {
   @ViewChild('template', {static: true}) template: any;
   allPlanData: any;
   billingCycle = 'monthly';
-  currentPlanData = new DefaultPlanData();
+  currentPlanData: any = {
+    cookieConsent: new DefaultPlanData(),
+    consentPreference: new DefaultPlanData(),
+    dsar: new DefaultPlanData()
+  };
   type = 'cookieConsent';
   msg = '';
   mainFeatures = mainPlans;
@@ -71,9 +75,8 @@ export class SubscriptionPopupComponent implements OnInit {
 
   openModal() {
     this.dataService.openModalWithData.subscribe(res => {
-      if (res.hasOwnProperty('msg')) {
-        this.msg = res.msg;
-      }
+      console.log(res)
+      // debugger
       if (res.openModal) {
         if (!res.data) {
           this.currentPlanData = new DefaultPlanData();
@@ -85,9 +88,9 @@ export class SubscriptionPopupComponent implements OnInit {
           if (Object.keys(res.data).length !== 0) {
             this.type = res.type;
             this.currentPlanData = res.data;
-            if (res.currentplan !== undefined) {
-              this.existingOrgPlan = res.currentplan;
-            }
+            // if (res.data !== undefined) {
+            //   this.existingOrgPlan = res.data;
+            // }
           } else if (!res.data && res.type == 'org') {
             this.type = 'org'
             this.currentPlanData = new DefaultPlanData();
@@ -107,15 +110,15 @@ export class SubscriptionPopupComponent implements OnInit {
     this.billingService.getCurrentPlanInfo(this.constructor.name, moduleName.pricingModule).subscribe((res: any) => {
       this.allPlanData = res.response;
       this.onSetEnterPrice();
-      this.cookieConsentPlans = this.allPlanData.base[`${this.billingCycle}`];
-      this.dsarPlans = this.allPlanData.addons[`${this.billingCycle}`]
+      this.cookieConsentPlans = this.allPlanData.cookieConsent[`${this.billingCycle}`];
+      this.dsarPlans = this.allPlanData.dsar[`${this.billingCycle}`]
       // this.subscriptionList = res.response.monthly;
     }, error => {
     });
   }
 
   onSetEnterPrice() {
-    this.allPlanData.base['monthly'].push({
+    this.allPlanData.cookieConsent['monthly'].push({
       cycle: 'Enterprise',
       description: '',
       id: '',
@@ -124,7 +127,7 @@ export class SubscriptionPopupComponent implements OnInit {
       product_name: 'Advanced enterprise features and global coverage.',
       type: 0
     });
-    this.allPlanData.base['yearly'].push({
+    this.allPlanData.cookieConsent['yearly'].push({
       cycle: 'Enterprise',
       description: '',
       id: '',
@@ -134,7 +137,7 @@ export class SubscriptionPopupComponent implements OnInit {
       type: 0
     });
 
-    this.allPlanData.addons['monthly'].push({
+    this.allPlanData.dsar['monthly'].push({
       cycle: 'Enterprise',
       description: '',
       id: '',
@@ -143,7 +146,7 @@ export class SubscriptionPopupComponent implements OnInit {
       product_name: 'Advanced enterprise features and global coverage.',
       type: 0
     });
-    this.allPlanData.addons['yearly'].push({
+    this.allPlanData.dsar['yearly'].push({
       cycle: 'Enterprise',
       description: '',
       id: '',
@@ -157,13 +160,13 @@ export class SubscriptionPopupComponent implements OnInit {
   onSelectBillingCycle(e) {
     if (e.checked) {
       this.billingCycle = 'yearly';
-      this.cookieConsentPlans = this.allPlanData.base[`${this.billingCycle}`]
-      this.dsarPlans = this.allPlanData.addons[`${this.billingCycle}`]
+      this.cookieConsentPlans = this.allPlanData.cookieConsent[`${this.billingCycle}`]
+      this.dsarPlans = this.allPlanData.dsar[`${this.billingCycle}`]
 
     } else {
       this.billingCycle = 'monthly';
-      this.cookieConsentPlans = this.allPlanData.base[`${this.billingCycle}`]
-      this.dsarPlans = this.allPlanData.addons[`${this.billingCycle}`]
+      this.cookieConsentPlans = this.allPlanData.cookieConsent[`${this.billingCycle}`]
+      this.dsarPlans = this.allPlanData.dsar[`${this.billingCycle}`]
     }
   }
 
@@ -172,5 +175,9 @@ export class SubscriptionPopupComponent implements OnInit {
     this.router.navigateByUrl('/settings/billing/pricing')
   }
 
+  onTemplateHide(){
+    this.router.navigate(['/home/dashboard/analytics']);
+    this.template.hide();
+  }
 
 }

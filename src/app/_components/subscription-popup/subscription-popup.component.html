@@ -127,7 +127,7 @@
                 <ng-container *ngIf="plan.name === 'Enterprise'">
                   <li class="text-left feature-list" *ngFor="let  features of mainFeatures.dsar.enterprise">{{features.featureName}} <span class="font-weight-bold" *ngIf="features.featureValue"> - {{features.featureValue}}</span></li>
                 </ng-container>
-<!--                <a *ngIf="plan.name !== 'Free'" class="more-text" routerLink="/settings/billing/manage">More ...</a>-->
+                <!--                <a *ngIf="plan.name !== 'Free'" class="more-text" routerLink="/settings/billing/manage">More ...</a>-->
               </ul>
 
 
@@ -273,13 +273,13 @@
 
             </div><!-- col -->
           </div>
-      </div>
+        </div>
         <div class="text-center">
           <a routerLink="/settings/billing/manage" (click)="template.hide()" class="btn mt-3 btn-primary"> <i
             _aria-hidden="true" class="fa fa-cogs pr-1"></i> Manage License</a>
-          <p class="cancel-btn mt-2 mb-2" (click)="template.hide()">or Cancel & Go Back</p>
+          <p class="cancel-btn mt-2 mb-2" (click)="onTemplateHide()">or Cancel & Go Back</p>
         </div>
 
+      </div>
     </div>
   </div>
-</div>

@@ -5,6 +5,8 @@ import { PagenotfoundComponent } from './errorpages/pagenotfound.component';
 import { InternalerrorComponent } from './errorpages/internalerror.component';
 import { PagenotfoundComponent1 } from './errorpages/404page.component';
 import { RouteguardService } from './_services/routeguard.service';
+import { LicenseguardPropertyService } from './_services/licenseguardproperty.service';
+import { LicenseGuardConsentPreferenceService } from './_services/licenseguardconsentpreference.service';
 
 const routes: Routes = [
   {path :'signout',loadChildren : () => import('./signout-page/signout-page.module').then(m => m.SignoutPageModule)},
@@ -53,13 +55,18 @@ const routes: Routes = [
   },
   {
     path: 'cookie-consent', loadChildren: () => import('./privacy/cookie-consent/cookie-consent.module')
-      .then(m => m.CookieConsentModule), canActivate: [AuthGuard,RouteguardService]
+      .then(m => m.CookieConsentModule), canActivate: [AuthGuard,RouteguardService,LicenseguardPropertyService]
+  },
+  {
+    path: 'consent-solutions', loadChildren: () => import('./privacy/consent-solutions/consent-solutions.module')
+      .then(m => m.ConsentSolutionsModule), canActivate: [AuthGuard,RouteguardService,LicenseGuardConsentPreferenceService]
   },
   { path: 'privacy/dsar/createworkflow', loadChildren: () => import('./privacy/dsar/createworkflow/createworkflow.module')
   .then(m => m.CreateworkflowModule) },
   { path: 'privacy/dsar/createworkflow/:id', loadChildren: () => import('./privacy/dsar/createworkflow/createworkflow.module')
   .then(m => m.CreateworkflowModule) },
   { path: 'settings', loadChildren: () => import('./pagesettings/pagesettings.module').then(m => m.PagesettingsModule) },
+  { path: 'error', loadChildren: () => import('./errorpage/errorpage.module').then(m => m.ErrorpageModule) },
   // { path: 'propertydashboard/:propid', component: PropertydashboardComponent, canActivate: [AuthGuard] },
   { path: 'verify-email/:id', loadChildren: () => import('./verifyemail/verifyemail.module').then(m => m.VerifyemailModule) },
   // { path: 'checkout', component: CheckoutComponent, canActivate: [AuthGuard] },

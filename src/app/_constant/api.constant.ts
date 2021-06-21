@@ -12,10 +12,10 @@ export const apiConstant = {
   COOKIE_WITH_ID: '/cookie/:orgId/:propId/:id',
   COOKIE: '/cookie/:orgId/:propId',
   COOKIE_SCAN_JOBS: '/scan-jobs/:orgId/:propId',
-  COOKIE_LAST_SCANNING_DATA: '/last-scan-jobs/:propId',
+  COOKIE_LAST_SCANNING_DATA: '/last-cookie-scan-job/:propId',
   COOKIE_SCANNER_STATUS: '/scannerstatus/:orgId/:propId',
   // Cookie Consent
-  UPDATE_VENDORS  : '/consent/manage-vendors/:orgId/:propId',
+  UPDATE_VENDORS: '/consent/manage-vendors/:orgId/:propId',
   COOKIE_CONSENT: '/consents/tracking/:propId',
   COOKIE_TRACKING_FILTER: '/consents/trackingbyfilter/:propId',
   COOKIE_CONSENT_PUBLISHER: '/consent/cookieconsent',
@@ -41,20 +41,21 @@ export const apiConstant = {
   BILLING_ACTIVE_PLAN: '/billing/list/subscription',
   BILLING_FEATURES: '/billing/plan/allowed-features',
   //
-  BILLING_GET_ASSIGNE_PROP : '/licensed/property',
+  BILLING_GET_ASSIGNE_PROP: '/licensed/property',
   BILLING_GET_ASSIGNE_ORG: '/licensed/organizations',
 
   BILLING_ASSIGNE_PROPERTY: '/assign/license/property',
   BILLING_ASSIGNE_ORG: '/assign/license/organization',
   //
   BILLING_LIST_ALL_PROPERTY: '/unlicensed/property',
+  BILLING_LIST_ALL_PROPERTY_LICENSES: '/licensed/property_license',
   BILLING_LIST_ALL_ORG: '/unlicensed/organizations',
   ORG_ACITVE_LIST: '/organizations',
   //
   BILLING_UNSSIGNE_PROPERTY: '/unassign/license/property',
   BILLING_UNSSIGNE_ORG: '/unassign/license/organization',
   //
-  BILLING_MANAGE_SESSION_ID_GEN : '/billing/customerportal/session',
+  BILLING_MANAGE_SESSION_ID_GEN: '/billing/customerportal/session',
   // Workflow
   WORKFLOW: '/workflow',
   WORKFLOW_STATUS: '/workflow?workflow_status=',
@@ -70,7 +71,14 @@ export const apiConstant = {
   PROPERTY_PLAN: '/billing/plan/features',
   ORG_PLAN: '/available/user/organization/:orgId',
   COMPANY_PLAN: '/available/user/company',
-  PROP_AND_ORG_PLAN : '/billing/plan/inviteuser'
+  PROP_AND_ORG_PLAN: '/billing/plan/inviteuser',
+
+
+  // Consent Solution
+  GET_CONSENT_RECORDS: '/consent/solution/:pid',
+  GET_LEGAL_RECORDS: '/consent/legal_notices/:pid',
+  UPDATE_CONSENT: '/consent/solution/:pid/:id',
+  CONSENT_DASHBOARD: '/consent/dashboard/:pid'
 };
 
 // {

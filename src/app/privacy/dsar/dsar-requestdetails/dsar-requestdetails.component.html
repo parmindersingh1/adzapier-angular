@@ -18,6 +18,7 @@
                         Current Status of DSAR Request
                     </span>
                     <div class="d-flex">
+                        <button *ngIf="duplicateRequest.length > 0" type="button" class="btn btn-sm btn-outline-secondary btn-uppercase mr-2" (click)="openDuplicateRequest()">View duplicate</button>
                             <button (click)="onRefresh()" class="btn btn-sm btn-uppercase btn-outline-secondary pt-2 mr-2 lineheight-22">
                               <i class="fas fa-sync feather-16"></i> Refresh</button>
 
@@ -760,10 +761,10 @@
 
             <div class="row">
                 <div class="col-sm-12 ml-1 mb-3">
-                    <div class="form-check">
-                        <input type="checkbox" id="issubtaskrequired" class="form-check-input" [(ngModel)]="subTaskFields.required" name="required" />
+                    <div class="form-check checkbox-wrapper">
+                       <span class="mr-3 mt-0 pt-0"><input type="checkbox" id="issubtaskrequired" class="form-check-input m-0 ml-0 pr-3" [(ngModel)]="subTaskFields.required" name="required" /></span>
                         <label for="issubtaskrequired"
-                            class="form-check-label tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">
+                            class="form-check-label tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03 mb-0">
                             <span>Is Required</span>
                         </label>
                     </div>
@@ -956,4 +957,97 @@
             OK
         </button>
     </div>
+</ng-template>
+
+<ng-template #duplicateRequestModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Duplicate Requests</h4>
+        <button type="button" class="close" aria-label="Close" (click)="onCloseDuplicatereqModal()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+<div class="modal-body">
+    <div class="checkbox-wrapper">
+        <div *ngIf="duplicateRequest.length > 0" class="dup-list-wrapper">
+        <ul>
+            <li *ngFor="let data of duplicateRequest" [ngClass]="{'activelistid':data.id == duplicateRequestID ,'':data.id != duplicateRequestID}">
+                   <a (click)="showReqData(data)">
+                    <div class="dupid-div"> 
+                        {{data.id}}
+                    </div>
+                    <span class="pl-1 pr-1 text-capitalize border-gray rounded text-primary" *ngIf="data.request_status == 1">New</span>
+                    <span class="pl-1 pr-1 text-capitalize border-gray rounded text-warning" *ngIf="data.request_status == 2">In progress</span>
+                    <span class="pl-1 pr-1 text-capitalize border-gray rounded text-success" *ngIf="data.request_status == 3">Completed</span>
+                    <span class="pl-1 pr-1 text-capitalize border-gray rounded text-danger" *ngIf="data.request_status == -1">Rejected</span>
+                   </a>
+            </li>
+        </ul>
+       </div>
+       <div class="dup-list-details">
+        <ul class="ml-0 pl-3 mb-0">
+            <ng-container *ngFor="let details of displayCurrentRequestData;let i = index;">
+                <div *ngIf="i==0" class="font-weight-bold txt-uppercase" style="display: flex; flex-direction: column;"><span>Request ID : <span class="text-uppercase">{{duplicateRequestID}}</span></span>
+                <span>Status: <span [ngStyle]="duplicateRequestStatus">{{progressStaus}}</span></span>
+                </div>
+                
+            <li [ngClass]="details[0] == 'approver' || details[0] == 'captchacode' || details[0] == 'request_details' ? 'hide':'showrows'">
+                <span *ngIf="details[0] !== 'approver' && details[0] !== 'captchacode' && details[0] !== 'request_details' && details[0] !== 'request_type' && details[0] !== 'subject_type' && details[0] !== 'workflow'">
+                    {{capitalizatFirstLetterForDuplicate(details[0])}}: {{details[1]}}
+                </span>
+                <span *ngIf="details[0] =='request_type'">
+                    {{capitalizatFirstLetterForDuplicate(details[0])}}: {{duplicateReqType}}
+                </span>
+                <span *ngIf="details[0] =='subject_type'">
+                    {{capitalizatFirstLetterForDuplicate(details[0])}}: {{duplicateSubType}}
+                </span>
+                <span *ngIf="details[0] =='workflow'">
+                    {{capitalizatFirstLetterForDuplicate(details[0])}}: {{currentWorkflowname}}
+                </span>
+            </li>
+        </ng-container>
+        </ul>
+       <div>
+        <form [formGroup]="quillEditorRejectRequest" (ngSubmit)="onSubmitRejectRequest('duplicate')">
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group mg-b-5">
+                        <label for="reason"
+                            class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">
+                            Select reason</label>
+                            <select (change)="onChangeReason($event)"
+                                                formControlName="reason" class="form-control">
+                                                <option selected disabled value="">select reason</option>
+                                                <ng-container *ngFor="let obj of reasonList">
+                                                    <option [value]="obj.reason">{{obj.reason}}</option>
+                                                </ng-container>
+                            </select>
+                        <div *ngIf="isRejectrequestsubmitted && requestReject.reason?.errors" class="color-red">
+                            Reason is required
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <label class="mt-2 mb-0"><span class="color-red">*</span>Reason for rejecting the request</label>
+                    <quill-editor formControlName="editorComments" class="quilleditorextenddays" [styles]="{height: '90px'}"
+                     [modules]="quillConfig">
+                    </quill-editor>
+                    <div *ngIf="isRejectrequestsubmitted && requestReject.editorComments?.errors"
+                    class="color-red">Reason can not be empty, add your post.</div>
+                </div>
+                </div>
+            <div class="row">
+                <div class="ml-auto col-sm-2">
+                    <button type="submit" class="btn btn-xs btn-primary float-right mb-2 mt-2">Post</button>
+                </div>
+            </div>
+        </div>
+    </form>
+       </div>
+       </div>
+       </div>
+</div>
 </ng-template>

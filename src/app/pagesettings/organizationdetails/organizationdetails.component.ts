@@ -322,6 +322,7 @@ export class OrganizationdetailsComponent implements OnInit {
         }
       }, (error) => {
         this.alertMsg = error;
+        this.modalService.dismissAll('Data Saved!');
         this.isOpen = true;
         this.alertType = 'danger';
       });

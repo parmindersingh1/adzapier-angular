@@ -671,6 +671,10 @@ ul.ngx-pagination {
     //   word-break: break-all;
   }
 
+  .showrows{
+      display: flex;
+  }
+
   .hide {
       display: none;
   }
@@ -977,6 +981,93 @@ ul.ngx-pagination {
 //   .tooltip-inner {
 //     padding: 0px 5px !important;
 //   }
+
+.checkbox-wrapper {
+    display: flex;
+    flex-direction: row;
+    padding-left: 0;
+}
+
+.dup-list-wrapper {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    flex-direction: row;
+    display: flex;
+}
+
+.dup-list-wrapper ul {
+    margin: 0;
+    padding: 0;
+}
+
+.dup-list-wrapper ul li{
+    list-style: none;
+    margin: 0 0 -1px 0;
+    padding: 0;
+    flex-direction: row;
+    text-transform: uppercase;
+    border: 1px solid #ccc;
+    width: 330px;
+    justify-content: space-between;
+    display: flex;
+    align-items: baseline;
+    flex-direction: row;
+    align-content: stretch;    
+}
+
+.dup-list-wrapper ul li a {
+    cursor: pointer;
+    padding: 0 5px 0 6px;
+    margin: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.dup-list-details {
+    overflow-y: scroll;
+    height: 400px;
+}
+
+.dup-list-details > ul li{
+    margin: 0;
+    list-style: none;
+    padding: 0;
+    line-height: 25px;
+}
+
+.dupid-status {
+    display: flex;
+    border-bottom: 1px solid #ccc;
+    margin: -6px 0 12px 0;
+    padding-left: 3px;
+    justify-content: space-between;
+}
+
+.activelistid{
+    background-color:#f9f9f9;
+}
+
+.dupid-div {
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+    cursor: pointer !important;
+    width: 215px;
+    overflow: hidden !important;
+    flex-direction: row;
+    margin: 0 20px -1px 0;
+    z-index: 1200;
+    padding: 8px 3px 8px 0px;
+    text-transform: uppercase;
+    justify-items: center;
+}
+
+.border-gray {
+    border:1px solid #d8d8d8;
+    background: #fff;
+}
 
 @media(max-width:768px){
 .activitytab .nav-tabs .nav-link {

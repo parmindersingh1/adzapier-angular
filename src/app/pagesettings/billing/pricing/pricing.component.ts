@@ -7,16 +7,6 @@ import {UserService} from '../../../_services';
 import {moduleName} from '../../../_constant/module-name.constant';
 import {environment} from '../../../../environments/environment';
 import {featureCount, highLightFeatures} from '../../../_constant/main-plans.constant';
-
-declare var jQuery: any;
-
-
-class PlanDetails {
-  addonss: any[];
-  monthly: any[];
-  yearly: any[];
-}
-
 @Component({
   selector: 'app-pricing',
   templateUrl: './pricing.component.html',
@@ -25,16 +15,18 @@ class PlanDetails {
 export class PricingComponent implements OnInit, OnDestroy {
   subscriptionPlan;
   planDetails: any;
-  addonsList: any;
+  dsarPlanList: any;
+  consentPreferenceList: any;
   skeletonLoader = false;
   highLightFeatures = highLightFeatures;
   featureCount = featureCount;
   subscriptionList = [];
-  billingCycle = 'monthly';
-  billingAddonCycle = 'monthly';
+  cookieConsentBillingCycle = 'monthly';
+  addonsBillingCycle = 'monthly';
   stripe = (window as any).Stripe(environment.stripePublishablekey);
   cartItem = [];
   // subscriptionPlanType = 'CCPA';
+  maxCookiePreferenceList = 4;
   subTotal = 0;
   userEmail: any;
   skeletonLoaderFeature = true;
@@ -50,8 +42,9 @@ export class PricingComponent implements OnInit, OnDestroy {
   percentOff = 0;
   promoCode: any;
   activeData = {
-    base: {maxPrice: -1, maxPlanID: '', cycle: 'monthly'},
-    addons: {maxPrice: -1, maxPlanID: '', cycle: 'monthly'}
+    cookieConsent: {maxPrice: -1, maxPlanID: '', cycle: 'monthly'},
+    dsar: {maxPrice: -1, maxPlanID: '', cycle: 'monthly'},
+    consentPreference: {maxPrice: -1, maxPlanID: '', cycle: 'monthly'}
   };
   featuresList = [];
   isPromoCodeActive = false;
@@ -108,25 +101,29 @@ export class PricingComponent implements OnInit, OnDestroy {
     const activeData = this.activeData;
     for (const data of record) {
       if (data.active && data.planDetails.type === 0) {
-        if (data.planDetails.price > activeData.base.maxPrice) {
-          activeData.base.maxPrice = data.planDetails.price;
-          activeData.base.maxPlanID = data.planDetails.stripe_plan_id;
-          activeData.base.cycle = data.planDetails.cycle;
-          this.billingCycle = data.planDetails.cycle;
+        if (data.planDetails.price > activeData.cookieConsent.maxPrice) {
+          activeData.cookieConsent.maxPrice = data.planDetails.price;
+          activeData.cookieConsent.maxPlanID = data.planDetails.stripe_plan_id;
+          activeData.cookieConsent.cycle = data.planDetails.cycle;
+          this.cookieConsentBillingCycle = data.planDetails.cycle;
         }
-      } else {
-        if (data.planDetails.price > activeData.addons.maxPrice && data.active) {
-          activeData.addons.maxPrice = data.planDetails.price;
-          activeData.addons.maxPlanID = data.planDetails.stripe_plan_id;
-          activeData.addons.cycle = data.planDetails.cycle;
-          this.billingAddonCycle = data.planDetails.cycle;
+      } else if (data.planDetails.price > activeData.dsar.maxPrice && data.active && data.planDetails.type === 1) {
+          activeData.dsar.maxPrice = data.planDetails.price;
+          activeData.dsar.maxPlanID = data.planDetails.stripe_plan_id;
+          activeData.dsar.cycle = data.planDetails.cycle;
+          this.addonsBillingCycle = data.planDetails.cycle;
         }
-      }
-    }
+       else if (data.planDetails.price > activeData.consentPreference.maxPrice && data.active && data.planDetails.type === 2) {
+          activeData.consentPreference.maxPrice = data.planDetails.price;
+          activeData.consentPreference.maxPlanID = data.planDetails.stripe_plan_id;
+          activeData.consentPreference.cycle = data.planDetails.cycle;
 
+        }
+    }
     this.activeData = activeData;
-    this.subscriptionList = this.planDetails.base[`${this.billingCycle}`];
-    this.addonsList = this.planDetails.addons[`${this.billingAddonCycle}`];
+    this.subscriptionList = this.planDetails.cookieConsent[`${this.cookieConsentBillingCycle}`];
+    this.dsarPlanList = this.planDetails.dsar[`${this.addonsBillingCycle}`];
+    this.consentPreferenceList = this.planDetails.consentPreference[`${this.addonsBillingCycle}`];
   }
 
   onGetPlanDetails() {
@@ -148,8 +145,9 @@ export class PricingComponent implements OnInit, OnDestroy {
   }
 
   onSetPlans(plansData) {
-    this.subscriptionList = plansData.base[`${this.billingCycle}`];
-    this.addonsList = plansData.addons[`${this.billingAddonCycle}`];
+    this.subscriptionList = plansData.cookieConsent[`${this.cookieConsentBillingCycle}`];
+    this.dsarPlanList = plansData.dsar[`${this.addonsBillingCycle}`];
+    this.consentPreferenceList = plansData.consentPreference[`${this.addonsBillingCycle}`];
   }
 
   ngOnDestroy() {
@@ -202,30 +200,32 @@ export class PricingComponent implements OnInit, OnDestroy {
 
   onSelectPlanType(event) {
     if (event.target.checked) {
-      this.subscriptionList = this.planDetails[`${this.billingCycle}`];
+      this.subscriptionList = this.planDetails[`${this.cookieConsentBillingCycle}`];
     } else {
       // this.subscriptionPlanType = 'CCPA';
     }
   }
 
-  onSelectBillingCycle(e) {
+  onSelectCookieConsentBillingCycle(e) {
     if (e.checked) {
-      this.billingCycle = 'yearly';
-      this.subscriptionList = this.planDetails.base[`${this.billingCycle}`];
+      this.cookieConsentBillingCycle = 'yearly';
+      this.subscriptionList = this.planDetails.cookieConsent[`${this.cookieConsentBillingCycle}`];
     } else {
-      this.billingCycle = 'monthly';
-      this.subscriptionList = this.planDetails.base[`${this.billingCycle}`];
+      this.cookieConsentBillingCycle = 'monthly';
+      this.subscriptionList = this.planDetails.cookieConsent[`${this.cookieConsentBillingCycle}`];
     }
   }
 
 
-  onSelectAddonBillingCycle(e) {
+  onSelectAddoncookieConsentBillingCycle(e) {
     if (e.checked) {
-      this.billingAddonCycle = 'yearly';
-      this.addonsList = this.planDetails.addons[`${this.billingAddonCycle}`];
+      this.addonsBillingCycle = 'yearly';
+      this.dsarPlanList = this.planDetails.dsar[`${this.addonsBillingCycle}`];
+      this.consentPreferenceList = this.planDetails.consentPreference[`${this.addonsBillingCycle}`];
     } else {
-      this.billingAddonCycle = 'monthly';
-      this.addonsList = this.planDetails.addons[`${this.billingAddonCycle}`];
+      this.addonsBillingCycle = 'monthly';
+      this.dsarPlanList = this.planDetails.dsar[`${this.addonsBillingCycle}`];
+      this.consentPreferenceList = this.planDetails.consentPreference[`${this.addonsBillingCycle}`];
     }
   }
 
@@ -236,7 +236,7 @@ export class PricingComponent implements OnInit, OnDestroy {
       this.loading.stop();
       if (!res.error) {
         this.currentPlan = res.response;
-        this.billingCycle = res.response.duration === 'month' ? 'MONTHLY' : 'YEARLY';
+        this.cookieConsentBillingCycle = res.response.duration === 'month' ? 'MONTHLY' : 'YEARLY';
         // this.onSetValue();
       } else {
         this.currentPlan.services = res.error.services;
