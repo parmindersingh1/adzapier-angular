@@ -75,10 +75,8 @@ export class SubscriptionPopupComponent implements OnInit {
 
   openModal() {
     this.dataService.openModalWithData.subscribe(res => {
+      console.log(res)
       // debugger
-      if (res.hasOwnProperty('msg')) {
-        this.msg = res.msg;
-      }
       if (res.openModal) {
         if (!res.data) {
           this.currentPlanData = new DefaultPlanData();
@@ -90,9 +88,9 @@ export class SubscriptionPopupComponent implements OnInit {
           if (Object.keys(res.data).length !== 0) {
             this.type = res.type;
             this.currentPlanData = res.data;
-            if (res.currentplan !== undefined) {
-              this.existingOrgPlan = res.currentplan;
-            }
+            // if (res.data !== undefined) {
+            //   this.existingOrgPlan = res.data;
+            // }
           } else if (!res.data && res.type == 'org') {
             this.type = 'org'
             this.currentPlanData = new DefaultPlanData();
@@ -177,5 +175,9 @@ export class SubscriptionPopupComponent implements OnInit {
     this.router.navigateByUrl('/settings/billing/pricing')
   }
 
+  onTemplateHide(){
+    this.router.navigate(['/home/dashboard/analytics']);
+    this.template.hide();
+  }
 
 }

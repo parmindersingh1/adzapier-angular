@@ -194,8 +194,11 @@ export class HeaderComponent implements OnInit {
 
   onCheckConsentPreferenceSubscription() {
     this.planDetails = this.dataService.getCurrentPropertyPlanDetails();
-    const isAllowConsentPreference = this.dataService.isAllowFeatureByYes(this.planDetails.response, featuresName.CONSENT_PREFERENCE);
-    this.showConsentPreference = isAllowConsentPreference;
+    if(this.planDetails !== ""){
+      const isAllowConsentPreference = this.dataService.isAllowFeatureByYes(this.planDetails.response, featuresName.CONSENT_PREFERENCE);
+      this.dataService.isConsentPreferenceApplied.next({ requesttype: 'consentpreference', hasaccess: isAllowConsentPreference });
+      this.showConsentPreference = isAllowConsentPreference;
+    }
   }
 
 
@@ -267,7 +270,7 @@ export class HeaderComponent implements OnInit {
           subcategory: [{ showlink: 'DSAR', routerLink: '/home/dashboard/ccpa-dsar', icon: 'bar-chart-2' },
           // { showlink: 'GDPR', routerLink: '/pagenotfound', icon: 'pie-chart' },
           { showlink: 'Cookie Consent', routerLink: '/home/dashboard/cookie-consent', icon: 'fas fa-cookie feather-16' },
-          { showlink: 'Consent Preference', routerLink:'/home/dashboard/consent-preference' , icon: 'fas fa-cookie feather-16'}
+          { showlink: 'Consent Preference', routerLink: '/home/dashboard/consent-preference' , icon: 'fas fa-cookie feather-16'}
           ]
         }, {
           showlink: 'Privacy',
@@ -284,7 +287,7 @@ export class HeaderComponent implements OnInit {
             { showlink: 'Consent Tracking', routerLink: '/cookie-consent/cookie-tracking', icon: 'fas fa-file-contract feather-16' },
             { showlink: 'Setup', routerLink: '/cookie-consent/cookie-banner/setup', icon: 'fas fa-wrench feather-16' },
 
-            { showlink: 'Dashboard', routerLink: '/home/dashboard/consent-preference', icon: 'fas fa-cookie feather-16' },
+            { showlink: 'Dashboard', routerLink: '/home/dashboard/consent-preference', icon: 'fas fa-chart-line feather-16' },
             { showlink: 'Consent Records', routerLink: '/consent-solutions/consent-records', icon: 'fas fa-tasks feather-16' },
           ]
         }, { showlink: 'Billing', routerLink: '/settings/billing/manage' }];
@@ -641,6 +644,12 @@ export class HeaderComponent implements OnInit {
     return this.isSublinkActive = this.selectedSubmenu.some((t) => t.showlink === selectedItem.showlink && t.icon === selectedItem.icon);
   }
 
+  activateSublinkConsentPreference(selectedItem): boolean {
+    return this.isSublinkActive = this.selectedSubmenu.some((t) => t === selectedItem.routerLink);
+  }
+
+
+
   confirm() {
     this.modalRef.hide();
     if (this.orgPropertyMenu[0] !== undefined) {
@@ -872,21 +881,36 @@ export class HeaderComponent implements OnInit {
   onCheckSubscriptionForProperty() {
     const resData: any = this.dataService.getCurrentPropertyPlanDetails();
     if (resData.hasOwnProperty('response')) {
-      if (resData.response.hasOwnProperty('features')) {
-        const features = resData.response.features;
-        if (features == null) {
-          this.isShowDashboardForCookieConsent = false;
-          this.dataService.isLicenseAppliedForProperty.next({ requesttype: 'property', hasaccess: false });
-        } else {
-          if (Object.keys(features).length > 0) {
-            this.isShowDashboardForCookieConsent = true;
-            this.dataService.isLicenseAppliedForProperty.next({ requesttype: 'property', hasaccess: true });
-          } else {
-            this.isShowDashboardForCookieConsent = false;
-            this.dataService.isLicenseAppliedForProperty.next({ requesttype: 'property', hasaccess: false });
-          }
+      if(resData.response && resData.response.plan_details &&  resData.response.plan_details.consentPreference){
+        if(Object.values(resData.response.plan_details.consentPreference).length > 0){
+          this.dataService.isConsentPreferenceApplied.next({ requesttype: 'consentpreference', hasaccess: true })
+        }else{
+          this.dataService.isConsentPreferenceApplied.next({ requesttype: 'consentpreference', hasaccess: false });
         }
       }
+      if(resData.response && resData.response.plan_details &&  resData.response.plan_details.cookieConsent){
+        if(Object.values(resData.response.plan_details.cookieConsent).length > 0){
+          this.isShowDashboardForCookieConsent = true;
+          this.dataService.isLicenseAppliedForProperty.next({ requesttype: 'property', hasaccess: true });
+        }else{
+          this.dataService.isLicenseAppliedForProperty.next({ requesttype: 'property', hasaccess: false });
+        }
+      }
+      // if (resData.response.hasOwnProperty('features')) {
+      //   const features = resData.response.features;
+      //   if (features == null) {
+      //     this.isShowDashboardForCookieConsent = false;
+      //     this.dataService.isLicenseAppliedForProperty.next({ requesttype: 'property', hasaccess: false });
+      //   } else {
+      //     if (Object.keys(features).length > 0) {
+      //       this.isShowDashboardForCookieConsent = true;
+      //       this.dataService.isLicenseAppliedForProperty.next({ requesttype: 'property', hasaccess: true });
+      //     } else {
+      //       this.isShowDashboardForCookieConsent = false;
+      //       this.dataService.isLicenseAppliedForProperty.next({ requesttype: 'property', hasaccess: false });
+      //     }
+      //   }
+      // }
     }
   }
 

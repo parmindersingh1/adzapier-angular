@@ -12,7 +12,7 @@ export const apiConstant = {
   COOKIE_WITH_ID: '/cookie/:orgId/:propId/:id',
   COOKIE: '/cookie/:orgId/:propId',
   COOKIE_SCAN_JOBS: '/scan-jobs/:orgId/:propId',
-  COOKIE_LAST_SCANNING_DATA: '/last-scan-jobs/:propId',
+  COOKIE_LAST_SCANNING_DATA: '/last-cookie-scan-job/:propId',
   COOKIE_SCANNER_STATUS: '/scannerstatus/:orgId/:propId',
   // Cookie Consent
   UPDATE_VENDORS: '/consent/manage-vendors/:orgId/:propId',

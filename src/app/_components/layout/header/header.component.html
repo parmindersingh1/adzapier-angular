@@ -133,7 +133,7 @@
               <div class="consent-preference" style="width:135px" *ngIf="q > 9">
                 <li *ngIf="q=== 10" class="displayflex"><span>Consent Preference</span></li>
                 <li role="menuitem">
-                  <a class="dropdown-item" [class.active]="activateSublink(item)" routerLink="{{item.routerLink}}" (click)="goto(item)">
+                  <a class="dropdown-item" [class.active]="activateSublinkConsentPreference(item)"  routerLink="{{item.routerLink}}" (click)="goto(item)">
                   <span *ngIf="item.icon.indexOf('fa')===-1">
                     <i-feather name="{{item.icon}}" class="feather-16"></i-feather> {{item.showlink}}
                   </span>
