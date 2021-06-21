@@ -243,9 +243,9 @@ tr.row-disabled > td > a {
   text-decoration: underline;
 }
 
-::ng-deep .p-datatable .p-paginator-bottom {
-  justify-content: flex-end;
-}
+// ::ng-deep .p-datatable .p-paginator-bottom {
+//   justify-content: flex;
+// }
 
 // ::ng-deep .pi {
 //   font-size: 0.6rem;
@@ -337,6 +337,7 @@ tr.row-disabled > td > a {
   border-radius: 0px 0px 10px 10px;
   border-bottom: 0;
 }
+
 
 .aligned{
   text-decoration: none !important;
@@ -481,4 +482,27 @@ tr.row-disabled > td > a {
 .flex-justifycontent{
   flex-direction: column;
 }
+}
+
+.category::ng-deep .p-paginator-bottom .p-paginator {
+  display: flex;
+  position: relative;
+}
+
+.category::ng-deep .p-datatable .p-paginator .p-paginator-current{
+  right: 0 !important;
+  position: absolute !important;
+}
+
+.category ::ng-deep .p-datatable .p-paginator .p-inputwrapper-filled {
+  position: absolute !important;
+  left: 0 !important;
+}
+
+.category::ng-deep .p-datatable .p-paginator-bottom {
+  display: flex;
+  border-top: 1px solid #ccc;
+  border-radius: 0px 0px 10px 10px;
+  border-bottom: 0;
+  justify-content: center;
 }
