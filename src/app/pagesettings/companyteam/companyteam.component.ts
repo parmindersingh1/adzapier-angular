@@ -48,6 +48,7 @@ export class CompanyteamComponent implements OnInit {
   controlname: string;
   companyPlanDetails: any;
   userList: any = [];
+  selectusertype = true;
   constructor(private companyService: CompanyService, private modalService: NgbModal,
               private formBuilder: FormBuilder,
               private userService: UserService,
