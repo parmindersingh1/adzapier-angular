@@ -101,6 +101,10 @@ export class SubscriptionPopupComponent implements OnInit {
         } else {
           this.type = 'noPlan'
         }
+        this.template.config = {
+        backdrop: true,
+        ignoreBackdropClick: true
+        }; // to avoid browser scrollbar issue appears due to modal does not get hide properly.
         this.template.show();
       }
     })

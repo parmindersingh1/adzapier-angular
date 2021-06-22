@@ -335,6 +335,21 @@ export class DataService {
   }
 
 
+  openUpgradeModalForConsentPreference(res):any {
+    let planDetails = null;
+    if (res.hasOwnProperty('response')) {
+      if (res.response.hasOwnProperty('plan_details')) {
+        planDetails = res.response.plan_details;
+      }
+    }
+
+    this.openModal.next({
+      openModal: true,
+      data: planDetails.consentPreference,
+      type: 'consentPreference',
+    });
+    return Object.keys(planDetails.consentPreference).length !== 0 ? true : false;
+  }
 
 
   openUpgradeModalForDsar(res):any {
@@ -483,6 +498,11 @@ export class DataService {
   getOrganizationPropertyCreationStatus(){
     let isPropertystatus = localStorage.getItem('propertySelected');
     return isPropertystatus = JSON.parse(isPropertystatus)
+  }
+
+  checkLicenseAvailabilityForProperty(prop):Observable<any>{
+    let propLicense = this.getPropertyPlanDetails(this.constructor.name,moduleName.headerModule,prop.property_id);
+    return forkJoin([propLicense]);
   }
 
 }
