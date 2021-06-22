@@ -611,7 +611,7 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
         BannerDoNotSellMyDataBackGroundColor: this.bannerCookieData.config.Banner.DoNotSellButtonStylesAndContent.background,
         //  POPUP
         PopUpGlobalTextColor: this.bannerCookieData.config.POPUP.GlobalStyles.textColor,
-        PopUpSwitchButton: this.bannerCookieData.config.POPUP.SwitchButton.backgroundColor,
+        PopUpSwitchButton: this.bannerCookieData.config.POPUP.SwitchButton.background,
         PopUpGlobalBackgroundColor: this.bannerCookieData.config.POPUP.GlobalStyles.background,
         PopUpPurposeButtonTextColor: this.bannerCookieData.config.POPUP.PurposeButton.textColor,
         PopUpPurposeButtonBackgroundColor: this.bannerCookieData.config.POPUP.PurposeButton.background,
