@@ -112,6 +112,55 @@
     display: none;
 }
 
+.showdiv {
+    display: flex;
+}
+  
+
+.tabs {
+    display: flex;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 15px;
+    align-content: center;
+    align-items: center;
+    margin-left: 10px;
+
+}
+
+.tab [type="radio"] {
+    opacity: 0;
+    width: 120px;
+    height: 40px;
+    margin: 0;
+    cursor: pointer;
+    font-size: 14px;
+  }
+
+  .tab label {
+    text-transform: uppercase;
+    font-weight: 500;
+    background: white;
+    border-bottom: 0px !important;
+    z-index: 2;
+    text-transform: uppercase;
+    margin-bottom: -1px;
+    margin: 0 0 0 -10px;
+    padding: 10px;
+    
+  }
+
+ .tab [type="radio"]:checked ~ label {
+    border-bottom: 0px !important;
+    z-index: 2;
+    text-transform: uppercase;
+    margin-bottom: -1px;
+    padding: 10px;
+    border: 1px solid #ccc;
+  }
+  
+  
+  
+
 table > tbody > tr > td:nth-child(2) > div > img.img-fluid {
     max-width: 100px;
     max-height: 50px;

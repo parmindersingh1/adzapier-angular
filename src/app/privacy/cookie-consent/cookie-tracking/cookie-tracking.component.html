@@ -72,6 +72,8 @@
   [rowsPerPageOptions]="[10,20,30]"
   [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
   (onLazyLoad)="onGetCookieConsentData($event)"
+  currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+
 >
   <ng-template pTemplate="header">
     <tr>
@@ -122,11 +124,11 @@
       <td> <span class="ui-column-title">State</span> {{consent.state}}</td>
     </tr>
   </ng-template>
-  <ng-template pTemplate="summary">
+  <!-- <ng-template pTemplate="summary">
     <div class="p-d-flex p-ai-center p-jc-between">
       In total there are {{totalCookieCount ? totalCookieCount : 0 }} Consent.
     </div>
-  </ng-template>
+  </ng-template> -->
 </p-table>
 </div>
 </div >

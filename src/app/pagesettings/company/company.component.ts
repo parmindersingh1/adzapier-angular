@@ -62,7 +62,7 @@ export class CompanyComponent implements OnInit {
   userList: any = [];
   noResult = false;
   private companyPlanDetails: any;
-
+  selectusertype = true;
   constructor(private companyService: CompanyService, private modalService: NgbModal,
               private formBuilder: FormBuilder,
               private userService: UserService,
