@@ -290,3 +290,14 @@ flex-direction: column;
 .ql-disabled {
 	background-color: #ccc !important;
 }
+
+.btn-wf-save {
+	line-height: 15px;
+    display: flex;
+    height: 38px;
+    margin-left: 10px;
+    align-items: center;
+    justify-content: center;
+    align-content: center;
+    flex-wrap: nowrap;
+}

@@ -124,9 +124,19 @@ export class CookieTrackingComponent implements OnInit {
 
   onGetFromServer() {
     this.loading.start();
-    const filter = '&consent_type=' + this.filterTypes.consentType + '&status=' + this.filterTypes.status + '&country=' + this.filterTypes.country
-      + '&startDate=' + this.startDate + '&endDate=' + this.endDate;
-    this.cookieConsentService.getConsent(this.currrentManagedPropID, this.pagelimit + filter, this.constructor.name, moduleName.cookieTrackingModule)
+    // const filter = '&consent_type=' + this.filterTypes.consentType + '&status=' + this.filterTypes.status + '&country=' + this.filterTypes.country
+    //   + '&startDate=' + this.startDate + '&endDate=' + this.endDate;
+    const filter = {
+      consent_type: this.filterTypes.consentType,
+      status: this.filterTypes.status,
+      country: this.filterTypes.country,
+      startDate: this.startDate,
+      endDate: this.endDate,
+      limit: this.eventRows,
+      page: this.firstone
+    };
+
+    this.cookieConsentService.getConsent(this.currrentManagedPropID, filter, this.constructor.name, moduleName.cookieTrackingModule)
       .subscribe(res => {
         this.loading.stop();
         this.tLoading = false;

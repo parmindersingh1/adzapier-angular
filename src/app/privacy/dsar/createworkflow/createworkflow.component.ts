@@ -34,6 +34,7 @@ export class CreateworkflowComponent implements OnInit, DirtyComponents {
   isWorkflowEditing: boolean;
   submitted = true;
   isControlDisabled = false;
+  isWorkflownameEdit = false;
   alertMsg: any;
   alertType: any;
   quillConfig = {
@@ -196,6 +197,7 @@ export class CreateworkflowComponent implements OnInit, DirtyComponents {
 
   saveWorkflow(quillEditorForm: NgForm, status) {
     this.submitted = true;
+    //this.isWorkflownameEdit = this.isWorkflownameEdit;
     const flowStatus = status === 'active' ? 'draft' : 'active';
     if (quillEditorForm.invalid) {
       this.skeletonLoading = false;
@@ -211,6 +213,7 @@ export class CreateworkflowComponent implements OnInit, DirtyComponents {
       this.workflowService.updateWorkflow(this.constructor.name, moduleName.workFlowModule, this.selectedWorkflowId, requestObj)
         .subscribe((data) => {
           if (data) {
+            this.isWorkflownameEdit = false;
             this.isworkflowSaved = true;
             this.isControlDisabled = false;
             this.alertMsg = data.response;

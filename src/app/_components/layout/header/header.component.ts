@@ -486,6 +486,11 @@ export class HeaderComponent implements OnInit {
               property_name: activePro[0].property[proIndex].property_name,
               user_id: this.userID
             };
+            this.licenseAvailabilityForProperty(obj);
+            // this.dataService.getPropertyPlanDetails(this.constructor.name, moduleName.cookieConsentModule, obj.property_id)
+            // .subscribe((res: any) => {
+            //   this.dataService.setPropertyPlanToLocalStorage(res);
+            // });
             this.orgservice.changeCurrentSelectedProperty(obj);
             // this.orgservice.getSelectedOrgProperty.emit(obj);
             //  this.firstElement = false;
@@ -864,6 +869,15 @@ export class HeaderComponent implements OnInit {
     }
   }
 
+  licenseAvailabilityForProperty(prop){
+    this.dataService.checkLicenseAvailabilityForProperty(prop).subscribe(result => {
+      this.dataService.setPropertyPlanToLocalStorage(result[0]);
+      this.onCheckSubscriptionForProperty();
+    },(error)=>{
+      console.log(error);
+    })
+  }
+
   @HostListener('window:resize', ['$event'])
   onWindowResize(event) {
     if (event.target.outerWidth <= 767) {
@@ -886,6 +900,7 @@ export class HeaderComponent implements OnInit {
           this.dataService.isConsentPreferenceApplied.next({ requesttype: 'consentpreference', hasaccess: true })
         }else{
           this.dataService.isConsentPreferenceApplied.next({ requesttype: 'consentpreference', hasaccess: false });
+         // this.dataService.openUpgradeModalForConsentPreference(resData);
         }
       }
       if(resData.response && resData.response.plan_details &&  resData.response.plan_details.cookieConsent){
@@ -894,6 +909,7 @@ export class HeaderComponent implements OnInit {
           this.dataService.isLicenseAppliedForProperty.next({ requesttype: 'property', hasaccess: true });
         }else{
           this.dataService.isLicenseAppliedForProperty.next({ requesttype: 'property', hasaccess: false });
+          this.dataService.openUpgradeModalForCookieConsent(resData);
         }
       }
       // if (resData.response.hasOwnProperty('features')) {
