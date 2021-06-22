@@ -18,7 +18,7 @@ export class CookieTrackingService {
 
   getConsent(propsId, pagelimit, componentName, moduleName) {
     const path = apiConstant.COOKIE_CONSENT.replace(':propId', propsId);
-    return this.http.get(environment.apiUrl + path + pagelimit).pipe(map(res => res),
+    return this.http.get(environment.apiUrl + path , { params: pagelimit}).pipe(map(res => res),
       catchError(error => {
         this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.cookieConsent, componentName, moduleName, path);
         return throwError(error);
