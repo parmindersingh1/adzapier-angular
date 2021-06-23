@@ -81,7 +81,7 @@
                    <span class="flex-spacebetween">
                     <span class="ml-2 mr-2" *ngIf="isPropSelected(submenu)">
                     <i class="fa fa-check"></i></span>
-                    <i-feather  placement="bottom" [adaptivePosition]="true" tooltip="You have not assigned cookie consent license to this property" *ngIf="isLicenseAssignedForProperty(submenu)" class="feather-lock mr-1" name="lock"></i-feather>
+                    <!-- <i-feather  placement="bottom" [adaptivePosition]="true" tooltip="You have not assigned cookie consent license to this property" *ngIf="isLicenseAssignedForProperty(submenu)" class="feather-lock mr-1" name="lock"></i-feather> -->
                   </span>
                   </span>
                   <ng-template #disabledProperty>
@@ -322,7 +322,7 @@
                  <span class="flex-spacebetween" (click)="isProperyDisabled(submenu) ? false : isCurrentPropertySelected(item,submenu)">  {{ submenu.property_name ? convertAmpersand(submenu.property_name) : 'No Property' }}
                   <span class="ml-2 mr-2" *ngIf="isPropSelected(submenu)">
                   <i class="fa fa-check"></i></span>
-                  <i-feather  placement="bottom" [adaptivePosition]="true" tooltip="You have not assigned cookie consent license to this property" *ngIf="isLicenseAssignedForProperty(submenu)" class="feather-lock mr-1" name="lock"></i-feather>
+                  <!-- <i-feather  placement="bottom" [adaptivePosition]="true" tooltip="You have not assigned cookie consent license to this property" *ngIf="isLicenseAssignedForProperty(submenu)" class="feather-lock mr-1" name="lock"></i-feather> -->
                 </span>
                 </a>
               </li>
