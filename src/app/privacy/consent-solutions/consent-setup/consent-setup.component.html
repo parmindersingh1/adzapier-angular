@@ -1,0 +1,114 @@
+<div class="container" xmlns="http://www.w3.org/1999/html">
+  <div class="d-sm-flex align-items-center justify-content-between mg-b-5 mg-lg-b-10 mg-xl-b-15">
+    <div>
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb breadcrumb-style1 mg-b-10">
+          <li class="breadcrumb-item">Privacy</li>
+          <li class="breadcrumb-item"><a routerLink="/consent-solutions/consent-records">Cookie Preference</a></li>
+          <li class="breadcrumb-item active">Setup</li>
+        </ol>
+      </nav>
+    </div>
+  </div>
+<!--  <alert type="warning">-->
+<!--    <strong>Hold On!</strong> If You Recently updated the Configuration, It would take around 1 Hour to Reflect the changes-->
+<!--  </alert>-->
+  <h5 class="mt-2 head">Implementing Consent Preference</h5>
+  <p class="alert alert-info">
+    <b>Note! </b> The script must be placed before any other script in your site in order to ensure the banner is loaded before any other scripts have the chance to load or set cookies. This allows for the script tag to communicate the site visitor's consent preferences to downstream vendors and for those vendors to show content and set cookies as allowed by the site visitor.
+  </p>
+  <div class="card mt-3">
+    <div  class="card-header"><h6 style="float: left"><b>Production SDK </b></h6>
+      <button (click)="copyToClipboard()" style="float: right" type="button" class=" pull-right btn-sm btn btn-primary"><i class="mr-1 fa fa-clipboard" aria-hidden="true"></i>
+        {{ isCopied.one ? 'Copied' : 'Copy Script'}}</button>
+
+
+    </div>
+    <div style="background: #282a36" class="card-body">
+      <p  class="text-danger codeText">
+        <!-- <span>
+          <code style="color: #8be9fd">{{tagEle.openHead}}</code>
+        </span> <br /> -->
+        <span>
+          <code style="color: rgb(116, 116, 116)">//Please copy and paste this code into the header for each page on your website(s). It is important that this code be the first script in your document.  </code>
+        </span> <br />
+
+        <!-- <span>
+          <code style="color: #8be9fd">{{tagEle.openScript}}</code>
+        </span> <br />
+
+        <span>
+          <code style="color: rgb(116, 116, 116)">//To implement authenticated consent on a web page, you can place a cookie on the page and pass the authenticated consent identifier to Adzapier. </code>
+        </span> <br />
+
+        <span>
+          <code style="color: #fff">document.</code> <code style="color: #ff3f7c">cookie </code>  <code style="color: #ffffff"> = </code>
+           <code style="color: #8be9fd">"</code><code style="color: #f5cea9">authId=123123123</code><code style="color: #8be9fd">"</code>
+           <code style="color: #fff">;</code>
+        </span> <br />
+
+        <span>
+          <code style="color: #8be9fd">{{tagEle.closeScript}}</code>
+        </span> <br /> -->
+
+        <span>
+            <code style="color: #8be9fd">{{addScript}}</code>
+          </span>
+        <span style="color: #fff; font-size: 16px">{{scriptUrl}}
+          </span>
+        <span>
+            <code style="color: #8be9fd">{{closeScript}}</code>
+          </span> <br />
+        <!-- <span>
+          <code style="color: #8be9fd">{{tagEle.closeHead}}</code>
+        </span> -->
+      </p>
+    </div>
+  </div>
+
+
+  <div class="card mt-3">
+    <div  class="card-header"><h6 style="float: left"><b>Initialization  <span>
+<!--      <code style="color: rgb(116, 116, 116)">// Get Cookie Consent List by AuthID </code>-->
+    </span></b></h6>
+    </div>
+    <div *ngIf="!loadingSkeleton" style="background: #282a36" class="card-body">
+      <p  class="text-danger codeText">
+
+        <span>
+          <code style="color: rgb(116, 116, 116)">// Start with init function  </code> <br/>
+          <code style="color: #ff3f7c"> window.</code><code style="color: #8be9fd">CP_SDK_ADZAPIER</code><code style="color: yellow">.init</code><code style="color: #fff" [innerHTML]="initData" >
+        </code>
+
+
+        </span> <br />
+
+
+<!--        <span>-->
+<!--          <code style="color: rgb(116, 116, 116)">// HTTP Request Type = GET </code> <br/>-->
+<!--          <code style="color: #fff">-->
+<!--            <code style="color: #8be9fd">{{env.apiUrl}}</code>-->
+<!--            <code style="color: #fff">{{apiConstant.COOKIE_CONSENT_PUBLISHER + '/' + currrentManagedPropID + '?='}}</code>-->
+<!--            <code style="color: #ff3f7c">{{'/{AuthID}\n'}}</code>-->
+<!--            </code>-->
+<!--        </span> <br />-->
+      </p>
+    </div>
+  </div>
+
+
+
+  <div class="card mt-3">
+    <div class="card-header"><b>To implement the Production CDN script</b></div>
+    <div class="card-body">
+      <ul style="list-style-type: decimal">
+        <li class="mb-1">Click the Publish button. The Publish Website pane appears.</li>
+        <li class="mb-1">Click the Publish button.</li>
+        <li class="mb-1">Go to the Production Scripts Header Tab</li>
+        <li class="mb-1">Click the Copy Script button for the Production CDN script.</li>
+        <li class="mb-1">Paste the copied script in the head for your site.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+

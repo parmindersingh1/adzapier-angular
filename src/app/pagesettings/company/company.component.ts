@@ -236,7 +236,7 @@ export class CompanyComponent implements OnInit {
 
   onGenerateToken(cId) {
     this.loading.start();
-    this.companyService.generateToken(this.constructor.name, moduleName.organizationDetailsModule, cId)
+    this.companyService.generateToken(this.constructor.name, moduleName.organizationDetailsModule)
       .subscribe(res => {
         this.loading.stop();
         this.alertMsg = res.message;
@@ -254,7 +254,7 @@ export class CompanyComponent implements OnInit {
 
   onUpdateToken(cId) {
     this.loading.start();
-    this.companyService.updateToken(this.constructor.name, moduleName.organizationDetailsModule, cId)
+    this.companyService.updateToken(this.constructor.name, moduleName.organizationDetailsModule)
       .subscribe(res => {
         this.loading.stop();
         this.alertMsg = res.message;
@@ -273,7 +273,7 @@ export class CompanyComponent implements OnInit {
 
   onGetToken(cid) {
     this.loading.start();
-    this.companyService.getToken(this.constructor.name, moduleName.organizationDetailsModule, cid)
+    this.companyService.getToken(this.constructor.name, moduleName.organizationDetailsModule)
       .subscribe(res => {
         this.loading.stop();
         this.alertMsg = res.message;
