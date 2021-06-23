@@ -181,12 +181,13 @@
             </div>
 
             <div class="col-sm">
-              <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Updated At
+              <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Auth Id
 
               </label>
 
-              <p class="mg-b-0" style="font-size:small;">{{consentData.updated_at | date}}</p>
+              <p class="mg-b-0" style="font-size:small;">{{consentData.auth_id}}</p>
             </div>
+      
 
 
             <div class="col-sm">
@@ -206,6 +207,25 @@
                 </ng-template>
               </div>
             </div>
+            <div class="col-sm">
+              <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Preference
+
+              </label>
+
+              <div class="d-flex mg-b-0" style="justify-content:start;">
+                <label style="font-size: small;">Terms of Service </label>
+                <!-- <span  class="product-badge ml-2" style="height: 30px;"
+                       [ngClass]="{'status-instock': consentData.preferences.newsletter, 'status-outofstock' : !consentData.preferences.newsletter }" >{{consentData.preferences.newsletter}}</span> -->
+                <ng-container *ngIf="consentData.preferences.term_of_service;else elseblock">
+                  <i class="pi pi-check ml-2" style="font-size: 1.0rem; color:#5cb85c;"></i>
+                </ng-container>
+                <ng-template #elseblock>
+                  <i class="pi pi-times ml-2" style="font-size: 1.0rem; color: #d9534f;"></i>
+                </ng-template>
+              </div>
+            </div>
+
+            
 
             <div class="col-sm">
               <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Preference
@@ -274,6 +294,7 @@
               <tr style="text-align:center;">
                 <th>Version</th>
                 <th>Identifier</th>
+                <th>Content</th>
                 <th>Created Date</th>
                 <th style="width:40px"></th>
               </tr>
@@ -282,9 +303,10 @@
               <tr>
                 <td class="tabledatas">{{legalRecord.version}}</td>
                 <td class="tabledatas">{{legalRecord.identifier}}</td>
+                <td class="tabledatas">{{legalRecord.content}}</td>
                 <td class="tabledatas">{{legalRecord.created_at | date}}</td>
-                <td class="tabledatas" style="text-align-last:right;width:40px;"><a href="#"><i class="pi pi-eye"
-                                                                                                style="font-size: 0.9rem;"></i></a>
+                <td class="tabledatas" style="text-align-last:right;width:40px;"><i class="pi pi-eye" (click)="editLegal(editLeg,legalRecord)"
+                                                                                                style="font-size: 0.9rem;"></i>
                 </td>
               </tr>
             </ng-template>
@@ -309,6 +331,39 @@
   <div class="modal-body">
     <p>
       {{proofFormConsent}}
+    </p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-link pull-right" (click)="modalRef.hide()">Close</button>
+  </div>
+</ng-template>
+
+<ng-template #editLeg let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Version</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p>
+      {{LegalVersion}}
+    </p>
+  </div>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Identifier</h4>
+  </div>
+  <div class="modal-body">
+    <p>
+      {{LegalIdentifier}}
+    </p>
+  </div>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Content</h4>
+  </div>
+  <div class="modal-body">
+    <p>
+      {{LegalContent}}
     </p>
   </div>
   <div class="modal-footer">

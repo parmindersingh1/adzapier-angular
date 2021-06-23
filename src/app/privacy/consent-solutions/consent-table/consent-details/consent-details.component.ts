@@ -30,7 +30,11 @@ export class ConsentDetailsComponent implements OnInit {
   consentDataupadted = '';
   consentDatanews = '';
   consentDataprivacy = '';
-
+  LegalVersion = '';
+  LegalIdentifier = '';
+  LegalContent = '';
+  legalForm
+auth_id='';
   editConsentForm: FormGroup;
   submitted = false;
   dismissible = true;
@@ -128,6 +132,13 @@ export class ConsentDetailsComponent implements OnInit {
   editUser(edit, proofs) {
     this.proofFormConsent = proofs.form;
     this.modalRef = this.modalService.show(edit, {});
+  }
+
+  editLegal(editLeg , legalRecord){
+    this.LegalVersion = legalRecord.version;
+    this.LegalIdentifier = legalRecord.identifier;
+    this.LegalContent = legalRecord.content;
+    this.modalRef = this.modalService.show(editLeg, {});
   }
 
   editConsentDetails(editdetails) {
