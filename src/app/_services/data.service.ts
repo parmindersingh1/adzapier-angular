@@ -513,8 +513,7 @@ export class DataService {
 
   allowURLToDisplaySubscriptionPopup():boolean{
     this.checkClickedURL.subscribe((data) => this.urlClickedByUser = data);
-    console.log(this.urlClickedByUser,"urlclicked..");
-    if(this.urlClickedByUser == "/home/welcome" || this.urlClickedByUser == "/home/dashboard/ccpa-dsar"){ //should not equal to current route url
+    if(this.urlClickedByUser == "/home/welcome" || this.urlClickedByUser == "/home/dashboard/ccpa-dsar"){ // for cookie consent
       return false;
     }else{
       return true;
@@ -523,7 +522,7 @@ export class DataService {
 
   allowURLToDisplaySubscriptionPopupOrg():boolean{
      this.checkClickedURL.subscribe((data) => this.urlClickedByUser = data);
-     if(this.urlClickedByUser == "/home/welcome" || this.urlClickedByUser == "/home/dashboard/ccpa-dsar" || this.urlClickedByUser.indexOf('/privacy/dsar') !== -1){ //should not equal to current route url
+     if(this.urlClickedByUser == "/home/welcome" || this.urlClickedByUser == "/home/dashboard/ccpa-dsar" || this.urlClickedByUser.indexOf('/privacy/dsar') !== -1){ //for DSAR
        return true;
      }
    }
