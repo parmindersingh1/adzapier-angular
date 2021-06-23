@@ -289,6 +289,7 @@ export class HeaderComponent implements OnInit {
 
             { showlink: 'Dashboard', routerLink: '/home/dashboard/consent-preference', icon: 'fas fa-chart-line feather-16' },
             { showlink: 'Consent Records', routerLink: '/consent-solutions/consent-records', icon: 'fas fa-tasks feather-16' },
+            { showlink: 'Setup', routerLink: '/consent-solutions/setup', icon: 'fas fa-wrench feather-16' },
           ]
         }, { showlink: 'Billing', routerLink: '/settings/billing/manage' }];
     }, (error) => {
@@ -486,6 +487,7 @@ export class HeaderComponent implements OnInit {
               property_name: activePro[0].property[proIndex].property_name,
               user_id: this.userID
             };
+
             this.licenseAvailabilityForProperty(obj);
             // this.dataService.getPropertyPlanDetails(this.constructor.name, moduleName.cookieConsentModule, obj.property_id)
             // .subscribe((res: any) => {

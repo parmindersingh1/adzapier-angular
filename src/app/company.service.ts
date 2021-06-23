@@ -47,8 +47,8 @@ export class CompanyService {
   }
 
 
-  generateToken(componentName, moduleName, cId): Observable<any> {
-    const path = '/company/create-app-id/' + cId;
+  generateToken(componentName, moduleName): Observable<any> {
+    const path = '/company/create-app-id';
     return this.httpClient.get<any>(environment.apiUrl + path).pipe(shareReplay(1), catchError(error => {
       this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.inviteUser, componentName, moduleName, path);
       return throwError(error);
@@ -56,8 +56,8 @@ export class CompanyService {
   }
 
 
-  updateToken(componentName, moduleName, cId): Observable<any> {
-    const path = '/company/update-app-id/' + cId;
+  updateToken(componentName, moduleName): Observable<any> {
+    const path = '/company/update-app-id';
     return this.httpClient.get<any>(environment.apiUrl + path).pipe(shareReplay(1), catchError(error => {
       this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.inviteUser, componentName, moduleName, path);
       return throwError(error);
@@ -65,8 +65,8 @@ export class CompanyService {
   }
 
 
-  getToken(componentName, moduleName, cId): Observable<any> {
-    const path = '/company/get-app-id/' + cId;
+  getToken(componentName, moduleName): Observable<any> {
+    const path = '/company/get-app-id';
     return this.httpClient.get<any>(environment.apiUrl + path).pipe(shareReplay(1), catchError(error => {
       this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.inviteUser, componentName, moduleName, path);
       return throwError(error);
