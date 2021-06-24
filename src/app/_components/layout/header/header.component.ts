@@ -169,9 +169,9 @@ export class HeaderComponent implements OnInit {
       }, {
         showlink: 'Contact Us', routerLink: '/contactus'
       }];
-    this.onCheckSubscriptionForProperty();
-    this.onCheckSubscriptionForOrg();
-
+    // this.onCheckSubscriptionForProperty();
+    // this.onCheckSubscriptionForOrg();
+    // this.onCheckConsentPreferenceSubscription();
     window.addEventListener('storage', event => {
       if (event.storageArea == localStorage) {
         let token = localStorage.getItem('currentUser');
@@ -327,7 +327,7 @@ export class HeaderComponent implements OnInit {
             } else {
               this.isShowDashboardForDsar = false;
               this.dataService.isLicenseApplied.next({ requesttype: 'organization', hasaccess: false });
-              this.dataService.openUpgradeModalForDsar(res);
+              //this.dataService.openUpgradeModalForDsar(res);
               if (this.router.url.indexOf('ccpa-dsar') !== -1) {
                 this.router.navigate(['/home/dashboard/analytics']);
               }
@@ -365,9 +365,9 @@ export class HeaderComponent implements OnInit {
           this.router.navigate([this.router.url]);
         }
 
-        this.onCheckSubscriptionForProperty();
-        this.onCheckSubscriptionForOrg();
-        this.onCheckConsentPreferenceSubscription();
+        // this.onCheckSubscriptionForProperty();
+        // this.onCheckSubscriptionForOrg();
+        // this.onCheckConsentPreferenceSubscription();
       }, err => {
         this.loading.stop('1')
       });
@@ -862,6 +862,7 @@ export class HeaderComponent implements OnInit {
       this.dataService.setAvailableLicenseForFormAndRequestPerOrg(finalObj);
       if (finalObj !== null && Object.keys(finalObj).length !== 0) {
         this.dataService.isLicenseApplied.next({ requesttype: 'organization', hasaccess: true });
+        this.onCheckSubscriptionForOrg();
       }
     }, (error) => {
       console.log(error)
@@ -919,7 +920,7 @@ export class HeaderComponent implements OnInit {
         }else{
           this.dataService.isLicenseAppliedForProperty.next({ requesttype: 'property', hasaccess: false });
           this.isShowDashboardForCookieConsent = false;
-          //this.dataService.openUpgradeModalForCookieConsent(resData);
+          this.dataService.openUpgradeModalForCookieConsent(resData);
         }
       }
       // if (resData.response.hasOwnProperty('features')) {

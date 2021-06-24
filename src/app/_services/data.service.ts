@@ -375,7 +375,7 @@ export class DataService {
 
 
     this.openModal.next({
-      openModal: true, //this.allowURLToDisplaySubscriptionPopupOrg(),
+      openModal: this.allowURLToDisplaySubscriptionPopupOrg(),
       data: planDetails,
       type: 'org',
       msg: msg,
@@ -512,19 +512,27 @@ export class DataService {
   }
 
   allowURLToDisplaySubscriptionPopup():boolean{
-    this.checkClickedURL.subscribe((data) => this.urlClickedByUser = data);
-    if(this.urlClickedByUser == "/home/welcome" || this.urlClickedByUser == "/home/dashboard/ccpa-dsar"){ // for cookie consent
-      return false;
-    }else{
-      return true;
-    }
+        let licenseStatusForProperty;
+        this.isLicenseAppliedForProperty.subscribe((status) => {
+            licenseStatusForProperty = status;
+        });
+        if (!licenseStatusForProperty.hasaccess) {
+            return true;
+        } else {
+            return false;
+        }
   }
 
   allowURLToDisplaySubscriptionPopupOrg():boolean{
-     this.checkClickedURL.subscribe((data) => this.urlClickedByUser = data);
-     if(this.urlClickedByUser == "/home/welcome" || this.urlClickedByUser == "/home/dashboard/ccpa-dsar" || this.urlClickedByUser.indexOf('/privacy/dsar') !== -1){ //for DSAR
-       return true;
-     }
+    let licenseStatus;
+    this.isLicenseApplied.subscribe((status) => {
+      licenseStatus = status;
+    });
+    if (!licenseStatus.hasaccess) {
+      return true;
+    } else {
+      return false;
+    }
    }
 }
 
