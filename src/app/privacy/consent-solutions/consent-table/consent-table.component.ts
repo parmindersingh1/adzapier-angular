@@ -237,6 +237,7 @@ export class ConsentTableComponent implements OnInit {
           this.alertMsg = res.message;
           this.alertType = 'success';
           this.modalRef.hide();
+          this.onGetConsentRecord();
         }
       }, err => {
         this.loading.stop();
