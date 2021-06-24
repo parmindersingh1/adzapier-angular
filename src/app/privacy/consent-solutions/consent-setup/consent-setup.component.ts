@@ -27,7 +27,7 @@ export class ConsentSetupComponent implements OnInit {
   currrentManagedPropID = '';
   @ViewChild('template', { static: true}) template: ElementRef;
   closeScript = `"></script>`;
-  addScript = `<script src="`;
+  addScript = `<script type="application/javascript" src="`;
   tagEle = {
     openHead: '<head>',
     closeHead: '</head>',

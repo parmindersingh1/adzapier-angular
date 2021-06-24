@@ -28,7 +28,7 @@ export class SetupComponent implements OnInit {
   currrentManagedPropID: any;
   @ViewChild('template', { static: true}) template: ElementRef;
   closeScript = `"></script>`;
-  addScript = `<script src="`;
+  addScript = `<script type="application/javascript" src="`;
   tagEle = {
     openHead: '<head>',
     closeHead: '</head>',
@@ -94,7 +94,7 @@ export class SetupComponent implements OnInit {
   }
   copyToClipboard() {
     this.isCopied.one = true;
-    const copyText: any = 
+    const copyText: any =
      this.addScript + '//' + this.scriptUrl + this.closeScript;
     let textarea = null;
     textarea = document.createElement('textarea');
