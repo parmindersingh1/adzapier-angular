@@ -202,7 +202,7 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
         this.dataService.isLicenseApplied.next({requesttype:'organization',hasaccess:false});
       }
     }
-    this.onOpenPopUp();
+  //  this.onOpenPopUp();
   }
 
   onOpenPopUp() {

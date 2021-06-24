@@ -115,12 +115,17 @@ export class ConsentTableComponent implements OnInit {
               private formBuilder: FormBuilder,
               private modalService: BsModalService
   ) {
+    this.dateCustomClasses = [
+      { date: new Date(), classes: ['theme-dark-blue'] },
+    ];
+    this.searchbydaterange = [new Date(new Date().setDate(new Date().getDate() - 30)),new Date()]
   }
 
   ngOnInit() {
     this.onGetPropsAndOrgId();
     this.onSetUpDebounce();
-    this.initForm();
+    this.bsConfig = Object.assign({}, { containerClass: 'theme-dark-blue', showClearButton: true, returnFocusToInput: true, dateInputFormat: 'yyyy-mm-dd', adaptivePosition : true, showTodayButton:true, ranges: this.ranges  });
+
   }
 
   onSetUpDebounce() {
