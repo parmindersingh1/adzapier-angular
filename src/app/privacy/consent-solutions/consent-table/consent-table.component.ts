@@ -31,7 +31,7 @@ export class ConsentTableComponent implements OnInit {
   alertMsg: any;
   isOpen = false;
   alertType: any;
-  AddConsentForm:FormGroup
+  AddConsentForm:FormGroup;
   pagelimit;
   dismissible = true;
   planDetails: any;
@@ -125,7 +125,7 @@ export class ConsentTableComponent implements OnInit {
     this.onGetPropsAndOrgId();
     this.onSetUpDebounce();
     this.bsConfig = Object.assign({}, { containerClass: 'theme-dark-blue', showClearButton: true, returnFocusToInput: true, dateInputFormat: 'yyyy-mm-dd', adaptivePosition : true, showTodayButton:true, ranges: this.ranges  });
-
+    this.initForm();
   }
 
   onSetUpDebounce() {
