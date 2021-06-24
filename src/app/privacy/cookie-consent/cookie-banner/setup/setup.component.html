@@ -22,8 +22,8 @@
     <div  class="card-header"><h6 style="float: left"><b>Production CDN </b></h6>
       <button (click)="copyToClipboard()" style="float: right" type="button" class=" pull-right btn-sm btn btn-primary"><i class="mr-1 fa fa-clipboard" aria-hidden="true"></i>
          {{ isCopied.one ? 'Copied' : 'Copy Script'}}</button>
-    
-    
+
+
     </div>
     <div *ngIf="!loadingSkeleton" style="background: #282a36" class="card-body">
       <p  class="text-danger codeText">
@@ -72,8 +72,8 @@
     <div  class="card-header"><h6 style="float: left"><b>Authenticated Consent</b></h6>
       <button (click)="copyToClipboards()" style="float: right" type="button" class=" pull-right btn-sm btn btn-primary"><i class="mr-1 fa fa-clipboard" aria-hidden="true"></i>
          {{ isCopied.three ? 'Copied' : 'Copy Script'}}</button>
-    
-    
+
+
     </div>
     <div *ngIf="!loadingSkeleton" style="background: #282a36" class="card-body">
       <p  class="text-danger codeText">
@@ -141,8 +141,8 @@
           <code style="color: rgb(116, 116, 116)">// HTTP Request Type = GET </code> <br/>
           <code style="color: #fff">
             <code style="color: #8be9fd">{{env.apiUrl}}</code>
-            <code style="color: #fff">{{apiConstant.COOKIE_CONSENT_PUBLISHER + '/' + currrentManagedPropID + '?='}}</code>
-            <code style="color: #ff3f7c">{{'/{AuthID}\n'}}</code>
+            <code style="color: #fff">{{apiConstant.COOKIE_CONSENT_PUBLISHER + '/' + currrentManagedPropID + '?authid='}}</code>
+            <code style="color: #ff3f7c">{{'{AuthID}\n'}}</code>
             </code>
         </span> <br />
       </p>
