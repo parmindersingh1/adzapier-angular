@@ -155,19 +155,39 @@ export class ConsentTableComponent implements OnInit {
     this.AddConsentForm = this.formBuilder.group({
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
-      email: ['', Validators.required,Validators.pattern],
+      email: ['', Validators.required],
       dataSource: ['', Validators.required],
       country: ['', Validators.required],
       ownerID: [''],
       ipAddress: ['', Validators.required],
-      newsLetter:[''],
-      privacyPolicy:[''],
-      term_of_service:[''],
+      // newsLetter:[''],
+      // term_of_service:[''],
+      // privacyPolicy:[''],
+      preferences:this.formBuilder.array([this.initPrefRows()]),
       verified:[''],
       proofs:this.formBuilder.array([this.initItemRows()]),
       legalNotices:this.formBuilder.array([this.initLegalRows()]),
 
     });
+  }
+
+  get prefArr(){
+    return this.AddConsentForm.get('preferences') as FormArray;
+  }
+
+  initPrefRows(){
+    return this.formBuilder.group({
+      preference:[''],
+      allow:[false],
+    })
+  }
+
+  addNewPref(){
+    this.prefArr.push(this.initPrefRows());
+  }
+
+  deletePref(index){
+    this.prefArr.removeAt(index);
   }
 
   get formArr(){
@@ -227,9 +247,10 @@ export class ConsentTableComponent implements OnInit {
       country: this.AddConsentForm.value.country,
       data_source: this.AddConsentForm.value.dataSource,
       ip_address: this.AddConsentForm.value.ipAddress,
-      preferences:{newsletter:this.AddConsentForm.value.newsLetter,
-      privacy_policy:this.AddConsentForm.value.privacyPolicy,
-      term_of_service:this.AddConsentForm.value.term_of_service},
+      // preferences:{newsletter:this.AddConsentForm.value.newsLetter,
+      // privacy_policy:this.AddConsentForm.value.privacyPolicy,
+      // term_of_service:this.AddConsentForm.value.term_of_service},
+      preferences:this.AddConsentForm.value.preferences,
       proofs:this.AddConsentForm.value.proofs,
       legal_notices:this.AddConsentForm.value.legalNotices,
     };
@@ -263,10 +284,16 @@ export class ConsentTableComponent implements OnInit {
       country:'',
       ownerID:'',
       ipAddress:'',
-      newsLetter:false,
-      privacyPolicy:false,
-      term_of_service:false,
       verified:false,
+      preferences:[{
+        preference:'',
+        allow:false,
+
+      }],
+      // newsLetter:false,
+      // term_of_service:false,
+      // privacyPolicy:false,
+      
       proofs:[{
         content:'',
         form:''

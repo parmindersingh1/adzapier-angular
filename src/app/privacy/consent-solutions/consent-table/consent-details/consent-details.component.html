@@ -187,63 +187,33 @@
 
               <p class="mg-b-0" style="font-size:small;">{{consentData.auth_id}}</p>
             </div>
-      
-
 
             <div class="col-sm">
-              <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Preference
+              <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Updated At
 
               </label>
 
-              <div class="d-flex mg-b-0" style="justify-content:start;">
-                <label style="font-size: small;">Newsletter </label>
-                <!-- <span  class="product-badge ml-2" style="height: 30px;"
-                       [ngClass]="{'status-instock': consentData.preferences.newsletter, 'status-outofstock' : !consentData.preferences.newsletter }" >{{consentData.preferences.newsletter}}</span> -->
-                <ng-container *ngIf="consentData.preferences.newsletter;else elseblock">
-                  <i class="pi pi-check ml-2" style="font-size: 1.0rem; color:#5cb85c;"></i>
-                </ng-container>
-                <ng-template #elseblock>
-                  <i class="pi pi-times ml-2" style="font-size: 1.0rem; color: #d9534f;"></i>
-                </ng-template>
-              </div>
+              <p class="mg-b-0" style="font-size:small;">{{consentData.updated_at | date}}</p>
             </div>
-            <div class="col-sm">
-              <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Preference
-
-              </label>
-
-              <div class="d-flex mg-b-0" style="justify-content:start;">
-                <label style="font-size: small;">Terms of Service </label>
-                <!-- <span  class="product-badge ml-2" style="height: 30px;"
-                       [ngClass]="{'status-instock': consentData.preferences.newsletter, 'status-outofstock' : !consentData.preferences.newsletter }" >{{consentData.preferences.newsletter}}</span> -->
-                <ng-container *ngIf="consentData.preferences.term_of_service;else elseblock">
-                  <i class="pi pi-check ml-2" style="font-size: 1.0rem; color:#5cb85c;"></i>
-                </ng-container>
-                <ng-template #elseblock>
-                  <i class="pi pi-times ml-2" style="font-size: 1.0rem; color: #d9534f;"></i>
-                </ng-template>
-              </div>
-            </div>
-
             
 
-            <div class="col-sm">
+            <!-- <div class="col-sm">
               <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Preference
 
               </label>
 
-              <div class="d-flex mg-b-0" style="justify-content:start;">
-                <label style="font-size: small;">Privacy Policy</label>
+              <div *ngFor="let pref of consentData.preferences" class="d-flex mg-b-0" style="justify-content:start;">
+                <label style="font-size: small;">{{pref.preference}}</label> -->
                 <!-- <span  class="product-badge ml-2" style="height: 30px;"
                        [ngClass]="{'status-instock': consentData.preferences.newsletter, 'status-outofstock' : !consentData.preferences.newsletter }" >{{consentData.preferences.newsletter}}</span> -->
-                <ng-container *ngIf="consentData.preferences.privacy_policy;else elseblock">
+                <!-- <ng-container *ngIf="pref.allow;else elseblock">
                   <i class="pi pi-check ml-2" style="font-size: 1.0rem; color:#5cb85c;"></i>
                 </ng-container>
                 <ng-template #elseblock>
                   <i class="pi pi-times ml-2" style="font-size: 1.0rem; color: #d9534f;"></i>
                 </ng-template>
               </div>
-            </div>
+            </div> -->
 
           </div>
         </div>
@@ -308,6 +278,41 @@
                 <td class="tabledatas" style="text-align-last:right;width:40px;"><i class="pi pi-eye" (click)="editLegal(editLeg,legalRecord)"
                                                                                                 style="font-size: 0.9rem;"></i>
                 </td>
+              </tr>
+            </ng-template>
+          </p-table>
+
+
+        </p-tabPanel>
+
+        <p-tabPanel header="Preferences" class="customs">
+
+
+          <p-table [value]="consentData.preferences"
+                   [scrollable]="true" scrollHeight="185px"
+                   styleClass="p-datatable-sm ">
+            <!-- <ng-template pTemplate="caption">
+             Legal Notice
+         </ng-template> -->
+            <ng-template pTemplate="header">
+              <tr style="text-align:center;">
+                <th>Preference</th>
+                <th>Allowed</th>
+                <th style="width:40px"></th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-pref>
+              <tr>
+                <td class="tabledatas">{{pref.preference}}</td>
+                <td class="tabledatas"><ng-container *ngIf="pref.allow;else elseblock">
+                  <i class="pi pi-check ml-2" style="font-size: 1.0rem; color:#5cb85c;"></i>
+                </ng-container>
+                <ng-template #elseblock>
+                  <i class="pi pi-times ml-2" style="font-size: 1.0rem; color: #d9534f;"></i>
+                </ng-template></td>
+                <!-- <td class="tabledatas" style="text-align-last:right;width:40px;"><i class="pi pi-eye" (click)="editLegal(editLeg,legalRecord)"
+                                                                                                style="font-size: 0.9rem;"></i>
+                </td> -->
               </tr>
             </ng-template>
           </p-table>
