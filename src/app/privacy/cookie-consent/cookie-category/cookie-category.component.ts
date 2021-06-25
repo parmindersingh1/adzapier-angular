@@ -269,11 +269,6 @@ export class CookieCategoryComponent implements OnInit {
 
 
   openNew() {
-    const planDetails = this.dataService.getCurrentPropertyPlanDetails();
-    const isPropertyPlan = this.dataService.isPropertyHasPlan(planDetails, featuresName.HIGHLY_BANNER_CONFIG);
-    if (!isPropertyPlan) {
-      return false;
-    }
     this.addCookieForm.reset();
     this.isUpdate = false;
     this.cookieCategory = {};
