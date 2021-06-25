@@ -422,6 +422,7 @@ export class HeaderComponent implements OnInit {
             const orgIndex = this.selectedOrgProperties.findIndex((t) => t.organization_id === data.organization_id);
             if (orgIndex === -1) {
               this.selectedOrgProperties.push(data);
+              this.licenseAvailabilityForProperty(data);
             }
             this.isPropSelected(data);
           }
