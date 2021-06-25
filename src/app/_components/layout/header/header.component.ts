@@ -332,7 +332,7 @@ export class HeaderComponent implements OnInit {
                 this.router.navigate(['/home/dashboard/analytics']);
               }
             }
-        } 
+        }
       }, error => {
         this.loading.stop('2')
       });
@@ -367,7 +367,7 @@ export class HeaderComponent implements OnInit {
 
         // this.onCheckSubscriptionForProperty();
         // this.onCheckSubscriptionForOrg();
-        // this.onCheckConsentPreferenceSubscription();
+        this.onCheckConsentPreferenceSubscription();
       }, err => {
         this.loading.stop('1')
       });
@@ -582,7 +582,7 @@ export class HeaderComponent implements OnInit {
   }
 
   goto(link: any, id?: any) {
-    if (link.routerLink === '/home/dashboard/cookie-consent' || link.routerLink === '/cookie-consent/manage-vendors' || link.routerLink === '/cookie-consent/cookie-category' 
+    if (link.routerLink === '/home/dashboard/cookie-consent' || link.routerLink === '/cookie-consent/manage-vendors' || link.routerLink === '/cookie-consent/cookie-category'
       || link.routerLink === '/cookie-consent/cookie-banner' || link.routerLink === '/cookie-consent/cookie-tracking' || link.routerLink === '/cookie-consent/cookie-banner/setup') {
       if (this.selectedOrgProperties.length > 0) {
         this.dataService.checkClickedURL.next(link.routerLink);
