@@ -4,9 +4,9 @@ import { WebformsComponent } from './webforms.component';
 import { AuthGuard } from 'src/app/_helpers';
 import { DirtyCheckGuard } from 'src/app/guards/dirty-check.guards';
 import { RouteguardService } from 'src/app/_services/routeguard.service';
+import {LicenseguardService} from 'src/app/_services/licenseguard.service';
 
-
-const routes: Routes = [{path: '', component: WebformsComponent, canActivate: [AuthGuard,RouteguardService], canDeactivate: [DirtyCheckGuard]},
+const routes: Routes = [{path: '', component: WebformsComponent, canActivate: [AuthGuard,RouteguardService,LicenseguardService], canDeactivate: [DirtyCheckGuard]},
 { path: 'privacy/dsar/dsarform/:id', loadChildren: () => import(`../dsarform/dsarform.module`)
   .then(m => m.DsarformModule), canDeactivate: [DirtyCheckGuard] }
 ];

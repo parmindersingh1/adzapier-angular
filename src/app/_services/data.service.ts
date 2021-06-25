@@ -44,8 +44,14 @@ export class DataService {
     return this.OrganizationCreatedStatus.asObservable();
   }
 
+  public checkClickedURL = new BehaviorSubject<any>("/home/welcome");
+  get checkNavigationURL(){
+    return this.checkClickedURL.asObservable();
+  }
+ 
   licenseAvailabilityObj = {};
   planUsageByOrgid = [];
+  urlClickedByUser;
   constructor(private http: HttpClient, private lokiService: LokiService) {
   }
 
@@ -198,7 +204,7 @@ export class DataService {
       }
     }
     if (flag === false) {
-      this.openModal.next({openModal: true, data: res.plan_details})
+      this.openModal.next({openModal: this.allowURLToDisplaySubscriptionPopup(), data: res.plan_details})
     }
     return flag;
   }
@@ -249,7 +255,7 @@ export class DataService {
 
     if (flag === false) {
       this.openModal.next({
-        openModal: true,
+        openModal: this.allowURLToDisplaySubscriptionPopup(),
         data: plan_details,
         type: planType,
         msg: msg,
@@ -294,7 +300,7 @@ export class DataService {
     }
     if (flag === false) {
       this.openModal.next({
-        openModal: true,
+        openModal: this.allowURLToDisplaySubscriptionPopup(),
         data: res.plan_details.cookieConsent,
         type: 'cookieConsent',
         // currentplan: this.getCurrentOrgPlanDetails().response.plan_details
@@ -311,7 +317,7 @@ export class DataService {
       }
     }
     this.openModal.next({
-      openModal: true,
+      openModal: this.allowURLToDisplaySubscriptionPopup(),
       data: planDetails.cookieConsent,
       type: 'cookieConsent',
     });
@@ -327,7 +333,7 @@ export class DataService {
     }
 
     this.openModal.next({
-      openModal: true,
+      openModal: this.allowURLToDisplaySubscriptionPopup(),
       data: planDetails.cookieConsent,
       type: 'cookieConsent',
     });
@@ -344,7 +350,7 @@ export class DataService {
     }
 
     this.openModal.next({
-      openModal: true,
+      openModal: this.allowURLToDisplaySubscriptionPopup(),
       data: planDetails.consentPreference,
       type: 'consentPreference',
     });
@@ -369,7 +375,7 @@ export class DataService {
 
 
     this.openModal.next({
-      openModal: true,
+      openModal: this.allowURLToDisplaySubscriptionPopupOrg(),
       data: planDetails,
       type: 'org',
       msg: msg,
@@ -409,7 +415,7 @@ export class DataService {
       changeResponseProperty = 'workflow_available';
     }
     if (Object.keys(responseData).length === 0) {
-      this.openModal.next({openModal: true, data: responseData, type: 'org', msg: ''});
+      this.openModal.next({openModal: this.allowURLToDisplaySubscriptionPopup(), data: responseData, type: 'org', msg: ''});
       return false;
     } else if (responseData[changeResponseProperty] === -1 || responseData[changeResponseProperty] > 0) {
       return true;
@@ -418,7 +424,7 @@ export class DataService {
       const requestMsg = 'You have exceeded request creation limit. For more details Manage subscription or upgrade plan'
       const respMsg = changeResponseProperty == 'form_available' ? formMsg : requestMsg;
       this.openModal.next({
-        openModal: true,
+        openModal: this.allowURLToDisplaySubscriptionPopup(),
         data: responseData,
         type: 'org',
         msg: respMsg,
@@ -427,7 +433,7 @@ export class DataService {
       return false;
     } else {
       this.openModal.next({
-        openModal: true,
+        openModal: this.allowURLToDisplaySubscriptionPopup(),
         data: responseData,
         type: 'org',
         msg: '',
@@ -505,6 +511,29 @@ export class DataService {
     return forkJoin([propLicense]);
   }
 
+  allowURLToDisplaySubscriptionPopup():boolean{
+        let licenseStatusForProperty;
+        this.isLicenseAppliedForProperty.subscribe((status) => {
+            licenseStatusForProperty = status;
+        });
+        if (!licenseStatusForProperty.hasaccess) {
+            return true;
+        } else {
+            return false;
+        }
+  }
+
+  allowURLToDisplaySubscriptionPopupOrg():boolean{
+    let licenseStatus;
+    this.isLicenseApplied.subscribe((status) => {
+      licenseStatus = status;
+    });
+    if (!licenseStatus.hasaccess) {
+      return true;
+    } else {
+      return false;
+    }
+   }
 }
 
 export class accesstype {

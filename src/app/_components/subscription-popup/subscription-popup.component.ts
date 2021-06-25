@@ -1,6 +1,6 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {moduleName} from '../../_constant/module-name.constant';
-import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
+import {BsModalRef, ModalDirective, BsModalService} from 'ngx-bootstrap/modal';
 import {BillingService} from '../../_services/billing.service';
 import {AuthenticationService} from '../../_services';
 import {CCPAFormConfigurationService} from '../../_services/ccpaform-configuration.service';
@@ -24,7 +24,7 @@ class DefaultPlanData {
 export class SubscriptionPopupComponent implements OnInit {
   modalRef: BsModalRef;
   cookieConsentPlans = [];
-  @ViewChild('template', {static: true}) template: any;
+  @ViewChild('template', { static: true }) template: ModalDirective;
   allPlanData: any;
   billingCycle = 'monthly';
   currentPlanData: any = {

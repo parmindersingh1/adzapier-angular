@@ -96,7 +96,7 @@ export class ConsentSolutionComponent implements OnInit {
   ngOnInit() {
     this.onSetUpDate();
     // this.onGetConsentData();
-    this.onOpenPopUp();
+    // this.onOpenPopUp();
   }
 
 
