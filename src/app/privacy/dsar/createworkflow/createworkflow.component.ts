@@ -82,7 +82,7 @@ export class CreateworkflowComponent implements OnInit, DirtyComponents {
 
 
     this.loadWorkflowById(this.selectedWorkflowId);
-    this.defaultStages = ['UNVERIFIED','NEW','VERIFY REQUEST','VERIFY CONSUMER REQUEST','LEGAL/PRIVACY REVIEW','REQUEST FULFILL','CONSUMER NOTIFICATION','IN PROGRESS','COMPLETE'];
+    this.defaultStages = ['UNVERIFIED','NEW','VERIFY REQUEST','VERIFY CONSUMER REQUEST','LEGAL/PRIVACY REVIEW','REQUEST FULFILL','CONSUMER NOTIFICATION','IN PROGRESS','COMPLETE','NOTIFY'];
   }
 
   previousTab() {
