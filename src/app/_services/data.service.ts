@@ -204,7 +204,7 @@ export class DataService {
       }
     }
     if (flag === false) {
-      this.openModal.next({openModal: this.allowURLToDisplaySubscriptionPopup(), data: res.plan_details})
+      this.openModal.next({openModal: this.isSubscriptionExistForProperty(), data: res.plan_details})
     }
     return flag;
   }
@@ -255,7 +255,7 @@ export class DataService {
 
     if (flag === false) {
       this.openModal.next({
-        openModal: this.allowURLToDisplaySubscriptionPopup(),
+        openModal: this.isSubscriptionExistForProperty(),
         data: plan_details,
         type: planType,
         msg: msg,
@@ -300,7 +300,7 @@ export class DataService {
     }
     if (flag === false) {
       this.openModal.next({
-        openModal: this.allowURLToDisplaySubscriptionPopup(),
+        openModal: this.isSubscriptionExistForProperty(),
         data: res.plan_details.cookieConsent,
         type: 'cookieConsent',
         // currentplan: this.getCurrentOrgPlanDetails().response.plan_details
@@ -317,7 +317,7 @@ export class DataService {
       }
     }
     this.openModal.next({
-      openModal: this.allowURLToDisplaySubscriptionPopup(),
+      openModal: this.isSubscriptionExistForProperty(),
       data: planDetails.cookieConsent,
       type: 'cookieConsent',
     });
@@ -333,7 +333,7 @@ export class DataService {
     }
 
     this.openModal.next({
-      openModal: this.allowURLToDisplaySubscriptionPopup(),
+      openModal: this.isSubscriptionExistForProperty(),
       data: planDetails.cookieConsent,
       type: 'cookieConsent',
     });
@@ -350,7 +350,7 @@ export class DataService {
     }
 
     this.openModal.next({
-      openModal: this.allowURLToDisplaySubscriptionPopup(),
+      openModal: this.isSubscriptionExistForProperty(),
       data: planDetails.consentPreference,
       type: 'consentPreference',
     });
@@ -375,7 +375,7 @@ export class DataService {
 
 
     this.openModal.next({
-      openModal: this.allowURLToDisplaySubscriptionPopupOrg(),
+      openModal: this.isSubscriptionExistForOrg(),
       data: planDetails,
       type: 'org',
       msg: msg,
@@ -415,7 +415,7 @@ export class DataService {
       changeResponseProperty = 'workflow_available';
     }
     if (Object.keys(responseData).length === 0) {
-      this.openModal.next({openModal: this.allowURLToDisplaySubscriptionPopup(), data: responseData, type: 'org', msg: ''});
+      this.openModal.next({openModal: this.isSubscriptionExistForOrg(), data: responseData, type: 'org', msg: ''});
       return false;
     } else if (responseData[changeResponseProperty] === -1 || responseData[changeResponseProperty] > 0) {
       return true;
@@ -424,20 +424,20 @@ export class DataService {
       const requestMsg = 'You have exceeded request creation limit. For more details Manage subscription or upgrade plan'
       const respMsg = changeResponseProperty == 'form_available' ? formMsg : requestMsg;
       this.openModal.next({
-        openModal: this.allowURLToDisplaySubscriptionPopup(),
+        openModal: this.isSubscriptionExistForOrg(),
         data: responseData,
         type: 'org',
         msg: respMsg,
-        currentplan: this.getCurrentOrgPlanDetails().response.plan_details
+        currentplan: this.getCurrentOrgPlanDetails() !== '' ? this.getCurrentOrgPlanDetails().response.plan_details : null
       });
       return false;
     } else {
       this.openModal.next({
-        openModal: this.allowURLToDisplaySubscriptionPopup(),
+        openModal: this.isSubscriptionExistForOrg(),
         data: responseData,
         type: 'org',
         msg: '',
-        currentplan: this.getCurrentOrgPlanDetails().response.plan_details
+        currentplan: this.getCurrentOrgPlanDetails() !== '' ? this.getCurrentOrgPlanDetails().response.plan_details : null
       });
       return false;
     }
@@ -511,7 +511,7 @@ export class DataService {
     return forkJoin([propLicense]);
   }
 
-  allowURLToDisplaySubscriptionPopup():boolean{
+  isSubscriptionExistForProperty():boolean{
         let licenseStatusForProperty;
         this.isLicenseAppliedForProperty.subscribe((status) => {
             licenseStatusForProperty = status;
@@ -523,7 +523,7 @@ export class DataService {
         }
   }
 
-  allowURLToDisplaySubscriptionPopupOrg():boolean{
+  isSubscriptionExistForOrg():boolean{
     let licenseStatus;
     this.isLicenseApplied.subscribe((status) => {
       licenseStatus = status;
