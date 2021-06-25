@@ -422,6 +422,7 @@ export class HeaderComponent implements OnInit {
             const orgIndex = this.selectedOrgProperties.findIndex((t) => t.organization_id === data.organization_id);
             if (orgIndex === -1) {
               this.selectedOrgProperties.push(data);
+              this.licenseAvailabilityForProperty(data);
             }
             this.isPropSelected(data);
           }
@@ -920,7 +921,7 @@ export class HeaderComponent implements OnInit {
         }else{
           this.dataService.isLicenseAppliedForProperty.next({ requesttype: 'property', hasaccess: false });
           this.isShowDashboardForCookieConsent = false;
-          this.dataService.openUpgradeModalForCookieConsent(resData);
+          //this.dataService.openUpgradeModalForCookieConsent(resData);
         }
       }
       // if (resData.response.hasOwnProperty('features')) {
