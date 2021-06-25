@@ -52,7 +52,7 @@
                     <span *ngIf="!skeletonLoading && workflowStages?.length === 0" class="nodatafound">No data found</span>
                     <div class="col-sm-6 mb-3">
                         <form #quillEditorForm="ngForm">
-                        <div class="col-sm-12 p-0">
+                        <div class="col-sm-12 p-0" *ngIf="workflowStatus === 'draft' && !isworkflowSaved">
                             <label class="tx-10 tx-uppercase tx-medium"> <span class="red">*</span>
                                 Workflow</label>
                                 <div style="display: flex;flex-direction: row;">
