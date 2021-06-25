@@ -920,7 +920,7 @@ export class HeaderComponent implements OnInit {
         }else{
           this.dataService.isLicenseAppliedForProperty.next({ requesttype: 'property', hasaccess: false });
           this.isShowDashboardForCookieConsent = false;
-          this.dataService.openUpgradeModalForCookieConsent(resData);
+          //this.dataService.openUpgradeModalForCookieConsent(resData);
         }
       }
       // if (resData.response.hasOwnProperty('features')) {
