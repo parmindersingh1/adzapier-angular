@@ -154,6 +154,8 @@ export class HeaderComponent implements OnInit {
         this.loadOrganizationWithProperty();
         this.loadNotification();
       }
+    },(error)=>{
+      console.log(error);
     });
     this.orgservice.emitUpdatedOrgList.subscribe((data) => {
       this.loadOrganizationList();
@@ -415,7 +417,7 @@ export class HeaderComponent implements OnInit {
     // tslint:disable-next-line: max-line-length
     this.orgservice.currentProperty.pipe(distinctUntilChanged())
       .subscribe((data) => {
-        if (data) {
+        if (data !== '') {
           this.currentProperty = data.property_name;
           this.currentOrganization = data.organization_name || data.response.orgname;
           if (this.currentProperty !== undefined) {
@@ -549,6 +551,7 @@ export class HeaderComponent implements OnInit {
         }
         this.isPropSelected(orgDetails);
         this.licenseAvailabilityForFormAndRequestPerOrg(orgDetails);
+        this.licenseAvailabilityForProperty(orgDetails);
       }
       return this.currentProperty;
     }
@@ -911,6 +914,7 @@ export class HeaderComponent implements OnInit {
           this.dataService.isConsentPreferenceApplied.next({ requesttype: 'consentpreference', hasaccess: true })
         }else{
           this.dataService.isConsentPreferenceApplied.next({ requesttype: 'consentpreference', hasaccess: false });
+          //this.router.navigate(['/home/welcome']);
          // this.dataService.openUpgradeModalForConsentPreference(resData);
         }
       }
@@ -921,6 +925,7 @@ export class HeaderComponent implements OnInit {
         }else{
           this.dataService.isLicenseAppliedForProperty.next({ requesttype: 'property', hasaccess: false });
           this.isShowDashboardForCookieConsent = false;
+          this.router.navigate(['/home/welcome']);
           //this.dataService.openUpgradeModalForCookieConsent(resData);
         }
       }
