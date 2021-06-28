@@ -925,7 +925,9 @@ export class HeaderComponent implements OnInit {
         }else{
           this.dataService.isLicenseAppliedForProperty.next({ requesttype: 'property', hasaccess: false });
           this.isShowDashboardForCookieConsent = false;
-          this.router.navigate(['/home/welcome']);
+          if(this.router.url.indexOf('settings') == -1){
+            this.router.navigate(['/home/welcome']);
+          }
           //this.dataService.openUpgradeModalForCookieConsent(resData);
         }
       }
