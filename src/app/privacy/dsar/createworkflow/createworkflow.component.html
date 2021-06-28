@@ -52,7 +52,7 @@
                     <span *ngIf="!skeletonLoading && workflowStages?.length === 0" class="nodatafound">No data found</span>
                     <div class="col-sm-6 mb-3">
                         <form #quillEditorForm="ngForm">
-                        <div class="col-sm-12 p-0" *ngIf="workflowStatus === 'draft' && !isworkflowSaved">
+                        <div class="col-sm-12 p-0">
                             <label class="tx-10 tx-uppercase tx-medium"> <span class="red">*</span>
                                 Workflow</label>
                                 <div style="display: flex;flex-direction: row;">
@@ -66,7 +66,7 @@
                                 </div>
                                 <button *ngIf="isWorkflownameEdit" class="btn btn-primary btn-sm btn-wf-save d-flex" (click)="saveWorkflow(quillEditorForm, workflowStatus)">
                                     <i-feather name="save" *ngIf="isWorkflownameEdit" class="feather-16 mr-2"></i-feather> Save</button>
-                                <button class="btn btn-link d-flex"  (click)="isWorkflownameEdit = !isWorkflownameEdit">
+                                <button class="btn btn-link d-flex" *ngIf="workflowStatus == 'draft'"  (click)="isWorkflownameEdit = !isWorkflownameEdit">
                                     <i-feather name="edit" *ngIf="!isWorkflownameEdit" class="feather-16 mr-2"></i-feather>
                                   {{!isWorkflownameEdit ? 'Edit' : 'Cancel'}} </button>
                                 </div>
