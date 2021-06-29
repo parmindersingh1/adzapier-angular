@@ -327,7 +327,7 @@ ul.nav-tabs > li:last-child > div > a::after {
 .chat-stage-wrapper {
     display: flex;
     width: 100%;
-    align-items: end;
+    align-items: flex-end;
     justify-content: space-between;
     padding: 5px 10px;
 }
