@@ -154,6 +154,8 @@ export class HeaderComponent implements OnInit {
         this.loadOrganizationWithProperty();
         this.loadNotification();
       }
+    },(error)=>{
+      console.log(error);
     });
     this.orgservice.emitUpdatedOrgList.subscribe((data) => {
       this.loadOrganizationList();
@@ -332,7 +334,7 @@ export class HeaderComponent implements OnInit {
                 this.router.navigate(['/home/dashboard/analytics']);
               }
             }
-        } 
+        }
       }, error => {
         this.loading.stop('2')
       });
@@ -367,7 +369,7 @@ export class HeaderComponent implements OnInit {
 
         // this.onCheckSubscriptionForProperty();
         // this.onCheckSubscriptionForOrg();
-        // this.onCheckConsentPreferenceSubscription();
+        this.onCheckConsentPreferenceSubscription();
       }, err => {
         this.loading.stop('1')
       });
@@ -415,13 +417,14 @@ export class HeaderComponent implements OnInit {
     // tslint:disable-next-line: max-line-length
     this.orgservice.currentProperty.pipe(distinctUntilChanged())
       .subscribe((data) => {
-        if (data) {
+        if (data !== '') {
           this.currentProperty = data.property_name;
           this.currentOrganization = data.organization_name || data.response.orgname;
           if (this.currentProperty !== undefined) {
             const orgIndex = this.selectedOrgProperties.findIndex((t) => t.organization_id === data.organization_id);
             if (orgIndex === -1) {
               this.selectedOrgProperties.push(data);
+              this.licenseAvailabilityForProperty(data);
             }
             this.isPropSelected(data);
           }
@@ -548,6 +551,7 @@ export class HeaderComponent implements OnInit {
         }
         this.isPropSelected(orgDetails);
         this.licenseAvailabilityForFormAndRequestPerOrg(orgDetails);
+        this.licenseAvailabilityForProperty(orgDetails);
       }
       return this.currentProperty;
     }
@@ -582,7 +586,7 @@ export class HeaderComponent implements OnInit {
   }
 
   goto(link: any, id?: any) {
-    if (link.routerLink === '/home/dashboard/cookie-consent' || link.routerLink === '/cookie-consent/manage-vendors' || link.routerLink === '/cookie-consent/cookie-category' 
+    if (link.routerLink === '/home/dashboard/cookie-consent' || link.routerLink === '/cookie-consent/manage-vendors' || link.routerLink === '/cookie-consent/cookie-category'
       || link.routerLink === '/cookie-consent/cookie-banner' || link.routerLink === '/cookie-consent/cookie-tracking' || link.routerLink === '/cookie-consent/cookie-banner/setup') {
       if (this.selectedOrgProperties.length > 0) {
         this.dataService.checkClickedURL.next(link.routerLink);
@@ -910,6 +914,7 @@ export class HeaderComponent implements OnInit {
           this.dataService.isConsentPreferenceApplied.next({ requesttype: 'consentpreference', hasaccess: true })
         }else{
           this.dataService.isConsentPreferenceApplied.next({ requesttype: 'consentpreference', hasaccess: false });
+          //this.router.navigate(['/home/welcome']);
          // this.dataService.openUpgradeModalForConsentPreference(resData);
         }
       }
@@ -920,7 +925,10 @@ export class HeaderComponent implements OnInit {
         }else{
           this.dataService.isLicenseAppliedForProperty.next({ requesttype: 'property', hasaccess: false });
           this.isShowDashboardForCookieConsent = false;
-          this.dataService.openUpgradeModalForCookieConsent(resData);
+          if(this.router.url.indexOf('settings') == -1){
+            this.router.navigate(['/home/welcome']);
+          }
+          //this.dataService.openUpgradeModalForCookieConsent(resData);
         }
       }
       // if (resData.response.hasOwnProperty('features')) {

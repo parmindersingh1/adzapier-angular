@@ -153,14 +153,24 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
   }
 
   onGetGlobleLangData() {
-    this.loading.start('lang');
-    this.cookieBannerService.GetGlobleLangData(this.activeBannerlanguage).subscribe(res => {
+    // this.loading.start('lang');
+    // this.cookieBannerService.GetGlobleLangData(this.activeBannerlanguage).subscribe(res => {
+    //   this.languageData = res;
+    //   this.loading.stop('lang');
+    //   this.cookieBannerForm.markAsPristine();
+    //   this.onSetDynamicLang(res);
+    // }, error => {
+    //   this.loading.stop('lang');
+    // });
+    this.loading.start();
+    this.cookieBannerService.GetGlobleLangData(this.activeBannerlanguage).subscribe( res => {
+      this.loading.stopAll();
       this.languageData = res;
-      this.loading.stop('lang');
       this.cookieBannerForm.markAsPristine();
       this.onSetDynamicLang(res);
     }, error => {
-      this.loading.stop('lang');
+      this.loading.stopAll();
+      alert('Error ::: Unable to Load Language');
     });
   }
 
@@ -984,12 +994,12 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
     if(allowLanguagesList.length === 0){
       allowLanguagesList.push('en-US');
       this.defaultLanguage = 'en-US';
-      
+
     }
     this.allowLanguagesList = [];
     this.allowLanguagesList = allowLanguagesList;
 
-    
+
 
   }
 

@@ -277,7 +277,8 @@ export class ManagePropertyComponent implements OnInit, OnDestroy {
     this.loading.start();
     this.skLoading = true;
     this.service.removeProperty(this.constructor.name, moduleName.billingModule, {properly_licenses_id: this.propertlyLicensesID,
-      pID
+      pID,
+      planID: this.planID
     })
       .subscribe((res: any) => {
         this.loading.stop();
