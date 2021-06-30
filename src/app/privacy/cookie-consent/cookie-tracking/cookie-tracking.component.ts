@@ -181,38 +181,9 @@ export class CookieTrackingComponent implements OnInit {
     this.onGetFromServer();
   }
 
-  onDateSelection() {
-    if (this.searchbydaterange.length > 0) {
-      const startDate = this.searchbydaterange[0].toJSON().split('T')[0];
-      const endDate = this.searchbydaterange[1].toJSON().split('T')[0];
-      this.loading.start();
-       this.pagelimit = {
-      consent_type: this.filterTypes.consentType,
-      status: this.filterTypes.status,
-      country: this.filterTypes.country,
-      startDate: startDate,
-      endDate: endDate,
-      limit: this.eventRows,
-      page: this.firstone
-    };
-
-    this.cookieConsentService.getConsent(this.currrentManagedPropID, this.pagelimit, this.constructor.name, moduleName.cookieTrackingModule)
-      .subscribe(res => {
-        this.loading.stop();
-        this.tLoading = false;
-        if (res['status'] === 200) {
-          this.cookieConsents = Object.values(res['response']['CookieConsent']);
-          this.totalCookieCount = res['count'];
-          
-        }
-      }, error => {
-        this.loading.stop();
-        this.tLoading = false;
-      });
-    }
-  }
-
   onGetFromServer() {
+    const startDate = this.searchbydaterange[0].toJSON().split('T')[0];
+    const endDate = this.searchbydaterange[1].toJSON().split('T')[0];
     this.loading.start();
     // const filter = '&consent_type=' + this.filterTypes.consentType + '&status=' + this.filterTypes.status + '&country=' + this.filterTypes.country
     //   + '&startDate=' + this.startDate + '&endDate=' + this.endDate;
@@ -220,8 +191,8 @@ export class CookieTrackingComponent implements OnInit {
       consent_type: this.filterTypes.consentType,
       status: this.filterTypes.status,
       country: this.filterTypes.country,
-      startDate: this.startDate,
-      endDate: this.endDate,
+      startDate:startDate,
+      endDate: endDate,
       limit: this.eventRows,
       page: this.firstone
     };
