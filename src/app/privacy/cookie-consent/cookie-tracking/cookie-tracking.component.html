@@ -37,8 +37,20 @@
           </select>
         </div>
 
-        <div class="col-sm-4">
-         <div class="input-group date-range-picker">
+        <div class="col-sm-4 pr-0">
+          <div class="pr-0 pl-2 d-flex row-reverse " style="margin-right: 100px;">
+            <div class="input-group-prepend"  (click)="dp.show()">
+              <span class="input-group-text rounded-right border-left-0" id="inputGroup-sizing-sm"><i class="fa" [ngClass]="searchbydaterange !== '' ? 'fa-caret-down':'fa-search'"></i></span>
+            </div>
+            <input type="text" [(ngModel)]="searchbydaterange" style="width: 220px;"
+             class="form-control border-left-0  border-right-0 rounded-right"
+            bsDaterangepicker [bsConfig]="bsConfig"  #dp="bsDaterangepicker"  (onHidden)="onGetFromServer()">
+            <div class="input-group-prepend border-left-0"  (click)="dp.show()">
+              <span class="input-group-text rounded-left border-right-0" id="inputGroup-sizing-sm"><i class="fa fa-calendar"></i></span>
+            </div>
+          </div>
+          </div>
+         <!-- <div class="input-group date-range-picker">
           <label class="input-group-btn calandericon" for="reportrange">
             <span class="btn btn-default calandericon">
               <i class="fa fa-calendar"></i>
@@ -50,14 +62,14 @@
                 <i class="fa fa-caret-down"></i>
             </span>
         </label>
-        </div>
+        </div> -->
 
           <!-- <span id="reportrange"
                 class="rounded-5">
             <i class="fa fa-calendar"></i>&nbsp;
             <span></span> <i class="fa fa-caret-down"></i>
           </span> -->
-        </div>
+        
 
       </div>
     </div>
