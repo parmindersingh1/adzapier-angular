@@ -9,6 +9,11 @@
 
 }
 
+input[type='checkbox'] {
+  width:15px;
+  height:15px;
+}
+
 
 .dust{
   padding: 0.25em 0.4em;
@@ -334,6 +339,30 @@ input[type='radio']:checked:after {
 .lineheight-22 {
   line-height: 22px;
 }
+
+.consent-record ::ng-deep .p-paginator-bottom .p-paginator {
+  display: flex;
+  position: relative;
+}
+
+.consent-record ::ng-deep .p-paginator-current {
+  position: absolute;
+  right: 0;
+}
+
+.consent-record ::ng-deep .p-inputwrapper-filled {
+  position: absolute;
+  left: 0;
+}
+
+.consent-record::ng-deep .p-datatable .p-paginator-bottom {
+  display: flex;
+  border-top: 1px solid #ccc;
+  border-radius: 0px 0px 10px 10px;
+  border-bottom: 0;
+  justify-content: center;
+}
+
 
 
 .chart-size{
