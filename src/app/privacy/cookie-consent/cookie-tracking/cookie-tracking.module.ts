@@ -7,6 +7,8 @@ import { TableModule} from 'primeng/table';
 import {FormsModule} from '@angular/forms';
 import {RouterModule, Routes} from '@angular/router';
 import {MultiSelectModule} from 'primeng/multiselect';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+
 
 
 const route: Routes = [
@@ -25,7 +27,8 @@ const route: Routes = [
     MultiSelectModule,
     ButtonModule,
     TableModule,
-    RouterModule.forChild(route)
+    RouterModule.forChild(route),
+    BsDatepickerModule.forRoot()
   ]
 })
 export class CookieTrackingModule { }
