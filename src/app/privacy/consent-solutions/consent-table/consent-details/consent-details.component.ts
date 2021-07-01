@@ -72,10 +72,11 @@ auth_id='';
     this.editConsentForm = this.formBuilder.group({
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
-      email: ['', Validators.required],
+      email: ['', [Validators.required,Validators.pattern]],
       dataSource: ['', Validators.required],
       country: ['', Validators.required],
       ownerID: [''],
+      AuthID:['',Validators.required],
       ipAddress: ['', Validators.required],
     });
   }
@@ -101,7 +102,8 @@ auth_id='';
       optout: this.consentData.optout,
       country: this.editConsentForm.value.country,
       data_source: this.editConsentForm.value.dataSource,
-      ip_address: this.editConsentForm.value.ipAddress
+      ip_address: this.editConsentForm.value.ipAddress,
+      auth_id:this.editConsentForm.value.AuthID,
     };
     this.loading.start();
     this.consentSolutionService.updateConsent(this.constructor.name, moduleName.consentSolutionModule, payloads, this.consentData.id)
@@ -115,6 +117,7 @@ auth_id='';
           this.consentData.country = this.editConsentForm.value.country;
           this.consentData.data_source = this.editConsentForm.value.dataSource;
           this.consentData.ip_address = this.editConsentForm.value.ipAddress;
+          this.consentData.auth_id = this.editConsentForm.value.AuthID;
           this.isOpen = true;
           this.alertMsg = res.message;
           this.alertType = 'success';
@@ -149,7 +152,8 @@ auth_id='';
       dataSource: this.consentData.data_source,
       country: this.consentData.country,
       ownerID: this.consentData.owner_id,
-      ipAddress: this.consentData.ip_address
+      ipAddress: this.consentData.ip_address,
+      AuthID:this.consentData.auth_id
     });
     this.modalRef = this.modalService.show(editdetails, {});
   }

@@ -158,8 +158,9 @@ export class ConsentTableComponent implements OnInit {
       email: ['', [Validators.required,Validators.pattern]],
       dataSource: ['', Validators.required],
       country: ['', Validators.required],
-      ownerID: [''],
+      ownerID: ['',Validators.required],
       ipAddress: ['', Validators.required],
+      AuthID:['',Validators.required],
       // newsLetter:[''],
       // term_of_service:[''],
       // privacyPolicy:[''],
@@ -253,6 +254,7 @@ export class ConsentTableComponent implements OnInit {
       preferences:this.AddConsentForm.value.preferences,
       proofs:this.AddConsentForm.value.proofs,
       legal_notices:this.AddConsentForm.value.legalNotices,
+      auth_id:this.AddConsentForm.value.AuthID,
     };
     this.loading.start();
     this.consentSolutionService.PutConsentRecord(this.constructor.name, moduleName.consentSolutionModule, payloads, this.currrentManagedPropID)
@@ -285,6 +287,7 @@ export class ConsentTableComponent implements OnInit {
       ownerID:'',
       ipAddress:'',
       verified:false,
+      AuthID:'',
       preferences:[{
         preference:'',
         allow:false,
@@ -349,7 +352,7 @@ export class ConsentTableComponent implements OnInit {
       first_name: this.firstnameSearch,
       last_name: this.lastnameSearch,
       ip_address: this.IpAddressSearch,
-      data_source: this.sourceSearch
+      data_source: this.sourceSearch,
     };
 
     this.consentSolutionService.getConsentRecord(this.constructor.name, moduleName.consentSolutionModule, this.pagelimit, this.currrentManagedPropID)
