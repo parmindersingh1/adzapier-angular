@@ -30,20 +30,35 @@
       <div class="form-group">
         <label>Email</label>
         <div class="input-group">
-          <input formControlName="email" class="form-control">
+          <input formControlName="email" pattern="^\w+@[a-zA-Z_0-9]+?\.[a-zA-Z]{2,3}$" class="form-control">
         </div>
         <div *ngIf="submitted && f.email.errors" class="text-danger">
           <div *ngIf="f.email.errors.required">Email is required</div>
+          <div *ngIf="f.email.errors.pattern">Please enter a valid email</div>
           <!--          <div *ngIf="f.email.errors.email">Email must be a valid email address</div>-->
         </div>
       </div>
-      <div class="form-group">
+      <div class="form-group d-flex">
+        <div>
         <label>Data Source</label>
         <div class="input-group">
-          <input formControlName="dataSource" class="form-control">
+          <label>Private : </label>
+          <input class="ml-2 mt-1" type="radio" formControlName="dataSource" value="private">
+          <label class="ml-3">Public : </label>
+          <input class="ml-2 mt-1" type="radio" formControlName="dataSource" value="public">
         </div>
         <div *ngIf="submitted && f.dataSource.errors" class="text-danger">
           <div *ngIf="f.dataSource.errors.required">Data Source is required</div>
+        </div>
+        </div>
+        <div style="margin-left: 75px;">
+          <label>AuthID</label>
+          <div class="input-group">
+            <input formControlName="AuthID" class="form-control" disabled>
+          </div>
+          <div *ngIf="submitted && f.country.errors" class="text-danger">
+            <div *ngIf="f.country.errors.required">AuthID is required</div>
+          </div>
         </div>
       </div>
       <div class="form-group d-flex">

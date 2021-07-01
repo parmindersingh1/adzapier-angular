@@ -157,7 +157,8 @@
           </div>
         </div>
       </div>
-      <div class="form-group">
+      <div class="form-group d-flex row">
+      <div class="col-sm-6">
         <label>Email : </label>
         <div class="input-group">
           <input placeholder="yourname@yourmail.com" pattern="^\w+@[a-zA-Z_0-9]+?\.[a-zA-Z]{2,3}$" formControlName="email" class="form-control">
@@ -167,6 +168,16 @@
           <div *ngIf="f.email.errors.pattern">Please enter a valid email</div>
           <!--          <div *ngIf="f.email.errors.email">Email must be a valid email address</div>-->
         </div>
+      </div>
+      <div class="col-sm-6">
+        <label>Authentication ID : </label>
+        <div class="input-group">
+          <input formControlName="AuthID" class="form-control">
+        </div>
+        <div *ngIf="submitted && f.AuthID.errors" class="text-danger">
+          <div *ngIf="f.AuthID.errors.required">Authentication ID is required</div>
+        </div>
+      </div>
       </div>
     
       <!-- <div class="form-group d-flex">
@@ -224,6 +235,9 @@
           <label>Owner Id : </label>
           <div class="input-group">
             <input formControlName="ownerID" class="form-control">
+          </div>
+          <div *ngIf="submitted && f.ownerID.errors" class="text-danger">
+            <div *ngIf="f.ownerID.errors.required">Owner Id is required</div>
           </div>
         </div>
       </div>
