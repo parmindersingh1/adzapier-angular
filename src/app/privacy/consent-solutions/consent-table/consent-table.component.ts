@@ -155,7 +155,7 @@ export class ConsentTableComponent implements OnInit {
     this.AddConsentForm = this.formBuilder.group({
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
-      email: ['', Validators.required],
+      email: ['', [Validators.required,Validators.pattern]],
       dataSource: ['', Validators.required],
       country: ['', Validators.required],
       ownerID: [''],

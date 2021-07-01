@@ -164,7 +164,7 @@
       <div class="form-group">
         <label>Email : </label>
         <div class="input-group">
-          <input placeholder="yourname@yourmail.com" formControlName="email" class="form-control">
+          <input placeholder="yourname@yourmail.com" pattern="^\w+@[a-zA-Z_0-9]+?\.[a-zA-Z]{2,3}$" formControlName="email" class="form-control">
         </div>
         <div *ngIf="submitted && f.email.errors" class="text-danger">
           <div *ngIf="f.email.errors.required">Email is required</div>
