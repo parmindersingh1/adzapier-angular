@@ -651,6 +651,7 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
       this.formContent.privacyTextColor = this.bannerCookieData.config.Banner.Privacy.textColor;
       this.formContent.bannerTextColor = this.bannerCookieData.config.Banner.GlobalStyles.textColor;
       this.formContent.bannerBackGroundColor = this.bannerCookieData.config.Banner.GlobalStyles.background;
+      this.formContent.bannerBorderColor=this.bannerCookieData.config.Banner.GlobalStyles.borderColor;
       this.formContent.bannerPreferenceButtonTextColor = this.bannerCookieData.config.Banner.PreferenceButtonStylesAndContent.textColor;
       this.formContent.bannerPreferenceButtonBackGroundColor = this.bannerCookieData.config.Banner.PreferenceButtonStylesAndContent.background,
         this.formContent.bannerAcceptButtonTextColor = this.bannerCookieData.config.Banner.AllowAllButtonStylesAndContent.textColor;
