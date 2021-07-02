@@ -30,7 +30,11 @@ export class ConsentDetailsComponent implements OnInit {
   consentDataupadted = '';
   consentDatanews = '';
   consentDataprivacy = '';
-
+  LegalVersion = '';
+  LegalIdentifier = '';
+  LegalContent = '';
+  legalForm
+auth_id='';
   editConsentForm: FormGroup;
   submitted = false;
   dismissible = true;
@@ -68,10 +72,11 @@ export class ConsentDetailsComponent implements OnInit {
     this.editConsentForm = this.formBuilder.group({
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
-      email: ['', Validators.required],
+      email: ['', [Validators.required,Validators.pattern]],
       dataSource: ['', Validators.required],
       country: ['', Validators.required],
       ownerID: [''],
+      AuthID:['',Validators.required],
       ipAddress: ['', Validators.required],
     });
   }
@@ -97,7 +102,8 @@ export class ConsentDetailsComponent implements OnInit {
       optout: this.consentData.optout,
       country: this.editConsentForm.value.country,
       data_source: this.editConsentForm.value.dataSource,
-      ip_address: this.editConsentForm.value.ipAddress
+      ip_address: this.editConsentForm.value.ipAddress,
+      auth_id:this.editConsentForm.value.AuthID,
     };
     this.loading.start();
     this.consentSolutionService.updateConsent(this.constructor.name, moduleName.consentSolutionModule, payloads, this.consentData.id)
@@ -111,6 +117,7 @@ export class ConsentDetailsComponent implements OnInit {
           this.consentData.country = this.editConsentForm.value.country;
           this.consentData.data_source = this.editConsentForm.value.dataSource;
           this.consentData.ip_address = this.editConsentForm.value.ipAddress;
+          this.consentData.auth_id = this.editConsentForm.value.AuthID;
           this.isOpen = true;
           this.alertMsg = res.message;
           this.alertType = 'success';
@@ -130,6 +137,13 @@ export class ConsentDetailsComponent implements OnInit {
     this.modalRef = this.modalService.show(edit, {});
   }
 
+  editLegal(editLeg , legalRecord){
+    this.LegalVersion = legalRecord.version;
+    this.LegalIdentifier = legalRecord.identifier;
+    this.LegalContent = legalRecord.content;
+    this.modalRef = this.modalService.show(editLeg, {});
+  }
+
   editConsentDetails(editdetails) {
     this.editConsentForm.patchValue({
       firstName: this.consentData.first_name,
@@ -138,7 +152,8 @@ export class ConsentDetailsComponent implements OnInit {
       dataSource: this.consentData.data_source,
       country: this.consentData.country,
       ownerID: this.consentData.owner_id,
-      ipAddress: this.consentData.ip_address
+      ipAddress: this.consentData.ip_address,
+      AuthID:this.consentData.auth_id
     });
     this.modalRef = this.modalService.show(editdetails, {});
   }

@@ -7,18 +7,24 @@
       <li class="breadcrumb-item active" aria-current="page">Consent Records</li>
     </ol>
   </nav>
-
 </div>
 
 
 
 
 <div class="card">
-  <div class="card-header row ml-1 mr-1">
-    <h4 class="headings col-md-10">Consent Records </h4>
+  <div class="card-header row ml-1 mr-1 d-flex" style="justify-content: space-between;">
+    <h4 class="headings col-md-7">Consent Records </h4>
+    <button type="button"
+        class="btn btn-sm btn-uppercase btn-outline-secondary pt-2 lineheight-22 col-md-2"  (click)="AddConsentRecord(addrecord)">
+        <i-feather class="feather-16" name="plus"></i-feather>
+        <span class="d-none d-sm-inline mg-l-5">
+          Add Consent </span>
+      </button>
     <button type="button"  *ngIf="!showFilters" (click)="showFilters = !showFilters" class=" btn btn-primary col-md-2 btn-sm filbutton">Show Filters</button>
     <button type="button"  *ngIf="showFilters" (click)="showFilters = !showFilters" class=" btn btn-primary col-md-2 btn-sm filbutton">Hide Filters</button>
   </div>
+
 
 
   <div class="card-body">
@@ -46,15 +52,15 @@
       <div class="d-flex" style="justify-content: space-between;">
         <div>
       <div class="form-check form-check-inline">
-        <input class="form-check-input" (click)="onSourceInputChange($event)" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="Both">
+        <input class="form-check-input" (click)="onSourceInputChange($event)" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="both">
         <label class="form-check-label" for="inlineRadio1">Both</label>
       </div>
       <div class="form-check form-check-inline">
-        <input class="form-check-input" (click)="onSourceInputChange($event)" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="Private">
+        <input class="form-check-input" (click)="onSourceInputChange($event)" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="private">
         <label class="form-check-label" for="inlineRadio2">Private</label>
       </div>
       <div class="form-check form-check-inline">
-        <input class="form-check-input"  (click)="onSourceInputChange($event)" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="Public">
+        <input class="form-check-input"  (click)="onSourceInputChange($event)" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="public">
         <label class="form-check-label" for="inlineRadio2">Public</label>
       </div>
     </div>
@@ -77,7 +83,7 @@
     </div>
     <hr>
     <div class="card">
-      <p-table [value]="consentRecordList"
+      <p-table class="consent-record" [value]="consentRecordList"
                [lazy]="true" [responsive]="true"
                [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
                [totalRecords]="consentRecordCount"
@@ -123,6 +129,268 @@
     </div>
   </div>
 </div>
+</div>
+
+<ng-template #addrecord let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Add Consent Details </h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="onCancelClick()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="AddConsentForm" (ngSubmit)="onAddconsentRecord()">
+      <div class="form-group d-flex row">
+        <div class="col-sm-6">
+          <label>Firstname : </label>
+          <div class="input-group">
+            <input formControlName="firstName" class="form-control">
+          </div>
+          <div *ngIf="submitted && f.firstName.errors" class="text-danger">
+            <div *ngIf="f.firstName.errors.required">First Name is required</div>
+          </div>
+        </div>
+
+        <div class="col-sm-6">
+          <label>Lastname : </label>
+          <div class="input-group">
+            <input formControlName="lastName" class="form-control">
+          </div>
+          <div *ngIf="submitted && f.lastName.errors" class="text-danger">
+            <div *ngIf="f.lastName.errors.required">Last Name is required</div>
+          </div>
+        </div>
+      </div>
+      <div class="form-group d-flex row">
+      <div class="col-sm-6">
+        <label>Email : </label>
+        <div class="input-group">
+          <input placeholder="yourname@yourmail.com" pattern="^\w+@[a-zA-Z_0-9]+?\.[a-zA-Z]{2,3}$" formControlName="email" class="form-control">
+        </div>
+        <div *ngIf="submitted && f.email.errors" class="text-danger">
+          <div *ngIf="f.email.errors.required">Email is required</div>
+          <div *ngIf="f.email.errors.pattern">Please enter a valid email</div>
+          <!--          <div *ngIf="f.email.errors.email">Email must be a valid email address</div>-->
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <label>Authentication ID : </label>
+        <div class="input-group">
+          <input formControlName="AuthID" class="form-control">
+        </div>
+        <div *ngIf="submitted && f.AuthID.errors" class="text-danger">
+          <div *ngIf="f.AuthID.errors.required">Authentication ID is required</div>
+        </div>
+      </div>
+      </div>
+
+      <!-- <div class="form-group d-flex">
+
+      <div><label>Preferences :</label></div>
+      <div class="form-group d-flex">
+        <label class="ml-3">Newsletter:-</label>
+        <div class="input-group">
+          <input class="ml-4 mt-1"  type="checkbox" formControlName="newsLetter">
+        </div>
+        <div *ngIf="submitted && f.newsletter.errors" class="text-danger" class="form-control">
+          <div *ngIf="f.newsletter.errors.required">newsletter is required</div>
+                    <div *ngIf="f.email.errors.email">Email must be a valid email address</div>
+        </div>
+      </div>
+
+
+      <div class="form-group d-flex">
+        <label class="ml-3">PrivacyPolicy:-</label>
+        <div class="input-group">
+          <input type="checkbox" class="ml-3 mt-1" formControlName="privacyPolicy">
+        </div>
+        <div *ngIf="submitted && f.privacy_policy.errors" class="text-danger">
+          <div *ngIf="f.privacy_policy.errors.required">privacy_policy is required</div>
+                 <div *ngIf="f.email.errors.email">Email must be a valid email address</div>
+        </div>
+      </div>
+      </div> -->
+      <div class="form-group">
+        <label>Data Source : </label>
+        <div class="input-group">
+          <label>Private : </label>
+          <input class="ml-2 mt-1" type="radio" formControlName="dataSource" value="private">
+          <label class="ml-3">Public : </label>
+          <input class="ml-2 mt-1" type="radio" formControlName="dataSource" value="public">
+        </div>
+        <div *ngIf="submitted && f.dataSource.errors" class="text-danger">
+          <div *ngIf="f.dataSource.errors.required">Data Source is required</div>
+        </div>
+      </div>
+
+
+
+      <div class="form-group row d-flex">
+        <div class="col-sm-6">
+          <label>Country : </label>
+          <div class="input-group">
+            <input formControlName="country" class="form-control">
+          </div>
+          <div *ngIf="submitted && f.country.errors" class="text-danger">
+            <div *ngIf="f.country.errors.required">Country is required</div>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <label>Owner Id : </label>
+          <div class="input-group">
+            <input formControlName="ownerID" class="form-control">
+          </div>
+          <div *ngIf="submitted && f.ownerID.errors" class="text-danger">
+            <div *ngIf="f.ownerID.errors.required">Owner Id is required</div>
+          </div>
+        </div>
+      </div>
+      <div class="form-group d-flex">
+      <div class="form-group">
+        <label>Ip Address : </label>
+        <div class="input-group">
+          <input formControlName="ipAddress" class="form-control">
+        </div>
+        <div *ngIf="submitted && f.ipAddress.errors" class="text-danger">
+          <div *ngIf="f.ipAddress.errors.required">IP Address is required</div>
+        </div>
+      </div>
+      <div class="form-group d-flex ml-4">
+        <label class="ml-4">Verified: </label>
+        <div class="input-group">
+          <input class="ml-4 mt-1" type="checkbox" formControlName="verified">
+        </div>
+        <!-- <div *ngIf="submitted && f.newsletter.errors" class="text-danger" class="form-control">
+          <div *ngIf="f.newsletter.errors.required">newsletter is required</div>
+                    <div *ngIf="f.email.errors.email">Email must be a valid email address</div>
+        </div> -->
+      </div>
+      </div>
+      <!-- <div class="form-group">
+        <label>Preferences : </label>
+        <div class="input-group">
+          <label>NewsLetter </label>
+          <input class="ml-2 mt-1" type="checkbox" formControlName="newsLetter">
+          <label class="ml-3">PrivacyPolicy</label>
+          <input class="ml-2 mt-1" type="checkbox" formControlName="privacyPolicy" >
+          <label class="ml-3">Terms-of-service</label>
+          <input class="ml-2 mt-1" type="checkbox" formControlName="term_of_service">
+        </div>
+        <div *ngIf="submitted && f.dataSource.errors" class="text-danger">
+          <div *ngIf="f.dataSource.errors.required">Data Source is required</div>
+        </div>
+      </div> -->
+      <label>Preferences :</label>
+      <div class="row">
+        <div class="col-sm-12 table-responsive" formArrayName="preferences">
+          <table class="table">
+            <thead>
+              <tr style="text-align: center;">
+                <th style="white-space: nowrap;padding-right: 4em;float:center;border: none;">Preference Name</th>
+                <th style="white-space: nowrap;padding-right: 4em;float:center;border: none;">Should be Allowed</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let preferences of AddConsentForm.controls.preferences['controls']; let i=index" [formGroupName]="i">
+                <td style="white-space: nowrap;border: none;"><input type="text" id="preference{{i}}" formControlName="preference" class="form-control"/></td>
+                <td style="white-space: nowrap;border: none;justify-content: center;align-items: center;display: flex;"><input type="checkbox" id="allow{{i}}" formControlName="allow"/></td>
+                <td style="border: none;"><button (click)="deletePref(i)" class="btn btn-danger"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></td>
+              </tr>
+
+            </tbody>
+            <tfoot>
+              <tr>
+                <td style="border: none;"><button type="button" (click)="addNewPref()" class="btn btn-primary"><i class="fa fa-plus-circle" aria-hidden="true"></i></button></td>
+              </tr>
+            </tfoot>
+          </table>
+
+        </div>
+      </div>
+
+      <hr>
+      <div><label>Proofs : </label></div>
+
+
+      <div class="row">
+        <div class="col-sm-12 table-responsive" formArrayName="proofs">
+          <table class="table">
+            <thead>
+              <tr style="text-align: center;">
+                <th style="white-space: nowrap;padding-right: 4em;float:center;border: none;">Content</th>
+                <th style="white-space: nowrap;padding-right: 4em;float:center;border: none;">Form</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let proofs of AddConsentForm.controls.proofs['controls']; let i=index" [formGroupName]="i">
+                <td style="white-space: nowrap;border: none;"><textarea id="content{{i}}" formControlName="content" class="form-control" ></textarea></td>
+                <td style="white-space: nowrap;border: none;"><textarea id="form{{i}}" formControlName="form" class="form-control" ></textarea></td>
+                <td style="border: none;"><button (click)="deleteRow(i)" class="btn btn-danger"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></td>
+
+              </tr>
+
+            </tbody>
+            <tfoot>
+              <tr>
+                <td style="border: none;"><button type="button" (click)="addNewRow()" class="btn btn-primary"><i class="fa fa-plus-circle" aria-hidden="true"></i></button></td>
+              </tr>
+            </tfoot>
+
+          </table>
+
+        </div>
+      </div>
+      <hr>
+
+      <div><label>Legal Notice : </label></div>
+
+
+      <div class="row">
+        <div class="col-sm-12 table-responsive" formArrayName="legalNotices">
+          <table class="table">
+            <thead>
+              <tr style="text-align: center;">
+                <th style="white-space: nowrap;padding-right: 4em;float:center;border: none;">Identifier</th>
+                <th style="white-space: nowrap;padding-right: 2em;float:center;border: none;">Version</th>
+                <th style="white-space: nowrap;padding-right: 2em;float:center;border: none;">Content</th>
+
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let legalNotices of AddConsentForm.controls.legalNotices['controls']; let ind=index" [formGroupName]="ind">
+                <td style="white-space: nowrap;border: none;"><textarea id="identifier{{ind}}" formControlName="identifier" class="form-control" ></textarea></td>
+                <td style="white-space: nowrap;border: none;"><input id="version{{ind}}" type="number" formControlName="version" class="form-control" ></td>
+                <td style="white-space: nowrap;border: none;"><textarea id="content{{ind}}" formControlName="content" class="form-control" ></textarea></td>
+                <td style="border: none;"><button (click)="deleteLegalRow(ind)" class="btn btn-danger"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></td>
+
+              </tr>
+
+            </tbody>
+            <tfoot>
+              <tr>
+                <td style="border: none;"><button type="button" (click)="addNewLegalRow()" class="btn btn-primary"><i class="fa fa-plus-circle" aria-hidden="true"></i></button></td>
+              </tr>
+            </tfoot>
+
+          </table>
+
+        </div>
+      </div>
+      <hr>
+
+  <div class="d-flex" style="justify-content: flex-end;">
+      <div class="btn-group">
+        <button type="submit" class="btn btn-primary btn-sm">Add</button>
+        <button type="button" class="btn btn-link btn-sm pull-right " (click)="onCancelClick()">Cancel</button>
+      </div>
+      </div>
+    </form>
+  </div>
+</ng-template>
+
+<div class="col-sm-5 mr-0 float-right flotingdiv" [ngClass]="{'hide':!isOpen}">
+  <alert *ngIf="isOpen" [type]="alertType" dismissOnTimeout="5000" [dismissible]="dismissible"
+  >{{  alertMsg}}</alert>
 </div>
 
 

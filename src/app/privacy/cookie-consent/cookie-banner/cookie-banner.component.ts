@@ -440,6 +440,7 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
       ccpaTarget: [defaultData.ccpaDefaultTarget, Validators.required],
       gdprTarget: [defaultData.gdprDefaultTarget, Validators.required],
       cookieBlocking: [this.defaultData.defaultCookieBlocking],
+      muteBanner: [this.defaultData.muteBanner],
       enableIab: [this.defaultData.defaultEnableIab],
       email: [this.defaultData.defaultEmail],
       google_vendors: [this.defaultData.google_vendors],
@@ -600,6 +601,8 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
         bannerClosedConsent: this.bannerCookieData.config.DisplayFrequency.bannerClosedConsent,
         bannerClosedConsentType: this.bannerCookieData.config.DisplayFrequency.bannerClosedConsentType,
         //
+        muteBanner: this.bannerCookieData.config.hasOwnProperty('MuteBanner') ?  this.bannerCookieData.config.MuteBanner : false,
+        //
         BadgePosition: this.bannerCookieData.config.BadgePosition,
         BannerPosition: this.bannerCookieData.config.BannerPosition,
         //
@@ -641,11 +644,14 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
       this.gdprBannerConfig = this.bannerCookieData.config.AllowedBanners.gdpr;
       this.genericBannerConfig = this.bannerCookieData.config.AllowedBanners.generic;
       this.formContent.position = this.bannerCookieData.config.BannerPosition;
+
+      this.formContent.muteBanner = this.bannerCookieData.config.hasOwnProperty('MuteBanner') ?  this.bannerCookieData.config.MuteBanner : false;
       //
       this.formContent.privacyLink = this.bannerCookieData.config.Banner.Privacy.privacyLink;
       this.formContent.privacyTextColor = this.bannerCookieData.config.Banner.Privacy.textColor;
       this.formContent.bannerTextColor = this.bannerCookieData.config.Banner.GlobalStyles.textColor;
       this.formContent.bannerBackGroundColor = this.bannerCookieData.config.Banner.GlobalStyles.background;
+      this.formContent.bannerBorderColor=this.bannerCookieData.config.Banner.GlobalStyles.borderColor;
       this.formContent.bannerPreferenceButtonTextColor = this.bannerCookieData.config.Banner.PreferenceButtonStylesAndContent.textColor;
       this.formContent.bannerPreferenceButtonBackGroundColor = this.bannerCookieData.config.Banner.PreferenceButtonStylesAndContent.background,
         this.formContent.bannerAcceptButtonTextColor = this.bannerCookieData.config.Banner.AllowAllButtonStylesAndContent.textColor;
@@ -813,6 +819,7 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
         gdpr: this.gdprBannerConfig,
         generic: this.genericBannerConfig
       },
+      MuteBanner: this.cookieBannerForm.value.muteBanner,
       BannerPosition: this.cookieBannerForm.value.BannerPosition,
       BadgePosition: this.cookieBannerForm.value.BadgePosition,
       DisplayFrequency: {

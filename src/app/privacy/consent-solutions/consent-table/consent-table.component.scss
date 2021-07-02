@@ -9,6 +9,11 @@
 
 }
 
+input[type='checkbox'] {
+  width:15px;
+  height:15px;
+}
+
 
 .dust{
   padding: 0.25em 0.4em;
@@ -40,42 +45,42 @@ background-color: rgb(230, 230, 230);
 height: 20px;
 }
 
-@media 
+@media
 only screen and (max-width: 760px),
 (min-device-width: 768px) and (max-device-width: 1024px)  {
 
 	/* Force table to not be like tables anymore */
-	table, thead, tbody, th, tr,.al { 
-		display: block; 
+	table, thead, tbody, th, tr,.al {
+		display: block;
 	}
-	
+
 	/* Hide table headers (but not display: none;, for accessibility) */
-	thead tr { 
+	thead tr {
 		position: absolute;
 		top: -9999px;
 		left: -9999px;
 	}
-	
-	
-	.al { 
+
+
+	.al {
 		/* Behave  like a "row" */
 		border: none;
-		border-bottom: 1px solid #eee; 
+		border-bottom: 1px solid #eee;
 		position: relative;
-		padding-left: 50%; 
+		padding-left: 50%;
 	}
-	
-	// td:before { 
+
+	// td:before {
 	// 	/* Now like a table header */
 	// 	position: absolute;
 	// 	/* Top/left values mimic padding */
 	// 	top: 6px;
 	// 	left: 6px;
-	// 	width: 45%; 
-	// 	padding-right: 10px; 
+	// 	width: 45%;
+	// 	padding-right: 10px;
 	// 	white-space: nowrap;
 	// }
-	
+
 	/*
 	Label the data
 	*/
@@ -199,7 +204,7 @@ input[type='radio']:checked:after {
     .p-inputtext{
       margin-bottom: 4px;
     }
-    
+
   }
 }
 
@@ -335,3 +340,79 @@ input[type='radio']:checked:after {
   line-height: 22px;
 }
 
+.consent-record ::ng-deep .p-paginator-bottom .p-paginator {
+  display: flex;
+  position: relative;
+}
+
+.consent-record ::ng-deep .p-paginator-current {
+  position: absolute;
+  right: 0;
+}
+
+.consent-record ::ng-deep .p-inputwrapper-filled {
+  position: absolute;
+  left: 0;
+}
+
+.consent-record::ng-deep .p-datatable .p-paginator-bottom {
+  display: flex;
+  border-top: 1px solid #ccc;
+  border-radius: 0px 0px 10px 10px;
+  border-bottom: 0;
+  justify-content: center;
+}
+
+
+
+.chart-size{
+  margin-bottom: 30px;
+  margin-top: 15px;
+}
+.no-chart {
+  flex-direction: column;
+  height: 300px;
+}
+
+
+#myChart {
+  height: 100%;
+  width: 100%;
+  min-height: 150px;
+}
+
+.zc-ref {
+  display: none;
+}
+.chart-one {
+  margin: 10px;
+}
+.state-count-list{
+  height: 170px;
+  overflow: overlay;
+}
+.state-header{
+  padding-top: 10px;
+  padding-bottom: 9px;
+}
+
+.country-dropdown{
+  height: 29px;
+  padding-right: 1px;
+  padding-left: 5px;
+}
+.div-height {
+  //min-height: 475px;
+}
+.card-height {
+  min-height: 450px;
+}
+
+.chart-height {
+  min-height: 376px;
+}
+
+.avr-time-text {
+  margin-left: -3px;
+  margin-right: -5px;
+}
