@@ -24,7 +24,7 @@
     <button type="button"  *ngIf="!showFilters" (click)="showFilters = !showFilters" class=" btn btn-primary col-md-2 btn-sm filbutton">Show Filters</button>
     <button type="button"  *ngIf="showFilters" (click)="showFilters = !showFilters" class=" btn btn-primary col-md-2 btn-sm filbutton">Hide Filters</button>
   </div>
-  
+
 
 
   <div class="card-body">
@@ -51,6 +51,10 @@
       </div>
       <div class="d-flex" style="justify-content: space-between;">
         <div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" (click)="onSourceInputChange($event)" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="both">
+        <label class="form-check-label" for="inlineRadio1">Both</label>
+      </div>
       <div class="form-check form-check-inline">
         <input class="form-check-input" (click)="onSourceInputChange($event)" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="private">
         <label class="form-check-label" for="inlineRadio2">Private</label>
@@ -146,7 +150,7 @@
             <div *ngIf="f.firstName.errors.required">First Name is required</div>
           </div>
         </div>
-        
+
         <div class="col-sm-6">
           <label>Lastname : </label>
           <div class="input-group">
@@ -179,9 +183,9 @@
         </div>
       </div>
       </div>
-    
+
       <!-- <div class="form-group d-flex">
-     
+
       <div><label>Preferences :</label></div>
       <div class="form-group d-flex">
         <label class="ml-3">Newsletter:-</label>
@@ -193,7 +197,7 @@
                     <div *ngIf="f.email.errors.email">Email must be a valid email address</div>
         </div>
       </div>
-      
+
 
       <div class="form-group d-flex">
         <label class="ml-3">PrivacyPolicy:-</label>
@@ -218,9 +222,9 @@
           <div *ngIf="f.dataSource.errors.required">Data Source is required</div>
         </div>
       </div>
-      
-      
-    
+
+
+
       <div class="form-group row d-flex">
         <div class="col-sm-6">
           <label>Country : </label>
@@ -292,7 +296,7 @@
                 <td style="white-space: nowrap;border: none;justify-content: center;align-items: center;display: flex;"><input type="checkbox" id="allow{{i}}" formControlName="allow"/></td>
                 <td style="border: none;"><button (click)="deletePref(i)" class="btn btn-danger"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></td>
               </tr>
-    
+
             </tbody>
             <tfoot>
               <tr>
@@ -303,7 +307,7 @@
 
         </div>
       </div>
-      
+
       <hr>
       <div><label>Proofs : </label></div>
 
@@ -324,7 +328,7 @@
                 <td style="border: none;"><button (click)="deleteRow(i)" class="btn btn-danger"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></td>
 
               </tr>
-    
+
             </tbody>
             <tfoot>
               <tr>
@@ -349,7 +353,7 @@
                 <th style="white-space: nowrap;padding-right: 4em;float:center;border: none;">Identifier</th>
                 <th style="white-space: nowrap;padding-right: 2em;float:center;border: none;">Version</th>
                 <th style="white-space: nowrap;padding-right: 2em;float:center;border: none;">Content</th>
-      
+
               </tr>
             </thead>
             <tbody>
@@ -360,7 +364,7 @@
                 <td style="border: none;"><button (click)="deleteLegalRow(ind)" class="btn btn-danger"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></td>
 
               </tr>
-            
+
             </tbody>
             <tfoot>
               <tr>
