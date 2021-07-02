@@ -315,6 +315,7 @@ export class ConsentTableComponent implements OnInit {
 
   onCancelClick(){
     this.submitted = false;
+    this.modalRef.hide();
     this.AddConsentForm.reset();
 
   }

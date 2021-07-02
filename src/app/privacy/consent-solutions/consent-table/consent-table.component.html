@@ -134,7 +134,7 @@
 <ng-template #addrecord let-modal>
   <div class="modal-header">
     <h4 class="modal-title pull-left">Add Consent Details </h4>
-    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide();onCancelClick()">
+    <button type="button" class="close pull-right" aria-label="Close" (click)="onCancelClick()">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
@@ -381,7 +381,7 @@
   <div class="d-flex" style="justify-content: flex-end;">
       <div class="btn-group">
         <button type="submit" class="btn btn-primary btn-sm">Add</button>
-        <button type="button" class="btn btn-link btn-sm pull-right " (click)="modalRef.hide();onCancelClick()">Cancel</button>
+        <button type="button" class="btn btn-link btn-sm pull-right " (click)="onCancelClick()">Cancel</button>
       </div>
       </div>
     </form>
