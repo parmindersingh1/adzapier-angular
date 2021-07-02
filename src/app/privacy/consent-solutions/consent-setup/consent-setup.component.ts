@@ -113,10 +113,12 @@ export class ConsentSetupComponent implements OnInit {
 
   copyToClipboards() {
     this.isCopied.three = true;
-    const copyText: any = `<script>
-    // Replace Your AuthId '123123123'
-    document.cookie = "authId=123123123";
-    </script> `;
+    const copyText: any = 
+    `window.CP_SDK_ADZAPIER.init({
+      AppID: '`+this.appId+`', // Your App ID
+      PropID: '`+this.currrentManagedPropID+`', // Your Current Property ID
+      ShowLogs: true, // Show Console Logs
+    })`;
     let textarea = null;
     textarea = document.createElement('textarea');
     textarea.style.height = '0px';
