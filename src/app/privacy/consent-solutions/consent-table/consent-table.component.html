@@ -134,7 +134,7 @@
 <ng-template #addrecord let-modal>
   <div class="modal-header">
     <h4 class="modal-title pull-left">Add Consent Details </h4>
-    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide();onCancelClick()">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>

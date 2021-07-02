@@ -276,7 +276,10 @@ export class ConsentTableComponent implements OnInit {
   }
 
   AddConsentRecord(addrecord) {
-    this.modalRef = this.modalService.show(addrecord, Object.assign({}, { class: 'gray modal-lg' })
+    this.modalRef = this.modalService.show(addrecord, Object.assign({}, { class: 'gray modal-lg' },{
+      backdrop: true,
+      ignoreBackdropClick: true
+      })
     );
     this.AddConsentForm.patchValue({
       firstName:'',
@@ -304,7 +307,7 @@ export class ConsentTableComponent implements OnInit {
       legalNotices:[{
         identifier:'',
         version:'',
-        contents:'',
+        content:'',
 
       }]
     })
