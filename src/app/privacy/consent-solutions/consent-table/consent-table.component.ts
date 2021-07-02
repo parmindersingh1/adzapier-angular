@@ -7,6 +7,8 @@ import {Subject} from 'rxjs';
 import {debounceTime, distinctUntilChanged} from 'rxjs/operators';
 import {ConsentSolutionsService} from '../../../_services/consent-solutions.service';
 import {BsDatepickerConfig, DatepickerDateCustomClasses} from 'ngx-bootstrap/datepicker';
+import { FormBuilder,FormArray, FormGroup, Validators } from '@angular/forms';
+import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
 
 
 @Component({
@@ -23,7 +25,15 @@ export class ConsentTableComponent implements OnInit {
   private firstone: number;
   eventRows;
   tLoading = true;
+  consentData:any;
+  submitted = false;
+  modalRef: BsModalRef;
+  alertMsg: any;
+  isOpen = false;
+  alertType: any;
+  AddConsentForm:FormGroup;
   pagelimit;
+  dismissible = true;
   planDetails: any;
   showFilters = false;
   searchDecouncer$: Subject<any> = new Subject();
@@ -101,7 +111,9 @@ export class ConsentTableComponent implements OnInit {
   constructor(private orgservice: OrganizationService,
               private consentSolutionService: ConsentSolutionsService,
               private loading: NgxUiLoaderService,
-              private router: Router
+              private router: Router,
+              private formBuilder: FormBuilder,
+              private modalService: BsModalService
   ) {
     this.dateCustomClasses = [
       { date: new Date(), classes: ['theme-dark-blue'] },
@@ -113,7 +125,7 @@ export class ConsentTableComponent implements OnInit {
     this.onGetPropsAndOrgId();
     this.onSetUpDebounce();
     this.bsConfig = Object.assign({}, { containerClass: 'theme-dark-blue', showClearButton: true, returnFocusToInput: true, dateInputFormat: 'yyyy-mm-dd', adaptivePosition : true, showTodayButton:true, ranges: this.ranges  });
-
+    this.initForm();
   }
 
   onSetUpDebounce() {
@@ -137,6 +149,175 @@ export class ConsentTableComponent implements OnInit {
         this.currrentManagedPropID = orgDetails.property_id;
       }
     });
+  }
+
+  initForm() {
+    this.AddConsentForm = this.formBuilder.group({
+      firstName: ['', Validators.required],
+      lastName: ['', Validators.required],
+      email: ['', [Validators.required,Validators.pattern]],
+      dataSource: ['', Validators.required],
+      country: ['', Validators.required],
+      ownerID: ['',Validators.required],
+      ipAddress: ['', Validators.required],
+      AuthID:['',Validators.required],
+      // newsLetter:[''],
+      // term_of_service:[''],
+      // privacyPolicy:[''],
+      preferences:this.formBuilder.array([this.initPrefRows()]),
+      verified:[''],
+      proofs:this.formBuilder.array([this.initItemRows()]),
+      legalNotices:this.formBuilder.array([this.initLegalRows()]),
+
+    });
+  }
+
+  get prefArr(){
+    return this.AddConsentForm.get('preferences') as FormArray;
+  }
+
+  initPrefRows(){
+    return this.formBuilder.group({
+      preference:[''],
+      allow:[false],
+    })
+  }
+
+  addNewPref(){
+    this.prefArr.push(this.initPrefRows());
+  }
+
+  deletePref(index){
+    this.prefArr.removeAt(index);
+  }
+
+  get formArr(){
+    return this.AddConsentForm.get('proofs') as FormArray;
+  }
+
+  initItemRows(){
+    return this.formBuilder.group({
+      content:[''],
+      form:[''],
+    });
+  }
+
+  addNewRow(){
+    this.formArr.push(this.initItemRows());
+  }
+
+  deleteRow(index:number){
+    this.formArr.removeAt(index);
+  }
+
+  get LegalArr(){
+    return this.AddConsentForm.get('legalNotices') as FormArray;
+  }
+
+  initLegalRows(){
+    return this.formBuilder.group({
+      identifier:[''],
+      version:[Number],
+      content:[''],
+    })
+  }
+
+  addNewLegalRow(){
+    this.LegalArr.push(this.initLegalRows());
+  }
+
+  deleteLegalRow(index:number){
+    this.LegalArr.removeAt(index);
+
+  }
+
+
+  onAddconsentRecord(){
+    this.submitted = true;
+    // stop here if form is invalid
+    if (this.AddConsentForm.invalid) {
+      return;
+    }
+    const payloads = {
+      owner_id: this.AddConsentForm.value.ownerID,
+      email: this.AddConsentForm.value.email,
+      first_name: this.AddConsentForm.value.firstName,
+      last_name: this.AddConsentForm.value.lastName,
+      verified: this.AddConsentForm.value.verified,
+      // optout: this.consentData.optout,
+      country: this.AddConsentForm.value.country,
+      data_source: this.AddConsentForm.value.dataSource,
+      ip_address: this.AddConsentForm.value.ipAddress,
+      // preferences:{newsletter:this.AddConsentForm.value.newsLetter,
+      // privacy_policy:this.AddConsentForm.value.privacyPolicy,
+      // term_of_service:this.AddConsentForm.value.term_of_service},
+      preferences:this.AddConsentForm.value.preferences,
+      proofs:this.AddConsentForm.value.proofs,
+      legal_notices:this.AddConsentForm.value.legalNotices,
+      auth_id:this.AddConsentForm.value.AuthID,
+    };
+    this.loading.start();
+    this.consentSolutionService.PutConsentRecord(this.constructor.name, moduleName.consentSolutionModule, payloads, this.currrentManagedPropID)
+      .subscribe((res: any) => {
+        this.loading.stop();
+        if (res) {
+          this.isOpen = true;
+          this.alertMsg = res.message;
+          this.alertType = 'success';
+          this.modalRef.hide();
+          this.onGetConsentRecord();
+        }
+      }, err => {
+        this.loading.stop();
+        this.isOpen = true;
+        this.alertMsg = err.message;
+        this.alertType = 'danger';
+      });
+  }
+
+  AddConsentRecord(addrecord) {
+    this.modalRef = this.modalService.show(addrecord, Object.assign({}, { class: 'gray modal-lg' })
+    );
+    this.AddConsentForm.patchValue({
+      firstName:'',
+      lastName:'',
+      email:'',
+      dataSource:'',
+      country:'',
+      ownerID:'',
+      ipAddress:'',
+      verified:false,
+      AuthID:'',
+      preferences:[{
+        preference:'',
+        allow:false,
+
+      }],
+      // newsLetter:false,
+      // term_of_service:false,
+      // privacyPolicy:false,
+
+      proofs:[{
+        content:'',
+        form:''
+      }],
+      legalNotices:[{
+        identifier:'',
+        version:'',
+        contents:'',
+
+      }]
+    })
+  }
+
+  onCancelClick(){
+    this.submitted = false;
+    this.AddConsentForm.reset();
+
+  }
+
+  get f() {
+    return this.AddConsentForm.controls;
   }
 
   onGetConsentSolutionData(event) {

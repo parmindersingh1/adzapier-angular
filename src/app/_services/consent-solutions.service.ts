@@ -57,6 +57,16 @@ export class ConsentSolutionsService {
       }));
   }
 
+  //Add Consent Record
+  PutConsentRecord(componentName, moduleName, payload, pid: string) {
+    const path = apiConstant.ADD_CONSENT.replace(':pid', pid);
+    return this.http.post(environment.apiUrl + path, payload).pipe(map(res => res),
+      catchError(error => {
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.billing, componentName, moduleName, path);
+        return throwError(error);
+      }));
+  }
+
   onPushConsentData(consentData) {
     return new Promise(resolve => {
       resolve(this.consentSolutionData.next(consentData));
