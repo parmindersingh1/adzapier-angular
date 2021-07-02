@@ -163,6 +163,8 @@ export class ConsentTableComponent implements OnInit {
 
   onGetConsentRecord() {
     this.loading.start();
+    const startDate = this.searchbydaterange[0].toJSON().split('T')[0];
+    const endDate = this.searchbydaterange[1].toJSON().split('T')[0];
     this.pagelimit = {
       limit: this.eventRows,
       page: this.firstone,
@@ -171,7 +173,9 @@ export class ConsentTableComponent implements OnInit {
       first_name: this.firstnameSearch,
       last_name: this.lastnameSearch,
       ip_address: this.IpAddressSearch,
-      data_source: this.sourceSearch
+      data_source: this.sourceSearch !== 'both' ? this.sourceSearch : '',
+      start_date: startDate,
+      end_date: endDate
     };
 
     this.consentSolutionService.getConsentRecord(this.constructor.name, moduleName.consentSolutionModule, this.pagelimit, this.currrentManagedPropID)
@@ -296,7 +300,7 @@ export class ConsentTableComponent implements OnInit {
         first_name: this.firstnameSearch,
         last_name: this.lastnameSearch,
         ip_address: this.IpAddressSearch,
-        data_source: this.sourceSearch,
+        data_source: this.sourceSearch !== 'both' ? this.sourceSearch : '',
         start_date: startDate,
         end_date: endDate
       };
