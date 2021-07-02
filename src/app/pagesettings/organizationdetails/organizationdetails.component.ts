@@ -150,10 +150,14 @@ export class OrganizationdetailsComponent implements OnInit {
     });
     this.inviteUserOrgForm = this.formBuilder.group({
       emailid: ['', [Validators.required, Validators.pattern]],
-      firstname: ['', [Validators.required]],
-      lastname: ['', [Validators.required]],
+      firstname: ['', [this.selectusertype ? Validators.required : '']],
+      lastname: ['', [this.selectusertype ? Validators.required : '']],
       permissions: ['', [Validators.required]]
     });
+    this.inviteUserOrgForm.get("emailid").valueChanges
+    .subscribe(data=> {
+      this.changeValidators();
+    })
     this.editOrganisationForm = this.formBuilder.group({
       organizationName: ['', [Validators.required, Validators.pattern(alphaNumeric)]],
       taxID: [''],
@@ -494,6 +498,7 @@ export class OrganizationdetailsComponent implements OnInit {
 
   onSubmitInviteUserOrganization() {
     this.isInviteFormSubmitted = true;
+    let requestObj;
     if (this.inviteUserOrgForm.invalid) {
       return false;
     } else {
@@ -501,14 +506,23 @@ export class OrganizationdetailsComponent implements OnInit {
         if(!this.onCheckSubscription()){
           return false;
         }
-        const requestObj = {
-          firstname: this.inviteUserOrgForm.value.firstname.trim(),
-          lastname: this.inviteUserOrgForm.value.lastname.trim(),
-          email: this.inviteUserOrgForm.value.emailid.trim(),
-          role_id: this.inviteUserOrgForm.value.permissions.trim(),
-          orgid: this.organizationID,
-          user_level: 'organization'
-        };
+        if(this.selectusertype){
+         requestObj = {
+            firstname: this.inviteUserOrgForm.value.firstname.trim(),
+            lastname: this.inviteUserOrgForm.value.lastname.trim(),
+            email: this.inviteUserOrgForm.value.emailid.trim(),
+            role_id: this.inviteUserOrgForm.value.permissions.trim(),
+            orgid: this.organizationID,
+            user_level: 'organization'
+          };
+        }else{
+         requestObj = {
+            email: this.inviteUserOrgForm.value.emailid.trim(),
+            role_id: this.inviteUserOrgForm.value.permissions.trim(),
+            orgid: this.organizationID,
+            user_level: 'organization'
+          };
+        }
         this.loading.start();
         this.companyService.inviteUser(this.constructor.name, moduleName.organizationDetailsModule, requestObj)
           .subscribe((data) => {
@@ -796,6 +810,18 @@ export class OrganizationdetailsComponent implements OnInit {
 
   redirectToManageLicense(){
     this.router.navigate(['/settings/billing/manage']);
+  }
+
+  changeValidators() {
+    if (this.selectusertype) {
+      this.inviteUserOrgForm.controls["firstname"].setValidators([Validators.required]);
+      this.inviteUserOrgForm.controls["lastname"].setValidators([Validators.required]);
+    } else {
+      this.inviteUserOrgForm.controls["firstname"].clearValidators();
+      this.inviteUserOrgForm.controls["lastname"].clearValidators();
+    }
+    this.inviteUserOrgForm.get("firstname").updateValueAndValidity();
+    this.inviteUserOrgForm.get("lastname").updateValueAndValidity();
   }
   // ngAfterContentChecked() {
   //   this.cdref.detectChanges();
