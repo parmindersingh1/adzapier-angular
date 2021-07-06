@@ -40,6 +40,7 @@ export class SubscriptionPopupComponent implements OnInit {
   noPlanType = 'org';
   isUserSubscribe = false;
   showFeatureCount = 6;
+  currentUser: any;
 
   constructor(
     private modalService: BsModalService,
@@ -48,13 +49,19 @@ export class SubscriptionPopupComponent implements OnInit {
     private ccpaFormConfigurationService: CCPAFormConfigurationService,
     private dsarformService: DsarformService,
     private dataService: DataService,
-    private router: Router
+    private router: Router,
+    private authService: AuthenticationService
   ) {
+    this.authService.currentUser.subscribe(x => {
+      this.currentUser = x;
+    });
   }
 
   ngOnInit(): void {
-    this.onGetPlanDetails();
-    this.onGetUserSubscriptions()
+    if (this.currentUser) {
+      this.onGetPlanDetails();
+      this.onGetUserSubscriptions();
+    }
     this.openModal();
   }
 
@@ -75,8 +82,6 @@ export class SubscriptionPopupComponent implements OnInit {
 
   openModal() {
     this.dataService.openModalWithData.subscribe(res => {
-      console.log(res)
-      // debugger
       if (res.openModal) {
         if (!res.data) {
           this.currentPlanData = new DefaultPlanData();
