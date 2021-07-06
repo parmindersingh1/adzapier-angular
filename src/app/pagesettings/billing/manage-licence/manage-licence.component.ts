@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { moduleName } from 'src/app/_constant/module-name.constant';
 import { BillingService } from 'src/app/_services/billing.service';
+import {AuthenticationService, UserService} from '../../../_services';
 
 @Component({
   selector: 'app-manage-subscription',
@@ -20,10 +21,12 @@ export class ManageLicenceComponent implements OnInit {
   isError: boolean;
   showManageText = false;
   inActiveplans = [];
+  userRole: any;
 
   constructor(
     private loading: NgxUiLoaderService,
     private billingService: BillingService,
+    private userService: UserService,
     private formBuilder: FormBuilder,
     private activatedRoute: ActivatedRoute
   ) { }
@@ -35,24 +38,33 @@ export class ManageLicenceComponent implements OnInit {
       } else if (params.success === 'false') {
         this.isError = true;
       }
-      if(params.hasOwnProperty('type')) {
+      if (params.hasOwnProperty('type')) {
         this.showManageText = true;
       }
     });
-    this.onGetActivePlan()
+
+    this.userService.getLoggedInUserDetails(this.constructor.name, moduleName.manageSubscriptionsModule).subscribe((res: any) => {
+       if (res.status === 200) {
+         this.userRole = res.response.role;
+         console.log('user role', this.userRole);
+       }
+    });
+
+
+    this.onGetActivePlan();
   }
 
   onGetActivePlan() {
-      this.loading.start()
+      this.loading.start();
       this.skLoading = true;
       this.billingService.getActivePlan(this.constructor.name, moduleName.manageSubscriptionsModule).subscribe( (res: any) => {
         this.loading.stop();
         this.skLoading = false;
         this.activeSubscriptionList = res.response;
         this.inActiveplans = [];
-        for(const isActive of res.response) {
-          if(!isActive.active) {
-            this.inActiveplans.push(isActive)
+        for (const isActive of res.response) {
+          if (!isActive.active) {
+            this.inActiveplans.push(isActive);
           }
         }
       }, err => {
@@ -61,14 +73,14 @@ export class ManageLicenceComponent implements OnInit {
         this.isOpen = true;
         this.alertMsg = err;
         this.alertType = 'danger';
-      })
+      });
   }
 
   onGenerateSessionID() {
-    this.loading.start()
+    this.loading.start();
     this.billingService.getManageSessionID(this.constructor.name, moduleName.manageSubscriptionsModule).subscribe( (res: any) => {
       this.loading.stop();
-      if(res.status === 200) {
+      if (res.status === 200) {
         window.open(res.response, '_blank');
       }
 
@@ -77,7 +89,7 @@ export class ManageLicenceComponent implements OnInit {
       this.isOpen = true;
       this.alertMsg = err;
       this.alertType = 'danger';
-    })
+    });
 }
 
   onCalculateOptValue(val, totalConsent) {

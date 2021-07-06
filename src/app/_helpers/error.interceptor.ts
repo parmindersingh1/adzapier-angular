@@ -28,7 +28,7 @@ export class ErrorInterceptor implements HttpInterceptor {
             }
             if(err.status === 403){
               if(err.error.error.search("is not authorized") == -1){
-              this.router.navigate(['/error/forbidden']);
+              // this.router.navigate(['/error/forbidden']);
               }
             }
             if(err.status === 404){
