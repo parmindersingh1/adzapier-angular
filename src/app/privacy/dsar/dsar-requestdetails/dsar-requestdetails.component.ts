@@ -1056,6 +1056,7 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
           this.alertMsg = error;
           this.isOpen = true;
           this.alertType = 'danger';
+          this.modalService.dismissAll('Canceled');
         });
     }
 
