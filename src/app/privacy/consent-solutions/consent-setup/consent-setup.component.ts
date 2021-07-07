@@ -36,7 +36,7 @@ export class ConsentSetupComponent implements OnInit {
   }
   appId = '';
   loadingSkeleton = false;
-  scriptUrl = 'https://staging-cdn.adzapsrv.com/consent-preference/develop/cp_sdk.adzapier.js';
+  scriptUrl = environment.consentPreferenceCDN;
   dismissible = true;
   alertMsg: any;
   isOpen = false;
@@ -113,7 +113,7 @@ export class ConsentSetupComponent implements OnInit {
 
   copyToClipboards() {
     this.isCopied.three = true;
-    const copyText: any = 
+    const copyText: any =
     `window.CP_SDK_ADZAPIER.init({
       AppID: '`+this.appId+`', // Your App ID
       PropID: '`+this.currrentManagedPropID+`', // Your Current Property ID
