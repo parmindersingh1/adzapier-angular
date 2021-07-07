@@ -38,7 +38,7 @@ export class DataService {
   get isConsentPreferenceAppliedForProperty(){
     return this.isConsentPreferenceApplied.asObservable();
   }
-  
+
   public OrganizationCreatedStatus = new BehaviorSubject<boolean>(false);
   get isOrganizationCreated(){
     return this.OrganizationCreatedStatus.asObservable();
@@ -48,7 +48,7 @@ export class DataService {
   get checkNavigationURL(){
     return this.checkClickedURL.asObservable();
   }
- 
+
   licenseAvailabilityObj = {};
   planUsageByOrgid = [];
   urlClickedByUser;
@@ -258,8 +258,8 @@ export class DataService {
         openModal: this.isSubscriptionExistForProperty(),
         data: plan_details,
         type: planType,
-        msg: msg,
-        currentplan: plan_details
+        // msg: msg,
+        // currentplan: plan_details
       })
     }
     return flag;
@@ -363,7 +363,7 @@ export class DataService {
     let planDetails = null;
     if (res.hasOwnProperty('response')) {
       if (res.response.hasOwnProperty('plan_details')) {
-        planDetails = res.response.plan_details;
+        planDetails = res.response.plan_details.dsar;
       }
     }
     let currentplan = null;
@@ -378,8 +378,8 @@ export class DataService {
       openModal: this.isSubscriptionExistForOrg(),
       data: planDetails,
       type: 'org',
-      msg: msg,
-      currentplan: currentplan
+      // msg: msg,
+      // currentplan: currentplan
     })
     return currentplan !== null ? true : false;
   }
@@ -415,7 +415,7 @@ export class DataService {
       changeResponseProperty = 'workflow_available';
     }
     if (Object.keys(responseData).length === 0) {
-      this.openModal.next({openModal: this.isSubscriptionExistForOrg(), data: responseData, type: 'org', msg: ''});
+      this.openModal.next({openModal: this.isSubscriptionExistForOrg(), data: responseData.dsar, type: 'org', msg: ''});
       return false;
     } else if (responseData[changeResponseProperty] === -1 || responseData[changeResponseProperty] > 0) {
       return true;
@@ -425,7 +425,7 @@ export class DataService {
       const respMsg = changeResponseProperty == 'form_available' ? formMsg : requestMsg;
       this.openModal.next({
         openModal: this.isSubscriptionExistForOrg(),
-        data: responseData,
+        data: responseData.dsar,
         type: 'org',
         msg: respMsg,
         currentplan: this.getCurrentOrgPlanDetails() !== '' ? this.getCurrentOrgPlanDetails().response.plan_details : null
@@ -434,7 +434,7 @@ export class DataService {
     } else {
       this.openModal.next({
         openModal: this.isSubscriptionExistForOrg(),
-        data: responseData,
+        data: responseData.dsar,
         type: 'org',
         msg: '',
         currentplan: this.getCurrentOrgPlanDetails() !== '' ? this.getCurrentOrgPlanDetails().response.plan_details : null
