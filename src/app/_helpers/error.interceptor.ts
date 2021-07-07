@@ -27,8 +27,15 @@ export class ErrorInterceptor implements HttpInterceptor {
               // location.reload();
             }
             if(err.status === 403){
-              if(err.error.error.search("is not authorized") == -1){
-              // this.router.navigate(['/error/forbidden']);
+              if(err.url.indexOf('/api/v1/invite/user/resend') !== -1){
+                const error = err.error.error || err.statusText;
+                return throwError(error);
+              }else if(err.url.indexOf('/api/v1/billing/customerportal/session') !== -1){
+                const error = err.error.error || err.statusText;
+                return throwError(error);
+              }
+              else if(err.error.error.search("is not authorized") == -1){
+              this.router.navigate(['/error/forbidden']);
               }
             }
             if(err.status === 404){
