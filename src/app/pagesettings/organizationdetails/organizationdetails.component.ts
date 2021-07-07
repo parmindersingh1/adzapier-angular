@@ -438,6 +438,7 @@ export class OrganizationdetailsComponent implements OnInit {
           this.alertMsg = error;
           this.isOpen = true;
           this.alertType = 'danger';
+          this.onCancelClickProperty();
         });
       }
     }
