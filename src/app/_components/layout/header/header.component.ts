@@ -57,6 +57,7 @@ export class HeaderComponent implements OnInit {
   userID: any;
   propList: any;
   isOrganizationUpdated: boolean;
+  isPropertyUpdated:boolean;
   isPropertySelected: boolean;
   isPrivacyActivelinkMatched = false;
   isBillingActivelinkMatched = false;
@@ -95,7 +96,7 @@ export class HeaderComponent implements OnInit {
         this.isCollapsed = false;
         this.getLoggedInUserDetails();
         this.loadOrganizationList();
-        this.loadOrganizationWithProperty();
+        this.loadOrganizationWithProperty();  //to load org and prop
         this.loadNotification();
       }
     });
@@ -103,7 +104,7 @@ export class HeaderComponent implements OnInit {
     this.orgservice.isOrganizationUpdated.subscribe((t) => {
       this.isOrganizationUpdated = t;
       if (this.isOrganizationUpdated) {
-        this.loadOrganizationWithProperty();
+        this.loadOrganizationWithProperty(); //to load org and prop
         this.currentSelectedProperty();
         this.loadNotification();
       }
@@ -151,7 +152,7 @@ export class HeaderComponent implements OnInit {
         this.currentLoggedInUser = this.currentUser.response.firstname + ' ' + this.currentUser.response.lastname;
         this.userRole = this.currentUser.response.role;
         this.userID = this.currentUser.response.uid;
-        this.loadOrganizationWithProperty();
+        this.loadOrganizationWithProperty(); //to load org and prop
         this.loadNotification();
       }
     },(error)=>{
@@ -318,6 +319,23 @@ export class HeaderComponent implements OnInit {
 
   async isCurrentPropertySelected(org, prop) {
     this.loading.start('2');
+    this.selectedOrgProperties.length = 0;
+        this.activeProp = prop.property_name;
+        const obj = {
+          organization_id: org.id,
+          organization_name: org.orgname,
+          property_id: prop.property_id,
+          property_name: prop.property_name,
+          property_active: prop.property_active,
+          user_id: this.userID
+        };
+        this.orgservice.changeCurrentSelectedProperty(obj);
+        // this.selectedOrgProperties.push(obj);
+        const orgIndex = this.selectedOrgProperties.findIndex((t) => t.organization_id === obj.organization_id);
+        if (orgIndex === -1) {
+          this.selectedOrgProperties.push(obj);
+        }
+        this.orgservice.setCurrentOrgWithProperty(obj);
     this.dataService.getOrgPlanInfo(this.constructor.name, moduleName.cookieConsentModule, org.id)
       .subscribe((res: any) => {
         this.loading.stop('2')
@@ -343,23 +361,6 @@ export class HeaderComponent implements OnInit {
       .subscribe((res: any) => {
         this.dataService.setPropertyPlanToLocalStorage(res);
         this.loading.stop('1')
-        this.selectedOrgProperties.length = 0;
-        this.activeProp = prop.property_name;
-        const obj = {
-          organization_id: org.id,
-          organization_name: org.orgname,
-          property_id: prop.property_id,
-          property_name: prop.property_name,
-          property_active: prop.property_active,
-          user_id: this.userID
-        };
-        this.orgservice.changeCurrentSelectedProperty(obj);
-        // this.selectedOrgProperties.push(obj);
-        const orgIndex = this.selectedOrgProperties.findIndex((t) => t.organization_id === obj.organization_id);
-        if (orgIndex === -1) {
-          this.selectedOrgProperties.push(obj);
-        }
-        this.orgservice.setCurrentOrgWithProperty(obj);
         this.currentSelectedProperty();
         if (this.router.url.indexOf('privacy/dsar/requests-details') !== -1) {
           this.router.navigate(['/privacy/dsar/requests']);
@@ -415,8 +416,8 @@ export class HeaderComponent implements OnInit {
 
   currentSelectedProperty() {
     // tslint:disable-next-line: max-line-length
-    this.orgservice.currentProperty.pipe(distinctUntilChanged())
-      .subscribe((data) => {
+    // this.orgservice.currentProperty.pipe(distinctUntilChanged()).subscribe((data) => {
+    this.orgservice.currentProperty.subscribe((data) => {
         if (data !== '') {
           this.currentProperty = data.property_name;
           this.currentOrganization = data.organization_name || data.response.orgname;
@@ -428,32 +429,38 @@ export class HeaderComponent implements OnInit {
             }
             this.isPropSelected(data);
           }
+        } else {
+          this.loadOrgPropertyFromLocal();
         }
 
       });
-
-    this.orgservice.editedProperty.subscribe((prop) => {
-      if (prop) {
-        this.currentProperty = prop.response.name;
-        const orgDetails = this.orgservice.getCurrentOrgWithProperty();
-        orgDetails.property_name = prop.response.name;
-        orgDetails.property_id = prop.response.id;
-        this.orgservice.updateCurrentOrgwithProperty(orgDetails);
-        this.isPropSelected(orgDetails);
+    this.orgservice.isPropertyUpdated.subscribe((status)=>{this.isPropertyUpdated = status});
+    this.orgservice.isOrganizationUpdated.subscribe((status)=>{this.isOrganizationUpdated = status});
+      
+      if(this.isPropertyUpdated){
+        this.orgservice.editedProperty.subscribe((prop) => {
+          if (prop) {
+            this.currentProperty = prop.response.name;
+            const orgDetails = this.orgservice.getCurrentOrgWithProperty();
+            orgDetails.property_name = prop.response.name;
+            orgDetails.property_id = prop.response.id;
+            this.orgservice.updateCurrentOrgwithProperty(orgDetails);
+            this.isPropSelected(orgDetails);
+          }
+        });
       }
-    });
-
-    this.orgservice.editedOrganization.subscribe((org) => {
-      if (org) {
-        this.currentOrganization = org.response.orgname;
-        const orgDetails = this.orgservice.getCurrentOrgWithProperty();
-        orgDetails.organization_id = org.response.id;
-        orgDetails.organization_name = org.response.orgname;
-        this.orgservice.updateCurrentOrgwithProperty(orgDetails);
-      } else {
-        this.loadOrgPropertyFromLocal();
-      }
-    });
+     
+      if(this.isOrganizationUpdated){
+        this.orgservice.editedOrganization.subscribe((org) => {
+          if (org) {
+            this.currentOrganization = org.response.orgname;
+            const orgDetails = this.orgservice.getCurrentOrgWithProperty();
+            orgDetails.organization_id = org.response.id;
+            orgDetails.organization_name = org.response.orgname;
+            this.orgservice.updateCurrentOrgwithProperty(orgDetails);
+          }
+        });
+      } 
 
   }
 
@@ -478,11 +485,12 @@ export class HeaderComponent implements OnInit {
         this.rearrangeFormSequence(this.orgPropertyMenu);
         this.selectedOrgProperties.length = 0;
         if (!this.isOrgPropertyExists(this.orgPropertyMenu)) {
-          if (typeof this.orgPropertyMenu[0].property[0] === 'undefined') {
+          if (this.orgPropertyMenu && this.orgPropertyMenu[0] && this.orgPropertyMenu[0].property[0] === 'undefined') {
             // this.router.navigate(['settings/organizations']);
             this.router.navigate(['settings/organizations/details/' + this.orgPropertyMenu[0].id]);
             return false;
           } else {
+            if(this.isOrgPropertyEmpty()){
             let activePro = this.filterProp(this.orgPropertyMenu);
             const proIndex = activePro[0].property.findIndex((t) => t.property_active === true);
             this.activeProp = activePro[0].property[proIndex];
@@ -500,11 +508,14 @@ export class HeaderComponent implements OnInit {
             // .subscribe((res: any) => {
             //   this.dataService.setPropertyPlanToLocalStorage(res);
             // });
-            this.orgservice.changeCurrentSelectedProperty(obj);
+            this.orgservice.changeCurrentSelectedProperty(obj); //check this..
             // this.orgservice.getSelectedOrgProperty.emit(obj);
             //  this.firstElement = false;
             this.orgservice.setCurrentOrgWithProperty(obj);
             this.licenseAvailabilityForFormAndRequestPerOrg(obj);
+          }else{
+            this.loadOrgPropertyFromLocal();
+          }
           }
         } else {
           this.currentSelectedProperty();
@@ -543,7 +554,7 @@ export class HeaderComponent implements OnInit {
     const orgDetails = this.orgservice.getCurrentOrgWithProperty();
     if (orgDetails !== undefined) {
       if (orgDetails.user_id === this.userID) { //=== this.userID
-        this.currentOrganization = orgDetails.organization_name ? orgDetails.organization_name : orgDetails.response.orgname;
+        this.currentOrganization = orgDetails.organization_name !== '' ? orgDetails.organization_name : orgDetails.response.orgname;
         this.currentProperty = orgDetails.property_name;
         const orgIndex = this.selectedOrgProperties.findIndex((t) => t.organization_id === orgDetails.organization_id);
         if (orgIndex === -1) {
@@ -553,7 +564,7 @@ export class HeaderComponent implements OnInit {
         this.licenseAvailabilityForFormAndRequestPerOrg(orgDetails);
         this.licenseAvailabilityForProperty(orgDetails);
       }
-      return this.currentProperty;
+    //  return this.currentProperty;
     }
 
   }
@@ -575,14 +586,16 @@ export class HeaderComponent implements OnInit {
     const orgDetails = this.orgservice.getCurrentOrgWithProperty();
     if (orgDetails !== undefined) {
       const result = data.filter((t) => t.id === orgDetails.organization_id).length > 0;
-      const isSameUserLoggedin = orgDetails.user_id === this.userID;
+      const isSameUserLoggedin =  this.userID === orgDetails.user_id;
       if (result && isSameUserLoggedin) {
         this.licenseAvailabilityForFormAndRequestPerOrg(orgDetails);
         return true;
-      } else {
-        return false;
       }
     }
+  }
+
+  isOrgPropertyEmpty():boolean {
+    return this.orgservice.getCurrentOrgWithProperty() == undefined ? true : false;
   }
 
   goto(link: any, id?: any) {
@@ -853,7 +866,9 @@ export class HeaderComponent implements OnInit {
   }
 
   convertAmpersand(item) {
-    return item.replace(/&amp;/g, '&');
+    if(item !== undefined){
+      return item.replace(/&amp;/g, '&');
+    }
   }
 
   licenseAvailabilityForFormAndRequestPerOrg(org) {

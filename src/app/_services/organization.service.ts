@@ -3,9 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from './../../environments/environment';
 import { Orglist } from './../_models';
-import { Organization } from '../_models/organization';
 import { Organizationdetails } from '../_models/organizationdetails';
-import { map, shareReplay } from 'rxjs/operators';
+import { shareReplay } from 'rxjs/operators';
 
 @Directive()
 @Injectable({ providedIn: 'root' })
@@ -31,6 +30,8 @@ export class OrganizationService {
     editedProperty = this.editedPropertySource.asObservable();
 
     public isOrganizationUpdated: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+    public isPropertyUpdated: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+
     constructor(private http: HttpClient) { }
 
     public get currentOrgValue(): Orglist {

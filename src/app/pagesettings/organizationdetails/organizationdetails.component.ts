@@ -426,6 +426,7 @@ export class OrganizationdetailsComponent implements OnInit {
             if (res.response.id === this.currrentManagedPropID) {
               // this.orgService.changeCurrentSelectedProperty(res);
               const orgDetails = this.orgService.getCurrentOrgWithProperty();
+              this.orgService.isPropertyUpdated.next(true);
               this.orgService.updateEditedProperty(res);
             }
           }
