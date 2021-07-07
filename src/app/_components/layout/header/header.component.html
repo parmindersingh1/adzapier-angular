@@ -57,11 +57,11 @@
   <!--menu after login-->
   <div class="collapse navbar-collapse mr-auto" [collapse]="!isCollapsed"
     [ngClass]="{'hidemenu':!currentUser, 'showmenu':currentUser}">
-    <ul  class="navbar-nav nav-mr" dropdown container="body">
-      <a class="nav-link dropdown-link"  dropdownToggle (click)="false">
-       <div>{{currentOrganization}}
-       </div>
-       <span>{{currentProperty ? convertAmpersand(currentProperty) : 'Select Property'}}</span>
+    <ul *ngIf="orgPropertyMenu" class="navbar-nav nav-mr" dropdown container="body">
+      <a class="nav-link dropdown-link"  dropdownToggle (click)="false" >
+       <div *ngIf="currentOrganization !== ''">{{currentOrganization}}</div>
+       <span *ngIf="currentProperty !== '';">{{currentProperty !== '' ? convertAmpersand(currentProperty) : 'Select Property'}}</span>
+       <span *ngIf="!currentProperty"> Select Property</span>
       </a>
      <!--(orgPropertyMenu | async).response-->
      <div *dropdownMenu>
@@ -88,7 +88,7 @@
                   </span>
                   <ng-template #disabledProperty>
                     <span (click)="false">
-                    {{ submenu.property_name ? convertAmpersand(submenu.property_name) : 'No Property' }}
+                    {{ submenu?.property_name !== '' ? convertAmpersand(submenu?.property_name) : 'No Property' }}
                     <span class="ml-2" *ngIf="isPropSelected(submenu)">
                       <i class="fa fa-check"></i></span>
                     </span>
@@ -310,9 +310,9 @@
   <!--sidemenu property list after login-->
   <ul  class="navbar-nav" dropdown container="body">
     <a class="nav-link dropdown-link"  (click)="onMobilePropertyMenuClicked(true)">
-     <div>{{currentOrganization}}
-     </div>
-     <span>{{currentProperty ? convertAmpersand(currentProperty):'Select Property'}}</span>
+      <div *ngIf="currentOrganization !== ''">{{currentOrganization}}</div>
+       <span *ngIf="currentProperty !== ''">{{convertAmpersand(currentProperty)}}</span>
+       <span *ngIf="!currentProperty">Select Property</span>
     </a>
     <ul class="dropdown-menu propMenu" [isAnimated]="true"  [collapse]="isMobilePropertyCollapsed">
         <li role="menuitem" *ngFor="let item of orgPropertyMenu; first as isFirst; let i = index;">

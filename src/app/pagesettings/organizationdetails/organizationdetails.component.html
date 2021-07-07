@@ -589,7 +589,7 @@
                 <div class="col-sm-12 user-roles">
                     <label for="permissions" class="d-block">Select roles</label>
                     <div *ngFor="let order of roleList;" class="form-check-inline">
-                        <input type="radio" id="permissions" name="permissions" formControlName="permissions"
+                        <input type="radio" name="permissions" formControlName="permissions"
                             [value]="order.id" /> {{order.role_name}}</div>
                     <div *ngIf="isInviteFormSubmitted && f.permissions.invalid" class="invalid-radio">
                         Roles is mandatory
