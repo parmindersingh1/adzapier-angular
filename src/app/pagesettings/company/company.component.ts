@@ -92,10 +92,14 @@ export class CompanyComponent implements OnInit {
     });
     this.inviteUserForm = this.formBuilder.group({
       emailid: ['', [Validators.required, Validators.pattern]],
-      firstname: ['', [Validators.required]],
-      lastname: ['', [Validators.required]],
+      firstname: ['', [this.selectusertype ? Validators.required : '']],
+      lastname: ['', [this.selectusertype ? Validators.required : '']],
       permissions: ['', [Validators.required]]
     });
+    this.inviteUserForm.get("emailid").valueChanges
+    .subscribe(data=> {
+      this.changeValidators();
+    })
     this.confirmationForm = this.formBuilder.group({
       userInput: ['', [Validators.required]]
     });
@@ -570,6 +574,18 @@ export class CompanyComponent implements OnInit {
   separateUsername(username){
     let res = username.split(" ");
     return res;
+  }
+
+  changeValidators() {
+    if (this.selectusertype) {
+      this.inviteUserForm.controls["firstname"].setValidators([Validators.required]);
+      this.inviteUserForm.controls["lastname"].setValidators([Validators.required]);
+    } else {
+      this.inviteUserForm.controls["firstname"].clearValidators();
+      this.inviteUserForm.controls["lastname"].clearValidators();
+    }
+    this.inviteUserForm.get("firstname").updateValueAndValidity();
+    this.inviteUserForm.get("lastname").updateValueAndValidity();
   }
 
 }
