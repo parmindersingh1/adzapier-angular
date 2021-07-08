@@ -438,6 +438,7 @@ export class OrganizationdetailsComponent implements OnInit {
           this.alertMsg = error;
           this.isOpen = true;
           this.alertType = 'danger';
+          this.onCancelClickProperty();
         });
       }
     }
@@ -483,7 +484,7 @@ export class OrganizationdetailsComponent implements OnInit {
       this.dataService.getOrgAndPropPlanInfo(this.constructor.name, moduleName.cookieConsentModule, this.organizationID)
         .subscribe((res: any) => {
           this.loading.stop('2');
-          const status = this.dataService.checkUserForOrg(this.orgPlanDetails, this.paginationConfig.totalItems, res.response.plan_details);
+          const status = this.dataService.checkUserForOrg(this.orgPlanDetails, this.paginationConfig.totalItems, res.response.plan_details.dsar);
           if (status === false) {
             // return false;
             resolve(false);
@@ -750,12 +751,12 @@ export class OrganizationdetailsComponent implements OnInit {
     this.modalService.dismissAll('Canceled');
     this.confirmationForm.reset();
   }
-    
+
 
   onSubmitConfirmation(selectedaction) {
     this.isconfirmationsubmitted = true;
     if (this.confirmationForm.invalid) {
-      
+
       return false;
     } else {
       const userInput = this.confirmationForm.value.userInput;
@@ -768,7 +769,7 @@ export class OrganizationdetailsComponent implements OnInit {
         } else if (selectedaction === 'team member') {
           this.confirmDeleteTeamMember();
         }
-        
+
       } else {
         // this.confirmationForm.reset();
         // this.isconfirmationsubmitted = false;

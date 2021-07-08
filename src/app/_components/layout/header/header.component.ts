@@ -490,7 +490,7 @@ export class HeaderComponent implements OnInit {
             this.router.navigate(['settings/organizations/details/' + this.orgPropertyMenu[0].id]);
             return false;
           } else {
-            if(this.isOrgPropertyEmpty()){
+            if(!this.isOrgPropertyEmpty() || this.isFirstPropertyExist()){
             let activePro = this.filterProp(this.orgPropertyMenu);
             const proIndex = activePro[0].property.findIndex((t) => t.property_active === true);
             this.activeProp = activePro[0].property[proIndex];
@@ -585,8 +585,8 @@ export class HeaderComponent implements OnInit {
   isOrgPropertyExists(data): boolean {
     const orgDetails = this.orgservice.getCurrentOrgWithProperty();
     if (orgDetails !== undefined) {
-      const result = data.filter((t) => t.id === orgDetails.organization_id).length > 0;
-      const isSameUserLoggedin =  this.userID === orgDetails.user_id;
+      const result = data.filter((t) => t.id === orgDetails.organization_id).length > 0 || data.some((t) => t.id === orgDetails.id);
+      const isSameUserLoggedin =  this.userID === orgDetails.user_id || orgDetails.uid;
       if (result && isSameUserLoggedin) {
         this.licenseAvailabilityForFormAndRequestPerOrg(orgDetails);
         return true;
@@ -595,7 +595,7 @@ export class HeaderComponent implements OnInit {
   }
 
   isOrgPropertyEmpty():boolean {
-    return this.orgservice.getCurrentOrgWithProperty() == undefined ? true : false;
+    return this.orgservice.getCurrentOrgWithProperty() !== undefined ? true : false;
   }
 
   goto(link: any, id?: any) {
@@ -678,7 +678,11 @@ export class HeaderComponent implements OnInit {
     return this.isSublinkActive = this.selectedSubmenu.some((t) => t === selectedItem.routerLink);
   }
 
-
+  isFirstPropertyExist():boolean {
+    if(this.orgPropertyMenu[0] !== undefined){
+      return this.orgPropertyMenu[0].property !== undefined && this.orgPropertyMenu[0].property[0] !== undefined
+    }
+  }
 
   confirm() {
     this.modalRef.hide();

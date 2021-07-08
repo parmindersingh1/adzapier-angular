@@ -321,7 +321,7 @@
             <div class="tab"><input type="radio" class="form-check-input"  [(ngModel)]="selectusertype" name="selectusertype" [value]="true"/><label class="mr-3">New User</label></div>
             <div class="tab"><input type="radio" class="form-check-input" [(ngModel)]="selectusertype"  name="selectusertype" [value]="false"/><label>Existing User</label></div>
         </div>
-        <div>Enter the email addresses of the users you'd like to invite, and choose the role they should have.
+        <div *ngIf="!isUpdateUserinvitation">Enter the email addresses of the users you'd like to invite, and choose the role they should have.
         </div>
         <form [formGroup]="inviteUserForm" autocomplete="off" (ngSubmit)="onSubmitInviteUser()">
             <div class="row">

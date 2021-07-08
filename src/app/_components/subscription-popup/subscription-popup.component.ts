@@ -39,8 +39,11 @@ export class SubscriptionPopupComponent implements OnInit {
   existingOrgPlan = null;
   noPlanType = 'org';
   isUserSubscribe = false;
+  isUserSubscribeDsar = false;
   showFeatureCount = 6;
   currentUser: any;
+  skLoading = false;
+  openModalStatus = false;
 
   constructor(
     private modalService: BsModalService,
@@ -54,34 +57,42 @@ export class SubscriptionPopupComponent implements OnInit {
   ) {
     this.authService.currentUser.subscribe(x => {
       this.currentUser = x;
+      if (this.currentUser) {
+        this.onGetPlanDetails();
+        this.onGetUserSubscriptions();
+      }
     });
   }
 
   ngOnInit(): void {
-    if (this.currentUser) {
-      this.onGetPlanDetails();
-      this.onGetUserSubscriptions();
-    }
     this.openModal();
   }
 
   onGetUserSubscriptions() {
+    this.skLoading = true;
     this.billingService.getActivePlan(this.constructor.name, moduleName.manageSubscriptionsModule).subscribe((res: any) => {
       // this.isUserSubscribe = res.response.length;
+      this.skLoading = false;
       if (res.status === 200) {
         const result = res.response;
         for (const obj of result) {
-          if (obj.active) {
+          if (obj.active && obj.planDetails.type === 0) {
             this.isUserSubscribe = true;
+          }
+          if (obj.active && obj.planDetails.type === 1) {
+            this.isUserSubscribeDsar = true;
           }
         }
       }
+    }, error => {
+      this.skLoading = false;
     });
   }
 
 
   openModal() {
     this.dataService.openModalWithData.subscribe(res => {
+      this.openModalStatus = res.openModal;
       if (res.openModal) {
         if (!res.data) {
           this.currentPlanData = new DefaultPlanData();
@@ -97,14 +108,14 @@ export class SubscriptionPopupComponent implements OnInit {
             //   this.existingOrgPlan = res.data;
             // }
           } else if (!res.data && res.type == 'org') {
-            this.type = 'org'
+            this.type = 'org';
             this.currentPlanData = new DefaultPlanData();
           } else {
-            this.type = 'noPlan'
+            this.type = 'noPlan';
             this.currentPlanData = new DefaultPlanData();
           }
         } else {
-          this.type = 'noPlan'
+          this.type = 'noPlan';
         }
         this.template.config = {
         backdrop: true,
@@ -112,7 +123,7 @@ export class SubscriptionPopupComponent implements OnInit {
         }; // to avoid browser scrollbar issue appears due to modal does not get hide properly.
         this.template.show();
       }
-    })
+    });
   }
 
   onGetPlanDetails() {
