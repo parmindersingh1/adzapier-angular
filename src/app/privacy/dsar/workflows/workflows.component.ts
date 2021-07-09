@@ -55,7 +55,7 @@ export class WorkflowsComponent implements OnInit, AfterViewInit, DirtyComponent
   currentManagedOrgID: any;
   isSaveClicked = false;
   isDirty:boolean;
-  constructor(private router: Router, 
+  constructor(private router: Router,
               private workflowService: WorkflowService,
               private dataService: DataService,
               private modalService: NgbModal,
@@ -352,7 +352,7 @@ onClosed(dismissedAlert: any): void {
 }
 
 isLicenseLimitAvailable(){
-  return this.dataService.isLicenseLimitAvailableForOrganization('workflow',this.dataService.getAvailableLicenseForFormAndRequestPerOrg());
+  return this.dataService.isLicenseLimitAvailableForOrganizationRestrication('workflow',this.dataService.getAvailableLicenseForFormAndRequestPerOrg());
 }
 
 licenseAvailabilityForFormAndRequestPerOrg(org){
