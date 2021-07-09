@@ -17,7 +17,7 @@
           padding: 0 20px; } }
       .content-auth > .container:first-child {
         flex: 1; }
-  
+
   .content-auth-alt {
     min-height: calc(100vh - 106px);
     display: flex;
@@ -28,7 +28,7 @@
       @media (max-width: 1139px) {
         .content-auth-alt .container {
           max-width: none; } }
-  
+
   .sign-wrapper {
     display: flex;
     flex-direction: column;
@@ -41,7 +41,7 @@
     .sign-wrapper .form-group label {
       display: block;
       margin-bottom: 5px; }
-  
+
 .alert-success {
   background-color: #5cb85c;
  border-color: #4cae4c;
@@ -54,7 +54,7 @@
  background-color: #f8d7da;
  border-color: #f5c6cb;
 }
- 
+
 .flotingdiv {
 	position: fixed;
 	bottom: 0;
@@ -66,4 +66,59 @@
 
 ::ng-deep .alert {
   padding: 12px 35px 12px 12px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+.login-background {
+  background-image: linear-gradient(#243553, #2f487a);
+  height: 100%;
+  margin: 0px;
+  padding: 0px;
+}
+.login-form{
+  width: 700px;
+  padding: 55px;
+}
+.input-lg {
+  height: 55px;
+  font-size: 16px;
+  font-weight: 600;
+}
+.logo-group{
+text-align: center;
+  margin-top: 40px;
+  margin-bottom: 30px;
+}
+.az-logo{
+  height: 65px;
+}
+.register-btn {
+  background-color: #243553;
+  font-size: 20px;
+  width: 335px;
+  height: 50px;
+  border: none;
+}
+.forgot-password{
+  float: right;
+  margin-right: 15px;
+  margin-top: 11px;
+  font-size: 15px;
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+.forgot-password a{
+  color: #555
 }

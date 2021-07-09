@@ -48,7 +48,6 @@ export class UserService {
                 // store user details and jwt token in local storage to keep user logged in between page refreshes
                 this.currentregSubject.next(user);
                 return user;
-
             }),
                 retry(1),
                 catchError(error => {
@@ -59,7 +58,7 @@ export class UserService {
     }
 
 
-    resetpassword(componentName, moduleName, token, password, confirmpassword): Observable<any> {
+  resetpassword(componentName, moduleName, token, password, confirmpassword): Observable<any> {
         const path = '/password/reset';
         return this.http.post<any>(environment.apiUrl + path, { token, password, confirmpassword })
         .pipe(catchError(error => {

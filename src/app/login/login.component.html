@@ -123,7 +123,10 @@
 <div class="container-fluid login-background ">
   <div class="row justify-content-center">
     <div class="">
-      <img src="assets/imgs/az-logo.png" class="az-logo" alt="adzapier logo" />
+      <div class="logo-group">
+        <img src="assets/imgs/az-logo.png" class="az-logo mb-2" alt="adzapier logo" />
+        <h4 class="tx-white">Trusted Data Privacy Solutions</h4>
+      </div>
       <div class="inputs-key login-form bg-white">
       <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
 
@@ -143,7 +146,7 @@
         <div class="form-group">
           <div class="d-flex justify-content-between mg-b-5">
             <label class="mg-b-0-f tx-17" >Password</label>
-            <a routerLink="/forgot-password" tabindex="-1">Forgot password?</a>
+
           </div>
           <input type="password" toggle formControlName="password" class="form-control input-lg"
                  [ngClass]="{ 'is-invalid': submitted && f.password.errors }" placeholder="Enter your password"
@@ -151,6 +154,9 @@
           <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
             <div *ngIf="f.password.errors.required">Password is required</div>
             <!-- <div *ngIf="f.password.errors.pattern">Invalid Password</div> -->
+          </div>
+          <div class="row forgot-password" >
+            <a routerLink="/forgot-password" tabindex="-1">Forgot password?</a>
           </div>
           <br>
           <div *ngIf="show" style="color:blue;">
@@ -163,15 +169,22 @@
 
         </div>
         <div class="text-center">
-          <button [disabled]="loading" class="btn btn-brand-02 btn-block" type="submit">
+          <button [disabled]="loading" class="btn btn-brand-02 btn-block login-btn" type="submit">
             <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
             {{sign_in}} </button>
 
-
+                          <div class="divider-text tx-17">or</div>
+                          <div class="tx-13 mg-t-20 tx-center tx-18">Don't have an account? <a class="font-weight-bold" routerLink="/signup">Create an
+                              Account</a></div>
         </div>
 
       </form>
     </div>
   </div>
 </div>
+</div>
+<div class="col-sm-5 mr-0 float-right flotingdiv" *ngIf="isOpen">
+  <alert *ngIf="isOpen" [type]="alertType" [dismissible]="dismissible" (onClosed)="onClosed(alertMsg)">{{
+    alertMsg}}
+  </alert>
 </div>
