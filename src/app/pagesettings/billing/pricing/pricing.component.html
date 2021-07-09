@@ -76,6 +76,7 @@
             <label class="property-type col-md-6" for="sel1">Property</label>
             <select #planUnit style="height: 32px;" class="mb-2 col-md-5 form-control" id="sel1">
               <option>1</option>
+            <ng-container *ngIf="plan.price > 0">
               <option>2</option>
               <option>3</option>
               <option>4</option>
@@ -85,6 +86,7 @@
               <option>8</option>
               <option>9</option>
               <option>10</option>
+            </ng-container>
             </select>
           </div>
 
