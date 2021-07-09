@@ -122,7 +122,7 @@ export class CookieTrackingComponent implements OnInit {
     (this.planDetails.response, featuresName.FULL_CONVERSION_AND_VISITOR, featuresName.CONSENT_RECORD_KEEPING);
     this.isDisabledScreen = !isAllowViewConsent;
     if (!isAllowViewConsent) {
-      this.dataService.openUpgradeModalForCookieConsent(this.planDetails);
+      this.dataService.openSubcriptionModalForRestrication(this.planDetails);
     }
   }
 

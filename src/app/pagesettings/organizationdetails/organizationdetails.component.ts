@@ -484,7 +484,7 @@ export class OrganizationdetailsComponent implements OnInit {
       this.dataService.getOrgAndPropPlanInfo(this.constructor.name, moduleName.cookieConsentModule, this.organizationID)
         .subscribe((res: any) => {
           this.loading.stop('2');
-          const status = this.dataService.checkUserForOrg(this.orgPlanDetails, this.paginationConfig.totalItems, res.response.plan_details.dsar);
+          const status = this.dataService.checkUserForOrg(this.orgPlanDetails, this.paginationConfig.totalItems, res.response.plan_details);
           if (status === false) {
             // return false;
             resolve(false);

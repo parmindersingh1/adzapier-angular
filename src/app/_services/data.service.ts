@@ -255,7 +255,7 @@ export class DataService {
 
     if (flag === false) {
       this.openModal.next({
-        openModal: this.isSubscriptionExistForProperty(),
+        openModal: true,
         data: plan_details,
         type: planType,
         // msg: msg,
@@ -340,6 +340,22 @@ export class DataService {
     return Object.keys(planDetails.cookieConsent).length !== 0 ? true : false;
   }
 
+
+  openSubcriptionModalForRestrication(res):any {
+    let planDetails = null;
+    if (res.hasOwnProperty('response')) {
+      if (res.response.hasOwnProperty('plan_details')) {
+        planDetails = res.response.plan_details;
+      }
+    }
+
+    this.openModal.next({
+      openModal: true,
+      data: planDetails.cookieConsent,
+      type: 'cookieConsent',
+    });
+    return Object.keys(planDetails.cookieConsent).length !== 0 ? true : false;
+  }
 
   openUpgradeModalForConsentPreference(res):any {
     let planDetails = null;
@@ -438,6 +454,42 @@ export class DataService {
         type: 'org',
         msg: '',
         currentplan: this.getCurrentOrgPlanDetails() !== '' ? this.getCurrentOrgPlanDetails().response.plan_details : null
+      });
+      return false;
+    }
+  }
+
+  isLicenseLimitAvailableForOrganizationRestrication(requestType, responseData): boolean {
+    console.log('responseData', responseData)
+    let changeResponseProperty;
+    if (requestType === 'form') {
+      changeResponseProperty = 'form_available';
+    } else if (requestType === 'request') {
+      changeResponseProperty = 'request_available';
+    } else if (requestType === 'workflow') {
+      changeResponseProperty = 'workflow_available';
+    }
+    if (Object.keys(responseData).length === 0) {
+      this.openModal.next({openModal: true,
+        data: this.getCurrentOrgPlanDetails() !== '' ? this.getCurrentOrgPlanDetails().response.plan_details.dsar : null, type: 'org', msg: ''});
+      return false;
+    } else if (responseData[changeResponseProperty] === -1 || responseData[changeResponseProperty] > 0) {
+      return true;
+    } else if (responseData[changeResponseProperty] === 0) {
+      const formMsg = 'You have exceeded form creation limit. For more details Manage subscription or upgrade plan';
+      const requestMsg = 'You have exceeded request creation limit. For more details Manage subscription or upgrade plan';
+      const respMsg = changeResponseProperty == 'form_available' ? formMsg : requestMsg;
+      this.openModal.next({
+        openModal: true,
+        data: this.getCurrentOrgPlanDetails() !== '' ? this.getCurrentOrgPlanDetails().response.plan_details.dsar : null,
+        type: 'org',
+      });
+      return false;
+    } else {
+      this.openModal.next({
+        openModal: true,
+        data: this.getCurrentOrgPlanDetails() !== '' ? this.getCurrentOrgPlanDetails().response.plan_details.dsar : null,
+        type: 'org',
       });
       return false;
     }
