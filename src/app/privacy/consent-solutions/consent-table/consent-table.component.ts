@@ -272,6 +272,7 @@ export class ConsentTableComponent implements OnInit {
         this.isOpen = true;
         this.alertMsg = err.message;
         this.alertType = 'danger';
+        this.onCancelClick();
       });
   }
 
