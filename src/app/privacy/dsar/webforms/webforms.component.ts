@@ -171,7 +171,7 @@ export class WebformsComponent implements OnInit, DirtyComponents {
   }
 
   isLicenseLimitAvailable(): boolean{
-      return this.dataService.isLicenseLimitAvailableForOrganization('form',this.dataService.getAvailableLicenseForFormAndRequestPerOrg());
+      return this.dataService.isLicenseLimitAvailableForOrganizationRestrication('form',this.dataService.getAvailableLicenseForFormAndRequestPerOrg());
   }
 
   licenseAvailabilityForFormAndRequestPerOrg(org){

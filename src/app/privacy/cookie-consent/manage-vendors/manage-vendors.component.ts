@@ -75,7 +75,7 @@ export class ManageVendorsComponent implements OnInit {
   onCheckAllowBannerConfig() {
     this.planDetails = this.dataService.getCurrentPropertyPlanDetails();
     if (!this.isFeatureAvaliable) {
-      this.dataService.openUpgradeModalForCookieConsent(this.planDetails);
+      this.dataService.openSubcriptionModalForRestrication(this.planDetails);
     }
   }
 
