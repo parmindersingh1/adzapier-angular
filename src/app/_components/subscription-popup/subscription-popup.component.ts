@@ -197,7 +197,7 @@ export class SubscriptionPopupComponent implements OnInit {
 
   onTemplateHide() {
     const path = location.pathname;
-    if (path === '/cookie-consent/cookie-banner') {
+    if (path === '/cookie-consent/cookie-banner' || path === '/cookie-consent/manage-vendors') {
       this.template.hide();
     } else {
       this.router.navigate(['/home/dashboard/analytics']);
