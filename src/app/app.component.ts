@@ -9,6 +9,7 @@ import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
 import {DataService} from './_services/data.service';
 import {moduleName} from './_constant/module-name.constant';
 import {BillingService} from './_services/billing.service';
+import {environment} from '../environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -51,6 +52,7 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.onInitCPSDK();
     this.openUnAuthModal();
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
@@ -67,6 +69,13 @@ export class AppComponent implements OnInit {
     feather.replace();
   }
 
+  onInitCPSDK() {
+    const  js = document.createElement('script');
+    js.type = 'text/javascript';
+    js.src = environment.consentPreferenceCDN;
+
+    document.body.appendChild(js);
+  }
   private openUnAuthModal() {
     this.dataService.unAuthPopUp.subscribe((res: any) => {
       if (res.isTrue) {

@@ -67,6 +67,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     element.classList.remove('site-content');
     element.classList.add('container-fluid');
     element.style.padding = '0px';
+    element.style.margin = '0px';
     this.loginForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.pattern]],
       password: ['', [Validators.required]]

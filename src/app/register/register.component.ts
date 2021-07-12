@@ -5,6 +5,7 @@ import {first} from 'rxjs/operators';
 import {AlertService, AuthenticationService, UserService} from './../_services';
 import {MustMatch} from '../_helpers/must-match.validator';
 import {moduleName} from '../_constant/module-name.constant';
+import {environment} from '../../environments/environment';
 
 
 @Component({
@@ -34,9 +35,9 @@ export class RegisterComponent implements OnInit, OnDestroy {
     private alertService: AlertService,
   ) {
     this.consentPreferenceSDK = (window as any).CP_SDK_ADZAPIER.init({
-      AppID: 'cBJtzTHAnDECTCguDBeBzIXprEfLdQwgklQYRXqkdRNPMCYSjX', // Your App ID
-      PropID: '67a0d68e-94e0-492a-8221-1dabaacd375d', // Your Current Property ID
-      ShowLogs: true, // Show Console Logs
+      AppID: environment.consentPreferenceConfig.AppID,
+      PropID: environment.consentPreferenceConfig.PropID,
+      ShowLogs: false, // Show Console Logs
     });
   }
 
@@ -46,6 +47,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
     element.classList.remove('site-content');
     element.classList.add('container-fluid');
     element.style.padding = '0px';
+    element.style.margin = '0px';
     const strRegx = '.*\\S.*[a-zA-Z \-\']';
     const alphaNumeric = '^(?![0-9]*$)[a-zA-Z0-9 ]+$'; // '.*\\S.*[a-zA-z0-9 ]';
     const zipRegex = '^[0-9]*$';
@@ -81,13 +83,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
-    // this.onSendConsentPreferenceRecord();
-
-    // console.log(' registerForm', this.registerForm.nativeElement);
     this.submitted = true;
-    //  this.show = false;
-    // this.alertService.clear();
-
     // stop here if form is invalid
     if (this.regForm.invalid) {
       return false;
@@ -111,7 +107,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
             this.alertMsg = 'Account created successfully';
             this.isOpen = true;
             this.alertType = 'success';
-            // this.router.navigate(['signup/thankyou']);
+            this.router.navigate(['signup/thankyou']);
             this.loading = false;
           },
           error => {
@@ -127,22 +123,12 @@ export class RegisterComponent implements OnInit, OnDestroy {
   }
 
   onSendConsentPreferenceRecord() {
-    let list = document.getElementById('registerForm');   // Get the <ul> element with id="myList"
-    // list.removeChild(list['password']);
-    // console.log(list['password']);
-    // list.removeChild(document.get);
-    // const inputs = document.getElementsByTagName('input');
-    // for (var i=0; i<inputs.length; i++) {
-    //   if (inputs[i].type.toLowerCase() === "password") {
-    //     list.removeChild(inputs[i])
-    //     console.log('linputt', inputs[i])
-    //     // ary.push(inputs[i]);
-    //     // list.removeChild(inputs[i]);
-    //   }
-    // }
-
-
-    console.log(list.outerHTML.replace(list['password'].outerHTML, ''));
+    const keys = ['password', 'confirmpassword'];
+    const formData = document.getElementById('registerForm');   // Get the <ul> element with id="myList"
+    let formDataContent: any = formData.outerHTML;   // Get the <ul> element with id="myList"
+    for (const formInputType of keys) {
+      formDataContent = formDataContent.replace(formData[formInputType].outerHTML, '');
+    }
 
     const payload = {
       firstname:  this.f.firstName.value,
@@ -153,20 +139,16 @@ export class RegisterComponent implements OnInit, OnDestroy {
       consentData: {
         formId: 'fsa',
         consent: {
-          email: 'email',
+          email: payload.email,
           firstName: payload.firstname,
           lastName: payload.lastname,
           dataSource: 'public',
           verified: true,
         },
-        exculde: ['password'],
+        exculdes: ['password'],
         preferences: [ // Optional
-          {preference: 'terms-and-conditions', allow: true},
-          // {preference: 'newsletter', allow: true},
+          {preference: 'terms_and_conditions', allow: true},
           {preference: 'privacy_policy', allow: true},
-          // termOfService: 'terms-and-conditions',
-          // newsletter: 'newsletter',
-          // privacyPolicy: 'privacy_policy'
         ],
       },
 
@@ -188,12 +170,10 @@ export class RegisterComponent implements OnInit, OnDestroy {
       proofs: [ // Optional
           {
               content: JSON.stringify(payload),
-              form: 'registerForm'
+              form: formDataContent
           }
       ],
       autodetectIpAddress: true, // A parameter that enable or disable the ip autodetect. Default to: true
-    }, (result) => {
-
     });
   }
 

@@ -202,9 +202,10 @@ p.error {
 
 .login-background {
   background-image: linear-gradient(#243553, #2f487a);
-  height: 100vh;
+  height: 100%;
   margin: 0px;
-  padding: 0px;
+  padding-bottom: 188px;
+  position: fixed;
 }
 .login-form{
   width: 500px;
