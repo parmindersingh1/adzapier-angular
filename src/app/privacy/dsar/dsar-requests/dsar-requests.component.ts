@@ -428,6 +428,10 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
           window.open('https://privacyportal.adzpier-staging.com/dsar/form/' + this.selectedOrgID + '/'
             + this.selectedPropID + '/' + this.selectedCRID + formStatus);
           this.onCancelClick();
+        } else if (window.location.hostname === 'qa-cmp.adzpier-staging.com') {
+          window.open('https://qa-privacyportal.adzpier-staging.com/dsar/form/' + this.selectedOrgID + '/'
+            + this.selectedPropID + '/' + this.selectedCRID + formStatus);
+          this.onCancelClick();
         } else if(window.location.hostname === 'portal.adzapier.com'){
           window.open('https://privacyportal.primeconsent.com/dsar/form/' + this.selectedOrgID + '/'
           + this.selectedPropID + '/' + this.selectedCRID + formStatus);
