@@ -195,9 +195,13 @@ export class SubscriptionPopupComponent implements OnInit {
     this.router.navigateByUrl('/settings/billing/pricing')
   }
 
-  onTemplateHide(){
-    this.router.navigate(['/home/dashboard/analytics']);
-    this.template.hide();
+  onTemplateHide() {
+    const path = location.pathname;
+    if (path === '/cookie-consent/cookie-banner' || path === '/cookie-consent/manage-vendors') {
+      this.template.hide();
+    } else {
+      this.router.navigate(['/home/dashboard/analytics']);
+      this.template.hide();
+    }
   }
-
 }

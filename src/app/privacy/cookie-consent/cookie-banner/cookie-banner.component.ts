@@ -946,25 +946,25 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
 
   onCheckLogoAllow() {
     if (this.disablePlanFeatures.hideLogo) {
-      this.dataService.openUpgradeModalForCookieConsent(this.planDetails);
+      this.dataService.openSubcriptionModalForRestrication(this.planDetails);
     }
   }
 
   onCheckAllowGoogleVendors() {
     if (this.disablePlanFeatures.disableGoogleVendors) {
-      this.dataService.openUpgradeModalForCookieConsent(this.planDetails);
+      this.dataService.openSubcriptionModalForRestrication(this.planDetails);
     }
   }
 
   onCheckDisableCookiebloking() {
     if (this.disablePlanFeatures.disableCookieblocking) {
-      this.dataService.openUpgradeModalForCookieConsent(this.planDetails);
+      this.dataService.openSubcriptionModalForRestrication(this.planDetails);
     }
   }
 
   onCheckAllowBannerConfig() {
     if (this.disablePlanFeatures.disableBannerConfig) {
-      this.dataService.openUpgradeModalForCookieConsent(this.planDetails);
+      this.dataService.openSubcriptionModalForRestrication(this.planDetails);
     }
   }
 
