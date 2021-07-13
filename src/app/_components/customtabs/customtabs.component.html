@@ -5,14 +5,17 @@
         <li *ngFor="let item of inputData; let i = index;let first = first; let last = last; let odd = odd;">
             <div class="displayflex">
                 <div class="tabTitleWrapper"  [class.selectedTab]="currentTab == item.order">
-                    <div *ngIf="currentSelectedStage(item.id)" class="deleteicon" (click)="deleteSelectedStage(i)">
+                    <div *ngIf="currentSelectedStage(item.id) && isnewlyAddedStage" class="deleteicon" (click)="deleteNewStage(i)">
+                        <i class="fa fa-trash" aria-hidden="true"></i>
+                    </div> 
+                     <div *ngIf="customStages(item)" class="deleteicon" (click)="openModal(confirmDeleteStageAlert,i,item)">
                         <i class="fa fa-trash" aria-hidden="true"></i>
                     </div> 
                     <div class="stageTitle" (click)="selectCurrentStage(item)">
                        {{item.stage_title}}
                     </div>                                      
                 </div>
-                <button [disabled]="flowStatus === 'active'"  class="btn btn-xs btn-primary small-btn" *ngIf="i !==  item.order && i < inputData.length - 1"
+                <button [disabled]="flowStatus === 'active'"  class="btn btn-xs btn-primary small-btn" *ngIf="i !==  item.order && i < inputData.length - 1 && item.stage_title !== 'UNVERIFIED' "
                     (click)="addCustomStages(i,item.order)" title="Add a new stage">
                     <span>
                         <i class="fa fa-plus" aria-hidden="true"></i>
@@ -24,3 +27,11 @@
 </div>
 <button (click)="onNextSearchPosition()" class="arrowbtn" [ngClass]="{'hidebtns':rightClickStatus()}"><i class="fa fa-angle-right"></i></button>
 </div>
+
+<ng-template #confirmDeleteStageAlert>
+    <div class="modal-body text-center">
+        <p>Do you want delete selected stage?</p>
+        <button type="button" class="btn btn-sm btn-uppercase btn-primary mr-2" (click)="confirm()">Yes</button>
+        <button type="button" class="btn btn-sm btn-outline-secondary btn-uppercase mr-2" (click)="decline()">No</button>
+    </div>
+</ng-template>
