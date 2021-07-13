@@ -17,7 +17,7 @@
           padding: 0 20px; } }
       .content-auth > .container:first-child {
         flex: 1; }
-  
+
   .content-auth-alt {
     min-height: calc(100vh - 106px);
     display: flex;
@@ -28,7 +28,7 @@
       @media (max-width: 1139px) {
         .content-auth-alt .container {
           max-width: none; } }
-  
+
   .sign-wrapper {
     display: flex;
     flex-direction: column;
@@ -44,7 +44,7 @@
 
       .float-right {
         float: right !important; }
-  
+
 .flotingdiv{
 	position: fixed;
 	bottom: 0;
@@ -52,7 +52,7 @@
 	right:0;
 	overflow-x: hidden;
     overflow-y: auto;
-    z-index: 0;    
+    z-index: 0;
 }
 
 .justify-content-center a:hover {
@@ -64,7 +64,7 @@
 }
 
 .email-verification-panel {
-  position: relative; 
+  position: relative;
   top: -470px;
   height: 100px;
   z-index: 1500;
@@ -196,4 +196,48 @@ p.error {
   100% {
     stroke-dashoffset: 900;
   }
+}
+
+
+
+.login-background {
+  background-image: linear-gradient(#243553, #2f487a);
+  height: 100%;
+  margin: 0px;
+  padding-bottom: 188px;
+  position: fixed;
+}
+.login-form{
+  width: 500px;
+  padding: 55px;
+}
+.input-lg {
+  height: 55px;
+  font-size: 16px;
+  font-weight: 600;
+}
+.logo-group{
+  text-align: center;
+  margin-top: 40px;
+  margin-bottom: 30px;
+}
+.az-logo{
+  height: 65px;
+}
+.login-btn {
+  background-color: #243553;
+  font-size: 20px;
+}
+
+.forgot-password{
+  float: right;
+  margin-right: 15px;
+  margin-top: 11px;
+  font-size: 15px;
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+.forgot-password a{
+  color: #555
 }
