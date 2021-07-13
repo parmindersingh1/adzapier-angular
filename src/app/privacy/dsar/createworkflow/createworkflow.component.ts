@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, AfterViewChecked, ViewChild } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, AfterViewChecked, ViewChild, TemplateRef } from '@angular/core';
 import { WorkflowService } from 'src/app/_services/workflow.service';
 import { FormGroup, NgForm } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
@@ -6,6 +6,7 @@ import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { moduleName } from '../../../_constant/module-name.constant';
 import { OrganizationService } from 'src/app/_services';
 import { DirtyComponents } from 'src/app/_models/dirtycomponents';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 @Component({
   selector: 'app-createworkflow',
   templateUrl: './createworkflow.component.html',
@@ -56,10 +57,13 @@ export class CreateworkflowComponent implements OnInit, DirtyComponents {
   currentManagedOrgID: any;
   defaultStages:any[];
   isDirty: boolean;
+  modalRef: BsModalRef;
+  @ViewChild('confirmDeleteStageAlert') confirmDeleteStageAlert: TemplateRef<any>;
   constructor(private activatedRoute: ActivatedRoute,
               private workflowService: WorkflowService,
               private loadingBar: NgxUiLoaderService,
               private orgservice: OrganizationService,
+              private bsmodalService: BsModalService,
               private cd: ChangeDetectorRef) {
   }
 
@@ -379,6 +383,10 @@ export class CreateworkflowComponent implements OnInit, DirtyComponents {
       })
     }
   
+  }
+
+  openModal(template: TemplateRef<any>) {
+    this.modalRef = this.bsmodalService.show(template, { class: '', keyboard: false, backdrop: true, ignoreBackdropClick: true });
   }
 
 }

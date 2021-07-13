@@ -8,7 +8,7 @@
                     <div *ngIf="currentSelectedStage(item.id) && isnewlyAddedStage" class="deleteicon" (click)="deleteNewStage(i)">
                         <i class="fa fa-trash" aria-hidden="true"></i>
                     </div> 
-                     <div *ngIf="customStages(item)" class="deleteicon" (click)="deleteSelectedStage(i,item)">
+                     <div *ngIf="customStages(item)" class="deleteicon" (click)="openModal(confirmDeleteStageAlert,i,item)">
                         <i class="fa fa-trash" aria-hidden="true"></i>
                     </div> 
                     <div class="stageTitle" (click)="selectCurrentStage(item)">
@@ -27,3 +27,11 @@
 </div>
 <button (click)="onNextSearchPosition()" class="arrowbtn" [ngClass]="{'hidebtns':rightClickStatus()}"><i class="fa fa-angle-right"></i></button>
 </div>
+
+<ng-template #confirmDeleteStageAlert>
+    <div class="modal-body text-center">
+        <p>Do you want delete selected stage?</p>
+        <button type="button" class="btn btn-sm btn-uppercase btn-primary mr-2" (click)="confirm()">Yes</button>
+        <button type="button" class="btn btn-sm btn-outline-secondary btn-uppercase mr-2" (click)="decline()">No</button>
+    </div>
+</ng-template>

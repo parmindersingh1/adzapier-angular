@@ -1,7 +1,8 @@
 import {
   Component, OnInit, Input, Output, EventEmitter, ElementRef, ViewChild, ChangeDetectionStrategy,
-  ChangeDetectorRef, AfterContentChecked
+  ChangeDetectorRef, AfterContentChecked, TemplateRef
 } from '@angular/core';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 
 @Component({
   selector: 'app-customtabs',
@@ -17,6 +18,8 @@ export class CustomtabsComponent implements OnInit, AfterContentChecked {
   @Output() deleteCustomStage: EventEmitter<any> = new EventEmitter<any>();
   @ViewChild('panel', { static: true }) public panel: ElementRef<any>;
   @ViewChild('inputDataIdentifier', { static: true }) public inputDataIdentifier: ElementRef<any>;
+  modalRef: BsModalRef;
+  @ViewChild('confirmDeleteStageAlert') confirmDeleteStageAlert: TemplateRef<any>;
   newitemAdded: any = [];
   currentStage: any;
   stageTitle: any;
@@ -25,7 +28,9 @@ export class CustomtabsComponent implements OnInit, AfterContentChecked {
   rightbtnVisibility = true;
   scrollLimit: number;
   isnewlyAddedStage = false;
-  constructor(private cdRef: ChangeDetectorRef) { }
+  selectedDelIndex;
+  selectedDelObject;
+  constructor(private cdRef: ChangeDetectorRef,private bsmodalService: BsModalService) { }
 
   ngOnInit() {
     if (this.currentTab) {
@@ -136,11 +141,27 @@ export class CustomtabsComponent implements OnInit, AfterContentChecked {
   ngAfterContentChecked(): void {
     this.cdRef.detectChanges();
     const parentElementSize = this.inputDataIdentifier.nativeElement.parentElement.offsetWidth;
-    const itemSize = this.inputDataIdentifier.nativeElement.querySelector('li').offsetWidth;
+    const itemSize = this.inputDataIdentifier.nativeElement.querySelector('li + li').offsetWidth;
     const itemLength = this.inputDataIdentifier.nativeElement.childElementCount;
     const menuSize = itemSize * itemLength;
     const visibleSize = menuSize - parentElementSize;
     this.scrollLimit = -visibleSize;
   }
+
+  openModal(template: TemplateRef<any>,deleteIndex,obj) {
+    this.selectedDelIndex = deleteIndex;
+    this.selectedDelObject = obj;
+    this.modalRef = this.bsmodalService.show(template, { class: '', keyboard: false, backdrop: true, ignoreBackdropClick: true });
+  }
+
+  confirm(): void {
+    this.deleteSelectedStage(this.selectedDelIndex,this.selectedDelObject);
+    this.modalRef.hide();
+  }
+ 
+  decline(): void {
+    this.modalRef.hide();
+  }
+
 
 }
