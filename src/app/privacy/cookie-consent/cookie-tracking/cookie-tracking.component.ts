@@ -8,6 +8,7 @@ import * as moment from 'moment';
 import {featuresName} from '../../../_constant/features-name.constant';
 import {DataService} from '../../../_services/data.service';
 import { LazyLoadEvent } from 'primeng/api';
+import { BsDatepickerConfig, DatepickerDateCustomClasses } from 'ngx-bootstrap/datepicker';
 
 class FilterType {
   consentType = '';
@@ -42,19 +43,77 @@ export class CookieTrackingComponent implements OnInit {
   planDetails: any;
   isDisabledScreen = false;
 
+  bsConfig: Partial<BsDatepickerConfig>;
+  dateCustomClasses: DatepickerDateCustomClasses[];
+  searchbydaterange: any = '';
+  date1: Date = new Date('yyyy-mm-dd');
+  ranges: any = [
+    {
+      value: [new Date(), new Date()],
+      label: 'Today'
+    },
+    {
+      value: [new Date(new Date().setDate(new Date().getDate() - 1)),
+        new Date(new Date().setDate(new Date().getDate() - 1))],
+      label: 'Yesterday'
+    },
+    {
+      value: [
+        new Date(new Date().setDate(new Date().getDate() - 7)),
+        new Date()
+      ],
+      label: 'Last 7 Days'
+    },
+    {
+      value: [
+        new Date(new Date().setDate(new Date().getDate() - 30)),
+        new Date()
+      ],
+      label: 'Last 30 Days'
+    },
+    {
+      value: [new Date(new Date().setDate(new Date().getMonth())), new Date()],
+      label: 'This Month'
+    },
+    {
+      value: [
+        new Date(new Date().getFullYear(), new Date().getMonth() - 1, 1),
+        new Date(new Date().getFullYear(), new Date().getMonth(), 0)
+      ],
+      label: 'Last Month'
+    },
+    {
+      value: [new Date(new Date().getFullYear(), 0, 1), new Date()],
+      label: 'This Year'
+    },
+    {
+      value: [
+        new Date(new Date().setFullYear(new Date().getFullYear() - 1)),
+        new Date()
+      ],
+      label: 'Last Year'
+    },
+  ];
+
+
   constructor(private cookieConsentService: CookieTrackingService,
               private  orgservice: OrganizationService,
               private loading: NgxUiLoaderService,
               private gdprService: GdprService,
               private dataService: DataService
   ) {
+    this.dateCustomClasses = [
+      { date: new Date(), classes: ['theme-dark-blue'] },
+    ];
+    this.searchbydaterange = [new Date(new Date().setDate(new Date().getDate() - 30)),new Date()]
   }
 
   ngOnInit() {
     this.onGetPropsAndOrgId();
     this.onGetFilterData();
-    this.onSetUpDate();
     this.onCheckSubscription();
+    this.bsConfig = Object.assign({}, { containerClass: 'theme-dark-blue', showClearButton: true, returnFocusToInput: true, dateInputFormat: 'yyyy-mm-dd', adaptivePosition : true, showTodayButton:true, ranges: this.ranges  });
+
   }
 
   onCheckSubscription() {
@@ -63,39 +122,39 @@ export class CookieTrackingComponent implements OnInit {
     (this.planDetails.response, featuresName.FULL_CONVERSION_AND_VISITOR, featuresName.CONSENT_RECORD_KEEPING);
     this.isDisabledScreen = !isAllowViewConsent;
     if (!isAllowViewConsent) {
-      this.dataService.openUpgradeModalForCookieConsent(this.planDetails);
+      this.dataService.openSubcriptionModalForRestrication(this.planDetails);
     }
   }
 
-  onSetUpDate() {
-    const that = this;
-    const start = moment().subtract(29, 'days');
-    const end = moment();
+  // onSetUpDate() {
+  //   const that = this;
+  //   const start = moment().subtract(29, 'days');
+  //   const end = moment();
 
-    function cb(start, end) {
-      jQuery('#reportrange').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
-      that.startDate = start.format('YYYY-MM-DD');
-      that.endDate = end.format('YYYY-MM-DD');
-      that.onGetFromServer();
-    }
+  //   function cb(start, end) {
+  //     jQuery('#reportrange').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+  //     that.startDate = start.format('YYYY-MM-DD');
+  //     that.endDate = end.format('YYYY-MM-DD');
+  //     that.onGetFromServer();
+  //   }
 
-    (<any>$('#reportrange')).daterangepicker({
-      startDate: start,
-      endDate: end,
-      maxDate: new Date(),
-      ranges: {
-        Today: [moment(), moment()],
-        Yesterday: [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-        'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-        'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-        'This Month': [moment().startOf('month'), moment().endOf('month')],
-        'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
-        'This Year': [moment().startOf('year'), moment().endOf('year')],
-        'Last Year': [moment().subtract(1, 'year').startOf('year'), moment().subtract(1, 'year').endOf('year')],
-      }
-    }, cb);
-    cb(start, end);
-  }
+  //   (<any>$('#reportrange')).daterangepicker({
+  //     startDate: start,
+  //     endDate: end,
+  //     maxDate: new Date(),
+  //     ranges: {
+  //       Today: [moment(), moment()],
+  //       Yesterday: [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+  //       'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+  //       'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+  //       'This Month': [moment().startOf('month'), moment().endOf('month')],
+  //       'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+  //       'This Year': [moment().startOf('year'), moment().endOf('year')],
+  //       'Last Year': [moment().subtract(1, 'year').startOf('year'), moment().subtract(1, 'year').endOf('year')],
+  //     }
+  //   }, cb);
+  //   cb(start, end);
+  // }
 
   onGetPropsAndOrgId() {
     this.orgservice.currentProperty.subscribe((response) => {
@@ -123,10 +182,22 @@ export class CookieTrackingComponent implements OnInit {
   }
 
   onGetFromServer() {
+    const startDate = this.searchbydaterange[0].toJSON().split('T')[0];
+    const endDate = this.searchbydaterange[1].toJSON().split('T')[0];
     this.loading.start();
-    const filter = '&consent_type=' + this.filterTypes.consentType + '&status=' + this.filterTypes.status + '&country=' + this.filterTypes.country
-      + '&startDate=' + this.startDate + '&endDate=' + this.endDate;
-    this.cookieConsentService.getConsent(this.currrentManagedPropID, this.pagelimit + filter, this.constructor.name, moduleName.cookieTrackingModule)
+    // const filter = '&consent_type=' + this.filterTypes.consentType + '&status=' + this.filterTypes.status + '&country=' + this.filterTypes.country
+    //   + '&startDate=' + this.startDate + '&endDate=' + this.endDate;
+    const filter = {
+      consent_type: this.filterTypes.consentType,
+      status: this.filterTypes.status,
+      country: this.filterTypes.country,
+      startDate:startDate,
+      endDate: endDate,
+      limit: this.eventRows,
+      page: this.firstone
+    };
+
+    this.cookieConsentService.getConsent(this.currrentManagedPropID, filter, this.constructor.name, moduleName.cookieTrackingModule)
       .subscribe(res => {
         this.loading.stop();
         this.tLoading = false;

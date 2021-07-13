@@ -86,13 +86,8 @@ export class CookieBannerService {
   }
 
   GetGlobleLangData(lang) {
-
-    const headers = new HttpHeaders()
-      .set('Cache-Control', 'no-cache, no-store, must-revalidate, post-check=0, pre-check=0')
-      .set('Pragma', 'no-cache')
-      .set('Expires', '0');
     const url = environment.globleLangURL.replace(':lang', lang);
-    return this.http.get(url, { headers });
+    return this.http.get(url);
   }
 
   GetCustomLangData(componentName, moduleName, lang, oid, pid) {

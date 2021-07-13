@@ -38,14 +38,20 @@ export class DataService {
   get isConsentPreferenceAppliedForProperty(){
     return this.isConsentPreferenceApplied.asObservable();
   }
-  
+
   public OrganizationCreatedStatus = new BehaviorSubject<boolean>(false);
   get isOrganizationCreated(){
     return this.OrganizationCreatedStatus.asObservable();
   }
 
+  public checkClickedURL = new BehaviorSubject<any>("/home/welcome");
+  get checkNavigationURL(){
+    return this.checkClickedURL.asObservable();
+  }
+
   licenseAvailabilityObj = {};
   planUsageByOrgid = [];
+  urlClickedByUser;
   constructor(private http: HttpClient, private lokiService: LokiService) {
   }
 
@@ -198,7 +204,7 @@ export class DataService {
       }
     }
     if (flag === false) {
-      this.openModal.next({openModal: true, data: res.plan_details})
+      this.openModal.next({openModal: this.isSubscriptionExistForProperty(), data: res.plan_details})
     }
     return flag;
   }
@@ -252,8 +258,8 @@ export class DataService {
         openModal: true,
         data: plan_details,
         type: planType,
-        msg: msg,
-        currentplan: plan_details
+        // msg: msg,
+        // currentplan: plan_details
       })
     }
     return flag;
@@ -294,7 +300,7 @@ export class DataService {
     }
     if (flag === false) {
       this.openModal.next({
-        openModal: true,
+        openModal: this.isSubscriptionExistForProperty(),
         data: res.plan_details.cookieConsent,
         type: 'cookieConsent',
         // currentplan: this.getCurrentOrgPlanDetails().response.plan_details
@@ -311,7 +317,7 @@ export class DataService {
       }
     }
     this.openModal.next({
-      openModal: true,
+      openModal: this.isSubscriptionExistForProperty(),
       data: planDetails.cookieConsent,
       type: 'cookieConsent',
     });
@@ -327,7 +333,7 @@ export class DataService {
     }
 
     this.openModal.next({
-      openModal: true,
+      openModal: this.isSubscriptionExistForProperty(),
       data: planDetails.cookieConsent,
       type: 'cookieConsent',
     });
@@ -335,6 +341,37 @@ export class DataService {
   }
 
 
+  openSubcriptionModalForRestrication(res):any {
+    let planDetails = null;
+    if (res.hasOwnProperty('response')) {
+      if (res.response.hasOwnProperty('plan_details')) {
+        planDetails = res.response.plan_details;
+      }
+    }
+
+    this.openModal.next({
+      openModal: true,
+      data: planDetails.cookieConsent,
+      type: 'cookieConsent',
+    });
+    return Object.keys(planDetails.cookieConsent).length !== 0 ? true : false;
+  }
+
+  openUpgradeModalForConsentPreference(res):any {
+    let planDetails = null;
+    if (res.hasOwnProperty('response')) {
+      if (res.response.hasOwnProperty('plan_details')) {
+        planDetails = res.response.plan_details;
+      }
+    }
+
+    this.openModal.next({
+      openModal: this.isSubscriptionExistForProperty(),
+      data: planDetails.consentPreference,
+      type: 'consentPreference',
+    });
+    return Object.keys(planDetails.consentPreference).length !== 0 ? true : false;
+  }
 
 
   openUpgradeModalForDsar(res):any {
@@ -342,7 +379,7 @@ export class DataService {
     let planDetails = null;
     if (res.hasOwnProperty('response')) {
       if (res.response.hasOwnProperty('plan_details')) {
-        planDetails = res.response.plan_details;
+        planDetails = res.response.plan_details.dsar;
       }
     }
     let currentplan = null;
@@ -354,11 +391,11 @@ export class DataService {
 
 
     this.openModal.next({
-      openModal: true,
+      openModal: this.isSubscriptionExistForOrg(),
       data: planDetails,
       type: 'org',
-      msg: msg,
-      currentplan: currentplan
+      // msg: msg,
+      // currentplan: currentplan
     })
     return currentplan !== null ? true : false;
   }
@@ -394,7 +431,7 @@ export class DataService {
       changeResponseProperty = 'workflow_available';
     }
     if (Object.keys(responseData).length === 0) {
-      this.openModal.next({openModal: true, data: responseData, type: 'org', msg: ''});
+      this.openModal.next({openModal: this.isSubscriptionExistForOrg(), data: responseData.dsar, type: 'org', msg: ''});
       return false;
     } else if (responseData[changeResponseProperty] === -1 || responseData[changeResponseProperty] > 0) {
       return true;
@@ -403,20 +440,56 @@ export class DataService {
       const requestMsg = 'You have exceeded request creation limit. For more details Manage subscription or upgrade plan'
       const respMsg = changeResponseProperty == 'form_available' ? formMsg : requestMsg;
       this.openModal.next({
-        openModal: true,
-        data: responseData,
+        openModal: this.isSubscriptionExistForOrg(),
+        data: responseData.dsar,
         type: 'org',
         msg: respMsg,
-        currentplan: this.getCurrentOrgPlanDetails().response.plan_details
+        currentplan: this.getCurrentOrgPlanDetails() !== '' ? this.getCurrentOrgPlanDetails().response.plan_details : null
+      });
+      return false;
+    } else {
+      this.openModal.next({
+        openModal: this.isSubscriptionExistForOrg(),
+        data: responseData.dsar,
+        type: 'org',
+        msg: '',
+        currentplan: this.getCurrentOrgPlanDetails() !== '' ? this.getCurrentOrgPlanDetails().response.plan_details : null
+      });
+      return false;
+    }
+  }
+
+  isLicenseLimitAvailableForOrganizationRestrication(requestType, responseData): boolean {
+    console.log('responseData', responseData)
+    let changeResponseProperty;
+    if (requestType === 'form') {
+      changeResponseProperty = 'form_available';
+    } else if (requestType === 'request') {
+      changeResponseProperty = 'request_available';
+    } else if (requestType === 'workflow') {
+      changeResponseProperty = 'workflow_available';
+    }
+    if (Object.keys(responseData).length === 0) {
+      this.openModal.next({openModal: true,
+        data: this.getCurrentOrgPlanDetails() !== '' ? this.getCurrentOrgPlanDetails().response.plan_details.dsar : null, type: 'org', msg: ''});
+      return false;
+    } else if (responseData[changeResponseProperty] === -1 || responseData[changeResponseProperty] > 0) {
+      return true;
+    } else if (responseData[changeResponseProperty] === 0) {
+      const formMsg = 'You have exceeded form creation limit. For more details Manage subscription or upgrade plan';
+      const requestMsg = 'You have exceeded request creation limit. For more details Manage subscription or upgrade plan';
+      const respMsg = changeResponseProperty == 'form_available' ? formMsg : requestMsg;
+      this.openModal.next({
+        openModal: true,
+        data: this.getCurrentOrgPlanDetails() !== '' ? this.getCurrentOrgPlanDetails().response.plan_details.dsar : null,
+        type: 'org',
       });
       return false;
     } else {
       this.openModal.next({
         openModal: true,
-        data: responseData,
+        data: this.getCurrentOrgPlanDetails() !== '' ? this.getCurrentOrgPlanDetails().response.plan_details.dsar : null,
         type: 'org',
-        msg: '',
-        currentplan: this.getCurrentOrgPlanDetails().response.plan_details
       });
       return false;
     }
@@ -485,6 +558,34 @@ export class DataService {
     return isPropertystatus = JSON.parse(isPropertystatus)
   }
 
+  checkLicenseAvailabilityForProperty(prop):Observable<any>{
+    let propLicense = this.getPropertyPlanDetails(this.constructor.name,moduleName.headerModule,prop.property_id);
+    return forkJoin([propLicense]);
+  }
+
+  isSubscriptionExistForProperty():boolean{
+        let licenseStatusForProperty;
+        this.isLicenseAppliedForProperty.subscribe((status) => {
+            licenseStatusForProperty = status;
+        });
+        if (!licenseStatusForProperty.hasaccess) {
+            return true;
+        } else {
+            return false;
+        }
+  }
+
+  isSubscriptionExistForOrg():boolean{
+    let licenseStatus;
+    this.isLicenseApplied.subscribe((status) => {
+      licenseStatus = status;
+    });
+    if (!licenseStatus.hasaccess) {
+      return true;
+    } else {
+      return false;
+    }
+   }
 }
 
 export class accesstype {

@@ -1,21 +1,20 @@
-import {Component, ElementRef, OnInit, TemplateRef, ViewChild} from '@angular/core';
-import { CookieBannerService } from '../../../../_services/cookie-banner.service';
-import { NgxUiLoaderService } from 'ngx-ui-loader';
-import { OrganizationService } from '../../../../_services';
-import { Location } from '@angular/common';
-import {moduleName} from '../../../../_constant/module-name.constant';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {environment} from '../../../../environments/environment';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
+import {CookieBannerService} from '../../../_services/cookie-banner.service';
+import {NgxUiLoaderService} from 'ngx-ui-loader';
 import {Router} from '@angular/router';
-import { environment } from 'src/environments/environment';
+import {OrganizationService} from '../../../_services';
+import {moduleName} from '../../../_constant/module-name.constant';
 import { apiConstant } from 'src/app/_constant/api.constant';
-
+import {CompanyService} from '../../../company.service';
 
 @Component({
-  selector: 'app-setup',
-  templateUrl: './setup.component.html',
-  styleUrls: ['./setup.component.scss']
+  selector: 'app-consent-setup',
+  templateUrl: './consent-setup.component.html',
+  styleUrls: ['./consent-setup.component.scss']
 })
-export class SetupComponent implements OnInit {
+export class ConsentSetupComponent implements OnInit {
   private currentManagedOrgID: any;
   env = environment;
   apiConstant = apiConstant;
@@ -23,9 +22,9 @@ export class SetupComponent implements OnInit {
   isCopied = {
     one: false,
     two: false,
-    three:false
+    three:false,
   };
-  currrentManagedPropID: any;
+  currrentManagedPropID = '';
   @ViewChild('template', { static: true}) template: ElementRef;
   closeScript = `"></script>`;
   addScript = `<script type="application/javascript" src="`;
@@ -35,24 +34,49 @@ export class SetupComponent implements OnInit {
     openScript: '<script>',
     closeScript: '</script>'
   }
+  appId = '';
   loadingSkeleton = false;
-  scriptUrl: any;
+  scriptUrl = environment.consentPreferenceCDN;
   dismissible = true;
   alertMsg: any;
   isOpen = false;
   alertType: any;
+  initData = '';
   constructor(
     private cookieBannerService: CookieBannerService,
     private loading: NgxUiLoaderService,
     private modalService: BsModalService,
     private router: Router,
     private orgservice: OrganizationService,
+    private companyService: CompanyService
   ) { }
 
   ngOnInit() {
     this.onGetPropsAndOrgId();
-    this.onGetCookieBannerData();
+    this.onGetToken();
   }
+
+
+  onGetToken() {
+    this.loading.start();
+    this.companyService.getToken(this.constructor.name, moduleName.organizationDetailsModule)
+      .subscribe(res => {
+        this.loading.stop();
+        this.appId = res.response.app_id;
+        this.initData = `({  <br />
+          <span style="color: #8be9fd">AppID: </span> '${this.appId}',    <code style="color: red">// Your App ID </code><br />
+             <span style="color: #8be9fd"> PropID: </span> '${this.currrentManagedPropID}', <code style="color: red"> // Your Current Property ID </code><br />
+          <span style="color: #8be9fd">ShowLogs: </span>  true,   <code style="color: red">// Show Console Logs </code><br />
+          })`;
+      }, err => {
+        this.loading.stop();
+        this.alertMsg = err.message;
+        this.isOpen = true;
+        this.alertType = 'danger';
+      })
+
+  }
+
 
   onGetPropsAndOrgId() {
     this.orgservice.currentProperty.subscribe((response) => {
@@ -67,35 +91,11 @@ export class SetupComponent implements OnInit {
     });
   }
 
-  onGetCookieBannerData() {
-    this.loading.start('2');
-    this.loadingSkeleton = true;
-    this.cookieBannerService.onGetCookieBannerData(this.currentManagedOrgID , this.currrentManagedPropID, this.constructor.name, moduleName.setUpModule)
-      .subscribe(res => {
-        this.loadingSkeleton = false;
-        this.loading.stop('2');
-        if (res.status === 200 && res.hasOwnProperty('response')) {
-          this.scriptUrl = res.response.js_location; this.scriptUrl = res.response.js_location;
-        } else {
-          this.openModal(this.template);
-        }
-      }, error => {
-        this.loading.stop('2');
-        this.loadingSkeleton = false;
-        this.isOpen = true;
-        this.alertMsg = error;
-        this.alertType = 'danger';
-      });
-  }
-  onCopyScript() {
-    this.scriptUrl.select();
-    document.execCommand('copy');
-    this.scriptUrl.setSelectionRange(0, 0);
-  }
+
   copyToClipboard() {
     this.isCopied.one = true;
     const copyText: any =
-     this.addScript + '//' + this.scriptUrl + this.closeScript;
+      this.addScript + this.scriptUrl + this.closeScript;
     let textarea = null;
     textarea = document.createElement('textarea');
     textarea.style.height = '0px';
@@ -113,10 +113,12 @@ export class SetupComponent implements OnInit {
 
   copyToClipboards() {
     this.isCopied.three = true;
-    const copyText: any = `<script>
-    // Replace Your AuthId '123123123'
-    document.cookie = "authId=123123123";
-    </script> `;
+    const copyText: any =
+    `window.CP_SDK_ADZAPIER.init({
+      AppID: '`+this.appId+`', // Your App ID
+      PropID: '`+this.currrentManagedPropID+`', // Your Current Property ID
+      ShowLogs: true, // Show Console Logs
+    })`;
     let textarea = null;
     textarea = document.createElement('textarea');
     textarea.style.height = '0px';
@@ -164,4 +166,5 @@ export class SetupComponent implements OnInit {
     textarea.select();
     document.execCommand('copy');
   }
+
 }

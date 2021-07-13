@@ -8,6 +8,7 @@ import {DataService} from '../_services/data.service';
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
+    //let errorMsgKey = ["User is not authorized to access this functionality"]
     constructor(private authenticationService: AuthenticationService,
                 private dataService: DataService,
                 private router: Router) { }
@@ -17,7 +18,7 @@ export class ErrorInterceptor implements HttpInterceptor {
           if(err.status === 403) {
             this.dataService.openUnAuthModal.next({isTrue: true, error: err})
           }
-            if (err.status === 401) {
+          if (err.status === 401) {
               // auto logout if 401 response returned from api
               if(err.url.indexOf('/api/v1/login') == -1 && err.error.error.match("exist.") == -1 || err.url.indexOf('/api/v1/login') == -1 && err.error.error.match("Incorrect") == -1){//
                 this.authenticationService.logout();
@@ -26,13 +27,38 @@ export class ErrorInterceptor implements HttpInterceptor {
               // location.reload();
             }
             if(err.status === 403){
+              if(err.url.indexOf('/api/v1/invite/user/resend') !== -1){
+                const error = err.error.error || err.statusText;
+                return throwError(error);
+              }else if(err.url.indexOf('/api/v1/billing/customerportal/session') !== -1){
+                const error = err.error.error || err.statusText;
+                return throwError(error);
+              }
+              else if(err.error.error.search("is not authorized") == -1){
               this.router.navigate(['/error/forbidden']);
+              }
             }
             if(err.status === 404){
-              this.router.navigate(['/error/pagenotfound']);
+              if(err.url.indexOf('/api/v1/invite/user') !== -1){
+                const error = err.error.error || err.statusText;
+                return throwError(error);
+              }else{
+                this.router.navigate(['/error/pagenotfound']);
+              }
             }
             if(err.status === 500 || err.status === 501){
-              this.router.navigate(['/error/servererror']);
+              if(err.url.indexOf('/api/v1/user') !== -1){
+                const error = err.error.error || err.statusText;
+                return throwError(error);
+              } else if(err.url.indexOf('/api/v1/password') !== -1){
+                const error = err.error.error || err.statusText;
+                return throwError(error);
+              } else if(err.url.indexOf('/api/v1/workflow') !== -1){
+                const error = err.error.error || err.statusText;
+                return throwError(error);
+              } else{
+                this.router.navigate(['/error/servererror']);
+              }
             }
             const error = err.error.error || err.statusText;
             return throwError(error);

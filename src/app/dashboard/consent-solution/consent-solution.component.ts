@@ -25,7 +25,8 @@ export class ConsentSolutionComponent implements OnInit {
       newsLetter: 0,
       privacyInfo: 0,
       termOfService: 0,
-      totalCount: 0
+      totalCount: 0,
+      other: 0
     },
     proofs: 0,
     totalConsent: 0
@@ -48,10 +49,10 @@ export class ConsentSolutionComponent implements OnInit {
       },
     }
   };
-  public doughnutChartLabels: Label[] = ['News Letter', 'Privacy Info', 'Term Of Service'];
+  public doughnutChartLabels: Label[] = ['News Letter', 'Privacy Info', 'Term Of Service', 'Other'];
   public doughnutChartData: number[] = [300, 500, 100];
   public doughnutChartType: ChartType = 'doughnut';
-  consentColor = ['#f77eb9', '#fdb16d', '#65e0e0'];
+  consentColor = ['#f77eb9', '#fdb16d', '#65e0e0', '#69b2f8'];
   public doughnutChartColors = [
     {
       backgroundColor: this.consentColor
@@ -96,7 +97,7 @@ export class ConsentSolutionComponent implements OnInit {
   ngOnInit() {
     this.onSetUpDate();
     // this.onGetConsentData();
-    this.onOpenPopUp();
+    // this.onOpenPopUp();
   }
 
 
@@ -141,9 +142,11 @@ export class ConsentSolutionComponent implements OnInit {
     this.consentDashboardService.getConsentDataForDashboard(this.constructor.name, params, moduleName.consentSolutionModule)
       .subscribe((res: any) => {
         this.loading.stop();
-        if (res.status === 200) {
-          this.consentData = res.response;
-          this.onSetUpChart();
+        if (res) {
+          if (res.status === 200) {
+            this.consentData = res.response;
+            this.onSetUpChart();
+          }
         }
       }, error => {
         this.loading.stop();
@@ -153,7 +156,7 @@ export class ConsentSolutionComponent implements OnInit {
   onSetUpChart() {
     // preference
     const preferenceChart = this.consentData.preference;
-    this.doughnutChartData = [preferenceChart.newsLetter, preferenceChart.privacyInfo, preferenceChart.termOfService];
+    this.doughnutChartData = [preferenceChart.newsLetter, preferenceChart.privacyInfo, preferenceChart.termOfService, preferenceChart.other];
 
     // Consent
     this.pieChartData = [this.consentData.totalConsent, this.consentData.legalNotice, this.consentData.proofs];

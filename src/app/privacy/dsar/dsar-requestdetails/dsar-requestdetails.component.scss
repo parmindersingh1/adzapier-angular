@@ -327,10 +327,11 @@ ul.nav-tabs > li:last-child > div > a::after {
 .chat-stage-wrapper {
     display: flex;
     width: 100%;
-    align-items: end;
+    align-items: flex-end;
     justify-content: space-between;
     padding: 5px 10px;
 }
+
 
  .margin-0 {
      margin: 0;
@@ -607,6 +608,7 @@ ul.ngx-pagination {
     outline: none;
     white-space: nowrap;
     -webkit-user-select: none;
+    user-select: none;
     cursor: pointer;    
     font-size: 10pt;
   }
@@ -647,6 +649,13 @@ ul.ngx-pagination {
 
   .email-attachment-wrapper label {
     font-weight: bold;
+  }
+
+  .emailspan{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width:150px
   }
 
   ::ng-deep .input-group > .custom-file {

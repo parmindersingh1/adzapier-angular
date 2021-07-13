@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, AfterViewChecked, ViewChild } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, AfterViewChecked, ViewChild, TemplateRef } from '@angular/core';
 import { WorkflowService } from 'src/app/_services/workflow.service';
 import { FormGroup, NgForm } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
@@ -6,6 +6,7 @@ import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { moduleName } from '../../../_constant/module-name.constant';
 import { OrganizationService } from 'src/app/_services';
 import { DirtyComponents } from 'src/app/_models/dirtycomponents';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 @Component({
   selector: 'app-createworkflow',
   templateUrl: './createworkflow.component.html',
@@ -56,10 +57,13 @@ export class CreateworkflowComponent implements OnInit, DirtyComponents {
   currentManagedOrgID: any;
   defaultStages:any[];
   isDirty: boolean;
+  modalRef: BsModalRef;
+  @ViewChild('confirmDeleteStageAlert') confirmDeleteStageAlert: TemplateRef<any>;
   constructor(private activatedRoute: ActivatedRoute,
               private workflowService: WorkflowService,
               private loadingBar: NgxUiLoaderService,
               private orgservice: OrganizationService,
+              private bsmodalService: BsModalService,
               private cd: ChangeDetectorRef) {
   }
 
@@ -82,7 +86,7 @@ export class CreateworkflowComponent implements OnInit, DirtyComponents {
 
 
     this.loadWorkflowById(this.selectedWorkflowId);
-    this.defaultStages = ['UNVERIFIED','NEW','VERIFY REQUEST','VERIFY CONSUMER REQUEST','LEGAL/PRIVACY REVIEW','REQUEST FULFILL','CONSUMER NOTIFICATION','IN PROGRESS','COMPLETE'];
+    this.defaultStages = ['UNVERIFIED','NEW','VERIFY REQUEST','VERIFY CONSUMER REQUEST','LEGAL/PRIVACY REVIEW','REQUEST FULFILL','CONSUMER NOTIFICATION','IN PROGRESS','COMPLETE','NOTIFY'];
   }
 
   previousTab() {
@@ -224,10 +228,19 @@ export class CreateworkflowComponent implements OnInit, DirtyComponents {
             this.loadWorkflowById(this.selectedWorkflowId);
           }
         }, (error) => {
-          this.alertMsg = error;
-          this.isOpen = true;
-          this.alertType = 'danger';
-          this.skeletonLoading = false;
+          if(error == "Bad Request"){
+            this.alertMsg = "No Default stages are can not be edited";
+            this.isOpen = true;
+            this.alertType = 'danger';
+            this.skeletonLoading = false;
+            this.loadWorkflowById(this.selectedWorkflowId);
+          }else{
+            this.alertMsg = error;
+            this.isOpen = true;
+            this.alertType = 'danger';
+            this.skeletonLoading = false;
+            this.loadWorkflowById(this.selectedWorkflowId);
+          }
         });
     }
 
@@ -355,6 +368,25 @@ export class CreateworkflowComponent implements OnInit, DirtyComponents {
 
   canDeactivate() {
     return this.isDirty;
+  }
+
+  deleteCustomStages($event){
+    if($event.id !== undefined){
+      this.workflowService.deleteWorkflowStage(this.constructor.name, moduleName.workFlowModule,$event.id,this.selectedWorkflowId).subscribe((data)=>{
+        this.alertMsg = data.response;
+        this.isOpen = true;
+        this.alertType = 'info';
+      },(error)=>{
+        this.alertMsg = error;
+        this.isOpen = true;
+        this.alertType = 'danger';
+      })
+    }
+  
+  }
+
+  openModal(template: TemplateRef<any>) {
+    this.modalRef = this.bsmodalService.show(template, { class: '', keyboard: false, backdrop: true, ignoreBackdropClick: true });
   }
 
 }

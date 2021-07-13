@@ -77,11 +77,15 @@ export class CompanyteamComponent implements OnInit {
       phone: ['', [Validators.required]]
     });
     this.inviteUserForm = this.formBuilder.group({
-      firstname: ['', [Validators.required]],
-      lastname: ['', [Validators.required]],
+      firstname: ['', [this.selectusertype ? Validators.required : '']],
+      lastname: ['', [this.selectusertype ? Validators.required : '']],
       emailid: ['', [Validators.required, Validators.pattern]],
       permissions: ['', [Validators.required]]
     });
+    this.inviteUserForm.get("emailid").valueChanges
+    .subscribe(data=> {
+      this.changeValidators();
+    })
     this.confirmationForm = this.formBuilder.group({
       userInput: ['', [Validators.required]]
     });
@@ -192,8 +196,8 @@ export class CompanyteamComponent implements OnInit {
           return false;
         }
         const requestObj = {
-          firstname: this.inviteUserForm.value.firstname.trim(),
-          lastname: this.inviteUserForm.value.lastname.trim(),
+          firstname: this.inviteUserForm.value.firstname,
+          lastname: this.inviteUserForm.value.lastname,
           email: this.inviteUserForm.value.emailid,
           role_id: this.inviteUserForm.value.permissions,
           user_level: 'company'
@@ -369,6 +373,18 @@ export class CompanyteamComponent implements OnInit {
   separateUsername(username){
     let res = username.split(" ");
     return res;
+  }
+
+  changeValidators() {
+    if (this.selectusertype) {
+      this.inviteUserForm.controls["firstname"].setValidators([Validators.required]);
+      this.inviteUserForm.controls["lastname"].setValidators([Validators.required]);
+    } else {
+      this.inviteUserForm.controls["firstname"].clearValidators();
+      this.inviteUserForm.controls["lastname"].clearValidators();
+    }
+    this.inviteUserForm.get("firstname").updateValueAndValidity();
+    this.inviteUserForm.get("lastname").updateValueAndValidity();
   }
 
 }

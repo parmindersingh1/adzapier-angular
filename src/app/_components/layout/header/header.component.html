@@ -1,4 +1,6 @@
 <nav *ngIf="currentUser" class="navbar navbar-expand-lg">
+
+
   <!-- Brand -->
   <!-- Toggler/collapsibe Button -->
 
@@ -55,11 +57,11 @@
   <!--menu after login-->
   <div class="collapse navbar-collapse mr-auto" [collapse]="!isCollapsed"
     [ngClass]="{'hidemenu':!currentUser, 'showmenu':currentUser}">
-    <ul  class="navbar-nav nav-mr" dropdown container="body">
-      <a class="nav-link dropdown-link"  dropdownToggle (click)="false">
-       <div>{{currentOrganization}}
-       </div>
-       <span>{{currentProperty ? convertAmpersand(currentProperty) : 'Select Property'}}</span>
+    <ul *ngIf="orgPropertyMenu" class="navbar-nav nav-mr" dropdown container="body">
+      <a class="nav-link dropdown-link"  dropdownToggle (click)="false" >
+       <div *ngIf="currentOrganization !== ''">{{currentOrganization}}</div>
+       <span *ngIf="currentProperty !== '';">{{currentProperty !== '' ? convertAmpersand(currentProperty) : 'Select Property'}}</span>
+       <span *ngIf="!currentProperty"> Select Property</span>
       </a>
      <!--(orgPropertyMenu | async).response-->
      <div *dropdownMenu>
@@ -81,12 +83,12 @@
                    <span class="flex-spacebetween">
                     <span class="ml-2 mr-2" *ngIf="isPropSelected(submenu)">
                     <i class="fa fa-check"></i></span>
-                    <i-feather  placement="bottom" [adaptivePosition]="true" tooltip="You have not assigned cookie consent license to this property" *ngIf="isLicenseAssignedForProperty(submenu)" class="feather-lock mr-1" name="lock"></i-feather>
+                    <!-- <i-feather  placement="bottom" [adaptivePosition]="true" tooltip="You have not assigned cookie consent license to this property" *ngIf="isLicenseAssignedForProperty(submenu)" class="feather-lock mr-1" name="lock"></i-feather> -->
                   </span>
                   </span>
                   <ng-template #disabledProperty>
                     <span (click)="false">
-                    {{ submenu.property_name ? convertAmpersand(submenu.property_name) : 'No Property' }}
+                    {{ submenu?.property_name !== '' ? convertAmpersand(submenu?.property_name) : 'No Property' }}
                     <span class="ml-2" *ngIf="isPropSelected(submenu)">
                       <i class="fa fa-check"></i></span>
                     </span>
@@ -117,7 +119,13 @@
             <ng-container *ngFor="let item of menu.subcategory;let q = index;">
               <li *ngIf="menu.showlink == 'Privacy' && q===0" class="displayflex"><span>DSAR</span></li>
               <li role="menuitem" *ngIf="q  <= 9">
-                <a class="dropdown-item" [class.active]="activateSublink(item)" routerLink="{{item.routerLink}}" (click)="goto(item)">
+                <a class="dropdown-item" [class.active]="activateSublink(item)" *ngIf="item.routerLink !== '/home/dashboard/consent-preference'" routerLink="{{item.routerLink}}" (click)="goto(item)">
+                  <span *ngIf="item.icon.indexOf('fa')===-1">
+                    <i-feather name="{{item.icon}}" class="feather-16"></i-feather> {{item.showlink}}
+                  </span>
+                  <span *ngIf="item.icon.indexOf('fa')===0"><i class="{{item.icon}}"></i>{{item.showlink}}</span>
+                </a> <!--hide consent preference menu item-->
+                <a class="dropdown-item" [class.active]="activateSublink(item)" *ngIf="item.routerLink == '/home/dashboard/consent-preference' && showConsentPreference" routerLink="{{item.routerLink}}" (click)="goto(item)">
                   <span *ngIf="item.icon.indexOf('fa')===-1">
                     <i-feather name="{{item.icon}}" class="feather-16"></i-feather> {{item.showlink}}
                   </span>
@@ -302,9 +310,9 @@
   <!--sidemenu property list after login-->
   <ul  class="navbar-nav" dropdown container="body">
     <a class="nav-link dropdown-link"  (click)="onMobilePropertyMenuClicked(true)">
-     <div>{{currentOrganization}}
-     </div>
-     <span>{{currentProperty ? convertAmpersand(currentProperty):'Select Property'}}</span>
+      <div *ngIf="currentOrganization !== ''">{{currentOrganization}}</div>
+       <span *ngIf="currentProperty !== ''">{{convertAmpersand(currentProperty)}}</span>
+       <span *ngIf="!currentProperty">Select Property</span>
     </a>
     <ul class="dropdown-menu propMenu" [isAnimated]="true"  [collapse]="isMobilePropertyCollapsed">
         <li role="menuitem" *ngFor="let item of orgPropertyMenu; first as isFirst; let i = index;">
@@ -322,7 +330,7 @@
                  <span class="flex-spacebetween" (click)="isProperyDisabled(submenu) ? false : isCurrentPropertySelected(item,submenu)">  {{ submenu.property_name ? convertAmpersand(submenu.property_name) : 'No Property' }}
                   <span class="ml-2 mr-2" *ngIf="isPropSelected(submenu)">
                   <i class="fa fa-check"></i></span>
-                  <i-feather  placement="bottom" [adaptivePosition]="true" tooltip="You have not assigned cookie consent license to this property" *ngIf="isLicenseAssignedForProperty(submenu)" class="feather-lock mr-1" name="lock"></i-feather>
+                  <!-- <i-feather  placement="bottom" [adaptivePosition]="true" tooltip="You have not assigned cookie consent license to this property" *ngIf="isLicenseAssignedForProperty(submenu)" class="feather-lock mr-1" name="lock"></i-feather> -->
                 </span>
                 </a>
               </li>

@@ -10,18 +10,23 @@ export const environment = {
   iabUrl: 'https://staging-cdn.adzapsrv.com/vendorlist/IABvendors/',
   googleVendorsUrl: 'https://staging-cdn.adzapsrv.com/vendorlist/googlevendorlist/google.json',
   apiUrl: 'https://develop-cmp-api.adzpier-staging.com/api/v1',
-  globleLangURL: 'https://staging-cdn.adzapsrv.com/cookiebanner/banner-language/:lang.json',
+  globleLangURL: 'https://cdn.primeconsent.com/cmp/banner-language/:lang.json',
+  // apiUrl: 'https://api.primeconsent.com/api/v1',
   customLangURL: 'https://staging-cdn.adzapsrv.com/cmp/v1/web/:oid/lang/:pid-:lang.json',
   // apiUrl: 'https://cmp-api.adzpier-staging.com/api/v1',
   // apiUrl: 'http://localhost:8888/api/v1',
   stripePublishablekey : 'pk_test_Bea8DtMw2JDaQoZuvyd2yEdE00wtdPEyoM',
+  consentPreferenceCDN: 'https://staging-cdn.adzapsrv.com/consent-preference/develop/adzapier-cp-sdk.js',
+  consentPreferenceConfig : {
+    AppID: 'cBJtzTHAnDECTCguDBeBzIXprEfLdQwgklQYRXqkdRNPMCYSjX', // Your App ID
+    PropID: '67a0d68e-94e0-492a-8221-1dabaacd375d'
+  },
   lokiUrl: 'https://logs.adzpier-staging.com/loki/api/v1/push',
   lokiConfig: {
         app: 'cmp-adminportal-local',
         env: 'local',
   },
 };
-
 
 /*
  * For easier debugging in development mode, you can import the following file

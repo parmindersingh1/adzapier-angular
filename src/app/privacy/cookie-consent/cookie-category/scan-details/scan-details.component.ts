@@ -189,7 +189,7 @@ export class ScanDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
       return true;
     }
     if (!this.availablePlan.scan_available || this.availablePlan.scan_available < 0) {
-      this.dataService.openUpgradeModalForCookieConsent(resData);
+      this.dataService.openSubcriptionModalForRestrication(resData);
       return false;
     }
     if (status === false) {

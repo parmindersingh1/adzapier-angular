@@ -10,6 +10,7 @@ export const environment = {
   apiUrl: 'https://api.primeconsent.com/api/v1',
   lokiUrl: 'https://logs.primeconsent.com/loki/api/v1/push',
   globleLangURL: 'https://cdn.primeconsent.com/cmp/banner-language/:lang.json',
+  consentPreferenceCDN: 'https://cdn.primeconsent.com/cmp/consent-preference/production/adzapier-cp-sdk.js',
   customLangURL: 'https://cdn.primeconsent.com/cmp/v1/web/:oid/lang/:pid-:lang.json',
   lokiConfig: {
     app: 'cmp-adminportal-prod',

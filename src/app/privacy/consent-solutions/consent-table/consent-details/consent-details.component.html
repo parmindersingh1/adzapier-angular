@@ -30,20 +30,35 @@
       <div class="form-group">
         <label>Email</label>
         <div class="input-group">
-          <input formControlName="email" class="form-control">
+          <input formControlName="email" pattern="^\w+@[a-zA-Z_0-9]+?\.[a-zA-Z]{2,3}$" class="form-control">
         </div>
         <div *ngIf="submitted && f.email.errors" class="text-danger">
           <div *ngIf="f.email.errors.required">Email is required</div>
+          <div *ngIf="f.email.errors.pattern">Please enter a valid email</div>
           <!--          <div *ngIf="f.email.errors.email">Email must be a valid email address</div>-->
         </div>
       </div>
-      <div class="form-group">
+      <div class="form-group d-flex">
+        <div>
         <label>Data Source</label>
         <div class="input-group">
-          <input formControlName="dataSource" class="form-control">
+          <label>Private : </label>
+          <input class="ml-2 mt-1" type="radio" formControlName="dataSource" value="private">
+          <label class="ml-3">Public : </label>
+          <input class="ml-2 mt-1" type="radio" formControlName="dataSource" value="public">
         </div>
         <div *ngIf="submitted && f.dataSource.errors" class="text-danger">
           <div *ngIf="f.dataSource.errors.required">Data Source is required</div>
+        </div>
+        </div>
+        <div style="margin-left: 75px;">
+          <label>AuthID</label>
+          <div class="input-group">
+            <input formControlName="AuthID" class="form-control" disabled>
+          </div>
+          <div *ngIf="submitted && f.country.errors" class="text-danger">
+            <div *ngIf="f.country.errors.required">AuthID is required</div>
+          </div>
         </div>
       </div>
       <div class="form-group d-flex">
@@ -73,9 +88,12 @@
         </div>
       </div>
 
+      <div class="d-flex" style="justify-content: flex-end;">
+
       <div class="btn-group">
         <button type="submit" class="btn btn-primary btn-sm">Update</button>
         <button type="button" class="btn btn-link btn-sm pull-right " (click)="modalRef.hide()">Cancel</button>
+      </div>
       </div>
     </form>
   </div>
@@ -181,49 +199,39 @@
             </div>
 
             <div class="col-sm">
+              <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Auth Id
+
+              </label>
+
+              <p class="mg-b-0" style="font-size:small;">{{consentData.auth_id}}</p>
+            </div>
+
+            <div class="col-sm">
               <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Updated At
 
               </label>
 
               <p class="mg-b-0" style="font-size:small;">{{consentData.updated_at | date}}</p>
             </div>
+            
 
-
-            <div class="col-sm">
+            <!-- <div class="col-sm">
               <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Preference
 
               </label>
 
-              <div class="d-flex mg-b-0" style="justify-content:start;">
-                <label style="font-size: small;">Newsletter </label>
+              <div *ngFor="let pref of consentData.preferences" class="d-flex mg-b-0" style="justify-content:start;">
+                <label style="font-size: small;">{{pref.preference}}</label> -->
                 <!-- <span  class="product-badge ml-2" style="height: 30px;"
                        [ngClass]="{'status-instock': consentData.preferences.newsletter, 'status-outofstock' : !consentData.preferences.newsletter }" >{{consentData.preferences.newsletter}}</span> -->
-                <ng-container *ngIf="consentData.preferences.newsletter;else elseblock">
+                <!-- <ng-container *ngIf="pref.allow;else elseblock">
                   <i class="pi pi-check ml-2" style="font-size: 1.0rem; color:#5cb85c;"></i>
                 </ng-container>
                 <ng-template #elseblock>
                   <i class="pi pi-times ml-2" style="font-size: 1.0rem; color: #d9534f;"></i>
                 </ng-template>
               </div>
-            </div>
-
-            <div class="col-sm">
-              <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Preference
-
-              </label>
-
-              <div class="d-flex mg-b-0" style="justify-content:start;">
-                <label style="font-size: small;">Privacy Policy</label>
-                <!-- <span  class="product-badge ml-2" style="height: 30px;"
-                       [ngClass]="{'status-instock': consentData.preferences.newsletter, 'status-outofstock' : !consentData.preferences.newsletter }" >{{consentData.preferences.newsletter}}</span> -->
-                <ng-container *ngIf="consentData.preferences.privacy_policy;else elseblock">
-                  <i class="pi pi-check ml-2" style="font-size: 1.0rem; color:#5cb85c;"></i>
-                </ng-container>
-                <ng-template #elseblock>
-                  <i class="pi pi-times ml-2" style="font-size: 1.0rem; color: #d9534f;"></i>
-                </ng-template>
-              </div>
-            </div>
+            </div> -->
 
           </div>
         </div>
@@ -274,6 +282,7 @@
               <tr style="text-align:center;">
                 <th>Version</th>
                 <th>Identifier</th>
+                <th>Content</th>
                 <th>Created Date</th>
                 <th style="width:40px"></th>
               </tr>
@@ -282,10 +291,46 @@
               <tr>
                 <td class="tabledatas">{{legalRecord.version}}</td>
                 <td class="tabledatas">{{legalRecord.identifier}}</td>
+                <td class="tabledatas">{{legalRecord.content}}</td>
                 <td class="tabledatas">{{legalRecord.created_at | date}}</td>
-                <td class="tabledatas" style="text-align-last:right;width:40px;"><a href="#"><i class="pi pi-eye"
-                                                                                                style="font-size: 0.9rem;"></i></a>
+                <td class="tabledatas" style="text-align-last:right;width:40px;"><i class="pi pi-eye" (click)="editLegal(editLeg,legalRecord)"
+                                                                                                style="font-size: 0.9rem;"></i>
                 </td>
+              </tr>
+            </ng-template>
+          </p-table>
+
+
+        </p-tabPanel>
+
+        <p-tabPanel header="Preferences" class="customs">
+
+
+          <p-table [value]="consentData.preferences"
+                   [scrollable]="true" scrollHeight="185px"
+                   styleClass="p-datatable-sm ">
+            <!-- <ng-template pTemplate="caption">
+             Legal Notice
+         </ng-template> -->
+            <ng-template pTemplate="header">
+              <tr style="text-align:center;">
+                <th>Preference</th>
+                <th>Allowed</th>
+                <th style="width:40px"></th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-pref>
+              <tr>
+                <td class="tabledatas">{{pref.preference}}</td>
+                <td class="tabledatas"><ng-container *ngIf="pref.allow;else elseblock">
+                  <i class="pi pi-check ml-2" style="font-size: 1.0rem; color:#5cb85c;"></i>
+                </ng-container>
+                <ng-template #elseblock>
+                  <i class="pi pi-times ml-2" style="font-size: 1.0rem; color: #d9534f;"></i>
+                </ng-template></td>
+                <!-- <td class="tabledatas" style="text-align-last:right;width:40px;"><i class="pi pi-eye" (click)="editLegal(editLeg,legalRecord)"
+                                                                                                style="font-size: 0.9rem;"></i>
+                </td> -->
               </tr>
             </ng-template>
           </p-table>
@@ -309,6 +354,39 @@
   <div class="modal-body">
     <p>
       {{proofFormConsent}}
+    </p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-link pull-right" (click)="modalRef.hide()">Close</button>
+  </div>
+</ng-template>
+
+<ng-template #editLeg let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Version</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p>
+      {{LegalVersion}}
+    </p>
+  </div>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Identifier</h4>
+  </div>
+  <div class="modal-body">
+    <p>
+      {{LegalIdentifier}}
+    </p>
+  </div>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Content</h4>
+  </div>
+  <div class="modal-body">
+    <p>
+      {{LegalContent}}
     </p>
   </div>
   <div class="modal-footer">

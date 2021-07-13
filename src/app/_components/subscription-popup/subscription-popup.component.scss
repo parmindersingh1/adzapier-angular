@@ -456,3 +456,16 @@ input[type="checkbox"] {
 .modal-lg {
   max-width: 1000px !important;
 }
+
+.modal-close-btn {
+  color: #000 !important;
+  top: 0;
+  background: transparent;
+  position: absolute;
+  cursor: pointer;
+  right: 10px;
+  border: 0;
+  font-size: 26px;
+  z-index: 100;
+  outline: none;
+}

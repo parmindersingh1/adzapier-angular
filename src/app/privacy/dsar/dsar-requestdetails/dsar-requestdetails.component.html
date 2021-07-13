@@ -143,7 +143,7 @@
                             <div class="customdata" *ngIf="data.key !== 'Email verified'">
 
                                 <label class="tx-sans">{{data.key}}
-                                    <span *ngIf="isemailverificationRequired" class="badge" (click)="verifyUserEmailID()"
+                                    <span *ngIf="isemailverificationRequired" class="badge" (click)="verifyUserEmailID()" tooltip="Resend the verification email to the request sender to confirm his / her email"
                                         [ngClass]="{'badge-danger':isCustomFieldEmail(data.key,isEmailVerified),'hide':!isCustomFieldEmail(data.key,isEmailVerified)}">
                                         Resend Verification</span>
                                     <span class="badge"
@@ -279,7 +279,7 @@
                                             <input type="file" class="custom-file-input"
                                                 (change)="uploadFile($event,'email')" id="emailAttachment">
                                             <label class="custom-file-label"
-                                                for="inputGroupFile01">{{uploadFilename?uploadFilename:'Choose file'}}</label>
+                                                for="inputGroupFile01"><span class="emailspan">{{uploadFilename?uploadFilename:'Choose file'}}</span></label>
                                         </div>
                                     </div>
                                     <button type="submit" class="btn btn-sm btn-uppercase btn-primary float-right mb-2 mt-2">Send

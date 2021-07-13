@@ -1,6 +1,6 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {moduleName} from '../../_constant/module-name.constant';
-import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
+import {BsModalRef, ModalDirective, BsModalService} from 'ngx-bootstrap/modal';
 import {BillingService} from '../../_services/billing.service';
 import {AuthenticationService} from '../../_services';
 import {CCPAFormConfigurationService} from '../../_services/ccpaform-configuration.service';
@@ -24,7 +24,7 @@ class DefaultPlanData {
 export class SubscriptionPopupComponent implements OnInit {
   modalRef: BsModalRef;
   cookieConsentPlans = [];
-  @ViewChild('template', {static: true}) template: any;
+  @ViewChild('template', { static: true }) template: ModalDirective;
   allPlanData: any;
   billingCycle = 'monthly';
   currentPlanData: any = {
@@ -39,7 +39,11 @@ export class SubscriptionPopupComponent implements OnInit {
   existingOrgPlan = null;
   noPlanType = 'org';
   isUserSubscribe = false;
+  isUserSubscribeDsar = false;
   showFeatureCount = 6;
+  currentUser: any;
+  skLoading = false;
+  openModalStatus = false;
 
   constructor(
     private modalService: BsModalService,
@@ -48,35 +52,47 @@ export class SubscriptionPopupComponent implements OnInit {
     private ccpaFormConfigurationService: CCPAFormConfigurationService,
     private dsarformService: DsarformService,
     private dataService: DataService,
-    private router: Router
+    private router: Router,
+    private authService: AuthenticationService
   ) {
+    this.authService.currentUser.subscribe(x => {
+      this.currentUser = x;
+      if (this.currentUser) {
+        this.onGetPlanDetails();
+        this.onGetUserSubscriptions();
+      }
+    });
   }
 
   ngOnInit(): void {
-    this.onGetPlanDetails();
-    this.onGetUserSubscriptions()
     this.openModal();
   }
 
   onGetUserSubscriptions() {
+    this.skLoading = true;
     this.billingService.getActivePlan(this.constructor.name, moduleName.manageSubscriptionsModule).subscribe((res: any) => {
       // this.isUserSubscribe = res.response.length;
+      this.skLoading = false;
       if (res.status === 200) {
         const result = res.response;
         for (const obj of result) {
-          if (obj.active) {
+          if (obj.active && obj.planDetails.type === 0) {
             this.isUserSubscribe = true;
+          }
+          if (obj.active && obj.planDetails.type === 1) {
+            this.isUserSubscribeDsar = true;
           }
         }
       }
+    }, error => {
+      this.skLoading = false;
     });
   }
 
 
   openModal() {
     this.dataService.openModalWithData.subscribe(res => {
-      console.log(res)
-      // debugger
+      this.openModalStatus = res.openModal;
       if (res.openModal) {
         if (!res.data) {
           this.currentPlanData = new DefaultPlanData();
@@ -92,18 +108,22 @@ export class SubscriptionPopupComponent implements OnInit {
             //   this.existingOrgPlan = res.data;
             // }
           } else if (!res.data && res.type == 'org') {
-            this.type = 'org'
+            this.type = 'org';
             this.currentPlanData = new DefaultPlanData();
           } else {
-            this.type = 'noPlan'
+            this.type = 'noPlan';
             this.currentPlanData = new DefaultPlanData();
           }
         } else {
-          this.type = 'noPlan'
+          this.type = 'noPlan';
         }
+        this.template.config = {
+        backdrop: true,
+        ignoreBackdropClick: true
+        }; // to avoid browser scrollbar issue appears due to modal does not get hide properly.
         this.template.show();
       }
-    })
+    });
   }
 
   onGetPlanDetails() {
@@ -175,9 +195,13 @@ export class SubscriptionPopupComponent implements OnInit {
     this.router.navigateByUrl('/settings/billing/pricing')
   }
 
-  onTemplateHide(){
-    this.router.navigate(['/home/dashboard/analytics']);
-    this.template.hide();
+  onTemplateHide() {
+    const path = location.pathname;
+    if (path === '/cookie-consent/cookie-banner' || path === '/cookie-consent/manage-vendors') {
+      this.template.hide();
+    } else {
+      this.router.navigate(['/home/dashboard/analytics']);
+      this.template.hide();
+    }
   }
-
 }

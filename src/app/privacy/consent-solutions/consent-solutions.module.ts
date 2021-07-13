@@ -12,17 +12,19 @@ import { SharedbootstrapModule } from 'src/app/sharedbootstrap/sharedbootstrap.m
 import {RadioButtonModule} from 'primeng/radiobutton';
 import {TabViewModule} from 'primeng/tabview';
 import { ModalModule } from 'ngx-bootstrap/modal';
+import { ConsentSetupComponent } from './consent-setup/consent-setup.component';
 
 
 
 
 const path: Routes = [
   {path: 'consent-records', component: ConsentTableComponent},
-  {path: 'consent-records/details/:id', component: ConsentDetailsComponent}
+  {path: 'consent-records/details/:id', component: ConsentDetailsComponent},
+  {path: 'setup', component: ConsentSetupComponent}
 ];
 
 @NgModule({
-  declarations: [ConsentTableComponent, ConsentDetailsComponent],
+  declarations: [ConsentTableComponent, ConsentDetailsComponent, ConsentSetupComponent],
   imports: [
     CommonModule,
     RouterModule.forChild(path),

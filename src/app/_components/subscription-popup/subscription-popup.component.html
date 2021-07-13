@@ -1,10 +1,14 @@
 
 <!--[config]="{backdrop: 'static'}" -->
-<div bsModal #template="bs-modal" class="modal fade" style="  z-index: 9999999" tabindex="-1"
+
+<ngx-skeleton-loader  *ngIf="skLoading && openModalStatus"  count="6" class="pt-4"></ngx-skeleton-loader>
+<div [ngStyle]="{'display': !skLoading ? 'block' :  'none'}">
+<div bsModal #template="bs-modal" class="modal fade"  style="  z-index: 9999999" tabindex="-1"
      role="dialog" aria-labelledby="dialog-sizes-name1">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
-
+      <button type="button" class="modal-close-btn" (click)="onTemplateHide()" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span></button>
       <div *ngIf="type ===  'cookieConsent' " class="modal-body">
         <div class="text-center">
           <h3 class="font-weight-bold">Cookie Consent Management </h3>
@@ -154,19 +158,24 @@
 
       <div *ngIf="type !==  'cookieConsent' && type !==  'org' " class="modal-body">
         <div class="text-center">
+
           <ng-container *ngIf="noPlanType == 'cookieConsent' && isUserSubscribe">
             <h3 class="font-weight-bold">Cookie Consent Management </h3>
             <h5> You haven't assigned a license to this property </h5></ng-container>
-          <ng-container *ngIf="noPlanType == 'org' && isUserSubscribe">
+
+          <ng-container *ngIf="noPlanType == 'org' && isUserSubscribeDsar">
             <h3 class="font-weight-bold">Data Subject Access Request (DSAR) </h3>
             <h5>You haven't assigned a license to this Organization</h5>
           </ng-container>
+
           <h4 *ngIf="noPlanType == 'company' && isUserSubscribe">You can not add more users, Please Upgrade your existing plan </h4>
-          <ng-container class="mb-4" *ngIf="!isUserSubscribe">
+
+          <ng-container class="mb-4" *ngIf="!isUserSubscribe ">
             <h3 class="font-weight-bold" *ngIf="noPlanType == 'cookieConsent'">Cookie Consent Management </h3>
             <h3 class="font-weight-bold" *ngIf="noPlanType == 'org'">Data Subject Access Request (DSAR) </h3>
             <h5> You don't have an active plan, please choose a new plan below </h5>
           </ng-container>
+
         </div>
 
         <div class="plan-body" *ngIf="noPlanType == 'cookieConsent' && !isUserSubscribe">
@@ -283,3 +292,5 @@
       </div>
     </div>
   </div>
+</div>
+</div>

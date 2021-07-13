@@ -18,7 +18,7 @@ export class RouteguardService implements CanActivate {
     });
     if (currentUser) {
       const checkStatusOnPageRefresh = this.dataService.getOrganizationPropertyCreationStatus();
-      if (!isPropertyCreated && checkStatusOnPageRefresh) { 
+      if (!isPropertyCreated && typeof checkStatusOnPageRefresh !== 'undefined' || !isPropertyCreated && checkStatusOnPageRefresh !== null) { 
         return true;
       }
       if (isPropertyCreated) {

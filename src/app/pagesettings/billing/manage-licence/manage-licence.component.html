@@ -28,7 +28,7 @@
       <a routerLink="/settings/billing/pricing" class="btn btn-sm btn-outline-secondary btn-uppercase mr-2">
         <i class="fa fa-plus pr-1"  aria-hidden="true"></i>  Add Subscription</a>
 
-      <button *ngIf="activeSubscriptionList.length > 0" (click)="onGenerateSessionID()" type="button" class="btn btn-sm btn-uppercase btn-outline-secondary"><i class="fa fa-cogs pr-1" aria-hidden="true"></i>
+      <button *ngIf="activeSubscriptionList.length > 0" (click)="onGenerateSessionID()" type="button" class="btn btn-sm btn-uppercase btn-outline-secondary" [disabled]="userRole === 'View Only'"> <i class="fa fa-cogs pr-1" aria-hidden="true"></i>
         Manage Subscription</button>
     </div>
   </div>

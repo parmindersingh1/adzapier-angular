@@ -11,6 +11,11 @@ export const environment = {
   lokiUrl: 'https://logs.adzpier-staging.com/loki/api/v1/push',
   globleLangURL: 'https://staging-cdn.adzapsrv.com/cookiebanner/banner-language/:lang.json',
   customLangURL: 'https://staging-cdn.adzapsrv.com/cmp/v1/web/:oid/lang/:pid-:lang.json',
+  consentPreferenceCDN: 'https://staging-cdn.adzapsrv.com/consent-preference/develop/adzapier-cp-sdk.js',
+  consentPreferenceConfig : {
+    AppID: 'cBJtzTHAnDECTCguDBeBzIXprEfLdQwgklQYRXqkdRNPMCYSjX', // Your App ID
+    PropID: '67a0d68e-94e0-492a-8221-1dabaacd375d'
+  },
   lokiConfig: {
     app: 'cmp-adminportal-develop',
     env: 'develop',

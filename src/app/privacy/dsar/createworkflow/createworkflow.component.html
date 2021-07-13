@@ -46,7 +46,7 @@
                             <span *ngIf="!skeletonLoading && workflowStages?.length === 0" class="nodatafound">No data found</span>
                         </div>
                         <app-customtabs *ngIf="!skeletonLoading"  [flowStatus]="workflowStatus" [inputData]="workflowStages" [currentTab]="order"
-                            (currentStageEvent)="clickOnWorkflowStages($event)">
+                            (currentStageEvent)="clickOnWorkflowStages($event)" (deleteCustomStage)="deleteCustomStages($event)">
                         </app-customtabs>                        
                     </ng-container>
                     <span *ngIf="!skeletonLoading && workflowStages?.length === 0" class="nodatafound">No data found</span>
@@ -66,7 +66,7 @@
                                 </div>
                                 <button *ngIf="isWorkflownameEdit" class="btn btn-primary btn-sm btn-wf-save d-flex" (click)="saveWorkflow(quillEditorForm, workflowStatus)">
                                     <i-feather name="save" *ngIf="isWorkflownameEdit" class="feather-16 mr-2"></i-feather> Save</button>
-                                <button class="btn btn-link d-flex"  (click)="isWorkflownameEdit = !isWorkflownameEdit">
+                                <button class="btn btn-link d-flex" *ngIf="workflowStatus == 'draft'"  (click)="isWorkflownameEdit = !isWorkflownameEdit">
                                     <i-feather name="edit" *ngIf="!isWorkflownameEdit" class="feather-16 mr-2"></i-feather>
                                   {{!isWorkflownameEdit ? 'Edit' : 'Cancel'}} </button>
                                 </div>
@@ -112,6 +112,7 @@
         </div>
     </div>
 </div>
+
 <div class="col-sm-5 mr-0 float-right flotingdiv" [ngClass]="{'hide':!isOpen}">
 <alert *ngIf="isOpen" [type]="alertType" dismissOnTimeout="5000" [dismissible]="dismissible" (onClosed)="onClosed(alertMsg)">{{alertMsg}}</alert>
 </div>
