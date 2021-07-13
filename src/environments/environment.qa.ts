@@ -11,7 +11,7 @@ export const environment = {
   lokiUrl: 'https://logs.adzpier-staging.com/loki/api/v1/push',
   globleLangURL: 'https://staging-cdn.adzapsrv.com/cookiebanner/banner-language/:lang.json',
   customLangURL: 'https://staging-cdn.adzapsrv.com/cmp/v1/web/:oid/lang/:pid-:lang.json',
-  //consentPreferenceCDN: 'https://staging-cdn.adzapsrv.com/consent-preference/staging/adzapier-cp-sdk.js',
+  consentPreferenceCDN: 'https://staging-cdn.adzapsrv.com/consent-preference/qa/adzapier-cp-sdk.js',
   lokiConfig: {
     app: 'cmp-adminportal-qa',
     env: 'qa',
