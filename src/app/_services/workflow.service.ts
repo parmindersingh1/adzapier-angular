@@ -113,6 +113,16 @@ export class WorkflowService {
 
   }
 
+  deleteWorkflowStage(componentName, moduleName, stageid, workflowid): Observable<any> {
+    const path = '/workflow/stage/' + stageid + '/' + workflowid ;
+    return this.httpClient.delete<any>(environment.apiUrl + path).pipe(
+      catchError(error => {
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.createWorkflow, componentName, moduleName, path);
+        return throwError(error);
+      }));
+
+  }
+
   onSendLogs(errorType, msg, functionality, componentName, moduleName, path) {
     this.lokiService.onSendErrorLogs(errorType, msg, functionality, componentName, moduleName, path).subscribe();
   }
