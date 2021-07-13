@@ -48,11 +48,20 @@
     </div>
   </div>
   <div class="card-body p-0">
+    <div class="btn-group-action">
+      <button type="button" class="btn btn-link " [ngStyle]="{'color' :  showVendorType === 1 ? '#2196f3' : '#555',
+      'border-bottom' : showVendorType === 1 ? '2px solid' : null
+      }" (click)="showVendorType = 1">IAB Vendors</button>
+      <button type="button" class="btn btn-link " [ngStyle]="{'color' :  showVendorType === 2 ? '#2196f3' : '#555',
+            'border-bottom' : showVendorType === 2 ? '2px solid' : null
+      }"   (click)="showVendorType = 2">Google Vendors</button>
+    </div>
     <ngx-skeleton-loader *ngIf="skeletonLoading.one || skeletonLoading.two" count="18"
                          class="pt-4"></ngx-skeleton-loader>
     <ng-container *ngIf="!skeletonLoading.one && !skeletonLoading.two">
-      <p-tabView>
-        <p-tabPanel header="IAB Vendors">
+
+<!--        <p-tabPanel header="IAB Vendors" (click)="showVendorType = 1">-->
+        <div class="iab-vendors" *ngIf="showVendorType === 1">
           <div class="row">
             <div class="col-md-8">
             </div>
@@ -61,8 +70,9 @@
                      class="m-0 form-control search-input">
             </div>
           </div>
-          <div class="card">
+          <div class="card"  >
             <p-table [value]="searchIAB.value ?  searchIabVendors :  iabVendorsList"
+                     [virtualScroll]="true" [virtualRowHeight]="34" [lazy]="true" (onLazyLoad)="loadIabVendorsLazy($event)"
                      styleClass="p-datatable-sm" [scrollable]="true" scrollHeight="550px">
               <ng-template pTemplate="colgroup">
                 <colgroup>
@@ -118,9 +128,8 @@
             </p-table>
           </div>
 
-        </p-tabPanel>
-        <p-tabPanel header="Google Vendors">
-
+       </div>
+        <div class="google-vendor" *ngIf="showVendorType === 2">
           <div class="row">
             <div class="col-md-8">
             </div>
@@ -130,8 +139,9 @@
             </div>
           </div>
 
-          <div class="card">
+          <div class="card" >
             <p-table [value]="searchGoogle.value ?  searchGoogleVendors :  googleVendorsList"
+                     [virtualScroll]="true" [virtualRowHeight]="34" [lazy]="true" (onLazyLoad)="loadIabGoogleLazy($event)"
                      styleClass="p-datatable-sm" [scrollable]="true" scrollHeight="550px">
               <ng-template pTemplate="colgroup">
                 <colgroup>
@@ -178,18 +188,23 @@
                   <td>Google Vendor</td>
                   <td>
                     <p>
-                      <span *ngIf="googleVendorsDefaultID.includes(vendor.provider_id)"
-                            class="btn btn-primary btn-sm active-btn">Active</span>
-                      <span *ngIf="!googleVendorsDefaultID.includes(vendor.provider_id)"
-                            class="btn btn-default btn-sm inactive-btn">Inactive</span>
+<!--                      <ng-container *ngIf="googleVendorsDefaultID.length > 0; else activeVendor">-->
+                          <span *ngIf="googleVendorsDefaultID.includes(vendor.provider_id)"
+                                class="btn btn-primary btn-sm active-btn">Active</span>
+                        <span *ngIf="!googleVendorsDefaultID.includes(vendor.provider_id)"
+                              class="btn btn-default btn-sm inactive-btn">Inactive</span>
+<!--                      </ng-container>-->
+<!--                      <ng-template #activeVendor>-->
+<!--                                    <span class="btn btn-primary btn-sm active-btn">Active</span>-->
+<!--                      </ng-template>-->
                     </p>
                   </td>
                 </tr>
               </ng-template>
             </p-table>
           </div>
-        </p-tabPanel>
-      </p-tabView>
+        </div>
+
 
 
     </ng-container>
@@ -225,7 +240,7 @@
         </div>
 
       </div>
-    
+
     </div>
     <div class="row">
       <div class="col-md-12 text-right">
