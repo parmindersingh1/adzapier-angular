@@ -224,10 +224,19 @@ export class CreateworkflowComponent implements OnInit, DirtyComponents {
             this.loadWorkflowById(this.selectedWorkflowId);
           }
         }, (error) => {
-          this.alertMsg = error;
-          this.isOpen = true;
-          this.alertType = 'danger';
-          this.skeletonLoading = false;
+          if(error == "Bad Request"){
+            this.alertMsg = "No Default stages are can not be edited";
+            this.isOpen = true;
+            this.alertType = 'danger';
+            this.skeletonLoading = false;
+            this.loadWorkflowById(this.selectedWorkflowId);
+          }else{
+            this.alertMsg = error;
+            this.isOpen = true;
+            this.alertType = 'danger';
+            this.skeletonLoading = false;
+            this.loadWorkflowById(this.selectedWorkflowId);
+          }
         });
     }
 
@@ -355,6 +364,21 @@ export class CreateworkflowComponent implements OnInit, DirtyComponents {
 
   canDeactivate() {
     return this.isDirty;
+  }
+
+  deleteCustomStages($event){
+    if($event.id !== undefined){
+      this.workflowService.deleteWorkflowStage(this.constructor.name, moduleName.workFlowModule,$event.id,this.selectedWorkflowId).subscribe((data)=>{
+        this.alertMsg = data.response;
+        this.isOpen = true;
+        this.alertType = 'info';
+      },(error)=>{
+        this.alertMsg = error;
+        this.isOpen = true;
+        this.alertType = 'danger';
+      })
+    }
+  
   }
 
 }

@@ -687,7 +687,8 @@ export class OrganizationdetailsComponent implements OnInit {
   onCancelClick() {
     this.modalService.dismissAll('Canceled');
     this.isInviteFormSubmitted = false;
-  //  this.isUpdateUserinvitation = false;
+    this.isUpdateUserinvitation = false;
+    this.selectusertype = true;
     this.isconfirmationsubmitted = false;
     this.inviteUserOrgForm.reset();
     this.confirmationForm.reset();
