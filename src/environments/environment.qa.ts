@@ -7,17 +7,13 @@ export const environment = {
   iabUrl: 'https://staging-cdn.adzapsrv.com/vendorlist/IABvendors/',
   langURL: 'https://staging-cdn.adzapsrv.com/cookiebanner/banner-language/:lang.json',
   googleVendorsUrl: 'https://staging-cdn.adzapsrv.com/vendorlist/googlevendorlist/google.json',
-  apiUrl: 'https://cmp-api.adzpier-staging.com/api/v1',
+  apiUrl: 'https://qa-cmp-api.adzpier-staging.com/api/v1',
   lokiUrl: 'https://logs.adzpier-staging.com/loki/api/v1/push',
   globleLangURL: 'https://staging-cdn.adzapsrv.com/cookiebanner/banner-language/:lang.json',
   customLangURL: 'https://staging-cdn.adzapsrv.com/cmp/v1/web/:oid/lang/:pid-:lang.json',
-  consentPreferenceCDN: 'https://staging-cdn.adzapsrv.com/consent-preference/staging/adzapier-cp-sdk.js',
-  consentPreferenceConfig : {
-    AppID: 'mKoZfTvxGoehXLKDQIMyvkgAQRmEJSGLjreGROQWhaMdvYcyAf', // Your App ID
-    PropID: '43077d0b-510b-4b30-a330-6f1308d2e33e'
-  },
+  consentPreferenceCDN: 'https://staging-cdn.adzapsrv.com/consent-preference/qa/adzapier-cp-sdk.js',
   lokiConfig: {
-    app: 'cmp-adminportal-staging',
-    env: 'staging',
+    app: 'cmp-adminportal-qa',
+    env: 'qa',
   },
 };

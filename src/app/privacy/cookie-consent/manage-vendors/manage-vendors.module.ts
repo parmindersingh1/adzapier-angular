@@ -8,6 +8,7 @@ import {TabViewModule} from 'primeng/tabview';
 import {AlertModule} from 'ngx-bootstrap/alert';
 import {TableModule} from 'primeng/table';
 import {FormsModule} from '@angular/forms';
+import {ButtonModule} from 'primeng/button';
 
 const path: Routes = [
   {path : '', component: ManageVendorsComponent}
@@ -16,15 +17,16 @@ const path: Routes = [
 
 @NgModule({
   declarations: [ManageVendorsComponent],
-  imports: [
-    CommonModule,
-    RouterModule.forChild(path),
-    TabsModule,
-    NgxSkeletonLoaderModule,
-    TabViewModule,
-    AlertModule,
-    TableModule,
-    FormsModule
-  ]
+    imports: [
+        CommonModule,
+        RouterModule.forChild(path),
+        TabsModule,
+        NgxSkeletonLoaderModule,
+        TabViewModule,
+        AlertModule,
+        TableModule,
+        FormsModule,
+        ButtonModule
+    ]
 })
 export class ManageVendorsModule { }
