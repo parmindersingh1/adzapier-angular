@@ -651,6 +651,13 @@ ul.ngx-pagination {
     font-weight: bold;
   }
 
+  .emailspan{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width:150px
+  }
+
   ::ng-deep .input-group > .custom-file {
       overflow: hidden;
   }
