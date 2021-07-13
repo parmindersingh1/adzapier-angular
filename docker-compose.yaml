@@ -10,11 +10,6 @@ services:
       - "${PUBLISH_PORT}:${TARGET_PORT}"
     volumes:
       - /etc/localtime:/etc/localtime:ro
-#    logging:
-#      driver: "json-file"
-#      options:
-#        max-size: "200k"
-#        max-file: "10"
     logging:
       driver: loki
       options:
