@@ -174,6 +174,8 @@ export class RegisterComponent implements OnInit, OnDestroy {
           }
       ],
       autodetectIpAddress: true, // A parameter that enable or disable the ip autodetect. Default to: true
+    }, res => {
+      console.log('consent response', res);
     });
   }
 
