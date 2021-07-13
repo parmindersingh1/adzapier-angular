@@ -78,6 +78,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     const element = document.getElementById('main');
     element.classList.remove('container-fluid');
     element.style.padding = null;
+    element.style.margin = null;
     element.classList.add('container');
     element.classList.add('site-content');
   }
