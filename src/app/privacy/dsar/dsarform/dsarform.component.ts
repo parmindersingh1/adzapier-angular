@@ -1843,6 +1843,8 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
         window.open('https://develop-privacyportal.adzpier-staging.com/dsar/form/' + this.orgId + '/' + this.propId + '/' + this.crid + '/' + formStatus);
       } else if (window.location.hostname === 'cmp.adzpier-staging.com') {
         window.open('https://privacyportal.adzpier-staging.com/dsar/form/' + this.orgId + '/' + this.propId + '/' + this.crid + '/' + formStatus);
+      } else if (window.location.hostname === 'qa-cmp.adzpier-staging.com') {
+        window.open('https://qa-privacyportal.adzpier-staging.com/dsar/form/' + this.orgId + '/' + this.propId + '/' + this.crid + '/' + formStatus);
       } else if (window.location.hostname === 'portal.adzapier.com') {
         window.open('https://privacyportal.primeconsent.com/dsar/form/' + this.orgId + '/' + this.propId + '/' + this.crid + '/' + formStatus);
       }
@@ -1863,6 +1865,8 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
         this.scriptcode = 'https://develop-privacyportal.adzpier-staging.com/dsar/form/' + this.orgId + '/' + this.propId + '/' + this.crid + '/' + formStatus;
       } else if (window.location.hostname === 'cmp.adzpier-staging.com') {
         this.scriptcode = 'https://privacyportal.adzpier-staging.com/dsar/form/' + this.orgId + '/' + this.propId + '/' + this.crid + '/' + formStatus;
+      } else if (window.location.hostname === 'qa-cmp.adzpier-staging.com') {
+        window.open('https://qa-privacyportal.adzpier-staging.com/dsar/form/' + this.orgId + '/' + this.propId + '/' + this.crid + '/' + formStatus);
       } else if (window.location.hostname === 'portal.adzapier.com') {
         this.scriptcode = 'https://privacyportal.primeconsent.com/dsar/form/' + this.orgId + '/' + this.propId + '/' + this.crid + '/' + formStatus;
       }
@@ -2042,7 +2046,9 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
       this.imgUrl = 'https://develop-cmp-api.adzpier-staging.com/api/v1/captcha/image';
     } else if (window.location.hostname === 'cmp.adzpier-staging.com') {
       this.imgUrl = 'https://privacyportal.adzpier-staging.com/api/v1/captcha/image';
-    } else if (window.location.hostname === 'portal.adzapier.com') {
+    } else if (window.location.hostname === 'qa-cmp.adzpier-staging.com') {
+      this.imgUrl = 'https://qa-privacyportal.adzpier-staging.com/api/v1/captcha/image';
+    }  else if (window.location.hostname === 'portal.adzapier.com') {
       this.imgUrl = 'https://privacyportal.primeconsent.com/api/v1/captcha/image';
     }
 

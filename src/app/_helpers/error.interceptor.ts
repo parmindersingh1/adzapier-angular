@@ -50,6 +50,9 @@ export class ErrorInterceptor implements HttpInterceptor {
               if(err.url.indexOf('/api/v1/user') !== -1){
                 const error = err.error.error || err.statusText;
                 return throwError(error);
+              } else if(err.url.indexOf('/api/v1/password') !== -1){
+                const error = err.error.error || err.statusText;
+                return throwError(error);
               } else if(err.url.indexOf('/api/v1/workflow') !== -1){
                 const error = err.error.error || err.statusText;
                 return throwError(error);
