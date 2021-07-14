@@ -422,7 +422,7 @@ export class OrganizationdetailsComponent implements OnInit {
             this.isOpen = true;
             this.alertType = 'success';
             this.getPropertyList(res.response.oid);
-
+            this.orgService.isPropertyUpdated.next(true);
             if (res.response.id === this.currrentManagedPropID) {
               // this.orgService.changeCurrentSelectedProperty(res);
               const orgDetails = this.orgService.getCurrentOrgWithProperty();

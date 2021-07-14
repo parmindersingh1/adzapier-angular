@@ -9,7 +9,7 @@ import { moduleName } from 'src/app/_constant/module-name.constant';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Location } from '@angular/common';
 import { DataService } from 'src/app/_services/data.service';
-import {featuresName} from '../../../_constant/features-name.constant';
+import { featuresName } from '../../../_constant/features-name.constant';
 
 
 @Component({
@@ -57,7 +57,7 @@ export class HeaderComponent implements OnInit {
   userID: any;
   propList: any;
   isOrganizationUpdated: boolean;
-  isPropertyUpdated:boolean;
+  isPropertyUpdated: boolean;
   isPropertySelected: boolean;
   isPrivacyActivelinkMatched = false;
   isBillingActivelinkMatched = false;
@@ -155,7 +155,7 @@ export class HeaderComponent implements OnInit {
         this.loadOrganizationWithProperty(); //to load org and prop
         this.loadNotification();
       }
-    },(error)=>{
+    }, (error) => {
       console.log(error);
     });
     this.orgservice.emitUpdatedOrgList.subscribe((data) => {
@@ -197,7 +197,7 @@ export class HeaderComponent implements OnInit {
 
   onCheckConsentPreferenceSubscription() {
     this.planDetails = this.dataService.getCurrentPropertyPlanDetails();
-    if(this.planDetails !== ""){
+    if (this.planDetails !== "") {
       const isAllowConsentPreference = this.dataService.isAllowFeatureByYes(this.planDetails.response, featuresName.CONSENT_PREFERENCE);
       this.dataService.isConsentPreferenceApplied.next({ requesttype: 'consentpreference', hasaccess: isAllowConsentPreference });
       this.showConsentPreference = isAllowConsentPreference;
@@ -273,7 +273,7 @@ export class HeaderComponent implements OnInit {
           subcategory: [{ showlink: 'DSAR', routerLink: '/home/dashboard/ccpa-dsar', icon: 'bar-chart-2' },
           // { showlink: 'GDPR', routerLink: '/pagenotfound', icon: 'pie-chart' },
           { showlink: 'Cookie Consent', routerLink: '/home/dashboard/cookie-consent', icon: 'fas fa-cookie feather-16' },
-          { showlink: 'Consent Preference', routerLink: '/home/dashboard/consent-preference' , icon: 'fas fa-cookie feather-16'}
+          { showlink: 'Consent Preference', routerLink: '/home/dashboard/consent-preference', icon: 'fas fa-cookie feather-16' }
           ]
         }, {
           showlink: 'Privacy',
@@ -320,38 +320,38 @@ export class HeaderComponent implements OnInit {
   async isCurrentPropertySelected(org, prop) {
     this.loading.start('2');
     this.selectedOrgProperties.length = 0;
-        this.activeProp = prop.property_name;
-        const obj = {
-          organization_id: org.id,
-          organization_name: org.orgname,
-          property_id: prop.property_id,
-          property_name: prop.property_name,
-          property_active: prop.property_active,
-          user_id: this.userID
-        };
-        this.orgservice.changeCurrentSelectedProperty(obj);
-        // this.selectedOrgProperties.push(obj);
-        const orgIndex = this.selectedOrgProperties.findIndex((t) => t.organization_id === obj.organization_id);
-        if (orgIndex === -1) {
-          this.selectedOrgProperties.push(obj);
-        }
-        this.orgservice.setCurrentOrgWithProperty(obj);
+    this.activeProp = prop.property_name;
+    const obj = {
+      organization_id: org.id,
+      organization_name: org.orgname,
+      property_id: prop.property_id,
+      property_name: prop.property_name,
+      property_active: prop.property_active,
+      user_id: this.userID
+    };
+    this.orgservice.changeCurrentSelectedProperty(obj);
+    // this.selectedOrgProperties.push(obj);
+    const orgIndex = this.selectedOrgProperties.findIndex((t) => t.organization_id === obj.organization_id);
+    if (orgIndex === -1) {
+      this.selectedOrgProperties.push(obj);
+    }
+    this.orgservice.setCurrentOrgWithProperty(obj);
     this.dataService.getOrgPlanInfo(this.constructor.name, moduleName.cookieConsentModule, org.id)
       .subscribe((res: any) => {
         this.loading.stop('2')
         this.dataService.setOrgPlanToLocalStorage(res);
-          if(res.response && res.response.plan_details &&  res.response.plan_details.dsar){
-            if(Object.values(res.response.plan_details.dsar).length > 0){
-          this.isShowDashboardForDsar = true;
-          this.dataService.isLicenseApplied.next({ requesttype: 'organization', hasaccess: true });
-            } else {
-              this.isShowDashboardForDsar = false;
-              this.dataService.isLicenseApplied.next({ requesttype: 'organization', hasaccess: false });
-              //this.dataService.openUpgradeModalForDsar(res);
-              if (this.router.url.indexOf('ccpa-dsar') !== -1) {
-                this.router.navigate(['/home/dashboard/analytics']);
-              }
+        if (res.response && res.response.plan_details && res.response.plan_details.dsar) {
+          if (Object.values(res.response.plan_details.dsar).length > 0) {
+            this.isShowDashboardForDsar = true;
+            this.dataService.isLicenseApplied.next({ requesttype: 'organization', hasaccess: true });
+          } else {
+            this.isShowDashboardForDsar = false;
+            this.dataService.isLicenseApplied.next({ requesttype: 'organization', hasaccess: false });
+            //this.dataService.openUpgradeModalForDsar(res);
+            if (this.router.url.indexOf('ccpa-dsar') !== -1) {
+              this.router.navigate(['/home/dashboard/analytics']);
             }
+          }
         }
       }, error => {
         this.loading.stop('2')
@@ -418,49 +418,50 @@ export class HeaderComponent implements OnInit {
     // tslint:disable-next-line: max-line-length
     // this.orgservice.currentProperty.pipe(distinctUntilChanged()).subscribe((data) => {
     this.orgservice.currentProperty.subscribe((data) => {
-        if (data !== '') {
-          this.currentProperty = data.property_name;
-          this.currentOrganization = data.organization_name || data.response.orgname;
-          if (this.currentProperty !== undefined) {
-            const orgIndex = this.selectedOrgProperties.findIndex((t) => t.organization_id === data.organization_id);
-            if (orgIndex === -1) {
-              this.selectedOrgProperties.push(data);
-              this.licenseAvailabilityForProperty(data);
-            }
-            this.isPropSelected(data);
+      if (data !== '') {
+        this.currentProperty = data.property_name;
+        this.currentOrganization = data.organization_name || data.response.orgname;
+        if (this.currentProperty !== undefined) {
+          const orgIndex = this.selectedOrgProperties.findIndex((t) => t.organization_id === data.organization_id);
+          if (orgIndex === -1) {
+            this.selectedOrgProperties.push(data);
+            this.licenseAvailabilityForProperty(data);
           }
-        } else {
-          this.loadOrgPropertyFromLocal();
+          this.isPropSelected(data);
         }
-
-      });
-    this.orgservice.isPropertyUpdated.subscribe((status)=>{this.isPropertyUpdated = status});
-    this.orgservice.isOrganizationUpdated.subscribe((status)=>{this.isOrganizationUpdated = status});
-      
-      if(this.isPropertyUpdated){
-        this.orgservice.editedProperty.subscribe((prop) => {
-          if (prop) {
-            this.currentProperty = prop.response.name;
-            const orgDetails = this.orgservice.getCurrentOrgWithProperty();
-            orgDetails.property_name = prop.response.name;
-            orgDetails.property_id = prop.response.id;
-            this.orgservice.updateCurrentOrgwithProperty(orgDetails);
-            this.isPropSelected(orgDetails);
-          }
-        });
+      } else {
+        this.loadOrgPropertyFromLocal();
       }
-     
-      if(this.isOrganizationUpdated){
-        this.orgservice.editedOrganization.subscribe((org) => {
-          if (org) {
-            this.currentOrganization = org.response.orgname;
-            const orgDetails = this.orgservice.getCurrentOrgWithProperty();
-            orgDetails.organization_id = org.response.id;
-            orgDetails.organization_name = org.response.orgname;
-            this.orgservice.updateCurrentOrgwithProperty(orgDetails);
-          }
-        });
-      } 
+
+    });
+    this.orgservice.isPropertyUpdated.subscribe((status) => { this.isPropertyUpdated = status });
+    this.orgservice.isOrganizationUpdated.subscribe((status) => { this.isOrganizationUpdated = status });
+
+    if (this.isPropertyUpdated) {
+      this.orgservice.editedProperty.subscribe((prop) => {
+        if (prop) {
+          this.currentProperty = prop.response.name;
+          const orgDetails = this.orgservice.getCurrentOrgWithProperty();
+          orgDetails.property_name = prop.response.name;
+          orgDetails.property_id = prop.response.id;
+          this.orgservice.updateCurrentOrgwithProperty(orgDetails);
+          this.isPropSelected(orgDetails);
+        }
+      });
+      this.loadOrganizationWithProperty();
+    }
+
+    if (this.isOrganizationUpdated) {
+      this.orgservice.editedOrganization.subscribe((org) => {
+        if (org) {
+          this.currentOrganization = org.response.orgname;
+          const orgDetails = this.orgservice.getCurrentOrgWithProperty();
+          orgDetails.organization_id = org.response.id;
+          orgDetails.organization_name = org.response.orgname;
+          this.orgservice.updateCurrentOrgwithProperty(orgDetails);
+        }
+      });
+    }
 
   }
 
@@ -490,32 +491,32 @@ export class HeaderComponent implements OnInit {
             this.router.navigate(['settings/organizations/details/' + this.orgPropertyMenu[0].id]);
             return false;
           } else {
-            if(!this.isOrgPropertyEmpty() || this.isFirstPropertyExist()){
-            let activePro = this.filterProp(this.orgPropertyMenu);
-            const proIndex = activePro[0].property.findIndex((t) => t.property_active === true);
-            this.activeProp = activePro[0].property[proIndex];
-            const obj = {
-              organization_id: activePro[0].id,
-              organization_name: activePro[0].orgname,
-              property_id: activePro[0].property[proIndex].property_id,
-              property_name: activePro[0].property[proIndex].property_name,
-              user_id: this.userID
-            };
+            if (!this.isOrgPropertyEmpty() || this.isFirstPropertyExist()) {
+              let activePro = this.filterProp(this.orgPropertyMenu);
+              const proIndex = activePro[0].property.findIndex((t) => t.property_active === true);
+              this.activeProp = activePro[0].property[proIndex];
+              const obj = {
+                organization_id: activePro[0].id,
+                organization_name: activePro[0].orgname,
+                property_id: activePro[0].property[proIndex].property_id,
+                property_name: activePro[0].property[proIndex].property_name,
+                user_id: this.userID
+              };
 
-            this.licenseAvailabilityForProperty(obj);
-            this.dataService.checkClickedURL.next('/home/welcome');
-            // this.dataService.getPropertyPlanDetails(this.constructor.name, moduleName.cookieConsentModule, obj.property_id)
-            // .subscribe((res: any) => {
-            //   this.dataService.setPropertyPlanToLocalStorage(res);
-            // });
-            this.orgservice.changeCurrentSelectedProperty(obj); //check this..
-            // this.orgservice.getSelectedOrgProperty.emit(obj);
-            //  this.firstElement = false;
-            this.orgservice.setCurrentOrgWithProperty(obj);
-            this.licenseAvailabilityForFormAndRequestPerOrg(obj);
-          }else{
-            this.loadOrgPropertyFromLocal();
-          }
+              this.licenseAvailabilityForProperty(obj);
+              this.dataService.checkClickedURL.next('/home/welcome');
+              // this.dataService.getPropertyPlanDetails(this.constructor.name, moduleName.cookieConsentModule, obj.property_id)
+              // .subscribe((res: any) => {
+              //   this.dataService.setPropertyPlanToLocalStorage(res);
+              // });
+              this.orgservice.changeCurrentSelectedProperty(obj); //check this..
+              // this.orgservice.getSelectedOrgProperty.emit(obj);
+              //  this.firstElement = false;
+              this.orgservice.setCurrentOrgWithProperty(obj);
+              this.licenseAvailabilityForFormAndRequestPerOrg(obj);
+            } else {
+              this.loadOrgPropertyFromLocal();
+            }
           }
         } else {
           this.currentSelectedProperty();
@@ -564,7 +565,7 @@ export class HeaderComponent implements OnInit {
         this.licenseAvailabilityForFormAndRequestPerOrg(orgDetails);
         this.licenseAvailabilityForProperty(orgDetails);
       }
-    //  return this.currentProperty;
+      //  return this.currentProperty;
     }
 
   }
@@ -586,7 +587,7 @@ export class HeaderComponent implements OnInit {
     const orgDetails = this.orgservice.getCurrentOrgWithProperty();
     if (orgDetails !== undefined) {
       const result = data.filter((t) => t.id === orgDetails.organization_id).length > 0 || data.some((t) => t.id === orgDetails.id);
-      const isSameUserLoggedin =  this.userID === orgDetails.user_id || orgDetails.uid;
+      const isSameUserLoggedin = this.userID === orgDetails.user_id || orgDetails.uid;
       if (result && isSameUserLoggedin) {
         this.licenseAvailabilityForFormAndRequestPerOrg(orgDetails);
         return true;
@@ -594,7 +595,7 @@ export class HeaderComponent implements OnInit {
     }
   }
 
-  isOrgPropertyEmpty():boolean {
+  isOrgPropertyEmpty(): boolean {
     return this.orgservice.getCurrentOrgWithProperty() !== undefined ? true : false;
   }
 
@@ -603,11 +604,11 @@ export class HeaderComponent implements OnInit {
       || link.routerLink === '/cookie-consent/cookie-banner' || link.routerLink === '/cookie-consent/cookie-tracking' || link.routerLink === '/cookie-consent/cookie-banner/setup') {
       if (this.selectedOrgProperties.length > 0) {
         this.dataService.checkClickedURL.next(link.routerLink);
-      this.onCheckAllowCookieConsentDashboard();
-      if (!this.isShowDashboardForCookieConsent) {
-        return false;
-      }
-    } else {
+        this.onCheckAllowCookieConsentDashboard();
+        if (!this.isShowDashboardForCookieConsent) {
+          return false;
+        }
+      } else {
         this.openModal(this.confirmModal);
         return false;
       }
@@ -678,8 +679,8 @@ export class HeaderComponent implements OnInit {
     return this.isSublinkActive = this.selectedSubmenu.some((t) => t === selectedItem.routerLink);
   }
 
-  isFirstPropertyExist():boolean {
-    if(this.orgPropertyMenu[0] !== undefined){
+  isFirstPropertyExist(): boolean {
+    if (this.orgPropertyMenu[0] !== undefined) {
       return this.orgPropertyMenu[0].property !== undefined && this.orgPropertyMenu[0].property[0] !== undefined
     }
   }
@@ -870,7 +871,7 @@ export class HeaderComponent implements OnInit {
   }
 
   convertAmpersand(item) {
-    if(item !== undefined){
+    if (item !== undefined) {
       return item.replace(/&amp;/g, '&');
     }
   }
@@ -901,12 +902,12 @@ export class HeaderComponent implements OnInit {
     }
   }
 
-  licenseAvailabilityForProperty(prop){
+  licenseAvailabilityForProperty(prop) {
     this.dataService.checkLicenseAvailabilityForProperty(prop).subscribe(result => {
       this.dataService.setPropertyPlanToLocalStorage(result[0]);
       this.onCheckSubscriptionForProperty();
       this.onCheckConsentPreferenceSubscription();
-    },(error)=>{
+    }, (error) => {
       console.log(error);
     })
   }
@@ -928,23 +929,23 @@ export class HeaderComponent implements OnInit {
   onCheckSubscriptionForProperty() {
     const resData: any = this.dataService.getCurrentPropertyPlanDetails();
     if (resData.hasOwnProperty('response')) {
-      if(resData.response && resData.response.plan_details &&  resData.response.plan_details.consentPreference){
-        if(Object.values(resData.response.plan_details.consentPreference).length > 0){
+      if (resData.response && resData.response.plan_details && resData.response.plan_details.consentPreference) {
+        if (Object.values(resData.response.plan_details.consentPreference).length > 0) {
           this.dataService.isConsentPreferenceApplied.next({ requesttype: 'consentpreference', hasaccess: true })
-        }else{
+        } else {
           this.dataService.isConsentPreferenceApplied.next({ requesttype: 'consentpreference', hasaccess: false });
           //this.router.navigate(['/home/welcome']);
-         // this.dataService.openUpgradeModalForConsentPreference(resData);
+          // this.dataService.openUpgradeModalForConsentPreference(resData);
         }
       }
-      if(resData.response && resData.response.plan_details &&  resData.response.plan_details.cookieConsent){
-        if(Object.values(resData.response.plan_details.cookieConsent).length > 0){
+      if (resData.response && resData.response.plan_details && resData.response.plan_details.cookieConsent) {
+        if (Object.values(resData.response.plan_details.cookieConsent).length > 0) {
           this.isShowDashboardForCookieConsent = true;
           this.dataService.isLicenseAppliedForProperty.next({ requesttype: 'property', hasaccess: true });
-        }else{
+        } else {
           this.dataService.isLicenseAppliedForProperty.next({ requesttype: 'property', hasaccess: false });
           this.isShowDashboardForCookieConsent = false;
-          if(this.router.url.indexOf('settings') == -1){
+          if (this.router.url.indexOf('settings') == -1) {
             this.router.navigate(['/home/welcome']);
           }
           //this.dataService.openUpgradeModalForCookieConsent(resData);
@@ -993,18 +994,18 @@ export class HeaderComponent implements OnInit {
 
   onCheckAllowOrgDashboard() {
     this.planDetails = this.dataService.getCurrentOrganizationPlanDetails();
-      if (!this.isShowDashboardForDsar) {
-        this.dataService.openUpgradeModalForDsar(this.planDetails);
-      }
+    if (!this.isShowDashboardForDsar) {
+      this.dataService.openUpgradeModalForDsar(this.planDetails);
+    }
   }
 
-  checkForUpgradeDSAR(){
+  checkForUpgradeDSAR() {
     let orglicenseStatus;
     this.planDetails = this.dataService.getCurrentOrganizationPlanDetails();
     this.dataService.isLicenseApplied.subscribe((status) => {
       orglicenseStatus = status.hasaccess;
     });
-    if(!orglicenseStatus){
+    if (!orglicenseStatus) {
       this.dataService.openUpgradeModalForDsar(this.planDetails);
     }
   }
@@ -1022,5 +1023,26 @@ export class HeaderComponent implements OnInit {
 
   isLicenseAssignedForProperty(item): boolean {
     return !item.license_assigned
+  }
+
+  btnTopAddSubscription() {
+    this.router.navigate(['/settings/billing/pricing']);
+  }
+
+  addEllipsis(): object {
+    let count;
+    if (this.currentProperty !== "") {
+      count = this.currentProperty.length;
+    }
+    if (count > 15) {
+      return {
+        "width": "115px"
+      }
+    } else {
+      return {
+        "width": "auto"
+      }
+    }
+
   }
 }

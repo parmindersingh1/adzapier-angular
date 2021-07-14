@@ -30,7 +30,7 @@
 
                     <button class="btn btn-xs btn-white d-flex align-items-center mg-r-5" type="button"
                     [ngClass]="{'hideEditSave-btn':workflowType == 'default', '': workflowType !== 'default'}"
-                    [attr.disabled]="isControlDisabled || workflowStatus == 'active' ? true : null"
+                    [attr.disabled]="workflowStatus == 'active' ? true : null"
                         (click)="saveWorkflow(quillEditorForm, workflowStatus)" title="Save as draft">
                         <span class="d-none d-sm-inline">
                             <i class="fa fa-plus" aria-hidden="true"></i>
@@ -64,7 +64,7 @@
                                 <div *ngIf="workflow_name?.invalid && !skeletonLoading" class="invalid-feedback">
                                     <div *ngIf="workflow_name?.invalid && submitted">Workflow is required</div>
                                 </div>
-                                <button *ngIf="isWorkflownameEdit" class="btn btn-primary btn-sm btn-wf-save d-flex" (click)="saveWorkflow(quillEditorForm, workflowStatus)">
+                                <button *ngIf="isWorkflownameEdit" class="btn btn-primary btn-sm btn-wf-save d-flex" (click)="updateWorkflowname()">
                                     <i-feather name="save" *ngIf="isWorkflownameEdit" class="feather-16 mr-2"></i-feather> Save</button>
                                 <button class="btn btn-link d-flex" *ngIf="workflowStatus == 'draft'"  (click)="isWorkflownameEdit = !isWorkflownameEdit">
                                     <i-feather name="edit" *ngIf="!isWorkflownameEdit" class="feather-16 mr-2"></i-feather>

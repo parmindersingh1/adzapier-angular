@@ -98,6 +98,26 @@ export class WorkflowService {
     }));
   }
 
+  //workflow/activate
+
+  activateWorkflow(componentName, moduleName, id, reqObj): Observable<any> {
+    const path = apiConstant.ACTIVATE_WORKFLOW + id;
+    return this.httpClient.put<any>(environment.apiUrl + path, reqObj).pipe(
+    catchError(error => {
+      this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.activateWorkflow, componentName, moduleName, path);
+      return throwError(error);
+    }));
+  }
+
+  updateWorkflowName(componentName, moduleName, id,reqObj): Observable<any> {
+    const path = apiConstant.UPDATE_WORKFLOW_NAME + id;
+    return this.httpClient.put<any>(environment.apiUrl + path, reqObj).pipe(
+    catchError(error => {
+      this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.activateWorkflow, componentName, moduleName, path);
+      return throwError(error);
+    }));
+  }
+
   changeCurrentSelectedWorkflow(currentItem) {
     this.workflowSource.next(currentItem);
   }

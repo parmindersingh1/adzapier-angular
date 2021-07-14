@@ -15,6 +15,7 @@ export enum LokiFunctionality {
   workFlow = 'workflow',
   workFlowByID = 'workflowbyid',
   updateWorkflow = 'updateWorkflow',
+  activateWorkflow = 'activateWorkflow',
   workFlowStatus = 'workflowstatus',
   getWorkflow = 'getWorkFlow',
   getWorkflowById = 'getWorkflowById',
