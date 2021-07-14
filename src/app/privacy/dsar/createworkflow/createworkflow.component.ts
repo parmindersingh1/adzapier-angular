@@ -248,7 +248,8 @@ export class CreateworkflowComponent implements OnInit, DirtyComponents {
 
   editWorkflow($event, status) {
     const flowStatus = status === 'active' ? 'draft' : 'active';
-    if ($event.target.innerText === 'Activate' && !this.isControlDisabled) {
+    //const flowStatus = status === 'draft' ? 'active' : 'draft';
+    if ($event.target.innerText === 'Activate' && this.isControlDisabled) {
       this.activateWorkflow(status);
       this.isControlDisabled = false;
     } else {
@@ -266,13 +267,14 @@ export class CreateworkflowComponent implements OnInit, DirtyComponents {
       workflow_status: flowStatus,
       oid: this.currentManagedOrgID
     };
-    this.workflowService.updateWorkflow(this.constructor.name, moduleName.workFlowModule, this.selectedWorkflowId, reqObj)
+    this.workflowService.activateWorkflow(this.constructor.name, moduleName.workFlowModule, this.selectedWorkflowId,reqObj)
       .subscribe((data) => {
         if (data) {
           this.alertMsg = data.response;
           this.isOpen = true;
           this.alertType = 'success';
           this.loadWorkflowById(this.selectedWorkflowId);
+          this.workflowStatus = 'Active';
         }
       }, (error) => {
         this.isOpen = true;
@@ -286,6 +288,28 @@ export class CreateworkflowComponent implements OnInit, DirtyComponents {
     if (this.isControlDisabled && this.workflowStatus === 'active') {
       return this.isControlDisabled = false;
     }
+  }
+
+  updateWorkflowname(){
+    const reqObj = {
+      workflow_name: this.workflowName,
+      oid:this.currentManagedOrgID
+    }
+    this.workflowService.updateWorkflowName(this.constructor.name, moduleName.workFlowModule, this.selectedWorkflowId,reqObj)
+     .subscribe((data) => {
+      if (data) {
+        this.isWorkflownameEdit = false;
+        this.alertMsg = data.response;
+        this.isOpen = true;
+        this.alertType = 'success';
+        this.loadWorkflowById(this.selectedWorkflowId);
+      }
+    }, (error) => {
+      this.isOpen = true;
+      this.alertMsg = error;
+      this.alertType = 'danger';
+      console.log(JSON.stringify(error));
+    });
   }
 
   // checkButtonStatus(): boolean {
