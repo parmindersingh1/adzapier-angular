@@ -7,6 +7,7 @@ import {NgxUiLoaderService} from 'ngx-ui-loader';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
 import {featuresName} from '../../../_constant/features-name.constant';
 import {DataService} from '../../../_services/data.service';
+import {LazyLoadEvent} from 'primeng/api';
 
 @Component({
   selector: 'app-manage-vendors',
@@ -43,6 +44,7 @@ export class ManageVendorsComponent implements OnInit {
   isFeatureAvaliable = false;
   isAlliavinactive = true;
   isAllgoogleinactive = true;
+  showVendorType = 1;
 
   constructor(
     private orgservice: OrganizationService,
@@ -123,8 +125,8 @@ export class ManageVendorsComponent implements OnInit {
             const result = res.response;
             this.googleVendorsDefaultID = JSON.parse(result.google_vendors);
             this.iabVendorsDefaultID = JSON.parse(result.iab_vendors);
-            this.isAlliavinactive = this.iabVendorsDefaultID.length > 0 ? true : false
-            this.isAllgoogleinactive = this.googleVendorsDefaultID > 0 ? true : false
+            this.isAlliavinactive = this.iabVendorsDefaultID.length > 0 ? true : false;
+            this.isAllgoogleinactive = this.googleVendorsDefaultID.length > 0 ? true : false;
             this.cd.detectChanges()
           }
           this.isOpen = true;
@@ -276,6 +278,25 @@ export class ManageVendorsComponent implements OnInit {
 
   decline(): void {
     this.modalRef.hide();
+  }
+
+
+  loadIabVendorsLazy(event: LazyLoadEvent) {
+
+    setTimeout(() => {
+      const iabVendors = this.iabVendorsList.slice(event.first, (event.first + event.rows));
+      Array.prototype.splice.apply(this.iabVendorsList, [...[event.first, event.rows], ...iabVendors]);
+      this.iabVendorsList = [...this.iabVendorsList];
+    }, Math.random() * 1000 + 250);
+  }
+
+  loadIabGoogleLazy(event: LazyLoadEvent) {
+    setTimeout(() => {
+      const googleVendors = this.googleVendorsList.slice(event.first, (event.first + event.rows));
+      Array.prototype.splice.apply(this.googleVendorsList, [...[event.first, event.rows], ...googleVendors]);
+      this.googleVendorsList = [...this.googleVendorsList];
+      this.cd.detectChanges()
+    }, Math.random() * 1000 + 250);
   }
 
 }

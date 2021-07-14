@@ -96,3 +96,13 @@ border: 1px solid #e9ecef;
   flex-direction: row;
   margin: 0 auto;
 }
+
+.btn-group-action {
+  text-align: center;
+  padding-top: 25px;
+  border-bottom: 1px solid lightgray;
+}
+.btn-group-action button {
+  color: #555;
+  font-weight: 600;
+}
