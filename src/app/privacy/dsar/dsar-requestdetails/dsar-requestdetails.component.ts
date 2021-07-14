@@ -812,7 +812,7 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
             delete reqObj[key];
           }
         });
-        this.activitytype = this.quillEditorText.value.publicprivatetype;
+      //  this.activitytype = this.quillEditorText.value.publicprivatetype;
         const fd = new FormData();
         fd.append('current_status', reqObj.current_status);
         fd.append('previous_status', reqObj.previous_status);
@@ -1867,6 +1867,10 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
       'color': status == 1 ? '#007bff' : status == 2 ? '#ffc107' : status == -1 ? '#bd2130' : '#28a745'
     };
     return colorStyle;
+  }
+
+  changeActivityType($event){
+    this.activitytype = $event.currentTarget.value;
   }
 }
 

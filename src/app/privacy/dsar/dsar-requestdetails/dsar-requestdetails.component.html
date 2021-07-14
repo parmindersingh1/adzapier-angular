@@ -229,11 +229,11 @@
                                 <button type="submit" class="btn btn-sm  btn-uppercase btn-primary float-right mb-2 mt-2">Post</button>
                                 <div class="radiobtn-wrapper">
                                     <div class="form-check" tooltip="For Private conversation" placement="top" [adaptivePosition]="true">
-                                        <input  type="radio"  name="publicprivatetype" id="private" value="0" checked>
+                                        <input  type="radio" (change)="changeActivityType($event)"  name="publicprivatetype" id="private" value="0" checked>
                                         <label  for="private" class="mr-2">Private</label>
                                     </div>
                                     <div class="form-check pl-2" tooltip="For Public conversation" placement="top" [adaptivePosition]="true">
-                                        <input type="radio"  name="publicprivatetype" id="public" value="1">
+                                        <input type="radio" (change)="changeActivityType($event)" name="publicprivatetype" id="public" value="1">
                                         <label for="public">Public</label>
                                     </div>
                                 </div>
