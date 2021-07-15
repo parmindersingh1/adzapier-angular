@@ -79,7 +79,11 @@ export const apiConstant = {
   GET_LEGAL_RECORDS: '/consent/legal_notices/:pid',
   UPDATE_CONSENT: '/consent/solution/:pid/:id',
   CONSENT_DASHBOARD: '/consent/dashboard/:pid',
-  ADD_CONSENT:'/portal-consent/solution/:pid'
+  ADD_CONSENT: '/portal-consent/solution/:pid',
+  EXPORT_CONSENT: '/consent-preference/consent/export/:pid',
+  EXPORT_CONSENT_LEGAL_NOTICES: '/consent-preference/legal-notices/export/:pid',
+  EXPORT_CONSENT_PROOFS: '/consent-preference/proofs/export/:pid',
+  EXPORT_CONSENT_PREFERENCE: '/consent-preference/preference/export/:pid',
 };
 
 // {

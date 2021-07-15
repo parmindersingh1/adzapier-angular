@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewEncapsulation} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
 import {OrganizationService} from '../../../_services';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
 import {moduleName} from '../../../_constant/module-name.constant';
@@ -21,6 +21,9 @@ export class ConsentTableComponent implements OnInit {
   currentManagedOrgID: any;
   currrentManagedPropID: any;
   consentRecordList = [];
+  startDateCsv: any;
+  endDateCsv: any
+  @ViewChild('template', { static: true}) template: ElementRef;
   consentRecordCount = 0;
   private firstone: number;
   eventRows;
@@ -53,11 +56,18 @@ export class ConsentTableComponent implements OnInit {
 
   source$: Subject<any> = new Subject();
   public sourceSearch = '';
+  downloadStatus = {
+    consents: false,
+    legalNotices: false,
+    Proofs: false,
+    Preference: false
+  };
 
 
   bsConfig: Partial<BsDatepickerConfig>;
   dateCustomClasses: DatepickerDateCustomClasses[];
   searchbydaterange: any = '';
+  searchbydaterangeExport: any = '';
   date1: Date = new Date('yyyy-mm-dd');
   ranges: any = [
     {
@@ -95,15 +105,11 @@ export class ConsentTableComponent implements OnInit {
       label: 'Last Month'
     },
     {
-      value: [new Date(new Date().getFullYear(), 0, 1), new Date()],
-      label: 'This Year'
-    },
-    {
       value: [
-        new Date(new Date().setFullYear(new Date().getFullYear() - 1)),
-        new Date()
+        new Date(new Date().getFullYear(), new Date().getMonth() - 6, 1),
+        new Date(new Date().getFullYear(), new Date().getMonth(), 0)
       ],
-      label: 'Last Year'
+      label: 'Last 6 Months'
     },
   ];
 
@@ -119,13 +125,17 @@ export class ConsentTableComponent implements OnInit {
       { date: new Date(), classes: ['theme-dark-blue'] },
     ];
     this.searchbydaterange = [new Date(new Date().setDate(new Date().getDate() - 30)),new Date()]
+    this.searchbydaterangeExport = [new Date(new Date().setDate(new Date().getDate() - 30)),new Date()]
   }
 
   ngOnInit() {
     this.onGetPropsAndOrgId();
     this.onSetUpDebounce();
-    this.bsConfig = Object.assign({}, { containerClass: 'theme-dark-blue', showClearButton: true, returnFocusToInput: true, dateInputFormat: 'yyyy-mm-dd', adaptivePosition : true, showTodayButton:true, ranges: this.ranges  });
+    this.bsConfig = Object.assign({}, { containerClass: 'theme-dark-blue', showClearButton: true, returnFocusToInput: true,
+      dateInputFormat: 'yyyy-mm-dd', adaptivePosition : true, showTodayButton:true, ranges: this.ranges  });
     this.initForm();
+    this.startDateCsv = this.searchbydaterangeExport[0].toJSON().split('T')[0];
+    this.endDateCsv = this.searchbydaterangeExport[1].toJSON().split('T')[0];
   }
 
   onSetUpDebounce() {
@@ -403,6 +413,10 @@ export class ConsentTableComponent implements OnInit {
     this.emailDebouncer$.next(e.target.value);
   }
 
+  openModal(template: any) {
+    this.modalRef = this.modalService.show(template, { animated: false,    keyboard: false, class: 'modal-lg'});
+  }
+
   private setupEmailDebouncer(): void {
     this.emailDebouncer$.pipe(
       debounceTime(1000),
@@ -472,7 +486,12 @@ export class ConsentTableComponent implements OnInit {
     });
   }
 
-
+  onSelectDateRangeForCsv() {
+    if (this.searchbydaterangeExport.length > 0) {
+      this.startDateCsv = this.searchbydaterangeExport[0].toJSON().split('T')[0];
+      this.endDateCsv = this.searchbydaterangeExport[1].toJSON().split('T')[0];
+    }
+  }
   onDateSelection() {
     if (this.searchbydaterange.length > 0) {
       const startDate = this.searchbydaterange[0].toJSON().split('T')[0];
@@ -504,4 +523,80 @@ export class ConsentTableComponent implements OnInit {
     }
   }
 
+  generateConsentCsv() {
+    const params = {
+      start_date: this.startDateCsv,
+      end_date: this.endDateCsv
+    };
+    this.downloadStatus.consents = true;
+    this.consentSolutionService.exportConsentCSv(this.currrentManagedPropID, params).subscribe(
+      response => {
+        this.downloadStatus.consents = false;
+        const fileName = 'Adzapier-consents~' + this.currrentManagedPropID + '~' + this.startDateCsv + '~' + this.endDateCsv + '.csv';
+        this.downLoadFile(response, 'text/csv', fileName );
+      }
+      , error => {
+        this.downloadStatus.consents = false;
+      });
+  }
+  generateLegalNoticesCsv() {
+    const params = {
+      start_date: this.startDateCsv,
+      end_date: this.endDateCsv
+    };
+    this.downloadStatus.legalNotices = true;
+    this.consentSolutionService.exportConsentLegalNoticesCSv(this.currrentManagedPropID, params).subscribe(
+      response => {
+        this.downloadStatus.legalNotices = false;
+        const fileName = 'Adzapier-consents-legal-notices~' + this.currrentManagedPropID + '~' + this.startDateCsv + '~' + this.endDateCsv + '.csv';
+        this.downLoadFile(response, 'text/csv', fileName );
+      }
+      , error => {
+        this.downloadStatus.legalNotices = false;
+      });
+  }
+
+  generateProofsCsv() {
+    const params = {
+      start_date: this.startDateCsv,
+      end_date: this.endDateCsv
+    };
+    this.downloadStatus.Proofs = true;
+    this.consentSolutionService.exportConsentProofsCSv(this.currrentManagedPropID, params).subscribe(
+      response => {
+        this.downloadStatus.Proofs = false;
+        const fileName = 'Adzapier-consents-proofs~' + this.currrentManagedPropID + '~' + this.startDateCsv + '~' + this.endDateCsv + '.csv';
+        this.downLoadFile(response, 'text/csv', fileName );
+      }
+      , error => {
+        this.downloadStatus.Proofs = false;
+      });
+  }
+
+  generatePreferenceCsv() {
+    const params = {
+      start_date: this.startDateCsv,
+      end_date: this.endDateCsv
+    };
+    this.downloadStatus.Preference = true;
+    this.consentSolutionService.exportConsentPreferenceCSv(this.currrentManagedPropID, params).subscribe(
+      response => {
+        this.downloadStatus.Preference = false;
+        const fileName = 'Adzapier-consents-preferences~' + this.currrentManagedPropID + '~' + this.startDateCsv + '~' + this.endDateCsv + '.csv';
+        this.downLoadFile(response, 'text/csv', fileName );
+      }
+      , error => {
+        this.downloadStatus.Preference = false;
+      });
+  }
+
+
+  downLoadFile(data: any, type: string, fileName) {
+    const blob = new Blob([data], { type});
+    const url = window.URL.createObjectURL(blob);
+    const anchor = document.createElement('a');
+    anchor.download = fileName;
+    anchor.href = url;
+    anchor.click();
+  }
 }
