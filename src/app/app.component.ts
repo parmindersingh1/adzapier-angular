@@ -70,13 +70,32 @@ export class AppComponent implements OnInit {
   }
 
  async onInitCPSDK() {
-    const  js = document.createElement('script');
-    js.type = 'text/javascript';
-    js.async = false;
-    js.src = environment.consentPreferenceCDN;
+  return  new Promise( (resolve, reject) => {
+    const script = document.createElement('script');
+    script.src = environment.consentPreferenceCDN;
+    script.type = 'text/javascript';
+    // Listen for onload time, after the current js file is loaded, load the next
+    script.onload = () => {
+      resolve(true);
+    };
+    document.getElementsByTagName('head')[0].appendChild(script)
 
-    document.body.appendChild(js);
-  }
+
+
+
+    //  const js = document.createElement('script');
+    // js.src = environment.consentPreferenceCDN;
+    //  js.async = false;
+    //  js.defer = false;
+    //  js.onload =  () => {
+    // resolve(true);
+    //  };
+    //  js.onerror =  (e) => {
+    //   console.error('ConsentPreference Script not loaded due to: ', e);
+    //   reject(false);
+    // };
+  });
+ }
   private openUnAuthModal() {
     this.dataService.unAuthPopUp.subscribe((res: any) => {
       if (res.isTrue) {

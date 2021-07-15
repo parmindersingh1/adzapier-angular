@@ -13,7 +13,7 @@ import {environment} from '../../environments/environment';
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss']
 })
-export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
+export class RegisterComponent implements OnInit, OnDestroy {
   @ViewChild('registerForm') registerForm: ElementRef;
   regForm: FormGroup;
   loading = false;
@@ -59,15 +59,13 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
       validator: MustMatch('password', 'confirmpassword')
     });
   }
-ngAfterViewInit() {
-  window.onload = () => {
-    this.consentPreferenceSDK = (window as any).CP_SDK_ADZAPIER.init({
-      AppID: environment.consentPreferenceConfig.AppID,
-      PropID: environment.consentPreferenceConfig.PropID,
-      ShowLogs: false, // Show Console Logs
-    });
-  }
-}
+// ngAfterViewInit() {
+//     this.consentPreferenceSDK = (window as any).CP_SDK_ADZAPIER.init({
+//       AppID: environment.consentPreferenceConfig.AppID,
+//       PropID: environment.consentPreferenceConfig.PropID,
+//       ShowLogs: false, // Show Console Logs
+//     });
+// }
 
   ngOnDestroy() {
     const element = document.getElementById('main');
@@ -128,6 +126,11 @@ ngAfterViewInit() {
   }
 
   onSendConsentPreferenceRecord() {
+    this.consentPreferenceSDK = (window as any).CP_SDK_ADZAPIER.init({
+      AppID: environment.consentPreferenceConfig.AppID,
+      PropID: environment.consentPreferenceConfig.PropID,
+      ShowLogs: false, // Show Console Logs
+    });
     const keys = ['password', 'confirmpassword'];
     const formData = document.getElementById('registerForm');   // Get the <ul> element with id="myList"
     let formDataContent: any = formData.outerHTML;   // Get the <ul> element with id="myList"
