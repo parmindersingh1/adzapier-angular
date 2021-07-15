@@ -51,8 +51,8 @@ export class AppComponent implements OnInit {
     );
   }
 
-  ngOnInit() {
-    this.onInitCPSDK();
+ async ngOnInit() {
+    await this.onInitCPSDK();
     this.openUnAuthModal();
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
@@ -69,9 +69,10 @@ export class AppComponent implements OnInit {
     feather.replace();
   }
 
-  onInitCPSDK() {
+ async onInitCPSDK() {
     const  js = document.createElement('script');
     js.type = 'text/javascript';
+    js.async = false;
     js.src = environment.consentPreferenceCDN;
 
     document.body.appendChild(js);

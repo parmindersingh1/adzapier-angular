@@ -1,4 +1,4 @@
-import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {Router} from '@angular/router';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {first} from 'rxjs/operators';
@@ -13,7 +13,7 @@ import {environment} from '../../environments/environment';
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss']
 })
-export class RegisterComponent implements OnInit, OnDestroy {
+export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('registerForm') registerForm: ElementRef;
   regForm: FormGroup;
   loading = false;
@@ -34,11 +34,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
     private userService: UserService,
     private alertService: AlertService,
   ) {
-    this.consentPreferenceSDK = (window as any).CP_SDK_ADZAPIER.init({
-      AppID: environment.consentPreferenceConfig.AppID,
-      PropID: environment.consentPreferenceConfig.PropID,
-      ShowLogs: false, // Show Console Logs
-    });
+
   }
 
   ngOnInit() {
@@ -62,8 +58,16 @@ export class RegisterComponent implements OnInit, OnDestroy {
     }, {
       validator: MustMatch('password', 'confirmpassword')
     });
-
   }
+ngAfterViewInit() {
+  window.onload = () => {
+    this.consentPreferenceSDK = (window as any).CP_SDK_ADZAPIER.init({
+      AppID: environment.consentPreferenceConfig.AppID,
+      PropID: environment.consentPreferenceConfig.PropID,
+      ShowLogs: false, // Show Console Logs
+    });
+  }
+}
 
   ngOnDestroy() {
     const element = document.getElementById('main');
