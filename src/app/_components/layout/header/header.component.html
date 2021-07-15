@@ -59,8 +59,8 @@
     [ngClass]="{'hidemenu':!currentUser, 'showmenu':currentUser}">
     <ul *ngIf="orgPropertyMenu" class="navbar-nav nav-mr" dropdown container="body">
       <a class="nav-link dropdown-link"  dropdownToggle (click)="false" >
-       <div *ngIf="currentOrganization !== ''">{{currentOrganization}}</div>
-       <span *ngIf="currentProperty !== '';">{{currentProperty !== '' ? convertAmpersand(currentProperty) : 'Select Property'}}</span>
+       <div *ngIf="currentOrganization !== ''" class="mr-2">{{currentOrganization}}</div>
+       <span class="large-propname" [ngStyle]="addEllipsis()" *ngIf="currentProperty !== '';">{{currentProperty !== '' ? convertAmpersand(currentProperty) : 'Select Property'}}</span>
        <span *ngIf="!currentProperty"> Select Property</span>
       </a>
      <!--(orgPropertyMenu | async).response-->
@@ -104,7 +104,7 @@
     <!-- </ng-container> -->
     </ul>
       <!--end of organization / property menu after login-->
-    <ul class="navbar-nav mr-auto" *ngIf="currentUser">
+    <ul class="navbar-nav" *ngIf="currentUser">
       <li *ngFor="let menu of navigationMenu" class="nav-item">
         <div *ngIf="menu.showlink" dropdown container="body">
           <div *ngIf="!menu.subcategory">
@@ -156,12 +156,15 @@
         </div>
       </li>
     </ul>
+    <div>
+      <button (click)="btnTopAddSubscription()" class="primary-yellow"> Add A Subscription </button>
+    </div>
   </div>
   <!--end of general menu after login-->
   <!--Help center after login-->
   <div class="navbar-right" *ngIf="currentUser"  dropdown [insideClick]="true">
   <a  class="nav-link dropdown-link mr-3" dropdownToggle>
-    <i-feather name="help-circle" class="feather-20"></i-feather>
+    <i-feather name="help-circle" class="feather-20 tx-white"></i-feather>
   </a>
   <ul class="dropdown-menu helpcenter-menu-right" *dropdownMenu>
     <li>
@@ -178,7 +181,7 @@
 
     <span  class="notification-number" [ngClass]="notificationsNumber == 0 ? 'hide-notification-number' : ''">{{notificationsNumber}}</span> <!--[ngClass]="{'hide-notification-number':notificationsNumber == '0'}"-->
     <a  class="nav-link dropdown-link p-0" (click)="onClickNotificationBell();"  dropdownToggle>
-      <i-feather name="bell" class="feather-20"></i-feather>
+      <i-feather name="bell" class="feather-20 tx-white"></i-feather>
     </a>
     </div>
     <ul class="dropdown-menu notification-menu-right" *dropdownMenu>
@@ -221,7 +224,7 @@
         <div class="iconwrapper">
           <div *ngIf="menu.items" dropdown container="body" placement="bottom right">
             <a class="nav-link dropdown-link" routerLinkActive="active" dropdownToggle (click)="false">
-              <i class="bd bd-primary bg-primary rounded-circle pd-10 tx-white">{{nameInitials(currentLoggedInUser)}}</i>
+              <span class="bg-white rounded-circle tx-white">{{nameInitials(currentLoggedInUser)}}</span>
             </a>
             <ul *dropdownMenu class="dropdown-menu dropdown-menu-right">
               <ng-container *ngFor="let item of menu.items; first as isFirst; let i = index;">
