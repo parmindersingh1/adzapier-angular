@@ -416,3 +416,10 @@ input[type='radio']:checked:after {
   margin-left: -3px;
   margin-right: -5px;
 }
+.progress {
+  margin: auto;
+}
+.progress div {
+  font-size: 17px;
+  font-weight: 600;
+}
