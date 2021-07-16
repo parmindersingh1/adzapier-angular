@@ -59,7 +59,7 @@
     [ngClass]="{'hidemenu':!currentUser, 'showmenu':currentUser}">
     <ul *ngIf="orgPropertyMenu" class="navbar-nav nav-mr" dropdown container="body">
       <a class="nav-link dropdown-link"  dropdownToggle (click)="false" >
-       <div *ngIf="currentOrganization !== ''" class="mr-2">{{currentOrganization}}</div>
+       <div *ngIf="currentOrganization !== ''" class="mr-2">{{currentOrganization}}<span class="ml-2">&amp;</span></div>
        <span class="large-propname" [ngStyle]="addEllipsis()" *ngIf="currentProperty !== '';">{{currentProperty !== '' ? convertAmpersand(currentProperty) : 'Select Property'}}</span>
        <span *ngIf="!currentProperty"> Select Property</span>
       </a>
