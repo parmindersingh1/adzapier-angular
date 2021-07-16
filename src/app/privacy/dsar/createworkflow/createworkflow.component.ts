@@ -15,6 +15,7 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 
 })
 export class CreateworkflowComponent implements OnInit, DirtyComponents {
+  //@ViewChild('quillEditorText') editor;
   dismissible = true;
   isOpen = false;
   workflowList: any;
@@ -36,6 +37,7 @@ export class CreateworkflowComponent implements OnInit, DirtyComponents {
   submitted = true;
   isControlDisabled = false;
   isWorkflownameEdit = false;
+  isEditClicked = false;
   alertMsg: any;
   alertType: any;
   quillConfig = {
@@ -254,6 +256,7 @@ export class CreateworkflowComponent implements OnInit, DirtyComponents {
       this.isControlDisabled = false;
     } else {
       this.workflowStatus = flowStatus;
+      this.isEditClicked = true;
     }
   }
 
@@ -302,7 +305,6 @@ export class CreateworkflowComponent implements OnInit, DirtyComponents {
         this.alertMsg = data.response;
         this.isOpen = true;
         this.alertType = 'success';
-        this.loadWorkflowById(this.selectedWorkflowId);
       }
     }, (error) => {
       this.isOpen = true;

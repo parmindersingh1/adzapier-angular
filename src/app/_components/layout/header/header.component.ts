@@ -1031,7 +1031,7 @@ export class HeaderComponent implements OnInit {
 
   addEllipsis(): object {
     let count;
-    if (this.currentProperty !== "") {
+    if (this.currentProperty !== "" && this.currentProperty !== undefined) {
       count = this.currentProperty.length;
     }
     if (count > 15) {
