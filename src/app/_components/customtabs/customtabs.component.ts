@@ -12,6 +12,7 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 })
 export class CustomtabsComponent implements OnInit, AfterContentChecked {
   @Input() inputData: any = [];
+  @Input() editStatus: boolean;
   @Input() currentTab: any;
   @Input() flowStatus: any;
   @Output() currentStageEvent: EventEmitter<any> = new EventEmitter<any>();

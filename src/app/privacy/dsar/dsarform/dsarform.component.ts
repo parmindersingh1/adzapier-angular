@@ -2349,6 +2349,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
           this.daysleft = data.response.settings.days_left;
 
           const key = 'request_form';
+          if(data.response[key] !== null) {
           this.webFormControlList = data.response[key];
           data.response[key].filter((t) => {
             if (t.controlId === 'fileupload') {
@@ -2377,6 +2378,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
               this.headerfaviconBase64 = t.faviconURL;
             }
           });
+        }
           this.ccpaFormConfigService.setFormControlList(this.webFormControlList);
           if (data.response['form_status'] === 'publish') {
             if (!this.isResetlinkEnable) {

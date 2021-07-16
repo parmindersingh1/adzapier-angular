@@ -713,7 +713,7 @@
                         [ngClass]="{ 'is-invalid': assignee.invalid && subTaskForm.submitted }"
                               required>
                             <ng-container *ngFor="let opt of ApproverList">
-                                <option *ngIf="opt.user_name !== ' '" [value]="opt.approver_id"
+                                <option *ngIf="opt.user_name !== ' ' && opt.email_verified" [value]="opt.approver_id"
                                     [selected]="opt.approver_id === selectedAssignee">
                                     {{ opt.user_name }}
                                 </option>
