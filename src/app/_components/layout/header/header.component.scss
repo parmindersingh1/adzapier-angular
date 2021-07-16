@@ -846,11 +846,12 @@ a.nav-link.dropdown-link span.rounded-circle {
   color: #1b365d;
   font-weight: bold;
   display: flex;
+  cursor: pointer;
   width: 38px;
-  height: 38px;
+  height: 36px;
   text-align: center;
   position: relative;
-  padding: 8px 7px 7px 9px;
+  padding: 7px 7px 7px 8px;
   font-size: 16px;
 }
 
