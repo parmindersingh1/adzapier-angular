@@ -94,4 +94,32 @@ export class ConsentSolutionsService {
         return throwError(error);
       }));
   }
+
+  exportConsentCSv(pid, params) {
+    const path = apiConstant.EXPORT_CONSENT.replace(':pid', pid)
+    return  this.http.get(environment.apiUrl + path,
+      {responseType: 'blob', params}
+    );
+  }
+
+  exportConsentLegalNoticesCSv(pid, params) {
+    const path = apiConstant.EXPORT_CONSENT_LEGAL_NOTICES.replace(':pid', pid)
+    return  this.http.get(environment.apiUrl + path,
+      {responseType: 'blob', params}
+    );
+  }
+
+  exportConsentProofsCSv(pid, params) {
+    const path = apiConstant.EXPORT_CONSENT_PROOFS.replace(':pid', pid)
+    return  this.http.get(environment.apiUrl + path,
+      {responseType: 'blob', params}
+    );
+  }
+
+  exportConsentPreferenceCSv(pid, params) {
+    const path = apiConstant.EXPORT_CONSENT_PREFERENCE.replace(':pid', pid)
+    return  this.http.get(environment.apiUrl + path,
+      {responseType: 'blob', params}
+    );
+  }
 }

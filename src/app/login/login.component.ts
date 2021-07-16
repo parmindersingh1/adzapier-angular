@@ -126,16 +126,16 @@ export class LoginComponent implements OnInit, OnDestroy {
           }
         },
         error => {
-          if (error == 'Please verify email address.') {
-            this.isEmailVerified = false;
-            this.loading = false;
-            this.isOpen = false;
-          } else {
+          // if (error == 'Please verify email address.') {
+          //   this.isEmailVerified = false;
+          //   this.loading = false;
+          //   this.isOpen = false;
+          // } else {
             this.isOpen = true;
             this.alertMsg = error;
             this.alertType = 'danger';
             this.loading = false;
-          }
+          // }
         });
 
   }

@@ -148,7 +148,7 @@
             <label class="mg-b-0-f tx-17" >Password</label>
 
           </div>
-          <input type="password" toggle formControlName="password" class="form-control input-lg"
+          <input type="password" togglepassword formControlName="password" class="form-control input-lg"
                  [ngClass]="{ 'is-invalid': submitted && f.password.errors }" placeholder="Enter your password"
                  (ngModelChange)="clearError()"/>
           <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
