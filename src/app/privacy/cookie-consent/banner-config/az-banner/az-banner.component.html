@@ -1,0 +1,47 @@
+<div class="banner-main">
+  <div id="ccpa-banner" *ngIf="bannerType === 'ccpa'" class="banner-content ">
+    <div class="row m-0">
+      <div class="card banner-bottom">
+        <div class="card-body border-top">
+          <div class="row m-0">
+          <div class="col-md-7">
+            <h5>We Care About Your Privacy</h5>
+            <p class="text-justify">By clicking "Accept All" you consent to us and all the third-parties mentioned in
+              our Privacy and Cookies Preference setting to store cookies and other technologies to enhance your website experience, process your personal data,
+              show you personalized content and advertisements, analyze website efficiency, and improve our marketing efforts.</p>
+          </div>
+          <div class="col-md-5 banner-action-btn">
+            <button pButton pRipple type="button" label="Privacy Settings" class="p-button-text mr-2"></button>
+            <button pButton pRipple type="button" label="Do not sell my data" class="p-button-secondary mr-2"></button>
+            <button pButton pRipple type="button" label="Accept All"></button>
+          </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div id="genric-banner" *ngIf="bannerType === 'generic'" class="banner-content ">
+    <div class="row m-0">
+      <div class="card banner-bottom">
+        <div class="card-body border-top">
+          <div class="row m-0">
+            <div class="col-md-7">
+              <h5>We Care About Your Privacy {{formData.title}}</h5>
+              <p class="text-justify">By clicking "Accept All" you consent to us and all the third-parties mentioned in
+                our Privacy and Cookies Preference setting to store cookies and other technologies to enhance your website experience, process your personal data,
+                show you personalized content and advertisements, analyze website efficiency, and improve our marketing efforts.</p>
+            </div>
+            <div class="col-md-5 banner-action-btn">
+              <button pButton pRipple type="button" label="Privacy Settings" class="p-button-text mr-3"></button>
+              <button pButton pRipple type="button" label="Disable All" class="p-button-secondary mr-3"></button>
+              <button pButton pRipple type="button" label="Accept All"></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
