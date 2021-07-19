@@ -22,6 +22,7 @@ import {ButtonModule} from 'primeng/button';
 import {RippleModule} from 'primeng/ripple';
 import { AzBannerComponent } from './az-banner/az-banner.component';
 import { AzPreferenceComponent } from './az-preference/az-preference.component';
+import {AccordionModule} from 'primeng/accordion';
 
 const path: Routes = [{
   path: '', component: BannerConfigComponent
@@ -50,7 +51,8 @@ const path: Routes = [{
     InputNumberModule,
     ButtonModule,
     RippleModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    AccordionModule
   ]
 })
 export class BannerConfigModule { }

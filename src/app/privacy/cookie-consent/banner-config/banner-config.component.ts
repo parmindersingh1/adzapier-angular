@@ -1,17 +1,23 @@
 import {Component, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
-import {SelectItemGroup} from 'primeng/api';
 import {DomSanitizer, SafeResourceUrl} from '@angular/platform-browser';
 import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
 import {FormBuilder, FormGroup} from '@angular/forms';
+import {
+  CcpaCounties,
+  DarkTheme, DefaultRegulation,
+  DisplayFrequency,
+  GdprCountries,
+  LanguageList,
+  LightTheme
+} from './bannerConfigDefaultValue.constant';
+import {NgxUiLoaderService} from 'ngx-ui-loader';
+import {CookieBannerService} from '../../../_services/cookie-banner.service';
 
-interface City {
-  name: string,
-  code: string
-}
 interface Country {
   name: string,
   code: string
 }
+
 @Component({
   selector: 'app-banner-config',
   templateUrl: './banner-config.component.html',
@@ -22,106 +28,38 @@ interface Country {
 export class BannerConfigComponent implements OnInit, OnDestroy {
   step = 1;
   selectedCountry: any;
-  countries: any[];
+  countries: any[] = CcpaCounties;
   selectedCountries1: Country[];
-  gdprCountries: Country[];
-  selectedValue: string = 'val1';
-  bannerContentDropdownStep = 'cookieNotice';
+  gdprCountries: Country[] = GdprCountries;
+  showDropDownValue = 'cookieNotice';
   url: SafeResourceUrl = '';
-  form!: FormGroup;
-  testColor = '';
-  themeType = 'dark';
-  languages =  [
-    {
-      title: 'English (United States)',
-      code: 'en-US',
-      countryFlag: 'us',
-    },
-    {
-      title: 'Italian (Italy)',
-      code: 'it-IT',
-      countryFlag: 'it',
-    },
-    {
-      title: 'Chinese (PRC)',
-      code: 'zh-CN',
-      countryFlag: 'cn',
-    },
-    {
-      title: 'German (Standard)',
-      code: 'de-DE',
-      countryFlag: 'de',
-    },
-    {
-      title: 'Russian (Russia)',
-      code: 'ru-RU',
-      countryFlag: 'ru',
-    },
-    {
-      title: 'French (France)',
-      code: 'fr-FR',
-      countryFlag: 'fr',
-    },
-    {
-      title: 'Portuguese (Portugal)',
-      code: 'pt-PT',
-      countryFlag: 'pt',
-    },
-    {
-      title: 'Spanish (Spain)',
-      code: 'es-ES',
-      countryFlag: 'es',
-    },
-    {
-      title: 'Dutch (Standard)',
-      code: 'nl-NL',
-      countryFlag: 'nl',
-    }
-
-  ];
-  movies = [
-    'Episode I - The Phantom Menace',
-    'Episode II - Attack of the Clones',
-    'Episode III - Revenge of the Sith',
-    'Episode IV - A New Hope',
-    'Episode V - The Empire Strikes Back',
-    'Episode VI - Return of the Jedi',
-    'Episode VII - The Force Awakens',
-    'Episode VIII - The Last Jedi',
-    'Episode IX – The Rise of Skywalker'
-  ];
-
+  BannerConfigurationForm!: FormGroup;
+  themeType = 'light';
+  languages = LanguageList;
+  selectedLanguage = ['en-US'];
+  currentBannerLayer = 'banner';
+  purposesList = [];
+  showCustomColor = false;
+  displayFrequency = DisplayFrequency;
+  defaultRegulation = DefaultRegulation;
   constructor(private sanitizer: DomSanitizer,
               private formBuilder: FormBuilder,
-              ) { }
-
-  ngOnInit() {
-    this.onInitForm();
-    this.url = this.sanitizer.bypassSecurityTrustResourceUrl('https://phonetechtalk.com');
-
+              private loading: NgxUiLoaderService,
+              private cookieBannerService: CookieBannerService
+  ) {
     const element = document.getElementById('main');
     element.classList.remove('container');
     element.classList.remove('site-content');
     element.classList.add('container-fluid');
     element.style.padding = '0px';
     element.style.margin = '0px';
-    this.countries = [
-      {name: 'United States', code: 'US'},
-      {name: 'California', code: 'US'}
-    ];
+  }
 
-    this.gdprCountries = [
-      {name: 'Australia', code: 'AU'},
-      {name: 'Brazil', code: 'BR'},
-      {name: 'China', code: 'CN'},
-      {name: 'Egypt', code: 'EG'},
-      {name: 'France', code: 'FR'},
-      {name: 'Germany', code: 'DE'},
-      {name: 'India', code: 'IN'},
-      {name: 'Japan', code: 'JP'},
-      {name: 'Spain', code: 'ES'},
-      {name: 'United States', code: 'US'}
-    ];
+  ngOnInit() {
+    this.onInitForm();
+    this.onGetGlobleLangData();
+    this.onSetDefaultStyle(LightTheme);
+    // this.url = this.sanitizer.bypassSecurityTrustResourceUrl('https://phonetechtalk.com');
   }
 
   ngOnDestroy() {
@@ -132,27 +70,172 @@ export class BannerConfigComponent implements OnInit, OnDestroy {
     element.classList.add('container');
     element.classList.add('site-content');
   }
+
   onInitForm() {
-    this.form = this.formBuilder.group({
-      title: [''],
+    this.BannerConfigurationForm = this.formBuilder.group({
+      // Config
+      AllowGDPR: [true],
+      AllowCCPA: [true],
+      AllowGENERIC: [true],
+      GdprCountries: [],
+      EnableIAB: [false],
+      GoogleVendors: [false],
+      GdprGlobal: [false],
+      CCPATarget: [],
+      CCPAGlobal: [false],
+      GenericGlobal: [false],
+      // Advance Config
+      DefaultRegulation: ['generic'],
+      CookieBlocking: [false],
+      AllowPurposeByDefault: [true],
+      ShowWatermark: [true],
+      ShowBadge: [true],
+      MuteBanner: [false],
+      // Language
+      DefaultLanguage: ['en-US'],
+      // Banner Content
+      BannerTitle: [''],
+      BannerDescription: [''],
+      BannerGDPRDescription2: [''],
+      BannerPrivacyText: [''],
+      BannerPrivacyLink: [''],
+      BannerAcceptAllText: [''],
+      BannerPreferenceText: [''],
+      BannerDisableAllText: [''],
+      BannerDoNotSellText: [''],
+      // Preference Content
+      PreferencePurposeGdprDescriptionText: [''],
+      PreferenceVendorGdprDescriptionText: [''],
+      PreferencePurposeCcpaAndGenericDescriptionText: [''],
+      PreferencePrivacyCcpaAndGenericDescriptionText: [''],
+      PreferenceAcceptAllText: [''],
+      PreferenceSaveMyChoiceText: [''],
+      PreferenceDisableAllText: [''],
+      PreferenceDoNotSellMyDataText: [''],
+      // Banner Color
+      BannerCookieNoticeBackgroundColor: [''],
+      BannerCookieNoticeTextColor: [''],
+      BannerCookieNoticeBorderColor: [''],
+      BannerAcceptAllBackgroundColor: [''],
+      BannerAcceptAllTextColor: [''],
+      BannerPreferenceBackgroundColor: [''],
+      BannerPreferenceTextColor: [''],
+      BannerDisableAllBackgroundColor: [''],
+      BannerDisableAllTextColor: [''],
+      BannerDoNotSellMyDataBackgroundColor: [''],
+      BannerDoNotSellMyDataTextColor: [''],
+      // Preference Colors
+      PreferenceBackgroundColor: [''],
+      PreferenceTextColor: [''],
+      PreferencePurposeBackgroundColor: [''],
+      PreferencePurposeTextColor: [''],
+      PreferenceSwitchColor: [''],
+      PreferenceAcceptAllBackgroundColor: [''],
+      PreferenceAcceptAllTextColor: [''],
+      PreferenceSaveMyChoiceBackgroundColor: [''],
+      PreferenceSaveMyChoiceTextColor: [''],
+      PreferenceDisableAllBackgroundColor: [''],
+      PreferenceDisableAllTextColor: [''],
+      PreferenceDoNotSellBackgroundColor: [''],
+      PreferenceDoNotSellTextColor: [''],
+      // Display Frequency
+      DisplayPartialConsent: [24],
+      DisplayPartialConsentType: ['hours'],
+      DisplayRejectAllConsent: [2],
+      DisplayRejectAllConsentType: ['days'],
+      DisplayClosedConsent: [10],
+      DisplayClosedConsentType: ['pageViews'],
+      // Other
+      LivePreviewType: ['gdpr']
     });
-   console.log('fasdfas',  this.form.value.title)
   }
+
+  onGetGlobleLangData() {
+    this.loading.start();
+    this.cookieBannerService.GetGlobleLangData('en-US').subscribe(res => {
+      this.loading.stopAll();
+      // this.languageData = res;
+      this.BannerConfigurationForm.markAsPristine();
+      this.onSetDefaultContent(res);
+    }, error => {
+      this.loading.stopAll();
+      alert('Error ::: Unable to Load Language');
+    });
+  }
+
+  onSetDefaultContent(langData) {
+    const LANG_CONFIG = langData;
+    this.BannerConfigurationForm.patchValue({
+      // Banner
+      BannerTitle: LANG_CONFIG.CONFIG.BANNER.TITLE,
+      BannerDescription: LANG_CONFIG.CONFIG.BANNER.DESCRIPTION,
+      BannerGDPRDescription2: LANG_CONFIG.CONFIG.BANNER.GDPR_PRIVACY_DESC,
+      BannerPrivacyText: LANG_CONFIG.CONFIG.BANNER.PRIVACY,
+      BannerPrivacyLink: [''],
+      BannerAcceptAllText: LANG_CONFIG.CONFIG.BANNER.ACCEPT_ALL_BTN,
+      BannerPreferenceText: LANG_CONFIG.CONFIG.BANNER.PRIVACY_SETTINGS_BTN,
+      BannerDisableAllText: LANG_CONFIG.CONFIG.BANNER.DISABLE_ALL_BTN,
+      BannerDoNotSellText: LANG_CONFIG.CONFIG.BANNER.DO_NOT_SELL_BTN,
+      // Preference Content
+      PreferencePurposeGdprDescriptionText: LANG_CONFIG.CONFIG.POPUP.GDPR_PURPOSES_DESC,
+      PreferenceVendorGdprDescriptionText: LANG_CONFIG.CONFIG.POPUP.GDPR_VENDORS_DESC,
+      PreferencePurposeCcpaAndGenericDescriptionText: LANG_CONFIG.CONFIG.POPUP.CCPA_AND_GENERIC_PURPOSES_DESC,
+      PreferencePrivacyCcpaAndGenericDescriptionText: LANG_CONFIG.CONFIG.POPUP.CCPA_AND_GENERIC_PRIVACY_INFO_DESCRIPTION,
+      PreferenceAcceptAllText: LANG_CONFIG.CONFIG.POPUP.ACCEPT_ALL_BTN,
+      PreferenceSaveMyChoiceText: LANG_CONFIG.CONFIG.POPUP.SAVE_MY_CHOICE_BTN,
+      PreferenceDisableAllText: LANG_CONFIG.CONFIG.POPUP.DISABLE_ALL_BTN,
+      PreferenceDoNotSellMyDataText: LANG_CONFIG.CONFIG.POPUP.DO_NOT_SELL_BTN,
+
+      DisplayPartialConsentType: 'hours',
+      DisplayRejectAllConsentType: 'days',
+      DisplayClosedConsentType: 'pageViews',
+    });
+    this.purposesList = LANG_CONFIG.PURPOSES;
+  }
+
+  onSetLanguage(e, langCode) {
+    const isChecked = e.checked;
+    const selectedLanguage = [...this.selectedLanguage];
+    if (isChecked) {
+      selectedLanguage.push(langCode);
+    } else {
+      const index = this.selectedLanguage.indexOf(langCode);
+      if (index > -1) {
+        selectedLanguage.splice(index, 1);
+      }
+    }
+    this.selectedLanguage = selectedLanguage;
+  }
+
   onSelectStep(step) {
     this.step = step;
   }
+
   onOpenDropDown(step) {
-    this.bannerContentDropdownStep =  this.bannerContentDropdownStep === step ? '' : step;
+    this.showDropDownValue = this.showDropDownValue === step ? '' : step;
   }
+
   onSelectThemeType(type) {
     this.themeType = type;
+    if (type === 'dark') {
+      this.onSetDefaultStyle(DarkTheme);
+    } else if (type === 'light') {
+      this.onSetDefaultStyle(LightTheme);
+    }
+    if (type === 'custom') {
+      this.showCustomColor = true;
+    } else {
+      this.showCustomColor = false;
+    }
   }
+
   drop(event: CdkDragDrop<string[]>) {
     console.log('eventData', event)
-    moveItemInArray(this.movies, event.previousIndex, event.currentIndex);
+    moveItemInArray(this.purposesList, event.previousIndex, event.currentIndex);
   }
 
   onSubmit() {
+    console.log('formData', this.BannerConfigurationForm.value)
     // this.submitted = true;
     //
     // // reset alerts on submit
@@ -171,4 +254,42 @@ export class BannerConfigComponent implements OnInit, OnDestroy {
     // }
   }
 
+  onChangeBannerLayer(e) {
+    this.currentBannerLayer = e;
+  }
+
+  onSetDefaultStyle(theme) {
+    const ThemeColor = theme;
+    this.BannerConfigurationForm.patchValue({
+      // Banner Color
+      BannerCookieNoticeBackgroundColor: ThemeColor.BannerCookieNoticeBackgroundColor,
+      BannerCookieNoticeTextColor: ThemeColor.BannerCookieNoticeTextColor,
+      BannerCookieNoticeBorderColor: ThemeColor.BannerCookieNoticeBorderColor,
+      BannerAcceptAllBackgroundColor: ThemeColor.BannerAcceptAllBackgroundColor,
+      BannerAcceptAllTextColor: ThemeColor.BannerAcceptAllText,
+      BannerPreferenceBackgroundColor: ThemeColor.BannerPreferenceBackgroundColor,
+      BannerPreferenceTextColor: ThemeColor.BannerPreferenceTextColor,
+      BannerDisableAllBackgroundColor: ThemeColor.BannerDisableAllBackgroundColor,
+      BannerDisableAllTextColor: ThemeColor.BannerDisableAllTextColor,
+      BannerDoNotSellMyDataBackgroundColor: ThemeColor.BannerDoNotSellMyDataBackgroundColor,
+      BannerDoNotSellMyDataTextColor: ThemeColor.BannerDoNotSellMyDataTextColor,
+      // Preference Colors
+      PreferenceBackgroundColor: ThemeColor.PreferenceBackgroundColor,
+      PreferenceTextColor: ThemeColor.PreferenceTextColor,
+      PreferencePurposeBackgroundColor: ThemeColor.PreferencePurposeBackgroundColor,
+      PreferencePurposeTextColor: ThemeColor.PreferencePurposeTextColor,
+      PreferenceSwitchColor: ThemeColor.PreferenceSwitchColor,
+      PreferenceAcceptAllBackgroundColor: ThemeColor.PreferenceAcceptAllBackgroundColor,
+      PreferenceAcceptAllTextColor: ThemeColor.PreferenceAcceptAllTextColor,
+      PreferenceSaveMyChoiceBackgroundColor: ThemeColor.PreferenceSaveMyChoiceBackgroundColor,
+      PreferenceSaveMyChoiceTextColor: ThemeColor.PreferenceSaveMyChoiceTextColor,
+      PreferenceDisableAllBackgroundColor: ThemeColor.PreferenceDisableAllBackgroundColor,
+      PreferenceDisableAllTextColor: ThemeColor.PreferenceDisableAllTextColor,
+      PreferenceDoNotSellBackgroundColor: ThemeColor.PreferenceDoNotSellBackgroundColor,
+      PreferenceDoNotSellTextColor: ThemeColor.PreferenceDoNotSellTextColor
+    });
+  }
+  onChangeBannerType(type){
+
+  }
 }

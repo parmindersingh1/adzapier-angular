@@ -1,0 +1,79 @@
+.p-tabview .p-tabview-nav {
+  align-items: center!important;
+  justify-content: center!important;
+  padding-left: 0!important;
+}
+
+.card {
+  width: 700px;
+  height: 600px;
+  margin-left: 30%;
+  margin-top: 4%;
+  box-shadow: 0 -1px 10px 0 rgb(172 171 171 / 30%);
+}
+
+.purpose-body {
+  padding: 10px;
+  background: #fafafa;
+  border: 1px solid #f0f0f0;
+}
+
+.purpose-text{
+  font-weight: 600;
+  color: #1b365d;
+  font-size: 15px;
+}
+
+.preference-wrap{
+  overflow: scroll;
+  overflow-x: hidden;
+  min-height: 514px;
+  max-height: 514px;
+}
+.purpose-body {
+  cursor: pointer;
+}
+.donotsellbtn{
+  width: 48%
+}
+.aceept-all-btn{
+  width: 48%
+}
+.footer-body{
+  border-top: 1px solid #f0f0f0;
+}
+.logo{
+  color: rgb(113, 221, 233);
+}
+.power-by-tx{
+  color: gray;
+  font-size: 12px !important;
+}
+.gdpr-disable{
+  width: 30%
+}
+
+.gdpr-save-my-choice{
+  width: 30%
+}
+
+.gdpr-accept-all{
+  width: 30%
+}
+
+
+.radiobtn-wrapper{
+  display: flex;
+  justify-content: space-around;
+  flex-direction: row;
+  margin: 0 auto;
+}
+
+.btn-group-action {
+  text-align: center;
+  border-bottom: 1px solid lightgray;
+}
+.btn-group-action button {
+  color: #555;
+  font-weight: 600;
+}

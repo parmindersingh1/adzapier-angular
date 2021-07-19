@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, Output, EventEmitter} from '@angular/core';
 
 @Component({
   selector: 'app-az-banner',
@@ -8,9 +8,12 @@ import {Component, Input, OnInit} from '@angular/core';
 export class AzBannerComponent implements OnInit {
   bannerType = 'generic';
   @Input('formData') formData;
+  @Output('currentBannerLayer') currentBannerLayer = new EventEmitter();
   constructor() { }
 
   ngOnInit(): void {
   }
-
+  onOpenPreference() {
+    this.currentBannerLayer.emit('preference');
+  }
 }

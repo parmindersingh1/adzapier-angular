@@ -132,6 +132,21 @@ width: 100%;
 .az-dropdown span{
   float: right;
 }
+
+.az-purpose-dropdown{
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 600;
+  color: #1b365d;
+  width: 90%;
+  padding-top: 20px;
+  padding-left: 12px;
+}
+.az-purpose-dropdown span{
+  float: right;
+}
+
+
 .p-field {
   margin-bottom: 1rem;
 }
@@ -298,3 +313,18 @@ width: 100%;
   color: #1b365d;
 }
 
+
+.live-preview-type{
+  color: #1b365d;
+  font-weight: 600;
+  font-size: 18px;
+  padding-top: 6px;
+  margin-bottom: 0px;
+}
+
+.preview-radio{
+  vertical-align: inherit;
+}
+.preview-border-left{
+  border-left: 3px solid #1b365d;
+}

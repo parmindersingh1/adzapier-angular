@@ -13,987 +13,1156 @@
     </div>
   </div> <!-- breadcrumb -->
 
-<!--  <form [formGroup]="form" (ngSubmit)="onSubmit()">-->
+  <form [formGroup]="BannerConfigurationForm" (ngSubmit)="onSubmit()">
 
-  <div class="card title-head">
-  <div class="card-header">
-    <div class="row">
-      <h5 class="main-heading col-md-9">Banner Configuration 	</h5>
-      <div class="col-md-3 text-right">
-        <button pButton pRipple type="button" label="Save" class="p-button-warning mr-2"></button>
-        <button pButton pRipple type="button" label="Publish"></button>
+    <div class="card title-head">
+      <div class="card-header">
+        <div class="row">
+          <h5 class="main-heading col-md-4">Banner Configuration </h5>
+          <div class="col-md-6 preview-border-left">
+            <p class="live-preview-type">Live Preview :          <span>
+             <span class="tx-16 pl-2 pr-2" *ngIf="BannerConfigurationForm.value.AllowGDPR" > GDPR :   <p-radioButton class="preview-radio" formControlName="LivePreviewType" value="gdpr"></p-radioButton></span>
+             <span class="tx-16 pl-2 pr-2"  *ngIf="BannerConfigurationForm.value.AllowCCPA">       CCPA :    <p-radioButton    class="preview-radio"  formControlName="LivePreviewType"  value="ccpa"></p-radioButton></span>
+             <span class="tx-16 pl-2 pr-2"  *ngIf="BannerConfigurationForm.value.AllowGENERIC" >       GENERIC :  <p-radioButton  class="preview-radio"  formControlName="LivePreviewType"   value="generic"></p-radioButton></span>
+              </span>
+            </p>
+          </div>
+          <div class="col-md-2 text-right">
+            <button pButton pRipple type="button" label="Save" class="p-button-warning mr-2"></button>
+            <button pButton pRipple type="submit" label="Publish"></button>
 
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</div>
-  <div class="row row-cols-group">
-    <div class="col-md-1 border-right">
-      <div class="row step-bg" (click)="onSelectStep(1)" [ngClass]="{'step-active' : step === 1}">
-        <p class="col-md-12  p-0 text-center"><i class="fas fa-cogs tx-35"></i></p>
-        <p class="col-md-12 p-0 text-center tx-14 font-weight-bold">Config</p>
+    <div class="row row-cols-group">
+      <div class="col-md-1 border-right">
+        <div class="row step-bg" (click)="onSelectStep(1)" [ngClass]="{'step-active' : step === 1}">
+          <p class="col-md-12  p-0 text-center"><i class="fas fa-cogs tx-35"></i></p>
+          <p class="col-md-12 p-0 text-center tx-14 font-weight-bold">Config</p>
+        </div>
+        <div class="row step-bg" (click)="onSelectStep(2)" [ngClass]="{'step-active' : step === 2}">
+          <p class="col-md-12  p-0 text-center"><i class="fas fa-language tx-35"></i></p>
+          <p class="col-md-12 p-0 text-center tx-14 font-weight-bold">Language</p>
+        </div>
+        <div class="row step-bg" (click)="onSelectStep(3)" [ngClass]="{'step-active' : step === 3}">
+          <p class="col-md-12  p-0 text-center"><i class="fas fa-file-alt tx-35"></i></p>
+          <p class="col-md-12 p-0 text-center tx-14 font-weight-bold">Content</p>
+        </div>
+        <div class="row step-bg" (click)="onSelectStep(4)" [ngClass]="{'step-active' : step === 4}">
+          <p class="col-md-12  p-0 text-center ">
+            <i class="fas fa-fill-drip tx-35"></i>
+          </p>
+          <p class="col-md-12 p-0 text-center tx-14 font-weight-bold"> Layout</p>
+        </div>
+        <div class="row step-bg" (click)="onSelectStep(5)" [ngClass]="{'step-active' : step === 5}">
+          <p class="col-md-12  p-0 text-center"><i class="fas fa-tools tx-35"></i></p>
+          <p class="col-md-12 p-0 text-center tx-14 font-weight-bold">Purposes <br/> Preferences</p>
+        </div>
+        <div class="row step-bg" (click)="onSelectStep(6)" [ngClass]="{'step-active' : step === 6}">
+          <p class="col-md-12  p-0 text-center"><i class="fas fa-tv tx-35"></i></p>
+          <p class="col-md-12 p-0 text-center tx-14 font-weight-bold">Display <br/> Frequency</p>
+        </div>
       </div>
-      <div class="row step-bg" (click)="onSelectStep(2)" [ngClass]="{'step-active' : step === 2}">
-        <p class="col-md-12  p-0 text-center"><i class="fas fa-language tx-35"></i></p>
-        <p class="col-md-12 p-0 text-center tx-14 font-weight-bold">Language</p>
-      </div>
-      <div class="row step-bg" (click)="onSelectStep(3)" [ngClass]="{'step-active' : step === 3}">
-        <p class="col-md-12  p-0 text-center"><i class="fas fa-file-alt tx-35"></i></p>
-        <p class="col-md-12 p-0 text-center tx-14 font-weight-bold">Content</p>
-      </div>
-      <div class="row step-bg" (click)="onSelectStep(4)" [ngClass]="{'step-active' : step === 4}">
-        <p class="col-md-12  p-0 text-center ">
-          <i class="fas fa-fill-drip tx-35"></i>
-        </p>
-        <p class="col-md-12 p-0 text-center tx-14 font-weight-bold"> Layout</p>
-      </div>
-      <div class="row step-bg" (click)="onSelectStep(5)" [ngClass]="{'step-active' : step === 5}">
-        <p class="col-md-12  p-0 text-center"><i class="fas fa-tools tx-35"></i></p>
-        <p class="col-md-12 p-0 text-center tx-14 font-weight-bold">Purposes <br/> Preferences</p>
-      </div>
-      <div class="row step-bg" (click)="onSelectStep(6)" [ngClass]="{'step-active' : step === 6}">
-        <p class="col-md-12  p-0 text-center"><i class="fas fa-tv tx-35"></i></p>
-        <p class="col-md-12 p-0 text-center tx-14 font-weight-bold">Display <br/> Frequency</p>
-      </div>
-    </div>
-    <div class="col-md-11 p-0">
-      <p-splitter [style]="{'height': '650px'}" [panelSizes]="[30, 80]" [minSizes]="[5, 0]" stateStorage="session"
-                  styleClass="p-mb-5">
+      <div class="col-md-11 p-0">
+        <p-splitter [style]="{'height': '650px'}" [panelSizes]="[30, 80]" [minSizes]="[5, 0]" stateStorage="session"
+                    styleClass="p-mb-5">
 
-        <ng-template pTemplate>
-          <div class="steppers">
-            <div class="step-1 config-wrapper" *ngIf="step === 1">
-              <div class="allow-regulations  mt-3">
-<!--                <h5 class="col-md-12 ml-1 mb-3 head-tx">Allow Regulations</h5>-->
-                <p-divider align="left" type="dashed">
-                  <b>Allow Regulations</b>
-                </p-divider>
-                <div class="checkbox-group row ml-3">
-                  <div class="col-md-12 mb-2">
-                    <div class="p-field-checkbox row">
-                      <p-checkbox name="group1" styleClass="checkbox" class="col-md-2" value="New York"
-                                  inputId="gdpr"></p-checkbox>
-                      <label class="col-md-10 mb-0 label-tx" for="gdpr">GDPR</label>
+          <ng-template pTemplate>
+            <div class="steppers">
+              <div class="step-1 config-wrapper" [ngStyle]="{'display' : step === 1 ? 'block' : 'none'}">
+                <div class="allow-regulations  mt-3">
+                  <!--                <h5 class="col-md-12 ml-1 mb-3 head-tx">Allow Regulations</h5>-->
+                  <p-divider align="left" type="dashed">
+                    <b>Allow Regulations</b>
+                  </p-divider>
+                  <div class="checkbox-group row ml-3">
+                    <div class="col-md-12 mb-2">
+                      <div class="p-field-checkbox row">
+                        <p-checkbox [formControl]="BannerConfigurationForm.controls['AllowGDPR']" class="col-md-2"
+                                    [binary]="true"
+                        ></p-checkbox>
+                        <label class="col-md-10 mb-0 label-tx" for="gdpr">GDPR</label>
+                      </div>
+                    </div>
+                    <div class="col-md-12 mb-2">
+                      <div class="p-field-checkbox row">
+                        <p-checkbox name="group1" class="col-md-2"
+                                    [formControl]="BannerConfigurationForm.controls['AllowCCPA']"
+                                    [binary]="true" inputId="ccpa"></p-checkbox>
+                        <label class="col-md-10 mb-0  label-tx" for="ccpa">CCPA</label>
+                      </div>
+                    </div>
+                    <div class="col-md-12 mb-2">
+                      <div class="p-field-checkbox row">
+                        <p-checkbox name="group1" [formControl]="BannerConfigurationForm.controls['AllowGENERIC']"
+                                    [binary]="true" class="col-md-2" inputId="generic"></p-checkbox>
+                        <label class="col-md-10 mb-0 label-tx" for="gdpr">GENERIC</label>
+                      </div>
                     </div>
                   </div>
-                  <div class="col-md-12 mb-2">
-                    <div class="p-field-checkbox row">
-                      <p-checkbox name="group1" class="col-md-2" value="New York" inputId="ccpa"></p-checkbox>
-                      <label class="col-md-10 mb-0  label-tx" for="ccpa">CCPA</label>
+                </div>
+
+                <div class="regulations-config mt-3">
+                  <!--                <h5 class="col-md-12 ml-1 mb-3 head-tx">Regulations Configurations</h5>-->
+                  <p-divider align="center" type="dashed">
+                    <b>Regulations Configurations</b>
+                  </p-divider>
+
+                  <div class="gdpr-regulations ml-4"
+                       [ngStyle]="{'display' : BannerConfigurationForm.value.AllowGDPR ? 'block' : 'none'}">
+                    <p-divider align="left" type="dashed">
+                      <b>GDPR</b>
+                    </p-divider>
+                    <!--                    GDPR Target-->
+                    <div class="row">
+                      <div class="col-md-4">
+                        <p class=" mb-0  input-label pt-2" for="ccpa_target">GDPR Target</p>
+                      </div>
+                      <div class="col-md-8">
+                        <p-multiSelect [options]="gdprCountries" formControlName="GdprCountries"
+                                       defaultLabel="Select a Country" optionLabel="name" class="multiselect-custom">
+                          <ng-template let-value pTemplate="selectedItems">
+                            <div class="country-item country-item-value" *ngFor="let option of selectedCountries1">
+                              <img src="assets/imgs/icons/flag_placeholder.png"
+                                   [class]="'flag flag-' + option.code.toLowerCase()"/>
+                              <div>{{option.name}}</div>
+                            </div>
+                            <div *ngIf="!selectedCountries1 || selectedCountries1.length === 0"
+                                 class="country-placeholder">
+                              Select Countries
+                            </div>
+                          </ng-template>
+                          <ng-template let-country pTemplate="item">
+                            <div class="country-item">
+                              <img src="assets/imgs/icons/flag_placeholder.png"
+                                   [class]="'flag flag-gdpr flag-' + country.code.toLowerCase()"/>
+                              <div>{{country.name}}</div>
+                            </div>
+                          </ng-template>
+                        </p-multiSelect>
+                      </div>
                     </div>
+
+
+                    <!--                  Enable IAB-->
+                    <div class="row mt-3">
+                      <div class="col-md-4">
+                        <p class=" mb-0  input-label pt-2">Enable IAB</p>
+                      </div>
+                      <div class="col-md-8">
+                        <p-inputSwitch formControlName="EnableIAB"></p-inputSwitch>
+                      </div>
+                    </div>
+
+                    <!--                  Google Vendors -->
+                    <div class="row mt-3">
+                      <div class="col-md-4">
+                        <p class=" mb-0  input-label pt-2">Google Vendors</p>
+                      </div>
+                      <div class="col-md-8">
+                        <p-inputSwitch formControlName="GoogleVendors"></p-inputSwitch>
+                      </div>
+                    </div>
+
+                    <!--                  GDPR Global-->
+                    <div class="row mt-3">
+                      <div class="col-md-4">
+                        <p class=" mb-0  input-label pt-2">GDPR Global</p>
+                      </div>
+                      <div class="col-md-8">
+                        <p-inputSwitch formControlName="GdprGlobal"></p-inputSwitch>
+                      </div>
+                    </div>
+
                   </div>
-                  <div class="col-md-12 mb-2">
-                    <div class="p-field-checkbox row">
-                      <p-checkbox name="group1" class="col-md-2" value="New York" inputId="generic"></p-checkbox>
-                      <label class="col-md-10 mb-0 label-tx" for="gdpr">GENERIC</label>
+                  <div class="ccpa-regulations ml-4"
+                       [ngStyle]="{'display' : BannerConfigurationForm.value.AllowCCPA ? 'block' : 'none'}">
+                    <p-divider align="left" type="dashed">
+                      <b>CCPA</b>
+                    </p-divider>
+                    <!--                  CCPA Target-->
+                    <div class="row">
+                      <div class="col-md-4">
+                        <p class=" mb-0  input-label pt-2" for="ccpa_target">CCPA Target</p>
+                      </div>
+                      <div class="col-md-8">
+                        <p-dropdown id="ccpa_target" [options]="countries" formControlName="CCPATarget"
+                                    optionLabel="name" [showClear]="true" placeholder="Select a Country">
+                          <ng-template pTemplate="selectedItem">
+                            <div class="country-item country-item-value row" *ngIf="selectedCountry">
+                              <img src="assets/imgs/icons/flag_placeholder.png" style="height: 20px"
+                                   [class]="'flag ml-2  col-md-2 flag-' + selectedCountry.code.toLowerCase()"/>
+                              <div class="col-md-9">{{selectedCountry.name}}</div>
+                            </div>
+                          </ng-template>
+                          <ng-template let-country pTemplate="item">
+                            <div class="country-item row">
+                              <img src="assets/imgs/icons/flag_placeholder.png" style="height: 20px"
+                                   [class]="'flag col-md-2 flag-' + country.code.toLowerCase()"/>
+                              <div class="col-md-9">{{country.name}}</div>
+                            </div>
+                          </ng-template>
+                        </p-dropdown>
+                      </div>
                     </div>
+                    <!--                  CCPA Global-->
+                    <div class="row mt-3">
+                      <div class="col-md-4">
+                        <p class=" mb-0  input-label pt-2" for="ccpa_target">CCPA Global</p>
+                      </div>
+                      <div class="col-md-8">
+                        <p-inputSwitch formControlName="CCPAGlobal"></p-inputSwitch>
+                      </div>
+                    </div>
+
+
+                  </div>
+                  <div class="generic-regulations ml-4"
+                       [ngStyle]="{'display' : BannerConfigurationForm.value.AllowGENERIC ? 'block' : 'none'}">
+                    <p-divider align="left" type="dashed">
+                      <b>GENERIC</b>
+                    </p-divider>
+                    <!--                  GENERIC Global-->
+                    <div class="row mt-3">
+                      <div class="col-md-4">
+                        <p class=" mb-0  input-label pt-2">GENERIC Global</p>
+                      </div>
+                      <div class="col-md-8">
+                        <p-inputSwitch formControlName="GenericGlobal"></p-inputSwitch>
+                      </div>
+                    </div>
+
+
+                  </div>
+                  <div class="additional-feature ml-4">
+                    <p-divider align="left" type="dashed">
+                      <b>Advanced Features</b>
+                    </p-divider>
+
+                    <div class="row mt-3">
+                      <div class="col-md-4">
+                        <p class=" mb-0  input-label pt-2" >Default Regulation</p>
+                      </div>
+                      <div class="col-md-8">
+                        <p-dropdown class="col-md-6 p-0 m-0"  formControlName="DefaultRegulation"
+                                    [options]="defaultRegulation" optionLabel="name" optionValue="code"></p-dropdown>
+                      </div>
+                    </div>
+
+                    <div class="row mt-3">
+                      <div class="col-md-4">
+                        <p class=" mb-0  input-label pt-2">Cookie Blocking</p>
+                      </div>
+                      <div class="col-md-8">
+                        <p-inputSwitch formControlName="CookieBlocking"></p-inputSwitch>
+                      </div>
+                    </div>
+
+
+                    <div class="row mt-3">
+                        <div class="col-md-4">
+                          <p class=" mb-0  input-label pt-2" >Allow Purposes By Default</p>
+                        </div>
+                        <div class="col-md-8">
+                          <p-inputSwitch formControlName="AllowPurposeByDefault"></p-inputSwitch>
+                        </div>
+                      </div>
+
+                    <div class="row mt-3">
+                      <div class="col-md-4">
+                        <p class=" mb-0  input-label pt-2" >Show Watermark</p>
+                      </div>
+                      <div class="col-md-8">
+                        <p-inputSwitch formControlName="ShowWatermark"></p-inputSwitch>
+                      </div>
+                    </div>
+
+                    <div class="row mt-3">
+                      <div class="col-md-4">
+                        <p class=" mb-0  input-label pt-2" >Show Badge</p>
+                      </div>
+                      <div class="col-md-8">
+                        <p-inputSwitch formControlName="ShowBadge"></p-inputSwitch>
+                      </div>
+                    </div>
+
+                    <div class="row mt-3">
+                      <div class="col-md-4">
+                        <p class=" mb-0  input-label pt-2" >Mute Banner (1 Layer)</p>
+                      </div>
+                      <div class="col-md-8">
+                        <p-inputSwitch formControlName="MuteBanner"></p-inputSwitch>
+                      </div>
+                    </div>
+
+
                   </div>
                 </div>
               </div>
-
-              <div class="regulations-config mt-3">
-<!--                <h5 class="col-md-12 ml-1 mb-3 head-tx">Regulations Configurations</h5>-->
-                <p-divider align="center" type="dashed">
-                  <b>Regulations Configurations</b>
-                </p-divider>
+              <div class="step-2  lang-config" [ngStyle]="{'display' : step === 2 ? 'block' : 'none'}">
                 <p-divider align="left" type="dashed">
-                  <b>GDPR</b>
+                  <b>Manage Language</b>
                 </p-divider>
-                <div class="gdpr-regulations  ml-4">
-                  <!--                    GDPR Target-->
-                  <div class="row">
-                    <div class="col-md-4">
-                      <p class=" mb-0  input-label pt-2" for="ccpa_target">GDPR Target</p>
-                    </div>
-                    <div class="col-md-8">
-                      <p-multiSelect [options]="gdprCountries" [(ngModel)]="selectedCountries1"
-                                     defaultLabel="Select a Country" optionLabel="name" class="multiselect-custom">
-                        <ng-template let-value pTemplate="selectedItems">
-                          <div class="country-item country-item-value" *ngFor="let option of selectedCountries1">
-                            <img src="assets/imgs/icons/flag_placeholder.png"
-                                 [class]="'flag flag-' + option.code.toLowerCase()"/>
-                            <div>{{option.name}}</div>
-                          </div>
-                          <div *ngIf="!selectedCountries1 || selectedCountries1.length === 0"
-                               class="country-placeholder">
-                            Select Countries
-                          </div>
-                        </ng-template>
-                        <ng-template let-country pTemplate="item">
-                          <div class="country-item">
-                            <img src="assets/imgs/icons/flag_placeholder.png"
-                                 [class]="'flag flag-gdpr flag-' + country.code.toLowerCase()"/>
-                            <div>{{country.name}}</div>
-                          </div>
-                        </ng-template>
-                      </p-multiSelect>
-                    </div>
-                  </div>
-
-
-                  <!--                  Enable IAB-->
-                  <div class="row mt-3">
-                    <div class="col-md-4">
-                      <p class=" mb-0  input-label pt-2">Enable IAB</p>
-                    </div>
-                    <div class="col-md-8">
-                      <p-inputSwitch></p-inputSwitch>
-                    </div>
-                  </div>
-
-                  <!--                  Google Vendors -->
-                  <div class="row mt-3">
-                    <div class="col-md-4">
-                      <p class=" mb-0  input-label pt-2">Google Vendors</p>
-                    </div>
-                    <div class="col-md-8">
-                      <p-inputSwitch></p-inputSwitch>
-                    </div>
-                  </div>
-
-                  <!--                  GDPR Global-->
-                  <div class="row mt-3">
-                    <div class="col-md-4">
-                      <p class=" mb-0  input-label pt-2">GDPR Global</p>
-                    </div>
-                    <div class="col-md-8">
-                      <p-inputSwitch></p-inputSwitch>
-                    </div>
-                  </div>
-
+                <div class="card">
+                  <p-table [value]="languages" styleClass="p-datatable">
+                    <ng-template pTemplate="header">
+                      <tr>
+                        <th style="width:17%">
+                          <p-checkbox name="group1" class="col-md-2"></p-checkbox>
+                        </th>
+                        <th style="width:58%">Language</th>
+                        <th style="width:5%"></th>
+                        <th style="width:20%">Default</th>
+                      </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-language>
+                      <tr>
+                        <td>
+                          <p-checkbox (onChange)="onSetLanguage($event, language.code)" binary="true"
+                                      class="col-md-2"></p-checkbox>
+                        </td>
+                        <td><img src="assets/imgs/icons/flag_placeholder.png"
+                                 [class]="'flag flag-' + language.countryFlag"/>
+                          {{language.title}}</td>
+                        <td></td>
+                        <td>
+                          <p-radioButton formControlName="DefaultLanguage" [value]="language.code"
+                          ></p-radioButton>
+                        </td>
+                      </tr>
+                    </ng-template>
+                  </p-table>
                 </div>
-                <p-divider align="left" type="dashed">
-                  <b>CCPA</b>
-                </p-divider>
-                <div class="ccpa-regulations ml-4">
-                  <!--                  CCPA Target-->
-                  <div class="row">
-                    <div class="col-md-4">
-                      <p class=" mb-0  input-label pt-2" for="ccpa_target">CCPA Target</p>
-                    </div>
-                    <div class="col-md-8">
-                      <p-dropdown id="ccpa_target" [options]="countries" [(ngModel)]="selectedCountry"
-                                  optionLabel="name" [showClear]="true" placeholder="Select a Country">
-                        <ng-template pTemplate="selectedItem">
-                          <div class="country-item country-item-value row" *ngIf="selectedCountry">
-                            <img src="assets/imgs/icons/flag_placeholder.png" style="height: 20px"
-                                 [class]="'flag ml-2  col-md-2 flag-' + selectedCountry.code.toLowerCase()"/>
-                            <div class="col-md-9">{{selectedCountry.name}}</div>
-                          </div>
-                        </ng-template>
-                        <ng-template let-country pTemplate="item">
-                          <div class="country-item row">
-                            <img src="assets/imgs/icons/flag_placeholder.png" style="height: 20px"
-                                 [class]="'flag col-md-2 flag-' + country.code.toLowerCase()"/>
-                            <div class="col-md-9">{{country.name}}</div>
-                          </div>
-                        </ng-template>
-                      </p-dropdown>
-                    </div>
-                  </div>
-                  <!--                  CCPA Global-->
-                  <div class="row mt-3">
-                    <div class="col-md-4">
-                      <p class=" mb-0  input-label pt-2" for="ccpa_target">CCPA Global</p>
-                    </div>
-                    <div class="col-md-8">
-                      <p-inputSwitch></p-inputSwitch>
-                    </div>
-                  </div>
-
-
-                </div>
-                <p-divider align="left" type="dashed">
-                  <b>GENERIC</b>
-                </p-divider>
-                <div class="generic-regulations ml-4">
-                  <!--                  GENERIC Global-->
-                  <div class="row mt-3">
-                    <div class="col-md-4">
-                      <p class=" mb-0  input-label pt-2">GENERIC Global</p>
-                    </div>
-                    <div class="col-md-8">
-                      <p-inputSwitch></p-inputSwitch>
-                    </div>
-                  </div>
-
-
-                </div>
-
-
               </div>
-            </div>
-            <div class="step-2  lang-config" *ngIf="step === 2">
-              <p-divider align="left" type="dashed">
-                <b>Manage Language</b>
-              </p-divider>
-              <div class="card">
-                <p-table [value]="languages" styleClass="p-datatable">
+              <div class="step-3 content" *ngIf="step === 3">
+                <p-divider align="left" type="dashed">
+                  <b>Content</b>
+                </p-divider>
+                <p-tabView>
+                  <p-tabPanel header="Banner">
+                    <div id="cookieNotice">
+                      <p class="az-dropdown" (click)="onOpenDropDown('cookieNotice')">Cookie Notice
+                        <span *ngIf="showDropDownValue !== 'cookieNotice'"><i
+                          class="fas fa-chevron-down"></i></span>
+                        <span *ngIf="showDropDownValue === 'cookieNotice'"><i
+                          class="fas fa-chevron-up"></i></span>
+                      </p>
+                      <p-divider></p-divider>
+                      <div class="az-input-group" *ngIf="showDropDownValue === 'cookieNotice'">
+                        <div class="p-field">
+                          <label for="title" class="input-label ">Title</label> <br/>
+                          <input formControlName="BannerTitle" type="text" class="az-input" pInputText/>
+                        </div>
 
-                  <ng-template pTemplate="header">
-                    <tr>
-                      <th style="width:17%">
-                        <p-checkbox name="group1" class="col-md-2" value="New York"></p-checkbox>
-                      </th>
-                      <th style="width:58%">Language</th>
-                      <th style="width:5%"></th>
-                      <th style="width:20%">Default</th>
-                    </tr>
-                  </ng-template>
-                  <ng-template pTemplate="body" let-language>
-                    <tr>
-                      <td>
-                        <p-checkbox name="group1" class="col-md-2" value="New York"></p-checkbox>
-                      </td>
-                      <td><img src="assets/imgs/icons/flag_placeholder.png"
-                               [class]="'flag flag-' + language.countryFlag"/>
-                        {{language.title}}</td>
-                      <td></td>
-                      <td>
-                        <p-radioButton name="lang_default" [value]="language.code"
-                                       [(ngModel)]="selectedValue"></p-radioButton>
-                      </td>
-                    </tr>
-                  </ng-template>
-                </p-table>
+                        <div class="p-field">
+                          <label for="title" class="input-label ">Description</label> <br/>
+                          <textarea pInputTextarea formControlName="BannerDescription"></textarea>
+                        </div>
+
+                        <div class="p-field">
+                          <label for="title" class="input-label ">Privacy Text</label> <br/>
+                          <input id="BannerPrivacyText" formControlName="BannerPrivacyText" type="text" class="az-input"
+                                 pInputText/>
+                        </div>
+
+                        <div class="p-field">
+                          <label for="title" class="input-label ">Link</label> <br/>
+                          <input type="text" formControlName="BannerPrivacyLink" class="az-input" pInputText/>
+                        </div>
+
+                      </div>
+                    </div>
+                    <div id="bannerButton">
+                      <p class="az-dropdown" (click)="onOpenDropDown('bannerButton')">Buttons
+                        <span *ngIf="showDropDownValue !== 'bannerButton'"><i
+                          class="fas fa-chevron-down"></i></span>
+                        <span *ngIf="showDropDownValue === 'bannerButton'"><i
+                          class="fas fa-chevron-up"></i></span>
+                      </p>
+                      <p-divider></p-divider>
+
+
+                      <div class="az-input-group" *ngIf="showDropDownValue === 'bannerButton'">
+                        <div class="p-field">
+                          <label for="title" class="input-label ">Accept All</label> <br/>
+                          <input type="text" formControlName="BannerAcceptAllText" class="az-input" pInputText/>
+                        </div>
+
+                        <div class="p-field">
+                          <label for="title" class="input-label ">Preference</label> <br/>
+                          <input type="text" formControlName="BannerPreferenceText" class="az-input" pInputText/>
+                        </div>
+
+                        <div class="p-field">
+                          <label for="title" class="input-label ">Disable All Button (Generic)</label> <br/>
+                          <input type="text" formControlName="BannerDisableAllText" class="az-input" pInputText/>
+                        </div>
+
+                        <div class="p-field">
+                          <label for="title" class="input-label ">Do No Sell My Data (CCPA)</label> <br/>
+                          <input type="text" formControlName="BannerDoNotSellText" class="az-input" pInputText/>
+                        </div>
+
+                      </div>
+                    </div>
+                  </p-tabPanel>
+                  <p-tabPanel header="Preferences">
+                    <div id="preferencePurposeAndVendors">
+                      <p class="az-dropdown" (click)="onOpenDropDown('preferencePurposeAndVendors')">Purpose & Vendor (
+                        GDPR )
+                        <span *ngIf="showDropDownValue !== 'preferencePurposeAndVendors'"><i
+                          class="fas fa-chevron-down"></i></span>
+                        <span *ngIf="showDropDownValue === 'preferencePurposeAndVendors'"><i
+                          class="fas fa-chevron-up"></i></span>
+                      </p>
+                      <p-divider></p-divider>
+
+                      <div class="az-input-group" *ngIf="showDropDownValue === 'preferencePurposeAndVendors'">
+                        <div class="p-field">
+                          <label for="title" class="input-label ">Purpose Description</label> <br/>
+                          <textarea pInputTextarea formControlName="PreferencePurposeGdprDescriptionText"></textarea>
+                        </div>
+                        <div class="p-field">
+                          <label for="title" class="input-label ">Vendor Description</label> <br/>
+                          <textarea pInputTextarea formControlName="PreferenceVendorGdprDescriptionText"></textarea>
+                        </div>
+                      </div>
+                    </div>
+
+
+                    <div id="preferencePurposeAndPrivacy">
+                      <p class="az-dropdown" (click)="onOpenDropDown('preferencePurposeAndPrivacy')">Purpose & Privacy (
+                        CCPA & GENERIC )
+                        <span *ngIf="showDropDownValue !== 'preferencePurposeAndPrivacy'"><i
+                          class="fas fa-chevron-down"></i></span>
+                        <span *ngIf="showDropDownValue === 'preferencePurposeAndPrivacy'"><i
+                          class="fas fa-chevron-up"></i></span>
+                      </p>
+                      <p-divider></p-divider>
+
+
+                      <div class="az-input-group" *ngIf="showDropDownValue === 'preferencePurposeAndPrivacy'">
+                        <div class="p-field">
+                          <label for="title" class="input-label ">Purpose Description</label> <br/>
+                          <textarea pInputTextarea
+                                    formControlName="PreferencePurposeCcpaAndGenericDescriptionText"></textarea>
+                        </div>
+                        <div class="p-field">
+                          <label for="title" class="input-label ">Privacy Description</label> <br/>
+                          <textarea pInputTextarea
+                                    formControlName="PreferencePrivacyCcpaAndGenericDescriptionText"></textarea>
+                        </div>
+                      </div>
+                    </div>
+
+
+                    <div id="preferenceButtons">
+                      <p class="az-dropdown" (click)="onOpenDropDown('preferenceButtons')">Buttons
+                        <span *ngIf="showDropDownValue !== 'preferenceButtons'"><i
+                          class="fas fa-chevron-down"></i></span>
+                        <span *ngIf="showDropDownValue === 'preferenceButtons'"><i class="fas fa-chevron-up"></i></span>
+                      </p>
+                      <p-divider></p-divider>
+                      <div class="az-input-group" *ngIf="showDropDownValue === 'preferenceButtons'">
+
+                        <!--                      <div class="p-field">-->
+                        <!--                        <label for="title" class="input-label ">Purpose</label> <br/>-->
+                        <!--                        <input  type="text" class="az-input" pInputText/>-->
+                        <!--                      </div>-->
+
+                        <div class="p-field">
+                          <label for="title" class="input-label ">Accept All</label> <br/>
+                          <input type="text" formControlName="PreferenceAcceptAllText" class="az-input" pInputText/>
+                        </div>
+
+                        <div class="p-field">
+                          <label for="title" class="input-label ">Save My Choice</label> <br/>
+                          <input type="text" formControlName="PreferenceSaveMyChoiceText" class="az-input" pInputText/>
+                        </div>
+
+                        <div class="p-field">
+                          <label for="title" class="input-label ">Disable All</label> <br/>
+                          <input type="text" formControlName="PreferenceDisableAllText" class="az-input" pInputText/>
+                        </div>
+
+                        <div class="p-field">
+                          <label for="title" class="input-label ">Do Not Sell My Data (CCPA)</label> <br/>
+                          <input type="text" formControlName="PreferenceDoNotSellMyDataText" class="az-input"
+                                 pInputText/>
+                        </div>
+                      </div>
+
+                    </div>
+
+
+                  </p-tabPanel>
+                </p-tabView>
               </div>
-            </div>
-            <div class="step-3 content" *ngIf="step === 3">
-              <p-divider align="left" type="dashed">
-                <b>Content</b>
-              </p-divider>
-              <p-tabView>
-                <p-tabPanel header="Banner">
-                  <div id="cookieNotice">
-                    <p class="az-dropdown" (click)="onOpenDropDown('cookieNotice')">Cookie Notice
-                      <span *ngIf="bannerContentDropdownStep !== 'cookieNotice'"><i
+              <div class="step-4 layout content" *ngIf="step === 4">
+                <p-divider align="left" type="dashed">
+                  <b>Layout</b>
+                </p-divider>
+                <p-tabView>
+                  <p-tabPanel header="Banner">
+                    <div class="card-theme mb-3 mt-2">
+                      <div class="theme-btn-light mt-2" (click)="onSelectThemeType('light')">
+                        <i class="fas fa-tint" style="color: #4e98fa;"></i> <span class="pl-3">Light Theme</span> <span
+                        class="allowSign" *ngIf="themeType === 'light'"><i class="fas fa-check-circle"></i></span>
+                      </div>
+                      <div class="theme-btn-dark mt-2" (click)="onSelectThemeType('dark')">
+                        <i class="fas fa-tint"></i> <span class="pl-3">Dark Theme</span>
+                        <span class="allowSign" *ngIf="themeType === 'dark'"><i class="fas fa-check-circle"></i></span>
+                      </div>
+                      <div class="theme-btn-light mt-2" (click)="onSelectThemeType('custom')">
+                        <i class="fas fa-palette"></i> <span class="pl-3">Custom Colors</span>
+                        <span class="allowSign" *ngIf="themeType === 'custom'"><i
+                          class="fas fa-check-circle"></i></span>
+                      </div>
+                    </div>
+                    <div class="banner-color-wrap mt-3" [ngStyle]="{'display' : showCustomColor ? 'block' : 'none'}">
+                      <p-divider align="left" type="dashed">
+                        <b><i class="fas fa-tools mr-2"></i> Customization  </b>
+                      </p-divider>
+                      <div id="cookieNoticeColor">
+                        <p class="az-dropdown" (click)="onOpenDropDown('cookieNoticeColor')">Cookie Notice
+                          <span *ngIf="showDropDownValue !== 'cookieNoticeColor'"><i
+                            class="fas fa-chevron-down"></i></span>
+                          <span *ngIf="showDropDownValue === 'cookieNoticeColor'"><i class="fas fa-chevron-up"></i></span>
+                        </p>
+                        <p-divider></p-divider>
+                        <div class="az-input-group" *ngIf="showDropDownValue === 'cookieNoticeColor'">
+                          <div class="row mr-0">
+                            <div class="p-field col-md-6">
+                              <label for="title" class="input-label ">Background</label> <br/>
+                              <div class="row">
+                                <p-colorPicker format="hex" class="col-md-4 pr-0"
+                                               formControlName="BannerCookieNoticeBackgroundColor"
+                                               [showTransitionOptions]="'50ms'"
+                                               [hideTransitionOptions]="'50ms'"></p-colorPicker>
+                                <input type="text" formControlName="BannerCookieNoticeBackgroundColor"
+                                       class="pl-0 col-md-8" pInputText/>
+                              </div>
+                            </div>
+                            <div class="p-field col-md-6">
+                              <label for="title" class="input-label ">Text </label> <br/>
+                              <div class="row">
+                                <p-colorPicker format="hex" class="col-md-4 pr-0" [showTransitionOptions]="'50ms'"
+                                               formControlName="BannerCookieNoticeTextColor"
+                                               [hideTransitionOptions]="'50ms'"></p-colorPicker>
+                                <input type="text" formControlName="BannerCookieNoticeTextColor" class="pl-0 col-md-8"
+                                       pInputText/>
+                              </div>
+                            </div>
+                            <div class="p-field col-md-6 mt-2">
+                              <label for="title" class="input-label ">Border</label> <br/>
+                              <div class="row">
+                                <p-colorPicker format="hex" class="col-md-4 pr-0" [showTransitionOptions]="'50ms'"
+                                               formControlName="BannerCookieNoticeBorderColor"
+                                               [hideTransitionOptions]="'50ms'"></p-colorPicker>
+                                <input type="text" formControlName="BannerCookieNoticeBorderColor" class="pl-0 col-md-8"
+                                       pInputText/>
+                              </div>
+                            </div>
+                          </div>
+
+                        </div>
+                      </div>
+
+                      <div id="acceptAllBannerButtonColor">
+                        <p class="az-dropdown" (click)="onOpenDropDown('acceptAllBannerButtonColor')"> Accept All
+                          <span *ngIf="showDropDownValue !== 'acceptAllBannerButtonColor'"><i
+                            class="fas fa-chevron-down"></i></span>
+                          <span *ngIf="showDropDownValue === 'acceptAllBannerButtonColor'"><i
+                            class="fas fa-chevron-up"></i></span>
+                        </p>
+                        <p-divider></p-divider>
+                        <div class="az-input-group" *ngIf="showDropDownValue === 'acceptAllBannerButtonColor'">
+                          <div class="row mr-0">
+                            <div class="p-field col-md-6">
+                              <label for="title" class="input-label ">Background</label> <br/>
+                              <div class="row">
+                                <p-colorPicker format="hex" class="col-md-4 pr-0"
+                                               [showTransitionOptions]="'50ms'"
+                                               formControlName="BannerAcceptAllBackgroundColor"
+                                               [hideTransitionOptions]="'50ms'"></p-colorPicker>
+                                <input type="text" class="pl-0 col-md-8" formControlName="BannerAcceptAllBackgroundColor"
+                                       pInputText/>
+                              </div>
+                            </div>
+                            <div class="p-field col-md-6">
+                              <label for="title" class="input-label ">Text </label> <br/>
+                              <div class="row">
+                                <p-colorPicker format="hex" class="col-md-4 pr-0" [showTransitionOptions]="'50ms'"
+                                               formControlName="BannerAcceptAllTextColor"
+                                               [hideTransitionOptions]="'50ms'"></p-colorPicker>
+                                <input type="text" class="pl-0 col-md-8" formControlName="BannerAcceptAllTextColor"
+                                       pInputText/>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div id="preferenceBannerButtonColor">
+                        <p class="az-dropdown" (click)="onOpenDropDown('preferenceBannerButtonColor')"> Preference
+                          <span *ngIf="showDropDownValue !== 'preferenceBannerButtonColor'"><i
+                            class="fas fa-chevron-down"></i></span>
+                          <span *ngIf="showDropDownValue === 'preferenceBannerButtonColor'"><i
+                            class="fas fa-chevron-up"></i></span>
+                        </p>
+                        <p-divider></p-divider>
+
+                        <div class="" *ngIf="showDropDownValue === 'preferenceBannerButtonColor'">
+                          <div class="row">
+                            <div class="p-field col-md-6">
+                              <label for="title" class="input-label ">Background</label> <br/>
+                              <div class="row">
+                                <p-colorPicker format="hex" class="col-md-4 pr-0"
+                                               [showTransitionOptions]="'50ms'"
+                                               formControlName="BannerPreferenceBackgroundColor"
+                                               [hideTransitionOptions]="'50ms'"></p-colorPicker>
+                                <input type="text" class="pl-0 col-md-8" formControlName="BannerPreferenceBackgroundColor"
+                                       pInputText/>
+                              </div>
+                            </div>
+                            <div class="p-field col-md-6">
+                              <label for="title" class="input-label ">Text </label> <br/>
+                              <div class="row">
+                                <p-colorPicker format="hex" class="col-md-4 pr-0" [showTransitionOptions]="'50ms'"
+                                               formControlName="BannerPreferenceTextColor"
+                                               [hideTransitionOptions]="'50ms'"></p-colorPicker>
+                                <input type="text" class="pl-0 col-md-8" formControlName="BannerPreferenceTextColor"
+                                       pInputText/>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div id="disableAllBannerButtonColor">
+                        <p class="az-dropdown" (click)="onOpenDropDown('disableAllBannerButtonColor')"> Disable All
+                          (Generic)
+                          <span *ngIf="showDropDownValue !== 'disableAllBannerButtonColor'"><i
+                            class="fas fa-chevron-down"></i></span>
+                          <span *ngIf="showDropDownValue === 'disableAllBannerButtonColor'"><i
+                            class="fas fa-chevron-up"></i></span>
+                        </p>
+                        <p-divider></p-divider>
+
+                        <div class="az-input-group" *ngIf="showDropDownValue === 'disableAllBannerButtonColor'">
+                          <div class="mr-0 row">
+                            <div class="p-field col-md-6">
+                              <label for="title" class="input-label ">Background</label> <br/>
+                              <div class="row">
+                                <p-colorPicker format="hex" class="col-md-4 pr-0"
+                                               [showTransitionOptions]="'50ms'"
+                                               formControlName="BannerDisableAllBackgroundColor"
+                                               [hideTransitionOptions]="'50ms'"></p-colorPicker>
+                                <input type="text" class="pl-0 col-md-8" formControlName="BannerDisableAllBackgroundColor"
+                                       pInputText/>
+                              </div>
+                            </div>
+                            <div class="p-field col-md-6">
+                              <label for="title" class="input-label ">Text </label> <br/>
+                              <div class="row">
+                                <p-colorPicker format="hex" class="col-md-4 pr-0" [showTransitionOptions]="'50ms'"
+                                               formControlName="BannerDisableAllTextColor"
+                                               [hideTransitionOptions]="'50ms'"></p-colorPicker>
+                                <input type="text" class="pl-0 col-md-8" pInputText
+                                       formControlName="BannerDisableAllTextColor"/>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div id="doNotSellMyDataBannerButtonColor">
+                        <p class="az-dropdown" (click)="onOpenDropDown('doNotSellMyDataBannerButtonColor')"> Do Not Sell
+                          My Data
+                          (CCPA)
+                          <span *ngIf="showDropDownValue !== 'doNotSellMyDataBannerButtonColor'"><i
+                            class="fas fa-chevron-down"></i></span>
+                          <span *ngIf="showDropDownValue === 'doNotSellMyDataBannerButtonColor'"><i
+                            class="fas fa-chevron-up"></i></span>
+                        </p>
+                        <div class="az-input-group" *ngIf="showDropDownValue === 'doNotSellMyDataBannerButtonColor'">
+                          <div class="mr-0 row">
+                            <div class="p-field col-md-6">
+                              <label for="title" class="input-label ">Background</label> <br/>
+                              <div class="row">
+                                <p-colorPicker format="hex" class="col-md-4 pr-0"
+                                               [showTransitionOptions]="'50ms'"
+                                               formControlName="BannerDoNotSellMyDataBackgroundColor"
+                                               [hideTransitionOptions]="'50ms'"></p-colorPicker>
+                                <input type="text" class="pl-0 col-md-8"
+                                       formControlName="BannerDoNotSellMyDataBackgroundColor" pInputText/>
+                              </div>
+                            </div>
+                            <div class="p-field col-md-6">
+                              <label for="title" class="input-label ">Text </label> <br/>
+                              <div class="row">
+                                <p-colorPicker format="hex" class="col-md-4 pr-0" [showTransitionOptions]="'50ms'"
+                                               formControlName="BannerDoNotSellMyDataTextColor"
+                                               [hideTransitionOptions]="'50ms'"></p-colorPicker>
+                                <input type="text" class="pl-0 col-md-8" formControlName="BannerDoNotSellMyDataTextColor"
+                                       pInputText/>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </p-tabPanel>
+                  <p-tabPanel header="Preference">
+                    <div class="card-theme mb-3  mb-3">
+                      <div class="theme-btn-light mt-2" (click)="onSelectThemeType('light')">
+                        <i class="fas fa-tint" style="color: #4e98fa;"></i> <span class="pl-3">Light Theme</span> <span
+                        class="allowSign" *ngIf="themeType === 'light'"><i class="fas fa-check-circle"></i></span>
+                      </div>
+                      <div class="theme-btn-dark mt-2" (click)="onSelectThemeType('dark')">
+                        <i class="fas fa-tint"></i> <span class="pl-3">Dark Theme</span>
+                        <span class="allowSign" *ngIf="themeType === 'dark'"><i class="fas fa-check-circle"></i></span>
+                      </div>
+                      <div class="theme-btn-light mt-2" (click)="onSelectThemeType('custom')">
+                        <i class="fas fa-palette"></i> <span class="pl-3">Custom Colors</span>
+                        <span class="allowSign" *ngIf="themeType === 'custom'"><i
+                          class="fas fa-check-circle"></i></span>
+                      </div>
+                    </div>
+                    <div class="preference-color-wrap  mt-3 mb-3" [ngStyle]="{'display' : showCustomColor ? 'block' : 'none'}">
+
+                      <p-divider align="left" type="dashed">
+                        <b><i class="fas fa-tools mr-2"></i> Customization  </b>
+                      </p-divider>
+                      <div id="preferencePreferenceButtonColor">
+                        <p class="az-dropdown" (click)="onOpenDropDown('preferencePreferenceButtonColor')"> Preference
+                          <span *ngIf="showDropDownValue !== 'preferencePreferenceButtonColor'"><i
+                            class="fas fa-chevron-down"></i></span>
+                          <span *ngIf="showDropDownValue === 'preferencePreferenceButtonColor'"><i
+                            class="fas fa-chevron-up"></i></span>
+                        </p>
+                        <p-divider></p-divider>
+                        <div class="az-input-group" *ngIf="showDropDownValue === 'preferencePreferenceButtonColor'">
+                          <div class="mr-0 row">
+                            <div class="p-field col-md-6">
+                              <label for="title" class="input-label ">Background</label> <br/>
+                              <div class="row">
+                                <p-colorPicker format="hex" class="col-md-4 pr-0"
+                                               [showTransitionOptions]="'50ms'"
+                                               formControlName="PreferenceBackgroundColor"
+                                               [hideTransitionOptions]="'50ms'"></p-colorPicker>
+                                <input type="text" class="pl-0 col-md-8"
+                                       formControlName="PreferenceBackgroundColor" pInputText/>
+                              </div>
+                            </div>
+                            <div class="p-field col-md-6">
+                              <label for="title" class="input-label ">Text </label> <br/>
+                              <div class="row">
+                                <p-colorPicker format="hex" class="col-md-4 pr-0" [showTransitionOptions]="'50ms'"
+                                               formControlName="PreferenceTextColor"
+                                               [hideTransitionOptions]="'50ms'"></p-colorPicker>
+                                <input type="text" class="pl-0 col-md-8" formControlName="PreferenceTextColor"
+                                       pInputText/>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                    <div id="purposePreferenceButtonColor">
+                      <p class="az-dropdown" (click)="onOpenDropDown('purposePreferenceButtonColor')"> Purpose
+                        <span *ngIf="showDropDownValue !== 'purposePreferenceButtonColor'"><i
+                          class="fas fa-chevron-down"></i></span>
+                        <span *ngIf="showDropDownValue === 'purposePreferenceButtonColor'"><i
+                          class="fas fa-chevron-up"></i></span>
+                      </p>
+
+                      <p-divider></p-divider>
+                      <div class="az-input-group" *ngIf="showDropDownValue === 'purposePreferenceButtonColor'">
+                        <div class="row mr-0">
+                          <div class="p-field col-md-6">
+                            <label for="title" class="input-label ">Background</label> <br/>
+                            <div class="row">
+                              <p-colorPicker format="hex" class="col-md-4 pr-0"
+                                             [showTransitionOptions]="'50ms'"
+                                             formControlName="PreferencePurposeBackgroundColor"
+                                             [hideTransitionOptions]="'50ms'"></p-colorPicker>
+                              <input type="text" class="pl-0 col-md-8"
+                                     formControlName="PreferencePurposeBackgroundColor" pInputText/>
+                            </div>
+                          </div>
+                          <div class="p-field col-md-6">
+                            <label for="title" class="input-label ">Text </label> <br/>
+                            <div class="row">
+                              <p-colorPicker format="hex" class="col-md-4 pr-0" [showTransitionOptions]="'50ms'"
+                                             formControlName="PreferencePurposeTextColor"
+                                             [hideTransitionOptions]="'50ms'"></p-colorPicker>
+                              <input type="text" class="pl-0 col-md-8" formControlName="PreferencePurposeTextColor"
+                                     pInputText/>
+                            </div>
+                          </div>
+                          <div class="p-field col-md-6 mt-2">
+                            <label for="title" class="input-label ">Switch</label> <br/>
+                            <div class="row">
+                              <p-colorPicker format="hex" class="col-md-4 pr-0" [showTransitionOptions]="'50ms'"
+                                             formControlName="PreferenceSwitchColor"
+                                             [hideTransitionOptions]="'50ms'"></p-colorPicker>
+                              <input type="text" class="pl-0 col-md-8" formControlName="PreferenceSwitchColor"
+                                     pInputText/>
+                            </div>
+                          </div>
+                        </div>
+
+                      </div>
+
+
+                    </div>
+
+                    <div id="acceptAllPreferenceButtonColor">
+                      <p class="az-dropdown" (click)="onOpenDropDown('acceptAllPreferenceButtonColor')"> Accept All
+                        <span *ngIf="showDropDownValue !== 'acceptAllPreferenceButtonColor'"><i
+                          class="fas fa-chevron-down"></i></span>
+                        <span *ngIf="showDropDownValue === 'acceptAllPreferenceButtonColor'"><i
+                          class="fas fa-chevron-up"></i></span>
+                      </p>
+                      <p-divider></p-divider>
+                      <div class="az-input-group" *ngIf="showDropDownValue === 'acceptAllPreferenceButtonColor'">
+                        <div class="mr-0 row">
+                          <div class="p-field col-md-6">
+                            <label for="title" class="input-label ">Background</label> <br/>
+                            <div class="row">
+                              <p-colorPicker format="hex" class="col-md-4 pr-0"
+                                             [showTransitionOptions]="'50ms'"
+                                             formControlName="PreferenceAcceptAllBackgroundColor"
+                                             [hideTransitionOptions]="'50ms'"></p-colorPicker>
+                              <input type="text" class="pl-0 col-md-8"
+                                     formControlName="PreferenceAcceptAllBackgroundColor" pInputText/>
+                            </div>
+                          </div>
+                          <div class="p-field col-md-6">
+                            <label for="title" class="input-label ">Text </label> <br/>
+                            <div class="row">
+                              <p-colorPicker format="hex" class="col-md-4 pr-0" [showTransitionOptions]="'50ms'"
+                                             formControlName="PreferenceAcceptAllTextColor"
+                                             [hideTransitionOptions]="'50ms'"></p-colorPicker>
+                              <input type="text" class="pl-0 col-md-8" formControlName="PreferenceAcceptAllTextColor"
+                                     pInputText/>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div id="saveMyChoicePreferenceButtonColor">
+                      <p class="az-dropdown" (click)="onOpenDropDown('saveMyChoicePreferenceButtonColor')"> Save My
+                        Choice
+                        <span *ngIf="showDropDownValue !== 'saveMyChoicePreferenceButtonColor'"><i
+                          class="fas fa-chevron-down"></i></span>
+                        <span *ngIf="showDropDownValue === 'saveMyChoicePreferenceButtonColor'"><i
+                          class="fas fa-chevron-up"></i></span>
+                      </p>
+                      <p-divider></p-divider>
+                      <div class="az-input-group" *ngIf="showDropDownValue === 'saveMyChoicePreferenceButtonColor'">
+                        <div class="mr-0 row">
+                          <div class="p-field col-md-6">
+                            <label for="title" class="input-label ">Background</label> <br/>
+                            <div class="row">
+                              <p-colorPicker format="hex" class="col-md-4 pr-0"
+                                             [showTransitionOptions]="'50ms'"
+                                             formControlName="PreferenceSaveMyChoiceBackgroundColor"
+                                             [hideTransitionOptions]="'50ms'"></p-colorPicker>
+                              <input type="text" class="pl-0 col-md-8"
+                                     formControlName="PreferenceSaveMyChoiceBackgroundColor" pInputText/>
+                            </div>
+                          </div>
+                          <div class="p-field col-md-6">
+                            <label for="title" class="input-label ">Text </label> <br/>
+                            <div class="row">
+                              <p-colorPicker format="hex" class="col-md-4 pr-0" [showTransitionOptions]="'50ms'"
+                                             formControlName="PreferenceSaveMyChoiceTextColor"
+                                             [hideTransitionOptions]="'50ms'"></p-colorPicker>
+                              <input type="text" class="pl-0 col-md-8" formControlName="PreferenceSaveMyChoiceTextColor"
+                                     pInputText/>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div id="disablePreferenceButtonColor">
+                      <p class="az-dropdown" (click)="onOpenDropDown('disablePreferenceButtonColor')"> Disable All
+                        <span *ngIf="showDropDownValue !== 'disablePreferenceButtonColor'"><i
+                          class="fas fa-chevron-down"></i></span>
+                        <span *ngIf="showDropDownValue === 'disablePreferenceButtonColor'"><i
+                          class="fas fa-chevron-up"></i></span>
+                      </p>
+                      <p-divider></p-divider>
+                      <div class="az-input-group" *ngIf="showDropDownValue === 'disablePreferenceButtonColor'">
+                        <div class="mr-0 row">
+                          <div class="p-field col-md-6">
+                            <label for="title" class="input-label ">Background</label> <br/>
+                            <div class="row">
+                              <p-colorPicker format="hex" class="col-md-4 pr-0"
+                                             [showTransitionOptions]="'50ms'"
+                                             formControlName="PreferenceDisableAllBackgroundColor"
+                                             [hideTransitionOptions]="'50ms'"></p-colorPicker>
+                              <input type="text" class="pl-0 col-md-8"
+                                     formControlName="PreferenceDisableAllBackgroundColor" pInputText/>
+                            </div>
+                          </div>
+                          <div class="p-field col-md-6">
+                            <label for="title" class="input-label ">Text </label> <br/>
+                            <div class="row">
+                              <p-colorPicker format="hex" class="col-md-4 pr-0" [showTransitionOptions]="'50ms'"
+                                             formControlName="PreferenceDisableAllTextColor"
+                                             [hideTransitionOptions]="'50ms'"></p-colorPicker>
+                              <input type="text" class="pl-0 col-md-8" formControlName="PreferenceDisableAllTextColor"
+                                     pInputText/>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div id="doNotSellMyDataPreferenceButtonColor">
+                      <p class="az-dropdown" (click)="onOpenDropDown('doNotSellMyDataPreferenceButtonColor')">Do Not
+                        Sell My Data (CCPA)
+                        <span *ngIf="showDropDownValue !== 'doNotSellMyDataPreferenceButtonColor'"><i
+                          class="fas fa-chevron-down"></i></span>
+                        <span *ngIf="showDropDownValue === 'doNotSellMyDataPreferenceButtonColor'"><i
+                          class="fas fa-chevron-up"></i></span>
+                      </p>
+                      <p-divider></p-divider>
+                      <div class="az-input-group" *ngIf="showDropDownValue === 'doNotSellMyDataPreferenceButtonColor'">
+                        <div class="mr-0 row">
+                          <div class="p-field col-md-6">
+                            <label for="title" class="input-label ">Background</label> <br/>
+                            <div class="row">
+                              <p-colorPicker format="hex" class="col-md-4 pr-0"
+                                             [showTransitionOptions]="'50ms'"
+                                             formControlName="PreferenceDoNotSellBackgroundColor"
+                                             [hideTransitionOptions]="'50ms'"></p-colorPicker>
+                              <input type="text" class="pl-0 col-md-8"
+                                     formControlName="PreferenceDoNotSellBackgroundColor" pInputText/>
+                            </div>
+                          </div>
+                          <div class="p-field col-md-6">
+                            <label for="title" class="input-label ">Text </label> <br/>
+                            <div class="row">
+                              <p-colorPicker format="hex" class="col-md-4 pr-0" [showTransitionOptions]="'50ms'"
+                                             formControlName="PreferenceDoNotSellTextColor"
+                                             [hideTransitionOptions]="'50ms'"></p-colorPicker>
+                              <input type="text" class="pl-0 col-md-8" formControlName="PreferenceDoNotSellTextColor"
+                                     pInputText/>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    </div>
+
+                  </p-tabPanel>
+                </p-tabView>
+              </div>
+              <div class="step-5 content purpose-preference" *ngIf="step === 5">
+                <p-divider align="left" type="dashed">
+                  <b>Manage Purposes</b>
+                </p-divider>
+                <div cdkDropList (cdkDropListDropped)="drop($event)">
+                  <div id="essentialCookies" class="mt-2" cdkDrag *ngFor="let purpose of purposesList" >
+                    <p class="az-purpose-dropdown" (click)="onOpenDropDown(purpose.title)"> {{purpose.title}}
+                      <span *ngIf="showDropDownValue !== purpose.title"><i
                         class="fas fa-chevron-down"></i></span>
-                      <span *ngIf="bannerContentDropdownStep === 'cookieNotice'"><i
+                      <span *ngIf="showDropDownValue === purpose.title"><i
                         class="fas fa-chevron-up"></i></span>
                     </p>
                     <p-divider></p-divider>
-                    <div class="az-input-group" *ngIf="bannerContentDropdownStep === 'cookieNotice'">
+                    <div class="az-input-group" *ngIf="showDropDownValue === purpose.title">
                       <div class="p-field">
                         <label for="title" class="input-label ">Title</label> <br/>
-                        <input id="title" type="text" class="az-input" pInputText/>
+                        <input type="text" class="az-input" [value]="purpose.title" pInputText/>
                       </div>
 
                       <div class="p-field">
                         <label for="title" class="input-label ">Description</label> <br/>
-                        <textarea pInputTextarea></textarea>
-                      </div>
-
-                      <div class="p-field">
-                        <label for="title" class="input-label ">Privacy Text</label> <br/>
-                        <input id="title" type="text" class="az-input" pInputText/>
-                      </div>
-
-                      <div class="p-field">
-                        <label for="title" class="input-label ">Link</label> <br/>
-                        <input id="title" type="text" class="az-input" pInputText/>
-                      </div>
-
-                    </div>
-                  </div>
-                  <div id="bannerButton">
-                    <p class="az-dropdown" (click)="onOpenDropDown('bannerButton')">Buttons
-                      <span *ngIf="bannerContentDropdownStep !== 'bannerButton'"><i
-                        class="fas fa-chevron-down"></i></span>
-                      <span *ngIf="bannerContentDropdownStep === 'bannerButton'"><i
-                        class="fas fa-chevron-up"></i></span>
-                    </p>
-                    <p-divider></p-divider>
-
-
-                    <div class="az-input-group" *ngIf="bannerContentDropdownStep === 'bannerButton'">
-                      <div class="p-field">
-                        <label for="title" class="input-label ">Accept All</label> <br/>
-                        <input id="title" type="text" class="az-input" pInputText/>
-                      </div>
-
-                      <div class="p-field">
-                        <label for="title" class="input-label ">Preference</label> <br/>
-                        <input id="title" type="text" class="az-input" pInputText/>
-                      </div>
-
-                      <div class="p-field">
-                        <label for="title" class="input-label ">Disable All Button (Generic)</label> <br/>
-                        <input id="title" type="text" class="az-input" pInputText/>
-                      </div>
-
-                      <div class="p-field">
-                        <label for="title" class="input-label ">Do No Sell My Data (CCPA)</label> <br/>
-                        <input id="title" type="text" class="az-input" pInputText/>
-                      </div>
-
-                    </div>
-                  </div>
-                </p-tabPanel>
-                <p-tabPanel header="Preferences">
-                  <div id="preferencePurposeAndVendors">
-                    <p class="az-dropdown" (click)="onOpenDropDown('preferencePurposeAndVendors')">Purpose & Vendor (
-                      GDPR )
-                      <span *ngIf="bannerContentDropdownStep !== 'preferencePurposeAndVendors'"><i
-                        class="fas fa-chevron-down"></i></span>
-                      <span *ngIf="bannerContentDropdownStep === 'preferencePurposeAndVendors'"><i
-                        class="fas fa-chevron-up"></i></span>
-                    </p>
-                    <p-divider></p-divider>
-
-                    <div class="az-input-group" *ngIf="bannerContentDropdownStep === 'preferencePurposeAndVendors'">
-                      <div class="p-field">
-                        <label for="title" class="input-label ">Purpose Description</label> <br/>
-                        <textarea pInputTextarea></textarea>
-                      </div>
-                      <div class="p-field">
-                        <label for="title" class="input-label ">Vendor Description</label> <br/>
-                        <textarea pInputTextarea></textarea>
+                        <textarea pInputTextarea [value]="purpose.description"></textarea>
                       </div>
                     </div>
                   </div>
+<!--                  <div id="functionalCookies " cdkDrag>-->
+<!--                    <p class="az-dropdown" (click)="onOpenDropDown('functionalCookies')"> Functional Cookies-->
+<!--                      <span *ngIf="showDropDownValue !== 'functionalCookies'"><i-->
+<!--                        class="fas fa-chevron-down"></i></span>-->
+<!--                      <span *ngIf="showDropDownValue === 'functionalCookies'"><i-->
+<!--                        class="fas fa-chevron-up"></i></span>-->
+<!--                    </p>-->
+<!--                    <p-divider></p-divider>-->
+<!--                    <div class="az-input-group" *ngIf="showDropDownValue === 'functionalCookies'">-->
+<!--                      <div class="p-field">-->
+<!--                        <label for="title" class="input-label ">Title</label> <br/>-->
+<!--                        <input type="text" class="az-input" pInputText/>-->
+<!--                      </div>-->
+
+<!--                      <div class="p-field">-->
+<!--                        <label for="title" class="input-label ">Description</label> <br/>-->
+<!--                        <textarea pInputTextarea></textarea>-->
+<!--                      </div>-->
+<!--                    </div>-->
+<!--                  </div>-->
+
+<!--                  <div id="analyticsCookies " cdkDrag>-->
+<!--                    <p class="az-dropdown" (click)="onOpenDropDown('analyticsCookies')"> Analytics Cookies-->
+<!--                      <span *ngIf="showDropDownValue !== 'analyticsCookies'"><i-->
+<!--                        class="fas fa-chevron-down"></i></span>-->
+<!--                      <span *ngIf="showDropDownValue === 'analyticsCookies'"><i-->
+<!--                        class="fas fa-chevron-up"></i></span>-->
+<!--                    </p>-->
+<!--                    <p-divider></p-divider>-->
+<!--                    <div class="az-input-group" *ngIf="showDropDownValue === 'analyticsCookies'">-->
+<!--                      <div class="p-field">-->
+<!--                        <label for="title" class="input-label ">Title</label> <br/>-->
+<!--                        <input type="text" class="az-input" pInputText/>-->
+<!--                      </div>-->
+
+<!--                      <div class="p-field">-->
+<!--                        <label for="title" class="input-label ">Description</label> <br/>-->
+<!--                        <textarea pInputTextarea></textarea>-->
+<!--                      </div>-->
+<!--                    </div>-->
+<!--                  </div>-->
+
+<!--                  <div id="advertisingCookies " cdkDrag>-->
+<!--                    <p class="az-dropdown" (click)="onOpenDropDown('advertisingCookies')"> Advertising Cookies-->
+<!--                      <span *ngIf="showDropDownValue !== 'advertisingCookies'"><i-->
+<!--                        class="fas fa-chevron-down"></i></span>-->
+<!--                      <span *ngIf="showDropDownValue === 'advertisingCookies'"><i-->
+<!--                        class="fas fa-chevron-up"></i></span>-->
+<!--                    </p>-->
+<!--                    <p-divider></p-divider>-->
+<!--                    <div class="az-input-group" *ngIf="showDropDownValue === 'advertisingCookies'">-->
+<!--                      <div class="p-field">-->
+<!--                        <label for="title" class="input-label ">Title</label> <br/>-->
+<!--                        <input type="text" class="az-input" pInputText/>-->
+<!--                      </div>-->
+
+<!--                      <div class="p-field">-->
+<!--                        <label for="title" class="input-label ">Description</label> <br/>-->
+<!--                        <textarea pInputTextarea></textarea>-->
+<!--                      </div>-->
+<!--                    </div>-->
+<!--                  </div>-->
 
 
-                  <div id="preferencePurposeAndPrivacy">
-                    <p class="az-dropdown" (click)="onOpenDropDown('preferencePurposeAndPrivacy')">Purpose & Privacy (
-                      CCPA & GENERIC )
-                      <span *ngIf="bannerContentDropdownStep !== 'preferencePurposeAndPrivacy'"><i
-                        class="fas fa-chevron-down"></i></span>
-                      <span *ngIf="bannerContentDropdownStep === 'preferencePurposeAndPrivacy'"><i
-                        class="fas fa-chevron-up"></i></span>
-                    </p>
-                    <p-divider></p-divider>
+<!--                  <div id="socialMediaCookies " cdkDrag>-->
+<!--                    <p class="az-dropdown" (click)="onOpenDropDown('socialMediaCookies')"> Social Media Cookies-->
+<!--                      <span *ngIf="showDropDownValue !== 'socialMediaCookies'"><i-->
+<!--                        class="fas fa-chevron-down"></i></span>-->
+<!--                      <span *ngIf="showDropDownValue === 'socialMediaCookies'"><i-->
+<!--                        class="fas fa-chevron-up"></i></span>-->
+<!--                    </p>-->
+<!--                    <p-divider></p-divider>-->
+<!--                    <div class="az-input-group" *ngIf="showDropDownValue === 'socialMediaCookies'">-->
+<!--                      <div class="p-field">-->
+<!--                        <label for="title" class="input-label ">Title</label> <br/>-->
+<!--                        <input type="text" class="az-input" pInputText/>-->
+<!--                      </div>-->
+
+<!--                      <div class="p-field">-->
+<!--                        <label for="title" class="input-label ">Description</label> <br/>-->
+<!--                        <textarea pInputTextarea></textarea>-->
+<!--                      </div>-->
+<!--                    </div>-->
+<!--                  </div>-->
 
 
-                    <div class="az-input-group" *ngIf="bannerContentDropdownStep === 'preferencePurposeAndPrivacy'">
-                      <div class="p-field">
-                        <label for="title" class="input-label ">Purpose Description</label> <br/>
-                        <textarea pInputTextarea></textarea>
-                      </div>
-                      <div class="p-field">
-                        <label for="title" class="input-label ">Vendor Description</label> <br/>
-                        <textarea pInputTextarea></textarea>
-                      </div>
-                    </div>
-                  </div>
+<!--                  <div id="unclassifiedCookies " cdkDrag>-->
+<!--                    <p class="az-dropdown" (click)="onOpenDropDown('unclassifiedCookies')"> Unclassified-->
+<!--                      <span *ngIf="showDropDownValue !== 'unclassifiedCookies'"><i-->
+<!--                        class="fas fa-chevron-down"></i></span>-->
+<!--                      <span *ngIf="showDropDownValue === 'unclassifiedCookies'"><i-->
+<!--                        class="fas fa-chevron-up"></i></span>-->
+<!--                    </p>-->
+<!--                    <p-divider></p-divider>-->
+<!--                    <div class="az-input-group" *ngIf="showDropDownValue === 'unclassifiedCookies'">-->
+<!--                      <div class="p-field">-->
+<!--                        <label for="title" class="input-label ">Title</label> <br/>-->
+<!--                        <input type="text" class="az-input" pInputText/>-->
+<!--                      </div>-->
+
+<!--                      <div class="p-field">-->
+<!--                        <label for="title" class="input-label ">Description</label> <br/>-->
+<!--                        <textarea pInputTextarea></textarea>-->
+<!--                      </div>-->
+<!--                    </div>-->
+<!--                  </div>-->
 
 
-                  <div id="preferenceButtons">
-                    <p class="az-dropdown" (click)="onOpenDropDown('preferenceButtons')">Buttons
-                      <span *ngIf="bannerContentDropdownStep !== 'preferenceButtons'"><i
-                        class="fas fa-chevron-down"></i></span>
-                      <span *ngIf="bannerContentDropdownStep === 'preferenceButtons'"><i class="fas fa-chevron-up"></i></span>
-                    </p>
-                    <p-divider></p-divider>
-                    <div class="az-input-group" *ngIf="bannerContentDropdownStep === 'preferenceButtons'">
-
-                      <div class="p-field">
-                        <label for="title" class="input-label ">Purpose</label> <br/>
-                        <input id="title" type="text" class="az-input" pInputText/>
-                      </div>
-
-                      <div class="p-field">
-                        <label for="title" class="input-label ">Accept All</label> <br/>
-                        <input id="title" type="text" class="az-input" pInputText/>
-                      </div>
-
-                      <div class="p-field">
-                        <label for="title" class="input-label ">Save My Choice</label> <br/>
-                        <input id="title" type="text" class="az-input" pInputText/>
-                      </div>
-
-                      <div class="p-field">
-                        <label for="title" class="input-label ">Disable All</label> <br/>
-                        <input id="title" type="text" class="az-input" pInputText/>
-                      </div>
-
-                      <div class="p-field">
-                        <label for="title" class="input-label ">Do Not Sell My Data (CCPA)</label> <br/>
-                        <input id="title" type="text" class="az-input" pInputText/>
-                      </div>
-                    </div>
-
-                  </div>
-
-
-                </p-tabPanel>
-              </p-tabView>
-            </div>
-            <div class="step-4 layout content" *ngIf="step === 4">
-              <p-divider align="left" type="dashed">
-                <b>Layout</b>
-              </p-divider>
-              <p-tabView>
-                <p-tabPanel header="Banner">
-                  <div class="card-theme mb-3 mt-2">
-                    <div class="theme-btn-dark" (click)="onSelectThemeType('dark')">
-                      <i class="fas fa-tint"></i> <span class="pl-3">Dark Theme</span>
-                      <span class="allowSign" *ngIf="themeType === 'dark'"><i class="fas fa-check-circle"></i></span>
-                    </div>
-                    <div class="theme-btn-light mt-2" (click)="onSelectThemeType('light')">
-                      <i class="fas fa-tint" style="color: #4e98fa;"></i> <span class="pl-3">Light Theme</span> <span
-                      class="allowSign" *ngIf="themeType === 'light'"><i class="fas fa-check-circle"></i></span>
-                    </div>
-                    <div class="theme-btn-light mt-2" (click)="onSelectThemeType('custom')">
-                      <i class="fas fa-palette"></i> <span class="pl-3">Custom Colors</span>
-                      <span class="allowSign" *ngIf="themeType === 'custom'"><i
-                      class="fas fa-check-circle"></i></span>
-                    </div>
-                  </div>
-
-                <div id="cookieNoticeColor">
-                  <p class="az-dropdown" (click)="onOpenDropDown('cookieNoticeColor')">Cookie Notice
-                    <span *ngIf="bannerContentDropdownStep !== 'cookieNoticeColor'"><i
-                      class="fas fa-chevron-down"></i></span>
-                    <span *ngIf="bannerContentDropdownStep === 'cookieNoticeColor'"><i class="fas fa-chevron-up"></i></span>
-                  </p>
-                  <p-divider></p-divider>
-                  <div class="az-input-group" *ngIf="bannerContentDropdownStep === 'cookieNoticeColor'">
-                    <div class="row mr-0">
-                      <div class="p-field col-md-6">
-                        <label for="title" class="input-label ">Background</label> <br/>
-                        <div class="row">
-                          <p-colorPicker format="hex" class="col-md-4 pr-0"
-                                         [showTransitionOptions]="'50ms'"
-                                         [hideTransitionOptions]="'50ms'"></p-colorPicker>
-                          <input id="title" type="text" class="pl-0 col-md-8" pInputText/>
-                        </div>
-                      </div>
-                      <div class="p-field col-md-6">
-                        <label for="title" class="input-label ">Text </label> <br/>
-                        <div class="row">
-                          <p-colorPicker format="hex" class="col-md-4 pr-0" [showTransitionOptions]="'50ms'"
-                                         [hideTransitionOptions]="'50ms'"></p-colorPicker>
-                          <input id="title" type="text" class="pl-0 col-md-8" pInputText/>
-                        </div>
-                      </div>
-                      <div class="p-field col-md-6 mt-2">
-                        <label for="title" class="input-label ">Border</label> <br/>
-                        <div class="row">
-                          <p-colorPicker format="hex" class="col-md-4 pr-0" [showTransitionOptions]="'50ms'"
-                                         [hideTransitionOptions]="'50ms'"></p-colorPicker>
-                          <input id="title" type="text" class="pl-0 col-md-8" pInputText/>
-                        </div>
-                      </div>
-                    </div>
-
-                  </div>
                 </div>
 
 
-
-              <div id="acceptAllBannerButtonColor">
-                  <p class="az-dropdown" (click)="onOpenDropDown('acceptAllBannerButtonColor')"> Accept All
-                    <span *ngIf="bannerContentDropdownStep !== 'acceptAllBannerButtonColor'"><i
-                      class="fas fa-chevron-down"></i></span>
-                    <span *ngIf="bannerContentDropdownStep === 'acceptAllBannerButtonColor'"><i
-                      class="fas fa-chevron-up"></i></span>
-                  </p>
-                <p-divider></p-divider>
-                  <div class="az-input-group"  *ngIf="bannerContentDropdownStep === 'acceptAllBannerButtonColor'">
-                    <div class="row mr-0">
-                      <div class="p-field col-md-6">
-                        <label for="title" class="input-label ">Background</label> <br/>
-                        <div class="row">
-                          <p-colorPicker format="hex" class="col-md-4 pr-0"
-                                         [showTransitionOptions]="'50ms'"
-                                         [hideTransitionOptions]="'50ms'"></p-colorPicker>
-                          <input id="title" type="text" class="pl-0 col-md-8" pInputText/>
-                        </div>
-                      </div>
-                      <div class="p-field col-md-6">
-                        <label for="title" class="input-label ">Text </label> <br/>
-                        <div class="row">
-                          <p-colorPicker format="hex" class="col-md-4 pr-0" [showTransitionOptions]="'50ms'"
-                                         [hideTransitionOptions]="'50ms'"></p-colorPicker>
-                          <input id="title" type="text" class="pl-0 col-md-8" pInputText/>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
               </div>
 
-            <div id="preferenceBannerButtonColor">
-                  <p class="az-dropdown" (click)="onOpenDropDown('preferenceBannerButtonColor')"> Preference
-                    <span *ngIf="bannerContentDropdownStep !== 'preferenceBannerButtonColor'"><i
-                      class="fas fa-chevron-down"></i></span>
-                    <span *ngIf="bannerContentDropdownStep === 'preferenceBannerButtonColor'"><i
-                      class="fas fa-chevron-up"></i></span>
-                  </p>
-                  <p-divider></p-divider>
 
-                  <div class="" *ngIf="bannerContentDropdownStep === 'preferenceBannerButtonColor'">
-                    <div class="row">
-                      <div class="p-field col-md-6">
-                        <label for="title" class="input-label ">Background</label> <br/>
-                        <div class="row">
-                          <p-colorPicker format="hex" class="col-md-4 pr-0"
-                                         [showTransitionOptions]="'50ms'"
-                                         [hideTransitionOptions]="'50ms'"></p-colorPicker>
-                          <input id="title" type="text" class="pl-0 col-md-8" pInputText/>
-                        </div>
-                      </div>
-                      <div class="p-field col-md-6">
-                        <label for="title" class="input-label ">Text </label> <br/>
-                        <div class="row">
-                          <p-colorPicker format="hex" class="col-md-4 pr-0" [showTransitionOptions]="'50ms'"
-                                         [hideTransitionOptions]="'50ms'"></p-colorPicker>
-                          <input id="title" type="text" class="pl-0 col-md-8" pInputText/>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-            </div>
+              <div class="step-6 content display-frequency" *ngIf="step === 6">
+                <p-divider align="left" type="dashed">
+                  <b>Display Frequency</b>
+                </p-divider>
 
 
-                  <div id="disableAllBannerButtonColor">
-                  <p class="az-dropdown" (click)="onOpenDropDown('disableAllBannerButtonColor')"> Disable All (Generic)
-                    <span *ngIf="bannerContentDropdownStep !== 'disableAllBannerButtonColor'"><i
-                      class="fas fa-chevron-down"></i></span>
-                    <span *ngIf="bannerContentDropdownStep === 'disableAllBannerButtonColor'"><i
-                      class="fas fa-chevron-up"></i></span>
-                  </p>
-                    <p-divider></p-divider>
-
-                    <div class="az-input-group" *ngIf="bannerContentDropdownStep === 'disableAllBannerButtonColor'">
-                    <div class="mr-0 row">
-                      <div class="p-field col-md-6">
-                        <label for="title" class="input-label ">Background</label> <br/>
-                        <div class="row">
-                          <p-colorPicker format="hex" class="col-md-4 pr-0"
-                                         [showTransitionOptions]="'50ms'"
-                                         [hideTransitionOptions]="'50ms'"></p-colorPicker>
-                          <input id="title" type="text" class="pl-0 col-md-8" pInputText/>
-                        </div>
-                      </div>
-                      <div class="p-field col-md-6">
-                        <label for="title" class="input-label ">Text </label> <br/>
-                        <div class="row">
-                          <p-colorPicker format="hex" class="col-md-4 pr-0" [showTransitionOptions]="'50ms'"
-                                         [hideTransitionOptions]="'50ms'"></p-colorPicker>
-                          <input id="title" type="text" class="pl-0 col-md-8" pInputText/>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  </div>
-
-                  <div id="doNotSellMyDataBannerButtonColor">
-                  <p class="az-dropdown" (click)="onOpenDropDown('doNotSellMyDataBannerButtonColor')"> Do Not Sell My Data
-                    (CCPA)
-                    <span *ngIf="bannerContentDropdownStep !== 'doNotSellMyDataBannerButtonColor'"><i
-                      class="fas fa-chevron-down"></i></span>
-                    <span *ngIf="bannerContentDropdownStep === 'doNotSellMyDataBannerButtonColor'"><i
-                      class="fas fa-chevron-up"></i></span>
-                  </p>
-                  <div class="az-input-group" *ngIf="bannerContentDropdownStep === 'doNotSellMyDataBannerButtonColor'">
-                    <div class="mr-0 row">
-                      <div class="p-field col-md-6">
-                        <label for="title" class="input-label ">Background</label> <br/>
-                        <div class="row">
-                          <p-colorPicker format="hex" class="col-md-4 pr-0"
-                                         [showTransitionOptions]="'50ms'"
-                                         [hideTransitionOptions]="'50ms'"></p-colorPicker>
-                          <input id="title" type="text" class="pl-0 col-md-8" pInputText/>
-                        </div>
-                      </div>
-                      <div class="p-field col-md-6">
-                        <label for="title" class="input-label ">Text </label> <br/>
-                        <div class="row">
-                          <p-colorPicker format="hex" class="col-md-4 pr-0" [showTransitionOptions]="'50ms'"
-                                         [hideTransitionOptions]="'50ms'"></p-colorPicker>
-                          <input id="title" type="text" class="pl-0 col-md-8" pInputText/>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  </div>
-
-                </p-tabPanel>
-                <p-tabPanel header="Preference">
-
-
-                  <div id="purposePreferenceButtonColor">
-                    <p class="az-dropdown" (click)="onOpenDropDown('purposePreferenceButtonColor')"> Purpose
-                      <span *ngIf="bannerContentDropdownStep !== 'purposePreferenceButtonColor'"><i
-                        class="fas fa-chevron-down"></i></span>
-                      <span *ngIf="bannerContentDropdownStep === 'purposePreferenceButtonColor'"><i
-                        class="fas fa-chevron-up"></i></span>
-                    </p>
-
-                  <p-divider></p-divider>
-                    <div class="az-input-group" *ngIf="bannerContentDropdownStep === 'purposePreferenceButtonColor'">
-                      <div class="row mr-0">
-                        <div class="p-field col-md-6">
-                          <label for="title" class="input-label ">Background</label> <br/>
-                          <div class="row">
-                            <p-colorPicker format="hex" class="col-md-4 pr-0"
-                                           [showTransitionOptions]="'50ms'"
-                                           [hideTransitionOptions]="'50ms'"></p-colorPicker>
-                            <input id="title" type="text" class="pl-0 col-md-8" pInputText/>
-                          </div>
-                        </div>
-                        <div class="p-field col-md-6">
-                          <label for="title" class="input-label ">Text </label> <br/>
-                          <div class="row">
-                            <p-colorPicker format="hex" class="col-md-4 pr-0" [showTransitionOptions]="'50ms'"
-                                           [hideTransitionOptions]="'50ms'"></p-colorPicker>
-                            <input id="title" type="text" class="pl-0 col-md-8" pInputText/>
-                          </div>
-                        </div>
-                        <div class="p-field col-md-6 mt-2">
-                          <label for="title" class="input-label ">Switch</label> <br/>
-                          <div class="row">
-                            <p-colorPicker format="hex" class="col-md-4 pr-0" [showTransitionOptions]="'50ms'"
-                                           [hideTransitionOptions]="'50ms'"></p-colorPicker>
-                            <input id="title" type="text" class="pl-0 col-md-8" pInputText/>
-                          </div>
-                        </div>
-                      </div>
-
-                    </div>
-
-
-
-                  </div>
-
-
-                  <div id="acceptAllPreferenceButtonColor">
-                    <p class="az-dropdown" (click)="onOpenDropDown('acceptAllPreferenceButtonColor')"> Accept All
-                      <span *ngIf="bannerContentDropdownStep !== 'acceptAllPreferenceButtonColor'"><i
-                        class="fas fa-chevron-down"></i></span>
-                      <span *ngIf="bannerContentDropdownStep === 'acceptAllPreferenceButtonColor'"><i
-                        class="fas fa-chevron-up"></i></span>
-                    </p>
-                    <p-divider></p-divider>
-                    <div class="az-input-group" *ngIf="bannerContentDropdownStep === 'acceptAllPreferenceButtonColor'">
-                      <div class="mr-0 row">
-                        <div class="p-field col-md-6">
-                          <label for="title" class="input-label ">Background</label> <br/>
-                          <div class="row">
-                            <p-colorPicker format="hex" class="col-md-4 pr-0"
-                                           [showTransitionOptions]="'50ms'"
-                                           [hideTransitionOptions]="'50ms'"></p-colorPicker>
-                            <input id="title" type="text" class="pl-0 col-md-8" pInputText/>
-                          </div>
-                        </div>
-                        <div class="p-field col-md-6">
-                          <label for="title" class="input-label ">Text </label> <br/>
-                          <div class="row">
-                            <p-colorPicker format="hex" class="col-md-4 pr-0" [showTransitionOptions]="'50ms'"
-                                           [hideTransitionOptions]="'50ms'"></p-colorPicker>
-                            <input id="title" type="text" class="pl-0 col-md-8" pInputText/>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-
-
-                  <div id="saveMyChoicePreferenceButtonColor">
-                    <p class="az-dropdown" (click)="onOpenDropDown('saveMyChoicePreferenceButtonColor')"> Save My Choice
-                      <span *ngIf="bannerContentDropdownStep !== 'saveMyChoicePreferenceButtonColor'"><i
-                        class="fas fa-chevron-down"></i></span>
-                      <span *ngIf="bannerContentDropdownStep === 'saveMyChoicePreferenceButtonColor'"><i
-                        class="fas fa-chevron-up"></i></span>
-                    </p>
-                    <p-divider></p-divider>
-                    <div class="az-input-group" *ngIf="bannerContentDropdownStep === 'saveMyChoicePreferenceButtonColor'">
-                      <div class="mr-0 row">
-                        <div class="p-field col-md-6">
-                          <label for="title" class="input-label ">Background</label> <br/>
-                          <div class="row">
-                            <p-colorPicker format="hex" class="col-md-4 pr-0"
-                                           [showTransitionOptions]="'50ms'"
-                                           [hideTransitionOptions]="'50ms'"></p-colorPicker>
-                            <input id="title" type="text" class="pl-0 col-md-8" pInputText/>
-                          </div>
-                        </div>
-                        <div class="p-field col-md-6">
-                          <label for="title" class="input-label ">Text </label> <br/>
-                          <div class="row">
-                            <p-colorPicker format="hex" class="col-md-4 pr-0" [showTransitionOptions]="'50ms'"
-                                           [hideTransitionOptions]="'50ms'"></p-colorPicker>
-                            <input id="title" type="text" class="pl-0 col-md-8" pInputText/>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-
-
-
-
-                  <div id="disablePreferenceButtonColor">
-                    <p class="az-dropdown" (click)="onOpenDropDown('disablePreferenceButtonColor')"> Disable All
-                      <span *ngIf="bannerContentDropdownStep !== 'disablePreferenceButtonColor'"><i
-                        class="fas fa-chevron-down"></i></span>
-                      <span *ngIf="bannerContentDropdownStep === 'disablePreferenceButtonColor'"><i
-                        class="fas fa-chevron-up"></i></span>
-                    </p>
-                    <p-divider></p-divider>
-                    <div class="az-input-group" *ngIf="bannerContentDropdownStep === 'disablePreferenceButtonColor'">
-                      <div class="mr-0 row">
-                        <div class="p-field col-md-6">
-                          <label for="title" class="input-label ">Background</label> <br/>
-                          <div class="row">
-                            <p-colorPicker format="hex" class="col-md-4 pr-0"
-                                           [showTransitionOptions]="'50ms'"
-                                           [hideTransitionOptions]="'50ms'"></p-colorPicker>
-                            <input id="title" type="text" class="pl-0 col-md-8" pInputText/>
-                          </div>
-                        </div>
-                        <div class="p-field col-md-6">
-                          <label for="title" class="input-label ">Text </label> <br/>
-                          <div class="row">
-                            <p-colorPicker format="hex" class="col-md-4 pr-0" [showTransitionOptions]="'50ms'"
-                                           [hideTransitionOptions]="'50ms'"></p-colorPicker>
-                            <input id="title" type="text" class="pl-0 col-md-8" pInputText/>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-
-
-
-                  <div id="doNotSellMyDataPreferenceButtonColor">
-                    <p class="az-dropdown" (click)="onOpenDropDown('doNotSellMyDataPreferenceButtonColor')">Do Not Sell My Data (CCPA)
-                      <span *ngIf="bannerContentDropdownStep !== 'doNotSellMyDataPreferenceButtonColor'"><i
-                        class="fas fa-chevron-down"></i></span>
-                      <span *ngIf="bannerContentDropdownStep === 'doNotSellMyDataPreferenceButtonColor'"><i
-                        class="fas fa-chevron-up"></i></span>
-                    </p>
-                    <p-divider></p-divider>
-                    <div class="az-input-group" *ngIf="bannerContentDropdownStep === 'doNotSellMyDataPreferenceButtonColor'">
-                      <div class="mr-0 row">
-                        <div class="p-field col-md-6">
-                          <label for="title" class="input-label ">Background</label> <br/>
-                          <div class="row">
-                            <p-colorPicker format="hex" class="col-md-4 pr-0"
-                                           [showTransitionOptions]="'50ms'"
-                                           [hideTransitionOptions]="'50ms'"></p-colorPicker>
-                            <input id="title" type="text" class="pl-0 col-md-8" pInputText/>
-                          </div>
-                        </div>
-                        <div class="p-field col-md-6">
-                          <label for="title" class="input-label ">Text </label> <br/>
-                          <div class="row">
-                            <p-colorPicker format="hex" class="col-md-4 pr-0" [showTransitionOptions]="'50ms'"
-                                           [hideTransitionOptions]="'50ms'"></p-colorPicker>
-                            <input id="title" type="text" class="pl-0 col-md-8" pInputText/>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-
-
-
-
-                </p-tabPanel>
-              </p-tabView>
-            </div>
-            <div class="step-5 content purpose-preference" *ngIf="step === 5">
-<!--              <div cdkDropList class="example-list" (cdkDropListDropped)="drop($event)">-->
-<!--                <div class="example-box" *ngFor="let movie of movies" cdkDrag>{{movie}}-->
-<!--                </div>-->
-<!--              </div>-->
-
-              <p-divider align="left" type="dashed">
-                <b>Manage Purposes</b>
-              </p-divider>
-              <div cdkDropList  (cdkDropListDropped)="drop($event)">
-              <div id="essentialCookies" class="mt-5" cdkDrag>
-                <p class="az-dropdown" (click)="onOpenDropDown('essentialCookies')"> Essential Cookies
-                  <span *ngIf="bannerContentDropdownStep !== 'essentialCookies'"><i
-                    class="fas fa-chevron-down"></i></span>
-                  <span *ngIf="bannerContentDropdownStep === 'essentialCookies'"><i
-                    class="fas fa-chevron-up"></i></span>
-                </p>
-                <p-divider></p-divider>
-                <div class="az-input-group" *ngIf="bannerContentDropdownStep === 'essentialCookies'">
+                <div id="displayFrequency">
                   <div class="p-field">
-                    <label for="title" class="input-label ">Title</label> <br/>
-                    <input id="title" type="text" class="az-input" pInputText/>
+                    <label for="title" class="input-label ">For Partial Consent-Show Banner Every </label> <br/>
+                    <div class="row m-0">
+                      <p-inputNumber class="az-input col-md-6 p-0 m-0" mode="decimal" inputId="withoutgrouping"
+                          formControlName="DisplayPartialConsent"           [useGrouping]="false">
+                      </p-inputNumber>
+                      <p-dropdown class="col-md-6 p-0 m-0"  formControlName="DisplayPartialConsentType"     [options]="displayFrequency" optionLabel="name" optionValue="code"></p-dropdown>
+                    </div>
                   </div>
 
-                  <div class="p-field">
-                    <label for="title" class="input-label ">Description</label> <br/>
-                    <textarea pInputTextarea></textarea>
+
+                  <div class="p-field mt-4">
+                    <label for="title" class="input-label ">For Reject All -Show Banner Every</label> <br/>
+                    <div class="row m-0">
+                      <p-inputNumber class="az-input col-md-6 p-0 m-0" mode="decimal" inputId="withoutgrouping"
+                                     formControlName="DisplayRejectAllConsent"            [useGrouping]="false">
+                      </p-inputNumber>
+                      <p-dropdown class="col-md-6 p-0 m-0"  formControlName="DisplayRejectAllConsentType"   [options]="displayFrequency" optionLabel="name" optionValue="code"></p-dropdown>
+                    </div>
                   </div>
+
+
+                  <div class="p-field mt-4">
+                    <label for="title" class="input-label "> For No Choice - Show Banner Every</label> <br/>
+                    <div class="row m-0">
+                      <p-inputNumber class="az-input col-md-6 p-0 m-0" mode="decimal" inputId="withoutgrouping"
+                                     formControlName="DisplayClosedConsent"           [useGrouping]="false">
+                      </p-inputNumber>
+                      <p-dropdown class="col-md-6 p-0 m-0" formControlName="DisplayClosedConsentType"   [options]="displayFrequency" optionLabel="name" optionValue="code"></p-dropdown>
+                    </div>
+                  </div>
+
                 </div>
-              </div>
-                <div id="functionalCookies " cdkDrag>
-                  <p class="az-dropdown" (click)="onOpenDropDown('functionalCookies')"> Functional Cookies
-                    <span *ngIf="bannerContentDropdownStep !== 'functionalCookies'"><i
-                      class="fas fa-chevron-down"></i></span>
-                    <span *ngIf="bannerContentDropdownStep === 'functionalCookies'"><i
-                      class="fas fa-chevron-up"></i></span>
-                  </p>
-                  <p-divider></p-divider>
-                  <div class="az-input-group" *ngIf="bannerContentDropdownStep === 'functionalCookies'">
-                    <div class="p-field">
-                      <label for="title" class="input-label ">Title</label> <br/>
-                      <input id="title" type="text" class="az-input" pInputText/>
-                    </div>
-
-                    <div class="p-field">
-                      <label for="title" class="input-label ">Description</label> <br/>
-                      <textarea pInputTextarea></textarea>
-                    </div>
-                  </div>
-                </div>
-
-                <div id="analyticsCookies " cdkDrag>
-                  <p class="az-dropdown" (click)="onOpenDropDown('analyticsCookies')"> Analytics Cookies
-                    <span *ngIf="bannerContentDropdownStep !== 'analyticsCookies'"><i
-                      class="fas fa-chevron-down"></i></span>
-                    <span *ngIf="bannerContentDropdownStep === 'analyticsCookies'"><i
-                      class="fas fa-chevron-up"></i></span>
-                  </p>
-                  <p-divider></p-divider>
-                  <div class="az-input-group" *ngIf="bannerContentDropdownStep === 'analyticsCookies'">
-                    <div class="p-field">
-                      <label for="title" class="input-label ">Title</label> <br/>
-                      <input id="title" type="text" class="az-input" pInputText/>
-                    </div>
-
-                    <div class="p-field">
-                      <label for="title" class="input-label ">Description</label> <br/>
-                      <textarea pInputTextarea></textarea>
-                    </div>
-                  </div>
-                </div>
-
-                <div id="advertisingCookies " cdkDrag>
-                  <p class="az-dropdown" (click)="onOpenDropDown('advertisingCookies')"> Advertising Cookies
-                    <span *ngIf="bannerContentDropdownStep !== 'advertisingCookies'"><i
-                      class="fas fa-chevron-down"></i></span>
-                    <span *ngIf="bannerContentDropdownStep === 'advertisingCookies'"><i
-                      class="fas fa-chevron-up"></i></span>
-                  </p>
-                  <p-divider></p-divider>
-                  <div class="az-input-group" *ngIf="bannerContentDropdownStep === 'advertisingCookies'">
-                    <div class="p-field">
-                      <label for="title" class="input-label ">Title</label> <br/>
-                      <input id="title" type="text" class="az-input" pInputText/>
-                    </div>
-
-                    <div class="p-field">
-                      <label for="title" class="input-label ">Description</label> <br/>
-                      <textarea pInputTextarea></textarea>
-                    </div>
-                  </div>
-                </div>
-
-
-                <div id="socialMediaCookies " cdkDrag>
-                  <p class="az-dropdown" (click)="onOpenDropDown('socialMediaCookies')"> Social Media Cookies
-                    <span *ngIf="bannerContentDropdownStep !== 'socialMediaCookies'"><i
-                      class="fas fa-chevron-down"></i></span>
-                    <span *ngIf="bannerContentDropdownStep === 'socialMediaCookies'"><i
-                      class="fas fa-chevron-up"></i></span>
-                  </p>
-                  <p-divider></p-divider>
-                  <div class="az-input-group" *ngIf="bannerContentDropdownStep === 'socialMediaCookies'">
-                    <div class="p-field">
-                      <label for="title" class="input-label ">Title</label> <br/>
-                      <input id="title" type="text" class="az-input" pInputText/>
-                    </div>
-
-                    <div class="p-field">
-                      <label for="title" class="input-label ">Description</label> <br/>
-                      <textarea pInputTextarea></textarea>
-                    </div>
-                  </div>
-                </div>
-
-
-                <div id="unclassifiedCookies " cdkDrag>
-                  <p class="az-dropdown" (click)="onOpenDropDown('unclassifiedCookies')">  Unclassified
-                    <span *ngIf="bannerContentDropdownStep !== 'unclassifiedCookies'"><i
-                      class="fas fa-chevron-down"></i></span>
-                    <span *ngIf="bannerContentDropdownStep === 'unclassifiedCookies'"><i
-                      class="fas fa-chevron-up"></i></span>
-                  </p>
-                  <p-divider></p-divider>
-                  <div class="az-input-group" *ngIf="bannerContentDropdownStep === 'unclassifiedCookies'">
-                    <div class="p-field">
-                      <label for="title" class="input-label ">Title</label> <br/>
-                      <input id="title" type="text" class="az-input" pInputText/>
-                    </div>
-
-                    <div class="p-field">
-                      <label for="title" class="input-label ">Description</label> <br/>
-                      <textarea pInputTextarea></textarea>
-                    </div>
-                  </div>
-                </div>
-
-
 
               </div>
-
-
             </div>
+          </ng-template>
 
-
-            <div class="step-6 content display-frequency" *ngIf="step === 6">
-              <p-divider align="left" type="dashed">
-                <b>Display Frequency</b>
-              </p-divider>
-
-
-              <div id="displayFrequency">
-                <div class="p-field">
-                  <label for="title" class="input-label ">For Partial Consent-Show Banner Every </label> <br/>
-                  <div class="row m-0">
-                    <p-inputNumber class="az-input col-md-6 p-0 m-0"  mode="decimal" inputId="withoutgrouping" [useGrouping]="false">
-                    </p-inputNumber>
-                    <p-dropdown class="col-md-6 p-0 m-0" [options]="countries"  optionLabel="name"></p-dropdown>
-                  </div>
-                </div>
-
-
-                <div class="p-field mt-4">
-                  <label for="title" class="input-label ">For Reject All -Show Banner Every</label> <br/>
-                  <div class="row m-0">
-                    <p-inputNumber class="az-input col-md-6 p-0 m-0"  mode="decimal" inputId="withoutgrouping" [useGrouping]="false">
-                    </p-inputNumber>
-                    <p-dropdown class="col-md-6 p-0 m-0" [options]="countries"  optionLabel="name"></p-dropdown>
-                  </div>
-                </div>
-
-
-                <div class="p-field mt-4">
-                  <label for="title" class="input-label "> For No Choice - Show Banner Every</label> <br/>
-                  <div class="row m-0">
-                    <p-inputNumber class="az-input col-md-6 p-0 m-0"  mode="decimal" inputId="withoutgrouping" [useGrouping]="false">
-                    </p-inputNumber>
-                    <p-dropdown class="col-md-6 p-0 m-0" [options]="countries"  optionLabel="name"></p-dropdown>
-                  </div>
-                </div>
-
-              </div>
-
+          <ng-template pTemplate>
+            <div class="p-col p-d-flex p-ai-center p-jc-center">
+              <app-az-banner *ngIf="currentBannerLayer === 'banner'" (currentBannerLayer)="onChangeBannerLayer($event)"
+                             [formData]="BannerConfigurationForm.value"></app-az-banner>
+              <app-az-preference *ngIf="currentBannerLayer === 'preference'" [formData]="BannerConfigurationForm.value"
+                                 [purposesList]="purposesList"></app-az-preference>
             </div>
-          </div>
-        </ng-template>
+          </ng-template>
 
-        <ng-template pTemplate>
-          <div class="p-col p-d-flex p-ai-center p-jc-center">
-            <app-az-banner [formData]="form.value"></app-az-banner>
-          </div>
-        </ng-template>
+        </p-splitter>
 
-      </p-splitter>
-
+      </div>
     </div>
-  </div>
 
-<!--  </form>-->
+  </form>
 </div>
