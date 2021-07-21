@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
 import {DomSanitizer, SafeResourceUrl} from '@angular/platform-browser';
 import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
-import {FormBuilder, FormGroup} from '@angular/forms';
+import {FormArray, FormBuilder, FormGroup} from '@angular/forms';
 import {
   CcpaCounties,
   DarkTheme, DefaultRegulation,
@@ -42,6 +42,7 @@ export class BannerConfigComponent implements OnInit, OnDestroy {
   showCustomColor = false;
   displayFrequency = DisplayFrequency;
   defaultRegulation = DefaultRegulation;
+  allowedLanguage = [];
   constructor(private sanitizer: DomSanitizer,
               private formBuilder: FormBuilder,
               private loading: NgxUiLoaderService,
@@ -57,7 +58,7 @@ export class BannerConfigComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.onInitForm();
-    this.onGetGlobleLangData();
+    this.onGetGlobleLangData('en-US');
     this.onSetDefaultStyle(LightTheme);
     // this.url = this.sanitizer.bypassSecurityTrustResourceUrl('https://phonetechtalk.com');
   }
@@ -70,7 +71,16 @@ export class BannerConfigComponent implements OnInit, OnDestroy {
     element.classList.add('container');
     element.classList.add('site-content');
   }
-
+  initPurpose(){
+    return this.formBuilder.group({
+      title: [''],
+      description: [''],
+      id: ['']
+    });
+  }
+  addPurpose(data){
+    return this.formBuilder.group(data);
+  }
   onInitForm() {
     this.BannerConfigurationForm = this.formBuilder.group({
       // Config
@@ -138,6 +148,8 @@ export class BannerConfigComponent implements OnInit, OnDestroy {
       PreferenceDisableAllTextColor: [''],
       PreferenceDoNotSellBackgroundColor: [''],
       PreferenceDoNotSellTextColor: [''],
+      // Purpose
+      PurposeList: this.formBuilder.array([]),
       // Display Frequency
       DisplayPartialConsent: [24],
       DisplayPartialConsentType: ['hours'],
@@ -145,14 +157,15 @@ export class BannerConfigComponent implements OnInit, OnDestroy {
       DisplayRejectAllConsentType: ['days'],
       DisplayClosedConsent: [10],
       DisplayClosedConsentType: ['pageViews'],
-      // Other
-      LivePreviewType: ['gdpr']
+      // Other Ignore Feilds
+      LivePreviewType: ['gdpr'],
+      PreviewLanguage: ['']
     });
   }
 
-  onGetGlobleLangData() {
+  onGetGlobleLangData(langCode) {
     this.loading.start();
-    this.cookieBannerService.GetGlobleLangData('en-US').subscribe(res => {
+    this.cookieBannerService.GetGlobleLangData(langCode).subscribe(res => {
       this.loading.stopAll();
       // this.languageData = res;
       this.BannerConfigurationForm.markAsPristine();
@@ -191,10 +204,23 @@ export class BannerConfigComponent implements OnInit, OnDestroy {
       DisplayClosedConsentType: 'pageViews',
     });
     this.purposesList = LANG_CONFIG.PURPOSES;
+    if (this.BannerConfigurationForm.value.PurposeList.length === 0) {
+      for (const data of this.purposesList) {
+        this.addPurposeRows.push(this.addPurpose(data));
+      }
+    } else {
+      this.BannerConfigurationForm.patchValue({
+        PurposeList: this.purposesList
+      });
+    }
+  }
+  get addPurposeRows(){
+    return this.BannerConfigurationForm.get('PurposeList') as FormArray;
   }
 
+
   onSetLanguage(e, langCode) {
-    const isChecked = e.checked;
+    const isChecked = e.target.checked;
     const selectedLanguage = [...this.selectedLanguage];
     if (isChecked) {
       selectedLanguage.push(langCode);
@@ -205,6 +231,7 @@ export class BannerConfigComponent implements OnInit, OnDestroy {
       }
     }
     this.selectedLanguage = selectedLanguage;
+    console.log('selectedLanguage', this.selectedLanguage)
   }
 
   onSelectStep(step) {
@@ -230,8 +257,12 @@ export class BannerConfigComponent implements OnInit, OnDestroy {
   }
 
   drop(event: CdkDragDrop<string[]>) {
-    console.log('eventData', event)
-    moveItemInArray(this.purposesList, event.previousIndex, event.currentIndex);
+    let purposeList = this.BannerConfigurationForm.value.PurposeList;
+    moveItemInArray(purposeList, event.previousIndex, event.currentIndex);
+    this.purposesList = purposeList;
+    this.BannerConfigurationForm.patchValue({
+      PurposeList: purposeList
+    });
   }
 
   onSubmit() {
@@ -291,5 +322,9 @@ export class BannerConfigComponent implements OnInit, OnDestroy {
   }
   onChangeBannerType(type){
 
+  }
+  onSelectPreviewLang() {
+      const langCode = this.BannerConfigurationForm.value.PreviewLanguage.code;
+      this.onGetGlobleLangData(langCode);
   }
 }

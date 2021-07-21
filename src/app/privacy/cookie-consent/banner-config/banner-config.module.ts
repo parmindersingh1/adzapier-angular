@@ -51,7 +51,7 @@ const path: Routes = [{
     InputNumberModule,
     ButtonModule,
     RippleModule,
-    ReactiveFormsModule,
+    ReactiveFormsModule.withConfig({warnOnNgModelWithFormControl: 'never'}),
     AccordionModule
   ]
 })

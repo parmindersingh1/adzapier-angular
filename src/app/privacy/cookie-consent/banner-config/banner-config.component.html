@@ -319,15 +319,16 @@
                     <ng-template pTemplate="body" let-language>
                       <tr>
                         <td>
-                          <p-checkbox (onChange)="onSetLanguage($event, language.code)" binary="true"
-                                      class="col-md-2"></p-checkbox>
+<!--                          <p-checkbox (onChange)="onSetLanguage($event, language.code)" binary="true"-->
+<!--                                      class="col-md-2"></p-checkbox>-->
+                          <input type="checkbox" [checked]="selectedLanguage.includes(language.code)"  class="lang-checkbox ml-1" (change)="onSetLanguage($event, language.code)" [value]="language.code"  />
                         </td>
                         <td><img src="assets/imgs/icons/flag_placeholder.png"
                                  [class]="'flag flag-' + language.countryFlag"/>
                           {{language.title}}</td>
                         <td></td>
                         <td>
-                          <p-radioButton formControlName="DefaultLanguage" [value]="language.code"
+                          <p-radioButton [disabled]="!selectedLanguage.includes(language.code)" formControlName="DefaultLanguage" [value]="language.code"
                           ></p-radioButton>
                         </td>
                       </tr>
@@ -339,8 +340,36 @@
                 <p-divider align="left" type="dashed">
                   <b>Content</b>
                 </p-divider>
+
+
+                    <div class="row mb-3">
+                      <div class="col-md-4">
+                        <p class=" mb-0  input-label pt-2" for="ccpa_target">Preview Language</p>
+                      </div>
+                      <div class="col-md-8">
+                        <p-dropdown  [options]="languages" formControlName="PreviewLanguage" (onChange)="onSelectPreviewLang()"
+                                     [showClear]="true" placeholder="Select a Language">
+                          <ng-template pTemplate="selectedItem">
+                            <div class="country-item country-item-value row" *ngIf="BannerConfigurationForm.value.PreviewLanguage">
+                              <img src="assets/imgs/icons/flag_placeholder.png" style="height: 20px"
+                                   [class]="'flag ml-2  col-md-2 flag-' + BannerConfigurationForm.value.PreviewLanguage.countryFlag.toLowerCase()"/>
+                              <div class="col-md-9">{{BannerConfigurationForm.value.PreviewLanguage.title}}</div>
+                            </div>
+                          </ng-template>
+                          <ng-template let-lang pTemplate="item">
+                            <div class="country-item row">
+                              <img src="assets/imgs/icons/flag_placeholder.png" style="height: 20px"
+                                   [class]="'flag col-md-2 flag-' + lang.countryFlag.toLowerCase()"/>
+                              <div class="col-md-9">{{lang.title}}</div>
+                            </div>
+                          </ng-template>
+                        </p-dropdown>
+                      </div>
+                    </div>
+
                 <p-tabView>
                   <p-tabPanel header="Banner">
+
                     <div id="cookieNotice">
                       <p class="az-dropdown" (click)="onOpenDropDown('cookieNotice')">Cookie Notice
                         <span *ngIf="showDropDownValue !== 'cookieNotice'"><i
@@ -971,25 +1000,53 @@
                   <b>Manage Purposes</b>
                 </p-divider>
                 <div cdkDropList (cdkDropListDropped)="drop($event)">
-                  <div id="essentialCookies" class="mt-2" cdkDrag *ngFor="let purpose of purposesList" >
-                    <p class="az-purpose-dropdown" (click)="onOpenDropDown(purpose.title)"> {{purpose.title}}
-                      <span *ngIf="showDropDownValue !== purpose.title"><i
+
+
+<!--                  -->
+<!--                  <div id="essentialCookies" class="mt-2" cdkDrag *ngFor="let purpose of purposesList" >-->
+<!--                    <p class="az-purpose-dropdown" (click)="onOpenDropDown(purpose.title)"> {{purpose.title}}-->
+<!--                      <span *ngIf="showDropDownValue !== purpose.title"><i-->
+<!--                        class="fas fa-chevron-down"></i></span>-->
+<!--                      <span *ngIf="showDropDownValue === purpose.title"><i-->
+<!--                        class="fas fa-chevron-up"></i></span>-->
+<!--                    </p>-->
+<!--                    <p-divider></p-divider>-->
+<!--                    <div class="az-input-group" *ngIf="showDropDownValue === purpose.title">-->
+<!--                      <div class="p-field">-->
+<!--                        <label for="title" class="input-label ">Title</label> <br/>-->
+<!--                        <input type="text" class="az-input" [(ngModel)]="purpose.title"  pInputText/>-->
+<!--                      </div>-->
+
+<!--                      <div class="p-field">-->
+<!--                        <label for="title" class="input-label ">Description</label> <br/>-->
+<!--                        <textarea pInputTextarea [(ngModel)]="purpose.description" ></textarea>-->
+<!--                      </div>-->
+<!--                    </div>-->
+<!--                  </div>         -->
+<!--                  -->
+
+                  <div formArrayName="PurposeList" >
+
+                  <div id="essentialCookies" class="mt-2" cdkDrag  *ngFor="let purpose of BannerConfigurationForm.controls.PurposeList['controls']; let i=index"  [formGroupName]="i">
+                    <p class="az-purpose-dropdown" (click)="onOpenDropDown('purpose' + i)"><span  class="drag-drop"><i class="fas fa-grip-vertical "></i></span> {{purposesList[i].title}}
+                      <span *ngIf="showDropDownValue !== 'purpose' + i"><i
                         class="fas fa-chevron-down"></i></span>
-                      <span *ngIf="showDropDownValue === purpose.title"><i
+                      <span *ngIf="showDropDownValue === 'purpose' + i"><i
                         class="fas fa-chevron-up"></i></span>
                     </p>
                     <p-divider></p-divider>
-                    <div class="az-input-group" *ngIf="showDropDownValue === purpose.title">
+                    <div class="az-input-group" *ngIf="showDropDownValue === 'purpose' + i">
                       <div class="p-field">
-                        <label for="title" class="input-label ">Title</label> <br/>
-                        <input type="text" class="az-input" [value]="purpose.title" pInputText/>
+                        <label class="input-label ">Title</label> <br/>
+                        <input type="text" class="az-input" id="title{{i}}" formControlName="title" pInputText/>
                       </div>
 
                       <div class="p-field">
-                        <label for="title" class="input-label ">Description</label> <br/>
-                        <textarea pInputTextarea [value]="purpose.description"></textarea>
+                        <label class="input-label ">Description</label> <br/>
+                        <textarea pInputTextarea   id="description{{i}}"  formControlName="description" ></textarea>
                       </div>
                     </div>
+                  </div>
                   </div>
 <!--                  <div id="functionalCookies " cdkDrag>-->
 <!--                    <p class="az-dropdown" (click)="onOpenDropDown('functionalCookies')"> Functional Cookies-->
