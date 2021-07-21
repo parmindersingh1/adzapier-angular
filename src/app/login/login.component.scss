@@ -63,6 +63,11 @@
   cursor: pointer;
 }
 
+input::-ms-reveal,
+input::-ms-clear {
+  display: none;
+}
+
 .email-verification-panel {
   position: relative;
   top: -470px;
