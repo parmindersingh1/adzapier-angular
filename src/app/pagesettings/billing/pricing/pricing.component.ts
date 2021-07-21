@@ -221,16 +221,19 @@ export class PricingComponent implements OnInit, OnDestroy {
   }
 
   onSelectCookieConsentBillingCycle(e) {
-    if (e.checked) {
-      this.cookieConsentBillingCycle = 'yearly';
-      this.subscriptionList = this.planDetails.cookieConsent[`${this.cookieConsentBillingCycle}`];
-      this.dsarPlanList = this.planDetails.dsar[`${this.cookieConsentBillingCycle}`];
-      this.consentPreferenceList = this.planDetails.consentPreference[`${this.cookieConsentBillingCycle}`];
-    } else {
-      this.cookieConsentBillingCycle = 'monthly';
-      this.subscriptionList = this.planDetails.cookieConsent[`${this.cookieConsentBillingCycle}`];
-      this.dsarPlanList = this.planDetails.dsar[`${this.cookieConsentBillingCycle}`];
-      this.consentPreferenceList = this.planDetails.consentPreference[`${this.cookieConsentBillingCycle}`];
+    try {
+      if (e.checked) {
+        this.cookieConsentBillingCycle = 'yearly';
+        this.subscriptionList = this.planDetails.cookieConsent[`${this.cookieConsentBillingCycle}`];
+        this.dsarPlanList = this.planDetails.dsar[`${this.cookieConsentBillingCycle}`];
+        this.consentPreferenceList = this.planDetails.consentPreference[`${this.cookieConsentBillingCycle}`];
+      } else {
+        this.cookieConsentBillingCycle = 'monthly';
+        this.subscriptionList = this.planDetails.cookieConsent[`${this.cookieConsentBillingCycle}`];
+        this.dsarPlanList = this.planDetails.dsar[`${this.cookieConsentBillingCycle}`];
+        this.consentPreferenceList = this.planDetails.consentPreference[`${this.cookieConsentBillingCycle}`];
+      }
+    } catch (e) {
     }
   }
 
@@ -309,6 +312,7 @@ export class PricingComponent implements OnInit, OnDestroy {
         this.subTotal += Number(item.priceTotal);
       }
     }
+    console.log('cartItem', this.cartItem)
   }
 
   onUpdateCart(cartProperty, i) {
@@ -388,4 +392,12 @@ export class PricingComponent implements OnInit, OnDestroy {
   openModal(template: TemplateRef<any>) {
     this.modalRef = this.modalService.show(template, {class: 'modal-lg'});
   }
+
+  onSetCookieConsent(type) {
+ this.currentStep = type;
+  this.cookieConsentBillingCycle = 'monthly';
+    this.subscriptionList = this.planDetails.cookieConsent[`${this.cookieConsentBillingCycle}`];
+    this.dsarPlanList = this.planDetails.dsar[`${this.cookieConsentBillingCycle}`];
+    this.consentPreferenceList = this.planDetails.consentPreference[`${this.cookieConsentBillingCycle}`];
+}
 }
