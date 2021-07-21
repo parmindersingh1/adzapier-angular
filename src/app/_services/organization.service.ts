@@ -30,7 +30,7 @@ export class OrganizationService {
     editedProperty = this.editedPropertySource.asObservable();
 
     public isOrganizationUpdated: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-    public isPropertyUpdated: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+    public isPropertyUpdated: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(null);
 
     constructor(private http: HttpClient) { }
 
