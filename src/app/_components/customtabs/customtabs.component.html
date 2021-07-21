@@ -8,11 +8,11 @@
                     <div *ngIf="currentSelectedStage(item.id) && isnewlyAddedStage" class="deleteicon" (click)="deleteNewStage(i)">
                         <i class="fa fa-trash" aria-hidden="true"></i>
                     </div> 
-                     <button *ngIf="customStages(item)" [disabled]="editStatus ? null : true" class="deleteicon" (click)="openModal(confirmDeleteStageAlert,i,item)">
+                     <button *ngIf="customStages(item)" [disabled]="flowStatus === 'active'" class="deleteicon" (click)="openModal(confirmDeleteStageAlert,i,item)">
                         <i class="fa fa-trash" aria-hidden="true"></i>
                      </button> 
                     <div class="stageTitle" (click)="selectCurrentStage(item)">
-                       {{item.stage_title}}
+                       {{item.stage_title}} editStatus | {{editStatus}}{{flowStatus}}
                     </div>                                      
                 </div>
                 <button [disabled]="flowStatus === 'active'"  class="btn btn-xs btn-primary small-btn" *ngIf="i !==  item.order && i < inputData.length - 1 && item.stage_title !== 'UNVERIFIED' "

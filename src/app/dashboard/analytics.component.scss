@@ -29,7 +29,61 @@
     border: 0;
 }
 
+
+.dashboard-div {
+    margin: 0;
+    padding: 0;
+    display: inline-flex;
+    flex-direction: row;
+    flex-wrap: nowrap !important;
+}
+
 .dashboard-div .card-body {
+    box-sizing:border-box;
     border: 1px solid #cdcfd7 !important;
     box-shadow: -1px -1px 20px #afafaf !important;
+}
+
+.dashboard-div ul {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    display: inline-flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+}
+
+.dashboard-div ul li {
+    padding: 0;
+    // margin: 0 0 36px 0;
+    list-style: none;
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    align-content:space-between;
+    // width: 300px;
+}
+
+
+.dashboard-no-license-div {
+    margin: 0;
+    padding: 0;
+    display: inline-flex;
+    flex-direction: row;
+    flex-wrap: nowrap !important;
+}
+  
+
+.hide-dashboard-div {
+    display: none !important;
+    visibility: hidden;
+}
+
+.add-bottom-margin {
+    margin: 0 0 36px 0;
+}
+
+.remove-bottom-margin {
+    margin: 0 0 36px 0;
 }
