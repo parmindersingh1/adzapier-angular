@@ -14,7 +14,7 @@
         </div>
 
         <div class="toggle-period">
-          <input id="toggle-period" (change)="onSelectCookieConsentBillingCycle(subType)"
+          <input id="toggle-period" (change)="onSelectCookieConsentBillingCycle(subType)" [checked]="cookieConsentBillingCycle === 'yearly'"
         #subType class="toggle-period__checkbox" type="checkbox">
 <!--          <input id="toggle-period" (change)="onSelectCookieConsentBillingCycle(subType)"-->
 <!--                 [disabled]="activeData.cookieConsent.cycle === 'yearly'"-->
@@ -33,9 +33,9 @@
 
       </div>
       <div class="btn-group-type text-center mt-3">
-        <button type="button" (click)="currentStep = 1; cookieConsentBillingCycle = 'monthly'" [ngClass]="{'primary-yellow' : currentStep === 1}" class="button-text btn-white btn mr-2">Cookie Consent</button>
-        <button type="button" (click)="currentStep = 2; cookieConsentBillingCycle = 'monthly'" [ngClass]="{'primary-yellow' : currentStep === 2}" class="button-text btn btn-white mr-2">DSAR</button>
-        <button type="button" (click)="currentStep = 3; cookieConsentBillingCycle = 'monthly'"  [ngClass]="{'primary-yellow' : currentStep === 3}" class="button-text btn-white btn mr-2">Cookie Preference</button>
+        <button type="button" (click)="onSetCookieConsent(1)" [ngClass]="{'primary-yellow' : currentStep === 1}" class="button-text btn-white btn mr-2">Cookie Consent</button>
+        <button type="button" (click)="onSetCookieConsent(2)" [ngClass]="{'primary-yellow' : currentStep === 2}" class="button-text btn btn-white mr-2">DSAR</button>
+        <button type="button" (click)="onSetCookieConsent(3)"  [ngClass]="{'primary-yellow' : currentStep === 3}" class="button-text btn-white btn mr-2">Cookie Preference</button>
       </div>
 
 
@@ -76,6 +76,8 @@
                   *ngFor="let  features of highLightFeatures.cookieConsent.enterprise">{{features.featureName}} <span
                 class="font-weight-bold" *ngIf="features.featureValue"> - {{features.featureValue}}</span></li>
             </ng-container>
+            <a class="more-details-text" (click)="openModal(template)">View Comparision</a>
+
           </ul>
 
           <h1 class="tx-rubik tx-normal mb-3 mg-t-auto price-text">
@@ -128,6 +130,8 @@
             <li class="text-left feature-list"
                 *ngFor="let  features of highLightFeatures.cookieConsent.enterprise">{{features.featureName}}
               <span class="font-weight-bold" *ngIf="features.featureValue"> - {{features.featureValue}}</span></li>
+            <a class="more-details-text" (click)="openModal(template)">View Comparision</a>
+
           </ul>
           <h2 class="tx-rubik tx-normal ">Contact Us</h2>
           <p class="tx-size-10 mg-b-30 "></p>
@@ -223,6 +227,8 @@
             <li class="text-left feature-list"
                 *ngFor="let  features of highLightFeatures.dsar.enterprise">{{features.featureName}}
               <span class="font-weight-bold" *ngIf="features.featureValue"> - {{features.featureValue}}</span></li>
+            <a class="more-details-text" (click)="openModal(template)">View Comparision</a>
+
           </ul>
           <h2 class="tx-rubik tx-normal ">Contact Us</h2>
           <p class="tx-size-10 mg-b-30 "></p>
@@ -272,7 +278,7 @@
 
           <h1 class="tx-rubik tx-normal mb-3 mg-t-auto price-text">
             <sup class="doller">$</sup>
-            <span class="font-weight-bold" *ngIf="cookieConsentBillingCycle === 'monthly'">{{plan.price}}</span>
+            <span class="font-weight-bold" *ngIf="cookieConsentBillingCycle === 'monthly'">{{plan.price}}  </span>
             <span class="font-weight-bold" *ngIf="cookieConsentBillingCycle !== 'monthly'">{{plan.price  / 12 | number : '1.0-0'}}</span>
             <span class="billing-type">/Month</span>
           </h1>
@@ -594,7 +600,7 @@
             <div style="text-align: left" class="col-md-6">
               <h5 class="cart-head">{{cart.product_name}}
               </h5>
-              <h6 class="pt-2 font-weight-bold tx-13">Property / Organization</h6>
+              <h6 class="pt-2 font-weight-bold tx-13">Property / Organization - {{cart.cycle}}</h6>
             </div>
             <div class="col-md-5 mb-3">
               <h5>${{cart.priceTotal}}.00</h5>
