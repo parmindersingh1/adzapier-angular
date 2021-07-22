@@ -395,7 +395,7 @@ export class PricingComponent implements OnInit, OnDestroy {
     })
   }
   openModal(template: TemplateRef<any>) {
-    this.modalRef = this.modalService.show(template, {class: 'modal-lg'});
+    this.modalRef = this.modalService.show(template, {class: 'modal-lg', ignoreBackdropClick: true});
   }
 
   onSetCookieConsent(type) {
