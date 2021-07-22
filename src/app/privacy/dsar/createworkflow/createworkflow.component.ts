@@ -167,8 +167,13 @@ export class CreateworkflowComponent implements OnInit, AfterViewChecked, DirtyC
     
     const index = this.workflowStages.findIndex((t) => t.id === this.selectedStageId);
     this.guidancetext = e.html;
-    this.workflowStages[index].guidance_text = this.guidancetext;
-    this.workflowStages[index].ws_stage_status == 'custom' ? this.isworkflowSaved = false : this.isworkflowSaved = true;
+    if(index !== -1){
+      this.workflowStages[index].guidance_text = this.guidancetext;
+      this.workflowStages[index].ws_stage_status == 'custom' ? this.isworkflowSaved = false : this.isworkflowSaved = true;
+    }else{
+      this.workflowStages[0].guidance_text = this.guidancetext;
+      this.workflowStages[0].ws_stage_status == 'custom' ? this.isworkflowSaved = false : this.isworkflowSaved = true;
+    }
   }
 
   rearrangeArrayResponse(dataArray) {
@@ -352,6 +357,8 @@ export class CreateworkflowComponent implements OnInit, AfterViewChecked, DirtyC
   loadWorkflowById(id?) {
     this.skeletonLoading = true;
     let resp: any;
+    let stageTitle;
+    let guidanceText;
     this.workflowService.getWorkflowById(this.constructor.name, moduleName.workFlowModule, this.currentManagedOrgID, id)
       .subscribe((data) => {
         if (data.length > 0) {
@@ -360,9 +367,15 @@ export class CreateworkflowComponent implements OnInit, AfterViewChecked, DirtyC
           this.selectedStageId = this.selectedStageId || this.workflowStages[0].id;
           const stageIndex = this.workflowStages.findIndex((t) => t.id === this.selectedStageId);
           // stageIndex == 0 ? this.isControlDisabled = true : this.isControlDisabled = false;
-          const stageTitle = this.workflowStages[stageIndex].stage_title;
-          const guidanceText = this.workflowStages[stageIndex].guidance_text;
+          if(stageIndex !== -1){
+          stageTitle = this.workflowStages[stageIndex].stage_title;
+          guidanceText = this.workflowStages[stageIndex].guidance_text;
           this.order = this.workflowStages[stageIndex].order;
+          }else{
+            stageTitle = this.workflowStages[0].stage_title;
+            guidanceText = this.workflowStages[0].guidance_text;
+            this.order = this.workflowStages[0].order;
+          }
           this.workflowStatus = data[0].workflow_status;
           this.workflowType = data[0].workflow_type;
           this.isControlDisabled = true;
@@ -433,7 +446,6 @@ export class CreateworkflowComponent implements OnInit, AfterViewChecked, DirtyC
   }
 
   ngAfterViewChecked() {
-    console.log(this.workflowStatus, 'ws..');
     this.cd.detectChanges();
 
     if (this.quillTextEditor !== undefined) {
