@@ -190,8 +190,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
           // this.orgservice.removeControls();
           this.userService.getCurrentUser.unsubscribe();
           localStorage.clear();
-          this.router.navigate(['/login']);
-          sessionStorage.clear();
+          if(this.router.url.indexOf('/verify-email') !== -1){
+            this.router.navigate(['/login']);
+            sessionStorage.clear();
+          }
         }
       }
     });
@@ -389,10 +391,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   isPropSelected(selectedItem): boolean {
-    if (!this.isProperyDisabled(selectedItem)) {
-      this.isPropertySelected = this.selectedOrgProperties.filter((t) => t.property_id === selectedItem.property_id).length > 0
-        ? true : false;
+    if (selectedItem.property_id !== undefined) {
+      this.isPropertySelected = this.selectedOrgProperties.filter((t) => t.property_id === selectedItem.property_id).length > 0;
       return this.isPropertySelected;
+    } else{
+      if(selectedItem.response.id !== undefined){
+      this.isPropertySelected = this.selectedOrgProperties.some((t) => t.property_id === selectedItem.response.id);
+      return this.isPropertySelected;
+      }
     }
   }
 
@@ -422,13 +428,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
     // tslint:disable-next-line: max-line-length
     // this.orgservice.currentProperty.pipe(distinctUntilChanged()).subscribe((data) => {
     this.orgservice.isPropertyUpdated.subscribe((status) => { this.isPropertyUpdated = status });
-   if(!this.isPropertyUpdated){
+  // if(!this.isPropertyUpdated){
     this.orgservice.currentProperty.subscribe((data) => {
       if (data !== '') {
-        this.currentProperty = data.property_name;
-        this.currentOrganization = data.organization_name || data.response.orgname;
+        this.currentProperty = data.property_name || data.response.name;
+        this.currentOrganization = data.organization_name || data.response.orgname || data.response.name;
         if (this.currentProperty !== undefined) {
-          const orgIndex = this.selectedOrgProperties.findIndex((t) => t.organization_id === data.organization_id);
+          const orgIndex = this.selectedOrgProperties.findIndex((t) => t.organization_id === data.organization_id || data.response.oid);
           if (orgIndex === -1) {
             this.selectedOrgProperties.push(data);
             this.licenseAvailabilityForProperty(data);
@@ -440,7 +446,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
       }
 
     });
- }
+ //}
 
     if (this.isPropertyUpdated) {
       this.orgservice.editedProperty.subscribe((prop) => {
@@ -597,7 +603,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   isOrgPropertyExists(data): boolean {
     const orgDetails = this.orgservice.getCurrentOrgWithProperty();
     if (orgDetails !== undefined) {
-      const result = data.filter((t) => t.id === orgDetails.organization_id).length > 0 || data.some((t) => t.id === orgDetails.id);
+      const result = data.filter((t) => t.id === orgDetails.organization_id).length > 0 || data.some((t) => t.id === orgDetails.response.oid);
       const isSameUserLoggedin = this.userID === orgDetails.user_id || orgDetails.uid;
       if (result && isSameUserLoggedin) {
         this.licenseAvailabilityForFormAndRequestPerOrg(orgDetails);

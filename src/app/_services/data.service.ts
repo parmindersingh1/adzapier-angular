@@ -543,9 +543,13 @@ export class DataService {
   }
 
   checkLicenseAvailabilityPerOrganization(org): Observable<any>{
-    let webFormLicense = this.getWebFormLicenseLimit(this.constructor.name, moduleName.headerModule, org.id || org.organization_id || org);
-    let requestLicense = this.getDSARRequestLicenseLimit(this.constructor.name, moduleName.headerModule, org.id || org.organization_id || org);
-    let workflowLicense = this.getWorkflowLicenseLimit(this.constructor.name, moduleName.headerModule, org.id || org.organization_id || org);
+    let orgID;
+    if(org.response !== undefined){
+      orgID = org.response.id;
+    } 
+    let webFormLicense = this.getWebFormLicenseLimit(this.constructor.name, moduleName.headerModule, org.id || org.organization_id || orgID || org);
+    let requestLicense = this.getDSARRequestLicenseLimit(this.constructor.name, moduleName.headerModule, org.id || org.organization_id || orgID || org);
+    let workflowLicense = this.getWorkflowLicenseLimit(this.constructor.name, moduleName.headerModule, org.id || org.organization_id || orgID || org);
     return forkJoin([webFormLicense, requestLicense, workflowLicense])
   }
 
