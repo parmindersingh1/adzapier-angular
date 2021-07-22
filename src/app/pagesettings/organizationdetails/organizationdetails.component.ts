@@ -425,7 +425,7 @@ export class OrganizationdetailsComponent implements OnInit {
             this.getPropertyList(res.response.oid);
             this.orgService.isPropertyUpdated.next(true);
             if (res.response.id === this.currrentManagedPropID) {
-              // this.orgService.changeCurrentSelectedProperty(res);
+              this.orgService.changeCurrentSelectedProperty(res);
               res['user_id'] = this.userID;
               res['organization_name'] = this.organizationName;
               this.orgService.setCurrentOrgWithProperty(res);
