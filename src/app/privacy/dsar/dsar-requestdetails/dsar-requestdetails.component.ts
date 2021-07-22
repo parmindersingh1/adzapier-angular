@@ -1870,7 +1870,7 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
   }
 
   changeActivityType($event){
-    this.activitytype = $event.currentTarget.value;
+    this.activitytype = parseInt($event.currentTarget.value);
   }
 }
 

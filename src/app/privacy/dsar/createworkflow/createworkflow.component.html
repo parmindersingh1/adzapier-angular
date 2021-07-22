@@ -45,7 +45,7 @@
                             <ngx-skeleton-loader  *ngIf="skeletonLoading && workflowStages?.length !== 0"   count="1"></ngx-skeleton-loader>
                             <span *ngIf="!skeletonLoading && workflowStages?.length === 0" class="nodatafound">No data found</span>
                         </div>
-                        <app-customtabs *ngIf="!skeletonLoading"  [flowStatus]="workflowStatus" [editStatus]="isEditClicked" [inputData]="workflowStages" [currentTab]="order"
+                        <app-customtabs *ngIf="!skeletonLoading"  [flowStatus]="workflowStatus" [inputData]="workflowStages" [currentTab]="order"
                             (currentStageEvent)="clickOnWorkflowStages($event)" (deleteCustomStage)="deleteCustomStages($event)">
                         </app-customtabs>                        
                     </ng-container>
@@ -90,8 +90,8 @@
                                 tooltip="You can't edit the predefined guidance text"></i-feather>
                                 </label>
                             <div [ngClass]="{ 'quilleditor-invalid':  guidanceText.invalid && submitted && !skeletonLoading}">
-                                <quill-editor [(ngModel)]="guidancetext" name="guidancetext" [modules]="quillConfig" 
-                                #guidanceText = "ngModel"
+                                <quill-editor [(ngModel)]="guidancetext" name="guidancetext" [modules]="isControlDisabled ? '' : quillConfig" 
+                                #guidanceText = "ngModel" #quillEditorText
                                 [readOnly]="isControlDisabled || workflowStatus == 'active'"
                                 (onContentChanged)="updateGuidanceText($event)"
                                 [ngClass]="{ 'is-invalid': guidanceText?.invalid && (guidanceText?.dirty || guidanceText?.touched) && submitted }"

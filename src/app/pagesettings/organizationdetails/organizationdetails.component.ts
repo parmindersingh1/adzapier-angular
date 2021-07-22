@@ -42,7 +42,7 @@ export class OrganizationdetailsComponent implements OnInit {
   pageSize: any = 5;
   totalCount: any;
   paginationConfig: TablePaginationConfig;
-
+  userID;
   p2: number = 1;
   propertyPgSize: any = 5;
   propertyTotalCount: any;
@@ -195,6 +195,7 @@ export class OrganizationdetailsComponent implements OnInit {
       this.zipcode = data.response.zipcode;
       this.email = data.response.email;
       this.phone = data.response.phone;
+      this.userID = data.response.uid;
       if(data.response.license_id){
         this.loadOrganizationLicenseNameByID(this.organizationID,data.response.license_id)
       }
@@ -424,7 +425,10 @@ export class OrganizationdetailsComponent implements OnInit {
             this.getPropertyList(res.response.oid);
             this.orgService.isPropertyUpdated.next(true);
             if (res.response.id === this.currrentManagedPropID) {
-              // this.orgService.changeCurrentSelectedProperty(res);
+              this.orgService.changeCurrentSelectedProperty(res);
+              res['user_id'] = this.userID;
+              res['organization_name'] = this.organizationName;
+              this.orgService.setCurrentOrgWithProperty(res);
               const orgDetails = this.orgService.getCurrentOrgWithProperty();
               this.orgService.isPropertyUpdated.next(true);
               this.orgService.updateEditedProperty(res);
