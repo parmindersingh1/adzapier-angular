@@ -324,8 +324,8 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
       if (response !== '') {
         this.selectedProperty = response.property_name;
         this.currentOrganization = response.organization_name;
-        this.orgId = response.organization_id;
-        this.propId = response.property_id;
+        this.orgId = response.organization_id || response.response.oid;
+        this.propId = response.property_id || response.response.id;
         this.currentManagedOrgID = response.organization_id;
       } else {
         const orgDetails = this.organizationService.getCurrentOrgWithProperty();

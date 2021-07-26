@@ -332,8 +332,8 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
   getSelectedOrgIDPropertyID() {
     this.orgService.currentProperty.subscribe((response) => {
       if (response !== '') {
-        this.currentManagedOrgID = response.organization_id;
-        this.currrentManagedPropID = response.property_id;
+        this.currentManagedOrgID = response.organization_id || response.response.oid;
+        this.currrentManagedPropID = response.property_id || response.response.id;
         this.currentPropertyName = response.property_name;
         this.currentSelectedOrgname = response.organization_name;
       } else {
