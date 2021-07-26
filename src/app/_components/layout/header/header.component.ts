@@ -499,16 +499,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
       if (data.response.length > 0) {
         this.rearrangeFormSequence(this.orgPropertyMenu);
         this.selectedOrgProperties.length = 0;
-        console.log(this.isOrgPropertyExists(this.orgPropertyMenu),'isorgproexist...');
         if (!this.isOrgPropertyExists(this.orgPropertyMenu)) {
           if (this.orgPropertyMenu && this.orgPropertyMenu[0] && this.orgPropertyMenu[0].property[0] === 'undefined') {
             // this.router.navigate(['settings/organizations']);
             this.router.navigate(['settings/organizations/details/' + this.orgPropertyMenu[0].id]);
             return false;
           } else {
-            console.log(this.isFirstPropertyExist(),'isFirstPropertyExist..');
-            console.log(this.isOrgPropertyEmpty(),'isOrgPropertyEmpty..');
-            if (this.isOrgPropertyEmpty() || this.isFirstPropertyExist()) {
+            if (this.isOrgPropertyEmpty() && this.isFirstPropertyExist()) {
               let activePro = this.filterProp(this.orgPropertyMenu);
               const proIndex = activePro[0].property.findIndex((t) => t.property_active === true);
               this.activeProp = activePro[0].property[proIndex];
@@ -962,9 +959,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
         } else {
           this.dataService.isLicenseAppliedForProperty.next({ requesttype: 'property', hasaccess: false });
           this.isShowDashboardForCookieConsent = false;
-          if (this.router.url.indexOf('settings') == -1) {
-            this.router.navigate(['/home/welcome']);
-          }
+          // if (this.router.url.indexOf('settings') == -1) {
+          //   this.router.navigate(['/home/welcome']);
+          // }
           //this.dataService.openUpgradeModalForCookieConsent(resData);
         }
       }
