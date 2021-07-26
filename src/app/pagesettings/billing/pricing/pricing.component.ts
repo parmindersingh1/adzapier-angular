@@ -208,7 +208,10 @@ export class PricingComponent implements OnInit, OnDestroy {
         }
       }, error => {
         this.loading.stop();
-        console.log(error);
+        const err: any = JSON.parse(error);
+        this.isOpen = true;
+        this.alertMsg = err.message;
+        this.alertType = 'danger';
       });
     } else {
       location.reload();
@@ -315,7 +318,6 @@ export class PricingComponent implements OnInit, OnDestroy {
         this.subTotal += Number(item.priceTotal);
       }
     }
-    console.log('cartItem', this.cartItem)
   }
 
   onUpdateCart(cartProperty, i) {
@@ -393,7 +395,7 @@ export class PricingComponent implements OnInit, OnDestroy {
     })
   }
   openModal(template: TemplateRef<any>) {
-    this.modalRef = this.modalService.show(template, {class: 'modal-lg'});
+    this.modalRef = this.modalService.show(template, {class: 'modal-lg', ignoreBackdropClick: true});
   }
 
   onSetCookieConsent(type) {

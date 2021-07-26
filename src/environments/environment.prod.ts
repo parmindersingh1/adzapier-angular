@@ -12,6 +12,10 @@ export const environment = {
   globleLangURL: 'https://cdn.primeconsent.com/cmp/banner-language/:lang.json',
   consentPreferenceCDN: 'https://cdn.primeconsent.com/cmp/consent-preference/production/adzapier-cp-sdk.js',
   customLangURL: 'https://cdn.primeconsent.com/cmp/v1/web/:oid/lang/:pid-:lang.json',
+  consentPreferenceConfig : {
+    AppID: 'ZDorfxuiXKCKBmKOoTqhrmPfJHHBUQfBoFTeeqjYDUNruEmehJ', // Your App ID
+    PropID: 'd966020b-220d-4977-8d28-85aa08c2f3aa'
+  },
   lokiConfig: {
     app: 'cmp-adminportal-prod',
     env: 'prod',
