@@ -534,7 +534,7 @@ export class OrganizationdetailsComponent implements OnInit {
           .subscribe((data) => {
             this.loading.stop();
             if (data) {
-              this.alertMsg = data.response;
+              this.alertMsg = data.response || data.error;
               this.isOpen = true;
               this.alertType = 'success';
               this.loadOrgTeamMembers(this.organizationID);

@@ -219,3 +219,7 @@ table > tbody > tr > td:nth-child(2) > div > img.img-fluid {
 //     opacity: 1;
 //     display: block;
 // }
+span:not(:last-of-type)::after {
+    content: ","
+ }
+ 

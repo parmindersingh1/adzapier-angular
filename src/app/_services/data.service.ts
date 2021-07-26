@@ -563,7 +563,7 @@ export class DataService {
   }
 
   checkLicenseAvailabilityForProperty(prop):Observable<any>{
-    let propLicense = this.getPropertyPlanDetails(this.constructor.name,moduleName.headerModule,prop.property_id);
+    let propLicense = this.getPropertyPlanDetails(this.constructor.name,moduleName.headerModule,prop.property_id || prop.response.id);
     return forkJoin([propLicense]);
   }
 
