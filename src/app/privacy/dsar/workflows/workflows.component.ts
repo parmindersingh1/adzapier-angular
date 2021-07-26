@@ -117,7 +117,7 @@ export class WorkflowsComponent implements OnInit, AfterViewInit, DirtyComponent
   onGetOrgId() {
     this.orgservice.currentProperty.subscribe((response) => {
       if (response !== '') {
-        this.currentManagedOrgID = response.organization_id;
+        this.currentManagedOrgID = response.organization_id || response.response.oid;
       } else {
         const orgDetails = this.orgservice.getCurrentOrgWithProperty();
         this.currentManagedOrgID = orgDetails.organization_id;
