@@ -392,11 +392,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   isPropSelected(selectedItem): boolean {
     if (selectedItem.property_id !== undefined) {
-      this.isPropertySelected = this.selectedOrgProperties.filter((t) => t.property_id === selectedItem.property_id).length > 0;
+      this.isPropertySelected = this.selectedOrgProperties.filter((t) => t.property_id === selectedItem.property_id).length > 0 || this.selectedOrgProperties.some((t) => t.response !== undefined && t.response.id === selectedItem.property_id);
       return this.isPropertySelected;
     } else{
       if(selectedItem.response.id !== undefined){
-      this.isPropertySelected = this.selectedOrgProperties.some((t) => t.property_id === selectedItem.response.id);
+      this.isPropertySelected = this.selectedOrgProperties.some((t) => t.property_id === selectedItem.response.id) || this.selectedOrgProperties.some((t) => t.response !== undefined && t.response.id === selectedItem.response.id);
       return this.isPropertySelected;
       }
     }

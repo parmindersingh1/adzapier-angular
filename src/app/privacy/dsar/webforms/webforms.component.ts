@@ -97,7 +97,7 @@ export class WebformsComponent implements OnInit, DirtyComponents {
     this.organizationService.currentProperty.subscribe((data) => {
       if (data !== '') {
         this.orgDetails = data;
-        this.currentOrgID = this.orgDetails.organization_id;
+        this.currentOrgID = this.orgDetails.organization_id || this.orgDetails.response.oid;
        } else {
         const orgDetails = this.organizationService.getCurrentOrgWithProperty();
         this.orgDetails = orgDetails;
@@ -116,7 +116,7 @@ export class WebformsComponent implements OnInit, DirtyComponents {
     const perPageRecords = this.numofRecords ? this.numofRecords : 10;
      const pagelimit = '?limit=' + perPageRecords + '&page=' + this.activePage;
     if (orgDetails !== undefined) {
-      this.ccpaFormConfigService.getCCPAFormList(orgDetails.organization_id, orgDetails.property_id,
+      this.ccpaFormConfigService.getCCPAFormList(orgDetails.organization_id || orgDetails.response.oid, orgDetails.property_id || orgDetails.response.id,
         this.constructor.name, moduleName.dsarWebFormModule,pagelimit)
         .subscribe((data) => {
           this.loading.stop();
