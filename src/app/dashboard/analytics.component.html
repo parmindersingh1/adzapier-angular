@@ -1,104 +1,80 @@
-<div class="container pd-x-0 pd-lg-x-10 pd-xl-x-0">
-  <!-- <div class="ml-5 pl-2 d-sm-flex align-items-center justify-content-between mg-b-20 mg-lg-b-25 mg-xl-b-30">
-    <div>
-      <nav aria-label="breadcrumb">
-        <ol class="breadcrumb breadcrumb-style1 mg-b-10">
-          <li class="breadcrumb-item active"><a href="#">Welcome</a></li>
-         
-        </ol>
-      </nav>
-      <h4 class="mg-b-0 tx-spacing--1">Your Apps</h4>
-    </div>
-
-  </div> -->
-  <div class="col-sm-10 ml-5 mb-3">
+<div class="container pd-x-0 pd-lg-x-10 pd-xl-x-0" *ngIf="appsContent?.length > 0">
+  <div class="col-sm-10 mb-3">
     <p class="text-uppercase mb-2 font-weight-bold tx-11">Welcome</p>
     <h4>Your Apps</h4>
   </div>
-  <div class="mx-2 row row-xs dashboard-div">
-    <!-- col -->
-    <div class="mx-auto col-sm-6 col-lg-3">
-      <div class="card card-body">
-        <h5 class="mx-auto card-title">Cookie Consent Dashboard</h5>
-        <i class="fas fa-chart-line tx-primary temp-blue center tx-64 margin-15"></i>
-        <p class="mx-auto tx-11 tx-spacing-0 tx-color-02 tx-normal mg-b-8 margin-30">
-          Real-time dashboard and analytics to improve your opt-in rates with in-depth reporting.        </p>
-
-        <div class="d-flex d-lg-block d-xl-flex align-items-end">
-          <!-- <h3 class="tx-normal tx-rubik mg-b-0 mg-r-5 lh-1">0.81%</h3> -->
-        </div>
-        <hr>
-
-        <a class="btn btn-primary bg-templ-blue" tooltip="{{cookieTooltiptext}}" [routerLink]="isLicenseAssignedtoProperty ? ['/home/dashboard/cookie-consent'] : ['/settings/billing/manage']">{{isLicenseAssignedtoProperty ? 'Go Now' : 'Try Now'}}</a>
-      </div>
-    </div><!-- col -->
-    <div class="mx-auto col-sm-6 col-lg-3">
-      <div class="card card-body">
-        <h5 class="mx-auto card-title">Banner Configuration</h5>
-        <i class="fas fa-layer-group tx-primary temp-blue center tx-64 margin-15"></i>
-        <p class="mx-auto tx-11 tx-spacing-0 tx-color-02 tx-normal mg-b-8 margin-30">
-          Configure geo specific cookie banner, language and preference center.
-        <div class="d-flex d-lg-block d-xl-flex align-items-end">
-        </div>
-        <hr>
-        <a class="btn btn-primary bg-templ-blue" tooltip="{{cookieTooltiptext}}" [routerLink]="isLicenseAssignedtoProperty ? ['/cookie-consent/cookie-banner'] : ['/settings/billing/manage']">{{isLicenseAssignedtoProperty ? 'Go Now' : 'Try Now'}}</a>
-      </div>
-    </div><!-- col -->
-
-    <div class="mx-auto col-sm-6 col-lg-3">
-      <div class="card card-body">
-        <h5 class="mx-auto card-title">Setup</h5>
-        <i class="fas fa-wrench tx-primary temp-blue fa-3x center tx-64 margin-15"></i>
-        <p class="mx-auto tx-11 tx-spacing-0 tx-color-02 tx-normal mg-b-8 margin-30">
-          Setup consent banner Javascript CDN into your application <br />        </p>
-        <div class="d-flex d-lg-block d-xl-flex align-items-end">
-          <!-- <h3 class="tx-normal tx-rubik mg-b-0 mg-r-5 lh-1">0.81%</h3> -->
-        </div>
-        <hr>
-
-        <a class="btn btn-primary bg-templ-blue" tooltip="{{cookieTooltiptext}}" [routerLink]="isLicenseAssignedtoProperty ? ['/cookie-consent/cookie-banner/setup'] : ['/settings/billing/manage']">{{isLicenseAssignedtoProperty ? 'Go Now' : 'Try Now'}}</a>
-
-      </div>
-    </div>
-  </div><!-- row -->
-
-  <div class="col-sm-10 ml-5 mt-5 mb-3">
+    <div class="dashboard-div mb-4">
+    <ul>
+      <ng-container *ngFor="let data of appsPositionRowOne"> 
+        <li class="col-sm-4">
+          <div>
+            <div class="col-md-10">
+              <div class="card card-body">
+                <h5 class="mx-auto card-title">{{data.title}}</h5>
+                <i class="{{data.iconcss}}"></i>
+                <p class="mx-auto tx-11 tx-spacing-0 tx-color-02 tx-normal mg-b-8 margin-30">
+                  {{data.content}}
+                </p>
+                <hr>
+                <a class="btn btn-primary bg-templ-blue" tooltip="{{data.tooltipcontent}}"
+                  [routerLink]="data.routerlinktext">{{data.buttonText}}</a>
+              </div>
+            </div>
+          </div>
+        </li>
+      </ng-container>
+    </ul>
+  </div>
+  <div class="col-sm-10 mt-5 mb-3" *ngIf="noOfLicensePurchased !== 0 && noOfLicensePurchased < 3">
     <h4>Other Apps</h4>
   </div>
-
-  <div class="mx-2 row row-xs dashboard-div">
-    <!-- <div class="col-md-12">
-      <h5 class="text-divider"><span>ADD-ON</span></h5>    </div> -->
-    <div class="mx-auto col-sm-6 col-lg-3">
-      <div class="card card-body">
-        <h5 class="mx-auto card-title">Data Subject Request</h5>
-        <i class="fas fa-balance-scale tx-primary temp-blue center tx-64 margin-15"></i>
-        <p class="mx-auto tx-11 tx-spacing-0 tx-color-02 tx-normal mg-b-8 margin-30">
-          Create dynamic forms and respond to privacy rights requests to meet regulatory deadlines.
-        <div class="d-flex d-lg-block d-xl-flex align-items-end">
-        </div>
-        <hr>
-        <a class="btn btn-primary bg-templ-blue" tooltip="{{dsarTooltiptext}}" [routerLink]="isLicenseAssignedtoOrganization ? ['/privacy/dsar/requests'] : ['/settings/billing/manage']">{{isLicenseAssignedtoOrganization ? 'Go Now' : 'Try Now'}}</a>
-      </div>
-    </div><!-- col -->
-    <div class="mx-auto col-sm-6 col-lg-3">
-      <div class="card card-body">
-        <h5 class="mx-auto card-title">Consent preference</h5>
-        <i class="fas fa-file-signature tx-primary temp-blue center tx-64 margin-15"></i>
-        <p class="mx-auto tx-11 tx-spacing-0 tx-color-02 tx-normal mg-b-8 margin-30">
-          Collect user preference consent, document opt-ins/out via your web forms and systems.        </p>
-
-        <div class="d-flex d-lg-block d-xl-flex align-items-end">
-          <!-- <h3 class="tx-normal tx-rubik mg-b-0 mg-r-5 lh-1">0.81%</h3> -->
-        </div>
-        <hr>
-
-        <a class="btn btn-primary bg-templ-blue" tooltip="{{consentTooltipText}}" [routerLink]="isConsentPreferenceLicenseAssignedToProperty ? ['/home/dashboard/consent-preference'] : ['/settings/billing/manage']">{{ isConsentPreferenceLicenseAssignedToProperty ? 'Go Now' : 'Try Now'}}</a>
-
-      </div>
-    </div><!-- col -->
-    <div class="mx-auto col-sm-6 col-lg-3">
-
-    </div>
-    </div><!-- row -->
+  <div class="dashboard-div" [ngClass]="{'':appsPositionRowTwo?.length == 0,'mb-4':appsPositionRowTwo.length > 0}">
+    <ul>
+      <ng-container *ngFor="let data of appsPositionRowTwo"> 
+        <li class="col-sm-4">
+          <div>
+            <div class="col-md-10">
+              <div class="card card-body">
+                <h5 class="mx-auto card-title">{{data.title}}</h5>
+                <i class="{{data.iconcss}}"></i>
+                <p class="mx-auto tx-11 tx-spacing-0 tx-color-02 tx-normal mg-b-8 margin-30">
+                  {{data.content}}
+                </p>
+                <hr>
+                <a class="btn btn-primary bg-templ-blue" tooltip="{{data.tooltipcontent}}"
+                  [routerLink]="data.routerlinktext">{{data.buttonText}}</a>
+              </div>
+            </div>
+          </div>
+        </li>
+      </ng-container>
+    </ul>
+  </div>
+  
+  <div class="col-sm-10 mt-3 mb-3" *ngIf="noOfLicensePurchased >= 3 && noOfLicensePurchased !== 5">
+    <h4>Other Apps</h4>
+  </div>
+  
+  <div class="dashboard-div">
+    <ul>
+      <ng-container *ngFor="let data of appsPositionRowThree">
+        <li class="col-sm-4">  
+          <div>
+            <div class="col-md-10">
+              <div class="card card-body">
+                <h5 class="mx-auto card-title">{{data.title}}</h5>
+                <i class="{{data.iconcss}}"></i>
+                <p class="mx-auto tx-11 tx-spacing-0 tx-color-02 tx-normal mg-b-8 margin-30">
+                  {{data.content}}
+                </p>
+                <hr>
+                <a class="btn btn-primary bg-templ-blue" tooltip="{{data.tooltipcontent}}"
+                  [routerLink]="data.routerlinktext">{{data.buttonText}}</a>
+              </div>
+            </div>
+          </div>
+        </li>
+      </ng-container>
+    </ul>
+  </div>
 </div>
