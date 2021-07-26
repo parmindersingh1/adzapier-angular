@@ -23,6 +23,7 @@ import {RippleModule} from 'primeng/ripple';
 import { AzBannerComponent } from './az-banner/az-banner.component';
 import { AzPreferenceComponent } from './az-preference/az-preference.component';
 import {AccordionModule} from 'primeng/accordion';
+import {AlertModule} from 'ngx-bootstrap/alert';
 
 const path: Routes = [{
   path: '', component: BannerConfigComponent
@@ -30,29 +31,30 @@ const path: Routes = [{
 
 @NgModule({
   declarations: [BannerConfigComponent, AzBannerComponent, AzPreferenceComponent],
-  imports: [
-    CommonModule,
-    SplitterModule,
-    InputSwitchModule,
-    RouterModule.forChild(path),
-    FeatherModule,
-    DividerModule,
-    CheckboxModule,
-    DropdownModule,
-    FormsModule,
-    MultiSelectModule,
-    TableModule,
-    RadioButtonModule,
-    TabViewModule,
-    InputTextModule,
-    InputTextareaModule,
-    ColorPickerModule,
-    DragDropModule,
-    InputNumberModule,
-    ButtonModule,
-    RippleModule,
-    ReactiveFormsModule.withConfig({warnOnNgModelWithFormControl: 'never'}),
-    AccordionModule
-  ]
+    imports: [
+        CommonModule,
+        SplitterModule,
+        InputSwitchModule,
+        RouterModule.forChild(path),
+        FeatherModule,
+        DividerModule,
+        CheckboxModule,
+        DropdownModule,
+        FormsModule,
+        MultiSelectModule,
+        TableModule,
+        RadioButtonModule,
+        TabViewModule,
+        InputTextModule,
+        InputTextareaModule,
+        ColorPickerModule,
+        DragDropModule,
+        InputNumberModule,
+        ButtonModule,
+        RippleModule,
+        ReactiveFormsModule.withConfig({warnOnNgModelWithFormControl: 'never'}),
+        AccordionModule,
+        AlertModule
+    ]
 })
 export class BannerConfigModule { }
