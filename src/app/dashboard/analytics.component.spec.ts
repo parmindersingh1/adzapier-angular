@@ -22,4 +22,12 @@ describe('AnalyticsComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should contain app details',() =>{
+    expect(component.appsContent).not.toEqual(null)
+  })
+
+  it('should contain number for number of license purchased',() =>{
+    expect(component.noOfLicensePurchased).not.toBeUndefined()
+  })
 });

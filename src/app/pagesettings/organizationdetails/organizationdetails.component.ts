@@ -42,7 +42,7 @@ export class OrganizationdetailsComponent implements OnInit {
   pageSize: any = 5;
   totalCount: any;
   paginationConfig: TablePaginationConfig;
-
+  userID;
   p2: number = 1;
   propertyPgSize: any = 5;
   propertyTotalCount: any;
@@ -100,10 +100,10 @@ export class OrganizationdetailsComponent implements OnInit {
               private bsmodalService: BsModalService,
               private loading: NgxUiLoaderService,
               private cdref: ChangeDetectorRef) {
-    this.orgService.currentProperty.subscribe((data) => {
-      this.currentManagedOrgID = data.organization_id;
-      this.currrentManagedPropID = data.property_id;
-    });
+    // this.orgService.currentProperty.subscribe((data) => {
+    //   this.currentManagedOrgID = data.organization_id || data.response.oid;
+    //   this.currrentManagedPropID = data.property_id || data.response.id;
+    // });
     this.paginationConfig = { itemsPerPage: this.pageSize, currentPage: this.p, totalItems: this.totalCount, id: 'userPagination' };
     this.propertyPageConfig = {
       itemsPerPage: this.propertyPgSize, currentPage: this.p2,
@@ -114,13 +114,13 @@ export class OrganizationdetailsComponent implements OnInit {
   ngOnInit() {
     this.orgService.currentProperty.subscribe((response) => {
       if (response !== '') {
-        this.currentManagedOrgID = response.organization_id;
-        this.currrentManagedPropID = response.property_id;
+        this.currentManagedOrgID = response.organization_id || response.response.oid;
+        this.currrentManagedPropID = response.property_id || response.response.id;
       } else {
         const orgDetails = this.orgService.getCurrentOrgWithProperty();
         if (orgDetails !== undefined) {
           this.currentManagedOrgID = orgDetails.organization_id;
-          this.currrentManagedPropID = orgDetails.property_id;
+          this.currrentManagedPropID = orgDetails.property_id
         }
       }
     });
@@ -195,6 +195,7 @@ export class OrganizationdetailsComponent implements OnInit {
       this.zipcode = data.response.zipcode;
       this.email = data.response.email;
       this.phone = data.response.phone;
+      this.userID = data.response.uid;
       if(data.response.license_id){
         this.loadOrganizationLicenseNameByID(this.organizationID,data.response.license_id)
       }
@@ -424,7 +425,10 @@ export class OrganizationdetailsComponent implements OnInit {
             this.getPropertyList(res.response.oid);
             this.orgService.isPropertyUpdated.next(true);
             if (res.response.id === this.currrentManagedPropID) {
-              // this.orgService.changeCurrentSelectedProperty(res);
+              this.orgService.changeCurrentSelectedProperty(res);
+              res['user_id'] = this.userID;
+              res['organization_name'] = this.organizationName;
+              this.orgService.setCurrentOrgWithProperty(res);
               const orgDetails = this.orgService.getCurrentOrgWithProperty();
               this.orgService.isPropertyUpdated.next(true);
               this.orgService.updateEditedProperty(res);
@@ -530,7 +534,7 @@ export class OrganizationdetailsComponent implements OnInit {
           .subscribe((data) => {
             this.loading.stop();
             if (data) {
-              this.alertMsg = data.response;
+              this.alertMsg = data.response || data.error;
               this.isOpen = true;
               this.alertType = 'success';
               this.loadOrgTeamMembers(this.organizationID);

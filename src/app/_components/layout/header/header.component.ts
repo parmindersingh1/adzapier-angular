@@ -1,9 +1,8 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { OrganizationService, AuthenticationService, UserService } from '../../../_services';
 import { Observable } from 'rxjs';
 import { Organization } from 'src/app/_models/organization';
-import { distinctUntilChanged, map } from 'rxjs/operators';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { moduleName } from 'src/app/_constant/module-name.constant';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
@@ -18,7 +17,7 @@ import { featuresName } from '../../../_constant/features-name.constant';
   styleUrls: ['./header.component.scss'],
   changeDetection: ChangeDetectionStrategy.Default
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent implements OnInit, OnDestroy {
   @ViewChild('confirmTemplate') confirmModal: TemplateRef<any>;
   modalRef: BsModalRef;
   isCollapsed = true;
@@ -61,6 +60,7 @@ export class HeaderComponent implements OnInit {
   isPropertySelected: boolean;
   isPrivacyActivelinkMatched = false;
   isBillingActivelinkMatched = false;
+  isConsentPreferencelinkMatched = false;
   isOtherActivelinkMatched = false;
   isSublinkActive = false;
   selectedSubmenu: any = [];
@@ -132,6 +132,10 @@ export class HeaderComponent implements OnInit {
           this.isBillingActivelinkMatched = true;
           this.isPrivacyActivelinkMatched = false;
         }
+      } else if (event instanceof NavigationEnd) {
+          this.isBillingActivelinkMatched = false;
+          this.isPrivacyActivelinkMatched = false;
+          this.isConsentPreferencelinkMatched = event.url.indexOf('consent-preference') !== -1;
       }
     });
     this.authService.isNotificationUpdated.subscribe((status) => {
@@ -186,8 +190,10 @@ export class HeaderComponent implements OnInit {
           // this.orgservice.removeControls();
           this.userService.getCurrentUser.unsubscribe();
           localStorage.clear();
-          this.router.navigate(['/login']);
-          sessionStorage.clear();
+          if(this.router.url.indexOf('/verify-email') !== -1){
+            this.router.navigate(['/login']);
+            sessionStorage.clear();
+          }
         }
       }
     });
@@ -385,10 +391,14 @@ export class HeaderComponent implements OnInit {
   }
 
   isPropSelected(selectedItem): boolean {
-    if (!this.isProperyDisabled(selectedItem)) {
-      this.isPropertySelected = this.selectedOrgProperties.filter((t) => t.property_id === selectedItem.property_id).length > 0
-        ? true : false;
+    if (selectedItem.property_id !== undefined) {
+      this.isPropertySelected = this.selectedOrgProperties.filter((t) => t.property_id === selectedItem.property_id).length > 0 || this.selectedOrgProperties.some((t) => t.response !== undefined && t.response.id === selectedItem.property_id);
       return this.isPropertySelected;
+    } else{
+      if(selectedItem.response.id !== undefined){
+      this.isPropertySelected = this.selectedOrgProperties.some((t) => t.property_id === selectedItem.response.id) || this.selectedOrgProperties.some((t) => t.response !== undefined && t.response.id === selectedItem.response.id);
+      return this.isPropertySelected;
+      }
     }
   }
 
@@ -417,12 +427,14 @@ export class HeaderComponent implements OnInit {
   currentSelectedProperty() {
     // tslint:disable-next-line: max-line-length
     // this.orgservice.currentProperty.pipe(distinctUntilChanged()).subscribe((data) => {
+    this.orgservice.isPropertyUpdated.subscribe((status) => { this.isPropertyUpdated = status });
+  // if(!this.isPropertyUpdated){
     this.orgservice.currentProperty.subscribe((data) => {
       if (data !== '') {
-        this.currentProperty = data.property_name;
-        this.currentOrganization = data.organization_name || data.response.orgname;
+        this.currentProperty = data.property_name || data.response.name;
+        this.currentOrganization = data.organization_name || data.response.orgname || data.response.name;
         if (this.currentProperty !== undefined) {
-          const orgIndex = this.selectedOrgProperties.findIndex((t) => t.organization_id === data.organization_id);
+          const orgIndex = this.selectedOrgProperties.findIndex((t) => t.organization_id === data.organization_id || data.response.oid);
           if (orgIndex === -1) {
             this.selectedOrgProperties.push(data);
             this.licenseAvailabilityForProperty(data);
@@ -434,8 +446,7 @@ export class HeaderComponent implements OnInit {
       }
 
     });
-    this.orgservice.isPropertyUpdated.subscribe((status) => { this.isPropertyUpdated = status });
-    this.orgservice.isOrganizationUpdated.subscribe((status) => { this.isOrganizationUpdated = status });
+ //}
 
     if (this.isPropertyUpdated) {
       this.orgservice.editedProperty.subscribe((prop) => {
@@ -446,10 +457,13 @@ export class HeaderComponent implements OnInit {
           orgDetails.property_id = prop.response.id;
           this.orgservice.updateCurrentOrgwithProperty(orgDetails);
           this.isPropSelected(orgDetails);
+           
         }
       });
-      this.loadOrganizationWithProperty();
+      this.loadOrganizationWithProperty();  
+      this.orgservice.isPropertyUpdated.next(null); 
     }
+    
 
     if (this.isOrganizationUpdated) {
       this.orgservice.editedOrganization.subscribe((org) => {
@@ -462,7 +476,7 @@ export class HeaderComponent implements OnInit {
         }
       });
     }
-
+    
   }
 
   toggleNavbar() {
@@ -491,7 +505,7 @@ export class HeaderComponent implements OnInit {
             this.router.navigate(['settings/organizations/details/' + this.orgPropertyMenu[0].id]);
             return false;
           } else {
-            if (!this.isOrgPropertyEmpty() || this.isFirstPropertyExist()) {
+            if (this.isOrgPropertyEmpty() && this.isFirstPropertyExist()) {
               let activePro = this.filterProp(this.orgPropertyMenu);
               const proIndex = activePro[0].property.findIndex((t) => t.property_active === true);
               this.activeProp = activePro[0].property[proIndex];
@@ -557,7 +571,7 @@ export class HeaderComponent implements OnInit {
       if (orgDetails.user_id === this.userID) { //=== this.userID
         this.currentOrganization = orgDetails.organization_name !== '' ? orgDetails.organization_name : orgDetails.response.orgname;
         this.currentProperty = orgDetails.property_name;
-        const orgIndex = this.selectedOrgProperties.findIndex((t) => t.organization_id === orgDetails.organization_id);
+        const orgIndex = this.selectedOrgProperties.findIndex((t) => t.organization_id === orgDetails.organization_id || t.response.oid === orgDetails.response.oid);
         if (orgIndex === -1) {
           this.selectedOrgProperties.push(orgDetails);
         }
@@ -586,7 +600,7 @@ export class HeaderComponent implements OnInit {
   isOrgPropertyExists(data): boolean {
     const orgDetails = this.orgservice.getCurrentOrgWithProperty();
     if (orgDetails !== undefined) {
-      const result = data.filter((t) => t.id === orgDetails.organization_id).length > 0 || data.some((t) => t.id === orgDetails.id);
+      const result = data.filter((t) => t.id === orgDetails.organization_id).length > 0 || data.some((t) => t.id === orgDetails.response.oid);
       const isSameUserLoggedin = this.userID === orgDetails.user_id || orgDetails.uid;
       if (result && isSameUserLoggedin) {
         this.licenseAvailabilityForFormAndRequestPerOrg(orgDetails);
@@ -596,7 +610,7 @@ export class HeaderComponent implements OnInit {
   }
 
   isOrgPropertyEmpty(): boolean {
-    return this.orgservice.getCurrentOrgWithProperty() !== undefined ? true : false;
+    return this.orgservice.getCurrentOrgWithProperty() == undefined;// ? true : false;
   }
 
   goto(link: any, id?: any) {
@@ -662,7 +676,7 @@ export class HeaderComponent implements OnInit {
       }
       return this.isPrivacyActivelinkMatched = false;
     } else if (navLink.indexOf('/settings') >= 0) {
-      if (menu.icon !== undefined) {
+      if (menu.icon !== undefined || menu !== undefined) {
         this.activateSublink(menu);
       }
     } else {
@@ -672,7 +686,7 @@ export class HeaderComponent implements OnInit {
   }
 
   activateSublink(selectedItem): boolean {
-    return this.isSublinkActive = this.selectedSubmenu.some((t) => t.showlink === selectedItem.showlink && t.icon === selectedItem.icon);
+    return this.isSublinkActive = this.selectedSubmenu.some((t) =>  t === selectedItem) || this.selectedSubmenu.some((q) => q.routerLink === selectedItem.routerLink)
   }
 
   activateSublinkConsentPreference(selectedItem): boolean {
@@ -945,9 +959,9 @@ export class HeaderComponent implements OnInit {
         } else {
           this.dataService.isLicenseAppliedForProperty.next({ requesttype: 'property', hasaccess: false });
           this.isShowDashboardForCookieConsent = false;
-          if (this.router.url.indexOf('settings') == -1) {
-            this.router.navigate(['/home/welcome']);
-          }
+          // if (this.router.url.indexOf('settings') == -1) {
+          //   this.router.navigate(['/home/welcome']);
+          // }
           //this.dataService.openUpgradeModalForCookieConsent(resData);
         }
       }
@@ -1044,5 +1058,11 @@ export class HeaderComponent implements OnInit {
       }
     }
 
+  }
+
+  ngOnDestroy(){
+    if(this.orgservice.isPropertyUpdated !== undefined){
+      this.orgservice.isPropertyUpdated.unsubscribe();
+    }
   }
 }

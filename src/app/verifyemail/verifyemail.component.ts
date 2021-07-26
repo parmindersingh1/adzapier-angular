@@ -26,13 +26,16 @@ export class VerifyemailComponent implements OnInit {
       token: this.id
     };
     this.loading.start();
-    this.userService.verifyEmailAddress(this.constructor.name, moduleName.verifyEmailModule, requestObj).subscribe((data) => {
+    this.userService.verifyEmailAddress(this.constructor.name, moduleName.verifyEmailModule, requestObj)
+    .subscribe((data) => {
       this.loading.stop();
-      this.isUserVarified = true;
-      this.message = 'Your email address is successfully verified ! please login to access your account!';
-      setTimeout(()=>{
-        return this.router.navigate(['/login']);
-       },3000);
+      if(data){
+        this.isUserVarified = true;
+        this.message = 'Your email address is successfully verified ! please login to access your account!';
+        setTimeout(()=>{
+          return this.router.navigate(['/login']);
+        },3000);
+      }
     }, error => {
       this.loading.stop();
       this.isUserVarified = false;
