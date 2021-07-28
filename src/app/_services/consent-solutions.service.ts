@@ -29,8 +29,8 @@ export class ConsentSolutionsService {
         this.currrentManagedPropID = response.property_id || response.response.id;
       } else {
         const orgDetails = this.orgservice.getCurrentOrgWithProperty();
-        this.currentManagedOrgID = orgDetails.organization_id;
-        this.currrentManagedPropID = orgDetails.property_id;
+        this.currentManagedOrgID = orgDetails.organization_id || orgDetails.response.oid;
+        this.currrentManagedPropID = orgDetails.property_id || orgDetails.response.id;
       }
     });
   }
