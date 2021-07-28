@@ -322,18 +322,18 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
     this.organizationService.currentProperty.subscribe((response) => {
       //  this.loadingbar.stop();
       if (response !== '') {
-        this.selectedProperty = response.property_name;
+        this.selectedProperty = response.property_name || response.response.name;
         this.currentOrganization = response.organization_name;
         this.orgId = response.organization_id || response.response.oid;
         this.propId = response.property_id || response.response.id;
-        this.currentManagedOrgID = response.organization_id;
+        this.currentManagedOrgID = response.organization_id || response.response.oid;
       } else {
         const orgDetails = this.organizationService.getCurrentOrgWithProperty();
         this.currentOrganization = orgDetails.organization_name;
         this.selectedProperty = orgDetails.property_name;
-        this.orgId = orgDetails.organization_id;
-        this.propId = orgDetails.property_id;
-        this.currentManagedOrgID = orgDetails.organization_id;
+        this.orgId = orgDetails.organization_id || orgDetails.response.oid;
+        this.propId = orgDetails.property_id || orgDetails.response.id;
+        this.currentManagedOrgID = orgDetails.organization_id || orgDetails.response.oid;
         this.loading = false;
       }
     });
@@ -364,10 +364,10 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
           // this.selectedWorkflowID = data.workflow;
           const isUUID = uuidRegx.test(data.approver);
           if (isUUID) {
-            this.selectedApproverID = data.approver;
+            this.selectedApproverID = data.approver || data.response.approver;
             this.workflow = data.workflow;
           } else {
-            this.selectedApproverID = data.approver_id;
+            this.selectedApproverID = data.approver_id || data.response.approver;
             this.workflow = data.workflow_id;
           }
           // this.requestFormControls = data.request_form;

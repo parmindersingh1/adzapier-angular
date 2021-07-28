@@ -59,9 +59,10 @@
     [ngClass]="{'hidemenu':!currentUser, 'showmenu':currentUser}">
     <ul *ngIf="orgPropertyMenu" class="navbar-nav nav-mr" dropdown container="body">
       <a class="nav-link dropdown-link"  dropdownToggle (click)="false" >
-       <div *ngIf="currentOrganization !== ''" class="mr-2">{{currentOrganization}}<span *ngIf="!currentOrganization">Select Organization </span><span class="ml-2">&amp;</span></div>
-       <span class="large-propname" [ngStyle]="addEllipsis()" *ngIf="currentProperty !== '';">{{currentProperty !== '' ? convertAmpersand(currentProperty) : 'Select Property'}}</span>
-       <span *ngIf="!currentProperty"> Select Property</span>
+       <ng-container *ngIf="currentOrganization !== undefined && currentOrganization.length > 0" class="mr-2">{{currentOrganization}} &nbsp;</ng-container>
+       <span class="large-propname" [ngStyle]="addEllipsis()" *ngIf="currentProperty !== undefined && currentProperty.length > 0"> &amp; &nbsp; {{currentProperty.length > 0 ? convertAmpersand(currentProperty) : 'Select Property'}}</span>
+       <span *ngIf="currentOrganization == undefined">Select Organization<span class="ml-2">&amp; &nbsp;</span></span>
+       <span *ngIf="currentProperty == undefined"> Select Property</span>
       </a>
      <!--(orgPropertyMenu | async).response-->
      <div *dropdownMenu>
