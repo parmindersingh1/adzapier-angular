@@ -403,7 +403,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   isOrgSelected(selectedItem): boolean {
-    return this.selectedOrgProperties.filter((t) => t.organization_id === selectedItem.id).length > 0;
+    if(this.selectedOrgProperties.length > 0) {
+      return this.selectedOrgProperties.filter((t) => t.organization_id === selectedItem.id).length > 0;
+    }
   }
 
   public trackByMethod(index: number): number {
@@ -505,7 +507,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
             this.router.navigate(['settings/organizations/details/' + this.orgPropertyMenu[0].id]);
             return false;
           } else {
-            if (this.isOrgPropertyEmpty() && this.isFirstPropertyExist()) {
+            if (this.isOrgPropertyEmpty()) { // && this.isFirstPropertyExist()
               let activePro = this.filterProp(this.orgPropertyMenu);
               const proIndex = activePro[0].property.findIndex((t) => t.property_active === true);
               this.activeProp = activePro[0].property[proIndex];
@@ -568,7 +570,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   loadOrgPropertyFromLocal() {
     const orgDetails = this.orgservice.getCurrentOrgWithProperty();
     if (orgDetails !== undefined) {
-      if (orgDetails.user_id === this.userID) { //=== this.userID
+      if (orgDetails.user_id) { //=== this.userID
         this.currentOrganization = orgDetails.organization_name !== '' ? orgDetails.organization_name : orgDetails.response.orgname;
         this.currentProperty = orgDetails.property_name;
         const orgIndex = this.selectedOrgProperties.findIndex((t) => t.organization_id === orgDetails.organization_id || t.response.oid === orgDetails.response.oid);
@@ -1015,11 +1017,18 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   checkForUpgradeDSAR() {
     let orglicenseStatus;
-    this.planDetails = this.dataService.getCurrentOrganizationPlanDetails();
+    this.planDetails = JSON.stringify(this.dataService.getCurrentOrganizationPlanDetails());
+    
+    let isorgplanExist; // check on page refresh
+    if(JSON.parse(this.planDetails).response && JSON.parse(this.planDetails).response.plan_details &&  JSON.parse(this.planDetails).response.plan_details.dsar){
+      if(Object.values(JSON.parse(this.planDetails).response.plan_details.dsar).length > 0){
+        isorgplanExist = true;
+      }
+    }
     this.dataService.isLicenseApplied.subscribe((status) => {
       orglicenseStatus = status.hasaccess;
     });
-    if (!orglicenseStatus) {
+    if (!orglicenseStatus && !isorgplanExist) {
       this.dataService.openUpgradeModalForDsar(this.planDetails);
     }
   }

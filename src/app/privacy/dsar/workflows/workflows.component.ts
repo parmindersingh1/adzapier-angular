@@ -120,7 +120,7 @@ export class WorkflowsComponent implements OnInit, AfterViewInit, DirtyComponent
         this.currentManagedOrgID = response.organization_id || response.response.oid;
       } else {
         const orgDetails = this.orgservice.getCurrentOrgWithProperty();
-        this.currentManagedOrgID = orgDetails.organization_id;
+        this.currentManagedOrgID = orgDetails.organization_id || orgDetails.response.oid;
       }
     });
   }
