@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
 import {DomSanitizer, SafeResourceUrl} from '@angular/platform-browser';
 import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
-import {FormArray, FormBuilder, FormGroup} from '@angular/forms';
+import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {
   CcpaCounties,
   DarkTheme,
@@ -16,6 +16,8 @@ import {CookieBannerService} from '../../../_services/cookie-banner.service';
 import {moduleName} from '../../../_constant/module-name.constant';
 import {OrganizationService} from '../../../_services';
 import {debounceTime, map} from 'rxjs/operators';
+import {main} from '@angular/compiler-cli/src/main';
+import {Router} from '@angular/router';
 
 interface Country {
   name: string,
@@ -33,6 +35,7 @@ export class BannerConfigComponent implements OnInit, OnDestroy {
   private currentManagedOrgID: any;
   private currrentManagedPropID: any;
   step = 1;
+  submitted = false;
   languageContents: any;
   selectedCountry: any;
   countries: any[] = CcpaCounties;
@@ -56,13 +59,20 @@ export class BannerConfigComponent implements OnInit, OnDestroy {
   alertType: any;
   publishType = 'draft';
   isFormUpdate = false;
-  contentSaving = null;
-
+  contentSaving = '';
+  customLang = [];
+  allowedLanguagesForPreview = [  {
+    title: 'English (United States)',
+    code: 'en-US',
+    countryFlag: 'us',
+  }];
+  publishing = false;
   constructor(private sanitizer: DomSanitizer,
               private formBuilder: FormBuilder,
               private loading: NgxUiLoaderService,
               private cookieBannerService: CookieBannerService,
-              private orgservice: OrganizationService
+              private orgservice: OrganizationService,
+              private  router: Router
   ) {
     const element = document.getElementById('main');
     element.classList.remove('container');
@@ -75,7 +85,7 @@ export class BannerConfigComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.onGetPropsAndOrgId();
     this.onInitForm();
-    this.onGetGlobleLangData('en-US');
+    this.onLoadContent('en-US');
     this.onSetDefaultStyle(LightTheme);
     this.onGetSavedBannerConfig();
     this.BannerConfigurationForm.valueChanges
@@ -139,6 +149,7 @@ export class BannerConfigComponent implements OnInit, OnDestroy {
         this.loading.stop('3');
         if (res.status === 200 && res.hasOwnProperty('response')) {
           this.isFormUpdate = true;
+          this.onSetSavedGeneralConfig(res.response);
           this.onSetSavedStyle(res.response.config);
         }
       }, error => {
@@ -168,11 +179,11 @@ export class BannerConfigComponent implements OnInit, OnDestroy {
       AllowGDPR: [true],
       AllowCCPA: [true],
       AllowGENERIC: [true],
-      GdprCountries: [],
+      GdprCountries: [GdprCountries, Validators.required],
       EnableIAB: [false],
       GoogleVendors: [false],
       GdprGlobal: [false],
-      CCPATarget: [],
+      CCPATarget: [CcpaCounties[0], Validators.required],
       CCPAGlobal: [false],
       GenericGlobal: [false],
       // Advance Config
@@ -240,8 +251,21 @@ export class BannerConfigComponent implements OnInit, OnDestroy {
       DisplayClosedConsentType: ['pageViews'],
       // Other Ignore Feilds
       LivePreviewType: ['gdpr'],
-      PreviewLanguage: ['en-US']
+      PreviewLanguage: [  {
+        title: 'English (United States)',
+        code: 'en-US',
+        countryFlag: 'us',
+      }]
     });
+  }
+  get f() { return this.BannerConfigurationForm.controls; }
+
+  onLoadContent(langCode) {
+    if (this.customLang.includes(langCode)) {
+      this.onGetCustomLangData(langCode);
+    } else {
+      this.onGetGlobleLangData(langCode);
+    }
   }
 
   onGetGlobleLangData(langCode) {
@@ -255,6 +279,22 @@ export class BannerConfigComponent implements OnInit, OnDestroy {
       this.loading.stopAll();
       alert('Error ::: Unable to Load Language');
     });
+  }
+
+  onGetCustomLangData(langCode) {
+    this.loading.start('lang');
+    this.cookieBannerService.GetCustomLangData( this.constructor.name, moduleName.cookieBannerModule, langCode, this.currentManagedOrgID, this.currrentManagedPropID)
+      .subscribe((res: any) => {
+        this.loading.stop('lang');
+        if (res.status === 200 ) {
+          const langData = JSON.parse(res.response.lang_data);
+          this.languageContents = res;
+          this.onSetDefaultContent(langData);
+          this.BannerConfigurationForm.markAsPristine();
+        }
+      }, error => {
+        this.loading.stop('lang');
+      });
   }
 
   onSetDefaultContent(langData) {
@@ -304,16 +344,22 @@ export class BannerConfigComponent implements OnInit, OnDestroy {
   onSetLanguage(e, langCode) {
     const isChecked = e.target.checked;
     const selectedLanguage = [...this.selectedLanguage];
+    const allowedLangForPreview = [...this.allowedLanguagesForPreview];
     if (isChecked) {
       selectedLanguage.push(langCode);
+      allowedLangForPreview.push(this.onFindLangByCode(langCode));
     } else {
       const index = this.selectedLanguage.indexOf(langCode);
       if (index > -1) {
         selectedLanguage.splice(index, 1);
       }
+      const index1 = this.allowedLanguagesForPreview.indexOf(this.onFindLangByCode(langCode));
+      if (index1 > -1) {
+        allowedLangForPreview.splice(index, 1);
+      }
     }
     this.selectedLanguage = selectedLanguage;
-    console.log('selectedLanguage', this.selectedLanguage)
+    this.allowedLanguagesForPreview = allowedLangForPreview;
   }
 
   onSelectStep(step) {
@@ -349,6 +395,51 @@ export class BannerConfigComponent implements OnInit, OnDestroy {
 
   onChangeBannerLayer(e) {
     this.currentBannerLayer = e;
+  }
+
+  onSetSavedGeneralConfig(mainConfig) {
+    const CONFIG = mainConfig.config;
+    this.BannerConfigurationForm.patchValue({
+      AllowGDPR: CONFIG.AllowedBanners.gdpr,
+      AllowCCPA: CONFIG.AllowedBanners.ccpa,
+      AllowGENERIC: CONFIG.AllowedBanners.generic,
+      GdprCountries: this.onGetGdprCountriesByCode(mainConfig.gdpr_target),
+      EnableIAB: mainConfig.enable_iab,
+      GoogleVendors: mainConfig.google_vendors,
+      GdprGlobal: mainConfig.gdpr_global,
+      CCPATarget: this.onGetCcpaCountryByCode(mainConfig.ccpa_target),
+      CCPAGlobal: mainConfig.ccpa_global,
+      GenericGlobal: mainConfig.generic_global,
+      // Advance Config
+      DefaultRegulation: mainConfig.default_regulation,
+      CookieBlocking: mainConfig.cookie_blocking,
+      AllowPurposeByDefault: mainConfig.purposes_by_default,
+      ShowWatermark: mainConfig.logo,
+      ShowBadge: mainConfig.show_badge,
+      MuteBanner: CONFIG.MuteBanner,
+      // Language
+      DefaultLanguage: CONFIG.LanguageConfig.defaultLang,
+    });
+    this.customLang = CONFIG.LanguageConfig.customLang;
+  }
+  onGetGdprCountriesByCode(langCodes) {
+   const langData = [];
+   for (const lang of GdprCountries) {
+     if (langCodes.includes(lang.code)) {
+       langData.push(lang);
+     }
+   }
+   return langData;
+  }
+
+  onGetCcpaCountryByCode(langCode) {
+    let langData = {name: 'United States', code: 'US'};
+    for (const lang of CcpaCounties) {
+      if (langCode === lang.code) {
+        langData = lang;
+      }
+    }
+    return langData;
   }
 
   onSetSavedStyle(config) {
@@ -419,17 +510,27 @@ export class BannerConfigComponent implements OnInit, OnDestroy {
   }
 
   onSelectPreviewLang() {
-    const langCode = this.BannerConfigurationForm.value.PreviewLanguage;
-    this.onGetGlobleLangData(langCode);
+    const langCode = this.BannerConfigurationForm.value.PreviewLanguage.code;
+    this.onLoadContent(langCode);
   }
 
 
   onSubmit() {
-    this.onSubmitForm();
-    // this.onUpdateForm();
+    this.submitted = true;
+
+    // stop here if form is invalid
+    if (this.BannerConfigurationForm.invalid) {
+      return;
+    }
+
+    if (this.isFormUpdate) {
+      this.onUpdateForm();
+    } else {
+      this.onCreateForm();
+    }
   }
 
-  onSubmitForm() {
+  onCreateForm() {
     const payload = {
       ccpa_target: this.BannerConfigurationForm.value.CCPATarget,
       type: this.publishType,
@@ -444,13 +545,16 @@ export class BannerConfigComponent implements OnInit, OnDestroy {
       google_vendors_ids: '',
       cookie_blocking: this.BannerConfigurationForm.value.CookieBlocking,
       enable_iab: this.BannerConfigurationForm.value.EnableIAB,
-      email: '',
+      email: false,
       google_vendors: this.BannerConfigurationForm.value.GoogleVendors,
       show_badge: this.BannerConfigurationForm.value.ShowBadge,
       CONFIG: this.onGetBannerConfig()
     };
-
-    this.loading.start();
+    if (this.publishType === 'draft') {
+      this.loading.start();
+    } else {
+      this.publishing = true;
+    }
     this.cookieBannerService.onSubmitCookieBannerData(payload, this.currentManagedOrgID, this.currrentManagedPropID, this.constructor.name, moduleName.cookieBannerModule)
       .subscribe((res: any) => {
         this.BannerConfigurationForm.markAsPristine();
@@ -458,36 +562,43 @@ export class BannerConfigComponent implements OnInit, OnDestroy {
         this.isOpen = true;
         this.alertMsg = res.response;
         this.alertType = 'success';
+        this.publishing = false;
+        this.router.navigateByUrl('/cookie-consent/cookie-banner/setup');
       }, error => {
         this.isOpen = true;
         this.alertMsg = error;
         this.alertType = 'danger';
         this.loading.stop();
+        this.publishing = false;
       });
   }
 
   onUpdateForm() {
     const payload = {
-      ccpa_target: this.BannerConfigurationForm.value.CCPATarget,
+      ccpa_target: this.BannerConfigurationForm.value.CCPATarget.code,
       type: this.publishType,
       logo: this.BannerConfigurationForm.value.ShowWatermark,
-      gdpr_global: this.BannerConfigurationForm.value.GdprGlobal,
+      gdpr_global: Boolean(this.BannerConfigurationForm.value.GdprGlobal),
       ccpa_global: this.BannerConfigurationForm.value.CCPAGlobal,
       generic_global: this.BannerConfigurationForm.value.GenericGlobal,
       default_regulation: this.BannerConfigurationForm.value.DefaultRegulation,
       purposes_by_default: this.BannerConfigurationForm.value.AllowPurposeByDefault,
-      gdpr_target: this.BannerConfigurationForm.value.GdprCountries,
+      gdpr_target: this.onRefectorGdprTarget(),
       iab_vendors_ids: '',
       google_vendors_ids: '',
       cookie_blocking: this.BannerConfigurationForm.value.CookieBlocking,
       enable_iab: this.BannerConfigurationForm.value.EnableIAB,
-      email: '',
+      email: false,
       google_vendors: this.BannerConfigurationForm.value.GoogleVendors,
       show_badge: this.BannerConfigurationForm.value.ShowBadge,
       CONFIG: this.onGetBannerConfig()
     };
 
-    this.loading.start();
+    if (this.publishType === 'draft') {
+      this.loading.start();
+    } else {
+      this.publishing = true;
+    }
     this.cookieBannerService.onUpdateCookieBannerData(payload, this.currentManagedOrgID, this.currrentManagedPropID, this.constructor.name, moduleName.cookieBannerModule)
       .subscribe((res: any) => {
         this.BannerConfigurationForm.markAsPristine();
@@ -495,20 +606,34 @@ export class BannerConfigComponent implements OnInit, OnDestroy {
         this.isOpen = true;
         this.alertMsg = res.response;
         this.alertType = 'success';
+        this.publishing = false;
+        this.router.navigateByUrl('/cookie-consent/cookie-banner/setup');
       }, error => {
         this.isOpen = true;
         this.alertMsg = error;
         this.alertType = 'danger';
         this.loading.stop();
+        this.publishing = false;
       });
   }
+
+  onRefectorGdprTarget(){
+   const gdprTargetData = this.BannerConfigurationForm.value.GdprCountries;
+   const gdprTargetCode = [];
+   for(const gdprCountry of gdprTargetData) {
+     gdprTargetCode.push(gdprCountry.code);
+   }
+   return gdprTargetCode;
+  }
+
+
 
   onGetBannerConfig() {
     return {
       LanguageConfig: {
         allowedLang: this.selectedLanguage,
         defaultLang: this.BannerConfigurationForm.value.DefaultLanguage,
-        customLang: [],
+        customLang: this.customLang,
       },
       AllowedBanners: {
         ccpa: this.BannerConfigurationForm.value.AllowCCPA,
@@ -588,11 +713,14 @@ export class BannerConfigComponent implements OnInit, OnDestroy {
 
   onPublishLangOnS3() {
     const payload = JSON.stringify(this.onAssignPayload());
-    const currentLang = this.BannerConfigurationForm.value.PreviewLanguage;
+    const currentLang = this.BannerConfigurationForm.value.PreviewLanguage.code;
     if (!currentLang) {
       alert('Please Select Language');
       return false;
     }
+    if (!this.customLang.includes(currentLang)) {
+      this.customLang.push(currentLang);
+    };
     this.cookieBannerService.saveCustomLang(payload, currentLang, this.currentManagedOrgID, this.currrentManagedPropID, this.constructor.name, moduleName.manageVendorsModule)
       .subscribe(res => {
         this.BannerConfigurationForm.markAsPristine();
@@ -601,20 +729,20 @@ export class BannerConfigComponent implements OnInit, OnDestroy {
 
   onSaveCustomLangOnDB() {
     const payload = JSON.stringify(this.onAssignPayload());
-    const currentLang = this.BannerConfigurationForm.value.PreviewLanguage;
+    const currentLang = this.BannerConfigurationForm.value.PreviewLanguage.code;
     const langPayload = {
       lang_code: currentLang,
       lang_data: payload
     };
-    this.contentSaving = true;
+    this.contentSaving = 'saving';
     this.cookieBannerService.saveCustomLangInDB(langPayload, this.currentManagedOrgID, this.currrentManagedPropID, this.constructor.name, moduleName.manageVendorsModule)
       .subscribe((res: any) => {
-        this.contentSaving = false;
+        this.contentSaving = 'saved';
         if (res.status === 201) {
           this.BannerConfigurationForm.markAsPristine();
         }
       },error => {
-        this.contentSaving = false;
+        this.contentSaving = '';
       });
   }
 
@@ -660,5 +788,34 @@ export class BannerConfigComponent implements OnInit, OnDestroy {
     // langData.PURPOSES[5].description = this.BannerConfigurationForm.value.UnknownDescription;
     return langData;
   }
-
+  onFindLangByCode(langCode) {
+    let langData =  {
+      title: 'English (United States)',
+      code: 'en-US',
+      countryFlag: 'us',
+    };
+    for (const lang of LanguageList) {
+      if (lang.code === langCode) {
+        langData = lang;
+      }
+    }
+    console.log('langData', langData);
+    return langData;
+  }
+  onAllowAllLanguage(e) {
+    if(e.checked) {
+      this.selectedLanguage = [];
+      this.allowedLanguagesForPreview = [];
+      for (const lang of LanguageList) {
+        this.selectedLanguage.push(lang.code);
+      }
+      this.allowedLanguagesForPreview = [...LanguageList];
+    } else {
+      this.selectedLanguage = [];
+      this.allowedLanguagesForPreview = [];
+    }
+  }
+  onTest() {
+    console.log('hi there')
+  }
 }

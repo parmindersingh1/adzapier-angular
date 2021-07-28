@@ -79,7 +79,7 @@ export const GdprCountries = [
 
 export const CcpaCounties = [
   {name: 'United States', code: 'US'},
-  {name: 'California', code: 'US'}
+  {name: 'California', code: 'CA'}
 ];
 
 export const LightTheme = {

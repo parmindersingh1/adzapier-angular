@@ -1,4 +1,4 @@
-<div class="wrapper ">
+<div class="wrapper" *ngIf="!publishing">
   <div class="row">
     <div class="col-md-10">
       <div class="d-sm-flex align-items-center justify-content-between">
@@ -16,11 +16,11 @@
       </div> <!-- breadcrumb -->
     </div>
     <div class="col-md-2 pl-5">
-      <div class="saving-status" *ngIf="contentSaving">
+      <div class="saving-status  float-right" *ngIf="contentSaving === 'saving'">
         <p class="mb-0">     <span class="spinner-border"></span>    Saving Your Customization ... </p>
       </div>
-      <div class="saved-status" *ngIf="!contentSaving">
-        <p class="mb-0">     Saved Your Customization!</p>
+      <div class="saved-status float-right" *ngIf="contentSaving === 'saved'">
+        <p class="mb-0">     Saved </p>
       </div>
     </div>
   </div>
@@ -42,7 +42,7 @@
             </p>
           </div>
           <div class="col-md-2 text-right">
-            <button pButton pRipple type="button" (click)="publishType = 'draft'" (click)="onGetSavedBannerConfig()"  label="Save" class="p-button-warning mr-2"></button>
+            <button pButton pRipple type="submit" (click)="publishType = 'draft'" label="Save" class="p-button-warning mr-2"></button>
             <button pButton pRipple type="submit"  (click)="publishType = 'publish'"  label="Publish"></button>
 
           </div>
@@ -135,16 +135,16 @@
                       </div>
                       <div class="col-md-8">
                         <p-multiSelect [options]="gdprCountries" formControlName="GdprCountries"
-                                       defaultLabel="Select a Country" optionLabel="name" class="multiselect-custom">
+                                       defaultLabel="Select a Country" optionLabel="name" class="multiselect-custom " [ngClass]="{ 'ng-invalid ng-dirty' :  submitted && f.GdprCountries.errors}">
                           <ng-template let-value pTemplate="selectedItems">
-                            <div class="country-item country-item-value" *ngFor="let option of selectedCountries1">
+                            <div class="country-item country-item-value" *ngFor="let option of BannerConfigurationForm.value.GdprCountries">
                               <img src="assets/imgs/icons/flag_placeholder.png"
                                    [class]="'flag flag-' + option.code.toLowerCase()"/>
                               <div>{{option.name}}</div>
                             </div>
-                            <div *ngIf="!selectedCountries1 || selectedCountries1.length === 0"
+                            <div *ngIf="!BannerConfigurationForm.value.GdprCountries || BannerConfigurationForm.value.GdprCountries.length === 0"
                                  class="country-placeholder">
-                              Select Countries
+                              Select European Countries
                             </div>
                           </ng-template>
                           <ng-template let-country pTemplate="item">
@@ -155,6 +155,9 @@
                             </div>
                           </ng-template>
                         </p-multiSelect>
+                        <div *ngIf="submitted && f.GdprCountries.errors" class="invalid-feedback mt-1">
+                          <div *ngIf="f.GdprCountries.errors.required">GDPR Target is required</div>
+                        </div>
                       </div>
                     </div>
 
@@ -204,10 +207,10 @@
                         <p-dropdown id="ccpa_target" [options]="countries" formControlName="CCPATarget"
                                     optionLabel="name" [showClear]="true" placeholder="Select a Country">
                           <ng-template pTemplate="selectedItem">
-                            <div class="country-item country-item-value row" *ngIf="selectedCountry">
+                            <div class="country-item country-item-value row" *ngIf="BannerConfigurationForm.value.CCPATarget">
                               <img src="assets/imgs/icons/flag_placeholder.png" style="height: 20px"
-                                   [class]="'flag ml-2  col-md-2 flag-' + selectedCountry.code.toLowerCase()"/>
-                              <div class="col-md-9">{{selectedCountry.name}}</div>
+                                   [class]="'flag ml-2  col-md-2 flag-' + BannerConfigurationForm.value.CCPATarget.code.toLowerCase()"/>
+                              <div class="col-md-9">{{BannerConfigurationForm.value.CCPATarget.name}}</div>
                             </div>
                           </ng-template>
                           <ng-template let-country pTemplate="item">
@@ -323,7 +326,7 @@
                     <ng-template pTemplate="header">
                       <tr>
                         <th style="width:17%">
-                          <p-checkbox name="group1" class="col-md-2"></p-checkbox>
+                          <p-checkbox (onChange)="onAllowAllLanguage($event)" name="group1" class="col-md-2"></p-checkbox>
                         </th>
                         <th style="width:58%">Language</th>
                         <th style="width:5%"></th>
@@ -361,13 +364,13 @@
                         <p class=" mb-0  input-label pt-2" for="ccpa_target">Preview Language</p>
                       </div>
                       <div class="col-md-8">
-                        <p-dropdown  [options]="languages" formControlName="PreviewLanguage" (onChange)="onSelectPreviewLang()"
-                                     optionLabel="name" optionValue="code"     [showClear]="true" placeholder="Select a Language">
+                        <p-dropdown  [options]="allowedLanguagesForPreview" formControlName="PreviewLanguage" (onChange)="onSelectPreviewLang()"
+                                     [showClear]="true" placeholder="Select a Language">
                           <ng-template pTemplate="selectedItem">
                             <div class="country-item country-item-value row" *ngIf="BannerConfigurationForm.value.PreviewLanguage">
                               <img src="assets/imgs/icons/flag_placeholder.png" style="height: 20px"
-                                   [class]="'flag ml-2  col-md-2 flag-' + BannerConfigurationForm.value.PreviewLanguage.countryFlag.toLowerCase()"/>
-                              <div class="col-md-9">{{BannerConfigurationForm.value.PreviewLanguage.title}}</div>
+                                                                 [class]="'flag ml-2  col-md-2 flag-' + BannerConfigurationForm.value.PreviewLanguage.countryFlag.toLowerCase()"/>
+                                                            <div class="col-md-9">{{BannerConfigurationForm.value.PreviewLanguage.title}}</div>
                             </div>
                           </ng-template>
                           <ng-template let-lang pTemplate="item">
@@ -381,9 +384,16 @@
                       </div>
                     </div>
 
-                <p-tabView>
-                  <p-tabPanel header="Banner">
+<!--                <p-tabView>-->
+<!--                  <p-tabPanel header="Banner">-->
 
+                <div class="btn-group-action mb-4 mt-2">
+                  <button type="button" class="btn btn-link " [ngStyle]="{'color' : currentBannerLayer === 'banner' ? '#2196f3' : '#555',   'border-bottom' : currentBannerLayer === 'banner' ? '2px solid' : null }" (click)="currentBannerLayer = 'banner'">Banner</button>
+                  <button type="button" class="btn btn-link " [ngStyle]="{'color' :   currentBannerLayer === 'preference'  ? '#2196f3' : '#555', 'border-bottom' : currentBannerLayer === 'preference' ? '2px solid' : null  }"   (click)="currentBannerLayer = 'preference'">Preference</button>
+                </div>
+
+
+                  <div class="content-banner" *ngIf="currentBannerLayer === 'banner'">
                     <div id="cookieNotice">
                       <p class="az-dropdown" (click)="onOpenDropDown('cookieNotice')">Cookie Notice
                         <span *ngIf="showDropDownValue !== 'cookieNotice'"><i
@@ -449,8 +459,9 @@
 
                       </div>
                     </div>
-                  </p-tabPanel>
-                  <p-tabPanel header="Preferences">
+                  </div>
+
+                <div class="content-preference" *ngIf="currentBannerLayer === 'preference'">
                     <div id="preferencePurposeAndVendors">
                       <p class="az-dropdown" (click)="onOpenDropDown('preferencePurposeAndVendors')">Purpose & Vendor (
                         GDPR )
@@ -537,18 +548,21 @@
                       </div>
 
                     </div>
-
-
-                  </p-tabPanel>
-                </p-tabView>
+                </div>
               </div>
               <div class="step-4 layout content" *ngIf="step === 4">
                 <p-divider align="left" type="dashed">
                   <b>Layout</b>
                 </p-divider>
-                <p-tabView>
-                  <p-tabPanel header="Banner">
-                    <div class="card-theme mb-3 mt-2">
+
+
+                <div class="btn-group-action mb-4 mt-2">
+                  <button type="button" class="btn btn-link " [ngStyle]="{'color' : currentBannerLayer === 'banner' ? '#2196f3' : '#555',   'border-bottom' : currentBannerLayer === 'banner' ? '2px solid' : null }" (click)="currentBannerLayer = 'banner'">Banner</button>
+                  <button type="button" class="btn btn-link " [ngStyle]="{'color' :   currentBannerLayer === 'preference'  ? '#2196f3' : '#555', 'border-bottom' : currentBannerLayer === 'preference' ? '2px solid' : null  }"   (click)="currentBannerLayer = 'preference'">Preference</button>
+                </div>
+
+            <div class="layout-banner" *ngIf="currentBannerLayer === 'banner'">
+                <div class="card-theme mb-3 mt-2">
                       <div class="theme-btn-light mt-2" (click)="onSelectThemeType('light')">
                         <i class="fas fa-tint" style="color: #4e98fa;"></i> <span class="pl-3">Light Theme</span> <span
                         class="allowSign" *ngIf="themeType === 'light'"><i class="fas fa-check-circle"></i></span>
@@ -756,8 +770,8 @@
                         </div>
                       </div>
                     </div>
-                  </p-tabPanel>
-                  <p-tabPanel header="Preference">
+            </div>
+                <div class="layout-preference" *ngIf="currentBannerLayer === 'preference'">
                     <div class="card-theme mb-3  mb-3">
                       <div class="theme-btn-light mt-2" (click)="onSelectThemeType('light')">
                         <i class="fas fa-tint" style="color: #4e98fa;"></i> <span class="pl-3">Light Theme</span> <span
@@ -1006,8 +1020,7 @@
 
                     </div>
 
-                  </p-tabPanel>
-                </p-tabView>
+                </div>
               </div>
               <div class="step-5 content purpose-preference" *ngIf="step === 5">
                 <p-divider align="left" type="dashed">
@@ -1018,8 +1031,8 @@
                     <p class=" mb-0  input-label pt-2" for="ccpa_target">Preview Language</p>
                   </div>
                   <div class="col-md-8">
-                    <p-dropdown  [options]="languages" formControlName="PreviewLanguage" (onChange)="onSelectPreviewLang()"
-                                 optionLabel="name" optionValue="code"     [showClear]="true" placeholder="Select a Language">
+                    <p-dropdown  [options]="allowedLanguagesForPreview" formControlName="PreviewLanguage" (onChange)="onSelectPreviewLang()"
+                                 [showClear]="true" placeholder="Select a Language">
                       <ng-template pTemplate="selectedItem">
                         <div class="country-item country-item-value row" *ngIf="BannerConfigurationForm.value.PreviewLanguage">
                           <img src="assets/imgs/icons/flag_placeholder.png" style="height: 20px"
@@ -1260,6 +1273,39 @@
     </div>
 
   </form>
+</div>
+
+
+
+
+<div *ngIf="publishing" class="w-100 card mt-3 publish-loader">
+  <h5 class="text-center">Creating Your Banner ...</h5>
+  <div class="loading text-center">
+    <div class="spinner-grow text-primary" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>
+    <div class="spinner-grow text-secondary" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>
+    <div class="spinner-grow text-success" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>
+    <div class="spinner-grow text-danger" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>
+    <div class="spinner-grow text-warning" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>
+    <div class="spinner-grow text-info" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>
+    <div class="spinner-grow text-light" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>
+    <div class="spinner-grow text-dark" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>
+  </div>
 </div>
 
 
