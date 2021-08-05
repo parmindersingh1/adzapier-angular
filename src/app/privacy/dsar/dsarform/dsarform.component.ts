@@ -2467,7 +2467,6 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
     } else if (this.crid == null && this.settingsForm.form.dirty){
       this.isDirty = false;
       this.settingsForm.form.markAsPristine();
-      this.getDSARFormByCRID(this.crid,'dataupdated');
     }
     this.isDirty = false;
     this.modalRef.hide();
