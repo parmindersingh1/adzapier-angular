@@ -19,6 +19,8 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { DataService } from 'src/app/_services/data.service';
 import { DirtyComponents } from 'src/app/_models/dirtycomponents';
+import { environment } from 'src/environments/environment';
+
 @Component({
   selector: 'app-dsarform',
   templateUrl: './dsarform.component.html',
@@ -368,7 +370,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
             this.workflow = data.workflow;
           } else {
             this.selectedApproverID = data.approver_id || data.response.approver;
-            this.workflow = data.workflow_id;
+            this.workflow = data.workflow_id !== undefined ? data.workflow_id : data.response.workflow;
           }
           // this.requestFormControls = data.request_form;
           if (data.request_form) {
@@ -1835,18 +1837,11 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
 
   previewCCPAForm() {
     if (this.orgId && this.propId) {
-      const formStatus = this.isWebFormPublished && !this.isEditingPublishedForm && !this.isResetlinkEnable ? 'publish' : 'draft';
-      if (window.location.hostname === 'localhost') {
-        window.open('http://localhost:4500/dsar/form/' + this.orgId + '/' + this.propId + '/' + this.crid + '/' + formStatus);
-      }
-      if (window.location.hostname === 'develop-cmp.adzpier-staging.com') {
-        window.open('https://develop-privacyportal.adzpier-staging.com/dsar/form/' + this.orgId + '/' + this.propId + '/' + this.crid + '/' + formStatus);
-      } else if (window.location.hostname === 'cmp.adzpier-staging.com') {
-        window.open('https://privacyportal.adzpier-staging.com/dsar/form/' + this.orgId + '/' + this.propId + '/' + this.crid + '/' + formStatus);
-      } else if (window.location.hostname === 'qa-cmp.adzpier-staging.com') {
-        window.open('https://qa-privacyportal.adzpier-staging.com/dsar/form/' + this.orgId + '/' + this.propId + '/' + this.crid + '/' + formStatus);
-      } else if (window.location.hostname === 'portal.adzapier.com') {
-        window.open('https://privacyportal.primeconsent.com/dsar/form/' + this.orgId + '/' + this.propId + '/' + this.crid + '/' + formStatus);
+        const formStatus = this.isWebFormPublished && !this.isEditingPublishedForm && !this.isResetlinkEnable ? 'publish' : 'draft';
+     if (window.location.hostname === 'localhost') { //for internal purpose
+         window.open('http://localhost:4500/dsar/form/' + this.orgId + '/' + this.propId + '/' + this.crid + '/' + formStatus);
+      } else{
+         window.open(environment.privacyportalUrl + this.orgId + '/' + this.propId + '/' + this.crid + '/' + formStatus);
       }
     } else {
       this.alertMsg = 'Organization or Property not found!';
@@ -1858,17 +1853,10 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
   getWebFormScriptLink() {
     if (this.orgId && this.propId) {
       const formStatus = 'publish';
-      if (window.location.hostname === 'localhost') {
+      if (window.location.hostname === 'localhost') { //for internal purpose
         this.scriptcode = 'http://localhost:4500/dsar/form/' + this.orgId + '/' + this.propId + '/' + this.crid + '/' + formStatus;
-      }
-      if (window.location.hostname === 'develop-cmp.adzpier-staging.com') {
-        this.scriptcode = 'https://develop-privacyportal.adzpier-staging.com/dsar/form/' + this.orgId + '/' + this.propId + '/' + this.crid + '/' + formStatus;
-      } else if (window.location.hostname === 'cmp.adzpier-staging.com') {
-        this.scriptcode = 'https://privacyportal.adzpier-staging.com/dsar/form/' + this.orgId + '/' + this.propId + '/' + this.crid + '/' + formStatus;
-      } else if (window.location.hostname === 'qa-cmp.adzpier-staging.com') {
-        window.open('https://qa-privacyportal.adzpier-staging.com/dsar/form/' + this.orgId + '/' + this.propId + '/' + this.crid + '/' + formStatus);
-      } else if (window.location.hostname === 'portal.adzapier.com') {
-        this.scriptcode = 'https://privacyportal.primeconsent.com/dsar/form/' + this.orgId + '/' + this.propId + '/' + this.crid + '/' + formStatus;
+      } else {
+        this.scriptcode = environment.privacyportalUrl + this.orgId + '/' + this.propId + '/' + this.crid + '/' + formStatus;
       }
     }
   }
@@ -2472,15 +2460,18 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
     this.isEditingPublishedForm = !this.isEditingPublishedForm;
     this.isdraftsubmitted = false;
     this.basicFormSubmitted = false;
-    if(this.crid || this.settingsForm.form.dirty){
-      this.isDirty = false;
+    if(this.crid !== null && this.settingsForm.form.dirty){
+        this.isDirty = false;
+        this.settingsForm.form.markAsPristine();
+        this.getDSARFormByCRID(this.crid,'dataupdated');
+    } else if (this.crid == null && this.settingsForm.form.dirty){
+      this.isDirty = true;
       this.settingsForm.form.markAsPristine();
-      this.getDSARFormByCRID(this.crid,'dataupdated');
+      this.navDirective.select(this.activeId);
     }
-    this.isDirty = false;
+    this.isDirty = true;
     this.modalRef.hide();
     this.navDirective.select(this.activeId);
-   // return false;
   }
 
   disableEditPublishBtn(): boolean {

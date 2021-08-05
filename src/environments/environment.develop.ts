@@ -8,6 +8,7 @@ export const environment = {
   langURL: 'https://staging-cdn.adzapsrv.com/cookiebanner/banner-language/:lang.json',
   googleVendorsUrl: 'https://staging-cdn.adzapsrv.com/vendorlist/googlevendorlist/google.json',
   apiUrl: 'https://develop-cmp-api.adzpier-staging.com/api/v1',
+  privacyportalUrl: 'https://develop-privacyportal.adzpier-staging.com/dsar/form/',
   lokiUrl: 'https://logs.adzpier-staging.com/loki/api/v1/push',
   globleLangURL: 'https://staging-cdn.adzapsrv.com/cookiebanner/banner-language/:lang.json',
   customLangURL: 'https://staging-cdn.adzapsrv.com/cmp/v1/web/:oid/lang/:pid-:lang.json',
