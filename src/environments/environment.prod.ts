@@ -8,6 +8,7 @@ export const environment = {
   iabUrl: 'https://cdn.primeconsent.com/vendorlist/IABvendors/',
   googleVendorsUrl: 'https://cdn.primeconsent.com/vendorlist/googlevendorlist/google.json',
   apiUrl: 'https://api.primeconsent.com/api/v1',
+  privacyportalUrl: 'https://privacyportal.primeconsent.com/dsar/form/',
   lokiUrl: 'https://logs.primeconsent.com/loki/api/v1/push',
   globleLangURL: 'https://cdn.primeconsent.com/cmp/banner-language/:lang.json',
   consentPreferenceCDN: 'https://cdn.primeconsent.com/cmp/consent-preference/production/adzapier-cp-sdk.js',
