@@ -2465,13 +2465,13 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
         this.settingsForm.form.markAsPristine();
         this.getDSARFormByCRID(this.crid,'dataupdated');
     } else if (this.crid == null && this.settingsForm.form.dirty){
-      this.isDirty = false;
+      this.isDirty = true;
       this.settingsForm.form.markAsPristine();
+      this.navDirective.select(this.activeId);
     }
-    this.isDirty = false;
+    this.isDirty = true;
     this.modalRef.hide();
     this.navDirective.select(this.activeId);
-   // return false;
   }
 
   disableEditPublishBtn(): boolean {
