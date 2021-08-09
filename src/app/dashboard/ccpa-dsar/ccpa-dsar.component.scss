@@ -39,3 +39,14 @@
   margin-left: -3px;
   margin-right: -5px;
 }
+
+.state-header select {
+  width: 70px;
+  height: 30px;
+  padding: 0 10px;
+  background:url('../../../assets/imgs/down-arrow.svg') no-repeat;
+  background-position: 95% 50%;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
