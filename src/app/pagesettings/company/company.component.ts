@@ -88,7 +88,7 @@ export class CompanyComponent implements OnInit {
       state: ['', [Validators.required, Validators.pattern(strRegx)]],
       zipcode: ['', [Validators.required, Validators.pattern(numZip)]],
       email: [''],
-      phone: ['']
+      phone: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(15), Validators.pattern(numRegex)]]
     });
     this.inviteUserForm = this.formBuilder.group({
       emailid: ['', [Validators.required, Validators.pattern]],

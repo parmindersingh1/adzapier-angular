@@ -1,6 +1,6 @@
 import { Component, AfterViewChecked, OnInit, ChangeDetectorRef } from '@angular/core';
 import { faChrome, faEdge, faFirefox, faSafari, faOpera } from '@fortawesome/free-brands-svg-icons';
-import { AuthenticationService } from 'src/app/_services';
+import { AuthenticationService, OrganizationService } from 'src/app/_services';
 
 import { DataService } from '../_services/data.service';
 
@@ -33,6 +33,7 @@ export class AnalyticsComponent implements AfterViewChecked, OnInit {
   noOfLicensePurchased:number;
   constructor(
     private authService: AuthenticationService,
+    private orgService : OrganizationService,
     private dataService: DataService,
     private cdRef: ChangeDetectorRef
   ) {
@@ -44,6 +45,7 @@ export class AnalyticsComponent implements AfterViewChecked, OnInit {
 
 
   ngOnInit(){
+   this.getSelectedOrgIDPropertyID()
    this.isPropertyLicenseAssigned();
    this.isOrganizationLicenseAssigned();
    this.isConsentPreferenceLicenseAssigned();
@@ -102,14 +104,7 @@ export class AnalyticsComponent implements AfterViewChecked, OnInit {
   }
 
   ngAfterViewChecked(){
-    this.isPropertyLicenseAssigned();
-   this.isOrganizationLicenseAssigned();
-   this.isConsentPreferenceLicenseAssigned();
-    let checknoofDivs = this.checkDivLength();
-    if(checknoofDivs !== this.noOfLicensePurchased){
-      this.noOfLicensePurchased = checknoofDivs;
-      this.cdRef.detectChanges();
-    }
+    this.getSelectedOrgIDPropertyID();
   }
 
   loadAppContent(){
@@ -207,5 +202,21 @@ export class AnalyticsComponent implements AfterViewChecked, OnInit {
   }
   }
 
+  getSelectedOrgIDPropertyID() {
+    this.orgService.currentProperty.subscribe((response) => {
+      if (response !== '') {
+        this.isPropertyLicenseAssigned();
+        this.isOrganizationLicenseAssigned();
+        this.isConsentPreferenceLicenseAssigned();
+        let checknoofDivs = this.checkDivLength();
+        if (checknoofDivs !== this.noOfLicensePurchased) {
+          this.noOfLicensePurchased = checknoofDivs;
+          this.cdRef.detectChanges();
+        }
+      }
+    }, (error) => {
+      console.log(error, 'error.');
+    });
+  }
    
 }
