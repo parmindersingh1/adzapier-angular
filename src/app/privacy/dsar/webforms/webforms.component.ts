@@ -269,6 +269,7 @@ export class WebformsComponent implements OnInit, DirtyComponents {
         this.alertType = 'info';
         this.confirmationForm.controls['userInput'].setValue('');
         this.isconfirmationsubmitted = false;
+        this.licenseAvailabilityForFormAndRequestPerOrg(this.currentOrgID);
       }
     },(error) => {
       this.alertMsg = error;
