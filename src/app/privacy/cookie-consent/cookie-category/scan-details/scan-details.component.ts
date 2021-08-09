@@ -165,6 +165,7 @@ export class ScanDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
             this.lastScan = res.response;
             this.chartTypeData = [this.lastScan.total_cookies, this.lastScan.total_localstorage, this.lastScan.total_page_scans, this.lastScan.total_tages];
           }
+          this.authService.notificationUpdated.next(true);
       }
       this._cd.detectChanges();
     }, error => {
