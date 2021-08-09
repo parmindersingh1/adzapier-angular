@@ -221,6 +221,7 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
   duplicateRequestID;
   progressStaus;
   duplicateRequestStatus;
+  isSubmitBtnClickedOnce;
   //isduplicatedIdSelected = false;
   constructor(private activatedRoute: ActivatedRoute,
               private router: Router,
@@ -1190,10 +1191,11 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
     if (subtaskForm.invalid) {
       return false;
     }
+    this.isSubmitBtnClickedOnce = true;
     let currentStageID;
     this.isConfirmed ? currentStageID = this.currentWorkflowStageID : currentStageID = this.currentStageId;
    // const currentStageID = this.currentStageId ? this.currentStageId : this.currentWorkflowStageID;
-    if (this.isConfirmed == undefined) {
+    if (this.isConfirmed == undefined || !this.isConfirmed) {
       currentStageID = this.currentWorkflowStageID;
     }
     if (currentStageID !== undefined) {
@@ -1215,6 +1217,7 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
             subtaskForm.resetForm();
             this.getSubTaskList();
             this.authService.notificationUpdated.next(true);
+            this.isSubmitBtnClickedOnce = false;
             this.modalService.dismissAll('Canceled');
           }, (error) => {
             this.onResetSubTask();
@@ -1232,6 +1235,7 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
           subtaskForm.resetForm();
           this.onResetSubTask();
           this.authService.notificationUpdated.next(true);
+          this.isSubmitBtnClickedOnce = false;
         }, (error) => {
           this.alertMsg = error;
           this.isOpen = true;
@@ -1245,6 +1249,7 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
       this.alertMsg = 'Workflow stages are not available!';
       this.isOpen = true;
       this.alertType = 'info';
+      this.isSubmitBtnClickedOnce = false;
     }
   }
 
@@ -1412,6 +1417,7 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
     } else if(this.isEmailVerified){
       this.selectedStages.push(this.workflowStages[0]);
       this.selectedStages.push(this.workflowStages[1]);
+      this.currentWorkflowStageID = this.workflowStages[1].id;
     }
 
   }
@@ -1477,8 +1483,8 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
   }
 
   displayApproverName(id): string {
-    let approverName = this.ApproverList.filter((t) => t.approver_id = id);
-    return this.displayAssignee = approverName[0].user_name;
+    let i = this.ApproverList.findIndex((t) => t.approver_id == id && t.email_verified);
+    return this.displayAssignee = this.ApproverList[i].user_name;
   }
 
   onCancelSubTaskResponse() {
@@ -1871,6 +1877,41 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
 
   changeActivityType($event){
     this.activitytype = parseInt($event.currentTarget.value);
+  }
+
+  reOpenrequest(){
+   
+    this.dsarRequestService.reopenDeletedDSARRequest( this.currentManagedOrgID,this.currrentManagedPropID, this.requestID,this.constructor.name, moduleName.dsarRequestModule).subscribe((data)=>{
+     if(data.status == 200){
+      if (this.selectedStages.length !== 0) {
+        const reqObj = {
+          current_status: this.selectedStages[this.selectedStages.length - 1].id,
+          previous_status: this.previousStageId,
+          activity_feedback: 'Request reopen'
+        };
+        Object.keys(reqObj).forEach(key => {
+          if (reqObj[key] === undefined) {
+            delete reqObj[key];
+          }
+        });
+        const fd = new FormData();
+        fd.append('current_status', reqObj.current_status);
+        fd.append('previous_status', reqObj.previous_status);
+        fd.append('activity_feedback', reqObj.activity_feedback);
+        this.stageAPI(this.requestID, fd);
+        this.isExtenddasysubmitted = false;
+      } else {
+        this.alertMsg = 'Select stage!';
+        this.isOpen = true;
+        this.alertType = 'danger';
+      }
+    }
+    },(error)=>{
+        this.alertMsg = error;
+        this.isOpen = true;
+        this.alertType = 'danger';
+    })
+
   }
 }
 

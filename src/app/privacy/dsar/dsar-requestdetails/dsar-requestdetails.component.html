@@ -19,6 +19,7 @@
                     </span>
                     <div class="d-flex">
                         <button *ngIf="duplicateRequest.length > 0" type="button" class="btn btn-sm btn-outline-secondary btn-uppercase mr-2" (click)="openDuplicateRequest()">View duplicate</button>
+                        <button (click)="reOpenrequest()" *ngIf="currentWorkflowStage == 'Rejected'" class="btn btn-sm btn-outline-secondary btn-uppercase mr-2">Reopen</button>
                             <button (click)="onRefresh()" class="btn btn-sm btn-uppercase btn-outline-secondary pt-2 mr-2 lineheight-22">
                               <i class="fas fa-sync feather-16"></i> Refresh</button>
 
@@ -803,7 +804,7 @@
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-link tx-decoration-underline m-0" (click)="onResetSubTask()">Cancel</button>
-            <button class="btn btn-primary m-0" type="submit">Save</button>
+            <button class="btn btn-primary m-0" [attr.disabled]="isSubmitBtnClickedOnce ? true : null" type="submit">Save</button>
         </div>
     </form>
 </ng-template>
