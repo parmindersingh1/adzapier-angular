@@ -525,8 +525,10 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
       moveItemInArray(this.webFormControlList, event.previousIndex, event.currentIndex);
       if (this.crid) {
         this.ccpaFormConfigService.setFormControlList(this.webFormControlList);
+        this.isDirty = true;
       } else {
         this.dsarFormService.setFormControlList(this.webFormControlList);
+        this.isDirty = true;
       }
 
 
