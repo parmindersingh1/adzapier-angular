@@ -1221,6 +1221,7 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
             this.modalService.dismissAll('Canceled');
           }, (error) => {
             this.onResetSubTask();
+            this.isSubmitBtnClickedOnce = false;
             this.alertMsg = error;
             this.isOpen = true;
             this.alertType = 'danger';
@@ -1240,6 +1241,7 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
           this.alertMsg = error;
           this.isOpen = true;
           this.alertType = 'danger';
+          this.isSubmitBtnClickedOnce = false;
           this.onResetSubTask();
         });
       }
@@ -1412,9 +1414,7 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
       const workfloworder = this.workflowStages.filter((t) => t.id === id);
       const x = this.workflowStages.slice(0, workfloworder[0].order);
       this.selectedStages = x;
-    } else if (!this.isEmailVerified){
-      this.selectedStages.push(this.workflowStages[0]);
-    } else if(this.isEmailVerified){
+    } else if (!this.isEmailVerified || this.isEmailVerified){
       this.selectedStages.push(this.workflowStages[0]);
       this.selectedStages.push(this.workflowStages[1]);
       this.currentWorkflowStageID = this.workflowStages[1].id;
