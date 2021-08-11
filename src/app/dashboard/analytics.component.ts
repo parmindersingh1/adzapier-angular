@@ -1,6 +1,6 @@
 import { Component, AfterViewChecked, OnInit, ChangeDetectorRef } from '@angular/core';
 import { faChrome, faEdge, faFirefox, faSafari, faOpera } from '@fortawesome/free-brands-svg-icons';
-import { AuthenticationService } from 'src/app/_services';
+import { AuthenticationService, OrganizationService } from 'src/app/_services';
 
 import { DataService } from '../_services/data.service';
 
@@ -33,6 +33,7 @@ export class AnalyticsComponent implements AfterViewChecked, OnInit {
   noOfLicensePurchased:number;
   constructor(
     private authService: AuthenticationService,
+    private orgService : OrganizationService,
     private dataService: DataService,
     private cdRef: ChangeDetectorRef
   ) {
@@ -44,6 +45,7 @@ export class AnalyticsComponent implements AfterViewChecked, OnInit {
 
 
   ngOnInit(){
+   this.getSelectedOrgIDPropertyID()
    this.isPropertyLicenseAssigned();
    this.isOrganizationLicenseAssigned();
    this.isConsentPreferenceLicenseAssigned();
@@ -53,11 +55,20 @@ export class AnalyticsComponent implements AfterViewChecked, OnInit {
   }
 
   isPropertyLicenseAssigned():boolean {
+    let propPlandetails = JSON.stringify(this.dataService.getCurrentPropertyPlanDetails()); // on page refresh
+        let ispropplanExist;
+        if(JSON.parse(propPlandetails).response && JSON.parse(propPlandetails).response.plan_details &&  JSON.parse(propPlandetails).response.plan_details.cookieConsent){
+          if(Object.values(JSON.parse(propPlandetails).response.plan_details.cookieConsent).length > 0){
+            ispropplanExist = true;
+          }
+        }
+    let licensePropStatus;    
     this.dataService.isLicenseAppliedForProperty.subscribe((status) =>  {
+      licensePropStatus = status.hasaccess;
     this.isLicenseAssignedtoProperty = status.hasaccess;
     });
     this.cookieTooltiptext = this.isLicenseAssignedtoProperty ? '' : 'You have not assigned Cookie consent license to selected property';
-    return this.isLicenseAssignedtoProperty;
+    return this.isLicenseAssignedtoProperty =  licensePropStatus || ispropplanExist !== undefined ? true : false;
   }
 
   isConsentPreferenceLicenseAssigned():boolean {
@@ -75,7 +86,17 @@ export class AnalyticsComponent implements AfterViewChecked, OnInit {
      this.isLicenseAssignedtoOrganization = licenseStatus;
      this.dsarTooltiptext = this.isLicenseAssignedtoOrganization ? '' : 'You have not assigned DSAR license to selected organization';
     });
-    return this.isLicenseAssignedtoOrganization = licenseStatus;
+
+    let orgPlanDSARPlans = JSON.stringify(this.dataService.getCurrentOrganizationPlanDetails());
+    
+    let isorgplanExist; // check on page refresh
+    if(JSON.parse(orgPlanDSARPlans).response && JSON.parse(orgPlanDSARPlans).response.plan_details &&  JSON.parse(orgPlanDSARPlans).response.plan_details.dsar){
+      if(Object.values(JSON.parse(orgPlanDSARPlans).response.plan_details.dsar).length > 0){
+        isorgplanExist = true;
+      }
+    }
+
+    return this.isLicenseAssignedtoOrganization = licenseStatus || isorgplanExist !== undefined ? isorgplanExist : false;
   }
 
    checkDivLength(){
@@ -83,14 +104,7 @@ export class AnalyticsComponent implements AfterViewChecked, OnInit {
   }
 
   ngAfterViewChecked(){
-    this.isPropertyLicenseAssigned();
-   this.isOrganizationLicenseAssigned();
-   this.isConsentPreferenceLicenseAssigned();
-    let checknoofDivs = this.checkDivLength();
-    if(checknoofDivs !== this.noOfLicensePurchased){
-      this.noOfLicensePurchased = checknoofDivs;
-      this.cdRef.detectChanges();
-    }
+    this.getSelectedOrgIDPropertyID();
   }
 
   loadAppContent(){
@@ -100,7 +114,7 @@ export class AnalyticsComponent implements AfterViewChecked, OnInit {
       title:"Cookie Consent Dashboard",
       iconcss:"fas fa-chart-line tx-primary temp-blue center tx-64 margin-15",
       content:"Real-time dashboard and analytics to improve your opt-in rates with in-depth reporting.",
-      tooltipcontent: this.cookieTooltiptext,
+      tooltipcontent: this.isLicenseAssignedtoProperty ? '' : this.cookieTooltiptext,
       routerlinktext:this.isLicenseAssignedtoProperty ? '/home/dashboard/cookie-consent' : '/settings/billing/manage',
       buttonText:this.isLicenseAssignedtoProperty ? 'Go Now' : 'Try Now'
     },
@@ -110,7 +124,7 @@ export class AnalyticsComponent implements AfterViewChecked, OnInit {
      title:"Banner Configuration",
      iconcss:"fas fa-layer-group tx-primary temp-blue center tx-64 margin-15",
      content:"Configure geo specific cookie banner, language and preference center.",
-     tooltipcontent: this.cookieTooltiptext,
+     tooltipcontent: this.isLicenseAssignedtoProperty ? '' : this.cookieTooltiptext,
      routerlinktext:this.isLicenseAssignedtoProperty ? '/cookie-consent/cookie-banner' : '/settings/billing/manage',
      buttonText: this.isLicenseAssignedtoProperty ? 'Go Now' : 'Try Now'
    }, {
@@ -119,7 +133,7 @@ export class AnalyticsComponent implements AfterViewChecked, OnInit {
      title:"Setup",
      iconcss:"fas fa-wrench tx-primary temp-blue fa-3x center tx-64 margin-15",
      content:"Setup consent banner Javascript CDN into your application",
-     tooltipcontent: this.cookieTooltiptext,
+     tooltipcontent:this.isLicenseAssignedtoProperty ? '' : this.cookieTooltiptext,
      routerlinktext:this.isLicenseAssignedtoProperty ? '/cookie-consent/cookie-banner/setup' : '/settings/billing/manage',
      buttonText:this.isLicenseAssignedtoProperty ? 'Go Now' : 'Try Now'
    }, {
@@ -128,7 +142,7 @@ export class AnalyticsComponent implements AfterViewChecked, OnInit {
      title:"Data Subject Request",
      iconcss:"fas fa-balance-scale tx-primary temp-blue center tx-64 margin-15",
      content:"Create dynamic forms and respond to privacy rights requests to meet regulatory deadlines.",
-     tooltipcontent: this.dsarTooltiptext,
+     tooltipcontent: this.isLicenseAssignedtoOrganization ? '' : this.dsarTooltiptext,
      routerlinktext:this.isLicenseAssignedtoOrganization ? ['/privacy/dsar/requests'] : ['/settings/billing/manage'],
      buttonText:this.isLicenseAssignedtoOrganization ? 'Go Now' : 'Try Now'
    }, {
@@ -137,7 +151,7 @@ export class AnalyticsComponent implements AfterViewChecked, OnInit {
      title:"Consent preference",
      iconcss:"fas fa-file-signature tx-primary temp-blue center tx-64 margin-15",
      content:"Collect user preference consent, document opt-ins/out via your web forms and systems.",
-     tooltipcontent: this.consentTooltipText,
+     tooltipcontent: this.isConsentPreferenceLicenseAssignedToProperty ? '' : this.consentTooltipText,
      routerlinktext:this.isConsentPreferenceLicenseAssignedToProperty ? ['/home/dashboard/consent-preference'] : ['/settings/billing/manage'],
      buttonText:this.isConsentPreferenceLicenseAssignedToProperty ? 'Go Now' : 'Try Now'
    }];
@@ -188,5 +202,21 @@ export class AnalyticsComponent implements AfterViewChecked, OnInit {
   }
   }
 
+  getSelectedOrgIDPropertyID() {
+    this.orgService.currentProperty.subscribe((response) => {
+      if (response !== '') {
+        this.isPropertyLicenseAssigned();
+        this.isOrganizationLicenseAssigned();
+        this.isConsentPreferenceLicenseAssigned();
+        let checknoofDivs = this.checkDivLength();
+        if (checknoofDivs !== this.noOfLicensePurchased) {
+          this.noOfLicensePurchased = checknoofDivs;
+          this.cdRef.detectChanges();
+        }
+      }
+    }, (error) => {
+      console.log(error, 'error.');
+    });
+  }
    
 }

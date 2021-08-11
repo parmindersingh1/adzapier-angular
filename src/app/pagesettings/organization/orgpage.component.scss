@@ -97,6 +97,7 @@
 .searchfield > div > span.input-group-append {
     height: 38px;
     display: flex;
+    cursor: pointer;
 }
 
 .searchfield > div > span > div.input-group-text {
@@ -166,3 +167,12 @@ tr.row-disabled > td > a {
        float:right;
        margin-top: 10px;
    }
+
+.pagination-wrapper .form-inline .form-group select {
+    width: 50%;
+    background: url('../../../assets/imgs/down-arrow.svg') no-repeat;
+    background-position: 85% 50%;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
+}

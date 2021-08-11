@@ -433,6 +433,14 @@ h6 ::ng-deep .tooltip-arrow .arrow {
   height: 100%;
 }
 
+.config-pd .form-group select, .show-controls select, .border-gray select, .card-header select {
+  background:url('../../../../assets/imgs/down-arrow.svg') no-repeat;
+  background-position: 95% 50%;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
 @media only screen and (max-width: 600px) {
   .bredcrub-row {
     margin-left: 0px !important;

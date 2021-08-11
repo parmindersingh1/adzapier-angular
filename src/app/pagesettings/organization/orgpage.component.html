@@ -46,8 +46,7 @@
                 <tbody>
                     <ng-container *ngFor="let data of orgList | paginate:paginationConfig; let i = index"> <!--filter: searchText:'orgname':'city':'state' -->
                     <tr [ngClass]="{'row-disabled':data.active == false, 'row-enabled':data.active == true}">
-                        <td><a *ngIf="data.active == true || data.active == 'undefined'" (click)="viewOrganization(data.id)">{{data.orgname}}</a>
-                            <span *ngIf="data.active == false || data.active === undefined">{{data.orgname}}</span>
+                        <td><a *ngIf="data.active == true || data.active == undefined" (click)="viewOrganization(data.id)">{{data.orgname}}</a>
                         </td>
                         <td>{{data.address1}} {{data.address2}}</td>
                         <td>{{data.city}}</td>

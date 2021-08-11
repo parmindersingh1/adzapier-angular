@@ -163,7 +163,7 @@
                             </td>
                             <td>
                                 <!-- <i-feather name="edit-3" class="feather-16"></i-feather> -->
-                                <a class="pd-r-5" (click)="editModalPopup(propertyModal,list)">
+                                <a class="pd-r-5" *ngIf="list.active" (click)="editModalPopup(propertyModal,list)">
                                    <span class="cursorpointer"><i class="far fa-edit fa-1x"></i></span>
                                 </a>
                                 <a class="pd-r-5" *ngIf="list.active"
@@ -431,7 +431,7 @@
                             [ngClass]="{ 'is-invalid': submitted && editOrg.phone.errors }" />
                         <div *ngIf="submitted && editOrg.phone.errors" class="invalid-feedback">
                             <div *ngIf="editOrg.phone.errors.required">Phone is required</div>
-                            <div *ngIf="editOrg.phone.errors.pattern">Enter valid phone number</div>
+                            <div *ngIf="editOrg.phone.errors || editOrg.phone.errors.pattern">Enter valid phone number</div>
                         </div>
                     </div>
                 </div>

@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ReactiveFormsModule } from '@angular/forms';
 
 import { DsarRequestdetailsComponent } from './dsar-requestdetails.component';
 
@@ -8,7 +9,8 @@ describe('DsarRequestdetailsComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ DsarRequestdetailsComponent ]
+      declarations: [ DsarRequestdetailsComponent ],
+      imports:[ReactiveFormsModule]
     })
     .compileComponents();
   }));
@@ -22,4 +24,18 @@ describe('DsarRequestdetailsComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should have workflow first stage selected',()=>{
+    expect(component.selectedStages.length).toBeGreaterThanOrEqual(1);
+  })
+
+  it('should container organization and property id',()=>{
+    expect(component.currentManagedOrgID).toBeDefined();
+    expect(component.currrentManagedPropID).toBeDefined();
+  })
+
+  it('should have request id',()=>{
+    expect(component.requestID).toBeDefined()
+  })
+
 });

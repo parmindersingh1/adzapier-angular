@@ -101,7 +101,7 @@ export class WebformsComponent implements OnInit, DirtyComponents {
        } else {
         const orgDetails = this.organizationService.getCurrentOrgWithProperty();
         this.orgDetails = orgDetails;
-        this.currentOrgID = orgDetails.organization_id;
+        this.currentOrgID = orgDetails.organization_id || orgDetails.response.oid;
         }
     });
 
@@ -269,6 +269,7 @@ export class WebformsComponent implements OnInit, DirtyComponents {
         this.alertType = 'info';
         this.confirmationForm.controls['userInput'].setValue('');
         this.isconfirmationsubmitted = false;
+        this.licenseAvailabilityForFormAndRequestPerOrg(this.currentOrgID);
       }
     },(error) => {
       this.alertMsg = error;
