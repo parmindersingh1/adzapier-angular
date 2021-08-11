@@ -6,7 +6,7 @@ import {moduleName} from '../../_constant/module-name.constant';
 import {DataService} from '../../_services/data.service';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
 import {Location} from '@angular/common';
-import { Router} from '@angular/router';
+import { ActivatedRoute, Router} from '@angular/router';
 
 interface Country {
   count: number;
@@ -64,6 +64,8 @@ export class CookieConsentComponent implements OnInit {
   isShowDashboard = false;
   @ViewChild('noSup', {static: true}) noSup;
   modalRef: BsModalRef;
+  queryOID;
+  queryPID;
   constructor(private dashboardService: DashboardService,
               private orgservice: OrganizationService,
               private cd: ChangeDetectorRef,
@@ -71,8 +73,15 @@ export class CookieConsentComponent implements OnInit {
               private dataService: DataService,
               private modalService: BsModalService,
               private _location: Location,
-              private router:Router
-  ) { }
+              private router:Router,
+              private activateRoute: ActivatedRoute
+  ) { 
+    this.activateRoute.queryParamMap
+    .subscribe(params => {
+    this.queryOID = params.get('oid');
+    this.queryPID = params.get('pid'); 
+    });
+  }
 
   ngOnInit() {
     this.onGetPropsAndOrgId();
@@ -348,8 +357,13 @@ export class CookieConsentComponent implements OnInit {
     this.onGetMapData();
   }
   onGoBack() {
-    this.router.navigate(['/home/dashboard/analytics']);
+    //this.router.navigate(['/home/dashboard/analytics']);
+    this.router.navigate(['/home/dashboard/analytics'],{ queryParams: { oid: this.queryOID, pid: this.queryPID }, queryParamsHandling:'merge', skipLocationChange:false});
     this.modalRef.hide();
+  }
+
+  backToParentlink() {
+    this.router.navigate(['/home/dashboard/cookie-consent'],{ queryParams: { oid: this.queryOID, pid: this.queryPID }, queryParamsHandling:'merge', skipLocationChange:false});
   }
 
 }

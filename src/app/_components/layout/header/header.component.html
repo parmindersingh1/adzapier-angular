@@ -11,7 +11,7 @@
         <i-feather name="menu" *ngIf="close" class="feather-16"></i-feather>
         <i-feather name="plus" *ngIf="!close" class="feather-16 menuplus-icon"></i-feather>
       </button>
-      <a routerLink="/home/welcome"> <!--routerLink="/login"-->
+      <a routerLink="/home/welcome" [queryParams]="{oid:queryOID , pid:queryPID}"> <!--routerLink="/login"-->
         <img src="assets/imgs/adzapier_logo.svg" width="130" height="30" alt="Adzapier | Ad Tech for Publishers"/>
       </a>
     </div>
@@ -25,7 +25,7 @@
       <li *ngFor="let menu of publicNavigationMenu" class="nav-item">
         <div *ngIf="menu.showlink" dropdown container="body">
           <div *ngIf="!menu.subcategory">
-            <a class="nav-link" (click)="true" routerLinkActive="active" routerLink="{{menu.routerLink}}" routerLink="{{menu.routerLink}}">
+            <a class="nav-link" (click)="true" routerLinkActive="active" routerLink="{{menu.routerLink}}">
               {{ menu.showlink }}</a></div>
           <div *ngIf="menu.subcategory">
             <a class="nav-link dropdown-toggle" routerLinkActive="active" routerLink="{{menu.routerLink}}" *ngIf="menu.subcategory" dropdownToggle (click)="true">
@@ -34,7 +34,7 @@
             <ul *dropdownMenu class="dropdown-menu">
               <ng-container *ngFor="let item of menu.subcategory;">
                 <li role="menuitem">
-                  <a class="dropdown-item" routerLinkActive="active" routerLink="{{item.routerLink}}" routerLink="{{item.routerLink}}">
+                  <a class="dropdown-item" routerLinkActive="active" routerLink="{{item.routerLink}}">
                     {{item.showlink}}
                   </a>
                 </li>
@@ -67,10 +67,12 @@
      <!--(orgPropertyMenu | async).response-->
      <div *dropdownMenu>
        <div class="dropdown-wrapper">
+         <!-- {{queryOID}}  | {{queryPID}} -->
       <ul class="dropdown-menu propMenu" [ngStyle]="addColumncount()"> <!--[ngStyle]="addColumncount()"-->
           <li role="menuitem" *ngFor="let item of orgPropertyMenu; first as isFirst; let i = index;">
             <a class="dropdown-item" title="{{item.orgname}}" routerLink="/settings/organizations/details/{{item.id}}" (click)="goto('settings/organizations/details',item.id)">
              <span [ngClass]="[isOrgSelected(item) ? 'active' : '']">{{item.orgname}}</span>
+             
              <span class="align-right width50"><i-feather class="feather-plus" name="plus"></i-feather>
               <!-- <i-feather placement="bottom" [adaptivePosition]="true" tooltip="You have not assigned DSAR License to this organization" style="color:orange" *ngIf="isLicenseAssignedForOrganization(item)" class="feather-lock mr-1" name="lock"></i-feather>   -->
             </span>
@@ -78,11 +80,18 @@
             <div *ngIf="item.property.length=='0'">No Property</div>
             <ul role="menu">
               <ng-container  *ngFor="let submenu of item.property">
-                <li role="menuitem">
-                  <a class="dropdown-item" routerLinkActive="active" [class.disableproperty]="isProperyDisabled(submenu)" [ngClass]="[isPropSelected(submenu) ? 'active' : '']"> <!-- routerLink="{{item.id}}/{{submenu.property_id}}"-->
-                   <span class="propertyLink" *ngIf="!isProperyDisabled(submenu); else disabledProperty" (click)="isCurrentPropertySelected(item,submenu)"> <span class="property-ellipsis"> {{ submenu.property_name ? convertAmpersand(submenu.property_name) : 'No Property' }}</span>
-                   <span class="flex-spacebetween">
-                    <span class="ml-2 mr-2" *ngIf="isPropSelected(submenu)">
+                <!-- curl | {{currentNavigationUrl}} -->
+                <!-- currentNavigationUrl |{{currentNavigationUrl}}  routerLink="[currentNavigationUrl]" -->
+                <!-- currentNavigationUrl |{{currentNavigationUrl}}|{{item.id}}|{{submenu.property_id}} skipLocationChange='true' -->
+                <li role="menuitem"> <!--[queryParams]="{oid:item.id , pid:submenu.property_id}"  [queryParamsHandling]="preserve"--> <!-- routerLink="{{item.id}}/{{submenu.property_id}}"-->
+                  <a class="dropdown-item"   routerLinkActive="active"  
+                  routerLink="currentNavigationUrl"                 
+                    [queryParams]="{oid:item.id , pid:submenu.property_id}"    [class.disableproperty]="isProperyDisabled(submenu)" [ngClass]="[isPropSelected(submenu) ? 'active' : '']">
+                   <span class="propertyLink" *ngIf="!isProperyDisabled(submenu); else disabledProperty" (click)="isCurrentPropertySelected(item,submenu)"> <span class="property-ellipsis">
+                    <!-- {{submenu.property_id}}  -->
+                    {{ submenu.property_name ? convertAmpersand(submenu.property_name) : 'No Property' }}</span>
+                   <span class="flex-spacebetween"> 
+                    <span class="ml-2 mr-2" *ngIf="isPropSelected(submenu)"> <!-- *ngIf="isPropSelected(submenu)"-->
                     <i class="fa fa-check"></i></span>
                     <!-- <i-feather  placement="bottom" [adaptivePosition]="true" tooltip="You have not assigned cookie consent license to this property" *ngIf="isLicenseAssignedForProperty(submenu)" class="feather-lock mr-1" name="lock"></i-feather> -->
                   </span>
@@ -109,8 +118,8 @@
       <li *ngFor="let menu of navigationMenu" class="nav-item">
         <div *ngIf="menu.showlink" dropdown container="body">
           <div *ngIf="!menu.subcategory">
-            <a class="nav-link" routerLink="{{menu.routerLink}}" [class.active]="menu.showlink === 'Billing' && isBillingActivelinkMatched" (click)="goto(menu)">
-              {{ menu.showlink }}</a></div>
+            <a class="nav-link" routerLink="[menu.routerLink]" [queryParams]="{oid:queryOID , pid:queryPID}"  [class.active]="menu.showlink === 'Billing' && isBillingActivelinkMatched" (click)="goto(menu)">
+          {{ menu.showlink }}</a></div>
           <div *ngIf="menu.subcategory">
             <a class="nav-link dropdown-toggle"  [class.active]="menu.showlink === 'Privacy' && isPrivacyActivelinkMatched" *ngIf="menu.subcategory" dropdownToggle (click)="true">
               {{ menu.showlink }}</a></div>
@@ -120,15 +129,15 @@
             <ng-container *ngFor="let item of menu.subcategory;let q = index;">
               <li *ngIf="menu.showlink == 'Privacy' && q===0" class="displayflex"><span>DSAR</span></li>
               <li role="menuitem" *ngIf="q  <= 9">
-                <a class="dropdown-item" [class.active]="activateSublink(item)" *ngIf="item.routerLink !== '/home/dashboard/consent-preference'" routerLink="{{item.routerLink}}" (click)="goto(item)">
+                <a class="dropdown-item" [class.active]="activateSublink(item)" *ngIf="item.routerLink !== '/home/dashboard/consent-preference'" [routerLink]="item.routerLink" [queryParams]="{oid:queryOID , pid:queryPID}" (click)="goto(item)">
                   <span *ngIf="item.icon.indexOf('fa')===-1">
-                    <i-feather name="{{item.icon}}" class="feather-16"></i-feather> {{item.showlink}}
+                    <i-feather name="{{item.icon}}" class="feather-16"></i-feather>{{item.showlink}}
                   </span>
                   <span *ngIf="item.icon.indexOf('fa')===0"><i class="{{item.icon}}"></i>{{item.showlink}}</span>
                 </a> <!--hide consent preference menu item-->
-                <a class="dropdown-item" [class.active]="activateSublinkConsentPreference(item)" *ngIf="item.routerLink == '/home/dashboard/consent-preference' && showConsentPreference" routerLink="{{item.routerLink}}" (click)="goto(item)">
+                <a class="dropdown-item" [class.active]="activateSublinkConsentPreference(item)" *ngIf="item.routerLink == '/home/dashboard/consent-preference' && showConsentPreference" [routerLink]="item.routerLink"  [queryParams]="{oid:queryOID , pid:queryPID}" (click)="goto(item)">
                   <span *ngIf="item.icon.indexOf('fa')===-1">
-                    <i-feather name="{{item.icon}}" class="feather-16"></i-feather> {{item.showlink}}
+                    <i-feather name="{{item.icon}}" class="feather-16"></i-feather>{{item.showlink}}
                   </span>
                   <span *ngIf="item.icon.indexOf('fa')===0"><i class="{{item.icon}}"></i>{{item.showlink}}</span>
                 </a>
@@ -142,7 +151,7 @@
               <div class="consent-preference" style="width:135px" *ngIf="q > 9">
                 <li *ngIf="q=== 10" class="displayflex"><span>Consent Preference</span></li>
                 <li role="menuitem">
-                  <a class="dropdown-item" [class.active]="activateSublinkConsentPreference(item)"  routerLink="{{item.routerLink}}" (click)="goto(item)">
+                  <a class="dropdown-item" [class.active]="activateSublinkConsentPreference(item)"  routerLink="{{item.routerLink}}"  [queryParams]="{oid:queryOID , pid:queryPID}" (click)="goto(item)">
                   <span *ngIf="item.icon.indexOf('fa')===-1">
                     <i-feather name="{{item.icon}}" class="feather-16"></i-feather> {{item.showlink}}
                   </span>
@@ -356,7 +365,7 @@
            {{ menu.showlink }}</a></div>
         <ul [isAnimated]="true" [collapse]="collapseStatus(r)" class="dropdown-menu">
           <ng-container *ngFor="let item of menu.subcategory;let q = index;">
-            <li *ngIf="menu.showlink == 'Privacy' && q===0" class="displayflex"><span>DSAR</span></li>
+            <li *ngIf="menu.showlink == 'Privacy' && q===0" class="displayflex"><span>DSAR366</span></li>
             <li role="menuitem">
               <a class="dropdown-item" [class.active]="activateSublink(item)" routerLink="{{item.routerLink}}" (click)="goto(item)">
                 <span *ngIf="item.icon.indexOf('fa')===-1">

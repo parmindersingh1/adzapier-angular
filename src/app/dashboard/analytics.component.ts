@@ -1,5 +1,7 @@
-import { Component, AfterViewChecked, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, AfterViewChecked, OnInit, ChangeDetectorRef, DoCheck } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { faChrome, faEdge, faFirefox, faSafari, faOpera } from '@fortawesome/free-brands-svg-icons';
+import { debounceTime, filter } from 'rxjs/operators';
 import { AuthenticationService, OrganizationService } from 'src/app/_services';
 
 import { DataService } from '../_services/data.service';
@@ -9,7 +11,7 @@ import { DataService } from '../_services/data.service';
   templateUrl: './analytics.component.html',
   styleUrls: ['./analytics.component.scss']
 })
-export class AnalyticsComponent implements AfterViewChecked, OnInit {
+export class AnalyticsComponent implements OnInit {
   faChrome = faChrome;
   faEdge = faEdge;
   faFirefox = faFirefox;
@@ -31,44 +33,121 @@ export class AnalyticsComponent implements AfterViewChecked, OnInit {
   appsPositionRowTwo:any = [];
   appsPositionRowThree:any = [];
   noOfLicensePurchased:number;
+  queryOID;
+  queryPID;
   constructor(
+    private router: Router,
+    private activateRoute : ActivatedRoute,
     private authService: AuthenticationService,
     private orgService : OrganizationService,
     private dataService: DataService,
     private cdRef: ChangeDetectorRef
   ) {
+     // this.activatedroute.queryParams.subscribe((params) => {
+    //   console.log(params,'params..');
+    //  // cdRef.markForCheck();
+    // });
     this.authService.currentUser.subscribe(x => this.currentUser = x);
     this.isCollapsed = false;
-    this.loadAppContent();
+   // this.loadAppContent();
    }
   // redirect to home if already logged in
 
 
   ngOnInit(){
-   this.getSelectedOrgIDPropertyID()
+    this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+
+    console.log(this.activateRoute.snapshot.queryParamMap.has('oid'),'53');
+    console.log(this.activateRoute.snapshot.queryParamMap.get('oid'),'54');
+    // this.activateRoute.queryParamMap
+    //         .subscribe(params => { 
+    //           this.cdRef.markForCheck();
+    //          // this.pageNo = +params.get('pageNum')||0;
+    //           console.log('Query params ',params) 
+    //       });
    this.isPropertyLicenseAssigned();
    this.isOrganizationLicenseAssigned();
    this.isConsentPreferenceLicenseAssigned();
    this.checkDivLength();
    this.loadAppContent();
    this.allocateElementToRows();
+  
+   //window.location.reload();
+//    this.activateRoute.queryParams.pipe(
+//     debounceTime(500),
+//      filter((queryParams:any)=>{
+//        return !queryParams.oid;
+//      })
+//    ).  
+//    subscribe(params => {
+//      console.log(params.keys,'app..');
+//      //if (params.get('code')) {
+//        if(Object.keys(params).length > 0){
+//          console.log(params.get('oid'),params.get('pid'));
+//        }
+//        //  this.qcode = params.get('pid');
+//     // }
+//  });
+
+ this.activateRoute.queryParamMap
+ .subscribe(params => {
+   this.queryOID = params.get('oid');
+   this.queryPID = params.get('pid');
+   console.log(this.queryOID,'queryOID..');
+   console.log(this.queryPID,'queryPID..');
+  });
+   
+//   this.updatedUrlWithPID = params.get('pid');  
+// console.log(params.get('oid'),'oid..');
+// console.log(params.get('pid'),'pid..');
+
+
+// if(this.queryOID !== undefined){
+// this.dataService.checkLicenseAvailabilityPerOrganization(this.queryOID).subscribe(results => {
+//   let finalObj = {
+//     ...results[0].response,
+//     ...results[1].response,
+//     ...results[2].response
+//   }
+//   this.dataService.setAvailableLicenseForFormAndRequestPerOrg(finalObj);
+//   if (finalObj !== null && Object.keys(finalObj).length !== 0) {
+//     this.isLicenseAssignedtoOrganization = true;
+//     this.dataService.isLicenseApplied.next({ requesttype: 'organization', hasaccess: true });
+//     this.allocateElementToRows();
+//     //this.onCheckSubscriptionForOrg();
+//   } 
+//   // else{
+//   //   this.isLicenseAssignedtoOrganization = false;
+//   //   this.dataService.isLicenseApplied.next({ requesttype: 'organization', hasaccess: false });
+//   // }
+// }, (error) => {
+//   console.log(error)
+// });
+// }
+
+
+
   }
 
   isPropertyLicenseAssigned():boolean {
-    let propPlandetails = JSON.stringify(this.dataService.getCurrentPropertyPlanDetails()); // on page refresh
-        let ispropplanExist;
-        if(JSON.parse(propPlandetails).response && JSON.parse(propPlandetails).response.plan_details &&  JSON.parse(propPlandetails).response.plan_details.cookieConsent){
-          if(Object.values(JSON.parse(propPlandetails).response.plan_details.cookieConsent).length > 0){
-            ispropplanExist = true;
-          }
-        }
+    console.log(this.queryPID,'queryPID..');
+    // this.dataService.checkLicenseAvailabilityForProperty(this.queryPID).subscribe((data)=>{
+    //   this.isLicenseAssignedtoProperty = data.hasaccess;
+    // })
+    // let propPlandetails = JSON.stringify(this.dataService.getCurrentPropertyPlanDetails()); // on page refresh
+    //     let ispropplanExist;
+    //     if(JSON.parse(propPlandetails).response && JSON.parse(propPlandetails).response.plan_details &&  JSON.parse(propPlandetails).response.plan_details.cookieConsent){
+    //       if(Object.values(JSON.parse(propPlandetails).response.plan_details.cookieConsent).length > 0){
+    //         ispropplanExist = true;
+    //       }
+    //     }
     let licensePropStatus;    
     this.dataService.isLicenseAppliedForProperty.subscribe((status) =>  {
       licensePropStatus = status.hasaccess;
     this.isLicenseAssignedtoProperty = status.hasaccess;
     });
     this.cookieTooltiptext = this.isLicenseAssignedtoProperty ? '' : 'You have not assigned Cookie consent license to selected property';
-    return this.isLicenseAssignedtoProperty =  licensePropStatus || ispropplanExist !== undefined ? true : false;
+    return this.isLicenseAssignedtoProperty; //|| ispropplanExist !== undefined ? true : false;
   }
 
   isConsentPreferenceLicenseAssigned():boolean {
@@ -87,16 +166,17 @@ export class AnalyticsComponent implements AfterViewChecked, OnInit {
      this.dsarTooltiptext = this.isLicenseAssignedtoOrganization ? '' : 'You have not assigned DSAR license to selected organization';
     });
 
-    let orgPlanDSARPlans = JSON.stringify(this.dataService.getCurrentOrganizationPlanDetails());
+    // let orgPlanDSARPlans = JSON.stringify(this.dataService.getCurrentOrganizationPlanDetails());
     
-    let isorgplanExist; // check on page refresh
-    if(JSON.parse(orgPlanDSARPlans).response && JSON.parse(orgPlanDSARPlans).response.plan_details &&  JSON.parse(orgPlanDSARPlans).response.plan_details.dsar){
-      if(Object.values(JSON.parse(orgPlanDSARPlans).response.plan_details.dsar).length > 0){
-        isorgplanExist = true;
-      }
-    }
-
-    return this.isLicenseAssignedtoOrganization = licenseStatus || isorgplanExist !== undefined ? isorgplanExist : false;
+    // let isorgplanExist; // check on page refresh
+    // if(JSON.parse(orgPlanDSARPlans).response && JSON.parse(orgPlanDSARPlans).response.plan_details &&  JSON.parse(orgPlanDSARPlans).response.plan_details.dsar){
+    //   if(Object.values(JSON.parse(orgPlanDSARPlans).response.plan_details.dsar).length > 0){
+    //     isorgplanExist = true;
+    //   }
+    // }
+    console.log(this.isLicenseAssignedtoOrganization,'162..');
+    
+    return this.isLicenseAssignedtoOrganization = licenseStatus;// || isorgplanExist !== undefined ? isorgplanExist : false;
   }
 
    checkDivLength(){
@@ -155,6 +235,7 @@ export class AnalyticsComponent implements AfterViewChecked, OnInit {
      routerlinktext:this.isConsentPreferenceLicenseAssignedToProperty ? ['/home/dashboard/consent-preference'] : ['/settings/billing/manage'],
      buttonText:this.isConsentPreferenceLicenseAssignedToProperty ? 'Go Now' : 'Try Now'
    }];
+   return this.appsContent;
   }
 
   allocateElementToRows(){

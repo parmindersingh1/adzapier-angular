@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
+import { AfterViewChecked, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Router, ActivatedRoute, NavigationEnd, NavigationStart } from '@angular/router';
 import { OrganizationService, AuthenticationService, UserService } from '../../../_services';
 import { Observable } from 'rxjs';
 import { Organization } from 'src/app/_models/organization';
@@ -9,6 +9,7 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Location } from '@angular/common';
 import { DataService } from 'src/app/_services/data.service';
 import { featuresName } from '../../../_constant/features-name.constant';
+import { debounceTime, filter } from 'rxjs/operators';
 
 
 @Component({
@@ -17,7 +18,7 @@ import { featuresName } from '../../../_constant/features-name.constant';
   styleUrls: ['./header.component.scss'],
   changeDetection: ChangeDetectionStrategy.Default
 })
-export class HeaderComponent implements OnInit, OnDestroy {
+export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('confirmTemplate') confirmModal: TemplateRef<any>;
   modalRef: BsModalRef;
   isCollapsed = true;
@@ -78,6 +79,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
   planDetails: any;
   isNewnotification: boolean;
   showConsentPreference = false;
+  currentNavigationUrl : string;
+  updatedUrlWithPID;
+  updatedUrlWithOID;
+  isCurrentSelectedProperty;
+  isUrlWithPropID:boolean = false;
+  oIDPIDFromURL:any = [];
+  queryOID;
+  queryPID;
   constructor(
     private router: Router,
     private activatedroute: ActivatedRoute,
@@ -90,6 +99,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private location: Location,
     private cdRef: ChangeDetectorRef
   ) {
+   
     this.authService.currentUser.subscribe(x => {
       this.currentUser = x;
       if (this.currentUser) {
@@ -105,21 +115,72 @@ export class HeaderComponent implements OnInit, OnDestroy {
       this.isOrganizationUpdated = t;
       if (this.isOrganizationUpdated) {
         this.loadOrganizationWithProperty(); //to load org and prop
-        this.currentSelectedProperty();
+        // if(this.oIDPIDFromURL !== undefined){
+        // this.currentSelectedProperty();
+        // }
         this.loadNotification();
       }
     });
-    this.router.routeReuseStrategy.shouldReuseRoute = () => {
-      return false;
-    };
+   
 
+    // this.router.routeReuseStrategy.shouldReuseRoute = () => {
+    //   return false;
+    // };
+    this.activatedroute.queryParamMap
+    .subscribe(params => {
+      this.queryOID = params.get('oid');
+      this.queryPID = params.get('pid');
+     // console.log(this.queryOID,'queryOID210..');
+     // console.log(this.queryPID,'queryPID211..');
+     });
+
+  //   this.activatedroute.queryParams.pipe(
+  //   // debounceTime(500),
+  //     filter((queryParams:any)=>{
+  //       return !queryParams.oid;
+  //     })
+  //   ).  
+  //   subscribe(params => {
+  //     console.log(params.keys,'app..');
+  //       if(Object.keys(params).length > 0){
+  //         console.log(params.get('oid'),params.get('pid'));
+  //       }
+  // });
+
+  
+  
+  console.log(this.location.path(),'path..');
+   //this.currentNavigationUrl = this.router.url !== '/' ? this.router.url : '/home/welcome';
+  //  if(this.location.path().indexOf('settings') == -1 || this.location.path().indexOf('userprofile') == -1 || this.location.path().indexOf('privacy') == -1) {
+  //   this.currentNavigationUrl = this.location.path() == '/' ? '/home/welcome' : this.location.path();
+  //  }
     this.router.events.subscribe((event) => {
+    //   if (event instanceof NavigationStart) {
+    //     if (event.url.indexOf('oid') > 0) {
+    //     this.updatedUrlWithPID = event.url;
+    //    return this.currentNavigationUrl =  event.url !== '/' ? event.url : '/home/welcome';
+    //  //   this.currentNavigationUrl = encodeURIComponent(this.currentNavigationUrl);
+    //     } else if(event.url !== ""){
+    //      return this.currentNavigationUrl =  event.url !== '/' ? event.url : '/home/welcome';
+    //     }
+         
+    //   }
       if (event instanceof NavigationEnd) {
+      //   if (event.url.indexOf('oid') > 0) {
+      //     this.updatedUrlWithPID = event.url;
+      //    return this.currentNavigationUrl =  event.url !== '/' ? event.url : '/home/welcome';
+      //  //   this.currentNavigationUrl = encodeURIComponent(this.currentNavigationUrl);
+      //     } else if(event.url !== ""){
+      //      return this.currentNavigationUrl =  event.url !== '/' ? event.url : '/home/welcome';
+      //     }
         if (event.url.indexOf('signup') >= 0) {
           if (this.currentUser === null) {
             return true;
           } else {
-            this.router.navigate(['/home/welcome']);
+            if(this.queryOID && this.queryPID){
+              alert('a181');
+            this.router.navigate(['/home/welcome'],{ queryParams: { oid: this.queryOID, pid: this.queryPID },  skipLocationChange:false});
+            }
           }
         }
       }
@@ -147,6 +208,25 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+ //   this.loadOrganizationWithProperty();
+ //this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+ this.activatedroute.queryParamMap
+ .subscribe(params => {
+   this.queryOID = params.get('oid');
+   this.queryPID = params.get('pid');
+   //console.log(this.queryOID,'queryOID210..');
+   //console.log(this.queryPID,'queryPID211..');
+  });
+  //    this.activatedroute.queryParamMap
+  //      .subscribe(params => {
+  //        this.queryOID = params.get('oid');
+  //        this.queryPID = params.get('pid');
+  //        console.log(this.queryOID,'queryOID..');
+  //        console.log(this.queryPID,'queryPID..');
+  //  //   this.updatedUrlWithPID = params.get('pid');  
+  //     // console.log(params.get('oid'),'oid..');
+  //     // console.log(params.get('pid'),'pid..');
+  //     });
     //  this.firstElement = true;
     this.isCollapsed = false;
     this.userService.getCurrentUser.subscribe((data) => {
@@ -156,7 +236,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
         this.currentLoggedInUser = this.currentUser.response.firstname + ' ' + this.currentUser.response.lastname;
         this.userRole = this.currentUser.response.role;
         this.userID = this.currentUser.response.uid;
-        this.loadOrganizationWithProperty(); //to load org and prop
+        this.checkCurrentManagingProperty();
+        //this.loadOrganizationWithProperty(); //to load org and prop
         this.loadNotification();
       }
     }, (error) => {
@@ -190,6 +271,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
           // this.orgservice.removeControls();
           this.userService.getCurrentUser.unsubscribe();
           localStorage.clear();
+          this.selectedOrgProperties.length = 0;
           if(this.router.url.indexOf('/verify-email') !== -1){
             this.router.navigate(['/login']);
             sessionStorage.clear();
@@ -198,6 +280,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
       }
     });
     this.onCheckConsentPreferenceSubscription();
+    
+    this.oIDPIDFromURL= this.findPropertyIDFromUrl(this.location.path());
+    if(this.oIDPIDFromURL !== undefined){
+     this.checkCurrentManagingProperty();
+    }
+    
+    this.getPropertyDetailsFromUrl();
   }
 
 
@@ -323,7 +412,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
     });
   }
 
-  async isCurrentPropertySelected(org, prop) {
+  isCurrentPropertySelected(org, prop) {
+    if(this.location.path().indexOf('settings') == -1 || this.location.path().indexOf('userprofile') == -1){
+      this.queryOID = org.id;
+      this.queryPID = prop.property_id;
+    this.currentNavigationUrl = this.location.path() == '/' ? '/home/welcome' : "/home/welcome?oid="+ this.queryOID +"&pid="+this.queryPID;
+    }
     this.loading.start('2');
     this.selectedOrgProperties.length = 0;
     this.activeProp = prop.property_name;
@@ -335,16 +429,58 @@ export class HeaderComponent implements OnInit, OnDestroy {
       property_active: prop.property_active,
       user_id: this.userID
     };
-    this.orgservice.changeCurrentSelectedProperty(obj);
+       this.orgservice.changeCurrentSelectedProperty(obj);
     // this.selectedOrgProperties.push(obj);
+    //if(this.selectedOrgProperties.length == 0){
     const orgIndex = this.selectedOrgProperties.findIndex((t) => t.organization_id === obj.organization_id);
     if (orgIndex === -1) {
       this.selectedOrgProperties.push(obj);
     }
-    this.orgservice.setCurrentOrgWithProperty(obj);
-    this.loadOrganizationPlanInfo(obj.organization_id);
-    this.loading.start('1');
-    this.loadPropertyPlanInfo(obj.property_id);
+      //}
+    //this.orgservice.setCurrentOrgWithProperty(obj); // two
+    this.isPropSelected(obj);
+    this.loadOrganizationPlanDetails(obj);
+   // this.loading.start('1');
+    this.loadPropertyPlanDetails(prop);
+    
+    // this.dataService.getOrgPlanInfo(this.constructor.name, moduleName.cookieConsentModule, org.id)
+    //   .subscribe((res: any) => {
+    //     this.loading.stop('2')
+    //     this.dataService.setOrgPlanToLocalStorage(res);
+    //     if (res.response && res.response.plan_details && res.response.plan_details.dsar) {
+    //       if (Object.values(res.response.plan_details.dsar).length > 0) {
+    //         this.isShowDashboardForDsar = true;
+    //         this.dataService.isLicenseApplied.next({ requesttype: 'organization', hasaccess: true });
+    //       } else {
+    //         this.isShowDashboardForDsar = false;
+    //         this.dataService.isLicenseApplied.next({ requesttype: 'organization', hasaccess: false });
+    //         //this.dataService.openUpgradeModalForDsar(res);
+    //         if (this.router.url.indexOf('ccpa-dsar') !== -1) {
+    //           this.router.navigate(['/home/dashboard/analytics']);
+    //         }
+    //       }
+    //     }
+    //   }, error => {
+    //     this.loading.stop('2')
+    //   });
+   
+    // this.dataService.getPropertyPlanDetails(this.constructor.name, moduleName.cookieConsentModule, prop.property_id)
+    //   .subscribe((res: any) => {
+    //     this.dataService.setPropertyPlanToLocalStorage(res);
+    //     this.loading.stop('1')
+    //     this.currentSelectedProperty();
+    //     if (this.router.url.indexOf('privacy/dsar/requests-details') !== -1) {
+    //       this.router.navigate(['/privacy/dsar/requests']);
+    //     } else {
+    //       this.router.navigate([this.router.url]);
+    //     }
+
+    //     // this.onCheckSubscriptionForProperty();
+    //     // this.onCheckSubscriptionForOrg();
+    //     this.onCheckConsentPreferenceSubscription();
+    //   }, err => {
+    //     this.loading.stop('1')
+    //   });
     this.licenseAvailabilityForFormAndRequestPerOrg(org);
     if (this.router.url.indexOf('dsarform') !== -1) {
       this.router.navigate(['/privacy/dsar/webforms']);
@@ -352,24 +488,35 @@ export class HeaderComponent implements OnInit, OnDestroy {
     if (this.router.url.indexOf('createworkflow') !== -1) {
       this.router.navigate(['/privacy/dsar/workflows']);
     }
-    this.openNav();
+    this.router.navigate([this.router.url], { queryParams: { oid: obj.organization_id, pid: obj.property_id },skipLocationChange:false} );
+   // this.openNav();
   }
 
   isPropSelected(selectedItem): boolean {
     if (selectedItem.property_id !== undefined) {
       this.isPropertySelected = this.selectedOrgProperties.filter((t) => t.property_id === selectedItem.property_id).length > 0 || this.selectedOrgProperties.some((t) => t.response !== undefined && t.response.id === selectedItem.property_id);
       return this.isPropertySelected;
-    } else{
-      if(selectedItem.response.id !== undefined){
+    } 
+      else if(selectedItem.response !== undefined && selectedItem.response.id !== undefined){
       this.isPropertySelected = this.selectedOrgProperties.some((t) => t.property_id === selectedItem.response.id) || this.selectedOrgProperties.some((t) => t.response !== undefined && t.response.id === selectedItem.response.id);
       return this.isPropertySelected;
+      } else if(this.currentNavigationUrl[1] !== undefined && selectedItem.property_id === this.currentNavigationUrl[1]){ //this.isUrlWithPropID // this.findPropertyIDFromUrl(this.currentNavigationUrl)[1]
+        return true;
       }
-    }
+  
   }
 
   isOrgSelected(selectedItem): boolean {
-    if(this.selectedOrgProperties.length > 0) {
-      return this.selectedOrgProperties.filter((t) => t.organization_id === selectedItem.id).length > 0;
+    //this.selectedOrgProperties.length = 0;
+  //  const findOidIndex = this.orgPropertyMenu.findIndex((t) => t.id == this.oIDPIDFromURL[0]) //finding oid
+    //let activePro = this.orgPropertyMenu[findOidIndex]
+    this.oIDPIDFromURL= this.findPropertyIDFromUrl(this.location.path());
+    const orgIndex = this.orgPropertyMenu.findIndex((t) => t.id == this.oIDPIDFromURL[0]);
+    if (orgIndex !== -1) {
+      this.selectedOrgProperties.push(this.orgPropertyMenu[orgIndex]);
+    }
+    if(this.selectedOrgProperties !== undefined && this.selectedOrgProperties.length > 0) {
+      return this.selectedOrgProperties.filter((t) => t.id === selectedItem.id).length > 0;
     }
   }
 
@@ -392,33 +539,39 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   currentSelectedProperty() {
+    //this.selectedOrgProperties.lenghth = 0;
     // tslint:disable-next-line: max-line-length
     // this.orgservice.currentProperty.pipe(distinctUntilChanged()).subscribe((data) => {
     this.orgservice.isPropertyUpdated.subscribe((status) => { this.isPropertyUpdated = status });
-  // if(!this.isPropertyUpdated){
+   if(!this.isPropertyUpdated){
     this.orgservice.currentProperty.subscribe((data) => {
-      if (data !== '') {
+      if (data !== '' || data.length > 0) {
         this.currentProperty = data.property_name || data.response.name;
+       // console.log(this.currentProperty,'523');
         this.currentOrganization = data.organization_name || data.response.orgname || data.response.name;
         if (this.currentProperty !== undefined) {
-          const orgIndex = this.selectedOrgProperties.findIndex((t) => t.organization_id === data.organization_id || data.response.oid);
+        if( this.selectedOrgProperties.length == 0){
+          const orgIndex = this.selectedOrgProperties.findIndex((t) => t.organization_id === data.organization_id || data.response !== undefined && data.response.oid);
           if (orgIndex === -1) {
             this.selectedOrgProperties.push(data);
             this.licenseAvailabilityForProperty(data);
           }
-          this.isPropSelected(data);
+         // this.isPropSelected(data);
         }
-      } else {
-        this.loadOrgPropertyFromLocal();
-      }
+        }
+      } 
+      // else {
+      //   this.loadOrgPropertyFromLocal();
+      // }
 
     });
- //}
+ }
 
     if (this.isPropertyUpdated) {
       this.orgservice.editedProperty.subscribe((prop) => {
         if (prop) {
           this.currentProperty = prop.response.name;
+          console.log(this.currentProperty,'546');
           const orgDetails = this.orgservice.getCurrentOrgWithProperty();
           orgDetails.property_name = prop.response.name;
           orgDetails.property_id = prop.response.id;
@@ -427,6 +580,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
            
         }
       });
+      console.log('489..');
       this.loadOrganizationWithProperty();  
       this.orgservice.isPropertyUpdated.next(null); 
     }
@@ -458,59 +612,127 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
 
   loadOrganizationWithProperty() {
+    
+    this.oIDPIDFromURL = this.findPropertyIDFromUrl(this.currentNavigationUrl || this.location.path());
     this.loading.start();
     this.orgservice.getOrganizationWithProperty().subscribe((data) => {
       this.loading.stop();
       this.orgPropertyMenu = data.response;
+      this.checkCurrentManagingProperty();
+      console.log(this.orgPropertyMenu,'orgPropertyMenu..522');
       this.resCID = data.response.cID;
-      if (data.response.length > 0) {
-        this.rearrangeFormSequence(this.orgPropertyMenu);
-        this.selectedOrgProperties.length = 0;
-        if (!this.isOrgPropertyExists(this.orgPropertyMenu)) {
-          if (this.orgPropertyMenu && this.orgPropertyMenu[0] && this.orgPropertyMenu[0].property[0] === 'undefined') {
-            // this.router.navigate(['settings/organizations']);
-            this.router.navigate(['settings/organizations/details/' + this.orgPropertyMenu[0].id]);
-            return false;
-          } else {
-            if (this.isOrgPropertyEmpty()) { // && this.isFirstPropertyExist()
-              let activePro = this.filterProp(this.orgPropertyMenu);
-              const proIndex = activePro[0].property.findIndex((t) => t.property_active === true);
-              this.activeProp = activePro[0].property[proIndex];
-              const obj = {
-                organization_id: activePro[0].id,
-                organization_name: activePro[0].orgname,
-                property_id: activePro[0].property[proIndex].property_id,
-                property_name: activePro[0].property[proIndex].property_name,
-                user_id: this.userID
-              };
-              this.loadOrganizationPlanInfo(obj.organization_id);
-              this.loading.start('1');
-              this.loadPropertyPlanInfo(obj.property_id);
-              this.licenseAvailabilityForProperty(obj);
-              this.dataService.checkClickedURL.next('/home/welcome');
-              // this.dataService.getPropertyPlanDetails(this.constructor.name, moduleName.cookieConsentModule, obj.property_id)
-              // .subscribe((res: any) => {
-              //   this.dataService.setPropertyPlanToLocalStorage(res);
-              // });
-              this.orgservice.changeCurrentSelectedProperty(obj); //check this..
-              // this.orgservice.getSelectedOrgProperty.emit(obj);
-              //  this.firstElement = false;
-              this.orgservice.setCurrentOrgWithProperty(obj);
-              this.licenseAvailabilityForFormAndRequestPerOrg(obj);
-            } else {
-              this.loadOrgPropertyFromLocal();
-            }
-          }
-        } else {
-          this.currentSelectedProperty();
-        }
-
-      } else {
-        this.router.navigate(['settings/organizations']);
-      }
+     
     }, (error) => {
       this.loading.stop();
-    });
+    }, () => {
+      console.log('complete..');
+      if(this.currentNavigationUrl !== undefined){
+      this.oIDPIDFromURL= this.findPropertyIDFromUrl(this.currentNavigationUrl || this.location.path());//updatedUrlWithPID
+      }
+     this.checkCurrentManagingProperty();
+      });
+    
+  }
+
+
+  checkCurrentManagingProperty(){
+    if (this.orgPropertyMenu !== undefined && this.orgPropertyMenu.length > 0) {
+      this.rearrangeFormSequence(this.orgPropertyMenu);
+      //this.selectedOrgProperties.length = 0;
+      if (!this.isOrgPropertyExists(this.orgPropertyMenu)) {
+        if (this.orgPropertyMenu && this.orgPropertyMenu[0] && this.orgPropertyMenu[0].property[0] === 'undefined') {
+          // this.router.navigate(['settings/organizations']);
+          this.router.navigate(['settings/organizations/details/' + this.orgPropertyMenu[0].id]);
+          return false;
+        } else {
+          if ( this.oIDPIDFromURL == undefined || this.oIDPIDFromURL.length == 0) { //this.isOrgPropertyEmpty() // this.queryOID == undefined // && this.isFirstPropertyExist() &&  !this.isUrlWithPropID // this.isOrgPropertyEmpty()
+            let activePro = this.filterProp(this.orgPropertyMenu);
+            const proIndex = activePro[0].property.findIndex((t) => t.property_active === true);
+            this.activeProp = activePro[0].property[proIndex];
+            const obj = {
+              organization_id: activePro[0].id,
+              organization_name: activePro[0].orgname,
+              property_id: activePro[0].property[proIndex].property_id,
+              property_name: activePro[0].property[proIndex].property_name,
+              user_id: this.userID
+            };
+            this.selectedOrgProperties.push(obj);
+            this.orgservice.changeCurrentSelectedProperty(obj); //check this..
+            this.licenseAvailabilityForProperty(obj);
+            this.loadOrganizationPlanDetails(obj);
+          //  this.loading.start('1');
+            this.loadPropertyPlanDetails(obj);
+            //this.orgservice.setCurrentOrgWithProperty(obj); // three
+            this.router.navigate([this.router.url], { queryParams: { oid: obj.organization_id, pid: obj.property_id }, queryParamsHandling:'merge', skipLocationChange:false} );
+            this.dataService.checkClickedURL.next('/home/welcome'+'?oid='+obj.organization_id+'&pid='+obj.property_id);
+            // this.dataService.getPropertyPlanDetails(this.constructor.name, moduleName.cookieConsentModule, obj.property_id)
+            // .subscribe((res: any) => {
+            //   this.dataService.setPropertyPlanToLocalStorage(res);
+            // });
+            
+            // this.orgservice.getSelectedOrgProperty.emit(obj);
+            //  this.firstElement = false;
+            
+            this.licenseAvailabilityForFormAndRequestPerOrg(obj);
+            // this.findPropertyIDFromUrl();
+            // this.getPropertyDetailsFromUrl();
+            // //let activePro = this.filterProp(this.orgPropertyMenu);
+            // const propobj = activePro[0].property.filter((el)=>el.property_id === this.findPropertyIDFromUrl());
+            // console.log(propobj,'propobj..550');
+          } else {
+            let activePro;
+           // let url = this.findPropertyIDFromUrl();
+            if(this.oIDPIDFromURL !== undefined){
+              const findOidIndex = this.orgPropertyMenu.findIndex((t) => t.id == this.oIDPIDFromURL[0]) //finding oid
+              if(findOidIndex !== -1){
+                activePro = this.orgPropertyMenu[findOidIndex] //based on oid finding propid
+              }
+         
+         const propobj = activePro !== undefined && activePro.property.filter((el)=>el.property_id === this.oIDPIDFromURL[1]);
+         if(propobj){
+         const obj = {
+          organization_id: activePro.id,
+          organization_name: activePro.orgname,
+          property_id: propobj[0].property_id,
+          property_name: propobj[0].property_name,
+          user_id: this.userID
+        };
+         console.log(propobj,'propobj..562');
+         this.selectedOrgProperties.push(obj);
+         // this.orgservice.getSelectedOrgProperty.emit(obj);
+         //  this.firstElement = false;
+       //  this.orgservice.setCurrentOrgWithProperty(obj); // one
+         this.licenseAvailabilityForProperty(obj);
+         this.licenseAvailabilityForFormAndRequestPerOrg(obj);
+         this.isPropSelected(obj);
+         this.orgservice.changeCurrentSelectedProperty(obj); //check this..
+         this.loadOrganizationPlanDetails(obj);
+         //  this.loading.start('1');
+           this.loadPropertyPlanDetails(obj);
+      }
+            // this.activeProp = activePro[0].property[proIndex];
+            // const obj = {
+            //   organization_id: activePro[0].id,
+            //   organization_name: activePro[0].orgname,
+            //   property_id: activePro[0].property[proIndex].property_id,
+            //   property_name: activePro[0].property[proIndex].property_name,
+            //   user_id: this.userID
+            // };
+
+         this.getPropertyDetailsFromUrl();
+        // this.loadOrgPropertyFromLocal(); // four
+            }
+          }
+        }
+      } else {
+        this.currentSelectedProperty();
+      }
+
+    } 
+    //else {
+     // this.dataService.checkClickedURL.next('/home/welcome'+'?oid='+this.queryOID+'&pid='+this.queryPID);
+     // this.router.navigate(['settings/organizations']);
+   // }
   }
 
   getColumnCountSize() {
@@ -528,6 +750,17 @@ export class HeaderComponent implements OnInit, OnDestroy {
     return activePro;
   }
 
+  findProperty(propArry,pid) {
+    let activePro = [];
+    for (let i = 0; i < propArry.length; i++) {
+      if (propArry[i].property.some((t) => t.property_active === true)) {
+        activePro.push(propArry[i]);
+        break;
+      }
+    }
+    return activePro;
+  }
+
   checkPropertyStatus(prop): boolean {
     if (this.propList) {
       return this.propList.filter((t) => t.id === prop.property_id && t.active === false).length > 0;
@@ -535,21 +768,25 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   loadOrgPropertyFromLocal() {
-    const orgDetails = this.orgservice.getCurrentOrgWithProperty();
-    if (orgDetails !== undefined) {
-      if (orgDetails.user_id) { //=== this.userID
-        this.currentOrganization = orgDetails.organization_name !== '' ? orgDetails.organization_name : orgDetails.response.orgname;
-        this.currentProperty = orgDetails.property_name;
-        const orgIndex = this.selectedOrgProperties.findIndex((t) => t.organization_id === orgDetails.organization_id || t.response.oid === orgDetails.response.oid);
-        if (orgIndex === -1) {
-          this.selectedOrgProperties.push(orgDetails);
-        }
-        this.isPropSelected(orgDetails);
-        this.licenseAvailabilityForFormAndRequestPerOrg(orgDetails);
-        this.licenseAvailabilityForProperty(orgDetails);
+    this.selectedOrgProperties.length = 0;
+      const orgIndex = this.orgPropertyMenu.findIndex((t) => t.organization_id === this.queryOID);
+      if (orgIndex === -1) {
+        this.selectedOrgProperties.push(this.orgPropertyMenu[orgIndex]);
+      }
+      this.isPropSelected(this.orgPropertyMenu[orgIndex]);
+      this.licenseAvailabilityForFormAndRequestPerOrg(this.orgPropertyMenu[orgIndex]);
+      this.licenseAvailabilityForProperty(this.orgPropertyMenu[orgIndex]);
+
+   // const orgDetails = this.orgservice.getCurrentOrgWithProperty();
+   // if (orgDetails !== undefined && orgDetails.length > 0) {
+      if (this.orgPropertyMenu[orgIndex].user_id) { //=== this.userID
+        this.currentOrganization = this.orgPropertyMenu[orgIndex].organization_name !== '' ? this.orgPropertyMenu[orgIndex].organization_name : this.orgPropertyMenu[orgIndex].response.orgname;
+        this.currentProperty = this.orgPropertyMenu[orgIndex].property_name;
+        console.log(this.currentProperty,'742');
+    
       }
       //  return this.currentProperty;
-    }
+   // }
 
   }
 
@@ -568,7 +805,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   // check whether organizaion property was earlier selected
   isOrgPropertyExists(data): boolean {
     const orgDetails = this.orgservice.getCurrentOrgWithProperty();
-    if (orgDetails !== undefined) {
+    if (orgDetails !== undefined && orgDetails.length > 0) {
       const result = data.filter((t) => t.id === orgDetails.organization_id).length > 0 || data.some((t) => t.id === orgDetails.response.oid);
       const isSameUserLoggedin = this.userID === orgDetails.user_id || orgDetails.uid;
       if (result && isSameUserLoggedin) {
@@ -583,6 +820,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   goto(link: any, id?: any) {
+  //  this.currentNavigationUrl = link.routerLink == '/' ? '/home/welcome' : link.routerLink;
+    this.currentNavigationUrl = this.location.path() == '/' ? "/home/welcome?oid="+ this.queryOID +"&pid="+this.queryPID : link.routerLink + "?oid=" + this.queryOID +"&pid="+this.queryPID;
     if (link.routerLink === '/home/dashboard/cookie-consent' || link.routerLink === '/cookie-consent/manage-vendors' || link.routerLink === '/cookie-consent/cookie-category'
       || link.routerLink === '/cookie-consent/cookie-banner' || link.routerLink === '/cookie-consent/cookie-tracking' || link.routerLink === '/cookie-consent/cookie-banner/setup') {
       if (this.selectedOrgProperties.length > 0) {
@@ -610,11 +849,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
 
     if (id !== undefined) {
-      this.router.navigate([link.routerLink || link, id]);
+      this.router.navigate([link.routerLink || link, id]); //,{queryParams:{'oid':id,'pid':id}}
     } else {
       if (this.checkLinkAccess(link.routerLink || link)) {
         if (this.selectedOrgProperties.length > 0) {
-          this.router.navigate([link.routerLink || link]);
+          if(this.queryOID && this.queryPID){
+          this.router.navigate([link.routerLink || link],{ queryParams: { oid: this.queryOID, pid: this.queryPID }, queryParamsHandling:'merge', skipLocationChange:false});
+          }
           this.activateActiveClass(link);
         } else {
           this.openModal(this.confirmModal);
@@ -629,7 +870,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
       link.indexOf('ccpa') !== -1 || link.indexOf('billing') !== -1) {
       return true;
     } else {
-      this.router.navigate([link.routerLink || link]);
+      if(this.queryOID && this.queryPID){
+      this.router.navigate([link.routerLink || link],{ queryParams: { oid: this.queryOID, pid: this.queryPID }, queryParamsHandling:'merge', skipLocationChange:false});
+      }
       this.activateActiveClass(link);
     }
   }
@@ -870,6 +1113,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
       if (finalObj !== null && Object.keys(finalObj).length !== 0) {
         this.dataService.isLicenseApplied.next({ requesttype: 'organization', hasaccess: true });
         this.onCheckSubscriptionForOrg();
+      }else{
+        this.dataService.isLicenseApplied.next({ requesttype: 'organization', hasaccess: false });
       }
     }, (error) => {
       console.log(error)
@@ -1036,8 +1281,39 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   }
 
-  loadOrganizationPlanInfo(selectedOrgID){
-    this.dataService.getOrgPlanInfo(this.constructor.name, moduleName.cookieConsentModule, selectedOrgID)
+  findPropertyIDFromUrl(urlLink){
+   // console.log(this.router.url,'url..');
+    let oIDFromURL;
+    if(urlLink !== undefined){
+    if(urlLink.indexOf('pid') !== -1){
+      this.isUrlWithPropID = true;
+      oIDFromURL = urlLink.split("?oid=")
+      return  oIDFromURL[1].split("&pid=");
+     // console.log(this.currentNavigationUrl,'currentNavigationUrl..');
+    }
+    }
+    
+  }
+
+  getPropertyDetailsFromUrl(){
+    if(this.orgPropertyMenu !== undefined && this.orgPropertyMenu.length > 1){
+      for(const key of this.orgPropertyMenu){
+        const obj = key.property.filter((el)=>el.property_id == this.oIDPIDFromURL[1]);
+       // console.log(obj,'obj...1266');
+      }
+      
+     
+    }
+    // this.orgservice.getOrganizationWithProperty().subscribe((data) => {
+       
+    //   this.orgPropertyMenu = data.response;
+    // },(error) => {
+
+    // })
+  }
+
+  loadOrganizationPlanDetails(org){
+    this.dataService.getOrgPlanInfo(this.constructor.name, moduleName.cookieConsentModule, org.organization_id || org.id)
     .subscribe((res: any) => {
       this.loading.stop('2')
       this.dataService.setOrgPlanToLocalStorage(res);
@@ -1050,8 +1326,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
           this.dataService.isLicenseApplied.next({ requesttype: 'organization', hasaccess: false });
           //this.dataService.openUpgradeModalForDsar(res);
           if (this.router.url.indexOf('ccpa-dsar') !== -1) {
-            this.router.navigate(['/home/dashboard/analytics']);
+            if(this.queryOID && this.queryPID){
+            this.router.navigate(['/home/dashboard/analytics'],{ queryParams: { oid: this.queryOID, pid: this.queryPID }, queryParamsHandling:'merge', skipLocationChange:false});
           }
+        }
         }
       }
     }, error => {
@@ -1059,24 +1337,49 @@ export class HeaderComponent implements OnInit, OnDestroy {
     });
   }
 
-  loadPropertyPlanInfo(propertyid){
-    this.dataService.getPropertyPlanDetails(this.constructor.name, moduleName.cookieConsentModule, propertyid)
-      .subscribe((res: any) => {
-        this.dataService.setPropertyPlanToLocalStorage(res);
-        this.loading.stop('1')
-        this.currentSelectedProperty();
-        if (this.router.url.indexOf('privacy/dsar/requests-details') !== -1) {
-          this.router.navigate(['/privacy/dsar/requests']);
-        } else {
-          this.router.navigate([this.router.url]);
+  loadPropertyPlanDetails(prop){
+    this.dataService.getPropertyPlanDetails(this.constructor.name, moduleName.cookieConsentModule, prop.property_id)
+    .subscribe((res: any) => {
+      this.dataService.setPropertyPlanToLocalStorage(res);
+      this.loading.stop('1')
+      this.currentSelectedProperty();
+      if (this.router.url.indexOf('privacy/dsar/requests-details') !== -1) {
+        if(this.queryOID && this.queryPID){
+        this.router.navigate(['/privacy/dsar/requests'],{ queryParams: { oid: this.queryOID, pid: this.queryPID }, skipLocationChange:false});
         }
+      } else {
+        //this.router.navigate([this.router.url]);
+        if(this.queryOID && this.queryPID){
+          if(this.router.url.indexOf('oid') == -1){
+            return this.router.navigate([this.router.url], { queryParams: { oid: this.queryOID, pid: this.queryPID }, skipLocationChange:false} );
+          }
+        }
+      }
 
-        // this.onCheckSubscriptionForProperty();
-        // this.onCheckSubscriptionForOrg();
-        this.onCheckConsentPreferenceSubscription();
-      }, err => {
-        this.loading.stop('1')
-      });
+      // this.onCheckSubscriptionForProperty();
+      // this.onCheckSubscriptionForOrg();
+      this.onCheckConsentPreferenceSubscription();
+    }, err => {
+      this.loading.stop('1')
+    });
+  }
+
+  // propertyMouseOver(){
+  //   this.currentNavigationUrl = this.router.url;// + '?' + oid + '&' + pid;
+  // }
+
+  ngOnChanges(){
+
+  }
+
+  ngAfterViewInit(){
+    //console.log("1351..");
+    this.activatedroute.queryParamMap.subscribe(params => {
+   this.queryOID = params.get('oid');
+   this.queryPID = params.get('pid');
+   //console.log(this.queryOID,'queryOID210..');
+   //console.log(this.queryPID,'queryPID211..');
+  });
   }
 
   ngOnDestroy(){
@@ -1084,4 +1387,5 @@ export class HeaderComponent implements OnInit, OnDestroy {
       this.orgservice.isPropertyUpdated.unsubscribe();
     }
   }
+  
 }

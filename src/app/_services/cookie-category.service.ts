@@ -7,6 +7,7 @@ import {apiConstant} from '../_constant/api.constant';
 import {catchError, map} from 'rxjs/operators';
 import {LokiFunctionality, LokiStatusType} from '../_constant/loki.constant';
 import {Observable, throwError} from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
 
 interface CreateCookie {
   response: [];
@@ -19,22 +20,31 @@ export class CookieCategoryService {
   primaryKeys: string[] = ['id'];
   currentManagedOrgID: any;
   currrentManagedPropID: any;
-
+  queryOID;
+  queryPID;
   constructor(private http: HttpClient,
               private loki: LokiService,
+              private activateRoute: ActivatedRoute,
               private orgservice: OrganizationService) {
     this.onGetPropsAndOrgId();
+    this.activateRoute.queryParamMap
+ .subscribe(params => {
+   this.queryOID = params.get('oid');
+   this.queryPID = params.get('pid'); 
+});
   }
 
   onGetPropsAndOrgId() {
     this.orgservice.currentProperty.subscribe((response) => {
       if (response !== '') {
-        this.currentManagedOrgID = response.organization_id || response.response.oid;
-        this.currrentManagedPropID = response.property_id || response.response.id;
+        this.currentManagedOrgID = response.organization_id || response.response.oid || this.queryOID;
+        this.currrentManagedPropID = response.property_id || response.response.id || this.queryPID;
       } else {
-        const orgDetails = this.orgservice.getCurrentOrgWithProperty();
-        this.currentManagedOrgID = orgDetails.organization_id || orgDetails.response.oid;
-        this.currrentManagedPropID = orgDetails.property_id || orgDetails.response.id;
+        //const orgDetails = this.orgservice.getCurrentOrgWithProperty();
+        if(this.queryOID !== null && this.queryPID !== null){
+        this.currentManagedOrgID = this.queryOID; //orgDetails.organization_id || orgDetails.response.oid || this.queryOID;
+        this.currrentManagedPropID = this.queryPID;// orgDetails.property_id || orgDetails.response.id || this.queryPID;
+        }
       }
     });
   }
