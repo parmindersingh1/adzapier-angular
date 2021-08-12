@@ -766,7 +766,7 @@ export const featuresComparison = {
       featureName: 'Support Response Time\n',
       free: 'Best effort\n',
       essentials: '24 Hours\n',
-      professional: '12 HR\n',
+      professional: '12 Hours\n',
       enterprise: '3 Hours\n'
     }
   ],
@@ -810,7 +810,7 @@ export const featuresComparison = {
       featureName: 'Support Response Time\n',
       free: '',
       essentials: '24 Hours\n',
-      professional: '12 HR\n',
+      professional: '12 Hours\n',
       enterprise: '3 Hours\n'
     },
   ],
