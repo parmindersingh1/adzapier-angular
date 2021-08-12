@@ -644,13 +644,6 @@ export const featuresComparison = {
       enterprise: '1M+'
     },
     {
-      featureName: 'Users Per Organization\n',
-      free: '1\n',
-      essentials: 'up to 2\n',
-      professional: 'up to 5\n',
-      enterprise: 'Unlimited'
-    },
-    {
       featureName: 'Users Per Organization',
       free: '1',
       essentials: 'Up To 2',
@@ -778,6 +771,13 @@ export const featuresComparison = {
     }
   ],
   dsar: [
+    {
+      featureName: 'Users Per Organization',
+      free: '',
+      essentials: 'Up To 2',
+      professional: 'Up To 5',
+      enterprise: 'Unlimited'
+    },
     {
       featureName: 'DSAR - Forms',
       free: '',
