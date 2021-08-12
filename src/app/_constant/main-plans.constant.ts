@@ -610,34 +610,6 @@ export const highLightFeatures = {
 
 
 export const featureCount = [
-  {
-    featureName: 'Monthly Pageviews',
-    free: 'Less Than 250K',
-    essentials: '250K To 500K',
-    professional: '500K To 1M',
-    enterprise: '1M+'
-  },
-  {
-    featureName: 'Domain Scan',
-    free: '1/Month',
-    essentials: '2/Month',
-    professional: '5/Month',
-    enterprise: 'Unlimited'
-  },
-  {
-    featureName: 'Users Per Organization',
-    free: '1',
-    essentials: 'Up To 2',
-    professional: 'Up To 5',
-    enterprise: 'Unlimited'
-  },
-  {
-    featureName: 'Support Response Time',
-    free: 'Best Effort',
-    essentials: ' 24 Hours',
-    professional: '12 Hours',
-    enterprise: '3 Hours'
-  },
 
   {
     featureName: 'DSAR - Forms',
@@ -661,3 +633,266 @@ export const featureCount = [
     enterprise: 'Unlimited'
   },
 ]
+
+export const featuresComparison = {
+  cookieConsent: [
+    {
+      featureName: 'Monthly Pageviews',
+      free: 'Less Than 250K',
+      essentials: '250K To 500K',
+      professional: '500K To 1M',
+      enterprise: '1M+'
+    },
+    {
+      featureName: 'Users Per Organization\n',
+      free: '1\n',
+      essentials: 'up to 2\n',
+      professional: 'up to 5\n',
+      enterprise: 'Unlimited'
+    },
+    {
+      featureName: 'Users Per Organization',
+      free: '1',
+      essentials: 'Up To 2',
+      professional: 'Up To 5',
+      enterprise: 'Unlimited'
+    },
+    {
+      featureName: 'Consent Record Keeping\n',
+      free: 'NO',
+      essentials: 'YES',
+      professional: 'YES',
+      enterprise: 'YES'
+    },
+
+    {
+      featureName: 'Consent Record Keeping Extract/Export\n',
+      free: 'NO',
+      essentials: 'YES',
+      professional: 'YES',
+      enterprise: 'YES'
+    },
+    {
+      featureName: '1st Party Cookie Discovery\n',
+      free: 'NO',
+      essentials: 'YES',
+      professional: 'YES',
+      enterprise: 'YES'
+    },  {
+      featureName: '3rd-party Cookie Blocking\n',
+      free: 'NO',
+      essentials: 'YES',
+      professional: 'YES',
+      enterprise: 'YES'
+    },  {
+      featureName: 'Highly configurable GDPR & CCPA consent settings\n',
+      free: 'NO',
+      essentials: 'YES',
+      professional: 'YES',
+      enterprise: 'YES'
+    },  {
+      featureName: 'Full conversion and visitor consent state reporting\n',
+      free: 'YES',
+      essentials: 'YES',
+      professional: 'YES',
+      enterprise: 'YES'
+    },  {
+      featureName: 'Google vendors\n',
+      free: 'NO',
+      essentials: 'YES',
+      professional: 'YES',
+      enterprise: 'YES'
+    },  {
+      featureName: 'IAB Europe TCF Support\n',
+      free: 'YES',
+      essentials: 'YES',
+      professional: 'YES',
+      enterprise: 'YES'
+    },  {
+      featureName: 'CCPA Opt-Out Mode\n',
+      free: 'YES',
+      essentials: 'YES',
+      professional: 'YES',
+      enterprise: 'YES'
+    },  {
+      featureName: 'Geo-targeting',
+      free: 'NO',
+      essentials: 'YES',
+      professional: 'YES',
+      enterprise: 'YES'
+    },  {
+      featureName: 'Remove "powered by Adzapier" branding\n',
+      free: 'NO',
+      essentials: 'YES',
+      professional: 'YES',
+      enterprise: 'YES'
+    },  {
+      featureName: 'Banner translated in multiple languages\n',
+      free: 'NO',
+      essentials: 'YES',
+      professional: 'YES',
+      enterprise: 'YES'
+    },
+    {
+      featureName: 'Scripts/cookie-blocking system\n',
+      free: 'NO',
+      essentials: 'YES',
+      professional: 'YES',
+      enterprise: 'YES'
+    },  {
+      featureName: 'Multiple options for accepting/rejecting cookies\n',
+      free: 'YES',
+      essentials: 'YES',
+      professional: 'YES',
+      enterprise: 'YES'
+    },
+
+    {
+      featureName: 'Compatible with the IAB Transparency & Consent Framework\n',
+      free: 'YES',
+      essentials: 'YES',
+      professional: 'YES',
+      enterprise: 'YES'
+    },
+    {
+      featureName: 'Cookie banner with dynamic notice text\n',
+      free: 'NO',
+      essentials: 'YES',
+      professional: 'YES',
+      enterprise: 'YES'
+    },
+    {
+      featureName: 'Domain Scan\n',
+      free: '1/Month\n',
+      essentials: ' 2/Month\n',
+      professional: '5/month\n',
+      enterprise: 'Unlimited\n'
+    },
+
+    {
+      featureName: 'Support Response Time\n',
+      free: 'Best effort\n',
+      essentials: '24 Hours\n',
+      professional: '12 HR\n',
+      enterprise: '3 Hours\n'
+    }
+  ],
+  dsar: [
+    {
+      featureName: 'DSAR - Forms',
+      free: '',
+      essentials: ' 2',
+      professional: '10',
+      enterprise: 'Unlimited'
+    },
+    {
+      featureName: 'DSAR - Workflow',
+      free: '',
+      essentials: ' 5',
+      professional: '15',
+      enterprise: 'Unlimited'
+    },
+    {
+      featureName: 'DSAR - Requests',
+      free: '',
+      essentials: '150K',
+      professional: '250K',
+      enterprise: 'Unlimited'
+    },
+    {
+      featureName: 'Integrations\n',
+      free: '',
+      essentials: '3',
+      professional: '5\n',
+      enterprise: 'Unlimited'
+    },
+    {
+      featureName: 'Support Response Time\n',
+      free: '',
+      essentials: '24 Hours\n',
+      professional: '12 HR\n',
+      enterprise: '3 Hours\n'
+    },
+  ],
+  consentPreference: [
+    {
+      featureName: 'Number Of users\n',
+      free: '',
+      essentials: ' up to 5k\n',
+      professional: '$5k- 10K\n',
+      enterprise: 'Custom\n'
+    },
+    {
+      featureName: 'Keep user consent and privacy preferences in one place\n',
+      free: '',
+      essentials: 'YES',
+      professional: 'YES',
+      enterprise: 'YES'
+    },
+    {
+      featureName: 'Store multiple preferences for each user (e.g. if you have multiple newsletters or opt-ins)\n',
+      free: '',
+      essentials: 'YES',
+      professional: 'YES',
+      enterprise: 'YES'
+    },
+    {
+      featureName: 'Store whether a user was verified with double opt-in\n',
+      free: '',
+      essentials: 'YES',
+      professional: 'YES',
+      enterprise: 'YES'
+    },
+    {
+      featureName: 'For each user, get the history of consents\n',
+      free: '',
+      essentials: 'YES',
+      professional: 'YES',
+      enterprise: 'YES'
+    },    {
+      featureName: 'User-friendly dashboard for reviewing consent records\n',
+      free: '',
+      essentials: 'YES',
+      professional: 'YES',
+      enterprise: 'YES'
+    },    {
+      featureName: 'REST HTTP API and JS SDK, to give you total control and how and when consent is stored\n',
+      free: '',
+      essentials: 'YES',
+      professional: 'YES',
+      enterprise: 'YES'
+    },
+    {
+      featureName: 'An easy to implement JS widget to ease consent tracking for online forms\n',
+      free: '',
+      essentials: 'YES',
+      professional: 'YES',
+      enterprise: 'YES'
+    },
+    {
+      featureName: 'For each consent, track the legal or privacy notice the user has accepted\n',
+      free: '',
+      essentials: ' coming soon\n',
+      professional: 'coming soon\n',
+      enterprise: 'coming soon\n'
+    },    {
+      featureName: 'Webhooks\n',
+      free: '',
+      essentials: ' coming soon\n',
+      professional: 'coming soon\n',
+      enterprise: 'coming soon\n'
+    },    {
+      featureName: 'Update consent preferences across your third party tools (MailChimp, Intercom, Marketo etc.)\n',
+      free: '',
+      essentials: ' coming soon\n',
+      professional: 'coming soon\n',
+      enterprise: 'coming soon\n'
+    },    {
+      featureName: 'Support Response Time\n',
+      free: '',
+      essentials: ' 24 Hours\n',
+      professional: '12 HR\n',
+      enterprise: '3 Hours\n'
+    }
+  ]
+};
