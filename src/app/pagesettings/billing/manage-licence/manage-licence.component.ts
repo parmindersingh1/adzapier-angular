@@ -22,7 +22,8 @@ export class ManageLicenceComponent implements OnInit {
   showManageText = false;
   inActiveplans = [];
   userRole: any;
-
+  queryOID;
+  queryPID;
   constructor(
     private loading: NgxUiLoaderService,
     private billingService: BillingService,
@@ -32,6 +33,11 @@ export class ManageLicenceComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.activatedRoute.queryParamMap
+      .subscribe(params => {
+      this.queryOID = params.get('oid');
+      this.queryPID = params.get('pid'); 
+    });
     this.activatedRoute.queryParams.subscribe(params => {
       if (params.success === 'true') {
         this.isSuccess = true;

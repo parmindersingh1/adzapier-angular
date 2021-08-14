@@ -9,6 +9,7 @@ import {featuresName} from '../../../_constant/features-name.constant';
 import {DataService} from '../../../_services/data.service';
 import { LazyLoadEvent } from 'primeng/api';
 import { BsDatepickerConfig, DatepickerDateCustomClasses } from 'ngx-bootstrap/datepicker';
+import { ActivatedRoute } from '@angular/router';
 
 class FilterType {
   consentType = '';
@@ -42,7 +43,8 @@ export class CookieTrackingComponent implements OnInit {
   pagelimit;
   planDetails: any;
   isDisabledScreen = false;
-
+  queryOID;
+  queryPID;
   bsConfig: Partial<BsDatepickerConfig>;
   dateCustomClasses: DatepickerDateCustomClasses[];
   searchbydaterange: any = '';
@@ -99,6 +101,7 @@ export class CookieTrackingComponent implements OnInit {
   constructor(private cookieConsentService: CookieTrackingService,
               private  orgservice: OrganizationService,
               private loading: NgxUiLoaderService,
+              private activateRoute: ActivatedRoute,
               private gdprService: GdprService,
               private dataService: DataService
   ) {
@@ -106,6 +109,11 @@ export class CookieTrackingComponent implements OnInit {
       { date: new Date(), classes: ['theme-dark-blue'] },
     ];
     this.searchbydaterange = [new Date(new Date().setDate(new Date().getDate() - 30)),new Date()]
+    this.activateRoute.queryParamMap
+      .subscribe(params => {
+        this.queryOID = params.get('oid');
+        this.queryPID = params.get('pid');
+      });
   }
 
   ngOnInit() {

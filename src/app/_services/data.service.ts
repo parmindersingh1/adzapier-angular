@@ -590,6 +590,14 @@ export class DataService {
       return false;
     }
    }
+
+  removeOrgPlanFromLocalStorage() {
+    localStorage.removeItem('orgPlan');
+  }
+
+  removePropertyPlanFromLocalStorage() {
+    localStorage.removeItem('propertyPlan');
+  }
 }
 
 export class accesstype {

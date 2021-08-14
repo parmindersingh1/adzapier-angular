@@ -5,7 +5,7 @@
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb breadcrumb-style1 mg-b-10">
             <li class="breadcrumb-item">Privacy</li>
-            <li class="breadcrumb-item"><a routerLink="/home/dashboard/cookie-consent">Cookie Consent</a></li>
+            <li class="breadcrumb-item"><a routerLink="/home/dashboard/cookie-consent" [queryParams]="{oid:queryOID , pid:queryPID}">Cookie Consent</a></li>
             <li class="breadcrumb-item active">Cookie Category</li>
           </ol>
         </nav>
@@ -22,12 +22,12 @@
           <div class="col-md-12 btn-list">
             <div style="float: right" class="d-flex flex-column flex-sm-row mg-t-20 mg-md-t-0">
               <a class="btn btn-sm btn-outline-secondary btn-uppercase mr-2" type="button"
-                 routerLink="/cookie-consent/cookie-banner">
+                 routerLink="/cookie-consent/cookie-banner" [queryParams]="{oid:queryOID , pid:queryPID}">
                 <i class="fa fa-cog" aria-hidden="true"></i>
                 Configure Banner
               </a>
               <a class="btn btn-sm btn-outline-secondary btn-uppercase mr-2" type="button"
-                 routerLink="/cookie-consent/cookie-category/scan-details">
+                 routerLink="/cookie-consent/cookie-category/scan-details" [queryParams]="{oid:queryOID , pid:queryPID}">
                 <i class="fa-cookie fas feather-16"></i>
                 Cookie Scanning
               </a>
