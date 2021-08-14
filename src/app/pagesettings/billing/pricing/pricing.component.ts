@@ -6,7 +6,7 @@ import {DataService} from '../../../_services/data.service';
 import {UserService} from '../../../_services';
 import {moduleName} from '../../../_constant/module-name.constant';
 import {environment} from '../../../../environments/environment';
-import {featureCount, highLightFeatures} from '../../../_constant/main-plans.constant';
+import {featuresComparison, highLightFeatures} from '../../../_constant/main-plans.constant';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
 
 @Component({
@@ -21,12 +21,13 @@ export class PricingComponent implements OnInit, OnDestroy {
   consentPreferenceList: any;
   skeletonLoader = false;
   highLightFeatures = highLightFeatures;
-  featureCount = featureCount;
+  featuresComparison = featuresComparison;
   subscriptionList = [];
   cookieConsentBillingCycle = 'monthly';
   addonsBillingCycle = 'monthly';
   stripe = (window as any).Stripe(environment.stripePublishablekey);
   cartItem = [];
+  currentFeature = 'cookieConsent';
   // subscriptionPlanType = 'CCPA';
   maxCookiePreferenceList = 4;
   subTotal = 0;
@@ -63,7 +64,7 @@ export class PricingComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.onGetPlanCompareData()
+    // this.onGetPlanCompareData()
     this.onGetActivePlan();
     this.onGetPlanDetails();
     this.onGetUserEmail();
@@ -398,7 +399,8 @@ export class PricingComponent implements OnInit, OnDestroy {
     this.modalRef = this.modalService.show(template, {class: 'modal-lg', ignoreBackdropClick: true});
   }
 
-  onSetCookieConsent(type) {
+  onSetCookieConsent(type, featureCompareType) {
+    this.currentFeature = featureCompareType;
  this.currentStep = type;
   this.cookieConsentBillingCycle = 'monthly';
     this.subscriptionList = this.planDetails.cookieConsent[`${this.cookieConsentBillingCycle}`];
