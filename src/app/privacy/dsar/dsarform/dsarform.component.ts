@@ -1223,9 +1223,11 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
   cancelAddingFormControl(actionType) {
     if (actionType === 'cancel' && this.crid === null) {
        let obj = this.ccpaFormConfigService.getStoreDataBeforeEdit();
-       const customControlIndex = this.webFormControlList.findIndex((t) => t.controlId === obj.controlId);
-       this.dsarFormService.updateControl(this.webFormControlList[customControlIndex], customControlIndex, obj);
-       this.webFormControlList = this.dsarFormService.getFormControlList();
+      if (obj !== undefined) {
+        const customControlIndex = this.webFormControlList.findIndex((t) => t.controlId === obj.controlId);
+        this.dsarFormService.updateControl(this.webFormControlList[customControlIndex], customControlIndex, obj);
+        this.webFormControlList = this.dsarFormService.getFormControlList();
+      }
     } else if (actionType === 'cancel' && this.crid !== null) {
       this.isDirty = true;
       const previousobj = this.ccpaFormConfigService.getStoreDataBeforeEdit();
