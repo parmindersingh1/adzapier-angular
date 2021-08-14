@@ -110,10 +110,10 @@ export class CookieTrackingComponent implements OnInit {
     ];
     this.searchbydaterange = [new Date(new Date().setDate(new Date().getDate() - 30)),new Date()]
     this.activateRoute.queryParamMap
-    .subscribe(params => {
-    this.queryOID = params.get('oid');
-    this.queryPID = params.get('pid'); 
-    });
+      .subscribe(params => {
+        this.queryOID = params.get('oid');
+        this.queryPID = params.get('pid');
+      });
   }
 
   ngOnInit() {

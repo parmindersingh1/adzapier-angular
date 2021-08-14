@@ -49,7 +49,8 @@ export class ManagePropertyComponent implements OnInit, OnDestroy {
   skLoading = true;
   propertyList = [];
   allPropertyList = [];
-
+  queryOID;
+  queryPID;
   constructor(private service: BillingService,
               private modalService: BsModalService,
               private activatedRoute: ActivatedRoute,
@@ -76,6 +77,11 @@ export class ManagePropertyComponent implements OnInit, OnDestroy {
       this.onCalculateValue();
     });
 
+    this.activatedRoute.queryParamMap
+      .subscribe(params => {
+      this.queryOID = params.get('oid');
+      this.queryPID = params.get('pid'); 
+    });
     this.getAllOrgList();
   }
 
@@ -86,9 +92,8 @@ export class ManagePropertyComponent implements OnInit, OnDestroy {
         this.currentManagedOrgID = response.organization_id || response.response.oid;
         this.currrentManagedPropID = response.property_id || response.response.id;
       } else {
-        const orgDetails = this.orgservice.getCurrentOrgWithProperty();
-        this.currentManagedOrgID = orgDetails.organization_id || orgDetails.response.oid;
-        this.currrentManagedPropID = orgDetails.property_id || orgDetails.response.id;
+        this.currentManagedOrgID = this.queryOID;
+        this.currrentManagedPropID = this.queryPID;
       }
     });
   }

@@ -53,16 +53,13 @@ export class SetupComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.activateRoute.queryParamMap
+      .subscribe(params => {
+        this.queryOID = params.get('oid');
+        this.queryPID = params.get('pid');
+      });
     this.onGetPropsAndOrgId();
     this.onGetCookieBannerData();
-     
- this.activateRoute.queryParamMap
- .subscribe(params => {
-   this.queryOID = params.get('oid');
-   this.queryPID = params.get('pid');
-   console.log(this.queryOID,'queryOID..');
-   console.log(this.queryPID,'queryPID..');
-});
   }
 
   onGetPropsAndOrgId() {
@@ -71,9 +68,8 @@ export class SetupComponent implements OnInit {
         this.currentManagedOrgID = response.organization_id || response.response.oid;
         this.currrentManagedPropID = response.property_id || response.response.id;
       } else {
-        const orgDetails = this.orgservice.getCurrentOrgWithProperty();
-        this.currentManagedOrgID = orgDetails.organization_id || orgDetails.response.oid;
-        this.currrentManagedPropID = orgDetails.property_id || orgDetails.response.id;
+        this.currentManagedOrgID = this.queryOID;
+        this.currrentManagedPropID = this.queryPID;
       }
     });
   }

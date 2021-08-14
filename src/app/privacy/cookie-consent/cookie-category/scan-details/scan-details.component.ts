@@ -8,6 +8,7 @@ import {featuresName} from '../../../../_constant/features-name.constant';
 import {AuthenticationService} from '../../../../_services';
 import {DataService} from '../../../../_services/data.service';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-scan-details',
@@ -70,16 +71,23 @@ export class ScanDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
   private eventRows: string;
   private pagelimit: string;
   private data: { limit: any; page: any; sortBy: any, sortColumn: any, name: any };
-
+  queryOID;
+  queryPID;
   constructor(private service: CookieCategoryService,
               private authService: AuthenticationService,
               private dataService: DataService,
               private loading: NgxUiLoaderService,
-              private _cd: ChangeDetectorRef
+              private _cd: ChangeDetectorRef,
+              private activateRoute: ActivatedRoute
   ) {
   }
 
   ngOnInit(): void {
+    this.activateRoute.queryParamMap
+      .subscribe(params => {
+        this.queryOID = params.get('oid');
+        this.queryPID = params.get('pid');
+      });
     this.onGetSubscriptionData();
     this.onGetLastScanJobs();
   }

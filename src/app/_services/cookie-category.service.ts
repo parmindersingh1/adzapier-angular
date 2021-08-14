@@ -27,11 +27,6 @@ export class CookieCategoryService {
               private activateRoute: ActivatedRoute,
               private orgservice: OrganizationService) {
     this.onGetPropsAndOrgId();
-    this.activateRoute.queryParamMap
- .subscribe(params => {
-   this.queryOID = params.get('oid');
-   this.queryPID = params.get('pid'); 
-});
   }
 
   onGetPropsAndOrgId() {
@@ -40,6 +35,11 @@ export class CookieCategoryService {
         this.currentManagedOrgID = response.organization_id || response.response.oid || this.queryOID;
         this.currrentManagedPropID = response.property_id || response.response.id || this.queryPID;
       } else {
+        this.activateRoute.queryParamMap
+        .subscribe(params => {
+          this.queryOID = params.get('oid');
+          this.queryPID = params.get('pid');
+        });
         //const orgDetails = this.orgservice.getCurrentOrgWithProperty();
         if(this.queryOID !== null && this.queryPID !== null){
         this.currentManagedOrgID = this.queryOID; //orgDetails.organization_id || orgDetails.response.oid || this.queryOID;

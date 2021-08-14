@@ -20,7 +20,6 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { DataService } from 'src/app/_services/data.service';
 import { DirtyComponents } from 'src/app/_models/dirtycomponents';
 import { environment } from 'src/environments/environment';
-//import { HeaderComponent } from 'src/app/_components/layout/header/header.component';
 
 @Component({
   selector: 'app-dsarform',
@@ -42,7 +41,6 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
   @ViewChild('confirmSaveAlert') confirmSaveAlert: TemplateRef<any>;
   @ViewChild('basicForm') basicDetailForm: NgForm;
   @ViewChild('settingsForm',{static:false}) settingsForm: NgForm;
-  //@ViewChild(HeaderComponent) headerNav : HeaderComponent;
 
   public requestObject: any = {};
   public selectedFormOption: any;
@@ -343,22 +341,10 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
         this.propId = response.property_id || response.response.id;
         this.currentManagedOrgID = response.organization_id || response.response.oid;
       } else {
-       // const orgDetails = this.organizationService.getCurrentOrgWithProperty();
-        this.orgDetails = {
-          organization_id : this.queryOID,
-          property_id: this.queryPID
-        };
-        this.currentOrgID = this.orgDetails.organization_id || this.queryOID;
-        // if(this.headerNav !== undefined){
-        //    console.log(this.headerNav.selectedOrgProperties,'selectedOrgProperties..');
-        //   this.selectedProperty = this.headerNav.currentProperty;
-        //   console.log(this.selectedProperty,'selectedProperty 354..')
-        //   this.currentOrganization = this.headerNav.currentOrganization;// orgDetails.organization_name;
-        // }
-        //this.selectedProperty = orgDetails.property_name;
-        this.orgId = this.orgDetails.organization_id;// || orgDetails.response.oid;
-        this.propId = this.orgDetails.property_id;// || orgDetails.response.id;
-        this.currentManagedOrgID = this.orgDetails.organization_id;// || orgDetails.response.oid;
+        this.currentOrgID =  this.queryOID;
+        this.orgId =  this.queryOID;
+        this.propId = this.queryPID;
+        this.currentManagedOrgID = this.queryOID;
         this.loading = false;
       }
     });

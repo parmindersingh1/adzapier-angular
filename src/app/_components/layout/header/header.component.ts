@@ -87,6 +87,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
   oIDPIDFromURL:any = [];
   queryOID;
   queryPID;
+  initialPropertyID;
+  initialOrgID;
   constructor(
     private router: Router,
     private activatedroute: ActivatedRoute,
@@ -130,56 +132,16 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
     .subscribe(params => {
       this.queryOID = params.get('oid');
       this.queryPID = params.get('pid');
-     // console.log(this.queryOID,'queryOID210..');
-     // console.log(this.queryPID,'queryPID211..');
      });
 
-  //   this.activatedroute.queryParams.pipe(
-  //   // debounceTime(500),
-  //     filter((queryParams:any)=>{
-  //       return !queryParams.oid;
-  //     })
-  //   ).  
-  //   subscribe(params => {
-  //     console.log(params.keys,'app..');
-  //       if(Object.keys(params).length > 0){
-  //         console.log(params.get('oid'),params.get('pid'));
-  //       }
-  // });
-
-  
-  
-  console.log(this.location.path(),'path..');
-   //this.currentNavigationUrl = this.router.url !== '/' ? this.router.url : '/home/welcome';
-  //  if(this.location.path().indexOf('settings') == -1 || this.location.path().indexOf('userprofile') == -1 || this.location.path().indexOf('privacy') == -1) {
-  //   this.currentNavigationUrl = this.location.path() == '/' ? '/home/welcome' : this.location.path();
-  //  }
     this.router.events.subscribe((event) => {
-    //   if (event instanceof NavigationStart) {
-    //     if (event.url.indexOf('oid') > 0) {
-    //     this.updatedUrlWithPID = event.url;
-    //    return this.currentNavigationUrl =  event.url !== '/' ? event.url : '/home/welcome';
-    //  //   this.currentNavigationUrl = encodeURIComponent(this.currentNavigationUrl);
-    //     } else if(event.url !== ""){
-    //      return this.currentNavigationUrl =  event.url !== '/' ? event.url : '/home/welcome';
-    //     }
-         
-    //   }
       if (event instanceof NavigationEnd) {
-      //   if (event.url.indexOf('oid') > 0) {
-      //     this.updatedUrlWithPID = event.url;
-      //    return this.currentNavigationUrl =  event.url !== '/' ? event.url : '/home/welcome';
-      //  //   this.currentNavigationUrl = encodeURIComponent(this.currentNavigationUrl);
-      //     } else if(event.url !== ""){
-      //      return this.currentNavigationUrl =  event.url !== '/' ? event.url : '/home/welcome';
-      //     }
         if (event.url.indexOf('signup') >= 0) {
           if (this.currentUser === null) {
             return true;
           } else {
             if(this.queryOID && this.queryPID){
-              alert('a181');
-            this.router.navigate(['/home/welcome'],{ queryParams: { oid: this.queryOID, pid: this.queryPID },  skipLocationChange:false});
+            this.router.navigate(['/home/dashboard/analytics'],{ queryParams: { oid: this.queryOID, pid: this.queryPID },  skipLocationChange:false});
             }
           }
         }
@@ -217,17 +179,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
    //console.log(this.queryOID,'queryOID210..');
    //console.log(this.queryPID,'queryPID211..');
   });
-  //    this.activatedroute.queryParamMap
-  //      .subscribe(params => {
-  //        this.queryOID = params.get('oid');
-  //        this.queryPID = params.get('pid');
-  //        console.log(this.queryOID,'queryOID..');
-  //        console.log(this.queryPID,'queryPID..');
-  //  //   this.updatedUrlWithPID = params.get('pid');  
-  //     // console.log(params.get('oid'),'oid..');
-  //     // console.log(params.get('pid'),'pid..');
-  //     });
-    //  this.firstElement = true;
     this.isCollapsed = false;
     this.userService.getCurrentUser.subscribe((data) => {
       if (data) {
@@ -237,7 +188,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
         this.userRole = this.currentUser.response.role;
         this.userID = this.currentUser.response.uid;
         this.checkCurrentManagingProperty();
-        //this.loadOrganizationWithProperty(); //to load org and prop
+        this.loadOrganizationWithProperty(); //to load org and prop
         this.loadNotification();
       }
     }, (error) => {
@@ -443,44 +394,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
    // this.loading.start('1');
     this.loadPropertyPlanDetails(prop);
     
-    // this.dataService.getOrgPlanInfo(this.constructor.name, moduleName.cookieConsentModule, org.id)
-    //   .subscribe((res: any) => {
-    //     this.loading.stop('2')
-    //     this.dataService.setOrgPlanToLocalStorage(res);
-    //     if (res.response && res.response.plan_details && res.response.plan_details.dsar) {
-    //       if (Object.values(res.response.plan_details.dsar).length > 0) {
-    //         this.isShowDashboardForDsar = true;
-    //         this.dataService.isLicenseApplied.next({ requesttype: 'organization', hasaccess: true });
-    //       } else {
-    //         this.isShowDashboardForDsar = false;
-    //         this.dataService.isLicenseApplied.next({ requesttype: 'organization', hasaccess: false });
-    //         //this.dataService.openUpgradeModalForDsar(res);
-    //         if (this.router.url.indexOf('ccpa-dsar') !== -1) {
-    //           this.router.navigate(['/home/dashboard/analytics']);
-    //         }
-    //       }
-    //     }
-    //   }, error => {
-    //     this.loading.stop('2')
-    //   });
-   
-    // this.dataService.getPropertyPlanDetails(this.constructor.name, moduleName.cookieConsentModule, prop.property_id)
-    //   .subscribe((res: any) => {
-    //     this.dataService.setPropertyPlanToLocalStorage(res);
-    //     this.loading.stop('1')
-    //     this.currentSelectedProperty();
-    //     if (this.router.url.indexOf('privacy/dsar/requests-details') !== -1) {
-    //       this.router.navigate(['/privacy/dsar/requests']);
-    //     } else {
-    //       this.router.navigate([this.router.url]);
-    //     }
 
-    //     // this.onCheckSubscriptionForProperty();
-    //     // this.onCheckSubscriptionForOrg();
-    //     this.onCheckConsentPreferenceSubscription();
-    //   }, err => {
-    //     this.loading.stop('1')
-    //   });
     this.licenseAvailabilityForFormAndRequestPerOrg(org);
     if (this.router.url.indexOf('dsarform') !== -1) {
       this.router.navigate(['/privacy/dsar/webforms']);
@@ -507,16 +421,20 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   isOrgSelected(selectedItem): boolean {
-    //this.selectedOrgProperties.length = 0;
-  //  const findOidIndex = this.orgPropertyMenu.findIndex((t) => t.id == this.oIDPIDFromURL[0]) //finding oid
-    //let activePro = this.orgPropertyMenu[findOidIndex]
-    this.oIDPIDFromURL= this.findPropertyIDFromUrl(this.location.path());
-    const orgIndex = this.orgPropertyMenu.findIndex((t) => t.id == this.oIDPIDFromURL[0]);
-    if (orgIndex !== -1) {
-      this.selectedOrgProperties.push(this.orgPropertyMenu[orgIndex]);
-    }
-    if(this.selectedOrgProperties !== undefined && this.selectedOrgProperties.length > 0) {
-      return this.selectedOrgProperties.filter((t) => t.id === selectedItem.id).length > 0;
+    let orgIndex;
+    this.oIDPIDFromURL = this.findPropertyIDFromUrl(this.location.path());
+    if (this.orgPropertyMenu !== undefined) {
+      if(this.oIDPIDFromURL !== undefined){
+        orgIndex = this.orgPropertyMenu.findIndex((t) => t.id == this.oIDPIDFromURL[0]);
+      }else{
+        orgIndex = this.orgPropertyMenu.findIndex((t) => t.id == selectedItem.id);
+      }
+      if (orgIndex !== -1) {
+        this.selectedOrgProperties.push(this.orgPropertyMenu[orgIndex]);
+      }
+      if (this.selectedOrgProperties !== undefined && this.selectedOrgProperties.length > 0) {
+        return this.selectedOrgProperties.filter((t) => t.id === selectedItem.id).length > 0;
+      }
     }
   }
 
@@ -639,8 +557,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.orgPropertyMenu !== undefined && this.orgPropertyMenu.length > 0) {
       this.rearrangeFormSequence(this.orgPropertyMenu);
       //this.selectedOrgProperties.length = 0;
-      if (!this.isOrgPropertyExists(this.orgPropertyMenu)) {
-        if (this.orgPropertyMenu && this.orgPropertyMenu[0] && this.orgPropertyMenu[0].property[0] === 'undefined') {
+        if (this.orgPropertyMenu && this.orgPropertyMenu[0] && this.orgPropertyMenu[0].property[0] === undefined) {
           // this.router.navigate(['settings/organizations']);
           this.router.navigate(['settings/organizations/details/' + this.orgPropertyMenu[0].id]);
           return false;
@@ -724,9 +641,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
             }
           }
         }
-      } else {
-        this.currentSelectedProperty();
-      }
 
     } 
     //else {
@@ -852,7 +766,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
       this.router.navigate([link.routerLink || link, id]); //,{queryParams:{'oid':id,'pid':id}}
     } else {
       if (this.checkLinkAccess(link.routerLink || link)) {
-        if (this.selectedOrgProperties.length > 0) {
+        if (this.queryPID !== undefined) {//this.selectedOrgProperties.length > 0
           if(this.queryOID && this.queryPID){
           this.router.navigate([link.routerLink || link],{ queryParams: { oid: this.queryOID, pid: this.queryPID }, queryParamsHandling:'merge', skipLocationChange:false});
           }
@@ -1261,7 +1175,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   btnTopAddSubscription() {
-    this.router.navigate(['/settings/billing/pricing']);
+    this.router.navigate(['/settings/billing/pricing'],{ queryParams: { oid: this.queryOID, pid: this.queryPID }, queryParamsHandling:'merge', skipLocationChange:false});
   }
 
   addEllipsis(): object {
@@ -1282,14 +1196,16 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   findPropertyIDFromUrl(urlLink){
-   // console.log(this.router.url,'url..');
     let oIDFromURL;
     if(urlLink !== undefined){
     if(urlLink.indexOf('pid') !== -1){
       this.isUrlWithPropID = true;
-      oIDFromURL = urlLink.split("?oid=")
+      if(urlLink.indexOf('?oid=') !== -1){
+        oIDFromURL = urlLink.split("?oid=");
+      }else{
+        oIDFromURL = urlLink.split("&oid=");
+      }
       return  oIDFromURL[1].split("&pid=");
-     // console.log(this.currentNavigationUrl,'currentNavigationUrl..');
     }
     }
     
@@ -1299,20 +1215,15 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
     if(this.orgPropertyMenu !== undefined && this.orgPropertyMenu.length > 1){
       for(const key of this.orgPropertyMenu){
         const obj = key.property.filter((el)=>el.property_id == this.oIDPIDFromURL[1]);
-       // console.log(obj,'obj...1266');
       }
       
      
     }
-    // this.orgservice.getOrganizationWithProperty().subscribe((data) => {
-       
-    //   this.orgPropertyMenu = data.response;
-    // },(error) => {
 
-    // })
   }
 
   loadOrganizationPlanDetails(org){
+    this.dataService.removeOrgPlanFromLocalStorage();
     this.dataService.getOrgPlanInfo(this.constructor.name, moduleName.cookieConsentModule, org.organization_id || org.id)
     .subscribe((res: any) => {
       this.loading.stop('2')
@@ -1320,10 +1231,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
       if (res.response && res.response.plan_details && res.response.plan_details.dsar) {
         if (Object.values(res.response.plan_details.dsar).length > 0) {
           this.isShowDashboardForDsar = true;
-          this.dataService.isLicenseApplied.next({ requesttype: 'organization', hasaccess: true });
+         return this.dataService.isLicenseApplied.next({ requesttype: 'organization', hasaccess: true });
         } else {
           this.isShowDashboardForDsar = false;
-          this.dataService.isLicenseApplied.next({ requesttype: 'organization', hasaccess: false });
+          // this.dataService.isLicenseApplied.next({ requesttype: 'organization', hasaccess: false });
           //this.dataService.openUpgradeModalForDsar(res);
           if (this.router.url.indexOf('ccpa-dsar') !== -1) {
             if(this.queryOID && this.queryPID){
@@ -1338,21 +1249,15 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   loadPropertyPlanDetails(prop){
+    this.dataService.removePropertyPlanFromLocalStorage();
     this.dataService.getPropertyPlanDetails(this.constructor.name, moduleName.cookieConsentModule, prop.property_id)
     .subscribe((res: any) => {
       this.dataService.setPropertyPlanToLocalStorage(res);
       this.loading.stop('1')
       this.currentSelectedProperty();
-      if (this.router.url.indexOf('privacy/dsar/requests-details') !== -1) {
-        if(this.queryOID && this.queryPID){
-        this.router.navigate(['/privacy/dsar/requests'],{ queryParams: { oid: this.queryOID, pid: this.queryPID }, skipLocationChange:false});
-        }
-      } else {
-        //this.router.navigate([this.router.url]);
-        if(this.queryOID && this.queryPID){
-          if(this.router.url.indexOf('oid') == -1){
-            return this.router.navigate([this.router.url], { queryParams: { oid: this.queryOID, pid: this.queryPID }, skipLocationChange:false} );
-          }
+      if(this.queryOID && this.queryPID){
+        if(this.router.url.indexOf('oid') == -1){
+          return this.router.navigate([this.router.url], { queryParams: { oid: this.queryOID, pid: this.queryPID }, skipLocationChange:false} );
         }
       }
 
@@ -1368,17 +1273,24 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
   //   this.currentNavigationUrl = this.router.url;// + '?' + oid + '&' + pid;
   // }
 
-  ngOnChanges(){
-
+  navigateToWelcomepage(){
+    this.activatedroute.queryParamMap
+    .subscribe(params => {
+      this.queryOID = params.get('oid');
+      this.queryPID = params.get('pid');
+      this.loadOrganizationWithProperty();
+     });
+     if(this.queryOID !== null || this.queryOID !== undefined){
+       this.router.navigate(['/home/dashboard/analytics'],{ queryParams: { oid: this.queryOID, pid: this.queryPID },  skipLocationChange:false});
+     }else{
+       this.router.navigate(['/home/dashboard/analytics'],{ queryParams: { oid: this.selectedOrgProperties[0].organization_id, pid: this.selectedOrgProperties[0].property_id },  skipLocationChange:false});
+     }
   }
 
   ngAfterViewInit(){
-    //console.log("1351..");
     this.activatedroute.queryParamMap.subscribe(params => {
    this.queryOID = params.get('oid');
    this.queryPID = params.get('pid');
-   //console.log(this.queryOID,'queryOID210..');
-   //console.log(this.queryPID,'queryPID211..');
   });
   }
 

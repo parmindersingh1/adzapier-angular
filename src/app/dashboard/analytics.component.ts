@@ -1,9 +1,11 @@
 import { Component, AfterViewChecked, OnInit, ChangeDetectorRef, DoCheck } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { faChrome, faEdge, faFirefox, faSafari, faOpera } from '@fortawesome/free-brands-svg-icons';
-import { debounceTime, filter } from 'rxjs/operators';
+import { Subscription } from 'rxjs';
+import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { AuthenticationService, OrganizationService } from 'src/app/_services';
-
+import { featuresName } from '../_constant/features-name.constant';
+import { moduleName } from '../_constant/module-name.constant';
 import { DataService } from '../_services/data.service';
 
 @Component({
@@ -19,275 +21,196 @@ export class AnalyticsComponent implements OnInit {
   faOpera = faOpera;
   loginToken;
   currentUser: any;
-  isCollapsed: any;
   isLicenseAssignedtoProperty = false;
   isLicenseAssignedtoOrganization = false;
   isConsentPreferenceLicenseAssignedToProperty = false;
-  dsarTooltiptext:string;
-  consentTooltipText:string;
-  cookieTooltiptext:string;
-  arryt:any = [];
-  appsContent:any = [];
-  purchsedApps:any = [];
-  appsPositionRowOne:any = [];
-  appsPositionRowTwo:any = [];
-  appsPositionRowThree:any = [];
-  noOfLicensePurchased:number;
+  dsarTooltiptext: string;
+  consentTooltipText: string;
+  cookieTooltiptext: string;
+  arryt: any = [];
+  appsContent: any = [];
+  purchsedApps: any = [];
+  appsPositionRowOne: any = [];
+  appsPositionRowTwo: any = [];
+  appsPositionRowThree: any = [];
+  noOfLicensePurchased: number = 0;
+  skeletonLoading = true;
   queryOID;
   queryPID;
+  sub: Subscription;
   constructor(
     private router: Router,
-    private activateRoute : ActivatedRoute,
+    private activateRoute: ActivatedRoute,
     private authService: AuthenticationService,
-    private orgService : OrganizationService,
+    private orgService: OrganizationService,
     private dataService: DataService,
+    private loading: NgxUiLoaderService,
     private cdRef: ChangeDetectorRef
   ) {
-     // this.activatedroute.queryParams.subscribe((params) => {
-    //   console.log(params,'params..');
-    //  // cdRef.markForCheck();
-    // });
     this.authService.currentUser.subscribe(x => this.currentUser = x);
-    this.isCollapsed = false;
-   // this.loadAppContent();
+    this.activateRoute.queryParamMap
+      .subscribe(params => {
+        this.queryOID = params.get('oid');
+        this.queryPID = params.get('pid');
+      });
    }
   // redirect to home if already logged in
 
 
-  ngOnInit(){
+  ngOnInit() {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
-
-    console.log(this.activateRoute.snapshot.queryParamMap.has('oid'),'53');
-    console.log(this.activateRoute.snapshot.queryParamMap.get('oid'),'54');
-    // this.activateRoute.queryParamMap
-    //         .subscribe(params => { 
-    //           this.cdRef.markForCheck();
-    //          // this.pageNo = +params.get('pageNum')||0;
-    //           console.log('Query params ',params) 
-    //       });
-   this.isPropertyLicenseAssigned();
-   this.isOrganizationLicenseAssigned();
-   this.isConsentPreferenceLicenseAssigned();
-   this.checkDivLength();
-   this.loadAppContent();
-   this.allocateElementToRows();
+    if(this.queryOID !== null && this.queryOID !== undefined){
+    const obj = {
+      organization_id: this.queryOID,
+      property_id: this.queryPID
+    };
+    this.loadOrganizationPlanDetails(obj);
+    this.loadPropertyPlanDetails(obj);
+  }
+    this.isConsentPreferenceLicenseAssigned();
+    this.checkDivLength();
+    this.loadAppContent();
   
-   //window.location.reload();
-//    this.activateRoute.queryParams.pipe(
-//     debounceTime(500),
-//      filter((queryParams:any)=>{
-//        return !queryParams.oid;
-//      })
-//    ).  
-//    subscribe(params => {
-//      console.log(params.keys,'app..');
-//      //if (params.get('code')) {
-//        if(Object.keys(params).length > 0){
-//          console.log(params.get('oid'),params.get('pid'));
-//        }
-//        //  this.qcode = params.get('pid');
-//     // }
-//  });
-
- this.activateRoute.queryParamMap
- .subscribe(params => {
-   this.queryOID = params.get('oid');
-   this.queryPID = params.get('pid');
-   console.log(this.queryOID,'queryOID..');
-   console.log(this.queryPID,'queryPID..');
-  });
-   
-//   this.updatedUrlWithPID = params.get('pid');  
-// console.log(params.get('oid'),'oid..');
-// console.log(params.get('pid'),'pid..');
-
-
-// if(this.queryOID !== undefined){
-// this.dataService.checkLicenseAvailabilityPerOrganization(this.queryOID).subscribe(results => {
-//   let finalObj = {
-//     ...results[0].response,
-//     ...results[1].response,
-//     ...results[2].response
-//   }
-//   this.dataService.setAvailableLicenseForFormAndRequestPerOrg(finalObj);
-//   if (finalObj !== null && Object.keys(finalObj).length !== 0) {
-//     this.isLicenseAssignedtoOrganization = true;
-//     this.dataService.isLicenseApplied.next({ requesttype: 'organization', hasaccess: true });
-//     this.allocateElementToRows();
-//     //this.onCheckSubscriptionForOrg();
-//   } 
-//   // else{
-//   //   this.isLicenseAssignedtoOrganization = false;
-//   //   this.dataService.isLicenseApplied.next({ requesttype: 'organization', hasaccess: false });
-//   // }
-// }, (error) => {
-//   console.log(error)
-// });
-// }
 
 
 
   }
 
-  isPropertyLicenseAssigned():boolean {
-    console.log(this.queryPID,'queryPID..');
-    // this.dataService.checkLicenseAvailabilityForProperty(this.queryPID).subscribe((data)=>{
-    //   this.isLicenseAssignedtoProperty = data.hasaccess;
-    // })
-    // let propPlandetails = JSON.stringify(this.dataService.getCurrentPropertyPlanDetails()); // on page refresh
-    //     let ispropplanExist;
-    //     if(JSON.parse(propPlandetails).response && JSON.parse(propPlandetails).response.plan_details &&  JSON.parse(propPlandetails).response.plan_details.cookieConsent){
-    //       if(Object.values(JSON.parse(propPlandetails).response.plan_details.cookieConsent).length > 0){
-    //         ispropplanExist = true;
-    //       }
-    //     }
-    let licensePropStatus;    
-    this.dataService.isLicenseAppliedForProperty.subscribe((status) =>  {
-      licensePropStatus = status.hasaccess;
-    this.isLicenseAssignedtoProperty = status.hasaccess;
-    });
+  isPropertyLicenseAssigned(status): boolean {
+    this.isLicenseAssignedtoProperty = status;
     this.cookieTooltiptext = this.isLicenseAssignedtoProperty ? '' : 'You have not assigned Cookie consent license to selected property';
     return this.isLicenseAssignedtoProperty; //|| ispropplanExist !== undefined ? true : false;
   }
 
-  isConsentPreferenceLicenseAssigned():boolean {
-    this.dataService.isConsentPreferenceAppliedForProperty.subscribe((status) =>  {
+  isConsentPreferenceLicenseAssigned(): boolean {
+    this.dataService.isConsentPreferenceAppliedForProperty.subscribe((status) => {
     this.isConsentPreferenceLicenseAssignedToProperty = status.hasaccess;
     });
     this.consentTooltipText = this.isConsentPreferenceLicenseAssignedToProperty ? '' : 'You have not assigned Consent Preference to selected property';
     return this.isConsentPreferenceLicenseAssignedToProperty;
   }
 
-  isOrganizationLicenseAssigned():boolean {
-    let licenseStatus;
-    this.dataService.isLicenseApplied.subscribe((status) =>  {
-     licenseStatus = status.hasaccess;
-     this.isLicenseAssignedtoOrganization = licenseStatus;
-     this.dsarTooltiptext = this.isLicenseAssignedtoOrganization ? '' : 'You have not assigned DSAR license to selected organization';
-    });
+  isOrganizationLicenseAssigned(status): boolean {
+    this.isLicenseAssignedtoOrganization = status;
+    this.dsarTooltiptext = this.isLicenseAssignedtoOrganization ? '' : 'You have not assigned DSAR license to selected organization';
 
-    // let orgPlanDSARPlans = JSON.stringify(this.dataService.getCurrentOrganizationPlanDetails());
-    
-    // let isorgplanExist; // check on page refresh
-    // if(JSON.parse(orgPlanDSARPlans).response && JSON.parse(orgPlanDSARPlans).response.plan_details &&  JSON.parse(orgPlanDSARPlans).response.plan_details.dsar){
-    //   if(Object.values(JSON.parse(orgPlanDSARPlans).response.plan_details.dsar).length > 0){
-    //     isorgplanExist = true;
-    //   }
-    // }
-    console.log(this.isLicenseAssignedtoOrganization,'162..');
-    
-    return this.isLicenseAssignedtoOrganization = licenseStatus;// || isorgplanExist !== undefined ? isorgplanExist : false;
+    return this.isLicenseAssignedtoOrganization;
   }
 
-   checkDivLength(){
-    return this.appsContent.filter((t)=>t.isLicensepurchased == true).length;
+  checkDivLength() {
+    return this.appsContent.filter((t) => t.isLicensepurchased == true).length;
   }
 
-  ngAfterViewChecked(){
+  ngAfterViewChecked() {
     this.getSelectedOrgIDPropertyID();
   }
 
-  loadAppContent(){
+  loadAppContent() {
     this.appsContent = [{
-      id:1,
-      isLicensepurchased:this.isLicenseAssignedtoProperty,
-      title:"Cookie Consent Dashboard",
-      iconcss:"fas fa-chart-line tx-primary temp-blue center tx-64 margin-15",
-      content:"Real-time dashboard and analytics to improve your opt-in rates with in-depth reporting.",
+      id: 1,
+      isLicensepurchased: this.isLicenseAssignedtoProperty,
+      title: "Cookie Consent Dashboard",
+      iconcss: "fas fa-chart-line tx-primary temp-blue center tx-64 margin-15",
+      content: "Real-time dashboard and analytics to improve your opt-in rates with in-depth reporting.",
       tooltipcontent: this.isLicenseAssignedtoProperty ? '' : this.cookieTooltiptext,
-      routerlinktext:this.isLicenseAssignedtoProperty ? '/home/dashboard/cookie-consent' : '/settings/billing/manage',
-      buttonText:this.isLicenseAssignedtoProperty ? 'Go Now' : 'Try Now'
+      routerlinktext: this.isLicenseAssignedtoProperty ? '/home/dashboard/cookie-consent' : '/settings/billing/manage',
+      buttonText: this.isLicenseAssignedtoProperty ? 'Go Now' : 'Try Now'
     },
     {
-     id:2,
-     isLicensepurchased:this.isLicenseAssignedtoProperty,
-     title:"Banner Configuration",
-     iconcss:"fas fa-layer-group tx-primary temp-blue center tx-64 margin-15",
-     content:"Configure geo specific cookie banner, language and preference center.",
-     tooltipcontent: this.isLicenseAssignedtoProperty ? '' : this.cookieTooltiptext,
-     routerlinktext:this.isLicenseAssignedtoProperty ? '/cookie-consent/cookie-banner' : '/settings/billing/manage',
-     buttonText: this.isLicenseAssignedtoProperty ? 'Go Now' : 'Try Now'
-   }, {
-     id:3,
-     isLicensepurchased:this.isLicenseAssignedtoProperty,
-     title:"Setup",
-     iconcss:"fas fa-wrench tx-primary temp-blue fa-3x center tx-64 margin-15",
-     content:"Setup consent banner Javascript CDN into your application",
-     tooltipcontent:this.isLicenseAssignedtoProperty ? '' : this.cookieTooltiptext,
-     routerlinktext:this.isLicenseAssignedtoProperty ? '/cookie-consent/cookie-banner/setup' : '/settings/billing/manage',
-     buttonText:this.isLicenseAssignedtoProperty ? 'Go Now' : 'Try Now'
-   }, {
-     id:4,
-     isLicensepurchased:this.isLicenseAssignedtoOrganization,
-     title:"Data Subject Request",
-     iconcss:"fas fa-balance-scale tx-primary temp-blue center tx-64 margin-15",
-     content:"Create dynamic forms and respond to privacy rights requests to meet regulatory deadlines.",
-     tooltipcontent: this.isLicenseAssignedtoOrganization ? '' : this.dsarTooltiptext,
-     routerlinktext:this.isLicenseAssignedtoOrganization ? ['/privacy/dsar/requests'] : ['/settings/billing/manage'],
-     buttonText:this.isLicenseAssignedtoOrganization ? 'Go Now' : 'Try Now'
-   }, {
-     id:5,
-     isLicensepurchased:this.isConsentPreferenceLicenseAssignedToProperty,
-     title:"Consent preference",
-     iconcss:"fas fa-file-signature tx-primary temp-blue center tx-64 margin-15",
-     content:"Collect user preference consent, document opt-ins/out via your web forms and systems.",
-     tooltipcontent: this.isConsentPreferenceLicenseAssignedToProperty ? '' : this.consentTooltipText,
-     routerlinktext:this.isConsentPreferenceLicenseAssignedToProperty ? ['/home/dashboard/consent-preference'] : ['/settings/billing/manage'],
-     buttonText:this.isConsentPreferenceLicenseAssignedToProperty ? 'Go Now' : 'Try Now'
-   }];
-   return this.appsContent;
+      id: 2,
+      isLicensepurchased: this.isLicenseAssignedtoProperty,
+      title: "Banner Configuration",
+      iconcss: "fas fa-layer-group tx-primary temp-blue center tx-64 margin-15",
+      content: "Configure geo specific cookie banner, language and preference center.",
+      tooltipcontent: this.isLicenseAssignedtoProperty ? '' : this.cookieTooltiptext,
+      routerlinktext: this.isLicenseAssignedtoProperty ? '/cookie-consent/cookie-banner' : '/settings/billing/manage',
+      buttonText: this.isLicenseAssignedtoProperty ? 'Go Now' : 'Try Now'
+    }, {
+      id: 3,
+      isLicensepurchased: this.isLicenseAssignedtoProperty,
+      title: "Setup",
+      iconcss: "fas fa-wrench tx-primary temp-blue fa-3x center tx-64 margin-15",
+      content: "Setup consent banner Javascript CDN into your application",
+      tooltipcontent: this.isLicenseAssignedtoProperty ? '' : this.cookieTooltiptext,
+      routerlinktext: this.isLicenseAssignedtoProperty ? '/cookie-consent/cookie-banner/setup' : '/settings/billing/manage',
+      buttonText: this.isLicenseAssignedtoProperty ? 'Go Now' : 'Try Now'
+    }, {
+      id: 4,
+      isLicensepurchased: this.isLicenseAssignedtoOrganization,
+      title: "Data Subject Request",
+      iconcss: "fas fa-balance-scale tx-primary temp-blue center tx-64 margin-15",
+      content: "Create dynamic forms and respond to privacy rights requests to meet regulatory deadlines.",
+      tooltipcontent: this.isLicenseAssignedtoOrganization ? '' : this.dsarTooltiptext,
+      routerlinktext: this.isLicenseAssignedtoOrganization ? ['/privacy/dsar/requests'] : ['/settings/billing/manage'],
+      buttonText: this.isLicenseAssignedtoOrganization ? 'Go Now' : 'Try Now'
+    }, {
+      id: 5,
+      isLicensepurchased: this.isConsentPreferenceLicenseAssignedToProperty,
+      title: "Consent preference",
+      iconcss: "fas fa-file-signature tx-primary temp-blue center tx-64 margin-15",
+      content: "Collect user preference consent, document opt-ins/out via your web forms and systems.",
+      tooltipcontent: this.isConsentPreferenceLicenseAssignedToProperty ? '' : this.consentTooltipText,
+      routerlinktext: this.isConsentPreferenceLicenseAssignedToProperty ? ['/home/dashboard/consent-preference'] : ['/settings/billing/manage'],
+      buttonText: this.isConsentPreferenceLicenseAssignedToProperty ? 'Go Now' : 'Try Now'
+    }];
+    return this.appsContent;
   }
 
-  allocateElementToRows(){
+  allocateElementToRows() {
+   // this.skeletonLoading = true;
     let checknoofDivs = this.checkDivLength();
-    if(checknoofDivs !== this.noOfLicensePurchased){
+    if (checknoofDivs !== this.noOfLicensePurchased) {
       this.noOfLicensePurchased = checknoofDivs;
       this.cdRef.detectChanges();
     }
-    if(this.noOfLicensePurchased !== undefined){
-      if(this.noOfLicensePurchased == 5){
+    if (this.noOfLicensePurchased !== undefined) {
+      if (this.noOfLicensePurchased == 5) {
         this.appsPositionRowOne.length = 0;
         this.appsPositionRowTwo.length = 0;
-        this.appsPositionRowOne = this.appsContent.filter((item)=>item.isLicensepurchased == true).slice(0,3);
-        this.appsPositionRowTwo = this.appsContent.filter((item)=>item.isLicensepurchased == true).slice(3,5);
-      } else if(this.noOfLicensePurchased == 4){
-        this.appsPositionRowOne.length = 0;
-        this.appsPositionRowTwo.length = 0;
-        this.appsPositionRowThree.length = 0;
-        this.appsPositionRowOne = this.appsContent.filter((item)=>item.isLicensepurchased == true).slice(0,3);
-        this.appsPositionRowTwo = this.appsContent.filter((item)=>item.isLicensepurchased == true).slice(3,4);
-        this.appsPositionRowThree = this.appsContent.filter((item)=>item.isLicensepurchased == false);
-      } else if(this.noOfLicensePurchased == 3){
-        this.appsPositionRowOne.length = 0;
-        this.appsPositionRowThree.length = 0;
-        this.appsPositionRowOne = this.appsContent.filter((item)=>item.isLicensepurchased == true);
-        this.appsPositionRowThree = this.appsContent.filter((item)=>item.isLicensepurchased == false);
-      } else if(this.noOfLicensePurchased == 2){
-        this.appsPositionRowOne.length = 0;
-        this.appsPositionRowThree.length = 0;
-        this.appsPositionRowOne = this.appsContent.filter((item)=>item.isLicensepurchased == true);
-        this.appsPositionRowThree = this.appsContent.filter((item)=>item.isLicensepurchased == false).slice(0,3);
-      } else if(this.noOfLicensePurchased == 1){
+        this.appsPositionRowOne = this.appsContent.filter((item) => item.isLicensepurchased == true).slice(0, 3);
+        this.appsPositionRowTwo = this.appsContent.filter((item) => item.isLicensepurchased == true).slice(3, 5);
+        this.skeletonLoading = false;
+      } else if (this.noOfLicensePurchased == 4) {
         this.appsPositionRowOne.length = 0;
         this.appsPositionRowTwo.length = 0;
         this.appsPositionRowThree.length = 0;
-        this.appsPositionRowOne = this.appsContent.filter((item)=>item.isLicensepurchased == true);
-        this.appsPositionRowTwo = this.appsContent.filter((item)=>item.isLicensepurchased == false).slice(0,3);
-        this.appsPositionRowThree = this.appsContent.filter((item)=>item.isLicensepurchased == false).slice(3,4);
-      } else if(this.noOfLicensePurchased == 0){
+        this.appsPositionRowOne = this.appsContent.filter((item) => item.isLicensepurchased == true).slice(0, 3);
+        this.appsPositionRowTwo = this.appsContent.filter((item) => item.isLicensepurchased == true).slice(3, 4);
+        this.appsPositionRowThree = this.appsContent.filter((item) => item.isLicensepurchased == false);
+        this.skeletonLoading = false;
+      } else if (this.noOfLicensePurchased == 3) {
+        this.appsPositionRowOne.length = 0;
+        this.appsPositionRowThree.length = 0;
+        this.appsPositionRowOne = this.appsContent.filter((item) => item.isLicensepurchased == true);
+        this.appsPositionRowThree = this.appsContent.filter((item) => item.isLicensepurchased == false);
+        this.skeletonLoading = false;
+      } else if (this.noOfLicensePurchased == 2) {
+        this.appsPositionRowOne.length = 0;
+        this.appsPositionRowThree.length = 0;
+        this.appsPositionRowOne = this.appsContent.filter((item) => item.isLicensepurchased == true);
+        this.appsPositionRowThree = this.appsContent.filter((item) => item.isLicensepurchased == false).slice(0, 3);
+        this.skeletonLoading = false;
+      } else if (this.noOfLicensePurchased == 1) {
         this.appsPositionRowOne.length = 0;
         this.appsPositionRowTwo.length = 0;
-        this.appsPositionRowOne = this.appsContent.filter((item)=>item.isLicensepurchased == false).slice(0,3);
-        this.appsPositionRowTwo = this.appsContent.filter((item)=>item.isLicensepurchased == false).slice(3,5);
+        this.appsPositionRowThree.length = 0;
+        this.appsPositionRowOne = this.appsContent.filter((item) => item.isLicensepurchased == true);
+        this.appsPositionRowTwo = this.appsContent.filter((item) => item.isLicensepurchased == false).slice(0, 3);
+        this.appsPositionRowThree = this.appsContent.filter((item) => item.isLicensepurchased == false).slice(3, 4);
+        this.skeletonLoading = false;
+      } else if (this.noOfLicensePurchased == 0) {
+        this.appsPositionRowOne.length = 0;
+        this.appsPositionRowTwo.length = 0;
+        this.appsPositionRowOne = this.appsContent.filter((item) => item.isLicensepurchased == false).slice(0, 3);
+        this.appsPositionRowTwo = this.appsContent.filter((item) => item.isLicensepurchased == false).slice(3, 5);
+        this.skeletonLoading = false;
       }
-  }
+    }
   }
 
   getSelectedOrgIDPropertyID() {
     this.orgService.currentProperty.subscribe((response) => {
       if (response !== '') {
-        this.isPropertyLicenseAssigned();
-        this.isOrganizationLicenseAssigned();
         this.isConsentPreferenceLicenseAssigned();
         let checknoofDivs = this.checkDivLength();
         if (checknoofDivs !== this.noOfLicensePurchased) {
@@ -300,4 +223,66 @@ export class AnalyticsComponent implements OnInit {
     });
   }
    
+  loadOrganizationPlanDetails(org) {
+    this.skeletonLoading = true;
+    this.dataService.removeOrgPlanFromLocalStorage();
+    this.dataService.getOrgPlanInfo(this.constructor.name, moduleName.cookieConsentModule, org.organization_id || org.id)
+      .subscribe((res: any) => {
+        this.dataService.setOrgPlanToLocalStorage(res);
+        if (res.response && res.response.plan_details && res.response.plan_details.dsar) {
+          if (Object.values(res.response.plan_details.dsar).length > 0) {
+            let status = true;
+            this.isOrganizationLicenseAssigned(status);
+            if (status) {
+              this.loadAppContent();
+              this.allocateElementToRows();
+            }
+          } else {
+            let status = false;
+            this.isOrganizationLicenseAssigned(status);
+            if (!status) {
+              this.loadAppContent();
+              this.allocateElementToRows();
+            }
+          }
+        }
+      }, error => {
+        console.log(error,'error');
+      });
+  }
+
+  loadPropertyPlanDetails(prop) {
+    this.skeletonLoading = true;
+    this.dataService.removePropertyPlanFromLocalStorage();
+    this.dataService.getPropertyPlanDetails(this.constructor.name, moduleName.cookieConsentModule, prop.property_id).subscribe((res: any) => {
+        if (res.response && res.response.plan_details && res.response.plan_details.cookieConsent) {
+          if (Object.values(res.response.plan_details.cookieConsent).length > 0) {
+            let status = true;
+            this.isPropertyLicenseAssigned(status);
+            const isAllowConsentPreference = this.dataService.isAllowFeatureByYes(res.response, featuresName.CONSENT_PREFERENCE);
+            this.isConsentPreferenceLicenseAssignedToProperty = isAllowConsentPreference;
+            this.loadAppContent();
+            this.allocateElementToRows();
+          } else {
+            this.isConsentPreferenceLicenseAssignedToProperty = false;
+            let status = false;
+            this.isPropertyLicenseAssigned(status);
+            if (!status) {
+              this.loadAppContent();
+              this.allocateElementToRows();
+            }
+          }
+        }
+        this.dataService.setPropertyPlanToLocalStorage(res);
+      }, err => {
+        console.log(err);
+      });
+  }
+
+  ngOnDestroy() {
+    console.log('analytics ngdestroy..');
+    if (this.sub !== undefined) {
+      this.sub.unsubscribe();
+    }
+  }
 }

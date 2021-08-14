@@ -151,6 +151,11 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
     }
 
   ngOnInit() {
+    this.activateRoute.queryParamMap
+      .subscribe(params => {
+        this.queryOID = params.get('oid');
+        this.queryPID = params.get('pid');
+      });
     this.onGetPropsAndOrgId();
     this.onGetRequestListFilter();
     this.setupSearchDebouncer();
@@ -161,11 +166,6 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
     });
     this.bsConfig = Object.assign({}, { containerClass: 'theme-dark-blue', showClearButton: true, returnFocusToInput: true, dateInputFormat: 'yyyy-mm-dd', adaptivePosition : true, showTodayButton:true, ranges: this.ranges  });
     
- this.activateRoute.queryParamMap
- .subscribe(params => {
-   this.queryOID = params.get('oid');
-   this.queryPID = params.get('pid'); 
-    });
   }
 
   get dsar() { return this.createDSARWebFormRequest.controls; }
@@ -176,9 +176,8 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
         this.currentManagedOrgID = response.organization_id || response.response.oid || this.queryOID;
         this.currrentManagedPropID = response.property_id || response.response.id || this.queryPID;
       } else {
-        const orgDetails = this.orgservice.getCurrentOrgWithProperty();
-        this.currentManagedOrgID = orgDetails.organization_id || orgDetails.response.oid || this.queryOID;
-        this.currrentManagedPropID = orgDetails.property_id || orgDetails.response.id || this.queryPID;
+        this.currentManagedOrgID = this.queryOID;
+        this.currrentManagedPropID = this.queryPID;
       }
     });
   }

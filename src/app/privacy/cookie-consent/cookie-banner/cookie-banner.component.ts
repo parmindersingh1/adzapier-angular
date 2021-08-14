@@ -132,14 +132,14 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
               private dataService: DataService,
               private gdprService: GdprService
   ) {
+  }
+
+  async ngOnInit() {
     this.activatedroute.queryParamMap
     .subscribe(params => {
       this.queryOID = params.get('oid');
       this.queryPID = params.get('pid'); 
      });
-  }
-
-  async ngOnInit() {
     this.onGetPropsAndOrgId();
     this.onGetAllowVendors();
     this.onGetCookies();

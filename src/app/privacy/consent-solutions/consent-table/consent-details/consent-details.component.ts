@@ -5,6 +5,7 @@ import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {moduleName} from '../../../../_constant/module-name.constant';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-consentlegal-table',
@@ -34,7 +35,7 @@ export class ConsentDetailsComponent implements OnInit {
   LegalIdentifier = '';
   LegalContent = '';
   legalForm
-auth_id='';
+  auth_id='';
   editConsentForm: FormGroup;
   submitted = false;
   dismissible = true;
@@ -43,14 +44,21 @@ auth_id='';
   isOpen = false;
   alertType: any;
   planDetails: any;
-
+  queryOID;
+  queryPID;
   constructor(private consentSolutionService: ConsentSolutionsService,
               private formBuilder: FormBuilder,
               private loading: NgxUiLoaderService,
+              private activatedroute: ActivatedRoute,
               private location: Location, private modalService: BsModalService) {
   }
 
   ngOnInit() {
+    this.activatedroute.queryParamMap
+    .subscribe(params => {
+      this.queryOID = params.get('oid');
+      this.queryPID = params.get('pid'); 
+     });
     try {
       this.consentSolutionService.consentSolutionDetails.subscribe(res => {
         if (res === null) {

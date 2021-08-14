@@ -11,7 +11,7 @@
         <i-feather name="menu" *ngIf="close" class="feather-16"></i-feather>
         <i-feather name="plus" *ngIf="!close" class="feather-16 menuplus-icon"></i-feather>
       </button>
-      <a routerLink="/home/welcome" [queryParams]="{oid:queryOID , pid:queryPID}"> <!--routerLink="/login"-->
+      <a (click)="navigateToWelcomepage()">
         <img src="assets/imgs/adzapier_logo.svg" width="130" height="30" alt="Adzapier | Ad Tech for Publishers"/>
       </a>
     </div>
@@ -46,10 +46,10 @@
     </ul>
     <ul class="navbar-nav navbar-right" *ngIf="!currentUser">
       <li class="nav-item">
-        <a class="btn btn-sm btn-primary" routerLink="/login" routerLink="/login">Sign In</a>
+        <a class="btn btn-sm btn-primary" routerLink="/login">Sign In</a>
       </li>
       <li class="nav-item">
-        <a class="btn btn-sm btn-primary mg-l-10" routerLink="/signup" routerLink="/signup">Try for Free</a>
+        <a class="btn btn-sm btn-primary mg-l-10" routerLink="/signup">Try for Free</a>
       </li>
     </ul>
   </div>
@@ -80,15 +80,11 @@
             <div *ngIf="item.property.length=='0'">No Property</div>
             <ul role="menu">
               <ng-container  *ngFor="let submenu of item.property">
-                <!-- curl | {{currentNavigationUrl}} -->
-                <!-- currentNavigationUrl |{{currentNavigationUrl}}  routerLink="[currentNavigationUrl]" -->
-                <!-- currentNavigationUrl |{{currentNavigationUrl}}|{{item.id}}|{{submenu.property_id}} skipLocationChange='true' -->
-                <li role="menuitem"> <!--[queryParams]="{oid:item.id , pid:submenu.property_id}"  [queryParamsHandling]="preserve"--> <!-- routerLink="{{item.id}}/{{submenu.property_id}}"-->
+                <li role="menuitem"> 
                   <a class="dropdown-item"   routerLinkActive="active"  
                   routerLink="currentNavigationUrl"                 
                     [queryParams]="{oid:item.id , pid:submenu.property_id}"    [class.disableproperty]="isProperyDisabled(submenu)" [ngClass]="[isPropSelected(submenu) ? 'active' : '']">
                    <span class="propertyLink" *ngIf="!isProperyDisabled(submenu); else disabledProperty" (click)="isCurrentPropertySelected(item,submenu)"> <span class="property-ellipsis">
-                    <!-- {{submenu.property_id}}  -->
                     {{ submenu.property_name ? convertAmpersand(submenu.property_name) : 'No Property' }}</span>
                    <span class="flex-spacebetween"> 
                     <span class="ml-2 mr-2" *ngIf="isPropSelected(submenu)"> <!-- *ngIf="isPropSelected(submenu)"-->

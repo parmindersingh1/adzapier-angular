@@ -210,8 +210,8 @@ export class SubscriptionPopupComponent implements OnInit {
     if (path === '/cookie-consent/cookie-banner' || path === '/cookie-consent/manage-vendors') {
       this.template.hide();
     } else {
-      this.router.navigate(['/home/dashboard/analytics'],{ queryParams: { oid: this.queryOID, pid: this.queryPID }, queryParamsHandling:'merge', skipLocationChange:false});
       this.template.hide();
+      this.router.navigate(['/home/dashboard/analytics'],{ queryParams: { oid: this.queryOID, pid: this.queryPID }, queryParamsHandling:'merge', skipLocationChange:false});
     }
   }
 }
