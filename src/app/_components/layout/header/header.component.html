@@ -82,8 +82,7 @@
               <ng-container  *ngFor="let submenu of item.property">
                 <li role="menuitem"> 
                   <a class="dropdown-item"   routerLinkActive="active"  
-                  routerLink="currentNavigationUrl"                 
-                    [queryParams]="{oid:item.id , pid:submenu.property_id}"    [class.disableproperty]="isProperyDisabled(submenu)" [ngClass]="[isPropSelected(submenu) ? 'active' : '']">
+                  routerLink="{{getCurrentRoute()}}"  [queryParams]="{oid:item.id , pid:submenu.property_id}" [class.disableproperty]="isProperyDisabled(submenu)" [ngClass]="[isPropSelected(submenu) ? 'active' : '']">
                    <span class="propertyLink" *ngIf="!isProperyDisabled(submenu); else disabledProperty" (click)="isCurrentPropertySelected(item,submenu)"> <span class="property-ellipsis">
                     {{ submenu.property_name ? convertAmpersand(submenu.property_name) : 'No Property' }}</span>
                    <span class="flex-spacebetween"> 
