@@ -107,7 +107,8 @@ export class DataService {
 
   getPropertyPlanDetails(componentName, moduleName, propID) {
     const path = apiConstant.PROPERTY_PLAN;
-    return this.http.get(environment.apiUrl + path, {params: {pID: propID}}).pipe(map(res => res),
+    let propertyID = propID !== undefined && typeof propID == "object" ?  propID.property_id : propID;
+    return this.http.get(environment.apiUrl + path, {params: {pID: propertyID}}).pipe(map(res => res),
       catchError(error => {
         this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.consentDashboard, componentName, moduleName, path);
         return throwError(error);
@@ -563,7 +564,7 @@ export class DataService {
   }
 
   checkLicenseAvailabilityForProperty(prop):Observable<any>{
-    let propLicense = this.getPropertyPlanDetails(this.constructor.name,moduleName.headerModule,prop.property_id || prop.response.id);
+    let propLicense = this.getPropertyPlanDetails(this.constructor.name,moduleName.headerModule,prop || prop.property_id || prop.response.id);
     return forkJoin([propLicense]);
   }
 

@@ -538,7 +538,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
       this.orgPropertyMenu = data.response;
       this.checkCurrentManagingProperty();
       console.log(this.orgPropertyMenu,'orgPropertyMenu..522');
-      this.resCID = data.response.cID;
+     // this.resCID = data.response.cID || data.response[0].cID;
      
     }, (error) => {
       this.loading.stop();
@@ -1287,6 +1287,14 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
      }else{
        this.router.navigate(['/home/dashboard/analytics'],{ queryParams: { oid: this.selectedOrgProperties[0].organization_id, pid: this.selectedOrgProperties[0].property_id },  skipLocationChange:false});
      }
+  }
+
+  getCurrentRoute(){
+    if(this.currentNavigationUrl !== undefined){
+      return this.currentNavigationUrl.split('?')[0];
+    } else{
+      return this.location.path().split('?')[0];
+    }
   }
 
   ngAfterViewInit(){

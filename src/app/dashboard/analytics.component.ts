@@ -251,6 +251,8 @@ export class AnalyticsComponent implements OnInit {
       });
   }
 
+  
+
   loadPropertyPlanDetails(prop) {
     this.skeletonLoading = true;
     this.dataService.removePropertyPlanFromLocalStorage();
@@ -259,12 +261,11 @@ export class AnalyticsComponent implements OnInit {
           if (Object.values(res.response.plan_details.cookieConsent).length > 0) {
             let status = true;
             this.isPropertyLicenseAssigned(status);
-            const isAllowConsentPreference = this.dataService.isAllowFeatureByYes(res.response, featuresName.CONSENT_PREFERENCE);
-            this.isConsentPreferenceLicenseAssignedToProperty = isAllowConsentPreference;
             this.loadAppContent();
             this.allocateElementToRows();
           } else {
-            this.isConsentPreferenceLicenseAssignedToProperty = false;
+            const isAllowConsentPreference = this.dataService.isAllowFeatureByYes(res.response, featuresName.CONSENT_PREFERENCE);
+            this.isConsentPreferenceLicenseAssignedToProperty = isAllowConsentPreference;
             let status = false;
             this.isPropertyLicenseAssigned(status);
             if (!status) {
