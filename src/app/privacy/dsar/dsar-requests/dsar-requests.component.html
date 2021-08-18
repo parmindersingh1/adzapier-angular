@@ -86,12 +86,13 @@
         </div>
 
         <div class="col-sm-2">
-          <select (change)="onChangeDueIn($event)" class="form-control">
+          <input type="number" placeholder="Due in" (change)="onChangeDueIn($event)" class="form-control" />
+          <!-- <select (change)="onChangeDueIn($event)" class="form-control">
             <option selected value="">Due in</option>
             <ng-container *ngFor="let obj of allFilterData.filter_due_in">
               <option [value]="obj.key">{{obj.value}}</option>
             </ng-container>
-          </select>
+          </select> -->
         </div>
         <div class="col-sm-2">
           <p-multiSelect [options]="cols" [(ngModel)]="selectedColumns" optionLabel="header"

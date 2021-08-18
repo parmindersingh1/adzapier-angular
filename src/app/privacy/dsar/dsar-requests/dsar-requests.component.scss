@@ -402,6 +402,11 @@ span.ui-column-title {
   border-bottom: 0;
 }
 
+::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: #333333;
+  opacity: 1; /* Firefox */
+}
+
 @media (min-width: 1024px) { 
   .container {
     max-width: 1024px;

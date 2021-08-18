@@ -8,7 +8,8 @@ import {DsarformService} from '../../_services/dsarform.service';
 import {DataService} from '../../_services/data.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {mainPlans} from '../../_constant/main-plans.constant';
-
+import { findPropertyIDFromUrl } from 'src/app/_helpers/common-utility';
+import { Location } from '@angular/common';
 class DefaultPlanData {
   plan_name: '';
   price: 0;
@@ -55,7 +56,8 @@ export class SubscriptionPopupComponent implements OnInit {
     private dataService: DataService,
     private router: Router,
     private activateRoute: ActivatedRoute,
-    private authService: AuthenticationService
+    private authService: AuthenticationService,
+    private location:Location
   ) {
     this.authService.currentUser.subscribe(x => {
       this.currentUser = x;
@@ -211,7 +213,12 @@ export class SubscriptionPopupComponent implements OnInit {
       this.template.hide();
     } else {
       this.template.hide();
-      this.router.navigate(['/home/dashboard/analytics'],{ queryParams: { oid: this.queryOID, pid: this.queryPID }, queryParamsHandling:'merge', skipLocationChange:false});
+      if(this.queryOID !== undefined){
+        this.router.navigate(['/home/dashboard/analytics'],{ queryParams: { oid: this.queryOID, pid: this.queryPID }, queryParamsHandling:'merge', skipLocationChange:false});
+      }else{
+        let oIDPIDFromURL = findPropertyIDFromUrl(this.location.path())
+        this.router.navigate(['/home/dashboard/analytics'], { queryParams: { oid: oIDPIDFromURL[0], pid: oIDPIDFromURL[1] }, skipLocationChange: false });
+      }
     }
   }
 }
