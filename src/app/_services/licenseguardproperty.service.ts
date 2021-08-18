@@ -34,7 +34,7 @@ export class LicenseguardPropertyService implements CanActivate {
       if (oIDPIDFromURL !== undefined) {
         let results = await this.dataService.checkLicenseAvailabilityForProperty(oIDPIDFromURL[1]).toPromise();
 
-        if (results.length > 0) {
+        if (results !== undefined && results.length > 0) {
           let finalObj = {
             ...results[0].response
           }
@@ -51,8 +51,8 @@ export class LicenseguardPropertyService implements CanActivate {
           }
 
         } else {
-          this.dataService.openUpgradeModalForCookieConsent(results[0])
           this.router.navigate(['/home/dashboard/analytics'], { queryParams: { oid: oIDPIDFromURL[0], pid: oIDPIDFromURL[1] }, skipLocationChange: false });
+          this.dataService.openUpgradeModalForCookieConsent(results[0])
           return false;
         }
       }
