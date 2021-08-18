@@ -62,7 +62,7 @@
           [queryParams]="{planid: plan.id, plan_name: plan.plan_name,
              total_licence: plan.total_licence, assigned_licence: plan.assigned_licence,
               product_name: plan.planDetails.product_name,
-              type: plan.planDetails.type
+              type: plan.planDetails.type, oid: this.queryOID, pid: this.queryPID
             }">
            {{plan.planDetails.product_name}}</a></td>
 
@@ -70,7 +70,7 @@
             [queryParams]="{planid: plan.id, plan_name: plan.plan_name,
                total_licence: plan.total_licence, assigned_licence: plan.assigned_licence,
                 product_name: plan.planDetails.product_name,
-                type: plan.planDetails.type
+                type: plan.planDetails.type, oid: this.queryOID, pid: this.queryPID
               }">
              {{plan.planDetails.product_name}}</a></td>
 

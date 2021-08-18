@@ -6,7 +6,7 @@ import {AuthenticationService} from '../../_services';
 import {CCPAFormConfigurationService} from '../../_services/ccpaform-configuration.service';
 import {DsarformService} from '../../_services/dsarform.service';
 import {DataService} from '../../_services/data.service';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {mainPlans} from '../../_constant/main-plans.constant';
 
 class DefaultPlanData {
@@ -44,7 +44,8 @@ export class SubscriptionPopupComponent implements OnInit {
   currentUser: any;
   skLoading = false;
   openModalStatus = false;
-
+  queryOID;
+  queryPID;
   constructor(
     private modalService: BsModalService,
     private billingService: BillingService,
@@ -53,6 +54,7 @@ export class SubscriptionPopupComponent implements OnInit {
     private dsarformService: DsarformService,
     private dataService: DataService,
     private router: Router,
+    private activateRoute: ActivatedRoute,
     private authService: AuthenticationService
   ) {
     this.authService.currentUser.subscribe(x => {
@@ -65,6 +67,14 @@ export class SubscriptionPopupComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    //this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+ this.activateRoute.queryParamMap
+ .subscribe(params => {
+   this.queryOID = params.get('oid');
+   this.queryPID = params.get('pid');
+   console.log(this.queryOID,'queryOID..75');
+   console.log(this.queryPID,'queryPID..76');
+});
     this.openModal();
   }
 
@@ -200,8 +210,8 @@ export class SubscriptionPopupComponent implements OnInit {
     if (path === '/cookie-consent/cookie-banner' || path === '/cookie-consent/manage-vendors') {
       this.template.hide();
     } else {
-      this.router.navigate(['/home/dashboard/analytics']);
       this.template.hide();
+      this.router.navigate(['/home/dashboard/analytics'],{ queryParams: { oid: this.queryOID, pid: this.queryPID }, queryParamsHandling:'merge', skipLocationChange:false});
     }
   }
 }
