@@ -21,7 +21,7 @@ export class LicenseGuardConsentPreferenceService implements CanActivate {
         } else {
             let oIDPIDFromURL = findPropertyIDFromUrl(this.location.path())
             let results = await this.dataService.checkLicenseAvailabilityForProperty(oIDPIDFromURL[0]).toPromise();
-            if (results) {
+            if (results !== undefined && results.length > 0) {
                 let finalObj = {
                     ...results[0].response
                 }
@@ -29,8 +29,8 @@ export class LicenseGuardConsentPreferenceService implements CanActivate {
                     if (Object.values(finalObj.plan_details.consentPreference).length > 0) {
                       return true;
                     } else {
-                      this.dataService.openUpgradeModalForConsentPreference(results[0])
                       this.router.navigate(['/home/dashboard/analytics'], { queryParams: { oid: oIDPIDFromURL[0], pid: oIDPIDFromURL[1] }, skipLocationChange: false });
+                      this.dataService.openUpgradeModalForConsentPreference(results[0]);
                       return false;
                     }
                   }
