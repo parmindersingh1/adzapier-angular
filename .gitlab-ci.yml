@@ -216,7 +216,7 @@ deploy-to-swarm-develop-beta:
   stage: deploy
   variables:
     DOCKER_HOST: tcp://${DOCKER_HOST_STAGING}:2375
-    DOMAINS: "Host(`swarmpit.adzpier-staging.com`)"
+    DOMAINS: "Host(`develop-beta-cmp.adzpier-staging.com`)"
     SERVICE_NAME: ${CI_BUILD_REF_NAME}-adminportal
     TARGET_PORT: 8080
     PUBLISH_PORT: 8350
