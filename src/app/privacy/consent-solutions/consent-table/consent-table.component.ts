@@ -276,6 +276,23 @@ export class ConsentTableComponent implements OnInit {
           this.alertType = 'success';
           this.modalRef.hide();
           this.onGetConsentRecord();
+
+          const preferences: any = this.AddConsentForm.controls['preferences'];
+          for (let i = preferences.length -1; i >= 0; i--) {
+            preferences.removeAt(i);
+          }
+
+
+          const proofs: any = this.AddConsentForm.controls['proofs'];
+          for (let i = proofs.length -1; i >= 0; i--) {
+            proofs.removeAt(i);
+          }
+
+          const legalNotices: any = this.AddConsentForm.controls['legalNotices'];
+          for (let i = legalNotices.length -1; i >= 0; i--) {
+            legalNotices.removeAt(i);
+          }
+          this.submitted = false;
         }
       }, err => {
         this.loading.stop();
