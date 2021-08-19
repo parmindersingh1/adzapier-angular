@@ -54,7 +54,7 @@
         <div style="margin-left: 75px;">
           <label>AuthID</label>
           <div class="input-group">
-            <input formControlName="AuthID" class="form-control" disabled>
+            <input formControlName="AuthID" class="form-control">
           </div>
           <div *ngIf="submitted && f.country.errors" class="text-danger">
             <div *ngIf="f.country.errors.required">AuthID is required</div>
@@ -74,7 +74,7 @@
         <div class="ml-5">
           <label>Owner Id</label>
           <div class="input-group">
-            <input formControlName="ownerID" class="form-control" disabled>
+            <input formControlName="ownerID" class="form-control">
           </div>
         </div>
       </div>
@@ -213,7 +213,7 @@
 
               <p class="mg-b-0" style="font-size:small;">{{consentData.updated_at | date}}</p>
             </div>
-            
+
 
             <!-- <div class="col-sm">
               <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Preference
