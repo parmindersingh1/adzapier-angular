@@ -11,7 +11,7 @@ import {cookieName} from '../../../_constant/cookies-name.constant';
 import {ChartOptions} from 'chart.js';
 import {DataService} from 'src/app/_services/data.service';
 import {featuresName} from 'src/app/_constant/features-name.constant';
-import { ActivatedRoute } from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 
 const colorCodes = ['#f77eb9', '#fdb16d', '#c693f9', '#65e0e0', '#69b2f8', '#6fd39b'];
 
@@ -106,7 +106,8 @@ export class CookieCategoryComponent implements OnInit {
               private formBuilder: FormBuilder,
               private messageService: MessageService, private confirmationService: ConfirmationService,
               private authService: AuthenticationService,
-              private activateRoute: ActivatedRoute
+              private activateRoute: ActivatedRoute,
+              private router: Router
   ) {
     this.onInItCategoryForm();
   }
@@ -657,5 +658,8 @@ export class CookieCategoryComponent implements OnInit {
     });
 
     return result;
+  }
+  onNavigate(url, queryParams) {
+    this.router.navigate([url], {queryParams});
   }
 }

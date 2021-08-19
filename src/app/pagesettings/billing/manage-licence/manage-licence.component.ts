@@ -5,6 +5,7 @@ import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { moduleName } from 'src/app/_constant/module-name.constant';
 import { BillingService } from 'src/app/_services/billing.service';
 import {AuthenticationService, UserService} from '../../../_services';
+const moment = require('moment');
 
 @Component({
   selector: 'app-manage-subscription',
@@ -36,7 +37,7 @@ export class ManageLicenceComponent implements OnInit {
     this.activatedRoute.queryParamMap
       .subscribe(params => {
       this.queryOID = params.get('oid');
-      this.queryPID = params.get('pid'); 
+      this.queryPID = params.get('pid');
     });
     this.activatedRoute.queryParams.subscribe(params => {
       if (params.success === 'true') {
