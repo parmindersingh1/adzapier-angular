@@ -1423,10 +1423,14 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
       const workfloworder = this.workflowStages.filter((t) => t.id === id);
       const x = this.workflowStages.slice(0, workfloworder[0].order);
       this.selectedStages = x;
-    } else if (!this.isEmailVerified || this.isEmailVerified){
+    } 
+     else if (!this.isEmailVerified && !this.isemailverificationRequired){
       this.selectedStages.push(this.workflowStages[0]);
       this.selectedStages.push(this.workflowStages[1]);
       this.currentWorkflowStageID = this.workflowStages[1].id;
+    } else{
+      this.selectedStages.push(this.workflowStages[0]);
+      this.currentWorkflowStageID = this.workflowStages[0].id;
     }
 
   }
@@ -1441,9 +1445,9 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
       currentStageID = this.currentStageId ? this.currentStageId : this.currentWorkflowStageID;
     }
     //  return false;
-    if (currentStageID) {
+    if (currentStageID !== undefined && currentStageID.length !== 0) {
       let resp;
-      this.dsarRequestService.getSubTaskByWorkflowID(this.requestID, currentStageID[0], this.constructor.name, moduleName.dsarRequestModule)
+      this.dsarRequestService.getSubTaskByWorkflowID(this.requestID, currentStageID, this.constructor.name, moduleName.dsarRequestModule)
         .subscribe((data) => {
            this.subTaskListResponse = data;
         }, (error) => {

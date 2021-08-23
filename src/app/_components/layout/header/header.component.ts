@@ -735,7 +735,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
 
   goto(link: any, id?: any) {
     this.oIDPIDFromURL= this.findPropertyIDFromUrl(this.location.path());
-    this.currentNavigationUrl = link.routerLink == '/' ? '/home/welcome' : link.routerLink;
+    this.currentNavigationUrl = link.routerLink == '/' ? '/home/welcome' : link.routerLink + "?oid="+ this.queryOID +"&pid="+this.queryPID;
     if (link.routerLink === '/home/dashboard/cookie-consent' || link.routerLink === '/cookie-consent/manage-vendors' || link.routerLink === '/cookie-consent/cookie-category'
       || link.routerLink === '/cookie-consent/cookie-banner' || link.routerLink === '/cookie-consent/cookie-tracking' || link.routerLink === '/cookie-consent/cookie-banner/setup') {
       if (this.selectedOrgProperties.length > 0) {
@@ -767,10 +767,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
     } else {
       if (this.checkLinkAccess(link.routerLink || link)) {
         if (this.queryPID !== undefined) {//this.selectedOrgProperties.length > 0
-          if(this.queryOID && this.queryPID){
-          this.router.navigate([link.routerLink || link],{ queryParams: { oid: this.queryOID, pid: this.queryPID }, queryParamsHandling:'merge', skipLocationChange:false});
+          if (this.queryOID && this.queryPID) {
+            this.router.navigate([link.routerLink || link], { queryParams: { oid: this.queryOID, pid: this.queryPID }, queryParamsHandling: 'merge', skipLocationChange: false });
           } else {
-            this.router.navigate([link.routerLink || link],{ queryParams: { oid: this.oIDPIDFromURL[0], pid: this.oIDPIDFromURL[1] }, queryParamsHandling:'merge', skipLocationChange:false});
+            this.oIDPIDFromURL = this.findPropertyIDFromUrl(this.location.path());
+            this.router.navigate([link.routerLink || link], { queryParams: { oid: this.oIDPIDFromURL[0], pid: this.oIDPIDFromURL[1] }, queryParamsHandling: 'merge', skipLocationChange: false });
           }
           this.activateActiveClass(link);
         } else {
@@ -786,7 +787,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
       link.indexOf('ccpa') !== -1 || link.indexOf('billing') !== -1) {
       return true;
     } else {
-      if(this.queryOID && this.queryPID){
+      if(this.queryOID != null && this.queryPID != null){
       this.router.navigate([link.routerLink || link],{ queryParams: { oid: this.queryOID, pid: this.queryPID }, queryParamsHandling:'merge', skipLocationChange:false});
       }
       this.activateActiveClass(link);

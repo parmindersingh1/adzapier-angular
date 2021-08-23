@@ -146,7 +146,7 @@ export class AnalyticsComponent implements OnInit {
     }, {
       id: 5,
       isLicensepurchased: this.isConsentPreferenceLicenseAssignedToProperty,
-      title: "Consent preference",
+      title: "Consent Preference",
       iconcss: "fas fa-file-signature tx-primary temp-blue center tx-64 margin-15",
       content: "Collect user preference consent, document opt-ins/out via your web forms and systems.",
       tooltipcontent: this.isConsentPreferenceLicenseAssignedToProperty ? '' : this.consentTooltipText,
