@@ -71,11 +71,11 @@ const routes: Routes = [
   { path: 'verify-email/:id', loadChildren: () => import('./verifyemail/verifyemail.module').then(m => m.VerifyemailModule) },
   // { path: 'checkout', component: CheckoutComponent, canActivate: [AuthGuard] },
   // { path: 'success', component: CheckoutConfirmationComponent, canActivate: [AuthGuard] },
-  { path: '', redirectTo: 'home/welcome', pathMatch: 'full', runGuardsAndResolvers:'always' },
+  { path: '', redirectTo: 'home/welcome', pathMatch: 'full' },
   { path: 'plans', loadChildren: () => import('./plans/plan.module').then(m => m.PlanModule) },
   // { path: '', redirectTo: 'home/dashboard/analytics', pathMatch:'full' },
   // otherwise redirect to home
-  { path: '**', redirectTo: 'home/welcome', pathMatch: 'full', runGuardsAndResolvers:'always' }
+  { path: '**', redirectTo: 'home/welcome', pathMatch: 'full' } //, runGuardsAndResolvers:'always'
 ];
 
 @NgModule({

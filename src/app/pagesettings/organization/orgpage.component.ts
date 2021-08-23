@@ -3,7 +3,7 @@ import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { OrganizationService, UserService } from 'src/app/_services';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { DomSanitizer } from '@angular/platform-browser';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { CompanyService } from 'src/app/company.service';
 import { TablePaginationConfig } from 'src/app/_models/tablepaginationconfig';
@@ -59,13 +59,16 @@ export class OrgpageComponent implements OnInit {
   phone: any;
   companyID: any;
   currentUser: any;
+  queryOID;
+  queryPID;
   constructor(private formBuilder: FormBuilder,
               private orgservice: OrganizationService,
               private modalService: NgbModal, private sanitizer: DomSanitizer,
               private userService: UserService,
               private companyService: CompanyService,
               private router: Router,
-              private loading: NgxUiLoaderService
+              private loading: NgxUiLoaderService,
+              private activatedRoute: ActivatedRoute
   ) {
     this.paginationConfig = { itemsPerPage: this.pageSize, currentPage: this.p, totalItems: this.totalCount };
    }
@@ -96,6 +99,11 @@ export class OrgpageComponent implements OnInit {
     });
     this.loadOrganizationList();
     this.getLoggedInUserDetails();
+    this.activatedRoute.queryParamMap
+      .subscribe(params => {
+        this.queryOID = params.get('oid');
+        this.queryPID = params.get('pid');
+      });
   }
   get orgProp() { return this.organisationPropertyForm.controls; }
   get editOrg() { return this.editOrganisationForm.controls; }
@@ -371,7 +379,9 @@ export class OrgpageComponent implements OnInit {
   }
 
   viewOrganization(orgID) {
-    this.router.navigate(['settings/organizations/details', orgID]);
+    if (this.queryOID !== undefined && this.queryPID !== undefined) {
+      this.router.navigate(['settings/organizations/details', orgID], { queryParams: { oid: this.queryOID, pid: this.queryPID }, queryParamsHandling: 'merge', skipLocationChange: false });
+    }
   }
 
   sortNumberColumn() {
