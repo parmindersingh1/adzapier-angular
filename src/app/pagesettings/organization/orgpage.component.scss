@@ -56,7 +56,6 @@
 
 .table.table.table-bordered > tbody > tr > td > a {
     color: #0168fa;
-    cursor: pointer;
 }
 
 .table.table.table-bordered > tbody > tr > td > a:hover {
@@ -113,7 +112,7 @@
 }
 
 tr.row-disabled > td > a {
-    color: #fff !important;
+    color: #fff;
 }
 
 
@@ -175,4 +174,12 @@ tr.row-disabled > td > a {
     -moz-appearance: none;
     -webkit-appearance: none;
     appearance: none;
+}
+
+.disabledText {
+    color:#000000;
+}
+
+.cursor-pointer {
+    cursor: pointer;
 }

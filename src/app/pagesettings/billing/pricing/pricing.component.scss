@@ -626,3 +626,11 @@ width: 32%;
   -webkit-appearance: none;
   appearance: none;
 }
+
+.dp-safari select {
+  background: #ffffff url('../../../../assets/imgs/down-arrow.svg') no-repeat;
+  background-position: 90% 55%;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
+}

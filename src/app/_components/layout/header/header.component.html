@@ -238,7 +238,7 @@
                   <p class="tx-12 tx-color-03">{{userRole}}</p>
                 </div>
                 <li *ngIf="!item.items" role="menuitem">
-                  <a class="dropdown-item" routerLink="{{item.routerLink}}" *ngIf="item.label !== 'Signout' && item.label !== 'Help Center'" [class.active]="selectedSubmenu == item.routerLink || activateSublink(item)" (click)="goto(item)">
+                  <a class="dropdown-item" routerLink="{{item.routerLink}}" [queryParams]="{oid:queryOID , pid:queryPID}" *ngIf="item.label !== 'Signout' && item.label !== 'Help Center'" [class.active]="selectedSubmenu == item.routerLink || activateSublink(item)" (click)="goto(item)">
                     <i-feather *ngIf="item.icon" name="{{item.icon}}" class="feather-16"></i-feather>{{item.label}}
                   </a>
                   <a class="dropdown-item" routerLink="{{item.routerLink}}" *ngIf="item.label === 'Signout'" (click)="logout()"> <!--routerLink="{{item.routerLink}}"-->
@@ -253,7 +253,7 @@
                 </li>
                 <li *ngIf="item.items" role="menuitem" dropdown triggers="mouseover" placement="top left"
                   container="body">
-                  <a class="dropdown-item"  routerLink="{{item.routerLink}}" [class.active]="selectedSubmenu == item.routerLink" (click)="false">
+                  <a class="dropdown-item"  routerLink="{{item.routerLink}}" [queryParams]="{oid:queryOID , pid:queryPID}" [class.active]="selectedSubmenu == item.routerLink" (click)="false">
                     <i class="fas fa-caret-left dropdown-submenu-left"></i> {{ item.label }}</a>
                   <ul *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu">
                     <ng-container *ngFor="let submenu of item.items">
@@ -360,7 +360,7 @@
            {{ menu.showlink }}</a></div>
         <ul [isAnimated]="true" [collapse]="collapseStatus(r)" class="dropdown-menu">
           <ng-container *ngFor="let item of menu.subcategory;let q = index;">
-            <li *ngIf="menu.showlink == 'Privacy' && q===0" class="displayflex"><span>DSAR366</span></li>
+            <li *ngIf="menu.showlink == 'Privacy' && q===0" class="displayflex"><span>DSAR</span></li>
             <li role="menuitem">
               <a class="dropdown-item" [class.active]="activateSublink(item)" routerLink="{{item.routerLink}}" (click)="goto(item)">
                 <span *ngIf="item.icon.indexOf('fa')===-1">
