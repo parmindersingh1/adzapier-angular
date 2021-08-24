@@ -580,8 +580,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
           //  this.loading.start('1');
             this.loadPropertyPlanDetails(obj);
             //this.orgservice.setCurrentOrgWithProperty(obj); // three
-            this.router.navigate([this.router.url], { queryParams: { oid: obj.organization_id, pid: obj.property_id }, queryParamsHandling:'merge', skipLocationChange:false} );
-            this.dataService.checkClickedURL.next('/home/welcome'+'?oid='+obj.organization_id+'&pid='+obj.property_id);
+            if(this.router.url.indexOf("type=manage") == -1 && this.router.url.indexOf("manage?success") == -1){
+              this.router.navigate([this.router.url], { queryParams: { oid: obj.organization_id, pid: obj.property_id }, queryParamsHandling:'merge', skipLocationChange:false} );
+            } else{
+              this.router.navigate(['settings/billing/manage'], { queryParams: { oid: obj.organization_id, pid: obj.property_id }, queryParamsHandling:'merge', skipLocationChange:false} );
+            }
+           // this.dataService.checkClickedURL.next('/home/welcome'+'?oid='+obj.organization_id+'&pid='+obj.property_id);
             // this.dataService.getPropertyPlanDetails(this.constructor.name, moduleName.cookieConsentModule, obj.property_id)
             // .subscribe((res: any) => {
             //   this.dataService.setPropertyPlanToLocalStorage(res);
@@ -1298,11 +1302,17 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  ngAfterViewInit(){
+  ngAfterViewInit() {
     this.activatedroute.queryParamMap.subscribe(params => {
-   this.queryOID = params.get('oid');
-   this.queryPID = params.get('pid');
-  });
+      this.queryOID = params.get('oid');
+      this.queryPID = params.get('pid');
+    });
+    //if logout from one tab, all tab redirect to login page
+    window.addEventListener('storage', event => {
+      if (event !== undefined && event.storageArea.length === 0) {
+        this.router.navigate(['/login']);
+      }
+    });
   }
 
   ngOnDestroy(){
