@@ -429,11 +429,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
       }else{
         orgIndex = this.orgPropertyMenu.findIndex((t) => t.id == selectedItem.id);
       }
-      if (orgIndex !== -1) {
+      if (orgIndex == -1) {
         this.selectedOrgProperties.push(this.orgPropertyMenu[orgIndex]);
       }
       if (this.selectedOrgProperties !== undefined && this.selectedOrgProperties.length > 0) {
-        return this.selectedOrgProperties.filter((t) => t.id === selectedItem.id).length > 0;
+        return this.selectedOrgProperties.some((t) => t.organization_id === selectedItem.id);
       }
     }
   }
