@@ -1423,8 +1423,11 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
       const workfloworder = this.workflowStages.filter((t) => t.id === id);
       const x = this.workflowStages.slice(0, workfloworder[0].order);
       this.selectedStages = x;
-    } 
-     else if (!this.isEmailVerified && !this.isemailverificationRequired){
+    } else if (this.isEmailVerified && this.isemailverificationRequired){
+      this.selectedStages.push(this.workflowStages[0]);
+      this.selectedStages.push(this.workflowStages[1]);
+      this.currentWorkflowStageID = this.workflowStages[1].id;
+    } else if (!this.isEmailVerified && !this.isemailverificationRequired){
       this.selectedStages.push(this.workflowStages[0]);
       this.selectedStages.push(this.workflowStages[1]);
       this.currentWorkflowStageID = this.workflowStages[1].id;
