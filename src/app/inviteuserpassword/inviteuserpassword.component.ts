@@ -114,11 +114,17 @@ export class InviteuserpasswordComponent implements OnInit {
      .subscribe((data) => {
        if (data) {
          this.show = true;
+         this.isOpen = true;
+         this.alertMsg = "Password set successfully";
+         this.alertType = 'success';
          this.successmessage = 'Password has been set successfully!';
          this.router.navigate(['/login']);
        }
      }, (error) => {
        this.errormessage = error.Invalid_token;
+       this.isOpen = true;
+       this.alertMsg = "Something went wrong";
+       this.alertType = 'danger';
      });
   }
 
