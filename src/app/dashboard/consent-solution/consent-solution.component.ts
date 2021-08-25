@@ -49,7 +49,7 @@ export class ConsentSolutionComponent implements OnInit {
       },
     }
   };
-  public doughnutChartLabels: Label[] = ['News Letter', 'Privacy Info', 'Term Of Service', 'Other'];
+  public doughnutChartLabels: Label[] = ['News Letter', 'Privacy Info', 'Terms and Conditions', 'Other'];
   public doughnutChartData: number[] = [300, 500, 100];
   public doughnutChartType: ChartType = 'doughnut';
   consentColor = ['#f77eb9', '#fdb16d', '#65e0e0', '#69b2f8'];
