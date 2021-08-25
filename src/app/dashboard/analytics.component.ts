@@ -167,6 +167,7 @@ export class AnalyticsComponent implements OnInit {
       if (this.noOfLicensePurchased == 5) {
         this.appsPositionRowOne.length = 0;
         this.appsPositionRowTwo.length = 0;
+        this.appsPositionRowThree.length = 0;
         this.appsPositionRowOne = this.appsContent.filter((item) => item.isLicensepurchased == true).slice(0, 3);
         this.appsPositionRowTwo = this.appsContent.filter((item) => item.isLicensepurchased == true).slice(3, 5);
         this.skeletonLoading = false;
@@ -181,6 +182,7 @@ export class AnalyticsComponent implements OnInit {
       } else if (this.noOfLicensePurchased == 3) {
         this.appsPositionRowOne.length = 0;
         this.appsPositionRowThree.length = 0;
+        this.appsPositionRowTwo.length = 0;
         this.appsPositionRowOne = this.appsContent.filter((item) => item.isLicensepurchased == true);
         this.appsPositionRowThree = this.appsContent.filter((item) => item.isLicensepurchased == false);
         this.skeletonLoading = false;
