@@ -67,9 +67,9 @@ export class UserService {
           }));
     }
 
-    inviteusersetpassword(componentName, moduleName, user_id:string , newpassword, confirmnewpassword): Observable<any> {
-        const path = '/invite/user/setpassword/' + user_id;
-        return this.http.post<any>(environment.apiUrl + path, { newpassword, confirmnewpassword })
+    inviteusersetpassword(componentName, moduleName, user_id:string ,token, newpassword, confirmnewpassword): Observable<any> {
+        const path = '/invite/user/setpassword/' + user_id + '?token=' + token ;
+        return this.http.post<any>(environment.apiUrl + path , { newpassword, confirmnewpassword })
         .pipe(catchError(error => {
             this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.resetPassword, componentName, moduleName, path);
             return throwError(error);

@@ -35,6 +35,7 @@ export class InviteuserpasswordComponent implements OnInit {
   successmessage: any;
   errormessage: any;
   public userid: string;
+  tokenID;
   constructor(
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
@@ -46,6 +47,8 @@ export class InviteuserpasswordComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
   ) {
     this.activatedRoute.snapshot.paramMap.get('userid');
+    this.tokenID = this.route.snapshot.queryParams["token"];
+
 
    }
 
@@ -106,7 +109,7 @@ export class InviteuserpasswordComponent implements OnInit {
 
     this.loading = true;
     this.userService.inviteusersetpassword(this.constructor.name, moduleName.inviteUserModule,
-      this.f.token.value, this.f.password.value, this.f.confirmpassword.value)
+      this.f.token.value, this.tokenID, this.f.password.value, this.f.confirmpassword.value)
      .pipe(first())
      .subscribe((data) => {
        if (data) {
