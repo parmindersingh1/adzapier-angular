@@ -1,0 +1,78 @@
+<div class="container">
+
+      <form [formGroup]="mySqlForm" class="mt-3" (ngSubmit)="onSubmit()">
+        <div class="row">
+
+          <div class="col-md-6">
+            <div class="form-group w-75">
+              <label>Connection  Name</label>
+              <input type="text" formControlName="connection_name" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.connection_name.errors }" />
+              <div *ngIf="submitted && f.connection_name.errors" class="invalid-feedback">
+                <div *ngIf="f.connection_name.errors.required">This Field is required</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="form-group w-75">
+              <label>Connection Description</label>
+              <textarea formControlName="connection_desc" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.connection_desc.errors }"></textarea>
+              <div *ngIf="submitted && f.connection_desc.errors" class="invalid-feedback">
+                <div *ngIf="f.connection_desc.errors.required">This Field is required</div>
+              </div>
+            </div>
+          </div>
+
+
+
+          <div class="col-md-6">
+            <div class="form-group w-75">
+              <label>Connector  Type</label>
+              <input type="text" formControlName="connector_type" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.connector_type.errors }" />
+              <div *ngIf="submitted && f.connector_type.errors" class="invalid-feedback">
+                <div *ngIf="f.connector_type.errors.required">This Field is required</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-12 divider-text">Mysql Credential</div>
+
+          <ng-container formArrayName="credential">
+          <div class="col-md-6" *ngFor="let credential of mySqlForm.controls.credential['controls']; let i=index"  [formGroupName]="i">
+              <div class="form-group w-75">
+                <label class="text-capitalize">{{mySqlForm.value.credential[i].key}}</label>
+                <input type="hidden" formControlName="key" [value]="credential.key" />
+                <input type="text" formControlName="secret_1" class="form-control" [ngClass]="{ 'is-invalid': submitted && credential.get('secret_1').errors }" />
+                <div *ngIf="submitted && credential.get('secret_1').errors" class="invalid-feedback">
+                  <div *ngIf="credential.get('secret_1').errors.required">This Field is required</div>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+
+          <div class="col-md-6">
+            <button type="submit" (click)="submitType = 'test'" [disabled]="isTesting"  class="btn btn-outline-secondary">
+              <div *ngIf="isTesting" class="spinner-border"></div>
+              Test Connection</button>
+            <div *ngIf="isTesting" class="progress mt-4 w-75">
+              <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:  100%"></div>
+            </div>
+            <p *ngIf="!testingSuccess" class="text-danger mt-2">{{alertMsg}}</p>
+            <p *ngIf="testingSuccess" class="text-success mt-2">Connection Stabilized.!</p>
+          </div>
+
+          <div class="col-md-12">
+            <div class="divider-text"></div>
+            <div class="text-center">
+              <button type="button" (click)="onReset()" [disabled]="isTesting"  class="btn btn-secondary">Reset</button>
+              <button type="submit" (click)="submitType = 'submit'" [disabled]="isTesting"  class="btn btn-primary ml-4">Submit</button>
+            </div>
+          </div>
+
+        </div>
+      </form>
+</div>
+
+
+<div class="col-sm-5 mr-0 float-right flotingdiv" [ngClass]="{'hide':!isOpen}">
+  <alert *ngIf="isOpen" [type]="alertType" dismissOnTimeout="5000" [dismissible]="dismissible">{{  alertMsg}}</alert>
+</div>

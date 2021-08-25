@@ -86,6 +86,11 @@ export const apiConstant = {
   EXPORT_CONSENT_LEGAL_NOTICES: '/consent-preference/legal-notices/export/:pid',
   EXPORT_CONSENT_PROOFS: '/consent-preference/proofs/export/:pid',
   EXPORT_CONSENT_PREFERENCE: '/consent-preference/preference/export/:pid',
+
+  // System Integration
+  SYSTEM_INTEGRATION_LIST: '/integration/system-list',
+  CONNECTION_INTEGRATION_LIST: '/integration/connection-by-company',
+  INTEGRATION_SYSTEM: '/integration/credentials/:oid/:pid/:connectionID',
 };
 
 // {
