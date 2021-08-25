@@ -40,9 +40,13 @@ export class LicenseguardService implements CanActivate {
           if (finalObj !== null && Object.keys(finalObj).length !== 0) {
             return true;
           } else {
-            this.router.navigate(['/home/dashboard/analytics'], { queryParams: { oid: oIDPIDFromURL[0], pid: oIDPIDFromURL[1] }, skipLocationChange: false });
-            this.dataService.openUpgradeModalForDsar(results);
-            return false;
+            if (this.router.url.indexOf('/welcome') === -1) {
+              this.router.navigate(['/home/dashboard/analytics'], { queryParams: { oid: oIDPIDFromURL[0], pid: oIDPIDFromURL[1] }, skipLocationChange: false });
+              this.dataService.openUpgradeModalForDsar(results);
+              return false;
+            } else {
+              return false;
+            }
           }
         }
       }
