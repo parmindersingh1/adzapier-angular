@@ -223,6 +223,8 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
   duplicateRequestStatus;
   isSubmitBtnClickedOnce;
   //isduplicatedIdSelected = false;
+  queryOID;
+  queryPID;
   constructor(private activatedRoute: ActivatedRoute,
               private router: Router,
               private orgService: OrganizationService,
@@ -266,6 +268,12 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
       this.queryOrgID = params.get('orgid');
       this.queryPropID = params.get('propid');
     });
+
+    this.activatedRoute.queryParamMap
+    .subscribe(params => {
+   this.queryOID = params.get('oid');
+   this.queryPID = params.get('pid');
+      });
 
     this.quillEditorText = new FormGroup({
       editor: new FormControl('', Validators.required),
@@ -338,11 +346,11 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
         this.currentPropertyName = response.property_name;
         this.currentSelectedOrgname = response.organization_name;
       } else {
-        const orgDetails = this.orgService.getCurrentOrgWithProperty();
-        this.currentManagedOrgID = orgDetails.organization_id || orgDetails.response.oid;
-        this.currrentManagedPropID = orgDetails.property_id;
-        this.currentPropertyName = orgDetails.property_name;
-        this.currentSelectedOrgname = orgDetails.organization_name;
+        //const orgDetails = this.orgService.getCurrentOrgWithProperty();
+        this.currentManagedOrgID = this.queryOID; //orgDetails.organization_id || orgDetails.response.oid;
+        this.currrentManagedPropID = this.queryPID;// orgDetails.property_id;
+        // this.currentPropertyName = orgDetails.property_name;
+        // this.currentSelectedOrgname = orgDetails.organization_name;
       }
     }, (error) => {
       this.alertMsg = error;
@@ -352,7 +360,7 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
   }
 
   backToDSARRequest() {
-    this.router.navigate(['privacy/dsar/requests']);
+    this.router.navigate(['privacy/dsar/requests'],{ queryParams: { oid: this.queryOID, pid: this.queryPID }, queryParamsHandling:'merge', skipLocationChange:false});
   }
 
   onRefresh(){
@@ -542,6 +550,7 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
   }
 
   getWorkflowStages(id) {
+    console.log(this.currentManagedOrgID,'currentManagedOrgID..');
     ///workflowId
     this.workflowService.getWorkflowById(this.constructor.name, moduleName.workFlowModule, this.currentManagedOrgID, id).subscribe((data) => {
       if (data.length > 0) {
@@ -1414,10 +1423,17 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
       const workfloworder = this.workflowStages.filter((t) => t.id === id);
       const x = this.workflowStages.slice(0, workfloworder[0].order);
       this.selectedStages = x;
-    } else if (!this.isEmailVerified || this.isEmailVerified){
+    } else if (this.isEmailVerified && this.isemailverificationRequired){
       this.selectedStages.push(this.workflowStages[0]);
       this.selectedStages.push(this.workflowStages[1]);
       this.currentWorkflowStageID = this.workflowStages[1].id;
+    } else if (!this.isEmailVerified && !this.isemailverificationRequired){
+      this.selectedStages.push(this.workflowStages[0]);
+      this.selectedStages.push(this.workflowStages[1]);
+      this.currentWorkflowStageID = this.workflowStages[1].id;
+    } else{
+      this.selectedStages.push(this.workflowStages[0]);
+      this.currentWorkflowStageID = this.workflowStages[0].id;
     }
 
   }
@@ -1432,11 +1448,11 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
       currentStageID = this.currentStageId ? this.currentStageId : this.currentWorkflowStageID;
     }
     //  return false;
-    if (currentStageID) {
+    if (currentStageID !== undefined && currentStageID.length !== 0) {
       let resp;
       this.dsarRequestService.getSubTaskByWorkflowID(this.requestID, currentStageID, this.constructor.name, moduleName.dsarRequestModule)
         .subscribe((data) => {
-          return this.subTaskListResponse = data;
+           this.subTaskListResponse = data;
         }, (error) => {
           this.alertMsg = error;
           this.isOpen = true;

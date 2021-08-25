@@ -8,6 +8,7 @@ import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
 import {featuresName} from '../../../_constant/features-name.constant';
 import {DataService} from '../../../_services/data.service';
 import {LazyLoadEvent} from 'primeng/api';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-manage-vendors',
@@ -45,11 +46,13 @@ export class ManageVendorsComponent implements OnInit {
   isAlliavinactive = true;
   isAllgoogleinactive = true;
   showVendorType = 1;
-
+  queryOID;
+  queryPID;
   constructor(
     private orgservice: OrganizationService,
     private gdprService: GdprService,
     private loading: NgxUiLoaderService,
+    private activateRoute: ActivatedRoute,
     private modalService: BsModalService,
     private cookieBanner: CookieBannerService,
     private dataService: DataService,
@@ -61,6 +64,12 @@ export class ManageVendorsComponent implements OnInit {
     this.onGetPropsAndOrgId();
     this.getAllVendorsData();
     this.onCheckSubscription();
+    
+    this.activateRoute.queryParamMap
+    .subscribe(params => {
+    this.queryOID = params.get('oid');
+    this.queryPID = params.get('pid'); 
+    });
   }
 
 
@@ -88,12 +97,12 @@ export class ManageVendorsComponent implements OnInit {
     this.cd.markForCheck();
     this.orgservice.currentProperty.subscribe((response) => {
       if (response !== '') {
-        this.currentManagedOrgID = response.organization_id || response.response.oid;
-        this.currrentManagedPropID = response.property_id || response.response.id;
+        this.currentManagedOrgID = response.organization_id || response.response.oid || this.queryOID;
+        this.currrentManagedPropID = response.property_id || response.response.id || this.queryPID;
       } else {
         const orgDetails = this.orgservice.getCurrentOrgWithProperty();
-        this.currentManagedOrgID = orgDetails.organization_id || orgDetails.response.oid;
-        this.currrentManagedPropID = orgDetails.property_id || orgDetails.response.id;
+        this.currentManagedOrgID = orgDetails.organization_id || orgDetails.response.oid || this.queryOID;
+        this.currrentManagedPropID = orgDetails.property_id || orgDetails.response.id || this.queryPID;
       }
     });
   }

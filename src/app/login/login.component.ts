@@ -67,7 +67,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     element.classList.remove('site-content');
     element.classList.add('container-fluid');
     element.style.padding = '0px';
-    element.style.margin = '0px';
     this.loginForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.pattern]],
       password: ['', [Validators.required]]
@@ -78,7 +77,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     const element = document.getElementById('main');
     element.classList.remove('container-fluid');
     element.style.padding = null;
-    element.style.margin = null;
     element.classList.add('container');
     element.classList.add('site-content');
   }

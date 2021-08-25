@@ -65,12 +65,19 @@ export class CreateworkflowComponent implements OnInit, AfterViewChecked, DirtyC
   isDirty: boolean;
   modalRef: BsModalRef;
   @ViewChild('confirmDeleteStageAlert') confirmDeleteStageAlert: TemplateRef<any>;
+  queryOID;
+  queryPID;
   constructor(private activatedRoute: ActivatedRoute,
               private workflowService: WorkflowService,
               private loadingBar: NgxUiLoaderService,
               private orgservice: OrganizationService,
               private bsmodalService: BsModalService,
               private cd: ChangeDetectorRef) {
+                this.activatedRoute.queryParamMap
+                .subscribe(params => {
+                  this.queryOID = params.get('oid');
+                  this.queryPID = params.get('pid');
+                });
   }
 
   ngOnInit() {

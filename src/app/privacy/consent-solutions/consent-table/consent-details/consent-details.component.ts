@@ -5,6 +5,7 @@ import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {moduleName} from '../../../../_constant/module-name.constant';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
   selector: 'app-consentlegal-table',
@@ -18,23 +19,15 @@ export class ConsentDetailsComponent implements OnInit {
   consentRecordList = [];
   modalRef: BsModalRef;
   proofFormConsent = '';
-  consentDataId = '';
   consentDatafirstname = '';
   consentDatalastname = '';
-  consentDataemail = '';
   consentDatads = '';
-  consentDatacountry = '';
-  consentDataowner = '';
-  consentDataip = '';
   consentDatacreated = '';
   consentDataupadted = '';
-  consentDatanews = '';
-  consentDataprivacy = '';
   LegalVersion = '';
   LegalIdentifier = '';
   LegalContent = '';
-  legalForm
-auth_id='';
+  auth_id = '';
   editConsentForm: FormGroup;
   submitted = false;
   dismissible = true;
@@ -43,14 +36,22 @@ auth_id='';
   isOpen = false;
   alertType: any;
   planDetails: any;
+  queryOID;
+  queryPID;
 
   constructor(private consentSolutionService: ConsentSolutionsService,
               private formBuilder: FormBuilder,
               private loading: NgxUiLoaderService,
+              private activatedroute: ActivatedRoute,
               private location: Location, private modalService: BsModalService) {
   }
 
   ngOnInit() {
+    this.activatedroute.queryParamMap
+      .subscribe(params => {
+        this.queryOID = params.get('oid');
+        this.queryPID = params.get('pid');
+      });
     try {
       this.consentSolutionService.consentSolutionDetails.subscribe(res => {
         if (res === null) {
@@ -70,14 +71,14 @@ auth_id='';
 
   initForm() {
     this.editConsentForm = this.formBuilder.group({
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
-      email: ['', [Validators.required,Validators.pattern]],
-      dataSource: ['', Validators.required],
-      country: ['', Validators.required],
+      firstName: [''],
+      lastName: [''],
+      email: ['', [Validators.required, Validators.pattern]],
+      dataSource: [''],
+      country: [''],
       ownerID: [''],
-      AuthID:['',Validators.required],
-      ipAddress: ['', Validators.required],
+      AuthID: [''],
+      ipAddress: [''],
     });
   }
 
@@ -103,7 +104,7 @@ auth_id='';
       country: this.editConsentForm.value.country,
       data_source: this.editConsentForm.value.dataSource,
       ip_address: this.editConsentForm.value.ipAddress,
-      auth_id:this.editConsentForm.value.AuthID,
+      auth_id: this.editConsentForm.value.AuthID,
     };
     this.loading.start();
     this.consentSolutionService.updateConsent(this.constructor.name, moduleName.consentSolutionModule, payloads, this.consentData.id)
@@ -137,7 +138,7 @@ auth_id='';
     this.modalRef = this.modalService.show(edit, {});
   }
 
-  editLegal(editLeg , legalRecord){
+  editLegal(editLeg, legalRecord) {
     this.LegalVersion = legalRecord.version;
     this.LegalIdentifier = legalRecord.identifier;
     this.LegalContent = legalRecord.content;
@@ -153,7 +154,7 @@ auth_id='';
       country: this.consentData.country,
       ownerID: this.consentData.owner_id,
       ipAddress: this.consentData.ip_address,
-      AuthID:this.consentData.auth_id
+      AuthID: this.consentData.auth_id
     });
     this.modalRef = this.modalService.show(editdetails, {});
   }

@@ -78,9 +78,9 @@
           </div>
 
           <div class="text-center">
-            <a routerLink="/settings/billing/manage" (click)="template.hide()" class="btn mt-3 btn-primary"> <i
+            <a routerLink="/settings/billing/manage" (click)="onTemplateHide()" [queryParams]="{oid:queryOID , pid:queryPID}" class="btn mt-3 btn-primary"> <i
               _aria-hidden="true" class="fa fa-cogs pr-1"></i> Manage License</a>
-            <p class="cancel-btn mt-2 mb-2" (click)="template.hide()">or Cancel & Go Back</p>
+            <p class="cancel-btn mt-2 mb-2" (click)="onTemplateHide()">or Cancel & Go Back</p>
           </div>
         </div>
 
@@ -149,9 +149,9 @@
           </div>
 
           <div class="text-center">
-            <a routerLink="/settings/billing/manage" (click)="template.hide()" class="btn mt-3 btn-primary"> <i
+            <a routerLink="/settings/billing/manage" [queryParams]="{oid:queryOID , pid:queryPID}" (click)="onTemplateHide()"  class="btn mt-3 btn-primary"> <i
               _aria-hidden="true" class="fa fa-cogs pr-1"></i> Manage License</a>
-            <p class="cancel-btn mt-2 mb-2" (click)="template.hide()">or Cancel & Go Back</p>
+            <p class="cancel-btn mt-2 mb-2" (click)="onTemplateHide()">or Cancel & Go Back</p>
           </div>
         </div>
       </div>
@@ -284,7 +284,7 @@
           </div>
         </div>
         <div class="text-center">
-          <a routerLink="/settings/billing/manage" (click)="template.hide()" class="btn mt-3 btn-primary"> <i
+          <a routerLink="/settings/billing/manage" [queryParams]="{oid:queryOID , pid:queryPID}" (click)="template.hide()" class="btn mt-3 btn-primary"> <i
             _aria-hidden="true" class="fa fa-cogs pr-1"></i> Manage License</a>
           <p class="cancel-btn mt-2 mb-2" (click)="onTemplateHide()">or Cancel & Go Back</p>
         </div>
