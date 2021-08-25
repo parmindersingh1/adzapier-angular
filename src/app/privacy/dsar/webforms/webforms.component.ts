@@ -1,5 +1,5 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { Router, NavigationEnd } from '@angular/router';
+import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { CCPAFormConfigurationService } from 'src/app/_services/ccpaform-configuration.service';
 import { OrganizationService, UserService } from 'src/app/_services';
 import { CCPAFormFields } from 'src/app/_models/ccpaformfields';
@@ -9,6 +9,7 @@ import { DataService } from 'src/app/_services/data.service';
 import { DirtyComponents } from 'src/app/_models/dirtycomponents';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { debounceTime, filter } from 'rxjs/operators';
 interface WebFormModel {
   crid: any;
   form_name: string;
@@ -65,6 +66,8 @@ export class WebformsComponent implements OnInit, DirtyComponents {
   isconfirmationsubmitted: boolean;
   selectedWebForm: any;
   controlname: string;
+  queryOID;
+  queryPID;
   constructor(private ccpaFormConfigService: CCPAFormConfigurationService,
               private organizationService: OrganizationService,
               private loading: NgxUiLoaderService,
@@ -72,6 +75,7 @@ export class WebformsComponent implements OnInit, DirtyComponents {
               private dataService: DataService,
               private formBuilder: FormBuilder,
               private bsmodalService: BsModalService,
+              private activateRoute:ActivatedRoute,
               private router: Router) {
     this.router.events.subscribe((e) => {
       if (e instanceof NavigationEnd) {
@@ -79,10 +83,18 @@ export class WebformsComponent implements OnInit, DirtyComponents {
         this.currentLoggedInUser();
       }
     });
+   
+
+   this.activateRoute.queryParamMap
+   .subscribe(params => {
+     this.queryOID = params.get('oid');
+     this.queryPID = params.get('pid'); 
+    });
   }
 
   ngOnInit() {
     // this.loading = true;
+   
     this.loadCurrentProperty();
     this.currentLoggedInUser();
     this.licenseAvailabilityForFormAndRequestPerOrg(this.currentOrgID);
@@ -97,11 +109,14 @@ export class WebformsComponent implements OnInit, DirtyComponents {
     this.organizationService.currentProperty.subscribe((data) => {
       if (data !== '') {
         this.orgDetails = data;
-        this.currentOrgID = this.orgDetails.organization_id;
+        this.currentOrgID = this.orgDetails.organization_id || this.orgDetails.response.oid || this.queryOID;
        } else {
-        const orgDetails = this.organizationService.getCurrentOrgWithProperty();
-        this.orgDetails = orgDetails;
-        this.currentOrgID = orgDetails.organization_id;
+       // const orgDetails = this.organizationService.getCurrentOrgWithProperty();
+        this.orgDetails = {
+          organization_id : this.queryOID,
+          property_id: this.queryPID
+        };
+        this.currentOrgID = this.orgDetails.organization_id || this.queryOID;
         }
     });
 
@@ -116,7 +131,7 @@ export class WebformsComponent implements OnInit, DirtyComponents {
     const perPageRecords = this.numofRecords ? this.numofRecords : 10;
      const pagelimit = '?limit=' + perPageRecords + '&page=' + this.activePage;
     if (orgDetails !== undefined) {
-      this.ccpaFormConfigService.getCCPAFormList(orgDetails.organization_id, orgDetails.property_id,
+      this.ccpaFormConfigService.getCCPAFormList(orgDetails.organization_id || orgDetails.response.oid, orgDetails.property_id || orgDetails.response.id,
         this.constructor.name, moduleName.dsarWebFormModule,pagelimit)
         .subscribe((data) => {
           this.loading.stop();
@@ -142,14 +157,14 @@ export class WebformsComponent implements OnInit, DirtyComponents {
   showForm(data) {
     this.ccpaFormConfigService.removeCurrentSelectedFormData();
     this.ccpaFormConfigService.captureCurrentSelectedFormData(data);
-    this.router.navigate(['/privacy/dsar/dsarform', data.crid]);
+    this.router.navigate(['/privacy/dsar/dsarform', data.crid], { queryParams: { oid: this.queryOID, pid: this.queryPID }, queryParamsHandling:'merge', skipLocationChange:false});
   }
 
   navigateToDSARForm() {
    if (this.currentPropertyName !== undefined) {
     if(this.isLicenseLimitAvailable()){
       this.ccpaFormConfigService.removeCurrentSelectedFormData();
-      this.router.navigate(['/privacy/dsar/dsarform']);
+      this.router.navigate(['/privacy/dsar/dsarform'],{ queryParams: { oid: this.queryOID, pid: this.queryPID }, queryParamsHandling:'merge', skipLocationChange:false});
      }
     } else {
       this.alertMsg = 'Please Select property first!';
@@ -269,6 +284,7 @@ export class WebformsComponent implements OnInit, DirtyComponents {
         this.alertType = 'info';
         this.confirmationForm.controls['userInput'].setValue('');
         this.isconfirmationsubmitted = false;
+        this.licenseAvailabilityForFormAndRequestPerOrg(this.currentOrgID);
       }
     },(error) => {
       this.alertMsg = error;

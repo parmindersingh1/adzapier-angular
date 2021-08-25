@@ -18,7 +18,7 @@ export class CcpadataService {
   }
 
   addCCPADataActivity(componentName, moduleName, activitytype, ccpaDataId, reqObj) {
-    const activityType = activitytype === "0" ? 'internal' : 'public';
+    const activityType = activitytype === 0 ? 'internal' : 'public';
     const path = '/ccpa/activity/' + activityType + '/' + ccpaDataId;
     return this.httpClient.post<any>(environment.apiUrl + path, reqObj)
       .pipe(catchError(error => {

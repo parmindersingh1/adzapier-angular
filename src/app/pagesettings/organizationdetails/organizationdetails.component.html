@@ -2,9 +2,9 @@
     <div class="mb-3">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb breadcrumb-style1 mg-b-0">
-                <li class="breadcrumb-item"><a routerLink="/settings">Settings</a></li>
+                <li class="breadcrumb-item"><a routerLink="/settings" [queryParams]="{oid:queryOID , pid:queryPID}">Settings</a></li>
                 <li class="breadcrumb-item active" aria-current="page"><a
-                        routerLink="/settings/organizations">Organizations</a></li>
+                        routerLink="/settings/organizations" [queryParams]="{oid:queryOID , pid:queryPID}">Organizations</a></li>
                 <li class="breadcrumb-item active" aria-current="page">Details</li>
 
             </ol>
@@ -154,12 +154,16 @@
                                 {{list.website}}
                             </td>
                             <td>
-                              <span *ngIf="list.license_id !== null"><span *ngIf="(list.planDetails | json).length > 2">{{list.planDetails.product_name}}</span></span>
-                              <span *ngIf="(list.license_id == null || list.license_id == '') && list.active"> <button class="btn btn-primary btn-xs" (click)="redirectToManageLicense()">Manage License</button></span> 
+                                <span *ngFor="let data of list.property_licenses; let last = last">
+                                      {{data.subscription.product.name}}                          
+                                </span>
+                                <span *ngIf="list.property_licenses.length == 0">
+                                    <button class="btn btn-primary btn-xs" (click)="redirectToManageLicense()">Manage License</button>
+                                </span>
                             </td>
                             <td>
                                 <!-- <i-feather name="edit-3" class="feather-16"></i-feather> -->
-                                <a class="pd-r-5" (click)="editModalPopup(propertyModal,list)">
+                                <a class="pd-r-5" *ngIf="list.active" (click)="editModalPopup(propertyModal,list)">
                                    <span class="cursorpointer"><i class="far fa-edit fa-1x"></i></span>
                                 </a>
                                 <a class="pd-r-5" *ngIf="list.active"
@@ -427,7 +431,7 @@
                             [ngClass]="{ 'is-invalid': submitted && editOrg.phone.errors }" />
                         <div *ngIf="submitted && editOrg.phone.errors" class="invalid-feedback">
                             <div *ngIf="editOrg.phone.errors.required">Phone is required</div>
-                            <div *ngIf="editOrg.phone.errors.pattern">Enter valid phone number</div>
+                            <div *ngIf="editOrg.phone.errors || editOrg.phone.errors.pattern">Enter valid phone number</div>
                         </div>
                     </div>
                 </div>

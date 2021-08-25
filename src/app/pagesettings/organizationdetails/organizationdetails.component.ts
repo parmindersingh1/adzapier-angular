@@ -12,6 +12,8 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { DataService } from 'src/app/_services/data.service';
 import { featuresName } from 'src/app/_constant/features-name.constant';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
+import { Location } from '@angular/common';
+import { findPropertyIDFromUrl } from 'src/app/_helpers/common-utility';
 
 // import { CompanyService } from '../company.service';
 @Component({
@@ -42,7 +44,7 @@ export class OrganizationdetailsComponent implements OnInit {
   pageSize: any = 5;
   totalCount: any;
   paginationConfig: TablePaginationConfig;
-
+  userID;
   p2: number = 1;
   propertyPgSize: any = 5;
   propertyTotalCount: any;
@@ -89,6 +91,8 @@ export class OrganizationdetailsComponent implements OnInit {
   private orgPlanDetails: any;
   orgLicensedPlanName;
   selectusertype = true;
+  queryOID;
+  queryPID;
   constructor(private activatedRoute: ActivatedRoute,
               private orgService: OrganizationService,
               private modalService: NgbModal,
@@ -99,11 +103,12 @@ export class OrganizationdetailsComponent implements OnInit {
               private dataService: DataService,
               private bsmodalService: BsModalService,
               private loading: NgxUiLoaderService,
+              private location: Location,
               private cdref: ChangeDetectorRef) {
-    this.orgService.currentProperty.subscribe((data) => {
-      this.currentManagedOrgID = data.organization_id;
-      this.currrentManagedPropID = data.property_id;
-    });
+    // this.orgService.currentProperty.subscribe((data) => {
+    //   this.currentManagedOrgID = data.organization_id || data.response.oid;
+    //   this.currrentManagedPropID = data.property_id || data.response.id;
+    // });
     this.paginationConfig = { itemsPerPage: this.pageSize, currentPage: this.p, totalItems: this.totalCount, id: 'userPagination' };
     this.propertyPageConfig = {
       itemsPerPage: this.propertyPgSize, currentPage: this.p2,
@@ -114,23 +119,30 @@ export class OrganizationdetailsComponent implements OnInit {
   ngOnInit() {
     this.orgService.currentProperty.subscribe((response) => {
       if (response !== '') {
-        this.currentManagedOrgID = response.organization_id;
-        this.currrentManagedPropID = response.property_id;
+        this.currentManagedOrgID = response.organization_id || response.response.oid;
+        this.currrentManagedPropID = response.property_id || response.response.id;
       } else {
         const orgDetails = this.orgService.getCurrentOrgWithProperty();
         if (orgDetails !== undefined) {
           this.currentManagedOrgID = orgDetails.organization_id;
-          this.currrentManagedPropID = orgDetails.property_id;
+          this.currrentManagedPropID = orgDetails.property_id
         }
       }
     });
     this.loadRoleList();
 
     this.activatedRoute.paramMap.subscribe(params => {
-      this.organizationID = params.get('id');
-      this.loadOrganizationByID(this.organizationID);
-      this.getPropertyList(this.organizationID);
-      this.loadOrgTeamMembers(this.organizationID);
+        this.organizationID = params.get('id');
+        let oIDPIDFromURL = findPropertyIDFromUrl(this.location.path())
+        if(this.organizationID !== undefined && this.organizationID.indexOf('oid') !== -1){
+          this.loadOrganizationByID(oIDPIDFromURL[0]);
+          this.getPropertyList(oIDPIDFromURL[0]);
+          this.loadOrgTeamMembers(oIDPIDFromURL[0]);
+        }else{
+          this.loadOrganizationByID(this.organizationID);
+          this.getPropertyList(this.organizationID);
+          this.loadOrgTeamMembers(this.organizationID);
+        }
 
     });
 
@@ -167,7 +179,7 @@ export class OrganizationdetailsComponent implements OnInit {
       state: ['', [Validators.required, Validators.pattern(strRegx)]],
       zipcode: ['', [Validators.required, Validators.pattern(zipRegex)]],
       email: ['', [Validators.required, Validators.pattern]],
-      phone: ['', [Validators.required, Validators.pattern(phoneNumRegx)]]
+      phone: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(15), Validators.pattern(phoneNumRegx)]]
     });
     this.confirmationForm = this.formBuilder.group({
       userInput: ['', [Validators.required]]
@@ -179,6 +191,11 @@ export class OrganizationdetailsComponent implements OnInit {
     this.organisationPropertyForm.patchValue({
       protocol:this.protocol
     })
+    this.activatedRoute.queryParamMap
+      .subscribe(params => {
+        this.queryOID = params.get('oid');
+        this.queryPID = params.get('pid');
+      });
   }
   get f() { return this.inviteUserOrgForm.controls; }
   get orgProp() { return this.organisationPropertyForm.controls; }
@@ -195,6 +212,7 @@ export class OrganizationdetailsComponent implements OnInit {
       this.zipcode = data.response.zipcode;
       this.email = data.response.email;
       this.phone = data.response.phone;
+      this.userID = data.response.uid;
       if(data.response.license_id){
         this.loadOrganizationLicenseNameByID(this.organizationID,data.response.license_id)
       }
@@ -424,7 +442,10 @@ export class OrganizationdetailsComponent implements OnInit {
             this.getPropertyList(res.response.oid);
             this.orgService.isPropertyUpdated.next(true);
             if (res.response.id === this.currrentManagedPropID) {
-              // this.orgService.changeCurrentSelectedProperty(res);
+              this.orgService.changeCurrentSelectedProperty(res);
+              res['user_id'] = this.userID;
+              res['organization_name'] = this.organizationName;
+              this.orgService.setCurrentOrgWithProperty(res);
               const orgDetails = this.orgService.getCurrentOrgWithProperty();
               this.orgService.isPropertyUpdated.next(true);
               this.orgService.updateEditedProperty(res);
@@ -530,7 +551,7 @@ export class OrganizationdetailsComponent implements OnInit {
           .subscribe((data) => {
             this.loading.stop();
             if (data) {
-              this.alertMsg = data.response;
+              this.alertMsg = data.response || data.error;
               this.isOpen = true;
               this.alertType = 'success';
               this.loadOrgTeamMembers(this.organizationID);

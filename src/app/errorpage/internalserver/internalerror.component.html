@@ -1,6 +1,6 @@
 <div class="errordiv">
     <h3>500</h3>
     <p>Internal Server Error</p>
-    <a class="btn btn-link" [routerLink]="['/home/welcome']"> Go to Dashboard</a>
-    <button class="btn btn-link" (click)="gotoPreviousLink()"> Go to Previoius page</button>
+    <a class="btn btn-link" [routerLink]="['/home/welcome']" [queryParams]="{oid:queryOID , pid:queryPID}"> Go to Dashboard</a>
+    <button class="btn btn-link" (click)="gotoPreviousLink()"> Go to Previoius page</button> <!--[routerLink]="['/home/welcome']" [queryParams]="{oid:queryOID , pid:queryPID}" -->
 </div>

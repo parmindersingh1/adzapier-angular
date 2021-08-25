@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit, TemplateRef} from '@angular/core';
 import {Router} from '@angular/router';
 import {BillingService} from '../../../_services/billing.service';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
@@ -6,7 +6,9 @@ import {DataService} from '../../../_services/data.service';
 import {UserService} from '../../../_services';
 import {moduleName} from '../../../_constant/module-name.constant';
 import {environment} from '../../../../environments/environment';
-import {featureCount, highLightFeatures} from '../../../_constant/main-plans.constant';
+import {featuresComparison, highLightFeatures} from '../../../_constant/main-plans.constant';
+import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
+
 @Component({
   selector: 'app-pricing',
   templateUrl: './pricing.component.html',
@@ -19,12 +21,13 @@ export class PricingComponent implements OnInit, OnDestroy {
   consentPreferenceList: any;
   skeletonLoader = false;
   highLightFeatures = highLightFeatures;
-  featureCount = featureCount;
+  featuresComparison = featuresComparison;
   subscriptionList = [];
   cookieConsentBillingCycle = 'monthly';
   addonsBillingCycle = 'monthly';
   stripe = (window as any).Stripe(environment.stripePublishablekey);
   cartItem = [];
+  currentFeature = 'cookieConsent';
   // subscriptionPlanType = 'CCPA';
   maxCookiePreferenceList = 4;
   subTotal = 0;
@@ -49,16 +52,19 @@ export class PricingComponent implements OnInit, OnDestroy {
   featuresList = [];
   isPromoCodeActive = false;
   isPromoCodeError = false;
+  currentStep = 1;
+  modalRef: BsModalRef;
 
   constructor(private router: Router,
               private loading: NgxUiLoaderService,
               private dataService: DataService,
               private userService: UserService,
+              private modalService: BsModalService,
               private billingService: BillingService) {
   }
 
   ngOnInit() {
-    this.onGetPlanCompareData()
+    // this.onGetPlanCompareData()
     this.onGetActivePlan();
     this.onGetPlanDetails();
     this.onGetUserEmail();
@@ -66,7 +72,14 @@ export class PricingComponent implements OnInit, OnDestroy {
     // this.onGetCurrentPlan();
     // const div = document.querySelector('#main');
     // div.classList.remove('container');
+    const element = document.getElementById('main');
+    element.classList.remove('container');
+    element.classList.remove('site-content');
+    element.classList.add('container-fluid');
+    element.style.padding = '0px';
+    element.style.margin = '0px';
   }
+
 
   onGetPlanCompareData() {
     this.loading.start('f1');
@@ -98,32 +111,34 @@ export class PricingComponent implements OnInit, OnDestroy {
   }
 
   onSelectActivePlan(record) {
-    const activeData = this.activeData;
-    for (const data of record) {
-      if (data.active && data.planDetails.type === 0) {
-        if (data.planDetails.price > activeData.cookieConsent.maxPrice) {
-          activeData.cookieConsent.maxPrice = data.planDetails.price;
-          activeData.cookieConsent.maxPlanID = data.planDetails.stripe_plan_id;
-          activeData.cookieConsent.cycle = data.planDetails.cycle;
-          this.cookieConsentBillingCycle = data.planDetails.cycle;
-        }
-      } else if (data.planDetails.price > activeData.dsar.maxPrice && data.active && data.planDetails.type === 1) {
+    try {
+      const activeData = this.activeData;
+      for (const data of record) {
+        if (data.active && data.planDetails.type === 0) {
+          if (data.planDetails.price > activeData.cookieConsent.maxPrice) {
+            activeData.cookieConsent.maxPrice = data.planDetails.price;
+            activeData.cookieConsent.maxPlanID = data.planDetails.stripe_plan_id;
+            activeData.cookieConsent.cycle = data.planDetails.cycle;
+            this.cookieConsentBillingCycle = data.planDetails.cycle;
+          }
+        } else if (data.planDetails.price > activeData.dsar.maxPrice && data.active && data.planDetails.type === 1) {
           activeData.dsar.maxPrice = data.planDetails.price;
           activeData.dsar.maxPlanID = data.planDetails.stripe_plan_id;
           activeData.dsar.cycle = data.planDetails.cycle;
           this.addonsBillingCycle = data.planDetails.cycle;
-        }
-       else if (data.planDetails.price > activeData.consentPreference.maxPrice && data.active && data.planDetails.type === 2) {
+        } else if (data.planDetails.price > activeData.consentPreference.maxPrice && data.active && data.planDetails.type === 2) {
           activeData.consentPreference.maxPrice = data.planDetails.price;
           activeData.consentPreference.maxPlanID = data.planDetails.stripe_plan_id;
           activeData.consentPreference.cycle = data.planDetails.cycle;
 
         }
+      }
+      this.activeData = activeData;
+      this.subscriptionList = this.planDetails.cookieConsent[`${this.cookieConsentBillingCycle}`];
+      this.dsarPlanList = this.planDetails.dsar[`${this.addonsBillingCycle}`];
+      this.consentPreferenceList = this.planDetails.consentPreference[`${this.addonsBillingCycle}`];
+    } catch (e) {
     }
-    this.activeData = activeData;
-    this.subscriptionList = this.planDetails.cookieConsent[`${this.cookieConsentBillingCycle}`];
-    this.dsarPlanList = this.planDetails.dsar[`${this.addonsBillingCycle}`];
-    this.consentPreferenceList = this.planDetails.consentPreference[`${this.addonsBillingCycle}`];
   }
 
   onGetPlanDetails() {
@@ -146,14 +161,17 @@ export class PricingComponent implements OnInit, OnDestroy {
 
   onSetPlans(plansData) {
     this.subscriptionList = plansData.cookieConsent[`${this.cookieConsentBillingCycle}`];
-    this.dsarPlanList = plansData.dsar[`${this.addonsBillingCycle}`];
-    this.consentPreferenceList = plansData.consentPreference[`${this.addonsBillingCycle}`];
+    this.dsarPlanList = plansData.dsar[`${this.cookieConsentBillingCycle}`];
+    this.consentPreferenceList = plansData.consentPreference[`${this.cookieConsentBillingCycle}`];
   }
 
   ngOnDestroy() {
-    const div = document.querySelector('#main');
-    // div.classList.remove('container');
-    div.classList.add('container');
+    const element = document.getElementById('main');
+    element.classList.remove('container-fluid');
+    element.style.padding = null;
+    element.style.margin = null;
+    element.classList.add('container');
+    element.classList.add('site-content');
   }
 
   onGetUserEmail() {
@@ -191,7 +209,10 @@ export class PricingComponent implements OnInit, OnDestroy {
         }
       }, error => {
         this.loading.stop();
-        console.log(error);
+        const err: any = JSON.parse(error);
+        this.isOpen = true;
+        this.alertMsg = err.message;
+        this.alertType = 'danger';
       });
     } else {
       location.reload();
@@ -207,12 +228,19 @@ export class PricingComponent implements OnInit, OnDestroy {
   }
 
   onSelectCookieConsentBillingCycle(e) {
-    if (e.checked) {
-      this.cookieConsentBillingCycle = 'yearly';
-      this.subscriptionList = this.planDetails.cookieConsent[`${this.cookieConsentBillingCycle}`];
-    } else {
-      this.cookieConsentBillingCycle = 'monthly';
-      this.subscriptionList = this.planDetails.cookieConsent[`${this.cookieConsentBillingCycle}`];
+    try {
+      if (e.checked) {
+        this.cookieConsentBillingCycle = 'yearly';
+        this.subscriptionList = this.planDetails.cookieConsent[`${this.cookieConsentBillingCycle}`];
+        this.dsarPlanList = this.planDetails.dsar[`${this.cookieConsentBillingCycle}`];
+        this.consentPreferenceList = this.planDetails.consentPreference[`${this.cookieConsentBillingCycle}`];
+      } else {
+        this.cookieConsentBillingCycle = 'monthly';
+        this.subscriptionList = this.planDetails.cookieConsent[`${this.cookieConsentBillingCycle}`];
+        this.dsarPlanList = this.planDetails.dsar[`${this.cookieConsentBillingCycle}`];
+        this.consentPreferenceList = this.planDetails.consentPreference[`${this.cookieConsentBillingCycle}`];
+      }
+    } catch (e) {
     }
   }
 
@@ -367,5 +395,16 @@ export class PricingComponent implements OnInit, OnDestroy {
       this.alertType = 'danger';
     })
   }
+  openModal(template: TemplateRef<any>) {
+    this.modalRef = this.modalService.show(template, {class: 'modal-lg', ignoreBackdropClick: true});
+  }
 
+  onSetCookieConsent(type, featureCompareType) {
+    this.currentFeature = featureCompareType;
+ this.currentStep = type;
+  this.cookieConsentBillingCycle = 'monthly';
+    this.subscriptionList = this.planDetails.cookieConsent[`${this.cookieConsentBillingCycle}`];
+    this.dsarPlanList = this.planDetails.dsar[`${this.cookieConsentBillingCycle}`];
+    this.consentPreferenceList = this.planDetails.consentPreference[`${this.cookieConsentBillingCycle}`];
+}
 }

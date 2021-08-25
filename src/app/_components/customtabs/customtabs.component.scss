@@ -98,6 +98,9 @@
     margin: 0;
     padding: 9px 10px 7px 10px;
     cursor: pointer;
+    outline: none;     
+    background: transparent;
+    border: 0;
 }
 
 .stageTitle {
@@ -109,6 +112,10 @@
 .selectedTab {
     background-color: #3c65b7;
     color: #fff;
+}
+
+.tabTitleWrapper.selectedTab button {
+    color:#fff;
 }
 
 .selectedTab::after {

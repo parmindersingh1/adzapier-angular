@@ -3,8 +3,7 @@
         <div>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb breadcrumb-style1 mg-b-10">
-                    <li class="breadcrumb-item"><a routerLink='/'>User</a></li>
-                    <li class="breadcrumb-item active">Preferences</li>
+                    <li class="breadcrumb-item active">User Preferences</li>
                 </ol>
             </nav>
         </div>
@@ -127,7 +126,7 @@
 
                         <div class="text-left">
                         <button class="btn btn-link tx-decoration-underline ml-0"  aria-label="Close" type="reset">Cancel</button>
-                        <button class="btn btn-primary ml-0">Save</button>
+                        <button class="btn btn-primary ml-0" type="submit">Save</button>
                         </div>
 
                     </form>
@@ -150,7 +149,7 @@
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label for="firstName" class="d-block">First Name</label>
-                            <input type="text" minlength="2" maxlength="20" formControlName="firstName" name="firstName" [(ngModel)]="firstName"
+                            <input type="text" minlength="2" maxlength="20" formControlName="firstName" name="firstName"
                                 class="form-control" placeholder="Enter your firstname"
                                 [ngClass]="{ 'is-invalid': submitted && f.firstName.errors }" />
                             <div *ngIf="submitted && f.firstName.errors" class="invalid-feedback">
@@ -267,8 +266,8 @@
                         <div class="form-group">
                             <label>&nbsp;</label>
                             <div class="text-right">
-                                <button class="btn btn-link tx-decoration-underline" type="button" (click)="onResetProfile()">Cancel</button>
-                                    <button class="btn btn-primary mr-0">Save</button>
+                                <button class="btn btn-link tx-decoration-underline" type="reset" (click)="modal.dismiss('Close Clicked')">Cancel</button>
+                                    <button class="btn btn-primary mr-0" type="submit">Save</button>
                             </div>
                         </div>
                     </div>

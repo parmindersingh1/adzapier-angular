@@ -8,9 +8,9 @@
                     <div *ngIf="currentSelectedStage(item.id) && isnewlyAddedStage" class="deleteicon" (click)="deleteNewStage(i)">
                         <i class="fa fa-trash" aria-hidden="true"></i>
                     </div> 
-                     <div *ngIf="customStages(item)" class="deleteicon" (click)="openModal(confirmDeleteStageAlert,i,item)">
+                     <button *ngIf="customStages(item)" [disabled]="flowStatus === 'active'" class="deleteicon" (click)="openModal(confirmDeleteStageAlert,i,item)">
                         <i class="fa fa-trash" aria-hidden="true"></i>
-                    </div> 
+                     </button> 
                     <div class="stageTitle" (click)="selectCurrentStage(item)">
                        {{item.stage_title}}
                     </div>                                      

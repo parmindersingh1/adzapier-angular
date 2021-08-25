@@ -402,6 +402,19 @@ span.ui-column-title {
   border-bottom: 0;
 }
 
+::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: #333333;
+  opacity: 1; /* Firefox */
+}
+
+.dp-safari select {
+  background: #ffffff url('../../../../assets/imgs/down-arrow.svg') no-repeat;
+  background-position: 95% 60%;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
 @media (min-width: 1024px) { 
   .container {
     max-width: 1024px;

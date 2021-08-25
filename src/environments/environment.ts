@@ -10,6 +10,7 @@ export const environment = {
   iabUrl: 'https://staging-cdn.adzapsrv.com/vendorlist/IABvendors/',
   googleVendorsUrl: 'https://staging-cdn.adzapsrv.com/vendorlist/googlevendorlist/google.json',
   apiUrl: 'https://develop-cmp-api.adzpier-staging.com/api/v1',
+  privacyportalUrl: 'https://develop-privacyportal.adzpier-staging.com/dsar/form/',
   globleLangURL: 'https://cdn.primeconsent.com/cmp/banner-language/:lang.json',
   // apiUrl: 'https://api.primeconsent.com/api/v1',
   customLangURL: 'https://staging-cdn.adzapsrv.com/cmp/v1/web/:oid/lang/:pid-:lang.json',

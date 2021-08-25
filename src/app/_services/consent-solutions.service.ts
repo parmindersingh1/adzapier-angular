@@ -7,6 +7,7 @@ import {LokiService} from './loki.service';
 import {LokiFunctionality, LokiStatusType} from '../_constant/loki.constant';
 import {BehaviorSubject, throwError} from 'rxjs';
 import {OrganizationService} from './organization.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -16,21 +17,29 @@ export class ConsentSolutionsService {
   public consentSolutionDetails = this.consentSolutionData.asObservable();
   currentManagedOrgID: any;
   currrentManagedPropID: any;
+  queryOID;
+  queryPID;
   constructor(private http: HttpClient,
+              private activateRoute: ActivatedRoute,
               private orgservice: OrganizationService,
               private loki: LokiService) {
     this.onGetPropsAndOrgId();
+    this.activateRoute.queryParamMap
+      .subscribe(params => {
+        this.queryOID = params.get('oid');
+        this.queryPID = params.get('pid'); 
+    });
   }
 
   onGetPropsAndOrgId() {
     this.orgservice.currentProperty.subscribe((response) => {
       if (response !== '') {
-        this.currentManagedOrgID = response.organization_id;
-        this.currrentManagedPropID = response.property_id;
+        this.currentManagedOrgID = response.organization_id || response.response.oid || this.queryOID;
+        this.currrentManagedPropID = response.property_id || response.response.id || this.queryPID;
       } else {
         const orgDetails = this.orgservice.getCurrentOrgWithProperty();
-        this.currentManagedOrgID = orgDetails.organization_id;
-        this.currrentManagedPropID = orgDetails.property_id;
+        this.currentManagedOrgID = orgDetails.organization_id || orgDetails.response.oid || this.queryOID;
+        this.currrentManagedPropID = orgDetails.property_id || orgDetails.response.id || this.queryPID;
       }
     });
   }

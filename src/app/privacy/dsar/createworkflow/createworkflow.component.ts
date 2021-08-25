@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, AfterViewChecked, ViewChild, TemplateRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, AfterViewChecked, ViewChild, TemplateRef, ElementRef } from '@angular/core';
 import { WorkflowService } from 'src/app/_services/workflow.service';
 import { FormGroup, NgForm } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
@@ -14,7 +14,9 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
   // changeDetection: ChangeDetectionStrategy.OnPush
 
 })
-export class CreateworkflowComponent implements OnInit, DirtyComponents {
+export class CreateworkflowComponent implements OnInit, AfterViewChecked, DirtyComponents {
+  //@ViewChild('quillEditorText') editor;
+  @ViewChild('quillEditorText', { read: ElementRef }) public quillTextEditor: ElementRef<any>;
   dismissible = true;
   isOpen = false;
   workflowList: any;
@@ -36,13 +38,17 @@ export class CreateworkflowComponent implements OnInit, DirtyComponents {
   submitted = true;
   isControlDisabled = false;
   isWorkflownameEdit = false;
+  isDefaultStage: boolean;
+  isEditingStage: boolean;
   alertMsg: any;
   alertType: any;
   quillConfig = {
     toolbar: {
       container: [
         ['bold', 'italic', 'underline', 'strike'],
+        //[false, false, 'underline', 'strike'],
         [{ header: 1 }, { header: 2 }],
+        ['clean'],
         ['link'],
         [{ align: [] }],
         [{ size: ['small', false, 'large', 'huge'] }]
@@ -55,16 +61,23 @@ export class CreateworkflowComponent implements OnInit, DirtyComponents {
   selectedStageId: any;
   selectedIndex: number;
   currentManagedOrgID: any;
-  defaultStages:any[];
+  defaultStages: any[];
   isDirty: boolean;
   modalRef: BsModalRef;
   @ViewChild('confirmDeleteStageAlert') confirmDeleteStageAlert: TemplateRef<any>;
+  queryOID;
+  queryPID;
   constructor(private activatedRoute: ActivatedRoute,
               private workflowService: WorkflowService,
               private loadingBar: NgxUiLoaderService,
               private orgservice: OrganizationService,
               private bsmodalService: BsModalService,
               private cd: ChangeDetectorRef) {
+                this.activatedRoute.queryParamMap
+                .subscribe(params => {
+                  this.queryOID = params.get('oid');
+                  this.queryPID = params.get('pid');
+                });
   }
 
   ngOnInit() {
@@ -86,7 +99,7 @@ export class CreateworkflowComponent implements OnInit, DirtyComponents {
 
 
     this.loadWorkflowById(this.selectedWorkflowId);
-    this.defaultStages = ['UNVERIFIED','NEW','VERIFY REQUEST','VERIFY CONSUMER REQUEST','LEGAL/PRIVACY REVIEW','REQUEST FULFILL','CONSUMER NOTIFICATION','IN PROGRESS','COMPLETE','NOTIFY'];
+    this.defaultStages = ['UNVERIFIED', 'NEW', 'VERIFY REQUEST', 'VERIFY CONSUMER REQUEST', 'LEGAL/PRIVACY REVIEW', 'REQUEST FULFILL', 'CONSUMER NOTIFICATION', 'IN PROGRESS', 'COMPLETE', 'NOTIFY'];
   }
 
   previousTab() {
@@ -100,7 +113,7 @@ export class CreateworkflowComponent implements OnInit, DirtyComponents {
   onGetOrgId() {
     this.orgservice.currentProperty.subscribe((response) => {
       if (response !== '') {
-        this.currentManagedOrgID = response.organization_id;
+        this.currentManagedOrgID = response.organization_id || response.response.oid;
       } else {
         const orgDetails = this.orgservice.getCurrentOrgWithProperty();
         this.currentManagedOrgID = orgDetails.organization_id;
@@ -121,7 +134,7 @@ export class CreateworkflowComponent implements OnInit, DirtyComponents {
   }
 
   clickOnWorkflowStages($event) {
-    if($event.id == ''){
+    if ($event.id == '') {
       this.isDirty = true;
     }
     this.selectedTab = $event;
@@ -130,6 +143,8 @@ export class CreateworkflowComponent implements OnInit, DirtyComponents {
     this.stageTitle = $event.stage_title;
     this.guidancetext = $event.guidance_text;
     this.order = $event.order;
+    this.isDefaultStage = $event.ws_stage_status == "default" || false;
+    this.isworkflowSaved = $event.ws_stage_status !== "default";
     this.isDefaultWorkflowStage();
   }
 
@@ -137,6 +152,7 @@ export class CreateworkflowComponent implements OnInit, DirtyComponents {
     if (this.selectedTab !== undefined) {
       const index = this.workflowStages.findIndex((t) => t.order === this.selectedTab.order);
       this.workflowStages[index].stage_title = e.currentTarget.value;
+      this.workflowStages[index].ws_stage_status == 'custom' ? this.isworkflowSaved = false : this.isworkflowSaved = true;
       this.stageTitle = e.currentTarget.value;
       this.isDirty = true;
     } else {
@@ -147,9 +163,24 @@ export class CreateworkflowComponent implements OnInit, DirtyComponents {
   }
 
   updateGuidanceText(e) {
+   // this.isEditingStage = true;
+   
+    if (this.isDefaultStage) {
+      this.quillTextEditor.nativeElement.querySelectorAll('.ql-formats').forEach(element => {
+        element.style.display = "none";
+        element.style.cursor = "not-allowed";
+      });
+    }
+    
     const index = this.workflowStages.findIndex((t) => t.id === this.selectedStageId);
     this.guidancetext = e.html;
-    this.workflowStages[index].guidance_text = this.guidancetext;
+    if(index !== -1){
+      this.workflowStages[index].guidance_text = this.guidancetext;
+      this.workflowStages[index].ws_stage_status == 'custom' ? this.isworkflowSaved = false : this.isworkflowSaved = true;
+    }else{
+      this.workflowStages[0].guidance_text = this.guidancetext;
+      this.workflowStages[0].ws_stage_status == 'custom' ? this.isworkflowSaved = false : this.isworkflowSaved = true;
+    }
   }
 
   rearrangeArrayResponse(dataArray) {
@@ -219,7 +250,7 @@ export class CreateworkflowComponent implements OnInit, DirtyComponents {
           if (data) {
             this.isWorkflownameEdit = false;
             this.isworkflowSaved = true;
-            this.isControlDisabled = false;
+            this.isControlDisabled = true;
             this.alertMsg = data.response;
             this.isOpen = true;
             this.alertType = 'success';
@@ -228,13 +259,13 @@ export class CreateworkflowComponent implements OnInit, DirtyComponents {
             this.loadWorkflowById(this.selectedWorkflowId);
           }
         }, (error) => {
-          if(error == "Bad Request"){
+          if (error == "Bad Request") {
             this.alertMsg = "No Default stages are can not be edited";
             this.isOpen = true;
             this.alertType = 'danger';
             this.skeletonLoading = false;
             this.loadWorkflowById(this.selectedWorkflowId);
-          }else{
+          } else {
             this.alertMsg = error;
             this.isOpen = true;
             this.alertType = 'danger';
@@ -251,13 +282,15 @@ export class CreateworkflowComponent implements OnInit, DirtyComponents {
     //const flowStatus = status === 'draft' ? 'active' : 'draft';
     if ($event.target.innerText === 'Activate' && this.isControlDisabled) {
       this.activateWorkflow(status);
-      this.isControlDisabled = false;
+      this.isControlDisabled = true;
     } else {
       this.workflowStatus = flowStatus;
+
     }
   }
 
   activateWorkflow(status) {
+    this.isworkflowSaved = true;
     const flowStatus = status === 'draft' ? 'active' : 'draft';
 
     if (flowStatus === 'draft') {
@@ -267,12 +300,13 @@ export class CreateworkflowComponent implements OnInit, DirtyComponents {
       workflow_status: flowStatus,
       oid: this.currentManagedOrgID
     };
-    this.workflowService.activateWorkflow(this.constructor.name, moduleName.workFlowModule, this.selectedWorkflowId,reqObj)
+    this.workflowService.activateWorkflow(this.constructor.name, moduleName.workFlowModule, this.selectedWorkflowId, reqObj)
       .subscribe((data) => {
         if (data) {
           this.alertMsg = data.response;
           this.isOpen = true;
           this.alertType = 'success';
+          // this.isEditClicked = true;
           this.loadWorkflowById(this.selectedWorkflowId);
           this.workflowStatus = 'Active';
         }
@@ -290,26 +324,25 @@ export class CreateworkflowComponent implements OnInit, DirtyComponents {
     }
   }
 
-  updateWorkflowname(){
+  updateWorkflowname() {
     const reqObj = {
       workflow_name: this.workflowName,
-      oid:this.currentManagedOrgID
+      oid: this.currentManagedOrgID
     }
-    this.workflowService.updateWorkflowName(this.constructor.name, moduleName.workFlowModule, this.selectedWorkflowId,reqObj)
-     .subscribe((data) => {
-      if (data) {
-        this.isWorkflownameEdit = false;
-        this.alertMsg = data.response;
+    this.workflowService.updateWorkflowName(this.constructor.name, moduleName.workFlowModule, this.selectedWorkflowId, reqObj)
+      .subscribe((data) => {
+        if (data) {
+          this.isWorkflownameEdit = false;
+          this.alertMsg = data.response;
+          this.isOpen = true;
+          this.alertType = 'success';
+        }
+      }, (error) => {
         this.isOpen = true;
-        this.alertType = 'success';
-        this.loadWorkflowById(this.selectedWorkflowId);
-      }
-    }, (error) => {
-      this.isOpen = true;
-      this.alertMsg = error;
-      this.alertType = 'danger';
-      console.log(JSON.stringify(error));
-    });
+        this.alertMsg = error;
+        this.alertType = 'danger';
+        console.log(JSON.stringify(error));
+      });
   }
 
   // checkButtonStatus(): boolean {
@@ -331,6 +364,8 @@ export class CreateworkflowComponent implements OnInit, DirtyComponents {
   loadWorkflowById(id?) {
     this.skeletonLoading = true;
     let resp: any;
+    let stageTitle;
+    let guidanceText;
     this.workflowService.getWorkflowById(this.constructor.name, moduleName.workFlowModule, this.currentManagedOrgID, id)
       .subscribe((data) => {
         if (data.length > 0) {
@@ -338,12 +373,20 @@ export class CreateworkflowComponent implements OnInit, DirtyComponents {
           this.workflowStages = resp;
           this.selectedStageId = this.selectedStageId || this.workflowStages[0].id;
           const stageIndex = this.workflowStages.findIndex((t) => t.id === this.selectedStageId);
-          stageIndex == 0 ? this.isControlDisabled = true : this.isControlDisabled = false;
-          const stageTitle = this.workflowStages[stageIndex].stage_title;
-          const guidanceText = this.workflowStages[stageIndex].guidance_text;
+          // stageIndex == 0 ? this.isControlDisabled = true : this.isControlDisabled = false;
+          if(stageIndex !== -1){
+          stageTitle = this.workflowStages[stageIndex].stage_title;
+          guidanceText = this.workflowStages[stageIndex].guidance_text;
           this.order = this.workflowStages[stageIndex].order;
+          }else{
+            stageTitle = this.workflowStages[0].stage_title;
+            guidanceText = this.workflowStages[0].guidance_text;
+            this.order = this.workflowStages[0].order;
+          }
           this.workflowStatus = data[0].workflow_status;
           this.workflowType = data[0].workflow_type;
+          this.isControlDisabled = true;
+          this.isDefaultStage = true;
           // if (this.workflowStatus === 'active') {
           //   this.isControlDisabled = true;
           // } else {
@@ -377,15 +420,15 @@ export class CreateworkflowComponent implements OnInit, DirtyComponents {
       return {
         'background-color': '#f5f6fa',
         'cursor': 'not-allowed'
-    };
-  } else {
-  return {
-    'background-color': '#ffffff'
-    };
-     }
+      };
+    } else {
+      return {
+        'background-color': '#ffffff'
+      };
+    }
   }
 
-  isDefaultWorkflowStage():boolean{
+  isDefaultWorkflowStage(): boolean {
     this.isControlDisabled = this.defaultStages.some((t) => t == this.stageTitle);
     return this.isControlDisabled;
   }
@@ -394,19 +437,43 @@ export class CreateworkflowComponent implements OnInit, DirtyComponents {
     return this.isDirty;
   }
 
-  deleteCustomStages($event){
-    if($event.id !== undefined){
-      this.workflowService.deleteWorkflowStage(this.constructor.name, moduleName.workFlowModule,$event.id,this.selectedWorkflowId).subscribe((data)=>{
+  deleteCustomStages($event) {
+    if ($event.id !== undefined) {
+      this.workflowService.deleteWorkflowStage(this.constructor.name, moduleName.workFlowModule, $event.id, this.selectedWorkflowId).subscribe((data) => {
         this.alertMsg = data.response;
         this.isOpen = true;
         this.alertType = 'info';
-      },(error)=>{
+      }, (error) => {
         this.alertMsg = error;
         this.isOpen = true;
         this.alertType = 'danger';
       })
     }
   
+  }
+
+  ngAfterViewChecked() {
+    this.cd.detectChanges();
+
+    if (this.quillTextEditor !== undefined) {
+      if (this.workflowStatus === 'active') {
+        this.quillTextEditor.nativeElement.querySelector('.ql-toolbar').style.cursor = 'not-allowed';
+        this.quillTextEditor.nativeElement.querySelectorAll('.ql-formats').forEach(element => {
+          element.style.display = "none";
+          element.style.cursor = "not-allowed";
+        });
+         
+      } else {
+        if (!this.isDefaultStage && this.isDefaultStage !== undefined) {
+          if (this.quillTextEditor.nativeElement.querySelector('.ql-toolbar') !== null) {
+            this.quillTextEditor.nativeElement.querySelector('.ql-toolbar').style.cursor = 'pointer';
+            this.quillTextEditor.nativeElement.querySelectorAll('.ql-formats').forEach(element => {
+              element.style.display = "inline-flex";
+            });
+          }
+        }
+      }
+    }
   }
 
   openModal(template: TemplateRef<any>) {

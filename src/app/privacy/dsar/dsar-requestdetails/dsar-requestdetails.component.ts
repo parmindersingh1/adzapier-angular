@@ -221,7 +221,10 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
   duplicateRequestID;
   progressStaus;
   duplicateRequestStatus;
+  isSubmitBtnClickedOnce;
   //isduplicatedIdSelected = false;
+  queryOID;
+  queryPID;
   constructor(private activatedRoute: ActivatedRoute,
               private router: Router,
               private orgService: OrganizationService,
@@ -265,6 +268,12 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
       this.queryOrgID = params.get('orgid');
       this.queryPropID = params.get('propid');
     });
+
+    this.activatedRoute.queryParamMap
+    .subscribe(params => {
+   this.queryOID = params.get('oid');
+   this.queryPID = params.get('pid');
+      });
 
     this.quillEditorText = new FormGroup({
       editor: new FormControl('', Validators.required),
@@ -332,16 +341,16 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
   getSelectedOrgIDPropertyID() {
     this.orgService.currentProperty.subscribe((response) => {
       if (response !== '') {
-        this.currentManagedOrgID = response.organization_id;
-        this.currrentManagedPropID = response.property_id;
+        this.currentManagedOrgID = response.organization_id || response.response.oid;
+        this.currrentManagedPropID = response.property_id || response.response.id;
         this.currentPropertyName = response.property_name;
         this.currentSelectedOrgname = response.organization_name;
       } else {
-        const orgDetails = this.orgService.getCurrentOrgWithProperty();
-        this.currentManagedOrgID = orgDetails.organization_id;
-        this.currrentManagedPropID = orgDetails.property_id;
-        this.currentPropertyName = orgDetails.property_name;
-        this.currentSelectedOrgname = orgDetails.organization_name;
+        //const orgDetails = this.orgService.getCurrentOrgWithProperty();
+        this.currentManagedOrgID = this.queryOID; //orgDetails.organization_id || orgDetails.response.oid;
+        this.currrentManagedPropID = this.queryPID;// orgDetails.property_id;
+        // this.currentPropertyName = orgDetails.property_name;
+        // this.currentSelectedOrgname = orgDetails.organization_name;
       }
     }, (error) => {
       this.alertMsg = error;
@@ -351,7 +360,7 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
   }
 
   backToDSARRequest() {
-    this.router.navigate(['privacy/dsar/requests']);
+    this.router.navigate(['privacy/dsar/requests'],{ queryParams: { oid: this.queryOID, pid: this.queryPID }, queryParamsHandling:'merge', skipLocationChange:false});
   }
 
   onRefresh(){
@@ -541,6 +550,7 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
   }
 
   getWorkflowStages(id) {
+    console.log(this.currentManagedOrgID,'currentManagedOrgID..');
     ///workflowId
     this.workflowService.getWorkflowById(this.constructor.name, moduleName.workFlowModule, this.currentManagedOrgID, id).subscribe((data) => {
       if (data.length > 0) {
@@ -1190,10 +1200,11 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
     if (subtaskForm.invalid) {
       return false;
     }
+    this.isSubmitBtnClickedOnce = true;
     let currentStageID;
     this.isConfirmed ? currentStageID = this.currentWorkflowStageID : currentStageID = this.currentStageId;
    // const currentStageID = this.currentStageId ? this.currentStageId : this.currentWorkflowStageID;
-    if (this.isConfirmed == undefined) {
+    if (this.isConfirmed == undefined || !this.isConfirmed) {
       currentStageID = this.currentWorkflowStageID;
     }
     if (currentStageID !== undefined) {
@@ -1215,9 +1226,11 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
             subtaskForm.resetForm();
             this.getSubTaskList();
             this.authService.notificationUpdated.next(true);
+            this.isSubmitBtnClickedOnce = false;
             this.modalService.dismissAll('Canceled');
           }, (error) => {
             this.onResetSubTask();
+            this.isSubmitBtnClickedOnce = false;
             this.alertMsg = error;
             this.isOpen = true;
             this.alertType = 'danger';
@@ -1232,10 +1245,12 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
           subtaskForm.resetForm();
           this.onResetSubTask();
           this.authService.notificationUpdated.next(true);
+          this.isSubmitBtnClickedOnce = false;
         }, (error) => {
           this.alertMsg = error;
           this.isOpen = true;
           this.alertType = 'danger';
+          this.isSubmitBtnClickedOnce = false;
           this.onResetSubTask();
         });
       }
@@ -1245,6 +1260,7 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
       this.alertMsg = 'Workflow stages are not available!';
       this.isOpen = true;
       this.alertType = 'info';
+      this.isSubmitBtnClickedOnce = false;
     }
   }
 
@@ -1407,11 +1423,17 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
       const workfloworder = this.workflowStages.filter((t) => t.id === id);
       const x = this.workflowStages.slice(0, workfloworder[0].order);
       this.selectedStages = x;
-    } else if (!this.isEmailVerified){
-      this.selectedStages.push(this.workflowStages[0]);
-    } else if(this.isEmailVerified){
+    } else if (this.isEmailVerified && this.isemailverificationRequired){
       this.selectedStages.push(this.workflowStages[0]);
       this.selectedStages.push(this.workflowStages[1]);
+      this.currentWorkflowStageID = this.workflowStages[1].id;
+    } else if (!this.isEmailVerified && !this.isemailverificationRequired){
+      this.selectedStages.push(this.workflowStages[0]);
+      this.selectedStages.push(this.workflowStages[1]);
+      this.currentWorkflowStageID = this.workflowStages[1].id;
+    } else{
+      this.selectedStages.push(this.workflowStages[0]);
+      this.currentWorkflowStageID = this.workflowStages[0].id;
     }
 
   }
@@ -1426,11 +1448,11 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
       currentStageID = this.currentStageId ? this.currentStageId : this.currentWorkflowStageID;
     }
     //  return false;
-    if (currentStageID) {
+    if (currentStageID !== undefined && currentStageID.length !== 0) {
       let resp;
       this.dsarRequestService.getSubTaskByWorkflowID(this.requestID, currentStageID, this.constructor.name, moduleName.dsarRequestModule)
         .subscribe((data) => {
-          return this.subTaskListResponse = data;
+           this.subTaskListResponse = data;
         }, (error) => {
           this.alertMsg = error;
           this.isOpen = true;
@@ -1477,8 +1499,8 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
   }
 
   displayApproverName(id): string {
-    let approverName = this.ApproverList.filter((t) => t.approver_id = id);
-    return this.displayAssignee = approverName[0].user_name;
+    let i = this.ApproverList.findIndex((t) => t.approver_id == id && t.email_verified);
+    return this.displayAssignee = this.ApproverList[i].user_name;
   }
 
   onCancelSubTaskResponse() {
@@ -1870,7 +1892,42 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
   }
 
   changeActivityType($event){
-    this.activitytype = $event.currentTarget.value;
+    this.activitytype = parseInt($event.currentTarget.value);
+  }
+
+  reOpenrequest(){
+   
+    this.dsarRequestService.reopenDeletedDSARRequest( this.currentManagedOrgID,this.currrentManagedPropID, this.requestID,this.constructor.name, moduleName.dsarRequestModule).subscribe((data)=>{
+     if(data.status == 200){
+      if (this.selectedStages.length !== 0) {
+        const reqObj = {
+          current_status: this.selectedStages[this.selectedStages.length - 1].id,
+          previous_status: this.previousStageId,
+          activity_feedback: 'Request reopen'
+        };
+        Object.keys(reqObj).forEach(key => {
+          if (reqObj[key] === undefined) {
+            delete reqObj[key];
+          }
+        });
+        const fd = new FormData();
+        fd.append('current_status', reqObj.current_status);
+        fd.append('previous_status', reqObj.previous_status);
+        fd.append('activity_feedback', reqObj.activity_feedback);
+        this.stageAPI(this.requestID, fd);
+        this.isExtenddasysubmitted = false;
+      } else {
+        this.alertMsg = 'Select stage!';
+        this.isOpen = true;
+        this.alertType = 'danger';
+      }
+    }
+    },(error)=>{
+        this.alertMsg = error;
+        this.isOpen = true;
+        this.alertType = 'danger';
+    })
+
   }
 }
 

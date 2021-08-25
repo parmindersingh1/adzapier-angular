@@ -38,7 +38,7 @@
 .text-head h1{
   font-size: 44px;
   font-weight: 600;
-  color: #041e70;
+  color: #ffffff;
 }
 .doller{
   font-size: 20px;
@@ -61,13 +61,13 @@
   font-weight: bold;
 }
 .cart-box {
-  border-radius: 8px;
-  position: fixed;
-  top: 100px;
-  border-top: 3px solid #3968fa;
-
-  max-height: 500px;
-  overflow: overlay;
+  //border-radius: 8px;
+  //position: fixed;
+  //top: 100px;
+  //border-top: 3px solid #3968fa;
+  //
+  //max-height: 500px;
+  //overflow: overlay;
 }
 .add-addons{
   color: #3968fa;
@@ -370,6 +370,7 @@ li {
   letter-spacing: .3px;
   line-height: 24px;
   text-transform: uppercase;
+  width: 600px;
 }
 .toggle-period__monthly {
   color: #0546a3;
@@ -489,7 +490,7 @@ li {
 }
 .desc-text {
   font-size: 18px;
-  color: #3560d7 !important;
+  color: #ffffff !important;
   font-weight: 600;
 }
 
@@ -584,9 +585,52 @@ li {
   margin-top: -15px;
 }
 .more-details-text {
-  font-size: 11px;
+  font-size: 12px;
   margin-left: 6px;
   color: blue !important;
   font-weight: 600;
   cursor: pointer;
+  text-align: left;
+}
+.blue-back {
+  background: #1b365d;
+  height: 500px;
+  width: 100%;
+}
+.container {
+  margin-top: -375px;
+}
+.primary-yellow{
+  background: #f0b323;
+  width: 32%;
+}
+.btn-group-type button{
+width: 32%;
+}
+.button-text {
+  font-size: 21px;
+  font-weight: 600;
+  color: #1b365d;
+}
+.btn-primary{
+  background: #1b365d
+}
+.margin-auto{
+  margin: auto !important;
+}
+.bg-white-col select {
+  padding: 0 10px;
+  background:url('../../../../assets/imgs/down-arrow.svg') no-repeat;
+  background-position: 95% 50%;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.dp-safari select {
+  background: #ffffff url('../../../../assets/imgs/down-arrow.svg') no-repeat;
+  background-position: 90% 55%;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
 }

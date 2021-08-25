@@ -8,6 +8,7 @@ import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
 import {featuresName} from '../../../_constant/features-name.constant';
 import {DataService} from '../../../_services/data.service';
 import {LazyLoadEvent} from 'primeng/api';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-manage-vendors',
@@ -45,11 +46,13 @@ export class ManageVendorsComponent implements OnInit {
   isAlliavinactive = true;
   isAllgoogleinactive = true;
   showVendorType = 1;
-
+  queryOID;
+  queryPID;
   constructor(
     private orgservice: OrganizationService,
     private gdprService: GdprService,
     private loading: NgxUiLoaderService,
+    private activateRoute: ActivatedRoute,
     private modalService: BsModalService,
     private cookieBanner: CookieBannerService,
     private dataService: DataService,
@@ -60,8 +63,13 @@ export class ManageVendorsComponent implements OnInit {
   ngOnInit() {
     this.onGetPropsAndOrgId();
     this.getAllVendorsData();
-    this.onGetAllowVendors();
     this.onCheckSubscription();
+    
+    this.activateRoute.queryParamMap
+    .subscribe(params => {
+    this.queryOID = params.get('oid');
+    this.queryPID = params.get('pid'); 
+    });
   }
 
 
@@ -86,14 +94,15 @@ export class ManageVendorsComponent implements OnInit {
   }
 
   onGetPropsAndOrgId() {
+    this.cd.markForCheck();
     this.orgservice.currentProperty.subscribe((response) => {
       if (response !== '') {
-        this.currentManagedOrgID = response.organization_id;
-        this.currrentManagedPropID = response.property_id;
+        this.currentManagedOrgID = response.organization_id || response.response.oid || this.queryOID;
+        this.currrentManagedPropID = response.property_id || response.response.id || this.queryPID;
       } else {
         const orgDetails = this.orgservice.getCurrentOrgWithProperty();
-        this.currentManagedOrgID = orgDetails.organization_id;
-        this.currrentManagedPropID = orgDetails.property_id;
+        this.currentManagedOrgID = orgDetails.organization_id || orgDetails.response.oid || this.queryOID;
+        this.currrentManagedPropID = orgDetails.property_id || orgDetails.response.id || this.queryPID;
       }
     });
   }
@@ -108,7 +117,8 @@ export class ManageVendorsComponent implements OnInit {
     this.gdprService.getGoogleVendors().subscribe((res: any[]) => {
       this.skeletonLoading.one = false;
       this.googleVendorsList = res;
-    })
+      this.onGetAllowVendors();
+    });
 
   }
 
@@ -125,15 +135,11 @@ export class ManageVendorsComponent implements OnInit {
             const result = res.response;
             this.googleVendorsDefaultID = JSON.parse(result.google_vendors);
             this.iabVendorsDefaultID = JSON.parse(result.iab_vendors);
-            this.isAlliavinactive = this.iabVendorsDefaultID.length > 0 ? true : false;
-            this.isAllgoogleinactive = this.googleVendorsDefaultID.length > 0 ? true : false;
-            this.cd.detectChanges()
+            this.cd.detectChanges();
           }
-          this.isOpen = true;
-          this.alertMsg = res.message;
-          this.alertType = 'success';
+        } else {
+          this.onAllowAllVendors();
         }
-        this.onAllowAllVendors();
       }, error => {
         this.skeletonLoading.two = false;
         this.loading.stop();
@@ -145,18 +151,19 @@ export class ManageVendorsComponent implements OnInit {
   onAllowAllVendors() {
     const googleVendorsID = [];
     const iabVendorsID = [];
-    if (this.googleVendorsDefaultID.length === 0 && this.isAllgoogleinactive) {
+    if (this.googleVendorsDefaultID.length === 0) {
       for (const googleVendor of this.googleVendorsList) {
         googleVendorsID.push(googleVendor.provider_id);
       }
-      this.googleVendorsDefaultID = googleVendorsID;
     }
-    if (this.iabVendorsDefaultID.length === 0 && this.isAlliavinactive) {
+    if (this.iabVendorsDefaultID.length === 0) {
       for (const iabVendor of this.iabVendorsList) {
         iabVendorsID.push(iabVendor.id);
       }
-      this.iabVendorsDefaultID = iabVendorsID;
     }
+    this.googleVendorsDefaultID = googleVendorsID;
+    this.iabVendorsDefaultID = iabVendorsID;
+    this.cd.detectChanges()
   }
   onSelectGoogleVendor(event, id) {
     const isChecked = event.target.checked;

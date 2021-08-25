@@ -219,3 +219,15 @@ table > tbody > tr > td:nth-child(2) > div > img.img-fluid {
 //     opacity: 1;
 //     display: block;
 // }
+span:not(:last-of-type)::after {
+    content: ","
+ }
+ 
+ .pagination-wrapper .form-inline .form-group select {
+    width: 50%;
+    background: url('../../../assets/imgs/down-arrow.svg') no-repeat;
+    background-position: 85% 50%;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
+}

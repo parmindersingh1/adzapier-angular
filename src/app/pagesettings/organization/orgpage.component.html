@@ -2,7 +2,7 @@
 <div class="mb-3">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb breadcrumb-style1 mg-b-0">
-            <li class="breadcrumb-item"><a routerLink="/settings">Settings</a></li>
+            <li class="breadcrumb-item"><a routerLink="/settings" [queryParams]="{oid:queryOID , pid:queryPID}">Settings</a></li>
             <li class="breadcrumb-item active" aria-current="page">Organizations</li>
         </ol>
     </nav>
@@ -46,20 +46,19 @@
                 <tbody>
                     <ng-container *ngFor="let data of orgList | paginate:paginationConfig; let i = index"> <!--filter: searchText:'orgname':'city':'state' -->
                     <tr [ngClass]="{'row-disabled':data.active == false, 'row-enabled':data.active == true}">
-                        <td><a *ngIf="data.active == true || data.active == 'undefined'" (click)="viewOrganization(data.id)">{{data.orgname}}</a>
-                            <span *ngIf="data.active == false || data.active === undefined">{{data.orgname}}</span>
+                        <td><a [ngStyle]="{'cursor': data.active ? 'pointer' : '' }"  (click)="data.active || data.active == null ? viewOrganization(data.id):false">{{data.orgname}}</a>
                         </td>
                         <td>{{data.address1}} {{data.address2}}</td>
                         <td>{{data.city}}</td>
                         <td>{{data.state}}</td>
                         <td>{{data.zipcode}}</td>
                         <td>
-                            <a class="pd-r-5" *ngIf="data.active == true || data.active === undefined" (click)="viewOrganization(data.id)"><i
+                            <a class="pd-r-5" [ngStyle]="{'cursor':'pointer'}" *ngIf="data.active == true || data.active === undefined" (click)="viewOrganization(data.id)"><i
                                     class="fas fa-external-link-alt"></i> View</a>
                             <!-- <a class="pd-r-5" *ngIf="data.active == true" data-toggle="modal" (click)="organizationModalPopup(editOrgModal,data)">
                                 <i class="far fa-edit fa-1x"></i> Edit
                             </a> -->
-                            <a class="badge badge-success pd-r-5" *ngIf="data.active == false" (click)="enableOrganization(data.id)">
+                            <a class="badge badge-success pd-r-5 cursor-pointer" *ngIf="data.active == false" [ngStyle]="{'color': data.active ? '' : 'white' }"   (click)="enableOrganization(data.id)">
                                 <!-- <i-feather name="check" class="feather-16"></i-feather> -->
                                  Enable
                             </a>

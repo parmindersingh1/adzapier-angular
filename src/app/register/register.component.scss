@@ -55,6 +55,11 @@
  border-color: #f5c6cb;
 }
 
+input::-ms-reveal,
+input::-ms-clear {
+  display: none;
+}
+
 .flotingdiv {
 	position: fixed;
 	bottom: 0;

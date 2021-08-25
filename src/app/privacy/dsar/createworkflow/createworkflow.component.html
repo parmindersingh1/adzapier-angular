@@ -4,7 +4,7 @@
             <ol class="breadcrumb breadcrumb-style1 mg-b-0">
                 <li class="breadcrumb-item"> Privacy</li>
                 <li class="breadcrumb-item"> Data Subject Access Request </li>
-                <li class="breadcrumb-item"> <a routerLink="/privacy/dsar/workflows">Workflow</a> </li>
+                <li class="breadcrumb-item"> <a routerLink="/privacy/dsar/workflows" [queryParams]="{oid:queryOID , pid:queryPID}">Workflow</a> </li>
                 <li class="breadcrumb-item active" aria-current="page">
                     {{workflowName? workflowName : 'Create Workflow'}}</li>
             </ol>
@@ -90,8 +90,8 @@
                                 tooltip="You can't edit the predefined guidance text"></i-feather>
                                 </label>
                             <div [ngClass]="{ 'quilleditor-invalid':  guidanceText.invalid && submitted && !skeletonLoading}">
-                                <quill-editor [(ngModel)]="guidancetext" name="guidancetext" [modules]="quillConfig" 
-                                #guidanceText = "ngModel"
+                                <quill-editor [(ngModel)]="guidancetext" name="guidancetext" [modules]="isControlDisabled ? '' : quillConfig" 
+                                #guidanceText = "ngModel" #quillEditorText
                                 [readOnly]="isControlDisabled || workflowStatus == 'active'"
                                 (onContentChanged)="updateGuidanceText($event)"
                                 [ngClass]="{ 'is-invalid': guidanceText?.invalid && (guidanceText?.dirty || guidanceText?.touched) && submitted }"

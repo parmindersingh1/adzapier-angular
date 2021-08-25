@@ -58,7 +58,7 @@
 
           </span>
         </div>
-        <div class="col-sm-2">
+        <div class="col-sm-2 dp-safari">
           <select (change)="onChangeRequestType($event)" class="form-control">
             <option selected value="">Type Of Request</option>
             <ng-container *ngFor="let obj of allFilterData.filter_Request_type">
@@ -67,7 +67,7 @@
           </select>
         </div>
 
-        <div class="col-sm-2">
+        <div class="col-sm-2 dp-safari">
           <select (change)="onChangeSubjectType($event)" class="form-control">
             <option selected value="">Subject Type</option>
             <ng-container *ngFor="let obj of allFilterData.filter_Subject_type">
@@ -76,7 +76,7 @@
           </select>
         </div>
 
-        <div class="col-sm-2">
+        <div class="col-sm-2 dp-safari">
           <select (change)="onChangeStatus($event)" class="form-control">
             <option selected value="">Status</option>
             <ng-container *ngFor="let obj of allFilterData.filter_status">
@@ -86,12 +86,13 @@
         </div>
 
         <div class="col-sm-2">
-          <select (change)="onChangeDueIn($event)" class="form-control">
+          <input type="number" placeholder="Due in" (change)="onChangeDueIn($event)" class="form-control" />
+          <!-- <select (change)="onChangeDueIn($event)" class="form-control">
             <option selected value="">Due in</option>
             <ng-container *ngFor="let obj of allFilterData.filter_due_in">
               <option [value]="obj.key">{{obj.value}}</option>
             </ng-container>
-          </select>
+          </select> -->
         </div>
         <div class="col-sm-2">
           <p-multiSelect [options]="cols" [(ngModel)]="selectedColumns" optionLabel="header"

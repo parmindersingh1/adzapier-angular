@@ -1,5 +1,5 @@
 import { AfterViewInit, ChangeDetectorRef, Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { WorkflowService } from 'src/app/_services/workflow.service';
 import { DataService } from 'src/app/_services/data.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -55,7 +55,10 @@ export class WorkflowsComponent implements OnInit, AfterViewInit, DirtyComponent
   currentManagedOrgID: any;
   isSaveClicked = false;
   isDirty:boolean;
+  queryOID;
+  queryPID;
   constructor(private router: Router,
+              private activateRoute: ActivatedRoute,
               private workflowService: WorkflowService,
               private dataService: DataService,
               private modalService: NgbModal,
@@ -68,6 +71,11 @@ export class WorkflowsComponent implements OnInit, AfterViewInit, DirtyComponent
   //  intl.strings = strings;
    // intl.changes.next();
     this.paginationConfig = { itemsPerPage: this.pgSize, currentPage: this.page, totalItems: this.listTotalCount, id: 'propertyPagination' };
+    this.activateRoute.queryParamMap
+    .subscribe(params => {
+      this.queryOID = params.get('oid');
+      this.queryPID = params.get('pid');
+    });
   }
 
   ngOnInit() {
@@ -117,10 +125,10 @@ export class WorkflowsComponent implements OnInit, AfterViewInit, DirtyComponent
   onGetOrgId() {
     this.orgservice.currentProperty.subscribe((response) => {
       if (response !== '') {
-        this.currentManagedOrgID = response.organization_id;
+        this.currentManagedOrgID = response.organization_id || response.response.oid;
       } else {
         const orgDetails = this.orgservice.getCurrentOrgWithProperty();
-        this.currentManagedOrgID = orgDetails.organization_id;
+        this.currentManagedOrgID = orgDetails.organization_id || orgDetails.response.oid;
       }
     });
   }
@@ -335,7 +343,7 @@ propertyPageChangeEvent(event) {
 navigateToWorkflow(obj) {
  // if(this.isLicenseLimitAvailable()){
     this.workflowService.changeCurrentSelectedWorkflow(obj);
-    this.router.navigate(['privacy/dsar/createworkflow/', obj.id]);
+    this.router.navigate(['privacy/dsar/createworkflow/', obj.id],{ queryParams: { oid: this.queryOID, pid: this.queryPID }, queryParamsHandling:'merge', skipLocationChange:false});
  // }
 }
 
