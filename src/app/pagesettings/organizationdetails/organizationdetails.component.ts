@@ -833,7 +833,7 @@ export class OrganizationdetailsComponent implements OnInit {
   }
 
   redirectToManageLicense(){
-    this.router.navigate(['/settings/billing/manage']);
+    this.router.navigate(['/settings/billing/manage'],{ queryParams: { oid: this.queryOID, pid: this.queryPID }, queryParamsHandling:'merge', skipLocationChange:false});
   }
 
   changeValidators() {

@@ -1257,14 +1257,21 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
 
   loadPropertyPlanDetails(prop){
     this.dataService.removePropertyPlanFromLocalStorage();
+    this.oIDPIDFromURL = this.findPropertyIDFromUrl(this.location.path());
     this.dataService.getPropertyPlanDetails(this.constructor.name, moduleName.cookieConsentModule, prop.property_id)
     .subscribe((res: any) => {
       this.dataService.setPropertyPlanToLocalStorage(res);
       this.loading.stop('1')
       this.currentSelectedProperty();
-      if(this.queryOID && this.queryPID){
+      if(this.queryOID !== null && this.queryOID !== undefined){
         if(this.router.url.indexOf('oid') == -1){
           return this.router.navigate([this.router.url], { queryParams: { oid: this.queryOID, pid: this.queryPID }, skipLocationChange:false} );
+        }
+      } else {
+        if (this.oIDPIDFromURL !== undefined && this.oIDPIDFromURL.length !== 0) {
+          this.queryOID = this.oIDPIDFromURL[0];
+          this.queryPID = this.oIDPIDFromURL[1];
+          return this.router.navigate([this.router.url], { queryParams: { oid: this.oIDPIDFromURL[0], pid: this.oIDPIDFromURL[1] }, skipLocationChange: false });
         }
       }
 
@@ -1287,7 +1294,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
       this.queryPID = params.get('pid');
       this.loadOrganizationWithProperty();
      });
-     if(this.queryOID !== null || this.queryOID !== undefined){
+     if(this.queryOID !== null && this.queryOID !== undefined){
        this.router.navigate(['/home/dashboard/analytics'],{ queryParams: { oid: this.queryOID, pid: this.queryPID },  skipLocationChange:false});
      }else{
        this.router.navigate(['/home/dashboard/analytics'],{ queryParams: { oid: this.selectedOrgProperties[0].organization_id, pid: this.selectedOrgProperties[0].property_id },  skipLocationChange:false});

@@ -284,7 +284,7 @@
           </div>
         </div>
         <div class="text-center">
-          <a routerLink="/settings/billing/manage" [queryParams]="{oid:queryOID , pid:queryPID}" (click)="template.hide()" class="btn mt-3 btn-primary"> <i
+          <a (click)="redirectToManageLicense()" class="btn mt-3 btn-primary txt-white"> <i
             _aria-hidden="true" class="fa fa-cogs pr-1"></i> Manage License</a>
           <p class="cancel-btn mt-2 mb-2" (click)="onTemplateHide()">or Cancel & Go Back</p>
         </div>
