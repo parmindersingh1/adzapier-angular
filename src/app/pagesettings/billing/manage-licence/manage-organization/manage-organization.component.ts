@@ -181,7 +181,7 @@ export class ManageOrganizationComponent implements OnInit, OnDestroy {
         this.orgForm.reset()
         this.onGetAssingedOrg()
         this.isCurrentPropertySelected(this.currentManagedOrgID, this.currrentManagedPropID)
-
+        this.dataService.isLicenseApplied.next({ requesttype: 'organization', hasaccess: true });
       }, err => {
         this.loading.stop();
         this.skLoading = false;
@@ -232,7 +232,7 @@ export class ManageOrganizationComponent implements OnInit, OnDestroy {
         this.alertMsg = res.response;
         this.alertType = 'info';
         this.isCurrentPropertySelected(this.currentManagedOrgID, this.currrentManagedPropID);
-
+        this.dataService.isLicenseApplied.next({ requesttype: 'organization', hasaccess: false });
       }, err => {
         this.skLoading = false;
         this.loading.stop();
