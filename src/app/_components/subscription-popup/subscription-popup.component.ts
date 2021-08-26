@@ -215,4 +215,14 @@ export class SubscriptionPopupComponent implements OnInit {
         this.template.hide();
     }
   }
+
+  redirectToManageLicense() {
+    this.template.hide();
+    let oIDPIDFromURL = findPropertyIDFromUrl(this.location.path())
+    if (this.queryOID !== null && this.queryOID !== undefined) {
+      this.router.navigate(['/settings/billing/manage'], { queryParams: { oid: this.queryOID, pid: this.queryPID }, queryParamsHandling: 'merge', skipLocationChange: false });
+    } else {
+      this.router.navigate(['/settings/billing/manage'], { queryParams: { oid: oIDPIDFromURL[0], pid: oIDPIDFromURL[1] }, queryParamsHandling: 'merge', skipLocationChange: false });
+    }
+  }
 }
