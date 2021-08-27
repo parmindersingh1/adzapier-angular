@@ -65,15 +65,14 @@ export class ManageVendorsComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.activateRoute.queryParams
+      .subscribe((params: any) => {
+        this.queryOID = params.oid;
+        this.queryPID = params.pid;
+      });
     this.onGetPropsAndOrgId();
     this.getAllVendorsData();
     this.onCheckSubscription();
-    
-    this.activateRoute.queryParamMap
-    .subscribe(params => {
-    this.queryOID = params.get('oid');
-    this.queryPID = params.get('pid'); 
-    });
   }
 
 
@@ -130,7 +129,7 @@ export class ManageVendorsComponent implements OnInit {
     this.loading.start();
     this.skeletonLoading.two = true;
     this.isOpen = false;
-    this.cookieBanner.onGetVendorsData(this.currentManagedOrgID, this.currrentManagedPropID, this.constructor.name, moduleName.manageVendorsModule)
+    this.cookieBanner.onGetVendorsData(this.queryOID, this.queryPID, this.constructor.name, moduleName.manageVendorsModule)
       .subscribe(res => {
         this.skeletonLoading.two = false;
         this.loading.stop();
@@ -153,8 +152,8 @@ export class ManageVendorsComponent implements OnInit {
       })
   }
   onAllowAllVendors() {
-    const googleVendorsID = [];
-    const iabVendorsID = [];
+    const googleVendorsID = [...this.googleVendorsDefaultID];
+    const iabVendorsID = [...  this.iabVendorsDefaultID];
     if (this.googleVendorsDefaultID.length === 0) {
       for (const googleVendor of this.googleVendorsList) {
         googleVendorsID.push(googleVendor.provider_id);
@@ -198,7 +197,7 @@ export class ManageVendorsComponent implements OnInit {
     this.iabVendorsID = [];
     if (isChecked) {
       for (const iabObj of this.iabVendorsList) {
-        this.iabVendorsID.push(iabObj.id)
+        this.iabVendorsID.push(iabObj.id);
       }
     } else {
       this.iabVendorsID = [];
