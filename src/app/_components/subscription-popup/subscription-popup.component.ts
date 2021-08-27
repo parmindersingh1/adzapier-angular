@@ -74,8 +74,6 @@ export class SubscriptionPopupComponent implements OnInit {
  .subscribe(params => {
    this.queryOID = params.get('oid');
    this.queryPID = params.get('pid');
-   console.log(this.queryOID,'queryOID..75');
-   console.log(this.queryPID,'queryPID..76');
 });
     this.openModal();
   }
