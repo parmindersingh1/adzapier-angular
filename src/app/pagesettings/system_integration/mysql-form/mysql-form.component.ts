@@ -1,10 +1,11 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, EventEmitter, Output} from '@angular/core';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {SystemIntegrationService} from '../../../_services/system_integration.service';
 import {ActivatedRoute} from '@angular/router';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
 import {moduleName} from '../../../_constant/module-name.constant';
-import {mysqlForm} from '../integration_cred.constant';
+import {credForm } from '../integration_cred.constant';
+import {$e} from 'codelyzer/angular/styles/chars';
 
 @Component({
   selector: 'app-mysql-form',
@@ -18,6 +19,7 @@ export class MysqlFormComponent implements OnInit {
   submitType = 'test';
   @Input('systemID') systemID;
   @Input('systemName') systemName;
+  @Output('refreshConnectionList') refreshConnectionList = new EventEmitter()
   connectionID: any;
   dismissible = true;
   alertMsg: any;
@@ -27,8 +29,9 @@ export class MysqlFormComponent implements OnInit {
   isTesting = false;
   mySqlForm: FormGroup;
   submitted = false;
-  testingSuccess = false;
-
+  testingSuccess = '';
+  testEmail = '';
+  credForm = credForm;
   constructor(private formBuilder: FormBuilder,
               private systemIntegrationService: SystemIntegrationService,
               private activatedroute: ActivatedRoute,
@@ -51,14 +54,14 @@ export class MysqlFormComponent implements OnInit {
     });
     this.onGetConnectionList();
     // for (const data of mysqlForm) {
-    for (let i = 0; mysqlForm.length > i; i++) {
+    for (let i = 0; credForm[this.systemName].length > i; i++) {
       this.addCredentialRows.push(this.addCredential(i));
     }
   }
 
   addCredential(index) {
     return this.formBuilder.group({
-      key: [mysqlForm[index].key, Validators.required],
+      key: [credForm[this.systemName][index].key, Validators.required],
       secret_1: ['', Validators.required],
     });
   }
@@ -102,26 +105,33 @@ export class MysqlFormComponent implements OnInit {
 
   onTestConnection(payload) {
     this.loading.start();
-    const params = {
+    const params: any = {
       system: this.systemName
+    };
+    if (this.systemName === 'mailchimp') {
+      params.email = this.testEmail;
     }
     this.isTesting = true;
-    this.testingSuccess = false;
+    this.testingSuccess = '';
     this.systemIntegrationService.TestSystemIntegration(this.constructor.name,
       moduleName.systemIntegrationModule, this.systemID, payload, params)
-      .subscribe(res => {
+      .subscribe((res: any) => {
         this.isTesting = false;
-        this.testingSuccess = true;
+        if (res.status === 200) {
+          this.testingSuccess = res.message;
+          if (this.systemName === 'http') {
+            alert('API RESPONSE::::::' + JSON.stringify(res.apiResponse));
+          }
+        }
         this.alertMsg = '';
         this.loading.stop();
       }, error => {
-        this.testingSuccess = false;
+        this.testingSuccess = '';
         this.isTesting = false;
         this.isOpen = true;
         this.alertMsg = error;
         this.alertType = 'error';
         this.loading.stop();
-
       });
   }
 
@@ -131,6 +141,7 @@ export class MysqlFormComponent implements OnInit {
       moduleName.systemIntegrationModule, this.systemID, payload)
       .subscribe(res => {
         this.loading.stop();
+        this.refreshConnectionList.emit();
       }, error => {
         this.loading.stop();
         this.isOpen = true;
@@ -147,5 +158,9 @@ export class MysqlFormComponent implements OnInit {
   hideConnectionForm() {
     this.onGetConnectionList();
     this.showConnectionForm = false;
+  }
+
+  onSetTestEmail(event: any) {
+    this.testEmail = event.target.value;
   }
 }

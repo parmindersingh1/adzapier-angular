@@ -55,7 +55,7 @@ export class SystemIntegrationService {
         return throwError(error);
       }));
   }
-  GetConnectionListByCompany(componentName, moduleName) {
+  GetCredListByCompany(componentName, moduleName) {
     const path = apiConstant.CONNECTION_INTEGRATION_LIST;
     return this.http.get(environment.apiUrl + path)
       .pipe(catchError(error => {

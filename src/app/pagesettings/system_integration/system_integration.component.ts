@@ -3,6 +3,7 @@ import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
 import {LazyLoadEvent} from 'primeng/api';
 import {SystemIntegrationService} from '../../_services/system_integration.service';
 import {moduleName} from '../../_constant/module-name.constant';
+import {NgxUiLoaderService} from 'ngx-ui-loader';
 
 
 @Component({
@@ -17,7 +18,7 @@ export class SystemIntegrationComponent implements OnInit {
   virtualCars: [];
   cars = [];
   systemList = [];
-  connectionList = [];
+  credList = [];
   currentSystem = {
     id: null,
     name: null
@@ -25,37 +26,44 @@ export class SystemIntegrationComponent implements OnInit {
   step = 1;
   eventRows;
   firstone;
+  testingSuccess = false;
+  isTesting = false;
+  dismissible = true;
+  alertMsg: any;
+  isOpen = false;
+  alertType: any;
+  currentScanId = null;
   constructor(private modalService: BsModalService,
               private systemIntegrationService: SystemIntegrationService,
+              private loading: NgxUiLoaderService
   ) {
   }
+
   ngOnInit() {
-    this.cols = [
-      {field: 'id', header: 'ID'},
-      {field: 'year', header: 'Year'},
-      {field: 'brand', header: 'Brand'},
-      {field: 'color', header: 'Color'}
-    ];
     this.onGetSystemList();
-    this.onGetConnectionList();
   }
 
   onGetSystemList() {
     this.systemIntegrationService.GetSystemList(this.constructor.name, moduleName.systemIntegrationModule)
       .subscribe((res: any) => {
         this.systemList = res.response;
+        this.onGetCredList();
       })
   }
 
-  onGetConnectionList() {
-    this.systemIntegrationService.GetConnectionListByCompany(this.constructor.name, moduleName.systemIntegrationModule)
+  onGetCredList() {
+    this.loading.start();
+    this.systemIntegrationService.GetCredListByCompany(this.constructor.name, moduleName.systemIntegrationModule)
       .subscribe((res: any) => {
-        this.connectionList = res.response;
+        this.loading.stop();
+        this.credList = res.response;
       });
   }
+
   openModal(template: TemplateRef<any>) {
     this.modalRef = this.modalService.show(template, {class: 'modal-lg', ignoreBackdropClick: true});
   }
+
   loadCarsLazy(event: LazyLoadEvent) {
     this.eventRows = event.rows;
     if (event.first === 0) {
@@ -76,5 +84,63 @@ export class SystemIntegrationComponent implements OnInit {
       name: obj.name
     };
     this.step = step;
+  }
+
+  onFindSystemName(systemID) {
+    let systemName = '';
+    for (const system of this.systemList) {
+      if (system.id === systemID) {
+        systemName = system.name;
+      }
+    }
+    return systemName;
+  }
+
+  onTestConnection(data) {
+    this.currentScanId = data.id;
+    const integrationCred = [];
+    for (const cred of data.integration_auth) {
+      integrationCred.push({
+        key: cred.key,
+        secret_1: cred.secret_1
+      });
+    }
+    const payload = {
+      cred_name: data.cred_name,
+      description: data.description,
+      connector_type: data.connector_type,
+      integration_auth: integrationCred
+    };
+    this.loading.start();
+    const params = {
+      system: this.onFindSystemName(data.system_id)
+    };
+    this.isTesting = true;
+    this.isOpen = false;
+    this.alertMsg = '';
+    this.alertType = '';
+    this.systemIntegrationService.TestSystemIntegration(this.constructor.name,
+      moduleName.systemIntegrationModule, data.system_id, payload, params)
+      .subscribe((res: any) => {
+        this.isTesting = false;
+        this.testingSuccess = true;
+        this.isOpen = true;
+        this.alertMsg = res.message;
+        this.alertType = 'success';
+        // this.alertMsg = '';
+        this.loading.stop();
+      }, error => {
+        this.testingSuccess = false;
+        this.isTesting = false;
+        this.isOpen = true;
+        this.alertMsg = error;
+        this.alertType = 'danger';
+        this.loading.stop();
+      });
+  }
+  onRefreshList() {
+    this.step = 1;
+    this.modalRef.hide();
+    this.onGetCredList();
   }
 }
