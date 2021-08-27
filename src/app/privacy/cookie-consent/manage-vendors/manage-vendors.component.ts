@@ -9,6 +9,8 @@ import {featuresName} from '../../../_constant/features-name.constant';
 import {DataService} from '../../../_services/data.service';
 import {LazyLoadEvent} from 'primeng/api';
 import { ActivatedRoute } from '@angular/router';
+import { Location } from '@angular/common';
+import { findPropertyIDFromUrl } from 'src/app/_helpers/common-utility';
 
 @Component({
   selector: 'app-manage-vendors',
@@ -48,6 +50,7 @@ export class ManageVendorsComponent implements OnInit {
   showVendorType = 1;
   queryOID;
   queryPID;
+  oIDPIDFromURL:any = [];
   constructor(
     private orgservice: OrganizationService,
     private gdprService: GdprService,
@@ -56,6 +59,7 @@ export class ManageVendorsComponent implements OnInit {
     private modalService: BsModalService,
     private cookieBanner: CookieBannerService,
     private dataService: DataService,
+    private location: Location,
     private cd: ChangeDetectorRef
   ) {
   }
@@ -100,9 +104,9 @@ export class ManageVendorsComponent implements OnInit {
         this.currentManagedOrgID = response.organization_id || response.response.oid || this.queryOID;
         this.currrentManagedPropID = response.property_id || response.response.id || this.queryPID;
       } else {
-        const orgDetails = this.orgservice.getCurrentOrgWithProperty();
-        this.currentManagedOrgID = orgDetails.organization_id || orgDetails.response.oid || this.queryOID;
-        this.currrentManagedPropID = orgDetails.property_id || orgDetails.response.id || this.queryPID;
+        this.oIDPIDFromURL = findPropertyIDFromUrl(this.location.path());
+        this.currentManagedOrgID = this.queryOID || this.oIDPIDFromURL[0];
+        this.currrentManagedPropID = this.queryPID || this.oIDPIDFromURL[1];
       }
     });
   }
