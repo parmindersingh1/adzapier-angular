@@ -109,10 +109,10 @@ export class CookieTrackingComponent implements OnInit {
       { date: new Date(), classes: ['theme-dark-blue'] },
     ];
     this.searchbydaterange = [new Date(new Date().setDate(new Date().getDate() - 30)),new Date()]
-    this.activateRoute.queryParamMap
-      .subscribe(params => {
-        this.queryOID = params.get('oid');
-        this.queryPID = params.get('pid');
+    this.activateRoute.queryParams
+      .subscribe((params: any) => {
+        this.queryOID = params.oid;
+        this.queryPID = params.pid;
       });
   }
 
@@ -205,7 +205,7 @@ export class CookieTrackingComponent implements OnInit {
       page: this.firstone
     };
 
-    this.cookieConsentService.getConsent(this.currrentManagedPropID, filter, this.constructor.name, moduleName.cookieTrackingModule)
+    this.cookieConsentService.getConsent(this.queryPID, filter, this.constructor.name, moduleName.cookieTrackingModule)
       .subscribe(res => {
         this.loading.stop();
         this.tLoading = false;
@@ -221,7 +221,7 @@ export class CookieTrackingComponent implements OnInit {
 
   onGetFilterData() {
     this.loading.start();
-    this.cookieConsentService.onGetFilter(this.currrentManagedPropID, this.constructor.name, moduleName.cookieTrackingModule)
+    this.cookieConsentService.onGetFilter(this.queryPID, this.constructor.name, moduleName.cookieTrackingModule)
       .subscribe((res: any) => {
         this.loading.stop();
         if (res['status'] === 200) {
