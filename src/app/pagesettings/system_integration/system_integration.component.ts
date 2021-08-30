@@ -33,6 +33,8 @@ export class SystemIntegrationComponent implements OnInit {
   isOpen = false;
   alertType: any;
   currentScanId = null;
+  updateConnectionData = null;
+  updateSystemName = null;
   constructor(private modalService: BsModalService,
               private systemIntegrationService: SystemIntegrationService,
               private loading: NgxUiLoaderService
@@ -61,6 +63,12 @@ export class SystemIntegrationComponent implements OnInit {
   }
 
   openModal(template: TemplateRef<any>) {
+    this.modalRef = this.modalService.show(template, {class: 'modal-lg', ignoreBackdropClick: true});
+  }
+
+  openModalUpdateConnection(template: TemplateRef<any>, obj) {
+    this.updateSystemName = this.onFindSystemName(obj.system_id);
+    this.updateConnectionData = obj;
     this.modalRef = this.modalService.show(template, {class: 'modal-lg', ignoreBackdropClick: true});
   }
 

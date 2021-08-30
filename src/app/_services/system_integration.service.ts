@@ -28,6 +28,16 @@ export class SystemIntegrationService {
       }));
   }
 
+
+  UpdateSystemIntegration(componentName, moduleName, systemID, connectionID,  payload) {
+    const path = `/integration/credentials/${systemID}/${connectionID}`;
+    return this.http.put(environment.apiUrl + path, payload)
+      .pipe(catchError(error => {
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.getWorkflow, componentName, moduleName, path);
+        return throwError(error);
+      }));
+  }
+
   TestSystemIntegration(componentName, moduleName, connectionID, payload, params) {
     const path = `/integration/live-check-connection-status`;
     return this.http.post(environment.apiUrl + path, payload, {params:params})

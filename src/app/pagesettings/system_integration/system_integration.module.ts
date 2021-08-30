@@ -6,6 +6,7 @@ import {SharedbootstrapModule} from '../../sharedbootstrap/sharedbootstrap.modul
 import { MysqlFormComponent } from './mysql-form/mysql-form.component';
 import {TableModule} from 'primeng/table';
 import { ConnectionFormComponent } from './connection-form/connection-form.component';
+import { UpdateConnectionFormComponent } from './update-connection-form/update-connection-form.component';
 
 
 const router: Routes = [
@@ -13,7 +14,7 @@ const router: Routes = [
 ];
 
 @NgModule({
-  declarations: [SystemIntegrationComponent, MysqlFormComponent, ConnectionFormComponent],
+  declarations: [SystemIntegrationComponent, MysqlFormComponent, ConnectionFormComponent, UpdateConnectionFormComponent],
     imports: [RouterModule.forChild(router), ReactiveFormsModule, SharedbootstrapModule, TableModule, FormsModule]
 })
 
