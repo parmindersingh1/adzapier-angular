@@ -216,4 +216,13 @@ export class DsarRequestService {
 
   }
 
+  reopenDeletedDSARRequest(oid,pid,requestID,componentName,moduleName){
+    const path = '/ccpa/reopenrequest/' + oid + '/' + pid + '/' + requestID;
+    return this.http.put<any>(environment.apiUrl + path, {})
+      .pipe(shareReplay(1), catchError(error => {
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.reopenRejectedDSARRequest, componentName, moduleName, path);
+        return throwError(error);
+      }));
+  }
+
 }

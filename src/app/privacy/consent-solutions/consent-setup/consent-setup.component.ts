@@ -3,7 +3,7 @@ import {environment} from '../../../../environments/environment';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
 import {CookieBannerService} from '../../../_services/cookie-banner.service';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {OrganizationService} from '../../../_services';
 import {moduleName} from '../../../_constant/module-name.constant';
 import { apiConstant } from 'src/app/_constant/api.constant';
@@ -42,16 +42,24 @@ export class ConsentSetupComponent implements OnInit {
   isOpen = false;
   alertType: any;
   initData = '';
+  queryOID;
+  queryPID;
   constructor(
     private cookieBannerService: CookieBannerService,
     private loading: NgxUiLoaderService,
     private modalService: BsModalService,
     private router: Router,
     private orgservice: OrganizationService,
-    private companyService: CompanyService
+    private companyService: CompanyService,
+    private activateRoute: ActivatedRoute
   ) { }
 
   ngOnInit() {
+    this.activateRoute.queryParamMap
+      .subscribe(params => {
+        this.queryOID = params.get('oid');
+        this.queryPID = params.get('pid');
+      });
     this.onGetPropsAndOrgId();
     this.onGetToken();
   }
@@ -84,9 +92,8 @@ export class ConsentSetupComponent implements OnInit {
         this.currentManagedOrgID = response.organization_id || response.response.oid;
         this.currrentManagedPropID = response.property_id || response.response.id;
       } else {
-        const orgDetails = this.orgservice.getCurrentOrgWithProperty();
-        this.currentManagedOrgID = orgDetails.organization_id;
-        this.currrentManagedPropID = orgDetails.property_id;
+        this.currentManagedOrgID = this.queryOID;
+        this.currrentManagedPropID = this.queryPID;
       }
     });
   }

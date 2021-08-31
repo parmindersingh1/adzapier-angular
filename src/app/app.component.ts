@@ -1,7 +1,7 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {faCoffee} from '@fortawesome/free-solid-svg-icons';
 import {AuthenticationService, OrganizationService} from './_services';
-import {NavigationEnd, RouteConfigLoadEnd, RouteConfigLoadStart, Router, RouterEvent} from '@angular/router';
+import {ActivatedRoute, NavigationEnd, RouteConfigLoadEnd, RouteConfigLoadStart, Router, RouterEvent} from '@angular/router';
 import * as feather from 'feather-icons';
 import {CCPAFormConfigurationService} from './_services/ccpaform-configuration.service';
 import {DsarformService} from './_services/dsarform.service';
@@ -27,8 +27,11 @@ export class AppComponent implements OnInit {
   hideHeaderFooter = true;
   public unAuthMsg: any;
   isShowingRouteLoadIndicator: boolean;
-
+  qcode;
+  queryOID;
+  queryPID;
   constructor(private router: Router,
+              private activatedRoute : ActivatedRoute,
               private modalService: BsModalService,
               private billingService: BillingService,
               private authenticationService: AuthenticationService,
@@ -67,6 +70,18 @@ export class AppComponent implements OnInit {
       }
     });
     feather.replace();
+    this.activatedRoute.queryParamMap.subscribe(params => {
+     // console.log(params.keys,'app..');
+     // console.log(params,'params..app 75 component..');
+      //if (params.get('code')) {
+       //   console.log(params.get('oid'),'app74..');
+          this.qcode = params.get('pid');
+          this.queryOID = params.get('oid');
+         this.queryPID = params.get('pid');
+        //  console.log(this.queryOID,'queryOID..');
+        //  console.log(this.queryPID,'queryPID..');
+     // }
+  });
   }
 
  async onInitCPSDK() {

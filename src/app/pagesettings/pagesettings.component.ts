@@ -1,5 +1,5 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
+import {ActivatedRoute, Router } from '@angular/router';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { DataService } from '../_services/data.service';
 @Component({
@@ -11,8 +11,11 @@ export class PagesettingsComponent implements OnInit {
   @ViewChild('confirmTemplate') confirmModal: TemplateRef<any>;
   modalRef: BsModalRef;
   isPropertyCreated;
+  queryOID;
+  queryPID;
   constructor(private router: Router,
               private bsmodalService: BsModalService, 
+              private activatedRoute: ActivatedRoute,
               private dataService: DataService) { 
                 this.dataService.OrganizationCreatedStatus.subscribe((status) => {
                   this.isPropertyCreated = status;
@@ -20,6 +23,11 @@ export class PagesettingsComponent implements OnInit {
               }
 
   ngOnInit() {
+    this.activatedRoute.queryParamMap
+      .subscribe(params => {
+        this.queryOID = params.get('oid');
+        this.queryPID = params.get('pid');
+      });
   }
 
   goto(link) {
@@ -39,7 +47,7 @@ export class PagesettingsComponent implements OnInit {
   }
   confirm() {
     this.modalRef.hide();
-    this.router.navigate(['settings/organizations']);
+    this.router.navigate(['settings/organizations'],{ queryParams: { oid: this.queryOID, pid: this.queryPID }, queryParamsHandling:'merge', skipLocationChange:false});
   }
 
 }

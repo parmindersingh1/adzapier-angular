@@ -2,7 +2,7 @@
   <nav aria-label="breadcrumb" style="margin-left: -14px">
     <ol class="breadcrumb breadcrumb-style1 mg-b-10">
       <li class="breadcrumb-item">Billing</li>
-      <li class="breadcrumb-item"><a routerLink="/settings/billing/manage">Manage Licenses</a></li>
+      <li class="breadcrumb-item"><a routerLink="/settings/billing/manage" [queryParams]="{oid:queryOID , pid:queryPID}">Manage Licenses</a></li>
       <li class="breadcrumb-item active">Properties</li>
 
     </ol>
@@ -110,7 +110,7 @@
   </div>
   <div class="modal-body">
     <form [formGroup]="propertyForm" (ngSubmit)="onSubmit()">
-      <div class="form-group">
+      <div class="form-group dp-safari">
         <label for="usr">Find Organization:</label>
         <select (change)="onGetAllPropertyList($event)" class="form-control" id="sel1">
           <option [value]="">-- Select Organization --</option>

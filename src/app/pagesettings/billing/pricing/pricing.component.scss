@@ -370,6 +370,7 @@ li {
   letter-spacing: .3px;
   line-height: 24px;
   text-transform: uppercase;
+  width: 600px;
 }
 .toggle-period__monthly {
   color: #0546a3;
@@ -616,4 +617,20 @@ width: 32%;
 }
 .margin-auto{
   margin: auto !important;
+}
+.bg-white-col select {
+  padding: 0 10px;
+  background:url('../../../../assets/imgs/down-arrow.svg') no-repeat;
+  background-position: 95% 50%;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.dp-safari select {
+  background: #ffffff url('../../../../assets/imgs/down-arrow.svg') no-repeat;
+  background-position: 90% 55%;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
 }

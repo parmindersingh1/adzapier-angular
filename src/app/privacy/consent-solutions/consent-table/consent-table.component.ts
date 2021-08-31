@@ -155,29 +155,29 @@ export class ConsentTableComponent implements OnInit {
         this.currrentManagedPropID = response.property_id || response.response.id;
       } else {
         const orgDetails = this.orgservice.getCurrentOrgWithProperty();
-        this.currentManagedOrgID = orgDetails.organization_id;
-        this.currrentManagedPropID = orgDetails.property_id;
+        this.currentManagedOrgID = orgDetails.organization_id || orgDetails.response.oid;
+        this.currrentManagedPropID = orgDetails.property_id || orgDetails.response.id;
       }
     });
   }
 
   initForm() {
     this.AddConsentForm = this.formBuilder.group({
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
+      firstName: ['',],
+      lastName: ['',],
       email: ['', [Validators.required,Validators.pattern]],
-      dataSource: ['', Validators.required],
-      country: ['', Validators.required],
-      ownerID: ['',Validators.required],
-      ipAddress: ['', Validators.required],
-      AuthID:['',Validators.required],
+      dataSource: ['',],
+      country: ['',],
+      ownerID: ['',],
+      ipAddress: ['',],
+      AuthID:['',],
       // newsLetter:[''],
       // term_of_service:[''],
       // privacyPolicy:[''],
-      preferences:this.formBuilder.array([this.initPrefRows()]),
+      preferences:this.formBuilder.array([]),
       verified:[''],
-      proofs:this.formBuilder.array([this.initItemRows()]),
-      legalNotices:this.formBuilder.array([this.initLegalRows()]),
+      proofs:this.formBuilder.array([]),
+      legalNotices:this.formBuilder.array([]),
 
     });
   }
@@ -188,7 +188,7 @@ export class ConsentTableComponent implements OnInit {
 
   initPrefRows(){
     return this.formBuilder.group({
-      preference:[''],
+      preference:['',Validators.required],
       allow:[false],
     })
   }
@@ -207,8 +207,8 @@ export class ConsentTableComponent implements OnInit {
 
   initItemRows(){
     return this.formBuilder.group({
-      content:[''],
-      form:[''],
+      content:['',Validators.required],
+      form:['',Validators.required],
     });
   }
 
@@ -226,9 +226,9 @@ export class ConsentTableComponent implements OnInit {
 
   initLegalRows(){
     return this.formBuilder.group({
-      identifier:[''],
-      version:[Number],
-      content:[''],
+      identifier:['',Validators.required],
+      version:['',Number],
+      content:['',Validators.required],
     })
   }
 
@@ -276,6 +276,23 @@ export class ConsentTableComponent implements OnInit {
           this.alertType = 'success';
           this.modalRef.hide();
           this.onGetConsentRecord();
+
+          const preferences: any = this.AddConsentForm.controls['preferences'];
+          for (let i = preferences.length -1; i >= 0; i--) {
+            preferences.removeAt(i);
+          }
+
+
+          const proofs: any = this.AddConsentForm.controls['proofs'];
+          for (let i = proofs.length -1; i >= 0; i--) {
+            proofs.removeAt(i);
+          }
+
+          const legalNotices: any = this.AddConsentForm.controls['legalNotices'];
+          for (let i = legalNotices.length -1; i >= 0; i--) {
+            legalNotices.removeAt(i);
+          }
+          this.submitted = false;
         }
       }, err => {
         this.loading.stop();
@@ -328,6 +345,7 @@ export class ConsentTableComponent implements OnInit {
     this.submitted = false;
     this.modalRef.hide();
     this.AddConsentForm.reset();
+
 
   }
 

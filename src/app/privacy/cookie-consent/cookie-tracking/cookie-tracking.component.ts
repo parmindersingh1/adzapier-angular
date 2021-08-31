@@ -9,6 +9,7 @@ import {featuresName} from '../../../_constant/features-name.constant';
 import {DataService} from '../../../_services/data.service';
 import { LazyLoadEvent } from 'primeng/api';
 import { BsDatepickerConfig, DatepickerDateCustomClasses } from 'ngx-bootstrap/datepicker';
+import { ActivatedRoute } from '@angular/router';
 
 class FilterType {
   consentType = '';
@@ -42,7 +43,8 @@ export class CookieTrackingComponent implements OnInit {
   pagelimit;
   planDetails: any;
   isDisabledScreen = false;
-
+  queryOID;
+  queryPID;
   bsConfig: Partial<BsDatepickerConfig>;
   dateCustomClasses: DatepickerDateCustomClasses[];
   searchbydaterange: any = '';
@@ -99,6 +101,7 @@ export class CookieTrackingComponent implements OnInit {
   constructor(private cookieConsentService: CookieTrackingService,
               private  orgservice: OrganizationService,
               private loading: NgxUiLoaderService,
+              private activateRoute: ActivatedRoute,
               private gdprService: GdprService,
               private dataService: DataService
   ) {
@@ -106,6 +109,11 @@ export class CookieTrackingComponent implements OnInit {
       { date: new Date(), classes: ['theme-dark-blue'] },
     ];
     this.searchbydaterange = [new Date(new Date().setDate(new Date().getDate() - 30)),new Date()]
+    this.activateRoute.queryParams
+      .subscribe((params: any) => {
+        this.queryOID = params.oid;
+        this.queryPID = params.pid;
+      });
   }
 
   ngOnInit() {
@@ -163,8 +171,8 @@ export class CookieTrackingComponent implements OnInit {
         this.currrentManagedPropID = response.property_id || response.response.id;
       } else {
         const orgDetails = this.orgservice.getCurrentOrgWithProperty();
-        this.currentManagedOrgID = orgDetails.organization_id;
-        this.currrentManagedPropID = orgDetails.property_id;
+        this.currentManagedOrgID = orgDetails.organization_id || orgDetails.response.oid;
+        this.currrentManagedPropID = orgDetails.property_id || orgDetails.response.id;
       }
     });
   }
@@ -197,7 +205,7 @@ export class CookieTrackingComponent implements OnInit {
       page: this.firstone
     };
 
-    this.cookieConsentService.getConsent(this.currrentManagedPropID, filter, this.constructor.name, moduleName.cookieTrackingModule)
+    this.cookieConsentService.getConsent(this.queryPID, filter, this.constructor.name, moduleName.cookieTrackingModule)
       .subscribe(res => {
         this.loading.stop();
         this.tLoading = false;
@@ -213,7 +221,7 @@ export class CookieTrackingComponent implements OnInit {
 
   onGetFilterData() {
     this.loading.start();
-    this.cookieConsentService.onGetFilter(this.currrentManagedPropID, this.constructor.name, moduleName.cookieTrackingModule)
+    this.cookieConsentService.onGetFilter(this.queryPID, this.constructor.name, moduleName.cookieTrackingModule)
       .subscribe((res: any) => {
         this.loading.stop();
         if (res['status'] === 200) {

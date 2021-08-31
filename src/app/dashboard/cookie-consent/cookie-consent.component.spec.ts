@@ -22,4 +22,9 @@ describe('CookieConsentComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should contain organizationid and propertyid',() => {
+    expect(component.queryOID).toBeDefined();
+    expect(component.queryPID).toBeDefined();
+  })
 });

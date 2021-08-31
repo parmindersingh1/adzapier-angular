@@ -22,4 +22,9 @@ describe('WebformsComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should check license limit available before creating form',()=>{
+    expect(component.isLicenseLimitAvailable()).toBe(true);
+  })
+
 });

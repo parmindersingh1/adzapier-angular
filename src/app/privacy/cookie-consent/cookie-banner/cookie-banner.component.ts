@@ -15,7 +15,7 @@ import {CookieBannerService} from '../../../_services/cookie-banner.service';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
 import {OrganizationService} from '../../../_services';
 import {Location} from '@angular/common';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {moduleName} from '../../../_constant/module-name.constant';
 import {CookieCategoryService} from 'src/app/_services/cookie-category.service';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
@@ -117,7 +117,8 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
     allowedLang: ['en-US'],
     defaultLang: 'en-US'
   };
-
+  queryOID;
+  queryPID;
   constructor(private formBuilder: FormBuilder,
               private cd: ChangeDetectorRef,
               private modalService: BsModalService,
@@ -127,13 +128,18 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
               private  orgservice: OrganizationService,
               private _location: Location,
               private router: Router,
+              private activatedroute: ActivatedRoute,
               private dataService: DataService,
               private gdprService: GdprService
   ) {
-
   }
 
   async ngOnInit() {
+    this.activatedroute.queryParams
+      .subscribe((params: any) => {
+        this.queryOID = params.oid;
+        this.queryPID = params.pid;
+      });
     this.onGetPropsAndOrgId();
     this.onGetAllowVendors();
     this.onGetCookies();
@@ -195,7 +201,7 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
 
   onGetCustomLangData() {
     this.loading.start('lang');
-    this.cookieBannerService.GetCustomLangData( this.constructor.name, moduleName.cookieBannerModule, this.activeBannerlanguage, this.currentManagedOrgID, this.currrentManagedPropID)
+    this.cookieBannerService.GetCustomLangData( this.constructor.name, moduleName.cookieBannerModule, this.activeBannerlanguage, this.queryOID, this.queryPID)
       .subscribe((res: any) => {
         this.loading.stop('lang');
         if (res.status === 200 ) {
@@ -310,7 +316,7 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
     this.loading.start('23');
     this.skeletonLoading = true;
     this.isOpen = false;
-    this.cookieBannerService.onGetVendorsData(this.currentManagedOrgID, this.currrentManagedPropID, this.constructor.name, moduleName.manageVendorsModule)
+    this.cookieBannerService.onGetVendorsData(this.queryOID, this.queryPID, this.constructor.name, moduleName.manageVendorsModule)
       .subscribe(res => {
         this.skeletonLoading = false;
         this.loading.stop('23');
@@ -347,12 +353,13 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
       disableCookieblocking: !isThridPartyBlock,
       disableBannerConfig: !isBannerConfig
     };
+    this.cd.detectChanges();
   }
 
   onGetSavedCookieBannerConfig() {
     this.loading.start('2');
     return new Promise((resolve, reject) => {
-      this.cookieBannerService.onGetCookieBannerData(this.currentManagedOrgID, this.currrentManagedPropID, this.constructor.name, moduleName.cookieBannerModule)
+      this.cookieBannerService.onGetCookieBannerData(this.queryOID, this.queryPID, this.constructor.name, moduleName.cookieBannerModule)
         .subscribe((res: any) => {
           this.loading.stop('2');
           if (res.status === 200 && res.hasOwnProperty('response')) {
@@ -432,7 +439,8 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
 
   navigate() {
     this.modalRef.hide();
-    this.router.navigateByUrl('/cookie-consent/cookie-category');
+   // this.router.navigateByUrl('/cookie-consent/cookie-category');
+    this.router.navigate(['/cookie-consent/cookie-category'],{ queryParams: { oid: this.queryOID, pid: this.queryPID }, queryParamsHandling:'merge', skipLocationChange:false});
   }
 
   onFormInIt() {
@@ -688,12 +696,12 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
         this.currentManagedOrgID = response.organization_id || response.response.oid;
         this.currrentManagedPropID = response.property_id || response.response.id;
       } else {
-        const orgDetails = this.orgservice.getCurrentOrgWithProperty();
-        this.currentManagedOrgID = orgDetails.organization_id;
-        this.currrentManagedPropID = orgDetails.property_id;
+       // const orgDetails = this.orgservice.getCurrentOrgWithProperty();
+        this.currentManagedOrgID = this.queryOID; //orgDetails.organization_id || orgDetails.response.oid;
+        this.currrentManagedPropID = this.queryPID; // orgDetails.property_id || orgDetails.response.id;
       }
     });
-    
+
   }
 
   get f() {
@@ -739,7 +747,7 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
     };
     this.isPublish = true;
     this.loading.start();
-    this.cookieBannerService.onSubmitCookieBannerData(userPrefrencesData, this.currentManagedOrgID, this.currrentManagedPropID, this.constructor.name, moduleName.cookieBannerModule)
+    this.cookieBannerService.onSubmitCookieBannerData(userPrefrencesData, this.queryOID, this.queryPID, this.constructor.name, moduleName.cookieBannerModule)
       .subscribe((res: any) => {
         this.cookieBannerForm.markAsPristine();
         this.onGetSavedCookieBannerConfig();
@@ -786,7 +794,7 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
 
     this.loading.start();
     this.isPublish = true;
-    this.cookieBannerService.onUpdateCookieBannerData(userPrefrencesData, this.currentManagedOrgID, this.currrentManagedPropID, this.constructor.name, moduleName.cookieBannerModule)
+    this.cookieBannerService.onUpdateCookieBannerData(userPrefrencesData, this.queryOID, this.queryPID, this.constructor.name, moduleName.cookieBannerModule)
       .subscribe((res: any) => {
         this.cookieBannerForm.markAsPristine();
         this.onGetSavedCookieBannerConfig();
@@ -1100,14 +1108,14 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
     this.alertType = 'info';
     const payload = JSON.stringify(this.onAssignPayload());
     this.loading.start('lang');
-    this.cookieBannerService.saveCustomLang(payload, this.activeBannerlanguage, this.currentManagedOrgID, this.currrentManagedPropID, this.constructor.name, moduleName.manageVendorsModule)
+    this.cookieBannerService.saveCustomLang(payload, this.activeBannerlanguage, this.queryOID, this.queryPID, this.constructor.name, moduleName.manageVendorsModule)
       .subscribe(res => {
         if (res.status === 200) {
           const langPayload = {
             lang_code: this.activeBannerlanguage,
             lang_data: payload
           };
-          this.cookieBannerService.saveCustomLangInDB(langPayload, this.currentManagedOrgID, this.currrentManagedPropID, this.constructor.name, moduleName.manageVendorsModule)
+          this.cookieBannerService.saveCustomLangInDB(langPayload, this.queryOID, this.queryPID, this.constructor.name, moduleName.manageVendorsModule)
             .subscribe((res: any) => {
               if (res.status === 201) {
                 this.loading.stop('lang');
