@@ -78,9 +78,9 @@
           </div>
 
           <div class="text-center">
-            <a routerLink="/settings/billing/manage" (click)="template.hide()" class="btn mt-3 btn-primary"> <i
+            <a routerLink="/settings/billing/manage" (click)="onTemplateHide()" [queryParams]="{oid:queryOID , pid:queryPID}" class="btn mt-3 btn-primary"> <i
               _aria-hidden="true" class="fa fa-cogs pr-1"></i> Manage License</a>
-            <p class="cancel-btn mt-2 mb-2" (click)="template.hide()">or Cancel & Go Back</p>
+            <p class="cancel-btn mt-2 mb-2" (click)="onTemplateHide()">or Cancel & Go Back</p>
           </div>
         </div>
 
@@ -149,9 +149,9 @@
           </div>
 
           <div class="text-center">
-            <a routerLink="/settings/billing/manage" (click)="template.hide()" class="btn mt-3 btn-primary"> <i
+            <a routerLink="/settings/billing/manage" [queryParams]="{oid:queryOID , pid:queryPID}" (click)="onTemplateHide()"  class="btn mt-3 btn-primary"> <i
               _aria-hidden="true" class="fa fa-cogs pr-1"></i> Manage License</a>
-            <p class="cancel-btn mt-2 mb-2" (click)="template.hide()">or Cancel & Go Back</p>
+            <p class="cancel-btn mt-2 mb-2" (click)="onTemplateHide()">or Cancel & Go Back</p>
           </div>
         </div>
       </div>
@@ -171,14 +171,19 @@
           <h4 *ngIf="noPlanType == 'company' && isUserSubscribe">You can not add more users, Please Upgrade your existing plan </h4>
 
           <ng-container class="mb-4" *ngIf="!isUserSubscribe || !isUserSubscribeDsar ">
-            <h3 class="font-weight-bold" *ngIf="noPlanType == 'cookieConsent'">Cookie Consent Management </h3>
-            <h3 class="font-weight-bold" *ngIf="noPlanType == 'org'">Data Subject Access Request (DSAR) </h3>
-            <h5> You don't have an active plan, please choose a new plan below </h5>
+            <div id="cookieConsent" *ngIf="noPlanType == 'cookieConsent' && !isUserSubscribe">
+              <h3 class="font-weight-bold" >Cookie Consent Management </h3>
+              <h5> You don't have an active plan, please choose a new plan below </h5>
+            </div>
+            <div id="dsar" *ngIf="noPlanType == 'org' && !isUserSubscribeDsar">
+              <h3 class="font-weight-bold" >Data Subject Access Request (DSAR) </h3>
+              <h5> You don't have an active plan, please choose a new plan below </h5>
+            </div>
           </ng-container>
 
         </div>
 
-        <div class="plan-body" *ngIf="noPlanType == 'cookieConsent' && !isUserSubscribe">
+          <div class="plan-body" *ngIf="noPlanType == 'cookieConsent' && !isUserSubscribe">
           <div class="toggle-period">
             <input id="toggle-period_3" (change)="onSelectBillingCycle(subType)" #subType [checked]="billingCycle === 'yearly'" class="toggle-period__checkbox" type="checkbox">
             <label for="toggle-period_3" class="toggle-period__label">
@@ -284,9 +289,9 @@
           </div>
         </div>
         <div class="text-center">
-          <a routerLink="/settings/billing/manage" (click)="template.hide()" class="btn mt-3 btn-primary"> <i
+          <a (click)="redirectToManageLicense()" class="btn mt-3 btn-primary txt-white"> <i
             _aria-hidden="true" class="fa fa-cogs pr-1"></i> Manage License</a>
-          <p class="cancel-btn mt-2 mb-2" (click)="onTemplateHide()">or Cancel & Go Back</p>
+          <p class="cancel-btn mt-2 mb-2" (click)="onTemplateHide()" data-dismiss="modal" aria-label="Close">or Cancel & Go Back</p>
         </div>
 
       </div>

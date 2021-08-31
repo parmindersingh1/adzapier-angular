@@ -3,7 +3,7 @@
     <nav aria-label="breadcrumb" style="margin-left: -14px">
       <ol class="breadcrumb breadcrumb-style1 mg-b-10">
         <li class="breadcrumb-item">Privacy</li>
-        <li class="breadcrumb-item"><a routerLink="/home/dashboard/cookie-consent">Cookie Consent</a></li>
+        <li class="breadcrumb-item"><a routerLink="/home/dashboard/cookie-consent" [queryParams]="{oid:queryOID , pid:queryPID}">Cookie Consent</a></li>
         <li class="breadcrumb-item active">Manage Vendors</li>
       </ol>
     </nav>
@@ -22,7 +22,7 @@
 
       <div class="d-none d-md-block">
 
-        <button (click)="onGetAllowVendors()" *ngIf="!skeletonLoading.one && !skeletonLoading.two"
+        <button (click)="getAllVendorsData()" *ngIf="!skeletonLoading.one && !skeletonLoading.two"
                 class="btn  btn-sm btn-uppercase btn-outline-secondary" style="width: 102px">
           <i class="fas fa-sync"></i> Refresh
         </button>

@@ -9,6 +9,7 @@ import { QuillModule } from 'ngx-quill';
 import { SharedbootstrapModule } from 'src/app/sharedbootstrap/sharedbootstrap.module';
 import { FeatherModule } from 'angular-feather';
 import { allIcons } from 'angular-feather/icons';
+import { HeaderComponent } from 'src/app/_components/layout/header/header.component';
 
 @NgModule({
   declarations: [DsarformComponent],

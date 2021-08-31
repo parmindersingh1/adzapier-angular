@@ -2,7 +2,7 @@ import {
   Component, OnInit, ViewChild, Input, ChangeDetectionStrategy, ChangeDetectorRef, ElementRef, AfterContentChecked,
   AfterViewInit
 } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
@@ -127,11 +127,14 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
       label: "Last Year"
     },
   ];
+  queryOID;
+  queryPID;
   constructor(
     private orgservice: OrganizationService,
     private userService: UserService,
     private companyService: CompanyService,
     private router: Router,
+    private activateRoute: ActivatedRoute,
     private loading: NgxUiLoaderService,
     private dsarRequestService: DsarRequestService,
     private ccpaFormConfigService: CCPAFormConfigurationService,
@@ -148,6 +151,11 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
     }
 
   ngOnInit() {
+    this.activateRoute.queryParamMap
+      .subscribe(params => {
+        this.queryOID = params.get('oid');
+        this.queryPID = params.get('pid');
+      });
     this.onGetPropsAndOrgId();
     this.onGetRequestListFilter();
     this.setupSearchDebouncer();
@@ -157,6 +165,7 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
       webformselection: ['', [Validators.required]]
     });
     this.bsConfig = Object.assign({}, { containerClass: 'theme-dark-blue', showClearButton: true, returnFocusToInput: true, dateInputFormat: 'yyyy-mm-dd', adaptivePosition : true, showTodayButton:true, ranges: this.ranges  });
+    
   }
 
   get dsar() { return this.createDSARWebFormRequest.controls; }
@@ -164,12 +173,11 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
   onGetPropsAndOrgId() {
     this.orgservice.currentProperty.subscribe((response) => {
       if (response !== '') {
-        this.currentManagedOrgID = response.organization_id || response.response.oid;
-        this.currrentManagedPropID = response.property_id || response.response.id;
+        this.currentManagedOrgID = response.organization_id || response.response.oid || this.queryOID;
+        this.currrentManagedPropID = response.property_id || response.response.id || this.queryPID;
       } else {
-        const orgDetails = this.orgservice.getCurrentOrgWithProperty();
-        this.currentManagedOrgID = orgDetails.organization_id || orgDetails.response.oid;
-        this.currrentManagedPropID = orgDetails.property_id || orgDetails.response.id;
+        this.currentManagedOrgID = this.queryOID;
+        this.currrentManagedPropID = this.queryPID;
       }
     });
   }
@@ -187,8 +195,7 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
   loadrequestsListLazy(event: LazyLoadEvent) {
     this.isloading = true;
     this.eventRows = event.rows;
-    let selectedDateRange;
-    if (this.requestsList) {
+    if (this.requestsList !== undefined) {
 
       if (event.first === 0) {
         this.firstone = 1;
@@ -199,7 +206,8 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
       const sortOrder = event.sortOrder === -1 ? 'asc' : 'desc';
       // const orderBy = '&orderby=' + event.sortField + ' ' + sortOrder;
       const orderBy = '&order_by_date=' + sortOrder;
-
+      this.currentManagedOrgID == undefined ? this.currentManagedOrgID = this.queryOID : this.currentManagedOrgID;
+      this.currrentManagedPropID == undefined ? this.currrentManagedPropID = this.queryPID : this.currrentManagedPropID;
       this.dsarRequestService.getDsarRequestList(this.constructor.name, moduleName.dsarRequestModule, this.currentManagedOrgID,
         this.currrentManagedPropID, pagelimit, orderBy)
         .subscribe((data) => {
@@ -308,7 +316,7 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
   }
 
   viewDSARRequestDetails(res) {
-    this.router.navigate(['privacy/dsar/requests-details', res.id,res.cid,this.currentManagedOrgID,this.currrentManagedPropID]);
+    this.router.navigate(['privacy/dsar/requests-details', res.id,res.cid,this.currentManagedOrgID,this.currrentManagedPropID],{ queryParams: { oid: this.queryOID, pid: this.queryPID }, queryParamsHandling:'merge', skipLocationChange:false});
   }
 
   navigateToWebForm(obj) {

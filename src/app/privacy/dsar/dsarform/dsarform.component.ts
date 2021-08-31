@@ -1,5 +1,5 @@
 import {
-  Component, OnInit, OnDestroy, ViewChild, ViewEncapsulation,
+  Component, OnInit, OnDestroy, ViewChild, ViewEncapsulation, AfterViewInit,
   ChangeDetectionStrategy, ChangeDetectorRef, ElementRef, AfterContentChecked, AfterViewChecked, TemplateRef
 } from '@angular/core';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
@@ -19,6 +19,8 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { DataService } from 'src/app/_services/data.service';
 import { DirtyComponents } from 'src/app/_models/dirtycomponents';
+import { environment } from 'src/environments/environment';
+
 @Component({
   selector: 'app-dsarform',
   templateUrl: './dsarform.component.html',
@@ -27,7 +29,7 @@ import { DirtyComponents } from 'src/app/_models/dirtycomponents';
   changeDetection: ChangeDetectionStrategy.Default
 
 })
-export class DsarformComponent implements OnInit, AfterContentChecked, AfterViewChecked, OnDestroy, DirtyComponents {
+export class DsarformComponent implements OnInit, AfterContentChecked, AfterViewInit,  AfterViewChecked, OnDestroy, DirtyComponents {
   @ViewChild('editor', { static: true }) editor;
   @ViewChild('azEmbedCode') public azEmbedCode: ElementRef<any>;
   @ViewChild('shareLinkCode') public shareLinkCode: ElementRef<any>;
@@ -39,6 +41,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
   @ViewChild('confirmSaveAlert') confirmSaveAlert: TemplateRef<any>;
   @ViewChild('basicForm') basicDetailForm: NgForm;
   @ViewChild('settingsForm',{static:false}) settingsForm: NgForm;
+
   public requestObject: any = {};
   public selectedFormOption: any;
   public selectedControlType: any;
@@ -253,6 +256,10 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
   settingsFormchangeSubscription: any;
   basicFormSubscription: any;
   errorMsgdaysleft: string;
+  queryOID;
+  queryPID;
+  orgDetails;
+  orgPropertyMenu;
   constructor(private fb: FormBuilder, private ccpaRequestService: CcparequestService,
     private organizationService: OrganizationService,
     private dsarFormService: DsarformService,
@@ -270,6 +277,11 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
   ) {
 
     this.count = 0;
+    this.activatedRoute.queryParamMap
+    .subscribe(params => {
+   this.queryOID = params.get('oid');
+   this.queryPID = params.get('pid'); 
+    });
 
   }
 
@@ -313,6 +325,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
     this.faviconForm = this.fb.group({
       titlefavicon: ['']
     });
+    this.loadOrgProperty();
   }
   get stepFormOne() { return this.basicForm.controls; }
   get formLogo() { return this.headerLogoForm.controls; }
@@ -322,18 +335,16 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
     this.organizationService.currentProperty.subscribe((response) => {
       //  this.loadingbar.stop();
       if (response !== '') {
-        this.selectedProperty = response.property_name;
+        this.selectedProperty = response.property_name || response.response.name;
         this.currentOrganization = response.organization_name;
         this.orgId = response.organization_id || response.response.oid;
         this.propId = response.property_id || response.response.id;
-        this.currentManagedOrgID = response.organization_id;
+        this.currentManagedOrgID = response.organization_id || response.response.oid;
       } else {
-        const orgDetails = this.organizationService.getCurrentOrgWithProperty();
-        this.currentOrganization = orgDetails.organization_name;
-        this.selectedProperty = orgDetails.property_name;
-        this.orgId = orgDetails.organization_id;
-        this.propId = orgDetails.property_id;
-        this.currentManagedOrgID = orgDetails.organization_id;
+        this.currentOrgID =  this.queryOID;
+        this.orgId =  this.queryOID;
+        this.propId = this.queryPID;
+        this.currentManagedOrgID = this.queryOID;
         this.loading = false;
       }
     });
@@ -355,8 +366,8 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
           // this.orgId = data.OID;
           //  this.crid = data.crid;
           // this.propertyname = data.form_name;
-          this.formName = data.form_name || data.web_form_name;
-          this.daysleft = data.days_left || 45;
+          this.formName = data.response !== undefined && data.response.form_name || data.form_name || data.web_form_name;
+          this.daysleft = data.response !== undefined && data.response.settings.days_left || data.days_left || 45;
           if (data.form_status === 'draft') {
             this.isDraftWebForm = true;
             this.isEditingPublishedForm = true;
@@ -364,11 +375,11 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
           // this.selectedWorkflowID = data.workflow;
           const isUUID = uuidRegx.test(data.approver);
           if (isUUID) {
-            this.selectedApproverID = data.approver;
+            this.selectedApproverID = data.approver || data.response.approver;
             this.workflow = data.workflow;
           } else {
-            this.selectedApproverID = data.approver_id;
-            this.workflow = data.workflow_id;
+            this.selectedApproverID = data.approver_id || data.response.approver;
+            this.workflow = data.workflow_id !== undefined ? data.workflow_id : data.response.workflow;
           }
           // this.requestFormControls = data.request_form;
           if (data.request_form) {
@@ -523,8 +534,10 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
       moveItemInArray(this.webFormControlList, event.previousIndex, event.currentIndex);
       if (this.crid) {
         this.ccpaFormConfigService.setFormControlList(this.webFormControlList);
+        this.isDirty = true;
       } else {
         this.dsarFormService.setFormControlList(this.webFormControlList);
+        this.isDirty = true;
       }
 
 
@@ -1219,9 +1232,11 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
   cancelAddingFormControl(actionType) {
     if (actionType === 'cancel' && this.crid === null) {
        let obj = this.ccpaFormConfigService.getStoreDataBeforeEdit();
-       const customControlIndex = this.webFormControlList.findIndex((t) => t.controlId === obj.controlId);
-       this.dsarFormService.updateControl(this.webFormControlList[customControlIndex], customControlIndex, obj);
-       this.webFormControlList = this.dsarFormService.getFormControlList();
+      if (obj !== null && obj !== undefined) {
+        const customControlIndex = this.webFormControlList.findIndex((t) => t.controlId === obj.controlId);
+        this.dsarFormService.updateControl(this.webFormControlList[customControlIndex], customControlIndex, obj);
+        this.webFormControlList = this.dsarFormService.getFormControlList();
+      }
     } else if (actionType === 'cancel' && this.crid !== null) {
       this.isDirty = true;
       const previousobj = this.ccpaFormConfigService.getStoreDataBeforeEdit();
@@ -1835,18 +1850,11 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
 
   previewCCPAForm() {
     if (this.orgId && this.propId) {
-      const formStatus = this.isWebFormPublished && !this.isEditingPublishedForm && !this.isResetlinkEnable ? 'publish' : 'draft';
-      if (window.location.hostname === 'localhost') {
-        window.open('http://localhost:4500/dsar/form/' + this.orgId + '/' + this.propId + '/' + this.crid + '/' + formStatus);
-      }
-      if (window.location.hostname === 'develop-cmp.adzpier-staging.com') {
-        window.open('https://develop-privacyportal.adzpier-staging.com/dsar/form/' + this.orgId + '/' + this.propId + '/' + this.crid + '/' + formStatus);
-      } else if (window.location.hostname === 'cmp.adzpier-staging.com') {
-        window.open('https://privacyportal.adzpier-staging.com/dsar/form/' + this.orgId + '/' + this.propId + '/' + this.crid + '/' + formStatus);
-      } else if (window.location.hostname === 'qa-cmp.adzpier-staging.com') {
-        window.open('https://qa-privacyportal.adzpier-staging.com/dsar/form/' + this.orgId + '/' + this.propId + '/' + this.crid + '/' + formStatus);
-      } else if (window.location.hostname === 'portal.adzapier.com') {
-        window.open('https://privacyportal.primeconsent.com/dsar/form/' + this.orgId + '/' + this.propId + '/' + this.crid + '/' + formStatus);
+        const formStatus = this.isWebFormPublished && !this.isEditingPublishedForm && !this.isResetlinkEnable ? 'publish' : 'draft';
+     if (window.location.hostname === 'localhost') { //for internal purpose
+         window.open('http://localhost:4500/dsar/form/' + this.orgId + '/' + this.propId + '/' + this.crid + '/' + formStatus);
+      } else{
+         window.open(environment.privacyportalUrl + this.orgId + '/' + this.propId + '/' + this.crid + '/' + formStatus);
       }
     } else {
       this.alertMsg = 'Organization or Property not found!';
@@ -1858,17 +1866,10 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
   getWebFormScriptLink() {
     if (this.orgId && this.propId) {
       const formStatus = 'publish';
-      if (window.location.hostname === 'localhost') {
+      if (window.location.hostname === 'localhost') { //for internal purpose
         this.scriptcode = 'http://localhost:4500/dsar/form/' + this.orgId + '/' + this.propId + '/' + this.crid + '/' + formStatus;
-      }
-      if (window.location.hostname === 'develop-cmp.adzpier-staging.com') {
-        this.scriptcode = 'https://develop-privacyportal.adzpier-staging.com/dsar/form/' + this.orgId + '/' + this.propId + '/' + this.crid + '/' + formStatus;
-      } else if (window.location.hostname === 'cmp.adzpier-staging.com') {
-        this.scriptcode = 'https://privacyportal.adzpier-staging.com/dsar/form/' + this.orgId + '/' + this.propId + '/' + this.crid + '/' + formStatus;
-      } else if (window.location.hostname === 'qa-cmp.adzpier-staging.com') {
-        window.open('https://qa-privacyportal.adzpier-staging.com/dsar/form/' + this.orgId + '/' + this.propId + '/' + this.crid + '/' + formStatus);
-      } else if (window.location.hostname === 'portal.adzapier.com') {
-        this.scriptcode = 'https://privacyportal.primeconsent.com/dsar/form/' + this.orgId + '/' + this.propId + '/' + this.crid + '/' + formStatus;
+      } else {
+        this.scriptcode = environment.privacyportalUrl + this.orgId + '/' + this.propId + '/' + this.crid + '/' + formStatus;
       }
     }
   }
@@ -2472,15 +2473,18 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
     this.isEditingPublishedForm = !this.isEditingPublishedForm;
     this.isdraftsubmitted = false;
     this.basicFormSubmitted = false;
-    if(this.crid || this.settingsForm.form.dirty){
-      this.isDirty = false;
+    if(this.crid !== null && this.settingsForm.form.dirty){
+        this.isDirty = false;
+        this.settingsForm.form.markAsPristine();
+        this.getDSARFormByCRID(this.crid,'dataupdated');
+    } else if (this.crid == null && this.settingsForm.form.dirty){
+      this.isDirty = true;
       this.settingsForm.form.markAsPristine();
-      this.getDSARFormByCRID(this.crid,'dataupdated');
+      this.navDirective.select(this.activeId);
     }
-    this.isDirty = false;
+    this.isDirty = true;
     this.modalRef.hide();
     this.navDirective.select(this.activeId);
-   // return false;
   }
 
   disableEditPublishBtn(): boolean {
@@ -2622,9 +2626,17 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
 
   }
 
-  // ngAfterViewInit(){
+  ngAfterViewInit(){
+  //   this.headerNav.loadOrganizationWithProperty();
   //   this.cdRef.detectChanges();
-  // }
+  //   if(this.headerNav !== undefined){
+  //   this.selectedProperty = this.headerNav.currentProperty;
+  //  this.currentOrganization = this.headerNav.currentOrganization;// orgDetails.organization_name;
+  //  console.log(this.selectedProperty,'selectedProperty..2642..');
+  //  this.basicForm.controls['selectedProperty'].setValue(this.selectedProperty);
+  //  this.basicForm.controls['currentOrganization'].setValue(this.currentOrganization);
+  //   }
+  }
 
   getUpdatedFormList():any {
     return this.dsarFormService.getFormControlList();
@@ -2644,6 +2656,32 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
     }
 
   }
+
+  loadOrgProperty(){
+    this.organizationService.getOrganizationWithProperty().subscribe((data) => {
+      
+      this.orgPropertyMenu = data.response;
+      const findOidIndex = this.orgPropertyMenu.findIndex((t) => t.id == this.queryOID) //finding oid
+      if(findOidIndex !== -1){
+        const activePro = this.orgPropertyMenu[findOidIndex]; //based on oid finding propid
+        const propobj = activePro !== undefined && activePro.property.filter((el)=>el.property_id === this.queryPID);
+        if(propobj){
+        const obj = {
+         organization_id: activePro.id,
+         organization_name: activePro.orgname,
+         property_id: propobj[0].property_id,
+         property_name: propobj[0].property_name
+       };
+       this.selectedProperty = obj.property_name;
+       this.basicForm.controls['selectedProperty'].setValue(this.selectedProperty);
+       this.basicForm.controls['currentOrganization'].setValue(this.currentOrganization);
+      }
+     
+    } 
+  });
+  }
+
+  
 
 }
 

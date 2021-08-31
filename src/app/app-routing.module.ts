@@ -75,7 +75,7 @@ const routes: Routes = [
   { path: 'plans', loadChildren: () => import('./plans/plan.module').then(m => m.PlanModule) },
   // { path: '', redirectTo: 'home/dashboard/analytics', pathMatch:'full' },
   // otherwise redirect to home
-  { path: '**', redirectTo: 'home/welcome', pathMatch: 'full' }
+  { path: '**', redirectTo: 'home/welcome', pathMatch: 'full' } //, runGuardsAndResolvers:'always'
 ];
 
 @NgModule({

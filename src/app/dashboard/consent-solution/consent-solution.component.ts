@@ -8,7 +8,7 @@ import {NgxUiLoaderService} from 'ngx-ui-loader';
 import { DataService } from 'src/app/_services/data.service';
 import { BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
 import {Location} from '@angular/common';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 declare var jQuery: any;
 
@@ -49,7 +49,7 @@ export class ConsentSolutionComponent implements OnInit {
       },
     }
   };
-  public doughnutChartLabels: Label[] = ['News Letter', 'Privacy Info', 'Term Of Service', 'Other'];
+  public doughnutChartLabels: Label[] = ['News Letter', 'Privacy Info', 'Terms and Conditions', 'Other'];
   public doughnutChartData: number[] = [300, 500, 100];
   public doughnutChartType: ChartType = 'doughnut';
   consentColor = ['#f77eb9', '#fdb16d', '#65e0e0', '#69b2f8'];
@@ -85,16 +85,24 @@ export class ConsentSolutionComponent implements OnInit {
   ];
   modalRef: BsModalRef;
   @ViewChild('noLicenseForConsentPreference', {static: true}) noLicenseForConsentPreference;
+  queryOID;
+  queryPID;
   constructor(private consentDashboardService: ConsentSolutionsService,
               private loading: NgxUiLoaderService,
               private dataService: DataService,
               private modalService: BsModalService,
               private _location: Location,
-              private router:Router
+              private router:Router,
+              private activatedroute: ActivatedRoute
               ) {
   }
 
   ngOnInit() {
+    this.activatedroute.queryParamMap
+      .subscribe(params => {
+        this.queryOID = params.get('oid');
+        this.queryPID = params.get('pid');
+      });
     this.onSetUpDate();
     // this.onGetConsentData();
     // this.onOpenPopUp();
@@ -177,7 +185,7 @@ export class ConsentSolutionComponent implements OnInit {
   }
 
   onGoBack() {
-    this.router.navigate(['/home/dashboard/analytics']);
+    this.router.navigate(['/home/dashboard/analytics'],{ queryParams: { oid: this.queryOID, pid: this.queryPID },  skipLocationChange:false});
     this.modalRef.hide();
   }
 }

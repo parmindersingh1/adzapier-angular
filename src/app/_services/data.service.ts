@@ -107,7 +107,8 @@ export class DataService {
 
   getPropertyPlanDetails(componentName, moduleName, propID) {
     const path = apiConstant.PROPERTY_PLAN;
-    return this.http.get(environment.apiUrl + path, {params: {pID: propID}}).pipe(map(res => res),
+    let propertyID = propID !== undefined && typeof propID == "object" ?  propID.property_id : propID;
+    return this.http.get(environment.apiUrl + path, {params: {pID: propertyID}}).pipe(map(res => res),
       catchError(error => {
         this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.consentDashboard, componentName, moduleName, path);
         return throwError(error);
@@ -385,7 +386,7 @@ export class DataService {
     let currentplan = null;
     if (this.getCurrentOrgPlanDetails().hasOwnProperty('response')) {
       if (this.getCurrentOrgPlanDetails().response.hasOwnProperty('plan_details')) {
-        currentplan = res.response.plan_details;
+        currentplan = res.response !== undefined && res.response.plan_details;
       }
     }
 
@@ -544,8 +545,8 @@ export class DataService {
 
   checkLicenseAvailabilityPerOrganization(org): Observable<any>{
     let orgID;
-    if(org.response !== undefined){
-      orgID = org.response.id;
+    if(org && org.response !== undefined){
+      orgID = org.response.id || org;
     } 
     let webFormLicense = this.getWebFormLicenseLimit(this.constructor.name, moduleName.headerModule, org.id || org.organization_id || orgID || org);
     let requestLicense = this.getDSARRequestLicenseLimit(this.constructor.name, moduleName.headerModule, org.id || org.organization_id || orgID || org);
@@ -563,7 +564,7 @@ export class DataService {
   }
 
   checkLicenseAvailabilityForProperty(prop):Observable<any>{
-    let propLicense = this.getPropertyPlanDetails(this.constructor.name,moduleName.headerModule,prop.property_id || prop.response.id);
+    let propLicense = this.getPropertyPlanDetails(this.constructor.name,moduleName.headerModule,prop || prop.property_id || prop.response.id);
     return forkJoin([propLicense]);
   }
 
@@ -590,6 +591,14 @@ export class DataService {
       return false;
     }
    }
+
+  removeOrgPlanFromLocalStorage() {
+    localStorage.removeItem('orgPlan');
+  }
+
+  removePropertyPlanFromLocalStorage() {
+    localStorage.removeItem('propertyPlan');
+  }
 }
 
 export class accesstype {
