@@ -307,9 +307,15 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
   }
 
   onChangeDueIn(event) {
-    this.dueIn = event.target.value;
-    this.searchFilter();
+    if(event !== "" && typeof event !== "object"){
+      this.dueIn = event;
+      this.searchFilter();
+    } else if (event !== undefined && event.target.value.length > 1) {
+      this.dueIn = event.target.value;
+      this.searchFilter();
+    }
   }
+
   onChangeSubjectType(event) {
     this.subjectType = event.target.value;
     this.searchFilter();
