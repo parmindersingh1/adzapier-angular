@@ -36,6 +36,7 @@
     "@nrwl/workspace": "^11.6.1",
     "@types/jquery": "^3.5.0",
     "angular-feather": "^6.0.9",
+    "angular2-query-builder": "^0.6.2",
     "bootstrap": "^4.4.1",
     "chart.js": "^2.9.3",
     "feather-icons": "^4.28.0",

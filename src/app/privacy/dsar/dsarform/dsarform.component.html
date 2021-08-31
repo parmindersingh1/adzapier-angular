@@ -17,38 +17,39 @@
             <li [ngbNavItem]="1" [destroyOnHide]="false">
                 <a ngbNavLink>1 Basic</a>
                 <ng-template ngbNavContent>
-                    <form [formGroup]="basicForm">
-                        <div id="step-1" class="p-10 mt-2 tab-pane step-content" style="display: block;">
-                            <div class="col-6 align-items-center justify-content-between margin-auto">
+                  <app-dsar-system></app-dsar-system>
+<!--                    <form [formGroup]="basicForm">-->
+<!--                        <div id="step-1" class="p-10 mt-2 tab-pane step-content" style="display: block;">-->
+<!--                            <div class="col-6 align-items-center justify-content-between margin-auto">-->
 
-                                <div class="form-group mb-2">
-                                    <label for="formname" class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">Name</label>
-                                    <input type="text" class="form-control" formControlName="formname" name="formname" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
-                                        [ngClass]="{ 'is-invalid': basicFormSubmitted && stepFormOne.formname.errors }" />
-                                    <div *ngIf="basicFormSubmitted && stepFormOne.formname.errors" class="invalid-feedback">
-                                        <div *ngIf="stepFormOne.formname.errors.required">Form name is required
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="form-group mb-2">
-                                    <label for="currentOrganization" class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">Organization</label>
-                                    <input type="text" class="form-control" formControlName="currentOrganization" name="currentOrganization" />
-                                </div>
-    
-                                <div class="form-group mb-2">
-                                    <label for="selectedProperty" class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">Property</label>
-                                    <input type="text" class="form-control" formControlName="selectedProperty" name="selectedProperty" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="btn-toolbar sw-toolbar sw-toolbar-bottom justify-content-end">
-                            <div class="btn-group mr-2 mb-2 sw-btn-group" role="group">
-                            </div>
-                        </div>
-                    </form>              
+<!--                                <div class="form-group mb-2">-->
+<!--                                    <label for="formname" class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">Name</label>-->
+<!--                                    <input type="text" class="form-control" formControlName="formname" name="formname" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"-->
+<!--                                        [ngClass]="{ 'is-invalid': basicFormSubmitted && stepFormOne.formname.errors }" />-->
+<!--                                    <div *ngIf="basicFormSubmitted && stepFormOne.formname.errors" class="invalid-feedback">-->
+<!--                                        <div *ngIf="stepFormOne.formname.errors.required">Form name is required-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+
+<!--                                <div class="form-group mb-2">-->
+<!--                                    <label for="currentOrganization" class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">Organization</label>-->
+<!--                                    <input type="text" class="form-control" formControlName="currentOrganization" name="currentOrganization" />-->
+<!--                                </div>-->
+
+<!--                                <div class="form-group mb-2">-->
+<!--                                    <label for="selectedProperty" class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">Property</label>-->
+<!--                                    <input type="text" class="form-control" formControlName="selectedProperty" name="selectedProperty" />-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="btn-toolbar sw-toolbar sw-toolbar-bottom justify-content-end">-->
+<!--                            <div class="btn-group mr-2 mb-2 sw-btn-group" role="group">-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </form>-->
             </ng-template>
-            <!-- End Step-1-->  
+            <!-- End Step-1-->
     </li>
     <li [ngbNavItem]="2" [destroyOnHide]="false">
         <!--[disabled]="disabled"-->
@@ -62,7 +63,7 @@
                                 <div class="pull-left float-left" [ngClass]="accordionStatus.isFirstopen ? 'template-blue':'light-black'">Form Fields</div>
                                 <span class="float-right pull-right"><i class="fas fa-chevron-right" [ngClass]="accordionStatus.isFirstopen ? 'rotateicon':'resumeiconstate'"></i></span>
                               </button>
-                           
+
                             <div cdkDropList [cdkDropListData]="webFormControlList" class="formfield-list"
                                     (cdkDropListDropped)="drop($event)">
 
@@ -155,12 +156,12 @@
                                                                     <ng-container *ngFor="let status_item of editableControlOption">
                                                                       <option [value]="status_item.control"> {{status_item.display}}</option>
                                                                     </ng-container>
- 
+
                                                                 </select>
                                                             </label>
-                                                           
+
                                                         </div>
- 
+
                                                     </div>
                                                     <div *ngIf="ismultiselectrequired" class="pl-3">
                                                         <label for="multiselect">
@@ -169,7 +170,7 @@
                                                             </label>
                                                     </div>
                                                 </div>
-                                                
+
                                                 <div class="form-check required-check mt-2">
                                                     <input class="form-check-input" name="changeControlType" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
                                                         [checked]="isRequiredField" (change)="onCheckboxChange($event)"
@@ -185,12 +186,12 @@
                                                         <span *ngIf="ngModel.errors?.required"
                                                             style="color:red;font-size:11px">Name of control is
                                                             mandatory</span>
-                                                        <input type="text" class="form-control" name="lblText" 
+                                                        <input type="text" class="form-control" name="lblText"
                                                             (input)="onLabelChange($event)"
                                                             #ngModel="ngModel" [(ngModel)]="lblText" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
                                                             placeholder="Add label text" required />
                                                     </label>
-                                                  
+
                                                     <!--*ngIf="isSubjectType"-->
 
                                                     <div class="list-wrapper"
@@ -198,13 +199,13 @@
                                                         <ul cdkDropList [cdkDropListData]="sideMenuSubjectTypeOptions" class="formfield-list"
                                                         (cdkDropListDropped)="dragDropOptionSubjectType($event)">
                                                             <li *ngFor="let item of sideMenuSubjectTypeOptions; let i = index;let last = last" cdkDrag>
-                                                               
+
                                                                 <div class="row">
                                                                     <div class="icon-label-wrapper mr-2">
                                                                         <i class="fa fa-bars" aria-hidden="true"></i>
                                                                     </div>
                                                                     <div class="form-inline">
-                                                                        
+
                                                                         <div class="control-wrapper form-group pl-3">
                                                                             <input type="text" [(ngModel)]="item.name"
                                                                                 name="{{item.name}}" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
@@ -260,7 +261,7 @@
                                                                                 required />
                                                                             <div
                                                                                 *ngIf="ngModel.errors?.required && !(ngModel.dirty || ngModel.touched)">
-                                                                                <span 
+                                                                                <span
                                                                                     class="red">
                                                                                     Add value
                                                                                 </span>
@@ -295,18 +296,18 @@
                                                             <li
                                                                 *ngFor="let item of selectOptions; let i = index; let last = last;" cdkDrag>
                                                                 <div class="row form-inline">
-                                                                  
+
                                                                     <div class="col-md-12 form-group pr-0">
                                                                         <div class="icon-label-wrapper mr-2">
                                                                             <i class="fa fa-bars" aria-hidden="true"></i>
                                                                         </div> <!--[ngClass]="{ 'invalid-txtbox': customControl.errors?.required && isCustomFieldAdded}"-->
-                                                                        <div class="dispalyflex-column"> 
+                                                                        <div class="dispalyflex-column">
                                                                             <input type="text" [(ngModel)]="item.name"
                                                                                 name="{{item.name}}" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
                                                                                 [ngModelOptions]="{standalone: true}"
                                                                                 #customControl="ngModel"
                                                                                 [ngClass]="{ 'invalid-txtbox':!last && !customControl.valid  && this.selectOptions[i].name !== '' && customControl.errors?.required !== '' }"    class="form-control mb-1" required/>
-                                                                                
+
                                                                                 <div *ngIf="!last && !customControl.valid  && this.selectOptions[i].name !== '' && customControl.errors?.required !== '' ">
                                                                                     <span class="color-red">  Add value </span>
                                                                                 </div>
@@ -318,7 +319,7 @@
                                                                                     class="fa fa-minus"
                                                                                     aria-hidden="true"></i></span>
                                                                         </button>
-                                                                       
+
                                                                         <button type="button" *ngIf="last" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
                                                                             class="btn btn-xs btn-primary add-icon"
                                                                             (click)="addOptions()">
@@ -351,7 +352,7 @@
                                         <form [formGroup]="headerLogoForm">
                                         <div>
                                             <label for="taskresponse" class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5">
-                                                Header logo</label> 
+                                                Header logo</label>
                                                 <div class="upload-wrapper" [ngClass]="{'hide':headerlogoBase64,'show':!headerlogoBase64}">
                                                     <p>File Format PNG, JPG or JPEG, Max Size 1MB</p>
                                             <div class="input-group">
@@ -361,16 +362,16 @@
                                                 <input type="file" class="custom-file-input" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
                                                 formControlName="headerlogo"
                                                 (change)="fileChangeEvent($event)" id="headerlogo">
-                                                
+
                                             </div>
                                                 </div>
                                             <div class="img-space" [ngClass]="{'hide':!headerlogoBase64,'show':headerlogoBase64}">
                                                 <ng-container *ngIf="headerlogoBase64; else elseTemplate">
                                                     <img [src]="headerlogoBase64" class="uploaded-logo-width" [height]="logoHeight" [width]="logoWidth" />
                                                 </ng-container>
-                                                <ng-template #elseTemplate>                                    
+                                                <ng-template #elseTemplate>
                                                     <img src="assets/imgs/no_image.png" class="img-responsive">
-                                                </ng-template>                                
+                                                </ng-template>
                                             </div>
                                             <div class="filedetails" [ngClass]="{'hide':!headerlogoBase64,'show':headerlogoBase64}">
                                                <div> <span><i-feather name="image" class="feathericon"></i-feather>
@@ -383,14 +384,14 @@
                                                 </button>
                                             </div>
                                         </div>
-                                    
+
                                         </form>
                                     </div>
                                     <div class="col-sm-12 mb-2">
                                         <form [formGroup]="faviconForm">
                                             <div>
                                                 <label for="taskresponse" class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5">
-                                                    Header Favicon</label> 
+                                                    Header Favicon</label>
                                                     <div class="upload-wrapper" [ngClass]="{'hide':headerfaviconBase64,'show':!headerfaviconBase64}">
                                                         <p>File Format PNG, JPG or JPEG, Max Size 1MB</p>
                                                 <div class="input-group">
@@ -400,7 +401,7 @@
                                                     <input type="file" class="custom-file-input" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
                                                     formControlName="titlefavicon"
                                                     (change)="faviconChangeEvent($event)" id="titlefavicon">
-                                                    
+
                                                 </div>
                                                     </div>
                                                 <div class="favicon-img-space" [ngClass]="{'hide':!headerfaviconBase64,'show':headerfaviconBase64}">
@@ -422,7 +423,7 @@
                                                     </button>
                                                 </div>
                                             </div>
-                                        
+
                                             </form>
                                     </div>
                                     <div class="col-sm-12 mb-1">
@@ -435,7 +436,7 @@
                                                 <input type="text" class="form-control form-control-sm ml-1" (ngModelChange)="onColorSelection($event,'headerColor')" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm? '' : null"
                                                 [(ngModel)]="headerColor" />
                                             </div>
-                                            
+
                                         </div>
                                     </div>
                                     <div class="col-sm-12 mb-1">
@@ -498,7 +499,7 @@
 
                                 <div class="pd-5">
                                     <h6>Welcome Text <span style="float: right;">
-                                            <button type="button" class="btn btn-sm btn-default p-0 mr-1" data-toggle="modal" 
+                                            <button type="button" class="btn btn-sm btn-default p-0 mr-1" data-toggle="modal"
                                                 (click)="editQuillEditorDataPopup(quillEditorModal,'welcomeText')">
                                                 <i [ngClass]="{'fas fa-chevron-down':isWebFormPublished && !isEditingPublishedForm,'fa fa-edit':!isWebFormPublished || isWebFormPublished && isEditingPublishedForm }"></i>
                                             </button>
@@ -521,7 +522,7 @@
                     <!-- webFormControlList  {{webFormControlList | json}} -->
                     <div class="headerwrapper">
                         <div  class="logocontainer pd-10" [ngClass]="{'img-container':headerlogoBase64,'':!headerlogoBase64}" [style.background-color]="headerColor">
-                                <img *ngIf="headerlogoBase64" class="img-responsive logowidth" 
+                                <img *ngIf="headerlogoBase64" class="img-responsive logowidth"
                                 [src]="transform(headerlogoBase64)" width="150px" />
                             <h3 *ngIf="!headerlogoBase64" class="txt-capitalize m-0">{{formName}}</h3>
                         </div>
@@ -542,7 +543,7 @@
                                     <label><span *ngIf="webcontrol.requiredfield" class="color-red">*</span>
                                         <span [ngClass]="{'hidelabel':webcontrol.controlId == selectedControlId && isEditingList}">{{webcontrol.controllabel}}</span>
                                         <span *ngIf="webcontrol.controlId == selectedControlId && isEditingList">
-                                            <span>{{lblText && isEditingList ? lblText : webcontrol.controllabel}}</span> 
+                                            <span>{{lblText && isEditingList ? lblText : webcontrol.controllabel}}</span>
                                          </span>
                                         </label>
                                     <div
@@ -556,7 +557,7 @@
                                         </select>
                                         <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
                                     </div>
-                                    <div class="form-group" 
+                                    <div class="form-group"
                                         *ngIf="webcontrol.control === 'radio' && webcontrol.controlId === 'requesttype'">
                                         <div *ngFor="let opt of webcontrol.selectOptions" class="form-check-inline"  cdkDrag [cdkDragDisabled]="true">
                                             <input class="form-check-input" type="radio" name="requesttype"
@@ -567,7 +568,7 @@
 
                                         </div>
                                     </div>
-                                   
+
                                     <div class="form-group"
                                         *ngIf="webcontrol.control === 'checkbox' && webcontrol.controlId === 'requesttype'">
                                         <!-- *ngIf="checkboxBtnType"-->
@@ -587,7 +588,7 @@
                                     <label><span *ngIf="webcontrol.requiredfield" class="color-red">*</span>
                                         <span [ngClass]="{'hidelabel':webcontrol.controlId == selectedControlId && isEditingList}">{{webcontrol.controllabel}} </span>
                                         <span *ngIf="webcontrol.controlId == selectedControlId && isEditingList">
-                                            <span>{{lblText && isEditingList ? lblText : webcontrol.controllabel}}</span> 
+                                            <span>{{lblText && isEditingList ? lblText : webcontrol.controllabel}}</span>
                                          </span>
                                     </label>
                                     <div
@@ -607,7 +608,7 @@
                                         <!--*ngIf="subjectTyperadioBtn"-->
                                         <div *ngFor="let userOpt of webcontrol.selectOptions" class="form-check-inline"
                                         cdkDrag [cdkDragDisabled]="true">
-                                            <input class="form-check-input" type="radio" name="subjecttype" 
+                                            <input class="form-check-input" type="radio" name="subjecttype"
                                           id="{{userOpt.name}}"  #subjecttype="ngModel"
                                                 [value]='userOpt.subject_type_id'
                                                 [(ngModel)]="requestObject[userOpt.subject_type_id]" />
@@ -622,7 +623,7 @@
                                         <div *ngFor="let opt of webcontrol.selectOptions; let i = index;"
                                             class="form-check-inline" cdkDrag [cdkDragDisabled]="true">
                                             <input class="form-check-input" type="checkbox"
-                                            id="{{opt.name}}"  name="{{webcontrol.controllabel}}" 
+                                            id="{{opt.name}}"  name="{{webcontrol.controllabel}}"
                                             [value]='opt.subject_type_id'
                                                 [(ngModel)]="requestObject[opt.subject_type_id]" />
                                                 <label for="{{opt.name}}">{{opt.name}}</label>
@@ -636,7 +637,7 @@
                                     <label> <span *ngIf="webcontrol.requiredfield" class="color-red">*</span>
                                         <span [ngClass]="{'hidelabel':webcontrol.controlId == selectedControlId && isEditingList}">{{webcontrol.controllabel}} </span>
                                         <span *ngIf="webcontrol.controlId == selectedControlId && isEditingList">
-                                            <span>{{lblText && isEditingList ? lblText : webcontrol.controllabel}}</span> 
+                                            <span>{{lblText && isEditingList ? lblText : webcontrol.controllabel}}</span>
                                          </span>
                                     </label>
                                     <input class="form-control" type="text" name="{{webcontrol.controllabel}}"
@@ -648,7 +649,7 @@
                                     <label><span *ngIf="webcontrol.requiredfield" class="color-red">*</span>
                                         <span [ngClass]="{'hidelabel':webcontrol.controlId == selectedControlId && isEditingList}">{{webcontrol.controllabel}} </span>
                                         <span *ngIf="webcontrol.controlId == selectedControlId && isEditingList">
-                                            <span>{{lblText && isEditingList ? lblText : webcontrol.controllabel}}</span> 
+                                            <span>{{lblText && isEditingList ? lblText : webcontrol.controllabel}}</span>
                                          </span>
                                     </label>
                                     <textarea class="form-control" type="text" name="{{webcontrol.controllabel}}"
@@ -661,7 +662,7 @@
                                         <!-- {{webcontrol.controllabel}}  -->
                                         <span [ngClass]="{'hidelabel':webcontrol.controlId == selectedControlId && isEditingList}">{{webcontrol.controllabel}} </span>
                                         <span *ngIf="webcontrol.controlId == selectedControlId && isEditingList">
-                                            <span>{{lblText && isEditingList? lblText : webcontrol.controllabel}}</span> 
+                                            <span>{{lblText && isEditingList? lblText : webcontrol.controllabel}}</span>
                                          </span>
                                     </label>
                                     <input class="form-control" type="date" name="{{webcontrol.controllabel}}"
@@ -672,20 +673,20 @@
                                             required</div>
                                     </div>
                                 </div>
- 
+
                                 <div class="col-sm-12"
                                     *ngIf="webcontrol.control === 'radio' && webcontrol.controlId !== 'requesttype' && webcontrol.controlId !== 'subjecttype'">
                                     <div  cdkDropList [cdkDropListData]="webcontrol.selectOptions"
-                                    (cdkDropListDropped)="dragDropCustomOption($event)"> 
+                                    (cdkDropListDropped)="dragDropCustomOption($event)">
                                     <label class="heading"><span *ngIf="webcontrol.requiredfield"
                                             class="color-red">*</span>
                                             <!-- {{webcontrol.controllabel}}  -->
                                             <span [ngClass]="{'hidelabel':webcontrol.controlId == selectedControlId && isEditingList}">{{webcontrol.controllabel}} </span>
                                             <span *ngIf="webcontrol.controlId == selectedControlId && isEditingList">
-                                            <span>{{lblText && isEditingList ? lblText : webcontrol.controllabel}}</span> 
+                                            <span>{{lblText && isEditingList ? lblText : webcontrol.controllabel}}</span>
                                          </span>
                                     </label>
-                                    <div *ngFor="let userOpt of webcontrol.selectOptions" class="form-check-inline" 
+                                    <div *ngFor="let userOpt of webcontrol.selectOptions" class="form-check-inline"
                                     [cdkDragDisabled]="true" cdkDrag>
                                             <input class="form-check-input" type="radio" #customRadio="ngModel"
                                                 id="{{userOpt.id}}" name="{{userOpt.keylabel}}" [value]='userOpt.name'
@@ -706,7 +707,7 @@
                                             <!-- {{webcontrol.controllabel}} -->
                                             <span [ngClass]="{'hidelabel':webcontrol.controlId == selectedControlId && isEditingList}">{{webcontrol.controllabel}} </span>
                                             <span *ngIf="webcontrol.controlId == selectedControlId && isEditingList">
-                                            <span>{{lblText && isEditingList ? lblText : webcontrol.controllabel}}</span> 
+                                            <span>{{lblText && isEditingList ? lblText : webcontrol.controllabel}}</span>
                                          </span>
                                         </label>
                                         <select class="form-control" name="{{webcontrol.controllabel}}"
@@ -724,7 +725,7 @@
                                             <!-- {{webcontrol.controllabel}} -->
                                             <span [ngClass]="{'hidelabel':webcontrol.controlId == selectedControlId && isEditingList}">{{webcontrol.controllabel}} </span>
                                             <span *ngIf="webcontrol.controlId == selectedControlId && isEditingList">
-                                                <span>{{lblText && isEditingList ? lblText : webcontrol.controllabel}}</span> 
+                                                <span>{{lblText && isEditingList ? lblText : webcontrol.controllabel}}</span>
                                              </span>
                                         </label>
                                         <select class="form-control" name="{{webcontrol.controllabel}}"
@@ -743,7 +744,7 @@
                                             <!-- {{webcontrol.controllabel}}  -->
                                             <span [ngClass]="{'hidelabel':webcontrol.controlId == selectedControlId && isEditingList}">{{webcontrol.controllabel}} </span>
                                             <span *ngIf="webcontrol.controlId == selectedControlId && isEditingList">
-                                            <span>{{lblText && isEditingList ? lblText : webcontrol.controllabel}}</span> 
+                                            <span>{{lblText && isEditingList ? lblText : webcontrol.controllabel}}</span>
                                          </span>
                                         </label>
                                         <select class="form-control" name="{{webcontrol.controllabel}}"
@@ -762,7 +763,7 @@
                                             class="color-red">*</span>
                                             <span [ngClass]="{'hidelabel':webcontrol.controlId == selectedControlId && isEditingList}">{{webcontrol.controllabel}} </span>
                                             <span *ngIf="webcontrol.controlId == selectedControlId && isEditingList">
-                                                <span>{{lblText && isEditingList ? lblText : webcontrol.controllabel}}</span> 
+                                                <span>{{lblText && isEditingList ? lblText : webcontrol.controllabel}}</span>
                                              </span>
                                         </label>
                                     <div *ngFor="let opt of webcontrol.selectOptions; let i = index;"  class="form-check-inline">
@@ -782,7 +783,7 @@
                                             class="color-red">*</span>
                                             <span [ngClass]="{'hidelabel':webcontrol.controlId == selectedControlId && isEditingList}">{{webcontrol.controllabel}} </span>
                                             <span *ngIf="webcontrol.controlId == selectedControlId && isEditingList">
-                                                <span>{{lblText && isEditingList ? lblText : webcontrol.controllabel}}</span> 
+                                                <span>{{lblText && isEditingList ? lblText : webcontrol.controllabel}}</span>
                                              </span>
                                         </label>
                                     <div class="input-group">
@@ -866,7 +867,7 @@
                         <ng-container *ngFor="let opt of ApproverList">
                             <option *ngIf="opt.user_name !== ' ' && opt.email_verified" [value]="opt.approver_id"
                                 [selected]="opt.approver_id === selectedApproverID">
-                                {{ opt.user_name }} 
+                                {{ opt.user_name }}
                             </option>
                         </ng-container>
                     </select>
@@ -877,7 +878,7 @@
                 <div class="form-group mg-b-5">
                     <label for="workflow" class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">
                         Select Workflow</label>
-                    <select class="form-control" name="workflow" #workflowselect="ngModel" [(ngModel)]="workflow" 
+                    <select class="form-control" name="workflow" #workflowselect="ngModel" [(ngModel)]="workflow"
                     [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
                         [ngClass]="{ 'is-invalid': workflowselect.invalid && workflowselect.errors?.required && isdraftsubmitted}"
                         required>
@@ -897,11 +898,11 @@
                     <label for="daysleft" class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">Default
                         days to
                         respond</label>
-                 <input type="number" min="1" max="45" class="form-control" name="daysleft" #daysleftinput="ngModel" [(ngModel)]="daysleft" 
+                 <input type="number" min="1" max="45" class="form-control" name="daysleft" #daysleftinput="ngModel" [(ngModel)]="daysleft"
                 (input)="onChangeDaysLeft($event,daysleft)"  [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
                 [ngClass]="{ 'is-invalid': daysleftinput.invalid && daysleftinput.errors?.required && isdraftsubmitted}" required>
                 <div *ngIf="daysleftinput.invalid && isdraftsubmitted" class="invalid-feedback">
-                    <div *ngIf="daysleftinput.errors?.required">Days left is required</div>                           
+                    <div *ngIf="daysleftinput.errors?.required">Days left is required</div>
                 </div>
                 <div *ngIf="errorMsgdaysleft" class="red p-1">{{errorMsgdaysleft}}</div>
                 </div>
@@ -960,8 +961,17 @@
 
         </ng-template>
     </li>
-    <li [ngbNavItem]="4" [destroyOnHide]="false">
-        <a ngbNavLink>4 Integrate</a>
+
+          <li [ngbNavItem]="4" [destroyOnHide]="false">
+            <a ngbNavLink>4 System</a>
+            <ng-template ngbNavContent>
+              <h1>Hello</h1>
+            </ng-template>
+          </li>
+
+
+    <li [ngbNavItem]="5" [destroyOnHide]="false">
+        <a ngbNavLink>5 Integrate</a>
         <ng-template ngbNavContent>
             <div class="publishwrapper">
                 <ul ngbNav #nav="ngbNav" class="nav-tabs"
@@ -1035,21 +1045,21 @@
 
         </ng-template>
     </li>
-    <li> 
+    <li>
         <div class="button-wrapper" [ngClass]="{ 'min-width-75' : isWebFormPublished && isDraftWebForm, 'min-width-170': crid !== null}">
-        <button  class="btn btn-link cancel-link" (click)="navigateToWebForm()">Back</button>   
+        <button  class="btn btn-link cancel-link" (click)="navigateToWebForm()">Back</button>
         <button (click)="addUpdateDSARForm('save')" class="btn btn-sm pd-x-15 savebtn btn-uppercase lineheight-22 btn-outline-secondary" [ngClass]="isWebFormPublished && !isEditingPublishedForm || active === 4 ? 'hide' : ''">
         <i-feather class="feather-24 mr-1" name="save"></i-feather>Save</button>
 
-        <button type="button" *ngIf="crid !== null" type="button" class="btn btn-sm pd-x-15 lineheight-22 btn-outline-secondary btn-uppercase ml-2 mr-1" 
+        <button type="button" *ngIf="crid !== null" type="button" class="btn btn-sm pd-x-15 lineheight-22 btn-outline-secondary btn-uppercase ml-2 mr-1"
         [attr.disabled]="isDirty ? true : null"
            (click)="togglePublish()">
            <i-feather *ngIf="isWebFormPublished && !isEditingPublishedForm && !isResetlinkEnable" class="feather-24" name="edit-2"></i-feather>
            <i-feather *ngIf="isWebFormPublished && isEditingPublishedForm || !(isWebFormPublished && isEditingPublishedForm || isWebFormPublished)" name="upload-cloud"></i-feather>
            {{isWebFormPublished && !isEditingPublishedForm && !isResetlinkEnable ? 'Edit':' Publish'}}</button>
-          
+
            <a target="_blank" *ngIf="crid !== null" role="button" (click)="previewCCPAForm()" class="btn btn-sm pd-x-15 txt-gray lineheight-22 btn-outline-secondary btn-uppercase mg-l-5">
-            <i-feather name="file-text" class="feather-24"></i-feather>   
+            <i-feather name="file-text" class="feather-24"></i-feather>
             Preview</a>
         </div>
     </li>
@@ -1081,7 +1091,7 @@
                 [readOnly]="isWebFormPublished && !isEditingPublishedForm ? true : null"
                 [styles]="isEditorDisabled()"></quill-editor>
 
-            <button class="btn btn-primary float-right mt-2" 
+            <button class="btn btn-primary float-right mt-2"
             [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? true : null"
             type="submit">Save</button>
             <button type="button" class="btn btn-outline-dark float-right mt-2 mr-2" (click)="onCloseWelcomeTextEditor()">Close</button>
@@ -1089,7 +1099,7 @@
     </div>
     <ng-template #footerContent>
         <div class="modal-body">
-            <form [formGroup]="quillEditorText" (ngSubmit)="onSubmitQuillEditorData()" 
+            <form [formGroup]="quillEditorText" (ngSubmit)="onSubmitQuillEditorData()"
             [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? true : null">
                 <quill-editor formControlName="editor" [modules]="quillConfig" [(ngModel)]="editorDataFooter"
                 [readOnly]="isWebFormPublished && !isEditingPublishedForm ? true : null"
@@ -1097,7 +1107,7 @@
                 <button class="btn btn-primary float-right mt-2"
                 [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? true : null"
                 type="submit">Save</button>
-                <button type="button" class="btn btn-outline-dark float-right mt-2 mr-2" 
+                <button type="button" class="btn btn-outline-dark float-right mt-2 mr-2"
                     (click)="onCloseFooterTextEditor()">Close</button>
             </form>
         </div>
@@ -1121,3 +1131,4 @@
     <alert *ngIf="isOpen" [type]="alertType" dismissOnTimeout="5000" [dismissible]="dismissible"
         (onClosed)="onClosed(alertType)">{{alertMsg}}</alert>
 </div>
+

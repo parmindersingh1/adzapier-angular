@@ -72,7 +72,8 @@ import { SubscriptionPopupComponent } from './_components/subscription-popup/sub
     // TabsModule.forRoot(),
     // AccordionModule.forRoot(),
     NgbCollapseModule,
-    NgbModule
+    NgbModule,
+
   ],
   providers: [
     NgxUiLoaderService,

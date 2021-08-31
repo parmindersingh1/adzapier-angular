@@ -90,6 +90,8 @@ export const apiConstant = {
   // System Integration
   SYSTEM_INTEGRATION_LIST: '/integration/system-list',
   CONNECTION_INTEGRATION_LIST: '/integration/credentials',
+  SQL_TABLES_LIST: '/integration/get-tables',
+  SQL_TABLE_COLUMNS_LIST: '/integration/get-table-columns',
   INTEGRATION_SYSTEM: '/integration/credentials/:oid/:pid/:connectionID',
 };
 

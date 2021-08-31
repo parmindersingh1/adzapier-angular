@@ -74,6 +74,34 @@ export class SystemIntegrationService {
       }));
   }
 
+  GetCredListBySystem(componentName, systemID, moduleName) {
+    const path = apiConstant.CONNECTION_INTEGRATION_LIST + '/' + systemID;
+    return this.http.get(environment.apiUrl + path)
+      .pipe(catchError(error => {
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.getWorkflow, componentName, moduleName, path);
+        return throwError(error);
+      }));
+  }
+
+  GetSqlTables(componentName, connectionId, moduleName) {
+    const path = apiConstant.SQL_TABLES_LIST + '/' + connectionId;
+    return this.http.get(environment.apiUrl + path)
+      .pipe(catchError(error => {
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.getWorkflow, componentName, moduleName, path);
+        return throwError(error);
+      }));
+  }
+
+  GetSqlTableColumns(componentName, connectionId, param, moduleName) {
+    const path = apiConstant.SQL_TABLE_COLUMNS_LIST + '/' + connectionId;
+    return this.http.get(environment.apiUrl + path, {params: param})
+      .pipe(catchError(error => {
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.getWorkflow, componentName, moduleName, path);
+        return throwError(error);
+      }));
+  }
+
+
   GetCredList(componentName, moduleName) {
     const path = apiConstant.SYSTEM_INTEGRATION_LIST;
     return this.http.get(environment.apiUrl + path)

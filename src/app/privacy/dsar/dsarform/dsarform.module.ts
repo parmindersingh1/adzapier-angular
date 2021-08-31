@@ -10,21 +10,27 @@ import { SharedbootstrapModule } from 'src/app/sharedbootstrap/sharedbootstrap.m
 import { FeatherModule } from 'angular-feather';
 import { allIcons } from 'angular-feather/icons';
 import { HeaderComponent } from 'src/app/_components/layout/header/header.component';
+import {DsarSystemComponent} from './dsar-system/dsar-system.component';
+import {SqlQueryBuilderComponent} from './dsar-system/sql-query-builder/sql-query-builder.component';
+import {TableModule} from 'primeng/table';
+import {QueryBuilderModule} from 'angular2-query-builder';
 
 @NgModule({
-  declarations: [DsarformComponent],
+  declarations: [DsarformComponent, DsarSystemComponent, SqlQueryBuilderComponent],
   imports: [
     FormsModule,
     ReactiveFormsModule,
-  //  DragDropModule,
-   // NgbModule, NgbModal,
+    //  DragDropModule,
+    // NgbModule, NgbModal,
     DsarformRoutingModule,
     QuillModule.forRoot(),
     NgbModule,
     SharedbootstrapModule,
-    FeatherModule.pick(allIcons)
+    FeatherModule.pick(allIcons),
+    TableModule,
+    QueryBuilderModule
   ]
- // providers:[NgbModule, NgbModal],
+  // providers:[NgbModule, NgbModal],
 
 })
 export class DsarformModule { }
