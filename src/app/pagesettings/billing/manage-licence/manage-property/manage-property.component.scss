@@ -101,3 +101,10 @@ tbody tr td{
 .tx-decoration-underline:hover {
   text-decoration: underline;
  }
+ .dp-safari select {
+  background: #ffffff url('../../../../../assets/imgs/down-arrow.svg') no-repeat;
+  background-position: 97% 50%;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
+}

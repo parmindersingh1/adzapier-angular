@@ -429,11 +429,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
       }else{
         orgIndex = this.orgPropertyMenu.findIndex((t) => t.id == selectedItem.id);
       }
-      if (orgIndex !== -1) {
+      if (orgIndex == -1) {
         this.selectedOrgProperties.push(this.orgPropertyMenu[orgIndex]);
       }
       if (this.selectedOrgProperties !== undefined && this.selectedOrgProperties.length > 0) {
-        return this.selectedOrgProperties.filter((t) => t.id === selectedItem.id).length > 0;
+        return this.selectedOrgProperties.some((t) => t.organization_id === selectedItem.id);
       }
     }
   }
@@ -580,8 +580,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
           //  this.loading.start('1');
             this.loadPropertyPlanDetails(obj);
             //this.orgservice.setCurrentOrgWithProperty(obj); // three
-            this.router.navigate([this.router.url], { queryParams: { oid: obj.organization_id, pid: obj.property_id }, queryParamsHandling:'merge', skipLocationChange:false} );
-            this.dataService.checkClickedURL.next('/home/welcome'+'?oid='+obj.organization_id+'&pid='+obj.property_id);
+            if(this.router.url.indexOf("type=manage") == -1 && this.router.url.indexOf("manage?success") == -1){
+              this.router.navigate([this.router.url], { queryParams: { oid: obj.organization_id, pid: obj.property_id }, queryParamsHandling:'merge', skipLocationChange:false} );
+            } else{
+              this.router.navigate(['settings/billing/manage'], { queryParams: { oid: obj.organization_id, pid: obj.property_id }, queryParamsHandling:'merge', skipLocationChange:false} );
+            }
+           // this.dataService.checkClickedURL.next('/home/welcome'+'?oid='+obj.organization_id+'&pid='+obj.property_id);
             // this.dataService.getPropertyPlanDetails(this.constructor.name, moduleName.cookieConsentModule, obj.property_id)
             // .subscribe((res: any) => {
             //   this.dataService.setPropertyPlanToLocalStorage(res);
@@ -735,7 +739,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
 
   goto(link: any, id?: any) {
     this.oIDPIDFromURL= this.findPropertyIDFromUrl(this.location.path());
-    this.currentNavigationUrl = link.routerLink == '/' ? '/home/welcome' : link.routerLink;
+    this.currentNavigationUrl = link.routerLink == '/' ? '/home/welcome' : link.routerLink + "?oid="+ this.queryOID +"&pid="+this.queryPID;
     if (link.routerLink === '/home/dashboard/cookie-consent' || link.routerLink === '/cookie-consent/manage-vendors' || link.routerLink === '/cookie-consent/cookie-category'
       || link.routerLink === '/cookie-consent/cookie-banner' || link.routerLink === '/cookie-consent/cookie-tracking' || link.routerLink === '/cookie-consent/cookie-banner/setup') {
       if (this.selectedOrgProperties.length > 0) {
@@ -767,10 +771,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
     } else {
       if (this.checkLinkAccess(link.routerLink || link)) {
         if (this.queryPID !== undefined) {//this.selectedOrgProperties.length > 0
-          if(this.queryOID && this.queryPID){
-          this.router.navigate([link.routerLink || link],{ queryParams: { oid: this.queryOID, pid: this.queryPID }, queryParamsHandling:'merge', skipLocationChange:false});
+          if (this.queryOID && this.queryPID) {
+            this.router.navigate([link.routerLink || link], { queryParams: { oid: this.queryOID, pid: this.queryPID }, queryParamsHandling: 'merge', skipLocationChange: false });
           } else {
-            this.router.navigate([link.routerLink || link],{ queryParams: { oid: this.oIDPIDFromURL[0], pid: this.oIDPIDFromURL[1] }, queryParamsHandling:'merge', skipLocationChange:false});
+            this.oIDPIDFromURL = this.findPropertyIDFromUrl(this.location.path());
+            this.router.navigate([link.routerLink || link], { queryParams: { oid: this.oIDPIDFromURL[0], pid: this.oIDPIDFromURL[1] }, queryParamsHandling: 'merge', skipLocationChange: false });
           }
           this.activateActiveClass(link);
         } else {
@@ -786,7 +791,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
       link.indexOf('ccpa') !== -1 || link.indexOf('billing') !== -1) {
       return true;
     } else {
-      if(this.queryOID && this.queryPID){
+      if(this.queryOID != null && this.queryPID != null){
       this.router.navigate([link.routerLink || link],{ queryParams: { oid: this.queryOID, pid: this.queryPID }, queryParamsHandling:'merge', skipLocationChange:false});
       }
       this.activateActiveClass(link);
@@ -1252,14 +1257,21 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
 
   loadPropertyPlanDetails(prop){
     this.dataService.removePropertyPlanFromLocalStorage();
+    this.oIDPIDFromURL = this.findPropertyIDFromUrl(this.location.path());
     this.dataService.getPropertyPlanDetails(this.constructor.name, moduleName.cookieConsentModule, prop.property_id)
     .subscribe((res: any) => {
       this.dataService.setPropertyPlanToLocalStorage(res);
       this.loading.stop('1')
       this.currentSelectedProperty();
-      if(this.queryOID && this.queryPID){
+      if(this.queryOID !== null && this.queryOID !== undefined){
         if(this.router.url.indexOf('oid') == -1){
           return this.router.navigate([this.router.url], { queryParams: { oid: this.queryOID, pid: this.queryPID }, skipLocationChange:false} );
+        }
+      } else {
+        if (this.oIDPIDFromURL !== undefined && this.oIDPIDFromURL.length !== 0) {
+          this.queryOID = this.oIDPIDFromURL[0];
+          this.queryPID = this.oIDPIDFromURL[1];
+          return this.router.navigate([this.router.url], { queryParams: { oid: this.oIDPIDFromURL[0], pid: this.oIDPIDFromURL[1] }, skipLocationChange: false });
         }
       }
 
@@ -1282,7 +1294,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
       this.queryPID = params.get('pid');
       this.loadOrganizationWithProperty();
      });
-     if(this.queryOID !== null || this.queryOID !== undefined){
+     if(this.queryOID !== null && this.queryOID !== undefined){
        this.router.navigate(['/home/dashboard/analytics'],{ queryParams: { oid: this.queryOID, pid: this.queryPID },  skipLocationChange:false});
      }else{
        this.router.navigate(['/home/dashboard/analytics'],{ queryParams: { oid: this.selectedOrgProperties[0].organization_id, pid: this.selectedOrgProperties[0].property_id },  skipLocationChange:false});
@@ -1297,11 +1309,17 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  ngAfterViewInit(){
+  ngAfterViewInit() {
     this.activatedroute.queryParamMap.subscribe(params => {
-   this.queryOID = params.get('oid');
-   this.queryPID = params.get('pid');
-  });
+      this.queryOID = params.get('oid');
+      this.queryPID = params.get('pid');
+    });
+    //if logout from one tab, all tab redirect to login page
+    window.addEventListener('storage', event => {
+      if (event !== undefined && event.storageArea.length === 0) {
+        this.router.navigate(['/login']);
+      }
+    });
   }
 
   ngOnDestroy(){

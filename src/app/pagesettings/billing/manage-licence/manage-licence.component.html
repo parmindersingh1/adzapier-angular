@@ -25,7 +25,7 @@
     <h4 class="tx-14 tx-uppercase  mb-0 tx-spacing-1 tx-color-02 tx-semibold">Manage Licenses</h4>
     </div>
     <div class="col-md-5 text-right p-0">
-      <a routerLink="/settings/billing/pricing" class="btn btn-sm btn-outline-secondary btn-uppercase mr-2">
+      <a routerLink="/settings/billing/pricing" [queryParams]="{oid:queryOID , pid:queryPID}" class="btn btn-sm btn-outline-secondary btn-uppercase mr-2">
         <i class="fa fa-plus pr-1"  aria-hidden="true"></i>  Add Subscription</a>
 
       <button *ngIf="activeSubscriptionList.length > 0" (click)="onGenerateSessionID()" type="button" class="btn btn-sm btn-uppercase btn-outline-secondary" [disabled]="userRole === 'View Only'"> <i class="fa fa-cogs pr-1" aria-hidden="true"></i>

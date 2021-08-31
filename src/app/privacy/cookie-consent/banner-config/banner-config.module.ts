@@ -24,6 +24,7 @@ import { AzBannerComponent } from './az-banner/az-banner.component';
 import { AzPreferenceComponent } from './az-preference/az-preference.component';
 import {AccordionModule} from 'primeng/accordion';
 import {AlertModule} from 'ngx-bootstrap/alert';
+import {ButtonsModule} from 'ngx-bootstrap/buttons';
 
 const path: Routes = [{
   path: '', component: BannerConfigComponent
@@ -54,7 +55,8 @@ const path: Routes = [{
         RippleModule,
         ReactiveFormsModule.withConfig({warnOnNgModelWithFormControl: 'never'}),
         AccordionModule,
-        AlertModule
+        AlertModule,
+        ButtonsModule
     ]
 })
 export class BannerConfigModule { }

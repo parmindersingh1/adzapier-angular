@@ -12,6 +12,8 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { DataService } from 'src/app/_services/data.service';
 import { featuresName } from 'src/app/_constant/features-name.constant';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
+import { Location } from '@angular/common';
+import { findPropertyIDFromUrl } from 'src/app/_helpers/common-utility';
 
 // import { CompanyService } from '../company.service';
 @Component({
@@ -89,6 +91,8 @@ export class OrganizationdetailsComponent implements OnInit {
   private orgPlanDetails: any;
   orgLicensedPlanName;
   selectusertype = true;
+  queryOID;
+  queryPID;
   constructor(private activatedRoute: ActivatedRoute,
               private orgService: OrganizationService,
               private modalService: NgbModal,
@@ -99,6 +103,7 @@ export class OrganizationdetailsComponent implements OnInit {
               private dataService: DataService,
               private bsmodalService: BsModalService,
               private loading: NgxUiLoaderService,
+              private location: Location,
               private cdref: ChangeDetectorRef) {
     // this.orgService.currentProperty.subscribe((data) => {
     //   this.currentManagedOrgID = data.organization_id || data.response.oid;
@@ -127,10 +132,17 @@ export class OrganizationdetailsComponent implements OnInit {
     this.loadRoleList();
 
     this.activatedRoute.paramMap.subscribe(params => {
-      this.organizationID = params.get('id');
-      this.loadOrganizationByID(this.organizationID);
-      this.getPropertyList(this.organizationID);
-      this.loadOrgTeamMembers(this.organizationID);
+        this.organizationID = params.get('id');
+        let oIDPIDFromURL = findPropertyIDFromUrl(this.location.path())
+        if(this.organizationID !== undefined && this.organizationID.indexOf('oid') !== -1){
+          this.loadOrganizationByID(oIDPIDFromURL[0]);
+          this.getPropertyList(oIDPIDFromURL[0]);
+          this.loadOrgTeamMembers(oIDPIDFromURL[0]);
+        }else{
+          this.loadOrganizationByID(this.organizationID);
+          this.getPropertyList(this.organizationID);
+          this.loadOrgTeamMembers(this.organizationID);
+        }
 
     });
 
@@ -179,6 +191,11 @@ export class OrganizationdetailsComponent implements OnInit {
     this.organisationPropertyForm.patchValue({
       protocol:this.protocol
     })
+    this.activatedRoute.queryParamMap
+      .subscribe(params => {
+        this.queryOID = params.get('oid');
+        this.queryPID = params.get('pid');
+      });
   }
   get f() { return this.inviteUserOrgForm.controls; }
   get orgProp() { return this.organisationPropertyForm.controls; }
@@ -816,7 +833,7 @@ export class OrganizationdetailsComponent implements OnInit {
   }
 
   redirectToManageLicense(){
-    this.router.navigate(['/settings/billing/manage']);
+    this.router.navigate(['/settings/billing/manage'],{ queryParams: { oid: this.queryOID, pid: this.queryPID }, queryParamsHandling:'merge', skipLocationChange:false});
   }
 
   changeValidators() {

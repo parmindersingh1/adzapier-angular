@@ -74,8 +74,6 @@ export class SubscriptionPopupComponent implements OnInit {
  .subscribe(params => {
    this.queryOID = params.get('oid');
    this.queryPID = params.get('pid');
-   console.log(this.queryOID,'queryOID..75');
-   console.log(this.queryPID,'queryPID..76');
 });
     this.openModal();
   }
@@ -208,17 +206,21 @@ export class SubscriptionPopupComponent implements OnInit {
   }
 
   onTemplateHide() {
-    const path = location.pathname;
-    if (path === '/cookie-consent/cookie-banner' || path === '/cookie-consent/manage-vendors') {
+    if(this.location.path().indexOf('/settings') !== -1 && this.queryOID !== undefined){
       this.template.hide();
-    } else {
-      this.template.hide();
-      if(this.queryOID !== undefined){
         this.router.navigate(['/home/dashboard/analytics'],{ queryParams: { oid: this.queryOID, pid: this.queryPID }, queryParamsHandling:'merge', skipLocationChange:false});
       }else{
-        let oIDPIDFromURL = findPropertyIDFromUrl(this.location.path())
-        this.router.navigate(['/home/dashboard/analytics'], { queryParams: { oid: oIDPIDFromURL[0], pid: oIDPIDFromURL[1] }, skipLocationChange: false });
-      }
+        this.template.hide();
+    }
+  }
+
+  redirectToManageLicense() {
+    this.template.hide();
+    let oIDPIDFromURL = findPropertyIDFromUrl(this.location.path())
+    if (this.queryOID !== null && this.queryOID !== undefined) {
+      this.router.navigate(['/settings/billing/manage'], { queryParams: { oid: this.queryOID, pid: this.queryPID }, queryParamsHandling: 'merge', skipLocationChange: false });
+    } else {
+      this.router.navigate(['/settings/billing/manage'], { queryParams: { oid: oIDPIDFromURL[0], pid: oIDPIDFromURL[1] }, queryParamsHandling: 'merge', skipLocationChange: false });
     }
   }
 }
