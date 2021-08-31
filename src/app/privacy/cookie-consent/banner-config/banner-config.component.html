@@ -33,13 +33,23 @@
       <div class="card-header">
         <div class="row">
           <h5 class="main-heading col-md-4">Banner Configuration </h5>
-          <div class="col-md-6 preview-border-left">
+          <div class="col-md-3 preview-border-left">
             <p class="live-preview-type">Live Preview :          <span>
              <span class="tx-16 pl-2 pr-2" *ngIf="BannerConfigurationForm.value.AllowGDPR" > GDPR :   <p-radioButton class="preview-radio" formControlName="LivePreviewType" value="gdpr"></p-radioButton></span>
              <span class="tx-16 pl-2 pr-2"  *ngIf="BannerConfigurationForm.value.AllowCCPA">       CCPA :    <p-radioButton    class="preview-radio"  formControlName="LivePreviewType"  value="ccpa"></p-radioButton></span>
              <span class="tx-16 pl-2 pr-2"  *ngIf="BannerConfigurationForm.value.AllowGENERIC" >       GENERIC :  <p-radioButton  class="preview-radio"  formControlName="LivePreviewType"   value="generic"></p-radioButton></span>
               </span>
             </p>
+          </div>
+          <div class="col-md-3 preview-border-left">
+            <p class="live-preview-type float-left mr-3">Platform :
+            </p>
+            <div class="form-inline d-flex align-items-center float-left">
+              <div class="btn-group" btnRadioGroup [(ngModel)]="platformType" disabled>
+                <label class="btn btn-secondary" btnRadio="Left">Web</label>
+                <label class="btn btn-secondary" disabled btnRadio="Middle">Mobile</label>
+              </div>
+            </div>
           </div>
           <div class="col-md-2 text-right">
             <button pButton pRipple type="submit" (click)="publishType = 'draft'" label="Save" class="p-button-warning mr-2"></button>

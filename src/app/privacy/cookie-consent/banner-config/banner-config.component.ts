@@ -66,6 +66,7 @@ export class BannerConfigComponent implements OnInit, OnDestroy {
     code: 'en-US',
     countryFlag: 'us',
   }];
+  platformType = 'web';
   publishing = false;
   constructor(private sanitizer: DomSanitizer,
               private formBuilder: FormBuilder,
