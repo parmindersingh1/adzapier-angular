@@ -1555,11 +1555,11 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
           if (this.isDirty && this.workflow !== undefined && this.selectedApproverID !== undefined) {
             this.openModal(this.confirmSaveAlert);
           }
-          else if(this.workflow == undefined && this.selectedApproverID == undefined){
+          else if (this.workflow == undefined || this.selectedApproverID == undefined) {
             this.isdraftsubmitted = true;
             this.isDirty = false;
         changeEvent.preventDefault();
-        const stepnumber: number | string = this.formName === undefined ? '1 Basic, 2 Form & 3 Settings': '2 Form & 3 Settings';
+        const stepnumber: number | string = this.formName === undefined ? '1 Basic, 2 Form & 3 Settings' : '2 Form & 3 Settings';
         this.alertMsg = `Please complete step ${stepnumber} and press next`;
         this.isOpen = true;
         this.alertType = 'danger';

@@ -1291,8 +1291,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
      });
      if(this.queryOID !== null && this.queryOID !== undefined){
        this.router.navigate(['/home/dashboard/analytics'],{ queryParams: { oid: this.queryOID, pid: this.queryPID },  skipLocationChange:false});
-     }else{
+     }else if(this.selectedOrgProperties.length !== 0){
        this.router.navigate(['/home/dashboard/analytics'],{ queryParams: { oid: this.selectedOrgProperties[0].organization_id, pid: this.selectedOrgProperties[0].property_id },  skipLocationChange:false});
+     }else{
+       this.router.navigate(['settings/organizations']);
      }
   }
 
