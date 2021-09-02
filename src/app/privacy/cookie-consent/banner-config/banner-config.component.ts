@@ -17,7 +17,7 @@ import {moduleName} from '../../../_constant/module-name.constant';
 import {OrganizationService} from '../../../_services';
 import {debounceTime, map} from 'rxjs/operators';
 import {main} from '@angular/compiler-cli/src/main';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 
 interface Country {
   name: string,
@@ -66,13 +66,15 @@ export class BannerConfigComponent implements OnInit, OnDestroy {
     code: 'en-US',
     countryFlag: 'us',
   }];
+  platformType = 'web';
   publishing = false;
   constructor(private sanitizer: DomSanitizer,
               private formBuilder: FormBuilder,
               private loading: NgxUiLoaderService,
               private cookieBannerService: CookieBannerService,
               private orgservice: OrganizationService,
-              private  router: Router
+              private  router: Router,
+              private activatedRouter: ActivatedRoute
   ) {
     const element = document.getElementById('main');
     element.classList.remove('container');
@@ -130,15 +132,19 @@ export class BannerConfigComponent implements OnInit, OnDestroy {
   }
 
   onGetPropsAndOrgId() {
-    this.orgservice.currentProperty.subscribe((response) => {
-      if (response !== '') {
-        this.currentManagedOrgID = response.organization_id;
-        this.currrentManagedPropID = response.property_id;
-      } else {
-        const orgDetails = this.orgservice.getCurrentOrgWithProperty();
-        this.currentManagedOrgID = orgDetails.organization_id;
-        this.currrentManagedPropID = orgDetails.property_id;
-      }
+    // this.orgservice.currentProperty.subscribe((response) => {
+    //   if (response !== '') {
+    //     this.currentManagedOrgID = response.organization_id;
+    //     this.currrentManagedPropID = response.property_id;
+    //   } else {
+    //     const orgDetails = this.orgservice.getCurrentOrgWithProperty();
+    //     this.currentManagedOrgID = orgDetails.organization_id;
+    //     this.currrentManagedPropID = orgDetails.property_id;
+    //   }
+    // });
+    this.activatedRouter.queryParams.subscribe(params => {
+      this.currentManagedOrgID = params.oid;
+      this.currrentManagedPropID = params.pid;
     });
   }
 
@@ -563,7 +569,8 @@ export class BannerConfigComponent implements OnInit, OnDestroy {
         this.alertMsg = res.response;
         this.alertType = 'success';
         this.publishing = false;
-        this.router.navigateByUrl('/cookie-consent/cookie-banner/setup');
+        this.router.navigate(['/cookie-consent/cookie-banner/setup'],
+          {queryParams: {oid: this.currentManagedOrgID, pid: this.currrentManagedPropID}});
       }, error => {
         this.isOpen = true;
         this.alertMsg = error;
@@ -607,8 +614,9 @@ export class BannerConfigComponent implements OnInit, OnDestroy {
         this.alertMsg = res.response;
         this.alertType = 'success';
         this.publishing = false;
-        this.router.navigateByUrl('/cookie-consent/cookie-banner/setup');
-      }, error => {
+        this.router.navigate(['/cookie-consent/cookie-banner/setup'],
+          {queryParams: {oid: this.currentManagedOrgID, pid: this.currrentManagedPropID}});
+        }, error => {
         this.isOpen = true;
         this.alertMsg = error;
         this.alertType = 'danger';

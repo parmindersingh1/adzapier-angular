@@ -6,11 +6,11 @@
       <div class="card banner-bottom" [ngStyle]="{'background' : formData.BannerCookieNoticeBackgroundColor, 'color' : formData.BannerCookieNoticeTextColor}">
         <div class="card-body banner-border-top" [ngStyle]="{ 'border-top' : '2px solid' + formData.BannerCookieNoticeBorderColor }" >
           <div class="row m-0">
-            <div class="col-md-7">
+            <div class="col-md-7 col-12">
               <h5 [ngStyle]="{ 'color' : formData.BannerCookieNoticeTextColor}"> {{formData.BannerTitle}}</h5>
               <p class="text-justify"> {{formData.BannerDescription}}</p>
             </div>
-            <div class="col-md-5 banner-action-btn">
+            <div class="col-md-5 col-12 banner-action-btn">
               <button pButton pRipple type="button" (click)="onOpenPreference()" [label]="formData.BannerPreferenceText" class="p-button-text mr-3"
                       [ngStyle]="{'background': formData.BannerPreferenceBackgroundColor, 'border-color': formData.BannerPreferenceBackgroundColor, 'color': formData.BannerPreferenceTextColor}"></button>
               <button pButton pRipple type="button" [label]="formData.BannerDoNotSellText" class="p-button-secondary mr-3"
