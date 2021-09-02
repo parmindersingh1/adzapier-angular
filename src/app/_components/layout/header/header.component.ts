@@ -489,7 +489,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
       this.orgservice.editedProperty.subscribe((prop) => {
         if (prop) {
           this.currentProperty = prop.response.name;
-          console.log(this.currentProperty,'546');
           const orgDetails = this.orgservice.getCurrentOrgWithProperty();
           orgDetails.property_name = prop.response.name;
           orgDetails.property_id = prop.response.id;
@@ -498,7 +497,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
            
         }
       });
-      console.log('489..');
       this.loadOrganizationWithProperty();  
       this.orgservice.isPropertyUpdated.next(null); 
     }
@@ -537,7 +535,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
       this.loading.stop();
       this.orgPropertyMenu = data.response;
       this.checkCurrentManagingProperty();
-      console.log(this.orgPropertyMenu,'orgPropertyMenu..522');
      // this.resCID = data.response.cID || data.response[0].cID;
      
     }, (error) => {
@@ -618,7 +615,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
           property_name: propobj[0].property_name,
           user_id: this.userID
         };
-         console.log(propobj,'propobj..562');
          this.selectedOrgProperties.push(obj);
          // this.orgservice.getSelectedOrgProperty.emit(obj);
          //  this.firstElement = false;
@@ -700,7 +696,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
       if (this.orgPropertyMenu[orgIndex].user_id) { //=== this.userID
         this.currentOrganization = this.orgPropertyMenu[orgIndex].organization_name !== '' ? this.orgPropertyMenu[orgIndex].organization_name : this.orgPropertyMenu[orgIndex].response.orgname;
         this.currentProperty = this.orgPropertyMenu[orgIndex].property_name;
-        console.log(this.currentProperty,'742');
     
       }
       //  return this.currentProperty;
@@ -1296,8 +1291,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
      });
      if(this.queryOID !== null && this.queryOID !== undefined){
        this.router.navigate(['/home/dashboard/analytics'],{ queryParams: { oid: this.queryOID, pid: this.queryPID },  skipLocationChange:false});
-     }else{
+     }else if(this.selectedOrgProperties.length !== 0){
        this.router.navigate(['/home/dashboard/analytics'],{ queryParams: { oid: this.selectedOrgProperties[0].organization_id, pid: this.selectedOrgProperties[0].property_id },  skipLocationChange:false});
+     }else{
+       this.router.navigate(['settings/organizations']);
      }
   }
 

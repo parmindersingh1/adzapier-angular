@@ -415,6 +415,17 @@ span.ui-column-title {
   appearance: none;
 }
 
+.dropup .dropdown-toggle::after,.show .dropdown-toggle::after {
+  border-top: 0 !important;
+  border-left: 0 !important;
+  border-right: 1.5px solid #000000 !important;
+  border-bottom: 1.5px solid #000000 !important;
+}
+
+.dropup .btn-white {
+  padding: 5px 10px;
+}
+
 @media (min-width: 1024px) { 
   .container {
     max-width: 1024px;
