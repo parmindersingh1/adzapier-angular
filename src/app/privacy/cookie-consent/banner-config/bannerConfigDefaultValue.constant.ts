@@ -86,6 +86,7 @@ export const LightTheme = {
   BannerCookieNoticeBackgroundColor: '#ffffff',
   BannerCookieNoticeTextColor: '#1b365d',
   BannerCookieNoticeBorderColor: '#2196F3',
+  BannerCookieNoticePrivacyLinkColor: '#4682B4',
 
   BannerAcceptAllBackgroundColor: '#0069bc',
   BannerAcceptAllTextColor: '#ffffff',
@@ -124,6 +125,7 @@ export const DarkTheme = {
   BannerCookieNoticeBackgroundColor: '#010e20',
   BannerCookieNoticeTextColor: '#ffffff',
   BannerCookieNoticeBorderColor: '#2196F3',
+  BannerCookieNoticePrivacyLinkColor: '#4682B4',
 
   BannerAcceptAllBackgroundColor: '#0069bc',
   BannerAcceptAllTextColor: '#ffffff',
@@ -165,7 +167,7 @@ export const DisplayFrequency = [
 ];
 
 export const DefaultRegulation = [
-  {name: 'GENERIC', code: 'generic'},
+  {name: 'GLOBAL', code: 'generic'},
   {name: 'GDPR', code: 'gdpr'},
   {name: 'CCPA', code: 'ccpa'},
 ];
