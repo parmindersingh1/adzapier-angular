@@ -321,6 +321,38 @@
                       </div>
                     </div>
 
+                    <div class="row mt-3">
+                      <div class="col-md-12">
+                        <p class=" mb-0  input-label pt-2" >Banner Position</p>
+                      </div>
+                      <div class="col-md-12">
+                        <div class="p-field-radiobutton">
+                          <p-radioButton name="BannerPosition" value="top" formControlName="BannerPosition" inputId="top"></p-radioButton>
+                          <label for="top" class="pt-2 pl-3 mb-0">Top</label>
+                        </div>
+                        <div class="p-field-radiobutton">
+                          <p-radioButton name="BannerPosition" value="bottom" formControlName="BannerPosition" inputId="bottom"></p-radioButton>
+                          <label for="bottom"  class="pt-2 pl-3 mb-0">Bottom</label>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="row mt-3">
+                      <div class="col-md-12">
+                        <p class=" mb-0  input-label pt-2" [ngStyle]="{color: !BannerConfigurationForm.value.ShowBadge ? '#999' : null}">Badge Position</p>
+                      </div>
+                      <div class="col-md-12">
+                        <div class="p-field-radiobutton">
+                          <p-radioButton name="BadgePosition" [disabled]="!BannerConfigurationForm.value.ShowBadge" value="left" formControlName="BadgePosition" inputId="left"></p-radioButton>
+                          <label for="left" class="pt-2 pl-3 mb-0">Left</label>
+                        </div>
+                        <div class="p-field-radiobutton">
+                          <p-radioButton name="BadgePosition"  [disabled]="!BannerConfigurationForm.value.ShowBadge" value="right" formControlName="BadgePosition" inputId="right"></p-radioButton>
+                          <label for="right"  class="pt-2 pl-3 mb-0">Right</label>
+                        </div>
+                      </div>
+                    </div>
+
 
                   </div>
                 </div>
@@ -607,9 +639,10 @@
                                 <p-colorPicker format="hex" class="col-md-4 pr-0"
                                                formControlName="BannerCookieNoticeBackgroundColor"
                                                [showTransitionOptions]="'50ms'"
+                                               [(ngModel)]="colorPicker.BannerCookieNoticeBackgroundColor"
                                                [hideTransitionOptions]="'50ms'"></p-colorPicker>
                                 <input type="text" formControlName="BannerCookieNoticeBackgroundColor"
-                                       class="pl-0 col-md-8" pInputText/>
+                                  [(ngModel)]="colorPicker.BannerCookieNoticeBackgroundColor"     class="pl-0 col-md-8" pInputText/>
                               </div>
                             </div>
                             <div class="p-field col-md-6">
@@ -617,9 +650,10 @@
                               <div class="row">
                                 <p-colorPicker format="hex" class="col-md-4 pr-0" [showTransitionOptions]="'50ms'"
                                                formControlName="BannerCookieNoticeTextColor"
+                                               [(ngModel)]="colorPicker.BannerCookieNoticeTextColor"
                                                [hideTransitionOptions]="'50ms'"></p-colorPicker>
                                 <input type="text" formControlName="BannerCookieNoticeTextColor" class="pl-0 col-md-8"
-                                       pInputText/>
+                                       [(ngModel)]="colorPicker.BannerCookieNoticeTextColor"      pInputText/>
                               </div>
                             </div>
                             <div class="p-field col-md-6 mt-2">
@@ -627,9 +661,10 @@
                               <div class="row">
                                 <p-colorPicker format="hex" class="col-md-4 pr-0" [showTransitionOptions]="'50ms'"
                                                formControlName="BannerCookieNoticeBorderColor"
+                                               [(ngModel)]="colorPicker.BannerCookieNoticeBorderColor"
                                                [hideTransitionOptions]="'50ms'"></p-colorPicker>
                                 <input type="text" formControlName="BannerCookieNoticeBorderColor" class="pl-0 col-md-8"
-                                       pInputText/>
+                                       [(ngModel)]="colorPicker.BannerCookieNoticeBorderColor"       pInputText/>
                               </div>
                             </div>
                           </div>
@@ -652,10 +687,11 @@
                               <div class="row">
                                 <p-colorPicker format="hex" class="col-md-4 pr-0"
                                                [showTransitionOptions]="'50ms'"
+                                               [(ngModel)]="colorPicker.BannerAcceptAllBackgroundColor"
                                                formControlName="BannerAcceptAllBackgroundColor"
                                                [hideTransitionOptions]="'50ms'"></p-colorPicker>
                                 <input type="text" class="pl-0 col-md-8" formControlName="BannerAcceptAllBackgroundColor"
-                                       pInputText/>
+                                       [(ngModel)]="colorPicker.BannerAcceptAllBackgroundColor"     pInputText/>
                               </div>
                             </div>
                             <div class="p-field col-md-6">
@@ -663,9 +699,10 @@
                               <div class="row">
                                 <p-colorPicker format="hex" class="col-md-4 pr-0" [showTransitionOptions]="'50ms'"
                                                formControlName="BannerAcceptAllTextColor"
+                                               [(ngModel)]="colorPicker.BannerAcceptAllTextColor"
                                                [hideTransitionOptions]="'50ms'"></p-colorPicker>
                                 <input type="text" class="pl-0 col-md-8" formControlName="BannerAcceptAllTextColor"
-                                       pInputText/>
+                                       [(ngModel)]="colorPicker.BannerAcceptAllTextColor"    pInputText/>
                               </div>
                             </div>
                           </div>
@@ -688,10 +725,11 @@
                               <div class="row">
                                 <p-colorPicker format="hex" class="col-md-4 pr-0"
                                                [showTransitionOptions]="'50ms'"
+                                               [(ngModel)]="colorPicker.BannerPrivacyInfoBackgroundColor"
                                                formControlName="BannerPreferenceBackgroundColor"
                                                [hideTransitionOptions]="'50ms'"></p-colorPicker>
                                 <input type="text" class="pl-0 col-md-8" formControlName="BannerPreferenceBackgroundColor"
-                                       pInputText/>
+                                       [(ngModel)]="colorPicker.BannerPrivacyInfoBackgroundColor"   pInputText/>
                               </div>
                             </div>
                             <div class="p-field col-md-6">
@@ -699,9 +737,10 @@
                               <div class="row">
                                 <p-colorPicker format="hex" class="col-md-4 pr-0" [showTransitionOptions]="'50ms'"
                                                formControlName="BannerPreferenceTextColor"
+                                               [(ngModel)]="colorPicker.BannerPrivacyInfoTextColor"
                                                [hideTransitionOptions]="'50ms'"></p-colorPicker>
                                 <input type="text" class="pl-0 col-md-8" formControlName="BannerPreferenceTextColor"
-                                       pInputText/>
+                                       [(ngModel)]="colorPicker.BannerPrivacyInfoTextColor"     pInputText/>
                               </div>
                             </div>
                           </div>
@@ -725,10 +764,11 @@
                               <div class="row">
                                 <p-colorPicker format="hex" class="col-md-4 pr-0"
                                                [showTransitionOptions]="'50ms'"
+                                               [(ngModel)]="colorPicker.BannerDisableAllBackgroundColor"
                                                formControlName="BannerDisableAllBackgroundColor"
                                                [hideTransitionOptions]="'50ms'"></p-colorPicker>
                                 <input type="text" class="pl-0 col-md-8" formControlName="BannerDisableAllBackgroundColor"
-                                       pInputText/>
+                                       [(ngModel)]="colorPicker.BannerDisableAllBackgroundColor"     pInputText/>
                               </div>
                             </div>
                             <div class="p-field col-md-6">
@@ -736,9 +776,10 @@
                               <div class="row">
                                 <p-colorPicker format="hex" class="col-md-4 pr-0" [showTransitionOptions]="'50ms'"
                                                formControlName="BannerDisableAllTextColor"
+                                               [(ngModel)]="colorPicker.BannerDisableAllTextColor"
                                                [hideTransitionOptions]="'50ms'"></p-colorPicker>
                                 <input type="text" class="pl-0 col-md-8" pInputText
-                                       formControlName="BannerDisableAllTextColor"/>
+                                       [(ngModel)]="colorPicker.BannerDisableAllTextColor"     formControlName="BannerDisableAllTextColor"/>
                               </div>
                             </div>
                           </div>
@@ -761,10 +802,11 @@
                               <div class="row">
                                 <p-colorPicker format="hex" class="col-md-4 pr-0"
                                                [showTransitionOptions]="'50ms'"
+                                               [(ngModel)]="colorPicker.BannerDoNotSellBackgroundColor"
                                                formControlName="BannerDoNotSellMyDataBackgroundColor"
                                                [hideTransitionOptions]="'50ms'"></p-colorPicker>
                                 <input type="text" class="pl-0 col-md-8"
-                                       formControlName="BannerDoNotSellMyDataBackgroundColor" pInputText/>
+                                       [(ngModel)]="colorPicker.BannerDoNotSellBackgroundColor"   formControlName="BannerDoNotSellMyDataBackgroundColor" pInputText/>
                               </div>
                             </div>
                             <div class="p-field col-md-6">
@@ -772,9 +814,10 @@
                               <div class="row">
                                 <p-colorPicker format="hex" class="col-md-4 pr-0" [showTransitionOptions]="'50ms'"
                                                formControlName="BannerDoNotSellMyDataTextColor"
+                                               [(ngModel)]="colorPicker.BannerDoNotSellTextColor"
                                                [hideTransitionOptions]="'50ms'"></p-colorPicker>
                                 <input type="text" class="pl-0 col-md-8" formControlName="BannerDoNotSellMyDataTextColor"
-                                       pInputText/>
+                                       [(ngModel)]="colorPicker.BannerDoNotSellTextColor"      pInputText/>
                               </div>
                             </div>
                           </div>
@@ -819,9 +862,10 @@
                                 <p-colorPicker format="hex" class="col-md-4 pr-0"
                                                [showTransitionOptions]="'50ms'"
                                                formControlName="PreferenceBackgroundColor"
+                                               [(ngModel)]="colorPicker.PreferenceBackgroundColor"
                                                [hideTransitionOptions]="'50ms'"></p-colorPicker>
                                 <input type="text" class="pl-0 col-md-8"
-                                       formControlName="PreferenceBackgroundColor" pInputText/>
+                                       [(ngModel)]="colorPicker.PreferenceBackgroundColor"     formControlName="PreferenceBackgroundColor" pInputText/>
                               </div>
                             </div>
                             <div class="p-field col-md-6">
@@ -829,9 +873,10 @@
                               <div class="row">
                                 <p-colorPicker format="hex" class="col-md-4 pr-0" [showTransitionOptions]="'50ms'"
                                                formControlName="PreferenceTextColor"
+                                               [(ngModel)]="colorPicker.PreferenceTextColor"
                                                [hideTransitionOptions]="'50ms'"></p-colorPicker>
                                 <input type="text" class="pl-0 col-md-8" formControlName="PreferenceTextColor"
-                                       pInputText/>
+                                       [(ngModel)]="colorPicker.PreferenceTextColor"          pInputText/>
                               </div>
                             </div>
                           </div>
@@ -854,10 +899,11 @@
                             <div class="row">
                               <p-colorPicker format="hex" class="col-md-4 pr-0"
                                              [showTransitionOptions]="'50ms'"
+                                             [(ngModel)]="colorPicker.PreferencePurposeBackgroundColor"
                                              formControlName="PreferencePurposeBackgroundColor"
                                              [hideTransitionOptions]="'50ms'"></p-colorPicker>
                               <input type="text" class="pl-0 col-md-8"
-                                     formControlName="PreferencePurposeBackgroundColor" pInputText/>
+                                     [(ngModel)]="colorPicker.PreferencePurposeBackgroundColor"       formControlName="PreferencePurposeBackgroundColor" pInputText/>
                             </div>
                           </div>
                           <div class="p-field col-md-6">
@@ -865,9 +911,10 @@
                             <div class="row">
                               <p-colorPicker format="hex" class="col-md-4 pr-0" [showTransitionOptions]="'50ms'"
                                              formControlName="PreferencePurposeTextColor"
+                                             [(ngModel)]="colorPicker.PreferencePurposeTextColor"
                                              [hideTransitionOptions]="'50ms'"></p-colorPicker>
                               <input type="text" class="pl-0 col-md-8" formControlName="PreferencePurposeTextColor"
-                                     pInputText/>
+                                     [(ngModel)]="colorPicker.PreferencePurposeTextColor"     pInputText/>
                             </div>
                           </div>
                           <div class="p-field col-md-6 mt-2">
@@ -875,9 +922,10 @@
                             <div class="row">
                               <p-colorPicker format="hex" class="col-md-4 pr-0" [showTransitionOptions]="'50ms'"
                                              formControlName="PreferenceSwitchColor"
+                                             [(ngModel)]="colorPicker.PreferenceSwitchColor"
                                              [hideTransitionOptions]="'50ms'"></p-colorPicker>
                               <input type="text" class="pl-0 col-md-8" formControlName="PreferenceSwitchColor"
-                                     pInputText/>
+                                     [(ngModel)]="colorPicker.PreferenceSwitchColor"    pInputText/>
                             </div>
                           </div>
                         </div>
@@ -902,10 +950,11 @@
                             <div class="row">
                               <p-colorPicker format="hex" class="col-md-4 pr-0"
                                              [showTransitionOptions]="'50ms'"
+                                             [(ngModel)]="colorPicker.PreferenceAcceptAllBackgroundColor"
                                              formControlName="PreferenceAcceptAllBackgroundColor"
                                              [hideTransitionOptions]="'50ms'"></p-colorPicker>
                               <input type="text" class="pl-0 col-md-8"
-                                     formControlName="PreferenceAcceptAllBackgroundColor" pInputText/>
+                                     [(ngModel)]="colorPicker.PreferenceAcceptAllBackgroundColor"   formControlName="PreferenceAcceptAllBackgroundColor" pInputText/>
                             </div>
                           </div>
                           <div class="p-field col-md-6">
@@ -913,9 +962,10 @@
                             <div class="row">
                               <p-colorPicker format="hex" class="col-md-4 pr-0" [showTransitionOptions]="'50ms'"
                                              formControlName="PreferenceAcceptAllTextColor"
+                                             [(ngModel)]="colorPicker.PreferenceAcceptAllTextColor"
                                              [hideTransitionOptions]="'50ms'"></p-colorPicker>
                               <input type="text" class="pl-0 col-md-8" formControlName="PreferenceAcceptAllTextColor"
-                                     pInputText/>
+                                     [(ngModel)]="colorPicker.PreferenceAcceptAllTextColor"     pInputText/>
                             </div>
                           </div>
                         </div>
@@ -938,10 +988,11 @@
                             <div class="row">
                               <p-colorPicker format="hex" class="col-md-4 pr-0"
                                              [showTransitionOptions]="'50ms'"
+                                             [(ngModel)]="colorPicker.PreferenceSaveMyChoiceBackgroundColor"
                                              formControlName="PreferenceSaveMyChoiceBackgroundColor"
                                              [hideTransitionOptions]="'50ms'"></p-colorPicker>
                               <input type="text" class="pl-0 col-md-8"
-                                     formControlName="PreferenceSaveMyChoiceBackgroundColor" pInputText/>
+                                     [(ngModel)]="colorPicker.PreferenceSaveMyChoiceBackgroundColor"      formControlName="PreferenceSaveMyChoiceBackgroundColor" pInputText/>
                             </div>
                           </div>
                           <div class="p-field col-md-6">
@@ -949,9 +1000,10 @@
                             <div class="row">
                               <p-colorPicker format="hex" class="col-md-4 pr-0" [showTransitionOptions]="'50ms'"
                                              formControlName="PreferenceSaveMyChoiceTextColor"
+                                             [(ngModel)]="colorPicker.PreferenceSaveMyChoiceTextColor"
                                              [hideTransitionOptions]="'50ms'"></p-colorPicker>
                               <input type="text" class="pl-0 col-md-8" formControlName="PreferenceSaveMyChoiceTextColor"
-                                     pInputText/>
+                                     [(ngModel)]="colorPicker.PreferenceSaveMyChoiceTextColor"       pInputText/>
                             </div>
                           </div>
                         </div>
@@ -973,10 +1025,11 @@
                             <div class="row">
                               <p-colorPicker format="hex" class="col-md-4 pr-0"
                                              [showTransitionOptions]="'50ms'"
+                                             [(ngModel)]="colorPicker.PreferenceDisableAllBackgroundColor"
                                              formControlName="PreferenceDisableAllBackgroundColor"
                                              [hideTransitionOptions]="'50ms'"></p-colorPicker>
                               <input type="text" class="pl-0 col-md-8"
-                                     formControlName="PreferenceDisableAllBackgroundColor" pInputText/>
+                                     [(ngModel)]="colorPicker.PreferenceDisableAllBackgroundColor"    formControlName="PreferenceDisableAllBackgroundColor" pInputText/>
                             </div>
                           </div>
                           <div class="p-field col-md-6">
@@ -984,9 +1037,10 @@
                             <div class="row">
                               <p-colorPicker format="hex" class="col-md-4 pr-0" [showTransitionOptions]="'50ms'"
                                              formControlName="PreferenceDisableAllTextColor"
+                                             [(ngModel)]="colorPicker.PreferenceDisableAllTextColor"
                                              [hideTransitionOptions]="'50ms'"></p-colorPicker>
                               <input type="text" class="pl-0 col-md-8" formControlName="PreferenceDisableAllTextColor"
-                                     pInputText/>
+                                     [(ngModel)]="colorPicker.PreferenceDisableAllTextColor"    pInputText/>
                             </div>
                           </div>
                         </div>
@@ -1009,10 +1063,11 @@
                             <div class="row">
                               <p-colorPicker format="hex" class="col-md-4 pr-0"
                                              [showTransitionOptions]="'50ms'"
+                                             [(ngModel)]="colorPicker.PreferenceDoNotSellBackgroundColor"
                                              formControlName="PreferenceDoNotSellBackgroundColor"
                                              [hideTransitionOptions]="'50ms'"></p-colorPicker>
                               <input type="text" class="pl-0 col-md-8"
-                                     formControlName="PreferenceDoNotSellBackgroundColor" pInputText/>
+                                     [(ngModel)]="colorPicker.PreferenceDoNotSellBackgroundColor"      formControlName="PreferenceDoNotSellBackgroundColor" pInputText/>
                             </div>
                           </div>
                           <div class="p-field col-md-6">
@@ -1020,9 +1075,10 @@
                             <div class="row">
                               <p-colorPicker format="hex" class="col-md-4 pr-0" [showTransitionOptions]="'50ms'"
                                              formControlName="PreferenceDoNotSellTextColor"
+                                             [(ngModel)]="colorPicker.PreferenceDoNotSellTextColor"
                                              [hideTransitionOptions]="'50ms'"></p-colorPicker>
                               <input type="text" class="pl-0 col-md-8" formControlName="PreferenceDoNotSellTextColor"
-                                     pInputText/>
+                                     [(ngModel)]="colorPicker.PreferenceDoNotSellTextColor"     pInputText/>
                             </div>
                           </div>
                         </div>
@@ -1337,6 +1393,15 @@
     </div>
   </div>
 </div>
+
+
+<ng-template #publish>
+  <div class="modal-body text-center">
+    <h5 class="mb-3">Your Banner Configuration Successfully Published.!</h5>
+    <button type="button"  class="btn btn-primary mr-4" (click)="goToDashboard()" ><i  class="fa-cookie fas feather-16 pr-2"></i> Go to Dashboard</button>
+    <button type="button" class="btn btn-primary" (click)="goToSetup()" ><i class="fa-wrench fas feather-16 pr-2"></i>  Setup Banner</button>
+  </div>
+</ng-template>
 
 
 <div class="col-sm-5 mr-0 float-right flotingdiv" [ngClass]="{'hide':!isOpen}">

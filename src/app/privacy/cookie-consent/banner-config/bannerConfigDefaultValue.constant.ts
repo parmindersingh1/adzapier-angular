@@ -99,6 +99,8 @@ export const LightTheme = {
   BannerDisableAllBackgroundColor: '#325668',
   BannerDisableAllTextColor: '#ffffff',
 
+  PreferenceBackgroundColor: '#ffffff',
+  PreferenceTextColor: '#1b365d',
   PreferencePurposeBackgroundColor: '#fafafa',
   PreferencePurposeTextColor: '#1b365d',
 

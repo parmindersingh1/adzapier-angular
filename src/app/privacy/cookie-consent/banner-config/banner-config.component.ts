@@ -1,4 +1,12 @@
-import {AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component, ElementRef,
+  OnDestroy,
+  OnInit,
+  TemplateRef, ViewChild,
+  ViewEncapsulation
+} from '@angular/core';
 import {DomSanitizer, SafeResourceUrl} from '@angular/platform-browser';
 import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
@@ -20,6 +28,7 @@ import {main} from '@angular/compiler-cli/src/main';
 import {ActivatedRoute, Router} from '@angular/router';
 import {featuresName} from '../../../_constant/features-name.constant';
 import {DataService} from '../../../_services/data.service';
+import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
 
 interface Country {
   name: string,
@@ -77,6 +86,9 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
     disableCookieblocking: false,
     disableBannerConfig: false
   };
+  colorPicker = {...LightTheme};
+  modalRef?: BsModalRef;
+  @ViewChild('publish', {static: true}) publishModal: ElementRef;
   constructor(private sanitizer: DomSanitizer,
               private formBuilder: FormBuilder,
               private loading: NgxUiLoaderService,
@@ -85,7 +97,8 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
               private  router: Router,
               private activatedRouter: ActivatedRoute,
               private dataService: DataService,
-              private cd: ChangeDetectorRef
+              private cd: ChangeDetectorRef,
+              private modalService: BsModalService
   ) {
     const element = document.getElementById('main');
     element.classList.remove('container');
@@ -263,6 +276,8 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
       ShowWatermark: [true],
       ShowBadge: [true],
       MuteBanner: [false],
+      BannerPosition: ['bottom'],
+      BadgePosition: ['right'],
       // Language
       DefaultLanguage: ['en-US'],
       // Banner Content
@@ -489,6 +504,8 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
       MuteBanner: CONFIG.MuteBanner,
       // Language
       DefaultLanguage: CONFIG.LanguageConfig.defaultLang,
+      BannerPosition: CONFIG.BannerPosition,
+      BadgePosition: CONFIG.BadgePosition,
     });
     this.customLang = CONFIG.LanguageConfig.customLang;
     this.selectedLanguage = CONFIG.LanguageConfig.allowedLang;
@@ -548,6 +565,34 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
       PreferenceDoNotSellBackgroundColor: config.POPUP.DoNotSellButtonStylesAndContent.background,
       PreferenceDoNotSellTextColor: config.POPUP.DoNotSellButtonStylesAndContent.textColor
     });
+
+    this.colorPicker = {
+      BannerCookieNoticeBackgroundColor: config.Banner.GlobalStyles.background,
+      BannerCookieNoticeTextColor: config.Banner.GlobalStyles.textColor,
+      BannerCookieNoticeBorderColor: config.Banner.GlobalStyles.borderColor,
+      BannerAcceptAllBackgroundColor: config.Banner.AllowAllButtonStylesAndContent.background,
+      BannerAcceptAllTextColor: config.Banner.AllowAllButtonStylesAndContent.textColor,
+      BannerPrivacyInfoBackgroundColor: config.Banner.PreferenceButtonStylesAndContent.background,
+      BannerPrivacyInfoTextColor: config.Banner.PreferenceButtonStylesAndContent.textColor,
+      BannerDisableAllBackgroundColor: config.Banner.DisableAllButtonStylesAndContent.background,
+      BannerDisableAllTextColor: config.Banner.DisableAllButtonStylesAndContent.textColor,
+      BannerDoNotSellBackgroundColor: config.Banner.DoNotSellButtonStylesAndContent.background,
+      BannerDoNotSellTextColor: config.Banner.DoNotSellButtonStylesAndContent.textColor,
+      // Preference Colors
+      PreferenceBackgroundColor: config.POPUP.GlobalStyles.background,
+      PreferenceTextColor: config.POPUP.GlobalStyles.textColor,
+      PreferencePurposeBackgroundColor: config.POPUP.PurposeButton.background,
+      PreferencePurposeTextColor: config.POPUP.PurposeButton.textColor,
+      PreferenceSwitchColor: config.POPUP.SwitchButton.background,
+      PreferenceAcceptAllBackgroundColor: config.POPUP.AllowAllButton.background,
+      PreferenceAcceptAllTextColor: config.POPUP.AllowAllButton.textColor,
+      PreferenceSaveMyChoiceBackgroundColor: config.POPUP.SaveMyChoiseButton.background,
+      PreferenceSaveMyChoiceTextColor: config.POPUP.SaveMyChoiseButton.textColor,
+      PreferenceDisableAllBackgroundColor: config.POPUP.DisableAllButton.background,
+      PreferenceDisableAllTextColor: config.POPUP.DisableAllButton.textColor,
+      PreferenceDoNotSellBackgroundColor: config.POPUP.DoNotSellButtonStylesAndContent.background,
+      PreferenceDoNotSellTextColor: config.POPUP.DoNotSellButtonStylesAndContent.textColor
+    };
   }
 
   onSetDefaultStyle(theme) {
@@ -580,6 +625,33 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
       PreferenceDoNotSellBackgroundColor: ThemeColor.PreferenceDoNotSellBackgroundColor,
       PreferenceDoNotSellTextColor: ThemeColor.PreferenceDoNotSellTextColor
     });
+    this.colorPicker = {
+      BannerCookieNoticeBackgroundColor: ThemeColor.BannerCookieNoticeBackgroundColor,
+      BannerCookieNoticeTextColor: ThemeColor.BannerCookieNoticeTextColor,
+      BannerCookieNoticeBorderColor: ThemeColor.BannerCookieNoticeBorderColor,
+      BannerAcceptAllBackgroundColor: ThemeColor.BannerAcceptAllBackgroundColor,
+      BannerAcceptAllTextColor: ThemeColor.BannerAcceptAllText,
+      BannerPrivacyInfoBackgroundColor: ThemeColor.BannerPreferenceBackgroundColor,
+      BannerPrivacyInfoTextColor: ThemeColor.BannerPreferenceTextColor,
+      BannerDisableAllBackgroundColor: ThemeColor.BannerDisableAllBackgroundColor,
+      BannerDisableAllTextColor: ThemeColor.BannerDisableAllTextColor,
+      BannerDoNotSellBackgroundColor: ThemeColor.BannerDoNotSellMyDataBackgroundColor,
+      BannerDoNotSellTextColor: ThemeColor.BannerDoNotSellMyDataTextColor,
+      // Preference Colors
+      PreferenceBackgroundColor: ThemeColor.PreferenceBackgroundColor,
+      PreferenceTextColor: ThemeColor.PreferenceTextColor,
+      PreferencePurposeBackgroundColor: ThemeColor.PreferencePurposeBackgroundColor,
+      PreferencePurposeTextColor: ThemeColor.PreferencePurposeTextColor,
+      PreferenceSwitchColor: ThemeColor.PreferenceSwitchColor,
+      PreferenceAcceptAllBackgroundColor: ThemeColor.PreferenceAcceptAllBackgroundColor,
+      PreferenceAcceptAllTextColor: ThemeColor.PreferenceAcceptAllTextColor,
+      PreferenceSaveMyChoiceBackgroundColor: ThemeColor.PreferenceSaveMyChoiceBackgroundColor,
+      PreferenceSaveMyChoiceTextColor: ThemeColor.PreferenceSaveMyChoiceTextColor,
+      PreferenceDisableAllBackgroundColor: ThemeColor.PreferenceDisableAllBackgroundColor,
+      PreferenceDisableAllTextColor: ThemeColor.PreferenceDisableAllTextColor,
+      PreferenceDoNotSellBackgroundColor: ThemeColor.PreferenceDoNotSellBackgroundColor,
+      PreferenceDoNotSellTextColor: ThemeColor.PreferenceDoNotSellTextColor
+    };
   }
 
   onChangeBannerType(type) {
@@ -640,8 +712,11 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
         this.alertMsg = res.response;
         this.alertType = 'success';
         this.publishing = false;
-        this.router.navigate(['/cookie-consent/cookie-banner/setup'],
-          {queryParams: {oid: this.currentManagedOrgID, pid: this.currrentManagedPropID}});
+        if (this.publishType === 'publish') {
+          this.openModal(this.publishModal);
+          // this.router.navigate(['/cookie-consent/cookie-banner/setup'],
+          //   {queryParams: {oid: this.currentManagedOrgID, pid: this.currrentManagedPropID}});
+        }
       }, error => {
         this.isOpen = true;
         this.alertMsg = error;
@@ -685,8 +760,11 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
         this.alertMsg = res.response;
         this.alertType = 'success';
         this.publishing = false;
-        this.router.navigate(['/cookie-consent/cookie-banner/setup'],
-          {queryParams: {oid: this.currentManagedOrgID, pid: this.currrentManagedPropID}});
+        if (this.publishType === 'publish') {
+          this.openModal(this.publishModal);
+          // this.router.navigate(['/cookie-consent/cookie-banner/setup'],
+          //   {queryParams: {oid: this.currentManagedOrgID, pid: this.currrentManagedPropID}});
+        }
         }, error => {
         this.isOpen = true;
         this.alertMsg = error;
@@ -720,8 +798,8 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
         generic: this.BannerConfigurationForm.value.AllowGENERIC
       },
       MuteBanner: this.BannerConfigurationForm.value.MuteBanner,
-      BannerPosition: '',
-      BadgePosition: '',
+      BannerPosition: this.BannerConfigurationForm.value.BannerPosition,
+      BadgePosition: this.BannerConfigurationForm.value.BadgePosition,
       DisplayFrequency: {
         bannerPartialConsent: this.BannerConfigurationForm.value.DisplayPartialConsent,
         bannerPartialConsentType: this.BannerConfigurationForm.value.DisplayPartialConsentType,
@@ -922,5 +1000,23 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
       }
     }
     return name;
+  }
+  openModal(template) {
+    this.modalRef = this.modalService.show(template, {
+      animated: false, keyboard: false, ignoreBackdropClick: true
+    });
+  }
+
+  goToDashboard(): void {
+    this.router.navigate(['/home/dashboard/cookie-consent'],
+      {queryParams: {oid: this.currentManagedOrgID, pid: this.currrentManagedPropID}});
+    this.modalRef.hide();
+  }
+
+  goToSetup(): void {
+    this.router.navigate(['/cookie-consent/cookie-banner/setup'],
+      {queryParams: {oid: this.currentManagedOrgID, pid: this.currrentManagedPropID}});
+    this.modalRef.hide();
+
   }
 }
