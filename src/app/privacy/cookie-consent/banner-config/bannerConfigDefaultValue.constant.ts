@@ -113,6 +113,8 @@ export const LightTheme = {
 
   PreferenceAcceptAllBackgroundColor: '#0069bc',
   PreferenceAcceptAllTextColor: '#ffffff',
+
+  PreferenceSwitchColor: '#325668',
 };
 
 
@@ -150,6 +152,8 @@ export const DarkTheme = {
 
   PreferenceAcceptAllBackgroundColor: '#0069bc',
   PreferenceAcceptAllTextColor: '#ffffff',
+
+  PreferenceSwitchColor: '#325668',
 };
 
 export const DisplayFrequency = [
