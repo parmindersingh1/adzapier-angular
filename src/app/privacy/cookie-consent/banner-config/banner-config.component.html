@@ -52,8 +52,8 @@
 <!--            </div>-->
 <!--          </div>-->
           <div class="col-md-2 text-right">
-            <button pButton pRipple type="submit" (click)="publishType = 'draft'" label="Save" class="p-button-warning mr-2"></button>
-            <button pButton pRipple type="submit"  (click)="publishType = 'publish'"  label="Publish"></button>
+            <button pButton pRipple type="submit" [disabled]="contentSaving === 'saving'" (click)="publishType = 'draft'" label="Save" class="p-button-warning mr-2"></button>
+            <button pButton pRipple type="submit"  [disabled]="contentSaving === 'saving'"  (click)="publishType = 'publish'"  label="Publish"></button>
 
           </div>
         </div>
@@ -665,6 +665,17 @@
                                                [hideTransitionOptions]="'50ms'"></p-colorPicker>
                                 <input type="text" formControlName="BannerCookieNoticeBorderColor" class="pl-0 col-md-8"
                                        [(ngModel)]="colorPicker.BannerCookieNoticeBorderColor"       pInputText/>
+                              </div>
+                            </div>
+                            <div class="p-field col-md-6 mt-2">
+                              <label for="title" class="input-label ">Privacy Link</label> <br/>
+                              <div class="row">
+                                <p-colorPicker format="hex" class="col-md-4 pr-0" [showTransitionOptions]="'50ms'"
+                                               formControlName="BannerCookieNoticePrivacyLinkColor"
+                                               [(ngModel)]="colorPicker.BannerCookieNoticePrivacyLinkColor"
+                                               [hideTransitionOptions]="'50ms'"></p-colorPicker>
+                                <input type="text" formControlName="BannerCookieNoticePrivacyLinkColor" class="pl-0 col-md-8"
+                                       [(ngModel)]="colorPicker.BannerCookieNoticePrivacyLinkColor"       pInputText/>
                               </div>
                             </div>
                           </div>

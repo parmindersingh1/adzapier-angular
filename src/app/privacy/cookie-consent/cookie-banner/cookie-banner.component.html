@@ -32,6 +32,9 @@
 
 
               <div class="d-none d-md-block">
+                <a  routerLink="/cookie-consent/banner-configuration" style="color: #555f5e" [queryParams]="{oid: queryOID, pid: queryPID}" type="button" class="btn font-weight-bold tx-16 btn-sm btn-link">
+                 Try new  <span class="badge badge-primary">Beta</span>
+                </a>
                 <button (click)="onResetConfig()" type="button" class="btn  btn-sm btn-uppercase btn-outline-secondary">
                   Reset Configuration
                 </button>
