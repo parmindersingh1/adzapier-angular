@@ -1,0 +1,142 @@
+.p-tabview .p-tabview-nav {
+  align-items: center!important;
+  justify-content: center!important;
+  padding-left: 0!important;
+}
+
+.card {
+  width: 700px;
+  height: 600px;
+  margin-left: 30%;
+  margin-top: 4%;
+  box-shadow: 0 -1px 10px 0 rgb(172 171 171 / 30%);
+}
+
+.purpose-body {
+  padding: 10px;
+  background: #fafafa;
+  border: 1px solid #f0f0f0;
+}
+
+.purpose-text{
+  font-weight: 600;
+  color: #1b365d;
+  font-size: 15px;
+}
+
+.preference-wrap{
+  overflow: scroll;
+  overflow-x: hidden;
+  min-height: 514px;
+  max-height: 514px;
+}
+.purpose-body {
+  cursor: pointer;
+}
+.donotsellbtn{
+  width: 48%
+}
+.aceept-all-btn{
+  width: 48%
+}
+.footer-body{
+  border-top: 1px solid #f0f0f0;
+}
+.logo{
+  color: rgb(113, 221, 233);
+}
+.power-by-tx{
+  color: gray;
+  font-size: 12px !important;
+}
+.gdpr-disable{
+  width: 30%
+}
+
+.gdpr-save-my-choice{
+  width: 30%
+}
+
+.gdpr-accept-all{
+  width: 30%
+}
+
+
+.radiobtn-wrapper{
+  display: flex;
+  justify-content: space-around;
+  flex-direction: row;
+  margin: 0 auto;
+}
+
+.btn-group-action {
+  text-align: center;
+  border-bottom: 1px solid lightgray;
+}
+.btn-group-action button {
+  color: #555;
+  font-weight: 600;
+}
+
+
+
+
+.switch {
+  position: relative;
+  display: inline-block;
+  // width: 52px;
+  // height: 28px;
+  width: 45px;
+  height: 23px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 17px;
+  width: 17px;
+  left: 0px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
