@@ -416,7 +416,7 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
       BannerDescription: LANG_CONFIG.CONFIG.BANNER.DESCRIPTION,
       BannerGDPRDescription2: LANG_CONFIG.CONFIG.BANNER.GDPR_PRIVACY_DESC,
       BannerPrivacyText: LANG_CONFIG.CONFIG.BANNER.PRIVACY,
-      BannerPrivacyLink: [''],
+      BannerPrivacyLink: ['https://www.example.com/privacy'],
       BannerAcceptAllText: LANG_CONFIG.CONFIG.BANNER.ACCEPT_ALL_BTN,
       BannerPreferenceText: LANG_CONFIG.CONFIG.BANNER.PRIVACY_SETTINGS_BTN,
       BannerDisableAllText: LANG_CONFIG.CONFIG.BANNER.DISABLE_ALL_BTN,
@@ -534,7 +534,9 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
       DefaultLanguage: CONFIG.LanguageConfig.defaultLang,
       BannerPosition: CONFIG.BannerPosition,
       BadgePosition: CONFIG.BadgePosition,
+      BannerPrivacyLink: CONFIG.Banner.Privacy.privacyLink
     });
+
     this.customLang = CONFIG.LanguageConfig.customLang;
     this.selectedLanguage = CONFIG.LanguageConfig.allowedLang;
 
