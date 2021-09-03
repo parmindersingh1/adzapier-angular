@@ -6,11 +6,11 @@
       <div class="card banner-bottom" [ngStyle]="{'background' : formData.BannerCookieNoticeBackgroundColor, top: formData.BannerPosition === 'top' ? '0px' : null,  'color' : formData.BannerCookieNoticeTextColor}">
         <div class="card-body banner-border-top" [ngStyle]="{ 'border-top' : '2px solid' + formData.BannerCookieNoticeBorderColor }" >
           <div class="row m-0">
-            <div class="col-md-7 col-12">
+            <div class="col-md-6 col-12">
               <h5 [ngStyle]="{ 'color' : formData.BannerCookieNoticeTextColor}"> {{formData.BannerTitle}}</h5>
-              <p class="text-justify"> {{formData.BannerDescription}}</p>
+              <p class="text-justify"> {{formData.BannerDescription}} <a [style]="{color: formData.BannerCookieNoticePrivacyLinkColor}" [href]="formData.BannerPrivacyLink" target="_blank">{{formData.BannerPrivacyText}}</a></p>
             </div>
-            <div class="col-md-5 col-12 banner-action-btn">
+            <div class="col-md-6 col-12 banner-action-btn">
               <button pButton pRipple type="button" (click)="onOpenPreference()" [label]="formData.BannerPreferenceText" class="p-button-text mr-3"
                       [ngStyle]="{'background': formData.BannerPreferenceBackgroundColor, 'border-color': formData.BannerPreferenceBackgroundColor, 'color': formData.BannerPreferenceTextColor}"></button>
               <button pButton pRipple type="button" [label]="formData.BannerDoNotSellText" class="p-button-secondary mr-3"
@@ -30,11 +30,11 @@
       <div class="card banner-bottom" [ngStyle]="{'background' : formData.BannerCookieNoticeBackgroundColor, top: formData.BannerPosition === 'top' ? '0px' : null, 'color' : formData.BannerCookieNoticeTextColor}">
         <div class="card-body banner-border-top" [ngStyle]="{ 'border-top' : '2px solid' + formData.BannerCookieNoticeBorderColor }" >
           <div class="row m-0">
-            <div class="col-md-7">
+            <div class="col-md-6">
               <h5 [ngStyle]="{ 'color' : formData.BannerCookieNoticeTextColor}"> {{formData.BannerTitle}}</h5>
-              <p class="text-justify"> {{formData.BannerDescription}}</p>
+              <p class="text-justify"> {{formData.BannerDescription}} <a [style]="{color: formData.BannerCookieNoticePrivacyLinkColor}" [href]="formData.BannerPrivacyLink" target="_blank">{{formData.BannerPrivacyText}}</a></p>
             </div>
-            <div class="col-md-5 banner-action-btn">
+            <div class="col-md-6 banner-action-btn">
               <button pButton pRipple type="button" (click)="onOpenPreference()" [label]="formData.BannerPreferenceText" class="p-button-text mr-3"
               [ngStyle]="{'background': formData.BannerPreferenceBackgroundColor, 'border-color': formData.BannerPreferenceBackgroundColor, 'color': formData.BannerPreferenceTextColor}"></button>
               <button pButton pRipple type="button" [label]="formData.BannerDisableAllText" class="p-button-secondary mr-3"
@@ -57,7 +57,7 @@
           <div class="row m-0">
             <div class="col-md-5 gdpr-border-right" [ngStyle]="{ 'border-color' : formData.BannerCookieNoticeBorderColor }" >
               <h5 [ngStyle]="{ 'color' : formData.BannerCookieNoticeTextColor}"> {{formData.BannerTitle}}</h5>
-              <p class="text-justify"> {{formData.BannerDescription}}</p>
+              <p class="text-justify"> {{formData.BannerDescription}} <a [style]="{color: formData.BannerCookieNoticePrivacyLinkColor}" [href]="formData.BannerPrivacyLink" target="_blank">{{formData.BannerPrivacyText}}</a></p>
             </div>
             <div class="col-md-5">
               <p class="text-justify"> {{formData.BannerGDPRDescription2}}</p>

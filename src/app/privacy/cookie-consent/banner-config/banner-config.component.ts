@@ -86,6 +86,8 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
     disableCookieblocking: false,
     disableBannerConfig: false
   };
+  googleVendorsID = [];
+  iabVendorsID = [];
   colorPicker = {...LightTheme};
   modalRef?: BsModalRef;
   @ViewChild('publish', {static: true}) publishModal: ElementRef;
@@ -110,6 +112,7 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngOnInit() {
     this.onGetPropsAndOrgId();
+    this.onGetAllowVendors();
     this.onInitForm();
     this.onLoadContent('en-US');
     this.onSetDefaultStyle(LightTheme);
@@ -168,7 +171,29 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-
+  onGetAllowVendors() {
+    this.loading.start('23');
+    this.isOpen = false;
+    this.cookieBannerService.onGetVendorsData(this.currentManagedOrgID, this.currrentManagedPropID, this.constructor.name, moduleName.manageVendorsModule)
+      .subscribe(res => {
+        this.loading.stop('23');
+        if (res) {
+          if (res.status === 200) {
+            const result = res.response;
+            this.googleVendorsID = JSON.parse(result.google_vendors);
+            this.iabVendorsID = JSON.parse(result.iab_vendors);
+          }
+          this.isOpen = true;
+          this.alertMsg = res.message;
+          this.alertType = 'success';
+        }
+      }, error => {
+        this.loading.stop('23');
+        this.isOpen = true;
+        this.alertMsg = error.message;
+        this.alertType = 'danger';
+      });
+  }
   checkFormDirty() {
     return this.BannerConfigurationForm.controls.BannerTitle.dirty ||
       this.BannerConfigurationForm.controls.BannerDescription.dirty ||
@@ -284,8 +309,8 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
       BannerTitle: [''],
       BannerDescription: [''],
       BannerGDPRDescription2: [''],
-      BannerPrivacyText: [''],
-      BannerPrivacyLink: [''],
+      BannerPrivacyText: ['Privacy Link'],
+      BannerPrivacyLink: ['http://www.example.com/privacy'],
       BannerAcceptAllText: [''],
       BannerPreferenceText: [''],
       BannerDisableAllText: [''],
@@ -303,6 +328,7 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
       BannerCookieNoticeBackgroundColor: [''],
       BannerCookieNoticeTextColor: [''],
       BannerCookieNoticeBorderColor: [''],
+      BannerCookieNoticePrivacyLinkColor: [''],
       BannerAcceptAllBackgroundColor: [''],
       BannerAcceptAllTextColor: [''],
       BannerPreferenceBackgroundColor: [''],
@@ -476,6 +502,8 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
     this.BannerConfigurationForm.patchValue({
       PurposeList: purposeList
     });
+    this.onPublishLangOnS3();
+    this.onSaveCustomLangOnDB()
   }
 
   onChangeBannerLayer(e) {
@@ -542,6 +570,7 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
       BannerCookieNoticeBackgroundColor: config.Banner.GlobalStyles.background,
       BannerCookieNoticeTextColor: config.Banner.GlobalStyles.textColor,
       BannerCookieNoticeBorderColor: config.Banner.GlobalStyles.borderColor,
+      BannerCookieNoticePrivacyLinkColor: config.Banner.Privacy.textColor,
       BannerAcceptAllBackgroundColor: config.Banner.AllowAllButtonStylesAndContent.background,
       BannerAcceptAllTextColor: config.Banner.AllowAllButtonStylesAndContent.textColor,
       BannerPreferenceBackgroundColor: config.Banner.PreferenceButtonStylesAndContent.background,
@@ -570,6 +599,7 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
       BannerCookieNoticeBackgroundColor: config.Banner.GlobalStyles.background,
       BannerCookieNoticeTextColor: config.Banner.GlobalStyles.textColor,
       BannerCookieNoticeBorderColor: config.Banner.GlobalStyles.borderColor,
+      BannerCookieNoticePrivacyLinkColor: config.Banner.Privacy.textColor,
       BannerAcceptAllBackgroundColor: config.Banner.AllowAllButtonStylesAndContent.background,
       BannerAcceptAllTextColor: config.Banner.AllowAllButtonStylesAndContent.textColor,
       BannerPrivacyInfoBackgroundColor: config.Banner.PreferenceButtonStylesAndContent.background,
@@ -602,6 +632,7 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
       BannerCookieNoticeBackgroundColor: ThemeColor.BannerCookieNoticeBackgroundColor,
       BannerCookieNoticeTextColor: ThemeColor.BannerCookieNoticeTextColor,
       BannerCookieNoticeBorderColor: ThemeColor.BannerCookieNoticeBorderColor,
+      BannerCookieNoticePrivacyLinkColor: ThemeColor.BannerCookieNoticePrivacyLinkColor,
       BannerAcceptAllBackgroundColor: ThemeColor.BannerAcceptAllBackgroundColor,
       BannerAcceptAllTextColor: ThemeColor.BannerAcceptAllText,
       BannerPreferenceBackgroundColor: ThemeColor.BannerPreferenceBackgroundColor,
@@ -625,10 +656,12 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
       PreferenceDoNotSellBackgroundColor: ThemeColor.PreferenceDoNotSellBackgroundColor,
       PreferenceDoNotSellTextColor: ThemeColor.PreferenceDoNotSellTextColor
     });
+
     this.colorPicker = {
       BannerCookieNoticeBackgroundColor: ThemeColor.BannerCookieNoticeBackgroundColor,
       BannerCookieNoticeTextColor: ThemeColor.BannerCookieNoticeTextColor,
       BannerCookieNoticeBorderColor: ThemeColor.BannerCookieNoticeBorderColor,
+      BannerCookieNoticePrivacyLinkColor: ThemeColor.BannerCookieNoticePrivacyLinkColor,
       BannerAcceptAllBackgroundColor: ThemeColor.BannerAcceptAllBackgroundColor,
       BannerAcceptAllTextColor: ThemeColor.BannerAcceptAllText,
       BannerPrivacyInfoBackgroundColor: ThemeColor.BannerPreferenceBackgroundColor,
@@ -690,8 +723,8 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
       default_regulation: this.BannerConfigurationForm.value.DefaultRegulation,
       purposes_by_default: this.BannerConfigurationForm.value.AllowPurposeByDefault,
       gdpr_target: this.BannerConfigurationForm.value.GdprCountries,
-      iab_vendors_ids: '',
-      google_vendors_ids: '',
+      iab_vendors_ids: JSON.stringify(this.iabVendorsID),
+      google_vendors_ids: JSON.stringify(this.googleVendorsID),
       cookie_blocking: this.BannerConfigurationForm.value.CookieBlocking,
       enable_iab: this.BannerConfigurationForm.value.EnableIAB,
       email: false,
@@ -737,8 +770,8 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
       default_regulation: this.BannerConfigurationForm.value.DefaultRegulation,
       purposes_by_default: this.BannerConfigurationForm.value.AllowPurposeByDefault,
       gdpr_target: this.BannerConfigurationForm.value.GdprCountries,
-      iab_vendors_ids: '',
-      google_vendors_ids: '',
+      iab_vendors_ids: JSON.stringify(this.iabVendorsID),
+      google_vendors_ids: JSON.stringify(this.googleVendorsID),
       cookie_blocking: this.BannerConfigurationForm.value.CookieBlocking,
       enable_iab: this.BannerConfigurationForm.value.EnableIAB,
       email: false,
@@ -811,7 +844,7 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
       Banner: {
         Privacy: {
           privacyLink: this.BannerConfigurationForm.value.BannerPrivacyLink,
-          textColor: '',
+          textColor: this.BannerConfigurationForm.value.BannerCookieNoticePrivacyLinkColor,
         },
         GlobalStyles: {
           textColor: this.BannerConfigurationForm.value.BannerCookieNoticeTextColor,
