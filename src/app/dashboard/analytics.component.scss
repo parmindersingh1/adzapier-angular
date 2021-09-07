@@ -1,3 +1,5 @@
+@import "../../scss/variables";
+
 .center {text-align:center;width:100%;}
 .card card-title{
     margin-top:100px;
@@ -21,11 +23,11 @@
 }
 
 .temp-blue {
-    color:#1b365d;
+    color: $bg-templ-blue-primary;
 }
 
 .bg-templ-blue {
-    background-color:#1b365d;
+    background-color: $bg-templ-blue-primary;
     border: 0;
 }
 

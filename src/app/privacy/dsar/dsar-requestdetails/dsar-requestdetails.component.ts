@@ -447,7 +447,7 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
     let approverList;
     this.orgService.getOrgTeamMembers(this.currentManagedOrgID).subscribe((data) => {
       approverList = data.response;
-      let filterdList = approverList.filter((t) => t.user_name !== ' ');
+      let filterdList = approverList.filter((t) => t.user_name !== ' ' && t.role_name.indexOf('View') == -1 && t.email_verified);
       this.ApproverList = filterdList;
     }, (error) => {
       this.alertMsg = error;

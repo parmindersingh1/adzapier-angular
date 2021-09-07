@@ -1386,6 +1386,10 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
     }else{
       updatedWebForm = this.dsarFormService.getFormControlList();
     }
+    if(this.daysleft >= 46){
+      this.errorMsgdaysleft = 'Default days should not be greater than 45';
+      return false;
+    }
     this.formObject = {
       form_name: this.basicForm.controls['formname'].value,
       form_status: 'draft',
@@ -1812,7 +1816,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
     if (this.orgId) {
       setTimeout(()=>{
       this.organizationService.getOrgTeamMembers(this.orgId).subscribe((data) => {
-        this.ApproverList = data.response;
+        this.ApproverList = data.response.filter((t) => t.role_name.indexOf('View') == -1 && t.email_verified);//&& t.role_name.indexOf('View') == -1 && t.email_verified
         const filterValue = this.ApproverList.filter((t) => t.approver_id === this.selectedApproverID);
         if (filterValue.length > 0) {
           this.defaultapprover = filterValue[0].approver_id;
