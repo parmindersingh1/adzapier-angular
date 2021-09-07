@@ -206,13 +206,13 @@ export class SubscriptionPopupComponent implements OnInit {
   }
 
   onTemplateHide() {
-    if (this.location.path().indexOf('/settings') !== -1 && this.queryOID !== undefined) {
-      document.body.classList.remove('modal-open');
-      this.template.hide();
+    document.body.classList.remove('modal-open');
+    this.template.hide();
+    let oIDPIDFromURL = findPropertyIDFromUrl(this.location.path());
+    if (this.location.path().indexOf('/settings') !== -1 && this.queryOID !== null && this.queryOID !== undefined) {
       this.router.navigate(['/home/dashboard/analytics'], { queryParams: { oid: this.queryOID, pid: this.queryPID }, queryParamsHandling: 'merge', skipLocationChange: false });
     } else {
-      document.body.classList.remove('modal-open');
-      this.template.hide();
+      this.router.navigate(['/home/dashboard/analytics'], { queryParams: { oid: oIDPIDFromURL[0], pid: oIDPIDFromURL[1] }, queryParamsHandling: 'merge', skipLocationChange: false });
     }
   }
 

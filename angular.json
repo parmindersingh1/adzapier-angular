@@ -37,7 +37,7 @@
             "styles": [
               "./node_modules/bootstrap/dist/css/bootstrap.min.css",
               "./node_modules/ngx-bootstrap/datepicker/bs-datepicker.css",
-              "src/styles.scss",
+              "src/scss/styles.scss",
               "src/assets/css/dashforge.css",
               "./src/assets/css/map/jqvmap.min.css",
               "./src/assets/css/daterangepicker.css",
@@ -203,7 +203,7 @@
               "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "./node_modules/bootstrap/dist/css/bootstrap.min.css",
               "./node_modules/ngx-bootstrap/datepicker/bs-datepicker.css",
-              "src/styles.scss"
+              "src/scss/styles.scss"
             ],
             "scripts": []
           }
