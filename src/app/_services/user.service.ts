@@ -57,6 +57,22 @@ export class UserService {
             );
     }
 
+    registration(componentName, moduleName, obj) {
+        const path = '/register';
+        return this.http.post<any>(environment.apiUrl + `${path}`, obj)
+            .pipe(map(user => {
+                // store user details and jwt token in local storage to keep user logged in between page refreshes
+                this.currentregSubject.next(user);
+                return user;
+            }),
+                retry(1),
+                catchError(error => {
+                    this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.registerUser, componentName, moduleName, path);
+                    return throwError(error);
+                  })
+            );
+    }
+
 
   resetpassword(componentName, moduleName, token, password, confirmpassword): Observable<any> {
         const path = '/password/reset';
@@ -65,6 +81,10 @@ export class UserService {
             this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.resetPassword, componentName, moduleName, path);
             return throwError(error);
           }));
+    }
+
+    AddOrgCmpProp( obj , emailid , userid , plan_id ,units ){
+    return this.http.post(environment.apiUrl + '/billing/checkout/trialsession' + '?email=' + emailid + '&userid=' + userid + '&plan_id=' + plan_id + '&units=' + units, obj)
     }
 
 
@@ -128,6 +148,11 @@ export class UserService {
                 return throwError(error);
               })
         );
+    }
+
+    getverifyemailRecord(email): Observable<any> {
+        const path = '/register/checkemailverify' + '?email=' + email;
+        return this.http.get<any>(environment.apiUrl + path)
     }
 
     handleError(error) {
