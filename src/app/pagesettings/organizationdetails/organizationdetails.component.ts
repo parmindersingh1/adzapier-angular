@@ -597,7 +597,8 @@ export class OrganizationdetailsComponent implements OnInit {
       if (data) {
         const key = 'response';
         // const roleid = data[key];
-        this.roleList = data[key];
+        const organizationLevelRoles = data[key].filter((t) => t.role_name.indexOf('Org') != -1);
+        this.roleList = organizationLevelRoles
       }
     });
   }

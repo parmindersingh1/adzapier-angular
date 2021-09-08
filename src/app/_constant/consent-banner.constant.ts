@@ -116,7 +116,7 @@ export class FormDefaultData {
   bannerBorderColor: string;
   bannerBackGroundColor: string;
   badgePosition: string;
-
+  BannerPosition: string;
 
   bannerPreferenceButtonText: string;
   bannerPreferenceButtonTextColor: string;
