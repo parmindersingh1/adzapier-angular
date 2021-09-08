@@ -89,10 +89,10 @@ export const apiConstant = {
 
   // System Integration
   SYSTEM_INTEGRATION_LIST: '/integration/system-list',
-  CONNECTION_INTEGRATION_LIST: '/integration/credentials',
+  CONNECTION_INTEGRATION_LIST: '/integration/connection',
   SQL_TABLES_LIST: '/integration/get-tables',
   SQL_TABLE_COLUMNS_LIST: '/integration/get-table-columns',
-  INTEGRATION_SYSTEM: '/integration/credentials/:oid/:pid/:connectionID',
+  INTEGRATION_SYSTEM: '/integration/connection/:oid/:pid/:connectionID',
 };
 
 // {

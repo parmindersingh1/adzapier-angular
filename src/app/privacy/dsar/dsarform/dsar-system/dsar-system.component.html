@@ -1,15 +1,14 @@
-<div class="container">
-  <div class="system-list" *ngIf="currentSystemType === ''">
-    <h5 class="mt-2 mb-3">System List</h5>
-    <div class="list-group">
-      <a href="javascript:;"  *ngFor="let system of systemList" (click)="currentSystemType = system.name; systemID= system.id"  class="list-group-item list-group-item-action mb-0">
-        <span *ngIf="system.name ==='mysql'"><img style="width:  90px" src="../../../../../assets/imgs/db/mysql.png" alt="mysql" /></span>
-        <span *ngIf="system.name ==='mailchimp'"><img style="width:  180px" src="../../../../../assets/imgs/db/mailchimp.png" alt="mailchimp" /></span>
-        <span *ngIf="system.name ==='postgresql'"><img style="width:  210px; height: 47px" src="../../../../../assets/imgs/db/postgresql.svg" alt="postgresql" /></span>
-        <span *ngIf="system.name ==='http'"><img style="width:  210px; height: 47px" src="../../../../../assets/imgs/db/http.png" alt="http" /></span></a>
-    </div>
-  </div>
-  <div class="sql-builder" *ngIf="currentSystemType === 'mysql'">
-    <app-sql-query-builder [systemName]="currentSystemType" [systemID]="systemID"></app-sql-query-builder>
-  </div>
-</div>
+<!--<div class="container">-->
+<!--  <div class="system-list" *ngIf="currentSystemType === ''">-->
+<!--    <h5 class="mt-2 mb-3">System List</h5>-->
+<!--    <div class="list-group">-->
+<!--      <a href="javascript:;"  *ngFor="let system of systemList" (click)="currentSystemType = system.name; systemID= system.id"  class="list-group-item list-group-item-action mb-0">-->
+<!--        <span *ngIf="system.name ==='mysql'"><img style="width:  90px" src="../../../../../assets/imgs/db/mysql.png" alt="mysql" /></span>-->
+<!--        <span *ngIf="system.name ==='mailchimp'"><img style="width:  180px" src="../../../../../assets/imgs/db/mailchimp.png" alt="mailchimp" /></span>-->
+<!--        <span *ngIf="system.name ==='postgresql'"><img style="width:  210px; height: 47px" src="../../../../../assets/imgs/db/postgresql.svg" alt="postgresql" /></span>-->
+<!--        <span *ngIf="system.name ==='http'"><img style="width:  210px; height: 47px" src="../../../../../assets/imgs/db/http.png" alt="http" /></span></a>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--  <div class="sql-builder" *ngIf="currentSystemType === 'mysql'">-->
+<!--  </div>-->
+<!--</div>-->

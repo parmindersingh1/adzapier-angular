@@ -59,17 +59,18 @@ export class UpdateConnectionFormComponent implements OnInit {
       connection_desc: this.updateConnectionData.description,
       connector_type: this.updateConnectionData.connector_type
     });
-    this.onGetConnectionList();
+
     console.log('this.updateConnectionData', this.updateConnectionData)
-    for (let i = 0; this.updateConnectionData.integration_auth.length > i; i++) {
+    this.onGetConnectionList();
+    for (let i = 0; this.updateConnectionData.integration_cred.length > i; i++) {
       this.addCredentialRows.push(this.addCredential(i));
     }
   }
 
   addCredential(index) {
     return this.formBuilder.group({
-      key: [this.updateConnectionData.integration_auth[index].key, Validators.required],
-      secret_1: [this.updateConnectionData.integration_auth[index].secret_1, Validators.required],
+      key: [this.updateConnectionData.integration_cred[index].key, Validators.required],
+      secret_1: [this.updateConnectionData.integration_cred[index].secret_1, Validators.required],
     });
   }
 
@@ -101,7 +102,7 @@ export class UpdateConnectionFormComponent implements OnInit {
       cred_name: this.mySqlForm.value.connection_name,
       description: this.mySqlForm.value.connection_desc,
       connector_type: this.mySqlForm.value.connector_type,
-      integration_auth: this.mySqlForm.value.credential
+      integration_cred: this.mySqlForm.value.credential
     };
     if (this.submitType === 'test') {
       this.onTestConnection(payload);

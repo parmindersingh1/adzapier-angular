@@ -94,7 +94,7 @@ export class MysqlFormComponent implements OnInit {
       cred_name: this.mySqlForm.value.connection_name,
       description: this.mySqlForm.value.connection_desc,
       connector_type: this.mySqlForm.value.connector_type,
-      integration_auth: this.mySqlForm.value.credential
+      integration_cred: this.mySqlForm.value.credential
     };
     if (this.submitType === 'test') {
       this.onTestConnection(payload);

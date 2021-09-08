@@ -12,7 +12,6 @@ export class DsarSystemComponent implements OnInit {
   currentSystemType = '';
   systemID = '';
   constructor(private systemIntegrationService: SystemIntegrationService) { }
-
   ngOnInit(): void {
     this.onGetSystemList();
   }

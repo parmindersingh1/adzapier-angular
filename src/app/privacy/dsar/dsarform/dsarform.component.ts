@@ -260,6 +260,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
   queryPID;
   orgDetails;
   orgPropertyMenu;
+  currentStep = 0;
   constructor(private fb: FormBuilder, private ccpaRequestService: CcparequestService,
     private organizationService: OrganizationService,
     private dsarFormService: DsarformService,
@@ -280,7 +281,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
     this.activatedRoute.queryParamMap
     .subscribe(params => {
    this.queryOID = params.get('oid');
-   this.queryPID = params.get('pid'); 
+   this.queryPID = params.get('pid');
     });
 
   }
@@ -2659,7 +2660,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
 
   loadOrgProperty(){
     this.organizationService.getOrganizationWithProperty().subscribe((data) => {
-      
+
       this.orgPropertyMenu = data.response;
       const findOidIndex = this.orgPropertyMenu.findIndex((t) => t.id == this.queryOID) //finding oid
       if(findOidIndex !== -1){
@@ -2676,12 +2677,12 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
        this.basicForm.controls['selectedProperty'].setValue(this.selectedProperty);
        this.basicForm.controls['currentOrganization'].setValue(this.currentOrganization);
       }
-     
-    } 
+
+    }
   });
   }
 
-  
+
 
 }
 

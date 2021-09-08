@@ -20,7 +20,7 @@ export class SystemIntegrationService {
     this.applicationPath =  location.pathname;
   }
   SaveSystemIntegration(componentName, moduleName, systemID, payload) {
-    const path = `/integration/credentials/${systemID}`;
+    const path = `/integration/connection/${systemID}`;
     return this.http.post(environment.apiUrl + path, payload)
       .pipe(catchError(error => {
         this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.getWorkflow, componentName, moduleName, path);
@@ -30,7 +30,7 @@ export class SystemIntegrationService {
 
 
   UpdateSystemIntegration(componentName, moduleName, systemID, connectionID,  payload) {
-    const path = `/integration/credentials/${systemID}/${connectionID}`;
+    const path = `/integration/connection/${systemID}/${connectionID}`;
     return this.http.put(environment.apiUrl + path, payload)
       .pipe(catchError(error => {
         this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.getWorkflow, componentName, moduleName, path);
@@ -74,8 +74,8 @@ export class SystemIntegrationService {
       }));
   }
 
-  GetCredListBySystem(componentName, systemID, moduleName) {
-    const path = apiConstant.CONNECTION_INTEGRATION_LIST + '/' + systemID;
+  GetCredListBySystem(componentName, moduleName) {
+    const path = apiConstant.CONNECTION_INTEGRATION_LIST;
     return this.http.get(environment.apiUrl + path)
       .pipe(catchError(error => {
         this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.getWorkflow, componentName, moduleName, path);
@@ -124,4 +124,13 @@ export class SystemIntegrationService {
   onSendLogs(errorType, msg, functionality, componentName, moduleName, path) {
     this.lokiService.onSendErrorLogs(errorType, msg, functionality, componentName, moduleName, path).subscribe();
   }
+
+  saveQueryBuilder(componentName, moduleName, payload, oID, connectionID) {
+      const path = '/integration/save-query-builder/' + oID  + '/' + connectionID;
+      return this.http.post(environment.apiUrl + path, payload)
+      .pipe(catchError(error => {
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.getWorkflow, componentName, moduleName, path);
+        return throwError(error);
+  }));
+}
 }

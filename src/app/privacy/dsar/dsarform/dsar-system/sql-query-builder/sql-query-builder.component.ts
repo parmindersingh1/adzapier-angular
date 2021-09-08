@@ -1,17 +1,18 @@
-import {Component, Input, OnInit, TemplateRef} from '@angular/core';
+import {ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges, TemplateRef} from '@angular/core';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
 import {LazyLoadEvent} from 'primeng/api';
 import {moduleName} from '../../../../../_constant/module-name.constant';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
 import {SystemIntegrationService} from '../../../../../_services/system_integration.service';
 import {QueryBuilderConfig} from 'angular2-query-builder';
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
   selector: 'app-sql-query-builder',
   templateUrl: './sql-query-builder.component.html',
   styleUrls: ['./sql-query-builder.component.scss']
 })
-export class SqlQueryBuilderComponent implements OnInit {
+export class SqlQueryBuilderComponent implements OnInit, OnChanges {
   modalRef: BsModalRef;
   eventRows;
   credList = [];
@@ -23,38 +24,63 @@ export class SqlQueryBuilderComponent implements OnInit {
   alertType: any;
   step = 1;
   isTesting = false;
-  @Input('systemName') systemName;
-  @Input('systemID') systemID;
   connectionID = null;
   tableListKey = '';
   tableList = [];
-
+  @Input('formObject') formObject;
+  sqlSelectField = [];
   tableColumnsListKey = '';
   tableColumnsList = [];
-
+  systemName = '';
 
   query = {
     condition: 'and',
     rules: []
   };
-
+  systemList = [];
   config: QueryBuilderConfig = {
     fields: {}
   };
+  orgID = null;
   constructor(private modalService: BsModalService,
               private loading: NgxUiLoaderService,
-              private systemIntegrationService: SystemIntegrationService
+              private cd: ChangeDetectorRef,
+              private systemIntegrationService: SystemIntegrationService,
+              private activatedRoutes: ActivatedRoute
               ) { }
 
   ngOnInit(): void {
+    this.activatedRoutes.queryParams.subscribe(params => {
+      this.orgID =  params.oid;
+    })
+    this.onGetSystemList();
     this.onGetCredList();
   }
-  onGetCredList() {
-    this.loading.start();
-    this.systemIntegrationService.GetCredListBySystem(this.constructor.name, this.systemID, moduleName.systemIntegrationModule)
+  ngOnChanges(changes: SimpleChanges) {
+    this.formObject = changes.formObject.currentValue;
+    this.cd.detectChanges();
+  }
+
+  onGetSystemList() {
+    this.loading.start('step-1');
+    this.systemIntegrationService.GetSystemList(this.constructor.name, moduleName.systemIntegrationModule)
       .subscribe((res: any) => {
-        this.loading.stop();
+        this.loading.stop('step-1');
+        this.systemList = res.response;
+      }, error => {
+        this.loading.stop('step-1');
+      });
+  }
+  onGetCredList() {
+    this.loading.start('step2');
+    this.systemIntegrationService.GetCredListBySystem(this.constructor.name,  moduleName.systemIntegrationModule)
+      .subscribe((res: any) => {
+        this.loading.stop('step2');
         this.credList = res.response;
+        this.cd.detectChanges();
+
+      }, error => {
+        this.loading.stop('step2');
       });
   }
   openModal(template: TemplateRef<any>) {
@@ -77,7 +103,7 @@ export class SqlQueryBuilderComponent implements OnInit {
   onTestConnection(data) {
     this.currentScanId = data.id;
     const integrationCred = [];
-    for (const cred of data.integration_auth) {
+    for (const cred of data.integration_cred) {
       integrationCred.push({
         key: cred.key,
         secret_1: cred.secret_1
@@ -87,11 +113,11 @@ export class SqlQueryBuilderComponent implements OnInit {
       cred_name: data.cred_name,
       description: data.description,
       connector_type: data.connector_type,
-      integration_auth: integrationCred
+      integration_cred: integrationCred
     };
     this.loading.start();
     const params = {
-      system: this.systemName
+      system: this.onFindSystemName(data.system_id)
     };
     this.isTesting = true;
     this.isOpen = false;
@@ -117,6 +143,16 @@ export class SqlQueryBuilderComponent implements OnInit {
   onRefreshList() {
     this.modalRef.hide();
     this.onGetCredList();
+  }
+
+  onFindSystemName(systemID) {
+    let systemName = '';
+    for (const system of this.systemList) {
+      if (system.id === systemID) {
+        systemName = system.name;
+      }
+    }
+    return systemName;
   }
 
   onSelectConnection(connectionId) {
@@ -150,14 +186,13 @@ export class SqlQueryBuilderComponent implements OnInit {
       });
   }
   onCreateSqlBuilder() {
-    // config: QueryBuilderConfig = {
-    //   fields: {
-    //     age: {name: 'Age', type: 'string'},
-    //   }
-    // };
-    this.query.rules.push({field: this.tableColumnsList[0][this.tableColumnsListKey], operator: '<=', value: ''});
+    const queryOption = [];
+    for (const option of this.formObject.request_form) {
+      queryOption.push({name: 'Form.' + option.controllabel, value: option.controlId});
+    }
+    this.query.rules.push({field: this.tableColumnsList[0][this.tableColumnsListKey],  operators: ['=', '<=', '>'], value: ''});
     for (const column of this.tableColumnsList) {
-      this.config.fields[column[this.tableColumnsListKey]] = {name: column[this.tableColumnsListKey], type: 'string'};
+      this.config.fields[column[this.tableColumnsListKey]] = {name: column[this.tableColumnsListKey], type: 'category',  operators: ['=', '<=', '>'], options: queryOption};
     }
 
     this.step = 3;
@@ -165,4 +200,26 @@ export class SqlQueryBuilderComponent implements OnInit {
     console.log('this.this.config', this.config)
   }
 
+  onSelectField(event, field) {
+    const checked = event.target.checked;
+    const  sqlSelectField = [...this.sqlSelectField];
+    if (checked) {
+      sqlSelectField.push(field);
+    } else {
+      const index = this.sqlSelectField.indexOf(field);
+      if (index > -1) {
+        sqlSelectField.splice(index, 1);
+      }
+    }
+    this.sqlSelectField = sqlSelectField;
+  }
+  onSaveSqlBuilder() {
+    const payload = [
+      {field: 'select', value_1: JSON.stringify(this.sqlSelectField)},
+      {field: 'where', value_1: JSON.stringify(this.query)}
+    ];
+    this.systemIntegrationService.saveQueryBuilder(this.constructor.name, moduleName.systemIntegrationModule, payload, this.orgID, this.connectionID).subscribe(res => {
+
+    })
+  }
 }

@@ -107,7 +107,7 @@ export class SystemIntegrationComponent implements OnInit {
   onTestConnection(data) {
     this.currentScanId = data.id;
     const integrationCred = [];
-    for (const cred of data.integration_auth) {
+    for (const cred of data.integration_cred) {
       integrationCred.push({
         key: cred.key,
         secret_1: cred.secret_1
@@ -117,7 +117,7 @@ export class SystemIntegrationComponent implements OnInit {
       cred_name: data.cred_name,
       description: data.description,
       connector_type: data.connector_type,
-      integration_auth: integrationCred
+      integration_cred: integrationCred
     };
     this.loading.start();
     const params = {
