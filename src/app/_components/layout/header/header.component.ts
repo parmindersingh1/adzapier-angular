@@ -224,7 +224,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
           localStorage.clear();
           this.selectedOrgProperties.length = 0;
           if(this.router.url.indexOf('/verify-email') !== -1){
-            this.router.navigate(['/login']);
+            let urlpartone = this.router.url.split("?oid=");
+            let urlparttwo = urlpartone[0].split("?pid=");
+            this.router.navigate([urlparttwo[0]]);
             sessionStorage.clear();
           }
         }
