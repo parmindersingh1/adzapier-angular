@@ -12,7 +12,8 @@ const routes: Routes = [
   {path :'signout',loadChildren : () => import('./signout-page/signout-page.module').then(m => m.SignoutPageModule)},
 
   { path: 'login', loadChildren: () => import('./login/login.module').then(m => m.LoginModule) },
-  { path: 'signup', loadChildren: () => import('./register/register.module').then(m => m.RegisterModule) },
+  { path: 'register', loadChildren: () => import('./register/register.module').then(m => m.RegisterModule) },
+  {path : 'signup' , loadChildren : () => import('./twostepregister/twostepregister.module').then(m => m.TwostepregisterModule)},
   { path: 'forgot-password', loadChildren: () => import('./forgotpassword/forgotpassword.module').then(m => m.ForgotpasswordModule) },
   // { path: 'privacypolicy', component: PrivacypolicyComponent },
   // { path: 'partners', component: PartnersComponent },

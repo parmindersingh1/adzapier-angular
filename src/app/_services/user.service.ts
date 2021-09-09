@@ -6,6 +6,7 @@ import { BehaviorSubject, Observable, Subject, throwError } from 'rxjs';
 import { map, shareReplay, retry, catchError } from 'rxjs/operators';
 import {LokiService} from './loki.service';
 import {LokiFunctionality, LokiStatusType} from '../_constant/loki.constant';
+import { apiConstant } from '../_constant/api.constant';
 
 @Directive()
 @Injectable({ providedIn: 'root' })
@@ -57,6 +58,22 @@ export class UserService {
             );
     }
 
+    registration(componentName, moduleName, obj) {
+        const path = '/register';
+        return this.http.post<any>(environment.apiUrl + `${path}`, obj)
+            .pipe(map(user => {
+                // store user details and jwt token in local storage to keep user logged in between page refreshes
+                this.currentregSubject.next(user);
+                return user;
+            }),
+                retry(1),
+                catchError(error => {
+                    this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.registerUser, componentName, moduleName, path);
+                    return throwError(error);
+                  })
+            );
+    }
+
 
   resetpassword(componentName, moduleName, token, password, confirmpassword): Observable<any> {
         const path = '/password/reset';
@@ -65,6 +82,15 @@ export class UserService {
             this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.resetPassword, componentName, moduleName, path);
             return throwError(error);
           }));
+    }
+
+    
+    AddOrgCmpProp(componentName ,moduleName ,obj , emailid , userid , plan_id ,units ){
+    const path = apiConstant.REGISTRATION_ADD_COMPANY_ORG_PROP
+    return this.http.post(environment.apiUrl + path + '?email=' + emailid + '&userid=' + userid + '&plan_id=' + plan_id + '&units=' + units, obj).pipe(catchError(error => {
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.registerUser, componentName, moduleName, path);
+        return throwError(error);
+      }));
     }
 
 
@@ -128,6 +154,11 @@ export class UserService {
                 return throwError(error);
               })
         );
+    }
+
+    getverifyemailRecord(email): Observable<any> {
+        const path = '/register/checkemailverify' + '?email=' + email;
+        return this.http.get<any>(environment.apiUrl + path)
     }
 
     handleError(error) {
