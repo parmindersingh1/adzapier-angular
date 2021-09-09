@@ -37,17 +37,21 @@
           <div class="ccpa-privacy" *ngIf="preferenceStep === 2">
               <p class="tx-11 pt-2">{{formData.PreferencePrivacyCcpaAndGenericDescriptionText}}</p>
               <div class="row w-100 no-gutters" style=" align-items: center;">
-                <p-accordion class="w-100">
-                  <p-accordionTab header="Why do you need my consent?">
-                    What are cookies used?
-                    Whit this information is created a user profile based on this and other Data. It is anonymous and only linked to a device or in in combination with your browser.
-                  </p-accordionTab>
-                  <p-accordionTab header="What about cookies?">
-                    How they work
-                    By placing cookies in your device provide insight into a number of technical data when you visit our website (e.g your IP address, your operating system , the browser you use, the internet page you visit our website).                </p-accordionTab>
-                  <p-accordionTab header="Audit ID">
-                    Audit Id is a random unique number that is generated for you when you visit this website. The purpose of the Audit ID is to keep a record of your consent history on which cookies you accepted and when. The information kept in relation to your Audit ID includes, timestamp, version of cookie vendor list and a list of vendors that are allowed to process your data.                </p-accordionTab>
-                </p-accordion>
+
+                <ng-container *ngFor="let content of privacyContent; let i = index">
+                  <div class="col-md-12 card-body purpose-body"  [ngStyle]="{'background': formData.PreferencePurposeBackgroundColor, 'color': formData.PreferencePurposeTextColor}" >
+                      <div class=" purpose-text"   [ngStyle]="{ 'color': formData.PreferencePurposeTextColor}"  (click)="onShowDesc(i+ 200)">
+                        <span (click)="onShowDesc(i + 200)" class="mr-4 tx-18">
+                          <i *ngIf="currentPurposeID !== i + 200" class="fas fa-chevron-right"></i>
+                          <i *ngIf="currentPurposeID === i + 200" class="fas fa-chevron-down"></i>
+                        </span>
+                        {{content.title}}
+                      </div>
+                  </div>
+                  <div class="col-md-12 card-body row" *ngIf="currentPurposeID === i + 200">
+                    <p class="tx-11 mt-2 p-2 ml-3 mr-3">{{content.desc}}</p>
+                  </div>
+                </ng-container>
               </div>
           </div>
 
@@ -100,19 +104,22 @@
             </ng-container>
         </div>
         <div class="generic-privacy" *ngIf="preferenceStep === 2">
-            <p class="tx-11">{{formData.PreferencePrivacyCcpaAndGenericDescriptionText}}</p>
+            <p class="tx-11 mt-2">{{formData.PreferencePrivacyCcpaAndGenericDescriptionText}}</p>
             <div class="row w-100 no-gutters" style=" align-items: center;">
-              <p-accordion class="w-100">
-                <p-accordionTab header="Why do you need my consent?" >
-                  What are cookies used?
-                  Whit this information is created a user profile based on this and other Data. It is anonymous and only linked to a device or in in combination with your browser.
-                </p-accordionTab>
-                <p-accordionTab header="What about cookies?">
-                  How they work
-                  By placing cookies in your device provide insight into a number of technical data when you visit our website (e.g your IP address, your operating system , the browser you use, the internet page you visit our website).                </p-accordionTab>
-                <p-accordionTab header="Audit ID">
-                  Audit Id is a random unique number that is generated for you when you visit this website. The purpose of the Audit ID is to keep a record of your consent history on which cookies you accepted and when. The information kept in relation to your Audit ID includes, timestamp, version of cookie vendor list and a list of vendors that are allowed to process your data.                </p-accordionTab>
-              </p-accordion>
+              <ng-container *ngFor="let content of privacyContent; let i = index">
+                <div class="col-md-12 card-body purpose-body"  [ngStyle]="{'background': formData.PreferencePurposeBackgroundColor, 'color': formData.PreferencePurposeTextColor}" >
+                  <div class=" purpose-text"   [ngStyle]="{ 'color': formData.PreferencePurposeTextColor}"  (click)="onShowDesc(i+ 200)">
+                        <span (click)="onShowDesc(i + 200)" class="mr-4 tx-18">
+                          <i *ngIf="currentPurposeID !== i + 200" class="fas fa-chevron-right"></i>
+                          <i *ngIf="currentPurposeID === i + 200" class="fas fa-chevron-down"></i>
+                        </span>
+                    {{content.title}}
+                  </div>
+                </div>
+                <div class="col-md-12 card-body row" *ngIf="currentPurposeID === i + 200">
+                  <p class="tx-11 mt-2 p-2 ml-3 mr-3">{{content.desc}}</p>
+                </div>
+              </ng-container>
             </div>
         </div>
 
@@ -196,14 +203,16 @@
               <h6 class="tx-10 col-md-2 col-2" [ngStyle]="{ 'color': formData.PreferencePurposeTextColor}" ><b>
                 Off / ON</b></h6>
             </div>
-            <ng-container *ngFor="let vendor of iabVendorsList">
+            <ng-container *ngFor="let vendor of iabVendorsList; let i =index">
             <hr class="mt-1 mb-1" />
             <div class="row" style="align-items: center;">
               <h6 class="tx-10 col-md-5 col-5" [ngStyle]="{ 'color': formData.PreferencePurposeTextColor}" >{{vendor.name}}</h6>
               <h6   class="tx-10 col-md-5 col-5" [ngStyle]="{ 'color': formData.PreferencePurposeTextColor}" >{{vendor.policyUrl}}</h6>
               <h6 class="tx-10 col-md-2 col-2 mb-0">
                 <label class="switch mb-2 mt-2">
-                 <p-inputSwitch></p-inputSwitch>
+                  <input type="checkbox"  (change)="onSelectSwitch(i + 5, $event)" checked>
+                  <span [ngStyle]="{background: switchButton.includes(i + 5) ? formData.PreferenceSwitchColor: ''}"
+                        class="slider round"></span>
                 </label>
               </h6>
             </div>
