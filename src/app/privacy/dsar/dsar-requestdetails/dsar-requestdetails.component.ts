@@ -223,6 +223,7 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
   duplicateRequestStatus;
   isSubmitBtnClickedOnce;
   //isduplicatedIdSelected = false;
+  isExtendDaysExceeded = false;
   queryOID;
   queryPID;
   constructor(private activatedRoute: ActivatedRoute,
@@ -1266,9 +1267,13 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
 
   onSubmitExtendDays() {
     this.isExtenddasysubmitted = true;
+    this.isExtendDaysExceeded = this.quillEditorExtendDays.controls["customdays"].value < 1 || this.quillEditorExtendDays.controls["customdays"].value > 45;
     if (this.quillEditorExtendDays.invalid) {
       return false;
     } else {
+      if(this.isExtendDaysExceeded){
+        return false;
+      }
       this.onClickEndDays(this.quillEditorExtendDays.get('customdays').value);
       if (this.selectedStages.length !== 0) {
         const reqObj = {
