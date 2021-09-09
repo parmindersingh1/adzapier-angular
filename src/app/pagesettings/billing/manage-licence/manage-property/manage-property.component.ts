@@ -239,6 +239,7 @@ export class ManagePropertyComponent implements OnInit, OnDestroy {
         this.alertType = 'success';
         this.propertyForm.reset();
         this.onGetAssingedProperty();
+        this.dataService.isLicenseAppliedForProperty.next({ requesttype: 'property', hasaccess: true });
         this.isCurrentPropertySelected(this.currentManagedOrgID, this.currrentManagedPropID);
 
       }, err => {
@@ -263,6 +264,7 @@ export class ManagePropertyComponent implements OnInit, OnDestroy {
     this.loading.start('1');
     this.dataService.getPropertyPlanDetails(this.constructor.name, moduleName.cookieConsentModule, propID)
       .subscribe((res: any) => {
+        this.dataService.removePropertyPlanFromLocalStorage();
         this.dataService.setPropertyPlanToLocalStorage(res);
         this.loading.stop('1');
       }, err => {
@@ -293,6 +295,7 @@ export class ManagePropertyComponent implements OnInit, OnDestroy {
         this.isOpen = true;
         this.alertMsg = res.response;
         this.alertType = 'success';
+        this.dataService.isLicenseAppliedForProperty.next({ requesttype: 'property', hasaccess: false });
         this.isCurrentPropertySelected(this.currentManagedOrgID, this.currrentManagedPropID);
 
       }, err => {
