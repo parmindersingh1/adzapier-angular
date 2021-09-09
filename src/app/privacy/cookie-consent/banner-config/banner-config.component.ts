@@ -287,11 +287,23 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
       }
     // }
   }
-  onMakeRegulationEveryWhere(type) {
+  onMakeRegulationEveryWhere(type, event) {
     this.BannerConfigurationForm.patchValue({
       LivePreviewType: type
     });
-}
+    if (event.checked) {
+      if (type === 'gdpr') {
+        this.defaultRegulation = [{name: 'GDPR', code: 'gdpr'}];
+      } else if (type === 'ccpa') {
+        this.defaultRegulation = [{name: 'CCPA', code: 'ccpa'}];
+      } else {
+        this.defaultRegulation = [{name: 'GLOBAL', code: 'generic'}];
+      }
+    } else {
+      this.defaultRegulation = DefaultRegulation;
+    }
+
+  }
   initPurpose() {
     return this.formBuilder.group({
       title: [''],

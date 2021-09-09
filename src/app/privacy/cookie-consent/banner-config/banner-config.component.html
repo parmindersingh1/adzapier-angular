@@ -52,8 +52,10 @@
 <!--            </div>-->
 <!--          </div>-->
           <div class="col-md-2 text-right">
-            <button pButton pRipple type="submit" [disabled]="contentSaving === 'saving'" (click)="publishType = 'draft'" label="Save" class="p-button-warning mr-2"></button>
-            <button pButton pRipple type="submit"  [disabled]="contentSaving === 'saving'"  (click)="publishType = 'publish'"  label="Publish"></button>
+            <button pButton pRipple type="submit" [disabled]="contentSaving === 'saving' || BannerConfigurationForm.invalid"
+                    (click)="publishType = 'draft'" label="Save" class="p-button-warning mr-2"></button>
+            <button pButton pRipple type="submit" [disabled]="contentSaving === 'saving' || BannerConfigurationForm.invalid"
+                    (click)="publishType = 'publish'"  label="Publish"></button>
 
           </div>
         </div>
@@ -89,7 +91,7 @@
         </div>
       </div>
       <div class="col-md-11 p-0">
-        <p-splitter [style]="{'height': '650px'}" [panelSizes]="[30, 80]" [minSizes]="[27,50]" stateStorage="session"
+        <p-splitter [style]="{'height': '650px'}" [panelSizes]="[30, 80]" [minSizes]="[28,50]" stateStorage="session"
                     styleClass="p-mb-5">
 
           <ng-template pTemplate>
@@ -201,7 +203,7 @@
                         <p class=" mb-0  input-label pt-2">GDPR Everywhere</p>
                       </div>
                       <div class="col-md-8">
-                        <p-inputSwitch (onChange)="onMakeRegulationEveryWhere('gdpr')" formControlName="GdprGlobal"></p-inputSwitch>
+                        <p-inputSwitch (onChange)="onMakeRegulationEveryWhere('gdpr', $event)" formControlName="GdprGlobal"></p-inputSwitch>
                       </div>
                       <div class="col-md-12 mt-2">
                         <a routerLink="/cookie-consent/manage-vendors" [queryParams]="{oid: currentManagedOrgID, pid: currrentManagedPropID}" class="btn btn-link float-right">Manage Vendors</a>
@@ -245,7 +247,7 @@
                         <p class=" mb-0  input-label pt-2" for="ccpa_target">CCPA Everywhere</p>
                       </div>
                       <div class="col-md-8">
-                        <p-inputSwitch (onChange)="onMakeRegulationEveryWhere('ccpa')"  formControlName="CCPAGlobal"></p-inputSwitch>
+                        <p-inputSwitch (onChange)="onMakeRegulationEveryWhere('ccpa', $event)"  formControlName="CCPAGlobal"></p-inputSwitch>
                       </div>
                     </div>
                   </div>
@@ -260,7 +262,7 @@
                         <p class=" mb-0  input-label pt-2">Global Everywhere</p>
                       </div>
                       <div class="col-md-8">
-                        <p-inputSwitch (onChange)="onMakeRegulationEveryWhere('generic')"  formControlName="GenericGlobal"></p-inputSwitch>
+                        <p-inputSwitch (onChange)="onMakeRegulationEveryWhere('generic', $event)"  formControlName="GenericGlobal"></p-inputSwitch>
                       </div>
                     </div>
 
@@ -371,11 +373,11 @@
                   <p-table [value]="languages" styleClass="p-datatable">
                     <ng-template pTemplate="header">
                       <tr>
-                        <th style="width:15%">
+                        <th style="width:18%">
                           <p-checkbox (onChange)="onAllowAllLanguage($event)" name="group1" class="col-md-2"></p-checkbox>
                         </th>
                         <th style="width:35%">Language</th>
-                        <th style="width:15%"></th>
+                        <th style="width:12%"></th>
                         <th style="width:35%; text-align: right">Default</th>
                       </tr>
                     </ng-template>
@@ -1366,7 +1368,7 @@
           </ng-template>
 
           <ng-template pTemplate>
-            <div class="p-col p-d-flex p-ai-center p-jc-center">
+            <div class="p-col p-d-flex p-ai-center p-jc-center" [ngStyle]="{margin: currentBannerLayer === 'preference' ? 'auto' : null}" >
               <app-az-banner *ngIf="currentBannerLayer === 'banner'" (currentBannerLayer)="onChangeBannerLayer($event)"
                              [formData]="BannerConfigurationForm.value"></app-az-banner>
               <app-az-preference *ngIf="currentBannerLayer === 'preference'" [formData]="BannerConfigurationForm.value"
