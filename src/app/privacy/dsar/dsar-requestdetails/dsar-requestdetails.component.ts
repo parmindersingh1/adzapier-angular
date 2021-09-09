@@ -739,6 +739,7 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
   decline(): void {
     this.isConfirmed = false;
     this.modalRef.hide();
+    this.quillEditorExtendDays.reset();
   }
 
 
@@ -890,6 +891,7 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
           this.alertType = 'success';
           this.loadActivityLog(requestID);
           this.quillEditorText.get('editor').setValue('');
+          this.quillEditorExtendDays.reset();
           this.isActivitysubmitted = false;
         }
       }, (error) => {
@@ -1933,6 +1935,14 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
         this.alertType = 'danger';
     })
 
+  }
+
+  onKeyChanges($event) {
+    if ($event.target.value >= 1 && $event.target.value <= 45) {
+      this.isExtendDaysExceeded = false;
+    } else {
+      this.isExtendDaysExceeded = true;
+    }
   }
 }
 
