@@ -5,7 +5,7 @@
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb breadcrumb-style1 mg-b-10">
       <li class="breadcrumb-item">Privacy</li>
-      <li class="breadcrumb-item"><a routerLink="/home/dashboard/cookie-consent">Cookie Consent</a></li>
+      <li class="breadcrumb-item"><a routerLink="/home/dashboard/cookie-consent" [queryParams]="{oid: queryOID, pid: queryPID}">Cookie Consent</a></li>
       <li class="breadcrumb-item active" aria-current="page">Tracking</li>
     </ol>
   </nav>
@@ -42,7 +42,7 @@
             <div class="input-group-prepend"  (click)="dp.show()">
               <span class="input-group-text rounded-right border-left-0" id="inputGroup-sizing-sm"><i class="fa" [ngClass]="searchbydaterange !== '' ? 'fa-caret-down':'fa-search'"></i></span>
             </div>
-            <input type="text" [(ngModel)]="searchbydaterange" 
+            <input type="text" [(ngModel)]="searchbydaterange"
              class="form-control border-left-0  border-right-0 rounded-right"
             bsDaterangepicker [bsConfig]="bsConfig"  #dp="bsDaterangepicker"  (onHidden)="onGetFromServer()">
             <div class="input-group-prepend border-left-0"  (click)="dp.show()">
@@ -50,26 +50,6 @@
             </div>
           </div>
           </div>
-         <!-- <div class="input-group date-range-picker">
-          <label class="input-group-btn calandericon" for="reportrange">
-            <span class="btn btn-default calandericon">
-              <i class="fa fa-calendar"></i>
-            </span>
-        </label>
-          <input type="text" name="reportrange" class="form-control fa-calendar" id="reportrange"/>
-          <label class="input-group-btn" for="reportrange">
-            <span class="btn btn-default arrowicon">
-                <i class="fa fa-caret-down"></i>
-            </span>
-        </label>
-        </div> -->
-
-          <!-- <span id="reportrange"
-                class="rounded-5">
-            <i class="fa fa-calendar"></i>&nbsp;
-            <span></span> <i class="fa fa-caret-down"></i>
-          </span> -->
-        
 
       </div>
     </div>
@@ -82,7 +62,7 @@
   [loading]="tLoading"
   [totalRecords]="totalCookieCount"
    [resizableColumns]="true"
-  columnResizeMode="expand" 
+  columnResizeMode="expand"
   [rowsPerPageOptions]="[10,20,30]"
   [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
   (onLazyLoad)="onGetCookieConsentData($event)"
@@ -109,7 +89,7 @@
     <tr>
       <td style="width: 125px">
         <span class="ui-column-title">ID</span>
-       <a (click)="onDecodeString(consent)" [routerLink]="['/cookie-consent/cookie-tracking/decode']"  [queryParams]="{tcstring: consent.consent, type: consent.consent_type}">{{consent.id}}</a>
+       <a (click)="onDecodeString(consent)" [routerLink]="['/cookie-consent/cookie-tracking/decode']"  [queryParams]="{tcstring: consent.consent, type: consent.consent_type, oid: queryOID, pid: queryPID}">{{consent.id}}</a>
       </td>
       <td  data-toggle="tooltip" title="{{consent.consent}}">
         <span class="ui-column-title">Consent</span>
@@ -138,11 +118,6 @@
       <td> <span class="ui-column-title">State</span> {{consent.state}}</td>
     </tr>
   </ng-template>
-  <!-- <ng-template pTemplate="summary">
-    <div class="p-d-flex p-ai-center p-jc-between">
-      In total there are {{totalCookieCount ? totalCookieCount : 0 }} Consent.
-    </div>
-  </ng-template> -->
 </p-table>
 </div>
 </div >
