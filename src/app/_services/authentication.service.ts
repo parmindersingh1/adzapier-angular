@@ -21,7 +21,10 @@ export class AuthenticationService {
     }
     public currentUserSubject: BehaviorSubject<User>;
     public currentUser: Observable<User>;
-
+    public isUserVerified: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+    get userEmailVerificationStatus() {
+        return this.isUserVerified.asObservable();
+    }
     constructor(private http: HttpClient, private router: Router, private lokiService: LokiService) {
 
         this.currentUserSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('currentUser')));

@@ -7,6 +7,7 @@ import {OrganizationService} from '../_services/organization.service';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
 import {moduleName} from '../_constant/module-name.constant';
 import {animate, state, style, transition, trigger} from '@angular/animations';
+import { Observable, timer, Subscription } from 'rxjs';
 
 @Component({
   templateUrl: 'login.component.html',
@@ -43,7 +44,10 @@ export class LoginComponent implements OnInit, OnDestroy {
   isEmailVerified: boolean;
   isMsgConfirm = false;
   isVerificationBtnClick = false;
-
+  isInvitedUserVerified: boolean;
+  hideMessage: boolean;
+  subscription:Subscription;
+  timer : Observable<any>;
   constructor(
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
@@ -71,6 +75,8 @@ export class LoginComponent implements OnInit, OnDestroy {
       email: ['', [Validators.required, Validators.pattern]],
       password: ['', [Validators.required]]
     });
+    this.authenticationService.userEmailVerificationStatus.subscribe((data) => this.isInvitedUserVerified = data);
+    this.setTimer();
   }
 
   ngOnDestroy() {
@@ -171,4 +177,11 @@ export class LoginComponent implements OnInit, OnDestroy {
     })
   }
 
+  setTimer(){
+    this.timer = timer(8000)
+    this.subscription = this.timer.subscribe(() => {
+      this.isInvitedUserVerified = false;
+      this.hideMessage = true;
+    })
+  }
 }
