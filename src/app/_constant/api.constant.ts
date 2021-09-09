@@ -86,6 +86,9 @@ export const apiConstant = {
   EXPORT_CONSENT_LEGAL_NOTICES: '/consent-preference/legal-notices/export/:pid',
   EXPORT_CONSENT_PROOFS: '/consent-preference/proofs/export/:pid',
   EXPORT_CONSENT_PREFERENCE: '/consent-preference/preference/export/:pid',
+
+  //Login Registration 
+  REGISTRATION_ADD_COMPANY_ORG_PROP:'/billing/checkout/trialsession'
 };
 
 // {

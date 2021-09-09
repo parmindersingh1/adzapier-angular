@@ -90,19 +90,15 @@ export class TwostepregisterComponent implements OnInit {
 
      if(this.route.snapshot.queryParams["plan_id"]){
        this.planID = this.route.snapshot.queryParams["plan_id"];
-       console.log("id found");
      }else{
        this.planID = "price_1I8RHcBa3iZWL3Ygt4B3gZVd";
-       console.log("id not found");
      }
 
      
     if(this.route.snapshot.queryParams["units"]){
       this.units = this.route.snapshot.queryParams["units"];
-      console.log("unit found");
     }else{
       this.units = "1";
-      console.log("unit not found");
     }
 
 
@@ -253,7 +249,7 @@ export class TwostepregisterComponent implements OnInit {
         zipcode:this.r.code.value,
         phone:this.r.phone.value,
       };
-      this.userService.AddOrgCmpProp(requObj , this.emailid ,this.userid , this.planID , this.units)
+      this.userService.AddOrgCmpProp(this.constructor.name, moduleName.registerModule ,requObj , this.emailid ,this.userid , this.planID , this.units)
       .pipe(first())
       .subscribe(
         res => {
@@ -274,6 +270,8 @@ export class TwostepregisterComponent implements OnInit {
 
     }
   }
+
+  
   onSendConsentPreferenceRecord() {
     this.consentPreferenceSDK = (window as any).CP_SDK_ADZAPIER.init({
       AppID: environment.consentPreferenceConfig.AppID,

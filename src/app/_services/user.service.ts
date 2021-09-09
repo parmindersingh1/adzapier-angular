@@ -6,6 +6,7 @@ import { BehaviorSubject, Observable, Subject, throwError } from 'rxjs';
 import { map, shareReplay, retry, catchError } from 'rxjs/operators';
 import {LokiService} from './loki.service';
 import {LokiFunctionality, LokiStatusType} from '../_constant/loki.constant';
+import { apiConstant } from '../_constant/api.constant';
 
 @Directive()
 @Injectable({ providedIn: 'root' })
@@ -83,8 +84,13 @@ export class UserService {
           }));
     }
 
-    AddOrgCmpProp( obj , emailid , userid , plan_id ,units ){
-    return this.http.post(environment.apiUrl + '/billing/checkout/trialsession' + '?email=' + emailid + '&userid=' + userid + '&plan_id=' + plan_id + '&units=' + units, obj)
+    
+    AddOrgCmpProp(componentName ,moduleName ,obj , emailid , userid , plan_id ,units ){
+    const path = apiConstant.REGISTRATION_ADD_COMPANY_ORG_PROP
+    return this.http.post(environment.apiUrl + path + '?email=' + emailid + '&userid=' + userid + '&plan_id=' + plan_id + '&units=' + units, obj).pipe(catchError(error => {
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.registerUser, componentName, moduleName, path);
+        return throwError(error);
+      }));
     }
 
 
