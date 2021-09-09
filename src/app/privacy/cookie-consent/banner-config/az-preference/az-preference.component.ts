@@ -16,7 +16,13 @@ export class AzPreferenceComponent implements OnInit, OnChanges {
   iabVendorsList = [];
   preferenceStep = 1;
   switchButton = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20];
-
+   privacyContent = [
+    {title: 'Why do you need my consent?', desc: 'What are cookies used? Whit this information is created a user profile based on this and other Data. It is anonymous and only linked to a device or in in combination with your browser.'},
+    {title: 'What about cookies?', desc: 'How they work\n' +
+        '                    By placing cookies in your device provide insight into a number of technical data when you visit our website (e.g your IP address, your operating system , the browser you use, the internet page you visit our website)'},
+    {title: 'Audit ID',
+      desc: 'Audit Id is a random unique number that is generated for you when you visit this website. The purpose of the Audit ID is to keep a record of your consent history on which cookies you accepted and when. The information kept in relation to your Audit ID includes, timestamp, version of cookie vendor list and a list of vendors that are allowed to process your data.'}
+  ];
   constructor(private gdprService: GdprService,
               private cd: ChangeDetectorRef
               ) {
