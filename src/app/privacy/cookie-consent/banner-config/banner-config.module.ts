@@ -25,6 +25,7 @@ import { AzPreferenceComponent } from './az-preference/az-preference.component';
 import {AccordionModule} from 'primeng/accordion';
 import {AlertModule} from 'ngx-bootstrap/alert';
 import {ButtonsModule} from 'ngx-bootstrap/buttons';
+import {TooltipModule} from 'ngx-bootstrap/tooltip';
 
 const path: Routes = [{
   path: '', component: BannerConfigComponent
@@ -56,7 +57,8 @@ const path: Routes = [{
         ReactiveFormsModule.withConfig({warnOnNgModelWithFormControl: 'never'}),
         AccordionModule,
         AlertModule,
-        ButtonsModule
+        ButtonsModule,
+        TooltipModule
     ]
 })
 export class BannerConfigModule { }

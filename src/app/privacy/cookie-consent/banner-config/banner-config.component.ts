@@ -43,8 +43,8 @@ interface Country {
 })
 
 export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
-  private currentManagedOrgID: any;
-  private currrentManagedPropID: any;
+   currentManagedOrgID: any;
+   currrentManagedPropID: any;
   step = 1;
   submitted = false;
   languageContents: any;
@@ -224,16 +224,6 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   onGetPropsAndOrgId() {
-    // this.orgservice.currentProperty.subscribe((response) => {
-    //   if (response !== '') {
-    //     this.currentManagedOrgID = response.organization_id;
-    //     this.currrentManagedPropID = response.property_id;
-    //   } else {
-    //     const orgDetails = this.orgservice.getCurrentOrgWithProperty();
-    //     this.currentManagedOrgID = orgDetails.organization_id;
-    //     this.currrentManagedPropID = orgDetails.property_id;
-    //   }
-    // });
     this.activatedRouter.queryParams.subscribe(params => {
       this.currentManagedOrgID = params.oid;
       this.currrentManagedPropID = params.pid;
@@ -258,7 +248,62 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
       });
   }
 
+  onCheckRegulation(type, event) {
+    const checked = event.checked;
+    const {AllowGDPR, AllowCCPA, AllowGENERIC} = this.BannerConfigurationForm.value;
+    if (checked) {
+      this.BannerConfigurationForm.patchValue({
+        LivePreviewType: type
+      });
+    } else {
+      if (type === 'gdpr') {
+        this.BannerConfigurationForm.patchValue({
+          LivePreviewType: 'ccpa'
+        });
+      } else  if (type === 'ccpa') {
+        this.BannerConfigurationForm.patchValue({
+          LivePreviewType: 'generic'
+        });
+      }
+    }
+    // if (AllowGDPR && type === 'gdpr') {
+    //   this.BannerConfigurationForm.patchValue({
+    //     LivePreviewType: 'gdpr'
+    //   });
+    // } else if (AllowCCPA  && type === 'ccpa') {
+    //   this.BannerConfigurationForm.patchValue({
+    //     LivePreviewType: 'ccpa'
+    //   });
+    // } else if (AllowGENERIC && type === 'generic') {
+    //   this.BannerConfigurationForm.patchValue({
+    //     LivePreviewType: 'generic'
+    //   });
+    // } else {
+      if (!AllowGDPR && !AllowCCPA && !AllowGENERIC) {
+        this.BannerConfigurationForm.patchValue({
+          AllowGENERIC: true,
+          LivePreviewType: 'generic'
+        });
+      }
+    // }
+  }
+  onMakeRegulationEveryWhere(type, event) {
+    this.BannerConfigurationForm.patchValue({
+      LivePreviewType: type
+    });
+    if (event.checked) {
+      if (type === 'gdpr') {
+        this.defaultRegulation = [{name: 'GDPR', code: 'gdpr'}];
+      } else if (type === 'ccpa') {
+        this.defaultRegulation = [{name: 'CCPA', code: 'ccpa'}];
+      } else {
+        this.defaultRegulation = [{name: 'GLOBAL', code: 'generic'}];
+      }
+    } else {
+      this.defaultRegulation = DefaultRegulation;
+    }
 
+  }
   initPurpose() {
     return this.formBuilder.group({
       title: [''],

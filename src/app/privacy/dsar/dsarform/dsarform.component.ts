@@ -2535,7 +2535,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
   }
 
   getEditorFontSize(){
-    const tagObj = [{"ql-size-large":'24'},{"ql-size-small":'12'},{"<p>":'14'},{"<h1>":'28'},{"<h2>":'24'}]
+    const tagObj = [{"":'13'},{"ql-size-huge":'40'},{"ql-size-large":'24'},{"ql-size-small":'12'},{"<p>":'14'},{"<h1>":'40'},{"<h1>":'28'},{"<h2>":'24'}]
       for (const key in tagObj){
         if(this.quillEditorText.get('editor').value.indexOf(Object.keys(tagObj[key])) !== -1){
           if(this.isWelcomeEditor){

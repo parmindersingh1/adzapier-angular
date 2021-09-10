@@ -223,6 +223,7 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
   duplicateRequestStatus;
   isSubmitBtnClickedOnce;
   //isduplicatedIdSelected = false;
+  isExtendDaysExceeded = false;
   queryOID;
   queryPID;
   constructor(private activatedRoute: ActivatedRoute,
@@ -738,6 +739,7 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
   decline(): void {
     this.isConfirmed = false;
     this.modalRef.hide();
+    this.quillEditorExtendDays.reset();
   }
 
 
@@ -889,6 +891,7 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
           this.alertType = 'success';
           this.loadActivityLog(requestID);
           this.quillEditorText.get('editor').setValue('');
+          this.quillEditorExtendDays.reset();
           this.isActivitysubmitted = false;
         }
       }, (error) => {
@@ -1266,9 +1269,13 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
 
   onSubmitExtendDays() {
     this.isExtenddasysubmitted = true;
+    this.isExtendDaysExceeded = this.quillEditorExtendDays.controls["customdays"].value < 1 || this.quillEditorExtendDays.controls["customdays"].value > 45;
     if (this.quillEditorExtendDays.invalid) {
       return false;
     } else {
+      if(this.isExtendDaysExceeded){
+        return false;
+      }
       this.onClickEndDays(this.quillEditorExtendDays.get('customdays').value);
       if (this.selectedStages.length !== 0) {
         const reqObj = {
@@ -1928,6 +1935,14 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
         this.alertType = 'danger';
     })
 
+  }
+
+  onKeyChanges($event) {
+    if ($event.target.value >= 1 && $event.target.value <= 45) {
+      this.isExtendDaysExceeded = false;
+    } else {
+      this.isExtendDaysExceeded = true;
+    }
   }
 }
 

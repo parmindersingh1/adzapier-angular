@@ -44,6 +44,8 @@ export class DecodeComponent implements OnInit {
     one: true,
     two: true,
   }
+  queryOID;
+  queryPID;
   public googleVendorsIds = [];
   vendorsList: VendorsList = new VendorsList();
   constructor(private activatedRoute: ActivatedRoute,
@@ -51,6 +53,11 @@ export class DecodeComponent implements OnInit {
      private gdprService: GdprService) { }
 
   ngOnInit() {
+    this.activatedRoute.queryParams
+      .subscribe((params: any) => {
+        this.queryOID = params.oid;
+        this.queryPID = params.pid;
+      });
     this.getAllVendorsData();
     this.gdprService.getConsentInfo.subscribe(data =>{
         this.obj = data;

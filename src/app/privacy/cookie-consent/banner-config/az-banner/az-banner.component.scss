@@ -2,14 +2,16 @@
   padding-top: 35px;
 }
 .banner-bottom{
-  position: relative;
-  top: 475px;
+  position: absolute;
+  bottom: 0px;
   box-shadow: 0 -1px 10px 0 rgb(172 171 171 / 30%);
 }
 
 .gdpr-banner-bottom{
-  position: relative;
-  top: 404px;
+  position: absolute;
+  bottom: 0px;
+  //position: relative;
+  //top: 404px;
   box-shadow: 0 -1px 10px 0 rgb(172 171 171 / 30%);
 }
 .banner-border-top{

@@ -6,7 +6,7 @@
           <nav aria-label="breadcrumb" class="bredcrub-row" style="margin-left: -14px">
             <ol class="breadcrumb breadcrumb-style1 mg-b-10">
               <li class="breadcrumb-item">Privacy</li>
-              <li class="breadcrumb-item"><a routerLink="/home/dashboard/cookie-consent">Cookie Consent</a></li>
+              <li class="breadcrumb-item"><a routerLink="/home/dashboard/cookie-consent"  [queryParams]="{oid: currentManagedOrgID, pid: currrentManagedPropID}">Cookie Consent</a></li>
               <li class="breadcrumb-item active">Banner Configuration</li>
 
             </ol>
@@ -52,15 +52,17 @@
 <!--            </div>-->
 <!--          </div>-->
           <div class="col-md-2 text-right">
-            <button pButton pRipple type="submit" [disabled]="contentSaving === 'saving'" (click)="publishType = 'draft'" label="Save" class="p-button-warning mr-2"></button>
-            <button pButton pRipple type="submit"  [disabled]="contentSaving === 'saving'"  (click)="publishType = 'publish'"  label="Publish"></button>
+            <button pButton pRipple type="submit" [disabled]="contentSaving === 'saving' || BannerConfigurationForm.invalid"
+                    (click)="publishType = 'draft'" label="Save" class="p-button-warning mr-2"></button>
+            <button pButton pRipple type="submit" [disabled]="contentSaving === 'saving' || BannerConfigurationForm.invalid"
+                    (click)="publishType = 'publish'"  label="Publish"></button>
 
           </div>
         </div>
       </div>
     </div>
     <div class="row row-cols-group">
-      <div class="col-md-1 border-right">
+      <div class="col-md-1 border-right menu-background">
         <div class="row step-bg" (click)="onSelectStep(1)" [ngClass]="{'step-active' : step === 1}">
           <p class="col-md-12  p-0 text-center"><i class="fas fa-cogs tx-35"></i></p>
           <p class="col-md-12 p-0 text-center tx-14 font-weight-bold">Config</p>
@@ -84,12 +86,12 @@
           <p class="col-md-12 p-0 text-center tx-14 font-weight-bold">Purposes <br/> Preferences</p>
         </div>
         <div class="row step-bg" (click)="onSelectStep(6)" [ngClass]="{'step-active' : step === 6}">
-          <p class="col-md-12  p-0 text-center"><i class="fas fa-tv tx-35"></i></p>
-          <p class="col-md-12 p-0 text-center tx-14 font-weight-bold">Display <br/> Frequency</p>
+          <p class="col-md-12 mt-2  p-0 text-center"><i class="fas fa-tv tx-35"></i></p>
+          <p class="col-md-12 p-0 text-center tx-14 mb-3 font-weight-bold">Display <br/> Frequency</p>
         </div>
       </div>
       <div class="col-md-11 p-0">
-        <p-splitter [style]="{'height': '650px'}" [panelSizes]="[30, 80]" [minSizes]="[5, 0]" stateStorage="session"
+        <p-splitter [style]="{'height': '650px'}" [panelSizes]="[30, 80]" [minSizes]="[28,50]" stateStorage="session"
                     styleClass="p-mb-5">
 
           <ng-template pTemplate>
@@ -104,7 +106,8 @@
                     <div class="col-md-12 mb-2">
                       <div class="p-field-checkbox row">
                         <p-checkbox [formControl]="BannerConfigurationForm.controls['AllowGDPR']" class="col-md-2"
-                                    [binary]="true"
+                          [disabled]="BannerConfigurationForm.value.GdprGlobal || BannerConfigurationForm.value.CCPAGlobal || BannerConfigurationForm.value.GenericGlobal"
+                                    inputId="gdpr"   (onChange)="onCheckRegulation('gdpr', $event)"  [binary]="true"
                         ></p-checkbox>
                         <label class="col-md-10 mb-0 label-tx" for="gdpr">GDPR</label>
                       </div>
@@ -112,7 +115,8 @@
                     <div class="col-md-12 mb-2">
                       <div class="p-field-checkbox row">
                         <p-checkbox name="group1" class="col-md-2"
-                                    [formControl]="BannerConfigurationForm.controls['AllowCCPA']"
+                                    [disabled]="BannerConfigurationForm.value.GdprGlobal || BannerConfigurationForm.value.CCPAGlobal || BannerConfigurationForm.value.GenericGlobal"
+                                    (onChange)="onCheckRegulation('ccpa', $event)"       [formControl]="BannerConfigurationForm.controls['AllowCCPA']"
                                     [binary]="true" inputId="ccpa"></p-checkbox>
                         <label class="col-md-10 mb-0  label-tx" for="ccpa">CCPA</label>
                       </div>
@@ -120,8 +124,9 @@
                     <div class="col-md-12 mb-2">
                       <div class="p-field-checkbox row">
                         <p-checkbox name="group1" [formControl]="BannerConfigurationForm.controls['AllowGENERIC']"
-                                    [binary]="true" class="col-md-2" inputId="generic"></p-checkbox>
-                        <label class="col-md-10 mb-0 label-tx" for="gdpr">Global </label>
+                                    [disabled]="BannerConfigurationForm.value.GdprGlobal || BannerConfigurationForm.value.CCPAGlobal || BannerConfigurationForm.value.GenericGlobal"
+                                    (onChange)="onCheckRegulation('generic', $event)"         [binary]="true" class="col-md-2" inputId="generic"></p-checkbox>
+                        <label class="col-md-10 mb-0 label-tx" for="generic">Global </label>
                       </div>
                     </div>
                   </div>
@@ -198,7 +203,10 @@
                         <p class=" mb-0  input-label pt-2">GDPR Everywhere</p>
                       </div>
                       <div class="col-md-8">
-                        <p-inputSwitch formControlName="GdprGlobal"></p-inputSwitch>
+                        <p-inputSwitch (onChange)="onMakeRegulationEveryWhere('gdpr', $event)" formControlName="GdprGlobal"></p-inputSwitch>
+                      </div>
+                      <div class="col-md-12 mt-2">
+                        <a routerLink="/cookie-consent/manage-vendors" [queryParams]="{oid: currentManagedOrgID, pid: currrentManagedPropID}" class="btn btn-link float-right">Manage Vendors</a>
                       </div>
                     </div>
 
@@ -239,7 +247,7 @@
                         <p class=" mb-0  input-label pt-2" for="ccpa_target">CCPA Everywhere</p>
                       </div>
                       <div class="col-md-8">
-                        <p-inputSwitch formControlName="CCPAGlobal"></p-inputSwitch>
+                        <p-inputSwitch (onChange)="onMakeRegulationEveryWhere('ccpa', $event)"  formControlName="CCPAGlobal"></p-inputSwitch>
                       </div>
                     </div>
                   </div>
@@ -254,7 +262,7 @@
                         <p class=" mb-0  input-label pt-2">Global Everywhere</p>
                       </div>
                       <div class="col-md-8">
-                        <p-inputSwitch formControlName="GenericGlobal"></p-inputSwitch>
+                        <p-inputSwitch (onChange)="onMakeRegulationEveryWhere('generic', $event)"  formControlName="GenericGlobal"></p-inputSwitch>
                       </div>
                     </div>
 
@@ -365,12 +373,12 @@
                   <p-table [value]="languages" styleClass="p-datatable">
                     <ng-template pTemplate="header">
                       <tr>
-                        <th style="width:17%">
+                        <th style="width:18%">
                           <p-checkbox (onChange)="onAllowAllLanguage($event)" name="group1" class="col-md-2"></p-checkbox>
                         </th>
-                        <th style="width:48%">Language</th>
-                        <th style="width:15%"></th>
-                        <th style="width:20%">Default</th>
+                        <th style="width:35%">Language</th>
+                        <th style="width:12%"></th>
+                        <th style="width:35%; text-align: right">Default</th>
                       </tr>
                     </ng-template>
                     <ng-template pTemplate="body" let-language>
@@ -385,7 +393,7 @@
 <!--                                 [class]="'flag flag-' + language.countryFlag"/>-->
                           {{language.title}}</td>
                         <td><button *ngIf="customLang.includes(language.code)" type="button" (click)="onResetLang(language.code)" class="btn btn-link"> Reset</button></td>
-                        <td>
+                        <td class="text-right">
                           <p-radioButton [disabled]="!selectedLanguage.includes(language.code)" formControlName="DefaultLanguage" [value]="language.code"
                           ></p-radioButton>
                         </td>
@@ -1312,15 +1320,17 @@
 
               <div class="step-6 content display-frequency" *ngIf="step === 6">
                 <p-divider align="left" type="dashed">
-                  <b>Display Frequency</b>
+                  <b>Display Frequency  <i-feather name="info" class="feather-16"
+                                                   tooltip="Control how often the cookie banner appears on the domain based on user’s consents"></i-feather></b>
                 </p-divider>
 
 
                 <div id="displayFrequency">
                   <div class="p-field">
-                    <label for="title" class="input-label ">For Partial Consent-Show Banner Every </label> <br/>
+                    <label for="title" class="input-label ">For Partial Consent-Show Banner Every <i-feather name="info" class="feather-16"
+                                                                                                             tooltip="Show consent banner to users who have partially accepted the purposes in every"></i-feather></label> <br/>
                     <div class="row m-0">
-                      <p-inputNumber class="az-input col-md-6 p-0 m-0" mode="decimal" inputId="withoutgrouping"
+                      <p-inputNumber class="az-input col-md-6 p-0 m-0" mode="decimal" inputId="withoutgrouping" maxlength="8"
                           formControlName="DisplayPartialConsent"           [useGrouping]="false">
                       </p-inputNumber>
                       <p-dropdown class="col-md-6 p-0 m-0"  formControlName="DisplayPartialConsentType"     [options]="displayFrequency" optionLabel="name" optionValue="code"></p-dropdown>
@@ -1329,10 +1339,11 @@
 
 
                   <div class="p-field mt-4">
-                    <label for="title" class="input-label ">For Reject All -Show Banner Every</label> <br/>
+                    <label for="title" class="input-label ">For Reject All -Show Banner Every             <i-feather class="feather-16" name="info"
+                                                                                                                     tooltip="Show consent banner to users who have rejected all purposes in every"></i-feather></label> <br/>
                     <div class="row m-0">
                       <p-inputNumber class="az-input col-md-6 p-0 m-0" mode="decimal" inputId="withoutgrouping"
-                                     formControlName="DisplayRejectAllConsent"            [useGrouping]="false">
+                                     formControlName="DisplayRejectAllConsent"      maxlength="8"       [useGrouping]="false">
                       </p-inputNumber>
                       <p-dropdown class="col-md-6 p-0 m-0"  formControlName="DisplayRejectAllConsentType"   [options]="displayFrequency" optionLabel="name" optionValue="code"></p-dropdown>
                     </div>
@@ -1340,10 +1351,11 @@
 
 
                   <div class="p-field mt-4">
-                    <label for="title" class="input-label "> For No Choice - Show Banner Every</label> <br/>
+                    <label for="title" class="input-label "> For No Choice - Show Banner Every          <i-feather name="info" class="feather-16"
+                                                                                                                   tooltip="Show consent banner to users who haven’t accepted the cookies yet every"></i-feather></label> <br/>
                     <div class="row m-0">
                       <p-inputNumber class="az-input col-md-6 p-0 m-0" mode="decimal" inputId="withoutgrouping"
-                                     formControlName="DisplayClosedConsent"           [useGrouping]="false">
+                                     formControlName="DisplayClosedConsent"     maxlength="8"       [useGrouping]="false">
                       </p-inputNumber>
                       <p-dropdown class="col-md-6 p-0 m-0" formControlName="DisplayClosedConsentType"   [options]="displayFrequency" optionLabel="name" optionValue="code"></p-dropdown>
                     </div>
@@ -1356,7 +1368,7 @@
           </ng-template>
 
           <ng-template pTemplate>
-            <div class="p-col p-d-flex p-ai-center p-jc-center">
+            <div class="p-col p-d-flex p-ai-center p-jc-center" [ngStyle]="{margin: currentBannerLayer === 'preference' ? 'auto' : null}" >
               <app-az-banner *ngIf="currentBannerLayer === 'banner'" (currentBannerLayer)="onChangeBannerLayer($event)"
                              [formData]="BannerConfigurationForm.value"></app-az-banner>
               <app-az-preference *ngIf="currentBannerLayer === 'preference'" [formData]="BannerConfigurationForm.value"
