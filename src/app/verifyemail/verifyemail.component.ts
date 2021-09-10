@@ -32,9 +32,9 @@ export class VerifyemailComponent implements OnInit {
       if(data){
         this.isUserVarified = true;
         this.message = 'Your email address is successfully verified ! please login to access your account!';
-        setTimeout(()=>{
-          return this.router.navigate(['/login']);
-        },3000);
+        // setTimeout(()=>{
+        //   return this.router.navigate(['/login']);
+        // },3000);
       }
     }, error => {
       this.loading.stop();
