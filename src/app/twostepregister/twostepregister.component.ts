@@ -101,8 +101,6 @@ export class TwostepregisterComponent implements OnInit {
       this.units = "1";
     }
 
-
-
     
 
   }
@@ -202,10 +200,11 @@ export class TwostepregisterComponent implements OnInit {
             this.next();
           },
           error => {
+            if(error == 500)
+            this.loading = false;
             this.alertMsg = error.company_error || error;
             this.isOpen = true;
             this.alertType = 'info';
-            this.loading = false;
 
           });
 
