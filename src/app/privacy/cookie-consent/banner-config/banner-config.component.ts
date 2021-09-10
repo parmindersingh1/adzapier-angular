@@ -1036,4 +1036,21 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
     this.modalRef.hide();
 
   }
+
+  onResetEverything() {
+    this.themeType = 'light';
+    this.onGetGlobleLangData('en-US');
+    this.onSetDefaultStyle(LightTheme);
+    this.allowedLanguagesForPreview = [{
+      title: 'English (United States)',
+      code: 'en-US',
+      countryFlag: 'us',
+    }];
+    this.onPublishLangOnS3();
+    this.onSaveCustomLangOnDB();
+    this.publishType = 'draft';
+    this.customLang = [];
+    this.onSubmit();
+    this.modalRef.hide();
+  }
 }

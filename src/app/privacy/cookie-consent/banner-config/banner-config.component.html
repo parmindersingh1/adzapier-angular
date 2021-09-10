@@ -1,6 +1,6 @@
 <div class="wrapper" *ngIf="!publishing">
   <div class="row">
-    <div class="col-md-10">
+    <div class="col-md-9">
       <div class="d-sm-flex align-items-center justify-content-between">
         <div>
           <nav aria-label="breadcrumb" class="bredcrub-row" style="margin-left: -14px">
@@ -16,7 +16,7 @@
         </div>
       </div> <!-- breadcrumb -->
     </div>
-    <div class="col-md-2 pl-5">
+    <div class="col-md-3 pl-4">
       <div class="saving-status  float-right" *ngIf="contentSaving === 'saving'">
         <p class="mb-0"><span class="spinner-border"></span> Saving Your Customization ... </p>
       </div>
@@ -33,7 +33,7 @@
       <div class="card-header">
         <div class="row">
           <h5 class="main-heading col-md-4">Banner Configuration </h5>
-          <div class="col-md-6 preview-border-left">
+          <div class="col-md-4 preview-border-left">
             <p class="live-preview-type">Live Preview : <span>
              <span class="tx-16 pl-2 pr-2"
                    *ngIf="BannerConfigurationForm.value.AllowGDPR && (!BannerConfigurationForm.value.GenericGlobal && !BannerConfigurationForm.value.CCPAGlobal) "> GDPR :   <p-radioButton
@@ -57,7 +57,11 @@
           <!--              </div>-->
           <!--            </div>-->
           <!--          </div>-->
-          <div class="col-md-2 text-right">
+          <div class="col-md-4 text-right">
+            <button pButton pRipple type="button"
+                    [disabled]="contentSaving === 'saving'"
+                    (click)="openModal(resetConfig)" label="Reset to Default" class="p-button-secondary mr-2"></button>
+
             <button pButton pRipple type="submit"
                     [disabled]="contentSaving === 'saving' || BannerConfigurationForm.invalid"
                     (click)="publishType = 'draft'" label="Save" class="p-button-warning mr-2"></button>
@@ -1343,6 +1347,9 @@
 
 <ng-template #publish>
   <div class="modal-body text-center">
+    <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="modalRef?.hide()">
+      <span aria-hidden="true" class="visually-hidden">&times;</span>
+    </button>
     <h5 class="mb-3">Your Banner Configuration Successfully Published.!</h5>
     <button type="button" class="btn btn-primary mr-4" (click)="goToDashboard()"><i
       class="fa-cookie fas feather-16 pr-2"></i> Go to Dashboard
@@ -1350,6 +1357,20 @@
     <button type="button" class="btn btn-primary" (click)="goToSetup()"><i class="fa-wrench fas feather-16 pr-2"></i>
       Setup Banner
     </button>
+  </div>
+</ng-template>
+
+
+<ng-template #resetConfig>
+  <div class="modal-body text-center">
+    <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="modalRef?.hide()">
+      <span aria-hidden="true" class="visually-hidden">&times;</span>
+    </button>
+    <h5 class="mb-3"> Really do a reset your configuration?</h5>
+    <p>When you do a reset to deafult, you will lose all your saved data. <br />(including layout theme, content, purposes, display frequency ...)</p>
+    <button pButton type="button" (click)="modalRef?.hide()" label="Cancel" class="p-button-secondary mr-2"></button>
+    <button pButton type="button" (click)="onResetEverything()" label="I Agree"></button>
+
   </div>
 </ng-template>
 
