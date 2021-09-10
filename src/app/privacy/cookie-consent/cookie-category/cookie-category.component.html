@@ -382,33 +382,33 @@
           </div>
 
 
-          <div class="form-group">
-            <label class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-0 tx-color-03">Duration Type</label>
-            <div class="col-sm-10">
-              <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" id="Session1" formControlName="expiry" name="expiry" value="seesion">
-                <label class="form-check-label" for="Session1">Session </label>
-              </div>
-              <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" id="Persistent1" formControlName="expiry" name="expiry" value="presistent">
-                <label class="form-check-label" for="Persistent1">Persistent </label>
-              </div>
-            </div>
+<!--          <div class="form-group">-->
+<!--            <label class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-0 tx-color-03">Duration Type</label>-->
+<!--            <div class="col-sm-10">-->
+<!--              <div class="form-check form-check-inline">-->
+<!--                <input class="form-check-input" type="radio" id="Session1" formControlName="expiry" name="expiry" value="seesion">-->
+<!--                <label class="form-check-label" for="Session1">Session </label>-->
+<!--              </div>-->
+<!--              <div class="form-check form-check-inline">-->
+<!--                <input class="form-check-input" type="radio" id="Persistent1" formControlName="expiry" name="expiry" value="presistent">-->
+<!--                <label class="form-check-label" for="Persistent1">Persistent </label>-->
+<!--              </div>-->
+<!--            </div>-->
 
-            <div class="form-row">
-              <div class="form-group col-md-2">
-                <label class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-0 tx-color-03">Duration</label>
-                <input formControlName="duration" oninput="validity.valid||(value='');" min="1" type="number"
-                       class="form-control" placeholder="1">
+<!--            <div class="form-row">-->
+<!--              <div class="form-group col-md-2">-->
+<!--                <label class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-0 tx-color-03">Duration</label>-->
+<!--                <input formControlName="duration" oninput="validity.valid||(value='');" min="1" type="number"-->
+<!--                       class="form-control" placeholder="1">-->
 
-              </div>
-              <div class="form-group col-md-3 d-flex align-items-end">
-                <select formControlName="duration_type" class="custom-select">
-                  <option *ngFor="let dur of durationType" [value]="dur.key">{{dur.value}}</option>
-                </select>
-              </div>
-            </div>
-          </div>
+<!--              </div>-->
+<!--              <div class="form-group col-md-3 d-flex align-items-end">-->
+<!--                <select formControlName="duration_type" class="custom-select">-->
+<!--                  <option *ngFor="let dur of durationType" [value]="dur.key">{{dur.value}}</option>-->
+<!--                </select>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
           <input type="hidden" formControlName="property"/>
           <input type="hidden" formControlName="http_only"/>
           <div class="text-center">
