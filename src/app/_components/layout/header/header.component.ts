@@ -223,11 +223,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
           this.userService.getCurrentUser.unsubscribe();
           localStorage.clear();
           this.selectedOrgProperties.length = 0;
-          if(this.router.url.indexOf('/verify-email') !== -1){
-            let urlpartone = this.router.url.split("?oid=");
+          if (this.router.url.indexOf('/verify-email') !== -1 || this.location.path().indexOf('/verify-email') !== -1) {
+            let urlpartone = this.location.path().split("?oid=");
             let urlparttwo = urlpartone[0].split("?pid=");
-            this.router.navigate([urlparttwo[0]]);
+            let verifyToken = urlparttwo[0].split("verify-email/")
+            // this.router.navigate([urlparttwo[0]]);
             sessionStorage.clear();
+            this.router.navigate(["/signup"], { queryParams: { id: verifyToken[1] } });
           }
         }
       }
@@ -1314,11 +1316,21 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
       this.queryPID = params.get('pid');
     });
     //if logout from one tab, all tab redirect to login page
-    window.addEventListener('storage', event => {
-      if (event !== undefined && event.storageArea.length === 0) {
+   // if (event !== undefined && event.storageArea.length === 0) {
+      if (this.router !== undefined && this.router.url.indexOf('/verify-email') !== -1 || this.location.path().indexOf('/verify-email') !== -1) {
+        let urlpartone = this.location.path().split("?oid=");
+        let urlparttwo = urlpartone[0].split("?pid=");
+        let verifyToken = urlparttwo[0].split("verify-email/")
+        // this.router.navigate([urlparttwo[0]]);
+        sessionStorage.clear();
+        //this.router.navigate(['/signup'], { relativeTo: this.activatedRoute });
+        this.router.navigate(["/signup"],{ queryParams: { id: verifyToken[1] }});
+        //this.router.navigate(['/privacy/dsar/dsarform', obj.web_form_id]);
+        
+      } else {
         this.router.navigate(['/login']);
       }
-    });
+    
   }
 
   ngOnDestroy(){

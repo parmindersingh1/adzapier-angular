@@ -1,264 +1,347 @@
 <div class="container-fluid login-background ">
-    <div  class="row justify-content-center">
-      <div class="">
-        <div class="logo-group">
-          <img src="assets/imgs/az-logo.png" class="az-logo mb-2" alt="adzapier logo" />
-          <h4 class="tx-white">Trusted Data Privacy Solutions</h4>
-        </div>
-        <div *ngIf="step == 1"  class="inputs-key login-form bg-white">
-                      <h4 class="tx-color-01 mg-b-5">Create New Account</h4>
-                      <p class="tx-color-03 tx-16 mg-b-40">It's free to signup and only takes a minute.</p>
-                      <form [formGroup]="regForm" #registerForm id="registerForm" (ngSubmit)="onSubmit()">
-                        <div class="row" >
-                          <div class="form-group col-md-6">
-                              <label for="firstName">First Name</label>
-                              <input type="text" name="firstName" formControlName="firstName" class="form-control input-lg"
-                                  [ngClass]="{ 'is-invalid': submitted && f.firstName.errors }"
-                                  placeholder="Enter your firstname" pattern="^[a-zA-Z ]{3,20}$" />
-                              <div *ngIf="submitted && f.firstName.errors" class="invalid-feedback" >
-                                  <div *ngIf="f.firstName.errors.required">First Name is required</div>
-                                  <div *ngIf="f.firstName.errors.pattern">First Name Allow Only Alphabets(min 3 & max 20 Char)</div>
-                              </div>
-                          </div>
-                          <div class="form-group col-md-6">
-                              <label for="lastName">Last Name</label>
-                              <input type="text" formControlName="lastName" class="form-control input-lg"
-                                  [ngClass]="{ 'is-invalid': submitted && f.lastName.errors }"
-                                  placeholder="Enter your lastname" pattern="^[a-zA-Z\s]{3,20}$" />
-                              <div *ngIf="submitted && f.lastName.errors" class="invalid-feedback">
-                                  <div *ngIf="f.lastName.errors.required">Last Name is required</div>
-                                  <div *ngIf="f.lastName.errors.pattern">Last Name allow only Alphabets(min 3 & max 20 Char)</div>
-                              </div>
-                          </div>
-                        </div>
-  
-  
-                          <div class="form-group">
-                              <label for="email">Email Address</label>
-                              <input type="email" formControlName="email" class="form-control input-lg"
-                                  [ngClass]="{ 'is-invalid': submitted && f.email.errors }"
-                                  placeholder="Enter your email address"
-                                  pattern="^\w+@[a-zA-Z_0-9]+?\.[a-zA-Z]{2,3}$" (ngModelChange)="clearError()"/>
-                              <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
-                                  <div *ngIf="f.email.errors.required">Email address is required</div>
-                                  <div *ngIf="f.email.errors.pattern">Please enter a valid email</div>
-                              </div>
-                          </div>
+    <div class="row justify-content-center">
+        <div class="">
+            <div class="logo-group">
+                <img src="assets/imgs/az-logo.png" class="az-logo mb-2" alt="adzapier logo" />
+                <h4 class="tx-white">Trusted Data Privacy Solutions</h4>
+            </div>
+            <div *ngIf="showNextScreen && id" style="color:#fff">
+                Your email has been verified!
+            </div>
 
-                          <div class="form-group">
-                            <label for="country">Country</label>
-                            <input type="text" formControlName="country" class="form-control input-lg"
-                                [ngClass]="{ 'is-invalid': submitted && f.country.errors }"
-                                placeholder="Enter Country" />
-                                <div *ngIf="submitted && f.country.errors" class="invalid-feedback" >
-                                    <div *ngIf="f.country.errors.required">Country is required</div>
-                                    <div *ngIf="f.country.errors.pattern">Country allow only Alphabets</div>
-        
-                                </div>
+            <div *ngIf="step == 1 && !id" class="inputs-key login-form bg-white">
+                <h4 class="tx-color-01 mg-b-5">Create New Account</h4>
+                <p class="tx-color-03 tx-16 mg-b-40">It's free to signup and only takes a minute.</p>
+                <form [formGroup]="regForm" #registerForm id="registerForm" (ngSubmit)="onSubmit()">
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label for="firstName">First Name</label>
+                            <input type="text" name="firstName" formControlName="firstName"
+                                class="form-control input-lg"
+                                [ngClass]="{ 'is-invalid': submitted && f.firstName.errors }"
+                                placeholder="Enter your firstname" pattern="^[a-zA-Z ]{3,20}$" />
+                            <div *ngIf="submitted && f.firstName.errors" class="invalid-feedback">
+                                <div *ngIf="f.firstName.errors.required">First Name is required</div>
+                                <div *ngIf="f.firstName.errors.pattern">First Name Allow Only Alphabets(min 3 & max 20
+                                    Char)</div>
+                            </div>
                         </div>
-  
-                        <div class="row">
-                          <div class="form-group col-md-6">
-                                  <label for="password">Password</label>
-                                  <input toggle type="password" name="password" formControlName="password" class="form-control input-lg"
-                                      [ngClass]="{ 'is-invalid': submitted && f.password.errors }"
-                                      placeholder="Enter your password"
-                                      pattern="(?=^.{6,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9]).*$"/>
-                                  <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
-                                      <div *ngIf="f.password.errors.required">Password is required</div>
-                                      <div *ngIf="f.password.errors.pattern">Enter Valid Password (Ex: Aa@2aa) and minimum 6 charcters </div>
-                                  </div>
-                              </div>
-                              <div class="form-group col-md-6">
-                                  <label for="password">Confirm Password</label>
-                                  <input toggle type="password" formControlName="confirmpassword" class="form-control input-lg"
-                                      [ngClass]="{ 'is-invalid': submitted && f.confirmpassword.errors }"
-                                      placeholder="Enter your Confirm password"
-                                         name="confirmpassword"
-                                      pattern="(?=^.{6,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9]).*$"/>
-                                  <div *ngIf="submitted && f.confirmpassword.errors" class="invalid-feedback">
-                                      <div *ngIf="f.confirmpassword.errors.required">Confirm Password is required</div>
-                                      <div *ngIf="f.confirmpassword.errors.pattern">Enter Valid Confirm Password (Ex: Aa@2aa) and minimum 6 charcters </div>
-                                      <div *ngIf="f.confirmpassword.errors.mustMatch">The password and confirmation password do not match</div>
-                                  </div>
-                              </div>
+                        <div class="form-group col-md-6">
+                            <label for="lastName">Last Name</label>
+                            <input type="text" formControlName="lastName" class="form-control input-lg"
+                                [ngClass]="{ 'is-invalid': submitted && f.lastName.errors }"
+                                placeholder="Enter your lastname" pattern="^[a-zA-Z\s]{3,20}$" />
+                            <div *ngIf="submitted && f.lastName.errors" class="invalid-feedback">
+                                <div *ngIf="f.lastName.errors.required">Last Name is required</div>
+                                <div *ngIf="f.lastName.errors.pattern">Last Name allow only Alphabets(min 3 & max 20
+                                    Char)</div>
+                            </div>
                         </div>
-  
-                          <div *ngIf="show" style="color: blue;" class="tx-13"><p>Account Created Successfully...!</p></div>
-                          <div  style="color:red;"><p >{{errorMsg}}</p></div>
-  
-                      <div class="form-group form-check">
-                          <input type="checkbox" formControlName="acceptPolicy" id="acceptPolicy" class="form-check-input" />
-                          <label for="acceptPolicy" class="form-check-label" [ngClass]="{ 'is-invalid': submitted && f.acceptPolicy.errors }">By clicking <strong>Create an account</strong> below, you agree to our <a href="https://adzapier.com/terms-of-service" target="_blank">terms of service</a> and <a href="https://adzapier.com/privacy-policy" target="_blank">privacy statement</a>.</label>
-                          <div *ngIf="submitted && f.acceptPolicy.errors" class="invalid-feedback">Accept terms of service & privacy statement is required</div>
-                      </div>
-                      <div class="text-center">
-                          <button class="btn btn-primary mr-2 register-btn" [disabled]="loading" type="submit">
-                              <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1 "></span> Create Account
-                          </button>
-  <!--                         <button class="btn btn-primary mr-2" type="reset" (click)="onReset()">Reset</button> -->
-                                    <div class="divider-text">or</div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" formControlName="email" class="form-control input-lg"
+                            [ngClass]="{ 'is-invalid': submitted && f.email.errors }"
+                            placeholder="Enter your email address" pattern="^\w+@[a-zA-Z_0-9]+?\.[a-zA-Z]{2,3}$"
+                            (ngModelChange)="clearError()" />
+                        <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
+                            <div *ngIf="f.email.errors.required">Email address is required</div>
+                            <div *ngIf="f.email.errors.pattern">Please enter a valid email</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="country">Country</label>
+                        <input type="text" formControlName="country" class="form-control input-lg"
+                            [ngClass]="{ 'is-invalid': submitted && f.country.errors }" placeholder="Enter Country" />
+                        <div *ngIf="submitted && f.country.errors" class="invalid-feedback">
+                            <div *ngIf="f.country.errors.required">Country is required</div>
+                            <div *ngIf="f.country.errors.pattern">Country allow only Alphabets</div>
+
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label for="password">Password</label>
+                            <input toggle type="password" name="password" formControlName="password"
+                                class="form-control input-lg"
+                                [ngClass]="{ 'is-invalid': submitted && f.password.errors }"
+                                placeholder="Enter your password"
+                                pattern="(?=^.{6,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9]).*$" />
+                            <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
+                                <div *ngIf="f.password.errors.required">Password is required</div>
+                                <div *ngIf="f.password.errors.pattern">Enter Valid Password (Ex: Aa@2aa) and minimum 6
+                                    charcters </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="password">Confirm Password</label>
+                            <input toggle type="password" formControlName="confirmpassword"
+                                class="form-control input-lg"
+                                [ngClass]="{ 'is-invalid': submitted && f.confirmpassword.errors }"
+                                placeholder="Enter your Confirm password" name="confirmpassword"
+                                pattern="(?=^.{6,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9]).*$" />
+                            <div *ngIf="submitted && f.confirmpassword.errors" class="invalid-feedback">
+                                <div *ngIf="f.confirmpassword.errors.required">Confirm Password is required</div>
+                                <div *ngIf="f.confirmpassword.errors.pattern">Enter Valid Confirm Password (Ex: Aa@2aa)
+                                    and minimum 6 charcters </div>
+                                <div *ngIf="f.confirmpassword.errors.mustMatch">The password and confirmation password
+                                    do not match</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div *ngIf="show" style="color: blue;" class="tx-13">
+                        <p>Account Created Successfully...!</p>
+                    </div>
+                    <div style="color:red;">
+                        <p>{{errorMsg}}</p>
+                    </div>
+
+                    <div class="form-group form-check">
+                        <input type="checkbox" formControlName="acceptPolicy" id="acceptPolicy"
+                            class="form-check-input" />
+                        <label for="acceptPolicy" class="form-check-label"
+                            [ngClass]="{ 'is-invalid': submitted && f.acceptPolicy.errors }">By clicking <strong>Create
+                                an account</strong> below, you agree to our <a
+                                href="https://adzapier.com/terms-of-service" target="_blank">terms of service</a> and <a
+                                href="https://adzapier.com/privacy-policy" target="_blank">privacy
+                                statement</a>.</label>
+                        <div *ngIf="submitted && f.acceptPolicy.errors" class="invalid-feedback">Accept terms of service
+                            & privacy statement is required</div>
+                    </div>
+                    <div class="text-center">
+                        <button class="btn btn-primary mr-2 register-btn" [disabled]="loading" type="submit">
+                            <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1 "></span> Create Account
+                        </button>
+                        <!--                         <button class="btn btn-primary mr-2" type="reset" (click)="onReset()">Reset</button> -->
+                        <div class="divider-text">or</div>
                         <!--          <button class="btn btn-outline-facebook btn-block">Sign Up With Facebook</button>-->
                         <!--            <button class="btn btn-outline-twitter btn-block">Sign Up With Twitter</button>-->
-                                 <div class="tx-18 mg-t-20 tx-center">Already have an account?
-                                      <a routerLink="/login" class="btn btn-link font-weight-bold">Sign In</a>
-                                </div>
-  
-  
-                      </div>
-                      <!-- <a class="btn btn-primary mx-2" *ngIf = "step != 1" (click)="previous()">Previous</a>
+                        <div class="tx-18 mg-t-20 tx-center">Already have an account?
+                            <a routerLink="/login" class="btn btn-link font-weight-bold">Sign In</a>
+                        </div>
+
+
+                    </div>
+                    <!-- <a class="btn btn-primary mx-2" *ngIf = "step != 1" (click)="previous()">Previous</a>
                       <button (click)="next();" class="btn btn-sm btn-primary mx-2" *ngIf = "step != 2">Next</button>
                       <button type="submit" class="btn btn-sm btn-primary mx-2">Submit</button>
   
                       <div>{{this.regForm.value | json}}</div> -->
-                  </form>
-        </div>
-        <div *ngIf="step == 2" >
-            <!-- <div class="d-flex justify-content-center">
+                </form>
+            </div>
+            <div *ngIf="step == 2  && !id && !isInvitedUserVerified">
+                <!-- <div class="d-flex justify-content-center">
                 <div class="spinner-border" role="status" >
                   <span class="sr-only" id="loading"></span>
                 </div>
               </div> -->
-              <div *ngIf="isLoading" style="margin-top: 60px;" class="d-flex align-items-center justify-content-center">
-                <div id="spinner"></div>
-            </div>
-            <div class="mt-5 d-flex align-items-center justify-content-center"  >
-               <span style="color: white;font-size: large;">Please Verify Your Email, verification email has been sent to {{this.emailid}}.</span>
-               <!-- <button class="btn btn-sm" (click)="changetext()">Change</button>
+                <div *ngIf="isLoading" style="margin-top: 60px;"
+                    class="d-flex align-items-center justify-content-center">
+                    <div id="spinner"></div>
+                </div>
+                <div class="mt-5 d-flex align-items-center justify-content-center">
+                    <span style="color: white;font-size: large;">Please Verify Your Email, verification email has been
+                        sent to {{this.emailid}}.</span>
+                    <!-- <button class="btn btn-sm" (click)="changetext()">Change</button>
             <a class="btn btn-sm btn-primary mx-2" style="color: white;" (click)="previous()">Previous</a>
             <button (click)="next();" class="btn btn-sm btn-primary mx-2" *ngIf = "step != 3">Next</button> -->
-        </div>
-        </div>
-        <div *ngIf="step == 3" class="inputs-key login-form bg-white">
-          <h4 class="tx-color-01 mg-b-5">Add Company, Organization and Property</h4>
-          <form [formGroup]="secondregForm" #secregisterForm id="secregisterForm" (ngSubmit)="onSubSecond()" >
-            <div class="form-group">
-                <label for="companyname">Company or Agency</label>
-                <input type="text" formControlName="companyname" class="form-control input-lg"
-                    [ngClass]="{ 'is-invalid': submitted && r.companyname.errors }"
-                    placeholder="Enter your companyname" (ngModelChange)="clearError()">
-                <div *ngIf="submitted && r.companyname.errors" class="invalid-feedback">
-                    <div *ngIf="r.companyname.errors.required">Companyname is required</div>
-                    <div *ngIf="r.companyname.errors.pattern">Companyname allow only Alphanumeric</div>
                 </div>
-
             </div>
-
-            <div class="row" >
-                <div class="form-group col-md-6">
-                    <label for="address1">Address 1</label>
-                    <input type="text" name="address1" formControlName="address1" class="form-control input-lg"
-                        [ngClass]="{ 'is-invalid': submitted && r.address1.errors }"
-                        placeholder="Enter your Address" />
-                    <div *ngIf="submitted && r.address1.errors" class="invalid-feedback" >
-                        <div *ngIf="r.address1.errors.required">Address 1 is required</div>
-                    </div>
-                </div>
-                <div class="form-group col-md-6">
-                    <label for="address2">Address 2</label>
-                    <input type="text" formControlName="address2" class="form-control input-lg"
-                        placeholder="Enter your address" />
-                </div>
-              </div>
-
-              <div class="row" >
-                <div class="form-group col-md-6">
-                    <label for="city">City</label>
-                    <input type="text" name="city" formControlName="city" class="form-control input-lg"
-                        [ngClass]="{ 'is-invalid': submitted && r.city.errors }"
-                        placeholder="Enter City" />
-                    <div *ngIf="submitted && r.city.errors" class="invalid-feedback" >
-                        <div *ngIf="r.city.errors.required">City is required</div>
-                        <div *ngIf="r.city.errors.pattern">City allow only Alphabets</div>
-                        <div *ngIf="r.city.errors.minlength">City must be at least 2 characters long.</div>
-                        <div *ngIf="r.city.errors.maxlength">City should not be greater than 250 characters.</div>
-
-                    </div>
-                </div>
-                <div class="form-group col-md-6">
-                    <label for="state">State</label>
-                    <input type="text" formControlName="state" class="form-control input-lg"
-                        [ngClass]="{ 'is-invalid': submitted && r.state.errors }"
-                        placeholder="Enter State" />
-                        <div *ngIf="submitted && r.state.errors" class="invalid-feedback" >
-                            <div *ngIf="r.state.errors.required">State is required</div>
-                            <div *ngIf="r.state.errors.pattern">State allow only Alphabets</div>
+            <div *ngIf="isInvitedUserVerified && !id">
+                <div *ngIf="step == 3" class="inputs-key login-form bg-white">
+                    <h4 class="tx-color-01 mg-b-5">Add Company, Organization and Property</h4>
+                    <form [formGroup]="secondregForm" #secregisterForm id="secregisterForm" (ngSubmit)="onSubSecond()">
+                        <div class="form-group">
+                            <label for="companyname">Company or Agency</label>
+                            <input type="text" formControlName="companyname" class="form-control input-lg"
+                                [ngClass]="{ 'is-invalid': submitted && r.companyname.errors }"
+                                placeholder="Enter your companyname" (ngModelChange)="clearError()">
+                            <div *ngIf="submitted && r.companyname.errors" class="invalid-feedback">
+                                <div *ngIf="r.companyname.errors.required">Companyname is required</div>
+                                <div *ngIf="r.companyname.errors.pattern">Companyname allow only Alphanumeric</div>
+                            </div>
 
                         </div>
-                </div>
-              </div>
 
-              <div class="row" >
-                <div class="form-group col-md-6">
-                    <label for="code">Zipcode</label>
-                    <input type="text" name="code" formControlName="code" class="form-control input-lg"
-                        [ngClass]="{ 'is-invalid': submitted && r.code.errors }"
-                        placeholder="Enter Zipcode" />
-                    <div *ngIf="submitted && r.code.errors" class="invalid-feedback" >
-                        <div *ngIf="r.code.errors.required">Zipcode is required</div>
-                        <div *ngIf="r.code.errors.pattern">Zipcode can not be less than 5 digit</div>
-                    </div>
-                </div>
-                <div class="form-group col-md-6">
-                    <label for="phone">Phone No</label>
-                    <input type="text" formControlName="phone" class="form-control input-lg"
-                        [ngClass]="{ 'is-invalid': submitted && r.phone.errors }"
-                        placeholder="Enter Phone no" />
-                        <div *ngIf="submitted && r.phone.errors" class="invalid-feedback" >
-                            <div *ngIf="r.phone.errors.required">Phone No is required</div>
-                            <div *ngIf="r.phone.errors.pattern">Enter valid phone number</div>
-                            <div *ngIf="r.phone.errors.minlength">Phone no must be at least 5 digits long.</div>
-                        <div *ngIf="r.phone.errors.maxlength">Phone no should not be greater than 15.</div>
-
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <label for="address1">Address 1</label>
+                                <input type="text" name="address1" formControlName="address1"
+                                    class="form-control input-lg"
+                                    [ngClass]="{ 'is-invalid': submitted && r.address1.errors }"
+                                    placeholder="Enter your Address" />
+                                <div *ngIf="submitted && r.address1.errors" class="invalid-feedback">
+                                    <div *ngIf="r.address1.errors.required">Address 1 is required</div>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="address2">Address 2</label>
+                                <input type="text" formControlName="address2" class="form-control input-lg"
+                                    placeholder="Enter your address" />
+                            </div>
                         </div>
-                </div>
-              </div>
 
-            <div class="form-group">
-                <label for="website">Website</label>
-                <div class="input-group">
-                  <select class="custom-select" name="protocol" formControlName="protocol" [ngClass]="{ 'is-invalid': submitted && r.protocol.errors }">
-                      <ng-container *ngFor="let opt of protocolList">
-                        <option [value]="opt">{{opt}}</option>
-                      </ng-container>
-                    </select>
-                    
-                   
-                  <div class="col-sm-9 p-0 input-group-append flex-column">
-                    <input type="text" class="form-control" name="website" formControlName="website" placeholder="propertydomain.com"
-                    [ngClass]="{ 'is-invalid': submitted && r.website.errors }" />
-                    <div *ngIf="submitted && r.website.errors" class="invalid-feedback">
-                        <div *ngIf="r.website.errors.required">Website address is required</div>
-                        <div *ngIf="r.website.errors.pattern">Website address should to be lower case </div>
-                    </div>
-                    </div>
-                  </div>
-            </div>
-            <div class="form-group">
-                <label for="logourl">Logo URL</label>
-                <input type="text" class="form-control" name="logourl" formControlName="logourl" />
-            </div>
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <label for="city">City</label>
+                                <input type="text" name="city" formControlName="city" class="form-control input-lg"
+                                    [ngClass]="{ 'is-invalid': submitted && r.city.errors }" placeholder="Enter City" />
+                                <div *ngIf="submitted && r.city.errors" class="invalid-feedback">
+                                    <div *ngIf="r.city.errors.required">City is required</div>
+                                    <div *ngIf="r.city.errors.pattern">City allow only Alphabets</div>
+                                    <div *ngIf="r.city.errors.minlength">City must be at least 2 characters long.</div>
+                                    <div *ngIf="r.city.errors.maxlength">City should not be greater than 250 characters.
+                                    </div>
 
-            <!-- <div>{{this.secondregForm.value | json}}</div>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="state">State</label>
+                                <input type="text" formControlName="state" class="form-control input-lg"
+                                    [ngClass]="{ 'is-invalid': submitted && r.state.errors }"
+                                    placeholder="Enter State" />
+                                <div *ngIf="submitted && r.state.errors" class="invalid-feedback">
+                                    <div *ngIf="r.state.errors.required">State is required</div>
+                                    <div *ngIf="r.state.errors.pattern">State allow only Alphabets</div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <label for="code">Zipcode</label>
+                                <input type="text" name="code" formControlName="code" class="form-control input-lg"
+                                    [ngClass]="{ 'is-invalid': submitted && r.code.errors }"
+                                    placeholder="Enter Zipcode" />
+                                <div *ngIf="submitted && r.code.errors" class="invalid-feedback">
+                                    <div *ngIf="r.code.errors.required">Zipcode is required</div>
+                                    <div *ngIf="r.code.errors.pattern">Zipcode can not be less than 5 digit</div>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="phone">Phone No</label>
+                                <input type="text" formControlName="phone" class="form-control input-lg"
+                                    [ngClass]="{ 'is-invalid': submitted && r.phone.errors }"
+                                    placeholder="Enter Phone no" />
+                                <div *ngIf="submitted && r.phone.errors" class="invalid-feedback">
+                                    <div *ngIf="r.phone.errors.required">Phone No is required</div>
+                                    <div *ngIf="r.phone.errors.pattern">Enter valid phone number</div>
+                                    <div *ngIf="r.phone.errors.minlength">Phone no must be at least 5 digits long.</div>
+                                    <div *ngIf="r.phone.errors.maxlength">Phone no should not be greater than 15.</div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="website">Website</label>
+                            <div class="input-group">
+                                <select class="custom-select" name="protocol" formControlName="protocol"
+                                    [ngClass]="{ 'is-invalid': submitted && r.protocol.errors }">
+                                    <ng-container *ngFor="let opt of protocolList">
+                                        <option [value]="opt">{{opt}}</option>
+                                    </ng-container>
+                                </select>
+
+
+                                <div class="col-sm-9 p-0 input-group-append flex-column">
+                                    <input type="text" class="form-control" name="website" formControlName="website"
+                                        placeholder="propertydomain.com"
+                                        [ngClass]="{ 'is-invalid': submitted && r.website.errors }" />
+                                    <div *ngIf="submitted && r.website.errors" class="invalid-feedback">
+                                        <div *ngIf="r.website.errors.required">Website address is required</div>
+                                        <div *ngIf="r.website.errors.pattern">Website address should to be lower case
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="logourl">Logo URL</label>
+                            <input type="text" class="form-control" name="logourl" formControlName="logourl" />
+                        </div>
+
+                        <!-- <div>{{this.secondregForm.value | json}}</div>
            
 
           <a class="btn btn-sm btn-primary mx-2" style="color: white;" (click)="previous()">Previous</a>
           <button (click)="next();" class="btn btn-sm btn-primary mx-2" *ngIf = "step != 2">Next</button>
           <button type="submit" class="btn btn-sm btn-primary mx-2">Submit</button> -->
-          <div class="text-center">
-            <button class="btn btn-primary mr-2 register-btn" [disabled]="loading" type="submit">
-                <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1 "></span> Save
-            </button>
-            </div>
-          
-      </form>
-  </div>
-      </div>
-    </div>
-  </div>
+                        <div class="text-center">
+                            <button class="btn btn-primary mr-2 register-btn" [disabled]="loading" type="submit">
+                                <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1 "></span> Save
+                            </button>
+                        </div>
 
-  <div class="col-sm-5 mr-0 float-right flotingdiv" *ngIf="isOpen">
+                    </form>
+                </div>
+            </div>
+            <!--email verification start-->
+          <!--  <div [@slideInOut]="!isInvitedUserVerified ? true : false" class="p-5 email-verification-panel"
+            [ngClass]="{'hide-emailpanel':isInvitedUserVerified,'show-emailpanel':!isInvitedUserVerified}">
+            <div class="wd-100p">
+              <h3 class="tx-color-01 mg-b-5 relative-txt-center"><span (click)="onToggle()"
+                  class="back-arrow">🡠</span>Email Verification</h3>
+              <p class="tx-color-05 tx-16 mg-b-40 tx-center">Your email address is not verified</p>
+            </div>
+            <div class="justify-content-center">
+              <div *ngIf="isMsgConfirm">
+                <p class="confirm-msg">
+                  <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130.2 130.2">
+                     <circle class="path circle" fill="none" stroke="#73AF55" stroke-width="6" stroke-miterlimit="10"
+                       cx="65.1" cy="65.1" r="62.1" />
+                     <polyline class="path check" fill="none" stroke="#73AF55" stroke-width="6"
+                       stroke-linecap="round" stroke-miterlimit="10" points="100.2,40.2 51.5,88.8 29.8,67.5 " />
+                   </svg>
+                   <span> Confirmation email sent</span>
+                </p>
+                <p>
+                  If you do not receive the confirmation message within a few minutes, please check your Spam folder
+                  just in case the confirmation email got delivered there instead of your inbox.
+                </p>
+              </div>
+              <div class="text-center">
+                 <form [formGroup]="verifyEmailForm" (ngSubmit)="onSubmit()">
+                 
+                     <div class="form-group">
+                         <label for="email" class="tx-17">Email Address</label>
+                         <input type="email" formControlName="email" class="form-control input-lg"
+                             [ngClass]="{ 'is-invalid': submitted && vemail.email.errors }" pattern="^\w+@[a-zA-Z_0-9]+?\.[a-zA-Z]{2,3}$"
+                             placeholder="yourname@yourmail.com" (ngModelChange)="clearError()" />
+                          
+                         <div *ngIf="submitted && vemail.email.errors" class="invalid-feedback">
+                             <div *ngIf="vemail.email.errors.required">Email is required</div>
+                             <div *ngIf="vemail.email.errors.pattern">Please enter a valid email</div>
+                         </div>
+                     </div>
+                     <button class="btn btn-lg btn-uppercase btn-brand-02 btn-block" type="button"
+                         *ngIf="!isInvitedUserVerified && !isMsgConfirm" [disabled]="isVerificationBtnClick" (click)="resendToken()">
+                         <span *ngIf="isVerificationBtnClick" class="spinner-border spinner-border-sm mr-1"></span>
+                         Resend Verification
+                     </button>
+                     <div *ngIf="emailnotverifiedMsg">Email address not found</div>
+                 </form>
+               
+                <button class="btn btn-lg btn-uppercase btn-brand-02 btn-block" *ngIf="isMsgConfirm" type="button"
+                  (click)="onToggle()">
+                  <span class="h6 mr-3 tx-white">🡠</span> Login
+                </button>
+              </div>
+            </div>
+          </div>-->
+         <!--email verification end-->
+        </div>
+    </div>
+</div>
+
+<div class="col-sm-5 mr-0 float-right flotingdiv" *ngIf="isOpen">
     <alert *ngIf="isOpen" [type]="alertType" [dismissible]="dismissible" (onClosed)="onClosed(alertMsg)">{{
       alertMsg}}
     </alert>
-  </div>
+</div>
