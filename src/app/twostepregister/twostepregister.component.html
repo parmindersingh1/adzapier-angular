@@ -190,12 +190,12 @@
 
               <div class="row" >
                 <div class="form-group col-md-6">
-                    <label for="code">Pincode</label>
+                    <label for="code">Zipcode</label>
                     <input type="text" name="code" formControlName="code" class="form-control input-lg"
                         [ngClass]="{ 'is-invalid': submitted && r.code.errors }"
-                        placeholder="Enter pin code" />
+                        placeholder="Enter Zipcode" />
                     <div *ngIf="submitted && r.code.errors" class="invalid-feedback" >
-                        <div *ngIf="r.code.errors.required">Pin code is required</div>
+                        <div *ngIf="r.code.errors.required">Zipcode is required</div>
                         <div *ngIf="r.code.errors.pattern">Zipcode can not be less than 5 digit</div>
                     </div>
                 </div>
@@ -205,10 +205,10 @@
                         [ngClass]="{ 'is-invalid': submitted && r.phone.errors }"
                         placeholder="Enter Phone no" />
                         <div *ngIf="submitted && r.phone.errors" class="invalid-feedback" >
-                            <div *ngIf="r.phone.errors.required">State is required</div>
+                            <div *ngIf="r.phone.errors.required">Phone No is required</div>
                             <div *ngIf="r.phone.errors.pattern">Enter valid phone number</div>
-                            <div *ngIf="r.phone.errors.minlength">City must be at least 2 characters long.</div>
-                        <div *ngIf="r.phone.errors.maxlength">City should not be greater than 250 characters.</div>
+                            <div *ngIf="r.phone.errors.minlength">Phone no must be at least 5 digits long.</div>
+                        <div *ngIf="r.phone.errors.maxlength">Phone no should not be greater than 15.</div>
 
                         </div>
                 </div>
