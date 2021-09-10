@@ -680,7 +680,7 @@
                         class="fas fa-check-circle"></i></span>
                     </div>
                   </div>
-                  <div class="banner-color-wrap mt-3" [ngStyle]="{'display' : showCustomColor ? 'block' : 'none'}">
+                  <div class="banner-color-wrap mt-3" [ngStyle]="{'display' : themeType === 'custom' ? 'block' : 'none'}">
                     <p-divider align="left" type="dashed">
                       <b><i class="fas fa-tools mr-2"></i> Customization </b>
                     </p-divider>
@@ -1247,7 +1247,7 @@
                     </label> <br/>
                     <div class="row m-0">
                       <p-inputNumber class="az-input col-md-6 p-0 m-0" mode="decimal" inputId="withoutgrouping"
-                                     maxlength="8"
+                                     maxlength="8" min="1"
                                      formControlName="DisplayPartialConsent" [useGrouping]="false">
                       </p-inputNumber>
                       <p-dropdown class="col-md-6 p-0 m-0" formControlName="DisplayPartialConsentType"
@@ -1263,7 +1263,7 @@
                     </label> <br/>
                     <div class="row m-0">
                       <p-inputNumber class="az-input col-md-6 p-0 m-0" mode="decimal" inputId="withoutgrouping"
-                                     formControlName="DisplayRejectAllConsent" maxlength="8" [useGrouping]="false">
+                                     min="1"      formControlName="DisplayRejectAllConsent" maxlength="8" [useGrouping]="false">
                       </p-inputNumber>
                       <p-dropdown class="col-md-6 p-0 m-0" formControlName="DisplayRejectAllConsentType"
                                   [options]="displayFrequency" optionLabel="name" optionValue="code"></p-dropdown>
@@ -1278,7 +1278,7 @@
                     </label> <br/>
                     <div class="row m-0">
                       <p-inputNumber class="az-input col-md-6 p-0 m-0" mode="decimal" inputId="withoutgrouping"
-                                     formControlName="DisplayClosedConsent" maxlength="8" [useGrouping]="false">
+                                     min="1"    formControlName="DisplayClosedConsent" maxlength="8" [useGrouping]="false">
                       </p-inputNumber>
                       <p-dropdown class="col-md-6 p-0 m-0" formControlName="DisplayClosedConsentType"
                                   [options]="displayFrequency" optionLabel="name" optionValue="code"></p-dropdown>

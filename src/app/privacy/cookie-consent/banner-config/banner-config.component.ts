@@ -579,7 +579,7 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
     });
     this.customLang = CONFIG.LanguageConfig.customLang;
     this.selectedLanguage = CONFIG.LanguageConfig.allowedLang;
-
+    this.themeType = CONFIG.ThemeType;
     this.allowedLanguagesForPreview = [];
     for (const langCode of CONFIG.LanguageConfig.allowedLang) {
       this.allowedLanguagesForPreview.push(this.onFindLangByCode(langCode));
@@ -833,6 +833,7 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
       MuteBanner: this.BannerConfigurationForm.value.MuteBanner,
       BannerPosition: this.BannerConfigurationForm.value.BannerPosition,
       BadgePosition: this.BannerConfigurationForm.value.BadgePosition,
+      ThemeType: this.themeType,
       DisplayFrequency: {
         bannerPartialConsent: this.BannerConfigurationForm.value.DisplayPartialConsent,
         bannerPartialConsentType: this.BannerConfigurationForm.value.DisplayPartialConsentType,
