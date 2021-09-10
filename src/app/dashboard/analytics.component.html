@@ -5,10 +5,17 @@
   </div>
     <div class="dashboard-div mb-4">
     <ul>
-      <ngx-skeleton-loader appearance="circle"  *ngIf="skeletonLoading && appsPositionRowOne?.length == 0" [theme]="{
-        width: '250px',height: '250px','border-radius': '10px'}"></ngx-skeleton-loader>
-      <ng-container *ngFor="let data of appsPositionRowOne"> 
-       
+      <ng-container *ngIf="skeletonLoading && appsPositionRowOne?.length == 0">
+        <ngx-skeleton-loader appearance="circle"   [theme]="{
+        width: '280px',height: '260px','border-radius': '10px', marginRight: '80px'}"></ngx-skeleton-loader>
+        <ngx-skeleton-loader appearance="circle"   [theme]="{
+        width: '280px',height: '260px','border-radius': '10px' , marginRight: '80px'}"></ngx-skeleton-loader>
+        <ngx-skeleton-loader appearance="circle"   [theme]="{
+        width: '280px',height: '260px','border-radius': '10px', marginRight: '80px'}"></ngx-skeleton-loader>
+      </ng-container>
+
+      <ng-container *ngFor="let data of appsPositionRowOne">
+
         <li class="col-sm-4">
           <div>
             <div class="col-md-10">
@@ -33,9 +40,14 @@
   </div>
   <div class="dashboard-div" [ngClass]="{'':appsPositionRowTwo?.length == 0,'mb-4':appsPositionRowTwo.length > 0}">
     <ul>
-      <ngx-skeleton-loader appearance="circle"  *ngIf="skeletonLoading && appsPositionRowTwo?.length == 0" [theme]="{
-        width: '250px', height: '250px', 'border-radius': '10px'}"></ngx-skeleton-loader>
-      <ng-container *ngFor="let data of appsPositionRowTwo"> 
+      <ng-container *ngIf="skeletonLoading && appsPositionRowTwo?.length == 0">
+      <ngx-skeleton-loader appearance="circle"   [theme]="{
+        width: '280px',height: '260px','border-radius': '10px', marginRight: '80px'}"></ngx-skeleton-loader>
+      <ngx-skeleton-loader appearance="circle"   [theme]="{
+        width: '280px',height: '260px','border-radius': '10px' , marginRight: '80px'}"></ngx-skeleton-loader>
+      </ng-container>
+
+      <ng-container *ngFor="let data of appsPositionRowTwo">
         <li class="col-sm-4">
           <div>
             <div class="col-md-10">
@@ -55,17 +67,22 @@
       </ng-container>
     </ul>
   </div>
-  
+
   <div class="col-sm-10 mt-3 mb-3" *ngIf="noOfLicensePurchased >= 3 && noOfLicensePurchased !== 5">
     <h4>Other Apps</h4>
   </div>
-  
+
   <div class="dashboard-div">
     <ul>
-      <ngx-skeleton-loader appearance="circle"  *ngIf="skeletonLoading && appsPositionRowThree?.length == 0" [theme]="{
-        width: '250px', height: '250px','border-radius': '10px'}"></ngx-skeleton-loader>
+
+<ng-container *ngIf="skeletonLoading && appsPositionRowThree?.length == 0">
+      <ngx-skeleton-loader appearance="circle"   [theme]="{
+        width: '280px',height: '260px','border-radius': '10px', marginRight: '80px', marginTop: '30px'}"></ngx-skeleton-loader>
+      <ngx-skeleton-loader appearance="circle"   [theme]="{
+        width: '280px',height: '260px','border-radius': '10px' , marginRight: '80px', marginTop: '30px'}"></ngx-skeleton-loader>
+</ng-container>
       <ng-container *ngFor="let data of appsPositionRowThree">
-        <li class="col-sm-4">  
+        <li class="col-sm-4">
           <div>
             <div class="col-md-10">
               <div class="card card-body">
