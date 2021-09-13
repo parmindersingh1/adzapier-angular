@@ -161,6 +161,14 @@ export class EditProfileComponent implements OnInit {
   }
 
   editOrganizationModalPopup(content) {
+    this.profileForm.controls['firstName'].setValue(this.firstName);
+    this.profileForm.controls['lastName'].setValue(this.lastName);
+    this.profileForm.controls['newemail'].setValue(this.newemail);
+    this.profileForm.controls['companyname'].setValue(this.companyname);
+    this.profileForm.controls['addressone'].setValue(this.addressone);
+    this.profileForm.controls['city'].setValue(this.city);
+    this.profileForm.controls['zipcode'].setValue(this.zipcode);
+    this.profileForm.controls['state'].setValue(this.state);
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title', keyboard: false }).result.then((result) => {
     }, (reason) => {
       // this.profileForm.reset();

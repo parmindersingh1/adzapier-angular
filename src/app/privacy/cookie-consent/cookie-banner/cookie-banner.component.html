@@ -7,7 +7,7 @@
         <nav aria-label="breadcrumb" class="bredcrub-row" style="margin-left: -14px">
           <ol class="breadcrumb breadcrumb-style1 mg-b-10">
             <li class="breadcrumb-item">Privacy</li>
-            <li class="breadcrumb-item"><a routerLink="/home/dashboard/cookie-consent">Cookie Consent</a></li>
+            <li class="breadcrumb-item"><a routerLink="/home/dashboard/cookie-consent" [queryParams]="{oid:queryOID , pid:queryPID}">Cookie Consent</a></li>
             <li class="breadcrumb-item active">Banner Configuration</li>
 
           </ol>
@@ -32,6 +32,9 @@
 
 
               <div class="d-none d-md-block">
+                <a  routerLink="/cookie-consent/banner-configuration" style="color: #555f5e" [queryParams]="{oid: queryOID, pid: queryPID}" type="button" class="btn font-weight-bold tx-16 btn-sm btn-link">
+                 Try new  <span class="badge badge-primary">Beta</span>
+                </a>
                 <button (click)="onResetConfig()" type="button" class="btn  btn-sm btn-uppercase btn-outline-secondary">
                   Reset Configuration
                 </button>

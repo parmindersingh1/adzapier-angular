@@ -4,7 +4,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from './../../environments/environment';
 import { Orglist } from './../_models';
 import { Organizationdetails } from '../_models/organizationdetails';
-import { shareReplay } from 'rxjs/operators';
+import { map, shareReplay } from 'rxjs/operators';
 
 @Directive()
 @Injectable({ providedIn: 'root' })
@@ -92,7 +92,7 @@ export class OrganizationService {
     }
 
     getOrganizationWithProperty(): Observable<any> {
-        return this.http.get<any>(environment.apiUrl + '/organizations?required=property');
+        return this.http.get<any>(environment.apiUrl + '/organizations?required=property').pipe(map(res => res));
     }
 
     setCurrentOrgWithProperty(currentOrg) {

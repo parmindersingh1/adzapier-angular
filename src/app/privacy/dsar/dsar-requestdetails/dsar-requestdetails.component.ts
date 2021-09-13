@@ -223,6 +223,9 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
   duplicateRequestStatus;
   isSubmitBtnClickedOnce;
   //isduplicatedIdSelected = false;
+  isExtendDaysExceeded = false;
+  queryOID;
+  queryPID;
   constructor(private activatedRoute: ActivatedRoute,
               private router: Router,
               private orgService: OrganizationService,
@@ -266,6 +269,12 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
       this.queryOrgID = params.get('orgid');
       this.queryPropID = params.get('propid');
     });
+
+    this.activatedRoute.queryParamMap
+    .subscribe(params => {
+   this.queryOID = params.get('oid');
+   this.queryPID = params.get('pid');
+      });
 
     this.quillEditorText = new FormGroup({
       editor: new FormControl('', Validators.required),
@@ -338,11 +347,11 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
         this.currentPropertyName = response.property_name;
         this.currentSelectedOrgname = response.organization_name;
       } else {
-        const orgDetails = this.orgService.getCurrentOrgWithProperty();
-        this.currentManagedOrgID = orgDetails.organization_id || orgDetails.response.oid;
-        this.currrentManagedPropID = orgDetails.property_id;
-        this.currentPropertyName = orgDetails.property_name;
-        this.currentSelectedOrgname = orgDetails.organization_name;
+        //const orgDetails = this.orgService.getCurrentOrgWithProperty();
+        this.currentManagedOrgID = this.queryOID; //orgDetails.organization_id || orgDetails.response.oid;
+        this.currrentManagedPropID = this.queryPID;// orgDetails.property_id;
+        // this.currentPropertyName = orgDetails.property_name;
+        // this.currentSelectedOrgname = orgDetails.organization_name;
       }
     }, (error) => {
       this.alertMsg = error;
@@ -352,7 +361,7 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
   }
 
   backToDSARRequest() {
-    this.router.navigate(['privacy/dsar/requests']);
+    this.router.navigate(['privacy/dsar/requests'],{ queryParams: { oid: this.queryOID, pid: this.queryPID }, queryParamsHandling:'merge', skipLocationChange:false});
   }
 
   onRefresh(){
@@ -439,7 +448,7 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
     let approverList;
     this.orgService.getOrgTeamMembers(this.currentManagedOrgID).subscribe((data) => {
       approverList = data.response;
-      let filterdList = approverList.filter((t) => t.user_name !== ' ');
+      let filterdList = approverList.filter((t) => t.user_name !== ' ' && t.role_name.indexOf('View') == -1 && t.email_verified);
       this.ApproverList = filterdList;
     }, (error) => {
       this.alertMsg = error;
@@ -542,6 +551,7 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
   }
 
   getWorkflowStages(id) {
+    console.log(this.currentManagedOrgID,'currentManagedOrgID..');
     ///workflowId
     this.workflowService.getWorkflowById(this.constructor.name, moduleName.workFlowModule, this.currentManagedOrgID, id).subscribe((data) => {
       if (data.length > 0) {
@@ -729,6 +739,7 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
   decline(): void {
     this.isConfirmed = false;
     this.modalRef.hide();
+    this.quillEditorExtendDays.reset();
   }
 
 
@@ -880,6 +891,7 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
           this.alertType = 'success';
           this.loadActivityLog(requestID);
           this.quillEditorText.get('editor').setValue('');
+          this.quillEditorExtendDays.reset();
           this.isActivitysubmitted = false;
         }
       }, (error) => {
@@ -1257,9 +1269,13 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
 
   onSubmitExtendDays() {
     this.isExtenddasysubmitted = true;
+    this.isExtendDaysExceeded = this.quillEditorExtendDays.controls["customdays"].value < 1 || this.quillEditorExtendDays.controls["customdays"].value > 45;
     if (this.quillEditorExtendDays.invalid) {
       return false;
     } else {
+      if(this.isExtendDaysExceeded){
+        return false;
+      }
       this.onClickEndDays(this.quillEditorExtendDays.get('customdays').value);
       if (this.selectedStages.length !== 0) {
         const reqObj = {
@@ -1414,10 +1430,17 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
       const workfloworder = this.workflowStages.filter((t) => t.id === id);
       const x = this.workflowStages.slice(0, workfloworder[0].order);
       this.selectedStages = x;
-    } else if (!this.isEmailVerified || this.isEmailVerified){
+    } else if (this.isEmailVerified && this.isemailverificationRequired){
       this.selectedStages.push(this.workflowStages[0]);
       this.selectedStages.push(this.workflowStages[1]);
       this.currentWorkflowStageID = this.workflowStages[1].id;
+    } else if (!this.isEmailVerified && !this.isemailverificationRequired){
+      this.selectedStages.push(this.workflowStages[0]);
+      this.selectedStages.push(this.workflowStages[1]);
+      this.currentWorkflowStageID = this.workflowStages[1].id;
+    } else{
+      this.selectedStages.push(this.workflowStages[0]);
+      this.currentWorkflowStageID = this.workflowStages[0].id;
     }
 
   }
@@ -1432,11 +1455,11 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
       currentStageID = this.currentStageId ? this.currentStageId : this.currentWorkflowStageID;
     }
     //  return false;
-    if (currentStageID) {
+    if (currentStageID !== undefined && currentStageID.length !== 0) {
       let resp;
       this.dsarRequestService.getSubTaskByWorkflowID(this.requestID, currentStageID, this.constructor.name, moduleName.dsarRequestModule)
         .subscribe((data) => {
-          return this.subTaskListResponse = data;
+           this.subTaskListResponse = data;
         }, (error) => {
           this.alertMsg = error;
           this.isOpen = true;
@@ -1912,6 +1935,14 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
         this.alertType = 'danger';
     })
 
+  }
+
+  onKeyChanges($event) {
+    if ($event.target.value >= 1 && $event.target.value <= 45) {
+      this.isExtendDaysExceeded = false;
+    } else {
+      this.isExtendDaysExceeded = true;
+    }
   }
 }
 

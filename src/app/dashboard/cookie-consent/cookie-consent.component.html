@@ -103,7 +103,7 @@
       <div class="card ">
         <div class="card-header req-header d-flex align-items-center justify-content-between">
           <h6 class="mg-b-0">Request By State</h6>
-          <div class="dropdown">
+          <div class="dropdown dp-safari">
             <select (change)="onSelectCountryMap($event)" class="form-control" id="sel1">
               <option value="us">USA</option>
               <option value="world">World</option>
@@ -325,7 +325,7 @@
               <h6 class="mg-b-5">Consent Details</h6>
               <p class="tx-13 tx-color-03 mg-b-0">Your cookie consent detail</p>
             </div>
-            <div class="col-md-1">
+            <div class="col-md-1 dp-safari">
               <select (change)="onSelectCountry($event)" class="form-control" id="sel1">
                 <option *ngFor="let country of countryList" [value]="country.country">{{country.country}}</option>
               </select>

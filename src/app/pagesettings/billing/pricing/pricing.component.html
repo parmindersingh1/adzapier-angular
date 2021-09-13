@@ -45,7 +45,7 @@
                   class="button-text btn btn-white mr-2">DSAR
           </button>
           <button type="button" (click)="onSetCookieConsent(3, 'consentPreference')" [ngClass]="{'primary-yellow' : currentStep === 3}"
-                  class="button-text btn-white btn mr-2">Cookie Preference
+                  class="button-text btn-white btn mr-2">Consent Preference
           </button>
         </div>
 
@@ -385,7 +385,7 @@
               </div>
               <div class="col-md-5 mb-3">
                 <h5>${{cart.priceTotal}}.00</h5>
-                <div class=" w-100 m-auto form-group mb-2">
+                <div class=" w-100 m-auto form-group mb-2 dp-safari">
                   <select (change)="onUpdateCart(cartProperty, i)" #cartProperty [value]="cart.unit"
                           style="height: 32px;"
                           class="mb-2 w-25 margin-auto form-control">

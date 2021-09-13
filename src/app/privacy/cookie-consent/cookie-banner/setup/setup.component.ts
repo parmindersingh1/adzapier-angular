@@ -5,7 +5,7 @@ import { OrganizationService } from '../../../../_services';
 import { Location } from '@angular/common';
 import {moduleName} from '../../../../_constant/module-name.constant';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { apiConstant } from 'src/app/_constant/api.constant';
 
@@ -41,15 +41,23 @@ export class SetupComponent implements OnInit {
   alertMsg: any;
   isOpen = false;
   alertType: any;
+  queryOID;
+  queryPID;
   constructor(
     private cookieBannerService: CookieBannerService,
     private loading: NgxUiLoaderService,
     private modalService: BsModalService,
     private router: Router,
+    private activateRoute: ActivatedRoute,
     private orgservice: OrganizationService,
   ) { }
 
   ngOnInit() {
+    this.activateRoute.queryParams
+      .subscribe((params: any) => {
+        this.queryOID = params.oid;
+        this.queryPID = params.pid;
+      });
     this.onGetPropsAndOrgId();
     this.onGetCookieBannerData();
   }
@@ -60,9 +68,8 @@ export class SetupComponent implements OnInit {
         this.currentManagedOrgID = response.organization_id || response.response.oid;
         this.currrentManagedPropID = response.property_id || response.response.id;
       } else {
-        const orgDetails = this.orgservice.getCurrentOrgWithProperty();
-        this.currentManagedOrgID = orgDetails.organization_id || orgDetails.response.oid;
-        this.currrentManagedPropID = orgDetails.property_id || orgDetails.response.id;
+        this.currentManagedOrgID = this.queryOID;
+        this.currrentManagedPropID = this.queryPID;
       }
     });
   }
@@ -70,7 +77,7 @@ export class SetupComponent implements OnInit {
   onGetCookieBannerData() {
     this.loading.start('2');
     this.loadingSkeleton = true;
-    this.cookieBannerService.onGetCookieBannerData(this.currentManagedOrgID , this.currrentManagedPropID, this.constructor.name, moduleName.setUpModule)
+    this.cookieBannerService.onGetCookieBannerData(this.queryOID , this.queryPID, this.constructor.name, moduleName.setUpModule)
       .subscribe(res => {
         this.loadingSkeleton = false;
         this.loading.stop('2');
@@ -138,7 +145,8 @@ export class SetupComponent implements OnInit {
 
   navigate() {
     this.modalRef.hide();
-    this.router.navigateByUrl('/cookie-consent/cookie-banner');
+   // this.router.navigateByUrl('/cookie-consent/cookie-banner');
+    this.router.navigate(['/cookie-consent/cookie-banner'],{ queryParams: { oid: this.queryOID, pid: this.queryPID }, queryParamsHandling:'merge', skipLocationChange:false});
   }
 
   onClosed(alertMsg: any) {

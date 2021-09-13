@@ -201,7 +201,7 @@
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label for="orgname" class="d-block">Company Name</label>
-                        <input type="text" disabled formControlName="orgname" name="orgname" [(ngModel)]="orgname" minlength="2"
+                        <input type="text" disabled formControlName="orgname" name="orgname"  minlength="2"
                             maxlength="50" class="form-control" />                        
                     </div>
                 </div>
@@ -299,8 +299,7 @@
                     <div class="form-group">
                         <label>&nbsp;</label>
                         <div class="text-right">
-                            <button class="btn btn-link tx-decoration-underline" type="button"
-                                (click)="modal.dismiss('Close Clicked')">Cancel</button>
+                            <button class="btn btn-link tx-decoration-underline" type="reset" (click)="modal.dismiss('Close Clicked')">Cancel</button>
                             <button type="submit" class="btn btn-xs btn-primary">Save</button>
                         </div>
                     </div>
@@ -383,7 +382,7 @@
 
             </div>
             <div class="float-right">
-                <button class="btn btn-link tx-decoration-underline"
+                <button class="btn btn-link tx-decoration-underline" type="reset"
                 (click)="onCancelClick()">Cancel</button>
                 <button class="btn btn-primary btn-xs" type="submit">Submit</button>
             </div>

@@ -1,5 +1,5 @@
 import {
-  Component, OnInit, OnDestroy, ViewChild, ViewEncapsulation,
+  Component, OnInit, OnDestroy, ViewChild, ViewEncapsulation, AfterViewInit,
   ChangeDetectionStrategy, ChangeDetectorRef, ElementRef, AfterContentChecked, AfterViewChecked, TemplateRef
 } from '@angular/core';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
@@ -29,7 +29,7 @@ import { environment } from 'src/environments/environment';
   changeDetection: ChangeDetectionStrategy.Default
 
 })
-export class DsarformComponent implements OnInit, AfterContentChecked, AfterViewChecked, OnDestroy, DirtyComponents {
+export class DsarformComponent implements OnInit, AfterContentChecked, AfterViewInit,  AfterViewChecked, OnDestroy, DirtyComponents {
   @ViewChild('editor', { static: true }) editor;
   @ViewChild('azEmbedCode') public azEmbedCode: ElementRef<any>;
   @ViewChild('shareLinkCode') public shareLinkCode: ElementRef<any>;
@@ -41,6 +41,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
   @ViewChild('confirmSaveAlert') confirmSaveAlert: TemplateRef<any>;
   @ViewChild('basicForm') basicDetailForm: NgForm;
   @ViewChild('settingsForm',{static:false}) settingsForm: NgForm;
+
   public requestObject: any = {};
   public selectedFormOption: any;
   public selectedControlType: any;
@@ -255,6 +256,10 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
   settingsFormchangeSubscription: any;
   basicFormSubscription: any;
   errorMsgdaysleft: string;
+  queryOID;
+  queryPID;
+  orgDetails;
+  orgPropertyMenu;
   constructor(private fb: FormBuilder, private ccpaRequestService: CcparequestService,
     private organizationService: OrganizationService,
     private dsarFormService: DsarformService,
@@ -272,6 +277,11 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
   ) {
 
     this.count = 0;
+    this.activatedRoute.queryParamMap
+    .subscribe(params => {
+   this.queryOID = params.get('oid');
+   this.queryPID = params.get('pid'); 
+    });
 
   }
 
@@ -315,6 +325,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
     this.faviconForm = this.fb.group({
       titlefavicon: ['']
     });
+    this.loadOrgProperty();
   }
   get stepFormOne() { return this.basicForm.controls; }
   get formLogo() { return this.headerLogoForm.controls; }
@@ -330,12 +341,10 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
         this.propId = response.property_id || response.response.id;
         this.currentManagedOrgID = response.organization_id || response.response.oid;
       } else {
-        const orgDetails = this.organizationService.getCurrentOrgWithProperty();
-        this.currentOrganization = orgDetails.organization_name;
-        this.selectedProperty = orgDetails.property_name;
-        this.orgId = orgDetails.organization_id || orgDetails.response.oid;
-        this.propId = orgDetails.property_id || orgDetails.response.id;
-        this.currentManagedOrgID = orgDetails.organization_id || orgDetails.response.oid;
+        this.currentOrgID =  this.queryOID;
+        this.orgId =  this.queryOID;
+        this.propId = this.queryPID;
+        this.currentManagedOrgID = this.queryOID;
         this.loading = false;
       }
     });
@@ -357,8 +366,8 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
           // this.orgId = data.OID;
           //  this.crid = data.crid;
           // this.propertyname = data.form_name;
-          this.formName = data.form_name || data.web_form_name;
-          this.daysleft = data.days_left || 45;
+          this.formName = data.response !== undefined && data.response.form_name || data.form_name || data.web_form_name;
+          this.daysleft = data.response !== undefined && data.response.settings.days_left || data.days_left || 45;
           if (data.form_status === 'draft') {
             this.isDraftWebForm = true;
             this.isEditingPublishedForm = true;
@@ -1377,6 +1386,10 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
     }else{
       updatedWebForm = this.dsarFormService.getFormControlList();
     }
+    if(this.daysleft >= 46){
+      this.errorMsgdaysleft = 'Default days should not be greater than 45';
+      return false;
+    }
     this.formObject = {
       form_name: this.basicForm.controls['formname'].value,
       form_status: 'draft',
@@ -1546,11 +1559,11 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
           if (this.isDirty && this.workflow !== undefined && this.selectedApproverID !== undefined) {
             this.openModal(this.confirmSaveAlert);
           }
-          else if(this.workflow == undefined && this.selectedApproverID == undefined){
+          else if (this.workflow == undefined || this.selectedApproverID == undefined) {
             this.isdraftsubmitted = true;
             this.isDirty = false;
         changeEvent.preventDefault();
-        const stepnumber: number | string = this.formName === undefined ? '1 Basic, 2 Form & 3 Settings': '2 Form & 3 Settings';
+        const stepnumber: number | string = this.formName === undefined ? '1 Basic, 2 Form & 3 Settings' : '2 Form & 3 Settings';
         this.alertMsg = `Please complete step ${stepnumber} and press next`;
         this.isOpen = true;
         this.alertType = 'danger';
@@ -1803,7 +1816,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
     if (this.orgId) {
       setTimeout(()=>{
       this.organizationService.getOrgTeamMembers(this.orgId).subscribe((data) => {
-        this.ApproverList = data.response;
+        this.ApproverList = data.response.filter((t) => t.role_name.indexOf('View') == -1 && t.email_verified);//&& t.role_name.indexOf('View') == -1 && t.email_verified
         const filterValue = this.ApproverList.filter((t) => t.approver_id === this.selectedApproverID);
         if (filterValue.length > 0) {
           this.defaultapprover = filterValue[0].approver_id;
@@ -2522,7 +2535,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
   }
 
   getEditorFontSize(){
-    const tagObj = [{"ql-size-large":'24'},{"ql-size-small":'12'},{"<p>":'14'},{"<h1>":'28'},{"<h2>":'24'}]
+    const tagObj = [{"":'13'},{"ql-size-huge":'40'},{"ql-size-large":'24'},{"ql-size-small":'12'},{"<p>":'14'},{"<h1>":'40'},{"<h1>":'28'},{"<h2>":'24'}]
       for (const key in tagObj){
         if(this.quillEditorText.get('editor').value.indexOf(Object.keys(tagObj[key])) !== -1){
           if(this.isWelcomeEditor){
@@ -2617,9 +2630,17 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
 
   }
 
-  // ngAfterViewInit(){
+  ngAfterViewInit(){
+  //   this.headerNav.loadOrganizationWithProperty();
   //   this.cdRef.detectChanges();
-  // }
+  //   if(this.headerNav !== undefined){
+  //   this.selectedProperty = this.headerNav.currentProperty;
+  //  this.currentOrganization = this.headerNav.currentOrganization;// orgDetails.organization_name;
+  //  console.log(this.selectedProperty,'selectedProperty..2642..');
+  //  this.basicForm.controls['selectedProperty'].setValue(this.selectedProperty);
+  //  this.basicForm.controls['currentOrganization'].setValue(this.currentOrganization);
+  //   }
+  }
 
   getUpdatedFormList():any {
     return this.dsarFormService.getFormControlList();
@@ -2639,6 +2660,32 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
     }
 
   }
+
+  loadOrgProperty(){
+    this.organizationService.getOrganizationWithProperty().subscribe((data) => {
+      
+      this.orgPropertyMenu = data.response;
+      const findOidIndex = this.orgPropertyMenu.findIndex((t) => t.id == this.queryOID) //finding oid
+      if(findOidIndex !== -1){
+        const activePro = this.orgPropertyMenu[findOidIndex]; //based on oid finding propid
+        const propobj = activePro !== undefined && activePro.property.filter((el)=>el.property_id === this.queryPID);
+        if(propobj){
+        const obj = {
+         organization_id: activePro.id,
+         organization_name: activePro.orgname,
+         property_id: propobj[0].property_id,
+         property_name: propobj[0].property_name
+       };
+       this.selectedProperty = obj.property_name;
+       this.basicForm.controls['selectedProperty'].setValue(this.selectedProperty);
+       this.basicForm.controls['currentOrganization'].setValue(this.currentOrganization);
+      }
+     
+    } 
+  });
+  }
+
+  
 
 }
 

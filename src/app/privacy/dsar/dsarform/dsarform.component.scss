@@ -451,10 +451,22 @@ text-align: center !important;
 }
 
 .quilleditor p {
-text-align: center;
+text-align: left;
 width: 50%;
 margin: 0 auto;
 font-weight: 500;
+}
+
+.quilleditor p span.ql-size-large {
+  font-size: 1.5em;
+}
+
+.quilleditor p span.ql-size-huge {
+  font-size: 2.5em;
+}
+
+.quilleditor p span.ql-size-small {
+  font-size: .75em;
 }
 
 .border-top {

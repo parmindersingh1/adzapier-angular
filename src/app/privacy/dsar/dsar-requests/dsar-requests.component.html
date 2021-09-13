@@ -58,7 +58,7 @@
 
           </span>
         </div>
-        <div class="col-sm-2">
+        <div class="col-sm-2 dp-safari">
           <select (change)="onChangeRequestType($event)" class="form-control">
             <option selected value="">Type Of Request</option>
             <ng-container *ngFor="let obj of allFilterData.filter_Request_type">
@@ -67,7 +67,7 @@
           </select>
         </div>
 
-        <div class="col-sm-2">
+        <div class="col-sm-2 dp-safari">
           <select (change)="onChangeSubjectType($event)" class="form-control">
             <option selected value="">Subject Type</option>
             <ng-container *ngFor="let obj of allFilterData.filter_Subject_type">
@@ -76,7 +76,7 @@
           </select>
         </div>
 
-        <div class="col-sm-2">
+        <div class="col-sm-2 dp-safari">
           <select (change)="onChangeStatus($event)" class="form-control">
             <option selected value="">Status</option>
             <ng-container *ngFor="let obj of allFilterData.filter_status">
@@ -86,12 +86,25 @@
         </div>
 
         <div class="col-sm-2">
-          <select (change)="onChangeDueIn($event)" class="form-control">
+          <div class="btn-group dropup" dropdown [insideClick]="true">
+            <button type="button" class="btn btn-white dropdown-toggle"  dropdownToggle data-toggle="dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+              Due In
+            </button>
+            <div class="dropdown-menu"  *dropdownMenu>
+              <a class="dropdown-item" (click)="onChangeDueIn('-1')">Past due</a>
+              <a class="dropdown-item" (click)="onChangeDueIn('1')">One Day</a>
+              <a class="dropdown-item" (click)="onChangeDueIn('2')">2 Days</a>
+              <a class="dropdown-item" (click)="onChangeDueIn('15')">15 Days</a>
+              <input type="number" (change)="onChangeDueIn($event)" class="form-control" />
+            </div>
+          </div>
+          <!-- <input type="number" placeholder="Due in" (change)="onChangeDueIn($event)" class="form-control" /> -->
+          <!-- <select (change)="onChangeDueIn($event)" class="form-control">
             <option selected value="">Due in</option>
             <ng-container *ngFor="let obj of allFilterData.filter_due_in">
               <option [value]="obj.key">{{obj.value}}</option>
             </ng-container>
-          </select>
+          </select> -->
         </div>
         <div class="col-sm-2">
           <p-multiSelect [options]="cols" [(ngModel)]="selectedColumns" optionLabel="header"
@@ -121,7 +134,7 @@
         <th  *ngFor="let col of columns">
           {{col.header}} <!--pSortableColumn="{{col.field}}" <p-sortIcon field="{{col.field}}"></p-sortIcon>-->
         </th>
-        <th>Days left
+        <th>Due In
         </th>
         <th pSortableColumn="created_at">Created At <p-sortIcon field="created_at"></p-sortIcon>
         </th>
@@ -158,7 +171,7 @@
         </ng-container>
         </td>
         <td>
-          <span class="ui-column-title">Days left</span>
+          <span class="ui-column-title">Due In</span>
           <span class="badge"
             [ngClass]="{'badge-danger':rowData?.days_left < 10,'badge-warning':rowData?.days_left < 30,'badge-success':rowData?.days_left >= 20}">
             <ng-container *ngIf="rowData">
