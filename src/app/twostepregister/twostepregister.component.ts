@@ -3,7 +3,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import {AlertService, AuthenticationService, UserService} from './../_services';
 import {MustMatch} from '../_helpers/must-match.validator';
-import { first } from 'rxjs/operators';
+import { delay, first } from 'rxjs/operators';
+import {animate, state, style, transition, trigger} from '@angular/animations';
+import { Observable, timer, Subscription } from 'rxjs';
 import {moduleName} from '../_constant/module-name.constant';
 import {environment} from '../../environments/environment';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
@@ -11,7 +13,20 @@ import { NgxUiLoaderService } from 'ngx-ui-loader';
 @Component({
   selector: 'app-twostepregister',
   templateUrl: './twostepregister.component.html',
-  styleUrls: ['./twostepregister.component.scss']
+  styleUrls: ['./twostepregister.component.scss'],
+  animations: [
+    trigger('slideInOut', [
+      state('false', style({
+        transform: 'translateX(0)'
+      })),
+      state('true', style({
+        transform: 'translateY(-550px)',
+        "z-index":'-1'
+      })),
+      transition('false <=> true', animate('400ms ease-in-out'))
+    ])
+
+  ]
 })
 export class TwostepregisterComponent implements OnInit {
   @ViewChild('registerForm') registerForm: ElementRef;
@@ -36,7 +51,18 @@ export class TwostepregisterComponent implements OnInit {
   userid : any;
   planID = "price_1I8RHcBa3iZWL3Ygt4B3gZVd";
   units: any;
-
+  isInvitedUserVerified: boolean;
+  showNextScreen: boolean;
+  message;
+  public id: string;
+  isVerificationBtnClick: boolean;
+  isMsgConfirm: boolean;
+  verifyEmailForm: FormGroup;
+  emailnotverifiedMsg;
+  subscription: any;
+  timer: Observable<number>;
+  hideMessage: boolean;
+  
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
@@ -51,6 +77,40 @@ export class TwostepregisterComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.verifyEmailForm = this.formBuilder.group({
+      email: ['', [Validators.required, Validators.pattern]]
+    });
+    this.route.queryParamMap
+      .subscribe(params => {
+        this.id = params.get('id');
+      });
+    this.onGetVerifyEmailRecord();
+   // this.id = this.route.snapshot.paramMap.get('id');
+    const requestObj = {
+      token: this.id
+    };
+     
+    this.userService.verifyEmailAddress(this.constructor.name, moduleName.verifyEmailModule, requestObj).pipe(delay(2000))
+    .subscribe((data) => {
+      if(data){
+      //  this.isUserVarified = true;
+        //this.message = 'Your email address is successfully verified ! please login to access your account!';
+        this.authenticationService.isUserVerified.next(true);
+        this.isInvitedUserVerified = true;
+        this.showNextScreen = true;
+        //this.router.navigate(['/signup']);
+      }
+    }, error => {
+//      this.isUserVarified = false;
+      this.message = 'This link has been expired!';
+      this.authenticationService.isUserVerified.next(false);
+      this.isInvitedUserVerified = false;
+      this.showNextScreen = false;
+      //this.router.navigate(['/verify-email/',this.id]);
+    });
+    //this.authenticationService.userEmailVerificationStatus.subscribe((data) => this.isInvitedUserVerified = data);
+    //this.showNextScreen = this.isInvitedUserVerified ? true : false;
+    this.setTimer();
     const element = document.getElementById('main');
     element.classList.remove('container');
     element.classList.remove('site-content');
@@ -101,7 +161,7 @@ export class TwostepregisterComponent implements OnInit {
       this.units = "1";
     }
 
-    
+     
 
   }
 // ngAfterViewInit() {
@@ -111,6 +171,11 @@ export class TwostepregisterComponent implements OnInit {
 //       ShowLogs: false, // Show Console Logs
 //     });
 // }
+
+// convenience getter for easy access to form fields
+get vemail() {
+  return this.verifyEmailForm.controls;
+}
 
   ngOnDestroy() {
     const element = document.getElementById('main');
@@ -221,14 +286,18 @@ export class TwostepregisterComponent implements OnInit {
   }
 
   onGetVerifyEmailRecord() {
-    this.userService.getverifyemailRecord(this.emailid)
+    if(this.emailid !== undefined){
+      this.userService.getverifyemailRecord(this.emailid)
       .subscribe((res: any) => {
         const result: any = res;
         if (result.status === 200) {
+          this.authenticationService.isUserVerified.next(true);
           this.verified = result.response;
+          this.isInvitedUserVerified = true;
         }
       }, error => {
       });
+    }
   }
 
 
@@ -336,6 +405,40 @@ export class TwostepregisterComponent implements OnInit {
   onClosed(dismissedAlert: any): void {
     this.alertMsg = !dismissedAlert;
     this.isOpen = false;
+  }
+
+  onToggle() {
+    this.isInvitedUserVerified = !this.isInvitedUserVerified;
+    this.loading = false;
+    this.isVerificationBtnClick = false;
+    this.isMsgConfirm = false;
+  }
+
+  resendToken() {
+    this.isVerificationBtnClick = true;
+    const reqObj = {
+      email: this.vemail.email.value
+    }
+    this.userService.resendEmailVerificationToken(this.constructor.name, moduleName.loginModule, reqObj).subscribe((data) => {
+      if (data.status === 200) {
+        this.isMsgConfirm = true;
+        this.isVerificationBtnClick = false;
+      }
+    },(error)=>{
+      if (error == null){
+        this.emailnotverifiedMsg = 'User not found!';
+        this.isInvitedUserVerified = false;
+      }
+      this.isInvitedUserVerified = false;
+    })
+  }
+
+  setTimer(){
+    this.timer = timer(8000)
+    this.subscription = this.timer.subscribe(() => {
+      this.showNextScreen = false;
+      this.hideMessage = true;
+    })
   }
 
 }
