@@ -1329,6 +1329,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
         this.router.navigate(["/signup"],{ queryParams: { id: verifyToken[1] }});
         //this.router.navigate(['/privacy/dsar/dsarform', obj.web_form_id]);
         
+      } else if (this.location.path().indexOf("type=manage") == -1 && this.location.path().indexOf("manage?success") == -1) {
+        this.oIDPIDFromURL = this.findPropertyIDFromUrl(this.currentNavigationUrl || this.location.path());
+        const url = this.location.path() == '/' ? '/home/welcome' : this.getCurrentRoute();
+        this.router.navigate([url], { queryParams: { oid: this.oIDPIDFromURL[0], pid: this.oIDPIDFromURL[1] }, skipLocationChange: false });
       } else {
         this.router.navigate(['/login']);
       }

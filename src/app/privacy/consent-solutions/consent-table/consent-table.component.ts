@@ -2,7 +2,7 @@ import {Component, ElementRef, OnInit, ViewChild, ViewEncapsulation} from '@angu
 import {OrganizationService} from '../../../_services';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
 import {moduleName} from '../../../_constant/module-name.constant';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {Subject} from 'rxjs';
 import {debounceTime, distinctUntilChanged} from 'rxjs/operators';
 import {ConsentSolutionsService} from '../../../_services/consent-solutions.service';
@@ -112,14 +112,16 @@ export class ConsentTableComponent implements OnInit {
       label: 'Last 6 Months'
     },
   ];
-
+  queryOID;
+  queryPID;
 
   constructor(private orgservice: OrganizationService,
               private consentSolutionService: ConsentSolutionsService,
               private loading: NgxUiLoaderService,
               private router: Router,
               private formBuilder: FormBuilder,
-              private modalService: BsModalService
+              private modalService: BsModalService,
+              private activateRoute: ActivatedRoute
   ) {
     this.dateCustomClasses = [
       { date: new Date(), classes: ['theme-dark-blue'] },
@@ -129,6 +131,11 @@ export class ConsentTableComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.activateRoute.queryParamMap
+      .subscribe(params => {
+        this.queryOID = params.get('oid');
+        this.queryPID = params.get('pid');
+      });
     this.onGetPropsAndOrgId();
     this.onSetUpDebounce();
     this.bsConfig = Object.assign({}, { containerClass: 'theme-dark-blue', showClearButton: true, returnFocusToInput: true,
@@ -151,12 +158,11 @@ export class ConsentTableComponent implements OnInit {
   onGetPropsAndOrgId() {
     this.orgservice.currentProperty.subscribe((response) => {
       if (response !== '') {
-        this.currentManagedOrgID = response.organization_id || response.response.oid;
-        this.currrentManagedPropID = response.property_id || response.response.id;
+        this.currentManagedOrgID = response.organization_id || response.response.oid || this.queryOID;
+        this.currrentManagedPropID = response.property_id || response.response.id || this.queryPID;
       } else {
-        const orgDetails = this.orgservice.getCurrentOrgWithProperty();
-        this.currentManagedOrgID = orgDetails.organization_id || orgDetails.response.oid;
-        this.currrentManagedPropID = orgDetails.property_id || orgDetails.response.id;
+        this.currentManagedOrgID = this.queryOID;
+        this.currrentManagedPropID = this.queryPID;
       }
     });
   }
@@ -407,7 +413,10 @@ export class ConsentTableComponent implements OnInit {
 
   async onNavigateToDetails(consentRecord) {
     await this.consentSolutionService.onPushConsentData(consentRecord);
-    await this.router.navigateByUrl('/consent-solutions/consent-records/details/' + consentRecord.id);
+    //await this.router.navigateByUrl('/consent-solutions/consent-records/details/' + consentRecord.id);
+    if (consentRecord.id !== undefined) {
+      await this.router.navigate(['/consent-solutions/consent-records/details/', consentRecord.id], { queryParams: { oid: this.queryOID, pid: this.queryPID }, skipLocationChange: false });
+    }
   }
 
   public onSearchInputChange(e): void {
