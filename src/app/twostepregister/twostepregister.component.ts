@@ -68,6 +68,7 @@ export class TwostepregisterComponent implements OnInit {
   returnUrl: any;
   passwords: any;
   chckresponse: any;
+  plantype = "0";
   
   constructor(
     private formBuilder: FormBuilder,
@@ -369,6 +370,14 @@ export class TwostepregisterComponent implements OnInit {
       this.units = "1";
     }
 
+    if(this.route.snapshot.queryParams["plan_type"]){
+      this.plantype = this.route.snapshot.queryParams["plan_type"];
+    }else{
+      this.plantype = "0";
+    }
+
+    // this.plantype=this.route.snapshot.queryParams["plan_type"]
+
      
 
   }
@@ -525,7 +534,7 @@ get vemail() {
         zipcode:this.r.code.value,
         phone:this.r.phone.value,
       };
-      this.userService.AddOrgCmpProp(this.constructor.name, moduleName.registerModule ,requObj , this.emailid ,this.userid , this.planID , this.units)
+      this.userService.AddOrgCmpProp(this.constructor.name, moduleName.registerModule ,requObj , this.emailid ,this.userid , this.planID , this.units, this.plantype)
       .pipe(first())
       .subscribe(
         res => {
