@@ -1220,7 +1220,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
   getPropertyDetailsFromUrl(){
     if(this.orgPropertyMenu !== undefined && this.orgPropertyMenu.length > 1){
       for(const key of this.orgPropertyMenu){
+        if(this.oIDPIDFromURL !== undefined){
         const obj = key.property.filter((el)=>el.property_id == this.oIDPIDFromURL[1]);
+        }
       }
       
      

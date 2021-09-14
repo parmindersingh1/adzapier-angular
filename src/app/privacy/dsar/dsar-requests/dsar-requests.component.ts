@@ -284,7 +284,7 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
         this.isloading = false;
         const key = 'response';
         if (res[key]) {
-          this.requestsList = res[key];
+          this.requestsList = typeof res[key] !== 'string' ? res[key] : res[key];
         } else{
           this.requestsList = this.reloadRequestList;
         }

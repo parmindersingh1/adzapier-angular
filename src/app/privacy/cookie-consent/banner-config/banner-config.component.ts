@@ -272,9 +272,27 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
         LivePreviewType: 'generic'
       });
     }
+    this.onSetDefaultRegulation();
+  }
+
+  onSetDefaultRegulation() {
+    const {AllowGDPR, AllowCCPA, AllowGENERIC} = this.BannerConfigurationForm.value;
+    const regulationsList = [];
+      if (AllowCCPA) {
+        regulationsList.push(DefaultRegulation[2]);
+      }
+      if (AllowGDPR) {
+        regulationsList.push(DefaultRegulation[1]);
+      }
+      if (AllowGENERIC) {
+        regulationsList.push(DefaultRegulation[0]);
+      }
+    console.log('regulationsList', regulationsList)
+    this.defaultRegulation = regulationsList;
   }
 
   onMakeRegulationEveryWhere(type, event) {
+    console.log('type::::::', type)
     this.BannerConfigurationForm.patchValue({
       LivePreviewType: type
     });
@@ -585,6 +603,14 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
       this.allowedLanguagesForPreview.push(this.onFindLangByCode(langCode));
     }
     this.onLoadContent('en-US');
+    let type = 'generic';
+    if (mainConfig.ccpa_global) {
+      type = 'ccpa';
+    }  else if (mainConfig.gdpr_global == 'true') {
+      type = 'gdpr';
+    }
+    this.onMakeRegulationEveryWhere(type, {event: {checked: true} });
+    this.onSetDefaultRegulation();
   }
   onSetSavedStyle(config) {
     this.BannerConfigurationForm.patchValue({
