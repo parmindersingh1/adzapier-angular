@@ -39,7 +39,7 @@ export class TwostepregisterComponent implements OnInit {
   navbarCollapsed = false;
   show: boolean = false;
   errorMsg: string;
-  stripe = (window as any).Stripe(environment.stripePublishablekey);
+  stripe;
   alertMsg: any;
   isOpen: boolean;
   alertType: any;
@@ -452,6 +452,7 @@ get vemail() {
 
   onSubmit() {
     this.submitted = true;
+    this.stripe = (window as any).Stripe(environment.stripePublishablekey);
     // stop here if form is invalid
     if (this.regForm.invalid) {
       return false;
