@@ -543,8 +543,9 @@ get vemail() {
           this.isOpen = true;
           this.alertType = 'success';
           this.loading = false;
-          this.chckresponse = result.response;
+          this.chckresponse = result.response.stripe_sessionId;
           this.login();
+          
       
 
           },
