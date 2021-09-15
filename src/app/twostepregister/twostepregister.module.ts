@@ -5,6 +5,8 @@ import {AlertConfig, AlertModule} from 'ngx-bootstrap/alert';
 import { TwostepregisterRoutingModule } from './twostepregister-routing.module';
 import { TwostepregisterComponent } from './twostepregister.component';
 import { ToggleDirective } from '../_pipe/toggle.pipe';
+import {DropdownModule} from 'primeng/dropdown';
+
 
 
 
@@ -16,6 +18,7 @@ import { ToggleDirective } from '../_pipe/toggle.pipe';
     ReactiveFormsModule,
     FormsModule,
     AlertModule,
+    DropdownModule
   ],
   providers: [AlertConfig]
 })
