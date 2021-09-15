@@ -369,7 +369,7 @@ export class PricingComponent implements OnInit, OnDestroy {
 
   private onCheckOut(response: any) {
     this.stripe.redirectToCheckout({
-      sessionId: response
+      sessionId: 'cs_test_a14wuzTBy4pOLu9x3nqSSw2WZDULFwK4rrgJJ61vr6g2fESWT3FlfP2kbx'
     }).then((result) => {
     }).catch(error => {
     });

@@ -1,3 +1,5 @@
+@import "../../../../scss/variables";
+
 .navbar {
   padding: 5px;
   border-color: #e7e7e7;
@@ -1065,7 +1067,7 @@ a.nav-link.dropdown-link span.rounded-circle {
 }
 
 .primary-yellow {
-  background-color: #f0b323;
+  background-color: $color-brand-01;
   border: 1px solid #fff;
   border-radius: 3px;
   color: #333333;

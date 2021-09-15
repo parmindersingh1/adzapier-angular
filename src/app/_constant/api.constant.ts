@@ -93,6 +93,8 @@ export const apiConstant = {
   SQL_TABLES_LIST: '/integration/get-tables',
   SQL_TABLE_COLUMNS_LIST: '/integration/get-table-columns',
   INTEGRATION_SYSTEM: '/integration/connection/:oid/:pid/:connectionID',
+  //Login Registration
+  REGISTRATION_ADD_COMPANY_ORG_PROP:'/billing/checkout/trialsession'
 };
 
 // {

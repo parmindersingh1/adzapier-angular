@@ -1,14 +1,57 @@
-<!--<div class="container">-->
-<!--  <div class="system-list" *ngIf="currentSystemType === ''">-->
-<!--    <h5 class="mt-2 mb-3">System List</h5>-->
-<!--    <div class="list-group">-->
-<!--      <a href="javascript:;"  *ngFor="let system of systemList" (click)="currentSystemType = system.name; systemID= system.id"  class="list-group-item list-group-item-action mb-0">-->
-<!--        <span *ngIf="system.name ==='mysql'"><img style="width:  90px" src="../../../../../assets/imgs/db/mysql.png" alt="mysql" /></span>-->
-<!--        <span *ngIf="system.name ==='mailchimp'"><img style="width:  180px" src="../../../../../assets/imgs/db/mailchimp.png" alt="mailchimp" /></span>-->
-<!--        <span *ngIf="system.name ==='postgresql'"><img style="width:  210px; height: 47px" src="../../../../../assets/imgs/db/postgresql.svg" alt="postgresql" /></span>-->
-<!--        <span *ngIf="system.name ==='http'"><img style="width:  210px; height: 47px" src="../../../../../assets/imgs/db/http.png" alt="http" /></span></a>-->
-<!--    </div>-->
-<!--  </div>-->
-<!--  <div class="sql-builder" *ngIf="currentSystemType === 'mysql'">-->
-<!--  </div>-->
-<!--</div>-->
+<div class="card" *ngIf="systemName === ''">
+  <div class="card-header">
+    <h4 class="float-left pt-2">Choose Connection</h4>
+    <button class="btn btn-primary float-right" ><i class="fas fa-plus"></i> Create Connection</button>
+  </div>
+  <div class="card-body" *ngIf="credList.length > 0">
+    <p-table  [value]="credList" [scrollable]="true" [rows]="100" scrollHeight="450px"
+              [virtualScroll]="true" [virtualRowHeight]="40" [lazy]="true" (onLazyLoad)="loadCarsLazy($event)">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>ID</th>
+          <th>Connection Name</th>
+          <th>Description</th>
+          <th>Connector Type</th>
+          <th>System Name</th>
+          <th>Created</th>
+          <th>Test Connection</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-rowData >
+        <tr style="height:40px">
+          <td (click)="onSelectConnection(rowData.id,rowData.system_id)">{{rowData.id}}</td>
+          <td>{{rowData.cred_name}}</td>
+          <td>{{rowData.description}}</td>
+          <td>{{rowData.connector_type}}</td>
+          <td>{{onFindSystemName(rowData.system_id)}}</td>
+          <td>{{rowData.created_at | date}}</td>
+          <td>
+            <button type="button" (click)="onTestConnection(rowData)" class="btn btn-secondary btn-sm">
+              <span *ngIf="isTesting && currentScanId === rowData.id; else test"><div  class="spinner-border"></div> Testing... </span>
+              <ng-template #test><i class="fas fa-play pr-2"></i> Test </ng-template>
+
+            </button>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="loadingbody" let-columns="columns">
+        <tr style="height:40px">
+          <td *ngFor="let col of columns">
+            <div class="loading-text"></div>
+            <p-skeleton [ngStyle]="{'width': '100%'}"></p-skeleton>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</div>
+
+<app-sql-query-builder (backHome)="onHome($event)" [formObject]="formObject" [formID]="formID" [connectionId]="connectionID" [systemName]="systemName" *ngIf="systemName === 'mysql'"></app-sql-query-builder>
+<app-sql-query-builder (backHome)="onHome($event)"  [formObject]="formObject" [formID]="formID" [connectionId]="connectionID" [systemName]="systemName" *ngIf="systemName === 'postgres' || systemName === 'postgresql'"></app-sql-query-builder>
+<app-mailchimp-query-builder  (backHome)="onHome($event)"  [formObject]="formObject" [formID]="formID" [connectionId]="connectionID"  [systemName]="systemName" *ngIf="systemName === 'mailchimp'"></app-mailchimp-query-builder>
+<app-http-query-builder  (backHome)="onHome($event)"  [formObject]="formObject" [formID]="formID" [connectionId]="connectionID"  [systemName]="systemName" *ngIf="systemName === 'http'"></app-http-query-builder>
+
+<div class="col-sm-5 mr-0 float-right flotingdiv" [ngClass]="{'hide':!isOpen}">
+  <alert *ngIf="isOpen" [type]="alertType" dismissOnTimeout="5000" [dismissible]="dismissible"
+  ><span [innerHTML]="alertMsg"></span></alert>
+</div>

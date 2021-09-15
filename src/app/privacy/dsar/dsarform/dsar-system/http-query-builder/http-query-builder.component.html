@@ -1,0 +1,55 @@
+
+
+<div class="card">
+  <div class="card-header">
+    <h5>Query Params</h5>
+  </div>
+  <p (click)="onConnectionListPage()">Go Back</p>
+  <form [formGroup]="httpQueryBuilderForm" (ngSubmit)="onSubmit()">
+  <div class="card-body" formArrayName="queryParams">
+    <ng-container *ngFor="let obj of httpQueryBuilderForm.controls.queryParams['controls']; let i=index">
+    <div class="row" [formGroupName]="i">
+        <div class="col-md-3">
+            <div class="form-group">
+              <label for="exampleInputField{{i}}">Key</label>
+              <input type="email" class="form-control" id="exampleInputField{{i}}" formControlName="field" placeholder="Key">
+              <small id="key" class="form-text text-danger mt-2">Key is Required.</small>
+            </div>
+        </div>
+      <div class="col-md-4">
+        <div class="form-group">
+          <label for="exampleInputValue{{i}}">Value</label>
+          <select class="form-control" formControlName="value_1" id="exampleInputValue{{i}}">
+            <ng-container  *ngFor="let option of formObject.request_form">
+              <option [value]="option.controlId">form.{{option.controllabel}}</option>
+              <option [value]="option.controlId">form.{{option.controllabel}}</option>
+            </ng-container>
+          </select>
+          <small id="value" class="form-text text-danger mt-2">Value is Required.</small>
+        </div>
+      </div>
+      <div class="col-md-2">
+        <button type="button" class="btn btn-link text-danger" (click)="removeSkill(i)">Remove</button>
+      </div>
+    </div>
+    </ng-container>
+    <div class="row">
+      <div class="col-md-7">
+        <div class="text-center float-right">
+          <button type="button" class="btn btn-link mr-3" (click)="addSkills()">Add</button>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="text-center mt-4">
+        <button type="button" class="btn btn-secondary mr-3">Cancel</button>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </div>
+    </div>
+
+  </div>
+  </form>
+</div>
+

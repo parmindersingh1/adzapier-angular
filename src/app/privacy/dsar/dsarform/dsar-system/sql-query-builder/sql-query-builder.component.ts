@@ -1,4 +1,14 @@
-import {ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges, TemplateRef} from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  SimpleChanges,
+  TemplateRef,
+  EventEmitter
+} from '@angular/core';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
 import {LazyLoadEvent} from 'primeng/api';
 import {moduleName} from '../../../../../_constant/module-name.constant';
@@ -17,21 +27,22 @@ export class SqlQueryBuilderComponent implements OnInit, OnChanges {
   eventRows;
   credList = [];
   firstone;
-  currentScanId = null;
   dismissible = true;
   alertMsg: any;
   isOpen = false;
   alertType: any;
   step = 1;
   isTesting = false;
-  connectionID = null;
   tableListKey = '';
   tableList = [];
   @Input('formObject') formObject;
+  @Input('formID') formID;
+  @Input('connectionId') connectionId;
+  @Input('systemName') systemName;
+  @Output('backHome') backHome = new EventEmitter();
   sqlSelectField = [];
   tableColumnsListKey = '';
   tableColumnsList = [];
-  systemName = '';
 
   query = {
     condition: 'and',
@@ -41,6 +52,7 @@ export class SqlQueryBuilderComponent implements OnInit, OnChanges {
   config: QueryBuilderConfig = {
     fields: {}
   };
+  tableName = null;
   orgID = null;
   constructor(private modalService: BsModalService,
               private loading: NgxUiLoaderService,
@@ -53,134 +65,42 @@ export class SqlQueryBuilderComponent implements OnInit, OnChanges {
     this.activatedRoutes.queryParams.subscribe(params => {
       this.orgID =  params.oid;
     })
-    this.onGetSystemList();
-    this.onGetCredList();
+    this.onFindTables();
   }
-  ngOnChanges(changes: SimpleChanges) {
-    this.formObject = changes.formObject.currentValue;
-    this.cd.detectChanges();
-  }
-
-  onGetSystemList() {
-    this.loading.start('step-1');
-    this.systemIntegrationService.GetSystemList(this.constructor.name, moduleName.systemIntegrationModule)
-      .subscribe((res: any) => {
-        this.loading.stop('step-1');
-        this.systemList = res.response;
-      }, error => {
-        this.loading.stop('step-1');
-      });
-  }
-  onGetCredList() {
-    this.loading.start('step2');
-    this.systemIntegrationService.GetCredListBySystem(this.constructor.name,  moduleName.systemIntegrationModule)
-      .subscribe((res: any) => {
-        this.loading.stop('step2');
-        this.credList = res.response;
-        this.cd.detectChanges();
-
-      }, error => {
-        this.loading.stop('step2');
-      });
-  }
-  openModal(template: TemplateRef<any>) {
-    this.modalRef = this.modalService.show(template, {class: 'modal-lg', ignoreBackdropClick: true});
-  }
-
-  loadCarsLazy(event: LazyLoadEvent) {
-    this.eventRows = event.rows;
-    if (event.first === 0) {
-      this.firstone = 1;
-    } else {
-      this.firstone = (event.first / event.rows) + 1;
-    }
-    const payload = {
-      limit: this.eventRows,
-      page: this.firstone
-    };
-    // this.systemIntegrationService.GetSystemList()
-  }
-  onTestConnection(data) {
-    this.currentScanId = data.id;
-    const integrationCred = [];
-    for (const cred of data.integration_cred) {
-      integrationCred.push({
-        key: cred.key,
-        secret_1: cred.secret_1
-      });
-    }
-    const payload = {
-      cred_name: data.cred_name,
-      description: data.description,
-      connector_type: data.connector_type,
-      integration_cred: integrationCred
-    };
-    this.loading.start();
-    const params = {
-      system: this.onFindSystemName(data.system_id)
-    };
-    this.isTesting = true;
-    this.isOpen = false;
-    this.alertMsg = '';
-    this.alertType = '';
-    this.systemIntegrationService.TestSystemIntegration(this.constructor.name,
-      moduleName.systemIntegrationModule, data.system_id, payload, params)
-      .subscribe((res: any) => {
-        this.isTesting = false;
-        this.isOpen = true;
-        this.alertMsg = res.message;
-        this.alertType = 'success';
-        // this.alertMsg = '';
-        this.loading.stop();
-      }, error => {
-        this.isTesting = false;
-        this.isOpen = true;
-        this.alertMsg = error;
-        this.alertType = 'danger';
-        this.loading.stop();
-      });
-  }
-  onRefreshList() {
-    this.modalRef.hide();
-    this.onGetCredList();
-  }
-
-  onFindSystemName(systemID) {
-    let systemName = '';
-    for (const system of this.systemList) {
-      if (system.id === systemID) {
-        systemName = system.name;
-      }
-    }
-    return systemName;
-  }
-
-  onSelectConnection(connectionId) {
-    this.step = 2;
-    this.connectionID = connectionId;
-    this.loading.start();
-    this.systemIntegrationService.GetSqlTables(this.constructor.name, connectionId, moduleName.systemIntegrationModule)
+  onFindTables(){
+    this.systemIntegrationService.GetSqlTables(this.constructor.name, this.connectionId, moduleName.systemIntegrationModule)
       .subscribe((res: any) => {
         this.loading.stop();
         if (res.status === 200) {
           this.tableList = res.response;
           this.tableListKey = res.columns[0];
         }
+      }, error => {
+        this.loading.stop();
+        this.isOpen = true;
+        this.alertMsg = error;
+        this.alertType = 'danger';
       });
   }
-
+  ngOnChanges(changes: SimpleChanges) {
+    this.formObject = changes.formObject.currentValue;
+    this.cd.detectChanges();
+  }
 
   onSelectTable(tableName) {
+    this.tableName = tableName;
     this.loading.start();
     const params = {
       table: tableName
     };
-    this.systemIntegrationService.GetSqlTableColumns(this.constructor.name, this.connectionID, params, moduleName.systemIntegrationModule)
+    this.cd.detectChanges();
+    this.systemIntegrationService.GetSqlTableColumns(this.constructor.name, this.connectionId, params, moduleName.systemIntegrationModule)
       .subscribe((res: any) => {
         this.loading.stop();
         if (res.status === 200) {
           this.tableColumnsList = res.response;
           this.tableColumnsListKey = res.columns[0];
+          this.step = 2;
           this.onCreateSqlBuilder();
         }
       });
@@ -194,10 +114,6 @@ export class SqlQueryBuilderComponent implements OnInit, OnChanges {
     for (const column of this.tableColumnsList) {
       this.config.fields[column[this.tableColumnsListKey]] = {name: column[this.tableColumnsListKey], type: 'category',  operators: ['=', '<=', '>'], options: queryOption};
     }
-
-    this.step = 3;
-    console.log('this.query', this.query)
-    console.log('this.this.config', this.config)
   }
 
   onSelectField(event, field) {
@@ -215,11 +131,26 @@ export class SqlQueryBuilderComponent implements OnInit, OnChanges {
   }
   onSaveSqlBuilder() {
     const payload = [
-      {field: 'select', value_1: JSON.stringify(this.sqlSelectField)},
-      {field: 'where', value_1: JSON.stringify(this.query)}
+      {field: 'select', value_1: JSON.stringify(this.sqlSelectField), system_name: this.systemName},
+      {field: 'where', value_1: JSON.stringify(this.query), system_name: this.systemName},
+      {field: 'table', value_1: this.tableName, system_name: this.systemName}
     ];
-    this.systemIntegrationService.saveQueryBuilder(this.constructor.name, moduleName.systemIntegrationModule, payload, this.orgID, this.connectionID).subscribe(res => {
-
+    this.loading.start();
+    this.systemIntegrationService.saveQueryBuilder(this.constructor.name, moduleName.systemIntegrationModule, payload, this.orgID, this.connectionId, this.formID).subscribe((res: any) => {
+      this.loading.stop();
+      if (res.status === 201) {
+              this.isOpen = true;
+              this.alertMsg = 'Record Saved';
+              this.alertType = 'info';
+      }
+    }, error => {
+      this.loading.stop();
+      this.isOpen = true;
+      this.alertMsg = error;
+      this.alertType = 'danger';
     })
+  }
+  onConnectionListPage() {
+    this.backHome.emit(true)
   }
 }

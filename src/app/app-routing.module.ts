@@ -12,7 +12,8 @@ const routes: Routes = [
   {path :'signout',loadChildren : () => import('./signout-page/signout-page.module').then(m => m.SignoutPageModule)},
 
   { path: 'login', loadChildren: () => import('./login/login.module').then(m => m.LoginModule) },
-  { path: 'signup', loadChildren: () => import('./register/register.module').then(m => m.RegisterModule) },
+  { path: 'register', loadChildren: () => import('./register/register.module').then(m => m.RegisterModule) },
+  {path : 'signup' , loadChildren : () => import('./twostepregister/twostepregister.module').then(m => m.TwostepregisterModule)},
   { path: 'forgot-password', loadChildren: () => import('./forgotpassword/forgotpassword.module').then(m => m.ForgotpasswordModule) },
   // { path: 'privacypolicy', component: PrivacypolicyComponent },
   // { path: 'partners', component: PartnersComponent },
@@ -71,11 +72,11 @@ const routes: Routes = [
   { path: 'verify-email/:id', loadChildren: () => import('./verifyemail/verifyemail.module').then(m => m.VerifyemailModule) },
   // { path: 'checkout', component: CheckoutComponent, canActivate: [AuthGuard] },
   // { path: 'success', component: CheckoutConfirmationComponent, canActivate: [AuthGuard] },
-  { path: '', redirectTo: 'home/welcome', pathMatch: 'full', runGuardsAndResolvers:'always' },
+  { path: '', redirectTo: 'home/welcome', pathMatch: 'full' },
   { path: 'plans', loadChildren: () => import('./plans/plan.module').then(m => m.PlanModule) },
   // { path: '', redirectTo: 'home/dashboard/analytics', pathMatch:'full' },
   // otherwise redirect to home
-  { path: '**', redirectTo: 'home/welcome', pathMatch: 'full', runGuardsAndResolvers:'always' }
+  { path: '**', redirectTo: 'home/welcome', pathMatch: 'full' } //, runGuardsAndResolvers:'always'
 ];
 
 @NgModule({

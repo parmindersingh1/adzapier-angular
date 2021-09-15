@@ -1,66 +1,22 @@
-<div class="card" *ngIf="step === 1">
-  <div class="card-header">
-    <h4 class="float-left pt-2">Choose Connection</h4>
-    <button class="btn btn-primary float-right" (click)="openModal(template)"><i class="fas fa-plus"></i> Create Connection</button>
+<div class="" *ngIf="step === 1">
+  <p (click)="onConnectionListPage()">Go Back</p>
+  <h5 class="mt-2 mb-3">Choose Table</h5>
+  <div class="list-group table-list" *ngIf="tableList.length > 0; else noTableRecord">
+    <button type="button" (click)="onSelectTable(table[tableListKey])" *ngFor="let table of tableList"
+            class="list-group-item list-group-item-action mb-0">{{table[tableListKey]}}</button>
   </div>
-  <div class="card-body" *ngIf="credList.length > 0">
-    <p-table  [value]="credList" [scrollable]="true" [rows]="100" scrollHeight="450px"
-             [virtualScroll]="true" [virtualRowHeight]="40" [lazy]="true" (onLazyLoad)="loadCarsLazy($event)">
-      <ng-template pTemplate="header">
-        <tr>
-          <th>ID</th>
-          <th>Connection Name</th>
-          <th>Description</th>
-          <th>Connector Type</th>
-          <th>System Name</th>
-          <th>Created</th>
-          <th>Test Connection</th>
-        </tr>
-      </ng-template>
-      <ng-template pTemplate="body" let-rowData >
-        <tr style="height:40px">
-          <td (click)="onSelectConnection(rowData.id)">{{rowData.id}}</td>
-          <td>{{rowData.cred_name}}</td>
-          <td>{{rowData.description}}</td>
-          <td>{{rowData.connector_type}}</td>
-          <td>{{onFindSystemName(rowData.system_id)}}</td>
-          <td>{{rowData.created_at | date}}</td>
-          <td>
-            <button type="button" (click)="onTestConnection(rowData)" class="btn btn-secondary btn-sm">
-              <span *ngIf="isTesting && currentScanId === rowData.id; else test"><div  class="spinner-border"></div> Testing... </span>
-              <ng-template #test><i class="fas fa-play pr-2"></i> Test </ng-template>
-
-            </button>
-          </td>
-        </tr>
-      </ng-template>
-      <ng-template pTemplate="loadingbody" let-columns="columns">
-        <tr style="height:40px">
-          <td *ngFor="let col of columns">
-            <div class="loading-text"></div>
-            <p-skeleton [ngStyle]="{'width': '100%'}"></p-skeleton>
-          </td>
-        </tr>
-      </ng-template>
-    </p-table>
-  </div>
+  <ng-template #noTableRecord>
+    <div class="alert alert-info text-center">No Table Found</div>
+  </ng-template>
 </div>
+
+
 
 
 <div class="" *ngIf="step === 2">
-  <h5 class="mt-2 mb-3">Choose Table</h5>
-  <div class="list-group table-list">
-    <button type="button" (click)="onSelectTable(table[tableListKey])" *ngFor="let table of tableList" class="list-group-item list-group-item-action mb-0">{{table[tableListKey]}}</button>
-  </div>
-</div>
-
-
-
-
-<div class="" *ngIf="step === 3">
-<!--  <h5 class="mt-2 mb-3">Choose Columns</h5>-->
 
   <div class="card">
+    <p (click)="step = 1">Go Back</p>
     <p-table [value]="tableColumnsList"   [virtualScroll]="true" [lazy]="true"   [scrollable]="true" scrollHeight="300px"  styleClass="p-datatable-sm" responsiveLayout="scroll">
       <ng-template pTemplate="caption">
         Select Columns
@@ -81,53 +37,20 @@
         </tr>
       </ng-template>
     </p-table>
-
-
-<!--    <button type="button" (click)="onTest()">onTest</button>-->
   </div>
 
   <div class="mt-4">
     <h4 class="mb-2">SQL WHERE Clause</h4>
     <query-builder [(ngModel)]='query' [config]='config' ></query-builder>
   </div>
-    <div class="row mt-4 ">
-      <div class="text-center">
+    <div class="row mt-4 margin-auto">
+      <div class="text-center margin-auto">
         <button type="button" class="btn btn-secondary mr-3">Cancel</button>
         <button type="button" (click)="onSaveSqlBuilder()" class="btn btn-primary">Save</button>
       </div>
 
     </div>
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<ng-template #template>
-  <div class="modal-header">
-    <h4 class="modal-title text-center margin-auto">Create Connection</h4>
-    <button type="button" class="close pull-right ml-0" aria-label="Close" (click)="modalRef.hide()">
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
-  <div class="modal-body">
-<!--      <app-mysql-form (refreshConnectionList)="onRefreshList()" [systemID]="systemID" [systemName]="systemName" ></app-mysql-form>-->
-  </div>
-</ng-template>
-
-
 
 
 <div class="col-sm-5 mr-0 float-right flotingdiv" [ngClass]="{'hide':!isOpen}">

@@ -43,9 +43,13 @@ export class LicenseguardPropertyService implements CanActivate {
               if (Object.values(finalObj.plan_details.cookieConsent).length > 0) {
                 return true;
               } else {
-                this.dataService.openUpgradeModalForCookieConsent(results[0])
-                this.router.navigate(['/home/dashboard/analytics'], { queryParams: { oid: oIDPIDFromURL[0], pid: oIDPIDFromURL[1] }, skipLocationChange: false });
-                return false;
+                this.dataService.openUpgradeModalForCookieConsent(results[0]);
+                if (this.router.url.indexOf('/welcome') === -1) {
+                  this.router.navigate(['/home/dashboard/analytics'], { queryParams: { oid: oIDPIDFromURL[0], pid: oIDPIDFromURL[1] }, skipLocationChange: false });
+                  return false;
+                } else {
+                  return false;
+                }
               }
             }
           }

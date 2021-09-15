@@ -407,6 +407,25 @@ span.ui-column-title {
   opacity: 1; /* Firefox */
 }
 
+.dp-safari select {
+  background: #ffffff url('../../../../assets/imgs/down-arrow.svg') no-repeat;
+  background-position: 95% 60%;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.dropup .dropdown-toggle::after,.show .dropdown-toggle::after {
+  border-top: 0 !important;
+  border-left: 0 !important;
+  border-right: 1.5px solid #000000 !important;
+  border-bottom: 1.5px solid #000000 !important;
+}
+
+.dropup .btn-white {
+  padding: 5px 10px;
+}
+
 @media (min-width: 1024px) { 
   .container {
     max-width: 1024px;

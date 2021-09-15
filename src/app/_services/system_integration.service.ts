@@ -125,8 +125,8 @@ export class SystemIntegrationService {
     this.lokiService.onSendErrorLogs(errorType, msg, functionality, componentName, moduleName, path).subscribe();
   }
 
-  saveQueryBuilder(componentName, moduleName, payload, oID, connectionID) {
-      const path = '/integration/save-query-builder/' + oID  + '/' + connectionID;
+  saveQueryBuilder(componentName, moduleName, payload, oID, connectionID, formID) {
+      const path = '/integration/save-query-builder/' + oID  + '/' + connectionID + '/' + formID;
       return this.http.post(environment.apiUrl + path, payload)
       .pipe(catchError(error => {
         this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.getWorkflow, componentName, moduleName, path);

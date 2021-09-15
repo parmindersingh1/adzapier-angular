@@ -43,7 +43,7 @@ export class DsarSystemComponent implements OnInit {
               private loading: NgxUiLoaderService,
               private cd: ChangeDetectorRef) { }
   ngOnInit(): void {
-    console.log('formID', this.formID);
+    console.log('formObject', this.formObject);
     this.onGetSystemList();
     this.onGetCredList();
   }
@@ -147,5 +147,7 @@ export class DsarSystemComponent implements OnInit {
     this.connectionID = connectionId;
     this.systemName = this.onFindSystemName(systemID);
   }
-
+  onHome(e) {
+    this.systemName = '';
+  }
 }

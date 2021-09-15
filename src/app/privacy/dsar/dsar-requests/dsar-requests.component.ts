@@ -195,8 +195,7 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
   loadrequestsListLazy(event: LazyLoadEvent) {
     this.isloading = true;
     this.eventRows = event.rows;
-    let selectedDateRange;
-    if (this.requestsList) {
+    if (this.requestsList !== undefined) {
 
       if (event.first === 0) {
         this.firstone = 1;
@@ -207,7 +206,8 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
       const sortOrder = event.sortOrder === -1 ? 'asc' : 'desc';
       // const orderBy = '&orderby=' + event.sortField + ' ' + sortOrder;
       const orderBy = '&order_by_date=' + sortOrder;
-
+      this.currentManagedOrgID == undefined ? this.currentManagedOrgID = this.queryOID : this.currentManagedOrgID;
+      this.currrentManagedPropID == undefined ? this.currrentManagedPropID = this.queryPID : this.currrentManagedPropID;
       this.dsarRequestService.getDsarRequestList(this.constructor.name, moduleName.dsarRequestModule, this.currentManagedOrgID,
         this.currrentManagedPropID, pagelimit, orderBy)
         .subscribe((data) => {
@@ -307,9 +307,15 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
   }
 
   onChangeDueIn(event) {
-    this.dueIn = event.target.value;
-    this.searchFilter();
+    if(event !== "" && typeof event !== "object"){
+      this.dueIn = event;
+      this.searchFilter();
+    } else if (event !== undefined && event.target.value.length > 1) {
+      this.dueIn = event.target.value;
+      this.searchFilter();
+    }
   }
+
   onChangeSubjectType(event) {
     this.subjectType = event.target.value;
     this.searchFilter();

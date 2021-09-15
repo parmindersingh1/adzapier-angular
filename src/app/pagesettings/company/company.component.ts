@@ -163,10 +163,17 @@ export class CompanyComponent implements OnInit {
       if (!this.onCheckSubscription()) {
         return false;
       }
+    }else{
+      this.companyForm.controls['orgname'].setValue(this.orgname);
+      this.companyForm.controls['address1'].setValue(this.address1);
+      this.companyForm.controls['address2'].setValue(this.address2);
+      this.companyForm.controls['city'].setValue(this.city);
+      this.companyForm.controls['state'].setValue(this.state);
+      this.companyForm.controls['tax_id'].setValue(this.taxid);
+      this.companyForm.controls['zipcode'].setValue(this.zipcode);
+      this.companyForm.controls['email'].setValue(this.email);
+      this.companyForm.controls['phone'].setValue(this.phone);
     }
-    this.isInviteFormSubmitted = false;
-    this.isUpdateUserinvitation = false;
-    this.inviteUserForm.reset();
     this.inviteUserForm.get('emailid')[this.isUpdateUserinvitation ? 'disable' : 'enable']();
     this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
     }, (reason) => {
@@ -391,10 +398,8 @@ export class CompanyComponent implements OnInit {
     this.inviteUserForm.controls['firstname'].setValue(this.separateUsername(data.user_name)[0]);
     this.inviteUserForm.controls['lastname'].setValue(this.separateUsername(data.user_name)[1]);
     this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
-      this.inviteUserForm.reset();
       // this.closeResult = `Closed with: ${result}`;
     }, (reason) => {
-      this.inviteUserForm.reset();
       // this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
   }
@@ -453,7 +458,8 @@ export class CompanyComponent implements OnInit {
       if (data) {
         const key = 'response';
         // const roleid = data[key];
-        this.roleList = data[key];
+        const companyLevelRoles = data[key].filter((t) => t.role_name.indexOf('Org') == -1);
+        this.roleList = companyLevelRoles;
       }
     }, (err) => {
       this.alertMsg = err;
