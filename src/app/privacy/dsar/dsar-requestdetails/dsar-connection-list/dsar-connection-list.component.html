@@ -1,0 +1,135 @@
+<div class="row">
+  <div class="col-md-12" *ngIf="!isLoading">
+
+    <ul class="list-group w-100" *ngIf="currentStep == ''">
+      <li class="list-group-item mb-2" style="border-top: 1px solid #e5e9f2;" *ngFor="let obj of connectionList?.mysql">
+        <div class="row">
+          <div class="col-md-6">
+            <p><b>Connection Name  : </b> {{obj.connectionName}}</p>
+            <p><b>System Type :</b> {{obj.systemName}}</p>
+          </div>
+          <div class="col-md-6" *ngIf="!obj?.errorLogs?.error">
+            <h6 class="tx-17">Connection Status  : <span class="text-success">Stable</span></h6>
+            <h6 class="tx-17">Total Records <span class="badge badge-primary ml-2 tx-17" style="font-size: 13px">{{obj?.response?.length}} Found </span></h6>
+            <button type="button" class="btn btn-link pl-0" (click)="onShowSqlData('sql', obj)">View More</button>
+          </div>
+
+          <div class="col-md-6"*ngIf="obj?.errorLogs?.error">
+            <h6 class="tx-17">Connection Status  : <span class="text-danger">Error </span></h6>
+            <h6 class="tx-17">Total Not Records  <span class="badge badge-primary ml-2 tx-17 badge-danger" style="font-size: 13px">0</span></h6>
+            <div class="alert-danger alert">{{obj?.errorLogs?.message}}</div>
+          </div>
+
+
+        </div>
+      </li>
+      <li class="list-group-item mb-2" style="border-top: 1px solid #e5e9f2;" *ngFor="let obj of connectionList?.postgres">
+        <div class="row">
+          <div class="col-md-6">
+            <p><b>Connection Name  : </b> {{obj.connectionName}}</p>
+            <p><b>System Type :</b> {{obj.systemName}}</p>
+          </div>
+          <div class="col-md-6" *ngIf="!obj?.errorLogs?.error">
+            <h6 class="tx-17">Connection Status  : <span class="text-success">Stable</span></h6>
+            <h6 class="tx-17">Total Records <span class="badge badge-primary ml-2 tx-17" style="font-size: 13px">{{obj?.response?.length}} Found </span></h6>
+            <button type="button" class="btn btn-link pl-0" (click)="onShowSqlData('sql', obj)">View More</button>
+          </div>
+
+          <div class="col-md-6"*ngIf="obj?.errorLogs?.error">
+            <h6 class="tx-17">Connection Status  : <span class="text-danger">Error </span></h6>
+            <h6 class="tx-17">Total Not Records  <span class="badge badge-primary ml-2 tx-17 badge-danger" style="font-size: 13px">0</span></h6>
+            <div class="alert-danger alert">{{obj?.errorLogs?.message}}</div>
+          </div>
+
+        </div>
+      </li>
+
+
+      <li class="list-group-item mb-2" style="border-top: 1px solid #e5e9f2;" *ngFor="let obj of connectionList?.mailChimp">
+        <div class="row">
+          <div class="col-md-6">
+            <p><b>Connection Name  : </b> {{obj?.connectionName}}</p>
+            <p><b>System Type :</b> {{obj?.systemName}}</p>
+          </div>
+          <div class="col-md-6" *ngIf="!obj?.errorLogs?.error">
+            <h6 class="tx-17">Connection Status  : <span class="text-success">Stable</span></h6>
+            <button type="button" class="btn btn-link pl-0" (click)="onShowSqlData('mailChimp', obj)">View More</button>
+          </div>
+
+          <div class="col-md-6"*ngIf="obj?.errorLogs?.error">
+            <h6 class="tx-17">Connection Status  : <span class="text-danger">Error </span></h6>
+            <div class="alert-danger alert">{{obj?.errorLogs?.message}}</div>
+          </div>
+
+        </div>
+      </li>
+
+
+      <li class="list-group-item mb-2" style="border-top: 1px solid #e5e9f2;" *ngFor="let obj of connectionList?.restApi">
+        <div class="row">
+          <div class="col-md-6">
+            <p><b>Connection Name  : </b> {{obj?.connectionName}}</p>
+            <p><b>System Type :</b> {{obj?.systemName}}</p>
+          </div>
+<!--          <div class="col-md-6" *ngIf="!obj?.errorLogs?.error">-->
+            <h6 class="tx-17">Connection Status  : <span class="text-success">Stable</span></h6>
+            <button type="button" class="btn btn-link pl-0" (click)="onShowSqlData('restApi', obj)">View More</button>
+<!--          </div>-->
+
+
+        </div>
+      </li>
+    </ul>
+    <div class="sql" *ngIf="currentStep === 'sql'">
+<div class="card">
+  <div class="card-header">
+    <h4 class="float-left">Connection Name : {{sqlDetails?.connectionName}}</h4>
+    <p  class="float-right font-weight-bold tx-15" (click)="currentStep = ''"><i class="fas fa-chevron-left"></i>  Go Back</p>
+  </div>
+      <div class="card-body mt-3">
+      <p-table [value]="sqlDetails?.response" responsiveLayout="scroll">
+        <ng-template pTemplate="header">
+          <tr>
+            <th *ngFor="let col of sqlDetails?.cols">{{col}}</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-product >
+          <tr>
+            <td *ngFor="let col of sqlDetails?.cols">{{product[col]}}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+      </div>
+</div>
+<!--      <ng-template #noRecord>-->
+<!--        <div class="alert alert-info">No Record Found</div>-->
+<!--      </ng-template>-->
+
+        </div>
+  </div>
+
+
+  <div class="loading col-md-12 mr-2" *ngIf="isLoading">
+    <ngx-skeleton-loader appearance="circle"   [theme]="{
+        width: '100%',height: '80px','border-radius': '10px', marginBottom: '30px'}"></ngx-skeleton-loader>
+    <ngx-skeleton-loader appearance="circle"   [theme]="{
+        width: '100%',height: '80px','border-radius': '10px', marginBottom: '30px'}"></ngx-skeleton-loader>
+    <h5 class="text-center">Fetching ...</h5>
+    <ngx-skeleton-loader appearance="circle"   [theme]="{
+        width: '100%',height: '80px','border-radius': '10px', marginBottom: '30px'}"></ngx-skeleton-loader>
+    <ngx-skeleton-loader appearance="circle"   [theme]="{
+        width: '100%',height: '80px','border-radius': '10px', marginBottom: '30px'}"></ngx-skeleton-loader>
+  </div>
+</div>
+
+
+<ng-template #template>
+  <div class="modal-header">
+    <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="modalRef?.hide()">
+      <span aria-hidden="true" class="visually-hidden">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p class="overflow-hidden"> {{ showDataonModal }}</p>
+  </div>
+</ng-template>

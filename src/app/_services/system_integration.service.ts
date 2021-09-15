@@ -133,4 +133,13 @@ export class SystemIntegrationService {
         return throwError(error);
   }));
 }
+
+  GetIntegratedConnectionsList(formID, reqID, componentName, moduleName) {
+      const path = `/integration/get-connection-list-with-query-data/` + formID + '/' + reqID;
+      return this.http.get(environment.apiUrl + path)
+        .pipe(catchError(error => {
+          this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.getWorkflow, componentName, moduleName, path);
+          return throwError(error);
+        }));
+    }
 }

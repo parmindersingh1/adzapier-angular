@@ -5,14 +5,16 @@ import { SharedbootstrapModule } from 'src/app/sharedbootstrap/sharedbootstrap.m
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FeatherModule } from 'angular-feather';
 import { allIcons } from 'angular-feather/icons';
+import { DsarConnectionListComponent } from './dsar-connection-list/dsar-connection-list.component';
+import {TableModule} from 'primeng/table';
 
 @NgModule({
-  declarations: [DsarRequestdetailsComponent],
-  imports: [
-    SharedbootstrapModule,
-    FormsModule, ReactiveFormsModule,
-    DsarRequestdetailsRoutingModule,
-    FeatherModule.pick(allIcons),
-  ]
+  declarations: [DsarRequestdetailsComponent, DsarConnectionListComponent],
+    imports: [
+        SharedbootstrapModule,
+        FormsModule, ReactiveFormsModule,
+        DsarRequestdetailsRoutingModule,
+        FeatherModule.pick(allIcons), TableModule,
+    ]
 })
 export class DsarRequestdetailsModule { }

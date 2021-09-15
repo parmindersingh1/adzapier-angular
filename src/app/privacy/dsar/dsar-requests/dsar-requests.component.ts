@@ -143,7 +143,7 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
     private formBuilder: FormBuilder,
     private dataService: DataService,
     private billingService: BillingService
-  ) { 
+  ) {
     this.dateCustomClasses = [
       { date: new Date(), classes: ['theme-dark-blue'] },
     ];
@@ -165,7 +165,7 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
       webformselection: ['', [Validators.required]]
     });
     this.bsConfig = Object.assign({}, { containerClass: 'theme-dark-blue', showClearButton: true, returnFocusToInput: true, dateInputFormat: 'yyyy-mm-dd', adaptivePosition : true, showTodayButton:true, ranges: this.ranges  });
-    
+
   }
 
   get dsar() { return this.createDSARWebFormRequest.controls; }
@@ -322,7 +322,7 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
   }
 
   viewDSARRequestDetails(res) {
-    this.router.navigate(['privacy/dsar/requests-details', res.id,res.cid,this.currentManagedOrgID,this.currrentManagedPropID],{ queryParams: { oid: this.queryOID, pid: this.queryPID }, queryParamsHandling:'merge', skipLocationChange:false});
+    this.router.navigate(['privacy/dsar/requests-details', res.id,res.cid,this.currentManagedOrgID,this.currrentManagedPropID, res.web_form_id],{ queryParams: { oid: this.queryOID, pid: this.queryPID }, queryParamsHandling:'merge', skipLocationChange:false});
   }
 
   navigateToWebForm(obj) {
@@ -368,7 +368,7 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
       this.isOpen = true;
       this.alertType = 'info';
     }
-    
+
   }
 
   onCancelClick() {
@@ -473,12 +473,12 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
         }
       }
     });
- 
+
   }
 
   onDateSelection(){
       let date1 = this.searchbydaterange[0].toJSON().split('T')[0];
-      let date2 = this.searchbydaterange[1].toJSON().split('T')[0]; 
+      let date2 = this.searchbydaterange[1].toJSON().split('T')[0];
       let pageLimit = '?limit=' + this.eventRows + '&page=' + this.firstone;
       let selectedDateRange = '&start_date=' + date1 +  '&end_date=' + date2;
       this.isloading = true;
@@ -500,7 +500,7 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
           this.isOpen = true;
           this.alertType = 'danger';
         });
-     
+
   }
 
   clearDateRangePicker(){
