@@ -303,7 +303,7 @@ export class TwostepregisterComponent implements OnInit {
     .subscribe((data) => {
       if(data){
       //  this.isUserVarified = true;
-        //this.message = 'Your email address is successfully verified ! please login to access your account!';
+        this.message = 'Your email is successfully verified !';
         this.authenticationService.isUserVerified.next(true);
         this.isInvitedUserVerified = true;
         this.showNextScreen = true;
