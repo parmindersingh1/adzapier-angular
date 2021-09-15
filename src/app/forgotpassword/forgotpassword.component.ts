@@ -24,6 +24,7 @@ export class ForgotpasswordComponent implements OnInit {
   isOpen = false;
   alertType: any;
   dismissible = true;
+  errorMsg: string;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -43,6 +44,11 @@ export class ForgotpasswordComponent implements OnInit {
   }
 
   ngOnInit() {
+    const element = document.getElementById('main');
+    element.classList.remove('container');
+    element.classList.remove('site-content');
+    element.classList.add('container-fluid');
+    element.style.padding = '0px';
     this.forgotpasswordForm = this.formBuilder.group({
       emailid: ['', [Validators.required, Validators.pattern]]
     });
@@ -55,6 +61,14 @@ export class ForgotpasswordComponent implements OnInit {
   //     this.errorMsg="";
 
   // }
+
+  ngOnDestroy() {
+    const element = document.getElementById('main');
+    element.classList.remove('container-fluid');
+    element.style.padding = null;
+    element.classList.add('container');
+    element.classList.add('site-content');
+  }
 
 
   onSubmit() {
@@ -75,6 +89,7 @@ export class ForgotpasswordComponent implements OnInit {
         this.alertMsg = 'Link sent to your Email, please Reset Your Password..!';
         this.isOpen = true;
         this.alertType = 'success';
+        this.loading = false;
       },
         error => {
           this.loadingBar.stop();
@@ -89,5 +104,10 @@ export class ForgotpasswordComponent implements OnInit {
   onClosed(dismissedAlert: any): void {
     this.alertMsg = !dismissedAlert;
     this.isOpen = false;
+  }
+
+  
+  clearError() {
+    this.errorMsg = '';
   }
 }
