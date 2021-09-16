@@ -213,7 +213,7 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
         .subscribe((data) => {
           this.isloading = false;
           const key = 'response';
-          this.requestsList = data[key];
+          this.requestsList =  Object.values(data[key]);
           this.reloadRequestList = [...this.requestsList];
           this.rows = data[key].length;
           this.totalRecords = data.count;
@@ -284,7 +284,7 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
         this.isloading = false;
         const key = 'response';
         if (res[key]) {
-          this.requestsList = typeof res[key] !== 'string' ? res[key] : res[key];
+          this.requestsList = typeof res[key] !== 'string' ? res[key] : Object.values(res[key]);
         } else{
           this.requestsList = this.reloadRequestList;
         }
@@ -513,7 +513,6 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
   }
 
   requestsubject(requestorsubject, currenttype, request_form) {
-    if(currenttype == null){
     const requestForm = JSON.parse(request_form);
     const requesttypeindex = requestForm.findIndex((t) => t.controlId == requestorsubject);
       let filltypes = [];
@@ -523,6 +522,5 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
         }
     });
     return filltypes;
-    }
   }
 }
