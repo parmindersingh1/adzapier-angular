@@ -2,7 +2,7 @@
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb breadcrumb-style1 mg-b-10">
       <li class="breadcrumb-item">Billing</li>
-      <li class="breadcrumb-item"><a routerLink="/settings/billing/manage" [queryParams]="{oid:queryOID , pid:queryPID}">Manage Licenses</a></li>
+      <li class="breadcrumb-item"><a routerLink="/settings/billing/manage" [queryParams]="{oid:queryOID , pid:queryPID}">Manage Subscriptions</a></li>
       <li class="breadcrumb-item active">Organizations</li>
 
     </ol>
@@ -136,7 +136,7 @@
 </div>
 <ng-template #delConfirm>
   <div class="modal-body text-center">
-    <p>Do you want to remove license from this organization?</p>
+    <p>Do you want to remove subscription from this organization?</p>
     <button type="button" class="btn btn-primary mr-2" (click)="onRemoveOrg(delOrgID)" >Yes</button>
     <button type="button" class="btn btn-sm btn-outline-secondary btn-uppercase" (click)="decline()" >No</button>
   </div>
