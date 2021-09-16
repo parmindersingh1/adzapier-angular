@@ -226,6 +226,7 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
   isExtendDaysExceeded = false;
   queryOID;
   queryPID;
+  requestForm;
   constructor(private activatedRoute: ActivatedRoute,
               private router: Router,
               private orgService: OrganizationService,
@@ -390,6 +391,7 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
       if (data.response !== "No data found.") {
         this.requestDetails.push(data.response);
         this.customFields = data.response.custom_data;
+        this.requestForm = data.response.request_form;
         this.respApprover = data.response.approver_firstname + ' ' + data.response.approver_lastname;
         this.respState = data.response.custom_data.state;
         this.respCity = data.response.custom_data.city;
@@ -402,8 +404,8 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
         this.respEmailID = data.response.custom_data.email;
         this.respCDID = data.response.id;
         this.formName = data.response.form_name;
-        this.requestType = data.response.request_type;
-        this.subjectType = data.response.subject_type;
+        this.requestType = data.response.request_type || this.getCustomSubjectRequestType("requesttype");
+        this.subjectType = data.response.subject_type || this.getCustomSubjectRequestType("subjecttype");
         this.request_typeid = data.response.request_type_id;
         this.subject_typeid = data.response.subject_type_id;
         this.workflowName = data.response.workflow_name;
@@ -1944,6 +1946,19 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
       this.isExtendDaysExceeded = true;
     }
   }
+
+  getCustomSubjectRequestType(currenttype){
+    const requestForm = JSON.parse(this.requestForm);
+    const requesttypeindex = requestForm.findIndex((t) => t.controlId == currenttype);
+      let filltypes = [];
+      requestForm[requesttypeindex].selectOptions.filter((t)=> {
+        if(t.active){
+          filltypes.push(t.name);
+        }
+    });
+    return filltypes;
+  }
+  
 }
 
 interface SubTaskList {
