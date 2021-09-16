@@ -511,4 +511,18 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
   isLicenseLimitAvailable(): boolean {
       return this.dataService.isLicenseLimitAvailableForOrganization('request',this.dataService.getAvailableLicenseForFormAndRequestPerOrg());
   }
+
+  requestsubject(requestorsubject, currenttype, request_form) {
+    if(currenttype == null){
+    const requestForm = JSON.parse(request_form);
+    const requesttypeindex = requestForm.findIndex((t) => t.controlId == requestorsubject);
+      let filltypes = [];
+      requestForm[requesttypeindex].selectOptions.filter((t)=> {
+        if(t.active){
+          filltypes.push(t.name);
+        }
+    });
+    return filltypes;
+    }
+  }
 }
