@@ -287,12 +287,10 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
       if (AllowGENERIC) {
         regulationsList.push(DefaultRegulation[0]);
       }
-    console.log('regulationsList', regulationsList)
     this.defaultRegulation = regulationsList;
   }
 
   onMakeRegulationEveryWhere(type, event) {
-    console.log('type::::::', type)
     this.BannerConfigurationForm.patchValue({
       LivePreviewType: type
     });
@@ -564,6 +562,7 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
 
   onSetSavedGeneralConfig(mainConfig) {
     const CONFIG = mainConfig.config;
+    const gdprGlobal = !(mainConfig.gdpr_global === 'false' || mainConfig.gdpr_global === false);
     this.BannerConfigurationForm.patchValue({
       AllowGDPR: CONFIG.AllowedBanners.gdpr,
       AllowCCPA: CONFIG.AllowedBanners.ccpa,
@@ -571,7 +570,7 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
       GdprCountries: mainConfig.gdpr_target,
       EnableIAB: mainConfig.enable_iab,
       GoogleVendors: mainConfig.google_vendors,
-      GdprGlobal: mainConfig.gdpr_global == 'true' ? true : false,
+      GdprGlobal: gdprGlobal,
       CCPATarget: mainConfig.ccpa_target,
       CCPAGlobal: mainConfig.ccpa_global,
       GenericGlobal: mainConfig.generic_global,
@@ -606,7 +605,7 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
     let type = 'generic';
     if (mainConfig.ccpa_global) {
       type = 'ccpa';
-    }  else if (mainConfig.gdpr_global == 'true') {
+    }  else if (gdprGlobal) {
       type = 'gdpr';
     }
     this.onMakeRegulationEveryWhere(type, {event: {checked: true} });

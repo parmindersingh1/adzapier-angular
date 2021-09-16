@@ -313,7 +313,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
             { label: 'Organizations', routerLink: '/settings/organizations', icon: 'activity' },
             { label: 'Billing', routerLink: '/settings/billing/manage', icon: 'credit-card' },
             { label: 'Settings', routerLink: '/settings', icon: 'settings' },
-            { label: 'Help Center', routerLink: 'https://adzapier.atlassian.net/wiki/spaces/PD/pages/884637701/Adzapier+Portal', icon: 'help-circle' },
+            { label: 'Help Center', routerLink: 'https://support.adzapier.com', icon: 'help-circle' },
             { label: 'Signout', routerLink: '/signout', icon: 'log-out' }
           ]
         }];

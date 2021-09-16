@@ -85,9 +85,9 @@ export class UserService {
     }
 
     
-    AddOrgCmpProp(componentName ,moduleName ,obj , emailid , userid , plan_id ,units ){
+    AddOrgCmpProp(componentName ,moduleName ,obj , emailid , userid , plan_id ,units , plan_type ){
     const path = apiConstant.REGISTRATION_ADD_COMPANY_ORG_PROP
-    return this.http.post(environment.apiUrl + path + '?email=' + emailid + '&userid=' + userid + '&plan_id=' + plan_id + '&units=' + units, obj).pipe(catchError(error => {
+    return this.http.post(environment.apiUrl + path + '?email=' + emailid + '&userid=' + userid + '&plan_id=' + plan_id + '&units=' + units + '&plan_type=' + plan_type, obj).pipe(catchError(error => {
         this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.registerUser, componentName, moduleName, path);
         return throwError(error);
       }));
