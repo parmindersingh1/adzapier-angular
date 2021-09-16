@@ -1,0 +1,37 @@
+<!-- <div class="quickstart-wrapper">
+    <ul>
+        <li *ngFor="let datalist of quickStartMenu">
+            <button type="button" (click)="expanddiv()">{{datalist.indextext}}</button>
+            <div *ngIf="isOpen">
+                <ul>
+                    <li *ngFor="let pagelinks of datalist.quicklinks">
+                        {{pagelinks.linkdisplaytext}}
+                    </li>
+                </ul>
+            </div>
+        </li>
+    </ul>
+</div> -->
+<div style="position: relative;">
+    <div class="quickstart-wrapper" *ngIf="isOpen">
+        isOpen | {{isOpen}}
+        <accordion [isAnimated]="true" [closeOthers]="oneAtATime">
+            <accordion-group *ngFor="let datalist of quickStartMenu" heading="{{datalist.indextext}}"
+                [panelClass]="customClass">
+                <ul>
+                    <li *ngFor="let pagelinks of datalist.quicklinks">
+                        islinkclicked|   {{pagelinks.islinkclicked}}
+                        <a class="nav-link dropdown-toggle" routerLinkActive="active" routerLink="{{pagelinks.link}}"   (click)="onClickQuickStartlink($event,pagelinks)">
+                            {{pagelinks.linkdisplaytext}}</a>
+                       
+                    </li>
+                </ul>
+
+            </accordion-group>
+        </accordion>
+        <div><button (click)="dismissQuickStartMenu()">Dismiss quick start</button></div>
+        <div style="border: 1px solid #ccc;position:absolute;right:20px;">
+            <button (click)="onClickQuickStartBtn()">Quick Start</button>
+        </div>
+    </div>
+</div>
