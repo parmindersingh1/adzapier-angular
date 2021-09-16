@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import {RouterModule, Routes} from '@angular/router';
 import { SharedbootstrapModule } from 'src/app/sharedbootstrap/sharedbootstrap.module';
   import { ManageLicenceComponent } from './manage-licence.component';
+import {ButtonModule} from 'primeng/button';
 
 const paths: Routes = [
   {path: '', component:ManageLicenceComponent },
@@ -12,10 +13,11 @@ const paths: Routes = [
 ];
 @NgModule({
   declarations: [ManageLicenceComponent],
-  imports: [
-    CommonModule,
-    SharedbootstrapModule,
-    RouterModule.forChild(paths)
-  ]
+    imports: [
+        CommonModule,
+        SharedbootstrapModule,
+        RouterModule.forChild(paths),
+        ButtonModule
+    ]
 })
 export class ManageLicenceModule { }
