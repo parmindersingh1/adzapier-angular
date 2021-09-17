@@ -213,9 +213,11 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
         .subscribe((data) => {
           this.isloading = false;
           const key = 'response';
-          this.requestsList =  Object.values(data[key]);
-          this.reloadRequestList = [...this.requestsList];
-          this.rows = data[key].length;
+          if (Object.values(data[key]).length > 0) {
+            this.requestsList = Object.values(data[key]);
+            this.reloadRequestList = [...this.requestsList];
+            this.rows = Object.values(data[key]).length;
+          }
           this.totalRecords = data.count;
         }, error => {
           this.loading.stop();
@@ -283,9 +285,9 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
       .subscribe(res => {
         this.isloading = false;
         const key = 'response';
-        if (res[key]) {
-          this.requestsList = typeof res[key] !== 'string' ? res[key] : Object.values(res[key]);
-        } else{
+        if (Object.values(res[key]).length > 0) {
+          this.requestsList = Object.values(res[key]);
+        } else {
           this.requestsList = this.reloadRequestList;
         }
       }, error => {
@@ -488,7 +490,7 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
           this.isloading = false;
           const key = 'response';
           if(data[key] !== "No data found."){
-            this.requestsList = data[key];
+            this.requestsList = Object.values(data[key]);
             this.rows = data[key].length;
             this.totalRecords = data.count;
           }else{
