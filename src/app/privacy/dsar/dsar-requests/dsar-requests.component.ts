@@ -213,9 +213,11 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
         .subscribe((data) => {
           this.isloading = false;
           const key = 'response';
-          this.requestsList = data[key];
-          this.reloadRequestList = [...this.requestsList];
-          this.rows = data[key].length;
+          if (Object.values(data[key]).length > 0) {
+            this.requestsList = Object.values(data[key]);
+            this.reloadRequestList = [...this.requestsList];
+            this.rows = Object.values(data[key]).length;
+          }
           this.totalRecords = data.count;
         }, error => {
           this.loading.stop();
@@ -283,9 +285,9 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
       .subscribe(res => {
         this.isloading = false;
         const key = 'response';
-        if (res[key]) {
-          this.requestsList = res[key];
-        } else{
+        if (Object.values(res[key]).length > 0) {
+          this.requestsList = Object.values(res[key]);
+        } else {
           this.requestsList = this.reloadRequestList;
         }
       }, error => {
@@ -307,9 +309,15 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
   }
 
   onChangeDueIn(event) {
-    this.dueIn = event.target.value;
-    this.searchFilter();
+    if(event !== "" && typeof event !== "object"){
+      this.dueIn = event;
+      this.searchFilter();
+    } else if (event !== undefined && event.target.value.length > 1) {
+      this.dueIn = event.target.value;
+      this.searchFilter();
+    }
   }
+
   onChangeSubjectType(event) {
     this.subjectType = event.target.value;
     this.searchFilter();
@@ -482,7 +490,7 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
           this.isloading = false;
           const key = 'response';
           if(data[key] !== "No data found."){
-            this.requestsList = data[key];
+            this.requestsList = Object.values(data[key]);
             this.rows = data[key].length;
             this.totalRecords = data.count;
           }else{
@@ -504,5 +512,17 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
 
   isLicenseLimitAvailable(): boolean {
       return this.dataService.isLicenseLimitAvailableForOrganization('request',this.dataService.getAvailableLicenseForFormAndRequestPerOrg());
+  }
+
+  requestsubject(requestorsubject, currenttype, request_form) {
+    const requestForm = JSON.parse(request_form);
+    const requesttypeindex = requestForm.findIndex((t) => t.controlId == requestorsubject);
+      let filltypes = [];
+      requestForm[requesttypeindex].selectOptions.filter((t)=> {
+        if(t.active){
+          filltypes.push(t.name);
+        }
+    });
+    return filltypes;
   }
 }

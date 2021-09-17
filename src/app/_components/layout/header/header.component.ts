@@ -223,9 +223,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
           this.userService.getCurrentUser.unsubscribe();
           localStorage.clear();
           this.selectedOrgProperties.length = 0;
-          if(this.router.url.indexOf('/verify-email') !== -1){
-            this.router.navigate(['/login']);
+          if (this.router.url.indexOf('/verify-email') !== -1 || this.location.path().indexOf('/verify-email') !== -1) {
+            let urlpartone = this.location.path().split("?oid=");
+            let urlparttwo = urlpartone[0].split("?pid=");
+            let verifyToken = urlparttwo[0].split("verify-email/")
+            // this.router.navigate([urlparttwo[0]]);
             sessionStorage.clear();
+            this.router.navigate(["/signup"], { queryParams: { id: verifyToken[1] } });
           }
         }
       }
@@ -309,7 +313,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
             { label: 'Organizations', routerLink: '/settings/organizations', icon: 'activity' },
             { label: 'Billing', routerLink: '/settings/billing/manage', icon: 'credit-card' },
             { label: 'Settings', routerLink: '/settings', icon: 'settings' },
-            { label: 'Help Center', routerLink: 'https://adzapier.atlassian.net/wiki/spaces/PD/pages/884637701/Adzapier+Portal', icon: 'help-circle' },
+            { label: 'Help Center', routerLink: 'https://support.adzapier.com', icon: 'help-circle' },
             { label: 'Signout', routerLink: '/signout', icon: 'log-out' }
           ]
         }];
@@ -489,7 +493,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
       this.orgservice.editedProperty.subscribe((prop) => {
         if (prop) {
           this.currentProperty = prop.response.name;
-          console.log(this.currentProperty,'546');
           const orgDetails = this.orgservice.getCurrentOrgWithProperty();
           orgDetails.property_name = prop.response.name;
           orgDetails.property_id = prop.response.id;
@@ -498,7 +501,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
            
         }
       });
-      console.log('489..');
       this.loadOrganizationWithProperty();  
       this.orgservice.isPropertyUpdated.next(null); 
     }
@@ -537,7 +539,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
       this.loading.stop();
       this.orgPropertyMenu = data.response;
       this.checkCurrentManagingProperty();
-      console.log(this.orgPropertyMenu,'orgPropertyMenu..522');
      // this.resCID = data.response.cID || data.response[0].cID;
      
     }, (error) => {
@@ -618,7 +619,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
           property_name: propobj[0].property_name,
           user_id: this.userID
         };
-         console.log(propobj,'propobj..562');
          this.selectedOrgProperties.push(obj);
          // this.orgservice.getSelectedOrgProperty.emit(obj);
          //  this.firstElement = false;
@@ -700,7 +700,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
       if (this.orgPropertyMenu[orgIndex].user_id) { //=== this.userID
         this.currentOrganization = this.orgPropertyMenu[orgIndex].organization_name !== '' ? this.orgPropertyMenu[orgIndex].organization_name : this.orgPropertyMenu[orgIndex].response.orgname;
         this.currentProperty = this.orgPropertyMenu[orgIndex].property_name;
-        console.log(this.currentProperty,'742');
     
       }
       //  return this.currentProperty;
@@ -1221,7 +1220,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
   getPropertyDetailsFromUrl(){
     if(this.orgPropertyMenu !== undefined && this.orgPropertyMenu.length > 1){
       for(const key of this.orgPropertyMenu){
+        if(this.oIDPIDFromURL !== undefined){
         const obj = key.property.filter((el)=>el.property_id == this.oIDPIDFromURL[1]);
+        }
       }
       
      
@@ -1296,8 +1297,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
      });
      if(this.queryOID !== null && this.queryOID !== undefined){
        this.router.navigate(['/home/dashboard/analytics'],{ queryParams: { oid: this.queryOID, pid: this.queryPID },  skipLocationChange:false});
-     }else{
+     }else if(this.selectedOrgProperties.length !== 0){
        this.router.navigate(['/home/dashboard/analytics'],{ queryParams: { oid: this.selectedOrgProperties[0].organization_id, pid: this.selectedOrgProperties[0].property_id },  skipLocationChange:false});
+     }else{
+       this.router.navigate(['settings/organizations']);
      }
   }
 
@@ -1315,11 +1318,27 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
       this.queryPID = params.get('pid');
     });
     //if logout from one tab, all tab redirect to login page
-    window.addEventListener('storage', event => {
-      if (event !== undefined && event.storageArea.length === 0) {
+   // if (event !== undefined && event.storageArea.length === 0) {
+      if (this.router !== undefined && this.router.url.indexOf('/verify-email') !== -1 || this.location.path().indexOf('/verify-email') !== -1) {
+        let urlpartone = this.location.path().split("?oid=");
+        let urlparttwo = urlpartone[0].split("?pid=");
+        let verifyToken = urlparttwo[0].split("verify-email/")
+        // this.router.navigate([urlparttwo[0]]);
+        sessionStorage.clear();
+        //this.router.navigate(['/signup'], { relativeTo: this.activatedRoute });
+        this.router.navigate(["/signup"],{ queryParams: { id: verifyToken[1] }});
+        //this.router.navigate(['/privacy/dsar/dsarform', obj.web_form_id]);
+        
+      } else if (this.location.path().indexOf("type=manage") == -1 && this.location.path().indexOf("manage?success") == -1) {
+        this.oIDPIDFromURL = this.findPropertyIDFromUrl(this.currentNavigationUrl || this.location.path());
+        const url = this.location.path() == '/' ? '/home/welcome' : this.getCurrentRoute();
+        if(this.oIDPIDFromURL !== undefined){
+          this.router.navigate([url], { queryParams: { oid: this.oIDPIDFromURL[0], pid: this.oIDPIDFromURL[1] }, skipLocationChange: false });
+        }
+      } else {
         this.router.navigate(['/login']);
       }
-    });
+    
   }
 
   ngOnDestroy(){

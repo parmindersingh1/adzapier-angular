@@ -206,15 +206,18 @@ export class SubscriptionPopupComponent implements OnInit {
   }
 
   onTemplateHide() {
-    if(this.location.path().indexOf('/settings') !== -1 && this.queryOID !== undefined){
-      this.template.hide();
-        this.router.navigate(['/home/dashboard/analytics'],{ queryParams: { oid: this.queryOID, pid: this.queryPID }, queryParamsHandling:'merge', skipLocationChange:false});
-      }else{
-        this.template.hide();
+    document.body.classList.remove('modal-open');
+    this.template.hide();
+    let oIDPIDFromURL = findPropertyIDFromUrl(this.location.path());
+    if (this.location.path().indexOf('/settings') !== -1 && this.queryOID !== null && this.queryOID !== undefined) {
+      this.router.navigate(['/home/dashboard/analytics'], { queryParams: { oid: this.queryOID, pid: this.queryPID }, queryParamsHandling: 'merge', skipLocationChange: false });
+    } else {
+      this.router.navigate(['/home/dashboard/analytics'], { queryParams: { oid: oIDPIDFromURL[0], pid: oIDPIDFromURL[1] }, queryParamsHandling: 'merge', skipLocationChange: false });
     }
   }
 
   redirectToManageLicense() {
+    document.body.classList.remove('modal-open');
     this.template.hide();
     let oIDPIDFromURL = findPropertyIDFromUrl(this.location.path())
     if (this.queryOID !== null && this.queryOID !== undefined) {

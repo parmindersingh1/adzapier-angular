@@ -5,8 +5,8 @@
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb breadcrumb-style1 mg-b-10">
             <li class="breadcrumb-item">Privacy</li>
-            <li class="breadcrumb-item"><a routerLink="/home/dashboard/cookie-consent">Cookie Consent</a></li>
-            <li class="breadcrumb-item"><a routerLink="/cookie-consent/cookie-tracking"> Tracking</a></li>
+            <li class="breadcrumb-item"><a routerLink="/home/dashboard/cookie-consent" [queryParams]="{oid: queryOID, pid: queryPID}">Cookie Consent</a></li>
+            <li class="breadcrumb-item"><a routerLink="/cookie-consent/cookie-tracking" [queryParams]="{oid: queryOID, pid: queryPID}"> Tracking</a></li>
             <li class="breadcrumb-item active">Details</li>
           </ol>
         </nav>

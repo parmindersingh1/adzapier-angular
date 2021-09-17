@@ -10,9 +10,10 @@
 
 /*for prime ng table */
 // @import '../src/assets/css/dashforge.css';
-@import '../node_modules/primeng/resources/themes/saga-blue/theme.css';
-@import '../node_modules/primeng/resources/primeng.min.css';
-@import '../node_modules/primeicons/primeicons.css';
+@import '../scss/variables';
+@import '../../node_modules/primeng/resources/themes/saga-blue/theme.css';
+@import '../../node_modules/primeng/resources/primeng.min.css';
+@import '../../node_modules/primeicons/primeicons.css';
 
 
 body{
@@ -33,7 +34,7 @@ body{
   bottom: 0px !important;
 }
 .navbar {
-    background: #1b365D !important; /*042893*/
+    background: $bg-templ-blue-primary !important; /*042893*/
     border-radius: 0 !important;
     height: 60px;
 }
@@ -88,8 +89,8 @@ a.nav-link.dropdown-toggle.active:after {
 }
 
 a.nav-link.dropdown-toggle:hover:after {
-    border-right: 1.5px solid #f0b323 !important;
-    border-bottom: 1.5px solid #f0b323 !important;
+    border-right: 1.5px solid $color-brand-02 !important;
+    border-bottom: 1.5px solid $color-brand-02 !important;
 }
 // .dropdown-toggle:last-child::after{
 //     border: 0 !important;
@@ -236,7 +237,7 @@ a.dropdown-item > i {
 //     }
 // }
 .nav-link.active {
-    color: #f0b323;
+    color: $color-brand-02;
 }
 
 // .alert-success {
@@ -291,7 +292,9 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   .p-datatable.p-datatable-sm .p-datatable-tbody > tr > td {
       font-size: 13px !important;
   }
-
+  .p-datatable.p-datatable-sm .p-datatable-tbody > tr > td:nth-child(2),.p-datatable.p-datatable-sm .p-datatable-tbody > tr > td:nth-child(3){
+    overflow-wrap:break-word;
+  }
   .p-datatable.p-datatable-sm .p-datatable-tbody > tr > td:nth-child(8),.p-datatable.p-datatable-sm .p-datatable-tbody > tr > td:nth-child(9),.p-datatable.p-datatable-sm .p-datatable-tbody > tr > td:nth-child(10) {
   white-space: nowrap;
   overflow: hidden;

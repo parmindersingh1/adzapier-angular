@@ -758,7 +758,8 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
         this.alertType = 'success';
         setTimeout(() => {
           if (this.type === 'publish') {
-            this.router.navigateByUrl('/cookie-consent/cookie-banner/setup');
+            this.router.navigate(['/cookie-consent/cookie-banner/setup'],{ queryParams: { oid: this.queryOID, pid: this.queryPID }, queryParamsHandling:'merge', skipLocationChange:false});
+           // this.router.navigateByUrl('/cookie-consent/cookie-banner/setup');
           }
         }, 1000);
       }, error => {
@@ -805,7 +806,8 @@ export class CookieBannerComponent implements OnInit, AfterViewInit {
         this.alertType = 'success';
         setTimeout(() => {
           if (this.type === 'publish') {
-            this.router.navigateByUrl('/cookie-consent/cookie-banner/setup');
+            //this.router.navigateByUrl('/cookie-consent/cookie-banner/setup');
+            this.router.navigate(['/cookie-consent/cookie-banner/setup'],{ queryParams: { oid: this.queryOID, pid: this.queryPID }, queryParamsHandling:'merge', skipLocationChange:false});
           }
         }, 1000);
       }, error => {

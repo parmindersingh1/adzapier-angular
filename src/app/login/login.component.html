@@ -155,6 +155,20 @@
             <div *ngIf="f.password.errors.required">Password is required</div>
             <!-- <div *ngIf="f.password.errors.pattern">Invalid Password</div> -->
           </div>
+          <div *ngIf="isInvitedUserVerified" style="color: rgb(17, 0, 128);">
+            <p class="confirm-msg">
+              <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130.2 130.2">
+                <circle class="path circle" fill="none" stroke="#73AF55" stroke-width="6" stroke-miterlimit="10" cx="65.1"
+                  cy="65.1" r="62.1" />
+                <polyline class="path check" fill="none" stroke="#73AF55" stroke-width="6" stroke-linecap="round"
+                  stroke-miterlimit="10" points="100.2,40.2 51.5,88.8 29.8,67.5 " />
+              </svg>
+              <span> Your email address is successfully verified ! please login to access your account!'</span>
+            </p>
+          </div>
+          <!-- <div *ngIf="!isInvitedUserVerified">
+            <span *ngIf="!hideMessage" class="mt-1" style="color: red;">Verification link has been expired!</span>
+          </div> -->
           <div class="row forgot-password" >
             <a routerLink="/forgot-password" tabindex="-1">Forgot password?</a>
           </div>

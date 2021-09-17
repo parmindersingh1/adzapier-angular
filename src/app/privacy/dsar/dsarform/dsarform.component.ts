@@ -1386,6 +1386,10 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
     }else{
       updatedWebForm = this.dsarFormService.getFormControlList();
     }
+    if(this.daysleft >= 46){
+      this.errorMsgdaysleft = 'Default days should not be greater than 45';
+      return false;
+    }
     this.formObject = {
       form_name: this.basicForm.controls['formname'].value,
       form_status: 'draft',
@@ -1555,11 +1559,11 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
           if (this.isDirty && this.workflow !== undefined && this.selectedApproverID !== undefined) {
             this.openModal(this.confirmSaveAlert);
           }
-          else if(this.workflow == undefined && this.selectedApproverID == undefined){
+          else if (this.workflow == undefined || this.selectedApproverID == undefined) {
             this.isdraftsubmitted = true;
             this.isDirty = false;
         changeEvent.preventDefault();
-        const stepnumber: number | string = this.formName === undefined ? '1 Basic, 2 Form & 3 Settings': '2 Form & 3 Settings';
+        const stepnumber: number | string = this.formName === undefined ? '1 Basic, 2 Form & 3 Settings' : '2 Form & 3 Settings';
         this.alertMsg = `Please complete step ${stepnumber} and press next`;
         this.isOpen = true;
         this.alertType = 'danger';
@@ -1812,7 +1816,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
     if (this.orgId) {
       setTimeout(()=>{
       this.organizationService.getOrgTeamMembers(this.orgId).subscribe((data) => {
-        this.ApproverList = data.response;
+        this.ApproverList = data.response.filter((t) => t.role_name.indexOf('View') == -1 && t.email_verified);//&& t.role_name.indexOf('View') == -1 && t.email_verified
         const filterValue = this.ApproverList.filter((t) => t.approver_id === this.selectedApproverID);
         if (filterValue.length > 0) {
           this.defaultapprover = filterValue[0].approver_id;
@@ -2531,7 +2535,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
   }
 
   getEditorFontSize(){
-    const tagObj = [{"ql-size-large":'24'},{"ql-size-small":'12'},{"<p>":'14'},{"<h1>":'28'},{"<h2>":'24'}]
+    const tagObj = [{"ql-size-huge":'40'},{"ql-size-large":'24'},{"ql-size-small":'12'},{"ql-align-center":'13'},{"ql-align-right":'13'},{"<p>":'13'},{"<p>":'14'},{"<h1>":'40'},{"<h1>":'28'},{"<h2>":'24'}]
       for (const key in tagObj){
         if(this.quillEditorText.get('editor').value.indexOf(Object.keys(tagObj[key])) !== -1){
           if(this.isWelcomeEditor){

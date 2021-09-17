@@ -86,7 +86,19 @@
         </div>
 
         <div class="col-sm-2">
-          <input type="number" placeholder="Due in" (change)="onChangeDueIn($event)" class="form-control" />
+          <div class="btn-group dropup" dropdown [insideClick]="true">
+            <button type="button" class="btn btn-white dropdown-toggle"  dropdownToggle data-toggle="dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+              Due In
+            </button>
+            <div class="dropdown-menu"  *dropdownMenu>
+              <a class="dropdown-item" (click)="onChangeDueIn('-1')">Past due</a>
+              <a class="dropdown-item" (click)="onChangeDueIn('1')">One Day</a>
+              <a class="dropdown-item" (click)="onChangeDueIn('2')">2 Days</a>
+              <a class="dropdown-item" (click)="onChangeDueIn('15')">15 Days</a>
+              <input type="number" (change)="onChangeDueIn($event)" class="form-control" />
+            </div>
+          </div>
+          <!-- <input type="number" placeholder="Due in" (change)="onChangeDueIn($event)" class="form-control" /> -->
           <!-- <select (change)="onChangeDueIn($event)" class="form-control">
             <option selected value="">Due in</option>
             <ng-container *ngFor="let obj of allFilterData.filter_due_in">
@@ -122,7 +134,7 @@
         <th  *ngFor="let col of columns">
           {{col.header}} <!--pSortableColumn="{{col.field}}" <p-sortIcon field="{{col.field}}"></p-sortIcon>-->
         </th>
-        <th>Days left
+        <th>Due In
         </th>
         <th pSortableColumn="created_at">Created At <p-sortIcon field="created_at"></p-sortIcon>
         </th>
@@ -136,8 +148,8 @@
             {{rowData?.id}}
           </a>
         </td>
-        <td><span class="ui-column-title">Request Type</span>{{rowData?.request_type}}</td>
-        <td><span class="ui-column-title">Subject Type</span>{{rowData?.subject_type}}</td>
+        <td><span class="ui-column-title">Request Type</span>{{rowData?.request_type}}<span *ngIf="rowData?.request_type || !rowData?.request_type"><span *ngIf="rowData?.request_type">,</span>{{requestsubject("requesttype",rowData?.request_type,rowData.request_form)}}</span></td>
+        <td><span class="ui-column-title">Subject Type</span>{{rowData?.subject_type}}<span *ngIf="rowData?.subject_type || !rowData?.subject_type"><span *ngIf="rowData?.subject_type">,</span>{{requestsubject("subjecttype",rowData?.subject_type,rowData.request_form)}}</span></td>
         <td>
           <span class="ui-column-title">Status</span>
           <ng-container *ngIf="rowData">
@@ -159,7 +171,7 @@
         </ng-container>
         </td>
         <td>
-          <span class="ui-column-title">Days left</span>
+          <span class="ui-column-title">Due In</span>
           <span class="badge"
             [ngClass]="{'badge-danger':rowData?.days_left < 10,'badge-warning':rowData?.days_left < 30,'badge-success':rowData?.days_left >= 20}">
             <ng-container *ngIf="rowData">
