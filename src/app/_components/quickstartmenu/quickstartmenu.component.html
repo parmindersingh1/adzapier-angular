@@ -12,17 +12,24 @@
         </li>
     </ul>
 </div> -->
-<div style="position: relative;">
-    <div class="quickstart-wrapper" *ngIf="isOpen">
+<div style="position: relative;border: 1px solid #000;">
+    <div class="quickstart-wrapper" *ngIf="showQuickStartMenu">
         isOpen | {{isOpen}}
-        <accordion [isAnimated]="true" [closeOthers]="oneAtATime">
+        <button (click)="onCloseQuickstart($event)">close</button>
+        <accordion   [isAnimated]="true" [closeOthers]="oneAtATime">
             <accordion-group *ngFor="let datalist of quickStartMenu" heading="{{datalist.indextext}}"
                 [panelClass]="customClass">
-                <ul>
+                <ul class="link-list">
                     <li *ngFor="let pagelinks of datalist.quicklinks">
+                      
                         islinkclicked|   {{pagelinks.islinkclicked}}
-                        <a class="nav-link dropdown-toggle" routerLinkActive="active" routerLink="{{pagelinks.link}}"   (click)="onClickQuickStartlink($event,pagelinks)">
-                            {{pagelinks.linkdisplaytext}}</a>
+                        <a class="nav-link" routerLinkActive="active" routerLink="{{pagelinks.link}}" [queryParams]="{oid:queryOID , pid:queryPID}"  (click)="onClickQuickStartlink($event,pagelinks)">
+                            <span class="checkedlink" *ngIf="pagelinks.islinkclicked else linkNotvisited"><i class="fa fa-check-circle pr-2" aria-hidden="true"></i></span> 
+                            <ng-template #linkNotvisited>
+                             <span class="uncheckedlink"><i class="fa fa-check-circle pr-2" aria-hidden="true"></i></span> 
+                            </ng-template> 
+                            {{pagelinks.linkdisplaytext}}
+                        </a>
                        
                     </li>
                 </ul>
@@ -30,8 +37,7 @@
             </accordion-group>
         </accordion>
         <div><button (click)="dismissQuickStartMenu()">Dismiss quick start</button></div>
-        <div style="border: 1px solid #ccc;position:absolute;right:20px;">
-            <button (click)="onClickQuickStartBtn()">Quick Start</button>
-        </div>
+       
     </div>
+    <button (click)="onClickQuickStartBtn()" class="quickstart-btn">Quick Start</button>
 </div>

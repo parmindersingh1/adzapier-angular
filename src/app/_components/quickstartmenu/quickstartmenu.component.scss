@@ -1,10 +1,21 @@
 .quickstart-wrapper {
-    width:300px;
-    border:1px solid #ccc;
+    width: 300px;
+    border: 1px solid #ccc;
     background: #ffffff;
     position: fixed;
+    padding-bottom: 30px;
     bottom: 40px;
-    right:20px;
+    flex-direction: column;
+    display: flex;
+    right: 20px;
+}
+
+.quickstart-btn {
+    z-index: 1200;
+    right: 10px;
+    position: fixed;
+    bottom: 40px;
+    top: auto;
 }
 
 // .quickstart-wrapper > .panel-group > .panel  > .panel-heading{
@@ -21,9 +32,23 @@
     background: #770 !important;
 }
 
+.checkedlink {
+    color:green;
+}
+
+.uncheckedlink {
+    color:gray
+}
+
+
 accordion-group {
     ::ng-deep {
       div {
+        & > ul{
+            margin: 0;
+            padding: 0;
+            list-style-type: none;
+        }
         &>div.panel-heading.card-header.panel-enabled {
             padding: 0;
             background-color: rgba(255, 255, 255, 0.15); // change the background of every accordion heading

@@ -1956,7 +1956,7 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
     for (let i = 0; i < Object.values(requestorsubjectids).length; i++) {
       
       requestForm[requesttypeindex].selectOptions.filter((t) => {
-        if (t.subject_type_id == Object.values(requestorsubjectids)[i] || t.active) {
+        if (t.subject_type_id == Object.values(requestorsubjectids)[i]) {
           const idx = filltypes.includes(t.name);
           if (!idx) {
             filltypes.push(t.name);
@@ -1973,7 +1973,7 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
     let filltypes = [];
     for (let i = 0; i < Object.values(requestorsubjectids).length; i++) {
       requestForm[requesttypeindex].selectOptions.filter((t) => {
-         if (t.request_type_id == Object.values(requestorsubjectids)[i] || t.active) {
+         if (t.request_type_id == Object.values(requestorsubjectids)[i]) {
          const idx = filltypes.includes(t.name);
           if (!idx) {
             filltypes.push(t.name);

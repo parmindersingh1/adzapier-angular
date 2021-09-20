@@ -136,15 +136,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
-        if (event.url.indexOf('signup') >= 0) {
-          if (this.currentUser === null) {
-            return true;
-          } else {
-            if(this.queryOID && this.queryPID){
-            this.router.navigate(['/home/dashboard/analytics'],{ queryParams: { oid: this.queryOID, pid: this.queryPID },  skipLocationChange:false});
-            }
-          }
-        }
       }
       if (event instanceof NavigationEnd) {
         this.isPrivacyActivelinkMatched = event.url.indexOf('privacy') >= 0 || event.url.indexOf('home') >= 0
@@ -223,13 +214,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
           this.userService.getCurrentUser.unsubscribe();
           localStorage.clear();
           this.selectedOrgProperties.length = 0;
-          if (this.router.url.indexOf('/verify-email') !== -1 || this.location.path().indexOf('/verify-email') !== -1) {
-            let urlpartone = this.location.path().split("?oid=");
-            let urlparttwo = urlpartone[0].split("?pid=");
-            let verifyToken = urlparttwo[0].split("verify-email/")
-            // this.router.navigate([urlparttwo[0]]);
+          if (this.location.path().indexOf('/signup') !== -1 || this.location.path().indexOf('/verify-email') !== -1) {
+            const a = this.location.path().split("?id=");
+            this.router.navigate([a[0]],{ queryParams: { id: a[1] }});
             sessionStorage.clear();
-            this.router.navigate(["/signup"], { queryParams: { id: verifyToken[1] } });
+            this.router.navigate(["/signup"], { queryParams: { id: a[1] } });
+          } else{
+            this.router.navigate(['/login']);
           }
         }
       }
