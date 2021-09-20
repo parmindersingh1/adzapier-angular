@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { findPropertyIDFromUrl } from 'src/app/_helpers/common-utility';
 
@@ -14,27 +14,34 @@ export class QuickstartmenuComponent implements OnInit {
   showQuickStartMenu = true;
   customClass = 'customClass';
   oneAtATime = true;
+  queryOID;
+  queryPID;
   constructor(private location: Location,
-    private router: Router
+    private router: Router,
+    private activatedroute: ActivatedRoute
     ) { }
 
   ngOnInit(): void {
+    this.activatedroute.queryParamMap.subscribe(params => {
+      this.queryOID = params.get('oid');
+      this.queryPID = params.get('pid');
+    });
     this.quickStartMenu = [{
       "index":1,
       "indextext":"Getting Start",
       "quicklinks":[{
         "linkid":1,
-        "link":"/settings",
+        "link":"/settings/company",
         "islinkclicked":false,
         "linkdisplaytext":"Add Company details",
       },{
         "linkid":2,
-        "link":"/settings",
+        "link":"/settings/organizations",
         "islinkclicked":false,
         "linkdisplaytext":"Add Organization",
       },{
         "linkid":3,
-        "link":"/settings",
+        "link":"/settings/organizations/details/details/"+this.queryOID,
         "islinkclicked":false,
         "linkdisplaytext":"Add Property",
       },{
@@ -49,9 +56,9 @@ export class QuickstartmenuComponent implements OnInit {
       "indextext":"Subscription",
       "quicklinks":[{
         "linkid":5,
-        "link":"/settings",
+        "link":"/settings/billing/pricing",
         "islinkclicked":false,
-        "linkdisplaytext":"Add Company details",
+        "linkdisplaytext":"Subscription",
       }],
       
     },
@@ -106,7 +113,7 @@ export class QuickstartmenuComponent implements OnInit {
   onClickQuickStartlink($event,linkobj){
     console.log($event,linkobj);
     this.quickStartMenu[0].quicklinks.filter((t)=> {
-      if(t.linkid == linkobj.islinkclicked){
+      if(t.linkid == linkobj.linkid){
         t.islinkclicked = true;
       }
     });
@@ -115,5 +122,9 @@ export class QuickstartmenuComponent implements OnInit {
     this.quickStartMenu = [...a];
   }
   
+  onCloseQuickstart($event){
+    this.showQuickStartMenu = !this.showQuickStartMenu;
+    console.log($event);
+  }
 
 }
