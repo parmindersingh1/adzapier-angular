@@ -514,14 +514,45 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
       return this.dataService.isLicenseLimitAvailableForOrganization('request',this.dataService.getAvailableLicenseForFormAndRequestPerOrg());
   }
 
-  requestsubject(requestorsubject, currenttype, request_form) {
+  onCheckRequesttype(requestorsubject, currenttype, reqid, request_form) {
     const requestForm = JSON.parse(request_form);
     const requesttypeindex = requestForm.findIndex((t) => t.controlId == requestorsubject);
-      let filltypes = [];
-      requestForm[requesttypeindex].selectOptions.filter((t)=> {
-        if(t.active){
-          filltypes.push(t.name);
+    let filltypes = [];
+    if (currenttype !== "" && currenttype !== null) {
+      filltypes.push(currenttype)
+    }
+    requestForm[requesttypeindex].selectOptions.filter((t) => {
+      if (t.request_type_id == reqid) {
+        let isExist = filltypes.includes(t.name)
+        if (!isExist) {
+          filltypes.push(t.name)
+        } else {
+          const idx = filltypes.findIndex((el) => el == t.name);
+          filltypes.splice(idx, 1);
         }
+      }
+    });
+    return filltypes;
+  }
+
+  onCheckSubjecttype(requestorsubject, currenttype, subid, request_form) {
+    const requestForm = JSON.parse(request_form);
+    const requesttypeindex = requestForm.findIndex((t) => t.controlId == requestorsubject);
+    let filltypes = [];
+    filltypes.length = 0;
+    if (currenttype !== "" && currenttype !== null) {
+      filltypes.push(currenttype)
+    }
+    requestForm[requesttypeindex].selectOptions.filter((t) => {
+      if (t.subject_type_id == subid) {
+        let isExist = filltypes.includes(t.name)
+        if (!isExist) {
+          filltypes.push(t.name)
+        } else {
+          const idx = filltypes.findIndex((el) => el == t.name);
+          filltypes.splice(idx, 1);
+        }
+      }
     });
     return filltypes;
   }
