@@ -4,6 +4,8 @@ import {RouterModule, Routes} from '@angular/router';
 import { SharedbootstrapModule } from 'src/app/sharedbootstrap/sharedbootstrap.module';
   import { ManageLicenceComponent } from './manage-licence.component';
 import {ButtonModule} from 'primeng/button';
+import {MultiSelectModule} from 'primeng/multiselect';
+import {ReactiveFormsModule} from '@angular/forms';
 
 const paths: Routes = [
   {path: '', component:ManageLicenceComponent },
@@ -13,11 +15,13 @@ const paths: Routes = [
 ];
 @NgModule({
   declarations: [ManageLicenceComponent],
-    imports: [
-        CommonModule,
-        SharedbootstrapModule,
-        RouterModule.forChild(paths),
-        ButtonModule
-    ]
+  imports: [
+    CommonModule,
+    SharedbootstrapModule,
+    RouterModule.forChild(paths),
+    ButtonModule,
+    MultiSelectModule,
+    ReactiveFormsModule
+  ]
 })
 export class ManageLicenceModule { }

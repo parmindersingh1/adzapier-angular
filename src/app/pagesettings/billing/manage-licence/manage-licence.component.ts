@@ -1,16 +1,17 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
-import { NgxUiLoaderService } from 'ngx-ui-loader';
-import { moduleName } from 'src/app/_constant/module-name.constant';
-import { BillingService } from 'src/app/_services/billing.service';
-import {AuthenticationService, UserService} from '../../../_services';
-const moment = require('moment');
+import {Component, OnInit, TemplateRef, ViewEncapsulation} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {ActivatedRoute} from '@angular/router';
+import {NgxUiLoaderService} from 'ngx-ui-loader';
+import {moduleName} from 'src/app/_constant/module-name.constant';
+import {BillingService} from 'src/app/_services/billing.service';
+import {UserService} from '../../../_services';
+import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
 
 @Component({
   selector: 'app-manage-subscription',
   templateUrl: './manage-licence.component.html',
-  styleUrls: ['./manage-licence.component.scss']
+  styleUrls: ['./manage-licence.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class ManageLicenceComponent implements OnInit {
   activeSubscriptionList = [];
@@ -25,11 +26,15 @@ export class ManageLicenceComponent implements OnInit {
   userRole: any;
   queryOID;
   queryPID;
+  propertyForm: FormGroup;
+  modalRef: BsModalRef;
+
   constructor(
     private loading: NgxUiLoaderService,
     private billingService: BillingService,
     private userService: UserService,
     private formBuilder: FormBuilder,
+    private modalService: BsModalService,
     private activatedRoute: ActivatedRoute
   ) { }
 
@@ -59,6 +64,9 @@ export class ManageLicenceComponent implements OnInit {
 
 
     this.onGetActivePlan();
+    this.propertyForm = this.formBuilder.group({
+      propID: ['', Validators.required]
+    });
   }
 
   onGetActivePlan() {
@@ -107,4 +115,47 @@ export class ManageLicenceComponent implements OnInit {
       return cal;
     }
   }
+
+  // add  Properties
+  openModal(template: TemplateRef<any>) {
+    this.modalRef = this.modalService.show(template);
+  }
+  // async onSubmit() {
+  //   this.submitted = true;
+  //   this.propertyNameError = this.propertyForm.value.propID.length > this.totalLicence - this.assigneLicence ? true : false;
+  //   // stop here if form is invalid
+  //   if (this.propertyForm.invalid) {
+  //     return;
+  //   }
+  //   const payload = {
+  //     planID: this.planID,
+  //     propID: this.propertyForm.value.propID,
+  //     orgID: this.oID,
+  //     planType: this.planType
+  //   };
+  //   this.loading.start();
+  //
+  //   this.skLoading = true;
+  //   this.service.assignPropertyLicence(this.constructor.name, moduleName.billingModule, payload)
+  //     .subscribe((res: any) => {
+  //       this.loading.stop();
+  //       this.skLoading = false;
+  //       this.modalRef.hide();
+  //       this.isOpen = true;
+  //       this.alertMsg = res.response;
+  //       this.alertType = 'success';
+  //       this.propertyForm.reset();
+  //       this.onGetAssingedProperty();
+  //       this.dataService.isLicenseAppliedForProperty.next({ requesttype: 'property', hasaccess: true });
+  //       this.isCurrentPropertySelected(this.currentManagedOrgID, this.currrentManagedPropID);
+  //
+  //     }, err => {
+  //       this.loading.stop();
+  //       this.skLoading = false;
+  //       this.isOpen = true;
+  //       this.alertMsg = err;
+  //       this.alertType = 'danger';
+  //     });
+  //   // display form values on success
+  // }
 }

@@ -101,7 +101,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
     private location: Location,
     private cdRef: ChangeDetectorRef
   ) {
-   
+
     this.authService.currentUser.subscribe(x => {
       this.currentUser = x;
       if (this.currentUser) {
@@ -123,7 +123,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
         this.loadNotification();
       }
     });
-   
+
 
     // this.router.routeReuseStrategy.shouldReuseRoute = () => {
     //   return false;
@@ -235,12 +235,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
       }
     });
     this.onCheckConsentPreferenceSubscription();
-    
+
     this.oIDPIDFromURL= this.findPropertyIDFromUrl(this.location.path());
     if(this.oIDPIDFromURL !== undefined){
      this.checkCurrentManagingProperty();
     }
-    
+
     this.getPropertyDetailsFromUrl();
   }
 
@@ -397,7 +397,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
     this.loadOrganizationPlanDetails(obj);
    // this.loading.start('1');
     this.loadPropertyPlanDetails(prop);
-    
+
 
     this.licenseAvailabilityForFormAndRequestPerOrg(org);
     if (this.router.url.indexOf('dsarform') !== -1) {
@@ -414,14 +414,14 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
     if (selectedItem.property_id !== undefined) {
       this.isPropertySelected = this.selectedOrgProperties.filter((t) => t.property_id === selectedItem.property_id).length > 0 || this.selectedOrgProperties.some((t) => t.response !== undefined && t.response.id === selectedItem.property_id);
       return this.isPropertySelected;
-    } 
+    }
       else if(selectedItem.response !== undefined && selectedItem.response.id !== undefined){
       this.isPropertySelected = this.selectedOrgProperties.some((t) => t.property_id === selectedItem.response.id) || this.selectedOrgProperties.some((t) => t.response !== undefined && t.response.id === selectedItem.response.id);
       return this.isPropertySelected;
       } else if(this.currentNavigationUrl[1] !== undefined && selectedItem.property_id === this.currentNavigationUrl[1]){ //this.isUrlWithPropID // this.findPropertyIDFromUrl(this.currentNavigationUrl)[1]
         return true;
       }
-  
+
   }
 
   isOrgSelected(selectedItem): boolean {
@@ -481,7 +481,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
          // this.isPropSelected(data);
         }
         }
-      } 
+      }
       // else {
       //   this.loadOrgPropertyFromLocal();
       // }
@@ -498,13 +498,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
           orgDetails.property_id = prop.response.id;
           this.orgservice.updateCurrentOrgwithProperty(orgDetails);
           this.isPropSelected(orgDetails);
-           
+
         }
       });
-      this.loadOrganizationWithProperty();  
-      this.orgservice.isPropertyUpdated.next(null); 
+      this.loadOrganizationWithProperty();
+      this.orgservice.isPropertyUpdated.next(null);
     }
-    
+
 
     if (this.isOrganizationUpdated) {
       this.orgservice.editedOrganization.subscribe((org) => {
@@ -517,7 +517,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
         }
       });
     }
-    
+
   }
 
   toggleNavbar() {
@@ -532,7 +532,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
 
 
   loadOrganizationWithProperty() {
-    
+
     this.oIDPIDFromURL = this.findPropertyIDFromUrl(this.currentNavigationUrl || this.location.path());
     this.loading.start();
     this.orgservice.getOrganizationWithProperty().subscribe((data) => {
@@ -540,7 +540,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
       this.orgPropertyMenu = data.response;
       this.checkCurrentManagingProperty();
      // this.resCID = data.response.cID || data.response[0].cID;
-     
+
     }, (error) => {
       this.loading.stop();
     }, () => {
@@ -550,7 +550,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
       }
      this.checkCurrentManagingProperty();
       });
-    
+
   }
 
 
@@ -591,10 +591,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
             // .subscribe((res: any) => {
             //   this.dataService.setPropertyPlanToLocalStorage(res);
             // });
-            
+
             // this.orgservice.getSelectedOrgProperty.emit(obj);
             //  this.firstElement = false;
-            
+
             this.licenseAvailabilityForFormAndRequestPerOrg(obj);
             // this.findPropertyIDFromUrl();
             // this.getPropertyDetailsFromUrl();
@@ -609,7 +609,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
               if(findOidIndex !== -1){
                 activePro = this.orgPropertyMenu[findOidIndex] //based on oid finding propid
               }
-         
+
          const propobj = activePro !== undefined && activePro.property.filter((el)=>el.property_id === this.oIDPIDFromURL[1]);
          if(propobj){
          const obj = {
@@ -646,7 +646,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
           }
         }
 
-    } 
+    }
     //else {
      // this.dataService.checkClickedURL.next('/home/welcome'+'?oid='+this.queryOID+'&pid='+this.queryPID);
      // this.router.navigate(['settings/organizations']);
@@ -700,7 +700,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
       if (this.orgPropertyMenu[orgIndex].user_id) { //=== this.userID
         this.currentOrganization = this.orgPropertyMenu[orgIndex].organization_name !== '' ? this.orgPropertyMenu[orgIndex].organization_name : this.orgPropertyMenu[orgIndex].response.orgname;
         this.currentProperty = this.orgPropertyMenu[orgIndex].property_name;
-    
+
       }
       //  return this.currentProperty;
    // }
@@ -1150,7 +1150,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
   checkForUpgradeDSAR() {
     let orglicenseStatus;
     this.planDetails = JSON.stringify(this.dataService.getCurrentOrganizationPlanDetails());
-    
+
     let isorgplanExist; // check on page refresh
     if(JSON.parse(this.planDetails).response && JSON.parse(this.planDetails).response.plan_details &&  JSON.parse(this.planDetails).response.plan_details.dsar){
       if(Object.values(JSON.parse(this.planDetails).response.plan_details.dsar).length > 0){
@@ -1214,7 +1214,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
       return  oIDFromURL[1].split("&pid=");
     }
     }
-    
+
   }
 
   getPropertyDetailsFromUrl(){
@@ -1224,8 +1224,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
         const obj = key.property.filter((el)=>el.property_id == this.oIDPIDFromURL[1]);
         }
       }
-      
-     
+
+
     }
 
   }
@@ -1328,7 +1328,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
         //this.router.navigate(['/signup'], { relativeTo: this.activatedRoute });
         this.router.navigate(["/signup"],{ queryParams: { id: verifyToken[1] }});
         //this.router.navigate(['/privacy/dsar/dsarform', obj.web_form_id]);
-        
+
       } else if (this.location.path().indexOf("type=manage") == -1 && this.location.path().indexOf("manage?success") == -1) {
         this.oIDPIDFromURL = this.findPropertyIDFromUrl(this.currentNavigationUrl || this.location.path());
         const url = this.location.path() == '/' ? '/home/welcome' : this.getCurrentRoute();
@@ -1338,7 +1338,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
       } else {
         this.router.navigate(['/login']);
       }
-    
+
   }
 
   ngOnDestroy(){
@@ -1346,5 +1346,5 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
       this.orgservice.isPropertyUpdated.unsubscribe();
     }
   }
-  
+
 }
