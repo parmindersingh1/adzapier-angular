@@ -139,7 +139,7 @@ export class ManagePropertyComponent implements OnInit, OnDestroy {
   onGetAllPropertyList(e) {
     // this.onGetAllPropertyLicenseList(e);
     this.oID = e.target.value;
-    const payload = {oID: e.target.value, planID: this.planID, planType: this.planType};
+    const payload = {oID: e.target.value, planID: this.planID, planType: String(this.planType)};
     this.loading.start('2');
     this.service.getAllPropertyList(this.constructor.name, moduleName.billingModule, payload)
       .subscribe((res: any) => {
@@ -167,7 +167,7 @@ export class ManagePropertyComponent implements OnInit, OnDestroy {
   }
 
   onGetAllPropertyLicenseList(e, res) {
-    const payload = {oID: e.target.value, licenseType: this.planType};
+    const payload = {oID: e.target.value, licenseType: String(this.planType)};
     this.loading.start('3');
     this.service.getAllPropertyLicenseList(this.constructor.name, moduleName.billingModule, payload)
       .subscribe((result: any) => {
@@ -249,7 +249,7 @@ export class ManagePropertyComponent implements OnInit, OnDestroy {
       planID: this.planID,
       propID: this.propertyForm.value.propID,
       orgID: this.oID,
-      planType: this.planType
+      planType: String(this.planType)
     };
     this.loading.start();
 
