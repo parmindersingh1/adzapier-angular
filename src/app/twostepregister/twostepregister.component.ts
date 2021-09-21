@@ -5,7 +5,7 @@ import {AlertService, AuthenticationService, UserService} from './../_services';
 import {MustMatch} from '../_helpers/must-match.validator';
 import { delay, first } from 'rxjs/operators';
 import {animate, state, style, transition, trigger} from '@angular/animations';
-import { Observable, timer, Subscription } from 'rxjs';
+import { Observable, timer, Subscription, pipe } from 'rxjs';
 import {moduleName} from '../_constant/module-name.constant';
 import {environment} from '../../environments/environment';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
@@ -563,9 +563,10 @@ get vemail() {
 
   login(){
     this.authenticationService.login(this.constructor.name, moduleName.loginModule,this.emailid, this.f.password.value)
-      .pipe(first())
+      .pipe(delay(2000))
       .subscribe(
         data => {
+          console.log(data,'data..')
           // this.getLoggedInUserDetails();
           this.authenticationService.userLoggedIn.next(true);
           this.authenticationService.currentUserSubject.next(data);
