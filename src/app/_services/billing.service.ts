@@ -56,6 +56,15 @@ export class BillingService {
     );
   }
 
+  getPlanInfo(componentName, moduleName, planID){
+    const path = apiConstant.BILLING_ACTIVE_PLAN + '/' + planID;
+    return this.http.get(environment.apiUrl + path).pipe(map(res => res),
+      catchError(error => {
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.updateBilling, componentName, moduleName, path);
+        return throwError(error);
+      }),
+    );
+  }
 
   getAllPropertyList(componentName, moduleName, payload){
     const path = apiConstant.BILLING_LIST_ALL_PROPERTY;
