@@ -148,8 +148,8 @@
             {{rowData?.id}}
           </a>
         </td>
-        <td><span class="ui-column-title">Request Type</span>{{rowData?.request_type}}<span *ngIf="(rowData?.request_type == '' || rowData?.request_type == null) && rowData?.req_type_id !== ''"><span *ngIf="rowData?.request_type">,</span>{{onCheckRequesttype("requesttype",rowData?.request_type,rowData?.req_type_id,rowData.request_form)}}</span></td>
-        <td><span class="ui-column-title">Subject Type</span>{{rowData?.subject_type}}<span *ngIf="rowData?.subject_type || !rowData?.subject_type"><span *ngIf="rowData?.subject_type">,</span>{{onCheckSubjecttype("subjecttype",rowData?.subject_type,rowData.sub_type_id,rowData.request_form)}}</span></td>
+        <td><span class="ui-column-title">Request Type</span>{{onCheckRequesttype("requesttype",rowData.request_form,rowData.custom_data)}}</td>
+        <td><span class="ui-column-title">Subject Type</span>{{onCheckSubjecttype("subjecttype",rowData.request_form,rowData.custom_data)}}</td>
         <td>
           <span class="ui-column-title">Status</span>
           <ng-container *ngIf="rowData">
