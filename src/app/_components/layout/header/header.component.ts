@@ -1327,7 +1327,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
           this.router.navigate([url], { queryParams: { oid: this.oIDPIDFromURL[0], pid: this.oIDPIDFromURL[1] }, skipLocationChange: false });
         }
       } else {
-        this.router.navigate(['/login']);
+        this.router.navigate(['/home/dashboard/analytics']);
+        //this.router.navigate(['/login']);
       }
     
   }
