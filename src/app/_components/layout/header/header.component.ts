@@ -572,7 +572,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
           //  this.loading.start('1');
             this.loadPropertyPlanDetails(obj);
             //this.orgservice.setCurrentOrgWithProperty(obj); // three
-            if(this.router.url.indexOf("type=manage") == -1 && this.router.url.indexOf("manage?success") == -1){
+            if(this.router.url.indexOf("manage?success") == -1){
               this.router.navigate([this.router.url], { queryParams: { oid: obj.organization_id, pid: obj.property_id }, queryParamsHandling:'merge', skipLocationChange:false} );
             } else{
               this.router.navigate(['settings/billing/manage'], { queryParams: { oid: obj.organization_id, pid: obj.property_id }, queryParamsHandling:'merge', skipLocationChange:false} );
