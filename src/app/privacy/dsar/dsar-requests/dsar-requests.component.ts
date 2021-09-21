@@ -514,46 +514,41 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
       return this.dataService.isLicenseLimitAvailableForOrganization('request',this.dataService.getAvailableLicenseForFormAndRequestPerOrg());
   }
 
-  onCheckRequesttype(requestorsubject, currenttype, reqid, request_form) {
+  onCheckRequesttype(requesttype, request_form, customobj) {
     const requestForm = JSON.parse(request_form);
-    const requesttypeindex = requestForm.findIndex((t) => t.controlId == requestorsubject);
+    const cdata = JSON.parse(customobj).request_type;
+    const requesttypeindex = requestForm.findIndex((t) => t.controlId == requesttype);
     let filltypes = [];
-    if (currenttype !== "" && currenttype !== null) {
-      filltypes.push(currenttype)
-    }
-    requestForm[requesttypeindex].selectOptions.filter((t) => {
-      if (t.request_type_id == reqid) {
-        let isExist = filltypes.includes(t.name)
-        if (!isExist) {
-          filltypes.push(t.name)
-        } else {
-          const idx = filltypes.findIndex((el) => el == t.name);
-          filltypes.splice(idx, 1);
+    filltypes.length = 0;
+    for (let i = 0; i < Object.values(cdata).length; i++) {
+      requestForm[requesttypeindex].selectOptions.filter((t) => {
+        if (t.request_type_id == Object.values(cdata)[i]) {
+          const idx = filltypes.includes(t.name);
+          if (!idx) {
+            filltypes.push(t.name);
+          }
         }
-      }
-    });
+      });
+    }
     return filltypes;
   }
 
-  onCheckSubjecttype(requestorsubject, currenttype, subid, request_form) {
+  onCheckSubjecttype(subjecttype, request_form, customobj) {
     const requestForm = JSON.parse(request_form);
-    const requesttypeindex = requestForm.findIndex((t) => t.controlId == requestorsubject);
+    const cdata = JSON.parse(customobj).subject_type;
+    const requesttypeindex = requestForm.findIndex((t) => t.controlId == subjecttype);
     let filltypes = [];
     filltypes.length = 0;
-    if (currenttype !== "" && currenttype !== null) {
-      filltypes.push(currenttype)
-    }
-    requestForm[requesttypeindex].selectOptions.filter((t) => {
-      if (t.subject_type_id == subid) {
-        let isExist = filltypes.includes(t.name)
-        if (!isExist) {
-          filltypes.push(t.name)
-        } else {
-          const idx = filltypes.findIndex((el) => el == t.name);
-          filltypes.splice(idx, 1);
+    for (let i = 0; i < Object.values(cdata).length; i++) {
+      requestForm[requesttypeindex].selectOptions.filter((t) => {
+        if (t.subject_type_id == Object.values(cdata)[i]) {
+          const idx = filltypes.includes(t.name);
+          if (!idx) {
+            filltypes.push(t.name);
+          }
         }
-      }
-    });
+      });
+    }
     return filltypes;
   }
 }
