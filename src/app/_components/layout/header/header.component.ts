@@ -575,7 +575,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
             if(this.router.url.indexOf("manage?success") == -1){
               this.router.navigate([this.router.url], { queryParams: { oid: obj.organization_id, pid: obj.property_id }, queryParamsHandling:'merge', skipLocationChange:false} );
             } else{
-              this.router.navigate(['settings/billing/manage'], { queryParams: { oid: obj.organization_id, pid: obj.property_id }, queryParamsHandling:'merge', skipLocationChange:false} );
+                console.log('redirected 578..');
+              this.router.navigate(['/settings/billing/manage'], { queryParams: { oid: obj.organization_id, pid: obj.property_id }, queryParamsHandling:'merge', skipLocationChange:false} );
             }
            // this.dataService.checkClickedURL.next('/home/welcome'+'?oid='+obj.organization_id+'&pid='+obj.property_id);
             // this.dataService.getPropertyPlanDetails(this.constructor.name, moduleName.cookieConsentModule, obj.property_id)
@@ -1327,7 +1328,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
           this.router.navigate([url], { queryParams: { oid: this.oIDPIDFromURL[0], pid: this.oIDPIDFromURL[1] }, skipLocationChange: false });
         }
       } else {
-        this.router.navigate(['/home/dashboard/analytics']);
+          console.log('redirected..1331');
+        this.router.navigate(['/home/welcome']);
         //this.router.navigate(['/login']);
       }
     
