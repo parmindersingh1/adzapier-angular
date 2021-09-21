@@ -16,7 +16,7 @@ export class AuthGuard implements CanActivate {
         let url: string = state.url;
         this.dataService.checkClickedURL.next(state.url);
         this.authenticationService.redirectUrl = url;  
-        if (this.location.path().indexOf('signup') == -1) {
+      //  if (this.location.path().indexOf('signup') == -1) {
             if (currentUser) {
                 // authorised so return true
                 return true;
@@ -25,13 +25,13 @@ export class AuthGuard implements CanActivate {
                 // not logged in so redirect to login page with the return url
                 return false;
             }
-        } else {
-            this.authenticationService.logout();
-            localStorage.removeItem('currentUser');
-            localStorage.clear();
-            const a = this.location.path().split("?id=");
-            this.router.navigate([a[0]], { queryParams: { id: a[1] } });
-        }
+        // } else {
+        //     this.authenticationService.logout();
+        //     localStorage.removeItem('currentUser');
+        //     localStorage.clear();
+        //     const a = this.location.path().split("?id=");
+        //     this.router.navigate([a[0]], { queryParams: { id: a[1] } });
+        // }
     }
 
     getUrlParameterByName(name: string, url?: any) {

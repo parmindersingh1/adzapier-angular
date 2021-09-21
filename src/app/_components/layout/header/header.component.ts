@@ -572,10 +572,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
           //  this.loading.start('1');
             this.loadPropertyPlanDetails(obj);
             //this.orgservice.setCurrentOrgWithProperty(obj); // three
-            if(this.router.url.indexOf("manage?success") == -1){
+            if(this.location.path().indexOf("type=manage") == -1 && this.location.path().indexOf("manage?success") == -1){
               this.router.navigate([this.router.url], { queryParams: { oid: obj.organization_id, pid: obj.property_id }, queryParamsHandling:'merge', skipLocationChange:false} );
             } else{
-                console.log('redirected 578..');
               this.router.navigate(['/settings/billing/manage'], { queryParams: { oid: obj.organization_id, pid: obj.property_id }, queryParamsHandling:'merge', skipLocationChange:false} );
             }
            // this.dataService.checkClickedURL.next('/home/welcome'+'?oid='+obj.organization_id+'&pid='+obj.property_id);
@@ -1321,7 +1320,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
         this.router.navigate(["/signup"],{ queryParams: { id: verifyToken[1] }});
         //this.router.navigate(['/privacy/dsar/dsarform', obj.web_form_id]);
         
-      } else if (this.location.path().indexOf("manage?success") !== -1) {
+      } else if (this.location.path().indexOf("type=manage") == -1 && this.location.path().indexOf("manage?success") == -1) {
         this.oIDPIDFromURL = this.findPropertyIDFromUrl(this.currentNavigationUrl || this.location.path());
         const url = this.location.path() == '/' ? '/home/welcome' : this.getCurrentRoute();
         if(this.oIDPIDFromURL !== undefined){
@@ -1329,8 +1328,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
         }
       } else {
           console.log('redirected..1331');
-        this.router.navigate(['/home/welcome']);
-        //this.router.navigate(['/login']);
+        //this.router.navigate(['/home/welcome']);
+        this.router.navigate(['/login']);
       }
     
   }
