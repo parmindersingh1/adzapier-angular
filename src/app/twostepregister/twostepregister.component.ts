@@ -563,10 +563,9 @@ get vemail() {
 
   login(){
     this.authenticationService.login(this.constructor.name, moduleName.loginModule,this.emailid, this.f.password.value)
-      .pipe(delay(2000))
+      .pipe(first())
       .subscribe(
         data => {
-          console.log(data,'data..')
           // this.getLoggedInUserDetails();
           this.authenticationService.userLoggedIn.next(true);
           this.authenticationService.currentUserSubject.next(data);
@@ -579,7 +578,6 @@ get vemail() {
           if (this.returnUrl) {
             this.router.navigate([params['redirectURL']]);
           } else {
-             console.log('redirecttwo581..');
             this.router.navigate(['/home/welcome']);
           }
         },
