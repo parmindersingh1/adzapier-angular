@@ -72,7 +72,6 @@ export class ManageOrganizationComponent implements OnInit, OnDestroy {
     this.activatedRoute.params.subscribe(params => {
       this.planID = params.id;
       this.onGetPlanInfo();
-      this.onGetAssingedOrg();
       this.onCalculateValue();
     });
 
@@ -93,6 +92,7 @@ export class ManageOrganizationComponent implements OnInit, OnDestroy {
           this.assigneLicence = result.assigned_licence;
           // this.pl = result.planDetails.type;
         }
+        this.onGetAssingedOrg();
       }, error => {
         this.skLoading = false;
         this.loading.stop('23');

@@ -74,7 +74,7 @@ export class ManagePropertyComponent implements OnInit, OnDestroy {
       // this.assigneLicence = params.assigned_licence;
       // this.planType = params.type;
       this.onGetPlanInfo();
-      this.onGetAssingedProperty();
+      // this.onGetAssingedProperty();
       this.onCalculateValue();
     });
 
@@ -101,6 +101,7 @@ export class ManagePropertyComponent implements OnInit, OnDestroy {
           this.assigneLicence = result.assigned_licence;
           this.planType = result.planDetails.type;
         }
+        this.onGetAssingedProperty();
       }, error => {
         this.skLoading = false;
         this.loading.stop('23');
