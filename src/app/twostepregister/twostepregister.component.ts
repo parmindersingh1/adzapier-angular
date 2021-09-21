@@ -573,10 +573,12 @@ get vemail() {
           this.onCheckOut(this.chckresponse);
           let params = this.route.snapshot.queryParams;
           this.returnUrl = params['redirectURL'];
+          console.log(this.returnUrl,'returnUrl..');
           // if (params['redirectURL']) {
           if (this.returnUrl) {
             this.router.navigate([params['redirectURL']]);
           } else {
+             console.log('redirecttwo581..');
             this.router.navigate(['/home/welcome']);
           }
         },
