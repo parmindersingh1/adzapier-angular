@@ -681,13 +681,13 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
       BannerCookieNoticeBorderColor: ThemeColor.BannerCookieNoticeBorderColor,
       BannerCookieNoticePrivacyLinkColor: ThemeColor.BannerCookieNoticePrivacyLinkColor,
       BannerAcceptAllBackgroundColor: ThemeColor.BannerAcceptAllBackgroundColor,
-      BannerAcceptAllTextColor: ThemeColor.BannerAcceptAllText,
+      BannerAcceptAllTextColor: ThemeColor.BannerAcceptAllTextColor,
       BannerPreferenceBackgroundColor: ThemeColor.BannerPreferenceBackgroundColor,
       BannerPreferenceTextColor: ThemeColor.BannerPreferenceTextColor,
       BannerDisableAllBackgroundColor: ThemeColor.BannerDisableAllBackgroundColor,
       BannerDisableAllTextColor: ThemeColor.BannerDisableAllTextColor,
-      BannerDoNotSellMyDataBackgroundColor: ThemeColor.BannerDoNotSellMyDataBackgroundColor,
-      BannerDoNotSellMyDataTextColor: ThemeColor.BannerDoNotSellMyDataTextColor,
+      BannerDoNotSellMyDataBackgroundColor: ThemeColor.BannerDoNotSellBackgroundColor,
+      BannerDoNotSellMyDataTextColor: ThemeColor.BannerDoNotSellTextColor,
       // Preference Colors
       PreferenceBackgroundColor: ThemeColor.PreferenceBackgroundColor,
       PreferenceTextColor: ThemeColor.PreferenceTextColor,
@@ -710,13 +710,13 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
       BannerCookieNoticeBorderColor: ThemeColor.BannerCookieNoticeBorderColor,
       BannerCookieNoticePrivacyLinkColor: ThemeColor.BannerCookieNoticePrivacyLinkColor,
       BannerAcceptAllBackgroundColor: ThemeColor.BannerAcceptAllBackgroundColor,
-      BannerAcceptAllTextColor: ThemeColor.BannerAcceptAllText,
+      BannerAcceptAllTextColor: ThemeColor.BannerAcceptAllTextColor,
       BannerPrivacyInfoBackgroundColor: ThemeColor.BannerPreferenceBackgroundColor,
       BannerPrivacyInfoTextColor: ThemeColor.BannerPreferenceTextColor,
       BannerDisableAllBackgroundColor: ThemeColor.BannerDisableAllBackgroundColor,
       BannerDisableAllTextColor: ThemeColor.BannerDisableAllTextColor,
-      BannerDoNotSellBackgroundColor: ThemeColor.BannerDoNotSellMyDataBackgroundColor,
-      BannerDoNotSellTextColor: ThemeColor.BannerDoNotSellMyDataTextColor,
+      BannerDoNotSellBackgroundColor: ThemeColor.BannerDoNotSellBackgroundColor,
+      BannerDoNotSellTextColor: ThemeColor.BannerDoNotSellTextColor,
       // Preference Colors
       PreferenceBackgroundColor: ThemeColor.PreferenceBackgroundColor,
       PreferenceTextColor: ThemeColor.PreferenceTextColor,
@@ -786,6 +786,7 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
         this.alertMsg = res.response;
         this.alertType = 'success';
         this.publishing = false;
+        this.onGetSavedBannerConfig();
         if (this.publishType === 'publish') {
           this.openModal(this.publishModal);
         }
@@ -832,6 +833,7 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
         this.alertMsg = res.response;
         this.alertType = 'success';
         this.publishing = false;
+        this.onGetSavedBannerConfig();
         if (this.publishType === 'publish') {
           this.openModal(this.publishModal);
         }
@@ -882,7 +884,7 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
           background: this.BannerConfigurationForm.value.BannerPreferenceBackgroundColor
         },
         AllowAllButtonStylesAndContent: {
-          textColor: this.BannerConfigurationForm.value.BannerAcceptAllText,
+          textColor: this.BannerConfigurationForm.value.BannerAcceptAllTextColor,
           background: this.BannerConfigurationForm.value.BannerAcceptAllBackgroundColor
         },
 
@@ -892,7 +894,7 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
         },
         DoNotSellButtonStylesAndContent: {
           textColor: this.BannerConfigurationForm.value.BannerDoNotSellMyDataTextColor,
-          background: this.BannerConfigurationForm.value.BannerDoNotSellMyDataBackGroundColor
+          background: this.BannerConfigurationForm.value.BannerDoNotSellMyDataBackgroundColor
         }
       },
       POPUP: {
