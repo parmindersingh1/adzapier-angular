@@ -124,8 +124,9 @@ export class CompanyteamComponent implements OnInit {
       this.loading.stop();
       if (data) {
         const key = 'response';
+        const companyLevelRoles = data[key].filter((t) => t.role_name.indexOf('Org') == -1);
         // const roleid = data[key];
-        this.roleList = data[key];
+        this.roleList = companyLevelRoles;
       }
     }, (err) => {
       this.alertMsg = err;

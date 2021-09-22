@@ -5,7 +5,7 @@ import {AlertService, AuthenticationService, UserService} from './../_services';
 import {MustMatch} from '../_helpers/must-match.validator';
 import { delay, first } from 'rxjs/operators';
 import {animate, state, style, transition, trigger} from '@angular/animations';
-import { Observable, timer, Subscription } from 'rxjs';
+import { Observable, timer, Subscription, pipe } from 'rxjs';
 import {moduleName} from '../_constant/module-name.constant';
 import {environment} from '../../environments/environment';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
@@ -573,6 +573,7 @@ get vemail() {
           this.onCheckOut(this.chckresponse);
           let params = this.route.snapshot.queryParams;
           this.returnUrl = params['redirectURL'];
+          console.log(this.returnUrl,'returnUrl..');
           // if (params['redirectURL']) {
           if (this.returnUrl) {
             this.router.navigate([params['redirectURL']]);

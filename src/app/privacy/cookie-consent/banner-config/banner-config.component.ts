@@ -287,12 +287,10 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
       if (AllowGENERIC) {
         regulationsList.push(DefaultRegulation[0]);
       }
-    console.log('regulationsList', regulationsList)
     this.defaultRegulation = regulationsList;
   }
 
   onMakeRegulationEveryWhere(type, event) {
-    console.log('type::::::', type)
     this.BannerConfigurationForm.patchValue({
       LivePreviewType: type
     });
@@ -564,6 +562,7 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
 
   onSetSavedGeneralConfig(mainConfig) {
     const CONFIG = mainConfig.config;
+    const gdprGlobal = !(mainConfig.gdpr_global === 'false' || mainConfig.gdpr_global === false);
     this.BannerConfigurationForm.patchValue({
       AllowGDPR: CONFIG.AllowedBanners.gdpr,
       AllowCCPA: CONFIG.AllowedBanners.ccpa,
@@ -571,7 +570,7 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
       GdprCountries: mainConfig.gdpr_target,
       EnableIAB: mainConfig.enable_iab,
       GoogleVendors: mainConfig.google_vendors,
-      GdprGlobal: mainConfig.gdpr_global == 'true' ? true : false,
+      GdprGlobal: gdprGlobal,
       CCPATarget: mainConfig.ccpa_target,
       CCPAGlobal: mainConfig.ccpa_global,
       GenericGlobal: mainConfig.generic_global,
@@ -606,7 +605,7 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
     let type = 'generic';
     if (mainConfig.ccpa_global) {
       type = 'ccpa';
-    }  else if (mainConfig.gdpr_global == 'true') {
+    }  else if (gdprGlobal) {
       type = 'gdpr';
     }
     this.onMakeRegulationEveryWhere(type, {event: {checked: true} });
@@ -682,13 +681,13 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
       BannerCookieNoticeBorderColor: ThemeColor.BannerCookieNoticeBorderColor,
       BannerCookieNoticePrivacyLinkColor: ThemeColor.BannerCookieNoticePrivacyLinkColor,
       BannerAcceptAllBackgroundColor: ThemeColor.BannerAcceptAllBackgroundColor,
-      BannerAcceptAllTextColor: ThemeColor.BannerAcceptAllText,
+      BannerAcceptAllTextColor: ThemeColor.BannerAcceptAllTextColor,
       BannerPreferenceBackgroundColor: ThemeColor.BannerPreferenceBackgroundColor,
       BannerPreferenceTextColor: ThemeColor.BannerPreferenceTextColor,
       BannerDisableAllBackgroundColor: ThemeColor.BannerDisableAllBackgroundColor,
       BannerDisableAllTextColor: ThemeColor.BannerDisableAllTextColor,
-      BannerDoNotSellMyDataBackgroundColor: ThemeColor.BannerDoNotSellMyDataBackgroundColor,
-      BannerDoNotSellMyDataTextColor: ThemeColor.BannerDoNotSellMyDataTextColor,
+      BannerDoNotSellMyDataBackgroundColor: ThemeColor.BannerDoNotSellBackgroundColor,
+      BannerDoNotSellMyDataTextColor: ThemeColor.BannerDoNotSellTextColor,
       // Preference Colors
       PreferenceBackgroundColor: ThemeColor.PreferenceBackgroundColor,
       PreferenceTextColor: ThemeColor.PreferenceTextColor,
@@ -711,13 +710,13 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
       BannerCookieNoticeBorderColor: ThemeColor.BannerCookieNoticeBorderColor,
       BannerCookieNoticePrivacyLinkColor: ThemeColor.BannerCookieNoticePrivacyLinkColor,
       BannerAcceptAllBackgroundColor: ThemeColor.BannerAcceptAllBackgroundColor,
-      BannerAcceptAllTextColor: ThemeColor.BannerAcceptAllText,
+      BannerAcceptAllTextColor: ThemeColor.BannerAcceptAllTextColor,
       BannerPrivacyInfoBackgroundColor: ThemeColor.BannerPreferenceBackgroundColor,
       BannerPrivacyInfoTextColor: ThemeColor.BannerPreferenceTextColor,
       BannerDisableAllBackgroundColor: ThemeColor.BannerDisableAllBackgroundColor,
       BannerDisableAllTextColor: ThemeColor.BannerDisableAllTextColor,
-      BannerDoNotSellBackgroundColor: ThemeColor.BannerDoNotSellMyDataBackgroundColor,
-      BannerDoNotSellTextColor: ThemeColor.BannerDoNotSellMyDataTextColor,
+      BannerDoNotSellBackgroundColor: ThemeColor.BannerDoNotSellBackgroundColor,
+      BannerDoNotSellTextColor: ThemeColor.BannerDoNotSellTextColor,
       // Preference Colors
       PreferenceBackgroundColor: ThemeColor.PreferenceBackgroundColor,
       PreferenceTextColor: ThemeColor.PreferenceTextColor,
@@ -787,6 +786,7 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
         this.alertMsg = res.response;
         this.alertType = 'success';
         this.publishing = false;
+        this.onGetSavedBannerConfig();
         if (this.publishType === 'publish') {
           this.openModal(this.publishModal);
         }
@@ -833,6 +833,7 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
         this.alertMsg = res.response;
         this.alertType = 'success';
         this.publishing = false;
+        this.onGetSavedBannerConfig();
         if (this.publishType === 'publish') {
           this.openModal(this.publishModal);
         }
@@ -883,7 +884,7 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
           background: this.BannerConfigurationForm.value.BannerPreferenceBackgroundColor
         },
         AllowAllButtonStylesAndContent: {
-          textColor: this.BannerConfigurationForm.value.BannerAcceptAllText,
+          textColor: this.BannerConfigurationForm.value.BannerAcceptAllTextColor,
           background: this.BannerConfigurationForm.value.BannerAcceptAllBackgroundColor
         },
 
@@ -893,7 +894,7 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
         },
         DoNotSellButtonStylesAndContent: {
           textColor: this.BannerConfigurationForm.value.BannerDoNotSellMyDataTextColor,
-          background: this.BannerConfigurationForm.value.BannerDoNotSellMyDataBackGroundColor
+          background: this.BannerConfigurationForm.value.BannerDoNotSellMyDataBackgroundColor
         }
       },
       POPUP: {

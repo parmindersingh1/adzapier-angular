@@ -292,7 +292,9 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   .p-datatable.p-datatable-sm .p-datatable-tbody > tr > td {
       font-size: 13px !important;
   }
-
+  .p-datatable.p-datatable-sm .p-datatable-tbody > tr > td:nth-child(2),.p-datatable.p-datatable-sm .p-datatable-tbody > tr > td:nth-child(3){
+    overflow-wrap:break-word;
+  }
   .p-datatable.p-datatable-sm .p-datatable-tbody > tr > td:nth-child(8),.p-datatable.p-datatable-sm .p-datatable-tbody > tr > td:nth-child(9),.p-datatable.p-datatable-sm .p-datatable-tbody > tr > td:nth-child(10) {
   white-space: nowrap;
   overflow: hidden;

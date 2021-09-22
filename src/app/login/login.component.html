@@ -156,7 +156,7 @@
                 <div *ngIf="f.password.errors.required">Password is required</div>
                 <!-- <div *ngIf="f.password.errors.pattern">Invalid Password</div> -->
               </div>
-              <div *ngIf="isInvitedUserVerified" style="color: rgb(17, 0, 128);">
+              <!-- <div *ngIf="isInvitedUserVerified" style="color: rgb(17, 0, 128);">
                 <p class="confirm-msg">
                   <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130.2 130.2">
                     <circle class="path circle" fill="none" stroke="#73AF55" stroke-width="6" stroke-miterlimit="10"
@@ -166,7 +166,7 @@
                   </svg>
                   <span> Your email address is successfully verified ! please login to access your account!'</span>
                 </p>
-              </div>
+              </div> --> <!--Email verification message if user with pending email verification-->
               <!-- <div *ngIf="!isInvitedUserVerified">
             <span *ngIf="!hideMessage" class="mt-1" style="color: red;">Verification link has been expired!</span>
           </div> -->
