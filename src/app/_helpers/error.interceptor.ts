@@ -65,6 +65,9 @@ export class ErrorInterceptor implements HttpInterceptor {
               } else if(err.url.indexOf('/api/v1/user/verifyemail') !== -1){
                 const error = err.error.error || err.statusText;
                 return throwError(error);
+                } else if(err.url.indexOf('/billing/checkout/trialsession') !== -1){
+                const error = err.error.error || err.statusText;
+                return throwError(error);
               } else{
                 this.router.navigate(['/error/servererror']);
               }
