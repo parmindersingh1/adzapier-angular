@@ -6,8 +6,8 @@ import { Location } from '@angular/common';
 @Injectable({ providedIn: 'root' })
 export class AuthGuard implements CanActivate {
     constructor(private router: Router, private authenticationService: AuthenticationService,
-                private location:Location,
-                private dataService:DataService) { }
+        private location: Location,
+        private dataService: DataService) { }
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
         let id = this.getUrlParameterByName('id', window.location.href);
@@ -16,22 +16,15 @@ export class AuthGuard implements CanActivate {
         let url: string = state.url;
         this.dataService.checkClickedURL.next(state.url);
         this.authenticationService.redirectUrl = url;  
-        if (this.location.path().indexOf('signup') == -1) {
-            if (currentUser) {
-                // authorised so return true
-                return true;
-            }else{
-                this.router.navigate(['/login']);
-                // not logged in so redirect to login page with the return url
-                return false;
-            }
+        if (currentUser) {
+            // authorised so return true
+            return true;
         } else {
-            this.authenticationService.logout();
-            localStorage.removeItem('currentUser');
-            localStorage.clear();
-            const a = this.location.path().split("?id=");
-            this.router.navigate([a[0]], { queryParams: { id: a[1] } });
+            this.router.navigate(['/login']);
+            // not logged in so redirect to login page with the return url
+            return false;
         }
+
     }
 
     getUrlParameterByName(name: string, url?: any) {
@@ -43,5 +36,5 @@ export class AuthGuard implements CanActivate {
         if (!results[2]) { return ''; }
         return decodeURIComponent(results[2].replace(/\+/g, ' '));
     }
-    
+
 }
