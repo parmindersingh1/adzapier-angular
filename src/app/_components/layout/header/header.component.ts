@@ -572,10 +572,17 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
           //  this.loading.start('1');
             this.loadPropertyPlanDetails(obj);
             //this.orgservice.setCurrentOrgWithProperty(obj); // three
-            if(this.location.path().indexOf("type=manage") == -1 && this.location.path().indexOf("manage?success") == -1){
-              this.router.navigate([this.router.url], { queryParams: { oid: obj.organization_id, pid: obj.property_id }, queryParamsHandling:'merge', skipLocationChange:false} );
-            } else{
-              this.router.navigate(['/settings/billing/manage'], { queryParams: { oid: obj.organization_id, pid: obj.property_id }, queryParamsHandling:'merge', skipLocationChange:false} );
+            if (this.location.path().indexOf("signup") !== -1) {
+              this.currentUser = null;
+              this.authService.logout();
+              localStorage.removeItem('currentUser');
+              localStorage.clear();
+              const a = this.location.path().split("?id=");
+              this.router.navigate([a[0]], { queryParams: { id: a[1] } });
+            } else if (this.location.path().indexOf("type=manage") == -1 && this.location.path().indexOf("manage?success") == -1) {
+              this.router.navigate([this.router.url], { queryParams: { oid: obj.organization_id, pid: obj.property_id }, queryParamsHandling: 'merge', skipLocationChange: false });
+            } else {
+              this.router.navigate(['/settings/billing/manage'], { queryParams: { oid: obj.organization_id, pid: obj.property_id }, queryParamsHandling: 'merge', skipLocationChange: false });
             }
            // this.dataService.checkClickedURL.next('/home/welcome'+'?oid='+obj.organization_id+'&pid='+obj.property_id);
             // this.dataService.getPropertyPlanDetails(this.constructor.name, moduleName.cookieConsentModule, obj.property_id)
@@ -1327,8 +1334,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
           this.router.navigate([url], { queryParams: { oid: this.oIDPIDFromURL[0], pid: this.oIDPIDFromURL[1] }, skipLocationChange: false });
         }
       } else {
-          console.log('redirected..1331');
-        //this.router.navigate(['/home/welcome']);
         this.router.navigate(['/login']);
       }
     
