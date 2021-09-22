@@ -514,15 +514,41 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
       return this.dataService.isLicenseLimitAvailableForOrganization('request',this.dataService.getAvailableLicenseForFormAndRequestPerOrg());
   }
 
-  requestsubject(requestorsubject, currenttype, request_form) {
+  onCheckRequesttype(requesttype, request_form, customobj) {
     const requestForm = JSON.parse(request_form);
-    const requesttypeindex = requestForm.findIndex((t) => t.controlId == requestorsubject);
-      let filltypes = [];
-      requestForm[requesttypeindex].selectOptions.filter((t)=> {
-        if(t.active){
-          filltypes.push(t.name);
+    const cdata = JSON.parse(customobj).request_type;
+    const requesttypeindex = requestForm.findIndex((t) => t.controlId == requesttype);
+    let filltypes = [];
+    filltypes.length = 0;
+    for (let i = 0; i < Object.values(cdata).length; i++) {
+      requestForm[requesttypeindex].selectOptions.filter((t) => {
+        if (t.request_type_id == Object.values(cdata)[i]) {
+          const idx = filltypes.includes(t.name);
+          if (!idx) {
+            filltypes.push(t.name);
+          }
         }
-    });
+      });
+    }
+    return filltypes;
+  }
+
+  onCheckSubjecttype(subjecttype, request_form, customobj) {
+    const requestForm = JSON.parse(request_form);
+    const cdata = JSON.parse(customobj).subject_type;
+    const requesttypeindex = requestForm.findIndex((t) => t.controlId == subjecttype);
+    let filltypes = [];
+    filltypes.length = 0;
+    for (let i = 0; i < Object.values(cdata).length; i++) {
+      requestForm[requesttypeindex].selectOptions.filter((t) => {
+        if (t.subject_type_id == Object.values(cdata)[i]) {
+          const idx = filltypes.includes(t.name);
+          if (!idx) {
+            filltypes.push(t.name);
+          }
+        }
+      });
+    }
     return filltypes;
   }
 }

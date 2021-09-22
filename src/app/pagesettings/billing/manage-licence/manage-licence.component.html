@@ -59,20 +59,12 @@
       <tbody>
       <tr *ngFor="let plan of activeSubscriptionList">
         <ng-container *ngIf="plan.active">
-        <td *ngIf="plan.planDetails.level === 'property'"><a class="plan-name" [routerLink]="'/settings/billing/manage/property'"
-          [queryParams]="{planid: plan.id, plan_name: plan.plan_name,
-             total_licence: plan.total_licence, assigned_licence: plan.assigned_licence,
-              product_name: plan.planDetails.product_name,
-              type: plan.planDetails.type, oid: this.queryOID, pid: this.queryPID
-            }">
+        <td *ngIf="plan.planDetails.level === 'property'"><a class="plan-name" [routerLink]="['/settings/billing/manage/property', plan.id]"
+          [queryParams]="{oid: this.queryOID, pid: this.queryPID }">
            {{plan.planDetails.product_name}}</a></td>
 
-           <td *ngIf="plan.planDetails.level !== 'property'"><a class="plan-name" [routerLink]="'/settings/billing/manage/organizations'"
-            [queryParams]="{planid: plan.id, plan_name: plan.plan_name,
-               total_licence: plan.total_licence, assigned_licence: plan.assigned_licence,
-                product_name: plan.planDetails.product_name,
-                type: plan.planDetails.type, oid: this.queryOID, pid: this.queryPID
-              }">
+           <td *ngIf="plan.planDetails.level !== 'property'"><a class="plan-name" [routerLink]="['/settings/billing/manage/organizations', plan.id]"
+            [queryParams]="{oid: this.queryOID, pid: this.queryPID }">
              {{plan.planDetails.product_name}}</a></td>
 
 
@@ -106,19 +98,13 @@
 
         </th>
           <td style="width: 290px" *ngIf="plan.planDetails.level === 'property'">
-            <a class="plan-name" [routerLink]="'/settings/billing/manage/property'"
-                                                               [queryParams]="{planid: plan.id, plan_name: plan.plan_name,
-             total_licence: plan.total_licence, assigned_licence: plan.assigned_licence,
-              product_name: plan.planDetails.product_name,
-              type: plan.planDetails.type, oid: this.queryOID, pid: this.queryPID
+            <a class="plan-name" [routerLink]="['/settings/billing/manage/property', plan.id]"
+                                                               [queryParams]="{oid: this.queryOID, pid: this.queryPID
             }">
               <button pButton label="Assign Property" class="w-100 p-button-secondary manage-btn"></button></a></td>
 
-          <td style="width: 290px" *ngIf="plan.planDetails.level !== 'property'"><a class="plan-name" [routerLink]="'/settings/billing/manage/organizations'"
-                                                               [queryParams]="{planid: plan.id, plan_name: plan.plan_name,
-               total_licence: plan.total_licence, assigned_licence: plan.assigned_licence,
-                product_name: plan.planDetails.product_name,
-                type: plan.planDetails.type, oid: this.queryOID, pid: this.queryPID
+          <td style="width: 290px" *ngIf="plan.planDetails.level !== 'property'"><a class="plan-name" [routerLink]="['/settings/billing/manage/organizations', plan.id]"
+                                                               [queryParams]="{oid: this.queryOID, pid: this.queryPID
               }">
             <button pButton label="Assign Organization" class="w-100 p-button-secondary manage-btn"></button></a></td>
 

@@ -66,25 +66,50 @@ export class ManagePropertyComponent implements OnInit, OnDestroy {
     this.propertyForm = this.formBuilder.group({
       propID: ['', Validators.required]
     });
-    this.activatedRoute.queryParams.subscribe(params => {
-      this.planID = params.planid;
-      this.planName = params.plan_name;
-      this.totalLicence = params.total_licence;
-      this.productName = params.product_name;
-      this.assigneLicence = params.assigned_licence;
-      this.planType = params.type;
-      this.onGetAssingedProperty();
+    this.activatedRoute.params.subscribe(params => {
+      this.planID = params.id;
+      // this.planName = params.plan_name;
+      // this.totalLicence = params.total_licence;
+      // this.productName = params.product_name;
+      // this.assigneLicence = params.assigned_licence;
+      // this.planType = params.type;
+      this.onGetPlanInfo();
+      // this.onGetAssingedProperty();
       this.onCalculateValue();
     });
 
     this.activatedRoute.queryParamMap
       .subscribe(params => {
       this.queryOID = params.get('oid');
-      this.queryPID = params.get('pid'); 
+      this.queryPID = params.get('pid');
     });
     this.getAllOrgList();
   }
 
+  onGetPlanInfo() {
+    this.loading.start('23');
+    this.skLoading = true;
+    this.service.getPlanInfo(this.constructor.name, moduleName.billingModule, this.planID)
+      .subscribe((res: any) => {
+        this.loading.stop('23');
+        this.skLoading = false;
+        if (res.status === 200) {
+          const result = res.response.length > 0 ? res.response[0] : null;
+          this.planName = result.plan_name;
+          this.totalLicence = result.total_licence;
+          this.productName = result.planDetails.product_name;
+          this.assigneLicence = result.assigned_licence;
+          this.planType = result.planDetails.type;
+        }
+        this.onGetAssingedProperty();
+      }, error => {
+        this.skLoading = false;
+        this.loading.stop('23');
+        this.isOpen = true;
+        this.alertMsg = error;
+        this.alertType = 'danger';
+      });
+  }
 
   onGetPropsAndOrgId() {
     this.orgservice.currentProperty.subscribe((response) => {
@@ -114,7 +139,7 @@ export class ManagePropertyComponent implements OnInit, OnDestroy {
   onGetAllPropertyList(e) {
     // this.onGetAllPropertyLicenseList(e);
     this.oID = e.target.value;
-    const payload = {oID: e.target.value, planID: this.planID, planType: this.planType};
+    const payload = {oID: e.target.value, planID: this.planID, planType: String(this.planType)};
     this.loading.start('2');
     this.service.getAllPropertyList(this.constructor.name, moduleName.billingModule, payload)
       .subscribe((res: any) => {
@@ -142,7 +167,7 @@ export class ManagePropertyComponent implements OnInit, OnDestroy {
   }
 
   onGetAllPropertyLicenseList(e, res) {
-    const payload = {oID: e.target.value, licenseType: this.planType};
+    const payload = {oID: e.target.value, licenseType: String(this.planType)};
     this.loading.start('3');
     this.service.getAllPropertyLicenseList(this.constructor.name, moduleName.billingModule, payload)
       .subscribe((result: any) => {
@@ -224,7 +249,7 @@ export class ManagePropertyComponent implements OnInit, OnDestroy {
       planID: this.planID,
       propID: this.propertyForm.value.propID,
       orgID: this.oID,
-      planType: this.planType
+      planType: String(this.planType)
     };
     this.loading.start();
 
