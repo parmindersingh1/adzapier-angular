@@ -319,7 +319,9 @@ export class PricingComponent implements OnInit, OnDestroy {
         this.subTotal += Number(item.priceTotal);
       }
     }
-    window.scrollTo(0, document.body.scrollHeight);
+    setTimeout(() => {
+      window.scrollTo(0, document.body.scrollHeight);
+    }, 500);
   }
 
   onUpdateCart(cartProperty, i) {

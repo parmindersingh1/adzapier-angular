@@ -69,18 +69,39 @@ export class ManageOrganizationComponent implements OnInit, OnDestroy {
     this.orgForm = this.formBuilder.group({
       orgID: ['', Validators.required]
     });
-    this.activatedRoute.queryParams.subscribe(params => {
-      this.planID = params.planid;
-      this.planName = params.plan_name;
-      this.totalLicence = params.total_licence;
-      this.productName = params.product_name;
-      this.assigneLicence = params.assigned_licence;
-      this.onGetAssingedOrg();
-      this.onCalculateValue()
-    })
+    this.activatedRoute.params.subscribe(params => {
+      this.planID = params.id;
+      this.onGetPlanInfo();
+      this.onCalculateValue();
+    });
 
     this.getAllOrgList();
   }
+  onGetPlanInfo() {
+    this.loading.start('23');
+    this.skLoading = true;
+    this.service.getPlanInfo(this.constructor.name, moduleName.billingModule, this.planID)
+      .subscribe((res: any) => {
+        this.loading.stop('23');
+        this.skLoading = false;
+        if (res.status === 200) {
+          const result = res.response.length > 0 ? res.response[0] : null;
+          this.planName = result.plan_name;
+          this.totalLicence = result.total_licence;
+          this.productName = result.planDetails.product_name;
+          this.assigneLicence = result.assigned_licence;
+          // this.pl = result.planDetails.type;
+        }
+        this.onGetAssingedOrg();
+      }, error => {
+        this.skLoading = false;
+        this.loading.stop('23');
+        this.isOpen = true;
+        this.alertMsg = error;
+        this.alertType = 'danger';
+      });
+  }
+
 
   onCalculateValue() {
     const cal = Math.ceil(this.assigneLicence * 100 / this.totalLicence);

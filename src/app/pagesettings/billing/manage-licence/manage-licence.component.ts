@@ -4,8 +4,11 @@ import {ActivatedRoute} from '@angular/router';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
 import {moduleName} from 'src/app/_constant/module-name.constant';
 import {BillingService} from 'src/app/_services/billing.service';
-import {UserService} from '../../../_services';
+import {OrganizationService, UserService} from '../../../_services';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
+import {DataService} from '../../../_services/data.service';
+import {Observable} from 'rxjs';
+import {debounceTime, distinctUntilChanged, map} from 'rxjs/operators';
 
 @Component({
   selector: 'app-manage-subscription',
@@ -28,6 +31,18 @@ export class ManageLicenceComponent implements OnInit {
   queryPID;
   propertyForm: FormGroup;
   modalRef: BsModalRef;
+   submitted: boolean = false;
+  private currentManagedOrgID: any;
+  private currrentManagedPropID: any;
+  assigneLicence = 0;
+  propertyList = [];
+  planID = '';
+  oID = '';
+  private planType = '';
+  allUnSignPropertyList = [];
+  orgList = [];
+  totalLicence = 0;
+  propertyNameError = false;
 
   constructor(
     private loading: NgxUiLoaderService,
@@ -35,7 +50,9 @@ export class ManageLicenceComponent implements OnInit {
     private userService: UserService,
     private formBuilder: FormBuilder,
     private modalService: BsModalService,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private dataService: DataService,
+    private orgservice: OrganizationService
   ) { }
 
   ngOnInit() {
@@ -66,6 +83,20 @@ export class ManageLicenceComponent implements OnInit {
     this.onGetActivePlan();
     this.propertyForm = this.formBuilder.group({
       propID: ['', Validators.required]
+    });
+    this.onGetPropsAndOrgId();
+    this.getAllOrgList();
+  }
+
+  onGetPropsAndOrgId() {
+    this.orgservice.currentProperty.subscribe((response) => {
+      if (response !== '') {
+        this.currentManagedOrgID = response.organization_id || response.response.oid;
+        this.currrentManagedPropID = response.property_id || response.response.id;
+      } else {
+        this.currentManagedOrgID = this.queryOID;
+        this.currrentManagedPropID = this.queryPID;
+      }
     });
   }
 
@@ -117,45 +148,154 @@ export class ManageLicenceComponent implements OnInit {
   }
 
   // add  Properties
-  openModal(template: TemplateRef<any>) {
+  openModal(template: TemplateRef<any>, plan) {
+    console.log('plan::::::', plan)
+    this.assigneLicence = plan.assigned_licence;
+    this.totalLicence = plan.total_licence;
+    this.planID = plan.id;
+    this.planType = plan.planDetails.type;
     this.modalRef = this.modalService.show(template);
   }
-  // async onSubmit() {
-  //   this.submitted = true;
-  //   this.propertyNameError = this.propertyForm.value.propID.length > this.totalLicence - this.assigneLicence ? true : false;
-  //   // stop here if form is invalid
-  //   if (this.propertyForm.invalid) {
-  //     return;
-  //   }
-  //   const payload = {
-  //     planID: this.planID,
-  //     propID: this.propertyForm.value.propID,
-  //     orgID: this.oID,
-  //     planType: this.planType
-  //   };
-  //   this.loading.start();
-  //
-  //   this.skLoading = true;
-  //   this.service.assignPropertyLicence(this.constructor.name, moduleName.billingModule, payload)
-  //     .subscribe((res: any) => {
-  //       this.loading.stop();
-  //       this.skLoading = false;
-  //       this.modalRef.hide();
-  //       this.isOpen = true;
-  //       this.alertMsg = res.response;
-  //       this.alertType = 'success';
-  //       this.propertyForm.reset();
-  //       this.onGetAssingedProperty();
-  //       this.dataService.isLicenseAppliedForProperty.next({ requesttype: 'property', hasaccess: true });
-  //       this.isCurrentPropertySelected(this.currentManagedOrgID, this.currrentManagedPropID);
-  //
-  //     }, err => {
-  //       this.loading.stop();
-  //       this.skLoading = false;
-  //       this.isOpen = true;
-  //       this.alertMsg = err;
-  //       this.alertType = 'danger';
-  //     });
-  //   // display form values on success
-  // }
+  async onSubmit() {
+    this.submitted = true;
+    this.propertyNameError = this.propertyForm.value.propID.length > this.totalLicence - this.assigneLicence ? true : false;
+    // stop here if form is invalid
+    if (this.propertyForm.invalid) {
+      return;
+    }
+    const payload = {
+      planID: this.planID,
+      propID: this.propertyForm.value.propID,
+      orgID: this.oID,
+      planType: String(this.planType)
+    };
+    this.loading.start();
+
+    this.skLoading = true;
+    this.billingService.assignPropertyLicence(this.constructor.name, moduleName.billingModule, payload)
+      .subscribe((res: any) => {
+        this.loading.stop();
+        this.skLoading = false;
+        this.modalRef.hide();
+        this.isOpen = true;
+        this.alertMsg = res.response;
+        this.alertType = 'success';
+        this.propertyForm.reset();
+        this.onGetAssingedProperty();
+        this.dataService.isLicenseAppliedForProperty.next({ requesttype: 'property', hasaccess: true });
+        this.isCurrentPropertySelected(this.currentManagedOrgID, this.currrentManagedPropID);
+
+      }, err => {
+        this.loading.stop();
+        this.skLoading = false;
+        this.isOpen = true;
+        this.alertMsg = err;
+        this.alertType = 'danger';
+      });
+    // display form values on success
+  }
+  async isCurrentPropertySelected(orgID, propID) {
+    this.loading.start('2');
+    this.dataService.getOrgPlanInfo(this.constructor.name, moduleName.cookieConsentModule, orgID)
+      .subscribe((res: any) => {
+        this.loading.stop('2');
+        this.dataService.setOrgPlanToLocalStorage(res);
+      }, error => {
+        this.loading.stop('2');
+      });
+    this.loading.start('1');
+    this.dataService.getPropertyPlanDetails(this.constructor.name, moduleName.cookieConsentModule, propID)
+      .subscribe((res: any) => {
+        this.dataService.removePropertyPlanFromLocalStorage();
+        this.dataService.setPropertyPlanToLocalStorage(res);
+        this.loading.stop('1');
+      }, err => {
+        this.loading.stop('1');
+      });
+  }
+
+  onGetAssingedProperty() {
+    this.loading.start();
+    this.skLoading = true;
+    this.billingService.getAssignedPropByPlanID(this.constructor.name, moduleName.billingModule, this.planID).subscribe((res: any) => {
+      this.loading.stop();
+      this.skLoading = false;
+      this.assigneLicence = res.response.length;
+      this.propertyList = res.response;
+    }, err => {
+      this.loading.stop();
+      this.skLoading = false;
+      this.isOpen = true;
+      this.alertMsg = err;
+      this.alertType = 'danger';
+    });
+  }
+
+  onGetAllPropertyList(e) {
+    this.oID = e.target.value;
+    const payload = {oID: e.target.value, planID: this.planID, planType: String(this.planType)};
+    this.loading.start('2');
+    this.billingService.getAllPropertyList(this.constructor.name, moduleName.billingModule, payload)
+      .subscribe((res: any) => {
+        this.loading.stop('2');
+        this.onGetAllPropertyLicenseList(e, res);
+      }, err => {
+        this.loading.stop('2');
+        this.isOpen = true;
+        this.alertMsg = err;
+        this.alertType = 'danger';
+      });
+  }
+
+  onGetAllPropertyLicenseList(e, res) {
+    const payload = {oID: e.target.value, licenseType: String(this.planType)};
+    this.loading.start('3');
+    this.billingService.getAllPropertyLicenseList(this.constructor.name, moduleName.billingModule, payload)
+      .subscribe((result: any) => {
+        this.loading.stop('3');
+
+        const propertyList = [...res.response];
+        const assignedLicenseProperty = [];
+
+        for (const assignedProperty of result.response) {
+          assignedLicenseProperty.push(assignedProperty.pid);
+        }
+
+        this.allUnSignPropertyList = [];
+        for (const propertyObj of propertyList) {
+          if (!assignedLicenseProperty.includes(propertyObj.id)) {
+            this.allUnSignPropertyList.push({label: propertyObj.name, value: propertyObj.id});
+          }
+        }
+        this.search;
+      }, err => {
+        this.loading.stop('3');
+        this.isOpen = true;
+        this.alertMsg = err;
+        this.alertType = 'danger';
+      });
+  }
+  search = (text$: Observable<string>) =>
+    text$.pipe(
+      debounceTime(200),
+      distinctUntilChanged(),
+      map(term => term.length < 0 ? []
+        : this.allUnSignPropertyList.filter(v => v.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10))
+    )
+  getAllOrgList() {
+    this.loading.start('3');
+    this.billingService.getAllActiveOrgList(this.constructor.name, moduleName.billingModule)
+      .subscribe((res: any) => {
+        this.loading.stop('3');
+        this.orgList = res.response;
+      }, err => {
+        this.loading.stop('3');
+        this.isOpen = true;
+        this.alertMsg = err;
+        this.alertType = 'danger';
+      });
+  }
+  get f() {
+    return this.propertyForm.controls;
+  }
 }

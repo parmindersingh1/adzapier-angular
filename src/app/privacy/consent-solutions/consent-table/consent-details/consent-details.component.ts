@@ -129,6 +129,7 @@ export class ConsentDetailsComponent implements OnInit {
         this.isOpen = true;
         this.alertMsg = err.message;
         this.alertType = 'danger';
+        this.modalRef.hide();
       });
     // display form values on success
   }
