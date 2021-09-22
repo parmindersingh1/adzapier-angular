@@ -215,11 +215,14 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
           localStorage.clear();
           this.selectedOrgProperties.length = 0;
           if (this.location.path().indexOf('/signup') !== -1 || this.location.path().indexOf('/verify-email') !== -1) {
-            const a = this.location.path().split("?id=");
-          //  this.router.navigate([a[0]],{ queryParams: { id: a[1] }});
             sessionStorage.clear();
-            const tokenid = a[0].split("/verify-email/");
-            this.router.navigate(["/signup"], { queryParams: { id: tokenid[1] } });
+            const a = this.location.path().split("?id=");
+            if(a[0].indexOf('/verify-email') == -1){
+              this.router.navigate([a[0]],{ queryParams: { id: a[1] }});
+            }else{
+              const tokenid = a[0].split("/verify-email/");
+              this.router.navigate(["/signup"], { queryParams: { id: tokenid[1] } });
+            }
           } else{
             this.router.navigate(['/login']);
           }
