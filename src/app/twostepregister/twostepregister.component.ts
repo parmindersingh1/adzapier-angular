@@ -545,7 +545,6 @@ get vemail() {
           this.alertType = 'success';
           this.loading = false;
           this.chckresponse = result.response.stripe_sessionId;
-          console.log(this.chckresponse);
           this.login();
           
       
