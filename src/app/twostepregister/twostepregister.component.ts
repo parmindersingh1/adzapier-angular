@@ -49,7 +49,7 @@ export class TwostepregisterComponent implements OnInit {
   emailid:any;
   verified = "Email Not Verified";
   userid : any;
-  planID = "price_1I8RHcBa3iZWL3Ygt4B3gZVd";
+  planID :any;
   units: any;
   selectedVal:any;
   countries: string[];
@@ -360,7 +360,7 @@ export class TwostepregisterComponent implements OnInit {
      if(this.route.snapshot.queryParams["plan_id"]){
        this.planID = this.route.snapshot.queryParams["plan_id"];
      }else{
-       this.planID = "price_1I8RHcBa3iZWL3Ygt4B3gZVd";
+       this.planID = environment.cookiefreePlanID;
      }
 
      

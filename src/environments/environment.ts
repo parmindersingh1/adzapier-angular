@@ -17,6 +17,7 @@ export const environment = {
   // apiUrl: 'https://cmp-api.adzpier-staging.com/api/v1',
   // apiUrl: 'http://localhost:8888/api/v1',
   stripePublishablekey : 'pk_test_Bea8DtMw2JDaQoZuvyd2yEdE00wtdPEyoM',
+  cookiefreePlanID : 'price_1I8RHcBa3iZWL3Ygt4B3gZVd',
   consentPreferenceCDN: 'https://staging-cdn.adzapsrv.com/consent-preference/develop/adzapier-cp-sdk.js',
   consentPreferenceConfig : {
     AppID: 'cBJtzTHAnDECTCguDBeBzIXprEfLdQwgklQYRXqkdRNPMCYSjX', // Your App ID
