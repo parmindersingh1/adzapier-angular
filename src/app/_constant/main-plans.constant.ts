@@ -736,7 +736,7 @@ export const featuresComparison = {
       enterprise: 'YES'
     },
     {
-      featureName: 'Authenicated Consent\n',
+      featureName: 'Authenticated Consent\n',
       free: 'NO',
       essentials: 'YES',
       professional: 'YES',
