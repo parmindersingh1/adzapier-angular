@@ -109,9 +109,9 @@
 
           <ng-container *ngIf="plan.planDetails.level !== 'property'">
             <td class="text-center" style="width: 482px">
-              <button  pButton type="button" label="Assign Organization" style="border-radius: 3px 0px 0px 3px; width: 62%; font-size:11px"
+              <button  pButton type="button" label="Assign Organization" (click)="openModalOrg(addOrganization, plan)" style="border-radius: 3px 0px 0px 3px; width: 62%; font-size:11px"
                        icon="pi pi-plus" class="p-button-warning p-button-sm"></button>
-              <a class="plan-name" tooltip="Assign or remove subscription to properties" [routerLink]="['/settings/billing/manage/organization', plan.id]"
+              <a class="plan-name" tooltip="Assign or remove subscription to properties" [routerLink]="['/settings/billing/manage/organizations', plan.id]"
                  [queryParams]="{ oid: this.queryOID, pid: this.queryPID}">
                 <button pButton icon="pi pi-sliders-h" label="Manage" style="border-radius: 0px 3px 3px 0px;  font-size:11px" class="action-btn p-button-info manage-btn p-button-sm"></button></a>
             </td>
@@ -189,6 +189,32 @@
 </div>
 
 
+<ng-template #addOrganization>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Assign New Organization</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="orgForm" (ngSubmit)="onSubmitOrg()">
+      <label for="typeahead-basic">Find Organization:</label>
+      <div class="row">
+        <div class="col-sm-8">
+          <p-multiSelect class="gdprSelect"  [disabled]="totalLicenceOrg - assigneLicenceOrg === 0"  [selectionLimit]="totalLicenceOrg - assigneLicenceOrg"
+                         formControlName="orgID" [style]="{'width':'100%'}" [options]="allUnSignOrgList" ></p-multiSelect>
+        </div>
+        <div class="col-sm-4 p-0">
+          <button class="btn btn-link tx-decoration-underline" aria-label="Close" type="button"
+                  (click)="modalRef.hide()">Cancel</button>
+          <button type="submit" class="btn btn-primary mr-1" [disabled]="totalLicenceOrg - assigneLicenceOrg === 0">Assign</button>
+        </div>
+      </div>
+      <p *ngIf="orgNameError">This Field is Required</p>
+    </form>
+  </div>
+</ng-template>
+
 
 <ng-template #addProperty>
   <div class="modal-header">
@@ -217,7 +243,7 @@
         <div *ngIf="f.propID.errors.required">This Field is required</div>
       </div>
       <div class="text-danger" *ngIf="propertyNameError">Property is not Valid</div>
-      <div class="text-danger" *ngIf="this.totalLicence - this.assigneLicence">Licence not available</div>
+<!--      <div class="text-danger" *ngIf="this.totalLicence - this.assigneLicence">Licence not available</div>-->
       <div class="mt-4 text-center">
         <button class="btn btn-link tx-decoration-underline" type="button"  aria-label="Close" (click)="modalRef.hide()">Cancel</button>
         <button type="submit" class="btn ml-3 btn-primary">Assign</button>

@@ -43,7 +43,11 @@ export class ManageLicenceComponent implements OnInit {
   orgList = [];
   totalLicence = 0;
   propertyNameError = false;
-
+  orgForm: FormGroup;
+  allUnSignOrgList = [];
+  totalLicenceOrg = 0;
+  assigneLicenceOrg = 0;
+  orgNameError = null;
   constructor(
     private loading: NgxUiLoaderService,
     private billingService: BillingService,
@@ -84,8 +88,12 @@ export class ManageLicenceComponent implements OnInit {
     this.propertyForm = this.formBuilder.group({
       propID: ['', Validators.required]
     });
+    this.orgForm = this.formBuilder.group({
+      orgID: ['', Validators.required]
+    });
     this.onGetPropsAndOrgId();
     this.getAllOrgList();
+    this.getAllOrgList2();
   }
 
   onGetPropsAndOrgId() {
@@ -149,7 +157,6 @@ export class ManageLicenceComponent implements OnInit {
 
   // add  Properties
   openModal(template: TemplateRef<any>, plan) {
-    console.log('plan::::::', plan)
     this.assigneLicence = plan.assigned_licence;
     this.totalLicence = plan.total_licence;
     this.planID = plan.id;
@@ -297,5 +304,73 @@ export class ManageLicenceComponent implements OnInit {
   }
   get f() {
     return this.propertyForm.controls;
+  }
+  // add Organization
+  openModalOrg(template: TemplateRef<any>, plan) {
+    this.assigneLicenceOrg = plan.assigned_licence;
+    this.totalLicenceOrg = plan.total_licence;
+    this.planID = plan.id;
+    this.planType = plan.planDetails.type;
+    this.modalRef = this.modalService.show(template);
+  }
+
+  onSubmitOrg() {
+    this.submitted = true;
+    this.orgNameError = !this.orgForm.value.orgID ? true : false;
+    // stop here if form is invalid
+    if (this.orgForm.invalid) {
+      return;
+    }
+    const payload = {
+      planID: this.planID,
+      orgID: this.orgForm.value.orgID
+    };
+    this.loading.start();
+    this.skLoading = true;
+    this.billingService.assignOrgLicence(this.constructor.name, moduleName.billingModule, payload)
+      .subscribe(res => {
+        this.loading.stop();
+        this.skLoading = false;
+        this.modalRef.hide();
+        // this.licenseAvailabilityForFormAndRequestPerOrg(this.orgForm.value.orgID);
+        this.orgForm.reset();
+        // this.onGetAssingedOrg()
+        this.getAllOrgList2();
+        this.isCurrentPropertySelected(this.currentManagedOrgID, this.currrentManagedPropID)
+        this.dataService.isLicenseApplied.next({ requesttype: 'organization', hasaccess: true });
+      }, err => {
+        this.loading.stop();
+        this.skLoading = false;
+        this.isOpen = true;
+        this.alertMsg = err;
+        this.alertType = 'danger';
+      });
+    // display form values on success
+  }
+  searchOrg = (text$: Observable<string>) =>
+    text$.pipe(
+      debounceTime(200),
+      distinctUntilChanged(),
+      map(term => term.length < 0 ? []
+        : this.allUnSignOrgList.filter(v => v.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10))
+    )
+  getAllOrgList2() {
+    this.loading.start('3');
+    this.billingService.getAllOrgList(this.constructor.name, moduleName.billingModule)
+      .subscribe((res: any) => {
+        this.loading.stop('3');
+        // this.orgList = res.response;
+
+        this.allUnSignOrgList = [];
+        for (const orgObj of res.response) {
+          this.allUnSignOrgList.push({label: orgObj.orgname, value: orgObj.id})
+        }
+        this.searchOrg
+      }, err => {
+        this.loading.stop('3');
+        this.isOpen = true;
+        this.alertMsg = err;
+        this.alertType = 'danger';
+      })
   }
 }
