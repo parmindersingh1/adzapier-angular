@@ -26,6 +26,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
   isMobilePropertyCollapsed = true;
   isMobileDashboardMenuCollapsed = true;
   isMobilePrivacyMenuCollapsed = true;
+  isMobileDSARMenuCollapsed = true;
+  isMobileCookieMenuCollapsed=true;
+  isMobileConsentMenuCollapsed=true;
   accessHeader: boolean;
   public currentLoggedInUser: string;
   uid: string;
@@ -313,33 +316,45 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
           ]
         }];
       this.navigationMenu = [
-        {
-          showlink: 'Dashboard',
-          subcategory: [{ showlink: 'DSAR', routerLink: '/home/dashboard/ccpa-dsar', icon: 'bar-chart-2' },
-          // { showlink: 'GDPR', routerLink: '/pagenotfound', icon: 'pie-chart' },
-          { showlink: 'Cookie Consent', routerLink: '/home/dashboard/cookie-consent', icon: 'fas fa-cookie feather-16' },
-          { showlink: 'Consent Preference', routerLink: '/home/dashboard/consent-preference', icon: 'fas fa-cookie feather-16' }
-          ]
-        }, {
-          showlink: 'Privacy',
-          subcategory: [
-            { showlink: 'Dashboard', routerLink: '/home/dashboard/ccpa-dsar', icon: 'bar-chart-2' },
-            { showlink: 'Webforms', routerLink: '/privacy/dsar/webforms', icon: 'pie-chart' },
-            { showlink: 'Requests', routerLink: '/privacy/dsar/requests', icon: 'fa fa-ticket-alt feather-16' },
-            { showlink: 'Workflow', routerLink: '/privacy/dsar/workflows', icon: 'fas fa-sitemap' },
-
-            { showlink: 'Dashboard', routerLink: '/home/dashboard/cookie-consent', icon: 'fas fa-cookie feather-16' },
-            { showlink: 'Manage Vendors', routerLink: '/cookie-consent/manage-vendors', icon: 'fas fa-tasks feather-16' },
-            { showlink: 'Cookie Category', routerLink: '/cookie-consent/cookie-category', icon: 'fab fa-microsoft feather-16' },
-            { showlink: 'Cookie Banner', routerLink: '/cookie-consent/cookie-banner', icon: 'fas fa-cookie feather-16' },
-            { showlink: 'Consent Tracking', routerLink: '/cookie-consent/cookie-tracking', icon: 'fas fa-file-contract feather-16' },
-            { showlink: 'Setup', routerLink: '/cookie-consent/cookie-banner/setup', icon: 'fas fa-wrench feather-16' },
-
-            { showlink: 'Dashboard', routerLink: '/home/dashboard/consent-preference', icon: 'fas fa-chart-line feather-16' },
-            { showlink: 'Consent Records', routerLink: '/consent-solutions/consent-records', icon: 'fas fa-tasks feather-16' },
-            { showlink: 'Setup', routerLink: '/consent-solutions/setup', icon: 'fas fa-wrench feather-16' },
-          ]
-        }, { showlink: 'Billing', routerLink: '/settings/billing/manage' }];
+        // {
+        //   showlink: 'Dashboard',
+        //   subcategory: [{ showlink: 'DSAR', routerLink: '/home/dashboard/ccpa-dsar', icon: 'bar-chart-2' },
+        //   // { showlink: 'GDPR', routerLink: '/pagenotfound', icon: 'pie-chart' },
+        //   { showlink: 'Cookie Consent', routerLink: '/home/dashboard/cookie-consent', icon: 'fas fa-cookie feather-16' },
+        //   { showlink: 'Consent Preference', routerLink: '/home/dashboard/consent-preference', icon: 'fas fa-cookie feather-16' }
+        //   ]
+        // },
+        { 
+          showlink: 'DSAR',
+          tooltip:'Data Subject Access Request',
+        subcategory: [
+          { showlink: 'Dashboard', routerLink: '/home/dashboard/ccpa-dsar', icon: 'bar-chart-2' },
+          { showlink: 'Webforms', routerLink: '/privacy/dsar/webforms', icon: 'pie-chart' },
+          { showlink: 'Requests', routerLink: '/privacy/dsar/requests', icon: 'fa fa-ticket-alt feather-16' },
+          { showlink: 'Workflow', routerLink: '/privacy/dsar/workflows', icon: 'fas fa-sitemap' },
+        ]
+  
+        },
+      {
+        showlink: 'Cookie Consent',
+        subcategory: [
+          { showlink: 'Dashboard', routerLink: '/home/dashboard/cookie-consent', icon: 'fas fa-cookie feather-16' },
+          { showlink: 'Manage Vendors', routerLink: '/cookie-consent/manage-vendors', icon: 'fas fa-tasks feather-16' },
+          { showlink: 'Cookie Category', routerLink: '/cookie-consent/cookie-category', icon: 'fab fa-microsoft feather-16' },
+          { showlink: 'Cookie Banner', routerLink: '/cookie-consent/cookie-banner', icon: 'fas fa-cookie feather-16' },
+          { showlink: 'Consent Tracking', routerLink: '/cookie-consent/cookie-tracking', icon: 'fas fa-file-contract feather-16' },
+          { showlink: 'Setup', routerLink: '/cookie-consent/cookie-banner/setup', icon: 'fas fa-wrench feather-16' },
+        ]
+      },{
+      showlink: 'Consent Preference',
+        subcategory: [
+          { showlink: 'Dashboard', routerLink: '/home/dashboard/consent-preference', icon: 'fas fa-chart-line feather-16' },
+          { showlink: 'Consent Records', routerLink: '/consent-solutions/consent-records', icon: 'fas fa-tasks feather-16' },
+          { showlink: 'Setup', routerLink: '/consent-solutions/setup', icon: 'fas fa-wrench feather-16' },
+        ]
+      }
+        // { showlink: 'Billing', routerLink: '/settings/billing/manage' }
+   ];
     }, (error) => {
       console.log(error);
     });
@@ -942,23 +957,43 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
 
   onMobileMenuClicked(link) {
 
-    if (link === 'Dashboard' && this.isMobileDashboardMenuCollapsed) {
-      this.isMobileDashboardMenuCollapsed = false;
-      this.isMobilePrivacyMenuCollapsed = true;
-      this.isMobilePropertyCollapsed = true;
-    } else if (link === 'Dashboard' && !this.isMobileDashboardMenuCollapsed) {
-      this.isMobileDashboardMenuCollapsed = true;
-      this.isMobilePrivacyMenuCollapsed = true;
-      this.isMobilePropertyCollapsed = true;
-    } else if (link === 'Privacy' && this.isMobilePrivacyMenuCollapsed) {
-      this.isMobilePrivacyMenuCollapsed = false;
+     if (link === 'DSAR' && this.isMobileDSARMenuCollapsed) {
+      this.isMobileDSARMenuCollapsed = false;
+      this.isMobileConsentMenuCollapsed = true;
+      this.isMobileCookieMenuCollapsed = true;
       this.isMobileDashboardMenuCollapsed = true;
       this.isMobilePropertyCollapsed = true;
-    } else if (link === 'Privacy' && !this.isMobilePrivacyMenuCollapsed) {
+    } else if (link === 'DSAR' && !this.isMobileDSARMenuCollapsed) {
       this.isMobileDashboardMenuCollapsed = true;
-      this.isMobilePrivacyMenuCollapsed = true;
+      this.isMobileConsentMenuCollapsed = true;
+      this.isMobileCookieMenuCollapsed = true;
+      this.isMobileDSARMenuCollapsed = true;
       this.isMobilePropertyCollapsed = true;
-    } else {
+    } else if (link === 'Cookie Consent' && this.isMobileCookieMenuCollapsed) {
+      this.isMobileCookieMenuCollapsed = false;
+      this.isMobileDSARMenuCollapsed = true;
+      this.isMobileConsentMenuCollapsed = true;
+      this.isMobileDashboardMenuCollapsed = true;
+      this.isMobilePropertyCollapsed = true;
+    } else if (link === 'Cookie Consent' && !this.isMobileCookieMenuCollapsed) {
+      this.isMobileDashboardMenuCollapsed = true;
+      this.isMobileDSARMenuCollapsed = true;
+      this.isMobileConsentMenuCollapsed = true;
+      this.isMobileCookieMenuCollapsed = true;
+      this.isMobilePropertyCollapsed = true;
+    }else if (link === 'Consent Preference' && this.isMobileConsentMenuCollapsed) {
+      this.isMobileConsentMenuCollapsed = false;
+      this.isMobileDSARMenuCollapsed = true;
+      this.isMobileCookieMenuCollapsed = true;
+      this.isMobileDashboardMenuCollapsed = true;
+      this.isMobilePropertyCollapsed = true;
+    } else if (link === 'Consent Preference' && !this.isMobileConsentMenuCollapsed) {
+      this.isMobileDashboardMenuCollapsed = true;
+      this.isMobileDSARMenuCollapsed = true;
+      this.isMobileCookieMenuCollapsed = true;
+      this.isMobileConsentMenuCollapsed = true;
+      this.isMobilePropertyCollapsed = true;
+    }else {
       this.goto(link); // for billing link
       this.openNav();
     }
@@ -966,16 +1001,22 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
 
   collapseStatus(activeIndex): boolean {
     if (activeIndex === 0) {
-      return activeIndex == 0 && this.isMobileDashboardMenuCollapsed;
-    } else {
-      return activeIndex == 1 && this.isMobilePrivacyMenuCollapsed;
+      return activeIndex == 0 && this.isMobileDSARMenuCollapsed; 
+    }
+    else if (activeIndex === 1) {
+      return activeIndex == 1 && this.isMobileCookieMenuCollapsed; 
+    }else if(activeIndex === 2) {
+      return activeIndex == 2 && this.isMobileConsentMenuCollapsed;
+
     }
   }
 
   onMobilePropertyMenuClicked(status) {
     if (status) {
       this.isMobilePropertyCollapsed = !this.isMobilePropertyCollapsed;
-      this.isMobilePrivacyMenuCollapsed = true;
+      this.isMobileDSARMenuCollapsed = true;
+      this.isMobileCookieMenuCollapsed = true;
+      this.isMobileConsentMenuCollapsed = true;
       this.isMobileDashboardMenuCollapsed = true;
     }
 
@@ -1193,7 +1234,25 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
     }
     if (count > 15) {
       return {
-        "width": "115px"
+        "width": "70px"
+      }
+    } else {
+      return {
+        "width": "auto"
+      }
+    }
+
+  }
+
+  
+  addEllipsisOrg(): object {
+    let countorg;
+    if (this.currentOrganization !== "" && this.currentOrganization !== undefined) {
+      countorg = this.currentOrganization.length;
+    }
+    if (countorg > 15) {
+      return {
+        "width": "70px"
       }
     } else {
       return {

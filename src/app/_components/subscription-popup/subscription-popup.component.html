@@ -86,6 +86,7 @@
 
       </div>
 
+
       <div *ngIf="type ===  'org' " class="modal-body">
         <div class="text-center">
           <h4 class="font-weight-bold">Data Subject Access Request (DSAR)</h4>
@@ -156,7 +157,7 @@
         </div>
       </div>
 
-      <div *ngIf="type !==  'cookieConsent' && type !==  'org' " class="modal-body">
+      <div *ngIf="type !==  'cookieConsent' && type !==  'org' && type !=='consentPreference' " class="modal-body">
         <div class="text-center">
 
           <ng-container *ngIf="noPlanType == 'cookieConsent' && isUserSubscribe">
@@ -168,6 +169,11 @@
             <h5>You haven't assigned a license to this Organization</h5>
           </ng-container>
 
+          <ng-container *ngIf="noPlanType == 'consentPreference' && isUserSubscribeConsent">
+            <h3 class="font-weight-bold">Consent Preference </h3>
+            <h5>You haven't assigned a license to this Property</h5>
+          </ng-container>
+
           <h4 *ngIf="noPlanType == 'company' && isUserSubscribe">You can not add more users, Please Upgrade your existing plan </h4>
 
           <ng-container class="mb-4" *ngIf="!isUserSubscribe || !isUserSubscribeDsar ">
@@ -177,6 +183,10 @@
             </div>
             <div id="dsar" *ngIf="noPlanType == 'org' && !isUserSubscribeDsar">
               <h3 class="font-weight-bold" >Data Subject Access Request (DSAR) </h3>
+              <h5> You don't have an active plan, please choose a new plan below </h5>
+            </div>
+            <div id="consentPreference" *ngIf="noPlanType == 'consentPreference' && !isUserSubscribeConsent">
+              <h3 class="font-weight-bold" >Consent Preference </h3>
               <h5> You don't have an active plan, please choose a new plan below </h5>
             </div>
           </ng-container>
@@ -222,6 +232,58 @@
                 </ng-container>
                 <ng-container *ngIf="plan.name === 'Enterprise'">
                   <li class="text-left feature-list" *ngFor="let  features of mainFeatures.cookieConsent.enterprise | slice : 0: showFeatureCount">{{features.featureName}} <span class="font-weight-bold" *ngIf="features.featureValue"> - {{features.featureValue}}</span></li>
+                </ng-container>
+                <a *ngIf="plan.name !== 'Free' && showFeatureCount !== 25" (click)="showFeatureCount = 25" class="more-text" href="javascript:;">More ...</a>
+                <a *ngIf="plan.name !== 'Free'  && showFeatureCount === 25" (click)="showFeatureCount = 6" class="more-text" href="javascript:;">Hide ...</a>              </ul>
+              <h1 *ngIf="plan.price !== -1" class="text-color-nr tx-rubik tx-normal mb-3 mg-t-auto price-text">
+                <sup class="doller">$</sup>
+                <span *ngIf="billingCycle === 'monthly'" class="font-weight-bold">{{plan.price}} <span class="tx-15">/ Month</span></span>
+                <span *ngIf="billingCycle === 'yearly'" class="font-weight-bold">{{plan.price / 12 | number : '1.0-0'}} <span class="tx-15">/ Month</span></span>
+              </h1>
+              <button (click)="onNavigate()" [ngStyle]="{marginTop: plan.price == -1 ? '55px' : '0.25rem'}"
+                      class="btn mb-2 add-to-cart-btn btn-primary btn-block">
+                Choose Plan
+              </button>
+
+            </div><!-- col -->
+          </div>
+        </div>
+
+        <div class="plan-body" *ngIf="noPlanType == 'consentPreference' && !isUserSubscribeConsent">
+          <div class="toggle-period">
+            <input id="toggle-period_3" (change)="onSelectBillingCycle(subType)" #subType [checked]="billingCycle === 'yearly'" class="toggle-period__checkbox" type="checkbox">
+            <label for="toggle-period_3" class="toggle-period__label">
+            <span class="toggle-period__monthly" [ngStyle]="{color: billingCycle == 'yearly' ? '#c3c4c7' : '#0546a3'}"
+                  role="checkbox" aria-checked="false">Billed monthly</span>
+              <span class="toggle-period__switch"
+                    [ngStyle]="{backgroundColor: billingCycle == 'yearly' ? '#0da1dd' : '#0546a3'}" role="checkbox"
+                    aria-checked="true" tabindex="0"></span>
+              <span class="toggle-period__yearly" [ngStyle]="{color: billingCycle == 'yearly' ? '#0da1dd' : '#c3c4c7'}"
+                    role="checkbox" aria-checked="true">Billed annually</span>
+              <span class="flag" [ngStyle]="{opacity: billingCycle == 'yearly' ? 1 : .4}">2 Months Free</span>
+            </label>
+          </div>
+          <div class="row ml-2 mr-2">
+            <div *ngFor="let plan of ConsentPrefPlans"
+                 class=" mt-2 col ml-2 d-flex bg-white-col bt-card overflow-hidden flex-column bd pt-0 mr-2  pd-20 pb-0 ">
+              <div *ngIf="billingCycle === 'yearly' && plan.name !== 'Enterprise'"  class="plan-discount">
+                <span class="annual">2 Months Free</span>
+              </div>
+              <h4 class="text-center popular-text">
+              </h4>
+              <h3 [ngStyle]="{color: plan.price !== -1  ? '#999' : ''}"
+                  class="mt-1 text-color-nr plan-type">{{plan.name}}</h3>
+              <p  class="tx-color-03 text-color-nr text-color-nr tx-12 mb-0 prod-name">{{plan.product_name}}</p>
+
+              <ul [ngStyle]="{height: showFeatureCount === 25 ? '535px' : '205px'}">
+                <ng-container *ngIf="plan.name === 'Essentials'">
+                  <li class="text-left feature-list" *ngFor="let  features of mainFeatures.consentPreference.essentials | slice : 0: showFeatureCount">{{features.featureName}} <span class="font-weight-bold" *ngIf="features.featureValue"> - {{features.featureValue}}</span></li>
+                </ng-container>
+                <ng-container *ngIf="plan.name === 'Professional'">
+                  <li class="text-left feature-list" *ngFor="let  features of mainFeatures.consentPreference.professional | slice : 0: showFeatureCount">{{features.featureName}} <span class="font-weight-bold" *ngIf="features.featureValue"> - {{features.featureValue}}</span></li>
+                </ng-container>
+                <ng-container *ngIf="plan.name === 'Enterprise'">
+                  <li class="text-left feature-list" *ngFor="let  features of mainFeatures.consentPreference.enterprise | slice : 0: showFeatureCount">{{features.featureName}} <span class="font-weight-bold" *ngIf="features.featureValue"> - {{features.featureValue}}</span></li>
                 </ng-container>
                 <a *ngIf="plan.name !== 'Free' && showFeatureCount !== 25" (click)="showFeatureCount = 25" class="more-text" href="javascript:;">More ...</a>
                 <a *ngIf="plan.name !== 'Free'  && showFeatureCount === 25" (click)="showFeatureCount = 6" class="more-text" href="javascript:;">Hide ...</a>              </ul>
