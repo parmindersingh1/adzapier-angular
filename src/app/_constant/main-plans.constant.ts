@@ -329,7 +329,7 @@ export const highLightFeatures = {
       },
       {
         featureName: 'Domain Scan\n',
-        featureValue: '1/Month\n'
+        featureValue: 'None\n'
       },
       {
         featureName: 'Users Per Organization\n',
@@ -660,7 +660,7 @@ export const featuresComparison = {
     },
     {
       featureName: 'Domain Scan\n',
-      free: '1/Month\n',
+      free: 'None\n',
       essentials: ' 2/Month\n',
       professional: '5/month\n',
       enterprise: 'Unlimited\n'
