@@ -300,6 +300,158 @@ export const mainPlans = {
         featureValue: '3 Hours\n'
       }
     ],
+  },
+  consentPreference: {
+    essentials: [
+      {
+        featureName: 'Number Of users',
+        featureValue: '5K'
+      },
+      {
+        featureName: 'Keep user consent and privacy preferences in one place\n',
+        featureValue: null
+      },
+      {
+        featureName: 'Store multiple preferences for each user (e.g. if you have multiple newsletters or opt-ins)\n',
+        featureValue: null
+      },
+      {
+        featureName: 'Store whether a user was verified with double opt-in\n',
+        featureValue: null
+      },
+      {
+        featureName: 'For each user, get the history of consents\n',
+        featureValue: null
+      },
+      {
+        featureName: 'User-friendly dashboard for reviewing consent records\n',
+        featureValue: null
+      },
+      {
+        featureName: 'REST HTTP API and JS SDK, to give you total control and how and when consent is stored\n',
+        featureValue: null
+      },
+      {
+        featureName: 'An easy to implement JS widget to ease consent tracking for online forms\n',
+        featureValue: null
+      },
+      {
+        featureName: 'For each consent, track the legal or privacy notice the user has accepted\n',
+        featureValue: 'coming soon\n'
+      },
+      {
+        featureName: 'Webhooks\n',
+        featureValue: 'coming soon\n'
+      },
+      {
+        featureName: 'Update consent preferences across your third party tools (MailChimp, Intercom, Marketo etc.)\n',
+        featureValue: 'coming soon\n'
+      },
+      {
+        featureName: 'Support Response Time\n',
+        featureValue: '24 Hours\n'
+      }
+    ],
+    professional: [
+      {
+        featureName: 'Number Of users',
+        featureValue: '10K'
+      },
+      {
+        featureName: 'Keep user consent and privacy preferences in one place\n',
+        featureValue: null
+      },
+      {
+        featureName: 'Store multiple preferences for each user (e.g. if you have multiple newsletters or opt-ins)\n',
+        featureValue: null
+      },
+      {
+        featureName: 'Store whether a user was verified with double opt-in\n',
+        featureValue: null
+      },
+      {
+        featureName: 'For each user, get the history of consents\n',
+        featureValue: null
+      },
+      {
+        featureName: 'User-friendly dashboard for reviewing consent records\n',
+        featureValue: null
+      },
+      {
+        featureName: 'REST HTTP API and JS SDK, to give you total control and how and when consent is stored\n',
+        featureValue: null
+      },
+      {
+        featureName: 'An easy to implement JS widget to ease consent tracking for online forms\n',
+        featureValue: null
+      },
+      {
+        featureName: 'For each consent, track the legal or privacy notice the user has accepted\n',
+        featureValue: 'coming soon\n'
+      },
+      {
+        featureName: 'Webhooks\n',
+        featureValue: 'coming soon\n'
+      },
+      {
+        featureName: 'Update consent preferences across your third party tools (MailChimp, Intercom, Marketo etc.)\n',
+        featureValue: 'coming soon\n'
+      },
+      {
+        featureName: 'Support Response Time\n',
+        featureValue: '24 Hours\n'
+      }
+    ],
+    enterprise:  [
+      {
+        featureName: 'Number Of users',
+        featureValue: 'Unlimited'
+      },
+      {
+        featureName: 'Keep user consent and privacy preferences in one place\n',
+        featureValue: null
+      },
+      {
+        featureName: 'Store multiple preferences for each user (e.g. if you have multiple newsletters or opt-ins)\n',
+        featureValue: null
+      },
+      {
+        featureName: 'Store whether a user was verified with double opt-in\n',
+        featureValue: null
+      },
+      {
+        featureName: 'For each user, get the history of consents\n',
+        featureValue: null
+      },
+      {
+        featureName: 'User-friendly dashboard for reviewing consent records\n',
+        featureValue: null
+      },
+      {
+        featureName: 'REST HTTP API and JS SDK, to give you total control and how and when consent is stored\n',
+        featureValue: null
+      },
+      {
+        featureName: 'An easy to implement JS widget to ease consent tracking for online forms\n',
+        featureValue: null
+      },
+      {
+        featureName: 'For each consent, track the legal or privacy notice the user has accepted\n',
+        featureValue: 'coming soon\n'
+      },
+      {
+        featureName: 'Webhooks\n',
+        featureValue: 'coming soon\n'
+      },
+      {
+        featureName: 'Update consent preferences across your third party tools (MailChimp, Intercom, Marketo etc.)\n',
+        featureValue: 'coming soon\n'
+      },
+      {
+        featureName: 'Support Response Time\n',
+        featureValue: '3 Hours\n'
+      }
+    ],
   }
 }
 
@@ -329,7 +481,7 @@ export const highLightFeatures = {
       },
       {
         featureName: 'Domain Scan\n',
-        featureValue: '1/Month\n'
+        featureValue: 'None\n'
       },
       {
         featureName: 'Users Per Organization\n',
@@ -660,7 +812,7 @@ export const featuresComparison = {
     },
     {
       featureName: 'Domain Scan\n',
-      free: '1/Month\n',
+      free: 'None\n',
       essentials: ' 2/Month\n',
       professional: '5/month\n',
       enterprise: 'Unlimited\n'
