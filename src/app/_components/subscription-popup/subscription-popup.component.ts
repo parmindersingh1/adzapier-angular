@@ -25,6 +25,7 @@ class DefaultPlanData {
 export class SubscriptionPopupComponent implements OnInit {
   modalRef: BsModalRef;
   cookieConsentPlans = [];
+  ConsentPrefPlans = [];
   @ViewChild('template', { static: true }) template: ModalDirective;
   allPlanData: any;
   billingCycle = 'monthly';
@@ -47,6 +48,7 @@ export class SubscriptionPopupComponent implements OnInit {
   openModalStatus = false;
   queryOID;
   queryPID;
+  isUserSubscribeConsent = false;
   constructor(
     private modalService: BsModalService,
     private billingService: BillingService,
@@ -92,12 +94,16 @@ export class SubscriptionPopupComponent implements OnInit {
           if (obj.active && obj.planDetails.type === 1) {
             this.isUserSubscribeDsar = true;
           }
+          if (obj.active && obj.planDetails.type === 2) {
+            this.isUserSubscribeConsent = true;
+          }
         }
       }
     }, error => {
       this.skLoading = false;
     });
   }
+  
 
 
   openModal() {
@@ -120,7 +126,10 @@ export class SubscriptionPopupComponent implements OnInit {
           } else if (!res.data && res.type == 'org') {
             this.type = 'org';
             this.currentPlanData = new DefaultPlanData();
-          } else {
+          }  else if (!res.data && res.type == 'consentPreference') {
+            this.type = 'consentPreference';
+            this.currentPlanData = new DefaultPlanData();
+          }else {
             this.type = 'noPlan';
             this.currentPlanData = new DefaultPlanData();
           }
@@ -141,7 +150,8 @@ export class SubscriptionPopupComponent implements OnInit {
       this.allPlanData = res.response;
       this.onSetEnterPrice();
       this.cookieConsentPlans = this.allPlanData.cookieConsent[`${this.billingCycle}`];
-      this.dsarPlans = this.allPlanData.dsar[`${this.billingCycle}`]
+      this.dsarPlans = this.allPlanData.dsar[`${this.billingCycle}`];
+      this.ConsentPrefPlans = this.allPlanData.consentPreference[`${this.billingCycle}`]
       // this.subscriptionList = res.response.monthly;
     }, error => {
     });
@@ -185,6 +195,24 @@ export class SubscriptionPopupComponent implements OnInit {
       product_name: 'Advanced enterprise features and global coverage.',
       type: 0
     });
+    this.allPlanData.consentPreference['monthly'].push({
+      cycle: 'Enterprise',
+      description: '',
+      id: '',
+      name: 'Enterprise',
+      price: -1,
+      product_name: 'Advanced enterprise features and global coverage. Volume discount available.',
+      type: 0
+    });
+    this.allPlanData.consentPreference['yearly'].push({
+      cycle: 'Enterprise',
+      description: '',
+      id: '',
+      name: 'Enterprise',
+      price: -1,
+      product_name: 'Advanced enterprise features and global coverage. Volume discount available.',
+      type: 0
+    });
   }
 
   onSelectBillingCycle(e) {
@@ -192,11 +220,15 @@ export class SubscriptionPopupComponent implements OnInit {
       this.billingCycle = 'yearly';
       this.cookieConsentPlans = this.allPlanData.cookieConsent[`${this.billingCycle}`]
       this.dsarPlans = this.allPlanData.dsar[`${this.billingCycle}`]
+      this.ConsentPrefPlans = this.allPlanData.consentPreference[`${this.billingCycle}`]
+
 
     } else {
       this.billingCycle = 'monthly';
       this.cookieConsentPlans = this.allPlanData.cookieConsent[`${this.billingCycle}`]
       this.dsarPlans = this.allPlanData.dsar[`${this.billingCycle}`]
+      this.ConsentPrefPlans = this.allPlanData.consentPreference[`${this.billingCycle}`]
+
     }
   }
 

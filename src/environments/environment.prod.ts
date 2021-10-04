@@ -4,6 +4,7 @@ export const environment = {
   production: true,
   mock: false,
   stripePublishablekey : 'pk_live_McAxp3L479SpRJYWwTEJoBkk00xo81SHx6',
+  cookiefreePlanID : 'price_1IAwe6Ba3iZWL3YgzGI9QYau',
   langURL: 'https://cdn.primeconsent.com/cmp/banner-language/:lang.json',
   iabUrl: 'https://cdn.primeconsent.com/vendorlist/IABvendors/',
   googleVendorsUrl: 'https://cdn.primeconsent.com/vendorlist/googlevendorlist/google.json',
