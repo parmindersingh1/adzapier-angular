@@ -18,6 +18,10 @@ export const mainPlans = {
         featureValue: 'None\n'
       },
       {
+        featureName: 'Full conversion and visitor consent state reporting\n',
+        featureValue: null
+      },
+      {
         featureName: 'Cookie Consent Dashboard\n',
         featureValue: null
       },
@@ -44,6 +48,10 @@ export const mainPlans = {
         featureValue: '2/Month\n'
       },
       {
+        featureName: 'Full conversion and visitor consent state reporting\n',
+        featureValue: null
+      },
+      {
         featureName: 'Cookie Consent Dashboard\n',
         featureValue: null
       },
@@ -102,12 +110,7 @@ export const mainPlans = {
       {
         featureName: 'Custom branding\n',
         featureValue: null
-      },
-      {
-        featureName: 'Remove "powered by Adzapier" branding\n',
-        featureValue: null
-      },
-    
+      }, 
       {
         featureName: 'Support Response Time\n',
         featureValue: '24 Hours'
@@ -131,6 +134,10 @@ export const mainPlans = {
         featureValue: '5/month\n'
       },
       {
+        featureName: 'Full conversion and visitor consent state reporting\n',
+        featureValue: null
+      },
+      {
         featureName: 'Cookie Consent Dashboard\n',
         featureValue: null
       },
@@ -207,6 +214,10 @@ export const mainPlans = {
         featureValue: null
       },
       {
+        featureName: 'Google vendors & TCF vendors\n',
+        featureValue: null
+      },
+      {
         featureName: 'IAB Europe TCF Support\n',
         featureValue: null
       },
@@ -214,11 +225,6 @@ export const mainPlans = {
         featureName: 'Compatible with the IAB Transparency & Consent Framework\n',
         featureValue: null
       },
-      {
-        featureName: 'Remove "powered by Adzapier" branding\n',
-        featureValue: null
-      },
-    
       {
         featureName: 'Support Response Time\n',
         featureValue: '12 Hours'
@@ -242,6 +248,10 @@ export const mainPlans = {
         featureValue: 'Unlimited\n'
       },
       {
+        featureName: 'Full conversion and visitor consent state reporting\n',
+        featureValue: null
+      },
+      {
         featureName: 'Cookie Consent Dashboard\n',
         featureValue: null
       },
@@ -318,6 +328,10 @@ export const mainPlans = {
         featureValue: null
       },
       {
+        featureName: 'Google vendors & TCF vendors\n',
+        featureValue: null
+      },
+      {
         featureName: 'IAB Europe TCF Support\n',
         featureValue: null
       },
@@ -337,7 +351,6 @@ export const mainPlans = {
         featureName: 'Remove "powered by Adzapier" branding\n',
         featureValue: null
       },
-    
       {
         featureName: 'Support Response Time\n',
         featureValue: '3 Hours'
@@ -1094,8 +1107,8 @@ export const featuresComparison = {
     {
       featureName: 'Remove "powered by Adzapier" branding\n',
       free: 'NO',
-      essentials: 'Badge',
-      professional: 'Badge',
+      essentials: 'NO',
+      professional: 'NO',
       enterprise: 'YES'
     }, 
     {
