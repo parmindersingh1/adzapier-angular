@@ -18,6 +18,10 @@ export const mainPlans = {
         featureValue: 'None\n'
       },
       {
+        featureName: 'Full conversion and visitor consent state reporting\n',
+        featureValue: null
+      },
+      {
         featureName: 'Cookie Consent Dashboard\n',
         featureValue: null
       },
@@ -42,6 +46,10 @@ export const mainPlans = {
       {
         featureName: 'Domain Scan\n',
         featureValue: '2/Month\n'
+      },
+      {
+        featureName: 'Full conversion and visitor consent state reporting\n',
+        featureValue: null
       },
       {
         featureName: 'Cookie Consent Dashboard\n',
@@ -131,6 +139,10 @@ export const mainPlans = {
         featureValue: '5/month\n'
       },
       {
+        featureName: 'Full conversion and visitor consent state reporting\n',
+        featureValue: null
+      },
+      {
         featureName: 'Cookie Consent Dashboard\n',
         featureValue: null
       },
@@ -204,6 +216,10 @@ export const mainPlans = {
       },
       {
         featureName: 'Highly configurable GDPR & CCPA consent settings\n',
+        featureValue: null
+      },
+      {
+        featureName: 'Google vendors & TCF vendors\n',
         featureValue: null
       },
       {
@@ -242,6 +258,10 @@ export const mainPlans = {
         featureValue: 'Unlimited\n'
       },
       {
+        featureName: 'Full conversion and visitor consent state reporting\n',
+        featureValue: null
+      },
+      {
         featureName: 'Cookie Consent Dashboard\n',
         featureValue: null
       },
@@ -315,6 +335,10 @@ export const mainPlans = {
       },
       {
         featureName: 'Highly configurable GDPR & CCPA consent settings\n',
+        featureValue: null
+      },
+      {
+        featureName: 'Google vendors & TCF vendors\n',
         featureValue: null
       },
       {
