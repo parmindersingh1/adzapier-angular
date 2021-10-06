@@ -110,12 +110,7 @@ export const mainPlans = {
       {
         featureName: 'Custom branding\n',
         featureValue: null
-      },
-      {
-        featureName: 'Remove "powered by Adzapier" branding\n',
-        featureValue: null
-      },
-    
+      }, 
       {
         featureName: 'Support Response Time\n',
         featureValue: '24 Hours'
@@ -230,11 +225,6 @@ export const mainPlans = {
         featureName: 'Compatible with the IAB Transparency & Consent Framework\n',
         featureValue: null
       },
-      {
-        featureName: 'Remove "powered by Adzapier" branding\n',
-        featureValue: null
-      },
-    
       {
         featureName: 'Support Response Time\n',
         featureValue: '12 Hours'
@@ -361,7 +351,6 @@ export const mainPlans = {
         featureName: 'Remove "powered by Adzapier" branding\n',
         featureValue: null
       },
-    
       {
         featureName: 'Support Response Time\n',
         featureValue: '3 Hours'
@@ -1118,8 +1107,8 @@ export const featuresComparison = {
     {
       featureName: 'Remove "powered by Adzapier" branding\n',
       free: 'NO',
-      essentials: 'Badge',
-      professional: 'Badge',
+      essentials: 'NO',
+      professional: 'NO',
       enterprise: 'YES'
     }, 
     {

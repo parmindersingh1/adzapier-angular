@@ -45,7 +45,7 @@
               <p [ngStyle]="{color: plan.price <=  currentPlanData.price ? '#999' : ''}"
                  class="tx-color-03 tx-12 mb-0 prod-name">{{plan.product_name}}</p>
 
-              <ul [ngStyle]="{height: showFeatureCount === 30 ? '785px' : '205px'}">
+              <ul [ngStyle]="{height: showFeatureCount === 31 ? '785px' : '205px'}">
                 <ng-container *ngIf="plan.name === 'Free'">
                   <li class="text-left feature-list" *ngFor="let  features of mainFeatures.cookieConsent.free">{{features.featureName}}
                     <span class="font-weight-bold" *ngIf="features.featureValue"> - {{features.featureValue}}</span></li>
@@ -59,8 +59,8 @@
                 <ng-container *ngIf="plan.name === 'Enterprise'">
                   <li class="text-left feature-list" *ngFor="let  features of mainFeatures.cookieConsent.enterprise | slice : 0: showFeatureCount">{{features.featureName}} <span class="font-weight-bold" *ngIf="features.featureValue"> - {{features.featureValue}}</span></li>
                 </ng-container>
-                <a *ngIf="plan.name !== 'Free' && showFeatureCount !== 30" (click)="showFeatureCount = 30" class="more-text" href="javascript:;">More ...</a>
-                <a *ngIf="plan.name !== 'Free'  && showFeatureCount === 30" (click)="showFeatureCount = 6" class="more-text" href="javascript:;">Hide ...</a>
+                <a *ngIf="plan.name !== 'Free' && showFeatureCount !== 31" (click)="showFeatureCount = 31" class="more-text" href="javascript:;">More ...</a>
+                <a *ngIf="plan.name !== 'Free'  && showFeatureCount === 31" (click)="showFeatureCount = 6" class="more-text" href="javascript:;">Hide ...</a>
               </ul>
 
 
@@ -219,7 +219,7 @@
                   class="mt-1 text-color-nr plan-type">{{plan.name}}</h3>
               <p  class="tx-color-03 text-color-nr text-color-nr tx-12 mb-0 prod-name">{{plan.product_name}}</p>
 
-              <ul [ngStyle]="{height: showFeatureCount === 30 ? '785px' : '205px'}">
+              <ul [ngStyle]="{height: showFeatureCount === 31 ? '785px' : '205px'}">
                 <ng-container *ngIf="plan.name === 'Free'">
                   <li class="text-left feature-list" *ngFor="let  features of mainFeatures.cookieConsent.free">{{features.featureName}}
                     <span class="font-weight-bold" *ngIf="features.featureValue"> - {{features.featureValue}}</span></li>
@@ -233,8 +233,8 @@
                 <ng-container *ngIf="plan.name === 'Enterprise'">
                   <li class="text-left feature-list" *ngFor="let  features of mainFeatures.cookieConsent.enterprise | slice : 0: showFeatureCount">{{features.featureName}} <span class="font-weight-bold" *ngIf="features.featureValue"> - {{features.featureValue}}</span></li>
                 </ng-container>
-                <a *ngIf="plan.name !== 'Free' && showFeatureCount !== 30" (click)="showFeatureCount = 30" class="more-text" href="javascript:;">More ...</a>
-                <a *ngIf="plan.name !== 'Free'  && showFeatureCount === 30" (click)="showFeatureCount = 6" class="more-text" href="javascript:;">Hide ...</a>              </ul>
+                <a *ngIf="plan.name !== 'Free' && showFeatureCount !== 31" (click)="showFeatureCount = 31" class="more-text" href="javascript:;">More ...</a>
+                <a *ngIf="plan.name !== 'Free'  && showFeatureCount === 31" (click)="showFeatureCount = 6" class="more-text" href="javascript:;">Hide ...</a>              </ul>
               <h1 *ngIf="plan.price !== -1" class="text-color-nr tx-rubik tx-normal mb-3 mg-t-auto price-text">
                 <sup class="doller">$</sup>
                 <span *ngIf="billingCycle === 'monthly'" class="font-weight-bold">{{plan.price}} <span class="tx-15">/ Month</span></span>
@@ -275,7 +275,7 @@
                   class="mt-1 text-color-nr plan-type">{{plan.name}}</h3>
               <p  class="tx-color-03 text-color-nr text-color-nr tx-12 mb-0 prod-name">{{plan.product_name}}</p>
 
-              <ul [ngStyle]="{height: showFeatureCount === 30 ? '430px' : '205px'}">
+              <ul [ngStyle]="{height: showFeatureCount === 31 ? '430px' : '205px'}">
                 <ng-container *ngIf="plan.name === 'Essentials'">
                   <li class="text-left feature-list" *ngFor="let  features of mainFeatures.consentPreference.essentials | slice : 0: showFeatureCount">{{features.featureName}} <span class="font-weight-bold" *ngIf="features.featureValue"> - {{features.featureValue}}</span></li>
                 </ng-container>
@@ -285,8 +285,8 @@
                 <ng-container *ngIf="plan.name === 'Enterprise'">
                   <li class="text-left feature-list" *ngFor="let  features of mainFeatures.consentPreference.enterprise | slice : 0: showFeatureCount">{{features.featureName}} <span class="font-weight-bold" *ngIf="features.featureValue"> - {{features.featureValue}}</span></li>
                 </ng-container>
-                <a *ngIf="plan.name !== 'Free' && showFeatureCount !== 30" (click)="showFeatureCount = 30" class="more-text" href="javascript:;">More ...</a>
-                <a *ngIf="plan.name !== 'Free'  && showFeatureCount === 30" (click)="showFeatureCount = 6" class="more-text" href="javascript:;">Hide ...</a>              </ul>
+                <a *ngIf="plan.name !== 'Free' && showFeatureCount !== 31" (click)="showFeatureCount = 31" class="more-text" href="javascript:;">More ...</a>
+                <a *ngIf="plan.name !== 'Free'  && showFeatureCount === 31" (click)="showFeatureCount = 6" class="more-text" href="javascript:;">Hide ...</a>              </ul>
               <h1 *ngIf="plan.price !== -1" class="text-color-nr tx-rubik tx-normal mb-3 mg-t-auto price-text">
                 <sup class="doller">$</sup>
                 <span *ngIf="billingCycle === 'monthly'" class="font-weight-bold">{{plan.price}} <span class="tx-15">/ Month</span></span>
