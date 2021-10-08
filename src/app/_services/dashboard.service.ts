@@ -35,9 +35,9 @@ export class DashboardService {
       }),
     );
   }
-  getDashboardData(propId, componentName, moduleName) {
+  getDashboardData(params, propId, componentName, moduleName) {
     const path = apiConstant.DASHBOARD_CONSENT_DATA.replace(':propId', propId);
-    return this.http.get(environment.apiUrl + path).pipe(map(res => res),
+    return this.http.get(environment.apiUrl + path, {params: params}).pipe(map(res => res),
       catchError(error => {
         this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.consentDashboard, componentName, moduleName, path);
         return throwError(error);
@@ -45,9 +45,9 @@ export class DashboardService {
     );
   }
 
-  getOtpInActivity(propId, componentName, moduleName) {
+  getOtpInActivity(params, propId, componentName, moduleName) {
     const path = apiConstant.DASHBOARD_OPT_IN_ACTIVITY.replace(':propId', propId);
-    return this.http.get(environment.apiUrl  + path).pipe(map(res => res),
+    return this.http.get(environment.apiUrl  + path, {params: params}).pipe(map(res => res),
       catchError(error => {
         this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.consentDashboard, componentName, moduleName, path);
         return throwError(error);
@@ -55,18 +55,18 @@ export class DashboardService {
     );
   }
 
-  getOtpOutActivity(propId, componentName, moduleName) {
+  getOtpOutActivity(params, propId, componentName, moduleName) {
     const path = apiConstant.DASHBOARD_OPT_OUT_ACTIVITY.replace(':propId', propId);
-    return this.http.get(environment.apiUrl  + path).pipe(map(res => res),
+    return this.http.get(environment.apiUrl  + path, {params: params}).pipe(map(res => res),
       catchError(error => {
         this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.consentDashboard, componentName,  moduleName, path);
         return throwError(error);
       }),
     );
   }
-  getConsentDetails(propId, params, componentName, moduleName) {
+  getConsentDetails(params, propId, componentName, moduleName) {
     const path = apiConstant.DASHBOARD_CONSENT_DETAILS.replace(':propId', propId);
-    return this.http.get(environment.apiUrl  + path, {params}).pipe(map(res => res),
+    return this.http.get(environment.apiUrl  + path, {params: params}).pipe(map(res => res),
       catchError(error => {
         this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.consentDashboard, componentName, moduleName, path);
         return throwError(error);
