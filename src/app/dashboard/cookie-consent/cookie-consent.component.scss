@@ -95,3 +95,38 @@ td {
   -webkit-appearance: none;
   appearance: none;
 }
+
+
+
+.datepickerwrapper {
+  justify-content: flex-end !important;
+  display: flex !important;
+}
+
+.border-zero-left {
+  border-left: 0;
+}
+
+.datepickerwrapper .form-control:focus {
+  outline: none;
+  border-radius: 0px 5px 5px 0px;
+  box-shadow: none;
+  border-color: #c0ccda;
+}
+
+.datepickerwrapper .form-control {
+  border-radius: 0!important;
+}
+
+.datepickerwrapper .input-group-prepend {
+  height: 38px;
+}
+
+.row-reverse {
+  flex-direction: row-reverse;
+}
+
+.date-input{
+  width: 240px;
+  height: 34px;
+}
