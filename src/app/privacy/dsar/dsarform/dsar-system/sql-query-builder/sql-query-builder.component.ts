@@ -31,10 +31,11 @@ export class SqlQueryBuilderComponent implements OnInit, OnChanges {
   alertMsg: any;
   isOpen = false;
   alertType: any;
-  step = 1;
+  step = [1];
   isTesting = false;
   tableListKey = '';
   tableList = [];
+  skLoadingArray = [1,2, 3,4, 5,6, 1,2, 3,4];
   @Input('formObject') formObject;
   @Input('formID') formID;
   @Input('connectionId') connectionId;
@@ -43,10 +44,14 @@ export class SqlQueryBuilderComponent implements OnInit, OnChanges {
   sqlSelectField = [];
   tableColumnsListKey = '';
   tableColumnsList = [];
-
+  sqlPageStep = 1;
   query = {
     condition: 'and',
     rules: []
+  };
+  skLoading = {
+    one: true,
+    two: false
   };
   systemList = [];
   config: QueryBuilderConfig = {
@@ -64,18 +69,21 @@ export class SqlQueryBuilderComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     this.activatedRoutes.queryParams.subscribe(params => {
       this.orgID =  params.oid;
-    })
+    });
     this.onFindTables();
   }
   onFindTables(){
+    this.skLoading.one = true;
     this.systemIntegrationService.GetSqlTables(this.constructor.name, this.connectionId, moduleName.systemIntegrationModule)
       .subscribe((res: any) => {
         this.loading.stop();
+        this.skLoading.one = false;
         if (res.status === 200) {
           this.tableList = res.response;
           this.tableListKey = res.columns[0];
         }
       }, error => {
+        this.skLoading.one = false;
         this.loading.stop();
         this.isOpen = true;
         this.alertMsg = error;
@@ -89,20 +97,26 @@ export class SqlQueryBuilderComponent implements OnInit, OnChanges {
 
   onSelectTable(tableName) {
     this.tableName = tableName;
-    this.loading.start();
+    // this.loading.start();
     const params = {
       table: tableName
     };
     this.cd.detectChanges();
+    this.step.push(2);
+    this.skLoading.two = true;
     this.systemIntegrationService.GetSqlTableColumns(this.constructor.name, this.connectionId, params, moduleName.systemIntegrationModule)
       .subscribe((res: any) => {
-        this.loading.stop();
+        // this.loading.stop();
+        this.skLoading.two = false;
         if (res.status === 200) {
+          this.sqlSelectField = [];
           this.tableColumnsList = res.response;
           this.tableColumnsListKey = res.columns[0];
-          this.step = 2;
           this.onCreateSqlBuilder();
         }
+      }, error => {
+        this.skLoading.two = false;
+        // this.loading.stop();
       });
   }
   onCreateSqlBuilder() {
@@ -116,10 +130,9 @@ export class SqlQueryBuilderComponent implements OnInit, OnChanges {
     }
   }
 
-  onSelectField(event, field) {
-    const checked = event.target.checked;
+  onSelectField(field) {
     const  sqlSelectField = [...this.sqlSelectField];
-    if (checked) {
+    if (!sqlSelectField.includes(field)) {
       sqlSelectField.push(field);
     } else {
       const index = this.sqlSelectField.indexOf(field);
@@ -139,6 +152,7 @@ export class SqlQueryBuilderComponent implements OnInit, OnChanges {
     this.systemIntegrationService.saveQueryBuilder(this.constructor.name, moduleName.systemIntegrationModule, payload, this.orgID, this.connectionId, this.formID).subscribe((res: any) => {
       this.loading.stop();
       if (res.status === 201) {
+              this.sqlPageStep = 2;
               this.isOpen = true;
               this.alertMsg = 'Record Saved';
               this.alertType = 'info';

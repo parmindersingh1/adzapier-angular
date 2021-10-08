@@ -15,26 +15,31 @@ import {SqlQueryBuilderComponent} from './dsar-system/sql-query-builder/sql-quer
 import {TableModule} from 'primeng/table';
 import {QueryBuilderModule} from 'angular2-query-builder';
 import { MailchimpQueryBuilderComponent } from './dsar-system/mailchimp-query-builder/mailchimp-query-builder.component';
-import { HttpQueryBuilderComponent } from './dsar-system/http-query-builder/http-query-builder.component';
 import {SkeletonModule} from 'primeng/skeleton';
+import {SystemIntegrationModule} from '../../../pagesettings/system_integration/system_integration.module';
+import {ButtonModule} from 'primeng/button';
+import {RippleModule} from 'primeng/ripple';
 
 @NgModule({
-  declarations: [DsarformComponent, DsarSystemComponent, SqlQueryBuilderComponent, MailchimpQueryBuilderComponent, HttpQueryBuilderComponent],
-    imports: [
-        FormsModule,
-        ReactiveFormsModule,
-        //  DragDropModule,
-        // NgbModule, NgbModal,
-        DsarformRoutingModule,
-        QuillModule.forRoot(),
-        NgbModule,
-        SharedbootstrapModule,
-        FeatherModule.pick(allIcons),
-        TableModule,
-        QueryBuilderModule,
-        SkeletonModule
-    ]
-    // providers:[NgbModule, NgbModal],
+  declarations: [DsarformComponent, DsarSystemComponent, SqlQueryBuilderComponent, MailchimpQueryBuilderComponent],
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    //  DragDropModule,
+    // NgbModule, NgbModal,
+    DsarformRoutingModule,
+    QuillModule.forRoot(),
+    NgbModule,
+    SharedbootstrapModule,
+    FeatherModule.pick(allIcons),
+    TableModule,
+    QueryBuilderModule,
+    SkeletonModule,
+    SystemIntegrationModule,
+    ButtonModule,
+    RippleModule
+  ]
+  // providers:[NgbModule, NgbModal],
 
 })
 export class DsarformModule { }

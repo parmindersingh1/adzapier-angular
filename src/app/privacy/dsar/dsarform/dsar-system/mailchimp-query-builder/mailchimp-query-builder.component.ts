@@ -25,6 +25,7 @@ export class MailchimpQueryBuilderComponent implements OnInit, OnChanges {
   @Input('systemName') systemName;
   @Output('backHome') backHome = new EventEmitter();
   emailAddress = '';
+  pageStep = 1;
   orgID = null;
   alertMsg: any;
   isOpen = false;
@@ -55,6 +56,7 @@ export class MailchimpQueryBuilderComponent implements OnInit, OnChanges {
         this.isOpen = true;
         this.alertMsg = 'Record Saved';
         this.alertType = 'info';
+        this.pageStep = 2;
       }
     }, error => {
       this.loading.stop();

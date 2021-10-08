@@ -14,11 +14,12 @@ export class DsarConnectionListComponent implements OnInit {
   @ViewChild('template', {static: false}) template;
   isLoading = true;
   connectionList: any = null;
-  sqlDetails: any = {
+  connectionDetails: any = {
     response: [],
     cols: [],
     connectionName: ''
   };
+  connectionDetailsKeys = [];
   modalRef?: BsModalRef;
   currentStep = '';
   showDataonModal = '';
@@ -40,23 +41,18 @@ export class DsarConnectionListComponent implements OnInit {
     }, error => {
       this.isLoading = false;
     })
-  }i
+  }
   onShowSqlData(type, data) {
     this.currentStep = type;
-    this.sqlDetails = data;
+    this.connectionDetails = data;
     this.cd.detectChanges();
+  }
 
-    if (type === 'restApi' || type === 'mailChimp' ) {
-
-      if (this.currentStep === 'restApi') {
-        this.showDataonModal = JSON.stringify(this.sqlDetails?.restApi);
-      } else if ( this.currentStep === 'mailChimp') {
-        this.showDataonModal = JSON.stringify(this.sqlDetails?.response);
-      } else {
-        this.showDataonModal = 'Something went Wrong';
-      }
-      this.openModal(this.template);
-    }
+  onShowRestAPIData(type, data) {
+    this.currentStep = type;
+    this.connectionDetails = data.response[data.responsePath];
+    this.connectionDetailsKeys = Object.keys(this.connectionDetails[0]);
+    this.cd.detectChanges();
   }
 openModal(template: TemplateRef<any>, ) {
   this.modalRef = this.modalService.show(template);

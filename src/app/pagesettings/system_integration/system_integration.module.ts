@@ -7,6 +7,10 @@ import { MysqlFormComponent } from './mysql-form/mysql-form.component';
 import {TableModule} from 'primeng/table';
 import { ConnectionFormComponent } from './connection-form/connection-form.component';
 import { UpdateConnectionFormComponent } from './update-connection-form/update-connection-form.component';
+import {SkeletonModule} from 'primeng/skeleton';
+import {HttpQueryBuilderComponent} from '../../privacy/dsar/dsarform/dsar-system/http-query-builder/http-query-builder.component';
+import {ButtonModule} from 'primeng/button';
+import {RippleModule} from 'primeng/ripple';
 
 
 const router: Routes = [
@@ -14,8 +18,12 @@ const router: Routes = [
 ];
 
 @NgModule({
-  declarations: [SystemIntegrationComponent, MysqlFormComponent, ConnectionFormComponent, UpdateConnectionFormComponent],
-    imports: [RouterModule.forChild(router), ReactiveFormsModule, SharedbootstrapModule, TableModule, FormsModule]
+    declarations: [SystemIntegrationComponent, MysqlFormComponent, ConnectionFormComponent, UpdateConnectionFormComponent, HttpQueryBuilderComponent],
+  exports: [
+    MysqlFormComponent,
+    HttpQueryBuilderComponent
+  ],
+  imports: [RouterModule.forChild(router), ReactiveFormsModule, SharedbootstrapModule, TableModule, FormsModule, SkeletonModule, ButtonModule, RippleModule]
 })
 
 export class SystemIntegrationModule{}

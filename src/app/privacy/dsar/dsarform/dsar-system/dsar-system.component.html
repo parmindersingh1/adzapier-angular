@@ -1,11 +1,17 @@
 <div class="card" *ngIf="systemName === ''">
   <div class="card-header">
     <h4 class="float-left pt-2">Choose Connection</h4>
-    <button class="btn btn-primary float-right" ><i class="fas fa-plus"></i> Create Connection</button>
+    <button class="btn btn-primary float-right" (click)="openModal(createConnection)"><i class="fas fa-plus"></i> Create Connection</button>
   </div>
-  <div class="card-body" *ngIf="credList.length > 0">
-    <p-table  [value]="credList" [scrollable]="true" [rows]="100" scrollHeight="450px"
-              [virtualScroll]="true" [virtualRowHeight]="40" [lazy]="true" (onLazyLoad)="loadCarsLazy($event)">
+  <div class="card-body" [ngStyle]="{display: credList.length > 0 && !skLoading ? 'block': 'none'}">
+    <p-table  [value]="credList"
+              [lazy]="true" [responsive]="true"
+              [totalRecords]="credCount"
+              [resizableColumns]="true"
+              columnResizeMode="expand"
+              [rowsPerPageOptions]="[10,20,30]"
+              [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+              (onLazyLoad)="loadCarsLazy($event)">>
       <ng-template pTemplate="header">
         <tr>
           <th>ID</th>
@@ -26,7 +32,7 @@
           <td>{{onFindSystemName(rowData.system_id)}}</td>
           <td>{{rowData.created_at | date}}</td>
           <td>
-            <button type="button" (click)="onTestConnection(rowData)" class="btn btn-secondary btn-sm">
+            <button type="button" (click)="onTestConnection(rowData, rowData.system_id)" class="btn btn-secondary btn-sm">
               <span *ngIf="isTesting && currentScanId === rowData.id; else test"><div  class="spinner-border"></div> Testing... </span>
               <ng-template #test><i class="fas fa-play pr-2"></i> Test </ng-template>
 
@@ -44,12 +50,106 @@
       </ng-template>
     </p-table>
   </div>
+  <div *ngIf="credList.length === 0 && !skLoading" class="card-body">
+    <div class="alert-info alert text-center"> <i class="fas fa-plug pr-2"></i> No Connection Available </div>
+  </div>
+
+  <div class="card-body" *ngIf="skLoading">
+    <div class="row mb-2">
+      <div class="col-md-12">
+        <ngx-skeleton-loader [theme]="{width: '100%', height: '70px'}"></ngx-skeleton-loader>
+      </div>
+    </div>
+    <div class="row mb-2" *ngFor="let obj of skLoadingArray">
+      <div class="col-md-2">
+        <ngx-skeleton-loader   [theme]="{width: '150px'}"></ngx-skeleton-loader>
+      </div>
+      <div class="col-md-3">
+        <ngx-skeleton-loader   [theme]="{width: '200px'}"></ngx-skeleton-loader>
+      </div>
+      <div class="col-md-3">
+        <ngx-skeleton-loader   [theme]="{width: '200px'}"></ngx-skeleton-loader>
+      </div>
+      <div class="col-md-2">
+        <ngx-skeleton-loader   [theme]="{width: '150px'}"></ngx-skeleton-loader>
+      </div>
+      <div class="col-md-2">
+        <ngx-skeleton-loader   [theme]="{width: '150px'}"></ngx-skeleton-loader>
+      </div>
+    </div>
+  </div>
+
 </div>
 
 <app-sql-query-builder (backHome)="onHome($event)" [formObject]="formObject" [formID]="formID" [connectionId]="connectionID" [systemName]="systemName" *ngIf="systemName === 'mysql'"></app-sql-query-builder>
 <app-sql-query-builder (backHome)="onHome($event)"  [formObject]="formObject" [formID]="formID" [connectionId]="connectionID" [systemName]="systemName" *ngIf="systemName === 'postgres' || systemName === 'postgresql'"></app-sql-query-builder>
 <app-mailchimp-query-builder  (backHome)="onHome($event)"  [formObject]="formObject" [formID]="formID" [connectionId]="connectionID"  [systemName]="systemName" *ngIf="systemName === 'mailchimp'"></app-mailchimp-query-builder>
 <app-http-query-builder  (backHome)="onHome($event)"  [formObject]="formObject" [formID]="formID" [connectionId]="connectionID"  [systemName]="systemName" *ngIf="systemName === 'http'"></app-http-query-builder>
+
+
+
+<ng-template #createConnection>
+  <div class="modal-header">
+    <h4 class="modal-title text-center margin-auto">Create Connection</h4>
+    <button type="button" class="close pull-right ml-0" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="step-1" *ngIf="step === 1">
+      <div class="list-group">
+        <div class="row">
+          <ng-container *ngFor="let obj of systemList">
+            <div class="col-md-4 mb-3">
+              <a href="javascript:;" (click)="onSelectSystem(obj, 2)" class="list-group-item list-group-item-action">
+                <span *ngIf="obj.name ==='mysql'"><img style="width:  90px" src="assets/imgs/db/mysql.png" alt="mysql" /></span>
+                <span *ngIf="obj.name ==='mailchimp'"><img style="width:  180px" src="assets/imgs/db/mailchimp.png" alt="mailchimp" /></span>
+                <span *ngIf="obj.name ==='postgresql'"><img style="width:  210px; height: 47px" src="assets/imgs/db/postgresql.svg" alt="postgresql" /></span>
+                <span *ngIf="obj.name ==='http'"><img style="width:  210px; height: 47px" src="assets/imgs/db/http.png" alt="http" /></span>
+                <!--                <span *ngIf="obj.name !=='mailchimp'" class="tx-18 pl-3">{{obj.name}} </span>-->
+              </a>
+            </div>
+          </ng-container>
+        </div>
+
+
+      </div>
+    </div>
+    <ng-container *ngIf="step === 2">
+      <h6><span class="back-to-list-btn" (click)="step = 1"><i class="fas fa-chevron-left"></i>  Back To System </span></h6>
+      <app-mysql-form (refreshConnectionList)="onRefreshList()" [systemID]="currentSystem.id" [systemName]="currentSystem.name" ></app-mysql-form>
+    </ng-container>
+  </div>
+</ng-template>
+
+
+
+<ng-template #mailChimpConnection>
+  <div class="modal-header">
+    <h4 class="modal-title text-center margin-auto">Test MailChimp Connection</h4>
+    <button type="button" class="close pull-right ml-0" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="mailChimpForm" (ngSubmit)="onTestMailChimp()">
+      <div class="form-group">
+        <label for="exampleInputEmail1">Email address</label>
+        <input type="email" formControlName="email"  class="form-control" id="exampleInputEmail1"
+               [ngClass]="{'is-invalid': submitted && f.email.errors}"  aria-describedby="emailHelp" placeholder="Enter email">
+
+        <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
+          <div *ngIf="f.email.errors.required">Email Address is Required</div>
+          <div *ngIf="f.email.errors.email">Email must be a valid email address</div>
+        </div>
+      </div>
+      <div class="text-center">
+        <button type="button" class="btn btn-secondary">Cancel</button>
+        <button type="submit" class="ml-2 btn btn-primary">Submit</button>
+      </div>
+    </form>
+  </div>
+</ng-template>
 
 <div class="col-sm-5 mr-0 float-right flotingdiv" [ngClass]="{'hide':!isOpen}">
   <alert *ngIf="isOpen" [type]="alertType" dismissOnTimeout="5000" [dismissible]="dismissible"

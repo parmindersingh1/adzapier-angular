@@ -53,3 +53,12 @@
   display: none;
 }
 
+
+//new
+.text-over{
+  white-space: nowrap;
+  width: 130px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+

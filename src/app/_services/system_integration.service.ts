@@ -65,9 +65,9 @@ export class SystemIntegrationService {
         return throwError(error);
       }));
   }
-  GetCredListByCompany(componentName, moduleName) {
+  GetCredListByCompany(componentName, moduleName, payload) {
     const path = apiConstant.CONNECTION_INTEGRATION_LIST;
-    return this.http.get(environment.apiUrl + path)
+    return this.http.get(environment.apiUrl + path, {params: payload})
       .pipe(catchError(error => {
         this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.getWorkflow, componentName, moduleName, path);
         return throwError(error);

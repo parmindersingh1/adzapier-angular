@@ -32,7 +32,7 @@ export class HttpQueryBuilderComponent implements OnInit, OnChanges, AfterViewIn
   isOpen = false;
   alertType: any;
   orgID = null;
-
+  pageStep = 1;
   constructor(private formBuilder: FormBuilder,
               private cd: ChangeDetectorRef,
               private loading: NgxUiLoaderService,
@@ -44,6 +44,7 @@ export class HttpQueryBuilderComponent implements OnInit, OnChanges, AfterViewIn
       this.orgID =  params.oid;
     });
     this.httpQueryBuilderForm = this.formBuilder.group({
+      path: ['', Validators.required],
       queryParams: this.formBuilder.array([])
     });
   }
@@ -53,8 +54,9 @@ export class HttpQueryBuilderComponent implements OnInit, OnChanges, AfterViewIn
     this.cd.detectChanges();
   }
   ngAfterViewInit() {
-    this.addSkills()
+    this.addSkills();
   }
+  get f() { return this.httpQueryBuilderForm.controls; }
 
   get skills(): FormArray {
     return this.httpQueryBuilderForm.get('queryParams') as FormArray;
@@ -82,17 +84,25 @@ export class HttpQueryBuilderComponent implements OnInit, OnChanges, AfterViewIn
 
   onSubmit() {
     this.submitted = true;
+    console.log('this.httpQueryBuilderForm', this.httpQueryBuilderForm)
     // stop here if form is invalid
     if (this.httpQueryBuilderForm.invalid) {
       return;
     }
+    const payload = [...this.httpQueryBuilderForm.value.queryParams];
+    payload.push({
+      field: 'path',
+      value_1: this.httpQueryBuilderForm.value.path,
+      system_name: this.systemName
+    });
     this.loading.start();
-    this.systemIntegrationService.saveQueryBuilder(this.constructor.name, moduleName.systemIntegrationModule, this.httpQueryBuilderForm.value.queryParams, this.orgID, this.connectionId, this.formID).subscribe((res: any) => {
+    this.systemIntegrationService.saveQueryBuilder(this.constructor.name, moduleName.systemIntegrationModule, payload, this.orgID, this.connectionId, this.formID).subscribe((res: any) => {
       this.loading.stop();
       if (res.status === 201) {
         this.isOpen = true;
         this.alertMsg = 'Record Saved';
         this.alertType = 'info';
+        this.pageStep = 2;
       }
     }, error => {
       this.loading.stop();

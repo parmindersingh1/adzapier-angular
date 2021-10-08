@@ -6,9 +6,15 @@
     <h4 class="float-left pt-2">Connections List</h4>
     <button class="btn btn-primary float-right" (click)="openModal(template)"><i class="fas fa-plus"></i> Create Connection</button>
   </div>
-  <div class="card-body">
-    <p-table [columns]="cols" [value]="credList" [scrollable]="true" [rows]="100" scrollHeight="450px"
-             [virtualScroll]="true" [virtualRowHeight]="40" [lazy]="true" (onLazyLoad)="loadCarsLazy($event)">
+  <div class="card-body" [ngStyle]="{display: credList.length > 0 && !skLoading ? 'block': 'none'}">
+    <p-table   [value]="credList"
+               [lazy]="true" [responsive]="true"
+               [totalRecords]="credCount"
+               [resizableColumns]="true"
+               columnResizeMode="expand"
+               [rowsPerPageOptions]="[10,20,30]"
+               [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+               (onLazyLoad)="loadLazyData($event)">
       <ng-template pTemplate="header" let-columns>
         <tr>
           <th>ID</th>
@@ -30,7 +36,7 @@
           <td>{{onFindSystemName(rowData.system_id)}}</td>
           <td>{{rowData.created_at | date}}</td>
           <td>
-            <button type="button" (click)="onTestConnection(rowData)" class="btn btn-secondary btn-sm">
+            <button type="button" (click)="onTestConnection(rowData, rowData.system_id)" class="btn btn-secondary btn-sm" style="font-size: 12px">
               <span *ngIf="isTesting && currentScanId === rowData.id; else test"><div  class="spinner-border"></div> Testing... </span>
               <ng-template #test><i class="fas fa-play pr-2"></i> Test </ng-template>
 
@@ -50,6 +56,35 @@
         </tr>
       </ng-template>
     </p-table>
+  </div>
+
+  <div *ngIf="credList.length === 0 && !skLoading" class="card-body">
+    <div class="alert-info alert text-center"> <i class="fas fa-plug pr-2"></i> No Connection Available </div>
+  </div>
+
+  <div class="card-body" *ngIf="skLoading">
+    <div class="row mb-2">
+      <div class="col-md-12">
+      <ngx-skeleton-loader [theme]="{width: '100%', height: '70px'}"></ngx-skeleton-loader>
+      </div>
+    </div>
+    <div class="row mb-2" *ngFor="let obj of skLoadingArray">
+      <div class="col-md-2">
+        <ngx-skeleton-loader   [theme]="{width: '150px'}"></ngx-skeleton-loader>
+      </div>
+      <div class="col-md-3">
+        <ngx-skeleton-loader   [theme]="{width: '200px'}"></ngx-skeleton-loader>
+      </div>
+      <div class="col-md-3">
+        <ngx-skeleton-loader   [theme]="{width: '200px'}"></ngx-skeleton-loader>
+      </div>
+      <div class="col-md-2">
+        <ngx-skeleton-loader   [theme]="{width: '150px'}"></ngx-skeleton-loader>
+      </div>
+      <div class="col-md-2">
+        <ngx-skeleton-loader   [theme]="{width: '150px'}"></ngx-skeleton-loader>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -109,6 +144,34 @@
 </ng-template>
 
 
+
+
+<ng-template #mailChimpConnection>
+  <div class="modal-header">
+    <h4 class="modal-title text-center margin-auto">Test MailChimp Connection</h4>
+    <button type="button" class="close pull-right ml-0" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="mailChimpForm" (ngSubmit)="onTestMailChimp()">
+    <div class="form-group">
+      <label for="exampleInputEmail1">Email address</label>
+      <input type="email" formControlName="email"  class="form-control" id="exampleInputEmail1"
+           [ngClass]="{'is-invalid': submitted && f.email.errors}"  aria-describedby="emailHelp" placeholder="Enter email">
+
+      <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
+        <div *ngIf="f.email.errors.required">Email Address is Required</div>
+        <div *ngIf="f.email.errors.email">Email must be a valid email address</div>
+      </div>
+    </div>
+    <div class="text-center">
+      <button type="button" class="btn btn-secondary">Cancel</button>
+      <button type="button" (click)="onTestMailChimp()" class="ml-2 btn btn-primary">Submit</button>
+    </div>
+    </form>
+  </div>
+</ng-template>
 <div class="col-sm-5 mr-0 float-right flotingdiv" [ngClass]="{'hide':!isOpen}">
   <alert *ngIf="isOpen" [type]="alertType" dismissOnTimeout="5000" [dismissible]="dismissible"
       ><span [innerHTML]="alertMsg"></span></alert>
