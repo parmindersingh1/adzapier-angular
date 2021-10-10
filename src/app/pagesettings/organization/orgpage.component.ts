@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewChecked, OnDestroy, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { OrganizationService, UserService } from 'src/app/_services';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
@@ -9,6 +9,12 @@ import { CompanyService } from 'src/app/company.service';
 import { TablePaginationConfig } from 'src/app/_models/tablepaginationconfig';
 import { Orglist } from 'src/app/_models/org';
 import { moduleName } from 'src/app/_constant/module-name.constant';
+import { Subject, Subscription } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { QuickmenuService } from 'src/app/_services/quickmenu.service';
+import { QuickStart } from 'src/app/_models/quickstart';
+
+
 @Component({
   selector: 'app-orgpage',
   templateUrl: './orgpage.component.html',
@@ -16,7 +22,7 @@ import { moduleName } from 'src/app/_constant/module-name.constant';
 })
 
 
-export class OrgpageComponent implements OnInit {
+export class OrgpageComponent implements OnInit,AfterViewInit,OnDestroy {
   organisationPropertyForm: FormGroup;
   editOrganisationForm: FormGroup;
   submitted: boolean;
@@ -61,6 +67,17 @@ export class OrgpageComponent implements OnInit {
   currentUser: any;
   queryOID;
   queryPID;
+  isorgqsmenu:any;
+  isbtnClickedbyUser:boolean;
+  subscription:Subscription;
+  guidancetext:string = "Add your organization"
+  private unsubscribeAfterUserAction$: Subject<any> = new Subject<any>();
+  quickDivID;
+  isquickstartmenu:any;
+  actuallinkstatus:boolean;
+  text = "Add your organization..."
+  isRevistedLink:boolean;
+  currentLinkID:any;
   constructor(private formBuilder: FormBuilder,
               private orgservice: OrganizationService,
               private modalService: NgbModal, private sanitizer: DomSanitizer,
@@ -68,12 +85,25 @@ export class OrgpageComponent implements OnInit {
               private companyService: CompanyService,
               private router: Router,
               private loading: NgxUiLoaderService,
-              private activatedRoute: ActivatedRoute
+              private activatedRoute: ActivatedRoute,
+              private quickmenuService: QuickmenuService,
+              private cdRef: ChangeDetectorRef
   ) {
     this.paginationConfig = { itemsPerPage: this.pageSize, currentPage: this.p, totalItems: this.totalCount };
    }
 
   ngOnInit() {
+    this.userService.isClickedOnQSMenu.pipe(
+      takeUntil(this.unsubscribeAfterUserAction$)
+
+    ).subscribe((status)=>{
+      this.isorgqsmenu = status.isclicked;
+      this.quickDivID = status.quickstartid;
+      this.actuallinkstatus = status.isactualbtnclicked;
+      
+    });
+    this.userService.isRevisitedQSMenuLink.subscribe((status) => { this.isRevistedLink = status.reclickqslink; this.currentLinkID = status.quickstartid; });
+    
     this.isEditable = false;
     this.isEditProperty = false;
     const urlRegex = '(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?';
@@ -289,6 +319,19 @@ export class OrgpageComponent implements OnInit {
 
 
   organizationModalPopup(content, data) {
+    let quickLinkObj: QuickStart = {
+      linkid: 2,
+      indexid: 1,
+      isactualbtnclicked: true,
+      islinkclicked: true,
+      divguidetext: "addproperty",
+      linkdisplaytext: "Add Organization",
+      link: "/settings/organizations"
+    };
+
+    this.quickmenuService.onClickEmitQSLinkobj.next(quickLinkObj);
+    this.quickmenuService.updateQuerymenulist(quickLinkObj);
+    
     if (data !== '') {
       this.myContext = { oid: data.id };
       this.organizationname = data.orgname;
@@ -326,6 +369,10 @@ export class OrgpageComponent implements OnInit {
       });
     }
 
+  }
+
+  onClickOrgbtn(){
+    this.isorgqsmenu = !this.isorgqsmenu;
   }
 
   onResetEditOrganization() {
@@ -402,5 +449,27 @@ export class OrgpageComponent implements OnInit {
     this.isOpen = false;
   }
 
+  ngAfterViewInit(){
+   // this.userService.onClickActualBtnByUser.subscribe((status)=> this.isorgqsmenu = status);
+    this.cdRef.detectChanges();
+  }
+
+  ngAfterViewChecked(){
+       this.cdRef.detectChanges();
+  }
+
+  ngOnDestroy(){
+    //this.unsubscribeAfterUserAction$.next();
+    //this.unsubscribeAfterUserAction$.complete();
+    //this.userService.onClickQuickStartmenu.unsubscribe();
+  }
+
+  positionObj(){
+    return {
+      "left": "760px",
+      "top":"120px"
+    }
+
+  }
 
 }

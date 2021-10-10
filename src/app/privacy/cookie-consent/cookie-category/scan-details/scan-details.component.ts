@@ -5,7 +5,7 @@ import {CookieCategoryService} from '../../../../_services/cookie-category.servi
 import {SortEvent} from 'primeng/api';
 import {ChartOptions} from 'chart.js';
 import {featuresName} from '../../../../_constant/features-name.constant';
-import {AuthenticationService} from '../../../../_services';
+import {AuthenticationService, UserService} from '../../../../_services';
 import {DataService} from '../../../../_services/data.service';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
 import { ActivatedRoute } from '@angular/router';
@@ -75,6 +75,7 @@ export class ScanDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
   queryPID;
   constructor(private service: CookieCategoryService,
               private authService: AuthenticationService,
+              private userService: UserService,
               private dataService: DataService,
               private loading: NgxUiLoaderService,
               private _cd: ChangeDetectorRef,
@@ -83,6 +84,7 @@ export class ScanDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.userService.addUserActionOnActualButton.next({quickstartid:8,isclicked:true,isactualbtnclicked:true});
     this.activateRoute.queryParamMap
       .subscribe(params => {
         this.queryOID = params.get('oid');

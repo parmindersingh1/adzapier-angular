@@ -6,6 +6,7 @@ import {NgxUiLoaderService} from 'ngx-ui-loader';
 import {Observable} from 'rxjs';
 import {debounceTime, distinctUntilChanged, map} from 'rxjs/operators';
 import {moduleName} from 'src/app/_constant/module-name.constant';
+import { UserService } from 'src/app/_services';
 import {BillingService} from 'src/app/_services/billing.service';
 import {OrganizationService} from 'src/app/_services/organization.service';
 import {DataService} from '../../../../_services/data.service';
@@ -57,7 +58,8 @@ export class ManagePropertyComponent implements OnInit, OnDestroy {
               private loading: NgxUiLoaderService,
               private formBuilder: FormBuilder,
               private orgservice: OrganizationService,
-              private dataService: DataService
+              private dataService: DataService,
+              private userService: UserService
   ) {
   }
 

@@ -109,22 +109,20 @@
     <!-- </ng-container> -->
     </ul>
       <!--end of organization / property menu after login-->
-    <ul class="navbar-nav" *ngIf="currentUser">
-      <li *ngFor="let menu of navigationMenu" class="nav-item">
-        <div *ngIf="menu.showlink" dropdown container="body">
-          <!-- <div *ngIf="!menu.subcategory">
-            <a class="nav-link" routerLink="[menu.routerLink]" [queryParams]="{oid:queryOID , pid:queryPID}"  [class.active]="menu.showlink === 'Billing' && isBillingActivelinkMatched" (click)="goto(menu)">
-          {{ menu.showlink }}</a></div> -->
-          <!-- <div *ngIf="menu.subcategory && menu.showlink === 'DSAR'">
-            <a class="nav-link dropdown-toggle" title="Data Subject Access Request"  [class.active]="menu.showlink === 'Privacy' && isPrivacyActivelinkMatched" *ngIf="menu.subcategory" dropdownToggle (click)="true">
-              {{ menu.showlink }}</a></div> -->
+    <ul class="navbar-nav"  #navMenu *ngIf="currentUser">
+      <li *ngFor="let menu of navigationMenu;" class="nav-item">
+        
+      <div *ngIf="menu.showlink" dropdown   #headerDropdown="bs-dropdown"  container="body"    [autoClose]="true">
+          <div *ngIf="!menu.subcategory" >
+            <a class="nav-link" routerLink="[menu.routerLink]" dropdownToggle [queryParams]="{oid:queryOID , pid:queryPID}"  [class.active]="menu.showlink === 'Billing' && isBillingActivelinkMatched" (click)="goto(menu)">
+          {{ menu.showlink }}</a></div>
           <div *ngIf="menu.subcategory">
-            <a class="nav-link dropdown-toggle" title="{{menu.tooltip}}"  [class.active]="isPrivacyActivelinkMatched" *ngIf="menu.subcategory" dropdownToggle (click)="true">
+            <a class="nav-link dropdown-toggle" dropdownToggle  [class.active]="menu.showlink === 'Privacy' && isPrivacyActivelinkMatched" *ngIf="menu.subcategory" (click)="true">
               {{ menu.showlink }}</a></div>
-          <ul *dropdownMenu class="dropdown-menu">
+          <ul id="dropdown-triggers-manual"  #dpTriggers  *dropdownMenu class="dropdown-menu">
             <div class="d-flex">
               <div>
-            <ng-container *ngFor="let item of menu.subcategory;let q = index;">
+            <ul *ngFor="let item of menu.subcategory;let q = index;" style="margin: 0; padding: 0;">
               <li *ngIf="menu.showlink == 'Privacy' && q===0" class="displayflex"><span>DSAR</span></li>
               <li role="menuitem" *ngIf="q  <= 9">
                 <a class="dropdown-item" [class.active]="activateSublink(item)"  [routerLink]="item.routerLink" *ngIf="item.routerLink !== '/home/dashboard/consent-preference'" [queryParams]="{oid:queryOID , pid:queryPID}" (click)="goto(item)">
@@ -142,7 +140,7 @@
               </li>
               <!-- <li *ngIf="q===3" class="displayflex"><span>Cookie Consent</span></li> -->
 
-            </ng-container>
+            </ul>
             </div>
             <!-- <div *ngIf="showConsentPreference" class="ml-2">
             <ng-container *ngFor="let item of menu.subcategory;let q = index;">
@@ -164,8 +162,8 @@
         </div>
       </li>
     </ul>
-    <div >
-      <button (click)="btnTopAddSubscription()" class="primary-yellow"> Add A Subscription </button>
+    <div>
+      <button (click)="btnTopAddSubscription()" class="primary-yellow"> Add A Subscription</button>
     </div>
   </div>
   <!--end of general menu after login-->
@@ -389,3 +387,10 @@
       <button type="button" class="btn btn-xs btn-primary mr-2" (click)="confirm()">OK</button>
   </div>
 </ng-template>
+<!--quickstart alear for every page-->
+<div [ngClass]="isBillingpageQuickid() && isquicklinkclicked && !isBackdropclicked ? 'back-drop-two': ''"
+  (click)="onClickBackdrop()" *ngIf="!isloginpage">
+  <app-quickstartalert [styleobj]="positionObj()" [isclickedbyuser]="quickLinkStatus"
+    [isuserclickoutsidemenu]="isQuicklinkActuallinkVisited()" [linkid]="quickDivID" [divguidetext]="alertguidetext"
+    [guidancetext]="alertcontent" [isactualLinkclickedbyuser]="actuallinkstatus"></app-quickstartalert>
+</div>
