@@ -125,7 +125,7 @@ export class OrgpageComponent implements OnInit,AfterViewInit,OnDestroy {
       statename: ['', [Validators.required, Validators.pattern(strRegx)]],
       zipcodenum: ['', [Validators.required, Validators.pattern(zipRegex)]],
       email: ['', [Validators.required, Validators.pattern]],
-      phone: ['', [Validators.required, Validators.pattern(phoneNumRegx)]]
+      phone: ['', [Validators.pattern(phoneNumRegx)]]
     });
     this.loadOrganizationList();
     this.getLoggedInUserDetails();

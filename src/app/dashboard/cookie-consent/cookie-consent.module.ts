@@ -6,16 +6,18 @@ import {SharedbootstrapModule} from '../../sharedbootstrap/sharedbootstrap.modul
 import {AuthGuard} from '../../_helpers';
 import {RouteguardService} from '../../_services/routeguard.service';
 import { LicenseguardPropertyService } from '../../_services/licenseguardproperty.service';
+import {FormsModule} from '@angular/forms';
 const path: Routes = [
   {path: '', component: CookieConsentComponent,canActivate: [AuthGuard, RouteguardService, LicenseguardPropertyService]}
 ];
 
 @NgModule({
   declarations: [CookieConsentComponent],
-  imports: [
-    CommonModule,
-    SharedbootstrapModule,
-    RouterModule.forChild(path)
-  ]
+    imports: [
+        CommonModule,
+        SharedbootstrapModule,
+        RouterModule.forChild(path),
+        FormsModule
+    ]
 })
 export class CookieConsentModule { }

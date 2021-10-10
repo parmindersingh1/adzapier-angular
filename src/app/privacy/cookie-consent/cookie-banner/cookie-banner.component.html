@@ -269,6 +269,7 @@
                          *ngIf="gdprBannerConfig">
                       <a class="mt-n2 mr-n2 float-right btn-xs btn-uppercase "
                          style="font-size: 12px"
+                         [queryParams]="{oid: queryOID, pid: queryPID}"
                          routerLink="/cookie-consent/manage-vendors">
                         <i class="fa fa-cogs" style="    font-size: 15px;
     margin-right: 5px;" aria-hidden="true"></i>

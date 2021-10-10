@@ -129,6 +129,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
   actualBackdropclicked:boolean = false;
   storeDropdownstatus:boolean = false;
   lastopendp:any = [];
+  isShowDashboardConsent = false;
   constructor(
     private router: Router,
     private activatedroute: ActivatedRoute,
@@ -837,6 +838,18 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
       }
     }
 
+    if (link.routerLink === '/home/dashboard/consent-preference' || link.routerLink == '/consent-solutions/consent-records' || link.routerLink == '/consent-solutions/setup' ) {
+      if (this.selectedOrgProperties.length > 0) {
+        this.onCheckAllowConsentDashboard();
+        if (!this.isShowDashboardConsent) {
+          return false;
+        }
+      } else {
+        this.openModal(this.confirmModal);
+        return false;
+      }
+    }
+
     if (id !== undefined) {
       this.router.navigate([link.routerLink || link, id]); //,{queryParams:{'oid':id,'pid':id}}
     } else {
@@ -1012,7 +1025,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
 
   onMobileMenuClicked(link) {
 
-    if (link === 'DSAR' && this.isMobileDSARMenuCollapsed) {
+     if (link === 'DSAR' && this.isMobileDSARMenuCollapsed) {
       this.isMobileDSARMenuCollapsed = false;
       this.isMobileConsentMenuCollapsed = true;
       this.isMobileCookieMenuCollapsed = true;
@@ -1177,9 +1190,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
     if (resData.hasOwnProperty('response')) {
       if (resData.response && resData.response.plan_details && resData.response.plan_details.consentPreference) {
         if (Object.values(resData.response.plan_details.consentPreference).length > 0) {
+          this.isShowDashboardConsent = true;
           this.dataService.isConsentPreferenceApplied.next({ requesttype: 'consentpreference', hasaccess: true })
         } else {
           this.dataService.isConsentPreferenceApplied.next({ requesttype: 'consentpreference', hasaccess: false });
+          this.isShowDashboardConsent = false;
           //this.router.navigate(['/home/welcome']);
           // this.dataService.openUpgradeModalForConsentPreference(resData);
         }
@@ -1270,6 +1285,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
     }
   }
 
+  onCheckAllowConsentDashboard() {
+    this.planDetails = this.dataService.getCurrentPropertyPlanDetails();
+    if (!this.isShowDashboardConsent) {
+      this.dataService.openUpgradeModalForConsentPreference(this.planDetails);
+    }
+  }
+
   isLicenseAssignedForOrganization(item): boolean {
     return this.orgList.some((t) => t.id == item.id && !t.license_assigned);
   }
@@ -1300,7 +1322,25 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
     }
     if (count > 15) {
       return {
-        "width": "115px"
+        "width": "70px"
+      }
+    } else {
+      return {
+        "width": "auto"
+      }
+    }
+
+  }
+
+  
+  addEllipsisOrg(): object {
+    let countorg;
+    if (this.currentOrganization !== "" && this.currentOrganization !== undefined) {
+      countorg = this.currentOrganization.length;
+    }
+    if (countorg > 15) {
+      return {
+        "width": "70px"
       }
     } else {
       return {

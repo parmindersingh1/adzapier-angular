@@ -89,7 +89,7 @@
                   {{features.featureName}} <span class="font-weight-bold" *ngIf="features.featureValue"> -
                     {{features.featureValue}}</span></li>
               </ng-container>
-              <a class="more-details-text" (click)="openModal(template)">View Comparision</a>
+              <a class="more-details-text" (click)="openModal(template)">View Comparison</a>
 
             </ul>
 
@@ -144,11 +144,10 @@
             <p class="tx-color-03 mg-b-25">Advanced enterprise features and global coverage. Volume discount
               available.</p>
             <ul class="pl-3 mr-feature">
-              <li class="text-left feature-list" *ngFor="let  features of highLightFeatures.cookieConsent.enterprise">
-                {{features.featureName}}
-                <span class="font-weight-bold" *ngIf="features.featureValue"> - {{features.featureValue}}</span>
-              </li>
-              <a class="more-details-text" (click)="openModal(template)">View Comparision</a>
+              <li class="text-left feature-list"
+                  *ngFor="let  features of highLightFeatures.cookieConsent.enterprise">{{features.featureName}}
+                <span class="font-weight-bold" *ngIf="features.featureValue"> - {{features.featureValue}}</span></li>
+              <a class="more-details-text" (click)="openModal(template)">View Comparison</a>
 
             </ul>
             <h2 class="tx-rubik tx-normal ">Contact Us</h2>
@@ -192,7 +191,7 @@
                   {{features.featureName}} <span class="font-weight-bold" *ngIf="features.featureValue"> -
                     {{features.featureValue}}</span></li>
               </ng-container>
-              <a class="more-details-text" (click)="openModal(template)">View Comparision</a>
+              <a class="more-details-text" (click)="openModal(template)">View Comparison</a>
               <!--            <a class="more-details-text " *ngIf="maxCookiePreferenceList === 15" (click)="maxCookiePreferenceList = 4">Hide</a>-->
             </ul>
 
@@ -244,11 +243,10 @@
             <p class="tx-color-03 mg-b-25">Advanced enterprise features and global coverage. Volume discount
               available.</p>
             <ul class="pl-3 mr-feature">
-              <li class="text-left feature-list" *ngFor="let  features of highLightFeatures.dsar.enterprise">
-                {{features.featureName}}
-                <span class="font-weight-bold" *ngIf="features.featureValue"> - {{features.featureValue}}</span>
-              </li>
-              <a class="more-details-text" (click)="openModal(template)">View Comparision</a>
+              <li class="text-left feature-list"
+                  *ngFor="let  features of highLightFeatures.dsar.enterprise">{{features.featureName}}
+                <span class="font-weight-bold" *ngIf="features.featureValue"> - {{features.featureValue}}</span></li>
+              <a class="more-details-text" (click)="openModal(template)">View Comparison</a>
 
             </ul>
             <h2 class="tx-rubik tx-normal ">Contact Us</h2>
@@ -298,7 +296,7 @@
                   <span class="font-weight-bold" *ngIf="features.featureValue"> - {{features.featureValue}}</span>
                 </li>
               </ng-container>
-              <a class="more-details-text" (click)="openModal(template)">View Comparision</a>
+              <a class="more-details-text" (click)="openModal(template)">View Comparison</a>
 
               <!--                              <a class="more-details-text " *ngIf="maxCookiePreferenceList === 4" (click)="maxCookiePreferenceList = 15">Show More</a>-->
               <!--                              <a class="more-details-text " *ngIf="maxCookiePreferenceList === 15" (click)="maxCookiePreferenceList = 4">Hide</a>-->
@@ -354,11 +352,9 @@
               available.</p>
             <ul class="pl-3 mr-feature">
               <li class="text-left feature-list"
-                *ngFor="let  features of highLightFeatures.consentPreference.enterprise.slice(0, 4)">
-                {{features.featureName}}
-                <span class="font-weight-bold" *ngIf="features.featureValue"> - {{features.featureValue}}</span>
-              </li>
-              <a class="more-details-text" (click)="openModal(template)">View Comparision</a>
+                  *ngFor="let  features of highLightFeatures.consentPreference.enterprise.slice(0, 4)">{{features.featureName}}
+                <span class="font-weight-bold" *ngIf="features.featureValue"> - {{features.featureValue}}</span></li>
+              <a class="more-details-text" (click)="openModal(template)">View Comparison</a>
 
               <!--            <a class="more-details-text " *ngIf="maxCookiePreferenceList === 4" (click)="maxCookiePreferenceList = 15">Show More</a>-->
               <!--            <a class="more-details-text " *ngIf="maxCookiePreferenceList === 15" (click)="maxCookiePreferenceList = 4">Hide</a>-->
