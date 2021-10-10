@@ -15,6 +15,8 @@ import {NgxUiLoaderService} from 'ngx-ui-loader';
 import { Location } from '@angular/common';
 import { findPropertyIDFromUrl } from 'src/app/_helpers/common-utility';
 
+import { QuickmenuService } from 'src/app/_services/quickmenu.service';
+import { QuickStart } from 'src/app/_models/quickstart';
 // import { CompanyService } from '../company.service';
 @Component({
   selector: 'app-organizationdetails',
@@ -104,6 +106,7 @@ export class OrganizationdetailsComponent implements OnInit {
               private bsmodalService: BsModalService,
               private loading: NgxUiLoaderService,
               private location: Location,
+              private quickmenuService: QuickmenuService,
               private cdref: ChangeDetectorRef) {
     // this.orgService.currentProperty.subscribe((data) => {
     //   this.currentManagedOrgID = data.organization_id || data.response.oid;
@@ -244,8 +247,19 @@ export class OrganizationdetailsComponent implements OnInit {
     });
   }
 
- async open(content, type) {
-    if(type === 'invite' ) {
+  async open(content, type) {
+
+    let quickLinkObj: QuickStart = {
+      linkid: 3,
+      indexid: 1,
+      isactualbtnclicked: true,
+      islinkclicked: true,
+      divguidetext: "addproperty",
+      linkdisplaytext: "Add Property",
+      link: "/settings/organizations/details"
+    };
+    
+    if (type === 'invite') {
       if (! await this.onCheckSubscription()) {
         return false;
       }
@@ -262,6 +276,9 @@ export class OrganizationdetailsComponent implements OnInit {
     }, (reason) => {
       // this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
+    this.quickmenuService.onClickEmitQSLinkobj.next(quickLinkObj);
+    this.quickmenuService.updateQuerymenulist(quickLinkObj);
+
   }
 
   editModalPopup(content, data) {

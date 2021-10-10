@@ -20,6 +20,16 @@
   z-index: 1001;
 }
 
+.addbg-menuitem{
+  margin: 0 -5px !important;
+  padding: 0 4px !important;
+  z-index: 1200;
+  border-left: 0;
+  box-shadow: 0 0px 3px -1px;
+  border-radius: 5px;
+  border-right: 0;
+  border: 1px solid #0168fa;
+}
 
 .navbar h3 {
   margin: 10px 20px 10px 10px;
@@ -1077,4 +1087,24 @@ a.nav-link.dropdown-link span.rounded-circle {
   letter-spacing: 1px;
   outline: none;
   cursor: pointer;
+}
+
+
+.back-drop-two {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: rgba(0,0,0,0.7);
+  z-index: 990;
+}
+
+.highlight {
+  background-color: yellow;
+}
+
+.highlightmenu-element {
+  border:2px solid #0148ae;
+  color:#0148ae;
 }

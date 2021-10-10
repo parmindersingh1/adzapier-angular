@@ -7,9 +7,12 @@
             </ol>
         </nav>
     </div>
+    <!-- <app-quickstartalert [styleobj]="positionObj()" [linkid]="quickDivID" [divguidetext]="'addcompanydetails'"  [guidancetext]="text" [isclickedbyuser]="isquickstartmenu" [isactualLinkclickedbyuser]="actuallinkstatus"></app-quickstartalert>  -->
     <div class="row">
         <div class="col-12">
             <div class="card">
+                 <!-- <div *ngIf="isquickstartmenu && quickDivID == 1" class="guidencediv qs-position">22Edit company details</div> -->
+                
                 <div class="card-header d-flex align-items-center justify-content-between pd-y-10">
                     <h6 class="mg-b-0 tx-color-03 ">
                         Company Details
@@ -98,8 +101,8 @@
                         </span>
                     </div>
 
-                    <div class="col-sm-2 ml-auto">
-                        <button type="button" class="add-user-btn btn btn-sm btn-outline-secondary btn-uppercase mr-0" data-toggle="modal"
+                    <div class="col-sm-2 ml-auto btn-align-right">
+                        <button type="button" class="btn btn-sm btn-outline-secondary btn-uppercase mr-0" data-toggle="modal"
                             (click)="editOrganizationModalPopup(inviteuserModal, 'add')"><i class="fas fa-plus"></i> Add
                             User</button>
                     </div>
