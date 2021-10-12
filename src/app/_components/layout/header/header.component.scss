@@ -20,6 +20,16 @@
   z-index: 1001;
 }
 
+.addbg-menuitem{
+  margin: 0 -5px !important;
+  padding: 0 4px !important;
+  z-index: 1200;
+  border-left: 0;
+  box-shadow: 0 0px 3px -1px;
+  border-radius: 5px;
+  border-right: 0;
+  border: 1px solid #0168fa;
+}
 
 .navbar h3 {
   margin: 10px 20px 10px 10px;
@@ -121,9 +131,9 @@ i {
   font-size: 0.9rem;
   padding: 0;
 }
-.nav-mr {
-  margin-left: 100px;
-}
+// .nav-mr {
+//   margin-left: 100px;
+// }
 .dropdown-menu ul li {
   list-style-type: none;
 }
@@ -272,6 +282,15 @@ a.nav-link:hover {
 .navbar-expand-lg .navbar-nav .nav-link {
   color: #ffffff;
   display: flex;
+}
+
+
+.truncateClass {
+    display: inline-block;
+    width: 30px; // your width
+    white-space: nowrap;
+    overflow: hidden !important;
+    text-overflow: ellipsis;
 }
 
 .iconwrapper {
@@ -580,9 +599,9 @@ ul.navbar-nav > a.nav-link.dropdown-link:hover {
   color: #f0b323 !important;
 }
 
-ul.navbar-nav > a.nav-link.dropdown-link:hover .large-propname {
-  width: auto !important;
-}
+// ul.navbar-nav > a.nav-link.dropdown-link:hover .large-propname {
+//   width: auto !important;
+// }
 
 ul.navbar-nav > a.nav-link.dropdown-link::after{
   content: "";
@@ -866,6 +885,13 @@ a.nav-link.dropdown-link span.rounded-circle {
   overflow: hidden!important;
 }
 
+.large-orgname {
+  text-overflow: ellipsis!important;
+  white-space: nowrap!important;
+  cursor: pointer!important;
+  overflow: hidden!important;
+}
+
 .property-ellipsis {
   width: 180px;
   overflow: hidden;
@@ -1077,4 +1103,24 @@ a.nav-link.dropdown-link span.rounded-circle {
   letter-spacing: 1px;
   outline: none;
   cursor: pointer;
+}
+
+
+.back-drop-two {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: rgba(0,0,0,0.7);
+  z-index: 990;
+}
+
+.highlight {
+  background-color: yellow;
+}
+
+.highlightmenu-element {
+  border:2px solid #0148ae;
+  color:#0148ae;
 }

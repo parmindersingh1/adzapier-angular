@@ -4,14 +4,15 @@ import { SharedbootstrapModule } from 'src/app/sharedbootstrap/sharedbootstrap.m
 import { HeaderComponent } from './header.component';
 import { HeaderRoutingModule } from './header-routing.module';
 import {ScrollingModule} from '@angular/cdk/scrolling';
-
+import { QuickstartalertModule } from 'src/app/_components/quickstartalert/quickstartalert.module';
 @NgModule({
     declarations: [HeaderComponent],
       imports: [
           CommonModule,
           SharedbootstrapModule,
           HeaderRoutingModule,
-          ScrollingModule
+          ScrollingModule,
+          QuickstartalertModule
       ],
       schemas: [
         CUSTOM_ELEMENTS_SCHEMA

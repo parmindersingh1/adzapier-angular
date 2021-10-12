@@ -6,7 +6,7 @@ import { PricingComponent } from './pricing.component';
 import { SharedbootstrapModule } from 'src/app/sharedbootstrap/sharedbootstrap.module';
 import {BsDropdownModule} from 'ngx-bootstrap/dropdown';
 import {FormsModule} from '@angular/forms';
-
+import { QuickstartalertModule } from 'src/app/_components/quickstartalert/quickstartalert.module';
 @NgModule({
   declarations: [PricingComponent],
     imports: [
@@ -14,7 +14,8 @@ import {FormsModule} from '@angular/forms';
         PricingRoutingModule,
         SharedbootstrapModule,
         BsDropdownModule,
-        FormsModule
+        FormsModule,
+        QuickstartalertModule
     ]
 })
 export class PricingModule { }

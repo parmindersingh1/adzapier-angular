@@ -1,43 +1,56 @@
-<!-- <div class="quickstart-wrapper">
-    <ul>
-        <li *ngFor="let datalist of quickStartMenu">
-            <button type="button" (click)="expanddiv()">{{datalist.indextext}}</button>
-            <div *ngIf="isOpen">
-                <ul>
-                    <li *ngFor="let pagelinks of datalist.quicklinks">
-                        {{pagelinks.linkdisplaytext}}
-                    </li>
-                </ul>
-            </div>
-        </li>
-    </ul>
-</div> -->
-<div style="position: relative;border: 1px solid #000;">
-    <div class="quickstart-wrapper" *ngIf="showQuickStartMenu">
-        isOpen | {{isOpen}}
-        <button (click)="onCloseQuickstart($event)">close</button>
-        <accordion   [isAnimated]="true" [closeOthers]="oneAtATime">
-            <accordion-group *ngFor="let datalist of quickStartMenu" heading="{{datalist.indextext}}"
-                [panelClass]="customClass">
+<div (window:resize)="onWindowResize($event)"  *ngIf="currentUser">
+    <div class="quickstart-wrapper" [@slideInOut]="showQuickStartMenu ? true : false">
+        <button class="quickclosebtn" (click)="onCloseQuickstart($event)">&times;</button>
+        <accordion [isAnimated]="true" [closeOthers]="true" >
+            <accordion-group *ngFor="let datalist of quickStartMenuList" heading="{{datalist.indextext}}"
+                [panelClass]="customClass" [isOpen]="datalist.index == currenttabindex">
                 <ul class="link-list">
                     <li *ngFor="let pagelinks of datalist.quicklinks">
-                      
-                        islinkclicked|   {{pagelinks.islinkclicked}}
-                        <a class="nav-link" routerLinkActive="active" routerLink="{{pagelinks.link}}" [queryParams]="{oid:queryOID , pid:queryPID}"  (click)="onClickQuickStartlink($event,pagelinks)">
-                            <span class="checkedlink" *ngIf="pagelinks.islinkclicked else linkNotvisited"><i class="fa fa-check-circle pr-2" aria-hidden="true"></i></span> 
-                            <ng-template #linkNotvisited>
-                             <span class="uncheckedlink"><i class="fa fa-check-circle pr-2" aria-hidden="true"></i></span> 
-                            </ng-template> 
-                            {{pagelinks.linkdisplaytext}}
-                        </a>
-                       
+                        <span *ngIf="pagelinks.linkid == 3">
+                            <a class="nav-link" routerLinkActive="active"
+                                (click)="onClickQSLinkForProperty(datalist.index,pagelinks)">
+                                <span class="checkedlink" *ngIf="pagelinks.isactualbtnclicked else linkNotvisited"><i
+                                        class="fa fa-check-circle pr-2" aria-hidden="true"></i></span>
+                                <ng-template #linkNotvisited>
+                                    <span class="uncheckedlink"><i class="fa fa-check-circle pr-2"
+                                            aria-hidden="true"></i></span>
+                                </ng-template>
+                                {{pagelinks.linkdisplaytext}}
+                            </a>
+                        </span>
+                        <span *ngIf="pagelinks.linkid !== 9 && pagelinks.linkid !== 3; else linkfour">
+                            <a class="nav-link" routerLinkActive="active" 
+                                (click)="onClickQuickStartlink(datalist.index,pagelinks)">
+                                <span class="checkedlink" *ngIf="pagelinks.isactualbtnclicked else linkNotvisited"><i
+                                        class="fa fa-check-circle pr-2" aria-hidden="true"></i></span>
+                                <ng-template #linkNotvisited>
+                                    <span class="uncheckedlink"><i class="fa fa-check-circle pr-2"
+                                            aria-hidden="true"></i></span>
+                                </ng-template>
+                                {{pagelinks.linkdisplaytext}}
+                            </a>
+                        </span>
+                        <ng-template #linkfour>
+                            <a *ngIf="pagelinks.linkid !== 3" class="nav-link"
+                                (click)="onClickQuickStartlink(datalist.index,pagelinks)">
+                                <span class="checkedlink" *ngIf="pagelinks.isactualbtnclicked else linkNotvisited"><i
+                                        class="fa fa-check-circle pr-2" aria-hidden="true"></i></span>
+                                <ng-template #linkNotvisited>
+                                    <span class="uncheckedlink"><i class="fa fa-check-circle pr-2"
+                                            aria-hidden="true"></i></span>
+                                </ng-template>
+                                {{pagelinks.linkdisplaytext}}
+                            </a>
+                        </ng-template>
                     </li>
                 </ul>
 
             </accordion-group>
         </accordion>
-        <div><button (click)="dismissQuickStartMenu()">Dismiss quick start</button></div>
-       
+        <div><button type="button" (click)="dismissQuickStartMenu()" class="btn btn-link">Dismiss quick start</button>
+        </div>
+
     </div>
-    <button (click)="onClickQuickStartBtn()" class="quickstart-btn">Quick Start</button>
+    <button type="button" *ngIf="!ishideQsbtn" (click)="onClickQuickStartBtn()" class="btn btn-primary btn-sm quickstart-btn">Quick
+        Start</button>
 </div>

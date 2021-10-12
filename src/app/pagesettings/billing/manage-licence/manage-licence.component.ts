@@ -1,14 +1,16 @@
 import {Component, OnInit, TemplateRef, ViewEncapsulation} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
 import {moduleName} from 'src/app/_constant/module-name.constant';
 import {BillingService} from 'src/app/_services/billing.service';
 import {OrganizationService, UserService} from '../../../_services';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
 import {DataService} from '../../../_services/data.service';
-import {Observable} from 'rxjs';
+import {Observable, Subject} from 'rxjs';
 import {debounceTime, distinctUntilChanged, map} from 'rxjs/operators';
+import { QuickmenuService } from 'src/app/_services/quickmenu.service';
+import { QuickStart } from 'src/app/_models/quickstart';
 
 @Component({
   selector: 'app-manage-subscription',
@@ -17,6 +19,7 @@ import {debounceTime, distinctUntilChanged, map} from 'rxjs/operators';
   encapsulation: ViewEncapsulation.None
 })
 export class ManageLicenceComponent implements OnInit {
+  private unsubscribeAfterUserAction$: Subject<any> = new Subject<any>();
   activeSubscriptionList = [];
   alertMsg: any;
   isOpen = false;
@@ -48,18 +51,31 @@ export class ManageLicenceComponent implements OnInit {
   totalLicenceOrg = 0;
   assigneLicenceOrg = 0;
   orgNameError = null;
+  isquickstartdivclicked:any;
+  quickDivID;
+  isRevistedLink:boolean;
+  currentLinkID:any;
+  actuallinkstatus:boolean = false;
+  isquickstartmenu:any;
   constructor(
     private loading: NgxUiLoaderService,
     private billingService: BillingService,
+    private quickmenuService: QuickmenuService,
     private userService: UserService,
     private formBuilder: FormBuilder,
     private modalService: BsModalService,
-    private activatedRoute: ActivatedRoute,
     private dataService: DataService,
-    private orgservice: OrganizationService
+    private orgservice: OrganizationService,
+    private activatedRoute: ActivatedRoute,
+    private router: Router
   ) { }
 
   ngOnInit() {
+    this.quickmenuService.onClickEmitQSLinkobj.subscribe((res) => { 
+      console.log(res,'res..51');
+      this.quickDivID = res.linkid;
+    });
+    console.log(this.quickDivID,'quickDivID51');
     this.activatedRoute.queryParamMap
       .subscribe(params => {
       this.queryOID = params.get('oid');
@@ -373,4 +389,47 @@ export class ManageLicenceComponent implements OnInit {
         this.alertType = 'danger';
       })
   }
+  userAction(planid,quickdivid) {
+    let quickLinkObj: QuickStart = {
+      linkid: quickdivid,
+      indexid: quickdivid === 19 ? 5 : 3,
+      isactualbtnclicked: true,
+      islinkclicked: true,
+      divguidetext: "addcookieconsentsubscriptiontoproperty",
+      linkdisplaytext: "Assigning Cookie Consent subscription to property",
+      link: "/settings/billing/manage"
+    };
+    this.quickmenuService.onClickEmitQSLinkobj.next(quickLinkObj);
+    this.quickmenuService.updateQuerymenulist(quickLinkObj);
+    const a = this.quickmenuService.getQuerymenulist();
+    if(a.length !== 0){
+      const idx = a.findIndex((t)=>t.index == quickLinkObj.indexid);
+      if(a[idx].quicklinks.filter((t)=>t.linkid == quickLinkObj.linkid).length > 0){
+        this.router.navigate(['/settings/billing/manage/property', planid], { queryParams: { oid: this.queryOID, pid: this.queryPID }, queryParamsHandling: 'merge', skipLocationChange: false });
+      }
+    }
+    
+  }
+
+  userActionForOrg(planid) {
+    let quickLinkObj: QuickStart = {
+      linkid: 12,
+      indexid: 4,
+      isactualbtnclicked: true,
+      islinkclicked: true,
+      divguidetext: "assign-dsar-subscription-to-organization",
+      linkdisplaytext: "Add DSAR subscription",
+      link: "/settings/billing/manage"
+    };
+    this.quickmenuService.updateQuerymenulist(quickLinkObj);
+    this.quickmenuService.onClickEmitQSLinkobj.next(quickLinkObj);
+    const a = this.quickmenuService.getQuerymenulist();
+    if(a.length !== 0){
+      const idx = a.findIndex((t)=>t.index == quickLinkObj.indexid);
+      if(a[idx].quicklinks.filter((t)=>t.linkid == quickLinkObj.linkid).length > 0){
+        this.router.navigate(['/settings/billing/manage/organizations', planid], { queryParams: { oid: this.queryOID, pid: this.queryPID }, queryParamsHandling: 'merge', skipLocationChange: false });
+      }
+    }
+  }
+  
 }

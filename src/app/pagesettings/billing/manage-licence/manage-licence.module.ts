@@ -6,6 +6,7 @@ import { ManageLicenceComponent } from './manage-licence.component';
 import {ButtonModule} from 'primeng/button';
 import {MultiSelectModule} from 'primeng/multiselect';
 import {ReactiveFormsModule} from '@angular/forms';
+import { QuickstartalertModule } from 'src/app/_components/quickstartalert/quickstartalert.module';
 
 const paths: Routes = [
   {path: '', component: ManageLicenceComponent },
@@ -21,7 +22,8 @@ const paths: Routes = [
     RouterModule.forChild(paths),
     ButtonModule,
     MultiSelectModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    QuickstartalertModule
   ]
 })
 export class ManageLicenceModule { }

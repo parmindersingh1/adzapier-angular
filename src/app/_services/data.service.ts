@@ -367,7 +367,7 @@ export class DataService {
     }
 
     this.openModal.next({
-      openModal: this.isSubscriptionExistForProperty(),
+      openModal: this.isSubscriptionExistForConsent(),
       data: planDetails.consentPreference,
       type: 'consentPreference',
     });
@@ -574,6 +574,18 @@ export class DataService {
             licenseStatusForProperty = status;
         });
         if (!licenseStatusForProperty.hasaccess) {
+            return true;
+        } else {
+            return false;
+        }
+  }
+
+  isSubscriptionExistForConsent():boolean{
+    let licenseStatusForConsentProperty;
+        this.isConsentPreferenceAppliedForProperty.subscribe((status) => {
+            licenseStatusForConsentProperty = status;
+        });
+        if (!licenseStatusForConsentProperty.hasaccess) {
             return true;
         } else {
             return false;
