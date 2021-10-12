@@ -46,7 +46,7 @@ export class QuickStartMenuList {
         "quicklinks": [
           {
             "linkid": 4,
-            "link": "/settings/billing/pricing",
+            "link": "/",
             "islinkclicked": false,
             "isactualbtnclicked": false,
             "linkdisplaytext": "Subscription",

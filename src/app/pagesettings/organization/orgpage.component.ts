@@ -93,15 +93,33 @@ export class OrgpageComponent implements OnInit,AfterViewInit,OnDestroy {
    }
 
   ngOnInit() {
-    this.userService.isClickedOnQSMenu.pipe(
-      takeUntil(this.unsubscribeAfterUserAction$)
+    // this.userService.isClickedOnQSMenu.pipe(
+    //   takeUntil(this.unsubscribeAfterUserAction$)
 
-    ).subscribe((status)=>{
-      this.isorgqsmenu = status.isclicked;
-      this.quickDivID = status.quickstartid;
-      this.actuallinkstatus = status.isactualbtnclicked;
+    // ).subscribe((status)=>{
+    //   this.isorgqsmenu = status.isclicked;
+    //   this.quickDivID = status.quickstartid;
+    //   this.actuallinkstatus = status.isactualbtnclicked;
       
+    // });
+
+    const a = this.quickmenuService.getQuerymenulist();
+
+    this.quickmenuService.onClickEmitQSLinkobj.pipe(
+      takeUntil(this.unsubscribeAfterUserAction$)
+    ).subscribe((res) => {
+      if (a.length !== 0) {
+        const idx = a.findIndex((t) => t.index == 1);
+        if (a[idx].quicklinks.some((t) => t.linkid == res.linkid && t.isactualbtnclicked)) {
+          this.quickDivID = "";
+        } else if(a[idx].quicklinks.some((t) => t.linkid == res.linkid && !t.isactualbtnclicked)) {
+          this.quickDivID = res.linkid;
+        }
+      }
     });
+    
+    
+
     this.userService.isRevisitedQSMenuLink.subscribe((status) => { this.isRevistedLink = status.reclickqslink; this.currentLinkID = status.quickstartid; });
     
     this.isEditable = false;
@@ -319,19 +337,19 @@ export class OrgpageComponent implements OnInit,AfterViewInit,OnDestroy {
 
 
   organizationModalPopup(content, data) {
-    let quickLinkObj: QuickStart = {
-      linkid: 2,
+    let quickLinkObj = {
+      linkid: this.quickDivID,
       indexid: 1,
       isactualbtnclicked: true,
-      islinkclicked: true,
-      divguidetext: "addproperty",
-      linkdisplaytext: "Add Organization",
-      link: "/settings/organizations"
+      islinkclicked: true
     };
 
     this.quickmenuService.onClickEmitQSLinkobj.next(quickLinkObj);
     this.quickmenuService.updateQuerymenulist(quickLinkObj);
     
+    this.quickDivID = "";
+    this.unsubscribeAfterUserAction$.next();
+    this.unsubscribeAfterUserAction$.complete();
     if (data !== '') {
       this.myContext = { oid: data.id };
       this.organizationname = data.orgname;
@@ -459,6 +477,7 @@ export class OrgpageComponent implements OnInit,AfterViewInit,OnDestroy {
   }
 
   ngOnDestroy(){
+    this.unsubscribeAfterUserAction$.unsubscribe();
     //this.unsubscribeAfterUserAction$.next();
     //this.unsubscribeAfterUserAction$.complete();
     //this.userService.onClickQuickStartmenu.unsubscribe();

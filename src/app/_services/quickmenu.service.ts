@@ -11,6 +11,7 @@ export class QuickmenuService extends QuickStartMenuList {
   isclickeventfromquickmenu:boolean = false;
   isuserClickedonqstooltip:boolean = false;
   isquickstartopen:boolean = false;
+  isquickmenudismiss:boolean = false;
   public onClickEmitQSLinkobj: BehaviorSubject<any> = new BehaviorSubject<any>({divguidetext: "",
   indexid: 0,
   isactualbtnclicked: false,
@@ -18,10 +19,14 @@ export class QuickmenuService extends QuickStartMenuList {
   link: "",
   linkdisplaytext: "",
   linkid: 0});
-  //public onClickQuickStartmenu: BehaviorSubject<any> = new BehaviorSubject<any>(false);
+ 
   get isClickedOnQSMenu() {
       return this.onClickEmitQSLinkobj.asObservable();
   }
+  public onDissmissQuickStartmenu: BehaviorSubject<any> = new BehaviorSubject<any>(false);
+  get isQSMenuDissmissed() {
+    return this.onDissmissQuickStartmenu.asObservable();
+}
   constructor() {
     super();
         this.loadQuickstartMenu()

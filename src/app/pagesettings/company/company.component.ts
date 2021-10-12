@@ -71,7 +71,7 @@ export class CompanyComponent implements OnInit {
   private companyPlanDetails: any;
   selectusertype = true;
   isquickstartmenu:any;
-  quickDivID
+  quickDivID;
   actuallinkstatus:boolean = false;
   text = "Edit company details"
   isRevistedLink:boolean;
@@ -88,8 +88,18 @@ export class CompanyComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.quickmenuService.onClickEmitQSLinkobj.subscribe((res) => { 
-      this.quickDivID = res.linkid;
+    const a = this.quickmenuService.getQuerymenulist();
+    this.quickmenuService.onClickEmitQSLinkobj.pipe(
+      takeUntil(this.unsubscribeAfterUserAction$)
+    ).subscribe((res) => { 
+      if (a.length !== 0) {
+        const idx = a.findIndex((t) => t.index == 1);
+        if (a[idx].quicklinks.some((t) => t.linkid == res.linkid && t.isactualbtnclicked)) {
+          this.quickDivID = "";
+        } else if(a[idx].quicklinks.some((t) => t.linkid == res.linkid && !t.isactualbtnclicked)) {
+          this.quickDivID = res.linkid;
+        }
+      }
     });
     // this.userService.isClickedOnQSMenu.pipe(
     //   takeUntil(this.unsubscribeAfterUserAction$)
@@ -185,82 +195,21 @@ export class CompanyComponent implements OnInit {
   }
 
   editOrganizationModalPopup(content, type) { 
-  //   let quickLinkObj:QuickStart;
-  //  quickLinkObj["linkid"] = 1;
-  //  quickLinkObj["indexid"] = 1;
-  //  quickLinkObj["isactualbtnclicked"] = true;
-  //  quickLinkObj["islinkclicked"] = true;
-  //  quickLinkObj["divguidetext"] = "addcompanydetails";
-  //  quickLinkObj["linkdisplaytext"] = "Add Company details";
-  //  quickLinkObj["link"] = "/settings/company";
+  
+    let quickLinkObj: QuickStart = {
+      linkid: this.quickDivID,
+      indexid: 1,
+      isactualbtnclicked: true,
+      islinkclicked: true,
+      divguidetext: "addcompanydetails",
+      linkdisplaytext: "Add Company details",
+      link: "/settings/company"
+    };
 
-   let quickLinkObj:QuickStart = {
-    linkid : this.quickDivID,
-    indexid : 1,
-   isactualbtnclicked : true,
-   islinkclicked : true,
-   divguidetext : "addcompanydetails",
-   linkdisplaytext : "Add Company details",
-   link : "/settings/company"
- };
-
- this.quickmenuService.updateQuerymenulist(quickLinkObj);
- this.quickmenuService.onClickEmitQSLinkobj.next(quickLinkObj);
-   
-//  const a = this.quickmenuService.getQuerymenulist();
-//  if(a.length !== 0){
-//    const idx = a.findIndex((t)=>t.index == quickLinkObj.indexid);
-//    if(a[idx].quicklinks.filter((t)=>t.linkid == quickLinkObj.linkid).length > 0){
-//    }
-//   }
-   
-   
-//   this.quickstartmenuComponent.getupdatedQuickStartMenu();
+    this.quickmenuService.updateQuerymenulist(quickLinkObj);
+    this.quickmenuService.onClickEmitQSLinkobj.next(quickLinkObj);
+    this.quickDivID = ""
  
-   //this.qsMenuList = this.quickmenuService.getQuerymenulist();
-
-    // if(this.isRevistedLink && this.currentLinkID == 1){
-    //   this.userService.onRevistQuickStartmenulink.next({ quickstartid:1, reclickqslink:false});
-    // }
-    // this.actuallinkstatus = true;
-
-
-    // this.userService.addUserActionOnActualButton.next({quickstartid:1,isclicked:true,isactualbtnclicked:true});
-    // this.userService.onClickQuickStartmenu.next({quickstartid:1,isclicked:true,isactualbtnclicked:true});
-    
-    // this.userService.userActionOnQuickstart.next({quickstartid:1,isclicked:true,isactualbtnclicked:true});
-    // this.userService.onClickActualBtnByUser.subscribe((status)=> { 
-    //   this.isquickstartmenu = !status.isclicked;
-    //   this.actuallinkstatus = true;
-    //   this.quickDivID = 1;
-    // });
-
-    // this.unsubscribeAfterUserAction$.next();
-    // this.unsubscribeAfterUserAction$.complete();
-
-
-    //
-    // if(this.isRevistedLink && this.currentLinkID == 2){
-    //   this.userService.onRevistQuickStartmenulink.next({ quickstartid:2, reclickqslink:false});
-    // }
-    // this.actuallinkstatus = true;
-
-
-    // this.userService.addUserActionOnActualButton.next({quickstartid:2,isclicked:true,isactualbtnclicked:true});
-    // this.userService.onClickQuickStartmenu.next({quickstartid:2,isclicked:true,isactualbtnclicked:true});
-    
-    // this.userService.userActionOnQuickstart.next({quickstartid:2,isclicked:true,isactualbtnclicked:true});
-    // this.userService.onClickActualBtnByUser.subscribe((status)=> { 
-    //   this.isorgqsmenu = !status.isclicked;
-    //   this.actuallinkstatus = true;
-    //   this.quickDivID = 2;
-    // });
-
-    // this.unsubscribeAfterUserAction$.next();
-    // this.unsubscribeAfterUserAction$.complete();
-
-
-
     if (type === 'add') {
       if (!this.onCheckSubscription()) {
         return false;
@@ -283,24 +232,7 @@ export class CompanyComponent implements OnInit {
     });
    
   }
-  onEdit(){
-    let quickLinkObj:QuickStart = {
-       linkid : 1,
-       indexid : 1,
-      isactualbtnclicked : true,
-      islinkclicked : true,
-      divguidetext : "addcompanydetails",
-      linkdisplaytext : "Add Company details",
-      link : "/settings/company"
-    };
-   
-    this.quickmenuService.updateQuerymenulist(quickLinkObj);
-    this.quickmenuService.onClickEmitQSLinkobj.next(quickLinkObj);
-   // this.userService.addUserActionOnActualButton.next({quickstartid:1,isclicked:true,isactualbtnclicked:true});
-  //  this.quickstartmenuComponent.getupdatedQuickStartMenu();
-  }
-
-  
+ 
 
   pathValues() {
     this.loading.start();
