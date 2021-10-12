@@ -413,7 +413,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
       },{
       showlink: 'Consent Preference',
         subcategory: [
-          { showlink: 'Dashboard', routerLink: '/home/dashboard/consent-preference', icon: 'fas fa-chart-line feather-16',indexid:5,navmenuid:22 },
+          { showlink: 'Dashboard', routerLink: '/home/dashboard/consent-preference', icon: 'bar-chart-2',indexid:5,navmenuid:22 },
           { showlink: 'Consent Records', routerLink: '/consent-solutions/consent-records', icon: 'fas fa-tasks feather-16',indexid:5,navmenuid:21 },
           { showlink: 'Setup', routerLink: '/consent-solutions/setup', icon: 'fas fa-wrench feather-16',indexid:5,navmenuid:20 },
         ]
