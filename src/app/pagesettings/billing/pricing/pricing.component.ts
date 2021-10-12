@@ -75,6 +75,7 @@ export class PricingComponent implements OnInit, AfterViewChecked, OnDestroy {
               private modalService: BsModalService,
               private quickmenuService: QuickmenuService,
               private billingService: BillingService) {
+              this.onGetActivePlan();
   }
 
   ngOnInit() {
@@ -457,12 +458,6 @@ export class PricingComponent implements OnInit, AfterViewChecked, OnDestroy {
     this.subscriptionList = this.planDetails.cookieConsent[`${this.cookieConsentBillingCycle}`];
     this.dsarPlanList = this.planDetails.dsar[`${this.cookieConsentBillingCycle}`];
     this.consentPreferenceList = this.planDetails.consentPreference[`${this.cookieConsentBillingCycle}`];
-}
-positionObj(){
-  return {
-    "left": "135px",
-    "top":"250px"
-  }
 }
 
   ngAfterViewChecked() {

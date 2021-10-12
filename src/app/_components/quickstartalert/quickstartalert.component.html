@@ -1,16 +1,16 @@
     <div>
         <div class="guidencediv" [ngStyle]="styleobj"
             *ngIf="isclickedbyuser && !isactualLinkclickedbyuser && !revisitedqslink && linkid == '1' && divguidetext == 'addcompanydetails'">
-            <p> {{guidancetext}} revisitedqslink | {{revisitedqslink}} isactualLinkclickedbyuser ||{{isactualLinkclickedbyuser}}</p>
+            <p> {{guidancetext}}</p>
             
         </div>
         <div class="guidencediv" [ngStyle]="styleobj"
             *ngIf="isactualLinkclickedbyuser  && linkid == '1' && divguidetext == 'addcompanydetails'">
-            <p> {{guidancetext}} revisitedqslink | {{revisitedqslink }} isactualLinkclickedbyuser 2 ||{{isactualLinkclickedbyuser}}</p>
+            <p> {{guidancetext}}</p>
             
         </div>
     </div>
-    <div>
+    <div *ngIf="!isaddorgAlert">
         <div class="guidencediv" [ngStyle]="styleobj"
             *ngIf="isclickedbyuser && !isactualLinkclickedbyuser && linkid == '2' && divguidetext == 'addorganization'">
             <p> {{guidancetext}}</p>

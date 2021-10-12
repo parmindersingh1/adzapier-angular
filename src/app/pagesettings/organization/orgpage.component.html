@@ -25,7 +25,7 @@
                 </div>
                 
                 <div class="ml-auto mr-3">
-                    <button type="button" class="btn btn-sm btn-outline-secondary btn-uppercase mr-1" data-toggle="modal"
+                    <button type="button" class="btn btn-sm btn-outline-secondary btn-uppercase mr-1" data-toggle="modal" [ngClass]="quickDivID == 2 ? 'btn-qs-hightlight' : ''" 
                         (click)="organizationModalPopup(editOrgModal,'')">   <i-feather class="feather-16" name="plus"></i-feather> 
                         Add organization</button>
                 </div>

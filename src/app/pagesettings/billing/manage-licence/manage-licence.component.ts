@@ -47,8 +47,9 @@ export class ManageLicenceComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.quickmenuService.onClickEmitQSLinkobj.subscribe((res) => { 
-      console.log(res,'res..51');
+    this.quickmenuService.onClickEmitQSLinkobj.pipe(
+      takeUntil(this.unsubscribeAfterUserAction$)
+    ).subscribe((res) => { 
       this.quickDivID = res.linkid;
     });
     console.log(this.quickDivID,'quickDivID51');
@@ -139,12 +140,19 @@ export class ManageLicenceComponent implements OnInit {
     this.quickmenuService.onClickEmitQSLinkobj.next(quickLinkObj);
     this.quickmenuService.updateQuerymenulist(quickLinkObj);
     const a = this.quickmenuService.getQuerymenulist();
+    this.quickmenuService.onClickEmitQSLinkobj.pipe(
+      takeUntil(this.unsubscribeAfterUserAction$)
+    ).subscribe((res) => {
     if(a.length !== 0){
       const idx = a.findIndex((t)=>t.index == quickLinkObj.indexid);
-      if(a[idx].quicklinks.filter((t)=>t.linkid == quickLinkObj.linkid).length > 0){
+      if (a[idx].quicklinks.some((t) => t.linkid == res.linkid && t.isactualbtnclicked)) {
+        this.quickDivID = "";
         this.router.navigate(['/settings/billing/manage/property', planid], { queryParams: { oid: this.queryOID, pid: this.queryPID }, queryParamsHandling: 'merge', skipLocationChange: false });
+      } else if(a[idx].quicklinks.some((t) => t.linkid == res.linkid && !t.isactualbtnclicked)) {
+        this.quickDivID = res.linkid;
       }
     }
+  });
     
   }
 
@@ -161,12 +169,21 @@ export class ManageLicenceComponent implements OnInit {
     this.quickmenuService.updateQuerymenulist(quickLinkObj);
     this.quickmenuService.onClickEmitQSLinkobj.next(quickLinkObj);
     const a = this.quickmenuService.getQuerymenulist();
+    this.quickmenuService.onClickEmitQSLinkobj.pipe(
+      takeUntil(this.unsubscribeAfterUserAction$)
+    ).subscribe((res) => {
     if(a.length !== 0){
       const idx = a.findIndex((t)=>t.index == quickLinkObj.indexid);
-      if(a[idx].quicklinks.filter((t)=>t.linkid == quickLinkObj.linkid).length > 0){
+      
+      if (a[idx].quicklinks.some((t) => t.linkid == quickLinkObj.linkid && t.isactualbtnclicked)) {
+        this.quickDivID = "";
         this.router.navigate(['/settings/billing/manage/organizations', planid], { queryParams: { oid: this.queryOID, pid: this.queryPID }, queryParamsHandling: 'merge', skipLocationChange: false });
+      } else if(a[idx].quicklinks.some((t) => t.linkid == quickLinkObj.linkid && !t.isactualbtnclicked)) {
+        this.quickDivID = quickLinkObj.linkid;
       }
     }
+  });
+   
   }
   
 }

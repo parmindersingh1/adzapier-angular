@@ -1,4 +1,4 @@
-import { AfterViewInit, AfterViewChecked, AfterContentChecked,  ChangeDetectorRef,  Component, EventEmitter, HostListener, Input,  OnInit, Output, ViewChild, QueryList, ViewChildren, SimpleChanges } from '@angular/core';
+import { AfterViewInit, AfterViewChecked, AfterContentChecked,  ChangeDetectorRef,  Component, EventEmitter, HostListener, Input,  OnInit, Output, ViewChild, QueryList, ViewChildren, SimpleChanges, OnChanges } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import {animate, state, style, transition, trigger} from '@angular/animations';
@@ -24,7 +24,7 @@ import { BsDropdownDirective } from 'ngx-bootstrap/dropdown';
 
   ]
 })
-export class QuickstartmenuComponent implements OnInit, AfterViewInit,AfterViewChecked,AfterContentChecked {
+export class QuickstartmenuComponent implements OnInit, AfterViewInit,AfterViewChecked,AfterContentChecked,OnChanges {
   quickStartMenu : any = [];
   isOpen = true;
   showQuickStartMenu = true;
@@ -39,9 +39,10 @@ export class QuickstartmenuComponent implements OnInit, AfterViewInit,AfterViewC
   isFirstOpen = true;
   showGuidancediv = false;
   keptopen:boolean;
-  ishideQsbtn:boolean = false;
+  ishideQsbtn:boolean;
   @Input() customStyle;
   @Input() istopmenuclicked : boolean;
+  @Input() enablequickstartfromtopmenu : any;
   @Output() onClickQuickStart : EventEmitter<any> = new EventEmitter<any>();
   @Output() onClickEmitQSLinkobj : EventEmitter<any> = new EventEmitter<any>();
   @ViewChildren(BsDropdownDirective) headerDropdown:QueryList<BsDropdownDirective>;
@@ -83,7 +84,7 @@ export class QuickstartmenuComponent implements OnInit, AfterViewInit,AfterViewC
   }
 
   onClickQuickStartBtn(){
-    this.ishideQsbtn = !this.ishideQsbtn;
+  //  this.ishideQsbtn = !this.ishideQsbtn;
     if(this.windowWidth <= 1450){
         this.showQuickStartMenu = !this.showQuickStartMenu;
         this.showGuidancediv = !this.showGuidancediv;
@@ -96,8 +97,12 @@ export class QuickstartmenuComponent implements OnInit, AfterViewInit,AfterViewC
     
   }
 
-  dismissQuickStartMenu(){
-    this.isOpen = false
+  dismissQuickStartMenu() {
+    this.isOpen = false;
+    this.showQuickStartMenu = !this.showQuickStartMenu;
+    this.quickmenuService.isquickmenudismiss = true;
+    this.enablequickstartfromtopmenu = true;
+    this.quickmenuService.onDissmissQuickStartmenu.next(true); 
   }
 
   
@@ -141,7 +146,7 @@ export class QuickstartmenuComponent implements OnInit, AfterViewInit,AfterViewC
   
   onCloseQuickstart($event){
     this.isOpen = false;
-    this.ishideQsbtn = !this.ishideQsbtn;
+    //this.ishideQsbtn = !this.ishideQsbtn;
     this.showQuickStartMenu = !this.showQuickStartMenu;
     this.showGuidancediv = false;
     this.onClickQuickStart.emit(this.showQuickStartMenu);
@@ -254,6 +259,7 @@ export class QuickstartmenuComponent implements OnInit, AfterViewInit,AfterViewC
   }
 
   ngAfterViewChecked(){
+    this.quickmenuService.isQSMenuDissmissed.subscribe((status)=>this.enablequickstartfromtopmenu = status);
     this.oneAtATime = true;
     this.cdRef.detectChanges();
   }
