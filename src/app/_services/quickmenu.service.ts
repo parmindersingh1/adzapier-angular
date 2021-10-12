@@ -49,11 +49,14 @@ export class QuickmenuService extends QuickStartMenuList {
       const controlList = this.getQuerymenulist();
       const ctrlIdx = controlList.findIndex((el) => el.index === newItem.indexid);
       const quicklinkIdx = controlList[ctrlIdx].quicklinks.findIndex((t) => t.linkid === newItem.linkid);
-      //controlList[ctrlIdx].quicklinks[quicklinkIdx].linkid = newItem.linkid;
-      controlList[ctrlIdx].quicklinks[quicklinkIdx].isactualbtnclicked = newItem.isactualbtnclicked;
-      controlList[ctrlIdx].quicklinks[quicklinkIdx].islinkclicked = newItem.islinkclicked;
-      // controlList[ctrlIdx].quicklinks[quicklinkIdx] = newItem;
-      localStorage.setItem('quickmenuList', JSON.stringify(controlList));
+      if (quicklinkIdx !== -1) {
+        //controlList[ctrlIdx].quicklinks[quicklinkIdx].linkid = newItem.linkid;
+        controlList[ctrlIdx].quicklinks[quicklinkIdx].isactualbtnclicked = newItem.isactualbtnclicked;
+        controlList[ctrlIdx].quicklinks[quicklinkIdx].islinkclicked = newItem.islinkclicked;
+        // controlList[ctrlIdx].quicklinks[quicklinkIdx] = newItem;
+        localStorage.setItem('quickmenuList', JSON.stringify(controlList));
+      }
+
     }
   }
 }
