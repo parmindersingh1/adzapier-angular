@@ -133,6 +133,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
   lastopendp:any = [];
   isShowDashboardConsent = false;
   actualLinkVisitStatus = false;
+  actualLinkObj:any;
   @Output() onClickEnableQuickStartMenu: EventEmitter<any> = new EventEmitter<any>();
   constructor(
     private router: Router,
@@ -223,6 +224,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
     this.quickmenuService.onClickEmitQSLinkobj.pipe(
       takeUntil(this.unsubscribeAfterUserAction$)
     ).subscribe((res) => { 
+      this.actualLinkObj = res;
       this.quickDivIDSub = res.linkid;
     });
     this.isLoginOrSignupPage();

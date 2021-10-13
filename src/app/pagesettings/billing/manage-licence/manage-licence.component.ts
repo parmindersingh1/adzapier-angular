@@ -127,63 +127,71 @@ export class ManageLicenceComponent implements OnInit {
     }
   }
 
-  userAction(planid,quickdivid) {
-    let quickLinkObj: QuickStart = {
-      linkid: quickdivid,
-      indexid: quickdivid === 19 ? 5 : 3,
-      isactualbtnclicked: true,
-      islinkclicked: true,
-      divguidetext: "addcookieconsentsubscriptiontoproperty",
-      linkdisplaytext: "Assigning Cookie Consent subscription to property",
-      link: "/settings/billing/manage"
-    };
-    this.quickmenuService.onClickEmitQSLinkobj.next(quickLinkObj);
-    this.quickmenuService.updateQuerymenulist(quickLinkObj);
-    const a = this.quickmenuService.getQuerymenulist();
-    this.quickmenuService.onClickEmitQSLinkobj.pipe(
-      takeUntil(this.unsubscribeAfterUserAction$)
-    ).subscribe((res) => {
-    if(a.length !== 0){
-      const idx = a.findIndex((t)=>t.index == quickLinkObj.indexid);
-      if (a[idx].quicklinks.some((t) => t.linkid == res.linkid && t.isactualbtnclicked)) {
-        this.quickDivID = "";
-        this.router.navigate(['/settings/billing/manage/property', planid], { queryParams: { oid: this.queryOID, pid: this.queryPID }, queryParamsHandling: 'merge', skipLocationChange: false });
-      } else if(a[idx].quicklinks.some((t) => t.linkid == res.linkid && !t.isactualbtnclicked)) {
-        this.quickDivID = res.linkid;
-      }
+  userAction(planid, quickdivid) {
+    if (quickdivid !== undefined && (quickdivid == 6 || quickdivid == 19)) {
+      let quickLinkObj: QuickStart = {
+        linkid: quickdivid,
+        indexid: quickdivid === 19 ? 5 : 3,
+        isactualbtnclicked: true,
+        islinkclicked: true,
+        divguidetext: "addcookieconsentsubscriptiontoproperty",
+        linkdisplaytext: "Assigning Cookie Consent subscription to property",
+        link: "/settings/billing/manage"
+      };
+      this.quickmenuService.onClickEmitQSLinkobj.next(quickLinkObj);
+      this.quickmenuService.updateQuerymenulist(quickLinkObj);
+      const a = this.quickmenuService.getQuerymenulist();
+      this.quickmenuService.onClickEmitQSLinkobj.pipe(
+        takeUntil(this.unsubscribeAfterUserAction$)
+      ).subscribe((res) => {
+        if (a.length !== 0) {
+          const idx = a.findIndex((t) => t.index == quickLinkObj.indexid);
+          if (a[idx].quicklinks.some((t) => t.linkid == res.linkid && t.isactualbtnclicked)) {
+            this.quickDivID = "";
+            this.router.navigate(['/settings/billing/manage/property', planid], { queryParams: { oid: this.queryOID, pid: this.queryPID }, queryParamsHandling: 'merge', skipLocationChange: false });
+          } else if (a[idx].quicklinks.some((t) => t.linkid == res.linkid && !t.isactualbtnclicked)) {
+            this.quickDivID = res.linkid;
+          }
+        }
+      });
+    } else {
+      this.router.navigate(['/settings/billing/manage/property', planid], { queryParams: { oid: this.queryOID, pid: this.queryPID }, queryParamsHandling: 'merge', skipLocationChange: false });
     }
-  });
-    
+
   }
 
-  userActionForOrg(planid) {
-    let quickLinkObj: QuickStart = {
-      linkid: 12,
-      indexid: 4,
-      isactualbtnclicked: true,
-      islinkclicked: true,
-      divguidetext: "assign-dsar-subscription-to-organization",
-      linkdisplaytext: "Add DSAR subscription",
-      link: "/settings/billing/manage"
-    };
-    this.quickmenuService.updateQuerymenulist(quickLinkObj);
-    this.quickmenuService.onClickEmitQSLinkobj.next(quickLinkObj);
-    const a = this.quickmenuService.getQuerymenulist();
-    this.quickmenuService.onClickEmitQSLinkobj.pipe(
-      takeUntil(this.unsubscribeAfterUserAction$)
-    ).subscribe((res) => {
-    if(a.length !== 0){
-      const idx = a.findIndex((t)=>t.index == quickLinkObj.indexid);
-      
-      if (a[idx].quicklinks.some((t) => t.linkid == quickLinkObj.linkid && t.isactualbtnclicked)) {
-        this.quickDivID = "";
-        this.router.navigate(['/settings/billing/manage/organizations', planid], { queryParams: { oid: this.queryOID, pid: this.queryPID }, queryParamsHandling: 'merge', skipLocationChange: false });
-      } else if(a[idx].quicklinks.some((t) => t.linkid == quickLinkObj.linkid && !t.isactualbtnclicked)) {
-        this.quickDivID = quickLinkObj.linkid;
-      }
+  userActionForOrg(planid, quickdivid) {
+    if (quickdivid !== undefined && quickdivid == 12) {
+      let quickLinkObj: QuickStart = {
+        linkid: quickdivid,
+        indexid: 4,
+        isactualbtnclicked: true,
+        islinkclicked: true,
+        divguidetext: "assign-dsar-subscription-to-organization",
+        linkdisplaytext: "Add DSAR subscription",
+        link: "/settings/billing/manage"
+      };
+      this.quickmenuService.updateQuerymenulist(quickLinkObj);
+      this.quickmenuService.onClickEmitQSLinkobj.next(quickLinkObj);
+      const a = this.quickmenuService.getQuerymenulist();
+      this.quickmenuService.onClickEmitQSLinkobj.pipe(
+        takeUntil(this.unsubscribeAfterUserAction$)
+      ).subscribe((res) => {
+        if (a.length !== 0) {
+          const idx = a.findIndex((t) => t.index == quickLinkObj.indexid);
+
+          if (a[idx].quicklinks.some((t) => t.linkid == quickLinkObj.linkid && t.isactualbtnclicked)) {
+            this.quickDivID = "";
+            this.router.navigate(['/settings/billing/manage/organizations', planid], { queryParams: { oid: this.queryOID, pid: this.queryPID }, queryParamsHandling: 'merge', skipLocationChange: false });
+          } else if (a[idx].quicklinks.some((t) => t.linkid == quickLinkObj.linkid && !t.isactualbtnclicked)) {
+            this.quickDivID = quickLinkObj.linkid;
+          }
+        }
+      });
+    } else {
+      this.router.navigate(['/settings/billing/manage/organizations', planid], { queryParams: { oid: this.queryOID, pid: this.queryPID }, queryParamsHandling: 'merge', skipLocationChange: false });
     }
-  });
-   
+
   }
   
 }
