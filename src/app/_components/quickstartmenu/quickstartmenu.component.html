@@ -7,6 +7,8 @@
                 [panelClass]="customClass" [isOpen]="datalist.index == currenttabindex">
                 <ul class="link-list">
                     <li *ngFor="let pagelinks of datalist.quicklinks">
+                        index | {{datalist.index}}
+                        linkid | {{pagelinks.linkid}}
                         <span *ngIf="pagelinks.linkid == 3">
                             <a class="nav-link" routerLinkActive="active"
                                 (click)="onClickQSLinkForProperty(datalist.index,pagelinks)">
@@ -50,7 +52,7 @@
 
             </accordion-group>
         </accordion>
-        <div><button type="button" (click)="dismissQuickStartMenu()" class="btn btn-link">Dismiss quick start</button>
+        <div><button type="button" (click)="dismissQuickStartMenu()" class="btn btn-link">Dismiss Quick Start</button>
         </div>
 
     </div>

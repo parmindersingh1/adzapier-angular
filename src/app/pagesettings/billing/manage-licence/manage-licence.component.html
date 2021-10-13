@@ -102,7 +102,7 @@
               <button pButton label="Assign Property"  [ngClass]="quickDivID == 6 || quickDivID == 19 ? 'btn-qs-hightlight' : ''" class="w-100 p-button-secondary manage-btn"></button></a></td>
 
           <td style="width: 290px" *ngIf="plan.planDetails.level !== 'property'">
-            <a class="plan-name" (click)="userActionForOrg(plan.id)">
+            <a class="plan-name" (click)="userActionForOrg(plan.id,quickDivID)">
             <button pButton label="Assign Organization" [ngClass]="quickDivID == 12 ? 'btn-qs-hightlight' : ''" class="w-100 p-button-secondary manage-btn"></button></a></td>
 
 

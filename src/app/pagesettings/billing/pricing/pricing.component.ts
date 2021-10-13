@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit, AfterViewInit, AfterViewChecked, TemplateRef} from '@angular/core';
+import {Component, OnDestroy, OnInit, AfterViewInit, TemplateRef} from '@angular/core';
 import {Router} from '@angular/router';
 import {BillingService} from '../../../_services/billing.service';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
@@ -18,7 +18,7 @@ import { QuickStart } from 'src/app/_models/quickstart';
   templateUrl: './pricing.component.html',
   styleUrls: ['./pricing.component.scss']
 })
-export class PricingComponent implements OnInit, AfterViewChecked, OnDestroy {
+export class PricingComponent implements OnInit, AfterViewInit, OnDestroy {
   private unsubscribeAfterUserAction$: Subject<any> = new Subject<any>();
   subscriptionPlan;
   planDetails: any;
@@ -179,6 +179,7 @@ export class PricingComponent implements OnInit, AfterViewChecked, OnDestroy {
       this.skeletonLoader = false;
       this.planDetails = res.response;
       this.onSetPlans(res.response);
+      this.callForQuickStart();
       // this.subscriptionList = res.response.monthly;
     }, error => {
       this.loading.stop();
@@ -460,7 +461,15 @@ export class PricingComponent implements OnInit, AfterViewChecked, OnDestroy {
     this.consentPreferenceList = this.planDetails.consentPreference[`${this.cookieConsentBillingCycle}`];
 }
 
-  ngAfterViewChecked() {
+  ngAfterViewInit(){
+    console.log('first pricing..comp..');
+    this.onGetPlanDetails();
+    if(this.planDetails !== undefined){
+      this.callForQuickStart();
+    }
+  }
+
+  callForQuickStart(){
     const quicklinks = this.quickmenuService.qsMenuobjwithIndexid;
     if (quicklinks !== undefined && quicklinks.linkid == 11) {
       this.onSetCookieConsent(2, 'dsar');
@@ -468,10 +477,9 @@ export class PricingComponent implements OnInit, AfterViewChecked, OnDestroy {
       this.onSetCookieConsent(2, 'dsar');
     }else if (quicklinks !== undefined && quicklinks.linkid == 18) {
       this.onSetCookieConsent(3, 'consentPreference');
+    }else if (quicklinks !== undefined && quicklinks.linkid == 5) {
+      this.onSetCookieConsent(1, 'cookieConsent');
     } 
-    // else if (quicklinks !== undefined && quicklinks.linkid == 19) {
-    //   this.onSetCookieConsent(3, 'dsar');
-    // }
   }
 
 }

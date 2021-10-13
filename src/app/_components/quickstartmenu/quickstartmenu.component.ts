@@ -116,21 +116,35 @@ export class QuickstartmenuComponent implements OnInit, AfterViewInit,AfterViewC
   }
 
   onClickQuickStartlink(linkIndex, linkobj) {
+    if(linkIndex == 4 && linkobj.linkid == 17){
+      return false;
+    }
+    const allowtonavigate = linkIndex == 1 && (linkobj.linkid == 1 || linkobj.linkid == 2 || linkobj.linkid == 3);
+    const allowtonavigatetwo = linkIndex == 3 && (linkobj.linkid == 5 || linkobj.linkid == 6);
+    const allowtonavigatethree = linkIndex == 4 && (linkobj.linkid == 11 || linkobj.linkid == 12);
+    const allowtonavigatefour = linkIndex == 5 && (linkobj.linkid == 18 || linkobj.linkid == 19);
+    const commingSoon = linkIndex == 4 && linkobj.linkid == 17;
     this.quickmenuService.isuserClickedonqstooltip = false;
     linkobj["indexid"] = linkIndex;
    
    this.quickmenuService.onClickEmitQSLinkobj.next(linkobj);
     this.onClickEmitQSLinkobj.emit(linkobj);
-    
+
     this.currenttabindex = linkIndex;
-    if (linkobj.link.indexOf('dsar') == -1) {
+    // if (linkobj.link.indexOf('dsar') == -1) {
+    
+    if (allowtonavigate || allowtonavigatetwo || allowtonavigatethree || allowtonavigatefour) {
       let oIDPIDFromURL = findPropertyIDFromUrl(this.location.path());
       this.router.navigate([linkobj.link], { queryParams: { oid: oIDPIDFromURL[0], pid: oIDPIDFromURL[1] }, queryParamsHandling: 'merge', skipLocationChange: false });
+      // }
     }
     
   }
 
   onClickQSLinkForProperty(linkIndex, linkobj) {
+    if(linkIndex == 4 && linkobj.linkid == 17){
+      return false;
+    }
     this.quickmenuService.isuserClickedonqstooltip = false;
     linkobj["indexid"] = linkIndex;
     this.currenttabindex = linkIndex;
