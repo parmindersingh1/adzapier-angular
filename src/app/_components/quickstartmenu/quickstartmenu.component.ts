@@ -163,7 +163,7 @@ export class QuickstartmenuComponent implements OnInit, AfterViewInit,AfterViewC
     //this.ishideQsbtn = !this.ishideQsbtn;
     this.showQuickStartMenu = !this.showQuickStartMenu;
     this.showGuidancediv = false;
-    this.onClickQuickStart.emit(this.showQuickStartMenu);
+    this.onClickQuickStart.emit(true);
   }
 
   @HostListener('window',['$event'])
