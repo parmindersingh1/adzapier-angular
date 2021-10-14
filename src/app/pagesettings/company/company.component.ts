@@ -7,7 +7,12 @@ import {CompanyService} from 'src/app/company.service';
 import {TablePaginationConfig} from 'src/app/_models/tablepaginationconfig';
 import {moduleName} from 'src/app/_constant/module-name.constant';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
+import { QuickmenuService } from 'src/app/_services/quickmenu.service';
 import {DataService} from '../../_services/data.service';
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+import {QuickstartmenuComponent} from 'src/app/_components/quickstartmenu/quickstartmenu.component';
+import { QuickStart } from '../../_models/quickstart'
 
 @Component({
   selector: 'app-company',
@@ -15,7 +20,9 @@ import {DataService} from '../../_services/data.service';
   styleUrls: ['./company.component.scss']
 })
 export class CompanyComponent implements OnInit {
+  private unsubscribeAfterUserAction$: Subject<any> = new Subject<any>();
   @ViewChild('confirmTemplate') confirmModal: TemplateRef<any>;
+  @ViewChild(QuickstartmenuComponent, {static: false}) quickstartmenuComponent : QuickstartmenuComponent;
   modalRef: BsModalRef;
   companyDetails: any;
   appId: any;
@@ -63,17 +70,46 @@ export class CompanyComponent implements OnInit {
   noResult = false;
   private companyPlanDetails: any;
   selectusertype = true;
+  isquickstartmenu:any;
+  quickDivID;
+  actuallinkstatus:boolean = false;
+  text = "Edit company details"
+  isRevistedLink:boolean;
+  currentLinkID:any;
   constructor(private companyService: CompanyService, private modalService: NgbModal,
               private formBuilder: FormBuilder,
               private userService: UserService,
               private loading: NgxUiLoaderService,
               private dataService: DataService,
-              private bsmodalService: BsModalService
+              private bsmodalService: BsModalService,
+              private quickmenuService: QuickmenuService
   ) {
     this.paginationConfig = {itemsPerPage: this.pageSize, currentPage: this.p, totalItems: this.totalCount};
   }
 
   ngOnInit() {
+    const a = this.quickmenuService.getQuerymenulist();
+    this.quickmenuService.onClickEmitQSLinkobj.pipe(
+      takeUntil(this.unsubscribeAfterUserAction$)
+    ).subscribe((res) => { 
+      if (a.length !== 0) {
+        const idx = a.findIndex((t) => t.index == 1);
+        if (a[idx].quicklinks.some((t) => t.linkid == res.linkid && t.isactualbtnclicked)) {
+          this.quickDivID = "";
+        } else if(a[idx].quicklinks.some((t) => t.linkid == res.linkid && !t.isactualbtnclicked)) {
+          this.quickDivID = res.linkid;
+        }
+      }
+    });
+    // this.userService.isClickedOnQSMenu.pipe(
+    //   takeUntil(this.unsubscribeAfterUserAction$)
+
+    // ).subscribe((status)=>{
+    //   this.isquickstartmenu = status.isclicked;
+    //   this.quickDivID = status.quickstartid;
+      
+    // });
+    this.userService.isRevisitedQSMenuLink.subscribe((status) => { this.isRevistedLink = status.reclickqslink; this.currentLinkID = status.quickstartid; });
     this.loadRoleList();
     const numZip = '^[0-9]{5,20}$'; // '^[0-9]{5}(?:-[0-9]{4})?$';
     const numRegex = '^[0-9]*$';
@@ -158,7 +194,22 @@ export class CompanyComponent implements OnInit {
     });
   }
 
-  editOrganizationModalPopup(content, type) {
+  editOrganizationModalPopup(content, type) { 
+  
+    let quickLinkObj: QuickStart = {
+      linkid: this.quickDivID,
+      indexid: 1,
+      isactualbtnclicked: true,
+      islinkclicked: true,
+      divguidetext: "addcompanydetails",
+      linkdisplaytext: "Add Company details",
+      link: "/settings/company"
+    };
+
+    this.quickmenuService.updateQuerymenulist(quickLinkObj);
+    this.quickmenuService.onClickEmitQSLinkobj.next(quickLinkObj);
+    this.quickDivID = ""
+ 
     if (type === 'add') {
       if (!this.onCheckSubscription()) {
         return false;
@@ -179,7 +230,9 @@ export class CompanyComponent implements OnInit {
     }, (reason) => {
       // this.profileForm.reset();
     });
+   
   }
+ 
 
   pathValues() {
     this.loading.start();
@@ -592,6 +645,25 @@ export class CompanyComponent implements OnInit {
     }
     this.inviteUserForm.get("firstname").updateValueAndValidity();
     this.inviteUserForm.get("lastname").updateValueAndValidity();
+  }
+
+  captureUserAction(){
+
+  }
+
+  positionObj(){
+    return {
+      "left": "115px",
+      "top":"20px"
+    }
+
+  }
+
+  ngAfterViewChecked(){
+  //  let updatedqsMenu = this.quickmenuService.getQuerymenulist();
+    //console.log(updatedqsMenu,'ngAfterViewInit..qsm')
+    // let obj = this.quickstartmenuComponent.getupdatedQuickStartMenu();
+    // console.log(obj,'COMPOBJ216..');
   }
 
 }

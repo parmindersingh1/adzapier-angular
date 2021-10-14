@@ -15,6 +15,9 @@ import {NgxUiLoaderService} from 'ngx-ui-loader';
 import { Location } from '@angular/common';
 import { findPropertyIDFromUrl } from 'src/app/_helpers/common-utility';
 
+import { QuickmenuService } from 'src/app/_services/quickmenu.service';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 // import { CompanyService } from '../company.service';
 @Component({
   selector: 'app-organizationdetails',
@@ -22,6 +25,7 @@ import { findPropertyIDFromUrl } from 'src/app/_helpers/common-utility';
   styleUrls: ['./organizationdetails.component.scss']
 })
 export class OrganizationdetailsComponent implements OnInit {
+  private unsubscribeAfterUserAction$: Subject<any> = new Subject<any>();
   @ViewChild('propertyModal', { static: true }) propertyModal: TemplateRef<any>;
   @ViewChild('confirmTemplate') confirmModal: TemplateRef<any>;
   @ViewChild('deletePropertyAlert') deleteAlertModal: TemplateRef<any>;
@@ -93,6 +97,7 @@ export class OrganizationdetailsComponent implements OnInit {
   selectusertype = true;
   queryOID;
   queryPID;
+  quickDivID;
   constructor(private activatedRoute: ActivatedRoute,
               private orgService: OrganizationService,
               private modalService: NgbModal,
@@ -104,6 +109,7 @@ export class OrganizationdetailsComponent implements OnInit {
               private bsmodalService: BsModalService,
               private loading: NgxUiLoaderService,
               private location: Location,
+              private quickmenuService: QuickmenuService,
               private cdref: ChangeDetectorRef) {
     // this.orgService.currentProperty.subscribe((data) => {
     //   this.currentManagedOrgID = data.organization_id || data.response.oid;
@@ -117,6 +123,20 @@ export class OrganizationdetailsComponent implements OnInit {
   }
 
   ngOnInit() {
+    const a = this.quickmenuService.getQuerymenulist();
+    this.quickmenuService.onClickEmitQSLinkobj.pipe(
+      takeUntil(this.unsubscribeAfterUserAction$)
+    ).subscribe((res) => { 
+      if (a.length !== 0) {
+        const idx = a.findIndex((t) => t.index == 1);
+        if (a[idx].quicklinks.some((t) => t.linkid == res.linkid && t.isactualbtnclicked)) {
+          this.quickDivID = "";
+        } else if(a[idx].quicklinks.some((t) => t.linkid == res.linkid && !t.isactualbtnclicked)) {
+          this.quickDivID = res.linkid;
+        }
+      }
+    });
+
     this.orgService.currentProperty.subscribe((response) => {
       if (response !== '') {
         this.currentManagedOrgID = response.organization_id || response.response.oid;
@@ -244,8 +264,16 @@ export class OrganizationdetailsComponent implements OnInit {
     });
   }
 
- async open(content, type) {
-    if(type === 'invite' ) {
+  async open(content, type) {
+
+    let quickLinkObj = {
+      linkid: this.quickDivID,
+      indexid: 1,
+      isactualbtnclicked: true,
+      islinkclicked: true
+    };
+    
+    if (type === 'invite') {
       if (! await this.onCheckSubscription()) {
         return false;
       }
@@ -262,6 +290,9 @@ export class OrganizationdetailsComponent implements OnInit {
     }, (reason) => {
       // this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
+    this.quickmenuService.onClickEmitQSLinkobj.next(quickLinkObj);
+    this.quickmenuService.updateQuerymenulist(quickLinkObj);
+
   }
 
   editModalPopup(content, data) {

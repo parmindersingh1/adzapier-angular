@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit, TemplateRef} from '@angular/core';
+import {Component, OnDestroy, OnInit, AfterViewInit, TemplateRef} from '@angular/core';
 import {Router} from '@angular/router';
 import {BillingService} from '../../../_services/billing.service';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
@@ -8,13 +8,18 @@ import {moduleName} from '../../../_constant/module-name.constant';
 import {environment} from '../../../../environments/environment';
 import {featuresComparison, highLightFeatures} from '../../../_constant/main-plans.constant';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+import { QuickmenuService } from 'src/app/_services/quickmenu.service';
+import { QuickStart } from 'src/app/_models/quickstart';
 
 @Component({
   selector: 'app-pricing',
   templateUrl: './pricing.component.html',
   styleUrls: ['./pricing.component.scss']
 })
-export class PricingComponent implements OnInit, OnDestroy {
+export class PricingComponent implements OnInit, AfterViewInit, OnDestroy {
+  private unsubscribeAfterUserAction$: Subject<any> = new Subject<any>();
   subscriptionPlan;
   planDetails: any;
   dsarPlanList: any;
@@ -54,16 +59,41 @@ export class PricingComponent implements OnInit, OnDestroy {
   isPromoCodeError = false;
   currentStep = 1;
   modalRef: BsModalRef;
-
+  initialPropertyID;
+  initialOrgID;
+  isquickstartmenu:any;
+  isbtnClickedbyUser;
+  quickDivID;
+  isRevistedLink:boolean;
+  currentLinkID:any;
+  actuallinkstatus:boolean = false;
+  
   constructor(private router: Router,
               private loading: NgxUiLoaderService,
               private dataService: DataService,
               private userService: UserService,
               private modalService: BsModalService,
+              private quickmenuService: QuickmenuService,
               private billingService: BillingService) {
+              this.onGetActivePlan();
   }
 
   ngOnInit() {
+    this.quickmenuService.onClickEmitQSLinkobj.subscribe((res) => { 
+      this.quickDivID = res.linkid;
+    });
+   // this.userService.addUserActionOnActualButton.next({quickstartid:5,isclicked:null,isactualbtnclicked:false});
+     
+    // this.userService.isClickedOnQSMenu.pipe(
+    //   takeUntil(this.unsubscribeAfterUserAction$)
+
+    // ).subscribe((status)=>{
+    //   this.isquickstartmenu = status.isclicked;
+    //   this.quickDivID = status.quickstartid;
+      
+    // });
+    //this.quickDivID = 5;
+    //this.userService.isRevisitedQSMenuLink.subscribe((status) => { this.isRevistedLink = status.reclickqslink; this.currentLinkID = status.quickstartid; });
     // this.onGetPlanCompareData()
     this.onGetActivePlan();
     this.onGetPlanDetails();
@@ -149,6 +179,7 @@ export class PricingComponent implements OnInit, OnDestroy {
       this.skeletonLoader = false;
       this.planDetails = res.response;
       this.onSetPlans(res.response);
+      this.callForQuickStart();
       // this.subscriptionList = res.response.monthly;
     }, error => {
       this.loading.stop();
@@ -384,19 +415,38 @@ export class PricingComponent implements OnInit, OnDestroy {
   }
 
   onGenerateSessionID() {
-    this.loading.start()
-    this.billingService.getManageSessionID(this.constructor.name, moduleName.manageSubscriptionsModule).subscribe((res: any) => {
-      this.loading.stop();
-      if (res.status === 200) {
-        window.open(res.response, '_blank');
+    const indexId = this.quickDivID == 18 ? 5 : this.quickDivID == 11 ? 4 : 3;
+    let quickLinkObj = {
+      linkid: this.quickDivID,
+      indexid:  indexId,
+      isactualbtnclicked: true,
+      islinkclicked: true
+    };
+    this.quickmenuService.onClickEmitQSLinkobj.next(quickLinkObj);
+    this.quickmenuService.updateQuerymenulist(quickLinkObj);
+    const a = this.quickmenuService.getQuerymenulist();
+    if(a.length !== 0){
+      const idx = a.findIndex((t)=>t.index == quickLinkObj.indexid);
+      if(a[idx].quicklinks.filter((t)=>t.linkid == quickLinkObj.linkid).length > 0){
+        this.loading.start()
+        this.billingService.getManageSessionID(this.constructor.name, moduleName.manageSubscriptionsModule).subscribe((res: any) => {
+          this.loading.stop();
+          if (res.status === 200) {
+            this.quickmenuService.onClickEmitQSLinkobj.next(quickLinkObj);
+            this.quickmenuService.updateQuerymenulist(quickLinkObj);
+            window.open(res.response, '_blank');
+          }
+    
+        }, err => {
+          this.loading.stop();
+          this.isOpen = true;
+          this.alertMsg = err;
+          this.alertType = 'danger';
+        });
       }
+    }
 
-    }, err => {
-      this.loading.stop();
-      this.isOpen = true;
-      this.alertMsg = err;
-      this.alertType = 'danger';
-    })
+   
   }
   openModal(template: TemplateRef<any>) {
     this.modalRef = this.modalService.show(template, {class: 'modal-lg', ignoreBackdropClick: true});
@@ -410,4 +460,26 @@ export class PricingComponent implements OnInit, OnDestroy {
     this.dsarPlanList = this.planDetails.dsar[`${this.cookieConsentBillingCycle}`];
     this.consentPreferenceList = this.planDetails.consentPreference[`${this.cookieConsentBillingCycle}`];
 }
+
+  ngAfterViewInit(){
+    console.log('first pricing..comp..');
+    this.onGetPlanDetails();
+    if(this.planDetails !== undefined){
+      this.callForQuickStart();
+    }
+  }
+
+  callForQuickStart(){
+    const quicklinks = this.quickmenuService.qsMenuobjwithIndexid;
+    if (quicklinks !== undefined && quicklinks.linkid == 11) {
+      this.onSetCookieConsent(2, 'dsar');
+    }else if (quicklinks !== undefined && quicklinks.linkid == 12) {
+      this.onSetCookieConsent(2, 'dsar');
+    }else if (quicklinks !== undefined && quicklinks.linkid == 18) {
+      this.onSetCookieConsent(3, 'consentPreference');
+    }else if (quicklinks !== undefined && quicklinks.linkid == 5) {
+      this.onSetCookieConsent(1, 'cookieConsent');
+    } 
+  }
+
 }

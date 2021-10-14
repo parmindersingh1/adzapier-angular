@@ -8,13 +8,26 @@
           <li class="breadcrumb-item active">Consent Analytics</li>
         </ol>
       </nav>
-      <h4 class="mg-b-0 tx-spacing--1"></h4>
+      <h4 class="mg-b-0 tx-spacing--1 pl-1">Cookie Consent Dashboard</h4>
     </div>
     <div class="d-none d-md-block">
       <div class="d-flex flex-column flex-sm-row mg-t-20 mg-md-t-0">
         <!--        <button class="btn btn-sm btn-white btn-uppercase pd-x-15"><i data-feather="download" class="mg-r-5"></i> Export-->
         <!--          CSV-->
         <!--        </button>-->
+
+        <div class="pr-0 d-flex row-reverse" style="margin-right: 20px;">
+          <div class="input-group-prepend"  (click)="dp.show()">
+            <span class="input-group-text rounded-right border-left-0 bg-white" id="inputGroup-sizing-sm"><i class="fa" [ngClass]="searchbydaterange !== '' ? 'fa-caret-down':'fa-search'"></i></span>
+          </div>
+          <input type="text" [(ngModel)]="searchbydaterange" style="border-radius: 0"
+                 class="form-control date-input border-left-0  border-right-0 rounded-right"
+                 bsDaterangepicker [bsConfig]="bsConfig"  #dp="bsDaterangepicker"  (onHidden)="onRefreshAll()">
+          <div class="input-group-prepend border-left-0"  (click)="dp.show()">
+            <span class="input-group-text rounded-left border-right-0 bg-white" id="inputGroup-sizing-sm"><i class="fa fa-calendar"></i></span>
+          </div>
+        </div>
+
         <button (click)="onRefreshAll()" class="btn btn-sm btn-white btn-uppercase pd-x-15 mg-t-5 mg-sm-t-0  mg-sm-l-5">
           <i data-feather="eye"
              class="mg-r-5"></i>
@@ -323,12 +336,12 @@
           <div class="row w-100 mb-2">
             <div class="col-md-11">
               <h6 class="mg-b-5">Consent Details</h6>
-              <p class="tx-13 tx-color-03 mg-b-0">Your cookie consent detail</p>
+<!--              <p class="tx-13 tx-color-03 mg-b-0">Your cookie consent detail</p>-->
             </div>
             <div class="col-md-1 dp-safari">
-              <select (change)="onSelectCountry($event)" class="form-control" id="sel1">
-                <option *ngFor="let country of countryList" [value]="country.country">{{country.country}}</option>
-              </select>
+<!--              <select (change)="onSelectCountry($event)" class="form-control" id="sel1">-->
+<!--                <option *ngFor="let country of countryList" [value]="country.country">{{country.country}}</option>-->
+<!--              </select>-->
             </div>
           </div>
         </div>
@@ -338,8 +351,7 @@
             <table class="table table-dashboard mg-b-0">
               <thead>
               <tr>
-                <th>Country</th>
-                <th>Action</th>
+                <th class="pl-4">Status</th>
                 <th class="text-right"> Necessary Cookies</th>
                 <th class="text-right"> Analytics</th>
                 <th class="text-right">Advertising</th>
@@ -350,14 +362,13 @@
               </thead>
               <tbody>
               <tr *ngFor="let obj of consentDetails">
-                <td class="tx-normal ">{{obj.country}}</td>
-                <td class="tx-normal ">{{obj.action}}</td>
-                <td class="tx-normal text-right">{{obj.allow_essantial ? obj.allow_essantial : 0}}</td>
-                <td class="tx-medium text-right"> {{obj.allow_analytics ? obj.allow_analytics : 0}}</td>
-                <td class="tx-medium text-right"> {{obj.allow_advertising ? obj.allow_advertising : 0}}</td>
-                <td class="tx-medium text-right"> {{obj.allow_socialmedia ? obj.allow_socialmedia : 0}}</td>
-                <td class="tx-medium text-right"> {{obj.allow_functional ? obj.allow_functional : 0}}</td>
-                <td class="tx-medium text-right"> {{obj.allow_unknown ? obj.allow_unknown : 0}}</td>
+                <td class="tx-normal text-capitalize pl-4">{{obj.status.replace('_', ' ').replace('_', ' ')}}</td>
+                <td class="tx-normal text-right">{{obj.allow_essantial_count ? obj.allow_essantial_count : 0}}</td>
+                <td class="tx-medium text-right"> {{obj.allow_analytics_count ? obj.allow_analytics_count : 0}}</td>
+                <td class="tx-medium text-right"> {{obj.allow_advertising_count ? obj.allow_advertising_count : 0}}</td>
+                <td class="tx-medium text-right"> {{obj.allow_social_media_count ? obj.allow_social_media_count : 0}}</td>
+                <td class="tx-medium text-right"> {{obj.allow_functional_count ? obj.allow_functional_count : 0}}</td>
+                <td class="tx-medium text-right"> {{obj.allow_unknown_count ? obj.allow_unknown_count : 0}}</td>
               </tr>
               </tbody>
 
