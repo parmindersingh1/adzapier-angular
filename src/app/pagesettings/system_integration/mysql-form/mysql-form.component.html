@@ -39,15 +39,26 @@
           <ng-container formArrayName="credential">
           <div class="col-md-6" *ngFor="let credential of mySqlForm.controls.credential['controls']; let i=index"  [formGroupName]="i">
               <div class="form-group w-75" *ngIf="credForm[systemName][i].type === 'text'">
-                <label class="text-capitalize"><span class="text-danger">*</span> {{mySqlForm.value.credential[i].key}}</label>
+                <label class="text-capitalize"><span class="text-danger">*</span> {{mySqlForm.value.credential[i].key.replace('_', ' ')}}</label>
                 <input type="hidden" formControlName="key" [value]="credential.key" />
                 <input type="text" formControlName="secret_1" class="form-control" [ngClass]="{ 'is-invalid': submitted && credential.get('secret_1').errors }" />
                 <div *ngIf="submitted && credential.get('secret_1').errors" class="invalid-feedback">
                   <div *ngIf="credential.get('secret_1').errors.required">This Field is required</div>
                 </div>
               </div>
+
+            <div class="form-group w-75" *ngIf="credForm[systemName][i].type === 'textarea'">
+              <label class="text-capitalize"><span class="text-danger">*</span> {{mySqlForm.value.credential[i].key.replace('_', ' ')}}</label>
+              <input type="hidden" formControlName="key" [value]="credential.key" />
+              <textarea class="form-control" formControlName="secret_1" id="exampleFormControlTextarea1" [ngClass]="{ 'is-invalid': submitted && credential.get('secret_1').errors }" rows="3"></textarea>
+              <div *ngIf="submitted && credential.get('secret_1').errors" class="invalid-feedback">
+                <div *ngIf="credential.get('secret_1').errors.required">This Field is required</div>
+              </div>
+            </div>
+
+
             <div class="form-group w-75" *ngIf="credForm[systemName][i].type === 'password'">
-              <label class="text-capitalize"><span class="text-danger">*</span> {{mySqlForm.value.credential[i].key}}</label>
+              <label class="text-capitalize"><span class="text-danger">*</span> {{mySqlForm.value.credential[i].key.replace('_', ' ')}}</label>
               <input type="hidden" formControlName="key" [value]="credential.key" />
               <input type="password" formControlName="secret_1" class="form-control" [ngClass]="{ 'is-invalid': submitted && credential.get('secret_1').errors }" />
               <div *ngIf="submitted && credential.get('secret_1').errors" class="invalid-feedback">
@@ -56,7 +67,7 @@
             </div>
 
             <div class="form-group w-75" *ngIf="credForm[systemName][i].type === 'number'">
-              <label class="text-capitalize"><span class="text-danger">*</span> {{mySqlForm.value.credential[i].key}}</label>
+              <label class="text-capitalize"><span class="text-danger">*</span> {{mySqlForm.value.credential[i].key.replace('_', ' ')}}</label>
               <input type="hidden" formControlName="key" [value]="credential.key" />
               <input type="text" formControlName="secret_1" class="form-control" [ngClass]="{ 'is-invalid': submitted && credential.get('secret_1').errors }" />
               <div *ngIf="submitted && credential.get('secret_1').errors" class="invalid-feedback">
@@ -65,7 +76,7 @@
             </div>
 
             <div class="form-group w-75" *ngIf="credForm[systemName][i].type === 'select'">
-              <label class="text-capitalize"><span class="text-danger">*</span> {{mySqlForm.value.credential[i].key}}</label>
+              <label class="text-capitalize"><span class="text-danger">*</span> {{mySqlForm.value.credential[i].key.replace('_', ' ')}}</label>
               <input type="hidden" formControlName="key" [value]="credential.key" />
               <select formControlName="secret_1" class="form-control" [ngClass]="{ 'is-invalid': submitted && credential.get('secret_1').errors }" >
                 <option *ngFor="let optionText of credForm[systemName][i].options" [value]="optionText">{{optionText}}</option>
@@ -79,7 +90,10 @@
             </div>
           </ng-container>
 
-          <div class="col-md-6" *ngIf="systemName === 'mailchimp'">
+          <div class="col-md-6" *ngIf="systemName === 'mailchimp'
+          || systemName === 'Activecampaign'
+          || systemName === 'sendinblue'
+          || systemName === 'sendgrid'">
             <div class="form-group w-75">
               <label>Test Email (Only For Testing Connection)</label>
               <input type="email" (change)="onSetTestEmail($event)" class="form-control" />

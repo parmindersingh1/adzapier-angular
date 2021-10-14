@@ -134,7 +134,10 @@ export class SystemIntegrationComponent implements OnInit {
   }
 
   onTestConnection(data, systemID) {
-    if (this.onFindSystemName(systemID) === 'mailchimp') {
+    if (this.onFindSystemName(systemID) === 'mailchimp'
+    || this.onFindSystemName(systemID) === 'sendinblue'
+    || this.onFindSystemName(systemID) === 'sendgrid'
+        || this.onFindSystemName(systemID) === 'activecampaign') {
       this.mailChimpData = data;
       this.openModal(this.mailChimpConnection);
       return false;

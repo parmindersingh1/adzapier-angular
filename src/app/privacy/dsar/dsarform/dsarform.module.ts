@@ -19,9 +19,11 @@ import {SkeletonModule} from 'primeng/skeleton';
 import {SystemIntegrationModule} from '../../../pagesettings/system_integration/system_integration.module';
 import {ButtonModule} from 'primeng/button';
 import {RippleModule} from 'primeng/ripple';
+import { ActiveCampaignComponent } from './dsar-system/active-campaign/active-campaign.component';
+import { SendInBlueComponent } from './dsar-system/send-in-blue/send-in-blue.component';
 
 @NgModule({
-  declarations: [DsarformComponent, DsarSystemComponent, SqlQueryBuilderComponent, MailchimpQueryBuilderComponent],
+  declarations: [DsarformComponent, DsarSystemComponent, SqlQueryBuilderComponent, MailchimpQueryBuilderComponent, ActiveCampaignComponent, SendInBlueComponent],
   imports: [
     FormsModule,
     ReactiveFormsModule,

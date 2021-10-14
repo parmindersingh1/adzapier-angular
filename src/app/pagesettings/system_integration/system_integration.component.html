@@ -37,7 +37,8 @@
           <td>{{rowData.created_at | date}}</td>
           <td>
             <button type="button" (click)="onTestConnection(rowData, rowData.system_id)" class="btn btn-secondary btn-sm" style="font-size: 12px">
-              <span *ngIf="isTesting && currentScanId === rowData.id; else test"><div  class="spinner-border"></div> Testing... </span>
+              <span *ngIf="isTesting && currentScanId === rowData.id; else test">
+                <div  class="spinner-border"></div> Testing... </span>
               <ng-template #test><i class="fas fa-play pr-2"></i> Test </ng-template>
 
             </button>
@@ -113,7 +114,9 @@
                 <span *ngIf="obj.name ==='mailchimp'"><img style="width:  180px" src="assets/imgs/db/mailchimp.png" alt="mailchimp" /></span>
                 <span *ngIf="obj.name ==='postgresql'"><img style="width:  210px; height: 47px" src="assets/imgs/db/postgresql.svg" alt="postgresql" /></span>
                 <span *ngIf="obj.name ==='http'"><img style="width:  210px; height: 47px" src="assets/imgs/db/http.png" alt="http" /></span>
-<!--                <span *ngIf="obj.name !=='mailchimp'" class="tx-18 pl-3">{{obj.name}} </span>-->
+                <span *ngIf="obj.name ==='activecampaign'"><img style="width:  210px; height: 47px" src="assets/imgs/db/ActiveCampaign_logo.svg.png" alt="http" /></span>
+                <span *ngIf="obj.name ==='sendinblue'"><img style="width:  210px; height: 47px" src="assets/imgs/db/send-in-blue.svg" alt="send-in-blue" /></span>
+                <span *ngIf="obj.name ==='sendgrid'"><img style="width:  210px; height: 47px" src="assets/imgs/db/sendgrid.png" alt="sendgrid" /></span>
               </a>
               </div>
             </ng-container>

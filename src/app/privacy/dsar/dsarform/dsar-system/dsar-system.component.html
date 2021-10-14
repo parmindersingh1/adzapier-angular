@@ -85,7 +85,8 @@
 <app-sql-query-builder (backHome)="onHome($event)"  [formObject]="formObject" [formID]="formID" [connectionId]="connectionID" [systemName]="systemName" *ngIf="systemName === 'postgres' || systemName === 'postgresql'"></app-sql-query-builder>
 <app-mailchimp-query-builder  (backHome)="onHome($event)"  [formObject]="formObject" [formID]="formID" [connectionId]="connectionID"  [systemName]="systemName" *ngIf="systemName === 'mailchimp'"></app-mailchimp-query-builder>
 <app-http-query-builder  (backHome)="onHome($event)"  [formObject]="formObject" [formID]="formID" [connectionId]="connectionID"  [systemName]="systemName" *ngIf="systemName === 'http'"></app-http-query-builder>
-
+<app-active-campaign  (backHome)="onHome($event)"  [formObject]="formObject" [formID]="formID" [connectionId]="connectionID"  [systemName]="systemName" *ngIf="systemName === 'activecampaign'"></app-active-campaign>
+<app-send-in-blue  (backHome)="onHome($event)"  [formObject]="formObject" [formID]="formID" [connectionId]="connectionID"  [systemName]="systemName" *ngIf="systemName === 'sendinblue'"></app-send-in-blue>
 
 
 <ng-template #createConnection>
@@ -106,7 +107,8 @@
                 <span *ngIf="obj.name ==='mailchimp'"><img style="width:  180px" src="assets/imgs/db/mailchimp.png" alt="mailchimp" /></span>
                 <span *ngIf="obj.name ==='postgresql'"><img style="width:  210px; height: 47px" src="assets/imgs/db/postgresql.svg" alt="postgresql" /></span>
                 <span *ngIf="obj.name ==='http'"><img style="width:  210px; height: 47px" src="assets/imgs/db/http.png" alt="http" /></span>
-                <!--                <span *ngIf="obj.name !=='mailchimp'" class="tx-18 pl-3">{{obj.name}} </span>-->
+                <span *ngIf="obj.name ==='activecampaign'"><img style="width:  210px; height: 47px" src="assets/imgs/db/ActiveCampaign_logo.svg.png" alt="http" /></span>
+                <span *ngIf="obj.name ==='sendinblue'"><img style="width:  210px; height: 47px" src="assets/imgs/db/send-in-blue.svg" alt="send-in-blue" /></span>
               </a>
             </div>
           </ng-container>

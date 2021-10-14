@@ -70,6 +70,25 @@
         </div>
       </li>
 
+      <li class="list-group-item mb-2" style="border-top: 1px solid #e5e9f2;"
+          *ngFor="let obj of connectionList?.activeCampaign">
+        <div class="row">
+          <div class="col-md-6">
+            <p><b>Connection Name : </b> {{obj?.connectionName}}</p>
+            <p><b>System Type :</b> {{obj?.systemName}}</p>
+          </div>
+          <div class="col-md-6" *ngIf="!obj?.errorLogs?.error">
+            <h6 class="tx-17">Connection Status : <span class="text-success">Stable</span></h6>
+            <button type="button" class="btn btn-link pl-0" (click)="onShowSqlData('activeCampaign', obj)">View More</button>
+          </div>
+
+          <div class="col-md-6" *ngIf="obj?.errorLogs?.error">
+            <h6 class="tx-17">Connection Status : <span class="text-danger">Error </span></h6>
+            <div class="alert-danger alert">{{obj?.errorLogs?.message}}</div>
+          </div>
+
+        </div>
+      </li>
 
       <li class="list-group-item mb-2" style="border-top: 1px solid #e5e9f2;"
           *ngFor="let obj of connectionList?.restApi">
@@ -86,6 +105,32 @@
 
         </div>
       </li>
+
+
+      <li class="list-group-item mb-2" style="border-top: 1px solid #e5e9f2;"
+          *ngFor="let obj of connectionList?.sendInBlue">
+        <div class="row">
+          <div class="col-md-6">
+            <p><b>Connection Name : </b> {{obj.connectionName}}</p>
+            <p><b>System Type :</b> {{obj.systemName}}</p>
+          </div>
+          <div class="col-md-6" *ngIf="!obj?.errorLogs?.error">
+            <h6 class="tx-17">Connection Status : <span class="text-success">Stable</span></h6>
+            <h6 class="tx-17">Total Records <span class="badge badge-primary ml-2 tx-17"
+                                                  style="font-size: 13px">{{obj?.response?.length}} Found </span></h6>
+            <button type="button" class="btn btn-link pl-0" (click)="onShowSqlData('sendInBlue', obj)">View More</button>
+          </div>
+
+          <div class="col-md-6" *ngIf="obj?.errorLogs?.error">
+            <h6 class="tx-17">Connection Status : <span class="text-danger">Error </span></h6>
+            <h6 class="tx-17">Total Not Records <span class="badge badge-primary ml-2 tx-17 badge-danger"
+                                                      style="font-size: 13px">0</span></h6>
+            <div class="alert-danger alert">{{obj?.errorLogs?.message}}</div>
+          </div>
+
+        </div>
+      </li>
+
     </ul>
 
 
@@ -139,7 +184,133 @@
       </div>
     </div>
 
+    <div class="sql" *ngIf="currentStep === 'activeCampaign'">
+      <div class="card">
+        <div class="card-header">
+          <h4 class="float-left">Connection Name : {{connectionDetails?.connectionName}}</h4>
+          <p class="float-right font-weight-bold tx-15" (click)="currentStep = ''"><i class="fas fa-chevron-left"></i>
+            Go Back</p>
+        </div>
+        <div class="card-body mt-3">
+          <div class="row">
+            <div class="col-md-6">
 
+              <div class="row">
+                <div class="col-md-4">
+                  <h6>Hash</h6>
+                </div>
+                <div class="col-md-8">
+                  <p>{{connectionDetails?.response.contacts[0].hash}}</p>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-4">
+                  <h6>Full Name</h6>
+                </div>
+                <div class="col-md-8">
+                  <p>{{connectionDetails?.response.contacts[0].firstName}}  {{connectionDetails?.response.contacts[0].lastName}}</p>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-4">
+                  <h6>Email address</h6>
+                </div>
+                <div class="col-md-8">
+                  <p>{{connectionDetails?.response.contacts[0].email}}</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+
+
+              <div class="row">
+                <div class="col-md-4">
+                  <h6>Phone</h6>
+                </div>
+                <div class="col-md-8">
+                  <p>{{connectionDetails?.response.contacts[0].phone}}</p>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-4">
+                  <h6>Last Changes</h6>
+                </div>
+                <div class="col-md-8">
+                  <p>{{connectionDetails?.response.contacts[0].updated_timestamp}}</p>
+                </div>
+              </div>
+            </div>
+
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="sql" *ngIf="currentStep === 'sendInBlue'">
+      <div class="card">
+        <div class="card-header">
+          <h4 class="float-left">Connection Name : {{connectionDetails?.connectionName}}</h4>
+          <p class="float-right font-weight-bold tx-15" (click)="currentStep = ''"><i class="fas fa-chevron-left"></i>
+            Go Back</p>
+        </div>
+        <div class="card-body mt-3">
+          <div class="row">
+            <div class="col-md-6">
+
+              <div class="row">
+                <div class="col-md-4">
+                  <h6>Email</h6>
+                </div>
+                <div class="col-md-8">
+                  <p>{{connectionDetails?.response?.email}}</p>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-4">
+                  <h6>Full Name</h6>
+                </div>
+                <div class="col-md-8">
+                  <p>{{connectionDetails?.response?.attributes?.FIRSTNAME}}  {{connectionDetails?.response?.attributes?.LASTNAME}} </p>
+                </div>
+              </div>
+            </div>
+
+
+            <div class="col-md-6">
+
+
+              <div class="row">
+                <div class="col-md-4">
+                  <h6>EmailBlacklisted</h6>
+                </div>
+                <div class="col-md-8">
+                  <p>{{connectionDetails?.response?.emailBlacklisted}}</p>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-4">
+                  <h6>SMS</h6>
+                </div>
+                <div class="col-md-8">
+                  <p>{{connectionDetails?.response?.attributes?.SMS}}</p>
+                </div>
+              </div>
+            </div>
+
+
+          </div>
+        </div>
+      </div>
+
+    </div>
     <div class="sql" *ngIf="currentStep === 'mailChimp'">
       <div class="card">
         <div class="card-header">

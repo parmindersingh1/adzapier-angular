@@ -108,7 +108,10 @@ export class MysqlFormComponent implements OnInit {
     const params: any = {
       system: this.systemName
     };
-    if (this.systemName === 'mailchimp') {
+    if (this.systemName === 'mailchimp'
+      || this.systemName === 'Activecampaign'
+      || this.systemName === 'sendinblue'
+      || this.systemName === 'sendgrid') {
       params.email = this.testEmail;
     }
     this.isTesting = true;
@@ -116,6 +119,7 @@ export class MysqlFormComponent implements OnInit {
     this.systemIntegrationService.TestSystemIntegration(this.constructor.name,
       moduleName.systemIntegrationModule, this.systemID, payload, params)
       .subscribe((res: any) => {
+        this.loading.stop();
         this.isTesting = false;
         if (res.status === 200) {
           this.testingSuccess = res.message;
@@ -124,7 +128,7 @@ export class MysqlFormComponent implements OnInit {
           }
         }
         this.alertMsg = '';
-        this.loading.stop();
+
       }, error => {
         this.testingSuccess = '';
         this.isTesting = false;

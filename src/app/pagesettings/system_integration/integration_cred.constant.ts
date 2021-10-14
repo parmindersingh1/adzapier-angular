@@ -86,17 +86,44 @@ export const credForm = {
         required: true
       },
       {
-      key: 'auth_type',
-      secret_1: '',
+        key: 'auth_type',
+        secret_1: '',
         type: 'select',
         options: ['Bearer'],
         required: true
       }, {
-      key: 'token',
-      secret_1: '',
+        key: 'token',
+        secret_1: '',
         type: 'text',
         required: true
       }
     ],
+  activecampaign: [{
+      key: 'account_name',
+      secret_1: '',
+      type: 'text',
+      required: true
+    },
+      {
+        key: 'api_token',
+        secret_1: '',
+        type: 'textarea',
+        required: true
+      },
+    ],
+  sendinblue: [{
+    key: 'api_key',
+    secret_1: '',
+    type: 'text',
+    required: true
+  },
+  ],
+  sendgrid: [{
+    key: 'authorization',
+    secret_1: '',
+    type: 'textarea',
+    required: true
+  },
+  ]
   }
 ;
