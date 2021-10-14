@@ -179,7 +179,7 @@ export class OrganizationdetailsComponent implements OnInit {
       state: ['', [Validators.required, Validators.pattern(strRegx)]],
       zipcode: ['', [Validators.required, Validators.pattern(zipRegex)]],
       email: ['', [Validators.required, Validators.pattern]],
-      phone: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(15), Validators.pattern(phoneNumRegx)]]
+      phone: ['', [Validators.maxLength(15), Validators.pattern(phoneNumRegx)]]
     });
     this.confirmationForm = this.formBuilder.group({
       userInput: ['', [Validators.required]]
