@@ -78,7 +78,7 @@
           </div>
 
           <div class="text-center">
-            <a routerLink="/settings/billing/manage" (click)="onTemplateHide()" [queryParams]="{oid:queryOID , pid:queryPID}" class="btn mt-3 btn-primary"> <i
+            <a (click)="redirectToManageLicense()" class="btn mt-3 btn-primary txt-white"> <i
               _aria-hidden="true" class="fa fa-cogs pr-1"></i>Manage Subscription</a>
             <p class="cancel-btn mt-2 mb-2" (click)="onTemplateHide()">or Cancel & Go Back</p>
           </div>
