@@ -689,6 +689,14 @@ export class CompanyComponent implements AfterViewInit, OnInit {
     this.cdRef.detectChanges();
   }
 
+  ngAfterViewChecked(){
+    // this.userService.isClickedOnHeaderMenu.subscribe((data)=>{
+    //   if(!data){
+    //     this.quickDivID = "";
+    //   } 
+    // })
+  }
+
   ngOnDestroy(){
     this.quickDivID = "";
     this.unsubscribeAfterUserAction$.unsubscribe();

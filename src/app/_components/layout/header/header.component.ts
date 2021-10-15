@@ -1640,6 +1640,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
     }
     this.quickLinkObj = {};
     this.quickDivID = "";
+    this.headerDropdown.forEach((el) => {
+      el.hide(); 
+    });
     this.cdRef.detectChanges();
   }
  
@@ -2102,6 +2105,17 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
 
   onClickQSLinkFromHeader($event){
     this.quickmenuService.onDissmissQuickStartmenu.next(false);
+  }
+
+  headerNavbarEvent($event){
+    if($event.currentTarget === this.headerNavbarEle.nativeElement){ 
+    //  this.userService.onClickHeaderNavBar.next(true);
+      if(!this.isBackdropclicked && this.actualBackdropclicked){ // if quick start opened and want to click navbar
+        this.onClickBackdrop(); 
+      }else{
+        return true; // regular header navigation
+      }
+    }
   }
 
   ngOnDestroy(){
