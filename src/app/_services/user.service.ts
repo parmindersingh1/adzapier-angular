@@ -38,6 +38,12 @@ export class UserService {
     get isRevisitedQSMenuLink() {
         return this.onRevistQuickStartmenulink.asObservable();
     }
+
+    public onClickHeaderNavBar: BehaviorSubject<any> = new BehaviorSubject<any>(false);
+    get isClickedOnHeaderMenu() {
+        return this.onClickHeaderNavBar.asObservable();
+    }
+
     private organizationProperty = new Subject<any>();
     organizationProperty$ = this.organizationProperty.asObservable();
     constructor(private http: HttpClient, private lokiService: LokiService) {
