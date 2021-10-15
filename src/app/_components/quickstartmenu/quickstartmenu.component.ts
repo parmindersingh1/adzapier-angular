@@ -126,7 +126,7 @@ export class QuickstartmenuComponent implements OnInit, AfterViewInit,AfterViewC
     const commingSoon = linkIndex == 4 && linkobj.linkid == 17;
     this.quickmenuService.isuserClickedonqstooltip = false;
     linkobj["indexid"] = linkIndex;
-   
+    this.userService.onRevistQuickStartmenulink.next({quickstartid:linkobj.linkid,reclickqslink:false,urlchanged:false});
    this.quickmenuService.onClickEmitQSLinkobj.next(linkobj);
     this.onClickEmitQSLinkobj.emit(linkobj);
 
@@ -135,14 +135,18 @@ export class QuickstartmenuComponent implements OnInit, AfterViewInit,AfterViewC
     
     if (allowtonavigate || allowtonavigatetwo || allowtonavigatethree || allowtonavigatefour) {
       let oIDPIDFromURL = findPropertyIDFromUrl(this.location.path());
-      this.router.navigate([linkobj.link], { queryParams: { oid: oIDPIDFromURL[0], pid: oIDPIDFromURL[1] }, queryParamsHandling: 'merge', skipLocationChange: false });
+      if (oIDPIDFromURL !== undefined) {
+        this.router.navigate([linkobj.link], { queryParams: { oid: oIDPIDFromURL[0], pid: oIDPIDFromURL[1] }, queryParamsHandling: 'merge', skipLocationChange: false });
+      }else{
+        return false;
+      }
       // }
     }
     
   }
 
   onClickQSLinkForProperty(linkIndex, linkobj) {
-    if(linkIndex == 4 && linkobj.linkid == 17){
+    if (linkIndex == 4 && linkobj.linkid == 17) {
       return false;
     }
     this.quickmenuService.isuserClickedonqstooltip = false;
@@ -150,12 +154,13 @@ export class QuickstartmenuComponent implements OnInit, AfterViewInit,AfterViewC
     this.currenttabindex = linkIndex;
     this.quickmenuService.onClickEmitQSLinkobj.next(linkobj);
     this.onClickEmitQSLinkobj.emit(linkobj);
- 
-      let oIDPIDFromURL = findPropertyIDFromUrl(this.location.path());
-      if (oIDPIDFromURL !== undefined) {
-        this.router.navigate(['settings/organizations/details', oIDPIDFromURL[0]], { queryParams: { oid: oIDPIDFromURL[0], pid: oIDPIDFromURL[1] }, queryParamsHandling: 'merge', skipLocationChange: false });
-      }
-  //  }
+    this.userService.onRevistQuickStartmenulink.next({ quickstartid: linkobj.linkid, reclickqslink: false, urlchanged: false });
+    // this.userService.onRevistQuickStartmenulink.next({quickstartid:linkobj.linkid,reclickqslink:linkobj.isactualbtnclicked,urlchanged:false});
+    let oIDPIDFromURL = findPropertyIDFromUrl(this.location.path());
+    if (oIDPIDFromURL !== undefined) {
+      this.router.navigate(['settings/organizations/details', oIDPIDFromURL[0]], { queryParams: { oid: oIDPIDFromURL[0], pid: oIDPIDFromURL[1] }, queryParamsHandling: 'merge', skipLocationChange: false });
+    }
+    //  }
   }
   
   onCloseQuickstart($event){
@@ -163,7 +168,7 @@ export class QuickstartmenuComponent implements OnInit, AfterViewInit,AfterViewC
     //this.ishideQsbtn = !this.ishideQsbtn;
     this.showQuickStartMenu = !this.showQuickStartMenu;
     this.showGuidancediv = false;
-    this.onClickQuickStart.emit(true);
+    this.onClickQuickStart.emit(this.showQuickStartMenu);
   }
 
   @HostListener('window',['$event'])

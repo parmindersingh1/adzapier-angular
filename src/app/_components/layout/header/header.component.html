@@ -393,7 +393,8 @@
 <!--quickstart alert for every page-->
 <div [ngClass]="isBillingpageQuickid() && isquicklinkclicked && !isBackdropclicked ? 'back-drop-two': ''"
   (click)="onClickBackdrop()" *ngIf="isloginpage">
-  <app-quickstartalert *ngIf="!isBackdropclicked && actualBackdropclicked" [styleobj]="positionObj()" [isclickedbyuser]="quickLinkStatus"
+  <app-quickstartalert *ngIf="!isUserClickedNotRelatedToTooltip && !isRevistedLink  && !isBackdropclicked && actualBackdropclicked" [styleobj]="positionObj()" [isclickedbyuser]="quickLinkStatus"
     [isuserclickoutsidemenu]="isQuicklinkActuallinkVisited()" [linkid]="quickDivID" [divguidetext]="alertguidetext"
-    [guidancetext]="alertcontent" [isactualLinkclickedbyuser]="actuallinkstatus"></app-quickstartalert>
+    [guidancetext]="alertcontent" [isactualLinkclickedbyuser]="actuallinkstatus">
+  </app-quickstartalert>
 </div>

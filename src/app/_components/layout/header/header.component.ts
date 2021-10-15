@@ -110,7 +110,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
   quickDivID;
   quickDivIDSub;
   actuallinkstatus:boolean = false;
-  isRevistedLink:boolean;
+  isRevistedLink:boolean = false;
+  revisitedQuicklinnkid:any;
+  isUserClickedNotRelatedToTooltip:boolean;
   currentLinkId:any;
   isbtnClickedbyUser;
   istopmenuclicked;
@@ -221,18 +223,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
       }
     });
   //  this.isloginpage = this.location.path().indexOf('login') == -1 && this.location.path().indexOf('signup') == -1;
-  this.renderer.listen('window', 'click', (e) => {
-  
-    if(this.actualLinkObj.isactualbtnclicked){
-       
-      this.isBackdropclicked = true;
-      this.lastopendp.length = 0;
-      this.headerDropdown.forEach((el) => {
-        el.hide(); 
-      });
-    }
+  // this.renderer.listen('window', 'click', (e:Event) => {
+  //   if(e.target === this.dropdownTriggers.nativeElement){
+  //   }
    
-  });
+  // });
   }
 
   ngOnInit() {
@@ -1531,6 +1526,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
   }
 
   ngAfterViewChecked(){
+    this.userService.isRevisitedQSMenuLink.subscribe((status) => { this.isRevistedLink = status.reclickqslink; this.revisitedQuicklinnkid = status.quickstartid; this.isUserClickedNotRelatedToTooltip = status.urlchanged  });
     //let quickstartmenustatus;
     this.quickmenuService.isQSMenuDissmissed.subscribe((status) => this.quickstartmenustatus = status)
     if (this.quickstartmenustatus) {
@@ -1651,6 +1647,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
 
   @HostListener('document:click', ['$event.target']) 
   outsideClick() {
+    if (this.isUserclickedActualLink) {
+      this.onClickBackdrop();
+      this.isUserclickedActualLink = false;
+    }
     if (this.qslinkobj !== undefined){
     if (Object.values(this.qslinkobj).length !== 0) {
       if (this.qslinkobj.islinkclicked) {
@@ -1668,6 +1668,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
       this.actuallinkstatus = false;
     } else if(this.isquicklinkclicked && !this.actuallinkstatus && this.isBackdropclicked){
       this.isBackdropclicked = false;
+      this.actualBackdropclicked = true;
+      this.actuallinkstatus = true;
     }
      
     if (this.isuserClickedonqstooltip) {//&& !this.isquicklinkclicked && this.userclickedoutside
@@ -2015,6 +2017,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
         if(menuid !== undefined && menuid !== -1){
           this.lastopendp[menuid].dpmenu.isOpen = !this.lastopendp[menuid].dpmenu.isOpen;
           this.lastopendp[menuid].dpmenu.show();
+          this.isBackdropclicked = false;
         }else{
           this.lastopendp.length = 0;
           this.headerDropdown.forEach((el: any, index) => {
@@ -2048,6 +2051,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
                 dpname:dropdownname
               });
               el.show();
+              this.isBackdropclicked = false;
             }else{
               this.lastopendp[idx].dpmenu.isOpen = !this.lastopendp[idx].dpmenu.isOpen;
               this.lastopendp[idx].dpmenu.show();
