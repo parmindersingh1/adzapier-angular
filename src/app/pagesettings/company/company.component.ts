@@ -293,6 +293,7 @@ export class CompanyComponent implements AfterViewInit, OnInit {
               this.alertType = 'success';
               this.loadCompanyDetails();
               this.modalService.dismissAll('Data Saved!');
+              this.checkForQsTooltip();
             }
           }, (err) => {
             this.loading.stop();
@@ -300,6 +301,7 @@ export class CompanyComponent implements AfterViewInit, OnInit {
             this.isOpen = true;
             this.alertType = 'danger';
             this.modalService.dismissAll('Error!');
+            this.checkForQsTooltip();
           }
         );
     }
@@ -678,8 +680,8 @@ export class CompanyComponent implements AfterViewInit, OnInit {
   }
  
   checkForQsTooltip(){
+    this.userService.onRevistQuickStartmenulink.next({quickstartid:this.quickDivID,reclickqslink:true,urlchanged:true});
     this.quickDivID = "";
-    this.userService.onRevistQuickStartmenulink.next({quickstartid:this.quickDivID,reclickqslink:true,urlchanged:true}); 
   }
 
   ngAfterViewInit(){

@@ -101,12 +101,12 @@
     <div class="modal-header">
         <h4 class="modal-title" id="modal-basic-title">Add Organization
         </h4>
-        <button type="button" class="close" aria-label="Close" (click)="onResetEditOrganization()">
+        <button type="button" class="close" aria-label="Close" (click)="onResetEditOrganization();checkForQsTooltip();">
             <span aria-hidden="true">×</span>
         </button>
     </div>
     <div class="modal-body">
-        <form [formGroup]="editOrganisationForm" (ngSubmit)="updateOrganisationData()">
+        <form [formGroup]="editOrganisationForm" (ngSubmit)="updateOrganisationData();checkForQsTooltip();">
             <div class="row">
                 <div class="col-sm-12">
                     <div class="form-group">
@@ -219,7 +219,7 @@
             </div>
             <div class="row pull-right-btn">
                 <div class="text-right">
-                    <button type="button" (click)="onResetEditOrganization()"
+                    <button type="button" (click)="onResetEditOrganization();checkForQsTooltip();"
                         class="btn btn-link tx-decoration-underline">Cancel</button>
                         <button class="btn btn-xs btn-primary mr-3">Save</button>
                 </div>

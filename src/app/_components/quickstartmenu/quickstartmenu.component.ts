@@ -126,11 +126,11 @@ export class QuickstartmenuComponent implements OnInit, AfterViewInit,AfterViewC
     const commingSoon = linkIndex == 4 && linkobj.linkid == 17;
     this.quickmenuService.isuserClickedonqstooltip = false;
     linkobj["indexid"] = linkIndex;
-    this.userService.onRevistQuickStartmenulink.next({quickstartid:linkobj.linkid,reclickqslink:false,urlchanged:false});
-   this.quickmenuService.onClickEmitQSLinkobj.next(linkobj);
-    this.onClickEmitQSLinkobj.emit(linkobj);
-
     this.currenttabindex = linkIndex;
+    this.onClickEmitQSLinkobj.emit(linkobj);
+    this.quickmenuService.onClickEmitQSLinkobj.next(linkobj);    
+    this.userService.onRevistQuickStartmenulink.next({quickstartid:linkobj.linkid,reclickqslink:false,urlchanged:false});
+
     // if (linkobj.link.indexOf('dsar') == -1) {
     
     if (allowtonavigate || allowtonavigatetwo || allowtonavigatethree || allowtonavigatefour) {

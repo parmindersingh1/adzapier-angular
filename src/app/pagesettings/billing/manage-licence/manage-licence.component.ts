@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
@@ -36,6 +36,7 @@ export class ManageLicenceComponent implements OnInit {
   currentLinkID:any;
   actuallinkstatus:boolean = false;
   isquickstartmenu:any;
+  actualbtnClickstatus:boolean = false;
   constructor(
     private loading: NgxUiLoaderService,
     private billingService: BillingService,
@@ -43,6 +44,7 @@ export class ManageLicenceComponent implements OnInit {
     private userService: UserService,
     private formBuilder: FormBuilder,
     private activatedRoute: ActivatedRoute,
+    private cdRef: ChangeDetectorRef,
     private router: Router
   ) { }
 
@@ -51,6 +53,7 @@ export class ManageLicenceComponent implements OnInit {
       takeUntil(this.unsubscribeAfterUserAction$)
     ).subscribe((res) => { 
       this.quickDivID = res.linkid;
+      this.actualbtnClickstatus = res.isactualbtnclicked;
     });
     this.activatedRoute.queryParamMap
       .subscribe(params => {
@@ -137,8 +140,9 @@ export class ManageLicenceComponent implements OnInit {
         linkdisplaytext: "Assigning Cookie Consent subscription to property",
         link: "/settings/billing/manage"
       };
-      this.quickmenuService.onClickEmitQSLinkobj.next(quickLinkObj);
       this.quickmenuService.updateQuerymenulist(quickLinkObj);
+      this.quickmenuService.onClickEmitQSLinkobj.next(quickLinkObj);
+      this.userService.onRevistQuickStartmenulink.next({quickstartid:this.quickDivID,reclickqslink:true,urlchanged:false});
       const a = this.quickmenuService.getQuerymenulist();
       this.quickmenuService.onClickEmitQSLinkobj.pipe(
         takeUntil(this.unsubscribeAfterUserAction$)
@@ -149,7 +153,8 @@ export class ManageLicenceComponent implements OnInit {
             this.quickDivID = "";
             this.router.navigate(['/settings/billing/manage/property', planid], { queryParams: { oid: this.queryOID, pid: this.queryPID }, queryParamsHandling: 'merge', skipLocationChange: false });
           } else if (a[idx].quicklinks.some((t) => t.linkid == res.linkid && !t.isactualbtnclicked)) {
-            this.quickDivID = res.linkid;
+            this.quickDivID = "";
+            this.router.navigate(['/settings/billing/manage/property', planid], { queryParams: { oid: this.queryOID, pid: this.queryPID }, queryParamsHandling: 'merge', skipLocationChange: false });
           }
         }
       });
@@ -172,6 +177,8 @@ export class ManageLicenceComponent implements OnInit {
       };
       this.quickmenuService.updateQuerymenulist(quickLinkObj);
       this.quickmenuService.onClickEmitQSLinkobj.next(quickLinkObj);
+      this.userService.onRevistQuickStartmenulink.next({quickstartid:this.quickDivID,reclickqslink:true,urlchanged:false});
+      this.quickDivID = "";
       const a = this.quickmenuService.getQuerymenulist();
       this.quickmenuService.onClickEmitQSLinkobj.pipe(
         takeUntil(this.unsubscribeAfterUserAction$)
@@ -181,9 +188,10 @@ export class ManageLicenceComponent implements OnInit {
 
           if (a[idx].quicklinks.some((t) => t.linkid == res.linkid && t.isactualbtnclicked)) {
             this.quickDivID = "";
+            
             this.router.navigate(['/settings/billing/manage/organizations', planid], { queryParams: { oid: this.queryOID, pid: this.queryPID }, queryParamsHandling: 'merge', skipLocationChange: false });
           } else if (a[idx].quicklinks.some((t) => t.linkid == res.linkid && !t.isactualbtnclicked)) {
-            this.quickDivID = quickLinkObj.linkid;
+            this.quickDivID = "";
           }
         }
       });
@@ -191,6 +199,26 @@ export class ManageLicenceComponent implements OnInit {
       this.router.navigate(['/settings/billing/manage/organizations', planid], { queryParams: { oid: this.queryOID, pid: this.queryPID }, queryParamsHandling: 'merge', skipLocationChange: false });
     }
 
+  }
+
+  checkForQsTooltip(){
+    this.userService.onRevistQuickStartmenulink.next({quickstartid:this.quickDivID,reclickqslink:true,urlchanged:true}); 
+    this.quickDivID = "";    
+  }
+   
+
+  ngAfterViewInit(){
+    this.quickmenuService.onClickEmitQSLinkobj.pipe(
+      takeUntil(this.unsubscribeAfterUserAction$)
+    ).subscribe((res) => { 
+      this.quickDivID = res.linkid;
+    });
+    this.cdRef.detectChanges();
+  }
+
+  ngOnDestroy(){
+    this.quickDivID = "";
+    this.unsubscribeAfterUserAction$.unsubscribe();
   }
   
 }

@@ -453,7 +453,7 @@ export class OrganizationdetailsComponent implements OnInit {
         this.submitted = false;
         this.organisationPropertyForm.reset();
         this.modalService.dismissAll('Data Saved!');
-
+        this.checkForQsTooltip();
       } else {
         const reqObj = {
           name: this.organisationPropertyForm.value.propertyname,
@@ -481,12 +481,14 @@ export class OrganizationdetailsComponent implements OnInit {
           this.organisationPropertyForm.reset();
           this.modalService.dismissAll();
           this.submitted = false;
+          this.checkForQsTooltip();
         }, (error) => {
           this.alertMsg = error;
           this.isOpen = true;
           this.alertType = 'danger';
           this.onCancelClickProperty();
         });
+        this.checkForQsTooltip();
       }
     }
 
@@ -896,8 +898,8 @@ export class OrganizationdetailsComponent implements OnInit {
   }
 
   checkForQsTooltip(){
-    this.quickDivID = "";
     this.userService.onRevistQuickStartmenulink.next({quickstartid:this.quickDivID,reclickqslink:true,urlchanged:true}); 
+    this.quickDivID = "";
   }
 
   ngAfterViewInit(){
