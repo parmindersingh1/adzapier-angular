@@ -234,6 +234,7 @@ export class AppComponent implements OnInit {
     let updatedqsMenu = this.quickmenuService.getQuerymenulist();
   //  console.log(updatedqsMenu, 'ngAfterViewInit..app1qsm');
     this.qsMenuList = [...updatedqsMenu];
+    this.cdRef.detectChanges();
   }
 
   // ngAfterViewChecked(){
@@ -245,6 +246,7 @@ export class AppComponent implements OnInit {
     } else {
       this.isloginpage = true;
     }
+    this.cdRef.detectChanges();
   }
 
 

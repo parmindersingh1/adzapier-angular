@@ -29,7 +29,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
   @ViewChild('confirmTemplate') confirmModal: TemplateRef<any>;
   @ViewChildren(BsDropdownDirective) headerDropdown:QueryList<BsDropdownDirective>;
   @ViewChild('navMenu', { static: false }) navMenuEle: ElementRef;
+  @ViewChild('headerNavbar', { static: false }) headerNavbarEle: ElementRef;  
   @ViewChild('dpTriggers',{static:false}) dropdownTriggers:ElementRef;
+  @ViewChild('orgPropNavBar', { static: false }) orgPropNavBar: ElementRef;  
   qsMenuClick$ = this.userService.isClickedOnQSMenu;
   isRevisitedQSMenuLink$ = this.userService.isRevisitedQSMenuLink;
   modalRef: BsModalRef;
@@ -135,6 +137,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
   actualLinkVisitStatus = false;
   actualLinkObj:any;
   @Output() onClickEnableQuickStartMenu: EventEmitter<any> = new EventEmitter<any>();
+  quickstartmenustatus:any;
   constructor(
     private router: Router,
     private activatedroute: ActivatedRoute,
@@ -218,6 +221,18 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
       }
     });
   //  this.isloginpage = this.location.path().indexOf('login') == -1 && this.location.path().indexOf('signup') == -1;
+  this.renderer.listen('window', 'click', (e) => {
+  
+    if(this.actualLinkObj.isactualbtnclicked){
+       
+      this.isBackdropclicked = true;
+      this.lastopendp.length = 0;
+      this.headerDropdown.forEach((el) => {
+        el.hide(); 
+      });
+    }
+   
+  });
   }
 
   ngOnInit() {
@@ -1516,6 +1531,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
   }
 
   ngAfterViewChecked(){
+    //let quickstartmenustatus;
+    this.quickmenuService.isQSMenuDissmissed.subscribe((status) => this.quickstartmenustatus = status)
+    if (this.quickstartmenustatus) {
+      this.onClickBackdrop();
+    }
     
    // this.isloginpage = this.location.path().indexOf('login') == -1 && this.location.path().indexOf('signup') == -1;
     let actuallinkvisitatqs = this.isQuicklinkActuallinkVisited();
@@ -1583,8 +1603,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
       } 
      
     }
-    if(!this.isqsmenuopen){
-      this.addBordertoDropdownMenu();
+    if(!this.isqsmenuopen && this.qslinkobj !== undefined ){ // this.quickLinkObj !== undefined // Object.values(this.qslinkobj).length !== 0 //|| Object.values(this.qslinkobj).length !== 0
+      if(Object.values(this.qslinkobj).length !==0 ){
+        this.addBordertoDropdownMenu();
+      }
     }
   }
  
@@ -1616,7 +1638,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
       } else {
         this.isquicklinkclicked = !this.qslinkobj.islinkclicked;
       }
+    }else{
+      this.quickDivID = "";
+      this.qslinkobj = {};
     }
+    this.quickLinkObj = {};
+    this.quickDivID = "";
     this.cdRef.detectChanges();
   }
  
@@ -1624,7 +1651,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
 
   @HostListener('document:click', ['$event.target']) 
   outsideClick() {
-    if (this.qslinkobj !== undefined) {
+    if (this.qslinkobj !== undefined){
+    if (Object.values(this.qslinkobj).length !== 0) {
       if (this.qslinkobj.islinkclicked) {
       this.actualBackdropclicked = !this.actualBackdropclicked;
       } 
@@ -1632,6 +1660,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
         this.isBackdropclicked = false;
       }
     }
+  }
     
     if (this.isquicklinkclicked && this.actuallinkstatus) {
       this.isBackdropclicked = false;
@@ -1668,10 +1697,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
             this.opendropdownTrigger(2,'cookie-consent'); 
            // this.addBordertoDropdownMenu();
           }
-          if(this.quickDivID !== "" && (this.quickDivID == 11 || this.quickDivID == 12 )){
+          if(this.quickDivID !== "" && (this.quickDivID == 6 || this.quickDivID == 11 || this.quickDivID == 12 || this.quickDivID == 19)){
+            this.lastopendp = [];
             this.removeHightlightBorders();
             //this.renderer.removeClass(this.navMenuEle.nativeElement.querySelectorAll('li > div')[0], 'highlightmenu-element');
           }
+          
           if (this.quickDivID !== "" && (this.quickDivID === 16 || this.quickDivID === 15 || this.quickDivID === 14 || this.quickDivID === 13)) {
           
             this.renderer.addClass(this.navMenuEle.nativeElement.querySelectorAll('li > div')[0], 'highlightmenu-element');
@@ -1688,24 +1719,15 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
           }
         }
       }
+    }else if(this.onClickHideTooltip()){
+      this.lastopendp.length = 0;
+      this.removeHightlightBorders();
+      this.qslinkobj = {};
+      
     } else {
-      if (this.onClickHideTooltip()) {
-        this.lastopendp.length = 0;
-        this.headerDropdown.forEach((el: any, index) => {
-          if (this.quickDivID !== "" && (this.quickDivID === 16 || this.quickDivID === 15 || this.quickDivID === 14 || this.quickDivID === 13)) {
-          if(index === 1){
-            el.hide();
-            el.autoClose = true;// true;
-          }
-        }
-        });
-        this.quickDivID = "";
+      if(this.navMenuEle !== undefined){
+        this.removeHightlightBorders();
       }
-      //  this.isquicklinkclicked = false;
-      //  this.headerDropdown.forEach((el: any, index) => {
-      //  //  el.hide();
-      //    el.autoclose = true;
-      //  })
     }
     // }
   }
@@ -1713,7 +1735,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
   positionObj(){
     if(this.quickDivID !== "" && (this.quickDivID == 10)){
       return {
-        "left":"340px",
+        "left":"320px",
         "top":"70px"
       } 
     } else if(this.quickDivID !== "" && (this.quickDivID == 11)){
@@ -1723,17 +1745,17 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
       } 
     } else if(this.quickDivID !== "" && (this.quickDivID == 9)){
       return {
-        "left":"360px",
+        "left":"320px",
         "top":"170px"
       } 
     }  else if(this.quickDivID !== "" && (this.quickDivID == 8)){
       return {
-        "left":"360px",
+        "left":"320px",
         "top":"134px"
       } 
     } else if(this.quickDivID !== "" && (this.quickDivID == 7)){
       return {
-        "left":"340px",
+        "left":"320px",
         "top":"110px"
       } 
     } else if(this.quickDivID !== "" && (this.quickDivID == 4)){
@@ -1774,7 +1796,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
       }
     } else if(this.quickDivID !== "" && (this.quickDivID == 16)){
       return {
-        "left":"240px",
+        "left":"210px",
         "top":"70px"
       } 
     } else if(this.quickDivID !== "" && (this.quickDivID == 17)){
@@ -1815,12 +1837,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
       }
     } else if(this.quickDivID !== "" && (this.quickDivID == 21)){
       return {
-        "left":"490px",
+        "left":"440px",
         "top":"76px"
       }
     } else if(this.quickDivID !== "" && (this.quickDivID == 22)){
       return {
-        "left":"490px",
+        "left":"440px",
         "top":"70px"
       }
     }
@@ -1851,7 +1873,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
   onClickHideTooltip(): boolean {
     if (this.quickLinkObj !== undefined && this.actualBackdropclicked) { //!this.isuserClickedonqstooltip
       return true; // show menu on click of quickstart
-    }  else {
+    } else if (this.quickLinkObj !== undefined && this.isBackdropclicked) { 
+      return true;
+    } else {
       return false;  //hide already opened menu
     }
   }
@@ -1966,7 +1990,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
       };
       this.quickmenuService.updateQuerymenulist(quickLinkObj);
       this.quickmenuService.onClickEmitQSLinkobj.next(quickLinkObj);
-
+      this.removeHightlightBorders();
       this.headerDropdown.forEach((el) => {
             el.hide(); 
       });

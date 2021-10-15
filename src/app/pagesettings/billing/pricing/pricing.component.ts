@@ -415,34 +415,50 @@ export class PricingComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   onGenerateSessionID() {
-    const indexId = this.quickDivID == 18 ? 5 : this.quickDivID == 11 ? 4 : 3;
-    let quickLinkObj = {
-      linkid: this.quickDivID,
-      indexid:  indexId,
-      isactualbtnclicked: true,
-      islinkclicked: true
-    };
-    this.quickmenuService.onClickEmitQSLinkobj.next(quickLinkObj);
-    this.quickmenuService.updateQuerymenulist(quickLinkObj);
-    const a = this.quickmenuService.getQuerymenulist();
-    if(a.length !== 0){
-      const idx = a.findIndex((t)=>t.index == quickLinkObj.indexid);
-      if(a[idx].quicklinks.filter((t)=>t.linkid == quickLinkObj.linkid).length > 0){
-        this.loading.start()
-        this.billingService.getManageSessionID(this.constructor.name, moduleName.manageSubscriptionsModule).subscribe((res: any) => {
-          this.loading.stop();
-          if (res.status === 200) {
-            this.quickmenuService.onClickEmitQSLinkobj.next(quickLinkObj);
-            this.quickmenuService.updateQuerymenulist(quickLinkObj);
-            window.open(res.response, '_blank');
-          }
-    
-        }, err => {
-          this.loading.stop();
-          this.isOpen = true;
-          this.alertMsg = err;
-          this.alertType = 'danger';
-        });
+    if (this.quickDivID == undefined || (this.quickDivID == 0)) {
+      this.loading.start()
+      this.billingService.getManageSessionID(this.constructor.name, moduleName.manageSubscriptionsModule).subscribe((res: any) => {
+        this.loading.stop();
+        if (res.status === 200) {
+          window.open(res.response, '_blank');
+        }
+
+      }, err => {
+        this.loading.stop();
+        this.isOpen = true;
+        this.alertMsg = err;
+        this.alertType = 'danger';
+      })
+    } else if (this.quickDivID !== undefined && (this.quickDivID == 11 || this.quickDivID == 18)) {
+      const indexId = this.quickDivID == 18 ? 5 : this.quickDivID == 11 ? 4 : 3;
+      let quickLinkObj = {
+        linkid: this.quickDivID,
+        indexid: indexId,
+        isactualbtnclicked: true,
+        islinkclicked: true
+      };
+      this.quickmenuService.onClickEmitQSLinkobj.next(quickLinkObj);
+      this.quickmenuService.updateQuerymenulist(quickLinkObj);
+      const a = this.quickmenuService.getQuerymenulist();
+      if (a.length !== 0) {
+        const idx = a.findIndex((t) => t.index == quickLinkObj.indexid);
+        if (a[idx].quicklinks.filter((t) => t.linkid == quickLinkObj.linkid).length > 0) {
+          this.loading.start()
+          this.billingService.getManageSessionID(this.constructor.name, moduleName.manageSubscriptionsModule).subscribe((res: any) => {
+            this.loading.stop();
+            if (res.status === 200) {
+              this.quickmenuService.onClickEmitQSLinkobj.next(quickLinkObj);
+              this.quickmenuService.updateQuerymenulist(quickLinkObj);
+              window.open(res.response, '_blank');
+            }
+
+          }, err => {
+            this.loading.stop();
+            this.isOpen = true;
+            this.alertMsg = err;
+            this.alertType = 'danger';
+          });
+        }
       }
     }
 
