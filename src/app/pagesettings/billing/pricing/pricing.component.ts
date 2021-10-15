@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit, AfterViewInit, TemplateRef, ChangeDetectorRef} from '@angular/core';
+import {Component, OnDestroy, OnInit, AfterViewInit, AfterViewChecked, TemplateRef, ChangeDetectorRef} from '@angular/core';
 import {Router} from '@angular/router';
 import {BillingService} from '../../../_services/billing.service';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
@@ -18,7 +18,7 @@ import { QuickStart } from 'src/app/_models/quickstart';
   templateUrl: './pricing.component.html',
   styleUrls: ['./pricing.component.scss']
 })
-export class PricingComponent implements OnInit, AfterViewInit, OnDestroy {
+export class PricingComponent implements OnInit, AfterViewInit, AfterViewChecked, OnDestroy {
   private unsubscribeAfterUserAction$: Subject<any> = new Subject<any>();
   subscriptionPlan;
   planDetails: any;
@@ -439,8 +439,10 @@ export class PricingComponent implements OnInit, AfterViewInit, OnDestroy {
           this.billingService.getManageSessionID(this.constructor.name, moduleName.manageSubscriptionsModule).subscribe((res: any) => {
             this.loading.stop();
             if (res.status === 200) {
+              this.userService.onRevistQuickStartmenulink.next({quickstartid:this.quickDivID,reclickqslink:true,urlchanged:false});
               this.quickmenuService.onClickEmitQSLinkobj.next(quickLinkObj);
               this.quickmenuService.updateQuerymenulist(quickLinkObj);
+              this.checkForQsTooltip();
               window.open(res.response, '_blank');
             }
 
@@ -485,14 +487,35 @@ export class PricingComponent implements OnInit, AfterViewInit, OnDestroy {
   callForQuickStart(){
     const quicklinks = this.quickmenuService.qsMenuobjwithIndexid;
     if (quicklinks !== undefined && quicklinks.linkid == 11) {
-      this.onSetCookieConsent(2, 'dsar');
-    }else if (quicklinks !== undefined && quicklinks.linkid == 12) {
+      this.currentStep = 2;
       this.onSetCookieConsent(2, 'dsar');
     }else if (quicklinks !== undefined && quicklinks.linkid == 18) {
+      this.currentStep = 3;
       this.onSetCookieConsent(3, 'consentPreference');
     }else if (quicklinks !== undefined && quicklinks.linkid == 5) {
+      this.currentStep = 1;
       this.onSetCookieConsent(1, 'cookieConsent');
     } 
   }
 
+  getCurrentStep() {
+    if (this.quickDivID !== "") {
+      if (this.quickDivID == 11) {
+        return this.currentStep = 2;
+      } else if (this.quickDivID == 18) {
+        return this.currentStep = 3;
+      } else if (this.quickDivID == 5) {
+        return this.currentStep = 1
+      }
+    }
+  }
+
+  checkForQsTooltip(){
+    this.quickDivID = "";
+    this.userService.onRevistQuickStartmenulink.next({quickstartid:this.quickDivID,reclickqslink:true,urlchanged:true}); 
+  }
+
+  ngAfterViewChecked(){
+    this.getCurrentStep();
+  }
 }

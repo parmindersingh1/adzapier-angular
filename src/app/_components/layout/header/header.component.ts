@@ -112,7 +112,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
   actuallinkstatus:boolean = false;
   isRevistedLink:boolean = false;
   revisitedQuicklinnkid:any;
-  isUserClickedNotRelatedToTooltip:boolean;
+  isUserClickedNotRelatedToTooltip:boolean = false;
   currentLinkId:any;
   isbtnClickedbyUser;
   istopmenuclicked;
@@ -1743,7 +1743,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
     } else if(this.quickDivID !== "" && (this.quickDivID == 11)){
       return {
         "left":"107px",
-        "top":"85px"
+        "top":"200px"
       } 
     } else if(this.quickDivID !== "" && (this.quickDivID == 9)){
       return {
