@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit, AfterViewInit, TemplateRef} from '@angular/core';
+import {Component, OnDestroy, OnInit, AfterViewInit, TemplateRef, ChangeDetectorRef} from '@angular/core';
 import {Router} from '@angular/router';
 import {BillingService} from '../../../_services/billing.service';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
@@ -74,7 +74,8 @@ export class PricingComponent implements OnInit, AfterViewInit, OnDestroy {
               private userService: UserService,
               private modalService: BsModalService,
               private quickmenuService: QuickmenuService,
-              private billingService: BillingService) {
+              private billingService: BillingService,
+              private cdRef: ChangeDetectorRef) {
               this.onGetActivePlan();
   }
 
@@ -82,17 +83,6 @@ export class PricingComponent implements OnInit, AfterViewInit, OnDestroy {
     this.quickmenuService.onClickEmitQSLinkobj.subscribe((res) => { 
       this.quickDivID = res.linkid;
     });
-   // this.userService.addUserActionOnActualButton.next({quickstartid:5,isclicked:null,isactualbtnclicked:false});
-     
-    // this.userService.isClickedOnQSMenu.pipe(
-    //   takeUntil(this.unsubscribeAfterUserAction$)
-
-    // ).subscribe((status)=>{
-    //   this.isquickstartmenu = status.isclicked;
-    //   this.quickDivID = status.quickstartid;
-      
-    // });
-    //this.quickDivID = 5;
     //this.userService.isRevisitedQSMenuLink.subscribe((status) => { this.isRevistedLink = status.reclickqslink; this.currentLinkID = status.quickstartid; });
     // this.onGetPlanCompareData()
     this.onGetActivePlan();
@@ -203,6 +193,8 @@ export class PricingComponent implements OnInit, AfterViewInit, OnDestroy {
     element.style.margin = null;
     element.classList.add('container');
     element.classList.add('site-content');
+    this.quickDivID = "";
+    this.unsubscribeAfterUserAction$.unsubscribe();
   }
 
   onGetUserEmail() {
@@ -429,7 +421,7 @@ export class PricingComponent implements OnInit, AfterViewInit, OnDestroy {
         this.alertMsg = err;
         this.alertType = 'danger';
       })
-    } else if (this.quickDivID !== undefined && (this.quickDivID == 11 || this.quickDivID == 18)) {
+    } else if (this.quickDivID !== undefined && (this.quickDivID == 11 || this.quickDivID == 18 || this.quickDivID == 5)) {
       const indexId = this.quickDivID == 18 ? 5 : this.quickDivID == 11 ? 4 : 3;
       let quickLinkObj = {
         linkid: this.quickDivID,
@@ -469,17 +461,22 @@ export class PricingComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   onSetCookieConsent(type, featureCompareType) {
-    this.currentFeature = featureCompareType;
- this.currentStep = type;
-  this.cookieConsentBillingCycle = 'monthly';
-    this.subscriptionList = this.planDetails.cookieConsent[`${this.cookieConsentBillingCycle}`];
-    this.dsarPlanList = this.planDetails.dsar[`${this.cookieConsentBillingCycle}`];
-    this.consentPreferenceList = this.planDetails.consentPreference[`${this.cookieConsentBillingCycle}`];
-}
+    if (this.planDetails !== undefined) {
+      this.currentFeature = featureCompareType;
+      this.currentStep = type;
+      this.cookieConsentBillingCycle = 'monthly';
+      this.subscriptionList = this.planDetails.cookieConsent[`${this.cookieConsentBillingCycle}`];
+      this.dsarPlanList = this.planDetails.dsar[`${this.cookieConsentBillingCycle}`];
+      this.consentPreferenceList = this.planDetails.consentPreference[`${this.cookieConsentBillingCycle}`];
+    }
+  }
 
   ngAfterViewInit(){
-    console.log('first pricing..comp..');
+    this.quickmenuService.onClickEmitQSLinkobj.subscribe((res) => { 
+      this.quickDivID = res.linkid;
+    });
     this.onGetPlanDetails();
+    this.cdRef.detectChanges();
     if(this.planDetails !== undefined){
       this.callForQuickStart();
     }

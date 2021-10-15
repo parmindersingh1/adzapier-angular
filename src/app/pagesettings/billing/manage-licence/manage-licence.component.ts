@@ -52,7 +52,6 @@ export class ManageLicenceComponent implements OnInit {
     ).subscribe((res) => { 
       this.quickDivID = res.linkid;
     });
-    console.log(this.quickDivID,'quickDivID51');
     this.activatedRoute.queryParamMap
       .subscribe(params => {
       this.queryOID = params.get('oid');
@@ -180,10 +179,10 @@ export class ManageLicenceComponent implements OnInit {
         if (a.length !== 0) {
           const idx = a.findIndex((t) => t.index == quickLinkObj.indexid);
 
-          if (a[idx].quicklinks.some((t) => t.linkid == quickLinkObj.linkid && t.isactualbtnclicked)) {
+          if (a[idx].quicklinks.some((t) => t.linkid == res.linkid && t.isactualbtnclicked)) {
             this.quickDivID = "";
             this.router.navigate(['/settings/billing/manage/organizations', planid], { queryParams: { oid: this.queryOID, pid: this.queryPID }, queryParamsHandling: 'merge', skipLocationChange: false });
-          } else if (a[idx].quicklinks.some((t) => t.linkid == quickLinkObj.linkid && !t.isactualbtnclicked)) {
+          } else if (a[idx].quicklinks.some((t) => t.linkid == res.linkid && !t.isactualbtnclicked)) {
             this.quickDivID = quickLinkObj.linkid;
           }
         }

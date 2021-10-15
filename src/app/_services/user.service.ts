@@ -33,7 +33,7 @@ export class UserService {
         return this.userActionOnQuickstart.asObservable();
     }
 
-    public onRevistQuickStartmenulink: BehaviorSubject<UserActionOnQuickstartv2> = new BehaviorSubject<UserActionOnQuickstartv2>({ quickstartid:0, reclickqslink:false});
+    public onRevistQuickStartmenulink: BehaviorSubject<UserActionOnQuickstartv2> = new BehaviorSubject<UserActionOnQuickstartv2>({ quickstartid:0, reclickqslink:false, urlchanged:false});
     //public onClickQuickStartmenu: BehaviorSubject<any> = new BehaviorSubject<any>(false);
     get isRevisitedQSMenuLink() {
         return this.onRevistQuickStartmenulink.asObservable();
@@ -251,6 +251,7 @@ export class UserActionOnQuickstart {
 
 export class UserActionOnQuickstartv2 {
     public quickstartid: number;
+    public urlchanged:boolean | any;
     // public isclicked: boolean | any;
     // public isactualbtnclicked: boolean | any;
     public reclickqslink:boolean | any;
