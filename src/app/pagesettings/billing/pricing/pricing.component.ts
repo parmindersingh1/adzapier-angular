@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit, AfterViewInit, AfterViewChecked, TemplateRef, ChangeDetectorRef} from '@angular/core';
+import {Component, OnInit, AfterViewInit, TemplateRef, ChangeDetectorRef} from '@angular/core';
 import {Router} from '@angular/router';
 import {BillingService} from '../../../_services/billing.service';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
@@ -11,14 +11,13 @@ import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { QuickmenuService } from 'src/app/_services/quickmenu.service';
-import { QuickStart } from 'src/app/_models/quickstart';
 
 @Component({
   selector: 'app-pricing',
   templateUrl: './pricing.component.html',
   styleUrls: ['./pricing.component.scss']
 })
-export class PricingComponent implements OnInit, AfterViewInit, AfterViewChecked, OnDestroy {
+export class PricingComponent implements OnInit, AfterViewInit {
   private unsubscribeAfterUserAction$: Subject<any> = new Subject<any>();
   subscriptionPlan;
   planDetails: any;
@@ -82,6 +81,7 @@ export class PricingComponent implements OnInit, AfterViewInit, AfterViewChecked
   ngOnInit() {
     this.quickmenuService.onClickEmitQSLinkobj.subscribe((res) => { 
       this.quickDivID = res.linkid;
+      this.callForQuickStart();
     });
     //this.userService.isRevisitedQSMenuLink.subscribe((status) => { this.isRevistedLink = status.reclickqslink; this.currentLinkID = status.quickstartid; });
     // this.onGetPlanCompareData()
@@ -498,24 +498,10 @@ export class PricingComponent implements OnInit, AfterViewInit, AfterViewChecked
     } 
   }
 
-  getCurrentStep() {
-    if (this.quickDivID !== "") {
-      if (this.quickDivID == 11) {
-        return this.currentStep = 2;
-      } else if (this.quickDivID == 18) {
-        return this.currentStep = 3;
-      } else if (this.quickDivID == 5) {
-        return this.currentStep = 1
-      }
-    }
-  }
 
   checkForQsTooltip(){
-    this.quickDivID = "";
     this.userService.onRevistQuickStartmenulink.next({quickstartid:this.quickDivID,reclickqslink:true,urlchanged:true}); 
+    this.quickDivID = "";    
   }
 
-  ngAfterViewChecked(){
-    this.getCurrentStep();
-  }
 }

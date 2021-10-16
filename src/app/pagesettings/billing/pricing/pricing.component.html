@@ -246,12 +246,12 @@
               <li class="text-left feature-list"
                   *ngFor="let  features of highLightFeatures.dsar.enterprise">{{features.featureName}}
                 <span class="font-weight-bold" *ngIf="features.featureValue"> - {{features.featureValue}}</span></li>
-              <a class="more-details-text" (click)="openModal(template)">View Comparison</a>
+              <a class="more-details-text" (click)="openModal(template);checkForQsTooltip()">View Comparison</a>
 
             </ul>
             <h2 class="tx-rubik tx-normal ">Contact Us</h2>
             <p class="tx-size-10 mg-b-30 "></p>
-            <a href="https://adzapier.com/get-started/" target="_blank"
+            <a href="https://adzapier.com/get-started/" target="_blank" (click)="checkForQsTooltip()"
               class="enterprise-btn btn mb-4 add-to-cart-btn btn-primary btn-block">Get Enterprise</a>
           </div><!-- col -->
         </div>
