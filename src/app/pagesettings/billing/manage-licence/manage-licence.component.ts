@@ -144,20 +144,16 @@ export class ManageLicenceComponent implements OnInit {
       this.quickmenuService.onClickEmitQSLinkobj.next(quickLinkObj);
       this.userService.onRevistQuickStartmenulink.next({quickstartid:this.quickDivID,reclickqslink:true,urlchanged:false});
       const a = this.quickmenuService.getQuerymenulist();
-      this.quickmenuService.onClickEmitQSLinkobj.pipe(
-        takeUntil(this.unsubscribeAfterUserAction$)
-      ).subscribe((res) => {
         if (a.length !== 0) {
           const idx = a.findIndex((t) => t.index == quickLinkObj.indexid);
-          if (a[idx].quicklinks.some((t) => t.linkid == res.linkid && t.isactualbtnclicked)) {
+          if (a[idx].quicklinks.some((t) => t.linkid == quickLinkObj.linkid && t.isactualbtnclicked)) {
             this.quickDivID = "";
             this.router.navigate(['/settings/billing/manage/property', planid], { queryParams: { oid: this.queryOID, pid: this.queryPID }, queryParamsHandling: 'merge', skipLocationChange: false });
-          } else if (a[idx].quicklinks.some((t) => t.linkid == res.linkid && !t.isactualbtnclicked)) {
+          } else if (a[idx].quicklinks.some((t) => t.linkid == quickLinkObj.linkid && !t.isactualbtnclicked)) {
             this.quickDivID = "";
             this.router.navigate(['/settings/billing/manage/property', planid], { queryParams: { oid: this.queryOID, pid: this.queryPID }, queryParamsHandling: 'merge', skipLocationChange: false });
           }
         }
-      });
     } else {
       this.checkForQsTooltip();
       this.router.navigate(['/settings/billing/manage/property', planid], { queryParams: { oid: this.queryOID, pid: this.queryPID }, queryParamsHandling: 'merge', skipLocationChange: false });
@@ -181,21 +177,17 @@ export class ManageLicenceComponent implements OnInit {
       this.userService.onRevistQuickStartmenulink.next({quickstartid:this.quickDivID,reclickqslink:true,urlchanged:false});
       this.quickDivID = "";
       const a = this.quickmenuService.getQuerymenulist();
-      this.quickmenuService.onClickEmitQSLinkobj.pipe(
-        takeUntil(this.unsubscribeAfterUserAction$)
-      ).subscribe((res) => {
         if (a.length !== 0) {
           const idx = a.findIndex((t) => t.index == quickLinkObj.indexid);
 
-          if (a[idx].quicklinks.some((t) => t.linkid == res.linkid && t.isactualbtnclicked)) {
+          if (a[idx].quicklinks.some((t) => t.linkid == quickLinkObj.linkid && t.isactualbtnclicked)) {
             this.quickDivID = "";
             
             this.router.navigate(['/settings/billing/manage/organizations', planid], { queryParams: { oid: this.queryOID, pid: this.queryPID }, queryParamsHandling: 'merge', skipLocationChange: false });
-          } else if (a[idx].quicklinks.some((t) => t.linkid == res.linkid && !t.isactualbtnclicked)) {
+          } else if (a[idx].quicklinks.some((t) => t.linkid == quickLinkObj.linkid && !t.isactualbtnclicked)) {
             this.quickDivID = "";
           }
         }
-      });
     } else {
       this.checkForQsTooltip();
       this.router.navigate(['/settings/billing/manage/organizations', planid], { queryParams: { oid: this.queryOID, pid: this.queryPID }, queryParamsHandling: 'merge', skipLocationChange: false });
