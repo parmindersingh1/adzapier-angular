@@ -103,6 +103,7 @@ export class QuickstartmenuComponent implements OnInit, AfterViewInit,AfterViewC
     this.quickmenuService.isquickmenudismiss = true;
     this.enablequickstartfromtopmenu = true;
     this.quickmenuService.onDissmissQuickStartmenu.next(true); 
+    this.quickmenuService.headerNavStatusAfterDismissedQuickStart.next(false);
   }
 
   
