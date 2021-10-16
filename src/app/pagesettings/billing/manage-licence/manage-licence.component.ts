@@ -159,6 +159,7 @@ export class ManageLicenceComponent implements OnInit {
         }
       });
     } else {
+      this.checkForQsTooltip();
       this.router.navigate(['/settings/billing/manage/property', planid], { queryParams: { oid: this.queryOID, pid: this.queryPID }, queryParamsHandling: 'merge', skipLocationChange: false });
     }
 
@@ -196,6 +197,7 @@ export class ManageLicenceComponent implements OnInit {
         }
       });
     } else {
+      this.checkForQsTooltip();
       this.router.navigate(['/settings/billing/manage/organizations', planid], { queryParams: { oid: this.queryOID, pid: this.queryPID }, queryParamsHandling: 'merge', skipLocationChange: false });
     }
 
