@@ -1,20 +1,43 @@
+$guidancediv-bgcolor: #385a8e;
+$guidancediv-bgcolor-two: #385a8e;
+
+
+.quickclosebtn {
+  float: right;
+  top: -29px;
+  position: absolute;
+  z-index: 1200;
+  line-height: 23px;
+  height: 26px;
+  width: 27px;
+  font-size: 24px;
+  background: #ffffff;
+  border: 1px solid #1b365d;
+  right: -1px;
+  border-radius: 26px;
+}
+
+.quickclosebtn:focus {
+  outline: none;
+}
+
 .quickstart-wrapper {
     width: 300px;
     border: 1px solid #ccc;
     background: #ffffff;
     position: fixed;
-    padding-bottom: 30px;
     bottom: 40px;
     flex-direction: column;
     display: flex;
-    right: 20px;
+    right: 0;
+    
 }
 
 .quickstart-btn {
     z-index: 1200;
     right: 10px;
     position: fixed;
-    bottom: 40px;
+    bottom: 5px;
     top: auto;
 }
 
@@ -40,6 +63,20 @@
     color:gray
 }
 
+.guidencediv{
+  width: 250px;
+  border: 1px solid $guidancediv-bgcolor;
+  border-radius: 6px;
+  box-shadow: 0px 0px 7px #000000;
+  position: fixed;
+  background-color: $guidancediv-bgcolor;
+  box-sizing: content-box;
+  /* height: 70px; */
+  padding: 10px;
+  top: 20px;
+  color: #ffffff;
+  z-index: 1200;
+}
 
 accordion-group {
     ::ng-deep {
@@ -48,6 +85,13 @@ accordion-group {
             margin: 0;
             padding: 0;
             list-style-type: none;
+        }  li {
+           padding: 0;
+           margin: 0;
+        }  a {
+          display: flex;
+          flex-direction: row;
+          padding: 2px 0;
         }
         &>div.panel-heading.card-header.panel-enabled {
             padding: 0;
@@ -61,6 +105,8 @@ accordion-group {
         &>div.panel-collapse.collapse.in.show>div {
           background-color: hsla(210, 10%, 83%, 0.10); // change the expanded content style
         }
+
+        
       }
     }
 }

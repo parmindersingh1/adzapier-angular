@@ -1,7 +1,7 @@
-import { AfterViewChecked, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { AfterViewChecked, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, HostListener, OnDestroy, OnInit, Renderer2, TemplateRef, ViewChild, Input, OnChanges, QueryList, ViewChildren, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { Router, ActivatedRoute, NavigationEnd, NavigationStart } from '@angular/router';
 import { OrganizationService, AuthenticationService, UserService } from '../../../_services';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { Organization } from 'src/app/_models/organization';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { moduleName } from 'src/app/_constant/module-name.constant';
@@ -9,7 +9,10 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Location } from '@angular/common';
 import { DataService } from 'src/app/_services/data.service';
 import { featuresName } from '../../../_constant/features-name.constant';
-import { debounceTime, filter } from 'rxjs/operators';
+import { BsDropdownDirective } from 'ngx-bootstrap/dropdown';
+import { QuickmenuService } from 'src/app/_services/quickmenu.service';
+import { QuickStart } from 'src/app/_models/quickstart';
+import { takeUntil } from 'rxjs/operators';
 
 
 @Component({
@@ -18,8 +21,20 @@ import { debounceTime, filter } from 'rxjs/operators';
   styleUrls: ['./header.component.scss'],
   changeDetection: ChangeDetectionStrategy.Default
 })
-export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
+export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked, OnChanges, OnDestroy {
+  private unsubscribeAfterUserAction$: Subject<any> = new Subject<any>();
+  @Input() isquicklinkclicked:boolean;
+  @Input() qslinkobj:any;
+  @Input() isqsmenuopen:boolean = false;
+  //@Input() isclickonpage:boolean = false; // for later use
   @ViewChild('confirmTemplate') confirmModal: TemplateRef<any>;
+  @ViewChildren(BsDropdownDirective) headerDropdown:QueryList<BsDropdownDirective>;
+  @ViewChild('navMenu', { static: false }) navMenuEle: ElementRef;
+  @ViewChild('headerNavbar', { static: false }) headerNavbarEle: ElementRef;  
+  @ViewChild('dpTriggers',{static:false}) dropdownTriggers:ElementRef;
+  @ViewChild('orgPropNavBar', { static: false }) orgPropNavBar: ElementRef;  
+  qsMenuClick$ = this.userService.isClickedOnQSMenu;
+  isRevisitedQSMenuLink$ = this.userService.isRevisitedQSMenuLink;
   modalRef: BsModalRef;
   isCollapsed = true;
   isMobileMenuCollapsed = false;
@@ -92,7 +107,42 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
   queryPID;
   initialPropertyID;
   initialOrgID;
+  isquickstartmenuheader:any;
+  quickDivID;
+  quickDivIDSub;
+  actuallinkstatus:boolean = false;
+  isRevistedLink:boolean = false;
+  revisitedQuicklinnkid:any;
+  isUserClickedNotRelatedToTooltip:boolean = false;
+  currentLinkId:any;
+  isbtnClickedbyUser;
+  istopmenuclicked;
+  isdocumentclicked:boolean = false;
+  isInitialDocumentclick:boolean = false;
+  isUserClickonMenu:boolean = false;
+  currentClickedMenuItem:any;
+  quickLinkObj;
+  alertguidetext;
+  alertcontent;
+  quickLinkStatus:boolean;
+  userclickedoutside:boolean;
+  userclickedfromqsmenu:boolean;
+  isuserClickedonqstooltip:boolean = false;
+  isUserVistedActualLinkWithTooltip:boolean = false;
+  isHeaderNavbarClicked:boolean = false;
+  headerNavbarStatusAfterQSDismiss:boolean = false;
+  isBackdropclicked:boolean = false;
+  isUserclickedActualLink:boolean = false;
+  isloginpage:boolean = false;
+  actualBackdropclicked:boolean = false;
+  storeDropdownstatus:boolean = false;
+  lastopendp:any = [];
+  laststoreddp:any = [];
   isShowDashboardConsent = false;
+  actualLinkVisitStatus = false;
+  actualLinkObj:any;
+  @Output() onClickEnableQuickStartMenu: EventEmitter<any> = new EventEmitter<any>();
+  quickstartmenustatus:any;
   constructor(
     private router: Router,
     private activatedroute: ActivatedRoute,
@@ -103,9 +153,14 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
     private bsmodalService: BsModalService,
     private dataService: DataService,
     private location: Location,
-    private cdRef: ChangeDetectorRef
+    private cdRef: ChangeDetectorRef,
+    private renderer: Renderer2,
+    private elRef:ElementRef,
+    private quickmenuService:QuickmenuService
   ) {
-   
+    this.userclickedoutside = this.quickmenuService.isclickeventoutsidemenu;
+    this.isuserClickedonqstooltip = this.quickmenuService.isuserClickedonqstooltip;
+    this.quickLinkObj = this.quickmenuService.qsMenuobjwithIndexid;
     this.authService.currentUser.subscribe(x => {
       this.currentUser = x;
       if (this.currentUser) {
@@ -128,7 +183,15 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
       }
     });
    
-
+    this.quickmenuService.onClickEmitQSLinkobj.subscribe((data) => {
+      //this.actuallinkstatus = data.isactualbtnclicked;
+      if(data.islinkclicked && data.isactualbtnclicked){
+        this.isBackdropclicked = false;
+        this.actuallinkstatus = true;
+        //this.actualBackdropclicked = true;
+      }
+      
+    })
     // this.router.routeReuseStrategy.shouldReuseRoute = () => {
     //   return false;
     // };
@@ -162,9 +225,24 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
         this.loadNotification();
       }
     });
+  //  this.isloginpage = this.location.path().indexOf('login') == -1 && this.location.path().indexOf('signup') == -1;
+  // this.renderer.listen('window', 'click', (e:Event) => {
+  //   if(e.target === this.dropdownTriggers.nativeElement){
+  //   }
+   
+  // });
   }
 
   ngOnInit() {
+    this.quickmenuService.onClickEmitQSLinkobj.pipe(
+      takeUntil(this.unsubscribeAfterUserAction$)
+    ).subscribe((res) => { 
+      this.actualLinkObj = res;
+      this.quickDivIDSub = res.linkid;
+    });
+    this.isLoginOrSignupPage();
+  //  this.isloginpage = this.location.path().indexOf('login') == -1 && this.location.path().indexOf('signup') == -1;
+    this.userService.onClickTopmenu.subscribe((status) => this.istopmenuclicked = status);
  //   this.loadOrganizationWithProperty();
  //this.router.routeReuseStrategy.shouldReuseRoute = () => false;
  this.activatedroute.queryParamMap
@@ -309,49 +387,50 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
           label: 'User', icon: 'assets/imgs/glass.jpg',
           items: [
             { label: 'User Preferences', routerLink: '/userprofile', icon: 'edit-3' },
-            { label: 'Organizations', routerLink: '/settings/organizations', icon: 'activity' },
+            { label: 'Organizations', routerLink: '/settings/organizations', icon: 'activity',navmenuid:2 },
             { label: 'Billing', routerLink: '/settings/billing/manage', icon: 'credit-card' },
             { label: 'Settings', routerLink: '/settings', icon: 'settings' },
             { label: 'Help Center', routerLink: 'https://support.adzapier.com', icon: 'help-circle' },
+            { label: 'Quick Start', routerLink: '/', icon: 'external-link' },
             { label: 'Signout', routerLink: '/signout', icon: 'log-out' }
           ]
         }];
       this.navigationMenu = [
-        // {
+        // { 
         //   showlink: 'Dashboard',
-        //   subcategory: [{ showlink: 'DSAR', routerLink: '/home/dashboard/ccpa-dsar', icon: 'bar-chart-2' },
+        //   subcategory: [{ showlink: 'DSAR', routerLink: '/home/dashboard/ccpa-dsar', icon: 'bar-chart-2',indexid:4, navmenuid:16  },
         //   // { showlink: 'GDPR', routerLink: '/pagenotfound', icon: 'pie-chart' },
-        //   { showlink: 'Cookie Consent', routerLink: '/home/dashboard/cookie-consent', icon: 'fas fa-cookie feather-16' },
-        //   { showlink: 'Consent Preference', routerLink: '/home/dashboard/consent-preference', icon: 'fas fa-cookie feather-16' }
+        //   { showlink: 'Cookie Consent', routerLink: '/home/dashboard/cookie-consent', icon: 'fas fa-cookie feather-16',indexid:3,navmenuid:10 },
+        //   { showlink: 'Consent Preference', routerLink: '/home/dashboard/consent-preference', icon: 'fas fa-cookie feather-16',indexid:5,navmenuid:18 }
         //   ]
         // },
         { 
           showlink: 'DSAR',
           tooltip:'Data Subject Access Request',
         subcategory: [
-          { showlink: 'Dashboard', routerLink: '/home/dashboard/ccpa-dsar', icon: 'bar-chart-2' },
-          { showlink: 'Webforms', routerLink: '/privacy/dsar/webforms', icon: 'pie-chart' },
-          { showlink: 'Requests', routerLink: '/privacy/dsar/requests', icon: 'fa fa-ticket-alt feather-16' },
-          { showlink: 'Workflow', routerLink: '/privacy/dsar/workflows', icon: 'fas fa-sitemap' },
+          { showlink: 'Dashboard', routerLink: '/home/dashboard/ccpa-dsar', icon: 'bar-chart-2', indexid:4, navmenuid:16 },
+          { showlink: 'Webforms', routerLink: '/privacy/dsar/webforms', icon: 'pie-chart',indexid:4,navmenuid:14 },
+          { showlink: 'Requests', routerLink: '/privacy/dsar/requests', icon: 'fa fa-ticket-alt feather-16',indexid:4,navmenuid:15 },
+          { showlink: 'Workflow', routerLink: '/privacy/dsar/workflows', icon: 'fas fa-sitemap',indexid:4,navmenuid:13 },
         ]
   
         },
       {
         showlink: 'Cookie Consent',
         subcategory: [
-          { showlink: 'Dashboard', routerLink: '/home/dashboard/cookie-consent', icon: 'fas fa-cookie feather-16' },
+          { showlink: 'Dashboard', routerLink: '/home/dashboard/cookie-consent', icon: 'bar-chart-2',indexid:3,navmenuid:10 },
           { showlink: 'Manage Vendors', routerLink: '/cookie-consent/manage-vendors', icon: 'fas fa-tasks feather-16' },
-          { showlink: 'Cookie Category', routerLink: '/cookie-consent/cookie-category', icon: 'fab fa-microsoft feather-16' },
-          { showlink: 'Cookie Banner', routerLink: '/cookie-consent/cookie-banner', icon: 'fas fa-cookie feather-16' },
-          { showlink: 'Consent Tracking', routerLink: '/cookie-consent/cookie-tracking', icon: 'fas fa-file-contract feather-16' },
+          { showlink: 'Cookie Category', routerLink: '/cookie-consent/cookie-category', icon: 'fab fa-microsoft feather-16',indexid:3,navmenuid:7 },
+          { showlink: 'Cookie Banner', routerLink: '/cookie-consent/cookie-banner', icon: 'fas fa-cookie feather-16',indexid:3,navmenuid:8 },
+          { showlink: 'Consent Tracking', routerLink: '/cookie-consent/cookie-tracking', icon: 'fas fa-file-contract feather-16',indexid:3,navmenuid:9 },
           { showlink: 'Setup', routerLink: '/cookie-consent/cookie-banner/setup', icon: 'fas fa-wrench feather-16' },
         ]
       },{
       showlink: 'Consent Preference',
         subcategory: [
-          { showlink: 'Dashboard', routerLink: '/home/dashboard/consent-preference', icon: 'fas fa-chart-line feather-16' },
-          { showlink: 'Consent Records', routerLink: '/consent-solutions/consent-records', icon: 'fas fa-tasks feather-16' },
-          { showlink: 'Setup', routerLink: '/consent-solutions/setup', icon: 'fas fa-wrench feather-16' },
+          { showlink: 'Dashboard', routerLink: '/home/dashboard/consent-preference', icon: 'bar-chart-2',indexid:5,navmenuid:22 },
+          { showlink: 'Consent Records', routerLink: '/consent-solutions/consent-records', icon: 'fas fa-tasks feather-16',indexid:5,navmenuid:21 },
+          { showlink: 'Setup', routerLink: '/consent-solutions/setup', icon: 'fas fa-wrench feather-16',indexid:5,navmenuid:20 },
         ]
       }
         // { showlink: 'Billing', routerLink: '/settings/billing/manage' }
@@ -555,7 +634,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
     }, (error) => {
       this.loading.stop();
     }, () => {
-      console.log('complete..');
       if(this.currentNavigationUrl !== undefined){
       this.oIDPIDFromURL= this.findPropertyIDFromUrl(this.currentNavigationUrl || this.location.path());//updatedUrlWithPID
       }
@@ -629,7 +707,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
               }
          
          const propobj = activePro !== undefined && activePro.property.filter((el)=>el.property_id === this.oIDPIDFromURL[1]);
-         if(propobj){
+         if(propobj !== undefined && propobj.length !== 0){
          const obj = {
           organization_id: activePro.id,
           organization_name: activePro.orgname,
@@ -755,6 +833,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   goto(link: any, id?: any) {
+    if(this.quickDivID == link.navmenuid){//this.qslinkobj.linkid 
+      this.updateQuickLinkStatus(link);
+      this.isUserclickedActualLink = true;
+    }
+    this.onClickBackdrop();
     this.oIDPIDFromURL= this.findPropertyIDFromUrl(this.location.path());
     this.currentNavigationUrl = link.routerLink == '/' ? '/home/welcome' : link.routerLink + "?oid="+ this.queryOID +"&pid="+this.queryPID;
     if (link.routerLink === '/home/dashboard/cookie-consent' || link.routerLink === '/cookie-consent/manage-vendors' || link.routerLink === '/cookie-consent/cookie-category'
@@ -1246,6 +1329,18 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   btnTopAddSubscription() {
+    let quickLinkObj: QuickStart = {
+      linkid: this.quickDivIDSub,
+      indexid: 2,
+      isactualbtnclicked: true,
+      islinkclicked: true,
+      divguidetext: "subscription",
+      linkdisplaytext: "Subscription",
+      link: "/settings/billing/pricing"
+    };
+    this.quickmenuService.updateQuerymenulist(quickLinkObj);
+    this.quickmenuService.onClickEmitQSLinkobj.next(quickLinkObj);
+    this.quickDivIDSub = "";
     this.router.navigate(['/settings/billing/pricing'],{ queryParams: { oid: this.queryOID, pid: this.queryPID }, queryParamsHandling:'merge', skipLocationChange:false});
   }
 
@@ -1396,6 +1491,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit() {
+    this.userclickedoutside = this.quickmenuService.isclickeventoutsidemenu;
+    if(this.isquicklinkclicked){
+      this.isBackdropclicked = false;
+    }
+    this.cdRef.detectChanges();
     this.activatedroute.queryParamMap.subscribe(params => {
       this.queryOID = params.get('oid');
       this.queryPID = params.get('pid');
@@ -1421,7 +1521,619 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
       } else {
         this.router.navigate(['/login']);
       }
+      this.cdRef.detectChanges();
+  }
+
+  isTopMenuOpen($event){
+   // console.log($event,'1348..');
+    this.userService.onClickTopmenu.emit(true);
+  }
+
+  ngAfterViewChecked(){
+    this.userService.isRevisitedQSMenuLink.subscribe((status) => { this.isRevistedLink = status.reclickqslink; this.revisitedQuicklinnkid = status.quickstartid; this.isUserClickedNotRelatedToTooltip = status.urlchanged  });
+    //header navbar status clicked status false when Quick start dismiss true
+    this.quickmenuService.isQSMenuDissmissed.subscribe((status) => this.quickstartmenustatus = status)
+    this.quickmenuService.isHeaderNavClickedAfterQSDissmissed.subscribe((status) => this.headerNavbarStatusAfterQSDismiss = status)
+    if (this.quickstartmenustatus && !this.headerNavbarStatusAfterQSDismiss) {
+      this.onClickBackdrop();
+      this.quickmenuService.headerNavStatusAfterDismissedQuickStart.next(true);
+    } else if(this.quickstartmenustatus && this.headerNavbarStatusAfterQSDismiss){ //enable header nav while qs dismiss true
+      this.actualBackdropclicked = false;
+    }
     
+   // this.isloginpage = this.location.path().indexOf('login') == -1 && this.location.path().indexOf('signup') == -1;
+    let actuallinkvisitatqs = this.isQuicklinkActuallinkVisited();
+    if(actuallinkvisitatqs !== this.actualLinkVisitStatus){
+      this.actualLinkVisitStatus = actuallinkvisitatqs;
+      this.cdRef.detectChanges();
+    }
+    
+    //console.log(this.qslinkobj,'qslinkobj..ngAfterChecked..1523..3');
+ //   this.isloginpage = this.location.path().indexOf('login') == -1 && this.location.path().indexOf('signup') == -1;
+    this.isqsmenuopen = this.quickmenuService.isquickstartopen;
+    if(this.qslinkobj !== undefined){
+     // this.isBackdropclicked = false;
+      if(this.qslinkobj.isactualbtnclicked && this.qslinkobj.islinkclicked){
+        //this.isBackdropclicked = false;
+        this.actuallinkstatus = true;
+      }
+      
+      //this.quickDivID = this.qslinkobj.linkid;
+      this.quickLinkStatus = this.qslinkobj.islinkclicked;
+      //this.actualBackdropclicked = false;
+    //  this.isBackdropclicked = !this.isBackdropclicked;
+    }
+    if (this.actualBackdropclicked) {
+      this.removeHightlightBorders();
+      if (this.isBackdropclicked && this.actuallinkstatus) {
+        this.actuallinkstatus = false;
+      }
+    }
+
+    if(!this.actualBackdropclicked){
+      this.isBackdropclicked = false;
+    }
+     
+    // if(this.qslinkobj.islinkclicked && this.qslinkobj.isactualbtnclicked){
+    //   this.isBackdropclicked = false;
+    // }
+    
+  //  console.log(this.isqsmenuopen,'isqsmenuopen..1503')
+   // console.log(this.qslinkobj,'qslinkobj..')
+    this.userclickedoutside = this.quickmenuService.isclickeventoutsidemenu;
+    this.userclickedfromqsmenu = this.quickmenuService.isclickeventfromquickmenu;
+    this.isuserClickedonqstooltip = this.quickmenuService.isuserClickedonqstooltip;
+    
+  // console.log(this.isuserClickedonqstooltip);
+    if (this.isuserClickedonqstooltip) {
+      this.quickLinkObj = {};
+      Object.values(this.quickLinkObj).length = 0;
+    }
+    //console.log(this.userclickedoutside,'userclickedoutside..');
+    this.isBillingpageQuickid();
+    if(!this.actualBackdropclicked){ // && !this.userclickedoutside && !this.isHeaderNavbarClicked
+      // for(let i = 0; i < this.dropdownTriggers.nativeElement.querySelectorAll('div > div > ul').length; i++){
+      //      this.renderer.removeClass(this.dropdownTriggers.nativeElement.querySelectorAll('div > div > ul')[i], 'addbg-menuitem');
+      //  }
+      if (this.quickLinkObj !== undefined && (this.quickLinkObj.indexid == 4 && this.quickLinkObj.linkid == 11 || this.quickLinkObj.linkid == 12 )) {
+        this.renderer.removeClass(this.navMenuEle.nativeElement.querySelectorAll('li > div')[0], 'highlightmenu-element');
+        this.lastopendp = [];
+      } else if (this.quickLinkObj !== undefined && (this.quickLinkObj.indexid == 3 && this.quickLinkObj.linkid == 5 || this.quickLinkObj.linkid == 6 )) {
+        this.renderer.removeClass(this.navMenuEle.nativeElement.querySelectorAll('li > div')[2], 'highlightmenu-element');
+        this.lastopendp = [];
+      } else if (this.quickLinkObj !== undefined && (this.quickLinkObj.indexid == 5 && this.quickLinkObj.linkid == 18 || this.quickLinkObj.linkid == 19 )) {
+        this.renderer.removeClass(this.navMenuEle.nativeElement.querySelectorAll('li > div')[2], 'highlightmenu-element');
+        this.lastopendp = [];
+      } 
+     
+    }
+    if(!this.isqsmenuopen && this.qslinkobj !== undefined ){ // this.quickLinkObj !== undefined // Object.values(this.qslinkobj).length !== 0 //|| Object.values(this.qslinkobj).length !== 0
+      if(Object.values(this.qslinkobj).length !==0 ){
+        this.addBordertoDropdownMenu();
+      }
+    }
+  }
+ 
+  onClickBackdrop() {
+    //this.lastopendp = [];
+    this.isBackdropclicked = true;
+    this.actualBackdropclicked = true;// !this.actualBackdropclicked;
+    this.removeHightlightBorders();
+
+    if (this.isquicklinkclicked && this.actuallinkstatus) {
+      this.isBackdropclicked = false;
+      this.actualBackdropclicked = false;
+      this.actuallinkstatus = false;
+    }
+ 
+    if (this.dropdownTriggers !== undefined) {
+      for (let i = 0; i < this.dropdownTriggers.nativeElement.querySelectorAll('div > div > ul').length; i++) {
+        this.renderer.removeClass(this.dropdownTriggers.nativeElement.querySelectorAll('div > div > ul')[i], 'addbg-menuitem');
+      }
+    } else if (this.navMenuEle !== undefined) {
+      this.renderer.removeClass(this.navMenuEle.nativeElement.querySelectorAll('li > div')[1], 'highlightmenu-element');
+      this.renderer.removeClass(this.navMenuEle.nativeElement.querySelectorAll('li > div')[0], 'highlightmenu-element');
+    } else if (this.quickLinkObj !== undefined) {
+      this.renderer.removeClass(this.navMenuEle.nativeElement.querySelectorAll('li > div')[0], 'highlightmenu-element');
+    }
+    if (this.qslinkobj !== undefined) {
+      if (this.qslinkobj.islinkclicked && this.qslinkobj.isactualbtnclicked && !this.isquicklinkclicked && !this.actuallinkstatus) {
+        this.isBackdropclicked = true;
+      } else {
+        this.isquicklinkclicked = !this.qslinkobj.islinkclicked;
+      }
+    } else {
+      this.quickDivID = "";
+      this.qslinkobj = {};
+      this.headerDropdown.forEach((el) => {
+        el.hide();
+      });
+    }
+    this.cdRef.detectChanges();
+  }
+ 
+  
+
+  @HostListener('document:click', ['$event.target']) 
+  outsideClick() {
+    if (this.isUserclickedActualLink) {
+      this.onClickBackdrop();
+      this.isUserclickedActualLink = false;
+    }
+    if (this.qslinkobj !== undefined) {
+      if (Object.values(this.qslinkobj).length !== 0) {
+        if (this.qslinkobj.islinkclicked) {
+         // this.isHeaderNavbarClicked = false;
+          this.actualBackdropclicked = !this.actualBackdropclicked;
+        }
+        else {
+          this.isBackdropclicked = false;
+        }
+      }
+    }
+
+    if (this.isquicklinkclicked && this.actuallinkstatus) {
+      this.isBackdropclicked = false;
+      this.actualBackdropclicked = true;
+      this.actuallinkstatus = false;
+    } else if (this.isquicklinkclicked && !this.actuallinkstatus && this.isBackdropclicked) {
+      this.isBackdropclicked = false;
+      this.actualBackdropclicked = true;
+      this.actuallinkstatus = true;
+    }
+
+    if (this.isuserClickedonqstooltip) {//&& !this.isquicklinkclicked && this.userclickedoutside
+      this.qslinkobj = {};
+      Object.values(this.qslinkobj).length = 0;
+      this.quickDivID = "";
+    }
+
+    if (this.isquicklinkclicked) {
+      if (this.quickDivID !== undefined && this.quickDivID !== "") {
+        this.isuserClickedonqstooltip = false;
+        this.isHeaderNavbarClicked = false;
+        this.actualBackdropclicked = true;
+        // if (this.qslinkobj !== undefined) {
+        if (this.headerDropdown !== undefined) {
+
+
+          if (this.quickDivID !== "" && (this.quickDivID === 6) || this.quickDivID !== "" && (this.quickDivID === 5)) {
+            //  this.removeHightlightBorders();
+            this.renderer.removeClass(this.navMenuEle.nativeElement.querySelectorAll('li > div')[1], 'highlightmenu-element');
+
+          }
+          if (this.quickDivID !== "" && (this.quickDivID === 7 || this.quickDivID === 8 || this.quickDivID === 9 || this.quickDivID === 10)) {
+            //this.removeHightlightBorders();
+            this.renderer.removeClass(this.navMenuEle.nativeElement.querySelectorAll('li > div')[0], 'highlightmenu-element');
+            this.renderer.addClass(this.navMenuEle.nativeElement.querySelectorAll('li > div')[1], 'highlightmenu-element');
+            this.renderer.removeClass(this.navMenuEle.nativeElement.querySelectorAll('li > div')[2], 'highlightmenu-element');
+            this.opendropdownTrigger(2, 'cookie-consent');
+            // this.addBordertoDropdownMenu();
+          }
+          if (this.quickDivID !== "" && (this.quickDivID == 6 || this.quickDivID == 11 || this.quickDivID == 12 || this.quickDivID == 19)) {
+            this.lastopendp = [];
+            this.removeHightlightBorders();
+            //this.renderer.removeClass(this.navMenuEle.nativeElement.querySelectorAll('li > div')[0], 'highlightmenu-element');
+          }
+
+          if (this.quickDivID !== "" && (this.quickDivID === 16 || this.quickDivID === 15 || this.quickDivID === 14 || this.quickDivID === 13)) {
+
+            this.renderer.addClass(this.navMenuEle.nativeElement.querySelectorAll('li > div')[0], 'highlightmenu-element');
+            this.renderer.removeClass(this.navMenuEle.nativeElement.querySelectorAll('li > div')[2], 'highlightmenu-element');
+            this.renderer.removeClass(this.navMenuEle.nativeElement.querySelectorAll('li > div')[1], 'highlightmenu-element');
+            this.opendropdownTrigger(1, 'dsar');
+            this.addBordertoDropdownMenu();
+          }
+          if (this.quickDivID !== "" && (this.quickDivID === 20) || this.quickDivID !== "" && (this.quickDivID === 21) || this.quickDivID !== "" && (this.quickDivID === 22)) {
+            this.renderer.removeClass(this.navMenuEle.nativeElement.querySelectorAll('li > div')[0], 'highlightmenu-element');
+            this.renderer.removeClass(this.navMenuEle.nativeElement.querySelectorAll('li > div')[1], 'highlightmenu-element');
+            this.renderer.addClass(this.navMenuEle.nativeElement.querySelectorAll('li > div')[2], 'highlightmenu-element');
+            this.opendropdownTrigger(3, 'consentpreference');
+          }
+        }
+      }
+    } else if (this.quickmenuService.isquickmenudismiss && this.isHeaderNavbarClicked) {
+      this.isBackdropclicked = false;
+      this.actualBackdropclicked = true;
+    } else if (this.onClickHideTooltip()) {
+      this.lastopendp.length = 0;
+      this.removeHightlightBorders();
+      this.qslinkobj = {};
+      
+    } else {
+      if (this.navMenuEle !== undefined) {
+        this.removeHightlightBorders();
+      }
+    }
+    // }
+  }
+
+  positionObj(){
+    if(this.quickDivID !== "" && (this.quickDivID == 10)){
+      return {
+        "left":"320px",
+        "top":"70px"
+      } 
+    } else if(this.quickDivID !== "" && (this.quickDivID == 11)){
+      return {
+        "left":"107px",
+        "top":"200px"
+      } 
+    } else if(this.quickDivID !== "" && (this.quickDivID == 9)){
+      return {
+        "left":"320px",
+        "top":"170px"
+      } 
+    }  else if(this.quickDivID !== "" && (this.quickDivID == 8)){
+      return {
+        "left":"320px",
+        "top":"134px"
+      } 
+    } else if(this.quickDivID !== "" && (this.quickDivID == 7)){
+      return {
+        "left":"320px",
+        "top":"110px"
+      } 
+    } else if(this.quickDivID !== "" && (this.quickDivID == 4)){
+      return {
+        "left":"960px",
+        "top":"70px"
+      } 
+    }   else if(this.quickDivID !== "" && (this.quickDivID == 5)){
+      return {
+        "left":"100px",
+        "top":"200px",
+        "width":"290px"
+      } 
+    } else if(this.quickDivID !== "" && (this.quickDivID == 6)){
+      return {
+        "left":"660px",
+        "top":"401px"
+      } 
+    } else if(this.quickDivID !== "" && (this.quickDivID == 12)){
+      return {
+        "left":"750px",
+        "top":"170px"
+      } 
+    } else if(this.quickDivID !== "" && (this.quickDivID == 13)){
+      return {
+        "left":"200px",
+        "top":"140px"
+      } 
+    } else if(this.quickDivID !== "" && (this.quickDivID == 14)){
+      return {
+        "left":"190px",
+        "top":"70px"
+      } 
+    } else if(this.quickDivID !== "" && (this.quickDivID == 15)){
+      return {
+        "left": "190px",
+        "top": "110px"
+      }
+    } else if(this.quickDivID !== "" && (this.quickDivID == 16)){
+      return {
+        "left":"210px",
+        "top":"70px"
+      } 
+    } else if(this.quickDivID !== "" && (this.quickDivID == 17)){
+      return {
+        "left":"240px",
+        "top":"70px"
+      } 
+    } else if(this.quickDivID !== "" && (this.quickDivID == 18)){
+      return {
+        "left": "100px",
+        "top": "60px",
+        "width": "290px"
+      } 
+    } else if(this.quickDivID !== "" && (this.quickDivID == 1)){
+      return {
+        "left":"690px",
+        "top":"120px"
+      }
+    } else if(this.quickDivID !== "" && (this.quickDivID == 2)){
+      return {
+        "left":"680px",
+        "top":"126px"
+      }
+    }  else if(this.quickDivID !== "" && (this.quickDivID == 3)){
+      return {
+        "left":"760px",
+        "top":"346px"
+      }
+    } else if(this.quickDivID !== "" && (this.quickDivID == 19)){
+      return {
+        "left":"740px",
+        "top":"280px"
+      }
+    } else if(this.quickDivID !== "" && (this.quickDivID == 20)){
+      return {
+        "left":"440px",
+        "top":"76px"
+      }
+    } else if(this.quickDivID !== "" && (this.quickDivID == 21)){
+      return {
+        "left":"440px",
+        "top":"76px"
+      }
+    } else if(this.quickDivID !== "" && (this.quickDivID == 22)){
+      return {
+        "left":"440px",
+        "top":"70px"
+      }
+    }
+  }
+
+  positionObjCS(){
+    return {
+      "left": "375px",
+      "top":"340px"
+    }
+
+ 
+
+  }
+
+  isBillingpageQuickid(){
+    if(this.quickDivID !== undefined && this.quickDivID !== ""){
+      if(this.quickDivID == 1 || this.quickDivID == 2 || this.quickDivID == 3 || this.quickDivID == 11 || this.quickDivID == 12 || this.quickDivID == 18 ||  this.quickDivID == 19 || this.quickDivID == 6 || this.quickDivID == 5){
+        return false;
+      }else{
+        return true;
+      }
+    }else{
+      return false;
+    }
+  }
+
+  onClickHideTooltip(): boolean {
+    if (this.quickLinkObj !== undefined && Object.values(this.quickLinkObj).length !== 0 && this.actualBackdropclicked) { //!this.isuserClickedonqstooltip
+      return true; // show menu on click of quickstart
+    } else if (this.quickLinkObj !== undefined && Object.values(this.quickLinkObj).length !== 0 && this.isBackdropclicked) { 
+      return true;
+    } else {
+      return false;  //hide already opened menu
+    }
+  }
+
+  isQuicklinkActuallinkVisited():boolean{
+    if(this.qslinkobj !== undefined){
+      return this.qslinkobj.isactualbtnclicked && this.qslinkobj.islinkclicked;
+    } else{
+      return false;
+    }
+    
+  }
+
+  removeHightlightBorders(){
+    if(this.navMenuEle !== undefined){
+    this.renderer.removeClass(this.navMenuEle.nativeElement.querySelectorAll('li > div')[0], 'highlightmenu-element');
+    this.renderer.removeClass(this.navMenuEle.nativeElement.querySelectorAll('li > div')[1], 'highlightmenu-element');
+    this.renderer.removeClass(this.navMenuEle.nativeElement.querySelectorAll('li > div')[2], 'highlightmenu-element');
+    }
+    if(this.dropdownTriggers !== undefined){
+    for(let i = 0; i < this.dropdownTriggers.nativeElement.querySelectorAll('div > div > ul').length; i++){
+         this.renderer.removeClass(this.dropdownTriggers.nativeElement.querySelectorAll('div > div > ul')[i], 'addbg-menuitem');
+     }
+    }
+  }
+
+
+  showQuickMenu(){
+    if (this.quickDivID !== undefined) {
+      if(this.headerDropdown !== undefined){
+         this.headerDropdown.forEach((el: any, index) => {
+           if (this.quickDivID == 15) {
+             if (index == 2) {
+               el.container = "body"
+              el.show();
+
+             }
+           } else if (this.quickDivID == 7) {
+             if (index == 3) {
+               el.container = "body"
+               el.show();
+             }
+           }
+         });
+     }
+    }
+  }
+
+
+  highlight(text) {
+    var inputText = document.getElementById("dropdown-item");
+    //this.renderer.setProperty(this.divHello.nativeElement,'innerHTML',"Hello Angular")
+
+    var innerHTML = inputText.innerHTML;
+    var index = innerHTML.indexOf(text);
+    if (index >= 0) { 
+     innerHTML = innerHTML.substring(0,index) + "<span class='highlight'>" + innerHTML.substring(index,index+text.length) + "</span>" + innerHTML.substring(index + text.length);
+     inputText.innerHTML = innerHTML;
+    }
+  }
+    
+
+  ngOnChanges(changes: SimpleChanges) {
+   
+    this.quickLinkObj = this.quickmenuService.qsMenuobjwithIndexid;
+   // this.isloginpage = this.location.path().indexOf('login') == -1 && this.location.path().indexOf('signup') == -1;
+    this.isqsmenuopen = this.quickmenuService.isquickstartopen;
+    if(this.isqsmenuopen){
+      this.onClickBackdrop();
+    }
+    if(this.qslinkobj !== undefined){
+      this.quickLinkStatus = this.qslinkobj.islinkclicked;
+    }
+    if(this.actualBackdropclicked){
+      this.removeHightlightBorders();
+    }
+    
+    this.userclickedoutside = this.quickmenuService.isclickeventoutsidemenu;
+    this.userclickedfromqsmenu = this.quickmenuService.isclickeventfromquickmenu;
+    this.isuserClickedonqstooltip = this.quickmenuService.isuserClickedonqstooltip;
+    
+  
+    if (this.isuserClickedonqstooltip) {
+      this.quickLinkObj = {};
+      Object.values(this.quickLinkObj).length = 0;
+    }
+    
+    this.isBillingpageQuickid();
+    
+    if(changes.qslinkobj !== undefined && changes.qslinkobj.currentValue !== undefined){
+      
+      this.quickLinkObj = changes.qslinkobj.currentValue;
+      this.quickDivID = this.quickLinkObj.linkid;
+      this.isquicklinkclicked = this.quickLinkObj.islinkclicked;
+      this.userclickedoutside = this.quickmenuService.isclickeventoutsidemenu;
+      if(!this.quickmenuService.isquickstartopen){
+        this.isqsmenuopen = true;
+      }  
+      this.alertguidetext = this.quickLinkObj.divguidetext;
+      this.alertcontent = this.quickLinkObj.tooltipdescription;
+      this.quickLinkStatus = true;
+
+    }
+  //  this.addBordertoDropdownMenu();
+  } 
+
+
+  updateQuickLinkStatus(menu){
+      let quickLinkObj = {
+        linkid: menu.navmenuid,
+        indexid: menu.indexid,
+        isactualbtnclicked: true,
+        islinkclicked: true        
+      };
+      this.quickmenuService.updateQuerymenulist(quickLinkObj);
+      this.quickmenuService.onClickEmitQSLinkobj.next(quickLinkObj);
+      this.removeHightlightBorders();
+      this.headerDropdown.forEach((el) => {
+            el.hide(); 
+      });
+    
+       this.isUserVistedActualLinkWithTooltip = true;
+       this.lastopendp = [];
+  }
+ 
+  responseFromUser($event) {
+    this.userclickedoutside = $event;
+    this.quickmenuService.isclickeventoutsidemenu = $event;
+    this.isuserClickedonqstooltip = $event;
+    if(this.isuserClickedonqstooltip){
+      this.quickLinkObj = {};
+    }
+   
+  }
+
+  opendropdownTrigger(indexid,dropdownname) { 
+      if(this.lastopendp !== undefined && this.lastopendp.length !== 0){
+        let menuid = this.lastopendp.findIndex((t)=>t.dpindex === indexid && t.dpname === dropdownname);
+        if(menuid !== undefined && menuid !== -1){
+          this.lastopendp[menuid].dpmenu.isOpen = !this.lastopendp[menuid].dpmenu.isOpen;
+          this.lastopendp[menuid].dpmenu.show();
+          this.isBackdropclicked = false;
+        }else{
+          this.lastopendp.length = 0;
+          this.headerDropdown.forEach((el: any, index) => {
+            if (index == indexid) {
+              let idx = this.lastopendp.findIndex((t)=>t.dpindex === indexid && t.dpname === dropdownname);
+              if(idx == -1){
+                this.lastopendp.push({
+                  dpindex:indexid,
+                  dpmenu:el,
+                  dpname:dropdownname
+                });
+                el.show();
+              }else{
+                this.lastopendp[idx].dpmenu.isOpen = !this.lastopendp[idx].dpmenu.isOpen;
+                this.lastopendp[idx].dpmenu.show();
+                this.isBackdropclicked = false;
+              }
+              
+            } 
+          });
+        }
+      }else{
+      if(this.dropdownTriggers == undefined){
+        this.lastopendp.length = 0;
+        this.headerDropdown.forEach((el: any, index) => {
+          if (index == indexid) {
+            let idx = this.lastopendp.findIndex((t)=>t.dpindex === indexid && t.dpname === dropdownname);
+            if(idx == -1){
+              this.lastopendp.push({
+                dpindex:indexid,
+                dpmenu:el,
+                dpname:dropdownname
+              });
+              el.show();
+              this.isBackdropclicked = false;
+            }else{
+              this.lastopendp[idx].dpmenu.isOpen = !this.lastopendp[idx].dpmenu.isOpen;
+              this.lastopendp[idx].dpmenu.show();
+              this.isBackdropclicked = false;
+            }
+            
+          } 
+        });
+      }
+      }  
+     
+  }
+
+  isLoginOrSignupPage():boolean{
+    if( this.location.path().indexOf('login') !== -1 || this.location.path().indexOf('signup') !== -1){
+      return this.isloginpage = false;
+    }else{
+      return this.isloginpage = true;
+    }
+  }
+
+  addBordertoDropdownMenu(){
+    if(this.dropdownTriggers !== undefined && this.renderer !== undefined){
+      if(this.quickLinkObj !== undefined && this.quickLinkObj.linkid === 13){
+        this.renderer.addClass(this.dropdownTriggers.nativeElement.querySelectorAll('div > div > ul')[3], 'addbg-menuitem');
+      } else if(this.quickLinkObj !== undefined && this.quickLinkObj.linkid == 14){
+        this.renderer.addClass(this.dropdownTriggers.nativeElement.querySelectorAll('div > div > ul')[1], 'addbg-menuitem');
+      } else if(this.quickLinkObj !== undefined && this.quickLinkObj.linkid == 15){
+        this.renderer.addClass(this.dropdownTriggers.nativeElement.querySelectorAll('div > div > ul')[2], 'addbg-menuitem');
+      } else if(this.quickLinkObj !== undefined && this.quickLinkObj.linkid == 16){
+        this.renderer.addClass(this.dropdownTriggers.nativeElement.querySelectorAll('div > div > ul')[0], 'addbg-menuitem');
+      } else if(this.quickLinkObj !== undefined && this.quickLinkObj.linkid == 20){
+        this.renderer.addClass(this.dropdownTriggers.nativeElement.querySelectorAll('div > div > ul')[2], 'addbg-menuitem');
+      } else if(this.quickLinkObj !== undefined && this.quickLinkObj.linkid == 21){
+        this.renderer.addClass(this.dropdownTriggers.nativeElement.querySelectorAll('div > div > ul')[1], 'addbg-menuitem');
+      } else if(this.quickLinkObj !== undefined && this.quickLinkObj.linkid == 22){
+        this.renderer.addClass(this.dropdownTriggers.nativeElement.querySelectorAll('div > div > ul')[0], 'addbg-menuitem');
+      } if(this.quickLinkObj !== undefined && this.quickLinkObj.linkid === 7){
+        this.renderer.addClass(this.dropdownTriggers.nativeElement.querySelectorAll('div > div > ul')[2], 'addbg-menuitem');
+      } else if(this.quickLinkObj !== undefined && this.quickLinkObj.linkid == 8){
+        this.renderer.addClass(this.dropdownTriggers.nativeElement.querySelectorAll('div > div > ul')[3], 'addbg-menuitem');
+      } else if(this.quickLinkObj !== undefined && this.quickLinkObj.linkid == 9){
+        this.renderer.addClass(this.dropdownTriggers.nativeElement.querySelectorAll('div > div > ul')[4], 'addbg-menuitem');
+      } else if(this.quickLinkObj !== undefined && this.quickLinkObj.linkid == 10){
+        this.renderer.addClass(this.dropdownTriggers.nativeElement.querySelectorAll('div > div > ul')[0], 'addbg-menuitem');
+      } 
+    }
+  }
+
+  onClickQSLinkFromHeader($event){
+    this.quickmenuService.onDissmissQuickStartmenu.next(false);
+  }
+
+  headerNavbarEvent($event) {
+    this.isHeaderNavbarClicked = true;
+    if(this.quickLinkObj !== undefined && Object.values(this.quickLinkObj).length !== 0){
+      this.userService.onRevistQuickStartmenulink.next({quickstartid:this.quickDivID,reclickqslink:this.quickLinkObj.isactualbtnclicked,urlchanged:true}); 
+    }
+    if ($event.currentTarget === this.headerNavbarEle.nativeElement) {
+      if (!this.isBackdropclicked && this.actualBackdropclicked) { // if quick start opened and want to click navbar
+        this.onClickBackdrop();
+      } else {
+        return true; // regular header navigation
+      }
+    }
   }
 
   ngOnDestroy(){

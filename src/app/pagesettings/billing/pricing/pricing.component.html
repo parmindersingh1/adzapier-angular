@@ -15,45 +15,44 @@
 
           <div class="toggle-period">
             <input id="toggle-period" (change)="onSelectCookieConsentBillingCycle(subType)"
-                   [checked]="cookieConsentBillingCycle === 'yearly'"
-                   #subType class="toggle-period__checkbox" type="checkbox">
+              [checked]="cookieConsentBillingCycle === 'yearly'" #subType class="toggle-period__checkbox"
+              type="checkbox">
             <!--          <input id="toggle-period" (change)="onSelectCookieConsentBillingCycle(subType)"-->
             <!--                 [disabled]="activeData.cookieConsent.cycle === 'yearly'"-->
             <!--                 [checked]="cookieConsentBillingCycle === 'yearly'" #subType class="toggle-period__checkbox" type="checkbox">-->
             <label for="toggle-period" class="toggle-period__label">
-            <span class="toggle-period__monthly"
-                  [ngStyle]="{color: cookieConsentBillingCycle == 'yearly' ? '#c3c4c7' : '#0546a3'}"
-                  role="checkbox" aria-checked="false">Billed monthly</span>
+              <span class="toggle-period__monthly"
+                [ngStyle]="{color: cookieConsentBillingCycle == 'yearly' ? '#c3c4c7' : '#0546a3'}" role="checkbox"
+                aria-checked="false">Billed monthly</span>
               <span class="toggle-period__switch"
-                    [ngStyle]="{backgroundColor: cookieConsentBillingCycle == 'yearly' ? '#0da1dd' : '#0546a3'}"
-                    role="checkbox"
-                    aria-checked="true" tabindex="0"></span>
+                [ngStyle]="{backgroundColor: cookieConsentBillingCycle == 'yearly' ? '#0da1dd' : '#0546a3'}"
+                role="checkbox" aria-checked="true" tabindex="0"></span>
               <span class="toggle-period__yearly"
-                    [ngStyle]="{color: cookieConsentBillingCycle == 'yearly' ? '#0da1dd' : '#c3c4c7'}"
-                    role="checkbox" aria-checked="true">Billed annually</span>
-              <span class="flag"
-                    [ngStyle]="{opacity: cookieConsentBillingCycle == 'yearly' ? 1 : .4}">2 Months Free</span>
+                [ngStyle]="{color: cookieConsentBillingCycle == 'yearly' ? '#0da1dd' : '#c3c4c7'}" role="checkbox"
+                aria-checked="true">Billed annually</span>
+              <span class="flag" [ngStyle]="{opacity: cookieConsentBillingCycle == 'yearly' ? 1 : .4}">2 Months
+                Free</span>
             </label>
           </div>
 
         </div>
         <div class="btn-group-type text-center mt-3">
-          <button type="button" (click)="onSetCookieConsent(1, 'cookieConsent')" [ngClass]="{'primary-yellow' : currentStep === 1}"
-                  class="button-text btn-white btn mr-2">Cookie Consent
+          <button type="button" (click)="onSetCookieConsent(1, 'cookieConsent')"
+            [ngClass]="{'primary-yellow' : currentStep === 1}" class="button-text btn-white btn mr-2">Cookie Consent
           </button>
-          <button type="button" (click)="onSetCookieConsent(2, 'dsar')" [ngClass]="{'primary-yellow' : currentStep === 2}"
-                  class="button-text btn btn-white mr-2">DSAR
+          <button type="button" (click)="onSetCookieConsent(2, 'dsar')"
+            [ngClass]="{'primary-yellow' : currentStep === 2}" class="button-text btn btn-white mr-2">DSAR
           </button>
-          <button type="button" (click)="onSetCookieConsent(3, 'consentPreference')" [ngClass]="{'primary-yellow' : currentStep === 3}"
-                  class="button-text btn-white btn mr-2">Consent Preference
+          <button type="button" (click)="onSetCookieConsent(3, 'consentPreference')"
+            [ngClass]="{'primary-yellow' : currentStep === 3}" class="button-text btn-white btn mr-2">Consent Preference
           </button>
         </div>
 
 
         <div *ngIf="!skeletonLoader && currentStep === 1" class="row mt-2 justify-content-center">
 
-          <div *ngFor="let plan of subscriptionList" style="overflow: hidden"
-               class="col d-flex bg-white-col bt-card flex-column bd pt-0 mr-2  ">
+          <div *ngFor="let plan of subscriptionList;let i = index;" style="overflow: hidden"
+            class="col d-flex bg-white-col bt-card flex-column bd pt-0 mr-2  ">
 
             <div *ngIf="cookieConsentBillingCycle === 'yearly'" class="plan-discount">
               <span class="annual">2 Months Free</span>
@@ -61,7 +60,7 @@
 
 
             <h4 class="popular-text"
-                [ngStyle]="{background: plan.price ==  activeData.cookieConsent.maxPrice ? '#3968fa' : null}">
+              [ngStyle]="{background: plan.price ==  activeData.cookieConsent.maxPrice ? '#3968fa' : null}">
               <ng-container *ngIf="plan.price ==  activeData.cookieConsent.maxPrice">CURRENT PLAN</ng-container>
             </h4>
             <h3 class="mt-1 plan-type">{{plan.name}}</h3>
@@ -69,25 +68,26 @@
 
             <ul class="pl-3 mr-feature">
               <ng-container *ngIf="plan.name === 'Free'">
-                <li class="text-left feature-list"
-                    *ngFor="let  features of highLightFeatures.cookieConsent.free">{{features.featureName}}
-                  <span class="font-weight-bold" *ngIf="features.featureValue"> - {{features.featureValue}}</span></li>
+                <li class="text-left feature-list" *ngFor="let  features of highLightFeatures.cookieConsent.free">
+                  {{features.featureName}}
+                  <span class="font-weight-bold" *ngIf="features.featureValue"> - {{features.featureValue}}</span>
+                </li>
               </ng-container>
               <ng-container *ngIf="plan.name === 'Essentials'">
-                <li class="text-left feature-list"
-                    *ngFor="let  features of highLightFeatures.cookieConsent.essentials">{{features.featureName}} <span
-                  class="font-weight-bold" *ngIf="features.featureValue"> - {{features.featureValue}}</span></li>
+                <li class="text-left feature-list" *ngFor="let  features of highLightFeatures.cookieConsent.essentials">
+                  {{features.featureName}} <span class="font-weight-bold" *ngIf="features.featureValue"> -
+                    {{features.featureValue}}</span></li>
               </ng-container>
               <ng-container *ngIf="plan.name === 'Professional'">
                 <li class="text-left feature-list"
-                    *ngFor="let  features of highLightFeatures.cookieConsent.professional">{{features.featureName}}
-                  <span
-                    class="font-weight-bold" *ngIf="features.featureValue"> - {{features.featureValue}}</span></li>
+                  *ngFor="let  features of highLightFeatures.cookieConsent.professional">{{features.featureName}}
+                  <span class="font-weight-bold" *ngIf="features.featureValue"> - {{features.featureValue}}</span>
+                </li>
               </ng-container>
               <ng-container *ngIf="plan.name === 'Enterprise'">
-                <li class="text-left feature-list"
-                    *ngFor="let  features of highLightFeatures.cookieConsent.enterprise">{{features.featureName}} <span
-                  class="font-weight-bold" *ngIf="features.featureValue"> - {{features.featureValue}}</span></li>
+                <li class="text-left feature-list" *ngFor="let  features of highLightFeatures.cookieConsent.enterprise">
+                  {{features.featureName}} <span class="font-weight-bold" *ngIf="features.featureValue"> -
+                    {{features.featureValue}}</span></li>
               </ng-container>
               <a class="more-details-text" (click)="openModal(template)">View Comparison</a>
 
@@ -96,8 +96,8 @@
             <h1 class="tx-rubik tx-normal mb-3 mg-t-auto price-text">
               <sup class="doller">$</sup>
               <span class="font-weight-bold" *ngIf="cookieConsentBillingCycle === 'monthly'">{{plan.price}}</span>
-              <span class="font-weight-bold"
-                    *ngIf="cookieConsentBillingCycle !== 'monthly'">{{plan.price / 12 | number : '1.0-0'}}</span>
+              <span class="font-weight-bold" *ngIf="cookieConsentBillingCycle !== 'monthly'">{{plan.price / 12 | number
+                : '1.0-0'}}</span>
               <span class="billing-type">/Month</span>
             </h1>
             <p class="tx-size-10  mt-2 ">Billed {{cookieConsentBillingCycle}} </p>
@@ -121,18 +121,20 @@
 
 
             <button data-toggle="tooltip" data-placement="top"
-                    [title]="plan.price <=  activeData.cookieConsent.maxPrice ? 'You can not downgrade your plan' : 'Add to Cart'"
-                    *ngIf="plan.price !=  activeData.cookieConsent.maxPrice"
-                    [disabled]="plan.price <=  activeData.cookieConsent.maxPrice"
-                    (click)="onAddToCart(plan, planUnit)" class="btn mt-4 mb-4 add-to-cart-btn btn-primary btn-block">
+              [title]="plan.price <=  activeData.cookieConsent.maxPrice ? 'You can not downgrade your plan' : 'Add to Cart'"
+              *ngIf="plan.price !=  activeData.cookieConsent.maxPrice"
+              [disabled]="plan.price <=  activeData.cookieConsent.maxPrice" (click)="onAddToCart(plan, planUnit);checkForQsTooltip();"
+              class="btn mt-4 mb-4 add-to-cart-btn btn-primary btn-block">
               Add To Cart
             </button>
-
-
-            <button *ngIf="plan.price ==  activeData.cookieConsent.maxPrice" (click)="onGenerateSessionID()"
-                    class="btn mt-4 mb-4 add-to-cart-btn btn-primary btn-block">
+           
+            
+            
+            <button *ngIf="plan.price ==  activeData.cookieConsent.maxPrice" (click)="onGenerateSessionID();checkForQsTooltip();"
+              class="btn mt-4 mb-4 add-to-cart-btn btn-primary btn-block">
               Manage Plan
             </button>
+            
 
 
           </div><!-- col -->
@@ -145,20 +147,20 @@
               <li class="text-left feature-list"
                   *ngFor="let  features of highLightFeatures.cookieConsent.enterprise">{{features.featureName}}
                 <span class="font-weight-bold" *ngIf="features.featureValue"> - {{features.featureValue}}</span></li>
-              <a class="more-details-text" (click)="openModal(template)">View Comparison</a>
+              <a class="more-details-text" (click)="openModal(template);checkForQsTooltip();">View Comparison</a>
 
             </ul>
             <h2 class="tx-rubik tx-normal ">Contact Us</h2>
             <p class="tx-size-10 mg-b-30 "></p>
             <a href="https://adzapier.com/get-started/" target="_blank"
-               class="enterprise-btn btn mb-4 add-to-cart-btn btn-primary btn-block">Get Enterprise</a>
+              class="enterprise-btn btn mb-4 add-to-cart-btn btn-primary btn-block">Get Enterprise</a>
           </div><!-- col -->
         </div>
 
         <div *ngIf="!skeletonLoader && currentStep === 2" class="row mt-2 justify-content-center">
 
           <div *ngFor="let plan of dsarPlanList" style="overflow: hidden"
-               class="col d-flex bg-white-col bt-card flex-column bd pt-0 mr-2  ">
+            class="col d-flex bg-white-col bt-card flex-column bd pt-0 mr-2  ">
 
             <div *ngIf="cookieConsentBillingCycle === 'yearly'" class="plan-discount">
               <span class="annual">2 Months Free</span>
@@ -166,7 +168,7 @@
 
 
             <h4 class="popular-text"
-                [ngStyle]="{background: plan.price ==  activeData.dsar.maxPrice ? '#3968fa' : null}">
+              [ngStyle]="{background: plan.price ==  activeData.dsar.maxPrice ? '#3968fa' : null}">
               <ng-container *ngIf="plan.price ==  activeData.dsar.maxPrice">CURRENT PLAN</ng-container>
             </h4>
             <h3 class="mt-1 plan-type">{{plan.name}}</h3>
@@ -175,19 +177,19 @@
             <ul class="pl-3 mr-feature">
 
               <ng-container *ngIf="plan.name === 'Essentials'">
-                <li class="text-left feature-list"
-                    *ngFor="let  features of highLightFeatures.dsar.essentials">{{features.featureName}} <span
-                  class="font-weight-bold" *ngIf="features.featureValue"> - {{features.featureValue}}</span></li>
+                <li class="text-left feature-list" *ngFor="let  features of highLightFeatures.dsar.essentials">
+                  {{features.featureName}} <span class="font-weight-bold" *ngIf="features.featureValue"> -
+                    {{features.featureValue}}</span></li>
               </ng-container>
               <ng-container *ngIf="plan.name === 'Professional'">
-                <li class="text-left feature-list"
-                    *ngFor="let  features of highLightFeatures.dsar.professional">{{features.featureName}} <span
-                  class="font-weight-bold" *ngIf="features.featureValue"> - {{features.featureValue}}</span></li>
+                <li class="text-left feature-list" *ngFor="let  features of highLightFeatures.dsar.professional">
+                  {{features.featureName}} <span class="font-weight-bold" *ngIf="features.featureValue"> -
+                    {{features.featureValue}}</span></li>
               </ng-container>
               <ng-container *ngIf="plan.name === 'Enterprise'">
-                <li class="text-left feature-list"
-                    *ngFor="let  features of highLightFeatures.dsar.enterprise">{{features.featureName}} <span
-                  class="font-weight-bold" *ngIf="features.featureValue"> - {{features.featureValue}}</span></li>
+                <li class="text-left feature-list" *ngFor="let  features of highLightFeatures.dsar.enterprise">
+                  {{features.featureName}} <span class="font-weight-bold" *ngIf="features.featureValue"> -
+                    {{features.featureValue}}</span></li>
               </ng-container>
               <a class="more-details-text" (click)="openModal(template)">View Comparison</a>
               <!--            <a class="more-details-text " *ngIf="maxCookiePreferenceList === 15" (click)="maxCookiePreferenceList = 4">Hide</a>-->
@@ -196,8 +198,8 @@
             <h1 class="tx-rubik tx-normal mb-3 mg-t-auto price-text">
               <sup class="doller">$</sup>
               <span class="font-weight-bold" *ngIf="cookieConsentBillingCycle === 'monthly'">{{plan.price}}</span>
-              <span class="font-weight-bold"
-                    *ngIf="cookieConsentBillingCycle !== 'monthly'">{{plan.price / 12 | number : '1.0-0'}}</span>
+              <span class="font-weight-bold" *ngIf="cookieConsentBillingCycle !== 'monthly'">{{plan.price / 12 | number
+                : '1.0-0'}}</span>
               <span class="billing-type">/Month</span>
             </h1>
             <p class="tx-size-10  mt-2 ">Billed {{cookieConsentBillingCycle}} </p>
@@ -221,15 +223,15 @@
 
 
             <button data-toggle="tooltip" data-placement="top"
-                    [title]="plan.price <=  activeData.dsar.maxPrice ? 'You can not downgrade your plan' : 'Add to Cart'"
-                    *ngIf="plan.price !=  activeData.dsar.maxPrice" [disabled]="plan.price <=  activeData.dsar.maxPrice"
-                    (click)="onAddToCart(plan, planUnit)" class="btn mt-4 mb-4 add-to-cart-btn btn-primary btn-block">
+              [title]="plan.price <=  activeData.dsar.maxPrice ? 'You can not downgrade your plan' : 'Add to Cart'"
+              *ngIf="plan.price !=  activeData.dsar.maxPrice" [disabled]="plan.price <=  activeData.dsar.maxPrice"
+              (click)="onAddToCart(plan, planUnit);checkForQsTooltip();" class="btn mt-4 mb-4 add-to-cart-btn btn-primary btn-block">
               Add To Cart
             </button>
 
 
             <button *ngIf="plan.price ==  activeData.dsar.maxPrice" (click)="onGenerateSessionID()"
-                    class="btn mt-4 mb-4 add-to-cart-btn btn-primary btn-block">
+              class="btn mt-4 mb-4 add-to-cart-btn btn-primary btn-block">
               Manage Plan
             </button>
 
@@ -244,20 +246,20 @@
               <li class="text-left feature-list"
                   *ngFor="let  features of highLightFeatures.dsar.enterprise">{{features.featureName}}
                 <span class="font-weight-bold" *ngIf="features.featureValue"> - {{features.featureValue}}</span></li>
-              <a class="more-details-text" (click)="openModal(template)">View Comparison</a>
+              <a class="more-details-text" (click)="openModal(template);checkForQsTooltip()">View Comparison</a>
 
             </ul>
             <h2 class="tx-rubik tx-normal ">Contact Us</h2>
             <p class="tx-size-10 mg-b-30 "></p>
-            <a href="https://adzapier.com/get-started/" target="_blank"
-               class="enterprise-btn btn mb-4 add-to-cart-btn btn-primary btn-block">Get Enterprise</a>
+            <a href="https://adzapier.com/get-started/" target="_blank" (click)="checkForQsTooltip()"
+              class="enterprise-btn btn mb-4 add-to-cart-btn btn-primary btn-block">Get Enterprise</a>
           </div><!-- col -->
         </div>
 
         <div *ngIf="!skeletonLoader && currentStep === 3" class="row mt-2 justify-content-center">
 
           <div *ngFor="let plan of consentPreferenceList" style="overflow: hidden"
-               class="col d-flex bg-white-col bt-card flex-column bd pt-0 mr-2  ">
+            class="col d-flex bg-white-col bt-card flex-column bd pt-0 mr-2  ">
 
             <div *ngIf="cookieConsentBillingCycle === 'yearly'" class="plan-discount">
               <span class="annual">2 Months Free</span>
@@ -265,7 +267,7 @@
 
 
             <h4 class="popular-text"
-                [ngStyle]="{background: plan.price ==  activeData.consentPreference.maxPrice ? '#3968fa' : null}">
+              [ngStyle]="{background: plan.price ==  activeData.consentPreference.maxPrice ? '#3968fa' : null}">
               <ng-container *ngIf="plan.price ==  activeData.consentPreference.maxPrice">CURRENT PLAN</ng-container>
             </h4>
             <h3 class="mt-1 plan-type">{{plan.name}}</h3>
@@ -275,21 +277,24 @@
 
               <ng-container *ngIf="plan.name === 'Essentials'">
                 <li class="text-left feature-list"
-                    *ngFor="let  features of highLightFeatures.consentPreference.essentials.slice(0, 4)">{{features.featureName}}
-                  <span
-                    class="font-weight-bold" *ngIf="features.featureValue"> - {{features.featureValue}}</span></li>
+                  *ngFor="let  features of highLightFeatures.consentPreference.essentials.slice(0, 4)">
+                  {{features.featureName}}
+                  <span class="font-weight-bold" *ngIf="features.featureValue"> - {{features.featureValue}}</span>
+                </li>
               </ng-container>
               <ng-container *ngIf="plan.name === 'Professional'">
                 <li class="text-left feature-list"
-                    *ngFor="let  features of highLightFeatures.consentPreference.professional.slice(0, 4)">{{features.featureName}}
-                  <span
-                    class="font-weight-bold" *ngIf="features.featureValue"> - {{features.featureValue}}</span></li>
+                  *ngFor="let  features of highLightFeatures.consentPreference.professional.slice(0, 4)">
+                  {{features.featureName}}
+                  <span class="font-weight-bold" *ngIf="features.featureValue"> - {{features.featureValue}}</span>
+                </li>
               </ng-container>
               <ng-container *ngIf="plan.name === 'Enterprise'">
                 <li class="text-left feature-list"
-                    *ngFor="let  features of highLightFeatures.consentPreference.enterprise.slice(0, 4)">{{features.featureName}}
-                  <span
-                    class="font-weight-bold" *ngIf="features.featureValue"> - {{features.featureValue}}</span></li>
+                  *ngFor="let  features of highLightFeatures.consentPreference.enterprise.slice(0, 4)">
+                  {{features.featureName}}
+                  <span class="font-weight-bold" *ngIf="features.featureValue"> - {{features.featureValue}}</span>
+                </li>
               </ng-container>
               <a class="more-details-text" (click)="openModal(template)">View Comparison</a>
 
@@ -299,9 +304,9 @@
 
             <h1 class="tx-rubik tx-normal mb-3 mg-t-auto price-text">
               <sup class="doller">$</sup>
-              <span class="font-weight-bold" *ngIf="cookieConsentBillingCycle === 'monthly'">{{plan.price}}  </span>
-              <span class="font-weight-bold"
-                    *ngIf="cookieConsentBillingCycle !== 'monthly'">{{plan.price / 12 | number : '1.0-0'}}</span>
+              <span class="font-weight-bold" *ngIf="cookieConsentBillingCycle === 'monthly'">{{plan.price}} </span>
+              <span class="font-weight-bold" *ngIf="cookieConsentBillingCycle !== 'monthly'">{{plan.price / 12 | number
+                : '1.0-0'}}</span>
               <span class="billing-type">/Month</span>
             </h1>
             <p class="tx-size-10  mt-2 ">Billed {{cookieConsentBillingCycle}} </p>
@@ -325,16 +330,16 @@
 
 
             <button data-toggle="tooltip" data-placement="top"
-                    [title]="plan.price <=  activeData.consentPreference.maxPrice ? 'You can not downgrade your plan' : 'Add to Cart'"
-                    *ngIf="plan.price !=  activeData.consentPreference.maxPrice"
-                    [disabled]="plan.price <=  activeData.consentPreference.maxPrice"
-                    (click)="onAddToCart(plan, planUnit)" class="btn mt-4 mb-4 add-to-cart-btn btn-primary btn-block">
+              [title]="plan.price <=  activeData.consentPreference.maxPrice ? 'You can not downgrade your plan' : 'Add to Cart'"
+              *ngIf="plan.price !=  activeData.consentPreference.maxPrice"
+              [disabled]="plan.price <=  activeData.consentPreference.maxPrice" (click)="onAddToCart(plan, planUnit);checkForQsTooltip();"
+              class="btn mt-4 mb-4 add-to-cart-btn btn-primary btn-block">
               Add To Cart
             </button>
 
 
             <button *ngIf="plan.price ==  activeData.consentPreference.maxPrice" (click)="onGenerateSessionID()"
-                    class="btn mt-4 mb-4 add-to-cart-btn btn-primary btn-block">
+              class="btn mt-4 mb-4 add-to-cart-btn btn-primary btn-block">
               Manage Plan
             </button>
 
@@ -349,15 +354,15 @@
               <li class="text-left feature-list"
                   *ngFor="let  features of highLightFeatures.consentPreference.enterprise.slice(0, 4)">{{features.featureName}}
                 <span class="font-weight-bold" *ngIf="features.featureValue"> - {{features.featureValue}}</span></li>
-              <a class="more-details-text" (click)="openModal(template)">View Comparison</a>
+              <a class="more-details-text" (click)="openModal(template);checkForQsTooltip()">View Comparison</a>
 
               <!--            <a class="more-details-text " *ngIf="maxCookiePreferenceList === 4" (click)="maxCookiePreferenceList = 15">Show More</a>-->
               <!--            <a class="more-details-text " *ngIf="maxCookiePreferenceList === 15" (click)="maxCookiePreferenceList = 4">Hide</a>-->
             </ul>
             <h2 class="tx-rubik tx-normal ">Contact Us</h2>
             <p class="tx-size-10 mg-b-30 "></p>
-            <a href="https://adzapier.com/get-started/" target="_blank"
-               class="enterprise-btn btn mb-4 add-to-cart-btn btn-primary btn-block">Get Enterprise</a>
+            <a href="https://adzapier.com/get-started/" target="_blank" (click)="checkForQsTooltip()"
+              class="enterprise-btn btn mb-4 add-to-cart-btn btn-primary btn-block">Get Enterprise</a>
           </div><!-- col -->
         </div>
 
@@ -370,14 +375,15 @@
 
 
       </div>
-
+      
+        
       <div *ngIf="cartItem.length > 0" class="col-md-12 p-0 mt-4">
         <div class="card cart-box ">
           <div class="card-body">
             <h3 class="mb-4 text-center">Your Cart</h3>
 
             <div *ngFor="let cart of cartItem; let i = index" class="row mt-2"
-                 style="border-bottom: 1px solid lightgray;">
+              style="border-bottom: 1px solid lightgray;">
               <div style="text-align: left" class="col-md-6">
                 <h5 class="cart-head">{{cart.product_name}}
                 </h5>
@@ -387,8 +393,7 @@
                 <h5>${{cart.priceTotal}}.00</h5>
                 <div class=" w-100 m-auto form-group mb-2 dp-safari">
                   <select (change)="onUpdateCart(cartProperty, i)" #cartProperty [value]="cart.unit"
-                          style="height: 32px;"
-                          class="mb-2 w-25 margin-auto form-control">
+                    style="height: 32px;" class="mb-2 w-25 margin-auto form-control">
                     <option>1</option>
                     <option>2</option>
                     <option>3</option>
@@ -405,7 +410,7 @@
 
               <div>
                 <h4 (click)="onRemoveCartItem(i , cart)" style="cursor: pointer" class="pt-3 text-danger"><i
-                  class="fa fa-times" aria-hidden="true"></i>
+                    class="fa fa-times" aria-hidden="true"></i>
                 </h4>
               </div>
             </div>
@@ -417,7 +422,7 @@
                 <h6 class="font-weight-bold text-left">Discount</h6>
               </div>
               <div class="col-md-5 text-left">
-                <h5 class="text-center"> ${{  subTotal + '.00' }}</h5>
+                <h5 class="text-center"> ${{ subTotal + '.00' }}</h5>
                 <h5 class="text-center"> ${{percentOff ? subTotal * percentOff / 100 : '0.00'}} ({{percentOff}}%)</h5>
               </div>
               <div class="col-md-1"></div>
@@ -442,8 +447,7 @@
                   </div>
                   <div class="col-md-5 text-right p-0">
                     <input type="text" class="form-control mb-1 w-100" [(ngModel)]="promoCode" [disabled]="percentOff"
-                           [ngClass]="{'is-invalid' : isPromoCodeError}"
-                           placeholder="Promo Code">
+                      [ngClass]="{'is-invalid' : isPromoCodeError}" placeholder="Promo Code">
                     <div *ngIf="isPromoCodeError" class="invalid-feedback" style="width: 205px;">
                       The promo code you entered is not valid
                     </div>
@@ -456,14 +460,14 @@
                   </div>
                   <div class="col-md-3">
                     <button type="button" class="btn btn-outline-secondary" [disabled]="percentOff"
-                            (click)="onApplyCoupon()">Apply
+                      (click)="onApplyCoupon()">Apply
                     </button>
                   </div>
                 </div>
               </div>
               <div class="col-md-6">
                 <button type="button" (click)="onSelectPlan()"
-                        class="pl-5 mb-3 mt-3 w-50 ml-5  font-weight-bold pr-5 btn-lg btn btn-primary">Checkout
+                  class="pl-5 mb-3 mt-3 w-50 ml-5  font-weight-bold pr-5 btn-lg btn btn-primary">Checkout
                 </button>
               </div>
 
@@ -480,7 +484,7 @@
 </div>
 <div class="col-sm-5 mr-0 float-right flotingdiv" [ngClass]="{'hide':!isOpen}">
   <alert *ngIf="isOpen" [type]="alertType" dismissOnTimeout="5000" [dismissible]="dismissible"
-         (onClosed)="onClosed(alertMsg)">{{  alertMsg}}</alert>
+    (onClosed)="onClosed(alertMsg)">{{ alertMsg}}</alert>
 </div>
 <ng-template #template>
   <div class="modal-header" style="    background: #f0b323;">
@@ -495,72 +499,73 @@
       <!--      <h4 class="mg-b-10 align-baseline blue-text">Feature comparison</h4>-->
       <table class="table ">
         <tbody>
-        <tr>
-          <th scope="row"></th>
-          <td *ngIf="currentFeature === 'cookieConsent'">
-            <div class="rounded-10 pd-y-10 pd-x-20 bg-ui-01">Free</div>
-          </td>
-          <td>
-            <div class="rounded-10 pd-y-10 pd-x-20 bg-ui-01">Essentials</div>
-          </td>
-          <td>
-            <div class="rounded-10 pd-y-10 pd-x-20 bg-ui-01">Professional</div>
-          </td>
-          <td>
-            <div class="rounded-10 pd-y-10 pd-x-20 bg-ui-01">Enterprise</div>
-          </td>
-        </tr>
+          <tr>
+            <th scope="row"></th>
+            <td *ngIf="currentFeature === 'cookieConsent'">
+              <div class="rounded-10 pd-y-10 pd-x-20 bg-ui-01">Free</div>
+            </td>
+            <td>
+              <div class="rounded-10 pd-y-10 pd-x-20 bg-ui-01">Essentials</div>
+            </td>
+            <td>
+              <div class="rounded-10 pd-y-10 pd-x-20 bg-ui-01">Professional</div>
+            </td>
+            <td>
+              <div class="rounded-10 pd-y-10 pd-x-20 bg-ui-01">Enterprise</div>
+            </td>
+          </tr>
 
 
-<!--        <tr *ngFor="let feature of featureCount">-->
-<!--          <th scope="row text-feature-left" style="text-align: left">{{feature.featureName}}</th>-->
-<!--          <td>{{feature.free}}</td>-->
-<!--          <td>{{feature.essentials}}</td>-->
-<!--          <td>{{feature.professional}}</td>-->
-<!--          <td>{{feature.enterprise}}</td>-->
-<!--        </tr>-->
+          <!--        <tr *ngFor="let feature of featureCount">-->
+          <!--          <th scope="row text-feature-left" style="text-align: left">{{feature.featureName}}</th>-->
+          <!--          <td>{{feature.free}}</td>-->
+          <!--          <td>{{feature.essentials}}</td>-->
+          <!--          <td>{{feature.professional}}</td>-->
+          <!--          <td>{{feature.enterprise}}</td>-->
+          <!--        </tr>-->
 
-        <tr *ngFor="let feature of featuresComparison[currentFeature]">
-          <th scope="row text-feature-left" style="text-align: left">{{feature.featureName}}</th>
-          <td *ngIf="currentFeature === 'cookieConsent'">
-            <svg *ngIf="feature.free === 'YES'" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                 class="feather feather-check-square tx-primary">
-              <polyline points="9 11 12 14 22 4"></polyline>
-              <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
-            </svg>
-            <span *ngIf="feature.free !=='YES' && feature.free !== 'NO'">{{feature.free}}</span>
-          </td>
-          <td>
-            <svg *ngIf="feature.essentials === 'YES'"  xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                 viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                 stroke-linejoin="round" class="feather feather-check-square tx-primary">
-              <polyline points="9 11 12 14 22 4"></polyline>
-              <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
-            </svg>
-            <span *ngIf="feature.essentials !=='YES' && feature.essentials !== 'NO'">{{feature.essentials}}</span>
+          <tr *ngFor="let feature of featuresComparison[currentFeature]">
+            <th scope="row text-feature-left" style="text-align: left">{{feature.featureName}}</th>
+            <td *ngIf="currentFeature === 'cookieConsent'">
+              <svg *ngIf="feature.free === 'YES'" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round" class="feather feather-check-square tx-primary">
+                <polyline points="9 11 12 14 22 4"></polyline>
+                <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+              </svg>
+              <span *ngIf="feature.free !=='YES' && feature.free !== 'NO'">{{feature.free}}</span>
+            </td>
+            <td>
+              <svg *ngIf="feature.essentials === 'YES'" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round" class="feather feather-check-square tx-primary">
+                <polyline points="9 11 12 14 22 4"></polyline>
+                <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+              </svg>
+              <span *ngIf="feature.essentials !=='YES' && feature.essentials !== 'NO'">{{feature.essentials}}</span>
 
-          </td>
-          <td>
-            <svg *ngIf="feature.professional === 'YES'"   xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                 viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                 stroke-linejoin="round" class="feather feather-check-square tx-primary">
-              <polyline points="9 11 12 14 22 4"></polyline>
-              <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
-            </svg>
-            <span *ngIf="feature.professional !=='YES' && feature.professional !== 'NO'">{{feature.professional}}</span>
+            </td>
+            <td>
+              <svg *ngIf="feature.professional === 'YES'" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round" class="feather feather-check-square tx-primary">
+                <polyline points="9 11 12 14 22 4"></polyline>
+                <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+              </svg>
+              <span
+                *ngIf="feature.professional !=='YES' && feature.professional !== 'NO'">{{feature.professional}}</span>
 
-          </td>
-          <td>
-            <svg *ngIf="feature.enterprise === 'YES'"  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                 class="feather feather-check-square tx-primary">
-              <polyline points="9 11 12 14 22 4"></polyline>
-              <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
-            </svg>
-            <span *ngIf="feature.enterprise !=='YES' && feature.enterprise !== 'NO'">{{feature.enterprise}}</span>
-          </td>
-        </tr>
+            </td>
+            <td>
+              <svg *ngIf="feature.enterprise === 'YES'" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round" class="feather feather-check-square tx-primary">
+                <polyline points="9 11 12 14 22 4"></polyline>
+                <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+              </svg>
+              <span *ngIf="feature.enterprise !=='YES' && feature.enterprise !== 'NO'">{{feature.enterprise}}</span>
+            </td>
+          </tr>
 
 
         </tbody>

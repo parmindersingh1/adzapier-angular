@@ -4,6 +4,7 @@ import {RouterModule, Routes} from '@angular/router';
 import { SharedbootstrapModule } from 'src/app/sharedbootstrap/sharedbootstrap.module';
 import { ManageLicenceComponent } from './manage-licence.component';
 import {ButtonModule} from 'primeng/button';
+import { QuickstartalertModule } from 'src/app/_components/quickstartalert/quickstartalert.module';
 
 const paths: Routes = [
   {path: '', component: ManageLicenceComponent },
@@ -17,7 +18,8 @@ const paths: Routes = [
         CommonModule,
         SharedbootstrapModule,
         RouterModule.forChild(paths),
-        ButtonModule
+        ButtonModule,
+        QuickstartalertModule
     ]
 })
 export class ManageLicenceModule { }

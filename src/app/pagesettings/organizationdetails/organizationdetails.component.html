@@ -2,9 +2,9 @@
     <div class="mb-3">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb breadcrumb-style1 mg-b-0">
-                <li class="breadcrumb-item"><a routerLink="/settings" [queryParams]="{oid:queryOID , pid:queryPID}">Settings</a></li>
+                <li class="breadcrumb-item"><a routerLink="/settings" [queryParams]="{oid:queryOID , pid:queryPID}" (click)="checkForQsTooltip()">Settings</a></li>
                 <li class="breadcrumb-item active" aria-current="page"><a
-                        routerLink="/settings/organizations" [queryParams]="{oid:queryOID , pid:queryPID}">Organizations</a></li>
+                        routerLink="/settings/organizations" [queryParams]="{oid:queryOID , pid:queryPID}" (click)="checkForQsTooltip()">Organizations</a></li>
                 <li class="breadcrumb-item active" aria-current="page">Details</li>
 
             </ol>
@@ -30,7 +30,7 @@
                             <span class="d-none d-sm-inline cursorpointer mg-l-0"> <i class="fa fa-pen mr-1"
                                     aria-hidden="true"></i> Edit</span>
                         </button>
-                        <button (click)="disableOrganization('organization')" class="btn btn-xs btn-danger float-right">
+                        <button (click)="disableOrganization('organization');checkForQsTooltip();" class="btn btn-xs btn-danger float-right">
                             <i class="far fa-trash-alt fa-sm"></i>
                             <span class="d-none d-sm-inline mg-l-0 ml-2"> Delete</span>
                         </button>
@@ -91,7 +91,7 @@
                     </div>
 
                     <div class="ml-auto">
-                        <button type="button" class="btn btn-sm btn-outline-secondary btn-uppercase ml-2" data-toggle="modal"
+                        <button type="button"  [ngClass]="quickDivID == 3 && quickDivID == currentLinkID && !iswindowclicked ? 'btn-qs-hightlight' : ''" class="btn btn-sm btn-outline-secondary btn-uppercase ml-2" data-toggle="modal"
                             (click)="open(propertyModal, 'property')"><i class="fas fa-plus"></i> Add Property</button>
                     </div>
                 </div>
@@ -163,11 +163,11 @@
                             </td>
                             <td>
                                 <!-- <i-feather name="edit-3" class="feather-16"></i-feather> -->
-                                <a class="pd-r-5" *ngIf="list.active" (click)="editModalPopup(propertyModal,list)">
+                                <a class="pd-r-5" *ngIf="list.active" (click)="editModalPopup(propertyModal,list);checkForQsTooltip();">
                                    <span class="cursorpointer"><i class="far fa-edit fa-1x"></i></span>
                                 </a>
                                 <a class="pd-r-5" *ngIf="list.active"
-                                    (click)="disableProperty(list,'property')">
+                                    (click)="disableProperty(list,'property');checkForQsTooltip();">
                                     <span class="cursorpointer">  <i class="far fa-trash-alt tx-danger fa-sm"></i></span>
                                 </a>
                                 <!-- <i-feather name="trash-2" class="feather-16"></i-feather> -->
@@ -232,7 +232,7 @@
 
                     <div class="col-sm-2 ml-auto">
                         <button type="button" class="invite-user-btn btn btn-sm btn-outline-secondary btn-uppercase mr-" data-toggle="modal"
-                            (click)="open(inviteuserModal, 'invite')"><i class="fas fa-plus"></i> Invite User</button>
+                            (click)="open(inviteuserModal, 'invite');checkForQsTooltip();"><i class="fas fa-plus"></i> Invite User</button>
                     </div>
                 </div>
             </div>
@@ -272,7 +272,7 @@
 
                             </td>
                             <td>
-                                <a class="pd-r-5" (click)="editUserInvitation(inviteuserModal,list)">
+                                <a class="pd-r-5" (click)="editUserInvitation(inviteuserModal,list);checkForQsTooltip();">
                                     <span class="d-none d-sm-inline mg-l-0 cursorpointer"> <i
                                             class="fa fa-pen mr-1 colorblue" aria-hidden="true"></i></span>
                                 </a>
@@ -321,12 +321,12 @@
 <ng-template #editOrgModal let-modal>
     <div class="modal-header">
         <h4 class="modal-title" id="modal-basic-title">Edit Organization Details</h4>
-        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Close Clicked')">
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Close Clicked');checkForQsTooltip();">
             <span aria-hidden="true">×</span>
         </button>
     </div>
     <div class="modal-body">
-        <form [formGroup]="editOrganisationForm" (ngSubmit)="updateOrganisationData()">
+        <form [formGroup]="editOrganisationForm" (ngSubmit)="updateOrganisationData();checkForQsTooltip();">
             <div class="row">
                 <div class="col-sm-12">
                     <div class="form-group">
@@ -430,7 +430,7 @@
                         <input type="text" class="form-control" formControlName="phone" name="phone"
                             [ngClass]="{ 'is-invalid': submitted && editOrg.phone.errors }" />
                         <div *ngIf="submitted && editOrg.phone.errors" class="invalid-feedback">
-                            <div *ngIf="editOrg.phone.errors.required">Phone is required</div>
+                            <!-- <div *ngIf="editOrg.phone.errors.required">Phone is required</div> -->
                             <div *ngIf="editOrg.phone.errors || editOrg.phone.errors.pattern">Enter valid phone number</div>
                         </div>
                     </div>
@@ -438,7 +438,7 @@
             </div>
             <div class="row pull-right-btn">
                 <div class="text-right">
-                    <button class="btn btn-link tx-decoration-underline" type="reset" (click)="modal.dismiss('Close Clicked')">Cancel</button>
+                    <button class="btn btn-link tx-decoration-underline" type="reset" (click)="modal.dismiss('Close Clicked');checkForQsTooltip();">Cancel</button>
                     <button class="btn btn-primary" type="submit">Save</button>
                 </div>
                 <!-- <div class="col-sm-6"> -->
