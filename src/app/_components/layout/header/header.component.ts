@@ -26,6 +26,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
   @Input() isquicklinkclicked:boolean;
   @Input() qslinkobj:any;
   @Input() isqsmenuopen:boolean = false;
+  //@Input() isclickonpage:boolean = false; // for later use
   @ViewChild('confirmTemplate') confirmModal: TemplateRef<any>;
   @ViewChildren(BsDropdownDirective) headerDropdown:QueryList<BsDropdownDirective>;
   @ViewChild('navMenu', { static: false }) navMenuEle: ElementRef;
@@ -136,6 +137,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
   actualBackdropclicked:boolean = false;
   storeDropdownstatus:boolean = false;
   lastopendp:any = [];
+  laststoreddp:any = [];
   isShowDashboardConsent = false;
   actualLinkVisitStatus = false;
   actualLinkObj:any;
@@ -1613,7 +1615,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
   }
  
   onClickBackdrop() {
-    this.lastopendp = [];
+    //this.lastopendp = [];
     this.isBackdropclicked = true;
     this.actualBackdropclicked = true;// !this.actualBackdropclicked;
     this.removeHightlightBorders();
@@ -1640,15 +1642,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
       } else {
         this.isquicklinkclicked = !this.qslinkobj.islinkclicked;
       }
-    }else{
+    } else {
       this.quickDivID = "";
       this.qslinkobj = {};
+      this.headerDropdown.forEach((el) => {
+        el.hide();
+      });
     }
-    this.quickLinkObj = {};
-    this.quickDivID = "";
-    this.headerDropdown.forEach((el) => {
-      el.hide(); 
-    });
     this.cdRef.detectChanges();
   }
  
@@ -1663,6 +1663,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
     if (this.qslinkobj !== undefined) {
       if (Object.values(this.qslinkobj).length !== 0) {
         if (this.qslinkobj.islinkclicked) {
+         // this.isHeaderNavbarClicked = false;
           this.actualBackdropclicked = !this.actualBackdropclicked;
         }
         else {
@@ -1690,6 +1691,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
     if (this.isquicklinkclicked) {
       if (this.quickDivID !== undefined && this.quickDivID !== "") {
         this.isuserClickedonqstooltip = false;
+        this.isHeaderNavbarClicked = false;
         this.actualBackdropclicked = true;
         // if (this.qslinkobj !== undefined) {
         if (this.headerDropdown !== undefined) {
@@ -1873,7 +1875,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
   }
 
   isBillingpageQuickid(){
-    if(this.quickDivID !== ""){
+    if(this.quickDivID !== undefined && this.quickDivID !== ""){
       if(this.quickDivID == 1 || this.quickDivID == 2 || this.quickDivID == 3 || this.quickDivID == 11 || this.quickDivID == 12 || this.quickDivID == 18 ||  this.quickDivID == 19 || this.quickDivID == 6 || this.quickDivID == 5){
         return false;
       }else{
@@ -1885,9 +1887,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
   }
 
   onClickHideTooltip(): boolean {
-    if (this.quickLinkObj !== undefined && this.actualBackdropclicked) { //!this.isuserClickedonqstooltip
+    if (this.quickLinkObj !== undefined && Object.values(this.quickLinkObj).length !== 0 && this.actualBackdropclicked) { //!this.isuserClickedonqstooltip
       return true; // show menu on click of quickstart
-    } else if (this.quickLinkObj !== undefined && this.isBackdropclicked) { 
+    } else if (this.quickLinkObj !== undefined && Object.values(this.quickLinkObj).length !== 0 && this.isBackdropclicked) { 
       return true;
     } else {
       return false;  //hide already opened menu
@@ -1904,9 +1906,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
   }
 
   removeHightlightBorders(){
+    if(this.navMenuEle !== undefined){
     this.renderer.removeClass(this.navMenuEle.nativeElement.querySelectorAll('li > div')[0], 'highlightmenu-element');
     this.renderer.removeClass(this.navMenuEle.nativeElement.querySelectorAll('li > div')[1], 'highlightmenu-element');
     this.renderer.removeClass(this.navMenuEle.nativeElement.querySelectorAll('li > div')[2], 'highlightmenu-element');
+    }
     if(this.dropdownTriggers !== undefined){
     for(let i = 0; i < this.dropdownTriggers.nativeElement.querySelectorAll('div > div > ul').length; i++){
          this.renderer.removeClass(this.dropdownTriggers.nativeElement.querySelectorAll('div > div > ul')[i], 'addbg-menuitem');
@@ -2052,6 +2056,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
           });
         }
       }else{
+      if(this.dropdownTriggers == undefined){
         this.lastopendp.length = 0;
         this.headerDropdown.forEach((el: any, index) => {
           if (index == indexid) {
@@ -2072,6 +2077,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
             
           } 
         });
+      }
       }  
      
   }
@@ -2085,7 +2091,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
   }
 
   addBordertoDropdownMenu(){
-    if(this.dropdownTriggers !== undefined){
+    if(this.dropdownTriggers !== undefined && this.renderer !== undefined){
       if(this.quickLinkObj !== undefined && this.quickLinkObj.linkid === 13){
         this.renderer.addClass(this.dropdownTriggers.nativeElement.querySelectorAll('div > div > ul')[3], 'addbg-menuitem');
       } else if(this.quickLinkObj !== undefined && this.quickLinkObj.linkid == 14){
@@ -2117,6 +2123,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
   }
 
   headerNavbarEvent($event) {
+    this.isHeaderNavbarClicked = true;
+    if(this.quickLinkObj !== undefined && Object.values(this.quickLinkObj).length !== 0){
+      this.userService.onRevistQuickStartmenulink.next({quickstartid:this.quickDivID,reclickqslink:this.quickLinkObj.isactualbtnclicked,urlchanged:true}); 
+    }
     if ($event.currentTarget === this.headerNavbarEle.nativeElement) {
       if (!this.isBackdropclicked && this.actualBackdropclicked) { // if quick start opened and want to click navbar
         this.onClickBackdrop();

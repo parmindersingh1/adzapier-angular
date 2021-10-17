@@ -79,6 +79,7 @@ export class OrgpageComponent implements OnInit,AfterViewInit,OnDestroy {
   isRevistedLink:boolean;
   currentLinkID:any;
   highlightbtn:boolean = false;
+  iswindowclicked;
   constructor(private formBuilder: FormBuilder,
               private orgservice: OrganizationService,
               private modalService: NgbModal, private sanitizer: DomSanitizer,
@@ -445,6 +446,7 @@ export class OrgpageComponent implements OnInit,AfterViewInit,OnDestroy {
   }
 
   ngAfterViewInit(){
+    this.userService.isRevisitedQSMenuLink.subscribe((status) => { this.isRevistedLink = status.reclickqslink; this.currentLinkID = status.quickstartid; this.iswindowclicked = status.urlchanged  });
    this.showQuickStartTooltip();
    // this.userService.onClickActualBtnByUser.subscribe((status)=> this.isorgqsmenu = status);
     this.cdRef.detectChanges();

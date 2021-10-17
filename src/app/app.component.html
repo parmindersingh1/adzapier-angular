@@ -1,7 +1,7 @@
-<div class="container-fluid">
+<div class="container-fluid"> <!--#pageContainer  (click)="onPageClick($event)"-->
   <div class="row">
     <app-header class="w-100" [isqsmenuopen]="isquickstartopen" [qslinkobj]="qsmenulinkobj" (onClickEnableQuickStartMenu)="enableQuickStartMenu($event)" [isquicklinkclicked]="isquickLinkclicked" *ngIf="hideHeaderFooter"></app-header>
-    <div id="main" class="container site-content" > <!-- [@slideInOut]="isquickstartopen ? false : true"  [ngClass]="isquickstartopen ? 'change-margin' : ''"-->
+    <div id="main" class="container site-content" > <!-- [isclickonpage]="isuserclickonpage" [@slideInOut]="isquickstartopen ? false : true"  [ngClass]="isquickstartopen ? 'change-margin' : ''"-->
       <router-outlet></router-outlet>
       <!-- container -->
     </div><!-- content -->

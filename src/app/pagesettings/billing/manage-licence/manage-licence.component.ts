@@ -37,6 +37,7 @@ export class ManageLicenceComponent implements OnInit {
   actuallinkstatus:boolean = false;
   isquickstartmenu:any;
   actualbtnClickstatus:boolean = false;
+  iswindowclicked;
   constructor(
     private loading: NgxUiLoaderService,
     private billingService: BillingService,
@@ -202,6 +203,7 @@ export class ManageLicenceComponent implements OnInit {
    
 
   ngAfterViewInit(){
+    this.userService.isRevisitedQSMenuLink.subscribe((status) => { this.isRevistedLink = status.reclickqslink; this.currentLinkID = status.quickstartid; this.iswindowclicked = status.urlchanged  });
     this.quickmenuService.onClickEmitQSLinkobj.pipe(
       takeUntil(this.unsubscribeAfterUserAction$)
     ).subscribe((res) => { 

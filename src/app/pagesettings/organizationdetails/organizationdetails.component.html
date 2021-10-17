@@ -91,7 +91,7 @@
                     </div>
 
                     <div class="ml-auto">
-                        <button type="button"  [ngClass]="quickDivID == 3 ? 'btn-qs-hightlight' : ''" class="btn btn-sm btn-outline-secondary btn-uppercase ml-2" data-toggle="modal"
+                        <button type="button"  [ngClass]="quickDivID == 3 && quickDivID == currentLinkID && !iswindowclicked ? 'btn-qs-hightlight' : ''" class="btn btn-sm btn-outline-secondary btn-uppercase ml-2" data-toggle="modal"
                             (click)="open(propertyModal, 'property')"><i class="fas fa-plus"></i> Add Property</button>
                     </div>
                 </div>

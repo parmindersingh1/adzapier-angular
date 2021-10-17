@@ -163,7 +163,7 @@
       </li>
     </ul>
     <div>
-      <button (click)="btnTopAddSubscription()"  [ngClass]="quickDivIDSub == 4 ? 'btn-qs-white-hightlight' : ''" class="primary-yellow">Add A Subscription</button>
+      <button (click)="btnTopAddSubscription()"  [ngClass]="quickDivIDSub == 4 && revisitedQuicklinnkid == quickDivIDSub && !isUserClickedNotRelatedToTooltip ? 'btn-qs-white-hightlight' : ''" class="primary-yellow">Add A Subscription</button>
     </div>
   </div>
   <!--end of general menu after login-->
@@ -393,7 +393,7 @@
 <!--quickstart alert for every page-->
 <div [ngClass]="isBillingpageQuickid() && isquicklinkclicked && !isBackdropclicked ? 'back-drop-two': ''"
   (click)="onClickBackdrop()" *ngIf="isloginpage">
-  <app-quickstartalert *ngIf="!isUserClickedNotRelatedToTooltip && !isRevistedLink  && !isBackdropclicked && actualBackdropclicked" [styleobj]="positionObj()" [isclickedbyuser]="quickLinkStatus"
+  <app-quickstartalert *ngIf="!isHeaderNavbarClicked && !isUserClickedNotRelatedToTooltip && !isRevistedLink  && !isBackdropclicked && actualBackdropclicked" [styleobj]="positionObj()" [isclickedbyuser]="quickLinkStatus"
     [isuserclickoutsidemenu]="isQuicklinkActuallinkVisited()" [linkid]="quickDivID" [divguidetext]="alertguidetext"
     [guidancetext]="alertcontent" [isactualLinkclickedbyuser]="actuallinkstatus">
   </app-quickstartalert>

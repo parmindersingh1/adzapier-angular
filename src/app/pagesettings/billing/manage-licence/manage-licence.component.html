@@ -99,11 +99,11 @@
         </th>
           <td style="width: 290px" *ngIf="plan.planDetails.level === 'property'">
             <a class="plan-name" (click)="userAction(plan.id,quickDivID)">
-              <button pButton label="Assign Property"  [ngClass]="quickDivID == 6 || quickDivID == 19 ? 'btn-qs-hightlight' : ''" class="w-100 p-button-secondary manage-btn"></button></a></td>
+              <button pButton label="Assign Property"  [ngClass]="quickDivID == 6 && quickDivID == currentLinkID && !iswindowclicked || quickDivID == 19 && quickDivID == currentLinkID && !iswindowclicked ? 'btn-qs-hightlight' : ''" class="w-100 p-button-secondary manage-btn"></button></a></td>
 
           <td style="width: 290px" *ngIf="plan.planDetails.level !== 'property'">
             <a class="plan-name" (click)="userActionForOrg(plan.id,quickDivID)">
-            <button pButton label="Assign Organization" [ngClass]="quickDivID == 12 ? 'btn-qs-hightlight' : ''" class="w-100 p-button-secondary manage-btn"></button></a></td>
+            <button pButton label="Assign Organization" [ngClass]="quickDivID == 12 && quickDivID == currentLinkID && !iswindowclicked ? 'btn-qs-hightlight' : ''" class="w-100 p-button-secondary manage-btn"></button></a></td>
 
 
         </ng-container>

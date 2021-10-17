@@ -100,6 +100,7 @@ export class OrganizationdetailsComponent implements OnInit {
   quickDivID;
   isRevistedLink:boolean;
   currentLinkID:any;
+  iswindowclicked:boolean;
   currentRouteURL;
   changedRouteURL;
   constructor(private activatedRoute: ActivatedRoute,
@@ -904,6 +905,7 @@ export class OrganizationdetailsComponent implements OnInit {
 
   ngAfterViewInit(){
     this.showQuickstartTooltip();
+    this.userService.isRevisitedQSMenuLink.subscribe((status) => { this.isRevistedLink = status.reclickqslink; this.currentLinkID = status.quickstartid; this.iswindowclicked = status.urlchanged  });
     this.cdref.detectChanges();
   }
 
