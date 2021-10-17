@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit, SimpleChanges, AfterViewChecked, AfterContentChecked, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, SimpleChanges, AfterViewChecked, AfterContentChecked, ViewChild, ElementRef, HostListener } from '@angular/core';
 import { faCoffee } from '@fortawesome/free-solid-svg-icons';
 import { AuthenticationService, OrganizationService } from './_services';
 import { ActivatedRoute, NavigationEnd, RouteConfigLoadEnd, RouteConfigLoadStart, Router, RouterEvent } from '@angular/router';
@@ -42,7 +42,8 @@ export class AppComponent implements OnInit {
   modalRef: BsModalRef;
   @ViewChild('unauth', { static: true }) unauth: any;
   @ViewChild(QuickstartmenuComponent, { static: true }) quickstartmenuComponent: QuickstartmenuComponent;
-  @ViewChild(PricingComponent,{static: false}) pricingComp : PricingComponent
+  @ViewChild(PricingComponent,{static: false}) pricingComp : PricingComponent;
+  // @ViewChild('pageContainer', { static: false }) pageContainer: ElementRef;   // for later use
   title = 'adzapier-analytics-ng';
   faCoffee = faCoffee;
   allPlanData: any;
@@ -58,6 +59,7 @@ export class AppComponent implements OnInit {
   qsMenuList: any = [];
   isloginpage: boolean;
   toggleQuickstartmenu:boolean;
+  //isuserclickonpage:boolean = false; //for later use to check page click event
   constructor(private router: Router,
     private activatedRoute: ActivatedRoute,
     private modalService: BsModalService,

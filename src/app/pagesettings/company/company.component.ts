@@ -81,6 +81,7 @@ export class CompanyComponent implements AfterViewInit, OnInit {
   queryOID;
   queryPID;
   isUserClickedNotRelatedToTooltip:boolean;
+  iswindowclicked;
   constructor(private companyService: CompanyService, private modalService: NgbModal,
               private formBuilder: FormBuilder,
               private userService: UserService,
@@ -106,7 +107,9 @@ export class CompanyComponent implements AfterViewInit, OnInit {
       this.queryOID = params.get('oid');
       this.queryPID = params.get('pid');
     });
+    if (!this.quickmenuService.isclickeventoutsidemenu) {
     this.showQuickstarttooltip();
+    }
     // this.userService.isClickedOnQSMenu.pipe(
     //   takeUntil(this.unsubscribeAfterUserAction$)
 
@@ -685,8 +688,11 @@ export class CompanyComponent implements AfterViewInit, OnInit {
   }
 
   ngAfterViewInit(){
-    this.showQuickstarttooltip();
-    this.cdRef.detectChanges();
+    this.userService.isRevisitedQSMenuLink.subscribe((status) => { this.isRevistedLink = status.reclickqslink; this.currentLinkID = status.quickstartid; this.iswindowclicked = status.urlchanged  });
+    if (!this.quickmenuService.isclickeventoutsidemenu) {
+      this.showQuickstarttooltip();
+      this.cdRef.detectChanges();
+    }
   }
 
   ngAfterViewChecked(){
