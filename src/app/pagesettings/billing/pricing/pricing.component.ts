@@ -485,7 +485,6 @@ export class PricingComponent implements OnInit, AfterViewInit {
   }
 
   callForQuickStart(){
-    this.cookieConsentBillingCycle = "monthly";
     const quicklinks = this.quickmenuService.qsMenuobjwithIndexid;
     if (quicklinks !== undefined && quicklinks.linkid == 11) {
       this.currentStep = 2;
@@ -497,6 +496,7 @@ export class PricingComponent implements OnInit, AfterViewInit {
       this.currentStep = 1;
       this.onSetCookieConsent(1, 'cookieConsent');
     } 
+    this.onGetActivePlan(); // by default initially it will show monthly plan only
   }
 
 
