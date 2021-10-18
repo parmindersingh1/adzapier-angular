@@ -3,60 +3,60 @@ export const mainPlans = {
     free: [
       {
         featureName: 'Monthly Pageviews\n',
-        featureValue: 'Less than 250K'
+        featureValue: '5K per month'
+      },
+      {
+        featureName: 'Record of Consent Storage\n',
+        featureValue: '10k records per month'
+      },
+      {
+        featureName: 'Users Per Organization\n',
+        featureValue: '1'
       },
       {
         featureName: 'Domain Scan\n',
-        featureValue: '1/Month\n'
+        featureValue: 'None\n'
       },
       {
         featureName: 'Full conversion and visitor consent state reporting\n',
         featureValue: null
       },
       {
-        featureName: 'IAB Europe TCF Support',
+        featureName: 'Cookie Consent Dashboard\n',
         featureValue: null
       },
       {
-        featureName: 'CCPA Opt-Out Mode',
+        featureName: 'Audit Trails\n',
         featureValue: null
       },
     ],
     essentials: [
       {
         featureName: 'Monthly Pageviews\n',
-        featureValue: '250K to 500K'
+        featureValue: '5k - 30k per month'
       },
       {
-        featureName: 'Domain Scan\n',
-        featureValue: '2/Month\n'
-      },
-      {
-        featureName: 'Banner translated in multiple languages\n',
-        featureValue: null
-      },
-      {
-        featureName: 'Highly configurable GDPR & CCPA consent settings\n',
-        featureValue: null
-      },
-      {
-        featureName: 'Full conversion and visitor consent state reporting\n',
-        featureValue: null
-      },
-      {
-        featureName: 'Google vendors',
-        featureValue: null
-      },
-      {
-        featureName: '3rd-party Cookie Blocking\n',
-        featureValue: null
+        featureName: 'Record of Consent Storage\n',
+        featureValue: '60k records per month\n'
       },
       {
         featureName: 'Users Per Organization\n',
         featureValue: 'up to 2\n'
       },
       {
-        featureName: 'Consent Record Keeping',
+        featureName: 'Domain Scan\n',
+        featureValue: '2/Month\n'
+      },
+      {
+        featureName: 'Full conversion and visitor consent state reporting\n',
+        featureValue: null
+      },
+      {
+        featureName: 'Cookie Consent Dashboard\n',
+        featureValue: null
+      },
+      {
+        featureName: 'Audit Trails\n',
         featureValue: null
       },
       {
@@ -64,15 +64,15 @@ export const mainPlans = {
         featureValue: null
       },
       {
-        featureName: '1st Party Cookie Discovery',
+        featureName: '1st Party Cookie Discovery\n',
         featureValue: null
       },
       {
-        featureName: 'Geo-targeting ',
+        featureName: '3rd-party Cookie Blocking\n',
         featureValue: null
       },
       {
-        featureName: 'Remove "powered by Adzapier" branding\n',
+        featureName: 'Multiple Languages Support\n',
         featureValue: null
       },
       {
@@ -84,13 +84,33 @@ export const mainPlans = {
         featureValue: null
       },
       {
-        featureName: 'Compatible with the IAB Transparency & Consent Framework\n',
-        featureValue: null
-      },
-      {
         featureName: 'Cookie banner with dynamic notice text\n',
         featureValue: null
       },
+      {
+        featureName: 'Authenticated Consent\n',
+        featureValue: null
+      },
+      {
+        featureName: 'Google Consent Mode\n',
+        featureValue: null
+      },
+      {
+        featureName: 'Facebook Consent Mode\n',
+        featureValue: null
+      },
+      {
+        featureName: 'Consent Manager Versioning & Rollback\n',
+        featureValue: null
+      },
+      {
+        featureName: 'UI Display Frequency\n',
+        featureValue: null
+      },
+      {
+        featureName: 'Custom branding\n',
+        featureValue: null
+      }, 
       {
         featureName: 'Support Response Time\n',
         featureValue: '24 Hours'
@@ -99,38 +119,30 @@ export const mainPlans = {
     professional: [
       {
         featureName: 'Monthly Pageviews\n',
-        featureValue: '500K to 1M'
+        featureValue: '30k-50k per month'
       },
       {
-        featureName: 'Domain Scan\n',
-        featureValue: '5/month\n'
-      },
-      {
-        featureName: 'Banner translated in multiple languages\n',
-        featureValue: null
-      },
-      {
-        featureName: 'Highly configurable GDPR & CCPA consent settings\n',
-        featureValue: null
-      },
-      {
-        featureName: 'Full conversion and visitor consent state reporting\n',
-        featureValue: null
-      },
-      {
-        featureName: 'Google vendors',
-        featureValue: null
-      },
-      {
-        featureName: '3rd-party Cookie Blocking\n',
-        featureValue: null
+        featureName: 'Record of Consent Storage\n',
+        featureValue: '100k records per month\n'
       },
       {
         featureName: 'Users Per Organization\n',
         featureValue: 'up to 5\n'
       },
       {
-        featureName: 'Consent Record Keeping',
+        featureName: 'Domain Scan\n',
+        featureValue: '5/month\n'
+      },
+      {
+        featureName: 'Full conversion and visitor consent state reporting\n',
+        featureValue: null
+      },
+      {
+        featureName: 'Cookie Consent Dashboard\n',
+        featureValue: null
+      },
+      {
+        featureName: 'Audit Trails\n',
         featureValue: null
       },
       {
@@ -138,15 +150,15 @@ export const mainPlans = {
         featureValue: null
       },
       {
-        featureName: '1st Party Cookie Discovery',
+        featureName: '1st Party Cookie Discovery\n',
         featureValue: null
       },
       {
-        featureName: 'Geo-targeting ',
+        featureName: '3rd-party Cookie Blocking\n',
         featureValue: null
       },
       {
-        featureName: 'Remove "powered by Adzapier" branding\n',
+        featureName: 'Multiple Languages Support\n',
         featureValue: null
       },
       {
@@ -158,11 +170,59 @@ export const mainPlans = {
         featureValue: null
       },
       {
-        featureName: 'Compatible with the IAB Transparency & Consent Framework\n',
+        featureName: 'Cookie banner with dynamic notice text\n',
         featureValue: null
       },
       {
-        featureName: 'Cookie banner with dynamic notice text\n',
+        featureName: 'Authenticated Consent\n',
+        featureValue: null
+      },
+      {
+        featureName: 'Google Consent Mode\n',
+        featureValue: null
+      },
+      {
+        featureName: 'Facebook Consent Mode\n',
+        featureValue: null
+      },
+      {
+        featureName: 'Consent Manager Versioning & Rollback\n',
+        featureValue: null
+      },
+      {
+        featureName: 'UI Display Frequency\n',
+        featureValue: null
+      },
+      {
+        featureName: 'Custom branding\n',
+        featureValue: null
+      },
+      {
+        featureName: 'CCPA Opt-Out Mode\n',
+        featureValue: null
+      },
+      {
+        featureName: 'Advanced Languages Edits \n',
+        featureValue: null
+      },
+      {
+        featureName: 'Geo-targeting\n',
+        featureValue: null
+      },
+      {
+        featureName: 'Highly configurable GDPR & CCPA consent settings\n',
+        featureValue: null
+      },
+      {
+        featureName: 'Google vendors & TCF vendors\n',
+        featureValue: null
+      },
+      {
+        featureName: 'IAB Europe TCF Support\n',
+        featureValue: null
+      },
+      {
+        featureName: 'Compatible with the IAB Transparency & Consent Framework\n',
         featureValue: null
       },
       {
@@ -173,38 +233,30 @@ export const mainPlans = {
     enterprise: [
       {
         featureName: 'Monthly Pageviews\n',
-        featureValue: '1M+'
-      },
-      {
-        featureName: 'Domain Scan\n',
         featureValue: 'Unlimited'
       },
       {
-        featureName: 'Banner translated in multiple languages\n',
-        featureValue: null
-      },
-      {
-        featureName: 'Highly configurable GDPR & CCPA consent settings\n',
-        featureValue: null
-      },
-      {
-        featureName: 'Full conversion and visitor consent state reporting\n',
-        featureValue: null
-      },
-      {
-        featureName: 'Google vendors',
-        featureValue: null
-      },
-      {
-        featureName: '3rd-party Cookie Blocking\n',
-        featureValue: null
+        featureName: 'Record of Consent Storage\n',
+        featureValue: 'Unlimited\n'
       },
       {
         featureName: 'Users Per Organization\n',
         featureValue: 'Unlimited\n'
       },
       {
-        featureName: 'Consent Record Keeping',
+        featureName: 'Domain Scan\n',
+        featureValue: 'Unlimited\n'
+      },
+      {
+        featureName: 'Full conversion and visitor consent state reporting\n',
+        featureValue: null
+      },
+      {
+        featureName: 'Cookie Consent Dashboard\n',
+        featureValue: null
+      },
+      {
+        featureName: 'Audit Trails\n',
         featureValue: null
       },
       {
@@ -212,15 +264,15 @@ export const mainPlans = {
         featureValue: null
       },
       {
-        featureName: '1st Party Cookie Discovery',
+        featureName: '1st Party Cookie Discovery\n',
         featureValue: null
       },
       {
-        featureName: 'Geo-targeting ',
+        featureName: '3rd-party Cookie Blocking\n',
         featureValue: null
       },
       {
-        featureName: 'Remove "powered by Adzapier" branding\n',
+        featureName: 'Multiple Languages Support\n',
         featureValue: null
       },
       {
@@ -232,16 +284,76 @@ export const mainPlans = {
         featureValue: null
       },
       {
-        featureName: 'Compatible with the IAB Transparency & Consent Framework\n',
-        featureValue: null
-      },
-      {
         featureName: 'Cookie banner with dynamic notice text\n',
         featureValue: null
       },
       {
+        featureName: 'Authenticated Consent\n',
+        featureValue: null
+      },
+      {
+        featureName: 'Google Consent Mode\n',
+        featureValue: null
+      },
+      {
+        featureName: 'Facebook Consent Mode\n',
+        featureValue: null
+      },
+      {
+        featureName: 'Consent Manager Versioning & Rollback\n',
+        featureValue: null
+      },
+      {
+        featureName: 'UI Display Frequency\n',
+        featureValue: null
+      },
+      {
+        featureName: 'Custom branding\n',
+        featureValue: null
+      },
+      {
+        featureName: 'CCPA Opt-Out Mode\n',
+        featureValue: null
+      },
+      {
+        featureName: 'Advanced Languages Edits \n',
+        featureValue: null
+      },
+      {
+        featureName: 'Geo-targeting\n',
+        featureValue: null
+      },
+      {
+        featureName: 'Highly configurable GDPR & CCPA consent settings\n',
+        featureValue: null
+      },
+      {
+        featureName: 'Google vendors & TCF vendors\n',
+        featureValue: null
+      },
+      {
+        featureName: 'IAB Europe TCF Support\n',
+        featureValue: null
+      },
+      {
+        featureName: 'Compatible with the IAB Transparency & Consent Framework\n',
+        featureValue: null
+      },
+      {
+        featureName: 'Android Mobile SDK (beta)\n',
+        featureValue: null
+      },
+      {
+        featureName: 'Scan behind login\n',
+        featureValue: null
+      },
+      {
+        featureName: 'Remove "powered by Adzapier" branding\n',
+        featureValue: null
+      },
+      {
         featureName: 'Support Response Time\n',
-        featureValue: '3 Hours\n'
+        featureValue: '3 Hours'
       },
     ]
   },
@@ -300,6 +412,158 @@ export const mainPlans = {
         featureValue: '3 Hours\n'
       }
     ],
+  },
+  consentPreference: {
+    essentials: [
+      {
+        featureName: 'Number Of users',
+        featureValue: '5K'
+      },
+      {
+        featureName: 'Keep user consent and privacy preferences in one place\n',
+        featureValue: null
+      },
+      {
+        featureName: 'Store multiple preferences for each user (e.g. if you have multiple newsletters or opt-ins)\n',
+        featureValue: null
+      },
+      {
+        featureName: 'Store whether a user was verified with double opt-in\n',
+        featureValue: null
+      },
+      {
+        featureName: 'For each user, get the history of consents\n',
+        featureValue: null
+      },
+      {
+        featureName: 'User-friendly dashboard for reviewing consent records\n',
+        featureValue: null
+      },
+      {
+        featureName: 'REST HTTP API and JS SDK, to give you total control and how and when consent is stored\n',
+        featureValue: null
+      },
+      {
+        featureName: 'An easy to implement JS widget to ease consent tracking for online forms\n',
+        featureValue: null
+      },
+      {
+        featureName: 'For each consent, track the legal or privacy notice the user has accepted\n',
+        featureValue: 'coming soon\n'
+      },
+      {
+        featureName: 'Webhooks\n',
+        featureValue: 'coming soon\n'
+      },
+      {
+        featureName: 'Update consent preferences across your third party tools (MailChimp, Intercom, Marketo etc.)\n',
+        featureValue: 'coming soon\n'
+      },
+      {
+        featureName: 'Support Response Time\n',
+        featureValue: '24 Hours\n'
+      }
+    ],
+    professional: [
+      {
+        featureName: 'Number Of users',
+        featureValue: '10K'
+      },
+      {
+        featureName: 'Keep user consent and privacy preferences in one place\n',
+        featureValue: null
+      },
+      {
+        featureName: 'Store multiple preferences for each user (e.g. if you have multiple newsletters or opt-ins)\n',
+        featureValue: null
+      },
+      {
+        featureName: 'Store whether a user was verified with double opt-in\n',
+        featureValue: null
+      },
+      {
+        featureName: 'For each user, get the history of consents\n',
+        featureValue: null
+      },
+      {
+        featureName: 'User-friendly dashboard for reviewing consent records\n',
+        featureValue: null
+      },
+      {
+        featureName: 'REST HTTP API and JS SDK, to give you total control and how and when consent is stored\n',
+        featureValue: null
+      },
+      {
+        featureName: 'An easy to implement JS widget to ease consent tracking for online forms\n',
+        featureValue: null
+      },
+      {
+        featureName: 'For each consent, track the legal or privacy notice the user has accepted\n',
+        featureValue: 'coming soon\n'
+      },
+      {
+        featureName: 'Webhooks\n',
+        featureValue: 'coming soon\n'
+      },
+      {
+        featureName: 'Update consent preferences across your third party tools (MailChimp, Intercom, Marketo etc.)\n',
+        featureValue: 'coming soon\n'
+      },
+      {
+        featureName: 'Support Response Time\n',
+        featureValue: '24 Hours\n'
+      }
+    ],
+    enterprise:  [
+      {
+        featureName: 'Number Of users',
+        featureValue: 'Unlimited'
+      },
+      {
+        featureName: 'Keep user consent and privacy preferences in one place\n',
+        featureValue: null
+      },
+      {
+        featureName: 'Store multiple preferences for each user (e.g. if you have multiple newsletters or opt-ins)\n',
+        featureValue: null
+      },
+      {
+        featureName: 'Store whether a user was verified with double opt-in\n',
+        featureValue: null
+      },
+      {
+        featureName: 'For each user, get the history of consents\n',
+        featureValue: null
+      },
+      {
+        featureName: 'User-friendly dashboard for reviewing consent records\n',
+        featureValue: null
+      },
+      {
+        featureName: 'REST HTTP API and JS SDK, to give you total control and how and when consent is stored\n',
+        featureValue: null
+      },
+      {
+        featureName: 'An easy to implement JS widget to ease consent tracking for online forms\n',
+        featureValue: null
+      },
+      {
+        featureName: 'For each consent, track the legal or privacy notice the user has accepted\n',
+        featureValue: 'coming soon\n'
+      },
+      {
+        featureName: 'Webhooks\n',
+        featureValue: 'coming soon\n'
+      },
+      {
+        featureName: 'Update consent preferences across your third party tools (MailChimp, Intercom, Marketo etc.)\n',
+        featureValue: 'coming soon\n'
+      },
+      {
+        featureName: 'Support Response Time\n',
+        featureValue: '3 Hours\n'
+      }
+    ],
   }
 }
 
@@ -329,7 +593,7 @@ export const highLightFeatures = {
       },
       {
         featureName: 'Domain Scan\n',
-        featureValue: '1/Month\n'
+        featureValue: 'None\n'
       },
       {
         featureName: 'Users Per Organization\n',
@@ -660,7 +924,7 @@ export const featuresComparison = {
     },
     {
       featureName: 'Domain Scan\n',
-      free: '1/Month\n',
+      free: 'None\n',
       essentials: ' 2/Month\n',
       professional: '5/month\n',
       enterprise: 'Unlimited\n'
@@ -843,8 +1107,8 @@ export const featuresComparison = {
     {
       featureName: 'Remove "powered by Adzapier" branding\n',
       free: 'NO',
-      essentials: 'Badge',
-      professional: 'Badge',
+      essentials: 'NO',
+      professional: 'NO',
       enterprise: 'YES'
     }, 
     {

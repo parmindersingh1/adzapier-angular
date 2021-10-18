@@ -1,4 +1,4 @@
-<nav *ngIf="currentUser" class="navbar navbar-expand-lg">
+<nav *ngIf="currentUser" #headerNavbar (click)="headerNavbarEvent($event)"  class="navbar navbar-expand-lg">
 
 
   <!-- Brand -->
@@ -59,7 +59,7 @@
     [ngClass]="{'hidemenu':!currentUser, 'showmenu':currentUser}">
     <ul *ngIf="orgPropertyMenu" class="navbar-nav nav-mr" dropdown container="body">
       <a class="nav-link dropdown-link"  dropdownToggle (click)="false" >
-       <ng-container *ngIf="currentOrganization !== undefined && currentOrganization.length > 0" class="mr-2">{{currentOrganization}} &nbsp;</ng-container>
+       <span [ngStyle]="addEllipsisOrg()" *ngIf="currentOrganization !== undefined && currentOrganization.length > 0" class="mr-2 large-orgname">{{currentOrganization}} &nbsp;</span>
        <span class="large-propname" [ngStyle]="addEllipsis()" *ngIf="currentProperty !== undefined && currentProperty.length > 0"> &amp; &nbsp; {{currentProperty.length > 0 ? convertAmpersand(currentProperty) : 'Select Property'}}</span>
        <span *ngIf="currentOrganization == undefined">Select Organization<span class="ml-2">&amp; &nbsp;</span></span>
        <span *ngIf="currentProperty == undefined"> Select Property</span>
@@ -109,39 +109,40 @@
     <!-- </ng-container> -->
     </ul>
       <!--end of organization / property menu after login-->
-    <ul class="navbar-nav" *ngIf="currentUser">
-      <li *ngFor="let menu of navigationMenu" class="nav-item">
-        <div *ngIf="menu.showlink" dropdown container="body">
-          <div *ngIf="!menu.subcategory">
-            <a class="nav-link" routerLink="[menu.routerLink]" [queryParams]="{oid:queryOID , pid:queryPID}"  [class.active]="menu.showlink === 'Billing' && isBillingActivelinkMatched" (click)="goto(menu)">
+    <ul class="navbar-nav"  #navMenu *ngIf="currentUser">
+      <li *ngFor="let menu of navigationMenu;" class="nav-item">
+        
+      <div *ngIf="menu.showlink" dropdown   #headerDropdown="bs-dropdown"  container="body"    [autoClose]="true">
+          <div *ngIf="!menu.subcategory" >
+            <a class="nav-link" routerLink="[menu.routerLink]" dropdownToggle [queryParams]="{oid:queryOID , pid:queryPID}"  [class.active]="menu.showlink === 'Billing' && isBillingActivelinkMatched" (click)="goto(menu)">
           {{ menu.showlink }}</a></div>
           <div *ngIf="menu.subcategory">
-            <a class="nav-link dropdown-toggle"  [class.active]="menu.showlink === 'Privacy' && isPrivacyActivelinkMatched" *ngIf="menu.subcategory" dropdownToggle (click)="true">
+            <a class="nav-link dropdown-toggle" dropdownToggle  [class.active]="menu.showlink === 'Privacy' && isPrivacyActivelinkMatched" *ngIf="menu.subcategory" (click)="true">
               {{ menu.showlink }}</a></div>
-          <ul *dropdownMenu class="dropdown-menu">
+          <ul id="dropdown-triggers-manual"  #dpTriggers  *dropdownMenu class="dropdown-menu">
             <div class="d-flex">
               <div>
-            <ng-container *ngFor="let item of menu.subcategory;let q = index;">
+            <ul *ngFor="let item of menu.subcategory;let q = index;" style="margin: 0; padding: 0;">
               <li *ngIf="menu.showlink == 'Privacy' && q===0" class="displayflex"><span>DSAR</span></li>
               <li role="menuitem" *ngIf="q  <= 9">
-                <a class="dropdown-item" [class.active]="activateSublink(item)" *ngIf="item.routerLink !== '/home/dashboard/consent-preference'" [routerLink]="item.routerLink" [queryParams]="{oid:queryOID , pid:queryPID}" (click)="goto(item)">
+                <a class="dropdown-item" [class.active]="activateSublink(item)"  [routerLink]="item.routerLink" *ngIf="item.routerLink !== '/home/dashboard/consent-preference'" [queryParams]="{oid:queryOID , pid:queryPID}" (click)="goto(item)">
                   <span *ngIf="item.icon.indexOf('fa')===-1">
                     <i-feather name="{{item.icon}}" class="feather-16"></i-feather>{{item.showlink}}
                   </span>
                   <span *ngIf="item.icon.indexOf('fa')===0"><i class="{{item.icon}}"></i>{{item.showlink}}</span>
                 </a> <!--hide consent preference menu item-->
-                <a class="dropdown-item" [class.active]="activateSublinkConsentPreference(item)" *ngIf="item.routerLink == '/home/dashboard/consent-preference' && showConsentPreference" [routerLink]="item.routerLink"  [queryParams]="{oid:queryOID , pid:queryPID}" (click)="goto(item)">
+                <a class="dropdown-item" [class.active]="activateSublinkConsentPreference(item)" *ngIf="item.routerLink == '/home/dashboard/consent-preference' " [routerLink]="item.routerLink"  [queryParams]="{oid:queryOID , pid:queryPID}" (click)="goto(item)">
                   <span *ngIf="item.icon.indexOf('fa')===-1">
                     <i-feather name="{{item.icon}}" class="feather-16"></i-feather>{{item.showlink}}
                   </span>
                   <span *ngIf="item.icon.indexOf('fa')===0"><i class="{{item.icon}}"></i>{{item.showlink}}</span>
                 </a>
               </li>
-              <li *ngIf="q===3" class="displayflex"><span>Cookie Consent</span></li>
+              <!-- <li *ngIf="q===3" class="displayflex"><span>Cookie Consent</span></li> -->
 
-            </ng-container>
+            </ul>
             </div>
-            <div *ngIf="showConsentPreference" class="ml-2">
+            <!-- <div *ngIf="showConsentPreference" class="ml-2">
             <ng-container *ngFor="let item of menu.subcategory;let q = index;">
               <div class="consent-preference" style="width:135px" *ngIf="q > 9">
                 <li *ngIf="q=== 10" class="displayflex"><span>Consent Preference</span></li>
@@ -155,14 +156,14 @@
                 </li>
               </div>
             </ng-container>
-            </div>
+            </div> -->
             </div>
           </ul>
         </div>
       </li>
     </ul>
     <div>
-      <button (click)="btnTopAddSubscription()" class="primary-yellow"> Add A Subscription </button>
+      <button (click)="btnTopAddSubscription()"  [ngClass]="quickDivIDSub == 4 && revisitedQuicklinnkid == quickDivIDSub && !isUserClickedNotRelatedToTooltip ? 'btn-qs-white-hightlight' : ''" class="primary-yellow">Add A Subscription</button>
     </div>
   </div>
   <!--end of general menu after login-->
@@ -238,13 +239,16 @@
                   <p class="tx-12 tx-color-03">{{userRole}}</p>
                 </div>
                 <li *ngIf="!item.items" role="menuitem">
-                  <a class="dropdown-item" routerLink="{{item.routerLink}}" [queryParams]="{oid:queryOID , pid:queryPID}" *ngIf="item.label !== 'Signout' && item.label !== 'Help Center'" [class.active]="selectedSubmenu == item.routerLink || activateSublink(item)" (click)="goto(item)">
+                  <a class="dropdown-item" routerLink="{{item.routerLink}}" [queryParams]="{oid:queryOID , pid:queryPID}" *ngIf="item.label !== 'Signout' && item.label !== 'Help Center' && item.label !== 'Quick Start'" [class.active]="selectedSubmenu == item.routerLink || activateSublink(item)" (click)="goto(item)">
                     <i-feather *ngIf="item.icon" name="{{item.icon}}" class="feather-16"></i-feather>{{item.label}}
                   </a>
-                  <a class="dropdown-item" routerLink="{{item.routerLink}}" *ngIf="item.label === 'Signout'" (click)="logout()"> <!--routerLink="{{item.routerLink}}"-->
+                  <a class="dropdown-item" routerLink="{{item.routerLink}}" *ngIf="item.label !== 'Quick Start' && item.label === 'Signout'" (click)="logout()"> <!--routerLink="{{item.routerLink}}"-->
                     <i-feather *ngIf="item.icon" name="{{item.icon}}" class="feather-16"></i-feather>{{item.label}}
                   </a>
-                  <a class="dropdown-item" href="{{item.routerLink}}" *ngIf="item.label !== 'Signout' && item.label === 'Help Center'" target="_blank">
+                  <a class="dropdown-item" href="{{item.routerLink}}" *ngIf="item.label !== 'Quick Start' && item.label !== 'Signout' && item.label === 'Help Center'" target="_blank">
+                    <i-feather *ngIf="item.icon" name="{{item.icon}}" class="feather-16"></i-feather>{{item.label}}
+                  </a>
+                  <a class="dropdown-item" (click)="onClickQSLinkFromHeader(false);" *ngIf="item.label !== 'Signout' && item.label !== 'Help Center' && item.label === 'Quick Start'">
                     <i-feather *ngIf="item.icon" name="{{item.icon}}" class="feather-16"></i-feather>{{item.label}}
                   </a>
                 </li>
@@ -369,7 +373,7 @@
                 <span *ngIf="item.icon.indexOf('fa')===0"><i class="{{item.icon}}"></i>{{item.showlink}}</span>
               </a>
             </li>
-            <li *ngIf="q===3" class="displayflex"><span>Cookie Consent</span></li>
+            <!-- <li *ngIf="q===3" class="displayflex"><span>Cookie Consent</span></li> -->
           </ng-container>
         </ul>
       </div>
@@ -386,3 +390,11 @@
       <button type="button" class="btn btn-xs btn-primary mr-2" (click)="confirm()">OK</button>
   </div>
 </ng-template>
+<!--quickstart alert for every page-->
+<div [ngClass]="isBillingpageQuickid() && isquicklinkclicked && !isBackdropclicked ? 'back-drop-two': ''"
+  (click)="onClickBackdrop()" *ngIf="isloginpage">
+  <app-quickstartalert *ngIf="!isHeaderNavbarClicked && !isUserClickedNotRelatedToTooltip && !isRevistedLink  && !isBackdropclicked && actualBackdropclicked" [styleobj]="positionObj()" [isclickedbyuser]="quickLinkStatus"
+    [isuserclickoutsidemenu]="isQuicklinkActuallinkVisited()" [linkid]="quickDivID" [divguidetext]="alertguidetext"
+    [guidancetext]="alertcontent" [isactualLinkclickedbyuser]="actuallinkstatus">
+  </app-quickstartalert>
+</div>

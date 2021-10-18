@@ -2,7 +2,7 @@
 <div class="mb-3">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb breadcrumb-style1 mg-b-0">
-            <li class="breadcrumb-item"><a routerLink="/settings" [queryParams]="{oid:queryOID , pid:queryPID}">Settings</a></li>
+            <li class="breadcrumb-item"><a routerLink="/settings" (click)="checkForQsTooltip()" [queryParams]="{oid:queryOID , pid:queryPID}">Settings</a></li>
             <li class="breadcrumb-item active" aria-current="page">Organizations</li>
         </ol>
     </nav>
@@ -12,22 +12,22 @@
         <div class="card-header">
             <div class="searchfield mt-3">
                 <div class="col-3 input-group">
-                    <input class="form-control py-2 border-right-0 border" [(ngModel)]="searchText" type="text" (keyup.enter)="searchOrganization(searchText)"
+                    <input class="form-control py-2 border-right-0 border" [(ngModel)]="searchText" type="text" (keyup.enter)="searchOrganization(searchText);checkForQsTooltip();"
                         value="search" id="example-search-input" />
                         <span class="input-group-append">
                             <div *ngIf="searchText !== ''" (click)="clearSearchfield()" class="input-group-text bg-transparent">
                               <i class="fa fa-times color-red" aria-hidden="true"></i>
                             </div>
-                            <div class="input-group-text bg-transparent" (click)="searchOrganization(searchText)">
+                            <div class="input-group-text bg-transparent" (click)="searchOrganization(searchText);checkForQsTooltip();">
                               <i class="fa fa-search"></i>
                             </div>
                           </span>
                 </div>
                 
                 <div class="ml-auto mr-3">
-                    <button type="button" class="btn btn-sm btn-outline-secondary btn-uppercase mr-1" data-toggle="modal"
+                    <button type="button" class="btn btn-sm btn-outline-secondary btn-uppercase mr-1" data-toggle="modal" [ngClass]="quickDivID == 2 && quickDivID == currentLinkID && !iswindowclicked ? 'btn-qs-hightlight' : ''" 
                         (click)="organizationModalPopup(editOrgModal,'')">   <i-feather class="feather-16" name="plus"></i-feather> 
-                        Add organization</button>
+                    Add organization</button>
                 </div>
             </div>
         </div>
@@ -46,19 +46,19 @@
                 <tbody>
                     <ng-container *ngFor="let data of orgList | paginate:paginationConfig; let i = index"> <!--filter: searchText:'orgname':'city':'state' -->
                     <tr [ngClass]="{'row-disabled':data.active == false, 'row-enabled':data.active == true}">
-                        <td><a [ngStyle]="{'cursor': data.active ? 'pointer' : '' }"  (click)="data.active || data.active == null ? viewOrganization(data.id):false">{{data.orgname}}</a>
+                        <td><a [ngStyle]="{'cursor': data.active ? 'pointer' : '' }"  (click)="data.active || data.active == null ? viewOrganization(data.id):false; checkForQsTooltip();">{{data.orgname}}</a>
                         </td>
                         <td>{{data.address1}} {{data.address2}}</td>
                         <td>{{data.city}}</td>
                         <td>{{data.state}}</td>
                         <td>{{data.zipcode}}</td>
                         <td>
-                            <a class="pd-r-5" [ngStyle]="{'cursor':'pointer'}" *ngIf="data.active == true || data.active === undefined" (click)="viewOrganization(data.id)"><i
+                            <a class="pd-r-5" [ngStyle]="{'cursor':'pointer'}" *ngIf="data.active == true || data.active === undefined" (click)="viewOrganization(data.id);checkForQsTooltip();"><i
                                     class="fas fa-external-link-alt"></i> View</a>
                             <!-- <a class="pd-r-5" *ngIf="data.active == true" data-toggle="modal" (click)="organizationModalPopup(editOrgModal,data)">
                                 <i class="far fa-edit fa-1x"></i> Edit
                             </a> -->
-                            <a class="badge badge-success pd-r-5 cursor-pointer" *ngIf="data.active == false" [ngStyle]="{'color': data.active ? '' : 'white' }"   (click)="enableOrganization(data.id)">
+                            <a class="badge badge-success pd-r-5 cursor-pointer" *ngIf="data.active == false" [ngStyle]="{'color': data.active ? '' : 'white' }"   (click)="enableOrganization(data.id);checkForQsTooltip();">
                                 <!-- <i-feather name="check" class="feather-16"></i-feather> -->
                                  Enable
                             </a>
@@ -101,12 +101,12 @@
     <div class="modal-header">
         <h4 class="modal-title" id="modal-basic-title">Add Organization
         </h4>
-        <button type="button" class="close" aria-label="Close" (click)="onResetEditOrganization()">
+        <button type="button" class="close" aria-label="Close" (click)="onResetEditOrganization();checkForQsTooltip();">
             <span aria-hidden="true">×</span>
         </button>
     </div>
     <div class="modal-body">
-        <form [formGroup]="editOrganisationForm" (ngSubmit)="updateOrganisationData()">
+        <form [formGroup]="editOrganisationForm" (ngSubmit)="updateOrganisationData();checkForQsTooltip();">
             <div class="row">
                 <div class="col-sm-12">
                     <div class="form-group">
@@ -211,7 +211,7 @@
                         <input type="text" class="form-control"  formControlName="phone"
                         name="phone" [ngClass]="{ 'is-invalid': submitted && editOrg.phone?.errors }" />
                         <div *ngIf="submitted && editOrg.phone?.errors" class="invalid-feedback">
-                            <div *ngIf="editOrg.phone?.errors.required">Phone is required</div>
+                            <!-- <div *ngIf="editOrg.phone?.errors.required">Phone is required</div> -->
                             <div *ngIf="editOrg.phone?.errors.pattern">Enter valid phone number</div>
                         </div>
                     </div>
@@ -219,7 +219,7 @@
             </div>
             <div class="row pull-right-btn">
                 <div class="text-right">
-                    <button type="button" (click)="onResetEditOrganization()"
+                    <button type="button" (click)="onResetEditOrganization();checkForQsTooltip();"
                         class="btn btn-link tx-decoration-underline">Cancel</button>
                         <button class="btn btn-xs btn-primary mr-3">Save</button>
                 </div>

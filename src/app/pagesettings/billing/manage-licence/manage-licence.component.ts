@@ -1,9 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { moduleName } from 'src/app/_constant/module-name.constant';
+import { QuickStart } from 'src/app/_models/quickstart';
 import { BillingService } from 'src/app/_services/billing.service';
+import { QuickmenuService } from 'src/app/_services/quickmenu.service';
 import {AuthenticationService, UserService} from '../../../_services';
 const moment = require('moment');
 
@@ -13,6 +17,7 @@ const moment = require('moment');
   styleUrls: ['./manage-licence.component.scss']
 })
 export class ManageLicenceComponent implements OnInit {
+  private unsubscribeAfterUserAction$: Subject<any> = new Subject<any>();
   activeSubscriptionList = [];
   alertMsg: any;
   isOpen = false;
@@ -25,15 +30,32 @@ export class ManageLicenceComponent implements OnInit {
   userRole: any;
   queryOID;
   queryPID;
+  isquickstartdivclicked:any;
+  quickDivID;
+  isRevistedLink:boolean;
+  currentLinkID:any;
+  actuallinkstatus:boolean = false;
+  isquickstartmenu:any;
+  actualbtnClickstatus:boolean = false;
+  iswindowclicked;
   constructor(
     private loading: NgxUiLoaderService,
     private billingService: BillingService,
+    private quickmenuService: QuickmenuService,
     private userService: UserService,
     private formBuilder: FormBuilder,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private cdRef: ChangeDetectorRef,
+    private router: Router
   ) { }
 
   ngOnInit() {
+    this.quickmenuService.onClickEmitQSLinkobj.pipe(
+      takeUntil(this.unsubscribeAfterUserAction$)
+    ).subscribe((res) => { 
+      this.quickDivID = res.linkid;
+      this.actualbtnClickstatus = res.isactualbtnclicked;
+    });
     this.activatedRoute.queryParamMap
       .subscribe(params => {
       this.queryOID = params.get('oid');
@@ -107,4 +129,92 @@ export class ManageLicenceComponent implements OnInit {
       return cal;
     }
   }
+
+  userAction(planid, quickdivid) {
+    if (quickdivid !== undefined && (quickdivid == 6 || quickdivid == 19)) {
+      let quickLinkObj: QuickStart = {
+        linkid: quickdivid,
+        indexid: quickdivid === 19 ? 5 : 3,
+        isactualbtnclicked: true,
+        islinkclicked: true,
+        divguidetext: "addcookieconsentsubscriptiontoproperty",
+        linkdisplaytext: "Assigning Cookie Consent subscription to property",
+        link: "/settings/billing/manage"
+      };
+      this.quickmenuService.updateQuerymenulist(quickLinkObj);
+      this.quickmenuService.onClickEmitQSLinkobj.next(quickLinkObj);
+      this.userService.onRevistQuickStartmenulink.next({quickstartid:this.quickDivID,reclickqslink:true,urlchanged:false});
+      const a = this.quickmenuService.getQuerymenulist();
+        if (a.length !== 0) {
+          const idx = a.findIndex((t) => t.index == quickLinkObj.indexid);
+          if (a[idx].quicklinks.some((t) => t.linkid == quickLinkObj.linkid && t.isactualbtnclicked)) {
+            this.quickDivID = "";
+            this.router.navigate(['/settings/billing/manage/property', planid], { queryParams: { oid: this.queryOID, pid: this.queryPID }, queryParamsHandling: 'merge', skipLocationChange: false });
+          } else if (a[idx].quicklinks.some((t) => t.linkid == quickLinkObj.linkid && !t.isactualbtnclicked)) {
+            this.quickDivID = "";
+            this.router.navigate(['/settings/billing/manage/property', planid], { queryParams: { oid: this.queryOID, pid: this.queryPID }, queryParamsHandling: 'merge', skipLocationChange: false });
+          }
+        }
+    } else {
+      this.checkForQsTooltip();
+      this.router.navigate(['/settings/billing/manage/property', planid], { queryParams: { oid: this.queryOID, pid: this.queryPID }, queryParamsHandling: 'merge', skipLocationChange: false });
+    }
+
+  }
+
+  userActionForOrg(planid, quickdivid) {
+    if (quickdivid !== undefined && quickdivid == 12) {
+      let quickLinkObj: QuickStart = {
+        linkid: quickdivid,
+        indexid: 4,
+        isactualbtnclicked: true,
+        islinkclicked: true,
+        divguidetext: "assign-dsar-subscription-to-organization",
+        linkdisplaytext: "Add DSAR subscription",
+        link: "/settings/billing/manage"
+      };
+      this.quickmenuService.updateQuerymenulist(quickLinkObj);
+      this.quickmenuService.onClickEmitQSLinkobj.next(quickLinkObj);
+      this.userService.onRevistQuickStartmenulink.next({quickstartid:this.quickDivID,reclickqslink:true,urlchanged:false});
+      this.quickDivID = "";
+      const a = this.quickmenuService.getQuerymenulist();
+        if (a.length !== 0) {
+          const idx = a.findIndex((t) => t.index == quickLinkObj.indexid);
+
+          if (a[idx].quicklinks.some((t) => t.linkid == quickLinkObj.linkid && t.isactualbtnclicked)) {
+            this.quickDivID = "";
+            
+            this.router.navigate(['/settings/billing/manage/organizations', planid], { queryParams: { oid: this.queryOID, pid: this.queryPID }, queryParamsHandling: 'merge', skipLocationChange: false });
+          } else if (a[idx].quicklinks.some((t) => t.linkid == quickLinkObj.linkid && !t.isactualbtnclicked)) {
+            this.quickDivID = "";
+          }
+        }
+    } else {
+      this.checkForQsTooltip();
+      this.router.navigate(['/settings/billing/manage/organizations', planid], { queryParams: { oid: this.queryOID, pid: this.queryPID }, queryParamsHandling: 'merge', skipLocationChange: false });
+    }
+
+  }
+
+  checkForQsTooltip(){
+    this.userService.onRevistQuickStartmenulink.next({quickstartid:this.quickDivID,reclickqslink:true,urlchanged:true}); 
+    this.quickDivID = "";    
+  }
+   
+
+  ngAfterViewInit(){
+    this.userService.isRevisitedQSMenuLink.subscribe((status) => { this.isRevistedLink = status.reclickqslink; this.currentLinkID = status.quickstartid; this.iswindowclicked = status.urlchanged  });
+    this.quickmenuService.onClickEmitQSLinkobj.pipe(
+      takeUntil(this.unsubscribeAfterUserAction$)
+    ).subscribe((res) => { 
+      this.quickDivID = res.linkid;
+    });
+    this.cdRef.detectChanges();
+  }
+
+  ngOnDestroy(){
+    this.quickDivID = "";
+    this.unsubscribeAfterUserAction$.unsubscribe();
+  }
+  
 }
