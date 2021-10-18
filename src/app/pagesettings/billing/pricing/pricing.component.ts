@@ -477,7 +477,7 @@ export class PricingComponent implements OnInit, AfterViewInit {
     this.quickmenuService.onClickEmitQSLinkobj.subscribe((res) => { 
       this.quickDivID = res.linkid;
     });
-    this.onGetPlanDetails();
+  //  this.onGetPlanDetails();
     this.cdRef.detectChanges();
     if(this.planDetails !== undefined){
       this.callForQuickStart();
@@ -485,6 +485,7 @@ export class PricingComponent implements OnInit, AfterViewInit {
   }
 
   callForQuickStart(){
+    this.cookieConsentBillingCycle = "monthly";
     const quicklinks = this.quickmenuService.qsMenuobjwithIndexid;
     if (quicklinks !== undefined && quicklinks.linkid == 11) {
       this.currentStep = 2;
