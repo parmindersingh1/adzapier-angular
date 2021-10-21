@@ -81,7 +81,7 @@ export class CompanyComponent implements AfterViewInit, OnInit {
   queryOID;
   queryPID;
   isUserClickedNotRelatedToTooltip:boolean;
-  iswindowclicked;
+  iswindowclicked = false;
   constructor(private companyService: CompanyService, private modalService: NgbModal,
               private formBuilder: FormBuilder,
               private userService: UserService,
