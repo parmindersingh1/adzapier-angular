@@ -9,7 +9,7 @@ export class QuickStartMenuList {
     return [
       {
         "index": 1,
-        "indextext": "Getting Start",
+        "indextext": "Getting Started",
         "quicklinks": [
           {
             "linkid": 1,

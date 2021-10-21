@@ -325,6 +325,32 @@ export class PricingComponent implements OnInit, AfterViewInit {
   }
 
   onAddToCart(planDetails: any, planUnit: any) {
+    if (this.quickDivID !== undefined && (this.quickDivID == 11 || this.quickDivID == 18 || this.quickDivID == 5)) {
+      const indexId = this.quickDivID == 18 ? 5 : this.quickDivID == 11 ? 4 : 3;
+      this.checkForQuickDivIDWithIndex();
+      const a = this.quickmenuService.getQuerymenulist();
+      if (a.length !== 0) {
+        const idx = a.findIndex((t) => t.index == indexId);
+        if (a[idx].quicklinks.filter((t) => t.linkid == this.quickDivID).length > 0) {
+          
+          this.userService.onRevistQuickStartmenulink.next({quickstartid:this.quickDivID,reclickqslink:true,urlchanged:false});
+          const plan = {...planDetails};
+          plan.priceTotal = plan.price * planUnit.value;
+          plan.unit = planUnit.value;
+          this.cartItem.push(plan);
+          // }
+          this.subTotal = 0;
+          if (this.cartItem.length > 0) {
+            for (const item of this.cartItem) {
+              this.subTotal += Number(item.priceTotal);
+            }
+          }
+          setTimeout(() => {
+            window.scrollTo(0, document.body.scrollHeight);
+          }, 500);
+        }
+      }
+    } else{
     // const isItem = this.cartItem.includes((plan));
     // if (isItem) {
     //   this.cartItem = this.cartItem.filter( obj => {
@@ -345,6 +371,7 @@ export class PricingComponent implements OnInit, AfterViewInit {
     setTimeout(() => {
       window.scrollTo(0, document.body.scrollHeight);
     }, 500);
+  }
   }
 
   onUpdateCart(cartProperty, i) {
@@ -423,25 +450,18 @@ export class PricingComponent implements OnInit, AfterViewInit {
       })
     } else if (this.quickDivID !== undefined && (this.quickDivID == 11 || this.quickDivID == 18 || this.quickDivID == 5)) {
       const indexId = this.quickDivID == 18 ? 5 : this.quickDivID == 11 ? 4 : 3;
-      let quickLinkObj = {
-        linkid: this.quickDivID,
-        indexid: indexId,
-        isactualbtnclicked: true,
-        islinkclicked: true
-      };
-      this.quickmenuService.onClickEmitQSLinkobj.next(quickLinkObj);
-      this.quickmenuService.updateQuerymenulist(quickLinkObj);
+      this.checkForQuickDivIDWithIndex();
       const a = this.quickmenuService.getQuerymenulist();
       if (a.length !== 0) {
-        const idx = a.findIndex((t) => t.index == quickLinkObj.indexid);
-        if (a[idx].quicklinks.filter((t) => t.linkid == quickLinkObj.linkid).length > 0) {
+        const idx = a.findIndex((t) => t.index == indexId);
+        if (a[idx].quicklinks.filter((t) => t.linkid == this.quickDivID).length > 0) {
           this.loading.start()
           this.billingService.getManageSessionID(this.constructor.name, moduleName.manageSubscriptionsModule).subscribe((res: any) => {
             this.loading.stop();
             if (res.status === 200) {
               this.userService.onRevistQuickStartmenulink.next({quickstartid:this.quickDivID,reclickqslink:true,urlchanged:false});
-              this.quickmenuService.onClickEmitQSLinkobj.next(quickLinkObj);
-              this.quickmenuService.updateQuerymenulist(quickLinkObj);
+              // this.quickmenuService.onClickEmitQSLinkobj.next(quickLinkObj);
+              // this.quickmenuService.updateQuerymenulist(quickLinkObj);
               this.checkForQsTooltip();
               window.open(res.response, '_blank');
             }
@@ -501,8 +521,38 @@ export class PricingComponent implements OnInit, AfterViewInit {
 
 
   checkForQsTooltip(){
-    this.userService.onRevistQuickStartmenulink.next({quickstartid:this.quickDivID,reclickqslink:true,urlchanged:true}); 
+    this.userService.onRevistQuickStartmenulink.next({quickstartid:this.quickDivID,reclickqslink:false,urlchanged:true}); 
     this.quickDivID = "";    
   }
+
+  checkForQSTooltipForEnterprisebt() {
+    if (this.quickDivID == undefined || (this.quickDivID == 0)) {
+      return true;
+    } else {
+     this.checkForQuickDivIDWithIndex();
+     const indexId = this.quickDivID == 18 ? 5 : this.quickDivID == 11 ? 4 : 3;
+      const a = this.quickmenuService.getQuerymenulist();
+      if (a.length !== 0) {
+        const idx = a.findIndex((t) => t.index == indexId);
+        if (a[idx].quicklinks.filter((t) => t.linkid == this.quickDivID).length > 0) {
+          this.userService.onRevistQuickStartmenulink.next({ quickstartid: this.quickDivID, reclickqslink: true, urlchanged: false });
+        }
+      }
+    }
+
+  }
+
+  checkForQuickDivIDWithIndex(){
+    const indexId = this.quickDivID == 18 ? 5 : this.quickDivID == 11 ? 4 : 3;
+    let quickLinkObj = {
+      linkid: this.quickDivID,
+      indexid: indexId,
+      isactualbtnclicked: true,
+      islinkclicked: true
+    };
+    this.quickmenuService.onClickEmitQSLinkobj.next(quickLinkObj);
+    this.quickmenuService.updateQuerymenulist(quickLinkObj);
+  }
+
 
 }

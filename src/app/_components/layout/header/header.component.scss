@@ -1121,8 +1121,10 @@ a.nav-link.dropdown-link span.rounded-circle {
 }
 
 .highlightmenu-element {
-  border:2px solid #0148ae;
-  color:#0148ae;
+  border: 1px solid #0148ae;
+  color: #0148ae;
+  border-radius: 5px;
+  box-shadow: 0px 0px 3px #0148ae
 }
 
 

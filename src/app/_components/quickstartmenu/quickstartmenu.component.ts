@@ -27,7 +27,7 @@ import { BsDropdownDirective } from 'ngx-bootstrap/dropdown';
 export class QuickstartmenuComponent implements OnInit, AfterViewInit,AfterViewChecked,AfterContentChecked,OnChanges {
   quickStartMenu : any = [];
   isOpen = true;
-  showQuickStartMenu = true;
+  showQuickStartMenu:boolean = true;
   customClass = 'customClass';
   oneAtATime = true;
   windowWidth:number = 0;
@@ -86,11 +86,11 @@ export class QuickstartmenuComponent implements OnInit, AfterViewInit,AfterViewC
   onClickQuickStartBtn(){
   //  this.ishideQsbtn = !this.ishideQsbtn;
     if(this.windowWidth <= 1450){
-        this.showQuickStartMenu = !this.showQuickStartMenu;
+        this.showQuickStartMenu = false; //!this.showQuickStartMenu;
         this.showGuidancediv = !this.showGuidancediv;
         this.onClickQuickStart.emit(this.showQuickStartMenu);
     }else{
-      this.showQuickStartMenu = !this.showQuickStartMenu;
+      this.showQuickStartMenu = false;// !this.showQuickStartMenu;
       this.showGuidancediv = !this.showGuidancediv;
       this.onClickQuickStart.emit(false);
     }
@@ -99,7 +99,7 @@ export class QuickstartmenuComponent implements OnInit, AfterViewInit,AfterViewC
 
   dismissQuickStartMenu() {
     this.isOpen = false;
-    this.showQuickStartMenu = !this.showQuickStartMenu;
+    this.showQuickStartMenu = false;//!this.showQuickStartMenu;
     this.quickmenuService.isquickmenudismiss = true;
     this.enablequickstartfromtopmenu = true;
     this.quickmenuService.onDissmissQuickStartmenu.next(true); 
@@ -170,6 +170,7 @@ export class QuickstartmenuComponent implements OnInit, AfterViewInit,AfterViewC
     this.showQuickStartMenu = !this.showQuickStartMenu;
     this.showGuidancediv = false;
     this.onClickQuickStart.emit(this.showQuickStartMenu);
+    this.userService.onRevistQuickStartmenulink.next({quickstartid:0,reclickqslink:true,urlchanged:true}); 
   }
 
   @HostListener('window',['$event'])
@@ -188,14 +189,16 @@ export class QuickstartmenuComponent implements OnInit, AfterViewInit,AfterViewC
   
  @HostListener('document:click', ['$event.target'])
  outsideClick() {
+  let dataobj;
+  this.quickmenuService.onClickEmitQSLinkobj.subscribe((data) => dataobj = data);
    this.textmsg = this.insideqsmenu
      ? "Event Triggered insidee"
      : "Event Triggered Outside Component";
-   this.insideqsmenu = false;
+  // this.insideqsmenu = false;
    if (this.insideqsmenu) {
-     this.quickmenuService.isclickeventoutsidemenu = false;
+     this.quickmenuService.isclickeventoutsidemenu = true;
    } else {
-     this.quickmenuService.isclickeventfromquickmenu = true;
+     this.quickmenuService.isclickeventfromquickmenu = false;
    }
   
  }
