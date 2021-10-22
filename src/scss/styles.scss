@@ -412,7 +412,13 @@ ul.helpcenter-menu-right::after{
     padding: 10px;
     top: 20px;
     color: #ffffff;
-    z-index: 1050;
+    z-index: 1040;
+  }
+
+  
+.btn-qs-hightlight{
+    border: 1px solid #2446a4;
+    box-shadow: 0px 0px 5px #2446a4;
   }
 
 // .customClass > a:focus{

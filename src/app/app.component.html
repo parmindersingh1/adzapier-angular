@@ -1,13 +1,12 @@
-<div class="container-fluid">
+<div class="container-fluid" #pageContainer (click)="onPageClick()">
   <div class="row">
-    <app-header class="w-100" [isqsmenuopen]="isquickstartopen" [qslinkobj]="qsmenulinkobj" [isquicklinkclicked]="isquickLinkclicked" *ngIf="hideHeaderFooter"></app-header>
-
-    <div id="main" class="container site-content" > <!-- [@slideInOut]="isquickstartopen ? false : true"  [ngClass]="isquickstartopen ? 'change-margin' : ''"-->
+    <app-header class="w-100" [isqsmenuopen]="isquickstartopen" [qslinkobj]="qsmenulinkobj" (onClickEnableQuickStartMenu)="enableQuickStartMenu($event)" [isquicklinkclicked]="isquickLinkclicked" *ngIf="hideHeaderFooter"></app-header>
+    <div id="main" class="container site-content" > <!-- [isclickonpage]="isuserclickonpage" [@slideInOut]="isquickstartopen ? false : true"  [ngClass]="isquickstartopen ? 'change-margin' : ''"-->
       <router-outlet></router-outlet>
       <!-- container -->
     </div><!-- content -->
     <ngx-ui-loader></ngx-ui-loader>
-    <app-quickstartmenu [quickStartMenuList]="qsMenuList" (onClickQuickStart)="getStyle($event)" (onClickEmitQSLinkobj)="receivedQSLinkObj($event)" [istopmenuclicked]="isquickstartopen" [ngStyle]="{'position':'fixed','z-index':'1200'}" *ngIf="isloginpage"></app-quickstartmenu>
+    <app-quickstartmenu [quickStartMenuList]="qsMenuList"  (onClickQuickStart)="getStyle($event)" (onClickEmitQSLinkobj)="receivedQSLinkObj($event)" [enablequickstartfromtopmenu]="toggleQuickstartmenu" [istopmenuclicked]="isquickstartopen" [ngStyle]="{'position':'fixed','z-index':'1200'}" *ngIf="isloginpage"></app-quickstartmenu>
     <app-footer class="w-100" *ngIf="hideHeaderFooter"></app-footer>
   </div>
 </div>

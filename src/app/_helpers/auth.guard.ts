@@ -11,7 +11,6 @@ export class AuthGuard implements CanActivate {
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
         let id = this.getUrlParameterByName('id', window.location.href);
-        console.log(id,'di..');
         const currentUser = this.authenticationService.currentUserValue;
         let url: string = state.url;
         this.dataService.checkClickedURL.next(state.url);

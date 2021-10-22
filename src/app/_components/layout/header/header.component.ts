@@ -1,7 +1,7 @@
 import { AfterViewChecked, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, HostListener, OnDestroy, OnInit, Renderer2, TemplateRef, ViewChild, Input, OnChanges, QueryList, ViewChildren, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { Router, ActivatedRoute, NavigationEnd, NavigationStart } from '@angular/router';
 import { OrganizationService, AuthenticationService, UserService } from '../../../_services';
-import { Observable, Subject } from 'rxjs';
+import { fromEvent, Observable, Subject } from 'rxjs';
 import { Organization } from 'src/app/_models/organization';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { moduleName } from 'src/app/_constant/module-name.constant';
@@ -14,6 +14,7 @@ import { QuickmenuService } from 'src/app/_services/quickmenu.service';
 import { QuickStart } from 'src/app/_models/quickstart';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 
 
 @Component({
@@ -23,13 +24,19 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
   changeDetection: ChangeDetectionStrategy.Default
 })
 export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked, OnChanges, OnDestroy {
+  private unsubscribeAfterUserAction$: Subject<any> = new Subject<any>();
   @Input() isquicklinkclicked:boolean;
   @Input() qslinkobj:any;
-  @Input() isqsmenuopen:boolean = false;
+  @Input() isqsmenuopen:boolean;
+  //@Input() isclickonpage:boolean = false; // for later use
   @ViewChild('confirmTemplate') confirmModal: TemplateRef<any>;
   @ViewChildren(BsDropdownDirective) headerDropdown:QueryList<BsDropdownDirective>;
+  @ViewChild('headerDropdown',{static:false}) topheaderDropdown:BsDropdownDirective;
   @ViewChild('navMenu', { static: false }) navMenuEle: ElementRef;
+  @ViewChild('headerNavbar', { static: false }) headerNavbarEle: ElementRef;  
   @ViewChild('dpTriggers',{static:false}) dropdownTriggers:ElementRef;
+  @ViewChild('backDroparea',{static:false})  backDroparea:ElementRef;
+  @ViewChild('orgPropNavBar', { static: false }) orgPropNavBar: ElementRef;  
   qsMenuClick$ = this.userService.isClickedOnQSMenu;
   isRevisitedQSMenuLink$ = this.userService.isRevisitedQSMenuLink;
   modalRef: BsModalRef;
@@ -108,9 +115,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
   initialOrgID;
   isquickstartmenuheader:any;
   quickDivID;
-  quickDivIDCS;
+  quickDivIDSub;
   actuallinkstatus:boolean = false;
-  isRevistedLink:boolean;
+  isRevistedLink:boolean = false;
+  revisitedQuicklinnkid:any;
+  isUserClickedNotRelatedToTooltip:boolean = false;
   currentLinkId:any;
   isbtnClickedbyUser;
   istopmenuclicked;
@@ -126,13 +135,15 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
   userclickedfromqsmenu:boolean;
   isuserClickedonqstooltip:boolean = false;
   isUserVistedActualLinkWithTooltip:boolean = false;
-  isHeaderNavbarClicked:boolean = false;
+  isHeaderNavbarClicked:boolean;
+  headerNavbarStatusAfterQSDismiss:boolean = false;
   isBackdropclicked:boolean = false;
   isUserclickedActualLink:boolean = false;
   isloginpage:boolean = false;
   actualBackdropclicked:boolean = false;
   storeDropdownstatus:boolean = false;
   lastopendp:any = [];
+  laststoreddp:any = [];
   isShowDashboardConsent = false;
   SupportList:FormGroup;
   countries : [];
@@ -146,6 +157,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
   SupportLink: string;
   readytodisplay = false;
   loader= false;
+  actualLinkVisitStatus = false;
+  actualLinkObj:any;
+  @Output() onClickEnableQuickStartMenu: EventEmitter<any> = new EventEmitter<any>();
+  quickstartmenustatus:any;
+  istopmenuopened:boolean;
+  isborderapplied:boolean;
   constructor(
     private router: Router,
     private activatedroute: ActivatedRoute,
@@ -188,9 +205,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
     });
    
     this.quickmenuService.onClickEmitQSLinkobj.subscribe((data) => {
-      this.actuallinkstatus = data.isactualbtnclicked;
+      //this.actuallinkstatus = data.isactualbtnclicked;
       if(data.islinkclicked && data.isactualbtnclicked){
-        this.isBackdropclicked = false;
+       // this.isBackdropclicked = false; // 1
+        this.actuallinkstatus = true;
+        //this.actualBackdropclicked = true;
       }
       
     })
@@ -227,7 +246,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
         this.loadNotification();
       }
     });
-    this.isloginpage = this.location.path().indexOf('login') !== -1;
+  //  this.isloginpage = this.location.path().indexOf('login') == -1 && this.location.path().indexOf('signup') == -1;
+  // this.renderer.listen('window', 'click', (e:Event) => {
+  //   if(e.target === this.dropdownTriggers.nativeElement){
+  //   }
+   
+  // });
   }
 
   ngOnInit() {
@@ -236,6 +260,14 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
      searchtext:['',]
     })
     this.isloginpage = this.location.path().indexOf('login') !== -1;
+    this.quickmenuService.onClickEmitQSLinkobj.pipe(
+      takeUntil(this.unsubscribeAfterUserAction$)
+    ).subscribe((res) => { 
+      this.actualLinkObj = res;
+      this.quickDivIDSub = res.linkid;
+    });
+    this.isLoginOrSignupPage();
+  //  this.isloginpage = this.location.path().indexOf('login') == -1 && this.location.path().indexOf('signup') == -1;
     this.userService.onClickTopmenu.subscribe((status) => this.istopmenuclicked = status);
  //   this.loadOrganizationWithProperty();
  //this.router.routeReuseStrategy.shouldReuseRoute = () => false;
@@ -481,6 +513,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
             { label: 'Billing', routerLink: '/settings/billing/manage', icon: 'credit-card' },
             { label: 'Settings', routerLink: '/settings', icon: 'settings' },
             { label: 'Help Center', routerLink: 'https://support.adzapier.com', icon: 'help-circle' },
+            { label: 'Quick Start', routerLink: '/', icon: 'external-link' },
             { label: 'Signout', routerLink: '/signout', icon: 'log-out' }
           ]
         }];
@@ -507,7 +540,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
       {
         showlink: 'Cookie Consent',
         subcategory: [
-          { showlink: 'Dashboard', routerLink: '/home/dashboard/cookie-consent', icon: 'fas fa-cookie feather-16',indexid:3,navmenuid:10 },
+          { showlink: 'Dashboard', routerLink: '/home/dashboard/cookie-consent', icon: 'bar-chart-2',indexid:3,navmenuid:10 },
           { showlink: 'Manage Vendors', routerLink: '/cookie-consent/manage-vendors', icon: 'fas fa-tasks feather-16' },
           { showlink: 'Cookie Category', routerLink: '/cookie-consent/cookie-category', icon: 'fab fa-microsoft feather-16',indexid:3,navmenuid:7 },
           { showlink: 'Cookie Banner', routerLink: '/cookie-consent/cookie-banner', icon: 'fas fa-cookie feather-16',indexid:3,navmenuid:8 },
@@ -517,7 +550,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
       },{
       showlink: 'Consent Preference',
         subcategory: [
-          { showlink: 'Dashboard', routerLink: '/home/dashboard/consent-preference', icon: 'fas fa-chart-line feather-16',indexid:5,navmenuid:22 },
+          { showlink: 'Dashboard', routerLink: '/home/dashboard/consent-preference', icon: 'bar-chart-2',indexid:5,navmenuid:22 },
           { showlink: 'Consent Records', routerLink: '/consent-solutions/consent-records', icon: 'fas fa-tasks feather-16',indexid:5,navmenuid:21 },
           { showlink: 'Setup', routerLink: '/consent-solutions/setup', icon: 'fas fa-wrench feather-16',indexid:5,navmenuid:20 },
         ]
@@ -723,7 +756,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
     }, (error) => {
       this.loading.stop();
     }, () => {
-      console.log('complete..');
       if(this.currentNavigationUrl !== undefined){
       this.oIDPIDFromURL= this.findPropertyIDFromUrl(this.currentNavigationUrl || this.location.path());//updatedUrlWithPID
       }
@@ -926,7 +958,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
     if(this.quickDivID == link.navmenuid){//this.qslinkobj.linkid 
       this.updateQuickLinkStatus(link);
       this.isUserclickedActualLink = true;
+      this.isqsmenuopen = true;
     }
+    this.onClickBackdrop();
     this.oIDPIDFromURL= this.findPropertyIDFromUrl(this.location.path());
     this.currentNavigationUrl = link.routerLink == '/' ? '/home/welcome' : link.routerLink + "?oid="+ this.queryOID +"&pid="+this.queryPID;
     if (link.routerLink === '/home/dashboard/cookie-consent' || link.routerLink === '/cookie-consent/manage-vendors' || link.routerLink === '/cookie-consent/cookie-category'
@@ -1419,7 +1453,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
 
   btnTopAddSubscription() {
     let quickLinkObj: QuickStart = {
-      linkid: 4,
+      linkid: this.quickDivIDSub,
       indexid: 2,
       isactualbtnclicked: true,
       islinkclicked: true,
@@ -1429,6 +1463,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
     };
     this.quickmenuService.updateQuerymenulist(quickLinkObj);
     this.quickmenuService.onClickEmitQSLinkobj.next(quickLinkObj);
+    this.quickDivIDSub = "";
     this.router.navigate(['/settings/billing/pricing'],{ queryParams: { oid: this.queryOID, pid: this.queryPID }, queryParamsHandling:'merge', skipLocationChange:false});
   }
 
@@ -1579,10 +1614,26 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
   }
 
   ngAfterViewInit() {
-    this.userclickedoutside = this.quickmenuService.isclickeventoutsidemenu;
-    if(this.isquicklinkclicked){
-      this.isBackdropclicked = true;
+    this.quickmenuService.isQSMenuDissmissed.subscribe((status) => this.quickstartmenustatus = status)
+    this.quickmenuService.isHeaderNavClickedAfterQSDissmissed.subscribe((status) => this.headerNavbarStatusAfterQSDismiss = status);
+    console.log(this.headerNavbarStatusAfterQSDismiss,'headerNavbarStatusAfterQSDismiss..');
+    if (this.quickstartmenustatus && !this.headerNavbarStatusAfterQSDismiss) {
+      this.isqsmenuopen = true;
     }
+   
+    if(this.backDroparea !== undefined){
+      fromEvent(this.backDroparea.nativeElement,'click').subscribe((menustatus)=>{
+        console.log(menustatus,'backDroparea....')
+        if(menustatus){
+          this.isqsmenuopen = true;
+          this.onClickBackdrop();
+        }
+      });
+    }
+    this.userclickedoutside = this.quickmenuService.isclickeventoutsidemenu;
+    // if(this.isquicklinkclicked){
+    // //  this.isBackdropclicked = false; //2
+    // }
     this.cdRef.detectChanges();
     this.activatedroute.queryParamMap.subscribe(params => {
       this.queryOID = params.get('oid');
@@ -1618,24 +1669,50 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
   }
 
   ngAfterViewChecked(){
+    this.userService.isRevisitedQSMenuLink.subscribe((status) => { this.isRevistedLink = status.reclickqslink; this.revisitedQuicklinnkid = status.quickstartid; this.isUserClickedNotRelatedToTooltip = status.urlchanged  });
+    //header navbar status clicked status false when Quick start dismiss true
+    this.quickmenuService.isQSMenuDissmissed.subscribe((status) => this.quickstartmenustatus = status)
+    this.quickmenuService.isHeaderNavClickedAfterQSDissmissed.subscribe((status) => this.headerNavbarStatusAfterQSDismiss = status);
+    if (this.quickstartmenustatus && !this.headerNavbarStatusAfterQSDismiss) {
+      this.isqsmenuopen = true;
+      this.onClickBackdrop();
+      this.quickmenuService.headerNavStatusAfterDismissedQuickStart.next(true);
+    } else if(this.quickstartmenustatus && this.headerNavbarStatusAfterQSDismiss){ //enable header nav while qs dismiss true
+      this.actualBackdropclicked = false;
+    }
+    
+   // this.isloginpage = this.location.path().indexOf('login') == -1 && this.location.path().indexOf('signup') == -1;
+    let actuallinkvisitatqs = this.isQuicklinkActuallinkVisited();
+    if(actuallinkvisitatqs !== this.actualLinkVisitStatus){
+      this.actualLinkVisitStatus = actuallinkvisitatqs;
+      this.cdRef.detectChanges();
+    }
     
     //console.log(this.qslinkobj,'qslinkobj..ngAfterChecked..1523..3');
-    this.isloginpage = this.location.path().indexOf('login') !== -1;
-    this.isqsmenuopen = this.quickmenuService.isquickstartopen;
+ //   this.isloginpage = this.location.path().indexOf('login') == -1 && this.location.path().indexOf('signup') == -1;
+   // this.isqsmenuopen = this.quickmenuService.isquickstartopen; //a1
     if(this.qslinkobj !== undefined){
-      this.isBackdropclicked = false;
+     // this.isBackdropclicked = false;
+      if(this.qslinkobj.isactualbtnclicked && this.qslinkobj.islinkclicked){
+        //this.isBackdropclicked = false;
+        this.actuallinkstatus = true;
+      }
+      
       //this.quickDivID = this.qslinkobj.linkid;
       this.quickLinkStatus = this.qslinkobj.islinkclicked;
       //this.actualBackdropclicked = false;
     //  this.isBackdropclicked = !this.isBackdropclicked;
     }
-    if(this.actualBackdropclicked){
-      this.removeHightlightBorders();
-    }
+    // if (this.actualBackdropclicked) {
+    //   this.removeHightlightBorders();
+    //   if (this.actuallinkstatus) {
+    //     this.actuallinkstatus = false;
+    //   }
+    // }
 
-    if(!this.actualBackdropclicked){
-      this.isBackdropclicked = false;
-    }
+   // if(!this.actualBackdropclicked){
+      // this.isBackdropclicked = false; // 3
+   // }
      
     // if(this.qslinkobj.islinkclicked && this.qslinkobj.isactualbtnclicked){
     //   this.isBackdropclicked = false;
@@ -1654,7 +1731,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
     }
     //console.log(this.userclickedoutside,'userclickedoutside..');
     this.isBillingpageQuickid();
-    if(!this.actualBackdropclicked){ // && !this.userclickedoutside && !this.isHeaderNavbarClicked
+   // if(!this.actualBackdropclicked){ // && !this.userclickedoutside && !this.isHeaderNavbarClicked
       // for(let i = 0; i < this.dropdownTriggers.nativeElement.querySelectorAll('div > div > ul').length; i++){
       //      this.renderer.removeClass(this.dropdownTriggers.nativeElement.querySelectorAll('div > div > ul')[i], 'addbg-menuitem');
       //  }
@@ -1669,17 +1746,20 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
         this.lastopendp = [];
       } 
      
-    }
-    if(!this.isqsmenuopen){
-      this.addBordertoDropdownMenu();
+ //   }
+     this.quickLinkObj !== undefined // Object.values(this.qslinkobj).length !== 0 //|| Object.values(this.qslinkobj).length !== 0
+    if(!this.isqsmenuopen && this.qslinkobj !== undefined ){
+      if(Object.values(this.qslinkobj).length !==0 ){
+        this.addBordertoDropdownMenu();
+      }
     }
   }
  
   onClickBackdrop() {
-    this.lastopendp = [];
-    this.isBackdropclicked = true;
-    this.actualBackdropclicked = !this.actualBackdropclicked;
+    this.actualBackdropclicked = true;// !this.actualBackdropclicked;
     this.removeHightlightBorders();
+
+ 
     if (this.dropdownTriggers !== undefined) {
       for (let i = 0; i < this.dropdownTriggers.nativeElement.querySelectorAll('div > div > ul').length; i++) {
         this.renderer.removeClass(this.dropdownTriggers.nativeElement.querySelectorAll('div > div > ul')[i], 'addbg-menuitem');
@@ -1691,84 +1771,82 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
       this.renderer.removeClass(this.navMenuEle.nativeElement.querySelectorAll('li > div')[0], 'highlightmenu-element');
     }
     if (this.qslinkobj !== undefined) {
-      if (this.qslinkobj.islinkclicked && this.qslinkobj.isactualbtnclicked) {
-        this.isBackdropclicked = true;
+      if (this.qslinkobj.islinkclicked && this.qslinkobj.isactualbtnclicked && !this.isquicklinkclicked && !this.actuallinkstatus) {
+        this.isqsmenuopen = true;
+      //  this.isBackdropclicked = true; // 6
       } else {
-        this.isquicklinkclicked = !this.qslinkobj.islinkclicked;
+        this.isquicklinkclicked = false;//!this.qslinkobj.islinkclicked;
       }
+    } else if(this.qslinkobj == undefined && this.isHeaderNavbarClicked){
+      return true;
+    } else {
+      this.quickDivID = "";
+      this.qslinkobj = {};
+      this.headerDropdown.forEach((el) => {
+        el.hide();
+      });
     }
-
+    this.cdRef.detectChanges();
   }
  
   
 
-  @HostListener('document:click', ['$event','$event.target'])
+  @HostListener('document:click', ['$event.target']) 
   outsideClick() {
-    console.log("CLICKED OUTSIDE");
-    
-     
+    if (this.isUserclickedActualLink) {
+      this.onClickBackdrop();
+      this.isUserclickedActualLink = false;
+    }
+    if (this.qslinkobj !== undefined) {
+      if (Object.values(this.qslinkobj).length !== 0) {
+        if (this.qslinkobj.islinkclicked) {
+         // this.isHeaderNavbarClicked = false;
+          this.actualBackdropclicked = !this.actualBackdropclicked;
+        }
+        else {
+       //   this.isBackdropclicked = false; // 7
+        }
+      }
+    }
+
+    if (this.isquicklinkclicked && this.actuallinkstatus) {
+    //  this.isBackdropclicked = false; // 8
+      this.actualBackdropclicked = true;
+      this.actuallinkstatus = false;
+    } else if (this.isquicklinkclicked && !this.actuallinkstatus && this.isBackdropclicked) {
+   //   this.isBackdropclicked = false; // 9
+      this.actualBackdropclicked = true;
+      this.actuallinkstatus = true;
+    }
+
     if (this.isuserClickedonqstooltip) {//&& !this.isquicklinkclicked && this.userclickedoutside
       this.qslinkobj = {};
       Object.values(this.qslinkobj).length = 0;
       this.quickDivID = "";
     }
- 
-       if (this.isquicklinkclicked) {
+
+    if (this.isquicklinkclicked) {
       if (this.quickDivID !== undefined && this.quickDivID !== "") {
         this.isuserClickedonqstooltip = false;
+        this.isHeaderNavbarClicked = false;
+        this.actualBackdropclicked = true;
         // if (this.qslinkobj !== undefined) {
         if (this.headerDropdown !== undefined) {
-
- 
-          if(this.quickDivID !== "" && (this.quickDivID === 6) || this.quickDivID !== "" && (this.quickDivID === 5)){
-          //  this.removeHightlightBorders();
-          console.log('hide...1778',);
-          this.renderer.removeClass(this.navMenuEle.nativeElement.querySelectorAll('li > div')[1], 'highlightmenu-element');
-        
-          }
-          if (this.quickDivID !== "" && (this.quickDivID === 7 || this.quickDivID === 8 || this.quickDivID === 9 || this.quickDivID === 10)) {
-            //this.removeHightlightBorders();
-            this.renderer.removeClass(this.navMenuEle.nativeElement.querySelectorAll('li > div')[0], 'highlightmenu-element');
-            this.renderer.removeClass(this.navMenuEle.nativeElement.querySelectorAll('li > div')[2], 'highlightmenu-element');
-            this.opendropdownTrigger(2,'cookie-consent'); 
-           // this.addBordertoDropdownMenu();
-          }
-          if(this.quickDivID !== "" && (this.quickDivID == 11 || this.quickDivID == 12 )){
-            this.removeHightlightBorders();
-            //this.renderer.removeClass(this.navMenuEle.nativeElement.querySelectorAll('li > div')[0], 'highlightmenu-element');
-          }
-          if (this.quickDivID !== "" && (this.quickDivID === 16 || this.quickDivID === 15 || this.quickDivID === 14 || this.quickDivID === 13)) {
-          
-            this.renderer.removeClass(this.navMenuEle.nativeElement.querySelectorAll('li > div')[1], 'highlightmenu-element');
-            this.renderer.removeClass(this.navMenuEle.nativeElement.querySelectorAll('li > div')[2], 'highlightmenu-element');
-            this.opendropdownTrigger(1,'dsar'); 
-            this.addBordertoDropdownMenu();
-          }
-          if (this.quickDivID !== "" && (this.quickDivID === 20) || this.quickDivID !== "" && (this.quickDivID === 21) || this.quickDivID !== "" && (this.quickDivID === 22)) {
-          this.renderer.removeClass(this.navMenuEle.nativeElement.querySelectorAll('li > div')[0], 'highlightmenu-element');
-          this.renderer.removeClass(this.navMenuEle.nativeElement.querySelectorAll('li > div')[1], 'highlightmenu-element');
-            this.opendropdownTrigger(3,'consentpreference'); 
-          }
+          this.triggerDropdownForQSM();
         }
       }
+    } else if (this.quickmenuService.isquickmenudismiss && this.isHeaderNavbarClicked) {
+    //  this.isBackdropclicked = false; // 10
+      this.actualBackdropclicked = true;
+    } else if (this.onClickHideTooltip()) {
+      this.lastopendp.length = 0;
+      this.removeHightlightBorders();
+      this.qslinkobj = {};
+      
     } else {
-      if (this.onClickHideTooltip()) {
-        this.lastopendp.length = 0;
-        this.headerDropdown.forEach((el: any, index) => {
-          if (this.quickDivID !== "" && (this.quickDivID === 16 || this.quickDivID === 15 || this.quickDivID === 14 || this.quickDivID === 13)) {
-          if(index === 1){
-            el.hide();
-            el.autoClose = true;// true;
-          }
-        }
-        });
-        this.quickDivID = "";
+      if (this.navMenuEle !== undefined) {
+        this.removeHightlightBorders();
       }
-      //  this.isquicklinkclicked = false;
-      //  this.headerDropdown.forEach((el: any, index) => {
-      //  //  el.hide();
-      //    el.autoclose = true;
-      //  })
     }
     // }
   }
@@ -1776,27 +1854,27 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
   positionObj(){
     if(this.quickDivID !== "" && (this.quickDivID == 10)){
       return {
-        "left":"340px",
+        "left":"310px",
         "top":"70px"
       } 
     } else if(this.quickDivID !== "" && (this.quickDivID == 11)){
       return {
         "left":"107px",
-        "top":"85px"
+        "top":"200px"
       } 
     } else if(this.quickDivID !== "" && (this.quickDivID == 9)){
       return {
-        "left":"360px",
+        "left":"310px",
         "top":"170px"
       } 
     }  else if(this.quickDivID !== "" && (this.quickDivID == 8)){
       return {
-        "left":"360px",
+        "left":"310px",
         "top":"134px"
       } 
     } else if(this.quickDivID !== "" && (this.quickDivID == 7)){
       return {
-        "left":"340px",
+        "left":"310px",
         "top":"110px"
       } 
     } else if(this.quickDivID !== "" && (this.quickDivID == 4)){
@@ -1827,17 +1905,17 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
       } 
     } else if(this.quickDivID !== "" && (this.quickDivID == 14)){
       return {
-        "left":"240px",
+        "left":"190px",
         "top":"70px"
       } 
     } else if(this.quickDivID !== "" && (this.quickDivID == 15)){
       return {
-        "left": "240px",
+        "left": "190px",
         "top": "110px"
       }
     } else if(this.quickDivID !== "" && (this.quickDivID == 16)){
       return {
-        "left":"240px",
+        "left":"200px",
         "top":"70px"
       } 
     } else if(this.quickDivID !== "" && (this.quickDivID == 17)){
@@ -1854,12 +1932,17 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
     } else if(this.quickDivID !== "" && (this.quickDivID == 1)){
       return {
         "left":"690px",
-        "top":"140px"
+        "top":"120px"
       }
-    } else if(this.quickDivID !== "" && this.quickDivID == 2 || this.quickDivID == 3){
+    } else if(this.quickDivID !== "" && (this.quickDivID == 2)){
+      return {
+        "left":"680px",
+        "top":"126px"
+      }
+    }  else if(this.quickDivID !== "" && (this.quickDivID == 3)){
       return {
         "left":"760px",
-        "top":"146px"
+        "top":"346px"
       }
     } else if(this.quickDivID !== "" && (this.quickDivID == 19)){
       return {
@@ -1868,17 +1951,17 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
       }
     } else if(this.quickDivID !== "" && (this.quickDivID == 20)){
       return {
-        "left":"490px",
+        "left":"440px",
         "top":"76px"
       }
     } else if(this.quickDivID !== "" && (this.quickDivID == 21)){
       return {
-        "left":"490px",
+        "left":"440px",
         "top":"76px"
       }
     } else if(this.quickDivID !== "" && (this.quickDivID == 22)){
       return {
-        "left":"490px",
+        "left":"440px",
         "top":"70px"
       }
     }
@@ -1895,17 +1978,21 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
   }
 
   isBillingpageQuickid(){
-    if(this.quickDivID == 1 || this.quickDivID == 2 || this.quickDivID == 3 || this.quickDivID == 11 || this.quickDivID == 12 || this.quickDivID == 18 ||  this.quickDivID == 19 || this.quickDivID == 6 || this.quickDivID == 5 ){
-      return false;
-    }else{
-      return true;
+    if(this.quickDivID !== undefined && this.quickDivID !== ""){
+      if(this.quickDivID == 1 || this.quickDivID == 2 || this.quickDivID == 3 || this.quickDivID == 4 || this.quickDivID == 11 || this.quickDivID == 12 || this.quickDivID == 18 ||  this.quickDivID == 19 || this.quickDivID == 6 || this.quickDivID == 5){
+        return false;
+      }else{
+        return true;
+      }
     }
   }
 
   onClickHideTooltip(): boolean {
-    if (this.quickLinkObj !== undefined && this.actualBackdropclicked) { //!this.isuserClickedonqstooltip
+    if (this.quickLinkObj !== undefined && Object.values(this.quickLinkObj).length !== 0 && this.actualBackdropclicked) { //!this.isuserClickedonqstooltip
       return true; // show menu on click of quickstart
-    }  else {
+    } else if (this.quickLinkObj !== undefined && Object.values(this.quickLinkObj).length !== 0) { //&& this.isBackdropclicked
+      return true;
+    } else {
       return false;  //hide already opened menu
     }
   }
@@ -1913,14 +2000,18 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
   isQuicklinkActuallinkVisited():boolean{
     if(this.qslinkobj !== undefined){
       return this.qslinkobj.isactualbtnclicked && this.qslinkobj.islinkclicked;
+    } else{
+      return false;
     }
     
   }
 
   removeHightlightBorders(){
+    if(this.navMenuEle !== undefined){
     this.renderer.removeClass(this.navMenuEle.nativeElement.querySelectorAll('li > div')[0], 'highlightmenu-element');
     this.renderer.removeClass(this.navMenuEle.nativeElement.querySelectorAll('li > div')[1], 'highlightmenu-element');
     this.renderer.removeClass(this.navMenuEle.nativeElement.querySelectorAll('li > div')[2], 'highlightmenu-element');
+    }
     if(this.dropdownTriggers !== undefined){
     for(let i = 0; i < this.dropdownTriggers.nativeElement.querySelectorAll('div > div > ul').length; i++){
          this.renderer.removeClass(this.dropdownTriggers.nativeElement.querySelectorAll('div > div > ul')[i], 'addbg-menuitem');
@@ -1965,17 +2056,21 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
     
 
   ngOnChanges(changes: SimpleChanges) {
-   
+    if(this.isHeaderNavbarClicked && !this.istopmenuopened){
+      this.topheaderDropdown.hide(); // incase after selecting from qsm user navigate from header nav then open dropdown need to close
+    //  this.lastopendp = []; 
+      this.triggerDropdownForQSM();
+    }
     this.quickLinkObj = this.quickmenuService.qsMenuobjwithIndexid;
-    this.isloginpage = this.location.path().indexOf('login') !== -1;
-    this.isqsmenuopen = this.quickmenuService.isquickstartopen;
+   // this.isloginpage = this.location.path().indexOf('login') == -1 && this.location.path().indexOf('signup') == -1;
+    this.isqsmenuopen = this.quickmenuService.isquickstartopen; // A2
     if(this.isqsmenuopen){
       this.onClickBackdrop();
     }
     if(this.qslinkobj !== undefined){
       this.quickLinkStatus = this.qslinkobj.islinkclicked;
     }
-    if(this.actualBackdropclicked){
+    if(this.isqsmenuopen){
       this.removeHightlightBorders();
     }
     
@@ -1997,9 +2092,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
       this.quickDivID = this.quickLinkObj.linkid;
       this.isquicklinkclicked = this.quickLinkObj.islinkclicked;
       this.userclickedoutside = this.quickmenuService.isclickeventoutsidemenu;
-      if(!this.quickmenuService.isquickstartopen){
-        this.isqsmenuopen = true;
-      }  
+      // if(!this.quickmenuService.isquickstartopen){
+      //   this.isqsmenuopen = true;
+      // }  
       this.alertguidetext = this.quickLinkObj.divguidetext;
       this.alertcontent = this.quickLinkObj.tooltipdescription;
       this.quickLinkStatus = true;
@@ -2018,13 +2113,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
       };
       this.quickmenuService.updateQuerymenulist(quickLinkObj);
       this.quickmenuService.onClickEmitQSLinkobj.next(quickLinkObj);
-
+      this.removeHightlightBorders();
       this.headerDropdown.forEach((el) => {
             el.hide(); 
       });
     
        this.isUserVistedActualLinkWithTooltip = true;
-       this.lastopendp = [];
+     //  this.lastopendp = []; //22
   }
  
   responseFromUser($event) {
@@ -2043,11 +2138,14 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
         if(menuid !== undefined && menuid !== -1){
           this.lastopendp[menuid].dpmenu.isOpen = !this.lastopendp[menuid].dpmenu.isOpen;
           this.lastopendp[menuid].dpmenu.show();
+          if(this.lastopendp[menuid].dpmenu.isOpen){
+            this.lastopendp.length = 0;  
+          }
+        //  this.isBackdropclicked = false; // 10
         }else{
           this.lastopendp.length = 0;
           this.headerDropdown.forEach((el: any, index) => {
             if (index == indexid) {
-              console.log(this.storeDropdownstatus);
               let idx = this.lastopendp.findIndex((t)=>t.dpindex === indexid && t.dpname === dropdownname);
               if(idx == -1){
                 this.lastopendp.push({
@@ -2059,17 +2157,17 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
               }else{
                 this.lastopendp[idx].dpmenu.isOpen = !this.lastopendp[idx].dpmenu.isOpen;
                 this.lastopendp[idx].dpmenu.show();
-                this.isBackdropclicked = false;
+              //  this.isBackdropclicked = false; // 11
               }
               
             } 
           });
         }
       }else{
-        this.lastopendp.length = 0;
+    //  if(this.dropdownTriggers !== undefined){
+      this.lastopendp.length = 0;
         this.headerDropdown.forEach((el: any, index) => {
           if (index == indexid) {
-            console.log(this.storeDropdownstatus);
             let idx = this.lastopendp.findIndex((t)=>t.dpindex === indexid && t.dpname === dropdownname);
             if(idx == -1){
               this.lastopendp.push({
@@ -2078,21 +2176,30 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
                 dpname:dropdownname
               });
               el.show();
+           //   this.isBackdropclicked = false; // 12
             }else{
               this.lastopendp[idx].dpmenu.isOpen = !this.lastopendp[idx].dpmenu.isOpen;
               this.lastopendp[idx].dpmenu.show();
-              this.isBackdropclicked = false;
+           //   this.isBackdropclicked = false; // 13
             }
             
           } 
         });
+     // }
       }  
      
   }
 
+  isLoginOrSignupPage():boolean{
+    if( this.location.path().indexOf('login') !== -1 || this.location.path().indexOf('signup') !== -1){
+      return this.isloginpage = false;
+    }else{
+      return this.isloginpage = true;
+    }
+  }
 
   addBordertoDropdownMenu(){
-    if(this.dropdownTriggers !== undefined){
+    if(this.dropdownTriggers !== undefined && this.renderer !== undefined){
       if(this.quickLinkObj !== undefined && this.quickLinkObj.linkid === 13){
         this.renderer.addClass(this.dropdownTriggers.nativeElement.querySelectorAll('div > div > ul')[3], 'addbg-menuitem');
       } else if(this.quickLinkObj !== undefined && this.quickLinkObj.linkid == 14){
@@ -2116,6 +2223,68 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
       } else if(this.quickLinkObj !== undefined && this.quickLinkObj.linkid == 10){
         this.renderer.addClass(this.dropdownTriggers.nativeElement.querySelectorAll('div > div > ul')[0], 'addbg-menuitem');
       } 
+    }
+  }
+
+  onClickQSLinkFromHeader($event){
+    this.quickmenuService.onDissmissQuickStartmenu.next(false);
+  }
+
+  headerNavbarEvent($event) {
+    this.isHeaderNavbarClicked = true;
+    this.userService.onRevistQuickStartmenulink.next({quickstartid:this.quickDivID,reclickqslink:true,urlchanged:true}); 
+    if(this.quickLinkObj !== undefined && Object.values(this.quickLinkObj).length !== 0){
+      //this.userService.onRevistQuickStartmenulink.next({quickstartid:this.quickDivID,reclickqslink:true,urlchanged:true}); 
+    }
+    if ($event.currentTarget === this.headerNavbarEle.nativeElement) {
+      if (!this.isqsmenuopen) { // if quick start opened and want to click navbar
+        this.isqsmenuopen = true;
+        this.onClickBackdrop();
+      } else {
+        return true; // regular header navigation
+      }
+    }
+  }
+
+  onOpenChange(dropdownStatus){
+    dropdownStatus ? this.istopmenuopened = true : this.istopmenuopened = false;
+    return this.istopmenuopened;
+  }
+
+  triggerDropdownForQSM(){
+    if (this.quickDivID !== "" && (this.quickDivID === 6) || this.quickDivID !== "" && (this.quickDivID === 5)) {
+      //  this.removeHightlightBorders();
+      this.renderer.removeClass(this.navMenuEle.nativeElement.querySelectorAll('li > div')[1], 'highlightmenu-element');
+
+    }
+    if (this.quickDivID !== "" && (this.quickDivID === 7 || this.quickDivID === 8 || this.quickDivID === 9 || this.quickDivID === 10)) {
+      //this.removeHightlightBorders();
+      this.renderer.removeClass(this.navMenuEle.nativeElement.querySelectorAll('li > div')[0], 'highlightmenu-element');
+      this.renderer.addClass(this.navMenuEle.nativeElement.querySelectorAll('li > div')[1], 'highlightmenu-element');
+      this.renderer.removeClass(this.navMenuEle.nativeElement.querySelectorAll('li > div')[2], 'highlightmenu-element');
+      this.opendropdownTrigger(2, 'cookie-consent');
+      // this.addBordertoDropdownMenu();
+    }
+    if (this.quickDivID !== "" && (this.quickDivID == 6 || this.quickDivID == 11 || this.quickDivID == 12 || this.quickDivID == 19)) {
+      this.lastopendp = [];
+      this.removeHightlightBorders();
+      this.quickLinkObj = {};
+      //this.renderer.removeClass(this.navMenuEle.nativeElement.querySelectorAll('li > div')[0], 'highlightmenu-element');
+    }
+
+    if (this.quickDivID !== "" && (this.quickDivID === 16 || this.quickDivID === 15 || this.quickDivID === 14 || this.quickDivID === 13)) {
+
+      this.renderer.addClass(this.navMenuEle.nativeElement.querySelectorAll('li > div')[0], 'highlightmenu-element');
+      this.renderer.removeClass(this.navMenuEle.nativeElement.querySelectorAll('li > div')[2], 'highlightmenu-element');
+      this.renderer.removeClass(this.navMenuEle.nativeElement.querySelectorAll('li > div')[1], 'highlightmenu-element');
+      this.opendropdownTrigger(1, 'dsar');
+      this.addBordertoDropdownMenu();
+    }
+    if (this.quickDivID !== "" && (this.quickDivID === 20) || this.quickDivID !== "" && (this.quickDivID === 21) || this.quickDivID !== "" && (this.quickDivID === 22)) {
+      this.renderer.removeClass(this.navMenuEle.nativeElement.querySelectorAll('li > div')[0], 'highlightmenu-element');
+      this.renderer.removeClass(this.navMenuEle.nativeElement.querySelectorAll('li > div')[1], 'highlightmenu-element');
+      this.renderer.addClass(this.navMenuEle.nativeElement.querySelectorAll('li > div')[2], 'highlightmenu-element');
+      this.opendropdownTrigger(3, 'consentpreference');
     }
   }
 

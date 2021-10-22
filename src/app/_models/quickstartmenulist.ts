@@ -9,7 +9,7 @@ export class QuickStartMenuList {
     return [
       {
         "index": 1,
-        "indextext": "Getting Start",
+        "indextext": "Getting Started",
         "quicklinks": [
           {
             "linkid": 1,
@@ -46,7 +46,7 @@ export class QuickStartMenuList {
         "quicklinks": [
           {
             "linkid": 4,
-            "link": "/settings/billing/pricing",
+            "link": "/",
             "islinkclicked": false,
             "isactualbtnclicked": false,
             "linkdisplaytext": "Subscription",

@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit, AfterViewInit, AfterViewChecked, TemplateRef} from '@angular/core';
+import {Component, OnInit, AfterViewInit, TemplateRef, ChangeDetectorRef} from '@angular/core';
 import {Router} from '@angular/router';
 import {BillingService} from '../../../_services/billing.service';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
@@ -11,14 +11,13 @@ import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { QuickmenuService } from 'src/app/_services/quickmenu.service';
-import { QuickStart } from 'src/app/_models/quickstart';
 
 @Component({
   selector: 'app-pricing',
   templateUrl: './pricing.component.html',
   styleUrls: ['./pricing.component.scss']
 })
-export class PricingComponent implements OnInit, AfterViewChecked, OnDestroy {
+export class PricingComponent implements OnInit, AfterViewInit {
   private unsubscribeAfterUserAction$: Subject<any> = new Subject<any>();
   subscriptionPlan;
   planDetails: any;
@@ -66,6 +65,7 @@ export class PricingComponent implements OnInit, AfterViewChecked, OnDestroy {
   quickDivID;
   isRevistedLink:boolean;
   currentLinkID:any;
+  iswindowclicked;
   actuallinkstatus:boolean = false;
   
   constructor(private router: Router,
@@ -74,24 +74,17 @@ export class PricingComponent implements OnInit, AfterViewChecked, OnDestroy {
               private userService: UserService,
               private modalService: BsModalService,
               private quickmenuService: QuickmenuService,
-              private billingService: BillingService) {
+              private billingService: BillingService,
+              private cdRef: ChangeDetectorRef) {
+              this.onGetActivePlan();
   }
 
   ngOnInit() {
     this.quickmenuService.onClickEmitQSLinkobj.subscribe((res) => { 
       this.quickDivID = res.linkid;
+      this.callForQuickStart();
     });
-   // this.userService.addUserActionOnActualButton.next({quickstartid:5,isclicked:null,isactualbtnclicked:false});
-     
-    // this.userService.isClickedOnQSMenu.pipe(
-    //   takeUntil(this.unsubscribeAfterUserAction$)
-
-    // ).subscribe((status)=>{
-    //   this.isquickstartmenu = status.isclicked;
-    //   this.quickDivID = status.quickstartid;
-      
-    // });
-    //this.quickDivID = 5;
+    this.userService.isRevisitedQSMenuLink.subscribe((status) => { this.isRevistedLink = status.reclickqslink; this.currentLinkID = status.quickstartid; this.iswindowclicked = status.urlchanged  });
     //this.userService.isRevisitedQSMenuLink.subscribe((status) => { this.isRevistedLink = status.reclickqslink; this.currentLinkID = status.quickstartid; });
     // this.onGetPlanCompareData()
     this.onGetActivePlan();
@@ -178,6 +171,7 @@ export class PricingComponent implements OnInit, AfterViewChecked, OnDestroy {
       this.skeletonLoader = false;
       this.planDetails = res.response;
       this.onSetPlans(res.response);
+      this.callForQuickStart();
       // this.subscriptionList = res.response.monthly;
     }, error => {
       this.loading.stop();
@@ -201,6 +195,8 @@ export class PricingComponent implements OnInit, AfterViewChecked, OnDestroy {
     element.style.margin = null;
     element.classList.add('container');
     element.classList.add('site-content');
+    this.quickDivID = "";
+    this.unsubscribeAfterUserAction$.unsubscribe();
   }
 
   onGetUserEmail() {
@@ -331,6 +327,32 @@ export class PricingComponent implements OnInit, AfterViewChecked, OnDestroy {
   }
 
   onAddToCart(planDetails: any, planUnit: any) {
+    if (this.quickDivID !== undefined && (this.quickDivID == 11 || this.quickDivID == 18 || this.quickDivID == 5)) {
+      const indexId = this.quickDivID == 18 ? 5 : this.quickDivID == 11 ? 4 : 3;
+      this.checkForQuickDivIDWithIndex();
+      const a = this.quickmenuService.getQuerymenulist();
+      if (a.length !== 0) {
+        const idx = a.findIndex((t) => t.index == indexId);
+        if (a[idx].quicklinks.filter((t) => t.linkid == this.quickDivID).length > 0) {
+          
+          this.userService.onRevistQuickStartmenulink.next({quickstartid:this.quickDivID,reclickqslink:true,urlchanged:false});
+          const plan = {...planDetails};
+          plan.priceTotal = plan.price * planUnit.value;
+          plan.unit = planUnit.value;
+          this.cartItem.push(plan);
+          // }
+          this.subTotal = 0;
+          if (this.cartItem.length > 0) {
+            for (const item of this.cartItem) {
+              this.subTotal += Number(item.priceTotal);
+            }
+          }
+          setTimeout(() => {
+            window.scrollTo(0, document.body.scrollHeight);
+          }, 500);
+        }
+      }
+    } else{
     // const isItem = this.cartItem.includes((plan));
     // if (isItem) {
     //   this.cartItem = this.cartItem.filter( obj => {
@@ -351,6 +373,7 @@ export class PricingComponent implements OnInit, AfterViewChecked, OnDestroy {
     setTimeout(() => {
       window.scrollTo(0, document.body.scrollHeight);
     }, 500);
+  }
   }
 
   onUpdateCart(cartProperty, i) {
@@ -413,34 +436,45 @@ export class PricingComponent implements OnInit, AfterViewChecked, OnDestroy {
   }
 
   onGenerateSessionID() {
-    const indexId = this.quickDivID == 18 ? 5 : this.quickDivID == 11 ? 4 : 3;
-    let quickLinkObj = {
-      linkid: this.quickDivID,
-      indexid:  indexId,
-      isactualbtnclicked: true,
-      islinkclicked: true
-    };
-    this.quickmenuService.onClickEmitQSLinkobj.next(quickLinkObj);
-    this.quickmenuService.updateQuerymenulist(quickLinkObj);
-    const a = this.quickmenuService.getQuerymenulist();
-    if(a.length !== 0){
-      const idx = a.findIndex((t)=>t.index == quickLinkObj.indexid);
-      if(a[idx].quicklinks.filter((t)=>t.linkid == quickLinkObj.linkid).length > 0){
-        this.loading.start()
-        this.billingService.getManageSessionID(this.constructor.name, moduleName.manageSubscriptionsModule).subscribe((res: any) => {
-          this.loading.stop();
-          if (res.status === 200) {
-            this.quickmenuService.onClickEmitQSLinkobj.next(quickLinkObj);
-            this.quickmenuService.updateQuerymenulist(quickLinkObj);
-            window.open(res.response, '_blank');
-          }
-    
-        }, err => {
-          this.loading.stop();
-          this.isOpen = true;
-          this.alertMsg = err;
-          this.alertType = 'danger';
-        });
+    if (this.quickDivID == undefined || (this.quickDivID == 0)) {
+      this.loading.start()
+      this.billingService.getManageSessionID(this.constructor.name, moduleName.manageSubscriptionsModule).subscribe((res: any) => {
+        this.loading.stop();
+        if (res.status === 200) {
+          window.open(res.response, '_blank');
+        }
+
+      }, err => {
+        this.loading.stop();
+        this.isOpen = true;
+        this.alertMsg = err;
+        this.alertType = 'danger';
+      })
+    } else if (this.quickDivID !== undefined && (this.quickDivID == 11 || this.quickDivID == 18 || this.quickDivID == 5)) {
+      const indexId = this.quickDivID == 18 ? 5 : this.quickDivID == 11 ? 4 : 3;
+      this.checkForQuickDivIDWithIndex();
+      const a = this.quickmenuService.getQuerymenulist();
+      if (a.length !== 0) {
+        const idx = a.findIndex((t) => t.index == indexId);
+        if (a[idx].quicklinks.filter((t) => t.linkid == this.quickDivID).length > 0) {
+          this.loading.start()
+          this.billingService.getManageSessionID(this.constructor.name, moduleName.manageSubscriptionsModule).subscribe((res: any) => {
+            this.loading.stop();
+            if (res.status === 200) {
+              this.userService.onRevistQuickStartmenulink.next({quickstartid:this.quickDivID,reclickqslink:true,urlchanged:false});
+              // this.quickmenuService.onClickEmitQSLinkobj.next(quickLinkObj);
+              // this.quickmenuService.updateQuerymenulist(quickLinkObj);
+              this.checkForQsTooltip();
+              window.open(res.response, '_blank');
+            }
+
+          }, err => {
+            this.loading.stop();
+            this.isOpen = true;
+            this.alertMsg = err;
+            this.alertType = 'danger';
+          });
+        }
       }
     }
 
@@ -451,32 +485,77 @@ export class PricingComponent implements OnInit, AfterViewChecked, OnDestroy {
   }
 
   onSetCookieConsent(type, featureCompareType) {
-    this.currentFeature = featureCompareType;
- this.currentStep = type;
-  this.cookieConsentBillingCycle = 'monthly';
-    this.subscriptionList = this.planDetails.cookieConsent[`${this.cookieConsentBillingCycle}`];
-    this.dsarPlanList = this.planDetails.dsar[`${this.cookieConsentBillingCycle}`];
-    this.consentPreferenceList = this.planDetails.consentPreference[`${this.cookieConsentBillingCycle}`];
-}
-positionObj(){
-  return {
-    "left": "135px",
-    "top":"250px"
+    if (this.planDetails !== undefined) {
+      this.currentFeature = featureCompareType;
+      this.currentStep = type;
+      this.cookieConsentBillingCycle = 'monthly';
+      this.subscriptionList = this.planDetails.cookieConsent[`${this.cookieConsentBillingCycle}`];
+      this.dsarPlanList = this.planDetails.dsar[`${this.cookieConsentBillingCycle}`];
+      this.consentPreferenceList = this.planDetails.consentPreference[`${this.cookieConsentBillingCycle}`];
+    }
   }
-}
 
-  ngAfterViewChecked() {
+  ngAfterViewInit(){
+    this.userService.isRevisitedQSMenuLink.subscribe((status) => { this.isRevistedLink = status.reclickqslink; this.currentLinkID = status.quickstartid; this.iswindowclicked = status.urlchanged  });
+    this.quickmenuService.onClickEmitQSLinkobj.subscribe((res) => { 
+      this.quickDivID = res.linkid;
+    });
+  //  this.onGetPlanDetails();
+    this.cdRef.detectChanges();
+    if(this.planDetails !== undefined){
+      this.callForQuickStart();
+    }
+  }
+
+  callForQuickStart(){
     const quicklinks = this.quickmenuService.qsMenuobjwithIndexid;
     if (quicklinks !== undefined && quicklinks.linkid == 11) {
-      this.onSetCookieConsent(2, 'dsar');
-    }else if (quicklinks !== undefined && quicklinks.linkid == 12) {
+      this.currentStep = 2;
       this.onSetCookieConsent(2, 'dsar');
     }else if (quicklinks !== undefined && quicklinks.linkid == 18) {
+      this.currentStep = 3;
       this.onSetCookieConsent(3, 'consentPreference');
+    }else if (quicklinks !== undefined && quicklinks.linkid == 5) {
+      this.currentStep = 1;
+      this.onSetCookieConsent(1, 'cookieConsent');
     } 
-    // else if (quicklinks !== undefined && quicklinks.linkid == 19) {
-    //   this.onSetCookieConsent(3, 'dsar');
-    // }
+    this.onGetActivePlan(); // by default initially it will show monthly plan only
   }
+
+
+  checkForQsTooltip(){
+    this.userService.onRevistQuickStartmenulink.next({quickstartid:this.quickDivID,reclickqslink:false,urlchanged:true}); 
+    this.quickDivID = "";    
+  }
+
+  checkForQSTooltipForEnterprisebt() {
+    if (this.quickDivID == undefined || (this.quickDivID == 0)) {
+      return true;
+    } else {
+     this.checkForQuickDivIDWithIndex();
+     const indexId = this.quickDivID == 18 ? 5 : this.quickDivID == 11 ? 4 : 3;
+      const a = this.quickmenuService.getQuerymenulist();
+      if (a.length !== 0) {
+        const idx = a.findIndex((t) => t.index == indexId);
+        if (a[idx].quicklinks.filter((t) => t.linkid == this.quickDivID).length > 0) {
+          this.userService.onRevistQuickStartmenulink.next({ quickstartid: this.quickDivID, reclickqslink: true, urlchanged: false });
+        }
+      }
+    }
+
+  }
+
+  checkForQuickDivIDWithIndex(){
+    const indexId = this.quickDivID == 18 ? 5 : this.quickDivID == 11 ? 4 : 3;
+    let quickLinkObj = {
+      linkid: this.quickDivID,
+      indexid: indexId,
+      isactualbtnclicked: true,
+      islinkclicked: true
+    };
+    this.quickmenuService.onClickEmitQSLinkobj.next(quickLinkObj);
+    this.quickmenuService.updateQuerymenulist(quickLinkObj);
+  }
+
 
 }

@@ -1,13 +1,12 @@
-import { ChangeDetectorRef, Component, OnInit, SimpleChanges, AfterViewChecked, AfterContentChecked, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, SimpleChanges, AfterViewChecked, AfterContentChecked, ViewChild, ElementRef, HostListener } from '@angular/core';
 import { faCoffee } from '@fortawesome/free-solid-svg-icons';
-import { AuthenticationService, OrganizationService } from './_services';
+import { AuthenticationService, OrganizationService, UserService } from './_services';
 import { ActivatedRoute, NavigationEnd, RouteConfigLoadEnd, RouteConfigLoadStart, Router, RouterEvent } from '@angular/router';
 import * as feather from 'feather-icons';
 import { CCPAFormConfigurationService } from './_services/ccpaform-configuration.service';
 import { DsarformService } from './_services/dsarform.service';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { DataService } from './_services/data.service';
-import { moduleName } from './_constant/module-name.constant';
 import { BillingService } from './_services/billing.service';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { environment } from '../environments/environment';
@@ -21,17 +20,17 @@ import { PricingComponent } from 'src/app/pagesettings/billing/pricing/pricing.c
   styleUrls: ['./app.component.scss'],
   animations: [
     trigger('slideInOut', [
-      state('false', style({
+      state('true', style({
         "max-width": "1040px",
         "margin-left": "10px",
         transform: '  translateX(0)'
 
       })),
-      state('true', style({
+      state('false', style({
 
         transform: 'translateX(1)'
       })),
-      transition('false <=> true', animate('350ms ease-in-out'))
+      transition('true <=> false', animate('350ms ease-in-out'))
     ])
 
   ]
@@ -42,7 +41,8 @@ export class AppComponent implements OnInit {
   modalRef: BsModalRef;
   @ViewChild('unauth', { static: true }) unauth: any;
   @ViewChild(QuickstartmenuComponent, { static: true }) quickstartmenuComponent: QuickstartmenuComponent;
-  @ViewChild(PricingComponent,{static: false}) pricingComp : PricingComponent
+  @ViewChild(PricingComponent,{static: false}) pricingComp : PricingComponent;
+  @ViewChild('pageContainer', { static: false }) pageContainer: ElementRef;   // for later use
   title = 'adzapier-analytics-ng';
   faCoffee = faCoffee;
   allPlanData: any;
@@ -57,6 +57,9 @@ export class AppComponent implements OnInit {
   isquickLinkclicked: boolean;
   qsMenuList: any = [];
   isloginpage: boolean;
+  toggleQuickstartmenu:boolean;
+  quicklinkclickedObj;
+  //isuserclickonpage:boolean = false; //for later use to check page click event
   constructor(private router: Router,
     private activatedRoute: ActivatedRoute,
     private modalService: BsModalService,
@@ -67,10 +70,11 @@ export class AppComponent implements OnInit {
     private dataService: DataService,
     private organizationService: OrganizationService,
     private quickmenuService: QuickmenuService,
+    private userService: UserService,
     private location: Location,
     private cdRef: ChangeDetectorRef
   ) {
-    if (this.location.path().indexOf('/login') == -1) {
+    if (this.location.path().indexOf('/login') !== -1 || this.location.path().indexOf('signup') !== -1) {
       this.isloginpage = true;
     } else {
       this.isloginpage = false;
@@ -89,7 +93,6 @@ export class AppComponent implements OnInit {
     );
     this.quickmenuService.isClickedOnQSMenu.subscribe((data) => {
       if (data) {
-        console.log(data, 'app..const..');
         this.qsMenuList = this.quickmenuService.getQuerymenulist();
         // console.log(updatedqsMenu,'constructor..appcomp');
         // this.qsMenuList =  [...updatedqsMenu];
@@ -101,7 +104,6 @@ export class AppComponent implements OnInit {
   async ngOnInit() {
     this.quickmenuService.isClickedOnQSMenu.subscribe((data) => {
       if (data) {
-        console.log(data, 'app..init..');
         this.qsMenuList = this.quickmenuService.getQuerymenulist();
         // console.log(updatedqsMenu,'constructor..appcomp');
         // this.qsMenuList =  [...updatedqsMenu];
@@ -134,11 +136,9 @@ export class AppComponent implements OnInit {
       //  console.log(this.queryPID,'queryPID..');
       // }
     });
-    console.log(this.quickstartmenuComponent, 'oninit..quickstartmenuComponent..');
     this.qsMenuList = this.quickmenuService.getQuerymenulist();
     let obj;
     this.quickmenuService.onClickEmitQSLinkobj.subscribe((data) => obj = data);
-    console.log(obj, 'obj..oninit..');
 
 
   }
@@ -184,9 +184,17 @@ export class AppComponent implements OnInit {
   }
 
   getStyle($event) {
-    console.log($event,"app.comp..179");
-    this.quickmenuService.isquickstartopen = $event;
-    this.isquickstartopen = $event;
+    if(!$event){
+      this.quickmenuService.isquickstartopen = $event;
+      this.isquickstartopen = $event;
+    }else{
+      this.quickmenuService.isquickstartopen = !$event;
+      this.isquickstartopen = !$event;
+    }
+  }
+
+  enableQuickStartMenu($event){
+    this.toggleQuickstartmenu = $event;
   }
 
   receivedQSLinkObj($event) {
@@ -213,68 +221,49 @@ export class AppComponent implements OnInit {
     console.log($event, '$event...');
   }
 
-  
+  // receivedQSMenuDismissStatus($event){
+  //   this.dismissQSMStatus = $event;
+  // }
 
   ngAfterContentChecked() {
-  //  this.cdRef.detectChanges();
-    // let updatedqsMenu = this.quickmenuService.getQuerymenulist();
-    // console.log(updatedqsMenu,'ngAfterContentChecked..app1qsm');
-    // this.qsMenuList =  [...updatedqsMenu];
+  
   }
 
   ngAfterViewInit() {
-    // this.qsMenuList = this.quickmenuService.getQuerymenulist();
-    if(this.pricingComp !== undefined){
-    //  console.log(this.pricingComp,'pricingComp..225...');
-      this.pricingComp.onSetCookieConsent(2,'dsar');
-    }
- //   console.log(this.quickstartmenuComponent, 'viewinit..quickstartmenuComponent..');
-    let objdata;
-    this.quickmenuService.onClickEmitQSLinkobj.subscribe((data) => objdata = data);
+    this.isquickstartopen = this.quickmenuService.isquickstartopen;
+    this.quickmenuService.onClickEmitQSLinkobj.subscribe((data) => this.quicklinkclickedObj = data);
     this.cdRef.detectChanges();
     let updatedqsMenu = this.quickmenuService.getQuerymenulist();
-  //  console.log(updatedqsMenu, 'ngAfterViewInit..app1qsm');
     this.qsMenuList = [...updatedqsMenu];
-    //  this.quickmenuService.updateQuerymenulist(objdata);
-    // this.qsMenuList = this.quickstartmenuComponent.getupdatedQuickStartMenu();
+    this.cdRef.detectChanges();
   }
 
   // ngAfterViewChecked(){
   //   this.qsMenuList = this.quickstartmenuComponent.getupdatedQuickStartMenu();
   // }
   ngAfterViewChecked() {
-    if (this.location.path().indexOf('/login') == -1) {
-      this.isloginpage = true;
-    } else {
+    this.isquickstartopen = this.quickmenuService.isquickstartopen;
+    if (this.location.path().indexOf('/login') !== -1 || this.location.path().indexOf('signup') !== -1 || this.location.path().indexOf('resetpswd') !== -1) {
       this.isloginpage = false;
+    } else {
+      this.isloginpage = true;
     }
-    //not loading page..
-    // let obj;
-    // this.quickmenuService.onClickEmitQSLinkobj.subscribe((data) => obj = data);
-    // console.log(obj,'AviewcheckedCobj...');
-    //this.qsMenuList = this.quickmenuService.getQuerymenulist();
-    // // console.log(updatedqsMenu,'ngAfterViewChecked..app1qsm');
-    // this.qsMenuList =  [...updatedqsMenu];
-    // let updatedqsMenu = this.quickmenuService.getQuerymenulist();
-    // console.log(updatedqsMenu,'ngAfterViewChecked..appqsm');
-    // this.qsMenuList =  [...updatedqsMenu];
-    // let obj = this.quickstartmenuComponent.getupdatedQuickStartMenu();
-    // console.log(obj,'OBJ216..');
+    this.cdRef.detectChanges();
   }
 
 
 
   ngOnChanges(changes: SimpleChanges) {
 
- //   console.log(changes, 'changes..app..')
     let obj;
     this.quickmenuService.onClickEmitQSLinkobj.subscribe((data) => obj = data);
- //   console.log(obj, 'APCobj...');
-    // this.qsMenuList = this.quickstartmenuComponent.getupdatedQuickStartMenu();
 
-    //let updatedqsMenu = this.quickmenuService.getQuerymenulist();
-    //  this.quickStartMenu = [...updatedqsMenu];
   }
 
+  onPageClick() {
+    if (this.quickmenuService.isclickeventoutsidemenu) {
+      this.userService.onRevistQuickStartmenulink.next({ quickstartid: this.quicklinkclickedObj.linkid, reclickqslink: false, urlchanged: true });
+    }
+  }
 
 }

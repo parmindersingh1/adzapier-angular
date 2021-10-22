@@ -78,6 +78,20 @@ $guidancediv-bgcolor-two: #385a8e;
   z-index: 1200;
 }
 
+
+.flotingdiv{
+	position: fixed;
+	top: 84%;
+	right:310px;
+	overflow-x: hidden;
+  overflow-y: auto;
+  z-index: 1200;
+}
+
+.hideqsmalert {
+  display: none;
+}
+
 accordion-group {
     ::ng-deep {
       div {

@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, TemplateRef, ChangeDetectorRef, AfterContentChecked } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, NavigationError, NavigationStart, Router } from '@angular/router';
 // import { OrganizationService, UserService } from '../_services';
 import { FormGroup, FormBuilder, Validators, FormControl, FormArray } from '@angular/forms';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
@@ -16,7 +16,8 @@ import { Location } from '@angular/common';
 import { findPropertyIDFromUrl } from 'src/app/_helpers/common-utility';
 
 import { QuickmenuService } from 'src/app/_services/quickmenu.service';
-import { QuickStart } from 'src/app/_models/quickstart';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 // import { CompanyService } from '../company.service';
 @Component({
   selector: 'app-organizationdetails',
@@ -24,6 +25,7 @@ import { QuickStart } from 'src/app/_models/quickstart';
   styleUrls: ['./organizationdetails.component.scss']
 })
 export class OrganizationdetailsComponent implements OnInit {
+  private unsubscribeAfterUserAction$: Subject<any> = new Subject<any>();
   @ViewChild('propertyModal', { static: true }) propertyModal: TemplateRef<any>;
   @ViewChild('confirmTemplate') confirmModal: TemplateRef<any>;
   @ViewChild('deletePropertyAlert') deleteAlertModal: TemplateRef<any>;
@@ -95,6 +97,12 @@ export class OrganizationdetailsComponent implements OnInit {
   selectusertype = true;
   queryOID;
   queryPID;
+  quickDivID;
+  isRevistedLink:boolean;
+  currentLinkID:any;
+  iswindowclicked:boolean;
+  currentRouteURL;
+  changedRouteURL;
   constructor(private activatedRoute: ActivatedRoute,
               private orgService: OrganizationService,
               private modalService: NgbModal,
@@ -117,9 +125,14 @@ export class OrganizationdetailsComponent implements OnInit {
       itemsPerPage: this.propertyPgSize, currentPage: this.p2,
       totalItems: this.propertyTotalCount, id: 'propertyPagination'
     };
+   
+
   }
 
   ngOnInit() {
+    //this.currentRouteURL = this.location.path();
+    this.showQuickstartTooltip();
+    this.userService.isRevisitedQSMenuLink.subscribe((status) => { this.isRevistedLink = status.reclickqslink; this.currentLinkID = status.quickstartid; });
     this.orgService.currentProperty.subscribe((response) => {
       if (response !== '') {
         this.currentManagedOrgID = response.organization_id || response.response.oid;
@@ -182,7 +195,7 @@ export class OrganizationdetailsComponent implements OnInit {
       state: ['', [Validators.required, Validators.pattern(strRegx)]],
       zipcode: ['', [Validators.required, Validators.pattern(zipRegex)]],
       email: ['', [Validators.required, Validators.pattern]],
-      phone: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(15), Validators.pattern(phoneNumRegx)]]
+      phone: ['', [Validators.maxLength(15), Validators.pattern(phoneNumRegx)]]
     });
     this.confirmationForm = this.formBuilder.group({
       userInput: ['', [Validators.required]]
@@ -249,14 +262,11 @@ export class OrganizationdetailsComponent implements OnInit {
 
   async open(content, type) {
 
-    let quickLinkObj: QuickStart = {
-      linkid: 3,
+    let quickLinkObj = {
+      linkid: this.quickDivID,
       indexid: 1,
       isactualbtnclicked: true,
-      islinkclicked: true,
-      divguidetext: "addproperty",
-      linkdisplaytext: "Add Property",
-      link: "/settings/organizations/details"
+      islinkclicked: true
     };
     
     if (type === 'invite') {
@@ -444,7 +454,7 @@ export class OrganizationdetailsComponent implements OnInit {
         this.submitted = false;
         this.organisationPropertyForm.reset();
         this.modalService.dismissAll('Data Saved!');
-
+        this.checkForQsTooltip();
       } else {
         const reqObj = {
           name: this.organisationPropertyForm.value.propertyname,
@@ -472,12 +482,14 @@ export class OrganizationdetailsComponent implements OnInit {
           this.organisationPropertyForm.reset();
           this.modalService.dismissAll();
           this.submitted = false;
+          this.checkForQsTooltip();
         }, (error) => {
           this.alertMsg = error;
           this.isOpen = true;
           this.alertType = 'danger';
           this.onCancelClickProperty();
         });
+        this.checkForQsTooltip();
       }
     }
 
@@ -739,6 +751,8 @@ export class OrganizationdetailsComponent implements OnInit {
   }
 
   onCancelClickProperty() {
+    this.userService.onRevistQuickStartmenulink.next({quickstartid:this.quickDivID,reclickqslink:true, urlchanged:false });
+    this.quickDivID = "";
     this.submitted = false;
     this.modalService.dismissAll('Canceled');
     this.organisationPropertyForm.patchValue({
@@ -865,6 +879,41 @@ export class OrganizationdetailsComponent implements OnInit {
     this.inviteUserOrgForm.get("firstname").updateValueAndValidity();
     this.inviteUserOrgForm.get("lastname").updateValueAndValidity();
   }
+
+  showQuickstartTooltip(){
+    const a = this.quickmenuService.getQuerymenulist();
+    this.quickmenuService.onClickEmitQSLinkobj.pipe(
+      takeUntil(this.unsubscribeAfterUserAction$)
+    ).subscribe((res) => { 
+      if (a.length !== 0) {
+        const idx = a.findIndex((t) => t.index == 1);
+        if (a[idx].quicklinks.some((t) => t.linkid == res.linkid && t.isactualbtnclicked)) {
+          this.quickDivID = res.linkid;
+        } else if(a[idx].quicklinks.some((t) => t.linkid == res.linkid && !t.isactualbtnclicked)) {
+          this.quickDivID = res.linkid; // for revisited link
+        }
+      }
+    });
+    this.unsubscribeAfterUserAction$.next();
+    this.unsubscribeAfterUserAction$.complete();
+  }
+
+  checkForQsTooltip(){
+    this.userService.onRevistQuickStartmenulink.next({quickstartid:this.quickDivID,reclickqslink:true,urlchanged:true}); 
+    this.quickDivID = "";
+  }
+
+  ngAfterViewInit(){
+    this.showQuickstartTooltip();
+    this.userService.isRevisitedQSMenuLink.subscribe((status) => { this.isRevistedLink = status.reclickqslink; this.currentLinkID = status.quickstartid; this.iswindowclicked = status.urlchanged  });
+    this.cdref.detectChanges();
+  }
+
+  ngOnDestroy(){
+    this.quickDivID = "";
+    this.unsubscribeAfterUserAction$.unsubscribe();
+  }
+
   // ngAfterContentChecked() {
   //   this.cdref.detectChanges();
   // }

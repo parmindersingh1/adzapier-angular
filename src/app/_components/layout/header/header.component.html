@@ -1,4 +1,4 @@
-<nav *ngIf="currentUser" class="navbar navbar-expand-lg">
+<nav *ngIf="currentUser" #headerNavbar (click)="headerNavbarEvent($event)"  class="navbar navbar-expand-lg">
 
 
   <!-- Brand -->
@@ -112,7 +112,7 @@
     <ul class="navbar-nav"  #navMenu *ngIf="currentUser">
       <li *ngFor="let menu of navigationMenu;" class="nav-item">
         
-      <div *ngIf="menu.showlink" dropdown   #headerDropdown="bs-dropdown"  container="body"    [autoClose]="true">
+      <div *ngIf="menu.showlink" dropdown   #headerDropdown="bs-dropdown"  container="body"  (isOpenChange)="onOpenChange($event)"   [autoClose]="true"> <!--data-toggle="collapse"-->
           <div *ngIf="!menu.subcategory" >
             <a class="nav-link" routerLink="[menu.routerLink]" dropdownToggle [queryParams]="{oid:queryOID , pid:queryPID}"  [class.active]="menu.showlink === 'Billing' && isBillingActivelinkMatched" (click)="goto(menu)">
           {{ menu.showlink }}</a></div>
@@ -163,7 +163,7 @@
       </li>
     </ul>
     <div>
-      <button (click)="btnTopAddSubscription()" class="primary-yellow"> Add A Subscription</button>
+      <button (click)="btnTopAddSubscription()"  [ngClass]="quickDivIDSub == 4 && revisitedQuicklinnkid == quickDivIDSub && !isUserClickedNotRelatedToTooltip ? 'btn-qs-white-hightlight' : ''" class="primary-yellow">Add A Subscription</button>
     </div>
   </div>
   <!--end of general menu after login-->
@@ -279,13 +279,16 @@
                   <p class="tx-12 tx-color-03">{{userRole}}</p>
                 </div>
                 <li *ngIf="!item.items" role="menuitem">
-                  <a class="dropdown-item" routerLink="{{item.routerLink}}" [queryParams]="{oid:queryOID , pid:queryPID}" *ngIf="item.label !== 'Signout' && item.label !== 'Help Center'" [class.active]="selectedSubmenu == item.routerLink || activateSublink(item)" (click)="goto(item)">
+                  <a class="dropdown-item" routerLink="{{item.routerLink}}" [queryParams]="{oid:queryOID , pid:queryPID}" *ngIf="item.label !== 'Signout' && item.label !== 'Help Center' && item.label !== 'Quick Start'" [class.active]="selectedSubmenu == item.routerLink || activateSublink(item)" (click)="goto(item)">
                     <i-feather *ngIf="item.icon" name="{{item.icon}}" class="feather-16"></i-feather>{{item.label}}
                   </a>
-                  <a class="dropdown-item" routerLink="{{item.routerLink}}" *ngIf="item.label === 'Signout'" (click)="logout()"> <!--routerLink="{{item.routerLink}}"-->
+                  <a class="dropdown-item" routerLink="{{item.routerLink}}" *ngIf="item.label !== 'Quick Start' && item.label === 'Signout'" (click)="logout()"> <!--routerLink="{{item.routerLink}}"-->
                     <i-feather *ngIf="item.icon" name="{{item.icon}}" class="feather-16"></i-feather>{{item.label}}
                   </a>
-                  <a class="dropdown-item" href="{{item.routerLink}}" *ngIf="item.label !== 'Signout' && item.label === 'Help Center'" target="_blank">
+                  <a class="dropdown-item" href="{{item.routerLink}}" *ngIf="item.label !== 'Quick Start' && item.label !== 'Signout' && item.label === 'Help Center'" target="_blank">
+                    <i-feather *ngIf="item.icon" name="{{item.icon}}" class="feather-16"></i-feather>{{item.label}}
+                  </a>
+                  <a class="dropdown-item" (click)="onClickQSLinkFromHeader(false);" *ngIf="item.label !== 'Signout' && item.label !== 'Help Center' && item.label === 'Quick Start'">
                     <i-feather *ngIf="item.icon" name="{{item.icon}}" class="feather-16"></i-feather>{{item.label}}
                   </a>
                 </li>
@@ -427,10 +430,11 @@
       <button type="button" class="btn btn-xs btn-primary mr-2" (click)="confirm()">OK</button>
   </div>
 </ng-template>
-<!--quickstart alear for every page-->
-<div [ngClass]="isBillingpageQuickid() && isquicklinkclicked && !isBackdropclicked ? 'back-drop-two': ''"
-  (click)="onClickBackdrop()" *ngIf="!isloginpage">
-  <app-quickstartalert [styleobj]="positionObj()" [isclickedbyuser]="quickLinkStatus"
+<!--quickstart alert for every page-->
+<div #backDroparea [ngClass]="isBillingpageQuickid() && !isqsmenuopen ? 'back-drop-two': ''"
+  (click)="onClickBackdrop()" *ngIf="isloginpage">
+  <app-quickstartalert *ngIf="!isHeaderNavbarClicked && !isUserClickedNotRelatedToTooltip && !isRevistedLink  && !isBackdropclicked && actualBackdropclicked" [styleobj]="positionObj()" [isclickedbyuser]="quickLinkStatus"
     [isuserclickoutsidemenu]="isQuicklinkActuallinkVisited()" [linkid]="quickDivID" [divguidetext]="alertguidetext"
-    [guidancetext]="alertcontent" [isactualLinkclickedbyuser]="actuallinkstatus"></app-quickstartalert>
+    [guidancetext]="alertcontent" [isactualLinkclickedbyuser]="actuallinkstatus">
+  </app-quickstartalert>
 </div>
