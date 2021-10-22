@@ -52,6 +52,10 @@ export class QuickstartmenuComponent implements OnInit, AfterViewInit,AfterViewC
   currentUser:any;
   headingtextarray : any = [];
   currenttabindex:number;
+  alertMsg;
+  isOpenalertMsg;
+  alertType;
+  dismissible = true;
   constructor(private location: Location,
     private router: Router,
     private activatedroute: ActivatedRoute,
@@ -89,10 +93,12 @@ export class QuickstartmenuComponent implements OnInit, AfterViewInit,AfterViewC
         this.showQuickStartMenu = false; //!this.showQuickStartMenu;
         this.showGuidancediv = !this.showGuidancediv;
         this.onClickQuickStart.emit(this.showQuickStartMenu);
+        this.quickmenuService.isquickstartopen = true;
     }else{
       this.showQuickStartMenu = false;// !this.showQuickStartMenu;
       this.showGuidancediv = !this.showGuidancediv;
       this.onClickQuickStart.emit(false);
+      this.quickmenuService.isquickstartopen = true;
     }
     
   }
@@ -117,38 +123,52 @@ export class QuickstartmenuComponent implements OnInit, AfterViewInit,AfterViewC
   }
 
   onClickQuickStartlink(linkIndex, linkobj) {
-    if(linkIndex == 4 && linkobj.linkid == 17){
-      return false;
-    }
-    const allowtonavigate = linkIndex == 1 && (linkobj.linkid == 1 || linkobj.linkid == 2 || linkobj.linkid == 3);
-    const allowtonavigatetwo = linkIndex == 3 && (linkobj.linkid == 5 || linkobj.linkid == 6);
-    const allowtonavigatethree = linkIndex == 4 && (linkobj.linkid == 11 || linkobj.linkid == 12);
-    const allowtonavigatefour = linkIndex == 5 && (linkobj.linkid == 18 || linkobj.linkid == 19);
-    const commingSoon = linkIndex == 4 && linkobj.linkid == 17;
-    this.quickmenuService.isuserClickedonqstooltip = false;
-    linkobj["indexid"] = linkIndex;
-    this.currenttabindex = linkIndex;
-    this.onClickEmitQSLinkobj.emit(linkobj);
-    this.quickmenuService.onClickEmitQSLinkobj.next(linkobj);    
-    this.userService.onRevistQuickStartmenulink.next({quickstartid:linkobj.linkid,reclickqslink:false,urlchanged:false});
-
-    // if (linkobj.link.indexOf('dsar') == -1) {
-    
-    if (allowtonavigate || allowtonavigatetwo || allowtonavigatethree || allowtonavigatefour) {
-      let oIDPIDFromURL = findPropertyIDFromUrl(this.location.path());
-      if (oIDPIDFromURL !== undefined) {
-        this.router.navigate([linkobj.link], { queryParams: { oid: oIDPIDFromURL[0], pid: oIDPIDFromURL[1] }, queryParamsHandling: 'merge', skipLocationChange: false });
-      }else{
+    this.quickmenuService.isquickstartopen = false;
+    if (this.checkForVistiedQSMLink(linkIndex, linkobj)) {
+      if (linkIndex == 4 && linkobj.linkid == 17) {
         return false;
       }
-      // }
+      const allowtonavigate = linkIndex == 1 && (linkobj.linkid == 1 || linkobj.linkid == 2 || linkobj.linkid == 3);
+      const allowtonavigatetwo = linkIndex == 3 && (linkobj.linkid == 5 || linkobj.linkid == 6);
+      const allowtonavigatethree = linkIndex == 4 && (linkobj.linkid == 11 || linkobj.linkid == 12);
+      const allowtonavigatefour = linkIndex == 5 && (linkobj.linkid == 18 || linkobj.linkid == 19);
+      const commingSoon = linkIndex == 4 && linkobj.linkid == 17;
+      this.quickmenuService.isuserClickedonqstooltip = false;
+      linkobj["indexid"] = linkIndex;
+      this.currenttabindex = linkIndex;
+      this.onClickEmitQSLinkobj.emit(linkobj);
+      this.quickmenuService.onClickEmitQSLinkobj.next(linkobj);
+      this.userService.onRevistQuickStartmenulink.next({ quickstartid: linkobj.linkid, reclickqslink: false, urlchanged: false });
+
+      // if (linkobj.link.indexOf('dsar') == -1) {
+
+      if (allowtonavigate || allowtonavigatetwo || allowtonavigatethree || allowtonavigatefour) {
+        let oIDPIDFromURL = findPropertyIDFromUrl(this.location.path());
+        if (oIDPIDFromURL !== undefined) {
+          this.router.navigate([linkobj.link], { queryParams: { oid: oIDPIDFromURL[0], pid: oIDPIDFromURL[1] }, queryParamsHandling: 'merge', skipLocationChange: false });
+        } else {
+          return false;
+        }
+        // }
+      }
+    }else{
+      this.alertMsg = "previous quick start link is not selected";
+      this.isOpenalertMsg = true;
+      this.alertType = 'info';
+      return false;
     }
-    
+  }
+  
+  onClosed(dismissedAlert: any): void {
+    this.alertMsg = !dismissedAlert;
+    this.isOpenalertMsg = false;
   }
 
   onClickQSLinkForProperty(linkIndex, linkobj) {
+    this.quickmenuService.isquickstartopen = false;
+    if(this.checkForVistiedQSMLink(linkIndex,linkobj)){
     if (linkIndex == 4 && linkobj.linkid == 17) {
-      return false;
+      return true; // false; // temp commented...
     }
     this.quickmenuService.isuserClickedonqstooltip = false;
     linkobj["indexid"] = linkIndex;
@@ -161,7 +181,12 @@ export class QuickstartmenuComponent implements OnInit, AfterViewInit,AfterViewC
     if (oIDPIDFromURL !== undefined) {
       this.router.navigate(['settings/organizations/details', oIDPIDFromURL[0]], { queryParams: { oid: oIDPIDFromURL[0], pid: oIDPIDFromURL[1] }, queryParamsHandling: 'merge', skipLocationChange: false });
     }
-    //  }
+    }else{
+      this.alertMsg = "previous quick start link is not selected";
+      this.isOpenalertMsg = true;
+      this.alertType = 'info';
+      return false;
+    }
   }
   
   onCloseQuickstart($event){
@@ -169,7 +194,8 @@ export class QuickstartmenuComponent implements OnInit, AfterViewInit,AfterViewC
     //this.ishideQsbtn = !this.ishideQsbtn;
     this.showQuickStartMenu = !this.showQuickStartMenu;
     this.showGuidancediv = false;
-    this.onClickQuickStart.emit(this.showQuickStartMenu);
+    this.onClickQuickStart.emit(true);
+    this.quickmenuService.isquickstartopen = true;
     this.userService.onRevistQuickStartmenulink.next({quickstartid:0,reclickqslink:true,urlchanged:true}); 
   }
 
@@ -270,6 +296,41 @@ export class QuickstartmenuComponent implements OnInit, AfterViewInit,AfterViewC
     let updatedqsMenu = this.quickmenuService.getQuerymenulist();
     return this.quickStartMenu = [...updatedqsMenu];
     
+  }
+
+  checkForVistiedQSMLink(objindex, currentobj) {
+    if (objindex == 4 || currentobj.linkid == 17) {
+      return true;
+    }
+    if (currentobj.linkid !== 1 && currentobj.linkid !== 17) { //temporary commented
+      const a = this.quickmenuService.getQuerymenulist();
+
+      if (a.length !== 0) {
+        const idx = a.findIndex((t) => t.index == objindex);
+        const linkIndex = a[idx].quicklinks.findIndex((t) => t.linkid == currentobj.linkid);
+        if (linkIndex > 0) {
+          if (a[idx].quicklinks[linkIndex - 1].isactualbtnclicked) {
+            return true;
+          }
+        } else if (linkIndex == 0 && objindex > 1 && objindex !== 4) {
+          if ((objindex - 1) == 4) {
+            return true
+          }//temporary condition later remove..
+          const previousidx = a.findIndex((t) => t.index == objindex - 1);
+          const islastitemofPreviousIdChecked = a[previousidx].quicklinks[a[previousidx].quicklinks.length - 1].isactualbtnclicked == true || a[previousidx].quicklinks[a[previousidx].quicklinks.length - 1].linkid !== 17;
+          if (islastitemofPreviousIdChecked) {
+            return true;
+          } else {
+            return false;
+          }
+        }
+        else {
+          return true;
+        }
+      }
+    } else {
+      return true;
+    }
   }
 
   ngAfterViewInit(){
