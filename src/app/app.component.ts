@@ -184,8 +184,13 @@ export class AppComponent implements OnInit {
   }
 
   getStyle($event) {
-    this.quickmenuService.isquickstartopen = $event;
-    this.isquickstartopen = $event;
+    if(!$event){
+      this.quickmenuService.isquickstartopen = $event;
+      this.isquickstartopen = $event;
+    }else{
+      this.quickmenuService.isquickstartopen = !$event;
+      this.isquickstartopen = !$event;
+    }
   }
 
   enableQuickStartMenu($event){
@@ -225,6 +230,7 @@ export class AppComponent implements OnInit {
   }
 
   ngAfterViewInit() {
+    this.isquickstartopen = this.quickmenuService.isquickstartopen;
     this.quickmenuService.onClickEmitQSLinkobj.subscribe((data) => this.quicklinkclickedObj = data);
     this.cdRef.detectChanges();
     let updatedqsMenu = this.quickmenuService.getQuerymenulist();
@@ -236,6 +242,7 @@ export class AppComponent implements OnInit {
   //   this.qsMenuList = this.quickstartmenuComponent.getupdatedQuickStartMenu();
   // }
   ngAfterViewChecked() {
+    this.isquickstartopen = this.quickmenuService.isquickstartopen;
     if (this.location.path().indexOf('/login') !== -1 || this.location.path().indexOf('signup') !== -1 || this.location.path().indexOf('resetpswd') !== -1) {
       this.isloginpage = false;
     } else {

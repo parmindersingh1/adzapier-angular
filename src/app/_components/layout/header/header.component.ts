@@ -840,6 +840,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
     if(this.quickDivID == link.navmenuid){//this.qslinkobj.linkid 
       this.updateQuickLinkStatus(link);
       this.isUserclickedActualLink = true;
+      this.isqsmenuopen = true;
     }
     this.onClickBackdrop();
     this.oIDPIDFromURL= this.findPropertyIDFromUrl(this.location.path());

@@ -23,7 +23,6 @@ import { ActivatedRoute } from '@angular/router';
 export class CompanyComponent implements AfterViewInit, OnInit {
   private unsubscribeAfterUserAction$: Subject<any> = new Subject<any>();
   @ViewChild('confirmTemplate') confirmModal: TemplateRef<any>;
-  @ViewChild('btnEdit') btnEdit:ElementRef;
   @ViewChild(QuickstartmenuComponent, {static: false}) quickstartmenuComponent : QuickstartmenuComponent;
   modalRef: BsModalRef;
   companyDetails: any;
@@ -102,14 +101,12 @@ export class CompanyComponent implements AfterViewInit, OnInit {
   }
 
   ngOnInit() {
+    this.showQuickstarttooltip();
     this.activatedRoute.queryParamMap
     .subscribe(params => {
       this.queryOID = params.get('oid');
       this.queryPID = params.get('pid');
     });
-    if (!this.quickmenuService.isclickeventoutsidemenu) {
-    this.showQuickstarttooltip();
-    }
     // this.userService.isClickedOnQSMenu.pipe(
     //   takeUntil(this.unsubscribeAfterUserAction$)
 
@@ -118,7 +115,7 @@ export class CompanyComponent implements AfterViewInit, OnInit {
     //   this.quickDivID = status.quickstartid;
       
     // });
-    //this.userService.isRevisitedQSMenuLink.subscribe((status) => { this.isRevistedLink = status.reclickqslink; this.currentLinkID = status.quickstartid; this.isUserClickedNotRelatedToTooltip = status.urlchanged });
+    this.userService.isRevisitedQSMenuLink.subscribe((status) => { this.isRevistedLink = status.reclickqslink; this.currentLinkID = status.quickstartid; this.isUserClickedNotRelatedToTooltip = status.urlchanged });
     this.loadRoleList();
     const numZip = '^[0-9]{5,20}$'; // '^[0-9]{5}(?:-[0-9]{4})?$';
     const numRegex = '^[0-9]*$';
