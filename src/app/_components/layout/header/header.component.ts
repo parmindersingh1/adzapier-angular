@@ -1,7 +1,7 @@
 import { AfterViewChecked, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, HostListener, OnDestroy, OnInit, Renderer2, TemplateRef, ViewChild, Input, OnChanges, QueryList, ViewChildren, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { Router, ActivatedRoute, NavigationEnd, NavigationStart } from '@angular/router';
 import { OrganizationService, AuthenticationService, UserService } from '../../../_services';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { Organization } from 'src/app/_models/organization';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { moduleName } from 'src/app/_constant/module-name.constant';
@@ -12,6 +12,8 @@ import { featuresName } from '../../../_constant/features-name.constant';
 import { BsDropdownDirective } from 'ngx-bootstrap/dropdown';
 import { QuickmenuService } from 'src/app/_services/quickmenu.service';
 import { QuickStart } from 'src/app/_models/quickstart';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 
 @Component({
@@ -51,6 +53,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
   public headerStatus: boolean;
   orgList: any;
   currentOrganization: any;
+  searchDecouncer$: Subject<any> = new Subject();
+  public inputSearch = '';
   navigationMenu: any;
   rightItems: any;
   leftItems: any;
@@ -130,6 +134,18 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
   storeDropdownstatus:boolean = false;
   lastopendp:any = [];
   isShowDashboardConsent = false;
+  SupportList:FormGroup;
+  countries : [];
+  query = '';
+  categories: any;
+  parentID: any;
+  catId: any;
+  CategoryRecord: [];
+  display = true;
+  title: any;
+  SupportLink: string;
+  readytodisplay = false;
+  loader= false;
   constructor(
     private router: Router,
     private activatedroute: ActivatedRoute,
@@ -143,7 +159,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
     private cdRef: ChangeDetectorRef,
     private renderer: Renderer2,
     private elRef:ElementRef,
-    private quickmenuService:QuickmenuService
+    private quickmenuService:QuickmenuService,
+    private formBuilder: FormBuilder,
   ) {
     this.userclickedoutside = this.quickmenuService.isclickeventoutsidemenu;
     this.isuserClickedonqstooltip = this.quickmenuService.isuserClickedonqstooltip;
@@ -214,6 +231,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
   }
 
   ngOnInit() {
+    this.setupSearchDebouncer();
+    this.SupportList = this.formBuilder.group({
+     searchtext:['',]
+    })
     this.isloginpage = this.location.path().indexOf('login') !== -1;
     this.userService.onClickTopmenu.subscribe((status) => this.istopmenuclicked = status);
  //   this.loadOrganizationWithProperty();
@@ -318,6 +339,102 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
     location.reload();
 
 
+  }
+
+  onClickOpen(){
+    window.open(this.SupportLink);
+  }
+
+  async onNavigateToDetails(consentRecord) {
+  
+    await this.userService.onPushConsentData(consentRecord);
+    // console.log(consentRecord.id)
+    let category : any;
+    category = consentRecord.categories[0];
+    this.parentID =consentRecord.id;
+    this.catId =  category.parent.id;
+    // console.log(consentRecord.categories[0].id);
+    // console.log(category.parent.id);
+    // // await this.router.navigateByUrl('Https://support.adzapier.com/help-center/articles/'+ category.parent.id + '/' + consentRecord.categories[0].id + '/' + consentRecord.id +'/' + consentRecord.title);
+    // if (consentRecord.id !== undefined) {
+    //   await this.router.navigateByUrl('Https://support.adzapier.com/help-center/articles/'+ category.parent.id + '/' + consentRecord.categories[0].id + '/' + consentRecord.id +'/' + consentRecord.title);
+    // }
+    this.SupportLink ='https://support.adzapier.com/help-center/articles/'+ category.parent.id + '/' + consentRecord.categories[0].id + '/' + consentRecord.id +'/' + consentRecord.title;
+    this.onGetSupportDetailsRecord();
+    event.stopPropagation();
+     
+  }
+
+
+  onGetSupportRecord() {
+    this.readytodisplay = false;
+    this.display=true;
+    this.categories='';
+    this.CategoryRecord = [];
+    this.title = '';
+    this.userService.getList(this.constructor.name, moduleName.consentSolutionModule, this.inputSearch, this.categories)
+      .subscribe((res: any) => {
+        this.loading.stop();
+        const result: any = res;
+        if (res) {
+          this.countries = result.pagination.data;
+          //  console.log(this.countries);
+          // this.consentRecordCount = result.count;
+        }
+      }, error => {
+        // this.loading.stop();
+      });
+  }
+
+  onGetSupportDetailsRecord() {
+    this.loader= true;
+    this.display= false;
+    this.categories='';
+    this.userService.getRecordList(this.constructor.name, moduleName.consentSolutionModule, this.parentID, this.catId)
+      .subscribe((res: any) => {
+        this.loading.stop();
+        const result: any = res;
+        if (res) {
+          this.title = result.article.title;
+          this.CategoryRecord = result.article.body.replaceAll(`src="`,`src="https://support.adzapier.com/`);
+          this.readytodisplay=true;
+          this.loader=false;
+          //  console.log(this.CategoryRecord);
+          // this.consentRecordCount = result.count;
+        }
+      }, error => {
+        // this.loading.stop();
+      });
+  }
+
+ public clicktext(){
+          this.SupportList.patchValue({
+            searchtext : ''
+          });
+          this.countries = [];
+          this.CategoryRecord = [];
+          this.title = '';
+          this.readytodisplay = false;
+    
+  }
+
+  public onSearchInputChange(e): void {
+    this.inputSearch = e.target.value;
+    if(this.inputSearch == ''){
+      this.countries = [];
+    }
+    else{
+    this.searchDecouncer$.next(e.target.value);
+    }
+  }
+
+
+  private setupSearchDebouncer(): void {
+    this.searchDecouncer$.pipe(
+      distinctUntilChanged(),
+    ).subscribe((term: string) => {
+      this.onGetSupportRecord();
+    });
   }
 
   editProfile() {
