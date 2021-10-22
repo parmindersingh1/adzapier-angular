@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewChecked, OnDestroy, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { OrganizationService, UserService } from 'src/app/_services';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
@@ -9,6 +9,12 @@ import { CompanyService } from 'src/app/company.service';
 import { TablePaginationConfig } from 'src/app/_models/tablepaginationconfig';
 import { Orglist } from 'src/app/_models/org';
 import { moduleName } from 'src/app/_constant/module-name.constant';
+import { Subject, Subscription } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { QuickmenuService } from 'src/app/_services/quickmenu.service';
+import { QuickStart } from 'src/app/_models/quickstart';
+
+
 @Component({
   selector: 'app-orgpage',
   templateUrl: './orgpage.component.html',
@@ -16,7 +22,7 @@ import { moduleName } from 'src/app/_constant/module-name.constant';
 })
 
 
-export class OrgpageComponent implements OnInit {
+export class OrgpageComponent implements OnInit,AfterViewInit,OnDestroy {
   organisationPropertyForm: FormGroup;
   editOrganisationForm: FormGroup;
   submitted: boolean;
@@ -61,6 +67,19 @@ export class OrgpageComponent implements OnInit {
   currentUser: any;
   queryOID;
   queryPID;
+  isorgqsmenu:any;
+  isbtnClickedbyUser:boolean;
+  subscription:Subscription;
+  guidancetext:string = "Add your organization"
+  private unsubscribeAfterUserAction$: Subject<any> = new Subject<any>();
+  quickDivID;
+  isquickstartmenu:any;
+  actuallinkstatus:boolean;
+  text = "Add your organization..."
+  isRevistedLink:boolean;
+  currentLinkID:any;
+  highlightbtn:boolean = false;
+  iswindowclicked;
   constructor(private formBuilder: FormBuilder,
               private orgservice: OrganizationService,
               private modalService: NgbModal, private sanitizer: DomSanitizer,
@@ -68,12 +87,17 @@ export class OrgpageComponent implements OnInit {
               private companyService: CompanyService,
               private router: Router,
               private loading: NgxUiLoaderService,
-              private activatedRoute: ActivatedRoute
+              private activatedRoute: ActivatedRoute,
+              private quickmenuService: QuickmenuService,
+              private cdRef: ChangeDetectorRef
   ) {
     this.paginationConfig = { itemsPerPage: this.pageSize, currentPage: this.p, totalItems: this.totalCount };
    }
 
   ngOnInit() {
+    this.showQuickStartTooltip();    
+    this.userService.isRevisitedQSMenuLink.subscribe((status) => { this.isRevistedLink = status.reclickqslink; this.currentLinkID = status.quickstartid; });
+    
     this.isEditable = false;
     this.isEditProperty = false;
     const urlRegex = '(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?';
@@ -95,7 +119,7 @@ export class OrgpageComponent implements OnInit {
       statename: ['', [Validators.required, Validators.pattern(strRegx)]],
       zipcodenum: ['', [Validators.required, Validators.pattern(zipRegex)]],
       email: ['', [Validators.required, Validators.pattern]],
-      phone: ['', [Validators.required, Validators.pattern(phoneNumRegx)]]
+      phone: ['', [Validators.pattern(phoneNumRegx)]]
     });
     this.loadOrganizationList();
     this.getLoggedInUserDetails();
@@ -289,6 +313,19 @@ export class OrgpageComponent implements OnInit {
 
 
   organizationModalPopup(content, data) {
+    if (this.quickDivID !== undefined || this.quickDivID !== "") {
+      let quickLinkObj = {
+        linkid: this.quickDivID,
+        indexid: 1,
+        isactualbtnclicked: true,
+        islinkclicked: true
+      };
+
+      this.quickmenuService.onClickEmitQSLinkobj.next(quickLinkObj);
+      this.quickmenuService.updateQuerymenulist(quickLinkObj);
+    }
+   // this.quickDivID = "";
+   
     if (data !== '') {
       this.myContext = { oid: data.id };
       this.organizationname = data.orgname;
@@ -328,7 +365,13 @@ export class OrgpageComponent implements OnInit {
 
   }
 
+  onClickOrgbtn(){
+    this.isorgqsmenu = !this.isorgqsmenu;
+  }
+
   onResetEditOrganization() {
+    this.userService.onRevistQuickStartmenulink.next({quickstartid:this.quickDivID,reclickqslink:true,urlchanged:false});
+    this.quickDivID = "";
     this.submitted = false;
     this.editOrganisationForm.reset();
     this.modalService.dismissAll('Data Saved!');
@@ -402,5 +445,45 @@ export class OrgpageComponent implements OnInit {
     this.isOpen = false;
   }
 
+  ngAfterViewInit(){
+    this.userService.isRevisitedQSMenuLink.subscribe((status) => { this.isRevistedLink = status.reclickqslink; this.currentLinkID = status.quickstartid; this.iswindowclicked = status.urlchanged  });
+   this.showQuickStartTooltip();
+   // this.userService.onClickActualBtnByUser.subscribe((status)=> this.isorgqsmenu = status);
+    this.cdRef.detectChanges();
+  }
+
+  showQuickStartTooltip(){
+    const a = this.quickmenuService.getQuerymenulist();
+
+    this.quickmenuService.onClickEmitQSLinkobj.pipe(
+      takeUntil(this.unsubscribeAfterUserAction$)
+    ).subscribe((res) => {
+      if (a.length !== 0) {
+        const idx = a.findIndex((t) => t.index == 1);
+        if (a[idx].quicklinks.some((t) => t.linkid == res.linkid && t.isactualbtnclicked)) {
+          this.quickDivID = res.linkid;
+        } else if(a[idx].quicklinks.some((t) => t.linkid == res.linkid && !t.isactualbtnclicked)) {
+          this.quickDivID = res.linkid; // for revisited link
+        }
+      }
+    });
+    this.unsubscribeAfterUserAction$.next();
+    this.unsubscribeAfterUserAction$.complete();
+  }
+
+  checkForQsTooltip(){
+    this.quickDivID = "";
+    this.userService.onRevistQuickStartmenulink.next({quickstartid:this.quickDivID,reclickqslink:true,urlchanged:true}); 
+  }
+
+  ngAfterViewChecked(){
+       this.cdRef.detectChanges();
+  }
+
+  ngOnDestroy(){
+    this.quickDivID = "";
+    this.unsubscribeAfterUserAction$.unsubscribe();
+
+  }
 
 }

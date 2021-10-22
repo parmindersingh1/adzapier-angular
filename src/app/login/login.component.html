@@ -127,78 +127,108 @@
         <img src="assets/imgs/az-logo.png" class="az-logo mb-2" alt="adzapier logo" />
         <h4 class="tx-white">Trusted Data Privacy Solutions</h4>
       </div>
-      <div class="inputs-key login-form bg-white">
-      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <div [@animImageSlider]="step"  class="inputs-key login-form bg-white" style="height:470px;">
 
-        <div class="form-group">
-          <label for="email" class="tx-17">Email Address</label>
-          <input type="email" formControlName="email" class="form-control input-lg"
-                 [ngClass]="{ 'is-invalid': submitted && f.email.errors }"
-                 pattern="^\w+@[a-zA-Z_0-9]+?\.[a-zA-Z]{2,3}$" placeholder="yourname@yourmail.com"
-                 (ngModelChange)="clearError()"/>
-          <!-- pattern="^\w+@[a-zA-Z_0-9]+?\.com$" -->
-          <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
-            <div *ngIf="f.email.errors.required">Email is required</div>
-            <div *ngIf="f.email.errors.pattern">Please enter a valid email</div>
-          </div>
-        </div>
 
-        <div class="form-group">
-          <div class="d-flex justify-content-between mg-b-5">
-            <label class="mg-b-0-f tx-17" >Password</label>
+          <form *ngIf="step == 1" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
 
-          </div>
-          <input type="password" togglepassword formControlName="password" class="form-control input-lg"
-                 [ngClass]="{ 'is-invalid': submitted && f.password.errors }" placeholder="Enter your password"
-                 (ngModelChange)="clearError()"/>
-          <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
-            <div *ngIf="f.password.errors.required">Password is required</div>
-            <!-- <div *ngIf="f.password.errors.pattern">Invalid Password</div> -->
-          </div>
-          <div *ngIf="isInvitedUserVerified" style="color: rgb(17, 0, 128);">
-            <p class="confirm-msg">
-              <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130.2 130.2">
-                <circle class="path circle" fill="none" stroke="#73AF55" stroke-width="6" stroke-miterlimit="10" cx="65.1"
-                  cy="65.1" r="62.1" />
-                <polyline class="path check" fill="none" stroke="#73AF55" stroke-width="6" stroke-linecap="round"
-                  stroke-miterlimit="10" points="100.2,40.2 51.5,88.8 29.8,67.5 " />
-              </svg>
-              <span> Your email address is successfully verified ! please login to access your account!'</span>
-            </p>
-          </div>
-          <!-- <div *ngIf="!isInvitedUserVerified">
+            <div class="form-group">
+              <label for="email" class="tx-17">Email Address</label>
+              <input type="email" formControlName="email" class="form-control input-lg"
+                [ngClass]="{ 'is-invalid': submitted && f.email.errors }" pattern="^\w+@[a-zA-Z_0-9]+?\.[a-zA-Z]{2,3}$"
+                placeholder="yourname@yourmail.com" (ngModelChange)="clearError()" />
+              <!-- pattern="^\w+@[a-zA-Z_0-9]+?\.com$" -->
+              <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
+                <div *ngIf="f.email.errors.required">Email is required</div>
+                <div *ngIf="f.email.errors.pattern">Please enter a valid email</div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <div class="d-flex justify-content-between mg-b-5">
+                <label class="mg-b-0-f tx-17">Password</label>
+
+              </div>
+              <input type="password" togglepassword formControlName="password" class="form-control input-lg"
+                [ngClass]="{ 'is-invalid': submitted && f.password.errors }" placeholder="Enter your password"
+                (ngModelChange)="clearError()" />
+              <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
+                <div *ngIf="f.password.errors.required">Password is required</div>
+                <!-- <div *ngIf="f.password.errors.pattern">Invalid Password</div> -->
+              </div>
+              <!-- <div *ngIf="isInvitedUserVerified" style="color: rgb(17, 0, 128);">
+                <p class="confirm-msg">
+                  <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130.2 130.2">
+                    <circle class="path circle" fill="none" stroke="#73AF55" stroke-width="6" stroke-miterlimit="10"
+                      cx="65.1" cy="65.1" r="62.1" />
+                    <polyline class="path check" fill="none" stroke="#73AF55" stroke-width="6" stroke-linecap="round"
+                      stroke-miterlimit="10" points="100.2,40.2 51.5,88.8 29.8,67.5 " />
+                  </svg>
+                  <span> Your email address is successfully verified ! please login to access your account!'</span>
+                </p>
+              </div> --> <!--Email verification message if user with pending email verification-->
+              <!-- <div *ngIf="!isInvitedUserVerified">
             <span *ngIf="!hideMessage" class="mt-1" style="color: red;">Verification link has been expired!</span>
           </div> -->
-          <div class="row forgot-password" >
-            <a routerLink="/forgot-password" tabindex="-1">Forgot password?</a>
-          </div>
-          <br>
-          <div *ngIf="show" style="color:blue;">
-            <p>Sign In Successfully</p>
-          </div>
-          <div style="color:red;">
-            <p>{{errorMsg}}</p>
-          </div>
+              <div class="row forgot-password">
+                <a (click)="next()" tabindex="-1">Forgot password?</a>
+              </div>
+              <br>
+              <div *ngIf="show" style="color:blue;">
+                <p>Sign In Successfully</p>
+              </div>
+              <div style="color:red;">
+                <p>{{errorMsg}}</p>
+              </div>
 
 
+            </div >
+            <div class="text-center">
+              <button [disabled]="loading" class="btn btn-brand-02 btn-block login-btn" type="submit">
+                <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                {{sign_in}} </button>
+
+              <div class="divider-text tx-17">or</div>
+              <div class="tx-13 mg-t-20 tx-center tx-18">Don't have an account? <a class="font-weight-bold"
+                  routerLink="/signup">Create an
+                  Account</a></div>
+            </div>
+
+          </form>
+       
+
+          <form [formGroup]="forgotpasswordForm" *ngIf="step == 2" (ngSubmit)="onSubmitForgot()">
+            <h4  class="mb-4" >Forgot Password</h4>
+
+            <div class="form-group">
+              <label for="email" class="tx-17">Email Address</label>
+              <input type="email" formControlName="emailid" class="form-control input-lg"
+                [ngClass]="{ 'is-invalid': submitted && r.emailid.errors }"
+                pattern="^\w+@[a-zA-Z_0-9]+?\.[a-zA-Z]{2,3}$" placeholder="yourname@yourmail.com"
+                (ngModelChange)="clearError()" />
+              <!-- pattern="^\w+@[a-zA-Z_0-9]+?\.com$" -->
+              <div *ngIf="submitted && r.emailid.errors" class="invalid-feedback">
+                <div *ngIf="r.emailid.errors.required">Email is required</div>
+                <div *ngIf="r.emailid.errors.pattern">Please enter a valid email</div>
+              </div>
+            </div>
+            <div class="text-center">
+              <button [disabled]="loading" class="btn btn-brand-02 btn-block login-btn" type="submit">
+                <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                Send </button>
+
+              <div class="divider-text tx-17">or</div>
+              <div class="tx-13 mg-t-20 tx-center tx-18">Go back to Login? <a class="font-weight-bold" style="color: rgb(74, 127, 226);"
+                  (click)="previous()">Login
+                </a></div>
+            </div>
+          </form>
         </div>
-        <div class="text-center">
-          <button [disabled]="loading" class="btn btn-brand-02 btn-block login-btn" type="submit">
-            <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
-            {{sign_in}} </button>
-
-                          <div class="divider-text tx-17">or</div>
-                          <div class="tx-13 mg-t-20 tx-center tx-18">Don't have an account? <a class="font-weight-bold" routerLink="/signup">Create an
-                              Account</a></div>
-        </div>
-
-      </form>
     </div>
   </div>
 </div>
-</div>
 <div class="col-sm-5 mr-0 float-right flotingdiv" *ngIf="isOpen">
-  <alert *ngIf="isOpen" [type]="alertType" [dismissible]="dismissible" (onClosed)="onClosed(alertMsg)">{{
+  <alert *ngIf="isOpen" [type]="alertType" [dismissible]="dismissible" dismissOnTimeout="5000" (onClosed)="onClosed(alertMsg)">{{
     alertMsg}}
   </alert>
 </div>

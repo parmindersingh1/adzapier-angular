@@ -148,8 +148,8 @@
             {{rowData?.id}}
           </a>
         </td>
-        <td><span class="ui-column-title">Request Type</span>{{rowData?.request_type}}</td>
-        <td><span class="ui-column-title">Subject Type</span>{{rowData?.subject_type}}</td>
+        <td><span class="ui-column-title">Request Type</span>{{onCheckRequesttype("requesttype",rowData.request_form,rowData.custom_data)}}</td>
+        <td><span class="ui-column-title">Subject Type</span>{{onCheckSubjecttype("subjecttype",rowData.request_form,rowData.custom_data)}}</td>
         <td>
           <span class="ui-column-title">Status</span>
           <ng-container *ngIf="rowData">

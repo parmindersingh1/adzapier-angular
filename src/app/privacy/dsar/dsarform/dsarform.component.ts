@@ -2535,17 +2535,17 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
   }
 
   getEditorFontSize(){
-    const tagObj = [{"":'13'},{"ql-size-huge":'40'},{"ql-size-large":'24'},{"ql-size-small":'12'},{"<p>":'14'},{"<h1>":'40'},{"<h1>":'28'},{"<h2>":'24'}]
-    for (const key in tagObj){
-      if(this.quillEditorText.get('editor').value.indexOf(Object.keys(tagObj[key])) !== -1){
-        if(this.isWelcomeEditor){
-          return  this.welcomeFontSize = Object.values(tagObj[key])[0];
-        } else{
-          return this.footerFontSize = Object.values(tagObj[key])[0];
+    const tagObj = [{"ql-size-huge":'40'},{"ql-size-large":'24'},{"ql-size-small":'12'},{"ql-align-center":'13'},{"ql-align-right":'13'},{"<p>":'13'},{"<p>":'14'},{"<h1>":'40'},{"<h1>":'28'},{"<h2>":'24'}]
+      for (const key in tagObj){
+        if(this.quillEditorText.get('editor').value.indexOf(Object.keys(tagObj[key])) !== -1){
+          if(this.isWelcomeEditor){
+            return  this.welcomeFontSize = Object.values(tagObj[key])[0];
+          } else{
+            return this.footerFontSize = Object.values(tagObj[key])[0];
+          }
         }
       }
     }
-  }
 
   onLabelChange($event) {
     //  this.cd.detectChanges();

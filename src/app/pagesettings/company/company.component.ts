@@ -1,4 +1,4 @@
-import {Component, OnInit, TemplateRef, ViewChild} from '@angular/core';
+import {Component, OnInit, AfterViewInit, TemplateRef, ViewChild, ChangeDetectorRef, Renderer2, ElementRef} from '@angular/core';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
@@ -7,15 +7,24 @@ import {CompanyService} from 'src/app/company.service';
 import {TablePaginationConfig} from 'src/app/_models/tablepaginationconfig';
 import {moduleName} from 'src/app/_constant/module-name.constant';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
+import { QuickmenuService } from 'src/app/_services/quickmenu.service';
 import {DataService} from '../../_services/data.service';
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+import {QuickstartmenuComponent} from 'src/app/_components/quickstartmenu/quickstartmenu.component';
+import { QuickStart } from '../../_models/quickstart'
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-company',
   templateUrl: './company.component.html',
   styleUrls: ['./company.component.scss']
 })
-export class CompanyComponent implements OnInit {
+export class CompanyComponent implements AfterViewInit, OnInit {
+  private unsubscribeAfterUserAction$: Subject<any> = new Subject<any>();
   @ViewChild('confirmTemplate') confirmModal: TemplateRef<any>;
+  @ViewChild('btnEdit') btnEdit:ElementRef;
+  @ViewChild(QuickstartmenuComponent, {static: false}) quickstartmenuComponent : QuickstartmenuComponent;
   modalRef: BsModalRef;
   companyDetails: any;
   appId: any;
@@ -63,17 +72,53 @@ export class CompanyComponent implements OnInit {
   noResult = false;
   private companyPlanDetails: any;
   selectusertype = true;
+  isquickstartmenu:any;
+  quickDivID;
+  actuallinkstatus:boolean = false;
+  text = "Edit company details"
+  isRevistedLink:boolean;
+  currentLinkID:any;
+  queryOID;
+  queryPID;
+  isUserClickedNotRelatedToTooltip:boolean;
+  iswindowclicked = false;
   constructor(private companyService: CompanyService, private modalService: NgbModal,
               private formBuilder: FormBuilder,
               private userService: UserService,
               private loading: NgxUiLoaderService,
               private dataService: DataService,
-              private bsmodalService: BsModalService
+              private bsmodalService: BsModalService,
+              private quickmenuService: QuickmenuService,
+              private activatedRoute: ActivatedRoute,
+              private cdRef: ChangeDetectorRef,
+              private renderer: Renderer2
   ) {
     this.paginationConfig = {itemsPerPage: this.pageSize, currentPage: this.p, totalItems: this.totalCount};
+    // this.renderer.listen('window', 'click', (e: Event) => {
+    //   if (e.target !== this.btnEdit.nativeElement) {
+    //     this.checkForQsTooltip();        
+    //   }
+    // });
   }
 
   ngOnInit() {
+    this.activatedRoute.queryParamMap
+    .subscribe(params => {
+      this.queryOID = params.get('oid');
+      this.queryPID = params.get('pid');
+    });
+    if (!this.quickmenuService.isclickeventoutsidemenu) {
+    this.showQuickstarttooltip();
+    }
+    // this.userService.isClickedOnQSMenu.pipe(
+    //   takeUntil(this.unsubscribeAfterUserAction$)
+
+    // ).subscribe((status)=>{
+    //   this.isquickstartmenu = status.isclicked;
+    //   this.quickDivID = status.quickstartid;
+      
+    // });
+    //this.userService.isRevisitedQSMenuLink.subscribe((status) => { this.isRevistedLink = status.reclickqslink; this.currentLinkID = status.quickstartid; this.isUserClickedNotRelatedToTooltip = status.urlchanged });
     this.loadRoleList();
     const numZip = '^[0-9]{5,20}$'; // '^[0-9]{5}(?:-[0-9]{4})?$';
     const numRegex = '^[0-9]*$';
@@ -158,7 +203,23 @@ export class CompanyComponent implements OnInit {
     });
   }
 
-  editOrganizationModalPopup(content, type) {
+  editOrganizationModalPopup(content, type) { 
+    if (this.quickDivID !== undefined || this.quickDivID !== "") {
+    let quickLinkObj: QuickStart = {
+      linkid: this.quickDivID,
+      indexid: 1,
+      isactualbtnclicked: true,
+      islinkclicked: true,
+      divguidetext: "addcompanydetails",
+      linkdisplaytext: "Add Company details",
+      link: "/settings/company"
+    };
+
+    this.quickmenuService.updateQuerymenulist(quickLinkObj);
+    this.quickmenuService.onClickEmitQSLinkobj.next(quickLinkObj);
+  }
+  //  this.quickDivID = ""
+ 
     if (type === 'add') {
       if (!this.onCheckSubscription()) {
         return false;
@@ -179,7 +240,9 @@ export class CompanyComponent implements OnInit {
     }, (reason) => {
       // this.profileForm.reset();
     });
+   
   }
+ 
 
   pathValues() {
     this.loading.start();
@@ -233,6 +296,7 @@ export class CompanyComponent implements OnInit {
               this.alertType = 'success';
               this.loadCompanyDetails();
               this.modalService.dismissAll('Data Saved!');
+              this.checkForQsTooltip();
             }
           }, (err) => {
             this.loading.stop();
@@ -240,6 +304,7 @@ export class CompanyComponent implements OnInit {
             this.isOpen = true;
             this.alertType = 'danger';
             this.modalService.dismissAll('Error!');
+            this.checkForQsTooltip();
           }
         );
     }
@@ -435,6 +500,8 @@ export class CompanyComponent implements OnInit {
   }
 
   onResetProfile() {
+    this.userService.onRevistQuickStartmenulink.next({quickstartid:this.quickDivID,reclickqslink:true,urlchanged:false});
+    this.quickDivID = "";
     this.companyForm.reset();
     this.modalService.dismissAll('');
     this.loadCompanyDetails();
@@ -593,5 +660,53 @@ export class CompanyComponent implements OnInit {
     this.inviteUserForm.get("firstname").updateValueAndValidity();
     this.inviteUserForm.get("lastname").updateValueAndValidity();
   }
+ 
+
+
+  showQuickstarttooltip(){
+    const a = this.quickmenuService.getQuerymenulist();
+    this.quickmenuService.onClickEmitQSLinkobj.pipe(
+      takeUntil(this.unsubscribeAfterUserAction$)
+    ).subscribe((res) => { 
+      if (a.length !== 0) {
+        const idx = a.findIndex((t) => t.index == 1);
+        if (a[idx].quicklinks.some((t) => t.linkid == res.linkid && t.isactualbtnclicked)) {
+          this.quickDivID = res.linkid;
+        } else if(a[idx].quicklinks.some((t) => t.linkid == res.linkid && !t.isactualbtnclicked)) {
+          this.quickDivID = res.linkid; //for revisited link
+        }
+      }
+    });
+    //this.quickDivID = "";
+    this.unsubscribeAfterUserAction$.next();
+    this.unsubscribeAfterUserAction$.complete();
+  }
+ 
+  checkForQsTooltip(){
+    this.userService.onRevistQuickStartmenulink.next({quickstartid:this.quickDivID,reclickqslink:true,urlchanged:true});
+    this.quickDivID = "";
+  }
+
+  ngAfterViewInit(){
+    this.userService.isRevisitedQSMenuLink.subscribe((status) => { this.isRevistedLink = status.reclickqslink; this.currentLinkID = status.quickstartid; this.iswindowclicked = status.urlchanged  });
+    if (!this.quickmenuService.isclickeventoutsidemenu) {
+      this.showQuickstarttooltip();
+      this.cdRef.detectChanges();
+    }
+  }
+
+  ngAfterViewChecked(){
+    // this.userService.isClickedOnHeaderMenu.subscribe((data)=>{
+    //   if(!data){
+    //     this.quickDivID = "";
+    //   } 
+    // })
+  }
+
+  ngOnDestroy(){
+    this.quickDivID = "";
+    this.unsubscribeAfterUserAction$.unsubscribe();
+  }
+
 
 }

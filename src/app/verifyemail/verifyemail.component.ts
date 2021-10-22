@@ -35,7 +35,7 @@ export class VerifyemailComponent implements OnInit {
         this.isUserVarified = true;
         this.message = 'Your email address is successfully verified ! please login to access your account!';
         this.authenticationService.isUserVerified.next(true);
-        this.router.navigate(['/login'], { relativeTo: this.activatedRoute });
+        this.router.navigate(['/signup'], { relativeTo: this.activatedRoute });
       }
     }, error => {
       this.loading.stop();

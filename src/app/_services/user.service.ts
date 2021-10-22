@@ -4,8 +4,8 @@ import { environment } from './../../environments/environment';
 import { User } from './../_models';
 import { BehaviorSubject, Observable, Subject, throwError } from 'rxjs';
 import { map, shareReplay, retry, catchError } from 'rxjs/operators';
-import {LokiService} from './loki.service';
-import {LokiFunctionality, LokiStatusType} from '../_constant/loki.constant';
+import { LokiService } from './loki.service';
+import { LokiFunctionality, LokiStatusType } from '../_constant/loki.constant';
 import { apiConstant } from '../_constant/api.constant';
 
 @Directive()
@@ -17,6 +17,33 @@ export class UserService {
     userDetails: User;
     userProfileSubject = new Subject<User>();
     @Output() getCurrentUser: EventEmitter<any> = new EventEmitter<any>();
+    @Output() onClickTopmenu: EventEmitter<boolean> = new EventEmitter<boolean>();
+    @Output() onClickQuickStartmenux: EventEmitter<boolean> = new EventEmitter<boolean>(false);
+    
+    public onClickQuickStartmenu: BehaviorSubject<UserActionOnQuickstart> = new BehaviorSubject<UserActionOnQuickstart>({quickstartid:0,isclicked:false,isactualbtnclicked:false});
+    get isClickedOnQSMenu() {
+        return this.onClickQuickStartmenu.asObservable();
+    }
+    public addUserActionOnActualButton = new BehaviorSubject<UserActionOnQuickstart>({quickstartid:0,isclicked:false,isactualbtnclicked:false});
+    get onClickActualBtnByUser() {
+        return this.addUserActionOnActualButton.asObservable();
+    }
+    public userActionOnQuickstart = new BehaviorSubject<UserActionOnQuickstart>({ quickstartid: 0, isclicked: false, isactualbtnclicked:false });
+    get onClickQSTooltipByUser() {
+        return this.userActionOnQuickstart.asObservable();
+    }
+
+    public onRevistQuickStartmenulink: BehaviorSubject<UserActionOnQuickstartv2> = new BehaviorSubject<UserActionOnQuickstartv2>({ quickstartid:0, reclickqslink:false, urlchanged:false});
+    //public onClickQuickStartmenu: BehaviorSubject<any> = new BehaviorSubject<any>(false);
+    get isRevisitedQSMenuLink() {
+        return this.onRevistQuickStartmenulink.asObservable();
+    }
+
+    public onClickHeaderNavBar: BehaviorSubject<any> = new BehaviorSubject<any>(false);
+    get isClickedOnHeaderMenu() {
+        return this.onClickHeaderNavBar.asObservable();
+    }
+
     private organizationProperty = new Subject<any>();
     organizationProperty$ = this.organizationProperty.asObservable();
     constructor(private http: HttpClient, private lokiService: LokiService) {
@@ -32,10 +59,10 @@ export class UserService {
         const key = 'response';
         const path = '/user';
         return this.http.get<User[]>(environment.apiUrl + path).pipe(map(res => res[key]), shareReplay(),
-        catchError(error => {
-            this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.getAll, componentName, moduleName, path);
-            return throwError(error);
-          }));
+            catchError(error => {
+                this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.getAll, componentName, moduleName, path);
+                return throwError(error);
+            }));
     }
 
     // login(user: User){
@@ -70,27 +97,27 @@ export class UserService {
                 catchError(error => {
                     this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.registerUser, componentName, moduleName, path);
                     return throwError(error);
-                  })
+                })
             );
     }
 
 
-  resetpassword(componentName, moduleName, token, password, confirmpassword): Observable<any> {
+    resetpassword(componentName, moduleName, token, password, confirmpassword): Observable<any> {
         const path = '/password/reset';
         return this.http.post<any>(environment.apiUrl + path, { token, password, confirmpassword })
-        .pipe(catchError(error => {
-            this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.resetPassword, componentName, moduleName, path);
-            return throwError(error);
-          }));
+            .pipe(catchError(error => {
+                this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.resetPassword, componentName, moduleName, path);
+                return throwError(error);
+            }));
     }
 
-    
-    AddOrgCmpProp(componentName ,moduleName ,obj , emailid , userid , plan_id ,units ){
-    const path = apiConstant.REGISTRATION_ADD_COMPANY_ORG_PROP
-    return this.http.post(environment.apiUrl + path + '?email=' + emailid + '&userid=' + userid + '&plan_id=' + plan_id + '&units=' + units, obj).pipe(catchError(error => {
-        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.registerUser, componentName, moduleName, path);
-        return throwError(error);
-      }));
+
+    AddOrgCmpProp(componentName, moduleName, obj, emailid, userid, plan_id, units, plan_type) {
+        const path = apiConstant.REGISTRATION_ADD_COMPANY_ORG_PROP
+        return this.http.post(environment.apiUrl + path + '?email=' + emailid + '&userid=' + userid + '&plan_id=' + plan_id + '&units=' + units + '&plan_type=' + plan_type, obj).pipe(catchError(error => {
+            this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.registerUser, componentName, moduleName, path);
+            return throwError(error);
+        }));
     }
 
 
@@ -100,7 +127,7 @@ export class UserService {
             .pipe(catchError(error => {
                 this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.forgotPassword, componentName, moduleName, path);
                 return throwError(error);
-              }));
+            }));
 
     }
 
@@ -112,19 +139,19 @@ export class UserService {
     update(componentName, moduleName, profileObj) {
         const path = '/user';
         return this.http.put<any>(environment.apiUrl + path, profileObj)
-        .pipe(catchError(error => {
-            this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.updateUserProfile, componentName, moduleName, path);
-            return throwError(error);
-          }));
+            .pipe(catchError(error => {
+                this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.updateUserProfile, componentName, moduleName, path);
+                return throwError(error);
+            }));
     }
 
     getLoggedInUserDetails(componentName, moduleName): Observable<User> {
         const path = '/user';
         return this.http.get<User>(environment.apiUrl + path).pipe(shareReplay(1),
-        catchError(error => {
-            this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.getLoggedInUserDetails, componentName, moduleName, path);
-            return throwError(error);
-          })
+            catchError(error => {
+                this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.getLoggedInUserDetails, componentName, moduleName, path);
+                return throwError(error);
+            })
         );
     }
 
@@ -137,12 +164,12 @@ export class UserService {
     }
 
     verifyEmailAddress(componentName, moduleName, tokenObj): Observable<any> {
-        const path =  '/email/verify';
+        const path = '/email/verify';
         return this.http.post<any>(environment.apiUrl + path, tokenObj).pipe(
             catchError(error => {
                 this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.verifyUserEmailID, componentName, moduleName, path);
                 return throwError(error);
-              })
+            })
         );
     }
 
@@ -152,7 +179,7 @@ export class UserService {
             catchError(error => {
                 this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.userRole, componentName, moduleName, path);
                 return throwError(error);
-              })
+            })
         );
     }
 
@@ -180,7 +207,7 @@ export class UserService {
             catchError(error => {
                 this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.getNotification, componentName, moduleName, path);
                 return throwError(error);
-              })
+            })
         );
     }
 
@@ -190,33 +217,48 @@ export class UserService {
             catchError(error => {
                 this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.getNotification, componentName, moduleName, path);
                 return throwError(error);
-              })
+            })
         );
 
     }
 
-    checkIsNotificationVisited(componentName, moduleName): Observable<any>{
+    checkIsNotificationVisited(componentName, moduleName): Observable<any> {
         const path = "/notification/time";
         return this.http.put<any>(environment.apiUrl + path, {}).pipe(
             catchError(error => {
                 this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.checkIsNotificationVisited, componentName, moduleName, path);
                 return throwError(error);
-              })
+            })
         );
     }
 
-    resendEmailVerificationToken(componentName, moduleName,reqObj): Observable<any>{
+    resendEmailVerificationToken(componentName, moduleName, reqObj): Observable<any> {
         const path = "/user/verifyemail";
         return this.http.post<any>(environment.apiUrl + path, reqObj).pipe(
             catchError(error => {
                 this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.resendEmailVerificationToken, componentName, moduleName, path);
                 return throwError(error);
-              })
+            })
         );
     }
 
     onSendLogs(errorType, msg, functionality, componentName, moduleName, path) {
         this.lokiService.onSendErrorLogs(errorType, msg, functionality, componentName, moduleName, path).subscribe();
-      }
+    }
 
+}
+
+export class UserActionOnQuickstart {
+    public quickstartid: number;
+    public isclicked: boolean | any;
+    public isactualbtnclicked: boolean | any;
+    
+}
+
+export class UserActionOnQuickstartv2 {
+    public quickstartid: number;
+    public urlchanged:boolean | any;
+    // public isclicked: boolean | any;
+    // public isactualbtnclicked: boolean | any;
+    public reclickqslink:boolean | any;
 }

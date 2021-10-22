@@ -213,9 +213,11 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
         .subscribe((data) => {
           this.isloading = false;
           const key = 'response';
-          this.requestsList = data[key];
-          this.reloadRequestList = [...this.requestsList];
-          this.rows = data[key].length;
+          if (Object.values(data[key]).length > 0) {
+            this.requestsList = Object.values(data[key]);
+            this.reloadRequestList = [...this.requestsList];
+            this.rows = Object.values(data[key]).length;
+          }
           this.totalRecords = data.count;
         }, error => {
           this.loading.stop();
@@ -283,9 +285,9 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
       .subscribe(res => {
         this.isloading = false;
         const key = 'response';
-        if (res[key]) {
-          this.requestsList = res[key];
-        } else{
+        if (Object.values(res[key]).length > 0) {
+          this.requestsList = Object.values(res[key]);
+        } else {
           this.requestsList = this.reloadRequestList;
         }
       }, error => {
@@ -488,7 +490,7 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
           this.isloading = false;
           const key = 'response';
           if(data[key] !== "No data found."){
-            this.requestsList = data[key];
+            this.requestsList = Object.values(data[key]);
             this.rows = data[key].length;
             this.totalRecords = data.count;
           }else{
@@ -510,5 +512,43 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
 
   isLicenseLimitAvailable(): boolean {
       return this.dataService.isLicenseLimitAvailableForOrganization('request',this.dataService.getAvailableLicenseForFormAndRequestPerOrg());
+  }
+
+  onCheckRequesttype(requesttype, request_form, customobj) {
+    const requestForm = JSON.parse(request_form);
+    const cdata = JSON.parse(customobj).request_type;
+    const requesttypeindex = requestForm.findIndex((t) => t.controlId == requesttype);
+    let filltypes = [];
+    filltypes.length = 0;
+    for (let i = 0; i < Object.values(cdata).length; i++) {
+      requestForm[requesttypeindex].selectOptions.filter((t) => {
+        if (t.request_type_id == Object.values(cdata)[i]) {
+          const idx = filltypes.includes(t.name);
+          if (!idx) {
+            filltypes.push(t.name);
+          }
+        }
+      });
+    }
+    return filltypes;
+  }
+
+  onCheckSubjecttype(subjecttype, request_form, customobj) {
+    const requestForm = JSON.parse(request_form);
+    const cdata = JSON.parse(customobj).subject_type;
+    const requesttypeindex = requestForm.findIndex((t) => t.controlId == subjecttype);
+    let filltypes = [];
+    filltypes.length = 0;
+    for (let i = 0; i < Object.values(cdata).length; i++) {
+      requestForm[requesttypeindex].selectOptions.filter((t) => {
+        if (t.subject_type_id == Object.values(cdata)[i]) {
+          const idx = filltypes.includes(t.name);
+          if (!idx) {
+            filltypes.push(t.name);
+          }
+        }
+      });
+    }
+    return filltypes;
   }
 }

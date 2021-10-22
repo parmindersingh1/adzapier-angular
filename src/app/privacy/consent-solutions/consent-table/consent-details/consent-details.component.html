@@ -105,8 +105,8 @@
     <nav aria-label="breadcrumb" style="margin-left: 2px">
       <ol class="breadcrumb breadcrumb-style1 mg-b-10">
         <li class="breadcrumb-item">Privacy</li>
-        <li class="breadcrumb-item"><a routerLink="/consent-solutions/consent-records">Consent Solution</a></li>
-        <li class="breadcrumb-item"><a routerLink="/consent-solutions/consent-records"> Consent Records</a></li>
+        <li class="breadcrumb-item"><a routerLink="/consent-solutions/consent-records" [queryParams]="{oid:queryOID , pid:queryPID}">Consent Solution</a></li>
+        <li class="breadcrumb-item"><a routerLink="/consent-solutions/consent-records" [queryParams]="{oid:queryOID , pid:queryPID}"> Consent Records</a></li>
         <li class="breadcrumb-item active">Consent Details</li>
 
       </ol>

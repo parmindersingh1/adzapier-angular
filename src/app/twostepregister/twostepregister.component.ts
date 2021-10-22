@@ -3,7 +3,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import {AlertService, AuthenticationService, UserService} from './../_services';
 import {MustMatch} from '../_helpers/must-match.validator';
-import { first } from 'rxjs/operators';
+import { delay, first } from 'rxjs/operators';
+import {animate, state, style, transition, trigger} from '@angular/animations';
+import { Observable, timer, Subscription, pipe } from 'rxjs';
 import {moduleName} from '../_constant/module-name.constant';
 import {environment} from '../../environments/environment';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
@@ -11,7 +13,20 @@ import { NgxUiLoaderService } from 'ngx-ui-loader';
 @Component({
   selector: 'app-twostepregister',
   templateUrl: './twostepregister.component.html',
-  styleUrls: ['./twostepregister.component.scss']
+  styleUrls: ['./twostepregister.component.scss'],
+  animations: [
+    trigger('slideInOut', [
+      state('false', style({
+        transform: 'translateX(0)'
+      })),
+      state('true', style({
+        transform: 'translateY(-550px)',
+        "z-index":'-1'
+      })),
+      transition('false <=> true', animate('400ms ease-in-out'))
+    ])
+
+  ]
 })
 export class TwostepregisterComponent implements OnInit {
   @ViewChild('registerForm') registerForm: ElementRef;
@@ -24,7 +39,7 @@ export class TwostepregisterComponent implements OnInit {
   navbarCollapsed = false;
   show: boolean = false;
   errorMsg: string;
-  stripe = (window as any).Stripe(environment.stripePublishablekey);
+  stripe;
   alertMsg: any;
   isOpen: boolean;
   alertType: any;
@@ -34,9 +49,27 @@ export class TwostepregisterComponent implements OnInit {
   emailid:any;
   verified = "Email Not Verified";
   userid : any;
-  planID = "price_1I8RHcBa3iZWL3Ygt4B3gZVd";
+  planID :any;
   units: any;
-
+  selectedVal:any;
+  countries: string[];
+  isInvitedUserVerified: boolean;
+  showNextScreen: boolean;
+  message;
+  options :string[];
+  public id: string;
+  isVerificationBtnClick: boolean;
+  isMsgConfirm: boolean;
+  verifyEmailForm: FormGroup;
+  emailnotverifiedMsg;
+  subscription: any;
+  timer: Observable<number>;
+  hideMessage: boolean;
+  returnUrl: any;
+  passwords: any;
+  chckresponse: any;
+  plantype = "0";
+  
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
@@ -47,10 +80,246 @@ export class TwostepregisterComponent implements OnInit {
     private route: ActivatedRoute,
 
   ) {
+    this.countries = [
+      "Afghanistan",
+      "Albania",
+      "Algeria",
+      "Andorra",
+      "Angola",
+      "Antigua and Barbuda",
+      "Argentina",
+      "Armenia",
+      "Australia",
+      "Austria",
+      "Azerbaijan",
+      "Bahamas",
+      "Bahrain",
+      "Bangladesh",
+      "Barbados",
+      "Belarus",
+      "Belgium",
+      "Belize",
+      "Benin",
+      "Bhutan",
+      "Bolivia",
+      "Bosnia and Herzegovina",
+      "Botswana",
+      "Brazil",
+      "Brunei",
+      "Bulgaria",
+      "Burkina Faso",
+      "Burundi",
+      "Cabo Verde ",
+      "Cambodia ",
+      "Cameroon ",
+      "Canada",
+      "Central African Republic",
+      "Chad",
+      "Chile ",
+      "China ",
+      "Colombia ",
+      "Comoros ",
+      "Congo Democratic Republic of the",
+      "Congo Republic of the",
+      "Costa Rica ",
+      "Cote d'Ivoire ",
+      "Croatia ",
+      "Cuba ",
+      "Cyprus ",
+      "Czechia ",
+      "Denmark",
+      "Djibouti",
+      "Dominica",
+      "Dominican Republic",
+      "Ecuador",
+      "Egypt",
+      "El Salvador",
+      "Equatorial Guinea",
+      "Eritrea",
+      "Estonia",
+      "Eswatini",
+      "Ethiopia",
+      "Fiji",
+      "Finland",
+      "France",
+      "Gabon",
+      "Gambia",
+      "Georgia",
+      "Germany",
+      "Ghana",
+      "Greece",
+      "Grenada",
+      "Guatemala",
+      "Guinea",
+      "Guinea-Bissau",
+      "Guyana",
+      "Haiti",
+      "Honduras",
+      "Hungary",
+      "Iceland",
+      "India",
+      "Indonesia",
+      "Iran",
+      "Iraq",
+      "Ireland",
+      "Israel",
+      "Italy",
+      "Jamaica",
+      "Japan",
+      "Jordan",
+      "Kazakhstan",
+      "Kenya",
+      "Kiribati",
+      "Kosovo",
+      "Kuwait",
+      "Kyrgyzstan",
+      "Laos",
+      "Latvia",
+      "Lebanon",
+      "Lesotho",
+      "Liberia",
+      "Libya",
+      "Liechtenstein",
+      "Lithuania",
+      "Luxembourg",
+      "Madagascar",
+      "Malawi",
+      "Malaysia",
+      "Maldives",
+      "Mali",
+      "Malta",
+      "Marshall Islands",
+      "Mauritania",
+      "Mauritius",
+      "Mexico",
+      "Micronesia",
+      "Moldova",
+      "Monaco",
+      "Mongolia",
+      "Montenegro",
+      "Morocco",
+      "Mozambique",
+      "Myanmar",
+      "Namibia",
+      "Nauru",
+      "Nepal",
+      "Netherlands",
+      "New Zealand",
+      "Nicaragua",
+      "Niger",
+      "Nigeria",
+      "North Korea",
+      "North Macedonia",
+      "Norway",
+      "Oman",
+      "Pakistan",
+      "Palau",
+      "Palestine",
+      "Panama",
+      "Papua New Guinea",
+      "Paraguay",
+      "Peru",
+      "Philippines",
+      "Poland",
+      "Portugal",
+      "Qatar",
+      "Romania",
+      "Russia",
+      "Rwanda",
+      "Saint Kitts and Nevis",
+      "Saint Lucia",
+      "Saint Vincent and the Grenadines",
+      "Samoa",
+      "San Marino",
+      "Sao Tome and Principe",
+      "Saudi Arabia",
+      "Senegal",
+      "Serbia",
+      "Seychelles",
+      "Sierra Leone",
+      "Singapore",
+      "Slovakia",
+      "Slovenia",
+      "Solomon Islands",
+      "Somalia",
+      "South Africa",
+      "South Korea",
+      "South Sudan",
+      "Spain",
+      "Sri Lanka",
+      "Sudan",
+      "Suriname",
+      "Sweden",
+      "Switzerland",
+      "Syria",
+      "Taiwan",
+      "Tajikistan",
+      "Tanzania",
+      "Thailand",
+      "Timor-Leste",
+      "Togo",
+      "Tonga",
+      "Trinidad and Tobago",
+      "Tunisia",
+      "Turkey",
+      "Turkmenistan",
+      "Tuvalu",
+      "Uganda",
+      "Ukraine",
+      "United Arab Emirates ",
+      "United Kingdom ",
+      "United States of America ",
+      "Uruguay",
+      "Uzbekistan",
+      "Vanuatu",
+      "Vatican City ",
+      "Venezuela",
+      "Vietnam",
+      "Yemen",
+      "Zambia",
+      "Zimbabwe",
+
+
+      
+  ];
 
   }
 
   ngOnInit() {
+    this.verifyEmailForm = this.formBuilder.group({
+      email: ['', [Validators.required, Validators.pattern]]
+    });
+    this.route.queryParamMap
+      .subscribe(params => {
+        this.id = params.get('id');
+      });
+    this.onGetVerifyEmailRecord();
+   // this.id = this.route.snapshot.paramMap.get('id');
+    const requestObj = {
+      token: this.id
+    };
+     
+    this.userService.verifyEmailAddress(this.constructor.name, moduleName.verifyEmailModule, requestObj).pipe(delay(2000))
+    .subscribe((data) => {
+      if(data){
+      //  this.isUserVarified = true;
+        this.message = 'Your email is successfully verified !';
+        this.authenticationService.isUserVerified.next(true);
+        this.isInvitedUserVerified = true;
+        this.showNextScreen = true;
+        //this.router.navigate(['/signup']);
+      }
+    }, error => {
+//      this.isUserVarified = false;
+      this.message = 'This link has been expired!';
+      this.authenticationService.isUserVerified.next(false);
+      this.isInvitedUserVerified = false;
+      this.showNextScreen = false;
+      //this.router.navigate(['/verify-email/',this.id]);
+    });
+    //this.authenticationService.userEmailVerificationStatus.subscribe((data) => this.isInvitedUserVerified = data);
+    //this.showNextScreen = this.isInvitedUserVerified ? true : false;
+    this.setTimer();
     const element = document.getElementById('main');
     element.classList.remove('container');
     element.classList.remove('site-content');
@@ -82,7 +351,7 @@ export class TwostepregisterComponent implements OnInit {
       city:['',[Validators.required ,Validators.pattern(strRegx)]],
       state:['',[Validators.required,Validators.pattern(strRegx)]],
       code:['',[Validators.required , Validators.pattern(pinzipRegex)]],
-      phone:['',[Validators.required ,Validators.minLength(4), Validators.maxLength(15), Validators.pattern(zipRegex)]],
+      phone:['',[Validators.minLength(5), Validators.maxLength(15), Validators.pattern(zipRegex)]],
       protocol:['https://',[Validators.required]],
       website: ['', [Validators.required, Validators.pattern(urlRegex)]],
       logourl:['']
@@ -91,7 +360,7 @@ export class TwostepregisterComponent implements OnInit {
      if(this.route.snapshot.queryParams["plan_id"]){
        this.planID = this.route.snapshot.queryParams["plan_id"];
      }else{
-       this.planID = "price_1I8RHcBa3iZWL3Ygt4B3gZVd";
+       this.planID = environment.cookiefreePlanID;
      }
 
      
@@ -101,7 +370,15 @@ export class TwostepregisterComponent implements OnInit {
       this.units = "1";
     }
 
-    
+    if(this.route.snapshot.queryParams["plan_type"]){
+      this.plantype = this.route.snapshot.queryParams["plan_type"];
+    }else{
+      this.plantype = "0";
+    }
+
+    // this.plantype=this.route.snapshot.queryParams["plan_type"]
+
+     
 
   }
 // ngAfterViewInit() {
@@ -111,6 +388,11 @@ export class TwostepregisterComponent implements OnInit {
 //       ShowLogs: false, // Show Console Logs
 //     });
 // }
+
+// convenience getter for easy access to form fields
+get vemail() {
+  return this.verifyEmailForm.controls;
+}
 
   ngOnDestroy() {
     const element = document.getElementById('main');
@@ -170,12 +452,14 @@ export class TwostepregisterComponent implements OnInit {
 
   onSubmit() {
     this.submitted = true;
+    this.stripe = (window as any).Stripe(environment.stripePublishablekey);
     // stop here if form is invalid
     if (this.regForm.invalid) {
       return false;
     } else {
 
       this.loading = true;
+      this.passwords=this.f.password.value;
       const requestObj = {
         firstname: this.f.firstName.value,
         lastname: this.f.lastName.value,
@@ -200,11 +484,10 @@ export class TwostepregisterComponent implements OnInit {
             this.next();
           },
           error => {
-            if(error == 500)
             this.loading = false;
             this.alertMsg = error.company_error || error;
             this.isOpen = true;
-            this.alertType = 'info';
+            this.alertType = 'danger';
 
           });
 
@@ -221,14 +504,18 @@ export class TwostepregisterComponent implements OnInit {
   }
 
   onGetVerifyEmailRecord() {
-    this.userService.getverifyemailRecord(this.emailid)
+    if(this.emailid !== undefined){
+      this.userService.getverifyemailRecord(this.emailid)
       .subscribe((res: any) => {
         const result: any = res;
         if (result.status === 200) {
+          this.authenticationService.isUserVerified.next(true);
           this.verified = result.response;
+          this.isInvitedUserVerified = true;
         }
       }, error => {
       });
+    }
   }
 
 
@@ -248,7 +535,7 @@ export class TwostepregisterComponent implements OnInit {
         zipcode:this.r.code.value,
         phone:this.r.phone.value,
       };
-      this.userService.AddOrgCmpProp(this.constructor.name, moduleName.registerModule ,requObj , this.emailid ,this.userid , this.planID , this.units)
+      this.userService.AddOrgCmpProp(this.constructor.name, moduleName.registerModule ,requObj , this.emailid ,this.userid , this.planID , this.units, this.plantype)
       .pipe(first())
       .subscribe(
         res => {
@@ -257,12 +544,16 @@ export class TwostepregisterComponent implements OnInit {
           this.isOpen = true;
           this.alertType = 'success';
           this.loading = false;
-          this.onCheckOut(result.response);
+          this.chckresponse = result.response.stripe_sessionId;
+          this.login();
+          
+      
+
           },
         error => {
           this.alertMsg = error.company_error || error;
           this.isOpen = true;
-          this.alertType = 'info';
+          this.alertType = 'danger';
           this.loading = false;
 
         });
@@ -270,6 +561,39 @@ export class TwostepregisterComponent implements OnInit {
     }
   }
 
+  login(){
+    this.authenticationService.login(this.constructor.name, moduleName.loginModule,this.emailid, this.f.password.value)
+      .pipe(first())
+      .subscribe(
+        data => {
+          // this.getLoggedInUserDetails();
+          this.authenticationService.userLoggedIn.next(true);
+          this.authenticationService.currentUserSubject.next(data);
+          localStorage.setItem('currentUser', JSON.stringify(data));
+          this.onCheckOut(this.chckresponse);
+          let params = this.route.snapshot.queryParams;
+          this.returnUrl = params['redirectURL'];
+          console.log(this.returnUrl,'returnUrl..');
+          // if (params['redirectURL']) {
+          if (this.returnUrl) {
+            this.router.navigate([params['redirectURL']]);
+          } else {
+            this.router.navigate(['/home/welcome']);
+          }
+        },
+        error => {
+          // if (error == 'Please verify email address.') {
+          //   this.isEmailVerified = false;
+          //   this.loading = false;
+          //   this.isOpen = false;
+          // } else {
+            this.isOpen = true;
+            this.alertMsg = error;
+            this.alertType = 'danger';
+            this.loading = false;
+          // }
+        });
+  }
   
   onSendConsentPreferenceRecord() {
     this.consentPreferenceSDK = (window as any).CP_SDK_ADZAPIER.init({
@@ -336,6 +660,40 @@ export class TwostepregisterComponent implements OnInit {
   onClosed(dismissedAlert: any): void {
     this.alertMsg = !dismissedAlert;
     this.isOpen = false;
+  }
+
+  onToggle() {
+    this.isInvitedUserVerified = !this.isInvitedUserVerified;
+    this.loading = false;
+    this.isVerificationBtnClick = false;
+    this.isMsgConfirm = false;
+  }
+
+  resendToken() {
+    this.isVerificationBtnClick = true;
+    const reqObj = {
+      email: this.vemail.email.value
+    }
+    this.userService.resendEmailVerificationToken(this.constructor.name, moduleName.loginModule, reqObj).subscribe((data) => {
+      if (data.status === 200) {
+        this.isMsgConfirm = true;
+        this.isVerificationBtnClick = false;
+      }
+    },(error)=>{
+      if (error == null){
+        this.emailnotverifiedMsg = 'User not found!';
+        this.isInvitedUserVerified = false;
+      }
+      this.isInvitedUserVerified = false;
+    })
+  }
+
+  setTimer(){
+    this.timer = timer(8000)
+    this.subscription = this.timer.subscribe(() => {
+      this.showNextScreen = false;
+      this.hideMessage = true;
+    })
   }
 
 }

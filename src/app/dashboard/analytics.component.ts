@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { faChrome, faEdge, faFirefox, faSafari, faOpera } from '@fortawesome/free-brands-svg-icons';
 import { Subscription } from 'rxjs';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
-import { AuthenticationService, OrganizationService } from 'src/app/_services';
+import { AuthenticationService, OrganizationService, UserService } from 'src/app/_services';
 import { featuresName } from '../_constant/features-name.constant';
 import { moduleName } from '../_constant/module-name.constant';
 import { DataService } from '../_services/data.service';
@@ -45,6 +45,7 @@ export class AnalyticsComponent implements OnInit {
     private orgService: OrganizationService,
     private dataService: DataService,
     private loading: NgxUiLoaderService,
+    private userService:UserService,
     private cdRef: ChangeDetectorRef
   ) {
     this.authService.currentUser.subscribe(x => this.currentUser = x);
@@ -58,6 +59,7 @@ export class AnalyticsComponent implements OnInit {
 
 
   ngOnInit() {
+    this.userService.addUserActionOnActualButton.next({quickstartid:8,isclicked:null,isactualbtnclicked:false});
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
     if(this.queryOID !== null && this.queryOID !== undefined){
     const obj = {
