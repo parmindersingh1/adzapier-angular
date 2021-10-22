@@ -124,6 +124,28 @@ export const credForm = {
     type: 'textarea',
     required: true
   },
+  ],
+  moosend: [
+    {
+      key: 'api_key',
+      secret_1: '',
+      type: 'textarea',
+      required: true
+    },
+    {
+      key: 'mailing_list_id',
+      secret_1: '',
+      type: 'text',
+      required: true
+    }
+  ],
+  hubspot: [
+    {
+      key: 'api_key',
+      secret_1: '',
+      type: 'textarea',
+      required: true
+    }
   ]
   }
 ;

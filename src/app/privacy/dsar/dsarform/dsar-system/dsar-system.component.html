@@ -87,6 +87,9 @@
 <app-http-query-builder  (backHome)="onHome($event)"  [formObject]="formObject" [formID]="formID" [connectionId]="connectionID"  [systemName]="systemName" *ngIf="systemName === 'http'"></app-http-query-builder>
 <app-active-campaign  (backHome)="onHome($event)"  [formObject]="formObject" [formID]="formID" [connectionId]="connectionID"  [systemName]="systemName" *ngIf="systemName === 'activecampaign'"></app-active-campaign>
 <app-send-in-blue  (backHome)="onHome($event)"  [formObject]="formObject" [formID]="formID" [connectionId]="connectionID"  [systemName]="systemName" *ngIf="systemName === 'sendinblue'"></app-send-in-blue>
+<app-send-grid (backHome)="onHome($event)"  [formObject]="formObject" [formID]="formID" [connectionId]="connectionID"  [systemName]="systemName" *ngIf="systemName === 'sendgrid'"></app-send-grid>
+<app-moosend (backHome)="onHome($event)"  [formObject]="formObject" [formID]="formID" [connectionId]="connectionID"  [systemName]="systemName" *ngIf="systemName === 'moosend'"></app-moosend>
+<app-hubspot-query-builder (backHome)="onHome($event)"  [formObject]="formObject" [formID]="formID" [connectionId]="connectionID"  [systemName]="systemName" *ngIf="systemName === 'hubspot'"></app-hubspot-query-builder>
 
 
 <ng-template #createConnection>

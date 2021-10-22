@@ -14,9 +14,9 @@
     </div>
     <div class="row">
       <div class="col-md-12 mb-3"><h5>Choose Columns</h5></div>
-      <div class="col-md-2 mb-3" *ngFor="let column of activeCampaignColumns">
+      <div class="col-md-2 mb-3" *ngFor="let column of sendGrid">
         <button pButton pRipple type="button" (click)="onSelectColumn(column)"   [ngClass]="{'p-button-text' : !columnsList.includes(column)}"
-                class="p-button-raised w-100"><span class="text-over"> {{column.replace('_', ' ').replace('_', ' ')}}</span></button>
+                class="p-button-raised"><span class="text-over"> {{column.replace('_', ' ').replace('_', ' ')}}</span></button>
       </div>
       <div class="col-md-12" *ngIf="columnsList.length === 0">
         <p class="text-danger tx-bold"> Choose minimum 1 column </p>
@@ -39,11 +39,7 @@
       </div>
     </div>
   </div>
-
-
 </div>
-
-
 
 <div class="col-sm-5 mr-0 float-right flotingdiv" [ngClass]="{'hide':!isOpen}">
   <alert *ngIf="isOpen" [type]="alertType" dismissOnTimeout="5000"

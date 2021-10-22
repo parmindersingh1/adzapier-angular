@@ -110,7 +110,11 @@ export class DsarSystemComponent implements OnInit {
     this.onGetCredList();
   }
   onTestConnection(data, systemID) {
-    if (this.onFindSystemName(systemID) === 'mailchimp') {
+    if (this.onFindSystemName(systemID) === 'mailchimp'
+      || this.onFindSystemName(systemID) === 'activecampaign'
+      || this.onFindSystemName(systemID) === 'sendinblue'
+      || this.onFindSystemName(systemID) === 'moosend'
+      || this.onFindSystemName(systemID) === 'sendgrid') {
       this.mailChimpData = data;
       this.openModal(this.mailChimpConnection);
       return false;

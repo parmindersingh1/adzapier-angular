@@ -1,54 +1,32 @@
-import {ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, SimpleChanges} from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  SimpleChanges
+} from '@angular/core';
 import {SystemIntegrationService} from '../../../../../_services/system_integration.service';
 import {ActivatedRoute} from '@angular/router';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
 import {moduleName} from '../../../../../_constant/module-name.constant';
 
 @Component({
-  selector: 'app-active-campaign',
-  templateUrl: './active-campaign.component.html',
-  styleUrls: ['./active-campaign.component.scss']
+  selector: 'app-hubspot-query-builder',
+  templateUrl: './hubspot-query-builder.component.html',
+  styleUrls: ['./hubspot-query-builder.component.scss']
 })
-export class ActiveCampaignComponent implements OnInit {
-  activeCampaignColumns = [
-    'adate',
-  'anonymized',
-  'bounced_date',
-  'bounced_hard',
-  'bounced_soft',
-  'cdate',
-  'created_by',
-  'created_timestamp',
-  'created_utc_timestamp',
-  'deleted',
-  'deleted_at',
-  'edate',
-  'email',
-  'email_domain',
-  'email_empty',
-  'email_local',
-  'firstName',
-  'gravatar',
-  'hash',
-  'id',
-  'ip',
-  'lastName',
-  'mpp_tracking',
-  'organization',
-  'orgid',
-  'orgname',
-  'phone',
-  'rating_tstamp',
-  'scoreValues',
-  'segmentio_id',
-  'sentcnt',
-  'socialdata_lastcheck',
-  'ua',
-  'udate',
-  'updated_by',
-  'updated_timestamp',
-  'updated_utc_timestamp',
-];
+export class HubspotQueryBuilderComponent implements OnInit, OnChanges {
+  sendGrid = [
+    'createdate',
+    'email',
+    'firstname',
+    'hs_object_id',
+    'lastmodifieddate',
+    'lastname',
+  ];
   @Input('formObject') formObject;
   @Input('formID') formID;
   @Input('connectionId') connectionId;
@@ -61,28 +39,32 @@ export class ActiveCampaignComponent implements OnInit {
   isOpen = false;
   alertType: any;
   columnsList = [];
+
   constructor(private cd: ChangeDetectorRef,
               private integrationService: SystemIntegrationService,
               private activatedRoutes: ActivatedRoute,
               private loading: NgxUiLoaderService
-  ) { }
+  ) {
+  }
 
   ngOnInit(): void {
     this.activatedRoutes.queryParams.subscribe(params => {
-      this.orgID =  params.oid;
-    })
+      this.orgID = params.oid;
+    });
   }
+
   ngOnChanges(changes: SimpleChanges) {
     this.formObject = changes.formObject.currentValue;
     this.cd.detectChanges();
   }
+
   onSubmit() {
     if (!this.emailAddress || this.columnsList.length === 0) {
       return false;
     }
     const payload = [
       {field: 'columns', system_name: this.systemName, value_1: JSON.stringify(this.columnsList)},
-      {field: 'email', value_1: this.emailAddress,  system_name: this.systemName},
+      {field: 'email', value_1: this.emailAddress, system_name: this.systemName},
     ];
     this.loading.start();
     this.integrationService.saveQueryBuilder(this.constructor.name, moduleName.systemIntegrationModule, payload, this.orgID, this.connectionId, this.formID).subscribe((res: any) => {
@@ -100,11 +82,13 @@ export class ActiveCampaignComponent implements OnInit {
       this.alertType = 'danger';
     });
   }
+
   onConnectionListPage() {
-    this.backHome.emit(true)
+    this.backHome.emit(true);
   }
-  onSelectColumn(column){
-    const  columnsList = [...this.columnsList];
+
+  onSelectColumn(column) {
+    const columnsList = [...this.columnsList];
     if (!columnsList.includes(column)) {
       columnsList.push(column);
     } else {

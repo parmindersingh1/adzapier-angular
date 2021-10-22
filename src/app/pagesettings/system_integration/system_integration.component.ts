@@ -58,7 +58,10 @@ export class SystemIntegrationComponent implements OnInit {
       email: ['', Validators.required],
     });
   }
-  get f() { return this.mailChimpForm.controls; }
+
+  get f() {
+    return this.mailChimpForm.controls;
+  }
 
 
   onGetSystemList() {
@@ -135,9 +138,11 @@ export class SystemIntegrationComponent implements OnInit {
 
   onTestConnection(data, systemID) {
     if (this.onFindSystemName(systemID) === 'mailchimp'
-    || this.onFindSystemName(systemID) === 'sendinblue'
-    || this.onFindSystemName(systemID) === 'sendgrid'
-        || this.onFindSystemName(systemID) === 'activecampaign') {
+      || this.onFindSystemName(systemID) === 'sendinblue'
+      || this.onFindSystemName(systemID) === 'sendgrid'
+      || this.onFindSystemName(systemID) === 'activecampaign'
+      || this.onFindSystemName(systemID) === 'hubspot'
+      || this.onFindSystemName(systemID) === 'moosend') {
       this.mailChimpData = data;
       this.openModal(this.mailChimpConnection);
       return false;
@@ -183,11 +188,13 @@ export class SystemIntegrationComponent implements OnInit {
         this.loading.stop();
       });
   }
+
   onRefreshList() {
     this.step = 1;
     this.modalRef.hide();
     this.onGetCredList();
   }
+
   onTestMailChimp() {
     this.submitted = true;
 

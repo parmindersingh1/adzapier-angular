@@ -116,7 +116,10 @@ export class UpdateConnectionFormComponent implements OnInit {
     const params: any = {
       system: this.systemName
     };
-    if (this.systemName === 'mailchimp') {
+    if (this.systemName === 'mailchimp'
+      || this.systemName === 'Activecampaign'
+      || this.systemName === 'sendinblue'
+      || this.systemName === 'sendgrid') {
       params.email = this.testEmail;
     }
     this.isTesting = true;

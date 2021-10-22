@@ -1,465 +1,403 @@
 <div class="row">
   <div class="col-md-12" *ngIf="!isLoading">
+    <div *ngIf="type === 1" class="card">
+      <div class="card-header">
+        <h5 class="float-left pt-2">Integrated Connections</h5>
+        <button pButton pRipple type="button" icon="pi pi-refresh" style="float: right" label="Refresh"
+                (click)="onFetchConnectionsList()"
+                class="p-button-raised p-button-sm"></button>
+      </div>
+      <div class="card-body p-0">
+        <table class="table">
+          <thead>
+          <tr>
+            <th>System Name</th>
+            <th>Connection Name</th>
+            <th>Status</th>
+            <th>Total Record</th>
+            <th>Error Message</th>
+            <th>View Details</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let obj of connectionList?.mysql">
+            <td><img src="assets/imgs/db/mysql.png" alt="mailchimp logo" style="width: 120px; height: 30px"/></td>
+            <td>{{obj.connectionName}}</td>
+            <td>
+          <span
+            [ngClass]="{'status-stable' : !obj?.errorLogs?.error, 'status-error': obj?.errorLogs?.error || obj?.response === null}"
+            [class]="'customer-badge'">{{obj?.errorLogs?.error ? 'Error' : obj?.response === null ? 'No Record' : 'Stable'}}</span>
+            </td>
+            <td>
+              <div [ngClass]="{'outofstock': obj.response === null || obj.response?.length === 0,
+           'instock': obj.response !== null || obj.response?.length > 0}">
+                {{onFindTotalCount(obj)}}
+              </div>
+            </td>
+            <td>
+              <div *ngIf="obj?.errorLogs?.error">
+                <p class="text-danger">{{obj?.errorLogs?.message}}</p>
+              </div>
 
-    <ul class="list-group w-100" *ngIf="currentStep == ''">
-      <li class="list-group-item mb-2" style="border-top: 1px solid #e5e9f2;" *ngFor="let obj of connectionList?.mysql">
-        <div class="row">
-          <div class="col-md-6">
-            <p><b>Connection Name : </b> {{obj.connectionName}}</p>
-            <p><b>System Type :</b> {{obj.systemName}}</p>
-          </div>
-          <div class="col-md-6" *ngIf="!obj?.errorLogs?.error">
-            <h6 class="tx-17">Connection Status : <span class="text-success">Stable</span></h6>
-            <h6 class="tx-17">Total Records <span class="badge badge-primary ml-2 tx-17"
-                                                  style="font-size: 13px">{{obj?.response?.length}} Found </span></h6>
-            <button type="button" class="btn btn-link pl-0" (click)="onShowSqlData('sql', obj)">View More</button>
-          </div>
+            </td>
+            <td>
+              <button pButton pRipple icon="pi pi-eye" class="p-button-rounded p-button-success p-mr-2"
+                      [disabled]="obj?.response === null || obj?.response === 0"
+                      (click)="onShowSqlData('sql', obj)"></button>
+            </td>
+          </tr>
+          <tr *ngFor="let obj of connectionList?.postgres">
+            <td><img src="assets/imgs/db/postgresql.svg" alt="mailchimp logo" style="width: 120px; height: 30px"/></td>
+            <td>{{obj.connectionName}}</td>
+            <td>
+          <span
+            [ngClass]="{'status-stable' : !obj?.errorLogs?.error, 'status-error': obj?.errorLogs?.error || obj?.response === null}"
+            [class]="'customer-badge'">{{obj?.errorLogs?.error ? 'Error' : obj?.response === null ? 'No Record' : 'Stable'}}</span>
+            </td>
+            <td>
+              <div [ngClass]="{'outofstock': obj.response === null || obj.response?.length === 0,
+           'instock': obj.response !== null || obj.response?.length > 0}">
+                {{onFindTotalCount(obj)}}
+              </div>
+            </td>
+            <td>
+              <div *ngIf="obj?.errorLogs?.error">
+                <p class="text-danger">{{obj?.errorLogs?.message}}</p>
+              </div>
 
-          <div class="col-md-6" *ngIf="obj?.errorLogs?.error">
-            <h6 class="tx-17">Connection Status : <span class="text-danger">Error </span></h6>
-            <h6 class="tx-17">Total Not Records <span class="badge badge-primary ml-2 tx-17 badge-danger"
-                                                      style="font-size: 13px">0</span></h6>
-            <div class="alert-danger alert">{{obj?.errorLogs?.message}}</div>
-          </div>
-
-
-        </div>
-      </li>
-      <li class="list-group-item mb-2" style="border-top: 1px solid #e5e9f2;"
-          *ngFor="let obj of connectionList?.postgres">
-        <div class="row">
-          <div class="col-md-6">
-            <p><b>Connection Name : </b> {{obj.connectionName}}</p>
-            <p><b>System Type :</b> {{obj.systemName}}</p>
-          </div>
-          <div class="col-md-6" *ngIf="!obj?.errorLogs?.error">
-            <h6 class="tx-17">Connection Status : <span class="text-success">Stable</span></h6>
-            <h6 class="tx-17">Total Records <span class="badge badge-primary ml-2 tx-17"
-                                                  style="font-size: 13px">{{obj?.response?.length}} Found </span></h6>
-            <button type="button" class="btn btn-link pl-0" (click)="onShowSqlData('sql', obj)">View More</button>
-          </div>
-
-          <div class="col-md-6" *ngIf="obj?.errorLogs?.error">
-            <h6 class="tx-17">Connection Status : <span class="text-danger">Error </span></h6>
-            <h6 class="tx-17">Total Not Records <span class="badge badge-primary ml-2 tx-17 badge-danger"
-                                                      style="font-size: 13px">0</span></h6>
-            <div class="alert-danger alert">{{obj?.errorLogs?.message}}</div>
-          </div>
-
-        </div>
-      </li>
-
-
-      <li class="list-group-item mb-2" style="border-top: 1px solid #e5e9f2;"
-          *ngFor="let obj of connectionList?.mailChimp">
-        <div class="row">
-          <div class="col-md-6">
-            <p><b>Connection Name : </b> {{obj?.connectionName}}</p>
-            <p><b>System Type :</b> {{obj?.systemName}}</p>
-          </div>
-          <div class="col-md-6" *ngIf="!obj?.errorLogs?.error">
-            <h6 class="tx-17">Connection Status : <span class="text-success">Stable</span></h6>
-            <button type="button" class="btn btn-link pl-0" (click)="onShowSqlData('mailChimp', obj)">View More</button>
-          </div>
-
-          <div class="col-md-6" *ngIf="obj?.errorLogs?.error">
-            <h6 class="tx-17">Connection Status : <span class="text-danger">Error </span></h6>
-            <div class="alert-danger alert">{{obj?.errorLogs?.message}}</div>
-          </div>
-
-        </div>
-      </li>
-
-      <li class="list-group-item mb-2" style="border-top: 1px solid #e5e9f2;"
-          *ngFor="let obj of connectionList?.activeCampaign">
-        <div class="row">
-          <div class="col-md-6">
-            <p><b>Connection Name : </b> {{obj?.connectionName}}</p>
-            <p><b>System Type :</b> {{obj?.systemName}}</p>
-          </div>
-          <div class="col-md-6" *ngIf="!obj?.errorLogs?.error">
-            <h6 class="tx-17">Connection Status : <span class="text-success">Stable</span></h6>
-            <button type="button" class="btn btn-link pl-0" (click)="onShowSqlData('activeCampaign', obj)">View More</button>
-          </div>
-
-          <div class="col-md-6" *ngIf="obj?.errorLogs?.error">
-            <h6 class="tx-17">Connection Status : <span class="text-danger">Error </span></h6>
-            <div class="alert-danger alert">{{obj?.errorLogs?.message}}</div>
-          </div>
-
-        </div>
-      </li>
-
-      <li class="list-group-item mb-2" style="border-top: 1px solid #e5e9f2;"
-          *ngFor="let obj of connectionList?.restApi">
-        <div class="row">
-          <div class="col-md-6">
-            <p><b>Connection Name : </b> {{obj?.connectionName}}</p>
-            <p><b>System Type :</b> {{obj?.systemName}}</p>
-          </div>
-          <!--          <div class="col-md-6" *ngIf="!obj?.errorLogs?.error">-->
-          <h6 class="tx-17">Connection Status : <span class="text-success">Stable</span></h6>
-          <button type="button" class="btn btn-link pl-0" (click)="onShowRestAPIData('restApi', obj)">View More</button>
-          <!--          </div>-->
+            </td>
+            <td>
+              <button pButton pRipple icon="pi pi-eye" class="p-button-rounded p-button-success p-mr-2"
+                      [disabled]="obj?.response === null || obj?.response === 0"   (click)="onShowSqlData('sql', obj)"></button>
+            </td>
+          </tr>
 
 
-        </div>
-      </li>
+          <tr *ngFor="let obj of connectionList?.mailChimp">
+            <td><img src="assets/imgs/db/mailchimp.png" alt="mailchimp logo" style="width: 120px; height: 30px"/></td>
+            <td>{{obj.connectionName}}</td>
+            <td>
+          <span
+            [ngClass]="{'status-stable' : !obj?.errorLogs?.error, 'status-error': obj?.errorLogs?.error || obj?.response === null}"
+            [class]="'customer-badge'">{{obj?.errorLogs?.error ? 'Error' : obj?.response === null ? 'No Record' : 'Stable'}}</span>
+            </td>
+            <td>
+              <div [ngClass]="{'outofstock': obj.response === null || obj.response?.length === 0,
+           'instock': obj.response !== null || obj.response?.length > 0}">
+                {{onFindTotalCount(obj)}}
+              </div>
+            </td>
+            <td>
+              <div *ngIf="obj?.errorLogs?.error">
+                <p class="text-danger">{{obj?.errorLogs?.message}}</p>
+              </div>
+
+            </td>
+            <td>
+              <button pButton pRipple icon="pi pi-eye" class="p-button-rounded p-button-success p-mr-2"
+                      [disabled]="obj?.response === null || obj?.response === 0"
+                      (click)="onShowSqlData('mailChimp', obj)"></button>
+            </td>
+          </tr>
 
 
-      <li class="list-group-item mb-2" style="border-top: 1px solid #e5e9f2;"
-          *ngFor="let obj of connectionList?.sendInBlue">
-        <div class="row">
-          <div class="col-md-6">
-            <p><b>Connection Name : </b> {{obj.connectionName}}</p>
-            <p><b>System Type :</b> {{obj.systemName}}</p>
-          </div>
-          <div class="col-md-6" *ngIf="!obj?.errorLogs?.error">
-            <h6 class="tx-17">Connection Status : <span class="text-success">Stable</span></h6>
-            <h6 class="tx-17">Total Records <span class="badge badge-primary ml-2 tx-17"
-                                                  style="font-size: 13px">{{obj?.response?.length}} Found </span></h6>
-            <button type="button" class="btn btn-link pl-0" (click)="onShowSqlData('sendInBlue', obj)">View More</button>
-          </div>
+          <tr *ngFor="let obj of connectionList?.restApi">
+            <td><img src="assets/imgs/db/rest.png" alt="Rest API logo" style="width: 120px; height: 30px"/></td>
+            <td>{{obj.connectionName}}</td>
+            <td>
+          <span
+            [ngClass]="{'status-stable' : !obj?.errorLogs?.error, 'status-error': obj?.errorLogs?.error || obj?.response === null}"
+            [class]="'customer-badge'">{{obj?.errorLogs?.error ? 'Error' : obj?.response === null ? 'No Record' : 'Stable'}}</span>
+            </td>
+            <td>
+              <div [ngClass]="{'outofstock': obj.response === null || obj.response?.length === 0,
+           'instock': obj.response !== null || obj.response?.length > 0}">
+                {{onFindTotalCount(obj)}}
+              </div>
+            </td>
+            <td>
+              <div *ngIf="obj?.errorLogs?.error">
+                <p class="text-danger">{{obj?.errorLogs?.message}}</p>
+              </div>
 
-          <div class="col-md-6" *ngIf="obj?.errorLogs?.error">
-            <h6 class="tx-17">Connection Status : <span class="text-danger">Error </span></h6>
-            <h6 class="tx-17">Total Not Records <span class="badge badge-primary ml-2 tx-17 badge-danger"
-                                                      style="font-size: 13px">0</span></h6>
-            <div class="alert-danger alert">{{obj?.errorLogs?.message}}</div>
-          </div>
+            </td>
+            <td>
+              <button pButton pRipple icon="pi pi-eye" class="p-button-rounded p-button-success p-mr-2"
+                      [disabled]="obj?.response === null || obj?.response === 0"  (click)="onShowRestAPIData('restApi', obj)"></button>
+            </td>
+          </tr>
 
-        </div>
-      </li>
+          <tr *ngFor="let obj of connectionList?.activeCampaign">
+            <td><img class="mt-2" src="assets/imgs/db/ActiveCampaign_logo.svg.png" alt="mailchimp logo"
+                     style="width: 120px; height: 22px"/></td>
+            <td>{{obj.connectionName}}</td>
+            <td>
+          <span
+            [ngClass]="{'status-stable' : !obj?.errorLogs?.error, 'status-error': obj?.errorLogs?.error || obj?.response === null}"
+            [class]="'customer-badge'">{{obj?.errorLogs?.error ? 'Error' : obj?.response === null ? 'No Record' : 'Stable'}}</span>
+            </td>
+            <td>
+              <div [ngClass]="{'outofstock': obj.response?.contacts === null || obj.response?.contacts?.length === 0,
+           'instock': obj.response?.contacts !== null || obj.response?.contacts?.length > 0}">
+                {{onFindTotalActiveCampaginCount(obj)}}
+              </div>
+            </td>
+            <td>
+              <div *ngIf="obj?.errorLogs?.error">
+                <p class="text-danger">{{obj?.errorLogs?.message}}</p>
+              </div>
 
-    </ul>
+            </td>
+            <td>
+              <button pButton pRipple icon="pi pi-eye" class="p-button-rounded p-button-success p-mr-2"
+                      [disabled]="obj.response?.contacts === null || obj.response?.contacts?.length === 0"  (click)="onShowSqlData('activeCampaign', obj)"></button>
+            </td>
+          </tr>
+
+          <tr *ngFor="let obj of connectionList?.sendInBlue">
+            <td><img src="assets/imgs/db/send-in-blue.svg" alt="SendINBlue logo" style="width: 120px; height: 30px"/>
+            </td>
+            <td>{{obj.connectionName}}</td>
+            <td>
+          <span
+            [ngClass]="{'status-stable' : !obj?.errorLogs?.error, 'status-error': obj?.errorLogs?.error || obj?.response === null}"
+            [class]="'customer-badge'">{{obj?.errorLogs?.error ? 'Error' : obj?.response?.email === "" ? 'No Record' : 'Stable'}}</span>
+            </td>
+            <td>
+              <div [ngClass]="{'outofstock': obj.response?.email === '',
+           'instock': obj.response?.email}">
+                {{onFindTotalSendInBlueCount(obj)}}
+              </div>
+            </td>
+            <td>
+              <div *ngIf="obj?.errorLogs?.error">
+                <p class="text-danger">{{obj?.errorLogs?.message}}</p>
+              </div>
+
+            </td>
+            <td>
+              <button pButton pRipple icon="pi pi-eye" class="p-button-rounded p-button-success p-mr-2"
+                      [disabled]="obj?.response === null || obj.response?.email === ''"     (click)="onShowSqlData('sendInBlue', obj)"></button>
+            </td>
+          </tr>
+
+          <tr *ngFor="let obj of connectionList?.sendGrid">
+            <td><img src="assets/imgs/db/sendgrid.png" alt="SendGrid logo" style="width: 120px; height: 30px"/></td>
+            <td>{{obj.connectionName}}</td>
+            <td>
+          <span
+            [ngClass]="{'status-stable' : !obj?.errorLogs?.error, 'status-error': obj?.errorLogs?.error || obj?.response === null}"
+            [class]="'customer-badge'">{{obj?.errorLogs?.error ? 'Error' : obj?.response === null ? 'No Record' : 'Stable'}}</span>
+            </td>
+            <td>
+              <div [ngClass]="{'outofstock': obj.response === null || obj.response?.length === 0,
+           'instock': obj.response !== null || obj.response?.length > 0}">
+                {{onFindTotalCount(obj)}}
+              </div>
+            </td>
+            <td>
+              <div *ngIf="obj?.errorLogs?.error">
+                <p class="text-danger">{{obj?.errorLogs?.message}}</p>
+              </div>
+
+            </td>
+            <td>
+              <button pButton pRipple icon="pi pi-eye" class="p-button-rounded p-button-success p-mr-2"
+                      [disabled]="obj?.response === null || obj?.response === 0"    (click)="onShowSqlData('sendGrid', obj)"></button>
+            </td>
+          </tr>
 
 
+          <tr *ngFor="let obj of connectionList?.hubSpot">
+            <td><img src="assets/imgs/db/hubspot.png" alt="HubSpot logo" style="width: 120px; height: 30px"/></td>
+            <td>{{obj.connectionName}}</td>
+            <td>
+          <span
+            [ngClass]="{'status-stable' : !obj?.errorLogs?.error, 'status-error': obj?.errorLogs?.error ||  obj?.response?.results === null || obj?.response?.results.length === 0}"
+            [class]="'customer-badge'">{{obj?.errorLogs?.error ? 'Error' : obj?.response?.results === null || obj?.response?.results.length === 0 ? 'No Record' : 'Stable'}}</span>
+            </td>
+            <td>
+              <div [ngClass]="{'outofstock': obj.response === null || obj.response?.length === 0 || obj?.response?.results?.length === 0,
+           'instock': obj.response !== null || obj.response?.length > 0 || obj?.response?.results?.length > 0}">
+                {{obj?.response?.results?.length}}
+              </div>
+            </td>
+            <td>
+              <div *ngIf="obj?.errorLogs?.error">
+                <p class="text-danger">{{obj?.errorLogs?.message}}</p>
+              </div>
 
-    <div class="sql" *ngIf="currentStep === 'sql'">
-      <div class="card">
-        <div class="card-header">
-          <h4 class="float-left">Connection Name : {{connectionDetails?.connectionName}}</h4>
-          <p class="float-right font-weight-bold tx-15" (click)="currentStep = ''"><i class="fas fa-chevron-left"></i>
-            Go Back</p>
-        </div>
-        <div class="card-body mt-3">
-          <p-table [value]="connectionDetails?.response" responsiveLayout="scroll">
-            <ng-template pTemplate="header">
-              <tr>
-                <th *ngFor="let col of connectionDetails?.cols">{{col}}</th>
-              </tr>
-            </ng-template>
-            <ng-template pTemplate="body" let-product>
-              <tr>
-                <td *ngFor="let col of connectionDetails?.cols">{{product[col]}}</td>
-              </tr>
-            </ng-template>
-          </p-table>
-        </div>
+            </td>
+            <td>
+              <button pButton pRipple icon="pi pi-eye" class="p-button-rounded p-button-success p-mr-2"
+                      [disabled]="obj?.response === null || obj?.response === 0 || obj?.response?.results?.length === 0"    (click)="onShowSqlData('hubSpot', obj)"></button>
+            </td>
+          </tr>
+
+
+          <tr *ngFor="let obj of connectionList?.mooSend">
+            <td><img src="assets/imgs/db/moosend-1.png" alt="Moosend logo" style="width: 120px; height: 30px"/></td>
+            <td>{{obj.connectionName}}</td>
+            <td>
+          <span
+            [ngClass]="{'status-stable' : !obj?.errorLogs?.error, 'status-error': obj?.errorLogs?.error || obj?.response?.Error}"
+            [class]="'customer-badge'">{{obj?.errorLogs?.error ? 'Error' : obj?.response?.Error? 'No Record' : 'Stable'}}</span>
+            </td>
+            <td>
+              <div [ngClass]="{'outofstock': obj.response?.Error,
+           'instock': !obj.response?.Error}">
+                {{onFindTotalMoosendCount(obj)}}
+              </div>
+            </td>
+            <td>
+              <div *ngIf="obj?.errorLogs?.error || obj?.response?.Error">
+                <p class="text-danger">{{obj?.response?.Error ? obj?.response?.Error : obj?.errorLogs?.message.replaceAll('_', ' ')}}</p>
+              </div>
+
+            </td>
+            <td>
+              <button pButton pRipple icon="pi pi-eye" class="p-button-rounded p-button-success p-mr-2"
+                      [disabled]="obj?.errorLogs?.error || obj?.response?.Error"    (click)="onShowSqlData('mooSend', obj)"></button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
       </div>
     </div>
 
 
-    <div class="sql" *ngIf="currentStep === 'restApi'">
-      <div class="card">
-        <div class="card-header">
-          <h4 class="float-left">Connection Name : {{connectionDetails?.connectionName}}</h4>
-          <p class="float-right font-weight-bold tx-15" (click)="currentStep = ''"><i class="fas fa-chevron-left"></i>
-            Go Back</p>
-        </div>
-        <div class="card-body mt-3">
-          <p-table [value]="connectionDetails" responsiveLayout="scroll">
-            <ng-template pTemplate="header">
-              <tr>
-                <th *ngFor="let col of connectionDetailsKeys">{{col}}</th>
-              </tr>
-            </ng-template>
-            <ng-template pTemplate="body" let-product>
-              <tr>
-                <td *ngFor="let col of connectionDetailsKeys">{{product[col]}}</td>
-              </tr>
-            </ng-template>
-          </p-table>
-        </div>
-      </div>
-    </div>
-
-    <div class="sql" *ngIf="currentStep === 'activeCampaign'">
-      <div class="card">
-        <div class="card-header">
-          <h4 class="float-left">Connection Name : {{connectionDetails?.connectionName}}</h4>
-          <p class="float-right font-weight-bold tx-15" (click)="currentStep = ''"><i class="fas fa-chevron-left"></i>
-            Go Back</p>
-        </div>
-        <div class="card-body mt-3">
-          <div class="row">
-            <div class="col-md-6">
-
-              <div class="row">
-                <div class="col-md-4">
-                  <h6>Hash</h6>
-                </div>
-                <div class="col-md-8">
-                  <p>{{connectionDetails?.response.contacts[0].hash}}</p>
-                </div>
-              </div>
-
-              <div class="row">
-                <div class="col-md-4">
-                  <h6>Full Name</h6>
-                </div>
-                <div class="col-md-8">
-                  <p>{{connectionDetails?.response.contacts[0].firstName}}  {{connectionDetails?.response.contacts[0].lastName}}</p>
-                </div>
-              </div>
-
-              <div class="row">
-                <div class="col-md-4">
-                  <h6>Email address</h6>
-                </div>
-                <div class="col-md-8">
-                  <p>{{connectionDetails?.response.contacts[0].email}}</p>
-                </div>
-              </div>
-            </div>
-
-            <div class="col-md-6">
-
-
-              <div class="row">
-                <div class="col-md-4">
-                  <h6>Phone</h6>
-                </div>
-                <div class="col-md-8">
-                  <p>{{connectionDetails?.response.contacts[0].phone}}</p>
-                </div>
-              </div>
-
-              <div class="row">
-                <div class="col-md-4">
-                  <h6>Last Changes</h6>
-                </div>
-                <div class="col-md-8">
-                  <p>{{connectionDetails?.response.contacts[0].updated_timestamp}}</p>
-                </div>
-              </div>
-            </div>
-
-
+    <div *ngIf="type === 2">
+      <div class="sql" *ngIf="currentStep === 'sql'">
+        <div class="card">
+          <div class="card-header">
+            <h5 class="float-left">Connection Details - {{connectionDetails?.connectionName}}</h5>
+            <p class="float-right font-weight-bold tx-15" (click)="type = 1"><i class="fas fa-chevron-left"></i>
+              Go Back</p>
           </div>
-        </div>
-      </div>
-    </div>
-
-
-    <div class="sql" *ngIf="currentStep === 'sendInBlue'">
-      <div class="card">
-        <div class="card-header">
-          <h4 class="float-left">Connection Name : {{connectionDetails?.connectionName}}</h4>
-          <p class="float-right font-weight-bold tx-15" (click)="currentStep = ''"><i class="fas fa-chevron-left"></i>
-            Go Back</p>
-        </div>
-        <div class="card-body mt-3">
-          <div class="row">
-            <div class="col-md-6">
-
-              <div class="row">
-                <div class="col-md-4">
-                  <h6>Email</h6>
-                </div>
-                <div class="col-md-8">
-                  <p>{{connectionDetails?.response?.email}}</p>
-                </div>
-              </div>
-
-              <div class="row">
-                <div class="col-md-4">
-                  <h6>Full Name</h6>
-                </div>
-                <div class="col-md-8">
-                  <p>{{connectionDetails?.response?.attributes?.FIRSTNAME}}  {{connectionDetails?.response?.attributes?.LASTNAME}} </p>
-                </div>
-              </div>
-            </div>
-
-
-            <div class="col-md-6">
-
-
-              <div class="row">
-                <div class="col-md-4">
-                  <h6>EmailBlacklisted</h6>
-                </div>
-                <div class="col-md-8">
-                  <p>{{connectionDetails?.response?.emailBlacklisted}}</p>
-                </div>
-              </div>
-
-              <div class="row">
-                <div class="col-md-4">
-                  <h6>SMS</h6>
-                </div>
-                <div class="col-md-8">
-                  <p>{{connectionDetails?.response?.attributes?.SMS}}</p>
-                </div>
-              </div>
-            </div>
-
-
+          <div class="card-body mt-3">
+            <p-table [value]="connectionDetails?.response" responsiveLayout="scroll">
+              <ng-template pTemplate="header">
+                <tr>
+                  <th *ngFor="let col of connectionDetails?.cols">{{col}}</th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-product>
+                <tr>
+                  <td *ngFor="let col of connectionDetails?.cols">{{product[col]}}</td>
+                </tr>
+              </ng-template>
+            </p-table>
           </div>
         </div>
       </div>
 
-    </div>
-    <div class="sql" *ngIf="currentStep === 'mailChimp'">
-      <div class="card">
-        <div class="card-header">
-          <h4 class="float-left">Connection Name : {{connectionDetails?.connectionName}}</h4>
-          <p class="float-right font-weight-bold tx-15" (click)="currentStep = ''"><i class="fas fa-chevron-left"></i>
-            Go Back</p>
-        </div>
-        <div class="card-body mt-3">
+
+      <div class="restApi" *ngIf="currentStep === 'restApi'">
+        <app-restapi-connection-list (currentStep)="onGoBack($event)"
+                                     [connectionDetailsKeys]="connectionDetailsKeys"
+                                                   [connectionDetails]="connectionDetails"></app-restapi-connection-list>
+      </div>
+
+      <div class="sql" *ngIf="currentStep === 'activeCampaign'">
+        <app-email-connection-list-active-campaign (currentStep)="onGoBack($event)"
+                                                   [connectionDetails]="connectionDetails"></app-email-connection-list-active-campaign>
+      </div>
+
+
+      <div class="sendInBlue" *ngIf="currentStep === 'sendInBlue'">
+        <div class="card">
+          <div class="card-header">
+            <h5 class="float-left">Connection Details - {{connectionDetails?.connectionName}}</h5>
+            <p class="float-right font-weight-bold tx-15" (click)="type = 1"><i class="fas fa-chevron-left"></i>
+              Go Back</p>
+          </div>
+          <div class="card-body mt-3">
             <div class="row">
-                <div class="col-md-6">
+              <div class="col-md-6">
 
-                  <div class="row">
-                    <div class="col-md-4">
-                      <h6>Contact ID</h6>
-                    </div>
-                    <div class="col-md-8">
-                      <p>{{connectionDetails?.response.contact_id}}</p>
-                    </div>
+                <div class="row">
+                  <div class="col-md-4">
+                    <h6>Email</h6>
                   </div>
-
-                  <div class="row">
-                    <div class="col-md-4">
-                      <h6>Full Name</h6>
-                    </div>
-                    <div class="col-md-8">
-                      <p>{{connectionDetails?.response.full_name}}</p>
-                    </div>
+                  <div class="col-md-8">
+                    <p>{{connectionDetails?.response?.email}}</p>
                   </div>
-
-                  <div class="row">
-                    <div class="col-md-4">
-                      <h6>Email address</h6>
-                    </div>
-                    <div class="col-md-8">
-                      <p>{{connectionDetails?.response.email_address}}</p>
-                    </div>
-                  </div>
-
-                  <div class="row">
-                    <div class="col-md-4">
-                      <h6>Status</h6>
-                    </div>
-                    <div class="col-md-8">
-                      <p>{{connectionDetails?.response.status}}</p>
-                    </div>
-                  </div>
-
-                  <div class="row">
-                    <div class="col-md-4">
-                      <h6>Last Changes</h6>
-                    </div>
-                    <div class="col-md-8">
-                      <p>{{connectionDetails?.response.last_changed}}</p>
-                    </div>
-                  </div>
-
-                  <div class="row">
-                    <div class="col-md-4">
-                      <h6>IP Opt</h6>
-                    </div>
-                    <div class="col-md-8">
-                      <p>{{connectionDetails?.response.ip_opt}}</p>
-                    </div>
-                  </div>
-
                 </div>
 
-                <div class="col-md-6">
-
-                  <div class="row">
-                    <div class="col-md-4">
-                      <h6>List ID</h6>
-                    </div>
-                    <div class="col-md-8">
-                      <p>{{connectionDetails?.response?.list_id}}</p>
-                    </div>
+                <div class="row">
+                  <div class="col-md-4">
+                    <h6>Full Name</h6>
                   </div>
-                  <div class="row">
-                    <div class="col-md-4">
-                      <h6>Member Rating</h6>
-                    </div>
-                    <div class="col-md-8">
-                      <p>{{connectionDetails?.response?.member_rating}}</p>
-                    </div>
+                  <div class="col-md-8">
+                    <p>{{connectionDetails?.response?.attributes?.FIRSTNAME}}  {{connectionDetails?.response?.attributes?.LASTNAME}} </p>
                   </div>
-
-                  <div class="row">
-                    <div class="col-md-4">
-                      <h6>Source</h6>
-                    </div>
-                    <div class="col-md-8">
-                      <p>{{connectionDetails?.response?.source}}</p>
-                    </div>
-                  </div>
-
-                  <div class="row">
-                    <div class="col-md-4">
-                      <h6>Unique Email ID</h6>
-                    </div>
-                    <div class="col-md-8">
-                      <p>{{connectionDetails?.response?.unique_email_id}}</p>
-                    </div>
-                  </div>
-
-                  <div class="row">
-                    <div class="col-md-4">
-                      <h6>Language</h6>
-                    </div>
-                    <div class="col-md-8">
-                      <p>{{connectionDetails?.response?.language}}</p>
-                    </div>
-                  </div>
-
-                  <div class="row">
-                    <div class="col-md-4">
-                      <h6>Address</h6>
-                    </div>
-                    <div class="col-md-8">
-                      <p>{{connectionDetails?.response?.merge_fields?.ADDRESS?.addr1}},
-                         {{connectionDetails?.response?.merge_fields?.ADDRESS?.addr2}},
-                         {{connectionDetails?.response?.merge_fields?.ADDRESS?.city}},
-                         {{connectionDetails?.response?.merge_fields?.ADDRESS?.country}},
-                         {{connectionDetails?.response?.merge_fields?.ADDRESS?.state}},
-                         {{connectionDetails?.response?.merge_fields?.ADDRESS?.zip}}
-                      </p>
-                    </div>
-                  </div>
-
                 </div>
+              </div>
+
+
+              <div class="col-md-6">
+
+
+                <div class="row">
+                  <div class="col-md-4">
+                    <h6>EmailBlacklisted</h6>
+                  </div>
+                  <div class="col-md-8">
+                    <p>{{connectionDetails?.response?.emailBlacklisted}}</p>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-4">
+                    <h6>SMS</h6>
+                  </div>
+                  <div class="col-md-8">
+                    <p>{{connectionDetails?.response?.attributes?.SMS}}</p>
+                  </div>
+                </div>
+              </div>
 
 
             </div>
+          </div>
         </div>
+
+      </div>
+
+
+      <div class="mailChimp" *ngIf="currentStep === 'mailChimp'">
+        <app-mailchimp-connection-list (currentStep)="onGoBack($event)"
+                                       [connectionDetails]="connectionDetails"></app-mailchimp-connection-list>
+      </div>
+
+      <div class="mooSend" *ngIf="currentStep === 'mooSend'">
+        <app-moosend-connection-list (currentStep)="onGoBack($event)"
+                                     [connectionDetails]="connectionDetails"></app-moosend-connection-list>
+      </div>
+
+      <div class="sendGrid" *ngIf="currentStep === 'sendGrid'">
+        <app-sendgrid-connection-list (currentStep)="onGoBack($event)"
+                                      [connectionDetails]="connectionDetails"></app-sendgrid-connection-list>
+      </div>
+
+      <div class="hubSpot" *ngIf="currentStep === 'hubSpot'">
+        <app-hubspot-connection-list (currentStep)="onGoBack($event)"
+                                      [connectionDetails]="connectionDetails"></app-hubspot-connection-list>
       </div>
     </div>
-
   </div>
 
 
   <div class="loading col-md-12 mr-2" *ngIf="isLoading">
     <ngx-skeleton-loader appearance="circle" [theme]="{
-        width: '100%',height: '80px','border-radius': '10px', marginBottom: '30px'}"></ngx-skeleton-loader>
+        width: '100%',height: '30px','border-radius': '10px', marginBottom: '5px'}"></ngx-skeleton-loader>
     <ngx-skeleton-loader appearance="circle" [theme]="{
-        width: '100%',height: '80px','border-radius': '10px', marginBottom: '30px'}"></ngx-skeleton-loader>
+        width: '100%',height: '30px','border-radius': '10px', marginBottom: '5px'}"></ngx-skeleton-loader>
     <h5 class="text-center">Fetching ...</h5>
     <ngx-skeleton-loader appearance="circle" [theme]="{
-        width: '100%',height: '80px','border-radius': '10px', marginBottom: '30px'}"></ngx-skeleton-loader>
+        width: '100%',height: '30px','border-radius': '10px', marginBottom: '5px'}"></ngx-skeleton-loader>
     <ngx-skeleton-loader appearance="circle" [theme]="{
-        width: '100%',height: '80px','border-radius': '10px', marginBottom: '30px'}"></ngx-skeleton-loader>
+        width: '100%',height: '30px','border-radius': '10px', marginBottom: '5px'}"></ngx-skeleton-loader>
   </div>
 </div>
 

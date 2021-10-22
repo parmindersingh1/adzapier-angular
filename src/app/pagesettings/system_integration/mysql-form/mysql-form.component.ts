@@ -111,7 +111,9 @@ export class MysqlFormComponent implements OnInit {
     if (this.systemName === 'mailchimp'
       || this.systemName === 'Activecampaign'
       || this.systemName === 'sendinblue'
-      || this.systemName === 'sendgrid') {
+      || this.systemName === 'sendgrid'
+      || this.systemName === 'hubspot'
+      || this.systemName === 'moosend') {
       params.email = this.testEmail;
     }
     this.isTesting = true;

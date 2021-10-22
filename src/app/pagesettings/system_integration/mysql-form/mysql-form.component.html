@@ -93,7 +93,9 @@
           <div class="col-md-6" *ngIf="systemName === 'mailchimp'
           || systemName === 'Activecampaign'
           || systemName === 'sendinblue'
-          || systemName === 'sendgrid'">
+          || systemName === 'sendgrid'
+           || systemName === 'hubspot'
+          || systemName === 'moosend'">
             <div class="form-group w-75">
               <label>Test Email (Only For Testing Connection)</label>
               <input type="email" (change)="onSetTestEmail($event)" class="form-control" />

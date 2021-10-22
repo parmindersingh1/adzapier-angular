@@ -19,6 +19,29 @@ import {NgxUiLoaderService} from 'ngx-ui-loader';
   styleUrls: ['./mailchimp-query-builder.component.scss']
 })
 export class MailchimpQueryBuilderComponent implements OnInit, OnChanges {
+  mailChimpColumns = [
+    'consents_to_one_to_one_messaging',
+  'contact_id',
+  'email_address',
+  'email_client',
+  'email_type',
+  'full_name',
+  'id',
+  'ip_opt',
+  'ip_signup',
+  'language',
+  'last_changed',
+  'list_id',
+  'member_rating',
+  'source',
+  'status',
+  'tags_count',
+  'timestamp_opt',
+  'timestamp_signup',
+  'unique_email_id',
+  'vip',
+  'web_id',
+];
   @Input('formObject') formObject;
   @Input('formID') formID;
   @Input('connectionId') connectionId;
@@ -30,6 +53,7 @@ export class MailchimpQueryBuilderComponent implements OnInit, OnChanges {
   alertMsg: any;
   isOpen = false;
   alertType: any;
+  columnsList = [];
   constructor(private cd: ChangeDetectorRef,
               private integrationService: SystemIntegrationService,
               private activatedRoutes: ActivatedRoute,
@@ -46,7 +70,11 @@ export class MailchimpQueryBuilderComponent implements OnInit, OnChanges {
     this.cd.detectChanges();
   }
   onSubmit() {
+    if (!this.emailAddress || this.columnsList.length === 0) {
+      return false;
+    }
     const payload = [
+      {field: 'columns', system_name: this.systemName, value_1: JSON.stringify(this.columnsList)},
       {field: 'email', value_1: this.emailAddress,  system_name: this.systemName},
     ];
     this.loading.start();
@@ -67,5 +95,17 @@ export class MailchimpQueryBuilderComponent implements OnInit, OnChanges {
 }
   onConnectionListPage() {
     this.backHome.emit(true)
+  }
+  onSelectColumn(column){
+    const  columnsList = [...this.columnsList];
+    if (!columnsList.includes(column)) {
+      columnsList.push(column);
+    } else {
+      const index = this.columnsList.indexOf(column);
+      if (index > -1) {
+        columnsList.splice(index, 1);
+      }
+    }
+    this.columnsList = columnsList;
   }
 }
