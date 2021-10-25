@@ -1,0 +1,51 @@
+<div class="card">
+  <div class="card-body" *ngIf="pageStep === 1">
+    <div class="row">
+      <div class="form-group col-md-5">
+        <label for="exampleFormControlSelect1">Email Address</label>
+        <select class="form-control" id="exampleFormControlSelect1" [(ngModel)]="emailAddress">
+          <ng-container  *ngFor="let option of formObject.request_form">
+            <option [value]="option.controlId" *ngIf="option.controlId === 'email'">form.{{option.controllabel}}</option>
+            <option [value]="option.controlId" *ngIf="option.controlId.slice(0, 11) === 'CustomInput'">form.{{option.controllabel}}</option>
+          </ng-container>
+        </select>
+        <p class="mt-3 text-danger" *ngIf="emailAddress === ''">Email is Required</p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12 mb-3"><h5>Choose Columns</h5></div>
+      <div class="col-md-2 mb-3" *ngFor="let column of sendGrid">
+        <button pButton pRipple type="button" (click)="onSelectColumn(column)"   [ngClass]="{'p-button-text' : !columnsList.includes(column)}"
+                class="p-button-raised"><span class="text-over"> {{column.replace('_', ' ').replace('_', ' ')}}</span></button>
+      </div>
+      <div class="col-md-12" *ngIf="columnsList.length === 0">
+        <p class="text-danger tx-bold"> Choose minimum 1 column </p>
+      </div>
+    </div>
+    <div class="row mt-4 mb-5 margin-auto">
+      <div class="text-center margin-auto">
+        <button pButton pRipple type="button" (click)="onConnectionListPage()" label="Cancel" class="p-button-secondary mr-3"></button>
+        <button pButton pRipple type="button" (click)="onSubmit()" label="Save"></button>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="card-body" *ngIf="pageStep === 2">
+    <div class="row">
+      <div class="col-md-12 mt-5 text-center mb-5">
+        <h5><i style="font-size: 40px;" class="fas fa-check-circle tx-success mr-2"></i><span style="vertical-align: super;"> The Connection Configuration Successfully Saved </span></h5>
+        <button class="btn btn-link" type="button" (click)="onConnectionListPage()"><i class="fas fa-chevron-left mr-2"></i> Back to connection list</button>
+      </div>
+    </div>
+  </div>
+
+
+</div>
+
+
+
+<div class="col-sm-5 mr-0 float-right flotingdiv" [ngClass]="{'hide':!isOpen}">
+  <alert *ngIf="isOpen" [type]="alertType" dismissOnTimeout="5000"
+  ><span [innerHTML]="alertMsg"></span></alert>
+</div>

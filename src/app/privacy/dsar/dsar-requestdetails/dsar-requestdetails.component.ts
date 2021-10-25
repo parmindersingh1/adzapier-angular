@@ -19,6 +19,7 @@ import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { TablePaginationConfig } from 'src/app/_models/tablepaginationconfig';
 import { moduleName } from '../../../_constant/module-name.constant';
 import { formatDate } from '@angular/common';
+import {SystemIntegrationService} from '../../../_services/system_integration.service';
 @Component({
   selector: 'app-dsar-requestdetails',
   templateUrl: './dsar-requestdetails.component.html',
@@ -226,6 +227,7 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
   isExtendDaysExceeded = false;
   queryOID;
   queryPID;
+  formID;
   requestForm;
   constructor(private activatedRoute: ActivatedRoute,
               private router: Router,
@@ -241,7 +243,8 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
               private loading: NgxUiLoaderService,
               private cdRef: ChangeDetectorRef,
               private userService: UserService,
-              private authService: AuthenticationService
+              private authService: AuthenticationService,
+              private systemIntegrationService: SystemIntegrationService
   ) {
     // this.renderer2.listen('window', 'click', (e: Event) => {
     //   if (e.target !== this.toggleDayleftdiv.nativeElement &&
@@ -266,6 +269,7 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
   //  this.bsValue = new Date();
     this.activatedRoute.paramMap.subscribe(params => {
       this.requestID = params.get('reqid');
+      this.formID = params.get('formID');
       this.queryCompanyID = params.get('companyid');
       this.queryOrgID = params.get('orgid');
       this.queryPropID = params.get('propid');
@@ -333,6 +337,7 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
     this.minDate = new Date();
     this.loadReasonList();
   }
+
   get addActivity() { return this.quillEditorText.controls; }
   get addEmailPost() { return this.quillEditorEmailText.controls; }
   get editRequest() { return this.editRequestDetailForm.controls; }
@@ -429,7 +434,7 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
           this.showReqData(this.duplicateRequest[0]);
         } else{
           this.duplicateRequest.length = 0;
-        } 
+        }
         //        this.selectStageOnPageLoad(this.currentWorkflowStageID);
 
         this.editRequestDetailForm.controls['country'].setValue(this.respCountry);
@@ -947,7 +952,7 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
       "Consumer Name":this.firstName,
       "Company name":this.currentSelectedOrgname,
       "Company name privacy team":this.currentSelectedOrgname,
-      "Company Name":this.currentSelectedOrgname   
+      "Company Name":this.currentSelectedOrgname
    };
     var re = new RegExp(Object.keys(mapObj).join("|"),"gi");
     str = str.replace(re, function(matched){
@@ -1795,7 +1800,7 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
   }
 
   showCustomFieldValues(){
-    let fname; 
+    let fname;
     let lname;
     if(this.customFieldObj !== undefined){
       for(const key in this.customFieldObj){
@@ -1857,7 +1862,7 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
       if(this.duplicateRequest[0].request_data){
          if(this.subject_typeid == JSON.parse(this.duplicateRequest[0].request_data).subject_type[0]){
            this.duplicateReqType = this.subjectType;
-         } 
+         }
          if(this.request_typeid == JSON.parse(this.duplicateRequest[0].request_data).request_type[0]){
           this.duplicateSubType = this.requestType;
          }
@@ -1880,7 +1885,7 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
 
     this.duplicateRequestStatus = this.getStatusStyle(selectedData.request_status);
     let data = JSON.parse(selectedData.request_data);
-    
+
     let result = Object.keys(data).map((key) => [key, data[key]]);
     this.capitalizatFirstLetterForDuplicate(Object.keys(JSON.parse(selectedData.request_data)));
     return this.displayCurrentRequestData = result;
@@ -1896,7 +1901,7 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
       let key = data.replace('_', ' ');
       return key.charAt(0).toUpperCase() + key.slice(1);
     }
-   
+
   }
 
   getStatusStyle(status){
@@ -1911,7 +1916,7 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
   }
 
   reOpenrequest(){
-   
+
     this.dsarRequestService.reopenDeletedDSARRequest( this.currentManagedOrgID,this.currrentManagedPropID, this.requestID,this.constructor.name, moduleName.dsarRequestModule).subscribe((data)=>{
      if(data.status == 200){
       if (this.selectedStages.length !== 0) {
