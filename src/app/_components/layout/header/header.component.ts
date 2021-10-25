@@ -26,6 +26,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
   @Input() isquicklinkclicked:boolean;
   @Input() qslinkobj:any;
   @Input() isqsmenuopen:boolean;
+  @Input() isquickstartdismissed:boolean;
   //@Input() isclickonpage:boolean = false; // for later use
   @ViewChild('confirmTemplate') confirmModal: TemplateRef<any>;
   @ViewChildren(BsDropdownDirective) headerDropdown:QueryList<BsDropdownDirective>;
@@ -147,6 +148,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
   quickstartmenustatus:any;
   istopmenuopened:boolean;
   isborderapplied:boolean;
+  isQSMDismissed:boolean;
   constructor(
     private router: Router,
     private activatedroute: ActivatedRoute,
@@ -238,6 +240,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
   }
 
   ngOnInit() {
+    if (this.quickmenuService.getQuickstartDismissStatus() !== null) {
+      if(this.quickmenuService.getQuickstartDismissStatus().isdismissed){
+        this.isQSMDismissed = !this.quickmenuService.getQuickstartDismissStatus().isqstoplink;
+      }
+    }
     this.quickmenuService.onClickEmitQSLinkobj.pipe(
       takeUntil(this.unsubscribeAfterUserAction$)
     ).subscribe((res) => { 
@@ -1496,7 +1503,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
   }
 
   ngAfterViewInit() {
-    this.quickmenuService.isQSMenuDissmissed.subscribe((status) => this.quickstartmenustatus = status)
+    if (this.quickmenuService.getQuickstartDismissStatus() !== null) {
+      if (this.quickmenuService.getQuickstartDismissStatus().isdismissed) {
+        this.isQSMDismissed = !this.quickmenuService.getQuickstartDismissStatus().isqstoplink;
+      }
+    }
+    this.quickmenuService.isQSMenuDissmissed.subscribe((status) => this.quickstartmenustatus = status);
     this.quickmenuService.isHeaderNavClickedAfterQSDissmissed.subscribe((status) => this.headerNavbarStatusAfterQSDismiss = status);
     console.log(this.headerNavbarStatusAfterQSDismiss,'headerNavbarStatusAfterQSDismiss..');
     if (this.quickstartmenustatus && !this.headerNavbarStatusAfterQSDismiss) {
@@ -1551,6 +1563,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
   }
 
   ngAfterViewChecked(){
+     if (this.quickmenuService.getQuickstartDismissStatus() !== null) {
+      if(this.quickmenuService.getQuickstartDismissStatus().isdismissed){
+        this.isQSMDismissed = !this.quickmenuService.getQuickstartDismissStatus().isqstoplink;
+      }
+    }
     this.userService.isRevisitedQSMenuLink.subscribe((status) => { this.isRevistedLink = status.reclickqslink; this.revisitedQuicklinnkid = status.quickstartid; this.isUserClickedNotRelatedToTooltip = status.urlchanged  });
     //header navbar status clicked status false when Quick start dismiss true
     this.quickmenuService.isQSMenuDissmissed.subscribe((status) => this.quickstartmenustatus = status)
@@ -2109,6 +2126,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
   }
 
   onClickQSLinkFromHeader($event){
+    this.isquickstartdismissed = !this.isquickstartdismissed;
+    this.quickmenuService.setQuickstartDismissStatus({isdismissed:false,isqstoplink:false});
     this.quickmenuService.onDissmissQuickStartmenu.next(false);
   }
 

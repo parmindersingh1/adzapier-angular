@@ -59,6 +59,7 @@ export class AppComponent implements OnInit {
   isloginpage: boolean;
   toggleQuickstartmenu:boolean;
   quicklinkclickedObj;
+  qsmdismissedstatus:boolean;
   //isuserclickonpage:boolean = false; //for later use to check page click event
   constructor(private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -102,6 +103,18 @@ export class AppComponent implements OnInit {
   }
 
   async ngOnInit() {
+    // if (this.quickmenuService.getQuickstartDismissStatus() !== null) {
+    //   this.toggleQuickstartmenu = this.quickmenuService.getQuickstartDismissStatus().isdismissed;
+    // }
+    if (this.quickmenuService.getQuickstartDismissStatus() !== null) {
+      if(this.quickmenuService.getQuickstartDismissStatus().isdismissed){
+        this.toggleQuickstartmenu = this.quickmenuService.getQuickstartDismissStatus().isqstoplink;
+      } else if(this.quickmenuService.getQuickstartDismissStatus().isqstoplink){
+        this.toggleQuickstartmenu = this.quickmenuService.getQuickstartDismissStatus().isdismissed;
+      }else{
+        this.toggleQuickstartmenu = false;
+      }
+    }
     this.quickmenuService.isClickedOnQSMenu.subscribe((data) => {
       if (data) {
         this.qsMenuList = this.quickmenuService.getQuerymenulist();
@@ -193,8 +206,16 @@ export class AppComponent implements OnInit {
     }
   }
 
-  enableQuickStartMenu($event){
-    this.toggleQuickstartmenu = $event;
+  enableQuickStartMenu($event) {
+    if (this.quickmenuService.getQuickstartDismissStatus() !== null) {
+      if(this.quickmenuService.getQuickstartDismissStatus().isdismissed){
+        this.toggleQuickstartmenu = this.quickmenuService.getQuickstartDismissStatus().isqstoplink;
+      } else if(this.quickmenuService.getQuickstartDismissStatus().isqstoplink){
+        this.toggleQuickstartmenu = this.quickmenuService.getQuickstartDismissStatus().isdismissed;
+      }else{
+        this.toggleQuickstartmenu = false;
+      }
+    }
   }
 
   receivedQSLinkObj($event) {
@@ -230,6 +251,11 @@ export class AppComponent implements OnInit {
   }
 
   ngAfterViewInit() {
+    if (this.quickmenuService.getQuickstartDismissStatus() !== null) {
+      if(this.quickmenuService.getQuickstartDismissStatus().isdismissed){
+        this.qsmdismissedstatus = !this.quickmenuService.getQuickstartDismissStatus().isqstoplink;
+      }
+    }
     this.isquickstartopen = this.quickmenuService.isquickstartopen;
     this.quickmenuService.onClickEmitQSLinkobj.subscribe((data) => this.quicklinkclickedObj = data);
     this.cdRef.detectChanges();
@@ -242,6 +268,14 @@ export class AppComponent implements OnInit {
   //   this.qsMenuList = this.quickstartmenuComponent.getupdatedQuickStartMenu();
   // }
   ngAfterViewChecked() {
+    if (this.quickmenuService.getQuickstartDismissStatus() !== null) {
+      if(this.quickmenuService.getQuickstartDismissStatus().isdismissed){
+        this.toggleQuickstartmenu = this.quickmenuService.getQuickstartDismissStatus().isqstoplink;
+      } else if(!this.quickmenuService.getQuickstartDismissStatus().isqstoplink){
+        this.toggleQuickstartmenu = this.quickmenuService.getQuickstartDismissStatus().isdismissed;
+      }
+    }
+
     this.isquickstartopen = this.quickmenuService.isquickstartopen;
     if (this.location.path().indexOf('/login') !== -1 || this.location.path().indexOf('signup') !== -1 || this.location.path().indexOf('resetpswd') !== -1) {
       this.isloginpage = false;
@@ -261,7 +295,7 @@ export class AppComponent implements OnInit {
   }
 
   onPageClick() {
-    if (this.quickmenuService.isclickeventoutsidemenu) {
+    if (this.quickmenuService.isclickeventoutsidemenu && this.quicklinkclickedObj !== undefined) {
       this.userService.onRevistQuickStartmenulink.next({ quickstartid: this.quicklinkclickedObj.linkid, reclickqslink: false, urlchanged: true });
     }
   }
