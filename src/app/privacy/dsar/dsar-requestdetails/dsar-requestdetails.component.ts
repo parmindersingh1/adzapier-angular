@@ -367,6 +367,8 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
 
   onRefresh(){
     this.loadDataRequestDetails();
+    this.loadEmailLog(this.requestID);
+    this.loadActivityLog(this.requestID);
   }
 
 
@@ -1838,6 +1840,8 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
   }
 
   ngAfterViewInit() {
+    this.loadEmailLog(this.requestID);
+    this.loadActivityLog(this.requestID);
     this.cdRef.detectChanges();
   }
 

@@ -12,6 +12,8 @@ import { featuresName } from '../../../_constant/features-name.constant';
 import { BsDropdownDirective } from 'ngx-bootstrap/dropdown';
 import { QuickmenuService } from 'src/app/_services/quickmenu.service';
 import { QuickStart } from 'src/app/_models/quickstart';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { takeUntil } from 'rxjs/operators';
 
 
@@ -26,6 +28,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
   @Input() isquicklinkclicked:boolean;
   @Input() qslinkobj:any;
   @Input() isqsmenuopen:boolean;
+  @Input() isquickstartdismissed:boolean;
   //@Input() isclickonpage:boolean = false; // for later use
   @ViewChild('confirmTemplate') confirmModal: TemplateRef<any>;
   @ViewChildren(BsDropdownDirective) headerDropdown:QueryList<BsDropdownDirective>;
@@ -58,6 +61,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
   public headerStatus: boolean;
   orgList: any;
   currentOrganization: any;
+  searchDecouncer$: Subject<any> = new Subject();
+  public inputSearch = '';
   navigationMenu: any;
   rightItems: any;
   leftItems: any;
@@ -141,12 +146,25 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
   lastopendp:any = [];
   laststoreddp:any = [];
   isShowDashboardConsent = false;
+  SupportList:FormGroup;
+  countries : [];
+  query = '';
+  categories: any;
+  parentID: any;
+  catId: any;
+  CategoryRecord: [];
+  display = true;
+  title: any;
+  SupportLink: string;
+  readytodisplay = false;
+  loader= false;
   actualLinkVisitStatus = false;
   actualLinkObj:any;
   @Output() onClickEnableQuickStartMenu: EventEmitter<any> = new EventEmitter<any>();
   quickstartmenustatus:any;
   istopmenuopened:boolean;
   isborderapplied:boolean;
+  isQSMDismissed:boolean;
   constructor(
     private router: Router,
     private activatedroute: ActivatedRoute,
@@ -160,7 +178,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
     private cdRef: ChangeDetectorRef,
     private renderer: Renderer2,
     private elRef:ElementRef,
-    private quickmenuService:QuickmenuService
+    private quickmenuService:QuickmenuService,
+    private formBuilder: FormBuilder,
   ) {
     this.userclickedoutside = this.quickmenuService.isclickeventoutsidemenu;
     this.isuserClickedonqstooltip = this.quickmenuService.isuserClickedonqstooltip;
@@ -238,6 +257,16 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
   }
 
   ngOnInit() {
+    if (this.quickmenuService.getQuickstartDismissStatus() !== null) {
+      if(this.quickmenuService.getQuickstartDismissStatus().isdismissed){
+        this.isQSMDismissed = !this.quickmenuService.getQuickstartDismissStatus().isqstoplink;
+      }
+    }
+    this.setupSearchDebouncer();
+    this.SupportList = this.formBuilder.group({
+     searchtext:['',]
+    })
+    this.isloginpage = this.location.path().indexOf('login') !== -1;
     this.quickmenuService.onClickEmitQSLinkobj.pipe(
       takeUntil(this.unsubscribeAfterUserAction$)
     ).subscribe((res) => { 
@@ -349,6 +378,102 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
     location.reload();
 
 
+  }
+
+  onClickOpen(){
+    window.open(this.SupportLink);
+  }
+
+  async onNavigateToDetails(consentRecord) {
+  
+    await this.userService.onPushConsentData(consentRecord);
+    // console.log(consentRecord.id)
+    let category : any;
+    category = consentRecord.categories[0];
+    this.parentID =consentRecord.id;
+    this.catId =  category.parent.id;
+    // console.log(consentRecord.categories[0].id);
+    // console.log(category.parent.id);
+    // // await this.router.navigateByUrl('Https://support.adzapier.com/help-center/articles/'+ category.parent.id + '/' + consentRecord.categories[0].id + '/' + consentRecord.id +'/' + consentRecord.title);
+    // if (consentRecord.id !== undefined) {
+    //   await this.router.navigateByUrl('Https://support.adzapier.com/help-center/articles/'+ category.parent.id + '/' + consentRecord.categories[0].id + '/' + consentRecord.id +'/' + consentRecord.title);
+    // }
+    this.SupportLink ='https://support.adzapier.com/help-center/articles/'+ category.parent.id + '/' + consentRecord.categories[0].id + '/' + consentRecord.id +'/' + consentRecord.title;
+    this.onGetSupportDetailsRecord();
+    event.stopPropagation();
+     
+  }
+
+
+  onGetSupportRecord() {
+    this.readytodisplay = false;
+    this.display=true;
+    this.categories='';
+    this.CategoryRecord = [];
+    this.title = '';
+    this.userService.getList(this.constructor.name, moduleName.consentSolutionModule, this.inputSearch, this.categories)
+      .subscribe((res: any) => {
+        this.loading.stop();
+        const result: any = res;
+        if (res) {
+          this.countries = result.pagination.data;
+          //  console.log(this.countries);
+          // this.consentRecordCount = result.count;
+        }
+      }, error => {
+        // this.loading.stop();
+      });
+  }
+
+  onGetSupportDetailsRecord() {
+    this.loader= true;
+    this.display= false;
+    this.categories='';
+    this.userService.getRecordList(this.constructor.name, moduleName.consentSolutionModule, this.parentID, this.catId)
+      .subscribe((res: any) => {
+        this.loading.stop();
+        const result: any = res;
+        if (res) {
+          this.title = result.article.title;
+          this.CategoryRecord = result.article.body.replaceAll(`src="`,`src="https://support.adzapier.com/`);
+          this.readytodisplay=true;
+          this.loader=false;
+          //  console.log(this.CategoryRecord);
+          // this.consentRecordCount = result.count;
+        }
+      }, error => {
+        // this.loading.stop();
+      });
+  }
+
+ public clicktext(){
+          this.SupportList.patchValue({
+            searchtext : ''
+          });
+          this.countries = [];
+          this.CategoryRecord = [];
+          this.title = '';
+          this.readytodisplay = false;
+    
+  }
+
+  public onSearchInputChange(e): void {
+    this.inputSearch = e.target.value;
+    if(this.inputSearch == ''){
+      this.countries = [];
+    }
+    else{
+    this.searchDecouncer$.next(e.target.value);
+    }
+  }
+
+
+  private setupSearchDebouncer(): void {
+    this.searchDecouncer$.pipe(
+      distinctUntilChanged(),
+    ).subscribe((term: string) => {
+      this.onGetSupportRecord();
+    });
   }
 
   editProfile() {
@@ -840,6 +965,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
     if(this.quickDivID == link.navmenuid){//this.qslinkobj.linkid 
       this.updateQuickLinkStatus(link);
       this.isUserclickedActualLink = true;
+      this.isqsmenuopen = true;
     }
     this.onClickBackdrop();
     this.oIDPIDFromURL= this.findPropertyIDFromUrl(this.location.path());
@@ -1495,7 +1621,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
   }
 
   ngAfterViewInit() {
-    this.quickmenuService.isQSMenuDissmissed.subscribe((status) => this.quickstartmenustatus = status)
+    if (this.quickmenuService.getQuickstartDismissStatus() !== null) {
+      if (this.quickmenuService.getQuickstartDismissStatus().isdismissed) {
+        this.isQSMDismissed = !this.quickmenuService.getQuickstartDismissStatus().isqstoplink;
+      }
+    }
+    this.quickmenuService.isQSMenuDissmissed.subscribe((status) => this.quickstartmenustatus = status);
     this.quickmenuService.isHeaderNavClickedAfterQSDissmissed.subscribe((status) => this.headerNavbarStatusAfterQSDismiss = status);
     console.log(this.headerNavbarStatusAfterQSDismiss,'headerNavbarStatusAfterQSDismiss..');
     if (this.quickstartmenustatus && !this.headerNavbarStatusAfterQSDismiss) {
@@ -1550,6 +1681,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
   }
 
   ngAfterViewChecked(){
+     if (this.quickmenuService.getQuickstartDismissStatus() !== null) {
+      if(this.quickmenuService.getQuickstartDismissStatus().isdismissed){
+        this.isQSMDismissed = !this.quickmenuService.getQuickstartDismissStatus().isqstoplink;
+      }
+    }
     this.userService.isRevisitedQSMenuLink.subscribe((status) => { this.isRevistedLink = status.reclickqslink; this.revisitedQuicklinnkid = status.quickstartid; this.isUserClickedNotRelatedToTooltip = status.urlchanged  });
     //header navbar status clicked status false when Quick start dismiss true
     this.quickmenuService.isQSMenuDissmissed.subscribe((status) => this.quickstartmenustatus = status)
@@ -2108,6 +2244,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
   }
 
   onClickQSLinkFromHeader($event){
+    this.isquickstartdismissed = !this.isquickstartdismissed;
+    this.quickmenuService.setQuickstartDismissStatus({isdismissed:false,isqstoplink:false});
     this.quickmenuService.onDissmissQuickStartmenu.next(false);
   }
 
