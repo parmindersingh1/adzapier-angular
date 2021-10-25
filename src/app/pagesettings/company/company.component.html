@@ -19,7 +19,7 @@
                     </h6>
                     <div class="d-flex pd-0">
                         <a routerLink="/settings/organizations" (click)="checkForQsTooltip()" [queryParams]="{oid:queryOID , pid:queryPID}" class="btn btn-sm btn-outline-secondary btn-uppercase mr-2">Add Organization</a>
-                        <button #btnEdit [ngClass]="quickDivID == 1 && quickDivID == currentLinkID && !iswindowclicked ? 'btn-qs-hightlight' : ''" (click)="editOrganizationModalPopup(editCompanyModal, 'edit')"
+                        <button [ngClass]="quickDivID == 1 && quickDivID == currentLinkID && !iswindowclicked ? 'btn-qs-hightlight' : ''" (click)="editOrganizationModalPopup(editCompanyModal, 'edit')"
                             class="btn btn-sm btn-outline-secondary btn-uppercase mr-0">
                             <!-- <i-feather name="edit-2" class="feather-16"></i-feather> -->
                             <i class="fa fa-pen mr-1" aria-hidden="true"></i>

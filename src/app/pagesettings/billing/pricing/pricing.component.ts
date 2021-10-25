@@ -65,6 +65,7 @@ export class PricingComponent implements OnInit, AfterViewInit {
   quickDivID;
   isRevistedLink:boolean;
   currentLinkID:any;
+  iswindowclicked;
   actuallinkstatus:boolean = false;
   
   constructor(private router: Router,
@@ -83,6 +84,7 @@ export class PricingComponent implements OnInit, AfterViewInit {
       this.quickDivID = res.linkid;
       this.callForQuickStart();
     });
+    this.userService.isRevisitedQSMenuLink.subscribe((status) => { this.isRevistedLink = status.reclickqslink; this.currentLinkID = status.quickstartid; this.iswindowclicked = status.urlchanged  });
     //this.userService.isRevisitedQSMenuLink.subscribe((status) => { this.isRevistedLink = status.reclickqslink; this.currentLinkID = status.quickstartid; });
     // this.onGetPlanCompareData()
     this.onGetActivePlan();
@@ -494,6 +496,7 @@ export class PricingComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(){
+    this.userService.isRevisitedQSMenuLink.subscribe((status) => { this.isRevistedLink = status.reclickqslink; this.currentLinkID = status.quickstartid; this.iswindowclicked = status.urlchanged  });
     this.quickmenuService.onClickEmitQSLinkobj.subscribe((res) => { 
       this.quickDivID = res.linkid;
     });
