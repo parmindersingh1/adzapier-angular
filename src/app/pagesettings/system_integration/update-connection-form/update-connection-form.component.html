@@ -91,9 +91,11 @@
       </ng-container>
 
       <div class="col-md-6" *ngIf="systemName === 'mailchimp'
-          || systemName === 'Activecampaign'
+          || systemName === 'activecampaign'
           || systemName === 'sendinblue'
-          || systemName === 'sendgrid'">
+          || systemName === 'sendgrid'
+           || systemName === 'hubspot'
+          || systemName === 'moosend'">
         <div class="form-group w-75">
           <label>Test Email (Only For Testing Connection)</label>
           <input type="email" (change)="onSetTestEmail($event)" class="form-control" />
@@ -115,7 +117,7 @@
         <div class="divider-text"></div>
         <div class="text-center">
           <button type="button" (click)="onReset()" [disabled]="isTesting"  class="btn btn-secondary">Reset</button>
-          <button type="submit" (click)="submitType = 'submit'" [disabled]="isTesting"  class="btn btn-primary ml-4">Update</button>
+          <button type="submit" (click)="submitType = 'submit'" [disabled]="isTesting"  class="btn btn-primary ml-4">Submit</button>
         </div>
       </div>
 

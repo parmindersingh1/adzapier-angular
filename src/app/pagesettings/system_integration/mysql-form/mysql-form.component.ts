@@ -109,7 +109,7 @@ export class MysqlFormComponent implements OnInit {
       system: this.systemName
     };
     if (this.systemName === 'mailchimp'
-      || this.systemName === 'Activecampaign'
+      || this.systemName === 'activecampaign'
       || this.systemName === 'sendinblue'
       || this.systemName === 'sendgrid'
       || this.systemName === 'hubspot'
