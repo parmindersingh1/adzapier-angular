@@ -1518,6 +1518,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
         this.navDirective.select(2);
       }
     } else if (changeEvent.nextId === 3) {
+      this.openModal(this.confirmSaveAlert);
       this.activeId = changeEvent.activeId;
       this.nextId = changeEvent.nextId;
       this.formSaveMethod = 'nav';
@@ -1557,7 +1558,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
       this.basicFormSubmitted = true;
       this.isResetlinkEnable = false;
       if (this.isDirty && this.workflow !== undefined && this.selectedApproverID !== undefined) {
-        this.openModal(this.confirmSaveAlert);
+        // this.openModal(this.confirmSaveAlert);
       }
       else if (this.workflow == undefined || this.selectedApproverID == undefined) {
         this.isdraftsubmitted = true;

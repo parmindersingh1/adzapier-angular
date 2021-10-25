@@ -134,6 +134,15 @@ export class SystemIntegrationService {
   }));
 }
 
+  updateQueryBuilder(componentName, moduleName, payload, oID, connectionID, formID) {
+    const path = '/integration/update-query-builder/' + oID  + '/' + connectionID + '/' + formID;
+    return this.http.post(environment.apiUrl + path, payload)
+      .pipe(catchError(error => {
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.getWorkflow, componentName, moduleName, path);
+        return throwError(error);
+      }));
+  }
+
   GetIntegratedConnectionsList(formID, reqID, componentName, moduleName) {
       const path = `/integration/get-connection-list-with-query-data/` + formID + '/' + reqID;
       return this.http.get(environment.apiUrl + path)
@@ -142,4 +151,13 @@ export class SystemIntegrationService {
           return throwError(error);
         }));
     }
+
+  GetQueryBuilderData(componentName: string, systemIntegrationModule: string, orgID: any, connectionId, formID) {
+    const path = '/integration/get-query-builder-by-id/' + orgID  + '/' + connectionId + '/' + formID;
+    return this.http.get(environment.apiUrl + path)
+      .pipe(catchError(error => {
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.getWorkflow, componentName, systemIntegrationModule, path);
+        return throwError(error);
+      }));
+  }
 }

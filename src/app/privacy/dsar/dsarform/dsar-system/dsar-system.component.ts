@@ -1,4 +1,13 @@
-import {ChangeDetectorRef, Component, Input, OnInit, TemplateRef, ViewChild} from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+  TemplateRef,
+  ViewChild
+} from '@angular/core';
 import {moduleName} from '../../../../_constant/module-name.constant';
 import {SystemIntegrationService} from '../../../../_services/system_integration.service';
 import {LazyLoadEvent} from 'primeng/api';
@@ -12,7 +21,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
   templateUrl: './dsar-system.component.html',
   styleUrls: ['./dsar-system.component.scss']
 })
-export class DsarSystemComponent implements OnInit {
+export class DsarSystemComponent implements OnInit, OnChanges {
   modalRef: BsModalRef;
   eventRows = 10;
   credList = [];
@@ -64,6 +73,11 @@ export class DsarSystemComponent implements OnInit {
       email: ['', Validators.required],
     });
   }
+  ngOnChanges(changes: SimpleChanges) {
+    // this.formObject = changes;
+    // console.log('formDAta', this.formObject);
+  }
+
   get f() { return this.mailChimpForm.controls; }
 
   onGetSystemList() {
