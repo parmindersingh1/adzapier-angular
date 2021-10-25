@@ -153,7 +153,7 @@ export class QuickstartmenuComponent implements OnInit, AfterViewInit,AfterViewC
         // }
       }
     }else{
-      this.alertMsg = "previous quick start link is not selected";
+      this.alertMsg = "Please complete the previous steps";
       this.isOpenalertMsg = true;
       this.alertType = 'info';
       return false;
@@ -183,7 +183,7 @@ export class QuickstartmenuComponent implements OnInit, AfterViewInit,AfterViewC
       this.router.navigate(['settings/organizations/details', oIDPIDFromURL[0]], { queryParams: { oid: oIDPIDFromURL[0], pid: oIDPIDFromURL[1] }, queryParamsHandling: 'merge', skipLocationChange: false });
     }
     }else{
-      this.alertMsg = "previous quick start link is not selected";
+      this.alertMsg = "Please complete the previous steps";
       this.isOpenalertMsg = true;
       this.alertType = 'info';
       return false;
