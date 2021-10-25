@@ -107,7 +107,8 @@ export class QuickstartmenuComponent implements OnInit, AfterViewInit,AfterViewC
     this.isOpen = false;
     this.showQuickStartMenu = false;//!this.showQuickStartMenu;
     this.quickmenuService.isquickmenudismiss = true;
-    this.enablequickstartfromtopmenu = true;
+   // this.enablequickstartfromtopmenu = true;
+    this.quickmenuService.setQuickstartDismissStatus({isdismissed:true,isqstoplink:true});
     this.quickmenuService.onDissmissQuickStartmenu.next(true); 
     this.quickmenuService.headerNavStatusAfterDismissedQuickStart.next(false);
   }
@@ -317,7 +318,7 @@ export class QuickstartmenuComponent implements OnInit, AfterViewInit,AfterViewC
             return true
           }//temporary condition later remove..
           const previousidx = a.findIndex((t) => t.index == objindex - 1);
-          const islastitemofPreviousIdChecked = a[previousidx].quicklinks[a[previousidx].quicklinks.length - 1].isactualbtnclicked == true || a[previousidx].quicklinks[a[previousidx].quicklinks.length - 1].linkid !== 17;
+          const islastitemofPreviousIdChecked = a[previousidx].quicklinks[a[previousidx].quicklinks.length - 1].isactualbtnclicked == true && a[previousidx].quicklinks[a[previousidx].quicklinks.length - 1].linkid !== 17;
           if (islastitemofPreviousIdChecked) {
             return true;
           } else {
@@ -343,7 +344,7 @@ export class QuickstartmenuComponent implements OnInit, AfterViewInit,AfterViewC
   }
 
   ngAfterViewChecked(){
-    this.quickmenuService.isQSMenuDissmissed.subscribe((status)=>this.enablequickstartfromtopmenu = status);
+    //this.quickmenuService.isQSMenuDissmissed.subscribe((status)=>this.enablequickstartfromtopmenu = status);
     this.oneAtATime = true;
     this.cdRef.detectChanges();
   }
