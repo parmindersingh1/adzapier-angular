@@ -1550,6 +1550,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
         }
       }
     } else if (changeEvent.nextId === 4) {
+      // this.openModal(this.confirmSaveAlert);
       this.formSaveMethod = 'nav';
       this.activeId = changeEvent.activeId;
       this.nextId = changeEvent.nextId;
