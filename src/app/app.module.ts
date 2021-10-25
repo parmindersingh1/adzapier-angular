@@ -74,7 +74,8 @@ import { QuickstartmenuComponent } from './_components/quickstartmenu/quickstart
     // TabsModule.forRoot(),
     // AccordionModule.forRoot(),
     NgbCollapseModule,
-    NgbModule
+    NgbModule,
+
   ],
   providers: [
     NgxUiLoaderService,

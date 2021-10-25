@@ -1,0 +1,24 @@
+<div class="card">
+  <div class="card-header">
+    <h5 class="float-left">Connection Details - {{connectionDetails?.connectionName}}</h5>
+    <p class="float-right font-weight-bold tx-15" (click)="goBack()"><i class="fas fa-chevron-left"></i>
+      Go Back</p>
+  </div>
+  <div class="card-body mt-3">
+    <div class="row">
+      <div class="col-md-6" *ngFor="let column of getColumnsParse(connectionDetails?.columns)">
+
+        <div class="row">
+          <div class="col-md-4">
+            <h6>{{column.replaceAll('_', ' ')}}</h6>
+          </div>
+          <div class="col-md-8">
+            <p>{{connectionDetails?.response?.results[0]?.properties[column]}}</p>
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+  </div>
+</div>
