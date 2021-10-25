@@ -121,7 +121,7 @@
 
 
             <button data-toggle="tooltip" data-placement="top"
-              [ngClass]="quickDivID == 5 || quickDivID == 6 || quickDivID == 11 || quickDivID == 12 || quickDivID == 18 || quickDivID == 19 && quickDivID == currentLinkID && !iswindowclicked ? 'btn-qs-pricing-hightlight' : ''"
+              [ngClass]="(quickDivID == 5 || quickDivID == 6 || quickDivID == 11 || quickDivID == 12 || quickDivID == 18 || quickDivID == 19) && quickDivID == currentLinkID && !iswindowclicked ? 'btn-qs-pricing-hightlight' : ''"
               [title]="plan.price <=  activeData.cookieConsent.maxPrice ? 'You can not downgrade your plan' : 'Add to Cart'"
               *ngIf="plan.price !=  activeData.cookieConsent.maxPrice"
               [disabled]="plan.price <=  activeData.cookieConsent.maxPrice" (click)="onAddToCart(plan, planUnit);checkForQsTooltip();"
@@ -131,7 +131,7 @@
            
             
             
-            <button *ngIf="plan.price ==  activeData.cookieConsent.maxPrice"  [ngClass]="quickDivID == 5 || quickDivID == 6 || quickDivID == 11 || quickDivID == 12 || quickDivID == 18 || quickDivID == 19 && quickDivID == currentLinkID && !iswindowclicked ? 'btn-qs-pricing-hightlight' : ''"  (click)="onGenerateSessionID();checkForQsTooltip();"
+            <button *ngIf="plan.price ==  activeData.cookieConsent.maxPrice"  [ngClass]="(quickDivID == 5 || quickDivID == 6 || quickDivID == 11 || quickDivID == 12 || quickDivID == 18 || quickDivID == 19) && quickDivID == currentLinkID && !iswindowclicked ? 'btn-qs-pricing-hightlight' : ''"  (click)="onGenerateSessionID();checkForQsTooltip();"
               class="btn mt-4 mb-4 add-to-cart-btn btn-primary btn-block">
               Manage Plan
             </button>
@@ -154,7 +154,7 @@
             <h2 class="tx-rubik tx-normal ">Contact Us</h2>
             <p class="tx-size-10 mg-b-30 "></p>
             <a (click)="checkForQSTooltipForEnterprisebt()" href="https://adzapier.com/get-started/" target="_blank" 
-            [ngClass]="quickDivID == 5 || quickDivID == 6 || quickDivID == 11 || quickDivID == 12 || quickDivID == 18 || quickDivID == 19 && quickDivID == currentLinkID && !iswindowclicked ? 'btn-qs-pricing-hightlight' : ''"
+            [ngClass]="(quickDivID == 5 || quickDivID == 6 || quickDivID == 11 || quickDivID == 12 || quickDivID == 18 || quickDivID == 19) && quickDivID == currentLinkID && !iswindowclicked ? 'btn-qs-pricing-hightlight' : ''"
               class="enterprise-btn btn mb-4 add-to-cart-btn btn-primary btn-block">Get Enterprise</a>
           </div><!-- col -->
         </div>
@@ -224,7 +224,7 @@
             </div>
 
 
-            <button data-toggle="tooltip" data-placement="top"  [ngClass]="quickDivID == 5 || quickDivID == 6 || quickDivID == 11 || quickDivID == 12 || quickDivID == 18 || quickDivID == 19 && quickDivID == currentLinkID && !iswindowclicked ? 'btn-qs-pricing-hightlight' : ''" 
+            <button data-toggle="tooltip" data-placement="top"  [ngClass]="(quickDivID == 5 || quickDivID == 6 || quickDivID == 11 || quickDivID == 12 || quickDivID == 18 || quickDivID == 19) && quickDivID == currentLinkID && !iswindowclicked ? 'btn-qs-pricing-hightlight' : ''" 
               [title]="plan.price <=  activeData.dsar.maxPrice ? 'You can not downgrade your plan' : 'Add to Cart'"
               *ngIf="plan.price !=  activeData.dsar.maxPrice" [disabled]="plan.price <=  activeData.dsar.maxPrice"
               (click)="onAddToCart(plan, planUnit);checkForQsTooltip();" class="btn mt-4 mb-4 add-to-cart-btn btn-primary btn-block">
@@ -232,7 +232,7 @@
             </button>
 
 
-            <button *ngIf="plan.price ==  activeData.dsar.maxPrice"  [ngClass]="quickDivID == 5 || quickDivID == 6 || quickDivID == 11 || quickDivID == 12 || quickDivID == 18 || quickDivID == 19 && quickDivID == currentLinkID && !iswindowclicked ? 'btn-qs-pricing-hightlight' : ''"  (click)="onGenerateSessionID()"
+            <button *ngIf="plan.price ==  activeData.dsar.maxPrice"  [ngClass]="(quickDivID == 5 || quickDivID == 6 || quickDivID == 11 || quickDivID == 12 || quickDivID == 18 || quickDivID == 19) && quickDivID == currentLinkID && !iswindowclicked ? 'btn-qs-pricing-hightlight' : ''"  (click)="onGenerateSessionID()"
               class="btn mt-4 mb-4 add-to-cart-btn btn-primary btn-block">
               Manage Plan
             </button>
@@ -254,7 +254,7 @@
             <h2 class="tx-rubik tx-normal ">Contact Us</h2>
             <p class="tx-size-10 mg-b-30 "></p>
             <a (click)="checkForQSTooltipForEnterprisebt()" href="https://adzapier.com/get-started/" target="_blank" 
-            [ngClass]="quickDivID == 5 || quickDivID == 6 || quickDivID == 11 || quickDivID == 12 || quickDivID == 18 || quickDivID == 19 && quickDivID == currentLinkID && !iswindowclicked ? 'btn-qs-pricing-hightlight' : ''"
+            [ngClass]="(quickDivID == 5 || quickDivID == 6 || quickDivID == 11 || quickDivID == 12 || quickDivID == 18 || quickDivID == 19) && quickDivID == currentLinkID && !iswindowclicked ? 'btn-qs-pricing-hightlight' : ''"
               class="enterprise-btn btn mb-4 add-to-cart-btn btn-primary btn-block">Get Enterprise</a>
           </div><!-- col -->
         </div>
@@ -333,7 +333,7 @@
 
 
             <button data-toggle="tooltip" data-placement="top"
-              [ngClass]="quickDivID == 5 || quickDivID == 6 || quickDivID == 11 || quickDivID == 12 || quickDivID == 18 || quickDivID == 19 && quickDivID == currentLinkID && !iswindowclicked ? 'btn-qs-pricing-hightlight' : ''"
+              [ngClass]="(quickDivID == 5 || quickDivID == 6 || quickDivID == 11 || quickDivID == 12 || quickDivID == 18 || quickDivID == 19) && quickDivID == currentLinkID && !iswindowclicked ? 'btn-qs-pricing-hightlight' : ''"
               [title]="plan.price <=  activeData.consentPreference.maxPrice ? 'You can not downgrade your plan' : 'Add to Cart'"
               *ngIf="plan.price !=  activeData.consentPreference.maxPrice"
               [disabled]="plan.price <=  activeData.consentPreference.maxPrice" (click)="onAddToCart(plan, planUnit);checkForQsTooltip();"
@@ -342,7 +342,7 @@
             </button>
 
 
-            <button *ngIf="plan.price ==  activeData.consentPreference.maxPrice"  [ngClass]="quickDivID == 5 || quickDivID == 6 || quickDivID == 11 || quickDivID == 12 || quickDivID == 18 || quickDivID == 19 && quickDivID == currentLinkID && !iswindowclicked ? 'btn-qs-pricing-hightlight' : ''"  (click)="onGenerateSessionID()"
+            <button *ngIf="plan.price ==  activeData.consentPreference.maxPrice"  [ngClass]="(quickDivID == 5 || quickDivID == 6 || quickDivID == 11 || quickDivID == 12 || quickDivID == 18 || quickDivID == 19) && quickDivID == currentLinkID && !iswindowclicked ? 'btn-qs-pricing-hightlight' : ''"  (click)="onGenerateSessionID()"
               class="btn mt-4 mb-4 add-to-cart-btn btn-primary btn-block">
               Manage Plan
             </button>
@@ -366,7 +366,7 @@
             <h2 class="tx-rubik tx-normal ">Contact Us</h2>
             <p class="tx-size-10 mg-b-30 "></p>
             <a (click)="checkForQSTooltipForEnterprisebt()" href="https://adzapier.com/get-started/" target="_blank"
-              [ngClass]="quickDivID == 5 || quickDivID == 6 || quickDivID == 11 || quickDivID == 12 || quickDivID == 18 || quickDivID == 19 && quickDivID == currentLinkID && !iswindowclicked ? 'btn-qs-pricing-hightlight' : ''"
+              [ngClass]="(quickDivID == 5 || quickDivID == 6 || quickDivID == 11 || quickDivID == 12 || quickDivID == 18 || quickDivID == 19) && quickDivID == currentLinkID && !iswindowclicked ? 'btn-qs-pricing-hightlight' : ''"
               class="enterprise-btn btn mb-4 add-to-cart-btn btn-primary btn-block">Get Enterprise</a>
           </div><!-- col -->
         </div>

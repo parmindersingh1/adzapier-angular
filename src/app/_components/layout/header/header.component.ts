@@ -1793,6 +1793,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
       //  this.isBackdropclicked = true; // 6
       } else {
         this.isquicklinkclicked = false;//!this.qslinkobj.islinkclicked;
+        this.quickDivID = "";
+        this.qslinkobj = {};
       }
     } else if(this.qslinkobj == undefined && this.isHeaderNavbarClicked){
       return true;
@@ -1804,6 +1806,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
       });
     }
     this.cdRef.detectChanges();
+    this.quickDivID = "";
+    this.qslinkobj = {};
+    this.lastopendp = [];
   }
  
   
@@ -2073,10 +2078,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
     
 
   ngOnChanges(changes: SimpleChanges) {
-    if(this.isHeaderNavbarClicked && !this.istopmenuopened){
+    if(this.isHeaderNavbarClicked && this.istopmenuopened){
       this.topheaderDropdown.hide(); // incase after selecting from qsm user navigate from header nav then open dropdown need to close
     //  this.lastopendp = []; 
       this.triggerDropdownForQSM();
+    } else if(this.isHeaderNavbarClicked && this.topheaderDropdown !== undefined){
+      this.topheaderDropdown.hide(); 
     }
     this.quickLinkObj = this.quickmenuService.qsMenuobjwithIndexid;
    // this.isloginpage = this.location.path().indexOf('login') == -1 && this.location.path().indexOf('signup') == -1;

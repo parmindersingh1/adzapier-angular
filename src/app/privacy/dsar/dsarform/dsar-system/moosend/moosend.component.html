@@ -25,7 +25,8 @@
     <div class="row mt-4 mb-5 margin-auto">
       <div class="text-center margin-auto">
         <button pButton pRipple type="button" (click)="onConnectionListPage()" label="Cancel" class="p-button-secondary mr-3"></button>
-        <button pButton pRipple type="button" (click)="onSubmit()" label="Save"></button>
+        <button  *ngIf="!isUpdate" pButton pRipple type="button" (click)="onSubmit()" label="Save"></button>
+        <button *ngIf="isUpdate" pButton pRipple type="button" (click)="onSubmit()" label="Update"></button>
       </div>
 
     </div>
