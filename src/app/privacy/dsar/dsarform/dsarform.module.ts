@@ -24,9 +24,10 @@ import { SendInBlueComponent } from './dsar-system/send-in-blue/send-in-blue.com
 import { SendGridComponent } from './dsar-system/send-grid/send-grid.component';
 import { MoosendComponent } from './dsar-system/moosend/moosend.component';
 import { HubspotQueryBuilderComponent } from './dsar-system/hubspot-query-builder/hubspot-query-builder.component';
+import { UpdateSqlQueryBuilderComponent } from './dsar-system/sql-query-builder/update-sql-query-builder/update-sql-query-builder.component';
 
 @NgModule({
-  declarations: [DsarformComponent, DsarSystemComponent, SqlQueryBuilderComponent, MailchimpQueryBuilderComponent, ActiveCampaignComponent, SendInBlueComponent, SendGridComponent, MoosendComponent, HubspotQueryBuilderComponent],
+  declarations: [DsarformComponent, DsarSystemComponent, SqlQueryBuilderComponent, MailchimpQueryBuilderComponent, ActiveCampaignComponent, SendInBlueComponent, SendGridComponent, MoosendComponent, HubspotQueryBuilderComponent, UpdateSqlQueryBuilderComponent],
   imports: [
     FormsModule,
     ReactiveFormsModule,

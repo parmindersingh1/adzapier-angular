@@ -1,28 +1,26 @@
 import {
   ChangeDetectorRef,
   Component,
+  EventEmitter,
   Input,
   OnChanges,
   OnInit,
   Output,
-  SimpleChanges,
-  TemplateRef,
-  EventEmitter
+  SimpleChanges
 } from '@angular/core';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
-import {LazyLoadEvent} from 'primeng/api';
-import {moduleName} from '../../../../../_constant/module-name.constant';
-import {NgxUiLoaderService} from 'ngx-ui-loader';
-import {SystemIntegrationService} from '../../../../../_services/system_integration.service';
 import {QueryBuilderConfig} from 'angular2-query-builder';
+import {NgxUiLoaderService} from 'ngx-ui-loader';
+import {SystemIntegrationService} from '../../../../../../_services/system_integration.service';
 import {ActivatedRoute} from '@angular/router';
+import {moduleName} from '../../../../../../_constant/module-name.constant';
 
 @Component({
-  selector: 'app-sql-query-builder',
-  templateUrl: './sql-query-builder.component.html',
-  styleUrls: ['./sql-query-builder.component.scss']
+  selector: 'app-update-sql-query-builder',
+  templateUrl: './update-sql-query-builder.component.html',
+  styleUrls: ['./update-sql-query-builder.component.scss']
 })
-export class SqlQueryBuilderComponent implements OnInit, OnChanges {
+export class UpdateSqlQueryBuilderComponent implements OnInit, OnChanges {
   modalRef: BsModalRef;
   eventRows;
   credList = [];
@@ -35,13 +33,14 @@ export class SqlQueryBuilderComponent implements OnInit, OnChanges {
   isTesting = false;
   tableListKey = '';
   tableList = [];
-  skLoadingArray = [1,2, 3,4, 5,6, 1,2, 3,4];
+  skLoadingArray = [1, 2, 3, 4, 5, 6, 1, 2, 3, 4];
+  tableNameText = '';
   @Input('formObject') formObject;
   @Input('formID') formID;
   @Input('connectionId') connectionId;
   @Input('systemName') systemName;
+  @Input('updateData') updateData;
   @Output('backHome') backHome = new EventEmitter();
-  updateData = null;
   sqlSelectField = [];
   tableColumnsListKey = '';
   tableColumnsList = [];
@@ -60,35 +59,46 @@ export class SqlQueryBuilderComponent implements OnInit, OnChanges {
   };
   tableName = null;
   orgID = null;
-  isUpdate = false;
+  whereCluase = null;
+
   constructor(private modalService: BsModalService,
               private loading: NgxUiLoaderService,
               private cd: ChangeDetectorRef,
               private systemIntegrationService: SystemIntegrationService,
               private activatedRoutes: ActivatedRoute
-              ) { }
+  ) {
+  }
 
   ngOnInit(): void {
     this.activatedRoutes.queryParams.subscribe(params => {
-      this.orgID =  params.oid;
+      this.orgID = params.oid;
     });
     this.onFindTables();
-    this.onGetSavedData();
-
+    this.onFillEditContent();
   }
 
-  onGetSavedData() {
-    this.systemIntegrationService.GetQueryBuilderData(this.constructor.name,
-      moduleName.systemIntegrationModule, this.orgID, this.connectionId, this.formID).subscribe((res: any) => {
-      if (res.status === 200) {
-        if (res.response.length > 0) {
-          this.updateData = res.response;
-          this.isUpdate = true;
-        }
+  onFillEditContent() {
+    const queryOption = [];
+    for (const option of this.formObject.request_form) {
+      queryOption.push({name: 'Form.' + option.controllabel, value: option.controlId});
+    }
+    for (const data of this.updateData) {
+      if (data.field === 'table') {
+        (async () => {
+          this.tableNameText = data.value_1;
+          await this.onSelectTable(data.value_1);
+        })();
       }
-    });
+      if (data.field === 'select') {
+        this.sqlSelectField = JSON.parse(data.value_1);
+      }
+      if (data.field === 'where') {
+        this.whereCluase = JSON.parse(data.value_1);
+      }
+    }
   }
-  onFindTables(){
+
+  onFindTables() {
     this.skLoading.one = true;
     this.systemIntegrationService.GetSqlTables(this.constructor.name, this.connectionId, moduleName.systemIntegrationModule)
       .subscribe((res: any) => {
@@ -106,48 +116,73 @@ export class SqlQueryBuilderComponent implements OnInit, OnChanges {
         this.alertType = 'danger';
       });
   }
+
   ngOnChanges(changes: SimpleChanges) {
     this.formObject = changes.formObject.currentValue;
     this.cd.detectChanges();
   }
 
   onSelectTable(tableName) {
-    this.tableName = tableName;
-    // this.loading.start();
-    const params = {
-      table: tableName
-    };
-    this.cd.detectChanges();
-    this.step.push(2);
-    this.skLoading.two = true;
-    this.systemIntegrationService.GetSqlTableColumns(this.constructor.name, this.connectionId, params, moduleName.systemIntegrationModule)
-      .subscribe((res: any) => {
-        // this.loading.stop();
-        this.skLoading.two = false;
-        if (res.status === 200) {
-          this.sqlSelectField = [];
-          this.tableColumnsList = res.response;
-          this.tableColumnsListKey = res.columns[0];
-          this.onCreateSqlBuilder();
-        }
-      }, error => {
-        this.skLoading.two = false;
-        // this.loading.stop();
-      });
+    return new Promise((resolve, rejects) => {
+      this.tableName = tableName;
+      // this.loading.start();
+      const params = {
+        table: tableName
+      };
+      this.cd.detectChanges();
+      this.step.push(2);
+      this.skLoading.two = true;
+      this.systemIntegrationService.GetSqlTableColumns(this.constructor.name, this.connectionId, params, moduleName.systemIntegrationModule)
+        .subscribe((res: any) => {
+          // this.loading.stop();
+          this.skLoading.two = false;
+          if (res.status === 200) {
+            this.tableColumnsList = res.response;
+            this.tableColumnsListKey = res.columns[0];
+            this.onCreateSqlBuilder();
+            resolve(true);
+          }
+        }, error => {
+          this.skLoading.two = false;
+          // this.loading.stop();
+          this.tableColumnsList = [];
+          this.isOpen = true;
+          this.alertMsg = error.message;
+          this.alertType = 'danger';
+          rejects(true);
+        });
+
+    });
   }
+
   onCreateSqlBuilder() {
     const queryOption = [];
     for (const option of this.formObject.request_form) {
       queryOption.push({name: 'Form.' + option.controllabel, value: option.controlId});
     }
-    this.query.rules.push({field: this.tableColumnsList[0][this.tableColumnsListKey],  operators: ['=', '<=', '>'], value: ''});
+    const fieldsData = {};
     for (const column of this.tableColumnsList) {
-      this.config.fields[column[this.tableColumnsListKey]] = {name: column[this.tableColumnsListKey], type: 'category',  operators: ['=', '<=', '>'], options: queryOption};
+      fieldsData[column[this.tableColumnsListKey]] = {
+        name: column[this.tableColumnsListKey],
+        type: 'category',
+        operators: ['=', '<=', '>'],
+        options: queryOption
+      };
     }
+    const dataRules = this.whereCluase.rules;
+    const conditionType = this.whereCluase.condition;
+    this.query = {
+      condition: conditionType,
+      rules: dataRules
+    };
+
+    this.config = {
+      fields: fieldsData
+    };
   }
 
   onSelectField(field) {
-    const  sqlSelectField = [...this.sqlSelectField];
+    const sqlSelectField = [...this.sqlSelectField];
     if (!sqlSelectField.includes(field)) {
       sqlSelectField.push(field);
     } else {
@@ -158,20 +193,22 @@ export class SqlQueryBuilderComponent implements OnInit, OnChanges {
     }
     this.sqlSelectField = sqlSelectField;
   }
-  onSaveSqlBuilder() {
+
+  onUpdateSqlBuilder() {
     const payload = [
       {field: 'select', value_1: JSON.stringify(this.sqlSelectField), system_name: this.systemName},
       {field: 'where', value_1: JSON.stringify(this.query), system_name: this.systemName},
       {field: 'table', value_1: this.tableName, system_name: this.systemName}
     ];
     this.loading.start();
-    this.systemIntegrationService.saveQueryBuilder(this.constructor.name, moduleName.systemIntegrationModule, payload, this.orgID, this.connectionId, this.formID).subscribe((res: any) => {
+    this.systemIntegrationService.updateQueryBuilder(this.constructor.name, moduleName.systemIntegrationModule, payload, this.orgID, this.connectionId, this.formID).subscribe((res: any) => {
       this.loading.stop();
       if (res.status === 201) {
-              this.sqlPageStep = 2;
-              this.isOpen = true;
-              this.alertMsg = 'Record Saved';
-              this.alertType = 'info';
+        this.sqlPageStep = 2;
+        this.isOpen = true;
+        this.alertMsg = 'Record Updated';
+        this.alertType = 'info';
+        this.backHome.emit(true);
       }
     }, error => {
       this.loading.stop();
@@ -180,6 +217,7 @@ export class SqlQueryBuilderComponent implements OnInit, OnChanges {
       this.alertType = 'danger';
     })
   }
+
   onConnectionListPage() {
     this.backHome.emit(true)
   }

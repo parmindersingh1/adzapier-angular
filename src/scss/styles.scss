@@ -415,7 +415,7 @@ ul.helpcenter-menu-right::after{
     z-index: 1040;
   }
 
-  
+
 .btn-qs-hightlight{
     border: 1px solid #2446a4;
     box-shadow: 0px 0px 5px #2446a4;
@@ -452,4 +452,10 @@ ul.helpcenter-menu-right::after{
 
 
 
+.back-to-list-btn {
+  border-bottom: 2px solid;
+  padding-bottom: 7px;
+  cursor: pointer;
+  float: right;
+}
 

@@ -6,6 +6,8 @@
   </div>
   <form [ngStyle]="{display: pageStep === 1 ? 'block' : 'none'}"  (ngSubmit)="onSubmit()">
   <div class="card-body" [formGroup]="httpQueryBuilderForm">
+    <a href="javascript:;" class="back-to-list-btn mb-2" (click)="backHome.emit(true)"><i class="fas fa-chevron-left"></i> GoBack</a>
+
     <div class="row">
         <div class="col-md-6">
           <div class="form-group">

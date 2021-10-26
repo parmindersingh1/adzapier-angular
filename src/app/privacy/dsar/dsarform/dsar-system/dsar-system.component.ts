@@ -15,6 +15,7 @@ import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
 import {QueryBuilderConfig} from 'angular2-query-builder';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
   selector: 'app-dsar-system',
@@ -59,16 +60,21 @@ export class DsarSystemComponent implements OnInit, OnChanges {
   @ViewChild('mailChimpConnection', {static: true}) mailChimpConnection;
   mailChimpForm: FormGroup;
   submitted = false;
-
+  configuredConnectionID = [];
   constructor(private systemIntegrationService: SystemIntegrationService,
               private loading: NgxUiLoaderService,
               private formBuilder: FormBuilder,
               private modalService: BsModalService,
+              private activatedRoutes: ActivatedRoute,
               private cd: ChangeDetectorRef) { }
   ngOnInit(): void {
     console.log('formObject', this.formObject);
+    this.activatedRoutes.queryParams.subscribe(params => {
+      this.orgID = params.oid;
+    });
     this.onGetSystemList();
     this.onGetCredList();
+    this.onGetConnectionID();
     this.mailChimpForm = this.formBuilder.group({
       email: ['', Validators.required],
     });
@@ -87,6 +93,33 @@ export class DsarSystemComponent implements OnInit, OnChanges {
       }, error => {
       });
   }
+
+  onGetConnectionID() {
+    // this.loading.start('step2');
+    const payload = {
+      limit: this.eventRows,
+      page: this.firstone
+    };
+    this.skLoading = true;
+    this.systemIntegrationService.GetConnectionID(this.constructor.name,  moduleName.systemIntegrationModule, this.orgID, this.formID)
+      .subscribe((res: any) => {
+        this.skLoading = false;
+        if (res.status === 200) {
+          const connectionID = [...this.configuredConnectionID];
+          for (const connection of res.response) {
+            connectionID.push(connection.connection_id);
+          }
+          this.configuredConnectionID = connectionID;
+        }
+      }, error => {
+        this.isOpen = true;
+        this.alertMsg = error;
+        this.alertType = 'error';
+        this.skLoading = false;
+        // this.loading.stop('step2');
+      });
+  }
+
   onGetCredList() {
     // this.loading.start('step2');
     const payload = {
