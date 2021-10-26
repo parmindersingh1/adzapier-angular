@@ -362,7 +362,7 @@
               </thead>
               <tbody>
               <tr *ngFor="let obj of consentDetails">
-                <td class="tx-normal text-capitalize pl-4">{{obj.status.replace('_', ' ').replace('_', ' ')}}</td>
+                <td class="tx-normal text-capitalize pl-4">{{obj.status.replaceAll('_', ' ')}}</td>
                 <td class="tx-normal text-right">{{obj.allow_essantial_count ? obj.allow_essantial_count : 0}}</td>
                 <td class="tx-medium text-right"> {{obj.allow_analytics_count ? obj.allow_analytics_count : 0}}</td>
                 <td class="tx-medium text-right"> {{obj.allow_advertising_count ? obj.allow_advertising_count : 0}}</td>

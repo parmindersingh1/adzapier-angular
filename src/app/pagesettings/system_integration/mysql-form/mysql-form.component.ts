@@ -20,6 +20,7 @@ export class MysqlFormComponent implements OnInit {
   @Input('systemID') systemID;
   @Input('systemName') systemName;
   @Output('refreshConnectionList') refreshConnectionList = new EventEmitter()
+  @Output('close') close = new EventEmitter();
   connectionID: any;
   dismissible = true;
   alertMsg: any;
