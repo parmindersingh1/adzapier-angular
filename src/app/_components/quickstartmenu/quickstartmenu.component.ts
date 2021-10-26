@@ -300,11 +300,11 @@ export class QuickstartmenuComponent implements OnInit, AfterViewInit,AfterViewC
   }
 
   checkForVistiedQSMLink(objindex, currentobj) {
-    if (objindex == 4 || currentobj.linkid == 17) {
+    const a = this.quickmenuService.getQuerymenulist();
+    if (objindex == 4 && currentobj.linkid == 17) {
       return true;
     }
     if (currentobj.linkid !== 1 && currentobj.linkid !== 17) { //temporary commented
-      const a = this.quickmenuService.getQuerymenulist();
 
       if (a.length !== 0) {
         const idx = a.findIndex((t) => t.index == objindex);
@@ -313,10 +313,16 @@ export class QuickstartmenuComponent implements OnInit, AfterViewInit,AfterViewC
           if (a[idx].quicklinks[linkIndex - 1].isactualbtnclicked) {
             return true;
           }
-        } else if (linkIndex == 0 && objindex > 1 && objindex !== 4) {
-          if ((objindex - 1) == 4) {
+        }  else if(this.isSubscriptionLinkVisited()){
+          if(objindex == 3 || objindex == 4 || objindex == 5){
+            const idx = a.findIndex((t) => t.index == objindex);
+            return a[idx].quicklinks.some((t) => t.linkid == 5 || t.linkid == 11 || t.linkid == 18 );
+          }
+        }  else if (linkIndex == 0 && objindex > 1 && objindex !== 4) {
+          if ((objindex - 1) == 4 && currentobj.linkid == 17) {
             return true
-          }//temporary condition later remove..
+          }//temporary condition for connect to systems later remove..
+         else{
           const previousidx = a.findIndex((t) => t.index == objindex - 1);
           const islastitemofPreviousIdChecked = a[previousidx].quicklinks[a[previousidx].quicklinks.length - 1].isactualbtnclicked == true && a[previousidx].quicklinks[a[previousidx].quicklinks.length - 1].linkid !== 17;
           if (islastitemofPreviousIdChecked) {
@@ -325,13 +331,20 @@ export class QuickstartmenuComponent implements OnInit, AfterViewInit,AfterViewC
             return false;
           }
         }
+        }
         else {
-          return true;
+          return false; //true;
         }
       }
     } else {
       return true;
     }
+  }
+
+  isSubscriptionLinkVisited(): boolean {
+    const a = this.quickmenuService.getQuerymenulist();
+    const idx = a.findIndex((t) => t.index == 2);
+    return a[idx].quicklinks.some((t) => t.linkid == 4 && t.isactualbtnclicked);
   }
 
   ngAfterViewInit(){
