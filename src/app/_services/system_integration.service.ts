@@ -73,6 +73,14 @@ export class SystemIntegrationService {
         return throwError(error);
       }));
   }
+  GetConnectionID(componentName, moduleName, oID, formID) {
+    const path = apiConstant.GET_CONNECTION_IDS + '/' + oID + '/' + formID;
+    return this.http.get(environment.apiUrl + path)
+      .pipe(catchError(error => {
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.getWorkflow, componentName, moduleName, path);
+        return throwError(error);
+      }));
+  }
 
   GetCredListBySystem(componentName, moduleName) {
     const path = apiConstant.CONNECTION_INTEGRATION_LIST;
