@@ -19,6 +19,8 @@ export class UpdateConnectionFormComponent implements OnInit {
   // @Input('systemID') systemID;
   @Input('systemName') systemName;
   @Input('updateConnectionData') updateConnectionData;
+  @Output('close') close = new EventEmitter();
+
   @Output('refreshConnectionList') refreshConnectionList = new EventEmitter()
   systemID = null;
   connectionID: any;

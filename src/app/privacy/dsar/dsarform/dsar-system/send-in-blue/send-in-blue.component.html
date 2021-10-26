@@ -8,7 +8,7 @@
         <select class="form-control" id="exampleFormControlSelect1" [(ngModel)]="emailAddress">
           <ng-container  *ngFor="let option of formObject.request_form">
             <option [value]="option.controlId" *ngIf="option.controlId === 'email'">form.{{option.controllabel}}</option>
-            <option [value]="option.controlId" *ngIf="option.controlId.slice(0, 11) === 'CustomInput'">form.{{option.controllabel}}</option>
+            <option [value]="option.controllabel.replaceAll(' ', '_').toLowerCase()" *ngIf="option.controlId.slice(0, 11) === 'CustomInput'">form.{{option.controllabel}}</option>
           </ng-container>
         </select>
         <p class="mt-3 text-danger" *ngIf="emailAddress === ''">Email is Required</p>
