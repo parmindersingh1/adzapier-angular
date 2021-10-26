@@ -1,5 +1,7 @@
 <div class="card">
   <div class="card-body" *ngIf="pageStep === 1">
+    <a href="javascript:;" class="back-to-list-btn mb-2" (click)="backHome.emit(true)"><i class="fas fa-chevron-left"></i> GoBack</a>
+
     <div class="row">
       <div class="form-group col-md-5">
         <label for="exampleFormControlSelect1">Email Address</label>

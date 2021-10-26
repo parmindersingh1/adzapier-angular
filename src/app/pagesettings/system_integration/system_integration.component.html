@@ -128,7 +128,7 @@
       </div>
     </div>
     <ng-container *ngIf="step === 2">
-      <h6><span class="back-to-list-btn" (click)="step = 1"><i class="fas fa-chevron-left"></i>  Back To System </span></h6>
+      <h6><span class="back-to-list-btn-left " (click)="step = 1"><i class="fas fa-chevron-left"></i>  Back To System </span></h6>
       <app-mysql-form (refreshConnectionList)="onRefreshList()" [systemID]="currentSystem.id" [systemName]="currentSystem.name" ></app-mysql-form>
     </ng-container>
   </div>

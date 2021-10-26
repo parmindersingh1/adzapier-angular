@@ -1,5 +1,7 @@
 <div class="card">
-  <div class="card-body" *ngIf="pageStep === 1">
+  <ng-container *ngIf="pageStep === 1">
+  <div class="card-body" >
+    <a href="javascript:;" class="back-to-list-btn mb-2" (click)="backHome.emit(true)"><i class="fas fa-chevron-left"></i> GoBack</a>
     <div class="row">
       <div class="form-group col-md-5">
         <label for="exampleFormControlSelect1">Email Address</label>
@@ -21,8 +23,10 @@
 
     </div>
   </div>
-
-  <div class="card-body" *ngIf="pageStep === 2">
+  </ng-container>
+  <ng-container  *ngIf="pageStep === 2">
+  <div class="card-body">
+    <a href="javascript:;" class="back-to-list-btn mb-2" (click)="backHome.emit(true)"><i class="fas fa-chevron-left"></i> GoBack</a>
     <div class="row">
       <div class="col-md-12 mt-5 text-center mb-5">
         <h5><i style="font-size: 40px;" class="fas fa-check-circle tx-success mr-2"></i><span style="vertical-align: super;"> The Connection Configuration Successfully Saved </span></h5>
@@ -30,7 +34,7 @@
       </div>
     </div>
   </div>
-
+  </ng-container>
 
 </div>
 
