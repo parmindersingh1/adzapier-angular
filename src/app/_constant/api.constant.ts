@@ -90,6 +90,7 @@ export const apiConstant = {
   // System Integration
   SYSTEM_INTEGRATION_LIST: '/integration/system-list',
   CONNECTION_INTEGRATION_LIST: '/integration/connection',
+  GET_CONNECTION_IDS: '/integration/get-configured-query-builder-ids',
   SQL_TABLES_LIST: '/integration/get-tables',
   SQL_TABLE_COLUMNS_LIST: '/integration/get-table-columns',
   INTEGRATION_SYSTEM: '/integration/connection/:oid/:pid/:connectionID',

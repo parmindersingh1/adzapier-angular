@@ -1,12 +1,14 @@
 <div class="card">
   <div class="card-body" *ngIf="pageStep === 1">
+    <a href="javascript:;" class="back-to-list-btn mb-2" (click)="backHome.emit(true)"><i class="fas fa-chevron-left"></i> GoBack</a>
+
     <div class="row">
       <div class="form-group col-md-5">
         <label for="exampleFormControlSelect1">Email Address</label>
         <select class="form-control" id="exampleFormControlSelect1" [(ngModel)]="emailAddress">
           <ng-container  *ngFor="let option of formObject.request_form">
           <option [value]="option.controlId" *ngIf="option.controlId === 'email'">form.{{option.controllabel}}</option>
-          <option [value]="option.controlId" *ngIf="option.controlId.slice(0, 11) === 'CustomInput'">form.{{option.controllabel}}</option>
+            <option [value]="option.controllabel.replaceAll(' ', '_').toLowerCase()" *ngIf="option.controlId.slice(0, 11) === 'CustomInput'">form.{{option.controllabel}}</option>
           </ng-container>
         </select>
         <p class="mt-3 text-danger" *ngIf="emailAddress === ''">Email is Required</p>
@@ -16,7 +18,7 @@
       <div class="col-md-12 mb-3"><h5>Choose Columns</h5></div>
       <div class="col-md-2 mb-3" *ngFor="let column of mailChimpColumns">
         <button pButton pRipple type="button" (click)="onSelectColumn(column)"   [ngClass]="{'p-button-text' : !columnsList.includes(column)}"
-                class="p-button-raised w-100"><span class="text-over"> {{column.replace('_', ' ').replace('_', ' ')}}</span></button>
+                class="p-button-raised w-100"><span class="text-over"> {{column.replaceAll('_', ' ')}}</span></button>
       </div>
       <div class="col-md-12" *ngIf="columnsList.length === 0">
         <p class="text-danger tx-bold"> Choose minimum 1 column </p>
