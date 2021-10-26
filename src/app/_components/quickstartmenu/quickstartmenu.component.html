@@ -50,11 +50,12 @@
 
             </accordion-group>
         </accordion>
-        <div><button type="button" (click)="dismissQuickStartMenu()" class="btn btn-link">Dismiss Quick Start</button>
+        <div class="dismiss-top-border"><button type="button" (click)="dismissQuickStartMenu()" class="btn btn-link">Dismiss Quick Start</button>
         </div>
 
     </div>
-    <button type="button" *ngIf="!ishideQsbtn" (click)="onClickQuickStartBtn()" class="btn btn-primary btn-sm quickstart-btn">Quick Start</button>
+    <button type="button" *ngIf="!ishideQsbtn" (click)="onClickQuickStartBtn()" class="btn btn-primary btn-sm quickstart-btn">
+    <img src="assets/imgs/rocket-icon.svg" class="qs-arrow-icon"/> Quick Start</button>
 </div>
 </div>
 <div class="col-sm-3 mr-0 float-right flotingdiv" [ngClass]="{'hideqsmalert':!isOpenalertMsg}">

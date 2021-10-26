@@ -111,6 +111,7 @@ export class QuickstartmenuComponent implements OnInit, AfterViewInit,AfterViewC
     this.quickmenuService.setQuickstartDismissStatus({isdismissed:true,isqstoplink:true});
     this.quickmenuService.onDissmissQuickStartmenu.next(true); 
     this.quickmenuService.headerNavStatusAfterDismissedQuickStart.next(false);
+    this.userService.onRevistQuickStartmenulink.next({quickstartid:0,reclickqslink:true,urlchanged:true}); 
   }
 
   
