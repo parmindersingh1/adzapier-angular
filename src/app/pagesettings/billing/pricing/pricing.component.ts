@@ -67,7 +67,7 @@ export class PricingComponent implements OnInit, AfterViewInit {
   currentLinkID:any;
   iswindowclicked;
   actuallinkstatus:boolean = false;
-  
+
   constructor(private router: Router,
               private loading: NgxUiLoaderService,
               private dataService: DataService,
@@ -80,7 +80,7 @@ export class PricingComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-    this.quickmenuService.onClickEmitQSLinkobj.subscribe((res) => { 
+    this.quickmenuService.onClickEmitQSLinkobj.subscribe((res) => {
       this.quickDivID = res.linkid;
       this.callForQuickStart();
     });
@@ -334,7 +334,7 @@ export class PricingComponent implements OnInit, AfterViewInit {
       if (a.length !== 0) {
         const idx = a.findIndex((t) => t.index == indexId);
         if (a[idx].quicklinks.filter((t) => t.linkid == this.quickDivID).length > 0) {
-          
+
           this.userService.onRevistQuickStartmenulink.next({quickstartid:this.quickDivID,reclickqslink:true,urlchanged:false});
           const plan = {...planDetails};
           plan.priceTotal = plan.price * planUnit.value;
@@ -424,7 +424,7 @@ export class PricingComponent implements OnInit, AfterViewInit {
 
   private onCheckOut(response: any) {
     this.stripe.redirectToCheckout({
-      sessionId: 'cs_test_a14wuzTBy4pOLu9x3nqSSw2WZDULFwK4rrgJJ61vr6g2fESWT3FlfP2kbx'
+      sessionId: response
     }).then((result) => {
     }).catch(error => {
     });
@@ -478,7 +478,7 @@ export class PricingComponent implements OnInit, AfterViewInit {
       }
     }
 
-   
+
   }
   openModal(template: TemplateRef<any>) {
     this.modalRef = this.modalService.show(template, {class: 'modal-lg', ignoreBackdropClick: true});
@@ -497,7 +497,7 @@ export class PricingComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(){
     this.userService.isRevisitedQSMenuLink.subscribe((status) => { this.isRevistedLink = status.reclickqslink; this.currentLinkID = status.quickstartid; this.iswindowclicked = status.urlchanged  });
-    this.quickmenuService.onClickEmitQSLinkobj.subscribe((res) => { 
+    this.quickmenuService.onClickEmitQSLinkobj.subscribe((res) => {
       this.quickDivID = res.linkid;
     });
   //  this.onGetPlanDetails();
@@ -518,14 +518,14 @@ export class PricingComponent implements OnInit, AfterViewInit {
     }else if (quicklinks !== undefined && quicklinks.linkid == 5) {
       this.currentStep = 1;
       this.onSetCookieConsent(1, 'cookieConsent');
-    } 
+    }
     this.onGetActivePlan(); // by default initially it will show monthly plan only
   }
 
 
   checkForQsTooltip(){
-    this.userService.onRevistQuickStartmenulink.next({quickstartid:this.quickDivID,reclickqslink:false,urlchanged:true}); 
-    this.quickDivID = "";    
+    this.userService.onRevistQuickStartmenulink.next({quickstartid:this.quickDivID,reclickqslink:false,urlchanged:true});
+    this.quickDivID = "";
   }
 
   checkForQSTooltipForEnterprisebt() {
