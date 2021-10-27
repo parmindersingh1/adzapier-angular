@@ -176,7 +176,7 @@
 
           <h4 *ngIf="noPlanType == 'company' && isUserSubscribe">You can not add more users, Please Upgrade your existing plan </h4>
 
-          <ng-container class="mb-4" *ngIf="!isUserSubscribe || !isUserSubscribeDsar ">
+          <ng-container class="mb-4" *ngIf="!isUserSubscribe || !isUserSubscribeDsar || !isUserSubscribeConsent">
             <div id="cookieConsent" *ngIf="noPlanType == 'cookieConsent' && !isUserSubscribe">
               <h3 class="font-weight-bold" >Cookie Consent Management </h3>
               <h5> You don't have an active plan, please choose a new plan below </h5>
