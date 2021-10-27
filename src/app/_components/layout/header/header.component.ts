@@ -1632,7 +1632,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
     }
     this.quickmenuService.isQSMenuDissmissed.subscribe((status) => this.quickstartmenustatus = status);
     this.quickmenuService.isHeaderNavClickedAfterQSDissmissed.subscribe((status) => this.headerNavbarStatusAfterQSDismiss = status);
-    console.log(this.headerNavbarStatusAfterQSDismiss,'headerNavbarStatusAfterQSDismiss..');
     if (this.quickstartmenustatus && !this.headerNavbarStatusAfterQSDismiss) {
       this.isqsmenuopen = true;
     }
