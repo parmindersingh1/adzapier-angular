@@ -457,6 +457,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
     
   }
 
+  onRightClick(){
+    return false;
+  }
+
   public onSearchInputChange(e): void {
     this.inputSearch = e.target.value;
     if(this.inputSearch == ''){
@@ -1628,7 +1632,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
     }
     this.quickmenuService.isQSMenuDissmissed.subscribe((status) => this.quickstartmenustatus = status);
     this.quickmenuService.isHeaderNavClickedAfterQSDissmissed.subscribe((status) => this.headerNavbarStatusAfterQSDismiss = status);
-    console.log(this.headerNavbarStatusAfterQSDismiss,'headerNavbarStatusAfterQSDismiss..');
     if (this.quickstartmenustatus && !this.headerNavbarStatusAfterQSDismiss) {
       this.isqsmenuopen = true;
     }
@@ -2291,7 +2294,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
       this.opendropdownTrigger(2, 'cookie-consent');
       // this.addBordertoDropdownMenu();
     }
-    if (this.quickDivID !== "" && (this.quickDivID == 6 || this.quickDivID == 11 || this.quickDivID == 12 || this.quickDivID == 19)) {
+    if (this.quickDivID !== "" && (this.quickDivID == 6 || this.quickDivID == 11 || this.quickDivID == 12 || this.quickDivID == 18 || this.quickDivID == 19)) {
       this.lastopendp = [];
       this.removeHightlightBorders();
       this.quickLinkObj = {};
