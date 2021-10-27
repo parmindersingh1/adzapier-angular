@@ -169,7 +169,7 @@
 
 
             <button data-toggle="tooltip" data-placement="top"
-              [ngClass]="(quickDivID == 5 || quickDivID == 6 || quickDivID == 11 || quickDivID == 12 || quickDivID == 18 || quickDivID == 19) && quickDivID == currentLinkID && !iswindowclicked ? 'btn-qs-pricing-hightlight' : ''"
+              [ngClass]="(quickDivID == 5 || quickDivID == 6 || quickDivID == 11 || quickDivID == 12 || quickDivID == 18 || quickDivID == 19) && quickDivID == currentLinkID && !iswindowclicked && plan.price >=  activeData.cookieConsent.maxPrice ? 'btn-qs-pricing-hightlight' : ''"
               [title]="plan.price <=  activeData.cookieConsent.maxPrice ? 'You can not downgrade your plan' : 'Add to Cart'"
               *ngIf="plan.price !=  activeData.cookieConsent.maxPrice"
               [disabled]="plan.price <=  activeData.cookieConsent.maxPrice" (click)="onAddToCart(plan, planUnit);checkForQsTooltip();"
@@ -272,7 +272,7 @@
             </div>
 
 
-            <button data-toggle="tooltip" data-placement="top"  [ngClass]="(quickDivID == 5 || quickDivID == 6 || quickDivID == 11 || quickDivID == 12 || quickDivID == 18 || quickDivID == 19) && quickDivID == currentLinkID && !iswindowclicked ? 'btn-qs-pricing-hightlight' : ''"
+            <button data-toggle="tooltip" data-placement="top"  [ngClass]="(quickDivID == 5 || quickDivID == 6 || quickDivID == 11 || quickDivID == 12 || quickDivID == 18 || quickDivID == 19) && quickDivID == currentLinkID && !iswindowclicked && plan.price >=  activeData.dsar.maxPrice ? 'btn-qs-pricing-hightlight' : ''"
               [title]="plan.price <=  activeData.dsar.maxPrice ? 'You can not downgrade your plan' : 'Add to Cart'"
               *ngIf="plan.price !=  activeData.dsar.maxPrice" [disabled]="plan.price <=  activeData.dsar.maxPrice"
               (click)="onAddToCart(plan, planUnit);checkForQsTooltip();" class="btn mt-4 mb-4 add-to-cart-btn btn-primary btn-block">
@@ -381,7 +381,7 @@
 
 
             <button data-toggle="tooltip" data-placement="top"
-              [ngClass]="(quickDivID == 5 || quickDivID == 6 || quickDivID == 11 || quickDivID == 12 || quickDivID == 18 || quickDivID == 19) && quickDivID == currentLinkID && !iswindowclicked ? 'btn-qs-pricing-hightlight' : ''"
+              [ngClass]="(quickDivID == 5 || quickDivID == 6 || quickDivID == 11 || quickDivID == 12 || quickDivID == 18 || quickDivID == 19) && quickDivID == currentLinkID && !iswindowclicked && plan.price >=  activeData.consentPreference.maxPrice ? 'btn-qs-pricing-hightlight' : ''"
               [title]="plan.price <=  activeData.consentPreference.maxPrice ? 'You can not downgrade your plan' : 'Add to Cart'"
               *ngIf="plan.price !=  activeData.consentPreference.maxPrice"
               [disabled]="plan.price <=  activeData.consentPreference.maxPrice" (click)="onAddToCart(plan, planUnit);checkForQsTooltip();"
