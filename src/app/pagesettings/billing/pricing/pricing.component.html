@@ -13,8 +13,8 @@
               asked</p>
           </div>
 
-          <div class="toggle-period">
-            <input id="toggle-period" (change)="onSelectCookieConsentBillingCycle(subType)"
+          <div class="toggle-period" *ngIf="currentStep === 1">
+            <input id="toggle-period" (change)="onSelectCookieConsentBillingCycle(subType, 1)"
               [checked]="cookieConsentBillingCycle === 'yearly'" #subType class="toggle-period__checkbox"
               type="checkbox">
             <!--          <input id="toggle-period" (change)="onSelectCookieConsentBillingCycle(subType)"-->
@@ -31,6 +31,50 @@
                 [ngStyle]="{color: cookieConsentBillingCycle == 'yearly' ? '#0da1dd' : '#c3c4c7'}" role="checkbox"
                 aria-checked="true">Billed annually</span>
               <span class="flag" [ngStyle]="{opacity: cookieConsentBillingCycle == 'yearly' ? 1 : .4}">2 Months
+                Free</span>
+            </label>
+          </div>
+
+          <div class="toggle-period" *ngIf="currentStep === 2">
+            <input id="toggle-period" (change)="onSelectCookieConsentBillingCycle(subType, 2)"
+                   [checked]="dsarBillingCycle === 'yearly'" #subType class="toggle-period__checkbox"
+                   type="checkbox">
+            <!--          <input id="toggle-period" (change)="onSelectCookieConsentBillingCycle(subType)"-->
+            <!--                 [disabled]="activeData.cookieConsent.cycle === 'yearly'"-->
+            <!--                 [checked]="cookieConsentBillingCycle === 'yearly'" #subType class="toggle-period__checkbox" type="checkbox">-->
+            <label for="toggle-period" class="toggle-period__label">
+              <span class="toggle-period__monthly"
+                    [ngStyle]="{color: dsarBillingCycle == 'yearly' ? '#c3c4c7' : '#0546a3'}" role="checkbox"
+                    aria-checked="false">Billed monthly</span>
+              <span class="toggle-period__switch"
+                    [ngStyle]="{backgroundColor: dsarBillingCycle == 'yearly' ? '#0da1dd' : '#0546a3'}"
+                    role="checkbox" aria-checked="true" tabindex="0"></span>
+              <span class="toggle-period__yearly"
+                    [ngStyle]="{color: dsarBillingCycle == 'yearly' ? '#0da1dd' : '#c3c4c7'}" role="checkbox"
+                    aria-checked="true">Billed annually</span>
+              <span class="flag" [ngStyle]="{opacity: dsarBillingCycle == 'yearly' ? 1 : .4}">2 Months
+                Free</span>
+            </label>
+          </div>
+
+          <div class="toggle-period" *ngIf="currentStep === 3">
+            <input id="toggle-period" (change)="onSelectCookieConsentBillingCycle(subType, 3)"
+                   [checked]="consentPreferenceBillingCycle === 'yearly'" #subType class="toggle-period__checkbox"
+                   type="checkbox">
+            <!--          <input id="toggle-period" (change)="onSelectCookieConsentBillingCycle(subType)"-->
+            <!--                 [disabled]="activeData.cookieConsent.cycle === 'yearly'"-->
+            <!--                 [checked]="cookieConsentBillingCycle === 'yearly'" #subType class="toggle-period__checkbox" type="checkbox">-->
+            <label for="toggle-period" class="toggle-period__label">
+              <span class="toggle-period__monthly"
+                    [ngStyle]="{color: consentPreferenceBillingCycle == 'yearly' ? '#c3c4c7' : '#0546a3'}" role="checkbox"
+                    aria-checked="false">Billed monthly</span>
+              <span class="toggle-period__switch"
+                    [ngStyle]="{backgroundColor: consentPreferenceBillingCycle == 'yearly' ? '#0da1dd' : '#0546a3'}"
+                    role="checkbox" aria-checked="true" tabindex="0"></span>
+              <span class="toggle-period__yearly"
+                    [ngStyle]="{color: consentPreferenceBillingCycle == 'yearly' ? '#0da1dd' : '#c3c4c7'}" role="checkbox"
+                    aria-checked="true">Billed annually</span>
+              <span class="flag" [ngStyle]="{opacity: consentPreferenceBillingCycle == 'yearly' ? 1 : .4}">2 Months
                 Free</span>
             </label>
           </div>
@@ -95,12 +139,16 @@
 
             <h1 class="tx-rubik tx-normal mb-3 mg-t-auto price-text">
               <sup class="doller">$</sup>
+
               <span class="font-weight-bold" *ngIf="cookieConsentBillingCycle === 'monthly'">{{plan.price}}</span>
-              <span class="font-weight-bold" *ngIf="cookieConsentBillingCycle !== 'monthly'">{{plan.price / 12 | number
-                : '1.0-0'}}</span>
+              <span class="font-weight-bold" *ngIf="cookieConsentBillingCycle !== 'monthly'">{{plan.price / 12 | number: '1.0-0'}}</span>
+
+
               <span class="billing-type">/Month</span>
             </h1>
             <p class="tx-size-10  mt-2 ">Billed {{cookieConsentBillingCycle}} </p>
+
+
             <div class="form-group row mb-2 ">
               <label class="property-type col-md-6" for="sel1">Property</label>
               <select #planUnit style="height: 32px;" class="mb-2 col-md-5 form-control" id="sel1">
@@ -128,14 +176,14 @@
               class="btn mt-4 mb-4 add-to-cart-btn btn-primary btn-block">
               Add To Cart
             </button>
-           
-            
-            
+
+
+
             <button *ngIf="plan.price ==  activeData.cookieConsent.maxPrice"  [ngClass]="(quickDivID == 5 || quickDivID == 6 || quickDivID == 11 || quickDivID == 12 || quickDivID == 18 || quickDivID == 19) && quickDivID == currentLinkID && !iswindowclicked ? 'btn-qs-pricing-hightlight' : ''"  (click)="onGenerateSessionID();checkForQsTooltip();"
               class="btn mt-4 mb-4 add-to-cart-btn btn-primary btn-block">
               Manage Plan
             </button>
-            
+
 
 
           </div><!-- col -->
@@ -153,7 +201,7 @@
             </ul>
             <h2 class="tx-rubik tx-normal ">Contact Us</h2>
             <p class="tx-size-10 mg-b-30 "></p>
-            <a (click)="checkForQSTooltipForEnterprisebt()" href="https://adzapier.com/get-started/" target="_blank" 
+            <a (click)="checkForQSTooltipForEnterprisebt()" href="https://adzapier.com/get-started/" target="_blank"
             [ngClass]="(quickDivID == 5 || quickDivID == 6 || quickDivID == 11 || quickDivID == 12 || quickDivID == 18 || quickDivID == 19) && quickDivID == currentLinkID && !iswindowclicked ? 'btn-qs-pricing-hightlight' : ''"
               class="enterprise-btn btn mb-4 add-to-cart-btn btn-primary btn-block">Get Enterprise</a>
           </div><!-- col -->
@@ -164,7 +212,7 @@
           <div *ngFor="let plan of dsarPlanList" style="overflow: hidden"
             class="col d-flex bg-white-col bt-card flex-column bd pt-0 mr-2  ">
 
-            <div *ngIf="cookieConsentBillingCycle === 'yearly'" class="plan-discount">
+            <div *ngIf="dsarBillingCycle === 'yearly'" class="plan-discount">
               <span class="annual">2 Months Free</span>
             </div>
 
@@ -199,12 +247,12 @@
 
             <h1 class="tx-rubik tx-normal mb-3 mg-t-auto price-text">
               <sup class="doller">$</sup>
-              <span class="font-weight-bold" *ngIf="cookieConsentBillingCycle === 'monthly'">{{plan.price}}</span>
-              <span class="font-weight-bold" *ngIf="cookieConsentBillingCycle !== 'monthly'">{{plan.price / 12 | number
+              <span class="font-weight-bold" *ngIf="dsarBillingCycle === 'monthly'">{{plan.price}}</span>
+              <span class="font-weight-bold" *ngIf="dsarBillingCycle !== 'monthly'">{{plan.price / 12 | number
                 : '1.0-0'}}</span>
               <span class="billing-type">/Month</span>
             </h1>
-            <p class="tx-size-10  mt-2 ">Billed {{cookieConsentBillingCycle}} </p>
+            <p class="tx-size-10  mt-2 ">Billed {{dsarBillingCycle}} </p>
             <div class="form-group row mb-2 ">
               <label class="property-type col-md-6" for="sel1">Organization</label>
               <select #planUnit style="height: 32px;" class="mb-2 col-md-5 form-control" id="sel1">
@@ -224,7 +272,7 @@
             </div>
 
 
-            <button data-toggle="tooltip" data-placement="top"  [ngClass]="(quickDivID == 5 || quickDivID == 6 || quickDivID == 11 || quickDivID == 12 || quickDivID == 18 || quickDivID == 19) && quickDivID == currentLinkID && !iswindowclicked ? 'btn-qs-pricing-hightlight' : ''" 
+            <button data-toggle="tooltip" data-placement="top"  [ngClass]="(quickDivID == 5 || quickDivID == 6 || quickDivID == 11 || quickDivID == 12 || quickDivID == 18 || quickDivID == 19) && quickDivID == currentLinkID && !iswindowclicked ? 'btn-qs-pricing-hightlight' : ''"
               [title]="plan.price <=  activeData.dsar.maxPrice ? 'You can not downgrade your plan' : 'Add to Cart'"
               *ngIf="plan.price !=  activeData.dsar.maxPrice" [disabled]="plan.price <=  activeData.dsar.maxPrice"
               (click)="onAddToCart(plan, planUnit);checkForQsTooltip();" class="btn mt-4 mb-4 add-to-cart-btn btn-primary btn-block">
@@ -253,7 +301,7 @@
             </ul>
             <h2 class="tx-rubik tx-normal ">Contact Us</h2>
             <p class="tx-size-10 mg-b-30 "></p>
-            <a (click)="checkForQSTooltipForEnterprisebt()" href="https://adzapier.com/get-started/" target="_blank" 
+            <a (click)="checkForQSTooltipForEnterprisebt()" href="https://adzapier.com/get-started/" target="_blank"
             [ngClass]="(quickDivID == 5 || quickDivID == 6 || quickDivID == 11 || quickDivID == 12 || quickDivID == 18 || quickDivID == 19) && quickDivID == currentLinkID && !iswindowclicked ? 'btn-qs-pricing-hightlight' : ''"
               class="enterprise-btn btn mb-4 add-to-cart-btn btn-primary btn-block">Get Enterprise</a>
           </div><!-- col -->
@@ -264,7 +312,7 @@
           <div *ngFor="let plan of consentPreferenceList" style="overflow: hidden"
             class="col d-flex bg-white-col bt-card flex-column bd pt-0 mr-2  ">
 
-            <div *ngIf="cookieConsentBillingCycle === 'yearly'" class="plan-discount">
+            <div *ngIf="consentPreferenceBillingCycle === 'yearly'" class="plan-discount">
               <span class="annual">2 Months Free</span>
             </div>
 
@@ -307,12 +355,12 @@
 
             <h1 class="tx-rubik tx-normal mb-3 mg-t-auto price-text">
               <sup class="doller">$</sup>
-              <span class="font-weight-bold" *ngIf="cookieConsentBillingCycle === 'monthly'">{{plan.price}} </span>
-              <span class="font-weight-bold" *ngIf="cookieConsentBillingCycle !== 'monthly'">{{plan.price / 12 | number
+              <span class="font-weight-bold" *ngIf="consentPreferenceBillingCycle === 'monthly'">{{plan.price}} </span>
+              <span class="font-weight-bold" *ngIf="consentPreferenceBillingCycle !== 'monthly'">{{plan.price / 12 | number
                 : '1.0-0'}}</span>
               <span class="billing-type">/Month</span>
             </h1>
-            <p class="tx-size-10  mt-2 ">Billed {{cookieConsentBillingCycle}} </p>
+            <p class="tx-size-10  mt-2 ">Billed {{consentPreferenceBillingCycle}} </p>
             <div class="form-group row mb-2 ">
               <label class="property-type col-md-6" for="sel1">Property</label>
               <select #planUnit style="height: 32px;" class="mb-2 col-md-5 form-control" id="sel1">
@@ -380,8 +428,8 @@
 
 
       </div>
-      
-        
+
+
       <div *ngIf="cartItem.length > 0" class="col-md-12 p-0 mt-4">
         <div class="card cart-box ">
           <div class="card-body">
