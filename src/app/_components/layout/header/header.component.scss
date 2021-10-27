@@ -586,6 +586,16 @@ div#collapsibleNavbar ul.navbar-nav {
   color: #0168fa;
 }
 
+#footer {
+  position: fixed;
+  padding: 10px 10px 0px 10px;
+  bottom: 18px;
+  width: 96%;
+  /* Height of the footer*/ 
+  height: 40px;
+  background:white;
+}
+
 
 .linked:hover{
   background-color:#d6d4d4;
