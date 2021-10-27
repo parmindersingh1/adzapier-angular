@@ -457,6 +457,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
     
   }
 
+  onRightClick(){
+    return false;
+  }
+
   public onSearchInputChange(e): void {
     this.inputSearch = e.target.value;
     if(this.inputSearch == ''){
