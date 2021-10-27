@@ -519,7 +519,9 @@ export class PricingComponent implements OnInit, AfterViewInit {
       this.currentStep = 1;
       this.onSetCookieConsent(1, 'cookieConsent');
     }
-    this.onGetActivePlan(); // by default initially it will show monthly plan only
+    if(quicklinks !== undefined && (quicklinks.linkid == 5 || quicklinks.linkid == 11 || quicklinks.linkid == 18)){
+      this.onGetActivePlan(); // by default initially it will show monthly plan only
+    }
   }
 
 

@@ -75,7 +75,6 @@ export class ManageLicenceComponent implements OnInit {
     this.userService.getLoggedInUserDetails(this.constructor.name, moduleName.manageSubscriptionsModule).subscribe((res: any) => {
        if (res.status === 200) {
          this.userRole = res.response.role;
-         console.log('user role', this.userRole);
        }
     });
 

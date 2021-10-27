@@ -28,7 +28,6 @@ export class QuickstartalertComponent implements OnInit {
     private quickmenuService:QuickmenuService,
     private location: Location,
     private quickStartMenuList:QuickStartMenuList) {
-    console.log(this.isuserclickoutsidemenu,'isuserclickoutsidemenu..qlert..')
    }
 
   ngOnInit(): void {
