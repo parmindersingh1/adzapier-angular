@@ -18,6 +18,7 @@ export class QuickstartalertComponent implements OnInit {
   @Input() isactualLinkclickedbyuser: boolean = false;
   @Input() styleobj: object;
   @Input() divguidetext:string;
+  isUserClickOutside:boolean = false;
   @Output() clickEventbyUser:EventEmitter<any> = new EventEmitter<any>();
   revisitedqslink:boolean;
   revisitedlinkId:any;
@@ -27,7 +28,6 @@ export class QuickstartalertComponent implements OnInit {
     private quickmenuService:QuickmenuService,
     private location: Location,
     private quickStartMenuList:QuickStartMenuList) {
-    console.log(this.isuserclickoutsidemenu,'isuserclickoutsidemenu..qlert..')
    }
 
   ngOnInit(): void {
@@ -38,7 +38,7 @@ export class QuickstartalertComponent implements OnInit {
     this.quickstartmenu = this.quickStartMenuList.loadQuickstartMenu();
   //  console.log(this.isclickedbyuser,'isclickedbyuser..');
    // console.log(this.linkid,'isclickedbyuser..');
-    this.userService.isRevisitedQSMenuLink.subscribe((status) => {this.revisitedqslink = status.reclickqslink; this.revisitedlinkId = status.quickstartid; })
+    this.userService.isRevisitedQSMenuLink.subscribe((status) => {this.revisitedqslink = status.reclickqslink; this.revisitedlinkId = status.quickstartid; this.isUserClickOutside = status.urlchanged })
     // this.userService.isClickedOnQSMenu.pipe(
     //   takeUntil(this.unsubscribeAfterUserAction$)
 

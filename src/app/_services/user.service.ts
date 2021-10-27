@@ -11,6 +11,9 @@ import { apiConstant } from '../_constant/api.constant';
 @Directive()
 @Injectable({ providedIn: 'root' })
 export class UserService {
+    private SupportData = new BehaviorSubject(null);
+    public SupportDetails = this.SupportData.asObservable();
+    
 
     public currentregSubject: BehaviorSubject<User>;
     public currentregUser: Observable<User>;
@@ -33,11 +36,17 @@ export class UserService {
         return this.userActionOnQuickstart.asObservable();
     }
 
-    public onRevistQuickStartmenulink: BehaviorSubject<UserActionOnQuickstartv2> = new BehaviorSubject<UserActionOnQuickstartv2>({ quickstartid:0, reclickqslink:false});
+    public onRevistQuickStartmenulink: BehaviorSubject<UserActionOnQuickstartv2> = new BehaviorSubject<UserActionOnQuickstartv2>({ quickstartid:0, reclickqslink:false, urlchanged:false});
     //public onClickQuickStartmenu: BehaviorSubject<any> = new BehaviorSubject<any>(false);
     get isRevisitedQSMenuLink() {
         return this.onRevistQuickStartmenulink.asObservable();
     }
+
+    public onClickHeaderNavBar: BehaviorSubject<any> = new BehaviorSubject<any>(false);
+    get isClickedOnHeaderMenu() {
+        return this.onClickHeaderNavBar.asObservable();
+    }
+
     private organizationProperty = new Subject<any>();
     organizationProperty$ = this.organizationProperty.asObservable();
     constructor(private http: HttpClient, private lokiService: LokiService) {
@@ -114,6 +123,12 @@ export class UserService {
         }));
     }
 
+    onPushConsentData(suppData) {
+        return new Promise(resolve => {
+          resolve(this.SupportData.next(suppData));
+        });
+      }
+
 
     forgotpswd(componentName, moduleName, email) {
         const path = '/password/forgot';
@@ -170,6 +185,26 @@ export class UserService {
     getRoleList(componentName, moduleName): Observable<any> {
         const path = '/role';
         return this.http.get<any>(environment.apiUrl + path).pipe(
+            catchError(error => {
+                this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.userRole, componentName, moduleName, path);
+                return throwError(error);
+            })
+        );
+    }
+
+    getList(componentName, moduleName,query,categories): Observable<any> {
+        const path = 'https://support.adzapier.com/secure/search/articles';
+        return this.http.get<any>(path + '?query=' + query + '&categories=' + categories).pipe(
+            catchError(error => {
+                this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.userRole, componentName, moduleName, path);
+                return throwError(error);
+            })
+        );
+    }
+
+    getRecordList(componentName, moduleName,id,categories): Observable<any> {
+        const path = 'https://support.adzapier.com/secure/help-center/articles/';
+        return this.http.get<any>(path  + id + '?categories=' + categories).pipe(
             catchError(error => {
                 this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.userRole, componentName, moduleName, path);
                 return throwError(error);
@@ -251,6 +286,7 @@ export class UserActionOnQuickstart {
 
 export class UserActionOnQuickstartv2 {
     public quickstartid: number;
+    public urlchanged:boolean | any;
     // public isclicked: boolean | any;
     // public isactualbtnclicked: boolean | any;
     public reclickqslink:boolean | any;

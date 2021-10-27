@@ -39,7 +39,11 @@ const routes: Routes = [
         loadChildren: () => import('./organizationteam/organizationteam.module').then(m => m.OrganizationteamModule)
       }
     ]
-  }
+  },
+  {
+    path: 'system-integration'
+  , loadChildren: () => import('./system_integration/system_integration.module').then(m => m.SystemIntegrationModule)
+  },
 ];
 
 @NgModule({

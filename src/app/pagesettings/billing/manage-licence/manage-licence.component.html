@@ -25,10 +25,10 @@
     <h4 class="tx-14 tx-uppercase  mb-0 tx-spacing-1 tx-color-02 tx-semibold">Manage Subscriptions</h4>
     </div>
     <div class="col-md-5 text-right p-0">
-      <a routerLink="/settings/billing/pricing" [queryParams]="{oid:queryOID , pid:queryPID}" class="btn btn-sm btn-outline-secondary btn-uppercase mr-2">
+      <a routerLink="/settings/billing/pricing" [queryParams]="{oid:queryOID , pid:queryPID}" (click)="checkForQsTooltip()" class="btn btn-sm btn-outline-secondary btn-uppercase mr-2">
         <i class="fa fa-plus pr-1"  aria-hidden="true"></i>  Add Subscription</a>
 
-      <button *ngIf="activeSubscriptionList.length > 0" (click)="onGenerateSessionID()" type="button" class="btn btn-sm btn-uppercase btn-outline-secondary" [disabled]="userRole === 'View Only'"> <i class="fa fa-cogs pr-1" aria-hidden="true"></i>
+      <button *ngIf="activeSubscriptionList.length > 0" (click)="onGenerateSessionID();checkForQsTooltip();" type="button" class="btn btn-sm btn-uppercase btn-outline-secondary" [disabled]="userRole === 'View Only'"> <i class="fa fa-cogs pr-1" aria-hidden="true"></i>
         Manage Current Subscriptions</button>
     </div>
   </div>
@@ -60,11 +60,11 @@
       <tr *ngFor="let plan of activeSubscriptionList">
         <ng-container *ngIf="plan.active">
         <td *ngIf="plan.planDetails.level === 'property'"><a class="plan-name" [routerLink]="['/settings/billing/manage/property', plan.id]"
-          [queryParams]="{oid: this.queryOID, pid: this.queryPID }">
+          [queryParams]="{oid: this.queryOID, pid: this.queryPID }" (click)="checkForQsTooltip()">
            {{plan.planDetails.product_name}}</a></td>
 
            <td *ngIf="plan.planDetails.level !== 'property'"><a class="plan-name" [routerLink]="['/settings/billing/manage/organizations', plan.id]"
-            [queryParams]="{oid: this.queryOID, pid: this.queryPID }">
+            [queryParams]="{oid: this.queryOID, pid: this.queryPID }" (click)="checkForQsTooltip()">
              {{plan.planDetails.product_name}}</a></td>
 
 
@@ -99,11 +99,11 @@
         </th>
           <td style="width: 290px" *ngIf="plan.planDetails.level === 'property'">
             <a class="plan-name" (click)="userAction(plan.id,quickDivID)">
-              <button pButton label="Assign Property"  [ngClass]="quickDivID == 6 || quickDivID == 19 ? 'btn-qs-hightlight' : ''" class="w-100 p-button-secondary manage-btn"></button></a></td>
+              <button pButton label="Assign Property"  [ngClass]="quickDivID == 6 && quickDivID == currentLinkID && !iswindowclicked || quickDivID == 19 && quickDivID == currentLinkID && !iswindowclicked ? 'btn-qs-hightlight' : ''" class="w-100 p-button-secondary manage-btn"></button></a></td>
 
           <td style="width: 290px" *ngIf="plan.planDetails.level !== 'property'">
             <a class="plan-name" (click)="userActionForOrg(plan.id,quickDivID)">
-            <button pButton label="Assign Organization" [ngClass]="quickDivID == 12 ? 'btn-qs-hightlight' : ''" class="w-100 p-button-secondary manage-btn"></button></a></td>
+            <button pButton label="Assign Organization" [ngClass]="quickDivID == 12 && quickDivID == currentLinkID && !iswindowclicked ? 'btn-qs-hightlight' : ''" class="w-100 p-button-secondary manage-btn"></button></a></td>
 
 
         </ng-container>

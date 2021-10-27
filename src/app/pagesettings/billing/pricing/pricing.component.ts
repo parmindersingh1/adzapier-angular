@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit, AfterViewInit, TemplateRef} from '@angular/core';
+import {Component, OnInit, AfterViewInit, TemplateRef, ChangeDetectorRef} from '@angular/core';
 import {Router} from '@angular/router';
 import {BillingService} from '../../../_services/billing.service';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
@@ -11,14 +11,13 @@ import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { QuickmenuService } from 'src/app/_services/quickmenu.service';
-import { QuickStart } from 'src/app/_models/quickstart';
 
 @Component({
   selector: 'app-pricing',
   templateUrl: './pricing.component.html',
   styleUrls: ['./pricing.component.scss']
 })
-export class PricingComponent implements OnInit, AfterViewInit, OnDestroy {
+export class PricingComponent implements OnInit, AfterViewInit {
   private unsubscribeAfterUserAction$: Subject<any> = new Subject<any>();
   subscriptionPlan;
   planDetails: any;
@@ -29,7 +28,8 @@ export class PricingComponent implements OnInit, AfterViewInit, OnDestroy {
   featuresComparison = featuresComparison;
   subscriptionList = [];
   cookieConsentBillingCycle = 'monthly';
-  addonsBillingCycle = 'monthly';
+  dsarBillingCycle = 'monthly';
+  consentPreferenceBillingCycle = 'monthly';
   stripe = (window as any).Stripe(environment.stripePublishablekey);
   cartItem = [];
   currentFeature = 'cookieConsent';
@@ -66,33 +66,27 @@ export class PricingComponent implements OnInit, AfterViewInit, OnDestroy {
   quickDivID;
   isRevistedLink:boolean;
   currentLinkID:any;
+  iswindowclicked;
   actuallinkstatus:boolean = false;
-  
+  private subscriptionData: any;
+
   constructor(private router: Router,
               private loading: NgxUiLoaderService,
               private dataService: DataService,
               private userService: UserService,
               private modalService: BsModalService,
               private quickmenuService: QuickmenuService,
-              private billingService: BillingService) {
-              this.onGetActivePlan();
+              private billingService: BillingService,
+              private cdRef: ChangeDetectorRef) {
+              // this.onGetActivePlan();
   }
 
   ngOnInit() {
-    this.quickmenuService.onClickEmitQSLinkobj.subscribe((res) => { 
+    this.quickmenuService.onClickEmitQSLinkobj.subscribe((res) => {
       this.quickDivID = res.linkid;
+      this.callForQuickStart();
     });
-   // this.userService.addUserActionOnActualButton.next({quickstartid:5,isclicked:null,isactualbtnclicked:false});
-     
-    // this.userService.isClickedOnQSMenu.pipe(
-    //   takeUntil(this.unsubscribeAfterUserAction$)
-
-    // ).subscribe((status)=>{
-    //   this.isquickstartmenu = status.isclicked;
-    //   this.quickDivID = status.quickstartid;
-      
-    // });
-    //this.quickDivID = 5;
+    this.userService.isRevisitedQSMenuLink.subscribe((status) => { this.isRevistedLink = status.reclickqslink; this.currentLinkID = status.quickstartid; this.iswindowclicked = status.urlchanged  });
     //this.userService.isRevisitedQSMenuLink.subscribe((status) => { this.isRevistedLink = status.reclickqslink; this.currentLinkID = status.quickstartid; });
     // this.onGetPlanCompareData()
     this.onGetActivePlan();
@@ -130,6 +124,7 @@ export class PricingComponent implements OnInit, AfterViewInit, OnDestroy {
     this.billingService.getActivePlan(this.constructor.name, moduleName.manageSubscriptionsModule).subscribe((res: any) => {
       this.loading.stop('2');
       this.skeletonLoader = false;
+      this.subscriptionData = res.response;
       this.onSelectActivePlan(res.response)
     }, err => {
       this.loading.stop('2');
@@ -155,18 +150,18 @@ export class PricingComponent implements OnInit, AfterViewInit, OnDestroy {
           activeData.dsar.maxPrice = data.planDetails.price;
           activeData.dsar.maxPlanID = data.planDetails.stripe_plan_id;
           activeData.dsar.cycle = data.planDetails.cycle;
-          this.addonsBillingCycle = data.planDetails.cycle;
+          this.dsarBillingCycle = data.planDetails.cycle;
         } else if (data.planDetails.price > activeData.consentPreference.maxPrice && data.active && data.planDetails.type === 2) {
           activeData.consentPreference.maxPrice = data.planDetails.price;
           activeData.consentPreference.maxPlanID = data.planDetails.stripe_plan_id;
           activeData.consentPreference.cycle = data.planDetails.cycle;
-
+          this.consentPreferenceBillingCycle = data.planDetails.cycle;
         }
       }
       this.activeData = activeData;
       this.subscriptionList = this.planDetails.cookieConsent[`${this.cookieConsentBillingCycle}`];
-      this.dsarPlanList = this.planDetails.dsar[`${this.addonsBillingCycle}`];
-      this.consentPreferenceList = this.planDetails.consentPreference[`${this.addonsBillingCycle}`];
+      this.dsarPlanList = this.planDetails.dsar[`${this.dsarBillingCycle}`];
+      this.consentPreferenceList = this.planDetails.consentPreference[`${this.consentPreferenceBillingCycle}`];
     } catch (e) {
     }
   }
@@ -192,8 +187,8 @@ export class PricingComponent implements OnInit, AfterViewInit, OnDestroy {
 
   onSetPlans(plansData) {
     this.subscriptionList = plansData.cookieConsent[`${this.cookieConsentBillingCycle}`];
-    this.dsarPlanList = plansData.dsar[`${this.cookieConsentBillingCycle}`];
-    this.consentPreferenceList = plansData.consentPreference[`${this.cookieConsentBillingCycle}`];
+    this.dsarPlanList = plansData.dsar[`${this.dsarBillingCycle}`];
+    this.consentPreferenceList = plansData.consentPreference[`${this.consentPreferenceBillingCycle}`];
   }
 
   ngOnDestroy() {
@@ -203,6 +198,8 @@ export class PricingComponent implements OnInit, AfterViewInit, OnDestroy {
     element.style.margin = null;
     element.classList.add('container');
     element.classList.add('site-content');
+    this.quickDivID = "";
+    this.unsubscribeAfterUserAction$.unsubscribe();
   }
 
   onGetUserEmail() {
@@ -250,82 +247,40 @@ export class PricingComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  onSelectPlanType(event) {
-    if (event.target.checked) {
-      this.subscriptionList = this.planDetails[`${this.cookieConsentBillingCycle}`];
-    } else {
-      // this.subscriptionPlanType = 'CCPA';
-    }
-  }
-
-  onSelectCookieConsentBillingCycle(e) {
+  onSelectCookieConsentBillingCycle(e, type) {
     try {
       if (e.checked) {
-        this.cookieConsentBillingCycle = 'yearly';
+        if (type === 1) {
+          this.cookieConsentBillingCycle = 'yearly';
+        } else if (type === 2) {
+          this.dsarBillingCycle = 'yearly';
+        }
+        else if (type === 3) {
+          this.consentPreferenceBillingCycle = 'yearly';
+        }
+
         this.subscriptionList = this.planDetails.cookieConsent[`${this.cookieConsentBillingCycle}`];
-        this.dsarPlanList = this.planDetails.dsar[`${this.cookieConsentBillingCycle}`];
-        this.consentPreferenceList = this.planDetails.consentPreference[`${this.cookieConsentBillingCycle}`];
+        this.dsarPlanList = this.planDetails.dsar[`${this.dsarBillingCycle}`];
+        this.consentPreferenceList = this.planDetails.consentPreference[`${this.consentPreferenceBillingCycle}`];
       } else {
-        this.cookieConsentBillingCycle = 'monthly';
+        if (type === 1) {
+          this.cookieConsentBillingCycle = 'monthly';
+        } else if (type === 2) {
+          this.dsarBillingCycle = 'monthly';
+        }
+        else if (type === 3) {
+          this.consentPreferenceBillingCycle = 'monthly';
+        }
+
         this.subscriptionList = this.planDetails.cookieConsent[`${this.cookieConsentBillingCycle}`];
-        this.dsarPlanList = this.planDetails.dsar[`${this.cookieConsentBillingCycle}`];
-        this.consentPreferenceList = this.planDetails.consentPreference[`${this.cookieConsentBillingCycle}`];
+        this.dsarPlanList = this.planDetails.dsar[`${this.dsarBillingCycle}`];
+        this.consentPreferenceList = this.planDetails.consentPreference[`${this.consentPreferenceBillingCycle}`];
       }
     } catch (e) {
     }
   }
 
 
-  onSelectAddoncookieConsentBillingCycle(e) {
-    if (e.checked) {
-      this.addonsBillingCycle = 'yearly';
-      this.dsarPlanList = this.planDetails.dsar[`${this.addonsBillingCycle}`];
-      this.consentPreferenceList = this.planDetails.consentPreference[`${this.addonsBillingCycle}`];
-    } else {
-      this.addonsBillingCycle = 'monthly';
-      this.dsarPlanList = this.planDetails.dsar[`${this.addonsBillingCycle}`];
-      this.consentPreferenceList = this.planDetails.consentPreference[`${this.addonsBillingCycle}`];
-    }
-  }
-
-
-  onGetCurrentPlan() {
-    this.loading.start();
-    this.billingService.getCurrentPlanInfo(this.constructor.name, moduleName.pricingModule).subscribe((res: any) => {
-      this.loading.stop();
-      if (!res.error) {
-        this.currentPlan = res.response;
-        this.cookieConsentBillingCycle = res.response.duration === 'month' ? 'MONTHLY' : 'YEARLY';
-        // this.onSetValue();
-      } else {
-        this.currentPlan.services = res.error.services;
-      }
-    }, error => {
-      this.loading.stop();
-      this.isOpen = true;
-      this.alertMsg = error;
-      this.alertType = 'danger';
-    });
-  }
-
-  onUpgradePlan(plan) {
-    this.loading.start();
-    const payloads = {};
-    this.billingService.upGradePlan(payloads, this.constructor.name, moduleName.pricingModule).subscribe((res: any) => {
-      this.loading.stop();
-      if (res.status === 200) {
-        this.isOpen = true;
-        this.alertMsg = 'Your Plan has been Upgraded';
-        this.alertType = 'info';
-        this.onGetCurrentPlan();
-      }
-    }, error => {
-      this.loading.stop();
-      this.isOpen = true;
-      this.alertMsg = error;
-      this.alertType = 'danger';
-    });
-  }
 
   onClosed(dismissedAlert: any): void {
     this.alertMsg = !dismissedAlert;
@@ -333,6 +288,32 @@ export class PricingComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   onAddToCart(planDetails: any, planUnit: any) {
+   if (this.quickDivID !== undefined && (this.quickDivID == 11 || this.quickDivID == 18 || this.quickDivID == 5)) {
+      const indexId = this.quickDivID == 18 ? 5 : this.quickDivID == 11 ? 4 : 3;
+      this.checkForQuickDivIDWithIndex();
+      const a = this.quickmenuService.getQuerymenulist();
+      if (a.length !== 0) {
+        const idx = a.findIndex((t) => t.index == indexId);
+        if (a[idx].quicklinks.filter((t) => t.linkid == this.quickDivID).length > 0) {
+    
+          this.userService.onRevistQuickStartmenulink.next({quickstartid:this.quickDivID,reclickqslink:true,urlchanged:false});
+          const plan = {...planDetails};
+          plan.priceTotal = plan.price * planUnit.value;
+          plan.unit = planUnit.value;
+          this.cartItem.push(plan);
+          // }
+          this.subTotal = 0;
+          if (this.cartItem.length > 0) {
+            for (const item of this.cartItem) {
+              this.subTotal += Number(item.priceTotal);
+            }
+          }
+          setTimeout(() => {
+            window.scrollTo(0, document.body.scrollHeight);
+          }, 500);
+        }
+      }
+    } else{
     // const isItem = this.cartItem.includes((plan));
     // if (isItem) {
     //   this.cartItem = this.cartItem.filter( obj => {
@@ -353,6 +334,7 @@ export class PricingComponent implements OnInit, AfterViewInit, OnDestroy {
     setTimeout(() => {
       window.scrollTo(0, document.body.scrollHeight);
     }, 500);
+  }
   }
 
   onUpdateCart(cartProperty, i) {
@@ -429,26 +411,21 @@ export class PricingComponent implements OnInit, AfterViewInit, OnDestroy {
         this.alertMsg = err;
         this.alertType = 'danger';
       })
-    } else if (this.quickDivID !== undefined && (this.quickDivID == 11 || this.quickDivID == 18)) {
+    } else if (this.quickDivID !== undefined && (this.quickDivID == 11 || this.quickDivID == 18 || this.quickDivID == 5)) {
       const indexId = this.quickDivID == 18 ? 5 : this.quickDivID == 11 ? 4 : 3;
-      let quickLinkObj = {
-        linkid: this.quickDivID,
-        indexid: indexId,
-        isactualbtnclicked: true,
-        islinkclicked: true
-      };
-      this.quickmenuService.onClickEmitQSLinkobj.next(quickLinkObj);
-      this.quickmenuService.updateQuerymenulist(quickLinkObj);
+      this.checkForQuickDivIDWithIndex();
       const a = this.quickmenuService.getQuerymenulist();
       if (a.length !== 0) {
-        const idx = a.findIndex((t) => t.index == quickLinkObj.indexid);
-        if (a[idx].quicklinks.filter((t) => t.linkid == quickLinkObj.linkid).length > 0) {
+        const idx = a.findIndex((t) => t.index == indexId);
+        if (a[idx].quicklinks.filter((t) => t.linkid == this.quickDivID).length > 0) {
           this.loading.start()
           this.billingService.getManageSessionID(this.constructor.name, moduleName.manageSubscriptionsModule).subscribe((res: any) => {
             this.loading.stop();
             if (res.status === 200) {
-              this.quickmenuService.onClickEmitQSLinkobj.next(quickLinkObj);
-              this.quickmenuService.updateQuerymenulist(quickLinkObj);
+              this.userService.onRevistQuickStartmenulink.next({quickstartid:this.quickDivID,reclickqslink:true,urlchanged:false});
+              // this.quickmenuService.onClickEmitQSLinkobj.next(quickLinkObj);
+              // this.quickmenuService.updateQuerymenulist(quickLinkObj);
+              this.checkForQsTooltip();
               window.open(res.response, '_blank');
             }
 
@@ -462,40 +439,95 @@ export class PricingComponent implements OnInit, AfterViewInit, OnDestroy {
       }
     }
 
-   
+
   }
   openModal(template: TemplateRef<any>) {
     this.modalRef = this.modalService.show(template, {class: 'modal-lg', ignoreBackdropClick: true});
   }
 
   onSetCookieConsent(type, featureCompareType) {
-    this.currentFeature = featureCompareType;
- this.currentStep = type;
-  this.cookieConsentBillingCycle = 'monthly';
-    this.subscriptionList = this.planDetails.cookieConsent[`${this.cookieConsentBillingCycle}`];
-    this.dsarPlanList = this.planDetails.dsar[`${this.cookieConsentBillingCycle}`];
-    this.consentPreferenceList = this.planDetails.consentPreference[`${this.cookieConsentBillingCycle}`];
-}
+    if (this.planDetails !== undefined) {
+      this.currentFeature = featureCompareType;
+      this.currentStep = type;
+      this.subscriptionList = this.planDetails.cookieConsent[`${this.cookieConsentBillingCycle}`];
+      this.dsarPlanList = this.planDetails.dsar[`${this.dsarBillingCycle}`];
+      this.consentPreferenceList = this.planDetails.consentPreference[`${this.consentPreferenceBillingCycle}`];
+      this.onSelectActivePlan(this.subscriptionData);
+    }
+  }
 
   ngAfterViewInit(){
-    console.log('first pricing..comp..');
-    this.onGetPlanDetails();
+    this.userService.isRevisitedQSMenuLink.subscribe((status) => { this.isRevistedLink = status.reclickqslink; this.currentLinkID = status.quickstartid; this.iswindowclicked = status.urlchanged  });
+    this.quickmenuService.onClickEmitQSLinkobj.subscribe((res) => {
+      this.quickDivID = res.linkid;
+    });
+  //  this.onGetPlanDetails();
+    this.cdRef.detectChanges();
     if(this.planDetails !== undefined){
       this.callForQuickStart();
     }
   }
-
+  onSetCookieConsentTest(type, featureCompareType) {
+    if (this.planDetails !== undefined) {
+      this.currentFeature = featureCompareType;
+      this.currentStep = type;
+      this.subscriptionList = this.planDetails.cookieConsent[`${this.cookieConsentBillingCycle}`];
+      this.dsarPlanList = this.planDetails.dsar[`${this.dsarBillingCycle}`];
+      this.consentPreferenceList = this.planDetails.consentPreference[`${this.consentPreferenceBillingCycle}`];
+    }
+  }
   callForQuickStart(){
     const quicklinks = this.quickmenuService.qsMenuobjwithIndexid;
     if (quicklinks !== undefined && quicklinks.linkid == 11) {
-      this.onSetCookieConsent(2, 'dsar');
-    }else if (quicklinks !== undefined && quicklinks.linkid == 12) {
-      this.onSetCookieConsent(2, 'dsar');
+      this.currentStep = 2;
+      this.onSetCookieConsentTest(2, 'dsar');
     }else if (quicklinks !== undefined && quicklinks.linkid == 18) {
-      this.onSetCookieConsent(3, 'consentPreference');
+      this.currentStep = 3;
+      this.onSetCookieConsentTest(3, 'consentPreference');
     }else if (quicklinks !== undefined && quicklinks.linkid == 5) {
-      this.onSetCookieConsent(1, 'cookieConsent');
-    } 
+      this.currentStep = 1;
+      this.onSetCookieConsentTest(1, 'cookieConsent');
+    }
+    this.onSelectActivePlan(this.subscriptionData);
+    // if(quicklinks !== undefined && (quicklinks.linkid == 5 || quicklinks.linkid == 11 || quicklinks.linkid == 18)){
+    //   this.onGetActivePlan(); // by default initially it will show monthly plan only
+    // }
   }
+
+
+  checkForQsTooltip(){
+    this.userService.onRevistQuickStartmenulink.next({quickstartid:this.quickDivID,reclickqslink:false,urlchanged:true});
+    this.quickDivID = "";
+  }
+
+  checkForQSTooltipForEnterprisebt() {
+    if (this.quickDivID == undefined || (this.quickDivID == 0)) {
+      return true;
+    } else {
+     this.checkForQuickDivIDWithIndex();
+     const indexId = this.quickDivID == 18 ? 5 : this.quickDivID == 11 ? 4 : 3;
+      const a = this.quickmenuService.getQuerymenulist();
+      if (a.length !== 0) {
+        const idx = a.findIndex((t) => t.index == indexId);
+        if (a[idx].quicklinks.filter((t) => t.linkid == this.quickDivID).length > 0) {
+          this.userService.onRevistQuickStartmenulink.next({ quickstartid: this.quickDivID, reclickqslink: true, urlchanged: false });
+        }
+      }
+    }
+
+  }
+
+  checkForQuickDivIDWithIndex(){
+    const indexId = this.quickDivID == 18 ? 5 : this.quickDivID == 11 ? 4 : 3;
+    let quickLinkObj = {
+      linkid: this.quickDivID,
+      indexid: indexId,
+      isactualbtnclicked: true,
+      islinkclicked: true
+    };
+    this.quickmenuService.onClickEmitQSLinkobj.next(quickLinkObj);
+    this.quickmenuService.updateQuerymenulist(quickLinkObj);
+  }
+
 
 }

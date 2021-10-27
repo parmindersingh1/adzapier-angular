@@ -26,7 +26,11 @@ export class QuickmenuService extends QuickStartMenuList {
   public onDissmissQuickStartmenu: BehaviorSubject<any> = new BehaviorSubject<any>(false);
   get isQSMenuDissmissed() {
     return this.onDissmissQuickStartmenu.asObservable();
-}
+  }
+  public headerNavStatusAfterDismissedQuickStart: BehaviorSubject<any> = new BehaviorSubject<any>(false);
+  get isHeaderNavClickedAfterQSDissmissed() {
+    return this.headerNavStatusAfterDismissedQuickStart.asObservable();
+  }
   constructor() {
     super();
         this.loadQuickstartMenu()
@@ -58,5 +62,17 @@ export class QuickmenuService extends QuickStartMenuList {
       }
 
     }
+  }
+
+  setQuickstartDismissStatus(data){
+      localStorage.setItem('qsmDismissStatus', JSON.stringify(data));
+  }
+
+  getQuickstartDismissStatus(){
+    return JSON.parse(localStorage.getItem('qsmDismissStatus'));
+  }
+
+  removeQuicstartDismissStatus(){
+    localStorage.removeItem('qsmDismissStatus');
   }
 }

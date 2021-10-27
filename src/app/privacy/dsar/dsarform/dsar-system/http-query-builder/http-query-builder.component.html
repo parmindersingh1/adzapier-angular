@@ -1,0 +1,81 @@
+
+
+<div class="card">
+  <div class="card-header">
+    <h5>Rest API Configuration</h5>
+  </div>
+  <form [ngStyle]="{display: pageStep === 1 ? 'block' : 'none'}"  (ngSubmit)="onSubmit()">
+  <div class="card-body" [formGroup]="httpQueryBuilderForm">
+    <a href="javascript:;" class="back-to-list-btn mb-2" (click)="backHome.emit(true)"><i class="fas fa-chevron-left"></i> GoBack</a>
+
+    <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="exampleFormControlInput1">API Response Path</label>
+            <input type="email" class="form-control" formControlName="path" id="exampleFormControlInput1" placeholder="response.data">
+            <div *ngIf="submitted && f.path.errors" class="invalid-feedback">
+              <div *ngIf="f.path.errors.required">This Field is required</div>
+            </div>
+          </div>
+        </div>
+    </div>
+    <ng-container formArrayName="queryParams" *ngFor="let obj of httpQueryBuilderForm.controls.queryParams['controls']; let i=index">
+    <div class="row" [formGroupName]="i">
+        <div class="col-md-3">
+            <div class="form-group">
+              <label for="exampleInputField{{i}}">Key</label>
+              <input type="email" class="form-control" id="exampleInputField{{i}}" formControlName="field" placeholder="Key">
+<!--              <small id="key" class="form-text text-danger mt-2">Key is Required.</small>-->
+            </div>
+        </div>
+      <div class="col-md-4">
+        <div class="form-group">
+          <label for="exampleInputValue{{i}}">Value</label>
+          <select class="form-control" formControlName="value_1" id="exampleInputValue{{i}}">
+            <ng-container  *ngFor="let option of formObject.request_form">
+              <option [value]="option.controlId">form.{{option.controllabel}}</option>
+              <option [value]="option.controlId">form.{{option.controllabel}}</option>
+            </ng-container>
+          </select>
+<!--          <small id="value" class="form-text text-danger mt-2">Value is Required.</small>-->
+        </div>
+      </div>
+      <div class="col-md-2">
+        <button type="button" class="btn btn-link text-danger" (click)="removeSkill(i)">Remove</button>
+      </div>
+    </div>
+    </ng-container>
+    <div class="row">
+      <div class="col-md-7">
+        <div class="text-center float-right">
+          <button type="button" class="btn btn-link mr-3" (click)="addSkills()">Add More</button>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="row mt-4 mb-5 margin-auto">
+      <div class="text-center margin-auto">
+        <button pButton pRipple type="button" (click)="onConnectionListPage()" label="Cancel" class="p-button-secondary mr-3"></button>
+        <button pButton pRipple type="submit" label="Save"></button>
+
+        <!--          <button type="button" class="btn btn-secondary mr-3">Cancel</button>-->
+        <!--          <button type="button" (click)="onSaveSqlBuilder()" class="btn btn-primary">Save</button>-->
+      </div>
+
+    </div>
+
+  </div>
+  </form>
+
+  <div class="card-body" *ngIf="pageStep === 2">
+    <div class="row">
+      <div class="col-md-12 mt-5 text-center mb-5">
+        <h5><i style="font-size: 40px;" class="fas fa-check-circle tx-success mr-2"></i><span style="vertical-align: super;"> The Connection Configuration Successfully Saved </span></h5>
+        <button class="btn btn-link" type="button" (click)="onConnectionListPage()"><i class="fas fa-chevron-left mr-2"></i> Back to connection list</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+

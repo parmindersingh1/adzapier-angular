@@ -1,6 +1,6 @@
     <div>
         <div class="guidencediv" [ngStyle]="styleobj"
-            *ngIf="isclickedbyuser && !isactualLinkclickedbyuser && !revisitedqslink && linkid == '1' && divguidetext == 'addcompanydetails'">
+            *ngIf="isclickedbyuser && !isactualLinkclickedbyuser && linkid == '1' && divguidetext == 'addcompanydetails'">
             <p> {{guidancetext}}</p>
             
         </div>
@@ -122,7 +122,7 @@
             
         </div>
         <div class="guidencediv" [ngStyle]="styleobj"
-            *ngIf="revisitedqslink && linkid == '10' && revisitedlinkId == '10' && divguidetext == 'consent-dashboard'">
+            *ngIf="isactualLinkclickedbyuser && linkid == '10' && divguidetext == 'consent-dashboard'">
             <p> {{guidancetext}}</p>
             
         </div>
@@ -135,9 +135,9 @@
             
         </div>
         <div class="guidencediv" [ngStyle]="styleobj"
-            *ngIf="revisitedqslink && linkid == '11' && revisitedlinkId == '11' && divguidetext == 'add-dsar-subscription'">
+            *ngIf="isactualLinkclickedbyuser && linkid == '11' && divguidetext == 'add-dsar-subscription'">
             <p> {{guidancetext}}</p>
-            
+    
         </div>
     </div>
 
@@ -234,7 +234,7 @@
     </div>
 
 
-    <div *ngIf="!isactualLinkclickedbyuser">
+    <div>
         <div class="guidencediv" [ngStyle]="styleobj"
             *ngIf="isclickedbyuser && !isactualLinkclickedbyuser && linkid == '19'  && divguidetext == 'assign-consent-preference-subscription-toproperty' ">
             <p> {{guidancetext}}</p>

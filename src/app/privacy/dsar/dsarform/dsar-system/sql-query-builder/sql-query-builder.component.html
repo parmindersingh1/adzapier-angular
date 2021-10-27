@@ -1,0 +1,87 @@
+<ng-container *ngIf="!isUpdate">
+<div class="card">
+
+  <ng-container *ngIf="step.includes(1) && sqlPageStep === 1">
+  <div class="card-body" >
+    <a href="javascript:;" class="back-to-list-btn mb-2" (click)="backHome.emit(true)"><i class="fas fa-chevron-left"></i> GoBack</a>
+
+    <h5 class="mb-2">Select Table</h5>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-group"  *ngIf="!skLoading.one">
+          <select (change)="onSelectTable(tableName.value)" #tableName class="form-control w-75" id="exampleFormControlSelect1">
+            <option [value]="table[tableListKey]" *ngFor="let table of tableList">{{table[tableListKey]}}</option>
+          </select>
+        </div>
+        <ng-container *ngIf="skLoading.one">
+          <div class="mb-2">
+            <ngx-skeleton-loader   [theme]="{width: '100%', height: '30px'}"></ngx-skeleton-loader>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+  </ng-container>
+
+  <ng-container *ngIf="step.includes(2) && sqlPageStep === 1">
+  <div class="card-body" *ngIf="step.includes(2) && sqlPageStep === 1">
+
+    <h5 class="mb-3">Choose Table Columns</h5>
+    <div class="row">
+      <ng-container *ngIf="!skLoading.two">
+        <div class="col-md-2 mb-2" *ngFor="let tableColumn of tableColumnsList">
+          <button pButton pRipple type="button" (click)="onSelectField(tableColumn[tableColumnsListKey])"   [ngClass]="{'p-button-text' : !sqlSelectField.includes(tableColumn[tableColumnsListKey])}"
+                  class="p-button-raised"><span class="text-over"> {{tableColumn[tableColumnsListKey]}}</span></button>
+        </div>
+      </ng-container>
+    <ng-container *ngIf="skLoading.two">
+      <div class="col-md-2 mb-2" *ngFor="let table of skLoadingArray">
+        <ngx-skeleton-loader   [theme]="{width: '130px', height: '30px'}"></ngx-skeleton-loader>
+      </div>
+    </ng-container>
+
+    </div>
+  </div>
+  </ng-container>
+
+
+
+  <ng-container  *ngIf="sqlSelectField.length > 0 && sqlPageStep === 1">
+    <div class="mt-4 card-body">
+      <h5 class="mb-2">SQL WHERE Clause</h5>
+      <query-builder [(ngModel)]='query' [config]='config' ></query-builder>
+    </div>
+      <div class="row mt-4 mb-5 margin-auto">
+        <div class="text-center margin-auto">
+          <button pButton pRipple type="button" (click)="onConnectionListPage()" label="Cancel" class="p-button-secondary mr-3"></button>
+          <button pButton pRipple type="button" (click)="onSaveSqlBuilder()" label="Save"></button>
+        </div>
+
+      </div>
+  </ng-container>
+
+
+  <div class="card-body" *ngIf="sqlPageStep === 2">
+    <div class="row">
+      <div class="col-md-12 mt-5 text-center mb-5">
+        <h5><i style="font-size: 40px;" class="fas fa-check-circle tx-success mr-2"></i><span style="vertical-align: super;"> The Connection Configuration Successfully Saved </span></h5>
+        <button class="btn btn-link" type="button" (click)="onConnectionListPage()"><i class="fas fa-chevron-left mr-2"></i> Back to connection list</button>
+      </div>
+    </div>
+  </div>
+
+  </div>
+
+
+<div class="col-sm-5 mr-0 float-right flotingdiv" [ngClass]="{'hide':!isOpen}">
+  <alert *ngIf="isOpen" [type]="alertType" dismissOnTimeout="5000" [dismissible]="dismissible"
+  ><span [innerHTML]="alertMsg"></span></alert>
+</div>
+</ng-container>
+
+<ng-container *ngIf="isUpdate">
+<app-update-sql-query-builder [formObject]="formObject" [formID]="formID"
+                              [updateData]="updateData"
+                              (backHome)="backHome.emit(true)"
+                              [connectionId]="connectionId" [systemName]="systemName"></app-update-sql-query-builder>
+</ng-container>
