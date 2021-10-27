@@ -105,7 +105,7 @@ export class QuickstartmenuComponent implements OnInit, AfterViewInit,AfterViewC
 
   dismissQuickStartMenu() {
     this.isOpen = false;
-    this.showQuickStartMenu = false;//!this.showQuickStartMenu;
+    this.showQuickStartMenu = !this.showQuickStartMenu; //to close already open quick start div
     this.quickmenuService.isquickmenudismiss = true;
    // this.enablequickstartfromtopmenu = true;
     this.quickmenuService.setQuickstartDismissStatus({isdismissed:true,isqstoplink:true});
@@ -315,9 +315,9 @@ export class QuickstartmenuComponent implements OnInit, AfterViewInit,AfterViewC
             return true;
           }
         }  else if(this.isSubscriptionLinkVisited()){
-          if(objindex == 3 || objindex == 4 || objindex == 5){
+          if(objindex == 2 || objindex == 3 || objindex == 4 || objindex == 5){ //to avoid issue when revisit qsm links
             const idx = a.findIndex((t) => t.index == objindex);
-            return a[idx].quicklinks.some((t) => t.linkid == 5 || t.linkid == 11 || t.linkid == 18 );
+            return a[idx].quicklinks.some((t) => t.linkid == 4 || t.linkid == 5 || t.linkid == 11 || t.linkid == 18 ); //to avoid issue when revisit qsm links
           }
         }  else if (linkIndex == 0 && objindex > 1 && objindex !== 4) {
           if ((objindex - 1) == 4 && currentobj.linkid == 17) {
