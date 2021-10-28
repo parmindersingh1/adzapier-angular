@@ -346,7 +346,7 @@
                             </table>
                         </ng-template>
                     </li>
-                   <li ngbNavItem>
+                   <li ngbNavItem [ngbNavItem]="4">
                         <a ngbNavLink>Systems</a>
                         <ng-template ngbNavContent>
                           <app-dsar-connection-list [formID]="formID" [requestID]="requestID"></app-dsar-connection-list>
