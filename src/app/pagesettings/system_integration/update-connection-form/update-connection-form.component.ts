@@ -4,7 +4,7 @@ import {SystemIntegrationService} from '../../../_services/system_integration.se
 import {ActivatedRoute} from '@angular/router';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
 import {moduleName} from '../../../_constant/module-name.constant';
-import {credForm } from '../integration_cred.constant';
+import {credForm} from '../integration_cred.constant';
 
 @Component({
   selector: 'app-update-connection-form',
@@ -35,6 +35,7 @@ export class UpdateConnectionFormComponent implements OnInit {
   testingSuccess = '';
   testEmail = '';
   credForm = credForm;
+
   constructor(private formBuilder: FormBuilder,
               private systemIntegrationService: SystemIntegrationService,
               private activatedroute: ActivatedRoute,
@@ -67,6 +68,17 @@ export class UpdateConnectionFormComponent implements OnInit {
     for (let i = 0; this.updateConnectionData.integration_cred.length > i; i++) {
       this.addCredentialRows.push(this.addCredential(i));
     }
+  }
+
+  onFindCredentialType(keyText): string {
+    const cred = this.credForm[this.systemName];
+    let type = 'text';
+    for (const data of cred) {
+      if (data.key === keyText) {
+        type = data.type;
+      }
+    }
+    return type;
   }
 
   addCredential(index) {
@@ -153,7 +165,7 @@ export class UpdateConnectionFormComponent implements OnInit {
   onUpdateCred(payload) {
     this.loading.start();
     this.systemIntegrationService.UpdateSystemIntegration(this.constructor.name,
-      moduleName.systemIntegrationModule, this.systemID, this.updateConnectionData.id,  payload)
+      moduleName.systemIntegrationModule, this.systemID, this.updateConnectionData.id, payload)
       .subscribe(res => {
         this.loading.stop();
         this.refreshConnectionList.emit();

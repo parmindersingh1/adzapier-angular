@@ -44,7 +44,7 @@ export class SystemIntegrationComponent implements OnInit {
   mailChimpForm: FormGroup;
   submitted = false;
   credCount: any = 0;
-
+  errorMessage = '';
   constructor(private modalService: BsModalService,
               private systemIntegrationService: SystemIntegrationService,
               private loading: NgxUiLoaderService,
@@ -234,17 +234,18 @@ export class SystemIntegrationComponent implements OnInit {
         this.isOpen = true;
         this.alertMsg = res.message;
         this.alertType = 'success';
-        // this.alertMsg = '';
+        this.errorMessage = '';
         this.loading.stop();
         this.modalRef.hide();
       }, error => {
         this.testingSuccess = false;
         this.isTesting = false;
-        this.isOpen = true;
-        this.alertMsg = error;
-        this.alertType = 'danger';
+        // this.isOpen = true;
+        // this.alertMsg = error;
+        // this.alertType = 'danger';
         this.loading.stop();
-        this.modalRef.hide();
+        this.errorMessage = error;
+        // this.modalRef.hide();
       });
   }
 }

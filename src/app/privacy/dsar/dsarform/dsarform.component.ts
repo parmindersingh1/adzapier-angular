@@ -1496,7 +1496,26 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
     }
 
   }
-
+  onSetFormObj () {
+    let updatedWebForm;
+    if(this.crid){
+      updatedWebForm = this.ccpaFormConfigService.getFormControlList();
+    }else{
+      updatedWebForm = this.dsarFormService.getFormControlList();
+    }
+    this.formObject = {
+      form_name: this.basicForm.controls['formname'].value,
+      form_status: 'draft',
+      settings: {
+        approver: this.defaultapprover || this.selectedApproverID,
+        workflow: this.workflow,
+        days_left: Number(this.daysleft) === 0 ? '45' : Number(this.daysleft),
+        email_verified: this.isEmailVerificationRequired || false,
+        captcha: this.isCaptchaVerificationRequired || false,
+      },
+      request_form: updatedWebForm
+    };
+  }
   onNavChange(changeEvent: NgbNavChangeEvent) {
     if (changeEvent.nextId === 2) {
       this.activeId = changeEvent.activeId;
