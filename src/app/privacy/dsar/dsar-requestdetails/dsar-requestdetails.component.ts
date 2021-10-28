@@ -490,6 +490,9 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
     } else if (changeEvent.activeId === 4 && changeEvent.nextId === 1) {
       this.isActivityLogOpen = true;
     }
+    else if (changeEvent.activeId === 4 && changeEvent.nextId === 2) {
+      this.isEmailLogOpen = true;
+    }
     else if (changeEvent.activeId === 1 && changeEvent.nextId === 3) {
       this.isActivityLogOpen = false;
       this.isEmailLogOpen = false;
