@@ -346,10 +346,14 @@
                             </table>
                         </ng-template>
                     </li>
-                    <!-- <li ngbNavItem>
+                   <li ngbNavItem [ngbNavItem]="4">
                         <a ngbNavLink>Systems</a>
-                        <ng-template ngbNavContent>System content</ng-template>
-                    </li> -->
+                        <ng-template ngbNavContent>
+                          <app-dsar-connection-list [formID]="formID" [requestID]="requestID"></app-dsar-connection-list>
+
+
+                        </ng-template>
+                    </li>
                 </ul>
 
                 <button *ngIf="isTaskTabOpen" class="btn btn-sm btn-outline-secondary btn-uppercase btnSubtask" [disabled]="currentWorkflowStage === 'Rejected'"
@@ -430,7 +434,7 @@
                         <li *ngFor="let data of emailLog; let k = index;  first as isFirst">
                             <div class="activity-log">
                                 <div class="chat-group-divider">
-                                    
+
                                     <span
                                         *ngIf=" !k || ( data.created_at | date: 'longDate') !== (emailLog[k-1].created_at | date: 'longDate' ) ">
                                         {{data.created_at | date:'longDate'}}
@@ -974,7 +978,7 @@
         <ul>
             <li *ngFor="let data of duplicateRequest" [ngClass]="{'activelistid':data.id == duplicateRequestID ,'':data.id != duplicateRequestID}">
                    <a (click)="showReqData(data)">
-                    <div class="dupid-div"> 
+                    <div class="dupid-div">
                         {{data.id}}
                     </div>
                     <span class="pl-1 pr-1 text-capitalize border-gray rounded text-primary" *ngIf="data.request_status == 1">New</span>
@@ -991,7 +995,7 @@
                 <div *ngIf="i==0" class="font-weight-bold txt-uppercase" style="display: flex; flex-direction: column;"><span>Request ID : <span class="text-uppercase">{{duplicateRequestID}}</span></span>
                 <span>Status: <span [ngStyle]="duplicateRequestStatus">{{progressStaus}}</span></span>
                 </div>
-                
+
             <li [ngClass]="details[0] == 'approver' || details[0] == 'captchacode' || details[0] == 'request_details' ? 'hide':'showrows'">
                 <span *ngIf="details[0] !== 'approver' && details[0] !== 'captchacode' && details[0] !== 'request_details' && details[0] !== 'request_type' && details[0] !== 'subject_type' && details[0] !== 'workflow'">
                     {{capitalizatFirstLetterForDuplicate(details[0])}}: {{details[1]}}

@@ -112,7 +112,7 @@
     <ul class="navbar-nav"  #navMenu *ngIf="currentUser">
       <li *ngFor="let menu of navigationMenu;" class="nav-item">
         
-      <div *ngIf="menu.showlink" dropdown   #headerDropdown="bs-dropdown"  container="body"    [autoClose]="true">
+      <div *ngIf="menu.showlink" dropdown   #headerDropdown="bs-dropdown"  container="body"  (isOpenChange)="onOpenChange($event)"   [autoClose]="true"> <!--data-toggle="collapse"-->
           <div *ngIf="!menu.subcategory" >
             <a class="nav-link" routerLink="[menu.routerLink]" dropdownToggle [queryParams]="{oid:queryOID , pid:queryPID}"  [class.active]="menu.showlink === 'Billing' && isBillingActivelinkMatched" (click)="goto(menu)">
           {{ menu.showlink }}</a></div>
@@ -169,14 +169,59 @@
   <!--end of general menu after login-->
   <!--Help center after login-->
   <div class="navbar-right" *ngIf="currentUser"  dropdown [insideClick]="true">
-  <a  class="nav-link dropdown-link mr-3" dropdownToggle>
+  <a (click)="clicktext()"  class="nav-link dropdown-link mr-3" title="Help Center" dropdownToggle>
     <i-feather name="help-circle" class="feather-20 tx-white"></i-feather>
   </a>
   <ul class="dropdown-menu helpcenter-menu-right" *dropdownMenu>
     <li>
-      <div class="dropdown-header">
-        <a href="https://support.adzapier.com" target="_blank">Help center</a>
+      <div class="dropdown-headers">
+        <!-- <a href="https://support.adzapier.com" target="_blank">Help center</a> -->
+        <form [formGroup]="SupportList" style="box-sizing: border-box;border: 3px solid rgb(235, 236, 240);">
+          <div style="background-color: rgb(250, 251, 252);border-bottom: 2px solid rgb(235, 236, 240);">
+            <h6 style="display: flex;align-items: center;justify-content: center;text-transform: none;margin-top: 8px;">
+              Help</h6>
+            <div class="form-group has-search mt-2">
+              <span class="fa fa-search form-control-feedback ml-2"></span>
+              <input style="width:400px;" type="text" class="form-control ml-2 mr-2" placeholder="Search"
+                (keyup)="onSearchInputChange($event)" formControlName="searchtext">
+            </div>
+            <!-- <input style="width:310px;" class="form-control" placeholder="Enter Topic For Ex:'Billing', 'Cookie Category', 'DSAR'" (keyup)="onSearchInputChange($event)" type="text" formControlName="searchtext"> -->
+          </div>
+          <div style="margin-top: 5px;height:400px;overflow-y:auto;">
+            <div *ngIf="display">
+              <ul class="list-group mb-3" *ngFor="let const of countries">
+                <a class="linked" href="javascript:;" (click)="onNavigateToDetails(const)" (contextmenu)="onRightClick()">
+                  <li class="ml-3 mt-2" style="color: black;text-transform: none;">{{const.title}}</li>
+                  <li class="ml-3"
+                    style="color: black;width:400px;white-space:pre-wrap;margin-top: 5px;text-transform: none;font-weight: normal;">
+                    <p class="mb-0">{{const.body}}</p><a class="mt-2">More...</a>
+                  </li>
+                </a>
+              </ul>
+            </div>
+            <div *ngIf="!display" style="width: 400px;white-space:pre-wrap;">
+              <h5 class="mt-3 ml-2">{{title}}</h5>
+              <div *ngIf="loader" class="spinner-border" role="status" style="margin-left: 47%;margin-top: 30%;">
+                <span class="sr-only">Loading...</span>
+              </div>
+              <div class="ml-2 mr-2" [innerHTML]="CategoryRecord"
+                style="color: black;width:400px;white-space:pre-wrap;margin-top: 5px; text-transform: none;font-weight: normal;">
+  
+              </div>
+              <div id="footer" *ngIf="!display && readytodisplay">
+                <a (click)="onClickOpen()" style="color: #3434e6 ;"><label style="text-transform: none;">Open this article in new tab</label>
+                <svg width="24" height="24" viewBox="0 0 24 24" role="presentation"><g fill="currentColor"><path d="M19.005 19c-.003 0-.005.002-.005.002l.005-.002zM5 19.006c0-.004-.002-.006-.005-.006H5v.006zM5 4.994V5v-.006zM19 19v-6h2v6.002A1.996 1.996 0 0119.005 21H4.995A1.996 1.996 0 013 19.006V4.994C3 3.893 3.896 3 4.997 3H11v2H5v14h14zM5 4.994V5v-.006zm0 14.012c0-.004-.002-.006-.005-.006H5v.006zM11 5H5v14h14v-6h2v6.002A1.996 1.996 0 0119.005 21H4.995A1.996 1.996 0 013 19.006V4.994C3 3.893 3.896 3 4.997 3H11v2zm8 0v3a1 1 0 002 0V4a1 1 0 00-1-1h-4a1 1 0 000 2h3z"></path><path d="M12.707 12.707l8-8a1 1 0 10-1.414-1.414l-8 8a1 1 0 001.414 1.414z"></path></g></svg></a>
+              </div>
+             
+            </div>
+            
+          </div>
+          
+        </form>
+        
       </div>
+      
+
     </li>
   </ul>
     </div>
@@ -248,7 +293,7 @@
                   <a class="dropdown-item" href="{{item.routerLink}}" *ngIf="item.label !== 'Quick Start' && item.label !== 'Signout' && item.label === 'Help Center'" target="_blank">
                     <i-feather *ngIf="item.icon" name="{{item.icon}}" class="feather-16"></i-feather>{{item.label}}
                   </a>
-                  <a class="dropdown-item" (click)="onClickQSLinkFromHeader(false);" *ngIf="item.label !== 'Signout' && item.label !== 'Help Center' && item.label === 'Quick Start'">
+                  <a class="dropdown-item" (click)="onClickQSLinkFromHeader(false);" *ngIf="item.label !== 'Signout' && item.label !== 'Help Center' && item.label === 'Quick Start' && isquickstartdismissed">
                     <i-feather *ngIf="item.icon" name="{{item.icon}}" class="feather-16"></i-feather>{{item.label}}
                   </a>
                 </li>
@@ -391,7 +436,7 @@
   </div>
 </ng-template>
 <!--quickstart alert for every page-->
-<div [ngClass]="isBillingpageQuickid() && isquicklinkclicked && !isBackdropclicked ? 'back-drop-two': ''"
+<div #backDroparea [ngClass]="isBillingpageQuickid() && !isqsmenuopen ? 'back-drop-two': ''"
   (click)="onClickBackdrop()" *ngIf="isloginpage">
   <app-quickstartalert *ngIf="!isHeaderNavbarClicked && !isUserClickedNotRelatedToTooltip && !isRevistedLink  && !isBackdropclicked && actualBackdropclicked" [styleobj]="positionObj()" [isclickedbyuser]="quickLinkStatus"
     [isuserclickoutsidemenu]="isQuicklinkActuallinkVisited()" [linkid]="quickDivID" [divguidetext]="alertguidetext"

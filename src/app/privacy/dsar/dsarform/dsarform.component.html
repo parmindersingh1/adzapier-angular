@@ -1,985 +1,992 @@
 <div class="container">
-    <div class="mb-3">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb breadcrumb-style1 mg-b-0">
-                <li class="breadcrumb-item">Privacy</li>
-                <li class="breadcrumb-item">Data Subject Access Request</li>
-                <li class="breadcrumb-item"><a routerLink="/privacy/dsar/webforms" [queryParams]="{oid:queryOID , pid:queryPID}">Web forms</a></li>
-                <li class="breadcrumb-item active" aria-current="page">{{formName}}</li>
-            </ol>
-        </nav>
+  <div class="mb-3">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb breadcrumb-style1 mg-b-0">
+        <li class="breadcrumb-item">Privacy</li>
+        <li class="breadcrumb-item">Data Subject Access Request</li>
+        <li class="breadcrumb-item"><a routerLink="/privacy/dsar/webforms" [queryParams]="{oid:queryOID , pid:queryPID}">Web forms</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{formName}}</li>
+      </ol>
+    </nav>
+  </div>
+  <div class="shadowdiv" *ngIf="webFormControlList">
+    <div class="webformheading p-3">
+      <h3 class="tx-uppercase tx-14 mb-0 tx-spacing-1 tx-color-02 tx-semibold">Web form name: <span class="text-capitalize text-primary mr-2">{{formName}}</span> <span class="badge tx-11" [ngClass]="showFormStatus() === 'Publish' ? 'badge-primary':'badge-secondary'">{{showFormStatus() === 'Publish' ? 'Active': 'Draft'}}</span></h3>
     </div>
-    <div class="shadowdiv" *ngIf="webFormControlList">
-        <div class="webformheading p-3">
-            <h3 class="tx-uppercase tx-14 mb-0 tx-spacing-1 tx-color-02 tx-semibold">Web form name: <span class="text-capitalize text-primary mr-2">{{formName}}</span> <span class="badge tx-11" [ngClass]="showFormStatus() === 'Publish' ? 'badge-primary':'badge-secondary'">{{showFormStatus() === 'Publish' ? 'Active': 'Draft'}}</span></h3>
-        </div>
-        <ul ngbNav #nav="ngbNav"  (navChange)="onNavChange($event)"  [(activeId)]="active" class="nav-tabs">
-            <li [ngbNavItem]="1" [destroyOnHide]="false">
-                <a ngbNavLink>1 Basic</a>
-                <ng-template ngbNavContent>
-                    <form [formGroup]="basicForm">
-                        <div id="step-1" class="p-10 mt-2 tab-pane step-content" style="display: block;">
-                            <div class="col-6 align-items-center justify-content-between margin-auto">
+    <ul ngbNav #nav="ngbNav"  (navChange)="onNavChange($event)"  [(activeId)]="active" class="nav-tabs">
+      <li [ngbNavItem]="1" [destroyOnHide]="false">
+        <a ngbNavLink>1 Basic</a>
+        <ng-template ngbNavContent>
+          <form [formGroup]="basicForm">
+            <div id="step-1" class="p-10 mt-2 tab-pane step-content" style="display: block;">
+              <div class="col-6 align-items-center justify-content-between margin-auto">
 
-                                <div class="form-group mb-2">
-                                    <label for="formname" class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">Name</label>
-                                    <input type="text" class="form-control" formControlName="formname" name="formname" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
-                                        [ngClass]="{ 'is-invalid': basicFormSubmitted && stepFormOne.formname.errors }" />
-                                    <div *ngIf="basicFormSubmitted && stepFormOne.formname.errors" class="invalid-feedback">
-                                        <div *ngIf="stepFormOne.formname.errors.required">Form name is required
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="form-group mb-2">
-                                    <label for="currentOrganization" class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">Organization</label>
-                                    <input type="text" class="form-control" formControlName="currentOrganization" name="currentOrganization" />
-                                </div>
-    
-                                <div class="form-group mb-2">
-                                    <label for="selectedProperty" class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">Property</label>
-                                    <input type="text" class="form-control" formControlName="selectedProperty" name="selectedProperty" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="btn-toolbar sw-toolbar sw-toolbar-bottom justify-content-end">
-                            <div class="btn-group mr-2 mb-2 sw-btn-group" role="group">
-                            </div>
-                        </div>
-                    </form>              
-            </ng-template>
-            <!-- End Step-1-->  
-    </li>
-    <li [ngbNavItem]="2" [destroyOnHide]="false">
+                <div class="form-group mb-2">
+                  <label for="formname" class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">Name</label>
+                  <input type="text" class="form-control" formControlName="formname" name="formname" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
+                         [ngClass]="{ 'is-invalid': basicFormSubmitted && stepFormOne.formname.errors }" />
+                  <div *ngIf="basicFormSubmitted && stepFormOne.formname.errors" class="invalid-feedback">
+                    <div *ngIf="stepFormOne.formname.errors.required">Form name is required
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-group mb-2">
+                  <label for="currentOrganization" class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">Organization</label>
+                  <input type="text" class="form-control" formControlName="currentOrganization" name="currentOrganization" />
+                </div>
+
+                <div class="form-group mb-2">
+                  <label for="selectedProperty" class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">Property</label>
+                  <input type="text" class="form-control" formControlName="selectedProperty" name="selectedProperty" />
+                </div>
+              </div>
+            </div>
+            <div class="btn-toolbar sw-toolbar sw-toolbar-bottom justify-content-end">
+              <div class="btn-group mr-2 mb-2 sw-btn-group" role="group">
+              </div>
+            </div>
+          </form>
+        </ng-template>
+        <!-- End Step-1-->
+      </li>
+      <li [ngbNavItem]="2" [destroyOnHide]="false">
         <!--[disabled]="disabled"-->
         <a ngbNavLink>2 Form</a>
         <ng-template ngbNavContent>
-            <div class="row">
-                <div class="col-sm-4 form-field-section bordermargin">
-                    <accordion closeOthers="1" [isAnimated]="true">
-                        <accordion-group [isOpen]="accordionStatus.isFirstopen" (isOpenChange)="accordionChangeStatus($event,'first')">
-                            <button class="btn btn-link btn-block clearfix" accordion-heading type="button">
-                                <div class="pull-left float-left" [ngClass]="accordionStatus.isFirstopen ? 'template-blue':'light-black'">Form Fields</div>
-                                <span class="float-right pull-right"><i class="fas fa-chevron-right" [ngClass]="accordionStatus.isFirstopen ? 'rotateicon':'resumeiconstate'"></i></span>
-                              </button>
-                           
-                            <div cdkDropList [cdkDropListData]="webFormControlList" class="formfield-list"
-                                    (cdkDropListDropped)="drop($event)">
+          <div class="row">
+            <div class="col-sm-4 form-field-section bordermargin">
+              <accordion closeOthers="1" [isAnimated]="true">
+                <accordion-group [isOpen]="accordionStatus.isFirstopen" (isOpenChange)="accordionChangeStatus($event,'first')">
+                  <button class="btn btn-link btn-block clearfix" accordion-heading type="button">
+                    <div class="pull-left float-left" [ngClass]="accordionStatus.isFirstopen ? 'template-blue':'light-black'">Form Fields</div>
+                    <span class="float-right pull-right"><i class="fas fa-chevron-right" [ngClass]="accordionStatus.isFirstopen ? 'rotateicon':'resumeiconstate'"></i></span>
+                  </button>
 
-                                    <div *ngIf="!isAddingFormControl" >
-                                        <div *ngIf="!isEditingList">
-                                            <div *ngFor="let item of webFormControlList; let i = index;" cdkDrag>
-                                                <div class="example-box"
-                                                    *ngIf="!isContainFavicon(item) && !isContainHeaderLogo(item) && !isContainWelcomeText(item) && !isContainFileUpload(item) && !isContainCaptchaControl(item) && !isContainFooterText(item)">
-                                                    <div class="icon-label-wrapper mr-2">
-                                                        <i class="fa fa-bars" aria-hidden="true"></i>
-                                                        <span class="control-label">
+                  <div cdkDropList [cdkDropListData]="webFormControlList" class="formfield-list"
+                       (cdkDropListDropped)="drop($event)">
+
+                    <div *ngIf="!isAddingFormControl" >
+                      <div *ngIf="!isEditingList">
+                        <div *ngFor="let item of webFormControlList; let i = index;" cdkDrag>
+                          <div class="example-box"
+                               *ngIf="!isContainFavicon(item) && !isContainHeaderLogo(item) && !isContainWelcomeText(item) && !isContainFileUpload(item) && !isContainCaptchaControl(item) && !isContainFooterText(item)">
+                            <div class="icon-label-wrapper mr-2">
+                              <i class="fa fa-bars" aria-hidden="true"></i>
+                              <span class="control-label">
                                                             {{item.controllabel}}
                                                         </span>
-                                                    </div>
-                                                    <div class="displayflex">
-                                                        <button *ngIf="isCustomControlWithRadioBtn(item)" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
-                                                            class="btn btn-sm btn-outline-primary editbtn"
-                                                            (click)="deleteSelectedItem(item)">
-                                                            <i class="fa fa-trash" aria-hidden="true"></i>
-                                                        </button>
-                                                        <button class="btn btn-sm btn-outline-primary editbtn" (click)="editSelectedRow(item)">
-                                                            <div>
-                                                                <i [ngClass]="{'fa fa-angle-down':isWebFormPublished && !isEditingPublishedForm,'fas fa-pen':!isWebFormPublished || isWebFormPublished && isEditingPublishedForm  }"></i>
-                                                            </div>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-sm-12">
-                                            <div class="d-flex justify-content-between">
-                                                <div class="p-2" *ngIf="!isAddingFormControl"><button
-                                                        class="btn btn-xs btn-primary" (click)="addingFormControl()" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null">
-                                                        Add new</button></div>
-                                            </div>
-                                        </div>
+                            </div>
+                            <div class="displayflex">
+                              <button *ngIf="isCustomControlWithRadioBtn(item)" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
+                                      class="btn btn-sm btn-outline-primary editbtn"
+                                      (click)="deleteSelectedItem(item)">
+                                <i class="fa fa-trash" aria-hidden="true"></i>
+                              </button>
+                              <button class="btn btn-sm btn-outline-primary editbtn" (click)="editSelectedRow(item)">
+                                <div>
+                                  <i [ngClass]="{'fa fa-angle-down':isWebFormPublished && !isEditingPublishedForm,'fas fa-pen':!isWebFormPublished || isWebFormPublished && isEditingPublishedForm  }"></i>
+                                </div>
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-sm-12">
+                        <div class="d-flex justify-content-between">
+                          <div class="p-2" *ngIf="!isAddingFormControl"><button
+                            class="btn btn-xs btn-primary" (click)="addingFormControl()" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null">
+                            Add new</button></div>
+                        </div>
+                      </div>
 
-                                        <div *ngIf="isAddingFormControl" class="col-sm-11 custom-controls">
-                                            <form #customFields="ngForm"
-                                                (ngSubmit)="customFields.form.valid">
-                                                <div class="row">
-                                                    <div class="col-sm-12">
-                                                        <h5> <span *ngIf="isAddingFormControl && isEditingList">Edit Field</span>
-                                                            <span *ngIf="isAddingFormControl && !isEditingList">Custom Fields</span>
-                                                            <div>
-                                                               <button class="btn btn-sm btn-outline-secondary mr-2" type="button" (click)="cancelAddingFormControl('cancel')">Cancel</button>
-                                                                <button type="submit" class="btn btn-sm btn-outline-primary" (click)="addCustomFields(customFields)" [attr.disabled]="isCustomOptionEmpty() && isSideMenuRequestTypeOptionEmpty() || isCustomOptionEmpty() && isSideMenuSubjectTypeOptionEmpty() || isCustomOptionEmpty() || !customFields.form.valid || isWebFormPublished && !isEditingPublishedForm ? true : null">Save and close</button>
-                                                            </div>
-                                                        </h5>
-                                                    </div>
+                      <div *ngIf="isAddingFormControl" class="col-sm-11 custom-controls">
+                        <form #customFields="ngForm"
+                              (ngSubmit)="customFields.form.valid">
+                          <div class="row">
+                            <div class="col-sm-12">
+                              <h5> <span *ngIf="isAddingFormControl && isEditingList">Edit Field</span>
+                                <span *ngIf="isAddingFormControl && !isEditingList">Custom Fields</span>
+                                <div>
+                                  <button class="btn btn-sm btn-outline-secondary mr-2" type="button" (click)="cancelAddingFormControl('cancel')">Cancel</button>
+                                  <button type="submit" class="btn btn-sm btn-outline-primary" (click)="addCustomFields(customFields)" [attr.disabled]="isCustomOptionEmpty() && isSideMenuRequestTypeOptionEmpty() || isCustomOptionEmpty() && isSideMenuSubjectTypeOptionEmpty() || isCustomOptionEmpty() || !customFields.form.valid || isWebFormPublished && !isEditingPublishedForm ? true : null">Save and close</button>
+                                </div>
+                              </h5>
+                            </div>
 
-                                                    <div style="display: flex;" *ngIf="!isEditingList">
-                                                        <div class="form-inline custom-controls">
-                                                            <div class="col-md-12">
-                                                                <label>Select Field Type</label>
-                                                            </div>
-                                                            <div class="col-md-12 form-group pr-0">
-                                                                <select class="form-control selectwidth" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
-                                                                    (change)="onChangeEvent($event)"
-                                                                    name="selectOptionControl" #ngModel="ngModel"
-                                                                    [(ngModel)]="selectOptionControl" required>
-                                                                    <option selected disabled value="">select field</option>
-                                                                    <ng-container
-                                                                        *ngFor="let status_item of controlOption">
-                                                                        <option [value]="status_item.control">
-                                                                            {{status_item.display}}
-                                                                        </option>
-                                                                    </ng-container>
-                                                                </select>
-                                                                <button type="button" (click)="addFormField()" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
-                                                                    class="btn btn-primary ml-2">{{showFormOption?'Cancel':'Add'}}</button>
-                                                                <span *ngIf="ngModel.errors?.required"
-                                                                    style="color:red;font-size:11px">Select
+                            <div style="display: flex;" *ngIf="!isEditingList">
+                              <div class="form-inline custom-controls">
+                                <div class="col-md-12">
+                                  <label>Select Field Type</label>
+                                </div>
+                                <div class="col-md-12 form-group pr-0">
+                                  <select class="form-control selectwidth" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
+                                          (change)="onChangeEvent($event)"
+                                          name="selectOptionControl" #ngModel="ngModel"
+                                          [(ngModel)]="selectOptionControl" required>
+                                    <option selected disabled value="">select field</option>
+                                    <ng-container
+                                      *ngFor="let status_item of controlOption">
+                                      <option [value]="status_item.control">
+                                        {{status_item.display}}
+                                      </option>
+                                    </ng-container>
+                                  </select>
+                                  <button type="button" (click)="addFormField()" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
+                                          class="btn btn-primary ml-2">{{showFormOption?'Cancel':'Add'}}</button>
+                                  <span *ngIf="ngModel.errors?.required"
+                                        style="color:red;font-size:11px">Select
                                                                     field type control is
                                                                     mandatory</span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                </div>
+                              </div>
+                            </div>
 
-                                                    <div *ngIf="isEditingList && editSelectionType">
-                                                        <div class="col-sm-12">
-                                                            <label>Display Type
-                                                                <select class="form-control"
-                                                                    (change)="updateControlType($event)"
-                                                                    name="changeControlType" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
-                                                                    [(ngModel)]="changeControlType">
-                                                                    <option disabled selected value="">select option</option>
-                                                                    <ng-container *ngFor="let status_item of editableControlOption">
-                                                                      <option [value]="status_item.control"> {{status_item.display}}</option>
-                                                                    </ng-container>
- 
-                                                                </select>
-                                                            </label>
-                                                           
-                                                        </div>
- 
-                                                    </div>
-                                                    <div *ngIf="ismultiselectrequired" class="pl-3">
-                                                        <label for="multiselect">
-                                                            <input type="checkbox" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null" id="multicheck" name="multicheck"  #ismulticheck="ngModel" [(ngModel)]="multiselect"/>
-                                                            Enable multiselect
-                                                            </label>
-                                                    </div>
-                                                </div>
-                                                
-                                                <div class="form-check required-check mt-2">
-                                                    <input class="form-check-input" name="changeControlType" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
-                                                        [checked]="isRequiredField" (change)="onCheckboxChange($event)"
-                                                        type="checkbox" id="gridCheck1">
-                                                    <label class="form-check-label" for="gridCheck1">
-                                                        Required
-                                                    </label>
-                                                </div>
+                            <div *ngIf="isEditingList && editSelectionType">
+                              <div class="col-sm-12">
+                                <label>Display Type
+                                  <select class="form-control"
+                                          (change)="updateControlType($event)"
+                                          name="changeControlType" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
+                                          [(ngModel)]="changeControlType">
+                                    <option disabled selected value="">select option</option>
+                                    <ng-container *ngFor="let status_item of editableControlOption">
+                                      <option [value]="status_item.control"> {{status_item.display}}</option>
+                                    </ng-container>
 
-                                                <div *ngIf="showFormOption" id="selectControl"
-                                                    class="controls-with-options">
-                                                    <label>Add control
-                                                        <span *ngIf="ngModel.errors?.required"
-                                                            style="color:red;font-size:11px">Name of control is
+                                  </select>
+                                </label>
+
+                              </div>
+
+                            </div>
+                            <div *ngIf="ismultiselectrequired" class="pl-3">
+                              <label for="multiselect">
+                                <input type="checkbox" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null" id="multicheck" name="multicheck"  #ismulticheck="ngModel" [(ngModel)]="multiselect"/>
+                                Enable multiselect
+                              </label>
+                            </div>
+                          </div>
+
+                          <div class="form-check required-check mt-2">
+                            <input class="form-check-input" name="changeControlType" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
+                                   [checked]="isRequiredField" (change)="onCheckboxChange($event)"
+                                   type="checkbox" id="gridCheck1">
+                            <label class="form-check-label" for="gridCheck1">
+                              Required
+                            </label>
+                          </div>
+
+                          <div *ngIf="showFormOption" id="selectControl"
+                               class="controls-with-options">
+                            <label>Add control
+                              <span *ngIf="ngModel.errors?.required"
+                                    style="color:red;font-size:11px">Name of control is
                                                             mandatory</span>
-                                                        <input type="text" class="form-control" name="lblText" 
-                                                            (input)="onLabelChange($event)"
-                                                            #ngModel="ngModel" [(ngModel)]="lblText" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
-                                                            placeholder="Add label text" required />
-                                                    </label>
-                                                  
-                                                    <!--*ngIf="isSubjectType"-->
+                              <input type="text" class="form-control" name="lblText"
+                                     (input)="onLabelChange($event)"
+                                     #ngModel="ngModel" [(ngModel)]="lblText" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
+                                     placeholder="Add label text" required />
+                            </label>
 
-                                                    <div class="list-wrapper"
-                                                        *ngIf="isSubjectType == true && isRequestType == false">
-                                                        <ul cdkDropList [cdkDropListData]="sideMenuSubjectTypeOptions" class="formfield-list"
-                                                        (cdkDropListDropped)="dragDropOptionSubjectType($event)">
-                                                            <li *ngFor="let item of sideMenuSubjectTypeOptions; let i = index;let last = last" cdkDrag>
-                                                               
-                                                                <div class="row">
-                                                                    <div class="icon-label-wrapper mr-2">
-                                                                        <i class="fa fa-bars" aria-hidden="true"></i>
-                                                                    </div>
-                                                                    <div class="form-inline">
-                                                                        
-                                                                        <div class="control-wrapper form-group pl-3">
-                                                                            <input type="text" [(ngModel)]="item.name"
-                                                                                name="{{item.name}}" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
-                                                                                [ngModelOptions]="{standalone: true}"
-                                                                                #ngModel="ngModel"
-                                                                                [ngClass]="{ 'invalid-txtbox': ngModel.errors?.required && !(ngModel.dirty || ngModel.touched)}"
-                                                                                class="form-control mb-1" required />
-                                                                            <div
-                                                                                *ngIf="ngModel.errors?.required && !(ngModel.dirty || ngModel.touched)">
+                            <!--*ngIf="isSubjectType"-->
+
+                            <div class="list-wrapper"
+                                 *ngIf="isSubjectType == true && isRequestType == false">
+                              <ul cdkDropList [cdkDropListData]="sideMenuSubjectTypeOptions" class="formfield-list"
+                                  (cdkDropListDropped)="dragDropOptionSubjectType($event)">
+                                <li *ngFor="let item of sideMenuSubjectTypeOptions; let i = index;let last = last" cdkDrag>
+
+                                  <div class="row">
+                                    <div class="icon-label-wrapper mr-2">
+                                      <i class="fa fa-bars" aria-hidden="true"></i>
+                                    </div>
+                                    <div class="form-inline">
+
+                                      <div class="control-wrapper form-group pl-3">
+                                        <input type="text" [(ngModel)]="item.name"
+                                               name="{{item.name}}" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
+                                               [ngModelOptions]="{standalone: true}"
+                                               #ngModel="ngModel"
+                                               [ngClass]="{ 'invalid-txtbox': ngModel.errors?.required && !(ngModel.dirty || ngModel.touched)}"
+                                               class="form-control mb-1" required />
+                                        <div
+                                          *ngIf="ngModel.errors?.required && !(ngModel.dirty || ngModel.touched)">
                                                                                 <span class="red">
                                                                                     Add value
                                                                                 </span>
-                                                                            </div>
-                                                                        </div>
-                                                                        <button type="button" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
-                                                                            class="btn btn-sm btn-danger ml-2" *ngIf="sideMenuSubjectTypeOptions.length !== 1"
-                                                                            (click)="deleteSubjectOption(i)"><span
-                                                                                style="font-size: 13px;"><i
-                                                                                    class="fa fa-minus"
-                                                                                    aria-hidden="true"></i></span></button>
-                                                                        <span *ngIf="last">
+                                        </div>
+                                      </div>
+                                      <button type="button" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
+                                              class="btn btn-sm btn-danger ml-2" *ngIf="sideMenuSubjectTypeOptions.length !== 1"
+                                              (click)="deleteSubjectOption(i)"><span
+                                        style="font-size: 13px;"><i
+                                        class="fa fa-minus"
+                                        aria-hidden="true"></i></span></button>
+                                      <span *ngIf="last">
                                                                             <button [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
-                                                                                *ngIf="isSubjectType === true && isRequestType === false"
-                                                                                class="btn btn-xs btn-primary"
-                                                                                (click)="addCustomReqestSubjectType()">
+                                                                                    *ngIf="isSubjectType === true && isRequestType === false"
+                                                                                    class="btn btn-xs btn-primary"
+                                                                                    (click)="addCustomReqestSubjectType()">
                                                                                 <span>
                                                                                     <i class="fa fa-plus"
-                                                                                        aria-hidden="true"></i></span>
+                                                                                       aria-hidden="true"></i></span>
                                                                             </button></span>
-                                                                    </div>
-                                                                </div>
-                                                            </li>
-                                                        </ul>
+                                    </div>
+                                  </div>
+                                </li>
+                              </ul>
 
-                                                    </div>
-                                                    <div class="list-wrapper"
-                                                        *ngIf="isSubjectType == false && isRequestType == true">
-                                                        <ul cdkDropList [cdkDropListData]="sideMenuRequestTypeOptions" class="formfield-list"
-                                                        (cdkDropListDropped)="dragDropOptionRequestType($event)">
-                                                            <li  *ngFor="let item of sideMenuRequestTypeOptions; let i = index; let last = last;" cdkDrag>
-                                                                <div class="row">
-                                                                    <div class="form-inline">
-                                                                        <div class="icon-label-wrapper mr-2">
-                                                                            <i class="fa fa-bars" aria-hidden="true"></i>
-                                                                        </div>
-                                                                        <div class="control-wrapper form-group pl-3">
-                                                                            <input type="text" [(ngModel)]="item.name"
-                                                                                name="{{item.name}}" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
-                                                                                [ngModelOptions]="{standalone: true}"
-                                                                                #ngModel="ngModel"
-                                                                                class="form-control mb-1"
-                                                                                [ngClass]="{ 'invalid-txtbox': ngModel.errors?.required && !(ngModel.dirty || ngModel.touched)}"
-                                                                                required />
-                                                                            <div
-                                                                                *ngIf="ngModel.errors?.required && !(ngModel.dirty || ngModel.touched)">
-                                                                                <span 
-                                                                                    class="red">
+                            </div>
+                            <div class="list-wrapper"
+                                 *ngIf="isSubjectType == false && isRequestType == true">
+                              <ul cdkDropList [cdkDropListData]="sideMenuRequestTypeOptions" class="formfield-list"
+                                  (cdkDropListDropped)="dragDropOptionRequestType($event)">
+                                <li  *ngFor="let item of sideMenuRequestTypeOptions; let i = index; let last = last;" cdkDrag>
+                                  <div class="row">
+                                    <div class="form-inline">
+                                      <div class="icon-label-wrapper mr-2">
+                                        <i class="fa fa-bars" aria-hidden="true"></i>
+                                      </div>
+                                      <div class="control-wrapper form-group pl-3">
+                                        <input type="text" [(ngModel)]="item.name"
+                                               name="{{item.name}}" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
+                                               [ngModelOptions]="{standalone: true}"
+                                               #ngModel="ngModel"
+                                               class="form-control mb-1"
+                                               [ngClass]="{ 'invalid-txtbox': ngModel.errors?.required && !(ngModel.dirty || ngModel.touched)}"
+                                               required />
+                                        <div
+                                          *ngIf="ngModel.errors?.required && !(ngModel.dirty || ngModel.touched)">
+                                                                                <span
+                                                                                  class="red">
                                                                                     Add value
                                                                                 </span>
-                                                                            </div>
+                                        </div>
 
-                                                                        </div>
-                                                                        <button type="button" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
-                                                                            class="btn btn-sm btn-danger ml-2" *ngIf="sideMenuRequestTypeOptions.length !== 1"
-                                                                            (click)="deleteRequestOption(i)"><span
-                                                                                style="font-size: 13px;">
+                                      </div>
+                                      <button type="button" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
+                                              class="btn btn-sm btn-danger ml-2" *ngIf="sideMenuRequestTypeOptions.length !== 1"
+                                              (click)="deleteRequestOption(i)"><span
+                                        style="font-size: 13px;">
                                                                                 <i class="fa fa-minus"
-                                                                                    aria-hidden="true"></i>
+                                                                                   aria-hidden="true"></i>
                                                                             </span></button>
-                                                                        <span *ngIf="last">
+                                      <span *ngIf="last">
                                                                             <button [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
-                                                                                *ngIf="isSubjectType === false && isRequestType === true"
-                                                                                class="btn btn-xs btn-primary"
-                                                                                (click)="addCustomReqestSubjectType()">
+                                                                                    *ngIf="isSubjectType === false && isRequestType === true"
+                                                                                    class="btn btn-xs btn-primary"
+                                                                                    (click)="addCustomReqestSubjectType()">
                                                                                 <span>
                                                                                     <i class="fa fa-plus"
-                                                                                        aria-hidden="true"></i>
+                                                                                       aria-hidden="true"></i>
                                                                                 </span>
                                                                             </button></span>
-                                                                    </div>
-                                                                </div>
-                                                            </li>
-                                                        </ul>
+                                    </div>
+                                  </div>
+                                </li>
+                              </ul>
 
-                                                    </div>
-                                                    <div *ngIf="selectedControlType" class="addoption">
-                                                        <ul class="formfield-list"  cdkDropList [cdkDropListData]="selectOptions" (cdkDropListDropped)="dragDropCustomOption($event)">
-                                                            <li
-                                                                *ngFor="let item of selectOptions; let i = index; let last = last;" cdkDrag>
-                                                                <div class="row form-inline">
-                                                                  
-                                                                    <div class="col-md-12 form-group pr-0">
-                                                                        <div class="icon-label-wrapper mr-2">
-                                                                            <i class="fa fa-bars" aria-hidden="true"></i>
-                                                                        </div> <!--[ngClass]="{ 'invalid-txtbox': customControl.errors?.required && isCustomFieldAdded}"-->
-                                                                        <div class="dispalyflex-column"> 
-                                                                            <input type="text" [(ngModel)]="item.name"
-                                                                                name="{{item.name}}" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
-                                                                                [ngModelOptions]="{standalone: true}"
-                                                                                #customControl="ngModel"
-                                                                                [ngClass]="{ 'invalid-txtbox':!last && !customControl.valid  && this.selectOptions[i].name !== '' && customControl.errors?.required !== '' }"    class="form-control mb-1" required/>
-                                                                                
-                                                                                <div *ngIf="!last && !customControl.valid  && this.selectOptions[i].name !== '' && customControl.errors?.required !== '' ">
-                                                                                    <span class="color-red">  Add value </span>
-                                                                                </div>
-                                                                        </div>
-                                                                        <button type="button" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
-                                                                            class="btn btn-sm btn-danger ml-2" *ngIf="selectOptions.length !== 1"
-                                                                            (click)="deleteSelectOption(i)"><span
-                                                                                style="font-size: 13px;"><i
-                                                                                    class="fa fa-minus"
-                                                                                    aria-hidden="true"></i></span>
-                                                                        </button>
-                                                                       
-                                                                        <button type="button" *ngIf="last" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
-                                                                            class="btn btn-xs btn-primary add-icon"
-                                                                            (click)="addOptions()">
-                                                                            <i class="fa fa-plus"
-                                                                                aria-hidden="true"></i>
-                                                                        </button>
-                                                                    </div>
-                                                                </div>
-
-                                                            </li>
-                                                        </ul>
-
-                                                    </div>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                        </accordion-group>
-                        <accordion-group (isOpenChange)="accordionChangeStatus($event,'second')">
-                            <button class="btn btn-link btn-block clearfix" type="button" accordion-heading>
-                                <div class="pull-left float-left" [ngClass]="accordionStatus.isSecondopen ? 'template-blue':'light-black'">Form Styling</div>
-                                <span class="float-right pull-right"><i class="fas fa-chevron-right" [ngClass]="accordionStatus.isSecondopen ? 'rotateicon':'resumeiconstate'"></i></span>
-                            </button>
-                            <div class="d-flex align-items-center justify-content-between">
-                                <div class="row">
-                                    <div class="col-sm-12 mb-2">
-                                        <!-- (ngSubmit)="onSubmitHeaderLogo()"-->
-
-                                        <form [formGroup]="headerLogoForm">
-                                        <div>
-                                            <label for="taskresponse" class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5">
-                                                Header logo</label> 
-                                                <div class="upload-wrapper" [ngClass]="{'hide':headerlogoBase64,'show':!headerlogoBase64}">
-                                                    <p>File Format PNG, JPG or JPEG, Max Size 1MB</p>
-                                            <div class="input-group">
-                                                <label for="file-upload" class="custom-file-upload btn btn-primary" [ngClass]="{'disabled':isWebFormPublished && !isEditingPublishedForm}">
-                                                    Upload
-                                                </label>
-                                                <input type="file" class="custom-file-input" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
-                                                formControlName="headerlogo"
-                                                (change)="fileChangeEvent($event)" id="headerlogo">
-                                                
-                                            </div>
-                                                </div>
-                                            <div class="img-space" [ngClass]="{'hide':!headerlogoBase64,'show':headerlogoBase64}">
-                                                <ng-container *ngIf="headerlogoBase64; else elseTemplate">
-                                                    <img [src]="headerlogoBase64" class="uploaded-logo-width" [height]="logoHeight" [width]="logoWidth" />
-                                                </ng-container>
-                                                <ng-template #elseTemplate>                                    
-                                                    <img src="assets/imgs/no_image.png" class="img-responsive">
-                                                </ng-template>                                
-                                            </div>
-                                            <div class="filedetails" [ngClass]="{'hide':!headerlogoBase64,'show':headerlogoBase64}">
-                                               <div> <span><i-feather name="image" class="feathericon"></i-feather>
-                                                </span>
-                                               <span class="ml-1"> File Name:  {{logoFilename}}</span>
-                                               </div>
-                                                <span class="ml-4">File size: {{logoFilesize}}</span>
-                                                <button class="logodelete" (click)="deleteSelectedLogo()" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null">
-                                                    <i-feather name="trash-2" class="feathericon"></i-feather>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    
-                                        </form>
-                                    </div>
-                                    <div class="col-sm-12 mb-2">
-                                        <form [formGroup]="faviconForm">
-                                            <div>
-                                                <label for="taskresponse" class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5">
-                                                    Header Favicon</label> 
-                                                    <div class="upload-wrapper" [ngClass]="{'hide':headerfaviconBase64,'show':!headerfaviconBase64}">
-                                                        <p>File Format PNG, JPG or JPEG, Max Size 1MB</p>
-                                                <div class="input-group">
-                                                    <label for="file-upload" class="custom-file-upload btn btn-primary" [ngClass]="{'disabled':isWebFormPublished && !isEditingPublishedForm}">
-                                                        Upload
-                                                    </label>
-                                                    <input type="file" class="custom-file-input" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
-                                                    formControlName="titlefavicon"
-                                                    (change)="faviconChangeEvent($event)" id="titlefavicon">
-                                                    
-                                                </div>
-                                                    </div>
-                                                <div class="favicon-img-space" [ngClass]="{'hide':!headerfaviconBase64,'show':headerfaviconBase64}">
-                                                    <ng-container *ngIf="headerfaviconBase64; else elseTemplate">
-                                                        <img [src]="headerfaviconBase64" class="uploaded-favicon-width" [height]="logoHeight" [width]="logoWidth" />
-                                                    </ng-container>
-                                                    <ng-template #elseTemplate>
-                                                        <img src="assets/imgs/no_image.png" class="img-responsive">
-                                                    </ng-template>
-                                                </div>
-                                                <div class="filedetails" [ngClass]="{'hide':!headerfaviconBase64,'show':headerfaviconBase64}">
-                                                   <div> <span><i-feather name="image" class="feathericon"></i-feather>
-                                                    </span>
-                                                   <span class="ml-1"> File Name:  {{faviconFilename ? faviconFilename :''}}</span>
-                                                   </div>
-                                                    <span class="ml-4">File size: {{faviconFilesize ? faviconFilesize : ''}}</span>
-                                                    <button class="logodelete" (click)="deleteSelectedFavicon()" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null">
-                                                        <i-feather name="trash-2" class="feathericon"></i-feather>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        
-                                            </form>
-                                    </div>
-                                    <div class="col-sm-12 mb-1">
-                                        <div class="formgroup d-flex justify-content">
-                                            <div class="col-md-5 p-0">
-                                                <label class="col-form-label-sm tx-10 tx-uppercase tx-medium tx-spacing-1">Header Color</label>
-                                            </div>
-                                            <div class="col-md-6 d-flex color-controlwrapper">
-                                                <input type="color" [(ngModel)]="headerColor" (ngModelChange)="onColorSelection($event,'headerColor')" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null" />
-                                                <input type="text" class="form-control form-control-sm ml-1" (ngModelChange)="onColorSelection($event,'headerColor')" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm? '' : null"
-                                                [(ngModel)]="headerColor" />
-                                            </div>
-                                            
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-12 mb-1">
-                                        <div class="formgroup d-flex justify-content">
-                                            <div class="col-md-5 p-0">
-                                                <label class="col-form-label-sm tx-10 tx-uppercase tx-medium tx-spacing-1">Welcome Text Color</label>
-                                            </div>
-                                            <div class="col-md-6 d-flex color-controlwrapper"><input type="color" class="form-control" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
-                                                    [(ngModel)]="welcomeTextColor" (ngModelChange)="onColorSelection($event,'welcomeTextColor')"/>
-                                                    <input type="text" class="form-control form-control-sm ml-1" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
-                                                    [(ngModel)]="welcomeTextColor" (ngModelChange)="onColorSelection($event,'welcomeTextColor')" />
-                                                </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-12 mb-1">
-                                        <div class="formgroup row justify-content">
-                                            <div class="col-md-5">
-                                                <label class="col-form-label-sm tx-10 tx-uppercase tx-medium tx-spacing-1">Welcome Font Size </label>
-                                            </div>
-                                            <div class="col-sm-3">
-                                                <input type="number" min="13" max="20" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
-                                                    class="form-control form-control-sm h-75"
-                                                    [(ngModel)]="welcomeFontSize" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-12 mb-1">
-                                        <div class="formgroup d-flex justify-content">
-                                            <div class="col-md-5 p-0">
-                                                <label class="col-form-label-sm tx-10 tx-uppercase tx-medium tx-spacing-1">Footer Text Color</label>
-                                            </div>
-                                            <div class="col-md-6 d-flex color-controlwrapper">
-                                                <input type="color" [(ngModel)]="footerTextColor" (ngModelChange)="onColorSelection($event,'footerTextColor')" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null" />
-                                                <input type="text" class="form-control form-control-sm ml-1" (ngModelChange)="onColorSelection($event,'footerTextColor')" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm? '' : null"
-                                                    [(ngModel)]="footerTextColor" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-12 mb-1">
-                                        <div class="formgroup row justify-content">
-                                            <div class="col-md-5">
-                                                <label class="col-form-label-sm tx-10 tx-uppercase tx-medium tx-spacing-1">Footer Text Size</label>
-                                            </div>
-                                            <div class="col-sm-3">
-                                                <input type="number" min="13" max="20"
-                                                    class="form-control form-control-sm h-75" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
-                                                    [(ngModel)]="footerFontSize" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
-                        </accordion-group>
-                        <accordion-group (isOpenChange)="accordionChangeStatus($event,'third')">
-                            <button class="btn btn-link btn-block clearfix" accordion-heading type="button">
-                                <div class="pull-left float-left" [ngClass]="accordionStatus.isThirdopen ? 'template-blue':'light-black'">Form Text</div>
-                                <span class="float-right pull-right"><i class="fas fa-chevron-right" [ngClass]="accordionStatus.isThirdopen ? 'rotateicon':'resumeiconstate'"></i></span>
-                              </button>
-                            <div class="editorwrapper">
+                            <div *ngIf="selectedControlType" class="addoption">
+                              <ul class="formfield-list"  cdkDropList [cdkDropListData]="selectOptions" (cdkDropListDropped)="dragDropCustomOption($event)">
+                                <li
+                                  *ngFor="let item of selectOptions; let i = index; let last = last;" cdkDrag>
+                                  <div class="row form-inline">
 
-                                <div class="pd-5">
-                                    <h6>Welcome Text <span style="float: right;">
-                                            <button type="button" class="btn btn-sm btn-default p-0 mr-1" data-toggle="modal" 
-                                                (click)="editQuillEditorDataPopup(quillEditorModal,'welcomeText')">
+                                    <div class="col-md-12 form-group pr-0">
+                                      <div class="icon-label-wrapper mr-2">
+                                        <i class="fa fa-bars" aria-hidden="true"></i>
+                                      </div> <!--[ngClass]="{ 'invalid-txtbox': customControl.errors?.required && isCustomFieldAdded}"-->
+                                      <div class="dispalyflex-column">
+                                        <input type="text" [(ngModel)]="item.name"
+                                               name="{{item.name}}" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
+                                               [ngModelOptions]="{standalone: true}"
+                                               #customControl="ngModel"
+                                               [ngClass]="{ 'invalid-txtbox':!last && !customControl.valid  && this.selectOptions[i].name !== '' && customControl.errors?.required !== '' }"    class="form-control mb-1" required/>
+
+                                        <div *ngIf="!last && !customControl.valid  && this.selectOptions[i].name !== '' && customControl.errors?.required !== '' ">
+                                          <span class="color-red">  Add value </span>
+                                        </div>
+                                      </div>
+                                      <button type="button" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
+                                              class="btn btn-sm btn-danger ml-2" *ngIf="selectOptions.length !== 1"
+                                              (click)="deleteSelectOption(i)"><span
+                                        style="font-size: 13px;"><i
+                                        class="fa fa-minus"
+                                        aria-hidden="true"></i></span>
+                                      </button>
+
+                                      <button type="button" *ngIf="last" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
+                                              class="btn btn-xs btn-primary add-icon"
+                                              (click)="addOptions()">
+                                        <i class="fa fa-plus"
+                                           aria-hidden="true"></i>
+                                      </button>
+                                    </div>
+                                  </div>
+
+                                </li>
+                              </ul>
+
+                            </div>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </accordion-group>
+                <accordion-group (isOpenChange)="accordionChangeStatus($event,'second')">
+                  <button class="btn btn-link btn-block clearfix" type="button" accordion-heading>
+                    <div class="pull-left float-left" [ngClass]="accordionStatus.isSecondopen ? 'template-blue':'light-black'">Form Styling</div>
+                    <span class="float-right pull-right"><i class="fas fa-chevron-right" [ngClass]="accordionStatus.isSecondopen ? 'rotateicon':'resumeiconstate'"></i></span>
+                  </button>
+                  <div class="d-flex align-items-center justify-content-between">
+                    <div class="row">
+                      <div class="col-sm-12 mb-2">
+                        <!-- (ngSubmit)="onSubmitHeaderLogo()"-->
+
+                        <form [formGroup]="headerLogoForm">
+                          <div>
+                            <label for="taskresponse" class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5">
+                              Header logo</label>
+                            <div class="upload-wrapper" [ngClass]="{'hide':headerlogoBase64,'show':!headerlogoBase64}">
+                              <p>File Format PNG, JPG or JPEG, Max Size 1MB</p>
+                              <div class="input-group">
+                                <label for="file-upload" class="custom-file-upload btn btn-primary" [ngClass]="{'disabled':isWebFormPublished && !isEditingPublishedForm}">
+                                  Upload
+                                </label>
+                                <input type="file" class="custom-file-input" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
+                                       formControlName="headerlogo"
+                                       (change)="fileChangeEvent($event)" id="headerlogo">
+
+                              </div>
+                            </div>
+                            <div class="img-space" [ngClass]="{'hide':!headerlogoBase64,'show':headerlogoBase64}">
+                              <ng-container *ngIf="headerlogoBase64; else elseTemplate">
+                                <img [src]="headerlogoBase64" class="uploaded-logo-width" [height]="logoHeight" [width]="logoWidth" />
+                              </ng-container>
+                              <ng-template #elseTemplate>
+                                <img src="assets/imgs/no_image.png" class="img-responsive">
+                              </ng-template>
+                            </div>
+                            <div class="filedetails" [ngClass]="{'hide':!headerlogoBase64,'show':headerlogoBase64}">
+                              <div> <span><i-feather name="image" class="feathericon"></i-feather>
+                                                </span>
+                                <span class="ml-1"> File Name:  {{logoFilename}}</span>
+                              </div>
+                              <span class="ml-4">File size: {{logoFilesize}}</span>
+                              <button class="logodelete" (click)="deleteSelectedLogo()" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null">
+                                <i-feather name="trash-2" class="feathericon"></i-feather>
+                              </button>
+                            </div>
+                          </div>
+
+                        </form>
+                      </div>
+                      <div class="col-sm-12 mb-2">
+                        <form [formGroup]="faviconForm">
+                          <div>
+                            <label for="taskresponse" class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5">
+                              Header Favicon</label>
+                            <div class="upload-wrapper" [ngClass]="{'hide':headerfaviconBase64,'show':!headerfaviconBase64}">
+                              <p>File Format PNG, JPG or JPEG, Max Size 1MB</p>
+                              <div class="input-group">
+                                <label for="file-upload" class="custom-file-upload btn btn-primary" [ngClass]="{'disabled':isWebFormPublished && !isEditingPublishedForm}">
+                                  Upload
+                                </label>
+                                <input type="file" class="custom-file-input" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
+                                       formControlName="titlefavicon"
+                                       (change)="faviconChangeEvent($event)" id="titlefavicon">
+
+                              </div>
+                            </div>
+                            <div class="favicon-img-space" [ngClass]="{'hide':!headerfaviconBase64,'show':headerfaviconBase64}">
+                              <ng-container *ngIf="headerfaviconBase64; else elseTemplate">
+                                <img [src]="headerfaviconBase64" class="uploaded-favicon-width" [height]="logoHeight" [width]="logoWidth" />
+                              </ng-container>
+                              <ng-template #elseTemplate>
+                                <img src="assets/imgs/no_image.png" class="img-responsive">
+                              </ng-template>
+                            </div>
+                            <div class="filedetails" [ngClass]="{'hide':!headerfaviconBase64,'show':headerfaviconBase64}">
+                              <div> <span><i-feather name="image" class="feathericon"></i-feather>
+                                                    </span>
+                                <span class="ml-1"> File Name:  {{faviconFilename ? faviconFilename :''}}</span>
+                              </div>
+                              <span class="ml-4">File size: {{faviconFilesize ? faviconFilesize : ''}}</span>
+                              <button class="logodelete" (click)="deleteSelectedFavicon()" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null">
+                                <i-feather name="trash-2" class="feathericon"></i-feather>
+                              </button>
+                            </div>
+                          </div>
+
+                        </form>
+                      </div>
+                      <div class="col-sm-12 mb-1">
+                        <div class="formgroup d-flex justify-content">
+                          <div class="col-md-5 p-0">
+                            <label class="col-form-label-sm tx-10 tx-uppercase tx-medium tx-spacing-1">Header Color</label>
+                          </div>
+                          <div class="col-md-6 d-flex color-controlwrapper">
+                            <input type="color" [(ngModel)]="headerColor" (ngModelChange)="onColorSelection($event,'headerColor')" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null" />
+                            <input type="text" class="form-control form-control-sm ml-1" (ngModelChange)="onColorSelection($event,'headerColor')" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm? '' : null"
+                                   [(ngModel)]="headerColor" />
+                          </div>
+
+                        </div>
+                      </div>
+                      <div class="col-sm-12 mb-1">
+                        <div class="formgroup d-flex justify-content">
+                          <div class="col-md-5 p-0">
+                            <label class="col-form-label-sm tx-10 tx-uppercase tx-medium tx-spacing-1">Welcome Text Color</label>
+                          </div>
+                          <div class="col-md-6 d-flex color-controlwrapper"><input type="color" class="form-control" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
+                                                                                   [(ngModel)]="welcomeTextColor" (ngModelChange)="onColorSelection($event,'welcomeTextColor')"/>
+                            <input type="text" class="form-control form-control-sm ml-1" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
+                                   [(ngModel)]="welcomeTextColor" (ngModelChange)="onColorSelection($event,'welcomeTextColor')" />
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-sm-12 mb-1">
+                        <div class="formgroup row justify-content">
+                          <div class="col-md-5">
+                            <label class="col-form-label-sm tx-10 tx-uppercase tx-medium tx-spacing-1">Welcome Font Size </label>
+                          </div>
+                          <div class="col-sm-3">
+                            <input type="number" min="13" max="20" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
+                                   class="form-control form-control-sm h-75"
+                                   [(ngModel)]="welcomeFontSize" />
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-sm-12 mb-1">
+                        <div class="formgroup d-flex justify-content">
+                          <div class="col-md-5 p-0">
+                            <label class="col-form-label-sm tx-10 tx-uppercase tx-medium tx-spacing-1">Footer Text Color</label>
+                          </div>
+                          <div class="col-md-6 d-flex color-controlwrapper">
+                            <input type="color" [(ngModel)]="footerTextColor" (ngModelChange)="onColorSelection($event,'footerTextColor')" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null" />
+                            <input type="text" class="form-control form-control-sm ml-1" (ngModelChange)="onColorSelection($event,'footerTextColor')" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm? '' : null"
+                                   [(ngModel)]="footerTextColor" />
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-sm-12 mb-1">
+                        <div class="formgroup row justify-content">
+                          <div class="col-md-5">
+                            <label class="col-form-label-sm tx-10 tx-uppercase tx-medium tx-spacing-1">Footer Text Size</label>
+                          </div>
+                          <div class="col-sm-3">
+                            <input type="number" min="13" max="20"
+                                   class="form-control form-control-sm h-75" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
+                                   [(ngModel)]="footerFontSize" />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </accordion-group>
+                <accordion-group (isOpenChange)="accordionChangeStatus($event,'third')">
+                  <button class="btn btn-link btn-block clearfix" accordion-heading type="button">
+                    <div class="pull-left float-left" [ngClass]="accordionStatus.isThirdopen ? 'template-blue':'light-black'">Form Text</div>
+                    <span class="float-right pull-right"><i class="fas fa-chevron-right" [ngClass]="accordionStatus.isThirdopen ? 'rotateicon':'resumeiconstate'"></i></span>
+                  </button>
+                  <div class="editorwrapper">
+
+                    <div class="pd-5">
+                      <h6>Welcome Text <span style="float: right;">
+                                            <button type="button" class="btn btn-sm btn-default p-0 mr-1" data-toggle="modal"
+                                                    (click)="editQuillEditorDataPopup(quillEditorModal,'welcomeText')">
                                                 <i [ngClass]="{'fas fa-chevron-down':isWebFormPublished && !isEditingPublishedForm,'fa fa-edit':!isWebFormPublished || isWebFormPublished && isEditingPublishedForm }"></i>
                                             </button>
                                         </span></h6>
-                                </div>
-                                <div class="pd-5">
-                                    <h6>Footer Text <span style="float: right;">
+                    </div>
+                    <div class="pd-5">
+                      <h6>Footer Text <span style="float: right;">
                                             <button type="button" class="btn btn-sm btn-default p-0 mr-1" data-toggle="modal"
-                                                (click)="editQuillEditorDataPopup(quillEditorModal,'footerText')">
+                                                    (click)="editQuillEditorDataPopup(quillEditorModal,'footerText')">
                                                 <i [ngClass]="{'fas fa-chevron-down':isWebFormPublished && !isEditingPublishedForm,'fa fa-edit': !isWebFormPublished || isWebFormPublished && isEditingPublishedForm }"></i>
                                             </button>
                                         </span></h6>
-                                </div>
-
-                            </div>
-                        </accordion-group>
-                    </accordion>
-                </div>
-                <div class="col-sm-8">
-                    <!-- webFormControlList  {{webFormControlList | json}} -->
-                    <div class="headerwrapper">
-                        <div  class="logocontainer pd-10" [ngClass]="{'img-container':headerlogoBase64,'':!headerlogoBase64}" [style.background-color]="headerColor">
-                                <img *ngIf="headerlogoBase64" class="img-responsive logowidth" 
-                                [src]="transform(headerlogoBase64)" width="150px" />
-                            <h3 *ngIf="!headerlogoBase64" class="txt-capitalize m-0">{{formName}}</h3>
-                        </div>
-                        <div class="quilleditor-wrapper py-2">
-                            <div class="quilleditor" [ngStyle]="welcomeStyle()"
-                                [innerHTML]="editorDataWelcome?(editorDataWelcome | safe: 'html'):welcomeText">
-                            </div>
-                        </div>
                     </div>
 
-                    <div cdkDropList [cdkDropListData]="webFormControlList" class="example-list"
-                        (cdkDropListDropped)="drop($event)">
-
-                        <form #registerForm="ngForm" (ngSubmit)="register(registerForm)">
-                            <div class="dsarform-box" cdkDragBoundary=".dsarform-box" *ngFor="let webcontrol of webFormControlList; let j = index;"
-                                cdkDrag [cdkDragDisabled]="true">
-                                <div *ngIf="webcontrol.controlId === 'requesttype'" class="col-sm-12">
-                                    <label><span *ngIf="webcontrol.requiredfield" class="color-red">*</span>
-                                        <span [ngClass]="{'hidelabel':webcontrol.controlId == selectedControlId && isEditingList}">{{webcontrol.controllabel}}</span>
-                                        <span *ngIf="webcontrol.controlId == selectedControlId && isEditingList">
-                                            <span>{{lblText && isEditingList ? lblText : webcontrol.controllabel}}</span> 
-                                         </span>
-                                        </label>
-                                    <div
-                                        *ngIf="webcontrol.control === 'select' && webcontrol.controlId === 'requesttype'">
-                                        <select class="form-control" name="{{webcontrol.controllabel}}"
-                                            [(ngModel)]="requestObject[webcontrol.controllabel]">
-                                            <option *ngFor="let opt of webcontrol.selectOptions"
-                                                [value]="opt.request_type_id">
-                                                {{ opt.name }}
-                                            </option>
-                                        </select>
-                                        <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
-                                    </div>
-                                    <div class="form-group" 
-                                        *ngIf="webcontrol.control === 'radio' && webcontrol.controlId === 'requesttype'">
-                                        <div *ngFor="let opt of webcontrol.selectOptions" class="form-check-inline"  cdkDrag [cdkDragDisabled]="true">
-                                            <input class="form-check-input" type="radio" name="requesttype"
-                                            id="{{opt.name}}"  [value]='opt.request_type_id' #requestype="ngModel"
-                                                [(ngModel)]="requestObject[opt.request_type_id]" />
-                                                <label for="{{opt.name}}">{{opt.name}}</label>
-                                            <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
-
-                                        </div>
-                                    </div>
-                                   
-                                    <div class="form-group"
-                                        *ngIf="webcontrol.control === 'checkbox' && webcontrol.controlId === 'requesttype'">
-                                        <!-- *ngIf="checkboxBtnType"-->
-                                        <div *ngFor="let opt of webcontrol.selectOptions; let i = index;" class="form-check-inline" cdkDrag [cdkDragDisabled]="true">
-                                            <input class="form-check-input" type="checkbox"  name="requestype"
-                                            id="{{opt.name}}"  [value]='opt.request_type_id'  #requestype="ngModel"
-                                                [(ngModel)]="requestObject[opt.request_type_id]" />
-                                                <label for="{{opt.name}}">{{opt.name}}</label>
-                                            <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
-
-                                        </div>
-                                    </div>
-
-                                </div>
-                                <div *ngIf="webcontrol.controlId === 'subjecttype'" class="col-sm-12">
-                                    <!--webcontrol.control == 'select' && webcontrol.controlId === 'subjecttype' && isSubjectTypeSelected-->
-                                    <label><span *ngIf="webcontrol.requiredfield" class="color-red">*</span>
-                                        <span [ngClass]="{'hidelabel':webcontrol.controlId == selectedControlId && isEditingList}">{{webcontrol.controllabel}} </span>
-                                        <span *ngIf="webcontrol.controlId == selectedControlId && isEditingList">
-                                            <span>{{lblText && isEditingList ? lblText : webcontrol.controllabel}}</span> 
-                                         </span>
-                                    </label>
-                                    <div
-                                        *ngIf="webcontrol.control == 'select' && webcontrol.controlId === 'subjecttype'">
-                                        <!-- *ngIf="isSubjectTypeSelected"-->
-                                        <select class="form-control" name="{{webcontrol.controllabel}}"
-                                            [(ngModel)]="requestObject[webcontrol.controllabel]">
-                                            <option *ngFor="let userOpt of webcontrol.selectOptions"
-                                                [value]="userOpt.subject_type_id">
-                                                {{ userOpt.name }}
-                                            </option>
-                                        </select>
-                                        <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
-                                    </div>
-                                    <div class="form-group"
-                                        *ngIf="webcontrol.control == 'radio' && webcontrol.controlId === 'subjecttype'">
-                                        <!--*ngIf="subjectTyperadioBtn"-->
-                                        <div *ngFor="let userOpt of webcontrol.selectOptions" class="form-check-inline"
-                                        cdkDrag [cdkDragDisabled]="true">
-                                            <input class="form-check-input" type="radio" name="subjecttype" 
-                                          id="{{userOpt.name}}"  #subjecttype="ngModel"
-                                                [value]='userOpt.subject_type_id'
-                                                [(ngModel)]="requestObject[userOpt.subject_type_id]" />
-                                            <label for="{{userOpt.name}}">{{userOpt.name}}</label>
-
-                                            <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
-                                        </div>
-                                    </div>
-                                    <div class="form-group"
-                                        *ngIf="webcontrol.control == 'checkbox' && webcontrol.controlId === 'subjecttype'">
-                                        <!--*ngIf="subjectTypecheckboxBtnType"-->
-                                        <div *ngFor="let opt of webcontrol.selectOptions; let i = index;"
-                                            class="form-check-inline" cdkDrag [cdkDragDisabled]="true">
-                                            <input class="form-check-input" type="checkbox"
-                                            id="{{opt.name}}"  name="{{webcontrol.controllabel}}" 
-                                            [value]='opt.subject_type_id'
-                                                [(ngModel)]="requestObject[opt.subject_type_id]" />
-                                                <label for="{{opt.name}}">{{opt.name}}</label>
-                                            <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
-
-                                        </div>
-                                    </div>
-
-                                </div>
-                                <div *ngIf="webcontrol.control === 'textbox';else selectOption" class="col-sm-12">
-                                    <label> <span *ngIf="webcontrol.requiredfield" class="color-red">*</span>
-                                        <span [ngClass]="{'hidelabel':webcontrol.controlId == selectedControlId && isEditingList}">{{webcontrol.controllabel}} </span>
-                                        <span *ngIf="webcontrol.controlId == selectedControlId && isEditingList">
-                                            <span>{{lblText && isEditingList ? lblText : webcontrol.controllabel}}</span> 
-                                         </span>
-                                    </label>
-                                    <input class="form-control" type="text" name="{{webcontrol.controllabel}}"
-                                        [(ngModel)]="requestObject[webcontrol.controllabel]" />
-                                    <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
-
-                                </div>
-                                <div *ngIf="webcontrol.control === 'textarea'" class="col-sm-12">
-                                    <label><span *ngIf="webcontrol.requiredfield" class="color-red">*</span>
-                                        <span [ngClass]="{'hidelabel':webcontrol.controlId == selectedControlId && isEditingList}">{{webcontrol.controllabel}} </span>
-                                        <span *ngIf="webcontrol.controlId == selectedControlId && isEditingList">
-                                            <span>{{lblText && isEditingList ? lblText : webcontrol.controllabel}}</span> 
-                                         </span>
-                                    </label>
-                                    <textarea class="form-control" type="text" name="{{webcontrol.controllabel}}"
-                                        [(ngModel)]="requestObject[webcontrol.controllabel]"></textarea>
-                                    <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
-
-                                </div>
-                                <div *ngIf="webcontrol.control === 'datepicker'" class="col-sm-12">
-                                    <label><span *ngIf="webcontrol.requiredfield" class="color-red">*</span>
-                                        <!-- {{webcontrol.controllabel}}  -->
-                                        <span [ngClass]="{'hidelabel':webcontrol.controlId == selectedControlId && isEditingList}">{{webcontrol.controllabel}} </span>
-                                        <span *ngIf="webcontrol.controlId == selectedControlId && isEditingList">
-                                            <span>{{lblText && isEditingList? lblText : webcontrol.controllabel}}</span> 
-                                         </span>
-                                    </label>
-                                    <input class="form-control" type="date" name="{{webcontrol.controllabel}}"
-                                        #datePicker="ngModel" [(ngModel)]="requestObject[webcontrol.controllabel]" />
-                                    <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
-                                    <div *ngIf="registerForm.submitted && datePicker.invalid" class="invalid-feedback">
-                                        <div *ngIf="datePicker.errors.required">{{webcontrol.controllabel}} is
-                                            required</div>
-                                    </div>
-                                </div>
- 
-                                <div class="col-sm-12"
-                                    *ngIf="webcontrol.control === 'radio' && webcontrol.controlId !== 'requesttype' && webcontrol.controlId !== 'subjecttype'">
-                                    <div  cdkDropList [cdkDropListData]="webcontrol.selectOptions"
-                                    (cdkDropListDropped)="dragDropCustomOption($event)"> 
-                                    <label class="heading"><span *ngIf="webcontrol.requiredfield"
-                                            class="color-red">*</span>
-                                            <!-- {{webcontrol.controllabel}}  -->
-                                            <span [ngClass]="{'hidelabel':webcontrol.controlId == selectedControlId && isEditingList}">{{webcontrol.controllabel}} </span>
-                                            <span *ngIf="webcontrol.controlId == selectedControlId && isEditingList">
-                                            <span>{{lblText && isEditingList ? lblText : webcontrol.controllabel}}</span> 
-                                         </span>
-                                    </label>
-                                    <div *ngFor="let userOpt of webcontrol.selectOptions" class="form-check-inline" 
-                                    [cdkDragDisabled]="true" cdkDrag>
-                                            <input class="form-check-input" type="radio" #customRadio="ngModel"
-                                                id="{{userOpt.id}}" name="{{userOpt.keylabel}}" [value]='userOpt.name'
-                                                [(ngModel)]="requestObject[userOpt.id]"
-                                                [ngClass]="{ 'is-invalid': registerForm.submitted && customRadio.invalid }"
-                                                [required]="webcontrol.requiredfield ? 'required' : null" />
-                                            <label for="{{userOpt.id}}">{{userOpt.name}}</label>
-                                            <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
-
-                                    </div>
-                                    </div>
-                                </div>
-
-                                <ng-template #selectOption>
-                                    <div class="col-sm-12"
-                                        *ngIf="webcontrol.control == 'select' && webcontrol.controlId !== 'state' && webcontrol.controlId !== 'country' && webcontrol.controlId !== 'subjecttype' && webcontrol.controlId !== 'requesttype'">
-                                        <label><span *ngIf="webcontrol.requiredfield" class="color-red">*</span>
-                                            <!-- {{webcontrol.controllabel}} -->
-                                            <span [ngClass]="{'hidelabel':webcontrol.controlId == selectedControlId && isEditingList}">{{webcontrol.controllabel}} </span>
-                                            <span *ngIf="webcontrol.controlId == selectedControlId && isEditingList">
-                                            <span>{{lblText && isEditingList ? lblText : webcontrol.controllabel}}</span> 
-                                         </span>
-                                        </label>
-                                        <select class="form-control" name="{{webcontrol.controllabel}}"
-                                            [(ngModel)]="requestObject[webcontrol.controllabel]">
-                                            <option *ngFor="let data of webcontrol.selectOptions" [value]="data.id">
-                                                {{ data.name }}
-                                            </option>
-                                        </select>
-                                        <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
-
-                                    </div>
-                                    <div class="col-sm-12"
-                                        *ngIf="webcontrol.control == 'select' && webcontrol.controlId == 'country'">
-                                        <label><span *ngIf="webcontrol.requiredfield" class="color-red">*</span>
-                                            <!-- {{webcontrol.controllabel}} -->
-                                            <span [ngClass]="{'hidelabel':webcontrol.controlId == selectedControlId && isEditingList}">{{webcontrol.controllabel}} </span>
-                                            <span *ngIf="webcontrol.controlId == selectedControlId && isEditingList">
-                                                <span>{{lblText && isEditingList ? lblText : webcontrol.controllabel}}</span> 
-                                             </span>
-                                        </label>
-                                        <select class="form-control" name="{{webcontrol.controllabel}}"
-                                            [(ngModel)]="requestObject[webcontrol.controllabel]"
-                                            (change)="onSelectCountry($event.target.value)">
-                                            <option *ngFor="let data of contactList" [value]="data.id">
-                                                {{ data.name }}
-                                            </option>
-                                        </select>
-                                        <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
-                                    </div>
-
-                                    <div class="col-sm-12"
-                                        *ngIf="webcontrol.control == 'select' && webcontrol.controlId == 'state'">
-                                        <label><span *ngIf="webcontrol.requiredfield" class="color-red">*</span>
-                                            <!-- {{webcontrol.controllabel}}  -->
-                                            <span [ngClass]="{'hidelabel':webcontrol.controlId == selectedControlId && isEditingList}">{{webcontrol.controllabel}} </span>
-                                            <span *ngIf="webcontrol.controlId == selectedControlId && isEditingList">
-                                            <span>{{lblText && isEditingList ? lblText : webcontrol.controllabel}}</span> 
-                                         </span>
-                                        </label>
-                                        <select class="form-control" name="{{webcontrol.controllabel}}"
-                                            [(ngModel)]="requestObject[webcontrol.controllabel]">
-                                            <option *ngFor="let data of filteredStateList" [value]="data.name">
-                                                {{ data.name }}
-                                            </option>
-                                        </select>
-                                        <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
-                                    </div>
-
-                                </ng-template>
-                                <div class="col-sm-12"
-                                    *ngIf="webcontrol.control == 'checkbox' && webcontrol.controlId !== 'subjecttype' && webcontrol.controlId !== 'requesttype'">
-                                    <label class="form-check-label"><span *ngIf="webcontrol.requiredfield"
-                                            class="color-red">*</span>
-                                            <span [ngClass]="{'hidelabel':webcontrol.controlId == selectedControlId && isEditingList}">{{webcontrol.controllabel}} </span>
-                                            <span *ngIf="webcontrol.controlId == selectedControlId && isEditingList">
-                                                <span>{{lblText && isEditingList ? lblText : webcontrol.controllabel}}</span> 
-                                             </span>
-                                        </label>
-                                    <div *ngFor="let opt of webcontrol.selectOptions; let i = index;"  class="form-check-inline">
-                                        <input class="form-check-input" type="checkbox" [ngModelOptions]="{standalone: true}" #customChkbox="ngModel"
-                                        id="{{opt.name}}"  name="{{opt.name}}" [value]="opt.id"
-                                        [ngClass]="{ 'is-invalid': registerForm.submitted && customChkbox.invalid }"
-                                        [required]="webcontrol.requiredfield ? 'required' : null" [(ngModel)]="requestObject[opt.id]" />
-                                    <label for="{{opt.name}}">{{opt.name}}</label>
-                                    <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
-
-                                    </div>
-                                </div>
-                                <div class="col-sm-12"
-                                    [ngClass]="{'displaynone':!webcontrol.requiredfield,'':webcontrol.requiredfield ||isFileUploadRequired}"
-                                    *ngIf="webcontrol.requiredfield && webcontrol.controlId == 'fileupload'">
-                                    <label class="form-check-label"><span *ngIf="webcontrol.ismandatory"
-                                            class="color-red">*</span>
-                                            <span [ngClass]="{'hidelabel':webcontrol.controlId == selectedControlId && isEditingList}">{{webcontrol.controllabel}} </span>
-                                            <span *ngIf="webcontrol.controlId == selectedControlId && isEditingList">
-                                                <span>{{lblText && isEditingList ? lblText : webcontrol.controllabel}}</span> 
-                                             </span>
-                                        </label>
-                                    <div class="input-group">
-                                        <div class="custom-file">
-                                            <input type="file" class="custom-file-input" (change)="uploadFile($event)"
-                                                id="uploaddocument">
-                                            <label class="custom-file-label"
-                                                for="inputGroupFile01">{{uploadFilename?uploadFilename:'Choose file'}}</label>
-                                            <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
-
-                                        </div>
-
-                                    </div>
-                                    <div *ngIf="showFilesizeerror" class="color-red tx-12 mt-2">
-                                        File size should not exceed 10 MB
-                                    </div>
-                                    <div *ngIf="showFileExtnerror" class="color-red tx-12 mt-2">
-                                        Only pdf, jpg, txt, doc, docx file area allowed.
-                                    </div>
-
-                                </div>
-
-                                <!-- <img *ngIf="j == webFormControlList.length - 1" [src]='capthchaID' />
-                                     {{capthchaID}}  [ngClass]="{'displaynone':!webcontrol.requiredfield,'':webcontrol.requiredfield ||isCaptchaVerificationRequired}"-->
-                                <div class="col-sm-12" *ngIf="webFormControlList.length - 1">
-                                    <div class="col-sm-12 margin-padding-zero"
-                                        [ngClass]="{'displaynone':!webcontrol.requiredfield,'':webcontrol.requiredfield ||isCaptchaVerificationRequired}"
-                                        *ngIf="webcontrol.requiredfield && webcontrol.controlId == 'captchacontrol'">
-
-                                        <label>Captcha</label>
-                                        <div class="form-group flex-align-item mb-0">
-                                            <button title="Refresh captcha" type="button"
-                                                class="btn btn-xs btn-primary mb-2 mr-1" (click)="loadCaptcha()">
-                                                <img src="../../assets/imgs/refresh.svg" width="20" height="20" />
-                                            </button>
-                                            <div class="align-form">
-                                                <span [ngClass]="{'displaynone':!isImageLoading,'':isImageLoading}"
-                                                    class="spinner-border spinner-border-sm mr-1"></span>
-                                                <img [src]="imageToShow" alt="captcha image"
-                                                    *ngIf="!isImageLoading; else noImageFound">
-                                                <!-- <audio controls>
-                                                <source src="imageToShow.wav" type="audio/wav">
-                                            </audio> -->
-                                                <ng-template #noImageFound>
-                                                    <span>No Image Found</span>
-                                                </ng-template>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-12 margin-padding-zero">
-                                            <input class="form-control" placeholder="Enter above captcha code"
-                                                autocomplete="new-{{j}}" name="captchacode" [(ngModel)]="captchacode" />
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
-
-                        </form>
-                        <div class="quilleditor-wrapper py-2 border-top">
-                            <div class="quilleditor" [ngStyle]="footerStyle()"
-                                [innerHTML]="editorDataFooter?(editorDataFooter | safe: 'html'):footerText">
-                            </div>
-                        </div>
-
-                    </div>
-
-                </div>
+                  </div>
+                </accordion-group>
+              </accordion>
             </div>
+            <div class="col-sm-8">
+              <!-- webFormControlList  {{webFormControlList | json}} -->
+              <div class="headerwrapper">
+                <div  class="logocontainer pd-10" [ngClass]="{'img-container':headerlogoBase64,'':!headerlogoBase64}" [style.background-color]="headerColor">
+                  <img *ngIf="headerlogoBase64" class="img-responsive logowidth"
+                       [src]="transform(headerlogoBase64)" width="150px" />
+                  <h3 *ngIf="!headerlogoBase64" class="txt-capitalize m-0">{{formName}}</h3>
+                </div>
+                <div class="quilleditor-wrapper py-2">
+                  <div class="quilleditor" [ngStyle]="welcomeStyle()"
+                       [innerHTML]="editorDataWelcome?(editorDataWelcome | safe: 'html'):welcomeText">
+                  </div>
+                </div>
+              </div>
+
+              <div cdkDropList [cdkDropListData]="webFormControlList" class="example-list"
+                   (cdkDropListDropped)="drop($event)">
+
+                <form #registerForm="ngForm" (ngSubmit)="register(registerForm)">
+                  <div class="dsarform-box" cdkDragBoundary=".dsarform-box" *ngFor="let webcontrol of webFormControlList; let j = index;"
+                       cdkDrag [cdkDragDisabled]="true">
+                    <div *ngIf="webcontrol.controlId === 'requesttype'" class="col-sm-12">
+                      <label><span *ngIf="webcontrol.requiredfield" class="color-red">*</span>
+                        <span [ngClass]="{'hidelabel':webcontrol.controlId == selectedControlId && isEditingList}">{{webcontrol.controllabel}}</span>
+                        <span *ngIf="webcontrol.controlId == selectedControlId && isEditingList">
+                                            <span>{{lblText && isEditingList ? lblText : webcontrol.controllabel}}</span>
+                                         </span>
+                      </label>
+                      <div
+                        *ngIf="webcontrol.control === 'select' && webcontrol.controlId === 'requesttype'">
+                        <select class="form-control" name="{{webcontrol.controllabel}}"
+                                [(ngModel)]="requestObject[webcontrol.controllabel]">
+                          <option *ngFor="let opt of webcontrol.selectOptions"
+                                  [value]="opt.request_type_id">
+                            {{ opt.name }}
+                          </option>
+                        </select>
+                        <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
+                      </div>
+                      <div class="form-group"
+                           *ngIf="webcontrol.control === 'radio' && webcontrol.controlId === 'requesttype'">
+                        <div *ngFor="let opt of webcontrol.selectOptions" class="form-check-inline"  cdkDrag [cdkDragDisabled]="true">
+                          <input class="form-check-input" type="radio" name="requesttype"
+                                 id="{{opt.name}}"  [value]='opt.request_type_id' #requestype="ngModel"
+                                 [(ngModel)]="requestObject[opt.request_type_id]" />
+                          <label for="{{opt.name}}">{{opt.name}}</label>
+                          <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
+
+                        </div>
+                      </div>
+
+                      <div class="form-group"
+                           *ngIf="webcontrol.control === 'checkbox' && webcontrol.controlId === 'requesttype'">
+                        <!-- *ngIf="checkboxBtnType"-->
+                        <div *ngFor="let opt of webcontrol.selectOptions; let i = index;" class="form-check-inline" cdkDrag [cdkDragDisabled]="true">
+                          <input class="form-check-input" type="checkbox"  name="requestype"
+                                 id="{{opt.name}}"  [value]='opt.request_type_id'  #requestype="ngModel"
+                                 [(ngModel)]="requestObject[opt.request_type_id]" />
+                          <label for="{{opt.name}}">{{opt.name}}</label>
+                          <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
+
+                        </div>
+                      </div>
+
+                    </div>
+                    <div *ngIf="webcontrol.controlId === 'subjecttype'" class="col-sm-12">
+                      <!--webcontrol.control == 'select' && webcontrol.controlId === 'subjecttype' && isSubjectTypeSelected-->
+                      <label><span *ngIf="webcontrol.requiredfield" class="color-red">*</span>
+                        <span [ngClass]="{'hidelabel':webcontrol.controlId == selectedControlId && isEditingList}">{{webcontrol.controllabel}} </span>
+                        <span *ngIf="webcontrol.controlId == selectedControlId && isEditingList">
+                                            <span>{{lblText && isEditingList ? lblText : webcontrol.controllabel}}</span>
+                                         </span>
+                      </label>
+                      <div
+                        *ngIf="webcontrol.control == 'select' && webcontrol.controlId === 'subjecttype'">
+                        <!-- *ngIf="isSubjectTypeSelected"-->
+                        <select class="form-control" name="{{webcontrol.controllabel}}"
+                                [(ngModel)]="requestObject[webcontrol.controllabel]">
+                          <option *ngFor="let userOpt of webcontrol.selectOptions"
+                                  [value]="userOpt.subject_type_id">
+                            {{ userOpt.name }}
+                          </option>
+                        </select>
+                        <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
+                      </div>
+                      <div class="form-group"
+                           *ngIf="webcontrol.control == 'radio' && webcontrol.controlId === 'subjecttype'">
+                        <!--*ngIf="subjectTyperadioBtn"-->
+                        <div *ngFor="let userOpt of webcontrol.selectOptions" class="form-check-inline"
+                             cdkDrag [cdkDragDisabled]="true">
+                          <input class="form-check-input" type="radio" name="subjecttype"
+                                 id="{{userOpt.name}}"  #subjecttype="ngModel"
+                                 [value]='userOpt.subject_type_id'
+                                 [(ngModel)]="requestObject[userOpt.subject_type_id]" />
+                          <label for="{{userOpt.name}}">{{userOpt.name}}</label>
+
+                          <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
+                        </div>
+                      </div>
+                      <div class="form-group"
+                           *ngIf="webcontrol.control == 'checkbox' && webcontrol.controlId === 'subjecttype'">
+                        <!--*ngIf="subjectTypecheckboxBtnType"-->
+                        <div *ngFor="let opt of webcontrol.selectOptions; let i = index;"
+                             class="form-check-inline" cdkDrag [cdkDragDisabled]="true">
+                          <input class="form-check-input" type="checkbox"
+                                 id="{{opt.name}}"  name="{{webcontrol.controllabel}}"
+                                 [value]='opt.subject_type_id'
+                                 [(ngModel)]="requestObject[opt.subject_type_id]" />
+                          <label for="{{opt.name}}">{{opt.name}}</label>
+                          <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
+
+                        </div>
+                      </div>
+
+                    </div>
+                    <div *ngIf="webcontrol.control === 'textbox';else selectOption" class="col-sm-12">
+                      <label> <span *ngIf="webcontrol.requiredfield" class="color-red">*</span>
+                        <span [ngClass]="{'hidelabel':webcontrol.controlId == selectedControlId && isEditingList}">{{webcontrol.controllabel}} </span>
+                        <span *ngIf="webcontrol.controlId == selectedControlId && isEditingList">
+                                            <span>{{lblText && isEditingList ? lblText : webcontrol.controllabel}}</span>
+                                         </span>
+                      </label>
+                      <input class="form-control" type="text" name="{{webcontrol.controllabel}}"
+                             [(ngModel)]="requestObject[webcontrol.controllabel]" />
+                      <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
+
+                    </div>
+                    <div *ngIf="webcontrol.control === 'textarea'" class="col-sm-12">
+                      <label><span *ngIf="webcontrol.requiredfield" class="color-red">*</span>
+                        <span [ngClass]="{'hidelabel':webcontrol.controlId == selectedControlId && isEditingList}">{{webcontrol.controllabel}} </span>
+                        <span *ngIf="webcontrol.controlId == selectedControlId && isEditingList">
+                                            <span>{{lblText && isEditingList ? lblText : webcontrol.controllabel}}</span>
+                                         </span>
+                      </label>
+                      <textarea class="form-control" type="text" name="{{webcontrol.controllabel}}"
+                                [(ngModel)]="requestObject[webcontrol.controllabel]"></textarea>
+                      <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
+
+                    </div>
+                    <div *ngIf="webcontrol.control === 'datepicker'" class="col-sm-12">
+                      <label><span *ngIf="webcontrol.requiredfield" class="color-red">*</span>
+                        <!-- {{webcontrol.controllabel}}  -->
+                        <span [ngClass]="{'hidelabel':webcontrol.controlId == selectedControlId && isEditingList}">{{webcontrol.controllabel}} </span>
+                        <span *ngIf="webcontrol.controlId == selectedControlId && isEditingList">
+                                            <span>{{lblText && isEditingList? lblText : webcontrol.controllabel}}</span>
+                                         </span>
+                      </label>
+                      <input class="form-control" type="date" name="{{webcontrol.controllabel}}"
+                             #datePicker="ngModel" [(ngModel)]="requestObject[webcontrol.controllabel]" />
+                      <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
+                      <div *ngIf="registerForm.submitted && datePicker.invalid" class="invalid-feedback">
+                        <div *ngIf="datePicker.errors.required">{{webcontrol.controllabel}} is
+                          required</div>
+                      </div>
+                    </div>
+
+                    <div class="col-sm-12"
+                         *ngIf="webcontrol.control === 'radio' && webcontrol.controlId !== 'requesttype' && webcontrol.controlId !== 'subjecttype'">
+                      <div  cdkDropList [cdkDropListData]="webcontrol.selectOptions"
+                            (cdkDropListDropped)="dragDropCustomOption($event)">
+                        <label class="heading"><span *ngIf="webcontrol.requiredfield"
+                                                     class="color-red">*</span>
+                          <!-- {{webcontrol.controllabel}}  -->
+                          <span [ngClass]="{'hidelabel':webcontrol.controlId == selectedControlId && isEditingList}">{{webcontrol.controllabel}} </span>
+                          <span *ngIf="webcontrol.controlId == selectedControlId && isEditingList">
+                                            <span>{{lblText && isEditingList ? lblText : webcontrol.controllabel}}</span>
+                                         </span>
+                        </label>
+                        <div *ngFor="let userOpt of webcontrol.selectOptions" class="form-check-inline"
+                             [cdkDragDisabled]="true" cdkDrag>
+                          <input class="form-check-input" type="radio" #customRadio="ngModel"
+                                 id="{{userOpt.id}}" name="{{userOpt.keylabel}}" [value]='userOpt.name'
+                                 [(ngModel)]="requestObject[userOpt.id]"
+                                 [ngClass]="{ 'is-invalid': registerForm.submitted && customRadio.invalid }"
+                                 [required]="webcontrol.requiredfield ? 'required' : null" />
+                          <label for="{{userOpt.id}}">{{userOpt.name}}</label>
+                          <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
+
+                        </div>
+                      </div>
+                    </div>
+
+                    <ng-template #selectOption>
+                      <div class="col-sm-12"
+                           *ngIf="webcontrol.control == 'select' && webcontrol.controlId !== 'state' && webcontrol.controlId !== 'country' && webcontrol.controlId !== 'subjecttype' && webcontrol.controlId !== 'requesttype'">
+                        <label><span *ngIf="webcontrol.requiredfield" class="color-red">*</span>
+                          <!-- {{webcontrol.controllabel}} -->
+                          <span [ngClass]="{'hidelabel':webcontrol.controlId == selectedControlId && isEditingList}">{{webcontrol.controllabel}} </span>
+                          <span *ngIf="webcontrol.controlId == selectedControlId && isEditingList">
+                                            <span>{{lblText && isEditingList ? lblText : webcontrol.controllabel}}</span>
+                                         </span>
+                        </label>
+                        <select class="form-control" name="{{webcontrol.controllabel}}"
+                                [(ngModel)]="requestObject[webcontrol.controllabel]">
+                          <option *ngFor="let data of webcontrol.selectOptions" [value]="data.id">
+                            {{ data.name }}
+                          </option>
+                        </select>
+                        <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
+
+                      </div>
+                      <div class="col-sm-12"
+                           *ngIf="webcontrol.control == 'select' && webcontrol.controlId == 'country'">
+                        <label><span *ngIf="webcontrol.requiredfield" class="color-red">*</span>
+                          <!-- {{webcontrol.controllabel}} -->
+                          <span [ngClass]="{'hidelabel':webcontrol.controlId == selectedControlId && isEditingList}">{{webcontrol.controllabel}} </span>
+                          <span *ngIf="webcontrol.controlId == selectedControlId && isEditingList">
+                                                <span>{{lblText && isEditingList ? lblText : webcontrol.controllabel}}</span>
+                                             </span>
+                        </label>
+                        <select class="form-control" name="{{webcontrol.controllabel}}"
+                                [(ngModel)]="requestObject[webcontrol.controllabel]"
+                                (change)="onSelectCountry($event.target.value)">
+                          <option *ngFor="let data of contactList" [value]="data.id">
+                            {{ data.name }}
+                          </option>
+                        </select>
+                        <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
+                      </div>
+
+                      <div class="col-sm-12"
+                           *ngIf="webcontrol.control == 'select' && webcontrol.controlId == 'state'">
+                        <label><span *ngIf="webcontrol.requiredfield" class="color-red">*</span>
+                          <!-- {{webcontrol.controllabel}}  -->
+                          <span [ngClass]="{'hidelabel':webcontrol.controlId == selectedControlId && isEditingList}">{{webcontrol.controllabel}} </span>
+                          <span *ngIf="webcontrol.controlId == selectedControlId && isEditingList">
+                                            <span>{{lblText && isEditingList ? lblText : webcontrol.controllabel}}</span>
+                                         </span>
+                        </label>
+                        <select class="form-control" name="{{webcontrol.controllabel}}"
+                                [(ngModel)]="requestObject[webcontrol.controllabel]">
+                          <option *ngFor="let data of filteredStateList" [value]="data.name">
+                            {{ data.name }}
+                          </option>
+                        </select>
+                        <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
+                      </div>
+
+                    </ng-template>
+                    <div class="col-sm-12"
+                         *ngIf="webcontrol.control == 'checkbox' && webcontrol.controlId !== 'subjecttype' && webcontrol.controlId !== 'requesttype'">
+                      <label class="form-check-label"><span *ngIf="webcontrol.requiredfield"
+                                                            class="color-red">*</span>
+                        <span [ngClass]="{'hidelabel':webcontrol.controlId == selectedControlId && isEditingList}">{{webcontrol.controllabel}} </span>
+                        <span *ngIf="webcontrol.controlId == selectedControlId && isEditingList">
+                                                <span>{{lblText && isEditingList ? lblText : webcontrol.controllabel}}</span>
+                                             </span>
+                      </label>
+                      <div *ngFor="let opt of webcontrol.selectOptions; let i = index;"  class="form-check-inline">
+                        <input class="form-check-input" type="checkbox" [ngModelOptions]="{standalone: true}" #customChkbox="ngModel"
+                               id="{{opt.name}}"  name="{{opt.name}}" [value]="opt.id"
+                               [ngClass]="{ 'is-invalid': registerForm.submitted && customChkbox.invalid }"
+                               [required]="webcontrol.requiredfield ? 'required' : null" [(ngModel)]="requestObject[opt.id]" />
+                        <label for="{{opt.name}}">{{opt.name}}</label>
+                        <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
+
+                      </div>
+                    </div>
+                    <div class="col-sm-12"
+                         [ngClass]="{'displaynone':!webcontrol.requiredfield,'':webcontrol.requiredfield ||isFileUploadRequired}"
+                         *ngIf="webcontrol.requiredfield && webcontrol.controlId == 'fileupload'">
+                      <label class="form-check-label"><span *ngIf="webcontrol.ismandatory"
+                                                            class="color-red">*</span>
+                        <span [ngClass]="{'hidelabel':webcontrol.controlId == selectedControlId && isEditingList}">{{webcontrol.controllabel}} </span>
+                        <span *ngIf="webcontrol.controlId == selectedControlId && isEditingList">
+                                                <span>{{lblText && isEditingList ? lblText : webcontrol.controllabel}}</span>
+                                             </span>
+                      </label>
+                      <div class="input-group">
+                        <div class="custom-file">
+                          <input type="file" class="custom-file-input" (change)="uploadFile($event)"
+                                 id="uploaddocument">
+                          <label class="custom-file-label"
+                                 for="inputGroupFile01">{{uploadFilename?uploadFilename:'Choose file'}}</label>
+                          <input type="hidden" name="{{webcontrol.indexCount}}" [ngModel]="j+1" />
+
+                        </div>
+
+                      </div>
+                      <div *ngIf="showFilesizeerror" class="color-red tx-12 mt-2">
+                        File size should not exceed 10 MB
+                      </div>
+                      <div *ngIf="showFileExtnerror" class="color-red tx-12 mt-2">
+                        Only pdf, jpg, txt, doc, docx file area allowed.
+                      </div>
+
+                    </div>
+
+                    <!-- <img *ngIf="j == webFormControlList.length - 1" [src]='capthchaID' />
+                         {{capthchaID}}  [ngClass]="{'displaynone':!webcontrol.requiredfield,'':webcontrol.requiredfield ||isCaptchaVerificationRequired}"-->
+                    <div class="col-sm-12" *ngIf="webFormControlList.length - 1">
+                      <div class="col-sm-12 margin-padding-zero"
+                           [ngClass]="{'displaynone':!webcontrol.requiredfield,'':webcontrol.requiredfield ||isCaptchaVerificationRequired}"
+                           *ngIf="webcontrol.requiredfield && webcontrol.controlId == 'captchacontrol'">
+
+                        <label>Captcha</label>
+                        <div class="form-group flex-align-item mb-0">
+                          <button title="Refresh captcha" type="button"
+                                  class="btn btn-xs btn-primary mb-2 mr-1" (click)="loadCaptcha()">
+                            <img src="../../assets/imgs/refresh.svg" width="20" height="20" />
+                          </button>
+                          <div class="align-form">
+                                                <span [ngClass]="{'displaynone':!isImageLoading,'':isImageLoading}"
+                                                      class="spinner-border spinner-border-sm mr-1"></span>
+                            <img [src]="imageToShow" alt="captcha image"
+                                 *ngIf="!isImageLoading; else noImageFound">
+                            <!-- <audio controls>
+                            <source src="imageToShow.wav" type="audio/wav">
+                        </audio> -->
+                            <ng-template #noImageFound>
+                              <span>No Image Found</span>
+                            </ng-template>
+                          </div>
+                        </div>
+                        <div class="col-sm-12 margin-padding-zero">
+                          <input class="form-control" placeholder="Enter above captcha code"
+                                 autocomplete="new-{{j}}" name="captchacode" [(ngModel)]="captchacode" />
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+
+                </form>
+                <div class="quilleditor-wrapper py-2 border-top">
+                  <div class="quilleditor" [ngStyle]="footerStyle()"
+                       [innerHTML]="editorDataFooter?(editorDataFooter | safe: 'html'):footerText">
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
+          </div>
         </ng-template>
-    </li>
-    <li [ngbNavItem]="3" [destroyOnHide]="false">
+      </li>
+      <li [ngbNavItem]="3" [destroyOnHide]="false">
         <a ngbNavLink>3 Settings</a>
         <ng-template ngbNavContent>
-            <div class="col-5 margin-auto">
-                <form #settingsForm="ngForm">
-                <div class="form-group mg-b-5">
-                    <label for="defaultapprover" class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">
-                        Default Approver</label>
-                    <select class="form-control" name="user" #userselect="ngModel" name="selectedApproverID" [(ngModel)]="selectedApproverID"
+          <div class="col-5 margin-auto">
+            <form #settingsForm="ngForm">
+              <div class="form-group mg-b-5">
+                <label for="defaultapprover" class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">
+                  Default Approver</label>
+                <select class="form-control" name="user" #userselect="ngModel" name="selectedApproverID" [(ngModel)]="selectedApproverID"
                         [ngClass]="{ 'is-invalid': userselect.invalid && userselect.errors?.required && isdraftsubmitted}" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null" required>
-                        <ng-container *ngFor="let opt of ApproverList">
-                            <option *ngIf="opt.user_name !== ' ' && opt.email_verified" [value]="opt.approver_id"
-                                [selected]="opt.approver_id === selectedApproverID">
-                                {{ opt.user_name }} 
-                            </option>
-                        </ng-container>
-                    </select>
-                    <div *ngIf="userselect.invalid" class="invalid-feedback">
-                        <div *ngIf="userselect.errors?.required">Default approver is required</div>
-                    </div>
+                  <ng-container *ngFor="let opt of ApproverList">
+                    <option *ngIf="opt.user_name !== ' ' && opt.email_verified" [value]="opt.approver_id"
+                            [selected]="opt.approver_id === selectedApproverID">
+                      {{ opt.user_name }}
+                    </option>
+                  </ng-container>
+                </select>
+                <div *ngIf="userselect.invalid" class="invalid-feedback">
+                  <div *ngIf="userselect.errors?.required">Default approver is required</div>
                 </div>
-                <div class="form-group mg-b-5">
-                    <label for="workflow" class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">
-                        Select Workflow</label>
-                    <select class="form-control" name="workflow" #workflowselect="ngModel" [(ngModel)]="workflow" 
-                    [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
+              </div>
+              <div class="form-group mg-b-5">
+                <label for="workflow" class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">
+                  Select Workflow</label>
+                <select class="form-control" name="workflow" #workflowselect="ngModel" [(ngModel)]="workflow"
+                        [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
                         [ngClass]="{ 'is-invalid': workflowselect.invalid && workflowselect.errors?.required && isdraftsubmitted}"
                         required>
-                        <ng-container *ngFor="let opt of workFlowList">
-                            <option *ngIf="opt.workflow_status == 'active'" [value]="opt.id"
-                                [selected]="opt.id === workflow">
-                                {{ opt.workflow_name }}
-                            </option>
-                        </ng-container>
+                  <ng-container *ngFor="let opt of workFlowList">
+                    <option *ngIf="opt.workflow_status == 'active'" [value]="opt.id"
+                            [selected]="opt.id === workflow">
+                      {{ opt.workflow_name }}
+                    </option>
+                  </ng-container>
 
-                    </select>
-                    <div *ngIf="workflowselect.invalid && isdraftsubmitted" class="invalid-feedback">
-                        <div *ngIf="workflowselect.errors?.required">Workflow is required</div>
-                    </div>
+                </select>
+                <div *ngIf="workflowselect.invalid && isdraftsubmitted" class="invalid-feedback">
+                  <div *ngIf="workflowselect.errors?.required">Workflow is required</div>
                 </div>
-                <div class="form-group mg-b-5">
-                    <label for="daysleft" class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">Default
-                        days to
-                        respond</label>
-                 <input type="number" min="1" max="45" class="form-control" name="daysleft" #daysleftinput="ngModel" [(ngModel)]="daysleft" 
-                (input)="onChangeDaysLeft($event,daysleft)"  [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
-                [ngClass]="{ 'is-invalid': daysleftinput.invalid && daysleftinput.errors?.required && isdraftsubmitted}" required>
+              </div>
+              <div class="form-group mg-b-5">
+                <label for="daysleft" class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">Default
+                  days to
+                  respond</label>
+                <input type="number" min="1" max="45" class="form-control" name="daysleft" #daysleftinput="ngModel" [(ngModel)]="daysleft"
+                       (input)="onChangeDaysLeft($event,daysleft)"  [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
+                       [ngClass]="{ 'is-invalid': daysleftinput.invalid && daysleftinput.errors?.required && isdraftsubmitted}" required>
                 <div *ngIf="daysleftinput.invalid && isdraftsubmitted" class="invalid-feedback">
-                    <div *ngIf="daysleftinput.errors?.required">Days left is required</div>                           
+                  <div *ngIf="daysleftinput.errors?.required">Days left is required</div>
                 </div>
                 <div *ngIf="errorMsgdaysleft" class="red p-1">{{errorMsgdaysleft}}</div>
+              </div>
+              <div class="form-group mg-b-5">
+                <label class="form-check-label pt-1 tx-10 tx-uppercase tx-medium tx-spacing-1 tx-color-03"> <span>Allow attachments</span></label>
+                <label for="fileupload"
+                       class="switchchkbox float-right mt-n3 form-check-label tx-10 tx-uppercase tx-medium tx-spacing-1 tx-color-03">
+                  <input type="checkbox" [checked]="isFileUploadRequired" class="form-check-input" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
+                         (click)="allowFileupload($event)" />
+                  <span class="slider round"></span>
+                </label>
+                <div class="tx-10 tx-spacing-1 tx-color-03">
+                  <span>Allow user to attach file through portal</span>
                 </div>
-                <div class="form-group mg-b-5">
-                    <label class="form-check-label pt-1 tx-10 tx-uppercase tx-medium tx-spacing-1 tx-color-03"> <span>Allow attachments</span></label>
-                    <label for="fileupload"
-                        class="switchchkbox float-right mt-n3 form-check-label tx-10 tx-uppercase tx-medium tx-spacing-1 tx-color-03">
-                        <input type="checkbox" [checked]="isFileUploadRequired" class="form-check-input" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
-                            (click)="allowFileupload($event)" />
-                        <span class="slider round"></span>
-                    </label>
-                    <div class="tx-10 tx-spacing-1 tx-color-03">
-                        <span>Allow user to attach file through portal</span>
-                    </div>
-                    <div class="form-check required-check" [ngClass]="{'show':isFileuploadRequiredFieldVisible ||!isFileuploadRequiredFieldVisible && isFileUploadRequired,'hide':!isFileuploadRequiredFieldVisible || isFileuploadRequiredFieldVisible && isFileUploadRequired}">
-                        <label class="form-check-label pt-1 tx-10 tx-uppercase tx-medium tx-spacing-1 tx-color-03"><span> Required Attachements </span></label>
-                        <label class="switchchkbox float-right mt-n3 form-check-label tx-10 tx-uppercase tx-medium tx-spacing-1 tx-color-03"
-                            for="gridCheck1">
-                            <input class="form-check-input" name="changeControlType"
-                                [checked]="isFileuploadRequiredField" (change)="onCheckboxChangeUpload($event)"
-                                type="checkbox" id="gridCheck1" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm? '' : null">
-                                <span class="slider round"></span>
-                            <!-- <span class="pad-right-20"> Required Attachements </span> -->
-                        </label>
-                        <div class="ml-3 pl-1  tx-10 tx-spacing-1 tx-color-03">
-                           <span> User must attach file</span>
-                        </div>
-                    </div>
+                <div class="form-check required-check" [ngClass]="{'show':isFileuploadRequiredFieldVisible ||!isFileuploadRequiredFieldVisible && isFileUploadRequired,'hide':!isFileuploadRequiredFieldVisible || isFileuploadRequiredFieldVisible && isFileUploadRequired}">
+                  <label class="form-check-label pt-1 tx-10 tx-uppercase tx-medium tx-spacing-1 tx-color-03"><span> Required Attachements </span></label>
+                  <label class="switchchkbox float-right mt-n3 form-check-label tx-10 tx-uppercase tx-medium tx-spacing-1 tx-color-03"
+                         for="gridCheck1">
+                    <input class="form-check-input" name="changeControlType"
+                           [checked]="isFileuploadRequiredField" (change)="onCheckboxChangeUpload($event)"
+                           type="checkbox" id="gridCheck1" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm? '' : null">
+                    <span class="slider round"></span>
+                    <!-- <span class="pad-right-20"> Required Attachements </span> -->
+                  </label>
+                  <div class="ml-3 pl-1  tx-10 tx-spacing-1 tx-color-03">
+                    <span> User must attach file</span>
+                  </div>
                 </div>
-                <div class="form-group mg-b-5">
-                    <label class="form-check-label pt-1 tx-10 tx-uppercase tx-medium tx-spacing-1 tx-color-03"><span>Email Verification</span></label>
-                    <label for="emailverification"
-                        class="switchchkbox float-right mt-n3 form-check-label tx-10 tx-uppercase tx-medium tx-spacing-1 tx-color-03">
-                        <input type="checkbox" [checked]="isEmailVerificationRequired" class="form-check-input"
-                            (click)="allowEmailVerification($event)" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm? '' : null"/>
-                            <span class="slider round"></span>
-                    </label>
-                    <div class="tx-10 tx-spacing-1 tx-color-03">
-                        Required user to verify email their email address
-                    </div>
+              </div>
+              <div class="form-group mg-b-5">
+                <label class="form-check-label pt-1 tx-10 tx-uppercase tx-medium tx-spacing-1 tx-color-03"><span>Email Verification</span></label>
+                <label for="emailverification"
+                       class="switchchkbox float-right mt-n3 form-check-label tx-10 tx-uppercase tx-medium tx-spacing-1 tx-color-03">
+                  <input type="checkbox" [checked]="isEmailVerificationRequired" class="form-check-input"
+                         (click)="allowEmailVerification($event)" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm? '' : null"/>
+                  <span class="slider round"></span>
+                </label>
+                <div class="tx-10 tx-spacing-1 tx-color-03">
+                  Required user to verify email their email address
                 </div>
-                <div class="form-group mg-b-5">
-                    <label class="form-check-label pt-1 tx-10 tx-uppercase tx-medium tx-spacing-1 tx-color-03"><span>Captcha Verification</span></label>
-                    <label for="captcha"
-                        class="switchchkbox float-right mt-n3 form-check-label tx-10 tx-uppercase tx-medium tx-spacing-1 tx-color-03">
-                        <input type="checkbox" [checked]="isCaptchaVerificationRequired" class="form-check-input"
-                            (click)="allowCaptchaVerification($event)" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"/>
-                        <span class="slider round"></span>
-                    </label>
-                    <div class="tx-10 tx-spacing-1 tx-color-03">
-                        <span>Require CAPTCHA Validation</span>
-                    </div>
+              </div>
+              <div class="form-group mg-b-5">
+                <label class="form-check-label pt-1 tx-10 tx-uppercase tx-medium tx-spacing-1 tx-color-03"><span>Captcha Verification</span></label>
+                <label for="captcha"
+                       class="switchchkbox float-right mt-n3 form-check-label tx-10 tx-uppercase tx-medium tx-spacing-1 tx-color-03">
+                  <input type="checkbox" [checked]="isCaptchaVerificationRequired" class="form-check-input"
+                         (click)="allowCaptchaVerification($event)" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"/>
+                  <span class="slider round"></span>
+                </label>
+                <div class="tx-10 tx-spacing-1 tx-color-03">
+                  <span>Require CAPTCHA Validation</span>
                 </div>
+              </div>
             </form>
-            </div>
+          </div>
 
         </ng-template>
-    </li>
-    <li [ngbNavItem]="4" [destroyOnHide]="false">
-        <a ngbNavLink>4 Integrate</a>
+      </li>
+      <li [ngbNavItem]="4" [destroyOnHide]="true">
+        <a ngbNavLink>4 System</a>
         <ng-template ngbNavContent>
-            <div class="publishwrapper">
-                <ul ngbNav #nav="ngbNav" class="nav-tabs"
-                    [ngClass]="{'hide':!isWebFormPublished,'show':isWebFormPublished}">
-                    <li ngbNavItem>
-                        <a ngbNavLink>Embed Code</a>
-                        <ng-template ngbNavContent>
-                            <div *ngIf="!isWebFormPublished" class="mb-2 txt-center">Integrate options will be available once the webform is
-                                published.
-                            </div>
-                            <div class="code-link-wrapper"
-                                [ngClass]="{'hide':!isWebFormPublished,'show':isWebFormPublished}">
-                                <p class="script-title">
+          <app-dsar-system  [formObject]="formObject" [formID]="crid"></app-dsar-system>
+        </ng-template>
+      </li>
+
+      <li [ngbNavItem]="5" [destroyOnHide]="false">
+        <a ngbNavLink>5 Integrate</a>
+        <ng-template ngbNavContent>
+          <div class="publishwrapper">
+            <ul ngbNav #nav="ngbNav" class="nav-tabs"
+                [ngClass]="{'hide':!isWebFormPublished,'show':isWebFormPublished}">
+              <li ngbNavItem>
+                <a ngbNavLink>Embed Code</a>
+                <ng-template ngbNavContent>
+                  <div *ngIf="!isWebFormPublished" class="mb-2 txt-center">Integrate options will be available once the webform is
+                    published.
+                  </div>
+                  <div class="code-link-wrapper"
+                       [ngClass]="{'hide':!isWebFormPublished,'show':isWebFormPublished}">
+                    <p class="script-title">
                                     <span class="font-weight-bold"> <span class="fontsize22 mr-1"><i
-                                                class="far fa-file-code"></i></span>Add script</span> <button
-                                        class="btn btn-xs btn-primary float-right"
-                                        (click)="copyToClipBoard('embedcode')">Copy</button> </p>
-                                <div class="publishbg" #azEmbedCode>
+                                      class="far fa-file-code"></i></span>Add script</span> <button
+                      class="btn btn-xs btn-primary float-right"
+                      (click)="copyToClipBoard('embedcode')">Copy</button> </p>
+                    <div class="publishbg" #azEmbedCode>
                                     <pre class="mb-0">
 <code>  <span class="tag">&lt;style&gt;</span>
         <span style="color: blueviolet;">{{'.az-form-wrapper {'}}</span>
@@ -998,126 +1005,126 @@
              <span style="color: blueviolet;">{{ '}' }}</span>
   <span class="tag">&lt;/style&gt;</span>
 </code></pre>
-                                    <pre class="publish">
+                      <pre class="publish">
 <code><span class="bluecolor">&lt;div class=&quot;az-form-wrapper&quot;&gt;</span>
     <span class="bluecolor">&lt;iframe</span> <span class="greencolor">src=</span><span class="redcolor">&quot;{{scriptcode}}&quot;</span><span class="bluecolor">&gt;</span>
     <span class="bluecolor">&lt;/iframe&gt;</span>
 <span class="bluecolor">&lt;/div&gt;</span>
 </code>
 </pre>
-                                </div>
-                            </div>
-                        </ng-template>
-                    </li>
-                    <li ngbNavItem>
-                        <a ngbNavLink>Share Link</a>
-                        <ng-template ngbNavContent>
-                            <div class="code-link-wrapper"
-                                [ngClass]="{'hide':!isWebFormPublished,'show':isWebFormPublished}">
-                                <p class="script-title">
+                    </div>
+                  </div>
+                </ng-template>
+              </li>
+              <li ngbNavItem>
+                <a ngbNavLink>Share Link</a>
+                <ng-template ngbNavContent>
+                  <div class="code-link-wrapper"
+                       [ngClass]="{'hide':!isWebFormPublished,'show':isWebFormPublished}">
+                    <p class="script-title">
                                     <span class="font-weight-bold"> <span class="fontsize22 mr-1"><i
-                                                class="far fa-file-code"></i></span>
+                                      class="far fa-file-code"></i></span>
                                         Web Form Link</span> <button class="btn btn-xs btn-primary float-right"
-                                        (click)="copyToClipBoard('sharelink')">Copy</button> </p>
-                                <div class="sharelinkbg" #shareLinkCode>
+                                                                     (click)="copyToClipBoard('sharelink')">Copy</button> </p>
+                    <div class="sharelinkbg" #shareLinkCode>
                                     <pre
-                                        class="publish"><code><span class="redcolor">&quot;{{scriptcode}}&quot;</span></code></pre>
-                                </div>
-                            </div>
-                        </ng-template>
-                    </li>
-                </ul>
+                                      class="publish"><code><span class="redcolor">&quot;{{scriptcode}}&quot;</span></code></pre>
+                    </div>
+                  </div>
+                </ng-template>
+              </li>
+            </ul>
 
-            </div>
-            <div class="publish-content mb-3" [ngbNavOutlet]="nav"></div>
+          </div>
+          <div class="publish-content mb-3" [ngbNavOutlet]="nav"></div>
 
 
 
         </ng-template>
-    </li>
-    <li> 
+      </li>
+      <li>
         <div class="button-wrapper" [ngClass]="{ 'min-width-75' : isWebFormPublished && isDraftWebForm, 'min-width-170': crid !== null}">
-        <button  class="btn btn-link cancel-link" (click)="navigateToWebForm()">Back</button>   
-        <button (click)="addUpdateDSARForm('save')" class="btn btn-sm pd-x-15 savebtn btn-uppercase lineheight-22 btn-outline-secondary" [ngClass]="isWebFormPublished && !isEditingPublishedForm || active === 4 ? 'hide' : ''">
-        <i-feather class="feather-24 mr-1" name="save"></i-feather>Save</button>
+          <button  class="btn btn-link cancel-link" (click)="navigateToWebForm()">Back</button>
+          <button (click)="addUpdateDSARForm('save')" class="btn btn-sm pd-x-15 savebtn btn-uppercase lineheight-22 btn-outline-secondary" [ngClass]="isWebFormPublished && !isEditingPublishedForm || active === 4 ? 'hide' : ''">
+            <i-feather class="feather-24 mr-1" name="save"></i-feather>Save</button>
 
-        <button type="button" *ngIf="crid !== null" type="button" class="btn btn-sm pd-x-15 lineheight-22 btn-outline-secondary btn-uppercase ml-2 mr-1" 
-        [attr.disabled]="isDirty ? true : null"
-           (click)="togglePublish()">
-           <i-feather *ngIf="isWebFormPublished && !isEditingPublishedForm && !isResetlinkEnable" class="feather-24" name="edit-2"></i-feather>
-           <i-feather *ngIf="isWebFormPublished && isEditingPublishedForm || !(isWebFormPublished && isEditingPublishedForm || isWebFormPublished)" name="upload-cloud"></i-feather>
-           {{isWebFormPublished && !isEditingPublishedForm && !isResetlinkEnable ? 'Edit':' Publish'}}</button>
-          
-           <a target="_blank" *ngIf="crid !== null" role="button" (click)="previewCCPAForm()" class="btn btn-sm pd-x-15 txt-gray lineheight-22 btn-outline-secondary btn-uppercase mg-l-5">
-            <i-feather name="file-text" class="feather-24"></i-feather>   
+          <button type="button" *ngIf="crid !== null" type="button" class="btn btn-sm pd-x-15 lineheight-22 btn-outline-secondary btn-uppercase ml-2 mr-1"
+                  [attr.disabled]="isDirty ? true : null"
+                  (click)="togglePublish()">
+            <i-feather *ngIf="isWebFormPublished && !isEditingPublishedForm && !isResetlinkEnable" class="feather-24" name="edit-2"></i-feather>
+            <i-feather *ngIf="isWebFormPublished && isEditingPublishedForm || !(isWebFormPublished && isEditingPublishedForm || isWebFormPublished)" name="upload-cloud"></i-feather>
+            {{isWebFormPublished && !isEditingPublishedForm && !isResetlinkEnable ? 'Edit':' Publish'}}</button>
+
+          <a target="_blank" *ngIf="crid !== null" role="button" (click)="previewCCPAForm()" class="btn btn-sm pd-x-15 txt-gray lineheight-22 btn-outline-secondary btn-uppercase mg-l-5">
+            <i-feather name="file-text" class="feather-24"></i-feather>
             Preview</a>
         </div>
-    </li>
+      </li>
     </ul>
 
     <div [ngbNavOutlet]="nav">
 
     </div>
 
-</div>
+  </div>
 </div>
 
 <!--QuillEditor Modal Popup-->
 <ng-template #quillEditorModal let-modal>
-    <div class="modal-header">
-        <h4 class="modal-title" id="modal-basic-title" *ngIf="isWelcomeEditor;else footerHeading">Welcome Text</h4>
-        <ng-template #footerHeading>
-            <h4 class="modal-title" id="modal-basic-title">Footer Text</h4>
-        </ng-template>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title" *ngIf="isWelcomeEditor;else footerHeading">Welcome Text</h4>
+    <ng-template #footerHeading>
+      <h4 class="modal-title" id="modal-basic-title">Footer Text</h4>
+    </ng-template>
 
-        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Close Clicked')">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
-    <div class="modal-body" *ngIf="isWelcomeEditor;else footerContent">
-        <form [formGroup]="quillEditorText" (ngSubmit)="onSubmitQuillEditorData()"
-        [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? true : null">
-            <quill-editor formControlName="editor" [modules]="quillConfig" [(ngModel)]="editorDataWelcome"
-                [readOnly]="isWebFormPublished && !isEditingPublishedForm ? true : null"
-                [styles]="isEditorDisabled()"></quill-editor>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Close Clicked')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body" *ngIf="isWelcomeEditor;else footerContent">
+    <form [formGroup]="quillEditorText" (ngSubmit)="onSubmitQuillEditorData()"
+          [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? true : null">
+      <quill-editor formControlName="editor" [modules]="quillConfig" [(ngModel)]="editorDataWelcome"
+                    [readOnly]="isWebFormPublished && !isEditingPublishedForm ? true : null"
+                    [styles]="isEditorDisabled()"></quill-editor>
 
-            <button class="btn btn-primary float-right mt-2" 
-            [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? true : null"
-            type="submit">Save</button>
-            <button type="button" class="btn btn-outline-dark float-right mt-2 mr-2" (click)="onCloseWelcomeTextEditor()">Close</button>
-        </form>
-    </div>
-    <ng-template #footerContent>
-        <div class="modal-body">
-            <form [formGroup]="quillEditorText" (ngSubmit)="onSubmitQuillEditorData()" 
+      <button class="btn btn-primary float-right mt-2"
+              [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? true : null"
+              type="submit">Save</button>
+      <button type="button" class="btn btn-outline-dark float-right mt-2 mr-2" (click)="onCloseWelcomeTextEditor()">Close</button>
+    </form>
+  </div>
+  <ng-template #footerContent>
+    <div class="modal-body">
+      <form [formGroup]="quillEditorText" (ngSubmit)="onSubmitQuillEditorData()"
             [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? true : null">
-                <quill-editor formControlName="editor" [modules]="quillConfig" [(ngModel)]="editorDataFooter"
-                [readOnly]="isWebFormPublished && !isEditingPublishedForm ? true : null"
-                [styles]="isEditorDisabled()"></quill-editor>
-                <button class="btn btn-primary float-right mt-2"
+        <quill-editor formControlName="editor" [modules]="quillConfig" [(ngModel)]="editorDataFooter"
+                      [readOnly]="isWebFormPublished && !isEditingPublishedForm ? true : null"
+                      [styles]="isEditorDisabled()"></quill-editor>
+        <button class="btn btn-primary float-right mt-2"
                 [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? true : null"
                 type="submit">Save</button>
-                <button type="button" class="btn btn-outline-dark float-right mt-2 mr-2" 
-                    (click)="onCloseFooterTextEditor()">Close</button>
-            </form>
-        </div>
-    </ng-template>
+        <button type="button" class="btn btn-outline-dark float-right mt-2 mr-2"
+                (click)="onCloseFooterTextEditor()">Close</button>
+      </form>
+    </div>
+  </ng-template>
 </ng-template>
 <ng-template #confirmEdit>
-    <div class="modal-body text-center">
-        <p>Do you want to edit published form? You may loose previous data!</p>
-        <button type="button" class="btn btn-sm btn-uppercase btn-primary mr-2" (click)="confirmForEditing()">Yes</button>
-        <button type="button" class="btn btn-sm btn-outline-secondary btn-uppercase mr-2" (click)="closeModal()">No</button>
-    </div>
+  <div class="modal-body text-center">
+    <p>Do you want to edit published form? You may loose previous data!</p>
+    <button type="button" class="btn btn-sm btn-uppercase btn-primary mr-2" (click)="confirmForEditing()">Yes</button>
+    <button type="button" class="btn btn-sm btn-outline-secondary btn-uppercase mr-2" (click)="closeModal()">No</button>
+  </div>
 </ng-template>
 <ng-template #confirmSaveAlert>
-    <div class="modal-body text-center">
-        <p>Do you want save changes?</p>
-        <button type="button" class="btn btn-sm btn-uppercase btn-primary mr-2" (click)="addUpdateDSARForm('nav')">Yes</button>
-        <button type="button" class="btn btn-sm btn-outline-secondary btn-uppercase mr-2" (click)="resetWebform()">No</button>
-    </div>
+  <div class="modal-body text-center">
+    <p>Do you want save changes?</p>
+    <button type="button" class="btn btn-sm btn-uppercase btn-primary mr-2" (click)="addUpdateDSARForm('nav')">Yes</button>
+    <button type="button" class="btn btn-sm btn-outline-secondary btn-uppercase mr-2" (click)="resetWebform()">No</button>
+  </div>
 </ng-template>
 <div class="col-sm-5 mr-0 float-right flotingdiv">
-    <alert *ngIf="isOpen" [type]="alertType" dismissOnTimeout="5000" [dismissible]="dismissible"
-        (onClosed)="onClosed(alertType)">{{alertMsg}}</alert>
+  <alert *ngIf="isOpen" [type]="alertType" dismissOnTimeout="5000" [dismissible]="dismissible"
+         (onClosed)="onClosed(alertType)">{{alertMsg}}</alert>
 </div>

@@ -1,0 +1,21 @@
+<div class="card">
+  <div class="card-header">
+    <h5 class="float-left">Connection Details - {{connectionDetails?.connectionName}}</h5>
+    <p class="float-right font-weight-bold tx-15" (click)="goBack()"><i class="fas fa-chevron-left"></i>
+      Go Back</p>
+  </div>
+  <div class="card-body mt-3">
+    <p-table [value]="connectionDetails" responsiveLayout="scroll">
+      <ng-template pTemplate="header">
+        <tr>
+          <th *ngFor="let col of connectionDetailsKeys">{{col}}</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-product>
+        <tr>
+          <td *ngFor="let col of connectionDetailsKeys">{{product[col]}}</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</div>

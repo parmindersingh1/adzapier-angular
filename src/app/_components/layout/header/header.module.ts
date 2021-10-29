@@ -4,7 +4,11 @@ import { SharedbootstrapModule } from 'src/app/sharedbootstrap/sharedbootstrap.m
 import { HeaderComponent } from './header.component';
 import { HeaderRoutingModule } from './header-routing.module';
 import {ScrollingModule} from '@angular/cdk/scrolling';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { QuickstartalertModule } from 'src/app/_components/quickstartalert/quickstartalert.module';
+import {DropdownModule} from 'primeng/dropdown';
+
+
 @NgModule({
     declarations: [HeaderComponent],
       imports: [
@@ -12,7 +16,10 @@ import { QuickstartalertModule } from 'src/app/_components/quickstartalert/quick
           SharedbootstrapModule,
           HeaderRoutingModule,
           ScrollingModule,
-          QuickstartalertModule
+          QuickstartalertModule,
+          DropdownModule,
+          ReactiveFormsModule,
+          FormsModule
       ],
       schemas: [
         CUSTOM_ELEMENTS_SCHEMA

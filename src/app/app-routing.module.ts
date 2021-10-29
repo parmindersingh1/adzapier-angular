@@ -46,7 +46,7 @@ const routes: Routes = [
   //   loadChildren: () => import('./privacy/dsar/dsar-requestdetails/dsar-requestdetails.module').then(m => m.DsarRequestdetailsModule)
   // },
   {
-    path: 'privacy/dsar/requests-details/:reqid/:companyid/:orgid/:propid',
+    path: 'privacy/dsar/requests-details/:reqid/:companyid/:orgid/:propid/:formID',
     loadChildren: () => import('./privacy/dsar/dsar-requestdetails/dsar-requestdetails.module').then(m => m.DsarRequestdetailsModule)
   },
   { path: 'privacy/dsar/webforms', loadChildren: () => import('./privacy/dsar/webforms/webforms.module').then(m => m.WebformsModule), canActivate: [AuthGuard] },
