@@ -7,9 +7,9 @@
     </div><!-- content -->
     <ngx-ui-loader></ngx-ui-loader>
     <app-quickstartmenu [quickStartMenuList]="qsMenuList"  (onClickQuickStart)="getStyle($event)" (onClickEmitQSLinkobj)="receivedQSLinkObj($event)" [enablequickstartfromtopmenu]="toggleQuickstartmenu" [istopmenuclicked]="isquickstartopen" [ngStyle]="{'position':'fixed','z-index':'1200'}" *ngIf="isloginpage"></app-quickstartmenu>
-    <app-footer class="w-100" *ngIf="hideHeaderFooter"></app-footer>
   </div>
 </div>
+<app-footer class="w-100" *ngIf="hideHeaderFooter"></app-footer>
 <div  class="full-back"  *ngIf="isShowingRouteLoadIndicator" >
   <div style="margin-left: 49%; margin-top: 9%; color: #040d26" class="spinner-border"></div>
 </div>
