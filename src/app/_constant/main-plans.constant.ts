@@ -360,15 +360,15 @@ export const mainPlans = {
   dsar: {
     essentials: [
       {
-        featureName: 'Forms\n',
+        featureName: 'Customizable & Branded Forms\n',
         featureValue: '2'
       },
       {
-        featureName: 'Workflow\n',
+        featureName: 'Automated Workflows\n',
         featureValue: '5\n'
       },
       {
-        featureName: 'Requests\n',
+        featureName: 'DSAR-Requests\n',
         featureValue: '150K'
       },
       {
@@ -378,15 +378,15 @@ export const mainPlans = {
     ],
     professional: [
       {
-        featureName: 'Forms\n',
+        featureName: 'Customizable & Branded Forms\n',
         featureValue: '10\n'
       },
       {
-        featureName: 'Workflow\n',
+        featureName: 'Automated Workflows\n',
         featureValue: '15\n'
       },
       {
-        featureName: 'Requests\n',
+        featureName: 'DSAR-Requests\n',
         featureValue: '250K'
       },
       {
@@ -396,15 +396,15 @@ export const mainPlans = {
     ],
     enterprise: [
       {
-        featureName: 'Forms\n',
+        featureName: 'Customizable & Branded Forms\n',
         featureValue: 'Unlimited\n'
       },
       {
-        featureName: 'Workflow\n',
+        featureName: 'Automated Workflows\n',
         featureValue: 'Unlimited\n'
       },
       {
-        featureName: 'Requests\n',
+        featureName: 'DSAR-Requests\n',
         featureValue: 'Unlimited\n'
       },
       {
@@ -662,15 +662,15 @@ export const highLightFeatures = {
   dsar: {
     essentials: [
       {
-        featureName: 'Forms\n',
+        featureName: 'Customizable & Branded Forms\n',
         featureValue: '2'
       },
       {
-        featureName: 'Workflow\n',
+        featureName: 'Automated Workflows\n',
         featureValue: '5\n'
       },
       {
-        featureName: 'Requests\n',
+        featureName: 'DSAR-Requests\n',
         featureValue: '150K'
       },
       {
@@ -680,15 +680,15 @@ export const highLightFeatures = {
     ],
     professional: [
       {
-        featureName: 'Forms\n',
+        featureName: 'Customizable & Branded Forms\n',
         featureValue: '10\n'
       },
       {
-        featureName: 'Workflow\n',
+        featureName: 'Automated Workflows\n',
         featureValue: '15\n'
       },
       {
-        featureName: 'Requests\n',
+        featureName: 'DSAR-Requests\n',
         featureValue: '250K'
       },
       {
@@ -698,15 +698,15 @@ export const highLightFeatures = {
     ],
     enterprise: [
       {
-        featureName: 'Forms\n',
+        featureName: 'Customizable & Branded Forms\n',
         featureValue: 'Unlimited\n'
       },
       {
-        featureName: 'Workflow\n',
+        featureName: 'Automated Workflows\n',
         featureValue: 'Unlimited\n'
       },
       {
-        featureName: 'Requests\n',
+        featureName: 'DSAR-Requests\n',
         featureValue: 'Unlimited\n'
       },
       {

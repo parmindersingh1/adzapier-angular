@@ -36,6 +36,7 @@ export class DsarSystemComponent implements OnInit, OnChanges {
   isTesting = false;
   connectionID = null;
   tableListKey = '';
+  errorMessage = '';
   tableList = [];
   @Input('formObject') formObject;
   @Input('formID') formID;
@@ -156,6 +157,52 @@ export class DsarSystemComponent implements OnInit, OnChanges {
     }
     this.onGetCredList();
   }
+
+  onTestConnectionSql(data, systemName) {
+    this.currentScanId = data.id;
+    const integrationCred = [];
+    for (const cred of data.integration_cred) {
+      integrationCred.push({
+        key: cred.key,
+        secret_1: cred.secret_1
+      });
+    }
+    const payload = {
+      cred_name: data.cred_name,
+      description: data.description,
+      connector_type: data.connector_type,
+      integration_cred: integrationCred
+    };
+    this.loading.start();
+    const params = {
+      system: this.onFindSystemName(data.system_id)
+    };
+    this.isTesting = true;
+    this.isOpen = false;
+    this.alertMsg = '';
+    this.alertType = '';
+    this.systemIntegrationService.TestSystemIntegration(this.constructor.name,
+      moduleName.systemIntegrationModule, data.system_id, payload, params)
+      .subscribe((res: any) => {
+        this.step = 2;
+        this.connectionID = data.id;
+        this.systemName = systemName;
+        this.isTesting = false;
+        this.isOpen = true;
+        this.alertMsg = res.message;
+        this.alertType = 'success';
+        // this.alertMsg = '';
+        this.loading.stop();
+      }, error => {
+        this.isTesting = false;
+        this.isOpen = true;
+        this.alertMsg = error;
+        this.alertType = 'danger';
+        this.loading.stop();
+      });
+  }
+
+
   onTestConnection(data, systemID) {
     if (this.onFindSystemName(systemID) === 'mailchimp'
       || this.onFindSystemName(systemID) === 'activecampaign'
@@ -220,10 +267,15 @@ export class DsarSystemComponent implements OnInit, OnChanges {
     return systemName;
   }
 
-  onSelectConnection(connectionId, systemID) {
-    this.step = 2;
-    this.connectionID = connectionId;
-    this.systemName = this.onFindSystemName(systemID);
+  onSelectConnection(data) {
+
+    const systemName = this.onFindSystemName(data.system_id);
+    if (systemName === 'mysql' || systemName === 'postgresql' || systemName === 'postgres') {
+      this.onTestConnectionSql(data, systemName);
+    } else {
+      this.step = 2;
+      this.connectionID = data.id;
+    }
   }
   onHome(e) {
     this.systemName = '';
@@ -275,14 +327,16 @@ export class DsarSystemComponent implements OnInit, OnChanges {
         this.isOpen = true;
         this.alertMsg = res.message;
         this.alertType = 'success';
+        this.errorMessage = '';
         // this.alertMsg = '';
         this.loading.stop();
         this.modalRef.hide();
       }, error => {
         this.isTesting = false;
-        this.isOpen = true;
-        this.alertMsg = error;
-        this.alertType = 'danger';
+        // this.isOpen = true;
+        // this.alertMsg = error;
+        this.errorMessage = error;
+        // this.alertType = 'danger';
         this.loading.stop();
         this.modalRef.hide();
       });

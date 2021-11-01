@@ -1496,7 +1496,6 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
     }
 
   }
-
   onNavChange(changeEvent: NgbNavChangeEvent) {
     if (changeEvent.nextId === 2) {
       this.activeId = changeEvent.activeId;
@@ -1550,8 +1549,8 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
         }
       }
     } else if (changeEvent.nextId === 4) {
-      // this.openModal(this.confirmSaveAlert);
       this.formSaveMethod = 'nav';
+      this.saveAsDraftCCPAFormConfiguration('nav');
       this.activeId = changeEvent.activeId;
       this.nextId = changeEvent.nextId;
       this.isdraftsubmitted = true;
