@@ -12,7 +12,7 @@
         Data Subject Access Requests
     </span>
       <div class="datepickerwrapper col-sm-9 pr-0 mr-0 ml-auto">
-        <button (click)="onRefresh()" class="btn btn-sm btn-uppercase btn-outline-secondary pt-2 lineheight-22">
+        <button (click)="onRefresh()" type="reset" class="btn btn-sm btn-uppercase btn-outline-secondary pt-2 lineheight-22">
           <i class="fas fa-sync feather-16"></i> Refresh</button>
       <div class="col-sm-5 pr-0 pl-2 mr-2 d-flex row-reverse">
         <div class="input-group-prepend"  (click)="dp.show()">
@@ -39,14 +39,14 @@
   </div>
 
   <p-table class="dsar-request-table" #ptable [value]="requestsList" [responsive]="true" [columns]="selectedColumns" [paginator]="true" [lazy]="true"
-    [loading]="isloading" (onLazyLoad)="loadrequestsListLazy($event)" [rows]="5" [showCurrentPageReport]="true"
+    [loading]="isloading" (onLazyLoad)="loadrequestsListLazy($event)" [rows]="10" [showCurrentPageReport]="true"
     [totalRecords]="totalRecords" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-    [rowsPerPageOptions]="[5,10,15]" styleClass="p-datatable-sm">
+    [rowsPerPageOptions]="[10,20,30]" styleClass="p-datatable-sm">
     <ng-template pTemplate="caption">
       <div class="searchfield row mt-1 pl-2 pr-2">
         <div class="col-sm-2 input-group">
           <input class="form-control border-right-0 border" [(ngModel)]="inputValue" type="text"
-            (keyup.enter)="onSearchInputChange()" placeholder="Search" id="example-search-input" />
+            (keyup.enter)="onSearchInputChange()" placeholder="Search by name" id="example-search-input" />
           <span class="input-group-append">
             <div *ngIf="inputValue !== ''" (click)="clearSearchfield()" class="input-group-text bg-transparent"
               style="background-color: #fff !important;">
@@ -59,7 +59,7 @@
           </span>
         </div>
         <div class="col-sm-2 dp-safari">
-          <select (change)="onChangeRequestType($event)" class="form-control">
+          <select (change)="onChangeRequestType($event)"  [(ngModel)]="dprequestType" class="form-control">
             <option selected value="">Type Of Request</option>
             <ng-container *ngFor="let obj of allFilterData.filter_Request_type">
               <option [value]="obj.key">{{obj.value}}</option>
@@ -68,7 +68,7 @@
         </div>
 
         <div class="col-sm-2 dp-safari">
-          <select (change)="onChangeSubjectType($event)" class="form-control">
+          <select (change)="onChangeSubjectType($event)" [(ngModel)]="dpsubjectType" class="form-control">
             <option selected value="">Subject Type</option>
             <ng-container *ngFor="let obj of allFilterData.filter_Subject_type">
               <option [value]="obj.key">{{obj.value}}</option>
@@ -77,7 +77,7 @@
         </div>
 
         <div class="col-sm-2 dp-safari">
-          <select (change)="onChangeStatus($event)" class="form-control">
+          <select (change)="onChangeStatus($event)" [(ngModel)]="dprequestStatus" class="form-control">
             <option selected value="">Status</option>
             <ng-container *ngFor="let obj of allFilterData.filter_status">
               <option [value]="obj.key">{{obj.value}}</option>
@@ -86,8 +86,8 @@
         </div>
 
         <div class="col-sm-2">
-          <div class="btn-group dropup" dropdown [insideClick]="true">
-            <button type="button" class="btn btn-white dropdown-toggle"  dropdownToggle data-toggle="dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+          <div class="btn-group dropup" dropdown [autoClose]="true" [insideClick]="true">
+            <button type="button" class="btn btn-white dropdown-toggle" dropdownToggle data-toggle="dropdown-toggle" aria-haspopup="true" aria-expanded="false">
               Due In
             </button>
             <div class="dropdown-menu"  *dropdownMenu>
@@ -95,7 +95,7 @@
               <a class="dropdown-item" (click)="onChangeDueIn('1')">One Day</a>
               <a class="dropdown-item" (click)="onChangeDueIn('2')">2 Days</a>
               <a class="dropdown-item" (click)="onChangeDueIn('15')">15 Days</a>
-              <input type="number" (change)="onChangeDueIn($event)" class="form-control" />
+              <input type="number" (change)="onChangeDueIn($event)" [(ngModel)]="inputValueDueIn" class="form-control" />
             </div>
           </div>
           <!-- <input type="number" placeholder="Due in" (change)="onChangeDueIn($event)" class="form-control" /> -->
