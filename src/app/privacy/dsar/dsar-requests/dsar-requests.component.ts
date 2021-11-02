@@ -36,6 +36,8 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
   propertyname: any;
   reloadRequestList = [];
   requestsList = [];
+  searchrequestList = [];
+  storeSearchList = [];
   website: any;
   logourl: any;
   organizationname: any;
@@ -56,6 +58,7 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
   eventRows: number;
   currrentManagedPropID: any;
   public inputValue = '';
+  public inputValueDueIn = '';
   public debouncedInputValue = this.inputValue;
   private searchDecouncer$: Subject<string> = new Subject();
   subjectType = '';
@@ -129,6 +132,12 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
   ];
   queryOID;
   queryPID;
+  issearchfilteractive:boolean = false;
+  dprequestStatus;
+  dpsubjectType;
+  dprequestType;
+  isSelected:boolean = true;
+  lazyEvent;
   constructor(
     private orgservice: OrganizationService,
     private userService: UserService,
@@ -148,9 +157,14 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
       { date: new Date(), classes: ['theme-dark-blue'] },
     ];
     this.searchbydaterange = [new Date(new Date().setDate(new Date().getDate() - 30)),new Date()]
+    this.isSelected = true;
     }
 
   ngOnInit() {
+    this.isSelected = true;
+    this.dprequestStatus = "";
+    this.dprequestType = "";
+    this.dpsubjectType = "";
     this.activateRoute.queryParamMap
       .subscribe(params => {
         this.queryOID = params.get('oid');
@@ -193,38 +207,53 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
   }
 
   loadrequestsListLazy(event: LazyLoadEvent) {
-    this.isloading = true;
-    this.eventRows = event.rows;
-    if (this.requestsList !== undefined) {
+    this.lazyEvent = event;
+    if (!this.issearchfilteractive) {
+      this.isloading = true;
+      this.eventRows = event.rows;
+      if (this.requestsList !== undefined) {
 
+        if (event.first === 0) {
+          this.firstone = 1;
+        } else {
+          this.firstone = (event.first / event.rows) + 1;
+        }
+        const pagelimit = '?limit=' + this.eventRows + '&page=' + this.firstone;
+        const sortOrder = event.sortOrder === -1 ? 'asc' : 'desc';
+        // const orderBy = '&orderby=' + event.sortField + ' ' + sortOrder;
+        const orderBy = '&order_by_date=' + sortOrder;
+        this.currentManagedOrgID == undefined ? this.currentManagedOrgID = this.queryOID : this.currentManagedOrgID;
+        this.currrentManagedPropID == undefined ? this.currrentManagedPropID = this.queryPID : this.currrentManagedPropID;
+        this.dsarRequestService.getDsarRequestList(this.constructor.name, moduleName.dsarRequestModule, this.currentManagedOrgID,
+          this.currrentManagedPropID, pagelimit, orderBy)
+          .subscribe((data) => {
+            this.isloading = false;
+            const key = 'response';
+            if (Object.values(data[key]).length > 0) {
+              this.requestsList = Object.values(data[key]);
+              this.reloadRequestList = [...this.requestsList];
+              // this.rows = Object.values(data[key]).length;
+            }
+            this.totalRecords = data.count;
+          }, error => {
+            this.loading.stop();
+            this.alertMsg = error;
+            this.isOpen = true;
+            this.alertType = 'danger';
+          });
+      }
+    } else {//in case of filter applied subject/request type/status/duein
       if (event.first === 0) {
         this.firstone = 1;
       } else {
         this.firstone = (event.first / event.rows) + 1;
       }
-      const pagelimit = '?limit=' + this.eventRows + '&page=' + this.firstone;
-      const sortOrder = event.sortOrder === -1 ? 'asc' : 'desc';
-      // const orderBy = '&orderby=' + event.sortField + ' ' + sortOrder;
-      const orderBy = '&order_by_date=' + sortOrder;
-      this.currentManagedOrgID == undefined ? this.currentManagedOrgID = this.queryOID : this.currentManagedOrgID;
-      this.currrentManagedPropID == undefined ? this.currrentManagedPropID = this.queryPID : this.currrentManagedPropID;
-      this.dsarRequestService.getDsarRequestList(this.constructor.name, moduleName.dsarRequestModule, this.currentManagedOrgID,
-        this.currrentManagedPropID, pagelimit, orderBy)
-        .subscribe((data) => {
-          this.isloading = false;
-          const key = 'response';
-          if (Object.values(data[key]).length > 0) {
-            this.requestsList = Object.values(data[key]);
-            this.reloadRequestList = [...this.requestsList];
-            this.rows = Object.values(data[key]).length;
-          }
-          this.totalRecords = data.count;
-        }, error => {
-          this.loading.stop();
-          this.alertMsg = error;
-          this.isOpen = true;
-          this.alertType = 'danger';
-        });
+      if (this.firstone > 1 && event.first !== 0) {
+      this.requestsList = this.storeSearchList.slice(event.first, (event.first + event.rows));
+      } else {
+       // this.requestsList = this.storeSearchList.slice(0, event.rows); //event.first
+        this.requestsList = this.storeSearchList.slice(event.first, (event.first + event.rows));
+      }
     }
 
     this.cols = [
@@ -263,6 +292,13 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
   public clearSearchfield() {
     this.inputValue = '';
     this.searchDecouncer$.next(this.inputValue);
+    this.issearchfilteractive = false;
+  }
+
+  public clearDueInSearchfield() { //for later use
+    this.inputValueDueIn = '';
+    this.searchDecouncer$.next(this.inputValueDueIn);
+    this.issearchfilteractive = false;
   }
 
   private setupSearchDebouncer(): void {
@@ -276,22 +312,27 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
   }
 
   private searchFilter(): void {
-    const params = '?limit=' + this.eventRows + '&page=' + this.firstone
-      + '&name=' + this.inputValue + '&subject_type=' + this.subjectType + '&request_type=' + this.requestType
+    const params = '?limit=' + this.eventRows + '&page=' + this.firstone +
+      '&name=' + this.inputValue + '&subject_type=' + this.subjectType + '&request_type=' + this.requestType
       + '&status=' + this.status + '&due_in=' + this.dueIn;
     this.isloading = true;
     this.dsarRequestService.getDsarRequestFilterList(this.currentManagedOrgID, this.currrentManagedPropID, params,
       this.constructor.name, moduleName.dsarRequestModule)
       .subscribe(res => {
         this.isloading = false;
+        this.issearchfilteractive = true;
         const key = 'response';
         if (Object.values(res[key]).length > 0) {
-          this.requestsList = Object.values(res[key]);
-        } else {
-          this.requestsList = this.reloadRequestList;
+          this.storeSearchList = Object.values(res[key]);
+          this.totalRecords = res['count'];
+          this.loadrequestsListLazy(this.lazyEvent);
+        }
+        else {
+          this.requestsList = [];
         }
       }, error => {
         this.isloading = false;
+        this.issearchfilteractive = false;
         this.alertMsg = error;
         this.isOpen = true;
         this.alertType = 'danger';
@@ -299,28 +340,45 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
   }
 
   onChangeRequestType(event) {
+    if(event.target.value !== ""){
     this.requestType = event.target.value;
     this.searchFilter();
+    }else{
+      this.issearchfilteractive = false;
+      this.onRefreshDSARList();
+    }
   }
 
   onChangeStatus(event) {
-    this.status = event.target.value;
-    this.searchFilter();
+    if(event.target.value !== ""){
+      this.status = event.target.value;
+      this.searchFilter();
+    }else{
+      this.issearchfilteractive = false;
+      this.onRefreshDSARList();
+    }
   }
 
   onChangeDueIn(event) {
     if(event !== "" && typeof event !== "object"){
       this.dueIn = event;
       this.searchFilter();
-    } else if (event !== undefined && event.target.value.length > 1) {
+    } else if (event !== undefined && event.target.value !== '') {
       this.dueIn = event.target.value;
       this.searchFilter();
+    }else{
+      this.clearDueInSearchfield();
     }
   }
 
   onChangeSubjectType(event) {
-    this.subjectType = event.target.value;
-    this.searchFilter();
+    if(this.dpsubjectType == ""){
+      this.issearchfilteractive = false;
+      this.onRefreshDSARList();
+    }else{
+      this.subjectType = event.target.value;
+      this.searchFilter();
+    }
   }
 
   viewDSARRequestDetails(res) {
@@ -421,7 +479,35 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
   }
 
   onRefresh(){
-    this.pTable.reset();
+    this.dprequestStatus = "";
+    this.dprequestType = "";
+    this.dpsubjectType = "";
+    this.isSelected = true;
+    this.onRefreshDSARList();
+  }
+
+  onRefreshDSARList(){
+    const pagelimit = '?limit=' + 10 + '&page=' + 1;
+    const sortOrder = 'desc';
+    const orderBy = '&order_by_date=' + sortOrder;
+    this.currentManagedOrgID == undefined ? this.currentManagedOrgID = this.queryOID : this.currentManagedOrgID;
+    this.currrentManagedPropID == undefined ? this.currrentManagedPropID = this.queryPID : this.currrentManagedPropID;
+    this.dsarRequestService.getDsarRequestList(this.constructor.name, moduleName.dsarRequestModule, this.currentManagedOrgID,
+      this.currrentManagedPropID, pagelimit, orderBy)
+      .subscribe((data) => {
+        this.isloading = false;
+        const key = 'response';
+        if (Object.values(data[key]).length > 0) {
+          this.requestsList = Object.values(data[key]);
+          this.reloadRequestList = [...this.requestsList];
+        }
+        this.totalRecords = data.count;
+      }, error => {
+        this.loading.stop();
+        this.alertMsg = error;
+        this.isOpen = true;
+        this.alertType = 'danger';
+      });
   }
 
   previewCCPAForm() {
@@ -515,40 +601,45 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
   }
 
   onCheckRequesttype(requesttype, request_form, customobj) {
-    const requestForm = JSON.parse(request_form);
-    const cdata = JSON.parse(customobj).request_type;
-    const requesttypeindex = requestForm.findIndex((t) => t.controlId == requesttype);
-    let filltypes = [];
-    filltypes.length = 0;
-    for (let i = 0; i < Object.values(cdata).length; i++) {
-      requestForm[requesttypeindex].selectOptions.filter((t) => {
-        if (t.request_type_id == Object.values(cdata)[i]) {
-          const idx = filltypes.includes(t.name);
-          if (!idx) {
-            filltypes.push(t.name);
+    if (request_form !== undefined) {
+      const requestForm = JSON.parse(request_form);
+      const cdata = JSON.parse(customobj).request_type;
+      const requesttypeindex = requestForm.findIndex((t) => t.controlId == requesttype);
+      let filltypes = [];
+      filltypes.length = 0;
+      for (let i = 0; i < Object.values(cdata).length; i++) {
+        requestForm[requesttypeindex].selectOptions.filter((t) => {
+          if (t.request_type_id == Object.values(cdata)[i]) {
+            const idx = filltypes.includes(t.name);
+            if (!idx) {
+              filltypes.push(t.name);
+            }
           }
-        }
-      });
+        });
+      }
+      return filltypes;
     }
-    return filltypes;
   }
 
   onCheckSubjecttype(subjecttype, request_form, customobj) {
-    const requestForm = JSON.parse(request_form);
-    const cdata = JSON.parse(customobj).subject_type;
-    const requesttypeindex = requestForm.findIndex((t) => t.controlId == subjecttype);
-    let filltypes = [];
-    filltypes.length = 0;
-    for (let i = 0; i < Object.values(cdata).length; i++) {
-      requestForm[requesttypeindex].selectOptions.filter((t) => {
-        if (t.subject_type_id == Object.values(cdata)[i]) {
-          const idx = filltypes.includes(t.name);
-          if (!idx) {
-            filltypes.push(t.name);
+    if (request_form !== undefined) {
+      const requestForm = JSON.parse(request_form);
+      const cdata = JSON.parse(customobj).subject_type;
+      const requesttypeindex = requestForm.findIndex((t) => t.controlId == subjecttype);
+      let filltypes = [];
+      filltypes.length = 0;
+      for (let i = 0; i < Object.values(cdata).length; i++) {
+        requestForm[requesttypeindex].selectOptions.filter((t) => {
+          if (t.subject_type_id == Object.values(cdata)[i]) {
+            const idx = filltypes.includes(t.name);
+            if (!idx) {
+              filltypes.push(t.name);
+            }
           }
-        }
-      });
+        });
+      }
+      return filltypes;
     }
-    return filltypes;
   }
+
 }
