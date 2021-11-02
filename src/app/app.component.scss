@@ -358,6 +358,16 @@
   z-index: 990;
 }
 
+.remove-btm-margin {
+  margin-bottom: 0;
+  // overflow: hidden;
+}
+
+.loginbg {
+  background: linear-gradient(#042b60, #004097);
+  // height: calc(100% - 0px);
+}
+
 // #main .container-fluid {
 //   margin-bottom: 0 !important;
 // }

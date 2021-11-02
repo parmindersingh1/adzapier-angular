@@ -207,15 +207,15 @@ p.error {
 
 .login-background {
   background-image: linear-gradient(#042b60, #004097);
-  height: 105%;
+  height: calc(100% - 0px);
   margin: 0px;
-  padding-bottom: 188px;
-  position: fixed;
-  overflow: scroll;
+  padding-bottom: 0px;
+  margin-bottom: 0px;
+  overflow: hidden;
 }
 .login-form{
   width: 500px;
-  padding: 55px;
+  padding: 45px 50px 50px 50px;
 }
 .input-lg {
   height: 55px;
