@@ -4,7 +4,7 @@
     flex: 1;
     padding: 20px 0;
     margin-top: 60px;
-    min-height: 415px;
+    // min-height: 415px;
   }
 
   .btn-default{
@@ -365,7 +365,7 @@
 
 .loginbg {
   background: linear-gradient(#042b60, #004097);
-  // height: calc(100% - 0px);
+  min-height: calc(100% - 44px);
 }
 
 // #main .container-fluid {
