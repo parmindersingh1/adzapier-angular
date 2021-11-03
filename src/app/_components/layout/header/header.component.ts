@@ -157,6 +157,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
   title: any;
   SupportLink: string;
   readytodisplay = false;
+  nothingtoshow = true;
   loader= false;
   actualLinkVisitStatus = false;
   actualLinkObj:any;
@@ -165,6 +166,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
   istopmenuopened:boolean;
   isborderapplied:boolean;
   isQSMDismissed:boolean;
+  counter: any;
   constructor(
     private router: Router,
     private activatedroute: ActivatedRoute,
@@ -408,6 +410,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
   onGetSupportRecord() {
     this.readytodisplay = false;
     this.display=true;
+    this.nothingtoshow = false;
     this.categories='';
     this.CategoryRecord = [];
     this.title = '';
@@ -417,6 +420,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
         const result: any = res;
         if (res) {
           this.countries = result.pagination.data;
+          this.counter = this.countries.length;
           //  console.log(this.countries);
           // this.consentRecordCount = result.count;
         }
@@ -428,6 +432,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
   onGetSupportDetailsRecord() {
     this.loader= true;
     this.display= false;
+    this.nothingtoshow = false;
     this.categories='';
     this.userService.getRecordList(this.constructor.name, moduleName.consentSolutionModule, this.parentID, this.catId)
       .subscribe((res: any) => {
@@ -453,6 +458,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
           this.countries = [];
           this.CategoryRecord = [];
           this.title = '';
+          this.nothingtoshow = true;
           this.readytodisplay = false;
     
   }
@@ -465,6 +471,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
     this.inputSearch = e.target.value;
     if(this.inputSearch == ''){
       this.countries = [];
+      this.display = false;
+      this.nothingtoshow = true;
     }
     else{
     this.searchDecouncer$.next(e.target.value);
