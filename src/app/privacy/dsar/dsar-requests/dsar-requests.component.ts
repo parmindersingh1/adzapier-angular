@@ -108,7 +108,7 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
       label: "Last 30 Days"
     },
     {
-      value: [new Date(new Date().setDate(new Date().getMonth())), new Date()],
+      value: [new Date(new Date().getFullYear(), new Date().getMonth(), 1), new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0)],
       label: "This Month"
     },
     {
@@ -567,6 +567,7 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
   onDateSelection(){
       let date1 = this.searchbydaterange[0].toJSON().split('T')[0];
       let date2 = this.searchbydaterange[1].toJSON().split('T')[0];
+      this.issearchfilteractive = true;
       let pageLimit = '?limit=' + this.eventRows + '&page=' + this.firstone;
       let selectedDateRange = '&start_date=' + date1 +  '&end_date=' + date2;
       this.isloading = true;
@@ -577,6 +578,7 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
           const key = 'response';
           if(data[key] !== "No data found."){
             this.requestsList = Object.values(data[key]);
+            this.storeSearchList = this.requestsList;
             this.rows = data[key].length;
             this.totalRecords = data.count;
           }else{
