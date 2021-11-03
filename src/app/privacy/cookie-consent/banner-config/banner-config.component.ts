@@ -352,6 +352,7 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
       ShowWatermark: [true],
       ShowBadge: [true],
       MuteBanner: [false],
+      LayoutType: ['full-width-bottom'],
       BannerPosition: ['bottom'],
       BadgePosition: ['right'],
       // Language
@@ -420,7 +421,11 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
       }]
     });
   }
-
+  onSetBannerType(type: string) {
+    this.BannerConfigurationForm.patchValue({
+      LayoutType: type
+    });
+  }
   get f() {
     return this.BannerConfigurationForm.controls;
   }
@@ -583,6 +588,7 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
       MuteBanner: CONFIG.MuteBanner,
       // Language
       DefaultLanguage: CONFIG.LanguageConfig.defaultLang,
+      LayoutType: CONFIG.LayoutType ? CONFIG.LayoutType : 'full-width-bottom',
       BannerPosition: CONFIG.BannerPosition,
       BadgePosition: CONFIG.BadgePosition,
       BannerPrivacyLink: CONFIG.Banner.Privacy.privacyLink,
@@ -858,6 +864,7 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
         generic: this.BannerConfigurationForm.value.AllowGENERIC
       },
       MuteBanner: this.BannerConfigurationForm.value.MuteBanner,
+      LayoutType: this.BannerConfigurationForm?.value?.LayoutType,
       BannerPosition: this.BannerConfigurationForm.value.BannerPosition,
       BadgePosition: this.BannerConfigurationForm.value.BadgePosition,
       ThemeType: this.themeType,

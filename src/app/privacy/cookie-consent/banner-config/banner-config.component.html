@@ -296,6 +296,48 @@
 
 
                   </div>
+
+                  <div class="banner-box-type ml-4">
+                    <p-divider align="left" type="dashed">
+                      <b>Banner Type</b>
+                    </p-divider>
+                    <div class="row">
+                      <div class="col-md-4 mb-2 cursor-pointer" (click)="onSetBannerType('full-width-top')">
+                        <i *ngIf="BannerConfigurationForm.value.LayoutType === 'full-width-top'" class="fas fa-check-circle banner-types"></i>
+                        <img class="w-100" src="assets/imgs/banner-types/az-banner-top.svg" />
+                      </div>
+                      <div class="col-md-4 mb-2 cursor-pointer" (click)="onSetBannerType('full-width-bottom')">
+                        <i *ngIf="BannerConfigurationForm.value.LayoutType === 'full-width-bottom'"  class="fas fa-check-circle banner-types"></i>
+                        <img class="w-100" src="assets/imgs/banner-types/az-banner-bottom.svg" />
+                      </div>
+                      <div class="col-md-4 mb-4 cursor-pointer" (click)="onSetBannerType('boxed-left-bottom')">
+                        <i *ngIf="BannerConfigurationForm.value.LayoutType === 'boxed-left-bottom'"  class="fas fa-check-circle banner-types"></i>
+                        <img class="w-100" src="assets/imgs/banner-types/az-box-bottom-left.svg" />
+                      </div>
+                      <div class="col-md-4 mb-4 cursor-pointer" (click)="onSetBannerType('boxed-right-bottom')">
+                        <i *ngIf="BannerConfigurationForm.value.LayoutType === 'boxed-right-bottom'"  class="fas fa-check-circle banner-types"></i>
+                      <img class="w-100" src="assets/imgs/banner-types/az-box-bottom-right.svg" />
+                    </div>
+
+                      <div class="col-md-4 mb-4 cursor-pointer" (click)="onSetBannerType('boxed-left-top')">
+                        <i *ngIf="BannerConfigurationForm.value.LayoutType === 'boxed-left-top'"  class="fas fa-check-circle banner-types"></i>
+                        <img class="w-100" src="assets/imgs/banner-types/az-box-top-left.svg" />
+                      </div>
+
+                      <div class="col-md-4 mb-4 cursor-pointer" (click)="onSetBannerType('boxed-right-top')">
+                        <i *ngIf="BannerConfigurationForm.value.LayoutType === 'boxed-right-top'"  class="fas fa-check-circle banner-types"></i>
+                        <img class="w-100" src="assets/imgs/banner-types/az-box-top-right.svg" />
+                      </div>
+
+                      <div class="col-md-4 mb-4 cursor-pointer" (click)="onSetBannerType('boxed-center')">
+                        <i *ngIf="BannerConfigurationForm.value.LayoutType === 'boxed-center'"  class="fas fa-check-circle banner-types"></i>
+                        <img class="w-100" src="assets/imgs/banner-types/popup-center.svg" />
+                      </div>
+
+
+                    </div>
+                  </div>
+
                   <div class="additional-feature ml-4">
                     <p-divider align="left" type="dashed">
                       <b>Advanced Features</b>
