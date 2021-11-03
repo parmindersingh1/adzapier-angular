@@ -353,7 +353,7 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
       ShowBadge: [true],
       MuteBanner: [false],
       LayoutType: ['full-width-bottom'],
-      BannerPosition: ['bottom'],
+      // BannerPosition: ['bottom'],
       BadgePosition: ['right'],
       // Language
       DefaultLanguage: ['en-US'],
@@ -589,7 +589,7 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
       // Language
       DefaultLanguage: CONFIG.LanguageConfig.defaultLang,
       LayoutType: CONFIG.LayoutType ? CONFIG.LayoutType : 'full-width-bottom',
-      BannerPosition: CONFIG.BannerPosition,
+      // BannerPosition: CONFIG.BannerPosition,
       BadgePosition: CONFIG.BadgePosition,
       BannerPrivacyLink: CONFIG.Banner.Privacy.privacyLink,
       // Display Frequency
@@ -865,7 +865,7 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
       },
       MuteBanner: this.BannerConfigurationForm.value.MuteBanner,
       LayoutType: this.BannerConfigurationForm?.value?.LayoutType,
-      BannerPosition: this.BannerConfigurationForm.value.BannerPosition,
+      // BannerPosition: this.BannerConfigurationForm.value.BannerPosition,
       BadgePosition: this.BannerConfigurationForm.value.BadgePosition,
       ThemeType: this.themeType,
       DisplayFrequency: {
