@@ -483,12 +483,23 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
       this.isEmailLogOpen = true;
       this.isActivityLogOpen = false;
       this.isTaskTabOpen = false;
-    } else if (changeEvent.activeId === 1 && changeEvent.nextId === 3) {
+    } else if (changeEvent.nextId === 4) {
+      this.isEmailLogOpen = false;
+      this.isActivityLogOpen = false;
+      this.isTaskTabOpen = false;
+    } else if (changeEvent.activeId === 4 && changeEvent.nextId === 1) {
+      this.isActivityLogOpen = true;
+    }
+    else if (changeEvent.activeId === 4 && changeEvent.nextId === 2) {
+      this.isEmailLogOpen = true;
+    }
+    else if (changeEvent.activeId === 1 && changeEvent.nextId === 3) {
       this.isActivityLogOpen = false;
       this.isEmailLogOpen = false;
       this.isTaskTabOpen = true;
       this.getSubTaskList();
-    } else if (changeEvent.activeId === 2 && changeEvent.nextId === 3) {
+    }
+    else if (changeEvent.activeId === 2 && changeEvent.nextId === 3) {
       this.isActivityLogOpen = false;
       this.isEmailLogOpen = false;
       this.isTaskTabOpen = true;
@@ -1963,14 +1974,14 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
     const requesttypeindex = requestForm.findIndex((t) => t.controlId == currenttype);
     let filltypes = [];
     for (let i = 0; i < Object.values(requestorsubjectids).length; i++) {
-      
+
       requestForm[requesttypeindex].selectOptions.filter((t) => {
         if (t.subject_type_id == Object.values(requestorsubjectids)[i]) {
           const idx = filltypes.includes(t.name);
           if (!idx) {
             filltypes.push(t.name);
           }
-        } 
+        }
       });
     }
     return filltypes;
@@ -1992,7 +2003,7 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
     }
     return filltypes;
   }
-  
+
 }
 
 interface SubTaskList {

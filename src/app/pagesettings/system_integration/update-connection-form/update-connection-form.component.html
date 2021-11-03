@@ -38,7 +38,7 @@
 
       <ng-container formArrayName="credential">
         <div class="col-md-6" *ngFor="let credential of mySqlForm.controls.credential['controls']; let i=index"  [formGroupName]="i">
-          <div class="form-group w-75" *ngIf="credForm[systemName][i].type === 'text'">
+          <div class="form-group w-75" *ngIf="onFindCredentialType(mySqlForm.value.credential[i].key) === 'text'">
             <label class="text-capitalize"><span class="text-danger">*</span> {{mySqlForm.value.credential[i].key.replaceAll('_', ' ')}}</label>
             <input type="hidden" formControlName="key" [value]="credential.key" />
             <input type="text" formControlName="secret_1" class="form-control" [ngClass]="{ 'is-invalid': submitted && credential.get('secret_1').errors }" />
@@ -47,7 +47,7 @@
             </div>
           </div>
 
-          <div class="form-group w-75" *ngIf="credForm[systemName][i].type === 'textarea'">
+          <div class="form-group w-75" *ngIf="onFindCredentialType(mySqlForm.value.credential[i].key)  === 'textarea'">
             <label class="text-capitalize"><span class="text-danger">*</span> {{mySqlForm.value.credential[i].key.replaceAll('_', ' ')}}</label>
             <input type="hidden" formControlName="key" [value]="credential.key" />
             <textarea class="form-control" formControlName="secret_1" id="exampleFormControlTextarea1" [ngClass]="{ 'is-invalid': submitted && credential.get('secret_1').errors }" rows="3"></textarea>
@@ -57,7 +57,7 @@
           </div>
 
 
-          <div class="form-group w-75" *ngIf="credForm[systemName][i].type === 'password'">
+          <div class="form-group w-75" *ngIf="onFindCredentialType(mySqlForm.value.credential[i].key)  === 'password'">
             <label class="text-capitalize"><span class="text-danger">*</span> {{mySqlForm.value.credential[i].key.replaceAll('_', ' ')}}</label>
             <input type="hidden" formControlName="key" [value]="credential.key" />
             <input type="password" formControlName="secret_1" class="form-control" [ngClass]="{ 'is-invalid': submitted && credential.get('secret_1').errors }" />
@@ -66,7 +66,7 @@
             </div>
           </div>
 
-          <div class="form-group w-75" *ngIf="credForm[systemName][i].type === 'number'">
+          <div class="form-group w-75" *ngIf="onFindCredentialType(mySqlForm.value.credential[i].key) === 'number'">
             <label class="text-capitalize"><span class="text-danger">*</span> {{mySqlForm.value.credential[i].key.replaceAll('_', ' ')}}</label>
             <input type="hidden" formControlName="key" [value]="credential.key" />
             <input type="text" formControlName="secret_1" class="form-control" [ngClass]="{ 'is-invalid': submitted && credential.get('secret_1').errors }" />
@@ -75,7 +75,7 @@
             </div>
           </div>
 
-          <div class="form-group w-75" *ngIf="credForm[systemName][i].type === 'select'">
+          <div class="form-group w-75" *ngIf="onFindCredentialType(mySqlForm.value.credential[i].key) === 'select'">
             <label class="text-capitalize"><span class="text-danger">*</span> {{mySqlForm.value.credential[i].key.replaceAll('_', ' ')}}</label>
             <input type="hidden" formControlName="key" [value]="credential.key" />
             <select formControlName="secret_1" class="form-control" [ngClass]="{ 'is-invalid': submitted && credential.get('secret_1').errors }" >
@@ -97,7 +97,7 @@
            || systemName === 'hubspot'
           || systemName === 'moosend'">
         <div class="form-group w-75">
-          <label>Test Email (Only For Testing Connection)</label>
+          <label>Test Email (Only For Test Connection)</label>
           <input type="email" (change)="onSetTestEmail($event)" class="form-control" />
         </div>
       </div>
@@ -117,7 +117,7 @@
         <div class="divider-text"></div>
         <div class="text-center">
           <button type="button" (click)="close.emit(true)" [disabled]="isTesting"  class="btn btn-secondary">Close</button>
-          <button type="submit" (click)="submitType = 'submit'" [disabled]="isTesting"  class="btn btn-primary ml-4">Submit</button>
+          <button type="submit" (click)="submitType = 'submit'" [disabled]="isTesting"  class="btn btn-primary ml-4">Update</button>
         </div>
       </div>
 

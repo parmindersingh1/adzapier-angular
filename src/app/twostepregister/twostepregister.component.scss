@@ -136,6 +136,7 @@ input::-ms-clear {
 .login-form{
   width: 700px;
   padding: 55px;
+  min-height: calc(100% - 265px);
 }
 .input-lg {
   height: 55px;
@@ -281,6 +282,12 @@ svg {
 p.error {
   color: #d06079;
 }
+
+.verification-msg{
+  color:#fff; 
+  min-height:calc(100vh - 265px)
+}
+
 @-webkit-keyframes dash {
   0% {
     stroke-dashoffset: 1000;
