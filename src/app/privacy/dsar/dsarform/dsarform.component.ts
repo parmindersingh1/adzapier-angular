@@ -1557,7 +1557,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
       this.basicFormSubmitted = true;
       this.isResetlinkEnable = false;
       if (this.isDirty && this.workflow !== undefined && this.selectedApproverID !== undefined) {
-        this.openModal(this.confirmSaveAlert);
+        // this.openModal(this.confirmSaveAlert);
       }
       else if (this.workflow == undefined || this.selectedApproverID == undefined) {
         this.isdraftsubmitted = true;
