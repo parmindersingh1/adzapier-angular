@@ -274,11 +274,13 @@ export class DsarSystemComponent implements OnInit, OnChanges {
       this.onTestConnectionSql(data, systemName);
     } else {
       this.step = 2;
+      this.systemName = systemName;
       this.connectionID = data.id;
     }
   }
   onHome(e) {
     this.systemName = '';
+    this.onGetConnectionID();
   }
 
   onSelectSystem(obj, step) {

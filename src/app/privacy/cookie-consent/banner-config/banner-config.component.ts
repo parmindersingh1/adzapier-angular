@@ -475,7 +475,6 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
       BannerDescription: LANG_CONFIG.CONFIG.BANNER.DESCRIPTION,
       BannerGDPRDescription2: LANG_CONFIG.CONFIG.BANNER.GDPR_PRIVACY_DESC,
       BannerPrivacyText: LANG_CONFIG.CONFIG.BANNER.PRIVACY,
-      BannerPrivacyLink: ['https://www.example.com/privacy'],
       BannerAcceptAllText: LANG_CONFIG.CONFIG.BANNER.ACCEPT_ALL_BTN,
       BannerPreferenceText: LANG_CONFIG.CONFIG.BANNER.PRIVACY_SETTINGS_BTN,
       BannerDisableAllText: LANG_CONFIG.CONFIG.BANNER.DISABLE_ALL_BTN,
@@ -984,7 +983,7 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
     // Banner
     langData.CONFIG.BANNER.ACCEPT_ALL_BTN = this.BannerConfigurationForm.value.BannerAcceptAllText;
     langData.CONFIG.BANNER.DESCRIPTION = this.BannerConfigurationForm.value.BannerDescription;
-    langData.CONFIG.BANNER.PRIVACY_SETTINGS_BTN = this.BannerConfigurationForm.value.BannerPrivacyText;
+    langData.CONFIG.BANNER.PRIVACY_SETTINGS_BTN = this.BannerConfigurationForm.value.BannerPreferenceText;
     langData.CONFIG.BANNER.DISABLE_ALL_BTN = this.BannerConfigurationForm.value.BannerDisableAllText;
     langData.CONFIG.BANNER.DO_NOT_SELL_BTN = this.BannerConfigurationForm.value.BannerDoNotSellText;
     langData.CONFIG.BANNER.TITLE = this.BannerConfigurationForm.value.BannerTitle;
