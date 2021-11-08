@@ -592,13 +592,22 @@ li {
   cursor: pointer;
   text-align: left;
 }
-.blue-back {
-  background: #1b365d;
-  height: 500px;
-  width: 100%;
+// .blue-back {
+//   background: linear-gradient(180deg, rgba(27,54,93,1) 50%, rgba(255,255,255,1) 50%, rgba(255,255,255,1) 100%);
+//   width: 100%;
+// }
+// .container {
+//   margin-top: -375px;
+// }
+
+.top-margin {
+  margin-top: 110px;
 }
-.container {
-  margin-top: -375px;
+.plan-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 15px;
+  flex-direction: row;
 }
 .primary-yellow{
   background: #f0b323;
