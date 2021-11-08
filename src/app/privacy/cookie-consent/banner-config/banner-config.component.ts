@@ -219,7 +219,7 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
     element.classList.remove('container-fluid');
     element.style.padding = null;
     element.style.margin = null;
-    element.classList.add('container');
+   // element.classList.add('container');
     element.classList.add('site-content');
   }
 
