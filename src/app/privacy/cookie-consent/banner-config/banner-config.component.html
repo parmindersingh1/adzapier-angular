@@ -303,35 +303,42 @@
                     </p-divider>
                     <div class="row">
                       <div class="col-md-4 mb-2 cursor-pointer" (click)="onSetBannerType('full-width-top')">
-                        <i *ngIf="BannerConfigurationForm.value.LayoutType === 'full-width-top'" class="fas fa-check-circle banner-types"></i>
-                        <img class="w-100" src="assets/imgs/banner-types/az-banner-top.svg" />
+                        <i *ngIf="BannerConfigurationForm.value.LayoutType === 'full-width-top'"
+                           class="fas fa-check-circle banner-types"></i>
+                        <img class="w-100" src="assets/imgs/banner-types/az-banner-top.svg"/>
                       </div>
                       <div class="col-md-4 mb-2 cursor-pointer" (click)="onSetBannerType('full-width-bottom')">
-                        <i *ngIf="BannerConfigurationForm.value.LayoutType === 'full-width-bottom'"  class="fas fa-check-circle banner-types"></i>
-                        <img class="w-100" src="assets/imgs/banner-types/az-banner-bottom.svg" />
+                        <i *ngIf="BannerConfigurationForm.value.LayoutType === 'full-width-bottom'"
+                           class="fas fa-check-circle banner-types"></i>
+                        <img class="w-100" src="assets/imgs/banner-types/az-banner-bottom.svg"/>
                       </div>
                       <div class="col-md-4 mb-4 cursor-pointer" (click)="onSetBannerType('boxed-left-bottom')">
-                        <i *ngIf="BannerConfigurationForm.value.LayoutType === 'boxed-left-bottom'"  class="fas fa-check-circle banner-types"></i>
-                        <img class="w-100" src="assets/imgs/banner-types/az-box-bottom-left.svg" />
+                        <i *ngIf="BannerConfigurationForm.value.LayoutType === 'boxed-left-bottom'"
+                           class="fas fa-check-circle banner-types"></i>
+                        <img class="w-100" src="assets/imgs/banner-types/az-box-bottom-left.svg"/>
                       </div>
                       <div class="col-md-4 mb-4 cursor-pointer" (click)="onSetBannerType('boxed-right-bottom')">
-                        <i *ngIf="BannerConfigurationForm.value.LayoutType === 'boxed-right-bottom'"  class="fas fa-check-circle banner-types"></i>
-                      <img class="w-100" src="assets/imgs/banner-types/az-box-bottom-right.svg" />
-                    </div>
+                        <i *ngIf="BannerConfigurationForm.value.LayoutType === 'boxed-right-bottom'"
+                           class="fas fa-check-circle banner-types"></i>
+                        <img class="w-100" src="assets/imgs/banner-types/az-box-bottom-right.svg"/>
+                      </div>
 
                       <div class="col-md-4 mb-4 cursor-pointer" (click)="onSetBannerType('boxed-left-top')">
-                        <i *ngIf="BannerConfigurationForm.value.LayoutType === 'boxed-left-top'"  class="fas fa-check-circle banner-types"></i>
-                        <img class="w-100" src="assets/imgs/banner-types/az-box-top-left.svg" />
+                        <i *ngIf="BannerConfigurationForm.value.LayoutType === 'boxed-left-top'"
+                           class="fas fa-check-circle banner-types"></i>
+                        <img class="w-100" src="assets/imgs/banner-types/az-box-top-left.svg"/>
                       </div>
 
                       <div class="col-md-4 mb-4 cursor-pointer" (click)="onSetBannerType('boxed-right-top')">
-                        <i *ngIf="BannerConfigurationForm.value.LayoutType === 'boxed-right-top'"  class="fas fa-check-circle banner-types"></i>
-                        <img class="w-100" src="assets/imgs/banner-types/az-box-top-right.svg" />
+                        <i *ngIf="BannerConfigurationForm.value.LayoutType === 'boxed-right-top'"
+                           class="fas fa-check-circle banner-types"></i>
+                        <img class="w-100" src="assets/imgs/banner-types/az-box-top-right.svg"/>
                       </div>
 
                       <div class="col-md-4 mb-4 cursor-pointer" (click)="onSetBannerType('boxed-center')">
-                        <i *ngIf="BannerConfigurationForm.value.LayoutType === 'boxed-center'"  class="fas fa-check-circle banner-types"></i>
-                        <img class="w-100" src="assets/imgs/banner-types/popup-center.svg" />
+                        <i *ngIf="BannerConfigurationForm.value.LayoutType === 'boxed-center'"
+                           class="fas fa-check-circle banner-types"></i>
+                        <img class="w-100" src="assets/imgs/banner-types/popup-center.svg"/>
                       </div>
 
 
@@ -404,44 +411,69 @@
                       </div>
                     </div>
 
-<!--                    <div class="row mt-3">-->
-<!--                      <div class="col-md-12">-->
-<!--                        <p class=" mb-0  input-label pt-2">Banner Position</p>-->
-<!--                      </div>-->
-<!--                      <div class="col-md-12">-->
-<!--                        <div class="p-field-radiobutton">-->
-<!--                          <p-radioButton name="BannerPosition" value="top" formControlName="BannerPosition"-->
-<!--                                         inputId="top"></p-radioButton>-->
-<!--                          <label for="top" class="pt-2 pl-3 mb-0">Top</label>-->
-<!--                        </div>-->
-<!--                        <div class="p-field-radiobutton">-->
-<!--                          <p-radioButton name="BannerPosition" value="bottom" formControlName="BannerPosition"-->
-<!--                                         inputId="bottom"></p-radioButton>-->
-<!--                          <label for="bottom" class="pt-2 pl-3 mb-0">Bottom</label>-->
-<!--                        </div>-->
-<!--                      </div>-->
-<!--                    </div>-->
+                    <!--                    <div class="row mt-3">-->
+                    <!--                      <div class="col-md-12">-->
+                    <!--                        <p class=" mb-0  input-label pt-2">Banner Position</p>-->
+                    <!--                      </div>-->
+                    <!--                      <div class="col-md-12">-->
+                    <!--                        <div class="p-field-radiobutton">-->
+                    <!--                          <p-radioButton name="BannerPosition" value="top" formControlName="BannerPosition"-->
+                    <!--                                         inputId="top"></p-radioButton>-->
+                    <!--                          <label for="top" class="pt-2 pl-3 mb-0">Top</label>-->
+                    <!--                        </div>-->
+                    <!--                        <div class="p-field-radiobutton">-->
+                    <!--                          <p-radioButton name="BannerPosition" value="bottom" formControlName="BannerPosition"-->
+                    <!--                                         inputId="bottom"></p-radioButton>-->
+                    <!--                          <label for="bottom" class="pt-2 pl-3 mb-0">Bottom</label>-->
+                    <!--                        </div>-->
+                    <!--                      </div>-->
+                    <!--                    </div>-->
 
                     <div class="row mt-3">
-                      <div class="col-md-12">
+                      <div class="col-md-4">
                         <p class=" mb-0  input-label pt-2"
                            [ngStyle]="{color: !BannerConfigurationForm.value.ShowBadge ? '#999' : null}">Badge
                           Position</p>
                       </div>
-                      <div class="col-md-12">
-                        <div class="p-field-radiobutton">
-                          <p-radioButton name="BadgePosition" [disabled]="!BannerConfigurationForm.value.ShowBadge"
-                                         value="left" formControlName="BadgePosition" inputId="left"></p-radioButton>
-                          <label for="left" class="pt-2 pl-3 mb-0">Left</label>
-                        </div>
-                        <div class="p-field-radiobutton">
-                          <p-radioButton name="BadgePosition" [disabled]="!BannerConfigurationForm.value.ShowBadge"
-                                         value="right" formControlName="BadgePosition" inputId="right"></p-radioButton>
-                          <label for="right" class="pt-2 pl-3 mb-0">Right</label>
+                      <div class="col-md-8">
+                        <div class="row">
+                          <div class="p-field-radiobutton col-md-3">
+                            <p-radioButton name="BadgePosition" [disabled]="!BannerConfigurationForm.value.ShowBadge"
+                                           value="left" formControlName="BadgePosition" inputId="left"></p-radioButton>
+                            <label for="left" class="pt-2 pl-3 mb-0">Left</label>
+                          </div>
+                          <div class="p-field-radiobutton col-md-3">
+                            <p-radioButton name="BadgePosition" [disabled]="!BannerConfigurationForm.value.ShowBadge"
+                                           value="right" formControlName="BadgePosition"
+                                           inputId="right"></p-radioButton>
+                            <label for="right" class="pt-2 pl-3 mb-0">Right</label>
+                          </div>
                         </div>
                       </div>
                     </div>
 
+
+                  </div>
+
+                  <div class="customer-logo ml-4">
+                    <p-divider align="left" type="dashed">
+                      <b>Customer Logo</b>
+                    </p-divider>
+
+                    <div class="row mt-3">
+                      <div class="col-md-4">
+                        <p class=" mb-0  input-label pt-2">Company Logo</p>
+                      </div>
+                      <div class="col-md-8">
+                        <input type="file" accept="image/*" (change)="changeListener($event)">
+                        <p *ngIf="companyLogoValidation.error" class="text-danger">{{companyLogoValidation.msg}}</p>
+
+                        <div class="mt-4 img-preview">
+                          <img *ngIf="customerBrandLogo" width="250" height="100" [src]="customerBrandLogo" />
+                          <h5 *ngIf="!customerBrandLogo" class="text-center mt-4 pt-1"><i class="far fa-image"></i> Image Preview</h5>
+                        </div>
+                      </div>
+                    </div>
 
                   </div>
                 </div>
@@ -726,7 +758,8 @@
                         class="fas fa-check-circle"></i></span>
                     </div>
                   </div>
-                  <div class="banner-color-wrap mt-3" [ngStyle]="{'display' : themeType === 'custom' ? 'block' : 'none'}">
+                  <div class="banner-color-wrap mt-3"
+                       [ngStyle]="{'display' : themeType === 'custom' ? 'block' : 'none'}">
                     <p-divider align="left" type="dashed">
                       <b><i class="fas fa-tools mr-2"></i> Customization </b>
                     </p-divider>
@@ -1309,7 +1342,8 @@
                     </label> <br/>
                     <div class="row m-0">
                       <p-inputNumber class="az-input col-md-6 p-0 m-0" mode="decimal" inputId="withoutgrouping"
-                                     min="1"      formControlName="DisplayRejectAllConsent" maxlength="8" [useGrouping]="false">
+                                     min="1" formControlName="DisplayRejectAllConsent" maxlength="8"
+                                     [useGrouping]="false">
                       </p-inputNumber>
                       <p-dropdown class="col-md-6 p-0 m-0" formControlName="DisplayRejectAllConsentType"
                                   [options]="displayFrequency" optionLabel="name" optionValue="code"></p-dropdown>
@@ -1324,7 +1358,7 @@
                     </label> <br/>
                     <div class="row m-0">
                       <p-inputNumber class="az-input col-md-6 p-0 m-0" mode="decimal" inputId="withoutgrouping"
-                                     min="1"    formControlName="DisplayClosedConsent" maxlength="8" [useGrouping]="false">
+                                     min="1" formControlName="DisplayClosedConsent" maxlength="8" [useGrouping]="false">
                       </p-inputNumber>
                       <p-dropdown class="col-md-6 p-0 m-0" formControlName="DisplayClosedConsentType"
                                   [options]="displayFrequency" optionLabel="name" optionValue="code"></p-dropdown>
@@ -1409,7 +1443,8 @@
       <span aria-hidden="true" class="visually-hidden">&times;</span>
     </button>
     <h5 class="mb-3"> Really do a reset your configuration?</h5>
-    <p>When you do a reset to deafult, you will lose all your saved data. <br />(including layout theme, content, purposes, display frequency ...)</p>
+    <p>When you do a reset to deafult, you will lose all your saved data. <br/>(including layout theme, content,
+      purposes, display frequency ...)</p>
     <button pButton type="button" (click)="modalRef?.hide()" label="Cancel" class="p-button-secondary mr-2"></button>
     <button pButton type="button" (click)="onResetEverything()" label="I Agree"></button>
 
