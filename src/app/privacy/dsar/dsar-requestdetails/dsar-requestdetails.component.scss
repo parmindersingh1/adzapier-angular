@@ -719,6 +719,7 @@ ul.ngx-pagination {
     position: relative;
     overflow: hidden;
     min-height: 70px;
+    width: 1200px; //added due to 100% layout
 }
 
 .add-min-height {
