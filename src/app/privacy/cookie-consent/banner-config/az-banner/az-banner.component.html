@@ -8,7 +8,9 @@
            [ngStyle]="{'background' : formData.BannerCookieNoticeBackgroundColor,
             'color' : formData.BannerCookieNoticeTextColor,
       width: isBoxedType === 'boxed' ? '600px' : ''}">
-        <div class="card-body banner-border-top" [ngStyle]="{ 'border-top' : '2px solid' + formData.BannerCookieNoticeBorderColor }" >
+        <div class="card-body banner-border-top" [ngStyle]="{ 'border-top' : isBoxedType !== 'boxed' ? '2px solid' + formData.BannerCookieNoticeBorderColor : null,
+         'border' : isBoxedType === 'boxed' ? '2px solid' + formData.BannerCookieNoticeBorderColor : null
+        }" >
           <div class="row m-0">
             <div class="col-12" [ngClass]="{'col-md-12': isBoxedType === 'boxed', 'col-md-6': isBoxedType !== 'boxed'}">
               <h5 [ngStyle]="{ 'color' : formData.BannerCookieNoticeTextColor}"> {{formData.BannerTitle}}</h5>
@@ -38,7 +40,9 @@
            [ngStyle]="{'background' : formData.BannerCookieNoticeBackgroundColor,
             'color' : formData.BannerCookieNoticeTextColor,
       width: isBoxedType === 'boxed' ? '600px' : ''}">
-        <div class="card-body banner-border-top" [ngStyle]="{ 'border-top' : '2px solid' + formData.BannerCookieNoticeBorderColor }" >
+        <div class="card-body banner-border-top" [ngStyle]="{ 'border-top' : isBoxedType !== 'boxed' ? '2px solid' + formData.BannerCookieNoticeBorderColor : null,
+         'border' : isBoxedType === 'boxed' ? '2px solid' + formData.BannerCookieNoticeBorderColor : null
+        }" >
           <div class="row m-0">
             <div [ngClass]="{'col-md-12': isBoxedType === 'boxed', 'col-md-6': isBoxedType !== 'boxed'}">
               <h5 [ngStyle]="{ 'color' : formData.BannerCookieNoticeTextColor}"> {{formData.BannerTitle}}</h5>
@@ -63,14 +67,16 @@
 
 
   <div id="gdpr-banner" *ngIf="formData.LivePreviewType === 'gdpr'" class="banner-content ">
-    <div class="row m-0">
+    <div class="row m-0" >
       <div class="card"
            [ngClass]="{'gdpr-banner-bottom': isBannerBottomType === 'bottom',
             'banner-right': isBannerRightType === 'right'}"
            [ngStyle]="{'background' : formData.BannerCookieNoticeBackgroundColor,
             'color' : formData.BannerCookieNoticeTextColor,
       width: isBoxedType === 'boxed' ? '600px' : ''}">
-        <div class="card-body banner-border-top" [ngStyle]="{ 'border-top' : '2px solid' + formData.BannerCookieNoticeBorderColor }" >
+        <div class="card-body banner-border-top"  [ngStyle]="{ 'border-top' : isBoxedType !== 'boxed' ? '2px solid' + formData.BannerCookieNoticeBorderColor : null,
+         'border' : isBoxedType === 'boxed' ? '2px solid' + formData.BannerCookieNoticeBorderColor : null
+        }"  >
           <div class="row m-0">
             <div
                  [ngClass]="{'col-md-12 gdpr-border-bottom': isBoxedType === 'boxed', 'col-md-5 gdpr-border-right': isBoxedType !== 'boxed'}"

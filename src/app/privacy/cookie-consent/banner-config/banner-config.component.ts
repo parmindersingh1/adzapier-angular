@@ -88,6 +88,11 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
   colorPicker = {...LightTheme};
   modalRef?: BsModalRef;
   @ViewChild('publish', {static: true}) publishModal: ElementRef;
+  customerBrandLogo: string | ArrayBuffer = null;
+  companyLogoValidation = {
+    error: false,
+    msg: ''
+  };
 
   constructor(private sanitizer: DomSanitizer,
               private formBuilder: FormBuilder,
@@ -550,7 +555,7 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   drop(event: CdkDragDrop<string[]>) {
-    let purposeList = this.BannerConfigurationForm.value.PurposeList;
+    const purposeList = this.BannerConfigurationForm.value.PurposeList;
     moveItemInArray(purposeList, event.previousIndex, event.currentIndex);
     this.purposesList = purposeList;
     this.BannerConfigurationForm.patchValue({
@@ -600,6 +605,7 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
       DisplayClosedConsentType: CONFIG.DisplayFrequency.bannerClosedConsentType,
     });
     this.customLang = CONFIG.LanguageConfig.customLang;
+    this.customerBrandLogo = CONFIG.CustomerBrandLogo;
     this.selectedLanguage = CONFIG.LanguageConfig.allowedLang;
     this.themeType = CONFIG.ThemeType;
     this.allowedLanguagesForPreview = [];
@@ -866,6 +872,7 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
       LayoutType: this.BannerConfigurationForm?.value?.LayoutType,
       // BannerPosition: this.BannerConfigurationForm.value.BannerPosition,
       BadgePosition: this.BannerConfigurationForm.value.BadgePosition,
+      CustomerBrandLogo: this.customerBrandLogo,
       ThemeType: this.themeType,
       DisplayFrequency: {
         bannerPartialConsent: this.BannerConfigurationForm.value.DisplayPartialConsent,
@@ -1085,5 +1092,27 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
     this.customLang = [];
     this.onSubmit();
     this.modalRef.hide();
+  }
+
+  changeListener($event) {
+    const file = $event.target.files[0];
+    if (file.size > 20000) {
+      this.companyLogoValidation.error = true;
+      this.companyLogoValidation.msg = 'Maximum file size to upload is 20kb.';
+      this.cd.detectChanges();
+      return false;
+    }
+    this.companyLogoValidation.error = false;
+    this.readThis($event.target);
+  }
+
+  readThis(inputValue: any): void {
+    const file: File = inputValue.files[0];
+    const myReader: FileReader = new FileReader();
+
+    myReader.onloadend = (e) => {
+      this.customerBrandLogo = myReader.result;
+    };
+    myReader.readAsDataURL(file);
   }
 }
