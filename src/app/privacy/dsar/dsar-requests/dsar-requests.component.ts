@@ -313,9 +313,16 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
   }
 
   private searchFilter(): void {
-    const params = '?limit=' + this.eventRows + '&page=' + this.firstone +
+    let params;
+    if(this.selectedDateRange !== undefined){
+    params = '?limit=' + this.eventRows + '&page=' + this.firstone +
       '&name=' + this.inputValue + '&subject_type=' + this.subjectType + '&request_type=' + this.requestType
       + '&status=' + this.status + '&due_in=' + this.dueIn + this.selectedDateRange;
+    }else{
+      params = '?limit=' + this.eventRows + '&page=' + this.firstone +
+      '&name=' + this.inputValue + '&subject_type=' + this.subjectType + '&request_type=' + this.requestType
+      + '&status=' + this.status + '&due_in=' + this.dueIn;
+    }
     this.isloading = true;
     this.dsarRequestService.getDsarRequestFilterList(this.currentManagedOrgID, this.currrentManagedPropID, params,
       this.constructor.name, moduleName.dsarRequestModule)
