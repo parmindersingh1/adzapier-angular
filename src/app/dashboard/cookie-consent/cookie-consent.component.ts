@@ -150,7 +150,7 @@ export class CookieConsentComponent implements OnInit {
       showClearButton: true,
       returnFocusToInput: true,
       dateInputFormat: 'yyyy-mm-dd',
-      adaptivePosition: true,
+      adaptivePosition: false,
       showTodayButton: true,
       ranges: this.ranges
     });
