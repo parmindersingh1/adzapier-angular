@@ -138,6 +138,7 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
   dprequestType;
   isSelected:boolean = true;
   lazyEvent;
+  selectedDateRange;
   constructor(
     private orgservice: OrganizationService,
     private userService: UserService,
@@ -156,7 +157,7 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
     this.dateCustomClasses = [
       { date: new Date(), classes: ['theme-dark-blue'] },
     ];
-    this.searchbydaterange = [new Date(new Date().setDate(new Date().getDate() - 30)),new Date()]
+  //  this.searchbydaterange = [new Date(new Date().setDate(new Date().getDate() - 30)),new Date()]
     this.isSelected = true;
     }
 
@@ -314,7 +315,7 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
   private searchFilter(): void {
     const params = '?limit=' + this.eventRows + '&page=' + this.firstone +
       '&name=' + this.inputValue + '&subject_type=' + this.subjectType + '&request_type=' + this.requestType
-      + '&status=' + this.status + '&due_in=' + this.dueIn;
+      + '&status=' + this.status + '&due_in=' + this.dueIn + this.selectedDateRange;
     this.isloading = true;
     this.dsarRequestService.getDsarRequestFilterList(this.currentManagedOrgID, this.currrentManagedPropID, params,
       this.constructor.name, moduleName.dsarRequestModule)
@@ -483,13 +484,15 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
     this.dprequestType = "";
     this.dpsubjectType = "";
     this.isSelected = true;
+    this.selectedDateRange = "";
+    this.searchbydaterange = "";    
     this.onRefreshDSARList();
   }
 
   onRefreshDSARList(){
     const pagelimit = '?limit=' + 10 + '&page=' + 1;
     const sortOrder = 'desc';
-    const orderBy = '&order_by_date=' + sortOrder;
+    const orderBy = '&order_by_date=' + sortOrder + this.selectedDateRange;
     this.currentManagedOrgID == undefined ? this.currentManagedOrgID = this.queryOID : this.currentManagedOrgID;
     this.currrentManagedPropID == undefined ? this.currrentManagedPropID = this.queryPID : this.currrentManagedPropID;
     this.dsarRequestService.getDsarRequestList(this.constructor.name, moduleName.dsarRequestModule, this.currentManagedOrgID,
@@ -565,11 +568,13 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
   }
 
   onDateSelection(){
+    if(this.searchbydaterange !== null){
       let date1 = this.searchbydaterange[0].toJSON().split('T')[0];
       let date2 = this.searchbydaterange[1].toJSON().split('T')[0];
       this.issearchfilteractive = true;
       let pageLimit = '?limit=' + this.eventRows + '&page=' + this.firstone;
       let selectedDateRange = '&start_date=' + date1 +  '&end_date=' + date2;
+      this.selectedDateRange = selectedDateRange;
       this.isloading = true;
       this.dsarRequestService.getDsarRequestList(this.constructor.name, moduleName.dsarRequestModule, this.currentManagedOrgID,
         this.currrentManagedPropID, pageLimit, '', selectedDateRange)
@@ -590,7 +595,9 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
           this.isOpen = true;
           this.alertType = 'danger';
         });
-
+      }else{
+        this.onRefreshDSARList();
+      }
   }
 
   clearDateRangePicker(){
@@ -644,4 +651,9 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
     }
   }
 
+  clearDatePicker(){
+    this.selectedDateRange = "";
+    this.searchbydaterange = "";    
+    this.onRefreshDSARList();
+  }
 }
