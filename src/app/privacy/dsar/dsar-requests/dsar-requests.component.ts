@@ -568,7 +568,7 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
   }
 
   onDateSelection(){
-    if(this.searchbydaterange !== null){
+    if(this.searchbydaterange !== null && this.searchbydaterange !== ""){
       let date1 = this.searchbydaterange[0].toJSON().split('T')[0];
       let date2 = this.searchbydaterange[1].toJSON().split('T')[0];
       this.issearchfilteractive = true;

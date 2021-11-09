@@ -17,15 +17,15 @@
       <div class="col-sm-5 pr-0 pl-2 mr-2 d-flex row-reverse">
         <div class="input-group-prepend">
           <span *ngIf="searchbydaterange == ''" (click)="dp.show()" class="input-group-text rounded-right border-left-0" id="inputGroup-sizing-sm">
-            <i class="fa" [ngClass]="searchbydaterange !== '' ? 'fa-caret-down':'fa-search'"></i>
+            <i class="fa" [ngClass]="searchbydaterange !== '' ? '':'fa-caret-down'"></i>
           </span>
           <span *ngIf="searchbydaterange !== ''" (click)="clearDatePicker()" class="input-group-text bg-transparent"
           style="background-color: #fff !important; border-left:0 !important; border-radius: 0px 5px 5px 0px;"> 
-          <i class="fa" [ngClass]="searchbydaterange == null ? 'fa-search':'fa-times color-red'" aria-hidden="true"></i>
+          <i class="fa" [ngClass]="searchbydaterange == null ? 'fa-caret-down':'fa-times color-red'" aria-hidden="true"></i>
         </span>
         </div>
         <input type="text" [(ngModel)]="searchbydaterange" class="form-control border-left-0  border-right-0 rounded-right"
-          bsDaterangepicker [bsConfig]="bsConfig" #dp="bsDaterangepicker"
+          bsDaterangepicker [bsConfig]="bsConfig" #dp="bsDaterangepicker" placeholder="Select Date"
           (onHidden)="onDateSelection()">
         <div class="input-group-prepend border-left-0" (click)="dp.show()">
           <span class="input-group-text rounded-left border-right-0" id="inputGroup-sizing-sm"><i class="fa fa-calendar"></i></span>
