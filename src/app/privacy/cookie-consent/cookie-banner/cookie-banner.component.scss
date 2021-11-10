@@ -441,6 +441,12 @@ h6 ::ng-deep .tooltip-arrow .arrow {
   appearance: none;
 }
 
+.max-fullwidth {
+  max-width: 1308px !important;
+  margin: 0 auto;
+  min-width: 100%;
+}
+
 @media only screen and (max-width: 600px) {
   .bredcrub-row {
     margin-left: 0px !important;

@@ -22,7 +22,7 @@ import { PricingComponent } from 'src/app/pagesettings/billing/pricing/pricing.c
     trigger('slideInOut', [
       state('true', style({
         "max-width": "1040px",
-        "margin-left": "10px",
+        "margin-left":"0",
         transform: '  translateX(0)'
 
       })),
@@ -30,7 +30,7 @@ import { PricingComponent } from 'src/app/pagesettings/billing/pricing/pricing.c
 
         transform: 'translateX(1)'
       })),
-      transition('true <=> false', animate('350ms ease-in-out'))
+      transition('true <=> false', animate('50ms ease-in-out'))
     ])
 
   ]
@@ -56,10 +56,11 @@ export class AppComponent implements OnInit {
   qsmenulinkobj: any;
   isquickLinkclicked: boolean;
   qsMenuList: any = [];
-  isloginpage: boolean;
+  isloginpage: boolean = true;
   toggleQuickstartmenu:boolean;
   quicklinkclickedObj;
   qsmdismissedstatus:boolean;
+  isBillingpageUrl:boolean = false;
   //isuserclickonpage:boolean = false; //for later use to check page click event
   constructor(private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -133,7 +134,11 @@ export class AppComponent implements OnInit {
           this.dsarformService.removeControls();
           this.organizationService.removeControls();
         }
-
+        if(event.url.indexOf('/settings/billing/pricing') !== -1){
+          this.isBillingpageUrl = true;
+        }else{
+          this.isBillingpageUrl = false;
+        }
       }
     });
     feather.replace();

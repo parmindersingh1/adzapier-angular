@@ -16,4 +16,13 @@ export class AzBannerComponent implements OnInit {
   onOpenPreference() {
     this.currentBannerLayer.emit('preference');
   }
+  get isBoxedType() {
+    return this.formData?.LayoutType?.search('boxed') !== -1 ? 'boxed' : 'full-width';
+  }
+  get isBannerBottomType() {
+    return this.formData?.LayoutType?.search('bottom') !== -1 ? 'bottom' : 'top';
+  }
+  get isBannerRightType() {
+    return this.formData?.LayoutType?.search('right') !== -1 ? 'right' : 'left';
+  }
 }

@@ -196,7 +196,7 @@ export class PricingComponent implements OnInit, AfterViewInit {
     element.classList.remove('container-fluid');
     element.style.padding = null;
     element.style.margin = null;
-    element.classList.add('container');
+   // element.classList.add('container');
     element.classList.add('site-content');
     this.quickDivID = "";
     this.unsubscribeAfterUserAction$.unsubscribe();

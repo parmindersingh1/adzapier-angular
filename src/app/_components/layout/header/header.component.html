@@ -198,8 +198,60 @@
                   </li>
                 </a>
               </ul>
+              <div *ngIf="counter == 0 && !nothingtoshow " style="margin-top:80px;display: flex;justify-content: center;align-items: center;flex-direction: column;">
+                <i class="far fa-frown fa-3x mb-3"></i>
+                <p style="font-weight: normal;text-transform: none;">We couldn’t find anything matching with your search.</p> 
+                 <p style="font-weight: normal;text-transform: none;">Please try searching again with another query. </p>
+                 <div style="margin-top: 30px;display: flex;justify-content: center;">
+                  <a href="https://support.adzapier.com/help-center" target="_blank"><label style="text-transform: none;font-size: small;">Browse All articles</label>
+                    <svg width="24" height="24" viewBox="0 0 24 24" role="presentation">
+                      <g fill="currentColor">
+                        <path
+                          d="M19.005 19c-.003 0-.005.002-.005.002l.005-.002zM5 19.006c0-.004-.002-.006-.005-.006H5v.006zM5 4.994V5v-.006zM19 19v-6h2v6.002A1.996 1.996 0 0119.005 21H4.995A1.996 1.996 0 013 19.006V4.994C3 3.893 3.896 3 4.997 3H11v2H5v14h14zM5 4.994V5v-.006zm0 14.012c0-.004-.002-.006-.005-.006H5v.006zM11 5H5v14h14v-6h2v6.002A1.996 1.996 0 0119.005 21H4.995A1.996 1.996 0 013 19.006V4.994C3 3.893 3.896 3 4.997 3H11v2zm8 0v3a1 1 0 002 0V4a1 1 0 00-1-1h-4a1 1 0 000 2h3z">
+                        </path>
+                        <path d="M12.707 12.707l8-8a1 1 0 10-1.414-1.414l-8 8a1 1 0 001.414 1.414z"></path>
+                      </g>
+                    </svg></a>
+                </div>
+                <div style="margin-top: 15px;display: flex;justify-content: center;">
+                  <a href="https://support.adzapier.com/help-center/tickets/new" target="_blank"><label style="text-transform: none;font-size: small;">Ask your questions or send us feedback</label>
+                    <i class="ml-1 far fa-comments fa-2x"></i>
+
+</a>
+                </div>
+              </div>
+
             </div>
-            <div *ngIf="!display" style="width: 400px;white-space:pre-wrap;">
+            <div *ngIf="nothingtoshow">
+              <div style="margin-left: 15px;margin-top: 20px;">
+              <h5 style="margin-bottom: 20px;margin-left:8px;text-transform: none;">Popular Articles</h5>
+                <ul type="square">
+                  <li style="margin-top: 16px;">&#9672;<a style="margin-left: 8px;text-transform: none;font-size: small;" href="https://support.adzapier.com/help-center/articles/23/13/28/manage-subscriptions" target="_blank">Manage Subscription</a></li>
+                  <li style="margin-top: 16px;">&#9672;<a style="margin-left: 8px;text-transform: none;font-size: small;" href="https://support.adzapier.com/help-center/articles/23/7/11/cookie-category" target="_blank">Cookie Category</a></li>
+                  <li style="margin-top: 16px;">&#9672;<a style="margin-left: 8px;text-transform: none;font-size: small;" href="https://support.adzapier.com/help-center/articles/23/7/29/configure-cookie-banner" target="_blank">Configure Cookie Banner</a></li>
+                  <li style="margin-top: 16px;">&#9672;<a style="margin-left: 8px;text-transform: none;font-size: small;" href="https://support.adzapier.com/help-center/articles/23/9/17/manage-dsar-web-forms" target="_blank">Manage DSAR Web Forms</a></li>
+                  <li style="margin-top: 16px;">&#9672;<a style="margin-left: 8px;text-transform: none;font-size: small;" href="https://support.adzapier.com/help-center/articles/23/10/23/manage-consent-records" target="_blank">Manage Consent Record</a></li>
+                </ul>
+                </div>
+                <hr>
+                <div style="margin-top: 30px;display: flex;justify-content: center;">
+                  <a href="https://support.adzapier.com/help-center" target="_blank"><label style="text-transform: none;font-size: small;">Browse All articles</label>
+                    <svg width="24" height="24" viewBox="0 0 24 24" role="presentation">
+                      <g fill="currentColor">
+                        <path
+                          d="M19.005 19c-.003 0-.005.002-.005.002l.005-.002zM5 19.006c0-.004-.002-.006-.005-.006H5v.006zM5 4.994V5v-.006zM19 19v-6h2v6.002A1.996 1.996 0 0119.005 21H4.995A1.996 1.996 0 013 19.006V4.994C3 3.893 3.896 3 4.997 3H11v2H5v14h14zM5 4.994V5v-.006zm0 14.012c0-.004-.002-.006-.005-.006H5v.006zM11 5H5v14h14v-6h2v6.002A1.996 1.996 0 0119.005 21H4.995A1.996 1.996 0 013 19.006V4.994C3 3.893 3.896 3 4.997 3H11v2zm8 0v3a1 1 0 002 0V4a1 1 0 00-1-1h-4a1 1 0 000 2h3z">
+                        </path>
+                        <path d="M12.707 12.707l8-8a1 1 0 10-1.414-1.414l-8 8a1 1 0 001.414 1.414z"></path>
+                      </g>
+                    </svg></a>
+                </div>
+                <div style="margin-top: 15px;display: flex;justify-content: center;">
+                  <a href="https://support.adzapier.com/help-center/tickets/new" target="_blank"><label style="text-transform: none;font-size: small;">Ask your questions or send us feedback</label>
+                    <i class="ml-1 far fa-comments fa-2x"></i>
+                  </a>
+                </div>
+            </div>
+            <div *ngIf="!display && !nothingtoshow" style="width: 400px;white-space:pre-wrap;">
               <h5 class="mt-3 ml-2">{{title}}</h5>
               <div *ngIf="loader" class="spinner-border" role="status" style="margin-left: 47%;margin-top: 30%;">
                 <span class="sr-only">Loading...</span>
@@ -443,3 +495,4 @@
     [guidancetext]="alertcontent" [isactualLinkclickedbyuser]="actuallinkstatus">
   </app-quickstartalert>
 </div>
+<!-- <app-sidemenu></app-sidemenu> -->

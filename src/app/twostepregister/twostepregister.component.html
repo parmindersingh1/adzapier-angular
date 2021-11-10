@@ -1,11 +1,11 @@
-<div class="container-fluid login-background ">
-    <div class="row justify-content-center">
+<div class="container-fluid">
+    <div class="row justify-content-center min-calcheight">
         <div class="">
             <div class="logo-group">
                 <img src="assets/imgs/az-logo.png" class="az-logo mb-2" alt="adzapier logo" />
                 <h4 class="tx-white">Trusted Data Privacy Solutions</h4>
             </div>
-            <div *ngIf="isInvitedUserVerified && id" style="color:#fff">
+            <div *ngIf="isInvitedUserVerified && id" class="verification-msg">
                 <p class="confirm-msg">
                     <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130.2 130.2">
                        <circle class="path circle" fill="none" stroke="#73AF55" stroke-width="6" stroke-miterlimit="10"
@@ -16,7 +16,7 @@
                      <span style="color:#fff">{{message}}</span>
                   </p>
             </div>
-            <div *ngIf="!isInvitedUserVerified && id" style="color:#fff">
+            <div *ngIf="!isInvitedUserVerified && id" class="verification-msg">
                 <p>
                      <span style="color:red">{{message}}</span>
                   </p>

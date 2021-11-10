@@ -88,6 +88,11 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
   colorPicker = {...LightTheme};
   modalRef?: BsModalRef;
   @ViewChild('publish', {static: true}) publishModal: ElementRef;
+  customerBrandLogo: string | ArrayBuffer = null;
+  companyLogoValidation = {
+    error: false,
+    msg: ''
+  };
 
   constructor(private sanitizer: DomSanitizer,
               private formBuilder: FormBuilder,
@@ -219,7 +224,7 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
     element.classList.remove('container-fluid');
     element.style.padding = null;
     element.style.margin = null;
-    element.classList.add('container');
+   // element.classList.add('container');
     element.classList.add('site-content');
   }
 
@@ -352,7 +357,8 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
       ShowWatermark: [true],
       ShowBadge: [true],
       MuteBanner: [false],
-      BannerPosition: ['bottom'],
+      LayoutType: ['full-width-bottom'],
+      // BannerPosition: ['bottom'],
       BadgePosition: ['right'],
       // Language
       DefaultLanguage: ['en-US'],
@@ -420,7 +426,11 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
       }]
     });
   }
-
+  onSetBannerType(type: string) {
+    this.BannerConfigurationForm.patchValue({
+      LayoutType: type
+    });
+  }
   get f() {
     return this.BannerConfigurationForm.controls;
   }
@@ -470,7 +480,6 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
       BannerDescription: LANG_CONFIG.CONFIG.BANNER.DESCRIPTION,
       BannerGDPRDescription2: LANG_CONFIG.CONFIG.BANNER.GDPR_PRIVACY_DESC,
       BannerPrivacyText: LANG_CONFIG.CONFIG.BANNER.PRIVACY,
-      BannerPrivacyLink: ['https://www.example.com/privacy'],
       BannerAcceptAllText: LANG_CONFIG.CONFIG.BANNER.ACCEPT_ALL_BTN,
       BannerPreferenceText: LANG_CONFIG.CONFIG.BANNER.PRIVACY_SETTINGS_BTN,
       BannerDisableAllText: LANG_CONFIG.CONFIG.BANNER.DISABLE_ALL_BTN,
@@ -546,7 +555,7 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   drop(event: CdkDragDrop<string[]>) {
-    let purposeList = this.BannerConfigurationForm.value.PurposeList;
+    const purposeList = this.BannerConfigurationForm.value.PurposeList;
     moveItemInArray(purposeList, event.previousIndex, event.currentIndex);
     this.purposesList = purposeList;
     this.BannerConfigurationForm.patchValue({
@@ -583,7 +592,8 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
       MuteBanner: CONFIG.MuteBanner,
       // Language
       DefaultLanguage: CONFIG.LanguageConfig.defaultLang,
-      BannerPosition: CONFIG.BannerPosition,
+      LayoutType: CONFIG.LayoutType ? CONFIG.LayoutType : 'full-width-bottom',
+      // BannerPosition: CONFIG.BannerPosition,
       BadgePosition: CONFIG.BadgePosition,
       BannerPrivacyLink: CONFIG.Banner.Privacy.privacyLink,
       // Display Frequency
@@ -595,6 +605,7 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
       DisplayClosedConsentType: CONFIG.DisplayFrequency.bannerClosedConsentType,
     });
     this.customLang = CONFIG.LanguageConfig.customLang;
+    this.customerBrandLogo = CONFIG.CustomerBrandLogo;
     this.selectedLanguage = CONFIG.LanguageConfig.allowedLang;
     this.themeType = CONFIG.ThemeType;
     this.allowedLanguagesForPreview = [];
@@ -858,8 +869,10 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
         generic: this.BannerConfigurationForm.value.AllowGENERIC
       },
       MuteBanner: this.BannerConfigurationForm.value.MuteBanner,
-      BannerPosition: this.BannerConfigurationForm.value.BannerPosition,
+      LayoutType: this.BannerConfigurationForm?.value?.LayoutType,
+      // BannerPosition: this.BannerConfigurationForm.value.BannerPosition,
       BadgePosition: this.BannerConfigurationForm.value.BadgePosition,
+      CustomerBrandLogo: this.customerBrandLogo,
       ThemeType: this.themeType,
       DisplayFrequency: {
         bannerPartialConsent: this.BannerConfigurationForm.value.DisplayPartialConsent,
@@ -977,7 +990,7 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
     // Banner
     langData.CONFIG.BANNER.ACCEPT_ALL_BTN = this.BannerConfigurationForm.value.BannerAcceptAllText;
     langData.CONFIG.BANNER.DESCRIPTION = this.BannerConfigurationForm.value.BannerDescription;
-    langData.CONFIG.BANNER.PRIVACY_SETTINGS_BTN = this.BannerConfigurationForm.value.BannerPrivacyText;
+    langData.CONFIG.BANNER.PRIVACY_SETTINGS_BTN = this.BannerConfigurationForm.value.BannerPreferenceText;
     langData.CONFIG.BANNER.DISABLE_ALL_BTN = this.BannerConfigurationForm.value.BannerDisableAllText;
     langData.CONFIG.BANNER.DO_NOT_SELL_BTN = this.BannerConfigurationForm.value.BannerDoNotSellText;
     langData.CONFIG.BANNER.TITLE = this.BannerConfigurationForm.value.BannerTitle;
@@ -1079,5 +1092,27 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
     this.customLang = [];
     this.onSubmit();
     this.modalRef.hide();
+  }
+
+  changeListener($event) {
+    const file = $event.target.files[0];
+    if (file.size > 20000) {
+      this.companyLogoValidation.error = true;
+      this.companyLogoValidation.msg = 'Maximum file size to upload is 20kb.';
+      this.cd.detectChanges();
+      return false;
+    }
+    this.companyLogoValidation.error = false;
+    this.readThis($event.target);
+  }
+
+  readThis(inputValue: any): void {
+    const file: File = inputValue.files[0];
+    const myReader: FileReader = new FileReader();
+
+    myReader.onloadend = (e) => {
+      this.customerBrandLogo = myReader.result;
+    };
+    myReader.readAsDataURL(file);
   }
 }

@@ -206,7 +206,7 @@ a.dropdown-item > i {
 }
 
 .container, .container-fluid {
-    margin-bottom: 50px;
+    margin-bottom: 60px;
     //background-color: #f5f6fa;
 }
 
@@ -270,9 +270,11 @@ a.dropdown-item > i {
 .nav-item {
   background: transparent !important;
 }
-
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html{
+    height: 100%;
+}
+// html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; display: grid; min-height: 100%;}
 
 
 /* Prime Ng Table */
@@ -459,3 +461,6 @@ ul.helpcenter-menu-right::after{
   float: right;
 }
 
+.height-100 {
+  height: 100%;
+}
