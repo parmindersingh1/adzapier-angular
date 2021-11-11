@@ -46,7 +46,8 @@ import { QuickstartmenuComponent } from './_components/quickstartmenu/quickstart
    //  CheckoutConfirmationComponent,
     WelcomeComponent,
     SubscriptionPopupComponent,
-    QuickstartmenuComponent
+    QuickstartmenuComponent,
+
   ],
   imports: [
     BrowserModule,
