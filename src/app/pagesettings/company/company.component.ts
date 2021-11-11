@@ -95,7 +95,7 @@ export class CompanyComponent implements AfterViewInit, OnInit {
     this.paginationConfig = {itemsPerPage: this.pageSize, currentPage: this.p, totalItems: this.totalCount};
     // this.renderer.listen('window', 'click', (e: Event) => {
     //   if (e.target !== this.btnEdit.nativeElement) {
-    //     this.checkForQsTooltip();        
+    //     this.checkForQsTooltip();
     //   }
     // });
   }
@@ -113,7 +113,7 @@ export class CompanyComponent implements AfterViewInit, OnInit {
     // ).subscribe((status)=>{
     //   this.isquickstartmenu = status.isclicked;
     //   this.quickDivID = status.quickstartid;
-      
+
     // });
     this.userService.isRevisitedQSMenuLink.subscribe((status) => { this.isRevistedLink = status.reclickqslink; this.currentLinkID = status.quickstartid; this.isUserClickedNotRelatedToTooltip = status.urlchanged });
     this.loadRoleList();
@@ -200,7 +200,7 @@ export class CompanyComponent implements AfterViewInit, OnInit {
     });
   }
 
-  editOrganizationModalPopup(content, type) { 
+  editOrganizationModalPopup(content, type) {
     if (this.quickDivID !== undefined || this.quickDivID !== "") {
     let quickLinkObj: QuickStart = {
       linkid: this.quickDivID,
@@ -216,7 +216,7 @@ export class CompanyComponent implements AfterViewInit, OnInit {
     this.quickmenuService.onClickEmitQSLinkobj.next(quickLinkObj);
   }
   //  this.quickDivID = ""
- 
+
     if (type === 'add') {
       if (!this.onCheckSubscription()) {
         return false;
@@ -237,9 +237,9 @@ export class CompanyComponent implements AfterViewInit, OnInit {
     }, (reason) => {
       // this.profileForm.reset();
     });
-   
+
   }
- 
+
 
   pathValues() {
     this.loading.start();
@@ -349,15 +349,15 @@ export class CompanyComponent implements AfterViewInit, OnInit {
     this.companyService.getToken(this.constructor.name, moduleName.organizationDetailsModule)
       .subscribe(res => {
         this.loading.stop();
-        this.alertMsg = res.message;
+        // this.alertMsg = res.message;
         this.appId = res.response.app_id;
-        this.isOpen = true;
-        this.alertType = 'success';
+        // this.isOpen = true;
+        // this.alertType = 'success';
       }, err => {
         this.loading.stop();
-        this.alertMsg = err.message;
-        this.isOpen = true;
-        this.alertType = 'danger';
+        // this.alertMsg = err.message;
+        // this.isOpen = true;
+        // this.alertType = 'danger';
       })
 
   }
@@ -657,14 +657,14 @@ export class CompanyComponent implements AfterViewInit, OnInit {
     this.inviteUserForm.get("firstname").updateValueAndValidity();
     this.inviteUserForm.get("lastname").updateValueAndValidity();
   }
- 
+
 
 
   showQuickstarttooltip(){
     const a = this.quickmenuService.getQuerymenulist();
     this.quickmenuService.onClickEmitQSLinkobj.pipe(
       takeUntil(this.unsubscribeAfterUserAction$)
-    ).subscribe((res) => { 
+    ).subscribe((res) => {
       if (a.length !== 0) {
         const idx = a.findIndex((t) => t.index == 1);
         if (a[idx].quicklinks.some((t) => t.linkid == res.linkid && t.isactualbtnclicked)) {
@@ -678,7 +678,7 @@ export class CompanyComponent implements AfterViewInit, OnInit {
     this.unsubscribeAfterUserAction$.next();
     this.unsubscribeAfterUserAction$.complete();
   }
- 
+
   checkForQsTooltip(){
     this.userService.onRevistQuickStartmenulink.next({quickstartid:this.quickDivID,reclickqslink:true,urlchanged:true});
     this.quickDivID = "";
@@ -696,7 +696,7 @@ export class CompanyComponent implements AfterViewInit, OnInit {
     // this.userService.isClickedOnHeaderMenu.subscribe((data)=>{
     //   if(!data){
     //     this.quickDivID = "";
-    //   } 
+    //   }
     // })
   }
 
