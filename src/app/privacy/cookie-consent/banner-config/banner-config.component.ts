@@ -29,6 +29,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {featuresName} from '../../../_constant/features-name.constant';
 import {DataService} from '../../../_services/data.service';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
+import {CookieCategoryService} from '../../../_services/cookie-category.service';
 
 interface Country {
   name: string,
@@ -45,6 +46,7 @@ interface Country {
 export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
   currentManagedOrgID: any;
   currrentManagedPropID: any;
+  @ViewChild('noCookie', {static: true}) noCookie: ElementRef;
   step = 1;
   submitted = false;
   languageContents: any;
@@ -102,6 +104,7 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
               private router: Router,
               private activatedRouter: ActivatedRoute,
               private dataService: DataService,
+              private cookieCategoryService: CookieCategoryService,
               private cd: ChangeDetectorRef,
               private modalService: BsModalService
   ) {
@@ -175,6 +178,20 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
+  onGetAllCookies() {
+    this.loading.start();
+    this.cookieCategoryService.getCookieData({}, this.constructor.name, moduleName.cookieBannerModule).subscribe((res: any) => {
+      this.loading.stop();
+      if (res.response.length === 0) {
+        this.modalRef = this.modalService.show(this.noCookie, {
+          animated: false, keyboard: false, ignoreBackdropClick: true
+        });
+      }
+    }, error => {
+      this.loading.stop();
+    });
+  }
+
   onGetAllowVendors() {
     this.loading.start('23');
     this.isOpen = false;
@@ -224,7 +241,7 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
     element.classList.remove('container-fluid');
     element.style.padding = null;
     element.style.margin = null;
-   // element.classList.add('container');
+    // element.classList.add('container');
     element.classList.add('site-content');
   }
 
@@ -283,15 +300,15 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
   onSetDefaultRegulation() {
     const {AllowGDPR, AllowCCPA, AllowGENERIC} = this.BannerConfigurationForm.value;
     const regulationsList = [];
-      if (AllowCCPA) {
-        regulationsList.push(DefaultRegulation[2]);
-      }
-      if (AllowGDPR) {
-        regulationsList.push(DefaultRegulation[1]);
-      }
-      if (AllowGENERIC) {
-        regulationsList.push(DefaultRegulation[0]);
-      }
+    if (AllowCCPA) {
+      regulationsList.push(DefaultRegulation[2]);
+    }
+    if (AllowGDPR) {
+      regulationsList.push(DefaultRegulation[1]);
+    }
+    if (AllowGENERIC) {
+      regulationsList.push(DefaultRegulation[0]);
+    }
     this.defaultRegulation = regulationsList;
   }
 
@@ -312,6 +329,7 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
   }
+
 
   initPurpose() {
     return this.formBuilder.group({
@@ -426,11 +444,13 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
       }]
     });
   }
+
   onSetBannerType(type: string) {
     this.BannerConfigurationForm.patchValue({
       LayoutType: type
     });
   }
+
   get f() {
     return this.BannerConfigurationForm.controls;
   }
@@ -616,12 +636,26 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
     let type = 'generic';
     if (mainConfig.ccpa_global) {
       type = 'ccpa';
-    }  else if (gdprGlobal) {
+    } else if (gdprGlobal) {
       type = 'gdpr';
     }
-    this.onMakeRegulationEveryWhere(type, {event: {checked: true} });
+    this.onMakeRegulationEveryWhere(type, {event: {checked: true}});
     this.onSetDefaultRegulation();
+    this.onSetGlobleRegulation(mainConfig);
   }
+
+  onSetGlobleRegulation(mainConfig) {
+    const gdprGlobal = !(mainConfig.gdpr_global === 'false' || mainConfig.gdpr_global === false);
+    const event = {checked: true};
+    if (mainConfig.ccpa_global) {
+      this.onMakeRegulationEveryWhere('ccpa', event);
+    } else if (mainConfig.generic_global) {
+      this.onMakeRegulationEveryWhere('generic', event);
+    } else if (gdprGlobal) {
+      this.onMakeRegulationEveryWhere('gdpr', event);
+    }
+  }
+
   onSetSavedStyle(config) {
     this.BannerConfigurationForm.patchValue({
       // Banner Color
@@ -744,6 +778,7 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
       PreferenceDoNotSellTextColor: ThemeColor.PreferenceDoNotSellTextColor
     };
   }
+
   onSelectPreviewLang() {
     const langCode = this.BannerConfigurationForm.value.PreviewLanguage.code;
     this.onLoadContent(langCode);
@@ -856,6 +891,7 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
         this.publishing = false;
       });
   }
+
   onGetBannerConfig() {
     return {
       LanguageConfig: {
@@ -1114,5 +1150,15 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
       this.customerBrandLogo = myReader.result;
     };
     myReader.readAsDataURL(file);
+  }
+
+  navigateToCookie() {
+    this.modalRef.hide();
+    this.router.navigate(['/cookie-consent/cookie-category'], {
+      queryParams: {
+        oid: this.currentManagedOrgID,
+        pid: this.currrentManagedPropID
+      }, queryParamsHandling: 'merge', skipLocationChange: false
+    });
   }
 }
