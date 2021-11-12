@@ -319,6 +319,9 @@ export class TwostepregisterComponent implements OnInit {
           this.loader.stop();
           if (data) {
             //  this.isUserVarified = true;
+            this.alertMsg = 'Your email is successfully verified !';
+            this.isOpen = true;
+            this.alertType = 'success';
             this.message = 'Your email is successfully verified !';
             this.authenticationService.isUserVerified.next(true);
             this.isInvitedUserVerified = true;

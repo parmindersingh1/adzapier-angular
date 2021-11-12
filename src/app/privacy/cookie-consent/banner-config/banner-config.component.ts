@@ -376,6 +376,7 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
       ShowBadge: [true],
       MuteBanner: [false],
       LayoutType: ['full-width-bottom'],
+      PublishDate: [],
       // BannerPosition: ['bottom'],
       BadgePosition: ['right'],
       // Language
@@ -612,7 +613,8 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
       MuteBanner: CONFIG.MuteBanner,
       // Language
       DefaultLanguage: CONFIG.LanguageConfig.defaultLang,
-      LayoutType: CONFIG.LayoutType ? CONFIG.LayoutType : 'full-width-bottom',
+      LayoutType: CONFIG?.LayoutType ? CONFIG?.LayoutType : 'full-width-bottom',
+      PublishDate: CONFIG?.PublishDate,
       // BannerPosition: CONFIG.BannerPosition,
       BadgePosition: CONFIG.BadgePosition,
       BannerPrivacyLink: CONFIG.Banner.Privacy.privacyLink,
@@ -910,6 +912,7 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
       BadgePosition: this.BannerConfigurationForm.value.BadgePosition,
       CustomerBrandLogo: this.customerBrandLogo,
       ThemeType: this.themeType,
+      PublishDate: this.publishType === 'publish' ? new Date() : this.BannerConfigurationForm.value?.PublishDate,
       DisplayFrequency: {
         bannerPartialConsent: this.BannerConfigurationForm.value.DisplayPartialConsent,
         bannerPartialConsentType: this.BannerConfigurationForm.value.DisplayPartialConsentType,
