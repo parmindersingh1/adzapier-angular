@@ -1132,6 +1132,12 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
 
   changeListener($event) {
     const file = $event.target.files[0];
+    if (!this.validateFile($event.target.files[0].name)) {
+      this.companyLogoValidation.error = true;
+      this.companyLogoValidation.msg = 'Selected file format is not supported.';
+      this.cd.detectChanges();
+      return false;
+    }
     if (file.size > 20000) {
       this.companyLogoValidation.error = true;
       this.companyLogoValidation.msg = 'Maximum file size to upload is 20kb.';
@@ -1140,6 +1146,21 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
     }
     this.companyLogoValidation.error = false;
     this.readThis($event.target);
+  }
+  validateFile(name: string) {
+    const ext = name.substring(name.lastIndexOf('.') + 1);
+    if (ext.toLowerCase() === 'png') {
+      return true;
+    } else if (ext.toLowerCase() === 'jpg') {
+      return true;
+    } else if (ext.toLowerCase() === 'svg') {
+      return true;
+    } else if (ext.toLowerCase() === 'jpeg') {
+      return true;
+    }
+    else {
+      return false;
+    }
   }
 
   readThis(inputValue: any): void {
