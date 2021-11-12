@@ -465,14 +465,15 @@
                         <p class=" mb-0  input-label pt-2">Company Logo</p>
                       </div>
                       <div class="col-md-8">
+                        <p class="mb-1 tx-12">File Type: .jgp, .png, .svg and .jpeg supported</p>
                         <input type="file" accept="image/png, image/svg, image/jpeg" (change)="changeListener($event)">
                         <p *ngIf="companyLogoValidation.error" class="text-danger">{{companyLogoValidation.msg}}</p>
                       </div>
                       <div class="col-md-12">
 
                         <div class="mt-4 img-preview">
-                          <img *ngIf="customerBrandLogo" width="250" height="100" [src]="customerBrandLogo" />
-                          <h5 *ngIf="!customerBrandLogo" class="text-center mt-4 pt-1"><i class="far fa-image"></i> Image Preview</h5>
+                          <img *ngIf="customerBrandLogo"  class="img-preview-tag" [src]="customerBrandLogo" />
+                          <h5 *ngIf="!customerBrandLogo" class="text-center mt-4 mb-4 pt-1"><i class="far fa-image"></i> Image Preview</h5>
                         </div>
                         <button *ngIf="customerBrandLogo" (click)="customerBrandLogo = null" class="btn btn-link mt-1" type="button">Remove</button>
                       </div>
@@ -1376,7 +1377,7 @@
 
           <ng-template pTemplate>
             <div class="p-col p-d-flex p-ai-center p-jc-center"
-                 [ngStyle]="{margin: currentBannerLayer === 'preference' ? 'auto' : null}">
+                 [ngStyle]="{margin: currentBannerLayer === 'preference' || BannerConfigurationForm.value.LayoutType === 'boxed-center' ? 'auto' : null}">
               <app-az-banner *ngIf="currentBannerLayer === 'banner'" (currentBannerLayer)="onChangeBannerLayer($event)"
                              [formData]="BannerConfigurationForm.value"></app-az-banner>
               <app-az-preference *ngIf="currentBannerLayer === 'preference'" [formData]="BannerConfigurationForm.value"
