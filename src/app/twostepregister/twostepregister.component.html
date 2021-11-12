@@ -178,9 +178,13 @@
             </div>
             <div *ngIf="isInvitedUserVerified && !id">
                 <div *ngIf="step == 3" class="inputs-key login-form bg-white">
-                  <div *ngIf="isInvitedUserVerified" class="alert alert-success">
+                  <div *ngIf="isInvitedUserVerified && requiredID" class="alert alert-success">
                     Your email is successfully verified !
                   </div>
+                  <div *ngIf="!requiredID" class="alert alert-info">
+                    Last Step: Please Complete Your Registration Form !
+                  </div>
+
                     <h4 class="tx-color-01 mg-b-5">Add Company, Organization and Property</h4>
                     <form [formGroup]="secondregForm" #secregisterForm id="secregisterForm" (ngSubmit)="onSubSecond()">
                         <div class="form-group">
@@ -374,7 +378,7 @@
     <form  [formGroup]="passwordForm" (ngSubmit)="onSubmitPassword()">
     <div class="row">
         <div class="form-group col-md-12">
-          <label class="text-left" for="password">Enter Your Password<span class="required-asterisk">*</span></label>
+          <label class="text-left" for="password">Enter Your Adzapier Login Password<span class="required-asterisk">*</span></label>
           <input toggle type="password" name="password" formControlName="password"
                  class="form-control input-lg"
                  [ngClass]="{ 'is-invalid': submitted && p.password.errors }"

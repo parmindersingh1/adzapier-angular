@@ -73,6 +73,7 @@ export class TwostepregisterComponent implements OnInit {
   passwords: any;
   chckresponse: any;
   plantype = '0';
+  requiredID = true;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -292,43 +293,55 @@ export class TwostepregisterComponent implements OnInit {
     this.verifyEmailForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.pattern]]
     });
-    this.route.queryParamMap
-      .subscribe(params => {
-        this.id = params.get('id');
+    this.route.queryParams
+      .subscribe((params: any) => {
+        if (params.hasOwnProperty('step')) {
+          this.emailid = params.email;
+          this.userid = params.userID;
+          this.id = '';
+          this.isInvitedUserVerified = true;
+          this.step = 3;
+          this.requiredID = false;
+        } else {
+          this.id = params.id;
+          this.requiredID = true
+        }
       });
     this.onGetVerifyEmailRecord();
     // this.id = this.route.snapshot.paramMap.get('id');
-    const requestObj = {
-      token: this.id
-    };
-    this.loader.start();
-    this.userService.verifyEmailAddress(this.constructor.name, moduleName.verifyEmailModule, requestObj).pipe(delay(2000))
-      .subscribe((data) => {
-        this.loader.stop();
-        if (data) {
-          //  this.isUserVarified = true;
-          this.message = 'Your email is successfully verified !';
-          this.authenticationService.isUserVerified.next(true);
-          this.isInvitedUserVerified = true;
-          this.showNextScreen = true;
-          setTimeout(() => {
-            this.id = '';
+    if (this.requiredID) {
+      const requestObj = {
+        token: this.id
+      };
+      this.loader.start();
+      this.userService.verifyEmailAddress(this.constructor.name, moduleName.verifyEmailModule, requestObj).pipe(delay(2000))
+        .subscribe((data) => {
+          this.loader.stop();
+          if (data) {
+            //  this.isUserVarified = true;
+            this.message = 'Your email is successfully verified !';
+            this.authenticationService.isUserVerified.next(true);
             this.isInvitedUserVerified = true;
-            this.userid = data.userID;
-            this.emailid = data.email;
-            this.step = 3;
-          }, 1000);
-          //this.router.navigate(['/signup']);
-        }
-      }, error => {
-        this.loader.stop();
+            this.showNextScreen = true;
+            setTimeout(() => {
+              this.id = '';
+              this.isInvitedUserVerified = true;
+              this.userid = data.userID;
+              this.emailid = data.email;
+              this.step = 3;
+            }, 1000);
+            //this.router.navigate(['/signup']);
+          }
+        }, error => {
+          this.loader.stop();
 //      this.isUserVarified = false;
-        this.message = 'This link has been expired!';
-        this.authenticationService.isUserVerified.next(false);
-        this.isInvitedUserVerified = false;
-        this.showNextScreen = false;
-        //this.router.navigate(['/verify-email/',this.id]);
-      });
+          this.message = 'This link has been expired!';
+          this.authenticationService.isUserVerified.next(false);
+          this.isInvitedUserVerified = false;
+          this.showNextScreen = false;
+          //this.router.navigate(['/verify-email/',this.id]);
+        });
+    }
     //this.authenticationService.userEmailVerificationStatus.subscribe((data) => this.isInvitedUserVerified = data);
     //this.showNextScreen = this.isInvitedUserVerified ? true : false;
     this.setTimer();
@@ -595,18 +608,19 @@ export class TwostepregisterComponent implements OnInit {
   }
   login() {
     this.loader.start();
+    const that = this;
     const password =  this.f.password.value ?  this.f.password.value : this.passwordForm.value.password;
     this.authenticationService.login(this.constructor.name, moduleName.loginModule, this.emailid, password)
       .pipe( first())
       .subscribe(
         async data => {
           this.loader.stop();
-          this.modalRef.hide();
+          this.passwordForm.value.password ? this.modalRef.hide() : null;
           // this.getLoggedInUserDetails();
           this.authenticationService.userLoggedIn.next(true);
           this.authenticationService.currentUserSubject.next(data);
           localStorage.setItem('currentUser', JSON.stringify(data));
-          await this.onCheckOut(this.chckresponse);
+          await that.onCheckOut(this.chckresponse);
           let params = this.route.snapshot.queryParams;
           this.returnUrl = params['redirectURL'];
           // if (params['redirectURL']) {
