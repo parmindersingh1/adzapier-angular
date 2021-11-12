@@ -26,6 +26,7 @@ import {AccordionModule} from 'primeng/accordion';
 import {AlertModule} from 'ngx-bootstrap/alert';
 import {ButtonsModule} from 'ngx-bootstrap/buttons';
 import {TooltipModule} from 'ngx-bootstrap/tooltip';
+import {TimeagoModule} from 'ngx-timeago';
 
 const path: Routes = [{
   path: '', component: BannerConfigComponent
@@ -58,7 +59,8 @@ const path: Routes = [{
         AccordionModule,
         AlertModule,
         ButtonsModule,
-        TooltipModule
+        TooltipModule,
+        TimeagoModule
     ]
 })
 export class BannerConfigModule { }
