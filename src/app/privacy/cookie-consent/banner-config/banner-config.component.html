@@ -68,6 +68,7 @@
             <button pButton pRipple type="submit"
                     [disabled]="contentSaving === 'saving' || BannerConfigurationForm.invalid"
                     (click)="publishType = 'publish'" label="Publish"></button>
+            <p class="publish-date-text" *ngIf="BannerConfigurationForm.value?.PublishDate">Last Published : {{BannerConfigurationForm.value?.PublishDate | timeago}}</p>
 
           </div>
         </div>

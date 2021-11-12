@@ -178,12 +178,16 @@
             </div>
             <div *ngIf="isInvitedUserVerified && !id">
                 <div *ngIf="step == 3" class="inputs-key login-form bg-white">
-                  <div *ngIf="isInvitedUserVerified && requiredID" class="alert alert-success">
-                    Your email is successfully verified !
-                  </div>
-                  <div *ngIf="!requiredID" class="alert alert-info">
-                    Last Step: Please Complete Your Registration Form !
-                  </div>
+<!--                  <div *ngIf="isInvitedUserVerified && requiredID" class="alert alert-success">-->
+<!--                    Your email is successfully verified !-->
+<!--                  </div>-->
+                  <h5 *ngIf="isInvitedUserVerified" class="alert alert-success tx-14">Hey! Just one step to complete <br />
+                    Please enter the following details to create your account instantly.</h5>
+<!--                  <div *ngIf="!requiredID" class="alert alert-info">-->
+<!--                    Last Step: Please Complete Your Registration Form !-->
+<!--                  </div>-->
+
+
 
                     <h4 class="tx-color-01 mg-b-5">Add Company, Organization and Property</h4>
                     <form [formGroup]="secondregForm" #secregisterForm id="secregisterForm" (ngSubmit)="onSubSecond()">
