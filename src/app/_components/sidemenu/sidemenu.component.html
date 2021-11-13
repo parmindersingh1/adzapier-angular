@@ -1,5 +1,5 @@
 <div class="menuwrapper">
-    <div class="sidemenu" (mouseenter)="onMouseover()" (mouseleave)="onMouseout()" [@slideInOutSideMenu]="slideSideMenu ? true : false">
+    <div class="sidemenu" (onmouseover)="onMouseover()" (onmouseout)="onMouseout()" [@slideInOutSideMenu]="slideSideMenu ? true : false">
 <!--  [ngClass]="[slideSideMenu ? 'addslide-width':'removeslide-width']" [@slideInOut]="slideSideMenu ? true : false"-->
         <p class="org-property" [ngClass]="slideSideMenu ? 'showcontent' : 'hidecontent' ">
             <span>{{organization}} </span>
@@ -11,8 +11,8 @@
         <div class="wrapper" [ngClass]="slideSideMenu ? 'showcontent' : 'hidecontent' ">
             <div class="submenu" *ngIf="currentmenu" >
                 <p class="mb-0">{{menulink}}</p>
-                <div *ngFor="let menuitem of submenu">
-                    <a draggable="false" [routerLink]="menuitem.routerLink" [queryParams]="{oid:queryOID , pid:queryPID}">
+                <div *ngFor="let menuitem of submenu" class="current-menu">
+                    <a [routerLink]="menuitem.routerLink" [queryParams]="{oid:queryOID , pid:queryPID}">
                         <span *ngIf="menuitem.icon.indexOf('fa')===-1">
                             <i-feather name="{{menuitem.icon}}" class="feather-16"></i-feather>{{menuitem.showlink}}
                         </span>
