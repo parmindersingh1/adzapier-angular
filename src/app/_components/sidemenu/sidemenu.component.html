@@ -1,5 +1,5 @@
 <div class="menuwrapper">
-    <div class="sidemenu" (onmouseover)="onMouseover()" (onmouseout)="onMouseout()" [@slideInOutSideMenu]="slideSideMenu ? true : false">
+    <div class="sidemenu" (mouseenter)="onMouseover()" (mouseleave)="onMouseout()" [@slideInOutSideMenu]="slideSideMenu ? true : false">
 <!--  [ngClass]="[slideSideMenu ? 'addslide-width':'removeslide-width']" [@slideInOut]="slideSideMenu ? true : false"-->
         <p class="org-property" [ngClass]="slideSideMenu ? 'showcontent' : 'hidecontent' ">
             <span>{{organization}} </span>

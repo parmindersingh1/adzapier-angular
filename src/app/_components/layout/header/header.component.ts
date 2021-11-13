@@ -715,9 +715,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
         }
         }
       }
-      // else {
-      //   this.loadOrgPropertyFromLocal();
-      // }
+      else {
+        this.loadOrgPropertyFromLocal();
+      }
 
     });
  }
@@ -926,6 +926,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
 
   loadOrgPropertyFromLocal() {
     this.selectedOrgProperties.length = 0;
+    if (this.orgPropertyMenu !== undefined) {
       const orgIndex = this.orgPropertyMenu.findIndex((t) => t.organization_id === this.queryOID);
       if (orgIndex === -1) {
         this.selectedOrgProperties.push(this.orgPropertyMenu[orgIndex]);
@@ -934,15 +935,16 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
       this.licenseAvailabilityForFormAndRequestPerOrg(this.orgPropertyMenu[orgIndex]);
       this.licenseAvailabilityForProperty(this.orgPropertyMenu[orgIndex]);
 
-   // const orgDetails = this.orgservice.getCurrentOrgWithProperty();
-   // if (orgDetails !== undefined && orgDetails.length > 0) {
+      // const orgDetails = this.orgservice.getCurrentOrgWithProperty();
+      // if (orgDetails !== undefined && orgDetails.length > 0) {
       if (this.orgPropertyMenu[orgIndex].user_id) { //=== this.userID
         this.currentOrganization = this.orgPropertyMenu[orgIndex].organization_name !== '' ? this.orgPropertyMenu[orgIndex].organization_name : this.orgPropertyMenu[orgIndex].response.orgname;
         this.currentProperty = this.orgPropertyMenu[orgIndex].property_name;
 
       }
       //  return this.currentProperty;
-   // }
+      // }
+    }
 
   }
 
