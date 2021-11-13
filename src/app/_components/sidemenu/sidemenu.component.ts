@@ -88,6 +88,7 @@ export class SidemenuComponent implements OnInit {
   }
 
   onClickonMenuArrow() {
+    this.userService.removeSidemenuOpenStatus();
     if (this.isMouseOver && this.slideSideMenu) {
       this.onClickSideMenuArrow.emit(this.slideSideMenu);
       this.isSideMenuArrowClicked = true;
