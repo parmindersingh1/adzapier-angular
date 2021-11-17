@@ -21,8 +21,7 @@ import { PricingComponent } from 'src/app/pagesettings/billing/pricing/pricing.c
   animations: [
     trigger('slideInOut', [
       state('true', style({
-        "max-width": "1040px",
-        "margin-left":"0",
+       "margin-left":"200px",
         transform: '  translateX(0)'
 
       })),
@@ -30,7 +29,7 @@ import { PricingComponent } from 'src/app/pagesettings/billing/pricing/pricing.c
 
         transform: 'translateX(1)'
       })),
-      transition('true <=> false', animate('50ms ease-in-out'))
+      transition('true <=> false', animate('200ms linear'))
     ])
 
   ]
@@ -62,6 +61,9 @@ export class AppComponent implements OnInit {
   qsmdismissedstatus:boolean;
   isBillingpageUrl:boolean = false;
   //isuserclickonpage:boolean = false; //for later use to check page click event
+  isSidemenuOnHover:boolean = false;
+  isSidemenuMouseOut:boolean = false;
+  isSidemenuClick:boolean = false;
   constructor(private router: Router,
     private activatedRoute: ActivatedRoute,
     private modalService: BsModalService,
@@ -76,7 +78,7 @@ export class AppComponent implements OnInit {
     private location: Location,
     private cdRef: ChangeDetectorRef
   ) {
-    if (this.location.path().indexOf('/login') !== -1 || this.location.path().indexOf('signup') !== -1) {
+    if (this.location.path().indexOf('/login') !== -1 || this.location.path().indexOf('signup') !== -1 || this.location.path().indexOf('invited-user-verify-email') !== -1) {
       this.isloginpage = true;
     } else {
       this.isloginpage = false;
@@ -127,7 +129,7 @@ export class AppComponent implements OnInit {
     this.openUnAuthModal();
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
-        if (event.url.indexOf('/resetpswd') !== -1 || event.url.indexOf('/verify-email') !== -1) {
+        if (event.url.indexOf('/resetpswd') !== -1 || event.url.indexOf('/verify-email') !== -1 || event.url.indexOf('invited-user-verify-email') !== -1) {
           this.hideHeaderFooter = true;
           this.authenticationService.logout();
           this.ccpaFormConfigurationService.removeControls();
@@ -252,7 +254,7 @@ export class AppComponent implements OnInit {
   // }
 
   ngAfterContentChecked() {
-  
+    this.isSidemenuClick = this.userService.isSideMenuClicked;
   }
 
   ngAfterViewInit() {
@@ -282,7 +284,7 @@ export class AppComponent implements OnInit {
     }
 
     this.isquickstartopen = this.quickmenuService.isquickstartopen;
-    if (this.location.path().indexOf('/login') !== -1 || this.location.path().indexOf('signup') !== -1 || this.location.path().indexOf('resetpswd') !== -1) {
+    if (this.location.path().indexOf('/login') !== -1 || this.location.path().indexOf('signup') !== -1 || this.location.path().indexOf('resetpswd') !== -1 || this.location.path().indexOf('invited-user-verify-email') !== -1) {
       this.isloginpage = false;
     } else {
       this.isloginpage = true;

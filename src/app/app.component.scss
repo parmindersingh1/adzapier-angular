@@ -2,7 +2,7 @@
 
 .site-content {
     flex: 1;
-    padding: 20px 15px;
+    padding: 20px 0px 20px 0px;// 20px 15px; | 20px 0px 20px 30px;
     margin-top: 60px;
     min-height: calc(100vh + (-164px));
     // min-height: 415px;
@@ -398,4 +398,8 @@
   display: flex;
   min-height: 100%; // used percent instead of vh due to safari bug.
   flex-direction: column;
+}
+
+app-footer {
+  z-index: 1;
 }

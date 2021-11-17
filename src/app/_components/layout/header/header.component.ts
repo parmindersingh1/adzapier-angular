@@ -167,6 +167,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
   isborderapplied:boolean;
   isQSMDismissed:boolean;
   counter: any;
+  showSidemenu:boolean = false;
   constructor(
     private router: Router,
     private activatedroute: ActivatedRoute,
@@ -354,6 +355,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
     }
 
     this.getPropertyDetailsFromUrl();
+    this.checkPathForSideMenu();
   }
 
 
@@ -713,9 +715,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
         }
         }
       }
-      // else {
-      //   this.loadOrgPropertyFromLocal();
-      // }
+      else {
+        this.loadOrgPropertyFromLocal();
+      }
 
     });
  }
@@ -924,6 +926,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
 
   loadOrgPropertyFromLocal() {
     this.selectedOrgProperties.length = 0;
+    if (this.orgPropertyMenu !== undefined) {
       const orgIndex = this.orgPropertyMenu.findIndex((t) => t.organization_id === this.queryOID);
       if (orgIndex === -1) {
         this.selectedOrgProperties.push(this.orgPropertyMenu[orgIndex]);
@@ -932,15 +935,16 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
       this.licenseAvailabilityForFormAndRequestPerOrg(this.orgPropertyMenu[orgIndex]);
       this.licenseAvailabilityForProperty(this.orgPropertyMenu[orgIndex]);
 
-   // const orgDetails = this.orgservice.getCurrentOrgWithProperty();
-   // if (orgDetails !== undefined && orgDetails.length > 0) {
+      // const orgDetails = this.orgservice.getCurrentOrgWithProperty();
+      // if (orgDetails !== undefined && orgDetails.length > 0) {
       if (this.orgPropertyMenu[orgIndex].user_id) { //=== this.userID
         this.currentOrganization = this.orgPropertyMenu[orgIndex].organization_name !== '' ? this.orgPropertyMenu[orgIndex].organization_name : this.orgPropertyMenu[orgIndex].response.orgname;
         this.currentProperty = this.orgPropertyMenu[orgIndex].property_name;
 
       }
       //  return this.currentProperty;
-   // }
+      // }
+    }
 
   }
 
@@ -994,6 +998,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
         this.openModal(this.confirmModal);
         return false;
       }
+      this.currentClickedMenuItem = this.navigationMenu[1];
     }
 
     if (link.routerLink === '/home/dashboard/ccpa-dsar' || link.routerLink == '/privacy/dsar/webforms' || link.routerLink == '/privacy/dsar/requests' || link.routerLink == '/privacy/dsar/workflows') {
@@ -1006,6 +1011,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
         this.openModal(this.confirmModal);
         return false;
       }
+      this.currentClickedMenuItem = this.navigationMenu[0];
     }
 
     if (link.routerLink === '/home/dashboard/consent-preference' || link.routerLink == '/consent-solutions/consent-records' || link.routerLink == '/consent-solutions/setup' ) {
@@ -1018,6 +1024,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
         this.openModal(this.confirmModal);
         return false;
       }
+      this.currentClickedMenuItem = this.navigationMenu[2];
     }
 
     if (id !== undefined) {
@@ -1692,6 +1699,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
   }
 
   ngAfterViewChecked(){
+    this.checkPathForSideMenu();
      if (this.quickmenuService.getQuickstartDismissStatus() !== null) {
       if(this.quickmenuService.getQuickstartDismissStatus().isdismissed){
         this.isQSMDismissed = !this.quickmenuService.getQuickstartDismissStatus().isqstoplink;
@@ -2226,7 +2234,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
   }
 
   isLoginOrSignupPage():boolean{
-    if( this.location.path().indexOf('login') !== -1 || this.location.path().indexOf('signup') !== -1){
+    if( this.location.path().indexOf('login') !== -1 || this.location.path().indexOf('signup') !== -1 || this.location.path().indexOf('invited-user-verify-email') !== -1){
       return this.isloginpage = false;
     }else{
       return this.isloginpage = true;
@@ -2323,6 +2331,59 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
       this.renderer.addClass(this.navMenuEle.nativeElement.querySelectorAll('li > div')[2], 'highlightmenu-element');
       this.opendropdownTrigger(3, 'consentpreference');
     }
+  }
+
+  checkPathForSideMenu(){
+    if (this.location.path().indexOf('/home/dashboard/cookie-consent') !== -1 || this.location.path().indexOf('/cookie-consent/manage-vendors') !== -1 || this.location.path().indexOf('/cookie-consent/cookie-category') !== -1
+    || this.location.path().indexOf('/cookie-consent/cookie-banner') !== -1 || this.location.path().indexOf('/cookie-consent/cookie-tracking') !== -1 || this.location.path().indexOf('/cookie-consent/cookie-banner/setup') !== -1) {
+      this.showSidemenu = true;
+      this.currentClickedMenuItem = {
+        showlink: 'Cookie Consent',
+        subcategory: [
+          { showlink: 'Dashboard', routerLink: '/home/dashboard/cookie-consent', icon: 'bar-chart-2',indexid:3,navmenuid:10 },
+          { showlink: 'Manage Vendors', routerLink: '/cookie-consent/manage-vendors', icon: 'fas fa-tasks feather-16' },
+          { showlink: 'Cookie Category', routerLink: '/cookie-consent/cookie-category', icon: 'fab fa-microsoft feather-16',indexid:3,navmenuid:7 },
+          { showlink: 'Cookie Banner', routerLink: '/cookie-consent/cookie-banner', icon: 'fas fa-cookie feather-16',indexid:3,navmenuid:8 },
+          { showlink: 'Consent Tracking', routerLink: '/cookie-consent/cookie-tracking', icon: 'fas fa-file-contract feather-16',indexid:3,navmenuid:9 },
+          { showlink: 'Setup', routerLink: '/cookie-consent/cookie-banner/setup', icon: 'fas fa-wrench feather-16' },
+        ]
+      }; // this.navigationMenu[1];
+      this.userService.setSidemenulist(this.currentClickedMenuItem);
+    } else if (this.location.path().indexOf('/home/dashboard/ccpa-dsar') !== -1 || this.location.path().indexOf('/privacy/dsar/webforms') !== -1 || this.location.path().indexOf('/privacy/dsar/requests') !== -1 || this.location.path().indexOf('/privacy/dsar/workflows') !== -1) {
+      this.showSidemenu = true;
+      this.currentClickedMenuItem =  { 
+        showlink: 'DSAR',
+        tooltip:'Data Subject Access Request',
+      subcategory: [
+        { showlink: 'Dashboard', routerLink: '/home/dashboard/ccpa-dsar', icon: 'bar-chart-2', indexid:4, navmenuid:16 },
+        { showlink: 'Webforms', routerLink: '/privacy/dsar/webforms', icon: 'pie-chart',indexid:4,navmenuid:14 },
+        { showlink: 'Requests', routerLink: '/privacy/dsar/requests', icon: 'fa fa-ticket-alt feather-16',indexid:4,navmenuid:15 },
+        { showlink: 'Workflow', routerLink: '/privacy/dsar/workflows', icon: 'fas fa-sitemap',indexid:4,navmenuid:13 },
+      ]
+
+      };
+      this.userService.setSidemenulist(this.currentClickedMenuItem);
+    } else  if (this.location.path().indexOf('/home/dashboard/consent-preference') !== -1 || this.location.path().indexOf('/consent-solutions/consent-records') !== -1 || this.location.path().indexOf('/consent-solutions/setup') !== -1 ) {
+      this.showSidemenu = true;
+      this.currentClickedMenuItem =  {
+        showlink: 'Consent Preference',
+          subcategory: [
+            { showlink: 'Dashboard', routerLink: '/home/dashboard/consent-preference', icon: 'bar-chart-2',indexid:5,navmenuid:22 },
+            { showlink: 'Consent Records', routerLink: '/consent-solutions/consent-records', icon: 'fas fa-tasks feather-16',indexid:5,navmenuid:21 },
+            { showlink: 'Setup', routerLink: '/consent-solutions/setup', icon: 'fas fa-wrench feather-16',indexid:5,navmenuid:20 },
+          ]
+        }
+      this.userService.setSidemenulist(this.currentClickedMenuItem);
+    } else {
+      this.userService.removeSidemenulist();
+      this.showSidemenu = false;
+      this.currentClickedMenuItem = [];
+      this.userService.isSideMenuClicked = false;
+    }
+  }
+
+  checkSideMenuarrowClick($event){
+      this.userService.isSideMenuClicked = $event;
   }
 
   ngOnDestroy(){
