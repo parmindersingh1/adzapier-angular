@@ -129,7 +129,7 @@ export class AppComponent implements OnInit {
     this.openUnAuthModal();
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
-        if (event.url.indexOf('/resetpswd') !== -1 || event.url.indexOf('/verify-email') !== -1 || this.location.path().indexOf('invited-user-verify-email') !== -1) {
+        if (event.url.indexOf('/resetpswd') !== -1 || event.url.indexOf('/verify-email') !== -1 || event.url.indexOf('invited-user-verify-email') !== -1) {
           this.hideHeaderFooter = true;
           this.authenticationService.logout();
           this.ccpaFormConfigurationService.removeControls();
