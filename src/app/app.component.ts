@@ -21,8 +21,7 @@ import { PricingComponent } from 'src/app/pagesettings/billing/pricing/pricing.c
   animations: [
     trigger('slideInOut', [
       state('true', style({
-        "max-width": "1040px",
-        "margin-left":"0",
+       "margin-left":"200px",
         transform: '  translateX(0)'
 
       })),
@@ -30,7 +29,7 @@ import { PricingComponent } from 'src/app/pagesettings/billing/pricing/pricing.c
 
         transform: 'translateX(1)'
       })),
-      transition('true <=> false', animate('50ms ease-in-out'))
+      transition('true <=> false', animate('200ms linear'))
     ])
 
   ]
@@ -62,6 +61,9 @@ export class AppComponent implements OnInit {
   qsmdismissedstatus:boolean;
   isBillingpageUrl:boolean = false;
   //isuserclickonpage:boolean = false; //for later use to check page click event
+  isSidemenuOnHover:boolean = false;
+  isSidemenuMouseOut:boolean = false;
+  isSidemenuClick:boolean = false;
   constructor(private router: Router,
     private activatedRoute: ActivatedRoute,
     private modalService: BsModalService,
@@ -252,7 +254,7 @@ export class AppComponent implements OnInit {
   // }
 
   ngAfterContentChecked() {
-  
+    this.isSidemenuClick = this.userService.isSideMenuClicked;
   }
 
   ngAfterViewInit() {

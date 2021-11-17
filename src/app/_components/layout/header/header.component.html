@@ -495,4 +495,6 @@
     [guidancetext]="alertcontent" [isactualLinkclickedbyuser]="actuallinkstatus">
   </app-quickstartalert>
 </div>
-<!-- <app-sidemenu></app-sidemenu> -->
+<div *ngIf="currentUser && showSidemenu">
+<app-sidemenu  [organization]="currentOrganization" [currentmenu]="currentClickedMenuItem" [property]="currentProperty" (onClickSideMenuArrow)="checkSideMenuarrowClick($event)"></app-sidemenu>
+</div>
