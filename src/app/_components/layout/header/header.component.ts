@@ -2234,7 +2234,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
   }
 
   isLoginOrSignupPage():boolean{
-    if( this.location.path().indexOf('login') !== -1 || this.location.path().indexOf('signup') !== -1){
+    if( this.location.path().indexOf('login') !== -1 || this.location.path().indexOf('signup') !== -1 || this.location.path().indexOf('invited-user-verify-email') !== -1){
       return this.isloginpage = false;
     }else{
       return this.isloginpage = true;
