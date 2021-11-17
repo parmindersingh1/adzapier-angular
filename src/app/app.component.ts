@@ -78,7 +78,7 @@ export class AppComponent implements OnInit {
     private location: Location,
     private cdRef: ChangeDetectorRef
   ) {
-    if (this.location.path().indexOf('/login') !== -1 || this.location.path().indexOf('signup') !== -1) {
+    if (this.location.path().indexOf('/login') !== -1 || this.location.path().indexOf('signup') !== -1 || this.location.path().indexOf('invited-user-verify-email') !== -1) {
       this.isloginpage = true;
     } else {
       this.isloginpage = false;
@@ -129,7 +129,7 @@ export class AppComponent implements OnInit {
     this.openUnAuthModal();
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
-        if (event.url.indexOf('/resetpswd') !== -1 || event.url.indexOf('/verify-email') !== -1) {
+        if (event.url.indexOf('/resetpswd') !== -1 || event.url.indexOf('/verify-email') !== -1 || this.location.path().indexOf('invited-user-verify-email') !== -1) {
           this.hideHeaderFooter = true;
           this.authenticationService.logout();
           this.ccpaFormConfigurationService.removeControls();
@@ -284,7 +284,7 @@ export class AppComponent implements OnInit {
     }
 
     this.isquickstartopen = this.quickmenuService.isquickstartopen;
-    if (this.location.path().indexOf('/login') !== -1 || this.location.path().indexOf('signup') !== -1 || this.location.path().indexOf('resetpswd') !== -1) {
+    if (this.location.path().indexOf('/login') !== -1 || this.location.path().indexOf('signup') !== -1 || this.location.path().indexOf('resetpswd') !== -1 || this.location.path().indexOf('invited-user-verify-email') !== -1) {
       this.isloginpage = false;
     } else {
       this.isloginpage = true;
