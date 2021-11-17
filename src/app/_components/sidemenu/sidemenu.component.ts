@@ -1,5 +1,5 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { Component, Input, OnInit, Output,EventEmitter, HostListener } from '@angular/core';
+import { Component, Input, OnInit, Output,EventEmitter, HostListener, ElementRef } from '@angular/core';
 import { Router, ActivatedRoute, NavigationEnd, NavigationStart } from '@angular/router';
 import { UserService } from '../../_services/user.service';
 @Component({
@@ -13,7 +13,7 @@ import { UserService } from '../../_services/user.service';
        background:'#fff',
       })),
       state('false', style({
-        width:'20px',
+        width:'35px',
         background:'#fff',
       })),
      transition('false <=> true', animate('200ms linear'))
@@ -37,7 +37,10 @@ export class SidemenuComponent implements OnInit {
   menulink:any;
   isScrollingUp:boolean = false;
   isScrollingDown:boolean = false;
-  constructor(private activatedroute: ActivatedRoute,private userService:UserService) {
+  constructor(private activatedroute: ActivatedRoute,
+              private elRef:ElementRef,
+              private router: Router,
+              private userService:UserService) {
     this.activatedroute.queryParamMap
     .subscribe(params => {
       this.queryOID = params.get('oid');
@@ -46,6 +49,13 @@ export class SidemenuComponent implements OnInit {
    }
 
   ngOnInit(): void {
+    if (this.isSideMenuArrowClicked || this.slideSideMenu) {
+      this.elRef.nativeElement.querySelector('.sidemenu').removeEventListener('mouseenter', this.onMouseover, false);
+      this.elRef.nativeElement.querySelector('.sidemenu').removeEventListener('mouseleave', this.onMouseout, false);
+    } else {
+      this.elRef.nativeElement.querySelector('.sidemenu').addEventListener('mouseenter', this.onMouseover.bind(this));
+      this.elRef.nativeElement.querySelector('.sidemenu').addEventListener('mouseleave', this.onMouseout.bind(this));
+    }
     if(this.currentmenu !== undefined){
       this.getCurrentmenu();
     }
@@ -53,6 +63,8 @@ export class SidemenuComponent implements OnInit {
   }
 
   onMouseover() {
+    this.elRef.nativeElement.querySelector('.menu-arrow').removeEventListener('mouseenter',this.onMouseoveronArrow.bind(this));
+    this.elRef.nativeElement.querySelector('.menu-arrow').removeEventListener('mouseleave',this.onMouseout.bind(this));
    
     if (this.isSideMenuArrowClicked) {
       this.isMouseOver = false;
@@ -79,28 +91,38 @@ export class SidemenuComponent implements OnInit {
    }
   }
 
-  onMouseoutonArrow(event){
-    event.stopPropagation();
+  onMouseoutonArrow(){
+    if(this.slideSideMenu){
+      this.slideSideMenu = true;
+    }else{
+      this.slideSideMenu = false;
+    }
+
+    this.elRef.nativeElement.querySelector('.sidemenu').removeEventListener('mouseenter',this.onMouseover.bind(this));
+    this.elRef.nativeElement.querySelector('.sidemenu').removeEventListener('mouseleave',this.onMouseout.bind(this));
   }
 
-  onMouseoveronArrow(event){
-    event.stopPropagation();
+  onMouseoveronArrow(){
+    this.elRef.nativeElement.querySelector('.sidemenu').addEventListener('mouseenter',this.onMouseover.bind(this));
+   
+   if(!this.slideSideMenu){
+    this.slideSideMenu = false;
+    }else{
+      this.slideSideMenu = true;
+    }
+    this.elRef.nativeElement.querySelector('.sidemenu').removeEventListener('mouseenter',this.onMouseover.bind(this));
   }
 
   onClickonMenuArrow() {
     this.userService.removeSidemenuOpenStatus();
-    if (this.isMouseOver && this.slideSideMenu) {
+    this.isSideMenuArrowClicked = !this.isSideMenuArrowClicked;
+    if (this.slideSideMenu && this.isSideMenuArrowClicked) {
       this.onClickSideMenuArrow.emit(this.slideSideMenu);
-      this.isSideMenuArrowClicked = true;
       this.userService.setSidemenuOpenStatus(this.isSideMenuArrowClicked);
-      this.isMouseOver = false;
-      this.isMouseOut = false;
-    } else if (!this.isMouseOut && this.slideSideMenu) {
-      this.isSideMenuArrowClicked = !this.isSideMenuArrowClicked;
-      this.userService.setSidemenuOpenStatus(this.isSideMenuArrowClicked);
-      this.slideSideMenu = false;
+    }else{
+      this.slideSideMenu = !this.slideSideMenu;
       this.onClickSideMenuArrow.emit(this.slideSideMenu);
-      this.isMouseOut = true;
+      this.userService.setSidemenuOpenStatus(this.isSideMenuArrowClicked);
     }
   }
 
@@ -119,8 +141,19 @@ export class SidemenuComponent implements OnInit {
     }
   }
   
+  onClickSubmenu(link){
+    if(!this.isSideMenuArrowClicked){
+      this.slideSideMenu = false;
+    }
+    this.router.navigate([link], { queryParams: { oid: this.queryOID, pid: this.queryPID }});//queryParamsHandling: 'merge', skipLocationChange: false 
+  }
+
   ngOnChanges(){
     this.getCurrentmenu();
   }
 
+  ngAfterViewInit(){
+   this.elRef.nativeElement.querySelector('.sidemenu').addEventListener('mouseenter',this.onMouseover.bind(this));
+   this.elRef.nativeElement.querySelector('.sidemenu').addEventListener('mouseleave',this.onMouseout.bind(this));
+  }
 }

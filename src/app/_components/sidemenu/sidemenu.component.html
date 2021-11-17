@@ -1,25 +1,36 @@
 <div class="menuwrapper">
-    <div class="sidemenu" (mouseenter)="onMouseover()" (mouseleave)="onMouseout()" [@slideInOutSideMenu]="slideSideMenu ? true : false">
+    <div class="sidemenu" [@slideInOutSideMenu]="slideSideMenu ? true : false">
 <!--  [ngClass]="[slideSideMenu ? 'addslide-width':'removeslide-width']" [@slideInOut]="slideSideMenu ? true : false"-->
-        <p class="org-property" [ngClass]="slideSideMenu ? 'showcontent' : 'hidecontent' ">
-            <span>{{organization}} </span>
-            <span>{{property}}</span>
+        <p class="org-property" [ngClass]="slideSideMenu ? 'showcontent':'addwidth-toorgpro'"> 
+            <span [ngClass]="!slideSideMenu ? 'addwidth-toorgpro' : '' ">{{organization}} </span>
+            <span [ngClass]="!slideSideMenu ? 'addwidth-toorgpro' : '' ">{{property}}</span>
         </p>
-        <span class="menu-arrow"  [ngClass]="[isSideMenuArrowClicked ? 'menu-arrow-padding-left':'menu-arrow-padding',slideSideMenu ? 'movearrowright':'backtospace']" (click)="onClickonMenuArrow()" (mouseenter)="onMouseoveronArrow($event)" (mouseleave)="onMouseoutonArrow($event)"> <!--(mouseenter)="onMouseoveronArrow($event)" (mouseleave)="onMouseoutonArrow($event)" (mouseenter)="onMouseoveronArrow($event)" (mouseleave)="onMouseoutonArrow($event)"-->
+        <span class="menu-arrow"  [ngClass]="[isSideMenuArrowClicked ? 'menu-arrow-padding-left':'menu-arrow-padding',slideSideMenu ? 'movearrowright':'backtospace']" (click)="onClickonMenuArrow()"> <!--(mouseenter)="onMouseoveronArrow($event)" (mouseleave)="onMouseoutonArrow($event)" (mouseenter)="onMouseoveronArrow($event)" (mouseleave)="onMouseoutonArrow($event)"-->
             <i class="fas fa-chevron-right" [ngClass]="isSideMenuArrowClicked ? 'rotate-menu-arrow':''"></i>
         </span>
-        <div class="wrapper" [ngClass]="slideSideMenu ? 'showcontent' : 'hidecontent' ">
-            <div class="submenu" *ngIf="currentmenu" >
-                <p class="mb-0">{{menulink}}</p>
-                <div *ngFor="let menuitem of submenu" class="current-menu">
-                    <a [routerLink]="menuitem.routerLink" [queryParams]="{oid:queryOID , pid:queryPID}">
-                        <span *ngIf="menuitem.icon.indexOf('fa')===-1">
-                            <i-feather name="{{menuitem.icon}}" class="feather-16"></i-feather>{{menuitem.showlink}}
+        <div class="wrapper" [ngClass]="!slideSideMenu ? 'addwidth-tohide' : '' ">
+            <div class="submenu" *ngIf="currentmenu" [ngClass]="!slideSideMenu ? 'addwidth-tohide' : '' ">
+                <p class="mb-0" [ngClass]="slideSideMenu ? 'showcontent' : 'hidecontent' ">{{menulink}}</p>
+                <div *ngFor="let menuitem of submenu" id="linkmenu" class="current-menu">
+                    <button class="btn btn-link" (click)="onClickSubmenu(menuitem.routerLink)">
+                        <span *ngIf="menuitem.icon.indexOf('fa')===-1" class="d-flex">
+                            <i-feather name="{{menuitem.icon}}" class="feather-16"></i-feather>
+                            <span [ngClass]="slideSideMenu ? 'showcontent' : 'hidecontent' ">
+                            {{menuitem.showlink}}
+                            </span>
                         </span>
-                        <span *ngIf="menuitem.icon.indexOf('fa')===0"><i class="{{menuitem.icon}}"></i>{{menuitem.showlink}}</span>
-                    </a>
+                        <span *ngIf="menuitem.icon.indexOf('fa')===0"  class="d-flex">
+                            <i class="{{menuitem.icon}}"></i>
+                            <span [ngClass]="slideSideMenu ? 'showcontent' : 'hidecontent' ">
+                            {{menuitem.showlink}}
+                            </span>
+                        </span>
+                    </button>
                 </div>
             </div>
         </div>
     </div>
+    <span class="menu-arrow"  [ngClass]="[isSideMenuArrowClicked ? 'menu-arrow-padding-left':'menu-arrow-padding',slideSideMenu ? 'movearrowright hidearrowbtn':'backtospace']" (click)="onClickonMenuArrow()"> 
+        <i class="fas fa-chevron-right" [ngClass]="isSideMenuArrowClicked ? 'rotate-menu-arrow':''"></i>
+    </span>
 </div>
