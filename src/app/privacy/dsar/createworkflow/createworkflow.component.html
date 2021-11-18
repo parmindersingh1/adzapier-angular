@@ -53,7 +53,7 @@
                     <div class="col-sm-6 mb-3">
                         <form #quillEditorForm="ngForm">
                         <div class="col-sm-12 p-0">
-                            <label class="tx-10 tx-uppercase tx-medium"> <span class="red">*</span>
+                            <label class="tx-11 tx-medium"> <span class="red">*</span>
                                 Workflow</label>
                                 <div style="display: flex;flex-direction: row;">
                             <input type="text" [(ngModel)]="workflowName" #workflow_name="ngModel" name="workflowName" 
@@ -73,7 +73,7 @@
                         </div>
 
                             <div [ngClass]="{'hide':!skeletonLoading && !quillEditorForm.valid && workflowStages?.length == 0,'showerror':!skeletonLoading && !quillEditorForm.valid && workflowStages?.length != 0}">
-                            <label class="tx-10 tx-uppercase tx-medium"> <span class="red">*</span>
+                            <label class="tx-11 tx-medium"> <span class="red">*</span>
                                 Stage  <i-feather name="info" class="feather-16" *ngIf="isControlDisabled"
                                 tooltip="You can't edit the predefined stage name"></i-feather>
                                 </label>
@@ -85,7 +85,7 @@
                             <div *ngIf="stage_title?.invalid && !skeletonLoading" class="invalid-feedback">
                                 <div *ngIf="stage_title?.invalid && submitted">Stage is required</div>
                             </div>
-                            <label class="tx-10 tx-uppercase tx-medium"> <span class="red">*</span>
+                            <label class="tx-11 tx-medium"> <span class="red">*</span>
                                 Guidance Text  <i-feather name="info" class="feather-16" *ngIf="isControlDisabled"
                                 tooltip="You can't edit the predefined guidance text"></i-feather>
                                 </label>

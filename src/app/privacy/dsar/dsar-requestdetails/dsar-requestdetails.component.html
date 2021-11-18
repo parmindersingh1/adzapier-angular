@@ -20,19 +20,19 @@
                     <div class="d-flex">
                         <button *ngIf="duplicateRequest.length > 0" type="button" class="btn btn-sm btn-outline-secondary btn-uppercase mr-2" (click)="openDuplicateRequest()">View duplicate</button>
                         <button (click)="reOpenrequest()" *ngIf="currentWorkflowStage == 'Rejected'" class="btn btn-sm btn-outline-secondary btn-uppercase mr-2">Reopen</button>
-                            <button (click)="onRefresh()" class="btn btn-sm btn-uppercase btn-outline-secondary pt-2 mr-2 lineheight-22">
+                            <button (click)="onRefresh()" class="btn btn-sm btn-uppercase btn-outline-secondary pt-2 mr-2 lineheight-22" style="text-transform: none;font-size: 12px;">
                               <i class="fas fa-sync feather-16"></i> Refresh</button>
 
                         <button *ngIf="currentWorkflowStage !== 'Rejected'" (click)="openModalPopup(editRequestDetails,'')" data-toggle="modal"
-                            class="btn btn-sm btn-outline-secondary btn-uppercase mr-2"><svg xmlns="http://www.w3.org/2000/svg" width="24"
+                            class="btn btn-sm btn-outline-secondary btn-uppercase mr-2" style="text-transform: none;font-size: 12px;"><svg xmlns="http://www.w3.org/2000/svg" width="24"
                                 height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                 stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-2">
                                 <polygon points="16 3 21 8 8 21 3 21 3 16 16 3"></polygon>
                             </svg><span class="d-none d-sm-inline mg-l-5">
                                 Edit</span></button>
-                        <button  class="btn btn-sm btn-outline-secondary btn-uppercase mr-2" *ngIf="selectedStages.length !== 0 && currentWorkflowStage !== 'Rejected'"  (click)="openExtendModal()">Extend Days</button>
-                        <button  class="btn btn-sm btn-outline-secondary btn-uppercase mr-2" *ngIf="!isRequestCompleted && currentWorkflowStage !== 'Rejected'" (click)="openReqestRejectModal()">Reject</button>
-                         <button class="btn btn-sm  btn-uppercase btn-danger" (click)="removeDSARRequest('DSAR Request detail')">Delete</button>
+                        <button  class="btn btn-sm btn-outline-secondary btn-uppercase mr-2" *ngIf="selectedStages.length !== 0 && currentWorkflowStage !== 'Rejected'"  (click)="openExtendModal()" style="text-transform: none;font-size: 12px;">Extend Days</button>
+                        <button  class="btn btn-sm btn-outline-secondary btn-uppercase mr-2" *ngIf="!isRequestCompleted && currentWorkflowStage !== 'Rejected'" (click)="openReqestRejectModal()" style="text-transform: none;font-size: 12px;">Reject</button>
+                         <button class="btn btn-sm  btn-uppercase btn-danger" (click)="removeDSARRequest('DSAR Request detail')" style="text-transform: none;font-size: 12px;">Delete</button>
 
                     </div>
 
@@ -42,26 +42,26 @@
                         <!-- <ngx-skeleton-loader  *ngIf="skeletonLoading && respCDID"   count="3"></ngx-skeleton-loader> -->
 
                         <div class="col-sm">
-                            <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Request
+                            <label class="tx-11 tx-medium tx-spacing-1 tx-color-03 tx-sans mg-y-0">Request
                                 ID</label>
                                 <ngx-skeleton-loader  *ngIf="!respCDID" count="1"></ngx-skeleton-loader>
                             <p class="mg-b-0">{{respCDID}}</p>
                         </div>
                         <div class="col-sm">
-                            <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Request
+                            <label class="tx-11 tx-medium tx-spacing-1 tx-color-03 tx-sans mg-y-0">Request
                                 Types
                             </label>
                             <ngx-skeleton-loader  *ngIf="!requestType" count="1"></ngx-skeleton-loader>
                             <p class="mg-b-0">{{requestType}}</p>
                         </div>
                         <div class="col-sm">
-                            <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Due in</label>
+                            <label class="tx-11 tx-medium tx-spacing-1 tx-color-03 tx-sans mg-y-0">Due in</label>
                             <ngx-skeleton-loader  *ngIf="isNumber(getDueIn(respCreatedAt,respDaysLeft))" count="1"></ngx-skeleton-loader>
                             <p class="mg-b-0" *ngIf="!isNumber(getDueIn(respCreatedAt,respDaysLeft))"> {{getDueIn(respCreatedAt,respDaysLeft)}}</p>
                         </div>
 
                         <div class="col-sm">
-                            <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Date
+                            <label class="tx-11 tx-medium tx-spacing-1 tx-color-03 tx-sans mg-y-0">Date
                                 Opened
                             </label>
                             <ngx-skeleton-loader *ngIf="!respCreatedAt" count="1"></ngx-skeleton-loader>
@@ -69,7 +69,7 @@
                         </div>
 
                         <div class="col-sm">
-                            <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Request
+                            <label class="tx-11 tx-medium tx-spacing-1 tx-color-03 tx-sans mg-y-0">Request
                                 Accepting Agent</label>
                                 <ngx-skeleton-loader *ngIf="!reqAcceptingagent && skeletonCustomLoading" count="1"></ngx-skeleton-loader>
                             <p class="mg-b-0">{{reqAcceptingagent}}</p>
@@ -78,14 +78,14 @@
 
                         <div class="col-sm ">
                             <label
-                                class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Workflow</label>
+                                class="tx-11 tx-medium tx-spacing-1 tx-color-03 tx-sans mg-y-0">Workflow</label>
                                 <ngx-skeleton-loader *ngIf="!workflowName" count="1"></ngx-skeleton-loader>
                             <p class="mg-b-0">{{workflowName}}</p>
                         </div>
                     </div>
                     <div class="row row-sm pd-t-10 bd-t">
                         <div class="col-sm">
-                            <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Status</label>
+                            <label class="tx-11 tx-medium tx-spacing-1 tx-color-03 tx-sans mg-y-0">Status</label>
                                 <ngx-skeleton-loader *ngIf="!currentWorkflowStage" count="1"></ngx-skeleton-loader>
                             <p class="tx-spacing-1 tx-12 tx-semibold status-text tx-success"
                             [ngClass]="{'tx-success':currentWorkflowStage !== 'Rejected','tx-danger':currentWorkflowStage == 'Rejected' }">
@@ -93,14 +93,14 @@
                             </p>
                         </div>
                         <div class="col-sm">
-                            <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Subject
+                            <label class="tx-11 tx-medium tx-spacing-1 tx-color-03 tx-sans mg-y-0">Subject
                                 Type
                             </label>
                             <ngx-skeleton-loader *ngIf="!subjectType" count="1"></ngx-skeleton-loader>
                             <p class="mg-b-0">{{subjectType}}</p>
                         </div>
                         <div class="col-sm">
-                            <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Risk
+                            <label class="tx-11 tx-medium tx-spacing-1 tx-color-03 tx-sans mg-y-0">Risk
                                 Factor
                             </label>
                             <ngx-skeleton-loader *ngIf="!riskFactorText" count="1"></ngx-skeleton-loader>
@@ -108,7 +108,7 @@
                         </div>
 
                         <div class="col-sm">
-                            <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Deadline
+                            <label class="tx-11 tx-medium tx-spacing-1 tx-color-03 tx-sans mg-y-0">Deadline
                             </label>
                             <ngx-skeleton-loader *ngIf="!respDaysLeft" count="1"></ngx-skeleton-loader>
                             <p class="mg-b-0" *ngIf="respCreatedAt && respDaysLeft">
@@ -116,7 +116,7 @@
                         </div>
 
                         <div class="col-sm">
-                            <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Approver
+                            <label class="tx-11 tx-medium tx-spacing-1 tx-color-03 tx-sans mg-y-0">Approver
                             </label>
                             <ngx-skeleton-loader *ngIf="!respApprover" count="1"></ngx-skeleton-loader>
                             <p class="mg-b-0">{{respApprover}}</p>
@@ -125,7 +125,7 @@
 
                         <div class="col-sm ">
                             <label
-                                class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-y-0">Form</label>
+                                class="tx-11 tx-medium tx-spacing-1 tx-color-03 tx-sans mg-y-0">Form</label>
                                 <ngx-skeleton-loader *ngIf="!formName" count="1"></ngx-skeleton-loader>
                             <p class="mg-b-0">{{formName}}</p>
                         </div>
@@ -492,7 +492,7 @@
                 <div class="col-sm-12">
                     <div class="form-group">
                         <label for="requestacceptingagent"
-                            class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">Request accepting
+                            class="tx-11 tx-medium tx-spacing-1 mg-b-5 tx-color-03">Request accepting
                             agent</label>
                         <input type="text" class="form-control" formControlName="requestacceptingagent"
                             [ngClass]="{ 'is-invalid': isRequestDetailFormsubmit && editRequest.requestacceptingagent.errors }" />
@@ -508,7 +508,7 @@
             <div class="row">
                 <div class="col-sm-12 mb-3">
 
-                    <label for="riskfactor" class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">
+                    <label for="riskfactor" class="tx-11 tx-medium tx-spacing-1 mg-b-5 tx-color-03">
                         Select Risk factor</label>
                     <select class="form-control" formControlName="riskfactor"
                         [ngClass]="{ 'is-invalid': isRequestDetailFormsubmit && editRequest.riskfactor.errors }">
@@ -528,7 +528,7 @@
 
             <div class="row">
                 <div class="col-sm-12">
-                    <label for="workflowselect" class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">
+                    <label for="workflowselect" class="tx-11 tx-medium tx-spacing-1 mg-b-5 tx-color-03">
                         Select Approver</label>
                     <select class="form-control" formControlName="approver"
                         [ngClass]="{ 'is-invalid':  isRequestDetailFormsubmit && editRequest.approver.errors}">
@@ -546,7 +546,7 @@
             </div>
             <div class="row">
                 <div class="col-sm-12">
-                    <label for="workflowselect" class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">
+                    <label for="workflowselect" class="tx-11 tx-medium tx-spacing-1 mg-b-5 tx-color-03">
                         Country</label>
                     <input formControlName="country" autocomplete="false" [typeahead]="countryList"
                         typeaheadOptionField="name" [typeaheadScrollable]="true" [typeaheadOptionsInScrollableView]="5"
@@ -562,7 +562,7 @@
 
             <div class="row">
                 <div class="col-sm-12">
-                    <label for="workflowselect" class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">
+                    <label for="workflowselect" class="tx-11 tx-medium tx-spacing-1 mg-b-5 tx-color-03">
                         Select State</label>
                     <input formControlName="state" autocomplete="new" [typeahead]="filteredStateList"
                         typeaheadOptionField="name"
@@ -576,7 +576,7 @@
             </div>
             <div class="row">
                 <div class="col-sm-12">
-                    <label for="workflowselect" class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">
+                    <label for="workflowselect" class="tx-11 tx-medium tx-spacing-1 mg-b-5 tx-color-03">
                         City</label>
                     <input type="text" autocomplete="false" class="form-control" formControlName="city"
                         [ngClass]="{ 'is-invalid': isRequestDetailFormsubmit && editRequest.city.errors }" />
@@ -605,7 +605,7 @@
 
 <ng-template #extendDays let-modal>
     <div class="modal-header">
-        <h4 class="modal-title" id="modal-basic-title">Extend days</h4>
+        <h4 class="modal-title" id="modal-basic-title">Extend Days</h4>
         <button type="button" class="close" aria-label="Close" (click)="decline()">
             <span aria-hidden="true">&times;</span>
         </button>
@@ -649,7 +649,7 @@
 </ng-template>
 <ng-template #rejectRequest let-modal>
     <div class="modal-header">
-        <h4 class="modal-title" id="modal-basic-title">Reject request</h4>
+        <h4 class="modal-title" id="modal-basic-title">Reject Request</h4>
         <button type="button" class="close" aria-label="Close" (click)="decline()">
             <span aria-hidden="true">&times;</span>
         </button>
@@ -661,8 +661,8 @@
                 <div class="col-sm-6">
                     <div class="form-group mg-b-5">
                         <label for="reason"
-                            class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">
-                            Select reason</label>
+                            class="tx-13 tx-medium tx-spacing-1 mg-b-5 tx-color-03">
+                            <span class="color-red">*</span>Select reason</label>
                             <select (change)="onChangeReason($event)"
                                                 formControlName="reason" class="form-control">
                                                 <option selected disabled value="">select reason</option>

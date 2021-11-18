@@ -11,7 +11,7 @@
   </div>
   <div class="shadowdiv" *ngIf="webFormControlList">
     <div class="webformheading p-3">
-      <h3 class="tx-uppercase tx-14 mb-0 tx-spacing-1 tx-color-02 tx-semibold">Web form name: <span class="text-capitalize text-primary mr-2">{{formName}}</span> <span class="badge tx-11" [ngClass]="showFormStatus() === 'Publish' ? 'badge-primary':'badge-secondary'">{{showFormStatus() === 'Publish' ? 'Active': 'Draft'}}</span></h3>
+      <h3 class="tx-14 mb-0 tx-spacing-1 tx-color-02 tx-semibold">Web form name: <span class="text-capitalize text-primary mr-2">{{formName}}</span> <span class="badge tx-11" [ngClass]="showFormStatus() === 'Publish' ? 'badge-primary':'badge-secondary'">{{showFormStatus() === 'Publish' ? 'Active': 'Draft'}}</span></h3>
     </div>
     <ul ngbNav #nav="ngbNav"  (navChange)="onNavChange($event)"  [(activeId)]="active" class="nav-tabs">
       <li [ngbNavItem]="1" [destroyOnHide]="false">
@@ -22,7 +22,7 @@
               <div class="col-6 align-items-center justify-content-between margin-auto">
 
                 <div class="form-group mb-2">
-                  <label for="formname" class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">Name</label>
+                  <label for="formname" class="tx-10 tx-medium tx-spacing-1 mg-b-5 tx-color-03">Name</label>
                   <input type="text" class="form-control" formControlName="formname" name="formname" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
                          [ngClass]="{ 'is-invalid': basicFormSubmitted && stepFormOne.formname.errors }" />
                   <div *ngIf="basicFormSubmitted && stepFormOne.formname.errors" class="invalid-feedback">
@@ -32,12 +32,12 @@
                 </div>
 
                 <div class="form-group mb-2">
-                  <label for="currentOrganization" class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">Organization</label>
+                  <label for="currentOrganization" class="tx-10 tx-medium tx-spacing-1 mg-b-5 tx-color-03">Organization</label>
                   <input type="text" class="form-control" formControlName="currentOrganization" name="currentOrganization" />
                 </div>
 
                 <div class="form-group mb-2">
-                  <label for="selectedProperty" class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">Property</label>
+                  <label for="selectedProperty" class="tx-10 tx-medium tx-spacing-1 mg-b-5 tx-color-03">Property</label>
                   <input type="text" class="form-control" formControlName="selectedProperty" name="selectedProperty" />
                 </div>
               </div>
@@ -98,7 +98,7 @@
                         <div class="d-flex justify-content-between">
                           <div class="p-2" *ngIf="!isAddingFormControl"><button
                             class="btn btn-xs btn-primary" (click)="addingFormControl()" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null">
-                            Add new</button></div>
+                            Add New</button></div>
                         </div>
                       </div>
 
@@ -350,7 +350,7 @@
 
                         <form [formGroup]="headerLogoForm">
                           <div>
-                            <label for="taskresponse" class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5">
+                            <label for="taskresponse" class="tx-11 tx-medium tx-spacing-1 mg-b-5">
                               Header logo</label>
                             <div class="upload-wrapper" [ngClass]="{'hide':headerlogoBase64,'show':!headerlogoBase64}">
                               <p>File Format PNG, JPG or JPEG, Max Size 1MB</p>
@@ -389,7 +389,7 @@
                       <div class="col-sm-12 mb-2">
                         <form [formGroup]="faviconForm">
                           <div>
-                            <label for="taskresponse" class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5">
+                            <label for="taskresponse" class="tx-11 tx-medium tx-spacing-1 mg-b-5">
                               Header Favicon</label>
                             <div class="upload-wrapper" [ngClass]="{'hide':headerfaviconBase64,'show':!headerfaviconBase64}">
                               <p>File Format PNG, JPG or JPEG, Max Size 1MB</p>
@@ -428,7 +428,7 @@
                       <div class="col-sm-12 mb-1">
                         <div class="formgroup d-flex justify-content">
                           <div class="col-md-5 p-0">
-                            <label class="col-form-label-sm tx-10 tx-uppercase tx-medium tx-spacing-1">Header Color</label>
+                            <label class="col-form-label-sm tx-11 tx-medium tx-spacing-1">Header Color</label>
                           </div>
                           <div class="col-md-6 d-flex color-controlwrapper">
                             <input type="color" [(ngModel)]="headerColor" (ngModelChange)="onColorSelection($event,'headerColor')" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null" />
@@ -441,7 +441,7 @@
                       <div class="col-sm-12 mb-1">
                         <div class="formgroup d-flex justify-content">
                           <div class="col-md-5 p-0">
-                            <label class="col-form-label-sm tx-10 tx-uppercase tx-medium tx-spacing-1">Welcome Text Color</label>
+                            <label class="col-form-label-sm tx-11 tx-medium tx-spacing-1">Welcome Text Color</label>
                           </div>
                           <div class="col-md-6 d-flex color-controlwrapper"><input type="color" class="form-control" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
                                                                                    [(ngModel)]="welcomeTextColor" (ngModelChange)="onColorSelection($event,'welcomeTextColor')"/>
@@ -453,7 +453,7 @@
                       <div class="col-sm-12 mb-1">
                         <div class="formgroup row justify-content">
                           <div class="col-md-5">
-                            <label class="col-form-label-sm tx-10 tx-uppercase tx-medium tx-spacing-1">Welcome Font Size </label>
+                            <label class="col-form-label-sm tx-11 tx-medium tx-spacing-1">Welcome Font Size </label>
                           </div>
                           <div class="col-sm-3">
                             <input type="number" min="13" max="20" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
@@ -465,7 +465,7 @@
                       <div class="col-sm-12 mb-1">
                         <div class="formgroup d-flex justify-content">
                           <div class="col-md-5 p-0">
-                            <label class="col-form-label-sm tx-10 tx-uppercase tx-medium tx-spacing-1">Footer Text Color</label>
+                            <label class="col-form-label-sm tx-11 tx-medium tx-spacing-1">Footer Text Color</label>
                           </div>
                           <div class="col-md-6 d-flex color-controlwrapper">
                             <input type="color" [(ngModel)]="footerTextColor" (ngModelChange)="onColorSelection($event,'footerTextColor')" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null" />
@@ -477,7 +477,7 @@
                       <div class="col-sm-12 mb-1">
                         <div class="formgroup row justify-content">
                           <div class="col-md-5">
-                            <label class="col-form-label-sm tx-10 tx-uppercase tx-medium tx-spacing-1">Footer Text Size</label>
+                            <label class="col-form-label-sm tx-11 tx-medium tx-spacing-1">Footer Text Size</label>
                           </div>
                           <div class="col-sm-3">
                             <input type="number" min="13" max="20"
@@ -859,7 +859,7 @@
           <div class="col-5 margin-auto">
             <form #settingsForm="ngForm">
               <div class="form-group mg-b-5">
-                <label for="defaultapprover" class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">
+                <label for="defaultapprover" class="tx-11  tx-medium tx-spacing-1 mg-b-5 tx-color-03">
                   Default Approver</label>
                 <select class="form-control" name="user" #userselect="ngModel" name="selectedApproverID" [(ngModel)]="selectedApproverID"
                         [ngClass]="{ 'is-invalid': userselect.invalid && userselect.errors?.required && isdraftsubmitted}" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null" required>
@@ -875,7 +875,7 @@
                 </div>
               </div>
               <div class="form-group mg-b-5">
-                <label for="workflow" class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">
+                <label for="workflow" class="tx-11 tx-medium tx-spacing-1 mg-b-5 tx-color-03">
                   Select Workflow</label>
                 <select class="form-control" name="workflow" #workflowselect="ngModel" [(ngModel)]="workflow"
                         [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
@@ -894,7 +894,7 @@
                 </div>
               </div>
               <div class="form-group mg-b-5">
-                <label for="daysleft" class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">Default
+                <label for="daysleft" class="tx-11 tx-medium tx-spacing-1 mg-b-5 tx-color-03">Default
                   days to
                   respond</label>
                 <input type="number" min="1" max="45" class="form-control" name="daysleft" #daysleftinput="ngModel" [(ngModel)]="daysleft"
@@ -906,7 +906,7 @@
                 <div *ngIf="errorMsgdaysleft" class="red p-1">{{errorMsgdaysleft}}</div>
               </div>
               <div class="form-group mg-b-5">
-                <label class="form-check-label pt-1 tx-10 tx-uppercase tx-medium tx-spacing-1 tx-color-03"> <span>Allow attachments</span></label>
+                <label class="form-check-label pt-1 tx-11 tx-medium tx-spacing-1 tx-color-03"> <span>Allow attachments</span></label>
                 <label for="fileupload"
                        class="switchchkbox float-right mt-n3 form-check-label tx-10 tx-uppercase tx-medium tx-spacing-1 tx-color-03">
                   <input type="checkbox" [checked]="isFileUploadRequired" class="form-check-input" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
@@ -917,7 +917,7 @@
                   <span>Allow user to attach file through portal</span>
                 </div>
                 <div class="form-check required-check" [ngClass]="{'show':isFileuploadRequiredFieldVisible ||!isFileuploadRequiredFieldVisible && isFileUploadRequired,'hide':!isFileuploadRequiredFieldVisible || isFileuploadRequiredFieldVisible && isFileUploadRequired}">
-                  <label class="form-check-label pt-1 tx-10 tx-uppercase tx-medium tx-spacing-1 tx-color-03"><span> Required Attachements </span></label>
+                  <label class="form-check-label pt-1 tx-11 tx-medium tx-spacing-1 tx-color-03"><span> Required Attachements </span></label>
                   <label class="switchchkbox float-right mt-n3 form-check-label tx-10 tx-uppercase tx-medium tx-spacing-1 tx-color-03"
                          for="gridCheck1">
                     <input class="form-check-input" name="changeControlType"
@@ -932,7 +932,7 @@
                 </div>
               </div>
               <div class="form-group mg-b-5">
-                <label class="form-check-label pt-1 tx-10 tx-uppercase tx-medium tx-spacing-1 tx-color-03"><span>Email Verification</span></label>
+                <label class="form-check-label pt-1 tx-11 tx-medium tx-spacing-1 tx-color-03"><span>Email Verification</span></label>
                 <label for="emailverification"
                        class="switchchkbox float-right mt-n3 form-check-label tx-10 tx-uppercase tx-medium tx-spacing-1 tx-color-03">
                   <input type="checkbox" [checked]="isEmailVerificationRequired" class="form-check-input"
@@ -944,7 +944,7 @@
                 </div>
               </div>
               <div class="form-group mg-b-5">
-                <label class="form-check-label pt-1 tx-10 tx-uppercase tx-medium tx-spacing-1 tx-color-03"><span>Captcha Verification</span></label>
+                <label class="form-check-label pt-1 tx-11 tx-medium tx-spacing-1 tx-color-03"><span>Captcha Verification</span></label>
                 <label for="captcha"
                        class="switchchkbox float-right mt-n3 form-check-label tx-10 tx-uppercase tx-medium tx-spacing-1 tx-color-03">
                   <input type="checkbox" [checked]="isCaptchaVerificationRequired" class="form-check-input"
@@ -1044,18 +1044,18 @@
       </li>
       <li>
         <div class="button-wrapper" [ngClass]="{ 'min-width-75' : isWebFormPublished && isDraftWebForm, 'min-width-170': crid !== null}">
-          <button  class="btn btn-link cancel-link" (click)="navigateToWebForm()">Back</button>
-          <button (click)="addUpdateDSARForm('save')" class="btn btn-sm pd-x-15 savebtn btn-uppercase lineheight-22 btn-outline-secondary" [ngClass]="isWebFormPublished && !isEditingPublishedForm || active === 4 ? 'hide' : ''">
+          <button  class="btn btn-link cancel-link" style="text-transform: none;font-size: 12px;" (click)="navigateToWebForm()">Back</button>
+          <button (click)="addUpdateDSARForm('save')" class="btn btn-sm pd-x-15 savebtn btn-uppercase lineheight-22 btn-outline-secondary" [ngClass]="isWebFormPublished && !isEditingPublishedForm || active === 4 ? 'hide' : ''" style="text-transform: none;font-size: 12px;">
             <i-feather class="feather-24 mr-1" name="save"></i-feather>Save</button>
 
           <button type="button" *ngIf="crid !== null" type="button" class="btn btn-sm pd-x-15 lineheight-22 btn-outline-secondary btn-uppercase ml-2 mr-1"
                   [attr.disabled]="isDirty ? true : null"
-                  (click)="togglePublish()">
+                  (click)="togglePublish()" style="text-transform: none;font-size: 12px;">
             <i-feather *ngIf="isWebFormPublished && !isEditingPublishedForm && !isResetlinkEnable" class="feather-24" name="edit-2"></i-feather>
             <i-feather *ngIf="isWebFormPublished && isEditingPublishedForm || !(isWebFormPublished && isEditingPublishedForm || isWebFormPublished)" name="upload-cloud"></i-feather>
             {{isWebFormPublished && !isEditingPublishedForm && !isResetlinkEnable ? 'Edit':' Publish'}}</button>
 
-          <a target="_blank" *ngIf="crid !== null" role="button" (click)="previewCCPAForm()" class="btn btn-sm pd-x-15 txt-gray lineheight-22 btn-outline-secondary btn-uppercase mg-l-5">
+          <a target="_blank" *ngIf="crid !== null" role="button" (click)="previewCCPAForm()" class="btn btn-sm pd-x-15 txt-gray lineheight-22 btn-outline-secondary btn-uppercase mg-l-5" style="text-transform: none;font-size: 12px;">
             <i-feather name="file-text" class="feather-24"></i-feather>
             Preview</a>
         </div>

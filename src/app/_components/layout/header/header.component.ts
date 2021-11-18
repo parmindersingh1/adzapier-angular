@@ -542,7 +542,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
           tooltip:'Data Subject Access Request',
         subcategory: [
           { showlink: 'Dashboard', routerLink: '/home/dashboard/ccpa-dsar', icon: 'bar-chart-2', indexid:4, navmenuid:16 },
-          { showlink: 'Webforms', routerLink: '/privacy/dsar/webforms', icon: 'pie-chart',indexid:4,navmenuid:14 },
+          { showlink: 'Web Forms', routerLink: '/privacy/dsar/webforms', icon: 'pie-chart',indexid:4,navmenuid:14 },
           { showlink: 'Requests', routerLink: '/privacy/dsar/requests', icon: 'fa fa-ticket-alt feather-16',indexid:4,navmenuid:15 },
           { showlink: 'Workflow', routerLink: '/privacy/dsar/workflows', icon: 'fas fa-sitemap',indexid:4,navmenuid:13 },
         ]

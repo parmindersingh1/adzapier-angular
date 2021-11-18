@@ -12,7 +12,7 @@
         Data Subject Access Requests
     </span>
       <div class="datepickerwrapper col-sm-9 pr-0 mr-0 ml-auto">
-        <button (click)="onRefresh()" class="btn btn-sm btn-uppercase btn-outline-secondary pt-2 lineheight-22">
+        <button (click)="onRefresh()" class="btn btn-sm btn-uppercase btn-outline-secondary pt-2 lineheight-22" style="text-transform: none;font-size: 12px;">
           <i class="fas fa-sync feather-16"></i> Refresh</button>
       <div class="col-sm-5 pr-0 pl-2 mr-2 d-flex row-reverse">
         <div class="input-group-prepend"  (click)="dp.show()">
@@ -27,7 +27,7 @@
       </div>
       <div class="bg-white">
       <button (click)="createWebFormRequestModal(createRequestModal,'')" data-toggle="modal" type="button"
-        class="btn btn-sm btn-uppercase btn-outline-secondary pt-2 lineheight-22">
+        class="btn btn-sm btn-uppercase btn-outline-secondary pt-2 lineheight-22" style="text-transform: none;font-size: 12px;">
         <i-feather class="feather-16" name="plus"></i-feather>
         <span class="d-none d-sm-inline mg-l-5">
           Create Request </span>
@@ -118,7 +118,7 @@
     <ng-template pTemplate="header"  let-columns>
 
       <tr>
-        <th>Id
+        <th>ID
         </th>
         <th>Request Type
         </th>
@@ -136,7 +136,7 @@
         </th>
         <th>Due In
         </th>
-        <th pSortableColumn="created_at">Created At <p-sortIcon field="created_at"></p-sortIcon>
+        <th pSortableColumn="created_at">Created at <p-sortIcon field="created_at"></p-sortIcon>
         </th>
       </tr>
 
@@ -219,7 +219,7 @@
           <div class="col-sm-12">
             <div class="form-group">
               <label for="webformselection"
-                class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">Web form templates</label>
+                class="tx-11 tx-medium tx-spacing-1 mg-b-5 tx-color-03">Web form templates</label>
               <select class="form-control" formControlName="webformselection" (change)="onWebformChange($event)"
                 [ngClass]="{ 'is-invalid': submitted && dsar.webformselection.errors }">
                 <option selected value="">Please select web form</option>
@@ -238,7 +238,7 @@
       </div>
       <div class="modal-footer">
         <button class="btn btn-link tx-decoration-underline tx-13" type="reset" aria-label="Close" (click)="onCancelClick()">Cancel</button>
-        <button class="btn btn-sm btn-outline-secondary btn-uppercase tx-13">Create</button>
+        <button class="btn btn-sm btn-outline-secondary btn-uppercase tx-13" style="text-transform: none;font-size: 12px;">Create</button>
       </div>
     </form>
   </ng-template>

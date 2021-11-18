@@ -24,7 +24,7 @@
 
             <div *ngIf="step == 1 && !id" class="inputs-key login-form bg-white">
                 <h4 class="tx-color-01 mg-b-5">Create New Account</h4>
-                <p class="tx-color-03 tx-16 mg-b-40">It's free to signup and only takes a minute.</p>
+                <p class="tx-color-03 tx-16 mg-b-40">It's free to signup and only takes a minute!</p>
                 <form [formGroup]="regForm" #registerForm id="registerForm" (ngSubmit)="onSubmit()">
                     <div class="row">
                         <div class="form-group col-md-6">
@@ -130,10 +130,10 @@
                             class="form-check-input" />
                         <label for="acceptPolicy" class="form-check-label"
                             [ngClass]="{ 'is-invalid': submitted && f.acceptPolicy.errors }">By clicking <strong>Create
-                                an account</strong> below, you agree to our <a
-                                href="https://adzapier.com/terms-of-service" target="_blank">terms of service</a> and <a
-                                href="https://adzapier.com/privacy-policy" target="_blank">privacy
-                                statement</a>.</label>
+                                 Account</strong>, you agree to our <a
+                                href="https://adzapier.com/terms-of-service" target="_blank">Terms of Services</a> and <a
+                                href="https://adzapier.com/privacy-policy" target="_blank">Privacy
+                                Policy</a>.</label>
                         <div *ngIf="submitted && f.acceptPolicy.errors" class="invalid-feedback">Accept terms of service
                             & privacy statement is required</div>
                     </div>
@@ -142,11 +142,11 @@
                             <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1 "></span> Create Account
                         </button>
                         <!--                         <button class="btn btn-primary mr-2" type="reset" (click)="onReset()">Reset</button> -->
-                        <div class="divider-text">or</div>
+                        <div class="divider-text tx-13" style="text-transform: none;">Or</div>
                         <!--          <button class="btn btn-outline-facebook btn-block">Sign Up With Facebook</button>-->
                         <!--            <button class="btn btn-outline-twitter btn-block">Sign Up With Twitter</button>-->
                         <div class="tx-18 mg-t-20 tx-center">Already have an account?
-                            <a routerLink="/login" class="btn btn-link font-weight-bold">Sign In</a>
+                            <a routerLink="/login" class="btn btn-link font-weight-bold">Sign in</a>
                         </div>
 
 

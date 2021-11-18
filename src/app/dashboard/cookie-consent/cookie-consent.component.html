@@ -28,7 +28,7 @@
           </div>
         </div>
 
-        <button (click)="onRefreshAll()" class="btn btn-sm btn-white btn-uppercase pd-x-15 mg-t-5 mg-sm-t-0  mg-sm-l-5">
+        <button (click)="onRefreshAll()" class="btn btn-sm btn-white btn-uppercase pd-x-15 mg-t-5 mg-sm-t-0  mg-sm-l-5" style="text-transform: none;font-size: 12px;">
           <i data-feather="eye"
              class="mg-r-5"></i>
           Refresh
@@ -45,7 +45,7 @@
         <div class="col-4 col-sm-2 col-md-2 ">
           <h4 class="tx-normal tx-rubik mg-b-10">{{dashboardCount.totalConsent}}</h4>
 
-          <h6 class="tx-uppercase tx-spacing-1 tx-semibold tx-10 tx-color-02 mg-b-2">Total Consents</h6>
+          <h6 class="tx-spacing-1 tx-semibold tx-11 tx-color-02 mg-b-2">Total Consents</h6>
 
         </div><!-- col -->
         <div class="col-6 col-sm-4 col-md-3 col-lg bd-l">
@@ -57,7 +57,7 @@
           </div>
 
           <h6
-            class="tx-uppercase tx-spacing-1 tx-semibold tx-10 tx-color-02 mg-b-2">
+            class="tx-spacing-1 tx-semibold tx-11 tx-color-02 mg-b-2">
             Accept All</h6>
 
         </div><!-- col -->
@@ -68,7 +68,7 @@
                  role="progressbar" attr.aria-valuenow="{{dashboardCount.saveSetting}}" aria-valuemin="0"
                  aria-valuemax="100"></div>
           </div>
-          <h6 class="tx-uppercase tx-spacing-1 tx-semibold tx-10 tx-color-02 mg-b-2">Save Settings</h6>
+          <h6 class=" tx-spacing-1 tx-semibold tx-11 tx-color-02 mg-b-2">Save Settings</h6>
 
         </div><!-- col -->
         <div class="col-6 col-sm-4 col-md-3 col-lg mg-t-20 mg-md-t-0 bd-l">
@@ -78,7 +78,7 @@
                  role="progressbar" attr.aria-valuenow="{{dashboardCount.rejectAll}}" aria-valuemin="0"
                  aria-valuemax="100"></div>
           </div>
-          <h6 class="tx-uppercase tx-spacing-1 tx-semibold tx-10 tx-color-02 mg-b-2">Reject ALL</h6>
+          <h6 class="tx-spacing-1 tx-semibold tx-11 tx-color-02 mg-b-2">Reject ALL</h6>
 
         </div><!-- col -->
         <div class="col-6 col-sm-4 col-md-3 col-lg mg-t-20 mg-lg-t-0 bd-l">
@@ -88,7 +88,7 @@
                  role="progressbar" attr.aria-valuenow="{{dashboardCount.close}}" aria-valuemin="0"
                  aria-valuemax="100"></div>
           </div>
-          <h6 class="tx-uppercase tx-spacing-1 tx-semibold tx-10 tx-color-02 mg-b-2">Close</h6>
+          <h6 class="tx-spacing-1 tx-semibold tx-11 tx-color-02 mg-b-2">Close</h6>
 
         </div><!-- col -->
         <div class="col-6 col-sm-4 col-md-3 col-lg mg-t-20 mg-lg-t-0 bd-l">
@@ -98,7 +98,7 @@
                  role="progressbar" attr.aria-valuenow="{{dashboardCount.doNotSale}}" aria-valuemin="0"
                  aria-valuemax="100"></div>
           </div>
-          <h6 class="tx-uppercase tx-spacing-1 tx-semibold tx-10 tx-color-02 mg-b-2">Do not Sell</h6>
+          <h6 class="tx-spacing-1 tx-semibold tx-11 tx-color-02 mg-b-2">Do not Sell</h6>
 
         </div><!-- col -->
 
@@ -115,7 +115,7 @@
     <div class="col-md-6 col-xl-4  order-md-1 order-xl-0">
       <div class="card ">
         <div class="card-header req-header d-flex align-items-center justify-content-between">
-          <h6 class="mg-b-0">Request By State</h6>
+          <h6 class="mg-b-0" style="text-transform: none;font-size: 14px;">Request by State</h6>
           <div class="dropdown dp-safari">
             <select (change)="onSelectCountryMap($event)" class="form-control" id="sel1">
               <option value="us">USA</option>
@@ -139,11 +139,11 @@
     <div class="col-md-4 mg-t-10 mg-md-t-0">
       <div class="card">
         <div class="card-header pd-t-20 ">
-          <h6 class="mg-b-0">Opt In Activities</h6>
+          <h6 class="mg-b-0" style="text-transform: none;font-size: 14px;">Opt-in Activities</h6>
         </div><!-- card-header -->
         <div class="card-body activity-card  pd-y-10">
           <div  *ngIf="!loadingSkeleton.two">
-          <h6 class="tx-uppercase tx-spacing-1 tx-semibold tx-10 tx-color-02 mg-b-15">Performance Score</h6>
+          <h6 class="tx-spacing-1 tx-semibold tx-11 tx-color-02 mg-b-15">Performance Score</h6>
           <div class="progress bg-transparent op-7 ht-10 mg-b-15">
             <div class="progress-bar bg-primary"
                  [ngStyle]="{'width': onCalculateOptValue(optIn.allow_essantial, optIn.total_consents)+'%'}"
@@ -234,11 +234,11 @@
     <div class="col-md-4 mg-t-10 mg-md-t-0">
       <div class="card">
         <div class="card-header pd-t-20 ">
-          <h6 class="mg-b-0">Optout Activities</h6>
+          <h6 class="mg-b-0" style="text-transform: none;font-size: 14px;">Opt-out Activities</h6>
         </div><!-- card-header -->
         <div class="card-body activity-card  pd-y-10">
           <div *ngIf="!loadingSkeleton.three">
-          <h6 class="tx-uppercase tx-spacing-1 tx-semibold tx-10 tx-color-02 mg-b-15">Performance Score</h6>
+          <h6 class="tx-spacing-1 tx-semibold tx-11 tx-color-02 mg-b-15">Performance Score</h6>
           <div class="progress bg-transparent op-7 ht-10 mg-b-15">
             <div class="progress-bar bg-gray-900"
                  [ngStyle]="{'width': onCalculateOptValue(optOut.allow_essantial, optOut.total_consents)+'%'}"

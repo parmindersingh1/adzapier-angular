@@ -22,12 +22,12 @@
           <div class="col-md-12 btn-list">
             <div style="float: right" class="d-flex flex-column flex-sm-row mg-t-20 mg-md-t-0">
               <button class="btn btn-sm btn-uppercase btn-outline-secondary mr-2" type="button"
-                      (click)="onNavigate('/cookie-consent/cookie-banner', {oid:queryOID , pid:queryPID})">
+                      (click)="onNavigate('/cookie-consent/cookie-banner', {oid:queryOID , pid:queryPID})" style="text-transform: none;font-size: 12px;">
                 <i class="fa fa-cog" aria-hidden="true"></i>
                 Configure Banner
               </button>
               <button class="btn btn-sm btn-uppercase btn-outline-secondary mr-2" type="button"
-                      (click)="onNavigate('/cookie-consent/cookie-category/scan-details', {oid:queryOID , pid:queryPID})">
+                      (click)="onNavigate('/cookie-consent/cookie-category/scan-details', {oid:queryOID , pid:queryPID})" style="text-transform: none;font-size: 12px;">
                 <i class="fa-cookie fas feather-16"></i>
                 Cookie Scanning
               </button>
@@ -47,7 +47,7 @@
 
 
               <button (click)="onPublishCookie()" type="submit" [disabled]="cookieCategoryList.length === 0"
-                      class="btn btn-sm pd-x-15 btn-primary btn-uppercase mg-l-5"
+                      class="btn btn-sm pd-x-15 btn-primary btn-uppercase mg-l-5" style="text-transform: none;font-size: 12px;"
                       data-toggle="modal">
                 <ng-container *ngIf="!isPublish">
                   <i class="fa fa-upload pr-1" aria-hidden="true"></i>
@@ -98,7 +98,7 @@
             <ul class="list-inline d-flex mg-t-20 mg-sm-t-10 mg-md-t-0 mg-b-0">
               <li class="list-inline-item d-flex align-items-center">
                 <!-- <span class="d-block wd-10 ht-10 bg-df-1 rounded mg-r-5"></span> -->
-                <span class="tx-sans tx-uppercase tx-10 tx-medium tx-color-03  mg-r-5 ">Total Cookies</span>
+                <span class="tx-sans tx-11 tx-medium tx-color-03  mg-r-5 ">Total Cookies</span>
                 <span class="tx-sans tx-uppercase tx-10 tx-bold tx-color-03">{{purposeTotalCount}}</span>
               </li>
 
@@ -181,7 +181,7 @@
         <ng-template pTemplate="left">
           <span class="p-input-icon-left">
                     <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
-                           placeholder="Search..."/>
+                           placeholder="Search by name"/>
                                   <i class="pi pi-search"></i>
                 </span>
           <p-multiSelect class="ml-3" [options]="cols" [(ngModel)]="selectedColumns" optionLabel="header"
@@ -191,13 +191,13 @@
         </ng-template>
 
         <ng-template pTemplate="right">
-          <button type="button" class="btn btn-sm  btn-outline-secondary btn-uppercase mr-2" (click)="openNew()">
+          <button type="button" class="btn btn-sm  btn-outline-secondary btn-uppercase mr-2" (click)="openNew()" style="text-transform: none;font-size: 12px;">
             <i aria-hidden="true" class="fa fa-plus pr-1"></i> Add Cookie
           </button>
 
           <button type="button"
                   [disabled]="cookieCategoryList.length === 0"
-                  (click)="onGenerateCsv()" class="btn  btn-sm btn-outline-secondary btn-uppercase mr-2">
+                  (click)="onGenerateCsv()" class="btn  btn-sm btn-outline-secondary btn-uppercase mr-2" style="text-transform: none;font-size: 12px;">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                  class="feather feather-download mg-r-5">
@@ -235,7 +235,7 @@
               {{col.header}}
             </th>
             <th>Domain</th>
-            <th>Http Only</th>
+            <th>HTTP Only</th>
             <th>Secure</th>
             <th>Edit</th>
             <th>Delete</th>
@@ -286,7 +286,7 @@
           <div class="form-row">
 
             <div class="form-group col-md-6">
-              <label class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-0 tx-color-03"><i
+              <label class="tx-11 tx-medium tx-spacing-1 mg-b-0 tx-color-03"><i
                 class="tx-8 fa fa-asterisk tx-danger " aria-hidden="true"></i>Cookie
                 Name</label>
               <input type="text" formControlName="name" class="form-control" placeholder="Cookie Name">
@@ -298,7 +298,7 @@
 
 
             <div class="form-group col-md-6">
-              <label class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-0 tx-color-03">
+              <label class="tx-11 tx-medium tx-spacing-1 mg-b-0 tx-color-03">
                 <i class="tx-8 fa fa-asterisk tx-danger " aria-hidden="true"></i> Category</label>
               <select formControlName="category" id="my-select" class="form-control">
                 <option *ngFor="let obj of cookieCategories" [value]="obj.value">{{obj.label}}</option>
@@ -315,7 +315,7 @@
           <div class="form-row">
 
             <div class="form-group col-md-6">
-              <label class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-0 tx-color-03"><i
+              <label class="tx-11 tx-medium tx-spacing-1 mg-b-0 tx-color-03"><i
                 class="tx-8 fa fa-asterisk tx-danger " aria-hidden="true"></i> Domain</label>
               <input type="text" formControlName="domain" class="form-control" placeholder="Domain">
               <div *ngIf="submitted && f.domain.errors"
@@ -326,7 +326,7 @@
 
 
             <div class="form-group col-md-6">
-              <label class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-0 tx-color-03"><i
+              <label class="tx-11 tx-medium tx-spacing-1 mg-b-0 tx-color-03"><i
                 class="tx-8 fa fa-asterisk tx-danger " aria-hidden="true"></i> Path</label>
               <input type="text" formControlName="path" class="form-control" placeholder="Path">
               <div *ngIf="submitted && f.path.errors"
@@ -337,18 +337,18 @@
 
 
             <div class="form-group col-md-12">
-              <label class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-0 tx-color-03"><i
+              <label class="tx-11 tx-medium tx-spacing-1 mg-b-0 tx-color-03"><i
                 class="tx-8 fa fa-asterisk tx-danger " aria-hidden="true"></i> Party</label>
               <div class="col-sm-10">
                 <div class="form-check form-check-inline">
                   <input class="form-check-input" type="radio" formControlName="party" name="party" id="inlineRadio1"
                          value="first_party">
-                  <label class="form-check-label" for="inlineRadio1">First Party</label>
+                  <label class="form-check-label" for="inlineRadio1">First-Party</label>
                 </div>
                 <div class="form-check form-check-inline">
                   <input class="form-check-input" type="radio" formControlName="party" name="party" id="inlineRadio2"
                          value="third_party">
-                  <label class="form-check-label" for="inlineRadio2">Third Party</label>
+                  <label class="form-check-label" for="inlineRadio2">Third-Party</label>
                 </div>
               </div>
               <div *ngIf="submitted && f.party.errors"
@@ -361,7 +361,7 @@
 
 
           <div class="form-group mg-b-5">
-            <label><i class="tx-8 fa fa-asterisk tx-danger " aria-hidden="true"></i>
+            <label><i class="tx-11 fa fa-asterisk tx-danger " aria-hidden="true"></i>
               Description</label>
             <textarea formControlName="description" class="form-control"
                       rows="3"></textarea>
@@ -372,7 +372,7 @@
           </div>
 
           <div class="form-group mg-b-5">
-            <label><i class="tx-8 fa fa-asterisk tx-danger " aria-hidden="true"></i>
+            <label><i class="tx-11 fa fa-asterisk tx-danger " aria-hidden="true"></i>
               Value</label>
             <textarea formControlName="value" class="form-control" rows="3"></textarea>
             <div *ngIf="submitted && f.value.errors"

@@ -8,7 +8,7 @@
           <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
         </ol>
       </nav>
-      <h4 class="mg-b-0 tx-spacing--1">DSAR to Dashboard</h4>
+      <h4 class="mg-b-0 tx-spacing--1">DSAR Dashboard</h4>
     </div>
     <div class="d-none d-md-block">
       <span id="reportrange"
@@ -18,12 +18,12 @@
         <span></span> <i class="fa fa-caret-down"></i>
 
       </span>
-      <button style="width: 110px" (click)="onPrint()" class="btn btn-sm pd-x-15 btn-white btn-uppercase mg-l-5" id="printReport"><i
-        class="fas fa-print" style='font-size:14px'></i> Print
+      <button style="width: 110px" (click)="onPrint()" class="btn btn-sm pd-x-15 btn-white btn-uppercase mg-l-5" style="text-transform: none;font-size: 12px;" id="printReport"><i
+        class="fas fa-print" style='font-size:12px'></i> Print
       </button>
 
       <button style="width: 110px" (click)="onGetPropsAndOrgId(); onGetCcpaAndDsar(); onGetRequestByState()"
-              class="btn btn-sm pd-x-15 btn-white btn-uppercase mg-l-5"><i class="fas fa-sync"></i> Refresh
+              class="btn btn-sm pd-x-15 btn-white btn-uppercase mg-l-5" style="text-transform: none;font-size: 12px;"><i class="fas fa-sync"></i> Refresh
       </button>
 
 
@@ -33,7 +33,7 @@
   <div class="row row-xs">
     <div class="col-sm-2">
       <div class="card card-body">
-        <h6 class="tx-uppercase tx-11 tx-spacing-1 tx-color-02 tx-semibold mg-b-8">Request Received</h6>
+        <h6 class="tx-11 tx-spacing-1 tx-color-02 tx-semibold mg-b-8">Request Received</h6>
         <div class="d-flex d-lg-block d-xl-flex align-items-end">
           <h3 class="tx-normal tx-rubik mg-b-0 mg-r-5 lh-1">{{dashboardCount.REQUEST_RECEIVED}}</h3>
           <!-- <p class="tx-11 tx-color-03 mg-b-0"><span class="tx-medium tx-success">100 <i class="icon ion-md-arrow-up"></i></span> than last week</p> -->
@@ -52,7 +52,7 @@
     </div><!-- col -->
     <div class="col-sm-2 mg-t-10 mg-sm-t-0">
       <div class="card card-body">
-        <h6 class="tx-uppercase tx-11 tx-spacing-1 tx-color-02 tx-semibold mg-b-8">Request In PROGRESS</h6>
+        <h6 class="tx-11 tx-spacing-1 tx-color-02 tx-semibold mg-b-8">Request In Progress</h6>
         <div class="d-flex d-lg-block d-xl-flex align-items-end">
           <h3 class="tx-normal tx-rubik mg-b-0 mg-r-5 lh-1">{{dashboardCount.REQUEST_IN_PROGRESS}}</h3>
           <!-- <p class="tx-11 tx-color-03 mg-b-0"><span class="tx-medium tx-danger">10 <i class="icon ion-md-arrow-down"></i></span> than last week</p> -->
@@ -71,7 +71,7 @@
     </div><!-- col -->
     <div class="col-sm-2 mg-t-10 mg-lg-t-0">
       <div class="card card-body">
-        <h6 class="tx-uppercase tx-11 tx-spacing-1 tx-color-02 tx-semibold mg-b-8">Request Completed</h6>
+        <h6 class="tx-11 tx-spacing-1 tx-color-02 tx-semibold mg-b-8">Request Completed</h6>
         <div class="d-flex d-lg-block d-xl-flex align-items-end">
           <h3 class="tx-normal tx-rubik mg-b-0 mg-r-5 lh-1">{{dashboardCount.REQUEST_COMPLETED}}</h3>
           <!-- <p class="tx-11 tx-color-03 mg-b-0"><span class="tx-medium tx-danger">0.3% <i class="icon ion-md-arrow-down"></i></span> than last week</p> -->
@@ -92,7 +92,7 @@
 
     <div class="col-sm-2 mg-t-10 mg-lg-t-0">
       <div class="card card-body">
-        <h6 class="tx-uppercase tx-11 tx-spacing-1 tx-color-02 tx-semibold mg-b-8">Request Rejected</h6>
+        <h6 class="tx-11 tx-spacing-1 tx-color-02 tx-semibold mg-b-8">Request Rejected</h6>
         <div class="d-flex d-lg-block d-xl-flex align-items-end">
           <h3 class="tx-normal tx-rubik mg-b-0 mg-r-5 lh-1">{{dashboardCount.REQUEST_REJECTED}} </h3>
           <!-- <p class="tx-11 tx-color-03 mg-b-0"><span class="tx-medium tx-success">2.1% <i class="icon ion-md-arrow-up"></i></span> than last week</p> -->
@@ -111,7 +111,7 @@
     </div><!-- col -->
     <div class="col-sm-2 mg-t-10 mg-lg-t-0">
       <div class="card card-body">
-        <h6 class="tx-uppercase tx-11 tx-spacing-1 tx-color-02 tx-semibold mg-b-8">Request Deleted</h6>
+        <h6 class="tx-11 tx-spacing-1 tx-color-02 tx-semibold mg-b-8">Request Deleted</h6>
         <div class="d-flex d-lg-block d-xl-flex align-items-end">
           <h3 class="tx-normal tx-rubik mg-b-0 mg-r-5 lh-1">{{dashboardCount.REQUEST_DELETED}} </h3>
           <!-- <p class="tx-11 tx-color-03 mg-b-0"><span class="tx-medium tx-success">2.1% <i class="icon ion-md-arrow-up"></i></span> than last week</p> -->
@@ -132,7 +132,7 @@
 
     <div class="col-sm-2 mg-t-10 mg-lg-t-0">
       <div class="card card-body">
-        <h6 class=" avr-time-text tx-uppercase tx-11 tx-spacing-1 tx-color-02 tx-semibold mg-b-8">Avg. Time to Complete</h6>
+        <h6 class=" avr-time-text tx-11 tx-spacing-1 tx-color-02 tx-semibold mg-b-8">Avg Time to Complete</h6>
         <div class="d-flex d-lg-block d-xl-flex align-items-end">
           <h3 class="tx-normal tx-rubik mg-b-0 mg-r-5 lh-1">{{onAvgTime()}} days</h3>
           <!-- <p class="tx-11 tx-color-03 mg-b-0"><span class="tx-medium tx-success">2.1% <i class="icon ion-md-arrow-up"></i></span> than last week</p> -->
@@ -231,7 +231,7 @@
     <div class="div-height col-md-6 col-xl-4 mg-t-10 order-md-1 order-xl-0">
       <div class="card card-height">
         <div class="card-header state-header d-flex align-items-center justify-content-between">
-          <h6 class="mg-b-0">Request By State</h6>
+          <h6 class="mg-b-0">Request by State</h6>
           <div class="tx-13 d-flex align-items-center">
             <div class="btn-group" dropdown>
 
@@ -299,7 +299,7 @@
     <div class="div-height col-md-6 col-xl-4 mg-t-10">
       <div class="card ht-lg-100p">
         <div class="card-header d-flex align-items-center justify-content-between">
-          <h6 class="mg-b-0">Requests By Subject Type</h6>
+          <h6 class="mg-b-0">Requests by Subject Type</h6>
 
         </div><!-- card-header -->
         <ng-container *ngIf="!skeletonLoading">
