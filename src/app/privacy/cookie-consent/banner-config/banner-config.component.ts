@@ -1156,8 +1156,6 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
       return true;
     } else if (ext.toLowerCase() === 'jpg') {
       return true;
-    } else if (ext.toLowerCase() === 'svg') {
-      return true;
     } else if (ext.toLowerCase() === 'jpeg') {
       return true;
     }

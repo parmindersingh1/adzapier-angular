@@ -466,8 +466,8 @@
                         <p class=" mb-0  input-label pt-2">Company Logo</p>
                       </div>
                       <div class="col-md-8">
-                        <p class="mb-1 tx-12">File Type: .jgp, .png, .svg and .jpeg supported</p>
-                        <input type="file" accept="image/png, image/svg, image/jpeg" (change)="changeListener($event)">
+                        <p class="mb-1 tx-12">File Type: .jgp, .png and .jpeg supported</p>
+                        <input type="file" accept="image/png, image/jpg, image/jpeg" (change)="changeListener($event)">
                         <p *ngIf="companyLogoValidation.error" class="text-danger">{{companyLogoValidation.msg}}</p>
                       </div>
                       <div class="col-md-12">
