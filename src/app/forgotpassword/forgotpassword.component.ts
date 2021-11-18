@@ -66,7 +66,7 @@ export class ForgotpasswordComponent implements OnInit {
     const element = document.getElementById('main');
     element.classList.remove('container-fluid');
     element.style.padding = null;
-    element.classList.add('container');
+   // element.classList.add('container');
     element.classList.add('site-content');
   }
 

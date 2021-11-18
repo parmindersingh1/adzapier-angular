@@ -8,6 +8,7 @@ import {NgxUiLoaderService} from 'ngx-ui-loader';
 import {moduleName} from '../_constant/module-name.constant';
 import {animate, group, query, state, style, transition, trigger} from '@angular/animations';
 import { Observable, timer, Subscription } from 'rxjs';
+import {options} from 'ionicons/icons';
 
 const left = [
   query(':enter, :leave', style({ }), { optional: true }),
@@ -50,7 +51,7 @@ const right = [
       transition(':increment', right),
       transition(':decrement', left),
     ]),
-    
+
 
   ]
 
@@ -117,7 +118,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     const element = document.getElementById('main');
     element.classList.remove('container-fluid');
     element.style.padding = null;
-    element.classList.add('container');
+   // element.classList.add('container');
     element.classList.add('site-content');
   }
 
@@ -158,23 +159,29 @@ export class LoginComponent implements OnInit, OnDestroy {
       return;
 
     }
-
     this.loading = true;
     this.authenticationService.login(this.constructor.name, moduleName.loginModule, this.f.email.value, this.f.password.value)
       .pipe(first())
       .subscribe(
         data => {
-          // this.getLoggedInUserDetails();
-          this.authenticationService.userLoggedIn.next(true);
-          this.authenticationService.currentUserSubject.next(data);
-          localStorage.setItem('currentUser', JSON.stringify(data));
-          let params = this.route.snapshot.queryParams;
-          this.returnUrl = params['redirectURL'];
-          // if (params['redirectURL']) {
-          if (this.returnUrl) {
-            this.router.navigate([params['redirectURL']]);
+          if (data.response.hasOwnProperty('action')) {
+            if (data.response.action === 'required') {
+              this.router.navigate(['/signup'], {queryParams: {email: data.response.email, userID: data.response.userID, step: 'required'}});
+            }
+            return false;
           } else {
-            this.router.navigate(['/home/welcome']);
+            // this.getLoggedInUserDetails();
+            this.authenticationService.userLoggedIn.next(true);
+            this.authenticationService.currentUserSubject.next(data);
+            localStorage.setItem('currentUser', JSON.stringify(data));
+            let params = this.route.snapshot.queryParams;
+            this.returnUrl = params['redirectURL'];
+            // if (params['redirectURL']) {
+            if (this.returnUrl) {
+              this.router.navigate([params['redirectURL']]);
+            } else {
+              this.router.navigate(['/home/welcome']);
+            }
           }
         },
         error => {
@@ -191,7 +198,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         });
 
   }
-  
+
 
   onSubmitForgot() {
     this.submitted = true;

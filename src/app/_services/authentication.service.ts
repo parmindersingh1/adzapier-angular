@@ -39,11 +39,16 @@ export class AuthenticationService {
         const path = '/login';
         return this.http.post<any>(environment.apiUrl + path, { email, password })
             .pipe(map(user => {
-                if (user) {
+                if (user.response.hasOwnProperty('action')) {
+                  if (user.response.action === 'required') {
+                    this.router.navigate(['/signup'], {queryParams: {email: user.response.email, userID: user.response.userID, step: 'required'}});
+                  }
+                }
+                else if (user) {
                     // store user details and jwt token in local storage to keep user logged in between page refreshes
                     localStorage.setItem('currentUser', JSON.stringify(user));
                     this.currentUserSubject.next(user);
-                    if(this.redirectUrl){
+                    if (this.redirectUrl){
                         this.router.navigate([this.redirectUrl]);
                         this.redirectUrl = null;
                     }

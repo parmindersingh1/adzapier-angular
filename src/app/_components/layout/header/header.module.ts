@@ -6,6 +6,7 @@ import { HeaderRoutingModule } from './header-routing.module';
 import {ScrollingModule} from '@angular/cdk/scrolling';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { QuickstartalertModule } from 'src/app/_components/quickstartalert/quickstartalert.module';
+import { SidemenuModule } from 'src/app/_components/sidemenu/sidemenu.module';
 import {DropdownModule} from 'primeng/dropdown';
 
 
@@ -17,6 +18,7 @@ import {DropdownModule} from 'primeng/dropdown';
           HeaderRoutingModule,
           ScrollingModule,
           QuickstartalertModule,
+          SidemenuModule,
           DropdownModule,
           ReactiveFormsModule,
           FormsModule

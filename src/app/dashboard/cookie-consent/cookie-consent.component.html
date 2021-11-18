@@ -1,4 +1,4 @@
-<div class="container pd-x-0 pd-lg-x-10 pd-xl-x-0">
+<div class="neg-margin pd-x-0 pd-lg-x-10 pd-xl-x-0">
   <div class="d-sm-flex align-items-center justify-content-between mg-b-5 mg-lg-b-10 mg-xl-b-15">
     <div>
       <nav aria-label="breadcrumb">
@@ -22,7 +22,7 @@
           </div>
           <input type="text" [(ngModel)]="searchbydaterange" style="border-radius: 0"
                  class="form-control date-input border-left-0  border-right-0 rounded-right"
-                 bsDaterangepicker [bsConfig]="bsConfig"  #dp="bsDaterangepicker"  (onHidden)="onRefreshAll()">
+                 bsDaterangepicker [bsConfig]="bsConfig"  #dp="bsDaterangepicker" placement="bottom right" (onHidden)="onRefreshAll()">
           <div class="input-group-prepend border-left-0"  (click)="dp.show()">
             <span class="input-group-text rounded-left border-right-0 bg-white" id="inputGroup-sizing-sm"><i class="fa fa-calendar"></i></span>
           </div>
