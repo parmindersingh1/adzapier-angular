@@ -112,7 +112,13 @@ export class SqlQueryBuilderComponent implements OnInit, OnChanges {
   }
 
   onSelectTable(tableName) {
+
     this.tableName = tableName;
+    if (!tableName) {
+      this.step = [1];
+      this.sqlPageStep = 1;
+      return false;
+    }
     // this.loading.start();
     const params = {
       table: tableName
@@ -131,8 +137,13 @@ export class SqlQueryBuilderComponent implements OnInit, OnChanges {
           this.onCreateSqlBuilder();
         }
       }, error => {
+        this.step = [1];
+        this.sqlPageStep = 1;
         this.skLoading.two = false;
-        // this.loading.stop();
+        this.isOpen = true;
+        this.alertMsg = error;
+        this.alertType = 'danger';
+
       });
   }
   onCreateSqlBuilder() {

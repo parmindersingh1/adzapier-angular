@@ -208,8 +208,10 @@ export class DsarSystemComponent implements OnInit, OnChanges {
       || this.onFindSystemName(systemID) === 'activecampaign'
       || this.onFindSystemName(systemID) === 'sendinblue'
       || this.onFindSystemName(systemID) === 'moosend'
+      || this.onFindSystemName(systemID) === 'hubspot'
       || this.onFindSystemName(systemID) === 'sendgrid') {
       this.mailChimpData = data;
+      this.mailChimpForm.reset();
       this.openModal(this.mailChimpConnection);
       return false;
     }
@@ -333,14 +335,11 @@ export class DsarSystemComponent implements OnInit, OnChanges {
         // this.alertMsg = '';
         this.loading.stop();
         this.modalRef.hide();
+        this.mailChimpForm.reset();
       }, error => {
         this.isTesting = false;
-        // this.isOpen = true;
-        // this.alertMsg = error;
         this.errorMessage = error;
-        // this.alertType = 'danger';
         this.loading.stop();
-        this.modalRef.hide();
       });
   }
 
