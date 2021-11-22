@@ -291,7 +291,7 @@ export class CookieConsentComponent implements OnInit {
   onSetOtpIn(data) {
     const startDate = this.searchbydaterange[0].toJSON().split('T')[0];
     const endDate = this.searchbydaterange[1].toJSON().split('T')[0];
-    this.barChartLabels = [new Date(startDate) + ' - ' + new Date(endDate)];
+    this.barChartLabels = [startDate + ' - ' + endDate];
     this.barChartData = [
       { data:  [Number(data.allow_essantial)],  label: 'Essential' },
       { data: [Number(data.allow_functional)], label: 'Functional' },
