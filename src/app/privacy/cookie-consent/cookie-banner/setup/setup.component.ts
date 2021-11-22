@@ -146,7 +146,7 @@ export class SetupComponent implements OnInit {
   navigate() {
     this.modalRef.hide();
    // this.router.navigateByUrl('/cookie-consent/cookie-banner');
-    this.router.navigate(['/cookie-consent/cookie-banner'],{ queryParams: { oid: this.queryOID, pid: this.queryPID }, queryParamsHandling:'merge', skipLocationChange:false});
+    this.router.navigate(['/cookie-consent/banner-configuration'],{ queryParams: { oid: this.queryOID, pid: this.queryPID }, queryParamsHandling:'merge', skipLocationChange:false});
   }
 
   onClosed(alertMsg: any) {
