@@ -377,6 +377,7 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
       MuteBanner: [false],
       LayoutType: ['full-width-bottom'],
       PublishDate: [],
+      PublishDateDisplay: [],
       // BannerPosition: ['bottom'],
       BadgePosition: ['right'],
       // Language
@@ -615,6 +616,7 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
       DefaultLanguage: CONFIG.LanguageConfig.defaultLang,
       LayoutType: CONFIG?.LayoutType ? CONFIG?.LayoutType : 'full-width-bottom',
       PublishDate: CONFIG?.PublishDate,
+      PublishDateDisplay: CONFIG?.PublishDateDisplay,
       // BannerPosition: CONFIG.BannerPosition,
       BadgePosition: CONFIG.BadgePosition,
       BannerPrivacyLink: CONFIG.Banner.Privacy.privacyLink,
@@ -912,7 +914,8 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
       BadgePosition: this.BannerConfigurationForm.value.BadgePosition,
       CustomerBrandLogo: this.customerBrandLogo,
       ThemeType: this.themeType,
-      PublishDate: this.publishType === 'publish' ? new Date() : this.BannerConfigurationForm.value?.PublishDate,
+      PublishDate: this.BannerConfigurationForm.value?.PublishDate,
+      PublishDateDisplay: this.publishType === 'publish' ? new Date() : this.BannerConfigurationForm.value?.PublishDateDisplay,
       DisplayFrequency: {
         bannerPartialConsent: this.BannerConfigurationForm.value.DisplayPartialConsent,
         bannerPartialConsentType: this.BannerConfigurationForm.value.DisplayPartialConsentType,
@@ -1182,5 +1185,11 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
         pid: this.currrentManagedPropID
       }, queryParamsHandling: 'merge', skipLocationChange: false
     });
+  }
+  onSubmitWithReConsent() {
+    this.BannerConfigurationForm.patchValue({
+      PublishDate: new Date()
+    });
+    this.onSubmit();
   }
 }
