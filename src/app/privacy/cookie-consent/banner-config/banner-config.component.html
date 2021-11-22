@@ -65,10 +65,10 @@
             <button pButton pRipple type="submit"
                     [disabled]="contentSaving === 'saving' || BannerConfigurationForm.invalid"
                     (click)="publishType = 'draft'" label="Save" class="p-button-warning mr-2"></button>
-            <button pButton pRipple type="submit"
+            <button pButton pRipple type="button"
                     [disabled]="contentSaving === 'saving' || BannerConfigurationForm.invalid"
-                    (click)="publishType = 'publish'" label="Publish"></button>
-            <p class="publish-date-text" *ngIf="BannerConfigurationForm.value?.PublishDate">Last Published : {{BannerConfigurationForm.value?.PublishDate | timeago}}</p>
+                    (click)="openModal(ReConsentConfirmation)" label="Publish"></button>
+            <p class="publish-date-text" *ngIf="BannerConfigurationForm.value?.PublishDateDisplay">Last Published : {{BannerConfigurationForm.value?.PublishDateDisplay | timeago}}</p>
 
           </div>
         </div>
@@ -1438,6 +1438,21 @@
     <button type="button" class="btn btn-primary" (click)="goToSetup()"><i class="fa-wrench fas feather-16 pr-2"></i>
       Setup Banner
     </button>
+  </div>
+</ng-template>
+
+<ng-template #ReConsentConfirmation>
+  <div class="modal-body text-center">
+    <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="modalRef?.hide()">
+      <span aria-hidden="true" class="visually-hidden">&times;</span>
+    </button>
+    <h5 class="mb-3">You want to Reconsent All.!</h5>
+
+    <button pButton pRipple type="button"
+            (click)="publishType = 'publish'; onSubmit(); modalRef.hide()" label="No" class="p-button-warning mr-2"></button>
+    <button pButton pRipple type="button"
+            (click)="publishType = 'publish'; onSubmitWithReConsent(); modalRef.hide()" label="Yes"></button>
+    <p class="publish-date-text text-right pt-2" *ngIf="BannerConfigurationForm.value?.PublishDate">Last Reconsent date : {{BannerConfigurationForm.value?.PublishDate | timeago}}</p>
   </div>
 </ng-template>
 
