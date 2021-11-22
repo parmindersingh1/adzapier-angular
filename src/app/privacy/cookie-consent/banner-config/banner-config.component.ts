@@ -117,6 +117,7 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnInit() {
+    this.onGetAllCookies();
     this.onGetPropsAndOrgId();
     this.onGetAllowVendors();
     this.onInitForm();
