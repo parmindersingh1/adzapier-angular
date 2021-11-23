@@ -154,7 +154,7 @@
 <ng-template #mailChimpConnection>
   <div class="modal-header">
     <h4 class="modal-title text-center margin-auto">Test Connection</h4>
-    <button type="button" class="close pull-right ml-0" aria-label="Close" (click)="modalRef.hide()">
+    <button type="button" class="close pull-right ml-0" aria-label="Close" (click)="onResetTestEmailForm()">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
@@ -175,7 +175,7 @@
 
     </div>
     <div class="text-center">
-      <button type="button" (click)="modalRef.hide(); testEmail = ''" class="btn btn-secondary">Cancel</button>
+      <button type="button" (click)="onResetTestEmailForm()" class="btn btn-secondary">Cancel</button>
       <button type="button" (click)="onTestMailChimp()" class="ml-2 btn btn-primary">Submit</button>
     </div>
     </form>
