@@ -131,6 +131,9 @@ export class SqlQueryBuilderComponent implements OnInit, OnChanges {
           this.onCreateSqlBuilder();
         }
       }, error => {
+        this.isOpen = true;
+        this.alertMsg = 'Unable to get columns';
+        this.alertType = 'danger';
         this.skLoading.two = false;
         // this.loading.stop();
       });
