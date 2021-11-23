@@ -343,4 +343,9 @@ export class DsarSystemComponent implements OnInit, OnChanges {
       });
   }
 
+  onResetTestEmailForm(){
+    this.modalRef.hide();
+    this.errorMessage = '';
+    this.mailChimpForm.reset();
+  }
 }
