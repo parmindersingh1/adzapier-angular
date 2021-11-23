@@ -1,25 +1,32 @@
 <div class="menuwrapper">
     <div class="sidemenu" [@slideInOutSideMenu]="slideSideMenu ? true : false">
+        <!-- {{organization}} -->
 <!--  [ngClass]="[slideSideMenu ? 'addslide-width':'removeslide-width']" [@slideInOut]="slideSideMenu ? true : false"-->
         <p class="org-property" [ngClass]="slideSideMenu ? 'showcontent':'addwidth-toorgpro'"> 
-            <span [ngClass]="!slideSideMenu ? 'addwidth-toorgpro' : '' ">{{organization}} </span>
-            <span [ngClass]="!slideSideMenu ? 'addwidth-toorgpro' : '' ">{{property}}</span>
+            <span  [ngClass]="!slideSideMenu ? 'addwidth-toorgpro' : 'org-bg-expanded' " tooltip="{{organization}}" placement="right" [adaptivePosition]="true" container="body">
+                <span class="org-bg">{{ !slideSideMenu ? orgInitials : ''}} </span>
+                {{slideSideMenu ? organization : ''}} 
+            </span>
+            <span  [ngClass]="!slideSideMenu ? 'addwidth-toorgpro' : 'prop-bg-expanded' " tooltip="{{property}}" placement="right" [adaptivePosition]="true" container="body">
+                <span class="prop-bg">{{!slideSideMenu ? propInitials: ''}} </span>
+                {{slideSideMenu ? property: ''}}</span>
         </p>
-        <span class="menu-arrow"  [ngClass]="[isSideMenuArrowClicked ? 'menu-arrow-padding-left':'menu-arrow-padding',slideSideMenu ? 'movearrowright':'backtospace']" (click)="onClickonMenuArrow()"> <!--(mouseenter)="onMouseoveronArrow($event)" (mouseleave)="onMouseoutonArrow($event)" (mouseenter)="onMouseoveronArrow($event)" (mouseleave)="onMouseoutonArrow($event)"-->
+      
+        <span class="menu-arrow" tooltip="{{isSideMenuArrowClicked ? 'collapse':'expand'}}" placement="right" [adaptivePosition]="true" container="body"  [ngClass]="[isSideMenuArrowClicked ? 'menu-arrow-padding-left':'menu-arrow-padding',slideSideMenu ? 'movearrowright':'backtospace']" (click)="onClickonMenuArrow()"> <!--(mouseenter)="onMouseoveronArrow($event)" (mouseleave)="onMouseoutonArrow($event)" (mouseenter)="onMouseoveronArrow($event)" (mouseleave)="onMouseoutonArrow($event)"-->
             <i class="fas fa-chevron-right" [ngClass]="isSideMenuArrowClicked ? 'rotate-menu-arrow':''"></i>
         </span>
         <div class="wrapper" [ngClass]="!slideSideMenu ? 'addwidth-tohide' : '' ">
             <div class="submenu" *ngIf="currentmenu" [ngClass]="!slideSideMenu ? 'addwidth-tohide' : '' ">
-                <p class="mb-0" [ngClass]="slideSideMenu ? 'showcontent' : 'hidecontent' ">{{menulink}}</p>
-                <div *ngFor="let menuitem of submenu" id="linkmenu" class="current-menu">
-                    <button class="btn btn-link" (click)="onClickSubmenu(menuitem.routerLink)">
+                <p class="mb-0"  [ngClass]="slideSideMenu ? 'showcontent addtopmargin' : 'hidecontent removetopmargin' ">{{menulink}}</p>
+                <div *ngFor="let menuitem of submenu; let i = index" id="linkmenu" class="current-menu">
+                    <button class="btn btn-link" (click)="onClickSubmenu(menuitem.routerLink,i)" [ngClass]="currentMenuItemIndex == i ? 'selected-menu-item':''">
                         <span *ngIf="menuitem.icon.indexOf('fa')===-1" class="d-flex">
                             <i-feather name="{{menuitem.icon}}" class="feather-16"></i-feather>
                             <span [ngClass]="slideSideMenu ? 'showcontent' : 'hidecontent' ">
                             {{menuitem.showlink}}
                             </span>
                         </span>
-                        <span *ngIf="menuitem.icon.indexOf('fa')===0"  class="d-flex">
+                        <span *ngIf="menuitem.icon.indexOf('fa')===0"  class="d-flex align-itme-center">
                             <i class="{{menuitem.icon}}"></i>
                             <span [ngClass]="slideSideMenu ? 'showcontent' : 'hidecontent' ">
                             {{menuitem.showlink}}
@@ -30,7 +37,7 @@
             </div>
         </div>
     </div>
-    <span class="menu-arrow"  [ngClass]="[isSideMenuArrowClicked ? 'menu-arrow-padding-left':'menu-arrow-padding',slideSideMenu ? 'movearrowright hidearrowbtn':'backtospace']" (click)="onClickonMenuArrow()"> 
+    <span class="menu-arrow" tooltip="{{isSideMenuArrowClicked ? 'collapse':'expand'}}" placement="right" [adaptivePosition]="true" container="body" [ngClass]="[isSideMenuArrowClicked ? 'menu-arrow-padding-left':'menu-arrow-padding',slideSideMenu ? 'movearrowright hidearrowbtn':'backtospace']" (click)="onClickonMenuArrow()"> 
         <i class="fas fa-chevron-right" [ngClass]="isSideMenuArrowClicked ? 'rotate-menu-arrow':''"></i>
     </span>
 </div>
