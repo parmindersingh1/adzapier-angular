@@ -1,5 +1,5 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { Component, Input, OnInit, Output,EventEmitter, HostListener, ElementRef } from '@angular/core';
+import { Component, Input, OnInit, Output,EventEmitter, HostListener, ElementRef, ChangeDetectorRef, SimpleChanges } from '@angular/core';
 import { Router, ActivatedRoute, NavigationEnd, NavigationStart } from '@angular/router';
 import { UserService } from '../../_services/user.service';
 @Component({
@@ -9,7 +9,7 @@ import { UserService } from '../../_services/user.service';
   animations: [
     trigger('slideInOutSideMenu', [
       state('true', style({
-       width:'220px',
+       width:'240px',
        background:'#fff',
       })),
       state('false', style({
@@ -37,15 +37,21 @@ export class SidemenuComponent implements OnInit {
   menulink:any;
   isScrollingUp:boolean = false;
   isScrollingDown:boolean = false;
+  currentMenuItem:boolean = false;
+  currentMenuItemIndex:number;
+  orgInitials:any;
+  propInitials:any;
   constructor(private activatedroute: ActivatedRoute,
               private elRef:ElementRef,
               private router: Router,
+              private cdRef: ChangeDetectorRef,
               private userService:UserService) {
     this.activatedroute.queryParamMap
     .subscribe(params => {
       this.queryOID = params.get('oid');
       this.queryPID = params.get('pid');
      });
+     
    }
 
   ngOnInit(): void {
@@ -55,13 +61,17 @@ export class SidemenuComponent implements OnInit {
       this.getCurrentmenu();
     }
    this.onCheckSidemenustatus();
+   this.showOrgInitials(this.organization);
+   this.showPropInitials(this.property);
   }
 
   onMouseover() {
-    this.elRef.nativeElement.querySelector('.menu-arrow').removeEventListener('mouseenter',this.onMouseoveronArrow.bind(this));
-    this.elRef.nativeElement.querySelector('.menu-arrow').removeEventListener('mouseleave',this.onMouseoutonArrow.bind(this));
-    this.elRef.nativeElement.querySelector('.sidemenu').removeEventListener('mouseleave',this.onMouseout.bind(this), false);
+    this.elRef.nativeElement.querySelector('.menu-arrow').removeEventListener('mouseenter',this.onMouseoveronArrow.bind(this),true);
+    this.elRef.nativeElement.querySelector('.menu-arrow').removeEventListener('mouseleave',this.onMouseoutonArrow.bind(this),true);
+  
+    console.log('over..')
     if (this.isSideMenuArrowClicked) {
+      this.elRef.nativeElement.querySelector('.sidemenu').removeEventListener('mouseenter', this.onMouseover.bind(this), true);
       this.isMouseOver = false;
       this.isMouseOut = false;
      if (!this.slideSideMenu) {
@@ -72,9 +82,13 @@ export class SidemenuComponent implements OnInit {
       this.isMouseOver = true;
       this.isMouseOut = false;
     }
+    this.elRef.nativeElement.querySelector('.sidemenu').removeEventListener('mouseleave',this.onMouseout.bind(this), true);
+    this.elRef.nativeElement.querySelector('.sidemenu').removeEventListener('mouseenter', this.onMouseover.bind(this), true);
   }
 
   onMouseout() {
+    this.showOrgInitials(this.organization);
+    this.showPropInitials(this.property);
     this.elRef.nativeElement.querySelector('.menu-arrow').removeEventListener('mouseenter', this.onMouseoveronArrow.bind(this));
     this.elRef.nativeElement.querySelector('.menu-arrow').removeEventListener('mouseleave', this.onMouseoutonArrow.bind(this));
     this.elRef.nativeElement.querySelector('.sidemenu').removeEventListener('mouseenter', this.onMouseover.bind(this), false);
@@ -108,13 +122,15 @@ export class SidemenuComponent implements OnInit {
     }else{
       this.slideSideMenu = true;
     }
-    this.elRef.nativeElement.querySelector('.sidemenu').removeEventListener('mouseenter',this.onMouseover.bind(this));
+    this.elRef.nativeElement.querySelector('.sidemenu').removeEventListener('mouseenter',this.onMouseover.bind(this),true);
   }
 
   onClickonMenuArrow() {
     this.userService.removeSidemenuOpenStatus();
     this.isSideMenuArrowClicked = !this.isSideMenuArrowClicked;
     if (this.slideSideMenu && this.isSideMenuArrowClicked) {
+      this.elRef.nativeElement.querySelector('.sidemenu').removeEventListener('mouseenter', this.onMouseover.bind(this), true);
+      this.elRef.nativeElement.querySelector('.sidemenu').removeEventListener('mouseleave',this.onMouseout.bind(this), true);
       this.onClickSideMenuArrow.emit(this.slideSideMenu);
       this.userService.setSidemenuOpenStatus(this.isSideMenuArrowClicked);
     }else{
@@ -139,20 +155,53 @@ export class SidemenuComponent implements OnInit {
     }
   }
   
-  onClickSubmenu(link){
+  onClickSubmenu(link,linkIndex){
+    this.currentMenuItemIndex = linkIndex;
     if(!this.isSideMenuArrowClicked){
       this.slideSideMenu = false;
     }
-    this.elRef.nativeElement.querySelector('.sidemenu').removeEventListener('mouseleave',this.onMouseout.bind(this), false);
+    this.elRef.nativeElement.querySelector('.sidemenu').removeEventListener('mouseenter', this.onMouseover.bind(this));
+    this.elRef.nativeElement.querySelector('.sidemenu').removeEventListener('mouseleave',this.onMouseout.bind(this));
     this.router.navigate([link], { queryParams: { oid: this.queryOID, pid: this.queryPID }});//queryParamsHandling: 'merge', skipLocationChange: false 
   }
 
-  ngOnChanges(){
+  ngOnChanges(changes:SimpleChanges){
     this.getCurrentmenu();
+    console.log(changes,'changes..');
+   // console.log(this.organization,'organization..');
+    this.showOrgInitials(this.organization);
+    this.showPropInitials(this.property);
+     this.elRef.nativeElement.querySelector('.sidemenu').removeEventListener('mouseenter',this.onMouseover.bind(this));
+     this.elRef.nativeElement.querySelector('.sidemenu').removeEventListener('mouseleave',this.onMouseout.bind(this));
   }
 
   ngAfterViewInit(){
-   this.elRef.nativeElement.querySelector('.sidemenu').addEventListener('mouseenter',this.onMouseover.bind(this));
-   this.elRef.nativeElement.querySelector('.sidemenu').addEventListener('mouseleave',this.onMouseout.bind(this));
+   this.showOrgInitials(this.organization);
+   this.showPropInitials(this.property);
+    if(!this.slideSideMenu && !this.isSideMenuArrowClicked){
+        this.elRef.nativeElement.querySelector('.sidemenu').addEventListener('mouseenter',this.onMouseover.bind(this));
+        this.elRef.nativeElement.querySelector('.sidemenu').addEventListener('mouseleave',this.onMouseout.bind(this));
+    }
+    this.cdRef.detectChanges();
   }
+
+  showOrgInitials(orgname):string{
+   // if(!this.isSideMenuArrowClicked){
+      if(orgname !== undefined){
+        let o = orgname[0];
+        return this.orgInitials = o;
+      }
+    //}
+  }
+  
+  showPropInitials(propname):string{
+   //if(!this.isSideMenuArrowClicked){
+      if(propname !== undefined){
+        let p = propname[0];
+        return this.propInitials = p;
+      }
+   // }
+  }
+
+
 }

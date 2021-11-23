@@ -595,12 +595,17 @@ export class OrganizationdetailsComponent implements OnInit {
             this.onCancelClick();
           });
       } else {
+        let useremail = this.inviteUserOrgForm.getRawValue().emailid;
         const requestObj = {
           id: this.recordID,
           user_id: this.approverID,
+          email: useremail,
           role_id: this.inviteUserOrgForm.value.permissions,
           firstname: this.inviteUserOrgForm.value.firstname,
-          lastname: this.inviteUserOrgForm.value.lastname
+          lastname: this.inviteUserOrgForm.value.lastname,
+          orgid: this.organizationID,
+          user_level: 'organization',
+          action:'edit'
         };
         this.companyService.updateUserRole(this.constructor.name, moduleName.organizationDetailsModule, requestObj)
           .subscribe((data) => {
@@ -685,6 +690,7 @@ export class OrganizationdetailsComponent implements OnInit {
   }
 
   removeTeamMember(obj, control: string) {
+    obj['user_level']='organization';
     this.confirmTeammember = obj;
     this.controlname = control;
     this.selectedTeamMember = obj.user_email;
