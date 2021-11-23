@@ -246,4 +246,9 @@ export class SystemIntegrationComponent implements OnInit {
         this.errorMessage = error;
       });
   }
+  onResetTestEmailForm(){
+    this.modalRef.hide();
+    this.errorMessage = '';
+    this.mailChimpForm.reset();
+  }
 }
