@@ -10,7 +10,9 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {BsDatepickerConfig, DatepickerDateCustomClasses} from 'ngx-bootstrap/datepicker';
 import {ChartDataSets, ChartOptions, ChartType} from 'chart.js';
 import {Label} from 'ng2-charts';
-const colorCodes = [ '#f77eb9', '#fdb16d', '#c693f9',   '#65e0e0', '#69b2f8',   '#6fd39b'];
+
+const colorCodes = ['#f77eb9', '#fdb16d', '#c693f9', '#65e0e0', '#69b2f8', '#6fd39b'];
+
 interface Country {
   count: number;
   state: string;
@@ -46,9 +48,13 @@ export class CookieConsentComponent implements OnInit {
   public barChartOptions: ChartOptions = {
     responsive: true,
     // We use these empty structures as placeholders for dynamic theming.
-    scales: { xAxes: [{}], yAxes: [{ticks: {
+    scales: {
+      xAxes: [{}], yAxes: [{
+        ticks: {
           beginAtZero: true
-        }}] },
+        }
+      }]
+    },
 
     plugins: {
       datalabels: {
@@ -61,10 +67,15 @@ export class CookieConsentComponent implements OnInit {
   public barChartType: ChartType = 'bar';
   public barChartLegend = true;
   public barChartPlugins = ['test'];
-  public chartColors: any[] = [
-    {
-      backgroundColor:  [ '#f77eb9', '#fdb16d', '#c693f9',   '#65e0e0', '#69b2f8',   '#6fd39b']
-    }];
+  chartColors = [
+    { backgroundColor: '#f77eb9' },
+    { backgroundColor: '#fdb16d' },
+    { backgroundColor: '#c693f9' },
+    { backgroundColor: '#65e0e0' },
+    { backgroundColor: '#69b2f8' },
+    { backgroundColor: '#6fd39b' }
+  ];
+
   public barChartData: ChartDataSets[] = [];
 
   currentManagedOrgID: any;
@@ -292,14 +303,17 @@ export class CookieConsentComponent implements OnInit {
     const startDate = this.searchbydaterange[0].toJSON().split('T')[0];
     const endDate = this.searchbydaterange[1].toJSON().split('T')[0];
     this.barChartLabels = [startDate + ' - ' + endDate];
-    this.barChartData = [
-      { data:  [Number(data.allow_essantial)],  label: 'Essential' },
-      { data: [Number(data.allow_functional)], label: 'Functional' },
-      { data: [Number(data.allow_analytics)], label: 'Analytics' },
-      { data: [Number(data.allow_advertising)], label: 'Advertising' },
-      { data: [Number(data.allow_socialmedia)], label: 'Social Media' },
-      { data: [Number(data.allow_unknown)], label: 'Unclassified' },
-    ];
+    if (data.length > 0) {
+      const count = data[0];
+      this.barChartData = [
+        {data: [Number(count.allow_essantial_count)], label: 'Essential'},
+        {data: [Number(count.allow_functional_count)], label: 'Functional'},
+        {data: [Number(count.allow_analytics_count)], label: 'Analytics'},
+        {data: [Number(count.allow_advertising_count)], label: 'Advertising'},
+        {data: [Number(count.allow_social_media_count)], label: 'Social Media'},
+        {data: [Number(count.allow_unknown_count)], label: 'Unknown'},
+      ];
+    }
     this.cd.detectChanges();
   }
 
