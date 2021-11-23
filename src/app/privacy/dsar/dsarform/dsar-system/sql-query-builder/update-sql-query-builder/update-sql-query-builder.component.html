@@ -7,6 +7,7 @@
         <div class="form-group"  *ngIf="!skLoading.one">
           <!--          <label for="exampleFormControlSelect1">Table Name</label>-->
           <select (change)="sqlSelectField = [];onSelectTable(tableName.value)" #tableName class="form-control w-75" [(ngModel)]="tableNameText" id="exampleFormControlSelect1">
+            <option value="">--Select Table---</option>
             <option [value]="table[tableListKey]" *ngFor="let table of tableList">{{table[tableListKey]}}</option>
           </select>
         </div>

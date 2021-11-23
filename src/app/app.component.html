@@ -2,7 +2,7 @@
   <div class="row">
     <app-header class="w-100" [isqsmenuopen]="isquickstartopen" [isquickstartdismissed]="toggleQuickstartmenu" [qslinkobj]="qsmenulinkobj" (onClickEnableQuickStartMenu)="enableQuickStartMenu($event)" [isquicklinkclicked]="isquickLinkclicked" *ngIf="hideHeaderFooter"></app-header>
     <div class="center-div" [ngClass]="isBillingpageUrl ? 'blue-back' : ''">
-    <div id="main" class="site-content" [ngClass]="!isloginpage ? 'remove-btm-margin remove-top-margin' : ''"  [@slideInOut]="isSidemenuClick ? true : false" > <!-- [isclickonpage]="isuserclickonpage"  [@slideInOut]="isquickstartopen ? true : false"  [ngClass]="isquickstartopen ? 'change-margin' : ''"-->
+    <div id="main" class="site-content" [ngClass]="!isloginpage ? 'remove-btm-margin remove-top-margin' : ''" [@slideInOut]="isSidemenuClick ? true : false">
       <section class="container-fluid">
       <router-outlet></router-outlet>
       </section>

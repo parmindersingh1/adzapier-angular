@@ -13,13 +13,13 @@
 .wrapper{
     display: flex;
     flex-direction: column;
-    width: 220px;
+    //width: 220px;
     // padding: 10px;
     // overflow: hidden;
 }
 
 .submenu{
-    margin: 0;
+    margin: 10px 0px;
 }
 
 .submenu div a {
@@ -52,12 +52,12 @@
     height: 23px;
     position: fixed;
     background: #fff;
-    top: 90px;
+    top: 145px;
     left: 15px;
     font-size: 12px;
     line-height: 22px;
     text-align: center;
-    z-index: 9999;
+    z-index: 1050;
     transition: left 200ms linear; 
 }
 
@@ -89,10 +89,11 @@
     top: 0;
     left: 0;
     bottom: 60px;
-    padding: 70px 10px 0 4px;//padding: 70px 10px 0 10px;
+    padding: 70px 10px 0 6px;//padding: 70px 10px 0 10px;
     background-color: #fff;
     box-shadow: inset 0px 4px 5px #8d8d8d;
     border-right: 1px solid #f5f6fa;
+    overflow: hidden;
 }
 
 .hidecontent{
@@ -101,7 +102,7 @@
     transition: opacity 0ms linear,visibility 0ms linear;
     opacity: 0;
     overflow: hidden;
-    // height: 100%;
+    height: 21px;
     -webkit-transition-delay: 0.3s linear;
     transition-delay: 0.3s linear;
     //width: 220px;
@@ -114,9 +115,20 @@
     display: flex;
     justify-content: center;
     flex-direction: column;
+    //margin:10px 0 0 0;
     //width: 200px;
     // overflow: hidden auto;
     // height: 100%;
+}
+
+
+.addtopmargin{
+    margin:10px 0 5px 0;
+    padding-bottom: 5px;
+}
+
+.removetopmargin{
+    margin:10px 0 10px 0;
 }
 
 .org-property{
@@ -126,8 +138,9 @@
     border-bottom: 1px solid #cccc;
     font-weight: 500;
     text-transform: capitalize;
-    padding-bottom:5px;
-    width:200px;
+    padding:0 0 10px 0;
+    margin:-10px -40px 0px -9px;
+    width:auto;
 }
 
 .add-footerheight {
@@ -139,7 +152,7 @@
 }
 
 .movearrowright {
-    left:205px;
+    left:225px;
 }
 
 .backtospace {
@@ -147,18 +160,33 @@
 }
 
 .current-menu {
-    display: inline-block;
-    display: flex;
-    width: 100%;
+    // display: inline-block;
+    // display: flex;
+    width: 290px;
     flex-direction: column;
     text-align: left;
-    margin:10px 3px;
-    line-height: 30px;
+    margin:5px -20px 0 -40px;
+    padding-left: 50px;
+    // line-height: 30px;
+    color:#0168fa;
     align-items: flex-start;
+    cursor: pointer;
 }
 
 .current-menu .btn {
-    padding: 0;
+    padding: 5px 5px 5px 10px;
+    color:#000;
+    margin-left: -20px;
+    width: 100%;
+}
+
+.current-menu .btn:hover {
+    color:#0168fa;
+    background: #ebebeb;
+    padding-left: 10px;
+    border-radius: 0;
+    margin: 0 0px 0 -20px;
+    cursor: pointer;
 }
 
 .current-menu > button > span > i-feather,.current-menu > button > span > i {
@@ -177,6 +205,8 @@
 .addwidth-tohide{
     width:30px;
     overflow: hidden;
+    margin-left:-4px;
+    padding-left: 4px;
 }
 
 .addwidth-toorgpro {
@@ -184,5 +214,51 @@
     white-space: nowrap!important;
     cursor: pointer!important;
     overflow: hidden!important;
-    width: 20px;
+    padding: 3px;
+    height: 76px;
+}
+
+.selected-menu-item {
+    color: #0168fa !important;
+    background: #ebebeb !important;
+}
+
+.align-itme-center {
+    align-items:center
+}
+
+.org-bg {
+    background: #0168fa;
+    padding: 6px 8px;
+    color:#fff;
+    text-align: center;
+    width: 35px;
+    height: 35px;
+    margin: -12px -20px 5px 0px;
+    border-radius: 30px;
+}
+
+.prop-bg {
+    background: #ffc107;
+    padding: 6px 8px;
+    text-align: center;
+    width: 35px;
+    height: 35px;
+    margin: 25px -20px 0px 0px;
+    border-radius: 30px;
+}
+
+.org-bg-expanded {
+    background: #0168fa;
+    color:#fff;
+    padding: 6px 18px;
+    height:35px;
+
+}
+
+.prop-bg-expanded {
+    background: #ffc107;
+    padding: 6px 18px;
+    margin-bottom: -10px;
+    height:35px;
 }

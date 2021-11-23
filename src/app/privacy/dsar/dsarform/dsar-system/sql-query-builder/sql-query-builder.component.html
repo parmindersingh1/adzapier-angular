@@ -10,6 +10,7 @@
       <div class="col-md-6">
         <div class="form-group"  *ngIf="!skLoading.one">
           <select (change)="onSelectTable(tableName.value)" #tableName class="form-control w-75" id="exampleFormControlSelect1">
+            <option value="">--Select Table---</option>
             <option [value]="table[tableListKey]" *ngFor="let table of tableList">{{table[tableListKey]}}</option>
           </select>
         </div>

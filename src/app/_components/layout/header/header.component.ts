@@ -2234,7 +2234,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
   }
 
   isLoginOrSignupPage():boolean{
-    if( this.location.path().indexOf('login') !== -1 || this.location.path().indexOf('signup') !== -1){
+    if( this.location.path().indexOf('login') !== -1 || this.location.path().indexOf('signup') !== -1 || this.location.path().indexOf('invited-user-verify-email') !== -1){
       return this.isloginpage = false;
     }else{
       return this.isloginpage = true;
@@ -2335,7 +2335,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
 
   checkPathForSideMenu(){
     if (this.location.path().indexOf('/home/dashboard/cookie-consent') !== -1 || this.location.path().indexOf('/cookie-consent/manage-vendors') !== -1 || this.location.path().indexOf('/cookie-consent/cookie-category') !== -1
-    || this.location.path().indexOf('/cookie-consent/cookie-banner') !== -1 || this.location.path().indexOf('/cookie-consent/cookie-tracking') !== -1 || this.location.path().indexOf('/cookie-consent/cookie-banner/setup') !== -1) {
+    || this.location.path().indexOf('/cookie-consent/cookie-banner') !== -1 || this.location.path().indexOf('/cookie-consent/cookie-tracking') !== -1 || this.location.path().indexOf('/cookie-consent/cookie-banner/setup') !== -1 || this.location.path().indexOf('cookie') !== -1) {
       this.showSidemenu = true;
       this.currentClickedMenuItem = {
         showlink: 'Cookie Consent',
@@ -2349,7 +2349,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
         ]
       }; // this.navigationMenu[1];
       this.userService.setSidemenulist(this.currentClickedMenuItem);
-    } else if (this.location.path().indexOf('/home/dashboard/ccpa-dsar') !== -1 || this.location.path().indexOf('/privacy/dsar/webforms') !== -1 || this.location.path().indexOf('/privacy/dsar/requests') !== -1 || this.location.path().indexOf('/privacy/dsar/workflows') !== -1) {
+    } else if (this.location.path().indexOf('/home/dashboard/ccpa-dsar') !== -1 || this.location.path().indexOf('/privacy/dsar/webforms') !== -1 || this.location.path().indexOf('/privacy/dsar/requests') !== -1 || this.location.path().indexOf('/privacy/dsar/workflows') !== -1 || this.location.path().indexOf('dsar') !== -1) {
       this.showSidemenu = true;
       this.currentClickedMenuItem =  { 
         showlink: 'DSAR',
@@ -2363,7 +2363,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
 
       };
       this.userService.setSidemenulist(this.currentClickedMenuItem);
-    } else  if (this.location.path().indexOf('/home/dashboard/consent-preference') !== -1 || this.location.path().indexOf('/consent-solutions/consent-records') !== -1 || this.location.path().indexOf('/consent-solutions/setup') !== -1 ) {
+    } else  if (this.location.path().indexOf('/home/dashboard/consent-preference') !== -1 || this.location.path().indexOf('/consent-solutions/consent-records') !== -1 || this.location.path().indexOf('/consent-solutions/setup') !== -1 || this.location.path().indexOf('consent') !== -1) {
       this.showSidemenu = true;
       this.currentClickedMenuItem =  {
         showlink: 'Consent Preference',
