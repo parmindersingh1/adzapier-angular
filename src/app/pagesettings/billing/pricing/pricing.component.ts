@@ -69,6 +69,10 @@ export class PricingComponent implements OnInit, AfterViewInit {
   iswindowclicked;
   actuallinkstatus:boolean = false;
   private subscriptionData: any;
+  cartID: any;
+  cartstripeid: any;
+  cartQuantity: number;
+  cartRecordCount: number;
 
   constructor(private router: Router,
               private loading: NgxUiLoaderService,
@@ -102,6 +106,8 @@ export class PricingComponent implements OnInit, AfterViewInit {
     element.classList.add('container-fluid');
     element.style.padding = '0px';
     element.style.margin = '0px';
+
+    this.onGetCartRecord();
   }
 
 
@@ -301,6 +307,9 @@ export class PricingComponent implements OnInit, AfterViewInit {
           plan.priceTotal = plan.price * planUnit.value;
           plan.unit = planUnit.value;
           this.cartItem.push(plan);
+          this.cartstripeid = plan.id;
+          this.cartQuantity = Number(plan.unit);
+         this.AddToCart(planUnit.value);
           // }
           this.subTotal = 0;
           if (this.cartItem.length > 0) {
@@ -324,6 +333,9 @@ export class PricingComponent implements OnInit, AfterViewInit {
     plan.priceTotal = plan.price * planUnit.value;
     plan.unit = planUnit.value;
     this.cartItem.push(plan);
+    this.cartstripeid = plan.id;
+    this.cartQuantity = Number(plan.unit);
+    this.AddToCart(planUnit.value);
     // }
     this.subTotal = 0;
     if (this.cartItem.length > 0) {
@@ -337,6 +349,57 @@ export class PricingComponent implements OnInit, AfterViewInit {
   }
   }
 
+  AddToCart(planUnit : any){
+    if(planUnit.toString() == ''){
+      this.isOpen = true;
+      this.alertMsg = "Property/organization cannot be empty";
+      this.alertType = 'danger';
+    }
+    else{
+    this.loading.start();
+    const payload = {
+      id:this.cartstripeid,
+      quantity:this.cartQuantity,
+    }
+   
+    this.billingService.AddToCart(this.constructor.name, moduleName.pricingModule,payload).subscribe(res => {
+      this.loading.stop();
+      const result: any = res;
+      if (result.status === 201) {
+        this.cartID = result.response;
+        this.isOpen = true;
+        this.alertMsg = result.message;
+        this.alertType = 'success';
+        this.onGetCartRecord();
+       
+      }
+    }, error => {
+      this.loading.stop();
+      console.log(error);
+    });
+  }
+  }
+
+  onGetCartRecord() {
+    
+    this.billingService.GetCart(this.constructor.name, moduleName.billingModule)
+      .subscribe((res: any) => {
+        const result: any = res;
+        if (result.status === 200) {
+          this.cartRecordCount = Number(result.count);
+          this.onNavigateToDetails(this.cartRecordCount);
+        }
+      }, error => {
+        this.loading.stop();
+      });
+  }
+
+  onNavigateToDetails(plandata) {
+   this.billingService.onPushPlanData(plandata);
+    //await this.router.navigateByUrl('/consent-solutions/consent-records/details/' + consentRecord.id);
+  }
+
+
   onUpdateCart(cartProperty, i) {
     // const foundIndex = this.cartItem.findIndex(x => x.id == cart.id);
     this.cartItem[i].unit = cartProperty.value;
@@ -347,11 +410,14 @@ export class PricingComponent implements OnInit, AfterViewInit {
         this.subTotal += Number(item.priceTotal);
       }
     }
+    this.onNavigateToDetails(this.cartItem);
   }
+
 
   onRemoveCartItem(i, item) {
     this.cartItem.splice(i, 1);
 
+    this.onNavigateToDetails(this.cartItem);
     this.subTotal = 0;
     if (this.cartItem.length > 0) {
       for (const itemVal of this.cartItem) {
