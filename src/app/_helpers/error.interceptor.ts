@@ -18,8 +18,18 @@ export class ErrorInterceptor implements HttpInterceptor {
           if(err.status === 403) {
             this.dataService.openUnAuthModal.next({isTrue: true, error: err})
           }
+          if (err.status === 400) {
+            // auto logout if 401 response returned from api
+            this.dataService.openUnAuthModal.next({isTrue: true, error: err})
+            if(err.url.indexOf('api/v1/invite/user/company') == -1 && err.error.error.match("exist.") == -1 || err.url.indexOf('/api/v1/login') == -1 && err.error.error.match("Incorrect") == -1){//
+              this.authenticationService.logout();
+              this.router.navigate(['/error/unauthorized']);
+            }
+            // location.reload();
+          }
           if (err.status === 401) {
               // auto logout if 401 response returned from api
+              this.dataService.openUnAuthModal.next({isTrue: true, error: err})
               if(err.url.indexOf('/api/v1/login') == -1 && err.error.error.match("exist.") == -1 || err.url.indexOf('/api/v1/login') == -1 && err.error.error.match("Incorrect") == -1){//
                 this.authenticationService.logout();
                 this.router.navigate(['/error/unauthorized']);
@@ -38,9 +48,10 @@ export class ErrorInterceptor implements HttpInterceptor {
               this.router.navigate(['/error/forbidden']);
               }
             }
-            if(err.status === 404){
+            if(err.status === 404 || err.status === 401){
               if(err.url.indexOf('/api/v1/invite/user') !== -1){
                 const error = err.error.error || err.statusText;
+                this.dataService.openUnAuthModal.next({isTrue: true, error: err})
                 return throwError(error);
               }else{
                 this.router.navigate(['/error/pagenotfound']);

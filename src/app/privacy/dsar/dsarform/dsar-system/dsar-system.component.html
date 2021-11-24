@@ -136,8 +136,8 @@
 
 <ng-template #mailChimpConnection>
   <div class="modal-header">
-    <h4 class="modal-title text-center margin-auto">Test MailChimp Connection</h4>
-    <button type="button" class="close pull-right ml-0" aria-label="Close" (click)="modalRef.hide()">
+    <h4 class="modal-title text-center margin-auto">Test Connection</h4>
+    <button type="button" class="close pull-right ml-0" aria-label="Close" (click)="onResetTestEmailForm()" >
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
@@ -147,16 +147,14 @@
         <label for="exampleInputEmail1">Email address</label>
         <input type="email" formControlName="email"  class="form-control" id="exampleInputEmail1"
                [ngClass]="{'is-invalid': submitted && f.email.errors}"  aria-describedby="emailHelp" placeholder="Enter email">
-
         <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
           <div *ngIf="f.email.errors.required">Email Address is Required</div>
           <div *ngIf="f.email.errors.email">Email must be a valid email address</div>
         </div>
         <div  class="text-danger pl-1 pt-1" [innerHTML]="errorMessage"></div>
-
       </div>
       <div class="text-center">
-        <button type="button" class="btn btn-secondary">Cancel</button>
+        <button type="button" (click)="onResetTestEmailForm()"  class="btn btn-secondary">Cancel</button>
         <button type="submit" class="ml-2 btn btn-primary">Submit</button>
       </div>
     </form>

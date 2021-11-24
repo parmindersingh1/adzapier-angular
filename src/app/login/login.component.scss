@@ -203,7 +203,10 @@ p.error {
   }
 }
 
-
+.remove-btm-margin {
+  margin-bottom: 0;
+  height: calc(100% - 96px);
+}
 
 .login-background {
   background-image: linear-gradient(#042b60, #004097);
@@ -215,7 +218,7 @@ p.error {
 }
 .login-form{
   width: 500px;
-  padding: 45px 50px 50px 50px;
+  padding: 40px 50px 45px 50px;
 }
 .input-lg {
   height: 55px;
@@ -224,7 +227,7 @@ p.error {
 }
 .logo-group{
   text-align: center;
-  margin-top: 40px;
+  margin-top: 20px;
   margin-bottom: 30px;
 }
 .az-logo{
@@ -246,4 +249,8 @@ p.error {
 
 .forgot-password a{
   color: #555
+}
+
+.remove-top-margin {
+  margin-top: 0px !important;
 }

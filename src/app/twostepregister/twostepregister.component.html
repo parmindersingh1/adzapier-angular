@@ -1,22 +1,22 @@
 <div class="container-fluid">
-    <div class="row justify-content-center">
+    <div class="row justify-content-center min-calcheight">
         <div class="">
             <div class="logo-group">
                 <img src="assets/imgs/az-logo.png" class="az-logo mb-2" alt="adzapier logo" />
                 <h4 class="tx-white">Trusted Data Privacy Solutions</h4>
             </div>
-            <div *ngIf="isInvitedUserVerified && id" style="color:#fff">
-                <p class="confirm-msg">
-                    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130.2 130.2">
-                       <circle class="path circle" fill="none" stroke="#73AF55" stroke-width="6" stroke-miterlimit="10"
-                         cx="65.1" cy="65.1" r="62.1" />
-                       <polyline class="path check" fill="none" stroke="#73AF55" stroke-width="6"
-                         stroke-linecap="round" stroke-miterlimit="10" points="100.2,40.2 51.5,88.8 29.8,67.5 " />
-                     </svg>
-                     <span style="color:#fff">{{message}}</span>
-                  </p>
-            </div>
-            <div *ngIf="!isInvitedUserVerified && id" style="color:#fff">
+<!--            <div *ngIf="isInvitedUserVerified && id" class="verification-msg">-->
+<!--                <p class="confirm-msg">-->
+<!--                    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130.2 130.2">-->
+<!--                       <circle class="path circle" fill="none" stroke="#73AF55" stroke-width="6" stroke-miterlimit="10"-->
+<!--                         cx="65.1" cy="65.1" r="62.1" />-->
+<!--                       <polyline class="path check" fill="none" stroke="#73AF55" stroke-width="6"-->
+<!--                         stroke-linecap="round" stroke-miterlimit="10" points="100.2,40.2 51.5,88.8 29.8,67.5 " />-->
+<!--                     </svg>-->
+<!--                     <span style="color:#fff">{{message}}</span>-->
+<!--                  </p>-->
+<!--            </div>-->
+            <div *ngIf="!isInvitedUserVerified && id" class="verification-msg">
                 <p>
                      <span style="color:red">{{message}}</span>
                   </p>
@@ -154,7 +154,7 @@
                     <!-- <a class="btn btn-primary mx-2" *ngIf = "step != 1" (click)="previous()">Previous</a>
                       <button (click)="next();" class="btn btn-sm btn-primary mx-2" *ngIf = "step != 2">Next</button>
                       <button type="submit" class="btn btn-sm btn-primary mx-2">Submit</button>
-  
+
                       <div>{{this.regForm.value | json}}</div> -->
                 </form>
             </div>
@@ -178,6 +178,17 @@
             </div>
             <div *ngIf="isInvitedUserVerified && !id">
                 <div *ngIf="step == 3" class="inputs-key login-form bg-white">
+<!--                  <div *ngIf="isInvitedUserVerified && requiredID" class="alert alert-success">-->
+<!--                    Your email is successfully verified !-->
+<!--                  </div>-->
+                  <h5 *ngIf="isInvitedUserVerified" class="alert alert-success tx-14">Hey! Just one step to complete <br />
+                    Please enter the following details to create your account instantly.</h5>
+<!--                  <div *ngIf="!requiredID" class="alert alert-info">-->
+<!--                    Last Step: Please Complete Your Registration Form !-->
+<!--                  </div>-->
+
+
+
                     <h4 class="tx-color-01 mg-b-5">Add Company, Organization and Property</h4>
                     <form [formGroup]="secondregForm" #secregisterForm id="secregisterForm" (ngSubmit)="onSubSecond()">
                         <div class="form-group">
@@ -189,7 +200,9 @@
                                 <div *ngIf="r.companyname.errors.required">Companyname is required</div>
                                 <div *ngIf="r.companyname.errors.pattern">Companyname allow only Alphanumeric</div>
                             </div>
+                          <div *ngIf="alertMsg" [innerHTML]="alertMsg" class="invalid-feedback">
 
+                          </div>
                         </div>
 
                         <div class="row">
@@ -292,7 +305,7 @@
                         </div>
 
                         <!-- <div>{{this.secondregForm.value | json}}</div>
-           
+
 
           <a class="btn btn-sm btn-primary mx-2" style="color: white;" (click)="previous()">Previous</a>
           <button (click)="next();" class="btn btn-sm btn-primary mx-2" *ngIf = "step != 2">Next</button>
@@ -332,13 +345,13 @@
               </div>
               <div class="text-center">
                  <form [formGroup]="verifyEmailForm" (ngSubmit)="onSubmit()">
-                 
+
                      <div class="form-group">
                          <label for="email" class="tx-17">Email Address</label>
                          <input type="email" formControlName="email" class="form-control input-lg"
                              [ngClass]="{ 'is-invalid': submitted && vemail.email.errors }" pattern="^\w+@[a-zA-Z_0-9]+?\.[a-zA-Z]{2,3}$"
                              placeholder="yourname@yourmail.com" (ngModelChange)="clearError()" />
-                          
+
                          <div *ngIf="submitted && vemail.email.errors" class="invalid-feedback">
                              <div *ngIf="vemail.email.errors.required">Email is required</div>
                              <div *ngIf="vemail.email.errors.pattern">Please enter a valid email</div>
@@ -351,7 +364,7 @@
                      </button>
                      <div *ngIf="emailnotverifiedMsg">Email address not found</div>
                  </form>
-               
+
                 <button class="btn btn-lg btn-uppercase btn-brand-02 btn-block" *ngIf="isMsgConfirm" type="button"
                   (click)="onToggle()">
                   <span class="h6 mr-3 tx-white">🡠</span> Login
@@ -363,6 +376,32 @@
         </div>
     </div>
 </div>
+
+<ng-template #template>
+  <div class="modal-body text-center">
+    <form  [formGroup]="passwordForm" (ngSubmit)="onSubmitPassword()">
+    <div class="row">
+        <div class="form-group col-md-12">
+          <label class="text-left" for="password">Enter Your Adzapier Login Password<span class="required-asterisk">*</span></label>
+          <input toggle type="password" name="password" formControlName="password"
+                 class="form-control input-lg"
+                 [ngClass]="{ 'is-invalid': submitted && p.password.errors }"
+                 placeholder="Enter your password"
+                 pattern="(?=^.{6,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9]).*$" />
+          <div *ngIf="submitted && p.password.errors" class="invalid-feedback">
+            <div *ngIf="p.password.errors.required">Password is required</div>
+            <div *ngIf="p.password.errors.pattern">Enter Valid Password (Ex: Aa@2aa) and minimum 6
+              charcters </div>
+          </div>
+        </div>
+      <div class="text-center col-md-12 mt-2">
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </div>
+
+    </div>
+    </form>
+  </div>
+</ng-template>
 
 <div class="col-sm-5 mr-0 float-right flotingdiv" *ngIf="isOpen">
     <alert *ngIf="isOpen" [type]="alertType" [dismissible]="dismissible" dismissOnTimeout="5000" (onClosed)="onClosed(alertMsg)">{{

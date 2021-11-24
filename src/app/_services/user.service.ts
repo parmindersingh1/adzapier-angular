@@ -22,7 +22,7 @@ export class UserService {
     @Output() getCurrentUser: EventEmitter<any> = new EventEmitter<any>();
     @Output() onClickTopmenu: EventEmitter<boolean> = new EventEmitter<boolean>();
     @Output() onClickQuickStartmenux: EventEmitter<boolean> = new EventEmitter<boolean>(false);
-    
+    isSideMenuClicked:boolean = false;
     public onClickQuickStartmenu: BehaviorSubject<UserActionOnQuickstart> = new BehaviorSubject<UserActionOnQuickstart>({quickstartid:0,isclicked:false,isactualbtnclicked:false});
     get isClickedOnQSMenu() {
         return this.onClickQuickStartmenu.asObservable();
@@ -269,6 +269,34 @@ export class UserService {
                 return throwError(error);
             })
         );
+    }
+
+    setSidemenulist(data) {
+        localStorage.setItem('sidemenuList', JSON.stringify(data));
+    }
+
+    removeSidemenulist() {
+        localStorage.removeItem('sidemenuList');
+    }
+
+    getSidemenulist(): any {
+        if (localStorage.getItem('sidemenuList') !== null) {
+            return JSON.parse(localStorage.getItem('sidemenuList'));
+        }
+    }
+
+    setSidemenuOpenStatus(status){
+        localStorage.setItem('sidemenustatus', JSON.stringify(status));
+    }
+
+    removeSidemenuOpenStatus() {
+        localStorage.removeItem('sidemenustatus');
+    }
+
+    getSidemenuOpenStatus(): any {
+        if (localStorage.getItem('sidemenustatus') !== null) {
+            return JSON.parse(localStorage.getItem('sidemenustatus'));
+        }
     }
 
     onSendLogs(errorType, msg, functionality, componentName, moduleName, path) {

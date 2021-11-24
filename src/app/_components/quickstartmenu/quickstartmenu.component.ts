@@ -197,7 +197,7 @@ export class QuickstartmenuComponent implements OnInit, AfterViewInit,AfterViewC
     this.showQuickStartMenu = !this.showQuickStartMenu;
     this.showGuidancediv = false;
     this.onClickQuickStart.emit(true);
-    this.quickmenuService.isquickstartopen = true;
+    this.quickmenuService.isquickstartopen = false;//true;
     this.userService.onRevistQuickStartmenulink.next({quickstartid:0,reclickqslink:true,urlchanged:true}); 
   }
 

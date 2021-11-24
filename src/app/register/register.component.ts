@@ -72,7 +72,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
     element.classList.remove('container-fluid');
     element.style.padding = null;
     // element.style.margin = null;
-    element.classList.add('container');
+   // element.classList.add('container');
     element.classList.add('site-content');
   }
 
@@ -145,12 +145,11 @@ export class RegisterComponent implements OnInit, OnDestroy {
     };
     this.consentPreferenceSDK.submit({
       consentData: {
-        formId: 'fsa',
         consent: {
           email: payload.email,
-          firstName: payload.firstname,
-          lastName: payload.lastname,
-          dataSource: 'public',
+          first_name: payload.firstname,
+          last_name: payload.lastname,
+          data_source: 'public',
           verified: true,
         },
         exculdes: ['password'],

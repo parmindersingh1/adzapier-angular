@@ -1557,7 +1557,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
       this.basicFormSubmitted = true;
       this.isResetlinkEnable = false;
       if (this.isDirty && this.workflow !== undefined && this.selectedApproverID !== undefined) {
-        this.openModal(this.confirmSaveAlert);
+        // this.openModal(this.confirmSaveAlert);
       }
       else if (this.workflow == undefined || this.selectedApproverID == undefined) {
         this.isdraftsubmitted = true;
@@ -2332,6 +2332,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
           // this.ccpaFormConfigService.captureCurrentSelectedFormData(data);
           // tslint:disable-next-line: max-line-length
           if(data){
+            this.formObject = data.response;
             this.ccpaFormConfigService.removeCurrentSelectedFormData();
             this.ccpaFormConfigService.captureCurrentSelectedFormData(data);
             this.isCaptchaVerificationRequired = data.response.captcha;

@@ -123,6 +123,12 @@ export class UpdateSqlQueryBuilderComponent implements OnInit, OnChanges {
   }
 
   onSelectTable(tableName) {
+    if (!tableName) {
+      this.step = [1];
+      this.sqlPageStep = 1;
+      return false;
+    }
+    // this.loading.start()
     return new Promise((resolve, rejects) => {
       this.tableName = tableName;
       // this.loading.start();
@@ -147,7 +153,7 @@ export class UpdateSqlQueryBuilderComponent implements OnInit, OnChanges {
           // this.loading.stop();
           this.tableColumnsList = [];
           this.isOpen = true;
-          this.alertMsg = error.message;
+          this.alertMsg = 'Unable to get columns';
           this.alertType = 'danger';
           rejects(true);
         });
