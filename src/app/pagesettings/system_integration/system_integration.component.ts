@@ -103,6 +103,7 @@ export class SystemIntegrationComponent implements OnInit {
   }
 
   openModalUpdateConnection(template: TemplateRef<any>, obj) {
+    this.mailChimpForm.reset();
     this.updateSystemName = this.onFindSystemName(obj.system_id);
     this.updateConnectionData = obj;
     this.modalRef = this.modalService.show(template, {class: 'modal-lg', ignoreBackdropClick: true});
