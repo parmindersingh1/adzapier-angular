@@ -15,8 +15,8 @@ export const environment = {
   customLangURL: 'https://staging-cdn.adzapsrv.com/cmp/v1/web/:oid/lang/:pid-:lang.json',
   consentPreferenceCDN: 'https://staging-cdn.adzapsrv.com/consent-preference/qa/adzapier-cp-sdk.js',
   consentPreferenceConfig : {
-    AppID: 'mKoZfTvxGoehXLKDQIMyvkgAQRmEJSGLjreGROQWhaMdvYcyAf', // Your App ID
-    PropID: '43077d0b-510b-4b30-a330-6f1308d2e33e'
+    AppID: 'CSeDNaSKHKNGEvmOgsiaDoOdIJmFncXMuAiotVLMGagBvIbQio', // Your App ID
+    PropID: '69ddc83f-b3a9-4d40-bb22-ffb4dcfdaf27'
   },
   lokiConfig: {
     app: 'cmp-adminportal-qa',
