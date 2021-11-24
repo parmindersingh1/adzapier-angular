@@ -200,6 +200,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
         this.loadOrganizationList();
         this.loadOrganizationWithProperty();  //to load org and prop
         this.loadNotification();
+        this.onGetCartRecord();
       }
     });
 
@@ -274,8 +275,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
       console.error(error);
 
     });
-    
-    this.onGetCartRecord();
+
 
     if (this.quickmenuService.getQuickstartDismissStatus() !== null) {
       if(this.quickmenuService.getQuickstartDismissStatus().isdismissed){
