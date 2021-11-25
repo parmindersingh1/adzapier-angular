@@ -165,11 +165,12 @@
                   <option>10</option>
                 </ng-container>
               </select> -->
-              <button type="button" class="btn btn-sm btn-outline-secondary" style="font-size: large;" (click)="Add(planUnit,i)">+</button>
+              <button type="button" class="btn btn-sm btn-outline-secondary" style="font-size: large;" (click)="Subs(planUnit,i)">-</button>
+
               <input disabled [value]="1" style="width: 40px;text-align: center;" #planUnit type="text" id="sel1" min="1" required pattern="^[1-9][0-9]*$" oninput="if(!this.value.match('^[1-9][0-9]*$'))this.value='';"
               >
-              <button type="button" class="btn btn-sm btn-outline-secondary" style="font-size: large;" (click)="Subs(planUnit,i)">-</button>
-             
+              <button type="button" class="btn btn-sm btn-outline-secondary" style="font-size: large;" (click)="Add(planUnit,i)">+</button>
+
               </div>
 
 
@@ -278,10 +279,12 @@
                   <option>10</option>
                 </ng-container>
               </select> -->
-              <button type="button" class="btn btn-sm btn-outline-secondary" style="font-size: large;" (click)="Add(planUnit,i)">+</button>
+              <button type="button" class="btn btn-sm btn-outline-secondary" style="font-size: large;" (click)="Subs(planUnit,i)">-</button>
+
               <input disabled [value]="1" style="width: 40px;text-align: center;" #planUnit type="text" id="sel1" min="1" required pattern="^[1-9][0-9]*$" oninput="if(!this.value.match('^[1-9][0-9]*$'))this.value='';"
               >
-              <button type="button" class="btn btn-sm btn-outline-secondary" style="font-size: large;" (click)="Subs(planUnit,i)">-</button>
+              <button type="button" class="btn btn-sm btn-outline-secondary" style="font-size: large;" (click)="Add(planUnit,i)">+</button>
+
             </div>
 
 
@@ -396,10 +399,12 @@
                   <option>10</option>
                 </ng-container>
               </select> -->
-              <button type="button" class="btn btn-sm btn-outline-secondary" style="font-size: large;" (click)="Add(planUnit,i)">+</button>
+              <button type="button" class="btn btn-sm btn-outline-secondary" style="font-size: large;" (click)="Subs(planUnit,i)">-</button>
+
               <input disabled [value]="1" style="width: 40px;text-align: center;" #planUnit type="text" id="sel1" min="1" required pattern="^[1-9][0-9]*$" oninput="if(!this.value.match('^[1-9][0-9]*$'))this.value='';"
               >
-              <button type="button" class="btn btn-sm btn-outline-secondary" style="font-size: large;" (click)="Subs(planUnit,i)">-</button>
+              <button type="button" class="btn btn-sm btn-outline-secondary" style="font-size: large;" (click)="Add(planUnit,i)">+</button>
+
             </div>
 
 
@@ -654,3 +659,20 @@
     </div>
   </div>
 </ng-template>
+
+
+<div class="hello" *ngIf="displayStyle">
+  <div class="card" style="width: 18rem;">
+    <div class="card-body" style="background-color:rgb(247, 247, 247)" *ngFor="let cart of showpopup">
+      <h5 class="card-title"><i class="pi pi-check mr-2" style="font-size: 1.0rem; color:#5cb85c;"></i>
+        Added to Cart</h5>
+      <h6 class="card-text">{{cart.product_name}}</h6><br>
+      <h6 class="card-text">Billed - {{cart.cycle}}</h6><br>
+      <h6 class="card-text">Price - ${{cart.priceTotal}}</h6><br>
+      <h6 class="card-text">Quantity - {{cart.unit}}</h6><br>
+    </div>
+    <a routerLink="/settings/billing/cart" [queryParams]="{oid:queryOID , pid:queryPID}" style="margin-left: 20px;margin-bottom: 20px;"><button class="btn btn-md btn-primary mb-3" style="width: 250px;">Open Cart</button></a>
+  </div>
+
+</div>
+

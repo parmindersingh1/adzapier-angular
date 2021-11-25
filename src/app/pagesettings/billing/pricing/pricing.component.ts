@@ -1,5 +1,5 @@
 import {Component, OnInit, AfterViewInit, TemplateRef, ChangeDetectorRef} from '@angular/core';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {BillingService} from '../../../_services/billing.service';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
 import {DataService} from '../../../_services/data.service';
@@ -73,6 +73,10 @@ export class PricingComponent implements OnInit, AfterViewInit {
   cartstripeid: any;
   cartQuantity: number;
   cartRecordCount: number;
+  displayStyle:boolean = false;
+  showpopup = [];
+  queryOID: string;
+  queryPID: string;
 
   constructor(private router: Router,
               private loading: NgxUiLoaderService,
@@ -81,11 +85,20 @@ export class PricingComponent implements OnInit, AfterViewInit {
               private modalService: BsModalService,
               private quickmenuService: QuickmenuService,
               private billingService: BillingService,
-              private cdRef: ChangeDetectorRef) {
+              private cdRef: ChangeDetectorRef,
+              private activatedroute: ActivatedRoute,
+              ) {
               // this.onGetActivePlan();
   }
 
   ngOnInit() {
+    this.activatedroute.queryParamMap
+    .subscribe(params => {
+   this.queryOID = params.get('oid');
+   this.queryPID = params.get('pid');
+   //console.log(this.queryOID,'queryOID210..');
+   //console.log(this.queryPID,'queryPID211..');
+  });
     this.quickmenuService.onClickEmitQSLinkobj.subscribe((res) => {
       this.quickDivID = res.linkid;
       this.callForQuickStart();
@@ -334,6 +347,7 @@ export class PricingComponent implements OnInit, AfterViewInit {
     plan.priceTotal = plan.price * planUnit.value;
     plan.unit = planUnit.value;
     this.cartItem.push(plan);
+    this.showpopup.push(plan);
     this.cartstripeid = plan.id;
     this.cartQuantity = Number(plan.unit);
     this.AddToCart(planUnit.value);
@@ -366,12 +380,18 @@ export class PricingComponent implements OnInit, AfterViewInit {
     this.billingService.AddToCart(this.constructor.name, moduleName.pricingModule,payload).subscribe(res => {
       this.loading.stop();
       const result: any = res;
-      if (result.status === 201) {
+      if (result.status === 201 || result.status === 200) {
         this.cartID = result.response;
         this.isOpen = true;
         this.alertMsg = result.message;
         this.alertType = 'success';
         this.onGetCartRecord();
+        this.displayStyle=true;
+        setTimeout(() => {
+          this.showpopup = [];
+          this.displayStyle = false;
+        }, 3000);
+      
        
       }
     }, error => {
