@@ -1181,3 +1181,27 @@ a.nav-link.dropdown-link span.rounded-circle {
   border: 1px solid #ffffff;
   box-shadow: 0px 0px 5px #ffffff;
 }
+
+.fontsize-16{
+  font-size: 16px;
+}
+
+.webformicon{
+  display: flex;
+}
+
+.webformicon:hover {
+  color:#0168fa;
+}
+
+.webform-icon {
+  background: url('../../../../assets/imgs/webform-icon.svg') no-repeat;
+  display: inline-block;
+  margin-right: 15px;
+  padding-left: 30px;
+  color:#333333;
+}
+
+.webform-icon:hover {
+  filter: invert(23%) sepia(100%) saturate(2212%) hue-rotate(208deg) brightness(102%) contrast(110%);
+}
