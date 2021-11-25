@@ -56,6 +56,11 @@ export class SidemenuComponent implements OnInit {
    }
 
   ngOnInit(): void {
+    this.activatedroute.queryParamMap
+    .subscribe(params => {
+      this.queryOID = params.get('oid');
+      this.queryPID = params.get('pid');
+     });
     this.elRef.nativeElement.querySelector('.sidemenu').removeEventListener('mouseenter', this.onMouseover.bind(this), false);
     this.elRef.nativeElement.querySelector('.sidemenu').removeEventListener('mouseleave',this.onMouseover.bind(this), false);
     if(this.currentmenu !== undefined){
@@ -184,6 +189,11 @@ export class SidemenuComponent implements OnInit {
     }
     this.getCurrentmenu();
     this.matchSideLinkWithNavbarlink();
+    this.activatedroute.queryParamMap
+    .subscribe(params => {
+      this.queryOID = params.get('oid');
+      this.queryPID = params.get('pid');
+     });
     this.cdRef.detectChanges();
   }
 
