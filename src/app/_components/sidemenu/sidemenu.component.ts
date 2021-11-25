@@ -2,6 +2,7 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 import { Component, Input, OnInit, Output,EventEmitter, HostListener, ElementRef, ChangeDetectorRef, SimpleChanges } from '@angular/core';
 import { Router, ActivatedRoute, NavigationEnd, NavigationStart } from '@angular/router';
 import { UserService } from '../../_services/user.service';
+import { Location } from '@angular/common';
 @Component({
   selector: 'app-sidemenu',
   templateUrl: './sidemenu.component.html',
@@ -9,7 +10,7 @@ import { UserService } from '../../_services/user.service';
   animations: [
     trigger('slideInOutSideMenu', [
       state('true', style({
-       width:'240px',
+       width:'230px',
        background:'#fff',
       })),
       state('false', style({
@@ -26,7 +27,6 @@ export class SidemenuComponent implements OnInit {
   @Input() property;
   @Input() currentmenu:any = [];
   @Output() onClickSideMenuArrow : EventEmitter<any> = new EventEmitter<any>();
-  
   queryOID;
   queryPID;
   slideSideMenu:boolean = false;
@@ -45,6 +45,7 @@ export class SidemenuComponent implements OnInit {
               private elRef:ElementRef,
               private router: Router,
               private cdRef: ChangeDetectorRef,
+              private location: Location,
               private userService:UserService) {
     this.activatedroute.queryParamMap
     .subscribe(params => {
@@ -63,6 +64,7 @@ export class SidemenuComponent implements OnInit {
    this.onCheckSidemenustatus();
    this.showOrgInitials(this.organization);
    this.showPropInitials(this.property);
+   this.matchSideLinkWithNavbarlink();
   }
 
   onMouseover() {
@@ -166,13 +168,11 @@ export class SidemenuComponent implements OnInit {
   }
 
   ngOnChanges(changes:SimpleChanges){
-    this.getCurrentmenu();
-    console.log(changes,'changes..');
-   // console.log(this.organization,'organization..');
-    this.showOrgInitials(this.organization);
-    this.showPropInitials(this.property);
-     this.elRef.nativeElement.querySelector('.sidemenu').removeEventListener('mouseenter',this.onMouseover.bind(this));
-     this.elRef.nativeElement.querySelector('.sidemenu').removeEventListener('mouseleave',this.onMouseout.bind(this));
+  this.getCurrentmenu();
+  this.matchSideLinkWithNavbarlink();
+  this.showOrgInitials(this.organization);
+  this.showPropInitials(this.property);
+  this.cdRef.detectChanges();
   }
 
   ngAfterViewInit(){
@@ -182,6 +182,8 @@ export class SidemenuComponent implements OnInit {
         this.elRef.nativeElement.querySelector('.sidemenu').addEventListener('mouseenter',this.onMouseover.bind(this));
         this.elRef.nativeElement.querySelector('.sidemenu').addEventListener('mouseleave',this.onMouseout.bind(this));
     }
+    this.getCurrentmenu();
+    this.matchSideLinkWithNavbarlink();
     this.cdRef.detectChanges();
   }
 
@@ -203,5 +205,14 @@ export class SidemenuComponent implements OnInit {
    // }
   }
 
+  matchSideLinkWithNavbarlink(){
+      const pathFromURL = this.location.path().split("?"); 
+      const index = this.currentmenu.subcategory.findIndex((t) => t.routerLink === pathFromURL[0]);
+      this.currentMenuItemIndex = index; 
+  }
+
+  trackById(index, menuitem) {
+    return menuitem.indexid;
+  }
 
 }

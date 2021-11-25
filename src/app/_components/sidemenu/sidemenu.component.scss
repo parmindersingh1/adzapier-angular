@@ -23,16 +23,16 @@
 }
 
 .submenu div a {
-    line-height: 30px;
+    //line-height: 30px;
     cursor: pointer;
     color:#333;
     display:inline-block;
 }
 
 .submenu div a span {
-    padding: 10px 0;
-    margin: 10px 0;
-    line-height: 30px;
+    padding: 0;
+    // margin: 10px 0;
+    // line-height: 30px;
 }
 
 .submenu div a span:hover {
@@ -57,7 +57,7 @@
     font-size: 12px;
     line-height: 22px;
     text-align: center;
-    z-index: 1050;
+    z-index: 1030;
     transition: left 200ms linear; 
 }
 
@@ -125,6 +125,8 @@
 .addtopmargin{
     margin:10px 0 5px 0;
     padding-bottom: 5px;
+    height: 26px;
+    width: 220px;
 }
 
 .removetopmargin{
@@ -152,7 +154,7 @@
 }
 
 .movearrowright {
-    left:225px;
+    left:215px;
 }
 
 .backtospace {
@@ -178,6 +180,7 @@
     color:#000;
     margin-left: -20px;
     width: 100%;
+    cursor: pointer;
 }
 
 .current-menu .btn:hover {
@@ -258,7 +261,35 @@
 
 .prop-bg-expanded {
     background: #ffc107;
-    padding: 6px 18px;
+    padding: 6px 14px;
     margin-bottom: -10px;
     height:35px;
+    overflow: hidden;
+}
+
+.showpropname {
+    visibility: visible;
+    transition: none 0s ease 0s;
+    opacity: 1;
+    display: flex;
+    justify-content: left;
+    height: 21px;
+    width: 240px;
+}
+
+.hidepropname {
+    visibility: hidden;
+    transition: opacity 0ms linear, visibility 0ms linear;
+    opacity: 0;
+    overflow: hidden;
+    width: 230px;
+    height: 21px;
+}
+
+.current-menu > button > span :hover {
+    cursor: pointer;
+}
+
+.fontsize-16 {
+    font-size: 16px;
 }

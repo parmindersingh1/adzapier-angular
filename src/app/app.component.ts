@@ -19,7 +19,7 @@ import { PricingComponent } from 'src/app/pagesettings/billing/pricing/pricing.c
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
   animations: [
-    trigger('slideInOut', [
+    trigger('slideInOutApp', [
       state('true', style({
        "margin-left":"200px",
         transform: '  translateX(0)'
