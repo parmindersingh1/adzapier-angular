@@ -125,7 +125,7 @@ export class AnalyticsComponent implements OnInit {
       iconcss: "fas fa-layer-group tx-primary temp-blue center tx-64 margin-15",
       content: "Configure geo specific cookie banner, language and preference center.",
       tooltipcontent: this.isLicenseAssignedtoProperty ? '' : this.cookieTooltiptext,
-      routerlinktext: this.isLicenseAssignedtoProperty ? '/cookie-consent/cookie-banner' : '/settings/billing/manage',
+      routerlinktext: this.isLicenseAssignedtoProperty ? '/cookie-consent/banner-configuration' : '/settings/billing/manage',
       buttonText: this.isLicenseAssignedtoProperty ? 'Go Now' : 'Try Now'
     }, {
       id: 3,
