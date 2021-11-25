@@ -20,7 +20,7 @@
             <div class="submenu" *ngIf="currentmenu" [ngClass]="!slideSideMenu ? 'addwidth-tohide' : '' ">
                 <p class="mb-0"  [ngClass]="slideSideMenu ? 'showcontent addtopmargin' : 'hidecontent removetopmargin' ">{{menulink}}</p>
                 <div *ngFor="let menuitem of submenu;trackBy: trackById; let i = index" id="linkmenu" class="current-menu">
-                    <button type="button" class="btn btn-link" (click)="onClickSubmenu(menuitem.routerLink,i)" [ngClass]="[currentMenuItemIndex == i ? 'selected-menu-item':'']">
+                    <a class="btn btn-link" routerLink="{{menuitem.routerLink}}" [queryParams]="{oid:queryOID , pid:queryPID}" (click)="onClickSubmenu(menuitem.routerLink,i)" [ngClass]="[currentMenuItemIndex == i ? 'selected-menu-item':'']">
                         <span *ngIf="menuitem.icon.indexOf('fa')===-1 && menuitem.icon.indexOf('pie')===-1" class="d-flex">
                             <i-feather name="{{menuitem.icon}}" class="feather-16"></i-feather>
                             <span [ngClass]="slideSideMenu ? 'showcontent' : 'hidecontent' ">
@@ -39,7 +39,7 @@
                             {{menuitem.showlink}}
                             </span>
                         </span>
-                    </button>
+                    </a>
                 </div>
             </div>
         </div>
