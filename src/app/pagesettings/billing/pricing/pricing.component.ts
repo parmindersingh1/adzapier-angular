@@ -166,6 +166,7 @@ export class PricingComponent implements OnInit, AfterViewInit {
       }
       this.activeData = activeData;
       this.subscriptionList = this.planDetails.cookieConsent[`${this.cookieConsentBillingCycle}`];
+      console.log(this.subscriptionList);
       this.dsarPlanList = this.planDetails.dsar[`${this.dsarBillingCycle}`];
       this.consentPreferenceList = this.planDetails.consentPreference[`${this.consentPreferenceBillingCycle}`];
     } catch (e) {
@@ -196,6 +197,7 @@ export class PricingComponent implements OnInit, AfterViewInit {
     this.dsarPlanList = plansData.dsar[`${this.dsarBillingCycle}`];
     this.consentPreferenceList = plansData.consentPreference[`${this.consentPreferenceBillingCycle}`];
   }
+
 
   ngOnDestroy() {
     const element = document.getElementById('main');
@@ -378,6 +380,16 @@ export class PricingComponent implements OnInit, AfterViewInit {
       console.log(error);
     });
   }
+  }
+
+  Add(planUnit:any,index){
+    planUnit.value++;
+  }
+
+  Subs(planUnit:any,index){
+    if(planUnit.value > 1){
+    planUnit.value--;
+    }
   }
 
   onGetCartRecord() {

@@ -157,6 +157,26 @@ export class CartsystemComponent implements OnInit {
   prev(){
     this.step = 0;
   }
+
+  Add(cartProperty,i,cartId){
+    cartProperty.value++;
+    this.cartRecordList[i].CartId =  cartId.value;
+    this.cartRecordList[i].Quantity = cartProperty.value;
+    this.cartRecordList[i].Price = this.cartRecordList[i].Price * cartProperty.value;
+
+    this.onUpdateCartRecord(this.cartRecordList[i].CartId , this.cartRecordList[i].Quantity)
+  }
+
+  Subs(cartProperty,i,cartId){
+    if(cartProperty.value > 1){
+      cartProperty.value--;
+      this.cartRecordList[i].CartId =  cartId.value;
+      this.cartRecordList[i].Quantity = cartProperty.value;
+      this.cartRecordList[i].Price = this.cartRecordList[i].Price * cartProperty.value;
+  
+      this.onUpdateCartRecord(this.cartRecordList[i].CartId , this.cartRecordList[i].Quantity)
+    }
+  }
   
   onNavigateToDetails(plandata) {
     this.billingService.onPushPlanData(plandata);

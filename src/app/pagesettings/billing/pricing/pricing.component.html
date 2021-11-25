@@ -165,8 +165,10 @@
                   <option>10</option>
                 </ng-container>
               </select> -->
-              <input value="1" style="width: 80px;" #planUnit type="text" id="sel1" type="number" min="1" required pattern="^[1-9][0-9]*$" oninput="if(!this.value.match('^[1-9][0-9]*$'))this.value='';"
+              <button type="button" class="btn btn-sm btn-outline-secondary" style="font-size: large;" (click)="Add(planUnit,i)">+</button>
+              <input disabled [value]="1" style="width: 40px;text-align: center;" #planUnit type="text" id="sel1" min="1" required pattern="^[1-9][0-9]*$" oninput="if(!this.value.match('^[1-9][0-9]*$'))this.value='';"
               >
+              <button type="button" class="btn btn-sm btn-outline-secondary" style="font-size: large;" (click)="Subs(planUnit,i)">-</button>
              
               </div>
 
@@ -216,7 +218,7 @@
 
         <div *ngIf="!skeletonLoader && currentStep === 2" class="plan-wrapper mt-2 justify-content-center">
 
-          <div *ngFor="let plan of dsarPlanList" style="overflow: hidden"
+          <div *ngFor="let plan of dsarPlanList;let i = index;" style="overflow: hidden"
             class="col d-flex bg-white-col bt-card flex-column bd pt-0 mr-2  ">
 
             <div *ngIf="dsarBillingCycle === 'yearly'" class="plan-discount">
@@ -276,8 +278,10 @@
                   <option>10</option>
                 </ng-container>
               </select> -->
-              <input value="1" style="width: 80px;" #planUnit type="number" id="sel1" min="1" required pattern="^[1-9][0-9]*$" oninput="if(!this.value.match('^[1-9][0-9]*$'))this.value='';">
-
+              <button type="button" class="btn btn-sm btn-outline-secondary" style="font-size: large;" (click)="Add(planUnit,i)">+</button>
+              <input disabled [value]="1" style="width: 40px;text-align: center;" #planUnit type="text" id="sel1" min="1" required pattern="^[1-9][0-9]*$" oninput="if(!this.value.match('^[1-9][0-9]*$'))this.value='';"
+              >
+              <button type="button" class="btn btn-sm btn-outline-secondary" style="font-size: large;" (click)="Subs(planUnit,i)">-</button>
             </div>
 
 
@@ -322,7 +326,7 @@
 
         <div *ngIf="!skeletonLoader && currentStep === 3" class="plan-wrapper mt-2 justify-content-center">
 
-          <div *ngFor="let plan of consentPreferenceList" style="overflow: hidden"
+          <div *ngFor="let plan of consentPreferenceList;let i = index;" style="overflow: hidden"
             class="col d-flex bg-white-col bt-card flex-column bd pt-0 mr-2  ">
 
             <div *ngIf="consentPreferenceBillingCycle === 'yearly'" class="plan-discount">
@@ -392,8 +396,10 @@
                   <option>10</option>
                 </ng-container>
               </select> -->
-              <input value="1" style="width: 80px;" #planUnit type="number" id="sel1" min="1" required pattern="^[1-9][0-9]*$" oninput="if(!this.value.match('^[1-9][0-9]*$'))this.value='';">
-
+              <button type="button" class="btn btn-sm btn-outline-secondary" style="font-size: large;" (click)="Add(planUnit,i)">+</button>
+              <input disabled [value]="1" style="width: 40px;text-align: center;" #planUnit type="text" id="sel1" min="1" required pattern="^[1-9][0-9]*$" oninput="if(!this.value.match('^[1-9][0-9]*$'))this.value='';"
+              >
+              <button type="button" class="btn btn-sm btn-outline-secondary" style="font-size: large;" (click)="Subs(planUnit,i)">-</button>
             </div>
 
 

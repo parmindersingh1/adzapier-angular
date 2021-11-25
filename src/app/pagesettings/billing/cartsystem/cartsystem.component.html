@@ -53,7 +53,7 @@
                 <h5>${{cart.Price * cart.Quantity}}.00</h5>
                 <div class=" w-100 m-auto form-group mb-2 dp-safari">
                   <input type="text" #cartId [value]="cart.CartId" disabled hidden>
-                  <select  (change)="onUpdateCart(cartProperty, i, cartId)" #cartProperty [value]="cart.Quantity"
+                  <!-- <select  (change)="onUpdateCart(cartProperty, i, cartId)" #cartProperty [value]="cart.Quantity"
                     style="height: 32px;" class="mb-2 w-25 margin-auto form-control">
                     <option>1</option>
                     <option>2</option>
@@ -65,7 +65,11 @@
                     <option>8</option>
                     <option>9</option>
                     <option>10</option>
-                  </select>
+                  </select> -->
+                  <button type="button" class="btn btn-sm btn-outline-secondary" style="font-size: large;" (click)="Add(cartProperty,i,cartId)">+</button>
+              <input disabled [value]="cart.Quantity" (change)="onUpdateCart(cartProperty, i, cartId)" style="width: 40px;text-align: center;height:40px;" #cartProperty type="text" id="sel1" required pattern="^[1-9][0-9]*$" oninput="if(!this.value.match('^[1-9][0-9]*$'))this.value='';"
+              >
+              <button type="button" class="btn btn-sm btn-outline-secondary" style="font-size: large;" (click)="Subs(cartProperty,i,cartId)">-</button>
                 </div>
               </div>
 
@@ -165,7 +169,7 @@
                 <h5>${{cart.Price * cart.Quantity}}.00</h5>
                 <div class=" w-100 m-auto form-group mb-2 dp-safari">
                   <input type="text" #cartId [value]="cart.CartId" disabled hidden>
-                  <select  (change)="onUpdateCart(cartProperty, i, cartId)" #cartProperty [value]="cart.Quantity"
+                  <!-- <select  (change)="onUpdateCart(cartProperty, i, cartId)" #cartProperty [value]="cart.Quantity"
                     style="height: 32px;" class="mb-2 w-25 margin-auto form-control">
                     <option>1</option>
                     <option>2</option>
@@ -177,7 +181,11 @@
                     <option>8</option>
                     <option>9</option>
                     <option>10</option>
-                  </select>
+                  </select> -->
+                  <button type="button" class="btn btn-sm btn-outline-secondary" style="font-size: large;" (click)="Add(cartProperty,i,cartId)">+</button>
+              <input disabled [value]="cart.Quantity" (change)="onUpdateCart(cartProperty, i, cartId)" style="width: 40px;text-align: center;height:40px;" #cartProperty type="text" id="sel1" required pattern="^[1-9][0-9]*$" oninput="if(!this.value.match('^[1-9][0-9]*$'))this.value='';"
+              >
+              <button type="button" class="btn btn-sm btn-outline-secondary" style="font-size: large;" (click)="Subs(cartProperty,i,cartId)">-</button>
                 </div>
               </div>
 
@@ -288,7 +296,7 @@
                 <h5>${{cart.Price * cart.Quantity}}.00</h5>
                 <div class=" w-100 m-auto form-group mb-2 dp-safari">
                   <input type="text" #cartId [value]="cart.CartId" disabled hidden>
-                  <select  (change)="onUpdateCart(cartProperty, i, cartId)" #cartProperty [value]="cart.Quantity"
+                  <!-- <select  (change)="onUpdateCart(cartProperty, i, cartId)" #cartProperty [value]="cart.Quantity"
                     style="height: 32px;" class="mb-2 w-25 margin-auto form-control">
                     <option>1</option>
                     <option>2</option>
@@ -300,7 +308,11 @@
                     <option>8</option>
                     <option>9</option>
                     <option>10</option>
-                  </select>
+                  </select> -->
+                  <button type="button" class="btn btn-sm btn-outline-secondary" style="font-size: large;" (click)="Add(cartProperty,i,cartId)">+</button>
+              <input disabled [value]="cart.Quantity" (change)="onUpdateCart(cartProperty, i, cartId)" style="width: 40px;text-align: center;height:40px;" #cartProperty type="text" id="sel1" required pattern="^[1-9][0-9]*$" oninput="if(!this.value.match('^[1-9][0-9]*$'))this.value='';"
+              >
+              <button type="button" class="btn btn-sm btn-outline-secondary" style="font-size: large;" (click)="Subs(cartProperty,i,cartId)">-</button>
                 </div>
               </div>
 
@@ -411,7 +423,7 @@
                 <h5>${{cart.Price * cart.Quantity}}.00</h5>
                 <div class=" w-100 m-auto form-group mb-2 dp-safari">
                   <input type="text" #cartId [value]="cart.CartId" disabled hidden>
-                  <select  (change)="onUpdateCart(cartProperty, i, cartId)" #cartProperty [value]="cart.Quantity"
+                  <!-- <select  (change)="onUpdateCart(cartProperty, i, cartId)" #cartProperty [value]="cart.Quantity"
                     style="height: 32px;" class="mb-2 w-25 margin-auto form-control">
                     <option>1</option>
                     <option>2</option>
@@ -423,7 +435,11 @@
                     <option>8</option>
                     <option>9</option>
                     <option>10</option>
-                  </select>
+                  </select> -->
+                  <button type="button" class="btn btn-sm btn-outline-secondary" style="font-size: large;" (click)="Add(cartProperty,i,cartId)">+</button>
+              <input disabled [value]="cart.Quantity" (change)="onUpdateCart(cartProperty, i, cartId)" style="width: 40px;text-align: center;height:40px;" #cartProperty type="text" id="sel1" required pattern="^[1-9][0-9]*$" oninput="if(!this.value.match('^[1-9][0-9]*$'))this.value='';"
+              >
+              <button type="button" class="btn btn-sm btn-outline-secondary" style="font-size: large;" (click)="Subs(cartProperty,i,cartId)">-</button>
                 </div>
               </div>
 
