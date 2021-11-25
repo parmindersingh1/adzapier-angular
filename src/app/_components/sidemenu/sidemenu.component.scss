@@ -23,16 +23,16 @@
 }
 
 .submenu div a {
-    line-height: 30px;
+    //line-height: 30px;
     cursor: pointer;
     color:#333;
     display:inline-block;
 }
 
 .submenu div a span {
-    padding: 10px 0;
-    margin: 10px 0;
-    line-height: 30px;
+    padding: 0;
+    // margin: 10px 0;
+    // line-height: 30px;
 }
 
 .submenu div a span:hover {
