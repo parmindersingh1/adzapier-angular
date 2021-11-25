@@ -26,7 +26,7 @@ export class SidemenuComponent implements OnInit {
   @Input() organization;
   @Input() property;
   @Input() currentmenu:any = [];
-  
+  @Output() onClickSideMenuArrow : EventEmitter<any> = new EventEmitter<any>();
   queryOID;
   queryPID;
   slideSideMenu:boolean = false;
@@ -133,9 +133,11 @@ export class SidemenuComponent implements OnInit {
     if (this.slideSideMenu && this.isSideMenuArrowClicked) {
       this.elRef.nativeElement.querySelector('.sidemenu').removeEventListener('mouseenter', this.onMouseover.bind(this), true);
       this.elRef.nativeElement.querySelector('.sidemenu').removeEventListener('mouseleave',this.onMouseout.bind(this), true);
+      this.onClickSideMenuArrow.emit(this.slideSideMenu);
       this.userService.setSidemenuOpenStatus(this.isSideMenuArrowClicked);
     }else{
       this.slideSideMenu = !this.slideSideMenu;
+      this.onClickSideMenuArrow.emit(this.slideSideMenu);
       this.userService.setSidemenuOpenStatus(this.isSideMenuArrowClicked);
     }
   }
@@ -150,6 +152,7 @@ export class SidemenuComponent implements OnInit {
   onCheckSidemenustatus(){
     if(this.userService.getSidemenuOpenStatus()){
       this.slideSideMenu = true;
+      this.onClickSideMenuArrow.emit(this.slideSideMenu);
       this.isSideMenuArrowClicked = true;
     }
   }
