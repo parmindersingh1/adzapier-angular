@@ -153,7 +153,7 @@ export class UpdateSqlQueryBuilderComponent implements OnInit, OnChanges {
           // this.loading.stop();
           this.tableColumnsList = [];
           this.isOpen = true;
-          this.alertMsg = error.message;
+          this.alertMsg = 'Unable to get columns';
           this.alertType = 'danger';
           rejects(true);
         });
