@@ -1,9 +1,9 @@
-<div class="wrapper" *ngIf="!publishing">
-  <div class="row">
-    <div class="col-md-9">
+<div class="container-fluid margin-top-70" *ngIf="!publishing">
+  <!-- <div class="row"> -->
+    <div class="col-md-9 ml-4">
       <div class="d-sm-flex align-items-center justify-content-between">
         <div>
-          <nav aria-label="breadcrumb" class="bredcrub-row" style="margin-left: -14px">
+          <nav aria-label="breadcrumb" class="bredcrub-row" style="margin-left:-14px;">
             <ol class="breadcrumb breadcrumb-style1 mg-b-10">
               <li class="breadcrumb-item">Privacy</li>
               <li class="breadcrumb-item"><a routerLink="/home/dashboard/cookie-consent"
@@ -16,7 +16,7 @@
         </div>
       </div> <!-- breadcrumb -->
     </div>
-    <div class="col-md-3 pl-4">
+    <div class="col-md-3 pl-3">
       <div class="saving-status  float-right" *ngIf="contentSaving === 'saving'">
         <p class="mb-0"><span class="spinner-border"></span> Saving Your Customization ... </p>
       </div>
@@ -24,16 +24,16 @@
         <p class="mb-0"> Saved </p>
       </div>
     </div>
-  </div>
+  <!-- </div> -->
 
 
-  <form [formGroup]="BannerConfigurationForm" (ngSubmit)="onSubmit()">
+  <form [formGroup]="BannerConfigurationForm" class="margin-wrapper" (ngSubmit)="onSubmit()">
 
     <div class="card title-head">
       <div class="card-header">
         <div class="row">
           <h5 class="main-heading col-md-4">Banner Configuration </h5>
-          <div class="col-md-4 preview-border-left">
+          <div class="col-md-5 pr-0 preview-border-left">
             <p class="live-preview-type">Live Preview : <span>
              <span class="tx-16 pl-2 pr-2"
                    *ngIf="BannerConfigurationForm.value.AllowGDPR && (!BannerConfigurationForm.value.GenericGlobal && !BannerConfigurationForm.value.CCPAGlobal) "> GDPR :   <p-radioButton
@@ -57,7 +57,7 @@
           <!--              </div>-->
           <!--            </div>-->
           <!--          </div>-->
-          <div class="col-md-4 text-right">
+          <div class="col-md-3 pl-0 text-right">
             <button pButton pRipple type="button"
                     [disabled]="contentSaving === 'saving'"
                     (click)="openModal(resetConfig)" label="Reset to Default" class="p-button-secondary mr-2"></button>
