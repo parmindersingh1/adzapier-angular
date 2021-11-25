@@ -166,7 +166,6 @@ export class PricingComponent implements OnInit, AfterViewInit {
       }
       this.activeData = activeData;
       this.subscriptionList = this.planDetails.cookieConsent[`${this.cookieConsentBillingCycle}`];
-      console.log(this.subscriptionList);
       this.dsarPlanList = this.planDetails.dsar[`${this.dsarBillingCycle}`];
       this.consentPreferenceList = this.planDetails.consentPreference[`${this.consentPreferenceBillingCycle}`];
     } catch (e) {
