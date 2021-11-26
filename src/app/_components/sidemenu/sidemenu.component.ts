@@ -217,8 +217,10 @@ export class SidemenuComponent implements OnInit {
 
   matchSideLinkWithNavbarlink(){
       const pathFromURL = this.location.path().split("?"); 
-      const index = this.currentmenu.subcategory.findIndex((t) => t.routerLink === pathFromURL[0]);
-      this.currentMenuItemIndex = index; 
+      if(this.currentmenu !== undefined){
+        const index = this.currentmenu.subcategory.findIndex((t) => t.routerLink === pathFromURL[0]);
+        this.currentMenuItemIndex = index;
+      }
   }
 
   trackById(index, menuitem) {
