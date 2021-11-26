@@ -160,7 +160,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     }
     this.loading = true;
-    this.authenticationService.login(this.constructor.name, moduleName.loginModule, this.f.email.value, this.f.password.value)
+    this.authenticationService.login(this.constructor.name, moduleName.loginModule, this.f.email.value.toLowerCase(), this.f.password.value)
       .pipe(first())
       .subscribe(
         data => {
