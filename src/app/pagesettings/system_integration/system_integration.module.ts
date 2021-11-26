@@ -11,10 +11,11 @@ import {SkeletonModule} from 'primeng/skeleton';
 import {HttpQueryBuilderComponent} from '../../privacy/dsar/dsarform/dsar-system/http-query-builder/http-query-builder.component';
 import {ButtonModule} from 'primeng/button';
 import {RippleModule} from 'primeng/ripple';
+import { AuthGuard } from 'src/app/_helpers';
 
 
 const router: Routes = [
-  { path : '', component: SystemIntegrationComponent}
+  { path : '', component: SystemIntegrationComponent,canActivate:[AuthGuard]}
 ];
 
 @NgModule({
