@@ -117,6 +117,33 @@
 
     <div>
         <div class="guidencediv" [ngStyle]="styleobj"
+            *ngIf="isclickedbyuser && !isactualLinkclickedbyuser && linkid == '311'  &&  divguidetext == 'manage-vendors' ">
+            <p> {{guidancetext}}</p>
+            
+        </div>
+        <div class="guidencediv" [ngStyle]="styleobj"
+            *ngIf="isactualLinkclickedbyuser && linkid == '311' && divguidetext == 'manage-vendors'">
+            <p> {{guidancetext}}</p>
+            
+        </div>
+    </div>
+
+    
+    <div>
+        <div class="guidencediv" [ngStyle]="styleobj"
+            *ngIf="isclickedbyuser && !isactualLinkclickedbyuser && linkid == '312' && divguidetext == 'cookie-consent-setup' ">
+            <p> {{guidancetext}}</p>
+            
+        </div>
+        <div class="guidencediv" [ngStyle]="styleobj"
+            *ngIf="isactualLinkclickedbyuser && linkid == '312' && divguidetext == 'cookie-consent-setup'">
+            <p> {{guidancetext}}</p>
+            
+        </div>
+    </div>
+
+    <div>
+        <div class="guidencediv" [ngStyle]="styleobj"
             *ngIf="isclickedbyuser && !isactualLinkclickedbyuser && linkid == '10'  && divguidetext == 'consent-dashboard' ">
             <p> {{guidancetext}}</p>
             
