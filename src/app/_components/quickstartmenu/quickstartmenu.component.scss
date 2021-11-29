@@ -21,9 +21,33 @@ $guidancediv-bgcolor-two: #385a8e;
   outline: none;
 }
 
+.qsmtop-draghandle {
+  top: -28px;
+  left: 10px;
+  position: absolute;
+  z-index: 100;
+  line-height: 23px;
+  padding: 4px;
+  height: 30px;
+  width: 35px;
+  font-size: 20px;
+  background: #ffffff;
+  border-bottom: 2px solid #fff !important;
+  border: 1px solid #b2b8c5;
+  right: -2px;
+}
+
+
+.qsm-btm-draghandle {
+  position: relative;
+  margin-left: 15px;
+  margin-right: 15px;
+}
+
 .quickstart-wrapper {
     width: 300px;
-    border: 1px solid #dee2ea;
+    border: 1px solid #b2b8c5;
+    box-shadow: 2px 2px 3px #c7c7c7;
     border-top: 0;
     background: #ffffff;
     position: fixed;
@@ -123,6 +147,12 @@ $guidancediv-bgcolor-two: #385a8e;
 
 .dismiss-top-border {
   border-top:1px solid rgba(72, 94, 144, 0.16);
+  border-top: 1px solid rgba(72, 94, 144, 0.16);
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-wrap: wrap;
+  flex-direction: row;
 }
 
 accordion-group {

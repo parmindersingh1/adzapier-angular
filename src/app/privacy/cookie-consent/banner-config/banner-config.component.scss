@@ -1,9 +1,9 @@
-.wrapper{
-  margin-top: 5em;
-  padding-left: 2%;
-  padding-right: 2%;
-  height: 100%;
-}
+// .wrapper{
+//   margin-top: 5em;
+//   padding-left: 2%;
+//   padding-right: 2%;
+//   height: 100%;
+// }
 .row-cols-group{
   //height: 500px;
   margin-bottom: 50px;
@@ -178,6 +178,7 @@ width: 100%;
 }
 .p-divider.p-divider-horizontal {
   width: 100%;
+  z-index: 0;
 }
 
 .p-colorpicker-preview{
@@ -422,4 +423,12 @@ width: 100%;
   margin-top: 5px;
   font-weight: 500;
   font-size: 12px;
+}
+
+.margin-top-70 {
+  margin:70px 0 0 0;
+}
+
+.margin-wrapper {
+  margin:0 0 0 35px;
 }

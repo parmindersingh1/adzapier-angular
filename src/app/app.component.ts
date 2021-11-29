@@ -19,7 +19,7 @@ import { PricingComponent } from 'src/app/pagesettings/billing/pricing/pricing.c
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
   animations: [
-    trigger('slideInOut', [
+    trigger('slideInOutApp', [
       state('true', style({
        "margin-left":"200px",
         transform: '  translateX(0)'
@@ -78,10 +78,11 @@ export class AppComponent implements OnInit {
     private location: Location,
     private cdRef: ChangeDetectorRef
   ) {
-    if (this.location.path().indexOf('/login') !== -1 || this.location.path().indexOf('signup') !== -1 || this.location.path().indexOf('invited-user-verify-email') !== -1) {
-      this.isloginpage = true;
+    if (this.location.path().indexOf('/login') !== -1 || this.location.path().indexOf('signup') !== -1 || this.location.path().indexOf('invited-user-verify-email') !== -1 
+    || this.location.path().indexOf('error/pagenotfound') !== -1) {
+        this.isloginpage = false;
     } else {
-      this.isloginpage = false;
+      this.isloginpage = true;
     }
     //  this.headerComponent.loadOrganizationList();
     // Lazy Loading indicator
@@ -284,8 +285,8 @@ export class AppComponent implements OnInit {
     }
 
     this.isquickstartopen = this.quickmenuService.isquickstartopen;
-    if (this.location.path().indexOf('/login') !== -1 || this.location.path().indexOf('signup') !== -1 || this.location.path().indexOf('resetpswd') !== -1 || this.location.path().indexOf('invited-user-verify-email') !== -1) {
-      this.isloginpage = false;
+    if (this.location.path().indexOf('/login') !== -1 || this.location.path().indexOf('signup') !== -1 || this.location.path().indexOf('resetpswd') !== -1 || this.location.path().indexOf('invited-user-verify-email') !== -1 || this.location.path().indexOf('error/pagenotfound') !== -1) {
+      this.isloginpage = false; // quick start will not be visible
     } else {
       this.isloginpage = true;
     }

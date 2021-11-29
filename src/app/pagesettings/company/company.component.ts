@@ -387,7 +387,7 @@ export class CompanyComponent implements AfterViewInit, OnInit {
           role_id: this.inviteUserForm.value.permissions,
           user_level: 'company'
         };
-        this.companyService.inviteUser(this.constructor.name, moduleName.organizationDetailsModule, requestObj)
+        this.companyService.inviteUser(this.constructor.name, moduleName.companyModule, requestObj)
           .subscribe((data) => {
             if (data) {
               this.alertMsg = data.response;
@@ -406,14 +406,18 @@ export class CompanyComponent implements AfterViewInit, OnInit {
             this.isUpdateUserinvitation = false;
           });
       } else {
+        let useremail = this.inviteUserForm.getRawValue().emailid;
         const requestObj = {
           id: this.recordID,
+          email: useremail,
           user_id: this.approverID,
           role_id: this.inviteUserForm.value.permissions,
           firstname: this.inviteUserForm.value.firstname,
-          lastname: this.inviteUserForm.value.lastname
+          lastname: this.inviteUserForm.value.lastname,
+          user_level: 'company',
+          action:'edit'
         };
-        this.companyService.updateUserRole(this.constructor.name, moduleName.organizationDetailsModule, requestObj)
+        this.companyService.updateUserRole(this.constructor.name, moduleName.companyModule, requestObj)
           .subscribe((data) => {
             if (data) {
               this.alertMsg = data.response;
@@ -547,6 +551,7 @@ export class CompanyComponent implements AfterViewInit, OnInit {
   }
 
   removeTeamMember(obj, control: string) {
+    obj['user_level']='company';
     this.confirmTeammember = obj;
     this.controlname = control;
     this.selectedTeamMember = obj.user_email;

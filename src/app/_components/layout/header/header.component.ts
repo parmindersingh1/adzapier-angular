@@ -229,8 +229,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
 
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
-      }
-      if (event instanceof NavigationEnd) {
         this.isPrivacyActivelinkMatched = event.url.indexOf('privacy') >= 0 || event.url.indexOf('home') >= 0
           || event.url.indexOf('cookie') >= 0;
       } else if (event instanceof NavigationEnd) {
@@ -562,11 +560,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
         showlink: 'Cookie Consent',
         subcategory: [
           { showlink: 'Dashboard', routerLink: '/home/dashboard/cookie-consent', icon: 'bar-chart-2',indexid:3,navmenuid:10 },
-          { showlink: 'Manage Vendors', routerLink: '/cookie-consent/manage-vendors', icon: 'fas fa-tasks feather-16' },
+          { showlink: 'Manage Vendors', routerLink: '/cookie-consent/manage-vendors', icon: 'fas fa-tasks feather-16',indexid:3,navmenuid:311 },
           { showlink: 'Cookie Category', routerLink: '/cookie-consent/cookie-category', icon: 'fab fa-microsoft feather-16',indexid:3,navmenuid:7 },
           { showlink: 'Cookie Banner', routerLink: '/cookie-consent/banner-configuration', icon: 'fas fa-cookie feather-16',indexid:3,navmenuid:8 },
           { showlink: 'Consent Tracking', routerLink: '/cookie-consent/cookie-tracking', icon: 'fas fa-file-contract feather-16',indexid:3,navmenuid:9 },
-          { showlink: 'Setup', routerLink: '/cookie-consent/cookie-banner/setup', icon: 'fas fa-wrench feather-16' },
+          { showlink: 'Setup', routerLink: '/cookie-consent/cookie-banner/setup', icon: 'fas fa-wrench feather-16',indexid:3,navmenuid:312 },
         ]
       },{
       showlink: 'Consent Preference',
@@ -634,12 +632,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
 
     this.licenseAvailabilityForFormAndRequestPerOrg(org);
     if (this.router.url.indexOf('dsarform') !== -1) {
-      this.router.navigate(['/privacy/dsar/webforms']);
+      this.router.navigate(['/privacy/dsar/webforms'],{ queryParams: { oid: this.queryOID, pid: this.queryPID }});
     }
     if (this.router.url.indexOf('createworkflow') !== -1) {
-      this.router.navigate(['/privacy/dsar/workflows']);
+      this.router.navigate(['/privacy/dsar/workflows'],{ queryParams: { oid: this.queryOID, pid: this.queryPID }}); //oid: obj.organization_id, pid: obj.property_id
     }
-    this.router.navigate([this.router.url], { queryParams: { oid: obj.organization_id, pid: obj.property_id },skipLocationChange:false} );
+    this.router.navigate([this.router.url], { queryParams: { oid: this.queryOID, pid: this.queryPID },skipLocationChange:false} );
    // this.openNav();
   }
 
@@ -1011,7 +1009,16 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
         this.openModal(this.confirmModal);
         return false;
       }
-      this.currentClickedMenuItem = this.navigationMenu[0];
+      this.currentClickedMenuItem = [{ 
+        showlink: 'DSAR',
+        tooltip:'Data Subject Access Request',
+      subcategory: [
+        { showlink: 'Dashboard', routerLink: '/home/dashboard/ccpa-dsar', icon: 'bar-chart-2', indexid:4, navmenuid:16 },
+        { showlink: 'Webforms', routerLink: '/privacy/dsar/webforms', icon: 'pie-chart',indexid:4,navmenuid:14 },
+        { showlink: 'Requests', routerLink: '/privacy/dsar/requests', icon: 'fa fa-ticket-alt feather-16',indexid:4,navmenuid:15 },
+        { showlink: 'Workflow', routerLink: '/privacy/dsar/workflows', icon: 'fas fa-sitemap',indexid:4,navmenuid:13 },
+      ]
+      }];
     }
 
     if (link.routerLink === '/home/dashboard/consent-preference' || link.routerLink == '/consent-solutions/consent-records' || link.routerLink == '/consent-solutions/setup' ) {
@@ -1898,6 +1905,16 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
         "left":"310px",
         "top":"70px"
       }
+    } else if(this.quickDivID !== "" && (this.quickDivID == 311)){
+      return {
+        "left":"310px",
+        "top":"90px"
+      }
+    } else if(this.quickDivID !== "" && (this.quickDivID == 312)){
+      return {
+        "left":"310px",
+        "top":"200px"
+      }
     } else if(this.quickDivID !== "" && (this.quickDivID == 11)){
       return {
         "left":"107px",
@@ -2265,6 +2282,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
         this.renderer.addClass(this.dropdownTriggers.nativeElement.querySelectorAll('div > div > ul')[4], 'addbg-menuitem');
       } else if(this.quickLinkObj !== undefined && this.quickLinkObj.linkid == 10){
         this.renderer.addClass(this.dropdownTriggers.nativeElement.querySelectorAll('div > div > ul')[0], 'addbg-menuitem');
+      } else if(this.quickLinkObj !== undefined && this.quickLinkObj.linkid == 311){
+        this.renderer.addClass(this.dropdownTriggers.nativeElement.querySelectorAll('div > div > ul')[1], 'addbg-menuitem');
+      } else if(this.quickLinkObj !== undefined && this.quickLinkObj.linkid == 312){
+        this.renderer.addClass(this.dropdownTriggers.nativeElement.querySelectorAll('div > div > ul')[5], 'addbg-menuitem');
       }
     }
   }
@@ -2302,7 +2323,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
       this.renderer.removeClass(this.navMenuEle.nativeElement.querySelectorAll('li > div')[1], 'highlightmenu-element');
 
     }
-    if (this.quickDivID !== "" && (this.quickDivID === 7 || this.quickDivID === 8 || this.quickDivID === 9 || this.quickDivID === 10)) {
+    if (this.quickDivID !== "" && (this.quickDivID === 7 || this.quickDivID === 8 || this.quickDivID === 9 || this.quickDivID === 10 || this.quickDivID === 311 || this.quickDivID === 312)) {
       //this.removeHightlightBorders();
       this.renderer.removeClass(this.navMenuEle.nativeElement.querySelectorAll('li > div')[0], 'highlightmenu-element');
       this.renderer.addClass(this.navMenuEle.nativeElement.querySelectorAll('li > div')[1], 'highlightmenu-element');
@@ -2335,23 +2356,23 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
 
   checkPathForSideMenu(){
     if (this.location.path().indexOf('/home/dashboard/cookie-consent') !== -1 || this.location.path().indexOf('/cookie-consent/manage-vendors') !== -1 || this.location.path().indexOf('/cookie-consent/cookie-category') !== -1
-    || this.location.path().indexOf('/cookie-consent/cookie-banner') !== -1 || this.location.path().indexOf('/cookie-consent/cookie-tracking') !== -1 || this.location.path().indexOf('/cookie-consent/cookie-banner/setup') !== -1) {
+    || this.location.path().indexOf('/cookie-consent/cookie-banner') !== -1 || this.location.path().indexOf('/cookie-consent/cookie-tracking') !== -1 || this.location.path().indexOf('/cookie-consent/cookie-banner/setup') !== -1 || this.location.path().indexOf('cookie') !== -1) {
       this.showSidemenu = true;
-      this.currentClickedMenuItem = {
+      this.currentClickedMenuItem = [{
         showlink: 'Cookie Consent',
         subcategory: [
           { showlink: 'Dashboard', routerLink: '/home/dashboard/cookie-consent', icon: 'bar-chart-2',indexid:3,navmenuid:10 },
           { showlink: 'Manage Vendors', routerLink: '/cookie-consent/manage-vendors', icon: 'fas fa-tasks feather-16' },
           { showlink: 'Cookie Category', routerLink: '/cookie-consent/cookie-category', icon: 'fab fa-microsoft feather-16',indexid:3,navmenuid:7 },
-          { showlink: 'Cookie Banner', routerLink: '/cookie-consent/cookie-banner', icon: 'fas fa-cookie feather-16',indexid:3,navmenuid:8 },
+          { showlink: 'Cookie Banner', routerLink: '/cookie-consent/banner-configuration', icon: 'fas fa-cookie feather-16',indexid:3,navmenuid:8 },
           { showlink: 'Consent Tracking', routerLink: '/cookie-consent/cookie-tracking', icon: 'fas fa-file-contract feather-16',indexid:3,navmenuid:9 },
           { showlink: 'Setup', routerLink: '/cookie-consent/cookie-banner/setup', icon: 'fas fa-wrench feather-16' },
         ]
-      }; // this.navigationMenu[1];
+      }]; // this.navigationMenu[1];
       this.userService.setSidemenulist(this.currentClickedMenuItem);
-    } else if (this.location.path().indexOf('/home/dashboard/ccpa-dsar') !== -1 || this.location.path().indexOf('/privacy/dsar/webforms') !== -1 || this.location.path().indexOf('/privacy/dsar/requests') !== -1 || this.location.path().indexOf('/privacy/dsar/workflows') !== -1) {
+    } else if (this.location.path().indexOf('/home/dashboard/ccpa-dsar') !== -1 || this.location.path().indexOf('/privacy/dsar/webforms') !== -1 || this.location.path().indexOf('/privacy/dsar/requests') !== -1 || this.location.path().indexOf('/privacy/dsar/workflows') !== -1 || this.location.path().indexOf('dsar') !== -1) {
       this.showSidemenu = true;
-      this.currentClickedMenuItem =  { 
+      this.currentClickedMenuItem =  [{ 
         showlink: 'DSAR',
         tooltip:'Data Subject Access Request',
       subcategory: [
@@ -2361,18 +2382,18 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
         { showlink: 'Workflow', routerLink: '/privacy/dsar/workflows', icon: 'fas fa-sitemap',indexid:4,navmenuid:13 },
       ]
 
-      };
+      }];
       this.userService.setSidemenulist(this.currentClickedMenuItem);
-    } else  if (this.location.path().indexOf('/home/dashboard/consent-preference') !== -1 || this.location.path().indexOf('/consent-solutions/consent-records') !== -1 || this.location.path().indexOf('/consent-solutions/setup') !== -1 ) {
+    } else  if (this.location.path().indexOf('/home/dashboard/consent-preference') !== -1 || this.location.path().indexOf('/consent-solutions/consent-records') !== -1 || this.location.path().indexOf('/consent-solutions/setup') !== -1 || this.location.path().indexOf('consent') !== -1) {
       this.showSidemenu = true;
-      this.currentClickedMenuItem =  {
+      this.currentClickedMenuItem =  [{
         showlink: 'Consent Preference',
           subcategory: [
             { showlink: 'Dashboard', routerLink: '/home/dashboard/consent-preference', icon: 'bar-chart-2',indexid:5,navmenuid:22 },
             { showlink: 'Consent Records', routerLink: '/consent-solutions/consent-records', icon: 'fas fa-tasks feather-16',indexid:5,navmenuid:21 },
             { showlink: 'Setup', routerLink: '/consent-solutions/setup', icon: 'fas fa-wrench feather-16',indexid:5,navmenuid:20 },
           ]
-        }
+        }];
       this.userService.setSidemenulist(this.currentClickedMenuItem);
     } else {
       this.userService.removeSidemenulist();

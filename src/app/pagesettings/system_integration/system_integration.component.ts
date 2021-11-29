@@ -103,6 +103,7 @@ export class SystemIntegrationComponent implements OnInit {
   }
 
   openModalUpdateConnection(template: TemplateRef<any>, obj) {
+    this.mailChimpForm.reset();
     this.updateSystemName = this.onFindSystemName(obj.system_id);
     this.updateConnectionData = obj;
     this.modalRef = this.modalService.show(template, {class: 'modal-lg', ignoreBackdropClick: true});
@@ -144,6 +145,7 @@ export class SystemIntegrationComponent implements OnInit {
       || this.onFindSystemName(systemID) === 'hubspot'
       || this.onFindSystemName(systemID) === 'moosend') {
       this.mailChimpData = data;
+      this.mailChimpForm.reset();
       this.openModal(this.mailChimpConnection);
       return false;
     }
@@ -236,16 +238,18 @@ export class SystemIntegrationComponent implements OnInit {
         this.alertType = 'success';
         this.errorMessage = '';
         this.loading.stop();
+        this.mailChimpForm.reset();
         this.modalRef.hide();
       }, error => {
         this.testingSuccess = false;
         this.isTesting = false;
-        // this.isOpen = true;
-        // this.alertMsg = error;
-        // this.alertType = 'danger';
         this.loading.stop();
         this.errorMessage = error;
-        // this.modalRef.hide();
       });
+  }
+  onResetTestEmailForm(){
+    this.modalRef.hide();
+    this.errorMessage = '';
+    this.mailChimpForm.reset();
   }
 }

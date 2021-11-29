@@ -126,8 +126,11 @@
               <li *ngIf="menu.showlink == 'Privacy' && q===0" class="displayflex"><span>DSAR</span></li>
               <li role="menuitem" *ngIf="q  <= 9">
                 <a class="dropdown-item" [class.active]="activateSublink(item)"  [routerLink]="item.routerLink" *ngIf="item.routerLink !== '/home/dashboard/consent-preference'" [queryParams]="{oid:queryOID , pid:queryPID}" (click)="goto(item)">
-                  <span *ngIf="item.icon.indexOf('fa')===-1">
+                  <span *ngIf="item.icon.indexOf('fa')===-1 && item.icon.indexOf('pie') === -1">
                     <i-feather name="{{item.icon}}" class="feather-16"></i-feather>{{item.showlink}}
+                  </span>
+                  <span  *ngIf="item.icon.indexOf('fa')===-1 && item.icon.indexOf('pie') !== -1">
+                    <i class="fab fa-wpforms feather-16 fontsize-16"></i>{{item.showlink}}
                   </span>
                   <span *ngIf="item.icon.indexOf('fa')===0"><i class="{{item.icon}}"></i>{{item.showlink}}</span>
                 </a> <!--hide consent preference menu item-->
@@ -495,6 +498,6 @@
     [guidancetext]="alertcontent" [isactualLinkclickedbyuser]="actuallinkstatus">
   </app-quickstartalert>
 </div>
-<!-- <div *ngIf="currentUser && showSidemenu">
-<app-sidemenu  [organization]="currentOrganization" [currentmenu]="currentClickedMenuItem" [property]="currentProperty" (onClickSideMenuArrow)="checkSideMenuarrowClick($event)"></app-sidemenu>
-</div> -->
+<div *ngIf="currentUser && showSidemenu">
+   <app-sidemenu  [organization]="currentOrganization" [currentmenu]="currentClickedMenuItem[0]" [property]="currentProperty" (onClickSideMenuArrow)="checkSideMenuarrowClick($event)"></app-sidemenu>
+</div>
