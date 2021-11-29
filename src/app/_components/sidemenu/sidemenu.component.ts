@@ -56,6 +56,11 @@ export class SidemenuComponent implements OnInit {
    }
 
   ngOnInit(): void {
+    this.activatedroute.queryParamMap
+    .subscribe(params => {
+      this.queryOID = params.get('oid');
+      this.queryPID = params.get('pid');
+     });
     this.elRef.nativeElement.querySelector('.sidemenu').removeEventListener('mouseenter', this.onMouseover.bind(this), false);
     this.elRef.nativeElement.querySelector('.sidemenu').removeEventListener('mouseleave',this.onMouseover.bind(this), false);
     if(this.currentmenu !== undefined){
@@ -184,6 +189,11 @@ export class SidemenuComponent implements OnInit {
     }
     this.getCurrentmenu();
     this.matchSideLinkWithNavbarlink();
+    this.activatedroute.queryParamMap
+    .subscribe(params => {
+      this.queryOID = params.get('oid');
+      this.queryPID = params.get('pid');
+     });
     this.cdRef.detectChanges();
   }
 
@@ -207,8 +217,10 @@ export class SidemenuComponent implements OnInit {
 
   matchSideLinkWithNavbarlink(){
       const pathFromURL = this.location.path().split("?"); 
-      const index = this.currentmenu.subcategory.findIndex((t) => t.routerLink === pathFromURL[0]);
-      this.currentMenuItemIndex = index; 
+      if(this.currentmenu !== undefined){
+        const index = this.currentmenu.subcategory.findIndex((t) => t.routerLink === pathFromURL[0]);
+        this.currentMenuItemIndex = index;
+      }
   }
 
   trackById(index, menuitem) {

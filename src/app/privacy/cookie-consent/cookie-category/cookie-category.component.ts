@@ -16,6 +16,7 @@ import { takeUntil } from 'rxjs/operators';
 import { forkJoin, Observable, Subject } from 'rxjs';
 import { QuickmenuService } from 'src/app/_services/quickmenu.service';
 import { QuickStart } from 'src/app/_models/quickstart';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 const colorCodes = ['#f77eb9', '#fdb16d', '#c693f9', '#65e0e0', '#69b2f8', '#6fd39b'];
 
@@ -116,6 +117,7 @@ export class CookieCategoryComponent implements OnInit {//AfterViewChecked
               private cd: ChangeDetectorRef,
               private dataService: DataService,
               private modalService: BsModalService,
+              private ngbModal: NgbModal,
               private loading: NgxUiLoaderService,
               private orgservice: OrganizationService,
               public dialog: MatDialog,
@@ -287,8 +289,10 @@ export class CookieCategoryComponent implements OnInit {//AfterViewChecked
     }
     if (this.isUpdate) {
       this.onUpdate(catForm);
+      this.ngbModal.dismissAll('Canceled');
     } else {
       this.saveProduct(catForm);
+      this.ngbModal.dismissAll('Canceled');
     }
   }
 
@@ -306,12 +310,13 @@ export class CookieCategoryComponent implements OnInit {//AfterViewChecked
     this.productDialog = true;
   }
 
-  editProduct(product) {
+  editProduct(content,product) {
     this.catId = product.id;
     this.isUpdate = true;
     this.addCookieForm.patchValue(product);
     this.cookieCategory = {...product};
     this.productDialog = true;
+    this.ngbModal.open(content, { ariaLabelledBy: 'modal-basic-title' });
   }
 
   onGetChartData() {
@@ -402,6 +407,7 @@ export class CookieCategoryComponent implements OnInit {//AfterViewChecked
   hideDialog() {
     this.productDialog = false;
     this.submitted = false;
+    this.ngbModal.dismissAll('Canceled');
   }
 
   onUpdate(catForm) {
@@ -417,6 +423,7 @@ export class CookieCategoryComponent implements OnInit {//AfterViewChecked
         this.onGetChartData();
         this.onGetDataFromServer();
         this.productDialog = false;
+        this.submitted = false;
         // this.onGetCatList();
       }, error => {
         this.tLoading = false;
@@ -425,6 +432,7 @@ export class CookieCategoryComponent implements OnInit {//AfterViewChecked
         this.alertMsg = error;
         this.alertType = 'error';
         this.cookieCategory = {};
+        this.submitted = false;
       });
 
   }
@@ -442,6 +450,7 @@ export class CookieCategoryComponent implements OnInit {//AfterViewChecked
         this.onGetDataFromServer();
         this.cookieCategory = {};
         this.productDialog = false;
+        this.submitted = false;
         // this.onGetCatList();
       }, error => {
         this.isOpen = true;
@@ -450,6 +459,7 @@ export class CookieCategoryComponent implements OnInit {//AfterViewChecked
         this.tLoading = false;
         this.productDialog = false;
         this.cookieCategory = {};
+        this.submitted = false;
       });
 
   }
@@ -719,6 +729,12 @@ export class CookieCategoryComponent implements OnInit {//AfterViewChecked
     let qsMenuResult = this.userService.isClickedOnQSMenu;
 
     return forkJoin([userAction, qsMenuResult])
+  }
+
+  openCookieModal(content){
+    this.isUpdate = false;
+    this.addCookieForm.reset();
+    this.ngbModal.open(content, { ariaLabelledBy: 'modal-basic-title' });
   }
 
   positionObjForCookieScan(){

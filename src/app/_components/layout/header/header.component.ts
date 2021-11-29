@@ -596,11 +596,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
         showlink: 'Cookie Consent',
         subcategory: [
           { showlink: 'Dashboard', routerLink: '/home/dashboard/cookie-consent', icon: 'bar-chart-2',indexid:3,navmenuid:10 },
-          { showlink: 'Manage Vendors', routerLink: '/cookie-consent/manage-vendors', icon: 'fas fa-tasks feather-16' },
+          { showlink: 'Manage Vendors', routerLink: '/cookie-consent/manage-vendors', icon: 'fas fa-tasks feather-16',indexid:3,navmenuid:311 },
           { showlink: 'Cookie Category', routerLink: '/cookie-consent/cookie-category', icon: 'fab fa-microsoft feather-16',indexid:3,navmenuid:7 },
           { showlink: 'Cookie Banner', routerLink: '/cookie-consent/banner-configuration', icon: 'fas fa-cookie feather-16',indexid:3,navmenuid:8 },
           { showlink: 'Consent Tracking', routerLink: '/cookie-consent/cookie-tracking', icon: 'fas fa-file-contract feather-16',indexid:3,navmenuid:9 },
-          { showlink: 'Setup', routerLink: '/cookie-consent/cookie-banner/setup', icon: 'fas fa-wrench feather-16' },
+          { showlink: 'Setup', routerLink: '/cookie-consent/cookie-banner/setup', icon: 'fas fa-wrench feather-16',indexid:3,navmenuid:312 },
         ]
       },{
       showlink: 'Consent Preference',
@@ -1941,6 +1941,16 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
         "left":"310px",
         "top":"70px"
       }
+    } else if(this.quickDivID !== "" && (this.quickDivID == 311)){
+      return {
+        "left":"310px",
+        "top":"90px"
+      }
+    } else if(this.quickDivID !== "" && (this.quickDivID == 312)){
+      return {
+        "left":"310px",
+        "top":"200px"
+      }
     } else if(this.quickDivID !== "" && (this.quickDivID == 11)){
       return {
         "left":"107px",
@@ -2308,6 +2318,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
         this.renderer.addClass(this.dropdownTriggers.nativeElement.querySelectorAll('div > div > ul')[4], 'addbg-menuitem');
       } else if(this.quickLinkObj !== undefined && this.quickLinkObj.linkid == 10){
         this.renderer.addClass(this.dropdownTriggers.nativeElement.querySelectorAll('div > div > ul')[0], 'addbg-menuitem');
+      } else if(this.quickLinkObj !== undefined && this.quickLinkObj.linkid == 311){
+        this.renderer.addClass(this.dropdownTriggers.nativeElement.querySelectorAll('div > div > ul')[1], 'addbg-menuitem');
+      } else if(this.quickLinkObj !== undefined && this.quickLinkObj.linkid == 312){
+        this.renderer.addClass(this.dropdownTriggers.nativeElement.querySelectorAll('div > div > ul')[5], 'addbg-menuitem');
       }
     }
   }
@@ -2345,7 +2359,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
       this.renderer.removeClass(this.navMenuEle.nativeElement.querySelectorAll('li > div')[1], 'highlightmenu-element');
 
     }
-    if (this.quickDivID !== "" && (this.quickDivID === 7 || this.quickDivID === 8 || this.quickDivID === 9 || this.quickDivID === 10)) {
+    if (this.quickDivID !== "" && (this.quickDivID === 7 || this.quickDivID === 8 || this.quickDivID === 9 || this.quickDivID === 10 || this.quickDivID === 311 || this.quickDivID === 312)) {
       //this.removeHightlightBorders();
       this.renderer.removeClass(this.navMenuEle.nativeElement.querySelectorAll('li > div')[0], 'highlightmenu-element');
       this.renderer.addClass(this.navMenuEle.nativeElement.querySelectorAll('li > div')[1], 'highlightmenu-element');
