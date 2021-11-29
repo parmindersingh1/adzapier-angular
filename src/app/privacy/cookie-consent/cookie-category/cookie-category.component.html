@@ -191,7 +191,7 @@
         </ng-template>
 
         <ng-template pTemplate="right">
-          <button type="button" class="btn btn-sm  btn-outline-secondary btn-uppercase mr-2" (click)="openNew()">
+          <button type="button" class="btn btn-sm  btn-outline-secondary btn-uppercase mr-2" (click)="openCookieModal(addCookieModal)"> <!--openNew()-->
             <i aria-hidden="true" class="fa fa-plus pr-1"></i> Add Cookie
           </button>
 
@@ -263,7 +263,7 @@
             </td>
             <td>
               <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-button-sm"
-                      (click)="editProduct(cookieList)"></button>
+                      (click)="editProduct(addCookieModal,cookieList)"></button>
             </td>
             <td>
               <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger p-button-sm"
@@ -278,12 +278,16 @@
         </ng-template>
       </p-table>
     </div>
-
-    <p-dialog [(visible)]="productDialog" [style]="{width: '700px', zIndex: '999999', height: '500px'}"
-              header="Add Cookie" [modal]="true" styleClass="p-fluid">
-      <ng-template pTemplate="content">
-        <form [formGroup]="addCookieForm" (ngSubmit)="onSubmit()">
-          <div class="form-row">
+    <ng-template #addCookieModal let-modal>
+      <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">{{isUpdate ? 'Edit Cookie':'Add Cookie'}}</h4>
+        <button type="button" class="close" aria-label="Close" (click)="hideDialog()">
+            <span aria-hidden="true">×</span>
+        </button>
+      </div>
+    <div class="modal-body">
+      <form [formGroup]="addCookieForm" (ngSubmit)="onSubmit()">
+        <div class="form-row">
 
             <div class="form-group col-md-6">
               <label class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-0 tx-color-03"><i
@@ -411,15 +415,15 @@
 <!--          </div>-->
           <input type="hidden" formControlName="property"/>
           <input type="hidden" formControlName="http_only"/>
-          <div class="text-center">
-            <button type="button" (click)="hideDialog()" label="Cancel" icon="pi pi-times" class="btn btn-white mr-4">
+          <div class="text-right">
+            <button type="button" (click)="hideDialog()" label="Cancel" icon="pi pi-times" class="btn btn-link tx-decoration-underline">
               Cancel
             </button>
-            <button type="submit" label="Save" icon="pi pi-check" class="btn btn-primary">Save</button>
+            <button type="submit" label="Save" icon="pi pi-check" class="btn btn-xs btn-primary">Save</button>
           </div>
         </form>
+    </div>
       </ng-template>
-    </p-dialog>
 
     <p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>
 
