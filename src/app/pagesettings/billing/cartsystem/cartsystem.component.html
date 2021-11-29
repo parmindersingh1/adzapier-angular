@@ -26,11 +26,20 @@
           </button>
         </div>
       </div>
-
-      <div *ngIf="cartRecordList.length == 0 && currentStep == 0" class="col-md-12 p-0 mt-4">
+      <div *ngIf="currentStep == 0 && isLoading" class="col-md-12 p-0 mt-4">
         <div class="card cart-box ">
           <div class="card-body">
-            <h3 class="mb-4 mt-4 text-center">Your Cart is Empty !!!</h3>
+            <div *ngIf="isLoading" style="margin-top: 60px;" class="d-flex align-items-center justify-content-center">
+              <h3 class="mb-5 mt-5 text-center">Loading Cart...</h3>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="cartRecordList.length == 0 && currentStep == 0 && !isLoading" class="col-md-12 p-0 mt-4">
+        <div class="card cart-box ">
+          <div class="card-body">
+            <h3 class="mb-5 mt-5 text-center">Your Cart is Empty !!!</h3>
 
            <a routerLink="/settings/billing/pricing" [queryParams]="{oid:queryOID , pid:queryPID}"><h2 style="color: rgb(6,69,173);text-decoration: underline;" class="mb-4 mt-4 text-center">Click here to add a Plan </h2></a>
           </div>
@@ -148,7 +157,7 @@
       <div *ngIf="cookieConsent.length == 0 && currentStep == 1" class="col-md-12 p-0 mt-4">
         <div class="card cart-box ">
           <div class="card-body">
-            <h3 class="mb-4 mt-4 text-center">Your have not added any Cookie Consent Plan !!!</h3>
+            <h3 class="mb-5 mt-5 text-center">Your have not added any Cookie Consent Plan !!!</h3>
             <a routerLink="/settings/billing/pricing" [queryParams]="{oid:queryOID , pid:queryPID}"><h2 style="color: rgb(6,69,173);text-decoration: underline;" class="mb-4 mt-4 text-center">Click here to add a Plan</h2></a>
           </div>
           </div>
@@ -276,7 +285,7 @@
       <div *ngIf="dsar.length == 0 && currentStep == 2" class="col-md-12 p-0 mt-4">
         <div class="card cart-box ">
           <div class="card-body">
-            <h3 class="mb-4 mt-4 text-center">Your have not added any DSAR Plan !!!</h3>
+            <h3 class="mb-5 mt-5 text-center">Your have not added any DSAR Plan !!!</h3>
             <a routerLink="/settings/billing/pricing" [queryParams]="{oid:queryOID , pid:queryPID}"><h2 style="color: rgb(6,69,173);text-decoration: underline;" class="mb-4 mt-4 text-center">Click here to add a Plan</h2></a>
 
           </div>
@@ -406,7 +415,7 @@
       <div *ngIf="consentPref.length == 0 && currentStep == 3" class="col-md-12 p-0 mt-4">
         <div class="card cart-box ">
           <div class="card-body">
-            <h3 class="mb-4 mt-4 text-center">Your have not added any Consent Preference Plan !!!</h3>
+            <h3 class="mb-5 mt-5 text-center">Your have not added any Consent Preference Plan !!!</h3>
             <a routerLink="/settings/billing/pricing" [queryParams]="{oid:queryOID , pid:queryPID}"><h2 style="color: rgb(6,69,173);text-decoration: underline;" class="mb-4 mt-4 text-center">Click here to add a Plan</h2></a>
 
           </div>

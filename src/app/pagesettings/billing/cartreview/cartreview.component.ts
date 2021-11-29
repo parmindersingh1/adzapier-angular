@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { moduleName } from 'src/app/_constant/module-name.constant';
 import { UserService } from 'src/app/_services';
@@ -26,10 +27,14 @@ export class CartreviewComponent implements OnInit {
   alertMsg: any;
   alertType: string;
   dismissible = true;
+  queryOID: string;
+  queryPID: string;
 
   constructor(private billingService : BillingService,
     private loading: NgxUiLoaderService,
-    private userService : UserService) { }
+    private userService : UserService,
+    private activatedroute: ActivatedRoute,
+    ) { }
 
   ngOnInit() {
     this.onGetCartRecord();
@@ -40,6 +45,12 @@ export class CartreviewComponent implements OnInit {
     element.classList.add('container-fluid');
     element.style.padding = '0px';
     element.style.margin = '0px';
+
+    this.activatedroute.queryParamMap
+ .subscribe(params => {
+   this.queryOID = params.get('oid');
+   this.queryPID = params.get('pid');
+ });
   }
 
   onGetUserEmail() {
@@ -127,6 +138,7 @@ export class CartreviewComponent implements OnInit {
    }
 
    onApplyCoupon() {
+     if(this.promoCode.toString() !== ''){
     this.loading.start();
     this.billingService.coupon(this.promoCode, this.constructor.name, moduleName.pricingModule).subscribe((res: any) => {
       this.loading.stop();
@@ -148,6 +160,7 @@ export class CartreviewComponent implements OnInit {
       this.isPromoCodeError = true;
     });
   }
+}
 
   onRemoveCoupon() {
     this.percentOff = 0;

@@ -390,7 +390,7 @@ export class PricingComponent implements OnInit, AfterViewInit {
         setTimeout(() => {
           this.showpopup = [];
           this.displayStyle = false;
-        }, 3000);
+        }, 4000);
       
        
       }

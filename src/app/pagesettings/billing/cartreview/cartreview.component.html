@@ -119,8 +119,13 @@
                         </div>
                       </div>
                       <div class="col-md-6">
+                        <a routerLink="/settings/billing/cart" [queryParams]="{oid:queryOID , pid:queryPID}">
+                        <button type="button"
+                          class="pl-5  mb-3 mt-3 w-80 ml-1  font-weight-bold pr-5 btn-lg btn btn-primary">Go back to cart
+                        </button>
+                        </a>
                         <button type="button" (click)="onSelectPlan()"
-                          class="pl-5 mb-3 mt-3 w-80 ml-5  font-weight-bold pr-5 btn-lg btn btn-primary">Proceed to Pay  ${{ percentOff ? subTotal - subTotal * percentOff / 100 : subTotal + '.00' }}
+                          class="pl-5 mb-3 mt-3 w-80 ml-3  font-weight-bold pr-5 btn-lg btn btn-primary">Proceed to Pay  ${{ percentOff ? subTotal - subTotal * percentOff / 100 : subTotal + '.00' }}
                         </button>
                       </div>
         

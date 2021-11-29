@@ -35,6 +35,8 @@ export class CartsystemComponent implements OnInit {
   cookiesubTotal: number;
   DsarsubTotal: number;
   consentsubTotal: number;
+  isLoading = true;
+  
   
 
   constructor(private billingService : BillingService,
@@ -102,7 +104,8 @@ export class CartsystemComponent implements OnInit {
          
           this.cartRecordList = result.response;
           this.cartRecordCount = Number(result.count);
-          this.onNavigateToDetails(this.cartRecordCount)
+          this.onNavigateToDetails(this.cartRecordCount);
+          this.isLoading = false;
           this.subTotal = 0 ;
           if (this.cartRecordList.length > 0) {
             for (const item of this.cartRecordList) {
@@ -162,7 +165,7 @@ export class CartsystemComponent implements OnInit {
     cartProperty.value++;
     this.cartRecordList[i].CartId =  cartId.value;
     this.cartRecordList[i].Quantity = cartProperty.value;
-    this.cartRecordList[i].Price = this.cartRecordList[i].Price * cartProperty.value;
+    // this.cartRecordList[i].Price = this.cartRecordList[i].Price * cartProperty.value;
 
     this.onUpdateCartRecord(this.cartRecordList[i].CartId , this.cartRecordList[i].Quantity)
   }
@@ -172,7 +175,7 @@ export class CartsystemComponent implements OnInit {
       cartProperty.value--;
       this.cartRecordList[i].CartId =  cartId.value;
       this.cartRecordList[i].Quantity = cartProperty.value;
-      this.cartRecordList[i].Price = this.cartRecordList[i].Price * cartProperty.value;
+      // this.cartRecordList[i].Price = this.cartRecordList[i].Price * cartProperty.value;
   
       this.onUpdateCartRecord(this.cartRecordList[i].CartId , this.cartRecordList[i].Quantity)
     }
@@ -189,7 +192,7 @@ export class CartsystemComponent implements OnInit {
     // const foundIndex = this.cartItem.findIndex(x => x.id == cart.id);
     this.cartRecordList[i].CartId =  cartId.value;
     this.cartRecordList[i].Quantity = cartProperty.value;
-    this.cartRecordList[i].Price = this.cartRecordList[i].Price * cartProperty.value;
+    // this.cartRecordList[i].Price = this.cartRecordList[i].Price * cartProperty.value;
 
     this.onUpdateCartRecord(this.cartRecordList[i].CartId , this.cartRecordList[i].Quantity)
 
@@ -210,7 +213,7 @@ export class CartsystemComponent implements OnInit {
         const result: any = res;
         if (result.status === 200) {
          this.isOpen = true;
-         this.alertMsg = result.message;
+         this.alertMsg = "Number of Property/Organizations Updated";
          this.alertType = 'success';
          this.onGetCartRecord();
         }
