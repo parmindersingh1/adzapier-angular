@@ -39,12 +39,13 @@ export class QuickstartmenuComponent implements OnInit, AfterViewInit,AfterViewC
   isFirstOpen = true;
   showGuidancediv = false;
   keptopen:boolean;
-  ishideQsbtn:boolean;
+  ishideQsbtn:boolean = false;
   @Input() customStyle;
   @Input() istopmenuclicked : boolean;
   @Input() enablequickstartfromtopmenu : any;
   @Output() onClickQuickStart : EventEmitter<any> = new EventEmitter<any>();
   @Output() onClickEmitQSLinkobj : EventEmitter<any> = new EventEmitter<any>();
+  @Output() onClickDismiss : EventEmitter<any> = new EventEmitter<any>();
   @ViewChildren(BsDropdownDirective) headerDropdown:QueryList<BsDropdownDirective>;
   @Input() quickStartMenuList:any = [];
   insideqsmenu = false;
@@ -56,6 +57,7 @@ export class QuickstartmenuComponent implements OnInit, AfterViewInit,AfterViewC
   isOpenalertMsg;
   alertType;
   dismissible = true;
+  isClickedonDismissed:boolean = false;
   constructor(private location: Location,
     private router: Router,
     private activatedroute: ActivatedRoute,
@@ -74,7 +76,7 @@ export class QuickstartmenuComponent implements OnInit, AfterViewInit,AfterViewC
   ngOnInit(): void {
    this.headingtextarray = ["Getting started","Subscription","Data Subjects Rights Management"]
     this.windowWidth = window.innerWidth;
-    this.userService.onClickTopmenu.subscribe((status) => this.istopmenuclicked = status)
+    //this.userService.onClickTopmenu.subscribe((status) => this.istopmenuclicked = status)
     this.activatedroute.queryParamMap.subscribe(params => {
       this.queryOID = params.get('oid');
       this.queryPID = params.get('pid');
@@ -105,10 +107,18 @@ export class QuickstartmenuComponent implements OnInit, AfterViewInit,AfterViewC
 
   dismissQuickStartMenu() {
     this.isOpen = false;
+    this.isClickedonDismissed = true;
+    this.quickmenuService.dismissQuickStart(true).subscribe((data)=>{
+      this.enablequickstartfromtopmenu = data.response.quickstart_dismissed;
+      this.onClickDismiss.emit(data.response.quickstart_dismissed);
+      this.istopmenuclicked = false;
+    },error =>{
+      console.log(error)
+    });
     this.showQuickStartMenu = !this.showQuickStartMenu; //to close already open quick start div
     this.quickmenuService.isquickmenudismiss = true;
    // this.enablequickstartfromtopmenu = true;
-    this.quickmenuService.setQuickstartDismissStatus({isdismissed:true,isqstoplink:true});
+  //  this.quickmenuService.setQuickstartDismissStatus({isdismissed:true,isqstoplink:true});
     this.quickmenuService.onDissmissQuickStartmenu.next(true); 
     this.quickmenuService.headerNavStatusAfterDismissedQuickStart.next(false);
     this.userService.onRevistQuickStartmenulink.next({quickstartid:0,reclickqslink:true,urlchanged:true}); 
