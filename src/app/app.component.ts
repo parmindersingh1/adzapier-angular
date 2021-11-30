@@ -56,7 +56,7 @@ export class AppComponent implements OnInit {
   isquickLinkclicked: boolean;
   qsMenuList: any = [];
   isloginpage: boolean = true;
-  toggleQuickstartmenu:boolean;
+  isQuickstartmenuDismissed:boolean = false;
   quicklinkclickedObj;
   qsmdismissedstatus:boolean;
   isBillingpageUrl:boolean = false;
@@ -64,6 +64,7 @@ export class AppComponent implements OnInit {
   isSidemenuOnHover:boolean = false;
   isSidemenuMouseOut:boolean = false;
   isSidemenuClick:boolean = false;
+  checkSidemenuVisibility:boolean = false;
   constructor(private router: Router,
     private activatedRoute: ActivatedRoute,
     private modalService: BsModalService,
@@ -107,18 +108,6 @@ export class AppComponent implements OnInit {
   }
 
   async ngOnInit() {
-    // if (this.quickmenuService.getQuickstartDismissStatus() !== null) {
-    //   this.toggleQuickstartmenu = this.quickmenuService.getQuickstartDismissStatus().isdismissed;
-    // }
-    if (this.quickmenuService.getQuickstartDismissStatus() !== null) {
-      if(this.quickmenuService.getQuickstartDismissStatus().isdismissed){
-        this.toggleQuickstartmenu = this.quickmenuService.getQuickstartDismissStatus().isqstoplink;
-      } else if(this.quickmenuService.getQuickstartDismissStatus().isqstoplink){
-        this.toggleQuickstartmenu = this.quickmenuService.getQuickstartDismissStatus().isdismissed;
-      }else{
-        this.toggleQuickstartmenu = false;
-      }
-    }
     this.quickmenuService.isClickedOnQSMenu.subscribe((data) => {
       if (data) {
         this.qsMenuList = this.quickmenuService.getQuerymenulist();
@@ -205,25 +194,15 @@ export class AppComponent implements OnInit {
   }
 
   getStyle($event) {
-    if(!$event){
-      this.quickmenuService.isquickstartopen = $event;
-      this.isquickstartopen = $event;
-    }else{
-      this.quickmenuService.isquickstartopen = !$event;
-      this.isquickstartopen = !$event;
-    }
+    this.isquickstartopen = $event;
+  }
+
+  onDismissQSM($event){
+    this.isQuickstartmenuDismissed = $event;
   }
 
   enableQuickStartMenu($event) {
-    if (this.quickmenuService.getQuickstartDismissStatus() !== null) {
-      if(this.quickmenuService.getQuickstartDismissStatus().isdismissed){
-        this.toggleQuickstartmenu = this.quickmenuService.getQuickstartDismissStatus().isqstoplink;
-      } else if(this.quickmenuService.getQuickstartDismissStatus().isqstoplink){
-        this.toggleQuickstartmenu = this.quickmenuService.getQuickstartDismissStatus().isdismissed;
-      }else{
-        this.toggleQuickstartmenu = false;
-      }
-    }
+    this.isQuickstartmenuDismissed = $event;
   }
 
   receivedQSLinkObj($event) {
@@ -256,6 +235,7 @@ export class AppComponent implements OnInit {
 
   ngAfterContentChecked() {
     this.isSidemenuClick = this.userService.isSideMenuClicked;
+    this.checkSidemenuVisibility = this.userService.isSideMenuVisible;
   }
 
   ngAfterViewInit() {
@@ -276,13 +256,6 @@ export class AppComponent implements OnInit {
   //   this.qsMenuList = this.quickstartmenuComponent.getupdatedQuickStartMenu();
   // }
   ngAfterViewChecked() {
-    if (this.quickmenuService.getQuickstartDismissStatus() !== null) {
-      if(this.quickmenuService.getQuickstartDismissStatus().isdismissed){
-        this.toggleQuickstartmenu = this.quickmenuService.getQuickstartDismissStatus().isqstoplink;
-      } else if(!this.quickmenuService.getQuickstartDismissStatus().isqstoplink){
-        this.toggleQuickstartmenu = this.quickmenuService.getQuickstartDismissStatus().isdismissed;
-      }
-    }
 
     this.isquickstartopen = this.quickmenuService.isquickstartopen;
     if (this.location.path().indexOf('/login') !== -1 || this.location.path().indexOf('signup') !== -1 || this.location.path().indexOf('resetpswd') !== -1 || this.location.path().indexOf('invited-user-verify-email') !== -1 || this.location.path().indexOf('error/pagenotfound') !== -1) {

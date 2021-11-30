@@ -1,5 +1,6 @@
 <div class="container-fluid margin-top-70" *ngIf="!publishing">
   <!-- <div class="row"> -->
+    <div class="d-flex">
     <div class="col-md-9 ml-4">
       <div class="d-sm-flex align-items-center justify-content-between">
         <div>
@@ -23,6 +24,7 @@
       <div class="saved-status float-right" *ngIf="contentSaving === 'saved'">
         <p class="mb-0"> Saved </p>
       </div>
+    </div>
     </div>
   <!-- </div> -->
 
@@ -74,7 +76,7 @@
         </div>
       </div>
     </div>
-    <div class="row row-cols-group mb-0">
+    <div class="d-flex row-cols-group mb-0">
       <div class="col-md-1 border-right menu-background">
         <div class="row step-bg" (click)="onSelectStep(1)" [ngClass]="{'step-active' : step === 1}">
           <p class="col-md-12  p-0 text-center"><i class="fas fa-cogs tx-35"></i></p>
