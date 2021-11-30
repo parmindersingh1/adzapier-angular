@@ -1,6 +1,8 @@
 import { EventEmitter, Injectable, Output } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { QuickStartMenuList } from '../_models/quickstartmenulist'
+import { HttpClient } from '@angular/common/http';
+import { environment } from './../../environments/environment';
 @Injectable({
   providedIn: 'root'
 })
@@ -31,7 +33,7 @@ export class QuickmenuService extends QuickStartMenuList {
   get isHeaderNavClickedAfterQSDissmissed() {
     return this.headerNavStatusAfterDismissedQuickStart.asObservable();
   }
-  constructor() {
+  constructor(private httpClient:HttpClient) {
     super();
         this.loadQuickstartMenu()
    }
@@ -75,4 +77,9 @@ export class QuickmenuService extends QuickStartMenuList {
   removeQuicstartDismissStatus(){
     localStorage.removeItem('qsmDismissStatus');
   }
+
+  dismissQuickStart(status): Observable<any>{
+    return this.httpClient.post<any>(environment.apiUrl + '/quickstart/dismiss',{"is_quickstart_dismissed":status});
+  }
+
 }
