@@ -5,10 +5,11 @@ import {RouterModule, Routes} from '@angular/router';
 import {BsDropdownModule} from 'ngx-bootstrap/dropdown';
 import {FormsModule} from '@angular/forms';
 import { SharedbootstrapModule } from 'src/app/sharedbootstrap/sharedbootstrap.module';
+import { AuthGuard } from 'src/app/_helpers';
 
 
 const routes: Routes = [
-  {path: '', component: CartreviewComponent, },
+  {path: '', component: CartreviewComponent, canActivate: [AuthGuard]},
   ];
 @NgModule({
   declarations: [CartreviewComponent],

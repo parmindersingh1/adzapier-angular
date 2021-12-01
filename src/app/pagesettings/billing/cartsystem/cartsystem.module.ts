@@ -6,9 +6,10 @@ import { SharedbootstrapModule } from 'src/app/sharedbootstrap/sharedbootstrap.m
 import {BsDropdownModule} from 'ngx-bootstrap/dropdown';
 import {FormsModule} from '@angular/forms';
 import { QuickstartalertModule } from 'src/app/_components/quickstartalert/quickstartalert.module';
+import { AuthGuard } from 'src/app/_helpers';
 
 const routes: Routes = [
-  {path: '', component: CartsystemComponent, },
+  {path: '', component: CartsystemComponent, canActivate: [AuthGuard] },
   ];
 
 @NgModule({
