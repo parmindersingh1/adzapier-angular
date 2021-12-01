@@ -171,7 +171,7 @@ export class SidemenuComponent implements OnInit {
     }
     this.elRef.nativeElement.querySelector('.sidemenu').removeEventListener('mouseenter', this.onMouseover.bind(this));
     this.elRef.nativeElement.querySelector('.sidemenu').removeEventListener('mouseleave',this.onMouseout.bind(this));
-    if(this.queryOID !== undefined && this.queryPID !== undefined){
+    if(this.queryOID !== null && this.queryOID !== undefined && this.queryPID !== null && this.queryPID !== undefined){
     this.router.navigate([link], { queryParams: { oid: this.queryOID, pid: this.queryPID }});//queryParamsHandling: 'merge', skipLocationChange: false 
     } else{
       this.oIDPIDFromURL = findPropertyIDFromUrl(this.location.path());
