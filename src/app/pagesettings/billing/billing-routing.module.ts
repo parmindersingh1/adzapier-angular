@@ -10,6 +10,10 @@ const routes: Routes = [
   { path: '', redirectTo: 'manage', pathMatch: 'full' },
  {path: 'pricing', loadChildren: () => import('./pricing/pricing.module').then(m => m.PricingModule), canActivate: [AuthGuard,RouteguardService]},
  {path: 'manage', loadChildren: () => import('./manage-licence/manage-licence.module').then(m => m.ManageLicenceModule), canActivate: [AuthGuard,RouteguardService]},
+ {path: 'cart', loadChildren: () => import('./cartsystem/cartsystem.module').then(m => m.CartsystemModule),canActivate: [AuthGuard,RouteguardService]},
+ {path: 'cartreview', loadChildren: () => import('./cartreview/cartreview.module').then(m => m.CartreviewModule),canActivate: [AuthGuard,RouteguardService]},
+
+
 //  {path: 'manage-product', loadChildren: () => import('./manage-product/manage-product.module').then(m => m.ManageProductModule), canActivate: [AuthGuard]}
   ];
 @NgModule({

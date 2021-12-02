@@ -1,0 +1,147 @@
+<div>
+<div class="container">
+    <div class=" ht-100p tx-center top-margin">
+        <div class="row justify-content-center">
+            <div class="col-md-12">
+                <div class="row">
+
+                    <div class="text-center text-head col-md-12 mb-2">
+                        <h1 class="tx-white"><span style="color: #f0b323">Cart Review</span></h1>
+                        
+                    </div>
+                </div>
+            </div>
+
+            <div *ngIf="cartRecordList.length == 0" class="col-md-12 p-0 mt-4">
+              <div class="card cart-box ">
+                <div class="card-body">
+                  <h3 class="text-center" style="margin-top:80px;margin-bottom: 80px;">Loading...</h3>
+      
+                </div>
+                </div>
+                </div>
+
+            <div *ngIf="cartRecordList.length > 0" class="col-md-12 p-0 mt-4">
+                <div class="card cart-box ">
+                  <div class="card-body">
+                    <h3 class="mb-4 text-center"></h3>
+        
+                    <div  class="row mt-2" *ngFor="let cart of cartRecordList; let i = index"
+                      style="border-bottom: 1px solid lightgray;">
+                      <div style="text-align: left" class="col-md-6">
+                        <h5 class="cart-head">Plan :
+                        </h5>
+                        <h6 class="pt-2 font-weight-bold tx-13">Billed :</h6>
+                        <h6 class="pt-2 font-weight-bold tx-13">No of Property / Organization :</h6>
+                        <h6 class="pt-2 font-weight-bold tx-13">Price per Property /Organization :</h6>
+                        <h6 class="pt-2 font-weight-bold tx-13">Total Price :</h6>
+                      </div>
+                      <div class="col-md-6 mb-3">
+                        <h5>{{cart.Product}}</h5>
+                        <h5>{{cart.Cycle}}</h5>
+                        <h5>{{cart.Quantity}}</h5>
+                        <h5>${{cart.Price}}</h5>
+                        <h5>${{cart.Price}} * {{cart.Quantity}} = ${{cart.Price * cart.Quantity}}.00</h5>
+                        
+                        <!-- <div class=" w-100 m-auto form-group mb-2 dp-safari">
+                          <input type="text" #cartId [value]="cart.CartId" disabled hidden>
+                          <select  #cartProperty [value]="cart.Quantity"
+                            style="height: 32px;" class="mb-2 w-25 margin-auto form-control">
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                            <option>5</option>
+                            <option>6</option>
+                            <option>7</option>
+                            <option>8</option>
+                            <option>9</option>
+                            <option>10</option>
+                          </select>
+                        </div> -->
+                      </div>
+        
+                      <div>
+                        <!-- <h4 (click)="onRemoveCartItem(i , cartId)" style="cursor: pointer" class="pt-3 text-danger"><i
+                          class="fa fa-times" aria-hidden="true"></i>
+                      </h4> -->
+                      </div>
+                    </div>
+        
+        
+                    <div class="row mt-1 pt-3">
+                      <div class="col-md-6">
+                        <h5 class=" font-weight-bold text-left">Subtotal</h5>
+                        <h6 class="font-weight-bold text-left">Discount</h6>
+                      </div>
+                      <div class="col-md-6 text-left">
+                        <h5 class="text-center">${{ subTotal + '.00' }} </h5>
+                        <h5 class="text-center">${{percentOff ? subTotal * percentOff / 100 : '0.00'}} ({{percentOff}}%)</h5>
+                      </div> 
+                      </div>
+                      <div class="col-md-1">
+                    </div>
+        
+        
+                    <div class="row mt-3 pt-3" style="border-top: 1px dotted lightgray">
+                      <div class="col-md-6">
+                        <h5 class="text-left font-weight-bold">Total</h5>
+                      </div>
+                      <div class="col-md-6">
+                        <h5>${{ percentOff ? subTotal - subTotal * percentOff / 100 : subTotal + '.00' }}</h5>
+                      </div>
+        
+                    </div>
+                    <div class="row  mt-3 pt-3" style="border-top: 1px dotted lightgray">
+                      <div class="col-md-6">
+                        <div class="row mt-3">
+                          <div class="col-md-4">
+                            <h5 class="pt-2 font-weight-bold text-left tx-14"> Promo Code</h5>
+                          </div>
+                          <div class="col-md-5 text-right p-0">
+                            <input type="text" class="form-control mb-1 w-100" [(ngModel)]="promoCode" [disabled]="percentOff"
+                              [ngClass]="{'is-invalid' : isPromoCodeError}" placeholder="Promo Code">
+                            <div *ngIf="isPromoCodeError" class="invalid-feedback" style="width: 205px;">
+                              The promo code you entered is not valid
+                            </div>
+                                         <!-- <a href="javascript:;" *ngIf="promoCode && !percentOff" class="mr-1 text-primary"
+                                            (click)="onApplyCoupon()">Apply</a>
+                                           <a href="javascript:;"  class="mr-1 text-primary" (click)="onRemoveCoupon()">Remove</a> -->
+                            <div *ngIf="percentOff" class="text-success text-left">Promo Code Applied
+                              <i class="fa fa-times cursorpointer close-btn" (click)="onRemoveCoupon()" aria-hidden="true"></i>
+                            </div>
+                          </div>
+                          <div class="col-md-3">
+                            <button type="button" class="btn btn-outline-secondary" 
+                            (click)="onApplyCoupon()">Apply
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <a routerLink="/settings/billing/cart" [queryParams]="{oid:queryOID , pid:queryPID}">
+                        <button type="button"
+                          class="pl-5  mb-3 mt-3 w-80 ml-1  font-weight-bold pr-5 btn-lg btn btn-primary">Go back to cart
+                        </button>
+                        </a>
+                        <button type="button" (click)="onSelectPlan()"
+                          class="pl-5 mb-3 mt-3 w-80 ml-3  font-weight-bold pr-5 btn-lg btn btn-primary">Proceed to Pay  ${{ percentOff ? subTotal - subTotal * percentOff / 100 : subTotal + '.00' }}
+                        </button>
+                      </div>
+        
+                    </div>
+                    
+        
+                  </div>
+                </div>
+              </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<div class="col-sm-5 mr-0 float-right flotingdiv" [ngClass]="{'hide':!isOpen}">
+    <alert *ngIf="isOpen" [type]="alertType" dismissOnTimeout="5000" [dismissible]="dismissible"
+      >{{ alertMsg}}</alert>
+  </div>
+        
