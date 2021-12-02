@@ -15,6 +15,7 @@ import { QuickStart } from 'src/app/_models/quickstart';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { takeUntil } from 'rxjs/operators';
+import { BillingService } from 'src/app/_services/billing.service';
 
 
 @Component({
@@ -179,6 +180,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
   istopmenuopened:boolean;
   isborderapplied:boolean;
   isQSMDismissed:boolean;
+  count: any;
+  counttwo: any;
+  cartRecordCount: number;
   counter: any;
   showSidemenu:boolean = false;
   isUserOptQSMenu:boolean = false;
@@ -197,6 +201,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
     private elRef:ElementRef,
     private quickmenuService:QuickmenuService,
     private formBuilder: FormBuilder,
+    private billingService : BillingService
   ) {
     this.userclickedoutside = this.quickmenuService.isclickeventoutsidemenu;
     this.isuserClickedonqstooltip = this.quickmenuService.isuserClickedonqstooltip;
@@ -209,6 +214,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
         this.loadOrganizationList();
         this.loadOrganizationWithProperty();  //to load org and prop
         this.loadNotification();
+        this.onGetCartRecord();
       }
     });
 
@@ -272,6 +278,17 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
   }
 
   ngOnInit() {
+    this.billingService.PlanDetails.subscribe(res => {
+      
+    
+       this.count = res;      
+    
+    }, error => {
+      console.error(error);
+
+    });
+
+
     if (this.quickmenuService.getQuickstartDismissStatus() !== null) {
       if(this.quickmenuService.getQuickstartDismissStatus().isdismissed){
         this.isQSMDismissed = !this.quickmenuService.getQuickstartDismissStatus().isqstoplink;
@@ -442,6 +459,25 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
         // this.loading.stop();
       });
   }
+
+  onGetCartRecord() {
+    
+    this.billingService.GetCart(this.constructor.name, moduleName.billingModule)
+      .subscribe((res: any) => {
+        const result: any = res;
+        if (result.status === 200) {
+          this.cartRecordCount = Number(result.count);
+          this.onNavigateToCartDetails(this.cartRecordCount);
+        }
+      }, error => {
+        this.loading.stop();
+      });
+  }
+
+  onNavigateToCartDetails(plandata) {
+    this.billingService.onPushPlanData(plandata);
+     //await this.router.navigateByUrl('/consent-solutions/consent-records/details/' + consentRecord.id);
+   }
 
   onGetSupportDetailsRecord() {
     this.loader= true;
