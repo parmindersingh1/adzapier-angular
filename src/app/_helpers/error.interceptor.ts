@@ -74,7 +74,7 @@ export class ErrorInterceptor implements HttpInterceptor {
             if(err.status === 404 || err.status === 401){
               if(err.url.indexOf('/api/v1/invite/user') !== -1){
                 const error = err.error.error || err.statusText;
-                this.dataService.openUnAuthModal.next({isTrue: true, error: err})
+                //this.dataService.openUnAuthModal.next({isTrue: true, error: err})
                 return throwError(error);
               }else{
                 this.router.navigate(['/error/pagenotfound']);
