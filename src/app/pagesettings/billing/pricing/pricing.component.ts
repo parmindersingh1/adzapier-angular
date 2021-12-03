@@ -1,5 +1,5 @@
 import {Component, OnInit, AfterViewInit, TemplateRef, ChangeDetectorRef} from '@angular/core';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {BillingService} from '../../../_services/billing.service';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
 import {DataService} from '../../../_services/data.service';
@@ -69,6 +69,14 @@ export class PricingComponent implements OnInit, AfterViewInit {
   iswindowclicked;
   actuallinkstatus:boolean = false;
   private subscriptionData: any;
+  cartID: any;
+  cartstripeid: any;
+  cartQuantity: number;
+  cartRecordCount: number;
+  displayStyle:boolean = false;
+  showpopup = [];
+  queryOID: string;
+  queryPID: string;
 
   constructor(private router: Router,
               private loading: NgxUiLoaderService,
@@ -77,11 +85,20 @@ export class PricingComponent implements OnInit, AfterViewInit {
               private modalService: BsModalService,
               private quickmenuService: QuickmenuService,
               private billingService: BillingService,
-              private cdRef: ChangeDetectorRef) {
+              private cdRef: ChangeDetectorRef,
+              private activatedroute: ActivatedRoute,
+              ) {
               // this.onGetActivePlan();
   }
 
   ngOnInit() {
+    this.activatedroute.queryParamMap
+    .subscribe(params => {
+   this.queryOID = params.get('oid');
+   this.queryPID = params.get('pid');
+   //console.log(this.queryOID,'queryOID210..');
+   //console.log(this.queryPID,'queryPID211..');
+  });
     this.quickmenuService.onClickEmitQSLinkobj.subscribe((res) => {
       this.quickDivID = res.linkid;
       this.callForQuickStart();
@@ -102,6 +119,8 @@ export class PricingComponent implements OnInit, AfterViewInit {
     element.classList.add('container-fluid');
     element.style.padding = '0px';
     element.style.margin = '0px';
+
+    this.onGetCartRecord();
   }
 
 
@@ -190,6 +209,7 @@ export class PricingComponent implements OnInit, AfterViewInit {
     this.dsarPlanList = plansData.dsar[`${this.dsarBillingCycle}`];
     this.consentPreferenceList = plansData.consentPreference[`${this.consentPreferenceBillingCycle}`];
   }
+
 
   ngOnDestroy() {
     const element = document.getElementById('main');
@@ -301,6 +321,9 @@ export class PricingComponent implements OnInit, AfterViewInit {
           plan.priceTotal = plan.price * planUnit.value;
           plan.unit = planUnit.value;
           this.cartItem.push(plan);
+          this.cartstripeid = plan.id;
+          this.cartQuantity = Number(plan.unit);
+         this.AddToCart(planUnit.value);
           // }
           this.subTotal = 0;
           if (this.cartItem.length > 0) {
@@ -324,6 +347,10 @@ export class PricingComponent implements OnInit, AfterViewInit {
     plan.priceTotal = plan.price * planUnit.value;
     plan.unit = planUnit.value;
     this.cartItem.push(plan);
+    this.showpopup.push(plan);
+    this.cartstripeid = plan.id;
+    this.cartQuantity = Number(plan.unit);
+    this.AddToCart(planUnit.value);
     // }
     this.subTotal = 0;
     if (this.cartItem.length > 0) {
@@ -337,6 +364,73 @@ export class PricingComponent implements OnInit, AfterViewInit {
   }
   }
 
+  AddToCart(planUnit : any){
+    if(planUnit.toString() == ''){
+      this.isOpen = true;
+      this.alertMsg = "Property/organization cannot be empty";
+      this.alertType = 'danger';
+    }
+    else{
+    this.loading.start();
+    const payload = {
+      id:this.cartstripeid,
+      quantity:this.cartQuantity,
+    }
+   
+    this.billingService.AddToCart(this.constructor.name, moduleName.pricingModule,payload).subscribe(res => {
+      this.loading.stop();
+      const result: any = res;
+      if (result.status === 201 || result.status === 200) {
+        this.cartID = result.response;
+        this.isOpen = true;
+        this.alertMsg = result.message;
+        this.alertType = 'success';
+        this.onGetCartRecord();
+        this.displayStyle=true;
+        setTimeout(() => {
+          this.showpopup = [];
+          this.displayStyle = false;
+        }, 4000);
+      
+       
+      }
+    }, error => {
+      this.loading.stop();
+      console.log(error);
+    });
+  }
+  }
+
+  Add(planUnit:any,index){
+    planUnit.value++;
+  }
+
+  Subs(planUnit:any,index){
+    if(planUnit.value > 1){
+    planUnit.value--;
+    }
+  }
+
+  onGetCartRecord() {
+    
+    this.billingService.GetCart(this.constructor.name, moduleName.billingModule)
+      .subscribe((res: any) => {
+        const result: any = res;
+        if (result.status === 200) {
+          this.cartRecordCount = Number(result.count);
+          this.onNavigateToDetails(this.cartRecordCount);
+        }
+      }, error => {
+        this.loading.stop();
+      });
+  }
+
+  onNavigateToDetails(plandata) {
+   this.billingService.onPushPlanData(plandata);
+    //await this.router.navigateByUrl('/consent-solutions/consent-records/details/' + consentRecord.id);
+  }
+
+
   onUpdateCart(cartProperty, i) {
     // const foundIndex = this.cartItem.findIndex(x => x.id == cart.id);
     this.cartItem[i].unit = cartProperty.value;
@@ -347,11 +441,14 @@ export class PricingComponent implements OnInit, AfterViewInit {
         this.subTotal += Number(item.priceTotal);
       }
     }
+    this.onNavigateToDetails(this.cartItem);
   }
+
 
   onRemoveCartItem(i, item) {
     this.cartItem.splice(i, 1);
 
+    this.onNavigateToDetails(this.cartItem);
     this.subTotal = 0;
     if (this.cartItem.length > 0) {
       for (const itemVal of this.cartItem) {

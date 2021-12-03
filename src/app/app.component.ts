@@ -126,7 +126,7 @@ export class AppComponent implements OnInit {
           this.dsarformService.removeControls();
           this.organizationService.removeControls();
         }
-        if(event.url.indexOf('/settings/billing/pricing') !== -1){
+        if(event.url.indexOf('/settings/billing/pricing') !== -1 || event.url.indexOf('/settings/billing/cart') !== -1 || event.url.indexOf('/settings/billing/cartreview') !== -1){
           this.isBillingpageUrl = true;
         }else{
           this.isBillingpageUrl = false;

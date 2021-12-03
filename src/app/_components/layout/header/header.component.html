@@ -281,6 +281,17 @@
     </li>
   </ul>
     </div>
+    <div class="navbar-right" *ngIf="currentUser" dropdown [insideClick]="true" style="margin-right: 17px;">
+      <div class="responsive-notification">
+  
+      <span  class="notification-number" style="background-color: white;color: black;">{{count}}</span> <!--[ngClass]="{'hide-notification-number':notificationsNumber == '0'}"-->
+      <a  class="nav-link dropdown-link p-0" routerLink="/settings/billing/cart" [queryParams]="{oid:queryOID , pid:queryPID}"  dropdownToggle>
+        <i-feather name="shopping-cart"  class="feather-20 tx-white"></i-feather>
+
+      </a>
+      </div>
+      </div>
+    
   <!--Help center after login ends-->
   <!--notification after login-->
   <div class="navbar-right" *ngIf="currentUser" dropdown [insideClick]="true">
