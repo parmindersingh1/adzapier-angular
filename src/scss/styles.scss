@@ -464,3 +464,7 @@ ul.helpcenter-menu-right::after{
 .height-100 {
   height: 100%;
 }
+
+.btn-primary.disabled, .btn-primary:disabled {
+    cursor: auto;
+}

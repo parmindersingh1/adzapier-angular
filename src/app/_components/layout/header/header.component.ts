@@ -206,69 +206,84 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
     this.userclickedoutside = this.quickmenuService.isclickeventoutsidemenu;
     this.isuserClickedonqstooltip = this.quickmenuService.isuserClickedonqstooltip;
     this.quickLinkObj = this.quickmenuService.qsMenuobjwithIndexid;
-    this.authService.currentUser.subscribe(x => {
-      this.currentUser = x;
-      if (this.currentUser) {
-        this.isCollapsed = false;
-        this.getLoggedInUserDetails();
-        this.loadOrganizationList();
-        this.loadOrganizationWithProperty();  //to load org and prop
-        this.loadNotification();
-        this.onGetCartRecord();
-      }
-    });
-
-    this.orgservice.isOrganizationUpdated.subscribe((t) => {
-      this.isOrganizationUpdated = t;
-      if (this.isOrganizationUpdated) {
-        this.loadOrganizationWithProperty(); //to load org and prop
-        // if(this.oIDPIDFromURL !== undefined){
-        // this.currentSelectedProperty();
-        // }
-        this.loadNotification();
-      }
-    });
-
-    this.quickmenuService.onClickEmitQSLinkobj.subscribe((data) => {
-      //this.actuallinkstatus = data.isactualbtnclicked;
-      if(data.islinkclicked && data.isactualbtnclicked){
-       // this.isBackdropclicked = false; // 1
-        this.actuallinkstatus = true;
-        //this.actualBackdropclicked = true;
-      }
-
-    })
-    // this.router.routeReuseStrategy.shouldReuseRoute = () => {
-    //   return false;
-    // };
-    this.activatedroute.queryParamMap
-    .subscribe(params => {
-      this.queryOID = params.get('oid');
-      this.queryPID = params.get('pid');
-     });
-
-    this.router.events.subscribe((event) => {
-      if (event instanceof NavigationEnd) {
-        this.isPrivacyActivelinkMatched = event.url.indexOf('privacy') >= 0 || event.url.indexOf('home') >= 0
-          || event.url.indexOf('cookie') >= 0;
-      } else if (event instanceof NavigationEnd) {
-        if (event.url.indexOf('settings/billing') !== -1 || event.url.indexOf('pricing') !== -1 ||
-          event.url.indexOf('welcome') >= 0) {
-          this.isBillingActivelinkMatched = true;
-          this.isPrivacyActivelinkMatched = false;
+    if (this.location.path().indexOf('/signup') == -1 && this.location.path().indexOf('/invited-user-verify-email') == -1) {
+      this.authService.currentUser.subscribe(x => {
+        this.currentUser = x;
+        if (this.currentUser) {
+          this.isCollapsed = false;
+          this.getLoggedInUserDetails();
+          this.loadOrganizationList();
+          this.loadOrganizationWithProperty();  //to load org and prop
+          this.loadNotification();
+          this.onGetCartRecord();
         }
-      } else if (event instanceof NavigationEnd) {
-          this.isBillingActivelinkMatched = false;
-          this.isPrivacyActivelinkMatched = false;
-          this.isConsentPreferencelinkMatched = event.url.indexOf('consent-preference') !== -1;
+      });
+      this.orgservice.isOrganizationUpdated.subscribe((t) => {
+        this.isOrganizationUpdated = t;
+        if (this.isOrganizationUpdated) {
+          this.loadOrganizationWithProperty(); //to load org and prop
+          // if(this.oIDPIDFromURL !== undefined){
+          // this.currentSelectedProperty();
+          // }
+          this.loadNotification();
+        }
+      });
+  
+      this.quickmenuService.onClickEmitQSLinkobj.subscribe((data) => {
+        //this.actuallinkstatus = data.isactualbtnclicked;
+        if(data.islinkclicked && data.isactualbtnclicked){
+         // this.isBackdropclicked = false; // 1
+          this.actuallinkstatus = true;
+          //this.actualBackdropclicked = true;
+        }
+  
+      })
+      // this.router.routeReuseStrategy.shouldReuseRoute = () => {
+      //   return false;
+      // };
+      this.activatedroute.queryParamMap
+      .subscribe(params => {
+        this.queryOID = params.get('oid');
+        this.queryPID = params.get('pid');
+       });
+  
+      this.router.events.subscribe((event) => {
+        if (event instanceof NavigationEnd) {
+          this.isPrivacyActivelinkMatched = event.url.indexOf('privacy') >= 0 || event.url.indexOf('home') >= 0
+            || event.url.indexOf('cookie') >= 0;
+        } else if (event instanceof NavigationEnd) {
+          if (event.url.indexOf('settings/billing') !== -1 || event.url.indexOf('pricing') !== -1 ||
+            event.url.indexOf('welcome') >= 0) {
+            this.isBillingActivelinkMatched = true;
+            this.isPrivacyActivelinkMatched = false;
+          }
+        } else if (event instanceof NavigationEnd) {
+            this.isBillingActivelinkMatched = false;
+            this.isPrivacyActivelinkMatched = false;
+            this.isConsentPreferencelinkMatched = event.url.indexOf('consent-preference') !== -1;
+        }
+      });
+      this.authService.isNotificationUpdated.subscribe((status) => {
+        this.isNewnotification = status;
+        if (this.isNewnotification) {
+          this.loadNotification();
+        }
+      });
+    } else {
+      this.isCollapsed = true;
+      localStorage.removeItem('currentUser');
+      this.authService.logout();
+      // this.orgservice.removeControls();
+      this.userService.getCurrentUser.unsubscribe();
+      localStorage.clear();
+      this.selectedOrgProperties.length = 0; 
+      const a = this.location.path().split("/");
+      if (a[1].indexOf('/invited-user-verify-email') == -1) {
+        this.router.navigate(['/invited-user-verify-email'], { queryParams: { id: a[2] } });
       }
-    });
-    this.authService.isNotificationUpdated.subscribe((status) => {
-      this.isNewnotification = status;
-      if (this.isNewnotification) {
-        this.loadNotification();
-      }
-    });
+    }
+
+   
   //  this.isloginpage = this.location.path().indexOf('login') == -1 && this.location.path().indexOf('signup') == -1;
   // this.renderer.listen('window', 'click', (e:Event) => {
   //   if(e.target === this.dropdownTriggers.nativeElement){
@@ -278,6 +293,21 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
   }
 
   ngOnInit() {
+    
+    if(!this.isLoginOrSignupPage()){
+      this.authService.logout();
+      this.isCollapsed = true;
+      localStorage.removeItem('currentUser');
+      this.userService.getCurrentUser.unsubscribe();
+      localStorage.clear();
+      this.selectedOrgProperties.length = 0;
+      return false;
+      // console.log(this.location.path(),"path..");
+      // const a = this.location.path().split("invited-user-verify-email");
+      // if (a[1].indexOf('/invited-user-verify-email') == -1) {
+      //  return this.router.navigate(['/invited-user-verify-email'], { queryParams: { id: a[2] } });
+      // }
+    }
     this.billingService.PlanDetails.subscribe(res => {
       
     
@@ -306,6 +336,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
       this.quickDivIDSub = res.linkid;
     });
     this.isLoginOrSignupPage();
+    
   //  this.isloginpage = this.location.path().indexOf('login') == -1 && this.location.path().indexOf('signup') == -1;
     this.userService.onClickTopmenu.subscribe((status) => this.istopmenuclicked = status);
  //   this.loadOrganizationWithProperty();
@@ -318,20 +349,27 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
    //console.log(this.queryPID,'queryPID211..');
   });
     this.isCollapsed = false;
-    this.userService.getCurrentUser.subscribe((data) => {
-      if (data) {
-        this.currentUser = data;
-        this.isCollapsed = false;
-        this.currentLoggedInUser = this.currentUser.response.firstname + ' ' + this.currentUser.response.lastname;
-        this.userRole = this.currentUser.response.role;
-        this.userID = this.currentUser.response.uid;
-        this.checkCurrentManagingProperty();
-        this.loadOrganizationWithProperty(); //to load org and prop
-        this.loadNotification();
+    if (this.location.path().indexOf('/signup') == -1 && this.location.path().indexOf('/invited-user-verify-email') == -1) {
+      this.userService.getCurrentUser.subscribe((data) => {
+        if (data) {
+          this.currentUser = data;
+          this.isCollapsed = false;
+          this.currentLoggedInUser = this.currentUser.response.firstname + ' ' + this.currentUser.response.lastname;
+          this.userRole = this.currentUser.response.role;
+          this.userID = this.currentUser.response.uid;
+          this.checkCurrentManagingProperty();
+          this.loadOrganizationWithProperty(); //to load org and prop
+          this.loadNotification();
+        }
+      }, (error) => {
+        console.log(error);
+      });
+    } else {
+      const a = this.location.path().split("/");
+      if (a[1].indexOf('/invited-user-verify-email') == -1) {
+        this.router.navigate(['/invited-user-verify-email'], { queryParams: { id: a[2] } });
       }
-    }, (error) => {
-      console.log(error);
-    });
+    }
     this.orgservice.emitUpdatedOrgList.subscribe((data) => {
       this.loadOrganizationList();
     });
@@ -369,6 +407,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
             }else{
               const tokenid = a[0].split("/verify-email/");
               this.router.navigate(["/signup"], { queryParams: { id: tokenid[1] } });
+            }
+          } 
+          if (this.location.path().indexOf('/invited-user-verify-email') == -1) {
+            const a = this.location.path().split("/");
+            if (a[1].indexOf('/invited-user-verify-email') == -1) {
+              this.router.navigate(['/invited-user-verify-email'], { queryParams: { id: a[2] } });
             }
           } else{
             this.router.navigate(['/login']);
