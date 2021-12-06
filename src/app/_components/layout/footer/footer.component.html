@@ -2,10 +2,10 @@
     <div>
       <span>&copy; 2020 Adzapier v1.0.0.</span>
     </div>
-    <div class="footer-margin-right">
+    <div  [ngClass]="isheadernotrequired ? '' : 'footer-margin-right'">
       <nav class="nav">
-       <a href="https://adzapier.com/privacy-policy" target="_blank" [ngClass]="isheadernotrequired ? 'color-white' : '' " class="nav-link">Privacy policy</a>
-       <a href="https://adzapier.com/terms-of-service" target="_blank" [ngClass]="isheadernotrequired ? 'color-white' : '' " class="nav-link">Terms of services</a>
+       <a href="https://adzapier.com/privacy-policy" target="_blank" [ngClass]="isheadernotrequired ? 'color-white' : 'color-gray' " class="nav-link">Privacy policy</a>
+       <a href="https://adzapier.com/terms-of-service" target="_blank" [ngClass]="isheadernotrequired ? 'color-white' : 'color-gray' " class="nav-link">Terms of services</a>
       </nav>
     </div>
   </footer>
