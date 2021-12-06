@@ -1073,7 +1073,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
     return this.orgservice.getCurrentOrgWithProperty() == undefined;// ? true : false;
   }
 
-  goto(link: any, id?: any) {
+  goto(link: any, id?: any, linkoid?:any, linkpid?:any) {
     if(this.quickDivID == link.navmenuid){//this.qslinkobj.linkid
       this.updateQuickLinkStatus(link);
       this.isUserclickedActualLink = true;
@@ -1133,7 +1133,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
     }
 
     if (id !== undefined) {
-      this.router.navigate([link.routerLink || link, id]); //,{queryParams:{'oid':id,'pid':id}}
+      this.router.navigate([link.routerLink || link, id],{ queryParams: { oid: linkoid, pid: linkpid }, queryParamsHandling: 'merge', skipLocationChange: false }); //,{queryParams:{'oid':id,'pid':id}}
     } else {
       if (this.checkLinkAccess(link.routerLink || link)) {
         if (this.queryPID !== undefined) {//this.selectedOrgProperties.length > 0
