@@ -96,7 +96,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
   userID: any;
   propList: any;
   isOrganizationUpdated: boolean;
-  isPropertyUpdated: boolean;
+  isPropertyUpdated: boolean = false;
   isPropertySelected: boolean;
   isPrivacyActivelinkMatched = false;
   isBillingActivelinkMatched = false;
