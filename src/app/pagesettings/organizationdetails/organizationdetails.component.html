@@ -27,10 +27,10 @@
                         <button (click)="editOrganizationModalPopup(editOrgModal)"
                             class="btn btn-sm btn-outline-secondary btn-uppercase mr-2">
                             <!-- <i-feather name="edit-2" class="feather-16"></i-feather> -->
-                            <span class="d-none d-sm-inline cursorpointer mg-l-0"> <i class="fa fa-pen mr-1"
-                                    aria-hidden="true"></i> Edit</span>
+                            <span class="d-none d-sm-inline cursorpointer mg-l-0" style="text-transform: none;font-size: 12px;"> <i class="fa fa-pen mr-1"
+                                    aria-hidden="true" ></i> Edit</span>
                         </button>
-                        <button (click)="disableOrganization('organization');checkForQsTooltip();" class="btn btn-xs btn-danger float-right">
+                        <button (click)="disableOrganization('organization');checkForQsTooltip();" class="btn btn-xs btn-danger float-right" style="text-transform: none;font-size: 12px;">
                             <i class="far fa-trash-alt fa-sm"></i>
                             <span class="d-none d-sm-inline mg-l-0 ml-2"> Delete</span>
                         </button>
@@ -41,29 +41,29 @@
                 <div class="card-body">
                     <div class="row row-sm">
                         <div class="col-sm-2 mg-t-5 mg-sm-t-5">
-                            <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">
+                            <label class="tx-11 tx-medium tx-spacing-1 tx-color-03  tx-sans mg-b-10">
                                 Organization</label>
                             <p class="mg-b-0">{{organizationName}}</p>
                         </div>
                         <div class="col-sm-2 mg-t-5 mg-sm-t-5">
                             <label
-                                class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Address</label>
+                                class="tx-11 tx-medium tx-spacing-1 tx-color-03 tx-sans mg-b-10">Address</label>
                             <p class="mg-b-0">{{addressOne}} {{addressTwo}} {{city}}
                                 {{state}} {{zipcode}}
                             </p>
                         </div>
                         <div class="col-sm-2 mg-t-5 mg-sm-t-5">
                             <label
-                                class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Email</label>
+                                class="tx-11 tx-medium tx-spacing-1 tx-color-03 tx-sans mg-b-10">Email</label>
                             <p class="mg-b-0">{{email}}</p>
                         </div>
                         <div class="col-sm-2 mg-t-5 mg-sm-t-5">
                             <label
-                                class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Phone</label>
+                                class="tx-11 tx-medium tx-spacing-1 tx-color-03 tx-sans mg-b-10">Phone</label>
                             <p class="mg-b-0">{{phone}}</p>
                         </div>
                         <div class="col-sm-4 mg-t-5 mg-sm-t-5" *ngIf="orgLicensedPlanName">
-                            <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Assigned Plan name</label>
+                            <label class="tx-11 tx-medium tx-spacing-1 tx-color-03 tx-sans mg-b-10">Assigned Plan name</label>
                             <p class="mg-b-0">{{orgLicensedPlanName}}</p>
                         </div>
                         <div class="col-sm-2 mg-t-5 mg-sm-t-5">
@@ -92,7 +92,7 @@
 
                     <div class="ml-auto">
                         <button type="button"  [ngClass]="quickDivID == 3 && quickDivID == currentLinkID && !iswindowclicked ? 'btn-qs-hightlight' : ''" class="btn btn-sm btn-outline-secondary btn-uppercase ml-2" data-toggle="modal"
-                            (click)="open(propertyModal, 'property')"><i class="fas fa-plus"></i> Add Property</button>
+                            (click)="open(propertyModal, 'property')" style="text-transform: none;font-size: 12px;"><i class="fas fa-plus"></i> Add Property</button>
                     </div>
                 </div>
             </div>
@@ -130,9 +130,9 @@
                         <tr>
                             <th>ID</th>
                             <th>Logo</th>
-                            <th>Name</th>
+                            <th>Property Name</th>
                             <th>Domain</th>
-                            <th>Plan name</th>
+                            <th>Plans Assigned</th>
                             <th>Action</th>
                             <th>Status</th>
                         </tr>
@@ -232,7 +232,7 @@
 
                     <div class="col-sm-2 ml-auto text-right">
                         <button type="button" class="invite-user-btn btn btn-sm btn-outline-secondary btn-uppercase mr-" data-toggle="modal"
-                            (click)="open(inviteuserModal, 'invite');checkForQsTooltip();"><i class="fas fa-plus"></i> Invite User</button>
+                            (click)="open(inviteuserModal, 'invite');checkForQsTooltip();" style="text-transform: none;font-size: 12px;"><i class="fas fa-plus"></i> Invite User</button>
                     </div>
                 </div>
             </div>
@@ -243,7 +243,7 @@
                             <th>ID</th>
                             <th>Name</th>
                             <th>Email</th>
-                            <th>Roles</th>
+                            <th>Role</th>
                             <th>Last Login</th>
                             <th>Action</th>
                         </tr>
@@ -333,7 +333,7 @@
             <div class="row">
                 <div class="col-sm-12">
                     <div class="form-group">
-                        <label for="organizationName">Name</label>
+                        <label for="organizationName">Organization Name</label>
                         <input type="text" class="form-control" formControlName="organizationName"
                             name="organizationName"
                             [ngClass]="{ 'is-invalid': submitted && editOrg.organizationName.errors }" />
@@ -355,7 +355,7 @@
                 </div>
                 <div class="col-sm-6">
                     <div class="form-group">
-                        <label for="addressOne">Address 1</label>
+                        <label for="addressOne">Address: Line 1</label>
                         <input type="text" class="form-control" formControlName="addressOne" name="addressOne"
                             [ngClass]="{ 'is-invalid': submitted && editOrg.addressOne.errors }" />
                         <div *ngIf="submitted && editOrg.addressOne.errors" class="invalid-feedback">
@@ -369,7 +369,7 @@
 
                 <div class="col-sm-6">
                     <div class="form-group">
-                        <label for="addressTwo">Address 2</label>
+                        <label for="addressTwo">Address: Line 2</label>
                         <input type="text" class="form-control" formControlName="addressTwo" name="addressTwo" />
                     </div>
                 </div>
@@ -406,7 +406,7 @@
                 </div>
                 <div class="col-sm-6">
                     <div class="form-group">
-                        <label for="state">Zip Code</label>
+                        <label for="state">ZIP Code</label>
                         <input type="text" class="form-control" formControlName="zipcode" name="zipcode"
                             [ngClass]="{ 'is-invalid': submitted && editOrg.zipcode.errors }" />
                         <div *ngIf="submitted && editOrg.zipcode.errors" class="invalid-feedback">
@@ -466,7 +466,7 @@
         <!-- <span *ngIf="myContext.pid">PID:{{pid}} {{myContext.pid}}</span> -->
         <form [formGroup]="organisationPropertyForm" (ngSubmit)="onSubmit()">
             <div class="form-group">
-                <label for="name">Name</label>
+                <label for="name">Property Name</label>
                 <input type="text" class="form-control" name="propertyname" formControlName="propertyname"
                     [ngClass]="{ 'is-invalid': submitted && orgProp.propertyname.errors }" />
                 <div *ngIf="submitted && orgProp.propertyname.errors" class="invalid-feedback">
