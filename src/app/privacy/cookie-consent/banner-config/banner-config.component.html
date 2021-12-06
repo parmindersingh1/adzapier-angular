@@ -1,9 +1,9 @@
-<div class="wrapper" *ngIf="!publishing">
-  <div class="row">
-    <div class="col-md-9">
+<div class="container-fluid margin-top-70" *ngIf="!publishing">
+  <!-- <div class="row"> -->
+    <div class="col-md-9 ml-4">
       <div class="d-sm-flex align-items-center justify-content-between">
         <div>
-          <nav aria-label="breadcrumb" class="bredcrub-row" style="margin-left: -14px">
+          <nav aria-label="breadcrumb" class="bredcrub-row" style="margin-left:-14px;">
             <ol class="breadcrumb breadcrumb-style1 mg-b-10">
               <li class="breadcrumb-item">Privacy</li>
               <li class="breadcrumb-item"><a routerLink="/home/dashboard/cookie-consent"
@@ -16,7 +16,7 @@
         </div>
       </div> <!-- breadcrumb -->
     </div>
-    <div class="col-md-3 pl-4">
+    <div class="col-md-3 pl-3">
       <div class="saving-status  float-right" *ngIf="contentSaving === 'saving'">
         <p class="mb-0"><span class="spinner-border"></span> Saving Your Customization ... </p>
       </div>
@@ -24,16 +24,16 @@
         <p class="mb-0"> Saved </p>
       </div>
     </div>
-  </div>
+  <!-- </div> -->
 
 
-  <form [formGroup]="BannerConfigurationForm" (ngSubmit)="onSubmit()">
+  <form [formGroup]="BannerConfigurationForm" class="margin-wrapper" (ngSubmit)="onSubmit()">
 
     <div class="card title-head">
       <div class="card-header">
         <div class="row">
           <h5 class="main-heading col-md-4">Banner Configuration </h5>
-          <div class="col-md-4 preview-border-left">
+          <div class="col-md-5 pr-0 preview-border-left">
             <p class="live-preview-type">Live Preview : <span>
              <span class="tx-16 pl-2 pr-2"
                    *ngIf="BannerConfigurationForm.value.AllowGDPR && (!BannerConfigurationForm.value.GenericGlobal && !BannerConfigurationForm.value.CCPAGlobal) "> GDPR :   <p-radioButton
@@ -57,7 +57,7 @@
           <!--              </div>-->
           <!--            </div>-->
           <!--          </div>-->
-          <div class="col-md-4 text-right">
+          <div class="col-md-3 pl-0 text-right">
             <button pButton pRipple type="button"
                     [disabled]="contentSaving === 'saving'"
                     (click)="openModal(resetConfig)" label="Reset to Default" class="p-button-secondary mr-2"></button>
@@ -65,10 +65,10 @@
             <button pButton pRipple type="submit"
                     [disabled]="contentSaving === 'saving' || BannerConfigurationForm.invalid"
                     (click)="publishType = 'draft'" label="Save" class="p-button-warning mr-2"></button>
-            <button pButton pRipple type="submit"
+            <button pButton pRipple type="button"
                     [disabled]="contentSaving === 'saving' || BannerConfigurationForm.invalid"
-                    (click)="publishType = 'publish'" label="Publish"></button>
-            <p class="publish-date-text" *ngIf="BannerConfigurationForm.value?.PublishDate">Last Published : {{BannerConfigurationForm.value?.PublishDate | timeago}}</p>
+                    (click)="openModal(ReConsentConfirmation)" label="Publish"></button>
+            <p class="publish-date-text" *ngIf="BannerConfigurationForm.value?.PublishDateDisplay">Last Published : {{BannerConfigurationForm.value?.PublishDateDisplay | timeago}}</p>
 
           </div>
         </div>
@@ -1438,6 +1438,21 @@
     <button type="button" class="btn btn-primary" (click)="goToSetup()"><i class="fa-wrench fas feather-16 pr-2"></i>
       Setup Banner
     </button>
+  </div>
+</ng-template>
+
+<ng-template #ReConsentConfirmation>
+  <div class="modal-body text-center">
+    <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="modalRef?.hide()">
+      <span aria-hidden="true" class="visually-hidden">&times;</span>
+    </button>
+    <h5 class="mb-3">Do you want to let your users give their consents again?</h5>
+
+    <button pButton pRipple type="button"
+            (click)="publishType = 'publish'; onSubmit(); modalRef.hide()" label="No" class="p-button-warning mr-2"></button>
+    <button pButton pRipple type="button"
+            (click)="publishType = 'publish'; onSubmitWithReConsent(); modalRef.hide()" label="Yes"></button>
+    <p class="publish-date-text text-right pt-2" *ngIf="BannerConfigurationForm.value?.PublishDate">Last Reconsent date : {{BannerConfigurationForm.value?.PublishDate | timeago}}</p>
   </div>
 </ng-template>
 

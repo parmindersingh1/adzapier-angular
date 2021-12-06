@@ -8,6 +8,10 @@ import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
 import {Location} from '@angular/common';
 import {ActivatedRoute, Router} from '@angular/router';
 import {BsDatepickerConfig, DatepickerDateCustomClasses} from 'ngx-bootstrap/datepicker';
+import {ChartDataSets, ChartOptions, ChartType} from 'chart.js';
+import {Label} from 'ng2-charts';
+
+const colorCodes = ['#f77eb9', '#fdb16d', '#c693f9', '#65e0e0', '#69b2f8', '#6fd39b'];
 
 interface Country {
   count: number;
@@ -41,6 +45,39 @@ class Opt {
   styleUrls: ['./cookie-consent.component.scss']
 })
 export class CookieConsentComponent implements OnInit {
+  public barChartOptions: ChartOptions = {
+    responsive: true,
+    // We use these empty structures as placeholders for dynamic theming.
+    scales: {
+      xAxes: [{}], yAxes: [{
+        ticks: {
+          beginAtZero: true
+        }
+      }]
+    },
+
+    plugins: {
+      datalabels: {
+        anchor: 'end',
+        align: 'end',
+      }
+    }
+  };
+  public barChartLabels: Label[] = ['10/19/2021 - 11/18/2021'];
+  public barChartType: ChartType = 'bar';
+  public barChartLegend = true;
+  public barChartPlugins = ['test'];
+  chartColors = [
+    { backgroundColor: '#f77eb9' },
+    { backgroundColor: '#fdb16d' },
+    { backgroundColor: '#c693f9' },
+    { backgroundColor: '#65e0e0' },
+    { backgroundColor: '#69b2f8' },
+    { backgroundColor: '#6fd39b' }
+  ];
+
+  public barChartData: ChartDataSets[] = [];
+
   currentManagedOrgID: any;
   alertMsg: any;
   alertType: any;
@@ -158,7 +195,7 @@ export class CookieConsentComponent implements OnInit {
     this.onGetPropsAndOrgId();
     this.onGetDashboardData();
     this.onGetOptInActivity();
-    this.onGetOptOutActivity();
+    // this.onGetOptOutActivity();
     // this.onGetCountryList();
     this.onConsentDetails();
     this.onGetMapData();
@@ -254,11 +291,30 @@ export class CookieConsentComponent implements OnInit {
         this.loading.stop('f1');
         if (res) {
           this.optIn = res['response'];
+          this.onSetOtpIn(res['response']);
         }
       }, error => {
         this.loadingSkeleton.two = false;
         this.loading.stop('f1');
-      })
+      });
+  }
+
+  onSetOtpIn(data) {
+    const startDate = this.searchbydaterange[0].toJSON().split('T')[0];
+    const endDate = this.searchbydaterange[1].toJSON().split('T')[0];
+    this.barChartLabels = [startDate + ' - ' + endDate];
+    if (data.length > 0) {
+      const count = data[0];
+      this.barChartData = [
+        {data: [Number(count.allow_essantial_count)], label: 'Essential'},
+        {data: [Number(count.allow_functional_count)], label: 'Functional'},
+        {data: [Number(count.allow_analytics_count)], label: 'Analytics'},
+        {data: [Number(count.allow_advertising_count)], label: 'Advertising'},
+        {data: [Number(count.allow_social_media_count)], label: 'Social Media'},
+        {data: [Number(count.allow_unknown_count)], label: 'Unknown'},
+      ];
+    }
+    this.cd.detectChanges();
   }
 
   onGetOptOutActivity() {

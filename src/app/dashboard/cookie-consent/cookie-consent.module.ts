@@ -7,6 +7,7 @@ import {AuthGuard} from '../../_helpers';
 import {RouteguardService} from '../../_services/routeguard.service';
 import { LicenseguardPropertyService } from '../../_services/licenseguardproperty.service';
 import {FormsModule} from '@angular/forms';
+import {ChartsModule} from 'ng2-charts';
 const path: Routes = [
   {path: '', component: CookieConsentComponent,canActivate: [AuthGuard, RouteguardService, LicenseguardPropertyService]}
 ];
@@ -17,7 +18,8 @@ const path: Routes = [
         CommonModule,
         SharedbootstrapModule,
         RouterModule.forChild(path),
-        FormsModule
+        FormsModule,
+        ChartsModule
     ]
 })
 export class CookieConsentModule { }

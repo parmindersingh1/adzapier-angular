@@ -125,7 +125,7 @@ export class AnalyticsComponent implements OnInit {
       iconcss: "fas fa-layer-group tx-primary temp-blue center tx-64 margin-15",
       content: "Configure geo-specific cookie banner, language and preference center.",
       tooltipcontent: this.isLicenseAssignedtoProperty ? '' : this.cookieTooltiptext,
-      routerlinktext: this.isLicenseAssignedtoProperty ? '/cookie-consent/cookie-banner' : '/settings/billing/manage',
+      routerlinktext: this.isLicenseAssignedtoProperty ? '/cookie-consent/banner-configuration' : '/settings/billing/manage',
       buttonText: this.isLicenseAssignedtoProperty ? 'Go Now' : 'Try Now'
     }, {
       id: 3,
@@ -150,7 +150,7 @@ export class AnalyticsComponent implements OnInit {
       isLicensepurchased: this.isConsentPreferenceLicenseAssignedToProperty,
       title: "Consent Preference",
       iconcss: "fas fa-file-signature tx-primary temp-blue center tx-64 margin-15",
-      content: "Collect user preference consent, document opt-ins/opt-out via your web forms and systems.",
+      content: "Collect user preference consent, document opt-ins/opt-outs via your web forms and systems.",
       tooltipcontent: this.isConsentPreferenceLicenseAssignedToProperty ? '' : this.consentTooltipText,
       routerlinktext: this.isConsentPreferenceLicenseAssignedToProperty ? ['/home/dashboard/consent-preference'] : ['/settings/billing/manage'],
       buttonText: this.isConsentPreferenceLicenseAssignedToProperty ? 'Go Now' : 'Try Now'

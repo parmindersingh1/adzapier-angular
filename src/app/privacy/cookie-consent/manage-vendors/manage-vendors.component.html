@@ -1,6 +1,6 @@
 <div class="d-sm-flex align-items-center justify-content-between">
   <div>
-    <nav aria-label="breadcrumb" style="margin-left: -14px">
+    <nav aria-label="breadcrumb">
       <ol class="breadcrumb breadcrumb-style1 mg-b-10">
         <li class="breadcrumb-item">Privacy</li>
         <li class="breadcrumb-item"><a routerLink="/home/dashboard/cookie-consent" [queryParams]="{oid:queryOID , pid:queryPID}">Cookie Consent</a></li>
@@ -222,8 +222,8 @@
 
 <ng-template #template>
   <div class="font-weight-bold modal-body text-center">
-    <p>You will no longer be able to send or receive signals to and from vendors once they are set to Inactive. A
-      vendor’s status can be updated to Active or Inactive at any time.</p>
+    <p>You can update the vendor’s status to Active or Inactive at any time. Once you set any vendors to Inactive, you can’t send or receive signals from those vendors. 
+    </p>
     <div class="row mt-2 mb-2">
       <div class="col-md-5 radiobtn-wrapper">
         <div class="form-check d-flex">

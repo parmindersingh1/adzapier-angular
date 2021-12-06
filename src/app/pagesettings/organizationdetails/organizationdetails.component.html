@@ -252,17 +252,17 @@
                         <tr
                             *ngFor="let list of organizationTeamMemberList | paginate:paginationConfig | filter: searchText:'user_name':'user_email':'role_name'; let i = index">
 
-                            <td>
+                            <td [ngClass]="i === 0 ? 'tr-graybg' : ''">
                                 {{ (paginationConfig.currentPage - 1) * paginationConfig.itemsPerPage + i + 1 }}
                             </td>
-                            <td>{{list.user_name}}</td>
-                            <td>
+                            <td [ngClass]="i === 0 ? 'tr-graybg' : ''">{{list.user_name}}</td>
+                            <td [ngClass]="i === 0 ? 'tr-graybg' : ''">
                                 {{list.user_email}}
                             </td>
-                            <td>
+                            <td [ngClass]="i === 0 ? 'tr-graybg' : ''">
                                 {{list.role_name}}
                             </td>
-                            <td class="text-center">
+                            <td class="text-center" [ngClass]="i === 0 ? 'tr-graybg' : ''">
                             <button  *ngIf="list.user_last_login === 'Invitation Pending' || list.user_last_login === 'Invitation sent' || list.user_last_login === ''; else LoginDate" type="button"
                             (click)="onResendInvitation(list.approver_id)" class="btn btn-xs btn-primary">
                             <i class="fas fa-envelope"></i> Resend Invitation</button>
@@ -271,12 +271,15 @@
                             </ng-template>
 
                             </td>
-                            <td>
-                                <a class="pd-r-5" (click)="editUserInvitation(inviteuserModal,list);checkForQsTooltip();">
-                                    <span class="d-none d-sm-inline mg-l-0 cursorpointer"> <i
-                                            class="fa fa-pen mr-1 colorblue" aria-hidden="true"></i></span>
+                            <td [ngClass]="i === 0 ? 'tr-graybg' : ''">
+                                <span class="mg-l-0"  *ngIf="i == 0" tooltip="Edit or delete not applicable for super administrator at organization level, if want to change role visit company page" placement="top" [adaptivePosition]="true" container="body">
+                                     <i class="fa fa-pen mr-2 tx-gray-400"></i>
+                                     <i class="far fa-trash-alt tx-gray-400 fa-sm"></i>    
+                                </span>                               
+                                <a class="pd-r-5" *ngIf="i !== 0" (click)="editUserInvitation(inviteuserModal,list);checkForQsTooltip();">
+                                    <span class="d-none d-sm-inline mg-l-0 cursorpointer"> <i class="fa fa-pen mr-1 colorblue" aria-hidden="true"></i></span>
                                 </a>
-                                <a class="pd-r-5 cursorpointer" (click)="removeTeamMember(list,'team member')">
+                                <a class="pd-r-5 cursorpointer" *ngIf="i !== 0" (click)="removeTeamMember(list,'team member')">
                                     <i class="far fa-trash-alt tx-danger fa-sm"></i>
                                 </a>
                             </td>

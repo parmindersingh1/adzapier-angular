@@ -357,7 +357,7 @@
                 </ul>
 
                 <button *ngIf="isTaskTabOpen" class="btn btn-sm btn-outline-secondary btn-uppercase btnSubtask" [disabled]="currentWorkflowStage === 'Rejected'"
-                    (click)="openModalPopup(subTask,'')" data-toggle="modal">
+                    (click)="openModalPopup(subTask,'')" style="font-size: small;text-transform: none;" data-toggle="modal">
                     Subtask
                 </button>
                 <div [ngbNavOutlet]="nav" class="m-2"></div>
