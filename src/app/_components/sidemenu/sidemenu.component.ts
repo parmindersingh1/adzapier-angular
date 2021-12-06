@@ -3,6 +3,7 @@ import { Component, Input, OnInit, Output,EventEmitter, HostListener, ElementRef
 import { Router, ActivatedRoute, NavigationEnd, NavigationStart } from '@angular/router';
 import { UserService } from '../../_services/user.service';
 import { Location } from '@angular/common';
+import { findPropertyIDFromUrl } from 'src/app/_helpers/common-utility';
 @Component({
   selector: 'app-sidemenu',
   templateUrl: './sidemenu.component.html',
@@ -41,6 +42,7 @@ export class SidemenuComponent implements OnInit {
   currentMenuItemIndex:number;
   orgInitials:any;
   propInitials:any;
+  oIDPIDFromURL:any;
   constructor(private activatedroute: ActivatedRoute,
               private elRef:ElementRef,
               private router: Router,
@@ -56,6 +58,11 @@ export class SidemenuComponent implements OnInit {
    }
 
   ngOnInit(): void {
+    this.activatedroute.queryParamMap
+    .subscribe(params => {
+      this.queryOID = params.get('oid');
+      this.queryPID = params.get('pid');
+     });
     this.elRef.nativeElement.querySelector('.sidemenu').removeEventListener('mouseenter', this.onMouseover.bind(this), false);
     this.elRef.nativeElement.querySelector('.sidemenu').removeEventListener('mouseleave',this.onMouseover.bind(this), false);
     if(this.currentmenu !== undefined){
@@ -164,7 +171,13 @@ export class SidemenuComponent implements OnInit {
     }
     this.elRef.nativeElement.querySelector('.sidemenu').removeEventListener('mouseenter', this.onMouseover.bind(this));
     this.elRef.nativeElement.querySelector('.sidemenu').removeEventListener('mouseleave',this.onMouseout.bind(this));
+    if(this.queryOID !== null && this.queryOID !== undefined && this.queryPID !== null && this.queryPID !== undefined){
     this.router.navigate([link], { queryParams: { oid: this.queryOID, pid: this.queryPID }});//queryParamsHandling: 'merge', skipLocationChange: false 
+    } else{
+      this.oIDPIDFromURL = findPropertyIDFromUrl(this.location.path());
+      this.router.navigate([link], { queryParams: { oid: this.oIDPIDFromURL[0], pid: this.oIDPIDFromURL[1] }});//queryParamsHandling: 'merge', skipLocationChange: false 
+    }
+    
   }
 
   ngOnChanges(changes:SimpleChanges){
@@ -184,6 +197,11 @@ export class SidemenuComponent implements OnInit {
     }
     this.getCurrentmenu();
     this.matchSideLinkWithNavbarlink();
+    this.activatedroute.queryParamMap
+    .subscribe(params => {
+      this.queryOID = params.get('oid');
+      this.queryPID = params.get('pid');
+     });
     this.cdRef.detectChanges();
   }
 
@@ -207,8 +225,10 @@ export class SidemenuComponent implements OnInit {
 
   matchSideLinkWithNavbarlink(){
       const pathFromURL = this.location.path().split("?"); 
-      const index = this.currentmenu.subcategory.findIndex((t) => t.routerLink === pathFromURL[0]);
-      this.currentMenuItemIndex = index; 
+      if(this.currentmenu !== undefined){
+        const index = this.currentmenu.subcategory.findIndex((t) => t.routerLink === pathFromURL[0]);
+        this.currentMenuItemIndex = index;
+      }
   }
 
   trackById(index, menuitem) {

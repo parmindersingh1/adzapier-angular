@@ -23,6 +23,7 @@ export class UserService {
     @Output() onClickTopmenu: EventEmitter<boolean> = new EventEmitter<boolean>();
     @Output() onClickQuickStartmenux: EventEmitter<boolean> = new EventEmitter<boolean>(false);
     isSideMenuClicked:boolean = false;
+    isSideMenuVisible:boolean = false;
     public onClickQuickStartmenu: BehaviorSubject<UserActionOnQuickstart> = new BehaviorSubject<UserActionOnQuickstart>({quickstartid:0,isclicked:false,isactualbtnclicked:false});
     get isClickedOnQSMenu() {
         return this.onClickQuickStartmenu.asObservable();

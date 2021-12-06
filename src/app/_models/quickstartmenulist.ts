@@ -112,6 +112,24 @@ export class QuickStartMenuList {
             "linkdisplaytext": "Consent Dashboard",
             "divguidetext": "consent-dashboard",
             "tooltipdescription":"View cookie consent dashboard"
+          },
+          {
+            "linkid": 311,
+            "link": "/",
+            "islinkclicked": false,
+            "isactualbtnclicked": false,
+            "linkdisplaytext": "Manage Vendors",
+            "divguidetext": "manage-vendors",
+            "tooltipdescription":"Manage vendors"
+          },
+          {
+            "linkid": 312,
+            "link": "/",
+            "islinkclicked": false,
+            "isactualbtnclicked": false,
+            "linkdisplaytext": "Setup",
+            "divguidetext": "cookie-consent-setup",
+            "tooltipdescription":"Cookie consent setup"
           }
         ]
       },

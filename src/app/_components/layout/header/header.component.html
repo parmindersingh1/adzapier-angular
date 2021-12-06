@@ -1,4 +1,5 @@
-<nav *ngIf="currentUser" #headerNavbar (click)="headerNavbarEvent($event)"  class="navbar navbar-expand-lg">
+<div *ngIf="currentUser">
+  <nav #headerNavbar (click)="headerNavbarEvent($event)" class="navbar navbar-expand-lg">
 
 
   <!-- Brand -->
@@ -280,6 +281,17 @@
     </li>
   </ul>
     </div>
+    <div class="navbar-right" *ngIf="currentUser" dropdown [insideClick]="true" style="margin-right: 17px;">
+      <div class="responsive-notification">
+  
+      <span  class="notification-number" style="background-color: white;color: black;">{{count}}</span> <!--[ngClass]="{'hide-notification-number':notificationsNumber == '0'}"-->
+      <a  class="nav-link dropdown-link p-0" routerLink="/settings/billing/cart" [queryParams]="{oid:queryOID , pid:queryPID}"  dropdownToggle>
+        <i-feather name="shopping-cart"  class="feather-20 tx-white"></i-feather>
+
+      </a>
+      </div>
+      </div>
+    
   <!--Help center after login ends-->
   <!--notification after login-->
   <div class="navbar-right" *ngIf="currentUser" dropdown [insideClick]="true">
@@ -384,6 +396,7 @@
 
   <!--usermenuends after login-->
 </nav>
+</div>
 <!---iPad / Mobile Menu-->
 <div id="divSidenav" class="sidenav back-drop" [ngStyle]="addMobileBackdrop">
   <div class="sidebar sidebar-components" [ngStyle]="addMobileMenuWidth">
@@ -491,12 +504,14 @@
   </div>
 </ng-template>
 <!--quickstart alert for every page-->
+<div *ngIf="isloginpage">
 <div #backDroparea [ngClass]="isBillingpageQuickid() && !isqsmenuopen ? 'back-drop-two': ''"
-  (click)="onClickBackdrop()" *ngIf="isloginpage">
+  (click)="onClickBackdrop()">
   <app-quickstartalert *ngIf="!isHeaderNavbarClicked && !isUserClickedNotRelatedToTooltip && !isRevistedLink  && !isBackdropclicked && actualBackdropclicked" [styleobj]="positionObj()" [isclickedbyuser]="quickLinkStatus"
     [isuserclickoutsidemenu]="isQuicklinkActuallinkVisited()" [linkid]="quickDivID" [divguidetext]="alertguidetext"
     [guidancetext]="alertcontent" [isactualLinkclickedbyuser]="actuallinkstatus">
   </app-quickstartalert>
+</div>
 </div>
 <div *ngIf="currentUser && showSidemenu">
    <app-sidemenu  [organization]="currentOrganization" [currentmenu]="currentClickedMenuItem[0]" [property]="currentProperty" (onClickSideMenuArrow)="checkSideMenuarrowClick($event)"></app-sidemenu>

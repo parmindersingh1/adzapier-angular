@@ -20,19 +20,42 @@ export class ErrorInterceptor implements HttpInterceptor {
           }
           if (err.status === 400) {
             // auto logout if 401 response returned from api
-            this.dataService.openUnAuthModal.next({isTrue: true, error: err})
-            if(err.url.indexOf('api/v1/invite/user/company') == -1 && err.error.error.match("exist.") == -1 || err.url.indexOf('/api/v1/login') == -1 && err.error.error.match("Incorrect") == -1){//
+            if(err.url.indexOf('api/v1/integration') !== -1){
+               const error = err.error.error || err.statusText;
+               return throwError(error);
+             }
+            if(err.url.indexOf('api/v1/start-cookie-scanning') !== -1){
+              const error = err.error.error || err.statusText;
+               return throwError(error);
+            }
+            if(err.url.indexOf('api/v1/invite/user/company') !== -1 && err.error.error.match("exist.") !== null || err.url.indexOf('/api/v1/login') == -1 && err.error.error.match("Incorrect") !== null){//
               this.authenticationService.logout();
+              this.dataService.openUnAuthModal.next({isTrue: true, error: err})
               this.router.navigate(['/error/unauthorized']);
+            }else if(err.url.indexOf('api/v1/password/forgot') !== -1 || err.url.indexOf('api/v1/register/checkemailverify') !== -1){
+              this.authenticationService.logout();
+              const error = err.error.error || err.statusText;
+              return throwError(error);
             }
             // location.reload();
           }
           if (err.status === 401) {
               // auto logout if 401 response returned from api
-              this.dataService.openUnAuthModal.next({isTrue: true, error: err})
-              if(err.url.indexOf('/api/v1/login') == -1 && err.error.error.match("exist.") == -1 || err.url.indexOf('/api/v1/login') == -1 && err.error.error.match("Incorrect") == -1){//
+             // this.dataService.openUnAuthModal.next({isTrue: true, error: err})
+              if(err.url.indexOf('api/v1/integration') !== -1){
+                this.authenticationService.logout();
+                const error = err.error.error || err.statusText;
+                throwError(error);
+              }
+              if(err.url.indexOf('/api/v1/login') == -1 && err.error.error.match("exist.") !== null || err.url.indexOf('/api/v1/login') == -1 && err.error.error.match("Incorrect") !== null){//
                 this.authenticationService.logout();
                 this.router.navigate(['/error/unauthorized']);
+                const error = err.error.error || err.statusText;
+                return throwError(error);
+              } else if(err.url.indexOf('/api/v1/login') !== -1){
+                this.authenticationService.logout();
+                const error = err.error.error || err.statusText;
+                return throwError(error);
               }
               // location.reload();
             }
@@ -51,7 +74,7 @@ export class ErrorInterceptor implements HttpInterceptor {
             if(err.status === 404 || err.status === 401){
               if(err.url.indexOf('/api/v1/invite/user') !== -1){
                 const error = err.error.error || err.statusText;
-                this.dataService.openUnAuthModal.next({isTrue: true, error: err})
+                //this.dataService.openUnAuthModal.next({isTrue: true, error: err})
                 return throwError(error);
               }else{
                 this.router.navigate(['/error/pagenotfound']);
@@ -79,7 +102,11 @@ export class ErrorInterceptor implements HttpInterceptor {
               } else if(err.url.indexOf('/billing/checkout/trialsession') !== -1){
                 const error = err.error.error || err.statusText;
                 return throwError(error);
-              } else{
+              } else if(err.url.indexOf('/cart') !== -1){
+                const error = err.error.error || err.statusText;
+                return throwError(error);
+              }
+                else{
                 this.router.navigate(['/error/servererror']);
               }
             }
