@@ -740,11 +740,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
   }
 
   isPropSelected(selectedItem): boolean {
-    if (selectedItem.property_id !== undefined) {
+    if (selectedItem !== undefined && selectedItem.property_id !== undefined) {
       this.isPropertySelected = this.selectedOrgProperties.filter((t) => t.property_id === selectedItem.property_id).length > 0 || this.selectedOrgProperties.some((t) => t.response !== undefined && t.response.id === selectedItem.property_id);
       return this.isPropertySelected;
     }
-      else if(selectedItem.response !== undefined && selectedItem.response.id !== undefined){
+      else if(selectedItem !== undefined && selectedItem.response !== undefined && selectedItem.response.id !== undefined){
       this.isPropertySelected = this.selectedOrgProperties.some((t) => t.property_id === selectedItem.response.id) || this.selectedOrgProperties.some((t) => t.response !== undefined && t.response.id === selectedItem.response.id);
       return this.isPropertySelected;
       } else if(this.currentNavigationUrl[1] !== undefined && selectedItem.property_id === this.currentNavigationUrl[1]){ //this.isUrlWithPropID // this.findPropertyIDFromUrl(this.currentNavigationUrl)[1]
@@ -2524,9 +2524,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
   }
 
   ngOnDestroy(){
-    if(this.orgservice.isPropertyUpdated !== undefined){
-      this.orgservice.isPropertyUpdated.unsubscribe();
-    }
+    //temporary commented
+    // if(this.orgservice.isPropertyUpdated !== undefined){
+    //   this.orgservice.isPropertyUpdated.unsubscribe();
+    // }
   }
 
 }

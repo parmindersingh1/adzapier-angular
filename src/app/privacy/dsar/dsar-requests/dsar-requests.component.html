@@ -44,7 +44,7 @@
 
   </div>
 
-  <p-table class="dsar-request-table" #ptable [value]="requestsList" [responsive]="true" [columns]="selectedColumns" [paginator]="true" [lazy]="true"
+  <p-table class="dsar-request-table" #ptable [value]="requestsList" sortField="rowData.created_at"  (onSort)="customSort($event)" [customSort]="true" [responsive]="true" [columns]="selectedColumns" [paginator]="true" [lazy]="true"
     [loading]="isloading" (onLazyLoad)="loadrequestsListLazy($event)" [rows]="10" [showCurrentPageReport]="true"
     [totalRecords]="totalRecords" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
     [rowsPerPageOptions]="[10,20,30]" styleClass="p-datatable-sm">

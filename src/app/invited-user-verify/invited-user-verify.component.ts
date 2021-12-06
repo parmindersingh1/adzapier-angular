@@ -2,7 +2,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {moduleName} from '../_constant/module-name.constant';
 import {delay} from 'rxjs/operators';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
-import {UserService} from '../_services';
+import {AuthenticationService, OrganizationService, UserService} from '../_services';
 import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
@@ -17,6 +17,8 @@ export class InvitedUserVerifyComponent implements OnInit, OnDestroy {
   constructor(
     private loader: NgxUiLoaderService,
     private userService: UserService,
+    private authService : AuthenticationService,
+    private orgservice : OrganizationService,
     private router: Router,
     private activateRouter: ActivatedRoute,
   ) { }
@@ -46,6 +48,12 @@ export class InvitedUserVerifyComponent implements OnInit, OnDestroy {
         if (data) {
           this.isInvitedUserVerified = true;
           this.message = 'Your email is successfully verified !';
+          this.authService.logout(); 
+          sessionStorage.clear();
+          localStorage.removeItem('currentUser');
+          this.orgservice.removeControls();
+          this.userService.getCurrentUser.unsubscribe();
+          localStorage.clear();
           setTimeout(()=>{
             this.router.navigate(['/login']);
           },1000);
