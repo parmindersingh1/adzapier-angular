@@ -113,18 +113,6 @@ input::-ms-clear {
 	z-index: 1000;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
 .login-background {
   background-image: linear-gradient(#042b60, #004097);
   height: 105%;
@@ -135,7 +123,8 @@ input::-ms-clear {
 }
 .login-form{
   width: 700px;
-  padding: 55px;
+  padding: 25px 30px 30px 30px;
+  min-height: calc(100% - 265px);
 }
 .input-lg {
   height: 55px;
@@ -281,6 +270,16 @@ svg {
 p.error {
   color: #d06079;
 }
+
+.verification-msg{
+  color:#fff;
+  min-height:calc(100vh - 265px)
+}
+
+.min-calcheight {
+  min-height: calc(100vh - 20px);
+}
+
 @-webkit-keyframes dash {
   0% {
     stroke-dashoffset: 1000;

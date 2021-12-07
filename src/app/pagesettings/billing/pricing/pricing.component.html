@@ -1,9 +1,7 @@
-<div class="blue-back">
 
-</div>
-<div class="container">
-  <div class=" ht-100p tx-center">
-    <div class="row justify-content-center">
+<div>
+  <div class="ht-100p tx-center top-margin">
+    <div class="justify-content-center">
       <div class="col-md-12">
         <div class="row">
 
@@ -13,8 +11,8 @@
               asked</p>
           </div>
 
-          <div class="toggle-period">
-            <input id="toggle-period" (change)="onSelectCookieConsentBillingCycle(subType)"
+          <div class="toggle-period" *ngIf="currentStep === 1">
+            <input id="toggle-period" (change)="onSelectCookieConsentBillingCycle(subType, 1)"
               [checked]="cookieConsentBillingCycle === 'yearly'" #subType class="toggle-period__checkbox"
               type="checkbox">
             <!--          <input id="toggle-period" (change)="onSelectCookieConsentBillingCycle(subType)"-->
@@ -35,6 +33,49 @@
             </label>
           </div>
 
+          <div class="toggle-period" *ngIf="currentStep === 2">
+            <input id="toggle-period" (change)="onSelectCookieConsentBillingCycle(subType, 2)"
+              [checked]="dsarBillingCycle === 'yearly'" #subType class="toggle-period__checkbox" type="checkbox">
+            <!--          <input id="toggle-period" (change)="onSelectCookieConsentBillingCycle(subType)"-->
+            <!--                 [disabled]="activeData.cookieConsent.cycle === 'yearly'"-->
+            <!--                 [checked]="cookieConsentBillingCycle === 'yearly'" #subType class="toggle-period__checkbox" type="checkbox">-->
+            <label for="toggle-period" class="toggle-period__label">
+              <span class="toggle-period__monthly"
+                [ngStyle]="{color: dsarBillingCycle == 'yearly' ? '#c3c4c7' : '#0546a3'}" role="checkbox"
+                aria-checked="false">Billed monthly</span>
+              <span class="toggle-period__switch"
+                [ngStyle]="{backgroundColor: dsarBillingCycle == 'yearly' ? '#0da1dd' : '#0546a3'}" role="checkbox"
+                aria-checked="true" tabindex="0"></span>
+              <span class="toggle-period__yearly"
+                [ngStyle]="{color: dsarBillingCycle == 'yearly' ? '#0da1dd' : '#c3c4c7'}" role="checkbox"
+                aria-checked="true">Billed annually</span>
+              <span class="flag" [ngStyle]="{opacity: dsarBillingCycle == 'yearly' ? 1 : .4}">2 Months
+                Free</span>
+            </label>
+          </div>
+
+          <div class="toggle-period" *ngIf="currentStep === 3">
+            <input id="toggle-period" (change)="onSelectCookieConsentBillingCycle(subType, 3)"
+              [checked]="consentPreferenceBillingCycle === 'yearly'" #subType class="toggle-period__checkbox"
+              type="checkbox">
+            <!--          <input id="toggle-period" (change)="onSelectCookieConsentBillingCycle(subType)"-->
+            <!--                 [disabled]="activeData.cookieConsent.cycle === 'yearly'"-->
+            <!--                 [checked]="cookieConsentBillingCycle === 'yearly'" #subType class="toggle-period__checkbox" type="checkbox">-->
+            <label for="toggle-period" class="toggle-period__label">
+              <span class="toggle-period__monthly"
+                [ngStyle]="{color: consentPreferenceBillingCycle == 'yearly' ? '#c3c4c7' : '#0546a3'}" role="checkbox"
+                aria-checked="false">Billed monthly</span>
+              <span class="toggle-period__switch"
+                [ngStyle]="{backgroundColor: consentPreferenceBillingCycle == 'yearly' ? '#0da1dd' : '#0546a3'}"
+                role="checkbox" aria-checked="true" tabindex="0"></span>
+              <span class="toggle-period__yearly"
+                [ngStyle]="{color: consentPreferenceBillingCycle == 'yearly' ? '#0da1dd' : '#c3c4c7'}" role="checkbox"
+                aria-checked="true">Billed annually</span>
+              <span class="flag" [ngStyle]="{opacity: consentPreferenceBillingCycle == 'yearly' ? 1 : .4}">2 Months
+                Free</span>
+            </label>
+          </div>
+
         </div>
         <div class="btn-group-type text-center mt-3">
           <button type="button" (click)="onSetCookieConsent(1, 'cookieConsent')"
@@ -44,12 +85,12 @@
             [ngClass]="{'primary-yellow' : currentStep === 2}" class="button-text btn btn-white mr-2">DSAR
           </button>
           <button type="button" (click)="onSetCookieConsent(3, 'consentPreference')"
-            [ngClass]="{'primary-yellow' : currentStep === 3}" class="button-text btn-white btn mr-2">Consent Preference
+            [ngClass]="{'primary-yellow' : currentStep === 3}" class="button-text btn-white btn">Consent Preference
           </button>
         </div>
 
 
-        <div *ngIf="!skeletonLoader && currentStep === 1" class="row mt-2 justify-content-center">
+        <div *ngIf="!skeletonLoader && currentStep === 1" class="plan-wrapper mt-2 justify-content-center">
 
           <div *ngFor="let plan of subscriptionList;let i = index;" style="overflow: hidden"
             class="col d-flex bg-white-col bt-card flex-column bd pt-0 mr-2  ">
@@ -74,7 +115,8 @@
                 </li>
               </ng-container>
               <ng-container *ngIf="plan.name === 'Essentials'">
-                <li class="text-left feature-list" *ngFor="let  features of highLightFeatures.cookieConsent.essentials">
+                <li class="text-left feature-list"
+                  *ngFor="let  features of highLightFeatures.cookieConsent.essentials">
                   {{features.featureName}} <span class="font-weight-bold" *ngIf="features.featureValue"> -
                     {{features.featureValue}}</span></li>
               </ng-container>
@@ -85,7 +127,8 @@
                 </li>
               </ng-container>
               <ng-container *ngIf="plan.name === 'Enterprise'">
-                <li class="text-left feature-list" *ngFor="let  features of highLightFeatures.cookieConsent.enterprise">
+                <li class="text-left feature-list"
+                  *ngFor="let  features of highLightFeatures.cookieConsent.enterprise">
                   {{features.featureName}} <span class="font-weight-bold" *ngIf="features.featureValue"> -
                     {{features.featureValue}}</span></li>
               </ng-container>
@@ -95,15 +138,20 @@
 
             <h1 class="tx-rubik tx-normal mb-3 mg-t-auto price-text">
               <sup class="doller">$</sup>
+
               <span class="font-weight-bold" *ngIf="cookieConsentBillingCycle === 'monthly'">{{plan.price}}</span>
-              <span class="font-weight-bold" *ngIf="cookieConsentBillingCycle !== 'monthly'">{{plan.price / 12 | number
-                : '1.0-0'}}</span>
+              <span class="font-weight-bold" *ngIf="cookieConsentBillingCycle !== 'monthly'">{{plan.price / 12 |
+                number: '1.0-0'}}</span>
+
+
               <span class="billing-type">/Month</span>
             </h1>
             <p class="tx-size-10  mt-2 ">Billed {{cookieConsentBillingCycle}} </p>
+
+
             <div class="form-group row mb-2 ">
               <label class="property-type col-md-6" for="sel1">Property</label>
-              <select #planUnit style="height: 32px;" class="mb-2 col-md-5 form-control" id="sel1">
+              <!-- <select #planUnit style="height: 32px;" class="mb-2 col-md-5 form-control" id="sel1">
                 <option>1</option>
                 <ng-container *ngIf="plan.price > 0">
                   <option>2</option>
@@ -116,25 +164,34 @@
                   <option>9</option>
                   <option>10</option>
                 </ng-container>
-              </select>
-            </div>
+              </select> -->
+              <button type="button" class="btn btn-sm btn-outline-secondary" style="font-size: large;" (click)="Subs(planUnit,i)">-</button>
+
+              <input disabled [value]="1" style="width: 40px;text-align: center;" #planUnit type="text" id="sel1" min="1" required pattern="^[1-9][0-9]*$" oninput="if(!this.value.match('^[1-9][0-9]*$'))this.value='';"
+              >
+              <button type="button" class="btn btn-sm btn-outline-secondary" style="font-size: large;" (click)="Add(planUnit,i)">+</button>
+
+              </div>
 
 
             <button data-toggle="tooltip" data-placement="top"
+              [ngClass]="(quickDivID == 5 || quickDivID == 6 || quickDivID == 11 || quickDivID == 12 || quickDivID == 18 || quickDivID == 19) && quickDivID == currentLinkID && !iswindowclicked && plan.price >=  activeData.cookieConsent.maxPrice ? 'btn-qs-pricing-hightlight' : ''"
               [title]="plan.price <=  activeData.cookieConsent.maxPrice ? 'You can not downgrade your plan' : 'Add to Cart'"
               *ngIf="plan.price !=  activeData.cookieConsent.maxPrice"
-              [disabled]="plan.price <=  activeData.cookieConsent.maxPrice" (click)="onAddToCart(plan, planUnit)"
+              (click)="onAddToCart(plan, planUnit);checkForQsTooltip();"
               class="btn mt-4 mb-4 add-to-cart-btn btn-primary btn-block">
-              Add To Cart
+              Add to Cart
             </button>
-           
-            
-            
-            <button *ngIf="plan.price ==  activeData.cookieConsent.maxPrice" (click)="onGenerateSessionID()"
+
+
+
+            <button *ngIf="plan.price ==  activeData.cookieConsent.maxPrice"
+              [ngClass]="(quickDivID == 5 || quickDivID == 6 || quickDivID == 11 || quickDivID == 12 || quickDivID == 18 || quickDivID == 19) && quickDivID == currentLinkID && !iswindowclicked ? 'btn-qs-pricing-hightlight' : ''"
+              (click)="onGenerateSessionID();checkForQsTooltip();"
               class="btn mt-4 mb-4 add-to-cart-btn btn-primary btn-block">
               Manage Plan
             </button>
-            
+
 
 
           </div><!-- col -->
@@ -144,25 +201,27 @@
             <p class="tx-color-03 mg-b-25">Advanced enterprise features and global coverage. Volume discount
               available.</p>
             <ul class="pl-3 mr-feature">
-              <li class="text-left feature-list"
-                  *ngFor="let  features of highLightFeatures.cookieConsent.enterprise">{{features.featureName}}
-                <span class="font-weight-bold" *ngIf="features.featureValue"> - {{features.featureValue}}</span></li>
-              <a class="more-details-text" (click)="openModal(template)">View Comparison</a>
+              <li class="text-left feature-list" *ngFor="let  features of highLightFeatures.cookieConsent.enterprise">
+                {{features.featureName}}
+                <span class="font-weight-bold" *ngIf="features.featureValue"> - {{features.featureValue}}</span>
+              </li>
+              <a class="more-details-text" (click)="openModal(template);checkForQsTooltip();">View Comparison</a>
 
             </ul>
             <h2 class="tx-rubik tx-normal ">Contact Us</h2>
             <p class="tx-size-10 mg-b-30 "></p>
-            <a href="https://adzapier.com/get-started/" target="_blank"
+            <a (click)="checkForQSTooltipForEnterprisebt()" href="https://adzapier.com/get-started/" target="_blank"
+              [ngClass]="(quickDivID == 5 || quickDivID == 6 || quickDivID == 11 || quickDivID == 12 || quickDivID == 18 || quickDivID == 19) && quickDivID == currentLinkID && !iswindowclicked ? 'btn-qs-pricing-hightlight' : ''"
               class="enterprise-btn btn mb-4 add-to-cart-btn btn-primary btn-block">Get Enterprise</a>
           </div><!-- col -->
         </div>
 
-        <div *ngIf="!skeletonLoader && currentStep === 2" class="row mt-2 justify-content-center">
+        <div *ngIf="!skeletonLoader && currentStep === 2" class="plan-wrapper mt-2 justify-content-center">
 
-          <div *ngFor="let plan of dsarPlanList" style="overflow: hidden"
+          <div *ngFor="let plan of dsarPlanList;let i = index;" style="overflow: hidden"
             class="col d-flex bg-white-col bt-card flex-column bd pt-0 mr-2  ">
 
-            <div *ngIf="cookieConsentBillingCycle === 'yearly'" class="plan-discount">
+            <div *ngIf="dsarBillingCycle === 'yearly'" class="plan-discount">
               <span class="annual">2 Months Free</span>
             </div>
 
@@ -197,15 +256,15 @@
 
             <h1 class="tx-rubik tx-normal mb-3 mg-t-auto price-text">
               <sup class="doller">$</sup>
-              <span class="font-weight-bold" *ngIf="cookieConsentBillingCycle === 'monthly'">{{plan.price}}</span>
-              <span class="font-weight-bold" *ngIf="cookieConsentBillingCycle !== 'monthly'">{{plan.price / 12 | number
+              <span class="font-weight-bold" *ngIf="dsarBillingCycle === 'monthly'">{{plan.price}}</span>
+              <span class="font-weight-bold" *ngIf="dsarBillingCycle !== 'monthly'">{{plan.price / 12 | number
                 : '1.0-0'}}</span>
               <span class="billing-type">/Month</span>
             </h1>
-            <p class="tx-size-10  mt-2 ">Billed {{cookieConsentBillingCycle}} </p>
+            <p class="tx-size-10  mt-2 ">Billed {{dsarBillingCycle}} </p>
             <div class="form-group row mb-2 ">
               <label class="property-type col-md-6" for="sel1">Organization</label>
-              <select #planUnit style="height: 32px;" class="mb-2 col-md-5 form-control" id="sel1">
+              <!-- <select #planUnit style="height: 32px;" class="mb-2 col-md-5 form-control" id="sel1">
                 <option>1</option>
                 <ng-container *ngIf="plan.price > 0">
                   <option>2</option>
@@ -218,20 +277,29 @@
                   <option>9</option>
                   <option>10</option>
                 </ng-container>
-              </select>
+              </select> -->
+              <button type="button" class="btn btn-sm btn-outline-secondary" style="font-size: large;" (click)="Subs(planUnit,i)">-</button>
+
+              <input disabled [value]="1" style="width: 40px;text-align: center;" #planUnit type="text" id="sel1" min="1" required pattern="^[1-9][0-9]*$" oninput="if(!this.value.match('^[1-9][0-9]*$'))this.value='';"
+              >
+              <button type="button" class="btn btn-sm btn-outline-secondary" style="font-size: large;" (click)="Add(planUnit,i)">+</button>
+
             </div>
 
 
             <button data-toggle="tooltip" data-placement="top"
+              [ngClass]="(quickDivID == 5 || quickDivID == 6 || quickDivID == 11 || quickDivID == 12 || quickDivID == 18 || quickDivID == 19) && quickDivID == currentLinkID && !iswindowclicked && plan.price >=  activeData.dsar.maxPrice ? 'btn-qs-pricing-hightlight' : ''"
               [title]="plan.price <=  activeData.dsar.maxPrice ? 'You can not downgrade your plan' : 'Add to Cart'"
-              *ngIf="plan.price !=  activeData.dsar.maxPrice" [disabled]="plan.price <=  activeData.dsar.maxPrice"
-              (click)="onAddToCart(plan, planUnit)" class="btn mt-4 mb-4 add-to-cart-btn btn-primary btn-block">
-              Add To Cart
+              *ngIf="plan.price !=  activeData.dsar.maxPrice"
+              (click)="onAddToCart(plan, planUnit);checkForQsTooltip();"
+              class="btn mt-4 mb-4 add-to-cart-btn btn-primary btn-block">
+              Add to Cart
             </button>
 
 
-            <button *ngIf="plan.price ==  activeData.dsar.maxPrice" (click)="onGenerateSessionID()"
-              class="btn mt-4 mb-4 add-to-cart-btn btn-primary btn-block">
+            <button *ngIf="plan.price ==  activeData.dsar.maxPrice"
+              [ngClass]="(quickDivID == 5 || quickDivID == 6 || quickDivID == 11 || quickDivID == 12 || quickDivID == 18 || quickDivID == 19) && quickDivID == currentLinkID && !iswindowclicked ? 'btn-qs-pricing-hightlight' : ''"
+              (click)="onGenerateSessionID()" class="btn mt-4 mb-4 add-to-cart-btn btn-primary btn-block">
               Manage Plan
             </button>
 
@@ -243,25 +311,27 @@
             <p class="tx-color-03 mg-b-25">Advanced enterprise features and global coverage. Volume discount
               available.</p>
             <ul class="pl-3 mr-feature">
-              <li class="text-left feature-list"
-                  *ngFor="let  features of highLightFeatures.dsar.enterprise">{{features.featureName}}
-                <span class="font-weight-bold" *ngIf="features.featureValue"> - {{features.featureValue}}</span></li>
-              <a class="more-details-text" (click)="openModal(template)">View Comparison</a>
+              <li class="text-left feature-list" *ngFor="let  features of highLightFeatures.dsar.enterprise">
+                {{features.featureName}}
+                <span class="font-weight-bold" *ngIf="features.featureValue"> - {{features.featureValue}}</span>
+              </li>
+              <a class="more-details-text" (click)="openModal(template);checkForQsTooltip()">View Comparison</a>
 
             </ul>
             <h2 class="tx-rubik tx-normal ">Contact Us</h2>
             <p class="tx-size-10 mg-b-30 "></p>
-            <a href="https://adzapier.com/get-started/" target="_blank"
+            <a (click)="checkForQSTooltipForEnterprisebt()" href="https://adzapier.com/get-started/" target="_blank"
+              [ngClass]="(quickDivID == 5 || quickDivID == 6 || quickDivID == 11 || quickDivID == 12 || quickDivID == 18 || quickDivID == 19) && quickDivID == currentLinkID && !iswindowclicked ? 'btn-qs-pricing-hightlight' : ''"
               class="enterprise-btn btn mb-4 add-to-cart-btn btn-primary btn-block">Get Enterprise</a>
           </div><!-- col -->
         </div>
 
-        <div *ngIf="!skeletonLoader && currentStep === 3" class="row mt-2 justify-content-center">
+        <div *ngIf="!skeletonLoader && currentStep === 3" class="plan-wrapper mt-2 justify-content-center">
 
-          <div *ngFor="let plan of consentPreferenceList" style="overflow: hidden"
+          <div *ngFor="let plan of consentPreferenceList;let i = index;" style="overflow: hidden"
             class="col d-flex bg-white-col bt-card flex-column bd pt-0 mr-2  ">
 
-            <div *ngIf="cookieConsentBillingCycle === 'yearly'" class="plan-discount">
+            <div *ngIf="consentPreferenceBillingCycle === 'yearly'" class="plan-discount">
               <span class="annual">2 Months Free</span>
             </div>
 
@@ -304,15 +374,17 @@
 
             <h1 class="tx-rubik tx-normal mb-3 mg-t-auto price-text">
               <sup class="doller">$</sup>
-              <span class="font-weight-bold" *ngIf="cookieConsentBillingCycle === 'monthly'">{{plan.price}} </span>
-              <span class="font-weight-bold" *ngIf="cookieConsentBillingCycle !== 'monthly'">{{plan.price / 12 | number
+              <span class="font-weight-bold" *ngIf="consentPreferenceBillingCycle === 'monthly'">{{plan.price}}
+              </span>
+              <span class="font-weight-bold" *ngIf="consentPreferenceBillingCycle !== 'monthly'">{{plan.price / 12 |
+                number
                 : '1.0-0'}}</span>
               <span class="billing-type">/Month</span>
             </h1>
-            <p class="tx-size-10  mt-2 ">Billed {{cookieConsentBillingCycle}} </p>
+            <p class="tx-size-10  mt-2 ">Billed {{consentPreferenceBillingCycle}} </p>
             <div class="form-group row mb-2 ">
               <label class="property-type col-md-6" for="sel1">Property</label>
-              <select #planUnit style="height: 32px;" class="mb-2 col-md-5 form-control" id="sel1">
+              <!-- <select #planUnit style="height: 32px;" class="mb-2 col-md-5 form-control" id="sel1">
                 <option>1</option>
                 <ng-container *ngIf="plan.price > 0">
                   <option>2</option>
@@ -325,21 +397,29 @@
                   <option>9</option>
                   <option>10</option>
                 </ng-container>
-              </select>
+              </select> -->
+              <button type="button" class="btn btn-sm btn-outline-secondary" style="font-size: large;" (click)="Subs(planUnit,i)">-</button>
+
+              <input disabled [value]="1" style="width: 40px;text-align: center;" #planUnit type="text" id="sel1" min="1" required pattern="^[1-9][0-9]*$" oninput="if(!this.value.match('^[1-9][0-9]*$'))this.value='';"
+              >
+              <button type="button" class="btn btn-sm btn-outline-secondary" style="font-size: large;" (click)="Add(planUnit,i)">+</button>
+
             </div>
 
 
             <button data-toggle="tooltip" data-placement="top"
+              [ngClass]="(quickDivID == 5 || quickDivID == 6 || quickDivID == 11 || quickDivID == 12 || quickDivID == 18 || quickDivID == 19) && quickDivID == currentLinkID && !iswindowclicked && plan.price >=  activeData.consentPreference.maxPrice ? 'btn-qs-pricing-hightlight' : ''"
               [title]="plan.price <=  activeData.consentPreference.maxPrice ? 'You can not downgrade your plan' : 'Add to Cart'"
               *ngIf="plan.price !=  activeData.consentPreference.maxPrice"
-              [disabled]="plan.price <=  activeData.consentPreference.maxPrice" (click)="onAddToCart(plan, planUnit)"
+              (click)="onAddToCart(plan, planUnit);checkForQsTooltip();"
               class="btn mt-4 mb-4 add-to-cart-btn btn-primary btn-block">
-              Add To Cart
+              Add to Cart
             </button>
 
 
-            <button *ngIf="plan.price ==  activeData.consentPreference.maxPrice" (click)="onGenerateSessionID()"
-              class="btn mt-4 mb-4 add-to-cart-btn btn-primary btn-block">
+            <button *ngIf="plan.price ==  activeData.consentPreference.maxPrice"
+              [ngClass]="(quickDivID == 5 || quickDivID == 6 || quickDivID == 11 || quickDivID == 12 || quickDivID == 18 || quickDivID == 19) && quickDivID == currentLinkID && !iswindowclicked ? 'btn-qs-pricing-hightlight' : ''"
+              (click)="onGenerateSessionID()" class="btn mt-4 mb-4 add-to-cart-btn btn-primary btn-block">
               Manage Plan
             </button>
 
@@ -352,16 +432,19 @@
               available.</p>
             <ul class="pl-3 mr-feature">
               <li class="text-left feature-list"
-                  *ngFor="let  features of highLightFeatures.consentPreference.enterprise.slice(0, 4)">{{features.featureName}}
-                <span class="font-weight-bold" *ngIf="features.featureValue"> - {{features.featureValue}}</span></li>
-              <a class="more-details-text" (click)="openModal(template)">View Comparison</a>
+                *ngFor="let  features of highLightFeatures.consentPreference.enterprise.slice(0, 4)">
+                {{features.featureName}}
+                <span class="font-weight-bold" *ngIf="features.featureValue"> - {{features.featureValue}}</span>
+              </li>
+              <a class="more-details-text" (click)="openModal(template);checkForQsTooltip()">View Comparison</a>
 
               <!--            <a class="more-details-text " *ngIf="maxCookiePreferenceList === 4" (click)="maxCookiePreferenceList = 15">Show More</a>-->
               <!--            <a class="more-details-text " *ngIf="maxCookiePreferenceList === 15" (click)="maxCookiePreferenceList = 4">Hide</a>-->
             </ul>
             <h2 class="tx-rubik tx-normal ">Contact Us</h2>
             <p class="tx-size-10 mg-b-30 "></p>
-            <a href="https://adzapier.com/get-started/" target="_blank"
+            <a (click)="checkForQSTooltipForEnterprisebt()" href="https://adzapier.com/get-started/" target="_blank"
+              [ngClass]="(quickDivID == 5 || quickDivID == 6 || quickDivID == 11 || quickDivID == 12 || quickDivID == 18 || quickDivID == 19) && quickDivID == currentLinkID && !iswindowclicked ? 'btn-qs-pricing-hightlight' : ''"
               class="enterprise-btn btn mb-4 add-to-cart-btn btn-primary btn-block">Get Enterprise</a>
           </div><!-- col -->
         </div>
@@ -375,9 +458,9 @@
 
 
       </div>
-      
-        <!-- <app-quickstartalert [styleobj]="positionObj()" [linkid]="quickDivID" [divguidetext]="'addcookieconsentsubscription'"  [guidancetext]="'Add Cookie Consent subscription'" [isclickedbyuser]="isquickstartmenu" [isactualLinkclickedbyuser]="actuallinkstatus"></app-quickstartalert>  -->
-      <div *ngIf="cartItem.length > 0" class="col-md-12 p-0 mt-4">
+
+
+      <!-- <div *ngIf="cartItem.length > 0" class="col-md-12 p-0 mt-4">
         <div class="card cart-box ">
           <div class="card-body">
             <h3 class="mb-4 text-center">Your Cart</h3>
@@ -451,11 +534,12 @@
                     <div *ngIf="isPromoCodeError" class="invalid-feedback" style="width: 205px;">
                       The promo code you entered is not valid
                     </div>
-                    <!--              <a href="javascript:;" *ngIf="promoCode && !percentOff" class="mr-1 text-primary"-->
-                    <!--                 (click)="onApplyCoupon()">Apply</a>-->
-                    <!--                <a href="javascript:;"  class="mr-1 text-primary" (click)="onRemoveCoupon()">Remove</a>-->
+                                 <a href="javascript:;" *ngIf="promoCode && !percentOff" class="mr-1 text-primary"
+                                    (click)="onApplyCoupon()">Apply</a>
+                                   <a href="javascript:;"  class="mr-1 text-primary" (click)="onRemoveCoupon()">Remove</a>
                     <div *ngIf="percentOff" class="text-success text-left">Promo Code Applied
-                      <i class="fa fa-times cursorpointer close-btn" (click)="onRemoveCoupon()" aria-hidden="true"></i>
+                      <i class="fa fa-times cursorpointer close-btn" (click)="onRemoveCoupon()"
+                        aria-hidden="true"></i>
                     </div>
                   </div>
                   <div class="col-md-3">
@@ -475,7 +559,7 @@
 
           </div>
         </div>
-      </div>
+      </div> -->
 
 
     </div>
@@ -573,3 +657,20 @@
     </div>
   </div>
 </ng-template>
+
+
+<div class="hello" *ngIf="displayStyle">
+  <div class="card" style="width: 18rem;">
+    <div class="card-body" style="background-color:rgb(247, 247, 247)" *ngFor="let cart of showpopup">
+      <h5 class="card-title"><i class="pi pi-check mr-2" style="font-size: 1.0rem; color:#5cb85c;"></i>
+        Added to Cart</h5>
+      <h6 class="card-text">{{cart.product_name}}</h6><br>
+      <h6 class="card-text">Billed - {{cart.cycle}}</h6><br>
+      <h6 class="card-text">Price - ${{cart.priceTotal}}</h6><br>
+      <h6 class="card-text">Quantity - {{cart.unit}}</h6><br>
+    </div>
+    <a routerLink="/settings/billing/cart" [queryParams]="{oid:queryOID , pid:queryPID}" style="margin-left: 20px;margin-bottom: 20px;"><button class="btn btn-md btn-primary mb-3" style="width: 250px;">Open Cart</button></a>
+  </div>
+
+</div>
+

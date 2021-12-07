@@ -1,0 +1,62 @@
+<div class="card">
+  <div class="card-body">
+    <a href="javascript:;" class="back-to-list-btn mb-2" (click)="backHome.emit(true)"><i class="fas fa-chevron-left"></i> GoBack</a>
+    <h5 class="mb-2">Select Table</h5>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-group"  *ngIf="!skLoading.one">
+          <!--          <label for="exampleFormControlSelect1">Table Name</label>-->
+          <select (change)="sqlSelectField = [];onSelectTable(tableName.value)" #tableName class="form-control w-75" [(ngModel)]="tableNameText" id="exampleFormControlSelect1">
+            <option value="">--Select Table---</option>
+            <option [value]="table[tableListKey]" *ngFor="let table of tableList">{{table[tableListKey]}}</option>
+          </select>
+        </div>
+        <ng-container *ngIf="skLoading.one">
+          <div class="mb-2">
+            <ngx-skeleton-loader   [theme]="{width: '100%', height: '30px'}"></ngx-skeleton-loader>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="card-body">
+    <h5 class="mb-3">Choose Table Columns</h5>
+    <div class="row">
+      <ng-container *ngIf="!skLoading.two">
+        <div class="col-md-2 mb-2" *ngFor="let tableColumn of tableColumnsList">
+          <button pButton pRipple type="button" (click)="onSelectField(tableColumn[tableColumnsListKey])"   [ngClass]="{'p-button-text' : !sqlSelectField.includes(tableColumn[tableColumnsListKey])}"
+                  class="p-button-raised"><span class="text-over"> {{tableColumn[tableColumnsListKey]}}</span></button>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="skLoading.two">
+        <div class="col-md-2 mb-2" *ngFor="let table of skLoadingArray">
+          <ngx-skeleton-loader   [theme]="{width: '130px', height: '30px'}"></ngx-skeleton-loader>
+        </div>
+      </ng-container>
+
+    </div>
+  </div>
+
+
+
+
+  <ng-container  *ngIf="sqlSelectField.length > 0">
+    <div class="mt-4 card-body">
+      <h5 class="mb-2">SQL WHERE Clause</h5>
+      <query-builder [(ngModel)]='query' [config]='config' ></query-builder>
+    </div>
+    <div class="row mt-4 mb-5 margin-auto">
+      <div class="text-center margin-auto">
+        <button pButton pRipple type="button" (click)="onConnectionListPage()" label="Cancel" class="p-button-secondary mr-3"></button>
+        <button pButton pRipple type="button" (click)="onUpdateSqlBuilder()" label="Update"></button>
+      </div>
+
+    </div>
+  </ng-container>
+
+<div class="col-sm-5 mr-0 float-right flotingdiv" [ngClass]="{'hide':!isOpen}">
+  <alert *ngIf="isOpen" [type]="alertType" dismissOnTimeout="5000" [dismissible]="dismissible"
+  ><span [innerHTML]="alertMsg"></span></alert>
+</div>

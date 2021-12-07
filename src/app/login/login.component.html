@@ -120,14 +120,14 @@
 <!--</div>-->
 
 
-<div class="container-fluid login-background ">
+<div class="container-fluid remove-top-margin">
   <div class="row justify-content-center">
     <div class="">
       <div class="logo-group">
         <img src="assets/imgs/az-logo.png" class="az-logo mb-2" alt="adzapier logo" />
         <h4 class="tx-white">Trusted Data Privacy Solutions</h4>
       </div>
-        <div [@animImageSlider]="step"  class="inputs-key login-form bg-white" style="height:470px;">
+        <div [@animImageSlider]="step"  class="inputs-key login-form bg-white" style="height:416px;">
 
 
           <form *ngIf="step == 1" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
@@ -188,7 +188,7 @@
                 <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
                 {{sign_in}} </button>
 
-              <div class="divider-text tx-17">or</div>
+              <div class="divider-text tx-13" style="text-transform: none;">Or</div>
               <div class="tx-13 mg-t-20 tx-center tx-18">Don't have an account? <a class="font-weight-bold"
                   routerLink="/signup">Create an
                   Account</a></div>
@@ -217,7 +217,7 @@
                 <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
                 Send </button>
 
-              <div class="divider-text tx-17">or</div>
+              <div class="divider-text tx-13" style="text-transform: none;">Or</div>
               <div class="tx-13 mg-t-20 tx-center tx-18">Go back to Login? <a class="font-weight-bold" style="color: rgb(74, 127, 226);"
                   (click)="previous()">Login
                 </a></div>

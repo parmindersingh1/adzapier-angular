@@ -24,6 +24,7 @@ import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import {TimeagoModule} from 'ngx-timeago';
 import { SubscriptionPopupComponent } from './_components/subscription-popup/subscription-popup.component';
 import { QuickstartmenuComponent } from './_components/quickstartmenu/quickstartmenu.component';
+import { SidemenuModule } from 'src/app/_components/sidemenu/sidemenu.module';
 
 @NgModule({
   declarations: [
@@ -46,7 +47,8 @@ import { QuickstartmenuComponent } from './_components/quickstartmenu/quickstart
    //  CheckoutConfirmationComponent,
     WelcomeComponent,
     SubscriptionPopupComponent,
-    QuickstartmenuComponent
+    QuickstartmenuComponent,
+
   ],
   imports: [
     BrowserModule,
@@ -74,7 +76,8 @@ import { QuickstartmenuComponent } from './_components/quickstartmenu/quickstart
     // TabsModule.forRoot(),
     // AccordionModule.forRoot(),
     NgbCollapseModule,
-    NgbModule
+    NgbModule,
+    SidemenuModule
   ],
   providers: [
     NgxUiLoaderService,

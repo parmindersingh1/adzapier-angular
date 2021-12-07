@@ -9,7 +9,7 @@ export class QuickStartMenuList {
     return [
       {
         "index": 1,
-        "indextext": "Getting Start",
+        "indextext": "Getting Started",
         "quicklinks": [
           {
             "linkid": 1,
@@ -46,10 +46,10 @@ export class QuickStartMenuList {
         "quicklinks": [
           {
             "linkid": 4,
-            "link": "/settings/billing/pricing",
+            "link": "/",
             "islinkclicked": false,
             "isactualbtnclicked": false,
-            "linkdisplaytext": "Subscription",
+            "linkdisplaytext": "Subscribe to our plans",
             "divguidetext": "subscription",
             "tooltipdescription":"Subscribe to our plans"
           }
@@ -73,7 +73,7 @@ export class QuickStartMenuList {
             "link": "/settings/billing/manage",
             "islinkclicked": false,
             "isactualbtnclicked": false,
-            "linkdisplaytext": "Assigning Cookie Consent subscription to property",
+            "linkdisplaytext": "Assign property to cookie consent subscription",
             "divguidetext": "addcookieconsentsubscriptiontoproperty",
             "tooltipdescription":"Assign a property to the cookie consent subscription"
           },
@@ -112,6 +112,24 @@ export class QuickStartMenuList {
             "linkdisplaytext": "Consent Dashboard",
             "divguidetext": "consent-dashboard",
             "tooltipdescription":"View cookie consent dashboard"
+          },
+          {
+            "linkid": 311,
+            "link": "/",
+            "islinkclicked": false,
+            "isactualbtnclicked": false,
+            "linkdisplaytext": "Manage Vendors",
+            "divguidetext": "manage-vendors",
+            "tooltipdescription":"Manage vendors"
+          },
+          {
+            "linkid": 312,
+            "link": "/",
+            "islinkclicked": false,
+            "isactualbtnclicked": false,
+            "linkdisplaytext": "Setup",
+            "divguidetext": "cookie-consent-setup",
+            "tooltipdescription":"Cookie consent setup"
           }
         ]
       },
@@ -133,7 +151,7 @@ export class QuickStartMenuList {
             "link": "/settings/billing/manage",
             "islinkclicked": false,
             "isactualbtnclicked": false,
-            "linkdisplaytext": "Assign DSAR subscription to organization",
+            "linkdisplaytext": "Assign organization to DSAR subscription",
             "divguidetext": "assign-dsar-subscription-to-organization",
             "tooltipdescription":"Assign an organization to the DSAR subscription"
           },
@@ -151,7 +169,7 @@ export class QuickStartMenuList {
             "link": "/",
             "islinkclicked": false,
             "isactualbtnclicked": false,
-            "linkdisplaytext": "Web form",
+            "linkdisplaytext": "Web Form",
             "divguidetext": "web-form",
             "tooltipdescription":"Create customized web form and embed with your domain to intake the requests"
           },
@@ -202,7 +220,7 @@ export class QuickStartMenuList {
             "link": "/settings/billing/manage",
             "islinkclicked": false,
             "isactualbtnclicked": false,
-            "linkdisplaytext": "Assign Consent Preference subscription to property",
+            "linkdisplaytext": "Assign property to consent preference subscription",
             "divguidetext": "assign-consent-preference-subscription-toproperty",
             "tooltipdescription":"Assign a property to the consent preference subscription"
           },
@@ -211,7 +229,7 @@ export class QuickStartMenuList {
             "link": "/settings",
             "islinkclicked": false,
             "isactualbtnclicked": false,
-            "linkdisplaytext": "JavaScript and APIs for implementation",
+            "linkdisplaytext": "APIs for implementation",
             "divguidetext": "javascript-apisfor-implementation",
             "tooltipdescription":"Find the API to implement the recording of consents"
           },

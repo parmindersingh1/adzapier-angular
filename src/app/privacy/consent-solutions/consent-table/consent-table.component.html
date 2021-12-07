@@ -1,4 +1,4 @@
-<div class="container">
+<div>
 <div class="mb-3">
   <nav aria-label="breadcrumb" class="align-navbtn">
     <ol class="breadcrumb breadcrumb-style1 mg-b-0">
@@ -17,7 +17,7 @@
     <h4 class="headings col-md-6">Consent Records </h4>
     <div class="col-md-6 text-center">
     <button type="button"
-        class="btn btn-sm btn-uppercase btn-outline-secondary pt-2 lineheight-22 mr-3"  (click)="AddConsentRecord(addrecord)">
+        class="btn btn-sm btn-uppercase btn-outline-secondary pt-2 lineheight-22 mr-3"  (click)="AddConsentRecord(addrecord)" style="text-transform: none;font-size: 12px;">
         <i-feather class="feather-16" name="plus"></i-feather>
         <span class="d-none d-sm-inline mg-l-5">
           Add Consent </span>
@@ -25,7 +25,7 @@
 
       <button type="button"
               [disabled]="consentRecordList.length === 0"
-              (click)="openModal(template);" class="btn  btn-sm btn-outline-secondary btn-uppercase mr-2">
+              (click)="openModal(template);" class="btn  btn-sm btn-outline-secondary btn-uppercase mr-2" style="text-transform: none;font-size: 12px;">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
              class="feather feather-download mg-r-5">
@@ -254,7 +254,7 @@
           </div> -->
         </div>
         <div class="col-sm-6">
-          <label>Owner Id : </label>
+          <label>Owner ID : </label>
           <div class="input-group">
             <input formControlName="ownerID" class="form-control">
           </div>
@@ -356,7 +356,7 @@
             </tbody>
             <tfoot>
               <tr>
-                <td style="border: none;"><button type="button" *ngIf="AddConsentForm.value.proofs.length === 0" (click)="addNewRow()" class="btn btn-sm btn-primary">Add Proofs<i class="fa fa-plus ml-2" aria-hidden="true"></i></button>
+                <td style="border: none;"><button type="button" *ngIf="AddConsentForm.value.proofs.length === 0" (click)="addNewRow()" class="btn btn-sm btn-primary">Add Proof<i class="fa fa-plus ml-2" aria-hidden="true"></i></button>
                   <button type="button"  *ngIf="AddConsentForm.value.proofs.length > 0" (click)="addNewRow()" class="btn btn-sm btn-primary"><i class="fa fa-plus-circle" aria-hidden="true"></i></button></td>
               </tr>
             </tfoot>
@@ -408,8 +408,9 @@
 
   <div class="d-flex" style="justify-content: flex-end;">
       <div class="btn-group">
-        <button type="submit" class="btn btn-primary btn-sm">Add</button>
         <button type="button" class="btn btn-link btn-sm pull-right " (click)="onCancelClick()">Cancel</button>
+        <button type="submit" class="btn btn-primary btn-sm">Add</button>
+        
       </div>
       </div>
     </form>
@@ -425,11 +426,11 @@
 
 <ng-template #template>
   <div class="modal-body modal-lg text-center">
-    <p>Export Your Consents Record into CSV
+    <p>Export your consent records as a CSV file
     </p>
     <div class="row mb-3">
       <div class="col-md-3">
-        <p class="pt-2 mb-0">Date Range :- </p>
+        <p class="pt-2 mb-0">Date Range - </p>
       </div>
       <div class="col-md-8 pr-0 mr-2 d-flex row-reverse">
         <div class="input-group-prepend"  (click)="dp.show()">
@@ -473,10 +474,10 @@
 
 
     <div class=" text-center">
-      <button type="button" class="btn btn-primary mr-3" [disabled]="downloadStatus.consents" (click)="generateConsentCsv()" >Export Consents </button>
+      <button type="button" class="btn btn-primary mr-3" [disabled]="downloadStatus.consents" (click)="generateConsentCsv()" >Export Consent Details </button>
       <button type="button" class="btn btn-primary mr-3" [disabled]="downloadStatus.legalNotices" (click)="generateLegalNoticesCsv()" >Export Legal Notices </button>
       <button type="button" class="btn btn-primary mr-3" [disabled]="downloadStatus.Proofs" (click)="generateProofsCsv()" >Export Proofs </button>
-      <button type="button" class="btn btn-primary mr-3" [disabled]="downloadStatus.Preference" (click)="generatePreferenceCsv()" >Export Preference </button>
+      <button type="button" class="btn btn-primary mr-3" [disabled]="downloadStatus.Preference" (click)="generatePreferenceCsv()" >Export Preferences </button>
     </div>
 
     <p class="mt-4"> * Maximum 6 months data can be downloaded </p>

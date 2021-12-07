@@ -1,12 +1,12 @@
     <div>
         <div class="guidencediv" [ngStyle]="styleobj"
-            *ngIf="isclickedbyuser && !isactualLinkclickedbyuser && !revisitedqslink && linkid == '1' && divguidetext == 'addcompanydetails'">
-            <p> {{guidancetext}} revisitedqslink | {{revisitedqslink}} isactualLinkclickedbyuser ||{{isactualLinkclickedbyuser}}</p>
+            *ngIf="isclickedbyuser && !isactualLinkclickedbyuser && linkid == '1' && divguidetext == 'addcompanydetails'">
+            <p> {{guidancetext}}</p>
             
         </div>
         <div class="guidencediv" [ngStyle]="styleobj"
             *ngIf="isactualLinkclickedbyuser  && linkid == '1' && divguidetext == 'addcompanydetails'">
-            <p> {{guidancetext}} revisitedqslink | {{revisitedqslink }} isactualLinkclickedbyuser 2 ||{{isactualLinkclickedbyuser}}</p>
+            <p> {{guidancetext}}</p>
             
         </div>
     </div>
@@ -117,12 +117,38 @@
 
     <div>
         <div class="guidencediv" [ngStyle]="styleobj"
+            *ngIf="isclickedbyuser && !isactualLinkclickedbyuser && linkid == '311'  &&  divguidetext == 'manage-vendors' ">
+            <p> {{guidancetext}}</p>
+            
+        </div>
+        <div class="guidencediv" [ngStyle]="styleobj"
+            *ngIf="isactualLinkclickedbyuser && linkid == '311' && divguidetext == 'manage-vendors'">
+            <p> {{guidancetext}}</p>
+            
+        </div>
+    </div>
+    
+    <div>
+        <div class="guidencediv" [ngStyle]="styleobj"
+            *ngIf="isclickedbyuser && !isactualLinkclickedbyuser && linkid == '312' && divguidetext == 'cookie-consent-setup' ">
+            <p> {{guidancetext}}</p>
+            
+        </div>
+        <div class="guidencediv" [ngStyle]="styleobj"
+            *ngIf="isactualLinkclickedbyuser && linkid == '312' && divguidetext == 'cookie-consent-setup'">
+            <p> {{guidancetext}}</p>
+            
+        </div>
+    </div>
+
+    <div>
+        <div class="guidencediv" [ngStyle]="styleobj"
             *ngIf="isclickedbyuser && !isactualLinkclickedbyuser && linkid == '10'  && divguidetext == 'consent-dashboard' ">
             <p> {{guidancetext}}</p>
             
         </div>
         <div class="guidencediv" [ngStyle]="styleobj"
-            *ngIf="revisitedqslink && linkid == '10' && revisitedlinkId == '10' && divguidetext == 'consent-dashboard'">
+            *ngIf="isactualLinkclickedbyuser && linkid == '10' && divguidetext == 'consent-dashboard'">
             <p> {{guidancetext}}</p>
             
         </div>
@@ -135,9 +161,9 @@
             
         </div>
         <div class="guidencediv" [ngStyle]="styleobj"
-            *ngIf="revisitedqslink && linkid == '11' && revisitedlinkId == '11' && divguidetext == 'add-dsar-subscription'">
+            *ngIf="isactualLinkclickedbyuser && linkid == '11' && divguidetext == 'add-dsar-subscription'">
             <p> {{guidancetext}}</p>
-            
+    
         </div>
     </div>
 
@@ -234,7 +260,7 @@
     </div>
 
 
-    <div *ngIf="!isactualLinkclickedbyuser">
+    <div>
         <div class="guidencediv" [ngStyle]="styleobj"
             *ngIf="isclickedbyuser && !isactualLinkclickedbyuser && linkid == '19'  && divguidetext == 'assign-consent-preference-subscription-toproperty' ">
             <p> {{guidancetext}}</p>

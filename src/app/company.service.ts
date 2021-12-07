@@ -76,7 +76,7 @@ export class CompanyService {
 
 
   updateUserRole(componentName, moduleName, reqestObj): Observable<any> {
-    const path = '/invite/user';
+    const path = '/invite/user/updaterole';
     return this.httpClient.put<any>(environment.apiUrl + path, reqestObj).pipe(catchError(error => {
       this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.updateUserRole, componentName, moduleName, path);
       return throwError(error);
@@ -86,9 +86,9 @@ export class CompanyService {
   removeTeamMember(componentName, moduleName, obj, orgid?): Observable<any> {
     let path;
     if (orgid) {
-      path = '/invite/user/' + obj.id + '/' + obj.approver_id + '?orgid=' + orgid;
+      path = '/invite/user/' + obj.user_level + '/' + obj.id + '/' + obj.approver_id + '?orgid=' + orgid;
     } else {
-      path = '/invite/user/' + obj.id + '/' + obj.approver_id;
+      path = '/invite/user/' + obj.user_level + '/' + obj.id + '/' + obj.approver_id;
     }
     return this.httpClient.delete<any>(environment.apiUrl + path)
       .pipe(catchError(error => {
@@ -100,11 +100,11 @@ export class CompanyService {
   resendInvitation(componentName, moduleName, userId, orgID?): Observable<any> {
     let path;
     if(orgID){
-      path = '/invite/user/resend/' + userId + '/' + orgID;
+      path = '/invite/user/resend' + '?user_id=' + userId + '&orgid=' + orgID;
     } else {
-      path = '/invite/user/resend/' + userId;
+      path = '/invite/user/resend' + '?user_id=' + userId;
     }
-    return this.httpClient.get<any>(environment.apiUrl + path, {})
+    return this.httpClient.get<any>(environment.apiUrl + path)
       .pipe(catchError(error => {
         this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.resendInvitation, componentName, moduleName, path);
         return throwError(error);

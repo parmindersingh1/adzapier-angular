@@ -6,6 +6,10 @@
   bottom: 0px;
   box-shadow: 0 -1px 10px 0 rgb(172 171 171 / 30%);
 }
+.banner-right {
+  right: 20px;
+  position: absolute;
+}
 
 .gdpr-banner-bottom{
   position: absolute;
@@ -19,4 +23,9 @@
 }
 .gdpr-border-right {
   border-right: 2px solid #1b365d;
+}
+
+.gdpr-border-bottom {
+  border-bottom: 2px solid #1b365d;
+  margin-bottom: 15px;
 }

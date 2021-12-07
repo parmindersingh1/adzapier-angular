@@ -1,7 +1,7 @@
 import { AfterViewChecked, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, HostListener, OnDestroy, OnInit, Renderer2, TemplateRef, ViewChild, Input, OnChanges, QueryList, ViewChildren, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { Router, ActivatedRoute, NavigationEnd, NavigationStart } from '@angular/router';
 import { OrganizationService, AuthenticationService, UserService } from '../../../_services';
-import { Observable } from 'rxjs';
+import { fromEvent, Observable, Subject } from 'rxjs';
 import { Organization } from 'src/app/_models/organization';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { moduleName } from 'src/app/_constant/module-name.constant';
@@ -12,6 +12,10 @@ import { featuresName } from '../../../_constant/features-name.constant';
 import { BsDropdownDirective } from 'ngx-bootstrap/dropdown';
 import { QuickmenuService } from 'src/app/_services/quickmenu.service';
 import { QuickStart } from 'src/app/_models/quickstart';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
+import { BillingService } from 'src/app/_services/billing.service';
 
 
 @Component({
@@ -21,13 +25,33 @@ import { QuickStart } from 'src/app/_models/quickstart';
   changeDetection: ChangeDetectionStrategy.Default
 })
 export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked, OnChanges, OnDestroy {
+  private unsubscribeAfterUserAction$: Subject<any> = new Subject<any>();
   @Input() isquicklinkclicked:boolean;
   @Input() qslinkobj:any;
-  @Input() isqsmenuopen:boolean = false;
+  @Input() isqsmenuopen:boolean;
+  @Input() isquickstartdismissed:boolean;
+  private headerNavbarEle : ElementRef;
+  private navMenuEle: ElementRef;
+  //@Input() isclickonpage:boolean = false; // for later use
   @ViewChild('confirmTemplate') confirmModal: TemplateRef<any>;
   @ViewChildren(BsDropdownDirective) headerDropdown:QueryList<BsDropdownDirective>;
-  @ViewChild('navMenu', { static: false }) navMenuEle: ElementRef;
+  @ViewChild('headerDropdown',{static:false}) topheaderDropdown:BsDropdownDirective;
+  //@ViewChild('navMenu', { static: true }) navMenuEle: ElementRef;
+  @ViewChild('navMenu', { static: false }) set navcontent(content:ElementRef){
+    if(content){
+      this.navMenuEle = content;
+    }
+  }
+  //@ViewChild('headerNavbar', { static: true }) headerNavbarEle: ElementRef;
+  @ViewChild('headerNavbar', { static: false }) set content(content:ElementRef) {
+    if(content) { // initially setter gets called with undefined
+      this.headerNavbarEle = content;
+    }
+  }
+
   @ViewChild('dpTriggers',{static:false}) dropdownTriggers:ElementRef;
+  @ViewChild('backDroparea',{static:false})  backDroparea:ElementRef;
+  @ViewChild('orgPropNavBar', { static: false }) orgPropNavBar: ElementRef;
   qsMenuClick$ = this.userService.isClickedOnQSMenu;
   isRevisitedQSMenuLink$ = this.userService.isRevisitedQSMenuLink;
   modalRef: BsModalRef;
@@ -51,6 +75,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
   public headerStatus: boolean;
   orgList: any;
   currentOrganization: any;
+  searchDecouncer$: Subject<any> = new Subject();
+  public inputSearch = '';
   navigationMenu: any;
   rightItems: any;
   leftItems: any;
@@ -70,7 +96,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
   userID: any;
   propList: any;
   isOrganizationUpdated: boolean;
-  isPropertyUpdated: boolean;
+  isPropertyUpdated: boolean = false;
   isPropertySelected: boolean;
   isPrivacyActivelinkMatched = false;
   isBillingActivelinkMatched = false;
@@ -104,9 +130,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
   initialOrgID;
   isquickstartmenuheader:any;
   quickDivID;
-  quickDivIDCS;
+  quickDivIDSub;
   actuallinkstatus:boolean = false;
-  isRevistedLink:boolean;
+  isRevistedLink:boolean = false;
+  revisitedQuicklinnkid:any;
+  isUserClickedNotRelatedToTooltip:boolean = false;
   currentLinkId:any;
   isbtnClickedbyUser;
   istopmenuclicked;
@@ -122,14 +150,42 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
   userclickedfromqsmenu:boolean;
   isuserClickedonqstooltip:boolean = false;
   isUserVistedActualLinkWithTooltip:boolean = false;
-  isHeaderNavbarClicked:boolean = false;
+  isHeaderNavbarClicked:boolean;
+  headerNavbarStatusAfterQSDismiss:boolean = false;
   isBackdropclicked:boolean = false;
   isUserclickedActualLink:boolean = false;
   isloginpage:boolean = false;
   actualBackdropclicked:boolean = false;
   storeDropdownstatus:boolean = false;
   lastopendp:any = [];
+  laststoreddp:any = [];
   isShowDashboardConsent = false;
+  SupportList:FormGroup;
+  countries : [];
+  query = '';
+  categories: any;
+  parentID: any;
+  catId: any;
+  CategoryRecord: [];
+  display = true;
+  title: any;
+  SupportLink: string;
+  readytodisplay = false;
+  nothingtoshow = true;
+  loader= false;
+  actualLinkVisitStatus = false;
+  actualLinkObj:any;
+  @Output() onClickEnableQuickStartMenu: EventEmitter<any> = new EventEmitter<any>();
+  quickstartmenustatus:any;
+  istopmenuopened:boolean;
+  isborderapplied:boolean;
+  isQSMDismissed:boolean;
+  count: any;
+  counttwo: any;
+  cartRecordCount: number;
+  counter: any;
+  showSidemenu:boolean = false;
+  isUserOptQSMenu:boolean = false;
   constructor(
     private router: Router,
     private activatedroute: ActivatedRoute,
@@ -143,78 +199,145 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
     private cdRef: ChangeDetectorRef,
     private renderer: Renderer2,
     private elRef:ElementRef,
-    private quickmenuService:QuickmenuService
+    private quickmenuService:QuickmenuService,
+    private formBuilder: FormBuilder,
+    private billingService : BillingService
   ) {
     this.userclickedoutside = this.quickmenuService.isclickeventoutsidemenu;
     this.isuserClickedonqstooltip = this.quickmenuService.isuserClickedonqstooltip;
     this.quickLinkObj = this.quickmenuService.qsMenuobjwithIndexid;
-    this.authService.currentUser.subscribe(x => {
-      this.currentUser = x;
-      if (this.currentUser) {
-        this.isCollapsed = false;
-        this.getLoggedInUserDetails();
-        this.loadOrganizationList();
-        this.loadOrganizationWithProperty();  //to load org and prop
-        this.loadNotification();
-      }
-    });
-
-    this.orgservice.isOrganizationUpdated.subscribe((t) => {
-      this.isOrganizationUpdated = t;
-      if (this.isOrganizationUpdated) {
-        this.loadOrganizationWithProperty(); //to load org and prop
-        // if(this.oIDPIDFromURL !== undefined){
-        // this.currentSelectedProperty();
-        // }
-        this.loadNotification();
-      }
-    });
-   
-    this.quickmenuService.onClickEmitQSLinkobj.subscribe((data) => {
-      this.actuallinkstatus = data.isactualbtnclicked;
-      if(data.islinkclicked && data.isactualbtnclicked){
-        this.isBackdropclicked = false;
-      }
-      
-    })
-    // this.router.routeReuseStrategy.shouldReuseRoute = () => {
-    //   return false;
-    // };
-    this.activatedroute.queryParamMap
-    .subscribe(params => {
-      this.queryOID = params.get('oid');
-      this.queryPID = params.get('pid');
-     });
-
-    this.router.events.subscribe((event) => {
-      if (event instanceof NavigationEnd) {
-      }
-      if (event instanceof NavigationEnd) {
-        this.isPrivacyActivelinkMatched = event.url.indexOf('privacy') >= 0 || event.url.indexOf('home') >= 0
-          || event.url.indexOf('cookie') >= 0;
-      } else if (event instanceof NavigationEnd) {
-        if (event.url.indexOf('settings/billing') !== -1 || event.url.indexOf('pricing') !== -1 ||
-          event.url.indexOf('welcome') >= 0) {
-          this.isBillingActivelinkMatched = true;
-          this.isPrivacyActivelinkMatched = false;
+    if (this.location.path().indexOf('/signup') == -1 && this.location.path().indexOf('/invited-user-verify-email') == -1) {
+      this.authService.currentUser.subscribe(x => {
+        this.currentUser = x;
+        if (this.currentUser) {
+          this.isCollapsed = false;
+          this.getLoggedInUserDetails();
+          this.loadOrganizationList();
+          this.loadOrganizationWithProperty();  //to load org and prop
+          this.loadNotification();
+          this.onGetCartRecord();
         }
-      } else if (event instanceof NavigationEnd) {
-          this.isBillingActivelinkMatched = false;
-          this.isPrivacyActivelinkMatched = false;
-          this.isConsentPreferencelinkMatched = event.url.indexOf('consent-preference') !== -1;
+      });
+      this.orgservice.isOrganizationUpdated.subscribe((t) => {
+        this.isOrganizationUpdated = t;
+        if (this.isOrganizationUpdated) {
+          this.loadOrganizationWithProperty(); //to load org and prop
+          // if(this.oIDPIDFromURL !== undefined){
+          // this.currentSelectedProperty();
+          // }
+          this.loadNotification();
+        }
+      });
+  
+      this.quickmenuService.onClickEmitQSLinkobj.subscribe((data) => {
+        //this.actuallinkstatus = data.isactualbtnclicked;
+        if(data.islinkclicked && data.isactualbtnclicked){
+         // this.isBackdropclicked = false; // 1
+          this.actuallinkstatus = true;
+          //this.actualBackdropclicked = true;
+        }
+  
+      })
+      // this.router.routeReuseStrategy.shouldReuseRoute = () => {
+      //   return false;
+      // };
+      this.activatedroute.queryParamMap
+      .subscribe(params => {
+        this.queryOID = params.get('oid');
+        this.queryPID = params.get('pid');
+       });
+  
+      this.router.events.subscribe((event) => {
+        if (event instanceof NavigationEnd) {
+          this.isPrivacyActivelinkMatched = event.url.indexOf('privacy') >= 0 || event.url.indexOf('home') >= 0
+            || event.url.indexOf('cookie') >= 0;
+        } else if (event instanceof NavigationEnd) {
+          if (event.url.indexOf('settings/billing') !== -1 || event.url.indexOf('pricing') !== -1 ||
+            event.url.indexOf('welcome') >= 0) {
+            this.isBillingActivelinkMatched = true;
+            this.isPrivacyActivelinkMatched = false;
+          }
+        } else if (event instanceof NavigationEnd) {
+            this.isBillingActivelinkMatched = false;
+            this.isPrivacyActivelinkMatched = false;
+            this.isConsentPreferencelinkMatched = event.url.indexOf('consent-preference') !== -1;
+        }
+      });
+      this.authService.isNotificationUpdated.subscribe((status) => {
+        this.isNewnotification = status;
+        if (this.isNewnotification) {
+          this.loadNotification();
+        }
+      });
+    } else {
+      this.isCollapsed = true;
+      localStorage.removeItem('currentUser');
+      this.authService.logout();
+      // this.orgservice.removeControls();
+      this.userService.getCurrentUser.unsubscribe();
+      localStorage.clear();
+      this.selectedOrgProperties.length = 0; 
+      const a = this.location.path().split("/");
+      if (a[1].indexOf('/invited-user-verify-email') == -1) {
+        this.router.navigate(['/invited-user-verify-email'], { queryParams: { id: a[2] } });
       }
-    });
-    this.authService.isNotificationUpdated.subscribe((status) => {
-      this.isNewnotification = status;
-      if (this.isNewnotification) {
-        this.loadNotification();
-      }
-    });
-    this.isloginpage = this.location.path().indexOf('login') !== -1;
+    }
+
+   
+  //  this.isloginpage = this.location.path().indexOf('login') == -1 && this.location.path().indexOf('signup') == -1;
+  // this.renderer.listen('window', 'click', (e:Event) => {
+  //   if(e.target === this.dropdownTriggers.nativeElement){
+  //   }
+
+  // });
   }
 
   ngOnInit() {
+    
+    if(!this.isLoginOrSignupPage()){
+      this.authService.logout();
+      this.isCollapsed = true;
+      localStorage.removeItem('currentUser');
+      this.userService.getCurrentUser.unsubscribe();
+      localStorage.clear();
+      this.selectedOrgProperties.length = 0;
+      return false;
+      // console.log(this.location.path(),"path..");
+      // const a = this.location.path().split("invited-user-verify-email");
+      // if (a[1].indexOf('/invited-user-verify-email') == -1) {
+      //  return this.router.navigate(['/invited-user-verify-email'], { queryParams: { id: a[2] } });
+      // }
+    }
+    this.billingService.PlanDetails.subscribe(res => {
+      
+    
+       this.count = res;      
+    
+    }, error => {
+      console.error(error);
+
+    });
+
+
+    if (this.quickmenuService.getQuickstartDismissStatus() !== null) {
+      if(this.quickmenuService.getQuickstartDismissStatus().isdismissed){
+        this.isQSMDismissed = !this.quickmenuService.getQuickstartDismissStatus().isqstoplink;
+      }
+    }
+    this.setupSearchDebouncer();
+    this.SupportList = this.formBuilder.group({
+     searchtext:['',]
+    })
     this.isloginpage = this.location.path().indexOf('login') !== -1;
+    this.quickmenuService.onClickEmitQSLinkobj.pipe(
+      takeUntil(this.unsubscribeAfterUserAction$)
+    ).subscribe((res) => {
+      this.actualLinkObj = res;
+      this.quickDivIDSub = res.linkid;
+    });
+    this.isLoginOrSignupPage();
+    
+  //  this.isloginpage = this.location.path().indexOf('login') == -1 && this.location.path().indexOf('signup') == -1;
     this.userService.onClickTopmenu.subscribe((status) => this.istopmenuclicked = status);
  //   this.loadOrganizationWithProperty();
  //this.router.routeReuseStrategy.shouldReuseRoute = () => false;
@@ -226,20 +349,27 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
    //console.log(this.queryPID,'queryPID211..');
   });
     this.isCollapsed = false;
-    this.userService.getCurrentUser.subscribe((data) => {
-      if (data) {
-        this.currentUser = data;
-        this.isCollapsed = false;
-        this.currentLoggedInUser = this.currentUser.response.firstname + ' ' + this.currentUser.response.lastname;
-        this.userRole = this.currentUser.response.role;
-        this.userID = this.currentUser.response.uid;
-        this.checkCurrentManagingProperty();
-        this.loadOrganizationWithProperty(); //to load org and prop
-        this.loadNotification();
+    if (this.location.path().indexOf('/signup') == -1 && this.location.path().indexOf('/invited-user-verify-email') == -1) {
+      this.userService.getCurrentUser.subscribe((data) => {
+        if (data) {
+          this.currentUser = data;
+          this.isCollapsed = false;
+          this.currentLoggedInUser = this.currentUser.response.firstname + ' ' + this.currentUser.response.lastname;
+          this.userRole = this.currentUser.response.role;
+          this.userID = this.currentUser.response.uid;
+          this.checkCurrentManagingProperty();
+          this.loadOrganizationWithProperty(); //to load org and prop
+          this.loadNotification();
+        }
+      }, (error) => {
+        console.log(error);
+      });
+    } else {
+      const a = this.location.path().split("/");
+      if (a[1].indexOf('/invited-user-verify-email') == -1) {
+        this.router.navigate(['/invited-user-verify-email'], { queryParams: { id: a[2] } });
       }
-    }, (error) => {
-      console.log(error);
-    });
+    }
     this.orgservice.emitUpdatedOrgList.subscribe((data) => {
       this.loadOrganizationList();
     });
@@ -278,6 +408,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
               const tokenid = a[0].split("/verify-email/");
               this.router.navigate(["/signup"], { queryParams: { id: tokenid[1] } });
             }
+          } 
+          if (this.location.path().indexOf('/invited-user-verify-email') == -1) {
+            const a = this.location.path().split("/");
+            if (a[1].indexOf('/invited-user-verify-email') == -1) {
+              this.router.navigate(['/invited-user-verify-email'], { queryParams: { id: a[2] } });
+            }
           } else{
             this.router.navigate(['/login']);
           }
@@ -292,6 +428,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
     }
 
     this.getPropertyDetailsFromUrl();
+    this.checkPathForSideMenu();
   }
 
 
@@ -318,6 +455,131 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
     location.reload();
 
 
+  }
+
+  onClickOpen(){
+    window.open(this.SupportLink);
+  }
+
+  async onNavigateToDetails(consentRecord) {
+
+    await this.userService.onPushConsentData(consentRecord);
+    // console.log(consentRecord.id)
+    let category : any;
+    category = consentRecord.categories[0];
+    this.parentID =consentRecord.id;
+    this.catId =  category.parent.id;
+    // console.log(consentRecord.categories[0].id);
+    // console.log(category.parent.id);
+    // // await this.router.navigateByUrl('Https://support.adzapier.com/help-center/articles/'+ category.parent.id + '/' + consentRecord.categories[0].id + '/' + consentRecord.id +'/' + consentRecord.title);
+    // if (consentRecord.id !== undefined) {
+    //   await this.router.navigateByUrl('Https://support.adzapier.com/help-center/articles/'+ category.parent.id + '/' + consentRecord.categories[0].id + '/' + consentRecord.id +'/' + consentRecord.title);
+    // }
+    this.SupportLink ='https://support.adzapier.com/help-center/articles/'+ category.parent.id + '/' + consentRecord.categories[0].id + '/' + consentRecord.id +'/' + consentRecord.title;
+    this.onGetSupportDetailsRecord();
+    event.stopPropagation();
+
+  }
+
+
+  onGetSupportRecord() {
+    this.readytodisplay = false;
+    this.display=true;
+    this.nothingtoshow = false;
+    this.categories='';
+    this.CategoryRecord = [];
+    this.title = '';
+    this.userService.getList(this.constructor.name, moduleName.consentSolutionModule, this.inputSearch, this.categories)
+      .subscribe((res: any) => {
+        this.loading.stop();
+        const result: any = res;
+        if (res) {
+          this.countries = result.pagination.data;
+          this.counter = this.countries.length;
+          //  console.log(this.countries);
+          // this.consentRecordCount = result.count;
+        }
+      }, error => {
+        // this.loading.stop();
+      });
+  }
+
+  onGetCartRecord() {
+    
+    this.billingService.GetCart(this.constructor.name, moduleName.billingModule)
+      .subscribe((res: any) => {
+        const result: any = res;
+        if (result.status === 200) {
+          this.cartRecordCount = Number(result.count);
+          this.onNavigateToCartDetails(this.cartRecordCount);
+        }
+      }, error => {
+        this.loading.stop();
+      });
+  }
+
+  onNavigateToCartDetails(plandata) {
+    this.billingService.onPushPlanData(plandata);
+     //await this.router.navigateByUrl('/consent-solutions/consent-records/details/' + consentRecord.id);
+   }
+
+  onGetSupportDetailsRecord() {
+    this.loader= true;
+    this.display= false;
+    this.nothingtoshow = false;
+    this.categories='';
+    this.userService.getRecordList(this.constructor.name, moduleName.consentSolutionModule, this.parentID, this.catId)
+      .subscribe((res: any) => {
+        this.loading.stop();
+        const result: any = res;
+        if (res) {
+          this.title = result.article.title;
+          this.CategoryRecord = result.article.body.replaceAll(`src="`,`src="https://support.adzapier.com/`);
+          this.readytodisplay=true;
+          this.loader=false;
+          //  console.log(this.CategoryRecord);
+          // this.consentRecordCount = result.count;
+        }
+      }, error => {
+        // this.loading.stop();
+      });
+  }
+
+ public clicktext(){
+          this.SupportList.patchValue({
+            searchtext : ''
+          });
+          this.countries = [];
+          this.CategoryRecord = [];
+          this.title = '';
+          this.nothingtoshow = true;
+          this.readytodisplay = false;
+
+  }
+
+  onRightClick(){
+    return false;
+  }
+
+  public onSearchInputChange(e): void {
+    this.inputSearch = e.target.value;
+    if(this.inputSearch == ''){
+      this.countries = [];
+      this.display = false;
+      this.nothingtoshow = true;
+    }
+    else{
+    this.searchDecouncer$.next(e.target.value);
+    }
+  }
+
+
+  private setupSearchDebouncer(): void {
+    this.searchDecouncer$.pipe(
+      distinctUntilChanged(),
+    ).subscribe((term: string) => {
+      this.onGetSupportRecord();
+    });
   }
 
   editProfile() {
@@ -364,11 +626,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
             { label: 'Billing', routerLink: '/settings/billing/manage', icon: 'credit-card' },
             { label: 'Settings', routerLink: '/settings', icon: 'settings' },
             { label: 'Help Center', routerLink: 'https://support.adzapier.com', icon: 'help-circle' },
+            { label: 'Quick Start', routerLink: '/', icon: 'external-link' },
             { label: 'Signout', routerLink: '/signout', icon: 'log-out' }
           ]
         }];
       this.navigationMenu = [
-        // { 
+        // {
         //   showlink: 'Dashboard',
         //   subcategory: [{ showlink: 'DSAR', routerLink: '/home/dashboard/ccpa-dsar', icon: 'bar-chart-2',indexid:4, navmenuid:16  },
         //   // { showlink: 'GDPR', routerLink: '/pagenotfound', icon: 'pie-chart' },
@@ -376,31 +639,31 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
         //   { showlink: 'Consent Preference', routerLink: '/home/dashboard/consent-preference', icon: 'fas fa-cookie feather-16',indexid:5,navmenuid:18 }
         //   ]
         // },
-        { 
+        {
           showlink: 'DSAR',
           tooltip:'Data Subject Access Request',
         subcategory: [
           { showlink: 'Dashboard', routerLink: '/home/dashboard/ccpa-dsar', icon: 'bar-chart-2', indexid:4, navmenuid:16 },
-          { showlink: 'Webforms', routerLink: '/privacy/dsar/webforms', icon: 'pie-chart',indexid:4,navmenuid:14 },
+          { showlink: 'Web Forms', routerLink: '/privacy/dsar/webforms', icon: 'pie-chart',indexid:4,navmenuid:14 },
           { showlink: 'Requests', routerLink: '/privacy/dsar/requests', icon: 'fa fa-ticket-alt feather-16',indexid:4,navmenuid:15 },
           { showlink: 'Workflow', routerLink: '/privacy/dsar/workflows', icon: 'fas fa-sitemap',indexid:4,navmenuid:13 },
         ]
-  
+
         },
       {
         showlink: 'Cookie Consent',
         subcategory: [
-          { showlink: 'Dashboard', routerLink: '/home/dashboard/cookie-consent', icon: 'fas fa-cookie feather-16',indexid:3,navmenuid:10 },
-          { showlink: 'Manage Vendors', routerLink: '/cookie-consent/manage-vendors', icon: 'fas fa-tasks feather-16' },
+          { showlink: 'Dashboard', routerLink: '/home/dashboard/cookie-consent', icon: 'bar-chart-2',indexid:3,navmenuid:10 },
+          { showlink: 'Manage Vendors', routerLink: '/cookie-consent/manage-vendors', icon: 'fas fa-tasks feather-16',indexid:3,navmenuid:311 },
           { showlink: 'Cookie Category', routerLink: '/cookie-consent/cookie-category', icon: 'fab fa-microsoft feather-16',indexid:3,navmenuid:7 },
-          { showlink: 'Cookie Banner', routerLink: '/cookie-consent/cookie-banner', icon: 'fas fa-cookie feather-16',indexid:3,navmenuid:8 },
+          { showlink: 'Cookie Banner', routerLink: '/cookie-consent/banner-configuration', icon: 'fas fa-cookie feather-16',indexid:3,navmenuid:8 },
           { showlink: 'Consent Tracking', routerLink: '/cookie-consent/cookie-tracking', icon: 'fas fa-file-contract feather-16',indexid:3,navmenuid:9 },
-          { showlink: 'Setup', routerLink: '/cookie-consent/cookie-banner/setup', icon: 'fas fa-wrench feather-16' },
+          { showlink: 'Setup', routerLink: '/cookie-consent/cookie-banner/setup', icon: 'fas fa-wrench feather-16',indexid:3,navmenuid:312 },
         ]
       },{
       showlink: 'Consent Preference',
         subcategory: [
-          { showlink: 'Dashboard', routerLink: '/home/dashboard/consent-preference', icon: 'fas fa-chart-line feather-16',indexid:5,navmenuid:22 },
+          { showlink: 'Dashboard', routerLink: '/home/dashboard/consent-preference', icon: 'bar-chart-2',indexid:5,navmenuid:22 },
           { showlink: 'Consent Records', routerLink: '/consent-solutions/consent-records', icon: 'fas fa-tasks feather-16',indexid:5,navmenuid:21 },
           { showlink: 'Setup', routerLink: '/consent-solutions/setup', icon: 'fas fa-wrench feather-16',indexid:5,navmenuid:20 },
         ]
@@ -426,10 +689,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
         .map((s) => s.charAt(0).toUpperCase() + s.substring(1)).join(' ');
       this.userRole = this.currentUser.response.role;
       this.userID = this.currentUser.response.uid;
+      this.isUserOptQSMenu = this.currentUser.response.is_quickstart_dismissed;
+      this.onClickEnableQuickStartMenu.emit(this.isUserOptQSMenu);
     });
   }
 
   isCurrentPropertySelected(org, prop) {
+    //if(org.id !== undefined && prop.property_id !== undefined){
     if(this.location.path().indexOf('settings') == -1 || this.location.path().indexOf('userprofile') == -1){
       this.queryOID = org.id;
       this.queryPID = prop.property_id;
@@ -463,21 +729,22 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
 
     this.licenseAvailabilityForFormAndRequestPerOrg(org);
     if (this.router.url.indexOf('dsarform') !== -1) {
-      this.router.navigate(['/privacy/dsar/webforms']);
+      this.router.navigate(['/privacy/dsar/webforms'],{ queryParams: { oid: this.queryOID, pid: this.queryPID }});
     }
     if (this.router.url.indexOf('createworkflow') !== -1) {
-      this.router.navigate(['/privacy/dsar/workflows']);
+      this.router.navigate(['/privacy/dsar/workflows'],{ queryParams: { oid: this.queryOID, pid: this.queryPID }}); //oid: obj.organization_id, pid: obj.property_id
     }
-    this.router.navigate([this.router.url], { queryParams: { oid: obj.organization_id, pid: obj.property_id },skipLocationChange:false} );
+    this.router.navigate([this.router.url], { queryParams: { oid: this.queryOID, pid: this.queryPID },skipLocationChange:false} );
+  //}
    // this.openNav();
   }
 
   isPropSelected(selectedItem): boolean {
-    if (selectedItem.property_id !== undefined) {
+    if (selectedItem !== undefined && selectedItem.property_id !== undefined) {
       this.isPropertySelected = this.selectedOrgProperties.filter((t) => t.property_id === selectedItem.property_id).length > 0 || this.selectedOrgProperties.some((t) => t.response !== undefined && t.response.id === selectedItem.property_id);
       return this.isPropertySelected;
     }
-      else if(selectedItem.response !== undefined && selectedItem.response.id !== undefined){
+      else if(selectedItem !== undefined && selectedItem.response !== undefined && selectedItem.response.id !== undefined){
       this.isPropertySelected = this.selectedOrgProperties.some((t) => t.property_id === selectedItem.response.id) || this.selectedOrgProperties.some((t) => t.response !== undefined && t.response.id === selectedItem.response.id);
       return this.isPropertySelected;
       } else if(this.currentNavigationUrl[1] !== undefined && selectedItem.property_id === this.currentNavigationUrl[1]){ //this.isUrlWithPropID // this.findPropertyIDFromUrl(this.currentNavigationUrl)[1]
@@ -544,9 +811,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
         }
         }
       }
-      // else {
-      //   this.loadOrgPropertyFromLocal();
-      // }
+      else {
+        this.loadOrgPropertyFromLocal();
+      }
 
     });
  }
@@ -606,7 +873,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
     }, (error) => {
       this.loading.stop();
     }, () => {
-      console.log('complete..');
       if(this.currentNavigationUrl !== undefined){
       this.oIDPIDFromURL= this.findPropertyIDFromUrl(this.currentNavigationUrl || this.location.path());//updatedUrlWithPID
       }
@@ -756,6 +1022,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
 
   loadOrgPropertyFromLocal() {
     this.selectedOrgProperties.length = 0;
+    if (this.orgPropertyMenu !== undefined) {
       const orgIndex = this.orgPropertyMenu.findIndex((t) => t.organization_id === this.queryOID);
       if (orgIndex === -1) {
         this.selectedOrgProperties.push(this.orgPropertyMenu[orgIndex]);
@@ -764,15 +1031,16 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
       this.licenseAvailabilityForFormAndRequestPerOrg(this.orgPropertyMenu[orgIndex]);
       this.licenseAvailabilityForProperty(this.orgPropertyMenu[orgIndex]);
 
-   // const orgDetails = this.orgservice.getCurrentOrgWithProperty();
-   // if (orgDetails !== undefined && orgDetails.length > 0) {
+      // const orgDetails = this.orgservice.getCurrentOrgWithProperty();
+      // if (orgDetails !== undefined && orgDetails.length > 0) {
       if (this.orgPropertyMenu[orgIndex].user_id) { //=== this.userID
         this.currentOrganization = this.orgPropertyMenu[orgIndex].organization_name !== '' ? this.orgPropertyMenu[orgIndex].organization_name : this.orgPropertyMenu[orgIndex].response.orgname;
         this.currentProperty = this.orgPropertyMenu[orgIndex].property_name;
 
       }
       //  return this.currentProperty;
-   // }
+      // }
+    }
 
   }
 
@@ -805,11 +1073,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
     return this.orgservice.getCurrentOrgWithProperty() == undefined;// ? true : false;
   }
 
-  goto(link: any, id?: any) {
-    if(this.quickDivID == link.navmenuid){//this.qslinkobj.linkid 
+  goto(link: any, id?: any, linkoid?:any, linkpid?:any) {
+    if(this.quickDivID == link.navmenuid){//this.qslinkobj.linkid
       this.updateQuickLinkStatus(link);
       this.isUserclickedActualLink = true;
+      this.isqsmenuopen = true;
     }
+    this.onClickBackdrop();
     this.oIDPIDFromURL= this.findPropertyIDFromUrl(this.location.path());
     this.currentNavigationUrl = link.routerLink == '/' ? '/home/welcome' : link.routerLink + "?oid="+ this.queryOID +"&pid="+this.queryPID;
     if (link.routerLink === '/home/dashboard/cookie-consent' || link.routerLink === '/cookie-consent/manage-vendors' || link.routerLink === '/cookie-consent/cookie-category'
@@ -824,6 +1094,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
         this.openModal(this.confirmModal);
         return false;
       }
+      this.currentClickedMenuItem = this.navigationMenu[1];
     }
 
     if (link.routerLink === '/home/dashboard/ccpa-dsar' || link.routerLink == '/privacy/dsar/webforms' || link.routerLink == '/privacy/dsar/requests' || link.routerLink == '/privacy/dsar/workflows') {
@@ -836,6 +1107,16 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
         this.openModal(this.confirmModal);
         return false;
       }
+      this.currentClickedMenuItem = [{ 
+        showlink: 'DSAR',
+        tooltip:'Data Subject Access Request',
+      subcategory: [
+        { showlink: 'Dashboard', routerLink: '/home/dashboard/ccpa-dsar', icon: 'bar-chart-2', indexid:4, navmenuid:16 },
+        { showlink: 'Webforms', routerLink: '/privacy/dsar/webforms', icon: 'pie-chart',indexid:4,navmenuid:14 },
+        { showlink: 'Requests', routerLink: '/privacy/dsar/requests', icon: 'fa fa-ticket-alt feather-16',indexid:4,navmenuid:15 },
+        { showlink: 'Workflow', routerLink: '/privacy/dsar/workflows', icon: 'fas fa-sitemap',indexid:4,navmenuid:13 },
+      ]
+      }];
     }
 
     if (link.routerLink === '/home/dashboard/consent-preference' || link.routerLink == '/consent-solutions/consent-records' || link.routerLink == '/consent-solutions/setup' ) {
@@ -848,10 +1129,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
         this.openModal(this.confirmModal);
         return false;
       }
+      this.currentClickedMenuItem = this.navigationMenu[2];
     }
 
     if (id !== undefined) {
-      this.router.navigate([link.routerLink || link, id]); //,{queryParams:{'oid':id,'pid':id}}
+      this.router.navigate([link.routerLink || link, id],{ queryParams: { oid: linkoid, pid: linkpid }, queryParamsHandling: 'merge', skipLocationChange: false }); //,{queryParams:{'oid':id,'pid':id}}
     } else {
       if (this.checkLinkAccess(link.routerLink || link)) {
         if (this.queryPID !== undefined) {//this.selectedOrgProperties.length > 0
@@ -1069,10 +1351,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
 
   collapseStatus(activeIndex): boolean {
     if (activeIndex === 0) {
-      return activeIndex == 0 && this.isMobileDSARMenuCollapsed; 
+      return activeIndex == 0 && this.isMobileDSARMenuCollapsed;
     }
     else if (activeIndex === 1) {
-      return activeIndex == 1 && this.isMobileCookieMenuCollapsed; 
+      return activeIndex == 1 && this.isMobileCookieMenuCollapsed;
     }else if(activeIndex === 2) {
       return activeIndex == 2 && this.isMobileConsentMenuCollapsed;
 
@@ -1302,7 +1584,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
 
   btnTopAddSubscription() {
     let quickLinkObj: QuickStart = {
-      linkid: 4,
+      linkid: this.quickDivIDSub,
       indexid: 2,
       isactualbtnclicked: true,
       islinkclicked: true,
@@ -1312,6 +1594,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
     };
     this.quickmenuService.updateQuerymenulist(quickLinkObj);
     this.quickmenuService.onClickEmitQSLinkobj.next(quickLinkObj);
+    this.quickDivIDSub = "";
     this.router.navigate(['/settings/billing/pricing'],{ queryParams: { oid: this.queryOID, pid: this.queryPID }, queryParamsHandling:'merge', skipLocationChange:false});
   }
 
@@ -1332,7 +1615,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
 
   }
 
-  
+
   addEllipsisOrg(): object {
     let countorg;
     if (this.currentOrganization !== "" && this.currentOrganization !== undefined) {
@@ -1462,10 +1745,31 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
   }
 
   ngAfterViewInit() {
-    this.userclickedoutside = this.quickmenuService.isclickeventoutsidemenu;
-    if(this.isquicklinkclicked){
-      this.isBackdropclicked = true;
+    if (this.quickmenuService.getQuickstartDismissStatus() !== null) {
+      if (this.quickmenuService.getQuickstartDismissStatus().isdismissed) {
+        this.isQSMDismissed = !this.quickmenuService.getQuickstartDismissStatus().isqstoplink;
+      }
     }
+    this.quickstartmenustatus = this.isUserOptQSMenu;
+    this.quickmenuService.isQSMenuDissmissed.subscribe((status) => this.quickstartmenustatus = status);
+    this.quickmenuService.isHeaderNavClickedAfterQSDissmissed.subscribe((status) => this.headerNavbarStatusAfterQSDismiss = status);
+    if (this.quickstartmenustatus && !this.headerNavbarStatusAfterQSDismiss) {
+      this.isqsmenuopen = true;
+    }
+
+    if(this.backDroparea !== undefined){
+      fromEvent(this.backDroparea.nativeElement,'click').subscribe((menustatus)=>{
+        console.log(menustatus,'backDroparea....')
+        if(menustatus){
+          this.isqsmenuopen = true;
+          this.onClickBackdrop();
+        }
+      });
+    }
+    this.userclickedoutside = this.quickmenuService.isclickeventoutsidemenu;
+    // if(this.isquicklinkclicked){
+    // //  this.isBackdropclicked = false; //2
+    // }
     this.cdRef.detectChanges();
     this.activatedroute.queryParamMap.subscribe(params => {
       this.queryOID = params.get('oid');
@@ -1501,35 +1805,68 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
   }
 
   ngAfterViewChecked(){
-    
+    this.checkPathForSideMenu();
+     if (this.quickmenuService.getQuickstartDismissStatus() !== null) {
+      if(this.quickmenuService.getQuickstartDismissStatus().isdismissed){
+        this.isQSMDismissed = !this.quickmenuService.getQuickstartDismissStatus().isqstoplink;
+      }
+    }
+    this.userService.isRevisitedQSMenuLink.subscribe((status) => { this.isRevistedLink = status.reclickqslink; this.revisitedQuicklinnkid = status.quickstartid; this.isUserClickedNotRelatedToTooltip = status.urlchanged  });
+    //header navbar status clicked status false when Quick start dismiss true
+    this.quickmenuService.isQSMenuDissmissed.subscribe((status) => this.quickstartmenustatus = status)
+   // this.quickstartmenustatus = this.isUserOptQSMenu;
+    this.quickmenuService.isHeaderNavClickedAfterQSDissmissed.subscribe((status) => this.headerNavbarStatusAfterQSDismiss = status);
+    if (this.quickstartmenustatus && !this.headerNavbarStatusAfterQSDismiss) {
+      this.isqsmenuopen = true;
+      this.onClickBackdrop();
+      this.quickmenuService.headerNavStatusAfterDismissedQuickStart.next(true);
+    } else if(this.quickstartmenustatus && this.headerNavbarStatusAfterQSDismiss){ //enable header nav while qs dismiss true
+      this.actualBackdropclicked = false;
+    }
+
+   // this.isloginpage = this.location.path().indexOf('login') == -1 && this.location.path().indexOf('signup') == -1;
+    let actuallinkvisitatqs = this.isQuicklinkActuallinkVisited();
+    if(actuallinkvisitatqs !== this.actualLinkVisitStatus){
+      this.actualLinkVisitStatus = actuallinkvisitatqs;
+      this.cdRef.detectChanges();
+    }
+
     //console.log(this.qslinkobj,'qslinkobj..ngAfterChecked..1523..3');
-    this.isloginpage = this.location.path().indexOf('login') !== -1;
-    this.isqsmenuopen = this.quickmenuService.isquickstartopen;
+ //   this.isloginpage = this.location.path().indexOf('login') == -1 && this.location.path().indexOf('signup') == -1;
+   // this.isqsmenuopen = this.quickmenuService.isquickstartopen; //a1
     if(this.qslinkobj !== undefined){
-      this.isBackdropclicked = false;
+     // this.isBackdropclicked = false;
+      if(this.qslinkobj.isactualbtnclicked && this.qslinkobj.islinkclicked){
+        //this.isBackdropclicked = false;
+        this.actuallinkstatus = true;
+      }
+
       //this.quickDivID = this.qslinkobj.linkid;
       this.quickLinkStatus = this.qslinkobj.islinkclicked;
       //this.actualBackdropclicked = false;
     //  this.isBackdropclicked = !this.isBackdropclicked;
     }
-    if(this.actualBackdropclicked){
-      this.removeHightlightBorders();
-    }
+    // if (this.actualBackdropclicked) {
+    //   this.removeHightlightBorders();
+    //   if (this.actuallinkstatus) {
+    //     this.actuallinkstatus = false;
+    //   }
+    // }
 
-    if(!this.actualBackdropclicked){
-      this.isBackdropclicked = false;
-    }
-     
+   // if(!this.actualBackdropclicked){
+      // this.isBackdropclicked = false; // 3
+   // }
+
     // if(this.qslinkobj.islinkclicked && this.qslinkobj.isactualbtnclicked){
     //   this.isBackdropclicked = false;
     // }
-    
+
   //  console.log(this.isqsmenuopen,'isqsmenuopen..1503')
    // console.log(this.qslinkobj,'qslinkobj..')
     this.userclickedoutside = this.quickmenuService.isclickeventoutsidemenu;
     this.userclickedfromqsmenu = this.quickmenuService.isclickeventfromquickmenu;
     this.isuserClickedonqstooltip = this.quickmenuService.isuserClickedonqstooltip;
-    
+
   // console.log(this.isuserClickedonqstooltip);
     if (this.isuserClickedonqstooltip) {
       this.quickLinkObj = {};
@@ -1537,32 +1874,37 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
     }
     //console.log(this.userclickedoutside,'userclickedoutside..');
     this.isBillingpageQuickid();
-    if(!this.actualBackdropclicked){ // && !this.userclickedoutside && !this.isHeaderNavbarClicked
+   // if(!this.actualBackdropclicked){ // && !this.userclickedoutside && !this.isHeaderNavbarClicked
       // for(let i = 0; i < this.dropdownTriggers.nativeElement.querySelectorAll('div > div > ul').length; i++){
       //      this.renderer.removeClass(this.dropdownTriggers.nativeElement.querySelectorAll('div > div > ul')[i], 'addbg-menuitem');
       //  }
-      if (this.quickLinkObj !== undefined && (this.quickLinkObj.indexid == 4 && this.quickLinkObj.linkid == 11 || this.quickLinkObj.linkid == 12 )) {
+    if (this.navMenuEle !== undefined) {
+      if (this.quickLinkObj !== undefined && (this.quickLinkObj.indexid == 4 && this.quickLinkObj.linkid == 11 || this.quickLinkObj.linkid == 12)) {
         this.renderer.removeClass(this.navMenuEle.nativeElement.querySelectorAll('li > div')[0], 'highlightmenu-element');
         this.lastopendp = [];
-      } else if (this.quickLinkObj !== undefined && (this.quickLinkObj.indexid == 3 && this.quickLinkObj.linkid == 5 || this.quickLinkObj.linkid == 6 )) {
+      } else if (this.quickLinkObj !== undefined && (this.quickLinkObj.indexid == 3 && this.quickLinkObj.linkid == 5 || this.quickLinkObj.linkid == 6)) {
         this.renderer.removeClass(this.navMenuEle.nativeElement.querySelectorAll('li > div')[2], 'highlightmenu-element');
         this.lastopendp = [];
-      } else if (this.quickLinkObj !== undefined && (this.quickLinkObj.indexid == 5 && this.quickLinkObj.linkid == 18 || this.quickLinkObj.linkid == 19 )) {
+      } else if (this.quickLinkObj !== undefined && (this.quickLinkObj.indexid == 5 && this.quickLinkObj.linkid == 18 || this.quickLinkObj.linkid == 19)) {
         this.renderer.removeClass(this.navMenuEle.nativeElement.querySelectorAll('li > div')[2], 'highlightmenu-element');
         this.lastopendp = [];
-      } 
-     
+      }
     }
-    if(!this.isqsmenuopen){
-      this.addBordertoDropdownMenu();
+
+ //   }
+     this.quickLinkObj !== undefined // Object.values(this.qslinkobj).length !== 0 //|| Object.values(this.qslinkobj).length !== 0
+    if(!this.isqsmenuopen && this.qslinkobj !== undefined ){
+      if(Object.values(this.qslinkobj).length !==0 ){
+        this.addBordertoDropdownMenu();
+      }
     }
   }
- 
+
   onClickBackdrop() {
-    this.lastopendp = [];
-    this.isBackdropclicked = true;
-    this.actualBackdropclicked = !this.actualBackdropclicked;
+    this.actualBackdropclicked = true;// !this.actualBackdropclicked;
     this.removeHightlightBorders();
+
+
     if (this.dropdownTriggers !== undefined) {
       for (let i = 0; i < this.dropdownTriggers.nativeElement.querySelectorAll('div > div > ul').length; i++) {
         this.renderer.removeClass(this.dropdownTriggers.nativeElement.querySelectorAll('div > div > ul')[i], 'addbg-menuitem');
@@ -1574,84 +1916,87 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
       this.renderer.removeClass(this.navMenuEle.nativeElement.querySelectorAll('li > div')[0], 'highlightmenu-element');
     }
     if (this.qslinkobj !== undefined) {
-      if (this.qslinkobj.islinkclicked && this.qslinkobj.isactualbtnclicked) {
-        this.isBackdropclicked = true;
+      if (this.qslinkobj.islinkclicked && this.qslinkobj.isactualbtnclicked && !this.isquicklinkclicked && !this.actuallinkstatus) {
+        this.isqsmenuopen = true;
+      //  this.isBackdropclicked = true; // 6
       } else {
-        this.isquicklinkclicked = !this.qslinkobj.islinkclicked;
+        this.isquicklinkclicked = false;//!this.qslinkobj.islinkclicked;
+        this.quickDivID = "";
+        this.qslinkobj = {};
+      }
+    } else if(this.qslinkobj == undefined && this.isHeaderNavbarClicked){
+      return true;
+    } else {
+      this.quickDivID = "";
+      this.qslinkobj = {};
+      this.headerDropdown.forEach((el) => {
+        el.hide();
+      });
+    }
+    this.cdRef.detectChanges();
+    this.quickDivID = "";
+    this.qslinkobj = {};
+    this.lastopendp = [];
+  }
+
+
+
+  @HostListener('document:click', ['$event.target'])
+  outsideClick() {
+    if (this.isUserclickedActualLink) {
+      this.onClickBackdrop();
+      this.isUserclickedActualLink = false;
+    }
+    if (this.qslinkobj !== undefined) {
+      if (Object.values(this.qslinkobj).length !== 0) {
+        if (this.qslinkobj.islinkclicked) {
+         // this.isHeaderNavbarClicked = false;
+          this.actualBackdropclicked = !this.actualBackdropclicked;
+        }
+        else {
+       //   this.isBackdropclicked = false; // 7
+        }
       }
     }
 
-  }
- 
-  
+    if (this.isquicklinkclicked && this.actuallinkstatus) {
+    //  this.isBackdropclicked = false; // 8
+      this.actualBackdropclicked = true;
+      this.actuallinkstatus = false;
+    } else if (this.isquicklinkclicked && !this.actuallinkstatus && this.isBackdropclicked) {
+   //   this.isBackdropclicked = false; // 9
+      this.actualBackdropclicked = true;
+      this.actuallinkstatus = true;
+    }
 
-  @HostListener('document:click', ['$event','$event.target'])
-  outsideClick() {
-    console.log("CLICKED OUTSIDE");
-    
-     
     if (this.isuserClickedonqstooltip) {//&& !this.isquicklinkclicked && this.userclickedoutside
       this.qslinkobj = {};
       Object.values(this.qslinkobj).length = 0;
       this.quickDivID = "";
     }
- 
-       if (this.isquicklinkclicked) {
+
+    if (this.isquicklinkclicked) {
       if (this.quickDivID !== undefined && this.quickDivID !== "") {
         this.isuserClickedonqstooltip = false;
+        this.isHeaderNavbarClicked = false;
+        this.actualBackdropclicked = true;
         // if (this.qslinkobj !== undefined) {
         if (this.headerDropdown !== undefined) {
+          this.triggerDropdownForQSM();
+        }
+      }
+    } else if (this.quickmenuService.isquickmenudismiss && this.isHeaderNavbarClicked) {
+    //  this.isBackdropclicked = false; // 10
+      this.actualBackdropclicked = true;
+    } else if (this.onClickHideTooltip()) {
+      this.lastopendp.length = 0;
+      this.removeHightlightBorders();
+      this.qslinkobj = {};
 
- 
-          if(this.quickDivID !== "" && (this.quickDivID === 6) || this.quickDivID !== "" && (this.quickDivID === 5)){
-          //  this.removeHightlightBorders();
-          console.log('hide...1778',);
-          this.renderer.removeClass(this.navMenuEle.nativeElement.querySelectorAll('li > div')[1], 'highlightmenu-element');
-        
-          }
-          if (this.quickDivID !== "" && (this.quickDivID === 7 || this.quickDivID === 8 || this.quickDivID === 9 || this.quickDivID === 10)) {
-            //this.removeHightlightBorders();
-            this.renderer.removeClass(this.navMenuEle.nativeElement.querySelectorAll('li > div')[0], 'highlightmenu-element');
-            this.renderer.removeClass(this.navMenuEle.nativeElement.querySelectorAll('li > div')[2], 'highlightmenu-element');
-            this.opendropdownTrigger(2,'cookie-consent'); 
-           // this.addBordertoDropdownMenu();
-          }
-          if(this.quickDivID !== "" && (this.quickDivID == 11 || this.quickDivID == 12 )){
-            this.removeHightlightBorders();
-            //this.renderer.removeClass(this.navMenuEle.nativeElement.querySelectorAll('li > div')[0], 'highlightmenu-element');
-          }
-          if (this.quickDivID !== "" && (this.quickDivID === 16 || this.quickDivID === 15 || this.quickDivID === 14 || this.quickDivID === 13)) {
-          
-            this.renderer.removeClass(this.navMenuEle.nativeElement.querySelectorAll('li > div')[1], 'highlightmenu-element');
-            this.renderer.removeClass(this.navMenuEle.nativeElement.querySelectorAll('li > div')[2], 'highlightmenu-element');
-            this.opendropdownTrigger(1,'dsar'); 
-            this.addBordertoDropdownMenu();
-          }
-          if (this.quickDivID !== "" && (this.quickDivID === 20) || this.quickDivID !== "" && (this.quickDivID === 21) || this.quickDivID !== "" && (this.quickDivID === 22)) {
-          this.renderer.removeClass(this.navMenuEle.nativeElement.querySelectorAll('li > div')[0], 'highlightmenu-element');
-          this.renderer.removeClass(this.navMenuEle.nativeElement.querySelectorAll('li > div')[1], 'highlightmenu-element');
-            this.opendropdownTrigger(3,'consentpreference'); 
-          }
-        }
-      }
     } else {
-      if (this.onClickHideTooltip()) {
-        this.lastopendp.length = 0;
-        this.headerDropdown.forEach((el: any, index) => {
-          if (this.quickDivID !== "" && (this.quickDivID === 16 || this.quickDivID === 15 || this.quickDivID === 14 || this.quickDivID === 13)) {
-          if(index === 1){
-            el.hide();
-            el.autoClose = true;// true;
-          }
-        }
-        });
-        this.quickDivID = "";
+      if (this.navMenuEle !== undefined) {
+        this.removeHightlightBorders();
       }
-      //  this.isquicklinkclicked = false;
-      //  this.headerDropdown.forEach((el: any, index) => {
-      //  //  el.hide();
-      //    el.autoclose = true;
-      //  })
     }
     // }
   }
@@ -1659,90 +2004,105 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
   positionObj(){
     if(this.quickDivID !== "" && (this.quickDivID == 10)){
       return {
-        "left":"340px",
+        "left":"310px",
         "top":"70px"
-      } 
+      }
+    } else if(this.quickDivID !== "" && (this.quickDivID == 311)){
+      return {
+        "left":"310px",
+        "top":"90px"
+      }
+    } else if(this.quickDivID !== "" && (this.quickDivID == 312)){
+      return {
+        "left":"310px",
+        "top":"200px"
+      }
     } else if(this.quickDivID !== "" && (this.quickDivID == 11)){
       return {
         "left":"107px",
-        "top":"85px"
-      } 
+        "top":"200px"
+      }
     } else if(this.quickDivID !== "" && (this.quickDivID == 9)){
       return {
-        "left":"360px",
+        "left":"310px",
         "top":"170px"
-      } 
+      }
     }  else if(this.quickDivID !== "" && (this.quickDivID == 8)){
       return {
-        "left":"360px",
+        "left":"310px",
         "top":"134px"
-      } 
+      }
     } else if(this.quickDivID !== "" && (this.quickDivID == 7)){
       return {
-        "left":"340px",
+        "left":"310px",
         "top":"110px"
-      } 
+      }
     } else if(this.quickDivID !== "" && (this.quickDivID == 4)){
       return {
         "left":"960px",
         "top":"70px"
-      } 
+      }
     }   else if(this.quickDivID !== "" && (this.quickDivID == 5)){
       return {
         "left":"100px",
         "top":"200px",
         "width":"290px"
-      } 
+      }
     } else if(this.quickDivID !== "" && (this.quickDivID == 6)){
       return {
         "left":"660px",
         "top":"401px"
-      } 
+      }
     } else if(this.quickDivID !== "" && (this.quickDivID == 12)){
       return {
         "left":"750px",
         "top":"170px"
-      } 
+      }
     } else if(this.quickDivID !== "" && (this.quickDivID == 13)){
       return {
         "left":"200px",
         "top":"140px"
-      } 
+      }
     } else if(this.quickDivID !== "" && (this.quickDivID == 14)){
       return {
-        "left":"240px",
+        "left":"190px",
         "top":"70px"
-      } 
+      }
     } else if(this.quickDivID !== "" && (this.quickDivID == 15)){
       return {
-        "left": "240px",
+        "left": "190px",
         "top": "110px"
       }
     } else if(this.quickDivID !== "" && (this.quickDivID == 16)){
       return {
-        "left":"240px",
+        "left":"200px",
         "top":"70px"
-      } 
+      }
     } else if(this.quickDivID !== "" && (this.quickDivID == 17)){
       return {
         "left":"240px",
         "top":"70px"
-      } 
+      }
     } else if(this.quickDivID !== "" && (this.quickDivID == 18)){
       return {
         "left": "100px",
         "top": "60px",
         "width": "290px"
-      } 
+      }
     } else if(this.quickDivID !== "" && (this.quickDivID == 1)){
       return {
         "left":"690px",
-        "top":"140px"
+        "top":"120px"
       }
-    } else if(this.quickDivID !== "" && this.quickDivID == 2 || this.quickDivID == 3){
+    } else if(this.quickDivID !== "" && (this.quickDivID == 2)){
+      return {
+        "left":"680px",
+        "top":"126px"
+      }
+    }  else if(this.quickDivID !== "" && (this.quickDivID == 3)){
       return {
         "left":"760px",
-        "top":"146px"
+        "top":"346px"
       }
     } else if(this.quickDivID !== "" && (this.quickDivID == 19)){
       return {
@@ -1751,17 +2111,17 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
       }
     } else if(this.quickDivID !== "" && (this.quickDivID == 20)){
       return {
-        "left":"490px",
+        "left":"440px",
         "top":"76px"
       }
     } else if(this.quickDivID !== "" && (this.quickDivID == 21)){
       return {
-        "left":"490px",
+        "left":"440px",
         "top":"76px"
       }
     } else if(this.quickDivID !== "" && (this.quickDivID == 22)){
       return {
-        "left":"490px",
+        "left":"440px",
         "top":"70px"
       }
     }
@@ -1773,22 +2133,26 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
       "top":"340px"
     }
 
- 
+
 
   }
 
   isBillingpageQuickid(){
-    if(this.quickDivID == 1 || this.quickDivID == 2 || this.quickDivID == 3 || this.quickDivID == 11 || this.quickDivID == 12 || this.quickDivID == 18 ||  this.quickDivID == 19 || this.quickDivID == 6 || this.quickDivID == 5 ){
-      return false;
-    }else{
-      return true;
+    if(this.quickDivID !== undefined && this.quickDivID !== ""){
+      if(this.quickDivID == 1 || this.quickDivID == 2 || this.quickDivID == 3 || this.quickDivID == 4 || this.quickDivID == 11 || this.quickDivID == 12 || this.quickDivID == 18 ||  this.quickDivID == 19 || this.quickDivID == 6 || this.quickDivID == 5){
+        return false;
+      }else{
+        return true;
+      }
     }
   }
 
   onClickHideTooltip(): boolean {
-    if (this.quickLinkObj !== undefined && this.actualBackdropclicked) { //!this.isuserClickedonqstooltip
+    if (this.quickLinkObj !== undefined && Object.values(this.quickLinkObj).length !== 0 && this.actualBackdropclicked) { //!this.isuserClickedonqstooltip
       return true; // show menu on click of quickstart
-    }  else {
+    } else if (this.quickLinkObj !== undefined && Object.values(this.quickLinkObj).length !== 0) { //&& this.isBackdropclicked
+      return true;
+    } else {
       return false;  //hide already opened menu
     }
   }
@@ -1796,16 +2160,22 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
   isQuicklinkActuallinkVisited():boolean{
     if(this.qslinkobj !== undefined){
       return this.qslinkobj.isactualbtnclicked && this.qslinkobj.islinkclicked;
+    } else{
+      return false;
     }
-    
+
   }
 
-  removeHightlightBorders(){
-    this.renderer.removeClass(this.navMenuEle.nativeElement.querySelectorAll('li > div')[0], 'highlightmenu-element');
-    this.renderer.removeClass(this.navMenuEle.nativeElement.querySelectorAll('li > div')[1], 'highlightmenu-element');
-    this.renderer.removeClass(this.navMenuEle.nativeElement.querySelectorAll('li > div')[2], 'highlightmenu-element');
-    if(this.dropdownTriggers !== undefined){
-    for(let i = 0; i < this.dropdownTriggers.nativeElement.querySelectorAll('div > div > ul').length; i++){
+  removeHightlightBorders() {
+    if (this.navMenuEle !== undefined) {
+      if (this.renderer !== undefined) {
+        this.renderer.removeClass(this.navMenuEle.nativeElement.querySelectorAll('li > div')[0], 'highlightmenu-element');
+        this.renderer.removeClass(this.navMenuEle.nativeElement.querySelectorAll('li > div')[1], 'highlightmenu-element');
+        this.renderer.removeClass(this.navMenuEle.nativeElement.querySelectorAll('li > div')[2], 'highlightmenu-element');
+      }
+    }
+    if (this.dropdownTriggers !== undefined) {
+      for (let i = 0; i < this.dropdownTriggers.nativeElement.querySelectorAll('div > div > ul').length; i++) {
          this.renderer.removeClass(this.dropdownTriggers.nativeElement.querySelectorAll('div > div > ul')[i], 'addbg-menuitem');
      }
     }
@@ -1840,56 +2210,62 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
 
     var innerHTML = inputText.innerHTML;
     var index = innerHTML.indexOf(text);
-    if (index >= 0) { 
+    if (index >= 0) {
      innerHTML = innerHTML.substring(0,index) + "<span class='highlight'>" + innerHTML.substring(index,index+text.length) + "</span>" + innerHTML.substring(index + text.length);
      inputText.innerHTML = innerHTML;
     }
   }
-    
+
 
   ngOnChanges(changes: SimpleChanges) {
-   
+    if(this.isHeaderNavbarClicked && this.istopmenuopened){
+      this.topheaderDropdown.hide(); // incase after selecting from qsm user navigate from header nav then open dropdown need to close
+    //  this.lastopendp = [];
+      this.triggerDropdownForQSM();
+    } else if(this.isHeaderNavbarClicked && this.topheaderDropdown !== undefined){
+      this.topheaderDropdown.hide();
+    }
     this.quickLinkObj = this.quickmenuService.qsMenuobjwithIndexid;
-    this.isloginpage = this.location.path().indexOf('login') !== -1;
-    this.isqsmenuopen = this.quickmenuService.isquickstartopen;
+   // this.isloginpage = this.location.path().indexOf('login') == -1 && this.location.path().indexOf('signup') == -1;
+    this.isqsmenuopen = this.quickmenuService.isquickstartopen; // A2
     if(this.isqsmenuopen){
       this.onClickBackdrop();
     }
     if(this.qslinkobj !== undefined){
       this.quickLinkStatus = this.qslinkobj.islinkclicked;
     }
-    if(this.actualBackdropclicked){
+    if(this.isqsmenuopen){
       this.removeHightlightBorders();
     }
-    
+
     this.userclickedoutside = this.quickmenuService.isclickeventoutsidemenu;
     this.userclickedfromqsmenu = this.quickmenuService.isclickeventfromquickmenu;
     this.isuserClickedonqstooltip = this.quickmenuService.isuserClickedonqstooltip;
-    
-  
+
+
     if (this.isuserClickedonqstooltip) {
       this.quickLinkObj = {};
       Object.values(this.quickLinkObj).length = 0;
     }
-    
+
     this.isBillingpageQuickid();
-    
+
     if(changes.qslinkobj !== undefined && changes.qslinkobj.currentValue !== undefined){
-      
+
       this.quickLinkObj = changes.qslinkobj.currentValue;
       this.quickDivID = this.quickLinkObj.linkid;
       this.isquicklinkclicked = this.quickLinkObj.islinkclicked;
       this.userclickedoutside = this.quickmenuService.isclickeventoutsidemenu;
-      if(!this.quickmenuService.isquickstartopen){
-        this.isqsmenuopen = true;
-      }  
+      // if(!this.quickmenuService.isquickstartopen){
+      //   this.isqsmenuopen = true;
+      // }
       this.alertguidetext = this.quickLinkObj.divguidetext;
       this.alertcontent = this.quickLinkObj.tooltipdescription;
       this.quickLinkStatus = true;
 
     }
   //  this.addBordertoDropdownMenu();
-  } 
+  }
 
 
   updateQuickLinkStatus(menu){
@@ -1897,19 +2273,19 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
         linkid: menu.navmenuid,
         indexid: menu.indexid,
         isactualbtnclicked: true,
-        islinkclicked: true        
+        islinkclicked: true
       };
       this.quickmenuService.updateQuerymenulist(quickLinkObj);
       this.quickmenuService.onClickEmitQSLinkobj.next(quickLinkObj);
-
+      this.removeHightlightBorders();
       this.headerDropdown.forEach((el) => {
-            el.hide(); 
+            el.hide();
       });
-    
+
        this.isUserVistedActualLinkWithTooltip = true;
-       this.lastopendp = [];
+     //  this.lastopendp = []; //22
   }
- 
+
   responseFromUser($event) {
     this.userclickedoutside = $event;
     this.quickmenuService.isclickeventoutsidemenu = $event;
@@ -1917,20 +2293,23 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
     if(this.isuserClickedonqstooltip){
       this.quickLinkObj = {};
     }
-   
+
   }
 
-  opendropdownTrigger(indexid,dropdownname) { 
+  opendropdownTrigger(indexid,dropdownname) {
       if(this.lastopendp !== undefined && this.lastopendp.length !== 0){
         let menuid = this.lastopendp.findIndex((t)=>t.dpindex === indexid && t.dpname === dropdownname);
         if(menuid !== undefined && menuid !== -1){
           this.lastopendp[menuid].dpmenu.isOpen = !this.lastopendp[menuid].dpmenu.isOpen;
           this.lastopendp[menuid].dpmenu.show();
+          if(this.lastopendp[menuid].dpmenu.isOpen){
+            this.lastopendp.length = 0;
+          }
+        //  this.isBackdropclicked = false; // 10
         }else{
           this.lastopendp.length = 0;
           this.headerDropdown.forEach((el: any, index) => {
             if (index == indexid) {
-              console.log(this.storeDropdownstatus);
               let idx = this.lastopendp.findIndex((t)=>t.dpindex === indexid && t.dpname === dropdownname);
               if(idx == -1){
                 this.lastopendp.push({
@@ -1942,17 +2321,17 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
               }else{
                 this.lastopendp[idx].dpmenu.isOpen = !this.lastopendp[idx].dpmenu.isOpen;
                 this.lastopendp[idx].dpmenu.show();
-                this.isBackdropclicked = false;
+              //  this.isBackdropclicked = false; // 11
               }
-              
-            } 
+
+            }
           });
         }
       }else{
-        this.lastopendp.length = 0;
+    //  if(this.dropdownTriggers !== undefined){
+      this.lastopendp.length = 0;
         this.headerDropdown.forEach((el: any, index) => {
           if (index == indexid) {
-            console.log(this.storeDropdownstatus);
             let idx = this.lastopendp.findIndex((t)=>t.dpindex === indexid && t.dpname === dropdownname);
             if(idx == -1){
               this.lastopendp.push({
@@ -1961,21 +2340,30 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
                 dpname:dropdownname
               });
               el.show();
+           //   this.isBackdropclicked = false; // 12
             }else{
               this.lastopendp[idx].dpmenu.isOpen = !this.lastopendp[idx].dpmenu.isOpen;
               this.lastopendp[idx].dpmenu.show();
-              this.isBackdropclicked = false;
+           //   this.isBackdropclicked = false; // 13
             }
-            
-          } 
+
+          }
         });
-      }  
-     
+     // }
+      }
+
   }
 
+  isLoginOrSignupPage():boolean{
+    if( this.location.path().indexOf('login') !== -1 || this.location.path().indexOf('signup') !== -1 || this.location.path().indexOf('invited-user-verify-email') !== -1){
+      return this.isloginpage = false;
+    }else{
+      return this.isloginpage = true;
+    }
+  }
 
   addBordertoDropdownMenu(){
-    if(this.dropdownTriggers !== undefined){
+    if(this.dropdownTriggers !== undefined && this.renderer !== undefined){
       if(this.quickLinkObj !== undefined && this.quickLinkObj.linkid === 13){
         this.renderer.addClass(this.dropdownTriggers.nativeElement.querySelectorAll('div > div > ul')[3], 'addbg-menuitem');
       } else if(this.quickLinkObj !== undefined && this.quickLinkObj.linkid == 14){
@@ -1998,14 +2386,148 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
         this.renderer.addClass(this.dropdownTriggers.nativeElement.querySelectorAll('div > div > ul')[4], 'addbg-menuitem');
       } else if(this.quickLinkObj !== undefined && this.quickLinkObj.linkid == 10){
         this.renderer.addClass(this.dropdownTriggers.nativeElement.querySelectorAll('div > div > ul')[0], 'addbg-menuitem');
-      } 
+      } else if(this.quickLinkObj !== undefined && this.quickLinkObj.linkid == 311){
+        this.renderer.addClass(this.dropdownTriggers.nativeElement.querySelectorAll('div > div > ul')[1], 'addbg-menuitem');
+      } else if(this.quickLinkObj !== undefined && this.quickLinkObj.linkid == 312){
+        this.renderer.addClass(this.dropdownTriggers.nativeElement.querySelectorAll('div > div > ul')[5], 'addbg-menuitem');
+      }
     }
   }
 
-  ngOnDestroy(){
-    if(this.orgservice.isPropertyUpdated !== undefined){
-      this.orgservice.isPropertyUpdated.unsubscribe();
+  onClickQSLinkFromHeader($event){
+    let enableQSMlink;
+    this.quickmenuService.dismissQuickStart($event).subscribe((data)=>{
+      enableQSMlink = data.quickstart_dismissed;
+      this.isquickstartdismissed = enableQSMlink;
+    } );
+    this.onClickEnableQuickStartMenu.emit(enableQSMlink);
+    this.quickmenuService.onDissmissQuickStartmenu.next(false);
+  }
+
+  headerNavbarEvent($event) {
+    this.isHeaderNavbarClicked = true;
+    this.userService.onRevistQuickStartmenulink.next({ quickstartid: this.quickDivID, reclickqslink: true, urlchanged: true });
+    if (this.quickLinkObj !== undefined && Object.values(this.quickLinkObj).length !== 0) {
+      //this.userService.onRevistQuickStartmenulink.next({quickstartid:this.quickDivID,reclickqslink:true,urlchanged:true});
     }
+    if (this.headerNavbarEle !== undefined) {
+      if ($event.currentTarget === this.headerNavbarEle.nativeElement) {
+        if (!this.isqsmenuopen) { // if quick start opened and want to click navbar
+          this.isqsmenuopen = true;
+          this.onClickBackdrop();
+        } else {
+          return true; // regular header navigation
+        }
+      }
+    }
+  }
+
+  onOpenChange(dropdownStatus){
+    dropdownStatus ? this.istopmenuopened = true : this.istopmenuopened = false;
+    return this.istopmenuopened;
+  }
+
+  triggerDropdownForQSM(){
+    if (this.navMenuEle !== undefined) {
+      if (this.quickDivID !== "" && (this.quickDivID === 6) || this.quickDivID !== "" && (this.quickDivID === 5)) {
+        //  this.removeHightlightBorders();
+        this.renderer.removeClass(this.navMenuEle.nativeElement.querySelectorAll('li > div')[1], 'highlightmenu-element');
+
+      }
+      if (this.quickDivID !== "" && (this.quickDivID === 7 || this.quickDivID === 8 || this.quickDivID === 9 || this.quickDivID === 10 || this.quickDivID === 311 || this.quickDivID === 312)) {
+        //this.removeHightlightBorders();
+        this.renderer.removeClass(this.navMenuEle.nativeElement.querySelectorAll('li > div')[0], 'highlightmenu-element');
+        this.renderer.addClass(this.navMenuEle.nativeElement.querySelectorAll('li > div')[1], 'highlightmenu-element');
+        this.renderer.removeClass(this.navMenuEle.nativeElement.querySelectorAll('li > div')[2], 'highlightmenu-element');
+        this.opendropdownTrigger(2, 'cookie-consent');
+        // this.addBordertoDropdownMenu();
+      }
+      if (this.quickDivID !== "" && (this.quickDivID == 6 || this.quickDivID == 11 || this.quickDivID == 12 || this.quickDivID == 18 || this.quickDivID == 19)) {
+        this.lastopendp = [];
+        this.removeHightlightBorders();
+        this.quickLinkObj = {};
+        //this.renderer.removeClass(this.navMenuEle.nativeElement.querySelectorAll('li > div')[0], 'highlightmenu-element');
+      }
+
+      if (this.quickDivID !== "" && (this.quickDivID === 16 || this.quickDivID === 15 || this.quickDivID === 14 || this.quickDivID === 13)) {
+
+        this.renderer.addClass(this.navMenuEle.nativeElement.querySelectorAll('li > div')[0], 'highlightmenu-element');
+        this.renderer.removeClass(this.navMenuEle.nativeElement.querySelectorAll('li > div')[2], 'highlightmenu-element');
+        this.renderer.removeClass(this.navMenuEle.nativeElement.querySelectorAll('li > div')[1], 'highlightmenu-element');
+        this.opendropdownTrigger(1, 'dsar');
+        this.addBordertoDropdownMenu();
+      }
+      if (this.quickDivID !== "" && (this.quickDivID === 20) || this.quickDivID !== "" && (this.quickDivID === 21) || this.quickDivID !== "" && (this.quickDivID === 22)) {
+        this.renderer.removeClass(this.navMenuEle.nativeElement.querySelectorAll('li > div')[0], 'highlightmenu-element');
+        this.renderer.removeClass(this.navMenuEle.nativeElement.querySelectorAll('li > div')[1], 'highlightmenu-element');
+        this.renderer.addClass(this.navMenuEle.nativeElement.querySelectorAll('li > div')[2], 'highlightmenu-element');
+        this.opendropdownTrigger(3, 'consentpreference');
+      }
+    }
+  }
+
+  checkPathForSideMenu(){
+    if (this.location.path().indexOf('/home/dashboard/cookie-consent') !== -1 || this.location.path().indexOf('/cookie-consent/manage-vendors') !== -1 || this.location.path().indexOf('/cookie-consent/cookie-category') !== -1
+    || this.location.path().indexOf('/cookie-consent/cookie-banner') !== -1 || this.location.path().indexOf('/cookie-consent/cookie-tracking') !== -1 || this.location.path().indexOf('/cookie-consent/cookie-banner/setup') !== -1 || this.location.path().indexOf('cookie') !== -1) {
+      this.showSidemenu = true;
+      this.userService.isSideMenuVisible = this.showSidemenu;
+      this.currentClickedMenuItem = [{
+        showlink: 'Cookie Consent',
+        subcategory: [
+          { showlink: 'Dashboard', routerLink: '/home/dashboard/cookie-consent', icon: 'bar-chart-2',indexid:3,navmenuid:10 },
+          { showlink: 'Manage Vendors', routerLink: '/cookie-consent/manage-vendors', icon: 'fas fa-tasks feather-16' },
+          { showlink: 'Cookie Category', routerLink: '/cookie-consent/cookie-category', icon: 'fab fa-microsoft feather-16',indexid:3,navmenuid:7 },
+          { showlink: 'Cookie Banner', routerLink: '/cookie-consent/banner-configuration', icon: 'fas fa-cookie feather-16',indexid:3,navmenuid:8 },
+          { showlink: 'Consent Tracking', routerLink: '/cookie-consent/cookie-tracking', icon: 'fas fa-file-contract feather-16',indexid:3,navmenuid:9 },
+          { showlink: 'Setup', routerLink: '/cookie-consent/cookie-banner/setup', icon: 'fas fa-wrench feather-16' },
+        ]
+      }]; // this.navigationMenu[1];
+      this.userService.setSidemenulist(this.currentClickedMenuItem);
+    } else if (this.location.path().indexOf('/home/dashboard/ccpa-dsar') !== -1 || this.location.path().indexOf('/privacy/dsar/webforms') !== -1 || this.location.path().indexOf('/privacy/dsar/requests') !== -1 || this.location.path().indexOf('/privacy/dsar/workflows') !== -1 || this.location.path().indexOf('dsar') !== -1) {
+      this.showSidemenu = true;
+      this.userService.isSideMenuVisible = this.showSidemenu;
+      this.currentClickedMenuItem =  [{ 
+        showlink: 'DSAR',
+        tooltip:'Data Subject Access Request',
+      subcategory: [
+        { showlink: 'Dashboard', routerLink: '/home/dashboard/ccpa-dsar', icon: 'bar-chart-2', indexid:4, navmenuid:16 },
+        { showlink: 'Webforms', routerLink: '/privacy/dsar/webforms', icon: 'pie-chart',indexid:4,navmenuid:14 },
+        { showlink: 'Requests', routerLink: '/privacy/dsar/requests', icon: 'fa fa-ticket-alt feather-16',indexid:4,navmenuid:15 },
+        { showlink: 'Workflow', routerLink: '/privacy/dsar/workflows', icon: 'fas fa-sitemap',indexid:4,navmenuid:13 },
+      ]
+
+      }];
+      this.userService.setSidemenulist(this.currentClickedMenuItem);
+    } else  if (this.location.path().indexOf('/home/dashboard/consent-preference') !== -1 || this.location.path().indexOf('/consent-solutions/consent-records') !== -1 || this.location.path().indexOf('/consent-solutions/setup') !== -1 || this.location.path().indexOf('consent') !== -1) {
+      this.showSidemenu = true;
+      this.userService.isSideMenuVisible = this.showSidemenu;
+      this.currentClickedMenuItem =  [{
+        showlink: 'Consent Preference',
+          subcategory: [
+            { showlink: 'Dashboard', routerLink: '/home/dashboard/consent-preference', icon: 'bar-chart-2',indexid:5,navmenuid:22 },
+            { showlink: 'Consent Records', routerLink: '/consent-solutions/consent-records', icon: 'fas fa-tasks feather-16',indexid:5,navmenuid:21 },
+            { showlink: 'Setup', routerLink: '/consent-solutions/setup', icon: 'fas fa-wrench feather-16',indexid:5,navmenuid:20 },
+          ]
+        }];
+      this.userService.setSidemenulist(this.currentClickedMenuItem);
+    } else {
+      this.userService.removeSidemenulist();
+      this.showSidemenu = false;
+      this.userService.isSideMenuVisible = this.showSidemenu;
+      this.currentClickedMenuItem = [];
+      this.userService.isSideMenuClicked = false;
+    }
+  }
+
+  checkSideMenuarrowClick($event){
+      this.userService.isSideMenuClicked = $event;
+  }
+
+  ngOnDestroy(){
+    //temporary commented
+    // if(this.orgservice.isPropertyUpdated !== undefined){
+    //   this.orgservice.isPropertyUpdated.unsubscribe();
+    // }
   }
 
 }

@@ -126,6 +126,21 @@ i {
   color: #7987a1;
   white-space: nowrap;
 }
+.dropdown-headers {
+  display: block;
+  // padding: 5px 18px 12px 18px;
+  // padding: 10px 18px 10px 18px;
+  text-transform: uppercase;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .5px;
+  // margin: 0 -25px;
+  color: #1b2e4b;
+  border-bottom: 1px solid rgba(72, 94, 144, 0.16);
+  font-size: 0.76562rem;
+  color: #7987a1;
+  white-space: nowrap;
+}
 
 .dropdown-menu{
   font-size: 0.9rem;
@@ -570,6 +585,40 @@ div#collapsibleNavbar ul.navbar-nav {
 .bluecolor {
   color: #0168fa;
 }
+
+#footer {
+  position: fixed;
+  padding: 10px 10px 0px 10px;
+  bottom: 18px;
+  width: 96%;
+  /* Height of the footer*/ 
+  height: 40px;
+  background:white;
+}
+
+
+.linked:hover{
+  background-color:#d6d4d4;
+}
+
+.has-search .form-control {
+  padding-left: 2.275rem;
+}
+
+
+
+.has-search .form-control-feedback {
+  position: absolute;
+  z-index: 2;
+  display: block;
+  width: 2.375rem;
+  height: 2.375rem;
+  line-height: 2.375rem;
+  text-align: center;
+  pointer-events: none;
+  color: #aaa;
+}
+
 
 #divSidenav .df-logo span {
   font-size: 20px;
@@ -1121,6 +1170,38 @@ a.nav-link.dropdown-link span.rounded-circle {
 }
 
 .highlightmenu-element {
-  border:2px solid #0148ae;
-  color:#0148ae;
+  border: 1px solid #0148ae;
+  color: #0148ae;
+  border-radius: 5px;
+  box-shadow: 0px 0px 3px #0148ae
+}
+
+
+.btn-qs-white-hightlight{
+  border: 1px solid #ffffff;
+  box-shadow: 0px 0px 5px #ffffff;
+}
+
+.fontsize-16{
+  font-size: 16px;
+}
+
+.webformicon{
+  display: flex;
+}
+
+.webformicon:hover {
+  color:#0168fa;
+}
+
+.webform-icon {
+  background: url('../../../../assets/imgs/webform-icon.svg') no-repeat;
+  display: inline-block;
+  margin-right: 15px;
+  padding-left: 30px;
+  color:#333333;
+}
+
+.webform-icon:hover {
+  filter: invert(23%) sepia(100%) saturate(2212%) hue-rotate(208deg) brightness(102%) contrast(110%);
 }

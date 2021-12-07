@@ -1,7 +1,8 @@
-<div (window:resize)="onWindowResize($event)"  *ngIf="currentUser">
-    <div class="quickstart-wrapper" [@slideInOut]="showQuickStartMenu ? true : false">
+<div *ngIf="!enablequickstartfromtopmenu">
+<div (window:resize)="onWindowResize($event)" *ngIf="currentUser">
+    <div class="quickstart-wrapper" cdkDragBoundary=".height-100" [@slideInOut]="showQuickStartMenu ? true : false" cdkDrag>
         <button class="quickclosebtn" (click)="onCloseQuickstart($event)">&times;</button>
-        <accordion [isAnimated]="true" [closeOthers]="true" >
+        <accordion [isAnimated]="true" [closeOthers]="true">
             <accordion-group *ngFor="let datalist of quickStartMenuList" heading="{{datalist.indextext}}"
                 [panelClass]="customClass" [isOpen]="datalist.index == currenttabindex">
                 <ul class="link-list">
@@ -9,7 +10,8 @@
                         <span *ngIf="pagelinks.linkid == 3">
                             <a class="nav-link" routerLinkActive="active"
                                 (click)="onClickQSLinkForProperty(datalist.index,pagelinks)">
-                                <span class="checkedlink" *ngIf="pagelinks.isactualbtnclicked else linkNotvisited"><i
+                                <span class="checkedlink"
+                                    *ngIf="pagelinks.isactualbtnclicked else linkNotvisited"><i
                                         class="fa fa-check-circle pr-2" aria-hidden="true"></i></span>
                                 <ng-template #linkNotvisited>
                                     <span class="uncheckedlink"><i class="fa fa-check-circle pr-2"
@@ -19,9 +21,10 @@
                             </a>
                         </span>
                         <span *ngIf="pagelinks.linkid !== 9 && pagelinks.linkid !== 3; else linkfour">
-                            <a class="nav-link" routerLinkActive="active" 
+                            <a class="nav-link" routerLinkActive="active"
                                 (click)="onClickQuickStartlink(datalist.index,pagelinks)">
-                                <span class="checkedlink" *ngIf="pagelinks.isactualbtnclicked else linkNotvisited"><i
+                                <span class="checkedlink"
+                                    *ngIf="pagelinks.isactualbtnclicked else linkNotvisited"><i
                                         class="fa fa-check-circle pr-2" aria-hidden="true"></i></span>
                                 <ng-template #linkNotvisited>
                                     <span class="uncheckedlink"><i class="fa fa-check-circle pr-2"
@@ -47,10 +50,21 @@
 
             </accordion-group>
         </accordion>
-        <div><button type="button" (click)="dismissQuickStartMenu()" class="btn btn-link">Dismiss quick start</button>
+        <div class="dismiss-top-border">
+            <div class="qsm-btm-draghandle" tooltip="Drag" cdkDragHandle>
+                <svg width="24px" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M10 9h4V6h3l-5-5-5 5h3v3zm-1 1H6V7l-5 5 5 5v-3h3v-4zm14 2l-5-5v3h-3v4h3v3l5-5zm-9 3h-4v3H7l5 5 5-5h-3v-3z"></path>
+                  <path d="M0 0h24v24H0z" fill="none"></path>
+                </svg>
+            </div>
+            <button type="button" (click)="dismissQuickStartMenu()" class="btn btn-link">Dismiss Quick Start</button>
         </div>
 
     </div>
-    <button type="button" *ngIf="!ishideQsbtn" (click)="onClickQuickStartBtn()" class="btn btn-primary btn-sm quickstart-btn">Quick
-        Start</button>
+    <button type="button" *ngIf="!enablequickstartfromtopmenu" (click)="onClickQuickStartBtn()" class="btn btn-primary btn-sm quickstart-btn">
+    <img src="assets/imgs/rocket-icon.svg" class="qs-arrow-icon"/> Quick Start</button>
+</div>
+</div>
+<div class="col-sm-3 mr-0 float-right flotingdiv" [ngClass]="{'hideqsmalert':!isOpenalertMsg}">
+    <alert *ngIf="isOpenalertMsg" [type]="alertType"  dismissOnTimeout="5000" [dismissible]="dismissible" (onClosed)="onClosed(alertMsg)">{{alertMsg}}</alert>
 </div>

@@ -9,11 +9,12 @@ import { LicenseguardPropertyService } from './_services/licenseguardproperty.se
 import { LicenseGuardConsentPreferenceService } from './_services/licenseguardconsentpreference.service';
 
 const routes: Routes = [
-  {path :'signout',loadChildren : () => import('./signout-page/signout-page.module').then(m => m.SignoutPageModule)},
+  {path : 'signout',loadChildren : () => import('./signout-page/signout-page.module').then(m => m.SignoutPageModule)},
 
   { path: 'login', loadChildren: () => import('./login/login.module').then(m => m.LoginModule) },
   { path: 'register', loadChildren: () => import('./register/register.module').then(m => m.RegisterModule) },
   {path : 'signup' , loadChildren : () => import('./twostepregister/twostepregister.module').then(m => m.TwostepregisterModule)},
+  { path: 'invited-user-verify-email/:id', loadChildren: () => import('./invited-user-verify/invited-user-verify.module').then(m => m.InvitedUserVerifyModule) },
   { path: 'forgot-password', loadChildren: () => import('./forgotpassword/forgotpassword.module').then(m => m.ForgotpasswordModule) },
   // { path: 'privacypolicy', component: PrivacypolicyComponent },
   // { path: 'partners', component: PartnersComponent },
@@ -46,7 +47,7 @@ const routes: Routes = [
   //   loadChildren: () => import('./privacy/dsar/dsar-requestdetails/dsar-requestdetails.module').then(m => m.DsarRequestdetailsModule)
   // },
   {
-    path: 'privacy/dsar/requests-details/:reqid/:companyid/:orgid/:propid',
+    path: 'privacy/dsar/requests-details/:reqid/:companyid/:orgid/:propid/:formID',
     loadChildren: () => import('./privacy/dsar/dsar-requestdetails/dsar-requestdetails.module').then(m => m.DsarRequestdetailsModule)
   },
   { path: 'privacy/dsar/webforms', loadChildren: () => import('./privacy/dsar/webforms/webforms.module').then(m => m.WebformsModule), canActivate: [AuthGuard] },

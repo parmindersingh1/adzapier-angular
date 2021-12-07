@@ -78,6 +78,8 @@ export class OrgpageComponent implements OnInit,AfterViewInit,OnDestroy {
   text = "Add your organization..."
   isRevistedLink:boolean;
   currentLinkID:any;
+  highlightbtn:boolean = false;
+  iswindowclicked;
   constructor(private formBuilder: FormBuilder,
               private orgservice: OrganizationService,
               private modalService: NgbModal, private sanitizer: DomSanitizer,
@@ -93,15 +95,7 @@ export class OrgpageComponent implements OnInit,AfterViewInit,OnDestroy {
    }
 
   ngOnInit() {
-    this.userService.isClickedOnQSMenu.pipe(
-      takeUntil(this.unsubscribeAfterUserAction$)
-
-    ).subscribe((status)=>{
-      this.isorgqsmenu = status.isclicked;
-      this.quickDivID = status.quickstartid;
-      this.actuallinkstatus = status.isactualbtnclicked;
-      
-    });
+    this.showQuickStartTooltip();    
     this.userService.isRevisitedQSMenuLink.subscribe((status) => { this.isRevistedLink = status.reclickqslink; this.currentLinkID = status.quickstartid; });
     
     this.isEditable = false;
@@ -319,19 +313,19 @@ export class OrgpageComponent implements OnInit,AfterViewInit,OnDestroy {
 
 
   organizationModalPopup(content, data) {
-    let quickLinkObj: QuickStart = {
-      linkid: 2,
-      indexid: 1,
-      isactualbtnclicked: true,
-      islinkclicked: true,
-      divguidetext: "addproperty",
-      linkdisplaytext: "Add Organization",
-      link: "/settings/organizations"
-    };
+    if (this.quickDivID !== undefined || this.quickDivID !== "") {
+      let quickLinkObj = {
+        linkid: this.quickDivID,
+        indexid: 1,
+        isactualbtnclicked: true,
+        islinkclicked: true
+      };
 
-    this.quickmenuService.onClickEmitQSLinkobj.next(quickLinkObj);
-    this.quickmenuService.updateQuerymenulist(quickLinkObj);
-    
+      this.quickmenuService.onClickEmitQSLinkobj.next(quickLinkObj);
+      this.quickmenuService.updateQuerymenulist(quickLinkObj);
+    }
+   // this.quickDivID = "";
+   
     if (data !== '') {
       this.myContext = { oid: data.id };
       this.organizationname = data.orgname;
@@ -376,6 +370,8 @@ export class OrgpageComponent implements OnInit,AfterViewInit,OnDestroy {
   }
 
   onResetEditOrganization() {
+    this.userService.onRevistQuickStartmenulink.next({quickstartid:this.quickDivID,reclickqslink:true,urlchanged:false});
+    this.quickDivID = "";
     this.submitted = false;
     this.editOrganisationForm.reset();
     this.modalService.dismissAll('Data Saved!');
@@ -450,8 +446,34 @@ export class OrgpageComponent implements OnInit,AfterViewInit,OnDestroy {
   }
 
   ngAfterViewInit(){
+    this.userService.isRevisitedQSMenuLink.subscribe((status) => { this.isRevistedLink = status.reclickqslink; this.currentLinkID = status.quickstartid; this.iswindowclicked = status.urlchanged  });
+   this.showQuickStartTooltip();
    // this.userService.onClickActualBtnByUser.subscribe((status)=> this.isorgqsmenu = status);
     this.cdRef.detectChanges();
+  }
+
+  showQuickStartTooltip(){
+    const a = this.quickmenuService.getQuerymenulist();
+
+    this.quickmenuService.onClickEmitQSLinkobj.pipe(
+      takeUntil(this.unsubscribeAfterUserAction$)
+    ).subscribe((res) => {
+      if (a.length !== 0) {
+        const idx = a.findIndex((t) => t.index == 1);
+        if (a[idx].quicklinks.some((t) => t.linkid == res.linkid && t.isactualbtnclicked)) {
+          this.quickDivID = res.linkid;
+        } else if(a[idx].quicklinks.some((t) => t.linkid == res.linkid && !t.isactualbtnclicked)) {
+          this.quickDivID = res.linkid; // for revisited link
+        }
+      }
+    });
+    this.unsubscribeAfterUserAction$.next();
+    this.unsubscribeAfterUserAction$.complete();
+  }
+
+  checkForQsTooltip(){
+    this.quickDivID = "";
+    this.userService.onRevistQuickStartmenulink.next({quickstartid:this.quickDivID,reclickqslink:true,urlchanged:true}); 
   }
 
   ngAfterViewChecked(){
@@ -459,16 +481,8 @@ export class OrgpageComponent implements OnInit,AfterViewInit,OnDestroy {
   }
 
   ngOnDestroy(){
-    //this.unsubscribeAfterUserAction$.next();
-    //this.unsubscribeAfterUserAction$.complete();
-    //this.userService.onClickQuickStartmenu.unsubscribe();
-  }
-
-  positionObj(){
-    return {
-      "left": "760px",
-      "top":"120px"
-    }
+    this.quickDivID = "";
+    this.unsubscribeAfterUserAction$.unsubscribe();
 
   }
 

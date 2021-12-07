@@ -98,7 +98,6 @@ export class CookieTrackingComponent implements OnInit {
       label: 'Last Year'
     },
   ];
-  quickDivID;
 
   constructor(private cookieConsentService: CookieTrackingService,
               private  orgservice: OrganizationService,
@@ -124,18 +123,6 @@ export class CookieTrackingComponent implements OnInit {
     this.onGetFilterData();
     this.onCheckSubscription();
     this.bsConfig = Object.assign({}, { containerClass: 'theme-dark-blue', showClearButton: true, returnFocusToInput: true, dateInputFormat: 'yyyy-mm-dd', adaptivePosition : true, showTodayButton: true, ranges: this.ranges });
-    this.quickDivID = 9;
-    let quickLinkObj: QuickStart = {
-      linkid: 9,
-      indexid: 3,
-      isactualbtnclicked: true,
-      islinkclicked: true,
-      divguidetext: "consent-tracking",
-      linkdisplaytext: "Consent Tracking",
-      link: "/cookie-consent/cookie-tracking"
-    };
-    this.quickmenuService.updateQuerymenulist(quickLinkObj);
-    this.quickmenuService.onClickEmitQSLinkobj.next(quickLinkObj);
   }
 
   onCheckSubscription() {

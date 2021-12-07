@@ -78,7 +78,7 @@
           </div>
 
           <div class="text-center">
-            <a routerLink="/settings/billing/manage" (click)="onTemplateHide()" [queryParams]="{oid:queryOID , pid:queryPID}" class="btn mt-3 btn-primary"> <i
+            <a (click)="redirectToManageLicense()" class="btn mt-3 btn-primary txt-white"> <i
               _aria-hidden="true" class="fa fa-cogs pr-1"></i>Manage Subscription</a>
             <p class="cancel-btn mt-2 mb-2" (click)="onTemplateHide()">or Cancel & Go Back</p>
           </div>
@@ -162,21 +162,21 @@
 
           <ng-container *ngIf="noPlanType == 'cookieConsent' && isUserSubscribe">
             <h3 class="font-weight-bold">Cookie Consent Management </h3>
-            <h5> You haven't assigned a license to this property </h5></ng-container>
+            <h5> You haven’t assigned this property to the Cookie Consent subscription  </h5></ng-container>
 
           <ng-container *ngIf="noPlanType == 'org' && isUserSubscribeDsar">
             <h3 class="font-weight-bold">Data Subject Access Request (DSAR) </h3>
-            <h5>You haven't assigned a license to this Organization</h5>
+            <h5>You haven’t assigned this organization to the DSAR subscription</h5>
           </ng-container>
 
           <ng-container *ngIf="noPlanType == 'consentPreference' && isUserSubscribeConsent">
             <h3 class="font-weight-bold">Consent Preference </h3>
-            <h5>You haven't assigned a license to this Property</h5>
+            <h5>You haven’t assigned this property to the Consent Preference subscription </h5>
           </ng-container>
 
           <h4 *ngIf="noPlanType == 'company' && isUserSubscribe">You can not add more users, Please Upgrade your existing plan </h4>
 
-          <ng-container class="mb-4" *ngIf="!isUserSubscribe || !isUserSubscribeDsar ">
+          <ng-container class="mb-4" *ngIf="!isUserSubscribe || !isUserSubscribeDsar || !isUserSubscribeConsent">
             <div id="cookieConsent" *ngIf="noPlanType == 'cookieConsent' && !isUserSubscribe">
               <h3 class="font-weight-bold" >Cookie Consent Management </h3>
               <h5> You don't have an active plan, please choose a new plan below </h5>
