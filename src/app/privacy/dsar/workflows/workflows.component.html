@@ -142,6 +142,7 @@
                         Select Workflow</label>
                     <select class="form-control" formControlName="workflowselection" (change)="onWorkflowChange($event)"
                         [ngClass]="{ 'is-invalid': submitted && addWorkflow.workflowselection.errors }">
+                      <option value="" selected>-- Select Workflow --</option>
                         <ng-container *ngFor="let opt of activeWorkflowList">
                             <option *ngIf="opt.workflow_status=='active'" [value]="opt.id">
                                 {{ opt.workflow_name }}
