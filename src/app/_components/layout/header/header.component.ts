@@ -909,14 +909,15 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
           //  this.loading.start('1');
             this.loadPropertyPlanDetails(obj);
             //this.orgservice.setCurrentOrgWithProperty(obj); // three
-            if (this.location.path().indexOf("signup") !== -1) {
-              this.currentUser = null;
-              this.authService.logout();
-              localStorage.removeItem('currentUser');
-              localStorage.clear();
-              const a = this.location.path().split("?id=");
-              this.router.navigate([a[0]], { queryParams: { id: a[1] } });
-            } else if (this.location.path().indexOf("type=manage") == -1 && this.location.path().indexOf("manage?success") == -1) {
+            // if (this.location.path().indexOf("signup") !== -1) {
+            //   this.currentUser = null;
+            //   this.authService.logout();
+            //   localStorage.removeItem('currentUser');
+            //   localStorage.clear();
+            //   const a = this.location.path().split("?id=");
+            //   this.router.navigate([a[0]], { queryParams: { id: a[1] } });
+            // }
+            if (this.location.path().indexOf("type=manage") == -1 && this.location.path().indexOf("manage?success") == -1) {
               this.router.navigate([this.router.url], { queryParams: { oid: obj.organization_id, pid: obj.property_id }, queryParamsHandling: 'merge', skipLocationChange: false });
             } else {
               this.router.navigate(['/settings/billing/manage'], { queryParams: { oid: obj.organization_id, pid: obj.property_id }, queryParamsHandling: 'merge', skipLocationChange: false });
