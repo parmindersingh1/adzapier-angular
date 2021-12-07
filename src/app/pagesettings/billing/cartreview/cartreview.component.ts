@@ -147,7 +147,7 @@ export class CartreviewComponent implements OnInit {
    }
 
    onApplyCoupon() {
-     if(this.promoCode.length !== ''){
+     if(this.promoCode){
     this.loading.start();
     this.billingService.coupon(this.promoCode, this.constructor.name, moduleName.pricingModule).subscribe((res: any) => {
       this.loading.stop();
