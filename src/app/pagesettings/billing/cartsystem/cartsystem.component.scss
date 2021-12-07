@@ -82,6 +82,10 @@
     overflow-y: auto;
   }
 
+  .hide {
+    display: none;
+  }
+
   #spinner {
     -webkit-animation: frames 1s infinite linear;
     animation: frames 2s infinite linear;
