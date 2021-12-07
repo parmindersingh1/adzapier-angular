@@ -13,18 +13,16 @@
           <div class="ccpa-purpose" *ngIf="preferenceStep === 1">
               <p class="tx-11 pt-3">{{formData.PreferencePurposeCcpaAndGenericDescriptionText}}</p>
               <ng-container *ngFor="let purpose of purposesList; let i = index">
-              <div class="card-body purpose-body" [ngStyle]="{'background': formData.PreferencePurposeBackgroundColor, 'color': formData.PreferencePurposeTextColor}" >
+                <ng-container *ngIf="purpose.id === '101'">
+                <div class="card-body purpose-body" [ngStyle]="{'background': formData.PreferencePurposeBackgroundColor, 'color': formData.PreferencePurposeTextColor}" >
                 <div class="row m-0">
-                    <div class="col-md-9 purpose-text" [ngStyle]="{ 'color': formData.PreferencePurposeTextColor}"  (click)="onShowDesc(purpose.id)">
+                    <div class="col-md-8 purpose-text" [ngStyle]="{ 'color': formData.PreferencePurposeTextColor}"  (click)="onShowDesc(purpose.id)">
                      {{purpose.title}}
                     </div>
-                    <div class="col-md-3">
-                      <label class="switch mb-2 mt-2">
-                        <input type="checkbox"  (change)="onSelectSwitch(i, $event)" checked>
-                        <span [ngStyle]="{background: switchButton.includes(i) ? formData.PreferenceSwitchColor: ''}"
-                              class="slider round"></span>
-                      </label>
-<!--                      <p-inputSwitch styleClass="background: red"></p-inputSwitch>-->
+                  <div class="col-md-3 text-right">
+                    Always allow
+                  </div>
+                  <div class="col-md-1">
                     <span (click)="onShowDesc(purpose.id)" class="float-right tx-18"><i class="fas fa-chevron-right"></i></span>
                   </div>
                 </div>
@@ -32,6 +30,28 @@
                 <div clas="card-body" *ngIf="currentPurposeID === purpose.id">
                   <p class="tx-11 mt-2 p-2">{{purpose.description}}</p>
                 </div>
+                </ng-container>
+                <ng-container *ngIf="purpose.id !== '101'">
+                  <div class="card-body purpose-body" [ngStyle]="{'background': formData.PreferencePurposeBackgroundColor, 'color': formData.PreferencePurposeTextColor}" >
+                    <div class="row m-0">
+                      <div class="col-md-9 purpose-text" [ngStyle]="{ 'color': formData.PreferencePurposeTextColor}"  (click)="onShowDesc(purpose.id)">
+                        {{purpose.title}}
+                      </div>
+                      <div class="col-md-3">
+                        <label class="switch mb-2 mt-2">
+                          <input type="checkbox"  (change)="onSelectSwitch(i, $event)" checked>
+                          <span [ngStyle]="{background: switchButton.includes(i) ? formData.PreferenceSwitchColor: ''}"
+                                class="slider round"></span>
+                        </label>
+                        <!--                      <p-inputSwitch styleClass="background: red"></p-inputSwitch>-->
+                        <span (click)="onShowDesc(purpose.id)" class="float-right tx-18"><i class="fas fa-chevron-right"></i></span>
+                      </div>
+                    </div>
+                  </div>
+                  <div clas="card-body" *ngIf="currentPurposeID === purpose.id">
+                    <p class="tx-11 mt-2 p-2">{{purpose.description}}</p>
+                  </div>
+                </ng-container>
               </ng-container>
           </div>
           <div class="ccpa-privacy" *ngIf="preferenceStep === 2">
@@ -83,17 +103,16 @@
         <div class="generic-purpose" *ngIf="preferenceStep === 1">
             <p class="tx-11 pt-2">{{formData.PreferencePurposeCcpaAndGenericDescriptionText}}</p>
             <ng-container *ngFor="let purpose of purposesList; let i =index">
+              <ng-container *ngIf="purpose.id === '101'">
               <div class="card-body purpose-body" [ngStyle]="{'background': formData.PreferencePurposeBackgroundColor, 'color': formData.PreferencePurposeTextColor}" >
                 <div class="row m-0">
-                  <div class="col-md-9 purpose-text"  [ngStyle]="{ 'color': formData.PreferencePurposeTextColor}"  (click)="onShowDesc(purpose.id)">
+                  <div class="col-md-8 purpose-text"  [ngStyle]="{ 'color': formData.PreferencePurposeTextColor}"  (click)="onShowDesc(purpose.id)">
                     {{purpose.title}}
                   </div>
-                  <div class="col-md-3">
-                    <label class="switch mb-2 mt-2">
-                      <input type="checkbox"  (change)="onSelectSwitch(i, $event)" checked>
-                      <span [ngStyle]="{background: switchButton.includes(i) ? formData.PreferenceSwitchColor: ''}"
-                            class="slider round"></span>
-                    </label>
+                  <div class="col-md-3 text-right">
+                    Always allow
+                  </div>
+                  <div class="col-md-1">
                     <span (click)="onShowDesc(purpose.id)" class="float-right tx-18"><i class="fas fa-chevron-right"></i></span>
                   </div>
                 </div>
@@ -101,6 +120,28 @@
               <div clas="card-body" *ngIf="currentPurposeID === purpose.id">
                 <p class="tx-11 mt-2 p-2">{{purpose.description}}</p>
               </div>
+              </ng-container>
+
+              <ng-container *ngIf="purpose.id !== '101'">
+                <div class="card-body purpose-body" [ngStyle]="{'background': formData.PreferencePurposeBackgroundColor, 'color': formData.PreferencePurposeTextColor}" >
+                  <div class="row m-0">
+                    <div class="col-md-9 purpose-text"  [ngStyle]="{ 'color': formData.PreferencePurposeTextColor}"  (click)="onShowDesc(purpose.id)">
+                      {{purpose.title}}
+                    </div>
+                    <div class="col-md-3">
+                      <label class="switch mb-2 mt-2">
+                        <input type="checkbox"  (change)="onSelectSwitch(i, $event)" checked>
+                        <span [ngStyle]="{background: switchButton.includes(i) ? formData.PreferenceSwitchColor: ''}"
+                              class="slider round"></span>
+                      </label>
+                      <span (click)="onShowDesc(purpose.id)" class="float-right tx-18"><i class="fas fa-chevron-right"></i></span>
+                    </div>
+                  </div>
+                </div>
+                <div clas="card-body" *ngIf="currentPurposeID === purpose.id">
+                  <p class="tx-11 mt-2 p-2">{{purpose.description}}</p>
+                </div>
+              </ng-container>
             </ng-container>
         </div>
         <div class="generic-privacy" *ngIf="preferenceStep === 2">
@@ -153,7 +194,27 @@
         <div class="purpose" *ngIf="preferenceStep === 1">
             <p class="tx-11 pt-2">{{formData.PreferencePurposeGdprDescriptionText}}</p>
             <ng-container *ngFor="let purpose of purposesList; let i = index">
+            <ng-container  *ngIf="purpose.id === '101'">
               <div class="card-body purpose-body"  [ngStyle]="{'background': formData.PreferencePurposeBackgroundColor, 'color': formData.PreferencePurposeTextColor}" >
+                <div class="row m-0">
+                  <div class="col-md-8 purpose-text"   [ngStyle]="{ 'color': formData.PreferencePurposeTextColor}"  (click)="onShowDesc(purpose.id)">
+                    {{purpose.title}}
+                  </div>
+                  <div class="col-md-3 text-right">
+                      Always allow
+                  </div>
+                  <div class="col-md-1">
+                    <span (click)="onShowDesc(purpose.id)" class="float-right tx-18"><i class="fas fa-chevron-right"></i></span>
+                  </div>
+                </div>
+              </div>
+              <div claas="card-body" *ngIf="currentPurposeID === purpose.id">
+                <p class="tx-11 mt-2 p-2">{{purpose.description}}</p>
+              </div>
+            </ng-container>
+
+            <ng-container  *ngIf="purpose.id !== '101'">
+              <div class="card-body purpose-body" [ngStyle]="{'background': formData.PreferencePurposeBackgroundColor, 'color': formData.PreferencePurposeTextColor}" >
                 <div class="row m-0">
                   <div class="col-md-9 purpose-text"   [ngStyle]="{ 'color': formData.PreferencePurposeTextColor}"  (click)="onShowDesc(purpose.id)">
                     {{purpose.title}}
@@ -171,6 +232,7 @@
               <div clas="card-body" *ngIf="currentPurposeID === purpose.id">
                 <p class="tx-11 mt-2 p-2">{{purpose.description}}</p>
               </div>
+            </ng-container>
             </ng-container>
 
             <ng-container *ngFor="let purpose of gdprPurposeList; let i = index">

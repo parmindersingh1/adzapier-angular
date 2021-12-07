@@ -71,7 +71,7 @@
          <!-- {{queryOID}}  | {{queryPID}} -->
       <ul class="dropdown-menu propMenu" [ngStyle]="addColumncount()"> <!--[ngStyle]="addColumncount()"-->
           <li role="menuitem" *ngFor="let item of orgPropertyMenu; first as isFirst; let i = index;">
-            <a class="dropdown-item" title="{{item.orgname}}" routerLink="/settings/organizations/details/{{item.id}}" (click)="goto('settings/organizations/details',item.id)">
+            <a class="dropdown-item" title="{{item.orgname}}" routerLink="/settings/organizations/details/{{item.id}}" [queryParams]="{oid:queryOID , pid:queryPID}" (click)="goto('settings/organizations/details',item.id,queryOID,queryPID)">
              <span [ngClass]="[isOrgSelected(item) ? 'active' : '']">{{item.orgname}}</span>
              
              <span class="align-right width50"><i-feather class="feather-plus" name="plus"></i-feather>
@@ -167,10 +167,21 @@
       </li>
     </ul>
     <div>
-      <button (click)="btnTopAddSubscription()"  [ngClass]="quickDivIDSub == 4 && revisitedQuicklinnkid == quickDivIDSub && !isUserClickedNotRelatedToTooltip ? 'btn-qs-white-hightlight' : ''" class="primary-yellow">Add A Subscription</button>
+      <button (click)="btnTopAddSubscription()"  [ngClass]="quickDivIDSub == 4 && revisitedQuicklinnkid == quickDivIDSub && !isUserClickedNotRelatedToTooltip ? 'btn-qs-white-hightlight' : ''" class="primary-yellow">Add a Subscription</button>
     </div>
   </div>
+  
   <!--end of general menu after login-->
+  <div class="navbar-right" *ngIf="currentUser" dropdown [insideClick]="true" style="margin-left: 17px;">
+    <div class="responsive-notification">
+
+    <span  class="notification-number" style="background-color: white;color: black;">{{count}}</span> <!--[ngClass]="{'hide-notification-number':notificationsNumber == '0'}"-->
+    <a  class="nav-link dropdown-link p-0" routerLink="/settings/billing/cart" [queryParams]="{oid:queryOID , pid:queryPID}"  dropdownToggle>
+      <i-feather name="shopping-cart"  class="feather-20 tx-white"></i-feather>
+
+    </a>
+    </div>
+    </div>
   <!--Help center after login-->
   <div class="navbar-right" *ngIf="currentUser"  dropdown [insideClick]="true">
   <a (click)="clicktext()"  class="nav-link dropdown-link mr-3" title="Help Center" dropdownToggle>
@@ -281,16 +292,7 @@
     </li>
   </ul>
     </div>
-    <div class="navbar-right" *ngIf="currentUser" dropdown [insideClick]="true" style="margin-right: 17px;">
-      <div class="responsive-notification">
-  
-      <span  class="notification-number" style="background-color: white;color: black;">{{count}}</span> <!--[ngClass]="{'hide-notification-number':notificationsNumber == '0'}"-->
-      <a  class="nav-link dropdown-link p-0" routerLink="/settings/billing/cart" [queryParams]="{oid:queryOID , pid:queryPID}"  dropdownToggle>
-        <i-feather name="shopping-cart"  class="feather-20 tx-white"></i-feather>
-
-      </a>
-      </div>
-      </div>
+    
     
   <!--Help center after login ends-->
   <!--notification after login-->

@@ -88,7 +88,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     private alertService: AlertService,
     private orgservice: OrganizationService,
     private loadingBar: NgxUiLoaderService,
-    private userService: UserService
+    private userService: UserService,
+    private authService: AuthenticationService
   ) {
     if (this.authenticationService.currentUserValue) {
       this.router.navigate(['/']);
@@ -111,7 +112,8 @@ export class LoginComponent implements OnInit, OnDestroy {
       emailid: ['', [Validators.required, Validators.pattern]]
     });
     this.authenticationService.userEmailVerificationStatus.subscribe((data) => this.isInvitedUserVerified = data);
-    this.setTimer();
+    //this.setTimer();
+    this.clearPreviousLoginDetails();
   }
 
   ngOnDestroy() {
@@ -272,4 +274,16 @@ export class LoginComponent implements OnInit, OnDestroy {
       this.hideMessage = true;
     })
   }
+
+  clearPreviousLoginDetails() {
+    let token = localStorage.getItem('currentUser');
+    if (token == undefined) {
+      this.authService.logout();
+      localStorage.removeItem('currentUser');
+      this.orgservice.removeControls();
+      this.userService.getCurrentUser.unsubscribe();
+      localStorage.clear();
+    }
+  }
+
 }

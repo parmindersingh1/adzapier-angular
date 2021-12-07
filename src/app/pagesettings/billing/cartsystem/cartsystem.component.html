@@ -85,8 +85,8 @@
               </div>
 
               <div>
-                <h4 (click)="onRemoveCartItem(i , cartId)" style="cursor: pointer" class="pt-3 text-danger"><i
-                  class="fa fa-times" aria-hidden="true"></i>
+                <h4 (click)="onRemoveCartItem(i , cartId)"  style="cursor: pointer" class="pt-3 text-danger"><i
+                  class="fa fa-times" title="Remove" aria-hidden="true"></i>
               </h4>
               </div>
             </div>
@@ -204,7 +204,7 @@
 
               <div>
                 <h4 (click)="onRemoveCartItem(i , cartId)" style="cursor: pointer" class="pt-3 text-danger"><i
-                  class="fa fa-times" aria-hidden="true"></i>
+                  class="fa fa-times" title="Remove" aria-hidden="true"></i>
               </h4>
               </div>
             </div>
@@ -333,7 +333,7 @@
 
               <div>
                 <h4 (click)="onRemoveCartItem(i , cartId)" style="cursor: pointer" class="pt-3 text-danger"><i
-                  class="fa fa-times" aria-hidden="true"></i>
+                  class="fa fa-times" title="Remove" aria-hidden="true"></i>
               </h4>
               </div>
             </div>
@@ -462,7 +462,7 @@
 
               <div>
                 <h4 (click)="onRemoveCartItem(i , cartId)" style="cursor: pointer" class="pt-3 text-danger"><i
-                  class="fa fa-times" aria-hidden="true"></i>
+                  class="fa fa-times" title="Remove" aria-hidden="true"></i>
               </h4>
               </div>
             </div>
@@ -546,9 +546,10 @@
 </div>
 </div>
 
+
 <div class="col-sm-5 mr-0 float-right flotingdiv" [ngClass]="{'hide':!isOpen}">
   <alert *ngIf="isOpen" [type]="alertType" dismissOnTimeout="5000" [dismissible]="dismissible"
-    >{{ alertMsg}}</alert>
+    (onClosed)="onClosed(alertMsg)">{{ alertMsg}}</alert>
 </div>
 
           
