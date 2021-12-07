@@ -71,7 +71,7 @@
          <!-- {{queryOID}}  | {{queryPID}} -->
       <ul class="dropdown-menu propMenu" [ngStyle]="addColumncount()"> <!--[ngStyle]="addColumncount()"-->
           <li role="menuitem" *ngFor="let item of orgPropertyMenu; first as isFirst; let i = index;">
-            <a class="dropdown-item" title="{{item.orgname}}" routerLink="/settings/organizations/details/{{item.id}}" (click)="goto('settings/organizations/details',item.id)">
+            <a class="dropdown-item" title="{{item.orgname}}" routerLink="/settings/organizations/details/{{item.id}}" [queryParams]="{oid:queryOID , pid:queryPID}" (click)="goto('settings/organizations/details',item.id,queryOID,queryPID)">
              <span [ngClass]="[isOrgSelected(item) ? 'active' : '']">{{item.orgname}}</span>
              
              <span class="align-right width50"><i-feather class="feather-plus" name="plus"></i-feather>
@@ -167,7 +167,7 @@
       </li>
     </ul>
     <div>
-      <button (click)="btnTopAddSubscription()"  [ngClass]="quickDivIDSub == 4 && revisitedQuicklinnkid == quickDivIDSub && !isUserClickedNotRelatedToTooltip ? 'btn-qs-white-hightlight' : ''" class="primary-yellow">Add A Subscription</button>
+      <button (click)="btnTopAddSubscription()"  [ngClass]="quickDivIDSub == 4 && revisitedQuicklinnkid == quickDivIDSub && !isUserClickedNotRelatedToTooltip ? 'btn-qs-white-hightlight' : ''" class="primary-yellow">Add a Subscription</button>
     </div>
   </div>
   

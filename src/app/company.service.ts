@@ -100,11 +100,11 @@ export class CompanyService {
   resendInvitation(componentName, moduleName, userId, orgID?): Observable<any> {
     let path;
     if(orgID){
-      path = '/invite/user/resend/' + userId + '/' + orgID;
+      path = '/invite/user/resend' + '?user_id=' + userId + '&orgid=' + orgID;
     } else {
-      path = '/invite/user/resend/' + userId;
+      path = '/invite/user/resend' + '?user_id=' + userId;
     }
-    return this.httpClient.get<any>(environment.apiUrl + path, {})
+    return this.httpClient.get<any>(environment.apiUrl + path)
       .pipe(catchError(error => {
         this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.resendInvitation, componentName, moduleName, path);
         return throwError(error);

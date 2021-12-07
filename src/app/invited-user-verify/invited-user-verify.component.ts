@@ -2,8 +2,8 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {moduleName} from '../_constant/module-name.constant';
 import {delay} from 'rxjs/operators';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
-import {UserService} from '../_services';
-import {ActivatedRoute} from '@angular/router';
+import {AuthenticationService, OrganizationService, UserService} from '../_services';
+import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
   selector: 'app-invited-user-verify',
@@ -17,6 +17,9 @@ export class InvitedUserVerifyComponent implements OnInit, OnDestroy {
   constructor(
     private loader: NgxUiLoaderService,
     private userService: UserService,
+    private authService : AuthenticationService,
+    private orgservice : OrganizationService,
+    private router: Router,
     private activateRouter: ActivatedRoute,
   ) { }
 
@@ -45,13 +48,25 @@ export class InvitedUserVerifyComponent implements OnInit, OnDestroy {
         if (data) {
           this.isInvitedUserVerified = true;
           this.message = 'Your email is successfully verified !';
-          //this.router.navigate(['/signup']);
+          this.authService.logout(); 
+          sessionStorage.clear();
+          localStorage.removeItem('currentUser');
+          this.orgservice.removeControls();
+          this.userService.getCurrentUser.unsubscribe();
+          localStorage.clear();
+          setTimeout(()=>{
+            this.router.navigate(['/login']);
+          },1000);
+          
         }
       }, error => {
         this.loader.stop();
 //      this.isUserVarified = false;
         this.message = 'This link has been expired!';
         this.isInvitedUserVerified = false;
+        setTimeout(()=>{
+          this.router.navigate(['/login']);
+        },1000);
         //this.router.navigate(['/verify-email/',this.id]);
       });
   }

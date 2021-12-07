@@ -22,110 +22,157 @@
 <div class="card mt-4 manage-license">
   <div class="card-header row ml-0 mr-0">
     <div class="col-md-7 p-0 align-items">
-    <h4 class="tx-14 tx-uppercase  mb-0 tx-spacing-1 tx-color-02 tx-semibold">Manage Subscriptions</h4>
+      <h4 class="tx-14 mb-0 tx-spacing-1 tx-color-02 tx-semibold">Manage Subscriptions</h4>
     </div>
     <div class="col-md-5 text-right p-0">
-      <a routerLink="/settings/billing/pricing" [queryParams]="{oid:queryOID , pid:queryPID}" (click)="checkForQsTooltip()" class="btn btn-sm btn-outline-secondary btn-uppercase mr-2">
-        <i class="fa fa-plus pr-1"  aria-hidden="true"></i>  Add Subscription</a>
+      <a routerLink="/settings/billing/pricing" [queryParams]="{oid:queryOID , pid:queryPID}"
+         (click)="checkForQsTooltip()" class="btn btn-sm btn-outline-secondary btn-uppercase mr-2"
+         style="text-transform: none;font-size: smaller;">
+        <i class="fa fa-plus pr-1" aria-hidden="true"></i> Add Subscription</a>
 
-      <button *ngIf="activeSubscriptionList.length > 0" (click)="onGenerateSessionID();checkForQsTooltip();" type="button" class="btn btn-sm btn-uppercase btn-outline-secondary" [disabled]="userRole === 'View Only'"> <i class="fa fa-cogs pr-1" aria-hidden="true"></i>
-        Manage Current Subscriptions</button>
+      <button *ngIf="activeSubscriptionList.length > 0" (click)="onGenerateSessionID();checkForQsTooltip();"
+              type="button" class="btn btn-sm btn-uppercase btn-outline-secondary"
+              style="text-transform: none;font-size: smaller;" [disabled]="userRole === 'View Only'"><i
+        class="fa fa-cogs pr-1" aria-hidden="true"></i>
+        Manage Current Subscriptions
+      </button>
     </div>
   </div>
 
   <div class="row">
     <div class="col-md-12">
-      <h4 class="cl-gray text-primary border-bottom tx-16 p-2 pl-3 mb-0">Active Products & Plans</h4>
+      <h4 class="cl-gray text-primary border-bottom tx-16 p-2 pl-3 mb-0">Active Products and Plans</h4>
     </div>
 
   </div>
 
   <div class="card-body border-top-0 p-1 mt-0">
     <ng-container *ngIf="!skLoading">
-    <table class="table mb-0 tx-14">
-      <thead>
-      <tr>
-        <th class="pl-2">Product Name</th>
-        <th>Plan Name</th>
-        <th>Available Subscription</th>
-        <th>Used / Total Subscription</th>
-        <th class="text-left pl-2">Valid Up to</th>
-        <th>Price</th>
-        <th>Pay By</th>
-        <th>Action</th>
-      </tr>
-      </thead>
-      <ng-container *ngIf="activeSubscriptionList.length > 0">
-      <tbody>
-      <tr *ngFor="let plan of activeSubscriptionList">
-        <ng-container *ngIf="plan.active">
-        <td *ngIf="plan.planDetails.level === 'property'"><a class="plan-name" [routerLink]="['/settings/billing/manage/property', plan.id]"
-          [queryParams]="{oid: this.queryOID, pid: this.queryPID }" (click)="checkForQsTooltip()">
-           {{plan.planDetails.product_name}}</a></td>
+      <table class="table mb-0 tx-14">
+        <thead>
+        <tr>
+          <th class="pl-2">Product Name</th>
+          <th>Plan Name</th>
+          <!--        <th>Available Subscription</th>-->
+          <th>Used / Total Subscription</th>
+          <th class="text-left pl-2">Status</th>
+          <th>Price</th>
+          <th>Pay by</th>
+          <th>Action</th>
+        </tr>
+        </thead>
+        <ng-container *ngIf="activeSubscriptionList.length > 0">
+          <tbody>
+          <tr *ngFor="let plan of activeSubscriptionList">
+            <ng-container *ngIf="plan.active">
+              <td *ngIf="plan.planDetails.level === 'property'"><a class="plan-name"
+                                                                   [routerLink]="['/settings/billing/manage/property', plan.id]"
+                                                                   [queryParams]="{oid: this.queryOID, pid: this.queryPID }"
+                                                                   (click)="checkForQsTooltip()">
+                {{plan.planDetails.product_name}}</a></td>
+              <td *ngIf="plan.planDetails.level !== 'property'"><a class="plan-name"
+                                                                   [routerLink]="['/settings/billing/manage/organizations', plan.id]"
+                                                                   [queryParams]="{oid: this.queryOID, pid: this.queryPID }"
+                                                                   (click)="checkForQsTooltip()">
+                {{plan.planDetails.product_name}}</a></td>
 
-           <td *ngIf="plan.planDetails.level !== 'property'"><a class="plan-name" [routerLink]="['/settings/billing/manage/organizations', plan.id]"
-            [queryParams]="{oid: this.queryOID, pid: this.queryPID }" (click)="checkForQsTooltip()">
-             {{plan.planDetails.product_name}}</a></td>
+              <td>{{plan.plan_name}}</td>
+              <td>
+                <div class="row justify-content-center">
+                  <div class="col-md-7 p-0">
+                    <div class="progress mt-1">
+                      <!-- <div class="progress-bar" [ngStyle]="{width:  onCalculateOptValue(plan.assigned_licence, plan.total_licence)+'%'}" style=" background-color: #11188f">
+                      </div>
+                      <div class="progress-bar"  [ngStyle]="{width:  100 - onCalculateOptValue(plan.assigned_licence, plan.total_licence) +'%'}" style="background-color: #3d78d4">
+                      </div> -->
+                      <span class="txt-center-bold"> {{plan.assigned_licence}} / {{plan.total_licence}}</span>
+                      <div class="progress-bar"
+                           [ngStyle]="{width:  onCalculateOptValue(plan.assigned_licence, plan.total_licence)+'%'}">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </td>
+              <td class="validity"><span class="activeplan"><i class="fa fa-check-circle pr-2" aria-hidden="true"></i> Active</span>
+                Renews on  {{plan.planDetails.plan_ends.slice(0, 10)}}</td>
+              <td>{{plan.planDetails.price + '.00 '| currency : 'USD'}}  </td>
+              <th class="d-flex">**** <span class="pr-1">{{plan.planDetails.card_number}}</span>
+
+                <span
+                  *ngIf="plan.planDetails.brand !== 'mastercard' && plan.planDetails.brand !== 'visa' && plan.planDetails.brand !== 'amex'">{{' ' + plan.planDetails.brand}}</span>
+                <img *ngIf="plan.planDetails.brand === 'mastercard'" alt="Credit Card Logos" title="Credit Card Logos"
+                     src="assets/card-logo/mc.png" width="40" height="25" border="0"/>
+                <img *ngIf="plan.planDetails.brand === 'visa'" alt="Credit Card Logos" title="Credit Card Logos"
+                     src="assets/card-logo/visa.gif" width="35" height="16" border="0"/>
+                <img *ngIf="plan.planDetails.brand === 'amex'" alt="Credit Card Logos" title="Credit Card Logos"
+                     src="/assets/card-logo/amex.gif" width="35" height="22" border="0"/>
+
+              </th>
+              <ng-container *ngIf="plan.planDetails.level === 'property'">
+                <td class="text-center" style="width: 482px">
+                  <button pButton type="button" label="Assign Property" (click)="openModal(addProperty, plan)"
+                          style="border-radius: 3px 0px 0px 3px; width: 62%; font-size:11px"
+                          icon="pi pi-plus" class="p-button-warning p-button-sm"></button>
+                  <a class="plan-name" tooltip="Assign or remove subscription to properties"
+                     [routerLink]="['/settings/billing/manage/property', plan.id]"
+                     [queryParams]="{ oid: this.queryOID, pid: this.queryPID}">
+                    <button pButton icon="pi pi-sliders-h" label="Manage"
+                            (click)="userAction(plan.id,quickDivID)"
+                            [ngClass]="quickDivID == 6 && quickDivID == currentLinkID && !iswindowclicked || quickDivID == 19 && quickDivID == currentLinkID && !iswindowclicked ? 'btn-qs-hightlight' : ''"
+                            style="border-radius: 0px 3px 3px 0px;  font-size:11px"
+                            class="action-btn p-button-info manage-btn p-button-sm"></button>
+                  </a>
+                </td>
+              </ng-container>
+
+              <ng-container *ngIf="plan.planDetails.level !== 'property'">
+                <td class="text-center" style="width: 482px">
+                  <button pButton type="button" label="Assign Organization"
+                          (click)="openModalOrg(addOrganization, plan)"
+                          style="border-radius: 3px 0px 0px 3px; width: 62%; font-size:11px"
+                          icon="pi pi-plus" class="p-button-warning p-button-sm"></button>
+                  <a class="plan-name" tooltip="Assign or remove subscription to properties"
+                     [routerLink]="['/settings/billing/manage/organizations', plan.id]"
+                     [queryParams]="{ oid: this.queryOID, pid: this.queryPID}">
+                    <button pButton icon="pi pi-sliders-h" label="Manage"
+                            style="border-radius: 0px 3px 3px 0px;  font-size:11px"
+                            (click)="userActionForOrg(plan.id,quickDivID)"
+                            [ngClass]="quickDivID == 12 && quickDivID == currentLinkID && !iswindowclicked ? 'btn-qs-hightlight' : ''"
+                            class="action-btn p-button-info manage-btn p-button-sm"></button>
+                  </a>
+                </td>
+              </ng-container>
 
 
-           <td>{{plan.plan_name}}</td>
-        <td class="text-center">{{ plan.total_licence - plan.assigned_licence}} </td>
-        <td>
-          <div class="row justify-content-center">
-            <div class="col-md-7 p-0">
-            <div class="progress mt-1">
-            <!-- <div class="progress-bar" [ngStyle]="{width:  onCalculateOptValue(plan.assigned_licence, plan.total_licence)+'%'}" style=" background-color: #11188f">
-            </div>
-            <div class="progress-bar"  [ngStyle]="{width:  100 - onCalculateOptValue(plan.assigned_licence, plan.total_licence) +'%'}" style="background-color: #3d78d4">
-            </div> -->
-            <span class="txt-center-bold"> {{plan.assigned_licence}} / {{plan.total_licence}}</span>
-            <div class="progress-bar" [ngStyle]="{width:  onCalculateOptValue(plan.assigned_licence, plan.total_licence)+'%'}">
-            </div>
-          </div>
-        </div>
-        </div>
+              <!-- <td style="width: 290px" *ngIf="plan.planDetails.level === 'property'">
+                <a class="plan-name" (click)="userAction(plan.id,quickDivID)">
+                  <button pButton label="Assign Property"  [ngClass]="quickDivID == 6 && quickDivID == currentLinkID && !iswindowclicked || quickDivID == 19 && quickDivID == currentLinkID && !iswindowclicked ? 'btn-qs-hightlight' : ''" class="w-100 p-button-secondary manage-btn"></button></a></td>
 
-        </td>
-        <td class="validity"><span class="activeplan"><i class="fa fa-check-circle pr-2" aria-hidden="true"></i> Active</span>
-          Renews on  {{plan.planDetails.plan_ends.slice(0, 10)}}</td>
-        <td>{{plan.planDetails.price + '.00 '| currency : 'USD'}}  </td>
-        <th class="d-flex">**** <span class="pr-1">{{plan.planDetails.card_number}}</span>
-
-          <span *ngIf="plan.planDetails.brand !== 'mastercard' && plan.planDetails.brand !== 'visa' && plan.planDetails.brand !== 'amex'">{{' ' + plan.planDetails.brand}}</span>
-          <img *ngIf="plan.planDetails.brand === 'mastercard'" alt="Credit Card Logos" title="Credit Card Logos" src="assets/card-logo/mc.png" width="40" height="25" border="0" />
-          <img *ngIf="plan.planDetails.brand === 'visa'" alt="Credit Card Logos" title="Credit Card Logos" src="assets/card-logo/visa.gif" width="35" height="16" border="0" />
-          <img *ngIf="plan.planDetails.brand === 'amex'" alt="Credit Card Logos" title="Credit Card Logos" src="/assets/card-logo/amex.gif" width="35" height="22" border="0" />
-
-        </th>
-          <td style="width: 290px" *ngIf="plan.planDetails.level === 'property'">
-            <a class="plan-name" (click)="userAction(plan.id,quickDivID)">
-              <button pButton label="Assign Property"  [ngClass]="quickDivID == 6 && quickDivID == currentLinkID && !iswindowclicked || quickDivID == 19 && quickDivID == currentLinkID && !iswindowclicked ? 'btn-qs-hightlight' : ''" class="w-100 p-button-secondary manage-btn"></button></a></td>
-
-          <td style="width: 290px" *ngIf="plan.planDetails.level !== 'property'">
-            <a class="plan-name" (click)="userActionForOrg(plan.id,quickDivID)">
-            <button pButton label="Assign Organization" [ngClass]="quickDivID == 12 && quickDivID == currentLinkID && !iswindowclicked ? 'btn-qs-hightlight' : ''" class="w-100 p-button-secondary manage-btn"></button></a></td>
+              <td style="width: 290px" *ngIf="plan.planDetails.level !== 'property'">
+                <a class="plan-name" (click)="userActionForOrg(plan.id,quickDivID)">
+                <button pButton label="Assign Organization" [ngClass]="quickDivID == 12 && quickDivID == currentLinkID && !iswindowclicked ? 'btn-qs-hightlight' : ''" class="w-100 p-button-secondary manage-btn"></button></a></td> -->
 
 
+            </ng-container>
+          </tr>
+          </tbody>
         </ng-container>
-      </tr>
-    </tbody>
-</ng-container>
-    </table>
-    <ng-container *ngIf="activeSubscriptionList.length == 0">
-      <div class="alert cs-alert w-100 alert-info">You don't have any active plan</div>
+      </table>
+      <ng-container *ngIf="activeSubscriptionList.length == 0">
+        <div class="alert cs-alert w-100 alert-info">You don't have any active plan</div>
       </ng-container>
-      </ng-container>
-      <ngx-skeleton-loader  *ngIf="skLoading" count="6" class="pt-4"></ngx-skeleton-loader>
+    </ng-container>
+    <ngx-skeleton-loader *ngIf="skLoading" count="6" class="pt-4"></ngx-skeleton-loader>
 
   </div>
 </div>
 
 
-
 <div class="card mt-4 manage-license">
   <div class="card-header row ml-0 mr-0">
     <div class="col-md-7 p-0 align-items">
-    <h4 class="tx-14 tx-uppercase  mb-0 tx-spacing-1 tx-color-02 tx-semibold">Expired Products & Plans</h4>
+      <h4 class="tx-14 tx-uppercase  mb-0 tx-spacing-1 tx-color-02 tx-semibold" style="text-transform: none;">Expired
+        Products and Plans</h4>
     </div>
   </div>
   <div class="card-body border-top-0 p-1 mt-0">
@@ -135,43 +182,123 @@
         <tr>
           <th class="pl-2">Product Name</th>
           <th>Plan Name</th>
-<!--          <th>Available Licenses</th>-->
-<!--          <th>Used / Total Licenses</th>-->
-          <th class="text-left pl-2">Valid Up to</th>
+          <!--          <th>Available Licenses</th>-->
+          <!--          <th>Used / Total Licenses</th>-->
+          <th class="text-left pl-2">Status</th>
           <th>Price</th>
-          <th>Pay By</th>
+          <th>Pay by</th>
         </tr>
         </thead>
         <ng-container *ngIf="inActiveplans.length > 0">
-        <tbody>
-        <tr *ngFor="let plan of inActiveplans">
-          <td>   <b> {{plan.planDetails.product_name}}</b></td>
+          <tbody>
+          <tr *ngFor="let plan of inActiveplans">
+            <td><b> {{plan.planDetails.product_name}}</b></td>
 
 
-             <td style="width: 200px">{{plan.plan_name}}</td>
-          <td style="width: 270px"><span class="inactiveplan"> <i class="fa fa-times-circle pr-2" aria-hidden="true"></i>Inactive</span> Expired on {{plan.planDetails.plan_ends.slice(0, 10)}}</td>
-          <td>{{plan.planDetails.price + '.00 '| currency : 'USD'}}  </td>
-          <th style="text-transform: capitalize;display: flex;">**** <span class="pr-1">{{plan.planDetails.card_number}}</span>
+            <td style="width: 200px">{{plan.plan_name}}</td>
+            <td style="width: 270px"><span class="inactiveplan"> <i class="fa fa-times-circle pr-2"
+                                                                    aria-hidden="true"></i>Inactive</span> Expired
+              on {{plan.planDetails.plan_ends.slice(0, 10)}}</td>
+            <td>{{plan.planDetails.price + '.00 '| currency : 'USD'}}  </td>
+            <th style="text-transform: capitalize;display: flex;">**** <span
+              class="pr-1">{{plan.planDetails.card_number}}</span>
 
-            <span *ngIf="plan.planDetails.brand !== 'mastercard' && plan.planDetails.brand !== 'visa' && plan.planDetails.brand !== 'amex'">{{ ' ' + plan.planDetails.brand}}</span>
-            <img *ngIf="plan.planDetails.brand === 'mastercard'" alt="Credit Card Logos" title="Credit Card Logos" src="assets/card-logo/mc.png" width="40" height="25" border="0" />
-            <img *ngIf="plan.planDetails.brand === 'visa'" alt="Credit Card Logos" title="Credit Card Logos" src="assets/card-logo/visa.gif" width="35" height="16" border="0" />
-            <img *ngIf="plan.planDetails.brand === 'amex'" alt="Credit Card Logos" title="Credit Card Logos" src="/assets/card-logo/amex.gif" width="35" height="22" border="0" />
+              <span
+                *ngIf="plan.planDetails.brand !== 'mastercard' && plan.planDetails.brand !== 'visa' && plan.planDetails.brand !== 'amex'">{{ ' ' + plan.planDetails.brand}}</span>
+              <img *ngIf="plan.planDetails.brand === 'mastercard'" alt="Credit Card Logos" title="Credit Card Logos"
+                   src="assets/card-logo/mc.png" width="40" height="25" border="0"/>
+              <img *ngIf="plan.planDetails.brand === 'visa'" alt="Credit Card Logos" title="Credit Card Logos"
+                   src="assets/card-logo/visa.gif" width="35" height="16" border="0"/>
+              <img *ngIf="plan.planDetails.brand === 'amex'" alt="Credit Card Logos" title="Credit Card Logos"
+                   src="/assets/card-logo/amex.gif" width="35" height="22" border="0"/>
 
-          </th>
+            </th>
 
-        </tr>
-      </tbody>
-  </ng-container>
+          </tr>
+          </tbody>
+        </ng-container>
       </table>
       <ng-container *ngIf="inActiveplans.length == 0">
         <div class="alert cs-alert w-100 alert-info">There is no expired plan</div>
-        </ng-container>
-        </ng-container>
-        <ngx-skeleton-loader  *ngIf="skLoading" count="6" class="pt-4"></ngx-skeleton-loader>
+      </ng-container>
+    </ng-container>
+    <ngx-skeleton-loader *ngIf="skLoading" count="6" class="pt-4"></ngx-skeleton-loader>
   </div>
 </div>
 
 <div class="col-sm-5 mt-3 mr-0 float-right">
-  <alert *ngIf="isOpen" [type]="alertType"  dismissOnTimeout="5000">{{  alertMsg}}</alert>
+  <alert *ngIf="isOpen" [type]="alertType" dismissOnTimeout="5000">{{  alertMsg}}</alert>
 </div>
+
+
+<ng-template #addOrganization>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Assign New Organization</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="orgForm" (ngSubmit)="onSubmitOrg()">
+      <label for="typeahead-basic">Find Organization:</label>
+      <div class="row">
+        <div class="col-sm-8">
+          <p-multiSelect class="gdprSelect" [disabled]="totalLicenceOrg - assigneLicenceOrg === 0"
+                         [selectionLimit]="totalLicenceOrg - assigneLicenceOrg"
+                         formControlName="orgID" [style]="{'width':'100%'}"
+                         [options]="allUnSignOrgList"></p-multiSelect>
+        </div>
+        <div class="col-sm-4 p-0">
+          <button class="btn btn-link tx-decoration-underline" aria-label="Close" type="button"
+                  (click)="modalRef.hide()">Cancel
+          </button>
+          <button type="submit" class="btn btn-primary mr-1" [disabled]="totalLicenceOrg - assigneLicenceOrg === 0">
+            Assign
+          </button>
+        </div>
+      </div>
+      <p *ngIf="orgNameError">This Field is Required</p>
+    </form>
+  </div>
+</ng-template>
+
+
+<ng-template #addProperty>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Assign New Property</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="propertyForm" (ngSubmit)="onSubmit()">
+      <div class="form-group dp-safari">
+        <label for="sel1">Find Organization:</label>
+        <select (change)="onGetAllPropertyList($event)" class="form-control" id="sel1">
+          <option [value]="">-- Select Organization --</option>
+          <option *ngFor="let obj of orgList" [value]="obj.id">{{obj.orgname}}</option>
+        </select>
+      </div>
+
+      <label for="propertyNameError">Find Property:</label>
+
+      <p-multiSelect class="gdprSelect" [disabled]="totalLicence - assigneLicence === 0"
+                     [selectionLimit]="totalLicence - assigneLicence "
+                     formControlName="propID" [style]="{'width':'100%'}"
+                     [options]="allUnSignPropertyList"></p-multiSelect>
+      <!-- <input formControlName="title"  id="typeahead-basic" type="text" class="form-control" [(ngModel)]="propertyName" [ngbTypeahead]="search"/> -->
+
+      <div *ngIf="submitted && f.propID.errors" class="invalid-feedback">
+        <div *ngIf="f.propID.errors.required">This Field is required</div>
+      </div>
+      <div class="text-danger" *ngIf="propertyNameError">Property is not Valid</div>
+      <!--      <div class="text-danger" *ngIf="this.totalLicence - this.assigneLicence">Licence not available</div>-->
+      <div class="mt-4 text-center">
+        <button class="btn btn-link tx-decoration-underline" type="button" aria-label="Close" (click)="modalRef.hide()">
+          Cancel
+        </button>
+        <button type="submit" class="btn ml-3 btn-primary">Assign</button>
+      </div>
+    </form>
+  </div>
+</ng-template>
