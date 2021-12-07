@@ -285,7 +285,6 @@ export class AnalyticsComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    console.log('analytics ngdestroy..');
     if (this.sub !== undefined) {
       this.sub.unsubscribe();
     }

@@ -69,7 +69,12 @@ export class ManagePropertyComponent implements OnInit, OnDestroy {
       propID: ['', Validators.required]
     });
     this.activatedRoute.params.subscribe(params => {
-      this.planID = params.id;
+      if(params.id.indexOf("?") == -1){
+        this.planID = params.id;
+      }else{
+        let extractplanID = params.id.split("?");
+        this.planID = extractplanID[0];
+      }
       // this.planName = params.plan_name;
       // this.totalLicence = params.total_licence;
       // this.productName = params.product_name;
