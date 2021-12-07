@@ -1,9 +1,15 @@
+.p-component{
+  font-size: unset !important;
+}
 thead tr {
   height: 65px;
 }
 .manage-btn{
 padding-top: 5px;
 padding-bottom: 5px;
+}
+.action-btn{
+font-size: 11px !important;
 }
 thead tr th {
   padding-bottom: 20px;

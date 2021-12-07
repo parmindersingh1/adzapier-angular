@@ -77,6 +77,16 @@ export class CartsystemComponent implements OnInit {
     element.style.margin = '0px';
   }
 
+  ngOnDestroy() {
+    const element = document.getElementById('main');
+    element.classList.remove('container-fluid');
+    element.style.padding = null;
+    element.style.margin = null;
+   // element.classList.add('container');
+    element.classList.add('site-content');
+
+  }
+
   CurrentOpen(){
     this.currentStep = 0;
   }
@@ -121,6 +131,11 @@ export class CartsystemComponent implements OnInit {
       }, error => {
         this.loading.stop();
       });
+  }
+
+  onClosed(dismissedAlert: any): void {
+    this.alertMsg = !dismissedAlert;
+    this.isOpen = false;
   }
 
   cookiefilter(cartRecord){

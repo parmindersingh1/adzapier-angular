@@ -53,6 +53,15 @@ export class CartreviewComponent implements OnInit {
  });
   }
 
+  ngOnDestroy() {
+    const element = document.getElementById('main');
+    element.classList.remove('container-fluid');
+    element.style.padding = null;
+    element.style.margin = null;
+   // element.classList.add('container');
+    element.classList.add('site-content');
+  }
+
   onGetUserEmail() {
     this.loading.start();
     this.userService.getLoggedInUserDetails(this.constructor.name, moduleName.pricingModule).subscribe(res => {
@@ -138,7 +147,7 @@ export class CartreviewComponent implements OnInit {
    }
 
    onApplyCoupon() {
-     if(this.promoCode.toString() !== ''){
+     if(this.promoCode){
     this.loading.start();
     this.billingService.coupon(this.promoCode, this.constructor.name, moduleName.pricingModule).subscribe((res: any) => {
       this.loading.stop();
