@@ -113,7 +113,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     });
     this.authenticationService.userEmailVerificationStatus.subscribe((data) => this.isInvitedUserVerified = data);
     //this.setTimer();
-    this.clearPreviousLoginDetails();
   }
 
   ngOnDestroy() {
@@ -275,15 +274,5 @@ export class LoginComponent implements OnInit, OnDestroy {
     })
   }
 
-  clearPreviousLoginDetails() {
-    let token = localStorage.getItem('currentUser');
-    if (token == undefined) {
-      this.authService.logout();
-      localStorage.removeItem('currentUser');
-      this.orgservice.removeControls();
-      this.userService.getCurrentUser.unsubscribe();
-      localStorage.clear();
-    }
-  }
 
 }
