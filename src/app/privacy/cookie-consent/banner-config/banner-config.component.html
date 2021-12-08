@@ -32,18 +32,18 @@
   <form [formGroup]="BannerConfigurationForm" class="margin-wrapper" (ngSubmit)="onSubmit()">
 
     <div class="card title-head">
-      <div class="card-header">
+      <div class="card-header p-2">
         <div class="row">
-          <h5 class="main-heading col-md-4">Banner Configuration </h5>
-          <div class="col-md-5 pr-0 preview-border-left">
-            <p class="live-preview-type">Live Preview : <span>
-             <span class="tx-16 pl-2 pr-2"
+          <h5 class="main-heading col-md-4 pt-1 pl-4">Banner Configuration </h5>
+          <div class="col-md-4 pr-0 preview-border-left">
+            <p class="live-preview-type" style="font-size: 14px">Preview : <span>
+             <span class="pl-2 pr-2 tx-13"
                    *ngIf="BannerConfigurationForm.value.AllowGDPR && (!BannerConfigurationForm.value.GenericGlobal && !BannerConfigurationForm.value.CCPAGlobal) "> GDPR :   <p-radioButton
                class="preview-radio" formControlName="LivePreviewType" value="gdpr"></p-radioButton></span>
-             <span class="tx-16 pl-2 pr-2"
+             <span class=" pl-2 pr-2  tx-13"
                    *ngIf="BannerConfigurationForm.value.AllowCCPA && (!BannerConfigurationForm.value.GenericGlobal && !BannerConfigurationForm.value.GdprGlobal) ">       CCPA :    <p-radioButton
                class="preview-radio" formControlName="LivePreviewType" value="ccpa"></p-radioButton></span>
-             <span class="tx-16 pl-2 pr-2"
+             <span class=" pl-2 pr-2  tx-13"
                    *ngIf="BannerConfigurationForm.value.AllowGENERIC && (!BannerConfigurationForm.value.CCPAGlobal && !BannerConfigurationForm.value.GdprGlobal) ">       GLOBAL :  <p-radioButton
                class="preview-radio" formControlName="LivePreviewType" value="generic"></p-radioButton></span>
               </span>
@@ -59,15 +59,15 @@
           <!--              </div>-->
           <!--            </div>-->
           <!--          </div>-->
-          <div class="col-md-3 pl-0 text-right">
+          <div class="col-md-4 pl-0 text-right">
             <button pButton pRipple type="button"
                     [disabled]="contentSaving === 'saving'"
-                    (click)="openModal(resetConfig)" label="Reset to Default" class="p-button-secondary mr-2"></button>
+                    (click)="openModal(resetConfig)" label="Reset to Default" class="p-button-secondary action-btn mr-2"></button>
 
             <button pButton pRipple type="submit"
                     [disabled]="contentSaving === 'saving' || BannerConfigurationForm.invalid"
-                    (click)="publishType = 'draft'" label="Save" class="p-button-warning mr-2"></button>
-            <button pButton pRipple type="button"
+                    (click)="publishType = 'draft'" label="Save" class="p-button-warning action-btn mr-2"></button>
+            <button pButton pRipple type="button" class="action-btn"
                     [disabled]="contentSaving === 'saving' || BannerConfigurationForm.invalid"
                     (click)="openModal(ReConsentConfirmation)" label="Publish"></button>
             <p class="publish-date-text" *ngIf="BannerConfigurationForm.value?.PublishDateDisplay">Last Published : {{BannerConfigurationForm.value?.PublishDateDisplay | timeago}}</p>
@@ -79,34 +79,34 @@
     <div class="d-flex row-cols-group mb-0">
       <div class="col-md-1 border-right menu-background">
         <div class="row step-bg" (click)="onSelectStep(1)" [ngClass]="{'step-active' : step === 1}">
-          <p class="col-md-12  p-0 text-center"><i class="fas fa-cogs tx-35"></i></p>
-          <p class="col-md-12 p-0 text-center tx-14 font-weight-bold">Config</p>
+          <p class="col-md-12 mb-2  p-0 text-center"><i class="fas fa-cogs tx-35"></i></p>
+          <p class="col-md-12 p-0 mb-2 text-center tx-14 font-weight-bold">Config</p>
         </div>
         <div class="row step-bg" (click)="onSelectStep(2)" [ngClass]="{'step-active' : step === 2}">
-          <p class="col-md-12  p-0 text-center"><i class="fas fa-language tx-35"></i></p>
-          <p class="col-md-12 p-0 text-center tx-14 font-weight-bold">Language</p>
+          <p class="col-md-12 mb-2 p-0 text-center"><i class="fas fa-language tx-35"></i></p>
+          <p class="col-md-12 p-0  mb-2 text-center tx-14 font-weight-bold">Language</p>
         </div>
         <div class="row step-bg" (click)="onCheckAllowBannerConfig(3)" [ngClass]="{'step-active' : step === 3}">
-          <p class="col-md-12  p-0 text-center"><i class="fas fa-file-alt tx-35"></i></p>
-          <p class="col-md-12 p-0 text-center tx-14 font-weight-bold">Content</p>
+          <p class="col-md-12 mb-2 p-0 text-center"><i class="fas fa-file-alt tx-35"></i></p>
+          <p class="col-md-12 p-0  mb-2 text-center tx-14 font-weight-bold">Content</p>
         </div>
         <div class="row step-bg" (click)="onCheckAllowBannerConfig(4)" [ngClass]="{'step-active' : step === 4}">
-          <p class="col-md-12  p-0 text-center ">
+          <p class="col-md-12 mb-2 p-0 text-center ">
             <i class="fas fa-fill-drip tx-35"></i>
           </p>
-          <p class="col-md-12 p-0 text-center tx-14 font-weight-bold"> Layout</p>
+          <p class="col-md-12 p-0  mb-2 text-center tx-14 font-weight-bold"> Layout</p>
         </div>
         <div class="row step-bg" (click)="onSelectStep(5)" [ngClass]="{'step-active' : step === 5}">
-          <p class="col-md-12  p-0 text-center"><i class="fas fa-tools tx-35"></i></p>
-          <p class="col-md-12 p-0 text-center tx-14 font-weight-bold">Purposes <br/> Preferences</p>
+          <p class="col-md-12 mb-2 p-0 text-center"><i class="fas fa-tools tx-35"></i></p>
+          <p class="col-md-12 p-0  mb-2 text-center tx-14 font-weight-bold">Purposes <br/> Preferences</p>
         </div>
         <div class="row step-bg" (click)="onSelectStep(6)" [ngClass]="{'step-active' : step === 6}">
           <p class="col-md-12 mt-2  p-0 text-center"><i class="fas fa-tv tx-35"></i></p>
-          <p class="col-md-12 p-0 text-center tx-14 mb-3 font-weight-bold">Display <br/> Frequency</p>
+          <p class="col-md-12 p-0  mb-2 text-center tx-14 mb-3 font-weight-bold">Display <br/> Frequency</p>
         </div>
       </div>
       <div class="col-md-11 p-0">
-        <p-splitter [style]="{'height': '650px'}" [panelSizes]="[30, 80]" [minSizes]="[28,50]" stateStorage="session"
+        <p-splitter [style]="{'height': '550px'}" [panelSizes]="[25, 80]" [minSizes]="[22,50]" stateStorage="session"
                     styleClass="p-mb-5">
 
           <ng-template pTemplate>
@@ -200,21 +200,21 @@
 
                     <!--                  Enable IAB-->
                     <div class="row mt-3">
-                      <div class="col-md-4">
+                      <div class="col-md-6">
                         <p class=" mb-0  input-label pt-2">Enable IAB</p>
                       </div>
-                      <div class="col-md-8">
+                      <div class="col-md-6">
                         <p-inputSwitch formControlName="EnableIAB"></p-inputSwitch>
                       </div>
                     </div>
 
                     <!--                  Google Vendors -->
                     <div class="row mt-3">
-                      <div class="col-md-4">
+                      <div class="col-md-6">
                         <p class=" mb-0  input-label pt-2"
                            [ngStyle]="{color: disablePlanFeatures.disableGoogleVendors ? '#999': ''}">Google Vendors</p>
                       </div>
-                      <div class="col-md-8" (click)="onCheckAllowGoogleVendors()">
+                      <div class="col-md-6" (click)="onCheckAllowGoogleVendors()">
                         <p-inputSwitch [disabled]="disablePlanFeatures.disableGoogleVendors"
                                        formControlName="GoogleVendors"></p-inputSwitch>
                       </div>
@@ -222,10 +222,10 @@
 
                     <!--                  GDPR Global-->
                     <div class="row mt-3">
-                      <div class="col-md-4">
+                      <div class="col-md-6">
                         <p class=" mb-0  input-label pt-2">GDPR Everywhere</p>
                       </div>
-                      <div class="col-md-8">
+                      <div class="col-md-6">
                         <p-inputSwitch (onChange)="onMakeRegulationEveryWhere('gdpr', $event)"
                                        formControlName="GdprGlobal"></p-inputSwitch>
                       </div>
@@ -244,10 +244,10 @@
                     </p-divider>
                     <!--                  CCPA Target-->
                     <div class="row">
-                      <div class="col-md-4">
+                      <div class="col-md-6">
                         <p class=" mb-0  input-label pt-2" for="ccpa_target">CCPA Target</p>
                       </div>
-                      <div class="col-md-8">
+                      <div class="col-md-6">
                         <p-dropdown id="ccpa_target" [options]="countries" formControlName="CCPATarget"
                                     optionLabel="name" optionValue="code" [showClear]="true"
                                     placeholder="Select a Country">
@@ -272,10 +272,10 @@
                     </div>
                     <!--                  CCPA Global-->
                     <div class="row mt-3">
-                      <div class="col-md-4">
+                      <div class="col-md-6">
                         <p class=" mb-0  input-label pt-2" for="ccpa_target">CCPA Everywhere</p>
                       </div>
-                      <div class="col-md-8">
+                      <div class="col-md-6">
                         <p-inputSwitch (onChange)="onMakeRegulationEveryWhere('ccpa', $event)"
                                        formControlName="CCPAGlobal"></p-inputSwitch>
                       </div>
@@ -288,10 +288,10 @@
                     </p-divider>
                     <!--                  GENERIC Global-->
                     <div class="row mt-3">
-                      <div class="col-md-4">
+                      <div class="col-md-6">
                         <p class=" mb-0  input-label pt-2">Global Everywhere</p>
                       </div>
-                      <div class="col-md-8">
+                      <div class="col-md-6">
                         <p-inputSwitch (onChange)="onMakeRegulationEveryWhere('generic', $event)"
                                        formControlName="GenericGlobal"></p-inputSwitch>
                       </div>
@@ -354,22 +354,22 @@
                     </p-divider>
 
                     <div class="row mt-3">
-                      <div class="col-md-4">
+                      <div class="col-md-6">
                         <p class=" mb-0  input-label pt-2">Default Regulation</p>
                       </div>
-                      <div class="col-md-8">
+                      <div class="col-md-6">
                         <p-dropdown class="col-md-6 p-0 m-0" formControlName="DefaultRegulation"
                                     [options]="defaultRegulation" optionLabel="name" optionValue="code"></p-dropdown>
                       </div>
                     </div>
 
                     <div class="row mt-3">
-                      <div class="col-md-4">
+                      <div class="col-md-6">
                         <p class=" mb-0  input-label pt-2"
                            [ngStyle]="{color: disablePlanFeatures.disableCookieblocking ? '#999': ''}">Cookie
                           Blocking</p>
                       </div>
-                      <div class="col-md-8" (click)="onCheckDisableCookiebloking()">
+                      <div class="col-md-6" (click)="onCheckDisableCookiebloking()">
                         <p-inputSwitch [disabled]="disablePlanFeatures.disableCookieblocking"
                                        formControlName="CookieBlocking"></p-inputSwitch>
                       </div>
@@ -377,39 +377,39 @@
 
 
                     <div class="row mt-3">
-                      <div class="col-md-4">
+                      <div class="col-md-6">
                         <p class=" mb-0  input-label pt-2">Allow Purposes By Default</p>
                       </div>
-                      <div class="col-md-8">
+                      <div class="col-md-6">
                         <p-inputSwitch formControlName="AllowPurposeByDefault"></p-inputSwitch>
                       </div>
                     </div>
 
                     <div class="row mt-3">
-                      <div class="col-md-4">
+                      <div class="col-md-6">
                         <p class=" mb-0  input-label pt-2"
                            [ngStyle]="{color: disablePlanFeatures.hideLogo ? '#999': ''}">Show Watermark</p>
                       </div>
-                      <div class="col-md-8" (click)="onCheckLogoAllow()">
+                      <div class="col-md-6" (click)="onCheckLogoAllow()">
                         <p-inputSwitch [disabled]="disablePlanFeatures.hideLogo"
                                        formControlName="ShowWatermark"></p-inputSwitch>
                       </div>
                     </div>
 
                     <div class="row mt-3">
-                      <div class="col-md-4">
+                      <div class="col-md-6">
                         <p class=" mb-0  input-label pt-2">Show Badge</p>
                       </div>
-                      <div class="col-md-8">
+                      <div class="col-md-6">
                         <p-inputSwitch formControlName="ShowBadge"></p-inputSwitch>
                       </div>
                     </div>
 
                     <div class="row mt-3">
-                      <div class="col-md-4">
+                      <div class="col-md-6">
                         <p class=" mb-0  input-label pt-2">Mute Cookie Notice</p>
                       </div>
-                      <div class="col-md-8">
+                      <div class="col-md-6">
                         <p-inputSwitch formControlName="MuteBanner"></p-inputSwitch>
                       </div>
                     </div>
@@ -433,23 +433,23 @@
                     <!--                    </div>-->
 
                     <div class="row mt-3">
-                      <div class="col-md-4">
+                      <div class="col-md-5">
                         <p class=" mb-0  input-label pt-2"
                            [ngStyle]="{color: !BannerConfigurationForm.value.ShowBadge ? '#999' : null}">Badge
                           Position</p>
                       </div>
-                      <div class="col-md-8">
+                      <div class="col-md-7">
                         <div class="row">
-                          <div class="p-field-radiobutton col-md-3">
+                          <div class="p-field-radiobutton col-md-6">
                             <p-radioButton name="BadgePosition" [disabled]="!BannerConfigurationForm.value.ShowBadge"
                                            value="left" formControlName="BadgePosition" inputId="left"></p-radioButton>
-                            <label for="left" class="pt-2 pl-3 mb-0">Left</label>
+                            <label for="left" class="pt-2 pl-3 mb-0 input-label">Left</label>
                           </div>
-                          <div class="p-field-radiobutton col-md-3">
+                          <div class="p-field-radiobutton col-md-6">
                             <p-radioButton name="BadgePosition" [disabled]="!BannerConfigurationForm.value.ShowBadge"
                                            value="right" formControlName="BadgePosition"
                                            inputId="right"></p-radioButton>
-                            <label for="right" class="pt-2 pl-3 mb-0">Right</label>
+                            <label for="right" class="pt-2 pl-3 mb-0 input-label">Right</label>
                           </div>
                         </div>
                       </div>
@@ -511,7 +511,7 @@
                                  class="lang-checkbox ml-1" (change)="onSetLanguage($event, language.code)"
                                  [value]="language.code"/>
                         </td>
-                        <td>
+                        <td style="font-size: 14px">
                           <!--                          <img src="assets/imgs/icons/flag_placeholder.png"-->
                           <!--                                 [class]="'flag flag-' + language.countryFlag"/>-->
                           {{language.title}}</td>

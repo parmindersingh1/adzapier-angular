@@ -131,7 +131,7 @@
                           (click)="openModalOrg(addOrganization, plan)"
                           style="border-radius: 3px 0px 0px 3px; width: 62%; font-size:11px"
                           icon="pi pi-plus" class="p-button-warning p-button-sm"></button>
-                  <a class="plan-name" tooltip="Assign or remove subscription to properties"
+                  <a class="plan-name" tooltip="Assign or remove subscription to organization"
                      [routerLink]="['/settings/billing/manage/organizations', plan.id]"
                      [queryParams]="{ oid: this.queryOID, pid: this.queryPID}">
                     <button pButton icon="pi pi-sliders-h" label="Manage"
