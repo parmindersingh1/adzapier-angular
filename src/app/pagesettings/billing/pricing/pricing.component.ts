@@ -331,9 +331,7 @@ export class PricingComponent implements OnInit, AfterViewInit {
               this.subTotal += Number(item.priceTotal);
             }
           }
-          setTimeout(() => {
-            window.scrollTo(0, document.body.scrollHeight);
-          }, 500);
+          
         }
       }
     } else{
@@ -358,9 +356,6 @@ export class PricingComponent implements OnInit, AfterViewInit {
         this.subTotal += Number(item.priceTotal);
       }
     }
-    setTimeout(() => {
-      window.scrollTo(0, document.body.scrollHeight);
-    }, 500);
   }
   }
 
