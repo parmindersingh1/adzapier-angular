@@ -79,8 +79,7 @@ export class AppComponent implements OnInit {
     private location: Location,
     private cdRef: ChangeDetectorRef
   ) {
-    if (this.location.path().indexOf('/login') !== -1 || this.location.path().indexOf('signup') !== -1 || this.location.path().indexOf('invited-user-verify-email') !== -1 
-    || this.location.path().indexOf('error/pagenotfound') !== -1) {
+    if (this.location.path().indexOf('/login') !== -1 || this.location.path().indexOf('signup') !== -1 || this.location.path().indexOf('invited-user-verify-email') !== -1) {
         this.isloginpage = false;
     } else {
       this.isloginpage = true;
@@ -261,7 +260,7 @@ export class AppComponent implements OnInit {
   ngAfterViewChecked() {
 
     this.isquickstartopen = this.quickmenuService.isquickstartopen;
-    if (this.location.path().indexOf('/login') !== -1 || this.location.path().indexOf('signup') !== -1 || this.location.path().indexOf('resetpswd') !== -1 || this.location.path().indexOf('invited-user-verify-email') !== -1 || this.location.path().indexOf('error/pagenotfound') !== -1) {
+    if (this.location.path().indexOf('/login') !== -1 || this.location.path().indexOf('signup') !== -1 || this.location.path().indexOf('resetpswd') !== -1 || this.location.path().indexOf('invited-user-verify-email') !== -1) {
       this.isloginpage = false; // quick start will not be visible
     } else {
       this.isloginpage = true;
