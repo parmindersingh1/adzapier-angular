@@ -414,8 +414,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
             if (a[1].indexOf('/invited-user-verify-email') !== -1) {
               this.router.navigate(['/invited-user-verify-email'], { queryParams: { id: a[2] } });
             }
-          } else{
-            this.router.navigate(['/login']);
           }
         }
       }
@@ -939,34 +937,50 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
             // console.log(propobj,'propobj..550');
           } else {
             let activePro;
-           // let url = this.findPropertyIDFromUrl();
             if(this.oIDPIDFromURL !== undefined){
+               const findOidIndex = this.orgPropertyMenu.findIndex((t) => t.id == this.oIDPIDFromURL[0]) //finding oid
+               if(findOidIndex !== -1){
+                 activePro = this.orgPropertyMenu[findOidIndex] //based on oid finding propid
+               }
+               
+              const proIndex = activePro.property.findIndex((t) => t.property_id === this.oIDPIDFromURL[1]);
+              this.activeProp = activePro.property[proIndex];
+              const obj = {
+                 organization_id: activePro.id,
+                 organization_name: activePro.orgname,
+                 property_id: activePro.property[proIndex].property_id,
+                 property_name: activePro.property[proIndex].property_name,
+                 user_id: this.userID
+               };
+               this.selectedOrgProperties.length = 0;
+               this.selectedOrgProperties.push(obj);
+              // this.orgservice.changeCurrentSelectedProperty(obj); //check this..
+               this.licenseAvailabilityForProperty(obj);
+               this.loadOrganizationPlanDetails(obj);
+             //  this.loading.start('1');
+               this.loadPropertyPlanDetails(obj);
+
+               this.isPropSelected(obj);
+               this.orgservice.changeCurrentSelectedProperty(obj); //check this..
+               //  this.loading.start('1');
+               
+               if (this.location.path().indexOf("type=manage") == -1 && this.location.path().indexOf("manage?success") == -1) {
+                 this.router.navigate([this.router.url], { queryParams: { oid: obj.organization_id, pid: obj.property_id }, queryParamsHandling: 'merge', skipLocationChange: false });
+               } else {
+                 this.router.navigate(['/settings/billing/manage'], { queryParams: { oid: obj.organization_id, pid: obj.property_id }, queryParamsHandling: 'merge', skipLocationChange: false });
+               }
+               this.licenseAvailabilityForFormAndRequestPerOrg(obj);
+              
+          }
+          else {
+            let activePro;
+           // let url = this.findPropertyIDFromUrl();
+           if(this.oIDPIDFromURL !== undefined){
               const findOidIndex = this.orgPropertyMenu.findIndex((t) => t.id == this.oIDPIDFromURL[0]) //finding oid
               if(findOidIndex !== -1){
                 activePro = this.orgPropertyMenu[findOidIndex] //based on oid finding propid
               }
-
-         const propobj = activePro !== undefined && activePro.property.filter((el)=>el.property_id === this.oIDPIDFromURL[1]);
-         if(propobj !== undefined && propobj.length !== 0){
-         const obj = {
-          organization_id: activePro.id,
-          organization_name: activePro.orgname,
-          property_id: propobj[0].property_id,
-          property_name: propobj[0].property_name,
-          user_id: this.userID
-        };
-         this.selectedOrgProperties.push(obj);
-         // this.orgservice.getSelectedOrgProperty.emit(obj);
-         //  this.firstElement = false;
-       //  this.orgservice.setCurrentOrgWithProperty(obj); // one
-         this.licenseAvailabilityForProperty(obj);
-         this.licenseAvailabilityForFormAndRequestPerOrg(obj);
-         this.isPropSelected(obj);
-         this.orgservice.changeCurrentSelectedProperty(obj); //check this..
-         this.loadOrganizationPlanDetails(obj);
-         //  this.loading.start('1');
-           this.loadPropertyPlanDetails(obj);
-      }
+            }
             // this.activeProp = activePro[0].property[proIndex];
             // const obj = {
             //   organization_id: activePro[0].id,
@@ -1024,7 +1038,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
   loadOrgPropertyFromLocal() {
     this.selectedOrgProperties.length = 0;
     if (this.orgPropertyMenu !== undefined) {
-      const orgIndex = this.orgPropertyMenu.findIndex((t) => t.organization_id === this.queryOID);
+      const orgIndex = this.orgPropertyMenu.findIndex((t) => {
+        if (this.queryOID !== null || this.queryOID !== undefined) {
+          t.organization_id === this.queryOID
+        } 
+      });
       if (orgIndex === -1) {
         this.selectedOrgProperties.push(this.orgPropertyMenu[orgIndex]);
       }
@@ -1800,9 +1818,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
             this.router.navigate(['/invited-user-verify-email'], { queryParams: { id: a[2] } });
           }
         } 
-        else {
-          this.router.navigate(['/login']);
-        }        
       } else {
         this.router.navigate(['/login']);
       }
