@@ -106,7 +106,7 @@ export class PricingComponent implements OnInit, AfterViewInit {
     this.userService.isRevisitedQSMenuLink.subscribe((status) => { this.isRevistedLink = status.reclickqslink; this.currentLinkID = status.quickstartid; this.iswindowclicked = status.urlchanged  });
     //this.userService.isRevisitedQSMenuLink.subscribe((status) => { this.isRevistedLink = status.reclickqslink; this.currentLinkID = status.quickstartid; });
     // this.onGetPlanCompareData()
-    this.onGetActivePlan();
+    // this.onGetActivePlan();
     this.onGetPlanDetails();
     this.onGetUserEmail();
     // this.onSetValue();
@@ -315,7 +315,7 @@ export class PricingComponent implements OnInit, AfterViewInit {
       if (a.length !== 0) {
         const idx = a.findIndex((t) => t.index == indexId);
         if (a[idx].quicklinks.filter((t) => t.linkid == this.quickDivID).length > 0) {
-    
+
           this.userService.onRevistQuickStartmenulink.next({quickstartid:this.quickDivID,reclickqslink:true,urlchanged:false});
           const plan = {...planDetails};
           plan.priceTotal = plan.price * planUnit.value;
@@ -371,7 +371,7 @@ export class PricingComponent implements OnInit, AfterViewInit {
       id:this.cartstripeid,
       quantity:this.cartQuantity,
     }
-   
+
     this.billingService.AddToCart(this.constructor.name, moduleName.pricingModule,payload).subscribe(res => {
       this.loading.stop();
       const result: any = res;
@@ -386,8 +386,8 @@ export class PricingComponent implements OnInit, AfterViewInit {
           this.showpopup = [];
           this.displayStyle = false;
         }, 4000);
-      
-       
+
+
       }
     }, error => {
       this.loading.stop();
@@ -407,7 +407,7 @@ export class PricingComponent implements OnInit, AfterViewInit {
   }
 
   onGetCartRecord() {
-    
+
     this.billingService.GetCart(this.constructor.name, moduleName.billingModule)
       .subscribe((res: any) => {
         const result: any = res;

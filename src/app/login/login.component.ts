@@ -88,7 +88,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     private alertService: AlertService,
     private orgservice: OrganizationService,
     private loadingBar: NgxUiLoaderService,
-    private userService: UserService
+    private userService: UserService,
+    private authService: AuthenticationService
   ) {
     if (this.authenticationService.currentUserValue) {
       this.router.navigate(['/']);
@@ -111,7 +112,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       emailid: ['', [Validators.required, Validators.pattern]]
     });
     this.authenticationService.userEmailVerificationStatus.subscribe((data) => this.isInvitedUserVerified = data);
-    this.setTimer();
+    //this.setTimer();
   }
 
   ngOnDestroy() {
@@ -272,4 +273,6 @@ export class LoginComponent implements OnInit, OnDestroy {
       this.hideMessage = true;
     })
   }
+
+
 }
