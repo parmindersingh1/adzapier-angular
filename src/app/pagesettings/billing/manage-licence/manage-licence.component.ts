@@ -77,7 +77,7 @@ export class ManageLicenceComponent implements OnInit {
   ngOnInit() {
     this.quickmenuService.onClickEmitQSLinkobj.pipe(
       takeUntil(this.unsubscribeAfterUserAction$)
-    ).subscribe((res) => { 
+    ).subscribe((res) => {
       this.quickDivID = res.linkid;
       this.actualbtnClickstatus = res.isactualbtnclicked;
     });
@@ -208,6 +208,7 @@ export class ManageLicenceComponent implements OnInit {
         this.alertMsg = res.response;
         this.alertType = 'success';
         this.propertyForm.reset();
+        this.onGetActivePlan();
         this.onGetAssingedProperty();
         this.dataService.isLicenseAppliedForProperty.next({ requesttype: 'property', hasaccess: true });
         this.isCurrentPropertySelected(this.currentManagedOrgID, this.currrentManagedPropID);
@@ -352,9 +353,8 @@ export class ManageLicenceComponent implements OnInit {
         this.loading.stop();
         this.skLoading = false;
         this.modalRef.hide();
-        // this.licenseAvailabilityForFormAndRequestPerOrg(this.orgForm.value.orgID);
+        this.onGetActivePlan();
         this.orgForm.reset();
-        // this.onGetAssingedOrg()
         this.getAllOrgList2();
         this.isCurrentPropertySelected(this.currentManagedOrgID, this.currrentManagedPropID)
         this.dataService.isLicenseApplied.next({ requesttype: 'organization', hasaccess: true });
@@ -446,7 +446,7 @@ export class ManageLicenceComponent implements OnInit {
 
           if (a[idx].quicklinks.some((t) => t.linkid == quickLinkObj.linkid && t.isactualbtnclicked)) {
             this.quickDivID = "";
-            
+
             this.router.navigate(['/settings/billing/manage/organizations', planid], { queryParams: { oid: this.queryOID, pid: this.queryPID }, queryParamsHandling: 'merge', skipLocationChange: false });
           } else if (a[idx].quicklinks.some((t) => t.linkid == quickLinkObj.linkid && !t.isactualbtnclicked)) {
             this.quickDivID = "";
@@ -460,16 +460,16 @@ export class ManageLicenceComponent implements OnInit {
   }
 
   checkForQsTooltip(){
-    this.userService.onRevistQuickStartmenulink.next({quickstartid:this.quickDivID,reclickqslink:true,urlchanged:true}); 
-    this.quickDivID = "";    
+    this.userService.onRevistQuickStartmenulink.next({quickstartid:this.quickDivID,reclickqslink:true,urlchanged:true});
+    this.quickDivID = "";
   }
-   
+
 
   ngAfterViewInit(){
     this.userService.isRevisitedQSMenuLink.subscribe((status) => { this.isRevistedLink = status.reclickqslink; this.currentLinkID = status.quickstartid; this.iswindowclicked = status.urlchanged  });
     this.quickmenuService.onClickEmitQSLinkobj.pipe(
       takeUntil(this.unsubscribeAfterUserAction$)
-    ).subscribe((res) => { 
+    ).subscribe((res) => {
       this.quickDivID = res.linkid;
     });
     this.cdRef.detectChanges();
@@ -479,5 +479,5 @@ export class ManageLicenceComponent implements OnInit {
     this.quickDivID = "";
     this.unsubscribeAfterUserAction$.unsubscribe();
   }
-  
+
 }
