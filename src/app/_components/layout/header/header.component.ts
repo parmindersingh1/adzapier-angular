@@ -409,9 +409,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
               this.router.navigate(["/signup"], { queryParams: { id: tokenid[1] } });
             }
           } 
-          if (this.location.path().indexOf('/invited-user-verify-email') == -1) {
+          if (this.location.path().indexOf('/invited-user-verify-email') !== -1) {
             const a = this.location.path().split("/");
-            if (a[1].indexOf('/invited-user-verify-email') == -1) {
+            if (a[1].indexOf('/invited-user-verify-email') !== -1) {
               this.router.navigate(['/invited-user-verify-email'], { queryParams: { id: a[2] } });
             }
           } else{
@@ -794,7 +794,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
     // tslint:disable-next-line: max-line-length
     // this.orgservice.currentProperty.pipe(distinctUntilChanged()).subscribe((data) => {
     this.orgservice.isPropertyUpdated.subscribe((status) => { this.isPropertyUpdated = status });
-   if(!this.isPropertyUpdated){
+   if(this.isPropertyUpdated == null || !this.isPropertyUpdated){
     this.orgservice.currentProperty.subscribe((data) => {
       if (data !== '' || data.length > 0) {
         this.currentProperty = data.property_name || data.response.name;
@@ -1791,9 +1791,18 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
       } else if (this.location.path().indexOf("type=manage") == -1 && this.location.path().indexOf("manage?success") == -1) {
         this.oIDPIDFromURL = this.findPropertyIDFromUrl(this.currentNavigationUrl || this.location.path());
         const url = this.location.path() == '/' ? '/home/welcome' : this.getCurrentRoute();
-        if(this.oIDPIDFromURL !== undefined){
+        if(this.oIDPIDFromURL !== undefined && this.currentUser !== null){
           this.router.navigate([url], { queryParams: { oid: this.oIDPIDFromURL[0], pid: this.oIDPIDFromURL[1] }, skipLocationChange: false });
         }
+        if (this.location.path().indexOf('/invited-user-verify-email') !== -1) {
+          const a = this.location.path().split("/");
+          if (a[1].indexOf('/invited-user-verify-email') !== -1) {
+            this.router.navigate(['/invited-user-verify-email'], { queryParams: { id: a[2] } });
+          }
+        } 
+        else {
+          this.router.navigate(['/login']);
+        }        
       } else {
         this.router.navigate(['/login']);
       }
@@ -2357,7 +2366,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
 
   isLoginOrSignupPage():boolean{
     if( this.location.path().indexOf('login') !== -1 || this.location.path().indexOf('signup') !== -1 || this.location.path().indexOf('invited-user-verify-email') !== -1){
-      return this.isloginpage = false;
+      if(this.currentUser){
+        return this.isloginpage = true;
+      }else{
+        return this.isloginpage = false;
+      }
     }else{
       return this.isloginpage = true;
     }
