@@ -57,7 +57,6 @@ export class InvitedUserVerifyComponent implements OnInit, OnDestroy {
           setTimeout(()=>{
             this.router.navigate(['/login']);
           },1000);
-          
         }
       }, error => {
         this.loader.stop();
