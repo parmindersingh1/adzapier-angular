@@ -36,7 +36,7 @@
                         <h6 class="pt-2 font-weight-bold tx-13">Price per Property /Organization :</h6>
                         <h6 class="pt-2 font-weight-bold tx-13">Total Price :</h6>
                       </div>
-                      <div class="col-md-6 mb-3">
+                      <div class="col-md-6 mb-3" style="text-align: right;">
                         <h5>{{cart.Product}}</h5>
                         <h5>{{cart.Cycle}}</h5>
                         <h5>{{cart.Quantity}}</h5>
@@ -74,9 +74,9 @@
                         <h5 class=" font-weight-bold text-left">Subtotal</h5>
                         <h6 class="font-weight-bold text-left">Discount</h6>
                       </div>
-                      <div class="col-md-6 text-left">
-                        <h5 class="text-center">${{ subTotal + '.00' }} </h5>
-                        <h5 class="text-center">${{percentOff ? subTotal * percentOff / 100 : '0.00'}} ({{percentOff}}%)</h5>
+                      <div class="col-md-6 text-right">
+                        <h5 class="text-right">${{ subTotal + '.00' }} </h5>
+                        <h5 class="text-right">${{percentOff ? subTotal * percentOff / 100 : '0.00'}} ({{percentOff}}%)</h5>
                       </div> 
                       </div>
                       <div class="col-md-1">
