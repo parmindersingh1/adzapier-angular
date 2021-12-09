@@ -124,6 +124,9 @@ export class AppComponent implements OnInit {
         if (event.url.indexOf('/resetpswd') !== -1 || event.url.indexOf('/verify-email') !== -1 || event.url.indexOf('invited-user-verify-email') !== -1) {
           this.hideHeaderFooter = false;
           this.authenticationService.logout();
+          localStorage.removeItem('currentUser');
+          this.userService.getCurrentUser.unsubscribe();
+          localStorage.clear();
           this.ccpaFormConfigurationService.removeControls();
           this.dsarformService.removeControls();
           this.organizationService.removeControls();

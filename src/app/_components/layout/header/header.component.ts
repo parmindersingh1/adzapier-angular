@@ -414,6 +414,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
             if (a[1].indexOf('/invited-user-verify-email') !== -1) {
               this.router.navigate(['/invited-user-verify-email'], { queryParams: { id: a[2] } });
             }
+          }else{
+            this.router.navigate(['/login']);
           }
         }
       }
