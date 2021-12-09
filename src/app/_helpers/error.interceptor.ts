@@ -79,8 +79,13 @@ export class ErrorInterceptor implements HttpInterceptor {
                 //this.dataService.openUnAuthModal.next({isTrue: true, error: err})
                 return throwError(error);
               }else{
+                const error = err.error.error || err.statusText;
                 const oIDPIDFromURL = findPropertyIDFromUrl(this.location.path());
-                this.router.navigate(['/error/pagenotfound'],{ queryParams: { oid: oIDPIDFromURL[0], pid: oIDPIDFromURL[1] }});
+                if(oIDPIDFromURL !== undefined){
+                  this.router.navigate(['/error/pagenotfound'],{ queryParams: { oid: oIDPIDFromURL[0], pid: oIDPIDFromURL[1] }});
+                }else{
+                  return throwError(error);
+                }
               }
             }
             if(err.status === 500 || err.status === 501){
