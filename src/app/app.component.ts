@@ -79,8 +79,7 @@ export class AppComponent implements OnInit {
     private location: Location,
     private cdRef: ChangeDetectorRef
   ) {
-    if (this.location.path().indexOf('/login') !== -1 || this.location.path().indexOf('signup') !== -1 || this.location.path().indexOf('invited-user-verify-email') !== -1 
-    || this.location.path().indexOf('error/pagenotfound') !== -1) {
+    if (this.location.path().indexOf('/login') !== -1 || this.location.path().indexOf('signup') !== -1 || this.location.path().indexOf('invited-user-verify-email') !== -1) {
         this.isloginpage = false;
     } else {
       this.isloginpage = true;
@@ -125,6 +124,9 @@ export class AppComponent implements OnInit {
         if (event.url.indexOf('/resetpswd') !== -1 || event.url.indexOf('/verify-email') !== -1 || event.url.indexOf('invited-user-verify-email') !== -1) {
           this.hideHeaderFooter = false;
           this.authenticationService.logout();
+          localStorage.removeItem('currentUser');
+          this.userService.getCurrentUser.unsubscribe();
+          localStorage.clear();
           this.ccpaFormConfigurationService.removeControls();
           this.dsarformService.removeControls();
           this.organizationService.removeControls();
@@ -261,7 +263,7 @@ export class AppComponent implements OnInit {
   ngAfterViewChecked() {
 
     this.isquickstartopen = this.quickmenuService.isquickstartopen;
-    if (this.location.path().indexOf('/login') !== -1 || this.location.path().indexOf('signup') !== -1 || this.location.path().indexOf('resetpswd') !== -1 || this.location.path().indexOf('invited-user-verify-email') !== -1 || this.location.path().indexOf('error/pagenotfound') !== -1) {
+    if (this.location.path().indexOf('/login') !== -1 || this.location.path().indexOf('signup') !== -1 || this.location.path().indexOf('resetpswd') !== -1 || this.location.path().indexOf('invited-user-verify-email') !== -1) {
       this.isloginpage = false; // quick start will not be visible
     } else {
       this.isloginpage = true;
