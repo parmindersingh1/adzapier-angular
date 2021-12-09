@@ -5,12 +5,14 @@ import { catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { AuthenticationService } from './../_services';
 import {DataService} from '../_services/data.service';
-
+import { Location } from '@angular/common';
+import { findPropertyIDFromUrl } from './common-utility';
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
     //let errorMsgKey = ["User is not authorized to access this functionality"]
     constructor(private authenticationService: AuthenticationService,
                 private dataService: DataService,
+                private location:Location,
                 private router: Router) { }
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
@@ -77,7 +79,13 @@ export class ErrorInterceptor implements HttpInterceptor {
                 //this.dataService.openUnAuthModal.next({isTrue: true, error: err})
                 return throwError(error);
               }else{
-                this.router.navigate(['/error/pagenotfound']);
+                const error = err.error.error || err.statusText;
+                const oIDPIDFromURL = findPropertyIDFromUrl(this.location.path());
+                if(oIDPIDFromURL !== undefined){
+                  this.router.navigate(['/error/pagenotfound'],{ queryParams: { oid: oIDPIDFromURL[0], pid: oIDPIDFromURL[1] }});
+                }else{
+                  return throwError(error);
+                }
               }
             }
             if(err.status === 500 || err.status === 501){

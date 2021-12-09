@@ -32,7 +32,7 @@
   <form [formGroup]="BannerConfigurationForm" class="margin-wrapper" (ngSubmit)="onSubmit()">
 
     <div class="card title-head">
-      <div class="card-header p-2">
+      <div class="card-header p-2 pb-3">
         <div class="row">
           <h5 class="main-heading col-md-4 pt-1 pl-4">Banner Configuration </h5>
           <div class="col-md-4 pr-0 preview-border-left">
@@ -635,7 +635,7 @@
                       </div>
 
                       <div class="p-field">
-                        <label for="title" class="input-label ">Disable All Button (Generic)</label> <br/>
+                        <label for="title" class="input-label ">Disable All Button (GLOBAL)</label> <br/>
                         <input type="text" formControlName="BannerDisableAllText" class="az-input" pInputText/>
                       </div>
 
@@ -908,7 +908,7 @@
 
                     <div id="disableAllBannerButtonColor">
                       <p class="az-dropdown" (click)="onOpenDropDown('disableAllBannerButtonColor')"> Disable All
-                        (Generic)
+                        (GLOBAL)
                         <span *ngIf="showDropDownValue !== 'disableAllBannerButtonColor'"><i
                           class="fas fa-chevron-down"></i></span>
                         <span *ngIf="showDropDownValue === 'disableAllBannerButtonColor'"><i
