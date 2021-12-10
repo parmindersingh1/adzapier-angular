@@ -917,6 +917,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
             //   const a = this.location.path().split("?id=");
             //   this.router.navigate([a[0]], { queryParams: { id: a[1] } });
             // }
+            if (this.location.path().indexOf("manage?success=true") !== -1) {
+              this.router.navigate(['/settings/billing/manage'], { queryParams: { oid: obj.organization_id, pid: obj.property_id }, queryParamsHandling: 'merge', skipLocationChange: false });
+            }
             if (this.location.path().indexOf("type=manage") == -1 && this.location.path().indexOf("manage?success") == -1) {
               this.router.navigate([this.router.url], { queryParams: { oid: obj.organization_id, pid: obj.property_id }, queryParamsHandling: 'merge', skipLocationChange: false });
             } else {
@@ -2198,7 +2201,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
 
   removeHightlightBorders() {
     if (this.navMenuEle !== undefined) {
-      if (this.renderer !== undefined) {
+      if (this.renderer !== undefined && this.currentUser !== null) {
         this.renderer.removeClass(this.navMenuEle.nativeElement.querySelectorAll('li > div')[0], 'highlightmenu-element');
         this.renderer.removeClass(this.navMenuEle.nativeElement.querySelectorAll('li > div')[1], 'highlightmenu-element');
         this.renderer.removeClass(this.navMenuEle.nativeElement.querySelectorAll('li > div')[2], 'highlightmenu-element');
