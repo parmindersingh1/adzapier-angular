@@ -4,6 +4,7 @@ import { DataService } from '../_services/data.service';
 import { AuthenticationService } from './authentication.service';
 import { Location } from '@angular/common';
 import { findPropertyIDFromUrl } from '../_helpers/common-utility'
+import { take } from 'rxjs/operators';
 @Injectable({
   providedIn: 'root'
 })
@@ -17,7 +18,7 @@ export class RouteguardService implements CanActivate {
   canActivate(): boolean {
     const currentUser = this.authenticationService.currentUserValue;
     let isPropertyCreated;
-    this.dataService.OrganizationCreatedStatus.subscribe((status) => {
+    this.dataService.OrganizationCreatedStatus.pipe(take(1)).subscribe((status) => {
       isPropertyCreated = status;
     });
     if (currentUser) {
@@ -25,7 +26,7 @@ export class RouteguardService implements CanActivate {
       if (!isPropertyCreated && typeof checkStatusOnPageRefresh !== 'undefined' || !isPropertyCreated && checkStatusOnPageRefresh !== null) { 
         return true;
       }
-      if (isPropertyCreated) {
+      if (isPropertyCreated || checkStatusOnPageRefresh) {
         return true;
       }
     } else {

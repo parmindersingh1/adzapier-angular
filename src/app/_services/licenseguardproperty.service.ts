@@ -3,6 +3,7 @@ import { CanActivate, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { findPropertyIDFromUrl } from '../_helpers/common-utility';
 import { DataService } from '../_services/data.service';
+import { take } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -23,7 +24,7 @@ export class LicenseguardPropertyService implements CanActivate {
         ispropplanExist = true;
       }
     }
-    this.dataService.isLicenseAppliedForProperty.subscribe((status) => {
+    this.dataService.isLicenseAppliedForProperty.pipe(take(1)).subscribe((status) => {
       licenseStatusForProperty = status.hasaccess;
     });
 

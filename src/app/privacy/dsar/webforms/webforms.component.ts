@@ -9,7 +9,7 @@ import { DataService } from 'src/app/_services/data.service';
 import { DirtyComponents } from 'src/app/_models/dirtycomponents';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-import { debounceTime, filter } from 'rxjs/operators';
+import { debounceTime, filter, take } from 'rxjs/operators';
 interface WebFormModel {
   crid: any;
   form_name: string;
@@ -191,7 +191,7 @@ export class WebformsComponent implements OnInit, DirtyComponents {
 
   licenseAvailabilityForFormAndRequestPerOrg(org){
     this.dataService.removeAvailableLicenseForFormAndRequestPerOrg();
-    this.dataService.checkLicenseAvailabilityPerOrganization(org).subscribe(results => {
+    this.dataService.checkLicenseAvailabilityPerOrganization(org).pipe(take(1)).subscribe(results => {
       let finalObj = {
         ...results[0].response,
         ...results[1].response,

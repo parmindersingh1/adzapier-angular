@@ -20,6 +20,7 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { DataService } from 'src/app/_services/data.service';
 import { DirtyComponents } from 'src/app/_models/dirtycomponents';
 import { environment } from 'src/environments/environment';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-dsarform',
@@ -2577,7 +2578,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
   }
 
   licenseAvailabilityForFormAndRequestPerOrg(org){
-    this.dataService.checkLicenseAvailabilityPerOrganization(org).subscribe(results => {
+    this.dataService.checkLicenseAvailabilityPerOrganization(org).pipe(take(1)).subscribe(results => {
       let finalObj = {
         ...results[0].response,
         ...results[1].response,
