@@ -186,6 +186,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
   counter: any;
   showSidemenu:boolean = false;
   isUserOptQSMenu:boolean = false;
+  oidpidforstrip:any;
   constructor(
     private router: Router,
     private activatedroute: ActivatedRoute,
@@ -908,6 +909,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
             this.loadOrganizationPlanDetails(obj);
           //  this.loading.start('1');
             this.loadPropertyPlanDetails(obj);
+            this.oidpidforstrip = obj;
             //this.orgservice.setCurrentOrgWithProperty(obj); // three
             // if (this.location.path().indexOf("signup") !== -1) {
             //   this.currentUser = null;
@@ -1814,6 +1816,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
         this.router.navigate(["/signup"],{ queryParams: { id: verifyToken[1] }});
         //this.router.navigate(['/privacy/dsar/dsarform', obj.web_form_id]);
 
+      }
+      if (this.location.path().indexOf("manage?success=true") !== -1) { //for stripe success redirect
+          this.router.navigate(['/settings/billing/manage'], { queryParams: { oid: this.oidpidforstrip.organization_id, pid: this.oidpidforstrip.property_id }, queryParamsHandling: 'merge', skipLocationChange: false });
       } else if (this.location.path().indexOf("type=manage") == -1 && this.location.path().indexOf("manage?success") == -1) {
         this.oIDPIDFromURL = this.findPropertyIDFromUrl(this.currentNavigationUrl || this.location.path());
         const url = this.location.path() == '/' ? '/home/welcome' : this.getCurrentRoute();
