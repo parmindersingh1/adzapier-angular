@@ -23,12 +23,12 @@ export class ConsentSolutionsService {
               private activateRoute: ActivatedRoute,
               private orgservice: OrganizationService,
               private loki: LokiService) {
-    this.onGetPropsAndOrgId();
     this.activateRoute.queryParamMap
       .subscribe(params => {
         this.queryOID = params.get('oid');
         this.queryPID = params.get('pid'); 
     });
+    this.onGetPropsAndOrgId();
   }
 
   onGetPropsAndOrgId() {
