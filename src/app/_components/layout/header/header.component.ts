@@ -965,13 +965,16 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
                this.isPropSelected(obj);
                this.orgservice.changeCurrentSelectedProperty(obj); //check this..
                //  this.loading.start('1');
-               
+               this.licenseAvailabilityForFormAndRequestPerOrg(obj);
                if (this.location.path().indexOf("type=manage") == -1 && this.location.path().indexOf("manage?success") == -1) {
-                 this.router.navigate([this.router.url], { queryParams: { oid: obj.organization_id, pid: obj.property_id }, queryParamsHandling: 'merge', skipLocationChange: false });
+                if(this.router.url.indexOf("oid") !== -1 && this.router.url.indexOf("pid") !== -1){
+                  this.router.navigateByUrl(this.location.path());
+                 }else{
+                  this.router.navigate([this.router.url], { queryParams: { oid: obj.organization_id, pid: obj.property_id }, queryParamsHandling: 'merge', skipLocationChange: false });
+                }
                } else {
                  this.router.navigate(['/settings/billing/manage'], { queryParams: { oid: obj.organization_id, pid: obj.property_id }, queryParamsHandling: 'merge', skipLocationChange: false });
                }
-               this.licenseAvailabilityForFormAndRequestPerOrg(obj);
               
           }
           else {
