@@ -95,7 +95,7 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
     error: false,
     msg: ''
   };
-
+  showBadgeOption = false;
   constructor(private sanitizer: DomSanitizer,
               private formBuilder: FormBuilder,
               private loading: NgxUiLoaderService,
@@ -374,13 +374,14 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
       CookieBlocking: [false],
       AllowPurposeByDefault: [true],
       ShowWatermark: [true],
-      ShowBadge: [true],
       MuteBanner: [false],
       LayoutType: ['full-width-bottom'],
       PublishDate: [],
       PublishDateDisplay: [],
-      // BannerPosition: ['bottom'],
+      // Badge Position
       BadgePosition: ['right'],
+      ShowBadge: [true],
+      BadgeType: ['text'],
       // Language
       DefaultLanguage: ['en-US'],
       // Banner Content
@@ -562,7 +563,12 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
   onOpenDropDown(step) {
     this.showDropDownValue = this.showDropDownValue === step ? '' : step;
   }
-
+  onSetBadgeType(type) {
+    this.BannerConfigurationForm.patchValue({
+      BadgeType: type
+    });
+    this.showBadgeOption = true;
+  }
   onSelectThemeType(type) {
     this.themeType = type;
     if (type === 'dark') {
@@ -620,6 +626,7 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
       PublishDateDisplay: CONFIG?.PublishDateDisplay,
       // BannerPosition: CONFIG.BannerPosition,
       BadgePosition: CONFIG.BadgePosition,
+      BadgeType: CONFIG?.BadgeType,
       BannerPrivacyLink: CONFIG.Banner.Privacy.privacyLink,
       // Display Frequency
       DisplayPartialConsent: CONFIG.DisplayFrequency.bannerPartialConsent,
@@ -913,6 +920,7 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
       LayoutType: this.BannerConfigurationForm?.value?.LayoutType,
       // BannerPosition: this.BannerConfigurationForm.value.BannerPosition,
       BadgePosition: this.BannerConfigurationForm.value.BadgePosition,
+      BadgeType: this.BannerConfigurationForm.value?.BadgeType,
       CustomerBrandLogo: this.customerBrandLogo,
       ThemeType: this.themeType,
       PublishDate: this.BannerConfigurationForm.value?.PublishDate,
