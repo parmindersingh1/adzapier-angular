@@ -232,7 +232,7 @@
                       <div class="col-md-12 mt-2">
                         <a routerLink="/cookie-consent/manage-vendors"
                            [queryParams]="{oid: currentManagedOrgID, pid: currrentManagedPropID}"
-                           class="btn btn-link float-right">Manage Vendors</a>
+                           class="btn btn-link float-right tx-12">Manage Vendors</a>
                       </div>
                     </div>
 
@@ -396,14 +396,14 @@
                       </div>
                     </div>
 
-                    <div class="row mt-3">
-                      <div class="col-md-6">
-                        <p class=" mb-0  input-label pt-2">Show Badge</p>
-                      </div>
-                      <div class="col-md-6">
-                        <p-inputSwitch formControlName="ShowBadge"></p-inputSwitch>
-                      </div>
-                    </div>
+<!--                    <div class="row mt-3">-->
+<!--                      <div class="col-md-6">-->
+<!--                        <p class=" mb-0  input-label pt-2">Show Badge</p>-->
+<!--                      </div>-->
+<!--                      <div class="col-md-6">-->
+<!--                        <p-inputSwitch formControlName="ShowBadge"></p-inputSwitch>-->
+<!--                      </div>-->
+<!--                    </div>-->
 
                     <div class="row mt-3">
                       <div class="col-md-6">
@@ -432,6 +432,68 @@
                     <!--                      </div>-->
                     <!--                    </div>-->
 
+<!--                    <div class="row mt-3">-->
+<!--                      <div class="col-md-5">-->
+<!--                        <p class=" mb-0  input-label pt-2"-->
+<!--                           [ngStyle]="{color: !BannerConfigurationForm.value.ShowBadge ? '#999' : null}">Badge-->
+<!--                          Position</p>-->
+<!--                      </div>-->
+<!--                      <div class="col-md-7">-->
+<!--                        <div class="row">-->
+<!--                          <div class="p-field-radiobutton col-md-6">-->
+<!--                            <p-radioButton name="BadgePosition" [disabled]="!BannerConfigurationForm.value.ShowBadge"-->
+<!--                                           value="left" formControlName="BadgePosition" inputId="left"></p-radioButton>-->
+<!--                            <label for="left" class="pt-2 pl-3 mb-0 input-label">Left</label>-->
+<!--                          </div>-->
+<!--                          <div class="p-field-radiobutton col-md-6">-->
+<!--                            <p-radioButton name="BadgePosition" [disabled]="!BannerConfigurationForm.value.ShowBadge"-->
+<!--                                           value="right" formControlName="BadgePosition"-->
+<!--                                           inputId="right"></p-radioButton>-->
+<!--                            <label for="right" class="pt-2 pl-3 mb-0 input-label">Right</label>-->
+<!--                          </div>-->
+<!--                        </div>-->
+<!--                      </div>-->
+<!--                    </div>-->
+
+
+                  </div>
+
+                  <div class="badge-config ml-4">
+                    <p-divider align="left" type="dashed">
+                      <b>Badge</b>
+                    </p-divider>
+
+                    <div class="row mt-3">
+                      <div class="col-md-6">
+                        <p class=" mb-0  input-label pt-2">Show Badge</p>
+                      </div>
+                      <div class="col-md-6">
+                        <p-inputSwitch  (onChange)="showBadgeOption = true" formControlName="ShowBadge"></p-inputSwitch>
+                      </div>
+                    </div>
+
+                    <div class="row mt-3">
+                      <div class="col-md-4">
+                        <p class=" mb-0  input-label pt-2">Badge Type</p>
+                      </div>
+                      <div class="col-md-8">
+                        <div class="row">
+                        <div class="col-md-8">
+                          <button type="button" (click)="onSetBadgeType('text')"  (click)="showBadgeOption = true"
+                                  [ngClass]="{'btn-outline-secondary': BannerConfigurationForm.value.BadgeType !== 'text', 'btn-secondary' : BannerConfigurationForm.value.BadgeType === 'text' }"
+                                  class="btn tx-12 ">Cookie Consent</button>
+                        </div>
+                        <div class="col-md-4 pl-0 text-left">
+                          <button (click)="onSetBadgeType('icon')" type="button"  (click)="showBadgeOption = true"
+                                  [ngClass]="{'btn-outline-secondary': BannerConfigurationForm.value.BadgeType !== 'icon', 'btn-secondary' : BannerConfigurationForm.value.BadgeType === 'icon' }" class="btn">
+                            <i class="fas fa-fingerprint tx-20"></i>
+                          </button>
+                        </div>
+                        </div>
+                      </div>
+                    </div>
+
+
                     <div class="row mt-3">
                       <div class="col-md-5">
                         <p class=" mb-0  input-label pt-2"
@@ -441,12 +503,12 @@
                       <div class="col-md-7">
                         <div class="row">
                           <div class="p-field-radiobutton col-md-6">
-                            <p-radioButton name="BadgePosition" [disabled]="!BannerConfigurationForm.value.ShowBadge"
+                            <p-radioButton name="BadgePosition" [disabled]="!BannerConfigurationForm.value.ShowBadge" (click)="showBadgeOption = true"
                                            value="left" formControlName="BadgePosition" inputId="left"></p-radioButton>
                             <label for="left" class="pt-2 pl-3 mb-0 input-label">Left</label>
                           </div>
                           <div class="p-field-radiobutton col-md-6">
-                            <p-radioButton name="BadgePosition" [disabled]="!BannerConfigurationForm.value.ShowBadge"
+                            <p-radioButton name="BadgePosition" [disabled]="!BannerConfigurationForm.value.ShowBadge"  (click)="showBadgeOption = true"
                                            value="right" formControlName="BadgePosition"
                                            inputId="right"></p-radioButton>
                             <label for="right" class="pt-2 pl-3 mb-0 input-label">Right</label>
@@ -1381,8 +1443,8 @@
           <ng-template pTemplate>
             <div class="p-col p-d-flex p-ai-center p-jc-center"
                  [ngStyle]="{margin: currentBannerLayer === 'preference' || BannerConfigurationForm.value.LayoutType === 'boxed-center' ? 'auto' : null}">
-              <app-az-banner *ngIf="currentBannerLayer === 'banner'" (currentBannerLayer)="onChangeBannerLayer($event)"
-                             [formData]="BannerConfigurationForm.value"></app-az-banner>
+              <app-az-banner *ngIf="currentBannerLayer === 'banner'" (currentBannerLayer)="onChangeBannerLayer($event)" [showBadge]="showBadgeOption"
+                            (showBadgeOption)="showBadgeOption = false" [formData]="BannerConfigurationForm.value"></app-az-banner>
               <app-az-preference *ngIf="currentBannerLayer === 'preference'" [formData]="BannerConfigurationForm.value"
                                  [purposesList]="purposesList"></app-az-preference>
             </div>
