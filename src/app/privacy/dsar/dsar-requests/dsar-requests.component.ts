@@ -538,7 +538,7 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
       .subscribe((data) => {
         this.isloading = false;
         const key = 'response';
-        if (Object.values(data[key]).length > 0) {
+        if (Object.values(data[key]).length > 0 && data[key] !== "No data found.") {
           this.requestsList = Object.values(data[key]);
           this.reloadRequestList = [...this.requestsList];
         }
