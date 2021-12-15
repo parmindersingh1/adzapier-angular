@@ -248,17 +248,19 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
           });
       }
     } else {//in case of filter applied subject/request type/status/duein
-      if (event.first === 0) {
-        this.firstone = 1;
-      } else {
-        this.firstone = (event.first / event.rows) + 1;
-      }
-      if (this.firstone > 1 && event.first !== 0) {
-      this.requestsList = this.storeSearchList.slice(event.first, (event.first + event.rows));
-      } else {
-       // this.requestsList = this.storeSearchList.slice(0, event.rows); //event.first
-        this.requestsList = this.storeSearchList.slice(event.first, (event.first + event.rows));
-      }
+     // if (this.searchbydaterange !== '' || this.searchbydaterange !== null) {
+        if (event.first === 0) {
+          this.firstone = 1;
+        } else {
+          this.firstone = (event.first / event.rows) + 1;
+        }
+        if (this.firstone > 1 && event.first !== 0) {
+          this.requestsList = this.storeSearchList.slice(event.first, (event.first + event.rows));
+        } else {
+          // this.requestsList = this.storeSearchList.slice(0, event.rows); //event.first
+          this.requestsList = this.storeSearchList.slice(event.first, (event.first + event.rows));
+        }
+     // }
     }
 
     this.cols = [
@@ -391,6 +393,7 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
     this.searchFilter();
     }else{
       this.requestType = "";
+      this.issearchfilterForReq = false;
       this.issearchfilteractive = false;
       if(this.issearchfilterForSub || this.issearchfilterForReq || this.issearchfilterForStatus){
         this.searchFilter();
@@ -407,6 +410,7 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
       this.searchFilter();
     }else{
       this.status = "";
+      this.issearchfilterForStatus = false;
       this.issearchfilteractive = false;
       if(this.issearchfilterForSub || this.issearchfilterForReq || this.issearchfilterForStatus){
         this.searchFilter();
@@ -436,6 +440,7 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
     }else{
       this.subjectType = "";
       this.issearchfilteractive = false;
+      this.issearchfilterForSub = false;
       if(this.issearchfilterForSub || this.issearchfilterForReq || this.issearchfilterForStatus){
         this.searchFilter();
       }else{
@@ -659,7 +664,7 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
           this.alertType = 'danger';
         });
       }else{
-        this.onRefreshDSARList();
+        this.clearDatePicker();
       }
   }
 
@@ -715,6 +720,7 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
   }
 
   clearDatePicker(){
+    this.issearchfilteractive = false;
     this.selectedDateRange = "";
     this.searchbydaterange = "";    
     this.onRefreshDSARList();
