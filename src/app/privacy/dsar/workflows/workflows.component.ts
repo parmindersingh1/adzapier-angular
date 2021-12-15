@@ -9,7 +9,7 @@ import { TablePaginationConfig } from 'src/app/_models/tablepaginationconfig';
 import { moduleName } from '../../../_constant/module-name.constant';
 import { LazyLoadEvent } from 'primeng/api';
 import { Subject } from 'rxjs';
-import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, take } from 'rxjs/operators';
 import { OrganizationService } from 'src/app/_services';
 import { trimValidator } from 'src/app/_helpers/trimspace.validator';
 import { DirtyComponents } from 'src/app/_models/dirtycomponents';
@@ -127,8 +127,7 @@ export class WorkflowsComponent implements OnInit, AfterViewInit, DirtyComponent
       if (response !== '') {
         this.currentManagedOrgID = response.organization_id || response.response.oid;
       } else {
-        const orgDetails = this.orgservice.getCurrentOrgWithProperty();
-        this.currentManagedOrgID = orgDetails.organization_id || orgDetails.response.oid;
+        this.currentManagedOrgID = this.queryOID;
       }
     });
   }
@@ -365,7 +364,7 @@ isLicenseLimitAvailable(){
 
 licenseAvailabilityForFormAndRequestPerOrg(org){
   this.dataService.removeAvailableLicenseForFormAndRequestPerOrg();
-  this.dataService.checkLicenseAvailabilityPerOrganization(org).subscribe(results => {
+  this.dataService.checkLicenseAvailabilityPerOrganization(org).pipe(take(1)).subscribe(results => {
     let finalObj = {
       ...results[0].response,
       ...results[1].response,

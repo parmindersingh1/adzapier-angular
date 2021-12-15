@@ -100,6 +100,9 @@ export const apiConstant = {
   SCAN_BEHIND_LOGIN:'/scanner/sbl/:propid',
   SCAN_BEHIND_LOGIN_UPDATE:'/scanner/update/sbl/:propid',
 
+  //Cart
+  ADDTOCART : '/cart',
+  UPDATECART : '/cart/update'
 };
 
 // {

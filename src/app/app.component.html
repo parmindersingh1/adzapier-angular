@@ -1,8 +1,8 @@
 <div class="container-fluid" [ngClass]="!isloginpage ? 'remove-btm-margin remove-top-margin loginbg' : ''" #pageContainer (click)="onPageClick()">
   <div class="row">
-    <app-header class="w-100" [isqsmenuopen]="isquickstartopen" [isquickstartdismissed]="toggleQuickstartmenu" [qslinkobj]="qsmenulinkobj" (onClickEnableQuickStartMenu)="enableQuickStartMenu($event)" [isquicklinkclicked]="isquickLinkclicked" *ngIf="hideHeaderFooter"></app-header>
+    <app-header class="w-100" [isqsmenuopen]="isquickstartopen" [isquickstartdismissed]="isQuickstartmenuDismissed" [qslinkobj]="qsmenulinkobj" (onClickEnableQuickStartMenu)="enableQuickStartMenu($event)" [isquicklinkclicked]="isquickLinkclicked" *ngIf="hideHeaderFooter"></app-header>
     <div class="center-div" [ngClass]="isBillingpageUrl ? 'blue-back' : ''">
-    <div id="main" class="site-content" [ngClass]="!isloginpage ? 'remove-btm-margin remove-top-margin' : ''" [@slideInOutApp]="isSidemenuClick ? true : false">
+    <div id="main" class="site-content" [ngClass]="[!isloginpage ? 'remove-btm-margin remove-top-margin' : '',!checkSidemenuVisibility ? 'site-content-rm-left-padding':'']" [@slideInOutApp]="isSidemenuClick ? true : false">
       <section class="container-fluid">
       <router-outlet></router-outlet>
       </section>
@@ -10,10 +10,10 @@
     </div><!-- content -->
     </div> <!--to check whether billing page url to add bg -->
     <ngx-ui-loader></ngx-ui-loader>
-    <app-quickstartmenu [quickStartMenuList]="qsMenuList"  (onClickQuickStart)="getStyle($event)" (onClickEmitQSLinkobj)="receivedQSLinkObj($event)" [enablequickstartfromtopmenu]="toggleQuickstartmenu" [istopmenuclicked]="isquickstartopen" [ngStyle]="{'position':'fixed','z-index':'1200'}" *ngIf="isloginpage"></app-quickstartmenu>
+    <app-quickstartmenu [quickStartMenuList]="qsMenuList" (onClickDismiss)="onDismissQSM($event)" (onClickQuickStart)="getStyle($event)" (onClickEmitQSLinkobj)="receivedQSLinkObj($event)" [enablequickstartfromtopmenu]="isQuickstartmenuDismissed" [istopmenuclicked]="isquickstartopen" [ngStyle]="{'position':'fixed','z-index':'1200'}" *ngIf="isloginpage && !isQuickstartmenuDismissed"></app-quickstartmenu>
   </div>
 </div>
-<app-footer [isheadernotrequired]="!isloginpage" class="w-100" *ngIf="hideHeaderFooter"></app-footer>
+<app-footer [isheadernotrequired]="!isloginpage" class="w-100"></app-footer>
 <div  class="full-back"  *ngIf="isShowingRouteLoadIndicator" >
   <div style="margin-left: 49%; margin-top: 9%; color: #040d26" class="spinner-border"></div>
 </div>

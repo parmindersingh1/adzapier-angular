@@ -349,7 +349,7 @@ export class OrganizationdetailsComponent implements OnInit {
       //  if (!this.isEditOrganization) {
       const updateObj = {
         orgname: this.editOrganisationForm.value.organizationName,
-        taxID: this.editOrganisationForm.value.taxID,
+        tax_id: this.editOrganisationForm.value.taxID,
         address1: this.editOrganisationForm.value.addressOne,
         address2: this.editOrganisationForm.value.addressTwo,
         city: this.editOrganisationForm.value.city,
@@ -866,7 +866,9 @@ export class OrganizationdetailsComponent implements OnInit {
 
   loadOrganizationLicenseNameByID(orgid,licenseID){
    this.orgService.getOrganizationLicenseNameByID(orgid,licenseID).subscribe((data)=>{
-    this.orgLicensedPlanName = data.response[0].name + " " + data.response[0].cycle;
+     if( data.response[0] !== undefined && data.response[0].name !== undefined && data.response[0].cycle !== undefined){
+      this.orgLicensedPlanName = data.response[0].name + " " + data.response[0].cycle;
+     }
    })
   }
 

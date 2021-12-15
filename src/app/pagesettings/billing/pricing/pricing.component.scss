@@ -315,11 +315,19 @@ li {
   font-size: 12px;
   font-weight: 600;
 }
+
 .text-color-nr {
   color:#333 !important;
 }
 .mr-feature {
   margin-bottom: 40px;
+}
+.hello{
+  position: fixed;
+  top:70px;
+  right: 20px;
+  z-index: 1000;
+  
 }
 .annual {
   display: inline;

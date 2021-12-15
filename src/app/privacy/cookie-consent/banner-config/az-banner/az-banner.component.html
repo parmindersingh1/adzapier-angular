@@ -1,6 +1,6 @@
 <div class="banner-main">
 
-
+  <ng-container *ngIf="!showBadge">
   <div id="ccpa-banner" *ngIf="formData.LivePreviewType === 'ccpa'" class="banner-content ">
     <div class="row m-0">
       <div class="card" [ngClass]="{'banner-bottom': isBannerBottomType === 'bottom',
@@ -8,22 +8,22 @@
            [ngStyle]="{'background' : formData.BannerCookieNoticeBackgroundColor,
             'color' : formData.BannerCookieNoticeTextColor,
       width: isBoxedType === 'boxed' ? '600px' : ''}">
-        <div class="card-body banner-border-top" [ngStyle]="{ 'border-top' : isBoxedType !== 'boxed' ? '2px solid' + formData.BannerCookieNoticeBorderColor : null,
+        <div class="card-body pt-2 p-1 banner-border-top" [ngStyle]="{ 'border-top' : isBoxedType !== 'boxed' ? '2px solid' + formData.BannerCookieNoticeBorderColor : null,
          'border' : isBoxedType === 'boxed' ? '2px solid' + formData.BannerCookieNoticeBorderColor : null
         }" >
           <div class="row m-0">
             <div class="col-12" [ngClass]="{'col-md-12': isBoxedType === 'boxed', 'col-md-6': isBoxedType !== 'boxed'}">
-              <h5 [ngStyle]="{ 'color' : formData.BannerCookieNoticeTextColor}"> {{formData.BannerTitle}}</h5>
-              <p class="text-justify"> {{formData.BannerDescription}} <a [style]="{color: formData.BannerCookieNoticePrivacyLinkColor}" [href]="formData.BannerPrivacyLink" target="_blank">{{formData.BannerPrivacyText}}</a></p>
+              <h6 [ngStyle]="{ 'color' : formData.BannerCookieNoticeTextColor}"> {{formData.BannerTitle}}</h6>
+              <p class="text-justify tx-12"> {{formData.BannerDescription}} <a [style]="{color: formData.BannerCookieNoticePrivacyLinkColor}" [href]="formData.BannerPrivacyLink" target="_blank">{{formData.BannerPrivacyText}}</a></p>
             </div>
             <div class="banner-action-btn" [ngStyle]="{paddingTop: isBoxedType === 'boxed' ? '5px': null,
             textAlign: isBoxedType === 'boxed' ? 'center': null}"
                  [ngClass]="{'col-md-12': isBoxedType === 'boxed', 'col-md-6': isBoxedType !== 'boxed'}">
-              <button pButton pRipple type="button" (click)="onOpenPreference()" [label]="formData.BannerPreferenceText" class="p-button-text mr-3"
+              <button pButton pRipple type="button" (click)="onOpenPreference()" style="font-size: 11px" [label]="formData.BannerPreferenceText" class="p-button-text tx-12 mr-1"
                       [ngStyle]="{'background': formData.BannerPreferenceBackgroundColor, 'border-color': formData.BannerPreferenceBackgroundColor, 'color': formData.BannerPreferenceTextColor}"></button>
-              <button pButton pRipple type="button" [label]="formData.BannerDoNotSellText" class="p-button-secondary mr-3"
+              <button pButton pRipple type="button" [label]="formData.BannerDoNotSellText" style="font-size: 11px"  class="p-button-secondary tx-12 mr-1"
                       [ngStyle]="{'background': formData.BannerDoNotSellMyDataBackgroundColor, 'border-color': formData.BannerDoNotSellMyDataBackgroundColor, 'color': formData.BannerDoNotSellMyDataTextColor}"></button>
-              <button pButton pRipple type="button" [label]="formData.BannerAcceptAllText"
+              <button pButton pRipple type="button" [label]="formData.BannerAcceptAllText" style="font-size: 11px"
                       [ngStyle]="{'background': formData.BannerAcceptAllBackgroundColor, 'border-color': formData.BannerAcceptAllBackgroundColor, 'color': formData.BannerAcceptAllTextColor}"></button>
             </div>
           </div>
@@ -31,7 +31,6 @@
       </div>
     </div>
   </div>
-
 
   <div id="genric-banner" *ngIf="formData.LivePreviewType === 'generic'" class="banner-content ">
     <div class="row m-0">
@@ -40,22 +39,22 @@
            [ngStyle]="{'background' : formData.BannerCookieNoticeBackgroundColor,
             'color' : formData.BannerCookieNoticeTextColor,
       width: isBoxedType === 'boxed' ? '600px' : ''}">
-        <div class="card-body banner-border-top" [ngStyle]="{ 'border-top' : isBoxedType !== 'boxed' ? '2px solid' + formData.BannerCookieNoticeBorderColor : null,
+        <div class="card-body pt-2 p-1 banner-border-top" [ngStyle]="{ 'border-top' : isBoxedType !== 'boxed' ? '2px solid' + formData.BannerCookieNoticeBorderColor : null,
          'border' : isBoxedType === 'boxed' ? '2px solid' + formData.BannerCookieNoticeBorderColor : null
         }" >
           <div class="row m-0">
             <div [ngClass]="{'col-md-12': isBoxedType === 'boxed', 'col-md-6': isBoxedType !== 'boxed'}">
-              <h5 [ngStyle]="{ 'color' : formData.BannerCookieNoticeTextColor}"> {{formData.BannerTitle}}</h5>
-              <p class="text-justify"> {{formData.BannerDescription}} <a [style]="{color: formData.BannerCookieNoticePrivacyLinkColor}" [href]="formData.BannerPrivacyLink" target="_blank">{{formData.BannerPrivacyText}}</a></p>
+              <h6 [ngStyle]="{ 'color' : formData.BannerCookieNoticeTextColor}"> {{formData.BannerTitle}}</h6>
+              <p class="text-justify tx-12"> {{formData.BannerDescription}} <a [style]="{color: formData.BannerCookieNoticePrivacyLinkColor}" [href]="formData.BannerPrivacyLink" target="_blank">{{formData.BannerPrivacyText}}</a></p>
             </div>
             <div class="banner-action-btn" [ngStyle]="{paddingTop: isBoxedType === 'boxed' ? '5px': null,
             textAlign: isBoxedType === 'boxed' ? 'center': null}"
                  [ngClass]="{'col-md-12': isBoxedType === 'boxed', 'col-md-6': isBoxedType !== 'boxed'}">
-              <button pButton pRipple type="button" (click)="onOpenPreference()" [label]="formData.BannerPreferenceText" class="p-button-text mr-3"
+              <button pButton pRipple type="button" (click)="onOpenPreference()" style="font-size: 12px"  [label]="formData.BannerPreferenceText" class="p-button-text mr-3"
               [ngStyle]="{'background': formData.BannerPreferenceBackgroundColor, 'border-color': formData.BannerPreferenceBackgroundColor, 'color': formData.BannerPreferenceTextColor}"></button>
-              <button pButton pRipple type="button" [label]="formData.BannerDisableAllText" class="p-button-secondary mr-3"
+              <button pButton pRipple type="button" [label]="formData.BannerDisableAllText" style="font-size: 12px"  class="p-button-secondary mr-3"
                       [ngStyle]="{'background': formData.BannerDisableAllBackgroundColor, 'border-color': formData.BannerDisableAllBackgroundColor, 'color': formData.BannerDisableAllTextColor}"></button>
-              <button pButton pRipple type="button" [label]="formData.BannerAcceptAllText"
+              <button pButton pRipple type="button" [label]="formData.BannerAcceptAllText" style="font-size: 12px"
                       [ngStyle]="{'background': formData.BannerAcceptAllBackgroundColor, 'border-color': formData.BannerAcceptAllBackgroundColor, 'color': formData.BannerAcceptAllTextColor}"></button>
             </div>
           </div>
@@ -63,8 +62,6 @@
       </div>
     </div>
   </div>
-
-
 
   <div id="gdpr-banner" *ngIf="formData.LivePreviewType === 'gdpr'" class="banner-content ">
     <div class="row m-0" >
@@ -74,26 +71,26 @@
            [ngStyle]="{'background' : formData.BannerCookieNoticeBackgroundColor,
             'color' : formData.BannerCookieNoticeTextColor,
       width: isBoxedType === 'boxed' ? '600px' : ''}">
-        <div class="card-body banner-border-top"  [ngStyle]="{ 'border-top' : isBoxedType !== 'boxed' ? '2px solid' + formData.BannerCookieNoticeBorderColor : null,
+        <div class="card-body pt-2 p-1 banner-border-top"  [ngStyle]="{ 'border-top' : isBoxedType !== 'boxed' ? '2px solid' + formData.BannerCookieNoticeBorderColor : null,
          'border' : isBoxedType === 'boxed' ? '2px solid' + formData.BannerCookieNoticeBorderColor : null
         }"  >
           <div class="row m-0">
             <div
                  [ngClass]="{'col-md-12 gdpr-border-bottom': isBoxedType === 'boxed', 'col-md-5 gdpr-border-right': isBoxedType !== 'boxed'}"
                  [ngStyle]="{ 'border-color' : formData.BannerCookieNoticeBorderColor }" >
-              <h5 [ngStyle]="{ 'color' : formData.BannerCookieNoticeTextColor}"> {{formData.BannerTitle}}</h5>
-              <p class="text-justify"> {{formData.BannerDescription}} <a [style]="{color: formData.BannerCookieNoticePrivacyLinkColor}" [href]="formData.BannerPrivacyLink" target="_blank">{{formData.BannerPrivacyText}}</a></p>
+              <h6 [ngStyle]="{ 'color' : formData.BannerCookieNoticeTextColor}"> {{formData.BannerTitle}}</h6>
+              <p style="font-size: 12px"  class="text-justify"> {{formData.BannerDescription}} <a [style]="{color: formData.BannerCookieNoticePrivacyLinkColor}" [href]="formData.BannerPrivacyLink" target="_blank">{{formData.BannerPrivacyText}}</a></p>
             </div>
             <div [ngClass]="{'col-md-12': isBoxedType === 'boxed', 'col-md-5': isBoxedType !== 'boxed'}">
-              <p class="text-justify"> {{formData.BannerGDPRDescription2}}</p>
+              <p style="font-size: 12px"  class="text-justify"> {{formData.BannerGDPRDescription2}}</p>
             </div>
             <div class="text-center banner-action-btn"
                  [ngStyle]="{paddingTop: isBoxedType === 'boxed' ? '5px': null,
             textAlign: isBoxedType === 'boxed' ? 'center': null}"
                  [ngClass]="{'col-md-12': isBoxedType === 'boxed', 'col-md-2': isBoxedType !== 'boxed'}">
-              <button pButton pRipple type="button" (click)="onOpenPreference()" [label]="formData.BannerPreferenceText" class="p-button-text"
+              <button style="font-size: 12px"  pButton pRipple type="button" (click)="onOpenPreference()" [label]="formData.BannerPreferenceText" class="p-button-text"
                       [ngStyle]="{'background': formData.BannerPreferenceBackgroundColor, 'border-color': formData.BannerPreferenceBackgroundColor, 'color': formData.BannerPreferenceTextColor}"></button>
-              <button class="mt-2" pButton pRipple type="button" [label]="formData.BannerAcceptAllText"
+              <button style="font-size: 12px"  class="mt-2" pButton pRipple type="button" [label]="formData.BannerAcceptAllText"
                       [ngStyle]="{'background': formData.BannerAcceptAllBackgroundColor, 'border-color': formData.BannerAcceptAllBackgroundColor, 'color': formData.BannerAcceptAllTextColor}"></button>
             </div>
           </div>
@@ -102,5 +99,17 @@
     </div>
   </div>
 
+  </ng-container>
+  <ng-container *ngIf="showBadge && formData.ShowBadge">
+    <button type="button" (click)="showCookieNotice()" class="btn btn-link tx-13">Back to Cookie Notice</button>
+  </ng-container>
 
+  <ng-container *ngIf="showBadge && formData.ShowBadge">
+    <div class="badge-btn-options p-2"  [ngStyle]="{right: formData.BadgePosition === 'right' ? 0 : null}" >
+      <button type="button" (click)="onOpenPreference()" *ngIf="formData.BadgeType === 'icon'; else defaultBadge"  class="btn btn-white"><i class="fas tx-24 fa-fingerprint"></i></button>
+      <ng-template #defaultBadge>
+        <button type="button" (click)="onOpenPreference()" class="btn btn-white">Cookie Consent</button>
+      </ng-template>
+    </div>
+  </ng-container>
 </div>

@@ -1,6 +1,6 @@
-//.fixed-bottom{
-//  background-color: #FFFFFF;
-//}
+// .fixed-bottom{
+//   background-color: #FFFFFF;
+// }
 //.footer{
 //  position: absolute;
 //  bottom: 0px;
@@ -20,4 +20,30 @@
 .addbg{
     background-color: #004097;
     color:#fff;
+}
+
+.footer-margin-right{
+    margin-right: 150px;
+}
+
+.footer-margin-right > nav a {
+    color:#fff;
+}
+
+.color-white {
+    color:#fff;
+}
+
+.color-white:hover {
+    text-decoration: underline;
+    color: #fff !important;
+}
+
+.color-gray {
+    color:#637388 !important;
+}
+
+.color-gray:hover {
+    text-decoration: underline !important;
+    color: #637388 !important;
 }
