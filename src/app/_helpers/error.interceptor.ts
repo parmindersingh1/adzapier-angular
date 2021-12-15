@@ -113,8 +113,10 @@ export class ErrorInterceptor implements HttpInterceptor {
               } else if(err.url.indexOf('/cart') !== -1){
                 const error = err.error.error || err.statusText;
                 return throwError(error);
-              }
-                else{
+              } else if(err.url.indexOf('/api/v1/ccpa/data') !== -1){
+                const error = err.error.error || err.statusText;
+                return throwError(error);
+              } else{
                 this.router.navigate(['/error/servererror']);
               }
             }
