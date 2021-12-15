@@ -25,7 +25,7 @@
         </span>
         </div>
         <input type="text" [(ngModel)]="searchbydaterange" class="form-control border-left-0  border-right-0 rounded-right"
-          bsDaterangepicker [bsConfig]="bsConfig" #dp="bsDaterangepicker" placeholder="Select Date"
+          bsDaterangepicker [bsConfig]="bsConfig" #dp="bsDaterangepicker"  [outsideClick]="true" placeholder="Select Date"
           (onHidden)="onDateSelection()">
         <div class="input-group-prepend border-left-0" (click)="dp.show()">
           <span class="input-group-text rounded-left border-right-0" id="inputGroup-sizing-sm"><i class="fa fa-calendar"></i></span>
