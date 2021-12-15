@@ -8,7 +8,9 @@ import {Component, Input, OnInit, Output, EventEmitter} from '@angular/core';
 export class AzBannerComponent implements OnInit {
   bannerType = 'generic';
   @Input('formData') formData;
+  @Input('showBadge') showBadge;
   @Output('currentBannerLayer') currentBannerLayer = new EventEmitter();
+  @Output('showBadgeOption') showBadgeOption = new EventEmitter();
   constructor() { }
 
   ngOnInit(): void {
@@ -24,5 +26,10 @@ export class AzBannerComponent implements OnInit {
   }
   get isBannerRightType() {
     return this.formData?.LayoutType?.search('right') !== -1 ? 'right' : 'left';
+  }
+
+  showCookieNotice() {
+    this.showBadge = false;
+    this.showBadgeOption.emit(true);
   }
 }

@@ -1,6 +1,6 @@
 <div class="banner-main">
 
-
+  <ng-container *ngIf="!showBadge">
   <div id="ccpa-banner" *ngIf="formData.LivePreviewType === 'ccpa'" class="banner-content ">
     <div class="row m-0">
       <div class="card" [ngClass]="{'banner-bottom': isBannerBottomType === 'bottom',
@@ -32,7 +32,6 @@
     </div>
   </div>
 
-
   <div id="genric-banner" *ngIf="formData.LivePreviewType === 'generic'" class="banner-content ">
     <div class="row m-0">
       <div class="card" [ngClass]="{'banner-bottom': isBannerBottomType === 'bottom',
@@ -63,8 +62,6 @@
       </div>
     </div>
   </div>
-
-
 
   <div id="gdpr-banner" *ngIf="formData.LivePreviewType === 'gdpr'" class="banner-content ">
     <div class="row m-0" >
@@ -102,5 +99,17 @@
     </div>
   </div>
 
+  </ng-container>
+  <ng-container *ngIf="showBadge && formData.ShowBadge">
+    <button type="button" (click)="showCookieNotice()" class="btn btn-link tx-13">Back to Cookie Notice</button>
+  </ng-container>
 
+  <ng-container *ngIf="showBadge && formData.ShowBadge">
+    <div class="badge-btn-options p-2"  [ngStyle]="{right: formData.BadgePosition === 'right' ? 0 : null}" >
+      <button type="button" (click)="onOpenPreference()" *ngIf="formData.BadgeType === 'icon'; else defaultBadge"  class="btn btn-white"><i class="fas tx-24 fa-fingerprint"></i></button>
+      <ng-template #defaultBadge>
+        <button type="button" (click)="onOpenPreference()" class="btn btn-white">Cookie Consent</button>
+      </ng-template>
+    </div>
+  </ng-container>
 </div>
