@@ -133,6 +133,9 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
   queryOID;
   queryPID;
   issearchfilteractive:boolean = false;
+  issearchfilterForReq:boolean = false;
+  issearchfilterForSub:boolean = false;
+  issearchfilterForStatus:boolean = false;
   dprequestStatus;
   dpsubjectType;
   dprequestType;
@@ -230,9 +233,10 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
           .subscribe((data) => {
             this.isloading = false;
             const key = 'response';
-            if (Object.values(data[key]).length > 0) {
+            if (Object.values(data[key]).length > 0 && data[key] !== "No data found.") {
               this.requestsList = Object.values(data[key]);
               this.reloadRequestList = [...this.requestsList];
+              this.totalRecords = data.count;
               // this.rows = Object.values(data[key]).length;
             }
             this.totalRecords = data.count;
@@ -281,13 +285,14 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
           this.isloading = false;
           this.issearchfilteractive = true;
           const key = 'response';
-          if (Object.values(res[key]).length > 0) {
+          if (Object.values(res[key]).length > 0 && res[key] !== "No data found.") {
             this.storeSearchList = Object.values(res[key]);
             this.totalRecords = res['count'];
             this.loadrequestsListLazy(this.lazyEvent);
           }
           else {
             this.requestsList = [];
+            this.totalRecords = 0;
           }
         }, error => {
           this.loading.stop();
@@ -361,13 +366,14 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
         this.isloading = false;
         this.issearchfilteractive = true;
         const key = 'response';
-        if (Object.values(res[key]).length > 0) {
+        if (Object.values(res[key]).length > 0 && res[key] !== "No data found.") {
           this.storeSearchList = Object.values(res[key]);
           this.totalRecords = res['count'];
           this.loadrequestsListLazy(this.lazyEvent);
         }
         else {
           this.requestsList = [];
+          this.totalRecords = 0
         }
       }, error => {
         this.isloading = false;
@@ -381,20 +387,32 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
   onChangeRequestType(event) {
     if(event.target.value !== ""){
     this.requestType = event.target.value;
+    this.issearchfilterForReq = true;
     this.searchFilter();
     }else{
+      this.requestType = "";
       this.issearchfilteractive = false;
-      this.onRefreshDSARList();
+      if(this.issearchfilterForSub || this.issearchfilterForReq || this.issearchfilterForStatus){
+        this.searchFilter();
+      }else{
+        this.onRefreshDSARList();
+      }
     }
   }
 
   onChangeStatus(event) {
     if(event.target.value !== ""){
       this.status = event.target.value;
+      this.issearchfilterForStatus = true;
       this.searchFilter();
     }else{
+      this.status = "";
       this.issearchfilteractive = false;
-      this.onRefreshDSARList();
+      if(this.issearchfilterForSub || this.issearchfilterForReq || this.issearchfilterForStatus){
+        this.searchFilter();
+      }else{
+        this.onRefreshDSARList();
+      }
     }
   }
 
@@ -411,12 +429,18 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
   }
 
   onChangeSubjectType(event) {
-    if(this.dpsubjectType == ""){
-      this.issearchfilteractive = false;
-      this.onRefreshDSARList();
-    }else{
+    if(event.target.value !== ""){
       this.subjectType = event.target.value;
+      this.issearchfilterForSub = true;
       this.searchFilter();
+    }else{
+      this.subjectType = "";
+      this.issearchfilteractive = false;
+      if(this.issearchfilterForSub || this.issearchfilterForReq || this.issearchfilterForStatus){
+        this.searchFilter();
+      }else{
+        this.onRefreshDSARList();
+      }
     }
   }
 
@@ -624,6 +648,7 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
             this.storeSearchList = this.requestsList;
             this.rows = data[key].length;
             this.totalRecords = data.count;
+            this.loadrequestsListLazy(this.lazyEvent);
           }else{
             this.requestsList = [];
           }
