@@ -1,5 +1,5 @@
-import {AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
-import {FormGroup} from '@angular/forms';
+import {AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit, TemplateRef, ViewChild} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {moduleName} from '../../../../_constant/module-name.constant';
 import {CookieCategoryService} from '../../../../_services/cookie-category.service';
 import {SortEvent} from 'primeng/api';
@@ -9,6 +9,7 @@ import {AuthenticationService, UserService} from '../../../../_services';
 import {DataService} from '../../../../_services/data.service';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
 import { ActivatedRoute } from '@angular/router';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 
 @Component({
   selector: 'app-scan-details',
@@ -16,11 +17,17 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./scan-details.component.scss']
 })
 export class ScanDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
+  @ViewChild('scan') Scanpopup: TemplateRef<any>;
+
   scanJobsList = [];
   scanJobsCount: 0;
   isScanning = false;
   cookieCategory: any;
+  scanForm:FormGroup;
+  editscanForm:FormGroup;
   setInterval = null;
+  passwordchangevalue="********";
+  step = 0;
   lastScan = {
     id: null,
     scanner_status: null,
@@ -73,13 +80,21 @@ export class ScanDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
   private data: { limit: any; page: any; sortBy: any, sortColumn: any, name: any };
   queryOID;
   queryPID;
+  modalRef: BsModalRef;
+  scanrecord : any;
+  update = false;
+  enterpriseData: any;
+  show = false;
   constructor(private service: CookieCategoryService,
               private authService: AuthenticationService,
               private userService: UserService,
               private dataService: DataService,
               private loading: NgxUiLoaderService,
               private _cd: ChangeDetectorRef,
-              private activateRoute: ActivatedRoute
+              private activateRoute: ActivatedRoute,
+              private formBuilder:FormBuilder,
+              private bsmodalService: BsModalService,
+
   ) {
   }
 
@@ -90,8 +105,29 @@ export class ScanDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
         this.queryOID = params.get('oid');
         this.queryPID = params.get('pid');
       });
+      this.scanForm = this.formBuilder.group({
+        loginurl: [''],
+        redirecturl:[''],
+        username:[''],
+        usernamevalue:[''],
+        password:[''],
+        passwordvalue:[''],
+        submitbutton:['']
+      });
+
+      this.editscanForm = this.formBuilder.group({
+        loginurl: [''],
+        redirecturl:[''],
+        username:[''],
+        usernamevalue:[''],
+        password:[''],
+        passwordvalue:[''],
+        submitbutton:['']
+      });
     this.onGetSubscriptionData();
     this.onGetLastScanJobs();
+    this.ScanbehindLoginrecord();
+    this.onCheckEnterpriseSubscription();
   }
 
   ngAfterViewInit() {
@@ -100,6 +136,10 @@ export class ScanDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
         this.onGetLastScanJobs();
       }
     }, 20000);
+  }
+
+  get f() {
+    return this.editscanForm.controls;
   }
 
   onGetCatList(event) {
@@ -165,6 +205,15 @@ export class ScanDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
     // }, 10000)
   }
 
+  next(){
+    this.step = this.step + 1;
+  }
+
+  prev(){
+    this.step = this.step - 1;
+  }
+
+
   onGetLastScanJobs() {
     // setInterval( () => {
     this.updaing = true;
@@ -193,6 +242,15 @@ export class ScanDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
       });
   }
 
+  onCheckEnterpriseSubscription(){
+    this.enterpriseData = this.dataService.getCurrentPropertyPlanDetails();
+    if(this.enterpriseData.response.plan_details.cookieConsent.plan_name == 'Enterprise'){
+      this.show = true;
+    }else{
+      this.show = false;
+    }
+  }
+
   onCheckSubscription() {
     const resData: any = this.dataService.getCurrentPropertyPlanDetails();
     const status = this.dataService.isAllowFeature(resData.response, featuresName.DOMAIN_SCAN);
@@ -216,6 +274,7 @@ export class ScanDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
     this.isScanning = true;
     this.service.cookieScanning(this.constructor.name, moduleName.cookieCategoryModule).subscribe((res: any) => {
       // this.onGetScanningStatus();
+      this.modalRef.hide();
       this.isScanning = false;
       this.lastScan.scanner_status = 'inQueue';
       this.onGetSubscriptionData();
@@ -233,6 +292,106 @@ export class ScanDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
+  ScanbehindLogin(){
+    const payload : any= {
+        login_url:this.scanForm.value.loginurl,
+        redirect_url:this.scanForm.value.redirecturl,
+        username:this.scanForm.value.username,
+        username_value:this.scanForm.value.usernamevalue,
+        password:this.scanForm.value.password,
+        password_value:this.scanForm.value.passwordvalue,
+        submit_button:this.scanForm.value.submitbutton  
+    }
+
+    this.service.scanbehindLogin(this.constructor.name, moduleName.pricingModule,payload).subscribe(res => {
+      const result: any = res;
+      if (result.status === 201 || result.status === 200) {
+        this.isOpen = true;
+        this.alertMsg = result.message;
+        this.alertType = 'success';
+        this.ScanbehindLoginrecord();
+        this.next();        
+      }
+    }, error => {
+      this.loading.stop();
+      console.log(error);
+    });
+  
+  }
+
+  hidediv(){
+    this.modalRef.hide();
+    this.ScanbehindLoginrecord();
+  }
+
+
+  ScanbehindLoginrecord(){
+   this.loading.start();
+    this.service.scanbehindLoginRecord(this.constructor.name, moduleName.pricingModule).subscribe(res => {
+      this.loading.stop();
+      const result: any = res;
+      if (result.status === 200) {
+        this.scanrecord = result.response;
+        if(result.message !== "No data exists"){
+          this.update = true;
+        }else{
+          this.update = false;
+        }
+      }
+    }, error => {
+      this.loading.stop();
+      console.log(error);
+    });
+  
+  }
+
+  ScanbehindLoginUpdate(){
+
+    this.loading.start();
+    const payload : any = {
+      login_url:this.editscanForm.value.loginurl,
+      redirect_url:this.editscanForm.value.redirecturl,
+      username: this.editscanForm.value.username,
+      username_value:this.editscanForm.value.usernamevalue,
+      password:this.editscanForm.value.password,
+      submit_button:this.editscanForm.value.submitbutton
+    
+  }
+
+  if(this.editscanForm.value.passwordvalue){
+    payload.password_value = this.editscanForm.value.passwordvalue
+  }
+ 
+  this.service.scanbehindLoginUpdate(this.constructor.name, moduleName.pricingModule,payload).subscribe(res => {
+    const result: any = res;
+    this.loading.stop();
+    if (result.status === 201 || result.status === 200) {
+      this.isOpen = true;
+      this.alertMsg = result.message;
+      this.alertType = 'success'    
+      this.modalRef.hide();
+      this.ScanbehindLoginrecord();
+    }
+  }, error => {
+    this.loading.stop();
+    console.log(error);
+  });
+  }
+
+
+  editscanDetails(editscan) {
+    this.editscanForm.patchValue({
+      loginurl: this.scanrecord.login_url,
+      redirecturl: this.scanrecord.redirect_url,
+      username: this.scanrecord.username,
+      usernamevalue: this.scanrecord.username_value,
+      password: this.scanrecord.password,
+      passwordvalue: this.scanrecord.password_value,
+      submitbutton: this.scanrecord.submit_button_id,
+    });
+    this.modalRef = this.bsmodalService.show(editscan, {class: 'modal-md'});
+  }
+
   onClosed(dismissedAlert: any): void {
     this.alertMsg = !dismissedAlert;
     this.isOpen = false;
@@ -240,5 +399,13 @@ export class ScanDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnDestroy() {
     clearInterval(this.setInterval);
+  }
+
+  openModal(template: TemplateRef<any>) {
+    this.modalRef = this.bsmodalService.show(template, { class: 'modal-md', keyboard: false, backdrop: true, ignoreBackdropClick: true });
+  }
+
+  onCancelClick(){
+    this.modalRef.hide();
   }
 }

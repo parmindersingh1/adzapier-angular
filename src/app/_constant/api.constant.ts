@@ -95,7 +95,11 @@ export const apiConstant = {
   SQL_TABLE_COLUMNS_LIST: '/integration/get-table-columns',
   INTEGRATION_SYSTEM: '/integration/connection/:oid/:pid/:connectionID',
   //Login Registration
-  REGISTRATION_ADD_COMPANY_ORG_PROP:'/billing/checkout/trialsession'
+  REGISTRATION_ADD_COMPANY_ORG_PROP:'/billing/checkout/trialsession',
+
+  SCAN_BEHIND_LOGIN:'/scanner/sbl/:propid',
+  SCAN_BEHIND_LOGIN_UPDATE:'/scanner/update/sbl/:propid',
+
 };
 
 // {
