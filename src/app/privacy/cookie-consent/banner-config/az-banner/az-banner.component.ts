@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, Output, EventEmitter} from '@angular/core';
+import {Component, Input, OnInit, Output, EventEmitter, ChangeDetectorRef} from '@angular/core';
 
 @Component({
   selector: 'app-az-banner',
@@ -11,7 +11,7 @@ export class AzBannerComponent implements OnInit {
   @Input('showBadge') showBadge;
   @Output('currentBannerLayer') currentBannerLayer = new EventEmitter();
   @Output('showBadgeOption') showBadgeOption = new EventEmitter();
-  constructor() { }
+  constructor(private cd: ChangeDetectorRef) { }
 
   ngOnInit(): void {
   }

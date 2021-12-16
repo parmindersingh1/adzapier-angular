@@ -35,31 +35,16 @@
       <div class="card-header p-2 pb-3">
         <div class="row">
           <h5 class="main-heading col-md-4 pt-1 pl-4">Banner Configuration </h5>
-          <div class="col-md-4 pr-0 preview-border-left">
-            <p class="live-preview-type" style="font-size: 14px">Preview : <span>
-             <span class="pl-2 pr-2 tx-13"
-                   *ngIf="BannerConfigurationForm.value.AllowGDPR && (!BannerConfigurationForm.value.GenericGlobal && !BannerConfigurationForm.value.CCPAGlobal) "> GDPR :   <p-radioButton
-               class="preview-radio" formControlName="LivePreviewType" value="gdpr"></p-radioButton></span>
-             <span class=" pl-2 pr-2  tx-13"
-                   *ngIf="BannerConfigurationForm.value.AllowCCPA && (!BannerConfigurationForm.value.GenericGlobal && !BannerConfigurationForm.value.GdprGlobal) ">       CCPA :    <p-radioButton
-               class="preview-radio" formControlName="LivePreviewType" value="ccpa"></p-radioButton></span>
-             <span class=" pl-2 pr-2  tx-13"
-                   *ngIf="BannerConfigurationForm.value.AllowGENERIC && (!BannerConfigurationForm.value.CCPAGlobal && !BannerConfigurationForm.value.GdprGlobal) ">       GLOBAL :  <p-radioButton
-               class="preview-radio" formControlName="LivePreviewType" value="generic"></p-radioButton></span>
-              </span>
-            </p>
+          <div class="col-md-3 pr-0 preview-border-left">
+            <p class="live-preview-type float-left pr-3" style="font-size: 14px">Preview :</p>
+            <div class="ml-2">
+              <p-selectButton [options]="[{label: 'GDPR', value: 'gdpr'}, {label: 'CCPA', value: 'ccpa'}, {label: 'GLOBAL', value: 'generic'}]" formControlName="LivePreviewType"  optionLabel="label" optionValue="value"></p-selectButton>
+            </div>
           </div>
-          <!--          <div class="col-md-3 preview-border-left">-->
-          <!--            <p class="live-preview-type float-left mr-3">Platform :-->
-          <!--            </p>-->
-          <!--            <div class="form-inline d-flex align-items-center float-left">-->
-          <!--              <div class="btn-group" btnRadioGroup disabled>-->
-          <!--                <label class="btn btn-secondary" btnRadio="Left">Web</label>-->
-          <!--                <label class="btn btn-outline-secondary" disabled btnRadio="Middle">Mobile</label>-->
-          <!--              </div>-->
-          <!--            </div>-->
-          <!--          </div>-->
-          <div class="col-md-4 pl-0 text-right">
+          <div class="col-md-2">
+            <p-selectButton [options]="[{label: 'Banner', value: 'banner'}, {label: 'Preference', value: 'preference'}]" [(ngModel)]="currentBannerLayer" [ngModelOptions]="{standalone: true}" optionLabel="label" optionValue="value"></p-selectButton>
+          </div>
+          <div class="col-md-3 pl-0 text-right">
             <button pButton pRipple type="button"
                     [disabled]="contentSaving === 'saving'"
                     (click)="openModal(resetConfig)" label="Reset to Default" class="p-button-secondary action-btn mr-2"></button>
@@ -249,7 +234,7 @@
                       </div>
                       <div class="col-md-6">
                         <p-dropdown id="ccpa_target" [options]="countries" formControlName="CCPATarget"
-                                    optionLabel="name" optionValue="code" [showClear]="true"
+                                    optionLabel="name" optionValue="code" [showClear]="false"
                                     placeholder="Select a Country">
                           <ng-template pTemplate="selectedItem">
                             <div class="country-item country-item-value row"
@@ -395,67 +380,14 @@
                                        formControlName="ShowWatermark"></p-inputSwitch>
                       </div>
                     </div>
-
-<!--                    <div class="row mt-3">-->
-<!--                      <div class="col-md-6">-->
-<!--                        <p class=" mb-0  input-label pt-2">Show Badge</p>-->
-<!--                      </div>-->
-<!--                      <div class="col-md-6">-->
-<!--                        <p-inputSwitch formControlName="ShowBadge"></p-inputSwitch>-->
-<!--                      </div>-->
-<!--                    </div>-->
-
                     <div class="row mt-3">
                       <div class="col-md-6">
                         <p class=" mb-0  input-label pt-2">Mute Cookie Notice</p>
                       </div>
                       <div class="col-md-6">
-                        <p-inputSwitch formControlName="MuteBanner"></p-inputSwitch>
+                          <p-inputSwitch formControlName="MuteBanner"></p-inputSwitch>
                       </div>
                     </div>
-
-                    <!--                    <div class="row mt-3">-->
-                    <!--                      <div class="col-md-12">-->
-                    <!--                        <p class=" mb-0  input-label pt-2">Banner Position</p>-->
-                    <!--                      </div>-->
-                    <!--                      <div class="col-md-12">-->
-                    <!--                        <div class="p-field-radiobutton">-->
-                    <!--                          <p-radioButton name="BannerPosition" value="top" formControlName="BannerPosition"-->
-                    <!--                                         inputId="top"></p-radioButton>-->
-                    <!--                          <label for="top" class="pt-2 pl-3 mb-0">Top</label>-->
-                    <!--                        </div>-->
-                    <!--                        <div class="p-field-radiobutton">-->
-                    <!--                          <p-radioButton name="BannerPosition" value="bottom" formControlName="BannerPosition"-->
-                    <!--                                         inputId="bottom"></p-radioButton>-->
-                    <!--                          <label for="bottom" class="pt-2 pl-3 mb-0">Bottom</label>-->
-                    <!--                        </div>-->
-                    <!--                      </div>-->
-                    <!--                    </div>-->
-
-<!--                    <div class="row mt-3">-->
-<!--                      <div class="col-md-5">-->
-<!--                        <p class=" mb-0  input-label pt-2"-->
-<!--                           [ngStyle]="{color: !BannerConfigurationForm.value.ShowBadge ? '#999' : null}">Badge-->
-<!--                          Position</p>-->
-<!--                      </div>-->
-<!--                      <div class="col-md-7">-->
-<!--                        <div class="row">-->
-<!--                          <div class="p-field-radiobutton col-md-6">-->
-<!--                            <p-radioButton name="BadgePosition" [disabled]="!BannerConfigurationForm.value.ShowBadge"-->
-<!--                                           value="left" formControlName="BadgePosition" inputId="left"></p-radioButton>-->
-<!--                            <label for="left" class="pt-2 pl-3 mb-0 input-label">Left</label>-->
-<!--                          </div>-->
-<!--                          <div class="p-field-radiobutton col-md-6">-->
-<!--                            <p-radioButton name="BadgePosition" [disabled]="!BannerConfigurationForm.value.ShowBadge"-->
-<!--                                           value="right" formControlName="BadgePosition"-->
-<!--                                           inputId="right"></p-radioButton>-->
-<!--                            <label for="right" class="pt-2 pl-3 mb-0 input-label">Right</label>-->
-<!--                          </div>-->
-<!--                        </div>-->
-<!--                      </div>-->
-<!--                    </div>-->
-
-
                   </div>
 
                   <div class="badge-config ml-4">
@@ -468,27 +400,29 @@
                         <p class=" mb-0  input-label pt-2">Show Badge</p>
                       </div>
                       <div class="col-md-6">
-                        <p-inputSwitch  (onChange)="showBadgeOption = true" formControlName="ShowBadge"></p-inputSwitch>
+                        <p-inputSwitch  #showBadgeBtn (onChange)="showBadgeOption = !showBadgeOption" formControlName="ShowBadge"></p-inputSwitch>
                       </div>
                     </div>
 
                     <div class="row mt-3">
                       <div class="col-md-4">
-                        <p class=" mb-0  input-label pt-2">Badge Type</p>
+                        <p  [ngStyle]="{color: !showBadgeBtn.checked ? '#999' : null}" class=" mb-0  input-label pt-2">Badge Type</p>
                       </div>
                       <div class="col-md-8">
                         <div class="row">
-                        <div class="col-md-8">
-                          <button type="button" (click)="onSetBadgeType('text')"  (click)="showBadgeOption = true"
-                                  [ngClass]="{'btn-outline-secondary': BannerConfigurationForm.value.BadgeType !== 'text', 'btn-secondary' : BannerConfigurationForm.value.BadgeType === 'text' }"
-                                  class="btn tx-12 ">Cookie Consent</button>
-                        </div>
-                        <div class="col-md-4 pl-0 text-left">
-                          <button (click)="onSetBadgeType('icon')" type="button"  (click)="showBadgeOption = true"
-                                  [ngClass]="{'btn-outline-secondary': BannerConfigurationForm.value.BadgeType !== 'icon', 'btn-secondary' : BannerConfigurationForm.value.BadgeType === 'icon' }" class="btn">
-                            <i class="fas fa-fingerprint tx-20"></i>
-                          </button>
-                        </div>
+                          <p-selectButton [disabled]="!showBadgeBtn.checked" (onChange)="showBadgeOption = true" [options]="[{label: 'Cookie Consent', value: 'text'}, {icon: 'fas fa-fingerprint tx-18', value: 'icon'}]"
+                                          formControlName="BadgeType"   optionLabel="label" optionValue="value"></p-selectButton>
+                          <!--                        <div class="col-md-8">-->
+<!--                          <button [disabled]="!showBadgeBtn.checked" type="button" (click)="onSetBadgeType('text')"  (click)="showBadgeOption = true"-->
+<!--                                  [ngClass]="{'btn-outline-secondary': BannerConfigurationForm.value.BadgeType !== 'text', 'btn-secondary' : BannerConfigurationForm.value.BadgeType === 'text' }"-->
+<!--                                  class="btn tx-12 ">Cookie Consent</button>-->
+<!--                        </div>-->
+<!--                        <div class="col-md-4 pl-0 text-left">-->
+<!--                          <button [disabled]="!showBadgeBtn.checked" (click)="onSetBadgeType('icon')" type="button"  (click)="showBadgeOption = true"-->
+<!--                                  [ngClass]="{'btn-outline-secondary': BannerConfigurationForm.value.BadgeType !== 'icon', 'btn-secondary' : BannerConfigurationForm.value.BadgeType === 'icon' }" class="btn">-->
+<!--                            <i class="fas fa-fingerprint tx-20"></i>-->
+<!--                          </button>-->
+<!--                        </div>-->
                         </div>
                       </div>
                     </div>
@@ -502,17 +436,19 @@
                       </div>
                       <div class="col-md-7">
                         <div class="row">
-                          <div class="p-field-radiobutton col-md-6">
-                            <p-radioButton name="BadgePosition" [disabled]="!BannerConfigurationForm.value.ShowBadge" (click)="showBadgeOption = true"
-                                           value="left" formControlName="BadgePosition" inputId="left"></p-radioButton>
-                            <label for="left" class="pt-2 pl-3 mb-0 input-label">Left</label>
-                          </div>
-                          <div class="p-field-radiobutton col-md-6">
-                            <p-radioButton name="BadgePosition" [disabled]="!BannerConfigurationForm.value.ShowBadge"  (click)="showBadgeOption = true"
-                                           value="right" formControlName="BadgePosition"
-                                           inputId="right"></p-radioButton>
-                            <label for="right" class="pt-2 pl-3 mb-0 input-label">Right</label>
-                          </div>
+                          <p-selectButton [disabled]="!showBadgeBtn.checked" [options]="[{label: 'Left', value: 'left'}, {label: 'Right', value: 'right'}]" formControlName="BadgePosition"   optionLabel="label" optionValue="value"></p-selectButton>
+
+                          <!--                          <div class="p-field-radiobutton col-md-6">-->
+<!--                            <p-radioButton name="BadgePosition" [disabled]="!BannerConfigurationForm.value.ShowBadge" (click)="showBadgeOption = true"-->
+<!--                                           value="left" formControlName="BadgePosition" inputId="left"></p-radioButton>-->
+<!--                            <label for="left" class="pt-2 pl-3 mb-0 input-label">Left</label>-->
+<!--                          </div>-->
+<!--                          <div class="p-field-radiobutton col-md-6">-->
+<!--                            <p-radioButton name="BadgePosition" [disabled]="!BannerConfigurationForm.value.ShowBadge"  (click)="showBadgeOption = true"-->
+<!--                                           value="right" formControlName="BadgePosition"-->
+<!--                                           inputId="right"></p-radioButton>-->
+<!--                            <label for="right" class="pt-2 pl-3 mb-0 input-label">Right</label>-->
+<!--                          </div>-->
                         </div>
                       </div>
                     </div>
@@ -605,7 +541,7 @@
                   <div class="col-md-8">
                     <p-dropdown [options]="allowedLanguagesForPreview" formControlName="PreviewLanguage"
                                 (onChange)="onSelectPreviewLang()"
-                                [showClear]="true" placeholder="Select a Language">
+                                [showClear]="false" placeholder="Select a Language">
                       <ng-template pTemplate="selectedItem">
                         <div class="country-item country-item-value row"
                              *ngIf="BannerConfigurationForm.value.PreviewLanguage">
@@ -850,7 +786,7 @@
                                              [(ngModel)]="colorPicker.BannerCookieNoticeBackgroundColor"
                                              [hideTransitionOptions]="'50ms'"></p-colorPicker>
                               <input type="text" formControlName="BannerCookieNoticeBackgroundColor"
-                                     [(ngModel)]="colorPicker.BannerCookieNoticeBackgroundColor" class="pl-0 col-md-8"
+                                     [(ngModel)]="colorPicker.BannerCookieNoticeBackgroundColor" class="pl-0 color-input col-md-8"
                                      pInputText/>
                             </div>
                           </div>
@@ -861,7 +797,7 @@
                                              formControlName="BannerCookieNoticeTextColor"
                                              [(ngModel)]="colorPicker.BannerCookieNoticeTextColor"
                                              [hideTransitionOptions]="'50ms'"></p-colorPicker>
-                              <input type="text" formControlName="BannerCookieNoticeTextColor" class="pl-0 col-md-8"
+                              <input type="text" formControlName="BannerCookieNoticeTextColor" class="pl-0 color-input col-md-8"
                                      [(ngModel)]="colorPicker.BannerCookieNoticeTextColor" pInputText/>
                             </div>
                           </div>
@@ -872,7 +808,7 @@
                                              formControlName="BannerCookieNoticeBorderColor"
                                              [(ngModel)]="colorPicker.BannerCookieNoticeBorderColor"
                                              [hideTransitionOptions]="'50ms'"></p-colorPicker>
-                              <input type="text" formControlName="BannerCookieNoticeBorderColor" class="pl-0 col-md-8"
+                              <input type="text" formControlName="BannerCookieNoticeBorderColor" class="pl-0 color-input col-md-8"
                                      [(ngModel)]="colorPicker.BannerCookieNoticeBorderColor" pInputText/>
                             </div>
                           </div>
@@ -884,7 +820,7 @@
                                              [(ngModel)]="colorPicker.BannerCookieNoticePrivacyLinkColor"
                                              [hideTransitionOptions]="'50ms'"></p-colorPicker>
                               <input type="text" formControlName="BannerCookieNoticePrivacyLinkColor"
-                                     class="pl-0 col-md-8"
+                                     class="pl-0 color-input col-md-8"
                                      [(ngModel)]="colorPicker.BannerCookieNoticePrivacyLinkColor" pInputText/>
                             </div>
                           </div>
@@ -911,7 +847,7 @@
                                              [(ngModel)]="colorPicker.BannerAcceptAllBackgroundColor"
                                              formControlName="BannerAcceptAllBackgroundColor"
                                              [hideTransitionOptions]="'50ms'"></p-colorPicker>
-                              <input type="text" class="pl-0 col-md-8" formControlName="BannerAcceptAllBackgroundColor"
+                              <input type="text" class="pl-0 color-input col-md-8" formControlName="BannerAcceptAllBackgroundColor"
                                      [(ngModel)]="colorPicker.BannerAcceptAllBackgroundColor" pInputText/>
                             </div>
                           </div>
@@ -922,7 +858,7 @@
                                              formControlName="BannerAcceptAllTextColor"
                                              [(ngModel)]="colorPicker.BannerAcceptAllTextColor"
                                              [hideTransitionOptions]="'50ms'"></p-colorPicker>
-                              <input type="text" class="pl-0 col-md-8" formControlName="BannerAcceptAllTextColor"
+                              <input type="text" class="pl-0 color-input col-md-8" formControlName="BannerAcceptAllTextColor"
                                      [(ngModel)]="colorPicker.BannerAcceptAllTextColor" pInputText/>
                             </div>
                           </div>
@@ -949,7 +885,7 @@
                                              [(ngModel)]="colorPicker.BannerPrivacyInfoBackgroundColor"
                                              formControlName="BannerPreferenceBackgroundColor"
                                              [hideTransitionOptions]="'50ms'"></p-colorPicker>
-                              <input type="text" class="pl-0 col-md-8" formControlName="BannerPreferenceBackgroundColor"
+                              <input type="text" class="pl-0 color-input col-md-8" formControlName="BannerPreferenceBackgroundColor"
                                      [(ngModel)]="colorPicker.BannerPrivacyInfoBackgroundColor" pInputText/>
                             </div>
                           </div>
@@ -960,7 +896,7 @@
                                              formControlName="BannerPreferenceTextColor"
                                              [(ngModel)]="colorPicker.BannerPrivacyInfoTextColor"
                                              [hideTransitionOptions]="'50ms'"></p-colorPicker>
-                              <input type="text" class="pl-0 col-md-8" formControlName="BannerPreferenceTextColor"
+                              <input type="text" class="pl-0 color-input col-md-8" formControlName="BannerPreferenceTextColor"
                                      [(ngModel)]="colorPicker.BannerPrivacyInfoTextColor" pInputText/>
                             </div>
                           </div>
@@ -988,7 +924,7 @@
                                              [(ngModel)]="colorPicker.BannerDisableAllBackgroundColor"
                                              formControlName="BannerDisableAllBackgroundColor"
                                              [hideTransitionOptions]="'50ms'"></p-colorPicker>
-                              <input type="text" class="pl-0 col-md-8" formControlName="BannerDisableAllBackgroundColor"
+                              <input type="text" class="pl-0 color-input col-md-8" formControlName="BannerDisableAllBackgroundColor"
                                      [(ngModel)]="colorPicker.BannerDisableAllBackgroundColor" pInputText/>
                             </div>
                           </div>
@@ -999,7 +935,7 @@
                                              formControlName="BannerDisableAllTextColor"
                                              [(ngModel)]="colorPicker.BannerDisableAllTextColor"
                                              [hideTransitionOptions]="'50ms'"></p-colorPicker>
-                              <input type="text" class="pl-0 col-md-8" pInputText
+                              <input type="text" class="pl-0 color-input col-md-8" pInputText
                                      [(ngModel)]="colorPicker.BannerDisableAllTextColor"
                                      formControlName="BannerDisableAllTextColor"/>
                             </div>
@@ -1039,7 +975,7 @@
                                              formControlName="BannerDoNotSellMyDataTextColor"
                                              [(ngModel)]="colorPicker.BannerDoNotSellTextColor"
                                              [hideTransitionOptions]="'50ms'"></p-colorPicker>
-                              <input type="text" class="pl-0 col-md-8" formControlName="BannerDoNotSellMyDataTextColor"
+                              <input type="text" class="pl-0 color-input col-md-8" formControlName="BannerDoNotSellMyDataTextColor"
                                      [(ngModel)]="colorPicker.BannerDoNotSellTextColor" pInputText/>
                             </div>
                           </div>
@@ -1088,7 +1024,7 @@
                                              formControlName="PreferenceBackgroundColor"
                                              [(ngModel)]="colorPicker.PreferenceBackgroundColor"
                                              [hideTransitionOptions]="'50ms'"></p-colorPicker>
-                              <input type="text" class="pl-0 col-md-8"
+                              <input type="text" class="pl-0 color-input col-md-8"
                                      [(ngModel)]="colorPicker.PreferenceBackgroundColor"
                                      formControlName="PreferenceBackgroundColor" pInputText/>
                             </div>
@@ -1100,7 +1036,7 @@
                                              formControlName="PreferenceTextColor"
                                              [(ngModel)]="colorPicker.PreferenceTextColor"
                                              [hideTransitionOptions]="'50ms'"></p-colorPicker>
-                              <input type="text" class="pl-0 col-md-8" formControlName="PreferenceTextColor"
+                              <input type="text" class="pl-0 color-input col-md-8" formControlName="PreferenceTextColor"
                                      [(ngModel)]="colorPicker.PreferenceTextColor" pInputText/>
                             </div>
                           </div>
@@ -1127,7 +1063,7 @@
                                              [(ngModel)]="colorPicker.PreferencePurposeBackgroundColor"
                                              formControlName="PreferencePurposeBackgroundColor"
                                              [hideTransitionOptions]="'50ms'"></p-colorPicker>
-                              <input type="text" class="pl-0 col-md-8"
+                              <input type="text" class="pl-0 color-input col-md-8"
                                      [(ngModel)]="colorPicker.PreferencePurposeBackgroundColor"
                                      formControlName="PreferencePurposeBackgroundColor" pInputText/>
                             </div>
@@ -1139,18 +1075,18 @@
                                              formControlName="PreferencePurposeTextColor"
                                              [(ngModel)]="colorPicker.PreferencePurposeTextColor"
                                              [hideTransitionOptions]="'50ms'"></p-colorPicker>
-                              <input type="text" class="pl-0 col-md-8" formControlName="PreferencePurposeTextColor"
+                              <input type="text" class="pl-0 color-input col-md-8" formControlName="PreferencePurposeTextColor"
                                      [(ngModel)]="colorPicker.PreferencePurposeTextColor" pInputText/>
                             </div>
                           </div>
                           <div class="p-field col-md-6 mt-2">
                             <label for="title" class="input-label ">Switch</label> <br/>
                             <div class="row">
-                              <p-colorPicker format="hex" class="col-md-4 pr-0" [showTransitionOptions]="'50ms'"
+                              <p-colorPicker format="hex" class="col-md-4  pr-0" [showTransitionOptions]="'50ms'"
                                              formControlName="PreferenceSwitchColor"
                                              [(ngModel)]="colorPicker.PreferenceSwitchColor"
                                              [hideTransitionOptions]="'50ms'"></p-colorPicker>
-                              <input type="text" class="pl-0 col-md-8" formControlName="PreferenceSwitchColor"
+                              <input type="text" class="pl-0 color-input col-md-8" formControlName="PreferenceSwitchColor"
                                      [(ngModel)]="colorPicker.PreferenceSwitchColor" pInputText/>
                             </div>
                           </div>
@@ -1179,7 +1115,7 @@
                                              [(ngModel)]="colorPicker.PreferenceAcceptAllBackgroundColor"
                                              formControlName="PreferenceAcceptAllBackgroundColor"
                                              [hideTransitionOptions]="'50ms'"></p-colorPicker>
-                              <input type="text" class="pl-0 col-md-8"
+                              <input type="text" class="pl-0 color-input col-md-8"
                                      [(ngModel)]="colorPicker.PreferenceAcceptAllBackgroundColor"
                                      formControlName="PreferenceAcceptAllBackgroundColor" pInputText/>
                             </div>
@@ -1191,7 +1127,7 @@
                                              formControlName="PreferenceAcceptAllTextColor"
                                              [(ngModel)]="colorPicker.PreferenceAcceptAllTextColor"
                                              [hideTransitionOptions]="'50ms'"></p-colorPicker>
-                              <input type="text" class="pl-0 col-md-8" formControlName="PreferenceAcceptAllTextColor"
+                              <input type="text" class="pl-0 color-input col-md-8" formControlName="PreferenceAcceptAllTextColor"
                                      [(ngModel)]="colorPicker.PreferenceAcceptAllTextColor" pInputText/>
                             </div>
                           </div>
@@ -1218,7 +1154,7 @@
                                              [(ngModel)]="colorPicker.PreferenceSaveMyChoiceBackgroundColor"
                                              formControlName="PreferenceSaveMyChoiceBackgroundColor"
                                              [hideTransitionOptions]="'50ms'"></p-colorPicker>
-                              <input type="text" class="pl-0 col-md-8"
+                              <input type="text" class="pl-0 color-input col-md-8"
                                      [(ngModel)]="colorPicker.PreferenceSaveMyChoiceBackgroundColor"
                                      formControlName="PreferenceSaveMyChoiceBackgroundColor" pInputText/>
                             </div>
@@ -1230,7 +1166,7 @@
                                              formControlName="PreferenceSaveMyChoiceTextColor"
                                              [(ngModel)]="colorPicker.PreferenceSaveMyChoiceTextColor"
                                              [hideTransitionOptions]="'50ms'"></p-colorPicker>
-                              <input type="text" class="pl-0 col-md-8" formControlName="PreferenceSaveMyChoiceTextColor"
+                              <input type="text" class="pl-0 color-input col-md-8" formControlName="PreferenceSaveMyChoiceTextColor"
                                      [(ngModel)]="colorPicker.PreferenceSaveMyChoiceTextColor" pInputText/>
                             </div>
                           </div>
@@ -1256,7 +1192,7 @@
                                              [(ngModel)]="colorPicker.PreferenceDisableAllBackgroundColor"
                                              formControlName="PreferenceDisableAllBackgroundColor"
                                              [hideTransitionOptions]="'50ms'"></p-colorPicker>
-                              <input type="text" class="pl-0 col-md-8"
+                              <input type="text" class="pl-0 color-input col-md-8"
                                      [(ngModel)]="colorPicker.PreferenceDisableAllBackgroundColor"
                                      formControlName="PreferenceDisableAllBackgroundColor" pInputText/>
                             </div>
@@ -1268,7 +1204,7 @@
                                              formControlName="PreferenceDisableAllTextColor"
                                              [(ngModel)]="colorPicker.PreferenceDisableAllTextColor"
                                              [hideTransitionOptions]="'50ms'"></p-colorPicker>
-                              <input type="text" class="pl-0 col-md-8" formControlName="PreferenceDisableAllTextColor"
+                              <input type="text" class="pl-0 color-input col-md-8" formControlName="PreferenceDisableAllTextColor"
                                      [(ngModel)]="colorPicker.PreferenceDisableAllTextColor" pInputText/>
                             </div>
                           </div>
@@ -1295,7 +1231,7 @@
                                              [(ngModel)]="colorPicker.PreferenceDoNotSellBackgroundColor"
                                              formControlName="PreferenceDoNotSellBackgroundColor"
                                              [hideTransitionOptions]="'50ms'"></p-colorPicker>
-                              <input type="text" class="pl-0 col-md-8"
+                              <input type="text" class="pl-0 color-input col-md-8"
                                      [(ngModel)]="colorPicker.PreferenceDoNotSellBackgroundColor"
                                      formControlName="PreferenceDoNotSellBackgroundColor" pInputText/>
                             </div>
@@ -1307,7 +1243,7 @@
                                              formControlName="PreferenceDoNotSellTextColor"
                                              [(ngModel)]="colorPicker.PreferenceDoNotSellTextColor"
                                              [hideTransitionOptions]="'50ms'"></p-colorPicker>
-                              <input type="text" class="pl-0 col-md-8" formControlName="PreferenceDoNotSellTextColor"
+                              <input type="text" class="pl-0 color-input col-md-8" formControlName="PreferenceDoNotSellTextColor"
                                      [(ngModel)]="colorPicker.PreferenceDoNotSellTextColor" pInputText/>
                             </div>
                           </div>
@@ -1330,7 +1266,7 @@
                   <div class="col-md-8">
                     <p-dropdown [options]="allowedLanguagesForPreview" formControlName="PreviewLanguage"
                                 (onChange)="onSelectPreviewLang()"
-                                [showClear]="true" placeholder="Select a Language">
+                                [showClear]="false" placeholder="Select a Language">
                       <ng-template pTemplate="selectedItem">
                         <div class="country-item country-item-value row"
                              *ngIf="BannerConfigurationForm.value.PreviewLanguage">
@@ -1351,7 +1287,7 @@
                     <div id="essentialCookies" class="mt-2" cdkDrag
                          *ngFor="let purpose of BannerConfigurationForm.controls.PurposeList['controls']; let i=index"
                          [formGroupName]="i">
-                      <p class="az-purpose-dropdown" (click)="onOpenDropDown('purpose' + i)"><span class="drag-drop"><i
+                      <p  class="az-purpose-dropdown" (click)="onOpenDropDown('purpose' + i)"><span cdkDragHandle class="drag-drop"><i
                         class="fas fa-grip-vertical "></i></span> {{purposesList[i].title}}
                         <span *ngIf="showDropDownValue !== 'purpose' + i"><i
                           class="fas fa-chevron-down"></i></span>
@@ -1445,7 +1381,7 @@
                  [ngStyle]="{margin: currentBannerLayer === 'preference' || BannerConfigurationForm.value.LayoutType === 'boxed-center' ? 'auto' : null}">
               <app-az-banner *ngIf="currentBannerLayer === 'banner'" (currentBannerLayer)="onChangeBannerLayer($event)" [showBadge]="showBadgeOption"
                             (showBadgeOption)="showBadgeOption = false" [formData]="BannerConfigurationForm.value"></app-az-banner>
-              <app-az-preference *ngIf="currentBannerLayer === 'preference'" [formData]="BannerConfigurationForm.value"
+              <app-az-preference *ngIf="currentBannerLayer === 'preference'" [formData]="BannerConfigurationForm.value" [customerBrandLogo]="customerBrandLogo"
                                  [purposesList]="purposesList"></app-az-preference>
             </div>
           </ng-template>
@@ -1526,9 +1462,8 @@
     <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="modalRef?.hide()">
       <span aria-hidden="true" class="visually-hidden">&times;</span>
     </button>
-    <h5 class="mb-3"> Really do a reset your configuration?</h5>
-    <p>When you do a reset to deafult, you will lose all your saved data. <br/>(including layout theme, content,
-      purposes, display frequency ...)</p>
+    <h5 class="mb-3"> Are you sure you want to reset to default? </h5>
+    <p>This will reset all the user-defined settings, contents, and layouts into the default.</p>
     <button pButton type="button" (click)="modalRef?.hide()" label="Cancel" class="p-button-secondary mr-2"></button>
     <button pButton type="button" (click)="onResetEverything()" label="I Agree"></button>
 

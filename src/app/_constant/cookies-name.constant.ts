@@ -4,5 +4,5 @@ export const cookieName = [
   {label: 'Analytics', value: 'analytics'},
   {label: 'Advertising', value: 'advertising'},
   {label: 'Social Media', value: 'social_media'},
-  {label: 'Unknown & Unclassified', value: 'unknown'},
+  {label: 'Unknown', value: 'unknown'},
 ];

@@ -27,6 +27,7 @@ import {AlertModule} from 'ngx-bootstrap/alert';
 import {ButtonsModule} from 'ngx-bootstrap/buttons';
 import {TooltipModule} from 'ngx-bootstrap/tooltip';
 import {TimeagoModule} from 'ngx-timeago';
+import {SelectButtonModule} from 'primeng/selectbutton';
 
 const path: Routes = [{
   path: '', component: BannerConfigComponent
@@ -60,7 +61,8 @@ const path: Routes = [{
         AlertModule,
         ButtonsModule,
         TooltipModule,
-        TimeagoModule
+        TimeagoModule,
+        SelectButtonModule
     ]
 })
 export class BannerConfigModule { }

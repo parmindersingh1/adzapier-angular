@@ -118,6 +118,15 @@ width: 100%;
   overflow-x: hidden;
   padding-bottom: 20px;
 }
+
+.p-selectbutton .p-button.p-highlight {
+  background: #1b365d !important;
+  border-color:#1b365d !important;
+  color: #ffffff !important;
+}
+.p-buttonset .p-button {
+  font-size: 12px !important;
+}
 .p-radiobutton .p-radiobutton-box.p-highlight {
   border-color: #004097;
   background: #004097;
@@ -189,7 +198,15 @@ width: 100%;
   height: 100%;
   border-right: none;
 }
-
+.color-input{
+  border-radius: 0px;
+}
+.p-colorpicker{
+  height: 42px;
+}
+.p-colorpicker input{
+  border-radius: 0px;
+}
 .theme-btn-dark{
   padding: 20px;
   border: 1px solid #e2e5ed;
