@@ -393,7 +393,7 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
     this.searchFilter();
     }else{
       this.requestType = "";
-      //this.issearchfilterForReq = false; //1
+      this.issearchfilterForReq = false;
       this.issearchfilteractive = false;
       if(this.issearchfilterForSub || this.issearchfilterForReq || this.issearchfilterForStatus){
         this.searchFilter();
@@ -410,7 +410,7 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
       this.searchFilter();
     }else{
       this.status = "";
-      //this.issearchfilterForStatus = false; //2
+      this.issearchfilterForStatus = false;
       this.issearchfilteractive = false;
       if(this.issearchfilterForSub || this.issearchfilterForReq || this.issearchfilterForStatus){
         this.searchFilter();
@@ -440,7 +440,7 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
     }else{
       this.subjectType = "";
       this.issearchfilteractive = false;
-      //this.issearchfilterForSub = false; //3
+      this.issearchfilterForSub = false;
       if(this.issearchfilterForSub || this.issearchfilterForReq || this.issearchfilterForStatus){
         this.searchFilter();
       }else{
@@ -664,8 +664,7 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
           this.alertType = 'danger';
         });
       }else{
-        //this.clearDatePicker();
-        this.onRefreshDSARList(); // 4
+        this.clearDatePicker();
       }
   }
 
@@ -721,7 +720,7 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
   }
 
   clearDatePicker(){
-   // this.issearchfilteractive = false; //5
+    this.issearchfilteractive = false;
     this.selectedDateRange = "";
     this.searchbydaterange = "";    
     this.onRefreshDSARList();
