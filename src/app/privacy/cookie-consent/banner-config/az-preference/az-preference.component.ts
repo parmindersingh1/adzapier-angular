@@ -10,6 +10,7 @@ import {GdprService} from '../../../../_services/gdpr.service';
 export class AzPreferenceComponent implements OnInit, OnChanges {
   @Input('formData') formData;
   @Input('purposesList') purposesList;
+  @Input('customerBrandLogo') customerBrandLogo;
   showPreferenceType = 'ccpa';
   currentPurposeID = 0;
   gdprPurposeList = [];

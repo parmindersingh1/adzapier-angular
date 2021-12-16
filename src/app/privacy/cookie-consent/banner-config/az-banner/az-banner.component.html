@@ -1,6 +1,6 @@
 <div class="banner-main">
-
-  <ng-container *ngIf="!showBadge">
+  <ng-container *ngIf="!formData.MuteBanner" >
+    <ng-container *ngIf="!showBadge" >
   <div id="ccpa-banner" *ngIf="formData.LivePreviewType === 'ccpa'" class="banner-content ">
     <div class="row m-0">
       <div class="card" [ngClass]="{'banner-bottom': isBannerBottomType === 'bottom',
@@ -8,9 +8,9 @@
            [ngStyle]="{'background' : formData.BannerCookieNoticeBackgroundColor,
             'color' : formData.BannerCookieNoticeTextColor,
       width: isBoxedType === 'boxed' ? '600px' : ''}">
-        <div class="card-body pt-2 p-1 banner-border-top" [ngStyle]="{ 'border-top' : isBoxedType !== 'boxed' ? '2px solid' + formData.BannerCookieNoticeBorderColor : null,
-         'border' : isBoxedType === 'boxed' ? '2px solid' + formData.BannerCookieNoticeBorderColor : null
-        }" >
+        <div class="card-body pt-2 p-1 banner-border-top"
+             [ngClass]="{'banner-border-top' : isBoxedType !== 'boxed', 'banner-border-full' : isBoxedType === 'boxed' }"
+             [ngStyle]="{ 'border-color' : formData.BannerCookieNoticeBorderColor }" >
           <div class="row m-0">
             <div class="col-12" [ngClass]="{'col-md-12': isBoxedType === 'boxed', 'col-md-6': isBoxedType !== 'boxed'}">
               <h6 [ngStyle]="{ 'color' : formData.BannerCookieNoticeTextColor}"> {{formData.BannerTitle}}</h6>
@@ -39,9 +39,9 @@
            [ngStyle]="{'background' : formData.BannerCookieNoticeBackgroundColor,
             'color' : formData.BannerCookieNoticeTextColor,
       width: isBoxedType === 'boxed' ? '600px' : ''}">
-        <div class="card-body pt-2 p-1 banner-border-top" [ngStyle]="{ 'border-top' : isBoxedType !== 'boxed' ? '2px solid' + formData.BannerCookieNoticeBorderColor : null,
-         'border' : isBoxedType === 'boxed' ? '2px solid' + formData.BannerCookieNoticeBorderColor : null
-        }" >
+        <div class="card-body pt-2 p-1 banner-border-top"
+             [ngClass]="{'banner-border-top' : isBoxedType !== 'boxed', 'banner-border-full' : isBoxedType === 'boxed' }"
+             [ngStyle]="{ 'border-color' : formData.BannerCookieNoticeBorderColor }" >
           <div class="row m-0">
             <div [ngClass]="{'col-md-12': isBoxedType === 'boxed', 'col-md-6': isBoxedType !== 'boxed'}">
               <h6 [ngStyle]="{ 'color' : formData.BannerCookieNoticeTextColor}"> {{formData.BannerTitle}}</h6>
@@ -71,9 +71,10 @@
            [ngStyle]="{'background' : formData.BannerCookieNoticeBackgroundColor,
             'color' : formData.BannerCookieNoticeTextColor,
       width: isBoxedType === 'boxed' ? '600px' : ''}">
-        <div class="card-body pt-2 p-1 banner-border-top"  [ngStyle]="{ 'border-top' : isBoxedType !== 'boxed' ? '2px solid' + formData.BannerCookieNoticeBorderColor : null,
-         'border' : isBoxedType === 'boxed' ? '2px solid' + formData.BannerCookieNoticeBorderColor : null
-        }"  >
+        <div class="card-body pt-2 p-1 banner-border-top"
+            [ngClass]="{'banner-border-top' : isBoxedType !== 'boxed', 'banner-border-full' : isBoxedType === 'boxed' }"
+            [ngStyle]="{ 'border-color' : formData.BannerCookieNoticeBorderColor }"
+        >
           <div class="row m-0">
             <div
                  [ngClass]="{'col-md-12 gdpr-border-bottom': isBoxedType === 'boxed', 'col-md-5 gdpr-border-right': isBoxedType !== 'boxed'}"
@@ -98,7 +99,7 @@
       </div>
     </div>
   </div>
-
+    </ng-container>
   </ng-container>
   <ng-container *ngIf="showBadge && formData.ShowBadge">
     <button type="button" (click)="showCookieNotice()" class="btn btn-link tx-13">Back to Cookie Notice</button>
