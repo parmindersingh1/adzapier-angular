@@ -17,9 +17,9 @@ export class BillingService {
   constructor(private http: HttpClient,
               private loki: LokiService
               ) { }
-  getSessionId(data, componentName, moduleName) {
+  getSessionId(data, queryParams, componentName, moduleName) {
     const path = apiConstant.BILLING_CREATE_SESSION_ID;
-    return this.http.post(environment.apiUrl + path, data).pipe(map(res => res),
+    return this.http.post(environment.apiUrl + path, data, {params: queryParams}).pipe(map(res => res),
       catchError(error => {
         this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.billing, componentName, moduleName, path);
         return throwError(error);

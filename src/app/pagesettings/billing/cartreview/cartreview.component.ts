@@ -89,7 +89,11 @@ export class CartreviewComponent implements OnInit {
         email: this.userEmail
       };
       this.loading.start();
-      this.billingService.getSessionId(payloads, this.constructor.name, moduleName.pricingModule).subscribe(res => {
+      const queryParams = {
+        pid: this.queryPID,
+        oid: this.queryOID
+      }
+      this.billingService.getSessionId(payloads, queryParams, this.constructor.name, moduleName.pricingModule).subscribe(res => {
         this.loading.stop();
         const result: any = res;
         if (result.status === 200) {
@@ -117,13 +121,13 @@ export class CartreviewComponent implements OnInit {
 
   onGetCartRecord() {
     this.loading.start();
-    
+
     this.billingService.GetCart(this.constructor.name, moduleName.billingModule)
       .subscribe((res: any) => {
         this.loading.stop();
         const result: any = res;
         if (result.status === 200) {
-         
+
           this.cartRecordList = result.response;
           this.cartRecordCount = Number(result.count);
           this.onNavigateToDetails(this.cartRecordCount)
@@ -133,8 +137,8 @@ export class CartreviewComponent implements OnInit {
               this.subTotal += Number(item.Price * item.Quantity);
             }
           }
-      
-          
+
+
         }
       }, error => {
         this.loading.stop();

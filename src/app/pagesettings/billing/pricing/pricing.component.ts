@@ -236,36 +236,36 @@ export class PricingComponent implements OnInit, AfterViewInit {
     });
   }
 
-  onSelectPlan() {
-    const plans = [];
-    for (const pricing of this.cartItem) {
-      plans.push({plan_id: pricing.id, units: pricing.unit});
-    }
-    if (this.userEmail) {
-      let payloads = {};
-      payloads = {
-        coupon_code: this.isPromoCodeActive ? this.promoCode : '',
-        plan_details: plans,
-        email: this.userEmail
-      };
-      this.loading.start();
-      this.billingService.getSessionId(payloads, this.constructor.name, moduleName.pricingModule).subscribe(res => {
-        this.loading.stop();
-        const result: any = res;
-        if (result.status === 200) {
-          this.onCheckOut(result.response);
-        }
-      }, error => {
-        this.loading.stop();
-        const err: any = JSON.parse(error);
-        this.isOpen = true;
-        this.alertMsg = err.message;
-        this.alertType = 'danger';
-      });
-    } else {
-      location.reload();
-    }
-  }
+  // onSelectPlan() {
+  //   const plans = [];
+  //   for (const pricing of this.cartItem) {
+  //     plans.push({plan_id: pricing.id, units: pricing.unit});
+  //   }
+  //   if (this.userEmail) {
+  //     let payloads = {};
+  //     payloads = {
+  //       coupon_code: this.isPromoCodeActive ? this.promoCode : '',
+  //       plan_details: plans,
+  //       email: this.userEmail
+  //     };
+  //     this.loading.start();
+  //     this.billingService.getSessionId(payloads, this.constructor.name, moduleName.pricingModule).subscribe(res => {
+  //       this.loading.stop();
+  //       const result: any = res;
+  //       if (result.status === 200) {
+  //         this.onCheckOut(result.response);
+  //       }
+  //     }, error => {
+  //       this.loading.stop();
+  //       const err: any = JSON.parse(error);
+  //       this.isOpen = true;
+  //       this.alertMsg = err.message;
+  //       this.alertType = 'danger';
+  //     });
+  //   } else {
+  //     location.reload();
+  //   }
+  // }
 
   onSelectCookieConsentBillingCycle(e, type) {
     try {
@@ -331,7 +331,7 @@ export class PricingComponent implements OnInit, AfterViewInit {
               this.subTotal += Number(item.priceTotal);
             }
           }
-          
+
         }
       }
     } else{
