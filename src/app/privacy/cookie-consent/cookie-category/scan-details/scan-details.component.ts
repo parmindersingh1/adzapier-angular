@@ -26,7 +26,6 @@ export class ScanDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
   scanForm:FormGroup;
   editscanForm:FormGroup;
   setInterval = null;
-  passwordchangevalue="********";
   step = 0;
   lastScan = {
     id: null,
