@@ -58,7 +58,7 @@ export class ScanDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
       ]
     }
   ];
-  public chartTypeLabels: Array<string> = ['Cookies', 'LocalStorage', 'Page Scans', 'Tags'];
+  public chartTypeLabels: Array<string> = ['Cookies', 'Page Scans', 'Tags'];
   public chartTypeData: Array<number> = [];
 
   selectedProducts = [];
@@ -173,7 +173,7 @@ export class ScanDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
       if (res) {
           if (Object.keys(res).length > 0) {
             this.lastScan = res.response;
-            this.chartTypeData = [this.lastScan.total_cookies, this.lastScan.total_localstorage, this.lastScan.total_page_scans, this.lastScan.total_tages];
+            this.chartTypeData = [this.lastScan.total_cookies, this.lastScan.total_page_scans, this.lastScan.total_tages];
           }
           this.authService.notificationUpdated.next(true);
       }
