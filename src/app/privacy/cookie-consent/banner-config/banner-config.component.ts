@@ -1182,6 +1182,7 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
 
     myReader.onloadend = (e) => {
       this.customerBrandLogo = myReader.result;
+      this.currentBannerLayer = 'preference';
     };
     myReader.readAsDataURL(file);
   }

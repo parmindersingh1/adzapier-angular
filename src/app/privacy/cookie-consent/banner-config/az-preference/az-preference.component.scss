@@ -73,11 +73,10 @@
   margin: 0 auto;
 }
 
-.btn-group-action {
-  text-align: center;
+.btn-group-action-purpose {
   border-bottom: 1px solid lightgray;
 }
-.btn-group-action button {
+.btn-group-action-purpose button {
   color: #555;
   font-weight: 600;
 }
@@ -144,3 +143,11 @@ input:checked + .slider:before {
   border-radius: 50%;
 }
 
+.company-logo {
+  max-width: 185px;
+  height: 35px;
+  margin-top: 7px;
+  padding-left: 10px;
+  padding-top: 4px;
+  margin-right: 15%;
+}
