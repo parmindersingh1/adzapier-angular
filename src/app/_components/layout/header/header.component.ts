@@ -617,7 +617,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
       }
       this.orgList = Object.values(data)[1];
       this.leftItems = this.orgList;
-      this.currentSelectedProperty();
+   //   this.currentSelectedProperty(); // commented due to redirection issue to billing page
       this.rightItems = [
         {
           label: 'User', icon: 'assets/imgs/glass.jpg',
