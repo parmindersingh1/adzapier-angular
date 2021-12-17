@@ -145,9 +145,9 @@ input:checked + .slider:before {
 
 .company-logo {
   max-width: 185px;
+  min-width: 185px;
+  float: left;
+}
+.company-logo img {
   height: 35px;
-  margin-top: 7px;
-  padding-left: 10px;
-  padding-top: 4px;
-  margin-right: 15%;
 }
