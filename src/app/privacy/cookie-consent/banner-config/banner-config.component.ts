@@ -845,6 +845,9 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
         this.alertType = 'success';
         this.publishing = false;
         this.onGetSavedBannerConfig();
+        this.BannerConfigurationForm.patchValue({
+          PreviewLanguage: 'en-US'
+        });
         if (this.publishType === 'publish') {
           this.openModal(this.publishModal);
         }
@@ -892,6 +895,9 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
         this.alertType = 'success';
         this.publishing = false;
         this.onGetSavedBannerConfig();
+        this.BannerConfigurationForm.patchValue({
+          PreviewLanguage: 'en-US'
+        });
         if (this.publishType === 'publish') {
           this.openModal(this.publishModal);
         }
