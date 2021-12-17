@@ -1818,7 +1818,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
 
       }
       if (this.location.path().indexOf("manage?success=true") !== -1) { //for stripe success redirect
-          this.router.navigate(['/settings/billing/manage'], { queryParams: { oid: this.oidpidforstrip.organization_id, pid: this.oidpidforstrip.property_id }, queryParamsHandling: 'merge', skipLocationChange: false });
+        this.router.navigate(['/settings/billing/manage'], { queryParams: { oid: this.oidpidforstrip.organization_id || this.oIDPIDFromURL[0], pid: this.oidpidforstrip.property_id || this.oIDPIDFromURL[1]}, queryParamsHandling: 'merge', skipLocationChange: false });
       } else if (this.location.path().indexOf("type=manage") == -1 && this.location.path().indexOf("manage?success") == -1) {
         this.oIDPIDFromURL = this.findPropertyIDFromUrl(this.currentNavigationUrl || this.location.path());
         const url = this.location.path() == '/' ? '/home/welcome' : this.getCurrentRoute();
