@@ -1,6 +1,6 @@
 <div class="banner-main">
-  <ng-container *ngIf="!formData.MuteBanner" >
-    <ng-container *ngIf="!showBadge" >
+
+  <ng-container *ngIf="!formData.MuteBanner && !showBadge" >
   <div id="ccpa-banner" *ngIf="formData.LivePreviewType === 'ccpa'" class="banner-content ">
     <div class="row m-0">
       <div class="card" [ngClass]="{'banner-bottom': isBannerBottomType === 'bottom',
@@ -21,9 +21,9 @@
                  [ngClass]="{'col-md-12': isBoxedType === 'boxed', 'col-md-6': isBoxedType !== 'boxed'}">
               <button pButton pRipple type="button" (click)="onOpenPreference()" style="font-size: 11px" [label]="formData.BannerPreferenceText" class="p-button-text tx-12 mr-1"
                       [ngStyle]="{'background': formData.BannerPreferenceBackgroundColor, 'border-color': formData.BannerPreferenceBackgroundColor, 'color': formData.BannerPreferenceTextColor}"></button>
-              <button pButton pRipple type="button" [label]="formData.BannerDoNotSellText" style="font-size: 11px"  class="p-button-secondary tx-12 mr-1"
+              <button pButton pRipple type="button" (click)="showBadge = true" [label]="formData.BannerDoNotSellText" style="font-size: 11px"  class="p-button-secondary tx-12 mr-1"
                       [ngStyle]="{'background': formData.BannerDoNotSellMyDataBackgroundColor, 'border-color': formData.BannerDoNotSellMyDataBackgroundColor, 'color': formData.BannerDoNotSellMyDataTextColor}"></button>
-              <button pButton pRipple type="button" [label]="formData.BannerAcceptAllText" style="font-size: 11px"
+              <button pButton pRipple type="button" (click)="showBadge = true"  [label]="formData.BannerAcceptAllText" style="font-size: 11px"
                       [ngStyle]="{'background': formData.BannerAcceptAllBackgroundColor, 'border-color': formData.BannerAcceptAllBackgroundColor, 'color': formData.BannerAcceptAllTextColor}"></button>
             </div>
           </div>
@@ -52,9 +52,9 @@
                  [ngClass]="{'col-md-12': isBoxedType === 'boxed', 'col-md-6': isBoxedType !== 'boxed'}">
               <button pButton pRipple type="button" (click)="onOpenPreference()" style="font-size: 12px"  [label]="formData.BannerPreferenceText" class="p-button-text mr-3"
               [ngStyle]="{'background': formData.BannerPreferenceBackgroundColor, 'border-color': formData.BannerPreferenceBackgroundColor, 'color': formData.BannerPreferenceTextColor}"></button>
-              <button pButton pRipple type="button" [label]="formData.BannerDisableAllText" style="font-size: 12px"  class="p-button-secondary mr-3"
+              <button pButton pRipple type="button" (click)="showBadge = true"  [label]="formData.BannerDisableAllText" style="font-size: 12px"  class="p-button-secondary mr-3"
                       [ngStyle]="{'background': formData.BannerDisableAllBackgroundColor, 'border-color': formData.BannerDisableAllBackgroundColor, 'color': formData.BannerDisableAllTextColor}"></button>
-              <button pButton pRipple type="button" [label]="formData.BannerAcceptAllText" style="font-size: 12px"
+              <button pButton pRipple type="button" (click)="showBadge = true"  [label]="formData.BannerAcceptAllText" style="font-size: 12px"
                       [ngStyle]="{'background': formData.BannerAcceptAllBackgroundColor, 'border-color': formData.BannerAcceptAllBackgroundColor, 'color': formData.BannerAcceptAllTextColor}"></button>
             </div>
           </div>
@@ -91,7 +91,7 @@
                  [ngClass]="{'col-md-12': isBoxedType === 'boxed', 'col-md-2': isBoxedType !== 'boxed'}">
               <button style="font-size: 12px"  pButton pRipple type="button" (click)="onOpenPreference()" [label]="formData.BannerPreferenceText" class="p-button-text"
                       [ngStyle]="{'background': formData.BannerPreferenceBackgroundColor, 'border-color': formData.BannerPreferenceBackgroundColor, 'color': formData.BannerPreferenceTextColor}"></button>
-              <button style="font-size: 12px"  class="mt-2" pButton pRipple type="button" [label]="formData.BannerAcceptAllText"
+              <button style="font-size: 12px"  class="mt-2" (click)="showBadge = true"  pButton pRipple type="button" [label]="formData.BannerAcceptAllText"
                       [ngStyle]="{'background': formData.BannerAcceptAllBackgroundColor, 'border-color': formData.BannerAcceptAllBackgroundColor, 'color': formData.BannerAcceptAllTextColor}"></button>
             </div>
           </div>
@@ -100,7 +100,6 @@
     </div>
   </div>
     </ng-container>
-  </ng-container>
   <ng-container *ngIf="showBadge && formData.ShowBadge">
     <button type="button" (click)="showCookieNotice()" class="btn btn-link tx-13">Back to Cookie Notice</button>
   </ng-container>
