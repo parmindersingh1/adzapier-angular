@@ -24,7 +24,7 @@ export class InviteuserpasswordComponent implements OnInit {
   errorMsg: string;
   show: Boolean = false;
   show1: Boolean = false;
-  sign_in: string = 'Confirm';
+  sign_in: string = 'Save';
   dismissible = true;
   alertMsg: any;
   isOpen = false;
