@@ -119,7 +119,7 @@ export class AppComponent implements OnInit {
         if (event.url.indexOf('welcome') !== -1) {
           this.hideHeaderFooter = true;
         }
-        if (event.url.indexOf('/resetpswd') !== -1 || event.url.indexOf('/verify-email') !== -1 || event.url.indexOf('invited-user-verify-email') !== -1) {
+        if (event.url.indexOf('/resetpswd') !== -1 || event.url.indexOf('/verify-email') !== -1 || event.url.indexOf('invited-user-verify-email') !== -1 || event.url.indexOf('/setpassword') !== -1) {
           this.hideHeaderFooter = false;
           this.authenticationService.logout();
           localStorage.removeItem('currentUser');
@@ -261,7 +261,7 @@ export class AppComponent implements OnInit {
   ngAfterViewChecked() {
 
     this.isquickstartopen = this.quickmenuService.isquickstartopen;
-    if (this.location.path().indexOf('/login') !== -1 || this.location.path().indexOf('signup') !== -1 || this.location.path().indexOf('resetpswd') !== -1 || this.location.path().indexOf('invited-user-verify-email') !== -1) {
+    if (this.location.path().indexOf('/login') !== -1 || this.location.path().indexOf('signup') !== -1 || this.location.path().indexOf('resetpswd') !== -1 || this.location.path().indexOf('invited-user-verify-email') !== -1 || this.location.path().indexOf('setpassword') !== -1) {
       this.isloginpage = false; // quick start will not be visible
     } else {
       this.isloginpage = true;
