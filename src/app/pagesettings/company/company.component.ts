@@ -201,7 +201,7 @@ export class CompanyComponent implements AfterViewInit, OnInit {
   }
 
   editOrganizationModalPopup(content, type) {
-    if (this.quickDivID !== undefined || this.quickDivID !== "") {
+    if (this.quickDivID !== undefined && this.quickDivID !== "") {
     let quickLinkObj: QuickStart = {
       linkid: this.quickDivID,
       indexid: 1,
@@ -254,7 +254,7 @@ export class CompanyComponent implements AfterViewInit, OnInit {
         state: this.companyDetails[0].state,
         zipcode: this.companyDetails[0].zipcode,
         tax_id: this.companyDetails[0].tax_id,
-        email: this.companyDetails[0].email,
+        email: this.companyDetails[0].email.toLowerCase(),
         phone: this.companyDetails[0].phone
       });
     }, (err) => {
@@ -280,7 +280,7 @@ export class CompanyComponent implements AfterViewInit, OnInit {
         city: this.companyForm.value.city.trim(),
         state: this.companyForm.value.state.trim(),
         zipcode: this.companyForm.value.zipcode.trim(),
-        email: this.companyForm.value.email.trim(),
+        email: this.companyForm.value.email.toLowerCase().trim(),
         phone: this.companyForm.value.phone.trim()
       };
       this.loading.start();
@@ -381,7 +381,7 @@ export class CompanyComponent implements AfterViewInit, OnInit {
           return false;
         }
         const requestObj = {
-          email: this.inviteUserForm.value.emailid,
+          email: this.inviteUserForm.value.emailid.toLowerCase(),
           firstname: this.inviteUserForm.value.firstname,
           lastname: this.inviteUserForm.value.lastname,
           role_id: this.inviteUserForm.value.permissions,
@@ -543,7 +543,9 @@ export class CompanyComponent implements AfterViewInit, OnInit {
   }
 
   onSearchEmailId(searchEmail: string) {
-    this.loadUserListForInvitation(searchEmail);
+    if(searchEmail.length >= 0){
+      this.loadUserListForInvitation(searchEmail);
+    }
   }
 
   typeaheadNoResults(event: boolean): void {
@@ -670,7 +672,7 @@ export class CompanyComponent implements AfterViewInit, OnInit {
     this.quickmenuService.onClickEmitQSLinkobj.pipe(
       takeUntil(this.unsubscribeAfterUserAction$)
     ).subscribe((res) => {
-      if (a.length !== 0) {
+      if (a !== undefined && a.length !== 0) {
         const idx = a.findIndex((t) => t.index == 1);
         if (a[idx].quicklinks.some((t) => t.linkid == res.linkid && t.isactualbtnclicked)) {
           this.quickDivID = res.linkid;

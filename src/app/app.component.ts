@@ -97,13 +97,11 @@ export class AppComponent implements OnInit {
       }
     );
     this.quickmenuService.isClickedOnQSMenu.subscribe((data) => {
-      if (data) {
+      if (data.linkid !== 0) {
+        this.quickmenuService.updateQuerymenulist(data);
         this.qsMenuList = this.quickmenuService.getQuerymenulist();
-        // console.log(updatedqsMenu,'constructor..appcomp');
-        // this.qsMenuList =  [...updatedqsMenu];
       }
     })
-
   }
 
   async ngOnInit() {
@@ -223,7 +221,7 @@ export class AppComponent implements OnInit {
     // if(Object.values(obj).length !== 0){
     //   this.quickmenuService.updateQuerymenulist(obj);
     // }else{
-    this.quickmenuService.updateQuerymenulist($event);
+    //this.quickmenuService.updateQuerymenulist($event); //Note this
     // }
     //this.quickstartmenuComponent.getupdatedQuickStartMenu();
     this.qsMenuList = this.quickmenuService.getQuerymenulist();

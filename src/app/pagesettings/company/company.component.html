@@ -358,6 +358,9 @@
                     <div class="form-group">
                         <label for="emailid" class="d-block">Email Id</label>
                     <input type="text" formControlName="emailid" name="emailid" [typeahead]="userList"
+                    [typeaheadMinLength]="0"
+                    [typeaheadOptionsLimit]="7"
+                    [typeaheadSingleWords]="false"
                     typeaheadWaitMs="1000"
                     (typeaheadNoResults)="typeaheadNoResults($event)"
                     (keypress)="onSearchEmailId($event.target.value)"
